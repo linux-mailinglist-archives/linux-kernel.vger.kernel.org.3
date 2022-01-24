@@ -2,51 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C2349795B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 08:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6800D497962
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 08:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241786AbiAXHWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 02:22:18 -0500
-Received: from verein.lst.de ([213.95.11.211]:54411 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241776AbiAXHWO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 02:22:14 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 898DB68BEB; Mon, 24 Jan 2022 08:22:08 +0100 (CET)
-Date:   Mon, 24 Jan 2022 08:22:08 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, wefu@redhat.com, liush@allwinnertech.com,
-        guoren@kernel.org, atishp@atishpatra.org, anup@brainfault.org,
-        drew@beagleboard.org, hch@lst.de, arnd@arndb.de, wens@csie.org,
-        maxime@cerno.tech, dlustig@nvidia.com, gfavor@ventanamicro.com,
-        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
-        huffman@cadence.com, mick@ics.forth.gr,
-        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu
-Subject: Re: [PATCH v5 00/14] riscv: support for svpbmt and D1 memory types
-Message-ID: <20220124072208.GA21441@lst.de>
-References: <20220121163618.351934-1-heiko@sntech.de>
+        id S241804AbiAXH1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 02:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241713AbiAXH1T (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 02:27:19 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A5CC06173B;
+        Sun, 23 Jan 2022 23:27:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=j+tH6nHEGujTdaJ2n2+WPQs1USsQeUND+saT792MFaY=; b=H7V5NazfCuRpqJD2ZyOZ7qzuHy
+        phksDlX5d097UBUrD3C1Pc6dIaRL3blyFjQPUDWBN+o/HC71o4JBUKo7iAAMn/o8aEi+348M3Nejt
+        E5wozVTblU1Pe3bYYemVEiPRnWcySUIZ0lV0P2v2Q5v8GBPEVldsLBIHplO15aFkVZW3A9HigYQdN
+        4N8Ay0SrPRCyI2LM78tG36kXrIo1MH7gXgQ5PQwNDMdhx8TKW+Z3ewo7bZ0v4e6bUr08YHlCvZJyH
+        H+hTD30ZWqXFATKQzOw4W6DLQKlOzAUweV6IfVc7fGfuauV3SpslRqZ+WBCB7ijsYUg95RBlZEH61
+        vq1P7G8g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nBtkq-002U44-LS; Mon, 24 Jan 2022 07:27:08 +0000
+Date:   Sun, 23 Jan 2022 23:27:08 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/23] MM: extend block-plugging to cover all swap reads
+ with read-ahead
+Message-ID: <Ye5UzEzvN8WWMNBn@infradead.org>
+References: <164299573337.26253.7538614611220034049.stgit@noble.brown>
+ <164299611274.26253.13900771841681128440.stgit@noble.brown>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121163618.351934-1-heiko@sntech.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <164299611274.26253.13900771841681128440.stgit@noble.brown>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 05:36:04PM +0100, Heiko Stuebner wrote:
-> So this is my try at implementing svpbmt (and the diverging D1 memory
-> types using the alternatives framework).
+On Mon, Jan 24, 2022 at 02:48:32PM +1100, NeilBrown wrote:
+> Code that does swap read-ahead uses blk_start_plug() and
+> blk_finish_plug() to allow lower levels to combine multiple read-ahead
+> pages into a single request, but calls blk_finish_plug() *before*
+> submitting the original (non-ahead) read request.
+> This missed an opportunity to combine read requests.
+> 
+> This patch moves the blk_finish_plug to *after* all the reads.
+> This will likely combine the primary read with some of the "ahead"
+> reads, and that may slightly increase the latency of that read, but it
+> should more than make up for this by making more efficient use of the
+> storage path.
+> 
+> The patch mostly makes the code look more consistent.  Performance
+> change is unlikely to be noticeable.
 
-Please spell out what it does.  While I can remember the original single
-letter extensions very well, the new priviliged extension naming is
-just letter salad.
+Looks good:
 
-You might also want to explain in more detail what it does and why you
-want to support it.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+
+> Fixes-no-auto-backport: 3fb5c298b04e ("swap: allow swap readahead to be merged")
+
+Is this really a thing?

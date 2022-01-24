@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCA1498D26
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C9E4992EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348206AbiAXT2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:28:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43438 "EHLO
+        id S1382867AbiAXU0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:26:25 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46142 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347567AbiAXTSh (ORCPT
+        with ESMTP id S1376272AbiAXUBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:18:37 -0500
+        Mon, 24 Jan 2022 15:01:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EB27B81235;
-        Mon, 24 Jan 2022 19:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC20C340E5;
-        Mon, 24 Jan 2022 19:18:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 063BBB8124F;
+        Mon, 24 Jan 2022 20:01:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31808C340E5;
+        Mon, 24 Jan 2022 20:01:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051914;
-        bh=gFwZuW3NXLcLBklwYKoFtGkp+6a7uJzR9q7GsSnsAtk=;
+        s=korg; t=1643054468;
+        bh=MOqpyLIQ3I/vv1y8J/7vIEClqtBU18OiiM0sN/pQ4eE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eS3zvRGF60l7mHyEnKrwagv0qiv7N4zSp+kPVhF1KpKMM2uZ4phlR3x6mlW3jRiFq
-         G7/xoNR1oTO5Mg8VowYHZsmjrfCyRCiH+lbnFXx6zSou+WcijZwiNpuUwz8K/Q1scW
-         9sNA1LgIx1VtWbhzZH4p9reIpcTRGp0TOZ2/dJ5Y=
+        b=jOElBW9Pm3SkRaxePYkH5Sr7ZI7CANFZ5kDf5yHTxdAJ9VM/OFdbv5LeDZ4rjmaod
+         W+wNRv9LwYycjZ7SuDiLUjl218zAzKz6z1geu8ilH8aJCILZ1UpcY8dt6ckUG1SKwC
+         wttYlH9J+2JfJw7EVxSBiB0gcq2pDPrRCXKHlhQI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 127/239] ARM: imx: rename DEBUG_IMX21_IMX27_UART to DEBUG_IMX27_UART
+Subject: [PATCH 5.10 400/563] net: phy: marvell: configure RGMII delays for 88E1118
 Date:   Mon, 24 Jan 2022 19:42:45 +0100
-Message-Id: <20220124183947.149798691@linuxfoundation.org>
+Message-Id: <20220124184038.266854410@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,119 +47,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-[ Upstream commit b0100bce4ff82ec1ccd3c1f3d339fd2df6a81784 ]
+[ Upstream commit f22725c95ececb703c3f741e8f946d23705630b7 ]
 
-Since commit 4b563a066611 ("ARM: imx: Remove imx21 support"), the config
-DEBUG_IMX21_IMX27_UART is really only debug support for IMX27.
+Corentin Labbe reports that the SSI 1328 does not work when allowing
+the PHY to operate at gigabit speeds, but does work with the generic
+PHY driver.
 
-So, rename this option to DEBUG_IMX27_UART and adjust dependencies in
-Kconfig and rename the definitions to IMX27 as further clean-up.
+This appears to be because m88e1118_config_init() writes a fixed value
+to the MSCR register, claiming that this is to enable 1G speeds.
+However, this always sets bits 4 and 5, enabling RGMII transmit and
+receive delays. The suspicion is that the original board this was
+added for required the delays to make 1G speeds work.
 
-This issue was discovered with ./scripts/checkkconfigsymbols.py, which
-reported that DEBUG_IMX21_IMX27_UART depends on the non-existing config
-SOC_IMX21.
+Add the necessary configuration for RGMII delays for the 88E1118 to
+bring this into line with the requirements for RGMII support, and thus
+make the SSI 1328 work.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Corentin Labbe has tested this on gemini-ssi1328 and gemini-ns2502.
+
+Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/Kconfig.debug            | 14 +++++++-------
- arch/arm/include/debug/imx-uart.h | 18 +++++++++---------
- 2 files changed, 16 insertions(+), 16 deletions(-)
+ drivers/net/phy/marvell.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 01c760929c9e4..12a023c542e45 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -405,12 +405,12 @@ choice
- 		  Say Y here if you want kernel low-level debugging support
- 		  on i.MX25.
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index 91616182c311f..4dda2ab19c265 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -1090,6 +1090,12 @@ static int m88e1118_config_init(struct phy_device *phydev)
+ 	if (err < 0)
+ 		return err;
  
--	config DEBUG_IMX21_IMX27_UART
--		bool "i.MX21 and i.MX27 Debug UART"
--		depends on SOC_IMX21 || SOC_IMX27
-+	config DEBUG_IMX27_UART
-+		bool "i.MX27 Debug UART"
-+		depends on SOC_IMX27
- 		help
- 		  Say Y here if you want kernel low-level debugging support
--		  on i.MX21 or i.MX27.
-+		  on i.MX27.
- 
- 	config DEBUG_IMX28_UART
- 		bool "i.MX28 Debug UART"
-@@ -1454,7 +1454,7 @@ config DEBUG_IMX_UART_PORT
- 	int "i.MX Debug UART Port Selection"
- 	depends on DEBUG_IMX1_UART || \
- 		   DEBUG_IMX25_UART || \
--		   DEBUG_IMX21_IMX27_UART || \
-+		   DEBUG_IMX27_UART || \
- 		   DEBUG_IMX31_UART || \
- 		   DEBUG_IMX35_UART || \
- 		   DEBUG_IMX50_UART || \
-@@ -1507,12 +1507,12 @@ config DEBUG_LL_INCLUDE
- 	default "debug/icedcc.S" if DEBUG_ICEDCC
- 	default "debug/imx.S" if DEBUG_IMX1_UART || \
- 				 DEBUG_IMX25_UART || \
--				 DEBUG_IMX21_IMX27_UART || \
-+				 DEBUG_IMX27_UART || \
- 				 DEBUG_IMX31_UART || \
- 				 DEBUG_IMX35_UART || \
- 				 DEBUG_IMX50_UART || \
- 				 DEBUG_IMX51_UART || \
--				 DEBUG_IMX53_UART ||\
-+				 DEBUG_IMX53_UART || \
- 				 DEBUG_IMX6Q_UART || \
- 				 DEBUG_IMX6SL_UART || \
- 				 DEBUG_IMX6SX_UART || \
-diff --git a/arch/arm/include/debug/imx-uart.h b/arch/arm/include/debug/imx-uart.h
-index bce58e975ad1f..c750cc9876f6d 100644
---- a/arch/arm/include/debug/imx-uart.h
-+++ b/arch/arm/include/debug/imx-uart.h
-@@ -14,13 +14,6 @@
- #define IMX1_UART_BASE_ADDR(n)	IMX1_UART##n##_BASE_ADDR
- #define IMX1_UART_BASE(n)	IMX1_UART_BASE_ADDR(n)
- 
--#define IMX21_UART1_BASE_ADDR	0x1000a000
--#define IMX21_UART2_BASE_ADDR	0x1000b000
--#define IMX21_UART3_BASE_ADDR	0x1000c000
--#define IMX21_UART4_BASE_ADDR	0x1000d000
--#define IMX21_UART_BASE_ADDR(n)	IMX21_UART##n##_BASE_ADDR
--#define IMX21_UART_BASE(n)	IMX21_UART_BASE_ADDR(n)
--
- #define IMX25_UART1_BASE_ADDR	0x43f90000
- #define IMX25_UART2_BASE_ADDR	0x43f94000
- #define IMX25_UART3_BASE_ADDR	0x5000c000
-@@ -29,6 +22,13 @@
- #define IMX25_UART_BASE_ADDR(n)	IMX25_UART##n##_BASE_ADDR
- #define IMX25_UART_BASE(n)	IMX25_UART_BASE_ADDR(n)
- 
-+#define IMX27_UART1_BASE_ADDR	0x1000a000
-+#define IMX27_UART2_BASE_ADDR	0x1000b000
-+#define IMX27_UART3_BASE_ADDR	0x1000c000
-+#define IMX27_UART4_BASE_ADDR	0x1000d000
-+#define IMX27_UART_BASE_ADDR(n)	IMX27_UART##n##_BASE_ADDR
-+#define IMX27_UART_BASE(n)	IMX27_UART_BASE_ADDR(n)
++	if (phy_interface_is_rgmii(phydev)) {
++		err = m88e1121_config_aneg_rgmii_delays(phydev);
++		if (err < 0)
++			return err;
++	}
 +
- #define IMX31_UART1_BASE_ADDR	0x43f90000
- #define IMX31_UART2_BASE_ADDR	0x43f94000
- #define IMX31_UART3_BASE_ADDR	0x5000c000
-@@ -115,10 +115,10 @@
- 
- #ifdef CONFIG_DEBUG_IMX1_UART
- #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX1)
--#elif defined(CONFIG_DEBUG_IMX21_IMX27_UART)
--#define UART_PADDR	IMX_DEBUG_UART_BASE(IMX21)
- #elif defined(CONFIG_DEBUG_IMX25_UART)
- #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX25)
-+#elif defined(CONFIG_DEBUG_IMX27_UART)
-+#define UART_PADDR	IMX_DEBUG_UART_BASE(IMX27)
- #elif defined(CONFIG_DEBUG_IMX31_UART)
- #define UART_PADDR	IMX_DEBUG_UART_BASE(IMX31)
- #elif defined(CONFIG_DEBUG_IMX35_UART)
+ 	/* Adjust LED Control */
+ 	if (phydev->dev_flags & MARVELL_PHY_M1118_DNS323_LEDS)
+ 		err = phy_write(phydev, 0x10, 0x1100);
 -- 
 2.34.1
 

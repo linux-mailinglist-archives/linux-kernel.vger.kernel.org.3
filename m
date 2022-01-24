@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 308F64997BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004DC499802
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449664AbiAXVP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:15:57 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41702 "EHLO
+        id S1354469AbiAXVSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:18:15 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43398 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357541AbiAXUt3 (ORCPT
+        with ESMTP id S1388088AbiAXUto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:49:29 -0500
+        Mon, 24 Jan 2022 15:49:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CC1C6090B;
-        Mon, 24 Jan 2022 20:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E3B5C340E5;
-        Mon, 24 Jan 2022 20:49:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FF9D6091C;
+        Mon, 24 Jan 2022 20:49:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCF9C340E5;
+        Mon, 24 Jan 2022 20:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057368;
-        bh=dx/qqfHaqsrI53eoI4nrZXwWfm8wRxcE9Pn+R9RZmHQ=;
+        s=korg; t=1643057379;
+        bh=NYew2eLHnOVBJzWS0JUQya8E9KMDLrukBSAFBS4kna0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CEJhgWNJNqglqkjraxFWReAg7d3NIV5Apfrx5jw/9hOUoZVRpqGnZdAjVDL4CLl7r
-         ywktb4Dfe3mFfktPBwMciv47YkiSFJGFlqLiuOS/59zx+t1JK3yO4i9gExZ3w4yFTR
-         6HRZq1YMG7eBukfgvHIF8SEi/j8aqiNBshLCT6Gc=
+        b=n/ArlKRuyT8hYu+gWEQ22JGbtLvVbas1+AlPOZ6JGNDQqgJloR6QFMH5UD4RGlI7Q
+         /7pwzqUuwNVyvqclA7u0ROJwwkkmx+Rs8PXjO532Lr3XAHY/R5cpe1PaZuG2/wLaQS
+         NlwT9qbXC/4h+0s1MvYVMTFzxtrotGMp1hxq6rcA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 757/846] block: fix async_depth sysfs interface for mq-deadline
-Date:   Mon, 24 Jan 2022 19:44:34 +0100
-Message-Id: <20220124184127.087380239@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH 5.15 761/846] drm/vc4: crtc: Copy assigned channel to the CRTC
+Date:   Mon, 24 Jan 2022 19:44:38 +0100
+Message-Id: <20220124184127.212911521@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -45,43 +45,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit 46cdc45acb089c811d9a54fd50af33b96e5fae9d upstream.
+commit eeb6ab4639590130d25670204ab7b6011333d685 upstream.
 
-A previous commit added this feature, but it inadvertently used the wrong
-variable to show/store the setting from/to, victimized by copy/paste. Fix
-it up so that the async_depth sysfs interface reads and writes from the
-right setting.
+Accessing the crtc->state pointer from outside the modesetting context
+is not allowed. We thus need to copy whatever we need from the KMS state
+to our structure in order to access it.
 
-Fixes: 07757588e507 ("block/mq-deadline: Reserve 25% of scheduler tags for synchronous requests")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215485
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+In VC4, a number of users of that pointers have crept in over the years,
+and the previous commits removed them all but the HVS channel a CRTC has
+been assigned.
+
+Let's move this channel in struct vc4_crtc at atomic_begin() time, drop
+it from our private state structure, and remove our use of crtc->state
+from our vblank handler entirely.
+
+Link: https://lore.kernel.org/all/YWgteNaNeaS9uWDe@phenom.ffwll.local/
+Link: https://lore.kernel.org/r/20211025141113.702757-4-maxime@cerno.tech
+Fixes: 87ebcd42fb7b ("drm/vc4: crtc: Assign output to channel automatically")
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/mq-deadline.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/vc4/vc4_crtc.c |    4 ++--
+ drivers/gpu/drm/vc4/vc4_drv.h  |    9 +++++++++
+ drivers/gpu/drm/vc4/vc4_hvs.c  |   12 ++++++++++++
+ drivers/gpu/drm/vc4/vc4_txp.c  |    1 +
+ 4 files changed, 24 insertions(+), 2 deletions(-)
 
---- a/block/mq-deadline.c
-+++ b/block/mq-deadline.c
-@@ -811,7 +811,7 @@ SHOW_JIFFIES(deadline_read_expire_show,
- SHOW_JIFFIES(deadline_write_expire_show, dd->fifo_expire[DD_WRITE]);
- SHOW_INT(deadline_writes_starved_show, dd->writes_starved);
- SHOW_INT(deadline_front_merges_show, dd->front_merges);
--SHOW_INT(deadline_async_depth_show, dd->front_merges);
-+SHOW_INT(deadline_async_depth_show, dd->async_depth);
- SHOW_INT(deadline_fifo_batch_show, dd->fifo_batch);
- #undef SHOW_INT
- #undef SHOW_JIFFIES
-@@ -840,7 +840,7 @@ STORE_JIFFIES(deadline_read_expire_store
- STORE_JIFFIES(deadline_write_expire_store, &dd->fifo_expire[DD_WRITE], 0, INT_MAX);
- STORE_INT(deadline_writes_starved_store, &dd->writes_starved, INT_MIN, INT_MAX);
- STORE_INT(deadline_front_merges_store, &dd->front_merges, 0, 1);
--STORE_INT(deadline_async_depth_store, &dd->front_merges, 1, INT_MAX);
-+STORE_INT(deadline_async_depth_store, &dd->async_depth, 1, INT_MAX);
- STORE_INT(deadline_fifo_batch_store, &dd->fifo_batch, 0, INT_MAX);
- #undef STORE_FUNCTION
- #undef STORE_INT
+--- a/drivers/gpu/drm/vc4/vc4_crtc.c
++++ b/drivers/gpu/drm/vc4/vc4_crtc.c
+@@ -708,8 +708,7 @@ static void vc4_crtc_handle_page_flip(st
+ 	struct drm_crtc *crtc = &vc4_crtc->base;
+ 	struct drm_device *dev = crtc->dev;
+ 	struct vc4_dev *vc4 = to_vc4_dev(dev);
+-	struct vc4_crtc_state *vc4_state = to_vc4_crtc_state(crtc->state);
+-	u32 chan = vc4_state->assigned_channel;
++	u32 chan = vc4_crtc->current_hvs_channel;
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&dev->event_lock, flags);
+@@ -955,6 +954,7 @@ static const struct drm_crtc_funcs vc4_c
+ static const struct drm_crtc_helper_funcs vc4_crtc_helper_funcs = {
+ 	.mode_valid = vc4_crtc_mode_valid,
+ 	.atomic_check = vc4_crtc_atomic_check,
++	.atomic_begin = vc4_hvs_atomic_begin,
+ 	.atomic_flush = vc4_hvs_atomic_flush,
+ 	.atomic_enable = vc4_crtc_atomic_enable,
+ 	.atomic_disable = vc4_crtc_atomic_disable,
+--- a/drivers/gpu/drm/vc4/vc4_drv.h
++++ b/drivers/gpu/drm/vc4/vc4_drv.h
+@@ -514,6 +514,14 @@ struct vc4_crtc {
+ 	 * handler to have access to that value.
+ 	 */
+ 	unsigned int current_dlist;
++
++	/**
++	 * @current_hvs_channel: HVS channel currently assigned to the
++	 * CRTC. Protected by @irq_lock, and copied in
++	 * vc4_hvs_atomic_begin() for the CRTC interrupt handler to have
++	 * access to that value.
++	 */
++	unsigned int current_hvs_channel;
+ };
+ 
+ static inline struct vc4_crtc *
+@@ -926,6 +934,7 @@ extern struct platform_driver vc4_hvs_dr
+ void vc4_hvs_stop_channel(struct drm_device *dev, unsigned int output);
+ int vc4_hvs_get_fifo_from_output(struct drm_device *dev, unsigned int output);
+ int vc4_hvs_atomic_check(struct drm_crtc *crtc, struct drm_atomic_state *state);
++void vc4_hvs_atomic_begin(struct drm_crtc *crtc, struct drm_atomic_state *state);
+ void vc4_hvs_atomic_enable(struct drm_crtc *crtc, struct drm_atomic_state *state);
+ void vc4_hvs_atomic_disable(struct drm_crtc *crtc, struct drm_atomic_state *state);
+ void vc4_hvs_atomic_flush(struct drm_crtc *crtc, struct drm_atomic_state *state);
+--- a/drivers/gpu/drm/vc4/vc4_hvs.c
++++ b/drivers/gpu/drm/vc4/vc4_hvs.c
+@@ -393,6 +393,18 @@ static void vc4_hvs_update_dlist(struct
+ 	spin_unlock_irqrestore(&vc4_crtc->irq_lock, flags);
+ }
+ 
++void vc4_hvs_atomic_begin(struct drm_crtc *crtc,
++			  struct drm_atomic_state *state)
++{
++	struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
++	struct vc4_crtc_state *vc4_state = to_vc4_crtc_state(crtc->state);
++	unsigned long flags;
++
++	spin_lock_irqsave(&vc4_crtc->irq_lock, flags);
++	vc4_crtc->current_hvs_channel = vc4_state->assigned_channel;
++	spin_unlock_irqrestore(&vc4_crtc->irq_lock, flags);
++}
++
+ void vc4_hvs_atomic_enable(struct drm_crtc *crtc,
+ 			   struct drm_atomic_state *state)
+ {
+--- a/drivers/gpu/drm/vc4/vc4_txp.c
++++ b/drivers/gpu/drm/vc4/vc4_txp.c
+@@ -435,6 +435,7 @@ static void vc4_txp_atomic_disable(struc
+ 
+ static const struct drm_crtc_helper_funcs vc4_txp_crtc_helper_funcs = {
+ 	.atomic_check	= vc4_txp_atomic_check,
++	.atomic_begin	= vc4_hvs_atomic_begin,
+ 	.atomic_flush	= vc4_hvs_atomic_flush,
+ 	.atomic_enable	= vc4_txp_atomic_enable,
+ 	.atomic_disable	= vc4_txp_atomic_disable,
 
 

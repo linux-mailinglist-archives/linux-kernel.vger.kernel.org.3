@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B6D49A302
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AF249A6C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2366055AbiAXXwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:52:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1845409AbiAXXMO (ORCPT
+        id S3421046AbiAYC0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:26:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45628 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347817AbiAXTs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:12:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C86FC028C17;
-        Mon, 24 Jan 2022 13:19:29 -0800 (PST)
+        Mon, 24 Jan 2022 14:48:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73D46B80FA1;
-        Mon, 24 Jan 2022 21:19:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3327C340E5;
-        Mon, 24 Jan 2022 21:19:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F97C612E9;
+        Mon, 24 Jan 2022 19:48:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57B78C340E5;
+        Mon, 24 Jan 2022 19:48:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059166;
-        bh=CjNurEu/6+GsUqTQ4NQoldgfbFXncMWtPF0rfbat62k=;
+        s=korg; t=1643053704;
+        bh=485Pel/umrmGTI7pbf0TizhUtAcoT/WJdPbsQcA5Gb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E92vEJtcPCkzkqsLYZn4fiUMytUYzCiXPoQHY0avIeZa2rVc63L45Ble4419bwICz
-         /osIhah8Bt+lhXJHp2qteLnp8jHnvhLaWSGMURrl1VxvOiSLGwKz6RPocA6xjtHEtg
-         lpxTPGUqp3Sn9HR5cnxNoGqceSxyCHa0Z3Jsxl8Q=
+        b=w7pCNwDnkVRmKWv9J8izLv8/dX856/Axt+/B8OvTIXYtCj8t9HY0IVkbYjxlA6VRX
+         ii2HxKlztTU4CRuzubEsFWwjr3vzF841HCHDV6Ul9KLcY/SjtMGEq4UjcMlIVwaNZd
+         HspaySBgkNRxKFvN/WS7637AYD3yFsaLYNeL+wvg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Anders Roxell <anders.roxell@linaro.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0526/1039] ASoC: imx-card: Fix mclk calculation issue for akcodec
-Date:   Mon, 24 Jan 2022 19:38:35 +0100
-Message-Id: <20220124184142.962408139@linuxfoundation.org>
+Subject: [PATCH 5.10 151/563] selftests: clone3: clone3: add case CLONE3_ARGS_NO_TEST
+Date:   Mon, 24 Jan 2022 19:38:36 +0100
+Message-Id: <20220124184029.628320367@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,54 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
+From: Anders Roxell <anders.roxell@linaro.org>
 
-[ Upstream commit f331ae5fa59fbfb748317b290648fc3f1a50d932 ]
+[ Upstream commit a531b0c23c0fc68ad758cc31a74cf612a4dafeb0 ]
 
-Transfer the refined slots and slot_width to akcodec_get_mclk_rate()
-for mclk calculation, otherwise the mclk frequency does not match
-with the slots and slot_width for S16_LE format, because the default
-slot_width is 32.
+Building selftests/clone3 with clang warns about enumeration not handled
+in switch case:
 
-Fixes: aa736700f42f ("ASoC: imx-card: Add imx-card machine driver")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Link: https://lore.kernel.org/r/1641292835-19085-3-git-send-email-shengjiu.wang@nxp.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+clone3.c:54:10: warning: enumeration value 'CLONE3_ARGS_NO_TEST' not handled in switch [-Wswitch]
+        switch (test_mode) {
+                ^
+
+Add the missing switch case with a comment.
+
+Fixes: 17a810699c18 ("selftests: add tests for clone3()")
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/fsl/imx-card.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ tools/testing/selftests/clone3/clone3.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/sound/soc/fsl/imx-card.c b/sound/soc/fsl/imx-card.c
-index 96ac1e465fade..84a8dcdee9316 100644
---- a/sound/soc/fsl/imx-card.c
-+++ b/sound/soc/fsl/imx-card.c
-@@ -247,13 +247,14 @@ static bool codec_is_akcodec(unsigned int type)
- }
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index 42be3b9258301..076cf4325f783 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -52,6 +52,12 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
+ 		size = sizeof(struct __clone_args);
  
- static unsigned long akcodec_get_mclk_rate(struct snd_pcm_substream *substream,
--					   struct snd_pcm_hw_params *params)
-+					   struct snd_pcm_hw_params *params,
-+					   int slots, int slot_width)
- {
- 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
- 	struct imx_card_data *data = snd_soc_card_get_drvdata(rtd->card);
- 	const struct imx_card_plat_data *plat_data = data->plat_data;
- 	struct dai_link_data *link_data = &data->link_data[rtd->num];
--	unsigned int width = link_data->slots * link_data->slot_width;
-+	unsigned int width = slots * slot_width;
- 	unsigned int rate = params_rate(params);
- 	int i;
- 
-@@ -349,7 +350,7 @@ static int imx_aif_hw_params(struct snd_pcm_substream *substream,
- 
- 	/* Set MCLK freq */
- 	if (codec_is_akcodec(plat_data->type))
--		mclk_freq = akcodec_get_mclk_rate(substream, params);
-+		mclk_freq = akcodec_get_mclk_rate(substream, params, slots, slot_width);
- 	else
- 		mclk_freq = params_rate(params) * slots * slot_width;
- 	/* Use the maximum freq from DSD512 (512*44100 = 22579200) */
+ 	switch (test_mode) {
++	case CLONE3_ARGS_NO_TEST:
++		/*
++		 * Uses default 'flags' and 'SIGCHLD'
++		 * assignment.
++		 */
++		break;
+ 	case CLONE3_ARGS_ALL_0:
+ 		args.flags = 0;
+ 		args.exit_signal = 0;
 -- 
 2.34.1
 

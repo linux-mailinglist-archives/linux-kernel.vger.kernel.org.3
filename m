@@ -2,196 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1630F499329
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96621498B79
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384472AbiAXU3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:29:51 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36238 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354486AbiAXUJY (ORCPT
+        id S1344999AbiAXTN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:13:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346230AbiAXTFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:09:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5E5E6091B;
-        Mon, 24 Jan 2022 20:09:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9B7C340E5;
-        Mon, 24 Jan 2022 20:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054963;
-        bh=8VJ5DOh9GMO1apj0w6QDm4S3TRwOpzb1AAjkoMUZWbY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y+Y6pZvUUF4a2IPKoLRyk3jzCbQZhXa22sfMhaCjHGB1kcHQWlZ4dC3HTNpCdtCaM
-         vyuYJMKTnx3zUJT31RtTXq7NwQD3cOZ/Nn5Tvvue7zCq1gN33m98ZkJORUy6ds1zXK
-         jo6IFy3KaKleXuoq4kNWzNS7PJY2BIfnjXaMi9vY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Zi Yan <ziy@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 560/563] mm/hmm.c: allow VM_MIXEDMAP to work with hmm_range_fault
-Date:   Mon, 24 Jan 2022 19:45:25 +0100
-Message-Id: <20220124184043.818421244@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 24 Jan 2022 14:05:13 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6580CC0613E5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:00:16 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id j2so23912888ejk.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:00:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nT/ZnOHsKJlxYz4RqSgPwsd6TUWvpfzybqxkqHLwAN4=;
+        b=k9IWBrqvExqU3irvTU/m+erA5ybtTbL59pFHFgYqkP57ohTZ/v3GlH9Tu7iUlhg6hG
+         a/TNhyk/+HHdmMH/HYBmjBFQuKCdgJCKebYkoDz3tOkFFaZye31lrvmlV+MEUvZuBgug
+         PfEsTeO1eGfHVbT+6Gl68gmAEz54KK/oow/vQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nT/ZnOHsKJlxYz4RqSgPwsd6TUWvpfzybqxkqHLwAN4=;
+        b=Mw8XbGA8kRsMYAGlh1LzC5+eX/1iPE3TRLNqFn61OThv8BwpGwVTTw2UDr5djZxBNm
+         aGgwtVuSYGiUhGhQ4NBRqXHhtiYL6+ZvxwuLTnW6o/H0nhWUe4cdQKqXFSpbfafcb8aM
+         dbwPAmf8H4HNAPjc53S0PfBQo8d07bK7y3J3a/LraVoo1JBxsLE37zNwB2pJGpMnVYK8
+         XWiihh2EniMiugiu4tRP2T+umcqkIgBeeND01UfOYxOp7xzzIWtU9N+8+BOhORM7xDsn
+         ThyIJhl1TuXCEOF/sJZmq31Mhx/hACkBSpu8+Naf7CdjJpAiMtqsyXoLCfAwvOTLZxAh
+         /RZg==
+X-Gm-Message-State: AOAM530bL4QoI3llDIINh/T7jS88ik1S8rpyUNvip44bz+Vai3/U7ol/
+        H98Hnes6AinXvc45xrg+uqQUkQ==
+X-Google-Smtp-Source: ABdhPJwYGNun9Hzk3k6pwp4tGzmkEh86jeWwUHDIfzQx2wPsTL5GWj1R20Vl0XN/0YmqK56g5Z7M/w==
+X-Received: by 2002:a17:906:4acd:: with SMTP id u13mr13618410ejt.563.1643050814994;
+        Mon, 24 Jan 2022 11:00:14 -0800 (PST)
+Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id by22sm5221518ejb.84.2022.01.24.11.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 11:00:14 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v3 1/2] media: uvcvideo: Only create input devs if hw supports it
+Date:   Mon, 24 Jan 2022 20:00:12 +0100
+Message-Id: <20220124190013.221601-1-ribalda@chromium.org>
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Popple <apopple@nvidia.com>
+Examine the stream headers to figure out if the device has a GPIO and
+can be used as an input.
 
-commit 87c01d57fa23de82fff593a7d070933d08755801 upstream.
-
-hmm_range_fault() can be used instead of get_user_pages() for devices
-which allow faulting however unlike get_user_pages() it will return an
-error when used on a VM_MIXEDMAP range.
-
-To make hmm_range_fault() more closely match get_user_pages() remove
-this restriction.  This requires dealing with the !ARCH_HAS_PTE_SPECIAL
-case in hmm_vma_handle_pte().  Rather than replicating the logic of
-vm_normal_page() call it directly and do a check for the zero pfn
-similar to what get_user_pages() currently does.
-
-Also add a test to hmm selftest to verify functionality.
-
-Link: https://lkml.kernel.org/r/20211104012001.2555676-1-apopple@nvidia.com
-Fixes: da4c3c735ea4 ("mm/hmm/mirror: helper to snapshot CPU page table")
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Jerome Glisse <jglisse@redhat.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
-Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- lib/test_hmm.c                         |   24 ++++++++++++++++++
- mm/hmm.c                               |    5 ++-
- tools/testing/selftests/vm/hmm-tests.c |   42 +++++++++++++++++++++++++++++++++
- 3 files changed, 69 insertions(+), 2 deletions(-)
+ drivers/media/usb/uvc/uvc_status.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
---- a/lib/test_hmm.c
-+++ b/lib/test_hmm.c
-@@ -965,9 +965,33 @@ static long dmirror_fops_unlocked_ioctl(
- 	return 0;
- }
- 
-+static int dmirror_fops_mmap(struct file *file, struct vm_area_struct *vma)
+diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
+index 753c8226db70..3ef0b281ffc5 100644
+--- a/drivers/media/usb/uvc/uvc_status.c
++++ b/drivers/media/usb/uvc/uvc_status.c
+@@ -18,11 +18,34 @@
+  * Input device
+  */
+ #ifdef CONFIG_USB_VIDEO_CLASS_INPUT_EVDEV
++
++static bool uvc_input_has_button(struct uvc_device *dev)
 +{
-+	unsigned long addr;
++	struct uvc_streaming *stream;
 +
-+	for (addr = vma->vm_start; addr < vma->vm_end; addr += PAGE_SIZE) {
-+		struct page *page;
-+		int ret;
-+
-+		page = alloc_page(GFP_KERNEL | __GFP_ZERO);
-+		if (!page)
-+			return -ENOMEM;
-+
-+		ret = vm_insert_page(vma, addr, page);
-+		if (ret) {
-+			__free_page(page);
-+			return ret;
-+		}
-+		put_page(page);
++	/*
++	 * The device has GPIO button event if both bTriggerSupport and
++	 * bTriggerUsage are one. Otherwise the camera button does not
++	 * exist or is handled automatically by the camera without host
++	 * driver or client application intervention.
++	 */
++	list_for_each_entry(stream, &dev->streams, list) {
++		if (stream->header.bTriggerSupport == 1 &&
++		    stream->header.bTriggerUsage == 1)
++			return true;
 +	}
 +
-+	return 0;
++	return false;
 +}
 +
- static const struct file_operations dmirror_fops = {
- 	.open		= dmirror_fops_open,
- 	.release	= dmirror_fops_release,
-+	.mmap		= dmirror_fops_mmap,
- 	.unlocked_ioctl = dmirror_fops_unlocked_ioctl,
- 	.llseek		= default_llseek,
- 	.owner		= THIS_MODULE,
---- a/mm/hmm.c
-+++ b/mm/hmm.c
-@@ -296,7 +296,8 @@ static int hmm_vma_handle_pte(struct mm_
- 	 * Since each architecture defines a struct page for the zero page, just
- 	 * fall through and treat it like a normal page.
- 	 */
--	if (pte_special(pte) && !pte_devmap(pte) &&
-+	if (!vm_normal_page(walk->vma, addr, pte) &&
-+	    !pte_devmap(pte) &&
- 	    !is_zero_pfn(pte_pfn(pte))) {
- 		if (hmm_pte_need_fault(hmm_vma_walk, pfn_req_flags, 0)) {
- 			pte_unmap(ptep);
-@@ -514,7 +515,7 @@ static int hmm_vma_walk_test(unsigned lo
- 	struct hmm_range *range = hmm_vma_walk->range;
- 	struct vm_area_struct *vma = walk->vma;
- 
--	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP | VM_MIXEDMAP)) &&
-+	if (!(vma->vm_flags & (VM_IO | VM_PFNMAP)) &&
- 	    vma->vm_flags & VM_READ)
- 		return 0;
- 
---- a/tools/testing/selftests/vm/hmm-tests.c
-+++ b/tools/testing/selftests/vm/hmm-tests.c
-@@ -1245,6 +1245,48 @@ TEST_F(hmm, anon_teardown)
- /*
-  * Test memory snapshot without faulting in pages accessed by the device.
-  */
-+TEST_F(hmm, mixedmap)
-+{
-+	struct hmm_buffer *buffer;
-+	unsigned long npages;
-+	unsigned long size;
-+	unsigned char *m;
-+	int ret;
-+
-+	npages = 1;
-+	size = npages << self->page_shift;
-+
-+	buffer = malloc(sizeof(*buffer));
-+	ASSERT_NE(buffer, NULL);
-+
-+	buffer->fd = -1;
-+	buffer->size = size;
-+	buffer->mirror = malloc(npages);
-+	ASSERT_NE(buffer->mirror, NULL);
-+
-+
-+	/* Reserve a range of addresses. */
-+	buffer->ptr = mmap(NULL, size,
-+			   PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE,
-+			   self->fd, 0);
-+	ASSERT_NE(buffer->ptr, MAP_FAILED);
-+
-+	/* Simulate a device snapshotting CPU pagetables. */
-+	ret = hmm_dmirror_cmd(self->fd, HMM_DMIRROR_SNAPSHOT, buffer, npages);
-+	ASSERT_EQ(ret, 0);
-+	ASSERT_EQ(buffer->cpages, npages);
-+
-+	/* Check what the device saw. */
-+	m = buffer->mirror;
-+	ASSERT_EQ(m[0], HMM_DMIRROR_PROT_READ);
-+
-+	hmm_buffer_free(buffer);
-+}
-+
-+/*
-+ * Test memory snapshot without faulting in pages accessed by the device.
-+ */
- TEST_F(hmm2, snapshot)
+ static int uvc_input_init(struct uvc_device *dev)
  {
- 	struct hmm_buffer *buffer;
-
+ 	struct input_dev *input;
+ 	int ret;
+ 
++	if (!uvc_input_has_button(dev))
++		return 0;
++
+ 	input = input_allocate_device();
+ 	if (input == NULL)
+ 		return -ENOMEM;
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7F04993EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06CC9498D3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386678AbiAXUfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:35:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S1352154AbiAXT3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348595AbiAXUNT (ORCPT
+        with ESMTP id S1349159AbiAXTUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:13:19 -0500
+        Mon, 24 Jan 2022 14:20:23 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B954C028C34;
-        Mon, 24 Jan 2022 11:34:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA375C02B8D0;
+        Mon, 24 Jan 2022 11:07:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 051A8B81232;
-        Mon, 24 Jan 2022 19:34:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362BBC340E5;
-        Mon, 24 Jan 2022 19:34:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FC57B811FC;
+        Mon, 24 Jan 2022 19:07:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D0E8C340E5;
+        Mon, 24 Jan 2022 19:07:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052850;
-        bh=ix7wDqJn/RxHYwks4UqY3CjF4nw8nPf/m6csEMp6k/k=;
+        s=korg; t=1643051258;
+        bh=0ierq2hC0x5LeWSevBtfA0k91FVROzcHK/4VaadK2lE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PYoIjwYMu0bu0bluoxCv+20bSQneqjUEMCK5KdODzs8JHktjRhES4xMPKb6L6j2b6
-         g0IhHvtv3D5PST5+PHN8dEnb8/iIlBEyn3TiPULUpaV9sggb5Z6jvWb8ojV9TQQlyt
-         nQrlYQqFvJ8lJCVNp7yKxUxJCfm7P8v11CYzfLYA=
+        b=159D2yPGt7T19DHIDFY1oSc6eoeM83+9T/ZZ4XrqMCnzxvpELMCUD+9hixXFB8h2Q
+         lmaKI1cJzaZV9w1V6S51TKDFBnPg3y39rw5dxbMuKx2xop3AJARqssa7fUVkw0XTPB
+         L7wPaPr5g9NdvDdirBu4KQ4+HVoVguCkkg6WoK6A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Biwen Li <biwen.li@nxp.com>,
-        Li Yang <leoyang.lil@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, rkardell@mida.se,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 194/320] arm64: dts: ls1028a-qds: move rtc node to the correct i2c bus
+Subject: [PATCH 4.14 103/186] media: m920x: dont use stack on USB reads
 Date:   Mon, 24 Jan 2022 19:42:58 +0100
-Message-Id: <20220124184000.244014223@linuxfoundation.org>
+Message-Id: <20220124183940.427295823@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,52 +49,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biwen Li <biwen.li@nxp.com>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit cbe9d948eadfe352ad45495a7cc5bf20a1b29d90 ]
+[ Upstream commit a2ab06d7c4d6bfd0b545a768247a70463e977e27 ]
 
-The i2c rtc is on i2c2 bus not i2c1 bus, so fix it in dts.
+Using stack-allocated pointers for USB message data don't work.
+This driver is almost OK with that, except for the I2C read
+logic.
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
-Signed-off-by: Li Yang <leoyang.lil@nxp.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fix it by using a temporary read buffer, just like on all other
+calls to m920x_read().
+
+Link: https://lore.kernel.org/all/ccc99e48-de4f-045e-0fe4-61e3118e3f74@mida.se/
+Reported-by: rkardell@mida.se
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/media/usb/dvb-usb/m920x.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-index 078a5010228cd..0b3a93c4155d2 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-@@ -161,11 +161,6 @@
- 				vcc-supply = <&sb_3v3>;
- 			};
- 
--			rtc@51 {
--				compatible = "nxp,pcf2129";
--				reg = <0x51>;
--			};
--
- 			eeprom@56 {
- 				compatible = "atmel,24c512";
- 				reg = <0x56>;
-@@ -209,6 +204,15 @@
- 
- };
- 
-+&i2c1 {
-+	status = "okay";
+diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-usb/m920x.c
+index 32081c2ce0da8..8a43e2415686a 100644
+--- a/drivers/media/usb/dvb-usb/m920x.c
++++ b/drivers/media/usb/dvb-usb/m920x.c
+@@ -280,6 +280,13 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+ 			/* Should check for ack here, if we knew how. */
+ 		}
+ 		if (msg[i].flags & I2C_M_RD) {
++			char *read = kmalloc(1, GFP_KERNEL);
++			if (!read) {
++				ret = -ENOMEM;
++				kfree(read);
++				goto unlock;
++			}
 +
-+	rtc@51 {
-+		compatible = "nxp,pcf2129";
-+		reg = <0x51>;
-+	};
-+};
+ 			for (j = 0; j < msg[i].len; j++) {
+ 				/* Last byte of transaction?
+ 				 * Send STOP, otherwise send ACK. */
+@@ -287,9 +294,12 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+ 
+ 				if ((ret = m920x_read(d->udev, M9206_I2C, 0x0,
+ 						      0x20 | stop,
+-						      &msg[i].buf[j], 1)) != 0)
++						      read, 1)) != 0)
+ 					goto unlock;
++				msg[i].buf[j] = read[0];
+ 			}
 +
- &enetc_port1 {
- 	phy-handle = <&qds_phy1>;
- 	phy-connection-type = "rgmii-id";
++			kfree(read);
+ 		} else {
+ 			for (j = 0; j < msg[i].len; j++) {
+ 				/* Last byte of transaction? Then send STOP. */
 -- 
 2.34.1
 

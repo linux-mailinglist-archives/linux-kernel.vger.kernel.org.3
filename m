@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBE149A760
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C471E49A29B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3423891AbiAYCiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
+        id S2362957AbiAXXnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:43:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356569AbiAXUcS (ORCPT
+        with ESMTP id S1843478AbiAXXED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:32:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD64AC08B4ED;
-        Mon, 24 Jan 2022 11:43:36 -0800 (PST)
+        Mon, 24 Jan 2022 18:04:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CDCC061A7C;
+        Mon, 24 Jan 2022 13:14:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DC15612E9;
-        Mon, 24 Jan 2022 19:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EBE0C340E5;
-        Mon, 24 Jan 2022 19:43:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EB7CB811FB;
+        Mon, 24 Jan 2022 21:14:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FC5C340E5;
+        Mon, 24 Jan 2022 21:14:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053415;
-        bh=8r/XJeSI7KQi3vSVnflKjR5XFdHnpyEreex20ky/SVU=;
+        s=korg; t=1643058893;
+        bh=14/r+hbS3Go8S3OHeRGpUygNx3H7+e9c8m+YWqIr+MA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ET1d2WikVBi4mC6PsijcqG7runvNikjM10RQrc8v8nANon41KLu+20QSyadApyQyF
-         A7eQQUcP+YWu2TwlH/Rqc3dfEP4DaVk16Jcwmcv82oXccrOxt8Eb2HzTZU0dtWjaBs
-         wyrcGvaiyxGMG6jBwnuuaMQVVSdTZC+sIs5qK89o=
+        b=QpxPhhaj+AbaTHGnTkM0/ARnXPAZMGZr3kMiKpGSBAdLJtNM+khj0gS8fS3U9AIei
+         uS5QP+BOU1JkXajajtC+DvXMu2Tqf5dTyzR4DL6qTszOuJ4R313pi4XEg37wgCNLJc
+         1Vj5xN77RURn6gkGaQNPcbKOAjqSRXmKxuGR2RS0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 057/563] wcn36xx: Fix DMA channel enable/disable cycle
-Date:   Mon, 24 Jan 2022 19:37:02 +0100
-Message-Id: <20220124184026.379548584@linuxfoundation.org>
+Subject: [PATCH 5.16 0435/1039] can: rcar_canfd: rcar_canfd_channel_probe(): make sure we free CAN network device
+Date:   Mon, 24 Jan 2022 19:37:04 +0100
+Message-Id: <20220124184139.921784434@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,123 +51,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-[ Upstream commit 89dcb1da611d9b3ff0728502d58372fdaae9ebff ]
+[ Upstream commit 72b1e360572f9fa7d08ee554f1da29abce23f288 ]
 
-Right now we have a broken sequence where we enable DMA channel interrupts
-which can be left enabled and never disabled if we hit an error path.
+Make sure we free CAN network device in the error path. There are
+several jumps to fail label after allocating the CAN network device
+successfully. This patch places the free_candev() under fail label so
+that in failure path a jump to fail label frees the CAN network
+device.
 
-Worse still when we unload the driver, the DMA channel interrupt bits are
-left intact. About the only saving grace here is that we do remember to
-disable the wcnss interrupt when unload the driver.
-
-Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN3680 hardware")
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/20211105122152.1580542-2-bryan.odonoghue@linaro.org
+Fixes: 76e9353a80e9 ("can: rcar_canfd: Add support for RZ/G2L family")
+Link: https://lore.kernel.org/all/20220106114801.20563-1-prabhakar.mahadev-lad.rj@bp.renesas.com
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/wcn36xx/dxe.c | 38 ++++++++++++++++++--------
- 1 file changed, 27 insertions(+), 11 deletions(-)
+ drivers/net/can/rcar/rcar_canfd.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/wcn36xx/dxe.c b/drivers/net/wireless/ath/wcn36xx/dxe.c
-index cf4eb0fb28151..0909d0c423cbb 100644
---- a/drivers/net/wireless/ath/wcn36xx/dxe.c
-+++ b/drivers/net/wireless/ath/wcn36xx/dxe.c
-@@ -272,6 +272,21 @@ static int wcn36xx_dxe_enable_ch_int(struct wcn36xx *wcn, u16 wcn_ch)
- 	return 0;
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index ff9d0f5ae0dd2..388521e70837f 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1640,8 +1640,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+ 	ndev = alloc_candev(sizeof(*priv), RCANFD_FIFO_DEPTH);
+ 	if (!ndev) {
+ 		dev_err(&pdev->dev, "alloc_candev() failed\n");
+-		err = -ENOMEM;
+-		goto fail;
++		return -ENOMEM;
+ 	}
+ 	priv = netdev_priv(ndev);
+ 
+@@ -1735,8 +1734,8 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+ 
+ fail_candev:
+ 	netif_napi_del(&priv->napi);
+-	free_candev(ndev);
+ fail:
++	free_candev(ndev);
+ 	return err;
  }
  
-+static void wcn36xx_dxe_disable_ch_int(struct wcn36xx *wcn, u16 wcn_ch)
-+{
-+	int reg_data = 0;
-+
-+	wcn36xx_dxe_read_register(wcn,
-+				  WCN36XX_DXE_INT_MASK_REG,
-+				  &reg_data);
-+
-+	reg_data &= ~wcn_ch;
-+
-+	wcn36xx_dxe_write_register(wcn,
-+				   WCN36XX_DXE_INT_MASK_REG,
-+				   (int)reg_data);
-+}
-+
- static int wcn36xx_dxe_fill_skb(struct device *dev,
- 				struct wcn36xx_dxe_ctl *ctl,
- 				gfp_t gfp)
-@@ -869,7 +884,6 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
- 		WCN36XX_DXE_WQ_TX_L);
- 
- 	wcn36xx_dxe_read_register(wcn, WCN36XX_DXE_REG_CH_EN, &reg_data);
--	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_L);
- 
- 	/***************************************/
- 	/* Init descriptors for TX HIGH channel */
-@@ -893,9 +907,6 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
- 
- 	wcn36xx_dxe_read_register(wcn, WCN36XX_DXE_REG_CH_EN, &reg_data);
- 
--	/* Enable channel interrupts */
--	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_H);
--
- 	/***************************************/
- 	/* Init descriptors for RX LOW channel */
- 	/***************************************/
-@@ -905,7 +916,6 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
- 		goto out_err_rxl_ch;
- 	}
- 
--
- 	/* For RX we need to preallocated buffers */
- 	wcn36xx_dxe_ch_alloc_skb(wcn, &wcn->dxe_rx_l_ch);
- 
-@@ -928,9 +938,6 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
- 		WCN36XX_DXE_REG_CTL_RX_L,
- 		WCN36XX_DXE_CH_DEFAULT_CTL_RX_L);
- 
--	/* Enable channel interrupts */
--	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_L);
--
- 	/***************************************/
- 	/* Init descriptors for RX HIGH channel */
- 	/***************************************/
-@@ -962,15 +969,18 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
- 		WCN36XX_DXE_REG_CTL_RX_H,
- 		WCN36XX_DXE_CH_DEFAULT_CTL_RX_H);
- 
--	/* Enable channel interrupts */
--	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_H);
--
- 	ret = wcn36xx_dxe_request_irqs(wcn);
- 	if (ret < 0)
- 		goto out_err_irq;
- 
- 	timer_setup(&wcn->tx_ack_timer, wcn36xx_dxe_tx_timer, 0);
- 
-+	/* Enable channel interrupts */
-+	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_L);
-+	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_H);
-+	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_L);
-+	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_H);
-+
- 	return 0;
- 
- out_err_irq:
-@@ -987,6 +997,12 @@ out_err_txh_ch:
- 
- void wcn36xx_dxe_deinit(struct wcn36xx *wcn)
- {
-+	/* Disable channel interrupts */
-+	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_H);
-+	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_L);
-+	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_H);
-+	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_L);
-+
- 	free_irq(wcn->tx_irq, wcn);
- 	free_irq(wcn->rx_irq, wcn);
- 	del_timer(&wcn->tx_ack_timer);
 -- 
 2.34.1
 

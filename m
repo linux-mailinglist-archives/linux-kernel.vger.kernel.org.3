@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8929D498D82
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F804990CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353090AbiAXTco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:32:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S1376910AbiAXUEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:04:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348030AbiAXTXZ (ORCPT
+        with ESMTP id S1356359AbiAXTqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:23:25 -0500
+        Mon, 24 Jan 2022 14:46:01 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BD7C06125B;
-        Mon, 24 Jan 2022 11:11:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5713CC02417B;
+        Mon, 24 Jan 2022 11:22:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86C3460909;
-        Mon, 24 Jan 2022 19:11:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41EF1C340E5;
-        Mon, 24 Jan 2022 19:11:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA72E6143D;
+        Mon, 24 Jan 2022 19:22:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBEBC340E8;
+        Mon, 24 Jan 2022 19:22:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051464;
-        bh=mDquujr8OPPM9a1khBGrB/a/+a3dDoDKnUi8nbhr/iA=;
+        s=korg; t=1643052160;
+        bh=T4/i0YuXX/RMcyoaCx/hrRoyWRKFKPUqGz9imKlq18w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pXtjxPc2g47ApNpC7wJeR6hMQ/zW19Rp6XaJ9+0/YRomuIA+2a/6hxCVazNl7qfAY
-         Lqao7v6MgQTHIXFau9DijvFXiclHVgZEdb57sh40iMTSOuOlHUp3uQ0BN1EDRadHfi
-         1sz0NZXUU4ACjhHZ/aK7TxCL8tpeQZFVWyQRmBCw=
+        b=RRbOcHXKXtDrWbwlXI3Ua5jakU8m74I/qmEPlu/m/X5WWFU0+5hdAgz/FsilPlU4c
+         9epGAVvKpjLmdTkIa/62ApY0scJYkuZ3rPLa2leoq/faic9f/0n8Ke+/3T/Aehu4gn
+         PEu2Xbdz5yLeQvBKC4posgKZw/VRGNKdo6tO/MHI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.14 170/186] netns: add schedule point in ops_exit_list()
+        stable@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Lionel Debieve <lionel.debieve@st.com>,
+        Nicolas Toromanoff <nicolas.toromanoff@st.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
+Subject: [PATCH 4.19 207/239] crypto: stm32/crc32 - Fix kernel BUG triggered in probe()
 Date:   Mon, 24 Jan 2022 19:44:05 +0100
-Message-Id: <20220124183942.584678820@linuxfoundation.org>
+Message-Id: <20220124183949.688480674@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,47 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Marek Vasut <marex@denx.de>
 
-commit 2836615aa22de55b8fca5e32fe1b27a67cda625e upstream.
+commit 29009604ad4e3ef784fd9b9fef6f23610ddf633d upstream.
 
-When under stress, cleanup_net() can have to dismantle
-netns in big numbers. ops_exit_list() currently calls
-many helpers [1] that have no schedule point, and we can
-end up with soft lockups, particularly on hosts
-with many cpus.
+The include/linux/crypto.h struct crypto_alg field cra_driver_name description
+states "Unique name of the transformation provider. " ... " this contains the
+name of the chip or provider and the name of the transformation algorithm."
 
-Even for moderate amount of netns processed by cleanup_net()
-this patch avoids latency spikes.
+In case of the stm32-crc driver, field cra_driver_name is identical for all
+registered transformation providers and set to the name of the driver itself,
+which is incorrect. This patch fixes it by assigning a unique cra_driver_name
+to each registered transformation provider.
 
-[1] Some of these helpers like fib_sync_up() and fib_sync_down_dev()
-are very slow because net/ipv4/fib_semantics.c uses host-wide hash tables,
-and ifindex is used as the only input of two hash functions.
-    ifindexes tend to be the same for all netns (lo.ifindex==1 per instance)
-    This will be fixed in a separate patch.
+The kernel crash is triggered when the driver calls crypto_register_shashes()
+which calls crypto_register_shash(), which calls crypto_register_alg(), which
+calls __crypto_register_alg(), which returns -EEXIST, which is propagated
+back through this call chain. Upon -EEXIST from crypto_register_shash(), the
+crypto_register_shashes() starts unregistering the providers back, and calls
+crypto_unregister_shash(), which calls crypto_unregister_alg(), and this is
+where the BUG() triggers due to incorrect cra_refcnt.
 
-Fixes: 72ad937abd0a ("net: Add support for batching network namespace cleanups")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Eric W. Biederman <ebiederm@xmission.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: b51dbe90912a ("crypto: stm32 - Support for STM32 CRC32 crypto module")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: <stable@vger.kernel.org> # 4.12+
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Fabien Dessenne <fabien.dessenne@st.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Lionel Debieve <lionel.debieve@st.com>
+Cc: Nicolas Toromanoff <nicolas.toromanoff@st.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+To: linux-crypto@vger.kernel.org
+Acked-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/net_namespace.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/crypto/stm32/stm32_crc32.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@ -138,8 +138,10 @@ static void ops_exit_list(const struct p
- {
- 	struct net *net;
- 	if (ops->exit) {
--		list_for_each_entry(net, net_exit_list, exit_list)
-+		list_for_each_entry(net, net_exit_list, exit_list) {
- 			ops->exit(net);
-+			cond_resched();
-+		}
- 	}
- 	if (ops->exit_batch)
- 		ops->exit_batch(net_exit_list);
+--- a/drivers/crypto/stm32/stm32_crc32.c
++++ b/drivers/crypto/stm32/stm32_crc32.c
+@@ -230,7 +230,7 @@ static struct shash_alg algs[] = {
+ 		.digestsize     = CHKSUM_DIGEST_SIZE,
+ 		.base           = {
+ 			.cra_name               = "crc32",
+-			.cra_driver_name        = DRIVER_NAME,
++			.cra_driver_name        = "stm32-crc32-crc32",
+ 			.cra_priority           = 200,
+ 			.cra_flags		= CRYPTO_ALG_OPTIONAL_KEY,
+ 			.cra_blocksize          = CHKSUM_BLOCK_SIZE,
+@@ -252,7 +252,7 @@ static struct shash_alg algs[] = {
+ 		.digestsize     = CHKSUM_DIGEST_SIZE,
+ 		.base           = {
+ 			.cra_name               = "crc32c",
+-			.cra_driver_name        = DRIVER_NAME,
++			.cra_driver_name        = "stm32-crc32-crc32c",
+ 			.cra_priority           = 200,
+ 			.cra_flags		= CRYPTO_ALG_OPTIONAL_KEY,
+ 			.cra_blocksize          = CHKSUM_BLOCK_SIZE,
 
 

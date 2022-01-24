@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACD04992EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76600498A81
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382764AbiAXU0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:26:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58044 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353254AbiAXUBa (ORCPT
+        id S1345664AbiAXTEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:04:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57298 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345206AbiAXS74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:01:30 -0500
+        Mon, 24 Jan 2022 13:59:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB49D611CD;
-        Mon, 24 Jan 2022 20:01:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABCE4C340E7;
-        Mon, 24 Jan 2022 20:01:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B707CB8121C;
+        Mon, 24 Jan 2022 18:59:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6AE1C340E5;
+        Mon, 24 Jan 2022 18:59:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054488;
-        bh=sPspLDjSwcA/+CaLh+o2OAKsp197ZqFntPnughJxxdU=;
+        s=korg; t=1643050794;
+        bh=8+gCBx0g7+QE7u/fTFVaw7lf8xg7PIrSLStF9YpUgcY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bMyVPtQHdupblyZELIrIHw0ilOaQ4oMflYrHtVw0OZWyNwYkUbtfmAQEr9DtbVNsy
-         yXA8S7kQQ+02LZtfo+olYtY3orM4uFf/ISFn7JteGO0Z1bYk5qOXwyzRRYj9xAssxM
-         SRF6ubw+27MIxRaISSNH+Sj0zwM/4bTrsTzxWPKY=
+        b=xHKf48nyTKpw/plnmYAT6zNUOJeROWaddZQmsn9VnES2b0+MxEUWPIP2cpdIZlNfT
+         87wRhOtXh9bPkysGf7MUV0TGlP0bP8Oqk0WjAhi1TmVjSbQqK/HyLh3MXH3GS80ow+
+         pcT+y6y0Ga2knJ0ErF6xyoWvaWtBvLGnDpKRho54=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 406/563] parisc: Avoid calling faulthandler_disabled() twice
+        stable@vger.kernel.org, Chengfeng Ye <cyeaa@connect.ust.hk>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 081/157] HSI: core: Fix return freed object in hsi_new_client
 Date:   Mon, 24 Jan 2022 19:42:51 +0100
-Message-Id: <20220124184038.488134638@linuxfoundation.org>
+Message-Id: <20220124183935.354484686@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,51 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Chengfeng Ye <cyeaa@connect.ust.hk>
 
-[ Upstream commit 9e9d4b460f23bab61672eae397417d03917d116c ]
+[ Upstream commit a1ee1c08fcd5af03187dcd41dcab12fd5b379555 ]
 
-In handle_interruption(), we call faulthandler_disabled() to check whether the
-fault handler is not disabled. If the fault handler is disabled, we immediately
-call do_page_fault(). It then calls faulthandler_disabled(). If disabled,
-do_page_fault() attempts to fixup the exception by jumping to no_context:
+cl is freed on error of calling device_register, but this
+object is return later, which will cause uaf issue. Fix it
+by return NULL on error.
 
-no_context:
-
-        if (!user_mode(regs) && fixup_exception(regs)) {
-                return;
-        }
-
-        parisc_terminate("Bad Address (null pointer deref?)", regs, code, address);
-
-Apart from the error messages, the two blocks of code perform the same
-function.
-
-We can avoid two calls to faulthandler_disabled() by a simple revision
-to the code in handle_interruption().
-
-Note: I didn't try to fix the formatting of this code block.
-
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Chengfeng Ye <cyeaa@connect.ust.hk>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/kernel/traps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hsi/hsi_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/parisc/kernel/traps.c b/arch/parisc/kernel/traps.c
-index 43f56335759a4..269b737d26299 100644
---- a/arch/parisc/kernel/traps.c
-+++ b/arch/parisc/kernel/traps.c
-@@ -784,7 +784,7 @@ void notrace handle_interruption(int code, struct pt_regs *regs)
- 	     * unless pagefault_disable() was called before.
- 	     */
+diff --git a/drivers/hsi/hsi_core.c b/drivers/hsi/hsi_core.c
+index e9d63b966caff..4a9fd745b8cb4 100644
+--- a/drivers/hsi/hsi_core.c
++++ b/drivers/hsi/hsi_core.c
+@@ -115,6 +115,7 @@ struct hsi_client *hsi_new_client(struct hsi_port *port,
+ 	if (device_register(&cl->device) < 0) {
+ 		pr_err("hsi: failed to register client: %s\n", info->name);
+ 		put_device(&cl->device);
++		goto err;
+ 	}
  
--	    if (fault_space == 0 && !faulthandler_disabled())
-+	    if (faulthandler_disabled() || fault_space == 0)
- 	    {
- 		/* Clean up and return if in exception table. */
- 		if (fixup_exception(regs))
+ 	return cl;
 -- 
 2.34.1
 

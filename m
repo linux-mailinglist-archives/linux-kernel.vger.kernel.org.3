@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7567E4994DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9902499CC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359122AbiAXUtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:49:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33514 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382135AbiAXUZP (ORCPT
+        id S1379852AbiAXWIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:08:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38026 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1449126AbiAXVO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:25:15 -0500
+        Mon, 24 Jan 2022 16:14:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F354CB811FB;
-        Mon, 24 Jan 2022 20:25:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28472C340E5;
-        Mon, 24 Jan 2022 20:25:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D539061320;
+        Mon, 24 Jan 2022 21:14:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3B3C340E5;
+        Mon, 24 Jan 2022 21:14:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055912;
-        bh=v3CmNcQuVcLWxRTsj4bwVZeaXhS0Z8OOc7cj1SIMdtw=;
+        s=korg; t=1643058896;
+        bh=g6pSpn2i0X05d9/e/pvWbJQ995pdOEPCyDaWB64n2Dw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b/OroVOPtNvXPY/5tTh0E+jigHIWLisjzgUdyalt3PUSyU5N8lWnJqrM+DaLdmEP4
-         QHE7VBwxEj3fM65nxKjA11j9XtcqecfR1xLEADzeiXJMYR2sB00f6Qv1uLMzHNihoJ
-         wwpr/UuNQx6g8YQjoWXAktJz3bFimtz0VvWHEmbM=
+        b=A8TfzFupAeMFv+oOIcOMkIgwCyIAZtoxIxpTUMh3Q9UZLkupdfvTAh9MqnJz/Wrvf
+         gisa2/zIcZLd0V3XN8r/K2sfEY0ZKQy3uk/VeMVCl98xpvLLngAfpGLb4kF91mVsGP
+         992ygy/t9dnIQKygJgcsxWy//EFpUZ7Xz9tAFScI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Al Viro <viro@ZenIV.linux.org.uk>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 308/846] netfilter: ipt_CLUSTERIP: fix refcount leak in clusterip_tg_check()
+Subject: [PATCH 5.16 0436/1039] pcmcia: fix setting of kthread task states
 Date:   Mon, 24 Jan 2022 19:37:05 +0100
-Message-Id: <20220124184111.534886909@linuxfoundation.org>
+Message-Id: <20220124184139.955395323@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,46 +47,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Xiong <xiongx18@fudan.edu.cn>
+From: Dominik Brodowski <linux@dominikbrodowski.net>
 
-[ Upstream commit d94a69cb2cfa77294921aae9afcfb866e723a2da ]
+[ Upstream commit fbb3485f1f931102d8ba606f1c28123f5b48afa3 ]
 
-The issue takes place in one error path of clusterip_tg_check(). When
-memcmp() returns nonzero, the function simply returns the error code,
-forgetting to decrease the reference count of a clusterip_config
-object, which is bumped earlier by clusterip_config_find_get(). This
-may incur reference count leak.
+We need to set TASK_INTERRUPTIBLE before calling kthread_should_stop().
+Otherwise, kthread_stop() might see that the pccardd thread is still
+in TASK_RUNNING state and fail to wake it up.
 
-Fix this issue by decrementing the refcount of the object in specific
-error path.
+Additionally, we only need to set the state back to TASK_RUNNING if
+kthread_should_stop() breaks the loop.
 
-Fixes: 06aa151ad1fc74 ("netfilter: ipt_CLUSTERIP: check MAC address when duplicate config is set")
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Al Viro <viro@ZenIV.linux.org.uk>
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Fixes: d3046ba809ce ("pcmcia: fix a boot time warning in pcmcia cs code")
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/netfilter/ipt_CLUSTERIP.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/pcmcia/cs.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/net/ipv4/netfilter/ipt_CLUSTERIP.c b/net/ipv4/netfilter/ipt_CLUSTERIP.c
-index 8fd1aba8af31c..b518f20c9a244 100644
---- a/net/ipv4/netfilter/ipt_CLUSTERIP.c
-+++ b/net/ipv4/netfilter/ipt_CLUSTERIP.c
-@@ -520,8 +520,11 @@ static int clusterip_tg_check(const struct xt_tgchk_param *par)
- 			if (IS_ERR(config))
- 				return PTR_ERR(config);
- 		}
--	} else if (memcmp(&config->clustermac, &cipinfo->clustermac, ETH_ALEN))
-+	} else if (memcmp(&config->clustermac, &cipinfo->clustermac, ETH_ALEN)) {
-+		clusterip_config_entry_put(config);
-+		clusterip_config_put(config);
- 		return -EINVAL;
-+	}
+diff --git a/drivers/pcmcia/cs.c b/drivers/pcmcia/cs.c
+index e211e2619680c..f70197154a362 100644
+--- a/drivers/pcmcia/cs.c
++++ b/drivers/pcmcia/cs.c
+@@ -666,18 +666,16 @@ static int pccardd(void *__skt)
+ 		if (events || sysfs_events)
+ 			continue;
  
- 	ret = nf_ct_netns_get(par->net, par->family);
- 	if (ret < 0) {
++		set_current_state(TASK_INTERRUPTIBLE);
+ 		if (kthread_should_stop())
+ 			break;
+ 
+-		set_current_state(TASK_INTERRUPTIBLE);
+-
+ 		schedule();
+ 
+-		/* make sure we are running */
+-		__set_current_state(TASK_RUNNING);
+-
+ 		try_to_freeze();
+ 	}
++	/* make sure we are running before we exit */
++	__set_current_state(TASK_RUNNING);
+ 
+ 	/* shut down socket, if a device is still present */
+ 	if (skt->state & SOCKET_PRESENT) {
 -- 
 2.34.1
 

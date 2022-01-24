@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8BA498AB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BCE498E7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345940AbiAXTEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:04:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56764 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343972AbiAXS5o (ORCPT
+        id S238261AbiAXTmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:42:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56286 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353189AbiAXTdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:57:44 -0500
+        Mon, 24 Jan 2022 14:33:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F2B361571;
-        Mon, 24 Jan 2022 18:57:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2F0C340E5;
-        Mon, 24 Jan 2022 18:57:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24134B810AF;
+        Mon, 24 Jan 2022 19:33:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC05C340E5;
+        Mon, 24 Jan 2022 19:33:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050663;
-        bh=Qjjcms0dCT2MCUurdm3bONYYlLGmNucgLwcM9IbxerE=;
+        s=korg; t=1643052797;
+        bh=8H5EoVxDGihervYYRp6fPu7r8TlKkjq40J4IIxrxiNw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LCpIuFmHfdgEV/6wEf6JytC1c0lRO8d7n+/UA4TOT7GFxRp+zuwi1p83Pbk6EPrnI
-         HHNUSJL75ibyQWQKQLyH4RPETIAUPHxu1gs+Xlj/Lz8SaU9GwVSH4qOchzQfm18nl7
-         OkkxRmsuzPP4ii83/j9Yzy0naN+NcLoXvts1UnQM=
+        b=1PqQ7rScLD86SrJLr6jO+8lcb2OJ/uzUeJvNRYQLnWEartjEl41BJ9r1B8J9Ll8uO
+         evG8yz4uwpaU6PRbiaDZYkFY3QWjmmGokq6W89g0Di0exkstGGE5aeLqcloZXrPcI4
+         /a6tK2WaRru/eQhoEGikJR9hCHKK9ncaKF8ul43A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kamal Heib <kamalheib1@gmail.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, rkardell@mida.se,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 072/157] RDMA/cxgb4: Set queue pair state when being queried
+Subject: [PATCH 5.4 178/320] media: m920x: dont use stack on USB reads
 Date:   Mon, 24 Jan 2022 19:42:42 +0100
-Message-Id: <20220124183935.077018026@linuxfoundation.org>
+Message-Id: <20220124183959.716996501@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,35 +46,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kamal Heib <kamalheib1@gmail.com>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit e375b9c92985e409c4bb95dd43d34915ea7f5e28 ]
+[ Upstream commit a2ab06d7c4d6bfd0b545a768247a70463e977e27 ]
 
-The API for ib_query_qp requires the driver to set cur_qp_state on return,
-add the missing set.
+Using stack-allocated pointers for USB message data don't work.
+This driver is almost OK with that, except for the I2C read
+logic.
 
-Fixes: 67bbc05512d8 ("RDMA/cxgb4: Add query_qp support")
-Link: https://lore.kernel.org/r/20211220152530.60399-1-kamalheib1@gmail.com
-Signed-off-by: Kamal Heib <kamalheib1@gmail.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fix it by using a temporary read buffer, just like on all other
+calls to m920x_read().
+
+Link: https://lore.kernel.org/all/ccc99e48-de4f-045e-0fe4-61e3118e3f74@mida.se/
+Reported-by: rkardell@mida.se
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/cxgb4/qp.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/usb/dvb-usb/m920x.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/cxgb4/qp.c b/drivers/infiniband/hw/cxgb4/qp.c
-index 87bc7b0db892b..2eeac8401c927 100644
---- a/drivers/infiniband/hw/cxgb4/qp.c
-+++ b/drivers/infiniband/hw/cxgb4/qp.c
-@@ -1974,6 +1974,7 @@ int c4iw_ib_query_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
- 	memset(attr, 0, sizeof *attr);
- 	memset(init_attr, 0, sizeof *init_attr);
- 	attr->qp_state = to_ib_qp_state(qhp->attr.state);
-+	attr->cur_qp_state = to_ib_qp_state(qhp->attr.state);
- 	init_attr->cap.max_send_wr = qhp->attr.sq_num_entries;
- 	init_attr->cap.max_recv_wr = qhp->attr.rq_num_entries;
- 	init_attr->cap.max_send_sge = qhp->attr.sq_max_sges;
+diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-usb/m920x.c
+index d866a1990a7d2..7282f60226558 100644
+--- a/drivers/media/usb/dvb-usb/m920x.c
++++ b/drivers/media/usb/dvb-usb/m920x.c
+@@ -274,6 +274,13 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+ 			/* Should check for ack here, if we knew how. */
+ 		}
+ 		if (msg[i].flags & I2C_M_RD) {
++			char *read = kmalloc(1, GFP_KERNEL);
++			if (!read) {
++				ret = -ENOMEM;
++				kfree(read);
++				goto unlock;
++			}
++
+ 			for (j = 0; j < msg[i].len; j++) {
+ 				/* Last byte of transaction?
+ 				 * Send STOP, otherwise send ACK. */
+@@ -281,9 +288,12 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+ 
+ 				if ((ret = m920x_read(d->udev, M9206_I2C, 0x0,
+ 						      0x20 | stop,
+-						      &msg[i].buf[j], 1)) != 0)
++						      read, 1)) != 0)
+ 					goto unlock;
++				msg[i].buf[j] = read[0];
+ 			}
++
++			kfree(read);
+ 		} else {
+ 			for (j = 0; j < msg[i].len; j++) {
+ 				/* Last byte of transaction? Then send STOP. */
 -- 
 2.34.1
 

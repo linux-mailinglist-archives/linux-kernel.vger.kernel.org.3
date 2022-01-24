@@ -2,140 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D660249A33B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982EB49A239
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2366181AbiAXXw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:52:28 -0500
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:8116 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1840615AbiAXWyw (ORCPT
+        id S1844445AbiAXXik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:38:40 -0500
+Received: from mail-lf1-f54.google.com ([209.85.167.54]:44659 "EHLO
+        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1842011AbiAXXAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:54:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1643064894; x=1674600894;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tCQU+m5DYoHuerB1mz/UMZFKa6gGl9Rfb7pcDwFKfco=;
-  b=Xtzq4h8cl4HVBhJokEwve7jCp06LmsIAgX5CXpFnnqOwbgPf6BYeON4d
-   2/twaKpXfjFNvvHFAIg0xnfu3VX6aiI74DNA1yQZuOkp8xpINYyb+QxuH
-   UO5fV6rjcQlosFgX55TCZlwv1lIICOZicERhoF70XDLjQabJ8YVLqHqXa
-   U=;
-X-IronPort-AV: E=Sophos;i="5.88,313,1635206400"; 
-   d="scan'208";a="172800001"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1box-d-74e80b3c.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 24 Jan 2022 22:54:16 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1box-d-74e80b3c.us-east-1.amazon.com (Postfix) with ESMTPS id 643298728F;
-        Mon, 24 Jan 2022 22:54:11 +0000 (UTC)
-Received: from EX13D02UWB002.ant.amazon.com (10.43.161.160) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 24 Jan 2022 22:54:10 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D02UWB002.ant.amazon.com (10.43.161.160) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 24 Jan 2022 22:54:10 +0000
-Received: from dev-dsk-alisaidi-i31e-9f3421fe.us-east-1.amazon.com
- (10.200.138.153) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.28 via Frontend Transport; Mon, 24 Jan 2022 22:54:09
- +0000
-Received: by dev-dsk-alisaidi-i31e-9f3421fe.us-east-1.amazon.com (Postfix, from userid 5131138)
-        id B167A21B28; Mon, 24 Jan 2022 22:54:09 +0000 (UTC)
-From:   Ali Saidi <alisaidi@amazon.com>
-To:     <james.clark@arm.com>
-CC:     <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <alisaidi@amazon.com>, <andrew.kilroy@arm.com>,
-        <benh@kernel.crashing.org>, <german.gomez@arm.com>,
-        <john.garry@huawei.com>, <jolsa@redhat.com>, <leo.yan@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
-        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>
-Subject: Re: [PATCH] perf arm-spe: Use SPE data source for neoverse cores
-Date:   Mon, 24 Jan 2022 22:53:33 +0000
-Message-ID: <20220124225333.19864-1-alisaidi@amazon.com>
-X-Mailer: git-send-email 2.24.4.AMZN
-In-Reply-To: <0ba26f30-6978-36ad-f7d0-7b8465648e54@arm.com>
-References: <0ba26f30-6978-36ad-f7d0-7b8465648e54@arm.com>
+        Mon, 24 Jan 2022 18:00:38 -0500
+Received: by mail-lf1-f54.google.com with SMTP id u14so22099497lfo.11;
+        Mon, 24 Jan 2022 15:00:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TonNysDZMx9C4Dgz002yU+hZtY7UFn20FRBn7HwXRao=;
+        b=zJeZXL4lEtXd51yhNP4Dt8NLrpOgKtwtkuVhFgMcSeY3lJUm/fx6E5JHiyV0IGv5Bh
+         6JZ1PiIh06FdTyZ1LD8xsguOBmpG7eVO+VNBWGPR0wQZ7/8nvrulNgKd9EH6NypN016B
+         k49qrM7qWUsvn4fDiGduiMdmg4ED37TNTErJljOjdwxsi6DVhhigpDHLe0xhrNvLFzzU
+         s+8YHebAxzDyw0RuRGz3dTeX5bg+6ETw0sDXXU6kJyhbIzaQkIUvSClOhzitqa+x/hI0
+         tlcvnpY38RPzZQviZy8rDWekcfQ96DuF2BM/bf6yfxon95iGdlxCuKSskC5qKoZmmYr5
+         H9Kw==
+X-Gm-Message-State: AOAM533JDGhIvNv7AG2xKTnwbPGy/uUEqAp9TolZi7e3ELRz44tjdTdu
+        eIoEyGsmCFTQ4zTqAIvXec8BBHH1+XwCJIDgRoX7g+kjEf3wfQ==
+X-Google-Smtp-Source: ABdhPJwUnhDVJOnLtC1IiX8E70tZTGNmcoWs3IFq1spDSkVkBLWmAMy/FESSLlhmgEkEjLfuy96nEV5Lp6wBMpR5v3o=
+X-Received: by 2002:a05:6512:6c1:: with SMTP id u1mr14221835lff.9.1643065235474;
+ Mon, 24 Jan 2022 15:00:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <CABXGCsNb22JCJ4AyR1sYqFtF4QUnvM3B2zQcc1svcm2mquWxoA@mail.gmail.com>
+ <YeUvvIaVJnJrrpYe@kuha.fi.intel.com> <CABXGCsO5PYBuZ11YR16NLLa0H07Jom1JQhWHFuETfotfBfzkMw@mail.gmail.com>
+ <YeVQsRp7aDMcQKs7@kuha.fi.intel.com> <CABXGCsMWXFFQY3L8ixK9K-gYX41_gTjqHRBXNp6gDpUgdnvFfg@mail.gmail.com>
+ <YeVfYOhxGTgg8VpZ@kuha.fi.intel.com> <CABXGCsOwsP7NJ67oyK3HPs2EarSJKLB9EVW7oEh+8bAFihSa8g@mail.gmail.com>
+ <Yea8p1b/sZYKNGaB@kuha.fi.intel.com> <YebBq/WDeYCIvwYw@kuha.fi.intel.com> <CANcMJZDrs418aUoVS4CijQFqgAW3pCbfm_NUCmx+T7HNoiMVnQ@mail.gmail.com>
+In-Reply-To: <CANcMJZDrs418aUoVS4CijQFqgAW3pCbfm_NUCmx+T7HNoiMVnQ@mail.gmail.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Mon, 24 Jan 2022 18:00:24 -0500
+Message-ID: <CAJvTdKnMKdQ6KJe63phZ87kJz2SjeQoNTHqajSfv4RJo6+Y6jw@mail.gmail.com>
+Subject: Re: [Bug][5.17-rc0] Between commits daadb3bd0e8d and 455e73a07f6e,
+ the kernel stops loading on my devices.
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        rafael.j.wysocki@intel.com, linux-usb@vger.kernel.org,
+        YongQin Liu <yongqin.liu@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22, 11:24 AM, "James Clark" <james.clark@arm.com> wrote:
->On 21/01/2022 18:24, Ali Saidi wrote:
->> When synthesizing data from SPE, augment the type with source information
->> for Arm Neoverse cores. The field is IMPLDEF but the Neoverse cores all use
->> the same encoding. I can't find encoding information for any other SPE
->> implementations to unify their choices with Arm's thus that is left for future
->> work.
->> 
->> This changes enables the expected behavior of perf c2c on a system with SPE where
->> lines that are shared among multiple cores show up in perf c2c output. 
->> 
->> Signed-off-by: Ali Saidi <alisaidi@amazon.com> 
->> ---
->>  .../util/arm-spe-decoder/arm-spe-decoder.c    |  1 +
->>  .../util/arm-spe-decoder/arm-spe-decoder.h    | 12 +++++
->>  tools/perf/util/arm-spe.c                     | 48 ++++++++++++++-----
->>  3 files changed, 49 insertions(+), 12 deletions(-)
->> 
->[...]
->> +static u64 arm_spe__synth_data_source(const struct arm_spe_record *record, u64 midr)
->>  {
->>  	union perf_mem_data_src	data_src = { 0 };
->> +	bool is_neoverse = is_midr_in_range(midr, neoverse_spe);
->>  
->>  	if (record->op == ARM_SPE_LD)
->>  		data_src.mem_op = PERF_MEM_OP_LOAD;
->> @@ -409,19 +418,30 @@ static u64 arm_spe__synth_data_source(const struct arm_spe_record *record)
->>  		data_src.mem_op = PERF_MEM_OP_STORE;
->>  
->>  	if (record->type & (ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS)) {
->> -		data_src.mem_lvl = PERF_MEM_LVL_L3;
->> +		if (is_neoverse && record->source == ARM_SPE_NV_DRAM) {
->> +			data_src.mem_lvl = PERF_MEM_LVL_LOC_RAM | PERF_MEM_LVL_HIT;
->> +		} else if (is_neoverse && record->source == ARM_SPE_NV_PEER_CLSTR) {
->> +			data_src.mem_snoop = PERF_MEM_SNOOP_HITM;
+Tested-by: Len Brown <len.brown@intelcom>
+
+The typec_link_ports crash goes away w/ the 2nd patch.
+
+https://bugzilla.kernel.org/show_bug.cgi?id=215529
+
+On Fri, Jan 21, 2022 at 4:33 PM John Stultz <john.stultz@linaro.org> wrote:
 >
->I'm not following how LLC_ACCESS | LLC_MISS ends up as HITM in this case (ARM_SPE_NV_PEER_CLSTR)?
->I thought there was no way to determine a HITM from SPE. Wouldn't one of the other values
->like PERF_MEM_SNOOP_MISS be more accurate?
-
-Thanks for taking a look James.
-
-I'd really like someone familiar with perf c2c output to also end up getting
-similar output when running on an Arm system with SPE. There are obviously large
-micro-architectural differences that have been abstracted away by the data_src
-abstraction but fundamentally my understanding of x86 HITM is that the line
-was found in the snoop filter of the LLC as being owned by another core and
-therefore the request needs to go to another core to get the line.  I'm not
-100% sure if on x86 it's really guaranteed to be dirty or not and it's not
-always going to be dirty in a Neoverse system, but since the SPE source
-indicates it was sourced from another core it is a core-2-core transfer of a
-line which is currently owned by another cpu core and that is the interesting
-data point that would be used to drive optimization and elimination of frequent
-core-2-core transfers (true or false sharing).
-
->> +			data_src.mem_lvl = PERF_MEM_LVL_L3 | PERF_MEM_LVL_HIT;
+> On Thu, Jan 20, 2022 at 3:27 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> > On Tue, Jan 18, 2022 at 03:12:10PM +0200, Heikki Krogerus wrote:
+> > > I can reproduce this one by simply not creating the component list in
+> > > the code. That function - component_master_add_with_match() - can't
+> > > handle situation where the list is empty. I'll prepare the fix.
+> >
+> > I'm again attaching the proposed fix, just to see if it also gets
+> > corrupted. Can you test does it fix this issue?
+> > You need to apply it on top of the previous one.
 >
->This one also adds PERF_MEM_LVL_HIT even though the check of "if (record->type & ARM_SPE_LLC_MISS)"
->hasn't happened yet. Maybe some comments would make it a bit clearer, but at the moment it's
->not obvious how the result is derived because there are some things that don't add up like
->ARM_SPE_LLC_MISS == PERF_MEM_LVL_HIT.
+> We've been hitting the null pointer crash from
+> component_master_add_with_match() regression as well on the hikey960
+> board.
+>
+> The patch you attached resolves the issue. It would be great to see it
+> merged upstream soon!
+>
+> Tested-by: John Stultz <john.stultz@linaro.org>
+>
+> thanks
+> -john
 
-Assuming the above is correct, my reading of the existing code that creates the
-c2c output is that when an access is marked as an LLC hit, that doesn't
-necessarily mean that the data was present in the LLC. I don't see how it could
-given that LLC_HIT + HITM means the line was dirty in another CPUs cache, and so
-LLC_HIT + HITM seems to mean that it was a hit in the LLC snoop filter and
-required a different core to provide the line. This and the above certainly
-deserve a comment as to why the miss is being attributed in this way if it's
-otherwise acceptable.
 
-Thanks,
-Ali
 
+-- 
+Len Brown, Intel Open Source Technology Center

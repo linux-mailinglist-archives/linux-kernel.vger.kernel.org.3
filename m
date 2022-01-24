@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E04FC499E11
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA1749A088
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587500AbiAXW2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:28:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54276 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455265AbiAXVfF (ORCPT
+        id S1844722AbiAXXKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1581332AbiAXWRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:35:05 -0500
+        Mon, 24 Jan 2022 17:17:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CB7C04A2DA;
+        Mon, 24 Jan 2022 12:45:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 587EF614CB;
-        Mon, 24 Jan 2022 21:35:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD02C340E4;
-        Mon, 24 Jan 2022 21:35:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6E0160C19;
+        Mon, 24 Jan 2022 20:45:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEDCC340E5;
+        Mon, 24 Jan 2022 20:45:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060103;
-        bh=fKi7ZwPG8n0+BGVYMxk00IA52PoG1YjyUx5UZx1Vb/o=;
+        s=korg; t=1643057142;
+        bh=EdeKd8hYj4w686f57lxmjeNGU6Ybz4jy8tR2I583/b4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CyfW4dx0pc5FES4nKvQR4mnD3JTTXE2D/wa0BIue+FuRULxdHE3FOkN6pXuD+7+Vw
-         /suHcanx2ZVWRcsH96PN7M2jTmIxt/8fCvpKYhFg6gJcD+Fv3TfiOuu9n9Z+Tg3VuB
-         AxpAIdfIaG6ahWQaXUc0JgDYNxfxInXXSNcQb1fE=
+        b=JlwIbyWaXtYjBC8monGqjtzJyOhPAV1pc+zxu/mt21qKPaAbidMghyg91fEVN6Sh6
+         fmfJ9jG6vN//rQadYjKcA3I/2I03MRAA8o0PdEPAYAnupCgXh98wtL71zSWMjnJraA
+         Wp7FCsjH7tzr0xJlwhZEMVdEGKWYizy99z+1RJMk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Patrick Williams <patrick@stwcx.xyz>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH 5.16 0841/1039] tpm: fix NPE on probe for missing device
-Date:   Mon, 24 Jan 2022 19:43:50 +0100
-Message-Id: <20220124184153.564796737@linuxfoundation.org>
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>, stable@kernel.org,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.15 714/846] ext4: make sure quota gets properly shutdown on error
+Date:   Mon, 24 Jan 2022 19:43:51 +0100
+Message-Id: <20220124184125.653471993@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,58 +48,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Williams <patrick@stwcx.xyz>
+From: Jan Kara <jack@suse.cz>
 
-commit 84cc69589700b90a4c8d27b481a51fce8cca6051 upstream.
+commit 15fc69bbbbbc8c72e5f6cc4e1be0f51283c5448e upstream.
 
-When using the tpm_tis-spi driver on a system missing the physical TPM,
-a null pointer exception was observed.
+When we hit an error when enabling quotas and setting inode flags, we do
+not properly shutdown quota subsystem despite returning error from
+Q_QUOTAON quotactl. This can lead to some odd situations like kernel
+using quota file while it is still writeable for userspace. Make sure we
+properly cleanup the quota subsystem in case of error.
 
-    [    0.938677] Unable to handle kernel NULL pointer dereference at virtual address 00000004
-    [    0.939020] pgd = 10c753cb
-    [    0.939237] [00000004] *pgd=00000000
-    [    0.939808] Internal error: Oops: 5 [#1] SMP ARM
-    [    0.940157] CPU: 0 PID: 48 Comm: kworker/u4:1 Not tainted 5.15.10-dd1e40c #1
-    [    0.940364] Hardware name: Generic DT based system
-    [    0.940601] Workqueue: events_unbound async_run_entry_fn
-    [    0.941048] PC is at tpm_tis_remove+0x28/0xb4
-    [    0.941196] LR is at tpm_tis_core_init+0x170/0x6ac
-
-This is due to an attempt in 'tpm_tis_remove' to use the drvdata, which
-was not initialized in 'tpm_tis_core_init' prior to the first error.
-
-Move the initialization of drvdata earlier so 'tpm_tis_remove' has
-access to it.
-
-Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
-Fixes: 79ca6f74dae0 ("tpm: fix Atmel TPM crash caused by too frequent queries")
-Cc: stable@vger.kernel.org
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jan Kara <jack@suse.cz>
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/r/20211007155336.12493-2-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/tpm/tpm_tis_core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/ext4/super.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -950,6 +950,8 @@ int tpm_tis_core_init(struct device *dev
- 	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
- 	priv->phy_ops = phy_ops;
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -6266,10 +6266,7 @@ static int ext4_quota_on(struct super_bl
  
-+	dev_set_drvdata(&chip->dev, priv);
-+
- 	rc = tpm_tis_read32(priv, TPM_DID_VID(0), &vendor);
- 	if (rc < 0)
- 		return rc;
-@@ -962,8 +964,6 @@ int tpm_tis_core_init(struct device *dev
- 		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
+ 	lockdep_set_quota_inode(path->dentry->d_inode, I_DATA_SEM_QUOTA);
+ 	err = dquot_quota_on(sb, type, format_id, path);
+-	if (err) {
+-		lockdep_set_quota_inode(path->dentry->d_inode,
+-					     I_DATA_SEM_NORMAL);
+-	} else {
++	if (!err) {
+ 		struct inode *inode = d_inode(path->dentry);
+ 		handle_t *handle;
+ 
+@@ -6289,7 +6286,12 @@ static int ext4_quota_on(struct super_bl
+ 		ext4_journal_stop(handle);
+ 	unlock_inode:
+ 		inode_unlock(inode);
++		if (err)
++			dquot_quota_off(sb, type);
  	}
++	if (err)
++		lockdep_set_quota_inode(path->dentry->d_inode,
++					     I_DATA_SEM_NORMAL);
+ 	return err;
+ }
  
--	dev_set_drvdata(&chip->dev, priv);
--
- 	if (is_bsw()) {
- 		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
- 					ILB_REMAP_SIZE);
 
 

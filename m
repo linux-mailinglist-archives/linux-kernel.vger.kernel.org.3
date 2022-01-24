@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CED498A5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416E3498E45
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344520AbiAXTCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        id S1355139AbiAXTkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:40:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344428AbiAXS6z (ORCPT
+        with ESMTP id S1346634AbiAXTb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:58:55 -0500
+        Mon, 24 Jan 2022 14:31:57 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11E2C061340;
-        Mon, 24 Jan 2022 10:56:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C0BC061748;
+        Mon, 24 Jan 2022 11:15:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CD35B81235;
-        Mon, 24 Jan 2022 18:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75F5C340E5;
-        Mon, 24 Jan 2022 18:56:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91DEFB8122A;
+        Mon, 24 Jan 2022 19:15:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D698BC340E5;
+        Mon, 24 Jan 2022 19:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050568;
-        bh=qJGO70c2a2ulGpa0+3IZx4+4uG78TZ2lXQht9kVfXc8=;
+        s=korg; t=1643051714;
+        bh=DNjlJ3BmDE5JutTMDSqdqDXzzaoCpJzIK0jEiHSOS6U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FNxuwaGZwxI80bsVBV3WUgS82GeD6igNUo69pb20wAb2zgZw1dEOWN9bdS9qJ45FV
-         S2EMF9Ab5xKJt5DKPN9bP30bHbDpoQ5iOANqaVFObdU//6bM0pfCzbrZcpUCQiPhwU
-         kqKZxxd9V3sBA5UvmrhH0CYciHaJf129+PD5P1H0=
+        b=taHEFoF8+4PjqaAu5SX6T7G9suDP7SUA3E2lceMFxWFSo+uWF0fU6fsNvejp9Pf8M
+         Di1grIZA2jHJxK2tZSLD9MJmzQYHCBUGHV0VDO7wdasNn/r2XtpQlWoJjKY5THXrE8
+         tscOTWt+9k3s8x4YZPUFcNpTA2nNLnOaYyoixOEg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.9 011/157] media: uvcvideo: fix division by zero at stream start
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 063/239] arm64: dts: qcom: msm8916: fix MMC controller aliases
 Date:   Mon, 24 Jan 2022 19:41:41 +0100
-Message-Id: <20220124183933.144507896@linuxfoundation.org>
+Message-Id: <20220124183945.139319638@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,43 +50,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-commit 8aa637bf6d70d2fb2ad4d708d8b9dd02b1c095df upstream.
+[ Upstream commit b0293c19d42f6d6951c2fab9a47fed50baf2c14d ]
 
-Add the missing bulk-endpoint max-packet sanity check to
-uvc_video_start_transfer() to avoid division by zero in
-uvc_alloc_urb_buffers() in case a malicious device has broken
-descriptors (or when doing descriptor fuzz testing).
+Change sdhcN aliases to mmcN to make them actually work. Currently the
+board uses non-standard aliases sdhcN, which do not work, resulting in
+mmc0 and mmc1 hosts randomly changing indices between boots.
 
-Note that USB core will reject URBs submitted for endpoints with zero
-wMaxPacketSize but that drivers doing packet-size calculations still
-need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
-endpoint descriptors with maxpacket=0")).
-
-Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
-Cc: stable@vger.kernel.org      # 2.6.26
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: c4da5a561627 ("arm64: dts: qcom: Add msm8916 sdhci configuration nodes")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211201020559.1611890-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_video.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/qcom/msm8916.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -1716,6 +1716,10 @@ static int uvc_init_video(struct uvc_str
- 		if (ep == NULL)
- 			return -EIO;
+diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+index ba42c62399226..078ae020a77b8 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+@@ -27,8 +27,8 @@
+ 	#size-cells = <2>;
  
-+		/* Reject broken descriptors. */
-+		if (usb_endpoint_maxp(&ep->desc) == 0)
-+			return -EIO;
-+
- 		ret = uvc_init_video_bulk(stream, ep, gfp_flags);
- 	}
+ 	aliases {
+-		sdhc1 = &sdhc_1; /* SDC1 eMMC slot */
+-		sdhc2 = &sdhc_2; /* SDC2 SD card slot */
++		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
++		mmc1 = &sdhc_2; /* SDC2 SD card slot */
+ 	};
  
+ 	chosen { };
+-- 
+2.34.1
+
 
 

@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09602498C0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B24498ECF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344632AbiAXTTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:19:05 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38016 "EHLO
+        id S1348077AbiAXTsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:48:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35862 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347297AbiAXTKK (ORCPT
+        with ESMTP id S1348707AbiAXTiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:10:10 -0500
+        Mon, 24 Jan 2022 14:38:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D3E8611ED;
-        Mon, 24 Jan 2022 19:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659C9C340E7;
-        Mon, 24 Jan 2022 19:10:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A59361542;
+        Mon, 24 Jan 2022 19:38:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F5EC340F2;
+        Mon, 24 Jan 2022 19:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051409;
-        bh=dvbrGGiVEQLOwzw10P90CvJsrbmFx1l9dlTRO+LfejY=;
+        s=korg; t=1643053099;
+        bh=czH9XBhxjWjGG03F484H/P9l8nncul0Wz3+TzAgzUM4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1UGGe8Cx7DpN0gHdt1PssUtZFtZkLi/glcvFWxfASFfRDWS71VW4qlpdg6h+j/jLn
-         UQdduWtaS+ne/z9oynyib5CLtlq7mBkqJApUnAIwzbIWbk97zV8RHdkCmnNriwPVCV
-         iq9Pl1KUdwtaBuZSOO17cEpmDDiGRZhE3IcihzSQ=
+        b=ehIhafkHmxRnfryTpC6volZ8mozWKmFYfnfy36zIQk6IirgxG9F2tn8A2ZNwZjxjg
+         u2zmLl8OoccW3c4F8gbLSbffqQCVIbHLqTZJAxDrgPPW+GPJXGiHHR8sJrXFFjRRlH
+         rj4OLAfJGSqYlktX+mlXlJTgxu9WSWnZiHCdAy9M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>, stable@kernel.org,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.14 153/186] ext4: make sure quota gets properly shutdown on error
+        stable@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 244/320] power: bq25890: Enable continuous conversion for ADC at charging
 Date:   Mon, 24 Jan 2022 19:43:48 +0100
-Message-Id: <20220124183942.024288543@linuxfoundation.org>
+Message-Id: <20220124184002.288511565@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,51 +47,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Yauhen Kharuzhy <jekhor@gmail.com>
 
-commit 15fc69bbbbbc8c72e5f6cc4e1be0f51283c5448e upstream.
+[ Upstream commit 80211be1b9dec04cc2805d3d81e2091ecac289a1 ]
 
-When we hit an error when enabling quotas and setting inode flags, we do
-not properly shutdown quota subsystem despite returning error from
-Q_QUOTAON quotactl. This can lead to some odd situations like kernel
-using quota file while it is still writeable for userspace. Make sure we
-properly cleanup the quota subsystem in case of error.
+Instead of one shot run of ADC at beginning of charging, run continuous
+conversion to ensure that all charging-related values are monitored
+properly (input voltage, input current, themperature etc.).
 
-Signed-off-by: Jan Kara <jack@suse.cz>
-Cc: stable@kernel.org
-Link: https://lore.kernel.org/r/20211007155336.12493-2-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Yauhen Kharuzhy <jekhor@gmail.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/super.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/power/supply/bq25890_charger.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -5678,10 +5678,7 @@ static int ext4_quota_on(struct super_bl
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index 9d1ec8d677de6..5afe55119fe65 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -531,12 +531,12 @@ static void bq25890_handle_state_change(struct bq25890_device *bq,
  
- 	lockdep_set_quota_inode(path->dentry->d_inode, I_DATA_SEM_QUOTA);
- 	err = dquot_quota_on(sb, type, format_id, path);
--	if (err) {
--		lockdep_set_quota_inode(path->dentry->d_inode,
--					     I_DATA_SEM_NORMAL);
--	} else {
-+	if (!err) {
- 		struct inode *inode = d_inode(path->dentry);
- 		handle_t *handle;
- 
-@@ -5701,7 +5698,12 @@ static int ext4_quota_on(struct super_bl
- 		ext4_journal_stop(handle);
- 	unlock_inode:
- 		inode_unlock(inode);
-+		if (err)
-+			dquot_quota_off(sb, type);
+ 	if (!new_state->online) {			     /* power removed */
+ 		/* disable ADC */
+-		ret = bq25890_field_write(bq, F_CONV_START, 0);
++		ret = bq25890_field_write(bq, F_CONV_RATE, 0);
+ 		if (ret < 0)
+ 			goto error;
+ 	} else if (!old_state.online) {			    /* power inserted */
+ 		/* enable ADC, to have control of charge current/voltage */
+-		ret = bq25890_field_write(bq, F_CONV_START, 1);
++		ret = bq25890_field_write(bq, F_CONV_RATE, 1);
+ 		if (ret < 0)
+ 			goto error;
  	}
-+	if (err)
-+		lockdep_set_quota_inode(path->dentry->d_inode,
-+					     I_DATA_SEM_NORMAL);
- 	return err;
- }
- 
+-- 
+2.34.1
+
 
 

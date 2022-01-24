@@ -2,272 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A07D498395
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE192498393
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235269AbiAXPc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:32:59 -0500
-Received: from mga02.intel.com ([134.134.136.20]:22167 "EHLO mga02.intel.com"
+        id S235569AbiAXPcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:32:55 -0500
+Received: from mga05.intel.com ([192.55.52.43]:21800 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235301AbiAXPc4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:32:56 -0500
+        id S233010AbiAXPcy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:32:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643038376; x=1674574376;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xzr0pkymjg0lZPz5PjBfOmmxDJm21Ju8OBtd1Sb19XI=;
-  b=ITO4RhEI7oikTwBo31filDwiLDtbiueC7ee5xJFwF3RDcqEE0GvJwSVF
-   cOKSKA+tCaW77GjHNJJKkw3EcAdP9xvuoKkaxTg27Ag9DRkQvcxN5rGkh
-   c2OlXhOSTdlwOSVo6rnR90I0WLBEtfSy+fVutHOw/UycK+tixItQiEo3y
-   VKaw0lakOmeUamZZatAZjDu5uNVFtHQYXX+WpHuyM9eTMuIzlX3XCKT2Q
-   Qqu5nCivmh3TWY6H4rXvQpM4KVBxdOhEM+V5jeirye04ZoX0z2J3/uqcH
-   jMkEEp0+bjuy/cBMxp80ByS6pRdKeoyB4O0n/+UCGuoPsHwKLSZMRRvFP
+  t=1643038374; x=1674574374;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/N7wfLow10MDvZWbjcrnYxRRIYUPADVRbu5mKH8flZs=;
+  b=lKQCAS44w342YauCVeRS8Kf0b5sSjM12fLrmQ/J4e871V/9MNq12bk5b
+   o5VYSyegAj8E8ivnsND54PXoPAPajePBkdazGOMPlfHvYSR7TkREiyEOE
+   2Dp75sf69a0uTcwi7wjuZ+ujTUKJngVN+7iT1NvCPG1Ito8vwOhK6gJO9
+   uHUc6+Ww+DJnSuFpuf3dsCqTkitXmZZ5FIRKfku3NIT6xKHbcx9fPXIi3
+   JQLSoAhRLbgyoz2s3nPouMhuwdW2ZWDC5e+4WSsdaqNCCp0V36h23Gtfn
+   PWkf0d83VJy2dd4KoY9v7O2QzAhCxgEku1yTteeb5gFXRzP9r4EM93+hh
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="233430652"
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="332424014"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="233430652"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:32:55 -0800
+   d="scan'208";a="332424014"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:32:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="476756089"
+   d="scan'208";a="479114879"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2022 07:32:52 -0800
+  by orsmga006.jf.intel.com with ESMTP; 24 Jan 2022 07:32:52 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nC1Ku-000IWn-6Q; Mon, 24 Jan 2022 15:32:52 +0000
-Date:   Mon, 24 Jan 2022 23:32:19 +0800
+        id 1nC1Ku-000IWh-1I; Mon, 24 Jan 2022 15:32:52 +0000
+Date:   Mon, 24 Jan 2022 23:32:21 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>, jic23@kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org, tomas.melin@vaisala.com,
-        andy.shevchenko@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Subject: Re: [PATCH V1 3/6] iio: accel: sca3300: modified to support multi
- chips
-Message-ID: <202201242336.1dSTFe7a-lkp@intel.com>
-References: <20220124093912.2429190-4-Qing-wu.Li@leica-geosystems.com.cn>
+To:     Jinyang He <hejinyang@loongson.cn>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/kernel/relocate.c:41:12: warning: no previous prototype
+ for function 'plat_post_relocation'
+Message-ID: <202201242332.W7XuI6gI-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124093912.2429190-4-Qing-wu.Li@leica-geosystems.com.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi LI,
+Hi Jinyang,
 
-Thank you for the patch! Perhaps something to improve:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on v5.17-rc1 next-20220124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/LI-Qingwu/i-iio-accel-sca3300-add-compitible-for-scl3300/20220124-174021
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: parisc-randconfig-r015-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242336.1dSTFe7a-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+commit: a307a4ce9ecd2e23c71318201330d9d648b3f818 MIPS: Loongson64: Add KASLR support
+date:   1 year, 2 months ago
+config: mips-randconfig-c004-20220120 (https://download.01.org/0day-ci/archive/20220124/202201242332.W7XuI6gI-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/7dc3bc68cdfcb252dd79fea28a5e944d76784fe8
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review LI-Qingwu/i-iio-accel-sca3300-add-compitible-for-scl3300/20220124-174021
-        git checkout 7dc3bc68cdfcb252dd79fea28a5e944d76784fe8
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a307a4ce9ecd2e23c71318201330d9d648b3f818
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a307a4ce9ecd2e23c71318201330d9d648b3f818
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash drivers/iio/accel/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/iio/accel/sca3300.c:74:60: error: macro "IIO_ENUM_AVAILABLE" requires 3 arguments, but only 2 given
-      74 |         IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-         |                                                            ^
-   In file included from include/linux/iio/buffer.h:10,
-                    from drivers/iio/accel/sca3300.c:17:
-   include/linux/iio/iio.h:112: note: macro "IIO_ENUM_AVAILABLE" defined here
-     112 | #define IIO_ENUM_AVAILABLE(_name, _shared, _e) \
-         | 
-   drivers/iio/accel/sca3300.c:74:9: error: 'IIO_ENUM_AVAILABLE' undeclared here (not in a function)
-      74 |         IIO_ENUM_AVAILABLE("op_mode", &sca3300_op_mode_enum),
-         |         ^~~~~~~~~~~~~~~~~~
->> drivers/iio/accel/sca3300.c:185:31: warning: initialization of 'long unsigned int' from 'const long unsigned int *' makes integer from pointer without a cast [-Wint-conversion]
-     185 |                 .scan_masks = sca3300_scan_masks,
-         |                               ^~~~~~~~~~~~~~~~~~
-   drivers/iio/accel/sca3300.c:185:31: note: (near initialization for 'sca3300_chip_info_tbl[0].scan_masks')
-   drivers/iio/accel/sca3300.c: In function 'sca3300_write_raw':
->> drivers/iio/accel/sca3300.c:307:34: warning: comparison between pointer and integer
-     307 |                         if ((val == sca3300_accel_scale[data->chip_info->chip_type][0]) &&
-         |                                  ^~
-   drivers/iio/accel/sca3300.c:308:35: warning: comparison between pointer and integer
-     308 |                             (val2 == sca3300_accel_scale[data->chip_info->chip_type][1]))
-         |                                   ^~
-   drivers/iio/accel/sca3300.c: In function 'sca3300_init':
->> drivers/iio/accel/sca3300.c:422:57: warning: assignment to 'const long unsigned int *' from 'long unsigned int' makes pointer from integer without a cast [-Wint-conversion]
-     422 |                         indio_dev->available_scan_masks = sca3300_chip_info_tbl[i].scan_masks;
-         |                                                         ^
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:38:
+   In file included from arch/mips/include/asm/thread_info.h:16:
+   In file included from arch/mips/include/asm/processor.h:14:
+   In file included from include/linux/atomic.h:7:
+   arch/mips/include/asm/atomic.h:257:1: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+   ATOMIC_SIP_OP(atomic, int, subu, ll, sc)
+   ^
+   arch/mips/include/asm/atomic.h:251:7: note: expanded from macro 'ATOMIC_SIP_OP'
+           if (!__SYNC_loongson3_war)                                      \
+                ^
+   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
+   # define __SYNC_loongson3_war   (1 << 31)
+                                      ^
+   In file included from arch/mips/kernel/relocate.c:12:
+   In file included from arch/mips/include/asm/cacheflush.h:13:
+   In file included from include/linux/mm.h:10:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:51:
+   In file included from include/linux/preempt.h:78:
+   In file included from ./arch/mips/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:38:
+   In file included from arch/mips/include/asm/thread_info.h:16:
+   In file included from arch/mips/include/asm/processor.h:14:
+   In file included from include/linux/atomic.h:7:
+   arch/mips/include/asm/atomic.h:261:1: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+   ATOMIC_SIP_OP(atomic64, s64, dsubu, lld, scd)
+   ^
+   arch/mips/include/asm/atomic.h:251:7: note: expanded from macro 'ATOMIC_SIP_OP'
+           if (!__SYNC_loongson3_war)                                      \
+                ^
+   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
+   # define __SYNC_loongson3_war   (1 << 31)
+                                      ^
+   In file included from arch/mips/kernel/relocate.c:12:
+   In file included from arch/mips/include/asm/cacheflush.h:13:
+   In file included from include/linux/mm.h:10:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:59:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:15:
+   In file included from include/linux/smp_types.h:5:
+   include/linux/llist.h:222:9: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+           return xchg(&head->first, NULL);
+                  ^
+   arch/mips/include/asm/cmpxchg.h:102:7: note: expanded from macro 'xchg'
+           if (!__SYNC_loongson3_war)                                      \
+                ^
+   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
+   # define __SYNC_loongson3_war   (1 << 31)
+                                      ^
+   In file included from arch/mips/kernel/relocate.c:12:
+   In file included from arch/mips/include/asm/cacheflush.h:13:
+   In file included from include/linux/mm.h:10:
+   In file included from include/linux/gfp.h:6:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:59:
+   In file included from include/linux/lockdep.h:27:
+   include/linux/debug_locks.h:17:9: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+           return xchg(&debug_locks, 0);
+                  ^
+   arch/mips/include/asm/cmpxchg.h:102:7: note: expanded from macro 'xchg'
+           if (!__SYNC_loongson3_war)                                      \
+                ^
+   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
+   # define __SYNC_loongson3_war   (1 << 31)
+                                      ^
+   In file included from arch/mips/kernel/relocate.c:12:
+   In file included from arch/mips/include/asm/cacheflush.h:13:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/mips/include/asm/pgtable.h:200:3: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+                   cmpxchg64(&buddy->pte, 0, _PAGE_GLOBAL);
+                   ^
+   arch/mips/include/asm/cmpxchg.h:220:2: note: expanded from macro 'cmpxchg64'
+           cmpxchg((ptr), (o), (n));                                       \
+           ^
+   arch/mips/include/asm/cmpxchg.h:194:7: note: expanded from macro 'cmpxchg'
+           if (!__SYNC_loongson3_war)                                      \
+                ^
+   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
+   # define __SYNC_loongson3_war   (1 << 31)
+                                      ^
+   In file included from arch/mips/kernel/relocate.c:12:
+   In file included from arch/mips/include/asm/cacheflush.h:13:
+   In file included from include/linux/mm.h:33:
+   In file included from include/linux/pgtable.h:6:
+   arch/mips/include/asm/pgtable.h:200:3: warning: converting the result of '<<' to a boolean always evaluates to true [-Wtautological-constant-compare]
+   arch/mips/include/asm/cmpxchg.h:220:2: note: expanded from macro 'cmpxchg64'
+           cmpxchg((ptr), (o), (n));                                       \
+           ^
+   arch/mips/include/asm/cmpxchg.h:204:7: note: expanded from macro 'cmpxchg'
+           if (!__SYNC_loongson3_war)                                      \
+                ^
+   arch/mips/include/asm/sync.h:147:34: note: expanded from macro '__SYNC_loongson3_war'
+   # define __SYNC_loongson3_war   (1 << 31)
+                                      ^
+>> arch/mips/kernel/relocate.c:41:12: warning: no previous prototype for function 'plat_post_relocation' [-Wmissing-prototypes]
+   int __weak plat_post_relocation(long offset)
+              ^
+   arch/mips/kernel/relocate.c:41:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __weak plat_post_relocation(long offset)
+   ^
+   static 
+   arch/mips/kernel/relocate.c:135:12: warning: no previous prototype for function 'do_relocations' [-Wmissing-prototypes]
+   int __init do_relocations(void *kbase_old, void *kbase_new, long offset)
+              ^
+   arch/mips/kernel/relocate.c:135:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init do_relocations(void *kbase_old, void *kbase_new, long offset)
+   ^
+   static 
+>> arch/mips/kernel/relocate.c:304:14: warning: no previous prototype for function 'relocate_kernel' [-Wmissing-prototypes]
+   void *__init relocate_kernel(void)
+                ^
+   arch/mips/kernel/relocate.c:304:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *__init relocate_kernel(void)
+   ^
+   static 
+   arch/mips/kernel/relocate.c:415:6: warning: no previous prototype for function 'show_kernel_relocation' [-Wmissing-prototypes]
+   void show_kernel_relocation(const char *level)
+        ^
+   arch/mips/kernel/relocate.c:415:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void show_kernel_relocation(const char *level)
+   ^
+   static 
+   16 warnings generated.
 
 
-vim +185 drivers/iio/accel/sca3300.c
+vim +/plat_post_relocation +41 arch/mips/kernel/relocate.c
 
-   177	
-   178	static const struct sca3300_chip_info sca3300_chip_info_tbl[] = {
-   179		[CHIP_SCA3300] = {
-   180			.chip_type = CHIP_SCA3300,
-   181			.name = "sca3300",
-   182			.chip_id = 0x51,
-   183			.channels = sca3300_channels,
-   184			.num_channels = ARRAY_SIZE(sca3300_channels),
- > 185			.scan_masks = sca3300_scan_masks,
-   186		},
-   187	};
-   188	
-   189	DECLARE_CRC8_TABLE(sca3300_crc_table);
-   190	
-   191	static int sca3300_transfer(struct sca3300_data *sca_data, int *val)
-   192	{
-   193		/* Consecutive requests min. 10 us delay (Datasheet section 5.1.2) */
-   194		struct spi_delay delay = { .value = 10, .unit = SPI_DELAY_UNIT_USECS };
-   195		int32_t ret;
-   196		int rs;
-   197		u8 crc;
-   198		struct spi_transfer xfers[2] = {
-   199			{
-   200				.tx_buf = sca_data->txbuf,
-   201				.len = ARRAY_SIZE(sca_data->txbuf),
-   202				.delay = delay,
-   203				.cs_change = 1,
-   204			},
-   205			{
-   206				.rx_buf = sca_data->rxbuf,
-   207				.len = ARRAY_SIZE(sca_data->rxbuf),
-   208				.delay = delay,
-   209			}
-   210		};
-   211	
-   212		/* inverted crc value as described in device data sheet */
-   213		crc = ~crc8(sca3300_crc_table, &sca_data->txbuf[0], 3, CRC8_INIT_VALUE);
-   214		sca_data->txbuf[3] = crc;
-   215	
-   216		ret = spi_sync_transfer(sca_data->spi, xfers, ARRAY_SIZE(xfers));
-   217		if (ret) {
-   218			dev_err(&sca_data->spi->dev,
-   219				"transfer error, error: %d\n", ret);
-   220			return -EIO;
-   221		}
-   222	
-   223		crc = ~crc8(sca3300_crc_table, &sca_data->rxbuf[0], 3, CRC8_INIT_VALUE);
-   224		if (sca_data->rxbuf[3] != crc) {
-   225			dev_err(&sca_data->spi->dev, "CRC checksum mismatch");
-   226			return -EIO;
-   227		}
-   228	
-   229		/* get return status */
-   230		rs = sca_data->rxbuf[0] & SCA3300_MASK_RS_STATUS;
-   231		if (rs == SCA3300_VALUE_RS_ERROR)
-   232			ret = -EINVAL;
-   233	
-   234		*val = sign_extend32(get_unaligned_be16(&sca_data->rxbuf[1]), 15);
-   235	
-   236		return ret;
-   237	}
-   238	
-   239	static int sca3300_error_handler(struct sca3300_data *sca_data)
-   240	{
-   241		int ret;
-   242		int val;
-   243	
-   244		mutex_lock(&sca_data->lock);
-   245		sca_data->txbuf[0] = SCA3300_REG_STATUS << 2;
-   246		ret = sca3300_transfer(sca_data, &val);
-   247		mutex_unlock(&sca_data->lock);
-   248		/*
-   249		 * Return status error is cleared after reading status register once,
-   250		 * expect EINVAL here.
-   251		 */
-   252		if (ret != -EINVAL) {
-   253			dev_err(&sca_data->spi->dev,
-   254				"error reading device status: %d\n", ret);
-   255			return ret;
-   256		}
-   257	
-   258		dev_err(&sca_data->spi->dev, "device status: 0x%lx\n",
-   259			val & SCA3300_STATUS_MASK);
-   260	
-   261		return 0;
-   262	}
-   263	
-   264	static int sca3300_read_reg(struct sca3300_data *sca_data, u8 reg, int *val)
-   265	{
-   266		int ret;
-   267	
-   268		mutex_lock(&sca_data->lock);
-   269		sca_data->txbuf[0] = reg << 2;
-   270		ret = sca3300_transfer(sca_data, val);
-   271		mutex_unlock(&sca_data->lock);
-   272		if (ret != -EINVAL)
-   273			return ret;
-   274	
-   275		return sca3300_error_handler(sca_data);
-   276	}
-   277	
-   278	static int sca3300_write_reg(struct sca3300_data *sca_data, u8 reg, int val)
-   279	{
-   280		int reg_val = 0;
-   281		int ret;
-   282	
-   283		mutex_lock(&sca_data->lock);
-   284		/* BIT(7) for write operation */
-   285		sca_data->txbuf[0] = BIT(7) | (reg << 2);
-   286		put_unaligned_be16(val, &sca_data->txbuf[1]);
-   287		ret = sca3300_transfer(sca_data, &reg_val);
-   288		mutex_unlock(&sca_data->lock);
-   289		if (ret != -EINVAL)
-   290			return ret;
-   291	
-   292		return sca3300_error_handler(sca_data);
-   293	}
-   294	
-   295	static int sca3300_write_raw(struct iio_dev *indio_dev,
-   296				     struct iio_chan_spec const *chan,
-   297				     int val, int val2, long mask)
-   298	{
-   299		struct sca3300_data *data = iio_priv(indio_dev);
-   300		int reg_val;
-   301		int ret;
-   302		int i;
-   303	
-   304		switch (mask) {
-   305		case IIO_CHAN_INFO_SCALE:
-   306			for (i = 0; i < OP_MOD_CNT; i++) {
- > 307				if ((val == sca3300_accel_scale[data->chip_info->chip_type][0]) &&
-   308				    (val2 == sca3300_accel_scale[data->chip_info->chip_type][1]))
-   309					return sca3300_write_reg(data, SCA3300_REG_MODE, i);
-   310			}
-   311			return -EINVAL;
-   312		case IIO_CHAN_INFO_LOW_PASS_FILTER_3DB_FREQUENCY:
-   313			ret = sca3300_read_reg(data, SCA3300_REG_MODE, &reg_val);
-   314			if (ret)
-   315				return ret;
-   316			/* freq. change is possible only for mode 3 and 4 */
-   317			if (reg_val == 2 && val == sca3300_lp_freq[data->chip_info->chip_type][3])
-   318				return sca3300_write_reg(data, SCA3300_REG_MODE, 3);
-   319			if (reg_val == 3 && val == sca3300_lp_freq[data->chip_info->chip_type][2])
-   320				return sca3300_write_reg(data, SCA3300_REG_MODE, 2);
-   321			return -EINVAL;
-   322		default:
-   323			return -EINVAL;
-   324		}
-   325	}
-   326	
+4c9fff362261d6 Marcin Nowakowski 2016-11-23  35  
+8cc709d7d4f013 Steven J. Hill    2016-12-09  36  /*
+8cc709d7d4f013 Steven J. Hill    2016-12-09  37   * This function may be defined for a platform to perform any post-relocation
+8cc709d7d4f013 Steven J. Hill    2016-12-09  38   * fixup necessary.
+8cc709d7d4f013 Steven J. Hill    2016-12-09  39   * Return non-zero to abort relocation
+8cc709d7d4f013 Steven J. Hill    2016-12-09  40   */
+8cc709d7d4f013 Steven J. Hill    2016-12-09 @41  int __weak plat_post_relocation(long offset)
+8cc709d7d4f013 Steven J. Hill    2016-12-09  42  {
+8cc709d7d4f013 Steven J. Hill    2016-12-09  43  	return 0;
+8cc709d7d4f013 Steven J. Hill    2016-12-09  44  }
+8cc709d7d4f013 Steven J. Hill    2016-12-09  45  
+
+:::::: The code at line 41 was first introduced by commit
+:::::: 8cc709d7d4f013f51d38ceb2e3c8c82d230cf457 MIPS: Relocatable: Provide plat_post_relocation hook
+
+:::::: TO: Steven J. Hill <Steven.Hill@cavium.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

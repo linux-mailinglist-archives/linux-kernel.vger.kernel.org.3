@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDF8498B9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1F4498EAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344584AbiAXTPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346735AbiAXTHV (ORCPT
+        id S1355932AbiAXTo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:44:57 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57812 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353985AbiAXTfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:07:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBAAC061244;
-        Mon, 24 Jan 2022 11:01:44 -0800 (PST)
+        Mon, 24 Jan 2022 14:35:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E1D16090C;
-        Mon, 24 Jan 2022 19:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43CC1C340E5;
-        Mon, 24 Jan 2022 19:01:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97DC8B8122A;
+        Mon, 24 Jan 2022 19:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE896C340E7;
+        Mon, 24 Jan 2022 19:35:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050903;
-        bh=/hdemuENqnf/jOGaiRcSiGH0J0G5zPzuLXuG/sxnf9g=;
+        s=korg; t=1643052941;
+        bh=Z6LnLnvpzRXBhuAU39DeUE7li7MEBSuYocwLtie5v+Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=shArt8N7ASkwTUDC98shOBvd45PoSQeTumiVNM5DROLe7XkCT57UWeSG82VxnvUoj
-         q5TH6MoVDltljyVSyjqfGo3z0pOLHyxZnametZ82+MaH+cc3HU+sBbudl+8NBaU5UM
-         mvuoB3Dz3I6DsuS5g3Nrwj3rH/m5g8PHjdmNjUd0=
+        b=UJoHSb0WWm4pv0sW0A01Nvkc6yoWvHsDaOQNhDQ9ULKBbQ/YmZzhkoEPZCbJG+cIU
+         92Eb/kTLXbnACWxZTxLiIOjQ1xN+wf4+8d77eTBkjUmCfnHWUEPMKClmORUhq7kV7R
+         9VcNqWaqMTy1jplCGOvdbidHUPemzGAMW4u/4tH0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tzung-Bi Shih <tzungbi@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 117/157] ASoC: mediatek: mt8173: fix device_node leak
+        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 223/320] parisc: Avoid calling faulthandler_disabled() twice
 Date:   Mon, 24 Jan 2022 19:43:27 +0100
-Message-Id: <20220124183936.493606975@linuxfoundation.org>
+Message-Id: <20220124184001.578089440@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,76 +45,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tzung-Bi Shih <tzungbi@google.com>
+From: John David Anglin <dave.anglin@bell.net>
 
-[ Upstream commit 493433785df0075afc0c106ab65f10a605d0b35d ]
+[ Upstream commit 9e9d4b460f23bab61672eae397417d03917d116c ]
 
-Fixes the device_node leak.
+In handle_interruption(), we call faulthandler_disabled() to check whether the
+fault handler is not disabled. If the fault handler is disabled, we immediately
+call do_page_fault(). It then calls faulthandler_disabled(). If disabled,
+do_page_fault() attempts to fixup the exception by jumping to no_context:
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
-Link: https://lore.kernel.org/r/20211224064719.2031210-2-tzungbi@google.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+no_context:
+
+        if (!user_mode(regs) && fixup_exception(regs)) {
+                return;
+        }
+
+        parisc_terminate("Bad Address (null pointer deref?)", regs, code, address);
+
+Apart from the error messages, the two blocks of code perform the same
+function.
+
+We can avoid two calls to faulthandler_disabled() by a simple revision
+to the code in handle_interruption().
+
+Note: I didn't try to fix the formatting of this code block.
+
+Signed-off-by: John David Anglin <dave.anglin@bell.net>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8173/mt8173-max98090.c      | 3 +++
- sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c | 2 ++
- sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c | 2 ++
- sound/soc/mediatek/mt8173/mt8173-rt5650.c        | 2 ++
- 4 files changed, 9 insertions(+)
+ arch/parisc/kernel/traps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-max98090.c b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-index 5524a2c727ec7..cab30cb48366d 100644
---- a/sound/soc/mediatek/mt8173/mt8173-max98090.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-@@ -183,6 +183,9 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
-+
-+	of_node_put(codec_node);
-+	of_node_put(platform_node);
- 	return ret;
- }
+diff --git a/arch/parisc/kernel/traps.c b/arch/parisc/kernel/traps.c
+index 82fc011894889..2a1060d747a5d 100644
+--- a/arch/parisc/kernel/traps.c
++++ b/arch/parisc/kernel/traps.c
+@@ -783,7 +783,7 @@ void notrace handle_interruption(int code, struct pt_regs *regs)
+ 	     * unless pagefault_disable() was called before.
+ 	     */
  
-diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c
-index 467f7049a2886..52fdd766ee82c 100644
---- a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5514.c
-@@ -228,6 +228,8 @@ static int mt8173_rt5650_rt5514_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
-+
-+	of_node_put(platform_node);
- 	return ret;
- }
- 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
-index 1b8b2a7788450..5d75b04f074fe 100644
---- a/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-rt5650-rt5676.c
-@@ -285,6 +285,8 @@ static int mt8173_rt5650_rt5676_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
-+
-+	of_node_put(platform_node);
- 	return ret;
- }
- 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650.c b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-index ba65f4157a7e0..d02a90201b13b 100644
---- a/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-@@ -317,6 +317,8 @@ static int mt8173_rt5650_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
- 			__func__, ret);
-+
-+	of_node_put(platform_node);
- 	return ret;
- }
- 
+-	    if (fault_space == 0 && !faulthandler_disabled())
++	    if (faulthandler_disabled() || fault_space == 0)
+ 	    {
+ 		/* Clean up and return if in exception table. */
+ 		if (fixup_exception(regs))
 -- 
 2.34.1
 

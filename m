@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4109D49A259
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA3F49A73C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2362159AbiAXXlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S3423713AbiAYCgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1842496AbiAXXB7 (ORCPT
+        with ESMTP id S1385055AbiAXUbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:01:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4305FC0F0559;
-        Mon, 24 Jan 2022 13:14:02 -0800 (PST)
+        Mon, 24 Jan 2022 15:31:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BABAC07A96D;
+        Mon, 24 Jan 2022 11:43:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C75036141C;
-        Mon, 24 Jan 2022 21:14:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DF29C340E5;
-        Mon, 24 Jan 2022 21:14:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4BCDB811FB;
+        Mon, 24 Jan 2022 19:43:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE84C340EA;
+        Mon, 24 Jan 2022 19:43:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058841;
-        bh=ZoNkKVhcKuiwDIg6kQ1SLQk1hXz5ho2UjRj/10QBW00=;
+        s=korg; t=1643053388;
+        bh=4RUcMj1GoLMRgwa1w50kVg3OcRDZyoHyt2bFDIJJZb8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UqD5U5SF5HCnr1yPnLOfJlqwiIc3fgeNJEWktTmpZDmOk8OdwL+DD7+PNEdK54avi
-         sr7Fx5qWjndk712ufLY4NJ14KzN7O06SEKbJfKYjT8PApvuukcecAYv3tz+AImaH/v
-         8T6f14t0UDSZX4uL3zrCapxPT7RDHoX+0ypL+sho=
+        b=VHdSzKk/RHT40JtqLLfiiAl6yHbOYIUqiBYzCb+OuXKUGxht4qVhOkxznM4/v5z7f
+         mfguVqrFhgW0lmhQq69PKiNgLSmcfLlqAbFyV53v/2O903l3/pK9YlPwyUSnpQIwY/
+         pWXozx2ayk736W+ZPQh1/ei1VxNJqRduSJ55pDMA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        "=?UTF-8?q?N=C3=ADcolas=20F . =20R . =20A . =20Prado?=" 
+        <nfraprado@collabora.com>, Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0420/1039] mptcp: fix a DSS option writing error
-Date:   Mon, 24 Jan 2022 19:36:49 +0100
-Message-Id: <20220124184139.422102200@linuxfoundation.org>
+Subject: [PATCH 5.10 049/563] drm/rockchip: dsi: Disable PLL clock on bind error
+Date:   Mon, 24 Jan 2022 19:36:54 +0100
+Message-Id: <20220124184026.116047314@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,38 +51,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geliang Tang <geliang.tang@suse.com>
+From: Brian Norris <briannorris@chromium.org>
 
-[ Upstream commit 110b6d1fe98fd7af9893992459b651594d789293 ]
+[ Upstream commit 5a614570172e1c9f59035d259dd735acd4f1c01b ]
 
-'ptr += 1;' was omitted in the original code.
+Fix some error handling here noticed in review of other changes.
 
-If the DSS is the last option -- which is what we have most of the
-time -- that's not an issue. But it is if we need to send something else
-after like a RM_ADDR or an MP_PRIO.
-
-Fixes: 1bff1e43a30e ("mptcp: optimize out option generation")
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 2d4f7bdafd70 ("drm/rockchip: dsi: migrate to use dw-mipi-dsi bridge driver")
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reported-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20210928143413.v3.4.I8bb7a91ecc411d56bc155763faa15f289d7fc074@changeid
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/options.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/net/mptcp/options.c b/net/mptcp/options.c
-index 96c6efdd48bcc..6661b1d6520f1 100644
---- a/net/mptcp/options.c
-+++ b/net/mptcp/options.c
-@@ -1319,6 +1319,7 @@ void mptcp_write_options(__be32 *ptr, const struct tcp_sock *tp,
- 				put_unaligned_be32(mpext->data_len << 16 |
- 						   TCPOPT_NOP << 8 | TCPOPT_NOP, ptr);
- 			}
-+			ptr += 1;
- 		}
- 	} else if (OPTIONS_MPTCP_MPC & opts->suboptions) {
- 		u8 len, flag = MPTCP_CAP_HMAC_SHA256;
+diff --git a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
+index d3cea42dde436..6691e45230126 100644
+--- a/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
++++ b/drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c
+@@ -923,7 +923,7 @@ static int dw_mipi_dsi_rockchip_bind(struct device *dev,
+ 	ret = clk_prepare_enable(dsi->grf_clk);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dsi->dev, "Failed to enable grf_clk: %d\n", ret);
+-		goto out_pm_runtime;
++		goto out_pll_clk;
+ 	}
+ 
+ 	dw_mipi_dsi_rockchip_config(dsi);
+@@ -935,17 +935,19 @@ static int dw_mipi_dsi_rockchip_bind(struct device *dev,
+ 	ret = rockchip_dsi_drm_create_encoder(dsi, drm_dev);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dev, "Failed to create drm encoder\n");
+-		goto out_pm_runtime;
++		goto out_pll_clk;
+ 	}
+ 
+ 	ret = dw_mipi_dsi_bind(dsi->dmd, &dsi->encoder);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dev, "Failed to bind: %d\n", ret);
+-		goto out_pm_runtime;
++		goto out_pll_clk;
+ 	}
+ 
+ 	return 0;
+ 
++out_pll_clk:
++	clk_disable_unprepare(dsi->pllref_clk);
+ out_pm_runtime:
+ 	pm_runtime_put(dsi->dev);
+ 	if (dsi->slave)
 -- 
 2.34.1
 

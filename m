@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0FC4988E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A473F498954
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245709AbiAXSvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:51:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50044 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245677AbiAXSuX (ORCPT
+        id S242561AbiAXSy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:54:27 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51690 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236282AbiAXSwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:50:23 -0500
+        Mon, 24 Jan 2022 13:52:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34CB6B8121A;
-        Mon, 24 Jan 2022 18:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E4BC340E7;
-        Mon, 24 Jan 2022 18:50:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C514A614EC;
+        Mon, 24 Jan 2022 18:52:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB7BC340E5;
+        Mon, 24 Jan 2022 18:52:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050220;
-        bh=qvukJeWuPH2cNPFvVyAkRgKIPsGmzXQ3XKZOb3xPYf4=;
+        s=korg; t=1643050354;
+        bh=qtKkJMFmMPARKOd3X03qqmFD/4R6AL0N8Z/w7kj3lLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Or/PiTuGquJvvVEFrTahnO6HHw38/JzNj2ces5m7QcY1/bqMxwnxat7gVCFR5L5yp
-         FV5ZjMP91OexFjUIMesMeq3tbCT2hq1qZsIFsljqpxywP4vc2hZsNQmbSlCGaFxTEr
-         HvuaW9pXLdM//Z5mJW3SXrgwfgvKe8df83BPAQ1s=
+        b=evSUhN1/wjx0RojmPt3msuMt54WzFH2avvDxM9oLw3ScE9fWiePCYElN/6rWOVdRw
+         9rXqImHreAF0BxyTZToSDqbKfQ+tJZ4QFQmM0KgPOd0yADf8S+pS9M8vji6SwoO1g2
+         1PaWwV5FQe82HNWkkQyJf/hScXRGzvC+zsO/53PA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bixuan Cui <cuibixuan@linux.alibaba.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 047/114] ALSA: oss: fix compile error when OSS_DEBUG is enabled
-Date:   Mon, 24 Jan 2022 19:42:22 +0100
-Message-Id: <20220124183928.557739669@linuxfoundation.org>
+        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.4 048/114] char/mwave: Adjust io port register size
+Date:   Mon, 24 Jan 2022 19:42:23 +0100
+Message-Id: <20220124183928.587436790@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
 References: <20220124183927.095545464@linuxfoundation.org>
@@ -45,39 +45,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bixuan Cui <cuibixuan@linux.alibaba.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 8e7daf318d97f25e18b2fc7eb5909e34cd903575 ]
+[ Upstream commit f5912cc19acd7c24b2dbf65a6340bf194244f085 ]
 
-Fix compile error when OSS_DEBUG is enabled:
-    sound/core/oss/pcm_oss.c: In function 'snd_pcm_oss_set_trigger':
-    sound/core/oss/pcm_oss.c:2055:10: error: 'substream' undeclared (first
-    use in this function); did you mean 'csubstream'?
-      pcm_dbg(substream->pcm, "pcm_oss: trigger = 0x%x\n", trigger);
-              ^
+Using MKWORD() on a byte-sized variable results in OOB read. Expand the
+size of the reserved area so both MKWORD and MKBYTE continue to work
+without overflow. Silences this warning on a -Warray-bounds build:
 
-Fixes: 61efcee8608c ("ALSA: oss: Use standard printk helpers")
-Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
-Link: https://lore.kernel.org/r/1638349134-110369-1-git-send-email-cuibixuan@linux.alibaba.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+drivers/char/mwave/3780i.h:346:22: error: array subscript 'short unsigned int[0]' is partly outside array bounds of 'DSP_ISA_SLAVE_CONTROL[1]' [-Werror=array-bounds]
+  346 | #define MKWORD(var) (*((unsigned short *)(&var)))
+      |                     ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/char/mwave/3780i.h:356:40: note: in definition of macro 'OutWordDsp'
+  356 | #define OutWordDsp(index,value)   outw(value,usDspBaseIO+index)
+      |                                        ^~~~~
+drivers/char/mwave/3780i.c:373:41: note: in expansion of macro 'MKWORD'
+  373 |         OutWordDsp(DSP_IsaSlaveControl, MKWORD(rSlaveControl));
+      |                                         ^~~~~~
+drivers/char/mwave/3780i.c:358:31: note: while referencing 'rSlaveControl'
+  358 |         DSP_ISA_SLAVE_CONTROL rSlaveControl;
+      |                               ^~~~~~~~~~~~~
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20211203084206.3104326-1-keescook@chromium.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/oss/pcm_oss.c | 2 +-
+ drivers/char/mwave/3780i.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/core/oss/pcm_oss.c b/sound/core/oss/pcm_oss.c
-index 593791d9a334f..6af4afe23e373 100644
---- a/sound/core/oss/pcm_oss.c
-+++ b/sound/core/oss/pcm_oss.c
-@@ -2121,7 +2121,7 @@ static int snd_pcm_oss_set_trigger(struct snd_pcm_oss_file *pcm_oss_file, int tr
- 	int err, cmd;
+diff --git a/drivers/char/mwave/3780i.h b/drivers/char/mwave/3780i.h
+index fba6ab1160ce8..b167163b18277 100644
+--- a/drivers/char/mwave/3780i.h
++++ b/drivers/char/mwave/3780i.h
+@@ -68,7 +68,7 @@ typedef struct {
+ 	unsigned char ClockControl:1;	/* RW: Clock control: 0=normal, 1=stop 3780i clocks */
+ 	unsigned char SoftReset:1;	/* RW: Soft reset 0=normal, 1=soft reset active */
+ 	unsigned char ConfigMode:1;	/* RW: Configuration mode, 0=normal, 1=config mode */
+-	unsigned char Reserved:5;	/* 0: Reserved */
++	unsigned short Reserved:13;	/* 0: Reserved */
+ } DSP_ISA_SLAVE_CONTROL;
  
- #ifdef OSS_DEBUG
--	pcm_dbg(substream->pcm, "pcm_oss: trigger = 0x%x\n", trigger);
-+	pr_debug("pcm_oss: trigger = 0x%x\n", trigger);
- #endif
- 	
- 	psubstream = pcm_oss_file->streams[SNDRV_PCM_STREAM_PLAYBACK];
+ 
 -- 
 2.34.1
 

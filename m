@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B37499CCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29AA499C1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580231AbiAXWJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:09:05 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45782 "EHLO
+        id S1577322AbiAXV7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:59:52 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43272 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452251AbiAXVY0 (ORCPT
+        with ESMTP id S1451345AbiAXVWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:24:26 -0500
+        Mon, 24 Jan 2022 16:22:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99970614D8;
-        Mon, 24 Jan 2022 21:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E80DC340E4;
-        Mon, 24 Jan 2022 21:24:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C269D61305;
+        Mon, 24 Jan 2022 21:22:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C15C340E4;
+        Mon, 24 Jan 2022 21:22:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059465;
-        bh=3v1HE+aP+jyFLtVWiJY2W1IvFFukw8FwMDbrTfFOkGc=;
+        s=korg; t=1643059362;
+        bh=K1P0TxYjsDj04lZnqfKDF20Wp9vKSWilXUlbwfumO/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hHo8PGzq+IU4hyJFlLgS3jDOMSBuqIS8t0bnA8frwVI/UlRdrDHMuPdchflbcCCRy
-         iMn+/KWwe8V27kHkQHLS/xcPGcIBC+omKgk3S4qDvZXDgp/ih/YyJLPdBc+SSoFN9s
-         GyNaaOlTxbOr/0ZOgu8NWyy/k6sfnxicr9GQaoSg=
+        b=ggKcWDDidZeyN8vLWMo08nX3+1CWwm+jCx69VNzwC4koWY+l3BuB9aQAZN8Y3m7Ps
+         D+YWRohe0jzSc4A5GPlDJLKd+6cu50NnOMD3kCyFX8+VXK9pnzVow4PICQUe4kcDso
+         9E9kCPpQrpgp+T5JYopAnwiWaRYD/lpIpAJi0VFo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
+        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0582/1039] drm/amd/display: check top_pipe_to_program pointer
-Date:   Mon, 24 Jan 2022 19:39:31 +0100
-Message-Id: <20220124184144.909444563@linuxfoundation.org>
+Subject: [PATCH 5.16 0583/1039] drm/amdgpu/display: set vblank_disable_immediate for DC
+Date:   Mon, 24 Jan 2022 19:39:32 +0100
+Message-Id: <20220124184144.945945777@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -47,45 +46,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Li <yang.lee@linux.alibaba.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit a689e8d1f80012f90384ebac9dcfac4201f9f77e ]
+[ Upstream commit 92020e81ddbeac351ea4a19bcf01743f32b9c800 ]
 
-Clang static analysis reports this error
+Disable vblanks immediately to save power.  I think this was
+missed when we merged DC support.
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:2870:7: warning:
-Dereference of null pointer [clang-analyzer-core.NullDereference]
-                if
-(top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
-                    ^
-
-top_pipe_to_program being NULL is caught as an error
-But then it is used to report the error.
-
-So add a check before using it.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1781
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c           | 1 -
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 +++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-index 0ded4decee05f..f0fbd8ad56229 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -2870,7 +2870,8 @@ static void commit_planes_for_stream(struct dc *dc,
- #endif
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
+index cc2e0c9cfe0a1..4f3c62adccbde 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c
+@@ -333,7 +333,6 @@ int amdgpu_irq_init(struct amdgpu_device *adev)
+ 	if (!amdgpu_device_has_dc_support(adev)) {
+ 		if (!adev->enable_virtual_display)
+ 			/* Disable vblank IRQs aggressively for power-saving */
+-			/* XXX: can this be enabled for DC? */
+ 			adev_to_drm(adev)->vblank_disable_immediate = true;
  
- 	if ((update_type != UPDATE_TYPE_FAST) && stream->update_flags.bits.dsc_changed)
--		if (top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
-+		if (top_pipe_to_program &&
-+			top_pipe_to_program->stream_res.tg->funcs->lock_doublebuffer_enable) {
- 			if (should_use_dmub_lock(stream->link)) {
- 				union dmub_hw_lock_flags hw_locks = { 0 };
- 				struct dmub_hw_lock_inst_flags inst_flags = { 0 };
+ 		r = drm_vblank_init(adev_to_drm(adev), adev->mode_info.num_crtc);
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 05f7ffd6a28da..e12f841d1d110 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -1597,6 +1597,9 @@ static int amdgpu_dm_init(struct amdgpu_device *adev)
+ 	adev_to_drm(adev)->mode_config.cursor_width = adev->dm.dc->caps.max_cursor_size;
+ 	adev_to_drm(adev)->mode_config.cursor_height = adev->dm.dc->caps.max_cursor_size;
+ 
++	/* Disable vblank IRQs aggressively for power-saving */
++	adev_to_drm(adev)->vblank_disable_immediate = true;
++
+ 	if (drm_vblank_init(adev_to_drm(adev), adev->dm.display_indexes_num)) {
+ 		DRM_ERROR(
+ 		"amdgpu: failed to initialize sw for display support.\n");
 -- 
 2.34.1
 

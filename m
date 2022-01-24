@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7296498FC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88086499044
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358219AbiAXTyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:54:39 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40964 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244676AbiAXTn2 (ORCPT
+        id S1353493AbiAXT7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:59:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33954 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355765AbiAXTnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:43:28 -0500
+        Mon, 24 Jan 2022 14:43:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EA99614B8;
-        Mon, 24 Jan 2022 19:43:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05A1EC340E5;
-        Mon, 24 Jan 2022 19:43:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0A85B811F3;
+        Mon, 24 Jan 2022 19:43:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB43C340E5;
+        Mon, 24 Jan 2022 19:43:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053406;
-        bh=w+VyngdW9N3dWCPVF+tKJ1n0N9r4Bcc/n6v1odHf5TQ=;
+        s=korg; t=1643053418;
+        bh=UO5roCH2zYZALs8rtmhmOHSCw7I+ibAjMZTVl8sl7RU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uhGyC1zvPHUP8xj9GGV7kvYGhSSVaSrqWgzZIVUOhdarXEfRcbmUB6au/llGIxerH
-         Zx3QXbfESg4e1Jag1UDymrNh+gtmFMAHD+V1sjnv9LqTRnBn5XtP0CcuO02nl0DxON
-         4Ab/AsB9nKbb7hntvx6Tw5M9Xaoq0hU85dokYgfQ=
+        b=TqgrLfkLNZpQwpqjjZM4Pw4Sjyyxi62VA4XwUicpoowGk/776pC6Y2wAZEZh8pcmQ
+         QqOmPUvBiq9iUtSIleu3TB6pQh0UKG8BQoSytzK3SW68Yck3Xefg6ug4VVgDOQwxAy
+         aG7y1eSD9WaVVkeFqQPoCA61rINyYHGxixxa5Ox4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Michael Stapelberg <michael@stapelberg.ch>,
+        stable@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 054/563] drm/vc4: hdmi: Set a default HSM rate
-Date:   Mon, 24 Jan 2022 19:36:59 +0100
-Message-Id: <20220124184026.285848868@linuxfoundation.org>
+Subject: [PATCH 5.10 058/563] wcn36xx: Release DMA channel descriptor allocations
+Date:   Mon, 24 Jan 2022 19:37:03 +0100
+Message-Id: <20220124184026.419341918@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -47,59 +47,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-[ Upstream commit 3e85b81591609bb794bb00cd619b20965b5b38cd ]
+[ Upstream commit 3652096e5263ad67604b0323f71d133485f410e5 ]
 
-When the firmware doesn't setup the HSM rate (such as when booting
-without an HDMI cable plugged in), its rate is 0 and thus any register
-access results in a CPU stall, even though HSM is enabled.
+When unloading the driver we are not releasing the DMA descriptors which we
+previously allocated.
 
-Let's enforce a minimum rate at boot to avoid this issue.
-
-Fixes: 4f6e3d66ac52 ("drm/vc4: Add runtime PM support to the HDMI encoder driver")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
-Tested-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
-Tested-by: Michael Stapelberg <michael@stapelberg.ch>
-Link: https://patchwork.freedesktop.org/patch/msgid/20210922125419.4125779-4-maxime@cerno.tech
+Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN3680 hardware")
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211105122152.1580542-3-bryan.odonoghue@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_hdmi.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/net/wireless/ath/wcn36xx/dxe.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index ee293f061f0a8..5d5c4e9a86218 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -79,6 +79,7 @@
- # define VC4_HD_M_SW_RST			BIT(2)
- # define VC4_HD_M_ENABLE			BIT(0)
+diff --git a/drivers/net/wireless/ath/wcn36xx/dxe.c b/drivers/net/wireless/ath/wcn36xx/dxe.c
+index 0909d0c423cbb..b117d8a0f446f 100644
+--- a/drivers/net/wireless/ath/wcn36xx/dxe.c
++++ b/drivers/net/wireless/ath/wcn36xx/dxe.c
+@@ -1014,4 +1014,9 @@ void wcn36xx_dxe_deinit(struct wcn36xx *wcn)
  
-+#define HSM_MIN_CLOCK_FREQ	120000000
- #define CEC_CLOCK_FREQ 40000
- #define VC4_HSM_MID_CLOCK 149985000
- 
-@@ -1806,6 +1807,19 @@ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
- 	vc4_hdmi->disable_wifi_frequencies =
- 		of_property_read_bool(dev->of_node, "wifi-2.4ghz-coexistence");
- 
-+	/*
-+	 * If we boot without any cable connected to the HDMI connector,
-+	 * the firmware will skip the HSM initialization and leave it
-+	 * with a rate of 0, resulting in a bus lockup when we're
-+	 * accessing the registers even if it's enabled.
-+	 *
-+	 * Let's put a sensible default at runtime_resume so that we
-+	 * don't end up in this situation.
-+	 */
-+	ret = clk_set_min_rate(vc4_hdmi->hsm_clock, HSM_MIN_CLOCK_FREQ);
-+	if (ret)
-+		goto err_put_ddc;
+ 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_l_ch);
+ 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_h_ch);
 +
- 	if (vc4_hdmi->variant->reset)
- 		vc4_hdmi->variant->reset(vc4_hdmi);
- 
++	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_tx_l_ch);
++	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_tx_h_ch);
++	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_rx_l_ch);
++	wcn36xx_dxe_deinit_descs(wcn->dev, &wcn->dxe_rx_h_ch);
+ }
 -- 
 2.34.1
 

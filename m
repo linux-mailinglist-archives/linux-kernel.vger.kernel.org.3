@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE48498C5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 063E54992F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349585AbiAXTVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238400AbiAXTM7 (ORCPT
+        id S1383185AbiAXU0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:26:55 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54838 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347509AbiAXT6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:12:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663A5C0604D4;
-        Mon, 24 Jan 2022 11:04:02 -0800 (PST)
+        Mon, 24 Jan 2022 14:58:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 070A060FED;
-        Mon, 24 Jan 2022 19:04:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38F5C340E5;
-        Mon, 24 Jan 2022 19:04:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D086660B02;
+        Mon, 24 Jan 2022 19:58:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA024C340E5;
+        Mon, 24 Jan 2022 19:58:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051041;
-        bh=Mm29p/MNKCC/N2fGHWjrloJ+iJd7CPkhYTkIPF/7R3Y=;
+        s=korg; t=1643054305;
+        bh=aXgAlWjFhuTYaGo0IQrs5NxFaBkHUtQAgDjh1OBwC9o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UMl2QlauKj7R8TuC+SL2NCD0s0+UxkFynMdnhlhSki+o9qHtCEKleTX+Si8kFATF6
-         Lb7EQ+LTuje7HfK/M8Lrg1KK07I2Wao8S3Ew7Smj6fBEaB1Fx92J6IyxboD3myYl4Q
-         OmYCPGfMmmo8qkGpkNfgymsUfCELCcRwnyux/tSs=
+        b=QuN7KRleVxvKtb7ekSR5PDdUAomPSZdo42sXLDwVXaLHqz9UnLfGECrrvhNX+PglG
+         +I9EIGTRC3QbanLPz7HQhvTKTinlpZZONvvtGkw6RP7eNseoxte+2Lv3zIvFD5Y5eh
+         f1g/qEnAdfQ3HQqXOweuH4DoT7b1R+HLqsc9rCO8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Michael Stapelberg <michael@stapelberg.ch>,
+        stable@vger.kernel.org, rkardell@mida.se,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 034/186] clk: bcm-2835: Pick the closest clock rate
-Date:   Mon, 24 Jan 2022 19:41:49 +0100
-Message-Id: <20220124183938.221804577@linuxfoundation.org>
+Subject: [PATCH 5.10 345/563] media: m920x: dont use stack on USB reads
+Date:   Mon, 24 Jan 2022 19:41:50 +0100
+Message-Id: <20220124184036.351610038@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,44 +46,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 5517357a4733d7cf7c17fc79d0530cfa47add372 ]
+[ Upstream commit a2ab06d7c4d6bfd0b545a768247a70463e977e27 ]
 
-The driver currently tries to pick the closest rate that is lower than
-the rate being requested.
+Using stack-allocated pointers for USB message data don't work.
+This driver is almost OK with that, except for the I2C read
+logic.
 
-This causes an issue with clk_set_min_rate() since it actively checks
-for the rounded rate to be above the minimum that was just set.
+Fix it by using a temporary read buffer, just like on all other
+calls to m920x_read().
 
-Let's change the logic a bit to pick the closest rate to the requested
-rate, no matter if it's actually higher or lower.
-
-Fixes: 6d18b8adbe67 ("clk: bcm2835: Support for clock parent selection")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
-Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
-Tested-by: Nicolas Saenz Julienne <nsaenz@kernel.org> # boot and basic functionality
-Tested-by: Michael Stapelberg <michael@stapelberg.ch>
-Link: https://patchwork.freedesktop.org/patch/msgid/20210922125419.4125779-2-maxime@cerno.tech
+Link: https://lore.kernel.org/all/ccc99e48-de4f-045e-0fe4-61e3118e3f74@mida.se/
+Reported-by: rkardell@mida.se
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/bcm/clk-bcm2835.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/usb/dvb-usb/m920x.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-index 98295b9703178..d6cd1cc3f8e4d 100644
---- a/drivers/clk/bcm/clk-bcm2835.c
-+++ b/drivers/clk/bcm/clk-bcm2835.c
-@@ -1233,7 +1233,7 @@ static int bcm2835_clock_determine_rate(struct clk_hw *hw,
- 		rate = bcm2835_clock_choose_div_and_prate(hw, i, req->rate,
- 							  &div, &prate,
- 							  &avgrate);
--		if (rate > best_rate && rate <= req->rate) {
-+		if (abs(req->rate - rate) < abs(req->rate - best_rate)) {
- 			best_parent = parent;
- 			best_prate = prate;
- 			best_rate = rate;
+diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-usb/m920x.c
+index 4bb5b82599a79..691e05833db19 100644
+--- a/drivers/media/usb/dvb-usb/m920x.c
++++ b/drivers/media/usb/dvb-usb/m920x.c
+@@ -274,6 +274,13 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+ 			/* Should check for ack here, if we knew how. */
+ 		}
+ 		if (msg[i].flags & I2C_M_RD) {
++			char *read = kmalloc(1, GFP_KERNEL);
++			if (!read) {
++				ret = -ENOMEM;
++				kfree(read);
++				goto unlock;
++			}
++
+ 			for (j = 0; j < msg[i].len; j++) {
+ 				/* Last byte of transaction?
+ 				 * Send STOP, otherwise send ACK. */
+@@ -281,9 +288,12 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+ 
+ 				if ((ret = m920x_read(d->udev, M9206_I2C, 0x0,
+ 						      0x20 | stop,
+-						      &msg[i].buf[j], 1)) != 0)
++						      read, 1)) != 0)
+ 					goto unlock;
++				msg[i].buf[j] = read[0];
+ 			}
++
++			kfree(read);
+ 		} else {
+ 			for (j = 0; j < msg[i].len; j++) {
+ 				/* Last byte of transaction? Then send STOP. */
 -- 
 2.34.1
 

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1443F4991FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90427498B18
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380640AbiAXUQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:16:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42774 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245216AbiAXT6W (ORCPT
+        id S1345034AbiAXTL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:11:27 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60634 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344936AbiAXTEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:58:22 -0500
+        Mon, 24 Jan 2022 14:04:02 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CF86B811F9;
-        Mon, 24 Jan 2022 19:58:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F10AC36AEB;
-        Mon, 24 Jan 2022 19:58:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D563B60B86;
+        Mon, 24 Jan 2022 19:03:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7FE9C340E5;
+        Mon, 24 Jan 2022 19:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054298;
-        bh=qDhR74ah9joXahceyFh9WO/6szkMtojGpRt+7xDLEdM=;
+        s=korg; t=1643051038;
+        bh=mhPuVfgRFd2RapL/z1cdkOW64XqvZopmkecBub3MIng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P0/EHm9o5X2igDsYwgKZ/QNcG5/pVIn2Farmc7d2o+QjSkHnwhNk+rSGtgA+Aw+WG
-         5z00aryneVgdqTGzN7FnglUlOPhXihJ18ed0Rq/rIncQgwcypjXnLxcwbtBtgBY+vh
-         zFplSCtfaYLWKy51kglZMB29BSKSJW+QKxMF1t/4=
+        b=K0yIUOGkXw593BVt1k2ca/dZ9S64D5oYS+CFIivWENePLjasLeM1Ja/HiiRFliPYW
+         b1jSb2G6UpH473jBCJdK32EP5urGWQmUJGL1bPM/VFcBNPLyYi1l1Nf+MV4UBe/+ot
+         hsxHzos7FiNNjdBgCt3RTFt+SXX0H6q9f/HwiAW0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wang Hai <wanghai38@huawei.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 343/563] media: rcar-vin: Update format alignment constraints
+Subject: [PATCH 4.14 033/186] Bluetooth: cmtp: fix possible panic when cmtp_init_sockets() fails
 Date:   Mon, 24 Jan 2022 19:41:48 +0100
-Message-Id: <20220124184036.289671836@linuxfoundation.org>
+Message-Id: <20220124183938.190311012@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,64 +47,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+From: Wang Hai <wanghai38@huawei.com>
 
-[ Upstream commit da6911f330d40cfe115a37249e47643eff555e82 ]
+[ Upstream commit 2a7ca7459d905febf519163bd9e3eed894de6bb7 ]
 
-This change fixes two issues with the size constraints for buffers.
+I got a kernel BUG report when doing fault injection test:
 
-- There is no width alignment constraint for RGB formats. Prior to this
-  change they were treated as YUV and as a result were more restricted
-  than needed. Add a new check to differentiate between the two.
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:45!
+...
+RIP: 0010:__list_del_entry_valid.cold+0x12/0x4d
+...
+Call Trace:
+ proto_unregister+0x83/0x220
+ cmtp_cleanup_sockets+0x37/0x40 [cmtp]
+ cmtp_exit+0xe/0x1f [cmtp]
+ do_syscall_64+0x35/0xb0
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-- The minimum width and height supported is 5x2, not 2x4, this is an
-  artifact from the driver's soc-camera days. Fix this incorrect
-  assumption.
+If cmtp_init_sockets() in cmtp_init() fails, cmtp_init() still returns
+success. This will cause a kernel bug when accessing uncreated ctmp
+related data when the module exits.
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rcar-vin/rcar-v4l2.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ net/bluetooth/cmtp/core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-index 3e7a3ae2a6b97..0bbe6f9f92062 100644
---- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-@@ -175,20 +175,27 @@ static void rvin_format_align(struct rvin_dev *vin, struct v4l2_pix_format *pix)
- 		break;
- 	}
+diff --git a/net/bluetooth/cmtp/core.c b/net/bluetooth/cmtp/core.c
+index 9873684a9d8ff..4764ed73f33bf 100644
+--- a/net/bluetooth/cmtp/core.c
++++ b/net/bluetooth/cmtp/core.c
+@@ -499,9 +499,7 @@ static int __init cmtp_init(void)
+ {
+ 	BT_INFO("CMTP (CAPI Emulation) ver %s", VERSION);
  
--	/* HW limit width to a multiple of 32 (2^5) for NV12/16 else 2 (2^1) */
-+	/* Hardware limits width alignment based on format. */
- 	switch (pix->pixelformat) {
-+	/* Multiple of 32 (2^5) for NV12/16. */
- 	case V4L2_PIX_FMT_NV12:
- 	case V4L2_PIX_FMT_NV16:
- 		walign = 5;
- 		break;
--	default:
-+	/* Multiple of 2 (2^1) for YUV. */
-+	case V4L2_PIX_FMT_YUYV:
-+	case V4L2_PIX_FMT_UYVY:
- 		walign = 1;
- 		break;
-+	/* No multiple for RGB. */
-+	default:
-+		walign = 0;
-+		break;
- 	}
+-	cmtp_init_sockets();
+-
+-	return 0;
++	return cmtp_init_sockets();
+ }
  
- 	/* Limit to VIN capabilities */
--	v4l_bound_align_image(&pix->width, 2, vin->info->max_width, walign,
--			      &pix->height, 4, vin->info->max_height, 2, 0);
-+	v4l_bound_align_image(&pix->width, 5, vin->info->max_width, walign,
-+			      &pix->height, 2, vin->info->max_height, 0, 0);
- 
- 	pix->bytesperline = rvin_format_bytesperline(vin, pix);
- 	pix->sizeimage = rvin_format_sizeimage(pix);
+ static void __exit cmtp_exit(void)
 -- 
 2.34.1
 

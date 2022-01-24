@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D85499872
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5BA499C1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452349AbiAXVZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:25:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52752 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443929AbiAXU7h (ORCPT
+        id S1577346AbiAXV74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1449391AbiAXVPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:59:37 -0500
+        Mon, 24 Jan 2022 16:15:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F1BC09F49F;
+        Mon, 24 Jan 2022 12:11:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A80776131F;
-        Mon, 24 Jan 2022 20:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAA1C340E5;
-        Mon, 24 Jan 2022 20:59:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 310906091A;
+        Mon, 24 Jan 2022 20:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E25C340E5;
+        Mon, 24 Jan 2022 20:11:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057975;
-        bh=fvSo4k2DvJm5t6/jjMZlDtic3DNw8fsnPxhjZI0j8sk=;
+        s=korg; t=1643055113;
+        bh=144PDysLpSJ6GIYi9kEkqsHULZPJMbuHXfVyKCTAQRU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aGhRZg4HifZEzRNNdokwj7TVtnkmiltIyfk4hRqMNOgS89CRi9x86+dKsjSiqYHM0
-         a4kak+wCK5wt+gHUxpdS5RAlcPjFAtCbYiwUR68da1MlxcJyVrngZJpGB+9UphcM/X
-         0AQu9UDf13vj29V8Ef3L3iYkdas97ewGfeGIBjRY=
+        b=1w+ae9SBAPjJB1zeENh3FahQqMJK1afmh+eYag5zOn8hyPf40SuzYJVlvKpG7pLw9
+         7i9QB2VPDx1JRlnD/uU1JQZT70a4Sqi6Hqw687Eu520x4CLwS/5olyr9U1AJ0qWRAE
+         0SAYnsqNGBq4nsFgyI+6VkPO/yrBS/cnTebMy++I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marcel Holtmann <marcel@holtmann.org>,
-        Jackie Liu <liuyun01@kylinos.cn>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0140/1039] Bluetooth: fix uninitialized variables notify_evt
-Date:   Mon, 24 Jan 2022 19:32:09 +0100
-Message-Id: <20220124184129.882767912@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Stefan Riedmueller <s.riedmueller@phytec.de>,
+        Christian Eggers <ceggers@arri.de>, Han Xu <han.xu@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.15 013/846] mtd: rawnand: gpmi: Add ERR007117 protection for nfc_apply_timings
+Date:   Mon, 24 Jan 2022 19:32:10 +0100
+Message-Id: <20220124184101.366620791@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,96 +50,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jackie Liu <liuyun01@kylinos.cn>
+From: Christian Eggers <ceggers@arri.de>
 
-[ Upstream commit a27c519a816437ec92f0ffa3adbc168c2c08725b ]
+commit f53d4c109a666bf1a4883b45d546fba079258717 upstream.
 
-Coverity Scan report:
+gpmi_io clock needs to be gated off when changing the parent/dividers of
+enfc_clk_root (i.MX6Q/i.MX6UL) respectively qspi2_clk_root (i.MX6SX).
+Otherwise this rate change can lead to an unresponsive GPMI core which
+results in DMA timeouts and failed driver probe:
 
-[...]
-*** CID 1493985:  Uninitialized variables  (UNINIT)
-/net/bluetooth/hci_event.c: 4535 in hci_sync_conn_complete_evt()
-4529
-4530     	/* Notify only in case of SCO over HCI transport data path which
-4531     	 * is zero and non-zero value shall be non-HCI transport data path
-4532     	 */
-4533     	if (conn->codec.data_path == 0) {
-4534     		if (hdev->notify)
->>>     CID 1493985:  Uninitialized variables  (UNINIT)
->>>     Using uninitialized value "notify_evt" when calling "*hdev->notify".
-4535     			hdev->notify(hdev, notify_evt);
-4536     	}
-4537
-4538     	hci_connect_cfm(conn, ev->status);
-4539     	if (ev->status)
-4540     		hci_conn_del(conn);
-[...]
+[    4.072318] gpmi-nand 112000.gpmi-nand: DMA timeout, last DMA
+...
+[    4.370355] gpmi-nand 112000.gpmi-nand: Chip: 0, Error -110
+...
+[    4.375988] gpmi-nand 112000.gpmi-nand: Chip: 0, Error -22
+[    4.381524] gpmi-nand 112000.gpmi-nand: Error in ECC-based read: -22
+[    4.387988] gpmi-nand 112000.gpmi-nand: Chip: 0, Error -22
+[    4.393535] gpmi-nand 112000.gpmi-nand: Chip: 0, Error -22
+...
 
-Although only btusb uses air_mode, and he only handles HCI_NOTIFY_ENABLE_SCO_CVSD
-and HCI_NOTIFY_ENABLE_SCO_TRANSP, there is still a very small chance that
-ev->air_mode is not equal to 0x2 and 0x3, but notify_evt is initialized to
-HCI_NOTIFY_ENABLE_SCO_CVSD or HCI_NOTIFY_ENABLE_SCO_TRANSP. the context is
-maybe not correct.
+Other than stated in i.MX 6 erratum ERR007117, it should be sufficient
+to gate only gpmi_io because all other bch/nand clocks are derived from
+different clock roots.
 
-Let us directly use the required function instead of re-initializing it,
-so as to restore the original logic and make the code more correct.
+The i.MX6 reference manuals state that changing clock muxers can cause
+glitches but are silent about changing dividers. But tests showed that
+these glitches can definitely happen on i.MX6ULL. For i.MX7D/8MM in turn,
+the manual guarantees that no glitches can happen when changing
+dividers.
 
-Addresses-Coverity: ("Uninitialized variables")
-Fixes: f4f9fa0c07bb ("Bluetooth: Allow usb to auto-suspend when SCO use	non-HCI transport")
-Suggested-by: Marcel Holtmann <marcel@holtmann.org>
-Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Co-developed-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+Signed-off-by: Christian Eggers <ceggers@arri.de>
+Cc: stable@vger.kernel.org
+Acked-by: Han Xu <han.xu@nxp.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20211102202022.15551-2-ceggers@arri.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bluetooth/hci_event.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |   28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index 59f0691d907f6..6eba439487749 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -4445,7 +4445,6 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev,
+--- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
++++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+@@ -713,14 +713,32 @@ static void gpmi_nfc_compute_timings(str
+ 			      (use_half_period ? BM_GPMI_CTRL1_HALF_PERIOD : 0);
+ }
+ 
+-static void gpmi_nfc_apply_timings(struct gpmi_nand_data *this)
++static int gpmi_nfc_apply_timings(struct gpmi_nand_data *this)
  {
- 	struct hci_ev_sync_conn_complete *ev = (void *) skb->data;
- 	struct hci_conn *conn;
--	unsigned int notify_evt;
+ 	struct gpmi_nfc_hardware_timing *hw = &this->hw;
+ 	struct resources *r = &this->resources;
+ 	void __iomem *gpmi_regs = r->gpmi_regs;
+ 	unsigned int dll_wait_time_us;
++	int ret;
++
++	/* Clock dividers do NOT guarantee a clean clock signal on its output
++	 * during the change of the divide factor on i.MX6Q/UL/SX. On i.MX7/8,
++	 * all clock dividers provide these guarantee.
++	 */
++	if (GPMI_IS_MX6Q(this) || GPMI_IS_MX6SX(this))
++		clk_disable_unprepare(r->clock[0]);
++
++	ret = clk_set_rate(r->clock[0], hw->clk_rate);
++	if (ret) {
++		dev_err(this->dev, "cannot set clock rate to %lu Hz: %d\n", hw->clk_rate, ret);
++		return ret;
++	}
  
- 	BT_DBG("%s status 0x%2.2x", hdev->name, ev->status);
+-	clk_set_rate(r->clock[0], hw->clk_rate);
++	if (GPMI_IS_MX6Q(this) || GPMI_IS_MX6SX(this)) {
++		ret = clk_prepare_enable(r->clock[0]);
++		if (ret)
++			return ret;
++	}
  
-@@ -4517,22 +4516,18 @@ static void hci_sync_conn_complete_evt(struct hci_dev *hdev,
- 	}
+ 	writel(hw->timing0, gpmi_regs + HW_GPMI_TIMING0);
+ 	writel(hw->timing1, gpmi_regs + HW_GPMI_TIMING1);
+@@ -739,6 +757,8 @@ static void gpmi_nfc_apply_timings(struc
  
- 	bt_dev_dbg(hdev, "SCO connected with air mode: %02x", ev->air_mode);
--
--	switch (ev->air_mode) {
--	case 0x02:
--		notify_evt = HCI_NOTIFY_ENABLE_SCO_CVSD;
--		break;
--	case 0x03:
--		notify_evt = HCI_NOTIFY_ENABLE_SCO_TRANSP;
--		break;
--	}
--
- 	/* Notify only in case of SCO over HCI transport data path which
- 	 * is zero and non-zero value shall be non-HCI transport data path
+ 	/* Wait for the DLL to settle. */
+ 	udelay(dll_wait_time_us);
++
++	return 0;
+ }
+ 
+ static int gpmi_setup_interface(struct nand_chip *chip, int chipnr,
+@@ -2280,7 +2300,9 @@ static int gpmi_nfc_exec_op(struct nand_
  	 */
--	if (conn->codec.data_path == 0) {
--		if (hdev->notify)
--			hdev->notify(hdev, notify_evt);
-+	if (conn->codec.data_path == 0 && hdev->notify) {
-+		switch (ev->air_mode) {
-+		case 0x02:
-+			hdev->notify(hdev, HCI_NOTIFY_ENABLE_SCO_CVSD);
-+			break;
-+		case 0x03:
-+			hdev->notify(hdev, HCI_NOTIFY_ENABLE_SCO_TRANSP);
-+			break;
-+		}
+ 	if (this->hw.must_apply_timings) {
+ 		this->hw.must_apply_timings = false;
+-		gpmi_nfc_apply_timings(this);
++		ret = gpmi_nfc_apply_timings(this);
++		if (ret)
++			return ret;
  	}
  
- 	hci_connect_cfm(conn, ev->status);
--- 
-2.34.1
-
+ 	dev_dbg(this->dev, "%s: %d instructions\n", __func__, op->ninstrs);
 
 

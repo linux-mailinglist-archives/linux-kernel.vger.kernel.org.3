@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A1A499E79
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951D2499EC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1589059AbiAXWey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:34:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
+        id S1383694AbiAXWoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456644AbiAXVjo (ORCPT
+        with ESMTP id S1456651AbiAXVjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:39:44 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876ADC0613A8;
-        Mon, 24 Jan 2022 12:25:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D752C0613BB;
+        Mon, 24 Jan 2022 12:25:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 243D1613FB;
-        Mon, 24 Jan 2022 20:25:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE16C340E5;
-        Mon, 24 Jan 2022 20:25:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DC6261507;
+        Mon, 24 Jan 2022 20:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2DCBC340E5;
+        Mon, 24 Jan 2022 20:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055921;
-        bh=sCXJc83fAaA7xRblOL9umQGC5ac3+hMGSd03XpSDmbA=;
+        s=korg; t=1643055927;
+        bh=l1GAvzEWVH6/hFQyYtoaHujoAr9JDdP8GbTGP8GHEJ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ctj/WmOH+2gSD2okAyyS0RJRAZXwiFrWGmkLa3Qh6cGT2EReW9kiMxn+TRhXN0JjW
-         U8Td28SYKsvDKeZ+k+GEcHJharUVcsy5i54tP3Z4Qrw8uYeYtv/HY7qbN36kmkocOD
-         zqx83qvABy4qZPlnbG8eRgae9kClF6k0bOolstZc=
+        b=YLrs4lxjo5aSGHuht/keMoQn8ISZsCHMbel6DFDDhEggb0C41nD3J0ZLmkfF9dpzo
+         +b5e0521kzZzKkQP4q1u8D51GJhvjiXsGbs8pr5Bh7DW3xhwmLR6AywmqmvlYaJ39T
+         zqzs7f9vboJrwS0R4i1lC5TmWAF5azMBbb54entc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org, Kris Van Hees <kris.van.hees@oracle.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 310/846] bpf, sockmap: Fix double bpf_prog_put on error case in map_link
-Date:   Mon, 24 Jan 2022 19:37:07 +0100
-Message-Id: <20220124184111.611762702@linuxfoundation.org>
+Subject: [PATCH 5.15 312/846] bpf: Fix verifier support for validation of async callbacks
+Date:   Mon, 24 Jan 2022 19:37:09 +0100
+Message-Id: <20220124184111.677299704@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -51,117 +49,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Fastabend <john.fastabend@gmail.com>
+From: Kris Van Hees <kris.van.hees@oracle.com>
 
-[ Upstream commit 218d747a4142f281a256687bb513a135c905867b ]
+[ Upstream commit a5bebc4f00dee47113eed48098c68e88b5ba70e8 ]
 
-sock_map_link() is called to update a sockmap entry with a sk. But, if the
-sock_map_init_proto() call fails then we return an error to the map_update
-op against the sockmap. In the error path though we need to cleanup psock
-and dec the refcnt on any programs associated with the map, because we
-refcnt them early in the update process to ensure they are pinned for the
-psock. (This avoids a race where user deletes programs while also updating
-the map with new socks.)
+Commit bfc6bb74e4f1 ("bpf: Implement verifier support for validation of async callbacks.")
+added support for BPF_FUNC_timer_set_callback to
+the __check_func_call() function.  The test in __check_func_call() is
+flaweed because it can mis-interpret a regular BPF-to-BPF pseudo-call
+as a BPF_FUNC_timer_set_callback callback call.
 
-In current code we do the prog refcnt dec explicitely by calling
-bpf_prog_put() when the program was found in the map. But, after commit
-'38207a5e81230' in this error path we've already done the prog to psock
-assignment so the programs have a reference from the psock as well. This
-then causes the psock tear down logic, invoked by sk_psock_put() in the
-error path, to similarly call bpf_prog_put on the programs there.
+Consider the conditional in the code:
 
-To be explicit this logic does the prog->psock assignment:
+	if (insn->code == (BPF_JMP | BPF_CALL) &&
+	    insn->imm == BPF_FUNC_timer_set_callback) {
 
-  if (msg_*)
-    psock_set_prog(...)
+The BPF_FUNC_timer_set_callback has value 170.  This means that if you
+have a BPF program that contains a pseudo-call with an instruction delta
+of 170, this conditional will be found to be true by the verifier, and
+it will interpret the pseudo-call as a callback.  This leads to a mess
+with the verification of the program because it makes the wrong
+assumptions about the nature of this call.
 
-Then the error path under the out_progs label does a similar check and
-dec with:
+Solution: include an explicit check to ensure that insn->src_reg == 0.
+This ensures that calls cannot be mis-interpreted as an async callback
+call.
 
-  if (msg_*)
-     bpf_prog_put(...)
-
-And the teardown logic sk_psock_put() does ...
-
-  psock_set_prog(msg_*, NULL)
-
-... triggering another bpf_prog_put(...). Then KASAN gives us this splat,
-found by syzbot because we've created an inbalance between bpf_prog_inc and
-bpf_prog_put calling put twice on the program.
-
-  BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
-  BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
-  BUG: KASAN: vmalloc-out-of-bounds in bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
-  Read of size 8 at addr ffffc90000e76038 by task syz-executor020/3641
-
-To fix clean up error path so it doesn't try to do the bpf_prog_put in the
-error path once progs are assigned then it relies on the normal psock
-tear down logic to do complete cleanup.
-
-For completness we also cover the case whereh sk_psock_init_strp() fails,
-but this is not expected because it indicates an incorrect socket type
-and should be caught earlier.
-
-Fixes: 38207a5e8123 ("bpf, sockmap: Attach map progs to psock early for feature probes")
-Reported-by: syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220104214645.290900-1-john.fastabend@gmail.com
+Fixes: bfc6bb74e4f1 ("bpf: Implement verifier support for validation of async callbacks.")
+Signed-off-by: Kris Van Hees <kris.van.hees@oracle.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20220105210150.GH1559@oracle.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/sock_map.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index c89f527411e84..8288b5382f08d 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -292,15 +292,23 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
- 	if (skb_verdict)
- 		psock_set_prog(&psock->progs.skb_verdict, skb_verdict);
- 
-+	/* msg_* and stream_* programs references tracked in psock after this
-+	 * point. Reference dec and cleanup will occur through psock destructor
-+	 */
- 	ret = sock_map_init_proto(sk, psock);
--	if (ret < 0)
--		goto out_drop;
-+	if (ret < 0) {
-+		sk_psock_put(sk, psock);
-+		goto out;
-+	}
- 
- 	write_lock_bh(&sk->sk_callback_lock);
- 	if (stream_parser && stream_verdict && !psock->saved_data_ready) {
- 		ret = sk_psock_init_strp(sk, psock);
--		if (ret)
--			goto out_unlock_drop;
-+		if (ret) {
-+			write_unlock_bh(&sk->sk_callback_lock);
-+			sk_psock_put(sk, psock);
-+			goto out;
-+		}
- 		sk_psock_start_strp(sk, psock);
- 	} else if (!stream_parser && stream_verdict && !psock->saved_data_ready) {
- 		sk_psock_start_verdict(sk,psock);
-@@ -309,10 +317,6 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7be72682dfda0..94f7f6ac136fb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5785,6 +5785,7 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
  	}
- 	write_unlock_bh(&sk->sk_callback_lock);
- 	return 0;
--out_unlock_drop:
--	write_unlock_bh(&sk->sk_callback_lock);
--out_drop:
--	sk_psock_put(sk, psock);
- out_progs:
- 	if (skb_verdict)
- 		bpf_prog_put(skb_verdict);
-@@ -325,6 +329,7 @@ out_put_stream_parser:
- out_put_stream_verdict:
- 	if (stream_verdict)
- 		bpf_prog_put(stream_verdict);
-+out:
- 	return ret;
- }
+ 
+ 	if (insn->code == (BPF_JMP | BPF_CALL) &&
++	    insn->src_reg == 0 &&
+ 	    insn->imm == BPF_FUNC_timer_set_callback) {
+ 		struct bpf_verifier_state *async_cb;
  
 -- 
 2.34.1

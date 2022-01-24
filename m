@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC14499EA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D0B499F19
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836949AbiAXWl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S1839982AbiAXWwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457503AbiAXVlo (ORCPT
+        with ESMTP id S1458146AbiAXVmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:41:44 -0500
+        Mon, 24 Jan 2022 16:42:47 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B70CC07E32C;
-        Mon, 24 Jan 2022 12:29:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430DBC07A957;
+        Mon, 24 Jan 2022 12:31:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42628B811F9;
-        Mon, 24 Jan 2022 20:29:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 704C6C340E7;
-        Mon, 24 Jan 2022 20:29:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01544B8123F;
+        Mon, 24 Jan 2022 20:31:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A116C340E5;
+        Mon, 24 Jan 2022 20:31:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056147;
-        bh=38atHOSDcEAA8WktNXrsyJ35lYSwBYWTpW+4G2AjEqA=;
+        s=korg; t=1643056265;
+        bh=dMH0TrLfYPk5E/hAHhxg0Py6sv4hdcdjMM7UmDRYzEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zYCncYXXKPThed0I9oXH2Eql6AtE2I5iWOqRW9RvnUga2aUQ16pe8EIoyQF1w5O9c
-         /PI7CP1vA86xK5PnbQA/pNkc2HdPZ30PKN/6OTHGzrB+DxmUhioTlHxWUq9YKaLxoA
-         v3c3g4gyj2fYAdHbzzxPNedWLmqNQZCRLkb4epJc=
+        b=N9Fw7VBJwNZzV5Wc6J58Ss+FxhZshRA5GaTAPi7kEYQtllG6mWY+I9n9chxrqwJmR
+         r6YgCPrAgYsMuImtMdnMBLKufCt1PH++lKWlT47QBEBfvrj0XzO26PgKxGdgc9zmS5
+         vG5l41XeljZbQYqGHoDtmWqulrlEtlPDLktj5SbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 386/846] ASoC: codecs: wcd938x: add SND_SOC_WCD938_SDW to codec list instead
-Date:   Mon, 24 Jan 2022 19:38:23 +0100
-Message-Id: <20220124184114.247731149@linuxfoundation.org>
+        stable@vger.kernel.org, Martijn Coenen <maco@android.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Todd Kjos <tkjos@google.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 399/846] binder: avoid potential data leakage when copying txn
+Date:   Mon, 24 Jan 2022 19:38:36 +0100
+Message-Id: <20220124184114.718027021@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,43 +49,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: Todd Kjos <tkjos@google.com>
 
-[ Upstream commit 2039cc1da4bee1fd0df644e26b28ed769cd32a81 ]
+[ Upstream commit 6d98eb95b450a75adb4516a1d33652dc78d2b20c ]
 
-Commit 045442228868 ("ASoC: codecs: wcd938x: add audio routing and
-Kconfig") adds SND_SOC_WCD937X, which does not exist, and
-SND_SOC_WCD938X, which seems not really to be the intended config to be
-selected, but only a supporting config symbol to the actual config
-SND_SOC_WCD938X_SDW for the codec.
+Transactions are copied from the sender to the target
+first and objects like BINDER_TYPE_PTR and BINDER_TYPE_FDA
+are then fixed up. This means there is a short period where
+the sender's version of these objects are visible to the
+target prior to the fixups.
 
-Add SND_SOC_WCD938_SDW to the list instead of SND_SOC_WCD93{7,8}X.
+Instead of copying all of the data first, copy data only
+after any needed fixups have been applied.
 
-The issue was identified with ./scripts/checkkconfigsymbols.py.
-
-Fixes: 045442228868 ("ASoC: codecs: wcd938x: add audio routing and Kconfig")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Link: https://lore.kernel.org/r/20211125095158.8394-3-lukas.bulwahn@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 457b9a6f09f0 ("Staging: android: add binder driver")
+Reviewed-by: Martijn Coenen <maco@android.com>
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: Todd Kjos <tkjos@google.com>
+Link: https://lore.kernel.org/r/20211130185152.437403-3-tkjos@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/android/binder.c | 94 ++++++++++++++++++++++++++++++----------
+ 1 file changed, 70 insertions(+), 24 deletions(-)
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 216cea04ad704..f12c9b9426788 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -235,8 +235,7 @@ config SND_SOC_ALL_CODECS
- 	imply SND_SOC_UDA1380
- 	imply SND_SOC_WCD9335
- 	imply SND_SOC_WCD934X
--	imply SND_SOC_WCD937X
--	imply SND_SOC_WCD938X
-+	imply SND_SOC_WCD938X_SDW
- 	imply SND_SOC_LPASS_RX_MACRO
- 	imply SND_SOC_LPASS_TX_MACRO
- 	imply SND_SOC_WL1273
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index 7d29d3d931a79..99ae919255f4d 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -1608,15 +1608,21 @@ static void binder_cleanup_transaction(struct binder_transaction *t,
+ /**
+  * binder_get_object() - gets object and checks for valid metadata
+  * @proc:	binder_proc owning the buffer
++ * @u:		sender's user pointer to base of buffer
+  * @buffer:	binder_buffer that we're parsing.
+  * @offset:	offset in the @buffer at which to validate an object.
+  * @object:	struct binder_object to read into
+  *
+- * Return:	If there's a valid metadata object at @offset in @buffer, the
++ * Copy the binder object at the given offset into @object. If @u is
++ * provided then the copy is from the sender's buffer. If not, then
++ * it is copied from the target's @buffer.
++ *
++ * Return:	If there's a valid metadata object at @offset, the
+  *		size of that object. Otherwise, it returns zero. The object
+  *		is read into the struct binder_object pointed to by @object.
+  */
+ static size_t binder_get_object(struct binder_proc *proc,
++				const void __user *u,
+ 				struct binder_buffer *buffer,
+ 				unsigned long offset,
+ 				struct binder_object *object)
+@@ -1626,10 +1632,16 @@ static size_t binder_get_object(struct binder_proc *proc,
+ 	size_t object_size = 0;
+ 
+ 	read_size = min_t(size_t, sizeof(*object), buffer->data_size - offset);
+-	if (offset > buffer->data_size || read_size < sizeof(*hdr) ||
+-	    binder_alloc_copy_from_buffer(&proc->alloc, object, buffer,
+-					  offset, read_size))
++	if (offset > buffer->data_size || read_size < sizeof(*hdr))
+ 		return 0;
++	if (u) {
++		if (copy_from_user(object, u + offset, read_size))
++			return 0;
++	} else {
++		if (binder_alloc_copy_from_buffer(&proc->alloc, object, buffer,
++						  offset, read_size))
++			return 0;
++	}
+ 
+ 	/* Ok, now see if we read a complete object. */
+ 	hdr = &object->hdr;
+@@ -1702,7 +1714,7 @@ static struct binder_buffer_object *binder_validate_ptr(
+ 					  b, buffer_offset,
+ 					  sizeof(object_offset)))
+ 		return NULL;
+-	object_size = binder_get_object(proc, b, object_offset, object);
++	object_size = binder_get_object(proc, NULL, b, object_offset, object);
+ 	if (!object_size || object->hdr.type != BINDER_TYPE_PTR)
+ 		return NULL;
+ 	if (object_offsetp)
+@@ -1767,7 +1779,8 @@ static bool binder_validate_fixup(struct binder_proc *proc,
+ 		unsigned long buffer_offset;
+ 		struct binder_object last_object;
+ 		struct binder_buffer_object *last_bbo;
+-		size_t object_size = binder_get_object(proc, b, last_obj_offset,
++		size_t object_size = binder_get_object(proc, NULL, b,
++						       last_obj_offset,
+ 						       &last_object);
+ 		if (object_size != sizeof(*last_bbo))
+ 			return false;
+@@ -1882,7 +1895,7 @@ static void binder_transaction_buffer_release(struct binder_proc *proc,
+ 		if (!binder_alloc_copy_from_buffer(&proc->alloc, &object_offset,
+ 						   buffer, buffer_offset,
+ 						   sizeof(object_offset)))
+-			object_size = binder_get_object(proc, buffer,
++			object_size = binder_get_object(proc, NULL, buffer,
+ 							object_offset, &object);
+ 		if (object_size == 0) {
+ 			pr_err("transaction release %d bad object at offset %lld, size %zd\n",
+@@ -2455,6 +2468,7 @@ static void binder_transaction(struct binder_proc *proc,
+ 	binder_size_t off_start_offset, off_end_offset;
+ 	binder_size_t off_min;
+ 	binder_size_t sg_buf_offset, sg_buf_end_offset;
++	binder_size_t user_offset = 0;
+ 	struct binder_proc *target_proc = NULL;
+ 	struct binder_thread *target_thread = NULL;
+ 	struct binder_node *target_node = NULL;
+@@ -2469,6 +2483,8 @@ static void binder_transaction(struct binder_proc *proc,
+ 	int t_debug_id = atomic_inc_return(&binder_last_id);
+ 	char *secctx = NULL;
+ 	u32 secctx_sz = 0;
++	const void __user *user_buffer = (const void __user *)
++				(uintptr_t)tr->data.ptr.buffer;
+ 
+ 	e = binder_transaction_log_add(&binder_transaction_log);
+ 	e->debug_id = t_debug_id;
+@@ -2780,19 +2796,6 @@ static void binder_transaction(struct binder_proc *proc,
+ 	t->buffer->clear_on_free = !!(t->flags & TF_CLEAR_BUF);
+ 	trace_binder_transaction_alloc_buf(t->buffer);
+ 
+-	if (binder_alloc_copy_user_to_buffer(
+-				&target_proc->alloc,
+-				t->buffer, 0,
+-				(const void __user *)
+-					(uintptr_t)tr->data.ptr.buffer,
+-				tr->data_size)) {
+-		binder_user_error("%d:%d got transaction with invalid data ptr\n",
+-				proc->pid, thread->pid);
+-		return_error = BR_FAILED_REPLY;
+-		return_error_param = -EFAULT;
+-		return_error_line = __LINE__;
+-		goto err_copy_data_failed;
+-	}
+ 	if (binder_alloc_copy_user_to_buffer(
+ 				&target_proc->alloc,
+ 				t->buffer,
+@@ -2837,6 +2840,7 @@ static void binder_transaction(struct binder_proc *proc,
+ 		size_t object_size;
+ 		struct binder_object object;
+ 		binder_size_t object_offset;
++		binder_size_t copy_size;
+ 
+ 		if (binder_alloc_copy_from_buffer(&target_proc->alloc,
+ 						  &object_offset,
+@@ -2848,8 +2852,27 @@ static void binder_transaction(struct binder_proc *proc,
+ 			return_error_line = __LINE__;
+ 			goto err_bad_offset;
+ 		}
+-		object_size = binder_get_object(target_proc, t->buffer,
+-						object_offset, &object);
++
++		/*
++		 * Copy the source user buffer up to the next object
++		 * that will be processed.
++		 */
++		copy_size = object_offset - user_offset;
++		if (copy_size && (user_offset > object_offset ||
++				binder_alloc_copy_user_to_buffer(
++					&target_proc->alloc,
++					t->buffer, user_offset,
++					user_buffer + user_offset,
++					copy_size))) {
++			binder_user_error("%d:%d got transaction with invalid data ptr\n",
++					proc->pid, thread->pid);
++			return_error = BR_FAILED_REPLY;
++			return_error_param = -EFAULT;
++			return_error_line = __LINE__;
++			goto err_copy_data_failed;
++		}
++		object_size = binder_get_object(target_proc, user_buffer,
++				t->buffer, object_offset, &object);
+ 		if (object_size == 0 || object_offset < off_min) {
+ 			binder_user_error("%d:%d got transaction with invalid offset (%lld, min %lld max %lld) or object.\n",
+ 					  proc->pid, thread->pid,
+@@ -2861,6 +2884,11 @@ static void binder_transaction(struct binder_proc *proc,
+ 			return_error_line = __LINE__;
+ 			goto err_bad_offset;
+ 		}
++		/*
++		 * Set offset to the next buffer fragment to be
++		 * copied
++		 */
++		user_offset = object_offset + object_size;
+ 
+ 		hdr = &object.hdr;
+ 		off_min = object_offset + object_size;
+@@ -2956,9 +2984,14 @@ static void binder_transaction(struct binder_proc *proc,
+ 			}
+ 			ret = binder_translate_fd_array(fda, parent, t, thread,
+ 							in_reply_to);
+-			if (ret < 0) {
++			if (!ret)
++				ret = binder_alloc_copy_to_buffer(&target_proc->alloc,
++								  t->buffer,
++								  object_offset,
++								  fda, sizeof(*fda));
++			if (ret) {
+ 				return_error = BR_FAILED_REPLY;
+-				return_error_param = ret;
++				return_error_param = ret > 0 ? -EINVAL : ret;
+ 				return_error_line = __LINE__;
+ 				goto err_translate_failed;
+ 			}
+@@ -3028,6 +3061,19 @@ static void binder_transaction(struct binder_proc *proc,
+ 			goto err_bad_object_type;
+ 		}
+ 	}
++	/* Done processing objects, copy the rest of the buffer */
++	if (binder_alloc_copy_user_to_buffer(
++				&target_proc->alloc,
++				t->buffer, user_offset,
++				user_buffer + user_offset,
++				tr->data_size - user_offset)) {
++		binder_user_error("%d:%d got transaction with invalid data ptr\n",
++				proc->pid, thread->pid);
++		return_error = BR_FAILED_REPLY;
++		return_error_param = -EFAULT;
++		return_error_line = __LINE__;
++		goto err_copy_data_failed;
++	}
+ 	if (t->buffer->oneway_spam_suspect)
+ 		tcomplete->type = BINDER_WORK_TRANSACTION_ONEWAY_SPAM_SUSPECT;
+ 	else
 -- 
 2.34.1
 

@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E811498DD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6DA498BC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354579AbiAXTgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:36:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54946 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353025AbiAXTbt (ORCPT
+        id S1344312AbiAXTQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:16:13 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35304 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346237AbiAXTFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:31:49 -0500
+        Mon, 24 Jan 2022 14:05:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49212B81215;
-        Mon, 24 Jan 2022 19:31:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BDD4C340E5;
-        Mon, 24 Jan 2022 19:31:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E40160BAD;
+        Mon, 24 Jan 2022 19:05:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52476C340E5;
+        Mon, 24 Jan 2022 19:05:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052707;
-        bh=TYR6G0G1NNZYgGiHfvo4P7O8iCjHHs0h9Uv+G6h0s/I=;
+        s=korg; t=1643051112;
+        bh=IyEZm5VJ9DTUvGD5ch3pdHZ+oyGhrNtAXW8JkE7kfH0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wLEgCA0fM+DeHukj/oXpjTPaLXtLquEGWaVDLjZQXo2dE08AUT9UPEwPT/X2hUCec
-         fyG7c8GXqPIv5ZRQLZa3xOe4p9r9+6vda93T6cqG25J4pUpQDsjrNta931ykNRDKA6
-         QgpKvnnl+KpdZsRx3YMj4JThEx6pJlxwwvTL27TM=
+        b=r/VosdqYFey/poKwwo1kQSfnFFIeIqR7S648/iGa0NbWbV+nHloPkfGCBfG0bGMSH
+         +wd/cXCpJU9r6/eDDDykVqsFpWX2sjCj7AM9PxcV8TxIMoqmK9nrOqB72RYWpI5NFH
+         86Rluj/5WlBQGLGt1njbhS6IFapG/NFVVkgHKUh4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 149/320] mips: bcm63xx: add support for clk_set_parent()
+Subject: [PATCH 4.14 058/186] pcmcia: rsrc_nonstatic: Fix a NULL pointer dereference in __nonstatic_find_io_region()
 Date:   Mon, 24 Jan 2022 19:42:13 +0100
-Message-Id: <20220124183958.705625217@linuxfoundation.org>
+Message-Id: <20220124183938.993447920@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,46 +46,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 6f03055d508ff4feb8db02ba3df9303a1db8d381 ]
+[ Upstream commit ca0fe0d7c35c97528bdf621fdca75f13157c27af ]
 
-The MIPS BMC63XX subarch does not provide/support clk_set_parent().
-This causes build errors in a few drivers, so add a simple implementation
-of that function so that callers of it will build without errors.
+In __nonstatic_find_io_region(), pcmcia_make_resource() is assigned to
+res and used in pci_bus_alloc_resource(). There is a dereference of res
+in pci_bus_alloc_resource(), which could lead to a NULL pointer
+dereference on failure of pcmcia_make_resource().
 
-Fixes these build errors:
+Fix this bug by adding a check of res.
 
-ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
-ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs." )
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_PCCARD_NONSTATIC=y show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 49b1153adfe1 ("pcmcia: move all pcmcia_resource_ops providers into one module")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+[linux@dominikbrodowski.net: Fix typo in commit message]
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/bcm63xx/clk.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/pcmcia/rsrc_nonstatic.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
-index aba6e2d6a736c..dcfa0ea912fe1 100644
---- a/arch/mips/bcm63xx/clk.c
-+++ b/arch/mips/bcm63xx/clk.c
-@@ -387,6 +387,12 @@ struct clk *clk_get_parent(struct clk *clk)
- }
- EXPORT_SYMBOL(clk_get_parent);
+diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
+index 5ef7b46a25786..4d244014f423f 100644
+--- a/drivers/pcmcia/rsrc_nonstatic.c
++++ b/drivers/pcmcia/rsrc_nonstatic.c
+@@ -693,6 +693,9 @@ static struct resource *__nonstatic_find_io_region(struct pcmcia_socket *s,
+ 	unsigned long min = base;
+ 	int ret;
  
-+int clk_set_parent(struct clk *clk, struct clk *parent)
-+{
-+	return 0;
-+}
-+EXPORT_SYMBOL(clk_set_parent);
++	if (!res)
++		return NULL;
 +
- unsigned long clk_get_rate(struct clk *clk)
- {
- 	if (!clk)
+ 	data.mask = align - 1;
+ 	data.offset = base & data.mask;
+ 	data.map = &s_data->io_db;
 -- 
 2.34.1
 

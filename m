@@ -2,41 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0471A4997B8
+	by mail.lfdr.de (Postfix) with ESMTP id 58E994997B9
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449455AbiAXVPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:15:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42206 "EHLO
+        id S1449490AbiAXVPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:15:40 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42268 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391637AbiAXUsQ (ORCPT
+        with ESMTP id S1391681AbiAXUsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:48:16 -0500
+        Mon, 24 Jan 2022 15:48:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7824D60C39;
-        Mon, 24 Jan 2022 20:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D846FC340E5;
-        Mon, 24 Jan 2022 20:48:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9A5760C3E;
+        Mon, 24 Jan 2022 20:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623B1C340E5;
+        Mon, 24 Jan 2022 20:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057294;
-        bh=alN1nGi9d01VTi67hSzdh6Vdn9Sl4cPFqezMOL+KxcI=;
+        s=korg; t=1643057301;
+        bh=eipPTW4zUA2Y7C6/tT/Xx48Qu8AVSVvCdWRcAwJbjbs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NCd0Y4mOqUU5kYq9kf6aDvlrqp9c3KBtLXrrzQASSXguZtOeYu/QnnyxY614SVAoP
-         UO9E/pyyuPoTut4HRTLzavBJvVRJwtP8TE5NLp7R5oxi4olun11przFxzMWdr4dRwQ
-         od/W1CNBZQwf1bFoA8Le7DG3JpJ/3UC3F+YXgd4w=
+        b=mDdknbIGQysdIcgik43P379chCn2IYSxtxjZ/H+yf2L3x8UfDGw3662PxvrwaTwIn
+         YsLCeGmwsPDraojRWxDj2WZ2Rv5A7UaQ2OuCuf28OylHrRyGCVjdo6Fr/hI9kwS950
+         q3mY5ejd8JOElUJayRiepTn6t8AEXvva2dLQJNMA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH 5.15 766/846] bpf: Fix mount source show for bpffs
-Date:   Mon, 24 Jan 2022 19:44:43 +0100
-Message-Id: <20220124184127.381781059@linuxfoundation.org>
+        stable@vger.kernel.org, Chase Conklin <chase.conklin@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.15 768/846] perf evsel: Override attr->sample_period for non-libpfm4 events
+Date:   Mon, 24 Jan 2022 19:44:45 +0100
+Message-Id: <20220124184127.452102489@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,80 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yafang Shao <laoar.shao@gmail.com>
+From: German Gomez <german.gomez@arm.com>
 
-commit 1e9d74660d4df625b0889e77018f9e94727ceacd upstream.
+commit 3606c0e1a1050d397ad759a62607e419fd8b0ccb upstream.
 
-We noticed our tc ebpf tools can't start after we upgrade our in-house kernel
-version from 4.19 to 5.10. That is because of the behaviour change in bpffs
-caused by commit d2935de7e4fd ("vfs: Convert bpf to use the new mount API").
+A previous patch preventing "attr->sample_period" values from being
+overridden in pfm events changed a related behaviour in arm-spe.
 
-In our tc ebpf tools, we do strict environment check. If the environment is
-not matched, we won't allow to start the ebpf progs. One of the check is whether
-bpffs is properly mounted. The mount information of bpffs in kernel-4.19 and
-kernel-5.10 are as follows:
+Before said patch:
 
-- kernel 4.19
-$ mount -t bpf bpffs /sys/fs/bpf
-$ mount -t bpf
-bpffs on /sys/fs/bpf type bpf (rw,relatime)
+  perf record -c 10000 -e arm_spe_0// -- sleep 1
 
-- kernel 5.10
-$ mount -t bpf bpffs /sys/fs/bpf
-$ mount -t bpf
-none on /sys/fs/bpf type bpf (rw,relatime)
+Would yield an SPE event with period=10000. After the patch, the period
+in "-c 10000" was being ignored because the arm-spe code initializes
+sample_period to a non-zero value.
 
-The device name in kernel-5.10 is displayed as none instead of bpffs, then our
-environment check fails. Currently we modify the tools to adopt to the kernel
-behaviour change, but I think we'd better change the kernel code to keep the
-behavior consistent.
+This patch restores the previous behaviour for non-libpfm4 events.
 
-After this change, the mount information will be displayed the same with the
-behavior in kernel-4.19, for example:
-
-$ mount -t bpf bpffs /sys/fs/bpf
-$ mount -t bpf
-bpffs on /sys/fs/bpf type bpf (rw,relatime)
-
-Fixes: d2935de7e4fd ("vfs: Convert bpf to use the new mount API")
-Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Link: https://lore.kernel.org/bpf/20220108134623.32467-1-laoar.shao@gmail.com
+Fixes: ae5dcc8abe31 (“perf record: Prevent override of attr->sample_period for libpfm4 events”)
+Reported-by: Chase Conklin <chase.conklin@arm.com>
+Signed-off-by: German Gomez <german.gomez@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20220118144054.2541-1-german.gomez@arm.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/inode.c |   14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ tools/perf/util/evsel.c |   25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -648,12 +648,22 @@ static int bpf_parse_param(struct fs_con
- 	int opt;
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1047,6 +1047,17 @@ void __weak arch_evsel__set_sample_weigh
+ 	evsel__set_sample_bit(evsel, WEIGHT);
+ }
  
- 	opt = fs_parse(fc, bpf_fs_parameters, param, &result);
--	if (opt < 0)
-+	if (opt < 0) {
- 		/* We might like to report bad mount options here, but
- 		 * traditionally we've ignored all mount options, so we'd
- 		 * better continue to ignore non-existing options for bpf.
- 		 */
--		return opt == -ENOPARAM ? 0 : opt;
-+		if (opt == -ENOPARAM) {
-+			opt = vfs_parse_fs_param_source(fc, param);
-+			if (opt != -ENOPARAM)
-+				return opt;
-+
-+			return 0;
-+		}
-+
-+		if (opt < 0)
-+			return opt;
++static void evsel__set_default_freq_period(struct record_opts *opts,
++					   struct perf_event_attr *attr)
++{
++	if (opts->freq) {
++		attr->freq = 1;
++		attr->sample_freq = opts->freq;
++	} else {
++		attr->sample_period = opts->default_interval;
 +	}
- 
- 	switch (opt) {
- 	case OPT_MODE:
++}
++
+ /*
+  * The enable_on_exec/disabled value strategy:
+  *
+@@ -1113,14 +1124,12 @@ void evsel__config(struct evsel *evsel,
+ 	 * We default some events to have a default interval. But keep
+ 	 * it a weak assumption overridable by the user.
+ 	 */
+-	if (!attr->sample_period) {
+-		if (opts->freq) {
+-			attr->freq		= 1;
+-			attr->sample_freq	= opts->freq;
+-		} else {
+-			attr->sample_period = opts->default_interval;
+-		}
+-	}
++	if ((evsel->is_libpfm_event && !attr->sample_period) ||
++	    (!evsel->is_libpfm_event && (!attr->sample_period ||
++					 opts->user_freq != UINT_MAX ||
++					 opts->user_interval != ULLONG_MAX)))
++		evsel__set_default_freq_period(opts, attr);
++
+ 	/*
+ 	 * If attr->freq was set (here or earlier), ask for period
+ 	 * to be sampled.
 
 

@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0595D49A726
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C97A549A2CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3422600AbiAYCbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:31:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57132 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381224AbiAXUTy (ORCPT
+        id S2364359AbiAXXr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1840878AbiAXWzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:19:54 -0500
+        Mon, 24 Jan 2022 17:55:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD8CC0680A6;
+        Mon, 24 Jan 2022 13:09:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA09FB8122A;
-        Mon, 24 Jan 2022 20:19:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0DBDC340E5;
-        Mon, 24 Jan 2022 20:19:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D6B161451;
+        Mon, 24 Jan 2022 21:09:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD62C340E5;
+        Mon, 24 Jan 2022 21:09:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055592;
-        bh=Ipaf2xrialY117D8ei2KWYiw/gJ+vYaZHb44lVq9cJ0=;
+        s=korg; t=1643058572;
+        bh=/CjwGGaAUdmDEBm/a/YjAd8KE0FRV4xADIfrAnFqqX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rwc6pk7A2mMTeJLgr54Ca4tQhRrs4PRsDjNDMa2EjnCPEN92NjiN3SB+TNa1MIfWV
-         zV34FHaIY3qEwRYjM959NTzT+Mt2SJWZVWwldapMtGfxG4Gww2viT5y8zzNiA16I7K
-         Qf6OH00NAxpLhsRYvQeE+vsH8HAUA+ENJOETQ3kQ=
+        b=zF0v6gTZSEUTpfCTtpF3so4tOZMrDhuNyje+5hE4c4D0vgQUvPAylWRZ6aUeAccM2
+         MkKuWZHNC+MavCXmWOKt87zuGM7uPam7mx5SJFHmVthh/mDbXMrXzCUUSbH0qalGVx
+         HdTISxWGS0OAkIjL+n+V2Q2kaRG6QLEPPNSgXtJQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org, Avraham Stern <avraham.stern@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 201/846] bpf: Adjust BTF log size limit.
-Date:   Mon, 24 Jan 2022 19:35:18 +0100
-Message-Id: <20220124184107.868752221@linuxfoundation.org>
+Subject: [PATCH 5.16 0331/1039] iwlwifi: mvm: set protected flag only for NDP ranging
+Date:   Mon, 24 Jan 2022 19:35:20 +0100
+Message-Id: <20220124184136.439036135@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,35 +49,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Avraham Stern <avraham.stern@intel.com>
 
-[ Upstream commit c5a2d43e998a821701029f23e25b62f9188e93ff ]
+[ Upstream commit 6bb2ea37c02db98cb677f978cfcb833ca608c5eb ]
 
-Make BTF log size limit to be the same as the verifier log size limit.
-Otherwise tools that progressively increase log size and use the same log
-for BTF loading and program loading will be hitting hard to debug EINVAL.
+Don't use protected ranging negotiation for FTM ranging as responders
+that support only FTM ranging don't expect the FTM request to be
+protected.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20211201181040.23337-7-alexei.starovoitov@gmail.com
+Signed-off-by: Avraham Stern <avraham.stern@intel.com>
+Fixes: 517a5eb9fab2 ("iwlwifi: mvm: when associated with PMF, use protected NDP ranging negotiation")
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211219132536.f50ed0e3c6b3.Ibff247ee9d4e6e0a1a2d08a3c8a4bbb37e6829dd@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/btf.c | 2 +-
+ drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index dfe61df4f974d..79c0bcdcab842 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4332,7 +4332,7 @@ static struct btf *btf_parse(bpfptr_t btf_data, u32 btf_data_size,
- 		log->len_total = log_size;
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
+index 3e6c13fc74eb0..9449d1af3c11a 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/ftm-initiator.c
+@@ -511,7 +511,7 @@ iwl_mvm_ftm_put_target(struct iwl_mvm *mvm, struct ieee80211_vif *vif,
+ 		rcu_read_lock();
  
- 		/* log attributes have to be sane */
--		if (log->len_total < 128 || log->len_total > UINT_MAX >> 8 ||
-+		if (log->len_total < 128 || log->len_total > UINT_MAX >> 2 ||
- 		    !log->level || !log->ubuf) {
- 			err = -EINVAL;
- 			goto errout;
+ 		sta = rcu_dereference(mvm->fw_id_to_mac_id[mvmvif->ap_sta_id]);
+-		if (sta->mfp)
++		if (sta->mfp && (peer->ftm.trigger_based || peer->ftm.non_trigger_based))
+ 			FTM_PUT_FLAG(PMF);
+ 
+ 		rcu_read_unlock();
 -- 
 2.34.1
 

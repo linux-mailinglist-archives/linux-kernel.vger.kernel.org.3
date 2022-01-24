@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4E3499643
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345BB499661
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444778AbiAXVBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
+        id S1445461AbiAXVDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387623AbiAXUg7 (ORCPT
+        with ESMTP id S1388480AbiAXUjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:36:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25843C038AFE;
-        Mon, 24 Jan 2022 11:50:40 -0800 (PST)
+        Mon, 24 Jan 2022 15:39:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46DEC02415F;
+        Mon, 24 Jan 2022 11:51:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB54260989;
-        Mon, 24 Jan 2022 19:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E89DC340E5;
-        Mon, 24 Jan 2022 19:50:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71C64B81142;
+        Mon, 24 Jan 2022 19:51:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98DFAC340E5;
+        Mon, 24 Jan 2022 19:51:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053839;
-        bh=QM//hBjgsuTM7DDyxfrEEztPQK4cgXN6RcQsVOzNrDM=;
+        s=korg; t=1643053872;
+        bh=Jqatb1L8yQjhbQy9UNMVpIvmVrX+KciqGzLn7FtNWoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z8IJ+3lsbckgVyZqbCYoUqysIClYDnM1XzEKbUVsP6KPyZNKqybihkYB+aahvYtJZ
-         v/7V7cDb7ob4h+Xu4Hg1eVv1AymwecyicWc/o+7qmBWv4r2ZGp+MednkvBf4kX6UDz
-         IhboTy9/V//sNI0Cl2vDClxIInqwEUeGpJRVl8Fk=
+        b=KfJ54gJol/zKCsvdzAWIRbMdaYRaUq4WBox/TSB64PSVUu02H2vI+sE8BQeSXxfiN
+         sxsCg3cGAPflfYuypp4MyxjYeJdj8fz5rq6UiimDLqZbiopMlBOrHvbfb7CqTFwXwz
+         U6Hb5sFz8WgavAMloBEcx1GL3KfWwPtZ+m9ECILY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
+        stable@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 176/563] usb: ftdi-elan: fix memory leak on device disconnect
-Date:   Mon, 24 Jan 2022 19:39:01 +0100
-Message-Id: <20220124184030.498568904@linuxfoundation.org>
+Subject: [PATCH 5.10 177/563] arm64: dts: marvell: cn9130: add GPIO and SPI aliases
+Date:   Mon, 24 Jan 2022 19:39:02 +0100
+Message-Id: <20220124184030.536654813@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -49,50 +49,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+From: Robert Marko <robert.marko@sartura.hr>
 
-[ Upstream commit 1646566b5e0c556f779180a8514e521ac735de1e ]
+[ Upstream commit effd42600b987c1e95f946b14fefc1c7639e7439 ]
 
-'ftdi' is alloced when probe device, but not free on device disconnect,
-this cause a memory leak as follows:
+CN9130 has one CP115 built in, which like the CP110 has 2 GPIO and 2 SPI
+controllers built-in.
 
-unreferenced object 0xffff88800d584000 (size 8400):
-  comm "kworker/0:2", pid 3809, jiffies 4295453055 (age 13.784s)
-  hex dump (first 32 bytes):
-    00 40 58 0d 80 88 ff ff 00 40 58 0d 80 88 ff ff  .@X......@X.....
-    00 00 00 00 00 00 00 00 00 00 00 00 ad 4e ad de  .............N..
-  backtrace:
-    [<000000000d47f947>] kmalloc_order_trace+0x19/0x110 mm/slab_common.c:960
-    [<000000008548ac68>] ftdi_elan_probe+0x8c/0x880 drivers/usb/misc/ftdi-elan.c:2647
-    [<000000007f73e422>] usb_probe_interface+0x31b/0x800 drivers/usb/core/driver.c:396
-    [<00000000fe8d07fc>] really_probe+0x299/0xc30 drivers/base/dd.c:517
-    [<0000000005da7d32>] __driver_probe_device+0x357/0x500 drivers/base/dd.c:751
-    [<000000003c2c9579>] driver_probe_device+0x4e/0x140 drivers/base/dd.c:781
+However, unlike the Armada 7k and 8k the SoC DTSI doesn't add the required
+aliases as both the Orion SPI driver and MVEBU GPIO drivers require the
+aliases to be present.
 
-Fix it by freeing 'ftdi' after nobody use it.
+So add the required aliases for GPIO and SPI controllers.
 
-Fixes: a5c66e4b2418 ("USB: ftdi-elan: client driver for ELAN Uxxx adapters")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-Link: https://lore.kernel.org/r/20211217083428.2441-1-weiyongjun1@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6b8970bd8d7a ("arm64: dts: marvell: Add support for Marvell CN9130 SoC support")
+
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/misc/ftdi-elan.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/marvell/cn9130.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
-index 8a3d9c0c8d8bc..157b31d354ac2 100644
---- a/drivers/usb/misc/ftdi-elan.c
-+++ b/drivers/usb/misc/ftdi-elan.c
-@@ -202,6 +202,7 @@ static void ftdi_elan_delete(struct kref *kref)
- 	mutex_unlock(&ftdi_module_lock);
- 	kfree(ftdi->bulk_in_buffer);
- 	ftdi->bulk_in_buffer = NULL;
-+	kfree(ftdi);
- }
+diff --git a/arch/arm64/boot/dts/marvell/cn9130.dtsi b/arch/arm64/boot/dts/marvell/cn9130.dtsi
+index a2b7e5ec979d3..71769ac7f0585 100644
+--- a/arch/arm64/boot/dts/marvell/cn9130.dtsi
++++ b/arch/arm64/boot/dts/marvell/cn9130.dtsi
+@@ -11,6 +11,13 @@
+ 	model = "Marvell Armada CN9130 SoC";
+ 	compatible = "marvell,cn9130", "marvell,armada-ap807-quad",
+ 		     "marvell,armada-ap807";
++
++	aliases {
++		gpio1 = &cp0_gpio1;
++		gpio2 = &cp0_gpio2;
++		spi1 = &cp0_spi0;
++		spi2 = &cp0_spi1;
++	};
+ };
  
- static void ftdi_elan_put_kref(struct usb_ftdi *ftdi)
+ /*
 -- 
 2.34.1
 

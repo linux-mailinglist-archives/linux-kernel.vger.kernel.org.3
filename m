@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B16499B2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5B6499ABC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574727AbiAXVuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:50:09 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34466 "EHLO
+        id S1573807AbiAXVp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:45:56 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33760 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448674AbiAXVNf (ORCPT
+        with ESMTP id S1448020AbiAXVLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:13:35 -0500
+        Mon, 24 Jan 2022 16:11:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B4BEB8122A;
-        Mon, 24 Jan 2022 21:13:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9090DC340E5;
-        Mon, 24 Jan 2022 21:13:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F31D6B8121C;
+        Mon, 24 Jan 2022 21:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D495C340E5;
+        Mon, 24 Jan 2022 21:11:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058813;
-        bh=F2oYiKHVZmI6LKK4R/SUjdr8SVXHmnrD7tlG1U1IfVw=;
+        s=korg; t=1643058711;
+        bh=AqUHJMQ2oY0NsP6WS7PPXKuOprmnYcXcK6FdrOhbVas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NSwfMPPMwYnSOxt0Qv6WsF8bFEgg3SkayQla1lVFSSg33DvoBtLANXmh9Di8iK4xQ
-         KvOIBg9BC1DPVJt4AYx//8ueu/hDN4su7kiVNsObBoWGP3CIaVNmpyTCpHBgl/4XQn
-         6lIExVLWflMGiGrBghxb1rkV1tADuyjYEjdaOdnI=
+        b=PewUrMZpCqOV30LoK6McSnp1HXenZbUZpU/EZH9Z2Dz80cGj9sTsSnXSgwXz9lyNT
+         AACOs+vrgGvxmPXSeK48F/n4hXp9zgYzAP+4hQySTrER080KcxJ2w9WZBHTOCyAvnE
+         0puTROgrWaK9FwqwdC7GVaahhdeQWp2TTpo/08sI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Alexei Starovoitov <ast@kernel.org>,
+        stable@vger.kernel.org,
+        Qiang Wang <wangqiang.wq.frank@bytedance.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hengqi Chen <hengqi.chen@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0377/1039] bpf: Fix SO_RCVBUF/SO_SNDBUF handling in _bpf_setsockopt().
-Date:   Mon, 24 Jan 2022 19:36:06 +0100
-Message-Id: <20220124184137.979604025@linuxfoundation.org>
+Subject: [PATCH 5.16 0378/1039] libbpf: Use probe_name for legacy kprobe
+Date:   Mon, 24 Jan 2022 19:36:07 +0100
+Message-Id: <20220124184138.019901056@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -46,44 +49,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+From: Qiang Wang <wangqiang.wq.frank@bytedance.com>
 
-[ Upstream commit 04c350b1ae6bdb12b84009a4d0bf5ab4e621c47b ]
+[ Upstream commit 71cff670baff5cc6a6eeb0181e2cc55579c5e1e0 ]
 
-The commit 4057765f2dee ("sock: consistent handling of extreme
-SO_SNDBUF/SO_RCVBUF values") added a change to prevent underflow
-in setsockopt() around SO_SNDBUF/SO_RCVBUF.
+Fix a bug in commit 46ed5fc33db9, which wrongly used the
+func_name instead of probe_name to register legacy kprobe.
 
-This patch adds the same change to _bpf_setsockopt().
-
-Fixes: 4057765f2dee ("sock: consistent handling of extreme SO_SNDBUF/SO_RCVBUF values")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220104013153.97906-2-kuniyu@amazon.co.jp
+Fixes: 46ed5fc33db9 ("libbpf: Refactor and simplify legacy kprobe code")
+Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Qiang Wang <wangqiang.wq.frank@bytedance.com>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Tested-by: Hengqi Chen <hengqi.chen@gmail.com>
+Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
+Link: https://lore.kernel.org/bpf/20211227130713.66933-1-wangqiang.wq.frank@bytedance.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/lib/bpf/libbpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 6102f093d59a5..31147a4cfab30 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4742,12 +4742,14 @@ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
- 		switch (optname) {
- 		case SO_RCVBUF:
- 			val = min_t(u32, val, sysctl_rmem_max);
-+			val = min_t(int, val, INT_MAX / 2);
- 			sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
- 			WRITE_ONCE(sk->sk_rcvbuf,
- 				   max_t(int, val * 2, SOCK_MIN_RCVBUF));
- 			break;
- 		case SO_SNDBUF:
- 			val = min_t(u32, val, sysctl_wmem_max);
-+			val = min_t(int, val, INT_MAX / 2);
- 			sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
- 			WRITE_ONCE(sk->sk_sndbuf,
- 				   max_t(int, val * 2, SOCK_MIN_SNDBUF));
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index fd25e30e70cc2..2696f0b7f0acc 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9769,7 +9769,7 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+ 		gen_kprobe_legacy_event_name(probe_name, sizeof(probe_name),
+ 					     func_name, offset);
+ 
+-		legacy_probe = strdup(func_name);
++		legacy_probe = strdup(probe_name);
+ 		if (!legacy_probe)
+ 			return libbpf_err_ptr(-ENOMEM);
+ 
 -- 
 2.34.1
 

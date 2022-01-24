@@ -2,78 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BE1499AC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF45B499C68
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378697AbiAXVqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:46:15 -0500
-Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:55055 "EHLO
-        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448337AbiAXVM2 (ORCPT
+        id S1579297AbiAXWFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:05:16 -0500
+Received: from isilmar-4.linta.de ([136.243.71.142]:53874 "EHLO
+        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376896AbiAXVQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:12:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1643058748; x=1674594748;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=s08kGL1P6vWKXvsndk5HwY8vMXv8Hz2WGGuKsGt7M+M=;
-  b=Lt24+Kwh4B2vxFMObDYugoNvzC+0bVYqPVLp4pet6BWgIT7rqAUzfT0e
-   ZZgVZhu0LqdjiHOV0RwGKa5xn6p6D6SDHea6XhMdMz6Bkkplo/KuTD8Yc
-   DRiP8b+zP0CvKjJmo0dG8EzEygfor9G9x/oBVJMOBl2s5YYvjpiuX+n8C
-   E=;
-X-IronPort-AV: E=Sophos;i="5.88,313,1635206400"; 
-   d="scan'208";a="171375781"
-Subject: Re: [PATCH 1/3] memblock: define functions to set the usable memory range
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP; 24 Jan 2022 21:05:45 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-b27d4a00.us-east-1.amazon.com (Postfix) with ESMTPS id 3023081139;
-        Mon, 24 Jan 2022 21:05:39 +0000 (UTC)
-Received: from EX13D19UEB001.ant.amazon.com (10.43.60.16) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.129) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 24 Jan 2022 21:05:39 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D19UEB001.ant.amazon.com (10.43.60.16) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 24 Jan 2022 21:05:39 +0000
-Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.28 via Frontend Transport; Mon, 24 Jan 2022 21:05:38
- +0000
-Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 1DC072A; Mon, 24 Jan 2022 21:05:38 +0000 (UTC)
-Date:   Mon, 24 Jan 2022 21:05:38 +0000
-From:   Frank van der Linden <fllinden@amazon.com>
-To:     Mike Rapoport <rppt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>, <robh+dt@kernel.org>,
-        <frowand.list@gmail.com>, <ardb@kernel.org>, <linux-mm@kvack.org>,
-        <devicetree@vger.kernel.org>, <linux-efi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kexec@lists.infradead.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <geert+renesas@glider.be>
-Message-ID: <20220124210538.GA15943@dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com>
-References: <20220110210809.3528-1-fllinden@amazon.com>
- <20220110210809.3528-2-fllinden@amazon.com> <Yd1cnquQFZoNE7FP@kernel.org>
+        Mon, 24 Jan 2022 16:16:34 -0500
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 7CF74200230;
+        Mon, 24 Jan 2022 21:16:25 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 49054809C2; Mon, 24 Jan 2022 22:15:21 +0100 (CET)
+Date:   Mon, 24 Jan 2022 22:15:21 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     andrew.shadura@collabora.co.uk
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, herbert@gondor.apana.org.au
+Subject: hid-u2fzero.c - hw_random quality set to 1?
+Message-ID: <Ye8W6bOh85JILMrp@owl.dominikbrodowski.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yd1cnquQFZoNE7FP@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Meanwhile, it seems that this issue was already addressed in:
+Hi,
 
-https://lore.kernel.org/all/20211215021348.8766-1-kernelfans@gmail.com/
+is there any specific rationale why the quality of the hid-u2fzero.c hw
+rng is set to 1, meaning that only 1 bit of entrop is added per 1024 bits
+of input (see drivers/char/hw_random/core.c)? That actually means that
+currently no entropy is credited at all, as this driver will return not
+more than 64 bytes (= rc), and then
 
-..which has now been pulled in, and sent to stable@ for 5.15. I
-somehow missed that message, and sent my change in a few weeks
-later.
+	rc * current_quality * 8 >> 10
 
-The fix to just reserve the ranges does seem a bit cleaner overall,
-but this will do fine.
+evaluates to 0. While this is addressed by a patch I just submitted,[*]
+I'd like to know whether this low quality setting is correct.
 
-Thanks!
+Thanks,
+	Dominik
 
-- Frank
+[*] https://lore.kernel.org/linux-crypto/20220124202951.28579-6-linux@dominikbrodowski.net/

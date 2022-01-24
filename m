@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DD9498C57
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E8E498EA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348977AbiAXTUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344994AbiAXTLX (ORCPT
+        id S237897AbiAXToW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:44:22 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52872 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352276AbiAXTaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:11:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563BCC061378;
-        Mon, 24 Jan 2022 11:03:20 -0800 (PST)
+        Mon, 24 Jan 2022 14:30:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13AC3B81236;
-        Mon, 24 Jan 2022 19:03:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECEF2C340E5;
-        Mon, 24 Jan 2022 19:03:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E699B8122C;
+        Mon, 24 Jan 2022 19:30:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64AF8C340E5;
+        Mon, 24 Jan 2022 19:29:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050997;
-        bh=mzOXgJWu4huwItt9Jb9pt1M7G82FlnWck1CgOhpFlsE=;
+        s=korg; t=1643052599;
+        bh=4S2dYCqoHBKcD8cOK9/6OdcbmPKRa6oX9Z0TpfEVuIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qtEoQNoSFaf9oLSWJ1BPMLli775ix9f50ryABUOrTKF5r5ccliVvYnfLm57a7t2dW
-         W4vKPgFh2z/aaJyybNiWAbybRQXLLzoo447HuLpPKrcX8drPYNe+EbQGI7uzEt/jXU
-         Rt8oUw+Q3Yf/dEOJj+HcktLzkGS0GBfTmmSMfUE8=
+        b=NJJm1PsyQxTpVWO9TeY+dabjxnCC6uHIGPQaTLUOWYNsYaJOHUjrkYY7u6L+qbqqh
+         gNkux9HEmEq91nvpyHdvQI1MDG0odBgRLbswctZU3E9um+Cb6xENw+6DlJnJqxS86H
+         sAfYHibQMAf8XBKTlzwfhqJP0KHlUSqkAKmROsPw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.14 021/186] media: flexcop-usb: fix control-message timeouts
-Date:   Mon, 24 Jan 2022 19:41:36 +0100
-Message-Id: <20220124183937.802649871@linuxfoundation.org>
+        stable@vger.kernel.org, Maor Dickman <maord@nvidia.com>,
+        Roi Dayan <roid@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 113/320] net/mlx5e: Dont block routes with nexthop objects in SW
+Date:   Mon, 24 Jan 2022 19:41:37 +0100
+Message-Id: <20220124183957.554448069@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,95 +47,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Maor Dickman <maord@nvidia.com>
 
-commit cd1798a387825cc4a51282f5a611ad05bb1ad75f upstream.
+[ Upstream commit 9e72a55a3c9d54b38a704bb7292d984574a81d9d ]
 
-USB control-message timeouts are specified in milliseconds and should
-specifically not vary with CONFIG_HZ.
+Routes with nexthop objects is currently not supported by multipath offload
+and any attempts to use it is blocked, however this also block adding SW
+routes with nexthop.
 
-Note that the driver was multiplying some of the timeout values with HZ
-twice resulting in 3000-second timeouts with HZ=1000.
+Resolve this by returning NOTIFY_DONE instead of an error which will allow such
+a route to be created in SW but not offloaded.
 
-Also note that two of the timeout defines are currently unused.
+This fix also solve an issue which block adding such routes on different devices
+due to missing check if the route FIB device is one of multipath devices.
 
-Fixes: 2154be651b90 ("[media] redrat3: new rc-core IR transceiver device driver")
-Cc: stable@vger.kernel.org      # 3.0
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6a87afc072c3 ("mlx5: Fail attempts to use routes with nexthop objects")
+Signed-off-by: Maor Dickman <maord@nvidia.com>
+Reviewed-by: Roi Dayan <roid@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/b2c2/flexcop-usb.c |   10 +++++-----
- drivers/media/usb/b2c2/flexcop-usb.h |   12 ++++++------
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/media/usb/b2c2/flexcop-usb.c
-+++ b/drivers/media/usb/b2c2/flexcop-usb.c
-@@ -86,7 +86,7 @@ static int flexcop_usb_readwrite_dw(stru
- 			0,
- 			fc_usb->data,
- 			sizeof(u32),
--			B2C2_WAIT_FOR_OPERATION_RDW * HZ);
-+			B2C2_WAIT_FOR_OPERATION_RDW);
- 
- 	if (ret != sizeof(u32)) {
- 		err("error while %s dword from %d (%d).", read ? "reading" :
-@@ -154,7 +154,7 @@ static int flexcop_usb_v8_memory_req(str
- 			wIndex,
- 			fc_usb->data,
- 			buflen,
--			nWaitTime * HZ);
-+			nWaitTime);
- 	if (ret != buflen)
- 		ret = -EIO;
- 
-@@ -248,13 +248,13 @@ static int flexcop_usb_i2c_req(struct fl
- 		/* DKT 020208 - add this to support special case of DiSEqC */
- 	case USB_FUNC_I2C_CHECKWRITE:
- 		pipe = B2C2_USB_CTRL_PIPE_OUT;
--		nWaitTime = 2;
-+		nWaitTime = 2000;
- 		request_type |= USB_DIR_OUT;
- 		break;
- 	case USB_FUNC_I2C_READ:
- 	case USB_FUNC_I2C_REPEATREAD:
- 		pipe = B2C2_USB_CTRL_PIPE_IN;
--		nWaitTime = 2;
-+		nWaitTime = 2000;
- 		request_type |= USB_DIR_IN;
- 		break;
- 	default:
-@@ -281,7 +281,7 @@ static int flexcop_usb_i2c_req(struct fl
- 			wIndex,
- 			fc_usb->data,
- 			buflen,
--			nWaitTime * HZ);
-+			nWaitTime);
- 
- 	if (ret != buflen)
- 		ret = -EIO;
---- a/drivers/media/usb/b2c2/flexcop-usb.h
-+++ b/drivers/media/usb/b2c2/flexcop-usb.h
-@@ -91,13 +91,13 @@ typedef enum {
- 	UTILITY_SRAM_TESTVERIFY     = 0x16,
- } flexcop_usb_utility_function_t;
- 
--#define B2C2_WAIT_FOR_OPERATION_RW (1*HZ)
--#define B2C2_WAIT_FOR_OPERATION_RDW (3*HZ)
--#define B2C2_WAIT_FOR_OPERATION_WDW (1*HZ)
-+#define B2C2_WAIT_FOR_OPERATION_RW 1000
-+#define B2C2_WAIT_FOR_OPERATION_RDW 3000
-+#define B2C2_WAIT_FOR_OPERATION_WDW 1000
- 
--#define B2C2_WAIT_FOR_OPERATION_V8READ (3*HZ)
--#define B2C2_WAIT_FOR_OPERATION_V8WRITE (3*HZ)
--#define B2C2_WAIT_FOR_OPERATION_V8FLASH (3*HZ)
-+#define B2C2_WAIT_FOR_OPERATION_V8READ 3000
-+#define B2C2_WAIT_FOR_OPERATION_V8WRITE 3000
-+#define B2C2_WAIT_FOR_OPERATION_V8FLASH 3000
- 
- typedef enum {
- 	V8_MEMORY_PAGE_DVB_CI = 0x20,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
+index bdc7f915d80e3..101667c6b5843 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lag_mp.c
+@@ -265,10 +265,8 @@ static int mlx5_lag_fib_event(struct notifier_block *nb,
+ 		fen_info = container_of(info, struct fib_entry_notifier_info,
+ 					info);
+ 		fi = fen_info->fi;
+-		if (fi->nh) {
+-			NL_SET_ERR_MSG_MOD(info->extack, "IPv4 route with nexthop objects is not supported");
+-			return notifier_from_errno(-EINVAL);
+-		}
++		if (fi->nh)
++			return NOTIFY_DONE;
+ 		fib_dev = fib_info_nh(fen_info->fi, 0)->fib_nh_dev;
+ 		if (fib_dev != ldev->pf[0].netdev &&
+ 		    fib_dev != ldev->pf[1].netdev) {
+-- 
+2.34.1
+
 
 

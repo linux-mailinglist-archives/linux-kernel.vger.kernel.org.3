@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 957AA4994F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80671499CDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391950AbiAXUuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:50:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33392 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381964AbiAXUZA (ORCPT
+        id S1581175AbiAXWLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:11:21 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37956 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1449092AbiAXVOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:25:00 -0500
+        Mon, 24 Jan 2022 16:14:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C63DB8122A;
-        Mon, 24 Jan 2022 20:24:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9406AC340E5;
-        Mon, 24 Jan 2022 20:24:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B879A6148C;
+        Mon, 24 Jan 2022 21:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B11FC340E5;
+        Mon, 24 Jan 2022 21:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055898;
-        bh=HDH01BdQbtjtxDwLkE394xgNnK/+LbYUX8kUZZULQ84=;
+        s=korg; t=1643058890;
+        bh=+JaUykpnnx79VM58DA0Rf4NkTtZca3z8xnJ8tFJjt9c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=00jsZ7gA0QbH4Gc8wkhCi2tN4Z5gyOJktE04AYr3MLKzBg8ch4cweqZ6iYH5QgXxN
-         4W8Eq3Hu4saAyIxc6Lfw5Mz8GrqNsOFdOv1mAjA5bq8reFbOCG0E1AuY46dCAL/mrT
-         FTSG3sOtLjfrLE0M9nArOkD5oq2A0lyVh1fugOtc=
+        b=kGriY2EruQgDsVFHpKh2FGyU+/yLaQlImyLHgFKFGSKXzJ5k3AZoWdY0k9gW8NJJW
+         1R/Nkt3N9VRXcsOhW3m4dfuq1Ehke10fVUyJkCBZtlVumm5nuZWs8J8Ph28qr/BF61
+         N9TLUD3javKwddh7bsGLZZG7rhDVuxhYBc2E+6xE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 303/846] pcmcia: rsrc_nonstatic: Fix a NULL pointer dereference in nonstatic_find_mem_region()
-Date:   Mon, 24 Jan 2022 19:37:00 +0100
-Message-Id: <20220124184111.353215825@linuxfoundation.org>
+Subject: [PATCH 5.16 0434/1039] can: xilinx_can: xcan_probe(): check for error irq
+Date:   Mon, 24 Jan 2022 19:37:03 +0100
+Message-Id: <20220124184139.890185367@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,52 +46,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 977d2e7c63c3d04d07ba340b39987742e3241554 ]
+[ Upstream commit c6564c13dae25cd7f8e1de5127b4da4500ee5844 ]
 
-In nonstatic_find_mem_region(), pcmcia_make_resource() is assigned to
-res and used in pci_bus_alloc_resource(). There a dereference of res
-in pci_bus_alloc_resource(), which could lead to a NULL pointer
-dereference on failure of pcmcia_make_resource().
+For the possible failure of the platform_get_irq(), the returned irq
+could be error number and will finally cause the failure of the
+request_irq().
 
-Fix this bug by adding a check of res.
+Consider that platform_get_irq() can now in certain cases return
+-EPROBE_DEFER, and the consequences of letting request_irq()
+effectively convert that into -EINVAL, even at probe time rather than
+later on. So it might be better to check just now.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_PCCARD_NONSTATIC=y show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 49b1153adfe1 ("pcmcia: move all pcmcia_resource_ops providers into one module")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Fixes: b1201e44f50b ("can: xilinx CAN controller support")
+Link: https://lore.kernel.org/all/20211224021324.1447494-1-jiasheng@iscas.ac.cn
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pcmcia/rsrc_nonstatic.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/can/xilinx_can.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
-index 827ca6e9ee54a..1cac528707111 100644
---- a/drivers/pcmcia/rsrc_nonstatic.c
-+++ b/drivers/pcmcia/rsrc_nonstatic.c
-@@ -812,6 +812,9 @@ static struct resource *nonstatic_find_mem_region(u_long base, u_long num,
- 	unsigned long min, max;
- 	int ret, i, j;
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index e2b15d29d15eb..af4a2adc85983 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -1761,7 +1761,12 @@ static int xcan_probe(struct platform_device *pdev)
+ 	spin_lock_init(&priv->tx_lock);
  
-+	if (!res)
-+		return NULL;
+ 	/* Get IRQ for the device */
+-	ndev->irq = platform_get_irq(pdev, 0);
++	ret = platform_get_irq(pdev, 0);
++	if (ret < 0)
++		goto err_free;
 +
- 	low = low || !(s->features & SS_CAP_PAGE_REGS);
++	ndev->irq = ret;
++
+ 	ndev->flags |= IFF_ECHO;	/* We support local echo */
  
- 	data.mask = align - 1;
+ 	platform_set_drvdata(pdev, ndev);
 -- 
 2.34.1
 

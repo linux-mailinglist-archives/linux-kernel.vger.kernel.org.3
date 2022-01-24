@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6035C49972C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F601499778
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447250AbiAXVKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:10:16 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33176 "EHLO
+        id S1448315AbiAXVM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:12:26 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35002 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388634AbiAXUjy (ORCPT
+        with ESMTP id S1388693AbiAXUj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:39:54 -0500
+        Mon, 24 Jan 2022 15:39:59 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 436A461536;
-        Mon, 24 Jan 2022 20:39:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27993C340E5;
-        Mon, 24 Jan 2022 20:39:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7403F61545;
+        Mon, 24 Jan 2022 20:39:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D6CC340E5;
+        Mon, 24 Jan 2022 20:39:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056790;
-        bh=eZwEiXJyPGEonfCjOOp7aKHAaSn0sBKdsFPzaIWm9G4=;
+        s=korg; t=1643056796;
+        bh=bKv49uldl9R9SC7HIVxX+ClVCBnMzrgTe9Li/DYxUJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ffyFSdetoPrruAJ8SNAZiBsOIpNRkhtPrzryWqjI84vdTZOWROHFWBAUFsflT57Pn
-         F412fCuZOqqPt2ENSkMFCg5yDi7hEci5sdoAOQfrciUt7UhUjNOCYUqxm9GDO90Mq/
-         u2O6RXKFYe67USWUqX9Zs6aIA3wXEADS0SMg4PiQ=
+        b=epbamufp1D2cEQXW8DNkddDXweJ+yYuO55rDO6cEIUbfkxdw539TcSYhT1r8pCMKj
+         ZOuDHbmam9xhyM/SHE4A+7ij4ZoqbVd0F0klxfo8LkDPrQ8fZr9syOvnMT/duIlWsW
+         1By5DEoJ1EjPHXurOLLxy2tIkMnzNGjuo84izNao=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org, Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 601/846] btrfs: remove BUG_ON(!eie) in find_parent_nodes
-Date:   Mon, 24 Jan 2022 19:41:58 +0100
-Message-Id: <20220124184121.768919225@linuxfoundation.org>
+Subject: [PATCH 5.15 603/846] mac80211: allow non-standard VHT MCS-10/11
+Date:   Mon, 24 Jan 2022 19:42:00 +0100
+Message-Id: <20220124184121.832271046@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -46,52 +47,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Ping-Ke Shih <pkshih@realtek.com>
 
-[ Upstream commit 9f05c09d6baef789726346397438cca4ec43c3ee ]
+[ Upstream commit 04be6d337d37400ad5b3d5f27ca87645ee5a18a3 ]
 
-If we're looking for leafs that point to a data extent we want to record
-the extent items that point at our bytenr.  At this point we have the
-reference and we know for a fact that this leaf should have a reference
-to our bytenr.  However if there's some sort of corruption we may not
-find any references to our leaf, and thus could end up with eie == NULL.
-Replace this BUG_ON() with an ASSERT() and then return -EUCLEAN for the
-mortals.
+Some AP can possibly try non-standard VHT rate and mac80211 warns and drops
+packets, and leads low TCP throughput.
 
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+    Rate marked as a VHT rate but data is invalid: MCS: 10, NSS: 2
+    WARNING: CPU: 1 PID: 7817 at net/mac80211/rx.c:4856 ieee80211_rx_list+0x223/0x2f0 [mac8021
+
+Since commit c27aa56a72b8 ("cfg80211: add VHT rate entries for MCS-10 and MCS-11")
+has added, mac80211 adds this support as well.
+
+After this patch, throughput is good and iw can get the bitrate:
+    rx bitrate:	975.1 MBit/s VHT-MCS 10 80MHz short GI VHT-NSS 2
+or
+    rx bitrate:	1083.3 MBit/s VHT-MCS 11 80MHz short GI VHT-NSS 2
+
+Buglink: https://bugzilla.suse.com/show_bug.cgi?id=1192891
+Reported-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
+Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
+Link: https://lore.kernel.org/r/20220103013623.17052-1-pkshih@realtek.com
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/backref.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ net/mac80211/rx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/backref.c b/fs/btrfs/backref.c
-index 6b4b0f105a572..8b090c40daf77 100644
---- a/fs/btrfs/backref.c
-+++ b/fs/btrfs/backref.c
-@@ -1365,10 +1365,18 @@ again:
- 				goto out;
- 			if (!ret && extent_item_pos) {
- 				/*
--				 * we've recorded that parent, so we must extend
--				 * its inode list here
-+				 * We've recorded that parent, so we must extend
-+				 * its inode list here.
-+				 *
-+				 * However if there was corruption we may not
-+				 * have found an eie, return an error in this
-+				 * case.
- 				 */
--				BUG_ON(!eie);
-+				ASSERT(eie);
-+				if (!eie) {
-+					ret = -EUCLEAN;
-+					goto out;
-+				}
- 				while (eie->next)
- 					eie = eie->next;
- 				eie->next = ref->inode_list;
+diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
+index 1958e4d59b524..92ce173dd0c13 100644
+--- a/net/mac80211/rx.c
++++ b/net/mac80211/rx.c
+@@ -4933,7 +4933,7 @@ void ieee80211_rx_list(struct ieee80211_hw *hw, struct ieee80211_sta *pubsta,
+ 				goto drop;
+ 			break;
+ 		case RX_ENC_VHT:
+-			if (WARN_ONCE(status->rate_idx > 9 ||
++			if (WARN_ONCE(status->rate_idx > 11 ||
+ 				      !status->nss ||
+ 				      status->nss > 8,
+ 				      "Rate marked as a VHT rate but data is invalid: MCS: %d, NSS: %d\n",
 -- 
 2.34.1
 

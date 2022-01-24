@@ -2,42 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EB14991EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECA9498D92
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380290AbiAXUQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:16:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348022AbiAXTwN (ORCPT
+        id S1349126AbiAXTdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:33:32 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53350 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350811AbiAXTZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:52:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C458C0617A7;
-        Mon, 24 Jan 2022 11:25:18 -0800 (PST)
+        Mon, 24 Jan 2022 14:25:24 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 046B6B8122A;
-        Mon, 24 Jan 2022 19:25:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219F9C340E5;
-        Mon, 24 Jan 2022 19:25:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DADD612A5;
+        Mon, 24 Jan 2022 19:25:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B77C340E5;
+        Mon, 24 Jan 2022 19:25:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052315;
-        bh=UQ1kjsQKUztbG+mC2ezX3DTEhk+4oW25wpr9eV2E+4U=;
+        s=korg; t=1643052322;
+        bh=b3juwtF1WadbjGXLpSUwGPgfTrogbjQu+gXIMxu3feE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YNkME/0rhIXstVmjxx4oELvX5nXN387e3yUArXWYXnI23zFMG8VG0ZEhWth9nIYkh
-         SvBw3xK+8fwHcNoAeqvHFHWehssE5TcN0IvDacID6ctEIvjp8DCEKlobFlkSjqliul
-         72u/F51N7/R0J1fYx4i6m6hkAYdekYcJNHjlCE2E=
+        b=D9qGptAPAgBAxaek9KWWuSbvdi2fhX01A6SBgtORl6/gpMbP6QuqO913kKm7xURA6
+         hOb1DJVOjEvLh3deaz0cK72nyn7UgYaO76w1xjZajuSkkpMEhexRxch1kdt/5EScvP
+         TkzN0TzR7d+KHkcf2FJqVuobmsRdm3FuJNtNeJn4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org, Michael Kuron <michael.kuron@gmail.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 5.4 019/320] media: s2255: fix control-message timeouts
-Date:   Mon, 24 Jan 2022 19:40:03 +0100
-Message-Id: <20220124183954.410001351@linuxfoundation.org>
+Subject: [PATCH 5.4 020/320] media: dib0700: fix undefined behavior in tuner shutdown
+Date:   Mon, 24 Jan 2022 19:40:04 +0100
+Message-Id: <20220124183954.442751555@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
 References: <20220124183953.750177707@linuxfoundation.org>
@@ -49,45 +45,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Michael Kuron <michael.kuron@gmail.com>
 
-commit f71d272ad4e354097020a4e6b1dc6e4b59feb50f upstream.
+commit f7b77ebe6d2f49c7747b2d619586d1aa33f9ea91 upstream.
 
-USB control-message timeouts are specified in milliseconds and should
-specifically not vary with CONFIG_HZ.
+This fixes a problem where closing the tuner would leave it in a state
+where it would not tune to any channel when reopened. This problem was
+discovered as part of https://github.com/hselasky/webcamd/issues/16.
 
-Use the common control-message timeout define for the five-second
-timeouts.
+Since adap->id is 0 or 1, this bit-shift overflows, which is undefined
+behavior. The driver still worked in practice as the overflow would in
+most environments result in 0, which rendered the line a no-op. When
+running the driver as part of webcamd however, the overflow could lead
+to 0xff due to optimizations by the compiler, which would, in the end,
+improperly shut down the tuner.
 
-Fixes: 38f993ad8b1f ("V4L/DVB (8125): This driver adds support for the Sensoray 2255 devices.")
-Cc: stable@vger.kernel.org      # 2.6.27
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+The bug is a regression introduced in the commit referenced below. The
+present patch causes identical behavior to before that commit for
+adap->id equal to 0 or 1. The driver does not contain support for
+dib0700 devices with more adapters, assuming such even exist.
+
+Tests have been performed with the Xbox One Digital TV Tuner on amd64.
+Not all dib0700 devices are expected to be affected by the regression;
+this code path is only taken by those with incorrect endpoint numbers.
+
+Link: https://lore.kernel.org/linux-media/1d2fc36d94ced6f67c7cc21dcc469d5e5bdd8201.1632689033.git.mchehab+huawei@kernel.org
+
+Cc: stable@vger.kernel.org
+Fixes: 7757ddda6f4f ("[media] DiB0700: add function to change I2C-speed")
+Signed-off-by: Michael Kuron <michael.kuron@gmail.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/usb/s2255/s2255drv.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/usb/dvb-usb/dib0700_core.c |    2 --
+ 1 file changed, 2 deletions(-)
 
---- a/drivers/media/usb/s2255/s2255drv.c
-+++ b/drivers/media/usb/s2255/s2255drv.c
-@@ -1884,7 +1884,7 @@ static long s2255_vendor_req(struct s225
- 				    USB_TYPE_VENDOR | USB_RECIP_DEVICE |
- 				    USB_DIR_IN,
- 				    Value, Index, buf,
--				    TransferBufferLength, HZ * 5);
-+				    TransferBufferLength, USB_CTRL_SET_TIMEOUT);
- 
- 		if (r >= 0)
- 			memcpy(TransferBuffer, buf, TransferBufferLength);
-@@ -1893,7 +1893,7 @@ static long s2255_vendor_req(struct s225
- 		r = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
- 				    Request, USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 				    Value, Index, buf,
--				    TransferBufferLength, HZ * 5);
-+				    TransferBufferLength, USB_CTRL_SET_TIMEOUT);
- 	}
- 	kfree(buf);
- 	return r;
+--- a/drivers/media/usb/dvb-usb/dib0700_core.c
++++ b/drivers/media/usb/dvb-usb/dib0700_core.c
+@@ -616,8 +616,6 @@ int dib0700_streaming_ctrl(struct dvb_us
+ 		deb_info("the endpoint number (%i) is not correct, use the adapter id instead", adap->fe_adap[0].stream.props.endpoint);
+ 		if (onoff)
+ 			st->channel_state |=	1 << (adap->id);
+-		else
+-			st->channel_state |=	1 << ~(adap->id);
+ 	} else {
+ 		if (onoff)
+ 			st->channel_state |=	1 << (adap->fe_adap[0].stream.props.endpoint-2);
 
 

@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56866498C22
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AF5498FEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348710AbiAXTTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:19:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40054 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347555AbiAXTKq (ORCPT
+        id S1358884AbiAXTz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:55:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355862AbiAXToE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:10:46 -0500
+        Mon, 24 Jan 2022 14:44:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F2AC02B8C5;
+        Mon, 24 Jan 2022 11:22:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 391DC61226;
-        Mon, 24 Jan 2022 19:10:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2836AC340E7;
-        Mon, 24 Jan 2022 19:10:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FFAC6131E;
+        Mon, 24 Jan 2022 19:22:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6482EC340E5;
+        Mon, 24 Jan 2022 19:22:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051445;
-        bh=SqqKlmrkJD2ajJiHT7F53gMvsqqsiJfdubXqh3QjyAo=;
+        s=korg; t=1643052142;
+        bh=TqIHgv56NEhzscdSjyNbYIuSq5WGNXRyGvRmEURN6lE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xfGPjlQmqLaKhdRnm1yNMxK8KIBeXVZb1qhkYaN9iBCJiVWh1abTYir/tyQYoM7Jm
-         WrJJEIDKhd95MpEphc1ojeqSwcQSMIYu/SjeJRQA2fGtZGlW/O40sbQneDFOfoYgX7
-         c9C1wc8+n/Jw8fYngZBbtBQ9acAsFrVXGkQHahzQ=
+        b=fGT5tB+zFiIQZIzZptdoasTEjCFsQboTuvhS6z7LWzOdCFT0s0bhlAsIPE4RG+SoS
+         CAxLyglp4bE8yUzfu3NsZbK9qzrYZVLjwnK728I0zd94sxnr+xkbhHycowY1j1GPW9
+         5LPUjko8WlYe2WfPDOcjBZaMHJjmvJAfnsAwzKRc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 4.14 164/186] powerpc/fsl/dts: Enable WA for erratum A-009885 on fman3l MDIO buses
-Date:   Mon, 24 Jan 2022 19:43:59 +0100
-Message-Id: <20220124183942.393451196@linuxfoundation.org>
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>, stable@kernel.org,
+        Theodore Tso <tytso@mit.edu>,
+        syzbot+3b6f9218b1301ddda3e2@syzkaller.appspotmail.com
+Subject: [PATCH 4.19 202/239] ext4: make sure to reset inode lockdep class when quota enabling fails
+Date:   Mon, 24 Jan 2022 19:44:00 +0100
+Message-Id: <20220124183949.531077186@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,38 +49,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tobias Waldekranz <tobias@waldekranz.com>
+From: Jan Kara <jack@suse.cz>
 
-commit 0d375d610fa96524e2ee2b46830a46a7bfa92a9f upstream.
+commit 4013d47a5307fdb5c13370b5392498b00fedd274 upstream.
 
-This block is used in (at least) T1024 and T1040, including their
-variants like T1023 etc.
+When we succeed in enabling some quota type but fail to enable another
+one with quota feature, we correctly disable all enabled quota types.
+However we forget to reset i_data_sem lockdep class. When the inode gets
+freed and reused, it will inherit this lockdep class (i_data_sem is
+initialized only when a slab is created) and thus eventually lockdep
+barfs about possible deadlocks.
 
-Fixes: d55ad2967d89 ("powerpc/mpc85xx: Create dts components for the FSL QorIQ DPAA FMan")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reported-and-tested-by: syzbot+3b6f9218b1301ddda3e2@syzkaller.appspotmail.com
+Signed-off-by: Jan Kara <jack@suse.cz>
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/r/20211007155336.12493-3-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi |    2 ++
- 1 file changed, 2 insertions(+)
+ fs/ext4/super.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
---- a/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
-+++ b/arch/powerpc/boot/dts/fsl/qoriq-fman3l-0.dtsi
-@@ -78,6 +78,7 @@ fman0: fman@400000 {
- 		#size-cells = <0>;
- 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
- 		reg = <0xfc000 0x1000>;
-+		fsl,erratum-a009885;
- 	};
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -5883,8 +5883,19 @@ static int ext4_enable_quotas(struct sup
+ 					"Failed to enable quota tracking "
+ 					"(type=%d, err=%d). Please run "
+ 					"e2fsck to fix.", type, err);
+-				for (type--; type >= 0; type--)
++				for (type--; type >= 0; type--) {
++					struct inode *inode;
++
++					inode = sb_dqopt(sb)->files[type];
++					if (inode)
++						inode = igrab(inode);
+ 					dquot_quota_off(sb, type);
++					if (inode) {
++						lockdep_set_quota_inode(inode,
++							I_DATA_SEM_NORMAL);
++						iput(inode);
++					}
++				}
  
- 	xmdio0: mdio@fd000 {
-@@ -85,6 +86,7 @@ fman0: fman@400000 {
- 		#size-cells = <0>;
- 		compatible = "fsl,fman-memac-mdio", "fsl,fman-xmdio";
- 		reg = <0xfd000 0x1000>;
-+		fsl,erratum-a009885;
- 	};
- 
- 	ptp_timer0: ptp-timer@fe000 {
+ 				return err;
+ 			}
 
 

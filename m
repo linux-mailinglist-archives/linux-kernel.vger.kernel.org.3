@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71189499FD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D188D49A00D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842236AbiAXXBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
+        id S1843165AbiAXXD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:03:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573020AbiAXVzI (ORCPT
+        with ESMTP id S1450966AbiAXV5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:55:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B284CC07E2AF;
-        Mon, 24 Jan 2022 12:37:46 -0800 (PST)
+        Mon, 24 Jan 2022 16:57:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0D8C038AD7;
+        Mon, 24 Jan 2022 12:38:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EF23B81063;
-        Mon, 24 Jan 2022 20:37:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F4D9C340E5;
-        Mon, 24 Jan 2022 20:37:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C59C61008;
+        Mon, 24 Jan 2022 20:38:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30CBCC340E5;
+        Mon, 24 Jan 2022 20:38:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056664;
-        bh=vNMezxssj6VcvR7r/jjQIM53BOA5+j+5fVwfrXZIJ98=;
+        s=korg; t=1643056684;
+        bh=iGXKZ32ebADZo9uL3I0kpvf3SEJ+MzjnQoFC482YF+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xQIaWVpxutPsC6GegXirRFVNxvAInucOp9zRZ7fWvZBtYIl2qFnakw9SfT6fmmQ+x
-         e4W3moSeLmRzT4LPhOJ1h27iq56fxze3Wy8Nc4kkwVeYH0o92/rVD9c1QYWd3PSCQl
-         KszC4l8ktf+N/gyFmRL/NZjAjzv9zF87dQezbiJM=
+        b=MO4ywm1otyvC+3x4REpFa1dF+o41mYKhcGfIZh03izoDHh59YgYDjfXRGONv0itdX
+         fsvQQXr+SFyHM2Zp/KT7FzHoulb0o+6njIPmSe3YjX5aEjJWORb5rfonHddzTxU1HS
+         S/Bt4XSJuK2xjrOHZwOCUs9tJqnrw8s6eHErM85g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 559/846] audit: ensure userspace is penalized the same as the kernel when under pressure
-Date:   Mon, 24 Jan 2022 19:41:16 +0100
-Message-Id: <20220124184120.310761403@linuxfoundation.org>
+Subject: [PATCH 5.15 566/846] usb: hub: Add delay for SuperSpeed hub resume to let links transit to U0
+Date:   Mon, 24 Jan 2022 19:41:23 +0100
+Message-Id: <20220124184120.556377224@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -50,68 +49,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Moore <paul@paul-moore.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-[ Upstream commit 8f110f530635af44fff1f4ee100ecef0bac62510 ]
+[ Upstream commit 00558586382891540c59c9febc671062425a6e47 ]
 
-Due to the audit control mutex necessary for serializing audit
-userspace messages we haven't been able to block/penalize userspace
-processes that attempt to send audit records while the system is
-under audit pressure.  The result is that privileged userspace
-applications have a priority boost with respect to audit as they are
-not bound by the same audit queue throttling as the other tasks on
-the system.
+When a new USB device gets plugged to nested hubs, the affected hub,
+which connects to usb 2-1.4-port2, doesn't report there's any change,
+hence the nested hubs go back to runtime suspend like nothing happened:
+[  281.032951] usb usb2: usb wakeup-resume
+[  281.032959] usb usb2: usb auto-resume
+[  281.032974] hub 2-0:1.0: hub_resume
+[  281.033011] usb usb2-port1: status 0263 change 0000
+[  281.033077] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+[  281.049797] usb 2-1: usb wakeup-resume
+[  281.069800] usb 2-1: Waited 0ms for CONNECT
+[  281.069810] usb 2-1: finish resume
+[  281.070026] hub 2-1:1.0: hub_resume
+[  281.070250] usb 2-1-port4: status 0203 change 0000
+[  281.070272] usb usb2-port1: resume, status 0
+[  281.070282] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+[  281.089813] usb 2-1.4: usb wakeup-resume
+[  281.109792] usb 2-1.4: Waited 0ms for CONNECT
+[  281.109801] usb 2-1.4: finish resume
+[  281.109991] hub 2-1.4:1.0: hub_resume
+[  281.110147] usb 2-1.4-port2: status 0263 change 0000
+[  281.110234] usb 2-1-port4: resume, status 0
+[  281.110239] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+[  281.110266] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+[  281.110426] hub 2-1.4:1.0: hub_suspend
+[  281.110565] usb 2-1.4: usb auto-suspend, wakeup 1
+[  281.130998] hub 2-1:1.0: hub_suspend
+[  281.137788] usb 2-1: usb auto-suspend, wakeup 1
+[  281.142935] hub 2-0:1.0: state 7 ports 4 chg 0000 evt 0000
+[  281.177828] usb 2-1: usb wakeup-resume
+[  281.197839] usb 2-1: Waited 0ms for CONNECT
+[  281.197850] usb 2-1: finish resume
+[  281.197984] hub 2-1:1.0: hub_resume
+[  281.198203] usb 2-1-port4: status 0203 change 0000
+[  281.198228] usb usb2-port1: resume, status 0
+[  281.198237] hub 2-1:1.0: state 7 ports 4 chg 0010 evt 0000
+[  281.217835] usb 2-1.4: usb wakeup-resume
+[  281.237834] usb 2-1.4: Waited 0ms for CONNECT
+[  281.237845] usb 2-1.4: finish resume
+[  281.237990] hub 2-1.4:1.0: hub_resume
+[  281.238067] usb 2-1.4-port2: status 0263 change 0000
+[  281.238148] usb 2-1-port4: resume, status 0
+[  281.238152] usb 2-1-port4: status 0203, change 0000, 10.0 Gb/s
+[  281.238166] hub 2-1.4:1.0: state 7 ports 4 chg 0000 evt 0000
+[  281.238385] hub 2-1.4:1.0: hub_suspend
+[  281.238523] usb 2-1.4: usb auto-suspend, wakeup 1
+[  281.258076] hub 2-1:1.0: hub_suspend
+[  281.265744] usb 2-1: usb auto-suspend, wakeup 1
+[  281.285976] hub 2-0:1.0: hub_suspend
+[  281.285988] usb usb2: bus auto-suspend, wakeup 1
 
-This patch attempts to restore some balance to the system when under
-audit pressure by blocking these privileged userspace tasks after
-they have finished their audit processing, and dropped the audit
-control mutex, but before they return to userspace.
+USB 3.2 spec, 9.2.5.4 "Changing Function Suspend State" says that "If
+the link is in a non-U0 state, then the device must transition the link
+to U0 prior to sending the remote wake message", but the hub only
+transits the link to U0 after signaling remote wakeup.
 
-Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Tested-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+So be more forgiving and use a 20ms delay to let the link transit to U0
+for remote wakeup.
+
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Link: https://lore.kernel.org/r/20211215120108.336597-1-kai.heng.feng@canonical.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/audit.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ drivers/usb/core/hub.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index 4cebadb5f30db..eab7282668ab9 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -1540,6 +1540,20 @@ static void audit_receive(struct sk_buff  *skb)
- 		nlh = nlmsg_next(nlh, &len);
- 	}
- 	audit_ctl_unlock();
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 3bc4a86c3d0a5..ac6c5ccfe1cb7 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -1110,7 +1110,10 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ 		} else {
+ 			hub_power_on(hub, true);
+ 		}
+-	}
++	/* Give some time on remote wakeup to let links to transit to U0 */
++	} else if (hub_is_superspeed(hub->hdev))
++		msleep(20);
 +
-+	/* can't block with the ctrl lock, so penalize the sender now */
-+	if (audit_backlog_limit &&
-+	    (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
-+		DECLARE_WAITQUEUE(wait, current);
-+
-+		/* wake kauditd to try and flush the queue */
-+		wake_up_interruptible(&kauditd_wait);
-+
-+		add_wait_queue_exclusive(&audit_backlog_wait, &wait);
-+		set_current_state(TASK_UNINTERRUPTIBLE);
-+		schedule_timeout(audit_backlog_wait_time);
-+		remove_wait_queue(&audit_backlog_wait, &wait);
-+	}
- }
+  init2:
  
- /* Log information about who is connecting to the audit multicast socket */
-@@ -1824,7 +1838,9 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
- 	 *    task_tgid_vnr() since auditd_pid is set in audit_receive_msg()
- 	 *    using a PID anchored in the caller's namespace
- 	 * 2. generator holding the audit_cmd_mutex - we don't want to block
--	 *    while holding the mutex */
-+	 *    while holding the mutex, although we do penalize the sender
-+	 *    later in audit_receive() when it is safe to block
-+	 */
- 	if (!(auditd_test_task(current) || audit_ctl_owner_current())) {
- 		long stime = audit_backlog_wait_time;
- 
+ 	/*
 -- 
 2.34.1
 

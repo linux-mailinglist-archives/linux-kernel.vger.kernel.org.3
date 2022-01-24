@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 662B0499D0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D8F499787
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581651AbiAXWMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:12:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42362 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452840AbiAXV1N (ORCPT
+        id S1448468AbiAXVMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:12:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390872AbiAXUqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:27:13 -0500
+        Mon, 24 Jan 2022 15:46:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF102C061259;
+        Mon, 24 Jan 2022 11:56:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0B06B8121C;
-        Mon, 24 Jan 2022 21:27:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 511E2C340E4;
-        Mon, 24 Jan 2022 21:27:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CC6760B89;
+        Mon, 24 Jan 2022 19:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BB8CC340E5;
+        Mon, 24 Jan 2022 19:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059630;
-        bh=3JX4NxME83wn+3Sx/vJIXU37WPkZe9zA5CufjNXYz9A=;
+        s=korg; t=1643054182;
+        bh=N+xAuBNrumYAwKdpAGtW0TSvVD1arLgbiAIJ/iqPfH8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GNkatMxy8fR61nQ4g5mdkTTZ4nzeaXS/JfuPgYmHsbWuYrIYH1l1eu0EjPluFtGJq
-         0hiCjEx0yI/5rFnn6I5YHh+PGW9WbuTJT/+rdWPl8/F6nW15JfXIj9Eb7vt2HoSQyg
-         7FEjWyzzJMGtww3pyn7AJL2irrf4ZglgHvyfGinA=
+        b=1Wgc1tA4QNEdQ8/T3xWQNaqSBbTnoU4lWyWnxMlzzKRl/U0evUKk9+6XO2qZ7qfLG
+         /TF301QQ+QmgT3mVsDLyW0FHmNQ4wCOp0HSwAWQINjfMMjoa0kqjGoLfd6IB/99sZP
+         fRZVnZ58qo04AV4O95JQ0jaPUNvIEy0jLV0CXi/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sam Edwards <CFSworks@gmail.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Diego Viola <diego.viola@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0680/1039] iwlwifi: recognize missing PNVM data and then log filename
-Date:   Mon, 24 Jan 2022 19:41:09 +0100
-Message-Id: <20220124184148.222339339@linuxfoundation.org>
+Subject: [PATCH 5.10 305/563] drm/nouveau/pmu/gm200-: avoid touching PMU outside of DEVINIT/PREOS/ACR
+Date:   Mon, 24 Jan 2022 19:41:10 +0100
+Message-Id: <20220124184034.988303891@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,108 +50,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Coelho <luciano.coelho@intel.com>
+From: Ben Skeggs <bskeggs@redhat.com>
 
-[ Upstream commit 1db385c668d3ccb04ccdb5f0f190fd17b2db29c6 ]
+[ Upstream commit 1d2271d2fb85e54bfc9630a6c30ac0feb9ffb983 ]
 
-We can detect that a FW SYSASSERT is due to missing PNVM data by
-checking the assertion code.  When this happens, it's is useful for
-the user if we print the filename where the driver is looking for the
-data.
+There have been reports of the WFI timing out on some boards, and a
+patch was proposed to just remove it.  This stuff is rather fragile,
+and I believe the WFI might be needed with our FW prior to GM200.
 
-Add the PNVM missing assertion code to the dump list and print out the
-name of the file we're looking for when this happens.
+However, we probably should not be touching PMU during init on GPUs
+where we depend on NVIDIA FW, outside of limited circumstances, so
+this should be a somewhat safer change that achieves the desired
+result.
 
-Reported-by: Sam Edwards <CFSworks@gmail.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20211210090244.1d8725b7518a.I0c36617a7282bd445cda484d97ac4a83022706ee@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Reported-by: Diego Viola <diego.viola@gmail.com>
+Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://gitlab.freedesktop.org/drm/nouveau/-/merge_requests/10
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/fw/dump.c | 9 +++++++++
- drivers/net/wireless/intel/iwlwifi/fw/img.c  | 6 +++---
- drivers/net/wireless/intel/iwlwifi/fw/img.h  | 4 ++++
- 3 files changed, 16 insertions(+), 3 deletions(-)
+ .../gpu/drm/nouveau/nvkm/subdev/pmu/base.c    | 37 +++++++++++--------
+ 1 file changed, 21 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/dump.c b/drivers/net/wireless/intel/iwlwifi/fw/dump.c
-index 016b3a4c5f513..6a37933a02169 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/dump.c
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/dump.c
-@@ -12,6 +12,7 @@
- #include "iwl-io.h"
- #include "iwl-prph.h"
- #include "iwl-csr.h"
-+#include "pnvm.h"
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+index a0fe607c9c07f..3bfc55c571b5e 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/base.c
+@@ -94,20 +94,13 @@ nvkm_pmu_fini(struct nvkm_subdev *subdev, bool suspend)
+ 	return 0;
+ }
  
- /*
-  * Note: This structure is read from the device with IO accesses,
-@@ -147,6 +148,7 @@ static void iwl_fwrt_dump_umac_error_log(struct iwl_fw_runtime *fwrt)
- 	struct iwl_trans *trans = fwrt->trans;
- 	struct iwl_umac_error_event_table table = {};
- 	u32 base = fwrt->trans->dbg.umac_error_event_table;
-+	char pnvm_name[MAX_PNVM_NAME];
+-static int
++static void
+ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ {
+ 	struct nvkm_device *device = pmu->subdev.device;
  
- 	if (!base &&
- 	    !(fwrt->trans->dbg.error_event_table_tlv_status &
-@@ -164,6 +166,13 @@ static void iwl_fwrt_dump_umac_error_log(struct iwl_fw_runtime *fwrt)
- 			fwrt->trans->status, table.valid);
- 	}
+ 	if (!pmu->func->enabled(pmu))
+-		return 0;
+-
+-	/* Inhibit interrupts, and wait for idle. */
+-	nvkm_wr32(device, 0x10a014, 0x0000ffff);
+-	nvkm_msec(device, 2000,
+-		if (!nvkm_rd32(device, 0x10a04c))
+-			break;
+-	);
++		return;
  
-+	if ((table.error_id & ~FW_SYSASSERT_CPU_MASK) ==
-+	    FW_SYSASSERT_PNVM_MISSING) {
-+		iwl_pnvm_get_fs_name(trans, pnvm_name, sizeof(pnvm_name));
-+		IWL_ERR(fwrt, "PNVM data is missing, please install %s\n",
-+			pnvm_name);
+ 	/* Reset. */
+ 	if (pmu->func->reset)
+@@ -118,25 +111,37 @@ nvkm_pmu_reset(struct nvkm_pmu *pmu)
+ 		if (!(nvkm_rd32(device, 0x10a10c) & 0x00000006))
+ 			break;
+ 	);
+-
+-	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_preinit(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	return nvkm_pmu_reset(pmu);
++	nvkm_pmu_reset(pmu);
++	return 0;
+ }
+ 
+ static int
+ nvkm_pmu_init(struct nvkm_subdev *subdev)
+ {
+ 	struct nvkm_pmu *pmu = nvkm_pmu(subdev);
+-	int ret = nvkm_pmu_reset(pmu);
+-	if (ret == 0 && pmu->func->init)
+-		ret = pmu->func->init(pmu);
+-	return ret;
++	struct nvkm_device *device = pmu->subdev.device;
++
++	if (!pmu->func->init)
++		return 0;
++
++	if (pmu->func->enabled(pmu)) {
++		/* Inhibit interrupts, and wait for idle. */
++		nvkm_wr32(device, 0x10a014, 0x0000ffff);
++		nvkm_msec(device, 2000,
++			if (!nvkm_rd32(device, 0x10a04c))
++				break;
++		);
++
++		nvkm_pmu_reset(pmu);
 +	}
 +
- 	IWL_ERR(fwrt, "0x%08X | %s\n", table.error_id,
- 		iwl_fw_lookup_assert_desc(table.error_id));
- 	IWL_ERR(fwrt, "0x%08X | umac branchlink1\n", table.blink1);
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/img.c b/drivers/net/wireless/intel/iwlwifi/fw/img.c
-index 24a9666736913..530674a35eeb2 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/img.c
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/img.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
- /*
-- * Copyright(c) 2019 - 2020 Intel Corporation
-+ * Copyright(c) 2019 - 2021 Intel Corporation
-  */
- 
- #include "img.h"
-@@ -49,10 +49,9 @@ u8 iwl_fw_lookup_notif_ver(const struct iwl_fw *fw, u8 grp, u8 cmd, u8 def)
++	return pmu->func->init(pmu);
  }
- EXPORT_SYMBOL_GPL(iwl_fw_lookup_notif_ver);
  
--#define FW_SYSASSERT_CPU_MASK 0xf0000000
- static const struct {
- 	const char *name;
--	u8 num;
-+	u32 num;
- } advanced_lookup[] = {
- 	{ "NMI_INTERRUPT_WDG", 0x34 },
- 	{ "SYSASSERT", 0x35 },
-@@ -73,6 +72,7 @@ static const struct {
- 	{ "NMI_INTERRUPT_ACTION_PT", 0x7C },
- 	{ "NMI_INTERRUPT_UNKNOWN", 0x84 },
- 	{ "NMI_INTERRUPT_INST_ACTION_PT", 0x86 },
-+	{ "PNVM_MISSING", FW_SYSASSERT_PNVM_MISSING },
- 	{ "ADVANCED_SYSASSERT", 0 },
- };
- 
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/img.h b/drivers/net/wireless/intel/iwlwifi/fw/img.h
-index 993bda17fa309..fa7b1780064c2 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/img.h
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/img.h
-@@ -279,4 +279,8 @@ u8 iwl_fw_lookup_cmd_ver(const struct iwl_fw *fw, u8 grp, u8 cmd, u8 def);
- 
- u8 iwl_fw_lookup_notif_ver(const struct iwl_fw *fw, u8 grp, u8 cmd, u8 def);
- const char *iwl_fw_lookup_assert_desc(u32 num);
-+
-+#define FW_SYSASSERT_CPU_MASK		0xf0000000
-+#define FW_SYSASSERT_PNVM_MISSING	0x0010070d
-+
- #endif  /* __iwl_fw_img_h__ */
+ static void *
 -- 
 2.34.1
 

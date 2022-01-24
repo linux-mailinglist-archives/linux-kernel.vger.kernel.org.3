@@ -2,311 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11793499835
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB39E4998E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1451379AbiAXVWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
+        id S1453677AbiAXVah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442669AbiAXUzE (ORCPT
+        with ESMTP id S1347869AbiAXU7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:55:04 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D82C047CE6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:00:02 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id p27so52313042lfa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:00:02 -0800 (PST)
+        Mon, 24 Jan 2022 15:59:06 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B509BC05487F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:01:03 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id x11so52286073lfa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:01:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=X1fspDfOZTRESHgvCsTpy0M+wXpoDo9iEK0jnJXDU5Y=;
-        b=liPSw+oHKbLKt49NG7WwlravT+ecqQGWP3Y1Q8azHjQmV39vlahZekjyxHrUorHG/s
-         lgHi+ZN/pKPrXARZMuuyXAiagpmQ754zvGdFo3GwVY1mEUx8JkonDBNdCBKtOm/CsO0H
-         l57Gfv77T9qgQK8hck4Gu9uzAdq07iWfS/Nn0d18+937IolDJ4rDoR6RYdCIOAMkGGiT
-         o86l+PSF7Bih3oEb7/WysNBmRTnzCpUJ46UIpdYMj/oPP3A3W2RSItFoPKkWjpDdyRT2
-         pVIUwn2blEfUxS8k8l1bWErFN2xPD3V9KfxdKz0wOpdP13mwNeNWhey02A8C1wkng6w0
-         P6Ng==
+        bh=9d/LljxdQFk/8v03A59TsFaR9pVRTvDbBagxt/vWhj8=;
+        b=Ntri0HCzdk31bT7UnQbWab1+vHBzqQ+fXAefDkzolzabvzJIxSfnO2MmF3vDrvc99D
+         eJ68tMf0fD/4+vtwn993CD+sEdfpx/Ab0z/QgdqY5KQ+NcCbAJ7MkAE9h7zp5VZ6WhW5
+         aIMVMUrQQdxB1PLNOmXXJP0im8vEctusN2yO/hawcQrBBatbuF7XQQDPIK4dFlsAcoob
+         eJe5RzJuHQXVDPe+RSX03Ro5EtiWcf5VBre2uQLkoMBKJ9I1ZlED/pm3f8M0cxNfXD35
+         Ud6xxmBMa6bMnBXpg12yy87XHxpGt2mIiK/7fqaww6rzDzV4Iau9OACXi2o3k3jqqh1N
+         cTNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=X1fspDfOZTRESHgvCsTpy0M+wXpoDo9iEK0jnJXDU5Y=;
-        b=A6EKXfcKxwUZwn8vNkgXIV6klGVTuHPNr3YLILFZKEk6TQTsD/1X6homgglY++uXFb
-         w2ZYNbENVdY6oORucxgFbYwdWWdOSr5dxcaYDeU+IBZv2vtBtMHSATQCMpRyPr8IrgGf
-         WxLIOhYgOZz1VBMt9huhBtXOuz2gIzPDjTmJ+KbBuCZ6n0So1Lyo1gkC+9zKQVLEEdsl
-         QlVGn1ME/CY/Zpl9AxNm7nHO+NdWfEv7udrZML0nDKVGvJiwgYmtvEBewwN/8FrMcMLd
-         7hdkzF8gwKY+FzTm0kuY9RGQ49LIVY2FTdbyemptMvgKmmzgqL2kxHxT+opfTnKHxO4M
-         cloA==
-X-Gm-Message-State: AOAM530H+pR/ZLfIa5rYsHorTgK4wOP6z+F/U691UxXRGiEewQBYf5f7
-        Ws0RfvepxnSxarSqe2otQJfdhO8rpmRoIPUcmgrFgA==
-X-Google-Smtp-Source: ABdhPJyR9U54DVM3ct2LPaeHjq5X1d2P4BRZ/v7s+ft4w68F9k24e6xs01fvMqO6kK5J5ovEHtn/qv7W3jzDWk3bGTA=
-X-Received: by 2002:a05:6512:308d:: with SMTP id z13mr13877780lfd.523.1643054401020;
- Mon, 24 Jan 2022 12:00:01 -0800 (PST)
+        bh=9d/LljxdQFk/8v03A59TsFaR9pVRTvDbBagxt/vWhj8=;
+        b=x2ikeEzNop6khxHxkTITmSXrlUEy6LRvWLGpL8OnJN1Q4HTnxuxkzq8XfjjyXkAzUk
+         jVV8GWMtNGbwi/9ybevvJbLiubRs9ShF9zONRdpYDQsi2Df1r22rFJrZtXkMsZA7zRjH
+         5NqwVe99Y1COSJtkrT4OwD6cBsz2L0i3H0veKqYW/9KQLPoiy52/3PLzFavYRgzbLj5n
+         I4+fAtxIhRJFzjZDj6FFuu9V7FEhKMBvqtqtyH+AXYHfbSnTp4d0lGV1VKP/upSj5rf+
+         cfLdH1fKrzoC59/ihugS7uwqqeeFF24tismh9K/0KgMWAPrBv0BvTuBnnY+izuxCWDub
+         P/ig==
+X-Gm-Message-State: AOAM532ql4c4nQRODHdAcGMrmPisQcPNy6OUXeB30u8a0Uma1d3fwp7X
+        V/YosIUOyNLvb26BctEXq/tn2vVqt9Jd5ryVr9Ku1Q==
+X-Google-Smtp-Source: ABdhPJz3vOMKc7w8t/aRtiTShdqmYvLtD3vHMppmryVlYq5BmMuK5OPb2pEke6T5vpI2Cn5jVPUOkZMMggaNlqqQxnk=
+X-Received: by 2002:a05:6512:2348:: with SMTP id p8mr2992234lfu.71.1643054462040;
+ Mon, 24 Jan 2022 12:01:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20220119135450.564115-1-Jason@zx2c4.com> <20220124192849.14755-1-Jason@zx2c4.com>
-In-Reply-To: <20220124192849.14755-1-Jason@zx2c4.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 24 Jan 2022 11:59:48 -0800
-Message-ID: <CAKwvOd=hGx4WEFTNKFSwkk_VZgNd01a+OZR78TMmKfK5stpBbQ@mail.gmail.com>
-Subject: Re: [PATCH v2] lib/crypto: blake2s: avoid indirect calls to
- compression function for Clang CFI
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Ard Biesheuvel <ardb@kernel.org>
+References: <20220119085719.1357874-1-daniel.lezcano@linaro.org> <20220119085719.1357874-3-daniel.lezcano@linaro.org>
+In-Reply-To: <20220119085719.1357874-3-daniel.lezcano@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 24 Jan 2022 21:00:25 +0100
+Message-ID: <CAPDyKFrtq0J2O0WBwLr7Zb+WkomhLcR1h+eDzzV-SxpiJmm_yQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/5] powercap/drivers/dtpm: Add hierarchy creation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, robh@kernel.org, lukasz.luba@arm.com,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:29 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Wed, 19 Jan 2022 at 09:58, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 >
-> blake2s_compress_generic is weakly aliased by blake2s_generic. The
-> current harness for function selection uses a function pointer, which is
-> ordinarily inlined and resolved at compile time. But when Clang's CFI is
-> enabled, CFI still triggers when making an indirect call via a weak
-> symbol. This seems like a bug in Clang's CFI, as though it's bucketing
-> weak symbols and strong symbols differently. It also only seems to
-> trigger when "full LTO" mode is used, rather than "thin LTO".
+> The DTPM framework is available but without a way to configure it.
 >
-> [    0.000000][    T0] Kernel panic - not syncing: CFI failure (target: blake2s_compress_generic+0x0/0x1444)
-> [    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-mainline-06981-g076c855b846e #1
-> [    0.000000][    T0] Hardware name: MT6873 (DT)
-> [    0.000000][    T0] Call trace:
-> [    0.000000][    T0]  dump_backtrace+0xfc/0x1dc
-> [    0.000000][    T0]  dump_stack_lvl+0xa8/0x11c
-> [    0.000000][    T0]  panic+0x194/0x464
-> [    0.000000][    T0]  __cfi_check_fail+0x54/0x58
-> [    0.000000][    T0]  __cfi_slowpath_diag+0x354/0x4b0
-> [    0.000000][    T0]  blake2s_update+0x14c/0x178
-> [    0.000000][    T0]  _extract_entropy+0xf4/0x29c
-> [    0.000000][    T0]  crng_initialize_primary+0x24/0x94
-> [    0.000000][    T0]  rand_initialize+0x2c/0x6c
-> [    0.000000][    T0]  start_kernel+0x2f8/0x65c
-> [    0.000000][    T0]  __primary_switched+0xc4/0x7be4
-> [    0.000000][    T0] Rebooting in 5 seconds..
+> This change provides a way to create a hierarchy of DTPM node where
+> the power consumption reflects the sum of the children's power
+> consumption.
 >
-> Nonetheless, the function pointer method isn't so terrific anyway, so
-> this patch replaces it with a simple boolean, which also gets inlined
-> away. This successfully works around the Clang bug.
-
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
-
-Thanks for the report. Once we have a fix in hand for LLVM, we can
-revisit removing this and raising the required LLVM version for CFI.
-
+> It is up to the platform to specify an array of dtpm nodes where each
+> element has a pointer to its parent, except the top most one. The type
+> of the node gives the indication of which initialization callback to
+> call. At this time, we can create a virtual node, where its purpose is
+> to be a parent in the hierarchy, and a DT node where the name
+> describes its path.
 >
-> In general, I'm not too keen on all of the indirection involved here; it
-> clearly does more harm than good. Hopefully the whole thing can get
-> cleaned up down the road when lib/crypto is overhauled more
-> comprehensively. But for now, we go with a simple bandaid.
+> In order to ensure a nice self-encapsulation, the DTPM subsys array
+> contains a couple of initialization functions, one to setup the DTPM
+> backend and one to initialize it up. With this approach, the DTPM
+> framework has a very few material to export.
 >
-> Fixes: 6048fdcc5f26 ("lib/crypto: blake2s: include as built-in")
-> Reported-by: Miles Chen <miles.chen@mediatek.com>
-> Tested-by: Miles Chen <miles.chen@mediatek.com>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1567
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
-> Changes v1->v2:
-> - Wrapped columns at 80 for Eric.
+>  drivers/powercap/Kconfig |   1 +
+>  drivers/powercap/dtpm.c  | 168 ++++++++++++++++++++++++++++++++++++++-
+>  include/linux/dtpm.h     |  15 ++++
+>  3 files changed, 181 insertions(+), 3 deletions(-)
 >
->  arch/arm/crypto/blake2s-shash.c   |  4 ++--
->  arch/x86/crypto/blake2s-shash.c   |  4 ++--
->  crypto/blake2s_generic.c          |  4 ++--
->  include/crypto/internal/blake2s.h | 40 +++++++++++++++++++------------
->  lib/crypto/blake2s.c              |  4 ++--
->  5 files changed, 33 insertions(+), 23 deletions(-)
+> diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
+> index 8242e8c5ed77..b1ca339957e3 100644
+> --- a/drivers/powercap/Kconfig
+> +++ b/drivers/powercap/Kconfig
+> @@ -46,6 +46,7 @@ config IDLE_INJECT
 >
-> diff --git a/arch/arm/crypto/blake2s-shash.c b/arch/arm/crypto/blake2s-shash.c
-> index 17c1c3bfe2f5..763c73beea2d 100644
-> --- a/arch/arm/crypto/blake2s-shash.c
-> +++ b/arch/arm/crypto/blake2s-shash.c
-> @@ -13,12 +13,12 @@
->  static int crypto_blake2s_update_arm(struct shash_desc *desc,
->                                      const u8 *in, unsigned int inlen)
->  {
-> -       return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
-> +       return crypto_blake2s_update(desc, in, inlen, false);
->  }
+>  config DTPM
+>         bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
+> +       depends on OF
+>         help
+>           This enables support for the power capping for the dynamic
+>           thermal power management userspace engine.
+> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+> index 0e5c93443c70..10032f7132c4 100644
+> --- a/drivers/powercap/dtpm.c
+> +++ b/drivers/powercap/dtpm.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/powercap.h>
+>  #include <linux/slab.h>
+>  #include <linux/mutex.h>
+> +#include <linux/of.h>
 >
->  static int crypto_blake2s_final_arm(struct shash_desc *desc, u8 *out)
->  {
-> -       return crypto_blake2s_final(desc, out, blake2s_compress);
-> +       return crypto_blake2s_final(desc, out, false);
->  }
+>  #include "dtpm_subsys.h"
 >
->  #define BLAKE2S_ALG(name, driver_name, digest_size)                    \
-> diff --git a/arch/x86/crypto/blake2s-shash.c b/arch/x86/crypto/blake2s-shash.c
-> index f9e2fecdb761..59ae28abe35c 100644
-> --- a/arch/x86/crypto/blake2s-shash.c
-> +++ b/arch/x86/crypto/blake2s-shash.c
-> @@ -18,12 +18,12 @@
->  static int crypto_blake2s_update_x86(struct shash_desc *desc,
->                                      const u8 *in, unsigned int inlen)
->  {
-> -       return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
-> +       return crypto_blake2s_update(desc, in, inlen, false);
->  }
->
->  static int crypto_blake2s_final_x86(struct shash_desc *desc, u8 *out)
->  {
-> -       return crypto_blake2s_final(desc, out, blake2s_compress);
-> +       return crypto_blake2s_final(desc, out, false);
->  }
->
->  #define BLAKE2S_ALG(name, driver_name, digest_size)                    \
-> diff --git a/crypto/blake2s_generic.c b/crypto/blake2s_generic.c
-> index 72fe480f9bd6..5f96a21f8788 100644
-> --- a/crypto/blake2s_generic.c
-> +++ b/crypto/blake2s_generic.c
-> @@ -15,12 +15,12 @@
->  static int crypto_blake2s_update_generic(struct shash_desc *desc,
->                                          const u8 *in, unsigned int inlen)
->  {
-> -       return crypto_blake2s_update(desc, in, inlen, blake2s_compress_generic);
-> +       return crypto_blake2s_update(desc, in, inlen, true);
->  }
->
->  static int crypto_blake2s_final_generic(struct shash_desc *desc, u8 *out)
->  {
-> -       return crypto_blake2s_final(desc, out, blake2s_compress_generic);
-> +       return crypto_blake2s_final(desc, out, true);
->  }
->
->  #define BLAKE2S_ALG(name, driver_name, digest_size)                    \
-> diff --git a/include/crypto/internal/blake2s.h b/include/crypto/internal/blake2s.h
-> index d39cfa0d333e..52363eee2b20 100644
-> --- a/include/crypto/internal/blake2s.h
-> +++ b/include/crypto/internal/blake2s.h
-> @@ -24,14 +24,11 @@ static inline void blake2s_set_lastblock(struct blake2s_state *state)
->         state->f[0] = -1;
->  }
->
-> -typedef void (*blake2s_compress_t)(struct blake2s_state *state,
-> -                                  const u8 *block, size_t nblocks, u32 inc);
-> -
->  /* Helper functions for BLAKE2s shared by the library and shash APIs */
->
-> -static inline void __blake2s_update(struct blake2s_state *state,
-> -                                   const u8 *in, size_t inlen,
-> -                                   blake2s_compress_t compress)
-> +static __always_inline void
-> +__blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen,
-> +                bool force_generic)
->  {
->         const size_t fill = BLAKE2S_BLOCK_SIZE - state->buflen;
->
-> @@ -39,7 +36,12 @@ static inline void __blake2s_update(struct blake2s_state *state,
->                 return;
->         if (inlen > fill) {
->                 memcpy(state->buf + state->buflen, in, fill);
-> -               (*compress)(state, state->buf, 1, BLAKE2S_BLOCK_SIZE);
-> +               if (force_generic)
-> +                       blake2s_compress_generic(state, state->buf, 1,
-> +                                                BLAKE2S_BLOCK_SIZE);
-> +               else
-> +                       blake2s_compress(state, state->buf, 1,
-> +                                        BLAKE2S_BLOCK_SIZE);
->                 state->buflen = 0;
->                 in += fill;
->                 inlen -= fill;
-> @@ -47,7 +49,12 @@ static inline void __blake2s_update(struct blake2s_state *state,
->         if (inlen > BLAKE2S_BLOCK_SIZE) {
->                 const size_t nblocks = DIV_ROUND_UP(inlen, BLAKE2S_BLOCK_SIZE);
->                 /* Hash one less (full) block than strictly possible */
-> -               (*compress)(state, in, nblocks - 1, BLAKE2S_BLOCK_SIZE);
-> +               if (force_generic)
-> +                       blake2s_compress_generic(state, in, nblocks - 1,
-> +                                                BLAKE2S_BLOCK_SIZE);
-> +               else
-> +                       blake2s_compress(state, in, nblocks - 1,
-> +                                        BLAKE2S_BLOCK_SIZE);
->                 in += BLAKE2S_BLOCK_SIZE * (nblocks - 1);
->                 inlen -= BLAKE2S_BLOCK_SIZE * (nblocks - 1);
->         }
-> @@ -55,13 +62,16 @@ static inline void __blake2s_update(struct blake2s_state *state,
->         state->buflen += inlen;
->  }
->
-> -static inline void __blake2s_final(struct blake2s_state *state, u8 *out,
-> -                                  blake2s_compress_t compress)
-> +static __always_inline void
-> +__blake2s_final(struct blake2s_state *state, u8 *out, bool force_generic)
->  {
->         blake2s_set_lastblock(state);
->         memset(state->buf + state->buflen, 0,
->                BLAKE2S_BLOCK_SIZE - state->buflen); /* Padding */
-> -       (*compress)(state, state->buf, 1, state->buflen);
-> +       if (force_generic)
-> +               blake2s_compress_generic(state, state->buf, 1, state->buflen);
-> +       else
-> +               blake2s_compress(state, state->buf, 1, state->buflen);
->         cpu_to_le32_array(state->h, ARRAY_SIZE(state->h));
->         memcpy(out, state->h, state->outlen);
->  }
-> @@ -99,20 +109,20 @@ static inline int crypto_blake2s_init(struct shash_desc *desc)
->
->  static inline int crypto_blake2s_update(struct shash_desc *desc,
->                                         const u8 *in, unsigned int inlen,
-> -                                       blake2s_compress_t compress)
-> +                                       bool force_generic)
->  {
->         struct blake2s_state *state = shash_desc_ctx(desc);
->
-> -       __blake2s_update(state, in, inlen, compress);
-> +       __blake2s_update(state, in, inlen, force_generic);
+> @@ -463,14 +464,175 @@ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
 >         return 0;
 >  }
 >
->  static inline int crypto_blake2s_final(struct shash_desc *desc, u8 *out,
-> -                                      blake2s_compress_t compress)
-> +                                      bool force_generic)
+> -static int __init init_dtpm(void)
+> +static struct dtpm *dtpm_setup_virtual(const struct dtpm_node *hierarchy,
+> +                                      struct dtpm *parent)
 >  {
->         struct blake2s_state *state = shash_desc_ctx(desc);
->
-> -       __blake2s_final(state, out, compress);
-> +       __blake2s_final(state, out, force_generic);
->         return 0;
->  }
->
-> diff --git a/lib/crypto/blake2s.c b/lib/crypto/blake2s.c
-> index 9364f79937b8..c71c09621c09 100644
-> --- a/lib/crypto/blake2s.c
-> +++ b/lib/crypto/blake2s.c
-> @@ -18,14 +18,14 @@
->
->  void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen)
->  {
-> -       __blake2s_update(state, in, inlen, blake2s_compress);
-> +       __blake2s_update(state, in, inlen, false);
->  }
->  EXPORT_SYMBOL(blake2s_update);
->
->  void blake2s_final(struct blake2s_state *state, u8 *out)
->  {
->         WARN_ON(IS_ENABLED(DEBUG) && !out);
-> -       __blake2s_final(state, out, blake2s_compress);
-> +       __blake2s_final(state, out, false);
->         memzero_explicit(state, sizeof(*state));
->  }
->  EXPORT_SYMBOL(blake2s_final);
-> --
-> 2.34.1
->
+> +       struct dtpm *dtpm;
+> +       int ret;
+> +
+> +       dtpm = kzalloc(sizeof(*dtpm), GFP_KERNEL);
+> +       if (!dtpm)
+> +               return ERR_PTR(-ENOMEM);
+> +       dtpm_init(dtpm, NULL);
+> +
+> +       ret = dtpm_register(hierarchy->name, dtpm, parent);
+> +       if (ret) {
+> +               pr_err("Failed to register dtpm node '%s': %d\n",
+> +                      hierarchy->name, ret);
+> +               kfree(dtpm);
+> +               return ERR_PTR(ret);
+> +       }
+> +
+> +       return dtpm;
+> +}
+> +
+> +static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
+> +                                 struct dtpm *parent)
+> +{
+> +       struct device_node *np;
+> +       int i, ret;
+> +
+> +       np = of_find_node_by_path(hierarchy->name);
+> +       if (!np) {
+> +               pr_err("Failed to find '%s'\n", hierarchy->name);
+> +               return ERR_PTR(-ENXIO);
+> +       }
+> +
+> +       for (i = 0; i < ARRAY_SIZE(dtpm_subsys); i++) {
+> +
+> +               if (!dtpm_subsys[i]->setup)
+> +                       continue;
+> +
+> +               ret = dtpm_subsys[i]->setup(parent, np);
+> +               if (ret) {
+> +                       pr_err("Failed to setup '%s': %d\n", dtpm_subsys[i]->name, ret);
+> +                       of_node_put(np);
+> +                       return ERR_PTR(ret);
+> +               }
+> +       }
+> +
+> +       of_node_put(np);
+> +
+> +       /*
+> +        * By returning a NULL pointer, we let know the caller there
+> +        * is no child for us as we are a leaf of the tree
+> +        */
+> +       return NULL;
+> +}
+> +
+> +typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
+> +
+> +dtpm_node_callback_t dtpm_node_callback[] = {
+> +       [DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
+> +       [DTPM_NODE_DT] = dtpm_setup_dt,
+> +};
+> +
+> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
+> +                              const struct dtpm_node *it, struct dtpm *parent)
+> +{
+> +       struct dtpm *dtpm;
+> +       int i, ret;
+> +
+> +       for (i = 0; hierarchy[i].name; i++) {
+> +
+> +               if (hierarchy[i].parent != it)
+> +                       continue;
+> +
+> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
+> +               if (!dtpm || IS_ERR(dtpm))
 
+This can be tested with the "IS_ERR_OR_NULL()" macro.
 
--- 
-Thanks,
-~Nick Desaulniers
+> +                       continue;
+
+We have discussed the error path previously. Just ignoring errors here
+and continuing with the initialization, isn't normally how we design
+good kernel code.
+
+However, you have also explained that the error path is special and
+somewhat non-trivial to manage in this case. I get that now and thanks
+for clarifying.
+
+Nevertheless, I think it deserves to be explained a bit with a comment
+in the code of what goes on here. Otherwise another developer that
+looks at this code in the future, may think it looks suspicious too.
+
+> +
+> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+
+[...]
+
+Other than the above, this looks good to me!
+
+Kind regards
+Uffe

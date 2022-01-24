@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64306498CC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B224992E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346449AbiAXTYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:24:23 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44326 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348251AbiAXTPI (ORCPT
+        id S1382591AbiAXUZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:25:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376711AbiAXUDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:15:08 -0500
+        Mon, 24 Jan 2022 15:03:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7002AC02B87F;
+        Mon, 24 Jan 2022 11:30:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6A96612F3;
-        Mon, 24 Jan 2022 19:15:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFE97C340E5;
-        Mon, 24 Jan 2022 19:15:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 278BBB81235;
+        Mon, 24 Jan 2022 19:30:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B927C340E5;
+        Mon, 24 Jan 2022 19:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051705;
-        bh=J8UPVYYR4aRg63SZEZ+MYskLvViqUeX5n6JxDgjLrkA=;
+        s=korg; t=1643052604;
+        bh=nc8gMN6FupTObSdJAM/kKjoEdDwv+BPG9AeILVfjHF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RQjGZbBR0Mti2E5nyjs9mMHjhMiwgIjN+spK+eAOF98HpFb7poo/jROQ+Pn+aCCk5
-         PAR3oBs6xytO8eHR+4VB8Oq6qrWsTDkybABAFtRsSyMNjCH5owNxsSnZnf3YO5RIYG
-         d7z//yjAXdwxk4WNnKwQTpqJBdjUpsUwhkwpO2Xs=
+        b=SVJYND4NJCtTOSJlHKveAw+MAU2g2oAkz/wtwnCzxxIn04LORxdUyaw4JDPIwnoz9
+         ENcq51ObiR9B9I/Oy1uCWWyb6XIXl+PrQ8roXV/IYZrpBGeKINgrVWeh6HPENAgYUs
+         Ja7kTEH0CUAfGZv9RjjVcG33ii1oUp59aTmRIhBw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Aya Levin <ayal@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 060/239] media: si470x-i2c: fix possible memory leak in si470x_i2c_probe()
+Subject: [PATCH 5.4 114/320] Revert "net/mlx5e: Block offload of outer header csum for UDP tunnels"
 Date:   Mon, 24 Jan 2022 19:41:38 +0100
-Message-Id: <20220124183945.049951657@linuxfoundation.org>
+Message-Id: <20220124183957.584887635@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,60 +50,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Aya Levin <ayal@nvidia.com>
 
-[ Upstream commit ef054e345ed8c79ce1121a3599b5a2dfd78e57a0 ]
+[ Upstream commit 64050cdad0983ad8060e33c3f4b5aee2366bcebd ]
 
-n the 'radio->hdl.error' error handling, ctrl handler allocated by
-v4l2_ctrl_new_std() does not released, and caused memory leak as
-follows:
+This reverts commit 6d6727dddc7f93fcc155cb8d0c49c29ae0e71122.
 
-unreferenced object 0xffff888033d54200 (size 256):
-  comm "i2c-si470x-19", pid 909, jiffies 4294914203 (age 8.072s)
-  hex dump (first 32 bytes):
-    e8 69 11 03 80 88 ff ff 00 46 d5 33 80 88 ff ff  .i.......F.3....
-    10 42 d5 33 80 88 ff ff 10 42 d5 33 80 88 ff ff  .B.3.....B.3....
-  backtrace:
-    [<00000000086bd4ed>] __kmalloc_node+0x1eb/0x360
-    [<00000000bdb68871>] kvmalloc_node+0x66/0x120
-    [<00000000fac74e4c>] v4l2_ctrl_new+0x7b9/0x1c60 [videodev]
-    [<00000000693bf940>] v4l2_ctrl_new_std+0x19b/0x270 [videodev]
-    [<00000000c0cb91bc>] si470x_i2c_probe+0x2d3/0x9a0 [radio_si470x_i2c]
-    [<0000000056a6f01f>] i2c_device_probe+0x4d8/0xbe0
+Although the NIC doesn't support offload of outer header CSUM, using
+gso_partial_features allows offloading the tunnel's segmentation. The
+driver relies on the stack CSUM calculation of the outer header. For
+this, NETIF_F_GSO_UDP_TUNNEL_CSUM must be a member of the device's
+features.
 
-Fix the error handling path to avoid memory leak.
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: 8c081b6f9a9b ("media: radio: Critical v4l2 registration...")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 6d6727dddc7f ("net/mlx5e: Block offload of outer header csum for UDP tunnels")
+Signed-off-by: Aya Levin <ayal@nvidia.com>
+Reviewed-by: Gal Pressman <gal@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/radio/si470x/radio-si470x-i2c.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
-index cc68bdac0c367..7c49eaee67f36 100644
---- a/drivers/media/radio/si470x/radio-si470x-i2c.c
-+++ b/drivers/media/radio/si470x/radio-si470x-i2c.c
-@@ -381,7 +381,7 @@ static int si470x_i2c_probe(struct i2c_client *client,
- 	if (radio->hdl.error) {
- 		retval = radio->hdl.error;
- 		dev_err(&client->dev, "couldn't register control\n");
--		goto err_dev;
-+		goto err_all;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index dea884c94568c..2465165cbea73 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -5053,9 +5053,13 @@ static void mlx5e_build_nic_netdev(struct net_device *netdev)
  	}
  
- 	/* video device initialization */
-@@ -465,7 +465,6 @@ err_rds:
- 	kfree(radio->buffer);
- err_ctrl:
- 	v4l2_ctrl_handler_free(&radio->hdl);
--err_dev:
- 	v4l2_device_unregister(&radio->v4l2_dev);
- err_radio:
- 	kfree(radio);
+ 	if (mlx5_vxlan_allowed(mdev->vxlan) || mlx5_geneve_tx_allowed(mdev)) {
+-		netdev->hw_features     |= NETIF_F_GSO_UDP_TUNNEL;
+-		netdev->hw_enc_features |= NETIF_F_GSO_UDP_TUNNEL;
+-		netdev->vlan_features |= NETIF_F_GSO_UDP_TUNNEL;
++		netdev->hw_features     |= NETIF_F_GSO_UDP_TUNNEL |
++					   NETIF_F_GSO_UDP_TUNNEL_CSUM;
++		netdev->hw_enc_features |= NETIF_F_GSO_UDP_TUNNEL |
++					   NETIF_F_GSO_UDP_TUNNEL_CSUM;
++		netdev->gso_partial_features = NETIF_F_GSO_UDP_TUNNEL_CSUM;
++		netdev->vlan_features |= NETIF_F_GSO_UDP_TUNNEL |
++					 NETIF_F_GSO_UDP_TUNNEL_CSUM;
+ 	}
+ 
+ 	if (mlx5e_tunnel_proto_supported(mdev, IPPROTO_GRE)) {
 -- 
 2.34.1
 

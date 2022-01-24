@@ -2,133 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8807498587
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3763B49858C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244022AbiAXQ6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:58:02 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:17795 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243796AbiAXQ6B (ORCPT
+        id S243849AbiAXQ6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:58:38 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:10619 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241308AbiAXQ6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:58:01 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1643043479; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=BmbwObkwttro0SkpL4p0P2XaUDTExkEYfbCchug/+GI=; b=vZFNpNT6t++UjJxzzIePhWchIejBneLoz90n1QPY/EWYS8mDZdoAP2e84prgmuMHPe4uOYN4
- Jk4a4tQ6BUIFsKV+9dPDMQlm7awNLgcyqHRyJL5/AzE3CwyaIpEB/Q4Zf3yEsz9HZGbCM6SD
- aUzK0Ny7PUKK99DlnFEdSpGMW6E=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 61eeda94020b4d26a6184209 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 24 Jan 2022 16:57:56
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E4E3DC4360D; Mon, 24 Jan 2022 16:57:55 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from hu-tdas-hyd.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 57B9DC4338F;
-        Mon, 24 Jan 2022 16:57:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 57B9DC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH v1] arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio clock controllers
-Date:   Mon, 24 Jan 2022 22:27:45 +0530
-Message-Id: <20220124165745.16277-1-tdas@codeaurora.org>
-X-Mailer: git-send-email 2.17.1
+        Mon, 24 Jan 2022 11:58:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643043514; x=1674579514;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PB2abBFo+LtFf89gOGyi1S52is2pdXAToSOC4wA22ac=;
+  b=Ri2xU7NcMCkUPhM3XwPHlBFIKxoCt62lrFO+q4btT4rzWD2b4QhUqKES
+   sTrn/MjMMcpCsvJ58CK6NM0fPlw7Cnr1fg0sHK1l4TohapmW+JTacajOM
+   +8AjFVjcozSUGJI4GnBZ+gMlebnemH1Zr5hNMlUK92JXrD89sAGNCwXj/
+   s=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jan 2022 08:58:34 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:58:34 -0800
+Received: from [10.216.45.46] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 24 Jan
+ 2022 08:58:32 -0800
+Message-ID: <05cdeb95-1e16-c1c1-30df-135a4d4ebfcc@quicinc.com>
+Date:   Mon, 24 Jan 2022 22:28:28 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: synchronize_rcu_expedited gets stuck in hotplug path
+Content-Language: en-US
+To:     <paulmck@kernel.org>
+CC:     Tejun Heo <tj@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, <jiangshanlai@gmail.com>
+References: <7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com>
+ <20220118200646.GJ947480@paulmck-ThinkPad-P17-Gen-1>
+ <Yece9mH3nzwGxar6@slm.duckdns.org>
+ <20220118214155.GK947480@paulmck-ThinkPad-P17-Gen-1>
+ <4f2ada96-234f-31d8-664a-c84f5b461385@quicinc.com>
+ <20220124164452.GG4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20220124164452.GG4285@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the low pass audio clock controller device nodes.
 
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
----
-Dependent onLPASS clock controller change: https://lkml.org/lkml/2022/1/24/772
+On 1/24/2022 10:14 PM, Paul E. McKenney wrote:
+> On Mon, Jan 24, 2022 at 07:32:01PM +0530, Mukesh Ojha wrote:
+>> On 1/19/2022 3:11 AM, Paul E. McKenney wrote:
+>>> On Tue, Jan 18, 2022 at 10:11:34AM -1000, Tejun Heo wrote:
+>>>> Hello,
+>>>>
+>>>> On Tue, Jan 18, 2022 at 12:06:46PM -0800, Paul E. McKenney wrote:
+>>>>> Interesting.  Adding Tejun and Lai on CC for their perspective.
+>>>>>
+>>>>> As you say, the incoming CPU invoked synchronize_rcu_expedited() which
+>>>>> in turn invoked queue_work().  By default, workqueues will of course
+>>>>> queue that work on the current CPU.  But in this case, the CPU's bit
+>>>>> is not yet set in the cpu_active_mask.  Thus, a workqueue scheduled on
+>>>>> the incoming CPU won't be invoked until CPUHP_AP_ACTIVE, which won't
+>>>>> be reached until after the grace period ends, which cannot happen until
+>>>>> the workqueue handler is invoked.
+>>>>>
+>>>>> I could imagine doing something as shown in the (untested) patch below,
+>>>>> but first does this help?
+>>>>>
+>>>>> If it does help, would this sort of check be appropriate here or
+>>>>> should it instead go into workqueues?
+>>>> Maybe it can be solved by rearranging the hotplug sequence but it's fragile
+>>>> to schedule per-cpu work items from hotplug paths. Maybe the whole issue can
+>>>> be side-stepped by making synchronize_rcu_expedited() use unbound workqueue
+>>>> instead? Does it require to be per-cpu?
+>>> Good point!
+>>>
+>>> And now that you mention it, RCU expedited grace periods already avoid
+>>> using workqueues during early boot.  The (again untested) patch below
+>>> extends that approach to incoming CPUs.
+>>>
+>>> Thoughts?
+>> Hi Paul,
+>>
+>> We are not seeing the issue after this patch.
+>> Can we merge this patch ?
+> It is currently in -rcu and should also be in -next shortly.  Left to
+> myself, and assuming further testing and reviews all go well, I would
+> submit it during the upcoming v5.18 merge window.
+>
+> Does that work for you?  Or do you need it in mainline sooner?
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 43 ++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+Before reporting this issue, we saw only one instance of it.
+Also got this fix tested with same set of test cases, did not observe 
+any issue as of yet.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 937c2e0e93eb..0aa834ce6b61 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -8,6 +8,8 @@
- #include <dt-bindings/clock/qcom,dispcc-sc7280.h>
- #include <dt-bindings/clock/qcom,gcc-sc7280.h>
- #include <dt-bindings/clock/qcom,gpucc-sc7280.h>
-+#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
-+#include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/clock/qcom,videocc-sc7280.h>
- #include <dt-bindings/interconnect/qcom,sc7280.h>
-@@ -1744,6 +1746,47 @@
- 			#clock-cells = <1>;
- 		};
+I would be happy to get a mail once it clear all the testing and get merges
+to -next. I would cherry-pick it in android branch-5.10.
 
-+		lpass_audiocc: clock-controller@3300000 {
-+			compatible = "qcom,sc7280-lpassaudiocc";
-+			reg = <0  0x03300000 0 0x30000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+			       <&lpass_aon LPASS_AON_CC_MAIN_RCG_CLK_SRC>;
-+			clock-names = "bi_tcxo", "lpass_aon_cc_main_rcg_clk_src";
-+			power-domains = <&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		lpass_aon: clock-controller@3380000 {
-+			compatible = "qcom,sc7280-lpassaoncc";
-+			reg = <0  0x03380000 0 0x30000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+			       <&rpmhcc RPMH_CXO_CLK_A>,
-+			       <&lpasscc LPASS_CORE_CC_CORE_CLK>;
-+			clock-names = "bi_tcxo", "bi_tcxo_ao", "iface";
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		lpasscore: clock-controller@3900000 {
-+			compatible = "qcom,sc7280-lpasscorecc";
-+			reg = <0  0x03900000 0 0x50000>;
-+			clocks =  <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "bi_tcxo";
-+			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>;
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		lpass_hm: clock-controller@3c00000 {
-+			compatible = "qcom,sc7280-lpasshm";
-+			reg = <0 0x3c00000 0 0x28>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "bi_tcxo";
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		lpass_ag_noc: interconnect@3c40000 {
- 			reg = <0 0x03c40000 0 0xf080>;
- 			compatible = "qcom,sc7280-lpass-ag-noc";
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
+-Mukesh
 
+>
+> 							Thanx, Paul
+>
+>> -Mukesh
+>>
+>>> 							Thanx, Paul
+>>>
+>>> ------------------------------------------------------------------------
+>>>
+>>> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+>>> index 60197ea24ceb9..1a45667402260 100644
+>>> --- a/kernel/rcu/tree_exp.h
+>>> +++ b/kernel/rcu/tree_exp.h
+>>> @@ -816,7 +816,7 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
+>>>     */
+>>>    void synchronize_rcu_expedited(void)
+>>>    {
+>>> -	bool boottime = (rcu_scheduler_active == RCU_SCHEDULER_INIT);
+>>> +	bool no_wq;
+>>>    	struct rcu_exp_work rew;
+>>>    	struct rcu_node *rnp;
+>>>    	unsigned long s;
+>>> @@ -841,9 +841,15 @@ void synchronize_rcu_expedited(void)
+>>>    	if (exp_funnel_lock(s))
+>>>    		return;  /* Someone else did our work for us. */
+>>> +	/* Don't use workqueue during boot or from an incoming CPU. */
+>>> +	preempt_disable();
+>>> +	no_wq = rcu_scheduler_active == RCU_SCHEDULER_INIT ||
+>>> +		!cpumask_test_cpu(smp_processor_id(), cpu_active_mask);
+>>> +	preempt_enable();
+>>> +
+>>>    	/* Ensure that load happens before action based on it. */
+>>> -	if (unlikely(boottime)) {
+>>> -		/* Direct call during scheduler init and early_initcalls(). */
+>>> +	if (unlikely(no_wq)) {
+>>> +		/* Direct call for scheduler init, early_initcall()s, and incoming CPUs. */
+>>>    		rcu_exp_sel_wait_wake(s);
+>>>    	} else {
+>>>    		/* Marshall arguments & schedule the expedited grace period. */
+>>> @@ -861,7 +867,7 @@ void synchronize_rcu_expedited(void)
+>>>    	/* Let the next expedited grace period start. */
+>>>    	mutex_unlock(&rcu_state.exp_mutex);
+>>> -	if (likely(!boottime))
+>>> +	if (likely(!no_wq))
+>>>    		destroy_work_on_stack(&rew.rew_work);
+>>>    }
+>>>    EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);

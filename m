@@ -2,120 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E0449850A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E274984FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243821AbiAXQmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241174AbiAXQmD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:42:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19838C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:42:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 939766104F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:42:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D004EC340E5;
-        Mon, 24 Jan 2022 16:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643042522;
-        bh=yToCtP1DwHyWLCVgbj3vG9Ean9EZBDLjsYvmycPPUTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LszlyFoM5z3ooARQUNpD6cf7lKe/84UjAPNJGnMY+3DnFKzQDKXCn2JHKC5wlp5vM
-         HonFcrLEXXgFKNsu6m6zJjC+Fvvp6cEifmbRLmQwZQlM1AnzkXWGllbnKab8bbzfcY
-         4/Kfwt69NVI1Fx5u8LSyEtIBXMN4Wljdru5EkNzxhQjJMP5m9DQtE5UshJhM01Hb9+
-         pP3Euc9ceq0KVgthQIGajjbaQNLIHzxxy22S8b2/w1E4YcTl55dZVGLTUOz22eO1G5
-         OW1IZILKfrQMgX8cr1AMw57A65MfNciTw5xky234+pCbff98AsjCv8YWszAanx986N
-         2C+T7pK6P+QWQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8F56440C99; Mon, 24 Jan 2022 13:39:59 -0300 (-03)
-Date:   Mon, 24 Jan 2022 13:39:59 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>
-Subject: Re: [PATCH v13 11/16] perf record: Introduce data transferred and
- compressed stats
-Message-ID: <Ye7WX9L7rbn5HicP@kernel.org>
-References: <cover.1642440724.git.alexey.v.bayduraev@linux.intel.com>
- <b5d598034c507dfb7544d2125500280b7d434764.1642440724.git.alexey.v.bayduraev@linux.intel.com>
- <Ye7FkknVAUJjM+oV@kernel.org>
+        id S243772AbiAXQkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:40:15 -0500
+Received: from mga03.intel.com ([134.134.136.65]:13016 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236102AbiAXQkO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:40:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643042414; x=1674578414;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MrgQitvtOWVHTnHUojQtooTuvQQ5xWumXXPm8dAS4EE=;
+  b=U1PlyMPtvSocnwvufDqVPYmKjSPaSkEycWhNT55j73zul6pqY9xhHq/O
+   tpbrjwQspJ3Nv31iV7+/eNcZ6Yan9AQZbwwbRHp8GqC7oBoTpx+vxjh4i
+   21INqSi7U2gbs2AB3zbumYj9JippzwT6WpYyWRUWzpvhJlO+sICtcvJPm
+   7Udzz0YuQ9n0YXtLAG8P3PSpoRNr93lGEi4pXyoU8GyB1DAOD/HZI3+0B
+   tNQbbWql6rcdBC7jKtuvlcFli61Ho5/fi3b0zz1Bl8p0jQYS3pz90WQho
+   rrzyT19r8tIUjwD4r4goBU+XLAno/mLcaSijzkvD904uUcdtGgYvvkx7Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="246033249"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="246033249"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:40:13 -0800
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="534306104"
+Received: from zengguan-mobl.ccr.corp.intel.com (HELO [10.254.213.37]) ([10.254.213.37])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 08:40:09 -0800
+Message-ID: <2207797e-6441-8abc-9ffc-d231fa4ca3fc@intel.com>
+Date:   Tue, 25 Jan 2022 00:40:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ye7FkknVAUJjM+oV@kernel.org>
-X-Url:  http://acmel.wordpress.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v5 8/8] KVM: VMX: Resize PID-ponter table on demand for
+ IPI virtualization
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+References: <20211231142849.611-1-guang.zeng@intel.com>
+ <20211231142849.611-9-guang.zeng@intel.com> <YeCjHbdAikyIFQc9@google.com>
+ <43200b86-aa40-f7a3-d571-dc5fc3ebd421@intel.com>
+ <YeGiVCn0wNH9eqxX@google.com>
+ <67262b95-d577-0620-79bf-20fc37906869@intel.com>
+ <Yeb1vkEclYzD27R/@google.com>
+ <aba84be5-562a-369e-913d-1b834c141cc6@intel.com>
+ <Yei0d0KVnNphPrP3@google.com>
+From:   Zeng Guang <guang.zeng@intel.com>
+In-Reply-To: <Yei0d0KVnNphPrP3@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 24, 2022 at 12:28:18PM -0300, Arnaldo Carvalho de Melo escreveu:
-> builtin-record.c:2141:4: note: in expansion of macro 'pr_debug'
->  2141 |    pr_debug("written=%ld\n", thread_data[t].bytes_written);
->       |    ^~~~~~~~
-> builtin-record.c:2141:24: note: format string is defined here
->  2141 |    pr_debug("written=%ld\n", thread_data[t].bytes_written);
->       |                      ~~^
->       |                        |
->       |                        long int
->       |                      %lld
-> 
-> Fixed with the following patch, no need to resend, I'll fix several
-> other similar issues and put the result in a tmp.perf/thread branch
-> while I review/test it.
+On 1/20/2022 9:01 AM, Sean Christopherson wrote:
+> On Wed, Jan 19, 2022, Zeng Guang wrote:
+>> It's self-adaptive , standalone function module in kvm, no any extra
+>> limitation introduced
+> I disagree.  Its failure mode on OOM is to degrade guest performance, _that_ is
+> a limitation.  OOM is absolutely something that should be immediately communicated
+> to userspace in a way that userspace can take action.
+If memory allocation fails, PID-pointer table stop updating and keep using
+the old one.  All IPIs from other vcpus will go through APIC-Write VM-exits
+and won't get performance improvement from IPI virtualization to this new
+created vcpu. Right, it's a limitation though it doesn't impact the 
+effectiveness
+of IPI virtualization among existing vcpus.
+>> and scalable even future extension on KVM_MAX_VCPU_IDS or new apic id
+>> implementation released.
+>>
+>> How do you think ? :)
+> Heh, I think I've made it quite clear that I think it's unnecesary complexity in
+> KVM.  It's not a hill I'll die on, e.g. if Paolo and others feel it's the right
+> approach then so be it, but I really, really dislike the idea of dynamically
+> changing the table, KVM has a long and sordid history of botching those types
+> of flows/features.
 
-Did it, with the fix it builds in all containers, now to test it and
-review patch by patch one more time.
+To follow your proposal, we think about the feasible implementation as 
+follows:
+1. Define new parameter apic_id_limit in struct kvm_arch and initialized
+as KVM_MAX_VCPU_IDS by default.
 
-[acme@quaco perf]$ git push acme.korg perf/core:tmp.perf/threaded
-Enumerating objects: 134, done.
-Counting objects: 100% (134/134), done.
-Delta compression using up to 8 threads
-Compressing objects: 100% (55/55), done.
-Writing objects: 100% (108/108), 23.64 KiB | 4.73 MiB/s, done.
-Total 108 (delta 105), reused 55 (delta 53), pack-reused 0
-remote: Resolving deltas: 100% (105/105), completed with 25 local objects.
-remote: Recorded in the transparency log
-remote:  manifest: updated /pub/scm/linux/kernel/git/acme/linux.git
-remote: Done in 0.06s
-remote: Notifying frontends: dfw ams sin
-To gitolite.kernel.org:/pub/scm/linux/kernel/git/acme/linux.git
- * [new branch]                        perf/core -> tmp.perf/threaded
-[acme@quaco perf]$
+2. New vm ioclt KVM_SET_APICID_LIMIT to allow user space set the possible
+max apic id required in the vm session before vcpu creation. Currently
+QEMU calculates the limit to CPU APIC ID up to max cpus assigned for
+hotpluggable cpu. It simply uses package/die/core/smt model to get bit
+width of id field on each level (not totally comply with CPUID 1f/0b) and
+make apic id for specific vcpu index. We can notify kvm this apic id limit
+to ensure memory enough for PID-table.
 
-- Arnaldo
+3. Need check whether id is less than min(apic_id_limit, KVM_MAX_VCPU_IDS)
+in vcpu creation. Otherwise return error.
 
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index 0f8488d12f446b84..d19d0639c3f1abc0 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -2114,10 +2114,10 @@ static int record__stop_threads(struct record *rec)
->  		pr_debug("threads[%d]: samples=%lld, wakes=%ld, ", thread_data[t].tid,
->  			 thread_data[t].samples, thread_data[t].waking);
->  		if (thread_data[t].bytes_transferred && thread_data[t].bytes_compressed)
-> -			pr_debug("trasferred=%ld, compressed=%ld\n",
-> +			pr_debug("transferred=%" PRIu64 ", compressed=%" PRIu64 "\n",
->  				 thread_data[t].bytes_transferred, thread_data[t].bytes_compressed);
->  		else
-> -			pr_debug("written=%ld\n", thread_data[t].bytes_written);
-> +			pr_debug("written=%" PRIu64 "\n", thread_data[t].bytes_written);
->  	}
->  
->  	return 0;
+4. Allocate memory covering vcpus with the id up to apic_id_limit for PID
+table during the first vcpu creation. Proper lock still needed to 
+protect PID
+table setup from race condition. If OOM happens, current vcpu creation
+fails either and return error back to user space.
 
--- 
+Plz let us know whether we can go for this solution further. Thanks.
 
-- Arnaldo

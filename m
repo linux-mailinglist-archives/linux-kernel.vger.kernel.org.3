@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 674E549A51E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 789F049A6D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2372573AbiAYAL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S3421633AbiAYC1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1849518AbiAXX0B (ORCPT
+        with ESMTP id S1377302AbiAXUFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:26:01 -0500
+        Mon, 24 Jan 2022 15:05:16 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73877C073238;
-        Mon, 24 Jan 2022 13:29:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5876DC06136A;
+        Mon, 24 Jan 2022 11:31:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8EED60C60;
-        Mon, 24 Jan 2022 21:29:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A98F8C340E4;
-        Mon, 24 Jan 2022 21:29:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8255614BE;
+        Mon, 24 Jan 2022 19:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7441C340E5;
+        Mon, 24 Jan 2022 19:31:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059798;
-        bh=tg8iEjvzYlmjjMbrWjc40apMLT5XKRdF0J/xCoow65U=;
+        s=korg; t=1643052688;
+        bh=yI7KrNG5Of/LDobzB0QUI4SIKQIc7jK6J4lDQYu0n28=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EH3+w4BDIdn/dmvGyIhfVgmGxqBobhvADfi7GxxtEB7wNYKAUCeCNWXvECdzXREN7
-         Yjzpm4u4GIKICRbNEpN29sdb1hViKGDvzI9uh4qX43/PObAwYk9LAgabi0D4oyxRpX
-         icUyBUDoJViYhMtZQ25ElpYtqn/2Wxs9na/xKirg=
+        b=gDbAAkjpKQ88PXM1mqh02B/Jidh6xHq9m0cczWRJkhNpSqQ7VQCv80buhE/msYS78
+         +rumpcLU9cBAbkVQv+1Xqv+YUeLmfel6xkNH2pIaKF4s2wEoEJdbuxCc6AD1a5kj4J
+         Vd9DFQR14WANqlQEQLU1W3gnQFNknp4zzFVRx0Ss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0738/1039] powerpc/watchdog: Fix missed watchdog reset due to memory ordering race
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 143/320] iommu/iova: Fix race between FQ timeout and teardown
 Date:   Mon, 24 Jan 2022 19:42:07 +0100
-Message-Id: <20220124184150.132273919@linuxfoundation.org>
+Message-Id: <20220124183958.504464068@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,108 +50,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Piggin <npiggin@gmail.com>
+From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 
-[ Upstream commit 5dad4ba68a2483fc80d70b9dc90bbe16e1f27263 ]
+[ Upstream commit d7061627d701c90e1cac1e1e60c45292f64f3470 ]
 
-It is possible for all CPUs to miss the pending cpumask becoming clear,
-and then nobody resetting it, which will cause the lockup detector to
-stop working. It will eventually expire, but watchdog_smp_panic will
-avoid doing anything if the pending mask is clear and it will never be
-reset.
+It turns out to be possible for hotplugging out a device to reach the
+stage of tearing down the device's group and default domain before the
+domain's flush queue has drained naturally. At this point, it is then
+possible for the timeout to expire just before the del_timer() call
+in free_iova_flush_queue(), such that we then proceed to free the FQ
+resources while fq_flush_timeout() is still accessing them on another
+CPU. Crashes due to this have been observed in the wild while removing
+NVMe devices.
 
-Order the cpumask clear vs the subsequent test to close this race.
+Close the race window by using del_timer_sync() to safely wait for any
+active timeout handler to finish before we start to free things. We
+already avoid any locking in free_iova_flush_queue() since the FQ is
+supposed to be inactive anyway, so the potential deadlock scenario does
+not apply.
 
-Add an extra check for an empty pending mask when the watchdog fires and
-finds its bit still clear, to try to catch any other possible races or
-bugs here and keep the watchdog working. The extra test in
-arch_touch_nmi_watchdog is required to prevent the new warning from
-firing off.
-
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-Reviewed-by: Laurent Dufour <ldufour@linux.ibm.com>
-Debugged-by: Laurent Dufour <ldufour@linux.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211110025056.2084347-2-npiggin@gmail.com
+Fixes: 9a005a800ae8 ("iommu/iova: Add flush timer")
+Reviewed-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+[ rm: rewrite commit message ]
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Link: https://lore.kernel.org/r/0a365e5b07f14b7344677ad6a9a734966a8422ce.1639753638.git.robin.murphy@arm.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/watchdog.c | 41 +++++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+ drivers/iommu/iova.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/kernel/watchdog.c b/arch/powerpc/kernel/watchdog.c
-index 3fa6d240bade2..ad94a2c6b7337 100644
---- a/arch/powerpc/kernel/watchdog.c
-+++ b/arch/powerpc/kernel/watchdog.c
-@@ -135,6 +135,10 @@ static void set_cpumask_stuck(const struct cpumask *cpumask, u64 tb)
- {
- 	cpumask_or(&wd_smp_cpus_stuck, &wd_smp_cpus_stuck, cpumask);
- 	cpumask_andnot(&wd_smp_cpus_pending, &wd_smp_cpus_pending, cpumask);
-+	/*
-+	 * See wd_smp_clear_cpu_pending()
-+	 */
-+	smp_mb();
- 	if (cpumask_empty(&wd_smp_cpus_pending)) {
- 		wd_smp_last_reset_tb = tb;
- 		cpumask_andnot(&wd_smp_cpus_pending,
-@@ -221,13 +225,44 @@ static void wd_smp_clear_cpu_pending(int cpu, u64 tb)
- 
- 			cpumask_clear_cpu(cpu, &wd_smp_cpus_stuck);
- 			wd_smp_unlock(&flags);
-+		} else {
-+			/*
-+			 * The last CPU to clear pending should have reset the
-+			 * watchdog so we generally should not find it empty
-+			 * here if our CPU was clear. However it could happen
-+			 * due to a rare race with another CPU taking the
-+			 * last CPU out of the mask concurrently.
-+			 *
-+			 * We can't add a warning for it. But just in case
-+			 * there is a problem with the watchdog that is causing
-+			 * the mask to not be reset, try to kick it along here.
-+			 */
-+			if (unlikely(cpumask_empty(&wd_smp_cpus_pending)))
-+				goto none_pending;
- 		}
+diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+index 612cbf668adf8..906582a21124d 100644
+--- a/drivers/iommu/iova.c
++++ b/drivers/iommu/iova.c
+@@ -64,8 +64,7 @@ static void free_iova_flush_queue(struct iova_domain *iovad)
+ 	if (!has_iova_flush_queue(iovad))
  		return;
- 	}
-+
- 	cpumask_clear_cpu(cpu, &wd_smp_cpus_pending);
-+
-+	/*
-+	 * Order the store to clear pending with the load(s) to check all
-+	 * words in the pending mask to check they are all empty. This orders
-+	 * with the same barrier on another CPU. This prevents two CPUs
-+	 * clearing the last 2 pending bits, but neither seeing the other's
-+	 * store when checking if the mask is empty, and missing an empty
-+	 * mask, which ends with a false positive.
-+	 */
-+	smp_mb();
- 	if (cpumask_empty(&wd_smp_cpus_pending)) {
- 		unsigned long flags;
  
-+none_pending:
-+		/*
-+		 * Double check under lock because more than one CPU could see
-+		 * a clear mask with the lockless check after clearing their
-+		 * pending bits.
-+		 */
- 		wd_smp_lock(&flags);
- 		if (cpumask_empty(&wd_smp_cpus_pending)) {
- 			wd_smp_last_reset_tb = tb;
-@@ -318,8 +353,12 @@ void arch_touch_nmi_watchdog(void)
- {
- 	unsigned long ticks = tb_ticks_per_usec * wd_timer_period_ms * 1000;
- 	int cpu = smp_processor_id();
--	u64 tb = get_tb();
-+	u64 tb;
+-	if (timer_pending(&iovad->fq_timer))
+-		del_timer(&iovad->fq_timer);
++	del_timer_sync(&iovad->fq_timer);
  
-+	if (!cpumask_test_cpu(cpu, &watchdog_cpumask))
-+		return;
-+
-+	tb = get_tb();
- 	if (tb - per_cpu(wd_timer_tb, cpu) >= ticks) {
- 		per_cpu(wd_timer_tb, cpu) = tb;
- 		wd_smp_clear_cpu_pending(cpu, tb);
+ 	fq_destroy_all_entries(iovad);
+ 
 -- 
 2.34.1
 

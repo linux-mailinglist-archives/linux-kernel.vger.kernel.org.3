@@ -2,217 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA4E498632
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95D1498639
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244380AbiAXROf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:14:35 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43910 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244430AbiAXROF (ORCPT
+        id S241456AbiAXRQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:16:33 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:59176 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229897AbiAXRQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:14:05 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20OFjDMg017614;
-        Mon, 24 Jan 2022 17:14:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=dXmZKoE+UR/LnkjHSxxzyrRlw3bhfBb5oC00h5Il9Z4=;
- b=YrEpnPnt44Zvvnexw/Ywp2SdmPxAY9xjygz3MFtTv5ql6mr13uy0v+jX/DhqT4+WpwEX
- +ydMkXrqdsl5JkZFbGURzpn0ZPWqknvDmECFLQ4jEq+0Vp5/avjW7VK/EXRENrgbeguW
- yJ64WkxX+tac/NTi2qC0GGivUCzpYQ+m+v3hO+CzmdaJep80SV8SWc7xWwRfLxKaDd65
- a1lfvY3m69E55imRbJUhPio/EpcD05RsT1t/WT1l5RcqAxD92IH20a3Tu1FXyEXBS9ot
- JAKhH6O60KXfvEuX6DBkKFOKTo0gzZ1Nhu8Of8dFS/Lfx8RnVAi6mswO2HQeZdtHfRtz sg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dsxnxk1tv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jan 2022 17:14:04 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20OGw9Zx000550;
-        Mon, 24 Jan 2022 17:14:04 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dsxnxk1sy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jan 2022 17:14:04 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20OHBMEI018900;
-        Mon, 24 Jan 2022 17:14:02 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dr9j8xr9e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jan 2022 17:14:02 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20OHDxfK46989632
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jan 2022 17:13:59 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 395F011C050;
-        Mon, 24 Jan 2022 17:13:59 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C46711C052;
-        Mon, 24 Jan 2022 17:13:58 +0000 (GMT)
-Received: from [9.171.89.189] (unknown [9.171.89.189])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Jan 2022 17:13:58 +0000 (GMT)
-Message-ID: <579f8642-5b3d-7d23-cc95-403393c372fd@linux.ibm.com>
-Date:   Mon, 24 Jan 2022 18:15:47 +0100
+        Mon, 24 Jan 2022 12:16:32 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4JjGqN02fzz9vKYF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:16:32 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2EKooWZw42rL for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 11:16:31 -0600 (CST)
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4JjGqM4ynQz9vKYH
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:16:31 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4JjGqM4ynQz9vKYH
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4JjGqM4ynQz9vKYH
+Received: by mail-pj1-f70.google.com with SMTP id ay18-20020a17090b031200b001b53c85761aso7460306pjb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:16:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZbD4Cm/3Vffm0HL+lKO3+0FIUSFq/dKHU9Ud+lQuNnU=;
+        b=OVepBF7n9FOnQOfzWCH4yWVhHf3qOf5lFf3MkeinE6ALECdgZjTHJEuVYZqgTtJkmo
+         XXQVbOjRSbe6YkPVR7qrrSPlVSOnXihzD2ioDcd/8JZWKSzivdB6AoGmKAAsqeIhZbtO
+         u/ffPsiXgak4owPYTtk5IDkUln+lhYru919YU14PeqL4sA8cNjuHxFjf35T2+/N2i3su
+         iUHGOW8TCzcotiKL7kVcRmRBr0Kue1DOhe25iEBdRh2J7lCxSpKKgvWS/g6jXUDhlrfg
+         +eMwdBbQZYKg6z1RlsVltqUnInSdq170jk1/RzdB8MtvmcOpxXIgRiovCyaO535rQ7Qg
+         LK6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZbD4Cm/3Vffm0HL+lKO3+0FIUSFq/dKHU9Ud+lQuNnU=;
+        b=2OcgNnLmuWv1FaFxEkwN600bj3fEcUGv+wUvhVWDd8z+DSGti/JYzYVVIvX6Cj2AtA
+         e2ktYNpip8KQyNrQmzam4eSvy74e8IZEk6fXqH3HMlqAEs1r9bKMQ27ja+ZX81tn32YE
+         OtYOMIww8xTsHQcBGRIfZke3G/HMfMO+D4RTKdzs/sWW5y9WpStGYRU0brFxiYiVUNeU
+         0CQ0+ywwZYnBreIxFmrpAEoAtrQrrLg0x7d3NHdSpe48RKxjS+Qqs7sWILDuBGqo136a
+         3O/UBmOXp9jfIRNzHLIQcfXgT4uj4BmaxFon7Y3/bS3iXktCtY4qUG9ESdrzEPWLQD4l
+         MIQA==
+X-Gm-Message-State: AOAM532ag7seQGBe9xQ6QAczFNJKOUA0RF/J3Rq4Lsdu0WWG6V0munCn
+        h3l0maqCkJ2UiwbOPyG1Sb2MuCBZv6Xn6/SZ9dtj+HMh5B683lNxriPr3+fC2cYjqmg7hdTXjut
+        5z5i8PXBSJdR+rgNF4ZDp3AciL2JT
+X-Received: by 2002:a17:902:8498:b0:14a:1b37:9f2b with SMTP id c24-20020a170902849800b0014a1b379f2bmr15862257plo.85.1643044590807;
+        Mon, 24 Jan 2022 09:16:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxmzkfmTgOVWbH61bb5d63j3WPu+JGnTE+TZUZcNzLSobKKUqFKCwRRttlfynOChBm0zoLXhg==
+X-Received: by 2002:a17:902:8498:b0:14a:1b37:9f2b with SMTP id c24-20020a170902849800b0014a1b379f2bmr15862240plo.85.1643044590590;
+        Mon, 24 Jan 2022 09:16:30 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id l4sm1013112pfu.90.2022.01.24.09.16.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 09:16:30 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: pci: cx23855-video.c: Fix a NULL pointer dereference in cx23885_video_register()
+Date:   Tue, 25 Jan 2022 01:16:18 +0800
+Message-Id: <20220124171620.61466-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 17/30] KVM: s390: mechanism to enable guest zPCI
- Interpretation
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-18-mjrosato@linux.ibm.com>
- <7125d611-5440-09ae-429a-7a087dd77868@linux.ibm.com>
- <7a1fa398-3304-cb30-10c0-83e12ac9e8ac@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <7a1fa398-3304-cb30-10c0-83e12ac9e8ac@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Ph3t5M1mcdi5cNc0dcYjajN-fKloz766
-X-Proofpoint-ORIG-GUID: uBw-U-LCFDT2zqd1i1rFodNtkSSnW2WU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-24_08,2022-01-24_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 spamscore=0 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 mlxscore=0 impostorscore=0 bulkscore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201240114
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In cx23885_video_register(), the return value of cx23885_vdev_init() is
+assigned to dev->video_dev and there is a dereference of it after that.
+the return value of cx23885_vdev_init() could be NULL on failure of
+allocation, which could lead to a NULL pointer dereference.
 
+the same as dev->vbi_dev.
 
-On 1/24/22 16:28, Matthew Rosato wrote:
-> On 1/24/22 9:24 AM, Pierre Morel wrote:
->>
->>
->> On 1/14/22 21:31, Matthew Rosato wrote:
->>> The guest must have access to certain facilities in order to allow
->>> interpretive execution of zPCI instructions and adapter event
->>> notifications.  However, there are some cases where a guest might
->>> disable interpretation -- provide a mechanism via which we can defer
->>> enabling the associated zPCI interpretation facilities until the guest
->>> indicates it wishes to use them.
->>>
->>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->>> ---
->>>   arch/s390/include/asm/kvm_host.h |  4 ++++
->>>   arch/s390/kvm/kvm-s390.c         | 40 ++++++++++++++++++++++++++++++++
->>>   arch/s390/kvm/kvm-s390.h         | 10 ++++++++
->>>   3 files changed, 54 insertions(+)
->>>
->>> diff --git a/arch/s390/include/asm/kvm_host.h 
->>> b/arch/s390/include/asm/kvm_host.h
->>> index 3f147b8d050b..38982c1de413 100644
->>> --- a/arch/s390/include/asm/kvm_host.h
->>> +++ b/arch/s390/include/asm/kvm_host.h
->>> @@ -252,7 +252,10 @@ struct kvm_s390_sie_block {
->>>   #define ECB2_IEP    0x20
->>>   #define ECB2_PFMFI    0x08
->>>   #define ECB2_ESCA    0x04
->>> +#define ECB2_ZPCI_LSI    0x02
->>>       __u8    ecb2;                   /* 0x0062 */
->>> +#define ECB3_AISI    0x20
->>> +#define ECB3_AISII    0x10
->>>   #define ECB3_DEA 0x08
->>>   #define ECB3_AES 0x04
->>>   #define ECB3_RI  0x01
->>> @@ -938,6 +941,7 @@ struct kvm_arch{
->>>       int use_cmma;
->>>       int use_pfmfi;
->>>       int use_skf;
->>> +    int use_zpci_interp;
->>>       int user_cpu_state_ctrl;
->>>       int user_sigp;
->>>       int user_stsi;
->>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->>> index ab8b56deed11..b6c32fc3b272 100644
->>> --- a/arch/s390/kvm/kvm-s390.c
->>> +++ b/arch/s390/kvm/kvm-s390.c
->>> @@ -1029,6 +1029,44 @@ static int kvm_s390_vm_set_crypto(struct kvm 
->>> *kvm, struct kvm_device_attr *attr)
->>>       return 0;
->>>   }
->>> +static void kvm_s390_vcpu_pci_setup(struct kvm_vcpu *vcpu)
->>> +{
->>> +    /* Only set the ECB bits after guest requests zPCI 
->>> interpretation */
->>> +    if (!vcpu->kvm->arch.use_zpci_interp)
->>> +        return;
->>> +
->>> +    vcpu->arch.sie_block->ecb2 |= ECB2_ZPCI_LSI;
->>> +    vcpu->arch.sie_block->ecb3 |= ECB3_AISII + ECB3_AISI;
->>
->> As far as I understood, the interpretation is only possible if a gisa 
->> designation is associated with the PCI function via CLP enable.
->>
-> 
-> This is true.  Once ECB is enabled, you must have either a SHM bit on 
-> for emulated device support or SHM bits off + a GISA designation 
-> registered for interpretation.  Otherwise, PCI instructions will fail.
+Fix this bug by adding a NULL check of dev->video_dev and dev->vbi_dev.
 
-AFAIU the PCI instruction should not fail but trigger an interception if 
-the GISA designation field of the CLP enable.
+This bug was found by a static analyzer.
 
-However, what you do is not false.
-So I think we better keep what you propose.
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
 
-> 
->> Why do we setup the SIE ECB only when the guest requests for 
->> interpretation and not systematically in vcpu_setup?
-> 
-> Once the ECB is enabled for a guest, emulated device FHs must have a SHM 
-> bit in order to continue working properly (so do passthrough devices 
-> that don't setup interpretation).  This was not a requirement before 
-> this series -- simply having the ECB bit off would ensure intercepts for 
-> all devices regardless of SHM bit settings, so by doing an opt-in once 
-> the guest indicates it will be doing interpretation we can preserve 
-> backwards-compatibility with an initial mode where SHM bits are not 
-> necessarily required.  However once userspace indicates it understands 
-> interpretation, we can assume it is will also use SHM bits properly.
+Fixes: 453afdd9ce33 ("[media] cx23885: convert to vb2")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in the
+current function or the callers, so they constitute bugs. 
 
-If not setting GD in CLP enable triggers interception on later PCI 
-instructions, preparing all early would allow to chose between 
-interpretation or interception on a function basis during the CLP set 
-PCI function with the enable command and make the initialization simpler.
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-However, what you propose is tested and works so we can have this 
-discussion later for enhancement, if it is really one.
+ drivers/media/pci/cx23885/cx23885-video.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-> 
->>
->> If ECB2_ZPCI_LSI, ECB3_AISII or ECB3_AISI have an effect when the gisa 
->> designation is not specified shouldn't we have a way to clear these bits?
->>
-> 
-> I'm not sure that's necessary -- The idea here was for the userspace to 
-> indicate 1) that it knows how to setup for interpreted devices and 2) 
-> that it has a guest that wants to use at least 1 interpreted device.
-> Once we know that userspace understands how to manage interpreted 
-> devices (implied by its use of these new vfio feature ioctls) I think it 
-> should be OK to leave these bits on and expect userspace to always do 
-> the appropriate steps (SHM bits for emulated devices / forced intercept 
-> passthrough devices, GISA designation for interpreted devices).
-
-Seems reasonable.
-
-Acked-by: Pierre Morel <pmorel@linux.ibm.com>
-
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
+index a380e0920a21..1b95109eff8c 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -1353,6 +1353,11 @@ int cx23885_video_register(struct cx23885_dev *dev)
+ 	/* register Video device */
+ 	dev->video_dev = cx23885_vdev_init(dev, dev->pci,
+ 		&cx23885_video_template, "video");
++	if (!dev->video_dev) {
++		err = -ENOMEM;
++		goto fail_unreg;
++	}
++
+ 	dev->video_dev->queue = &dev->vb2_vidq;
+ 	dev->video_dev->device_caps = V4L2_CAP_READWRITE | V4L2_CAP_STREAMING |
+ 				      V4L2_CAP_AUDIO | V4L2_CAP_VIDEO_CAPTURE;
+@@ -1381,6 +1386,11 @@ int cx23885_video_register(struct cx23885_dev *dev)
+ 	/* register VBI device */
+ 	dev->vbi_dev = cx23885_vdev_init(dev, dev->pci,
+ 		&cx23885_vbi_template, "vbi");
++	if (!dev->vbi_dev) {
++		err = -ENOMEM;
++		goto fail_unreg;
++	}
++
+ 	dev->vbi_dev->queue = &dev->vb2_vbiq;
+ 	dev->vbi_dev->device_caps = V4L2_CAP_READWRITE | V4L2_CAP_STREAMING |
+ 				    V4L2_CAP_AUDIO | V4L2_CAP_VBI_CAPTURE;
 -- 
-Pierre Morel
-IBM Lab Boeblingen
+2.25.1
+

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8438149A199
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4786499E03
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386382AbiAXXi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:38:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S1587262AbiAXW2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1841795AbiAXXAC (ORCPT
+        with ESMTP id S1454845AbiAXVdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:00:02 -0500
+        Mon, 24 Jan 2022 16:33:54 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688DAC09D313;
-        Mon, 24 Jan 2022 13:13:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166D8C075D33;
+        Mon, 24 Jan 2022 12:21:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05D8E61513;
-        Mon, 24 Jan 2022 21:13:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD993C340E5;
-        Mon, 24 Jan 2022 21:13:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90114614ED;
+        Mon, 24 Jan 2022 20:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F6D8C340E5;
+        Mon, 24 Jan 2022 20:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058816;
-        bh=g5jYcDdJTtAaQIzC6WDSvOuOlk9FXh7FUac05QGiE4c=;
+        s=korg; t=1643055710;
+        bh=D0k/8wHfzd2f+CJlNo5H5l4gD1tUJCIVd5hODXTl0kg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0opCvy+WAXd8BVVnovJKlIXyhX4GKDxcLBZ2g8joOodK1Vch/OebnQKWh2Qxg6Jr1
-         STm1mz2GD0HLBmnvlRFpi9flihbe6AjW8y90PzuEv66KJBAYn5CCHLFD1CLtY0XV1A
-         CFUkIRt/ARf74Hc3yNwltyhp/rTno3vpPFEnP6z8=
+        b=1MZOWS2DiBsw6aiEmIn3xQBTvxmmzY72VMTxC1zmcV7aB8EE8bpKWEpyOrsHgpRVe
+         7aKuUuA8fXTDDge39FrOEe83Tj+Nu07j0Ap84z/Q9x/V9uEoVPJf/Q3RFOVBNn9nlT
+         9JPFgwiyYTcl70hCZxYOrfjcqi1FPItSMuh0h1N8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Raed Salem <raeds@nvidia.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, Hector Martin <marcan@marcan.st>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0368/1039] net/xfrm: IPsec tunnel mode fix inner_ipproto setting in sec_path
+Subject: [PATCH 5.15 240/846] spi: Fix incorrect cs_setup delay handling
 Date:   Mon, 24 Jan 2022 19:35:57 +0100
-Message-Id: <20220124184137.667754585@linuxfoundation.org>
+Message-Id: <20220124184109.206425661@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,83 +49,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Raed Salem <raeds@nvidia.com>
+From: Hector Martin <marcan@marcan.st>
 
-[ Upstream commit 45a98ef4922def8c679ca7c454403d1957fe70e7 ]
+[ Upstream commit 95c07247399536f83b89dc60cfe7b279d17e69f6 ]
 
-The inner_ipproto saves the inner IP protocol of the plain
-text packet. This allows vendor's IPsec feature making offload
-decision at skb's features_check and configuring hardware at
-ndo_start_xmit, current code implenetation did not handle the
-case where IPsec is used in tunnel mode.
+Move the cs_setup delay to the end of spi_set_cs.
 
-Fix by handling the case when IPsec is used in tunnel mode by
-reading the protocol of the plain text packet IP protocol.
+>From include/linux/spi/spi.h:
 
-Fixes: fa4535238fb5 ("net/xfrm: Add inner_ipproto into sec_path")
-Signed-off-by: Raed Salem <raeds@nvidia.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+ * @cs_setup: delay to be introduced by the controller after CS is
+   asserted
+
+The cs_setup delay needs to happen *after* CS is asserted, that is, at
+the end of spi_set_cs, not at the beginning. Otherwise we're just
+delaying before the SPI transaction starts at all, which isn't very
+useful.
+
+No drivers use this right now, but that is likely to change soon with an
+upcoming Apple SPI HID transport driver.
+
+Fixes: 25093bdeb6bc ("spi: implement SW control for CS times")
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Link: https://lore.kernel.org/r/20211210170534.177139-1-marcan@marcan.st
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_output.c | 30 +++++++++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 5 deletions(-)
+ drivers/spi/spi.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
-index 229544bc70c21..4dc4a7bbe51cf 100644
---- a/net/xfrm/xfrm_output.c
-+++ b/net/xfrm/xfrm_output.c
-@@ -647,10 +647,12 @@ static int xfrm_output_gso(struct net *net, struct sock *sk, struct sk_buff *skb
-  * This requires hardware to know the inner packet type to calculate
-  * the inner header checksum. Save inner ip protocol here to avoid
-  * traversing the packet in the vendor's xmit code.
-- * If the encap type is IPIP, just save skb->inner_ipproto. Otherwise,
-- * get the ip protocol from the IP header.
-+ * For IPsec tunnel mode save the ip protocol from the IP header of the
-+ * plain text packet. Otherwise If the encap type is IPIP, just save
-+ * skb->inner_ipproto in any other case get the ip protocol from the IP
-+ * header.
-  */
--static void xfrm_get_inner_ipproto(struct sk_buff *skb)
-+static void xfrm_get_inner_ipproto(struct sk_buff *skb, struct xfrm_state *x)
- {
- 	struct xfrm_offload *xo = xfrm_offload(skb);
- 	const struct ethhdr *eth;
-@@ -658,6 +660,25 @@ static void xfrm_get_inner_ipproto(struct sk_buff *skb)
- 	if (!xo)
- 		return;
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 97b5a811bd7f7..a42b9e8521ce0 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -868,12 +868,9 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
+ 	spi->controller->last_cs_enable = enable;
+ 	spi->controller->last_cs_mode_high = spi->mode & SPI_CS_HIGH;
  
-+	if (x->outer_mode.encap == XFRM_MODE_TUNNEL) {
-+		switch (x->outer_mode.family) {
-+		case AF_INET:
-+			xo->inner_ipproto = ip_hdr(skb)->protocol;
-+			break;
-+		case AF_INET6:
-+			xo->inner_ipproto = ipv6_hdr(skb)->nexthdr;
-+			break;
-+		default:
-+			break;
-+		}
-+
-+		return;
-+	}
-+
-+	/* non-Tunnel Mode */
-+	if (!skb->encapsulation)
-+		return;
-+
- 	if (skb->inner_protocol_type == ENCAP_TYPE_IPPROTO) {
- 		xo->inner_ipproto = skb->inner_ipproto;
- 		return;
-@@ -712,8 +733,7 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
- 		sp->xvec[sp->len++] = x;
- 		xfrm_state_hold(x);
+-	if (spi->cs_gpiod || gpio_is_valid(spi->cs_gpio) ||
+-	    !spi->controller->set_cs_timing) {
+-		if (activate)
+-			spi_delay_exec(&spi->cs_setup, NULL);
+-		else
+-			spi_delay_exec(&spi->cs_hold, NULL);
++	if ((spi->cs_gpiod || gpio_is_valid(spi->cs_gpio) ||
++	    !spi->controller->set_cs_timing) && !activate) {
++		spi_delay_exec(&spi->cs_hold, NULL);
+ 	}
  
--		if (skb->encapsulation)
--			xfrm_get_inner_ipproto(skb);
-+		xfrm_get_inner_ipproto(skb, x);
- 		skb->encapsulation = 1;
+ 	if (spi->mode & SPI_CS_HIGH)
+@@ -915,7 +912,9 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
  
- 		if (skb_is_gso(skb)) {
+ 	if (spi->cs_gpiod || gpio_is_valid(spi->cs_gpio) ||
+ 	    !spi->controller->set_cs_timing) {
+-		if (!activate)
++		if (activate)
++			spi_delay_exec(&spi->cs_setup, NULL);
++		else
+ 			spi_delay_exec(&spi->cs_inactive, NULL);
+ 	}
+ }
 -- 
 2.34.1
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C62499BE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DA04995BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576889AbiAXV4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:56:40 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44430 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450966AbiAXVVy (ORCPT
+        id S1442644AbiAXUzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:55:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37414 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350425AbiAXUcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:21:54 -0500
+        Mon, 24 Jan 2022 15:32:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 150B8614DA;
-        Mon, 24 Jan 2022 21:21:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7789C340E4;
-        Mon, 24 Jan 2022 21:21:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BFC9B8121A;
+        Mon, 24 Jan 2022 20:32:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51C3FC340E7;
+        Mon, 24 Jan 2022 20:32:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059313;
-        bh=xwKORReWGw5mqUHtAtglYkKZr9iec73HNhvD8L3tEmw=;
+        s=korg; t=1643056324;
+        bh=URWHLSJH7EmPR6Venvvxop3L87OYrS7QRxfHT+dHLTs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P9FH4s0+PtwgauWWsJ7Y73v5YFNHTrWYjiAtXQ/U+r8W8KG1sVaUP4K3smZC3nzlV
-         YU/xh/pcjKwjh2Sh2777FTYmqzYqPTeTd1OTMlgpuTSM/qOy9hbynAi/fR57ylwqu+
-         NtBMdDvXQcrxC+Xx6FuV9w+oj+DPBB0/PCgofKrY=
+        b=v1AX9AgkeVQKCLHECwsqQIKJcBYwg3BmZcixnlEn7WXCfJsxZVw4Awm7MjIb6nigj
+         Nl5CXH/W5uR5iFBV/8Mr/4r2IT6terUB7gtPrzn5rHNJLy6/q65ZmxGQNmC1XK6iaP
+         qbVT2QYCacNYv7g2mmzkXTBoYALLrNVxf6mB1x2A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0574/1039] libbpf: Accommodate DWARF/compiler bug with duplicated structs
-Date:   Mon, 24 Jan 2022 19:39:23 +0100
-Message-Id: <20220124184144.643212658@linuxfoundation.org>
+Subject: [PATCH 5.15 447/846] ASoC: imx-card: Need special setting for ak4497 on i.MX8MQ
+Date:   Mon, 24 Jan 2022 19:39:24 +0100
+Message-Id: <20220124184116.415121458@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,113 +46,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
 
-[ Upstream commit efdd3eb8015e7447095f02a26eaabd164cd18004 ]
+[ Upstream commit 3349b3d0c63b8b6fcca58156d72407f0b2e101ac ]
 
-According to [0], compilers sometimes might produce duplicate DWARF
-definitions for exactly the same struct/union within the same
-compilation unit (CU). We've had similar issues with identical arrays
-and handled them with a similar workaround in 6b6e6b1d09aa ("libbpf:
-Accomodate DWARF/compiler bug with duplicated identical arrays"). Do the
-same for struct/union by ensuring that two structs/unions are exactly
-the same, down to the integer values of field referenced type IDs.
+The SAI on i.MX8MQ don't support one2one ratio for mclk:bclk, so
+the mclk frequency exceeds the supported range of codec for
+the case that sample rate is larger than 705kHZ and format is
+S32_LE. Update the supported width for such case.
 
-Solving this more generically (allowing referenced types to be
-equivalent, but using different type IDs, all within a single CU)
-requires a huge complexity increase to handle many-to-many mappings
-between canonidal and candidate type graphs. Before we invest in that,
-let's see if this approach handles all the instances of this issue in
-practice. Thankfully it's pretty rare, it seems.
-
-  [0] https://lore.kernel.org/bpf/YXr2NFlJTAhHdZqq@krava/
-
-Reported-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20211117194114.347675-1-andrii@kernel.org
+Fixes: aa736700f42f ("ASoC: imx-card: Add imx-card machine driver")
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Link: https://lore.kernel.org/r/1641292835-19085-2-git-send-email-shengjiu.wang@nxp.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/btf.c | 45 +++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 41 insertions(+), 4 deletions(-)
+ sound/soc/fsl/imx-card.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index c2400804d6bac..dc86259980231 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -3443,8 +3443,8 @@ static long btf_hash_struct(struct btf_type *t)
- }
+diff --git a/sound/soc/fsl/imx-card.c b/sound/soc/fsl/imx-card.c
+index 58fd0639a0698..f6b54de76dc3c 100644
+--- a/sound/soc/fsl/imx-card.c
++++ b/sound/soc/fsl/imx-card.c
+@@ -553,8 +553,23 @@ static int imx_card_parse_of(struct imx_card_data *data)
+ 			link_data->cpu_sysclk_id = FSL_SAI_CLK_MAST1;
  
- /*
-- * Check structural compatibility of two FUNC_PROTOs, ignoring referenced type
-- * IDs. This check is performed during type graph equivalence check and
-+ * Check structural compatibility of two STRUCTs/UNIONs, ignoring referenced
-+ * type IDs. This check is performed during type graph equivalence check and
-  * referenced types equivalence is checked separately.
-  */
- static bool btf_shallow_equal_struct(struct btf_type *t1, struct btf_type *t2)
-@@ -3817,6 +3817,31 @@ static int btf_dedup_identical_arrays(struct btf_dedup *d, __u32 id1, __u32 id2)
- 	return btf_equal_array(t1, t2);
- }
+ 			/* sai may support mclk/bclk = 1 */
+-			if (of_find_property(np, "fsl,mclk-equal-bclk", NULL))
++			if (of_find_property(np, "fsl,mclk-equal-bclk", NULL)) {
+ 				link_data->one2one_ratio = true;
++			} else {
++				int i;
++
++				/*
++				 * i.MX8MQ don't support one2one ratio, then
++				 * with ak4497 only 16bit case is supported.
++				 */
++				for (i = 0; i < ARRAY_SIZE(ak4497_fs_mul); i++) {
++					if (ak4497_fs_mul[i].rmin == 705600 &&
++					    ak4497_fs_mul[i].rmax == 768000) {
++						ak4497_fs_mul[i].wmin = 32;
++						ak4497_fs_mul[i].wmax = 32;
++					}
++				}
++			}
+ 		}
  
-+/* Check if given two types are identical STRUCT/UNION definitions */
-+static bool btf_dedup_identical_structs(struct btf_dedup *d, __u32 id1, __u32 id2)
-+{
-+	const struct btf_member *m1, *m2;
-+	struct btf_type *t1, *t2;
-+	int n, i;
-+
-+	t1 = btf_type_by_id(d->btf, id1);
-+	t2 = btf_type_by_id(d->btf, id2);
-+
-+	if (!btf_is_composite(t1) || btf_kind(t1) != btf_kind(t2))
-+		return false;
-+
-+	if (!btf_shallow_equal_struct(t1, t2))
-+		return false;
-+
-+	m1 = btf_members(t1);
-+	m2 = btf_members(t2);
-+	for (i = 0, n = btf_vlen(t1); i < n; i++, m1++, m2++) {
-+		if (m1->type != m2->type)
-+			return false;
-+	}
-+	return true;
-+}
-+
- /*
-  * Check equivalence of BTF type graph formed by candidate struct/union (we'll
-  * call it "candidate graph" in this description for brevity) to a type graph
-@@ -3928,6 +3953,8 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
- 
- 	hypot_type_id = d->hypot_map[canon_id];
- 	if (hypot_type_id <= BTF_MAX_NR_TYPES) {
-+		if (hypot_type_id == cand_id)
-+			return 1;
- 		/* In some cases compiler will generate different DWARF types
- 		 * for *identical* array type definitions and use them for
- 		 * different fields within the *same* struct. This breaks type
-@@ -3936,8 +3963,18 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
- 		 * types within a single CU. So work around that by explicitly
- 		 * allowing identical array types here.
- 		 */
--		return hypot_type_id == cand_id ||
--		       btf_dedup_identical_arrays(d, hypot_type_id, cand_id);
-+		if (btf_dedup_identical_arrays(d, hypot_type_id, cand_id))
-+			return 1;
-+		/* It turns out that similar situation can happen with
-+		 * struct/union sometimes, sigh... Handle the case where
-+		 * structs/unions are exactly the same, down to the referenced
-+		 * type IDs. Anything more complicated (e.g., if referenced
-+		 * types are different, but equivalent) is *way more*
-+		 * complicated and requires a many-to-many equivalence mapping.
-+		 */
-+		if (btf_dedup_identical_structs(d, hypot_type_id, cand_id))
-+			return 1;
-+		return 0;
- 	}
- 
- 	if (btf_dedup_hypot_map_add(d, canon_id, cand_id))
+ 		link->cpus->of_node = args.np;
 -- 
 2.34.1
 

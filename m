@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AF5498D41
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE7B498BDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352238AbiAXT34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:29:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44700 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349302AbiAXTUe (ORCPT
+        id S1347121AbiAXTRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:17:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38626 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343546AbiAXTI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:20:34 -0500
+        Mon, 24 Jan 2022 14:08:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4405BB8119D;
-        Mon, 24 Jan 2022 19:20:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A82CC340E5;
-        Mon, 24 Jan 2022 19:20:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1788D60BB9;
+        Mon, 24 Jan 2022 19:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC527C340E5;
+        Mon, 24 Jan 2022 19:08:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052032;
-        bh=fvew88oc9rXfBgGTAJEf7GitKFB3blNqbg6pMgytd3s=;
+        s=korg; t=1643051334;
+        bh=q1AQ1O9jbhap56lP71ZI3bOXZMTG/h6Z1vfl4pHRoHA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YjZhMRTBr66WL2EE89plmcLMb8PvXDD+cxQDlRErASYkKDWYf/6yN7Kaj+dEFT4vT
-         PyjItSInFhlLjt7OwZ0UbcklySoBDDgl/yU0f6jkAgalBdbVynJZgA/Qe7kKgEVGmM
-         HZE8bUX7UVcJFUsydPPmyOR65YwSOoeNgB06WlaQ=
+        b=ULhIT4435jn+Ljr3uvz0pRgvOSl1VSYyxauTybHJpiDf1uPMY8M78GIH3zeNscAgn
+         KJppiO6F4XmLo2LWyMQ2PvjzVUEz5Jrk4lvv4MmVmQkUdNhgdle8PmD4GNBoUCmujb
+         Mhn3Ries+hBd0kmw05s7Mkh27HVoGUWS8R06QUfU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 165/239] ACPI: battery: Add the ThinkPad "Not Charging" quirk
+Subject: [PATCH 4.14 128/186] net: phy: marvell: configure RGMII delays for 88E1118
 Date:   Mon, 24 Jan 2022 19:43:23 +0100
-Message-Id: <20220124183948.340959603@linuxfoundation.org>
+Message-Id: <20220124183941.227299670@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,80 +47,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Weißschuh <linux@weissschuh.net>
+From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-[ Upstream commit e96c1197aca628f7d2480a1cc3214912b40b3414 ]
+[ Upstream commit f22725c95ececb703c3f741e8f946d23705630b7 ]
 
-The EC/ACPI firmware on Lenovo ThinkPads used to report a status
-of "Unknown" when the battery is between the charge start and
-charge stop thresholds. On Windows, it reports "Not Charging"
-so the quirk has been added to also report correctly.
+Corentin Labbe reports that the SSI 1328 does not work when allowing
+the PHY to operate at gigabit speeds, but does work with the generic
+PHY driver.
 
-Now the "status" attribute returns "Not Charging" when the
-battery on ThinkPads is not physicaly charging.
+This appears to be because m88e1118_config_init() writes a fixed value
+to the MSCR register, claiming that this is to enable 1G speeds.
+However, this always sets bits 4 and 5, enabling RGMII transmit and
+receive delays. The suspicion is that the original board this was
+added for required the delays to make 1G speeds work.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Add the necessary configuration for RGMII delays for the 88E1118 to
+bring this into line with the requirements for RGMII support, and thus
+make the SSI 1328 work.
+
+Corentin Labbe has tested this on gemini-ssi1328 and gemini-ns2502.
+
+Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/battery.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/net/phy/marvell.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-index 0bbf8b453ebf2..d4e42a578e186 100644
---- a/drivers/acpi/battery.c
-+++ b/drivers/acpi/battery.c
-@@ -78,6 +78,7 @@ static int battery_bix_broken_package;
- static int battery_notification_delay_ms;
- static int battery_ac_is_broken;
- static int battery_check_pmic = 1;
-+static int battery_quirk_notcharging;
- static unsigned int cache_time = 1000;
- module_param(cache_time, uint, 0644);
- MODULE_PARM_DESC(cache_time, "cache time in milliseconds");
-@@ -246,6 +247,8 @@ static int acpi_battery_get_property(struct power_supply *psy,
- 			val->intval = POWER_SUPPLY_STATUS_CHARGING;
- 		else if (acpi_battery_is_charged(battery))
- 			val->intval = POWER_SUPPLY_STATUS_FULL;
-+		else if (battery_quirk_notcharging)
-+			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
- 		else
- 			val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
- 		break;
-@@ -1350,6 +1353,12 @@ battery_do_not_check_pmic_quirk(const struct dmi_system_id *d)
- 	return 0;
- }
+diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
+index 727b991312a4e..3d8d765932934 100644
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -938,6 +938,12 @@ static int m88e1118_config_init(struct phy_device *phydev)
+ 	if (err < 0)
+ 		return err;
  
-+static int __init battery_quirk_not_charging(const struct dmi_system_id *d)
-+{
-+	battery_quirk_notcharging = 1;
-+	return 0;
-+}
++	if (phy_interface_is_rgmii(phydev)) {
++		err = m88e1121_config_aneg_rgmii_delays(phydev);
++		if (err < 0)
++			return err;
++	}
 +
- static const struct dmi_system_id bat_dmi_table[] __initconst = {
- 	{
- 		/* NEC LZ750/LS */
-@@ -1394,6 +1403,19 @@ static const struct dmi_system_id bat_dmi_table[] __initconst = {
- 		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo MIIX 320-10ICR"),
- 		},
- 	},
-+	{
-+		/*
-+		 * On Lenovo ThinkPads the BIOS specification defines
-+		 * a state when the bits for charging and discharging
-+		 * are both set to 0. That state is "Not Charging".
-+		 */
-+		.callback = battery_quirk_not_charging,
-+		.ident = "Lenovo ThinkPad",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad"),
-+		},
-+	},
- 	{},
- };
- 
+ 	/* Adjust LED Control */
+ 	if (phydev->dev_flags & MARVELL_PHY_M1118_DNS323_LEDS)
+ 		err = phy_write(phydev, 0x10, 0x1100);
 -- 
 2.34.1
 

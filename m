@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A165D499FF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CD5499FF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842637AbiAXXCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:02:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58570 "EHLO
+        id S1842681AbiAXXCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456427AbiAXVzC (ORCPT
+        with ESMTP id S1456472AbiAXVzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:55:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A21C07E28E;
-        Mon, 24 Jan 2022 12:35:46 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E61C07E293;
+        Mon, 24 Jan 2022 12:35:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F655B80FA1;
-        Mon, 24 Jan 2022 20:35:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68D3C340E5;
-        Mon, 24 Jan 2022 20:35:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C981F61506;
+        Mon, 24 Jan 2022 20:35:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD67BC340E5;
+        Mon, 24 Jan 2022 20:35:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056544;
-        bh=OzfIY9xRVRlOTpRoanuZo2T6HA3to4jATFB0/K4WRxs=;
+        s=korg; t=1643056553;
+        bh=Rkw3g01TUkhbxguTqpap1lKFkPkmErFrADVBGX68Kt4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YrsoDINTgSwlrg/k8j36Qy/MlRyFdh5o5rmFA2VWTaGblOBykvit46GIcKr6lP8r+
-         tyV29stQZmltgaK2i64MhsnO+XTXwsAdaBZCfv4xTZegkAMqmAC/ErlFbVjL1hsYSz
-         qoTqtIr6cCQ8aYcng+Yfvd1KTeWcaoxJtqjIZu5M=
+        b=BeRquE8MM5Pa00iM2E/bIOpvY9oePIxuoFUSUAP3Gs7rlZBjJ84Eq1OOsIBDWzKqM
+         jw0txPaTVUK0yR3N8oIHXx0P9H0SyNyNZYTdjwqhbFNyF+Yu2BvtgOhDPnzsweoZTD
+         Co87ckDOZtlfKQcY6XcF4h1SUbDmXyXBD0xlxqNs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+23a02c7df2cf2bc93fa2@syzkaller.appspotmail.com,
-        Xiongwei Song <sxwjean@gmail.com>,
-        Denis Efremov <efremov@linux.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 520/846] floppy: Add max size check for user space request
-Date:   Mon, 24 Jan 2022 19:40:37 +0100
-Message-Id: <20220124184118.952832171@linuxfoundation.org>
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 522/846] drm: rcar-du: Fix CRTC timings when CMM is used
+Date:   Mon, 24 Jan 2022 19:40:39 +0100
+Message-Id: <20220124184119.020289587@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -51,80 +49,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiongwei Song <sxwjean@gmail.com>
+From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-[ Upstream commit 545a32498c536ee152331cd2e7d2416aa0f20e01 ]
+[ Upstream commit f0ce591dc9a97067c6e783a2eaccd22c5476144d ]
 
-We need to check the max request size that is from user space before
-allocating pages. If the request size exceeds the limit, return -EINVAL.
-This check can avoid the warning below from page allocator.
+When the CMM is enabled, an offset of 25 pixels must be subtracted from
+the HDS (horizontal display start) and HDE (horizontal display end)
+registers. Fix the timings calculation, and take this into account in
+the mode validation.
 
-WARNING: CPU: 3 PID: 16525 at mm/page_alloc.c:5344 current_gfp_context include/linux/sched/mm.h:195 [inline]
-WARNING: CPU: 3 PID: 16525 at mm/page_alloc.c:5344 __alloc_pages+0x45d/0x500 mm/page_alloc.c:5356
-Modules linked in:
-CPU: 3 PID: 16525 Comm: syz-executor.3 Not tainted 5.15.0-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:__alloc_pages+0x45d/0x500 mm/page_alloc.c:5344
-Code: be c9 00 00 00 48 c7 c7 20 4a 97 89 c6 05 62 32 a7 0b 01 e8 74 9a 42 07 e9 6a ff ff ff 0f 0b e9 a0 fd ff ff 40 80 e5 3f eb 88 <0f> 0b e9 18 ff ff ff 4c 89 ef 44 89 e6 45 31 ed e8 1e 76 ff ff e9
-RSP: 0018:ffffc90023b87850 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 1ffff92004770f0b RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: 0000000000000033 RDI: 0000000000010cc1
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff81bb4686 R11: 0000000000000001 R12: ffffffff902c1960
-R13: 0000000000000033 R14: 0000000000000000 R15: ffff88804cf64a30
-FS:  0000000000000000(0000) GS:ffff88802cd00000(0063) knlGS:00000000f44b4b40
-CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
-CR2: 000000002c921000 CR3: 000000004f507000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- alloc_pages+0x1a7/0x300 mm/mempolicy.c:2191
- __get_free_pages+0x8/0x40 mm/page_alloc.c:5418
- raw_cmd_copyin drivers/block/floppy.c:3113 [inline]
- raw_cmd_ioctl drivers/block/floppy.c:3160 [inline]
- fd_locked_ioctl+0x12e5/0x2820 drivers/block/floppy.c:3528
- fd_ioctl drivers/block/floppy.c:3555 [inline]
- fd_compat_ioctl+0x891/0x1b60 drivers/block/floppy.c:3869
- compat_blkdev_ioctl+0x3b8/0x810 block/ioctl.c:662
- __do_compat_sys_ioctl+0x1c7/0x290 fs/ioctl.c:972
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
- entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+This fixes a visible horizontal offset in the image with VGA monitors.
+HDMI monitors seem to be generally more tolerant to incorrect timings,
+but may be affected too.
 
-Reported-by: syzbot+23a02c7df2cf2bc93fa2@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/20211116131033.27685-1-sxwjean@me.com
-Signed-off-by: Xiongwei Song <sxwjean@gmail.com>
-Signed-off-by: Denis Efremov <efremov@linux.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/floppy.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/rcar-du/rcar_du_crtc.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
-index f50bbaba5762c..4a6a74177b3c9 100644
---- a/drivers/block/floppy.c
-+++ b/drivers/block/floppy.c
-@@ -3080,6 +3080,8 @@ static void raw_cmd_free(struct floppy_raw_cmd **ptr)
- 	}
- }
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+index ea7e39d035457..ee7e375ee6724 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
++++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+@@ -215,6 +215,7 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
+ 	const struct drm_display_mode *mode = &rcrtc->crtc.state->adjusted_mode;
+ 	struct rcar_du_device *rcdu = rcrtc->dev;
+ 	unsigned long mode_clock = mode->clock * 1000;
++	unsigned int hdse_offset;
+ 	u32 dsmr;
+ 	u32 escr;
  
-+#define MAX_LEN (1UL << MAX_ORDER << PAGE_SHIFT)
+@@ -298,10 +299,15 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
+ 	     | DSMR_DIPM_DISP | DSMR_CSPM;
+ 	rcar_du_crtc_write(rcrtc, DSMR, dsmr);
+ 
++	hdse_offset = 19;
++	if (rcrtc->group->cmms_mask & BIT(rcrtc->index % 2))
++		hdse_offset += 25;
 +
- static int raw_cmd_copyin(int cmd, void __user *param,
- 				 struct floppy_raw_cmd **rcmd)
- {
-@@ -3107,7 +3109,7 @@ loop:
- 	ptr->resultcode = 0;
+ 	/* Display timings */
+-	rcar_du_crtc_write(rcrtc, HDSR, mode->htotal - mode->hsync_start - 19);
++	rcar_du_crtc_write(rcrtc, HDSR, mode->htotal - mode->hsync_start -
++					hdse_offset);
+ 	rcar_du_crtc_write(rcrtc, HDER, mode->htotal - mode->hsync_start +
+-					mode->hdisplay - 19);
++					mode->hdisplay - hdse_offset);
+ 	rcar_du_crtc_write(rcrtc, HSWR, mode->hsync_end -
+ 					mode->hsync_start - 1);
+ 	rcar_du_crtc_write(rcrtc, HCR,  mode->htotal - 1);
+@@ -836,6 +842,7 @@ rcar_du_crtc_mode_valid(struct drm_crtc *crtc,
+ 	struct rcar_du_crtc *rcrtc = to_rcar_crtc(crtc);
+ 	struct rcar_du_device *rcdu = rcrtc->dev;
+ 	bool interlaced = mode->flags & DRM_MODE_FLAG_INTERLACE;
++	unsigned int min_sync_porch;
+ 	unsigned int vbp;
  
- 	if (ptr->flags & (FD_RAW_READ | FD_RAW_WRITE)) {
--		if (ptr->length <= 0)
-+		if (ptr->length <= 0 || ptr->length >= MAX_LEN)
- 			return -EINVAL;
- 		ptr->kernel_data = (char *)fd_dma_mem_alloc(ptr->length);
- 		fallback_on_nodma_alloc(&ptr->kernel_data, ptr->length);
+ 	if (interlaced && !rcar_du_has(rcdu, RCAR_DU_FEATURE_INTERLACED))
+@@ -843,9 +850,14 @@ rcar_du_crtc_mode_valid(struct drm_crtc *crtc,
+ 
+ 	/*
+ 	 * The hardware requires a minimum combined horizontal sync and back
+-	 * porch of 20 pixels and a minimum vertical back porch of 3 lines.
++	 * porch of 20 pixels (when CMM isn't used) or 45 pixels (when CMM is
++	 * used), and a minimum vertical back porch of 3 lines.
+ 	 */
+-	if (mode->htotal - mode->hsync_start < 20)
++	min_sync_porch = 20;
++	if (rcrtc->group->cmms_mask & BIT(rcrtc->index % 2))
++		min_sync_porch += 25;
++
++	if (mode->htotal - mode->hsync_start < min_sync_porch)
+ 		return MODE_HBLANK_NARROW;
+ 
+ 	vbp = (mode->vtotal - mode->vsync_end) / (interlaced ? 2 : 1);
 -- 
 2.34.1
 

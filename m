@@ -2,229 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F2D497A05
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21F2497A02
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242050AbiAXIHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbiAXIHg (ORCPT
+        id S242048AbiAXIHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:07:15 -0500
+Received: from esa13.fujitsucc.c3s2.iphmx.com ([68.232.156.96]:52729 "EHLO
+        esa13.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242055AbiAXIHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:07:36 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14399C06173B;
-        Mon, 24 Jan 2022 00:07:36 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id i67so1347964wma.0;
-        Mon, 24 Jan 2022 00:07:36 -0800 (PST)
+        Mon, 24 Jan 2022 03:07:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1643011635; x=1674547635;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=uuRPq1+t1/fQg7WeNOHxldcxhBR1wXCyp/EPzk/sowI=;
+  b=W/RoHsLfWvWFTc6AhyKZlK9Uzq7QkMFZsbzJS2irlFzgg/aUJgDVahfl
+   8BheZz0r66qO4NznOKgG6THev6l6kXzqPkmTCMJV2oZTmyQSir/UPhhkN
+   cDzeWSxmnADOgHZA1TJGtQZi/R48C3P9o8KJJpPAepmVvX2nqCYDq07Je
+   f8FSxyb6s8ObxVHngsuo8eepQjZaE2vLe538/BJjY5F7RYD7GUNC6r0hH
+   9q+cMs92+GBQnUklpFF5vtS6dG4WgqDudk7LV+iFMePI2zNZoUb1Dxy1z
+   65T/tUifAGgOi6AF8ba9FvlmOTZOMNT/iHTxWNGoHggl+cvDLu7GO60RP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="48042695"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635174000"; 
+   d="scan'208";a="48042695"
+Received: from mail-os0jpn01lp2110.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.110])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:07:12 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gquFZ6+gAqjx7KzJRk+5XiudPMnfwU3En3ahIqCxxhdMCLpRE2v/TbOQkyllBK/UtUxL02jbCy5U0xwo9Fjw0Jh/aGvEiLts5b5HZ9csIZdslR18tcZ5QkSN8pWS/pTLKxcKlSIXJujatIR1P+PuoEZ/vB8AECiGBUDyZTKwju1DDPo1itw29jg1LkM/fDkIZnWAgYdWEMo1/W6P5J95eXwC3mpFHELq7ODwFa32jPYegIoQr+Uwvi6NHwOE9mRbh6EGMa/AHeeSbVQjeR2CJo3BDiydXNKhZCRzBfjnJ4YWjZGVmmNe2v6cVvmgGRunTWP87Yridi/vJDJD0JWPUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1YVCMPlSNZqSslTmflY3hQW0JuShiizFMwTZz1982CI=;
+ b=MgRSmyAFdjfnzmCOUiBYrQ3alMNJZlgxpEZwwf8S/Fq7o2p7ZjbcY6coNJFeN/6vNeK1Dnz5t4xpyAbRCzYqHQYGjFyCp3X2yk6fdYNYHgVZRAhbecW1an3+AtVcjMj0segUyspApwSDgSTM0I6yMJkAslwKmM8QVwTN4gczsu8iTHqFh2lSENnGGaOkQbQIhdHR0vv3KZuGaS+JEJ0MaUKXmv1yE0TBvdw1C5VKZf7mg3Rg3TU8VrTczRfJcrd5BfK4r2Js1jNqf+9M22sEENcvJ/DUKI0TZ5BA3QG8EVA5NNpnhVhFqUH1VVc/RQ7dUgKLU0N/P5WjqBVzz4qFOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IQyuoyAjn/3wnjleMO1fKTfmVMZ//kX3WpenfwhdQ+Q=;
-        b=hUpsGt9ymnkI/AxNgOljMYzNT6vLangFj0ZRKSTmPXZcV94YAFpN+1Vtkm9yVFzS+M
-         frdxdiRARclmW1sXd3LmydJ1ON2a85UKm0sUjBA3FUAIUq//Xd9yuBWkuNzCgt6uVCVk
-         KA5CHm4gO8C81DSmc3/GtYJ46O3Y2TPqEE3DO31OmaBW0/GHfU3Xl1rkEs+nHEomthHh
-         llHyvMT5a13OwJTxDUS8hgZWq8yMzJBrIwMMvPUSh6irSgjP2lCibdD4irfxe0x+0+pf
-         MilvlAi1PZZj3dzyzGl7bVp1AYF8rFCfttlbfwz47FALIPBbYV37Os2yfjVQvY5fR5HM
-         rhPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IQyuoyAjn/3wnjleMO1fKTfmVMZ//kX3WpenfwhdQ+Q=;
-        b=6xK0pOHsSHWnifUbPzga9h/X/nGXx45MvER9t91C/qiMxXeJXQtyHbhjz+eQoBTCme
-         ggeqK6JHlPpHS00ht/6UaxuWj+He8jGSMbi/Pct3KgPG3HI1GfNwfvos7zU01E2YpEdZ
-         noSgb67aELWHsAg/A8ZFe0olas6nEzuAnOduIutQmDN+V2DzikZehorHV2bJuuZ7EXUo
-         neH+kornnHei54IUhf6w6iXh2ycmSuMGT60vilQlUh8vubTNL1zQtsq8rhn9IoAhHCeD
-         uEilaSTRCD7DUHSL63OE9dR/PWXNO0WJ0Fps3Cd3LUOqKiWwpxAvIoVYDP7VZ9Xn50vK
-         fxXw==
-X-Gm-Message-State: AOAM531h66QTk3npsb/nBYHTZ5Ss52hafZXTLPmbF1LPO/xl0BuaQNaU
-        HBeofigRL+nM/ON9HBRixU9HNR8fWDZhO/AKCtjsnrEZ+Xw=
-X-Google-Smtp-Source: ABdhPJzBWgOyq5fcOqLBNzKDVqnz6kg6sCApziJLKCTdO7kOegqYUGJjRBOkso4fQGDZggX/w9RHdGxqOdwHJ8twHwM=
-X-Received: by 2002:a05:600c:1e0e:: with SMTP id ay14mr673702wmb.77.1643011654496;
- Mon, 24 Jan 2022 00:07:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20220106125947.139523-1-gengcixi@gmail.com> <20220106125947.139523-4-gengcixi@gmail.com>
- <CADBw62pBCdrbRspTV9Yck4DP8DE=ECGmEtD74NOtm1YRT3DM8w@mail.gmail.com>
- <CAF12kFu6O-gfiqp4j24zxC_GqCwJ2Q5KGYYaCtnagmUFB_bsVg@mail.gmail.com> <CADBw62rSdWN-L8HbnyMrUNp=x0pDdKR6MyKO4yfu00MnrN4L-g@mail.gmail.com>
-In-Reply-To: <CADBw62rSdWN-L8HbnyMrUNp=x0pDdKR6MyKO4yfu00MnrN4L-g@mail.gmail.com>
-From:   Cixi Geng <gengcixi@gmail.com>
-Date:   Mon, 24 Jan 2022 16:06:58 +0800
-Message-ID: <CAF12kFvUfykKfeRAJACFRk31pmEBQEPw402x0JN4i1uv0EK1zg@mail.gmail.com>
-Subject: Re: [PATCH 3/7] iio: adc: sc27xx: structure adjuststment and optimization
-To:     Baolin Wang <baolin.wang7@gmail.com>
-Cc:     Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, jic23@kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>, lgirdwood@gmail.com,
-        Mark Brown <broonie@kernel.org>,
-        =?UTF-8?B?5pyx546J5piOIChZdW1pbmcgWmh1LzExNDU3KQ==?= 
-        <yuming.zhu1@unisoc.com>, linux-iio@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1YVCMPlSNZqSslTmflY3hQW0JuShiizFMwTZz1982CI=;
+ b=jtsfmTqNMCg8S6jKHO25U7XR5klmlBCl38v+PwjWKcwQsZEOvgx8OUcNCFEs/oSE7catNgzay6ITsX8KxqJmHZV4ZFQ2ND0GKuMtsPOhUElT+uKBtVZ6pRRyJI8DlYMDA5E9AIft6Uhz/O+MHZmkD6/zyc88shILLUJaOvg5Xmk=
+Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com (2603:1096:402:3e::12)
+ by TY2PR01MB2123.jpnprd01.prod.outlook.com (2603:1096:404:c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Mon, 24 Jan
+ 2022 08:07:08 +0000
+Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
+ ([fe80::bddf:b81c:fc55:3bbb]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
+ ([fe80::bddf:b81c:fc55:3bbb%5]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
+ 08:07:08 +0000
+From:   "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
+To:     'Reinette Chatre' <reinette.chatre@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH v2 4/5] selftests/resctrl: Change default limited time to
+ 120 seconds for resctrl_tests
+Thread-Topic: [PATCH v2 4/5] selftests/resctrl: Change default limited time to
+ 120 seconds for resctrl_tests
+Thread-Index: AQHX8AjEtZc9yygZX0KivH3QhJQEQqxW0CaAgBaIipCAAKpkAIAEDoqA
+Date:   Mon, 24 Jan 2022 08:07:08 +0000
+Message-ID: <TYAPR01MB6330667D087361CE452672D58B5E9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+References: <20211213100154.180599-1-tan.shaopeng@jp.fujitsu.com>
+ <20211213100154.180599-5-tan.shaopeng@jp.fujitsu.com>
+ <c8fd3125-b61c-8182-d7af-0f7a85eba345@intel.com>
+ <TYAPR01MB63301CABB489B1A764A9E8718B5B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+ <db556fff-90f5-a513-e823-db33b121f3e0@intel.com>
+In-Reply-To: <db556fff-90f5-a513-e823-db33b121f3e0@intel.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=true;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2022-01-24T08:03:17Z;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED?;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ActionId=45be6fc3-5705-4427-86e7-cff02447f11a;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a7331261-5625-4d75-295b-08d9df1084aa
+x-ms-traffictypediagnostic: TY2PR01MB2123:EE_
+x-microsoft-antispam-prvs: <TY2PR01MB21239EFCC8DBB8DBD6166D798B5E9@TY2PR01MB2123.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1122;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: lOwGc/I/FdoFR0IUG3e4YZS4H+GOr362+ETft716M5rG0O8rOrB8SZ6R08LBojFQNtEj+RILEKOF+xyEs91H64psCF9kuO0cjbOxHyOqdeemx3555gJ0R2XK/7ikmJG6AIjdXj390YT/2KuF9F0zlmBEKO2H1lC7ADrfftsHk9w3/QdG8ZPi9VCxAQelcqbveEDVGAqNGwdmrjb9m0H9w8mH1hGY4t27KASYUXhmj+2tgT+tX8w89/OLLmT7ErAYSUEfFqcZW92hxECpFT9gEdfmh47P5ES+BRmP+HcC6syUYFJTrLhu4akUpNJtZxjl4iHYA5ujoIGFote+NZS4uDlFv4tJXmjYvsh1f0QLDFYvFh52Q1RVcRwT6wUQOUpZaCpkcTb+Tz2gZEHlyHGjEVQNjPOA4VrS/ZUp7aqhNovOGzOCsO16wfTbv+xgFxPHdIbF8d72y+kT/0dSUOVSUI/KK3lHnKbARdpe1mT5apgF4MrY+AEperQ8d5qLTfuAIYweN8yrV5jEyWODI4jErjk5+e/AgYNlt3Rvdkj3OSu+qBjoA9PG6vOyYpqyfCGhZFR0lGnITY923BI680LoyV4VUVugdnsX2yfTIv23/2uf3wPmdgp/M1UWh8gVvhEu1oSY+tKF5p1KAqE1DB0nkShkyAtbhxBZayavubFEqD0o6Nb26ZqmaDxsTgF5mVwgRJA09B5hJIac96M5dMpyLA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(71200400001)(38070700005)(82960400001)(85182001)(66946007)(66476007)(66556008)(64756008)(66446008)(8676002)(53546011)(6506007)(26005)(2906002)(186003)(508600001)(38100700002)(122000001)(83380400001)(52536014)(54906003)(7696005)(5660300002)(9686003)(4326008)(76116006)(86362001)(8936002)(55016003)(316002)(110136005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?Ym42ME8rci9JclRkUkVrYkc4cFVobTBQclRBeWVjbm5VYTNXYUtYeGs3?=
+ =?iso-2022-jp?B?eFZtMHVUWWJkVy9weU9kY0dXdkRBVWtvMnBVWWNyUXNobE9sVVE2d3Qx?=
+ =?iso-2022-jp?B?SGIxWTE2Qi84SXcvYkhJZytxeTNnK252N2ZlVHB0Vm9RK3RWMzlGNUNm?=
+ =?iso-2022-jp?B?a01tMnhybFZRMXBZOVdjTnBYUE5IOHFFc3dKRDNyMThpOXQ2MEplTm13?=
+ =?iso-2022-jp?B?ZVNOODBlV09ZQWFhNlZHWGV5ck5UbWMweTRlUmJaUEsrMUZrQ2N3WmpF?=
+ =?iso-2022-jp?B?UTJwbE1iUGZZNmNjY0VHRTcyUkdvQTA3aDhXSkpWNUU3eGxYYXdqL3A3?=
+ =?iso-2022-jp?B?WThNWk1JV1NHdmJ1WmcyRXdTaXJDZm5SbUlsU0hyb3Q2bGVIT0E0Y0Yr?=
+ =?iso-2022-jp?B?VkwrTTJ1R3VycFBaSGJVcE9McDRkaFFOOUxKY2g2elA0NGZldXRGN3lu?=
+ =?iso-2022-jp?B?YTV1Qml1eXVST1lrMGo4MDNWZWtSWlVhMUhtTVREbnBJcUlEWHZIU0RT?=
+ =?iso-2022-jp?B?UDRRWVVGbmY1Skl1eG9UY2VKT0ViMXg1MzJFTGM1TWJkcjRMMGRsdWVj?=
+ =?iso-2022-jp?B?STNuYWlRZ2l0TjNlOVpBeFRpUXk4dnVscCtYZk9IY1llWjFXd0U4UGV0?=
+ =?iso-2022-jp?B?aEYvNW5BRWFRNWt0ZTdQdm9iMit3TmNyOHk5MnVCY0JiV0RpV044N3lD?=
+ =?iso-2022-jp?B?Z0Nqa1lvWTcxOGNnMTVvbHBVbWc5dEtnNG5xUEw4WGh2cjIzdVVoalhT?=
+ =?iso-2022-jp?B?TmtjWnRZL3VMZUtuN0pJUEtEbjJUakVJS0RCWUl2WFlwUmdYQ3J3eHFO?=
+ =?iso-2022-jp?B?V255QVFvUWE5UjBBTW1IQ0xuZHZ0bnBiWGl3c3hwbkVlMytkTEticmJy?=
+ =?iso-2022-jp?B?MlhGVTBWaHVuemdGRVNXelRxSnlEZGlQb2Y3ZkptWWVjWmt6MFVGREVE?=
+ =?iso-2022-jp?B?N0VhN3MvUVpRbjZZRWZnaUtUemUyUG4rMjNVSmVaSU5qTnVIU21WTms4?=
+ =?iso-2022-jp?B?Q1pxdEd1Q0NiMXFvYVUwRGhyako0SFdGUmdtREdsNzRrZytWMXZxcm5K?=
+ =?iso-2022-jp?B?OTdnamRnMDJpWThVVEIxNTE4TWZVekVhMlN5MnpROUFQUy9LRjQ5TFJE?=
+ =?iso-2022-jp?B?N2I0QlhkbjF4NjdnRnlzUmNITFUyb0Q2WHI5aTV2MnJnQjJuSlNFQTQx?=
+ =?iso-2022-jp?B?Z0JmUG91aGkzZjlVbURQa0RjOG53SXdCZWNkOTNKb2pKUkV2RTkxc2Rh?=
+ =?iso-2022-jp?B?RUs4cmtYTnF3NUhOMERacmpuN2tuNXIvUGF0aXFRS2FVOGpyTkFvQzR5?=
+ =?iso-2022-jp?B?Z0xHejFCRk5lQVFrRHFIejNJOEsvQ1pFMWsrVFdnRVByTXVTZFE4ZlBl?=
+ =?iso-2022-jp?B?dXY4OGt1MUw1dXE0RFlLWC8za2QvQ3A4eUl4dTZUOXhnUTMxeGZpTTBE?=
+ =?iso-2022-jp?B?dXhyanNYRFRKZzUvbTVicjlGTWxyaC80MlZ6Sk9aTFdRa2RtWWdmQzQ3?=
+ =?iso-2022-jp?B?N0J3NFZuazdmb3gzY3Iya3AzWDQwRHpNazJpaXJXU0dvaHVWWXIvckt1?=
+ =?iso-2022-jp?B?RlZhWm15RzdDM0NoZjR1d2RCUjRGdEh2TGQ0WU40ckhHZEI0dTVFQ29P?=
+ =?iso-2022-jp?B?M0ZEc3Z0L0I3aTFkSWJKNmszbUtyRXNIaG1BRUV4VlcrN05Ba0pZcnU5?=
+ =?iso-2022-jp?B?YWpmYmpOV0hiSHR5SFhuUklHakoveW56S3MyRFNzNHpudE9UWXRkblRw?=
+ =?iso-2022-jp?B?NyswTHdGbThsQUJsMXJaa2V5Tm5DcUJlM05GcStKNzltbXJSbVFjK1BD?=
+ =?iso-2022-jp?B?UW9ZcVZpdWdTdytjem9zcnd6MDYzMUxIcnhBaTNFK0h0d2swSDNrRzlK?=
+ =?iso-2022-jp?B?VU9hSmdScFdpNzcxdjhGditDSS9sUEh1eWcydS9EOFYxRFJuM21tWUJt?=
+ =?iso-2022-jp?B?MnBxWjdJNTJNbCtqY3NPQ2RNeVU0MXNpNFhCSFNsMkY1anNHUzREaFd4?=
+ =?iso-2022-jp?B?ZGk4Z1pFOEVUU1RWYWhlYkRTcEhXemEyZlVNdThyT1Roa1JLTXRvVmRR?=
+ =?iso-2022-jp?B?cUdaSWtxUUlZMkp6cHM3NG5BbUovRU5vOUtNQ0cydCtZZGpVdU12R1ky?=
+ =?iso-2022-jp?B?T0JWd0hvWXZlTFVtUjdyelVtSCt0ejJHYXRURGJCV1ptVUtIZ2p6dCsw?=
+ =?iso-2022-jp?B?eFdwZG5jYmtjYTV2ZmhpRDlhUzBJOFRweWJReWhEcXd3dU9ERCtUdTAx?=
+ =?iso-2022-jp?B?QWVGYUlkYUZjaEIvKzNwOHVZSjY3d1M5bUpOdXVoV3llVy9CeVE5YWRZ?=
+ =?iso-2022-jp?B?K2Z1QlFGSndvaDFqN0dKcTBJSGNYWUhhck8xWHpLUEtRMUVNSGVLbGhy?=
+ =?iso-2022-jp?B?VVowNThwTGdONzVtL2p2ZFl0dnNvVys4Vjh1WVUvaXE1TFlaNnVvTzhx?=
+ =?iso-2022-jp?B?enJ5cTVRPT0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6330.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7331261-5625-4d75-295b-08d9df1084aa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jan 2022 08:07:08.7225
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fQonOEVRHGPDV4OTmL4Eq67veg9gcABk14xzpT/qzv8dYxsQCKg6DbbZziVaU7i9Va/z+wMtWLL76eqiG7uShgR3LXH2TL8QjTkQwhQNNmg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB2123
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baolin Wang <baolin.wang7@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=8817=E6=
-=97=A5=E5=91=A8=E4=B8=80 14:15=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Jan 13, 2022 at 9:54 AM Cixi Geng <gengcixi@gmail.com> wrote:
+Hi Reinette,
+
+> On 1/20/2022 11:59 PM, tan.shaopeng@fujitsu.com wrote:
+> > Hi Reinette,
 > >
-> > Baolin Wang <baolin.wang7@gmail.com> =E4=BA=8E2022=E5=B9=B41=E6=9C=887=
-=E6=97=A5=E5=91=A8=E4=BA=94 15:03=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > On Thu, Jan 6, 2022 at 9:00 PM Cixi Geng <gengcixi@gmail.com> wrote:
-> > > >
-> > > > From: Cixi Geng <cixi.geng1@unisoc.com>
-> > > >
-> > > > Introduce one variant device data structure to be compatible
-> > > > with SC2731 PMIC since it has different scale and ratio calculation
-> > > > and so on.
-> > > >
-> > > > Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
-> > > > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> > > > ---
-> > > >  drivers/iio/adc/sc27xx_adc.c | 94 ++++++++++++++++++++++++++++++--=
-----
-> > > >  1 file changed, 79 insertions(+), 15 deletions(-)
-> > > >
-> > > > diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_=
-adc.c
-> > > > index aee076c8e2b1..d2712e54ee79 100644
-> > > > --- a/drivers/iio/adc/sc27xx_adc.c
-> > > > +++ b/drivers/iio/adc/sc27xx_adc.c
-> > > > @@ -12,9 +12,9 @@
-> > > >  #include <linux/slab.h>
-> > > >
-> > > >  /* PMIC global registers definition */
-> > > > -#define SC27XX_MODULE_EN               0xc08
-> > > > +#define SC2731_MODULE_EN               0xc08
-> > > >  #define SC27XX_MODULE_ADC_EN           BIT(5)
-> > > > -#define SC27XX_ARM_CLK_EN              0xc10
-> > > > +#define SC2731_ARM_CLK_EN              0xc10
-> > > >  #define SC27XX_CLK_ADC_EN              BIT(5)
-> > > >  #define SC27XX_CLK_ADC_CLK_EN          BIT(6)
-> > > >
-> > > > @@ -78,6 +78,23 @@ struct sc27xx_adc_data {
-> > > >         int channel_scale[SC27XX_ADC_CHANNEL_MAX];
-> > > >         u32 base;
-> > > >         int irq;
-> > > > +       const struct sc27xx_adc_variant_data *var_data;
-> > > > +};
-> > > > +
-> > > > +/*
-> > > > + * Since different PMICs of SC27xx series can have different
-> > > > + * address and ratio, we should save ratio config and base
-> > > > + * in the device data structure.
-> > > > + */
-> > > > +struct sc27xx_adc_variant_data {
-> > > > +       u32 module_en;
-> > > > +       u32 clk_en;
-> > > > +       u32 scale_shift;
-> > > > +       u32 scale_mask;
-> > > > +       const struct sc27xx_adc_linear_graph *bscale_cal;
-> > > > +       const struct sc27xx_adc_linear_graph *sscale_cal;
-> > > > +       void (*init_scale)(struct sc27xx_adc_data *data);
-> > > > +       int (*get_ratio)(int channel, int scale);
-> > > >  };
-> > > >
-> > > >  struct sc27xx_adc_linear_graph {
-> > > > @@ -103,6 +120,16 @@ static struct sc27xx_adc_linear_graph small_sc=
-ale_graph =3D {
-> > > >         100, 341,
-> > > >  };
-> > > >
-> > > > +static const struct sc27xx_adc_linear_graph sc2731_big_scale_graph=
-_calib =3D {
-> > > > +       4200, 850,
-> > > > +       3600, 728,
-> > > > +};
-> > > > +
-> > > > +static const struct sc27xx_adc_linear_graph sc2731_small_scale_gra=
-ph_calib =3D {
-> > > > +       1000, 838,
-> > > > +       100, 84,
-> > > > +};
-> > >
-> > > The original big_scale_graph_calib and small_scale_graph_calib are fo=
-r
-> > > SC2731 PMIC, why add new structure definition for SC2731?
-> > >
-> > > > +
-> > > >  static const struct sc27xx_adc_linear_graph big_scale_graph_calib =
-=3D {
-> > > >         4200, 856,
-> > > >         3600, 733,
-> > > > @@ -130,11 +157,11 @@ static int sc27xx_adc_scale_calibration(struc=
-t sc27xx_adc_data *data,
-> > > >         size_t len;
-> > > >
-> > > >         if (big_scale) {
-> > > > -               calib_graph =3D &big_scale_graph_calib;
-> > > > +               calib_graph =3D data->var_data->bscale_cal;
-> > > >                 graph =3D &big_scale_graph;
-> > > >                 cell_name =3D "big_scale_calib";
-> > > >         } else {
-> > > > -               calib_graph =3D &small_scale_graph_calib;
-> > > > +               calib_graph =3D data->var_data->sscale_cal;
-> > > >                 graph =3D &small_scale_graph;
-> > > >                 cell_name =3D "small_scale_calib";
-> > > >         }
-> > > > @@ -160,7 +187,7 @@ static int sc27xx_adc_scale_calibration(struct =
-sc27xx_adc_data *data,
-> > > >         return 0;
-> > > >  }
-> > > >
-> > > > -static int sc27xx_adc_get_ratio(int channel, int scale)
-> > > > +static int sc2731_adc_get_ratio(int channel, int scale)
-> > > >  {
-> > > >         switch (channel) {
-> > > >         case 1:
-> > > > @@ -185,6 +212,21 @@ static int sc27xx_adc_get_ratio(int channel, i=
-nt scale)
-> > > >         return SC27XX_VOLT_RATIO(1, 1);
-> > > >  }
-> > > >
-> > > > +/*
-> > > > + * According to the datasheet set specific value on some channel.
-> > > > + */
-> > > > +static void sc2731_adc_scale_init(struct sc27xx_adc_data *data)
-> > > > +{
-> > > > +       int i;
-> > > > +
-> > > > +       for (i =3D 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
-> > > > +               if (i =3D=3D 5)
-> > > > +                       data->channel_scale[i] =3D 1;
-> > > > +               else
-> > > > +                       data->channel_scale[i] =3D 0;
-> > > > +       }
-> > > > +}
-> > >
-> > > This is unnecessary I think, please see sc27xx_adc_write_raw() that
-> > > can set the channel scale.
-> > Did you mean that all the PMIC's scale_init function should put into
-> > the sc27xx_adc_write_raw?
->
-> No.
->
-> > but the scale_init is all different by each PMIC, if implemented in
-> > the write_raw, will add a lot of
-> > if or switch_case branch
->
-> What I mean is we should follow the original method to set the channel
-> scale by iio_info. Please also refer to other drivers how ot handle
-> the channel scale.
-Hi Baolin,  I understand the adc_write_raw() function is the method to set
-channal scale for the userspace, we can change the channel scale by write
-a value on a user code. did i understand right?
-out  scale_init is to set scale value when the driver probe stage, and I al=
-so
-did not found other adc driver use the adc_write_raw() during the driver
- initialization phase.
->
-> --
-> Baolin Wang
+> >> On 12/13/2021 2:01 AM, Shaopeng Tan wrote:
+> >>> This commit changed the default limited time(45s) to 120 seconds for
+> >>
+> >> (This commit)
+> >>
+> >>> resctrl_tests by adding "setting" file.  Since 45 seconds may not be
+> >>> enough on some machine environments.
+> >>
+> >> This sounds very imprecise when you say "may not be enough". From
+> >> what I understand you have already encountered systems where this is
+> >> not enough so you have established that 45 seconds is too short. The
+> >> next question is, how was 120 seconds determined and how do you know i=
+t
+> will be enough?
+> >
+> > It took about 68 seconds in my environment (Intel(R) Xeon(R) Gold 6254 =
+CPU
+> @ 3.10GHz).
+> > This test accesses a fixed size(250M) memory by default settings which
+> > is used when run in kselftest framework.
+> > I think that the execution time does not change significantly in differ=
+ent
+> environments.
+> > So, I roughly doubled the execution time and get 120s, which I set to t=
+he
+> limited time.
+> > I think it is enough for any environments.
+> > If 120s are also not enough, user can freely set the limited time by "s=
+etting"
+> file.
+> >
+>=20
+> How about something like:
+>=20
+> When testing on a Intel(R) Xeon(R) Gold 6254 CPU @ 3.10GHz the resctrl
+> selftests fail
+> due to timeout after exceeding the default time limit of 45 seconds. On t=
+his
+> system
+> the test takes about 68 seconds. Since the failing test by default access=
+es a
+> fixed
+> size of memory the execution time should not vary significantly between
+> different
+> environment. A new default of 120 seconds should be sufficient yet easy t=
+o
+> customize
+> with the introduction of the "settings" file for reference.
+
+Thanks for your feedback.=20
+I will use it for commit log in next version.
+
+Best regards,
+Tan Shaopeng

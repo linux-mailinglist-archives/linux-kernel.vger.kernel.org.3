@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAEF499D2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E1049993F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583141AbiAXWQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390880AbiAXVM6 (ORCPT
+        id S1352136AbiAXVeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:34:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50862 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1444150AbiAXVAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:12:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A923C06E003;
-        Mon, 24 Jan 2022 12:10:30 -0800 (PST)
+        Mon, 24 Jan 2022 16:00:08 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 631C4B811F9;
-        Mon, 24 Jan 2022 20:10:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F15FC340E5;
-        Mon, 24 Jan 2022 20:10:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6646C611DA;
+        Mon, 24 Jan 2022 21:00:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24851C340E5;
+        Mon, 24 Jan 2022 21:00:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055028;
-        bh=+UqKwQ35sgQOM9w62WCDHOz/u6Y8TNzdLyjcPKVz5Ac=;
+        s=korg; t=1643058005;
+        bh=kucaGnne7cqZQPDqTUhLgDG6belnp+ejA+u9CyOrx/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UWO2RKP8VtnMiPwr7IcxWMgH8cgN6UeK6nZq6+wnO5OclhTsqwPAjU3DjZ8Z/983W
-         v91tTeo6ThB5xJCdZQ0IsJBPDT/NLsVQyXEPwmUss7kSUBnBts5bTrj95Q8wX6rBA2
-         qAXbjzmHxv3rO98B06xlBKGc/lvilOUM4WI3dIlk=
+        b=HVb/01x37fk59ltfTuQxIqFiLS9sVvKG/bmE8fnFPNTGrtIEJzJYMvFcf7Joz73f2
+         Djfpnfm2Pir4WaMP4IXD35emQcxy0uEoIPtHF5AvqOjwRz8IGv6yBijNxxgv+wO8Xo
+         5VGV+mv1txw3Lwx7yBxkyO7pjmcybFeU22mzETo0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.15 018/846] mtd: rawnand: davinci: Rewrite function description
-Date:   Mon, 24 Jan 2022 19:32:15 +0100
-Message-Id: <20220124184101.543728444@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Tirthendu Sarkar <tirthendu.sarkar@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0149/1039] selftests/bpf: Fix xdpxceiver failures for no hugepages
+Date:   Mon, 24 Jan 2022 19:32:18 +0100
+Message-Id: <20220124184130.171764698@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,47 +47,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
+From: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
 
-commit 0697f8441faad552fbeb02d74454b5e7bcc956a2 upstream.
+[ Upstream commit dd7f091fd22b1dce6c20e8f7769aa068ed88ac6d ]
 
-The original comment that describes the function
-nand_davinci_read_page_hwecc_oob_first() is very obscure and it is hard
-to understand what it is for.
+xsk_configure_umem() needs hugepages to work in unaligned mode. So when
+hugepages are not configured, 'unaligned' tests should be skipped which
+is determined by the helper function hugepages_present(). This function
+erroneously returns true with MAP_NORESERVE flag even when no hugepages
+are configured. The removal of this flag fixes the issue.
 
-Cc: <stable@vger.kernel.org> # v5.2
-Fixes: a0ac778eb82c ("mtd: rawnand: ingenic: Add support for the JZ4740")
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20211016132228.40254-3-paul@crapouillou.net
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The test TEST_TYPE_UNALIGNED_INV_DESC also needs to be skipped when
+there are no hugepages. However, this was not skipped as there was no
+check for presence of hugepages and hence was failing. The check to skip
+the test has now been added.
+
+Fixes: a4ba98dd0c69 (selftests: xsk: Add test for unaligned mode)
+Signed-off-by: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20211117123613.22288-1-tirthendu.sarkar@intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/davinci_nand.c |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/mtd/nand/raw/davinci_nand.c
-+++ b/drivers/mtd/nand/raw/davinci_nand.c
-@@ -372,17 +372,15 @@ correct:
- }
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 6c7cf8aadc792..621342ec30c48 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -1219,7 +1219,7 @@ static bool hugepages_present(struct ifobject *ifobject)
+ 	void *bufs;
  
- /**
-- * nand_read_page_hwecc_oob_first - hw ecc, read oob first
-+ * nand_davinci_read_page_hwecc_oob_first - Hardware ECC page read with ECC
-+ *                                          data read from OOB area
-  * @chip: nand chip info structure
-  * @buf: buffer to store read data
-  * @oob_required: caller requires OOB data read to chip->oob_poi
-  * @page: page number to read
-  *
-- * Hardware ECC for large page chips, require OOB to be read first. For this
-- * ECC mode, the write_page method is re-used from ECC_HW. These methods
-- * read/write ECC from the OOB area, unlike the ECC_HW_SYNDROME support with
-- * multiple ECC steps, follows the "infix ECC" scheme and reads/writes ECC from
-- * the data area, by overwriting the NAND manufacturer bad block markings.
-+ * Hardware ECC for large page chips, which requires the ECC data to be
-+ * extracted from the OOB before the actual data is read.
-  */
- static int nand_davinci_read_page_hwecc_oob_first(struct nand_chip *chip,
- 						  uint8_t *buf,
+ 	bufs = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
+-		    MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE | MAP_HUGETLB, -1, 0);
++		    MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
+ 	if (bufs == MAP_FAILED)
+ 		return false;
+ 
+@@ -1366,6 +1366,10 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
+ 		testapp_invalid_desc(test);
+ 		break;
+ 	case TEST_TYPE_UNALIGNED_INV_DESC:
++		if (!hugepages_present(test->ifobj_tx)) {
++			ksft_test_result_skip("No 2M huge pages present.\n");
++			return;
++		}
+ 		test_spec_set_name(test, "UNALIGNED_INV_DESC");
+ 		test->ifobj_tx->umem->unaligned_mode = true;
+ 		test->ifobj_rx->umem->unaligned_mode = true;
+-- 
+2.34.1
+
 
 

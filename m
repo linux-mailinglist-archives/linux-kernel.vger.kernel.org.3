@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC9B49981B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A731B499817
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450710AbiAXVVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:21:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44116 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442030AbiAXUwj (ORCPT
+        id S1450570AbiAXVU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:20:56 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49382 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1441794AbiAXUvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:52:39 -0500
+        Mon, 24 Jan 2022 15:51:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1336860907;
-        Mon, 24 Jan 2022 20:52:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C449DC340E5;
-        Mon, 24 Jan 2022 20:52:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 529FAB811A9;
+        Mon, 24 Jan 2022 20:51:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E13EC340E5;
+        Mon, 24 Jan 2022 20:51:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057556;
-        bh=E9rqeuXF0R1RhFYaHyebayP+Xq8DyZgpVxVVA8MREWs=;
+        s=korg; t=1643057498;
+        bh=uyerVO+UteF3ZIZcetYXxzLHy9BxVQRYWe9gb8chIxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y79/nIVRTM/a+lN0w73foyN2SeydwHXT7LfPc5UeHNpYNr11TqcnOGaYp4/nip20y
-         WTwh5ydUOaZcgqfxS9KgdARaGgb7kI8tCodjpRYQPtjzkG1qQdeGpevmsk3RmjVOmO
-         ywxkYEJBN/NSaCoxLRTc+BOkaLsrRB4H9VDuJQp8=
+        b=odWbh/BvnBsJiErCThK6d6v/d9dnpd1p4JMgPqfZ8pYCnlF4+JdoCAv5Vwdgaw6rn
+         ca7/Nt9oPtLeBJmAW53lTxTsQvc6L2zmagw4a0IzH7LgJecyICCmnzXaPqsw+2PosQ
+         18O0N3ffcqv/MdgGZWFKnj3cPOBdFGvgxfhyc4HQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 830/846] bcmgenet: add WOL IRQ check
-Date:   Mon, 24 Jan 2022 19:45:47 +0100
-Message-Id: <20220124184129.539081809@linuxfoundation.org>
+Subject: [PATCH 5.15 833/846] net: ocelot: Fix the call to switchdev_bridge_port_offload
+Date:   Mon, 24 Jan 2022 19:45:50 +0100
+Message-Id: <20220124184129.650789861@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -46,42 +47,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-commit 9deb48b53e7f4056c2eaa2dc2ee3338df619e4f6 upstream.
+commit c0b7f7d7e0ad44f35745c01964b3fa2833e298cb upstream.
 
-The driver neglects to check the result of platform_get_irq_optional()'s
-call and blithely passes the negative error codes to devm_request_irq()
-(which takes *unsigned* IRQ #), causing it to fail with -EINVAL.
-Stop calling devm_request_irq() with the invalid IRQ #s.
+In the blamed commit, the call to the function
+switchdev_bridge_port_offload was passing the wrong argument for
+atomic_nb. It was ocelot_netdevice_nb instead of ocelot_swtchdev_nb.
+This patch fixes this issue.
 
-Fixes: 8562056f267d ("net: bcmgenet: request Wake-on-LAN interrupt")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: 4e51bf44a03af6 ("net: bridge: move the switchdev object replay helpers to "push" mode")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/genet/bcmgenet.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/mscc/ocelot_net.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -3966,10 +3966,12 @@ static int bcmgenet_probe(struct platfor
+--- a/drivers/net/ethernet/mscc/ocelot_net.c
++++ b/drivers/net/ethernet/mscc/ocelot_net.c
+@@ -1168,7 +1168,7 @@ static int ocelot_netdevice_bridge_join(
+ 	ocelot_port_bridge_join(ocelot, port, bridge);
  
- 	/* Request the WOL interrupt and advertise suspend if available */
- 	priv->wol_irq_disabled = true;
--	err = devm_request_irq(&pdev->dev, priv->wol_irq, bcmgenet_wol_isr, 0,
--			       dev->name, priv);
--	if (!err)
--		device_set_wakeup_capable(&pdev->dev, 1);
-+	if (priv->wol_irq > 0) {
-+		err = devm_request_irq(&pdev->dev, priv->wol_irq,
-+				       bcmgenet_wol_isr, 0, dev->name, priv);
-+		if (!err)
-+			device_set_wakeup_capable(&pdev->dev, 1);
-+	}
+ 	err = switchdev_bridge_port_offload(brport_dev, dev, priv,
+-					    &ocelot_netdevice_nb,
++					    &ocelot_switchdev_nb,
+ 					    &ocelot_switchdev_blocking_nb,
+ 					    false, extack);
+ 	if (err)
+@@ -1182,7 +1182,7 @@ static int ocelot_netdevice_bridge_join(
  
- 	/* Set the needed headroom to account for any possible
- 	 * features enabling/disabling at runtime
+ err_switchdev_sync:
+ 	switchdev_bridge_port_unoffload(brport_dev, priv,
+-					&ocelot_netdevice_nb,
++					&ocelot_switchdev_nb,
+ 					&ocelot_switchdev_blocking_nb);
+ err_switchdev_offload:
+ 	ocelot_port_bridge_leave(ocelot, port, bridge);
+@@ -1195,7 +1195,7 @@ static void ocelot_netdevice_pre_bridge_
+ 	struct ocelot_port_private *priv = netdev_priv(dev);
+ 
+ 	switchdev_bridge_port_unoffload(brport_dev, priv,
+-					&ocelot_netdevice_nb,
++					&ocelot_switchdev_nb,
+ 					&ocelot_switchdev_blocking_nb);
+ }
+ 
 
 

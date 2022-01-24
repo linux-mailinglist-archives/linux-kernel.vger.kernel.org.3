@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA93499B66
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5CB4995CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575381AbiAXVve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:51:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36490 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449749AbiAXVQv (ORCPT
+        id S1443017AbiAXU4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385518AbiAXUd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:16:51 -0500
+        Mon, 24 Jan 2022 15:33:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F8DC07E2A0;
+        Mon, 24 Jan 2022 11:45:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F56EB8123A;
-        Mon, 24 Jan 2022 21:16:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0B8C340E9;
-        Mon, 24 Jan 2022 21:16:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDFD96135E;
+        Mon, 24 Jan 2022 19:45:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD21C340E5;
+        Mon, 24 Jan 2022 19:45:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059008;
-        bh=8RebVPnGQbTuBjYXPFFVIGJcwMDv/Hu35mDAL/+P9Cs=;
+        s=korg; t=1643053543;
+        bh=xRnyQmwYcD9vW2Ti96mi22e8rUe5cVVNvbs1/irgqsc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k51OYnIdj5i2lWndyBO/y/RNaWkzTXD+5fPhyV2mgsJsRcN6AXjou+hXemXhy8/6g
-         HWbsMCFF7clz/75szAZ/xvXJTNgF3uyGxb+v5VtPxdS5L4WRdu8qA4tUZ3faUlhcwG
-         wktQRjkqNHFpEmONhxDxuI5stuqV+2jNzjARIItY=
+        b=UnXDZXPKm8O758/O6CbmKUw8mw5pfs8wjU0OrIdL+jPB+JPLFBn+/qHWNwW0nEYDJ
+         3Neaoy6j4dKE1sZ7KhRa10TnvN3rR/TM9ZhuYTcbBl3q1ZCcizaOfL0Urw3Kna5JTk
+         KiDntC9pxVo5p7ztVVbzI1rYIdOKxedl1uGhpuEk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Landley <rob@landley.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stafford Horne <shorne@gmail.com>,
+        stable@vger.kernel.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0473/1039] openrisc: Add clone3 ABI wrapper
-Date:   Mon, 24 Jan 2022 19:37:42 +0100
-Message-Id: <20220124184141.172946221@linuxfoundation.org>
+Subject: [PATCH 5.10 098/563] crypto: qat - fix spelling mistake: "messge" -> "message"
+Date:   Mon, 24 Jan 2022 19:37:43 +0100
+Message-Id: <20220124184027.789163111@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,61 +50,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stafford Horne <shorne@gmail.com>
+From: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-[ Upstream commit 433fe39f674d58bc7a3e8254a5d2ffc290b7e04e ]
+[ Upstream commit f17a25cb1776c5712e950aaf326528ae652a086c ]
 
-Like fork and clone the clone3 syscall needs a wrapper to save callee
-saved registers, which is required by the OpenRISC ABI.  This came up
-after auditing code following a discussion with Rob Landley and Arnd
-Bergmann [0].
+Trivial fix to spelling mistake in adf_pf2vf_msg.c and adf_vf2pf_msg.c.
+s/messge/message/
 
-Tested with the clone3 kselftests and there were no issues.
-
-[0] https://lore.kernel.org/all/41206fc7-f8ce-98aa-3718-ba3e1431e320@landley.net/T/#m9c0cdb2703813b9df4da04cf6b30de1f1aa89944
-
-Fixes: 07e83dfbe16c ("openrisc: Enable the clone3 syscall")
-Cc: Rob Landley <rob@landley.net>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Stafford Horne <shorne@gmail.com>
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/openrisc/include/asm/syscalls.h | 2 ++
- arch/openrisc/kernel/entry.S         | 5 +++++
- 2 files changed, 7 insertions(+)
+ drivers/crypto/qat/qat_common/adf_pf2vf_msg.c | 2 +-
+ drivers/crypto/qat/qat_common/adf_vf2pf_msg.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/openrisc/include/asm/syscalls.h b/arch/openrisc/include/asm/syscalls.h
-index 3a7eeae6f56a8..aa1c7e98722e3 100644
---- a/arch/openrisc/include/asm/syscalls.h
-+++ b/arch/openrisc/include/asm/syscalls.h
-@@ -22,9 +22,11 @@ asmlinkage long sys_or1k_atomic(unsigned long type, unsigned long *v1,
- 
- asmlinkage long __sys_clone(unsigned long clone_flags, unsigned long newsp,
- 			void __user *parent_tid, void __user *child_tid, int tls);
-+asmlinkage long __sys_clone3(struct clone_args __user *uargs, size_t size);
- asmlinkage long __sys_fork(void);
- 
- #define sys_clone __sys_clone
-+#define sys_clone3 __sys_clone3
- #define sys_fork __sys_fork
- 
- #endif /* __ASM_OPENRISC_SYSCALLS_H */
-diff --git a/arch/openrisc/kernel/entry.S b/arch/openrisc/kernel/entry.S
-index 59c6d3aa7081e..dc5b45e9e72b5 100644
---- a/arch/openrisc/kernel/entry.S
-+++ b/arch/openrisc/kernel/entry.S
-@@ -1170,6 +1170,11 @@ ENTRY(__sys_clone)
- 	l.j	_fork_save_extra_regs_and_call
- 	 l.nop
- 
-+ENTRY(__sys_clone3)
-+	l.movhi	r29,hi(sys_clone3)
-+	l.j	_fork_save_extra_regs_and_call
-+	 l.ori	r29,r29,lo(sys_clone3)
-+
- ENTRY(__sys_fork)
- 	l.movhi	r29,hi(sys_fork)
- 	l.ori	r29,r29,lo(sys_fork)
+diff --git a/drivers/crypto/qat/qat_common/adf_pf2vf_msg.c b/drivers/crypto/qat/qat_common/adf_pf2vf_msg.c
+index d7ca222f0df18..e3da97286980e 100644
+--- a/drivers/crypto/qat/qat_common/adf_pf2vf_msg.c
++++ b/drivers/crypto/qat/qat_common/adf_pf2vf_msg.c
+@@ -176,7 +176,7 @@ out:
+  * @msg:	Message to send
+  * @vf_nr:	VF number to which the message will be sent
+  *
+- * Function sends a messge from the PF to a VF
++ * Function sends a message from the PF to a VF
+  *
+  * Return: 0 on success, error code otherwise.
+  */
+diff --git a/drivers/crypto/qat/qat_common/adf_vf2pf_msg.c b/drivers/crypto/qat/qat_common/adf_vf2pf_msg.c
+index 54b738da829d8..3e25fac051b25 100644
+--- a/drivers/crypto/qat/qat_common/adf_vf2pf_msg.c
++++ b/drivers/crypto/qat/qat_common/adf_vf2pf_msg.c
+@@ -8,7 +8,7 @@
+  * adf_vf2pf_notify_init() - send init msg to PF
+  * @accel_dev:  Pointer to acceleration VF device.
+  *
+- * Function sends an init messge from the VF to a PF
++ * Function sends an init message from the VF to a PF
+  *
+  * Return: 0 on success, error code otherwise.
+  */
+@@ -31,7 +31,7 @@ EXPORT_SYMBOL_GPL(adf_vf2pf_notify_init);
+  * adf_vf2pf_notify_shutdown() - send shutdown msg to PF
+  * @accel_dev:  Pointer to acceleration VF device.
+  *
+- * Function sends a shutdown messge from the VF to a PF
++ * Function sends a shutdown message from the VF to a PF
+  *
+  * Return: void
+  */
 -- 
 2.34.1
 

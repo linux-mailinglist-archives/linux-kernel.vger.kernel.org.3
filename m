@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B392499285
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F778498D6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347361AbiAXUV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:21:27 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46142 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353538AbiAXUDQ (ORCPT
+        id S1345890AbiAXTcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349951AbiAXTW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:03:16 -0500
+        Mon, 24 Jan 2022 14:22:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C66DC02B86C;
+        Mon, 24 Jan 2022 11:09:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F79EB811F9;
-        Mon, 24 Jan 2022 20:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF20C340E5;
-        Mon, 24 Jan 2022 20:03:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28ABCB8121A;
+        Mon, 24 Jan 2022 19:09:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C622C340E5;
+        Mon, 24 Jan 2022 19:09:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054592;
-        bh=n3NJfTp/Pp/vZAidsmeEXWJbiKjAhzMri3BOT8j4izQ=;
+        s=korg; t=1643051340;
+        bh=535P58qQQMlgifpA4Bz4L7KolFZusa+CO+JXI12ywE4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T7V656C0TMN7/D2l3skAeVWwHdhqqvm/Y0DwMtI0ngy+ZqqJcaqjV2H7jyNm3NZPN
-         byH2u+AExK/aHGBxdnYXanv/Ic8J5ulZpI4np1AX7H5p9UKzp7aV+opM/hdsNJE/oN
-         pgWZFD7S+lYgUxqtt8+q/uD1CTqY5vbu+rIBPYVw=
+        b=ksIyQIioefIFVym+cB6seS6T547OTUcFloVT0lTygzRONA5lR50moNvxv9Ush1Z5Z
+         v79lNLofo29RchaGdik/f+8PA+PBnFkLivlURRPna/tLZX7LLBw+2UquEwSrQBmpck
+         lpN6s5SecR1S83DEJR02cK4zA1mCqMyhFHlXQ574=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: [PATCH 5.10 440/563] rpmsg: core: Clean up resources on announce_create failure.
+        stable@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 130/186] serial: core: Keep mctrl register state and cached copy in sync
 Date:   Mon, 24 Jan 2022 19:43:25 +0100
-Message-Id: <20220124184039.652086378@linuxfoundation.org>
+Message-Id: <20220124183941.290412780@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,57 +48,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+From: Lukas Wunner <lukas@wunner.de>
 
-commit 8066c615cb69b7da8a94f59379847b037b3a5e46 upstream.
+[ Upstream commit 93a770b7e16772530196674ffc79bb13fa927dc6 ]
 
-During the rpmsg_dev_probe, if rpdev->ops->announce_create returns an
-error, the rpmsg device and default endpoint should be freed before
-exiting the function.
+struct uart_port contains a cached copy of the Modem Control signals.
+It is used to skip register writes in uart_update_mctrl() if the new
+signal state equals the old signal state.  It also avoids a register
+read to obtain the current state of output signals.
 
-Fixes: 5e619b48677c ("rpmsg: Split rpmsg core and virtio backend")
-Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211206190758.10004-1-arnaud.pouliquen@foss.st.com
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+When a uart_port is registered, uart_configure_port() changes signal
+state but neglects to keep the cached copy in sync.  That may cause
+a subsequent register write to be incorrectly skipped.  Fix it before
+it trips somebody up.
+
+This behavior has been present ever since the serial core was introduced
+in 2002:
+https://git.kernel.org/history/history/c/33c0d1b0c3eb
+
+So far it was never an issue because the cached copy is initialized to 0
+by kzalloc() and when uart_configure_port() is executed, at most DTR has
+been set by uart_set_options() or sunsu_console_setup().  Therefore,
+a stable designation seems unnecessary.
+
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Link: https://lore.kernel.org/r/bceeaba030b028ed810272d55d5fc6f3656ddddb.1641129752.git.lukas@wunner.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rpmsg/rpmsg_core.c |   20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ drivers/tty/serial/serial_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/rpmsg/rpmsg_core.c
-+++ b/drivers/rpmsg/rpmsg_core.c
-@@ -473,13 +473,25 @@ static int rpmsg_dev_probe(struct device
- 	err = rpdrv->probe(rpdev);
- 	if (err) {
- 		dev_err(dev, "%s: failed: %d\n", __func__, err);
--		if (ept)
--			rpmsg_destroy_ept(ept);
--		goto out;
-+		goto destroy_ept;
- 	}
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+index 16ce187390d8b..5f9a52883bc05 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -2361,7 +2361,8 @@ uart_configure_port(struct uart_driver *drv, struct uart_state *state,
+ 		 * We probably don't need a spinlock around this, but
+ 		 */
+ 		spin_lock_irqsave(&port->lock, flags);
+-		port->ops->set_mctrl(port, port->mctrl & TIOCM_DTR);
++		port->mctrl &= TIOCM_DTR;
++		port->ops->set_mctrl(port, port->mctrl);
+ 		spin_unlock_irqrestore(&port->lock, flags);
  
--	if (ept && rpdev->ops->announce_create)
-+	if (ept && rpdev->ops->announce_create) {
- 		err = rpdev->ops->announce_create(rpdev);
-+		if (err) {
-+			dev_err(dev, "failed to announce creation\n");
-+			goto remove_rpdev;
-+		}
-+	}
-+
-+	return 0;
-+
-+remove_rpdev:
-+	if (rpdrv->remove)
-+		rpdrv->remove(rpdev);
-+destroy_ept:
-+	if (ept)
-+		rpmsg_destroy_ept(ept);
- out:
- 	return err;
- }
+ 		/*
+-- 
+2.34.1
+
 
 

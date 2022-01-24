@@ -2,125 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D59D04985C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC7C4985D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235398AbiAXRFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:05:30 -0500
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:33460 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244138AbiAXRFW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:05:22 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4JjGZT4vC3z9vjCJ
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:05:21 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wwcWM2FjLjYF for <linux-kernel@vger.kernel.org>;
-        Mon, 24 Jan 2022 11:05:21 -0600 (CST)
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4JjGZT2m6bz9vjC7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:05:21 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4JjGZT2m6bz9vjC7
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4JjGZT2m6bz9vjC7
-Received: by mail-pj1-f71.google.com with SMTP id q8-20020a17090a064800b001b4ee55e378so241744pje.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:05:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iqOvQckE4DPpe/gz80hlCWLF/acf9yFaFDsgsRhtXZY=;
-        b=czZ1znNCyFZoXGfMGTRQpY2QtLcSB0nqHP6Qv2BEwEtBbrFdR3EEjPAtvBBJ2rdKp1
-         HCWt/yP1Uz6TUK5+DCAUbmhjfwwbeygHk6e1pINjALHkZiuZ7X3fGXVzC4ja/Uffy3Pm
-         m3cGceoUfMcKY5gFjN5U3aHa31r5FJ53R4SduFG1taFo7vp7W57sSSyOhRD9HcDYl8P2
-         ZwMydl4q3y05ziPmP1wV9YGvHMUEqf1628SaqjuAKegh5garAkZUc09Rx9cpSH9F1jUy
-         kL7fgZO90+bdz4fB3nk2e0LepQwdWwOwh021tQT+3AZp5oVuMyKjQ+YYzz9guxDVk9eE
-         G+0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iqOvQckE4DPpe/gz80hlCWLF/acf9yFaFDsgsRhtXZY=;
-        b=1EqLNONOdEJIOKprxZrrN9qe+mwT7Ykfsd4+OVHneF9bCXOIHTfNsx369nvw5zZeFn
-         fEET37vT6o6MN1gbe0aHeUarq1UDnip+Q0JVdpUfCsC99hOql71CPSo4JxiNfItD6oyh
-         +1L8h8QBFszWoeD8rQASljIq9yEAm1J/lBke46T4GjnFpM3pjqvTVa7EER998pmZHxVS
-         jEC5FCyaXFXGShF4rNlmbY9xPASLSsQxWM9CbkW0EKaJloMax9rzbxvAVCMczknGQGUH
-         5D4ofbi6iuqPCO8XeQyU6aul0SfPDsPvD/KfbkssClZc1tv/GTCehueg6Ii/juf4O3tt
-         bh5Q==
-X-Gm-Message-State: AOAM533dVacFT3khi0u3F2WK7sIjQk+MjpGmApgjvENCvZ7o/B0hszHB
-        xQSN4HjTg2FO0qM6/mJSPgI3L+xBpA7OudIaQRpe7hge+5gYqKeEpCqdwNmks18V5nUpnfhOjhK
-        GNMO4rV0tl0CWZCPsbt1xyfO7UTzw
-X-Received: by 2002:a17:902:f243:b0:14b:1f32:e923 with SMTP id j3-20020a170902f24300b0014b1f32e923mr9628337plc.121.1643043920605;
-        Mon, 24 Jan 2022 09:05:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz6FN3UZbzNKOs+OIFcyGQ4fo0vfGGg3hCscMIg92FDOZqeD2qwe0OOD+rjCAyx1dQOnHgVQA==
-X-Received: by 2002:a17:902:f243:b0:14b:1f32:e923 with SMTP id j3-20020a170902f24300b0014b1f32e923mr9628306plc.121.1643043920288;
-        Mon, 24 Jan 2022 09:05:20 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.4.61.248])
-        by smtp.gmail.com with ESMTPSA id s2sm2882596pgq.38.2022.01.24.09.05.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 09:05:20 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Michael Schimek <mschimek@gmx.at>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] media: bttv: Fix a NULL pointer dereference in setup_window_lock()
-Date:   Tue, 25 Jan 2022 01:05:13 +0800
-Message-Id: <20220124170515.58519-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        id S243906AbiAXRGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:06:55 -0500
+Received: from mga05.intel.com ([192.55.52.43]:32113 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241403AbiAXRGv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:06:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643044011; x=1674580011;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Qd39rwROJKB7DIvk/PUIpvF42egNf6/G2c6rmIfyKr0=;
+  b=UnZ41U4KDqJTPit/pm1lwdiJLZL1umeZy5FX60eA68GnvgDh8QvZk150
+   2QLvmUhGPBun4sHZeJXYRxVS4zKlwVtDY/pJX8/+yHwBTp3qzQqae3jlS
+   bZtegt/dD76jNBviwWhU+L/aWeuK5wYs5dwjlixAzRmc71F8CGzWo4h3T
+   mxfUcZhxoySWgfq2MsrRzU65RcCpMwHAxaCx6L/KJqhHHPjrdyxMxS1KF
+   7bz1dfvLV43WNssJM9BJUqdBTXZFxRqxLNICf6ZUvNyeeIgtipHGtjpVq
+   f8jYRq/XD2R16iS0w4sleRixQsl7sR2xKilqahmMdK1AugK7mSFgwfkMI
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="332448538"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="332448538"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 09:05:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="520020358"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 24 Jan 2022 09:05:58 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nC2mz-000Ieg-Gp; Mon, 24 Jan 2022 17:05:57 +0000
+Date:   Tue, 25 Jan 2022 01:05:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Terrell <terrelln@fb.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c:1390
+ ZSTD_decompressSequences() warn: inconsistent indenting
+Message-ID: <202201250105.FTvWmcNq-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In setup_window_lock(), the return value of videobuf_sg_alloc() is
-assigned to variable new and there is a dereference of it after
-that. the return value of videobuf_sg_alloc() could be NULL on
-failure of allocation, which could lead to a NULL pointer dereference.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+commit: e0c1b49f5b674cca7b10549c53b3791d0bbc90a8 lib: zstd: Upgrade to latest upstream zstd version 1.4.10
+date:   3 months ago
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220125/202201250105.FTvWmcNq-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 
-Fix this bug by adding a NULL check of new.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This bug was found by a static analyzer.
+New smatch warnings:
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c:1390 ZSTD_decompressSequences() warn: inconsistent indenting
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c:1414 ZSTD_decompressSequencesLong() warn: inconsistent indenting
 
-Builds with 'make allyesconfig' show no new warnings,
-and our static analyzer no longer warns about this code.
+Old smatch warnings:
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:397 HUF_decompress4X1_usingDTable_internal_body() warn: maybe use && instead of &
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:397 HUF_decompress4X1_usingDTable_internal_body() warn: maybe use && instead of &
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:850 HUF_decompress4X2_usingDTable_internal_body() warn: maybe use && instead of &
+arch/x86/boot/compressed/../../../../lib/zstd/decompress/huf_decompress.c:850 HUF_decompress4X2_usingDTable_internal_body() warn: maybe use && instead of &
+arch/x86/boot/compressed/misc.c:292 parse_elf() warn: ignoring unreachable code.
 
-Fixes: e5bd0260e7d3 ("V4L/DVB (5077): Bttv cropping support")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+vim +1390 arch/x86/boot/compressed/../../../../lib/zstd/decompress/zstd_decompress_block.c
+
+  1369	
+  1370	typedef size_t (*ZSTD_decompressSequences_t)(
+  1371	                            ZSTD_DCtx* dctx,
+  1372	                            void* dst, size_t maxDstSize,
+  1373	                            const void* seqStart, size_t seqSize, int nbSeq,
+  1374	                            const ZSTD_longOffset_e isLongOffset,
+  1375	                            const int frame);
+  1376	
+  1377	#ifndef ZSTD_FORCE_DECOMPRESS_SEQUENCES_LONG
+  1378	static size_t
+  1379	ZSTD_decompressSequences(ZSTD_DCtx* dctx, void* dst, size_t maxDstSize,
+  1380	                   const void* seqStart, size_t seqSize, int nbSeq,
+  1381	                   const ZSTD_longOffset_e isLongOffset,
+  1382	                   const int frame)
+  1383	{
+  1384	    DEBUGLOG(5, "ZSTD_decompressSequences");
+  1385	#if DYNAMIC_BMI2
+  1386	    if (dctx->bmi2) {
+  1387	        return ZSTD_decompressSequences_bmi2(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
+  1388	    }
+  1389	#endif
+> 1390	  return ZSTD_decompressSequences_default(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
+  1391	}
+  1392	#endif /* ZSTD_FORCE_DECOMPRESS_SEQUENCES_LONG */
+  1393	
+  1394	
+  1395	#ifndef ZSTD_FORCE_DECOMPRESS_SEQUENCES_SHORT
+  1396	/* ZSTD_decompressSequencesLong() :
+  1397	 * decompression function triggered when a minimum share of offsets is considered "long",
+  1398	 * aka out of cache.
+  1399	 * note : "long" definition seems overloaded here, sometimes meaning "wider than bitstream register", and sometimes meaning "farther than memory cache distance".
+  1400	 * This function will try to mitigate main memory latency through the use of prefetching */
+  1401	static size_t
+  1402	ZSTD_decompressSequencesLong(ZSTD_DCtx* dctx,
+  1403	                             void* dst, size_t maxDstSize,
+  1404	                             const void* seqStart, size_t seqSize, int nbSeq,
+  1405	                             const ZSTD_longOffset_e isLongOffset,
+  1406	                             const int frame)
+  1407	{
+  1408	    DEBUGLOG(5, "ZSTD_decompressSequencesLong");
+  1409	#if DYNAMIC_BMI2
+  1410	    if (dctx->bmi2) {
+  1411	        return ZSTD_decompressSequencesLong_bmi2(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
+  1412	    }
+  1413	#endif
+> 1414	  return ZSTD_decompressSequencesLong_default(dctx, dst, maxDstSize, seqStart, seqSize, nbSeq, isLongOffset, frame);
+  1415	}
+  1416	#endif /* ZSTD_FORCE_DECOMPRESS_SEQUENCES_SHORT */
+  1417	
+  1418	
+  1419	
+
 ---
-The analysis employs differential checking to identify inconsistent 
-security operations (e.g., checks or kfrees) between two code paths 
-and confirms that the inconsistent operations are not recovered in the
-current function or the callers, so they constitute bugs. 
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
- drivers/media/pci/bt8xx/bttv-driver.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 8cc9bec43688..6338f98d845d 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -2182,6 +2182,8 @@ static int setup_window_lock(struct bttv_fh *fh, struct bttv *btv,
- 		struct bttv_buffer *new;
- 
- 		new = videobuf_sg_alloc(sizeof(*new));
-+		if (!new)
-+			return -ENOMEM;
- 		new->crop = btv->crop[!!fh->do_crop].rect;
- 		bttv_overlay_risc(btv, &fh->ov, fh->ovfmt, new);
- 		retval = bttv_switch_overlay(btv,fh,new);
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

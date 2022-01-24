@@ -2,131 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E410C497E0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA43497E11
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237615AbiAXLcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 06:32:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54412 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237573AbiAXLcH (ORCPT
+        id S237626AbiAXLdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 06:33:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237577AbiAXLdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 06:32:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643023926;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qORMnoIdgKPzaKMb6YWMbi2BpiXpkDZcr/xPk+9njEw=;
-        b=RisK8b27MWALvW7aE8fwyK5165hPJBeG7Q13Ei6xkp1rGtbunMmhJG2Ye+FnirPa8C+swD
-        n2ygv3nBQMw/PREAKRXOo77Vx9l61WsNjjljA4nfZw4yfrd0BpBigT3Xh2ROEpkBVq5HGE
-        I1TyGrEBkasilOJJKJI73j8eDZ7/vRw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-CSH3-giRNCe3megBcHYkmA-1; Mon, 24 Jan 2022 06:32:02 -0500
-X-MC-Unique: CSH3-giRNCe3megBcHYkmA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BE2B4814243;
-        Mon, 24 Jan 2022 11:32:01 +0000 (UTC)
-Received: from localhost (unknown [10.39.195.53])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8CF3410589B1;
-        Mon, 24 Jan 2022 11:31:50 +0000 (UTC)
-Date:   Mon, 24 Jan 2022 11:31:49 +0000
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>
-Subject: Re: [PATCH v1] vhost: cache avail index in vhost_enable_notify()
-Message-ID: <Ye6OJdi2M1EBx7b3@stefanha-x1.localdomain>
-References: <20220114090508.36416-1-sgarzare@redhat.com>
+        Mon, 24 Jan 2022 06:33:00 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD6BC06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:32:59 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id p203so8638919oih.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:32:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UFyEedV/4W7XdVLa8Lx8qnPyLjbWcIdiBACIonQnaII=;
+        b=o+RNdaWxjWEA92fpqACsUfCdgaIpmDzO8dAclSEvH/U+3qWxfqG11kzJH8COMl2ICK
+         CtkMuI0xi7S6VMinXQb+z5r0NS4zc9uFE0iWKLbIn5IdFiR8n1WbEFT+vNQKx3fa9RZ+
+         aHjcXudb7GoKH/32gHKWYurC77SsIfsuGQx0LMufgaCs6QdKGdHWTiDVL+82Qae524Vn
+         0IHBoCaAPzqfpCYtbDAGH9XIM5YnZfixxRs7P6VYudmBKdbJEP217pcU2RYJoGRm948q
+         e4BAECeCDxkeIE+mcfR8CBWJcaCZVnYBFgkU+FM+a2ykrPKOYQ330zwZaZML5oXouUjH
+         YxOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UFyEedV/4W7XdVLa8Lx8qnPyLjbWcIdiBACIonQnaII=;
+        b=U+Ta9MRhIurQT34gpRy3iZH4hdetFncr4QNKzuCBu3zT1kAWlBD299SKyCehj0mBnY
+         IzpHTg/Y5IPGN+fzIVkTzZEOvoQQhnCGp0BwXKk67lVRRHhmGIVokw5l2dCRzzVGEOPt
+         ufSpimq/T3Hxa/hhcY0cdcXLFSjkIo68zy47wgT6bSitJweDWNSyC2dMlA/8jfhpr6cH
+         e9uueu07/Yr2S4fJIJognVuDqiIlX2S6K2qKTvKoSsxyE3NePEyHzTURf9rF2JOcq6Vf
+         ARCv4AuU8KTej0SzATcgslV8FKg/K9A0xEAddGLk7JRKLuvhuBiSqVEYWeX479wxJyW/
+         xEnQ==
+X-Gm-Message-State: AOAM532RMFEGPCFcNgbsUP9yPhRqll8T83oi+xmzZFSW6OTdq9pYFt+K
+        c4809nOmzYcFkfYOKtuLwxuTxskrReogpdXMHRT3pg==
+X-Google-Smtp-Source: ABdhPJwqjfmWmyfw51mBeC+dqdV1ap2DrEQedAJxR30CSgPvOqXNtQdb36OHY/owlaJwxdUFI/H7VbkQ/Oxz18yxWvQ=
+X-Received: by 2002:a05:6808:120a:: with SMTP id a10mr980600oil.160.1643023977513;
+ Mon, 24 Jan 2022 03:32:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MUPe2nEeErvXt6ea"
-Content-Disposition: inline
-In-Reply-To: <20220114090508.36416-1-sgarzare@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+References: <20220124025205.329752-1-liupeng256@huawei.com>
+ <20220124025205.329752-2-liupeng256@huawei.com> <Ye5hKItk3j7arjaI@elver.google.com>
+ <6eb16a68-9a56-7aea-3dd6-bd719a9ce700@huawei.com>
+In-Reply-To: <6eb16a68-9a56-7aea-3dd6-bd719a9ce700@huawei.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 24 Jan 2022 12:32:45 +0100
+Message-ID: <CACT4Y+a86X+gH5aJ-o5ituc-+hysFOYBJ7ZvuC234xJnwANWvA@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/3] kfence: Add a module parameter to adjust kfence objects
+To:     "liupeng (DM)" <liupeng256@huawei.com>
+Cc:     Marco Elver <elver@google.com>, glider@google.com, corbet@lwn.net,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        akpm@linux-foundation.org, kasan-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---MUPe2nEeErvXt6ea
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Jan 14, 2022 at 10:05:08AM +0100, Stefano Garzarella wrote:
-> In vhost_enable_notify() we enable the notifications and we read
-> the avail index to check if new buffers have become available in
-> the meantime.
->=20
-> We are not caching the avail index, so when the device will call
-> vhost_get_vq_desc(), it will find the old value in the cache and
-> it will read the avail index again.
-
-I think this wording is clearer because we do keep a cached the avail
-index value, but the issue is we don't update it:
-s/We are not caching the avail index/We do not update the cached avail
-index value/
-
->=20
-> It would be better to refresh the cache every time we read avail
-> index, so let's change vhost_enable_notify() caching the value in
-> `avail_idx` and compare it with `last_avail_idx` to check if there
-> are new buffers available.
->=20
-> Anyway, we don't expect a significant performance boost because
-> the above path is not very common, indeed vhost_enable_notify()
-> is often called with unlikely(), expecting that avail index has
-> not been updated.
->=20
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+On Mon, 24 Jan 2022 at 12:24, liupeng (DM) <liupeng256@huawei.com> wrote:
+>
+>
+> On 2022/1/24 16:19, Marco Elver wrote:
+>
+> On Mon, Jan 24, 2022 at 02:52AM +0000, Peng Liu wrote:
+>
+> KFENCE is designed to be enabled in production kernels, but it can
+> be also useful in some debug situations. For machines with limited
+> memory and CPU resources, KASAN is really hard to run. Fortunately,
+>
+> If these are arm64 based machines, see if CONFIG_KASAN_SW_TAGS works for
+> you. In future, we believe that CONFIG_KASAN_HW_TAGS will be suitable
+> for a variety of scenarios, including debugging scenarios of resource
+> constrained environments.
+>
+> Thank you for your good suggestion, we will try it.
+>
+> KFENCE can be a suitable candidate. For KFENCE running on a single
+> machine, the possibility of discovering existed bugs will increase
+> as the increasing of KFENCE objects, but this will cost more memory.
+> In order to balance the possibility of discovering existed bugs and
+> memory cost, KFENCE objects need to be adjusted according to memory
+> resources for a compiled kernel Image. Add a module parameter to
+> adjust KFENCE objects will make kfence to use in different machines
+> with the same kernel Image.
+>
+> In short, the following reasons motivate us to add this parameter.
+> 1) In some debug situations, this will make kfence flexible.
+> 2) For some production machines with different memory and CPU size,
+> this will reduce the kernel-Image-version burden.
+>
+> [...]
+>
+> This patch (of 3):
+>
+> [ Note for future: No need to add "This patch (of X)" usually -- this is
+>   added by maintainers if deemed appropriate, and usually includes the
+>   cover letter. ]
+>
+> The most important motivation of this patch series is to make
+> KFENCE easy-to-use in business situations.
+>
+> Signed-off-by: Peng Liu <liupeng256@huawei.com>
 > ---
-> v1:
-> - improved the commit description [MST, Jason]
-> ---
->  drivers/vhost/vhost.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 59edb5a1ffe2..07363dff559e 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -2543,8 +2543,9 @@ bool vhost_enable_notify(struct vhost_dev *dev, str=
-uct vhost_virtqueue *vq)
->  		       &vq->avail->idx, r);
->  		return false;
->  	}
-> +	vq->avail_idx =3D vhost16_to_cpu(vq, avail_idx);
-> =20
-> -	return vhost16_to_cpu(vq, avail_idx) !=3D vq->avail_idx;
-> +	return vq->avail_idx !=3D vq->last_avail_idx;
+>  Documentation/dev-tools/kfence.rst |  14 ++--
+>  include/linux/kfence.h             |   3 +-
+>  mm/kfence/core.c                   | 108 ++++++++++++++++++++++++-----
+>  mm/kfence/kfence.h                 |   2 +-
+>  mm/kfence/kfence_test.c            |   2 +-
+>  5 files changed, 103 insertions(+), 26 deletions(-)
+>
+> [...]
+>
+> diff --git a/include/linux/kfence.h b/include/linux/kfence.h
+> index 4b5e3679a72c..aec4f6b247b5 100644
+> --- a/include/linux/kfence.h
+> +++ b/include/linux/kfence.h
+> @@ -17,12 +17,13 @@
+>  #include <linux/atomic.h>
+>  #include <linux/static_key.h>
+>
+> +extern unsigned long kfence_num_objects;
+>  /*
+>   * We allocate an even number of pages, as it simplifies calculations to map
+>   * address to metadata indices; effectively, the very first page serves as an
+>   * extended guard page, but otherwise has no special purpose.
+>   */
+> -#define KFENCE_POOL_SIZE ((CONFIG_KFENCE_NUM_OBJECTS + 1) * 2 * PAGE_SIZE)
+> +#define KFENCE_POOL_SIZE ((kfence_num_objects + 1) * 2 * PAGE_SIZE)
+>  extern char *__kfence_pool;
+>
+> I appreciate the effort, but you could have gotten a quicker answer if
+> you had first sent us an email to ask why adjustable number of objects
+> hasn't been done before. Because if it was trivial, we would have
+> already done it.
+>
+> What you've done is turned KFENCE_POOL_SIZE into a function instead of a
+> constant (it still being ALL_CAPS is now also misleading).
+>
+> This is important here:
+>
+> /**
+> * is_kfence_address() - check if an address belongs to KFENCE pool
+> * @addr: address to check
+> *
+> * Return: true or false depending on whether the address is within the KFENCE
+> * object range.
+> *
+> * KFENCE objects live in a separate page range and are not to be intermixed
+> * with regular heap objects (e.g. KFENCE objects must never be added to the
+> * allocator freelists). Failing to do so may and will result in heap
+> * corruptions, therefore is_kfence_address() must be used to check whether
+> * an object requires specific handling.
+> *
+> * Note: This function may be used in fast-paths, and is performance critical.
+> * Future changes should take this into account; for instance, we want to avoid
+> * introducing another load and therefore need to keep KFENCE_POOL_SIZE a
+> * constant (until immediate patching support is added to the kernel).
+> */
+> static __always_inline bool is_kfence_address(const void *addr)
+> {
+> /*
+> * The __kfence_pool != NULL check is required to deal with the case
+> * where __kfence_pool == NULL && addr < KFENCE_POOL_SIZE. Keep it in
+> * the slow-path after the range-check!
+> */
+> return unlikely((unsigned long)((char *)addr - __kfence_pool) < KFENCE_POOL_SIZE && __kfence_pool);
+> }
+>
+> Unfortunately I think you missed the "Note".
+>
+> Which means that ultimately your patch adds another LOAD to the fast
+> path, which is not an acceptable trade-off.
+>
+> This would mean your change would require benchmarking, but it'd also
+> mean we and everyone else would have to re-benchmark _all_ systems where
+> we've deployed KFENCE.
+>
+> I think the only reasonable way forward is if you add immediate patching
+> support to the kernel as the "Note" suggests.
+>
+> May you give us more details about "immediate patching"?
 
-vhost_vq_avail_empty() has a fast path that's missing in
-vhost_enable_notify():
 
-  if (vq->avail_idx !=3D vq->last_avail_idx)
-      return false;
+Another option may be as follows:
+Have a config for _max_ pool size. Always reserve max amount of
+virtual address space, and do the range check for the max amount. But
+actually allocate pages potentially for a smaller number of objects
+(configured with a runtime parameter).
 
---MUPe2nEeErvXt6ea
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmHujiUACgkQnKSrs4Gr
-c8j4FQgAqGNimsQXmBYd5xvOIaFAPOU7K643vUM2nqHYrdNnPg2GVtVXiyulBb0N
-gyajwW3HtC/CjTsb0mTXhAeHHiHJ+0ImiFGCsPrYhwwDQE9fK9QTwVNW0P++Suc1
-yvHSZtUCHzoy9MxvTtfzPGFFZvyCnFCAM+VR3mTPvV6d5X9kM1iMMb4SOMP3eEJ5
-Sr56/F6EgVy6IRHk5jw4b50dv/PXGkemVBToPYM1lJKpk6QItPkhO1Oz6cju47+l
-/sEYr52mKCa+j4HT4wg9cOZQwrP9FzDmr41yDHQsz/4hLllTilrz4WxiwMU5hUsc
-HGd9PcRpzj36BwxUcI3kzjr6yf9Sjw==
-=t889
------END PGP SIGNATURE-----
-
---MUPe2nEeErvXt6ea--
-
+> In the meantime, while not a single kernel imagine, we've found that
+> debug scenarios usually are best served with a custom debug kernel, as
+> there are other debug features that are only Kconfig configurable. Thus,
+> having a special debug kernel just configure KFENCE differently
+> shouldn't be an issue in the majority of cases.
+>
+> Should this answer not be satisfying for you, the recently added feature
+> skipping already covered allocations (configurable via
+> kfence.skip_covered_thresh) alleviates some of the issue of a smaller
+> pool with a very low sample interval (viz. high sample rate).
+>
+> The main thing to watch out for is KFENCE's actual sample rate vs
+> intended sample rate (per kfence.sample_interval). If you monitor
+> /sys/kernel/debug/kfence/stats, you can compute the actual sample rate.
+> If the actual sample rate becomes significantly lower than the intended
+> rate, only then does it make sense to increase the pool size. My
+> suggestion for you is therefore to run some experiments, while adjusting
+> kfence.sample_interval and kfence.skip_covered_thresh until you reach a
+> sample rate that is close to intended.
+>
+> Thanks,
+> -- Marco
+> .
+>
+> Thank you for your patient suggestions, it's actually helpful and inspired.
+> We have integrated your latest work "skipping already covered allocations",
+> and will do more experiments about KFENCE. Finally, we really hope you can
+> give us more introductions about "immediate patching".
+>
+> Thanks,
+> -- Peng Liu
+> .

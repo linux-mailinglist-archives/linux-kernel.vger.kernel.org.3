@@ -2,70 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2EF497BEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDF9497BF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbiAXJ0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
+        id S233705AbiAXJ0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:26:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233534AbiAXJ0Y (ORCPT
+        with ESMTP id S233534AbiAXJ0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:26:24 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C414FC06173D;
-        Mon, 24 Jan 2022 01:26:23 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 679C51F4331D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643016381;
-        bh=QKdfQZOdmYZJNu5RLWnu+T/Ig0eAu7tkYNWvSAxrBts=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=CWLx9uGiQ9qmn3+wTYnZ8fnLYrAVsfuclNxMso2wH/ogXuiYbl/Yd5zNkXlhOg5fT
-         Z6d7EreNWMpdktOBbkSCNcDzgHZusFAZrtXb1EecMAa58pv+YHUM9B3MZGpNYIkg36
-         yACj2xPrGdnoe4xEow6BG+KtfT89CADGMbU+NUydmfFzv97QR15J5i1ONzZrxUAdjG
-         RmLmfI2FSUz7kSJYHlZmpfuUNgJ7B5X1k68YVglOL+2zfRmNBcluqCqzKvZQw02e2m
-         Lp4NqyCaIJDmD4+Bx8jmbsEKsnM6SYRx8vdH/yCfHlIB5/12LwjoeDETGF3hUDIEhq
-         gPE4tIC9b4LWA==
-Subject: Re: [PATCH][next] usb: xhci-mtk: Use struct_size() helper in
- create_sch_ep()
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220120015546.GA75917@embeddedor>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <1e41c2fe-38b2-e7db-ec71-cab1abb708f3@collabora.com>
-Date:   Mon, 24 Jan 2022 10:26:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 24 Jan 2022 04:26:52 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62D4C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:26:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=WSgpQrO3nB4ks2zZoLG9jzPfRr
+        sPRYoI8tnJpsYPK3L1X75WnDNYMOtn6ENJlWXm9w9G9yAKY6/SGlp9Wi1dnTDW+29HKCD6zaYY7A0
+        AqOLI+Uq3b9clcdiX6WPFh5gG2p4ZSCXOIT+2sBks1pBxNmdIMmABpT1up7FBZFxg7/UQMkTBhtqQ
+        017fYsfhEaFTr/GTmeps0tW0gL1Xby0Q+ordWzMM6VYqIsIfKlamXNwUYgTueTsM7KM2M8KweI7LO
+        SWZ4mNJMFQVAGVmAxFlLvZnM1diDXEisNbfAvZ4FaNNhTK1xUTz9dLQnvCxXYmhHEaP/cR3ptbsOF
+        zw+yzrPA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nBvcJ-002mvL-Of; Mon, 24 Jan 2022 09:26:27 +0000
+Date:   Mon, 24 Jan 2022 01:26:27 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/7] iommu/vt-d: Remove aux-domain related callbacks
+Message-ID: <Ye5ww9g2nQwIyxcb@infradead.org>
+References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
+ <20220124071103.2097118-4-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220120015546.GA75917@embeddedor>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124071103.2097118-4-baolu.lu@linux.intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/01/22 02:55, Gustavo A. R. Silva ha scritto:
-> Make use of the struct_size() helper instead of an open-coded version,
-> in order to avoid any potential type mistakes or integer overflows that,
-> in the worst scenario, could lead to heap overflows.
-> 
-> Also, address the following sparse warnings:
-> drivers/usb/host/xhci-mtk-sch.c:265:20: warning: using sizeof on a flexible structure
-> 
-> Link: https://github.com/KSPP/linux/issues/160
-> Link: https://github.com/KSPP/linux/issues/174
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Acked-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Looks good,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>

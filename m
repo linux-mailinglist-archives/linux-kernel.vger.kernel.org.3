@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68879497BAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7C4497BBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbiAXJQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiAXJQb (ORCPT
+        id S231809AbiAXJTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:19:45 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4444 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232155AbiAXJTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:16:31 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D460C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:16:31 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id s127so24551082oig.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:16:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZRN5vWJAxkj8OOhK9WNkjB+abR7dFbVqjkPzo3NIMyE=;
-        b=Tk1aG7x8bDsvpHwzPDDbjglqlnUBuM/Vw5/O7TeuPWe/+bbzVPDKyO1tJk/UhSQjTI
-         wwEelgqnNno3r0HbDum2C2Xj5se6L8WD8ja36+tL0ANH9FjWTwcDy3rsNhdM2M1t+MDj
-         Z4frco5gvIZzxwDAqQcVDvK2hscAkFfpel3jEZppPZl4FS/oTY6cNwGkuBzAL/fSNEQ1
-         2vkTZR8MYcxfUyXIZHL1eutYwye/DnPqRGjxTfEJFWS6UA5ehqoH4KoYVZ+jGvifkvBK
-         cOjM70cAG+/5rz6I3RIC03meJmF4bTyv1LAY30jppdYI+fzzqDQEJpD/E6SqgrNIAiCB
-         T2eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZRN5vWJAxkj8OOhK9WNkjB+abR7dFbVqjkPzo3NIMyE=;
-        b=AFKLSYAQ7rLiXNUHb8NVWSCvISsyeOu9fd+5Jjo11zVaQvzHfvnjNVtAICruXVsiUB
-         S5Bol/v8FHyhc5DvHbyX1DtUGW/lnozxJnSxUb8V8lJq0VdxqKCahCNzZqysTToRq8ml
-         9VD+FxxsBIj5hpZOHjbA91PNhDIG/4nwuUFqUwAIpKiQveArhMzjyV/fDNuqSiv47GS7
-         d90DDbVrZCBcC4OueiKaru3m9N/GJjdurcy1MCiQFuESYryFtrX6lJhSSL2CQO3BTZbd
-         +CxEOsIIKFtfzSzglMGSg1uajAO3MDYW3WECByRuf4bHg2a3onj+hgGjytpAvORZXIp0
-         m+WA==
-X-Gm-Message-State: AOAM530jI9qIW0cjF4VkIR9TQf0nN2LYeUTu7fS2+jlgxgjfqdovC82z
-        msap+XbrdvQ3wzn+vtGnTdnCd21kVooIYowje7o=
-X-Google-Smtp-Source: ABdhPJxSI+GfoxY1I4bFw7NAKktdRprPZhTJ56hsLTsI80Qsx0BMUGA38IYXps5v363j0KE+U6M7QVUlQNu+aACpFIM=
-X-Received: by 2002:a05:6808:20a3:: with SMTP id s35mr706861oiw.170.1643015790773;
- Mon, 24 Jan 2022 01:16:30 -0800 (PST)
+        Mon, 24 Jan 2022 04:19:32 -0500
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jj4854kSmz686qc;
+        Mon, 24 Jan 2022 17:15:17 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 24 Jan 2022 10:19:30 +0100
+Received: from [10.47.89.21] (10.47.89.21) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.21; Mon, 24 Jan
+ 2022 09:19:29 +0000
+Subject: Test 73 Sig_trap fails on arm64 (was Re: [PATCH] perf test: Test 73
+ Sig_trap fails on s390)
+To:     Leo Yan <leo.yan@linaro.org>, Marco Elver <elver@google.com>,
+        Will Deacon <will@kernel.org>
+CC:     Thomas Richter <tmricht@linux.ibm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <acme@kernel.org>, <svens@linux.ibm.com>, <gor@linux.ibm.com>,
+        <sumanthk@linux.ibm.com>, <hca@linux.ibm.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20211216151454.752066-1-tmricht@linux.ibm.com>
+ <CANpmjNNMWtjcKa961SjEvRbbPXyw5M5SkrXbb3tnyL3_XyniCw@mail.gmail.com>
+ <90efb5a9-612a-919e-cf2f-c528692d61e2@huawei.com>
+ <20220118091827.GA98966@leoy-ThinkPad-X240s>
+ <CANpmjNMPoU+1b1fKFuYDYwisW2YfjQHxGt5hgLp1tioG7C2jmg@mail.gmail.com>
+ <20220118124343.GC98966@leoy-ThinkPad-X240s>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <bfa0af18-04ac-857d-d3d8-ad9290f912c8@huawei.com>
+Date:   Mon, 24 Jan 2022 09:19:00 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-References: <20220123181734.10402-1-makvihas@gmail.com> <20220124064918.GR1951@kadam>
-In-Reply-To: <20220124064918.GR1951@kadam>
-From:   Vihas Mak <makvihas@gmail.com>
-Date:   Mon, 24 Jan 2022 14:46:19 +0530
-Message-ID: <CAH1kMwSNtDAS26TsqWs+bm0B333dSJyK-m_XnU3pgoMZf1MGhQ@mail.gmail.com>
-Subject: Re: [PATCH v2] staging: r8188eu: handle rtw_init_netdev_name()
- failure appropriately
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220118124343.GC98966@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.89.21]
+X-ClientProxiedBy: lhreml709-chm.china.huawei.com (10.201.108.58) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for reviewing the patch Dan.
+On 18/01/2022 12:43, Leo Yan wrote:
 
->> TODO: re-write probe error handling
+Hi Will,
 
-Will submit a series of patches in upcoming days, based on the steps
-you provided.
+Can you kindly check below the question from Leo on this issue?
 
-On Mon, Jan 24, 2022 at 12:19 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Sun, Jan 23, 2022 at 11:47:35PM +0530, Vihas Mak wrote:
-> > rtw_init_netdev_name() calls dev_alloc_name() which allocates the name
-> > for the device as per the given name format.
-> > The name format is specified by the module parameter "ifname".
-> > It returns a negative err code if the format is invalid. Handle this
-> > error appropriately.
-> > Cancel the timers ininitliazed by rtw_init_drv_sw() before calling
-> > rtw_free_drv_sw() and then proceed to free the adapter.
-> >
-> > Also, if register_netdev() fails then goto free_drv_sw instead of
-> > goto handle_dualmac.
-> >
-> > Signed-off-by: Vihas Mak <makvihas@gmail.com>
-> > ---
-> > v1->v2:
-> >     free the adapter and netdev instead of warning the user about
-> >     allocation failure.
->
-> Thanks!
->
-> Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
->
-> Of course, all this code is staging code and terrible.  This function
-> is needlessly difficult to read/review.
->
-> TODO: re-write probe error handling
->
-> Step 1: Keep the success path and error path separate.
->
-> -       status = _SUCCESS;
-> +       return padapter;
->
-> Step 2: Eliminate do-nothing-gotos.  s/goto exit/return NULL/
->
-> Step 3: Delete the vfree(pnpi->priv); from rtw_free_netdev() and call
->         vfree(pnpi->priv); from probe and rtw_usb_if1_deinit() instead.
->         Avoid a layering violation.
->
-> Step 4: Every allocation function needs a matching free function.  Move
->         the rtw_cancel_all_timer() into the rtw_free_drv_sw() function.
->         Open coding it is a layering violation.
->
-> Step 5: Get rid of the rtw_handle_dualmac() function.  It has a bad
->         name and a global variable.  What is the point of this function?
->
-> But that stuff is for later patches.
->
-> regards,
-> dan carpenter
->
+You were cc'ed earlier in this thread so should be able to find more 
+context, if needed.
 
+Cheers,
+John
 
--- 
-Thanks,
-Vihas
+> On Tue, Jan 18, 2022 at 12:40:04PM +0100, Marco Elver wrote:
+> 
+> [...]
+> 
+>>> Both Arm and Arm64 platforms cannot support signal handler with
+>>> breakpoint, please see the details in [1].  So I think we need
+>>> something like below:
+>>>
+>>> static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+>>> {
+>>>          ...
+>>>
+>>>          if (!BP_SIGNAL_IS_SUPPORTED) {
+>>>                  pr_debug("Test not supported on this architecture");
+>>>                  return TEST_SKIP;
+>>>          }
+>>>
+>>>          ...
+>>> }
+>>>
+>>> Since we have defined BP_SIGNAL_IS_SUPPORTED, I think we can reuse it at
+>>> here.
+>>>
+>>> [1]https://lore.kernel.org/lkml/157169993406.29376.12473771029179755767.tip-bot2@tip-bot2/
+>> Does this limitation also exist for address watchpoints? The sigtrap
+>> test does not make use of instruction breakpoints, but instead just
+>> sets up a watchpoint on access to a data address.
+> Yes, after reading the code, the flow for either instrution breakpoint
+> or watchpoint both use the single step [1], thus the signal handler will
+> take the single step execution and lead to the infinite loop.
+> 
+> I am not the best person to answer this question; @Will, could you
+> confirm for this?  Thanks!
+> 
+> Leo
+> 
+> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/kernel/hw_breakpoint.c
+

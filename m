@@ -2,16 +2,16 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3E249AB3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D99249A82A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S254711AbiAYEq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 23:46:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        id S1316730AbiAYC6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1325891AbiAYDjH (ORCPT
+        with ESMTP id S3415250AbiAYA7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:39:07 -0500
+        Mon, 24 Jan 2022 19:59:31 -0500
 Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
         by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761C8C06B59C
         for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:44:21 -0800 (PST)

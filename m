@@ -2,137 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AAD49853D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B66949853F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243929AbiAXQvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:51:08 -0500
-Received: from mta-p7.oit.umn.edu ([134.84.196.207]:35564 "EHLO
-        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243924AbiAXQvG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:51:06 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4JjGG20Mc1z9w2xf
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:51:06 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p7.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FVyStysfDiR3 for <linux-kernel@vger.kernel.org>;
-        Mon, 24 Jan 2022 10:51:05 -0600 (CST)
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4JjGG15PgRz9w2xh
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:51:05 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4JjGG15PgRz9w2xh
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4JjGG15PgRz9w2xh
-Received: by mail-pj1-f69.google.com with SMTP id j9-20020a17090a7e8900b001b58e473d48so2476720pjl.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:51:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZI8YuwYv90KYmYShElkaKD7+O4xtWqLO7AtdD86iqPo=;
-        b=JEXHUEG00k/tjVrRYZZDZrFrAnIKx2tg0PD8vTiBpWYYydZmjrK/VtY7uFj1SulSqC
-         QqTK092VcTHAPUDv/EN1l7T+R/TdpQydJLOKAArS4tsLRz9euhhbW7Bpev2gGRlBnS9J
-         WtlZ2iDbxbkJOXJ/r0qeySuFCnIZ2LZS8C3/ESlF5T/JajCy1YdUQFyRRr7oWyiO24kl
-         wkLScmA9bsVXZpdjdrnvtQuYUlBErJmIcik2+FPHYjQmF1GpewD6XzkzsabgM5oJUi1Z
-         hJl9782YyXcGqLiC+8Zp12n2uSGyzgWCSpm7zbqpUIfKZ5Ue+200WiJaZOqZpuT+W8ox
-         iFlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZI8YuwYv90KYmYShElkaKD7+O4xtWqLO7AtdD86iqPo=;
-        b=Rah1djrR3zpDOKyb2y+fUjstDXggZ0O0MPoU90JFeDPNSNqe6iV4QjEO9UyCKIaLId
-         LwvrELCnIvc92PNRmWcNoCl0s/NPU+2FvDFeSUdbHDtHHpVqjM+inmzQYJhvZ+k73KmL
-         8Gx363HAii9aLbwp7HCwh6TnIRbDtKPwQTErxhTtN5FoX2S1PGcogfeAyAD2ao4sIC9K
-         8j5xYe/fbTi2LD0VAjEhTFHQRNI56KjX+DQlHA4/MtMSqlBawW4CApRiMVWL35xJygK2
-         Z/nBIuelH+EUQRzRT5wEMDCkOX0I8y4RUXChKfM4RAvnrL8GoPM0WkXXvwbokOHJfGFa
-         /1eQ==
-X-Gm-Message-State: AOAM5311NKhMSG01EgJJ/CypccZlMQrMrFG9OBczPpRiY9wIENDntHbw
-        Deytluik0gmejEM7FdZ2YrQG6n5IFXhDmm/dApVLgnggcPTqVgl88r310rMrzq8lIouDkxIbAOz
-        edZrsKJbpfdUL3bhXSeUPNNx7Xucn
-X-Received: by 2002:a17:902:7e82:b0:149:9714:699e with SMTP id z2-20020a1709027e8200b001499714699emr15301130pla.66.1643043064972;
-        Mon, 24 Jan 2022 08:51:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw8RIuohziTVtdBDn6b6CW2twXFnMB+xvuiE2F10TMndWaOG1wxoxI1hSHir9NE/ss1eNeWAA==
-X-Received: by 2002:a17:902:7e82:b0:149:9714:699e with SMTP id z2-20020a1709027e8200b001499714699emr15301107pla.66.1643043064769;
-        Mon, 24 Jan 2022 08:51:04 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.4.61.248])
-        by smtp.gmail.com with ESMTPSA id b12sm17205153pfv.148.2022.01.24.08.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 08:51:04 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-hsien Lin <chi-hsien.lin@infineon.com>,
-        Wright Feng <wright.feng@infineon.com>,
-        Chung-hsien Hsu <chung-hsien.hsu@infineon.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Len Baker <len.baker@gmx.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Hans deGoede <hdegoede@redhat.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        id S243924AbiAXQvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:51:19 -0500
+Received: from foss.arm.com ([217.140.110.172]:40402 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243936AbiAXQvR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:51:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 537EDD6E;
+        Mon, 24 Jan 2022 08:51:17 -0800 (PST)
+Received: from e113632-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DBF263F73B;
+        Mon, 24 Jan 2022 08:51:15 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] brcmfmac: Fix a NULL pointer dereference in brcmf_of_probe()
-Date:   Tue, 25 Jan 2022 00:50:46 +0800
-Message-Id: <20220124165048.54677-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+Cc:     John Keeping <john@metanate.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [PATCH] sched/rt: Plug rt_mutex_setprio() vs push_rt_task() race
+In-Reply-To: <349ada44-69bd-8653-a9f8-4f3d0f303392@arm.com>
+References: <20220120194037.650433-1-valentin.schneider@arm.com> <aa5bf2d0-bef7-485a-9a51-0da7df67d8c5@arm.com> <875yq945yi.mognet@arm.com> <349ada44-69bd-8653-a9f8-4f3d0f303392@arm.com>
+Date:   Mon, 24 Jan 2022 16:51:10 +0000
+Message-ID: <8735ld3wn5.mognet@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In brcmf_of_probe(), the return value of devm_kzalloc() is assigned to
-board_type and there is a dereference of it in strcpy() right after
-that. devm_kzalloc() could return NULL on failure of allocation, which
-could lead to NULL pointer dereference.
+On 24/01/22 16:47, Dietmar Eggemann wrote:
+> On 24/01/2022 14:29, Valentin Schneider wrote:
+>> On 24/01/22 10:37, Dietmar Eggemann wrote:
+>>> On 20/01/2022 20:40, Valentin Schneider wrote:
+>>>
+>>> [...]
+>>>
+>>>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>>>> index 7b4f4fbbb404..48fc8c04b038 100644
+>>>> --- a/kernel/sched/rt.c
+>>>> +++ b/kernel/sched/rt.c
+>>>> @@ -2026,6 +2026,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+>>>>  		return 0;
+>>>>  
+>>>>  retry:
+>>>> +	/*
+>>>> +	 * It's possible that the next_task slipped in of
+>>>> +	 * higher priority than current. If that's the case
+>>>> +	 * just reschedule current.
+>>>> +	 */
+>>>> +	if (unlikely(next_task->prio < rq->curr->prio)) {
+>>>> +		resched_curr(rq);
+>>>> +		return 0;
+>>>> +	}
+>>>
+>>> If we do this before `is_migration_disabled(next_task), shouldn't then
+>>> the related condition in push_dl_task() also be moved up?
+>>>
+>>>   if (dl_task(rq->curr) &&
+>>>     dl_time_before(next_task->dl.deadline, rq->curr->dl.deadline) &&
+>>>     rq->curr->nr_cpus_allowed > 1)
+>>>
+>>> To enforce resched_curr(rq) in the `is_migration_disabled(next_task)`
+>>> case there as well?
+>>>
+>> 
+>> I'm not sure if we can hit the same issue with DL since DL doesn't have the
+>> push irqwork. If there are DL tasks on the rq when current gets demoted,
+>> switched_from_dl() won't queue pull_dl_task().
+>
+> True. But with your RT change we reschedule current (CFS task or lower
+> rt task than next_task) now even in case next task is
+> migration-disabled. I.e. we prefer rescheduling over pushing current away.
+>
+> But for DL we wouldn't reschedule current in such a case, we would just
+> return 0.
+>
+> That said, the prio based check in RT includes other sched classes where
+> the DL check only compares DL tasks.
+>
 
-Fix this bug by adding a NULL check of board_type.
+I think you got a point to at least align the RT and DL code, and yes we
+shouldn't care whether the next pushable DL task is migration_disabled or
+not if it's higher prio than current, so I think I'll move that in v2.
 
-This bug was found by a static analyzer.
+>> That said, if say we have DL tasks on the rq and demote the current DL task
+>> to RT, do we currently have anything that will call resched_curr() (I'm
+>> looking at the rt_mutex path)?
+>> switched_to_fair() has a resched_curr() (which helps for the RT -> CFS
+>> case), I don't see anything that would give us that in switched_from_dl() /
+>> switched_to_rt(), or am I missing something?
+>> 
+>>>> +
+>>>>  	if (is_migration_disabled(next_task)) {
+>>>>  		struct task_struct *push_task = NULL;
+>>>>  		int cpu;
+>>>> @@ -2033,6 +2043,17 @@ static int push_rt_task(struct rq *rq, bool pull)
+>>>>  		if (!pull || rq->push_busy)
+>>>>  			return 0;
+>>>>  
+>>>> +		/*
+>>>> +		 * Per the above priority check, curr is at least RT. If it's
+>>>> +		 * of a higher class than RT, invoking find_lowest_rq() on it
+>>>> +		 * doesn't make sense.
+>>>> +		 *
+>>>> +		 * Note that the stoppers are masqueraded as SCHED_FIFO
+>>>> +		 * (cf. sched_set_stop_task()), so we can't rely on rt_task().
+>>>> +		 */
+>>>> +		if (rq->curr->sched_class != &rt_sched_class)
+>>>
+>>> s/ != / > / ... since the `unlikely(next_task->prio < rq->curr->prio)`
+>>> already filters tasks from lower sched classes (CFS)?
+>>>
+>> 
+>> != points out we won't invoke find_lowest_rq() on anything that isn't RT,
+>> which makes it a bit clearer IMO, and it's not like either of those
+>> comparisons is more expensive than the other :)
+>
+> Also true, but it would be more aligned to the comment above '...  If it
+> (i.e. curr) 's of a higher class than ...'
+>
 
-Builds with 'make allyesconfig' show no new warnings,
-and our static analyzer no longer warns about this code
+Right, I can clean that up!
 
-Fixes: 29e354ebeeec ("brcmfmac: Transform compatible string for FW loading")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
-The analysis employs differential checking to identify inconsistent 
-security operations (e.g., checks or kfrees) between two code paths 
-and confirms that the inconsistent operations are not recovered in the
-current function or the callers, so they constitute bugs. 
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-index 513c7e6421b2..535e8ddeab8d 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/of.c
-@@ -80,6 +80,8 @@ void brcmf_of_probe(struct device *dev, enum brcmf_bus_type bus_type,
- 		/* get rid of '/' in the compatible string to be able to find the FW */
- 		len = strlen(tmp) + 1;
- 		board_type = devm_kzalloc(dev, len, GFP_KERNEL);
-+		if (!board_type)
-+			return;
- 		strscpy(board_type, tmp, len);
- 		for (i = 0; i < board_type[i]; i++) {
- 			if (board_type[i] == '/')
--- 
-2.25.1
-
+> [...]

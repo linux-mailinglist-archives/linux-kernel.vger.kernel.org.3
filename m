@@ -2,108 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403D549867E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6FC498684
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244231AbiAXRWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:22:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34860 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238780AbiAXRWJ (ORCPT
+        id S244435AbiAXRWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:22:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241070AbiAXRWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:22:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643044929;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i1S3g+b7br3s08Re9KUAkuBGZDRyz6Chv3XkAdUIT9o=;
-        b=cAe6iL3mqtPOdlZTTPwrGmtcMC2BZ5pxojhU1GZ7zPctiaYKm8Ihc+DSgE6W4U7yS0PicV
-        nm0dsFBg3vPxdD8sDKco+JTMzU/NfZKEo264smrxiAyU7vNDfIY9podF3OzlniRIxcpcSj
-        gHg44KfcITEKql5eVvYjDcXTIexOC8A=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-ro2nz1JFPTGGxTVdGdA1zQ-1; Mon, 24 Jan 2022 12:22:07 -0500
-X-MC-Unique: ro2nz1JFPTGGxTVdGdA1zQ-1
-Received: by mail-qk1-f198.google.com with SMTP id y12-20020a05620a09cc00b0047d108ac60aso4776748qky.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:22:07 -0800 (PST)
+        Mon, 24 Jan 2022 12:22:44 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5041DC061401
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:22:44 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id s61-20020a17090a69c300b001b4d0427ea2so21115624pjj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:22:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MrF7wrhR/r11uhM1Zd7BV21fovtaCNxXQvw8C85WbLY=;
+        b=GLBFXmuYlThw8gVudTodEivYKQS9SKar/0ZJSgx9vZ2jV0i1C2mAs9UMhy+CDEzy5d
+         IFZTJOCLmtmr4tACBXyGpVkTCutTOkPjFKFsiXQuW10B7yMTisNiToMK0lgAYfmQGU2o
+         x5zzA/bx0jdyqosLimsGRim5t9m/10nNbO/oc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i1S3g+b7br3s08Re9KUAkuBGZDRyz6Chv3XkAdUIT9o=;
-        b=rtGfYn2vzRsSeppW5U24Izoy40jzHLnGw3bi2K1X+OHkkiMMcx+ICOBhebUurJcSYr
-         azK1sdp5VaIHp5jX8Q7wRRTGLs4XgZPLHkYfbj4Pad+fV5wzVdjUTGrdtCUpqi/Si0N9
-         +JVn69QeRF0j0EB/WwVSqDBSZfv/GbeQ+yQ5DxsoGLPWHN0umtfpyhcsPgV2DJgog+kw
-         ekocj1QfhO5phpw9wDo4aRrQKCG+HzRh1ExNzs6OAiX9VRbT6JsKSQaqlnbGmF2DBLCV
-         PRt+2Jo8GNyqrhslk8iuiDI2FQdPHd1cvCxk/rm+5nG6xV4vKk29tsak0av/gKGwdY7H
-         fHfw==
-X-Gm-Message-State: AOAM533Gyy1mAeTFd3oZcZZ0QOi3CvBIyKeVDFUtrd1mXEDd7lU7A915
-        ySnZYdZ0ad3FlN4CIoFYay2knHBChdaMEpc3V7GPX+UWRp9bJkqfC2S1Go3SCp4NUC3WaZ7EWhW
-        z1oYqyQ60U9ZMxLSNVrphnjN/h2FB09ZmJfmkb6GN
-X-Received: by 2002:a37:bd86:: with SMTP id n128mr11660107qkf.770.1643044927254;
-        Mon, 24 Jan 2022 09:22:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxUimEDbi3foNski3m2mUz0H6FU6LVnCqDgmmWfF0KbAU4PZJm+/5jDqGBmK60YY0A94WZuVtb8Flw59Rfx47E=
-X-Received: by 2002:a37:bd86:: with SMTP id n128mr11660087qkf.770.1643044927010;
- Mon, 24 Jan 2022 09:22:07 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MrF7wrhR/r11uhM1Zd7BV21fovtaCNxXQvw8C85WbLY=;
+        b=hTockWvTaTY8tCjMncvR+J7t5OMXgRqCLoJwf+gzXtmNiIz/r+wLFhaefz+sK1muU+
+         0Lk1QbN8+ZMxjMPpftdVg8KsRXBwQrwDEWUFDDOR4zlCmfSHQx4Bj//0b51q7LiGhHAW
+         SUsCGlbPNRSnasJU3Mg888V3NKM64mTDh+0v99LvOCnfB5KKNaz947116lXJE1Z+Db+B
+         bukmOwO304V0anFA7j2fSqzdNQKjGtZ7xwPxEI1HOWTl32tKxyrFm+pL86qOfcODfbXy
+         1PpN6BN5S5V7iVrPflrQynj7ZkE1+s4dqu9+4JTt+mQ4O2QfZlNTy+kV3IyhWtMwYQT/
+         MSqw==
+X-Gm-Message-State: AOAM531eHql7/Go69kqBP7Tuo1+BZQue1haUozdcvhtwF7rgqZetqBne
+        aY9NeeULHnXvT+nAdBR2lGz8Wg==
+X-Google-Smtp-Source: ABdhPJzrcJk7jTA+I8Ws2u0wMgyvDme0Vzcmms3hN2SNCAdRMMOG6NzZq8hGBo8rxEKZTG9pux+DpQ==
+X-Received: by 2002:a17:90b:380a:: with SMTP id mq10mr2879344pjb.147.1643044963893;
+        Mon, 24 Jan 2022 09:22:43 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id om12sm8581896pjb.48.2022.01.24.09.22.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 09:22:43 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Saeed Mahameed <saeedm@nvidia.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH RESEND] net/mlx5e: Use struct_group() for memcpy() region
+Date:   Mon, 24 Jan 2022 09:22:41 -0800
+Message-Id: <20220124172242.2410996-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <202201221028.YKA8kSdm-lkp@intel.com> <CAK-6q+h_hb94J3DSXPk=E44kCxiwZ+BE3kMJe09iShRzMb=vzQ@mail.gmail.com>
- <91901e7b-7d82-116c-aaf2-c74c6a6b999c@infradead.org> <CAK-6q+j2jc3pBmbvQ-DCmxveC-UMV75SFc2nC1zwXKe9wm4YPg@mail.gmail.com>
- <20220124124530.GS1951@kadam>
-In-Reply-To: <20220124124530.GS1951@kadam>
-From:   Alexander Aring <aahringo@redhat.com>
-Date:   Mon, 24 Jan 2022 12:21:55 -0500
-Message-ID: <CAK-6q+iZfY=FyOxJfS7cY7MqScs+nU=U3B4NnLnvcLH3fofuAg@mail.gmail.com>
-Subject: Re: fs/dlm/midcomms.c:913:22: sparse: sparse: restricted __le32
- degrades to integer
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, David Teigland <teigland@redhat.com>,
-        cluster-devel <cluster-devel@redhat.com>,
-        linux-sparse@vger.kernel.org, rcu@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2499; h=from:subject; bh=1Hy/h6xR6CfzT4qu6mjl1eEfD5rBqmasVCiGJ8yfoaE=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh7uBhn8A0lQDkjRJO9V5Sl0KNR5PpwAX0g9yKG64U XkTagiOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYe7gYQAKCRCJcvTf3G3AJrh+D/ 9XD/78mqJDQUOAqNi51dHFcJMTBtQW/5SOOscaza/hl+yTU06iM1xjcDFcsLZb7jaJ4KYcV/EZAnXv l73wUOrNTN38IgVBXoE6OMtjQHaJwjcbzEhxfcnx3ncVKWRelfg1Wcz3UCHgAp621U13ng7iIXtQFg JKnUuwTjUH8vLpNlDdzLwHJqxN7wWA/+r3YU5GGTsWbTGlUZSs4+TPUzhcF48K1Wx5gsWUUBD9lFg5 5oWex5SYi2l7himxmjllot0E3lyw9ot26ak3oWLfRQqqOUet5u4UhWbA1ZBkD6gys1OziqKY2YDzdA L/GNU45qVkr8K5864876AiJ2cFYIFEMng2G2M8xkgH2Pcj0aECmYo+BXt/WC4R5aNKGUbre0I77CKl uCiIH3lTD5mLBNIxe58Lr9ekNwdedX+uNPiZo96/OH0SKqmfp30VohtJJFlB3gauX/slbX9ONDffMR jtuYoEIwR5ODB0gsr3Rku7j/b0nYxJs80sAziKrtJTrlb9tk7RSlanVomFiTGvHxQoI8E8uiRogOG7 7u6sCJqdnF9kLjGpEkjPyi47V741Xkyly/jqjpTJjHzxQHSFinFisqz41YE2HEoINtxxy8kF6n2Rpy +uF1HuWJz6ebx3q5MGvBrhW3cnyzxgaMa1O85G0cJqOg8sujaw7WJe0sV8wQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+In preparation for FORTIFY_SOURCE performing compile-time and run-time
+field bounds checking for memcpy(), memmove(), and memset(), avoid
+intentionally writing across neighboring fields.
 
-On Mon, Jan 24, 2022 at 7:46 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Sun, Jan 23, 2022 at 01:41:52PM -0500, Alexander Aring wrote:
-> >
-> > I see also:
-> >
-> > fs/dlm/midcomms.c:213:1: sparse: sparse: symbol
-> > '__srcu_struct_nodes_srcu' was not declared. Should it be static?
-> >
->
-> Why not just do this?  (Untested.  Maybe I don't understand?)
->
-> diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-> index cb1f4351e8ba..a164089abec4 100644
-> --- a/include/linux/srcutree.h
-> +++ b/include/linux/srcutree.h
-> @@ -121,7 +121,7 @@ struct srcu_struct {
->  #ifdef MODULE
->  # define __DEFINE_SRCU(name, is_static)                                        \
->         is_static struct srcu_struct name;                              \
-> -       struct srcu_struct * const __srcu_struct_##name                 \
-> +       is_static struct srcu_struct * const __srcu_struct_##name       \
->                 __section("___srcu_struct_ptrs") = &name
->  #else
->  # define __DEFINE_SRCU(name, is_static)                                        \
->
+Use struct_group() in struct vlan_ethhdr around members h_dest and
+h_source, so they can be referenced together. This will allow memcpy()
+and sizeof() to more easily reason about sizes, improve readability,
+and avoid future warnings about writing beyond the end of h_dest.
 
-I tried it and yes it will fix the issue and introduce another one
-about "is_static struct srcu_struct * const __srcu_struct_##name" is
-unused ("-Wunused-const-variable").
-I added a __maybe_unused after the introduced is_static and it seems
-to fix the introduced issue, now it compiles and sparse is happy. I am
-not sure if this is the right fix?
+"pahole" shows no size nor member offset changes to struct vlan_ethhdr.
+"objdump -d" shows no object code changes.
 
-- Alex
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-rdma@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Since this results in no binary differences, I will carry this in my tree
+unless someone else wants to pick it up. It's one of the last remaining
+clean-ups needed for the next step in memcpy() hardening.
+---
+ drivers/net/ethernet/mellanox/mlx5/core/en_tx.c | 2 +-
+ include/linux/if_vlan.h                         | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+index 7fd33b356cc8..ee7ecb88adc1 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+@@ -208,7 +208,7 @@ static inline void mlx5e_insert_vlan(void *start, struct sk_buff *skb, u16 ihs)
+ 	int cpy1_sz = 2 * ETH_ALEN;
+ 	int cpy2_sz = ihs - cpy1_sz;
+ 
+-	memcpy(vhdr, skb->data, cpy1_sz);
++	memcpy(&vhdr->addrs, skb->data, cpy1_sz);
+ 	vhdr->h_vlan_proto = skb->vlan_proto;
+ 	vhdr->h_vlan_TCI = cpu_to_be16(skb_vlan_tag_get(skb));
+ 	memcpy(&vhdr->h_vlan_encapsulated_proto, skb->data + cpy1_sz, cpy2_sz);
+diff --git a/include/linux/if_vlan.h b/include/linux/if_vlan.h
+index 8420fe504927..2be4dd7e90a9 100644
+--- a/include/linux/if_vlan.h
++++ b/include/linux/if_vlan.h
+@@ -46,8 +46,10 @@ struct vlan_hdr {
+  *	@h_vlan_encapsulated_proto: packet type ID or len
+  */
+ struct vlan_ethhdr {
+-	unsigned char	h_dest[ETH_ALEN];
+-	unsigned char	h_source[ETH_ALEN];
++	struct_group(addrs,
++		unsigned char	h_dest[ETH_ALEN];
++		unsigned char	h_source[ETH_ALEN];
++	);
+ 	__be16		h_vlan_proto;
+ 	__be16		h_vlan_TCI;
+ 	__be16		h_vlan_encapsulated_proto;
+-- 
+2.30.2
 

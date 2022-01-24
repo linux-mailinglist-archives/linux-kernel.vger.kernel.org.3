@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC5549A15F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B88B549A0BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385836AbiAXXdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        id S1846706AbiAXXQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1579821AbiAXWnj (ORCPT
+        with ESMTP id S1583233AbiAXWR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:43:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84ADC05A1B4;
-        Mon, 24 Jan 2022 11:39:27 -0800 (PST)
+        Mon, 24 Jan 2022 17:17:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001BDC06138D;
+        Mon, 24 Jan 2022 12:48:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D592B810BD;
-        Mon, 24 Jan 2022 19:39:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA0AC340E5;
-        Mon, 24 Jan 2022 19:39:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D760260B03;
+        Mon, 24 Jan 2022 20:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAC6C340E5;
+        Mon, 24 Jan 2022 20:48:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053165;
-        bh=GQv7LOP06zbfKaH6OrGhewLZ8+JM8W6ZxwkO/Q4Zfm4=;
+        s=korg; t=1643057288;
+        bh=Bf7idONjgD/oBEZ0+ZWnrASVJYEbrOEFixMhi+GyhwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XDwG35NSccQJbJ/soHUtOJLEu3Hl+fgWorfiMMephf2a1MUcwQ0aXBVhMVp0ZGAtz
-         0pjcOOoNLm+Fw+BZaM68D48xx/B2MqYUqxBpNdGsUwjZk+aYewzd57UarKvbc2RUp8
-         OBWDsIo13xG8dC0sh4Y4Vhzz5CPfcYeSKjaf1PZI=
+        b=yNm7b/gdKAn65MyckyRFR38F41/HOSr9DbXKRpWxcSV/kgU5BpuWYaQcnQhbdJrfw
+         716HS/B1G4uxQXjFbcR/sO/sMHeBwekzauXF451iFH9sayTjQpZqyMnp9qz/obg0Ja
+         vXrNy/VmNtsC6p9obx69w9PyElSjJ6SQ/z/H/0n4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 297/320] net: axienet: increase default TX ring size to 128
+        stable@vger.kernel.org, Quentin Monnet <quentin@isovalent.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH 5.15 764/846] bpftool: Fix indent in option lists in the documentation
 Date:   Mon, 24 Jan 2022 19:44:41 +0100
-Message-Id: <20220124184004.051571050@linuxfoundation.org>
+Message-Id: <20220124184127.311934994@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,35 +48,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Quentin Monnet <quentin@isovalent.com>
 
-commit 2d19c3fd80178160dd505ccd7fed1643831227a5 upstream.
+commit 986dec18bbf41f50edc2e0aa4ac5ef8e0f64f328 upstream.
 
-With previous changes to make the driver handle the TX ring size more
-correctly, the default TX ring size of 64 appears to significantly
-bottleneck TX performance to around 600 Mbps on a 1 Gbps link on ZynqMP.
-Increasing this to 128 seems to bring performance up to near line rate and
-shouldn't cause excess bufferbloat (this driver doesn't yet support modern
-byte-based queue management).
+Mixed indentation levels in the lists of options in bpftool's
+documentation produces some unexpected results. For the "bpftool" man
+page, it prints a warning:
 
-Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+    $ make -C bpftool.8
+      GEN     bpftool.8
+    <stdin>:26: (ERROR/3) Unexpected indentation.
+
+For other pages, there is no warning, but it results in a line break
+appearing in the option lists in the generated man pages.
+
+RST paragraphs should have a uniform indentation level. Let's fix it.
+
+Fixes: c07ba629df97 ("tools: bpftool: Update and synchronise option list in doc and help msg")
+Fixes: 8cc8c6357c8f ("tools: bpftool: Document and add bash completion for -L, -B options")
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20211110114632.24537-5-quentin@isovalent.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/bpf/bpftool/Documentation/bpftool-btf.rst    |    2 +-
+ tools/bpf/bpftool/Documentation/bpftool-cgroup.rst |    2 +-
+ tools/bpf/bpftool/Documentation/bpftool-gen.rst    |    2 +-
+ tools/bpf/bpftool/Documentation/bpftool-link.rst   |    2 +-
+ tools/bpf/bpftool/Documentation/bpftool-map.rst    |    6 +++---
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst   |    8 ++++----
+ tools/bpf/bpftool/Documentation/bpftool.rst        |    6 +++---
+ 7 files changed, 14 insertions(+), 14 deletions(-)
 
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -41,7 +41,7 @@
- #include "xilinx_axienet.h"
+--- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+@@ -13,7 +13,7 @@ SYNOPSIS
+ 	**bpftool** [*OPTIONS*] **btf** *COMMAND*
  
- /* Descriptors defines for Tx and Rx DMA */
--#define TX_BD_NUM_DEFAULT		64
-+#define TX_BD_NUM_DEFAULT		128
- #define RX_BD_NUM_DEFAULT		1024
- #define TX_BD_NUM_MIN			(MAX_SKB_FRAGS + 1)
- #define TX_BD_NUM_MAX			4096
+ 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | {**-d** | **--debug** } |
+-		{ **-B** | **--base-btf** } }
++	{ **-B** | **--base-btf** } }
+ 
+ 	*COMMANDS* := { **dump** | **help** }
+ 
+--- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+@@ -13,7 +13,7 @@ SYNOPSIS
+ 	**bpftool** [*OPTIONS*] **cgroup** *COMMAND*
+ 
+ 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
+-		{ **-f** | **--bpffs** } }
++	{ **-f** | **--bpffs** } }
+ 
+ 	*COMMANDS* :=
+ 	{ **show** | **list** | **tree** | **attach** | **detach** | **help** }
+--- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+@@ -13,7 +13,7 @@ SYNOPSIS
+ 	**bpftool** [*OPTIONS*] **gen** *COMMAND*
+ 
+ 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
+-		{ **-L** | **--use-loader** } }
++	{ **-L** | **--use-loader** } }
+ 
+ 	*COMMAND* := { **object** | **skeleton** | **help** }
+ 
+--- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+@@ -13,7 +13,7 @@ SYNOPSIS
+ 	**bpftool** [*OPTIONS*] **link** *COMMAND*
+ 
+ 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
+-		{ **-f** | **--bpffs** } | { **-n** | **--nomount** } }
++	{ **-f** | **--bpffs** } | { **-n** | **--nomount** } }
+ 
+ 	*COMMANDS* := { **show** | **list** | **pin** | **help** }
+ 
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -13,11 +13,11 @@ SYNOPSIS
+ 	**bpftool** [*OPTIONS*] **map** *COMMAND*
+ 
+ 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
+-		{ **-f** | **--bpffs** } | { **-n** | **--nomount** } }
++	{ **-f** | **--bpffs** } | { **-n** | **--nomount** } }
+ 
+ 	*COMMANDS* :=
+-	{ **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext**
+-	| **delete** | **pin** | **help** }
++	{ **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
++	**delete** | **pin** | **help** }
+ 
+ MAP COMMANDS
+ =============
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -13,12 +13,12 @@ SYNOPSIS
+ 	**bpftool** [*OPTIONS*] **prog** *COMMAND*
+ 
+ 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
+-		{ **-f** | **--bpffs** } | { **-m** | **--mapcompat** } | { **-n** | **--nomount** } |
+-		{ **-L** | **--use-loader** } }
++	{ **-f** | **--bpffs** } | { **-m** | **--mapcompat** } | { **-n** | **--nomount** } |
++	{ **-L** | **--use-loader** } }
+ 
+ 	*COMMANDS* :=
+-	{ **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load**
+-	| **loadall** | **help** }
++	{ **show** | **list** | **dump xlated** | **dump jited** | **pin** | **load** |
++	**loadall** | **help** }
+ 
+ PROG COMMANDS
+ =============
+--- a/tools/bpf/bpftool/Documentation/bpftool.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool.rst
+@@ -19,14 +19,14 @@ SYNOPSIS
+ 	*OBJECT* := { **map** | **program** | **cgroup** | **perf** | **net** | **feature** }
+ 
+ 	*OPTIONS* := { { **-V** | **--version** } |
+-		{ **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } }
++	{ **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } }
+ 
+ 	*MAP-COMMANDS* :=
+ 	{ **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
+-		**delete** | **pin** | **event_pipe** | **help** }
++	**delete** | **pin** | **event_pipe** | **help** }
+ 
+ 	*PROG-COMMANDS* := { **show** | **list** | **dump jited** | **dump xlated** | **pin** |
+-		**load** | **attach** | **detach** | **help** }
++	**load** | **attach** | **detach** | **help** }
+ 
+ 	*CGROUP-COMMANDS* := { **show** | **list** | **attach** | **detach** | **help** }
+ 
 
 

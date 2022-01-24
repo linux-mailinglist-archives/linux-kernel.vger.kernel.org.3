@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEACD49A572
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1716549A534
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3409882AbiAYA1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:27:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47836 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455642AbiAXVfs (ORCPT
+        id S2372750AbiAYAM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:12:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1849660AbiAXX0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:35:48 -0500
+        Mon, 24 Jan 2022 18:26:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417DEC061252;
+        Mon, 24 Jan 2022 11:11:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9D1FB80CCF;
-        Mon, 24 Jan 2022 21:35:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1CD5C340E4;
-        Mon, 24 Jan 2022 21:35:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F175AB81233;
+        Mon, 24 Jan 2022 19:10:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22005C340E8;
+        Mon, 24 Jan 2022 19:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060146;
-        bh=RYKL0195HNgCJWuQDIBJ5AxoBVK81NvUTBgz1ofwYFw=;
+        s=korg; t=1643051457;
+        bh=eGU5BZn9pv3lxR8n0x8YyiDNk3dQsF9nkslcgbj7S0M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jqgolr7MBIkK6VwJNFfXZmKUk0AskFhjuZlWGJjyyg8N1oTWGlDoivsSWvIQ8Ve5/
-         IHNhgThfk50YiNJK6dol4MvVmlnZLZpKxOG+ZNvIknKwaqQjZtTgDtndUGY4vVDv8k
-         QNj+bBjziJncuk/P1cWIJ5uJC+ouSv+0zYTbLSzU=
+        b=wOraCk+MmLLUhAParTb3Qaf/Tv3dV6kIKZoeMnsQ8snOk8kdx8ixeCvkuOG5Or3dM
+         9B01ewuPbTmx2rjIP6MxNa2gueE8daw9ds+Zcg868WDxWlplHQZhSAEAZHU6N7IWMv
+         csy+IxlyfoGnJn/Pqnohu+SY0eQFAkWUd3FnetFA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 5.16 0854/1039] tracing: Have syscall trace events use trace_event_buffer_lock_reserve()
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.14 168/186] net: axienet: Wait for PhyRstCmplt after core reset
 Date:   Mon, 24 Jan 2022 19:44:03 +0100
-Message-Id: <20220124184153.986599946@linuxfoundation.org>
+Message-Id: <20220124183942.523248605@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,52 +49,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit 3e2a56e6f639492311e0a8533f0a7aed60816308 upstream.
+commit b400c2f4f4c53c86594dd57098970d97d488bfde upstream.
 
-Currently, the syscall trace events call trace_buffer_lock_reserve()
-directly, which means that it misses out on some of the filtering
-optimizations provided by the helper function
-trace_event_buffer_lock_reserve(). Have the syscall trace events call that
-instead, as it was missed when adding the update to use the temp buffer
-when filtering.
+When resetting the device, wait for the PhyRstCmplt bit to be set
+in the interrupt status register before continuing initialization, to
+ensure that the core is actually ready. When using an external PHY, this
+also ensures we do not start trying to access the PHY while it is still
+in reset. The PHY reset is initiated by the core reset which is
+triggered just above, but remains asserted for 5ms after the core is
+reset according to the documentation.
 
-Link: https://lkml.kernel.org/r/20220107225839.823118570@goodmis.org
+The MgtRdy bit could also be waited for, but unfortunately when using
+7-series devices, the bit does not appear to work as documented (it
+seems to behave as some sort of link state indication and not just an
+indication the transceiver is ready) so it can't really be relied on for
+this purpose.
 
-Cc: stable@vger.kernel.org
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Fixes: 0fc1b09ff1ff4 ("tracing: Use temp buffer when filtering events")
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/trace_syscalls.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/kernel/trace/trace_syscalls.c
-+++ b/kernel/trace/trace_syscalls.c
-@@ -323,8 +323,7 @@ static void ftrace_syscall_enter(void *d
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -279,6 +279,16 @@ static int axienet_dma_bd_init(struct ne
+ 	axienet_dma_out32(lp, XAXIDMA_TX_CR_OFFSET,
+ 			  cr | XAXIDMA_CR_RUNSTOP_MASK);
  
- 	trace_ctx = tracing_gen_ctx();
- 
--	buffer = tr->array_buffer.buffer;
--	event = trace_buffer_lock_reserve(buffer,
-+	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
- 			sys_data->enter_event->event.type, size, trace_ctx);
- 	if (!event)
- 		return;
-@@ -367,8 +366,7 @@ static void ftrace_syscall_exit(void *da
- 
- 	trace_ctx = tracing_gen_ctx();
- 
--	buffer = tr->array_buffer.buffer;
--	event = trace_buffer_lock_reserve(buffer,
-+	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
- 			sys_data->exit_event->event.type, sizeof(*entry),
- 			trace_ctx);
- 	if (!event)
++	/* Wait for PhyRstCmplt bit to be set, indicating the PHY reset has finished */
++	ret = read_poll_timeout(axienet_ior, value,
++				value & XAE_INT_PHYRSTCMPLT_MASK,
++				DELAY_OF_ONE_MILLISEC, 50000, false, lp,
++				XAE_IS_OFFSET);
++	if (ret) {
++		dev_err(lp->dev, "%s: timeout waiting for PhyRstCmplt\n", __func__);
++		return ret;
++	}
++
+ 	return 0;
+ out:
+ 	axienet_dma_bd_release(ndev);
 
 

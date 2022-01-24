@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7381F499E71
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A1A499E79
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588832AbiAXWeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
+        id S1589059AbiAXWey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:34:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456634AbiAXVjk (ORCPT
+        with ESMTP id S1456644AbiAXVjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:39:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480A1C0417D1;
-        Mon, 24 Jan 2022 12:25:12 -0800 (PST)
+        Mon, 24 Jan 2022 16:39:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876ADC0613A8;
+        Mon, 24 Jan 2022 12:25:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 109DBB8121C;
-        Mon, 24 Jan 2022 20:25:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3772EC340E8;
-        Mon, 24 Jan 2022 20:25:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 243D1613FB;
+        Mon, 24 Jan 2022 20:25:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE16C340E5;
+        Mon, 24 Jan 2022 20:25:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055909;
-        bh=1HJTEdJbsETCywUzoAM7MoH5oDIbZRr8IH9m9qAdEXg=;
+        s=korg; t=1643055921;
+        bh=sCXJc83fAaA7xRblOL9umQGC5ac3+hMGSd03XpSDmbA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wTJtQ3hYqOAWfbkDg0PIKzYuFXjniqjFTSCAL+6XY3uWPKjNt8T7F4wHmOkyHDPHr
-         JIze8UJ6rsX5KsbtU9kFG2t6zEt5L/5QqXKLUDEMR7LRe8KXpeAMFWXoAUihfZEhyZ
-         aUZeHhYptoHx8k/HYrRrbRxzBe859vj7vTwyH0Fw=
+        b=ctj/WmOH+2gSD2okAyyS0RJRAZXwiFrWGmkLa3Qh6cGT2EReW9kiMxn+TRhXN0JjW
+         U8Td28SYKsvDKeZ+k+GEcHJharUVcsy5i54tP3Z4Qrw8uYeYtv/HY7qbN36kmkocOD
+         zqx83qvABy4qZPlnbG8eRgae9kClF6k0bOolstZc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 307/846] net: dsa: fix incorrect function pointer check for MRP ring roles
-Date:   Mon, 24 Jan 2022 19:37:04 +0100
-Message-Id: <20220124184111.499495647@linuxfoundation.org>
+Subject: [PATCH 5.15 310/846] bpf, sockmap: Fix double bpf_prog_put on error case in map_link
+Date:   Mon, 24 Jan 2022 19:37:07 +0100
+Message-Id: <20220124184111.611762702@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -51,52 +51,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: John Fastabend <john.fastabend@gmail.com>
 
-[ Upstream commit ff91e1b68490b97c18c649b769618815eb945f11 ]
+[ Upstream commit 218d747a4142f281a256687bb513a135c905867b ]
 
-The cross-chip notifier boilerplate code meant to check the presence of
-ds->ops->port_mrp_add_ring_role before calling it, but checked
-ds->ops->port_mrp_add instead, before calling
-ds->ops->port_mrp_add_ring_role.
+sock_map_link() is called to update a sockmap entry with a sk. But, if the
+sock_map_init_proto() call fails then we return an error to the map_update
+op against the sockmap. In the error path though we need to cleanup psock
+and dec the refcnt on any programs associated with the map, because we
+refcnt them early in the update process to ensure they are pinned for the
+psock. (This avoids a race where user deletes programs while also updating
+the map with new socks.)
 
-Therefore, a driver which implements one operation but not the other
-would trigger a NULL pointer dereference.
+In current code we do the prog refcnt dec explicitely by calling
+bpf_prog_put() when the program was found in the map. But, after commit
+'38207a5e81230' in this error path we've already done the prog to psock
+assignment so the programs have a reference from the psock as well. This
+then causes the psock tear down logic, invoked by sk_psock_put() in the
+error path, to similarly call bpf_prog_put on the programs there.
 
-There isn't any such driver in DSA yet, so there is no reason to
-backport the change. Issue found through code inspection.
+To be explicit this logic does the prog->psock assignment:
 
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
-Fixes: c595c4330da0 ("net: dsa: add MRP support")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+  if (msg_*)
+    psock_set_prog(...)
+
+Then the error path under the out_progs label does a similar check and
+dec with:
+
+  if (msg_*)
+     bpf_prog_put(...)
+
+And the teardown logic sk_psock_put() does ...
+
+  psock_set_prog(msg_*, NULL)
+
+... triggering another bpf_prog_put(...). Then KASAN gives us this splat,
+found by syzbot because we've created an inbalance between bpf_prog_inc and
+bpf_prog_put calling put twice on the program.
+
+  BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
+  BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
+  BUG: KASAN: vmalloc-out-of-bounds in bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
+  Read of size 8 at addr ffffc90000e76038 by task syz-executor020/3641
+
+To fix clean up error path so it doesn't try to do the bpf_prog_put in the
+error path once progs are assigned then it relies on the normal psock
+tear down logic to do complete cleanup.
+
+For completness we also cover the case whereh sk_psock_init_strp() fails,
+but this is not expected because it indicates an incorrect socket type
+and should be caught earlier.
+
+Fixes: 38207a5e8123 ("bpf, sockmap: Attach map progs to psock early for feature probes")
+Reported-by: syzbot+bb73e71cf4b8fd376a4f@syzkaller.appspotmail.com
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220104214645.290900-1-john.fastabend@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/dsa/switch.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/core/sock_map.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/net/dsa/switch.c b/net/dsa/switch.c
-index 44558fbdc65b3..fb69f2f14234e 100644
---- a/net/dsa/switch.c
-+++ b/net/dsa/switch.c
-@@ -644,7 +644,7 @@ static int
- dsa_switch_mrp_add_ring_role(struct dsa_switch *ds,
- 			     struct dsa_notifier_mrp_ring_role_info *info)
- {
--	if (!ds->ops->port_mrp_add)
-+	if (!ds->ops->port_mrp_add_ring_role)
- 		return -EOPNOTSUPP;
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index c89f527411e84..8288b5382f08d 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -292,15 +292,23 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
+ 	if (skb_verdict)
+ 		psock_set_prog(&psock->progs.skb_verdict, skb_verdict);
  
- 	if (ds->index == info->sw_index)
-@@ -658,7 +658,7 @@ static int
- dsa_switch_mrp_del_ring_role(struct dsa_switch *ds,
- 			     struct dsa_notifier_mrp_ring_role_info *info)
- {
--	if (!ds->ops->port_mrp_del)
-+	if (!ds->ops->port_mrp_del_ring_role)
- 		return -EOPNOTSUPP;
++	/* msg_* and stream_* programs references tracked in psock after this
++	 * point. Reference dec and cleanup will occur through psock destructor
++	 */
+ 	ret = sock_map_init_proto(sk, psock);
+-	if (ret < 0)
+-		goto out_drop;
++	if (ret < 0) {
++		sk_psock_put(sk, psock);
++		goto out;
++	}
  
- 	if (ds->index == info->sw_index)
+ 	write_lock_bh(&sk->sk_callback_lock);
+ 	if (stream_parser && stream_verdict && !psock->saved_data_ready) {
+ 		ret = sk_psock_init_strp(sk, psock);
+-		if (ret)
+-			goto out_unlock_drop;
++		if (ret) {
++			write_unlock_bh(&sk->sk_callback_lock);
++			sk_psock_put(sk, psock);
++			goto out;
++		}
+ 		sk_psock_start_strp(sk, psock);
+ 	} else if (!stream_parser && stream_verdict && !psock->saved_data_ready) {
+ 		sk_psock_start_verdict(sk,psock);
+@@ -309,10 +317,6 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
+ 	}
+ 	write_unlock_bh(&sk->sk_callback_lock);
+ 	return 0;
+-out_unlock_drop:
+-	write_unlock_bh(&sk->sk_callback_lock);
+-out_drop:
+-	sk_psock_put(sk, psock);
+ out_progs:
+ 	if (skb_verdict)
+ 		bpf_prog_put(skb_verdict);
+@@ -325,6 +329,7 @@ out_put_stream_parser:
+ out_put_stream_verdict:
+ 	if (stream_verdict)
+ 		bpf_prog_put(stream_verdict);
++out:
+ 	return ret;
+ }
+ 
 -- 
 2.34.1
 

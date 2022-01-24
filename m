@@ -2,153 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AD5497C6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:49:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9BF497C75
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236846AbiAXJtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236830AbiAXJtM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:49:12 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC60BC06173B;
-        Mon, 24 Jan 2022 01:49:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=U9bFxdNKcDMMzkGN9dN7g8aA0mdb5+NJJNY3O8L2ma4=; b=B9qYNR+xIyROYlCnwaSlY6zegz
-        bxZLShFS4UwlNBJCvIOLbwTcmBRhczE3DWhTiB32BwCxoyTMLpUeK1X47ePxCHyQsCOpF+ZsxMZRq
-        9GdaeQnzjLusTcfi9izTGzRsO/nV+XBefDo3PXM+TP2hTtBRAg2hT+xWBVjOJJ6tXqy8GkRsN1JMn
-        N9XtS/8i/Jx228S76FhnXpOVRxU5zJR0HixKNTh6SjHf0WoKEb03UInibcW1YDf5nrY3ngUFPkz0C
-        f7jDr6HiejuS6BCx0CGTeS86SRle8wjLCFBC9aj+BW2KHhFsi0eR4ca89Ck9pSLZ6UqFiGfp/s9mT
-        G9VOp5QA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nBvxv-00389R-Kb; Mon, 24 Jan 2022 09:48:47 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3332A986245; Mon, 24 Jan 2022 10:48:46 +0100 (CET)
-Date:   Mon, 24 Jan 2022 10:48:46 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
-        pjt@google.com, posk@google.com, avagin@google.com,
-        jannh@google.com, tdelisle@uwaterloo.ca, posk@posk.io
-Subject: Re: [RFC][PATCH v2 5/5] sched: User Mode Concurency Groups
-Message-ID: <20220124094846.GN20638@worktop.programming.kicks-ass.net>
-References: <20220120155517.066795336@infradead.org>
- <20220120160822.914418096@infradead.org>
- <Yerl+ZrZ2qflIMyg@FVFF77S0Q05N>
+        id S236865AbiAXJxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:53:43 -0500
+Received: from mout.gmx.net ([212.227.17.22]:36455 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236830AbiAXJxm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 04:53:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643018010;
+        bh=7GRuR4CdBklw+80hinRUsLWHhq5nCs//cKIeWVCaoqg=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=GZyAHG3E9jZWM0nzRpZJIjg07DZpmXxMSLp8+9KEZ/5YIw5rVumFqsOYQRQWf1rVu
+         DJPNsoiUuRxr+cHSfNazWd6oBqIubhBk1Q7Fn4swOHseviDFnJbuRdjR3AStDJOTN+
+         YACQgafNXvyv/zL5QTQwr4uWt75bRjyytEZLKayk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.165.96]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MPogF-1myN7x2WSR-00MtRZ; Mon, 24
+ Jan 2022 10:53:30 +0100
+Message-ID: <e396a22d-7e0e-73a4-d831-f69dc854bfa8@gmx.de>
+Date:   Mon, 24 Jan 2022 10:52:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yerl+ZrZ2qflIMyg@FVFF77S0Q05N>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 1/1] video: hyperv_fb: Fix validation of screen resolution
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Haiyang Zhang <haiyangz@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Hu <weh@microsoft.com>, Dexuan Cui <decui@microsoft.com>,
+        "drawat.floss@gmail.com" <drawat.floss@gmail.com>,
+        hhei <hhei@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+References: <1642360711-2335-1-git-send-email-mikelley@microsoft.com>
+ <MN2PR21MB1295CE3BD15D4EB257A158DCCA569@MN2PR21MB1295.namprd21.prod.outlook.com>
+ <20220123215606.fzycryooluavtar4@liuwe-devbox-debian-v2>
+ <MWHPR21MB1593ED650DA82BC3009F66CED75D9@MWHPR21MB1593.namprd21.prod.outlook.com>
+ <20220123223030.ijdzrunduww76jiq@liuwe-devbox-debian-v2>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220123223030.ijdzrunduww76jiq@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ABKFW8SXczh7qFlTtEX++kFQL50OzKJREIhmItUxYzfJFmK2V3s
+ klErNU1W8xTevxbISZhl50sq2KD2jXUghY6dRpH+sNMai00TX5A8ZSGC6Paf9RddJ/LEV9b
+ zG84pz/qrxWV3lxnh/CbTZXatG9QKx3bL2JE4w2eVRzmUzYA+HbJXRUFuJuW4H8/mb4jEvd
+ sg0z+buxAtxOQANVKFwUw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eCugNLxSkNg=:2IjquIkMdLILVBhj1wpYWa
+ J6Wdiju0grn5NRgsJaFCnz4YJO7QdOOqzNZuBiUtITc3Tzely8mp2VW0+KmIu4FooDc8Hg90U
+ FXWQ4+iXikWP+7HOwnEvE2K0dtEoIRfu8hWZf1ZqMkWs6VMd24i9qBb52r772OB0DtAUmbddh
+ st1PGe8Un/xZgkXrBHRlXOdqkbdRG885KEcbJos3qHfN5+vDqrBKS7541/eJWVtxjQ6I8hZEP
+ bsyUeWY/YN4bw815tkJSiqstGQ9bou9wF0VtEfSDxcuds8syFrd+STaR98Z3Bqic/gqHNQaed
+ RIzP61bPPk1ob4UIqK5hjPsPMYKECN5i73e6bSPvm7/B0Velb6ovLrKxVljvK8I5SF5xtYMWA
+ 0XNB2YtRjOF013RTrnhv2nLuhB60hIJ88q2gL0RXQGaDRrYUa378/+VgvUSz/J/gR0QMYrGw1
+ CxnSs4p0d0+namGoR7IZBczbhaCoPgruVQ0P6u7guUV1Xy3mIBuvqpEW2kT/OEV01sSYE5qd4
+ wavnYgPOVuIWzkjobDt+YDrIqHb6OVYOJDmYTa/J1DVksTUCyh7ZxKAvfSWPsXx35IbaFnBHw
+ pJSdsJeEZYEyFg52aqPXRy9fFGmuGqJfcr0I11qwpeBBsFjgVUTypyfrNvkLWnYN608uqWDKI
+ 3B9z5kxa2VMLxd/BTEpKXeFkcr4FWoV1vaSuGsBtuUwm8SP3JIEZRLdF1hT7iFx33X8udbUvT
+ xK/I3buChrvbgdV0BMDXcdWo5LVqP1Dd4NcveWnuAEo6xda3avmgHi1k+BHV8EoPfha4AkgkD
+ ilRbElUqlpY9nDror+ECUvrp54A6YcZYJb9D5py7mQlc/bwy5vOnQf/QzFh6q5NDFNK35m/Iq
+ 1Bj0Xb6PkNkHTEQaOepJwxpLEEiqNqUTlJeohRHcyuwCrChGQF4pxJKzUo4/h0yHxie/BraXD
+ xcbEiiNxc6IwKfx2EkTfAby1itmW1enIsb3qqeLMvfMBSyGOfO1k+LQQKQI9RjF3PvUgwi2iX
+ KPqRcisYiWkqeijG7uHYZ/XkuVbJesChdfJyBrfOkZb/aDYwUbo66jOyo2P4LmuSdfKoHs6YR
+ o66AzqhZ8s1QBU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 04:57:29PM +0000, Mark Rutland wrote:
-> On Thu, Jan 20, 2022 at 04:55:22PM +0100, Peter Zijlstra wrote:
-> > User Managed Concurrency Groups is an M:N threading toolkit that allows
-> > constructing user space schedulers designed to efficiently manage
-> > heterogeneous in-process workloads while maintaining high CPU
-> > utilization (95%+).
-> > 
-> > XXX moar changelog explaining how this is moar awesome than
-> > traditional user-space threading.
-> 
-> Awaiting a commit message that I can parse, I'm just looking at the entry bits
-> for now. TBH I have no idea what this is actually trying to do...
+On 1/23/22 23:30, Wei Liu wrote:
+> On Sun, Jan 23, 2022 at 10:27:56PM +0000, Michael Kelley (LINUX) wrote:
+>> From: Wei Liu <wei.liu@kernel.org> Sent: Sunday, January 23, 2022 1:56 =
+PM
+>>>
+>>> On Sun, Jan 16, 2022 at 09:53:06PM +0000, Haiyang Zhang wrote:
+>>>>
+>>>>
+>>>>> -----Original Message-----
+>>>>> From: Michael Kelley (LINUX) <mikelley@microsoft.com>
+>>>>> Sent: Sunday, January 16, 2022 2:19 PM
+>>>>> To: KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
+>>> <haiyangz@microsoft.com>; Stephen
+>>>>> Hemminger <sthemmin@microsoft.com>; wei.liu@kernel.org; Wei Hu
+>>> <weh@microsoft.com>; Dexuan
+>>>>> Cui <decui@microsoft.com>; drawat.floss@gmail.com; hhei <hhei@redhat=
+.com>;
+>>> linux-
+>>>>> kernel@vger.kernel.org; linux-hyperv@vger.kernel.org; linux-
+>>> fbdev@vger.kernel.org; dri-
+>>>>> devel@lists.freedesktop.org
+>>>>> Cc: Michael Kelley (LINUX) <mikelley@microsoft.com>
+>>>>> Subject: [PATCH 1/1] video: hyperv_fb: Fix validation of screen reso=
+lution
+>>>>>
+>>>>> In the WIN10 version of the Synthetic Video protocol with Hyper-V,
+>>>>> Hyper-V reports a list of supported resolutions as part of the proto=
+col
+>>>>> negotiation. The driver calculates the maximum width and height from
+>>>>> the list of resolutions, and uses those maximums to validate any scr=
+een
+>>>>> resolution specified in the video=3D option on the kernel boot line.
+>>>>>
+>>>>> This method of validation is incorrect. For example, the list of
+>>>>> supported resolutions could contain 1600x1200 and 1920x1080, both of
+>>>>> which fit in an 8 Mbyte frame buffer.  But calculating the max width
+>>>>> and height yields 1920 and 1200, and 1920x1200 resolution does not f=
+it
+>>>>> in an 8 Mbyte frame buffer.  Unfortunately, this resolution is accep=
+ted,
+>>>>> causing a kernel fault when the driver accesses memory outside the
+>>>>> frame buffer.
+>>>>>
+>>>>> Instead, validate the specified screen resolution by calculating
+>>>>> its size, and comparing against the frame buffer size.  Delete the
+>>>>> code for calculating the max width and height from the list of
+>>>>> resolutions, since these max values have no use.  Also add the
+>>>>> frame buffer size to the info message to aid in understanding why
+>>>>> a resolution might be rejected.
+>>>>>
+>>>>> Fixes: 67e7cdb4829d ("video: hyperv: hyperv_fb: Obtain screen resolu=
+tion from Hyper-V
+>>>>> host")
+>>>>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+>>> [...]
+>>>>
+>>>> Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+>>>>
+>>>
+>>> Applied to hyperv-fixes. Thanks.
+>>
+>> This fix got pulled into the fbdev/for-next tree by a new maintainer, H=
+elge Deller.
+>> See https://git.kernel.org/pub/scm/linux/kernel/git/deller/linux-fbdev.=
+git/commit/?h=3Dfor-next&id=3Dbcc48f8d980b12e66a3d59dfa1041667db971d86
+>
+> OK. I will drop it from hyperv-fixes. Thanks for letting me know!
 
-Ha! yes.. I knew I was going to have to do that eventually :-)
+Linus hasn't pulled my tree yet, and he will probably not before the
+next merge window. So, if this is an urgent bugfix for you, I can offer
+to drop it from the fbdev tree and that you take it through the hyperv-fix=
+es tree.
+In that case you may add an Acked-by: Helge Deller <deller@gmx.de>.
+Just let me know what you prefer.
 
-It's basically a user-space scheduler that is subservient to the kernel
-scheduler (hierarchical scheduling were a user task is a server for
-other user tasks), where a server thread is in charge of selecting which
-of it's worker threads gets to run. The original idea was that each
-server only ever runs a single worker, but PeterO is currently trying to
-reconsider that.
-
-The *big* feature here, over traditional N:M scheduling, is that threads
-can block, while traditional userspace threading is limited to
-non-blocking system calls (and per later, page-faults).
-
-In order to make that happen we must ovbiously hook schedule() for
-these worker threads and inform userspace (the server thread) when this
-happens such that it can select another worker thread to go vroom.
-
-Meanwhile, a worker task getting woken from schedule() must not continue
-running; instead it must enter the server's ready-queue and await it's
-turn again. Instead of dealing with arbitrary delays deep inside the
-kernel block chain, we punt and let the task complete until
-return-to-user and block it there. The time between schedule() and
-return-to-user is unmanaged time.
-
-Now, since we can't readily poke at userspace memory from schedule(), we
-could be holding mmap_sem etc., we pin the worker and server page on
-sys-enter such that when we hit schedule() we can update state and then
-unpin the pages such that page pin time is from sys-enter to first
-schedule(), or sys-exit which ever comes first. This ensures the
-page-pin is *short* term.
-
-Additionally we must deal with signals :-(, the currnt approach is to
-let them bust boundaries and run them as unmanaged time. UMCG userspace
-can obviously control this by using pthread_sigmask() and friends.
-
-Now, the reason for irqentry_irq_enable() is mostly #PF.  When a worker
-faults and blocks we want the same things to happen.
-
-Anyway, so workers have 3 layers of hooks:
-
-		sys_enter
-				schedule()
-		sys_exit
-
-	return-to-user
-
-There's a bunch of paths through this:
-
- - sys_enter -> sys_exit:
-
-	no blocking; nothing changes:
-	  - sys_enter:
-	    * pin pages
-
-	  - sys_exit:
-	    * unpin pages
-
- - sys_enter -> schedule() -> sys_exit:
-
-	we did block:
-	  - sys_enter:
-	    * pin pages
-
-	  - schedule():
-	    * mark worker BLOCKED
-	    * wake server (it will observe it's current worker !RUNNING
-	      and select a new worker or idles)
-	    * unpin pages
-
-	  - sys_exit():
-	    * mark worker RUNNABLE
-	    * enqueue worker on server's runnable_list
-	    * wake server (which will observe a new runnable task, add
-	      it to whatever and if it was idle goes run, otherwise goes
-	      back to sleep to let it's current worker finish)
-	    * block until RUNNING
-
- - sys_enter -> schedule() -> sys_exit -> return_to_user:
-
-	As above; except now we got a signal while !RUNNING. sys_exit()
-	terminates and return-to-user takes over running the signal and
-	on return from the signal we'll again block until RUNNING, or do
-	the whole signal dance again if so required.
-
-
-Does this clarify things a little?
+Helge

@@ -2,109 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 210F4497C80
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455EB497C85
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236889AbiAXJ5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:57:44 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:56528 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbiAXJ5l (ORCPT
+        id S236893AbiAXJ6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:58:25 -0500
+Received: from mail-vk1-f172.google.com ([209.85.221.172]:38482 "EHLO
+        mail-vk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232102AbiAXJ6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:57:41 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 3E93621122;
-        Mon, 24 Jan 2022 09:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643018260; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3I0W7aX99uBZEBl2pnVuMlRFfqNgaPY9e+6cid2Tofc=;
-        b=tgNCB7GIulaUwtUgc9fYEchKX7Ic867VG4GAt7BeHL4Dwc2Kw8K2qludbTyCBTK36M0aNF
-        SbgD4jCJ4Fj+eVPnJ4Y36u/gcyE5h5O5BDgBg6eGP7EkutURg2uGdLXZDsEobDOpzwIw9x
-        bR0jKAJs0pGSKOVX4pQZElQ4k27QQOo=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 08F33A3B81;
-        Mon, 24 Jan 2022 09:57:39 +0000 (UTC)
-Date:   Mon, 24 Jan 2022 10:57:36 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        John Dias <joaodias@google.com>
-Subject: Re: [RESEND][PATCH v2] mm: don't call lru draining in the nested
- lru_cache_disable
-Message-ID: <Ye54ELlNBpeHoXsj@dhcp22.suse.cz>
-References: <20211230193627.495145-1-minchan@kernel.org>
- <YeVzWlrojI1+buQx@dhcp22.suse.cz>
- <YedXhpwURNTkW1Z3@google.com>
- <YefX1t4owjlx/m5I@dhcp22.suse.cz>
- <YejkUlnnYeED1pC5@google.com>
- <YekcNmBqcpO9BYWv@dhcp22.suse.cz>
- <YenPK/JVNOhbxjtr@google.com>
- <YeqEBAKJ6NUjLQhr@dhcp22.suse.cz>
- <YessDywpsnCyrfIy@google.com>
+        Mon, 24 Jan 2022 04:58:20 -0500
+Received: by mail-vk1-f172.google.com with SMTP id l196so6890884vki.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:58:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0qAilIt3zBRIhtEfQ4Mef/PuAGXLqiFVxp/VPi3j/sQ=;
+        b=f3cFJ7ryDdgu2FwRVJySqec+waY7XKb92GIATZvjYtSVYw9kHoGS66n5c3k7doOQpv
+         GWs2cMOFcFJmny/6BmZ1nqp0lopQXrzso20oD+lU2q/n/xHXr+XPULlgpEqKB+1a+agD
+         59IBLq0qK7//yg1Gy8gKQv2uu9CV1EluQb5zRzvADXKkUx+GcPpSEiFcibC3SI/v6uwH
+         z46FeWY+5eqUfJUryS1OU+oidvJ5w+fKXfL9HtHKiUOe9DtoTyJ2ijfAB9NuvAGzXJbd
+         eugZ3KuqzdOf8EZO+DVbMQWnn3so+HTGsE7e31QGhaLuwcG0roFsQQbNRu2r4E1X3IVs
+         ZmtQ==
+X-Gm-Message-State: AOAM5324VUk5nXvnPDybkF0HARYuOhOXMMzFi7oVUi3MtoiVdtfv6QsI
+        iMk1CELAGCOBP0s9qS6GHRdTZnhjHigXtg==
+X-Google-Smtp-Source: ABdhPJylCI8RL57z5NEUIYQ6m235IpkTQeVK3Bd4j7DRYnIA61Gn2Q77LBCZqWQuRDt/3oIaiAW9GA==
+X-Received: by 2002:a1f:a6d7:: with SMTP id p206mr5631365vke.31.1643018299613;
+        Mon, 24 Jan 2022 01:58:19 -0800 (PST)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id 10sm2403564uaq.9.2022.01.24.01.58.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jan 2022 01:58:19 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id b37so12143564uad.12
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:58:19 -0800 (PST)
+X-Received: by 2002:a67:c18e:: with SMTP id h14mr1390246vsj.5.1643018298119;
+ Mon, 24 Jan 2022 01:58:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YessDywpsnCyrfIy@google.com>
+References: <20220119201741.717770-1-nikita.yoush@cogentembedded.com>
+In-Reply-To: <20220119201741.717770-1-nikita.yoush@cogentembedded.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 24 Jan 2022 10:57:44 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXqG_qp0XL7OLLdHKpYJ=xAG+hTMxPctAbeBfUV9EpodQ@mail.gmail.com>
+Message-ID: <CAMuHMdXqG_qp0XL7OLLdHKpYJ=xAG+hTMxPctAbeBfUV9EpodQ@mail.gmail.com>
+Subject: Re: [PATCH] drivers: irqchip: add irq-type-changer
+To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 21-01-22 13:56:31, Minchan Kim wrote:
-> On Fri, Jan 21, 2022 at 10:59:32AM +0100, Michal Hocko wrote:
-> > On Thu 20-01-22 13:07:55, Minchan Kim wrote:
-> > > On Thu, Jan 20, 2022 at 09:24:22AM +0100, Michal Hocko wrote:
-> > > > On Wed 19-01-22 20:25:54, Minchan Kim wrote:
-> > > > > On Wed, Jan 19, 2022 at 10:20:22AM +0100, Michal Hocko wrote:
-> > > > [...]
-> > > > > > What does prevent you from calling lru_cache_{disable,enable} this way
-> > > > > > with the existing implementation? AFAICS calls can be nested just fine.
-> > > > > > Or am I missing something?
-> > > > > 
-> > > > > It just increases more IPI calls since we drain the lru cache
-> > > > > both upper layer and lower layer. That's I'd like to avoid
-> > > > > in this patch. Just disable lru cache one time for entire
-> > > > > allocation path.
-> > > > 
-> > > > I do not follow. Once you call lru_cache_disable at the higher level
-> > > > then no new pages are going to be added to the pcp caches. At the same
-> > > > time existing caches are flushed so the inner lru_cache_disable will not
-> > > > trigger any new IPIs.
-> > > 
-> > > lru_cache_disable calls __lru_add_drain_all with force_all_cpus
-> > > unconditionally so keep calling the IPI.
-> > 
-> > OK, this is something I have missed. Why cannot we remove the force_all
-> > mode for lru_disable_count>0 when there are no pcp caches populated?
-> 
-> Couldn't gaurantee whether the IPI is finished with only atomic counter.
-> 
-> CPU 0                               CPU 1
-> lru_cache_disable                   lru_cache_disable
->   ret = atomic_inc_return
->                                     
->                                    ret = atomic_inc_return
->   lru_add_drain_all(ret == 1);     lru_add_drain_all(ret == 1)
->     IPI ongoing                    skip IPI
->                                    alloc_contig_range
->                                    fail
->     ..
->     ..
-> 
->    IPI done
+Hi Nikita,
 
-But __lru_add_drain_all uses a local mutex while the IPI flushing is
-done so the racing lru_cache_disable would block until
-flush_work(&per_cpu(lru_add_drain_work, cpu)) completes so all IPIs are
-handled. Or am I missing something?
+On Wed, Jan 19, 2022 at 9:17 PM Nikita Yushchenko
+<nikita.yoush@cogentembedded.com> wrote:
+> Irq type changer is a virtual irqchip useful to support boards that
+> change (e.g. invert) interrupt signal between producer and consumer.
+>
+> Usage example, for Kingfisher extension board for Renesas Gen-3 Soc,
+> that has WiFi interrupt delivered over inverting level-shifter:
+>
+> / {
+>         gpio1_25_inverted: inverter {
+>                 compatible = "linux,irq-type-changer";
+>                 interrupt-controller;
+>                 #interrupt-cells = <2>;
+>                 interrupt-parent = <&gpio1>;
+>                 interrupts = <25 IRQ_TYPE_EDGE_FALLING>;
+>         };
+> };
+>
+> &wlcore {
+>         interrupt-parent = <&gpio1_25_inverted>;
+>         interrupts = <0 IRQ_TYPE_EDGE_RISING>;
+> };
+>
+> Then, wlcore driver observes IRQ_TYPE_EDGE_RISING trigger type and
+> configures interrupt output as such. At the same time, gpio-rcar driver
+> gets interrupt configured for IRQ_TYPE_EDGE_FALLING.
+>
+> This version uses hierarchical irq_domain API, and works only with
+> parent interrupt domains compatible with that API.
+>
+> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
 
--- 
-Michal Hocko
-SUSE Labs
+Thanks for your patch!
+
+> --- /dev/null
+> +++ b/drivers/irqchip/irq-type-changer.c
+> @@ -0,0 +1,162 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/irqchip.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/of_irq.h>
+> +
+> +struct changer {
+> +       unsigned long count;
+> +       struct {
+> +               struct irq_fwspec fwspec;
+> +               unsigned int type;
+> +       } out[0];
+
+Please use [] instead of [0] for flexible arrays, else the compiler
+doesn't realize it is a flexible array, and won't complain if you add
+more members below.
+
+> +};
+
+> +static int __init changer_of_init(struct device_node *node,
+> +                                 struct device_node *parent)
+> +{
+> +       struct irq_domain *domain, *parent_domain;
+> +       int count, i, ret;
+> +       struct changer *ch;
+> +       struct of_phandle_args pargs;
+> +       irq_hw_number_t unused;
+> +
+> +       if (!parent) {
+> +               pr_err("%pOF: no parent node\n", node);
+> +               return -EINVAL;
+> +       }
+> +
+> +       parent_domain = irq_find_host(parent);
+> +       if (!parent_domain) {
+> +               pr_err("%pOF: no parent domain\n", node);
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (WARN_ON(!parent_domain->ops->translate))
+> +               return -EINVAL;
+> +
+> +       count = of_irq_count(node);
+> +       if (count < 1) {
+> +               pr_err("%pOF: no interrupts defined\n", node);
+> +               return -EINVAL;
+> +       }
+> +
+> +       ch = kzalloc(GFP_KERNEL, sizeof(*ch) + count * sizeof(ch->out[0]));
+
+Oops, wrong parameter order, as detected by the  kernel test robot.
+Please use struct_size() to simplify and harden the size calculation.
+
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

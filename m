@@ -2,80 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FE749882C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358A5498831
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245181AbiAXSUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241869AbiAXSUX (ORCPT
+        id S241796AbiAXSVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:21:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55926 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235924AbiAXSVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:20:23 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4121C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:20:22 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id x37so12822543pfh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:20:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=dD7dOLXb+YQYq589HrH7forsalWY8+LJ4rBHpm/SHRw=;
-        b=gRTdqJHKCLMkSZ3bmFhgUlfkqnsGok83Bdw5ohbB+I4EGKL6koKg7mnrTsh5YuMBLa
-         GKVPoF7oCPhLtG/voaI0hrXtEDgvwdvX9ISnG4Co2a5itSLEAKDL4E6DmN8zOpsfwmNq
-         c+RR9Pzr/NoDUNdSUiTg3T+GaucTB45uBXKpK7LHeRF2sDhEkjwk6UcdD4kB4221HScc
-         V1Sfw3DzXLotVi01fh06jyDfTnUzIJ9DmoO/4r7Gh0MvqQx3wsDe7Mw9xj1KK9JEqhsB
-         GH9cThxBfs6YAdrp63S8R3uwKE4MIutDdJa0hJSb5kYB7fuNcyX7gcbggWsNZgCM8AH2
-         n/Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=dD7dOLXb+YQYq589HrH7forsalWY8+LJ4rBHpm/SHRw=;
-        b=o2taO6/lu9blQ2gutKypT99yAtYQ///9zaHKwnwUyOyDw3yRm3rQEP94RjXM5n/LdR
-         be0o5gatm4+40Tz5OoSTwGRXOY2amOCeS98w2r2wV+imCsUAfTCjdx4aWQ+tlqQrt8OZ
-         vgQdWN/LFA0r/OGgDsoWini99jujOcXZvcmN8wQOj7e8ijfNd4xV7v2GzEX0cJWQkvp3
-         93nFOYlLWtuTZJQ4qy4/PzYJywWyj7e2VQaLOBzFWlMfEa5Fmg+O5XieEOIcG0BsAyMG
-         gXYKN0EM0Wy5Wkj0GzkPIBaOMXilrWw6oYYUBuZxF81VEjY19ZlNfmzfrk3tePr1IUE9
-         e5Cg==
-X-Gm-Message-State: AOAM530U+OitkstZAV8OilWci9bpC7yYEPkgvihsqngHntWWUoZetSwP
-        lZC6Uod6/4obbM5hxwvBGxallA==
-X-Google-Smtp-Source: ABdhPJwLIGzTlfukShqfyFMX/Z6h5Q8RTwu9HHBQUuZApv0356SMbN+8i8h6wUvDuRXC5+uOphr6QQ==
-X-Received: by 2002:a63:ea51:: with SMTP id l17mr6080241pgk.450.1643048421931;
-        Mon, 24 Jan 2022 10:20:21 -0800 (PST)
-Received: from [2620:15c:29:204:1f99:bd65:fcbb:146c] ([2620:15c:29:204:1f99:bd65:fcbb:146c])
-        by smtp.gmail.com with ESMTPSA id x12sm12678911pge.58.2022.01.24.10.20.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 10:20:21 -0800 (PST)
-Date:   Mon, 24 Jan 2022 10:20:20 -0800 (PST)
-From:   David Rientjes <rientjes@google.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-cc:     sj@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm/damon: Remove redundant page validation
-In-Reply-To: <6d32f7d201b8970d53f51b6c5717d472aed2987c.1642386715.git.baolin.wang@linux.alibaba.com>
-Message-ID: <bdc7a556-b826-8d82-91b-8664f8a655e@google.com>
-References: <6d32f7d201b8970d53f51b6c5717d472aed2987c.1642386715.git.baolin.wang@linux.alibaba.com>
+        Mon, 24 Jan 2022 13:21:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643048469;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bYdjcQywipkMB8Wx1BG67FbDu6sqjBU0caVbeXrGM5Q=;
+        b=Iy33zitt0axIuzUZhWRttqHSOs41oTkxDJiW7GDr7V92XF/sM26YQeGnoNaNiEFX5nMS+X
+        t2N+sHRJ9P81ZoOgiabDCTs+U/zCHhftwzOPvnQ9Bq1bDjxUFIhZ2Xp+JCSu6ZLOVeo4gM
+        9zKoIHt+zezT5IyicqPzCZuDLPd0C8M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-214-3H4F0t18PtaUBfGq1f-RDQ-1; Mon, 24 Jan 2022 13:21:05 -0500
+X-MC-Unique: 3H4F0t18PtaUBfGq1f-RDQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 06D561083F60;
+        Mon, 24 Jan 2022 18:21:04 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6FBFF77469;
+        Mon, 24 Jan 2022 18:20:43 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id B2E2E4188583; Mon, 24 Jan 2022 15:20:25 -0300 (-03)
+Date:   Mon, 24 Jan 2022 15:20:25 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Christoph Lameter <cl@linux.com>, linux-kernel@vger.kernel.org,
+        Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [patch v8 02/10] add prctl task isolation prctl docs and samples
+Message-ID: <Ye7t6TI6lAOEwmDJ@fuller.cnet>
+References: <20211208161000.684779248@fuller.cnet>
+ <20220106234956.GA1321256@lothringen>
+ <20220107113001.GA105857@fuller.cnet>
+ <20220108000308.GB1337751@lothringen>
+ <Ye7roobHDqVogulr@fuller.cnet>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ye7roobHDqVogulr@fuller.cnet>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022, Baolin Wang wrote:
+On Mon, Jan 24, 2022 at 03:10:42PM -0300, Marcelo Tosatti wrote:
+> On Sat, Jan 08, 2022 at 01:03:08AM +0100, Frederic Weisbecker wrote:
+> > On Fri, Jan 07, 2022 at 08:30:01AM -0300, Marcelo Tosatti wrote:
+> > > On Fri, Jan 07, 2022 at 12:49:56AM +0100, Frederic Weisbecker wrote:
+> > > > On Wed, Dec 08, 2021 at 01:09:08PM -0300, Marcelo Tosatti wrote:
+> > > > > Add documentation and userspace sample code for prctl
+> > > > > task isolation interface.
+> > > > > 
+> > > > > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+> > > > 
+> > > > Acked-by: Frederic Weisbecker <frederic@kernel.org>
+> > > > 
+> > > > Thanks a lot! Time for me to look at the rest of the series.
+> > > > 
+> > > > Would be nice to have Thomas's opinion as well at least on
+> > > > the interface (this patch).
+> > > 
+> > > Yes. AFAIAW most of his earlier comments on what the 
+> > > interface should look like have been addressed (or at
+> > > least i've tried to)... including the ability for
+> > > the system admin to configure the isolation options.
+> > > 
+> > > The one thing missing is to attempt to enter nohz_full
+> > > on activation (which Christoph asked for).
+> > > 
+> > > Christoph, have a question on that. At
+> > > https://lkml.org/lkml/2021/12/14/346, you wrote:
+> > > 
+> > > "Applications running would ideally have no performance penalty and there
+> > > is no  issue with kernel activity unless the application is in its special
+> > > low latency loop. NOHZ is currently only activated after spinning in that
+> > > loop for 2 seconds or so. Would be best to be able to trigger that
+> > > manually somehow."
+> > > 
+> > > So was thinking of something similar to what the full task isolation
+> > > patchset does (with the behavior of returning an error as option...):
+> > > 
+> > > +int try_stop_full_tick(void)
+> > > +{
+> > > +	int cpu = smp_processor_id();
+> > > +	struct tick_sched *ts = this_cpu_ptr(&tick_cpu_sched);
+> > > +
+> > > +	/* For an unstable clock, we should return a permanent error code. */
+> > > +	if (atomic_read(&tick_dep_mask) & TICK_DEP_MASK_CLOCK_UNSTABLE)
+> > > +		return -EINVAL;
+> > > +
+> > > +	if (!can_stop_full_tick(cpu, ts))
+> > > +		return -EAGAIN;
+> > > +
+> > > +	tick_nohz_stop_sched_tick(ts, cpu);
+> > > +	return 0;
+> > > +}
+> > > 
+> > > Is that sufficient? (note it might still be possible 
+> > > for a failure to enter nohz_full due to a number of 
+> > > reasons), see tick_nohz_stop_sched_tick.
+> > 
+> > Well, I guess we can simply make tick_nohz_full_update_tick() an API, then
+> > it could be a QUIESCE feature.
+> > 
+> > But keep in mind we may not only fail to enter into nohz_full mode, we
+> > may also enter it but, instead of completely stopping the tick, it can
+> > be delayed to some future if there is still a timer callback queued somewhere.
+> > 
+> > Make sure you test "ts->next_tick == KTIME_MAX" after stopping the tick.
+> > 
+> > This raise the question: what do we do if a quiescing fails? At least if it's a
+> > oneshot, we can return an -EBUSY from the prctl() but otherwise, subsequent kernel
+> > entry/exit are a problem.
+> 
+> Well, maybe two modes can be specified for the NOHZ_FULL task isolation
+> feature. On activation of task isolation:
+> 
+> 	- Hint (default). Attempt to enter nohz_full mode,
+> 	  continue if unable to do so.
+> 
+> 	- Mandatory. Return an error if unable to enter nohz_full mode
+> 	  (tracing required to determine actual reason. is that OK?)
 
-> It will never get a NULL page by pte_page() as discussed in thread [1],
-> thus remove the redundant page validation to fix below Smatch static
-> checker warning.
-> 
->     mm/damon/vaddr.c:405 damon_hugetlb_mkold()
->     warn: 'page' can't be NULL.
-> 
-> [1] https://lore.kernel.org/linux-mm/20220106091200.GA14564@kili/
-> 
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Reviewed-by: SeongJae Park <sj@kernel.org>
+This mode is poorly defined. What happens if some event after task
+isolation activation causes nohz_full mode to be disabled ?
 
-Acked-by: David Rientjes <rientjes@google.com>
+Or an alternative is to let the verification of nohz_full mode 
+to take place at a different location, for example a BPF tool.
+This works for our usecase, i believe.
+
+> 
+> static bool check_tick_dependency(atomic_t *dep)
+> {
+>         int val = atomic_read(dep);
+> 
+>         if (val & TICK_DEP_MASK_POSIX_TIMER) {
+>                 trace_tick_stop(0, TICK_DEP_MASK_POSIX_TIMER);
+>                 return true;
+>         }
+> 
+>         if (val & TICK_DEP_MASK_PERF_EVENTS) {
+>                 trace_tick_stop(0, TICK_DEP_MASK_PERF_EVENTS);
+>                 return true;
+>         }
+> 
+>         if (val & TICK_DEP_MASK_SCHED) {
+>                 trace_tick_stop(0, TICK_DEP_MASK_SCHED);
+>                 return true;
+>         }
+> 
+>         if (val & TICK_DEP_MASK_CLOCK_UNSTABLE) {
+>                 trace_tick_stop(0, TICK_DEP_MASK_CLOCK_UNSTABLE);
+>                 return true;
+>         }
+> 
+>         if (val & TICK_DEP_MASK_RCU) {
+>                 trace_tick_stop(0, TICK_DEP_MASK_RCU);
+>                 return true;
+>         }
+> 
+>         return false;
+> }
+> 
+> One thing that can be done on the handlers is to execute any pending irq_work, which
+> would fix:
+> 
+> https://lkml.org/lkml/2021/6/18/1174
+> 
+> How about that ?
+> 
+

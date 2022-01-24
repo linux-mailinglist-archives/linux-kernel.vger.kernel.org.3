@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FF0498B98
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A902498ABC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348413AbiAXTPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:15:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33282 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238066AbiAXTHB (ORCPT
+        id S1345814AbiAXTG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:06:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57424 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345389AbiAXTAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:07:01 -0500
+        Mon, 24 Jan 2022 14:00:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0165060BFB;
-        Mon, 24 Jan 2022 19:06:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B5FC340E5;
-        Mon, 24 Jan 2022 19:06:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2149B81236;
+        Mon, 24 Jan 2022 19:00:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A98C340E5;
+        Mon, 24 Jan 2022 19:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051213;
-        bh=UUCikyKIDcs3Go+mASe8ngo1/9EOj+3ZGtzTSW63IPc=;
+        s=korg; t=1643050810;
+        bh=46ZQ2Ukvtqdel2YKeI9Beyu+coFEEPVZxoQUk1YKJUY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rfIthHfbCgbR07fdvGhHvjdW8V1Yf7WPPskGidsZuYIVZ1tLUoGu28Qel9zrLpRD5
-         v2pgiWAN+jT/KOtHJsGstvp2Lr3bnxHDmJz7VJ1hFvlIcKGrQQmdK/APhvPlu/vo46
-         R6vFjHPPxmwBBkijdgGiGRqRtD3g+m9u4ZCU1P+A=
+        b=lEDO1P8+vcdWgtmZiCU/NEiRmyQeTHlH0/JWJIlshPpaPnAy9ngSa7UQxbQPLZ/tN
+         kOXpsYn4Gs3iNfC1oF+cTo4QELWxZuBz51dR2dNjt0H4HdE7cF+BdBKyJ4PjEiQnDW
+         c4dnwuM0gT3IMqgM/f2tfNyWYNTxnX4h8JWBKbr4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, John Keeping <john@metanate.com>,
         Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 090/186] usb: gadget: f_fs: Use stream_open() for endpoint files
-Date:   Mon, 24 Jan 2022 19:42:45 +0100
-Message-Id: <20220124183940.007016835@linuxfoundation.org>
+Subject: [PATCH 4.9 076/157] usb: gadget: f_fs: Use stream_open() for endpoint files
+Date:   Mon, 24 Jan 2022 19:42:46 +0100
+Message-Id: <20220124183935.198233579@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -82,7 +82,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 6029f9b00b4a0..61795025f11b6 100644
+index 0336392686935..e4826454de1a7 100644
 --- a/drivers/usb/gadget/function/f_fs.c
 +++ b/drivers/usb/gadget/function/f_fs.c
 @@ -608,7 +608,7 @@ static int ffs_ep0_open(struct inode *inode, struct file *file)
@@ -94,7 +94,7 @@ index 6029f9b00b4a0..61795025f11b6 100644
  }
  
  static int ffs_ep0_release(struct inode *inode, struct file *file)
-@@ -1072,7 +1072,7 @@ ffs_epfile_open(struct inode *inode, struct file *file)
+@@ -1071,7 +1071,7 @@ ffs_epfile_open(struct inode *inode, struct file *file)
  	file->private_data = epfile;
  	ffs_data_opened(epfile->ffs);
  

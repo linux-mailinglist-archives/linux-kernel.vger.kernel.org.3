@@ -2,46 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A16249A0C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40A4499ED7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1847402AbiAXXTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584629AbiAXWVa (ORCPT
+        id S1838177AbiAXWqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:46:02 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51830 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1457169AbiAXVlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E664CC0424F6;
-        Mon, 24 Jan 2022 12:52:32 -0800 (PST)
+        Mon, 24 Jan 2022 16:41:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2FF2B80FA3;
-        Mon, 24 Jan 2022 20:52:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE66DC340E5;
-        Mon, 24 Jan 2022 20:52:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1AB1BB811FB;
+        Mon, 24 Jan 2022 21:41:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E15C340E4;
+        Mon, 24 Jan 2022 21:41:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057550;
-        bh=olu317EcY0281/hH9zwgTYYDd99g5RPM17Aw/ionn7o=;
+        s=korg; t=1643060463;
+        bh=YNh9wod2Ccya1/N3xPQytCYqAj6iSH52glEdm7TViB4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k3bvrtKekJk3+t5ItA7SCXNnhT1dEEbWSs5GfYygIruRPE85ZTyOyp2ALXux45zZq
-         e4nBTvWH5AcwLUfnWgFHvgMfKxYETkXmHx37J4aP5LVD7MNijtbjHBFlkfqHmCxnc8
-         Y9+k2fKn+4fWqk2gceAWttWIMD4REcR7Y+cXMhP8=
+        b=XgvRhUR/va+inSAMOPmwaZLalqWdXKJcQSDtl5uWgoUN2QM0zUxdxA0wrTze1eCbN
+         paNICceVD8txxd+jNUsmu+cBNf3KHA1muH+Wf1keq04Zr1Sjuwq/rBRr3CPRwX5gS0
+         j0yvixULX8tTIHYQohF/YR/Bviylo48iyGVkUgnE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kevin Bracey <kevin@bracey.fi>,
-        Eric Dumazet <edumazet@google.com>,
-        Jiri Pirko <jiri@resnulli.us>, Vimalkumar <j.vimal@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 828/846] net_sched: restore "mpu xxx" handling
-Date:   Mon, 24 Jan 2022 19:45:45 +0100
-Message-Id: <20220124184129.466063581@linuxfoundation.org>
+        stable@vger.kernel.org
+Subject: [PATCH 5.16 0957/1039] f2fs: fix to reserve space for IO align feature
+Date:   Mon, 24 Jan 2022 19:45:46 +0100
+Message-Id: <20220124184157.460240113@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,99 +44,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Bracey <kevin@bracey.fi>
+From: Chao Yu <chao@kernel.org>
 
-commit fb80445c438c78b40b547d12b8d56596ce4ccfeb upstream.
+commit 300a842937fbcfb5a189cea9ba15374fdb0b5c6b upstream.
 
-commit 56b765b79e9a ("htb: improved accuracy at high rates") broke
-"overhead X", "linklayer atm" and "mpu X" attributes.
+https://bugzilla.kernel.org/show_bug.cgi?id=204137
 
-"overhead X" and "linklayer atm" have already been fixed. This restores
-the "mpu X" handling, as might be used by DOCSIS or Ethernet shaping:
+With below script, we will hit panic during new segment allocation:
 
-    tc class add ... htb rate X overhead 4 mpu 64
+DISK=bingo.img
+MOUNT_DIR=/mnt/f2fs
 
-The code being fixed is used by htb, tbf and act_police. Cake has its
-own mpu handling. qdisc_calculate_pkt_len still uses the size table
-containing values adjusted for mpu by user space.
+dd if=/dev/zero of=$DISK bs=1M count=105
+mkfs.f2fe -a 1 -o 19 -t 1 -z 1 -f -q $DISK
 
-iproute2 tc has always passed mpu into the kernel via a tc_ratespec
-structure, but the kernel never directly acted on it, merely stored it
-so that it could be read back by `tc class show`.
+mount -t f2fs $DISK $MOUNT_DIR -o "noinline_dentry,flush_merge,noextent_cache,mode=lfs,io_bits=7,fsync_mode=strict"
 
-Rather, tc would generate length-to-time tables that included the mpu
-(and linklayer) in their construction, and the kernel used those tables.
+for (( i = 0; i < 4096; i++ )); do
+	name=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 10`
+	mkdir $MOUNT_DIR/$name
+done
 
-Since v3.7, the tables were no longer used. Along with "mpu", this also
-broke "overhead" and "linklayer" which were fixed in 01cb71d2d47b
-("net_sched: restore "overhead xxx" handling", v3.10) and 8a8e3d84b171
-("net_sched: restore "linklayer atm" handling", v3.11).
+umount $MOUNT_DIR
+rm $DISK
 
-"overhead" was fixed by simply restoring use of tc_ratespec::overhead -
-this had originally been used by the kernel but was initially omitted
-from the new non-table-based calculations.
-
-"linklayer" had been handled in the table like "mpu", but the mode was
-not originally passed in tc_ratespec. The new implementation was made to
-handle it by getting new versions of tc to pass the mode in an extended
-tc_ratespec, and for older versions of tc the table contents were analysed
-at load time to deduce linklayer.
-
-As "mpu" has always been given to the kernel in tc_ratespec,
-accompanying the mpu-based table, we can restore system functionality
-with no userspace change by making the kernel act on the tc_ratespec
-value.
-
-Fixes: 56b765b79e9a ("htb: improved accuracy at high rates")
-Signed-off-by: Kevin Bracey <kevin@bracey.fi>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jiri Pirko <jiri@resnulli.us>
-Cc: Vimalkumar <j.vimal@gmail.com>
-Link: https://lore.kernel.org/r/20220112170210.1014351-1-kevin@bracey.fi
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/net/sch_generic.h |    5 +++++
- net/sched/sch_generic.c   |    1 +
- 2 files changed, 6 insertions(+)
+ fs/f2fs/f2fs.h    |   11 +++++++++++
+ fs/f2fs/segment.h |    3 ++-
+ fs/f2fs/super.c   |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ fs/f2fs/sysfs.c   |    4 +++-
+ 4 files changed, 60 insertions(+), 2 deletions(-)
 
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -1260,6 +1260,7 @@ struct psched_ratecfg {
- 	u64	rate_bytes_ps; /* bytes per second */
- 	u32	mult;
- 	u16	overhead;
-+	u16	mpu;
- 	u8	linklayer;
- 	u8	shift;
- };
-@@ -1269,6 +1270,9 @@ static inline u64 psched_l2t_ns(const st
- {
- 	len += r->overhead;
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1018,6 +1018,7 @@ struct f2fs_sm_info {
+ 	unsigned int segment_count;	/* total # of segments */
+ 	unsigned int main_segments;	/* # of segments in main area */
+ 	unsigned int reserved_segments;	/* # of reserved segments */
++	unsigned int additional_reserved_segments;/* reserved segs for IO align feature */
+ 	unsigned int ovp_segments;	/* # of overprovision segments */
  
-+	if (len < r->mpu)
-+		len = r->mpu;
+ 	/* a threshold to reclaim prefree segments */
+@@ -2198,6 +2199,11 @@ static inline int inc_valid_block_count(
+ 
+ 	if (!__allow_reserved_blocks(sbi, inode, true))
+ 		avail_user_block_count -= F2FS_OPTION(sbi).root_reserved_blocks;
 +
- 	if (unlikely(r->linklayer == TC_LINKLAYER_ATM))
- 		return ((u64)(DIV_ROUND_UP(len,48)*53) * r->mult) >> r->shift;
++	if (F2FS_IO_ALIGNED(sbi))
++		avail_user_block_count -= sbi->blocks_per_seg *
++				SM_I(sbi)->additional_reserved_segments;
++
+ 	if (unlikely(is_sbi_flag_set(sbi, SBI_CP_DISABLED))) {
+ 		if (avail_user_block_count > sbi->unusable_block_count)
+ 			avail_user_block_count -= sbi->unusable_block_count;
+@@ -2444,6 +2450,11 @@ static inline int inc_valid_node_count(s
  
-@@ -1291,6 +1295,7 @@ static inline void psched_ratecfg_getrat
- 	res->rate = min_t(u64, r->rate_bytes_ps, ~0U);
+ 	if (!__allow_reserved_blocks(sbi, inode, false))
+ 		valid_block_count += F2FS_OPTION(sbi).root_reserved_blocks;
++
++	if (F2FS_IO_ALIGNED(sbi))
++		valid_block_count += sbi->blocks_per_seg *
++				SM_I(sbi)->additional_reserved_segments;
++
+ 	user_block_count = sbi->user_block_count;
+ 	if (unlikely(is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
+ 		user_block_count -= sbi->unusable_block_count;
+--- a/fs/f2fs/segment.h
++++ b/fs/f2fs/segment.h
+@@ -538,7 +538,8 @@ static inline unsigned int free_segments
  
- 	res->overhead = r->overhead;
-+	res->mpu = r->mpu;
- 	res->linklayer = (r->linklayer & TC_LINKLAYER_MASK);
+ static inline unsigned int reserved_segments(struct f2fs_sb_info *sbi)
+ {
+-	return SM_I(sbi)->reserved_segments;
++	return SM_I(sbi)->reserved_segments +
++			SM_I(sbi)->additional_reserved_segments;
  }
  
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -1455,6 +1455,7 @@ void psched_ratecfg_precompute(struct ps
+ static inline unsigned int free_sections(struct f2fs_sb_info *sbi)
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -328,6 +328,46 @@ static inline void limit_reserve_root(st
+ 					   F2FS_OPTION(sbi).s_resgid));
+ }
+ 
++static inline int adjust_reserved_segment(struct f2fs_sb_info *sbi)
++{
++	unsigned int sec_blks = sbi->blocks_per_seg * sbi->segs_per_sec;
++	unsigned int avg_vblocks;
++	unsigned int wanted_reserved_segments;
++	block_t avail_user_block_count;
++
++	if (!F2FS_IO_ALIGNED(sbi))
++		return 0;
++
++	/* average valid block count in section in worst case */
++	avg_vblocks = sec_blks / F2FS_IO_SIZE(sbi);
++
++	/*
++	 * we need enough free space when migrating one section in worst case
++	 */
++	wanted_reserved_segments = (F2FS_IO_SIZE(sbi) / avg_vblocks) *
++						reserved_segments(sbi);
++	wanted_reserved_segments -= reserved_segments(sbi);
++
++	avail_user_block_count = sbi->user_block_count -
++				sbi->current_reserved_blocks -
++				F2FS_OPTION(sbi).root_reserved_blocks;
++
++	if (wanted_reserved_segments * sbi->blocks_per_seg >
++					avail_user_block_count) {
++		f2fs_err(sbi, "IO align feature can't grab additional reserved segment: %u, available segments: %u",
++			wanted_reserved_segments,
++			avail_user_block_count >> sbi->log_blocks_per_seg);
++		return -ENOSPC;
++	}
++
++	SM_I(sbi)->additional_reserved_segments = wanted_reserved_segments;
++
++	f2fs_info(sbi, "IO align feature needs additional reserved segment: %u",
++			 wanted_reserved_segments);
++
++	return 0;
++}
++
+ static inline void adjust_unusable_cap_perc(struct f2fs_sb_info *sbi)
  {
- 	memset(r, 0, sizeof(*r));
- 	r->overhead = conf->overhead;
-+	r->mpu = conf->mpu;
- 	r->rate_bytes_ps = max_t(u64, conf->rate, rate64);
- 	r->linklayer = (conf->linklayer & TC_LINKLAYER_MASK);
- 	psched_ratecfg_precompute__(r->rate_bytes_ps, &r->mult, &r->shift);
+ 	if (!F2FS_OPTION(sbi).unusable_cap_perc)
+@@ -4180,6 +4220,10 @@ try_onemore:
+ 		goto free_nm;
+ 	}
+ 
++	err = adjust_reserved_segment(sbi);
++	if (err)
++		goto free_nm;
++
+ 	/* For write statistics */
+ 	sbi->sectors_written_start = f2fs_get_sectors_written(sbi);
+ 
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -415,7 +415,9 @@ out:
+ 	if (a->struct_type == RESERVED_BLOCKS) {
+ 		spin_lock(&sbi->stat_lock);
+ 		if (t > (unsigned long)(sbi->user_block_count -
+-				F2FS_OPTION(sbi).root_reserved_blocks)) {
++				F2FS_OPTION(sbi).root_reserved_blocks -
++				sbi->blocks_per_seg *
++				SM_I(sbi)->additional_reserved_segments)) {
+ 			spin_unlock(&sbi->stat_lock);
+ 			return -EINVAL;
+ 		}
 
 

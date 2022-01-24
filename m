@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E76849A072
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED74C499DF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384011AbiAXXHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:07:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        id S1586834AbiAXW1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1583277AbiAXWRb (ORCPT
+        with ESMTP id S1445275AbiAXVHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:17:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C8CC061392;
-        Mon, 24 Jan 2022 12:48:38 -0800 (PST)
+        Mon, 24 Jan 2022 16:07:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8B6C0680A2;
+        Mon, 24 Jan 2022 12:07:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6384B810A8;
-        Mon, 24 Jan 2022 20:48:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE51CC340E5;
-        Mon, 24 Jan 2022 20:48:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E0E96090A;
+        Mon, 24 Jan 2022 20:07:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C048C340E5;
+        Mon, 24 Jan 2022 20:07:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057316;
-        bh=7of+EHXBGl4nxCOkkheKVpwiRxEPsyfv3MBiRJmMuA8=;
+        s=korg; t=1643054861;
+        bh=EjBx6VLc9soLrs83ucHSAMI+i/H49AZLt1t7DcmUv5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R+HriuUP5UFvQ2WwZoNn3VixX8eGbb0Eb5iuTvgfG7BBolOee8J+dwKz/f6XtlDla
-         6FMoFKV+5+QL0CMZXAJP17z815TgLQ1N1Vuf5bEFl/Ud+aNcNq9EJnXlKedox3KV6p
-         8KrFyU9cQAjZCpinMyOXuooZ0dpuyrywDWmoOUks=
+        b=PgZVgII2gyzAB5LA6IDlCYoJ6FvN79V54S3xe2IgGsttIZEpPw4Yemi120X4ZN3P8
+         knR+XsZvqwNiTlF15wB8V8TZ8YoR+wApNkJZzm78hADoTY/UiPFuPcebdVYpVpU8Tr
+         +xq2DTNOwZRPfZ5eBvp6RKcWv/d+yXRxxdQKFsTM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 772/846] net/fsl: xgmac_mdio: Add workaround for erratum A-009885
-Date:   Mon, 24 Jan 2022 19:44:49 +0100
-Message-Id: <20220124184127.593412395@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 526/563] net: axienet: fix number of TX ring slots for available check
+Date:   Mon, 24 Jan 2022 19:44:51 +0100
+Message-Id: <20220124184042.624814989@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,98 +48,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tobias Waldekranz <tobias@waldekranz.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit 6198c722019774d38018457a8bfb9ba3ed8c931e upstream.
+commit aba57a823d2985a2cc8c74a2535f3a88e68d9424 upstream.
 
-Once an MDIO read transaction is initiated, we must read back the data
-register within 16 MDC cycles after the transaction completes. Outside
-of this window, reads may return corrupt data.
+The check for the number of available TX ring slots was off by 1 since a
+slot is required for the skb header as well as each fragment. This could
+result in overwriting a TX ring slot that was still in use.
 
-Therefore, disable local interrupts in the critical section, to
-maximize the probability that we can satisfy this requirement.
-
-Fixes: d55ad2967d89 ("powerpc/mpc85xx: Create dts components for the FSL QorIQ DPAA FMan")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/xgmac_mdio.c |   25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/freescale/xgmac_mdio.c
-+++ b/drivers/net/ethernet/freescale/xgmac_mdio.c
-@@ -52,6 +52,7 @@ struct tgec_mdio_controller {
- struct mdio_fsl_priv {
- 	struct	tgec_mdio_controller __iomem *mdio_base;
- 	bool	is_little_endian;
-+	bool	has_a009885;
- 	bool	has_a011043;
- };
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -747,7 +747,7 @@ axienet_start_xmit(struct sk_buff *skb,
+ 	num_frag = skb_shinfo(skb)->nr_frags;
+ 	cur_p = &lp->tx_bd_v[lp->tx_bd_tail];
  
-@@ -187,10 +188,10 @@ static int xgmac_mdio_read(struct mii_bu
- {
- 	struct mdio_fsl_priv *priv = (struct mdio_fsl_priv *)bus->priv;
- 	struct tgec_mdio_controller __iomem *regs = priv->mdio_base;
-+	unsigned long flags;
- 	uint16_t dev_addr;
- 	uint32_t mdio_stat;
- 	uint32_t mdio_ctl;
--	uint16_t value;
- 	int ret;
- 	bool endian = priv->is_little_endian;
+-	if (axienet_check_tx_bd_space(lp, num_frag)) {
++	if (axienet_check_tx_bd_space(lp, num_frag + 1)) {
+ 		if (netif_queue_stopped(ndev))
+ 			return NETDEV_TX_BUSY;
  
-@@ -222,12 +223,18 @@ static int xgmac_mdio_read(struct mii_bu
- 			return ret;
- 	}
+@@ -757,7 +757,7 @@ axienet_start_xmit(struct sk_buff *skb,
+ 		smp_mb();
  
-+	if (priv->has_a009885)
-+		/* Once the operation completes, i.e. MDIO_STAT_BSY clears, we
-+		 * must read back the data register within 16 MDC cycles.
-+		 */
-+		local_irq_save(flags);
-+
- 	/* Initiate the read */
- 	xgmac_write32(mdio_ctl | MDIO_CTL_READ, &regs->mdio_ctl, endian);
+ 		/* Space might have just been freed - check again */
+-		if (axienet_check_tx_bd_space(lp, num_frag))
++		if (axienet_check_tx_bd_space(lp, num_frag + 1))
+ 			return NETDEV_TX_BUSY;
  
- 	ret = xgmac_wait_until_done(&bus->dev, regs, endian);
- 	if (ret)
--		return ret;
-+		goto irq_restore;
- 
- 	/* Return all Fs if nothing was there */
- 	if ((xgmac_read32(&regs->mdio_stat, endian) & MDIO_STAT_RD_ER) &&
-@@ -235,13 +242,17 @@ static int xgmac_mdio_read(struct mii_bu
- 		dev_dbg(&bus->dev,
- 			"Error while reading PHY%d reg at %d.%hhu\n",
- 			phy_id, dev_addr, regnum);
--		return 0xffff;
-+		ret = 0xffff;
-+	} else {
-+		ret = xgmac_read32(&regs->mdio_data, endian) & 0xffff;
-+		dev_dbg(&bus->dev, "read %04x\n", ret);
- 	}
- 
--	value = xgmac_read32(&regs->mdio_data, endian) & 0xffff;
--	dev_dbg(&bus->dev, "read %04x\n", value);
-+irq_restore:
-+	if (priv->has_a009885)
-+		local_irq_restore(flags);
- 
--	return value;
-+	return ret;
- }
- 
- static int xgmac_mdio_probe(struct platform_device *pdev)
-@@ -288,6 +299,8 @@ static int xgmac_mdio_probe(struct platf
- 	priv->is_little_endian = device_property_read_bool(&pdev->dev,
- 							   "little-endian");
- 
-+	priv->has_a009885 = device_property_read_bool(&pdev->dev,
-+						      "fsl,erratum-a009885");
- 	priv->has_a011043 = device_property_read_bool(&pdev->dev,
- 						      "fsl,erratum-a011043");
- 
+ 		netif_wake_queue(ndev);
 
 

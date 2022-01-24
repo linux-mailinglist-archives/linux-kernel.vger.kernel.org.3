@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADED849932B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00EC49932C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384556AbiAXUaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:30:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51672 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378786AbiAXUJv (ORCPT
+        id S1384569AbiAXUaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:30:05 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36612 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378832AbiAXUJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:09:51 -0500
+        Mon, 24 Jan 2022 15:09:54 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BF92B810BD;
-        Mon, 24 Jan 2022 20:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2F0C340E7;
-        Mon, 24 Jan 2022 20:09:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9251960B56;
+        Mon, 24 Jan 2022 20:09:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56CCAC340E7;
+        Mon, 24 Jan 2022 20:09:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054987;
-        bh=DthYjh+AUf6U0msGHmNsk3EuOaLtsWRn1QyFhfakDLQ=;
+        s=korg; t=1643054994;
+        bh=TdBfH9yDEX18SMwX7BpD8oKnsT0/eTI2XzEfRHK2+LY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cwauFz9rodWObEhGxdAnr1AaScRiVMLoDuxybAfB14o2u8W+zf1RFgj4DxCL2ulCZ
-         o4Txi9bdxReLRG2RshtPL6rfY+LsLg05AuBqMluJ6adjgjvzuINbc8gt0ElulIrAWs
-         Ra0pmOP5q3p7nbBCq3GGCvNAAh7FBm+oS+OwoN9A=
+        b=MlwejpFuhShu/0/fWaogsZMrCq765qpfDHwp+Hix7YTAnVg7DhW8y7LOzWpRkcOf4
+         ALr2AjEYvpkTbm9sJjCwIFQDDf7+LszOR7KMOfnHQq5dpsQ/ecZ776Jq572gQgx8px
+         1X/G9G3K/R7XRsqyuKdKQQ1PocJzSrbiX/dVfn4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.10 538/563] libcxgb: Dont accidentally set RTO_ONLINK in cxgb_find_route()
-Date:   Mon, 24 Jan 2022 19:45:03 +0100
-Message-Id: <20220124184043.042063436@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.10 540/563] dmaengine: at_xdmac: Dont start transactions at tx_submit level
+Date:   Mon, 24 Jan 2022 19:45:05 +0100
+Message-Id: <20220124184043.114975053@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -45,44 +46,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Nault <gnault@redhat.com>
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-commit a915deaa9abe4fb3a440312c954253a6a733608e upstream.
+commit bccfb96b59179d4f96cbbd1ddff8fac6d335eae4 upstream.
 
-Mask the ECN bits before calling ip_route_output_ports(). The tos
-variable might be passed directly from an IPv4 header, so it may have
-the last ECN bit set. This interferes with the route lookup process as
-ip_route_output_key_hash() interpretes this bit specially (to restrict
-the route scope).
+tx_submit is supposed to push the current transaction descriptor to a
+pending queue, waiting for issue_pending() to be called. issue_pending()
+must start the transfer, not tx_submit(), thus remove
+at_xdmac_start_xfer() from at_xdmac_tx_submit(). Clients of at_xdmac that
+assume that tx_submit() starts the transfer must be updated and call
+dma_async_issue_pending() if they miss to call it (one example is
+atmel_serial).
 
-Found by code inspection, compile tested only.
+As the at_xdmac_start_xfer() is now called only from
+at_xdmac_advance_work() when !at_xdmac_chan_is_enabled(), the
+at_xdmac_chan_is_enabled() check is no longer needed in
+at_xdmac_start_xfer(), thus remove it.
 
-Fixes: 804c2f3e36ef ("libcxgb,iw_cxgb4,cxgbit: add cxgb_find_route()")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Link: https://lore.kernel.org/r/20211215110115.191749-2-tudor.ambarus@microchip.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/chelsio/libcxgb/libcxgb_cm.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/dma/at_xdmac.c |    6 ------
+ 1 file changed, 6 deletions(-)
 
---- a/drivers/net/ethernet/chelsio/libcxgb/libcxgb_cm.c
-+++ b/drivers/net/ethernet/chelsio/libcxgb/libcxgb_cm.c
-@@ -32,6 +32,7 @@
+--- a/drivers/dma/at_xdmac.c
++++ b/drivers/dma/at_xdmac.c
+@@ -338,9 +338,6 @@ static void at_xdmac_start_xfer(struct a
  
- #include <linux/tcp.h>
- #include <linux/ipv6.h>
-+#include <net/inet_ecn.h>
- #include <net/route.h>
- #include <net/ip6_route.h>
+ 	dev_vdbg(chan2dev(&atchan->chan), "%s: desc 0x%p\n", __func__, first);
  
-@@ -99,7 +100,7 @@ cxgb_find_route(struct cxgb4_lld_info *l
+-	if (at_xdmac_chan_is_enabled(atchan))
+-		return;
+-
+ 	/* Set transfer as active to not try to start it again. */
+ 	first->active_xfer = true;
  
- 	rt = ip_route_output_ports(&init_net, &fl4, NULL, peer_ip, local_ip,
- 				   peer_port, local_port, IPPROTO_TCP,
--				   tos, 0);
-+				   tos & ~INET_ECN_MASK, 0);
- 	if (IS_ERR(rt))
- 		return NULL;
- 	n = dst_neigh_lookup(&rt->dst, &peer_ip);
+@@ -430,9 +427,6 @@ static dma_cookie_t at_xdmac_tx_submit(s
+ 	dev_vdbg(chan2dev(tx->chan), "%s: atchan 0x%p, add desc 0x%p to xfers_list\n",
+ 		 __func__, atchan, desc);
+ 	list_add_tail(&desc->xfer_node, &atchan->xfers_list);
+-	if (list_is_singular(&atchan->xfers_list))
+-		at_xdmac_start_xfer(atchan, desc);
+-
+ 	spin_unlock_irqrestore(&atchan->lock, irqflags);
+ 	return cookie;
+ }
 
 

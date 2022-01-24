@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCA7498AA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6136499374
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237401AbiAXTGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:06:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57470 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345446AbiAXTAT (ORCPT
+        id S1357496AbiAXUd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355424AbiAXUNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:00:19 -0500
+        Mon, 24 Jan 2022 15:13:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135B1C061768;
+        Mon, 24 Jan 2022 11:36:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0874EB8122F;
-        Mon, 24 Jan 2022 19:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F94C340E5;
-        Mon, 24 Jan 2022 19:00:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D02ACB81239;
+        Mon, 24 Jan 2022 19:36:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0835DC340E5;
+        Mon, 24 Jan 2022 19:35:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050816;
-        bh=VCURiyomUVIPoWf9AU+8FLL/6YFSGAUikU9Mn+zQSdE=;
+        s=korg; t=1643052959;
+        bh=Fu2rLzeUDaVElkoc6+b62pdiMdE6f0wRxHkWDfpMuv4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KA85OKoDneVlezWGaFdaZdvHlDLDOHCqXcDnUvgUFIC6eFrIMe01eZMgfDVjaW6jJ
-         gdN3EzUYMDj4OIyvx3gmBMW4ht5+Vt4m8SVqM8XQENMHeVpAtQcG69qIZBjHyQStxS
-         mdjV2iy/k51J1Eo4SllcW8ABhih7RGn1tih6HsOM=
+        b=RUtVEXsEdZ/1gbxOTVxDRJjg10Gpy31EGE5qN6Ib4d7OsqR7BPE7i5fOCJkVB2cB6
+         eguJpOc6N8/aAZDfd1YjSqwiWamYs6d5+cpmDfld9pK2iE9UPavGXc+cunvInh0lPi
+         IugevJAdI7peSQMRzxVwl+IvqmRo+TRUwz7sySwA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jeroen van Wolffelaar <jeroen@wolffelaar.nl>,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Theodore Tso <tytso@mit.edu>, stable@kernel.org
-Subject: [PATCH 4.9 122/157] ext4: set csum seed in tmp inode while migrating to extents
-Date:   Mon, 24 Jan 2022 19:43:32 +0100
-Message-Id: <20220124183936.643926225@linuxfoundation.org>
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 229/320] i2c: i801: Dont silently correct invalid transfer size
+Date:   Mon, 24 Jan 2022 19:43:33 +0100
+Message-Id: <20220124184001.775036885@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,55 +49,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luís Henriques <lhenriques@suse.de>
+From: Heiner Kallweit <hkallweit1@gmail.com>
 
-commit e81c9302a6c3c008f5c30beb73b38adb0170ff2d upstream.
+[ Upstream commit effa453168a7eeb8a562ff4edc1dbf9067360a61 ]
 
-When migrating to extents, the temporary inode will have it's own checksum
-seed.  This means that, when swapping the inodes data, the inode checksums
-will be incorrect.
+If an invalid block size is provided, reject it instead of silently
+changing it to a supported value. Especially critical I see the case of
+a write transfer with block length 0. In this case we have no guarantee
+that the byte we would write is valid. When silently reducing a read to
+32 bytes then we don't return an error and the caller may falsely
+assume that we returned the full requested data.
 
-This can be fixed by recalculating the extents checksums again.  Or simply
-by copying the seed into the temporary inode.
+If this change should break any (broken) caller, then I think we should
+fix the caller.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=213357
-Reported-by: Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
-Link: https://lore.kernel.org/r/20211214175058.19511-1-lhenriques@suse.de
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Cc: stable@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/migrate.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-i801.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
---- a/fs/ext4/migrate.c
-+++ b/fs/ext4/migrate.c
-@@ -484,6 +484,17 @@ int ext4_ext_migrate(struct inode *inode
- 		ext4_journal_stop(handle);
- 		goto out_unlock;
- 	}
-+	/*
-+	 * Use the correct seed for checksum (i.e. the seed from 'inode').  This
-+	 * is so that the metadata blocks will have the correct checksum after
-+	 * the migration.
-+	 *
-+	 * Note however that, if a crash occurs during the migration process,
-+	 * the recovery process is broken because the tmp_inode checksums will
-+	 * be wrong and the orphans cleanup will fail.
-+	 */
-+	ei = EXT4_I(inode);
-+	EXT4_I(tmp_inode)->i_csum_seed = ei->i_csum_seed;
- 	i_size_write(tmp_inode, i_size_read(inode));
- 	/*
- 	 * Set the i_nlink to zero so it will be deleted later
-@@ -527,7 +538,6 @@ int ext4_ext_migrate(struct inode *inode
- 		goto out_tmp_inode;
+diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+index a959062ded4f8..4e6d0b722ddcd 100644
+--- a/drivers/i2c/busses/i2c-i801.c
++++ b/drivers/i2c/busses/i2c-i801.c
+@@ -785,6 +785,11 @@ static int i801_block_transaction(struct i801_priv *priv,
+ 	int result = 0;
+ 	unsigned char hostc;
+ 
++	if (read_write == I2C_SMBUS_READ && command == I2C_SMBUS_BLOCK_DATA)
++		data->block[0] = I2C_SMBUS_BLOCK_MAX;
++	else if (data->block[0] < 1 || data->block[0] > I2C_SMBUS_BLOCK_MAX)
++		return -EPROTO;
++
+ 	if (command == I2C_SMBUS_I2C_BLOCK_DATA) {
+ 		if (read_write == I2C_SMBUS_WRITE) {
+ 			/* set I2C_EN bit in configuration register */
+@@ -798,16 +803,6 @@ static int i801_block_transaction(struct i801_priv *priv,
+ 		}
  	}
  
--	ei = EXT4_I(inode);
- 	i_data = ei->i_data;
- 	memset(&lb, 0, sizeof(lb));
- 
+-	if (read_write == I2C_SMBUS_WRITE
+-	 || command == I2C_SMBUS_I2C_BLOCK_DATA) {
+-		if (data->block[0] < 1)
+-			data->block[0] = 1;
+-		if (data->block[0] > I2C_SMBUS_BLOCK_MAX)
+-			data->block[0] = I2C_SMBUS_BLOCK_MAX;
+-	} else {
+-		data->block[0] = 32;	/* max for SMBus block reads */
+-	}
+-
+ 	/* Experience has shown that the block buffer can only be used for
+ 	   SMBus (not I2C) block transactions, even though the datasheet
+ 	   doesn't mention this limitation. */
+-- 
+2.34.1
+
 
 

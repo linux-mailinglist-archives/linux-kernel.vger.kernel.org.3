@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8E94992D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FB9498C3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382216AbiAXUZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
+        id S1349684AbiAXTVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:21:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377245AbiAXUFL (ORCPT
+        with ESMTP id S241800AbiAXTNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:05:11 -0500
+        Mon, 24 Jan 2022 14:13:14 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89541C061A78;
-        Mon, 24 Jan 2022 11:30:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3456CC08EA44;
+        Mon, 24 Jan 2022 11:04:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27C3861482;
-        Mon, 24 Jan 2022 19:30:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07480C340E5;
-        Mon, 24 Jan 2022 19:30:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4F9860010;
+        Mon, 24 Jan 2022 19:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0800C340E5;
+        Mon, 24 Jan 2022 19:04:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052646;
-        bh=1IaBwYLYhvYLRKyD+aZ7MbTyG3hN7jEVS8Rz/XY4sGI=;
+        s=korg; t=1643051066;
+        bh=+yHQkpZqkv1wHMW7qRo2WHGJBgSOI2MtONsWBWU49Z0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ml/tPusV9t6ePVe2thSMjTxeJLchq/GJHg9OkJPdSsuqDZp1xgv1xrYPxJaWiHT9n
-         qL5wRcxsJDGEQGLXC4sMDRYxsS47OFs7h4P1CBS0V3ZkCdv1G8ABmp0Sjm+83mycZ8
-         jZJvrh2HStxnDL/KGHM+EfJQKM3d3zUH7sg0UQRE=
+        b=cfeHxaDCPPAKrSf4VbLSG3GUDSZL7K1Z3u1gAhVEXbPW5NNVgyMG69aZEme72ZF/a
+         9lm05van6ZupGLRrOpEdqfIO0aZPfQwxQNAEkzCqcYsZK3YM27P8Q7usWTqmvOd5dd
+         HHWpl5Xo321czefxFT8MRkDlB8l0tWLbjHyf2gCY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adam Ford <aford173@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 127/320] clk: imx8mn: Fix imx8mn_clko1_sels
+        stable@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 036/186] wcn36xx: Indicate beacon not connection loss on MISSED_BEACON_IND
 Date:   Mon, 24 Jan 2022 19:41:51 +0100
-Message-Id: <20220124183957.992732644@linuxfoundation.org>
+Message-Id: <20220124183938.288430717@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,48 +50,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adam Ford <aford173@gmail.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-[ Upstream commit 570727e9acfac1c2330a01dd5e1272e9c3acec08 ]
+[ Upstream commit 588b45c88ae130fe373a8c50edaf54735c3f4fe3 ]
 
-When attempting to use sys_pll1_80m as the parent for clko1, the
-system hangs.  This is due to the fact that the source select
-for sys_pll1_80m was incorrectly pointing to m7_alt_pll_clk, which
-doesn't yet exist.
+Firmware can trigger a missed beacon indication, this is not the same as a
+lost signal.
 
-According to Rev 3 of the TRM, The imx8mn_clko1_sels also incorrectly
-references an osc_27m which does not exist, nor does an entry for
-source select bits 010b.  Fix both by inserting a dummy clock into
-the missing space in the table and renaming the incorrectly name clock
-with dummy.
+Flag to Linux the missed beacon and let the WiFi stack decide for itself if
+the link is up or down by sending its own probe to determine this.
 
-Fixes: 96d6392b54db ("clk: imx: Add support for i.MX8MN clock driver")
-Signed-off-by: Adam Ford <aford173@gmail.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Link: https://lore.kernel.org/r/20211117133202.775633-1-aford173@gmail.com
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+We should only be signalling the link is lost when the firmware indicates
+
+Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN3680 hardware")
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211027232529.657764-1-bryan.odonoghue@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/imx/clk-imx8mn.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/wireless/ath/wcn36xx/smd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
-index 58b5acee38306..882b42efd2582 100644
---- a/drivers/clk/imx/clk-imx8mn.c
-+++ b/drivers/clk/imx/clk-imx8mn.c
-@@ -358,9 +358,9 @@ static const char * const imx8mn_pdm_sels[] = {"osc_24m", "sys_pll2_100m", "audi
- 
- static const char * const imx8mn_dram_core_sels[] = {"dram_pll_out", "dram_alt_root", };
- 
--static const char * const imx8mn_clko1_sels[] = {"osc_24m", "sys_pll1_800m", "osc_27m",
--						 "sys_pll1_200m", "audio_pll2_out", "vpu_pll",
--						 "sys_pll1_80m", };
-+static const char * const imx8mn_clko1_sels[] = {"osc_24m", "sys_pll1_800m", "dummy",
-+						 "sys_pll1_200m", "audio_pll2_out", "sys_pll2_500m",
-+						 "dummy", "sys_pll1_80m", };
- static const char * const imx8mn_clko2_sels[] = {"osc_24m", "sys_pll2_200m", "sys_pll1_400m",
- 						 "sys_pll2_166m", "sys_pll3_out", "audio_pll1_out",
- 						 "video_pll1_out", "osc_32k", };
+diff --git a/drivers/net/wireless/ath/wcn36xx/smd.c b/drivers/net/wireless/ath/wcn36xx/smd.c
+index c5b5fbcd2066c..3073c5af7dae8 100644
+--- a/drivers/net/wireless/ath/wcn36xx/smd.c
++++ b/drivers/net/wireless/ath/wcn36xx/smd.c
+@@ -2053,7 +2053,7 @@ static int wcn36xx_smd_missed_beacon_ind(struct wcn36xx *wcn,
+ 			wcn36xx_dbg(WCN36XX_DBG_HAL, "beacon missed bss_index %d\n",
+ 				    tmp->bss_index);
+ 			vif = wcn36xx_priv_to_vif(tmp);
+-			ieee80211_connection_loss(vif);
++			ieee80211_beacon_loss(vif);
+ 		}
+ 		return 0;
+ 	}
+@@ -2068,7 +2068,7 @@ static int wcn36xx_smd_missed_beacon_ind(struct wcn36xx *wcn,
+ 			wcn36xx_dbg(WCN36XX_DBG_HAL, "beacon missed bss_index %d\n",
+ 				    rsp->bss_index);
+ 			vif = wcn36xx_priv_to_vif(tmp);
+-			ieee80211_connection_loss(vif);
++			ieee80211_beacon_loss(vif);
+ 			return 0;
+ 		}
+ 	}
 -- 
 2.34.1
 

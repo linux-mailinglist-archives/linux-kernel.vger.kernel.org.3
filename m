@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D999499394
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B263498C20
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385918AbiAXUer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:34:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355456AbiAXUNl (ORCPT
+        id S1348674AbiAXTTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:19:25 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39938 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347443AbiAXTKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:13:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F48DC06177E;
-        Mon, 24 Jan 2022 11:37:01 -0800 (PST)
+        Mon, 24 Jan 2022 14:10:31 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BF5BB80FA1;
-        Mon, 24 Jan 2022 19:37:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E94DC340E5;
-        Mon, 24 Jan 2022 19:36:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05CDA60010;
+        Mon, 24 Jan 2022 19:10:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049F7C340E5;
+        Mon, 24 Jan 2022 19:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053018;
-        bh=KXa3PZX3KZ79XnZVl87pu7FZ3QvuxgE02+fJGd2UNa4=;
+        s=korg; t=1643051430;
+        bh=vwRGDU4N4TbEApmcUFKQ4hpx5acenT08Vv9AbCWceh8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zwBay6TLX9Yv9r0Lm8wTWrlpP6jRSD3zGXHbQGHmr1r6IVGRU9pBsn4pPK5/kR/QC
-         xY9QE6HPqXqpIqIorA8XM7UVDA83HYEceJdGMtcEYo3sK/Oaj/ysHSu40vgVjUAQaI
-         nh6yvrNv6GerfCQGqtM+fDpKoOf1t7g72TuCMa9U=
+        b=RowIxncB1llFSMkT8R7ZE3fgtuZEodIKyhfeluIQiHgzf4aHHKJsIT9J0X8Y3D3ig
+         NShOgfD1SdWvFfE09BFCDO9y/sctknW0DnHghNfRALEVTzjTowD+v4y+kkeQTDAB9N
+         TGKri1CfGFX6x+yfNDzbHGduNXXs8UVU5p+o8Eqs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
-        Miklos Szeredi <mszeredi@redhat.com>
-Subject: [PATCH 5.4 250/320] fuse: Pass correct lend value to filemap_write_and_wait_range()
-Date:   Mon, 24 Jan 2022 19:43:54 +0100
-Message-Id: <20220124184002.493762000@linuxfoundation.org>
+        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 4.14 160/186] Documentation: refer to config RANDOMIZE_BASE for kernel address-space randomization
+Date:   Mon, 24 Jan 2022 19:43:55 +0100
+Message-Id: <20220124183942.243699561@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,35 +45,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-commit e388164ea385f04666c4633f5dc4f951fca71890 upstream.
+commit 82ca67321f55a8d1da6ac3ed611da3c32818bb37 upstream.
 
-The acceptable maximum value of lend parameter in
-filemap_write_and_wait_range() is LLONG_MAX rather than -1. And there is
-also some logic depending on LLONG_MAX check in write_cache_pages(). So
-let's pass LLONG_MAX to filemap_write_and_wait_range() in
-fuse_writeback_range() instead.
+The config RANDOMIZE_SLAB does not exist, the authors probably intended to
+refer to the config RANDOMIZE_BASE, which provides kernel address-space
+randomization. They probably just confused SLAB with BASE (these two
+four-letter words coincidentally share three common letters), as they also
+point out the config SLAB_FREELIST_RANDOM as further randomization within
+the same sentence.
 
-Fixes: 59bda8ecee2f ("fuse: flush extending writes")
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Cc: <stable@vger.kernel.org> # v5.15
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Fix the reference of the config for kernel address-space randomization to
+the config that provides that.
+
+Fixes: 6e88559470f5 ("Documentation: Add section about CPU vulnerabilities for Spectre")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Link: https://lore.kernel.org/r/20211230171940.27558-1-lukas.bulwahn@gmail.com
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/fuse/file.c |    2 +-
+ Documentation/admin-guide/hw-vuln/spectre.rst |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -3188,7 +3188,7 @@ fuse_direct_IO(struct kiocb *iocb, struc
+--- a/Documentation/admin-guide/hw-vuln/spectre.rst
++++ b/Documentation/admin-guide/hw-vuln/spectre.rst
+@@ -468,7 +468,7 @@ Spectre variant 2
+    before invoking any firmware code to prevent Spectre variant 2 exploits
+    using the firmware.
  
- static int fuse_writeback_range(struct inode *inode, loff_t start, loff_t end)
- {
--	int err = filemap_write_and_wait_range(inode->i_mapping, start, -1);
-+	int err = filemap_write_and_wait_range(inode->i_mapping, start, LLONG_MAX);
+-   Using kernel address space randomization (CONFIG_RANDOMIZE_SLAB=y
++   Using kernel address space randomization (CONFIG_RANDOMIZE_BASE=y
+    and CONFIG_SLAB_FREELIST_RANDOM=y in the kernel configuration) makes
+    attacks on the kernel generally more difficult.
  
- 	if (!err)
- 		fuse_sync_writes(inode);
 
 

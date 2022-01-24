@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB0749A466
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC1849A6B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380744AbiAYARp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1851184AbiAXXcH (ORCPT
+        id S3420370AbiAYCYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:24:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38446 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347526AbiAXTKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:32:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62F5C075964;
-        Mon, 24 Jan 2022 13:35:28 -0800 (PST)
+        Mon, 24 Jan 2022 14:10:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55131612E5;
-        Mon, 24 Jan 2022 21:35:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E651C340E4;
-        Mon, 24 Jan 2022 21:35:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50D66603DE;
+        Mon, 24 Jan 2022 19:10:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B2D2C340E5;
+        Mon, 24 Jan 2022 19:10:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060127;
-        bh=uAlWWnbqersf2Iz6eORks7ljC27rMrLewZjq8ZOs8Hw=;
+        s=korg; t=1643051442;
+        bh=gk9HNkOw8giGGMPD+7p+DjpVIM6kP8mjUyFj3QJZWyw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=krJ+bgxcnC9Xu52KZWOiRgN1CxQdSu9jw187sxx+CTqmNQoyopK+2iHU8+3ib/rao
-         TXI+eJ1NiMRuegy8oM9G4PaQEU5Vyqf1HoW3Tiw2bx+3ss7mppR7pEZ836MqZyGjKd
-         it1UHERTICSAy7tlf/9DyJIduzsPTN6C29E5dcbA=
+        b=QrhU4twLkqiILEAvrVM1EYWORaJArw7eihFUHfGVHeM77RpD1/1CxL189+PMP36Xt
+         dyqJC0NuIIm94niBwruduvdwP1Uh4sxj/W0bJ+zDE9aqglyS+K3/rlK3cgia6hNuof
+         Z3tiK/rreBc2SU7UtDnpeH8yzH+W4nxxjz1w5fjA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rafael Gago Castano <rgc@hms.se>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Su Bao Cheng <baocheng.su@siemens.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: [PATCH 5.16 0849/1039] serial: Fix incorrect rs485 polarity on uart open
+        stable@vger.kernel.org, Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 4.14 163/186] powerpc/cell: Fix clang -Wimplicit-fallthrough warning
 Date:   Mon, 24 Jan 2022 19:43:58 +0100
-Message-Id: <20220124184153.824378230@linuxfoundation.org>
+Message-Id: <20220124183942.352926189@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,67 +48,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Wunner <lukas@wunner.de>
+From: Anders Roxell <anders.roxell@linaro.org>
 
-commit d3b3404df318504ec084213ab1065b73f49b0f1d upstream.
+commit e89257e28e844f5d1d39081bb901d9f1183a7705 upstream.
 
-Commit a6845e1e1b78 ("serial: core: Consider rs485 settings to drive
-RTS") sought to deassert RTS when opening an rs485-enabled uart port.
-That way, the transceiver does not occupy the bus until it transmits
-data.
+Clang warns:
 
-Unfortunately, the commit mixed up the logic and *asserted* RTS instead
-of *deasserting* it:
+arch/powerpc/platforms/cell/pervasive.c:81:2: error: unannotated fall-through between switch labels
+        case SRR1_WAKEEE:
+        ^
+arch/powerpc/platforms/cell/pervasive.c:81:2: note: insert 'break;' to avoid fall-through
+        case SRR1_WAKEEE:
+        ^
+        break;
+1 error generated.
 
-The commit amended uart_port_dtr_rts(), which raises DTR and RTS when
-opening an rs232 port.  "Raising" actually means lowering the signal
-that's coming out of the uart, because an rs232 transceiver not only
-changes a signal's voltage level, it also *inverts* the signal.  See
-the simplified schematic in the MAX232 datasheet for an example:
-https://www.ti.com/lit/ds/symlink/max232.pdf
+Clang is more pedantic than GCC, which does not warn when failing
+through to a case that is just break or return. Clang's version is more
+in line with the kernel's own stance in deprecated.rst. Add athe missing
+break to silence the warning.
 
-So, to raise RTS on an rs232 port, TIOCM_RTS is *set* in port->mctrl
-and that results in the signal being driven low.
-
-In contrast to rs232, the signal level for rs485 Transmit Enable is the
-identity, not the inversion:  If the transceiver expects a "high" RTS
-signal for Transmit Enable, the signal coming out of the uart must also
-be high, so TIOCM_RTS must be *cleared* in port->mctrl.
-
-The commit did the exact opposite, but it's easy to see why given the
-confusing semantics of rs232 and rs485.  Fix it.
-
-Fixes: a6845e1e1b78 ("serial: core: Consider rs485 settings to drive RTS")
-Cc: stable@vger.kernel.org # v4.14+
-Cc: Rafael Gago Castano <rgc@hms.se>
-Cc: Jan Kiszka <jan.kiszka@siemens.com>
-Cc: Su Bao Cheng <baocheng.su@siemens.com>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Link: https://lore.kernel.org/r/9395767847833f2f3193c49cde38501eeb3b5669.1639821059.git.lukas@wunner.de
+Fixes: 6e83985b0f6e ("powerpc/cbe: Do not process external or decremeter interrupts from sreset")
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211207110228.698956-1-anders.roxell@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/serial_core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/powerpc/platforms/cell/pervasive.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -162,7 +162,7 @@ static void uart_port_dtr_rts(struct uar
- 	int RTS_after_send = !!(uport->rs485.flags & SER_RS485_RTS_AFTER_SEND);
- 
- 	if (raise) {
--		if (rs485_on && !RTS_after_send) {
-+		if (rs485_on && RTS_after_send) {
- 			uart_set_mctrl(uport, TIOCM_DTR);
- 			uart_clear_mctrl(uport, TIOCM_RTS);
- 		} else {
-@@ -171,7 +171,7 @@ static void uart_port_dtr_rts(struct uar
- 	} else {
- 		unsigned int clear = TIOCM_DTR;
- 
--		clear |= (!rs485_on || !RTS_after_send) ? TIOCM_RTS : 0;
-+		clear |= (!rs485_on || RTS_after_send) ? TIOCM_RTS : 0;
- 		uart_clear_mctrl(uport, clear);
- 	}
- }
+--- a/arch/powerpc/platforms/cell/pervasive.c
++++ b/arch/powerpc/platforms/cell/pervasive.c
+@@ -90,6 +90,7 @@ static int cbe_system_reset_exception(st
+ 	switch (regs->msr & SRR1_WAKEMASK) {
+ 	case SRR1_WAKEDEC:
+ 		set_dec(1);
++		break;
+ 	case SRR1_WAKEEE:
+ 		/*
+ 		 * Handle these when interrupts get re-enabled and we take
 
 

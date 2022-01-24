@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3B8499ED2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C87049A053
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837999AbiAXWpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:45:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47594 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377338AbiAXVh3 (ORCPT
+        id S1583332AbiAXXGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381204AbiAXWTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:37:29 -0500
+        Mon, 24 Jan 2022 17:19:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904A2C0619CF;
+        Mon, 24 Jan 2022 12:49:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2D18B81142;
-        Mon, 24 Jan 2022 21:37:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2393CC340E7;
-        Mon, 24 Jan 2022 21:37:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E9D4B811A9;
+        Mon, 24 Jan 2022 20:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71CD2C340E5;
+        Mon, 24 Jan 2022 20:49:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060237;
-        bh=NoAJVYw6CP/5wj4wKs43vSyyWuXkyI9r0CT4hhQoO8g=;
+        s=korg; t=1643057371;
+        bh=nCkMqPq7aczurCyrAgJsTR6iIJRd5PJT1ENTZ16rmAY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N6ZV7o86rpTbcfpnGZu53diW3t1PDaPhohU46LfkhkXWEiTNcTAkI/DYrB7DpYPlP
-         pRHjk2i0qC2tqVfV2lvBMYde8zeBIbkJD9I6+xivmOM7O3wsY/skzMlmUGdjzmkb91
-         00gaZZlrgNOnA7N4gBwX6YoCKIqwZATyUKcVMYZI=
+        b=SlUjwNoPgIH9GPDVpehCO/exdg90dAOOPhgy8fKGkVnczu4jNobVS834odNkRtmBs
+         iLa8b4df0WxuDLNCTt0ZM/hP9cOurXxWYsdvxNz4kn7zc5mZI64bCyg+KKX+KxcPFi
+         iREqIkIvg1drD83qs2QsSD5gdRFKbdwvXf1LJUok=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nikolay Borisov <nborisov@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.16 0884/1039] btrfs: check the root node for uptodate before returning it
-Date:   Mon, 24 Jan 2022 19:44:33 +0100
-Message-Id: <20220124184155.007622603@linuxfoundation.org>
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 758/846] block: Fix fsync always failed if once failed
+Date:   Mon, 24 Jan 2022 19:44:35 +0100
+Message-Id: <20220124184127.118647249@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,68 +48,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Ye Bin <yebin10@huawei.com>
 
-commit 120de408e4b97504a2d9b5ca534b383de2c73d49 upstream.
+commit 8a7518931baa8ea023700987f3db31cb0a80610b upstream.
 
-Now that we clear the extent buffer uptodate if we fail to write it out
-we need to check to see if our root node is uptodate before we search
-down it.  Otherwise we could return stale data (or potentially corrupt
-data that was caught by the write verification step) and think that the
-path is OK to search down.
+We do test with inject error fault base on v4.19, after test some time we found
+sync /dev/sda always failed.
+[root@localhost] sync /dev/sda
+sync: error syncing '/dev/sda': Input/output error
 
-CC: stable@vger.kernel.org # 5.4+
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+scsi log as follows:
+[19069.812296] sd 0:0:0:0: [sda] tag#64 Send: scmd 0x00000000d03a0b6b
+[19069.812302] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
+[19069.812533] sd 0:0:0:0: [sda] tag#64 Done: SUCCESS Result: hostbyte=DID_OK driverbyte=DRIVER_OK
+[19069.812536] sd 0:0:0:0: [sda] tag#64 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
+[19069.812539] sd 0:0:0:0: [sda] tag#64 scsi host busy 1 failed 0
+[19069.812542] sd 0:0:0:0: Notifying upper driver of completion (result 0)
+[19069.812546] sd 0:0:0:0: [sda] tag#64 sd_done: completed 0 of 0 bytes
+[19069.812549] sd 0:0:0:0: [sda] tag#64 0 sectors total, 0 bytes done.
+[19069.812564] print_req_error: I/O error, dev sda, sector 0
+
+ftrace log as follows:
+ rep-306069 [007] .... 19654.923315: block_bio_queue: 8,0 FWS 0 + 0 [rep]
+ rep-306069 [007] .... 19654.923333: block_getrq: 8,0 FWS 0 + 0 [rep]
+ kworker/7:1H-250   [007] .... 19654.923352: block_rq_issue: 8,0 FF 0 () 0 + 0 [kworker/7:1H]
+ <idle>-0     [007] ..s. 19654.923562: block_rq_complete: 8,0 FF () 18446744073709551615 + 0 [0]
+ <idle>-0     [007] d.s. 19654.923576: block_rq_complete: 8,0 WS () 0 + 0 [-5]
+
+As 8d6996630c03 introduce 'fq->rq_status', this data only update when 'flush_rq'
+reference count isn't zero. If flush request once failed and record error code
+in 'fq->rq_status'. If there is no chance to update 'fq->rq_status',then do fsync
+will always failed.
+To address this issue reset 'fq->rq_status' after return error code to upper layer.
+
+Fixes: 8d6996630c03("block: fix null pointer dereference in blk_mq_rq_timed_out()")
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Link: https://lore.kernel.org/r/20211129012659.1553733-1-yebin10@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/ctree.c |   19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+ block/blk-flush.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/fs/btrfs/ctree.c
-+++ b/fs/btrfs/ctree.c
-@@ -1570,12 +1570,9 @@ static struct extent_buffer *btrfs_searc
- {
- 	struct btrfs_fs_info *fs_info = root->fs_info;
- 	struct extent_buffer *b;
--	int root_lock;
-+	int root_lock = 0;
- 	int level = 0;
- 
--	/* We try very hard to do read locks on the root */
--	root_lock = BTRFS_READ_LOCK;
--
- 	if (p->search_commit_root) {
- 		/*
- 		 * The commit roots are read only so we always do read locks,
-@@ -1613,6 +1610,9 @@ static struct extent_buffer *btrfs_searc
- 		goto out;
- 	}
- 
-+	/* We try very hard to do read locks on the root */
-+	root_lock = BTRFS_READ_LOCK;
-+
- 	/*
- 	 * If the level is set to maximum, we can skip trying to get the read
- 	 * lock.
-@@ -1639,6 +1639,17 @@ static struct extent_buffer *btrfs_searc
- 	level = btrfs_header_level(b);
- 
- out:
-+	/*
-+	 * The root may have failed to write out at some point, and thus is no
-+	 * longer valid, return an error in this case.
-+	 */
-+	if (!extent_buffer_uptodate(b)) {
-+		if (root_lock)
-+			btrfs_tree_unlock_rw(b, root_lock);
-+		free_extent_buffer(b);
-+		return ERR_PTR(-EIO);
+--- a/block/blk-flush.c
++++ b/block/blk-flush.c
+@@ -235,8 +235,10 @@ static void flush_end_io(struct request
+ 	 * avoiding use-after-free.
+ 	 */
+ 	WRITE_ONCE(flush_rq->state, MQ_RQ_IDLE);
+-	if (fq->rq_status != BLK_STS_OK)
++	if (fq->rq_status != BLK_STS_OK) {
+ 		error = fq->rq_status;
++		fq->rq_status = BLK_STS_OK;
 +	}
-+
- 	p->nodes[level] = b;
- 	if (!p->skip_locking)
- 		p->locks[level] = root_lock;
+ 
+ 	if (!q->elevator) {
+ 		flush_rq->tag = BLK_MQ_NO_TAG;
 
 

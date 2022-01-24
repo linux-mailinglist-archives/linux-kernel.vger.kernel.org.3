@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E5649908B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BBD498B88
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236282AbiAXUBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:01:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59048 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354774AbiAXTh4 (ORCPT
+        id S1346595AbiAXTOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346272AbiAXTFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:37:56 -0500
+        Mon, 24 Jan 2022 14:05:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EA2C0613F0;
+        Mon, 24 Jan 2022 11:01:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13C6DB8124C;
-        Mon, 24 Jan 2022 19:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1D6C340E5;
-        Mon, 24 Jan 2022 19:37:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59D0AB8123A;
+        Mon, 24 Jan 2022 19:01:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A1FEC340EA;
+        Mon, 24 Jan 2022 19:01:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053073;
-        bh=esUmQol+H/4d9Hgo8Aa5Ag4uakS/BpjuUbGvpirtm4s=;
+        s=korg; t=1643050861;
+        bh=MAeeJZOxqn6EdjZ+yLTH/ZYr2Om5f/r9frQ/yzaDLFI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EQbMB21ncrpR77OT/C4XuM1nOrneLfNMzhL6XnTIUlHTz7y415pmiP0TfHYvoMHgO
-         fSbz5hsuGcEoV/qN/3q5EsliWv4F+fI36cOYXkDwDrsD8M4GkkKGE4if4vnxhkd/2Y
-         q1yJJL8yROzqYXDBz4i3CNwXOMr8nN1iOVWGN0No=
+        b=EcnbjoBdne6VWiGRW+dtQPPyMv20XLvMPB50APa4SBwSrgJaQfZY3vgmWvm5lc7YS
+         3LvdWeovlWvaotVnCFXcTrcOnTR8pe3qAvqWRt1gY3k8eRHCWPcZsjWsZnqkAkO4gO
+         NUM8IlG0enuhAH0XQXHt1dop3AKkII7arnyZRvPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 240/320] i2c: designware-pci: Fix to change data types of hcnt and lcnt parameters
-Date:   Mon, 24 Jan 2022 19:43:44 +0100
-Message-Id: <20220124184002.149396816@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 4.9 135/157] net: axienet: fix number of TX ring slots for available check
+Date:   Mon, 24 Jan 2022 19:43:45 +0100
+Message-Id: <20220124183937.059128872@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,44 +48,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-[ Upstream commit d52097010078c1844348dc0e467305e5f90fd317 ]
+commit aba57a823d2985a2cc8c74a2535f3a88e68d9424 upstream.
 
-The data type of hcnt and lcnt in the struct dw_i2c_dev is of type u16.
-It's better to have same data type in struct dw_scl_sda_cfg as well.
+The check for the number of available TX ring slots was off by 1 since a
+slot is required for the skb header as well as each fragment. This could
+result in overwriting a TX ring slot that was still in use.
 
-Reported-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-designware-pcidrv.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 05b35ac33ce33..735326e5eb8cf 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -37,10 +37,10 @@ enum dw_pci_ctl_id_t {
- };
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -680,7 +680,7 @@ axienet_start_xmit(struct sk_buff *skb,
+ 	num_frag = skb_shinfo(skb)->nr_frags;
+ 	cur_p = &lp->tx_bd_v[lp->tx_bd_tail];
  
- struct dw_scl_sda_cfg {
--	u32 ss_hcnt;
--	u32 fs_hcnt;
--	u32 ss_lcnt;
--	u32 fs_lcnt;
-+	u16 ss_hcnt;
-+	u16 fs_hcnt;
-+	u16 ss_lcnt;
-+	u16 fs_lcnt;
- 	u32 sda_hold;
- };
+-	if (axienet_check_tx_bd_space(lp, num_frag)) {
++	if (axienet_check_tx_bd_space(lp, num_frag + 1)) {
+ 		if (netif_queue_stopped(ndev))
+ 			return NETDEV_TX_BUSY;
  
--- 
-2.34.1
-
+@@ -690,7 +690,7 @@ axienet_start_xmit(struct sk_buff *skb,
+ 		smp_mb();
+ 
+ 		/* Space might have just been freed - check again */
+-		if (axienet_check_tx_bd_space(lp, num_frag))
++		if (axienet_check_tx_bd_space(lp, num_frag + 1))
+ 			return NETDEV_TX_BUSY;
+ 
+ 		netif_wake_queue(ndev);
 
 

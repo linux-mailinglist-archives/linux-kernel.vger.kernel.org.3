@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9484549A707
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A52B49A2B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3422659AbiAYCbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:31:46 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58856 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354550AbiAXUU0 (ORCPT
+        id S1841813AbiAXXqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:46:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1587682AbiAXW4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:20:26 -0500
+        Mon, 24 Jan 2022 17:56:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C29C055AB9;
+        Mon, 24 Jan 2022 13:11:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B04CB8123D;
-        Mon, 24 Jan 2022 20:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4B49C340E5;
-        Mon, 24 Jan 2022 20:20:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5542A612E9;
+        Mon, 24 Jan 2022 21:11:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E74C340E5;
+        Mon, 24 Jan 2022 21:11:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055620;
-        bh=Yp1NnFfvlH+1ASCwb2Hc7AdUpcyrvhhExdH1MabsrVw=;
+        s=korg; t=1643058690;
+        bh=EjYjonRQitSknKhd+4bksVPMqHt1V78cIUfxjZQC6x8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YGv3F3rJT6OfTmZIm4jkEtpG6JP7dlGn0ocg0Y14HnpcK0U5BpiLOClblbpKDN9qb
-         AzWqrtHhpfCqwUwNyVxuO88TvmTL4tRzAvQb12CirlxdhKa58PCTOiIwuGIWKpjX5a
-         +ty/XIjeWIdhOMOVtw1GOBF9bDaY5T95OZGXrL3g=
+        b=tqmrEQ0lA+GZgDVofYxvIol4+SCyesyj1f0UsiTN5uMDA25z/QeZQ38ENdo+HvxYz
+         v01+6lx2lTo49My9PqBXLyF3gcSCb4PuMj2UHcu/ykZz7diw2JEyHgJFO2FF5NXkyp
+         bVocoyqZTwPZfSjy3Clta3zKOCcrGGRi2iWEI9y8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Richard Weinberger <richard@nod.at>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 210/846] media: dib8000: Fix a memleak in dib8000_init()
+Subject: [PATCH 5.16 0338/1039] um: virt-pci: Fix 32-bit compile
 Date:   Mon, 24 Jan 2022 19:35:27 +0100
-Message-Id: <20220124184108.167517880@linuxfoundation.org>
+Message-Id: <20220124184136.668044062@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,53 +50,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 8dbdcc7269a83305ee9d677b75064d3530a48ee2 ]
+[ Upstream commit d73820df6437b5d0a57be53faf39db46a0264b3a ]
 
-In dib8000_init(), the variable fe is not freed or passed out on the
-failure of dib8000_identify(&state->i2c), which could lead to a memleak.
+There were a few 32-bit compile warnings that of course
+turned into errors with -Werror, fix the 32-bit build.
 
-Fix this bug by adding a kfree of fe in the error path.
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DVB_DIB8000=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 77e2c0f5d471 ("V4L/DVB (12900): DiB8000: added support for DiBcom ISDB-T/ISDB-Tsb demodulator DiB8000")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 68f5d3f3b654 ("um: add PCI over virtio emulation driver")
+Reported-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/dib8000.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/um/drivers/virt-pci.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
-index bb02354a48b81..d67f2dd997d06 100644
---- a/drivers/media/dvb-frontends/dib8000.c
-+++ b/drivers/media/dvb-frontends/dib8000.c
-@@ -4473,8 +4473,10 @@ static struct dvb_frontend *dib8000_init(struct i2c_adapter *i2c_adap, u8 i2c_ad
+diff --git a/arch/um/drivers/virt-pci.c b/arch/um/drivers/virt-pci.c
+index c080666330234..0ab58016db22f 100644
+--- a/arch/um/drivers/virt-pci.c
++++ b/arch/um/drivers/virt-pci.c
+@@ -181,15 +181,15 @@ static unsigned long um_pci_cfgspace_read(void *priv, unsigned int offset,
+ 	/* buf->data is maximum size - we may only use parts of it */
+ 	struct um_pci_message_buffer *buf;
+ 	u8 *data;
+-	unsigned long ret = ~0ULL;
++	unsigned long ret = ULONG_MAX;
  
- 	state->timf_default = cfg->pll->timf;
+ 	if (!dev)
+-		return ~0ULL;
++		return ULONG_MAX;
  
--	if (dib8000_identify(&state->i2c) == 0)
-+	if (dib8000_identify(&state->i2c) == 0) {
-+		kfree(fe);
- 		goto error;
-+	}
+ 	buf = get_cpu_var(um_pci_msg_bufs);
+ 	data = buf->data;
  
- 	dibx000_init_i2c_master(&state->i2c_master, DIB8000, state->i2c.adap, state->i2c.addr);
+-	memset(data, 0xff, sizeof(data));
++	memset(buf->data, 0xff, sizeof(buf->data));
  
+ 	switch (size) {
+ 	case 1:
+@@ -304,7 +304,7 @@ static unsigned long um_pci_bar_read(void *priv, unsigned int offset,
+ 	/* buf->data is maximum size - we may only use parts of it */
+ 	struct um_pci_message_buffer *buf;
+ 	u8 *data;
+-	unsigned long ret = ~0ULL;
++	unsigned long ret = ULONG_MAX;
+ 
+ 	buf = get_cpu_var(um_pci_msg_bufs);
+ 	data = buf->data;
 -- 
 2.34.1
 

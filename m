@@ -2,100 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 830BB497B0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E96497B1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 10:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242586AbiAXJIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 04:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242418AbiAXJIP (ORCPT
+        id S242597AbiAXJLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:11:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48871 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242495AbiAXJLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:08:15 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37DBC061401
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:08:14 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id i62so2682023ybg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:08:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mo+uj8+53Ax7tIU91723WHax5XvtDO7oGefV09g/Eiw=;
-        b=Lag6Tc/VjcamDe0m5xYuMi0i4GEJpQqzDv2xv15qjoOeqbVWxK+nR+z87z3/Uds7yJ
-         xVMZsrEWXOp0quH66zVcVy5D9zyeeMNJ8MBFrQnj3VltAmEoKjttsv3dlG98dSbynjqk
-         PFnaOxWJQVmTUr0iugE5+mXiRzDIDnlGpq+Atf0UWF/05kXEtP98JOBc8mLU8YHEPRFF
-         F4B6lwfKhGX8rPNJo3AwlCueRsN7Pt4RrmA0biTfkV0Baij7u6nDkDnXHHN+LcrqhAqH
-         CShC3LlIw2tHICgexcSbDwofHLOvSY3OXjtQdxIIJaw/jzgvcxhEH1G/dQIPzOMr2C70
-         ai4w==
+        Mon, 24 Jan 2022 04:11:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643015478;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OMYGpin1GmNWwbbojqUVpe990D8pktHZFFcCMALRStg=;
+        b=Qxf+qyNbCFwzV0dDYx0RHHaSgsE8BSOZQvwNZNfSoARuSg0oad6ALkFwndvWdyqbFmv5EF
+        6mlvDKwFS76vkP4NTQ6QUK5tj3uu5Yx/P0FAWLTf7L637ICetVF7t/2CVJBU+zdmmvcMn2
+        vG3/d7qMgnOzUK23cpCV3XWzvsYz25A=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-183-r0nWPPzbMRelsuvEWwVEzw-1; Mon, 24 Jan 2022 04:11:16 -0500
+X-MC-Unique: r0nWPPzbMRelsuvEWwVEzw-1
+Received: by mail-wr1-f69.google.com with SMTP id j26-20020adfb31a000000b001d8e22f75fbso1594766wrd.20
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 01:11:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mo+uj8+53Ax7tIU91723WHax5XvtDO7oGefV09g/Eiw=;
-        b=SL2E/xcOnCA6wT3CKMvQcUwUnaCqX00o/vD81Zfs8os8l7EfoUvVT/qBxFvYsIGsZ3
-         47SWmPcU1AWROyVQ9obn3IrrlHlIyyt6kYgeHM4FeF51xu/nr4c9MyJ0mokTPrZtIFic
-         b9fhxzdRpRo+acpFtfG09lWNddvSYQ4gNKBpj+z14vFGALH7bo8MwAX0YkDV8hL1/6YG
-         kEl3PMoe4KTOMLsNOq/kAvZ4Dr3abmgagXjjZkRDNutvX4fFCpFTb0hMj/P/QzuwIB5V
-         JRN14eGVnllALvNNPOvTRR+8A46Rpflr2Jt/TMxsdjF5kNxvGvK4PaTYpG9F6JMQErzp
-         RGsw==
-X-Gm-Message-State: AOAM5324yAOkkFhQSvMLeO8mp2P0JbKpHqsSBDj0xf963sG17w/TE+Zs
-        2BaWsb6kw8VWe21ld2uoNSabWazIRB9KlbMVjM/3pw==
-X-Google-Smtp-Source: ABdhPJxR2sNnK1U8ZMv0TLocVVFDh5rCZxvNsQJUvLgq5oQIsKgHQM/iDQMQSKuzKm7osYadMtzCvSPfXA2+9Ul2f20=
-X-Received: by 2002:a05:6902:100c:: with SMTP id w12mr6231737ybt.317.1643015294113;
- Mon, 24 Jan 2022 01:08:14 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=OMYGpin1GmNWwbbojqUVpe990D8pktHZFFcCMALRStg=;
+        b=miSC4PXm2AHGJlvukUyqs7XNLVrfbtTq/QV1kszal9eSCi/vyfCHExDyxqMdBsOxz7
+         f2kmDPmg5T6W1vT69NFGpltlC5Q5PFmZb8X+BPThZpcLJ68rsmpnVhHvXpipqtzRt1oj
+         YrcbIsDYzPnuddkmpBAg+AkUuDgn1VVwBHWElEuRmnv8hczT6iz71+M5P7a7ucChKQRy
+         ocC6NmY7jRRobFf7hPDoBNJDJkgadq+1yreP5K7qZzBnJ1Me2j/AWmYqvvlit7dmNq2L
+         px28mlxSV6/mGMOqEdBqYr2D2kcJn0hyCwd48VFt0EJO0vukO0sl/dCnqoGy/N8Wk5fs
+         /7Tw==
+X-Gm-Message-State: AOAM533D/6sFTDwfyGLtK/v2fAaWoB15pYjvAP7HGUeg14KVpDgiYUQR
+        lljjD9onE3um7wu5rMW5lEQwi1R/JDaMGgoVyScDu8lavE368Wjz1dfEjt+Cz/U1PCqWIHOpo9z
+        trFO04D4WPEhL1xDoTIhNdnfE
+X-Received: by 2002:a5d:598a:: with SMTP id n10mr13089714wri.582.1643015475062;
+        Mon, 24 Jan 2022 01:11:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzhROMhxI51amPelFZSuWBFEYDzDjRJZl5mQ1KWe926i8sMhv1aUBQfdX4YJbP2yysVszrsOQ==
+X-Received: by 2002:a5d:598a:: with SMTP id n10mr13089684wri.582.1643015474784;
+        Mon, 24 Jan 2022 01:11:14 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id v5sm18175419wmh.19.2022.01.24.01.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 01:11:14 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH 06/54] x86/kvm: replace bitmap_weight with bitmap_empty
+ where appropriate
+In-Reply-To: <20220123183925.1052919-7-yury.norov@gmail.com>
+References: <20220123183925.1052919-1-yury.norov@gmail.com>
+ <20220123183925.1052919-7-yury.norov@gmail.com>
+Date:   Mon, 24 Jan 2022 10:11:12 +0100
+Message-ID: <87y235ijm7.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20220121075515.79311-1-songmuchun@bytedance.com>
- <20220121075515.79311-4-songmuchun@bytedance.com> <Ye5YNbBbVymwfPB0@infradead.org>
-In-Reply-To: <Ye5YNbBbVymwfPB0@infradead.org>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Mon, 24 Jan 2022 17:07:38 +0800
-Message-ID: <CAMZfGtUb+xF9nFd21g8tagjRTCYg7R=HOVmXvVZhbtx8im3FDQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] dax: fix missing writeprotect the pte entry
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>, apopple@nvidia.com,
-        Yang Shi <shy828301@gmail.com>, rcampbell@nvidia.com,
-        Hugh Dickins <hughd@google.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        zwisler@kernel.org, linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        nvdimm@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 3:41 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Fri, Jan 21, 2022 at 03:55:14PM +0800, Muchun Song wrote:
-> > Reuse some infrastructure of page_mkclean_one() to let DAX can handle
-> > similar case to fix this issue.
->
-> Can you split out some of the infrastructure changes into proper
-> well-documented preparation patches?
+Yury Norov <yury.norov@gmail.com> writes:
 
-Will do. I'll introduce page_vma_mkclean_one in a prepared patch
-and then fix the DAX issue in a separate patch. Thanks for your
-suggestions.
-
+> In some places kvm/hyperv.c code calls bitmap_weight() to check if any bit
+> of a given bitmap is set. It's better to use bitmap_empty() in that case
+> because bitmap_empty() stops traversing the bitmap as soon as it finds
+> first set bit, while bitmap_weight() counts all bits unconditionally.
 >
-> > +     pgoff_t pgoff_end = pgoff_start + npfn - 1;
-> >
-> >       i_mmap_lock_read(mapping);
-> > -     vma_interval_tree_foreach(vma, &mapping->i_mmap, index, index) {
-> > -             struct mmu_notifier_range range;
-> > -             unsigned long address;
-> > -
-> > +     vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff_start, pgoff_end) {
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  arch/x86/kvm/hyperv.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> Please avoid the overly long lines here.  Just using start and end
-> might be an easy option.
->
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 6e38a7d22e97..2c3400dea4b3 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -90,7 +90,7 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
+>  {
+>  	struct kvm_vcpu *vcpu = hv_synic_to_vcpu(synic);
+>  	struct kvm_hv *hv = to_kvm_hv(vcpu->kvm);
+> -	int auto_eoi_old, auto_eoi_new;
+> +	bool auto_eoi_old, auto_eoi_new;
+>  
+>  	if (vector < HV_SYNIC_FIRST_VALID_VECTOR)
+>  		return;
+> @@ -100,16 +100,16 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
+>  	else
+>  		__clear_bit(vector, synic->vec_bitmap);
+>  
+> -	auto_eoi_old = bitmap_weight(synic->auto_eoi_bitmap, 256);
+> +	auto_eoi_old = bitmap_empty(synic->auto_eoi_bitmap, 256);
 
-Will do.
+I would've preferred this written as 
 
-Thanks.
+	auto_eoi_old = !bitmap_empty(synic->auto_eoi_bitmap, 256);
+
+so the variable would indicate wether AutoEOI was previosly enabled, not
+disabled.
+
+>  
+>  	if (synic_has_vector_auto_eoi(synic, vector))
+>  		__set_bit(vector, synic->auto_eoi_bitmap);
+>  	else
+>  		__clear_bit(vector, synic->auto_eoi_bitmap);
+>  
+> -	auto_eoi_new = bitmap_weight(synic->auto_eoi_bitmap, 256);
+> +	auto_eoi_new = bitmap_empty(synic->auto_eoi_bitmap, 256);
+
+Same here, of course. "auto_eoi_new = true" sounds like "AutoEOI is now
+enabled".
+
+>  
+> -	if (!!auto_eoi_old == !!auto_eoi_new)
+> +	if (auto_eoi_old == auto_eoi_new)
+>  		return;
+>  
+>  	down_write(&vcpu->kvm->arch.apicv_update_lock);
+
+The change look good to me otherwise, feel free to add
+
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+
+-- 
+Vitaly
+

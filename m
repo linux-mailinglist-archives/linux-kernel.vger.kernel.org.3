@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6466B499E0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E6249A134
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587431AbiAXW2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:28:20 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54158 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455200AbiAXVe4 (ORCPT
+        id S1350320AbiAXX2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:28:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1451757AbiAXWNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:34:56 -0500
+        Mon, 24 Jan 2022 17:13:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0733DC0E03DF;
+        Mon, 24 Jan 2022 12:43:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 962E461320;
-        Mon, 24 Jan 2022 21:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA5FC340E4;
-        Mon, 24 Jan 2022 21:34:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B916BB810BD;
+        Mon, 24 Jan 2022 20:43:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3475C340E5;
+        Mon, 24 Jan 2022 20:43:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060095;
-        bh=3i2XzHDZD3pXO+yiyPbt7hDEmvflOcH/cdCg0AQj2PA=;
+        s=korg; t=1643057028;
+        bh=Ss+KyW9+v4+zPtZvCbZxmRTFAjt5mNV30rcy4WIJht8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VIOcCZrBv6EoXt/2KPu5op/U0qqdU7So9rHiNyZGOZOhhIum1o42MuzwU4gnc8UIp
-         6E/uzacCPucefmpBPxIWs6Rp2S5cRV3Mbx0j9tmMuUHxppw4hAbxWPHYxZZvc7S8mt
-         JV3WngkIHRMtZwkA8R3UC7UVd23LYXgQoxvdXTCw=
+        b=qY6+Ay+TbLZHU2ys/Tis8uxbMeMy2GWJhM0zjUUcXqiTWl1/mOJy7AdVEnBLchExo
+         Vd7JAop8njqEjZ6s3Xrad4pG0WzvhqT4jxrCttZ//DF4LyCwjnj2zvxKvxfrL4sqFO
+         EG3jlpqaeqVbW/xDJnvLnMdAqg81MM/szs8dQI0A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0804/1039] PCI: mvebu: Fix support for PCI_BRIDGE_CTL_BUS_RESET on emulated bridge
-Date:   Mon, 24 Jan 2022 19:43:13 +0100
-Message-Id: <20220124184152.336213477@linuxfoundation.org>
+        Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>
+Subject: [PATCH 5.15 677/846] xen/gntdev: fix unmap notification order
+Date:   Mon, 24 Jan 2022 19:43:14 +0100
+Message-Id: <20220124184124.424938108@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,81 +50,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
 
-[ Upstream commit d75404cc08832206f173668bd35391c581fea121 ]
+commit ce2f46f3531a03781181b7f4bd1ff9f8c5086e7e upstream.
 
-Hardware supports PCIe Hot Reset via PCIE_CTRL_OFF register. Use it for
-implementing PCI_BRIDGE_CTL_BUS_RESET bit of PCI_BRIDGE_CONTROL register on
-emulated bridge.
+While working with Xen's libxenvchan library I have faced an issue with
+unmap notifications sent in wrong order if both UNMAP_NOTIFY_SEND_EVENT
+and UNMAP_NOTIFY_CLEAR_BYTE were requested: first we send an event channel
+notification and then clear the notification byte which renders in the below
+inconsistency (cli_live is the byte which was requested to be cleared on unmap):
 
-With this change the function pci_reset_secondary_bus() starts working and
-can reset connected PCIe card.
+[  444.514243] gntdev_put_map UNMAP_NOTIFY_SEND_EVENT map->notify.event 6
+libxenvchan_is_open cli_live 1
+[  444.515239] __unmap_grant_pages UNMAP_NOTIFY_CLEAR_BYTE at 14
 
-Link: https://lore.kernel.org/r/20211125124605.25915-13-pali@kernel.org
-Fixes: 1f08673eef12 ("PCI: mvebu: Convert to PCI emulated bridge config space")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Thus it is not possible to reliably implement the checks like
+- wait for the notification (UNMAP_NOTIFY_SEND_EVENT)
+- check the variable (UNMAP_NOTIFY_CLEAR_BYTE)
+because it is possible that the variable gets checked before it is cleared
+by the kernel.
+
+To fix that we need to re-order the notifications, so the variable is first
+gets cleared and then the event channel notification is sent.
+With this fix I can see the correct order of execution:
+
+[   54.522611] __unmap_grant_pages UNMAP_NOTIFY_CLEAR_BYTE at 14
+[   54.537966] gntdev_put_map UNMAP_NOTIFY_SEND_EVENT map->notify.event 6
+libxenvchan_is_open cli_live 0
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Link: https://lore.kernel.org/r/20211210092817.580718-1-andr2000@gmail.com
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-mvebu.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/xen/gntdev.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-index f279471e340ee..aaf6a226f6dba 100644
---- a/drivers/pci/controller/pci-mvebu.c
-+++ b/drivers/pci/controller/pci-mvebu.c
-@@ -56,6 +56,7 @@
- #define PCIE_CTRL_OFF		0x1a00
- #define  PCIE_CTRL_X1_MODE		0x0001
- #define  PCIE_CTRL_RC_MODE		BIT(1)
-+#define  PCIE_CTRL_MASTER_HOT_RESET	BIT(24)
- #define PCIE_STAT_OFF		0x1a04
- #define  PCIE_STAT_BUS                  0xff00
- #define  PCIE_STAT_DEV                  0x1f0000
-@@ -462,6 +463,22 @@ mvebu_pci_bridge_emul_base_conf_read(struct pci_bridge_emul *bridge,
- 		break;
- 	}
+--- a/drivers/xen/gntdev.c
++++ b/drivers/xen/gntdev.c
+@@ -250,13 +250,13 @@ void gntdev_put_map(struct gntdev_priv *
+ 	if (!refcount_dec_and_test(&map->users))
+ 		return;
  
-+	case PCI_INTERRUPT_LINE: {
-+		/*
-+		 * From the whole 32bit register we support reading from HW only
-+		 * one bit: PCI_BRIDGE_CTL_BUS_RESET.
-+		 * Other bits are retrieved only from emulated config buffer.
-+		 */
-+		__le32 *cfgspace = (__le32 *)&bridge->conf;
-+		u32 val = le32_to_cpu(cfgspace[PCI_INTERRUPT_LINE / 4]);
-+		if (mvebu_readl(port, PCIE_CTRL_OFF) & PCIE_CTRL_MASTER_HOT_RESET)
-+			val |= PCI_BRIDGE_CTL_BUS_RESET << 16;
-+		else
-+			val &= ~(PCI_BRIDGE_CTL_BUS_RESET << 16);
-+		*value = val;
-+		break;
-+	}
++	if (map->pages && !use_ptemod)
++		unmap_grant_pages(map, 0, map->count);
 +
- 	default:
- 		return PCI_BRIDGE_EMUL_NOT_HANDLED;
+ 	if (map->notify.flags & UNMAP_NOTIFY_SEND_EVENT) {
+ 		notify_remote_via_evtchn(map->notify.event);
+ 		evtchn_put(map->notify.event);
  	}
-@@ -549,6 +566,17 @@ mvebu_pci_bridge_emul_base_conf_write(struct pci_bridge_emul *bridge,
- 			mvebu_pcie_set_local_bus_nr(port, conf->secondary_bus);
- 		break;
+-
+-	if (map->pages && !use_ptemod)
+-		unmap_grant_pages(map, 0, map->count);
+ 	gntdev_free_map(map);
+ }
  
-+	case PCI_INTERRUPT_LINE:
-+		if (mask & (PCI_BRIDGE_CTL_BUS_RESET << 16)) {
-+			u32 ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
-+			if (new & (PCI_BRIDGE_CTL_BUS_RESET << 16))
-+				ctrl |= PCIE_CTRL_MASTER_HOT_RESET;
-+			else
-+				ctrl &= ~PCIE_CTRL_MASTER_HOT_RESET;
-+			mvebu_writel(port, ctrl, PCIE_CTRL_OFF);
-+		}
-+		break;
-+
- 	default:
- 		break;
- 	}
--- 
-2.34.1
-
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E831499962
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E9F499A0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455164AbiAXVex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:34:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S1456596AbiAXVjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:39:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348495AbiAXU5F (ORCPT
+        with ESMTP id S1444638AbiAXVBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:57:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78473C0D9433;
-        Mon, 24 Jan 2022 11:18:06 -0800 (PST)
+        Mon, 24 Jan 2022 16:01:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F57C04C06A;
+        Mon, 24 Jan 2022 12:02:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 158FD60909;
-        Mon, 24 Jan 2022 19:18:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2532C340E5;
-        Mon, 24 Jan 2022 19:18:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E22CB81218;
+        Mon, 24 Jan 2022 20:02:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE3EC340E5;
+        Mon, 24 Jan 2022 20:02:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051885;
-        bh=NGhZjXS4KdgHxuHTra3Zo18KP6/yuT5w/WsUHTf9LhQ=;
+        s=korg; t=1643054553;
+        bh=xZeHHhIJdcdcNUkvrYURqdkvZoRC0kzJWd7ulHWA++Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nOExfnP9xjXB6Q9k/5oKpa/XT/RNn6jocwImqXaHA3CW6G/n+qqL9kJOFwrzCV3ML
-         TIBhDwRO9o9HuAjQLeMMDiyDQN/6fwkdNq5Zc3IHPVX8g0+Meb3rcwDBY7qCOvVe4l
-         JJdhqiwHQNpJ8dEbDvWkn/8ufpuazCeDKmMvyWc8=
+        b=CyqXCIA83LZrr8PXqlMHmTiGWVmcKEErlWS6YiSKl4/n1O5mg5gOgfPPKEkTUzPyh
+         x0h3W088Qo1BHPwQhE8scpD6wAlKRx6UjGTiko6yku9NTr4uJ2qV4F2KgbhZEyywoM
+         xOJYqMEZB8sT01w9dKxLJyRkKASPkGITsjsvAHE0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kamal Heib <kamalheib1@gmail.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 119/239] RDMA/cxgb4: Set queue pair state when being queried
-Date:   Mon, 24 Jan 2022 19:42:37 +0100
-Message-Id: <20220124183946.890289842@linuxfoundation.org>
+Subject: [PATCH 5.10 393/563] btrfs: remove BUG_ON() in find_parent_nodes()
+Date:   Mon, 24 Jan 2022 19:42:38 +0100
+Message-Id: <20220124184038.030887000@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,35 +49,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kamal Heib <kamalheib1@gmail.com>
+From: Josef Bacik <josef@toxicpanda.com>
 
-[ Upstream commit e375b9c92985e409c4bb95dd43d34915ea7f5e28 ]
+[ Upstream commit fcba0120edf88328524a4878d1d6f4ad39f2ec81 ]
 
-The API for ib_query_qp requires the driver to set cur_qp_state on return,
-add the missing set.
+We search for an extent entry with .offset = -1, which shouldn't be a
+thing, but corruption happens.  Add an ASSERT() for the developers,
+return -EUCLEAN for mortals.
 
-Fixes: 67bbc05512d8 ("RDMA/cxgb4: Add query_qp support")
-Link: https://lore.kernel.org/r/20211220152530.60399-1-kamalheib1@gmail.com
-Signed-off-by: Kamal Heib <kamalheib1@gmail.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/cxgb4/qp.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/btrfs/backref.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/cxgb4/qp.c b/drivers/infiniband/hw/cxgb4/qp.c
-index 20e3128f59b14..aa48627fc0bfa 100644
---- a/drivers/infiniband/hw/cxgb4/qp.c
-+++ b/drivers/infiniband/hw/cxgb4/qp.c
-@@ -2483,6 +2483,7 @@ int c4iw_ib_query_qp(struct ib_qp *ibqp, struct ib_qp_attr *attr,
- 	memset(attr, 0, sizeof *attr);
- 	memset(init_attr, 0, sizeof *init_attr);
- 	attr->qp_state = to_ib_qp_state(qhp->attr.state);
-+	attr->cur_qp_state = to_ib_qp_state(qhp->attr.state);
- 	init_attr->cap.max_send_wr = qhp->attr.sq_num_entries;
- 	init_attr->cap.max_recv_wr = qhp->attr.rq_num_entries;
- 	init_attr->cap.max_send_sge = qhp->attr.sq_max_sges;
+diff --git a/fs/btrfs/backref.c b/fs/btrfs/backref.c
+index 6e447bdaf9ec8..8b471579e26e1 100644
+--- a/fs/btrfs/backref.c
++++ b/fs/btrfs/backref.c
+@@ -1213,7 +1213,12 @@ again:
+ 	ret = btrfs_search_slot(trans, fs_info->extent_root, &key, path, 0, 0);
+ 	if (ret < 0)
+ 		goto out;
+-	BUG_ON(ret == 0);
++	if (ret == 0) {
++		/* This shouldn't happen, indicates a bug or fs corruption. */
++		ASSERT(ret != 0);
++		ret = -EUCLEAN;
++		goto out;
++	}
+ 
+ #ifdef CONFIG_BTRFS_FS_RUN_SANITY_TESTS
+ 	if (trans && likely(trans->type != __TRANS_DUMMY) &&
 -- 
 2.34.1
 

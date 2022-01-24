@@ -2,189 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D55A749837A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A6949837B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240377AbiAXPYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238580AbiAXPYd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:24:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B57BC06173B;
-        Mon, 24 Jan 2022 07:24:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C13E661480;
-        Mon, 24 Jan 2022 15:24:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 343D7C340EA;
-        Mon, 24 Jan 2022 15:24:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643037872;
-        bh=4FOVymSBLDFQAUqFaQOAK2kBFZDCor01RaScWJF5qNM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cODq/k6VDP7ljKDn3MJp5FNFm2MCyfsMLDmIYM4AvqFATOV5PODAGp2436Yv/N2pI
-         VmPtSU6yY8SJwkAjgYITv/xFu0axoW27LNO7eYmgtUQ58kO0naeZXAkOt1CIToWDzC
-         vhRTc+V5/C+etRsCqKZyGllGiIkuZJVfPi0K+Fo+TReFvppIyvAoXUJezVuSj10O+S
-         SUEbuJLWpaYEkCTBTuBbQNADww5ksf+0S1EVuwFlk116eidg1kEH8wd7kXpz3MZaQK
-         NDHT/BuVITqGNjn9mMHSOoHumwY9hrSXccr9piaFF2XnbPWsOq9IyEJS+DivWh5O/G
-         VS+Dg4FZZZGxw==
-Received: by mail-ej1-f45.google.com with SMTP id d10so22361158eje.10;
-        Mon, 24 Jan 2022 07:24:32 -0800 (PST)
-X-Gm-Message-State: AOAM530//oSfKC+fwdMJcIw8Kxwsfxw/4zPg3bhqCmZs4rv5+LaYKS3V
-        BQaiBGXpQ+TMiT4jyW+iSQTh4MxD048YWDcGog==
-X-Google-Smtp-Source: ABdhPJypLe3fQux9GhZfMQpZMZZVEASZHTXgPIIufJUZqKUSy3aayx1eCyItPpD7FF+WT3SVbvaFncSGiQsKqKP/auM=
-X-Received: by 2002:a17:906:1dc3:: with SMTP id v3mr12891842ejh.264.1643037870455;
- Mon, 24 Jan 2022 07:24:30 -0800 (PST)
+        id S240343AbiAXPZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:25:27 -0500
+Received: from mail-bn8nam08on2068.outbound.protection.outlook.com ([40.107.100.68]:32454
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238433AbiAXPZZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:25:25 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eKK+THUQuPyaUgEBXVRlVg7GXaB9aSOP1cD5CerHr1Hx1a/nmZSRGUExCqBg2RNlfYlFuAzNSSh1duLlRe8TJs2duoCtyUM9PF6oTWv911GTVjS90Y4XcL2hS4I1FJqr53PKQ49WzhOm6RKV4+JZOJAY1ahw7O4GnZajDAvJnf1IO9PvSSBgfS68ixMTNciUGNx6Juug4thVFT+P6HQLrj6DIuzmqL5BlgQ42XYiaC0kMZgnq2GMOvQDUDnD0K4COw5ZhndrAS3Dk083EuwQXYo0/HDnWRQlGHt68WVfFuTAoPDSPCZSQNIcYHKvRSCT5ny3/mB89tLCsVYxmtJRmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H9hDBBsf9zLLdqknMSQor9GR3kt58SnI3gtccqTRuV4=;
+ b=hxR4XjX2ayPINe6eWrJjVgFlOrvhm9fOq0TUzjeV0nxtLTOp91jWWDzbDwxqlwkYIZVc5ZpWJZhvq0BmBBWFTzhFs307U/pRjec2aEsLSnuYdmzqn6NcoNS158YDG4O4LUrBRieClfpcizqe1NbsfIwZdkWNG4bdqS8k1so47tJVKFwWyP7IhAgkd+CHCY4nTfvR0JRkYieKkETqNJEmOgmDWktuTAX+DGiQXYv2bwu/YV55saHvHfJdvEbr3X/q8tXl43KEiBy1p0heSVISssEG862SaYNDIGVURuZ57bE+LVVZMVeQkssy44VJVH5/5k3tC2Sv65MK6hcAnbQMIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H9hDBBsf9zLLdqknMSQor9GR3kt58SnI3gtccqTRuV4=;
+ b=OYHMVwLbScWNuvGdkac6d6kP0EqRzhcJ9dYopCfvtyM4Ll638TF2zL/k/i9nYBYUntshlIt9ttqlnkk7SMGkIvUoK+HaxTKBfmELCq4hjfbULX0gzZkHyS/pFPTHq/0Q+45eTlI6nbQp24Wr2W+SiI62VvBX4dT1WdqhzSNuj0M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by DM5PR12MB1433.namprd12.prod.outlook.com (2603:10b6:3:73::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Mon, 24 Jan
+ 2022 15:25:23 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::dd4b:b67b:1688:b52]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::dd4b:b67b:1688:b52%9]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
+ 15:25:23 +0000
+Message-ID: <fca36168-d66b-c914-a5c6-fb8d495238ad@amd.com>
+Date:   Mon, 24 Jan 2022 10:25:18 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH -next] drm/amd/display: don't use /** for non-kernel-doc
+ comments
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+References: <20220122012343.32540-1-rdunlap@infradead.org>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20220122012343.32540-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0137.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:e::10) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-References: <20220124122132.435743-1-christian.gmeiner@gmail.com>
-In-Reply-To: <20220124122132.435743-1-christian.gmeiner@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 24 Jan 2022 09:24:18 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLwFvLJg+LCgANU6Mdx_=RkkLWPk+8nxsTNxb_sLi+nwQ@mail.gmail.com>
-Message-ID: <CAL_JsqLwFvLJg+LCgANU6Mdx_=RkkLWPk+8nxsTNxb_sLi+nwQ@mail.gmail.com>
-Subject: Re: [PATCH] Revert "PCI: j721e: Drop redundant struct device *"
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-omap@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1388f763-a0f5-414b-60b6-08d9df4dbd38
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1433:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB14336B6E6A7EC7AB4896EF6E8C5E9@DM5PR12MB1433.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yyAxDm1ty9miOnDGVy64ydOFk4+Dkz93lo9Ruks2o7cvrRfdcccd23IMC9JbgM9R++aucsAt1MOwujjDx+jvPqXWFIbsKZgBh2Gc3ljde2Vt8s1R7LQ3VdedtIcfkCfRkf2Mp4cUhCEhhebw1dIQkk433S1ePPo9ppRrj+c4p61wwoFTRlqbe3+gBWgXSOxS+kbCWvbALlhSOY8IVGaKuEG7T0+RUsTE8dm+PvbGnI/5g23ARuXKTOrpOxdb+QifmS/NNMukDPeThDHzN897SdyDn0WxV0WC5XMnz7660AYLrIOOq4ii/9Y4ruPsQYbXTUYUZQ8FvSAGsZJyO7vOxLsVMWZ51d+n8oQ2C1PT7gJ2kN4KE3aQkdi1qvj519f4ehbAbMPlUuETrS2kY9KEmdYTyObQqdkOyh61lrGaG9MoPOcXOF6mCB+8KKHazcCaWYMJEOSd4u9qtzsJZPm3bBJUraKxn2K5vRtVEOrh8j/MZq3/nHArPLfjYiac6n3FWaMQTeT6GnlqG6v9ODJH5KNHx/HZqn+EnKGWjMDJt3nbUbDZW0TlALzkhs1TukoXeo5Xzv1NL1C/Js97VHrw8PyyQCYp7S4rK3daOkocaQxlvKwGSHz2kc4LvqOzqGKbIWoAt4BVw5hleb6Ij980h8sdkLUdMI9m9gE2jLojX7Q30xQ8o+5Sj/VgejzRZ/hicWspqY1K4SmplO43SRBKNk40DfyobSdh9pbSFO7J9Zk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(83380400001)(508600001)(84970400001)(316002)(6506007)(5660300002)(2906002)(31686004)(2616005)(6666004)(66476007)(31696002)(66556008)(4326008)(66946007)(38100700002)(36756003)(8936002)(8676002)(86362001)(53546011)(54906003)(186003)(26005)(44832011)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eThTZXBFd1daV0Q3aE5aTmNwcWZVUk0rVitnamErMnR0TE9hcjhaVW5VRm8v?=
+ =?utf-8?B?dHowY29kSkUyNkRaVWg5UDRMMzRjNzQrcTBWTWNaTUE2cWU0bW10ZnpOTmRG?=
+ =?utf-8?B?S0szN3BobW1XK2w0elVMUGhGanI3MG4wVG5tUThyaXFGSE5TeHJtSUtwb29o?=
+ =?utf-8?B?UWJ1WEhodjBEZkQxQmwvbEJUR2RYZ2F2L1QrdGZSbzNqUmxudXdiUzc4TCtu?=
+ =?utf-8?B?Rkh0OUVnaHhZVWlDdTRNWlVsLytyTCtDekcxaEF2YXp3dGFwY3FZdWNzK25M?=
+ =?utf-8?B?ajFOM09mQXAyTDIwa01hKzgyLzhoeG5wVXlIZ1hacW1tVlFOM1R4NzVPRWdH?=
+ =?utf-8?B?ZGhuMXc4OXhCbWRtZ28wQ0RBSjMxU2NXNXRoSEs5OGl3ZWtKZWI5Uy9nUzl5?=
+ =?utf-8?B?SmV2UVBpVEw0S3NDWHdRVUxkalJJLzdTaTQzZnpjUnZEbEpMMjhPbGpTK0Zq?=
+ =?utf-8?B?SWFSRjhnZmxpRjBHMUZzK1lJYnpWUUFROWF5ZHByazI3VDZHeXBEWUlaZWR1?=
+ =?utf-8?B?RUtxc3kzTzZhWGphY3NtRUpUNGV4TSsyREszRWYra3krUkdsR3V3YWNKb0x4?=
+ =?utf-8?B?Z0JXR0h3YUc2anh4RkRoQlFxOFVOb2ZLVTRnd3MwL3cyYjQ5YnNnS0dTMlM2?=
+ =?utf-8?B?a1RMcVpHODhVU1pVSmlnN1RvNzlBVURvZWJhR1NHTnFHSzBSNTZ0Z3ppMDdD?=
+ =?utf-8?B?NUYzbWpQZ25aUjZreWRsM0pSbXdYek9yeXRuRmtTVXllckd5aGpoUFhySDVD?=
+ =?utf-8?B?Z05kZGxpK0JpVnlMT0pJTDFNU2xmaGVTb3JsSTlyOHpleDEyRXdSVWUySEpC?=
+ =?utf-8?B?Tk5ocEUxNk8vSWdJdTJHUzVtRzNoajZBUUN2Yy9NM1VhL2hyeGd2S3BNTGpu?=
+ =?utf-8?B?aDJ6VDkvUCtOQ0lFYVgyWSthcGF4S3RpaGh0OFNodEM1SnBWSzhQQXVtRCt6?=
+ =?utf-8?B?cGpzcE5RSVhHZjFIdmtsLzB6b1Zqd0l1T3lpS28rczBRMHhKbjcrTW83WjdY?=
+ =?utf-8?B?dCtDM2ZmcEpVQ2QxUkxORnk3YkhOakswYUk2bWNzSnRacVZVL1hSU0JaTDBn?=
+ =?utf-8?B?QTZrbDdiMkdkaWwzdzJyTDYzM3d1S3h1V05BWXZHMWFPMHgzeXpLaVJWamJt?=
+ =?utf-8?B?UHZXamJORHlVUThuNUJ0K28zQ1hOeHpFREUxK0gxRHFNSWQzdFBRamtib2VT?=
+ =?utf-8?B?WmdEZmRFYjJrb3d0SDMvbTJEWlowbjBpUzdiekxDaTlkOVlPd1ArcllUdDdO?=
+ =?utf-8?B?cStWbHJwUlNPWkYzUTBvV0ZFYzhoUW1iaVU4ZEIreFdFemJMMkdzajJUbGd6?=
+ =?utf-8?B?RW5CTFpRcEhZakRHV1RzczhBb3lIaXhWd0U2U2w1SXhUdGtDanZqb2xiVjhH?=
+ =?utf-8?B?TnV2clI4YUFsRWs3MjFleXQ1QklZdmkzYzlQRXFBcy9oeElvQmVwMDlmSy9h?=
+ =?utf-8?B?c2ZiTEZwR3hGVWdQWDFDeWVlR1Fjbm9yV2FoakdlUWM4bzRoU2tSeVBvMm1E?=
+ =?utf-8?B?VnJ1TFFES2xCLzFIelhBVjN1RlhqbFNuOGo0bkZDMEhpb1VMbWdvRk9rK1dN?=
+ =?utf-8?B?REgwcU9pWk1mak5BT0xpTHg2ZFNLZldFdzV2RWhUdUJkQzFaakpHNWdVS0JC?=
+ =?utf-8?B?VGJ6NnZQR2ozR3ZCaEhPNTR4ODFFTDJGcDhRYUxTN0xuOHltNllzZnV6WkRP?=
+ =?utf-8?B?d2pIL2NJR0VxdER6Zk5aK1lOK3V4VDZaOFBZc2tlcDgydDI2QjVnekpBYzk3?=
+ =?utf-8?B?YzBTcm12TWdySVhGTndHV3NPTW42TGRNZ2IrSjU3aDM3T3pobHRMcCsxbHBV?=
+ =?utf-8?B?bG1JTEhoNlFra2l4bjVaQkE0cUVSRndhSFArUVBvUCtRRllsQzU4cW9SZXds?=
+ =?utf-8?B?VkIrNE81UzhJZ2VaMUVYLzJ2Zlpnb1Fha0pFdmdjZURiVHg2U3gwSDM0bUZq?=
+ =?utf-8?B?dXdRRTNsTTZKYXJEMjllRnZwc0E4aStRcFVFYXRFdnhmUnhscUpvSS91TU5u?=
+ =?utf-8?B?OHJGL0VwWk5FNnVRU0FjYVFwQzFsWERPUGd4ZnFyVGF0T2hJd215Mmk0RmU4?=
+ =?utf-8?B?amFZejdJUXFjNzZhSlErdlBlRm9uV3h5c2x2S0UwWEZ1czFFSGRVQ3NwRVNO?=
+ =?utf-8?B?WXpYOVBYUDJJTDQwSlVEUEFFVWNsd2tFOWk2M3pzeDFKa1pJU2lJc0xpYlZp?=
+ =?utf-8?Q?YsWov9bcfwew1ItetDhZXKE=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1388f763-a0f5-414b-60b6-08d9df4dbd38
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 15:25:23.2668
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c3ewidIdpFitJ3BySwd9WfvVLQwcE1JEDDE729fPD3MF+u4pXkXHP+0+8ikbLnItTQaQumYfps6r2JLtXuct9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1433
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 6:21 AM Christian Gmeiner
-<christian.gmeiner@gmail.com> wrote:
->
-> This reverts commit 19e863828acf6d8ac8475ba1fd93c0fe17fdc4ef.
->
-> Fixes the following oops:
+On 2022-01-21 20:23, Randy Dunlap wrote:
+> Change a static function's comment from "/**" (indicating kernel-doc
+> notation) to "/*" (indicating a regular C language comment).
+> This prevents multiple kernel-doc warnings:
+> 
+>   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'max_supported_frl_bw_in_kbps' not described in 'intersect_frl_link_bw_support'
+>   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: Function parameter or member 'hdmi_encoded_link_bw' not described in 'intersect_frl_link_bw_support'
+>   drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:4343: warning: expecting prototype for Return PCON's post FRL link training supported BW if its non(). Prototype was for intersect_frl_link_bw_support() instead
+> 
+> Fixes: c022375ae095 ("drm/amd/display: Add DP-HDMI FRL PCON Support in DC")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Fangzhi Zuo <Jerry.Zuo@amd.com>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+> Cc: Harry Wentland <harry.wentland@amd.com>
+> Cc: Leo Li <sunpeng.li@amd.com>
+> Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> Cc: amd-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
 
-Perhaps explain why the 2nd struct device was not redundant. Is this
-not just a case of the dev pointer not getting set early enough?
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
->  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
->  Internal error: Oops: 96000004 [#1] PREEMPT SMP
->  Modules linked in:
->  CPU: 1 PID: 7 Comm: kworker/u4:0 Not tainted 5.17.0-rc1-00086-ge38b27816fea-dirty #71
->  Hardware name: CPE0108 (DT)
->  Workqueue: events_unbound deferred_probe_work_func
->  pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : j721e_pcie_probe+0x184/0x600
->  lr : j721e_pcie_probe+0x170/0x600
->  sp : ffff80000957bae0
->  x29: ffff80000957bae0 x28: ffff800009357000 x27: ffff00000000c078
->  x26: ffff00003fe047a8 x25: 0000000000000000 x24: ffff0000000f5280
->  x23: ffff800008c98f78 x22: ffff800008f90ff0 x21: ffff000000231410
->  x20: ffff000002ef2780 x19: 0000000000000021 x18: 0000000000000001
->  x17: 0000000000000000 x16: 0000000000058c00 x15: ffffffffffffffff
->  x14: ffffffffffffffff x13: 0000000000000010 x12: 0101010101010101
->  x11: 0000000000000040 x10: ffff8000093e06c8 x9 : ffff8000093e06c0
->  x8 : ffff000000400270 x7 : 0000000000000000 x6 : ffff000000231590
->  x5 : ffff80000957b9e0 x4 : 0000000000000000 x3 : ffff0000002314f4
->  x2 : 0000000000000000 x1 : ffff0000000f5280 x0 : 0000000000000000
->  Call trace:
->   j721e_pcie_probe+0x184/0x600
->   platform_probe+0x68/0xe0
->   really_probe+0x144/0x320
->   __driver_probe_device+0xc4/0xe0
->   driver_probe_device+0x7c/0x110
->   __device_attach_driver+0x90/0xe0
->   bus_for_each_drv+0x78/0xd0
->   __device_attach+0xf0/0x150
->   device_initial_probe+0x14/0x20
->   bus_probe_device+0x9c/0xb0
->   deferred_probe_work_func+0x88/0xc0
->   process_one_work+0x1bc/0x340
->   worker_thread+0x1f8/0x420
->   kthread+0x110/0x120
->   ret_from_fork+0x10/0x20
->  Code: f9400280 a90573fb d0005396 913fc2d6 (f9400800)
->
-> Fixes: 19e863828acf ("PCI: j721e: Drop redundant struct device *")
-> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+Harry
+
 > ---
->  drivers/pci/controller/cadence/pci-j721e.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-> index 489586a4cdc7..cd43d1898482 100644
-> --- a/drivers/pci/controller/cadence/pci-j721e.c
-> +++ b/drivers/pci/controller/cadence/pci-j721e.c
-> @@ -51,10 +51,11 @@ enum link_status {
->  #define MAX_LANES                      2
->
->  struct j721e_pcie {
-> -       struct cdns_pcie        *cdns_pcie;
-> +       struct device           *dev;
->         struct clk              *refclk;
->         u32                     mode;
->         u32                     num_lanes;
-> +       struct cdns_pcie        *cdns_pcie;
->         void __iomem            *user_cfg_base;
->         void __iomem            *intd_cfg_base;
->         u32                     linkdown_irq_regfield;
-> @@ -98,7 +99,7 @@ static inline void j721e_pcie_intd_writel(struct j721e_pcie *pcie, u32 offset,
->  static irqreturn_t j721e_pcie_link_irq_handler(int irq, void *priv)
->  {
->         struct j721e_pcie *pcie = priv;
-> -       struct device *dev = pcie->cdns_pcie->dev;
-> +       struct device *dev = pcie->dev;
->         u32 reg;
->
->         reg = j721e_pcie_intd_readl(pcie, STATUS_REG_SYS_2);
-> @@ -164,7 +165,7 @@ static const struct cdns_pcie_ops j721e_pcie_ops = {
->  static int j721e_pcie_set_mode(struct j721e_pcie *pcie, struct regmap *syscon,
->                                unsigned int offset)
->  {
-> -       struct device *dev = pcie->cdns_pcie->dev;
-> +       struct device *dev = pcie->dev;
->         u32 mask = J721E_MODE_RC;
->         u32 mode = pcie->mode;
->         u32 val = 0;
-> @@ -183,7 +184,7 @@ static int j721e_pcie_set_mode(struct j721e_pcie *pcie, struct regmap *syscon,
->  static int j721e_pcie_set_link_speed(struct j721e_pcie *pcie,
->                                      struct regmap *syscon, unsigned int offset)
->  {
-> -       struct device *dev = pcie->cdns_pcie->dev;
-> +       struct device *dev = pcie->dev;
->         struct device_node *np = dev->of_node;
->         int link_speed;
->         u32 val = 0;
-> @@ -204,7 +205,7 @@ static int j721e_pcie_set_link_speed(struct j721e_pcie *pcie,
->  static int j721e_pcie_set_lane_count(struct j721e_pcie *pcie,
->                                      struct regmap *syscon, unsigned int offset)
->  {
-> -       struct device *dev = pcie->cdns_pcie->dev;
-> +       struct device *dev = pcie->dev;
->         u32 lanes = pcie->num_lanes;
->         u32 val = 0;
->         int ret;
-> @@ -219,7 +220,7 @@ static int j721e_pcie_set_lane_count(struct j721e_pcie *pcie,
->
->  static int j721e_pcie_ctrl_init(struct j721e_pcie *pcie)
->  {
-> -       struct device *dev = pcie->cdns_pcie->dev;
-> +       struct device *dev = pcie->dev;
->         struct device_node *node = dev->of_node;
->         struct of_phandle_args args;
->         unsigned int offset = 0;
-> @@ -376,6 +377,7 @@ static int j721e_pcie_probe(struct platform_device *pdev)
->         if (!pcie)
->                 return -ENOMEM;
->
-> +       pcie->dev = dev;
->         pcie->mode = mode;
->         pcie->linkdown_irq_regfield = data->linkdown_irq_regfield;
->
-> --
-> 2.34.1
->
+>  drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- linux-next-20220121.orig/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> +++ linux-next-20220121/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+> @@ -4970,7 +4970,7 @@ uint32_t dc_link_bw_kbps_from_raw_frl_li
+>  	return 0;
+>  }
+>  
+> -/**
+> +/*
+>   * Return PCON's post FRL link training supported BW if its non-zero, otherwise return max_supported_frl_bw.
+>   */
+>  static uint32_t intersect_frl_link_bw_support(
+

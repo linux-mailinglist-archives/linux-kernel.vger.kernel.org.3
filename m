@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BEC49A8C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E7849A8CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1320418AbiAYDMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:12:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
+        id S1320838AbiAYDOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:14:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3415687AbiAYC4w (ORCPT
+        with ESMTP id S1318166AbiAYDEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:56:52 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50DBC0E532B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:44:37 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso434064wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:44:37 -0800 (PST)
+        Mon, 24 Jan 2022 22:04:43 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B14C0E532C
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:44:39 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id l25so16336699wrb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:44:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7znmcaDRDi4XBN93/6yXaX6uBsi3TKnQRGE8o8aEMJU=;
-        b=6NrmZXRPLdTEvLqS3ppSEX5eWHDYIGuQfgP+OmoRc9nX4bQYf6Jc+vK8VwVvGC0reW
-         YpD083sS6XzF3mD2x3Q6yx2gLLg56RiTdTTPdvEEqediDTbdenAFJeHqICEDuv+/Zubj
-         BfTtwNHZxFcf6gIxCZDN/jFFR4r5+FwNGUVP+XFPjhm6Zmlpr+meHkUGeJuPRNIBhB+s
-         JQwHBvsiBFiv326bYrkQh5gYUXHzaPHc2q5Xlpo9YBG9E5oaD5qM+1DmA/8d/ZY8cTif
-         8X4bHgLpIL3sjvtJr81nb8eUzkA9Eq6E3D0TjA//coBqxuxn2wMKklIxCHk7zs3XGh5Y
-         cCsw==
+        bh=KIvXI8t6EItnsvd8/VeaRNMMu5vgvkLf5krJnCpeeSo=;
+        b=7ffPiiVQH/rKg+Bs6zcxiWPjs9FNhtxr5lhRd/gLOBBAB3BPcBZ7A5216mIkHGMzux
+         21maOcscSqk+T4ReWquNrGvbu+xqmGm8/Ti4BbfogRA6MZKs00ZdWt+YbDsbGPplnGuK
+         v4PuWl14bg9x9h5YCOOsUDeuYIIa1OfjjHLZ2XyLVgeetUse9G4CEek9kZLlH1U8lWQZ
+         hznJRzfW+NynqpYGCOIox023wds18zfk2xjVYqAQE3NRaHMf66hQKHuqvS4shHv1EgTN
+         dgnZnxMt7p5f3hs9WB61Lnk/AaTPHNwVp0QpnsdQys2B6+38VGYnN2TNfzfRKfa9s+xG
+         uXuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7znmcaDRDi4XBN93/6yXaX6uBsi3TKnQRGE8o8aEMJU=;
-        b=o3+5aPV0fmyVBU3t8S5iLy+hO9OITGEm0iYiBCmUxn+YCGtrnzm4G35LUzq08q3vI/
-         VEuirPFErx64qaVWsLms6F9F6NZ4zH6486b/83hN2Hm46mv/HQaeC6JbvaiNHSGT7YMR
-         zKlNAADYNQiZNEiZNnxCDbZJYOj7xqQP3l7/nbhh2l/RvUjAjrE2qXAwNdvv7aI5wmC/
-         RV+FSUPxgsA93byU/KzqgYJYF1Bq3zDgwjDcGgDWMofAC6USTX8M24Ek/v+n7Yagl8wo
-         ESfjEKRIVruylEmcFvCUx9ZozGpQw9I4Cs/iINT90orCAsHL3VCY8z5izox8jFiThTu5
-         E6RQ==
-X-Gm-Message-State: AOAM533umawTPyW+ggIwhxQfTVsJsJo8K2zpgGNXl/sScEElZ1E53rLt
-        m4se5oX+8dZKZYLdl7CB/xrsGg==
-X-Google-Smtp-Source: ABdhPJwbcicGgogM0TZZeXSpHymAph9CrVa/BQqjNDo7r1juFnFPlm1dFX+XORwvjCEQhpNJ5GbSGQ==
-X-Received: by 2002:a1c:a7c2:: with SMTP id q185mr378882wme.3.1643064276529;
-        Mon, 24 Jan 2022 14:44:36 -0800 (PST)
+        bh=KIvXI8t6EItnsvd8/VeaRNMMu5vgvkLf5krJnCpeeSo=;
+        b=nZwX0BotrtGUpmlr2FkASehKOBHHgMZi2svt8S28LEtFljfWTWwtwGwHu39aq/p6P/
+         dxa/DdaVcy+sHNS2AxeXT1OzBnEk+EyQLIMDDekvD93rxCRHz4cMYm/jvCXwPWm6tQ/Z
+         wijS9RZa7dm1vHVjbEkgo1onYq8hSMHv0aLWdC2H440XnUqEwJXoQo6RcNABoKlhEKUz
+         958aZyaoIAUvoccr1xcZfWWJarNowp96EprLqSqjtsDzOcUpmFSTJitsJNiu/z7LjOul
+         GflbbouaeX697tDc5JfYZdCkKvo1WFTc46gqgb3abPQj5LD8WLr44EyFs6oEXNzmZzw+
+         8W6A==
+X-Gm-Message-State: AOAM531HpQq7AkHS91OUOBj62GlkrkxQLm/nAu8hdCfJHfTNaYUEguZC
+        7sC+eDnFM9l6RE2mGis4xmT7hQ==
+X-Google-Smtp-Source: ABdhPJx8NGM7aJtTgd3JSXzGIulTdqeU4OZJqB1dshTmh7vng7GN305XLFIlOI5M4OTVCa4wVTyWWg==
+X-Received: by 2002:adf:d4c6:: with SMTP id w6mr15931741wrk.163.1643064278191;
+        Mon, 24 Jan 2022 14:44:38 -0800 (PST)
 Received: from localhost.localdomain (d.f.5.e.6.6.b.1.e.6.2.7.e.5.c.8.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0:8c5e:726e:1b66:e5fd])
-        by smtp.gmail.com with ESMTPSA id i3sm15010613wru.33.2022.01.24.14.44.35
+        by smtp.gmail.com with ESMTPSA id i3sm15010613wru.33.2022.01.24.14.44.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 14:44:36 -0800 (PST)
+        Mon, 24 Jan 2022 14:44:37 -0800 (PST)
 From:   Phillip Potter <phil@philpotter.co.uk>
 To:     gregkh@linuxfoundation.org
 Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
         straube.linux@gmail.com, martin@kaiser.cx,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         paskripkin@gmail.com
-Subject: [PATCH 07/10] staging: r8188eu: remove DBG_88E call from include/usb_ops.h
-Date:   Mon, 24 Jan 2022 22:44:12 +0000
-Message-Id: <20220124224415.831-8-phil@philpotter.co.uk>
+Subject: [PATCH 08/10] staging: r8188eu: remove all remaining aliased DBG_88E calls
+Date:   Mon, 24 Jan 2022 22:44:13 +0000
+Message-Id: <20220124224415.831-9-phil@philpotter.co.uk>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124224415.831-1-phil@philpotter.co.uk>
 References: <20220124224415.831-1-phil@philpotter.co.uk>
@@ -66,32 +66,277 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove DBG_88E call from include/usb_ops.h, as it does not conform to
-kernel coding standards and is superfluous. This will allow the eventual
-removal of the DBG_88E macro itself.
+Remove all remaining calls to preprocessor aliases of DBG_88E, as well
+as these definitions themselves, so that we can finally remove DBG_88E.
+This patch triggers several style related checkpatch warnings due to
+line lengths, placement of constants and '+' operators being too
+squished together. As these are pre-existing issues, they are better
+solved with a separate patch series that is more in scope.
 
 Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
 ---
- drivers/staging/r8188eu/include/usb_ops.h | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/staging/r8188eu/core/rtw_br_ext.c    | 59 +++-----------------
+ drivers/staging/r8188eu/core/rtw_xmit.c      | 22 ++------
+ drivers/staging/r8188eu/include/rtw_br_ext.h |  5 --
+ 3 files changed, 13 insertions(+), 73 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/include/usb_ops.h b/drivers/staging/r8188eu/include/usb_ops.h
-index 0a1155bbc7b8..2b1d50d2b2f2 100644
---- a/drivers/staging/r8188eu/include/usb_ops.h
-+++ b/drivers/staging/r8188eu/include/usb_ops.h
-@@ -30,11 +30,8 @@ static inline int rtw_inc_and_chk_continual_urb_error(struct dvobj_priv *dvobj)
- 	int ret = false;
- 	int value;
- 	value = atomic_inc_return(&dvobj->continual_urb_error);
--	if (value > MAX_CONTINUAL_URB_ERR) {
--		DBG_88E("[dvobj:%p][ERROR] continual_urb_error:%d > %d\n",
--			dvobj, value, MAX_CONTINUAL_URB_ERR);
-+	if (value > MAX_CONTINUAL_URB_ERR)
- 		ret = true;
+diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+index 4951f835feaf..5516d35b2c36 100644
+--- a/drivers/staging/r8188eu/core/rtw_br_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+@@ -71,10 +71,8 @@ static int __nat25_add_pppoe_tag(struct sk_buff *skb, struct pppoe_tag *tag)
+ 	int data_len;
+ 
+ 	data_len = tag->tag_len + TAG_HDR_LEN;
+-	if (skb_tailroom(skb) < data_len) {
+-		_DEBUG_ERR("skb_tailroom() failed in add SID tag!\n");
++	if (skb_tailroom(skb) < data_len)
+ 		return -1;
 -	}
- 	return ret;
+ 
+ 	skb_put(skb, data_len);
+ 	/*  have a room for new tag */
+@@ -163,9 +161,6 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 		if (len >= 8) {
+ 			mac = scan_tlv(&data[8], len-8, 1, 1);
+ 			if (mac) {
+-				_DEBUG_INFO("Router Solicitation, replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
+-					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+-					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+ 			}
+@@ -174,9 +169,6 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 		if (len >= 16) {
+ 			mac = scan_tlv(&data[16], len-16, 1, 1);
+ 			if (mac) {
+-				_DEBUG_INFO("Router Advertisement, replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
+-					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+-					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+ 			}
+@@ -185,9 +177,6 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 		if (len >= 24) {
+ 			mac = scan_tlv(&data[24], len-24, 1, 1);
+ 			if (mac) {
+-				_DEBUG_INFO("Neighbor Solicitation, replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
+-					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+-					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+ 			}
+@@ -196,9 +185,6 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 		if (len >= 24) {
+ 			mac = scan_tlv(&data[24], len-24, 2, 1);
+ 			if (mac) {
+-				_DEBUG_INFO("Neighbor Advertisement, replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
+-					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+-					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+ 			}
+@@ -207,9 +193,6 @@ static int update_nd_link_layer_addr(unsigned char *data, int len, unsigned char
+ 		if (len >= 40) {
+ 			mac = scan_tlv(&data[40], len-40, 2, 1);
+ 			if (mac) {
+-				_DEBUG_INFO("Redirect,  replace MAC From: %02x:%02x:%02x:%02x:%02x:%02x, To: %02x:%02x:%02x:%02x:%02x:%02x\n",
+-					mac[0], mac[1], mac[2], mac[3], mac[4], mac[5],
+-					replace_mac[0], replace_mac[1], replace_mac[2], replace_mac[3], replace_mac[4], replace_mac[5]);
+ 				memcpy(mac, replace_mac, 6);
+ 				return 1;
+ 			}
+@@ -404,10 +387,8 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 	if (protocol == ETH_P_IP) {
+ 		struct iphdr *iph = (struct iphdr *)(skb->data + ETH_HLEN);
+ 
+-		if (((unsigned char *)(iph) + (iph->ihl<<2)) >= (skb->data + ETH_HLEN + skb->len)) {
+-			DEBUG_WARN("NAT25: malformed IP packet !\n");
++		if (((unsigned char *)(iph) + (iph->ihl<<2)) >= (skb->data + ETH_HLEN + skb->len))
+ 			return -1;
+-		}
+ 
+ 		switch (method) {
+ 		case NAT25_CHECK:
+@@ -418,7 +399,6 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 			if (iph->saddr == 0)
+ 				return 0;
+ 			tmp = be32_to_cpu(iph->saddr);
+-			DEBUG_INFO("NAT25: Insert IP, SA =%08x, DA =%08x\n", tmp, iph->daddr);
+ 			__nat25_generate_ipv4_network_addr(networkAddr, &tmp);
+ 			/* record source IP address and , source mac address into db */
+ 			__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
+@@ -436,18 +416,13 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 		unsigned char *arp_ptr = (unsigned char *)(arp + 1);
+ 		unsigned int *sender;
+ 
+-		if (arp->ar_pro != __constant_htons(ETH_P_IP)) {
+-			DEBUG_WARN("NAT25: arp protocol unknown (%4x)!\n", be16_to_cpu(arp->ar_pro));
++		if (arp->ar_pro != __constant_htons(ETH_P_IP))
+ 			return -1;
+-		}
+ 
+ 		switch (method) {
+ 		case NAT25_CHECK:
+ 			return 0;	/*  skb_copy for all ARP frame */
+ 		case NAT25_INSERT:
+-			DEBUG_INFO("NAT25: Insert ARP, MAC =%02x%02x%02x%02x%02x%02x\n", arp_ptr[0],
+-				arp_ptr[1], arp_ptr[2], arp_ptr[3], arp_ptr[4], arp_ptr[5]);
+-
+ 			/*  change to ARP sender mac address to wlan STA address */
+ 			memcpy(arp_ptr, GET_MY_HWADDR(priv), ETH_ALEN);
+ 			arp_ptr += arp->ar_hln;
+@@ -484,18 +459,14 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 						pOldTag = (struct pppoe_tag *)__nat25_find_pppoe_tag(ph, ntohs(PTT_RELAY_SID));
+ 						if (pOldTag) { /*  if SID existed, copy old value and delete it */
+ 							old_tag_len = ntohs(pOldTag->tag_len);
+-							if (old_tag_len+TAG_HDR_LEN+MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN > sizeof(tag_buf)) {
+-								DEBUG_ERR("SID tag length too long!\n");
++							if (old_tag_len+TAG_HDR_LEN+MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN > sizeof(tag_buf))
+ 								return -1;
+-							}
+ 
+ 							memcpy(tag->tag_data+MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN,
+ 								pOldTag->tag_data, old_tag_len);
+ 
+-							if (skb_pull_and_merge(skb, (unsigned char *)pOldTag, TAG_HDR_LEN+old_tag_len) < 0) {
+-								DEBUG_ERR("call skb_pull_and_merge() failed in PADI/R packet!\n");
++							if (skb_pull_and_merge(skb, (unsigned char *)pOldTag, TAG_HDR_LEN+old_tag_len) < 0)
+ 								return -1;
+-							}
+ 							ph->length = htons(ntohs(ph->length)-TAG_HDR_LEN-old_tag_len);
+ 						}
+ 
+@@ -511,14 +482,10 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 						if (__nat25_add_pppoe_tag(skb, tag) < 0)
+ 							return -1;
+ 
+-						DEBUG_INFO("NAT25: Insert PPPoE, forward %s packet\n",
+-										(ph->code == PADI_CODE ? "PADI" : "PADR"));
+ 					} else { /*  not add relay tag */
+ 						if (priv->pppoe_connection_in_progress &&
+-								memcmp(skb->data+ETH_ALEN, priv->pppoe_addr, ETH_ALEN))	 {
+-							DEBUG_ERR("Discard PPPoE packet due to another PPPoE connection is in progress!\n");
++								memcmp(skb->data+ETH_ALEN, priv->pppoe_addr, ETH_ALEN))
+ 							return -2;
+-						}
+ 
+ 						if (priv->pppoe_connection_in_progress == 0)
+ 							memcpy(priv->pppoe_addr, skb->data+ETH_ALEN, ETH_ALEN);
+@@ -529,8 +496,6 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 					return -1;
+ 				}
+ 			} else {	/*  session phase */
+-				DEBUG_INFO("NAT25: Insert PPPoE, insert session packet to %s\n", skb->dev->name);
+-
+ 				__nat25_generate_pppoe_network_addr(networkAddr, skb->data, &ph->sid);
+ 
+ 				__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
+@@ -576,10 +541,8 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 		/*------------------------------------------------*/
+ 		struct ipv6hdr *iph = (struct ipv6hdr *)(skb->data + ETH_HLEN);
+ 
+-		if (sizeof(*iph) >= (skb->len - ETH_HLEN)) {
+-			DEBUG_WARN("NAT25: malformed IPv6 packet !\n");
++		if (sizeof(*iph) >= (skb->len - ETH_HLEN))
+ 			return -1;
+-		}
+ 
+ 		switch (method) {
+ 		case NAT25_CHECK:
+@@ -587,13 +550,6 @@ int nat25_db_handle(struct adapter *priv, struct sk_buff *skb, int method)
+ 				return 0;
+ 			return -1;
+ 		case NAT25_INSERT:
+-			DEBUG_INFO("NAT25: Insert IP, SA =%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x,"
+-							" DA =%4x:%4x:%4x:%4x:%4x:%4x:%4x:%4x\n",
+-				iph->saddr.s6_addr16[0], iph->saddr.s6_addr16[1], iph->saddr.s6_addr16[2], iph->saddr.s6_addr16[3],
+-				iph->saddr.s6_addr16[4], iph->saddr.s6_addr16[5], iph->saddr.s6_addr16[6], iph->saddr.s6_addr16[7],
+-				iph->daddr.s6_addr16[0], iph->daddr.s6_addr16[1], iph->daddr.s6_addr16[2], iph->daddr.s6_addr16[3],
+-				iph->daddr.s6_addr16[4], iph->daddr.s6_addr16[5], iph->daddr.s6_addr16[6], iph->daddr.s6_addr16[7]);
+-
+ 			if (memcmp(&iph->saddr, "\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0", 16)) {
+ 				__nat25_generate_ipv6_network_addr(networkAddr, (unsigned int *)&iph->saddr);
+ 				__nat25_db_network_insert(priv, skb->data+ETH_ALEN, networkAddr);
+@@ -669,7 +625,6 @@ void dhcp_flag_bcast(struct adapter *priv, struct sk_buff *skb)
+ 							/*  if not broadcast */
+ 							register int sum = 0;
+ 
+-							DEBUG_INFO("DHCP: change flag of DHCP request to broadcast.\n");
+ 							/*  or BROADCAST flag */
+ 							dhcph->flags |= htons(BROADCAST_FLAG);
+ 							/*  recalculate checksum */
+diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+index eebadb0bee5b..ab6d13aba744 100644
+--- a/drivers/staging/r8188eu/core/rtw_xmit.c
++++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+@@ -1588,10 +1588,8 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
+ 				}
+ 
+ 				newskb = skb_copy(skb, GFP_ATOMIC);
+-				if (!newskb) {
+-					DEBUG_ERR("TX DROP: skb_copy fail!\n");
++				if (!newskb)
+ 					return -1;
+-				}
+ 				dev_kfree_skb_any(skb);
+ 
+ 				*pskb = skb = newskb;
+@@ -1603,21 +1601,15 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
+ 				}
+ 			}
+ 
+-			if (skb_is_nonlinear(skb))
+-				DEBUG_ERR("%s(): skb_is_nonlinear!!\n", __func__);
+-
+ 			res = skb_linearize(skb);
+-			if (res < 0) {
+-					DEBUG_ERR("TX DROP: skb_linearize fail!\n");
++			if (res < 0)
+ 					return -1;
+-			}
+ 
+ 			res = nat25_db_handle(padapter, skb, NAT25_INSERT);
+ 			if (res < 0) {
+-				if (res == -2) {
+-					DEBUG_ERR("TX DROP: nat25_db_handle fail!\n");
++				if (res == -2)
+ 					return -1;
+-				}
++
+ 				return 0;
+ 			}
+ 		}
+@@ -1636,11 +1628,9 @@ static int rtw_br_client_tx(struct adapter *padapter, struct sk_buff **pskb)
+ 	}
+ 
+ 	/*  check if SA is equal to our MAC */
+-	if (memcmp(skb->data + ETH_ALEN, GET_MY_HWADDR(padapter), ETH_ALEN)) {
+-		DEBUG_ERR("TX DROP: untransformed frame SA:%02X%02X%02X%02X%02X%02X!\n",
+-			  skb->data[6], skb->data[7], skb->data[8], skb->data[9], skb->data[10], skb->data[11]);
++	if (memcmp(skb->data + ETH_ALEN, GET_MY_HWADDR(padapter), ETH_ALEN))
+ 		return -1;
+-	}
++
+ 	return 0;
  }
  
+diff --git a/drivers/staging/r8188eu/include/rtw_br_ext.h b/drivers/staging/r8188eu/include/rtw_br_ext.h
+index 17a6154e760a..56772af3bec5 100644
+--- a/drivers/staging/r8188eu/include/rtw_br_ext.h
++++ b/drivers/staging/r8188eu/include/rtw_br_ext.h
+@@ -4,11 +4,6 @@
+ #ifndef _RTW_BR_EXT_H_
+ #define _RTW_BR_EXT_H_
+ 
+-#define _DEBUG_ERR		DBG_88E
+-#define _DEBUG_INFO		DBG_88E
+-#define DEBUG_WARN		DBG_88E
+-#define DEBUG_INFO		DBG_88E
+-#define DEBUG_ERR		DBG_88E
+ #define GET_MY_HWADDR(padapter)		((padapter)->eeprompriv.mac_addr)
+ 
+ #define NAT25_HASH_BITS		4
 -- 
 2.34.1
 

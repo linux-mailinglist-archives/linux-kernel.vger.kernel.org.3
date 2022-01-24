@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D791497663
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 01:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9906A497665
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 01:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240529AbiAXAC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 19:02:59 -0500
-Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:32056 "EHLO
-        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235204AbiAXAC5 (ORCPT
+        id S240538AbiAXAHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 19:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240530AbiAXAHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 19:02:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1642982577; x=1674518577;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=884EPx7zeLdONILeLA66h3ygMwUbXySanvZ39llmgO4=;
-  b=TOD+OLNeYlk0ouJ1ouncPyWLDPG4rL+Yl8fd+NymAviHihc1eCihUUnq
-   EmHwJ2alfnmLSRn6V3i2Ax7x1VWQdgCP1EBkmQYAGq7NBZAyLf4Q4ULJA
-   rVSoeQjFiJeutXFvoNe/ICejMqjUcn6O4lRWuC6S0EURsTkn1wbvp2Fy4
-   E=;
-X-IronPort-AV: E=Sophos;i="5.88,311,1635206400"; 
-   d="scan'208";a="57429041"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 24 Jan 2022 00:02:57 +0000
-Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-e6c05252.us-west-2.amazon.com (Postfix) with ESMTPS id EE8794199F;
-        Mon, 24 Jan 2022 00:02:56 +0000 (UTC)
-Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
- EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 24 Jan 2022 00:02:56 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.160.114) by
- EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Mon, 24 Jan 2022 00:02:53 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-To:     <shorne@gmail.com>
-CC:     <benh@amazon.com>, <jonas@southpole.se>, <kuni1840@gmail.com>,
-        <kuniyu@amazon.co.jp>, <linux-kernel@vger.kernel.org>,
-        <openrisc@lists.librecores.org>,
-        <stefan.kristiansson@saunalahti.fi>
-Subject: Re: [PATCH] openrisc/boot: Remove unnecessary initialisation in memcpy().
-Date:   Mon, 24 Jan 2022 09:02:49 +0900
-Message-ID: <20220124000249.4295-1-kuniyu@amazon.co.jp>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <Ye3keps4aHhkbYzr@antec>
-References: <Ye3keps4aHhkbYzr@antec>
+        Sun, 23 Jan 2022 19:07:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7946C06173B;
+        Sun, 23 Jan 2022 16:07:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66A0861219;
+        Mon, 24 Jan 2022 00:07:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9258C340E3;
+        Mon, 24 Jan 2022 00:07:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642982854;
+        bh=sOPV0ZX6vJ/xD8yptJMnME9m2gNuPb3oT/LNhk3LgiI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=KAI8PcRr1KyEztG8DepJx/ckB7OmvLi1qrVhpOp3/WMkpHXIBJpxdWLRqVKFUWTmg
+         fTNYjzlHcqPd9JhD6vvU760g0EkpHWsw9gx1/uYXg4QtwPlQpXG/CNZHW9CJlFvBVN
+         fk/VXGpL6FU+IuCOKXQ23TXn4nuyCPnffUIyxMHFx5FmqN3/jkGkT25J8EqDp6QgnJ
+         +TKyRMhYTK33qNlWxHPcRMU8keav1O+fIQxcTs/Mu410yi6/sRm9PhJnD9bDHHSnuf
+         XihQ9mxR3gCCxoKP475YBQ+3wPsusnEPkl4kB7CkDf5j1j7ExDOhDSOYAqEpWSxoed
+         U38BtFmEEuhYA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7D9045C044F; Sun, 23 Jan 2022 16:07:34 -0800 (PST)
+Date:   Sun, 23 Jan 2022 16:07:34 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org
+Subject: Re: [PATCH 22/54] rcu: replace cpumask_weight with cpumask_empty
+ where appropriate
+Message-ID: <20220124000734.GB4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220123183925.1052919-1-yury.norov@gmail.com>
+ <20220123183925.1052919-23-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.114]
-X-ClientProxiedBy: EX13D03UWC003.ant.amazon.com (10.43.162.79) To
- EX13D04ANC001.ant.amazon.com (10.43.157.89)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123183925.1052919-23-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Stafford Horne <shorne@gmail.com>
-Date:   Mon, 24 Jan 2022 08:27:54 +0900
-> On Sun, Jan 23, 2022 at 11:01:00AM +0900, Kuniyuki Iwashima wrote:
-> > 'd' and 's' are initialised later with 'dest_w' and 'src_w', so we need not
-> > initialise them before that.
-> > 
-> > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+On Sun, Jan 23, 2022 at 10:38:53AM -0800, Yury Norov wrote:
+> In some places, RCU code calls cpumask_weight() to check if any bit of a
+> given cpumask is set. We can do it more efficiently with cpumask_empty()
+> because cpumask_empty() stops traversing the cpumask as soon as it finds
+> first set bit, while cpumask_weight() counts all bits unconditionally.
 > 
-> This looks fine to me.  I will queue this for the next release.
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 
-Thank you.
+Good point!  Queued and pushed, thank you!
 
+							Thanx, Paul
 
+> ---
+>  kernel/rcu/tree_nocb.h   | 4 ++--
+>  kernel/rcu/tree_plugin.h | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> Just curious why are you working on OpenRISC?
-
-While reading memcpy() variants, I found a nit to fix in x86 boot-time
-memcpy() [0].  While I'm at it, I just started reading all arch ones ;)
-
-[0]: https://lore.kernel.org/lkml/20220123015807.45005-1-kuniyu@amazon.co.jp/
-
-
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index eeafb546a7a0..f83c7b1d6110 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -1169,7 +1169,7 @@ void __init rcu_init_nohz(void)
+>  	struct rcu_data *rdp;
+>  
+>  #if defined(CONFIG_NO_HZ_FULL)
+> -	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask))
+> +	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
+>  		need_rcu_nocb_mask = true;
+>  #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+>  
+> @@ -1348,7 +1348,7 @@ static void __init rcu_organize_nocb_kthreads(void)
+>   */
+>  void rcu_bind_current_to_nocb(void)
+>  {
+> -	if (cpumask_available(rcu_nocb_mask) && cpumask_weight(rcu_nocb_mask))
+> +	if (cpumask_available(rcu_nocb_mask) && !cpumask_empty(rcu_nocb_mask))
+>  		WARN_ON(sched_setaffinity(current->pid, rcu_nocb_mask));
+>  }
+>  EXPORT_SYMBOL_GPL(rcu_bind_current_to_nocb);
+> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> index c5b45c2f68a1..0dc0c8d6717c 100644
+> --- a/kernel/rcu/tree_plugin.h
+> +++ b/kernel/rcu/tree_plugin.h
+> @@ -1215,7 +1215,7 @@ static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)
+>  		    cpu != outgoingcpu)
+>  			cpumask_set_cpu(cpu, cm);
+>  	cpumask_and(cm, cm, housekeeping_cpumask(HK_FLAG_RCU));
+> -	if (cpumask_weight(cm) == 0)
+> +	if (cpumask_empty(cm))
+>  		cpumask_copy(cm, housekeeping_cpumask(HK_FLAG_RCU));
+>  	set_cpus_allowed_ptr(t, cm);
+>  	free_cpumask_var(cm);
+> -- 
+> 2.30.2
 > 
-> -Stafford
-> 
-> > ---
-> >  arch/openrisc/lib/memcpy.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/openrisc/lib/memcpy.c b/arch/openrisc/lib/memcpy.c
-> > index fe2177628..e2af9b510 100644
-> > --- a/arch/openrisc/lib/memcpy.c
-> > +++ b/arch/openrisc/lib/memcpy.c
-> > @@ -101,7 +101,7 @@ void *memcpy(void *dest, __const void *src, __kernel_size_t n)
-> >   */
-> >  void *memcpy(void *dest, __const void *src, __kernel_size_t n)
-> >  {
-> > -	unsigned char *d = (unsigned char *)dest, *s = (unsigned char *)src;
-> > +	unsigned char *d, *s;
-> >  	uint32_t *dest_w = (uint32_t *)dest, *src_w = (uint32_t *)src;
-> >  
-> >  	/* If both source and dest are word aligned copy words */
-> > -- 
-> > 2.30.2

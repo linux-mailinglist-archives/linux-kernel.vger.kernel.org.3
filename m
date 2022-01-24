@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A85A49974B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C342E49974A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448277AbiAXVMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:12:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35608 "EHLO
+        id S1448257AbiAXVMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:12:17 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35626 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389369AbiAXUkv (ORCPT
+        with ESMTP id S1389423AbiAXUkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:40:51 -0500
+        Mon, 24 Jan 2022 15:40:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0622761573;
-        Mon, 24 Jan 2022 20:40:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8A9C340E7;
-        Mon, 24 Jan 2022 20:40:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7C1061507;
+        Mon, 24 Jan 2022 20:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE9A8C340E5;
+        Mon, 24 Jan 2022 20:40:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056849;
-        bh=sovLNmWwA9wnuElnBirZEn7t7GuDTXFhhWCtO7yz5rQ=;
+        s=korg; t=1643056852;
+        bh=5ND4c0WFizvbyzJNtRy1VuRdoEZMvxVRqMNu9KAXCrQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TjbWXJLtxFNqttOX/GRSofIMgGl097xo06k/q5tDGWUv3mxX1U4WzTorbvvksCU0H
-         3Cy+DEQcrD5owSztm2Abiqhp+mgzw3lWtr2aJyE08nJqYOgY433pZZeePAU70K5eAG
-         USzZw8E8lV6ZksPHpDT6kATz6gmLups+gBocQWV0=
+        b=uZc38GgQmMTEOZ4chdSkQbrZaTxn9i21iXI7YoULqtWVesZ0QFadIbiaJDSCXL18l
+         B2Zjbq0IEgFQ44gjIHfe+y7bBchBokqbwS3NIDIzukdIpkWLJFyjd+46sGnfNZAmoK
+         1B51HE6vuWEwBRgTxH5g4wYnJB/Ah1m+ciDdqZxw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 621/846] can: flexcan: add more quirks to describe RX path capabilities
-Date:   Mon, 24 Jan 2022 19:42:18 +0100
-Message-Id: <20220124184122.462222307@linuxfoundation.org>
+Subject: [PATCH 5.15 622/846] x86/kbuild: Enable CONFIG_KALLSYMS_ALL=y in the defconfigs
+Date:   Mon, 24 Jan 2022 19:42:19 +0100
+Message-Id: <20220124184122.498894189@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -45,163 +45,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Ingo Molnar <mingo@kernel.org>
 
-[ Upstream commit c5c88591040ee7d84d037328eed9019d3ffab821 ]
+[ Upstream commit b6aa86cff44cf099299d3a5e66348cb709cd7964 ]
 
-Most flexcan IP cores support 2 RX modes:
-- FIFO
-- mailbox
+Most distro kernels have this option enabled, to improve debug output.
 
-Some IP core versions cannot receive CAN RTR messages via mailboxes.
-This patch adds quirks to document this.
+Lockdep also selects it.
 
-This information will be used in a later patch to switch from FIFO to
-more performant mailbox mode at the expense of losing the ability to
-receive RTR messages. This trade off is beneficial in certain use
-cases.
+Enable this in the defconfig kernel as well, to make it more
+representative of what people are using on x86.
 
-Link: https://lore.kernel.org/all/20220107193105.1699523-5-mkl@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/YdTn7gssoMVDMgMw@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/flexcan.c | 66 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 54 insertions(+), 12 deletions(-)
+ arch/x86/configs/i386_defconfig   | 1 +
+ arch/x86/configs/x86_64_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 02299befe2852..18d7bb99ec1bd 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -252,6 +252,12 @@
- #define FLEXCAN_QUIRK_NR_IRQ_3 BIT(12)
- /* Setup 16 mailboxes */
- #define FLEXCAN_QUIRK_NR_MB_16 BIT(13)
-+/* Device supports RX via mailboxes */
-+#define FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX BIT(14)
-+/* Device supports RTR reception via mailboxes */
-+#define FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR BIT(15)
-+/* Device supports RX via FIFO */
-+#define FLEXCAN_QUIRK_SUPPPORT_RX_FIFO BIT(16)
- 
- /* Structure of the message buffer */
- struct flexcan_mb {
-@@ -382,59 +388,78 @@ struct flexcan_priv {
- 
- static const struct flexcan_devtype_data fsl_mcf5441x_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
--		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16,
-+		FLEXCAN_QUIRK_NR_IRQ_3 | FLEXCAN_QUIRK_NR_MB_16 |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO,
- };
- 
- static const struct flexcan_devtype_data fsl_p1010_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_BROKEN_WERR_STATE |
- 		FLEXCAN_QUIRK_BROKEN_PERR_STATE |
--		FLEXCAN_QUIRK_DEFAULT_BIG_ENDIAN,
-+		FLEXCAN_QUIRK_DEFAULT_BIG_ENDIAN |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO,
- };
- 
- static const struct flexcan_devtype_data fsl_imx25_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_BROKEN_WERR_STATE |
--		FLEXCAN_QUIRK_BROKEN_PERR_STATE,
-+		FLEXCAN_QUIRK_BROKEN_PERR_STATE |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO,
- };
- 
- static const struct flexcan_devtype_data fsl_imx28_devtype_data = {
--	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE,
-+	.quirks = FLEXCAN_QUIRK_BROKEN_PERR_STATE |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO,
- };
- 
- static const struct flexcan_devtype_data fsl_imx6q_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
- 		FLEXCAN_QUIRK_USE_RX_MAILBOX | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
--		FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR,
-+		FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
- };
- 
- static const struct flexcan_devtype_data fsl_imx8qm_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
- 		FLEXCAN_QUIRK_USE_RX_MAILBOX | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
--		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW,
-+		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
- };
- 
- static struct flexcan_devtype_data fsl_imx8mp_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
- 		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX |
- 		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR |
--		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SUPPORT_ECC,
-+		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SUPPORT_ECC |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
- };
- 
- static const struct flexcan_devtype_data fsl_vf610_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
- 		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_RX_MAILBOX |
--		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_SUPPORT_ECC,
-+		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_SUPPORT_ECC |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
- };
- 
- static const struct flexcan_devtype_data fsl_ls1021a_r2_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
--		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_USE_RX_MAILBOX,
-+		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_USE_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
- };
- 
- static const struct flexcan_devtype_data fsl_lx2160a_r1_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
- 		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
- 		FLEXCAN_QUIRK_USE_RX_MAILBOX | FLEXCAN_QUIRK_SUPPORT_FD |
--		FLEXCAN_QUIRK_SUPPORT_ECC,
-+		FLEXCAN_QUIRK_SUPPORT_ECC |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR,
- };
- 
- static const struct can_bittiming_const flexcan_bittiming_const = {
-@@ -2164,8 +2189,25 @@ static int flexcan_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 
- 	if ((devtype_data->quirks & FLEXCAN_QUIRK_SUPPORT_FD) &&
--	    !(devtype_data->quirks & FLEXCAN_QUIRK_USE_RX_MAILBOX)) {
--		dev_err(&pdev->dev, "CAN-FD mode doesn't work with FIFO mode!\n");
-+	    !((devtype_data->quirks &
-+	       (FLEXCAN_QUIRK_USE_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR |
-+		FLEXCAN_QUIRK_SUPPPORT_RX_FIFO)) ==
-+	      (FLEXCAN_QUIRK_USE_RX_MAILBOX |
-+	       FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+	       FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR))) {
-+		dev_err(&pdev->dev, "CAN-FD mode doesn't work in RX-FIFO mode!\n");
-+		return -EINVAL;
-+	}
-+
-+	if ((devtype_data->quirks &
-+	     (FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX |
-+	      FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR)) ==
-+	    FLEXCAN_QUIRK_SUPPPORT_RX_MAILBOX_RTR) {
-+		dev_err(&pdev->dev,
-+			"Quirks (0x%08x) inconsistent: RX_MAILBOX_RX supported but not RX_MAILBOX\n",
-+			devtype_data->quirks);
- 		return -EINVAL;
- 	}
- 
+diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
+index e81885384f604..99398cbdae434 100644
+--- a/arch/x86/configs/i386_defconfig
++++ b/arch/x86/configs/i386_defconfig
+@@ -262,3 +262,4 @@ CONFIG_BLK_DEV_IO_TRACE=y
+ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
+ CONFIG_EARLY_PRINTK_DBGP=y
+ CONFIG_DEBUG_BOOT_PARAMS=y
++CONFIG_KALLSYMS_ALL=y
+diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
+index e8a7a0af2bdaa..d7298b104a456 100644
+--- a/arch/x86/configs/x86_64_defconfig
++++ b/arch/x86/configs/x86_64_defconfig
+@@ -258,3 +258,4 @@ CONFIG_BLK_DEV_IO_TRACE=y
+ CONFIG_PROVIDE_OHCI1394_DMA_INIT=y
+ CONFIG_EARLY_PRINTK_DBGP=y
+ CONFIG_DEBUG_BOOT_PARAMS=y
++CONFIG_KALLSYMS_ALL=y
 -- 
 2.34.1
 

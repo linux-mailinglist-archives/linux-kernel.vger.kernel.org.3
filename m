@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C694498D47
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 293B0499399
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352439AbiAXTa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
+        id S1385948AbiAXUet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349832AbiAXTVY (ORCPT
+        with ESMTP id S1355449AbiAXUNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:21:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9697EC061797;
-        Mon, 24 Jan 2022 11:08:22 -0800 (PST)
+        Mon, 24 Jan 2022 15:13:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45665C06177D;
+        Mon, 24 Jan 2022 11:36:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DDBF60EC4;
-        Mon, 24 Jan 2022 19:08:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42681C340E5;
-        Mon, 24 Jan 2022 19:08:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C53AB80FA1;
+        Mon, 24 Jan 2022 19:36:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3848AC340E5;
+        Mon, 24 Jan 2022 19:36:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051301;
-        bh=pQnXVxQeSfUMLf41pmrb63t4YYQ2bvU2J9f+z1HT2PQ=;
+        s=korg; t=1643053001;
+        bh=pAudh+TsOSpSnD0nYfPANG+aRUPcTOqHL2dBB7d7S30=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KbjnB8FlYfkT6qPx/lNFPR3MeYX+4sNqlqzz5UfnoGRVN+wc3ulapmmjk4fpMjhDy
-         7N2t8Ni8MzGMvXgsYHb61u4hD0xro6mXl+nr9C5lQUS9edhanHcMUpmeYzMSlOeYmN
-         DodnOHUtmv/5FMedXEEqBLg1LWR5C6itHP5mlD2g=
+        b=0+Ca3MzlY+4e4erCPR5HI8bgVqtzrzIxCZwHR5tfN+NaWDIwKq/DmB4xFnzHBKiRi
+         8+E4zC69pxwT0RqQMF8zv2ABLwY8yrdX/LBUKSbSKsF8stoYQDPyIbmJoBLi/9wmbk
+         cHWRSMDTgYvHDkIjG5SlpmqNt0sbf8AhX1RUwk7U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mark Asselstine <mark.asselstine@windriver.com>,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Bob Moore <robert.moore@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 119/186] ACPICA: Utilities: Avoid deleting the same object twice in a row
+Subject: [PATCH 5.4 210/320] ACPI: battery: Add the ThinkPad "Not Charging" quirk
 Date:   Mon, 24 Jan 2022 19:43:14 +0100
-Message-Id: <20220124183940.941645419@linuxfoundation.org>
+Message-Id: <20220124184000.766334316@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-References: <20220124183937.101330125@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,46 +51,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Thomas Weißschuh <linux@weissschuh.net>
 
-[ Upstream commit 1cdfe9e346b4c5509ffe19ccde880fd259d9f7a3 ]
+[ Upstream commit e96c1197aca628f7d2480a1cc3214912b40b3414 ]
 
-ACPICA commit c11af67d8f7e3d381068ce7771322f2b5324d687
+The EC/ACPI firmware on Lenovo ThinkPads used to report a status
+of "Unknown" when the battery is between the charge start and
+charge stop thresholds. On Windows, it reports "Not Charging"
+so the quirk has been added to also report correctly.
 
-If original_count is 0 in acpi_ut_update_ref_count (),
-acpi_ut_delete_internal_obj () is invoked for the target object, which is
-incorrect, because that object has been deleted once already and the
-memory allocated to store it may have been reclaimed and allocated
-for a different purpose by the host OS.  Moreover, a confusing debug
-message following the "Reference Count is already zero, cannot
-decrement" warning is printed in that case.
+Now the "status" attribute returns "Not Charging" when the
+battery on ThinkPads is not physicaly charging.
 
-To fix this issue, make acpi_ut_update_ref_count () return after finding
-that original_count is 0 and printing the above warning.
-
-Link: https://github.com/acpica/acpica/commit/c11af67d
-Link: https://github.com/acpica/acpica/pull/652
-Reported-by: Mark Asselstine <mark.asselstine@windriver.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpica/utdelete.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/acpi/battery.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/drivers/acpi/acpica/utdelete.c b/drivers/acpi/acpica/utdelete.c
-index 61a979d0fbc5a..64a90ba71f18c 100644
---- a/drivers/acpi/acpica/utdelete.c
-+++ b/drivers/acpi/acpica/utdelete.c
-@@ -442,6 +442,7 @@ acpi_ut_update_ref_count(union acpi_operand_object *object, u32 action)
- 			ACPI_WARNING((AE_INFO,
- 				      "Obj %p, Reference Count is already zero, cannot decrement\n",
- 				      object));
-+			return;
- 		}
+diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
+index 6e96ed68b3379..4e0aea5f008e3 100644
+--- a/drivers/acpi/battery.c
++++ b/drivers/acpi/battery.c
+@@ -65,6 +65,7 @@ static int battery_bix_broken_package;
+ static int battery_notification_delay_ms;
+ static int battery_ac_is_broken;
+ static int battery_check_pmic = 1;
++static int battery_quirk_notcharging;
+ static unsigned int cache_time = 1000;
+ module_param(cache_time, uint, 0644);
+ MODULE_PARM_DESC(cache_time, "cache time in milliseconds");
+@@ -233,6 +234,8 @@ static int acpi_battery_get_property(struct power_supply *psy,
+ 			val->intval = POWER_SUPPLY_STATUS_CHARGING;
+ 		else if (acpi_battery_is_charged(battery))
+ 			val->intval = POWER_SUPPLY_STATUS_FULL;
++		else if (battery_quirk_notcharging)
++			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
+ 		else
+ 			val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
+ 		break;
+@@ -1337,6 +1340,12 @@ battery_do_not_check_pmic_quirk(const struct dmi_system_id *d)
+ 	return 0;
+ }
  
- 		ACPI_DEBUG_PRINT((ACPI_DB_ALLOCATIONS,
++static int __init battery_quirk_not_charging(const struct dmi_system_id *d)
++{
++	battery_quirk_notcharging = 1;
++	return 0;
++}
++
+ static const struct dmi_system_id bat_dmi_table[] __initconst = {
+ 	{
+ 		/* NEC LZ750/LS */
+@@ -1381,6 +1390,19 @@ static const struct dmi_system_id bat_dmi_table[] __initconst = {
+ 		  DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo MIIX 320-10ICR"),
+ 		},
+ 	},
++	{
++		/*
++		 * On Lenovo ThinkPads the BIOS specification defines
++		 * a state when the bits for charging and discharging
++		 * are both set to 0. That state is "Not Charging".
++		 */
++		.callback = battery_quirk_not_charging,
++		.ident = "Lenovo ThinkPad",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad"),
++		},
++	},
+ 	{},
+ };
+ 
 -- 
 2.34.1
 

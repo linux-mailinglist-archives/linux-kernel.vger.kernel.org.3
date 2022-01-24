@@ -2,161 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D38CC49A37E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AAAA49A393
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2368236AbiAXX6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
+        id S2368425AbiAXX7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1847630AbiAXXUO (ORCPT
+        with ESMTP id S1847649AbiAXXUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:20:14 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8343C08E90D
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:27:55 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id jx6so25175898ejb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:27:55 -0800 (PST)
+        Mon, 24 Jan 2022 18:20:15 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F0EC028C26;
+        Mon, 24 Jan 2022 13:28:14 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id r14so1812532qtt.5;
+        Mon, 24 Jan 2022 13:28:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RYjOggTIatflhN2tcFQRaqqDoiv4Tn5RiFVJCwGLqbw=;
-        b=3gh94fdxPP1DWGi6gOuYZrgk2uf3k5hBepC1rTfdXAfdOBNwWYVRFT+7VJ//ZBKj48
-         9cUBdcc1L83luJV4tNyo6xJ2NhDMZh+fGByJMZOR/E6OGpvhKXMfLugkrlVdTOH56MDo
-         53GnLKtMZ1UmD6cNG2HLa7dp6n40gG/YORbut8GypvyjOFtcXXVbFmRUkHhk5gGPcxEp
-         Dgpu/Tpnuc1tgVySpXrEXV2khVCSkxu0v94hJwxyVmROc7D4gXyjwSOqfPqFfbNilXgd
-         1HKCc/J/SbsB8BIH3KWfAuFdAb4ahrykJGfJjcwv72KNRdT+NPieaA//XGgx9ofoPnqK
-         CFVw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=slA4hKk3SRch55eW3a2SaAckanXwGcMXYthRdgb6F60=;
+        b=StyMdhim9hb/9ea2tVx958yAlIb9nMm7Edt1qSWsnGyh/fBU4p3xeiq7Z+BPkrxhzx
+         hvkt/JspEakv9QGMOvyic0F7+5XriBZUYv9A1C+VyvGSfDxp2bcKcCL2K4Bg20NJNpa1
+         CzWsW1Upz6eaEOlHU6sg84RdhrB2yVynS1UM4ga0CgHRymCi8OPdZ2UG8NtYqzutsgPB
+         /igRscwNvxqKQClIVHj7Ie/QrOhfnzIq5ZWebJU+fWJBmHcnl2P7F8HRwiIfJWgJJSJG
+         iU/RqM5ts6AHks+pVyyyOSVLdNOeOIYTUH0Pep4R6SGPkyxu1A1ZS8YcxkKxez99mijz
+         gQqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RYjOggTIatflhN2tcFQRaqqDoiv4Tn5RiFVJCwGLqbw=;
-        b=Ond3R3yGJOvfD6L7hHgYe9amG0jeG/t4+ecfWUzco0rSMvzOSxKMCvk4WTnWyMAGaG
-         SbUF+KbQXh9tdSLheu1wpOQ8R+R3/oN3JwQfhbIbJ9s56sxq3yvJidTIGJhz5Wh6jXP7
-         suHyg3OlzzQnF/IKrQHDZ3vJk5X5ttIztc1CB0kMxSNTNIJ3RUmlwpZZrEwZTCGtXfji
-         JiyxZkRKa/Bz7NHS0mB26e1A2tJfRSjVYWQo9fYMXzPbmN5qmv2IeJkGA5OIiU2vwqYZ
-         +v/tAFBqeDZxFAmxs2MP7ef4LZ8k7ovnjhM+M3EriA+6AFDlQj+YLyoEGNql/lvKcwRN
-         TmoQ==
-X-Gm-Message-State: AOAM530hMOLTcMGDmm91j1sv8I2IzM1+2+3/fXiJaLKLOT4Uwfv7r01X
-        bizXtInrbSJqK2SotwNvtcoKgQSYpcwkWJipiphn
-X-Google-Smtp-Source: ABdhPJzYbZvpioE6dEHN6JXBqwOIehEPUtOGXhvu9h/22uwOkXqdsmf4vjBbxGP53yiW7luwQlXcqdOThz5giAMUPiM=
-X-Received: by 2002:a17:907:968d:: with SMTP id hd13mr4919050ejc.12.1643059674146;
- Mon, 24 Jan 2022 13:27:54 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=slA4hKk3SRch55eW3a2SaAckanXwGcMXYthRdgb6F60=;
+        b=CdLQK+nxOfIX2lwz/i9mJHlmcNGo/dFArWLgIFMuiTIeoHf2FhTUJE3Pt39dVehbW6
+         ubGrfWjvRaswU0ZP+6LWajFuZYQkdrd1fLIrORiuJgTAq4vWK0UZpF+0aBElN78OyWqy
+         gl4tK3BuAtQB7tM542dNciDSRQ2PuH7b8pAApnEDQqUyeSYzBiqOB3rgzw/8LHkITYie
+         heyRiwEnyNul20qUKYlrkamtJNJTNpanOLB8FeoJSmoZXxp+EXDMb793XX0NX7Y0PC9a
+         jqCmFYczDNFF/1DM4ySzIeK4P/HT+v2MNJcwXMh8NWZjTioZsRCPjvmwTW02LMlEgWZR
+         V+Qg==
+X-Gm-Message-State: AOAM533KE26K9GwhanBdeNDFtGniXKK0S7y5wfz4vi0+U9a21M+7/xox
+        mwtbzqPiyaPw/hMQr8AmHNo=
+X-Google-Smtp-Source: ABdhPJxr1X9COMZLR6jW4yup+IW6IyJRcstvSb5FoEcZSfZWyozW2KfzV0ISVXICiVD3Akpz9hnNCg==
+X-Received: by 2002:ac8:5b51:: with SMTP id n17mr2893765qtw.594.1643059693753;
+        Mon, 24 Jan 2022 13:28:13 -0800 (PST)
+Received: from shaak (69-165-204-82.cable.teksavvy.com. [69.165.204.82])
+        by smtp.gmail.com with ESMTPSA id d13sm5486316qtx.35.2022.01.24.13.28.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 13:28:12 -0800 (PST)
+Date:   Mon, 24 Jan 2022 16:28:09 -0500
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Rosin <peda@axentia.se>
+Subject: Re: [PATCH v2 5/5] iio: afe: iio-rescale: Re-use generic struct
+ s32_fract
+Message-ID: <Ye8Z6dS5cCji9LNQ@shaak>
+References: <20220110193104.75225-1-andriy.shevchenko@linux.intel.com>
+ <20220110193104.75225-5-andriy.shevchenko@linux.intel.com>
+ <20220115185203.567780e8@jic23-huawei>
+ <Ye7DSAN4gdhXfEUs@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20220120214948.3637895-1-smayhew@redhat.com> <20220120214948.3637895-2-smayhew@redhat.com>
-In-Reply-To: <20220120214948.3637895-2-smayhew@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 24 Jan 2022 16:27:43 -0500
-Message-ID: <CAHC9VhT2RhnXtK3aQuDCFUr5qayH25G8HHjRTJzhWM3H41YNog@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
-To:     Scott Mayhew <smayhew@redhat.com>
-Cc:     selinux@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ye7DSAN4gdhXfEUs@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 4:50 PM Scott Mayhew <smayhew@redhat.com> wrote:
->
-> selinux_sb_mnt_opts_compat() is called under the sb_lock spinlock and
-> shouldn't be performing any memory allocations.  Fix this by parsing the
-> sids at the same time we're chopping up the security mount options
-> string and then using the pre-parsed sids when doing the comparison.
->
-> Fixes: cc274ae7763d ("selinux: fix sleeping function called from invalid context")
-> Fixes: 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an existing mount")
-> Signed-off-by: Scott Mayhew <smayhew@redhat.com>
-> ---
->  security/selinux/hooks.c | 112 ++++++++++++++++++++++++++-------------
->  1 file changed, 76 insertions(+), 36 deletions(-)
->
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 5b6895e4fc29..f27ca9e870c0 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -342,6 +342,11 @@ static void inode_free_security(struct inode *inode)
->
->  struct selinux_mnt_opts {
->         const char *fscontext, *context, *rootcontext, *defcontext;
-> +       u32 fscontext_sid;
-> +       u32 context_sid;
-> +       u32 rootcontext_sid;
-> +       u32 defcontext_sid;
-> +       unsigned short preparsed;
->  };
+Hi Andy,
 
-Is the preparsed field strictly necessary?  Can't we just write the
-code to assume that if a given SID field is not SECSID_NULL then it is
-valid/preparsed?
+On Mon, Jan 24, 2022 at 05:18:32PM +0200, Andy Shevchenko wrote:
+> On Sat, Jan 15, 2022 at 06:52:03PM +0000, Jonathan Cameron wrote:
+> > On Mon, 10 Jan 2022 21:31:04 +0200
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > 
+> > > Instead of custom data type re-use generic struct s32_fract.
+> > > No changes intended.
+> > > 
+> > > The new member is put to be the first one to avoid additional
+> > > pointer arithmetic. Besides that one may switch to use fract
+> > > member to perform container_of(), which will be no-op in this
+> > > case, to get struct rescale.
+> > > 
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > 
+> > I'm not totally sold on this series showing there is a strong case for
+> > these macros so interested to hear what others think.
+> 
+> So far no news :-)
 
-> @@ -598,12 +603,11 @@ static int bad_option(struct superblock_security_struct *sbsec, char flag,
->         return 0;
->  }
->
-> -static int parse_sid(struct super_block *sb, const char *s, u32 *sid,
-> -                    gfp_t gfp)
-> +static int parse_sid(struct super_block *sb, const char *s, u32 *sid)
->  {
->         int rc = security_context_str_to_sid(&selinux_state, s,
-> -                                            sid, gfp);
-> -       if (rc)
-> +                                            sid, GFP_KERNEL);
-> +       if (rc && sb != NULL)
->                 pr_warn("SELinux: security_context_str_to_sid"
->                        "(%s) failed for (dev %s, type %s) errno=%d\n",
->                        s, sb->s_id, sb->s_type->name, rc);
+Like I mentioned briefly in the other thread[1], I don't really see the
+advantage for the AFE driver given that it's almost just like renaming
+the parameters.
 
-It seems like it would still be useful to see the warning even when sb
-is NULL, wouldn't you say?  How about something like this:
+For the other drivers affected by the change, it drops the definition of
+the structure which is nice. So overall, it's a plus IMO :-)
 
-  if (rc)
-    pr_warn("SELinux: blah blah blah (dev %s, type %s) blah blah\n",
-            (sb ? sb->s_id : "?"),
-            (sb ? sb->s_type->name : "?"));
+[1] https://lore.kernel.org/linux-iio/20220108205319.2046348-1-liambeguin@gmail.com/
 
-> @@ -976,6 +976,9 @@ static int selinux_add_opt(int token, const char *s, void **mnt_opts)
->  {
->         struct selinux_mnt_opts *opts = *mnt_opts;
->         bool is_alloc_opts = false;
-> +       bool preparse_sid = false;
-> +       u32 sid;
-> +       int rc;
->
->         if (token == Opt_seclabel)
->                 /* eaten and completely ignored */
-> @@ -991,26 +994,57 @@ static int selinux_add_opt(int token, const char *s, void **mnt_opts)
->                 is_alloc_opts = true;
->         }
->
-> +       if (selinux_initialized(&selinux_state))
-> +               preparse_sid = true;
+Cheers,
+Liam
 
-Since there is no looping in selinux_add_opt, and you can only specify
-one token/option for a given call to this function, it seems like we
-can do away with preparse_sid and just do the selinux_initialized(...)
-check directly in the code below, yes?
-
->         switch (token) {
->         case Opt_context:
->                 if (opts->context || opts->defcontext)
->                         goto err;
->                 opts->context = s;
-> +               if (preparse_sid) {
-> +                       rc = parse_sid(NULL, s, &sid);
-> +                       if (rc == 0) {
-> +                               opts->context_sid = sid;
-> +                               opts->preparsed |= CONTEXT_MNT;
-> +                       }
-> +               }
-
-Is there a reason why we need a dedicated sid variable as opposed to
-passing opt->context_sid as the parameter?  For example:
-
-  rc = parse_sid(NULL, s, &opts->context_sid);
-
--- 
-paul moore
-paul-moore.com
+> > Boiler plate removal is always nice of course...
+> 
+> That's what I considered nice as well.
+> 
+> ...
+> 
+> > > I found this better in order how code is structurally (re)organized.
+> > > I may rebase this on top of ongoing AFE series.
+> > > 
+> > > Also reveals possibility to switch to rational best approximation.
+> > > But this is another story...
+> > 
+> > Now that may well justify introducing this shared infrastructure :)
+> 
+> We also have mult_frac() macro which can be extended by mult_fract() for
+> these structures.
+> 
+> ...
+> 
+> > >  	rescale = iio_priv(indio_dev);
+> > > -
+> > > +	rescale->source = source;
+> > 
+> > There seems to be more reorganizing going on in here than is necessary
+> > for the function of this patch. At very least, description should
+> > call it out.  Why move setting source?
+> 
+> Yeah, I agree that this may be in a separate change before of after the series.
+> I will split.
+> 
+> > >  	rescale->cfg = of_device_get_match_data(dev);
+> > > -	rescale->numerator = 1;
+> > > -	rescale->denominator = 1;
+> > >  
+> > > -	ret = rescale->cfg->props(dev, rescale);
+> > > +	fract = &rescale->fract;
+> > > +	fract->numerator = 1;
+> > > +	fract->denominator = 1;
+> 
+> > > -	rescale->source = source;
+> > > -
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 

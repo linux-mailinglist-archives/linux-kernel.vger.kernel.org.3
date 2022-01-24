@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C2D4982ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079A74982FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243251AbiAXPDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:03:12 -0500
-Received: from mga17.intel.com ([192.55.52.151]:63901 "EHLO mga17.intel.com"
+        id S243364AbiAXPDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:03:53 -0500
+Received: from mga03.intel.com ([134.134.136.65]:2612 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239694AbiAXPC2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:02:28 -0500
+        id S240370AbiAXPCi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 10:02:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643036548; x=1674572548;
+  t=1643036558; x=1674572558;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ny8hPu4sqyibLkN69362ey04CLPXYx99o5E/SzjH7Yk=;
-  b=OzFHx6w5Oc3JkCrLOQyECwxcM281PFPHWEk9uZ8GqkzUAgZlGZscZOfK
-   dT3purxiz9wvqOtT6Kj0RuGkmkzXt2s/4m0OQdqA+qUqPhxQo87LdBDmw
-   9RJ8z0Wt50eJvSA7okWXeRm9PF4+3glgNjiQ/NQPBumOBxHbIj4ZPX2/W
-   iimxa6Bz90nAyfJTjq1Vie8A9V6b/zDNTWoOWtE7PnP3elnE46z21Skiu
-   PbvnL8qBNakoH6BIx0Tgv1cCPsLXam3UMBSwy6T9oOFpDqcYfhZCIpjVw
-   io9KHhb5/nehd8qb8uI5xITipHPlVwziFnGIMzF5Cj3+O24aGkb5f+/CL
+  bh=cV4z4YKFQARzdqCciUMKqkAkSeqeXmSbqMOZknKC3MQ=;
+  b=TIk9eflzA74EsunZvCENBQ69CPndxp36jPqVUbKHn1wd0T+SHl3PuWMR
+   XNP7V4YVLRGubedXgJsBFU2HHIAo4jcb7mDebR0zsYr6KacZ6+B13vsCw
+   PEqjhgafm9ewUvf9elTrfGlKfyu3eBQUAvnnRbuRoS7p8rTlPUTucbyRB
+   d+VEIC7OoaRsIakSzAa3y+BWMBkHtB/unZGgSSOmGo4y919ASqMI+Zl1i
+   p/gpdw82pjcTXwXxJADs/chF7sPQVi+6+LuLPNoiAuPGxxht0oqI+iv+B
+   4avUhGK4tA7wRfBUNSfVJakI5FOFACHEthlP8OWarbGYLWu/rr3JCQbnK
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="226734707"
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="246007654"
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="226734707"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:02:26 -0800
+   d="scan'208";a="246007654"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 07:02:26 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="562680259"
+   d="scan'208";a="596810315"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 24 Jan 2022 07:02:20 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 24 Jan 2022 07:02:20 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 1CBD8ACE; Mon, 24 Jan 2022 17:02:20 +0200 (EET)
+        id 27741BAF; Mon, 24 Jan 2022 17:02:20 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -47,11 +47,11 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         x86@kernel.org, linux-kernel@vger.kernel.org,
         Sean Christopherson <sean.j.christopherson@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2 16/29] x86/boot: Add a trampoline for booting APs via firmware handoff
-Date:   Mon, 24 Jan 2022 18:02:02 +0300
-Message-Id: <20220124150215.36893-17-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv2 17/29] x86/acpi, x86/boot: Add multiprocessor wake-up support
+Date:   Mon, 24 Jan 2022 18:02:03 +0300
+Message-Id: <20220124150215.36893-18-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
 References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
@@ -61,199 +61,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <sean.j.christopherson@intel.com>
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-Historically, x86 platforms have booted secondary processors (APs)
-using INIT followed by the start up IPI (SIPI) messages. In regular
-VMs, this boot sequence is supported by the VMM emulation. But such a
-wakeup model is fatal for secure VMs like TDX in which VMM is an
-untrusted entity. To address this issue, a new wakeup model was added
-in ACPI v6.4, in which firmware (like TDX virtual BIOS) will help boot
-the APs. More details about this wakeup model can be found in ACPI
-specification v6.4, the section titled "Multiprocessor Wakeup Structure".
+TDX cannot use INIT/SIPI protocol to bring up secondary CPUs because it
+requires assistance from untrusted VMM.
 
-Since the existing trampoline code requires processors to boot in real
-mode with 16-bit addressing, it will not work for this wakeup model
-(because it boots the AP in 64-bit mode). To handle it, extend the
-trampoline code to support 64-bit mode firmware handoff. Also, extend
-IDT and GDT pointers to support 64-bit mode hand off.
+For platforms that do not support SIPI/INIT, ACPI defines a wakeup
+model (using mailbox) via MADT multiprocessor wakeup structure. More
+details about it can be found in ACPI specification v6.4, the section
+titled "Multiprocessor Wakeup Structure". If a platform firmware
+produces the multiprocessor wakeup structure, then OS may use this
+new mailbox-based mechanism to wake up the APs.
 
-There is no TDX-specific detection for this new boot method. The kernel
-will rely on it as the sole boot method whenever the new ACPI structure
-is present.
+Add ACPI MADT wake structure parsing support for x86 platform and if
+MADT wake table is present, update apic->wakeup_secondary_cpu_64 with
+new API which uses MADT wake mailbox to wake-up CPU.
 
-The ACPI table parser for the MADT multiprocessor wake up structure and
-the wakeup method that uses this structure will be added by the following
-patch in this series.
-
-Reported-by: Kai Huang <kai.huang@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 ---
- arch/x86/include/asm/apic.h              |  2 ++
- arch/x86/include/asm/realmode.h          |  1 +
- arch/x86/kernel/smpboot.c                | 12 ++++++--
- arch/x86/realmode/rm/header.S            |  1 +
- arch/x86/realmode/rm/trampoline_64.S     | 38 ++++++++++++++++++++++++
- arch/x86/realmode/rm/trampoline_common.S | 12 +++++++-
- 6 files changed, 63 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/apic.h |   5 ++
+ arch/x86/kernel/acpi/boot.c | 114 ++++++++++++++++++++++++++++++++++++
+ arch/x86/kernel/apic/apic.c |  10 ++++
+ 3 files changed, 129 insertions(+)
 
 diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-index 48067af94678..35006e151774 100644
+index 35006e151774..bd8ae0a7010a 100644
 --- a/arch/x86/include/asm/apic.h
 +++ b/arch/x86/include/asm/apic.h
-@@ -328,6 +328,8 @@ struct apic {
- 
- 	/* wakeup_secondary_cpu */
- 	int	(*wakeup_secondary_cpu)(int apicid, unsigned long start_eip);
-+	/* wakeup secondary CPU using 64-bit wakeup point */
-+	int	(*wakeup_secondary_cpu_64)(int apicid, unsigned long start_eip);
- 
- 	void	(*inquire_remote_apic)(int apicid);
- 
-diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
-index 331474b150f1..fd6f6e5b755a 100644
---- a/arch/x86/include/asm/realmode.h
-+++ b/arch/x86/include/asm/realmode.h
-@@ -25,6 +25,7 @@ struct real_mode_header {
- 	u32	sev_es_trampoline_start;
- #endif
- #ifdef CONFIG_X86_64
-+	u32	trampoline_start64;
- 	u32	trampoline_pgd;
- #endif
- 	/* ACPI S3 wakeup */
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 617012f4619f..6269dd126dba 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1088,6 +1088,11 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
- 	unsigned long boot_error = 0;
- 	unsigned long timeout;
+@@ -490,6 +490,11 @@ static inline unsigned int read_apic_id(void)
+ 	return apic->get_apic_id(reg);
+ }
  
 +#ifdef CONFIG_X86_64
-+	/* If 64-bit wakeup method exists, use the 64-bit mode trampoline IP */
-+	if (apic->wakeup_secondary_cpu_64)
-+		start_ip = real_mode_header->trampoline_start64;
++typedef int (*wakeup_cpu_handler)(int apicid, unsigned long start_eip);
++extern void acpi_wake_cpu_handler_update(wakeup_cpu_handler handler);
 +#endif
- 	idle->thread.sp = (unsigned long)task_pt_regs(idle);
- 	early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
- 	initial_code = (unsigned long)start_secondary;
-@@ -1129,11 +1134,14 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
- 
- 	/*
- 	 * Wake up a CPU in difference cases:
--	 * - Use the method in the APIC driver if it's defined
-+	 * - Use a method from the APIC driver if one defined, with wakeup
-+	 *   straight to 64-bit mode preferred over wakeup to RM.
- 	 * Otherwise,
- 	 * - Use an INIT boot APIC message for APs or NMI for BSP.
- 	 */
--	if (apic->wakeup_secondary_cpu)
-+	if (apic->wakeup_secondary_cpu_64)
-+		boot_error = apic->wakeup_secondary_cpu_64(apicid, start_ip);
-+	else if (apic->wakeup_secondary_cpu)
- 		boot_error = apic->wakeup_secondary_cpu(apicid, start_ip);
- 	else
- 		boot_error = wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
-diff --git a/arch/x86/realmode/rm/header.S b/arch/x86/realmode/rm/header.S
-index 8c1db5bf5d78..2eb62be6d256 100644
---- a/arch/x86/realmode/rm/header.S
-+++ b/arch/x86/realmode/rm/header.S
-@@ -24,6 +24,7 @@ SYM_DATA_START(real_mode_header)
- 	.long	pa_sev_es_trampoline_start
++
+ extern int default_apic_id_valid(u32 apicid);
+ extern int default_acpi_madt_oem_check(char *, char *);
+ extern void default_setup_apic_routing(void);
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 5b6d1a95776f..af204a217575 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -65,6 +65,15 @@ static u64 acpi_lapic_addr __initdata = APIC_DEFAULT_PHYS_BASE;
+ static bool acpi_support_online_capable;
  #endif
- #ifdef CONFIG_X86_64
-+	.long	pa_trampoline_start64
- 	.long	pa_trampoline_pgd;
- #endif
- 	/* ACPI S3 wakeup */
-diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
-index cc8391f86cdb..ae112a91592f 100644
---- a/arch/x86/realmode/rm/trampoline_64.S
-+++ b/arch/x86/realmode/rm/trampoline_64.S
-@@ -161,6 +161,19 @@ SYM_CODE_START(startup_32)
- 	ljmpl	$__KERNEL_CS, $pa_startup_64
- SYM_CODE_END(startup_32)
  
-+SYM_CODE_START(pa_trampoline_compat)
++#ifdef CONFIG_X86_64
++/* Physical address of the Multiprocessor Wakeup Structure mailbox */
++static u64 acpi_mp_wake_mailbox_paddr;
++/* Virtual address of the Multiprocessor Wakeup Structure mailbox */
++static struct acpi_madt_multiproc_wakeup_mailbox *acpi_mp_wake_mailbox;
++/* Lock to protect mailbox (acpi_mp_wake_mailbox) from parallel access */
++static DEFINE_SPINLOCK(mailbox_lock);
++#endif
++
+ #ifdef CONFIG_X86_IO_APIC
+ /*
+  * Locks related to IOAPIC hotplug
+@@ -336,6 +345,80 @@ acpi_parse_lapic_nmi(union acpi_subtable_headers * header, const unsigned long e
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_X86_64
++/* Virtual address of the Multiprocessor Wakeup Structure mailbox */
++static int acpi_wakeup_cpu(int apicid, unsigned long start_ip)
++{
++	static physid_mask_t apic_id_wakemap = PHYSID_MASK_NONE;
++	unsigned long flags;
++	u8 timeout;
++
++	/* Remap mailbox memory only for the first call to acpi_wakeup_cpu() */
++	if (physids_empty(apic_id_wakemap)) {
++		acpi_mp_wake_mailbox = memremap(acpi_mp_wake_mailbox_paddr,
++						sizeof(*acpi_mp_wake_mailbox),
++						MEMREMAP_WB);
++	}
++
 +	/*
-+	 * In compatibility mode.  Prep ESP and DX for startup_32, then disable
-+	 * paging and complete the switch to legacy 32-bit mode.
++	 * According to the ACPI specification r6.4, section titled
++	 * "Multiprocessor Wakeup Structure" the mailbox-based wakeup
++	 * mechanism cannot be used more than once for the same CPU.
++	 * Skip wakeups if they are attempted more than once.
 +	 */
-+	movl	$rm_stack_end, %esp
-+	movw	$__KERNEL_DS, %dx
++	if (physid_isset(apicid, apic_id_wakemap)) {
++		pr_err("CPU already awake (APIC ID %x), skipping wakeup\n",
++		       apicid);
++		return -EINVAL;
++	}
 +
-+	movl	$X86_CR0_PE, %eax
-+	movl	%eax, %cr0
-+	ljmpl   $__KERNEL32_CS, $pa_startup_32
-+SYM_CODE_END(pa_trampoline_compat)
++	spin_lock_irqsave(&mailbox_lock, flags);
 +
- 	.section ".text64","ax"
- 	.code64
- 	.balign 4
-@@ -169,6 +182,20 @@ SYM_CODE_START(startup_64)
- 	jmpq	*tr_start(%rip)
- SYM_CODE_END(startup_64)
- 
-+SYM_CODE_START(trampoline_start64)
 +	/*
-+	 * APs start here on a direct transfer from 64-bit BIOS with identity
-+	 * mapped page tables.  Load the kernel's GDT in order to gear down to
-+	 * 32-bit mode (to handle 4-level vs. 5-level paging), and to (re)load
-+	 * segment registers.  Load the zero IDT so any fault triggers a
-+	 * shutdown instead of jumping back into BIOS.
++	 * Mailbox memory is shared between firmware and OS. Firmware will
++	 * listen on mailbox command address, and once it receives the wakeup
++	 * command, CPU associated with the given apicid will be booted.
++	 *
++	 * The value of apic_id and wakeup_vector has to be set before updating
++	 * the wakeup command. To let compiler preserve order of writes, use
++	 * smp_store_release.
 +	 */
-+	lidt	tr_idt(%rip)
-+	lgdt	tr_gdt64(%rip)
++	smp_store_release(&acpi_mp_wake_mailbox->apic_id, apicid);
++	smp_store_release(&acpi_mp_wake_mailbox->wakeup_vector, start_ip);
++	smp_store_release(&acpi_mp_wake_mailbox->command,
++			  ACPI_MP_WAKE_COMMAND_WAKEUP);
 +
-+	ljmpl	*tr_compat(%rip)
-+SYM_CODE_END(trampoline_start64)
++	/*
++	 * After writing the wakeup command, wait for maximum timeout of 0xFF
++	 * for firmware to reset the command address back zero to indicate
++	 * the successful reception of command.
++	 * NOTE: 0xFF as timeout value is decided based on our experiments.
++	 *
++	 * XXX: Change the timeout once ACPI specification comes up with
++	 *      standard maximum timeout value.
++	 */
++	timeout = 0xFF;
++	while (READ_ONCE(acpi_mp_wake_mailbox->command) && --timeout)
++		cpu_relax();
 +
- 	.section ".rodata","a"
- 	# Duplicate the global descriptor table
- 	# so the kernel can live anywhere
-@@ -182,6 +209,17 @@ SYM_DATA_START(tr_gdt)
- 	.quad	0x00cf93000000ffff	# __KERNEL_DS
- SYM_DATA_END_LABEL(tr_gdt, SYM_L_LOCAL, tr_gdt_end)
++	/* If timed out (timeout == 0), return error */
++	if (!timeout) {
++		spin_unlock_irqrestore(&mailbox_lock, flags);
++		return -EIO;
++	}
++
++	/*
++	 * If the CPU wakeup process is successful, store the
++	 * status in apic_id_wakemap to prevent re-wakeup
++	 * requests.
++	 */
++	physid_set(apicid, apic_id_wakemap);
++
++	spin_unlock_irqrestore(&mailbox_lock, flags);
++
++	return 0;
++}
++#endif
+ #endif				/*CONFIG_X86_LOCAL_APIC */
  
-+SYM_DATA_START(tr_gdt64)
-+	.short	tr_gdt_end - tr_gdt - 1	# gdt limit
-+	.long	pa_tr_gdt
-+	.long	0
-+SYM_DATA_END(tr_gdt64)
+ #ifdef CONFIG_X86_IO_APIC
+@@ -1083,6 +1166,29 @@ static int __init acpi_parse_madt_lapic_entries(void)
+ 	}
+ 	return 0;
+ }
 +
-+SYM_DATA_START(tr_compat)
-+	.long	pa_trampoline_compat
-+	.short	__KERNEL32_CS
-+SYM_DATA_END(tr_compat)
++#ifdef CONFIG_X86_64
++static int __init acpi_parse_mp_wake(union acpi_subtable_headers *header,
++				     const unsigned long end)
++{
++	struct acpi_madt_multiproc_wakeup *mp_wake;
 +
- 	.bss
- 	.balign	PAGE_SIZE
- SYM_DATA(trampoline_pgd, .space PAGE_SIZE)
-diff --git a/arch/x86/realmode/rm/trampoline_common.S b/arch/x86/realmode/rm/trampoline_common.S
-index 5033e640f957..4331c32c47f8 100644
---- a/arch/x86/realmode/rm/trampoline_common.S
-+++ b/arch/x86/realmode/rm/trampoline_common.S
-@@ -1,4 +1,14 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- 	.section ".rodata","a"
- 	.balign	16
--SYM_DATA_LOCAL(tr_idt, .fill 1, 6, 0)
++	if (!IS_ENABLED(CONFIG_SMP))
++		return -ENODEV;
 +
-+/*
-+ * When a bootloader hands off to the kernel in 32-bit mode an
-+ * IDT with a 2-byte limit and 4-byte base is needed. When a boot
-+ * loader hands off to a kernel 64-bit mode the base address
-+ * extends to 8-bytes. Reserve enough space for either scenario.
-+ */
-+SYM_DATA_START_LOCAL(tr_idt)
-+	.short  0
-+	.quad   0
-+SYM_DATA_END(tr_idt)
++	mp_wake = (struct acpi_madt_multiproc_wakeup *)header;
++	if (BAD_MADT_ENTRY(mp_wake, end))
++		return -EINVAL;
++
++	acpi_table_print_madt_entry(&header->common);
++
++	acpi_mp_wake_mailbox_paddr = mp_wake->base_address;
++
++	acpi_wake_cpu_handler_update(acpi_wakeup_cpu);
++
++	return 0;
++}
++#endif				/* CONFIG_X86_64 */
+ #endif				/* CONFIG_X86_LOCAL_APIC */
+ 
+ #ifdef	CONFIG_X86_IO_APIC
+@@ -1278,6 +1384,14 @@ static void __init acpi_process_madt(void)
+ 
+ 				smp_found_config = 1;
+ 			}
++
++#ifdef CONFIG_X86_64
++			/*
++			 * Parse MADT MP Wake entry.
++			 */
++			acpi_table_parse_madt(ACPI_MADT_TYPE_MULTIPROC_WAKEUP,
++					      acpi_parse_mp_wake, 1);
++#endif
+ 		}
+ 		if (error == -EINVAL) {
+ 			/*
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index b70344bf6600..3c8f2c797a98 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -2551,6 +2551,16 @@ u32 x86_msi_msg_get_destid(struct msi_msg *msg, bool extid)
+ }
+ EXPORT_SYMBOL_GPL(x86_msi_msg_get_destid);
+ 
++#ifdef CONFIG_X86_64
++void __init acpi_wake_cpu_handler_update(wakeup_cpu_handler handler)
++{
++	struct apic **drv;
++
++	for (drv = __apicdrivers; drv < __apicdrivers_end; drv++)
++		(*drv)->wakeup_secondary_cpu_64 = handler;
++}
++#endif
++
+ /*
+  * Override the generic EOI implementation with an optimized version.
+  * Only called during early boot when only one CPU is active and with
 -- 
 2.34.1
 

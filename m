@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AA9498F6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9BD498D06
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347898AbiAXTwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355412AbiAXTlQ (ORCPT
+        id S237619AbiAXT1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:27:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40686 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348839AbiAXTTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:41:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA50CC06175E;
-        Mon, 24 Jan 2022 11:21:22 -0800 (PST)
+        Mon, 24 Jan 2022 14:19:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90D17B811F9;
-        Mon, 24 Jan 2022 19:21:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7526C340E5;
-        Mon, 24 Jan 2022 19:21:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6C3FB8121B;
+        Mon, 24 Jan 2022 19:19:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D03C340E8;
+        Mon, 24 Jan 2022 19:19:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052080;
-        bh=TXblizUNnF0qFAWhKFQNE34d8SwkK57tLFPlgMicx4A=;
+        s=korg; t=1643051985;
+        bh=BiDawCDCR9XnHyP+jduSugMt5j1biVVhOqB9aUPbh90=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1pFLRIZkgD9q9/Q6c8isODjLyFUcONKjEE6zW8P5HELxq3bx3vtcDK+J+/qE9eRqi
-         KSpsb/fyYhOU4URkPL3LnUTTzpVyq2TOKcKf76797nyzd+HYdZPwmuNn2wEfLbZMMq
-         P2u2SrWagMHFeuwMpa0bmzi/HDsxsg/Va2mCtRsE=
+        b=2Xd9bBSJUhV6/nhZpBZKeD6y3PidL9tqTGDXlQDse8ATHomPVfG3gnQbKGx3uxXnk
+         aBBvQDuxnXk73pyRXYRhl1BismM+xH4s0mZc+f7qfJta4bLaxnmZamp/IrMvbykEaS
+         OkYW9I3WUFZ8FPY8LhruRfHWjPzAhbzca8LDIT3o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 150/239] mmc: core: Fixup storing of OCR for MMC_QUIRK_NONSTD_SDIO
-Date:   Mon, 24 Jan 2022 19:43:08 +0100
-Message-Id: <20220124183947.864839011@linuxfoundation.org>
+Subject: [PATCH 4.19 151/239] audit: ensure userspace is penalized the same as the kernel when under pressure
+Date:   Mon, 24 Jan 2022 19:43:09 +0100
+Message-Id: <20220124183947.896612524@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
 References: <20220124183943.102762895@linuxfoundation.org>
@@ -49,55 +47,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Paul Moore <paul@paul-moore.com>
 
-[ Upstream commit 8c3e5b74b9e2146f564905e50ca716591c76d4f1 ]
+[ Upstream commit 8f110f530635af44fff1f4ee100ecef0bac62510 ]
 
-The mmc core takes a specific path to support initializing of a
-non-standard SDIO card. This is triggered by looking for the card-quirk,
-MMC_QUIRK_NONSTD_SDIO.
+Due to the audit control mutex necessary for serializing audit
+userspace messages we haven't been able to block/penalize userspace
+processes that attempt to send audit records while the system is
+under audit pressure.  The result is that privileged userspace
+applications have a priority boost with respect to audit as they are
+not bound by the same audit queue throttling as the other tasks on
+the system.
 
-In mmc_sdio_init_card() this gets rather messy, as it causes the code to
-bail out earlier, compared to the usual path. This leads to that the OCR
-doesn't get saved properly in card->ocr. Fortunately, only omap_hsmmc has
-been using the MMC_QUIRK_NONSTD_SDIO and is dealing with the issue, by
-assigning a hardcoded value (0x80) to card->ocr from an ->init_card() ops.
+This patch attempts to restore some balance to the system when under
+audit pressure by blocking these privileged userspace tasks after
+they have finished their audit processing, and dropped the audit
+control mutex, but before they return to userspace.
 
-To make the behaviour consistent, let's instead rely on the core to save
-the OCR in card->ocr during initialization.
-
-Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-Link: https://lore.kernel.org/r/e7936cff7fc24d187ef2680d3b4edb0ade58f293.1636564631.git.hns@goldelico.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Tested-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/core/sdio.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/audit.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
-index 4e72ad24322f7..5f1ee88aa7615 100644
---- a/drivers/mmc/core/sdio.c
-+++ b/drivers/mmc/core/sdio.c
-@@ -634,6 +634,8 @@ try_again:
- 	if (host->ops->init_card)
- 		host->ops->init_card(host, card);
- 
-+	card->ocr = ocr_card;
-+
- 	/*
- 	 * If the host and card support UHS-I mode request the card
- 	 * to switch to 1.8V signaling level.  No 1.8v signalling if
-@@ -740,7 +742,7 @@ try_again:
- 
- 		card = oldcard;
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 968921d376b98..c5e034fe14bbb 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -1528,6 +1528,20 @@ static void audit_receive(struct sk_buff  *skb)
+ 		nlh = nlmsg_next(nlh, &len);
  	}
--	card->ocr = ocr_card;
+ 	audit_ctl_unlock();
 +
- 	mmc_fixup_device(card, sdio_fixup_methods);
++	/* can't block with the ctrl lock, so penalize the sender now */
++	if (audit_backlog_limit &&
++	    (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
++		DECLARE_WAITQUEUE(wait, current);
++
++		/* wake kauditd to try and flush the queue */
++		wake_up_interruptible(&kauditd_wait);
++
++		add_wait_queue_exclusive(&audit_backlog_wait, &wait);
++		set_current_state(TASK_UNINTERRUPTIBLE);
++		schedule_timeout(audit_backlog_wait_time);
++		remove_wait_queue(&audit_backlog_wait, &wait);
++	}
+ }
  
- 	if (card->type == MMC_TYPE_SD_COMBO) {
+ /* Run custom bind function on netlink socket group connect or bind requests. */
+@@ -1772,7 +1786,9 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
+ 	 *    task_tgid_vnr() since auditd_pid is set in audit_receive_msg()
+ 	 *    using a PID anchored in the caller's namespace
+ 	 * 2. generator holding the audit_cmd_mutex - we don't want to block
+-	 *    while holding the mutex */
++	 *    while holding the mutex, although we do penalize the sender
++	 *    later in audit_receive() when it is safe to block
++	 */
+ 	if (!(auditd_test_task(current) || audit_ctl_owner_current())) {
+ 		long stime = audit_backlog_wait_time;
+ 
 -- 
 2.34.1
 

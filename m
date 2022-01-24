@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA325499CDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0C14994C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581007AbiAXWLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:11:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34150 "EHLO
+        id S1345396AbiAXUoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:44:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33560 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449188AbiAXVPI (ORCPT
+        with ESMTP id S1382240AbiAXUZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:15:08 -0500
+        Mon, 24 Jan 2022 15:25:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D33BB81142;
-        Mon, 24 Jan 2022 21:15:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93C72C340E5;
-        Mon, 24 Jan 2022 21:14:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD9BEB810BD;
+        Mon, 24 Jan 2022 20:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9BCC340E7;
+        Mon, 24 Jan 2022 20:25:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058899;
-        bh=sSDFp/4Isibgx+viCawhWzXdWhERJeA4CwQLf+j1haA=;
+        s=korg; t=1643055918;
+        bh=nuteEGewQqTwcTFHFsQbW1oe/ul0Q5xnOiHBmfH1eRQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MmxxWRaBLW1EP7oynW0cNk2ETT9/es42GK4g9MWY3xj96QIr4g6prRS8JlKCushyr
-         BXGD/Q8FwRccdQDM3tJ2EmezlWE0+txwL4XgACb3auCah5jL9TsuKbAzzY+OzGAvqU
-         hb84dVtCuukFnlmxB00Uq1Y3THvec//5KBPka3v8=
+        b=A0U04Abjb+CxCpJjz3XEMpvGjQAIS/j5ygsyPmyoNUqsTVlxibJDUWCqCeVxZdkyc
+         hHQ9mYEXxJNP58aUu1yo/yC3/sRHSe4HdT2wYFBsRGMdmS5rB5g4n/0yqeoM+esWgE
+         gHQqgEyG1im4X7dRtV/1XoFJ6+hmBy8BGarCrkV8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0437/1039] netfilter: egress: avoid a lockdep splat
+Subject: [PATCH 5.15 309/846] bpf, sockmap: Fix return codes from tcp_bpf_recvmsg_parser()
 Date:   Mon, 24 Jan 2022 19:37:06 +0100
-Message-Id: <20220124184139.986966049@linuxfoundation.org>
+Message-Id: <20220124184111.572962440@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,40 +46,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: John Fastabend <john.fastabend@gmail.com>
 
-[ Upstream commit 6316136ec6e3dd1c302f7e7289a9ee46ecc610ae ]
+[ Upstream commit 5b2c5540b8110eea0d67a78fb0ddb9654c58daeb ]
 
-include/linux/netfilter_netdev.h:97 suspicious rcu_dereference_check() usage!
-2 locks held by sd-resolve/1100:
- 0: ..(rcu_read_lock_bh){1:3}, at: ip_finish_output2
- 1: ..(rcu_read_lock_bh){1:3}, at: __dev_queue_xmit
- __dev_queue_xmit+0 ..
+Applications can be confused slightly because we do not always return the
+same error code as expected, e.g. what the TCP stack normally returns. For
+example on a sock err sk->sk_err instead of returning the sock_error we
+return EAGAIN. This usually means the application will 'try again'
+instead of aborting immediately. Another example, when a shutdown event
+is received we should immediately abort instead of waiting for data when
+the user provides a timeout.
 
-The helper has two callers, one uses rcu_read_lock, the other
-rcu_read_lock_bh().  Annotate the dereference to reflect this.
+These tend to not be fatal, applications usually recover, but introduces
+bogus errors to the user or introduces unexpected latency. Before
+'c5d2177a72a16' we fell back to the TCP stack when no data was available
+so we managed to catch many of the cases here, although with the extra
+latency cost of calling tcp_msg_wait_data() first.
 
-Fixes: 42df6e1d221dd ("netfilter: Introduce egress hook")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+To fix lets duplicate the error handling in TCP stack into tcp_bpf so
+that we get the same error codes.
+
+These were found in our CI tests that run applications against sockmap
+and do longer lived testing, at least compared to test_sockmap that
+does short-lived ping/pong tests, and in some of our test clusters
+we deploy.
+
+Its non-trivial to do these in a shorter form CI tests that would be
+appropriate for BPF selftests, but we are looking into it so we can
+ensure this keeps working going forward. As a preview one idea is to
+pull in the packetdrill testing which catches some of this.
+
+Fixes: c5d2177a72a16 ("bpf, sockmap: Fix race in ingress receive verdict with redirect to self")
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220104205918.286416-1-john.fastabend@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/netfilter_netdev.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ipv4/tcp_bpf.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/include/linux/netfilter_netdev.h b/include/linux/netfilter_netdev.h
-index b71b57a83bb4f..b4dd96e4dc8dc 100644
---- a/include/linux/netfilter_netdev.h
-+++ b/include/linux/netfilter_netdev.h
-@@ -94,7 +94,7 @@ static inline struct sk_buff *nf_hook_egress(struct sk_buff *skb, int *rc,
- 		return skb;
- #endif
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index f70aa0932bd6c..9b9b02052fd36 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -196,12 +196,39 @@ msg_bytes_ready:
+ 		long timeo;
+ 		int data;
  
--	e = rcu_dereference(dev->nf_hooks_egress);
-+	e = rcu_dereference_check(dev->nf_hooks_egress, rcu_read_lock_bh_held());
- 	if (!e)
- 		return skb;
- 
++		if (sock_flag(sk, SOCK_DONE))
++			goto out;
++
++		if (sk->sk_err) {
++			copied = sock_error(sk);
++			goto out;
++		}
++
++		if (sk->sk_shutdown & RCV_SHUTDOWN)
++			goto out;
++
++		if (sk->sk_state == TCP_CLOSE) {
++			copied = -ENOTCONN;
++			goto out;
++		}
++
+ 		timeo = sock_rcvtimeo(sk, nonblock);
++		if (!timeo) {
++			copied = -EAGAIN;
++			goto out;
++		}
++
++		if (signal_pending(current)) {
++			copied = sock_intr_errno(timeo);
++			goto out;
++		}
++
+ 		data = tcp_msg_wait_data(sk, psock, timeo);
+ 		if (data && !sk_psock_queue_empty(psock))
+ 			goto msg_bytes_ready;
+ 		copied = -EAGAIN;
+ 	}
++out:
+ 	release_sock(sk);
+ 	sk_psock_put(sk, psock);
+ 	return copied;
 -- 
 2.34.1
 

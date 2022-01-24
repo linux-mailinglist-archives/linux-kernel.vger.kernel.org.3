@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C8749A740
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B22F49A247
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3423627AbiAYCff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S2361581AbiAXXkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384590AbiAXUaL (ORCPT
+        with ESMTP id S1841132AbiAXW5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:30:11 -0500
+        Mon, 24 Jan 2022 17:57:41 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177E5C07A962;
-        Mon, 24 Jan 2022 11:42:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12822C08C5C0;
+        Mon, 24 Jan 2022 13:12:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAE4461298;
-        Mon, 24 Jan 2022 19:42:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE69C340E5;
-        Mon, 24 Jan 2022 19:42:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A72996131F;
+        Mon, 24 Jan 2022 21:12:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0F17C340E5;
+        Mon, 24 Jan 2022 21:12:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053361;
-        bh=50brnauWdiAtjqcwyntiqDSwqdYnjzoEqcJ97b19AFI=;
+        s=korg; t=1643058739;
+        bh=4ttaYS0IPIApvX9jBxMH4S+arQVzSNj44W36l/3hhes=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TYEquD6OudC1uL3djaJMpSSBjT+7nCnmsSORefKl8Snv2sVSmbHNiaNesHNm0PTNw
-         TjAYxTRgcR5mpbbevS80+89MurnfiJQFyCeZupu6MoiPNdVIvWtOENZP9NqKu0fK/H
-         YfqY6vfx7fWh3DZGdFs7TuvMtVlPbfkAhE9L2VbU=
+        b=gp0qYonjln018BpDH5ErYiVRN7oDbW16g4Y/LYNOvN7FAFiss4F5ezQ24umFDNKpK
+         ctvqlpggVlHYLSk0MnMTeiC75R/TJ2VO2/Ek0DRp+C3KB1kteQS3wnc9NZKz3e0iAa
+         dTh9XDvtgQbxXbQ3AYqBkwKNwzhIsfORo73vWKUM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Han Xu <han.xu@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.10 009/563] mtd: rawnand: gpmi: Remove explicit default gpmi clock setting for i.MX6
-Date:   Mon, 24 Jan 2022 19:36:14 +0100
-Message-Id: <20220124184024.742251646@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0387/1039] Bluetooth: hci_qca: Fix NULL vs IS_ERR_OR_NULL check in qca_serdev_probe
+Date:   Mon, 24 Jan 2022 19:36:16 +0100
+Message-Id: <20220124184138.327483962@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,40 +49,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Riedmueller <s.riedmueller@phytec.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit aa1baa0e6c1aa4872e481dce4fc7fd6f3dd8496b upstream.
+[ Upstream commit 6845667146a28c09b5dfc401c1ad112374087944 ]
 
-There is no need to explicitly set the default gpmi clock rate during
-boot for the i.MX 6 since this is done during nand_detect anyway.
+The function devm_gpiod_get_index() return error pointers on error.
+Thus devm_gpiod_get_index_optional() could return NULL and error pointers.
+The same as devm_gpiod_get_optional() function. Using IS_ERR_OR_NULL()
+check to catch error pointers.
 
-Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
-Cc: stable@vger.kernel.org
-Acked-by: Han Xu <han.xu@nxp.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20211102202022.15551-1-ceggers@arri.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 77131dfe ("Bluetooth: hci_qca: Replace devm_gpiod_get() with devm_gpiod_get_optional()")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |    9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/bluetooth/hci_qca.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -1052,15 +1052,6 @@ static int gpmi_get_clks(struct gpmi_nan
- 		r->clock[i] = clk;
- 	}
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index 9e99311038ae8..f6e91fb432a3b 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -2059,14 +2059,14 @@ static int qca_serdev_probe(struct serdev_device *serdev)
  
--	if (GPMI_IS_MX6(this))
--		/*
--		 * Set the default value for the gpmi clock.
--		 *
--		 * If you want to use the ONFI nand which is in the
--		 * Synchronous Mode, you should change the clock as you need.
--		 */
--		clk_set_rate(r->clock[0], 22000000);
--
- 	return 0;
+ 		qcadev->bt_en = devm_gpiod_get_optional(&serdev->dev, "enable",
+ 					       GPIOD_OUT_LOW);
+-		if (!qcadev->bt_en && data->soc_type == QCA_WCN6750) {
++		if (IS_ERR_OR_NULL(qcadev->bt_en) && data->soc_type == QCA_WCN6750) {
+ 			dev_err(&serdev->dev, "failed to acquire BT_EN gpio\n");
+ 			power_ctrl_enabled = false;
+ 		}
  
- err_clock:
+ 		qcadev->sw_ctrl = devm_gpiod_get_optional(&serdev->dev, "swctrl",
+ 					       GPIOD_IN);
+-		if (!qcadev->sw_ctrl && data->soc_type == QCA_WCN6750)
++		if (IS_ERR_OR_NULL(qcadev->sw_ctrl) && data->soc_type == QCA_WCN6750)
+ 			dev_warn(&serdev->dev, "failed to acquire SW_CTRL gpio\n");
+ 
+ 		qcadev->susclk = devm_clk_get_optional(&serdev->dev, NULL);
+@@ -2088,7 +2088,7 @@ static int qca_serdev_probe(struct serdev_device *serdev)
+ 
+ 		qcadev->bt_en = devm_gpiod_get_optional(&serdev->dev, "enable",
+ 					       GPIOD_OUT_LOW);
+-		if (!qcadev->bt_en) {
++		if (IS_ERR_OR_NULL(qcadev->bt_en)) {
+ 			dev_warn(&serdev->dev, "failed to acquire enable gpio\n");
+ 			power_ctrl_enabled = false;
+ 		}
+-- 
+2.34.1
+
 
 

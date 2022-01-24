@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9B049A390
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 839EA49A37A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2366565AbiAXXxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S2366386AbiAXXwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1845985AbiAXXOJ (ORCPT
+        with ESMTP id S1845907AbiAXXNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:14:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5778C0A02BD;
-        Mon, 24 Jan 2022 13:20:51 -0800 (PST)
+        Mon, 24 Jan 2022 18:13:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DB8C09F4BF;
+        Mon, 24 Jan 2022 13:19:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5538C60C44;
-        Mon, 24 Jan 2022 21:20:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2C2C340E4;
-        Mon, 24 Jan 2022 21:20:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAC58B80FA1;
+        Mon, 24 Jan 2022 21:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE25C340E4;
+        Mon, 24 Jan 2022 21:19:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059250;
-        bh=tGwi8PGuwVZUsl3xSmCHNuQbiPSwT1D+Ohe2sWsCveo=;
+        s=korg; t=1643059178;
+        bh=4n20CruvaLm92Dk2ViJNwsid1IZpIeyuGIIo5tTJCkc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bcST5ddlk6I+q9OyHUlUpSpFuUjGand1Op8QUcsQa0u5uc0xBCeA+oiC6PyZdKkhi
-         YUsXbsJ7dkyL3gWUj56fFHzvyf45DWhUNM4YT8Ob7VIm1hZY0D3FAi8/UK0FageYDX
-         ywnnfYTq/uzU4X6ALgLuo5/Pwu6t4aI8d8AoJoMo=
+        b=wG5rGyhGeT+vA6zMXs96jRJODmzh4F+1f+yZv8Z4MjfJp0dPP++jGx91VtkiAjwrm
+         5sefpIWh4YbeJbfPVB5/PHMoRP2nqZo84WcR55d92op1wnkUtOPidwZuZt40/d2KiY
+         6jw/YdN3FcIwfxO1vrbbq1eB3ecprK6vpWRxbPOI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0510/1039] iio: chemical: sunrise_co2: set val parameter only on success
-Date:   Mon, 24 Jan 2022 19:38:19 +0100
-Message-Id: <20220124184142.432735565@linuxfoundation.org>
+Subject: [PATCH 5.16 0512/1039] misc: lattice-ecp3-config: Fix task hung when firmware load failed
+Date:   Mon, 24 Jan 2022 19:38:21 +0100
+Message-Id: <20220124184142.494965616@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -49,59 +49,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 38ac2f038666521f94d4fa37b5a9441cef832ccf ]
+[ Upstream commit fcee5ce50bdb21116711e38635e3865594af907e ]
 
-Clang static analysis reports this representative warning
+When firmware load failed, kernel report task hung as follows:
 
-sunrise_co2.c:410:9: warning: Assigned value is garbage or undefined
-  *val = value;
-       ^ ~~~~~
+INFO: task xrun:5191 blocked for more than 147 seconds.
+      Tainted: G        W         5.16.0-rc5-next-20211220+ #11
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:xrun            state:D stack:    0 pid: 5191 ppid:   270 flags:0x00000004
+Call Trace:
+ __schedule+0xc12/0x4b50 kernel/sched/core.c:4986
+ schedule+0xd7/0x260 kernel/sched/core.c:6369 (discriminator 1)
+ schedule_timeout+0x7aa/0xa80 kernel/time/timer.c:1857
+ wait_for_completion+0x181/0x290 kernel/sched/completion.c:85
+ lattice_ecp3_remove+0x32/0x40 drivers/misc/lattice-ecp3-config.c:221
+ spi_remove+0x72/0xb0 drivers/spi/spi.c:409
 
-The ealier call to sunrise_read_word can fail without setting
-value.  So defer setting val until we know the read was successful.
+lattice_ecp3_remove() wait for signals from firmware loading, but when
+load failed, firmware_load() does not send this signal. This cause
+device remove hung. Fix it by sending signal even if load failed.
 
-Fixes: c397894e24f1 ("iio: chemical: Add Senseair Sunrise 006-0-007 driver")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Link: https://lore.kernel.org/r/20211224150833.3278236-1-trix@redhat.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 781551df57c7 ("misc: Add Lattice ECP3 FPGA configuration via SPI")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Link: https://lore.kernel.org/r/20211228125522.3122284-1-weiyongjun1@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/chemical/sunrise_co2.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/misc/lattice-ecp3-config.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/iio/chemical/sunrise_co2.c b/drivers/iio/chemical/sunrise_co2.c
-index 233bd0f379c93..8440dc0c77cfe 100644
---- a/drivers/iio/chemical/sunrise_co2.c
-+++ b/drivers/iio/chemical/sunrise_co2.c
-@@ -407,24 +407,24 @@ static int sunrise_read_raw(struct iio_dev *iio_dev,
- 			mutex_lock(&sunrise->lock);
- 			ret = sunrise_read_word(sunrise, SUNRISE_CO2_FILTERED_COMP_REG,
- 						&value);
--			*val = value;
- 			mutex_unlock(&sunrise->lock);
+diff --git a/drivers/misc/lattice-ecp3-config.c b/drivers/misc/lattice-ecp3-config.c
+index 0f54730c7ed56..98828030b5a4d 100644
+--- a/drivers/misc/lattice-ecp3-config.c
++++ b/drivers/misc/lattice-ecp3-config.c
+@@ -76,12 +76,12 @@ static void firmware_load(const struct firmware *fw, void *context)
  
- 			if (ret)
- 				return ret;
+ 	if (fw == NULL) {
+ 		dev_err(&spi->dev, "Cannot load firmware, aborting\n");
+-		return;
++		goto out;
+ 	}
  
-+			*val = value;
- 			return IIO_VAL_INT;
+ 	if (fw->size == 0) {
+ 		dev_err(&spi->dev, "Error: Firmware size is 0!\n");
+-		return;
++		goto out;
+ 	}
  
- 		case IIO_TEMP:
- 			mutex_lock(&sunrise->lock);
- 			ret = sunrise_read_word(sunrise, SUNRISE_CHIP_TEMPERATURE_REG,
- 						&value);
--			*val = value;
- 			mutex_unlock(&sunrise->lock);
+ 	/* Fill dummy data (24 stuffing bits for commands) */
+@@ -103,7 +103,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 		dev_err(&spi->dev,
+ 			"Error: No supported FPGA detected (JEDEC_ID=%08x)!\n",
+ 			jedec_id);
+-		return;
++		goto out;
+ 	}
  
- 			if (ret)
- 				return ret;
+ 	dev_info(&spi->dev, "FPGA %s detected\n", ecp3_dev[i].name);
+@@ -116,7 +116,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 	buffer = kzalloc(fw->size + 8, GFP_KERNEL);
+ 	if (!buffer) {
+ 		dev_err(&spi->dev, "Error: Can't allocate memory!\n");
+-		return;
++		goto out;
+ 	}
  
-+			*val = value;
- 			return IIO_VAL_INT;
+ 	/*
+@@ -155,7 +155,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 			"Error: Timeout waiting for FPGA to clear (status=%08x)!\n",
+ 			status);
+ 		kfree(buffer);
+-		return;
++		goto out;
+ 	}
  
- 		default:
+ 	dev_info(&spi->dev, "Configuring the FPGA...\n");
+@@ -181,7 +181,7 @@ static void firmware_load(const struct firmware *fw, void *context)
+ 	release_firmware(fw);
+ 
+ 	kfree(buffer);
+-
++out:
+ 	complete(&data->fw_loaded);
+ }
+ 
 -- 
 2.34.1
 

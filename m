@@ -2,149 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAD949869C
+	by mail.lfdr.de (Postfix) with ESMTP id EBF9749869D
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244239AbiAXRYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:24:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:41704 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244496AbiAXRYa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:24:30 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D08F4D6E;
-        Mon, 24 Jan 2022 09:24:29 -0800 (PST)
-Received: from [10.57.39.131] (unknown [10.57.39.131])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 47DF13F766;
-        Mon, 24 Jan 2022 09:24:27 -0800 (PST)
-Subject: Re: [PATCH] perf arm-spe: Use SPE data source for neoverse cores
-To:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Leo Yan <leo.yan@linaro.org>
-Cc:     benh@kernel.crashing.org, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>
-References: <20220121182456.13538-1-alisaidi@amazon.com>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <0ba26f30-6978-36ad-f7d0-7b8465648e54@arm.com>
-Date:   Mon, 24 Jan 2022 17:24:25 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S244498AbiAXRYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244510AbiAXRYc (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:24:32 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DD8C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:24:31 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id b15so1653302plg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:24:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MNfXtMWDs94yCP5IvCirOntnPOv7KcyJEPbhbH4XF7c=;
+        b=FqVOE59OXQhWJEUphirZINjoUn+baMGNtuwfvW4iNczeJetJyLUo6uMgi7HmKNKUmI
+         i5ipyJdbPNtzL9MnaNfct29Ic5bz/qTyfeOa89mMwtcbVepAxEXXFD5MQ0uFfiIpge4u
+         ARoOtbw0knoU83fcJUKquqYTdHrZlmO/829tWaIdMoe/kgasRT1FmK+QxuAzbNqEbu4B
+         HvLRCRf2zzNeu6Z0byRDkFKQocLTSG+/dVNHJEy0z0RtkhpYIcgpX0hKCsCvSUnsZkmJ
+         SsTRu9pkjXxx3FMubkNdhQMI7tPIzdy128CKxWuatt3yl4yVTtwLKJVG2oq753i7yp3J
+         JpFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MNfXtMWDs94yCP5IvCirOntnPOv7KcyJEPbhbH4XF7c=;
+        b=S1ZWMMKCP3boKKCa74r3Qqn1Ys5+0Ub/ieZqgbGipjCuVYZviKUFSpmtPgt8pg8O5+
+         c54Zjnv8Kop5ntGTcT59WxtWCbAjqvZ9miGPHS3nMbn+P0W804lbby+gcIeKsQy9KXTS
+         Qjozrf47F6C7ZOmgYYGW97po/yk13WHEps944b+lh7KjWavlmjsMQeI4Wk9n93Q7a8N2
+         2gb4AJNEPoNZtfe99LWfYMCH+sdmdS9ESkYovKFcwifuTIGmGPRtYZVz63Q2+p9N4AL3
+         alwcAxCx5cD39c4bqtTUrS7CxIj+hhcdKrIj/iBpSgKq/Ap/+sxeG2Yyv7+RtQzogYWR
+         F1vw==
+X-Gm-Message-State: AOAM530XVNVTirgkhB4XNNIj2kdbYcSjJSMWQ/3EjuGPQG62msehHfjo
+        yYB5I4KLe0J+v+xlygNieCgHdA==
+X-Google-Smtp-Source: ABdhPJx7TnvV1SVJ9Ch47mTOqFEGHvCB5zB2duDpG/p/MJ59nwCycfSfDrGjHF11Xcg35Zse7/OaRA==
+X-Received: by 2002:a17:903:22ca:b0:14b:3bbd:82ed with SMTP id y10-20020a17090322ca00b0014b3bbd82edmr8644487plg.37.1643045070980;
+        Mon, 24 Jan 2022 09:24:30 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n22sm15967403pfu.193.2022.01.24.09.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 09:24:30 -0800 (PST)
+Date:   Mon, 24 Jan 2022 17:24:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ayush Ranjan <ayushranjan@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ben Gardon <bgardon@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andrei Vagin <avagin@gmail.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Pratt <mpratt@google.com>
+Subject: Re: [PATCH] x86: add additional EPT bit definitions
+Message-ID: <Ye7gykcvjig7aPNM@google.com>
+References: <20220123195239.509528-1-ayushranjan@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20220121182456.13538-1-alisaidi@amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220123195239.509528-1-ayushranjan@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 21/01/2022 18:24, Ali Saidi wrote:
-> When synthesizing data from SPE, augment the type with source information
-> for Arm Neoverse cores. The field is IMPLDEF but the Neoverse cores all use
-> the same encoding. I can't find encoding information for any other SPE
-> implementations to unify their choices with Arm's thus that is left for future
-> work.
+On Sun, Jan 23, 2022, Ayush Ranjan wrote:
+> From: Michael Pratt <mpratt@google.com>
 > 
-> This changes enables the expected behavior of perf c2c on a system with SPE where
-> lines that are shared among multiple cores show up in perf c2c output. 
-> 
-> Signed-off-by: Ali Saidi <alisaidi@amazon.com> 
+> Used in gvisor for EPT support.
+
+As you may have surmised from the other patch, the changelogs from patches carried
+in our internal kernels rarely meet the criteria for acceptance upstream.  E.g. this
+doesn't provide sufficient justification since there's obviously no in-kernel gvisor
+that's consuming this.
+
+Submitting patches that we carry internally is perfectly ok, but there needs to be
+sufficient justfication, and the patch needs to follow the rules laid out by
+Documentation/process/submitting-patches.rst.
+
+> Tested: Builds cleanly
+> Signed-off-by: Ayush Ranjan <ayushranjan@google.com>
+> Signed-off-by: Michael Pratt <mpratt@google.com>
 > ---
->  .../util/arm-spe-decoder/arm-spe-decoder.c    |  1 +
->  .../util/arm-spe-decoder/arm-spe-decoder.h    | 12 +++++
->  tools/perf/util/arm-spe.c                     | 48 ++++++++++++++-----
->  3 files changed, 49 insertions(+), 12 deletions(-)
+>  arch/x86/include/asm/vmx.h | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-[...]
-> +static u64 arm_spe__synth_data_source(const struct arm_spe_record *record, u64 midr)
->  {
->  	union perf_mem_data_src	data_src = { 0 };
-> +	bool is_neoverse = is_midr_in_range(midr, neoverse_spe);
->  
->  	if (record->op == ARM_SPE_LD)
->  		data_src.mem_op = PERF_MEM_OP_LOAD;
-> @@ -409,19 +418,30 @@ static u64 arm_spe__synth_data_source(const struct arm_spe_record *record)
->  		data_src.mem_op = PERF_MEM_OP_STORE;
->  
->  	if (record->type & (ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS)) {
-> -		data_src.mem_lvl = PERF_MEM_LVL_L3;
-> +		if (is_neoverse && record->source == ARM_SPE_NV_DRAM) {
-> +			data_src.mem_lvl = PERF_MEM_LVL_LOC_RAM | PERF_MEM_LVL_HIT;
-> +		} else if (is_neoverse && record->source == ARM_SPE_NV_PEER_CLSTR) {
-> +			data_src.mem_snoop = PERF_MEM_SNOOP_HITM;
+> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
+> index 0ffaa3156a4e..c77ad687cdf7 100644
+> --- a/arch/x86/include/asm/vmx.h
+> +++ b/arch/x86/include/asm/vmx.h
+> @@ -496,7 +496,9 @@ enum vmcs_field {
+>  #define VMX_EPT_WRITABLE_MASK			0x2ull
+>  #define VMX_EPT_EXECUTABLE_MASK			0x4ull
+>  #define VMX_EPT_IPAT_BIT    			(1ull << 6)
+> -#define VMX_EPT_ACCESS_BIT			(1ull << 8)
+> +#define VMX_EPT_PSE_BIT				(1ull << 7)
 
-I'm not following how LLC_ACCESS | LLC_MISS ends up as HITM in this case (ARM_SPE_NV_PEER_CLSTR)?
-I thought there was no way to determine a HITM from SPE. Wouldn't one of the other values
-like PERF_MEM_SNOOP_MISS be more accurate?
+I'm not a fan of "PSE", it's unnecessarily terse and "PSE" has different meaning
+in IA32 paging.  VMX_EPT_PAGE_SIZE_BIT would be choice.
 
-> +			data_src.mem_lvl = PERF_MEM_LVL_L3 | PERF_MEM_LVL_HIT;
+As for justification, something that has been mentioned once or thrice is the lack
+of build-time assertions that the PT_* bits in mmu.h that are reused for EPT entries
+do indeed match the EPT definitions.  I can throw together a patch/series to add
+that and do the below cleanup.
 
-This one also adds PERF_MEM_LVL_HIT even though the check of "if (record->type & ARM_SPE_LLC_MISS)"
-hasn't happened yet. Maybe some comments would make it a bit clearer, but at the moment it's
-not obvious how the result is derived because there are some things that don't add up like
-ARM_SPE_LLC_MISS == PERF_MEM_LVL_HIT.
+> +#define VMX_EPT_ACCESS_SHIFT			8
 
-> +		} else {
-> +			data_src.mem_lvl = PERF_MEM_LVL_L3;>  
-> -		if (record->type & ARM_SPE_LLC_MISS)
-> -			data_src.mem_lvl |= PERF_MEM_LVL_MISS;
-> -		else
-> -			data_src.mem_lvl |= PERF_MEM_LVL_HIT;
-> +			if (record->type & ARM_SPE_LLC_MISS)
-> +				data_src.mem_lvl |= PERF_MEM_LVL_MISS;
-> +			else
-> +				data_src.mem_lvl |= PERF_MEM_LVL_HIT;
-> +		}
->  	} else if (record->type & (ARM_SPE_L1D_ACCESS | ARM_SPE_L1D_MISS)) {
-> -		data_src.mem_lvl = PERF_MEM_LVL_L1;
-> +		if (is_neoverse && record->source == ARM_SPE_NV_L2) {
-> +			data_src.mem_lvl = PERF_MEM_LVL_L2 | PERF_MEM_LVL_HIT;
-> +		} else {
-> +			data_src.mem_lvl = PERF_MEM_LVL_L1;
->  
-> -		if (record->type & ARM_SPE_L1D_MISS)
-> -			data_src.mem_lvl |= PERF_MEM_LVL_MISS;
-> -		else
-> -			data_src.mem_lvl |= PERF_MEM_LVL_HIT;
-> +			if (record->type & ARM_SPE_L1D_MISS)
-> +				data_src.mem_lvl |= PERF_MEM_LVL_MISS;
-> +			else
-> +				data_src.mem_lvl |= PERF_MEM_LVL_HIT;
-> +		}
->  	}
->  
->  	if (record->type & ARM_SPE_REMOTE_ACCESS)
-> @@ -446,7 +466,7 @@ static int arm_spe_sample(struct arm_spe_queue *speq)
->  	u64 data_src;
->  	int err;
->  
-> -	data_src = arm_spe__synth_data_source(record);
-> +	data_src = arm_spe__synth_data_source(record, spe->midr);
->  
->  	if (spe->sample_flc) {
->  		if (record->type & ARM_SPE_L1D_MISS) {
-> @@ -796,6 +816,10 @@ static int arm_spe_process_event(struct perf_session *session,
->  	u64 timestamp;
->  	struct arm_spe *spe = container_of(session->auxtrace,
->  			struct arm_spe, auxtrace);
-> +	const char *cpuid = perf_env__cpuid(session->evlist->env);
-> +	u64 midr = strtol(cpuid, NULL, 16);
-> +
-> +	spe->midr = midr;
->  
->  	if (dump_trace)
->  		return 0;
+I'd prefer we don't define the "shifts" for EPT (or PTE) bits, they really shouldn't
+be used as doing things like test_and_clear_bit() via a shift value can generate
+unnecessary lock instructions.  arch/x86/kvm/mmu.h could use a bit of spring cleaning
+in this regard.
+
+> +#define VMX_EPT_ACCESS_BIT			(1ull << VMX_EPT_ACCESS_SHIFT)
+>  #define VMX_EPT_DIRTY_BIT			(1ull << 9)
+>  #define VMX_EPT_RWX_MASK                        (VMX_EPT_READABLE_MASK |       \
+>  						 VMX_EPT_WRITABLE_MASK |       \
+> -- 
+> 2.35.0.rc0.227.g00780c9af4-goog
 > 

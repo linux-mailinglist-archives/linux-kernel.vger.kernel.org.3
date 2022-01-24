@@ -2,76 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2137C497DD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37944497DDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237366AbiAXLV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 06:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
+        id S237413AbiAXLWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 06:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237265AbiAXLVY (ORCPT
+        with ESMTP id S237370AbiAXLWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 06:21:24 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5929DC06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:21:24 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id g11so14393340qvu.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:21:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=17Nff13ZduB4cT7crgR0AD2g9NS5kSKWAjyqUQuJZQc=;
-        b=bSW/E7RVU/yIlr8nXESRkNWKtstsg3fowr71qQO0RDq35EqADUdZ6YAefi48BMot8O
-         9xYmKfNh1xORX2TCH+Ow8vg/8FgzWrASg8axB9SEWBnZLrB0IuI5A2J+6fB8z+leSxXB
-         LZkXLaH6jcGnA8hbYyZfUYIA3h+CUq4hzZ6FcXuAnF2tVrhgi3SZJo3NnG2rPsTHarwo
-         hp5zKipgPIeLJ/4Woa8YC999jaAvb+5j3Qj7nuIvi/Z4udF1pk4dIiED6jUpURbmaIIZ
-         uZ9UgW4R9G/1HoInXT+fC+0c0dDYhtwyQknG9FNptLld/joXssTiGfAhPOWVP9YAe+Vm
-         kOeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=17Nff13ZduB4cT7crgR0AD2g9NS5kSKWAjyqUQuJZQc=;
-        b=dqfRHK+JOpV25cB66qiE28HU1NLSFB1tI3ntRI2jySpA8yVf4x9/lWPpXONUP3ict6
-         CbAAKyIqamY6bXwArT2Xew5QzQmsQ2h5/mb99RPpoifGAZUAiU0pFuJlsLmr0RxCVi8N
-         gXJIzfjgyl2Q5OMVPM/mPqM9aakpuNooNR4CQ5TpQyavEq9JguDnttAn3QhATsjFZq9X
-         tyyyygBvjEb0Oac5YFgSCQw5SiYhXMnFgc8MZvg5AEkfXM2XXgbuFg9fRUjmaCaD1VlL
-         UtBE4ievC+qx+kZ2bJdg1hAA4CWA+zB0yTaj4qyJBKHIeO5aCBepWaDfNrk6Hpf7l6Sh
-         YEYg==
-X-Gm-Message-State: AOAM532SzUUKBsZ1VNmeIjv8gQFRotqW8ZY4koiOVDT+o/Val5AkvhTp
-        uZBQNaNzDtePDQQrGLgVs4G08mqG/bg84gabLlA=
-X-Google-Smtp-Source: ABdhPJxrYxpbUoSMmMmGtO2O6vXt7KmQXn9Od9l6NobHwhdR51/AqEnUUbXR+Q+l43o8+WH0GnG1zN38kfBNVuY9uRY=
-X-Received: by 2002:a05:6214:240a:: with SMTP id fv10mr287235qvb.50.1643023283370;
- Mon, 24 Jan 2022 03:21:23 -0800 (PST)
-MIME-Version: 1.0
-Sender: danielekeh51@gmail.com
-Received: by 2002:a05:6214:250d:0:0:0:0 with HTTP; Mon, 24 Jan 2022 03:21:22
- -0800 (PST)
-From:   Sophia Erick Lucas <sdltdkggl3455@gmail.com>
-Date:   Mon, 24 Jan 2022 12:21:22 +0100
-X-Google-Sender-Auth: WzM1fVF4Y4SmxcV8ytlsuQHY2kY
-Message-ID: <CAFF_m1Q=gMcX2P+Ou9WJQeyK-TbpybZ=tSp727b-P+w8NbP61Q@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 24 Jan 2022 06:22:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269D6C06173D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:22:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8144601B6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EAC4C340E4;
+        Mon, 24 Jan 2022 11:22:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643023365;
+        bh=VyxG/pwigPCS1qtw6sFfWpjbd3AUsqzfq85f5XpVJPQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pmFQjW6p+07glUnG9xEvwNEf+uCjFCDiE1T6IqmluPemYBfL1eWRr389FQCX1B3yB
+         jvyimsSo9JRz6TXCqLzxM5KrkmLy7E0fEXUB6xsWPIugBx4sD1TlcEOHDqEeUDcIb9
+         /EpCzcOtcP4fo1oC2Lfv+nDnzmhfXlSKmMaoTntedv8oYLGIwzKOxUnb0X9AENR5Zt
+         Pa3NZ6FORyx9Op/G/yUyxcKihbzxCyz5vnr0w22IwuNoi0huAdmF3JkdThNCO+C4gu
+         N9VlevOlUESsFxLSdCIaWHtxdv+r/Di3yBhT2lcMV+sVxHcN365/77O/5Vh+Fh7Igj
+         8EpEC+RbH2/eA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nBxQo-002Mnd-Ti; Mon, 24 Jan 2022 11:22:42 +0000
+Date:   Mon, 24 Jan 2022 11:22:42 +0000
+Message-ID: <87bl018jjx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        chenxiang <chenxiang66@hisilicon.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuqi (BA)" <liuqi115@huawei.com>
+Subject: Re: PCI MSI issue for maxcpus=1
+In-Reply-To: <5f529b4e-1f6c-5a7d-236c-09ebe3a7db29@huawei.com>
+References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
+        <87a6g8vp8k.wl-maz@kernel.org>
+        <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
+        <87v8yjyjc0.wl-maz@kernel.org>
+        <87k0ey9122.wl-maz@kernel.org>
+        <5f529b4e-1f6c-5a7d-236c-09ebe3a7db29@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: john.garry@huawei.com, tglx@linutronix.de, chenxiang66@hisilicon.com, shameerali.kolothum.thodi@huawei.com, linux-kernel@vger.kernel.org, liuqi115@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-May the peace of God be with you ,
+On Mon, 17 Jan 2022 11:59:58 +0000,
+John Garry <john.garry@huawei.com> wrote:
+> 
+> On 17/01/2022 09:14, Marc Zyngier wrote:
+> >> I guess that for managed interrupts, it shouldn't matter, as these
+> >> interrupts should only be used when the relevant CPUs come online.
+> >> 
+> >> Would something like below help? Totally untested, as I don't have a
+> >> Multi-MSI capable device that I can plug in a GICv3 system (maybe I
+> >> should teach that to a virtio device...).
+> 
+> JFYI, NVMe PCI uses the same API (pci_alloc_irq_vectors_affinity()),
+> but does not suffer from this issue - for maxcpus=1 the driver looks
+> to only want 1x vector
+> 
+> > Actually, if the CPU online status doesn't matter for managed affinity
+> > interrupts, then the correct fix is this:
+> > 
+> > diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> > index d25b7a864bbb..af4e72a6be63 100644
+> > --- a/drivers/irqchip/irq-gic-v3-its.c
+> > +++ b/drivers/irqchip/irq-gic-v3-its.c
+> > @@ -1624,7 +1624,7 @@ static int its_select_cpu(struct irq_data *d,
+> >     		cpu = cpumask_pick_least_loaded(d, tmpmask);
+> >   	} else {
+> > -		cpumask_and(tmpmask, irq_data_get_affinity_mask(d), cpu_online_mask);
+> > +		cpumask_copy(tmpmask, irq_data_get_affinity_mask(d));
+> >     		/* If we cannot cross sockets, limit the search to
+> > that node */
+> >   		if ((its_dev->its->flags & ITS_FLAGS_WORKAROUND_CAVIUM_23144) &&
+> 
+> That produces a warn:
+> 
+> [ 7.833025] ------------[ cut here ]------------
+> [ 7.837634] WARNING: CPU: 0 PID: 44 at
+> drivers/irqchip/irq-gic-v3-its.c:298 valid_col+0x14/0x24
+> [ 7.846324] Modules linked in:
+> [ 7.849368] CPU: 0 PID: 44 Comm: kworker/0:3 Not tainted 5.16.0-dirty #119
+> [ 7.856230] Hardware name: Huawei D06 /D06, BIOS Hisilicon D06 UEFI
+> RC0 - V1.16.01 03/15/2019
+> [ 7.864740] Workqueue: events work_for_cpu_fn
+> [ 7.869088] pstate: 804000c9 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [ 7.876037] pc : valid_col+0x14/0x24
+> [ 7.879600] lr : its_build_mapti_cmd+0x84/0x90
 
-It is my pleasure to communicate with you, I know that this message
-will be a surprise to you my name is Mrs. Sophia Erick, I am diagnosed
-with ovarian cancer which my doctor have confirmed that I have only
-some weeks to live so I have decided you handover the sum of($
-11,000,000.00, Eleven Million Dollars) through I decided handover the
-money in my account to you for help of the orphanage homes and the
-needy once
+Ah, of course. the CPU hasn't booted yet, so its collection isn't
+mapped. I was hoping that the core code would keep the interrupt in
+shutdown state, but it doesn't seem to be the case...
 
-Please   kindly reply me here as soon as possible to enable me give
-you more information but before handing over my details to you please
-assure me that you will only take 30%  of the money and share the rest
-to the poor orphanage home and the needy once, thank you am waiting to
-hear from you
+> Apart from this, I assume that if another cpu comes online later in
+> the affinity mask I would figure that we want to target the irq to
+> that cpu (which I think we would not do here).
 
-Mrs Sophia Erick.
+That's probably also something that should come from core code, as
+we're not really in a position to decide this in the ITS driver.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

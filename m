@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE49C498A5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BDF498E8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345177AbiAXTCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
+        id S1350456AbiAXTms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344675AbiAXS6y (ORCPT
+        with ESMTP id S1346657AbiAXTb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:58:54 -0500
+        Mon, 24 Jan 2022 14:31:57 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2238BC0613B0;
-        Mon, 24 Jan 2022 10:56:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23859C0604D0;
+        Mon, 24 Jan 2022 11:15:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B58D161537;
-        Mon, 24 Jan 2022 18:56:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855B4C340E7;
-        Mon, 24 Jan 2022 18:56:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B546F60010;
+        Mon, 24 Jan 2022 19:15:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0216C340E5;
+        Mon, 24 Jan 2022 19:15:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050565;
-        bh=4e2c9QG+xOFsS+hz96NS9KY9zF5wK4/cpjzUua0tK1o=;
+        s=korg; t=1643051711;
+        bh=5gpMEpfmr3TqHNa/BGaMeGbq5ejMLPM/MNPnSfuyYV4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ik2KZ1iis7RtIkhJPz2AOcM3B0twnC5ETw2w5YUcURGq1DtVARtmAZHzD2blJ7Gsx
-         HKJ/wsf1koAlRWmstqTVnPDYzNZYNlEgFHzNx3NNdKyZczpiNuU3A8S/7yQIXxyKXg
-         xDI8F0CPKyHWWAy7ubZfWZ7vbSL9mR8Rq7iyRMTg=
+        b=1Rt6/596G5jbbGnSX/zR+nNC+lNJjGm+pjNSxVFVt62KwlVhBZlxDvhSytQe3WQTK
+         xc2aaJtnzAyjaaBUBdlNE6+y/mRFIogrx0p+s25+slB52aQl6FswMGXGfntU0keoaC
+         rNditeh8DoqvJZ7FzE8w/UpLgQpxJ7ggVRAUO+hg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        =?UTF-8?q?D=C3=A1vid=20Bolvansk=C3=BD?= <david.bolvansky@gmail.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>
-Subject: [PATCH 4.9 010/157] drm/i915: Avoid bitwise vs logical OR warning in snb_wm_latency_quirk()
+        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>, Amish Chana <amish@3g.co.za>
+Subject: [PATCH 4.19 062/239] netfilter: bridge: add support for pppoe filtering
 Date:   Mon, 24 Jan 2022 19:41:40 +0100
-Message-Id: <20220124183933.112710894@linuxfoundation.org>
+Message-Id: <20220124183945.109568268@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,52 +49,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Florian Westphal <fw@strlen.de>
 
-commit 2e70570656adfe1c5d9a29940faa348d5f132199 upstream.
+[ Upstream commit 28b78ecffea8078d81466b2e01bb5a154509f1ba ]
 
-A new warning in clang points out a place in this file where a bitwise
-OR is being used with boolean types:
+This makes 'bridge-nf-filter-pppoe-tagged' sysctl work for
+bridged traffic.
 
-drivers/gpu/drm/i915/intel_pm.c:3066:12: warning: use of bitwise '|' with boolean operands [-Wbitwise-instead-of-logical]
-        changed = ilk_increase_wm_latency(dev_priv, dev_priv->wm.pri_latency, 12) |
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Looking at the original commit it doesn't appear this ever worked:
 
-This construct is intentional, as it allows every one of the calls to
-ilk_increase_wm_latency() to occur (instead of short circuiting with
-logical OR) while still caring about the result of each call.
+ static unsigned int br_nf_post_routing(unsigned int hook, struct sk_buff **pskb,
+[..]
+        if (skb->protocol == htons(ETH_P_8021Q)) {
+                skb_pull(skb, VLAN_HLEN);
+                skb->network_header += VLAN_HLEN;
++       } else if (skb->protocol == htons(ETH_P_PPP_SES)) {
++               skb_pull(skb, PPPOE_SES_HLEN);
++               skb->network_header += PPPOE_SES_HLEN;
+        }
+ [..]
+	NF_HOOK(... POST_ROUTING, ...)
 
-To make this clearer to the compiler, use the '|=' operator to assign
-the result of each ilk_increase_wm_latency() call to changed, which
-keeps the meaning of the code the same but makes it obvious that every
-one of these calls is expected to happen.
+... but the adjusted offsets are never restored.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1473
-Reported-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Suggested-by: Dávid Bolvanský <david.bolvansky@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211014211916.3550122-1-nathan@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The alternative would be to rip this code out for good,
+but otoh we'd have to keep this anyway for the vlan handling
+(which works because vlan tag info is in the skb, not the packet
+ payload).
+
+Reported-and-tested-by: Amish Chana <amish@3g.co.za>
+Fixes: 516299d2f5b6f97 ("[NETFILTER]: bridge-nf: filter bridged IPv4/IPv6 encapsulated in pppoe traffic")
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/bridge/br_netfilter_hooks.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -2274,9 +2274,9 @@ static void snb_wm_latency_quirk(struct
- 	 * The BIOS provided WM memory latency values are often
- 	 * inadequate for high resolution displays. Adjust them.
- 	 */
--	changed = ilk_increase_wm_latency(dev_priv, dev_priv->wm.pri_latency, 12) |
--		ilk_increase_wm_latency(dev_priv, dev_priv->wm.spr_latency, 12) |
--		ilk_increase_wm_latency(dev_priv, dev_priv->wm.cur_latency, 12);
-+	changed = ilk_increase_wm_latency(dev_priv, dev_priv->wm.pri_latency, 12);
-+	changed |= ilk_increase_wm_latency(dev_priv, dev_priv->wm.spr_latency, 12);
-+	changed |= ilk_increase_wm_latency(dev_priv, dev_priv->wm.cur_latency, 12);
+diff --git a/net/bridge/br_netfilter_hooks.c b/net/bridge/br_netfilter_hooks.c
+index c5380c6baf2e7..4b9d1d6bbf6f9 100644
+--- a/net/bridge/br_netfilter_hooks.c
++++ b/net/bridge/br_netfilter_hooks.c
+@@ -727,6 +727,9 @@ static int br_nf_dev_queue_xmit(struct net *net, struct sock *sk, struct sk_buff
+ 	if (nf_bridge->frag_max_size && nf_bridge->frag_max_size < mtu)
+ 		mtu = nf_bridge->frag_max_size;
  
- 	if (!changed)
- 		return;
++	nf_bridge_update_protocol(skb);
++	nf_bridge_push_encap_header(skb);
++
+ 	if (skb_is_gso(skb) || skb->len + mtu_reserved <= mtu) {
+ 		nf_bridge_info_free(skb);
+ 		return br_dev_queue_push_xmit(net, sk, skb);
+@@ -744,8 +747,6 @@ static int br_nf_dev_queue_xmit(struct net *net, struct sock *sk, struct sk_buff
+ 
+ 		IPCB(skb)->frag_max_size = nf_bridge->frag_max_size;
+ 
+-		nf_bridge_update_protocol(skb);
+-
+ 		data = this_cpu_ptr(&brnf_frag_data_storage);
+ 
+ 		data->vlan_tci = skb->vlan_tci;
+@@ -768,8 +769,6 @@ static int br_nf_dev_queue_xmit(struct net *net, struct sock *sk, struct sk_buff
+ 
+ 		IP6CB(skb)->frag_max_size = nf_bridge->frag_max_size;
+ 
+-		nf_bridge_update_protocol(skb);
+-
+ 		data = this_cpu_ptr(&brnf_frag_data_storage);
+ 		data->encap_size = nf_bridge_encap_header_len(skb);
+ 		data->size = ETH_HLEN + data->encap_size;
+-- 
+2.34.1
+
 
 

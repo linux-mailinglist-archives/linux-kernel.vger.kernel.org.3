@@ -2,259 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD97498703
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4FE49870E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244693AbiAXRg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:36:56 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:43804 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235334AbiAXRgy (ORCPT
+        id S244644AbiAXRiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:38:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241578AbiAXRiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:36:54 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 78FF21F461;
-        Mon, 24 Jan 2022 17:36:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643045813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TeUyB/stdDyhMS5JgA+yJwWxJq83TqkT8J8yugOGVb8=;
-        b=usRWu42pulbSgSGZ7TgqxzJ75vdlAC2VpC4qJTRM8vwTH1LFDkT+13DNn9EIjrqPKwc/0I
-        uYCr5x9LmLp309jntGNCJeZJeGH5fORMSQEMn/6kxSnwDNP18cC+Xs+6/TDmkZ3t7ce7gt
-        aRlO4EeyAnUS7vu/QB9GI7zw1DStpQk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643045813;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TeUyB/stdDyhMS5JgA+yJwWxJq83TqkT8J8yugOGVb8=;
-        b=iG4l1hud7YFGrE/zjYbhrpv78/SQcZbvNGXV+Gy4yrWE8zVPWWNI6d6ghigBlRj+elV6Vz
-        TwdvBv5eyUb4dfCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B3AA213C44;
-        Mon, 24 Jan 2022 17:36:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 54eJKbTj7mGdZAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 24 Jan 2022 17:36:52 +0000
-Date:   Mon, 24 Jan 2022 18:36:51 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
-        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
-        <Nehal-bakulchandra.Shah@amd.com>, <Basavaraj.Natikar@amd.com>,
-        <Shyam-sundar.S-k@amd.com>, <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v3 3/4] Watchdog: sp5100_tco: Add initialization using
- EFCH MMIO
-Message-ID: <20220124183651.62d5a97d@endymion>
-In-Reply-To: <20220118202234.410555-4-terry.bowman@amd.com>
-References: <20220118202234.410555-1-terry.bowman@amd.com>
-        <20220118202234.410555-4-terry.bowman@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Mon, 24 Jan 2022 12:38:10 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1EFC06173D;
+        Mon, 24 Jan 2022 09:38:10 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id y84so4062739iof.0;
+        Mon, 24 Jan 2022 09:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9PC3NeMELC1XD6IFEvl0tImz7mUzi6DrIvhNgtCXheg=;
+        b=r3W2o3FbK8Po9p5t9DKi/hM9uqDYDGKCZAI1sHFgfyGCY4wwhyY98OXAuMF6IdpkZb
+         c/rGYTdAPqbfzZMwr0XyNrlMnlGcWLc4gz44291eU8oERgzhJg5YyFWQ2MsBRSQV9NqI
+         YvgTo69DQeTu17hTODXR9xxiuw9j2iE1Rqq3AI3xm3b/lGWCXIrrMmkF6pVkIM8DnOoA
+         /xOJeIVot2b74mIishr1uty9wkFBQ8MNphJrpakA14QRl6MCgygV6kKmvSr1AaD8mVPm
+         ILUVGnzEomtWsL6yreWjWfZOAuFFTyBZUXIwEOeVAMlj+h0KorsJijDssRichvSERbtn
+         Drtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9PC3NeMELC1XD6IFEvl0tImz7mUzi6DrIvhNgtCXheg=;
+        b=JjGA8i5ZocSBkzMAB08G1KaFWAF6jHHleGbeBq3KtPYDAd3adZV3l46eJYpt5ErID6
+         /S8Hqh/TwxF7OyMHPgaKuV5jzvEskSH0qERaDTsb1/AETVf1WGySaCURQoKNnUxIw2zL
+         odjcS/omXq6npk1V93bDJv6dMAG+0U1VpoLtLtmgw0ht+CrFbdwvwmL5/kRE8AWD2LaG
+         +Y3ghEEOrsIn2KTsH60Pp6tnq41qlmxrChcBMEvpOHZ3gsL6aXV4ZPU5EBTTfo2xOply
+         1GOviSNvv8slp1WGWAm34ENeIFN18DimYKG5DQ8hLhC9RlcbdNzmtXPBnpIbdWQgXm6k
+         kX8w==
+X-Gm-Message-State: AOAM531eI5IKadKjMLMP5GgYgRZL5e3GB/RBIxRcTwbsjbf1mHcaW+52
+        9OO8tS7L5wESdXEYOgTcL1dueLYShJroGpEqv0lGRLkCjMo=
+X-Google-Smtp-Source: ABdhPJxqyiT0PPFpA0fk5ZVw2UJp+Mt7/NILaDDSxDYChAcP9uwMjItN1NgZ6EKo9iCRfF7hQBQ1H8jJ8B4YIwuKyNo=
+X-Received: by 2002:a05:6638:32a5:: with SMTP id f37mr7394048jav.208.1643045890072;
+ Mon, 24 Jan 2022 09:38:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
+In-Reply-To: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 24 Jan 2022 09:37:59 -0800
+Message-ID: <CANcMJZA16b5gT++73a8hjA=6OeLsPLQM-X+ps3kEsYHVyariGg@mail.gmail.com>
+Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
+To:     Kelly Rossmoyer <krossmo@google.com>,
+        Zichar Zhang <zichar.zhang@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Vijay Nayak <nayakvij@google.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Terry,
+On Tue, Jan 11, 2022 at 5:06 AM Kelly Rossmoyer <krossmo@google.com> wrote:
+>
+> # Introduction
+>
+> To aid optimization, troubleshooting, and attribution of battery life, the
+> Android kernel currently includes a set of patches which provide enhanced
+> visibility into kernel suspend/resume/abort behaviors.  The capabilities
+> and implementation of this feature have evolved significantly since an
+> unsuccessful attempt to upstream the original code
+> (https://lkml.org/lkml/2014/3/10/716), and we would like to (re)start a
+> conversation about upstreaming, starting with the central question: is
+> there support for upstreaming this set of features?
+>
+> # Motivation
+>
+> Of the many factors influencing battery life on Linux-powered mobile
+> devices, kernel suspend tends to be amongst the most impactful.  Maximizing
+> time spent in suspend and minimizing the frequency of net-negative suspend
+> cycles are both important contributors to battery life optimization.  But
+> enabling that optimization - and troubleshooting when things go wrong -
+> requires more observability of suspend/resume/abort behavior than Linux
+> currently provides.  While mechanisms like `/sys/power/pm_wakeup_irq` and
+> wakeup_source stats are useful, they are incomplete and scattered.  The
+> Android kernel wakeup reason patches implement significant improvements in
+> that area.
+>
+> # Features
+>
+> As of today, the active set of patches surface the following
+> suspend-related data:
+>
+> * wakeup IRQs, including:
+>    * multiple IRQs if more than one is pending during resume flow
+>    * unmapped HW IRQs (wakeup-capable in HW) that should not be
+>      occurring
+>    * misconfigured IRQs (e.g. both enable_irq_wake() and
+>      IRQF_NO_SUSPEND)
+>    * threaded IRQs (not just the parent chip's IRQ)
+>
+> * non-IRQ wakeups, including:
+>    * wakeups caused by an IRQ that was consumed by lower-level SW
+>    * wakeups from SOC architecture that don't manifest as IRQs
+>
+> * abort reasons, including:
+>    * wakeup_source activity
+>    * failure to freeze userspace
+>    * failure to suspend devices
+>    * failed syscore_suspend callback
+>
+> * durations from the most recent cycle, including:
+>    * time spent doing suspend/resume work
+>    * time spent in suspend
+>
+> In addition to battery life optimization and troubleshooting, some of these
+> capabilities also lay the groundwork for efforts around improving
+> attribution of wakeups/aborts (e.g. to specific processes, device features,
+> external devices, etc).
+>
+> # Shortcomings
+>
+> While the core implementation (see below) is relatively straightforward and
+> localized, calls into that core are somewhat widely spread in order to
+> capture the breadth of events of interest.  The pervasiveness of those
+> hooks is clearly an area where improvement would be beneficial, especially
+> if a cleaner solution preserved equivalent capabilities.
+>
+> # Existing Code
+>
+> As a reference for how Android currently implements the core code for these
+> features (which would need a bit of work before submission even if all
+> features were included), see the following link:
+>
+> https://android.googlesource.com/kernel/common/+/refs/heads/android-mainline/kernel/power/wakeup_reason.c
+>
 
-On Tue, 18 Jan 2022 14:22:33 -0600, Terry Bowman wrote:
-> cd6h/cd7h port I/O can be disabled on recent AMD hardware. Read
-> accesses to disabled cd6h/cd7h port I/O will return F's and written
-> data is dropped. It is recommended to replace the cd6h/cd7h
-> port I/O with MMIO.
-> 
-> Co-developed-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> To: Guenter Roeck <linux@roeck-us.net>
-> To: linux-watchdog@vger.kernel.org
-> To: Jean Delvare <jdelvare@suse.com>
-> To: linux-i2c@vger.kernel.org
-> To: Wolfram Sang <wsa@kernel.org>
-> To: Andy Shevchenko <andy.shevchenko@gmail.com>
-> To: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Robert Richter <rrichter@amd.com>
-> Cc: Thomas Lendacky <thomas.lendacky@amd.com>
-> ---
->  drivers/watchdog/sp5100_tco.c | 88 ++++++++++++++++++++++++++++++++++-
->  drivers/watchdog/sp5100_tco.h |  5 ++
->  2 files changed, 92 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
-> index 64ecebd93403..36519a992ca1 100644
-> --- a/drivers/watchdog/sp5100_tco.c
-> +++ b/drivers/watchdog/sp5100_tco.c
-> @@ -49,7 +49,7 @@
->  /* internal variables */
->  
->  enum tco_reg_layout {
-> -	sp5100, sb800, efch
-> +	sp5100, sb800, efch, efch_mmio
->  };
->  
->  struct sp5100_tco {
-> @@ -209,6 +209,8 @@ static void tco_timer_enable(struct sp5100_tco *tco)
->  					  ~EFCH_PM_WATCHDOG_DISABLE,
->  					  EFCH_PM_DECODEEN_SECOND_RES);
->  		break;
-> +	default:
-> +		break;
->  	}
->  }
->  
-> @@ -318,6 +320,87 @@ static int sp5100_tco_timer_init(struct sp5100_tco *tco)
->  	return 0;
->  }
->  
-> +static u8 efch_read_pm_reg8(void __iomem *addr, u8 index)
-> +{
-> +	return readb(addr + index);
-> +}
-> +
-> +static void efch_update_pm_reg8(void __iomem *addr, u8 index, u8 reset, u8 set)
-> +{
-> +	u8 val;
-> +
-> +	val = readb(addr + index);
-> +	val &= reset;
-> +	val |= set;
-> +	writeb(val, addr + index);
-> +}
-> +
-> +static void tco_timer_enable_mmio(void __iomem *addr)
-> +{
-> +	efch_update_pm_reg8(addr, EFCH_PM_DECODEEN3,
-> +			    ~EFCH_PM_WATCHDOG_DISABLE,
-> +			    EFCH_PM_DECODEEN_SECOND_RES);
-> +}
-> +
-> +static int sp5100_tco_setupdevice_mmio(struct device *dev,
-> +				       struct watchdog_device *wdd)
-> +{
-> +	struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
-> +	const char *dev_name = SB800_DEVNAME;
-> +	u32 mmio_addr = 0, alt_mmio_addr = 0;
-> +	struct resource *res;
-> +	void __iomem *addr;
-> +	int ret;
-> +
-> +	res = request_mem_region(EFCH_PM_ACPI_MMIO_PM_ADDR,
-> +				 EFCH_PM_ACPI_MMIO_PM_SIZE,
-> +				 "sp5100_tco");
-> +
-> +	if (!res) {
-> +		dev_err(dev,
-> +			"SMB base address memory region 0x%x already in use.\n",
+Hey Kelly!
+  So Zichar (added to the thread here) has been working for a little
+while on his own approach to upstream a simplified version of the
+wakeup_reason functionality. He's just gotten it to a place where it
+can be shared, so I wanted to pull him in so he could reply with his
+proposal.
 
-SMB -> SMBus
-
-> +			EFCH_PM_ACPI_MMIO_PM_ADDR);
-> +		return -EBUSY;
-> +	}
-> +
-> +	addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR,
-> +		       EFCH_PM_ACPI_MMIO_PM_SIZE);
-> +	if (!addr) {
-> +		release_resource(res);
-> +		dev_err(dev, "SMB base address mapping failed.\n");
-
-SMB -> SMBus
-
-> +		return -ENOMEM;
-> +	}
-> +
-
-A short comment saying what the next command is doing would be
-appreciated.
-
-> +	if (!(efch_read_pm_reg8(addr, EFCH_PM_DECODEEN) &
-> +	      EFCH_PM_DECODEEN_WDT_TMREN)) {
-
-I find such splits hard to read. If checkpatch complains when you don't
-split it (but I think it no longer does, right?) then just introduce a
-local variable to store the register value. Same for the 2 occurrences
-below.
-
-> +		efch_update_pm_reg8(addr, EFCH_PM_DECODEEN,
-> +				    0xff,
-> +				    EFCH_PM_DECODEEN_WDT_TMREN);
-
-Easily fits in one fewer line.
-
-> +	}
-> +
-> +	/* Determine MMIO base address */
-> +	if (efch_read_pm_reg8(addr, EFCH_PM_DECODEEN) &
-> +	    EFCH_PM_DECODEEN_WDT_TMREN)
-> +		mmio_addr = EFCH_PM_WDT_ADDR;
-> +
-> +	/* Determine alternate MMIO base address */
-> +	if (efch_read_pm_reg8(addr, EFCH_PM_ISACONTROL) &
-> +	    EFCH_PM_ISACONTROL_MMIOEN)
-> +		alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
-> +			EFCH_PM_ACPI_MMIO_WDT_OFFSET;
-> +
-> +	ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
-> +	if (!ret) {
-> +		tco_timer_enable_mmio(addr);
-> +		ret = sp5100_tco_timer_init(tco);
-> +	}
-> +
-> +	iounmap(addr);
-> +	release_resource(res);
-> +
-> +	return ret;
-> +}
-> +
->  static int sp5100_tco_setupdevice(struct device *dev,
->  				  struct watchdog_device *wdd)
->  {
-> @@ -327,6 +410,9 @@ static int sp5100_tco_setupdevice(struct device *dev,
->  	u32 alt_mmio_addr = 0;
->  	int ret;
->  
-> +	if (tco->tco_reg_layout == efch_mmio)
-> +		return sp5100_tco_setupdevice_mmio(dev, wdd);
-> +
->  	/* Request the IO ports used by this driver */
->  	if (!request_muxed_region(SP5100_IO_PM_INDEX_REG,
->  				  SP5100_PM_IOPORTS_SIZE, "sp5100_tco")) {
-> diff --git a/drivers/watchdog/sp5100_tco.h b/drivers/watchdog/sp5100_tco.h
-> index adf015aa4126..2df8f8b2c55b 100644
-> --- a/drivers/watchdog/sp5100_tco.h
-> +++ b/drivers/watchdog/sp5100_tco.h
-> @@ -83,3 +83,8 @@
->  
->  #define EFCH_PM_ACPI_MMIO_ADDR		0xfed80000
->  #define EFCH_PM_ACPI_MMIO_WDT_OFFSET	0x00000b00
-> +#define EFCH_PM_ACPI_MMIO_PM_OFFSET	0x00000300
-> +
-> +#define EFCH_PM_ACPI_MMIO_PM_ADDR	(EFCH_PM_ACPI_MMIO_ADDR +	\
-> +					 EFCH_PM_ACPI_MMIO_PM_OFFSET)
-> +#define EFCH_PM_ACPI_MMIO_PM_SIZE       8
-
-Other than these minor details, patch looks good to me, thanks.
-
-Tested-by: Jean Delvare <jdelvare@suse.de>
-
--- 
-Jean Delvare
-SUSE L3 Support
+thanks
+-john

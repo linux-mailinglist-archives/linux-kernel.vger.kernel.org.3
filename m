@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E1049993F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C36499875
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352136AbiAXVeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:34:16 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50862 "EHLO
+        id S1452476AbiAXVZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:25:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50964 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444150AbiAXVAI (ORCPT
+        with ESMTP id S1444177AbiAXVAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:00:08 -0500
+        Mon, 24 Jan 2022 16:00:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6646C611DA;
-        Mon, 24 Jan 2022 21:00:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24851C340E5;
-        Mon, 24 Jan 2022 21:00:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8690660916;
+        Mon, 24 Jan 2022 21:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4FBC340E5;
+        Mon, 24 Jan 2022 21:00:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058005;
-        bh=kucaGnne7cqZQPDqTUhLgDG6belnp+ejA+u9CyOrx/g=;
+        s=korg; t=1643058012;
+        bh=bTwDCjyp1FfNlpPdJ01CRAf9JzQtnnaDyzG6MorJD20=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HVb/01x37fk59ltfTuQxIqFiLS9sVvKG/bmE8fnFPNTGrtIEJzJYMvFcf7Joz73f2
-         Djfpnfm2Pir4WaMP4IXD35emQcxy0uEoIPtHF5AvqOjwRz8IGv6yBijNxxgv+wO8Xo
-         5VGV+mv1txw3Lwx7yBxkyO7pjmcybFeU22mzETo0=
+        b=XXQIHGeLBZkm7hOdrbkTwjs0R/nYoBsOz1m65fFkyiELlgecuYFYjCmJy89nKcH2j
+         ob7odbtOAdsK9i5FsgaIQ2u0l/tOAUXIMoNfxLhyYufvsPrNZgr6AjlYPgDgoy1M6p
+         juLOGvfQq9H5fQGw2Mghi7QSNaPvI+TurUtRN/Jo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tirthendu Sarkar <tirthendu.sarkar@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0149/1039] selftests/bpf: Fix xdpxceiver failures for no hugepages
-Date:   Mon, 24 Jan 2022 19:32:18 +0100
-Message-Id: <20220124184130.171764698@linuxfoundation.org>
+Subject: [PATCH 5.16 0151/1039] drm/vboxvideo: fix a NULL vs IS_ERR() check
+Date:   Mon, 24 Jan 2022 19:32:20 +0100
+Message-Id: <20220124184130.236313729@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -47,54 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit dd7f091fd22b1dce6c20e8f7769aa068ed88ac6d ]
+[ Upstream commit cebbb5c46d0cb0615fd0c62dea9b44273d0a9780 ]
 
-xsk_configure_umem() needs hugepages to work in unaligned mode. So when
-hugepages are not configured, 'unaligned' tests should be skipped which
-is determined by the helper function hugepages_present(). This function
-erroneously returns true with MAP_NORESERVE flag even when no hugepages
-are configured. The removal of this flag fixes the issue.
+The devm_gen_pool_create() function never returns NULL, it returns
+error pointers.
 
-The test TEST_TYPE_UNALIGNED_INV_DESC also needs to be skipped when
-there are no hugepages. However, this was not skipped as there was no
-check for presence of hugepages and hence was failing. The check to skip
-the test has now been added.
-
-Fixes: a4ba98dd0c69 (selftests: xsk: Add test for unaligned mode)
-Signed-off-by: Tirthendu Sarkar <tirthendu.sarkar@intel.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20211117123613.22288-1-tirthendu.sarkar@intel.com
+Fixes: 4cc9b565454b ("drm/vboxvideo: Use devm_gen_pool_create")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211118111233.GA1147@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/vboxvideo/vbox_main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 6c7cf8aadc792..621342ec30c48 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -1219,7 +1219,7 @@ static bool hugepages_present(struct ifobject *ifobject)
- 	void *bufs;
+diff --git a/drivers/gpu/drm/vboxvideo/vbox_main.c b/drivers/gpu/drm/vboxvideo/vbox_main.c
+index f28779715ccda..c9e8b3a63c621 100644
+--- a/drivers/gpu/drm/vboxvideo/vbox_main.c
++++ b/drivers/gpu/drm/vboxvideo/vbox_main.c
+@@ -127,8 +127,8 @@ int vbox_hw_init(struct vbox_private *vbox)
+ 	/* Create guest-heap mem-pool use 2^4 = 16 byte chunks */
+ 	vbox->guest_pool = devm_gen_pool_create(vbox->ddev.dev, 4, -1,
+ 						"vboxvideo-accel");
+-	if (!vbox->guest_pool)
+-		return -ENOMEM;
++	if (IS_ERR(vbox->guest_pool))
++		return PTR_ERR(vbox->guest_pool);
  
- 	bufs = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
--		    MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE | MAP_HUGETLB, -1, 0);
-+		    MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
- 	if (bufs == MAP_FAILED)
- 		return false;
- 
-@@ -1366,6 +1366,10 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		testapp_invalid_desc(test);
- 		break;
- 	case TEST_TYPE_UNALIGNED_INV_DESC:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
- 		test_spec_set_name(test, "UNALIGNED_INV_DESC");
- 		test->ifobj_tx->umem->unaligned_mode = true;
- 		test->ifobj_rx->umem->unaligned_mode = true;
+ 	ret = gen_pool_add_virt(vbox->guest_pool,
+ 				(unsigned long)vbox->guest_heap,
 -- 
 2.34.1
 

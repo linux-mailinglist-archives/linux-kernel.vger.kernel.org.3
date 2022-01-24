@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FE7498AEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C08E498F31
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238177AbiAXTHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:07:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
+        id S244261AbiAXTvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344602AbiAXTBn (ORCPT
+        with ESMTP id S242936AbiAXTkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:01:43 -0500
+        Mon, 24 Jan 2022 14:40:35 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C7CC0604E0;
-        Mon, 24 Jan 2022 10:58:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9367BC07A962;
+        Mon, 24 Jan 2022 11:19:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C8B9B8121D;
-        Mon, 24 Jan 2022 18:58:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 653D0C340E5;
-        Mon, 24 Jan 2022 18:58:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 502A6B81240;
+        Mon, 24 Jan 2022 19:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7533AC340E5;
+        Mon, 24 Jan 2022 19:19:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050708;
-        bh=tlhxMPv9xAdFHyHVPSocNKb4ygBkd3GToRMLuTLcu/s=;
+        s=korg; t=1643051958;
+        bh=jLeeFf393B8HjgrocufcT+n/GYkXVkQ4rnUo38UVcLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KnsGcz//pomxc8AqcI/omO69Y6PFkbrQ1si37LH5tHJmlEqCFGqQ4t6XZ6XbDR0uw
-         l2jmO4TvrXizLeZvzfFHIL1vZLKX3XHpNXkAR8mpCtmUGxq0K+W8/5a8L3wthhg9nZ
-         f6p0RY6zcWufvI8Sqi5v58blW3zmNi1VsLGqURP0=
+        b=Q5S8QB9mRec7+rWOHhYNpMDWElcLp1ikoTQqktimJGbLJAW9jyrZ/BL3ijKDW/62u
+         eZJnE/zQ+/qeIBCx2TLMrdTQHNyxd3DMDyLj+d7V0szjuAtD8phpjYMe09A+XJEHbw
+         jLJn0nnW7/alzX8t0ItNpb6isT5XUzywPHK4lfBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Suresh Kumar <suresh2514@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Sebastian Gottschall <s.gottschall@dd-wrt.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 088/157] net: bonding: debug: avoid printing debug logs when bond is not notifying peers
+Subject: [PATCH 4.19 140/239] ath10k: Fix tx hanging
 Date:   Mon, 24 Jan 2022 19:42:58 +0100
-Message-Id: <20220124183935.577925109@linuxfoundation.org>
+Message-Id: <20220124183947.558107343@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,66 +50,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suresh Kumar <surkumar@redhat.com>
+From: Sebastian Gottschall <s.gottschall@dd-wrt.com>
 
-[ Upstream commit fee32de284ac277ba434a2d59f8ce46528ff3946 ]
+[ Upstream commit e8a91863eba3966a447d2daa1526082d52b5db2a ]
 
-Currently "bond_should_notify_peers: slave ..." messages are printed whenever
-"bond_should_notify_peers" function is called.
+While running stress tests in roaming scenarios (switching ap's every 5
+seconds, we discovered a issue which leads to tx hangings of exactly 5
+seconds while or after scanning for new accesspoints. We found out that
+this hanging is triggered by ath10k_mac_wait_tx_complete since the
+empty_tx_wq was not wake when the num_tx_pending counter reaches zero.
+To fix this, we simply move the wake_up call to htt_tx_dec_pending,
+since this call was missed on several locations within the ath10k code.
 
-+++
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Received LACPDU on port 1
-Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Rx Machine: Port=1, Last State=6, Curr State=6
-Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): partner sync=1
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-...
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Received LACPDU on port 2
-Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Rx Machine: Port=2, Last State=6, Curr State=6
-Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): partner sync=1
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-+++
-
-This is confusing and can also clutter up debug logs.
-Print logs only when the peer notification happens.
-
-Signed-off-by: Suresh Kumar <suresh2514@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20210505085806.11474-1-s.gottschall@dd-wrt.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/wireless/ath/ath10k/htt_tx.c | 3 +++
+ drivers/net/wireless/ath/ath10k/txrx.c   | 2 --
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 2b721ed392adb..0d9226bdf6614 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -782,14 +782,14 @@ static bool bond_should_notify_peers(struct bonding *bond)
- 	slave = rcu_dereference(bond->curr_active_slave);
- 	rcu_read_unlock();
- 
--	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
--		   slave ? slave->dev->name : "NULL");
--
- 	if (!slave || !bond->send_peer_notif ||
- 	    !netif_carrier_ok(bond->dev) ||
- 	    test_bit(__LINK_STATE_LINKWATCH_PENDING, &slave->dev->state))
- 		return false;
- 
-+	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
-+		   slave ? slave->dev->name : "NULL");
+diff --git a/drivers/net/wireless/ath/ath10k/htt_tx.c b/drivers/net/wireless/ath/ath10k/htt_tx.c
+index fd011bdabb963..3718d4dfc6d60 100644
+--- a/drivers/net/wireless/ath/ath10k/htt_tx.c
++++ b/drivers/net/wireless/ath/ath10k/htt_tx.c
+@@ -158,6 +158,9 @@ void ath10k_htt_tx_dec_pending(struct ath10k_htt *htt)
+ 	htt->num_pending_tx--;
+ 	if (htt->num_pending_tx == htt->max_num_pending_tx - 1)
+ 		ath10k_mac_tx_unlock(htt->ar, ATH10K_TX_PAUSE_Q_FULL);
 +
- 	return true;
++	if (htt->num_pending_tx == 0)
++		wake_up(&htt->empty_tx_wq);
  }
  
+ int ath10k_htt_tx_inc_pending(struct ath10k_htt *htt)
+diff --git a/drivers/net/wireless/ath/ath10k/txrx.c b/drivers/net/wireless/ath/ath10k/txrx.c
+index 6c47e4b6aa6cd..888a8f4aff5d8 100644
+--- a/drivers/net/wireless/ath/ath10k/txrx.c
++++ b/drivers/net/wireless/ath/ath10k/txrx.c
+@@ -91,8 +91,6 @@ int ath10k_txrx_tx_unref(struct ath10k_htt *htt,
+ 
+ 	ath10k_htt_tx_free_msdu_id(htt, tx_done->msdu_id);
+ 	ath10k_htt_tx_dec_pending(htt);
+-	if (htt->num_pending_tx == 0)
+-		wake_up(&htt->empty_tx_wq);
+ 	spin_unlock_bh(&htt->tx_lock);
+ 
+ 	dma_unmap_single(dev, skb_cb->paddr, msdu->len, DMA_TO_DEVICE);
 -- 
 2.34.1
 

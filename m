@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB486497A96
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C766497A99
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 09:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236461AbiAXIrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 03:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S242236AbiAXIs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 03:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236390AbiAXIrv (ORCPT
+        with ESMTP id S242234AbiAXIsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 03:47:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8685BC06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 00:47:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D5E8B80E91
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:47:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8791C340E1;
-        Mon, 24 Jan 2022 08:47:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643014068;
-        bh=HZnUCYDMYPExwgg8l+2jKgG2vC3k8LkS337NzZjY9ow=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VFN/jRr3qc85voQcohH3lFZn4SfTddsIg5JiyZJUafhLLo/hjVpaQgCgt6/hANh2b
-         cVqydYjIyfc1OfVSM/1jNkO4djf+Nnbt3ddigda4dUO6mynA0lqE/IotzoIb9UuDgA
-         n/6D1uqgQ8JgHuWnY5Sqs+pXMhA8jxuqreD1XX1EPL/nf0kAfKcEZs7zcAqfX0BZ0x
-         XaSqHfWE/DV0bHYqyJEC2JHwjJEy8HtuPlgXtovuQOqUTdm26F0PhxGsDe5U31Zm2Y
-         NWIsn70jJBOQCIwu4xh06UBXzyo9J+y4aKM4HCg82xBbOU/QIOFBORXuLVRQ8tH4ET
-         ADBpF4hOJUsdw==
-Message-ID: <280ffeb4-4145-79c6-d8b8-081cab0ba1b0@kernel.org>
-Date:   Mon, 24 Jan 2022 16:47:45 +0800
+        Mon, 24 Jan 2022 03:48:24 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB37C06173B;
+        Mon, 24 Jan 2022 00:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=VZbyWcIRUzokvqgNgSVwmMAL96
+        U+car1lMPlLEYJNySRz/NOk4rcD7FtOJkkU6hwlVgppF05qVN1QiRsXJVgVFgHEUDkDBOJDJP9PKC
+        HtBfYTu0mlzOeSwc2S7frisatyDsADkFgpSPjw4d4J86U0i4F65/u4KESuzOujkmf63ccM3SVf1hd
+        Wv0qGV9OfatCZJksyVh5tu26rXp7NQVjwpoGdwkSeutreWPnu2ZPZ4pnoJj2bhjU+tE1GO6+3QLLT
+        Cma8bA1NKNhZZuRhzGOdl9/49GNPk73wWDET7zh6FZ/2IB3IunqsKcHFhn6xL+Xw6ctkcrjspdrfL
+        BDsu1zqA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nBv1L-002dmD-Ep; Mon, 24 Jan 2022 08:48:15 +0000
+Date:   Mon, 24 Jan 2022 00:48:15 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        David Howells <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/23] MM: introduce ->swap_rw and use it for reads from
+ SWP_FS_OPS swap-space
+Message-ID: <Ye5nz0e54s1I19T7@infradead.org>
+References: <164299573337.26253.7538614611220034049.stgit@noble.brown>
+ <164299611276.26253.13667789323141516970.stgit@noble.brown>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] erofs: avoid unnecessary z_erofs_decompressqueue_work()
- declaration
-Content-Language: en-US
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <20220121091412.86086-1-hsiangkao@linux.alibaba.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220121091412.86086-1-hsiangkao@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164299611276.26253.13667789323141516970.stgit@noble.brown>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/1/21 17:14, Gao Xiang wrote:
-> Just code rearrange. No logic changes.
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Looks good,
 
-Reviewed-by: Chao Yu <chao@kernel.org>
-
-Thanks,
+Reviewed-by: Christoph Hellwig <hch@lst.de>

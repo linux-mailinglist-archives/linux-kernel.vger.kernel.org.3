@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B31E8499DE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4783849A127
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586582AbiAXW05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:26:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S1849823AbiAXX0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390829AbiAXVM6 (ORCPT
+        with ESMTP id S1835925AbiAXWhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:12:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA0BC06E000;
-        Mon, 24 Jan 2022 12:10:16 -0800 (PST)
+        Mon, 24 Jan 2022 17:37:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349ACC05486B;
+        Mon, 24 Jan 2022 12:59:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69219611CD;
-        Mon, 24 Jan 2022 20:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A4FFC340E7;
-        Mon, 24 Jan 2022 20:10:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1A5CB811FB;
+        Mon, 24 Jan 2022 20:59:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA694C340E5;
+        Mon, 24 Jan 2022 20:59:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055015;
-        bh=fdw1b/O5jRA9uMPseswenIy2CXbtFeNmPjVBedmsMlQ=;
+        s=korg; t=1643057984;
+        bh=ZAAVcAfRBcJykvbAOIAdnOcapjFkib2az6P5abi5NX4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=td2SgnJ0OWxhx+8fUUPIAPGyb5LD4SNc7IKWJdA1sL4PWqrYo+yjVY3Si+edSz/Sf
-         2SAFl7DqKF1SP484HOjBxAN7P/KrOAdgqHRotzEWeZrc8pkwbAUBhobPa09/U5oUjT
-         eZ8EC+9VM51IIwg6kFOaHEJYPgh7147y0XgS+JI4=
+        b=b1nelFjewmZ37pP7RyZcGdO/Kbc4U0FVJ2vQ6Z8dSNoGGCtfcqIZ1PCanB8JeUu1v
+         SUKAoqcPVNWuWGusJhJe/hQP49zAfRyAfJM07MmlXNg2kU7xMYq5fwB79s3l5Fi3e0
+         CD0RjJGU9KWsezBns5TL2B38aCOV3HQUkelkHgMQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Han Xu <han.xu@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.15 014/846] mtd: rawnand: gpmi: Remove explicit default gpmi clock setting for i.MX6
-Date:   Mon, 24 Jan 2022 19:32:11 +0100
-Message-Id: <20220124184101.407137179@linuxfoundation.org>
+        Venkateswara Naralasetty <vnaralas@codeaurora.org>,
+        Sven Eckelmann <sven@narfation.org>,
+        Karthikeyan Kathirvel <kathirve@codeaurora.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0143/1039] ath11k: reset RSN/WPA present state for open BSS
+Date:   Mon, 24 Jan 2022 19:32:12 +0100
+Message-Id: <20220124184129.982882234@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,40 +52,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Riedmueller <s.riedmueller@phytec.de>
+From: Karthikeyan Kathirvel <kathirve@codeaurora.org>
 
-commit aa1baa0e6c1aa4872e481dce4fc7fd6f3dd8496b upstream.
+[ Upstream commit 64bc3aa02ae78b1fcb1b850e0eb1f0622002bfaa ]
 
-There is no need to explicitly set the default gpmi clock rate during
-boot for the i.MX 6 since this is done during nand_detect anyway.
+The ath11k driver is caching the information about RSN/WPA IE in the
+configured beacon template. The cached information is used during
+associations to figure out whether 4-way PKT/2-way GTK peer flags need to
+be set or not.
 
-Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
-Cc: stable@vger.kernel.org
-Acked-by: Han Xu <han.xu@nxp.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20211102202022.15551-1-ceggers@arri.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+But the code never cleared the state when no such IE was found. This can
+for example happen when moving from an WPA/RSN to an open setup. The
+(seemingly connected) peer was then not able to communicate over the
+link because the firmware assumed a different (encryption enabled) state
+for the peer.
+
+Tested-on: IPQ6018 hw1.0 AHB WLAN.HK.2.5.0.1-01100-QCAHKSWPL_SILICONZ-1
+
+Fixes: 01e34233c645 ("ath11k: fix wmi peer flags in peer assoc command")
+Cc: Venkateswara Naralasetty <vnaralas@codeaurora.org>
+Reported-by: Sven Eckelmann <sven@narfation.org>
+Signed-off-by: Karthikeyan Kathirvel <kathirve@codeaurora.org>
+[sven@narfation.org: split into separate patches, clean up commit message]
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211115100441.33771-2-sven@narfation.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |    9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/net/wireless/ath/ath11k/mac.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -1054,15 +1054,6 @@ static int gpmi_get_clks(struct gpmi_nan
- 		r->clock[i] = clk;
- 	}
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index cdee7545e876a..9ed7eb09bdb70 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -1137,11 +1137,15 @@ static int ath11k_mac_setup_bcn_tmpl(struct ath11k_vif *arvif)
  
--	if (GPMI_IS_MX6(this))
--		/*
--		 * Set the default value for the gpmi clock.
--		 *
--		 * If you want to use the ONFI nand which is in the
--		 * Synchronous Mode, you should change the clock as you need.
--		 */
--		clk_set_rate(r->clock[0], 22000000);
--
- 	return 0;
+ 	if (cfg80211_find_ie(WLAN_EID_RSN, ies, (skb_tail_pointer(bcn) - ies)))
+ 		arvif->rsnie_present = true;
++	else
++		arvif->rsnie_present = false;
  
- err_clock:
+ 	if (cfg80211_find_vendor_ie(WLAN_OUI_MICROSOFT,
+ 				    WLAN_OUI_TYPE_MICROSOFT_WPA,
+ 				    ies, (skb_tail_pointer(bcn) - ies)))
+ 		arvif->wpaie_present = true;
++	else
++		arvif->wpaie_present = false;
+ 
+ 	ret = ath11k_wmi_bcn_tmpl(ar, arvif->vdev_id, &offs, bcn);
+ 
+-- 
+2.34.1
+
 
 

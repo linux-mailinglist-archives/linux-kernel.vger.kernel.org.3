@@ -2,301 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1732A4978B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 06:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 237924978B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 06:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241489AbiAXFst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 00:48:49 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:44964
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235331AbiAXFss (ORCPT
+        id S235439AbiAXFta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 00:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231765AbiAXFt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 00:48:48 -0500
-Received: from HP-EliteBook-840-G7.. (36-229-235-192.dynamic-ip.hinet.net [36.229.235.192])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id D3E2B40D2E;
-        Mon, 24 Jan 2022 05:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643003327;
-        bh=0mfLOaA0QQIAEmHXcjtr90LdNJaD3sn4R/3ByXK4cRk=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=s/I6OgUhSL1ei3Afecqm7SM5A4sAaghlyIbCXCw1C/qvtdIlZO2JRJt9fH26G3fZv
-         R+frUrivUdJZ80fP4hn2UmzaKgwrUkeo6/qYmWuBZNbIraOaEsaZCRd9Iz9PXD7cGO
-         hnqc/U8uC6DM6JnEqV3gODKgIAUzHLXeckmba3FvPll3lyheyBnS9MP0IObgXMB9xg
-         6U6r6ftEGDcPYtltjWdwwVR1CHljKzNTUJ3B69xNQAUWWsA6nWXigkDkaV3pXy8sxr
-         FMdWap2tVa/u3D7Erdsg4Cs4Dwj8Aq2hIh669VB5ZfNWan1w9izxXU8NVy2DjJT5HJ
-         hmzZQaWClHUfA==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     arnd@arndb.de, gregkh@linuxfoundation.org, ulf.hansson@linaro.org
-Cc:     linux-pm@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Ricky WU <ricky_wu@realtek.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] misc: rtsx: Quiesce rts5249 on system suspend
-Date:   Mon, 24 Jan 2022 13:47:41 +0800
-Message-Id: <20220124054743.1800655-4-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220124054743.1800655-1-kai.heng.feng@canonical.com>
-References: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
- <20220124054743.1800655-1-kai.heng.feng@canonical.com>
+        Mon, 24 Jan 2022 00:49:29 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3881C06173B
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 21:49:28 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id d11so18889614qkj.12
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Jan 2022 21:49:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=+s8wCnWsTVg7vDdn0Dyg2pPBJKBG25qTB45iu3UC1Fc=;
+        b=ON1YYzBxUZso0QvkOnWcpy6lUO6w2Mu7lAKl/5+qtOiWvTjjOsvqO30Qxwajn984hG
+         RnUGZfj0SuShuiXfT92Tb7pzHDDUsZEzdZRD7baAxAHcfHfxMLD0JwWr/1MfbnBjNO7t
+         yETbTtXwufC8QhWhqlPOLb9qjLE2PP+52CDsIgtwIr0sSzMjAeEMn2iSSEG73lTYx7+r
+         8q1BVQAPCLSSy26dTtF6JxYKB9K84eDfJDNv/h9Vmf6ruoS2K8qo0jB4/2PvpEtSLaZZ
+         xpeY96ApmEswcKpgbWOulmTHkefiEBTp9BKYj0HGlIEZ5wg3AlP5356sR4QAyZGEYZs5
+         1Sww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=+s8wCnWsTVg7vDdn0Dyg2pPBJKBG25qTB45iu3UC1Fc=;
+        b=BvcrrsZBxtGvwBDl4j1Mn1pgqcNaW5vm4lfW+I3OPSbl66UP/dUFH4QXcMdbuMzxVi
+         hUl4vvs96NFwCbi2pPZ6/pfRyYtRDXl5ZbWZ9k6epr/sM3dWJdsN+uOE2h77bD35Jk0F
+         zOkwMt14L2HX39CHsJ+1Pi/nILqiN2ieTA5xSpq1BvQbMeqSXPY1JUfkE+AwbIkoSxzU
+         M1b3cwhVYdjJI5+aYCNcHJsQQNl7TKX33UfDMcW7NQOvlRYMdnK465TTWnGnByrUSSYT
+         0pepkoMYpAM6jtmTzKB924MNCf5Nd37R1GAP+9UiemV9/TZ8gJGYQQoviYZhz7lFiwCR
+         db4A==
+X-Gm-Message-State: AOAM533xTWz+kXtvzjzanSWavPkX5MLLWTJ+sdAm/Z2EX/B6WeEqt/vs
+        jnfx/nOtncZxMXYHqw3Plka7hnfzByE=
+X-Google-Smtp-Source: ABdhPJxuvjDBEj1fS9tSqLNgITnYGxe83q9ABmalPFBfMg0lHZy6ZVNI+tfqggXbkVm0A70P/th2Iw==
+X-Received: by 2002:a37:9405:: with SMTP id w5mr2916530qkd.682.1643003367757;
+        Sun, 23 Jan 2022 21:49:27 -0800 (PST)
+Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
+        by smtp.gmail.com with ESMTPSA id t123sm6994416qkh.31.2022.01.23.21.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 21:49:27 -0800 (PST)
+Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
+        by vps.qemfd.net (Postfix) with ESMTP id A47942B1C6;
+        Mon, 24 Jan 2022 00:49:26 -0500 (EST)
+Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
+        id 9E0DB600433; Mon, 24 Jan 2022 00:49:26 -0500 (EST)
+Date:   Mon, 24 Jan 2022 00:49:26 -0500
+From:   nick black <dankamongmen@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-kernel@vger.kernel.org,
+        Thomas Dickey <dickey@invisible-island.net>
+Subject: [PATCH v2] console: answer OSC 10 and 11
+Message-ID: <Ye495ub177QSJxM7@schwarzgerat.orthanc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set more registers in force_power_down callback to avoid S3 wakeup from
-hotplugging cards.
+XTerm and many other terminal emulators implement
+Operating System Commands 10 and 11, allowing the
+default foreground/background to be set and queried.
+Extend the VT control sequence parser to recognize
+and support these queries.
 
-This is originally written by Ricky WU.
+The VT already implements two OSCs, for changing
+and resetting the palette. In doing so (many years
+ago), it broke from the ANSI standard, and did not
+require an ST terminator. Read all about it in
+xterm(1) (see "brokenLinuxOSC"). I have followed this
+grand tradition, and similarly not required ST.
+Note that ST can still be safely sent by a client
+program, as the VT consumes it. Indeed, my Notcurses
+library does exactly this.
 
-Link: https://lore.kernel.org/lkml/c4525b4738f94483b9b8f8571fc80646@realtek.com/
-Cc: Ricky WU <ricky_wu@realtek.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+"Don't VTs always have black backgrounds?" Nope, you
+can change the default background color with any
+number of ANSI sequences, and then use the VT's
+Private CSI "ESC [ 8 ]" to make the current color pair
+the default attributes. Try it at home with, say:
+
+  printf %b '\e[46m' '\e[8]' '\e[H\e[J'
+
+The response follows XTerm's effective lead, using
+%02x/%02x/%02x to format the RGB value, rather than
+the %02x%02x%02x preferred by the preexisting
+P (set palette) OSC. This was done to simplify
+client libraries. Note that the spirit of the law,
+that the reply is a "control sequence of the same
+form which can be used to set", cannot be easily
+honored given the semantics of the Linux private CSI
+sequence. So it goes.
+
+As a result, notcurses-info now properly detects the
+default colors dynamically. Where it used to say:
+
+ no known default fg no known default bg
+
+It now says on boot:
+
+ notcurses 3.0.4 on Linux 5.16.0nlb VT
+ ...
+ default fg 0xaaaaaa default bg 0x000000
+
+and after a change like that above:
+
+ notcurses 3.0.4 on Linux 5.16.0nlb VT
+ ...
+ default fg 0xaaaaaa default bg 0xaa5500
+
+This is necessary to produce readable multicolor text
+while respecting the user's background choice.
+
+Signed-off-by: nick black <dankamongmen@gmail.com>
 ---
-v4:
-v3:
-v2:
- - No change.
+Changes in v2:
+ - Reverse in-kernel BGR to RGB
 
- drivers/misc/cardreader/rtl8411.c  |  2 +-
- drivers/misc/cardreader/rts5209.c  |  2 +-
- drivers/misc/cardreader/rts5228.c  |  2 +-
- drivers/misc/cardreader/rts5229.c  |  2 +-
- drivers/misc/cardreader/rts5249.c  | 31 ++++++++++++++++++++++++++++--
- drivers/misc/cardreader/rts5261.c  |  2 +-
- drivers/misc/cardreader/rtsx_pcr.c | 14 +++++++-------
- drivers/misc/cardreader/rtsx_pcr.h |  1 +
- include/linux/rtsx_pci.h           |  2 +-
- 9 files changed, 43 insertions(+), 15 deletions(-)
+ drivers/tty/vt/vt.c            | 67 ++++++++++++++++++++++++++++------
+ include/linux/console_struct.h |  1 +
+ 2 files changed, 58 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/misc/cardreader/rtl8411.c b/drivers/misc/cardreader/rtl8411.c
-index 4c5621b17a6fb..06457e875a90c 100644
---- a/drivers/misc/cardreader/rtl8411.c
-+++ b/drivers/misc/cardreader/rtl8411.c
-@@ -76,7 +76,7 @@ static void rtl8411b_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 		map_sd_drive(rtl8411b_reg_to_sd30_drive_sel_3v3(reg));
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index f8c87c4d7399..a10629bcaaa1 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -1878,6 +1878,31 @@ int mouse_reporting(void)
+ 	return vc_cons[fg_console].d->vc_report_mouse;
  }
  
--static void rtl8411_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rtl8411_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	rtsx_pci_write_register(pcr, FPDCTL, 0x07, 0x07);
- }
-diff --git a/drivers/misc/cardreader/rts5209.c b/drivers/misc/cardreader/rts5209.c
-index 29f5414072bf1..52b0a476ba51f 100644
---- a/drivers/misc/cardreader/rts5209.c
-+++ b/drivers/misc/cardreader/rts5209.c
-@@ -47,7 +47,7 @@ static void rts5209_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 	}
- }
- 
--static void rts5209_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rts5209_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	rtsx_pci_write_register(pcr, FPDCTL, 0x07, 0x07);
- }
-diff --git a/drivers/misc/cardreader/rts5228.c b/drivers/misc/cardreader/rts5228.c
-index ffc128278613b..ffe3afbf8bfed 100644
---- a/drivers/misc/cardreader/rts5228.c
-+++ b/drivers/misc/cardreader/rts5228.c
-@@ -91,7 +91,7 @@ static int rts5228_optimize_phy(struct rtsx_pcr *pcr)
- 	return rtsx_pci_write_phy_register(pcr, 0x07, 0x8F40);
- }
- 
--static void rts5228_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rts5228_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	/* Set relink_time to 0 */
- 	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
-diff --git a/drivers/misc/cardreader/rts5229.c b/drivers/misc/cardreader/rts5229.c
-index c748eaf1ec1f9..b0edd8006d52f 100644
---- a/drivers/misc/cardreader/rts5229.c
-+++ b/drivers/misc/cardreader/rts5229.c
-@@ -44,7 +44,7 @@ static void rts5229_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 		map_sd_drive(rtsx_reg_to_sd30_drive_sel_3v3(reg));
- }
- 
--static void rts5229_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rts5229_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	rtsx_pci_write_register(pcr, FPDCTL, 0x03, 0x03);
- }
-diff --git a/drivers/misc/cardreader/rts5249.c b/drivers/misc/cardreader/rts5249.c
-index 53f3a1f45c4a7..91d240dd68faa 100644
---- a/drivers/misc/cardreader/rts5249.c
-+++ b/drivers/misc/cardreader/rts5249.c
-@@ -74,7 +74,8 @@ static void rtsx_base_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 	pci_read_config_dword(pdev, PCR_SETTING_REG2, &reg);
- 	pcr_dbg(pcr, "Cfg 0x%x: 0x%x\n", PCR_SETTING_REG2, reg);
- 
--	pcr->rtd3_en = rtsx_reg_to_rtd3_uhsii(reg);
-+	if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A))
-+		pcr->rtd3_en = rtsx_reg_to_rtd3_uhsii(reg);
- 
- 	if (rtsx_check_mmc_support(reg))
- 		pcr->extra_caps |= EXTRA_CAPS_NO_MMC;
-@@ -143,6 +144,27 @@ static int rts5249_init_from_hw(struct rtsx_pcr *pcr)
- 	return 0;
- }
- 
-+static void rts52xa_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
++/* handle the OSC query specified by vc->vc_oscmd. we currently handle only 10
++ * and 11 (default foreground and default background, respectively).
++ */
++static void handle_osc_query(struct tty_struct *tty, const struct vc_data *vc)
 +{
-+	/* Set relink_time to 0 */
-+	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
-+	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 2, MASK_8_BIT_DEF, 0);
-+	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 3,
-+				RELINK_TIME_MASK, 0);
-+
-+	rtsx_pci_write_register(pcr, RTS524A_PM_CTRL3,
-+			D3_DELINK_MODE_EN, D3_DELINK_MODE_EN);
-+
-+	if (!runtime) {
-+		rtsx_pci_write_register(pcr, RTS524A_AUTOLOAD_CFG1,
-+				CD_RESUME_EN_MASK, 0);
-+		rtsx_pci_write_register(pcr, RTS524A_PM_CTRL3, 0x01, 0x00);
-+		rtsx_pci_write_register(pcr, RTS524A_PME_FORCE_CTL, 0x30, 0x20);
++	char buf[20];
++	int len, idx;
++	/* response payload conforms to XTerm: %02x/%02x/%02x for R, G, and B. */
++	switch (vc->vc_oscmd) {
++	case 10: /* get default foreground */
++		idx = vc->vc_def_color & 0x0f;
++		break;
++	case 11: /* get default background */
++		idx = (vc->vc_def_color & 0xf0) >> 4;
++		break;
++	default:
++		return;
 +	}
-+
-+	rtsx_pci_write_register(pcr, FPDCTL, ALL_POWER_DOWN, ALL_POWER_DOWN);
++	/* transpose internal BGR to RGB on output */
++	len = snprintf(buf, sizeof(buf), "\x1b]%d;rgb:%02x/%02x/%02x\x1b\\",
++		vc->vc_oscmd, vc->vc_palette[idx * 3 + 2],
++		vc->vc_palette[idx * 3 + 1], vc->vc_palette[idx * 3]);
++	respond_string(buf, len, tty->port);
 +}
 +
- static void rts52xa_save_content_from_efuse(struct rtsx_pcr *pcr)
+ /* console_lock is held */
+ static void set_mode(struct vc_data *vc, int on_off)
  {
- 	u8 cnt, sv;
-@@ -281,8 +303,11 @@ static int rts5249_extra_init_hw(struct rtsx_pcr *pcr)
- 
- 	rtsx_pci_send_cmd(pcr, CMD_TIMEOUT_DEF);
- 
--	if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A))
-+	if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A)) {
- 		rtsx_pci_write_register(pcr, REG_VREF, PWD_SUSPND_EN, PWD_SUSPND_EN);
-+		rtsx_pci_write_register(pcr, RTS524A_AUTOLOAD_CFG1,
-+			CD_RESUME_EN_MASK, CD_RESUME_EN_MASK);
-+	}
- 
- 	if (pcr->rtd3_en) {
- 		if (CHK_PCI_PID(pcr, PID_524A) || CHK_PCI_PID(pcr, PID_525A)) {
-@@ -724,6 +749,7 @@ static const struct pcr_ops rts524a_pcr_ops = {
- 	.card_power_on = rtsx_base_card_power_on,
- 	.card_power_off = rtsx_base_card_power_off,
- 	.switch_output_voltage = rtsx_base_switch_output_voltage,
-+	.force_power_down = rts52xa_force_power_down,
- 	.set_l1off_cfg_sub_d0 = rts5250_set_l1off_cfg_sub_d0,
- };
- 
-@@ -841,6 +867,7 @@ static const struct pcr_ops rts525a_pcr_ops = {
- 	.card_power_on = rts525a_card_power_on,
- 	.card_power_off = rtsx_base_card_power_off,
- 	.switch_output_voltage = rts525a_switch_output_voltage,
-+	.force_power_down = rts52xa_force_power_down,
- 	.set_l1off_cfg_sub_d0 = rts5250_set_l1off_cfg_sub_d0,
- };
- 
-diff --git a/drivers/misc/cardreader/rts5261.c b/drivers/misc/cardreader/rts5261.c
-index 1fd4e0e507302..64333347c14a4 100644
---- a/drivers/misc/cardreader/rts5261.c
-+++ b/drivers/misc/cardreader/rts5261.c
-@@ -91,7 +91,7 @@ static void rtsx5261_fetch_vendor_settings(struct rtsx_pcr *pcr)
- 	pcr->sd30_drive_sel_3v3 = rts5261_reg_to_sd30_drive_sel_3v3(reg);
+@@ -2075,8 +2100,8 @@ static void restore_cur(struct vc_data *vc)
  }
  
--static void rts5261_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rts5261_force_power_down(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	/* Set relink_time to 0 */
- 	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
-diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
-index ec395a33faf8b..7262ef0f1913f 100644
---- a/drivers/misc/cardreader/rtsx_pcr.c
-+++ b/drivers/misc/cardreader/rtsx_pcr.c
-@@ -1086,7 +1086,7 @@ static void rtsx_pm_power_saving(struct rtsx_pcr *pcr)
- 	rtsx_comm_pm_power_saving(pcr);
+ enum { ESnormal, ESesc, ESsquare, ESgetpars, ESfunckey,
+-	EShash, ESsetG0, ESsetG1, ESpercent, EScsiignore, ESnonstd,
+-	ESpalette, ESosc, ESapc, ESpm, ESdcs };
++	EShash, ESsetG0, ESsetG1, ESpercent, EScsiignore,
++	ESpalette, ESosc, ESoscmd, ESoscparam, ESapc, ESpm, ESdcs };
+ 
+ /* console_lock is held (except via vc_init()) */
+ static void reset_terminal(struct vc_data *vc, int do_clear)
+@@ -2230,7 +2255,7 @@ static void do_con_trol(struct tty_struct *tty, struct vc_data *vc, int c)
+ 			vc->vc_state = ESsquare;
+ 			return;
+ 		case ']':
+-			vc->vc_state = ESnonstd;
++			vc->vc_state = ESosc;
+ 			return;
+ 		case '_':
+ 			vc->vc_state = ESapc;
+@@ -2287,7 +2312,10 @@ static void do_con_trol(struct tty_struct *tty, struct vc_data *vc, int c)
+ 			return;
+ 		}
+ 		return;
+-	case ESnonstd:
++	case ESosc:
++		/* Operating System Commands are traditionally terminated with an ST
++		 * or a BEL, but Linux historically eschews said terminators.
++		 */
+ 		if (c=='P') {   /* palette escape sequence */
+ 			for (vc->vc_npar = 0; vc->vc_npar < NPAR; vc->vc_npar++)
+ 				vc->vc_par[vc->vc_npar] = 0;
+@@ -2297,9 +2325,10 @@ static void do_con_trol(struct tty_struct *tty, struct vc_data *vc, int c)
+ 		} else if (c=='R') {   /* reset palette */
+ 			reset_palette(vc);
+ 			vc->vc_state = ESnormal;
+-		} else if (c>='0' && c<='9')
+-			vc->vc_state = ESosc;
+-		else
++		} else if (isdigit(c)) {
++			vc->vc_oscmd = c - '0';
++			vc->vc_state = ESoscmd;
++		} else
+ 			vc->vc_state = ESnormal;
+ 		return;
+ 	case ESpalette:
+@@ -2348,7 +2377,7 @@ static void do_con_trol(struct tty_struct *tty, struct vc_data *vc, int c)
+ 		if (c == ';' && vc->vc_npar < NPAR - 1) {
+ 			vc->vc_npar++;
+ 			return;
+-		} else if (c>='0' && c<='9') {
++		} else if (isdigit(c)) {
+ 			vc->vc_par[vc->vc_npar] *= 10;
+ 			vc->vc_par[vc->vc_npar] += c - '0';
+ 			return;
+@@ -2556,7 +2585,23 @@ static void do_con_trol(struct tty_struct *tty, struct vc_data *vc, int c)
+ 		return;
+ 	case ESapc:
+ 		return;
+-	case ESosc:
++	case ESoscmd: /* extract the first OSC param, the command */
++		if (isdigit(c)) {
++			vc->vc_oscmd *= 10;
++			vc->vc_oscmd += c - '0';
++		} else if (c == ';') {
++			vc->vc_state = ESoscparam;
++		} else {
++			vc->vc_state = ESnormal;
++		}
++		return;
++	case ESoscparam: /* extract second OSC param */
++		/* All recognized numeric OSC commands take only '?', indicating a query.
++		 * See note above regarding ESosc about lack of OSC terminator ST.
++		 */
++		if (c == '?')
++			handle_osc_query(tty, vc);
++		vc->vc_state = ESnormal;
+ 		return;
+ 	case ESpm:
+ 		return;
+@@ -3441,8 +3486,8 @@ static void con_cleanup(struct tty_struct *tty)
  }
  
--static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
-+static void rtsx_base_force_power_down(struct rtsx_pcr *pcr)
- {
- 	/* Set relink_time to 0 */
- 	rtsx_pci_write_register(pcr, AUTOLOAD_CFG_BASE + 1, MASK_8_BIT_DEF, 0);
-@@ -1100,7 +1100,7 @@ static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
- 	rtsx_pci_write_register(pcr, FPDCTL, ALL_POWER_DOWN, ALL_POWER_DOWN);
- }
- 
--static void __maybe_unused rtsx_pci_power_off(struct rtsx_pcr *pcr, u8 pm_state)
-+static void __maybe_unused rtsx_pci_power_off(struct rtsx_pcr *pcr, u8 pm_state, bool runtime)
- {
- 	if (pcr->ops->turn_off_led)
- 		pcr->ops->turn_off_led(pcr);
-@@ -1112,9 +1112,9 @@ static void __maybe_unused rtsx_pci_power_off(struct rtsx_pcr *pcr, u8 pm_state)
- 	rtsx_pci_write_register(pcr, HOST_SLEEP_STATE, 0x03, pm_state);
- 
- 	if (pcr->ops->force_power_down)
--		pcr->ops->force_power_down(pcr, pm_state);
-+		pcr->ops->force_power_down(pcr, pm_state, runtime);
- 	else
--		rtsx_base_force_power_down(pcr, pm_state);
-+		rtsx_base_force_power_down(pcr);
- }
- 
- void rtsx_pci_enable_ocp(struct rtsx_pcr *pcr)
-@@ -1669,7 +1669,7 @@ static int __maybe_unused rtsx_pci_suspend(struct device *dev_d)
- 
- 	mutex_lock(&pcr->pcr_mutex);
- 
--	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
-+	rtsx_pci_power_off(pcr, HOST_ENTER_S3, false);
- 
- 	mutex_unlock(&pcr->pcr_mutex);
- 	return 0;
-@@ -1708,7 +1708,7 @@ static void rtsx_pci_shutdown(struct pci_dev *pcidev)
- 
- 	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
- 
--	rtsx_pci_power_off(pcr, HOST_ENTER_S1);
-+	rtsx_pci_power_off(pcr, HOST_ENTER_S1, false);
- 
- 	pci_disable_device(pcidev);
- 	free_irq(pcr->irq, (void *)pcr);
-@@ -1754,7 +1754,7 @@ static int rtsx_pci_runtime_suspend(struct device *device)
- 	cancel_delayed_work_sync(&pcr->carddet_work);
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
-+	rtsx_pci_power_off(pcr, HOST_ENTER_S3, true);
- 
- 	mutex_unlock(&pcr->pcr_mutex);
- 
-diff --git a/drivers/misc/cardreader/rtsx_pcr.h b/drivers/misc/cardreader/rtsx_pcr.h
-index daf057c4eea62..aa0ebd6672277 100644
---- a/drivers/misc/cardreader/rtsx_pcr.h
-+++ b/drivers/misc/cardreader/rtsx_pcr.h
-@@ -25,6 +25,7 @@
- #define REG_EFUSE_POWEROFF		0x00
- #define RTS5250_CLK_CFG3		0xFF79
- #define RTS525A_CFG_MEM_PD		0xF0
-+#define RTS524A_AUTOLOAD_CFG1		0xFF7C
- #define RTS524A_PM_CTRL3		0xFF7E
- #define RTS525A_BIOS_CFG		0xFF2D
- #define RTS525A_LOAD_BIOS_FLAG	0x01
-diff --git a/include/linux/rtsx_pci.h b/include/linux/rtsx_pci.h
-index 89b7d34e25b63..3d780b44e678a 100644
---- a/include/linux/rtsx_pci.h
-+++ b/include/linux/rtsx_pci.h
-@@ -1095,7 +1095,7 @@ struct pcr_ops {
- 	unsigned int	(*cd_deglitch)(struct rtsx_pcr *pcr);
- 	int		(*conv_clk_and_div_n)(int clk, int dir);
- 	void		(*fetch_vendor_settings)(struct rtsx_pcr *pcr);
--	void		(*force_power_down)(struct rtsx_pcr *pcr, u8 pm_state);
-+	void		(*force_power_down)(struct rtsx_pcr *pcr, u8 pm_state, bool runtime);
- 	void		(*stop_cmd)(struct rtsx_pcr *pcr);
- 
- 	void (*set_aspm)(struct rtsx_pcr *pcr, bool enable);
+ static int default_color           = 7; /* white */
+-static int default_italic_color    = 2; // green (ASCII)
+-static int default_underline_color = 3; // cyan (ASCII)
++static int default_italic_color    = 2; /* green */
++static int default_underline_color = 3; /* cyan */
+ module_param_named(color, default_color, int, S_IRUGO | S_IWUSR);
+ module_param_named(italic, default_italic_color, int, S_IRUGO | S_IWUSR);
+ module_param_named(underline, default_underline_color, int, S_IRUGO | S_IWUSR);
+diff --git a/include/linux/console_struct.h b/include/linux/console_struct.h
+index d5b9c8d40c18..6d4fa51b62de 100644
+--- a/include/linux/console_struct.h
++++ b/include/linux/console_struct.h
+@@ -128,6 +128,7 @@ struct vc_data {
+ 	/* VT terminal data */
+ 	unsigned int	vc_state;		/* Escape sequence parser state */
+ 	unsigned int	vc_npar,vc_par[NPAR];	/* Parameters of current escape sequence */
++	unsigned int	vc_oscmd; /* Operating System Command selector */
+ 	/* data for manual vt switching */
+ 	struct vt_mode	vt_mode;
+ 	struct pid 	*vt_pid;
 -- 
-2.33.1
+2.34.1
 

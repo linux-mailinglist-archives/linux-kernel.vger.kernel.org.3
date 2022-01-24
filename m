@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8EF499877
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE70499677
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452540AbiAXVZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442681AbiAXUzF (ORCPT
+        id S1445570AbiAXVEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:04:09 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36222 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1389502AbiAXUl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:55:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C424FC047CEA;
-        Mon, 24 Jan 2022 12:00:19 -0800 (PST)
+        Mon, 24 Jan 2022 15:41:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64D5D60FF4;
-        Mon, 24 Jan 2022 20:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40324C340E5;
-        Mon, 24 Jan 2022 20:00:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96A3A615C2;
+        Mon, 24 Jan 2022 20:41:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72374C340E5;
+        Mon, 24 Jan 2022 20:41:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054418;
-        bh=vYqT50n7P1s8BSjh/eXllW0EJ7z12+co5rPuam7sJbo=;
+        s=korg; t=1643056884;
+        bh=VpOIpWuYU5r7PoaTzGcmVyr0EObttdwQ5irv2gBTbpo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TYyh5XBlFvxKoAoO0sml/3pU7PIEzYfxgW6XIpXGKrtrce2ayECh4Hq1FURd453Uf
-         0yRqNi8TCAUxHemrjOoDCA0jxNNWR9LTb64ityVdj6kN2MbRytu79yxJRqZUBpOhrD
-         bIFICgezYC0sSq2EeomiTFyUBhapWjBPvanr+jzI=
+        b=nx4pf0ettV0f2VPZ1unJcivzxhh2puzrmCzYb2PzWNlQEu81W2g+6EQuXh7BOVwQ/
+         Yd/00ykEL8W4s15vY2/JqJzsTH/nAnYNXDPcduetYchJXURS6MdiOfdXmQR/2pBA3o
+         4TmcQWYnpx8sJr/jkvTWAH52RSUlh3o6+8NDRq5E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joerg Albert <joerg.albert@iav.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        stable@vger.kernel.org,
+        Joakim Tjernlund <joakim.tjernlund@infinera.com>,
+        Scott Wood <oss@buserror.net>, Wolfram Sang <wsa@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 383/563] drm/etnaviv: consider completed fence seqno in hang check
+Subject: [PATCH 5.15 631/846] i2c: mpc: Correct I2C reset procedure
 Date:   Mon, 24 Jan 2022 19:42:28 +0100
-Message-Id: <20220124184037.671331423@linuxfoundation.org>
+Message-Id: <20220124184122.797859418@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,57 +47,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+From: Joakim Tjernlund <joakim.tjernlund@infinera.com>
 
-[ Upstream commit cdd156955f946beaa5f3a00d8ccf90e5a197becc ]
+[ Upstream commit ebe82cf92cd4825c3029434cabfcd2f1780e64be ]
 
-Some GPU heavy test programs manage to trigger the hangcheck quite often.
-If there are no other GPU users in the system and the test program
-exhibits a very regular structure in the commandstreams that are being
-submitted, we can end up with two distinct submits managing to trigger
-the hangcheck with the FE in a very similar address range. This leads
-the hangcheck to believe that the GPU is stuck, while in reality the GPU
-is already busy working on a different job. To avoid those spurious
-GPU resets, also remember and consider the last completed fence seqno
-in the hang check.
+Current I2C reset procedure is broken in two ways:
+1) It only generate 1 START instead of 9 STARTs and STOP.
+2) It leaves the bus Busy so every I2C xfer after the first
+   fixup calls the reset routine again, for every xfer there after.
 
-Reported-by: Joerg Albert <joerg.albert@iav.de>
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+This fixes both errors.
+
+Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+Acked-by: Scott Wood <oss@buserror.net>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/etnaviv/etnaviv_gpu.h   | 1 +
- drivers/gpu/drm/etnaviv/etnaviv_sched.c | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-mpc.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-index 1c75c8ed5bcea..85eddd492774d 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-@@ -130,6 +130,7 @@ struct etnaviv_gpu {
+diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+index db26cc36e13fe..6c698c10d3cdb 100644
+--- a/drivers/i2c/busses/i2c-mpc.c
++++ b/drivers/i2c/busses/i2c-mpc.c
+@@ -119,23 +119,30 @@ static inline void writeccr(struct mpc_i2c *i2c, u32 x)
+ /* Sometimes 9th clock pulse isn't generated, and slave doesn't release
+  * the bus, because it wants to send ACK.
+  * Following sequence of enabling/disabling and sending start/stop generates
+- * the 9 pulses, so it's all OK.
++ * the 9 pulses, each with a START then ending with STOP, so it's all OK.
+  */
+ static void mpc_i2c_fixup(struct mpc_i2c *i2c)
+ {
+ 	int k;
+-	u32 delay_val = 1000000 / i2c->real_clk + 1;
+-
+-	if (delay_val < 2)
+-		delay_val = 2;
++	unsigned long flags;
  
- 	/* hang detection */
- 	u32 hangcheck_dma_addr;
-+	u32 hangcheck_fence;
- 
- 	void __iomem *mmio;
- 	int irq;
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_sched.c b/drivers/gpu/drm/etnaviv/etnaviv_sched.c
-index cd46c882269cc..026b6c0731198 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_sched.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_sched.c
-@@ -106,8 +106,10 @@ static void etnaviv_sched_timedout_job(struct drm_sched_job *sched_job)
- 	 */
- 	dma_addr = gpu_read(gpu, VIVS_FE_DMA_ADDRESS);
- 	change = dma_addr - gpu->hangcheck_dma_addr;
--	if (change < 0 || change > 16) {
-+	if (gpu->completed_fence != gpu->hangcheck_fence ||
-+	    change < 0 || change > 16) {
- 		gpu->hangcheck_dma_addr = dma_addr;
-+		gpu->hangcheck_fence = gpu->completed_fence;
- 		goto out_no_timeout;
+ 	for (k = 9; k; k--) {
+ 		writeccr(i2c, 0);
+-		writeccr(i2c, CCR_MSTA | CCR_MTX | CCR_MEN);
++		writeb(0, i2c->base + MPC_I2C_SR); /* clear any status bits */
++		writeccr(i2c, CCR_MEN | CCR_MSTA); /* START */
++		readb(i2c->base + MPC_I2C_DR); /* init xfer */
++		udelay(15); /* let it hit the bus */
++		local_irq_save(flags); /* should not be delayed further */
++		writeccr(i2c, CCR_MEN | CCR_MSTA | CCR_RSTA); /* delay SDA */
+ 		readb(i2c->base + MPC_I2C_DR);
+-		writeccr(i2c, CCR_MEN);
+-		udelay(delay_val << 1);
++		if (k != 1)
++			udelay(5);
++		local_irq_restore(flags);
  	}
++	writeccr(i2c, CCR_MEN); /* Initiate STOP */
++	readb(i2c->base + MPC_I2C_DR);
++	udelay(15); /* Let STOP propagate */
++	writeccr(i2c, 0);
+ }
  
+ static int i2c_mpc_wait_sr(struct mpc_i2c *i2c, int mask)
 -- 
 2.34.1
 

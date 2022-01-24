@@ -2,100 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AAAF49A155
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 115D149A196
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2359443AbiAXXch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:32:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
+        id S1386442AbiAXXhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456647AbiAXWjw (ORCPT
+        with ESMTP id S1841661AbiAXW7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:39:52 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA02C04D61D
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:04:20 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so8270024otr.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:04:20 -0800 (PST)
+        Mon, 24 Jan 2022 17:59:42 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CA0C09D301
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:13:22 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id w190so11081170pfw.7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 13:13:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=JYiLYol9mvWoC/k9SlBNW3f4S6peoi+xmexnQLDaAHc=;
-        b=HsuuTxhscaoAqtQaDrdwBqOr+pYZMN4w2SA8Q7gzbGeDVQlpfcRDDYbqoI1eGaw4HH
-         tqzC8Rw8Wq9AFXlLETHFjUOJ/Kd57+8avtXJcdQl+Zk2xnWWSjvNGfjrKmB1mjc9h3G/
-         J51AFEegRcmcOXWbI+rmYoSKJy7YCRzp/zMxE=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f3UlEdUBM1gGXgQtpyjWqPmUgqNBHNEo7AYSujAnzt8=;
+        b=ASZXLuYtwDROEgcIql1Nl9Ws1AgZNwkzQcx2Vd7Dl4Ja8wgqd2SCDYU1Lv3CfdNgcm
+         RqcE161FTzk7PBk1wj71vYLCHXVPpQqbeLpwVkGqZRTyvO0mDvmpHZOGkIHe6ozDgD1m
+         qsJiipP7bqHZuHdfgjBF9Lf+GTA9O6mD3RJcQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=JYiLYol9mvWoC/k9SlBNW3f4S6peoi+xmexnQLDaAHc=;
-        b=V5JuFevwKvfVhdY0gN82jg4/VfrRxiGjzO8mW9Eoz9h7/g4Il3EXFC9ESIWSA/X++L
-         8d9rBCDOO/oF0pPDhlmAsEmWsohSWw9tUoANh6U3f209NYSUu1DkvFBje5q4Q6yzsV1d
-         XHDowfBhtrEl2V040tn5CNJblXczGJCRAXnNtAv8EDoGssnRsZK0FVtV4qElbnnnG1+K
-         cTh3qE1QQk6jBS8GmdQz8gnP5/Qf5Gw0rFqZAznjB2qdGlVMicwgDYNP4papy/ZPBFJt
-         nvwzYbQ2CEUiLuP94JIpK6Ocda8eabyDZ+OS7+zcI34YAc3InAC4xj8BdApwXUTsOelH
-         RJfQ==
-X-Gm-Message-State: AOAM532tokHHmFaROLCnAXDPQ98+8VqfeZCZcBfc42iBRU/IxuyRuqB1
-        zVmJ2TlsqXb5GiLQVPYPOHeIPoZunAMF5DMS514NPA==
-X-Google-Smtp-Source: ABdhPJzWss7XOnvh73u3Bx1WcknT+UoYuzDwWnibDZtvmdSPqZExl7hcfY2zpEl1b5NjqqKETJt01WEhiJ/eialMpxs=
-X-Received: by 2002:a05:6830:30ba:: with SMTP id g26mr6213128ots.159.1643058259360;
- Mon, 24 Jan 2022 13:04:19 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 24 Jan 2022 13:04:18 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f3UlEdUBM1gGXgQtpyjWqPmUgqNBHNEo7AYSujAnzt8=;
+        b=jN6KWKerBdbtSfZ54RjK1+4U46doIVc6U756SKxr55oaCgtv7MjpLvuHlWfkqQ1fSm
+         qAcuGskEVkqFYTq0NQRvBAKKP3FXPwkjOB9dvHQB5dUcwc9RRqZLdjnxzjwxU5Ji4Tu5
+         skrGyDJAOUdGHHopwx4u0exy8HXaPTiabzIB8/UdNbPVHNeZATogVxjMtifR68LEy5F4
+         C0ode9rgsfihl+q7FtfCokVgkOE8SsomAb15VjjEiiw1eN4j4P0X+R7mUB2VY6gj7mST
+         3Ft0Psy4cyTv0rhV2R6qeGbuGsOvtl/sjdoGL6948geGtHGWr8MqbkJ9J/H0MhjKWGY1
+         zKAg==
+X-Gm-Message-State: AOAM531d54hO4FTxjpmd5FTncBnEKoHplma5k/0/UOkKPKUzlvID8guR
+        tcGkpJREHKpLs5tavlBKNWI3Bg==
+X-Google-Smtp-Source: ABdhPJwNR8Srqfc5OKBWmgOPvjXN/k1hIU5fnLL8J2NRnIxMn/bXsovf8HYlGXqHUpXfdjm8l8a8uQ==
+X-Received: by 2002:a63:9549:: with SMTP id t9mr13051175pgn.107.1643058801876;
+        Mon, 24 Jan 2022 13:13:21 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p21sm2905353pfh.89.2022.01.24.13.13.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 13:13:21 -0800 (PST)
+Date:   Mon, 24 Jan 2022 13:13:20 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Keith Busch <kbusch@kernel.org>, Len Baker <len.baker@gmx.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/2] overflow: Implement size_t saturating arithmetic
+ helpers
+Message-ID: <202201241237.C82267B66C@keescook>
+References: <20210920180853.1825195-1-keescook@chromium.org>
+ <20210920180853.1825195-2-keescook@chromium.org>
+ <aa42ebfa-03b8-93fa-e036-a7507397d0dc@rasmusvillemoes.dk>
 MIME-Version: 1.0
-In-Reply-To: <1643057170-10413-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1643057170-10413-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 24 Jan 2022 13:04:18 -0800
-Message-ID: <CAE-0n53nFcMzuKfqVRac6PRTkoPrftXL+uVK56ZQsHVWHmivkQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: always add fail-safe mode into connector mode list
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dmitry.baryshkov@linaro.org, robdclark@gmail.com, sean@poorly.run,
-        vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aa42ebfa-03b8-93fa-e036-a7507397d0dc@rasmusvillemoes.dk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-01-24 12:46:10)
-> Some of DP link compliant test expects to return fail-safe mode
-> if prefer detailed timing mode can not be supported by mainlink's
-> lane and rate after link training. Therefore add fail-safe mode
-> into connector mode list as backup mode. This patch fixes test
-> case 4.2.2.1.
->
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+*thread necromancy*
 
-Any Fixes tag? I also wonder why this isn't pushed into the DP core code
-somehow. Wouldn't every device need to add a 640x480 mode by default?
+On Tue, Sep 21, 2021 at 08:51:53AM +0200, Rasmus Villemoes wrote:
+> Not that I can see that the __must_check matters much for these anyway;
+> if anybody does
+> 
+>   size_mul(foo, bar);
+> 
+> that's just a statement with no side effects, so probably the compiler
+> would warn anyway, or at least nobody can then go on to do anything
+> "wrong". Unlike the check_*_overflow(), which have the (possibly
+> wrapped) result in a output-pointer and the "did it overflow" as the
+> return value, so you can do
+> 
+>   check_mul_overflow(a, b, &d);
+>   do_stuff_with(d);
+> 
+> were it not for the __must_check wrapper.
+> 
+> [Reminder: __must_check is a bit of a misnomer, the attribute is really
+> warn_unused_result, and there's no requirement that the result is part
+> of the controlling expression of an if() or while() - just passing the
+> result on directly to some other function counts as a "use", which is
+> indeed what we do with the size wrappers.]
 
-> ---
->  drivers/gpu/drm/msm/dp/dp_panel.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c b/drivers/gpu/drm/msm/dp/dp_panel.c
-> index 3b02922..7743b45 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-> @@ -221,6 +221,11 @@ int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
->                 if (drm_add_modes_noedid(connector, 640, 480))
->                         drm_set_preferred_mode(connector, 640, 480);
->                 mutex_unlock(&connector->dev->mode_config.mutex);
-> +       } else {
-> +               /* always add fail-safe mode as backup mode */
-> +               mutex_lock(&connector->dev->mode_config.mutex);
-> +               drm_add_modes_noedid(connector, 640, 480);
-> +               mutex_unlock(&connector->dev->mode_config.mutex);
->         }
->
->         if (panel->aux_cfg_update_done) {
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
+What I'd really like is a "store this in a size_t" check to catch dumb
+storage size problems (or related overflows). In other words:
+
+size_t big1 = 2147483647;
+size_t big2 = 2147483647;
+
+/* Doesn't overflow, but 4611686014132420609 becomes a 1 for int */
+int size = size_mul(big1, big2);
+...
+ptr = kmalloc(size, GFP_KERNEL); /* Allocates a 1 instead... */
+
+I could solve this but removing the assignment, but then I can't compose
+calls:
+
+static inline size_t __size_mul(size_t f1, size_t f2)
+{
+	size_t out;
+	if (check_mul_overflow(f1, f2, &out))
+		out = SIZE_MAX;
+	return out;
+}
+
+#define size_mul(f1, f2, out) do { \
+	BUILD_BUG_ON(!__same_type(out, size_t)); \
+	out = __size_mul(f1, f2); \
+} while (0)
+
+i.e. now I can't do size_mul(size_add(...), size_add(...))
+
+Better would be to build the entire kernel with -Wconversion. :)
+
+-- 
+Kees Cook

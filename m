@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCB449A10F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D9D499DE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849635AbiAXX0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S1586547AbiAXW0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1835941AbiAXWhu (ORCPT
+        with ESMTP id S1390883AbiAXVM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:37:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805E1C0E9BB2;
-        Mon, 24 Jan 2022 13:00:00 -0800 (PST)
+        Mon, 24 Jan 2022 16:12:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82405C06E004;
+        Mon, 24 Jan 2022 12:10:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22488611DA;
-        Mon, 24 Jan 2022 21:00:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03C52C340E5;
-        Mon, 24 Jan 2022 20:59:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A42DB8122F;
+        Mon, 24 Jan 2022 20:10:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 881F1C340E5;
+        Mon, 24 Jan 2022 20:10:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057999;
-        bh=bLax4OLcXZabgWm10AYP5WuGHuGUFlNoXdOHjo1yZi4=;
+        s=korg; t=1643055037;
+        bh=zp/NYWIKoE3tOdV+Shax2CsA4xFUZ7F/J0Kgo/s5+RE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mnl6gY1HB/WV1k7Hq198i1TEB5/TxIE3t8KMT4OIdWEUpb+TEJetk+gpjQ7P6upNK
-         rCH7d8IcdI1yyoyp2oUb6Ix7eSf/ufk9hlJmtsdfUwr+TKIW/gDRUhsfwirOa/1Y23
-         5qXPNQMyzqY7XR1sx62/nbDSmeh/cM5ArYvKlRFo=
+        b=F0erfDtt3tjN+W4kzCI/2dHR15AJ75KPbRku4deLeKaK+JhrWnF4OMdL2x1s2o0uv
+         5i5cVyTIkC/bFLBLY6rQAQDVEkk1JHKqKBsmT5lTN/hMhDCLqaxSIKBE5H96hFf07o
+         D77baBY6ZsU7eW68JPJUhMBg57FkZHsSlVY7Ywiw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0148/1039] drm/dp: Dont read back backlight mode in drm_edp_backlight_enable()
-Date:   Mon, 24 Jan 2022 19:32:17 +0100
-Message-Id: <20220124184130.141392342@linuxfoundation.org>
+        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Conor Dooley <Conor.Dooley@microchip.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.15 021/846] riscv: Get rid of MAXPHYSMEM configs
+Date:   Mon, 24 Jan 2022 19:32:18 +0100
+Message-Id: <20220124184101.647245147@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,98 +50,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lyude Paul <lyude@redhat.com>
+From: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 
-[ Upstream commit 646596485e1ed2182adf293dfd5aec4a96c46330 ]
+commit db1503d355a79d1d4255a9996f20e72848b74a56 upstream.
 
-As it turns out, apparently some machines will actually leave additional
-backlight functionality like dynamic backlight control on before the OS
-loads. Currently we don't take care to disable unsupported features when
-writing back the backlight mode, which can lead to some rather strange
-looking behavior when adjusting the backlight.
+CONFIG_MAXPHYSMEM_* are actually never used, even the nommu defconfigs
+selecting the MAXPHYSMEM_2GB had no effects on PAGE_OFFSET since it was
+preempted by !MMU case right before.
 
-So, let's fix this by just not reading back the current backlight mode on
-initial enable. I don't think there should really be any downsides to this,
-and this will ensure we don't leave any unsupported functionality enabled.
+In addition, the move of the kernel mapping at the end of the address
+space broke the use of MAXPHYSMEM_2G with MMU since it defines PAGE_OFFSET
+at the same address as the kernel mapping.
 
-This should fix at least one (but not all) of the issues seen with DPCD
-backlight support on fi-bdw-samus
-
-v5:
-* Just avoid reading back DPCD register - Doug Anderson
-
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Fixes: 867cf9cd73c3 ("drm/dp: Extract i915's eDP backlight code into DRM helpers")
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211105183342.130810-4-lyude@redhat.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Fixes: 2bfc6cd81bd1 ("riscv: Move kernel mapping outside of linear mapping")
+Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Tested-by: Conor Dooley <Conor.Dooley@microchip.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/drm_dp_helper.c | 40 ++++++++++-----------------------
- 1 file changed, 12 insertions(+), 28 deletions(-)
+ arch/riscv/Kconfig                             |   23 ++---------------------
+ arch/riscv/configs/nommu_k210_defconfig        |    2 --
+ arch/riscv/configs/nommu_k210_sdcard_defconfig |    2 --
+ arch/riscv/configs/nommu_virt_defconfig        |    1 -
+ 4 files changed, 2 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_dp_helper.c b/drivers/gpu/drm/drm_dp_helper.c
-index 4d0d1e8e51fa7..db7db839e42d1 100644
---- a/drivers/gpu/drm/drm_dp_helper.c
-+++ b/drivers/gpu/drm/drm_dp_helper.c
-@@ -3246,27 +3246,13 @@ int drm_edp_backlight_enable(struct drm_dp_aux *aux, const struct drm_edp_backli
- 			     const u16 level)
- {
- 	int ret;
--	u8 dpcd_buf, new_dpcd_buf;
-+	u8 dpcd_buf = DP_EDP_BACKLIGHT_CONTROL_MODE_DPCD;
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -158,10 +158,9 @@ config PA_BITS
  
--	ret = drm_dp_dpcd_readb(aux, DP_EDP_BACKLIGHT_MODE_SET_REGISTER, &dpcd_buf);
--	if (ret != 1) {
--		drm_dbg_kms(aux->drm_dev,
--			    "%s: Failed to read backlight mode: %d\n", aux->name, ret);
--		return ret < 0 ? ret : -EIO;
--	}
+ config PAGE_OFFSET
+ 	hex
+-	default 0xC0000000 if 32BIT && MAXPHYSMEM_1GB
++	default 0xC0000000 if 32BIT
+ 	default 0x80000000 if 64BIT && !MMU
+-	default 0xffffffff80000000 if 64BIT && MAXPHYSMEM_2GB
+-	default 0xffffffe000000000 if 64BIT && MAXPHYSMEM_128GB
++	default 0xffffffe000000000 if 64BIT
+ 
+ config KASAN_SHADOW_OFFSET
+ 	hex
+@@ -270,24 +269,6 @@ config MODULE_SECTIONS
+ 	bool
+ 	select HAVE_MOD_ARCH_SPECIFIC
+ 
+-choice
+-	prompt "Maximum Physical Memory"
+-	default MAXPHYSMEM_1GB if 32BIT
+-	default MAXPHYSMEM_2GB if 64BIT && CMODEL_MEDLOW
+-	default MAXPHYSMEM_128GB if 64BIT && CMODEL_MEDANY
 -
--	new_dpcd_buf = dpcd_buf;
+-	config MAXPHYSMEM_1GB
+-		depends on 32BIT
+-		bool "1GiB"
+-	config MAXPHYSMEM_2GB
+-		depends on 64BIT && CMODEL_MEDLOW
+-		bool "2GiB"
+-	config MAXPHYSMEM_128GB
+-		depends on 64BIT && CMODEL_MEDANY
+-		bool "128GiB"
+-endchoice
 -
--	if ((dpcd_buf & DP_EDP_BACKLIGHT_CONTROL_MODE_MASK) != DP_EDP_BACKLIGHT_CONTROL_MODE_DPCD) {
--		new_dpcd_buf &= ~DP_EDP_BACKLIGHT_CONTROL_MODE_MASK;
--		new_dpcd_buf |= DP_EDP_BACKLIGHT_CONTROL_MODE_DPCD;
 -
--		if (bl->pwmgen_bit_count) {
--			ret = drm_dp_dpcd_writeb(aux, DP_EDP_PWMGEN_BIT_COUNT, bl->pwmgen_bit_count);
--			if (ret != 1)
--				drm_dbg_kms(aux->drm_dev, "%s: Failed to write aux pwmgen bit count: %d\n",
--					    aux->name, ret);
--		}
-+	if (bl->pwmgen_bit_count) {
-+		ret = drm_dp_dpcd_writeb(aux, DP_EDP_PWMGEN_BIT_COUNT, bl->pwmgen_bit_count);
-+		if (ret != 1)
-+			drm_dbg_kms(aux->drm_dev, "%s: Failed to write aux pwmgen bit count: %d\n",
-+				    aux->name, ret);
- 	}
- 
- 	if (bl->pwm_freq_pre_divider) {
-@@ -3276,16 +3262,14 @@ int drm_edp_backlight_enable(struct drm_dp_aux *aux, const struct drm_edp_backli
- 				    "%s: Failed to write aux backlight frequency: %d\n",
- 				    aux->name, ret);
- 		else
--			new_dpcd_buf |= DP_EDP_BACKLIGHT_FREQ_AUX_SET_ENABLE;
-+			dpcd_buf |= DP_EDP_BACKLIGHT_FREQ_AUX_SET_ENABLE;
- 	}
- 
--	if (new_dpcd_buf != dpcd_buf) {
--		ret = drm_dp_dpcd_writeb(aux, DP_EDP_BACKLIGHT_MODE_SET_REGISTER, new_dpcd_buf);
--		if (ret != 1) {
--			drm_dbg_kms(aux->drm_dev, "%s: Failed to write aux backlight mode: %d\n",
--				    aux->name, ret);
--			return ret < 0 ? ret : -EIO;
--		}
-+	ret = drm_dp_dpcd_writeb(aux, DP_EDP_BACKLIGHT_MODE_SET_REGISTER, dpcd_buf);
-+	if (ret != 1) {
-+		drm_dbg_kms(aux->drm_dev, "%s: Failed to write aux backlight mode: %d\n",
-+			    aux->name, ret);
-+		return ret < 0 ? ret : -EIO;
- 	}
- 
- 	ret = drm_edp_backlight_set_level(aux, bl, level);
--- 
-2.34.1
-
+ config SMP
+ 	bool "Symmetric Multi-Processing"
+ 	help
+--- a/arch/riscv/configs/nommu_k210_defconfig
++++ b/arch/riscv/configs/nommu_k210_defconfig
+@@ -29,8 +29,6 @@ CONFIG_EMBEDDED=y
+ CONFIG_SLOB=y
+ # CONFIG_MMU is not set
+ CONFIG_SOC_CANAAN=y
+-CONFIG_SOC_CANAAN_K210_DTB_SOURCE="k210_generic"
+-CONFIG_MAXPHYSMEM_2GB=y
+ CONFIG_SMP=y
+ CONFIG_NR_CPUS=2
+ CONFIG_CMDLINE="earlycon console=ttySIF0"
+--- a/arch/riscv/configs/nommu_k210_sdcard_defconfig
++++ b/arch/riscv/configs/nommu_k210_sdcard_defconfig
+@@ -21,8 +21,6 @@ CONFIG_EMBEDDED=y
+ CONFIG_SLOB=y
+ # CONFIG_MMU is not set
+ CONFIG_SOC_CANAAN=y
+-CONFIG_SOC_CANAAN_K210_DTB_SOURCE="k210_generic"
+-CONFIG_MAXPHYSMEM_2GB=y
+ CONFIG_SMP=y
+ CONFIG_NR_CPUS=2
+ CONFIG_CMDLINE="earlycon console=ttySIF0 rootdelay=2 root=/dev/mmcblk0p1 ro"
+--- a/arch/riscv/configs/nommu_virt_defconfig
++++ b/arch/riscv/configs/nommu_virt_defconfig
+@@ -27,7 +27,6 @@ CONFIG_SLOB=y
+ # CONFIG_SLAB_MERGE_DEFAULT is not set
+ # CONFIG_MMU is not set
+ CONFIG_SOC_VIRT=y
+-CONFIG_MAXPHYSMEM_2GB=y
+ CONFIG_SMP=y
+ CONFIG_CMDLINE="root=/dev/vda rw earlycon=uart8250,mmio,0x10000000,115200n8 console=ttyS0"
+ CONFIG_CMDLINE_FORCE=y
 
 

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C15649A622
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAFB49A6BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3411617AbiAYAeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:34:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47494 "EHLO
+        id S3420260AbiAYCZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:25:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45064 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455232AbiAXVfD (ORCPT
+        with ESMTP id S1349705AbiAXTVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:35:03 -0500
+        Mon, 24 Jan 2022 14:21:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55991B8105C;
-        Mon, 24 Jan 2022 21:34:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E888C340E4;
-        Mon, 24 Jan 2022 21:34:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3816B8122A;
+        Mon, 24 Jan 2022 19:21:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC4BC340E5;
+        Mon, 24 Jan 2022 19:21:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060098;
-        bh=C1j676FUP8iWuGVMyB82H13nsJjOvitU5NC+K+waxcc=;
+        s=korg; t=1643052068;
+        bh=xAngeKfXCJtF/25f0h8+pSD9XBwTu6oIqZSVUBcS/cQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n/2Xr4gJqLYRpWTah8xtQIR0nqDKldX6fyJKow1kK2XmArf7Zj8fGx/UKOHvzMx7u
-         zdqwG/9ciH6zgot3gbs/9bHpegkFLQab65YIA012cdPFBa2sq5ATdXA2Ux9BK5/PEH
-         D+VmhkKecnnr+GAsFMIUx+YL0NhyMapFv6r1qyDI=
+        b=niA8N7BQLwbTJGLj7bXdajUNzarX3hE1WdnR7o04nVVZMwQZEWZi4RN+QnX+gpZlI
+         k/g9P4fBrVNOfD6uq1jZj1OosUJkH5g+nUk/JRpJ1u2o9t7P7pqa86A+6gD9Y7DT/I
+         Xhn/+SZiZy/4544jUpsXN1w5K54D1eW76+X77sQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0795/1039] i3c/master/mipi-i3c-hci: Fix a potentially infinite loop in hci_dat_v1_get_index()
+Subject: [PATCH 4.19 146/239] bpf: Do not WARN in bpf_warn_invalid_xdp_action()
 Date:   Mon, 24 Jan 2022 19:43:04 +0100
-Message-Id: <20220124184152.025168739@linuxfoundation.org>
+Message-Id: <20220124183947.737950237@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,45 +47,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Paolo Abeni <pabeni@redhat.com>
 
-[ Upstream commit 3f43926f271287fb1744c9ac9ae1122497f2b0c2 ]
+[ Upstream commit 2cbad989033bff0256675c38f96f5faab852af4b ]
 
-The code in 'hci_dat_v1_get_index()' really looks like a hand coded version
-of 'for_each_set_bit()', except that a +1 is missing when searching for the
-next set bit.
+The WARN_ONCE() in bpf_warn_invalid_xdp_action() can be triggered by
+any bugged program, and even attaching a correct program to a NIC
+not supporting the given action.
 
-This really looks odd and it seems that it will loop until 'dat_w0_read()'
-returns the expected result.
+The resulting splat, beyond polluting the logs, fouls automated tools:
+e.g. a syzkaller reproducers using an XDP program returning an
+unsupported action will never pass validation.
 
-So use 'for_each_set_bit()' instead. It is less verbose and should be more
-correct.
+Replace the WARN_ONCE with a less intrusive pr_warn_once().
 
-Fixes: 9ad9a52cce28 ("i3c/master: introduce the mipi-i3c-hci driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Acked-by: Nicolas Pitre <npitre@baylibre.com>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/0cdf3cb10293ead1acd271fdb8a70369c298c082.1637186628.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Link: https://lore.kernel.org/bpf/016ceec56e4817ebb2a9e35ce794d5c917df572c.1638189075.git.pabeni@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i3c/master/mipi-i3c-hci/dat_v1.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ net/core/filter.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i3c/master/mipi-i3c-hci/dat_v1.c b/drivers/i3c/master/mipi-i3c-hci/dat_v1.c
-index 783e551a2c85a..97bb49ff5b53b 100644
---- a/drivers/i3c/master/mipi-i3c-hci/dat_v1.c
-+++ b/drivers/i3c/master/mipi-i3c-hci/dat_v1.c
-@@ -160,9 +160,7 @@ static int hci_dat_v1_get_index(struct i3c_hci *hci, u8 dev_addr)
- 	unsigned int dat_idx;
- 	u32 dat_w0;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 01496c7cb42d7..7d68c98a00aa8 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5534,9 +5534,9 @@ void bpf_warn_invalid_xdp_action(u32 act)
+ {
+ 	const u32 act_max = XDP_REDIRECT;
  
--	for (dat_idx = find_first_bit(hci->DAT_data, hci->DAT_entries);
--	     dat_idx < hci->DAT_entries;
--	     dat_idx = find_next_bit(hci->DAT_data, hci->DAT_entries, dat_idx)) {
-+	for_each_set_bit(dat_idx, hci->DAT_data, hci->DAT_entries) {
- 		dat_w0 = dat_w0_read(dat_idx);
- 		if (FIELD_GET(DAT_0_DYNAMIC_ADDRESS, dat_w0) == dev_addr)
- 			return dat_idx;
+-	WARN_ONCE(1, "%s XDP return value %u, expect packet loss!\n",
+-		  act > act_max ? "Illegal" : "Driver unsupported",
+-		  act);
++	pr_warn_once("%s XDP return value %u, expect packet loss!\n",
++		     act > act_max ? "Illegal" : "Driver unsupported",
++		     act);
+ }
+ EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
+ 
 -- 
 2.34.1
 

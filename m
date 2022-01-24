@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5CA498295
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DD2498299
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 15:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239912AbiAXOls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 09:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
+        id S240234AbiAXOlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 09:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239960AbiAXOlr (ORCPT
+        with ESMTP id S240076AbiAXOlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 09:41:47 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D07C06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:41:47 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id x23so2966243lfc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:41:47 -0800 (PST)
+        Mon, 24 Jan 2022 09:41:51 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3693C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:41:50 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id b14so50006324lff.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 06:41:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Dt0TIjFH2rj7vzbGPRJ1VIsaxBP8dFaOgztWn+GtXbs=;
-        b=NGbOY41d8mvU/UOsgSm6XBtkvTxs2nEvDfQRp42uJB2ZUoDNXmlDIJCfX8kPKCe+Vo
-         3ZtF06uAG3blwhIR4P7oQ4glHodNVlQNAMMOj2lzVqDeeKr8ipVku2zXaVmteFUMTkGg
-         LV2v7D3GRDJky1oCuRPn8F0xHR3FpteoeydnddRIi/pzlWHc9YPy0ljbN4ElTV3o7Unc
-         OxAJHX33gOwZbPbrGtCnn8FH6hlPklp2mxbRsYOA0Pg+Sn8QwGR7Y/F2+nZijKkC/hXX
-         d99umKDneeSLxiaIq1wz7EGqanLzMSJV2ih9MA3bThD/RSRozcpErzg7J6UY1WjbFpnS
-         IYuw==
+        bh=wFgLqQiQZekbL3DCdTli/cNo/XPQ933io0UcW9Nz8QY=;
+        b=pL60G1qn0Cwzz+CCO5iPYCVX1X5revhvUOJ8CdKOUnYBhrrxx0XYZkbgnkvb+luTbV
+         11zDSBIXRpKDYfKfCQuAYp5d4NswkqV5gh0tMDnn+52uGclpnKqRcYBmSDIIeSMbnkeM
+         qoUjrbQKy6lylH47adN8dkrz0pxTqHO/Apdg52fdewkurhOyGQWftIPhSu/EM7qOH15M
+         /tqmzO7FtGtSkxiRoqFp84T98l+Hu4wuFgPnQxCEDE9PywjnyWJBLLMv+ajqctt88NCD
+         TcWIaVAkh5jCe/FbzURWw/B3xmyq6U+l+1DjIhpPtq+dVtxJmNOhiXG9sCqdKfpkhi46
+         b67A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Dt0TIjFH2rj7vzbGPRJ1VIsaxBP8dFaOgztWn+GtXbs=;
-        b=4ckhpykXOiNtH+HiJ3GlgAW/jZ6Xzq0ggrmeckqYo9Knle6lx2gslAgw/S7sRJj0h2
-         tRFiNJBafhbEuFLAAgM3gh4aqkbIlfOx5pyIauB+yFX5IrTyBUq6GW0dv3BxdNve2LJj
-         r9waO671wJWufNMkEVoDFgQN6Jqu+GiSsclYnEDHH0hNcst1mh/KwwYDi17jrslVpnxh
-         eudLqZGxECjUhFTFKTFE9P7zbwBP66s/Uh1GG2lJTiM5TiUU0ePcxFIaaDhpi8pEWHhD
-         G2E+OKwuYjUYS5ClSZxQZ0WNNdeo+2MgWE4LofGcirvh6qbyFpN+8pIsYzVri3g23p6k
-         IhPQ==
-X-Gm-Message-State: AOAM530dNBn39ApLYZ96sas3GSiwKa5LBGYwErNF1UYo+GQXnsY9dRRl
-        S5d+rtuDJJ7MDVISx5cI6cJLHW/CGADe2jYOyWwKVg==
-X-Google-Smtp-Source: ABdhPJwnzmeErgUKcLme9VHJTI4yfBT7Ilrk5WKCFJr7Lh2Lp4vrh4hTPIoOoNSW8/g/lAVOV3W1hTWHpwqofKoWRFs=
-X-Received: by 2002:a2e:9187:: with SMTP id f7mr5213711ljg.463.1643035305614;
- Mon, 24 Jan 2022 06:41:45 -0800 (PST)
+        bh=wFgLqQiQZekbL3DCdTli/cNo/XPQ933io0UcW9Nz8QY=;
+        b=yPhJfLE/fDxOic/2ihypL96YqqI/x7/9zkJ7fjM62WgT1rfjTr8aQjBApcWA9h1jvv
+         QwH0b2N2bgW4E4AeHpN0zrTQfES1GLZzjNwhYvNm0sz8MYIr0l+SmyWXXAIO3u2zABYL
+         c4pnKGYAdLXziYvPPIXgFwXiTlRkFEXhovkh4MOdGwpcMP0hyY06CVb7Fjr3ynbedox0
+         yANT1ECbg6nR5c8pzOScvVjvBl8u30X4XZQWt1t1NfPiCgjptN3uLePcv0+4+EMz9VNX
+         TrO5zQ7aF4gWKugfhXzZqzTXo57i4+VIMx1TGgCTwinSzijcjXI6LJyeP7CEKfblM8Xc
+         GiTQ==
+X-Gm-Message-State: AOAM5309GfiB3DSntVHjHQfGbMDJ79TwDZ7fZPnOSiV8xWFgF+jJoPhI
+        8sfF5Jz9FbI6sRqfDX0HktNpo4gDWM/untMP7sCIQA==
+X-Google-Smtp-Source: ABdhPJxdf25ZssXG185bshk88XSr3AoX0NtkzX7wzz28NnOYJclUAtmZPoSBdd5KiV2+kdRU9462eKAImgCT6pkgMSQ=
+X-Received: by 2002:a05:6512:2ea:: with SMTP id m10mr13241339lfq.254.1643035309135;
+ Mon, 24 Jan 2022 06:41:49 -0800 (PST)
 MIME-Version: 1.0
-References: <1642050969-21152-1-git-send-email-anrao@nvidia.com>
-In-Reply-To: <1642050969-21152-1-git-send-email-anrao@nvidia.com>
+References: <20220119075306.36262-1-benchuanggli@gmail.com>
+In-Reply-To: <20220119075306.36262-1-benchuanggli@gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 24 Jan 2022 15:41:09 +0100
-Message-ID: <CAPDyKFo6X4z_gEUSjKqV6gKk6hiBRzMRUKK_7LFcct4WYg=_qg@mail.gmail.com>
-Subject: Re: [PATCH] mmc: tegra: Enable wake on SD card event
-To:     Aniruddha Rao <anrao@nvidia.com>
-Cc:     adrian.hunter@intel.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, p.zabel@pengutronix.de,
-        linux-mmc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Mon, 24 Jan 2022 15:41:13 +0100
+Message-ID: <CAPDyKFrzKqEs_OXuJXj=zA9N6zOcz+fp+GwUxVADgtFOMXoY=A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mmc: sdhci-pci-gli: Reduce the SSC value at 205MHz
+ for GL9750 and GL9755
+To:     Ben Chuang <benchuanggli@gmail.com>
+Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, greg.tu@genesyslogic.com.tw,
+        ben.chuang@genesyslogic.com.tw, SeanHY.Chen@genesyslogic.com.tw
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Jan 2022 at 06:16, Aniruddha Rao <anrao@nvidia.com> wrote:
+On Wed, 19 Jan 2022 at 08:53, Ben Chuang <benchuanggli@gmail.com> wrote:
 >
-> Enable GPIO wake source on SD card detect line.
-> Physical card insertion/removal event should wake the system
-> from suspend.
+> From: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 >
-> Signed-off-by: Aniruddha Rao <anrao@nvidia.com>
+> The SSC value is 0xFFE7 at 205MHz and may be saturated. Reduce the SSC
+> value to 0x5A1D at 205MHz to reduce this situation for GL9750 and GL9755.
+>
+> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 
 Applied for next, thanks!
 
@@ -76,43 +77,31 @@ Uffe
 
 
 > ---
->  drivers/mmc/host/sdhci-tegra.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+>  drivers/mmc/host/sdhci-pci-gli.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-> index 35ebba0..5c84bd5 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -1673,6 +1673,9 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->         /* HW busy detection is supported, but R1B responses are required. */
->         host->mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY | MMC_CAP_NEED_RSP_BUSY;
->
-> +       /* GPIO CD can be set as a wakeup source */
-> +       host->mmc->caps |= MMC_CAP_CD_WAKE;
-> +
->         tegra_sdhci_parse_dt(host);
->
->         tegra_host->power_gpio = devm_gpiod_get_optional(&pdev->dev, "power",
-> @@ -1840,7 +1843,7 @@ static int sdhci_tegra_suspend(struct device *dev)
->                 return ret;
->         }
->
-> -       return 0;
-> +       return mmc_gpio_set_cd_wake(host->mmc, true);
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> index 4fd99c1e82ba..9ead32d73447 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -390,7 +390,7 @@ static void gl9750_set_ssc(struct sdhci_host *host, u8 enable, u8 step, u16 ppm)
+>  static void gl9750_set_ssc_pll_205mhz(struct sdhci_host *host)
+>  {
+>         /* set pll to 205MHz and enable ssc */
+> -       gl9750_set_ssc(host, 0x1, 0x1F, 0xFFE7);
+> +       gl9750_set_ssc(host, 0x1, 0xF, 0x5A1D);
+>         gl9750_set_pll(host, 0x1, 0x246, 0x0);
 >  }
 >
->  static int sdhci_tegra_resume(struct device *dev)
-> @@ -1848,6 +1851,10 @@ static int sdhci_tegra_resume(struct device *dev)
->         struct sdhci_host *host = dev_get_drvdata(dev);
->         int ret;
+> @@ -533,7 +533,7 @@ static void gl9755_set_ssc(struct pci_dev *pdev, u8 enable, u8 step, u16 ppm)
+>  static void gl9755_set_ssc_pll_205mhz(struct pci_dev *pdev)
+>  {
+>         /* set pll to 205MHz and enable ssc */
+> -       gl9755_set_ssc(pdev, 0x1, 0x1F, 0xFFE7);
+> +       gl9755_set_ssc(pdev, 0x1, 0xF, 0x5A1D);
+>         gl9755_set_pll(pdev, 0x1, 0x246, 0x0);
+>  }
 >
-> +       ret = mmc_gpio_set_cd_wake(host->mmc, false);
-> +       if (ret)
-> +               return ret;
-> +
->         ret = pm_runtime_force_resume(dev);
->         if (ret)
->                 return ret;
 > --
-> 2.7.4
+> 2.34.1
 >

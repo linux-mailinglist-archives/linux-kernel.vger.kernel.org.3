@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1EB499CEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759B149987F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581856AbiAXWMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:12:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43790 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453176AbiAXV2p (ORCPT
+        id S1452729AbiAXV0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:26:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358951AbiAXUtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:28:45 -0500
+        Mon, 24 Jan 2022 15:49:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836AAC0418AE;
+        Mon, 24 Jan 2022 11:57:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6A11B815A3;
-        Mon, 24 Jan 2022 21:28:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9504C33E61;
-        Mon, 24 Jan 2022 21:28:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2557060BA1;
+        Mon, 24 Jan 2022 19:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B6B4C340E5;
+        Mon, 24 Jan 2022 19:57:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059722;
-        bh=rpK3+TbL9U4gIt72SS2rJL1owWGxYC3tz1KHKjGihMM=;
+        s=korg; t=1643054274;
+        bh=YnzVyzVF2gyXnAhBU7QgCxTIBetL5S/Hebevk1xn7XQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LUuhSjwaR30Iy4/Bpwi6jH1cNRQu2LIW3tc0hWzgVOta+Q6Rff9K8Bv3EhJvZFNtc
-         xndKoOnRoTQt0OZ2wrlZSBLgxrqMPOx6WtkpemX8pdl77HdCfmykHcrnnjK0UNySBf
-         7bWvhgkxyfs8Mr08fM4Xw9WYI+KzQV7MOHf4MBYQ=
+        b=JRhkQZvZYQN4M77HDVr6lOp2RgeMfadFKWh9kNeKidMQ0SycGw9hoOB2fyAvKbfnm
+         BU/hzYc/p4jRl84yaFSVyNMdrhRTaihdPBfvslssGKCV5uNuyBmPMbZsdoKRByXJaq
+         eVcJPt3F90lK3n83vV8nnGfBsPJNUntWYxWn8874=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0711/1039] net: mdio: Demote probed message to debug print
-Date:   Mon, 24 Jan 2022 19:41:40 +0100
-Message-Id: <20220124184149.236630930@linuxfoundation.org>
+Subject: [PATCH 5.10 336/563] ACPI / x86: Add not-present quirk for the PCI0.SDHB.BRC1 device on the GPD win
+Date:   Mon, 24 Jan 2022 19:41:41 +0100
+Message-Id: <20220124184036.057066427@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,38 +49,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 7590fc6f80ac2cbf23e6b42b668bbeded070850b ]
+[ Upstream commit 57d2dbf710d832841872fb15ebb79429cab90fae ]
 
-On systems with large numbers of MDIO bus/muxes the message indicating
-that a given MDIO bus has been successfully probed is repeated for as
-many buses we have, which can eat up substantial boot time for no
-reason, demote to a debug print.
+The GPD win and its sibling the GPD pocket (99% the same electronics in a
+different case) use a PCI wifi card. But the ACPI tables on both variants
+contain a bug where the SDIO MMC controller for SDIO wifi cards is enabled
+despite this. This SDIO MMC controller has a PCI0.SDHB.BRC1 child-device
+which _PS3 method sets a GPIO causing the PCI wifi card to turn off.
 
-Reported-by: Maxime Bizon <mbizon@freebox.fr>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220103194024.2620-1-f.fainelli@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+At the moment there is a pretty ugly kludge in the sdhci-acpi.c code,
+just to work around the bug in the DSDT of this single design. This can
+be solved cleaner/simply with a quirk overriding the _STA return of the
+broken PCI0.SDHB.BRC1 PCI0.SDHB.BRC1 child with a status value of 0,
+so that its power_manageable flag gets cleared, avoiding this problem.
+
+Note that even though it is not used, the _STA method for the MMC
+controller is deliberately not overridden. If the status of the MMC
+controller were forced to 0 it would never get suspended, which would
+cause these mini-laptops to not reach S0i3 level when suspended.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/mdio_bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/x86/utils.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-index c198722e4871d..3f7b93d5c76fe 100644
---- a/drivers/net/phy/mdio_bus.c
-+++ b/drivers/net/phy/mdio_bus.c
-@@ -594,7 +594,7 @@ int __mdiobus_register(struct mii_bus *bus, struct module *owner)
- 	mdiobus_setup_mdiodev_from_board_info(bus, mdiobus_create_device);
+diff --git a/drivers/acpi/x86/utils.c b/drivers/acpi/x86/utils.c
+index 91bbc4b6b8035..3f9a162be84e3 100644
+--- a/drivers/acpi/x86/utils.c
++++ b/drivers/acpi/x86/utils.c
+@@ -94,9 +94,10 @@ static const struct override_status_id override_status_ids[] = {
+ 	/*
+ 	 * The GPD win BIOS dated 20170221 has disabled the accelerometer, the
+ 	 * drivers sometimes cause crashes under Windows and this is how the
+-	 * manufacturer has solved this :| Note that the the DMI data is less
+-	 * generic then it seems, a board_vendor of "AMI Corporation" is quite
+-	 * rare and a board_name of "Default String" also is rare.
++	 * manufacturer has solved this :|  The DMI match may not seem unique,
++	 * but it is. In the 67000+ DMI decode dumps from linux-hardware.org
++	 * only 116 have board_vendor set to "AMI Corporation" and of those 116
++	 * only the GPD win and pocket entries' board_name is "Default string".
+ 	 *
+ 	 * Unfortunately the GPD pocket also uses these strings and its BIOS
+ 	 * was copy-pasted from the GPD win, so it has a disabled KIOX000A
+@@ -120,6 +121,19 @@ static const struct override_status_id override_status_ids[] = {
+ 		DMI_MATCH(DMI_PRODUCT_NAME, "Default string"),
+ 		DMI_MATCH(DMI_BIOS_DATE, "05/25/2017")
+ 	      }),
++
++	/*
++	 * The GPD win/pocket have a PCI wifi card, but its DSDT has the SDIO
++	 * mmc controller enabled and that has a child-device which _PS3
++	 * method sets a GPIO causing the PCI wifi card to turn off.
++	 * See above remark about uniqueness of the DMI match.
++	 */
++	NOT_PRESENT_ENTRY_PATH("\\_SB_.PCI0.SDHB.BRC1", ATOM_AIRMONT, {
++		DMI_EXACT_MATCH(DMI_BOARD_VENDOR, "AMI Corporation"),
++		DMI_EXACT_MATCH(DMI_BOARD_NAME, "Default string"),
++		DMI_EXACT_MATCH(DMI_BOARD_SERIAL, "Default string"),
++		DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Default string"),
++	      }),
+ };
  
- 	bus->state = MDIOBUS_REGISTERED;
--	pr_info("%s: probed\n", bus->name);
-+	dev_dbg(&bus->dev, "probed\n");
- 	return 0;
- 
- error:
+ bool acpi_device_override_status(struct acpi_device *adev, unsigned long long *status)
 -- 
 2.34.1
 

@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28416499BB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BC449966D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576303AbiAXVxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:53:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43552 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450620AbiAXVVG (ORCPT
+        id S1359729AbiAXVDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1389445AbiAXUkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:21:06 -0500
+        Mon, 24 Jan 2022 15:40:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C79AC045923;
+        Mon, 24 Jan 2022 11:51:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51211614BE;
-        Mon, 24 Jan 2022 21:21:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18178C340E4;
-        Mon, 24 Jan 2022 21:21:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D09D060B88;
+        Mon, 24 Jan 2022 19:51:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6F3C340E5;
+        Mon, 24 Jan 2022 19:51:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059265;
-        bh=oN+riz2KPBpT4JWOx2X4OywlB2pWHJD4t8/cTC9SMSQ=;
+        s=korg; t=1643053908;
+        bh=Ufaa4jKKCgqnRSUhHqLd976W0nGl3ILv2sToo0ivXwI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fRr+zAaL11a8UdbmQwnlmeQZwCH8lGtb8PkqKRZ03aRcWxVrI1I6kTUsXE4Y8snvK
-         IlzB2w8M0HNvkELK6NtLSfgfkuOSpdksHmZHQpxYkCnMpirI6+8cPHS/fuUJl5yBsH
-         sp2Aefp/SCNEfMUzLVcWKQpU8SON8bVBKuaCOpcI=
+        b=V2SxVt2ubuSYSpoXELwRMfGgBNYe3OgSS9RSEgfsUCOELTfpeiSfynuj1BC4JMNG6
+         Ho1ETgJPasUBjSNyme5uv2atzQXEbktnr4YwivZLXJ3OlFGBlE1jM9EVRuTFkVqLao
+         WujDnDl6+SLDw7kb+L0Dde8JNTH2Wu6asOaYux7c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0559/1039] media: atomisp: check before deference asd variable
+Subject: [PATCH 5.10 183/563] mmc: meson-mx-sdio: add IRQ check
 Date:   Mon, 24 Jan 2022 19:39:08 +0100
-Message-Id: <20220124184144.099289157@linuxfoundation.org>
+Message-Id: <20220124184030.745502688@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,57 +50,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-[ Upstream commit 71665d816214124d6bc4eb80314ac8f84ecacd78 ]
+[ Upstream commit 8fc9a77bc64e1f23d07953439817d8402ac9706f ]
 
-The asd->isp was referenced before checking if asd is not
-NULL.
+The driver neglects to check the result of platform_get_irq()'s call and
+blithely passes the negative error codes to devm_request_threaded_irq()
+(which takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding
+an original error code. Stop calling devm_request_threaded_irq() with the
+invalid IRQ #s.
 
-This fixes this warning:
-
-	../drivers/staging/media/atomisp/pci/atomisp_cmd.c:5548 atomisp_set_fmt_to_snr() warn: variable dereferenced before check 'asd' (see line 5540)
-
-While here, avoid getting the pipe pointer twice.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: ed80a13bb4c4 ("mmc: meson-mx-sdio: Add a driver for the Amlogic Meson8 and Meson8b SoC")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Link: https://lore.kernel.org/r/20211217202717.10041-3-s.shtylyov@omp.ru
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/atomisp_cmd.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/mmc/host/meson-mx-sdio.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_cmd.c b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-index 75a531667d743..1ddb9c815a3cb 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_cmd.c
-@@ -5529,8 +5529,8 @@ static int atomisp_set_fmt_to_snr(struct video_device *vdev,
- 				  unsigned int padding_w, unsigned int padding_h,
- 				  unsigned int dvs_env_w, unsigned int dvs_env_h)
- {
--	struct atomisp_sub_device *asd = atomisp_to_video_pipe(vdev)->asd;
- 	struct atomisp_video_pipe *pipe = atomisp_to_video_pipe(vdev);
-+	struct atomisp_sub_device *asd = pipe->asd;
- 	const struct atomisp_format_bridge *format;
- 	struct v4l2_subdev_pad_config pad_cfg;
- 	struct v4l2_subdev_state pad_state = {
-@@ -5541,7 +5541,7 @@ static int atomisp_set_fmt_to_snr(struct video_device *vdev,
- 	};
- 	struct v4l2_mbus_framefmt *ffmt = &vformat.format;
- 	struct v4l2_mbus_framefmt *req_ffmt;
--	struct atomisp_device *isp = asd->isp;
-+	struct atomisp_device *isp;
- 	struct atomisp_input_stream_info *stream_info =
- 	    (struct atomisp_input_stream_info *)ffmt->reserved;
- 	u16 stream_index = ATOMISP_INPUT_STREAM_GENERAL;
-@@ -5555,6 +5555,8 @@ static int atomisp_set_fmt_to_snr(struct video_device *vdev,
- 		return -EINVAL;
+diff --git a/drivers/mmc/host/meson-mx-sdio.c b/drivers/mmc/host/meson-mx-sdio.c
+index 1c5299cd0cbe1..264aae2a2b0cf 100644
+--- a/drivers/mmc/host/meson-mx-sdio.c
++++ b/drivers/mmc/host/meson-mx-sdio.c
+@@ -663,6 +663,11 @@ static int meson_mx_mmc_probe(struct platform_device *pdev)
  	}
  
-+	isp = asd->isp;
+ 	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		ret = irq;
++		goto error_free_mmc;
++	}
 +
- 	v4l2_fh_init(&fh.vfh, vdev);
- 
- 	stream_index = atomisp_source_pad_to_stream_id(asd, source_pad);
+ 	ret = devm_request_threaded_irq(host->controller_dev, irq,
+ 					meson_mx_mmc_irq,
+ 					meson_mx_mmc_irq_thread, IRQF_ONESHOT,
 -- 
 2.34.1
 

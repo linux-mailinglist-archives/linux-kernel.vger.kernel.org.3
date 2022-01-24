@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B314990DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B954990DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377618AbiAXUFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:05:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38076 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346919AbiAXTsY (ORCPT
+        id S1377731AbiAXUFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:05:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45688 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349931AbiAXTse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:48:24 -0500
+        Mon, 24 Jan 2022 14:48:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EF3BB811FB;
-        Mon, 24 Jan 2022 19:48:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BFC2C340E5;
-        Mon, 24 Jan 2022 19:48:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9862E61523;
+        Mon, 24 Jan 2022 19:48:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F6E6C340E5;
+        Mon, 24 Jan 2022 19:48:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053701;
-        bh=w+al1ds14mD9E7dlVSEZTS3IUW3zxxoIo+M8eVMaPqU=;
+        s=korg; t=1643053711;
+        bh=Ta3/1LLC6DwEG0sQyMUdKfg8TkHsYZQsq1+TVOjRIwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lDr/dDKdAl14w/jJHFiXwBzduGlfWtbM9gb+ZvPtkZTe3N6EotN4VQLT0q0cuPQ/E
-         13rBNpR5ouPI8/dJF1AiPZqSYOGiGj+mEqWH7DsB8lVbqbCuUAj3Gvi1lDgfreYy/G
-         dn+aE/xnLehjYvn2IOy3u05PYyjKTPf8v5S4At7A=
+        b=MhyOhbMqhyCT9G+k1P89DP9zEyt0Su+Jij8psdXAjNHqvViWM32FdfljUJqNAMQbn
+         whBZrEGvUR7mFxenIyL16lqwA/MwmJnSHMtU9/I4AM+Zkimy3H7f6FpQefOG1KZu2A
+         rlEu80YBX9AZndlYyHaf98oyLodk/SwToeTKI6+Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 150/563] x86/uaccess: Move variable into switch case statement
-Date:   Mon, 24 Jan 2022 19:38:35 +0100
-Message-Id: <20220124184029.597819962@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 153/563] crypto: stm32 - Fix last sparse warning in stm32_cryp_check_ctr_counter
+Date:   Mon, 24 Jan 2022 19:38:38 +0100
+Message-Id: <20220124184029.691958504@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -46,47 +46,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Herbert Xu <herbert@gondor.apana.org.au>
 
-[ Upstream commit 61646ca83d3889696f2772edaff122dd96a2935e ]
+[ Upstream commit 81064c96d88180ad6995d52419e94a78968308a2 ]
 
-When building with automatic stack variable initialization, GCC 12
-complains about variables defined outside of switch case statements.
-Move the variable into the case that uses it, which silences the warning:
+This patch changes the cast in stm32_cryp_check_ctr_counter from
+u32 to __be32 to match the prototype of stm32_cryp_hw_write_iv
+correctly.
 
-./arch/x86/include/asm/uaccess.h:317:23: warning: statement will never be executed [-Wswitch-unreachable]
-  317 |         unsigned char x_u8__; \
-      |                       ^~~~~~
-
-Fixes: 865c50e1d279 ("x86/uaccess: utilize CONFIG_CC_HAS_ASM_GOTO_OUTPUT")
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20211209043456.1377875-1-keescook@chromium.org
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/uaccess.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/crypto/stm32/stm32-cryp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 5c95d242f38d7..bb1430283c726 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -314,11 +314,12 @@ do {									\
- do {									\
- 	__chk_user_ptr(ptr);						\
- 	switch (size) {							\
--	unsigned char x_u8__;						\
--	case 1:								\
-+	case 1:	{							\
-+		unsigned char x_u8__;					\
- 		__get_user_asm(x_u8__, ptr, "b", "=q", label);		\
- 		(x) = x_u8__;						\
- 		break;							\
-+	}								\
- 	case 2:								\
- 		__get_user_asm(x, ptr, "w", "=r", label);		\
- 		break;							\
+diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
+index 7999b26a16ed0..7389a0536ff02 100644
+--- a/drivers/crypto/stm32/stm32-cryp.c
++++ b/drivers/crypto/stm32/stm32-cryp.c
+@@ -1229,7 +1229,7 @@ static void stm32_cryp_check_ctr_counter(struct stm32_cryp *cryp)
+ 		cr = stm32_cryp_read(cryp, CRYP_CR);
+ 		stm32_cryp_write(cryp, CRYP_CR, cr & ~CR_CRYPEN);
+ 
+-		stm32_cryp_hw_write_iv(cryp, (u32 *)cryp->last_ctr);
++		stm32_cryp_hw_write_iv(cryp, (__be32 *)cryp->last_ctr);
+ 
+ 		stm32_cryp_write(cryp, CRYP_CR, cr);
+ 	}
 -- 
 2.34.1
 

@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B184977DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5694977D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 04:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241190AbiAXDwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 22:52:09 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:46932 "EHLO
+        id S241177AbiAXDvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 22:51:16 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:46874 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241187AbiAXDwI (ORCPT
+        with ESMTP id S241175AbiAXDvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 22:52:08 -0500
+        Sun, 23 Jan 2022 22:51:09 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2EED41F3B1;
-        Mon, 24 Jan 2022 03:52:07 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 82AA41F3A0;
+        Mon, 24 Jan 2022 03:51:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1642996327; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1642996268; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hXM27Ktz0q7GrqgI86euZLVhJuAWozKSUgPAu9ALmpc=;
-        b=u9i5KjaF6Cn4C7Alxy2UjJlqk65gob4QWaDmCWNlnT1O4xjgGA+Z3KaH6ZGLjw6ZMxg2QY
-        4qRdEQqZYJLT4JlCjLnqSzYy626J3zS783DwTjolcktJzNbfRqKX7Os4zCsqJ09CoJF4O6
-        2EYKf06c+qUdHdjMGtxkaibGjoRviEI=
+        bh=7aGIJFrJoxVYTOarUMpcVxyhqOqRdBZGTPLRKjCZ04Y=;
+        b=n+mu4ts5W6++NB/HdVWdE8/u2lXQLbHMlfwpoZTqDMnapsQ13f+u7f9HhjxBTWTO5iDyLQ
+        D0Iy1Xqj9oNV7juUdF1ZhfwDMEWP8KHBfIA5kx9sPvOBTcgObD+IXl6Guud+j9drUFn32J
+        kIgz1fZoFZeIUalBTmx+NouK2MsD3mw=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1642996327;
+        s=susede2_ed25519; t=1642996268;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hXM27Ktz0q7GrqgI86euZLVhJuAWozKSUgPAu9ALmpc=;
-        b=wkiiDO1OlmC/xnDFA1Jecbo9BhxrJEP6/taW6KXQ22Ol8DMlaOkgSXO1Q8SQriumxjjhd3
-        5wuO9Iykg35+76Aw==
+        bh=7aGIJFrJoxVYTOarUMpcVxyhqOqRdBZGTPLRKjCZ04Y=;
+        b=8DCw4T5/4ajAli4QaAAQISZwKGlcsbSrCUT2KT+Qt+OEuiQAoF11dpSgoz/pGYcsT324Nj
+        PW28866cIoVuzYDg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2F74E13305;
-        Mon, 24 Jan 2022 03:52:01 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2098E1331A;
+        Mon, 24 Jan 2022 03:51:04 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id yE+5N2Ei7mFCRQAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 24 Jan 2022 03:52:01 +0000
-Subject: [PATCH 09/23] MM: submit multipage reads for SWP_FS_OPS swap-space
+        id rbgdMygi7mH6RAAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 24 Jan 2022 03:51:04 +0000
+Subject: [PATCH 05/23] MM: reclaim mustn't enter FS for SWP_FS_OPS swap-space
 From:   NeilBrown <neilb@suse.de>
 To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
         Anna Schumaker <anna.schumaker@netapp.com>,
@@ -58,7 +58,7 @@ To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
 Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Date:   Mon, 24 Jan 2022 14:48:32 +1100
-Message-ID: <164299611278.26253.14950274629759580371.stgit@noble.brown>
+Message-ID: <164299611276.26253.11555458501911153645.stgit@noble.brown>
 In-Reply-To: <164299573337.26253.7538614611220034049.stgit@noble.brown>
 References: <164299573337.26253.7538614611220034049.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -69,370 +69,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-swap_readpage() is given one page at a time, but maybe called repeatedly
-in succession.
-For block-device swapspace, the blk_plug functionality allows the
-multiple pages to be combined together at lower layers.
-That cannot be used for SWP_FS_OPS as blk_plug may not exist - it is
-only active when CONFIG_BLOCK=y.  Consequently all swap reads over NFS
-are single page reads.
+If swap-out is using filesystem operations (SWP_FS_OPS), then it is not
+safe to enter the FS for reclaim.
+So only down-grade the requirement for swap pages to __GFP_IO after
+checking that SWP_FS_OPS are not being used.
 
-With this patch we pass in a pointer-to-pointer when swap_readpage can
-store state between calls - much like the effect of blk_plug.  After
-calling swap_readpage() some number of times, the state will be passed
-to swap_read_unplug() which can submit the combined request.
-
-Some caller currently call blk_finish_plug() *before* the final call to
-swap_readpage(), so the last page cannot be included.  This patch moves
-blk_finish_plug() to after the last call, and calls swap_read_unplug()
-there too.
+This makes the calculation of "may_enter_fs" slightly more complex, so
+move it into a separate function.  with that done, there is little value
+in maintaining the bool variable any more.  So replace the
+may_enter_fs variable with a may_enter_fs() function.  This removes any
+risk for the variable becoming out-of-date.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- mm/madvise.c    |    8 +++-
- mm/memory.c     |    2 +
- mm/page_io.c    |  102 +++++++++++++++++++++++++++++++++++--------------------
- mm/swap.h       |   16 +++++++--
- mm/swap_state.c |   19 +++++++---
- 5 files changed, 98 insertions(+), 49 deletions(-)
+ mm/swap.h   |    8 ++++++++
+ mm/vmscan.c |   29 ++++++++++++++++++++---------
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 1ee4b7583379..2b1ab30af141 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -225,6 +225,7 @@ static int swapin_walk_pmd_entry(pmd_t *pmd, unsigned long start,
- 	pte_t *orig_pte;
- 	struct vm_area_struct *vma = walk->private;
- 	unsigned long index;
-+	struct swap_iocb *splug = NULL;
- 
- 	if (pmd_none_or_trans_huge_or_clear_bad(pmd))
- 		return 0;
-@@ -246,10 +247,11 @@ static int swapin_walk_pmd_entry(pmd_t *pmd, unsigned long start,
- 			continue;
- 
- 		page = read_swap_cache_async(entry, GFP_HIGHUSER_MOVABLE,
--							vma, index, false);
-+					     vma, index, false, &splug);
- 		if (page)
- 			put_page(page);
- 	}
-+	swap_read_unplug(splug);
- 
- 	return 0;
- }
-@@ -265,6 +267,7 @@ static void force_shm_swapin_readahead(struct vm_area_struct *vma,
- 	XA_STATE(xas, &mapping->i_pages, linear_page_index(vma, start));
- 	pgoff_t end_index = linear_page_index(vma, end + PAGE_SIZE - 1);
- 	struct page *page;
-+	struct swap_iocb *splug = NULL;
- 
- 	rcu_read_lock();
- 	xas_for_each(&xas, page, end_index) {
-@@ -277,13 +280,14 @@ static void force_shm_swapin_readahead(struct vm_area_struct *vma,
- 
- 		swap = radix_to_swp_entry(page);
- 		page = read_swap_cache_async(swap, GFP_HIGHUSER_MOVABLE,
--							NULL, 0, false);
-+					     NULL, 0, false, &splug);
- 		if (page)
- 			put_page(page);
- 
- 		rcu_read_lock();
- 	}
- 	rcu_read_unlock();
-+	swap_read_unplug(splug);
- 
- 	lru_add_drain();	/* Push any new pages onto the LRU now */
- }
-diff --git a/mm/memory.c b/mm/memory.c
-index d25372340107..8bd18c54eaa4 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3559,7 +3559,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 
- 				/* To provide entry to swap_readpage() */
- 				set_page_private(page, entry.val);
--				swap_readpage(page, true);
-+				swap_readpage(page, true, NULL);
- 				set_page_private(page, 0);
- 			}
- 		} else {
-diff --git a/mm/page_io.c b/mm/page_io.c
-index 6e32ca35d9b6..bcf655d650c8 100644
---- a/mm/page_io.c
-+++ b/mm/page_io.c
-@@ -286,7 +286,8 @@ static void bio_associate_blkg_from_page(struct bio *bio, struct page *page)
- 
- struct swap_iocb {
- 	struct kiocb		iocb;
--	struct bio_vec		bvec;
-+	struct bio_vec		bvec[SWAP_CLUSTER_MAX];
-+	int			pages;
- };
- static mempool_t *sio_pool;
- 
-@@ -306,7 +307,7 @@ int sio_pool_init(void)
- static void sio_write_complete(struct kiocb *iocb, long ret)
- {
- 	struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
--	struct page *page = sio->bvec.bv_page;
-+	struct page *page = sio->bvec[0].bv_page;
- 
- 	if (ret != 0 && ret != PAGE_SIZE) {
- 		/*
-@@ -344,10 +345,10 @@ static int swap_writepage_fs(struct page *page, struct writeback_control *wbc)
- 	init_sync_kiocb(&sio->iocb, swap_file);
- 	sio->iocb.ki_complete = sio_write_complete;
- 	sio->iocb.ki_pos = page_file_offset(page);
--	sio->bvec.bv_page = page;
--	sio->bvec.bv_len = PAGE_SIZE;
--	sio->bvec.bv_offset = 0;
--	iov_iter_bvec(&from, WRITE, &sio->bvec, 1, PAGE_SIZE);
-+	sio->bvec[0].bv_page = page;
-+	sio->bvec[0].bv_len = PAGE_SIZE;
-+	sio->bvec[0].bv_offset = 0;
-+	iov_iter_bvec(&from, WRITE, &sio->bvec[0], 1, PAGE_SIZE);
- 	ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
- 	if (ret != -EIOCBQUEUED)
- 		sio_write_complete(&sio->iocb, ret);
-@@ -390,46 +391,60 @@ int __swap_writepage(struct page *page, struct writeback_control *wbc,
- static void sio_read_complete(struct kiocb *iocb, long ret)
- {
- 	struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
--	struct page *page = sio->bvec.bv_page;
--
--	if (ret != 0 && ret != PAGE_SIZE) {
--		SetPageError(page);
--		ClearPageUptodate(page);
--		pr_alert_ratelimited("Read-error on swap-device\n");
--	} else {
--		SetPageUptodate(page);
--		count_vm_event(PSWPIN);
-+	int p;
-+
-+	for (p = 0; p < sio->pages; p++) {
-+		struct page *page = sio->bvec[p].bv_page;
-+		if (ret != 0 && ret != PAGE_SIZE * sio->pages) {
-+			SetPageError(page);
-+			ClearPageUptodate(page);
-+			pr_alert_ratelimited("Read-error on swap-device\n");
-+		} else {
-+			SetPageUptodate(page);
-+			count_vm_event(PSWPIN);
-+		}
-+		unlock_page(page);
- 	}
--	unlock_page(page);
- 	mempool_free(sio, sio_pool);
- }
- 
--static int swap_readpage_fs(struct page *page)
-+static void swap_readpage_fs(struct page *page,
-+			     struct swap_iocb **plug)
- {
- 	struct swap_info_struct *sis = page_swap_info(page);
--	struct file *swap_file = sis->swap_file;
--	struct address_space *mapping = swap_file->f_mapping;
--	struct iov_iter from;
--	struct swap_iocb *sio;
-+	struct swap_iocb *sio = NULL;
- 	loff_t pos = page_file_offset(page);
--	int ret;
--
--	sio = mempool_alloc(sio_pool, GFP_KERNEL);
--	init_sync_kiocb(&sio->iocb, swap_file);
--	sio->iocb.ki_pos = pos;
--	sio->iocb.ki_complete = sio_read_complete;
--	sio->bvec.bv_page = page;
--	sio->bvec.bv_len = PAGE_SIZE;
--	sio->bvec.bv_offset = 0;
- 
--	iov_iter_bvec(&from, READ, &sio->bvec, 1, PAGE_SIZE);
--	ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
--	if (ret != -EIOCBQUEUED)
--		sio_read_complete(&sio->iocb, ret);
--	return ret;
-+	if (*plug)
-+		sio = *plug;
-+	if (sio) {
-+		if (sio->iocb.ki_filp != sis->swap_file ||
-+		    sio->iocb.ki_pos + sio->pages * PAGE_SIZE != pos) {
-+			swap_read_unplug(sio);
-+			sio = NULL;
-+		}
-+	}
-+	if (!sio) {
-+		sio = mempool_alloc(sio_pool, GFP_KERNEL);
-+		init_sync_kiocb(&sio->iocb, sis->swap_file);
-+		sio->iocb.ki_pos = pos;
-+		sio->iocb.ki_complete = sio_read_complete;
-+		sio->pages = 0;
-+	}
-+	sio->bvec[sio->pages].bv_page = page;
-+	sio->bvec[sio->pages].bv_len = PAGE_SIZE;
-+	sio->bvec[sio->pages].bv_offset = 0;
-+	sio->pages += 1;
-+	if (sio->pages == ARRAY_SIZE(sio->bvec) || !plug) {
-+		swap_read_unplug(sio);
-+		sio = NULL;
-+	}
-+	if (plug)
-+		*plug = sio;
- }
- 
--int swap_readpage(struct page *page, bool synchronous)
-+int swap_readpage(struct page *page, bool synchronous,
-+		  struct swap_iocb **plug)
- {
- 	struct bio *bio;
- 	int ret = 0;
-@@ -455,7 +470,7 @@ int swap_readpage(struct page *page, bool synchronous)
- 	}
- 
- 	if (data_race(sis->flags & SWP_FS_OPS)) {
--		ret = swap_readpage_fs(page);
-+		swap_readpage_fs(page, plug);
- 		goto out;
- 	}
- 
-@@ -507,3 +522,16 @@ int swap_readpage(struct page *page, bool synchronous)
- 	delayacct_swapin_end();
- 	return ret;
- }
-+
-+void __swap_read_unplug(struct swap_iocb *sio)
-+{
-+	struct iov_iter from;
-+	struct address_space *mapping = sio->iocb.ki_filp->f_mapping;
-+	int ret;
-+
-+	iov_iter_bvec(&from, READ, sio->bvec, sio->pages,
-+		      PAGE_SIZE * sio->pages);
-+	ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
-+	if (ret != -EIOCBQUEUED)
-+		sio_read_complete(&sio->iocb, ret);
-+}
 diff --git a/mm/swap.h b/mm/swap.h
-index e8ee995cf8d8..0c79b2478f3f 100644
+index 13e72a5023aa..5c676e55f288 100644
 --- a/mm/swap.h
 +++ b/mm/swap.h
-@@ -4,7 +4,15 @@
+@@ -47,6 +47,10 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t flag,
+ struct page *swapin_readahead(swp_entry_t entry, gfp_t flag,
+ 			      struct vm_fault *vmf);
  
- /* linux/mm/page_io.c */
- int sio_pool_init(void);
--int swap_readpage(struct page *page, bool do_poll);
-+struct swap_iocb;
-+int swap_readpage(struct page *page, bool do_poll,
-+		  struct swap_iocb **plug);
-+void __swap_read_unplug(struct swap_iocb *plug);
-+static inline void swap_read_unplug(struct swap_iocb *plug)
++static inline unsigned int page_swap_flags(struct page *page)
 +{
-+	if (unlikely(plug))
-+		__swap_read_unplug(plug);
++	return page_swap_info(page)->flags;
 +}
- int swap_writepage(struct page *page, struct writeback_control *wbc);
- void end_swap_bio_write(struct bio *bio);
- int __swap_writepage(struct page *page, struct writeback_control *wbc,
-@@ -38,7 +46,8 @@ struct page *find_get_incore_page(struct address_space *mapping, pgoff_t index);
- struct page *read_swap_cache_async(swp_entry_t, gfp_t,
- 				   struct vm_area_struct *vma,
- 				   unsigned long addr,
--				   bool do_poll);
-+				   bool do_poll,
-+				   struct swap_iocb **plug);
- struct page *__read_swap_cache_async(swp_entry_t, gfp_t,
- 				     struct vm_area_struct *vma,
- 				     unsigned long addr,
-@@ -53,7 +62,8 @@ static inline unsigned int page_swap_flags(struct page *page)
- 	return page_swap_info(page)->flags;
- }
  #else /* CONFIG_SWAP */
--static inline int swap_readpage(struct page *page, bool do_poll)
-+static inline int swap_readpage(struct page *page, bool do_poll,
-+				struct swap_iocb **plug);
+ static inline int swap_readpage(struct page *page, bool do_poll)
  {
- 	return 0;
+@@ -126,4 +130,8 @@ static inline void clear_shadow_from_swap_cache(int type, unsigned long begin,
+ {
  }
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index d541594be1c3..5cb2c75fa247 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -520,14 +520,16 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
-  * the swap entry is no longer in use.
+ 
++static inline unsigned int page_swap_flags(struct page *page)
++{
++	return 0;
++}
+ #endif /* CONFIG_SWAP */
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 5c734ffc6057..ad5026d06aa8 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1506,6 +1506,22 @@ static unsigned int demote_page_list(struct list_head *demote_pages,
+ 	return nr_succeeded;
+ }
+ 
++static bool may_enter_fs(struct page *page, gfp_t gfp_mask)
++{
++	if (gfp_mask & __GFP_FS)
++		return true;
++	if (!PageSwapCache(page) || !(gfp_mask & __GFP_IO))
++		return false;
++	/*
++	 * We can "enter_fs" for swap-cache with only __GFP_IO
++	 * providing this isn't SWP_FS_OPS.
++	 * ->flags can be updated non-atomicially (scan_swap_map_slots),
++	 * but that will never affect SWP_FS_OPS, so the data_race
++	 * is safe.
++	 */
++	return !data_race(page_swap_flags(page) & SWP_FS_OPS);
++}
++
+ /*
+  * shrink_page_list() returns the number of reclaimed pages
   */
- struct page *read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
--		struct vm_area_struct *vma, unsigned long addr, bool do_poll)
-+				   struct vm_area_struct *vma,
-+				   unsigned long addr, bool do_poll,
-+				   struct swap_iocb **plug)
- {
- 	bool page_was_allocated;
- 	struct page *retpage = __read_swap_cache_async(entry, gfp_mask,
- 			vma, addr, &page_was_allocated);
+@@ -1531,7 +1547,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 		struct address_space *mapping;
+ 		struct page *page;
+ 		enum page_references references = PAGEREF_RECLAIM;
+-		bool dirty, writeback, may_enter_fs;
++		bool dirty, writeback;
+ 		unsigned int nr_pages;
  
- 	if (page_was_allocated)
--		swap_readpage(retpage, do_poll);
-+		swap_readpage(retpage, do_poll, plug);
+ 		cond_resched();
+@@ -1555,9 +1571,6 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 		if (!sc->may_unmap && page_mapped(page))
+ 			goto keep_locked;
  
- 	return retpage;
- }
-@@ -621,6 +623,7 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
- 	unsigned long mask;
- 	struct swap_info_struct *si = swp_swap_info(entry);
- 	struct blk_plug plug;
-+	struct swap_iocb *splug = NULL;
- 	bool do_poll = true, page_allocated;
- 	struct vm_area_struct *vma = vmf->vma;
- 	unsigned long addr = vmf->address;
-@@ -647,7 +650,7 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
- 		if (!page)
- 			continue;
- 		if (page_allocated) {
--			swap_readpage(page, false);
-+			swap_readpage(page, false, &splug);
- 			if (offset != entry_offset) {
- 				SetPageReadahead(page);
- 				count_vm_event(SWAP_RA);
-@@ -658,8 +661,10 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
+-		may_enter_fs = (sc->gfp_mask & __GFP_FS) ||
+-			(PageSwapCache(page) && (sc->gfp_mask & __GFP_IO));
+-
+ 		/*
+ 		 * The number of dirty pages determines if a node is marked
+ 		 * reclaim_congested. kswapd will stall and start writing
+@@ -1602,7 +1615,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 		 *    not to fs). In this case mark the page for immediate
+ 		 *    reclaim and continue scanning.
+ 		 *
+-		 *    Require may_enter_fs because we would wait on fs, which
++		 *    Require may_enter_fs() because we would wait on fs, which
+ 		 *    may not have submitted IO yet. And the loop driver might
+ 		 *    enter reclaim, and deadlock if it waits on a page for
+ 		 *    which it is needed to do the write (loop masks off
+@@ -1634,7 +1647,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
  
- 	lru_add_drain();	/* Push any new pages onto the LRU now */
- skip:
--	page = read_swap_cache_async(entry, gfp_mask, vma, addr, do_poll);
-+	page = read_swap_cache_async(entry, gfp_mask, vma, addr, do_poll,
-+				     &splug);
- 	blk_finish_plug(&plug);
-+	swap_read_unplug(splug);
- 	return page;
- }
+ 			/* Case 2 above */
+ 			} else if (writeback_throttling_sane(sc) ||
+-			    !PageReclaim(page) || !may_enter_fs) {
++			    !PageReclaim(page) || !may_enter_fs(page, sc->gfp_mask)) {
+ 				/*
+ 				 * This is slightly racy - end_page_writeback()
+ 				 * might have just cleared PageReclaim, then
+@@ -1724,8 +1737,6 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 						goto activate_locked_split;
+ 				}
  
-@@ -791,6 +796,7 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
- 				       struct vm_fault *vmf)
- {
- 	struct blk_plug plug;
-+	struct swap_iocb *splug = NULL;
- 	struct vm_area_struct *vma = vmf->vma;
- 	struct page *page;
- 	pte_t *pte, pentry;
-@@ -821,7 +827,7 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
- 		if (!page)
- 			continue;
- 		if (page_allocated) {
--			swap_readpage(page, false);
-+			swap_readpage(page, false, &splug);
- 			if (i != ra_info.offset) {
- 				SetPageReadahead(page);
- 				count_vm_event(SWAP_RA);
-@@ -832,8 +838,9 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
- 	lru_add_drain();
- skip:
- 	page = read_swap_cache_async(fentry, gfp_mask, vma, vmf->address,
--				     ra_info.win == 1);
-+				     ra_info.win == 1, &splug);
- 	blk_finish_plug(&plug);
-+	swap_read_unplug(splug);
- 	return page;
- }
+-				may_enter_fs = true;
+-
+ 				/* Adding to swap updated mapping */
+ 				mapping = page_mapping(page);
+ 			}
+@@ -1795,7 +1806,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
  
+ 			if (references == PAGEREF_RECLAIM_CLEAN)
+ 				goto keep_locked;
+-			if (!may_enter_fs)
++			if (!may_enter_fs(page, sc->gfp_mask))
+ 				goto keep_locked;
+ 			if (!sc->may_writepage)
+ 				goto keep_locked;
 
 

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B86E2499158
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E690849916B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379131AbiAXUKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S1379221AbiAXUKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:10:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352168AbiAXTwp (ORCPT
+        with ESMTP id S1351785AbiAXTwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 14:52:45 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D558C06138E;
-        Mon, 24 Jan 2022 11:25:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61491C06138F;
+        Mon, 24 Jan 2022 11:25:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E93746148B;
-        Mon, 24 Jan 2022 19:25:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB115C340E5;
-        Mon, 24 Jan 2022 19:25:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC8DD61488;
+        Mon, 24 Jan 2022 19:25:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB123C340EA;
+        Mon, 24 Jan 2022 19:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052343;
-        bh=DJ/cYkr8MzqT7hAfv92BLVMqYFrXoXo4x8FHMhWFLhY=;
+        s=korg; t=1643052346;
+        bh=g7mHWUR/GWhbjh5JLbfZd53yt1tiPR9RD2IitNW5qzU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hd46jcAe/bMRU6y1iTVNEYlRGlbSkIamwpta2/28D0aA7CeE6ak9r1QR4fzYQ8oK8
-         9kmlYBy+pHVQsVRLgF58RQC4jWOYufYIr0bloFn+kYYqIPylkN4xzUcQVZ6mUibahC
-         JTthaUJooCqKq3DLTz3xoszrcNJzKGWY1GtYbKV4=
+        b=MuJdjbRHGUjmYqj6yGR/wDkd++ODSmiRmUs1li60fZBCcmzA/wi7YgteNmmImkrWV
+         2Bn9bOIZWssiXQoqccL093ml5Fsb4ndQ/JjR2rZwbVpnjq1o7CB+j53qazAWFrGehy
+         xSd2+METCPxJIV0jQOStDvcFMSALIhmUki4mT03E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
-Subject: [PATCH 5.4 006/320] nfc: llcp: fix NULL error pointer dereference on sendmsg() after failed bind()
-Date:   Mon, 24 Jan 2022 19:39:50 +0100
-Message-Id: <20220124183953.977141470@linuxfoundation.org>
+        Stefan Riedmueller <s.riedmueller@phytec.de>,
+        Christian Eggers <ceggers@arri.de>, Han Xu <han.xu@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 5.4 007/320] mtd: rawnand: gpmi: Add ERR007117 protection for nfc_apply_timings
+Date:   Mon, 24 Jan 2022 19:39:51 +0100
+Message-Id: <20220124183954.021297586@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
 References: <20220124183953.750177707@linuxfoundation.org>
@@ -50,102 +50,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Christian Eggers <ceggers@arri.de>
 
-commit dded08927ca3c31a5c37f8e7f95fe98770475dd4 upstream.
+commit f53d4c109a666bf1a4883b45d546fba079258717 upstream.
 
-Syzbot detected a NULL pointer dereference of nfc_llcp_sock->dev pointer
-(which is a 'struct nfc_dev *') with calls to llcp_sock_sendmsg() after
-a failed llcp_sock_bind(). The message being sent is a SOCK_DGRAM.
+gpmi_io clock needs to be gated off when changing the parent/dividers of
+enfc_clk_root (i.MX6Q/i.MX6UL) respectively qspi2_clk_root (i.MX6SX).
+Otherwise this rate change can lead to an unresponsive GPMI core which
+results in DMA timeouts and failed driver probe:
 
-KASAN report:
+[    4.072318] gpmi-nand 112000.gpmi-nand: DMA timeout, last DMA
+...
+[    4.370355] gpmi-nand 112000.gpmi-nand: Chip: 0, Error -110
+...
+[    4.375988] gpmi-nand 112000.gpmi-nand: Chip: 0, Error -22
+[    4.381524] gpmi-nand 112000.gpmi-nand: Error in ECC-based read: -22
+[    4.387988] gpmi-nand 112000.gpmi-nand: Chip: 0, Error -22
+[    4.393535] gpmi-nand 112000.gpmi-nand: Chip: 0, Error -22
+...
 
-  BUG: KASAN: null-ptr-deref in nfc_alloc_send_skb+0x2d/0xc0
-  Read of size 4 at addr 00000000000005c8 by task llcp_sock_nfc_a/899
+Other than stated in i.MX 6 erratum ERR007117, it should be sufficient
+to gate only gpmi_io because all other bch/nand clocks are derived from
+different clock roots.
 
-  CPU: 5 PID: 899 Comm: llcp_sock_nfc_a Not tainted 5.16.0-rc6-next-20211224-00001-gc6437fbf18b0 #125
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
-  Call Trace:
-   <TASK>
-   dump_stack_lvl+0x45/0x59
-   ? nfc_alloc_send_skb+0x2d/0xc0
-   __kasan_report.cold+0x117/0x11c
-   ? mark_lock+0x480/0x4f0
-   ? nfc_alloc_send_skb+0x2d/0xc0
-   kasan_report+0x38/0x50
-   nfc_alloc_send_skb+0x2d/0xc0
-   nfc_llcp_send_ui_frame+0x18c/0x2a0
-   ? nfc_llcp_send_i_frame+0x230/0x230
-   ? __local_bh_enable_ip+0x86/0xe0
-   ? llcp_sock_connect+0x470/0x470
-   ? llcp_sock_connect+0x470/0x470
-   sock_sendmsg+0x8e/0xa0
-   ____sys_sendmsg+0x253/0x3f0
-   ...
+The i.MX6 reference manuals state that changing clock muxers can cause
+glitches but are silent about changing dividers. But tests showed that
+these glitches can definitely happen on i.MX6ULL. For i.MX7D/8MM in turn,
+the manual guarantees that no glitches can happen when changing
+dividers.
 
-The issue was visible only with multiple simultaneous calls to bind() and
-sendmsg(), which resulted in most of the bind() calls to fail.  The
-bind() was failing on checking if there is available WKS/SDP/SAP
-(respective bit in 'struct nfc_llcp_local' fields).  When there was no
-available WKS/SDP/SAP, the bind returned error but the sendmsg() to such
-socket was able to trigger mentioned NULL pointer dereference of
-nfc_llcp_sock->dev.
-
-The code looks simply racy and currently it protects several paths
-against race with checks for (!nfc_llcp_sock->local) which is NULL-ified
-in error paths of bind().  The llcp_sock_sendmsg() did not have such
-check but called function nfc_llcp_send_ui_frame() had, although not
-protected with lock_sock().
-
-Therefore the race could look like (same socket is used all the time):
-  CPU0                                     CPU1
-  ====                                     ====
-  llcp_sock_bind()
-  - lock_sock()
-    - success
-  - release_sock()
-  - return 0
-                                           llcp_sock_sendmsg()
-                                           - lock_sock()
-                                           - release_sock()
-  llcp_sock_bind(), same socket
-  - lock_sock()
-    - error
-                                           - nfc_llcp_send_ui_frame()
-                                             - if (!llcp_sock->local)
-    - llcp_sock->local = NULL
-    - nfc_put_device(dev)
-                                             - dereference llcp_sock->dev
-  - release_sock()
-  - return -ERRNO
-
-The nfc_llcp_send_ui_frame() checked llcp_sock->local outside of the
-lock, which is racy and ineffective check.  Instead, its caller
-llcp_sock_sendmsg(), should perform the check inside lock_sock().
-
-Reported-and-tested-by: syzbot+7f23bcddf626e0593a39@syzkaller.appspotmail.com
-Fixes: b874dec21d1c ("NFC: Implement LLCP connection less Tx path")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Co-developed-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+Signed-off-by: Christian Eggers <ceggers@arri.de>
+Cc: stable@vger.kernel.org
+Acked-by: Han Xu <han.xu@nxp.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20211102202022.15551-2-ceggers@arri.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/nfc/llcp_sock.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |   28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
---- a/net/nfc/llcp_sock.c
-+++ b/net/nfc/llcp_sock.c
-@@ -789,6 +789,11 @@ static int llcp_sock_sendmsg(struct sock
+--- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
++++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
+@@ -710,14 +710,32 @@ static void gpmi_nfc_compute_timings(str
+ 			      (use_half_period ? BM_GPMI_CTRL1_HALF_PERIOD : 0);
+ }
  
- 	lock_sock(sk);
- 
-+	if (!llcp_sock->local) {
-+		release_sock(sk);
-+		return -ENODEV;
-+	}
+-static void gpmi_nfc_apply_timings(struct gpmi_nand_data *this)
++static int gpmi_nfc_apply_timings(struct gpmi_nand_data *this)
+ {
+ 	struct gpmi_nfc_hardware_timing *hw = &this->hw;
+ 	struct resources *r = &this->resources;
+ 	void __iomem *gpmi_regs = r->gpmi_regs;
+ 	unsigned int dll_wait_time_us;
++	int ret;
 +
- 	if (sk->sk_type == SOCK_DGRAM) {
- 		DECLARE_SOCKADDR(struct sockaddr_nfc_llcp *, addr,
- 				 msg->msg_name);
++	/* Clock dividers do NOT guarantee a clean clock signal on its output
++	 * during the change of the divide factor on i.MX6Q/UL/SX. On i.MX7/8,
++	 * all clock dividers provide these guarantee.
++	 */
++	if (GPMI_IS_MX6Q(this) || GPMI_IS_MX6SX(this))
++		clk_disable_unprepare(r->clock[0]);
++
++	ret = clk_set_rate(r->clock[0], hw->clk_rate);
++	if (ret) {
++		dev_err(this->dev, "cannot set clock rate to %lu Hz: %d\n", hw->clk_rate, ret);
++		return ret;
++	}
+ 
+-	clk_set_rate(r->clock[0], hw->clk_rate);
++	if (GPMI_IS_MX6Q(this) || GPMI_IS_MX6SX(this)) {
++		ret = clk_prepare_enable(r->clock[0]);
++		if (ret)
++			return ret;
++	}
+ 
+ 	writel(hw->timing0, gpmi_regs + HW_GPMI_TIMING0);
+ 	writel(hw->timing1, gpmi_regs + HW_GPMI_TIMING1);
+@@ -736,6 +754,8 @@ static void gpmi_nfc_apply_timings(struc
+ 
+ 	/* Wait for the DLL to settle. */
+ 	udelay(dll_wait_time_us);
++
++	return 0;
+ }
+ 
+ static int gpmi_setup_data_interface(struct nand_chip *chip, int chipnr,
+@@ -2429,7 +2449,9 @@ static int gpmi_nfc_exec_op(struct nand_
+ 	 */
+ 	if (this->hw.must_apply_timings) {
+ 		this->hw.must_apply_timings = false;
+-		gpmi_nfc_apply_timings(this);
++		ret = gpmi_nfc_apply_timings(this);
++		if (ret)
++			return ret;
+ 	}
+ 
+ 	dev_dbg(this->dev, "%s: %d instructions\n", __func__, op->ninstrs);
 
 

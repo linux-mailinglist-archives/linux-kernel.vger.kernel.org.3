@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CA8499D67
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF717499D65
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356670AbiAXWTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:19:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33262 "EHLO
+        id S1347130AbiAXWSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:18:39 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33280 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447576AbiAXVLB (ORCPT
+        with ESMTP id S1447592AbiAXVLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:11:01 -0500
+        Mon, 24 Jan 2022 16:11:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AB6DB80CCF;
-        Mon, 24 Jan 2022 21:10:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96285C340E5;
-        Mon, 24 Jan 2022 21:10:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 882A8B8122A;
+        Mon, 24 Jan 2022 21:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A394C340E5;
+        Mon, 24 Jan 2022 21:11:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058658;
-        bh=wAh/haiJ/v7tO3dGBFHipa7wk5ZBATtCVmv/QRDmjlo=;
+        s=korg; t=1643058661;
+        bh=19hz3DN36gB56Klljxe2nsrN2tOxcnraYLZOEAd9hso=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZHBm5h7DyYvZtj1ubjO+D64krLdqm1y28c4KqGf8L3FHfFcIdaST4FM8BawavJF6/
-         G5Bnmj28niCIGBbDmUik/v6hKB2UXjWnthYWtwSeBKWmFNRadMXTOXh35Tv1D+DBwr
-         5kUt/4mlQVn6tZTDZQl6AQZlBQ2evnrfUW2UoWng=
+        b=YmPnuL5Roko1PNAA3VsHj4WTMADlWBXBMYf3cMt6Xea1uG6mnbaYtdPaMOKKWdE4x
+         WdOkCiqcFQpXG5ztfHliRjM2TkRvwbh87uqPTOlME+/PuhaHhKR1zrcOmSrWLiZVC5
+         H9JRdGpmCYSXaeL1vA4Z2umyT6OTJg3IlBEqmPsM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0360/1039] io_uring: remove double poll on poll update
-Date:   Mon, 24 Jan 2022 19:35:49 +0100
-Message-Id: <20220124184137.379491661@linuxfoundation.org>
+        stable@vger.kernel.org, TCS Robot <tcs_robot@tencent.com>,
+        Haimin Zhang <tcs_kernel@tencent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Joanne Koong <joannekoong@fb.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0361/1039] bpf: Add missing map_get_next_key method to bloom filter map.
+Date:   Mon, 24 Jan 2022 19:35:50 +0100
+Message-Id: <20220124184137.412435046@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
 References: <20220124184125.121143506@linuxfoundation.org>
@@ -45,34 +48,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Haimin Zhang <tcs_kernel@tencent.com>
 
-[ Upstream commit e840b4baf3cfb37e2ead4f649a45bb78178677ff ]
+[ Upstream commit 3ccdcee28415c4226de05438b4d89eb5514edf73 ]
 
-Before updating a poll request we should remove it from poll queues,
-including the double poll entry.
+Without it, kernel crashes in map_get_next_key().
 
-Fixes: b69de288e913 ("io_uring: allow events and user_data update of running poll requests")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/ac39e7f80152613603b8a6cc29a2b6063ac2434f.1639605189.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 9330986c0300 ("bpf: Add bloom filter map implementation")
+Reported-by: TCS Robot <tcs_robot@tencent.com>
+Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Joanne Koong <joannekoong@fb.com>
+Link: https://lore.kernel.org/bpf/1640776802-22421-1-git-send-email-tcs.kernel@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/bpf/bloom_filter.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index fb2a0cb4aaf83..72496f424c155 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5928,6 +5928,7 @@ static int io_poll_update(struct io_kiocb *req, unsigned int issue_flags)
- 	 * update those. For multishot, if we're racing with completion, just
- 	 * let completion re-add it.
- 	 */
-+	io_poll_remove_double(preq);
- 	completing = !__io_poll_remove_one(preq, &preq->poll, false);
- 	if (completing && (preq->poll.events & EPOLLONESHOT)) {
- 		ret = -EALREADY;
+diff --git a/kernel/bpf/bloom_filter.c b/kernel/bpf/bloom_filter.c
+index 277a05e9c9849..b141a1346f72d 100644
+--- a/kernel/bpf/bloom_filter.c
++++ b/kernel/bpf/bloom_filter.c
+@@ -82,6 +82,11 @@ static int bloom_map_delete_elem(struct bpf_map *map, void *value)
+ 	return -EOPNOTSUPP;
+ }
+ 
++static int bloom_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
++{
++	return -EOPNOTSUPP;
++}
++
+ static struct bpf_map *bloom_map_alloc(union bpf_attr *attr)
+ {
+ 	u32 bitset_bytes, bitset_mask, nr_hash_funcs, nr_bits;
+@@ -192,6 +197,7 @@ const struct bpf_map_ops bloom_filter_map_ops = {
+ 	.map_meta_equal = bpf_map_meta_equal,
+ 	.map_alloc = bloom_map_alloc,
+ 	.map_free = bloom_map_free,
++	.map_get_next_key = bloom_map_get_next_key,
+ 	.map_push_elem = bloom_map_push_elem,
+ 	.map_peek_elem = bloom_map_peek_elem,
+ 	.map_pop_elem = bloom_map_pop_elem,
 -- 
 2.34.1
 

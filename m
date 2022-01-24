@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 041B7499E2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C76649A04F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588019AbiAXWae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:30:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50594 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377582AbiAXViv (ORCPT
+        id S1383507AbiAXXFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:05:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1583669AbiAXWTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:38:51 -0500
+        Mon, 24 Jan 2022 17:19:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D27C0619C2;
+        Mon, 24 Jan 2022 12:49:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE3E2B815AC;
-        Mon, 24 Jan 2022 21:38:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 056B6C36AEB;
-        Mon, 24 Jan 2022 21:38:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 910BA60C19;
+        Mon, 24 Jan 2022 20:49:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72111C340E5;
+        Mon, 24 Jan 2022 20:49:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060327;
-        bh=/CkJZbBS/noqHTVzt9gb1OaMJAK407vUfQxtvkkrFfs=;
+        s=korg; t=1643057362;
+        bh=c2qXLrMSjxDS76K9hZdCjkLK1zTrQr41ndm8rdt8eUA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0o463h19Qf/HjpGwKPT8ghXEAfITqpgz57SAWuZ/ySZMZk02aFm2Mhh54VEmL9FDe
-         ge3h+ONg1TyJgVTcDL72YOzGLSQsxCMaKP5QJfLDfi/VGlLNnvJq0RAFoaUpzpPSOj
-         32h09wrtzyPPGOrjZ2bB3LFPvldQCb1O8YkKQJXU=
+        b=t3NCnk4IRDDr5hsj+zac+FY0Dj9HCQClW/0jaREVfjmtdRRqkKnmBr07ubCCBLnvM
+         2luZE7aR0zZ1I5GL1aJzA7/+ZKpZ/REgfF2N991KsFxZu/o6mDKImyK4p220YaNos3
+         zf1ewVaul8v8Ab+ATXc06GsZWuhgneVnXdWs1dsI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.16 0912/1039] Documentation: ACPI: Fix data node reference documentation
-Date:   Mon, 24 Jan 2022 19:45:01 +0100
-Message-Id: <20220124184155.959228329@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH 5.15 786/846] clk: si5341: Fix clock HW provider cleanup
+Date:   Mon, 24 Jan 2022 19:45:03 +0100
+Message-Id: <20220124184128.070367352@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,66 +48,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit a11174952205d082f1658fab4314f0caf706e0a8 upstream.
+commit 49a8f2bc8d88702783c7e163ec84374e9a022f71 upstream.
 
-The data node reference documentation was missing a package that must
-contain the property values, instead property name and multiple values
-being present in a single package. This is not aligned with the _DSD
-spec.
+The call to of_clk_add_hw_provider was not undone on remove or on probe
+failure, which could cause an oops on a subsequent attempt to retrieve
+clocks for the removed device. Switch to the devm version of the
+function to avoid this issue.
 
-Fix it by adding the package for the values.
-
-Also add the missing "reg" properties to two numbered nodes.
-
-Fixes: b10134a3643d ("ACPI: property: Document hierarchical data extension references")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 3044a860fd09 ("clk: Add Si5341/Si5340 driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Link: https://lore.kernel.org/r/20220112203816.1784610-1-robert.hancock@calian.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/firmware-guide/acpi/dsd/data-node-references.rst |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/clk/clk-si5341.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/firmware-guide/acpi/dsd/data-node-references.rst
-+++ b/Documentation/firmware-guide/acpi/dsd/data-node-references.rst
-@@ -5,7 +5,7 @@
- Referencing hierarchical data nodes
- ===================================
- 
--:Copyright: |copy| 2018 Intel Corporation
-+:Copyright: |copy| 2018, 2021 Intel Corporation
- :Author: Sakari Ailus <sakari.ailus@linux.intel.com>
- 
- ACPI in general allows referring to device objects in the tree only.
-@@ -52,12 +52,14 @@ the ANOD object which is also the final
- 	    Name (NOD0, Package() {
- 		ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
- 		Package () {
-+		    Package () { "reg", 0 },
- 		    Package () { "random-property", 3 },
- 		}
- 	    })
- 	    Name (NOD1, Package() {
- 		ToUUID("dbb8e3e6-5886-4ba6-8795-1319f52a966b"),
- 		Package () {
-+		    Package () { "reg", 1 },
- 		    Package () { "anothernode", "ANOD" },
- 		}
- 	    })
-@@ -74,7 +76,11 @@ the ANOD object which is also the final
- 	    Name (_DSD, Package () {
- 		ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
- 		Package () {
--		    Package () { "reference", ^DEV0, "node@1", "anothernode" },
-+		    Package () {
-+			"reference", Package () {
-+			    ^DEV0, "node@1", "anothernode"
-+			}
-+		    },
- 		}
- 	    })
+--- a/drivers/clk/clk-si5341.c
++++ b/drivers/clk/clk-si5341.c
+@@ -1740,7 +1740,7 @@ static int si5341_probe(struct i2c_clien
+ 			clk_prepare(data->clk[i].hw.clk);
  	}
+ 
+-	err = of_clk_add_hw_provider(client->dev.of_node, of_clk_si5341_get,
++	err = devm_of_clk_add_hw_provider(&client->dev, of_clk_si5341_get,
+ 			data);
+ 	if (err) {
+ 		dev_err(&client->dev, "unable to add clk provider\n");
 
 

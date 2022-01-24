@@ -2,133 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D0149AB41
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AA249A9E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S254906AbiAYErL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 23:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S1323791AbiAYD3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S246821AbiAYDsv (ORCPT
+        with ESMTP id S1349611AbiAYDRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:48:51 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E005C055AB9;
-        Mon, 24 Jan 2022 14:58:55 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id y17so3737389ilm.1;
-        Mon, 24 Jan 2022 14:58:55 -0800 (PST)
+        Mon, 24 Jan 2022 22:17:10 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C749EC034610
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:59:54 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id f17so16422763wrx.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 14:59:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dDNdwkpKNppfQdAX/RdKIIe2QTeFkfz/ktdn7giHmGI=;
-        b=MBEEVN7qDgCDFdhhT/HSwodOkA2yjB0B9zxtw7ijLPl52m/FAjbCwaWH8yWFYUtARU
-         4ZJH46ALo8osGkf0MEwlDgjllQpwLMIcbsuNWbuxW2N0EM8xWtzfxwDl88IU8aUbkork
-         HyRmA6KX+zCPsaTu8DYH7MhRh1w5fVM4wF0kwNOsDLIZpeGhPKkGmnB4DzM0jiNfcwr6
-         OxrxepvUEe0HCeIFtrK3rgloAORRIvUmwSM3DoYAi6F3xFmj8p9QB8HMIYn6wsQtK4lc
-         ywDaz3wUhu2uh12LimtVHU2REFuwrij1vAxG65TQ9IMWvm/yVzNWMkpd9cYH/5wY+vIF
-         zsFA==
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=h/tZwH09eYlURsU9ovNUrKKrqJAZOzfkUhLGHlZxAp8=;
+        b=2T+hohDmYoqKFEv3Cv8ZgMQ/mKlBK/a8qNahYuYbb1KIy1ff+H7NPM5NU/qqMnh1nm
+         //4lCh+8o4FQSiEge38h2NQSPwbd9gv5iK42Ro+jCgnNkMMkwu+L3qKNcCoQiRoNycYC
+         Zke4hjtQnFbhjLblnbWF9+46jR/Fn/gM11g0itXYbO0z1YQBjVgPJCCS4SZqc8kDsKfW
+         5wmLXZskPAyp8NPOH4SXftDPH1XejxkYq6Otj3iJt6dfnMahe84KAWWUzzkhZrfxdmV0
+         tx6q9FGcodrGjLlTUbBfSYTvBvUYxzopL+0wmxFAvE08M+DOsz2R0ZjsRWzblckfAmaS
+         hBGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dDNdwkpKNppfQdAX/RdKIIe2QTeFkfz/ktdn7giHmGI=;
-        b=zlqyGXvXz6NqxC+AweejPTMhDadKqjzwwiZNfMDdGm3izGzw5HQuxn3VqD39vW4I+N
-         v6kDs/R6IHqOHPhWnttACR5tjqDoDpcS4pFXxGUM1HMq47fOwK9+0dSr89d56xjBJmT8
-         xJxJvlGL1iQH9BsQ/+APYnBDeZgGi1SPjF2072gIxzkxy5xYdUPM9Huu1Hnjjo1TfQjH
-         RGOOCyq3h6Zxrh1oopWbPj3bECDjCmeY3V7jLI2WKg+sM+ujBjDEafGLeNcVioOQL2qP
-         nXRknZwQnSq/Ru/2+VGb4FeorLrz8IecMLiifA8jcWSFcIof1DdAGilghou1VbTUB5U0
-         DjtA==
-X-Gm-Message-State: AOAM5328n2E4gM/Fi/3RbRm5mN+WlF9tlvXpUoR587rft+HGTk6H46hg
-        faOA8SzvrW4SVTfL1IoIsOOn+26zBqrq2L6tWw4=
-X-Google-Smtp-Source: ABdhPJzw6T+yZqQNek1Xa16SraihhQDl009D5c6isNAz+ULolEbkGeGQItFNTYFc/HRNedmb9oOGygvRXqA0YbOCVLI=
-X-Received: by 2002:a05:6e02:190e:: with SMTP id w14mr9072640ilu.71.1643065134544;
- Mon, 24 Jan 2022 14:58:54 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=h/tZwH09eYlURsU9ovNUrKKrqJAZOzfkUhLGHlZxAp8=;
+        b=Phba/22QRi63ulPg48+UmND84ZrtHM7ljBtoF26vrSUAf39NjJu1YwT+OV0n1fWg+y
+         6zZJan+WhUgr0K02hUl8Ar1/WUmRxEi0EQ8rCqfg3NBnXFjDdOCwIQ5fMHR3IqS974CU
+         mugBXedhP+fCwYdbWKsQRTv/9WW6orJAHp3xJlO7bs7rauakMy4L7IT8mVy7rl81DxKN
+         g2LAakRtya35+grePL2VKAs+I4rDvEIavhmGfDPhPZMihYlCLqYEJDf4qFZptghdjuKb
+         YD7zQMwWh8iLxucx2vmFSVwWyiQoF6/jyb0xf8vSNkAgBn9jApVK69ZsI0O9lxNplUO9
+         19fw==
+X-Gm-Message-State: AOAM533YFFOnrwzQWHWGvMZrRI+CigrnCOAXM5bxXRPWx66Um3yoURMT
+        VwSGhKlsQzqyexYbVfGIGUVW4g==
+X-Google-Smtp-Source: ABdhPJy11Hr0agn/tCEO9xF86BR6hvSBFE0Vp1eHDkwfZat/mTq+ZWfsDfHBlXjBjUggWwNbAeoKIQ==
+X-Received: by 2002:a5d:508a:: with SMTP id a10mr1377854wrt.719.1643065193425;
+        Mon, 24 Jan 2022 14:59:53 -0800 (PST)
+Received: from localhost.localdomain (3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.1.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:df16::3])
+        by smtp.gmail.com with ESMTPSA id b2sm7705113wrd.64.2022.01.24.14.59.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 14:59:52 -0800 (PST)
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     gregkh@linuxfoundation.org
+Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
+        straube.linux@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        paskripkin@gmail.com
+Subject: [PATCH 09/10] staging: r8188eu: remove DBG_88E macro definition
+Date:   Mon, 24 Jan 2022 22:59:49 +0000
+Message-Id: <20220124225950.784-2-phil@philpotter.co.uk>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220124225950.784-1-phil@philpotter.co.uk>
+References: <20220124225032.860-1-phil@philpotter.co.uk>
+ <20220124225950.784-1-phil@philpotter.co.uk>
 MIME-Version: 1.0
-References: <164260419349.657731.13913104835063027148.stgit@devnote2>
- <CAEf4Bzbbimea3ydwafXSHFiEffYx5zAcwGNKk8Zi6QZ==Vn0Ug@mail.gmail.com>
- <20220121135510.7cfa6540e31824aa39b1c1b8@kernel.org> <CAEf4Bza0eTft2kjcm9HhKpAm=AuXnGwZfZ+sYpVVBvj93PBreQ@mail.gmail.com>
- <Ye3ptcW0eAFRYm58@krava> <20220124092405.665e9e0fc3ce14b16a1a9fcf@kernel.org>
- <Ye6ZyeHQtPfUoSvX@krava> <CAEf4BzbrVBXDJA4qbCgudiiLGtHNyUQAOuE=AUwfxzMrF=Wr=w@mail.gmail.com>
- <Ye8m2CpVI8VOiMTH@krava>
-In-Reply-To: <Ye8m2CpVI8VOiMTH@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 24 Jan 2022 14:58:43 -0800
-Message-ID: <CAEf4Bzasj_3EFwW6RvMcV9Z95QUfevUX5eTA5_yWB4Q+KvXuXg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 0/9] fprobe: Introduce fprobe function entry/exit probe
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 2:23 PM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Mon, Jan 24, 2022 at 12:22:10PM -0800, Andrii Nakryiko wrote:
->
-> SNIP
->
-> > > > > > > > > (This testing patch is just for confirming the rethook is correctly
-> > > > > > > > >  implemented.)
-> > > > > > > > >
-> > > > > > > > > BTW, on the x86, ftrace (with fentry) location address is same as
-> > > > > > > > > symbol address. But on other archs, it will be different (e.g. arm64
-> > > > > > > > > will need 2 instructions to save link-register and call ftrace, the
-> > > > > > > > > 2nd instruction will be the ftrace location.)
-> > > > > > > > > Does libbpf correctly handle it?
-> > > > >
-> > > > > hm, I'm probably missing something, but should this be handled by arm
-> > > > > specific kernel code? user passes whatever is found in kallsyms, right?
-> > > >
-> > > > In x86, fentry nop is always placed at the first instruction of the function,
-> > > > but the other arches couldn't do that if they use LR (link register) for
-> > > > storing return address instead of stack. E.g. arm64 saves lr and call the
-> > > > ftrace. Then ftrace location address of a function is not the symbol address.
-> > > >
-> > > > Anyway, I updated fprobe to handle those cases. I also found some issues
-> > > > on rethook, so let me update the series again.
-> > >
-> > > great, I reworked the bpf fprobe link change and need to add the
-> > > symbols attachment support, so you don't need to include it in
-> > > new version.. I'll rebase it and send on top of your patchset
-> >
-> > Using just addresses (IPs) for retsnoop and bpftrace is fine because
-> > such generic tools are already parsing kallsyms and probably building
-> > some lookup table. But in general, having IP-based attachment is a
-> > regression from current perf_event_open-based kprobe, where user is
-> > expected to pass symbolic function name. Using IPs has an advantage of
-> > being unambiguous (e.g., when same static function name in kernel
-> > belongs to multiple actual functions), so there is that. But I was
-> > also wondering wouldn't kernel need to do symbol to IP resolution
-> > anyways just to check that we are attaching to function entry?
->
-> ftrace does its own check for address to attach, it keeps record
-> for every attachable address.. so less work for us ;-)
+Remove DBG_88E macro definition as it has no remaining callers within
+the driver. This is part of the ongoing effort to cleanup the driver to
+use standard debug mechanisms where appropriate.
 
-Oh, makes sense, thanks!
+Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+---
+ drivers/staging/r8188eu/include/rtw_debug.h | 6 ------
+ 1 file changed, 6 deletions(-)
 
->
-> >
-> > I'll wait for your patch set to see how did you go about it in a new revision.
->
-> I agree we should have the support to use symbols as well, I'll add it
+diff --git a/drivers/staging/r8188eu/include/rtw_debug.h b/drivers/staging/r8188eu/include/rtw_debug.h
+index 311051757715..959fb6bd25ca 100644
+--- a/drivers/staging/r8188eu/include/rtw_debug.h
++++ b/drivers/staging/r8188eu/include/rtw_debug.h
+@@ -54,10 +54,4 @@
+ 
+ extern u32 GlobalDebugLevel;
+ 
+-#define DBG_88E(...)							\
+-	do {								\
+-		if (_drv_err_ <= GlobalDebugLevel)			\
+-			pr_info(DRIVER_PREFIX __VA_ARGS__);		\
+-	} while (0)
+-
+ #endif	/* __RTW_DEBUG_H__ */
+-- 
+2.34.1
 
-sounds good, thanks
-
->
-> jirka
->

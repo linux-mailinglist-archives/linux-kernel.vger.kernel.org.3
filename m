@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F4F49841D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B2D498425
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236102AbiAXQCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:02:12 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:52071 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S240830AbiAXQCL (ORCPT
+        id S240935AbiAXQDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240900AbiAXQDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:02:11 -0500
-Received: (qmail 78238 invoked by uid 1000); 24 Jan 2022 11:02:07 -0500
-Date:   Mon, 24 Jan 2022 11:02:07 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        syzbot <syzbot+48a2d3f5d7c977bc22d7@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, jun.li@nxp.com, kishon@ti.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        peter.chen@nxp.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] BUG: corrupted list in usb_hcd_link_urb_to_ep (2)
-Message-ID: <Ye7Nf1FSi34rs3GJ@rowland.harvard.edu>
-References: <000000000000307c7d05d655b0da@google.com>
+        Mon, 24 Jan 2022 11:03:16 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF2DC06173B;
+        Mon, 24 Jan 2022 08:03:16 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id x11so50883986lfa.2;
+        Mon, 24 Jan 2022 08:03:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ctuBSgnjTp0h/xxnaiN9/6IRGFp3kd6uhelw4DkXMLg=;
+        b=Za/tb+7VG71Jko4HhFf6DhYMeUlx7XZF7QKlebw3k2gwZYkObllpj4S/mcS907m5TS
+         XGQ3JnkmgNIYDxbGx4Fu8QVB/uG2K9DaIDlQzSX8mYeWSiyuIA/cPmR5mL6v4MhPr6Ym
+         h6TOWqng3k2mxEXh7Nyy0lL29xrZISCZZuvGs3sUYeSaCwbAmV0umVqriVcggSMdQsZB
+         7sR/DjVkA8KbSpmcyHZCySvocrjAN1AMojQwifCimpkGi2vXvELTvH8psXEcIAjbLrE4
+         kn/HHpYqV6ct3PqGgLiD1Pu+0LG0BcvaZjBKUugWbMR41ibmbHeSKO87lJV3yRYoSxeZ
+         Vtmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ctuBSgnjTp0h/xxnaiN9/6IRGFp3kd6uhelw4DkXMLg=;
+        b=RLLdgM9KAMq5WRMXEkAVaeOvBsxIPaTK6BUKITLVCuxv+69BJ9cTsvzLKBlZR5Cbgj
+         ukrcKt81Ae9h0sbvaVathH8ekDtF0fcyK8AUYMoe0f25ORM4DDVUvQQxxvvPA+JtvcEw
+         ugIlYwDt5LWbk57Iu4fukSxqR0SK+H90lDwGdphKdkefmcWtoFMt6wm368X4gW09fPaE
+         7SVkDSkbdoa2aj8dYTXiM8zzm2IKR12mMVJEbSdEEqm3wYOgHUdN2pAj/7FWrcr1PhaK
+         O4KCL3xW3xLl06/3W0XH/Jqzz1o/280z2iUzGxWnudVydKDvfy4spk995S6X+NRIU551
+         LeLQ==
+X-Gm-Message-State: AOAM532Y0x26IT4MF90rVH8G3W9y1vqkxYz3zEyJrFQunyRpmirvNEP/
+        SL8Jf16WgLUcIjiyWDpD9rE=
+X-Google-Smtp-Source: ABdhPJyv79YN2uuThMFTQDTSpcs4BwkQtnRO1JU1cysB1134Xe2OL57Q0DwbYzNIcHd2IHtnhCN5Lg==
+X-Received: by 2002:ac2:43cf:: with SMTP id u15mr5689802lfl.66.1643040194295;
+        Mon, 24 Jan 2022 08:03:14 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id n21sm674187lji.18.2022.01.24.08.03.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 08:03:13 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH 0/3] nvmem: allow specifying cells by just names in DT
+Date:   Mon, 24 Jan 2022 17:02:57 +0100
+Message-Id: <20220124160300.25131-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000307c7d05d655b0da@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 07:33:20AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    dd81e1c7d5fb Merge tag 'powerpc-5.17-2' of git://git.kerne..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=126d2170700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=36924ae974256627
-> dashboard link: https://syzkaller.appspot.com/bug?extid=48a2d3f5d7c977bc22d7
-> compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1312815bb00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13804918700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+48a2d3f5d7c977bc22d7@syzkaller.appspotmail.com
-> 
-> input: CM109 USB driver as /devices/platform/dummy_hcd.4/usb5/5-1/5-1:0.0/input/input1176
-> list_add double add: new=ffff888013fffd18, prev=ffff888013fffd18, next=ffff8880244c9070.
-> ------------[ cut here ]------------
-> kernel BUG at lib/list_debug.c:31!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 140 Comm: kworker/0:2 Not tainted 5.17.0-rc1-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:__list_add_valid+0x8a/0xc0 lib/list_debug.c:29
-> Code: 74 11 4d 39 f7 74 0c b0 01 5b 41 5c 41 5d 41 5e 41 5f c3 48 c7 c7 80 5a d6 8a 4c 89 fe 4c 89 e2 4c 89 f1 31 c0 e8 3e 3c 53 fd <0f> 0b 48 c7 c7 40 59 d6 8a 4c 89 e6 4c 89 f1 31 c0 e8 28 3c 53 fd
-> RSP: 0018:ffffc9000282e680 EFLAGS: 00010046
-> RAX: 0000000000000058 RBX: ffff8880244c9078 RCX: 1c7d44314f50cc00
-> RDX: 0000000000000000 RSI: 0000000080000002 RDI: 0000000000000000
-> RBP: ffff8880244c9078 R08: ffffffff816affd2 R09: ffffed1017344f24
-> R10: ffffed1017344f24 R11: 0000000000000000 R12: ffff888013fffd18
-> R13: dffffc0000000000 R14: ffff8880244c9070 R15: ffff888013fffd18
-> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fff0109a9f8 CR3: 000000001fd14000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __list_add include/linux/list.h:69 [inline]
->  list_add_tail include/linux/list.h:102 [inline]
->  usb_hcd_link_urb_to_ep+0x1ae/0x300 drivers/usb/core/hcd.c:1181
->  dummy_urb_enqueue+0x2a9/0x750 drivers/usb/gadget/udc/dummy_hcd.c:1284
->  usb_hcd_submit_urb+0x2be/0x5f0 drivers/usb/core/hcd.c:1555
->  cm109_input_open+0x1eb/0x460 drivers/input/misc/cm109.c:572
->  input_open_device+0x184/0x2d0 drivers/input/input.c:629
->  kbd_connect+0xe5/0x120 drivers/tty/vt/keyboard.c:1593
->  input_attach_handler drivers/input/input.c:1035 [inline]
->  input_register_device+0xd95/0x1140 drivers/input/input.c:2335
->  cm109_usb_probe+0x11bf/0x16c0 drivers/input/misc/cm109.c:806
->  usb_probe_interface+0x633/0xb40 drivers/usb/core/driver.c:396
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Dmitry:
+This is a simplified & cleaned up version of my:
+[PATCH 0/5] nvmem: support more NVMEM cells variants
 
-It looks like the cm109 driver has a logic bug.   
-cm109_urb_irq_callback() doesn't check dev->ctl_urb_pending before 
-setting it and trying to submit the control URB.
+These changes will allow me to improve BCM5301X support with:
 
-I don't know anything about how this driver is meant to work, and this 
-apparent bug may be unrelated to what syzbot found.  Could you please 
-take a look at it?
+diff --git a/arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dts b/arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dts
+index 24ae3c8a3..9efcb2424 100644
+--- a/arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dts
++++ b/arch/arm/boot/dts/bcm47094-luxul-xwr-3150-v1.dts
+@@ -25,6 +25,9 @@ memory@0 {
+ 	nvram@1eff0000 {
+ 		compatible = "brcm,nvram";
+ 		reg = <0x1eff0000 0x10000>;
++
++		et0macaddr: et0macaddr {
++		};
+ 	};
+ 
+ 	leds {
+@@ -72,6 +75,11 @@ restart {
+ 	};
+ };
+ 
++&gmac0 {
++	nvmem-cells = <&et0macaddr>;
++	nvmem-cell-names = "mac-address";
++};
++
+ &usb3 {
+ 	vcc-gpio = <&chipcommon 18 GPIO_ACTIVE_HIGH>;
+ };
 
-Alan Stern
+Rafał Miłecki (3):
+  dt-bindings: nvmem: make "reg" property optional
+  dt-bindings: nvmem: brcm,nvram: add NVMEM cell to example
+  nvmem: core: add cell name based matching of DT cell nodes
+
+ .../devicetree/bindings/nvmem/brcm,nvram.yaml |  7 +++--
+ .../devicetree/bindings/nvmem/nvmem.yaml      |  3 ---
+ drivers/nvmem/core.c                          | 27 +++++++++++++++++++
+ 3 files changed, 32 insertions(+), 5 deletions(-)
+
+-- 
+2.31.1
+

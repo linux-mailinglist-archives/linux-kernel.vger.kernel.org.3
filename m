@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAD5498C37
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDB54990A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349454AbiAXTUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:20:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42248 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346348AbiAXTMh (ORCPT
+        id S1359776AbiAXUCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:02:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52022 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351979AbiAXT3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:12:37 -0500
+        Mon, 24 Jan 2022 14:29:25 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1221611A9;
-        Mon, 24 Jan 2022 19:12:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FE2C340E5;
-        Mon, 24 Jan 2022 19:12:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 390DFB81215;
+        Mon, 24 Jan 2022 19:29:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EE1DC340E8;
+        Mon, 24 Jan 2022 19:29:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051555;
-        bh=7MC46cqVCemBIVTmpcjdimelq3KvYsWQumf2TrlMETo=;
+        s=korg; t=1643052561;
+        bh=24dK8aJynKW8UzRARZZ9LbUpGPtlKnYUFP2ad0kgR6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QIv0oRvv+6nOyegDsecpJeOfQnpFJlxjDmgR86qGzivKyiUeKNHSxmdqd84kU8DbT
-         gg4mQ7SzJUII0LvjdKDXJmosU/zXAZaZ2yx3m5+bsztFIWmGg/th8DL4rgbQi4g0+Z
-         I+qcrWUdtgO2MwXlBOn1qgOLWkW4AV6uuphR+S1M=
+        b=B5171Y+625JkClYzYTXaRyQ8sBAP6hwT3oaobyt4pz+VQ3hLiEBPeQEsrgEEIRxbk
+         mCktEIcbjwLEVQ+duoXmVyH3tMMkFUo45pKB3j6i2nLvb6H6MRwHE734qdKD3BQO7B
+         NZzdwymd8j1Xcxa8TmmwFCCa10YcZIFCuTCJ+cWQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Paul Barker <paul.barker@sancloud.com>
-Subject: [PATCH 4.19 013/239] kbuild: Add $(KBUILD_HOSTLDFLAGS) to has_libelf test
+        stable@vger.kernel.org, Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 067/320] serial: amba-pl011: do not request memory region twice
 Date:   Mon, 24 Jan 2022 19:40:51 +0100
-Message-Id: <20220124183943.538536958@linuxfoundation.org>
+Message-Id: <20220124183956.008990956@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,54 +45,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Lino Sanfilippo <LinoSanfilippo@gmx.de>
 
-commit f634ca650f724347892068489c7920631a3aac6a upstream.
+[ Upstream commit d1180405c7b5c7a1c6bde79d5fc24fe931430737 ]
 
-Normally, invocations of $(HOSTCC) include $(KBUILD_HOSTLDFLAGS), which
-in turn includes $(HOSTLDFLAGS), which allows users to pass in their own
-flags when linking. However, the 'has_libelf' test does not, meaning
-that if a user requests a specific linker via HOSTLDFLAGS=-fuse-ld=...,
-it is not respected and the build might error.
+With commit 3873e2d7f63a ("drivers: PL011: refactor pl011_probe()") the
+function devm_ioremap() called from pl011_setup_port() was replaced with
+devm_ioremap_resource(). Since this function not only remaps but also
+requests the ports io memory region it now collides with the .config_port()
+callback which requests the same region at uart port registration.
 
-For example, if a user building with clang wants to use all of the LLVM
-tools without any GNU tools, they might remove all of the GNU tools from
-their system or PATH then build with
+Since devm_ioremap_resource() already claims the memory successfully, the
+request in .config_port() fails.
 
-$ make HOSTLDFLAGS=-fuse-ld=lld LLVM=1 LLVM_IAS=1
+Later at uart port deregistration the attempt to release the unclaimed
+memory also fails. The failure results in a “Trying to free nonexistent
+resource" warning.
 
-which says use all of the LLVM tools, the integrated assembler, and
-ld.lld for linking host executables. Without this change, the build will
-error because $(HOSTCC) uses its default linker, rather than the one
-requested via -fuse-ld=..., which is GNU ld in clang's case in a default
-configuration.
+Fix these issues by removing the callbacks that implement the redundant
+memory allocation/release. Also make sure that changing the drivers io
+memory base address via TIOCSSERIAL is not allowed any more.
 
-error: Cannot generate ORC metadata for CONFIG_UNWINDER_ORC=y, please
-install libelf-dev, libelf-devel or elfutils-libelf-devel
-make[1]: *** [Makefile:1260: prepare-objtool] Error 1
-
-Add $(KBUILD_HOSTLDFLAGS) to the 'has_libelf' test so that the linker
-choice is respected.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/479
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Paul Barker <paul.barker@sancloud.com>
+Fixes: 3873e2d7f63a ("drivers: PL011: refactor pl011_probe()")
+Signed-off-by: Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Link: https://lore.kernel.org/r/20211129174238.8333-1-LinoSanfilippo@gmx.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/amba-pl011.c | 27 +++------------------------
+ 1 file changed, 3 insertions(+), 24 deletions(-)
 
---- a/Makefile
-+++ b/Makefile
-@@ -972,7 +972,7 @@ HOST_LIBELF_LIBS = $(shell pkg-config li
+diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+index 6741d0f3daf94..0bd8c05d72d60 100644
+--- a/drivers/tty/serial/amba-pl011.c
++++ b/drivers/tty/serial/amba-pl011.c
+@@ -2094,32 +2094,13 @@ static const char *pl011_type(struct uart_port *port)
+ 	return uap->port.type == PORT_AMBA ? uap->type : NULL;
+ }
  
- ifdef CONFIG_STACK_VALIDATION
-   has_libelf := $(call try-run,\
--		echo "int main() {}" | $(HOSTCC) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
-+		echo "int main() {}" | $(HOSTCC) $(KBUILD_HOSTLDFLAGS) -xc -o /dev/null $(HOST_LIBELF_LIBS) -,1,0)
-   ifeq ($(has_libelf),1)
-     objtool_target := tools/objtool FORCE
-   else
+-/*
+- * Release the memory region(s) being used by 'port'
+- */
+-static void pl011_release_port(struct uart_port *port)
+-{
+-	release_mem_region(port->mapbase, SZ_4K);
+-}
+-
+-/*
+- * Request the memory region(s) being used by 'port'
+- */
+-static int pl011_request_port(struct uart_port *port)
+-{
+-	return request_mem_region(port->mapbase, SZ_4K, "uart-pl011")
+-			!= NULL ? 0 : -EBUSY;
+-}
+-
+ /*
+  * Configure/autoconfigure the port.
+  */
+ static void pl011_config_port(struct uart_port *port, int flags)
+ {
+-	if (flags & UART_CONFIG_TYPE) {
++	if (flags & UART_CONFIG_TYPE)
+ 		port->type = PORT_AMBA;
+-		pl011_request_port(port);
+-	}
+ }
+ 
+ /*
+@@ -2134,6 +2115,8 @@ static int pl011_verify_port(struct uart_port *port, struct serial_struct *ser)
+ 		ret = -EINVAL;
+ 	if (ser->baud_base < 9600)
+ 		ret = -EINVAL;
++	if (port->mapbase != (unsigned long) ser->iomem_base)
++		ret = -EINVAL;
+ 	return ret;
+ }
+ 
+@@ -2151,8 +2134,6 @@ static const struct uart_ops amba_pl011_pops = {
+ 	.flush_buffer	= pl011_dma_flush_buffer,
+ 	.set_termios	= pl011_set_termios,
+ 	.type		= pl011_type,
+-	.release_port	= pl011_release_port,
+-	.request_port	= pl011_request_port,
+ 	.config_port	= pl011_config_port,
+ 	.verify_port	= pl011_verify_port,
+ #ifdef CONFIG_CONSOLE_POLL
+@@ -2182,8 +2163,6 @@ static const struct uart_ops sbsa_uart_pops = {
+ 	.shutdown	= sbsa_uart_shutdown,
+ 	.set_termios	= sbsa_uart_set_termios,
+ 	.type		= pl011_type,
+-	.release_port	= pl011_release_port,
+-	.request_port	= pl011_request_port,
+ 	.config_port	= pl011_config_port,
+ 	.verify_port	= pl011_verify_port,
+ #ifdef CONFIG_CONSOLE_POLL
+-- 
+2.34.1
+
 
 

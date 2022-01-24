@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA49499F9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C87D499DD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1841845AbiAXXAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1576938AbiAXV5C (ORCPT
+        id S1586292AbiAXW0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:26:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48094 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1449160AbiAXV2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:57:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FAFC038ADF;
-        Mon, 24 Jan 2022 12:38:20 -0800 (PST)
+        Mon, 24 Jan 2022 16:28:08 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EDA961540;
-        Mon, 24 Jan 2022 20:38:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5C85C340E7;
-        Mon, 24 Jan 2022 20:38:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7E096131F;
+        Mon, 24 Jan 2022 21:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A4D2C340E7;
+        Mon, 24 Jan 2022 21:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056699;
-        bh=0NPR2GEkXmlKshR2DCdw5F1yXLjr3XEZ5JAnE8LMcEk=;
+        s=korg; t=1643059686;
+        bh=6YAm3CPq34GvsX3b4vYCVruJOM6/PYsnnpJpjUe6TT0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PBQoIgjdMN/u3oImnLMibSOZRbl3B7oXqGpCQgX5nNaqExcSVNUeH0YSChnMh5eQ/
-         KtjtzY28SNj7tZPW1CVs6sZKJqrFFCNOG5taAk0dAlRdyDckNwbzrvvA/l2SxAyGmO
-         UQymxBA/pzbxhC45Lk64/ibrSk8ceZExFd9oPNYI=
+        b=nCq6X5Wn5cr7GXQVCBQllI5oVo8Y64dfGPvDN55mZKlGSBlJps32bjE9pxeZJuPsc
+         jnDmpTVP3efLZmGEm7TEktKplF1Sfo0YvNamqfykg4SvuBHpBvMxHB/csHsEzhtGtW
+         3B0M8nQt5iMcBgXHuLRN2Nvy0MeuL7CdlLNrTYHQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bob Moore <robert.moore@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 570/846] ath9k_htc: fix NULL pointer dereference at ath9k_htc_rxep()
-Date:   Mon, 24 Jan 2022 19:41:27 +0100
-Message-Id: <20220124184120.702213299@linuxfoundation.org>
+Subject: [PATCH 5.16 0700/1039] ACPICA: Hardware: Do not flush CPU cache when entering S4 and S5
+Date:   Mon, 24 Jan 2022 19:41:29 +0100
+Message-Id: <20220124184148.869834985@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,72 +48,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+From: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-[ Upstream commit b0ec7e55fce65f125bd1d7f02e2dc4de62abee34 ]
+[ Upstream commit 1d4e0b3abb168b2ee1eca99c527cffa1b80b6161 ]
 
-syzbot is reporting lockdep warning followed by kernel panic at
-ath9k_htc_rxep() [1], for ath9k_htc_rxep() depends on ath9k_rx_init()
-being already completed.
+ACPICA commit 3dd7e1f3996456ef81bfe14cba29860e8d42949e
 
-Since ath9k_htc_rxep() is set by ath9k_htc_connect_svc(WMI_BEACON_SVC)
- from ath9k_init_htc_services(), it is possible that ath9k_htc_rxep() is
-called via timer interrupt before ath9k_rx_init() from ath9k_init_device()
-is called.
+According to ACPI 6.4, Section 16.2, the CPU cache flushing is
+required on entering to S1, S2, and S3, but the ACPICA code
+flushes the CPU cache regardless of the sleep state.
 
-Since we can't call ath9k_init_device() before ath9k_init_htc_services(),
-let's hold ath9k_htc_rxep() no-op until ath9k_rx_init() completes.
+Blind cache flush on entering S5 causes problems for TDX.
 
-Link: https://syzkaller.appspot.com/bug?extid=4d2d56175b934b9a7bf9 [1]
-Reported-by: syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/2b88f416-b2cb-7a18-d688-951e6dc3fe92@i-love.sakura.ne.jp
+Flushing happens with WBINVD that is not supported in the TDX
+environment.
+
+TDX only supports S5 and adjusting ACPICA code to conform to the
+spec more strictly fixes the issue.
+
+Link: https://github.com/acpica/acpica/commit/3dd7e1f3
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+[ rjw: Subject and changelog edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/htc.h          | 1 +
- drivers/net/wireless/ath/ath9k/htc_drv_txrx.c | 8 ++++++++
- 2 files changed, 9 insertions(+)
+ drivers/acpi/acpica/hwesleep.c  | 4 +++-
+ drivers/acpi/acpica/hwsleep.c   | 4 +++-
+ drivers/acpi/acpica/hwxfsleep.c | 2 --
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/htc.h b/drivers/net/wireless/ath/ath9k/htc.h
-index 0a1634238e673..4f71e962279af 100644
---- a/drivers/net/wireless/ath/ath9k/htc.h
-+++ b/drivers/net/wireless/ath/ath9k/htc.h
-@@ -281,6 +281,7 @@ struct ath9k_htc_rxbuf {
- struct ath9k_htc_rx {
- 	struct list_head rxbuf;
- 	spinlock_t rxbuflock;
-+	bool initialized;
- };
+diff --git a/drivers/acpi/acpica/hwesleep.c b/drivers/acpi/acpica/hwesleep.c
+index 808fdf54aeebf..7ee2939c08cd4 100644
+--- a/drivers/acpi/acpica/hwesleep.c
++++ b/drivers/acpi/acpica/hwesleep.c
+@@ -104,7 +104,9 @@ acpi_status acpi_hw_extended_sleep(u8 sleep_state)
  
- #define ATH9K_HTC_TX_CLEANUP_INTERVAL 50 /* ms */
-diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-index 8e69e8989f6d3..e7a21eaf3a68d 100644
---- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-@@ -1130,6 +1130,10 @@ void ath9k_htc_rxep(void *drv_priv, struct sk_buff *skb,
- 	struct ath9k_htc_rxbuf *rxbuf = NULL, *tmp_buf = NULL;
- 	unsigned long flags;
+ 	/* Flush caches, as per ACPI specification */
  
-+	/* Check if ath9k_rx_init() completed. */
-+	if (!data_race(priv->rx.initialized))
-+		goto err;
-+
- 	spin_lock_irqsave(&priv->rx.rxbuflock, flags);
- 	list_for_each_entry(tmp_buf, &priv->rx.rxbuf, list) {
- 		if (!tmp_buf->in_process) {
-@@ -1185,6 +1189,10 @@ int ath9k_rx_init(struct ath9k_htc_priv *priv)
- 		list_add_tail(&rxbuf->list, &priv->rx.rxbuf);
+-	ACPI_FLUSH_CPU_CACHE();
++	if (sleep_state < ACPI_STATE_S4) {
++		ACPI_FLUSH_CPU_CACHE();
++	}
+ 
+ 	status = acpi_os_enter_sleep(sleep_state, sleep_control, 0);
+ 	if (status == AE_CTRL_TERMINATE) {
+diff --git a/drivers/acpi/acpica/hwsleep.c b/drivers/acpi/acpica/hwsleep.c
+index 34a3825f25d37..5efa3d8e483e0 100644
+--- a/drivers/acpi/acpica/hwsleep.c
++++ b/drivers/acpi/acpica/hwsleep.c
+@@ -110,7 +110,9 @@ acpi_status acpi_hw_legacy_sleep(u8 sleep_state)
+ 
+ 	/* Flush caches, as per ACPI specification */
+ 
+-	ACPI_FLUSH_CPU_CACHE();
++	if (sleep_state < ACPI_STATE_S4) {
++		ACPI_FLUSH_CPU_CACHE();
++	}
+ 
+ 	status = acpi_os_enter_sleep(sleep_state, pm1a_control, pm1b_control);
+ 	if (status == AE_CTRL_TERMINATE) {
+diff --git a/drivers/acpi/acpica/hwxfsleep.c b/drivers/acpi/acpica/hwxfsleep.c
+index e4cde23a29061..ba77598ee43e8 100644
+--- a/drivers/acpi/acpica/hwxfsleep.c
++++ b/drivers/acpi/acpica/hwxfsleep.c
+@@ -162,8 +162,6 @@ acpi_status acpi_enter_sleep_state_s4bios(void)
+ 		return_ACPI_STATUS(status);
  	}
  
-+	/* Allow ath9k_htc_rxep() to operate. */
-+	smp_wmb();
-+	priv->rx.initialized = true;
-+
- 	return 0;
- 
- err:
+-	ACPI_FLUSH_CPU_CACHE();
+-
+ 	status = acpi_hw_write_port(acpi_gbl_FADT.smi_command,
+ 				    (u32)acpi_gbl_FADT.s4_bios_request, 8);
+ 	if (ACPI_FAILURE(status)) {
 -- 
 2.34.1
 

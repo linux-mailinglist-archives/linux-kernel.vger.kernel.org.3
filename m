@@ -2,42 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B54499BB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B4B49975E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379556AbiAXVyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:54:17 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43842 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450765AbiAXVVW (ORCPT
+        id S1448561AbiAXVNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:13:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387576AbiAXUg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:21:22 -0500
+        Mon, 24 Jan 2022 15:36:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD113C038AF8;
+        Mon, 24 Jan 2022 11:50:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A932761490;
-        Mon, 24 Jan 2022 21:21:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D05C340E4;
-        Mon, 24 Jan 2022 21:21:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DADA6091B;
+        Mon, 24 Jan 2022 19:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40DF8C340E5;
+        Mon, 24 Jan 2022 19:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059281;
-        bh=Fhv3mi1Mm8uNIIYwqjQOhdSly4zsT0G1KS4gJQ8MreU=;
+        s=korg; t=1643053822;
+        bh=pn09FPzboF/tVh8/0L5nmMFwe2Jrkb8T9pquQXiejis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=si0XCzpEo79L/P4lnz9Dg402KNmBkSIfg6xHeqdLslPx7XX5q4VafbGRL5VdA/AZ0
-         3oaSBqkZku3eaJWpFsn69kcd3j0VC60ZQXjjujKNAK5Wj7vYRPQ/0ypJw0vg/JpP6W
-         tRMLxGg4SIm0Ot84vCk3/CDtGyl6k1/JZx4EbIFg=
+        b=rth71vgbRoyhg1ZYqAlE/rdU93Inf4IKKUCr0eQNJVSwHAkCcPIuTvOVfvIRwDYp3
+         /WdgTJFyFBGsv8aKR7sNg5cGozoKPzxeL3LLraX9Lzuo8zL3m7QKwULNa2Q7THPM3o
+         RgfyEDe+SIAgmAQgBJDZ3USZ/SYq150Ieresjpf8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0564/1039] media: atomisp: handle errors at sh_css_create_isp_params()
-Date:   Mon, 24 Jan 2022 19:39:13 +0100
-Message-Id: <20220124184144.275112895@linuxfoundation.org>
+Subject: [PATCH 5.10 189/563] backlight: qcom-wled: Validate enabled string indices in DT
+Date:   Mon, 24 Jan 2022 19:39:14 +0100
+Message-Id: <20220124184030.959132141@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,51 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Marijn Suijten <marijn.suijten@somainline.org>
 
-[ Upstream commit 58043dbf6d1ae9deab4f5aa1e039c70112017682 ]
+[ Upstream commit c05b21ebc5bce3ecc78c2c71afd76d92c790a2ac ]
 
-The succ var tracks memory allocation erros on this function.
+The strings passed in DT may possibly cause out-of-bounds register
+accesses and should be validated before use.
 
-Fix it, in order to stop this W=1 Werror in clang:
-
-drivers/staging/media/atomisp/pci/sh_css_params.c:2430:7: error: variable 'succ' set but not used [-Werror,-Wunused-but-set-variable]
-        bool succ = true;
-             ^
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 775d2ffb4af6 ("backlight: qcom-wled: Restructure the driver for WLED3")
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20211115203459.1634079-2-marijn.suijten@somainline.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/atomisp/pci/sh_css_params.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/video/backlight/qcom-wled.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
-index dbd3bfe3d343c..ccc0078795648 100644
---- a/drivers/staging/media/atomisp/pci/sh_css_params.c
-+++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
-@@ -2431,7 +2431,7 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
- 	unsigned int i;
- 	struct sh_css_ddr_address_map *ddr_ptrs;
- 	struct sh_css_ddr_address_map_size *ddr_ptrs_size;
--	int err = 0;
-+	int err;
- 	size_t params_size;
- 	struct ia_css_isp_parameters *params =
- 	kvmalloc(sizeof(struct ia_css_isp_parameters), GFP_KERNEL);
-@@ -2473,7 +2473,11 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
- 	succ &= (ddr_ptrs->macc_tbl != mmgr_NULL);
+diff --git a/drivers/video/backlight/qcom-wled.c b/drivers/video/backlight/qcom-wled.c
+index cd11c57764381..2c4290f082025 100644
+--- a/drivers/video/backlight/qcom-wled.c
++++ b/drivers/video/backlight/qcom-wled.c
+@@ -1528,12 +1528,28 @@ static int wled_configure(struct wled *wled)
+ 	string_len = of_property_count_elems_of_size(dev->of_node,
+ 						     "qcom,enabled-strings",
+ 						     sizeof(u32));
+-	if (string_len > 0)
++	if (string_len > 0) {
++		if (string_len > wled->max_string_count) {
++			dev_err(dev, "Cannot have more than %d strings\n",
++				wled->max_string_count);
++			return -EINVAL;
++		}
++
+ 		of_property_read_u32_array(dev->of_node,
+ 						"qcom,enabled-strings",
+ 						wled->cfg.enabled_strings,
+ 						sizeof(u32));
  
- 	*isp_params_out = params;
--	return err;
++		for (i = 0; i < string_len; ++i) {
++			if (wled->cfg.enabled_strings[i] >= wled->max_string_count) {
++				dev_err(dev,
++					"qcom,enabled-strings index %d at %d is out of bounds\n",
++					wled->cfg.enabled_strings[i], i);
++				return -EINVAL;
++			}
++		}
++	}
 +
-+	if (!succ)
-+		return -ENOMEM;
-+
-+	return 0;
+ 	return 0;
  }
  
- static bool
 -- 
 2.34.1
 

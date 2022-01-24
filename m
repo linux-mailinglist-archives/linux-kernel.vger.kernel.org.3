@@ -2,134 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B66949853F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746C2498544
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 17:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243924AbiAXQvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 11:51:19 -0500
-Received: from foss.arm.com ([217.140.110.172]:40402 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243936AbiAXQvR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 11:51:17 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 537EDD6E;
-        Mon, 24 Jan 2022 08:51:17 -0800 (PST)
-Received: from e113632-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DBF263F73B;
-        Mon, 24 Jan 2022 08:51:15 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     John Keeping <john@metanate.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [PATCH] sched/rt: Plug rt_mutex_setprio() vs push_rt_task() race
-In-Reply-To: <349ada44-69bd-8653-a9f8-4f3d0f303392@arm.com>
-References: <20220120194037.650433-1-valentin.schneider@arm.com> <aa5bf2d0-bef7-485a-9a51-0da7df67d8c5@arm.com> <875yq945yi.mognet@arm.com> <349ada44-69bd-8653-a9f8-4f3d0f303392@arm.com>
-Date:   Mon, 24 Jan 2022 16:51:10 +0000
-Message-ID: <8735ld3wn5.mognet@arm.com>
+        id S243948AbiAXQwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 11:52:21 -0500
+Received: from mta-p7.oit.umn.edu ([134.84.196.207]:40470 "EHLO
+        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241220AbiAXQwO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 11:52:14 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4JjGHK41lQz9w2xr
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:52:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p7.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dyiY9F1KNFCt for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Jan 2022 10:52:13 -0600 (CST)
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4JjGHK20Z8z9w2xw
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 10:52:13 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4JjGHK20Z8z9w2xw
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4JjGHK20Z8z9w2xw
+Received: by mail-pf1-f199.google.com with SMTP id i6-20020a626d06000000b004c0abfd53b3so9515583pfc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 08:52:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y+tHqbGxYTZxLAsM/2xshYqCJwWoXL4A34qQepi4q+A=;
+        b=qTRfymmBKC6ulS4TRgxgZKClqn/zZAFzLlGZ9X8q4tPcpU4l6boeMZwpKIVwgfGf0u
+         BUzjWVHswyFWdKCrVRUgyIiUUSdCxNlyQoD40ujFs9DLvHyZ5IA7opMGjYe5NQ32dJ4s
+         jBHYtVUZJ9tooDz2GRD3vJjJ9KXzADNLTsZnWMHV1/uH9g5OquNsWbgWgABBZOfvcIMI
+         efVYuFAs1lQ5EQjCC6JHzf974Lvb+FSKV438Tb5OlBqBm53q1eP38MqODlR1/CsMItMD
+         rk93yz9f+XgCR0cth3LHoR1OsHnZy9nQfUNAJKrIPSj44Y2ihnIQvZAZOLi73L3bI4wh
+         lTvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y+tHqbGxYTZxLAsM/2xshYqCJwWoXL4A34qQepi4q+A=;
+        b=dcpwTNFSSVEwfI8QAt9qN+4eygHdiSJAn9uFRJPW+Mxd48KX7fKGv+/N29STmMEHAH
+         neAYpjm1Knp2M9iUNPvIQzCQJWiIlfv0Nvw/XV+i9SAp03KmMhDhwIrAeJe3qhlU3SX5
+         9rMKx2+05dmmSM9jceS83vkLgcZDgfzsshUK8SNBOx4yI4EzomTU7oSLVrL6pl5IafuH
+         wUf8QqVeHOeXo3GMTmEQSTXCjzQKELoMLbR+nj1nT9f8QBmFnsptHgZMziPMYIjhOKsp
+         TdTk03yz0WTb2NGzOw0/U/w5Hvd30HpUbcn8EKziAZrX23JMJ+YGVDQ+yVXKOLK0rBFB
+         JVhw==
+X-Gm-Message-State: AOAM533cCaw78HmcSTq3Z7M28nYuKdC4DowWQMfrZT277SZpd2Om81Ei
+        MmCH5cKr2p8Ig2S8dW4nLhs9GgptRAVU4PptAlDngDlx5k8TSvFgygx2femhDzE1kfTHHfgnJ3i
+        7SfxJXV/7cxq1HAI6C3EXmZNt5Wpj
+X-Received: by 2002:a17:90a:9488:: with SMTP id s8mr2752325pjo.40.1643043132426;
+        Mon, 24 Jan 2022 08:52:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx4GMuF2+Hhif3WBk5US0gETu4RE21+7UtomtMNIIf3WFvwybUV3W7ojOWWWG8Hp0/sZjoQAA==
+X-Received: by 2002:a17:90a:9488:: with SMTP id s8mr2752309pjo.40.1643043132222;
+        Mon, 24 Jan 2022 08:52:12 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.61.248])
+        by smtp.gmail.com with ESMTPSA id 17sm16984414pfl.175.2022.01.24.08.52.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 08:52:11 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Abel Vesa <abel.vesa@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Adam Ford <aford173@gmail.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: imx: Fix a NULL pointer dereference in imx_register_uart_clocks()
+Date:   Tue, 25 Jan 2022 00:52:06 +0800
+Message-Id: <20220124165206.55059-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/22 16:47, Dietmar Eggemann wrote:
-> On 24/01/2022 14:29, Valentin Schneider wrote:
->> On 24/01/22 10:37, Dietmar Eggemann wrote:
->>> On 20/01/2022 20:40, Valentin Schneider wrote:
->>>
->>> [...]
->>>
->>>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
->>>> index 7b4f4fbbb404..48fc8c04b038 100644
->>>> --- a/kernel/sched/rt.c
->>>> +++ b/kernel/sched/rt.c
->>>> @@ -2026,6 +2026,16 @@ static int push_rt_task(struct rq *rq, bool pull)
->>>>  		return 0;
->>>>  
->>>>  retry:
->>>> +	/*
->>>> +	 * It's possible that the next_task slipped in of
->>>> +	 * higher priority than current. If that's the case
->>>> +	 * just reschedule current.
->>>> +	 */
->>>> +	if (unlikely(next_task->prio < rq->curr->prio)) {
->>>> +		resched_curr(rq);
->>>> +		return 0;
->>>> +	}
->>>
->>> If we do this before `is_migration_disabled(next_task), shouldn't then
->>> the related condition in push_dl_task() also be moved up?
->>>
->>>   if (dl_task(rq->curr) &&
->>>     dl_time_before(next_task->dl.deadline, rq->curr->dl.deadline) &&
->>>     rq->curr->nr_cpus_allowed > 1)
->>>
->>> To enforce resched_curr(rq) in the `is_migration_disabled(next_task)`
->>> case there as well?
->>>
->> 
->> I'm not sure if we can hit the same issue with DL since DL doesn't have the
->> push irqwork. If there are DL tasks on the rq when current gets demoted,
->> switched_from_dl() won't queue pull_dl_task().
->
-> True. But with your RT change we reschedule current (CFS task or lower
-> rt task than next_task) now even in case next task is
-> migration-disabled. I.e. we prefer rescheduling over pushing current away.
->
-> But for DL we wouldn't reschedule current in such a case, we would just
-> return 0.
->
-> That said, the prio based check in RT includes other sched classes where
-> the DL check only compares DL tasks.
->
+In imx_register_uart_clocks(), the global variable imx_uart_clocks is
+assigned by kcalloc() and there is a dereference of in the next for loop,
+which could introduce a NULL pointer dereference on failure of kcalloc().
 
-I think you got a point to at least align the RT and DL code, and yes we
-shouldn't care whether the next pushable DL task is migration_disabled or
-not if it's higher prio than current, so I think I'll move that in v2.
+Fix this by adding a NULL check of imx_uart_clocks.
 
->> That said, if say we have DL tasks on the rq and demote the current DL task
->> to RT, do we currently have anything that will call resched_curr() (I'm
->> looking at the rt_mutex path)?
->> switched_to_fair() has a resched_curr() (which helps for the RT -> CFS
->> case), I don't see anything that would give us that in switched_from_dl() /
->> switched_to_rt(), or am I missing something?
->> 
->>>> +
->>>>  	if (is_migration_disabled(next_task)) {
->>>>  		struct task_struct *push_task = NULL;
->>>>  		int cpu;
->>>> @@ -2033,6 +2043,17 @@ static int push_rt_task(struct rq *rq, bool pull)
->>>>  		if (!pull || rq->push_busy)
->>>>  			return 0;
->>>>  
->>>> +		/*
->>>> +		 * Per the above priority check, curr is at least RT. If it's
->>>> +		 * of a higher class than RT, invoking find_lowest_rq() on it
->>>> +		 * doesn't make sense.
->>>> +		 *
->>>> +		 * Note that the stoppers are masqueraded as SCHED_FIFO
->>>> +		 * (cf. sched_set_stop_task()), so we can't rely on rt_task().
->>>> +		 */
->>>> +		if (rq->curr->sched_class != &rt_sched_class)
->>>
->>> s/ != / > / ... since the `unlikely(next_task->prio < rq->curr->prio)`
->>> already filters tasks from lower sched classes (CFS)?
->>>
->> 
->> != points out we won't invoke find_lowest_rq() on anything that isn't RT,
->> which makes it a bit clearer IMO, and it's not like either of those
->> comparisons is more expensive than the other :)
->
-> Also true, but it would be more aligned to the comment above '...  If it
-> (i.e. curr) 's of a higher class than ...'
->
+This bug was found by a static analyzer.
 
-Right, I can clean that up!
+Builds with 'make allyesconfig' show no new warnings,
+and our static analyzer no longer warns about this code.
 
-> [...]
+Fixes: 379c9a24cc23 ("clk: imx: Fix reparenting of UARTs not associated with stdout")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+The analysis employs differential checking to identify inconsistent 
+security operations (e.g., checks or kfrees) between two code paths 
+and confirms that the inconsistent operations are not recovered in the
+current function or the callers, so they constitute bugs. 
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+ drivers/clk/imx/clk.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/clk/imx/clk.c b/drivers/clk/imx/clk.c
+index 7cc669934253..99249ab361d2 100644
+--- a/drivers/clk/imx/clk.c
++++ b/drivers/clk/imx/clk.c
+@@ -173,6 +173,8 @@ void imx_register_uart_clocks(unsigned int clk_count)
+ 		int i;
+ 
+ 		imx_uart_clocks = kcalloc(clk_count, sizeof(struct clk *), GFP_KERNEL);
++		if (!imx_uart_clocks)
++			return;
+ 
+ 		if (!of_stdout)
+ 			return;
+-- 
+2.25.1
+

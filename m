@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6384849A2A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBE149A760
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2363042AbiAXXn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:43:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
+        id S3423891AbiAYCiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843469AbiAXXED (ORCPT
+        with ESMTP id S1356569AbiAXUcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:04:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D3BC06C5AA;
-        Mon, 24 Jan 2022 13:14:46 -0800 (PST)
+        Mon, 24 Jan 2022 15:32:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD64AC08B4ED;
+        Mon, 24 Jan 2022 11:43:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56FF7B80FA1;
-        Mon, 24 Jan 2022 21:14:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 879D5C340E5;
-        Mon, 24 Jan 2022 21:14:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DC15612E9;
+        Mon, 24 Jan 2022 19:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EBE0C340E5;
+        Mon, 24 Jan 2022 19:43:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058884;
-        bh=7V5Ot7QNLcDZm4yJ2eB2b0JK2T1MnQt23O8DU7JiMiM=;
+        s=korg; t=1643053415;
+        bh=8r/XJeSI7KQi3vSVnflKjR5XFdHnpyEreex20ky/SVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DrtyfKMROIGmvy9jk4Fh2nO4hGzSTpPPcpwVQ34jPUf/9xO6G/+6gm7rADH+ZZd/V
-         meH0SbzZPWiKIFDgbpYRKweGM7Z3F4ks3FfwiN3hm6pLq1DxsyPN2FIbW9qrYwzhfB
-         iswKBch5rAcJiZtheCPzbSiGA4zQeuPIjjw+faoc=
+        b=ET1d2WikVBi4mC6PsijcqG7runvNikjM10RQrc8v8nANon41KLu+20QSyadApyQyF
+         A7eQQUcP+YWu2TwlH/Rqc3dfEP4DaVk16Jcwmcv82oXccrOxt8Eb2HzTZU0dtWjaBs
+         wyrcGvaiyxGMG6jBwnuuaMQVVSdTZC+sIs5qK89o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0433/1039] can: softing: softing_startstop(): fix set but not used variable warning
+Subject: [PATCH 5.10 057/563] wcn36xx: Fix DMA channel enable/disable cycle
 Date:   Mon, 24 Jan 2022 19:37:02 +0100
-Message-Id: <20220124184139.845331795@linuxfoundation.org>
+Message-Id: <20220124184026.379548584@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,60 +50,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-[ Upstream commit 370d988cc529598ebaec6487d4f84c2115dc696b ]
+[ Upstream commit 89dcb1da611d9b3ff0728502d58372fdaae9ebff ]
 
-In the function softing_startstop() the variable error_reporting is
-assigned but not used. The code that uses this variable is commented
-out. Its stated that the functionality is not finally verified.
+Right now we have a broken sequence where we enable DMA channel interrupts
+which can be left enabled and never disabled if we hit an error path.
 
-To fix the warning:
+Worse still when we unload the driver, the DMA channel interrupt bits are
+left intact. About the only saving grace here is that we do remember to
+disable the wcnss interrupt when unload the driver.
 
-| drivers/net/can/softing/softing_fw.c:424:9: error: variable 'error_reporting' set but not used [-Werror,-Wunused-but-set-variable]
-
-remove the comment, activate the code, but add a "0 &&" to the if
-expression and rely on the optimizer rather than the preprocessor to
-remove the code.
-
-Link: https://lore.kernel.org/all/20220109103126.1872833-1-mkl@pengutronix.de
-Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
-Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN3680 hardware")
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211105122152.1580542-2-bryan.odonoghue@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/softing/softing_fw.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/net/wireless/ath/wcn36xx/dxe.c | 38 ++++++++++++++++++--------
+ 1 file changed, 27 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/can/softing/softing_fw.c b/drivers/net/can/softing/softing_fw.c
-index 7e15368779931..32286f861a195 100644
---- a/drivers/net/can/softing/softing_fw.c
-+++ b/drivers/net/can/softing/softing_fw.c
-@@ -565,18 +565,19 @@ int softing_startstop(struct net_device *dev, int up)
- 		if (ret < 0)
- 			goto failed;
- 	}
--	/* enable_error_frame */
--	/*
+diff --git a/drivers/net/wireless/ath/wcn36xx/dxe.c b/drivers/net/wireless/ath/wcn36xx/dxe.c
+index cf4eb0fb28151..0909d0c423cbb 100644
+--- a/drivers/net/wireless/ath/wcn36xx/dxe.c
++++ b/drivers/net/wireless/ath/wcn36xx/dxe.c
+@@ -272,6 +272,21 @@ static int wcn36xx_dxe_enable_ch_int(struct wcn36xx *wcn, u16 wcn_ch)
+ 	return 0;
+ }
+ 
++static void wcn36xx_dxe_disable_ch_int(struct wcn36xx *wcn, u16 wcn_ch)
++{
++	int reg_data = 0;
 +
-+	/* enable_error_frame
-+	 *
- 	 * Error reporting is switched off at the moment since
- 	 * the receiving of them is not yet 100% verified
- 	 * This should be enabled sooner or later
--	 *
--	if (error_reporting) {
-+	 */
-+	if (0 && error_reporting) {
- 		ret = softing_fct_cmd(card, 51, "enable_error_frame");
- 		if (ret < 0)
- 			goto failed;
- 	}
--	*/
++	wcn36xx_dxe_read_register(wcn,
++				  WCN36XX_DXE_INT_MASK_REG,
++				  &reg_data);
 +
- 	/* initialize interface */
- 	iowrite16(1, &card->dpram[DPRAM_FCT_PARAM + 2]);
- 	iowrite16(1, &card->dpram[DPRAM_FCT_PARAM + 4]);
++	reg_data &= ~wcn_ch;
++
++	wcn36xx_dxe_write_register(wcn,
++				   WCN36XX_DXE_INT_MASK_REG,
++				   (int)reg_data);
++}
++
+ static int wcn36xx_dxe_fill_skb(struct device *dev,
+ 				struct wcn36xx_dxe_ctl *ctl,
+ 				gfp_t gfp)
+@@ -869,7 +884,6 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
+ 		WCN36XX_DXE_WQ_TX_L);
+ 
+ 	wcn36xx_dxe_read_register(wcn, WCN36XX_DXE_REG_CH_EN, &reg_data);
+-	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_L);
+ 
+ 	/***************************************/
+ 	/* Init descriptors for TX HIGH channel */
+@@ -893,9 +907,6 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
+ 
+ 	wcn36xx_dxe_read_register(wcn, WCN36XX_DXE_REG_CH_EN, &reg_data);
+ 
+-	/* Enable channel interrupts */
+-	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_H);
+-
+ 	/***************************************/
+ 	/* Init descriptors for RX LOW channel */
+ 	/***************************************/
+@@ -905,7 +916,6 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
+ 		goto out_err_rxl_ch;
+ 	}
+ 
+-
+ 	/* For RX we need to preallocated buffers */
+ 	wcn36xx_dxe_ch_alloc_skb(wcn, &wcn->dxe_rx_l_ch);
+ 
+@@ -928,9 +938,6 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
+ 		WCN36XX_DXE_REG_CTL_RX_L,
+ 		WCN36XX_DXE_CH_DEFAULT_CTL_RX_L);
+ 
+-	/* Enable channel interrupts */
+-	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_L);
+-
+ 	/***************************************/
+ 	/* Init descriptors for RX HIGH channel */
+ 	/***************************************/
+@@ -962,15 +969,18 @@ int wcn36xx_dxe_init(struct wcn36xx *wcn)
+ 		WCN36XX_DXE_REG_CTL_RX_H,
+ 		WCN36XX_DXE_CH_DEFAULT_CTL_RX_H);
+ 
+-	/* Enable channel interrupts */
+-	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_H);
+-
+ 	ret = wcn36xx_dxe_request_irqs(wcn);
+ 	if (ret < 0)
+ 		goto out_err_irq;
+ 
+ 	timer_setup(&wcn->tx_ack_timer, wcn36xx_dxe_tx_timer, 0);
+ 
++	/* Enable channel interrupts */
++	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_L);
++	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_H);
++	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_L);
++	wcn36xx_dxe_enable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_H);
++
+ 	return 0;
+ 
+ out_err_irq:
+@@ -987,6 +997,12 @@ out_err_txh_ch:
+ 
+ void wcn36xx_dxe_deinit(struct wcn36xx *wcn)
+ {
++	/* Disable channel interrupts */
++	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_H);
++	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_L);
++	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_H);
++	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_TX_L);
++
+ 	free_irq(wcn->tx_irq, wcn);
+ 	free_irq(wcn->rx_irq, wcn);
+ 	del_timer(&wcn->tx_ack_timer);
 -- 
 2.34.1
 

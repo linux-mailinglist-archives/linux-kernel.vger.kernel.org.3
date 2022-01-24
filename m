@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E31134994DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 957AA4994F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358614AbiAXUsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:48:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33322 "EHLO
+        id S1391950AbiAXUuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:50:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33392 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381903AbiAXUYv (ORCPT
+        with ESMTP id S1381964AbiAXUZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:24:51 -0500
+        Mon, 24 Jan 2022 15:25:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FBA7B8122D;
-        Mon, 24 Jan 2022 20:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A64C340E5;
-        Mon, 24 Jan 2022 20:24:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C63DB8122A;
+        Mon, 24 Jan 2022 20:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9406AC340E5;
+        Mon, 24 Jan 2022 20:24:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055889;
-        bh=2BQlgnQsNwEwfMzcRqMA7YHREraPyfZU8xrRYkLHLTU=;
+        s=korg; t=1643055898;
+        bh=HDH01BdQbtjtxDwLkE394xgNnK/+LbYUX8kUZZULQ84=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yRiNHgldUO/VVSXDFHA06Y2Yji+DGCYi5sNDFrB/e8tvjkWf9oovMkgGDeFQDcjNK
-         +VA4agv0GB7D8Qtx1tcYcwV6mUyLXsME7w9nSRr7UNxHl2y/5fh8GU3z3yzBTQazHT
-         Mah8KcEaZjJgoBIY+/9ioorcCYqgIEBDz/n8AWks=
+        b=00jsZ7gA0QbH4Gc8wkhCi2tN4Z5gyOJktE04AYr3MLKzBg8ch4cweqZ6iYH5QgXxN
+         4W8Eq3Hu4saAyIxc6Lfw5Mz8GrqNsOFdOv1mAjA5bq8reFbOCG0E1AuY46dCAL/mrT
+         FTSG3sOtLjfrLE0M9nArOkD5oq2A0lyVh1fugOtc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 300/846] serial: 8250_bcm7271: Propagate error codes from brcmuart_probe()
-Date:   Mon, 24 Jan 2022 19:36:57 +0100
-Message-Id: <20220124184111.259530397@linuxfoundation.org>
+Subject: [PATCH 5.15 303/846] pcmcia: rsrc_nonstatic: Fix a NULL pointer dereference in nonstatic_find_mem_region()
+Date:   Mon, 24 Jan 2022 19:37:00 +0100
+Message-Id: <20220124184111.353215825@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -46,67 +46,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit c195438f1e84de8fa46b4f5264d12379bee6e9a1 ]
+[ Upstream commit 977d2e7c63c3d04d07ba340b39987742e3241554 ]
 
-In case of failures brcmuart_probe() always returned -ENODEV, this
-isn't correct for example platform_get_irq_byname() may return
--EPROBE_DEFER to handle such cases propagate error codes in
-brcmuart_probe() in case of failures.
+In nonstatic_find_mem_region(), pcmcia_make_resource() is assigned to
+res and used in pci_bus_alloc_resource(). There a dereference of res
+in pci_bus_alloc_resource(), which could lead to a NULL pointer
+dereference on failure of pcmcia_make_resource().
 
-Fixes: 41a469482de25 ("serial: 8250: Add new 8250-core based Broadcom STB driver")
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Link: https://lore.kernel.org/r/20211224142917.6966-4-prabhakar.mahadev-lad.rj@bp.renesas.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix this bug by adding a check of res.
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_PCCARD_NONSTATIC=y show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 49b1153adfe1 ("pcmcia: move all pcmcia_resource_ops providers into one module")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_bcm7271.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/pcmcia/rsrc_nonstatic.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
-index 5163d60756b73..0877cf24f7de0 100644
---- a/drivers/tty/serial/8250/8250_bcm7271.c
-+++ b/drivers/tty/serial/8250/8250_bcm7271.c
-@@ -1076,14 +1076,18 @@ static int brcmuart_probe(struct platform_device *pdev)
- 		priv->rx_bufs = dma_alloc_coherent(dev,
- 						   priv->rx_size,
- 						   &priv->rx_addr, GFP_KERNEL);
--		if (!priv->rx_bufs)
-+		if (!priv->rx_bufs) {
-+			ret = -EINVAL;
- 			goto err;
-+		}
- 		priv->tx_size = UART_XMIT_SIZE;
- 		priv->tx_buf = dma_alloc_coherent(dev,
- 						  priv->tx_size,
- 						  &priv->tx_addr, GFP_KERNEL);
--		if (!priv->tx_buf)
-+		if (!priv->tx_buf) {
-+			ret = -EINVAL;
- 			goto err;
-+		}
- 	}
+diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
+index 827ca6e9ee54a..1cac528707111 100644
+--- a/drivers/pcmcia/rsrc_nonstatic.c
++++ b/drivers/pcmcia/rsrc_nonstatic.c
+@@ -812,6 +812,9 @@ static struct resource *nonstatic_find_mem_region(u_long base, u_long num,
+ 	unsigned long min, max;
+ 	int ret, i, j;
  
- 	ret = serial8250_register_8250_port(&up);
-@@ -1097,6 +1101,7 @@ static int brcmuart_probe(struct platform_device *pdev)
- 	if (priv->dma_enabled) {
- 		dma_irq = platform_get_irq_byname(pdev,  "dma");
- 		if (dma_irq < 0) {
-+			ret = dma_irq;
- 			dev_err(dev, "no IRQ resource info\n");
- 			goto err1;
- 		}
-@@ -1116,7 +1121,7 @@ err1:
- err:
- 	brcmuart_free_bufs(dev, priv);
- 	brcmuart_arbitration(priv, 0);
--	return -ENODEV;
-+	return ret;
- }
++	if (!res)
++		return NULL;
++
+ 	low = low || !(s->features & SS_CAP_PAGE_REGS);
  
- static int brcmuart_remove(struct platform_device *pdev)
+ 	data.mask = align - 1;
 -- 
 2.34.1
 

@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2891B49A6F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C03F49A4FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3422102AbiAYCaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:30:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52354 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379276AbiAXULH (ORCPT
+        id S2372141AbiAYAKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1836988AbiAXWlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:11:07 -0500
+        Mon, 24 Jan 2022 17:41:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE43BC04D62B;
+        Mon, 24 Jan 2022 13:04:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13F98B8121A;
-        Mon, 24 Jan 2022 20:11:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F98C340E5;
-        Mon, 24 Jan 2022 20:10:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71D23B815AB;
+        Mon, 24 Jan 2022 21:04:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DC72C340E5;
+        Mon, 24 Jan 2022 21:04:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643055058;
-        bh=UxwUpDXJ4axt9oqEZOsHQYJIuHllOhKTqnBfWUdnq5M=;
+        s=korg; t=1643058266;
+        bh=fntRpshkPH1kBf19IZiQRtlhXjIeJ4hCEiSlfehiMwY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a7syHtQ8HGZIJXghdSU1blna47PmfoOFAcSTxeQAcoKQ6qyIfAN5Dndr63S25reEQ
-         iDA+L/vtPKeqMqqdTl4pAS1y0bWL+SYtEaWpHY7hBGWsrI7qx4b1My9jqi8SIvNGYp
-         xA2ni/FutLo1YFzJ6WiJzTl7cMl7B8URW/j33ruQ=
+        b=Aro1rurvsKCL7dhAkPr3inlJbUr+Q3zORrRqUGA8H1k3/y/url2In/wP9I6hmGBvD
+         lyqBPWKBOlBahfzUbJWInd/yUD5/buc4yB8jKmfTLC8TLaAa8vZ+7q5NUeYnY2AV0T
+         U8entK0wsppaLKKMyeeW/jdkwiJvXPgNbN8T4M0w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas De Marchi <lucas.demarchi@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 5.15 027/846] x86/gpu: Reserve stolen memory for first integrated Intel GPU
-Date:   Mon, 24 Jan 2022 19:32:24 +0100
-Message-Id: <20220124184101.853015332@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0190/1039] media: si470x-i2c: fix possible memory leak in si470x_i2c_probe()
+Date:   Mon, 24 Jan 2022 19:32:59 +0100
+Message-Id: <20220124184131.690000207@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,76 +51,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas De Marchi <lucas.demarchi@intel.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 9c494ca4d3a535f9ca11ad6af1813983c1c6cbdd upstream.
+[ Upstream commit ef054e345ed8c79ce1121a3599b5a2dfd78e57a0 ]
 
-"Stolen memory" is memory set aside for use by an Intel integrated GPU.
-The intel_graphics_quirks() early quirk reserves this memory when it is
-called for a GPU that appears in the intel_early_ids[] table of integrated
-GPUs.
+n the 'radio->hdl.error' error handling, ctrl handler allocated by
+v4l2_ctrl_new_std() does not released, and caused memory leak as
+follows:
 
-Previously intel_graphics_quirks() was marked as QFLAG_APPLY_ONCE, so it
-was called only for the first Intel GPU found.  If a discrete GPU happened
-to be enumerated first, intel_graphics_quirks() was called for it but not
-for any integrated GPU found later.  Therefore, stolen memory for such an
-integrated GPU was never reserved.
+unreferenced object 0xffff888033d54200 (size 256):
+  comm "i2c-si470x-19", pid 909, jiffies 4294914203 (age 8.072s)
+  hex dump (first 32 bytes):
+    e8 69 11 03 80 88 ff ff 00 46 d5 33 80 88 ff ff  .i.......F.3....
+    10 42 d5 33 80 88 ff ff 10 42 d5 33 80 88 ff ff  .B.3.....B.3....
+  backtrace:
+    [<00000000086bd4ed>] __kmalloc_node+0x1eb/0x360
+    [<00000000bdb68871>] kvmalloc_node+0x66/0x120
+    [<00000000fac74e4c>] v4l2_ctrl_new+0x7b9/0x1c60 [videodev]
+    [<00000000693bf940>] v4l2_ctrl_new_std+0x19b/0x270 [videodev]
+    [<00000000c0cb91bc>] si470x_i2c_probe+0x2d3/0x9a0 [radio_si470x_i2c]
+    [<0000000056a6f01f>] i2c_device_probe+0x4d8/0xbe0
 
-For example, this problem occurs in this Alderlake-P (integrated) + DG2
-(discrete) topology where the DG2 is found first, but stolen memory is
-associated with the integrated GPU:
+Fix the error handling path to avoid memory leak.
 
-  - 00:01.0 Bridge
-    `- 03:00.0 DG2 discrete GPU
-  - 00:02.0 Integrated GPU (with stolen memory)
-
-Remove the QFLAG_APPLY_ONCE flag and call intel_graphics_quirks() for every
-Intel GPU.  Reserve stolen memory for the first GPU that appears in
-intel_early_ids[].
-
-[bhelgaas: commit log, add code comment, squash in
-https://lore.kernel.org/r/20220118190558.2ququ4vdfjuahicm@ldmartin-desk2]
-Link: https://lore.kernel.org/r/20220114002843.2083382-1-lucas.demarchi@intel.com
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: 8c081b6f9a9b ("media: radio: Critical v4l2 registration...")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/early-quirks.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/media/radio/si470x/radio-si470x-i2c.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/x86/kernel/early-quirks.c
-+++ b/arch/x86/kernel/early-quirks.c
-@@ -515,6 +515,7 @@ static const struct intel_early_ops gen1
- 	.stolen_size = gen9_stolen_size,
- };
+diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
+index a972c0705ac79..76d39e2e87706 100644
+--- a/drivers/media/radio/si470x/radio-si470x-i2c.c
++++ b/drivers/media/radio/si470x/radio-si470x-i2c.c
+@@ -368,7 +368,7 @@ static int si470x_i2c_probe(struct i2c_client *client)
+ 	if (radio->hdl.error) {
+ 		retval = radio->hdl.error;
+ 		dev_err(&client->dev, "couldn't register control\n");
+-		goto err_dev;
++		goto err_all;
+ 	}
  
-+/* Intel integrated GPUs for which we need to reserve "stolen memory" */
- static const struct pci_device_id intel_early_ids[] __initconst = {
- 	INTEL_I830_IDS(&i830_early_ops),
- 	INTEL_I845G_IDS(&i845_early_ops),
-@@ -591,6 +592,13 @@ static void __init intel_graphics_quirks
- 	u16 device;
- 	int i;
- 
-+	/*
-+	 * Reserve "stolen memory" for an integrated GPU.  If we've already
-+	 * found one, there's nothing to do for other (discrete) GPUs.
-+	 */
-+	if (resource_size(&intel_graphics_stolen_res))
-+		return;
-+
- 	device = read_pci_config_16(num, slot, func, PCI_DEVICE_ID);
- 
- 	for (i = 0; i < ARRAY_SIZE(intel_early_ids); i++) {
-@@ -703,7 +711,7 @@ static struct chipset early_qrk[] __init
- 	{ PCI_VENDOR_ID_INTEL, 0x3406, PCI_CLASS_BRIDGE_HOST,
- 	  PCI_BASE_CLASS_BRIDGE, 0, intel_remapping_check },
- 	{ PCI_VENDOR_ID_INTEL, PCI_ANY_ID, PCI_CLASS_DISPLAY_VGA, PCI_ANY_ID,
--	  QFLAG_APPLY_ONCE, intel_graphics_quirks },
-+	  0, intel_graphics_quirks },
- 	/*
- 	 * HPET on the current version of the Baytrail platform has accuracy
- 	 * problems: it will halt in deep idle state - so we disable it.
+ 	/* video device initialization */
+@@ -463,7 +463,6 @@ static int si470x_i2c_probe(struct i2c_client *client)
+ 	return 0;
+ err_all:
+ 	v4l2_ctrl_handler_free(&radio->hdl);
+-err_dev:
+ 	v4l2_device_unregister(&radio->v4l2_dev);
+ err_initial:
+ 	return retval;
+-- 
+2.34.1
+
 
 

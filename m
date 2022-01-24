@@ -2,148 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C5B498376
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D55A749837A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 16:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240627AbiAXPXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 10:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
+        id S240377AbiAXPYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 10:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiAXPXu (ORCPT
+        with ESMTP id S238580AbiAXPYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 10:23:50 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363FFC06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 07:23:50 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id e8so12468390wrc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 07:23:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HoCKTXe73b6LRfZ2yfJRg1I4/082DZV6wf8n+3iyv3U=;
-        b=DXFMPQqZJ0tKT0e1GyjQjptwLQE+7cHPUKFQBr+FQZeLkkE77ifDs5YB3GOF2h2Seh
-         bgVGO7FGtiVNy3Mg062PsxfHEv95vu/7FuDahESCUCJFO1xZnM5iGo1upx+/pmKrvaB6
-         CSUStL3QD1cOCq8v/QVMbsKXpJs2to+BaJ6sFHSy/sLvqdOxY9TIlA8KUI4Jrj4Zarux
-         H3yY4uEjrAm5+t5Un+56XZMFQGrGxPIHVNdV9OMQtXbVEBu7Yd1EyCdR9Putf8JzYEQ7
-         7zdN+Tdh+rSzq6KW5FsWt+yw5LYnZnrdPn/KOiBaoshGM3xl5+rV4Szbq/KKk17PP89m
-         4qiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HoCKTXe73b6LRfZ2yfJRg1I4/082DZV6wf8n+3iyv3U=;
-        b=g0cfoMTJzmPhKG89OjtlSl/ekMmY1ECkXvv+oALQxKySqlCyGC/C2WKiY+fLvEyk1G
-         FekPqxQobjBo1W8VFZmA7M1XocGcfxPVFIvp+t0vAnRybO7L5PElBU+A6BiSCidGE6+Q
-         RPAU58D0A7V9JYSxqLIovATy7lJ7VoSawpS2BTJTioLbgt9CwOq4o1o1EBpkHDlGFvc4
-         aUv7vLxwaPurWmBUfH59Vw0EzDjxLYja9G86+oJYGfgAc8vCNiU0hE0upg+K9rh7WUMu
-         fym3m1yD7TiyrN/+2KhgJqSVS3WwjFt886yiRp7ZNWKBWOAHYaGi9lFuOuHs77XRvT96
-         mLxA==
-X-Gm-Message-State: AOAM533qJfCL82nI9lzgEFkW7SwAf5YgmqrRn/vKC8MsS1B+bB08FtYF
-        WlS59kqDWmVzlBsssI6BDGN4haKuTjTmaw==
-X-Google-Smtp-Source: ABdhPJwuOAaYhLMRPNPmkmjib9G4ImRHpSjbxVDsSwkT8tECvG6c7seMPvA24tjBSCj5SaEJ5QMa9Q==
-X-Received: by 2002:a5d:544c:: with SMTP id w12mr1825656wrv.47.1643037828828;
-        Mon, 24 Jan 2022 07:23:48 -0800 (PST)
-Received: from localhost.localdomain (179.160.117.78.rev.sfr.net. [78.117.160.179])
-        by smtp.gmail.com with ESMTPSA id p14sm3806868wmq.40.2022.01.24.07.23.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 07:23:48 -0800 (PST)
-From:   Julien STEPHAN <jstephan@baylibre.com>
-Cc:     Julien STEPHAN <jstephan@baylibre.com>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR MEDIATEK),
-        linux-mediatek@lists.infradead.org (moderated list:DRM DRIVERS FOR
-        MEDIATEK),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/mediatek: allow commands to be sent during video mode
-Date:   Mon, 24 Jan 2022 16:22:50 +0100
-Message-Id: <20220124152250.441809-1-jstephan@baylibre.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 24 Jan 2022 10:24:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B57BC06173B;
+        Mon, 24 Jan 2022 07:24:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C13E661480;
+        Mon, 24 Jan 2022 15:24:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 343D7C340EA;
+        Mon, 24 Jan 2022 15:24:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643037872;
+        bh=4FOVymSBLDFQAUqFaQOAK2kBFZDCor01RaScWJF5qNM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cODq/k6VDP7ljKDn3MJp5FNFm2MCyfsMLDmIYM4AvqFATOV5PODAGp2436Yv/N2pI
+         VmPtSU6yY8SJwkAjgYITv/xFu0axoW27LNO7eYmgtUQ58kO0naeZXAkOt1CIToWDzC
+         vhRTc+V5/C+etRsCqKZyGllGiIkuZJVfPi0K+Fo+TReFvppIyvAoXUJezVuSj10O+S
+         SUEbuJLWpaYEkCTBTuBbQNADww5ksf+0S1EVuwFlk116eidg1kEH8wd7kXpz3MZaQK
+         NDHT/BuVITqGNjn9mMHSOoHumwY9hrSXccr9piaFF2XnbPWsOq9IyEJS+DivWh5O/G
+         VS+Dg4FZZZGxw==
+Received: by mail-ej1-f45.google.com with SMTP id d10so22361158eje.10;
+        Mon, 24 Jan 2022 07:24:32 -0800 (PST)
+X-Gm-Message-State: AOAM530//oSfKC+fwdMJcIw8Kxwsfxw/4zPg3bhqCmZs4rv5+LaYKS3V
+        BQaiBGXpQ+TMiT4jyW+iSQTh4MxD048YWDcGog==
+X-Google-Smtp-Source: ABdhPJypLe3fQux9GhZfMQpZMZZVEASZHTXgPIIufJUZqKUSy3aayx1eCyItPpD7FF+WT3SVbvaFncSGiQsKqKP/auM=
+X-Received: by 2002:a17:906:1dc3:: with SMTP id v3mr12891842ejh.264.1643037870455;
+ Mon, 24 Jan 2022 07:24:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <20220124122132.435743-1-christian.gmeiner@gmail.com>
+In-Reply-To: <20220124122132.435743-1-christian.gmeiner@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 24 Jan 2022 09:24:18 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLwFvLJg+LCgANU6Mdx_=RkkLWPk+8nxsTNxb_sLi+nwQ@mail.gmail.com>
+Message-ID: <CAL_JsqLwFvLJg+LCgANU6Mdx_=RkkLWPk+8nxsTNxb_sLi+nwQ@mail.gmail.com>
+Subject: Re: [PATCH] Revert "PCI: j721e: Drop redundant struct device *"
+To:     Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Tom Joseph <tjoseph@cadence.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-omap@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the DSI is in video mode, all commands are rejected.
+On Mon, Jan 24, 2022 at 6:21 AM Christian Gmeiner
+<christian.gmeiner@gmail.com> wrote:
+>
+> This reverts commit 19e863828acf6d8ac8475ba1fd93c0fe17fdc4ef.
+>
+> Fixes the following oops:
 
-Detect current DSI mode in mtk_dsi_host_transfer() and switch modes
-temporarily to allow commands to be sent.
+Perhaps explain why the 2nd struct device was not redundant. Is this
+not just a case of the dev pointer not getting set early enough?
 
-Signed-off-by: Julien STEPHAN <jstephan@baylibre.com>
-Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 34 ++++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 5d90d2eb0019..7d66fdc7f81d 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -891,24 +891,34 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_dsi_host *host,
- 	u8 read_data[16];
- 	void *src_addr;
- 	u8 irq_flag = CMD_DONE_INT_FLAG;
--
--	if (readl(dsi->regs + DSI_MODE_CTRL) & MODE) {
--		DRM_ERROR("dsi engine is not command mode\n");
--		return -EINVAL;
-+	u32 dsi_mode;
-+
-+	dsi_mode = readl(dsi->regs + DSI_MODE_CTRL);
-+	if (dsi_mode & MODE) {
-+		mtk_dsi_stop(dsi);
-+		if (mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500)) {
-+			recv_cnt = -EINVAL;
-+			goto restore_dsi_mode;
-+		}
- 	}
- 
- 	if (MTK_DSI_HOST_IS_READ(msg->type))
- 		irq_flag |= LPRX_RD_RDY_INT_FLAG;
- 
--	if (mtk_dsi_host_send_cmd(dsi, msg, irq_flag) < 0)
--		return -ETIME;
-+	if (mtk_dsi_host_send_cmd(dsi, msg, irq_flag) < 0) {
-+		recv_cnt = -ETIME;
-+		goto restore_dsi_mode;
-+	}
- 
--	if (!MTK_DSI_HOST_IS_READ(msg->type))
--		return 0;
-+	if (!MTK_DSI_HOST_IS_READ(msg->type)) {
-+		recv_cnt = 0;
-+		goto restore_dsi_mode;
-+	}
- 
- 	if (!msg->rx_buf) {
- 		DRM_ERROR("dsi receive buffer size may be NULL\n");
--		return -EINVAL;
-+		recv_cnt = -EINVAL;
-+		goto restore_dsi_mode;
- 	}
- 
- 	for (i = 0; i < 16; i++)
-@@ -933,6 +943,12 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_dsi_host *host,
- 	DRM_INFO("dsi get %d byte data from the panel address(0x%x)\n",
- 		 recv_cnt, *((u8 *)(msg->tx_buf)));
- 
-+restore_dsi_mode:
-+	if (dsi_mode & MODE) {
-+		mtk_dsi_set_mode(dsi);
-+		mtk_dsi_start(dsi);
-+	}
-+
- 	return recv_cnt;
- }
- 
--- 
-2.34.1
-
+>  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+>  Internal error: Oops: 96000004 [#1] PREEMPT SMP
+>  Modules linked in:
+>  CPU: 1 PID: 7 Comm: kworker/u4:0 Not tainted 5.17.0-rc1-00086-ge38b27816fea-dirty #71
+>  Hardware name: CPE0108 (DT)
+>  Workqueue: events_unbound deferred_probe_work_func
+>  pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>  pc : j721e_pcie_probe+0x184/0x600
+>  lr : j721e_pcie_probe+0x170/0x600
+>  sp : ffff80000957bae0
+>  x29: ffff80000957bae0 x28: ffff800009357000 x27: ffff00000000c078
+>  x26: ffff00003fe047a8 x25: 0000000000000000 x24: ffff0000000f5280
+>  x23: ffff800008c98f78 x22: ffff800008f90ff0 x21: ffff000000231410
+>  x20: ffff000002ef2780 x19: 0000000000000021 x18: 0000000000000001
+>  x17: 0000000000000000 x16: 0000000000058c00 x15: ffffffffffffffff
+>  x14: ffffffffffffffff x13: 0000000000000010 x12: 0101010101010101
+>  x11: 0000000000000040 x10: ffff8000093e06c8 x9 : ffff8000093e06c0
+>  x8 : ffff000000400270 x7 : 0000000000000000 x6 : ffff000000231590
+>  x5 : ffff80000957b9e0 x4 : 0000000000000000 x3 : ffff0000002314f4
+>  x2 : 0000000000000000 x1 : ffff0000000f5280 x0 : 0000000000000000
+>  Call trace:
+>   j721e_pcie_probe+0x184/0x600
+>   platform_probe+0x68/0xe0
+>   really_probe+0x144/0x320
+>   __driver_probe_device+0xc4/0xe0
+>   driver_probe_device+0x7c/0x110
+>   __device_attach_driver+0x90/0xe0
+>   bus_for_each_drv+0x78/0xd0
+>   __device_attach+0xf0/0x150
+>   device_initial_probe+0x14/0x20
+>   bus_probe_device+0x9c/0xb0
+>   deferred_probe_work_func+0x88/0xc0
+>   process_one_work+0x1bc/0x340
+>   worker_thread+0x1f8/0x420
+>   kthread+0x110/0x120
+>   ret_from_fork+0x10/0x20
+>  Code: f9400280 a90573fb d0005396 913fc2d6 (f9400800)
+>
+> Fixes: 19e863828acf ("PCI: j721e: Drop redundant struct device *")
+> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+> ---
+>  drivers/pci/controller/cadence/pci-j721e.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+> index 489586a4cdc7..cd43d1898482 100644
+> --- a/drivers/pci/controller/cadence/pci-j721e.c
+> +++ b/drivers/pci/controller/cadence/pci-j721e.c
+> @@ -51,10 +51,11 @@ enum link_status {
+>  #define MAX_LANES                      2
+>
+>  struct j721e_pcie {
+> -       struct cdns_pcie        *cdns_pcie;
+> +       struct device           *dev;
+>         struct clk              *refclk;
+>         u32                     mode;
+>         u32                     num_lanes;
+> +       struct cdns_pcie        *cdns_pcie;
+>         void __iomem            *user_cfg_base;
+>         void __iomem            *intd_cfg_base;
+>         u32                     linkdown_irq_regfield;
+> @@ -98,7 +99,7 @@ static inline void j721e_pcie_intd_writel(struct j721e_pcie *pcie, u32 offset,
+>  static irqreturn_t j721e_pcie_link_irq_handler(int irq, void *priv)
+>  {
+>         struct j721e_pcie *pcie = priv;
+> -       struct device *dev = pcie->cdns_pcie->dev;
+> +       struct device *dev = pcie->dev;
+>         u32 reg;
+>
+>         reg = j721e_pcie_intd_readl(pcie, STATUS_REG_SYS_2);
+> @@ -164,7 +165,7 @@ static const struct cdns_pcie_ops j721e_pcie_ops = {
+>  static int j721e_pcie_set_mode(struct j721e_pcie *pcie, struct regmap *syscon,
+>                                unsigned int offset)
+>  {
+> -       struct device *dev = pcie->cdns_pcie->dev;
+> +       struct device *dev = pcie->dev;
+>         u32 mask = J721E_MODE_RC;
+>         u32 mode = pcie->mode;
+>         u32 val = 0;
+> @@ -183,7 +184,7 @@ static int j721e_pcie_set_mode(struct j721e_pcie *pcie, struct regmap *syscon,
+>  static int j721e_pcie_set_link_speed(struct j721e_pcie *pcie,
+>                                      struct regmap *syscon, unsigned int offset)
+>  {
+> -       struct device *dev = pcie->cdns_pcie->dev;
+> +       struct device *dev = pcie->dev;
+>         struct device_node *np = dev->of_node;
+>         int link_speed;
+>         u32 val = 0;
+> @@ -204,7 +205,7 @@ static int j721e_pcie_set_link_speed(struct j721e_pcie *pcie,
+>  static int j721e_pcie_set_lane_count(struct j721e_pcie *pcie,
+>                                      struct regmap *syscon, unsigned int offset)
+>  {
+> -       struct device *dev = pcie->cdns_pcie->dev;
+> +       struct device *dev = pcie->dev;
+>         u32 lanes = pcie->num_lanes;
+>         u32 val = 0;
+>         int ret;
+> @@ -219,7 +220,7 @@ static int j721e_pcie_set_lane_count(struct j721e_pcie *pcie,
+>
+>  static int j721e_pcie_ctrl_init(struct j721e_pcie *pcie)
+>  {
+> -       struct device *dev = pcie->cdns_pcie->dev;
+> +       struct device *dev = pcie->dev;
+>         struct device_node *node = dev->of_node;
+>         struct of_phandle_args args;
+>         unsigned int offset = 0;
+> @@ -376,6 +377,7 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+>         if (!pcie)
+>                 return -ENOMEM;
+>
+> +       pcie->dev = dev;
+>         pcie->mode = mode;
+>         pcie->linkdown_irq_regfield = data->linkdown_irq_regfield;
+>
+> --
+> 2.34.1
+>

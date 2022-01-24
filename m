@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 724FB49A0B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0FB49A08B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846883AbiAXXRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
+        id S1844998AbiAXXK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:10:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1581212AbiAXWRS (ORCPT
+        with ESMTP id S1356206AbiAXWRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 17:17:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BCCC04A2D2;
-        Mon, 24 Jan 2022 12:45:37 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4799C04A2D7;
+        Mon, 24 Jan 2022 12:45:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C933060C17;
-        Mon, 24 Jan 2022 20:45:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B27C340E8;
-        Mon, 24 Jan 2022 20:45:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79D4EB81061;
+        Mon, 24 Jan 2022 20:45:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFAADC340E5;
+        Mon, 24 Jan 2022 20:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057136;
-        bh=nmiMrpAAXAP5bidkMoGHx7ZEzwNtUKKPQpg/JF9EprQ=;
+        s=korg; t=1643057139;
+        bh=dzVoloKPV8iehEkPtMjgCkWs6t5GNeQ2ByyoDuIQLb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HFyxJ+Z6jpTxPJF86HnfXEG7TbM/7v4PAyHw+6T3UeL7XyL9i03cWXoLolUj/i+ez
-         MWXSV72qYvaodmZHhUy05URspfACXySxGM85/B1GxINqqLLMKFPRw53yjLGq4zxVXS
-         KuQHZHvDb1h5qcvVbLcRRHp2Vcpwoukjs7tbdLts=
+        b=sQwFvkZzt36ZqrGYeEWruCovWAvpSDGcR/WCj89Vhov11SAFN2hpNj9snX3iNqGPD
+         pljsPQ0hBMQxnajmGmIQ56pEHsndWRv+sf3pyefYpIqqJgXFxAF8eKkpwvd2Y1W4lO
+         F6KIluNjdk17Tyg4iOB1LNA6QYPLHoUErkUmQz4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 712/846] btrfs: respect the max size in the header when activating swap file
-Date:   Mon, 24 Jan 2022 19:43:49 +0100
-Message-Id: <20220124184125.586556723@linuxfoundation.org>
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>, stable@kernel.org,
+        Theodore Tso <tytso@mit.edu>,
+        syzbot+3b6f9218b1301ddda3e2@syzkaller.appspotmail.com
+Subject: [PATCH 5.15 713/846] ext4: make sure to reset inode lockdep class when quota enabling fails
+Date:   Mon, 24 Jan 2022 19:43:50 +0100
+Message-Id: <20220124184125.622910378@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,65 +49,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Jan Kara <jack@suse.cz>
 
-commit c2f822635df873c510bda6fb7fd1b10b7c31be2d upstream.
+commit 4013d47a5307fdb5c13370b5392498b00fedd274 upstream.
 
-If we extended the size of a swapfile after its header was created (by the
-mkswap utility) and then try to activate it, we will map the entire file
-when activating the swap file, instead of limiting to the max size defined
-in the swap file's header.
+When we succeed in enabling some quota type but fail to enable another
+one with quota feature, we correctly disable all enabled quota types.
+However we forget to reset i_data_sem lockdep class. When the inode gets
+freed and reused, it will inherit this lockdep class (i_data_sem is
+initialized only when a slab is created) and thus eventually lockdep
+barfs about possible deadlocks.
 
-Currently test case generic/643 from fstests fails because we do not
-respect that size limit defined in the swap file's header.
-
-So fix this by not mapping file ranges beyond the max size defined in the
-swap header.
-
-This is the same type of bug that iomap used to have, and was fixed in
-commit 36ca7943ac18ae ("mm/swap: consider max pages in
-iomap_swapfile_add_extent").
-
-Fixes: ed46ff3d423780 ("Btrfs: support swap files")
-CC: stable@vger.kernel.org # 5.4+
-Reviewed-and-tested-by: Josef Bacik <josef@toxicpanda.com
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Reported-and-tested-by: syzbot+3b6f9218b1301ddda3e2@syzkaller.appspotmail.com
+Signed-off-by: Jan Kara <jack@suse.cz>
+Cc: stable@kernel.org
+Link: https://lore.kernel.org/r/20211007155336.12493-3-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/inode.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ fs/ext4/super.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -10586,9 +10586,19 @@ static int btrfs_add_swap_extent(struct
- 				 struct btrfs_swap_info *bsi)
- {
- 	unsigned long nr_pages;
-+	unsigned long max_pages;
- 	u64 first_ppage, first_ppage_reported, next_ppage;
- 	int ret;
- 
-+	/*
-+	 * Our swapfile may have had its size extended after the swap header was
-+	 * written. In that case activating the swapfile should not go beyond
-+	 * the max size set in the swap header.
-+	 */
-+	if (bsi->nr_pages >= sis->max)
-+		return 0;
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -6352,8 +6352,19 @@ int ext4_enable_quotas(struct super_bloc
+ 					"Failed to enable quota tracking "
+ 					"(type=%d, err=%d). Please run "
+ 					"e2fsck to fix.", type, err);
+-				for (type--; type >= 0; type--)
++				for (type--; type >= 0; type--) {
++					struct inode *inode;
 +
-+	max_pages = sis->max - bsi->nr_pages;
- 	first_ppage = ALIGN(bsi->block_start, PAGE_SIZE) >> PAGE_SHIFT;
- 	next_ppage = ALIGN_DOWN(bsi->block_start + bsi->block_len,
- 				PAGE_SIZE) >> PAGE_SHIFT;
-@@ -10596,6 +10606,7 @@ static int btrfs_add_swap_extent(struct
- 	if (first_ppage >= next_ppage)
- 		return 0;
- 	nr_pages = next_ppage - first_ppage;
-+	nr_pages = min(nr_pages, max_pages);
++					inode = sb_dqopt(sb)->files[type];
++					if (inode)
++						inode = igrab(inode);
+ 					dquot_quota_off(sb, type);
++					if (inode) {
++						lockdep_set_quota_inode(inode,
++							I_DATA_SEM_NORMAL);
++						iput(inode);
++					}
++				}
  
- 	first_ppage_reported = first_ppage;
- 	if (bsi->start == 0)
+ 				return err;
+ 			}
 
 

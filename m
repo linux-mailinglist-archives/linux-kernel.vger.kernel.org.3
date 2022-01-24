@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2398D499AA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EF8499D1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:16:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573672AbiAXVpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:45:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33566 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446902AbiAXVJi (ORCPT
+        id S1582350AbiAXWPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:15:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1452865AbiAXV1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:09:38 -0500
+        Mon, 24 Jan 2022 16:27:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45869C073227;
+        Mon, 24 Jan 2022 12:18:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78E766131F;
-        Mon, 24 Jan 2022 21:09:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58730C340E5;
-        Mon, 24 Jan 2022 21:09:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D709660B56;
+        Mon, 24 Jan 2022 20:18:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD416C340E5;
+        Mon, 24 Jan 2022 20:18:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058577;
-        bh=sfLZiX02BJ5cJ5jesEuIRjHJpSQs6iwfZWTLM8msD+o=;
+        s=korg; t=1643055509;
+        bh=TXWftH3Lvlt9MHh1xSd+HVBtOTeO7gkjpDkzqXx25Ww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JLG84KrXYqW81gHyoXl/MWNcRx/6Xsude0XoPyl1RaInZYfzdv3DzzFyRZHAU5vmb
-         MEUYgKtCbR1qi2DbugsoJ0zlidXpO9JvrKXAAjGalJzNl5CWFoULrgrUT/4OJaP1v7
-         GGB6hodEayK0IcEeIsOTZHWaCsVm+3tNuwQ1ODS4=
+        b=voiHKdiH30jYYYB/lnu1CUf+MWLedmZVqJnsdI9if0Ttyz5Qses8tGGYUfTHE4f9/
+         ysflh+muvc8pXKsflyEo7L0N9BrGc4SNWk8+eLz1AjTpJEtI4SkvKf4l4+w8JxaE0f
+         UMCiafFYj/X80WoblbLM7lvU1F/SZqOscBapbcA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Antony Antony <antony.antony@secunet.com>,
-        Eyal Birger <eyal.birger@gmail.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>,
+        Nechama Kraus <nechamax.kraus@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0301/1039] xfrm: interface with if_id 0 should return error
-Date:   Mon, 24 Jan 2022 19:34:50 +0100
-Message-Id: <20220124184135.429986884@linuxfoundation.org>
+Subject: [PATCH 5.15 174/846] igc: AF_XDP zero-copy metadata adjust breaks SKBs on XDP_PASS
+Date:   Mon, 24 Jan 2022 19:34:51 +0100
+Message-Id: <20220124184106.979687442@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,67 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antony Antony <antony.antony@secunet.com>
+From: Jesper Dangaard Brouer <brouer@redhat.com>
 
-[ Upstream commit 8dce43919566f06e865f7e8949f5c10d8c2493f5 ]
+[ Upstream commit 4fa8fcd3440101dbacf4fae91de69877ef751977 ]
 
-xfrm interface if_id = 0 would cause xfrm policy lookup errors since
-Commit 9f8550e4bd9d.
+Driver already implicitly supports XDP metadata access in AF_XDP
+zero-copy mode, as xsk_buff_pool's xp_alloc() naturally set xdp_buff
+data_meta equal data.
 
-Now explicitly fail to create an xfrm interface when if_id = 0
+This works fine for XDP and AF_XDP, but if a BPF-prog adjust via
+bpf_xdp_adjust_meta() and choose to call XDP_PASS, then igc function
+igc_construct_skb_zc() will construct an invalid SKB packet. The
+function correctly include the xdp->data_meta area in the memcpy, but
+forgot to pull header to take metasize into account.
 
-With this commit:
- ip link add ipsec0  type xfrm dev lo  if_id 0
- Error: if_id must be non zero.
-
-v1->v2 change:
- - add Fixes: tag
-
-Fixes: 9f8550e4bd9d ("xfrm: fix disable_xfrm sysctl when used on xfrm interfaces")
-Signed-off-by: Antony Antony <antony.antony@secunet.com>
-Reviewed-by: Eyal Birger <eyal.birger@gmail.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Tested-by: Nechama Kraus <nechamax.kraus@linux.intel.com>
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/xfrm/xfrm_interface.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/net/xfrm/xfrm_interface.c b/net/xfrm/xfrm_interface.c
-index 41de46b5ffa94..57448fc519fcd 100644
---- a/net/xfrm/xfrm_interface.c
-+++ b/net/xfrm/xfrm_interface.c
-@@ -637,11 +637,16 @@ static int xfrmi_newlink(struct net *src_net, struct net_device *dev,
- 			struct netlink_ext_ack *extack)
- {
- 	struct net *net = dev_net(dev);
--	struct xfrm_if_parms p;
-+	struct xfrm_if_parms p = {};
- 	struct xfrm_if *xi;
- 	int err;
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 0a96627391a8c..c7fa978cdf02e 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -2447,8 +2447,10 @@ static struct sk_buff *igc_construct_skb_zc(struct igc_ring *ring,
  
- 	xfrmi_netlink_parms(data, &p);
-+	if (!p.if_id) {
-+		NL_SET_ERR_MSG(extack, "if_id must be non zero");
-+		return -EINVAL;
-+	}
-+
- 	xi = xfrmi_locate(net, &p);
- 	if (xi)
- 		return -EEXIST;
-@@ -666,7 +671,12 @@ static int xfrmi_changelink(struct net_device *dev, struct nlattr *tb[],
- {
- 	struct xfrm_if *xi = netdev_priv(dev);
- 	struct net *net = xi->net;
--	struct xfrm_if_parms p;
-+	struct xfrm_if_parms p = {};
-+
-+	if (!p.if_id) {
-+		NL_SET_ERR_MSG(extack, "if_id must be non zero");
-+		return -EINVAL;
+ 	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
+ 	memcpy(__skb_put(skb, totalsize), xdp->data_meta, totalsize);
+-	if (metasize)
++	if (metasize) {
+ 		skb_metadata_set(skb, metasize);
++		__skb_pull(skb, metasize);
 +	}
  
- 	xfrmi_netlink_parms(data, &p);
- 	xi = xfrmi_locate(net, &p);
+ 	return skb;
+ }
 -- 
 2.34.1
 

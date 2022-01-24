@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A9F49A7D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A915949A7C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1314822AbiAYCvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S1314504AbiAYCvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:51:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348365AbiAXVFL (ORCPT
+        with ESMTP id S1445655AbiAXVEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:05:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB20BC055A9D;
-        Mon, 24 Jan 2022 12:04:38 -0800 (PST)
+        Mon, 24 Jan 2022 16:04:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74527C068090;
+        Mon, 24 Jan 2022 12:04:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30D726131B;
-        Mon, 24 Jan 2022 20:04:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F40EDC340E5;
-        Mon, 24 Jan 2022 20:04:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B780B811FB;
+        Mon, 24 Jan 2022 20:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF09C340E5;
+        Mon, 24 Jan 2022 20:04:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054677;
-        bh=khj1TPKAGtqZ8SRnFW3L1kpEHrsWYchWuXRxLdSbLMw=;
+        s=korg; t=1643054659;
+        bh=Aqzs6TyYmoFSONdI2u4ZRgTSfsF8vwjIks/uERB6+TQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FHXsymWalUxw042jk9i3cMv0kETAce32+0T6WfoqMIl9Y9YUVgrH4zlHDet6Ob89w
-         x5DO8mdT6vjxQqpsm4kmJWq0hDjuPikmvenfTfwPE7K5E0jgyiT3TLdpFaoYr5cc31
-         sYXXoVcfma3K3bDuCjou5tD2eAjBYQQyHJxtqVUI=
+        b=tRcTrICOhJgCTmJYpAqnqpf+syd7eNa0hkkOea2q6EBaJ0vsLPFiIBbKCEvB1waW5
+         dhA9QCWfCVN6WslJSEir5dWk5npJZaSVF7BAXGCTfgIY+JtXlWgj7uxy7NZu2ODbgw
+         PluLpX9qB42dKm2Ted/6JSfu6ekjX4dERD15kP9w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zqiang <qiang.zhang1211@gmail.com>,
-        syzbot+bb950e68b400ab4f65f8@syzkaller.appspotmail.com,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 425/563] ALSA: seq: Set upper limit of processed events
-Date:   Mon, 24 Jan 2022 19:43:10 +0100
-Message-Id: <20220124184039.156668491@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 429/563] powerpc: handle kdump appropriately with crash_kexec_post_notifiers option
+Date:   Mon, 24 Jan 2022 19:43:14 +0100
+Message-Id: <20220124184039.294568624@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -49,85 +50,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Hari Bathini <hbathini@linux.ibm.com>
 
-[ Upstream commit 6fadb494a638d8b8a55864ecc6ac58194f03f327 ]
+[ Upstream commit 219572d2fc4135b5ce65c735d881787d48b10e71 ]
 
-Currently ALSA sequencer core tries to process the queued events as
-much as possible when they become dispatchable.  If applications try
-to queue too massive events to be processed at the very same timing,
-the sequencer core would still try to process such all events, either
-in the interrupt context or via some notifier; in either away, it
-might be a cause of RCU stall or such problems.
+Kdump can be triggered after panic_notifers since commit f06e5153f4ae2
+("kernel/panic.c: add "crash_kexec_post_notifiers" option for kdump
+after panic_notifers") introduced crash_kexec_post_notifiers option.
+But using this option would mean smp_send_stop(), that marks all other
+CPUs as offline, gets called before kdump is triggered. As a result,
+kdump routines fail to save other CPUs' registers. To fix this, kdump
+friendly crash_smp_send_stop() function was introduced with kernel
+commit 0ee59413c967 ("x86/panic: replace smp_send_stop() with kdump
+friendly version in panic path"). Override this kdump friendly weak
+function to handle crash_kexec_post_notifiers option appropriately
+on powerpc.
 
-As a potential workaround for those problems, this patch adds the
-upper limit of the amount of events to be processed.  The remaining
-events are processed in the next batch, so they won't be lost.
-
-For the time being, it's limited up to 1000 events per queue, which
-should be high enough for any normal usages.
-
-Reported-by: Zqiang <qiang.zhang1211@gmail.com>
-Reported-by: syzbot+bb950e68b400ab4f65f8@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/20211102033222.3849-1-qiang.zhang1211@gmail.com
-Link: https://lore.kernel.org/r/20211207165146.2888-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+[Fixed signature of crash_stop_this_cpu() - reported by lkp@intel.com]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211207103719.91117-1-hbathini@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/seq/seq_queue.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ arch/powerpc/kernel/smp.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/sound/core/seq/seq_queue.c b/sound/core/seq/seq_queue.c
-index 71a6ea62c3be7..4ff0b927230c2 100644
---- a/sound/core/seq/seq_queue.c
-+++ b/sound/core/seq/seq_queue.c
-@@ -234,12 +234,15 @@ struct snd_seq_queue *snd_seq_queue_find_name(char *name)
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index 50aeef08aa470..d993f28107afa 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -594,6 +594,36 @@ void crash_send_ipi(void (*crash_ipi_callback)(struct pt_regs *))
+ }
+ #endif
  
- /* -------------------------------------------------------- */
- 
-+#define MAX_CELL_PROCESSES_IN_QUEUE	1000
++#ifdef CONFIG_NMI_IPI
++static void crash_stop_this_cpu(struct pt_regs *regs)
++#else
++static void crash_stop_this_cpu(void *dummy)
++#endif
++{
++	/*
++	 * Just busy wait here and avoid marking CPU as offline to ensure
++	 * register data is captured appropriately.
++	 */
++	while (1)
++		cpu_relax();
++}
 +
- void snd_seq_check_queue(struct snd_seq_queue *q, int atomic, int hop)
++void crash_smp_send_stop(void)
++{
++	static bool stopped = false;
++
++	if (stopped)
++		return;
++
++	stopped = true;
++
++#ifdef CONFIG_NMI_IPI
++	smp_send_nmi_ipi(NMI_IPI_ALL_OTHERS, crash_stop_this_cpu, 1000000);
++#else
++	smp_call_function(crash_stop_this_cpu, NULL, 0);
++#endif /* CONFIG_NMI_IPI */
++}
++
+ #ifdef CONFIG_NMI_IPI
+ static void nmi_stop_this_cpu(struct pt_regs *regs)
  {
- 	unsigned long flags;
- 	struct snd_seq_event_cell *cell;
- 	snd_seq_tick_time_t cur_tick;
- 	snd_seq_real_time_t cur_time;
-+	int processed = 0;
- 
- 	if (q == NULL)
- 		return;
-@@ -262,6 +265,8 @@ void snd_seq_check_queue(struct snd_seq_queue *q, int atomic, int hop)
- 		if (!cell)
- 			break;
- 		snd_seq_dispatch_event(cell, atomic, hop);
-+		if (++processed >= MAX_CELL_PROCESSES_IN_QUEUE)
-+			goto out; /* the rest processed at the next batch */
- 	}
- 
- 	/* Process time queue... */
-@@ -271,14 +276,19 @@ void snd_seq_check_queue(struct snd_seq_queue *q, int atomic, int hop)
- 		if (!cell)
- 			break;
- 		snd_seq_dispatch_event(cell, atomic, hop);
-+		if (++processed >= MAX_CELL_PROCESSES_IN_QUEUE)
-+			goto out; /* the rest processed at the next batch */
- 	}
- 
-+ out:
- 	/* free lock */
- 	spin_lock_irqsave(&q->check_lock, flags);
- 	if (q->check_again) {
- 		q->check_again = 0;
--		spin_unlock_irqrestore(&q->check_lock, flags);
--		goto __again;
-+		if (processed < MAX_CELL_PROCESSES_IN_QUEUE) {
-+			spin_unlock_irqrestore(&q->check_lock, flags);
-+			goto __again;
-+		}
- 	}
- 	q->check_blocked = 0;
- 	spin_unlock_irqrestore(&q->check_lock, flags);
 -- 
 2.34.1
 

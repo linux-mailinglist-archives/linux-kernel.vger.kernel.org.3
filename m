@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 704914988CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6CD4989F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245398AbiAXSug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:50:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:48420 "EHLO
+        id S1344858AbiAXS7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:59:23 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56110 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245546AbiAXStr (ORCPT
+        with ESMTP id S1343495AbiAXS5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:49:47 -0500
+        Mon, 24 Jan 2022 13:57:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BBE1614C9;
-        Mon, 24 Jan 2022 18:49:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27344C340E5;
-        Mon, 24 Jan 2022 18:49:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3192D61562;
+        Mon, 24 Jan 2022 18:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 121A0C36AEC;
+        Mon, 24 Jan 2022 18:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050186;
-        bh=u+aBQpTuCtY9LJk5bEHF2dL9U4aLOFqYV4b54fbW9AY=;
+        s=korg; t=1643050622;
+        bh=R1Ks1+PCvdgWaCBScyCkSEWthZvRFUjY3tMhIVMKsH0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gDnALDqm8Fbits8VUxpINVGxvgG/ewHq9slqwU0Av52W9ic/g+Ayxpu2A9l2bzWfV
-         CgFymSykZFW7/T6jlw8GV8EH621tVIjnT56F2qxLl6M4xDKFeOT3FeCntTEpEHzUcc
-         CX/YNotzuLz5nEURoGRjm1DxohU5Vc57m7/1nOQo=
+        b=xWANy4D5zsKryJ41O+4OoiPeu9BnquIToMJk2oxye22RC71HynKzbaY4O68GbmUI6
+         zTjnEPj1wPOjOTWVGMfVcMkutOGI7ML7Q6Al+B7G7pob/WBDnxMJvGR0NWihvxWPga
+         sx2tnYHUkKOdzLtfaPMxXmCAsxfmLh8qjXYlFZQc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 037/114] spi: spi-meson-spifc: Add missing pm_runtime_disable() in meson_spifc_probe
-Date:   Mon, 24 Jan 2022 19:42:12 +0100
-Message-Id: <20220124183928.260103655@linuxfoundation.org>
+Subject: [PATCH 4.9 043/157] media: saa7146: mxb: Fix a NULL pointer dereference in mxb_attach()
+Date:   Mon, 24 Jan 2022 19:42:13 +0100
+Message-Id: <20220124183934.162201552@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
-References: <20220124183927.095545464@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,35 +47,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 69c1b87516e327a60b39f96b778fe683259408bf ]
+[ Upstream commit 0407c49ebe330333478440157c640fffd986f41b ]
 
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable().
-Add missing pm_runtime_disable() for meson_spifc_probe.
+In mxb_attach(dev, info), saa7146_vv_init() is called to allocate a
+new memory for dev->vv_data. saa7146_vv_release() will be called on
+failure of mxb_probe(dev). There is a dereference of dev->vv_data
+in saa7146_vv_release(), which could lead to a NULL pointer dereference
+on failure of saa7146_vv_init().
 
-Fixes: c3e4bc5434d2 ("spi: meson: Add support for Amlogic Meson SPIFC")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220107075424.7774-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fix this bug by adding a check of saa7146_vv_init().
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_VIDEO_MXB=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 03b1930efd3c ("V4L/DVB: saa7146: fix regression of the av7110/budget-av driver")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-meson-spifc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/pci/saa7146/mxb.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-meson-spifc.c b/drivers/spi/spi-meson-spifc.c
-index 2465259f62411..8e662e7a35181 100644
---- a/drivers/spi/spi-meson-spifc.c
-+++ b/drivers/spi/spi-meson-spifc.c
-@@ -357,6 +357,7 @@ static int meson_spifc_probe(struct platform_device *pdev)
- 	return 0;
- out_clk:
- 	clk_disable_unprepare(spifc->clk);
-+	pm_runtime_disable(spifc->dev);
- out_err:
- 	spi_master_put(master);
- 	return ret;
+diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
+index 3e8753c9e1e47..849c2a1d09f99 100644
+--- a/drivers/media/pci/saa7146/mxb.c
++++ b/drivers/media/pci/saa7146/mxb.c
+@@ -694,10 +694,16 @@ static struct saa7146_ext_vv vv_data;
+ static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+ {
+ 	struct mxb *mxb;
++	int ret;
+ 
+ 	DEB_EE("dev:%p\n", dev);
+ 
+-	saa7146_vv_init(dev, &vv_data);
++	ret = saa7146_vv_init(dev, &vv_data);
++	if (ret) {
++		ERR("Error in saa7146_vv_init()");
++		return ret;
++	}
++
+ 	if (mxb_probe(dev)) {
+ 		saa7146_vv_release(dev);
+ 		return -1;
 -- 
 2.34.1
 

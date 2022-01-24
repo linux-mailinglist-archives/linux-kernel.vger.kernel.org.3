@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5B6499ABC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882F0499569
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573807AbiAXVp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:45:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33760 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448020AbiAXVLy (ORCPT
+        id S1441810AbiAXUvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:51:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378024AbiAXU2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:11:54 -0500
+        Mon, 24 Jan 2022 15:28:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D575C082566;
+        Mon, 24 Jan 2022 11:42:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F31D6B8121C;
-        Mon, 24 Jan 2022 21:11:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D495C340E5;
-        Mon, 24 Jan 2022 21:11:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8CC81B81142;
+        Mon, 24 Jan 2022 19:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADF77C340E5;
+        Mon, 24 Jan 2022 19:42:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058711;
-        bh=AqUHJMQ2oY0NsP6WS7PPXKuOprmnYcXcK6FdrOhbVas=;
+        s=korg; t=1643053332;
+        bh=3CEz9ODacc9jEscmMETRWxB3JPYlvQ03a39mjOKa3f8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PewUrMZpCqOV30LoK6McSnp1HXenZbUZpU/EZH9Z2Dz80cGj9sTsSnXSgwXz9lyNT
-         AACOs+vrgGvxmPXSeK48F/n4hXp9zgYzAP+4hQySTrER080KcxJ2w9WZBHTOCyAvnE
-         0puTROgrWaK9FwqwdC7GVaahhdeQWp2TTpo/08sI=
+        b=YnPdVRkV3Ix/me3cZjTtWOgdjihegYSPiiWkVvkqzyjSqXK0c2CGJPP5QIFnuj226
+         /SnaCN0jdhknQ8u3sb0cwClXoh3nuvLG+wPrhcg3VAnBPZbt4ilz3qmoQ+rgvQ6adK
+         k1/r7tVUCMiLBu4OvzmQmEiUvbpO/it8Omt2BkhY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Qiang Wang <wangqiang.wq.frank@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hengqi Chen <hengqi.chen@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0378/1039] libbpf: Use probe_name for legacy kprobe
-Date:   Mon, 24 Jan 2022 19:36:07 +0100
-Message-Id: <20220124184138.019901056@linuxfoundation.org>
+        stable@vger.kernel.org, Jason Gerecke <jason.gerecke@wacom.com>,
+        Ping Cheng <ping.cheng@wacom.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.10 003/563] HID: wacom: Reset expected and received contact counts at the same time
+Date:   Mon, 24 Jan 2022 19:36:08 +0100
+Message-Id: <20220124184024.526771179@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,41 +49,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qiang Wang <wangqiang.wq.frank@bytedance.com>
+From: Jason Gerecke <killertofu@gmail.com>
 
-[ Upstream commit 71cff670baff5cc6a6eeb0181e2cc55579c5e1e0 ]
+commit 546e41ac994cc185ef3de610ca849a294b5df3ba upstream.
 
-Fix a bug in commit 46ed5fc33db9, which wrongly used the
-func_name instead of probe_name to register legacy kprobe.
+These two values go hand-in-hand and must be valid for the driver to
+behave correctly. We are currently lazy about updating the values and
+rely on the "expected" code flow to take care of making sure they're
+valid at the point they're needed. The "expected" flow changed somewhat
+with commit f8b6a74719b5 ("HID: wacom: generic: Support multiple tools
+per report"), however. This led to problems with the DTH-2452 due (in
+part) to *all* contacts being fully processed -- even those past the
+expected contact count. Specifically, the received count gets reset to
+0 once all expected fingers are processed, but not the expected count.
+The rest of the contacts in the report are then *also* processed since
+now the driver thinks we've only processed 0 of N expected contacts.
 
-Fixes: 46ed5fc33db9 ("libbpf: Refactor and simplify legacy kprobe code")
-Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Qiang Wang <wangqiang.wq.frank@bytedance.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Tested-by: Hengqi Chen <hengqi.chen@gmail.com>
-Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
-Link: https://lore.kernel.org/bpf/20211227130713.66933-1-wangqiang.wq.frank@bytedance.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Later commits such as 7fb0413baa7f (HID: wacom: Use "Confidence" flag to
+prevent reporting invalid contacts) worked around the DTH-2452 issue by
+skipping the invalid contacts at the end of the report, but this is not
+a complete fix. The confidence flag cannot be relied on when a contact
+is removed (see the following patch), and dealing with that condition
+re-introduces the DTH-2452 issue unless we also address this contact
+count laziness. By resetting expected and received counts at the same
+time we ensure the driver understands that there are 0 more contacts
+expected in the report. Similarly, we also make sure to reset the
+received count if for some reason we're out of sync in the pre-report
+phase.
+
+Link: https://github.com/linuxwacom/input-wacom/issues/288
+Fixes: f8b6a74719b5 ("HID: wacom: generic: Support multiple tools per report")
+CC: stable@vger.kernel.org
+Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
+Reviewed-by: Ping Cheng <ping.cheng@wacom.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/lib/bpf/libbpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/wacom_wac.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fd25e30e70cc2..2696f0b7f0acc 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9769,7 +9769,7 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 		gen_kprobe_legacy_event_name(probe_name, sizeof(probe_name),
- 					     func_name, offset);
+--- a/drivers/hid/wacom_wac.c
++++ b/drivers/hid/wacom_wac.c
+@@ -2664,11 +2664,14 @@ static void wacom_wac_finger_pre_report(
+ 	    hid_data->cc_index >= 0) {
+ 		struct hid_field *field = report->field[hid_data->cc_index];
+ 		int value = field->value[hid_data->cc_value_index];
+-		if (value)
++		if (value) {
+ 			hid_data->num_expected = value;
++			hid_data->num_received = 0;
++		}
+ 	}
+ 	else {
+ 		hid_data->num_expected = wacom_wac->features.touch_max;
++		hid_data->num_received = 0;
+ 	}
+ }
  
--		legacy_probe = strdup(func_name);
-+		legacy_probe = strdup(probe_name);
- 		if (!legacy_probe)
- 			return libbpf_err_ptr(-ENOMEM);
+@@ -2692,6 +2695,7 @@ static void wacom_wac_finger_report(stru
  
--- 
-2.34.1
-
+ 	input_sync(input);
+ 	wacom_wac->hid_data.num_received = 0;
++	wacom_wac->hid_data.num_expected = 0;
+ 
+ 	/* keep touch state for pen event */
+ 	wacom_wac->shared->touch_down = wacom_wac_finger_count_touches(wacom_wac);
 
 

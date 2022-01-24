@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEF6498E3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 664AA498D30
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355076AbiAXTj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:39:57 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33022 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349435AbiAXTeK (ORCPT
+        id S238283AbiAXT2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348651AbiAXTTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:34:10 -0500
+        Mon, 24 Jan 2022 14:19:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75CBC02B8CB;
+        Mon, 24 Jan 2022 11:07:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B0D06141C;
-        Mon, 24 Jan 2022 19:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878CBC340E8;
-        Mon, 24 Jan 2022 19:34:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F2CDB81236;
+        Mon, 24 Jan 2022 19:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48929C340E5;
+        Mon, 24 Jan 2022 19:07:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052847;
-        bh=Mux5XJTW3pJiVPcl/iFS7hUyFsEJtVaPya5qb4ckeX0=;
+        s=korg; t=1643051254;
+        bh=YeXAOZqsXJopt9g24xu3z88wjjco8btdyftcUw/InUg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O9ukjqbHFJI4u8EK1acklXuedqBmPLnXrLweHxEetECjZw82iZ4mMNVCasmYBYrr1
-         MBTvJLkCT8KO/moM68GiNrtPHZKITlHYxs45LsJfDexELOzbxZ5hzuHgnSjH3RoUX0
-         65gz8wDOWaHR28XHTHrRdZeQAxGGOU9IHucnPyIM=
+        b=rXFEViF9KwCrP66jovUtKLBE0mRdnZrCenfYzddrXsQK4Io5GXJWDfEjGznep1zeY
+         PiudWPgFT8j5xyuWXQskCRrF7qujax+75cJnXCzb4xcUpESdW7TFT3XZFdEXKbxWMA
+         4jPr0eKpNxSMAe6FutvjXlPNq/JG8ispSDIIrHTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
+        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 193/320] audit: ensure userspace is penalized the same as the kernel when under pressure
+Subject: [PATCH 4.14 102/186] media: saa7146: hexium_orion: Fix a NULL pointer dereference in hexium_attach()
 Date:   Mon, 24 Jan 2022 19:42:57 +0100
-Message-Id: <20220124184000.210055259@linuxfoundation.org>
+Message-Id: <20220124183940.395935956@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,68 +50,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Moore <paul@paul-moore.com>
+From: Zhou Qingyang <zhou1615@umn.edu>
 
-[ Upstream commit 8f110f530635af44fff1f4ee100ecef0bac62510 ]
+[ Upstream commit 348df8035301dd212e3cc2860efe4c86cb0d3303 ]
 
-Due to the audit control mutex necessary for serializing audit
-userspace messages we haven't been able to block/penalize userspace
-processes that attempt to send audit records while the system is
-under audit pressure.  The result is that privileged userspace
-applications have a priority boost with respect to audit as they are
-not bound by the same audit queue throttling as the other tasks on
-the system.
+In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
+a new memory for dev->vv_data. In hexium_detach(), saa7146_vv_release()
+will be called and there is a dereference of dev->vv_data in
+saa7146_vv_release(), which could lead to a NULL pointer dereference
+on failure of saa7146_vv_init() according to the following logic.
 
-This patch attempts to restore some balance to the system when under
-audit pressure by blocking these privileged userspace tasks after
-they have finished their audit processing, and dropped the audit
-control mutex, but before they return to userspace.
+Both hexium_attach() and hexium_detach() are callback functions of
+the variable 'extension', so there exists a possible call chain directly
+from hexium_attach() to hexium_detach():
 
-Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Tested-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+hexium_attach(dev, info) -- fail to alloc memory to dev->vv_data
+	|		    		in saa7146_vv_init().
+	|
+	|
+hexium_detach() -- a dereference of dev->vv_data in saa7146_vv_release()
+
+Fix this bug by adding a check of saa7146_vv_init().
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_VIDEO_HEXIUM_ORION=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/audit.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ drivers/media/pci/saa7146/hexium_orion.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/audit.c b/kernel/audit.c
-index d67fce9e3f8b8..146edff0c73ec 100644
---- a/kernel/audit.c
-+++ b/kernel/audit.c
-@@ -1528,6 +1528,20 @@ static void audit_receive(struct sk_buff  *skb)
- 		nlh = nlmsg_next(nlh, &len);
- 	}
- 	audit_ctl_unlock();
-+
-+	/* can't block with the ctrl lock, so penalize the sender now */
-+	if (audit_backlog_limit &&
-+	    (skb_queue_len(&audit_queue) > audit_backlog_limit)) {
-+		DECLARE_WAITQUEUE(wait, current);
-+
-+		/* wake kauditd to try and flush the queue */
-+		wake_up_interruptible(&kauditd_wait);
-+
-+		add_wait_queue_exclusive(&audit_backlog_wait, &wait);
-+		set_current_state(TASK_UNINTERRUPTIBLE);
-+		schedule_timeout(audit_backlog_wait_time);
-+		remove_wait_queue(&audit_backlog_wait, &wait);
+diff --git a/drivers/media/pci/saa7146/hexium_orion.c b/drivers/media/pci/saa7146/hexium_orion.c
+index cb71653a66694..908de2f768441 100644
+--- a/drivers/media/pci/saa7146/hexium_orion.c
++++ b/drivers/media/pci/saa7146/hexium_orion.c
+@@ -366,10 +366,16 @@ static struct saa7146_ext_vv vv_data;
+ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+ {
+ 	struct hexium *hexium = (struct hexium *) dev->ext_priv;
++	int ret;
+ 
+ 	DEB_EE("\n");
+ 
+-	saa7146_vv_init(dev, &vv_data);
++	ret = saa7146_vv_init(dev, &vv_data);
++	if (ret) {
++		pr_err("Error in saa7146_vv_init()\n");
++		return ret;
 +	}
- }
- 
- /* Run custom bind function on netlink socket group connect or bind requests. */
-@@ -1772,7 +1786,9 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
- 	 *    task_tgid_vnr() since auditd_pid is set in audit_receive_msg()
- 	 *    using a PID anchored in the caller's namespace
- 	 * 2. generator holding the audit_cmd_mutex - we don't want to block
--	 *    while holding the mutex */
-+	 *    while holding the mutex, although we do penalize the sender
-+	 *    later in audit_receive() when it is safe to block
-+	 */
- 	if (!(auditd_test_task(current) || audit_ctl_owner_current())) {
- 		long stime = audit_backlog_wait_time;
- 
++
+ 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+ 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+ 	vv_data.vid_ops.vidioc_s_input = vidioc_s_input;
 -- 
 2.34.1
 

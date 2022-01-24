@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C17049A08D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5933649A036
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1845067AbiAXXLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S1843128AbiAXXDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1578869AbiAXWRR (ORCPT
+        with ESMTP id S1577768AbiAXWBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:17:17 -0500
+        Mon, 24 Jan 2022 17:01:04 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E2FC06E010;
-        Mon, 24 Jan 2022 11:32:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78140C0C0939;
+        Mon, 24 Jan 2022 12:40:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9B48B81247;
-        Mon, 24 Jan 2022 19:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F21AC340E5;
-        Mon, 24 Jan 2022 19:32:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 356E4B80FA3;
+        Mon, 24 Jan 2022 20:40:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 600F4C340E7;
+        Mon, 24 Jan 2022 20:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052769;
-        bh=ZJme4Yid2pZKebZ4YavbIa0wEaqlh17EKn5d80x8Sd0=;
+        s=korg; t=1643056806;
+        bh=+j/hF9KUbkWpVpF0TWD+CJhI+JZR0eec5rq0R+03JEU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UhXNGTwpL5VC4UGNPv8WgnUr4R4Qy8ER2+eIyPbcKDJ6w7F9LiJrWFdP+A4TJ3fqW
-         cJ1s1JCvgbzDA0TacXuxhrxrdpZLFu7erXfJnm/rp1o1omq+xHY8gvs7y1tBSena3U
-         qEyKmscTijV7+EgzSGIO7cEq+pkt5vG7IBeVuytU=
+        b=ZQNb8KtzpzDaOuVZeYkOziX0n47YcGA5TiTyxESXbFzXvqgnHmQ66tNvI8ogDS8nx
+         g6nJhrgduBDPc9FcJ126OthgQtMZ+FoGUkya8tyMjSr9hvFIaUdOtETSnf0uouWXfJ
+         uO+OWcXCXkhKM3S165QyQ+sCmzlnVUVJfu1GFSpA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 135/320] scsi: ufs: Fix race conditions related to driver data
-Date:   Mon, 24 Jan 2022 19:41:59 +0100
-Message-Id: <20220124183958.253484533@linuxfoundation.org>
+Subject: [PATCH 5.15 605/846] dm space map common: add bounds check to sm_ll_lookup_bitmap()
+Date:   Mon, 24 Jan 2022 19:42:02 +0100
+Message-Id: <20220124184121.892034238@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,71 +49,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: Joe Thornber <ejt@redhat.com>
 
-[ Upstream commit 21ad0e49085deb22c094f91f9da57319a97188e4 ]
+[ Upstream commit cba23ac158db7f3cd48a923d6861bee2eb7a2978 ]
 
-The driver data pointer must be set before any callbacks are registered
-that use that pointer. Hence move the initialization of that pointer from
-after the ufshcd_init() call to inside ufshcd_init().
+Corrupted metadata could warrant returning error from sm_ll_lookup_bitmap().
 
-Link: https://lore.kernel.org/r/20211203231950.193369-7-bvanassche@acm.org
-Fixes: 3b1d05807a9a ("[SCSI] ufs: Segregate PCI Specific Code")
-Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
-Tested-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Joe Thornber <ejt@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/tc-dwc-g210-pci.c | 1 -
- drivers/scsi/ufs/ufshcd-pltfrm.c   | 2 --
- drivers/scsi/ufs/ufshcd.c          | 7 +++++++
- 3 files changed, 7 insertions(+), 3 deletions(-)
+ drivers/md/persistent-data/dm-space-map-common.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/scsi/ufs/tc-dwc-g210-pci.c b/drivers/scsi/ufs/tc-dwc-g210-pci.c
-index 67a6a61154b71..4e471484539d2 100644
---- a/drivers/scsi/ufs/tc-dwc-g210-pci.c
-+++ b/drivers/scsi/ufs/tc-dwc-g210-pci.c
-@@ -135,7 +135,6 @@ tc_dwc_g210_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return err;
- 	}
+diff --git a/drivers/md/persistent-data/dm-space-map-common.c b/drivers/md/persistent-data/dm-space-map-common.c
+index 4a6a2a9b4eb49..bfbfa750e0160 100644
+--- a/drivers/md/persistent-data/dm-space-map-common.c
++++ b/drivers/md/persistent-data/dm-space-map-common.c
+@@ -283,6 +283,11 @@ int sm_ll_lookup_bitmap(struct ll_disk *ll, dm_block_t b, uint32_t *result)
+ 	struct disk_index_entry ie_disk;
+ 	struct dm_block *blk;
  
--	pci_set_drvdata(pdev, hba);
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_allow(&pdev->dev);
- 
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index 8d40dc918f4e1..10eec501f6b39 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -436,8 +436,6 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
- 		goto dealloc_host;
- 	}
- 
--	platform_set_drvdata(pdev, hba);
--
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 29c7a76d2c658..ebf7ae1ef70d4 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -8328,6 +8328,13 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
- 	struct Scsi_Host *host = hba->host;
- 	struct device *dev = hba->dev;
- 
-+	/*
-+	 * dev_set_drvdata() must be called before any callbacks are registered
-+	 * that use dev_get_drvdata() (frequency scaling, clock scaling, hwmon,
-+	 * sysfs).
-+	 */
-+	dev_set_drvdata(dev, hba);
++	if (b >= ll->nr_blocks) {
++		DMERR_LIMIT("metadata block out of bounds");
++		return -EINVAL;
++	}
 +
- 	if (!mmio_base) {
- 		dev_err(hba->dev,
- 		"Invalid memory reference for mmio_base is NULL\n");
+ 	b = do_div(index, ll->entries_per_block);
+ 	r = ll->load_ie(ll, index, &ie_disk);
+ 	if (r < 0)
 -- 
 2.34.1
 

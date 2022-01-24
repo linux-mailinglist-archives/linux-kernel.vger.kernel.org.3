@@ -2,39 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6781498DBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E614992A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353794AbiAXTfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:35:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51572 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351779AbiAXT2l (ORCPT
+        id S1345615AbiAXUW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:22:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376330AbiAXUBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:28:41 -0500
+        Mon, 24 Jan 2022 15:01:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA885C055AB2;
+        Mon, 24 Jan 2022 11:28:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E502B81239;
-        Mon, 24 Jan 2022 19:28:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F506C340E5;
-        Mon, 24 Jan 2022 19:28:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64CA7B8123D;
+        Mon, 24 Jan 2022 19:28:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 756A8C340E5;
+        Mon, 24 Jan 2022 19:28:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052518;
-        bh=9o48Je1F87lDwxkuT1N6YQqhnrPGRVS42N5wlSw4AZM=;
+        s=korg; t=1643052521;
+        bh=aLxp9MG1FvXaB/4/0PbB5rq6RL/Jlk7y49FhlN07VPw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k8kPBItzBgej0Jpg9RLPOAy6bcKRv+gTFkm4E8NkOec3Kymjw4bg5ZFEislTvRB/i
-         KkJJ5kbVYFWNHE5YA1FX4T7QhOhlzF/Ql/Bm2z8jGKcQznMnCsU5y3id+DsnWqGRAv
-         ba6CCESFmpH+nr26kFX1CbkQqKBtsIuQNkJXGDoY=
+        b=Pv/yinmDaYuVNA3OZeY751J75/xwZlux5ewd2GhSDXsAhrKHlSR08uzbISxH1FrZi
+         0KdhUdP5qHQvjElcYr0I+o/PMYmPt+/0neVU06EFTyT8+4XW82Gk/k4lQ7pNP8W9ue
+         YJDqEAMxoGY8Af+R49mWrfvni0/GU+XrIOb+3pDU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 085/320] media: coda/imx-vdoa: Handle dma_set_coherent_mask error codes
-Date:   Mon, 24 Jan 2022 19:41:09 +0100
-Message-Id: <20220124183956.637433565@linuxfoundation.org>
+Subject: [PATCH 5.4 086/320] drm/msm/dpu: fix safe status debugfs file
+Date:   Mon, 24 Jan 2022 19:41:10 +0100
+Message-Id: <20220124183956.668770381@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
 References: <20220124183953.750177707@linuxfoundation.org>
@@ -46,39 +51,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 43f0633f89947df57fe0b5025bdd741768007708 ]
+[ Upstream commit f31b0e24d31e18b4503eeaf0032baeacc0beaff6 ]
 
-The return value of dma_set_coherent_mask() is not always 0.
-To catch the exception in case that dma is not support the mask.
+Make safe_status debugfs fs file actually return safe status rather than
+danger status data.
 
-Link: https://lore.kernel.org/linux-media/20211206022201.1639460-1-jiasheng@iscas.ac.cn
-Fixes: b0444f18e0b1 ("[media] coda: add i.MX6 VDOA driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Link: https://lore.kernel.org/r/20211201222633.2476780-3-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/imx-vdoa.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/coda/imx-vdoa.c b/drivers/media/platform/coda/imx-vdoa.c
-index 8bc0d83718193..dd6e2e320264e 100644
---- a/drivers/media/platform/coda/imx-vdoa.c
-+++ b/drivers/media/platform/coda/imx-vdoa.c
-@@ -287,7 +287,11 @@ static int vdoa_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	int ret;
- 
--	dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
-+	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
-+	if (ret) {
-+		dev_err(&pdev->dev, "DMA enable failed\n");
-+		return ret;
-+	}
- 
- 	vdoa = devm_kzalloc(&pdev->dev, sizeof(*vdoa), GFP_KERNEL);
- 	if (!vdoa)
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index 58b0485dc3750..72f487692adbb 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@ -88,8 +88,8 @@ static int _dpu_danger_signal_status(struct seq_file *s,
+ 					&status);
+ 	} else {
+ 		seq_puts(s, "\nSafe signal status:\n");
+-		if (kms->hw_mdp->ops.get_danger_status)
+-			kms->hw_mdp->ops.get_danger_status(kms->hw_mdp,
++		if (kms->hw_mdp->ops.get_safe_status)
++			kms->hw_mdp->ops.get_safe_status(kms->hw_mdp,
+ 					&status);
+ 	}
+ 	pm_runtime_put_sync(&kms->pdev->dev);
 -- 
 2.34.1
 

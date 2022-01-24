@@ -2,105 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A977A497C92
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539C0497C8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 11:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236889AbiAXKAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 05:00:41 -0500
-Received: from mga06.intel.com ([134.134.136.31]:1834 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229517AbiAXKAf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 05:00:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643018435; x=1674554435;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I9ASTMkJBZh1dnZeeM7ClIkGGamrhZ4TzmARTN6rzk4=;
-  b=iwTGTipd2ieKLH6tBDufWhV7W4WpEMIQwI/8Hyoaj2gqnCBPdixCVelp
-   W7tP6SfStWlg0WehTAzgJt1+nNAJLtcqi2eKsioV+oFyd6J3xlHWxC+h0
-   tXEQ8lrE9w0quWcBVG6viNxLvcheA+JBZ4Fm3VSMfpIYwZBqNrt7oJ6MW
-   JamCTVKNAzME4NInV+iHWuJadg40/qzD2MizAY4jtTjeo0cAmpLF4YzCU
-   wLzlc5wwS/OZC/EOWzt59VbB7uoBxMClb61/p9udJRD2slIghB3Oq3Ad0
-   GYFD0F6qKWlThtBaEnkrn2dz9YFRMXXokBn4eOvF3tLjijiVcCLxKdIhK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="306726405"
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="306726405"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 01:59:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
-   d="scan'208";a="695369016"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Jan 2022 01:59:29 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nBw8G-000I9K-R5; Mon, 24 Jan 2022 09:59:28 +0000
-Date:   Mon, 24 Jan 2022 17:58:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: drivers/pci/controller/pcie-mt7621.c:549:34: warning: unused
- variable 'mt7621_pcie_ids'
-Message-ID: <202201241754.igtHzgHv-lkp@intel.com>
+        id S236914AbiAXJ7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 04:59:53 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:51508 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236758AbiAXJ7v (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 04:59:51 -0500
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E80718E7;
+        Mon, 24 Jan 2022 10:59:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1643018390;
+        bh=zikyjJ6eavrl7X8+8F5Jt2Gv2ZdrXPqzPkYSSY0eaaM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=C1rIlJzCSLnS5M5A30ZSdfU1RPxjQHqc6t/s0i6doKpmJw2aPJHM+3qHalmUZyW7+
+         f1o/4+GoTVP0m+sFp2zPCpc8EdXDzEu1dqVzfM6LX8E3q19qSHE1GByycJsa67dTfj
+         rcTQBXV5nXB9sUv6iBrFOF56riHPYFEIJVkVv9GY=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220120081530.799399-1-nikita.yoush@cogentembedded.com>
+References: <20220120081530.799399-1-nikita.yoush@cogentembedded.com>
+Subject: Re: [PATCH v2] media: vsp1: mask interrupts before enabling
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Date:   Mon, 24 Jan 2022 09:59:47 +0000
+Message-ID: <164301838774.10801.3973367832884627893@Monstersaurus>
+User-Agent: alot/0.10
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-commit: 87c71931633bd15e9cfd51d4a4d9cd685e8cdb55 Merge branch 'pci/driver-cleanup'
-date:   11 days ago
-config: mips-randconfig-r031-20220124 (https://download.01.org/0day-ci/archive/20220124/202201241754.igtHzgHv-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 7b3d30728816403d1fd73cc5082e9fb761262bce)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=87c71931633bd15e9cfd51d4a4d9cd685e8cdb55
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 87c71931633bd15e9cfd51d4a4d9cd685e8cdb55
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pci/controller/
+Hi Nikita,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you for the v2,
 
-All warnings (new ones prefixed by >>):
+Quoting Nikita Yushchenko (2022-01-20 08:15:30)
+> VSP hardware could be used (e.g. by the bootloader) before driver load,
+> and some interrupts could be left in enabled and pending state. In this
+> case, setting up VSP interrupt handler without masking interrupts before
+> causes interrupt handler to be immediately called (and crash due to null
+> vsp->info dereference).
+>=20
+> Fix that by explicitly masking all interrupts before setting the interrupt
+> handler. To do so, have to set the interrupt handler later, after hw
+> revision is already detected and number of interrupts to mask gets
+> known.
+>=20
+> Based on patch by Koji Matsuoka <koji.matsuoka.xm@renesas.com> included
+> in the Renesas BSP kernel.
+>=20
+> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+> ---
+> v1: https://lore.kernel.org/all/20210926155356.23861-1-nikita.yoush@cogen=
+tembedded.com/
+> Changes since v1:
+> - move interrupt masking to a dedicated routine
+> - update comments and patch description
+>=20
+> > I think I would rather see the code to reset them done in
+> > vsp1_reset_wpf(), rather than in probe directly as that is what we are
+> > doing, and is I believe already in the call path.
+>=20
+> First, vsp1_reset_wpf() does not get called on driver early init.
+>=20
+> It is normally called from within vsp1_device_get() when device is powered
+> on, but vsp1_probe() calls vsp1_device_get() when vsp1->info is not yet s=
+et,
+> and in this case call from vsp1_pm_runtime_resume() to vsp1_device_init()=
+=20
+> is skipped.
 
-   drivers/pci/controller/pcie-mt7621.c:112:20: warning: unused function 'pcie_rmw' [-Wunused-function]
-   static inline void pcie_rmw(struct mt7621_pcie *pcie, u32 reg, u32 clr, u32 set)
-                      ^
->> drivers/pci/controller/pcie-mt7621.c:549:34: warning: unused variable 'mt7621_pcie_ids' [-Wunused-const-variable]
-   static const struct of_device_id mt7621_pcie_ids[] = {
-                                    ^
-   2 warnings generated.
+aha, I seem to have a long mail to you stuck in my drafts that didn't
+make it out to reply to your last mail. I'm sorry about that, but it
+looks like we're progressing anyway.
+
+But in that draft, I agreed that yes, we have catch 22 around setting
+that ->info, as we need to power up to determine the specific model.
+
+> I've tried to add extra vsp1_device_put() / vsp1_device_get() calls to the
+> probe path, and dumped related registers in vsp1_pm_runtime_resume() after
+> return from vsp1_device_init(), and got
+>=20
+> [    2.477315][    T1] vsp1 fea28000.vsp: VI6_DISP_IRQ_ENB(0) =3D 0x00000=
+100
+> [    2.483933][    T1] vsp1 fea28000.vsp: VI6_DISP_IRQ_STA(0) =3D 0x00000=
+121
+> [    2.490556][    T1] vsp1 fea28000.vsp: VI6_WPF_IRQ_ENB(0) =3D 0x000100=
+02
+> [    2.497088][    T1] vsp1 fea28000.vsp: VI6_WPF_IRQ_STA(0) =3D 0x000100=
+03
+> [    2.503618][    T1] vsp1 fea28000.vsp: VI6_WPF_IRQ_ENB(1) =3D 0x000000=
+00
+> [    2.510148][    T1] vsp1 fea28000.vsp: VI6_WPF_IRQ_STA(1) =3D 0x000000=
+00
+>=20
+> which shows that
+> (1) WPF interrupt is not cleared by WPF reset,
+> (2) also DISP interrupt is enabled and pending, and driver does not seem
+> to control it at all.
+>=20
+> Given that, I think it is safer to explicitly mask all interrupts before
+> setting the handler. I've moved interrupt masking to a separate routine.
+
+Thankyou, at least being a separate function makes it a bit cleaner and
+clear that it's not specifically a part of probe() but something we act
+upon to clean up.
 
 
-vim +/mt7621_pcie_ids +549 drivers/pci/controller/pcie-mt7621.c
+> > (But I'm reallly ... reallly concerned that the hardware is not really
+> > getting reset when it should, and that might merit some further
+> > investigation).
+>=20
+> The documentation for WFP reset bit has notes that under some situations,
+> reset is postponed for a long time, and reported via interrupt. I'm not
+> sure what exactly goes on there, but I'd assume that such logic implies
+> that interrupt subsystem is not reset.
+>=20
+> I agree that not having exact understand of hardware state is not good.
+> But, given that no signs of misfunction have been detected for a long time
+> (the patch was in vendor BSP for years), I think we can assume it is
+> "safe enough".
 
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  548  
-4793895f597d42e drivers/pci/controller/pcie-mt7621.c    Bjorn Helgaas 2021-12-22 @549  static const struct of_device_id mt7621_pcie_ids[] = {
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  550  	{ .compatible = "mediatek,mt7621-pci" },
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  551  	{},
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  552  };
-4793895f597d42e drivers/pci/controller/pcie-mt7621.c    Bjorn Helgaas 2021-12-22  553  MODULE_DEVICE_TABLE(of, mt7621_pcie_ids);
-03f152e31f4ae89 drivers/staging/mt7621-pci/pci-mt7621.c John Crispin  2018-03-15  554  
+Yes, well I think this is adding the safety by re-asserting our
+assumptions on probe time. Which sounds like a good thing given the
+circumstances.
 
-:::::: The code at line 549 was first introduced by commit
-:::::: 4793895f597d42eb54a0f54711b61263b6a8dd03 PCI: mt7621: Rename mt7621_pci_ to mt7621_pcie_
 
-:::::: TO: Bjorn Helgaas <bhelgaas@google.com>
-:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>  drivers/media/platform/vsp1/vsp1_drv.c | 34 ++++++++++++++++++++------
+>  1 file changed, 26 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/vsp1/vsp1_drv.c b/drivers/media/platf=
+orm/vsp1/vsp1_drv.c
+> index c9044785b903..92a95e2c21c7 100644
+> --- a/drivers/media/platform/vsp1/vsp1_drv.c
+> +++ b/drivers/media/platform/vsp1/vsp1_drv.c
+> @@ -550,6 +550,16 @@ static int vsp1_device_init(struct vsp1_device *vsp1)
+>         return 0;
+>  }
+> =20
+> +static void vsp1_mask_all_interrupts(struct vsp1_device *vsp1)
+> +{
+> +       int i;
+> +
+> +       for (i =3D 0; i < vsp1->info->lif_count; ++i)
+> +               vsp1_write(vsp1, VI6_DISP_IRQ_ENB(i), 0);
+> +       for (i =3D 0; i < vsp1->info->wpf_count; ++i)
+> +               vsp1_write(vsp1, VI6_WPF_IRQ_ENB(i), 0);
+> +}
+> +
+>  /*
+>   * vsp1_device_get - Acquire the VSP1 device
+>   *
+> @@ -819,13 +829,6 @@ static int vsp1_probe(struct platform_device *pdev)
+>                 return -EINVAL;
+>         }
+> =20
+> -       ret =3D devm_request_irq(&pdev->dev, irq->start, vsp1_irq_handler,
+> -                             IRQF_SHARED, dev_name(&pdev->dev), vsp1);
+> -       if (ret < 0) {
+> -               dev_err(&pdev->dev, "failed to request IRQ\n");
+> -               return ret;
+> -       }
+> -
+>         /* FCP (optional). */
+>         fcp_node =3D of_parse_phandle(pdev->dev.of_node, "renesas,fcp", 0=
+);
+>         if (fcp_node) {
+> @@ -855,7 +858,6 @@ static int vsp1_probe(struct platform_device *pdev)
+>                 goto done;
+> =20
+>         vsp1->version =3D vsp1_read(vsp1, VI6_IP_VERSION);
+> -       vsp1_device_put(vsp1);
+> =20
+>         for (i =3D 0; i < ARRAY_SIZE(vsp1_device_infos); ++i) {
+>                 if ((vsp1->version & VI6_IP_VERSION_MODEL_MASK) =3D=3D
+> @@ -868,12 +870,28 @@ static int vsp1_probe(struct platform_device *pdev)
+>         if (!vsp1->info) {
+>                 dev_err(&pdev->dev, "unsupported IP version 0x%08x\n",
+>                         vsp1->version);
+> +               vsp1_device_put(vsp1);
+>                 ret =3D -ENXIO;
+>                 goto done;
+>         }
+> =20
+>         dev_dbg(&pdev->dev, "IP version 0x%08x\n", vsp1->version);
+> =20
+> +       /*
+> +        * Previous use of the hardware (e.g. by the bootloader) could le=
+ave
+> +        * some interrupts enabled and pending.
+> +        */
+> +       vsp1_mask_all_interrupts(vsp1);
+> +
+> +       vsp1_device_put(vsp1);
+> +
+> +       ret =3D devm_request_irq(&pdev->dev, irq->start, vsp1_irq_handler,
+> +                              IRQF_SHARED, dev_name(&pdev->dev), vsp1);
+> +       if (ret < 0) {
+> +               dev_err(&pdev->dev, "failed to request IRQ\n");
+> +               goto done;
+> +       }
+> +
+>         /* Instantiate entities. */
+>         ret =3D vsp1_create_entities(vsp1);
+>         if (ret < 0) {
+> --=20
+> 2.30.2
+>

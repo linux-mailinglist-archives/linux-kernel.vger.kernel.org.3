@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46891499CEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F78C49977A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581667AbiAXWMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:12:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42630 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452982AbiAXV1e (ORCPT
+        id S1448416AbiAXVMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43168 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1390883AbiAXUqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:27:34 -0500
+        Mon, 24 Jan 2022 15:46:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE04CC06127E;
+        Mon, 24 Jan 2022 11:56:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8864EB812A4;
-        Mon, 24 Jan 2022 21:27:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD833C340E4;
-        Mon, 24 Jan 2022 21:27:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A921FB81218;
+        Mon, 24 Jan 2022 19:56:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D515BC340E5;
+        Mon, 24 Jan 2022 19:56:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059651;
-        bh=xsfclcnth22emOhXnExQDbZEHeQPjA9k8JwPqBUjW/I=;
+        s=korg; t=1643054201;
+        bh=1b6YLDjsUCQzFUYs8Px5c2cq/w57NeG2Q6+eG+HGcOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n4r861l2MbFnMSWcVg9r9tzjUx8+7+9LIk8QYvKHuYcbfeE639m06Cm+EarP8SV78
-         iQhbk0PeuekaaqQ1amkkZy8BICGj+NzNLzBOoPyQVaBcx4P/U0tXkT/eyr4CJZIi9r
-         AriZoxioNS523DF8MdXxsgwtN4uNXvc659WdVrws=
+        b=UjkkszSa8i0F10lcts/2MC45EXJB/WDlhOY/r//qLwOhyxT0NQ1gwt1seoEg8XEbe
+         S2ZuiRZEJNDZJBAmUmkz6WhuNCFqP/kgnutGzyzKjtt50kbnQGdwnHe3kFMCtLeD+t
+         iEJK/iVe0VPVLKm4E48ztidc8Ah9ZLsEk8wvcDeo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Hector Martin <marcan@marcan.st>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0686/1039] mmc: sdhci-pci-gli: GL9755: Support for CD/WP inversion on OF platforms
-Date:   Mon, 24 Jan 2022 19:41:15 +0100
-Message-Id: <20220124184148.413659573@linuxfoundation.org>
+Subject: [PATCH 5.10 311/563] media: atomisp: handle errors at sh_css_create_isp_params()
+Date:   Mon, 24 Jan 2022 19:41:16 +0100
+Message-Id: <20220124184035.186222073@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,61 +49,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-[ Upstream commit 189f1d9bc3a5ea3e442e119e4a5deda63da8c462 ]
+[ Upstream commit 58043dbf6d1ae9deab4f5aa1e039c70112017682 ]
 
-This is required on some Apple ARM64 laptops using this controller.
-As is typical on DT platforms, pull these quirks from the device tree
-using the standard mmc bindings.
+The succ var tracks memory allocation erros on this function.
 
-See Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+Fix it, in order to stop this W=1 Werror in clang:
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Link: https://lore.kernel.org/r/20211215161045.38843-2-marcan@marcan.st
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+drivers/staging/media/atomisp/pci/sh_css_params.c:2430:7: error: variable 'succ' set but not used [-Werror,-Wunused-but-set-variable]
+        bool succ = true;
+             ^
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/sdhci-pci-gli.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/staging/media/atomisp/pci/sh_css_params.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-index 4fd99c1e82ba3..ad50f16658fe2 100644
---- a/drivers/mmc/host/sdhci-pci-gli.c
-+++ b/drivers/mmc/host/sdhci-pci-gli.c
-@@ -12,6 +12,7 @@
- #include <linux/pci.h>
- #include <linux/mmc/mmc.h>
- #include <linux/delay.h>
-+#include <linux/of.h>
- #include "sdhci.h"
- #include "sdhci-pci.h"
- #include "cqhci.h"
-@@ -116,6 +117,8 @@
- #define PCI_GLI_9755_PECONF   0x44
- #define   PCI_GLI_9755_LFCLK    GENMASK(14, 12)
- #define   PCI_GLI_9755_DMACLK   BIT(29)
-+#define   PCI_GLI_9755_INVERT_CD  BIT(30)
-+#define   PCI_GLI_9755_INVERT_WP  BIT(31)
+diff --git a/drivers/staging/media/atomisp/pci/sh_css_params.c b/drivers/staging/media/atomisp/pci/sh_css_params.c
+index 24fc497bd4915..8d6514c45eeb6 100644
+--- a/drivers/staging/media/atomisp/pci/sh_css_params.c
++++ b/drivers/staging/media/atomisp/pci/sh_css_params.c
+@@ -2437,7 +2437,7 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
+ 	unsigned int i;
+ 	struct sh_css_ddr_address_map *ddr_ptrs;
+ 	struct sh_css_ddr_address_map_size *ddr_ptrs_size;
+-	int err = 0;
++	int err;
+ 	size_t params_size;
+ 	struct ia_css_isp_parameters *params =
+ 	kvmalloc(sizeof(struct ia_css_isp_parameters), GFP_KERNEL);
+@@ -2482,7 +2482,11 @@ sh_css_create_isp_params(struct ia_css_stream *stream,
+ 	succ &= (ddr_ptrs->macc_tbl != mmgr_NULL);
  
- #define PCI_GLI_9755_CFG2          0x48
- #define   PCI_GLI_9755_CFG2_L1DLY    GENMASK(28, 24)
-@@ -570,6 +573,14 @@ static void gl9755_hw_setting(struct sdhci_pci_slot *slot)
- 	gl9755_wt_on(pdev);
+ 	*isp_params_out = params;
+-	return err;
++
++	if (!succ)
++		return -ENOMEM;
++
++	return 0;
+ }
  
- 	pci_read_config_dword(pdev, PCI_GLI_9755_PECONF, &value);
-+	/*
-+	 * Apple ARM64 platforms using these chips may have
-+	 * inverted CD/WP detection.
-+	 */
-+	if (of_property_read_bool(pdev->dev.of_node, "cd-inverted"))
-+		value |= PCI_GLI_9755_INVERT_CD;
-+	if (of_property_read_bool(pdev->dev.of_node, "wp-inverted"))
-+		value |= PCI_GLI_9755_INVERT_WP;
- 	value &= ~PCI_GLI_9755_LFCLK;
- 	value &= ~PCI_GLI_9755_DMACLK;
- 	pci_write_config_dword(pdev, PCI_GLI_9755_PECONF, value);
+ static bool
 -- 
 2.34.1
 

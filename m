@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0460498D2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D804993B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348232AbiAXT2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:28:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42402 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348625AbiAXTTN (ORCPT
+        id S1386148AbiAXUfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354861AbiAXUMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:19:13 -0500
+        Mon, 24 Jan 2022 15:12:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95CDC028C2B;
+        Mon, 24 Jan 2022 11:34:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5739B8123D;
-        Mon, 24 Jan 2022 19:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A5FC340E5;
-        Mon, 24 Jan 2022 19:19:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82F396141C;
+        Mon, 24 Jan 2022 19:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBA8C340E5;
+        Mon, 24 Jan 2022 19:34:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051951;
-        bh=NZ86/jhMQ53LYMnML1i/s5E3FRSxzSncXmKzzl4r9Tk=;
+        s=korg; t=1643052844;
+        bh=XtiamZuhFQg/KSWaToglrULMfVhgN5zJmScIv/wuNgs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IH0OzLn19YcjmHYXd6AhLB5LF+wQaz1Kt/rsG4qeg+3qsK+KgFQ9qsJvmarA/hsZ6
-         6Qdz9WgUu5U9EBJXPoHNTuIPISW7we1ibEYeUaGN7a5bQ3jH/xMfFj62ycTHmpaVUs
-         RZjYTe8AZOIgORyjfj3R281P2p263w2UMUZ+OiV8=
+        b=JHhe+c84IR0fW7CDCPmKgZtgfCslukwlWYO6Kf8DAoQfWiiwrOezC99RPpMvGlhRS
+         SsVkdQ7NKh1iedZQAFet9EmWY+jDAAUo1j1x81m0OnZIDsoPjDCHiKmG3p6fCztPjH
+         FXzZyxZ+gr1ZcuYdtjhEkZXEi5pu0ULe5bJo3jWI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, rkardell@mida.se,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 138/239] media: m920x: dont use stack on USB reads
+Subject: [PATCH 5.4 192/320] mmc: core: Fixup storing of OCR for MMC_QUIRK_NONSTD_SDIO
 Date:   Mon, 24 Jan 2022 19:42:56 +0100
-Message-Id: <20220124183947.498514593@linuxfoundation.org>
+Message-Id: <20220124184000.180649765@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,57 +49,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit a2ab06d7c4d6bfd0b545a768247a70463e977e27 ]
+[ Upstream commit 8c3e5b74b9e2146f564905e50ca716591c76d4f1 ]
 
-Using stack-allocated pointers for USB message data don't work.
-This driver is almost OK with that, except for the I2C read
-logic.
+The mmc core takes a specific path to support initializing of a
+non-standard SDIO card. This is triggered by looking for the card-quirk,
+MMC_QUIRK_NONSTD_SDIO.
 
-Fix it by using a temporary read buffer, just like on all other
-calls to m920x_read().
+In mmc_sdio_init_card() this gets rather messy, as it causes the code to
+bail out earlier, compared to the usual path. This leads to that the OCR
+doesn't get saved properly in card->ocr. Fortunately, only omap_hsmmc has
+been using the MMC_QUIRK_NONSTD_SDIO and is dealing with the issue, by
+assigning a hardcoded value (0x80) to card->ocr from an ->init_card() ops.
 
-Link: https://lore.kernel.org/all/ccc99e48-de4f-045e-0fe4-61e3118e3f74@mida.se/
-Reported-by: rkardell@mida.se
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To make the behaviour consistent, let's instead rely on the core to save
+the OCR in card->ocr during initialization.
+
+Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Link: https://lore.kernel.org/r/e7936cff7fc24d187ef2680d3b4edb0ade58f293.1636564631.git.hns@goldelico.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/m920x.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/mmc/core/sdio.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-usb/m920x.c
-index 22554d9abd432..3b2a0f36fc38e 100644
---- a/drivers/media/usb/dvb-usb/m920x.c
-+++ b/drivers/media/usb/dvb-usb/m920x.c
-@@ -277,6 +277,13 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
- 			/* Should check for ack here, if we knew how. */
- 		}
- 		if (msg[i].flags & I2C_M_RD) {
-+			char *read = kmalloc(1, GFP_KERNEL);
-+			if (!read) {
-+				ret = -ENOMEM;
-+				kfree(read);
-+				goto unlock;
-+			}
-+
- 			for (j = 0; j < msg[i].len; j++) {
- 				/* Last byte of transaction?
- 				 * Send STOP, otherwise send ACK. */
-@@ -284,9 +291,12 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int nu
+diff --git a/drivers/mmc/core/sdio.c b/drivers/mmc/core/sdio.c
+index 0bf33786fc5c5..9e0791332ef38 100644
+--- a/drivers/mmc/core/sdio.c
++++ b/drivers/mmc/core/sdio.c
+@@ -626,6 +626,8 @@ try_again:
+ 	if (host->ops->init_card)
+ 		host->ops->init_card(host, card);
  
- 				if ((ret = m920x_read(d->udev, M9206_I2C, 0x0,
- 						      0x20 | stop,
--						      &msg[i].buf[j], 1)) != 0)
-+						      read, 1)) != 0)
- 					goto unlock;
-+				msg[i].buf[j] = read[0];
- 			}
++	card->ocr = ocr_card;
 +
-+			kfree(read);
- 		} else {
- 			for (j = 0; j < msg[i].len; j++) {
- 				/* Last byte of transaction? Then send STOP. */
+ 	/*
+ 	 * If the host and card support UHS-I mode request the card
+ 	 * to switch to 1.8V signaling level.  No 1.8v signalling if
+@@ -738,7 +740,7 @@ try_again:
+ 			goto mismatch;
+ 		}
+ 	}
+-	card->ocr = ocr_card;
++
+ 	mmc_fixup_device(card, sdio_fixup_methods);
+ 
+ 	if (card->type == MMC_TYPE_SD_COMBO) {
 -- 
 2.34.1
 

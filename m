@@ -2,79 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F18249A015
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE9B49A00F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843354AbiAXXDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        id S1843215AbiAXXDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458035AbiAXVzG (ORCPT
+        with ESMTP id S1577991AbiAXWBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:55:06 -0500
-Received: from mail.itouring.de (mail.itouring.de [IPv6:2a01:4f8:a0:4463::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E27C07E2A6;
-        Mon, 24 Jan 2022 12:36:43 -0800 (PST)
-Received: from tux.applied-asynchrony.com (p5b07e69a.dip0.t-ipconnect.de [91.7.230.154])
-        by mail.itouring.de (Postfix) with ESMTPSA id 6DE0D103765;
-        Mon, 24 Jan 2022 21:36:39 +0100 (CET)
-Received: from [192.168.100.221] (hho.applied-asynchrony.com [192.168.100.221])
-        by tux.applied-asynchrony.com (Postfix) with ESMTP id 13DC6F0160A;
-        Mon, 24 Jan 2022 21:36:39 +0100 (CET)
-Subject: Re: [PATCH 5.15 000/846] 5.15.17-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>
-References: <20220124184100.867127425@linuxfoundation.org>
-From:   =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>
-Organization: Applied Asynchrony, Inc.
-Message-ID: <29a0f562-af46-f4d0-182c-09c8d99e0a93@applied-asynchrony.com>
-Date:   Mon, 24 Jan 2022 21:36:39 +0100
+        Mon, 24 Jan 2022 17:01:24 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA62C024161
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:41:12 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id bu18so52459020lfb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 12:41:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1LJGjDTYMuLmHfQpWatQs3kMJ9qbd2ha/UHX5cFngus=;
+        b=mvCHYThbHbgCT4TsM9CfI+ZrMCLe2++pHQhdwPeI8vb/8sEb8D65Iom2uXnznuVmVS
+         +nGb5Ow23gtXLzerVRkV3f3Uw+Z6842cwIsDw+5dB7yqFKE3AjaTZwN1OxOvhrrjaDh2
+         75UtaMM4hS2p9EATTlFqNg0mtAUeJig69pu4EtGEQtcCKDwuG+KfNOM4L3+EXZwrdQ7j
+         TaqH65KfdgS3yLgVjAMhReY9jxu4RJWojw24J+Cl2+1KPAHeQ2TmTq2dOeVhSHk7T0DQ
+         ikZdyLW3rbZhcNdw2hBGpnM2eaid1iX33aaQTP+GjCBH5HwNygxtlrFmGpLuLQXIMqWG
+         Hmkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1LJGjDTYMuLmHfQpWatQs3kMJ9qbd2ha/UHX5cFngus=;
+        b=fx4HLbL6ydRyCzLrYbtsGCaP+G93MjaDGGJA+JjIoJjbrZZr9vbMr9jBzWOEYIC8oi
+         7J5YMCdmU8G4Ngge5Di24g+4zWR121fT762AhPBYJodyZ+ElCJ42/Pngze5eVkwtuC47
+         N7Nh36uWapIKs+mGdF3BY6nQ1GqqNcRqiLAp/5iOGedd4LjvHeZm32wjgeT+t9v36R/5
+         75qbkUrrBxSXQUdCln9juHXQaD6lAcxtvpVp2xjtybKandAfHGeVw5PtBuHgcjbCSvYw
+         9x5sF0gXk4gQpaSRqMFh3Wf0VZdjJGcZAuBc8AzQNUDP+9vu5z3vDhy/FYqMilZjFBXF
+         rmSA==
+X-Gm-Message-State: AOAM532JfA3Ww0u2u1nFxSCMRTvXNR/xLgwh875AQFxRQ324aZPLXOhg
+        /rNFKUe/AJZA1jbBFiMZT2Ea9DvcHXQDvAfc34uViE9IDc+noQ==
+X-Google-Smtp-Source: ABdhPJw5wfq7L+SJLcrq8u2A8nE43CCiP3/gypswmbsopPtzGSfHfId+dsvXuFq4G0FIe+wlsrViT3Ke+xM97hf2HYg=
+X-Received: by 2002:a05:6512:b0d:: with SMTP id w13mr14398285lfu.240.1643056870722;
+ Mon, 24 Jan 2022 12:41:10 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220120214001.1879469-1-nathan@kernel.org> <20220120214001.1879469-2-nathan@kernel.org>
+In-Reply-To: <20220120214001.1879469-2-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 24 Jan 2022 12:40:58 -0800
+Message-ID: <CAKwvOdmTBUcre5+=kopcyAv3q=55=Z5O65QHmvy3Ra2JqgLNHw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] MIPS: Loongson64: Wrap -mno-branch-likely with cc-option
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-24 19:31, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.17 release.
+On Thu, Jan 20, 2022 at 1:40 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> This flag is not supported by clang, which results in a warning:
+>
+>   clang-14: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
+>
+> This breaks cc-option, which adds -Werror to make this warning fatal and
+> catch flags that are not supported. Wrap the flag in cc-option so that
+> it does not cause cc-option to fail, which can cause randconfigs to be
+> really noisy.
+>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Oh noes :(
+We should convert more of these tests to Kconfig checks that run once
+per configuration, rather than multiple times for a build. IIRC Linus
+mentioned this somewhere...yeah, the -Wimplicit-fallthrough patches.
+See
+dee2b702bcf06 ("kconfig: Add support for -Wimplicit-fallthrough")
 
-   DESCEND bpf/resolve_btfids
-   MKDIR     /tmp/linux-5.15.17/tools/bpf/resolve_btfids//libbpf
-   GEN     /tmp/linux-5.15.17/tools/bpf/resolve_btfids/libbpf/bpf_helper_defs.h
-   MKDIR   /tmp/linux-5.15.17/tools/bpf/resolve_btfids/libbpf/staticobjs/
-   CC      /tmp/linux-5.15.17/tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf.o
-libbpf.c: In function 'bpf_object__elf_collect':
-libbpf.c:3038:31: error: invalid type argument of '->' (have 'GElf_Shdr' {aka 'Elf64_Shdr'})
-  3038 |                         if (sh->sh_type != SHT_PROGBITS)
-       |                               ^~
-libbpf.c:3042:31: error: invalid type argument of '->' (have 'GElf_Shdr' {aka 'Elf64_Shdr'})
-  3042 |                         if (sh->sh_type != SHT_PROGBITS)
-       |                               ^~
-make[4]: *** [/tmp/linux-5.15.17/tools/build/Makefile.build:97: /tmp/linux-5.15.17/tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf.o] Error 1
-make[3]: *** [Makefile:158: /tmp/linux-5.15.17/tools/bpf/resolve_btfids/libbpf/staticobjs/libbpf-in.o] Error 2
-make[2]: *** [Makefile:44: /tmp/linux-5.15.17/tools/bpf/resolve_btfids//libbpf/libbpf.a] Error 2
-make[1]: *** [Makefile:72: bpf/resolve_btfids] Error 2
-make: *** [Makefile:1371: tools/bpf/resolve_btfids] Error 2
+I wonder if we can check ARCH or SUBARCH in Kconfig to limit invoking
+the tool under test for certain arch specific command line flags?
 
-Reverting "libbpf-validate-that-.btf-and-.btf.ext-sections-cont.patcht" aka
-this one:
+I'll take this patch over such a larger change, but I think towards
+the goal of speeding up already configured builds, we eventually want
+to be migrating cc-option and ld-option checks to Kconfig.
 
-> Andrii Nakryiko <andrii@kernel.org>
->      libbpf: Validate that .BTF and .BTF.ext sections contain data
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-makes it build & run fine. I looked for followups but couldn't find anything that
-stood out, maybe the BPF folks (cc'ed) know what's missing/wrong.
+> ---
+>  arch/mips/loongson64/Platform | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
+> index 981d3abc150e..acf9edc9b15d 100644
+> --- a/arch/mips/loongson64/Platform
+> +++ b/arch/mips/loongson64/Platform
+> @@ -26,5 +26,6 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
+>  # Loongson Machines' Support
+>  #
+>
+> -cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64 -mno-branch-likely
+> +cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64
+> +cflags-$(CONFIG_MACH_LOONGSON64) += $(call cc-option,-mno-branch-likely)
+>  load-$(CONFIG_CPU_LOONGSON64) += 0xffffffff80200000
+> --
+> 2.34.1
+>
+>
 
-cheers
-Holger
+
+-- 
+Thanks,
+~Nick Desaulniers

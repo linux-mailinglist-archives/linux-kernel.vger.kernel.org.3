@@ -2,128 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37944497DDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B7B497DE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 12:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237413AbiAXLWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 06:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237370AbiAXLWq (ORCPT
+        id S237480AbiAXLY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 06:24:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48024 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237440AbiAXLY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 06:22:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269D6C06173D
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 03:22:46 -0800 (PST)
+        Mon, 24 Jan 2022 06:24:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8144601B6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:22:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EAC4C340E4;
-        Mon, 24 Jan 2022 11:22:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D326B80AE3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 11:24:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC482C340E1;
+        Mon, 24 Jan 2022 11:24:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643023365;
-        bh=VyxG/pwigPCS1qtw6sFfWpjbd3AUsqzfq85f5XpVJPQ=;
+        s=k20201202; t=1643023494;
+        bh=m/SHnOH+m0JwktM7yHyCtPza4vsWP6iO5cM6+Z32lb8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pmFQjW6p+07glUnG9xEvwNEf+uCjFCDiE1T6IqmluPemYBfL1eWRr389FQCX1B3yB
-         jvyimsSo9JRz6TXCqLzxM5KrkmLy7E0fEXUB6xsWPIugBx4sD1TlcEOHDqEeUDcIb9
-         /EpCzcOtcP4fo1oC2Lfv+nDnzmhfXlSKmMaoTntedv8oYLGIwzKOxUnb0X9AENR5Zt
-         Pa3NZ6FORyx9Op/G/yUyxcKihbzxCyz5vnr0w22IwuNoi0huAdmF3JkdThNCO+C4gu
-         N9VlevOlUESsFxLSdCIaWHtxdv+r/Di3yBhT2lcMV+sVxHcN365/77O/5Vh+Fh7Igj
-         8EpEC+RbH2/eA==
+        b=j49ucWmDcM79ombzb0danGgRCSyjQlhFJxW0S4NGV8mOUJneicxPx4mO84m6cOvuR
+         KaeYLlAMvtXm3ChK0pgeOsLT1d2YwO07BJM9mWLPifiSkspAT259wuhk3gGeacCph7
+         Bbz7lz5VgMm6Wr4KFTuAzoN390cHu9EJ+uoB1ed/OGa9u0VfdIHyWN405gJnV50RLJ
+         66SmSSByYbXysfAmqcJnbWShZA4EzJaQ2FzCZpNXufDYZCY5rlbcXto1meoism3Edc
+         wIgptZZOZFQLJTTzKSGOYshzFdlO9hJWf5bpkYI2auRQUmsR7VwygRhMWt8IODn62A
+         fwVt7ncAfEfkg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nBxQo-002Mnd-Ti; Mon, 24 Jan 2022 11:22:42 +0000
-Date:   Mon, 24 Jan 2022 11:22:42 +0000
-Message-ID: <87bl018jjx.wl-maz@kernel.org>
+        id 1nBxSu-002MoL-TC; Mon, 24 Jan 2022 11:24:53 +0000
+Date:   Mon, 24 Jan 2022 11:24:52 +0000
+Message-ID: <87a6fl8jgb.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        chenxiang <chenxiang66@hisilicon.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "liuqi (BA)" <liuqi115@huawei.com>
-Subject: Re: PCI MSI issue for maxcpus=1
-In-Reply-To: <5f529b4e-1f6c-5a7d-236c-09ebe3a7db29@huawei.com>
-References: <78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com>
-        <87a6g8vp8k.wl-maz@kernel.org>
-        <19d55cdf-9ef7-e4a3-5ae5-0970f0d7751b@huawei.com>
-        <87v8yjyjc0.wl-maz@kernel.org>
-        <87k0ey9122.wl-maz@kernel.org>
-        <5f529b4e-1f6c-5a7d-236c-09ebe3a7db29@huawei.com>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     <tglx@linutronix.de>, <linux-kernel@vger.kernel.org>,
+        <guohanjun@huawei.com>, John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH] irqchip/gic-v3-its: Select housekeeping CPUs preferentially for managed IRQs
+In-Reply-To: <20220124073440.88598-1-wangxiongfeng2@huawei.com>
+References: <20220124073440.88598-1-wangxiongfeng2@huawei.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: john.garry@huawei.com, tglx@linutronix.de, chenxiang66@hisilicon.com, shameerali.kolothum.thodi@huawei.com, linux-kernel@vger.kernel.org, liuqi115@huawei.com
+X-SA-Exim-Rcpt-To: wangxiongfeng2@huawei.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, john.garry@huawei.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022 11:59:58 +0000,
-John Garry <john.garry@huawei.com> wrote:
-> 
-> On 17/01/2022 09:14, Marc Zyngier wrote:
-> >> I guess that for managed interrupts, it shouldn't matter, as these
-> >> interrupts should only be used when the relevant CPUs come online.
-> >> 
-> >> Would something like below help? Totally untested, as I don't have a
-> >> Multi-MSI capable device that I can plug in a GICv3 system (maybe I
-> >> should teach that to a virtio device...).
-> 
-> JFYI, NVMe PCI uses the same API (pci_alloc_irq_vectors_affinity()),
-> but does not suffer from this issue - for maxcpus=1 the driver looks
-> to only want 1x vector
-> 
-> > Actually, if the CPU online status doesn't matter for managed affinity
-> > interrupts, then the correct fix is this:
-> > 
-> > diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-> > index d25b7a864bbb..af4e72a6be63 100644
-> > --- a/drivers/irqchip/irq-gic-v3-its.c
-> > +++ b/drivers/irqchip/irq-gic-v3-its.c
-> > @@ -1624,7 +1624,7 @@ static int its_select_cpu(struct irq_data *d,
-> >     		cpu = cpumask_pick_least_loaded(d, tmpmask);
-> >   	} else {
-> > -		cpumask_and(tmpmask, irq_data_get_affinity_mask(d), cpu_online_mask);
-> > +		cpumask_copy(tmpmask, irq_data_get_affinity_mask(d));
-> >     		/* If we cannot cross sockets, limit the search to
-> > that node */
-> >   		if ((its_dev->its->flags & ITS_FLAGS_WORKAROUND_CAVIUM_23144) &&
-> 
-> That produces a warn:
-> 
-> [ 7.833025] ------------[ cut here ]------------
-> [ 7.837634] WARNING: CPU: 0 PID: 44 at
-> drivers/irqchip/irq-gic-v3-its.c:298 valid_col+0x14/0x24
-> [ 7.846324] Modules linked in:
-> [ 7.849368] CPU: 0 PID: 44 Comm: kworker/0:3 Not tainted 5.16.0-dirty #119
-> [ 7.856230] Hardware name: Huawei D06 /D06, BIOS Hisilicon D06 UEFI
-> RC0 - V1.16.01 03/15/2019
-> [ 7.864740] Workqueue: events work_for_cpu_fn
-> [ 7.869088] pstate: 804000c9 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [ 7.876037] pc : valid_col+0x14/0x24
-> [ 7.879600] lr : its_build_mapti_cmd+0x84/0x90
++ John Garry, as he was reporting issues around the same piece of code[1]
 
-Ah, of course. the CPU hasn't booted yet, so its collection isn't
-mapped. I was hoping that the core code would keep the interrupt in
-shutdown state, but it doesn't seem to be the case...
+On Mon, 24 Jan 2022 07:34:40 +0000,
+Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
+> 
+> When using kernel parameter 'isolcpus=managed_irq,xxxx' to bind the
+> managed IRQs to housekeeping CPUs, the effective_affinity sometimes
+> still contains the non-housekeeping CPUs.
+> 
+> irq_do_set_affinity() passes the housekeeping cpumask to
+> chip->irq_set_affinity(), but ITS driver select CPU according to
+> irq_common_data->affinity. While 'irq_common_data->affinity' is updated
+> after chip->irq_set_affinity() is called in irq_do_set_affinity(). Also
+> 'irq_common_data->affinity' may contains non-housekeeping CPUs. I found
+> the below link explaining the reason.
+>   https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2267032.html
+> 
+> To modify CPU selecting logic to prefer housekeeping CPUs, select CPU
+> from the input cpumask parameter first. If none of it is online, then
+> select CPU from 'irq_common_data->affinity'.
+> 
+> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index d25b7a864bbb..17c15d3b2784 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -1624,7 +1624,10 @@ static int its_select_cpu(struct irq_data *d,
+>  
+>  		cpu = cpumask_pick_least_loaded(d, tmpmask);
+>  	} else {
+> -		cpumask_and(tmpmask, irq_data_get_affinity_mask(d), cpu_online_mask);
+> +		cpumask_and(tmpmask, aff_mask, cpu_online_mask);
+> +		if (cpumask_empty(tmpmask))
+> +			cpumask_and(tmpmask, irq_data_get_affinity_mask(d),
+> +				    cpu_online_mask);
 
-> Apart from this, I assume that if another cpu comes online later in
-> the affinity mask I would figure that we want to target the irq to
-> that cpu (which I think we would not do here).
+I think that the online_cpu_mask logical and is a bit wrong. A managed
+interrupt should be able to target an offline CPU:
 
-That's probably also something that should come from core code, as
-we're not really in a position to decide this in the ITS driver.
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index eb0882d15366..0cea46bdaf99 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -1620,7 +1620,7 @@ static int its_select_cpu(struct irq_data *d,
+ 
+ 		cpu = cpumask_pick_least_loaded(d, tmpmask);
+ 	} else {
+-		cpumask_and(tmpmask, irq_data_get_affinity_mask(d), cpu_online_mask);
++		cpumask_copy(tmpmask, aff_mask);
+ 
+ 		/* If we cannot cross sockets, limit the search to that node */
+ 		if ((its_dev->its->flags & ITS_FLAGS_WORKAROUND_CAVIUM_23144) &&
+
+We still have an issue when the system hasn't booted with all its
+CPUs, as the corresponding collections aren't initialised and we
+end-up in a rather bad place.
 
 	M.
+
+[1] https://lore.kernel.org/r/78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com
 
 -- 
 Without deviation from the norm, progress is not possible.

@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C46A4993D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF73C498CE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387764AbiAXUhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379647AbiAXUME (ORCPT
+        id S1351240AbiAXT0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:26:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47850 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347361AbiAXTS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:12:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9651BC028C1F;
-        Mon, 24 Jan 2022 11:33:50 -0800 (PST)
+        Mon, 24 Jan 2022 14:18:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3823861488;
-        Mon, 24 Jan 2022 19:33:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F419CC340E5;
-        Mon, 24 Jan 2022 19:33:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01C146135E;
+        Mon, 24 Jan 2022 19:18:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D605DC340E5;
+        Mon, 24 Jan 2022 19:18:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052829;
-        bh=qGh2KMC0KjqVZsHyFocmreJrZNAvnD7Xei2FC+o7QDQ=;
+        s=korg; t=1643051936;
+        bh=0LzPtP+1imS3yKjOyhidBSJgXssfUSqeD1/ITevQIJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G5/5TNIr+5uLd/tpBbBmTiPx9WxVfrpgSEDXCB6A4FpCzF5D1B4nTbUqT3qVLN8xx
-         kqPx/kpW/55VA9nZDEU/bromFlscHu11MW0Adae6qdW3UEmlelUv4aNkl+gKD+wyi3
-         CaR1MmTqQsl4LFvzOfLAMJMrL6s9LicMl0NWZLi0=
+        b=ECo2+pwpNt0BDCJHh9nGJ27jnYSAzcS+jQOZ/6uMS2zHTIS47+w3NLtUy6yYY4Nb4
+         GQuQehss9A6EC4S6LCSGOCNoN5vJkZnDgj0BWwonagHRX73ZC6lZvaXzjOm6k20Ugx
+         AOitDdK/Jy+dZ+JpVoACXCmOdFOo7G8Tqu5rVs4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Suresh Kumar <suresh2514@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Neal Liu <neal_liu@aspeedtech.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 187/320] net: bonding: debug: avoid printing debug logs when bond is not notifying peers
-Date:   Mon, 24 Jan 2022 19:42:51 +0100
-Message-Id: <20220124184000.012353590@linuxfoundation.org>
+Subject: [PATCH 4.19 134/239] usb: uhci: add aspeed ast2600 uhci support
+Date:   Mon, 24 Jan 2022 19:42:52 +0100
+Message-Id: <20220124183947.370932685@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,68 +45,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suresh Kumar <surkumar@redhat.com>
+From: Neal Liu <neal_liu@aspeedtech.com>
 
-[ Upstream commit fee32de284ac277ba434a2d59f8ce46528ff3946 ]
+[ Upstream commit 554abfe2eadec97d12c71d4a69da1518478f69eb ]
 
-Currently "bond_should_notify_peers: slave ..." messages are printed whenever
-"bond_should_notify_peers" function is called.
+Enable ast2600 uhci quirks.
 
-+++
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Received LACPDU on port 1
-Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Rx Machine: Port=1, Last State=6, Curr State=6
-Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): partner sync=1
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-...
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Received LACPDU on port 2
-Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Rx Machine: Port=2, Last State=6, Curr State=6
-Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): partner sync=1
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-+++
-
-This is confusing and can also clutter up debug logs.
-Print logs only when the peer notification happens.
-
-Signed-off-by: Suresh Kumar <suresh2514@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+Link: https://lore.kernel.org/r/20211126100021.2331024-1-neal_liu@aspeedtech.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/host/uhci-platform.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index a7eaf80f500c0..ff50ccc7dceb1 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -792,9 +792,6 @@ static bool bond_should_notify_peers(struct bonding *bond)
- 	slave = rcu_dereference(bond->curr_active_slave);
- 	rcu_read_unlock();
- 
--	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
--		   slave ? slave->dev->name : "NULL");
--
- 	if (!slave || !bond->send_peer_notif ||
- 	    bond->send_peer_notif %
- 	    max(1, bond->params.peer_notif_delay) != 0 ||
-@@ -802,6 +799,9 @@ static bool bond_should_notify_peers(struct bonding *bond)
- 	    test_bit(__LINK_STATE_LINKWATCH_PENDING, &slave->dev->state))
- 		return false;
- 
-+	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
-+		   slave ? slave->dev->name : "NULL");
-+
- 	return true;
- }
- 
+diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
+index 89700e26fb296..813ff3660e9f1 100644
+--- a/drivers/usb/host/uhci-platform.c
++++ b/drivers/usb/host/uhci-platform.c
+@@ -113,7 +113,8 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
+ 				num_ports);
+ 		}
+ 		if (of_device_is_compatible(np, "aspeed,ast2400-uhci") ||
+-		    of_device_is_compatible(np, "aspeed,ast2500-uhci")) {
++		    of_device_is_compatible(np, "aspeed,ast2500-uhci") ||
++		    of_device_is_compatible(np, "aspeed,ast2600-uhci")) {
+ 			uhci->is_aspeed = 1;
+ 			dev_info(&pdev->dev,
+ 				 "Enabled Aspeed implementation workarounds\n");
 -- 
 2.34.1
 

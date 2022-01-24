@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0EC4499E9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452C7499EDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836742AbiAXWkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
+        id S1838331AbiAXWqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457508AbiAXVlp (ORCPT
+        with ESMTP id S1457579AbiAXVly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:41:45 -0500
+        Mon, 24 Jan 2022 16:41:54 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF65C07E330;
-        Mon, 24 Jan 2022 12:29:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1635EC07E336;
+        Mon, 24 Jan 2022 12:29:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB164B811FB;
-        Mon, 24 Jan 2022 20:29:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F505C340E5;
-        Mon, 24 Jan 2022 20:29:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFE5BB8122A;
+        Mon, 24 Jan 2022 20:29:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBADC340E5;
+        Mon, 24 Jan 2022 20:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056161;
-        bh=C3U03kuRJu4rADZf8pbT2hpc6oMwmwLCP7eKl59M+XE=;
+        s=korg; t=1643056179;
+        bh=lq3hf89fjyCLhDkpQ9WdaE1sdfeZJVi7g3LIOu5gNf8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pqgdwL6BONa1zn2NKim1FVIQyeCZBkxtMIkShGscmfENpU2OKGcjgWe1D7GkxpO7I
-         9b3cE43h2VEmVbtSF03kGzEyMRR+JevEVeOcVEMJK3W996XK0zr3G3qoKYf2EKRx0p
-         /oUs8WYaoJ7U1c3ox32SNPtixUCenLdTJlZTVopk=
+        b=kRiKaOKe7iNwfZe5gMAiXnblL4J0Hlz27WoZVg489kN21IZLH1ISxWf1V8qVanW1n
+         YHGtTpArQSUpjDUhTqX0UFCD2hFwWDnnF6whvwVcsv70qSaRofpIxMQeR1b8dNMVTW
+         6opLLijQjuuEciLWwaCmri3p3gIbc17MJahWn2Ho=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 364/846] net/sched: flow_dissector: Fix matching on zone id for invalid conns
-Date:   Mon, 24 Jan 2022 19:38:01 +0100
-Message-Id: <20220124184113.493937513@linuxfoundation.org>
+Subject: [PATCH 5.15 365/846] net: openvswitch: Fix matching zone id for invalid conns arriving from tc
+Date:   Mon, 24 Jan 2022 19:38:02 +0100
+Message-Id: <20220124184113.531656257@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -51,108 +51,89 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Paul Blakey <paulb@nvidia.com>
 
-[ Upstream commit 3849595866166b23bf6a0cb9ff87e06423167f67 ]
+[ Upstream commit 635d448a1cce4b4ebee52b351052c70434fa90ea ]
 
-If ct rejects a flow, it removes the conntrack info from the skb.
-act_ct sets the post_ct variable so the dissector will see this case
-as an +tracked +invalid state, but the zone id is lost with the
-conntrack info.
+Zone id is not restored if we passed ct and ct rejected the connection,
+as there is no ct info on the skb.
 
-To restore the zone id on such cases, set the last executed zone,
-via the tc control block, when passing ct, and read it back in the
-dissector if there is no ct info on the skb (invalid connection).
+Save the zone from tc skb cb to tc skb extension and pass it on to
+ovs, use that info to restore the zone id for invalid connections.
 
-Fixes: 7baf2429a1a9 ("net/sched: cls_flower add CT_FLAGS_INVALID flag support")
+Fixes: d29334c15d33 ("net/sched: act_api: fix miss set post_ct for ovs after do conntrack in act_ct")
 Signed-off-by: Paul Blakey <paulb@nvidia.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/skbuff.h    | 2 +-
- include/net/pkt_sched.h   | 1 +
- net/core/flow_dissector.c | 3 ++-
- net/sched/act_ct.c        | 1 +
- net/sched/cls_flower.c    | 3 ++-
- 5 files changed, 7 insertions(+), 3 deletions(-)
+ include/linux/skbuff.h | 1 +
+ net/openvswitch/flow.c | 8 +++++++-
+ net/sched/cls_api.c    | 1 +
+ 3 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index b8c273af2910c..4f31ca71a82a7 100644
+index 4f31ca71a82a7..f92839b726dc2 100644
 --- a/include/linux/skbuff.h
 +++ b/include/linux/skbuff.h
-@@ -1370,7 +1370,7 @@ skb_flow_dissect_ct(const struct sk_buff *skb,
- 		    struct flow_dissector *flow_dissector,
- 		    void *target_container,
- 		    u16 *ctinfo_map, size_t mapsize,
--		    bool post_ct);
-+		    bool post_ct, u16 zone);
- void
- skb_flow_dissect_tunnel_info(const struct sk_buff *skb,
- 			     struct flow_dissector *flow_dissector,
-diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
-index 05f18e81f3e87..9e71691c491b7 100644
---- a/include/net/pkt_sched.h
-+++ b/include/net/pkt_sched.h
-@@ -198,6 +198,7 @@ struct tc_skb_cb {
- 
- 	u16 mru;
+@@ -286,6 +286,7 @@ struct nf_bridge_info {
+ struct tc_skb_ext {
+ 	__u32 chain;
+ 	__u16 mru;
++	__u16 zone;
  	bool post_ct;
-+	u16 zone; /* Only valid if post_ct = true */
  };
+ #endif
+diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
+index 9713035b89e3a..6d262d9aa10ea 100644
+--- a/net/openvswitch/flow.c
++++ b/net/openvswitch/flow.c
+@@ -34,6 +34,7 @@
+ #include <net/mpls.h>
+ #include <net/ndisc.h>
+ #include <net/nsh.h>
++#include <net/netfilter/nf_conntrack_zones.h>
  
- static inline struct tc_skb_cb *tc_skb_cb(const struct sk_buff *skb)
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index bac0184cf3de7..edffdaa875f1f 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -238,7 +238,7 @@ void
- skb_flow_dissect_ct(const struct sk_buff *skb,
- 		    struct flow_dissector *flow_dissector,
- 		    void *target_container, u16 *ctinfo_map,
--		    size_t mapsize, bool post_ct)
-+		    size_t mapsize, bool post_ct, u16 zone)
- {
- #if IS_ENABLED(CONFIG_NF_CONNTRACK)
- 	struct flow_dissector_key_ct *key;
-@@ -260,6 +260,7 @@ skb_flow_dissect_ct(const struct sk_buff *skb,
- 	if (!ct) {
- 		key->ct_state = TCA_FLOWER_KEY_CT_FLAGS_TRACKED |
- 				TCA_FLOWER_KEY_CT_FLAGS_INVALID;
-+		key->ct_zone = zone;
- 		return;
+ #include "conntrack.h"
+ #include "datapath.h"
+@@ -860,6 +861,7 @@ int ovs_flow_key_extract(const struct ip_tunnel_info *tun_info,
+ #endif
+ 	bool post_ct = false;
+ 	int res, err;
++	u16 zone = 0;
+ 
+ 	/* Extract metadata from packet. */
+ 	if (tun_info) {
+@@ -898,6 +900,7 @@ int ovs_flow_key_extract(const struct ip_tunnel_info *tun_info,
+ 		key->recirc_id = tc_ext ? tc_ext->chain : 0;
+ 		OVS_CB(skb)->mru = tc_ext ? tc_ext->mru : 0;
+ 		post_ct = tc_ext ? tc_ext->post_ct : false;
++		zone = post_ct ? tc_ext->zone : 0;
+ 	} else {
+ 		key->recirc_id = 0;
+ 	}
+@@ -906,8 +909,11 @@ int ovs_flow_key_extract(const struct ip_tunnel_info *tun_info,
+ #endif
+ 
+ 	err = key_extract(skb, key);
+-	if (!err)
++	if (!err) {
+ 		ovs_ct_fill_key(skb, key, post_ct);   /* Must be after key_extract(). */
++		if (post_ct && !skb_get_nfct(skb))
++			key->ct_zone = zone;
++	}
+ 	return err;
+ }
+ 
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index ff8a9383bf1c4..35c74bdde848e 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -1625,6 +1625,7 @@ int tcf_classify(struct sk_buff *skb,
+ 		ext->chain = last_executed_chain;
+ 		ext->mru = cb->mru;
+ 		ext->post_ct = cb->post_ct;
++		ext->zone = cb->zone;
  	}
  
-diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
-index 98e248b9c0b17..ab3591408419f 100644
---- a/net/sched/act_ct.c
-+++ b/net/sched/act_ct.c
-@@ -1049,6 +1049,7 @@ out_push:
- 	skb_push_rcsum(skb, nh_ofs);
- 
- 	tc_skb_cb(skb)->post_ct = true;
-+	tc_skb_cb(skb)->zone = p->zone;
- out_clear:
- 	if (defrag)
- 		qdisc_skb_cb(skb)->pkt_len = skb->len;
-diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
-index 161bd91c8c6b0..709348262410c 100644
---- a/net/sched/cls_flower.c
-+++ b/net/sched/cls_flower.c
-@@ -311,6 +311,7 @@ static int fl_classify(struct sk_buff *skb, const struct tcf_proto *tp,
- {
- 	struct cls_fl_head *head = rcu_dereference_bh(tp->root);
- 	bool post_ct = tc_skb_cb(skb)->post_ct;
-+	u16 zone = tc_skb_cb(skb)->zone;
- 	struct fl_flow_key skb_key;
- 	struct fl_flow_mask *mask;
- 	struct cls_fl_filter *f;
-@@ -328,7 +329,7 @@ static int fl_classify(struct sk_buff *skb, const struct tcf_proto *tp,
- 		skb_flow_dissect_ct(skb, &mask->dissector, &skb_key,
- 				    fl_ct_info_to_flower_map,
- 				    ARRAY_SIZE(fl_ct_info_to_flower_map),
--				    post_ct);
-+				    post_ct, zone);
- 		skb_flow_dissect_hash(skb, &mask->dissector, &skb_key);
- 		skb_flow_dissect(skb, &mask->dissector, &skb_key, 0);
- 
+ 	return ret;
 -- 
 2.34.1
 

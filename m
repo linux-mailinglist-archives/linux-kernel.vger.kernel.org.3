@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAEDC49A763
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B580B49A26B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 02:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3424090AbiAYCit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:38:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
+        id S2365739AbiAXXvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:51:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356726AbiAXUce (ORCPT
+        with ESMTP id S1843492AbiAXXED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:32:34 -0500
+        Mon, 24 Jan 2022 18:04:03 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306DDC08B4FC;
-        Mon, 24 Jan 2022 11:43:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E073C06C5B8;
+        Mon, 24 Jan 2022 13:16:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA24DB81215;
-        Mon, 24 Jan 2022 19:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19548C340E5;
-        Mon, 24 Jan 2022 19:43:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14CDAB80CCF;
+        Mon, 24 Jan 2022 21:16:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B99C340E4;
+        Mon, 24 Jan 2022 21:16:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053430;
-        bh=+GQuL4BuFI+r25AhMeGmdBP+JMbKMCMcrj8kpNcaSFM=;
+        s=korg; t=1643058960;
+        bh=+FIhuV+QFoMc3kFprresSPzAW2LFZqusS4F4IERQ6gw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FZm8GvRMEHKvST9MeBGes8bhJM1wc0G4sl6kASEy30PZl4vIXdTsNqMZidPrAqYJH
-         PxxhNVUZof1TOaLjBRV6OAfnqGk3Ufh1cq6NU32DXAEkrRqPhfk5tbt8R1jaHoB5RM
-         QohEKz2GCsGSSMWrIL7M/hJaVIq+Gdq9K9Pr5UfY=
+        b=yqjFp+OdE9pcMwpzpoZub27eyFdXsQSeVAlr7s5LL/yK+n+JPgrW5pEQpNV7O/goE
+         BDAf1t25i0ZPxTsZKHieUU/GpxApXhFos8S5MTqV+U0RsO8iAAebbn3I3mdZOwG4Nq
+         P92s2UeonxeQBP9oONhbD2bvAXQ1rAnb/yKG7tvU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sathishkumar Muruganandam <murugana@codeaurora.org>,
-        Rameshkumar Sundaram <ramess@codeaurora.org>,
-        Jouni Malinen <jouni@codeaurora.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 062/563] ath11k: Send PPDU_STATS_CFG with proper pdev mask to firmware
-Date:   Mon, 24 Jan 2022 19:37:07 +0100
-Message-Id: <20220124184026.560291742@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+Subject: [PATCH 5.16 0441/1039] net: mcs7830: handle usb read errors properly
+Date:   Mon, 24 Jan 2022 19:37:10 +0100
+Message-Id: <20220124184140.120501193@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,66 +51,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rameshkumar Sundaram <ramess@codeaurora.org>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 16a2c3d5406f95ef6139de52669c60a39443f5f7 ]
+[ Upstream commit d668769eb9c52b150753f1653f7f5a0aeb8239d2 ]
 
-HTT_PPDU_STATS_CFG_PDEV_ID bit mask for target FW PPDU stats request message
-was set as bit 8 to 15. Bit 8 is reserved for soc stats and pdev id starts from
-bit 9. Hence change the bitmask as bit 9 to 15 and fill the proper pdev id in
-the request message.
+Syzbot reported uninit value in mcs7830_bind(). The problem was in
+missing validation check for bytes read via usbnet_read_cmd().
 
-In commit 701e48a43e15 ("ath11k: add packet log support for QCA6390"), both
-HTT_PPDU_STATS_CFG_PDEV_ID and pdev_mask were changed, but this pdev_mask
-calculation is not valid for platforms which has multiple pdevs with 1 rxdma
-per pdev, as this is writing same value(i.e. 2) for all pdevs.  Hence fixed it
-to consider pdev_idx as well, to make it compatible for both single and multi
-pd cases.
+usbnet_read_cmd() internally calls usb_control_msg(), that returns
+number of bytes read. Code should validate that requested number of bytes
+was actually read.
 
-Tested on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01092-QCAHKSWPL_SILICONZ-1
-Tested on: IPQ6018 hw1.0 WLAN.HK.2.5.0.1-01067-QCAHKSWPL_SILICONZ-1
+So, this patch adds missing size validation check inside
+mcs7830_get_reg() to prevent uninit value bugs
 
-Fixes: 701e48a43e15 ("ath11k: add packet log support for QCA6390")
-
-Co-developed-by: Sathishkumar Muruganandam <murugana@codeaurora.org>
-Signed-off-by: Sathishkumar Muruganandam <murugana@codeaurora.org>
-Signed-off-by: Rameshkumar Sundaram <ramess@codeaurora.org>
-Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/20210721212029.142388-10-jouni@codeaurora.org
+Reported-and-tested-by: syzbot+003c0a286b9af5412510@syzkaller.appspotmail.com
+Fixes: 2a36d7083438 ("USB: driver for mcs7830 (aka DeLOCK) USB ethernet adapter")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20220106225716.7425-1-paskripkin@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath11k/dp.h    | 3 ++-
- drivers/net/wireless/ath/ath11k/dp_tx.c | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/usb/mcs7830.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/dp.h b/drivers/net/wireless/ath/ath11k/dp.h
-index ee8db812589b3..c4972233149f4 100644
---- a/drivers/net/wireless/ath/ath11k/dp.h
-+++ b/drivers/net/wireless/ath/ath11k/dp.h
-@@ -514,7 +514,8 @@ struct htt_ppdu_stats_cfg_cmd {
- } __packed;
+diff --git a/drivers/net/usb/mcs7830.c b/drivers/net/usb/mcs7830.c
+index 326cc4e749d80..fdda0616704ea 100644
+--- a/drivers/net/usb/mcs7830.c
++++ b/drivers/net/usb/mcs7830.c
+@@ -108,8 +108,16 @@ static const char driver_name[] = "MOSCHIP usb-ethernet driver";
  
- #define HTT_PPDU_STATS_CFG_MSG_TYPE		GENMASK(7, 0)
--#define HTT_PPDU_STATS_CFG_PDEV_ID		GENMASK(15, 8)
-+#define HTT_PPDU_STATS_CFG_SOC_STATS		BIT(8)
-+#define HTT_PPDU_STATS_CFG_PDEV_ID		GENMASK(15, 9)
- #define HTT_PPDU_STATS_CFG_TLV_TYPE_BITMASK	GENMASK(31, 16)
+ static int mcs7830_get_reg(struct usbnet *dev, u16 index, u16 size, void *data)
+ {
+-	return usbnet_read_cmd(dev, MCS7830_RD_BREQ, MCS7830_RD_BMREQ,
+-				0x0000, index, data, size);
++	int ret;
++
++	ret = usbnet_read_cmd(dev, MCS7830_RD_BREQ, MCS7830_RD_BMREQ,
++			      0x0000, index, data, size);
++	if (ret < 0)
++		return ret;
++	else if (ret < size)
++		return -ENODATA;
++
++	return ret;
+ }
  
- enum htt_ppdu_stats_tag_type {
-diff --git a/drivers/net/wireless/ath/ath11k/dp_tx.c b/drivers/net/wireless/ath/ath11k/dp_tx.c
-index 21dfd08d3debb..092eee735da29 100644
---- a/drivers/net/wireless/ath/ath11k/dp_tx.c
-+++ b/drivers/net/wireless/ath/ath11k/dp_tx.c
-@@ -894,7 +894,7 @@ int ath11k_dp_tx_htt_h2t_ppdu_stats_req(struct ath11k *ar, u32 mask)
- 		cmd->msg = FIELD_PREP(HTT_PPDU_STATS_CFG_MSG_TYPE,
- 				      HTT_H2T_MSG_TYPE_PPDU_STATS_CFG);
- 
--		pdev_mask = 1 << (i + 1);
-+		pdev_mask = 1 << (ar->pdev_idx + i);
- 		cmd->msg |= FIELD_PREP(HTT_PPDU_STATS_CFG_PDEV_ID, pdev_mask);
- 		cmd->msg |= FIELD_PREP(HTT_PPDU_STATS_CFG_TLV_TYPE_BITMASK, mask);
- 
+ static int mcs7830_set_reg(struct usbnet *dev, u16 index, u16 size, const void *data)
 -- 
 2.34.1
 

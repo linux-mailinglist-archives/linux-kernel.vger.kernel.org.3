@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B456498C86
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68C54991FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350006AbiAXTXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:23:05 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38460 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241161AbiAXTMr (ORCPT
+        id S1380680AbiAXUQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346894AbiAXT6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:12:47 -0500
+        Mon, 24 Jan 2022 14:58:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F64C047CE9;
+        Mon, 24 Jan 2022 11:27:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A39B4B8122A;
-        Mon, 24 Jan 2022 19:12:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F37CC340E5;
-        Mon, 24 Jan 2022 19:12:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 017CA614B8;
+        Mon, 24 Jan 2022 19:27:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E6BC340E5;
+        Mon, 24 Jan 2022 19:27:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051564;
-        bh=uNGaLj2lMbEPT6PmZ400m7tw1ykXSU1lTSsCwt5jZ6Q=;
+        s=korg; t=1643052472;
+        bh=twygcYS3MkXap/tO7SELMXxCodF8l1SPOiexz0O7FVw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ftgVtF6+EkelGP8WvfEEwhKl2gFNPZVP/kSJo/OsI1cUev/4cgox33EQ/ipTAMp+2
-         2vNg33DMRocvNeisuqm1QZTvAvbrKFrlaqJU8Ap3M4h4aKh9ZndvB0021Ye6KKgKKd
-         rJyt1Og0LIQ4dli4qXzzVQqpc/GdlRBQs3rre8Qg=
+        b=V6wAW3JhNW83z3ZL1DQh3dBSQaaDyoOBPT5qvQRrYRZrxRPG6SdvlPuUxlBVXJgEv
+         0pFtoFp9wfnpKtzRdlSekgvGn2Aj0wTO90IZY8K+490xt8FvkSipIvqlYbYEEIyF0T
+         966C6emvGR9NiAcQGUPjICWe2T+Jzt1DvchtETu4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.19 016/239] media: uvcvideo: fix division by zero at stream start
-Date:   Mon, 24 Jan 2022 19:40:54 +0100
-Message-Id: <20220124183943.630073909@linuxfoundation.org>
+        stable@vger.kernel.org, Mark-yw Chen <mark-yw.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 071/320] Bluetooth: btmtksdio: fix resume failure
+Date:   Mon, 24 Jan 2022 19:40:55 +0100
+Message-Id: <20220124183956.139201313@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-References: <20220124183943.102762895@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,43 +50,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Sean Wang <sean.wang@mediatek.com>
 
-commit 8aa637bf6d70d2fb2ad4d708d8b9dd02b1c095df upstream.
+[ Upstream commit 561ae1d46a8ddcbc13162d5771f5ed6c8249e730 ]
 
-Add the missing bulk-endpoint max-packet sanity check to
-uvc_video_start_transfer() to avoid division by zero in
-uvc_alloc_urb_buffers() in case a malicious device has broken
-descriptors (or when doing descriptor fuzz testing).
+btmtksdio have to rely on MMC_PM_KEEP_POWER in pm_flags to avoid that
+SDIO power is being shut off during the device is in suspend. That fixes
+the SDIO command fails to access the bus after the device is resumed.
 
-Note that USB core will reject URBs submitted for endpoints with zero
-wMaxPacketSize but that drivers doing packet-size calculations still
-need to handle this (cf. commit 2548288b4fb0 ("USB: Fix: Don't skip
-endpoint descriptors with maxpacket=0")).
-
-Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
-Cc: stable@vger.kernel.org      # 2.6.26
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7f3c563c575e7 ("Bluetooth: btmtksdio: Add runtime PM support to SDIO based Bluetooth")
+Co-developed-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
+Signed-off-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_video.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/bluetooth/btmtksdio.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -1854,6 +1854,10 @@ static int uvc_init_video(struct uvc_str
- 		if (ep == NULL)
- 			return -EIO;
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index 304178be1ef40..c2eb64bcd5d5d 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -1041,6 +1041,8 @@ static int btmtksdio_runtime_suspend(struct device *dev)
+ 	if (!bdev)
+ 		return 0;
  
-+		/* Reject broken descriptors. */
-+		if (usb_endpoint_maxp(&ep->desc) == 0)
-+			return -EIO;
++	sdio_set_host_pm_flags(func, MMC_PM_KEEP_POWER);
 +
- 		ret = uvc_init_video_bulk(stream, ep, gfp_flags);
- 	}
+ 	sdio_claim_host(bdev->func);
  
+ 	sdio_writel(bdev->func, C_FW_OWN_REQ_SET, MTK_REG_CHLPCR, &err);
+-- 
+2.34.1
+
 
 

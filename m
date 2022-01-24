@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FC34990AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB634991D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353388AbiAXUCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:02:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53088 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351456AbiAXT1F (ORCPT
+        id S1379806AbiAXUPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:15:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41894 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358277AbiAXTyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:27:05 -0500
+        Mon, 24 Jan 2022 14:54:47 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C29E61318;
-        Mon, 24 Jan 2022 19:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DF23C340E5;
-        Mon, 24 Jan 2022 19:27:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57CCBB8122F;
+        Mon, 24 Jan 2022 19:54:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE7FC340E5;
+        Mon, 24 Jan 2022 19:54:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052422;
-        bh=yXIQYxnNF1SjKzWmxAKfDHtSZ7/8iwVx/Mr08aAye/o=;
+        s=korg; t=1643054084;
+        bh=PlU0BGXYhEPw+yxn5LNeHuz6RZoUF0+GF9AQ5NrEnq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U0aSIDiA5HgRrd+8fgKDMco3+NJLoTaP9SVPjzWIGHalxQbYnLTJ/j/x+EsRWQ8+6
-         2ODv+xyIZuIJrcMED2MH7xR5R0U08hDMkI45k2jpwfuT06O8pFQIENQITduPzQDxuX
-         mMhPCw0H36Fek8gRkcwR8FcLDbUYvWvswivvlQsw=
+        b=bc61rIyCtgE3Y3eb6rGqotXfZlMgN3OoG09ENsVc7Xz/ljcUaCGxTlwJ63xN/f9ej
+         WEshwVCJrLUUhBYdG1h99t24jGGbmI3/FlD/MqGiFxTiJQ12anqOWBVWylORbSPCAJ
+         hZ1vQhHdoF6tf4nHyhMdDYgXbFFFTznulXEor6us=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Richard Genoud <richard.genoud@gmail.com>,
+        stable@vger.kernel.org, Dillon Min <dillon.minfei@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 053/320] tty: serial: atmel: Check return code of dmaengine_submit()
-Date:   Mon, 24 Jan 2022 19:40:37 +0100
-Message-Id: <20220124183955.547475165@linuxfoundation.org>
+Subject: [PATCH 5.10 273/563] clk: stm32: Fix ltdcs clock turn off by clk_disable_unused() after system enter shell
+Date:   Mon, 24 Jan 2022 19:40:38 +0100
+Message-Id: <20220124184033.880776185@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,56 +48,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Dillon Min <dillon.minfei@gmail.com>
 
-[ Upstream commit 1e67bd2b8cb90b66e89562598e9c2046246832d3 ]
+[ Upstream commit 6fc058a72f3b7b07fc4de6d66ad1f68951b00f6e ]
 
-The tx_submit() method of struct dma_async_tx_descriptor is entitled
-to do sanity checks and return errors if encountered. It's not the
-case for the DMA controller drivers that this client is using
-(at_h/xdmac), because they currently don't do sanity checks and always
-return a positive cookie at tx_submit() method. In case the controller
-drivers will implement sanity checks and return errors, print a message
-so that the client will be informed that something went wrong at
-tx_submit() level.
+stm32's clk driver register two ltdc gate clk to clk core by
+clk_hw_register_gate() and clk_hw_register_composite()
 
-Fixes: 08f738be88bb ("serial: at91: add tx dma support")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Acked-by: Richard Genoud <richard.genoud@gmail.com>
-Link: https://lore.kernel.org/r/20211125090028.786832-3-tudor.ambarus@microchip.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+first: 'stm32f429_gates[]', clk name is 'ltdc', which no user to use.
+second: 'stm32f429_aux_clk[]', clk name is 'lcd-tft', used by ltdc driver
+
+both of them point to the same offset of stm32's RCC register. after
+kernel enter console, clk core turn off ltdc's clk as 'stm32f429_gates[]'
+is no one to use. but, actually 'stm32f429_aux_clk[]' is in use.
+
+stm32f469/746/769 have the same issue, fix it.
+
+Fixes: daf2d117cbca ("clk: stm32f4: Add lcd-tft clock")
+Link: https://lore.kernel.org/linux-arm-kernel/1590564453-24499-7-git-send-email-dillon.minfei@gmail.com/
+Link: https://lore.kernel.org/lkml/CAPTRvHkf0cK_4ZidM17rPo99gWDmxgqFt4CDUjqFFwkOeQeFDg@mail.gmail.com/
+Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Acked-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Acked-by: Stephen Boyd <sboyd@kernel.org>
+Link: https://lore.kernel.org/r/1635232282-3992-10-git-send-email-dillon.minfei@gmail.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/atmel_serial.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/clk/clk-stm32f4.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/tty/serial/atmel_serial.c b/drivers/tty/serial/atmel_serial.c
-index 8a909d5561859..da076493b336a 100644
---- a/drivers/tty/serial/atmel_serial.c
-+++ b/drivers/tty/serial/atmel_serial.c
-@@ -1002,6 +1002,11 @@ static void atmel_tx_dma(struct uart_port *port)
- 		desc->callback = atmel_complete_tx_dma;
- 		desc->callback_param = atmel_port;
- 		atmel_port->cookie_tx = dmaengine_submit(desc);
-+		if (dma_submit_error(atmel_port->cookie_tx)) {
-+			dev_err(port->dev, "dma_submit_error %d\n",
-+				atmel_port->cookie_tx);
-+			return;
-+		}
- 	}
+diff --git a/drivers/clk/clk-stm32f4.c b/drivers/clk/clk-stm32f4.c
+index 5c75e3d906c20..682a18b392f08 100644
+--- a/drivers/clk/clk-stm32f4.c
++++ b/drivers/clk/clk-stm32f4.c
+@@ -129,7 +129,6 @@ static const struct stm32f4_gate_data stm32f429_gates[] __initconst = {
+ 	{ STM32F4_RCC_APB2ENR, 20,	"spi5",		"apb2_div" },
+ 	{ STM32F4_RCC_APB2ENR, 21,	"spi6",		"apb2_div" },
+ 	{ STM32F4_RCC_APB2ENR, 22,	"sai1",		"apb2_div" },
+-	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div" },
+ };
  
- 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
-@@ -1262,6 +1267,11 @@ static int atmel_prepare_rx_dma(struct uart_port *port)
- 	desc->callback_param = port;
- 	atmel_port->desc_rx = desc;
- 	atmel_port->cookie_rx = dmaengine_submit(desc);
-+	if (dma_submit_error(atmel_port->cookie_rx)) {
-+		dev_err(port->dev, "dma_submit_error %d\n",
-+			atmel_port->cookie_rx);
-+		goto chan_err;
-+	}
+ static const struct stm32f4_gate_data stm32f469_gates[] __initconst = {
+@@ -211,7 +210,6 @@ static const struct stm32f4_gate_data stm32f469_gates[] __initconst = {
+ 	{ STM32F4_RCC_APB2ENR, 20,	"spi5",		"apb2_div" },
+ 	{ STM32F4_RCC_APB2ENR, 21,	"spi6",		"apb2_div" },
+ 	{ STM32F4_RCC_APB2ENR, 22,	"sai1",		"apb2_div" },
+-	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div" },
+ };
  
- 	return 0;
+ static const struct stm32f4_gate_data stm32f746_gates[] __initconst = {
+@@ -286,7 +284,6 @@ static const struct stm32f4_gate_data stm32f746_gates[] __initconst = {
+ 	{ STM32F4_RCC_APB2ENR, 21,	"spi6",		"apb2_div" },
+ 	{ STM32F4_RCC_APB2ENR, 22,	"sai1",		"apb2_div" },
+ 	{ STM32F4_RCC_APB2ENR, 23,	"sai2",		"apb2_div" },
+-	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div" },
+ };
+ 
+ static const struct stm32f4_gate_data stm32f769_gates[] __initconst = {
+@@ -364,7 +361,6 @@ static const struct stm32f4_gate_data stm32f769_gates[] __initconst = {
+ 	{ STM32F4_RCC_APB2ENR, 21,	"spi6",		"apb2_div" },
+ 	{ STM32F4_RCC_APB2ENR, 22,	"sai1",		"apb2_div" },
+ 	{ STM32F4_RCC_APB2ENR, 23,	"sai2",		"apb2_div" },
+-	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div" },
+ 	{ STM32F4_RCC_APB2ENR, 30,	"mdio",		"apb2_div" },
+ };
  
 -- 
 2.34.1

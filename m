@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DF44990CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042014990D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377025AbiAXUEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:04:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44236 "EHLO
+        id S1377154AbiAXUFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:05:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44358 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356679AbiAXTrC (ORCPT
+        with ESMTP id S1356753AbiAXTrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:47:02 -0500
+        Mon, 24 Jan 2022 14:47:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F1196154E;
-        Mon, 24 Jan 2022 19:47:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F1EC340E5;
-        Mon, 24 Jan 2022 19:47:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FAD761551;
+        Mon, 24 Jan 2022 19:47:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 608F1C340E5;
+        Mon, 24 Jan 2022 19:47:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053620;
-        bh=FCtfFY34iZEwAr7Qu9zfh7qbShfAkumL+e4sa31RBqc=;
+        s=korg; t=1643053630;
+        bh=XcbVDpUyqUjXzOpF11EmDexo/J+zpZ7p9ony6TMOSco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i4eWQ5Uzipr0o2KXi+umApYeWrZQQozPShsC/iTD1jhjzm5n1KpX92u1+8vS9y0kc
-         c2XaLwKYTDVYlduJI92zKqwz/RW3vlpds/UFzqcePD3wJW4wQ4Vy/sgDWrNA9VHGge
-         /mxM1aZq82t19UHlKUZtFKD+PVZ3kL7nm2eMfJjk=
+        b=wa2JzQUj5zJXXL8Tqn7lvC+evRFi56KmwXGMIanUlvFj9ms3qau6I/aCl8Yj/90w1
+         aeDzADkuS3xfW/vrDbAAoJefb/gVxWEmOoDgpnSiL4mSrgT4cwqf7uAyjlzQImrptd
+         lOVY80/p8+ToPJJxDJikqEGAu0ULEqEdNjIdumi0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Pratyush Yadav <p.yadav@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 123/563] drm/amdgpu: Fix a NULL pointer dereference in amdgpu_connector_lcd_native_mode()
-Date:   Mon, 24 Jan 2022 19:38:08 +0100
-Message-Id: <20220124184028.654486911@linuxfoundation.org>
+Subject: [PATCH 5.10 126/563] arm64: dts: ti: k3-j721e: Fix the L2 cache sets
+Date:   Mon, 24 Jan 2022 19:38:11 +0100
+Message-Id: <20220124184028.760865545@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -46,62 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Nishanth Menon <nm@ti.com>
 
-[ Upstream commit b220110e4cd442156f36e1d9b4914bb9e87b0d00 ]
+[ Upstream commit e9ba3a5bc6fdc2c796c69fdaf5ed6c9957cf9f9d ]
 
-In amdgpu_connector_lcd_native_mode(), the return value of
-drm_mode_duplicate() is assigned to mode, and there is a dereference
-of it in amdgpu_connector_lcd_native_mode(), which will lead to a NULL
-pointer dereference on failure of drm_mode_duplicate().
+A72's L2 cache[1] on J721e[2] is 1MB. A72's L2 is fixed line length of
+64 bytes and 16-way set-associative cache structure.
 
-Fix this bug add a check of mode.
+1MB of L2 / 64 (line length) = 16384 ways
+16384 ways / 16 = 1024 sets
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+Fix the l2 cache-sets.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+[1] https://developer.arm.com/documentation/100095/0003/Level-2-Memory-System/About-the-L2-memory-system
+[2] http://www.ti.com/lit/pdf/spruil1
 
-Builds with CONFIG_DRM_AMDGPU=m show no new warnings, and
-our static analyzer no longer warns about this code.
-
-Fixes: d38ceaf99ed0 ("drm/amdgpu: add core driver (v4)")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fixes: 2d87061e70de ("arm64: dts: ti: Add Support for J721E SoC")
+Reported-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+Link: https://lore.kernel.org/r/20211113043639.4413-1-nm@ti.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-index 0de66f59adb8a..df1f9b88a53f9 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-@@ -387,6 +387,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
- 	    native_mode->vdisplay != 0 &&
- 	    native_mode->clock != 0) {
- 		mode = drm_mode_duplicate(dev, native_mode);
-+		if (!mode)
-+			return NULL;
-+
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		drm_mode_set_name(mode);
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+index d1ef9fbe4981d..a199227327ed2 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+@@ -85,7 +85,7 @@
+ 		cache-level = <2>;
+ 		cache-size = <0x100000>;
+ 		cache-line-size = <64>;
+-		cache-sets = <2048>;
++		cache-sets = <1024>;
+ 		next-level-cache = <&msmc_l3>;
+ 	};
  
-@@ -401,6 +404,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
- 		 * simpler.
- 		 */
- 		mode = drm_cvt_mode(dev, native_mode->hdisplay, native_mode->vdisplay, 60, true, false, false);
-+		if (!mode)
-+			return NULL;
-+
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		DRM_DEBUG_KMS("Adding cvt approximation of native panel mode %s\n", mode->name);
- 	}
 -- 
 2.34.1
 

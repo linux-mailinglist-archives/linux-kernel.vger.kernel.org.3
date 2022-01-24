@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C847549A0B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E39349A08C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846913AbiAXXR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
+        id S1845038AbiAXXLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355647AbiAXWRQ (ORCPT
+        with ESMTP id S1577171AbiAXWRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:17:16 -0500
+        Mon, 24 Jan 2022 17:17:17 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF33C04A2CE;
-        Mon, 24 Jan 2022 12:45:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3672CC04A2CF;
+        Mon, 24 Jan 2022 12:45:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B81360C19;
-        Mon, 24 Jan 2022 20:45:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1817C340E5;
-        Mon, 24 Jan 2022 20:45:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C735460C17;
+        Mon, 24 Jan 2022 20:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C783C340E5;
+        Mon, 24 Jan 2022 20:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057120;
-        bh=QdVmcSNCl6j2ovDoaiq6bklX/OhFGJkCUFV5FpRpP40=;
+        s=korg; t=1643057130;
+        bh=hfe/X2R1Opq4HzyJLzvdS46U19FqV7aHHRimDomOgMM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vmLZmAcx2zhsglTuD9SzRlVyil53xjV6hNWjHo94mqOD//PuNP06GNnfNJs5wULKt
-         J5ODUFtBq2U1598CEeu1wy1aaw77v7kwUm/bz0cTBU0NAamEQvdxcYuTQia5AyDM9J
-         HeZZlAu90nji3VpkZIVhgKfeVbH/P1x8vWJy7mX8=
+        b=XhLiJGu5y80Vi19Kjb9scDHp22lz7D4IsLBvT+gWvEaYbGzHE8dOfl7jyteWvn8jC
+         +IrWVihdcErlvRlOgKJ+TXzV914eL51vuuzcMJvNiC+HBSKWuAeABs1hW60mfLM1He
+         QHnJMrG8TAmfCOQWJOTkwf5P/X8fv91PoN25eSfY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ghalem Boudour <ghalem.boudour@6wind.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH 5.15 708/846] xfrm: fix policy lookup for ipv6 gre packets
-Date:   Mon, 24 Jan 2022 19:43:45 +0100
-Message-Id: <20220124184125.461187529@linuxfoundation.org>
+        stable@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>,
+        Qu Wenruo <wqu@suse.com>, Filipe Manana <fdmanana@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 710/846] btrfs: fix deadlock between quota enable and other quota operations
+Date:   Mon, 24 Jan 2022 19:43:47 +0100
+Message-Id: <20220124184125.524310732@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,100 +49,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ghalem Boudour <ghalem.boudour@6wind.com>
+From: Filipe Manana <fdmanana@suse.com>
 
-commit bcf141b2eb551b3477b24997ebc09c65f117a803 upstream.
+commit 232796df8c1437c41d308d161007f0715bac0a54 upstream.
 
-On egress side, xfrm lookup is called from __gre6_xmit() with the
-fl6_gre_key field not initialized leading to policies selectors check
-failure. Consequently, gre packets are sent without encryption.
+When enabling quotas, we attempt to commit a transaction while holding the
+mutex fs_info->qgroup_ioctl_lock. This can result on a deadlock with other
+quota operations such as:
 
-On ingress side, INET6_PROTO_NOPOLICY was set, thus packets were not
-checked against xfrm policies. Like for egress side, fl6_gre_key should be
-correctly set, this is now done in decode_session6().
+- qgroup creation and deletion, ioctl BTRFS_IOC_QGROUP_CREATE;
 
-Fixes: c12b395a4664 ("gre: Support GRE over IPv6")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ghalem Boudour <ghalem.boudour@6wind.com>
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+- adding and removing qgroup relations, ioctl BTRFS_IOC_QGROUP_ASSIGN.
+
+This is because these operations join a transaction and after that they
+attempt to lock the mutex fs_info->qgroup_ioctl_lock. Acquiring that mutex
+after joining or starting a transaction is a pattern followed everywhere
+in qgroups, so the quota enablement operation is the one at fault here,
+and should not commit a transaction while holding that mutex.
+
+Fix this by making the transaction commit while not holding the mutex.
+We are safe from two concurrent tasks trying to enable quotas because
+we are serialized by the rw semaphore fs_info->subvol_sem at
+btrfs_ioctl_quota_ctl(), which is the only call site for enabling
+quotas.
+
+When this deadlock happens, it produces a trace like the following:
+
+  INFO: task syz-executor:25604 blocked for more than 143 seconds.
+  Not tainted 5.15.0-rc6 #4
+  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+  task:syz-executor state:D stack:24800 pid:25604 ppid: 24873 flags:0x00004004
+  Call Trace:
+  context_switch kernel/sched/core.c:4940 [inline]
+  __schedule+0xcd9/0x2530 kernel/sched/core.c:6287
+  schedule+0xd3/0x270 kernel/sched/core.c:6366
+  btrfs_commit_transaction+0x994/0x2e90 fs/btrfs/transaction.c:2201
+  btrfs_quota_enable+0x95c/0x1790 fs/btrfs/qgroup.c:1120
+  btrfs_ioctl_quota_ctl fs/btrfs/ioctl.c:4229 [inline]
+  btrfs_ioctl+0x637e/0x7b70 fs/btrfs/ioctl.c:5010
+  vfs_ioctl fs/ioctl.c:51 [inline]
+  __do_sys_ioctl fs/ioctl.c:874 [inline]
+  __se_sys_ioctl fs/ioctl.c:860 [inline]
+  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+  RIP: 0033:0x7f86920b2c4d
+  RSP: 002b:00007f868f61ac58 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+  RAX: ffffffffffffffda RBX: 00007f86921d90a0 RCX: 00007f86920b2c4d
+  RDX: 0000000020005e40 RSI: 00000000c0109428 RDI: 0000000000000008
+  RBP: 00007f869212bd80 R08: 0000000000000000 R09: 0000000000000000
+  R10: 0000000000000000 R11: 0000000000000246 R12: 00007f86921d90a0
+  R13: 00007fff6d233e4f R14: 00007fff6d233ff0 R15: 00007f868f61adc0
+  INFO: task syz-executor:25628 blocked for more than 143 seconds.
+  Not tainted 5.15.0-rc6 #4
+  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+  task:syz-executor state:D stack:29080 pid:25628 ppid: 24873 flags:0x00004004
+  Call Trace:
+  context_switch kernel/sched/core.c:4940 [inline]
+  __schedule+0xcd9/0x2530 kernel/sched/core.c:6287
+  schedule+0xd3/0x270 kernel/sched/core.c:6366
+  schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6425
+  __mutex_lock_common kernel/locking/mutex.c:669 [inline]
+  __mutex_lock+0xc96/0x1680 kernel/locking/mutex.c:729
+  btrfs_remove_qgroup+0xb7/0x7d0 fs/btrfs/qgroup.c:1548
+  btrfs_ioctl_qgroup_create fs/btrfs/ioctl.c:4333 [inline]
+  btrfs_ioctl+0x683c/0x7b70 fs/btrfs/ioctl.c:5014
+  vfs_ioctl fs/ioctl.c:51 [inline]
+  __do_sys_ioctl fs/ioctl.c:874 [inline]
+  __se_sys_ioctl fs/ioctl.c:860 [inline]
+  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Reported-by: Hao Sun <sunhao.th@gmail.com>
+Link: https://lore.kernel.org/linux-btrfs/CACkBjsZQF19bQ1C6=yetF3BvL10OSORpFUcWXTP6HErshDB4dQ@mail.gmail.com/
+Fixes: 340f1aa27f36 ("btrfs: qgroups: Move transaction management inside btrfs_quota_enable/disable")
+CC: stable@vger.kernel.org # 4.19
+Reviewed-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/ip6_gre.c     |    5 ++++-
- net/xfrm/xfrm_policy.c |   21 +++++++++++++++++++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
+ fs/btrfs/qgroup.c |   19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
---- a/net/ipv6/ip6_gre.c
-+++ b/net/ipv6/ip6_gre.c
-@@ -755,6 +755,7 @@ static netdev_tx_t __gre6_xmit(struct sk
- 		fl6->daddr = key->u.ipv6.dst;
- 		fl6->flowlabel = key->label;
- 		fl6->flowi6_uid = sock_net_uid(dev_net(dev), NULL);
-+		fl6->fl6_gre_key = tunnel_id_to_key32(key->tun_id);
+--- a/fs/btrfs/qgroup.c
++++ b/fs/btrfs/qgroup.c
+@@ -940,6 +940,14 @@ int btrfs_quota_enable(struct btrfs_fs_i
+ 	int ret = 0;
+ 	int slot;
  
- 		dsfield = key->tos;
- 		flags = key->tun_flags &
-@@ -990,6 +991,7 @@ static netdev_tx_t ip6erspan_tunnel_xmit
- 		fl6.daddr = key->u.ipv6.dst;
- 		fl6.flowlabel = key->label;
- 		fl6.flowi6_uid = sock_net_uid(dev_net(dev), NULL);
-+		fl6.fl6_gre_key = tunnel_id_to_key32(key->tun_id);
- 
- 		dsfield = key->tos;
- 		if (!(tun_info->key.tun_flags & TUNNEL_ERSPAN_OPT))
-@@ -1098,6 +1100,7 @@ static void ip6gre_tnl_link_config_commo
- 	fl6->flowi6_oif = p->link;
- 	fl6->flowlabel = 0;
- 	fl6->flowi6_proto = IPPROTO_GRE;
-+	fl6->fl6_gre_key = t->parms.o_key;
- 
- 	if (!(p->flags&IP6_TNL_F_USE_ORIG_TCLASS))
- 		fl6->flowlabel |= IPV6_TCLASS_MASK & p->flowinfo;
-@@ -1544,7 +1547,7 @@ static void ip6gre_fb_tunnel_init(struct
- static struct inet6_protocol ip6gre_protocol __read_mostly = {
- 	.handler     = gre_rcv,
- 	.err_handler = ip6gre_err,
--	.flags       = INET6_PROTO_NOPOLICY|INET6_PROTO_FINAL,
-+	.flags       = INET6_PROTO_FINAL,
- };
- 
- static void ip6gre_destroy_tunnels(struct net *net, struct list_head *head)
---- a/net/xfrm/xfrm_policy.c
-+++ b/net/xfrm/xfrm_policy.c
-@@ -33,6 +33,7 @@
- #include <net/flow.h>
- #include <net/xfrm.h>
- #include <net/ip.h>
-+#include <net/gre.h>
- #if IS_ENABLED(CONFIG_IPV6_MIP6)
- #include <net/mip6.h>
- #endif
-@@ -3424,6 +3425,26 @@ decode_session6(struct sk_buff *skb, str
- 			}
- 			fl6->flowi6_proto = nexthdr;
- 			return;
-+		case IPPROTO_GRE:
-+			if (!onlyproto &&
-+			    (nh + offset + 12 < skb->data ||
-+			     pskb_may_pull(skb, nh + offset + 12 - skb->data))) {
-+				struct gre_base_hdr *gre_hdr;
-+				__be32 *gre_key;
++	/*
++	 * We need to have subvol_sem write locked, to prevent races between
++	 * concurrent tasks trying to enable quotas, because we will unlock
++	 * and relock qgroup_ioctl_lock before setting fs_info->quota_root
++	 * and before setting BTRFS_FS_QUOTA_ENABLED.
++	 */
++	lockdep_assert_held_write(&fs_info->subvol_sem);
 +
-+				nh = skb_network_header(skb);
-+				gre_hdr = (struct gre_base_hdr *)(nh + offset);
-+				gre_key = (__be32 *)(gre_hdr + 1);
-+
-+				if (gre_hdr->flags & GRE_KEY) {
-+					if (gre_hdr->flags & GRE_CSUM)
-+						gre_key++;
-+					fl6->fl6_gre_key = *gre_key;
-+				}
-+			}
-+			fl6->flowi6_proto = nexthdr;
-+			return;
-+
- #if IS_ENABLED(CONFIG_IPV6_MIP6)
- 		case IPPROTO_MH:
- 			offset += ipv6_optlen(exthdr);
+ 	mutex_lock(&fs_info->qgroup_ioctl_lock);
+ 	if (fs_info->quota_root)
+ 		goto out;
+@@ -1117,8 +1125,19 @@ out_add_root:
+ 		goto out_free_path;
+ 	}
+ 
++	mutex_unlock(&fs_info->qgroup_ioctl_lock);
++	/*
++	 * Commit the transaction while not holding qgroup_ioctl_lock, to avoid
++	 * a deadlock with tasks concurrently doing other qgroup operations, such
++	 * adding/removing qgroups or adding/deleting qgroup relations for example,
++	 * because all qgroup operations first start or join a transaction and then
++	 * lock the qgroup_ioctl_lock mutex.
++	 * We are safe from a concurrent task trying to enable quotas, by calling
++	 * this function, since we are serialized by fs_info->subvol_sem.
++	 */
+ 	ret = btrfs_commit_transaction(trans);
+ 	trans = NULL;
++	mutex_lock(&fs_info->qgroup_ioctl_lock);
+ 	if (ret)
+ 		goto out_free_path;
+ 
 
 

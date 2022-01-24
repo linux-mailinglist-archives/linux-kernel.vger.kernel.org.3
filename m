@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CA9498FC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEBE49902E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358239AbiAXTyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:54:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37238 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349652AbiAXTll (ORCPT
+        id S1352423AbiAXT6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:58:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60170 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355575AbiAXTlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:41:41 -0500
+        Mon, 24 Jan 2022 14:41:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 996BD6152B;
-        Mon, 24 Jan 2022 19:41:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FBB0C340E5;
-        Mon, 24 Jan 2022 19:41:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F301B810BD;
+        Mon, 24 Jan 2022 19:41:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51B35C340E5;
+        Mon, 24 Jan 2022 19:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053300;
-        bh=NK+mLdWP7UGRRHa1nOQH/HEHr/3rropPGAQJvjrO/bs=;
+        s=korg; t=1643053312;
+        bh=UQ1kjsQKUztbG+mC2ezX3DTEhk+4oW25wpr9eV2E+4U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CWu6/q1umbHNmSZPedBs6MpnMO4ZiWEUYH7W8VPsRqNThIi7elEWYHewX6c4O7baG
-         PveAQBkVZSFvUTLIQCB6JqZwAeAvtwF56g+z3EFCnEDLjmcxtiT9ssnv3YHYYQDrA1
-         uAKKAgogzmJ3xNV2oEB7DZLkyTzRdF//atsjyLCU=
+        b=boIcQFx4say9+X4vfIVtRa75+Ber3MzPsXkssRxcOOnL8T3qpQgk+Pu0DSxD2gYIO
+         FXowpTDnDgGQCfVaZkIX0Qzav4oSQJVrpJpg8V5RUPrRe3vz++TFmz62FDIGz8/MRq
+         U+Rktg0+p4zV/gfuQU3DuvoCDjxGu11EK7VTdYNA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 5.10 020/563] media: flexcop-usb: fix control-message timeouts
-Date:   Mon, 24 Jan 2022 19:36:25 +0100
-Message-Id: <20220124184025.108810999@linuxfoundation.org>
+Subject: [PATCH 5.10 024/563] media: s2255: fix control-message timeouts
+Date:   Mon, 24 Jan 2022 19:36:29 +0100
+Message-Id: <20220124184025.266304041@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -48,93 +48,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Johan Hovold <johan@kernel.org>
 
-commit cd1798a387825cc4a51282f5a611ad05bb1ad75f upstream.
+commit f71d272ad4e354097020a4e6b1dc6e4b59feb50f upstream.
 
 USB control-message timeouts are specified in milliseconds and should
 specifically not vary with CONFIG_HZ.
 
-Note that the driver was multiplying some of the timeout values with HZ
-twice resulting in 3000-second timeouts with HZ=1000.
+Use the common control-message timeout define for the five-second
+timeouts.
 
-Also note that two of the timeout defines are currently unused.
-
-Fixes: 2154be651b90 ("[media] redrat3: new rc-core IR transceiver device driver")
-Cc: stable@vger.kernel.org      # 3.0
+Fixes: 38f993ad8b1f ("V4L/DVB (8125): This driver adds support for the Sensoray 2255 devices.")
+Cc: stable@vger.kernel.org      # 2.6.27
 Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/usb/b2c2/flexcop-usb.c |   10 +++++-----
- drivers/media/usb/b2c2/flexcop-usb.h |   12 ++++++------
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/media/usb/s2255/s2255drv.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/media/usb/b2c2/flexcop-usb.c
-+++ b/drivers/media/usb/b2c2/flexcop-usb.c
-@@ -87,7 +87,7 @@ static int flexcop_usb_readwrite_dw(stru
- 			0,
- 			fc_usb->data,
- 			sizeof(u32),
--			B2C2_WAIT_FOR_OPERATION_RDW * HZ);
-+			B2C2_WAIT_FOR_OPERATION_RDW);
+--- a/drivers/media/usb/s2255/s2255drv.c
++++ b/drivers/media/usb/s2255/s2255drv.c
+@@ -1884,7 +1884,7 @@ static long s2255_vendor_req(struct s225
+ 				    USB_TYPE_VENDOR | USB_RECIP_DEVICE |
+ 				    USB_DIR_IN,
+ 				    Value, Index, buf,
+-				    TransferBufferLength, HZ * 5);
++				    TransferBufferLength, USB_CTRL_SET_TIMEOUT);
  
- 	if (ret != sizeof(u32)) {
- 		err("error while %s dword from %d (%d).", read ? "reading" :
-@@ -155,7 +155,7 @@ static int flexcop_usb_v8_memory_req(str
- 			wIndex,
- 			fc_usb->data,
- 			buflen,
--			nWaitTime * HZ);
-+			nWaitTime);
- 	if (ret != buflen)
- 		ret = -EIO;
- 
-@@ -249,13 +249,13 @@ static int flexcop_usb_i2c_req(struct fl
- 		/* DKT 020208 - add this to support special case of DiSEqC */
- 	case USB_FUNC_I2C_CHECKWRITE:
- 		pipe = B2C2_USB_CTRL_PIPE_OUT;
--		nWaitTime = 2;
-+		nWaitTime = 2000;
- 		request_type |= USB_DIR_OUT;
- 		break;
- 	case USB_FUNC_I2C_READ:
- 	case USB_FUNC_I2C_REPEATREAD:
- 		pipe = B2C2_USB_CTRL_PIPE_IN;
--		nWaitTime = 2;
-+		nWaitTime = 2000;
- 		request_type |= USB_DIR_IN;
- 		break;
- 	default:
-@@ -282,7 +282,7 @@ static int flexcop_usb_i2c_req(struct fl
- 			wIndex,
- 			fc_usb->data,
- 			buflen,
--			nWaitTime * HZ);
-+			nWaitTime);
- 
- 	if (ret != buflen)
- 		ret = -EIO;
---- a/drivers/media/usb/b2c2/flexcop-usb.h
-+++ b/drivers/media/usb/b2c2/flexcop-usb.h
-@@ -91,13 +91,13 @@ typedef enum {
- 	UTILITY_SRAM_TESTVERIFY     = 0x16,
- } flexcop_usb_utility_function_t;
- 
--#define B2C2_WAIT_FOR_OPERATION_RW (1*HZ)
--#define B2C2_WAIT_FOR_OPERATION_RDW (3*HZ)
--#define B2C2_WAIT_FOR_OPERATION_WDW (1*HZ)
-+#define B2C2_WAIT_FOR_OPERATION_RW 1000
-+#define B2C2_WAIT_FOR_OPERATION_RDW 3000
-+#define B2C2_WAIT_FOR_OPERATION_WDW 1000
- 
--#define B2C2_WAIT_FOR_OPERATION_V8READ (3*HZ)
--#define B2C2_WAIT_FOR_OPERATION_V8WRITE (3*HZ)
--#define B2C2_WAIT_FOR_OPERATION_V8FLASH (3*HZ)
-+#define B2C2_WAIT_FOR_OPERATION_V8READ 3000
-+#define B2C2_WAIT_FOR_OPERATION_V8WRITE 3000
-+#define B2C2_WAIT_FOR_OPERATION_V8FLASH 3000
- 
- typedef enum {
- 	V8_MEMORY_PAGE_DVB_CI = 0x20,
+ 		if (r >= 0)
+ 			memcpy(TransferBuffer, buf, TransferBufferLength);
+@@ -1893,7 +1893,7 @@ static long s2255_vendor_req(struct s225
+ 		r = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
+ 				    Request, USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 				    Value, Index, buf,
+-				    TransferBufferLength, HZ * 5);
++				    TransferBufferLength, USB_CTRL_SET_TIMEOUT);
+ 	}
+ 	kfree(buf);
+ 	return r;
 
 

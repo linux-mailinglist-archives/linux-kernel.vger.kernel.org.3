@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D570499318
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5109D498FAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351357AbiAXU2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:28:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33542 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378136AbiAXUGY (ORCPT
+        id S1352339AbiAXTyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355648AbiAXTnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:06:24 -0500
+        Mon, 24 Jan 2022 14:43:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCDBC09424B;
+        Mon, 24 Jan 2022 11:22:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECC616130A;
-        Mon, 24 Jan 2022 20:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C77AAC340E5;
-        Mon, 24 Jan 2022 20:06:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E082B613B3;
+        Mon, 24 Jan 2022 19:22:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F55C340E5;
+        Mon, 24 Jan 2022 19:22:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054783;
-        bh=ww+BcVqET/zZZV6a5y5S+vmzcWajE9txv4bLkQMaiJA=;
+        s=korg; t=1643052123;
+        bh=H7nvbYrauUoPT2xybAP6oulzQf5nTaPhNr5TPD56VnU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W4NtyY2ZWi76viPGKkf3ffNnPZLjUBCugJjpgyQV8FZ0A3N9lArEcgGU+D41fWXEk
-         RxYcg60ZHddXyoP8B/FwnM6ywJTx3WX7nngZjUpmfQaT1WfKjTWGo1fc0ggfBDla/N
-         SzG8Z0YBgaCD0xsd2e4iPJiFzTFTHS2l6qh7f/ac=
+        b=WTiCqKDFWBPoD/a6m3b618L43Cjj6xD1Wzr7K2v2YQmdu6GO8PVCstNA+UgVFcaoJ
+         xoApaWTO6gwHbzD2OT+7XDymG0dd8cUfEpNEsbqlDHUiI+X6knYsUuTnhogt1mC/35
+         vBSisPJPAoRCMyKrycVIuY5uUbuil8oTIcDr0ncs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ghalem Boudour <ghalem.boudour@6wind.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>
-Subject: [PATCH 5.10 468/563] xfrm: fix policy lookup for ipv6 gre packets
-Date:   Mon, 24 Jan 2022 19:43:53 +0100
-Message-Id: <20220124184040.647045636@linuxfoundation.org>
+        stable@vger.kernel.org, Petr Cvachoucek <cvachoucek@gmail.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 4.19 196/239] ubifs: Error path in ubifs_remount_rw() seems to wrongly free write buffers
+Date:   Mon, 24 Jan 2022 19:43:54 +0100
+Message-Id: <20220124183949.342700197@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,100 +48,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ghalem Boudour <ghalem.boudour@6wind.com>
+From: Petr Cvachoucek <cvachoucek@gmail.com>
 
-commit bcf141b2eb551b3477b24997ebc09c65f117a803 upstream.
+commit 3fea4d9d160186617ff40490ae01f4f4f36b28ff upstream.
 
-On egress side, xfrm lookup is called from __gre6_xmit() with the
-fl6_gre_key field not initialized leading to policies selectors check
-failure. Consequently, gre packets are sent without encryption.
+it seems freeing the write buffers in the error path of the
+ubifs_remount_rw() is wrong. It leads later to a kernel oops like this:
 
-On ingress side, INET6_PROTO_NOPOLICY was set, thus packets were not
-checked against xfrm policies. Like for egress side, fl6_gre_key should be
-correctly set, this is now done in decode_session6().
+[10016.431274] UBIFS (ubi0:0): start fixing up free space
+[10090.810042] UBIFS (ubi0:0): free space fixup complete
+[10090.814623] UBIFS error (ubi0:0 pid 512): ubifs_remount_fs: cannot
+spawn "ubifs_bgt0_0", error -4
+[10101.915108] UBIFS (ubi0:0): background thread "ubifs_bgt0_0" started,
+PID 517
+[10105.275498] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000030
+[10105.284352] Mem abort info:
+[10105.287160]   ESR = 0x96000006
+[10105.290252]   EC = 0x25: DABT (current EL), IL = 32 bits
+[10105.295592]   SET = 0, FnV = 0
+[10105.298652]   EA = 0, S1PTW = 0
+[10105.301848] Data abort info:
+[10105.304723]   ISV = 0, ISS = 0x00000006
+[10105.308573]   CM = 0, WnR = 0
+[10105.311564] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000f03d1000
+[10105.318034] [0000000000000030] pgd=00000000f6cee003,
+pud=00000000f4884003, pmd=0000000000000000
+[10105.326783] Internal error: Oops: 96000006 [#1] PREEMPT SMP
+[10105.332355] Modules linked in: ath10k_pci ath10k_core ath mac80211
+libarc4 cfg80211 nvme nvme_core cryptodev(O)
+[10105.342468] CPU: 3 PID: 518 Comm: touch Tainted: G           O
+5.4.3 #1
+[10105.349517] Hardware name: HYPEX CPU (DT)
+[10105.353525] pstate: 40000005 (nZcv daif -PAN -UAO)
+[10105.358324] pc : atomic64_try_cmpxchg_acquire.constprop.22+0x8/0x34
+[10105.364596] lr : mutex_lock+0x1c/0x34
+[10105.368253] sp : ffff000075633aa0
+[10105.371563] x29: ffff000075633aa0 x28: 0000000000000001
+[10105.376874] x27: ffff000076fa80c8 x26: 0000000000000004
+[10105.382185] x25: 0000000000000030 x24: 0000000000000000
+[10105.387495] x23: 0000000000000000 x22: 0000000000000038
+[10105.392807] x21: 000000000000000c x20: ffff000076fa80c8
+[10105.398119] x19: ffff000076fa8000 x18: 0000000000000000
+[10105.403429] x17: 0000000000000000 x16: 0000000000000000
+[10105.408741] x15: 0000000000000000 x14: fefefefefefefeff
+[10105.414052] x13: 0000000000000000 x12: 0000000000000fe0
+[10105.419364] x11: 0000000000000fe0 x10: ffff000076709020
+[10105.424675] x9 : 0000000000000000 x8 : 00000000000000a0
+[10105.429986] x7 : ffff000076fa80f4 x6 : 0000000000000030
+[10105.435297] x5 : 0000000000000000 x4 : 0000000000000000
+[10105.440609] x3 : 0000000000000000 x2 : ffff00006f276040
+[10105.445920] x1 : ffff000075633ab8 x0 : 0000000000000030
+[10105.451232] Call trace:
+[10105.453676]  atomic64_try_cmpxchg_acquire.constprop.22+0x8/0x34
+[10105.459600]  ubifs_garbage_collect+0xb4/0x334
+[10105.463956]  ubifs_budget_space+0x398/0x458
+[10105.468139]  ubifs_create+0x50/0x180
+[10105.471712]  path_openat+0x6a0/0x9b0
+[10105.475284]  do_filp_open+0x34/0x7c
+[10105.478771]  do_sys_open+0x78/0xe4
+[10105.482170]  __arm64_sys_openat+0x1c/0x24
+[10105.486180]  el0_svc_handler+0x84/0xc8
+[10105.489928]  el0_svc+0x8/0xc
+[10105.492808] Code: 52800013 17fffffb d2800003 f9800011 (c85ffc05)
+[10105.498903] ---[ end trace 46b721d93267a586 ]---
 
-Fixes: c12b395a4664 ("gre: Support GRE over IPv6")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ghalem Boudour <ghalem.boudour@6wind.com>
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+To reproduce the problem:
+
+1. Filesystem initially mounted read-only, free space fixup flag set.
+
+2. mount -o remount,rw <mountpoint>
+
+3. it takes some time (free space fixup running)
+    ... try to terminate running mount by CTRL-C
+    ... does not respond, only after free space fixup is complete
+    ... then "ubifs_remount_fs: cannot spawn "ubifs_bgt0_0", error -4"
+
+4. mount -o remount,rw <mountpoint>
+    ... now finished instantly (fixup already done).
+
+5. Create file or just unmount the filesystem and we get the oops.
+
+Cc: <stable@vger.kernel.org>
+Fixes: b50b9f408502 ("UBIFS: do not free write-buffers when in R/O mode")
+Signed-off-by: Petr Cvachoucek <cvachoucek@gmail.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/ip6_gre.c     |    5 ++++-
- net/xfrm/xfrm_policy.c |   21 +++++++++++++++++++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
+ fs/ubifs/super.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/net/ipv6/ip6_gre.c
-+++ b/net/ipv6/ip6_gre.c
-@@ -755,6 +755,7 @@ static netdev_tx_t __gre6_xmit(struct sk
- 		fl6->daddr = key->u.ipv6.dst;
- 		fl6->flowlabel = key->label;
- 		fl6->flowi6_uid = sock_net_uid(dev_net(dev), NULL);
-+		fl6->fl6_gre_key = tunnel_id_to_key32(key->tun_id);
- 
- 		dsfield = key->tos;
- 		flags = key->tun_flags &
-@@ -990,6 +991,7 @@ static netdev_tx_t ip6erspan_tunnel_xmit
- 		fl6.daddr = key->u.ipv6.dst;
- 		fl6.flowlabel = key->label;
- 		fl6.flowi6_uid = sock_net_uid(dev_net(dev), NULL);
-+		fl6.fl6_gre_key = tunnel_id_to_key32(key->tun_id);
- 
- 		dsfield = key->tos;
- 		if (!(tun_info->key.tun_flags & TUNNEL_ERSPAN_OPT))
-@@ -1098,6 +1100,7 @@ static void ip6gre_tnl_link_config_commo
- 	fl6->flowi6_oif = p->link;
- 	fl6->flowlabel = 0;
- 	fl6->flowi6_proto = IPPROTO_GRE;
-+	fl6->fl6_gre_key = t->parms.o_key;
- 
- 	if (!(p->flags&IP6_TNL_F_USE_ORIG_TCLASS))
- 		fl6->flowlabel |= IPV6_TCLASS_MASK & p->flowinfo;
-@@ -1543,7 +1546,7 @@ static void ip6gre_fb_tunnel_init(struct
- static struct inet6_protocol ip6gre_protocol __read_mostly = {
- 	.handler     = gre_rcv,
- 	.err_handler = ip6gre_err,
--	.flags       = INET6_PROTO_NOPOLICY|INET6_PROTO_FINAL,
-+	.flags       = INET6_PROTO_FINAL,
- };
- 
- static void ip6gre_destroy_tunnels(struct net *net, struct list_head *head)
---- a/net/xfrm/xfrm_policy.c
-+++ b/net/xfrm/xfrm_policy.c
-@@ -33,6 +33,7 @@
- #include <net/flow.h>
- #include <net/xfrm.h>
- #include <net/ip.h>
-+#include <net/gre.h>
- #if IS_ENABLED(CONFIG_IPV6_MIP6)
- #include <net/mip6.h>
- #endif
-@@ -3455,6 +3456,26 @@ decode_session6(struct sk_buff *skb, str
- 			}
- 			fl6->flowi6_proto = nexthdr;
- 			return;
-+		case IPPROTO_GRE:
-+			if (!onlyproto &&
-+			    (nh + offset + 12 < skb->data ||
-+			     pskb_may_pull(skb, nh + offset + 12 - skb->data))) {
-+				struct gre_base_hdr *gre_hdr;
-+				__be32 *gre_key;
-+
-+				nh = skb_network_header(skb);
-+				gre_hdr = (struct gre_base_hdr *)(nh + offset);
-+				gre_key = (__be32 *)(gre_hdr + 1);
-+
-+				if (gre_hdr->flags & GRE_KEY) {
-+					if (gre_hdr->flags & GRE_CSUM)
-+						gre_key++;
-+					fl6->fl6_gre_key = *gre_key;
-+				}
-+			}
-+			fl6->flowi6_proto = nexthdr;
-+			return;
-+
- #if IS_ENABLED(CONFIG_IPV6_MIP6)
- 		case IPPROTO_MH:
- 			offset += ipv6_optlen(exthdr);
+--- a/fs/ubifs/super.c
++++ b/fs/ubifs/super.c
+@@ -1730,7 +1730,6 @@ out:
+ 		kthread_stop(c->bgt);
+ 		c->bgt = NULL;
+ 	}
+-	free_wbufs(c);
+ 	kfree(c->write_reserve_buf);
+ 	c->write_reserve_buf = NULL;
+ 	vfree(c->ileb_buf);
 
 

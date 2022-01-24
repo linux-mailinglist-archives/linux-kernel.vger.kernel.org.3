@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D3F49A665
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE88B49A6F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3413571AbiAYAjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:39:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2363962AbiAXXq1 (ORCPT
+        id S3421980AbiAYC3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:29:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:36132 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353904AbiAXUJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:46:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0FBC05A1B8;
-        Mon, 24 Jan 2022 13:39:58 -0800 (PST)
+        Mon, 24 Jan 2022 15:09:17 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DEB961491;
-        Mon, 24 Jan 2022 21:39:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22288C340E4;
-        Mon, 24 Jan 2022 21:39:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C266131D;
+        Mon, 24 Jan 2022 20:09:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D26F6C340E7;
+        Mon, 24 Jan 2022 20:09:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060397;
-        bh=q7ihR5Snu2W1wGEKLmd6hmJZ58qgPjBl7VGdE/uxV+E=;
+        s=korg; t=1643054956;
+        bh=yu+IE5+gItyP4e2FuDlpjTgxMD8d6Lf0tXsdlecCLis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v1C8hbOsZ2GcszqahXsaeLkNHyFOcn3ClA1PT7wS5k5JV/Lxtr6fzB9a1hDrhJ1tQ
-         DFqZzUGa7lF73adRGrd06EtMWVV3ceLYjNcLIXW+/2pxcEhz5FiBpHukCX5EWZ56xB
-         y1mJ1RlnNy1k7ZiJVxwz1OKGn0tN8m8ZvEooO6WQ=
+        b=pVO0uHo6LQESZ87fvNf0/m7MXcHpOYI+TVmnpIxLXmrXz+SUZ/8SQC68SdvzXHQIK
+         4MpMfdIF3G/OG76/Rab7EU7TT8WJG0ey4eceYRerFUEGo49Lzvt71+5PVmmPKAgyHf
+         d9elk8Gzvfm52d9Nk9kUoXvXbRYu6ngF1v451RoA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH 5.16 0933/1039] drm/vc4: crtc: Drop feed_txp from state
-Date:   Mon, 24 Jan 2022 19:45:22 +0100
-Message-Id: <20220124184156.652900148@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Frank Rowand <frank.rowand@sony.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 5.10 558/563] scripts/dtc: dtx_diff: remove broken example from help text
+Date:   Mon, 24 Jan 2022 19:45:23 +0100
+Message-Id: <20220124184043.747104714@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,148 +47,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
-commit a16c66401fd831f70a02d33e9bcaac585637c29f upstream.
+commit d8adf5b92a9d2205620874d498c39923ecea8749 upstream.
 
-Accessing the crtc->state pointer from outside the modesetting context
-is not allowed. We thus need to copy whatever we need from the KMS state
-to our structure in order to access it.
+dtx_diff suggests to use <(...) syntax to pipe two inputs into it, but
+this has never worked: The /proc/self/fds/... paths passed by the shell
+will fail the `[ -f "${dtx}" ] && [ -r "${dtx}" ]` check in compile_to_dts,
+but even with this check removed, the function cannot work: hexdump will
+eat up the DTB magic, making the subsequent dtc call fail, as a pipe
+cannot be rewound.
 
-In VC4, a number of users of that pointers have crept in over the years,
-the first one being whether or not the downstream controller of the
-pixelvalve is our writeback controller.
+Simply remove this broken example, as there is already an alternative one
+that works fine.
 
-Fortunately for us, Since commit 39fcb2808376 ("drm/vc4: txp: Turn the
-TXP into a CRTC of its own") this is no longer something that can change
-from one commit to the other and is hardcoded.
-
-Let's set this flag in struct vc4_crtc if we happen to be the TXP, and
-drop the flag from our private state structure.
-
-Link: https://lore.kernel.org/all/YWgteNaNeaS9uWDe@phenom.ffwll.local/
-Link: https://lore.kernel.org/r/20211025141113.702757-2-maxime@cerno.tech
-Fixes: 008095e065a8 ("drm/vc4: Add support for the transposer block")
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Fixes: 10eadc253ddf ("dtc: create tool to diff device trees")
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220113081918.10387-1-matthias.schiffer@ew.tq-group.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vc4/vc4_crtc.c |    3 +--
- drivers/gpu/drm/vc4/vc4_drv.h  |    6 +++++-
- drivers/gpu/drm/vc4/vc4_hvs.c  |    7 +++----
- drivers/gpu/drm/vc4/vc4_kms.c  |    3 ++-
- drivers/gpu/drm/vc4/vc4_txp.c  |    3 +--
- 5 files changed, 12 insertions(+), 10 deletions(-)
+ scripts/dtc/dtx_diff |    8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
---- a/drivers/gpu/drm/vc4/vc4_crtc.c
-+++ b/drivers/gpu/drm/vc4/vc4_crtc.c
-@@ -715,7 +715,7 @@ static void vc4_crtc_handle_page_flip(st
- 	spin_lock_irqsave(&dev->event_lock, flags);
- 	if (vc4_crtc->event &&
- 	    (vc4_state->mm.start == HVS_READ(SCALER_DISPLACTX(chan)) ||
--	     vc4_state->feed_txp)) {
-+	     vc4_crtc->feeds_txp)) {
- 		drm_crtc_send_vblank_event(crtc, vc4_crtc->event);
- 		vc4_crtc->event = NULL;
- 		drm_crtc_vblank_put(crtc);
-@@ -893,7 +893,6 @@ struct drm_crtc_state *vc4_crtc_duplicat
- 		return NULL;
+--- a/scripts/dtc/dtx_diff
++++ b/scripts/dtc/dtx_diff
+@@ -59,12 +59,8 @@ Otherwise DTx is treated as a dts source
+    or '/include/' to be processed.
  
- 	old_vc4_state = to_vc4_crtc_state(crtc->state);
--	vc4_state->feed_txp = old_vc4_state->feed_txp;
- 	vc4_state->margins = old_vc4_state->margins;
- 	vc4_state->assigned_channel = old_vc4_state->assigned_channel;
+    If DTx_1 and DTx_2 are in different architectures, then this script
+-   may not work since \${ARCH} is part of the include path.  Two possible
+-   workarounds:
+-
+-      `basename $0` \\
+-          <(ARCH=arch_of_dtx_1 `basename $0` DTx_1) \\
+-          <(ARCH=arch_of_dtx_2 `basename $0` DTx_2)
++   may not work since \${ARCH} is part of the include path.  The following
++   workaround can be used:
  
---- a/drivers/gpu/drm/vc4/vc4_drv.h
-+++ b/drivers/gpu/drm/vc4/vc4_drv.h
-@@ -495,6 +495,11 @@ struct vc4_crtc {
- 	struct drm_pending_vblank_event *event;
- 
- 	struct debugfs_regset32 regset;
-+
-+	/**
-+	 * @feeds_txp: True if the CRTC feeds our writeback controller.
-+	 */
-+	bool feeds_txp;
- };
- 
- static inline struct vc4_crtc *
-@@ -521,7 +526,6 @@ struct vc4_crtc_state {
- 	struct drm_crtc_state base;
- 	/* Dlist area for this CRTC configuration. */
- 	struct drm_mm_node mm;
--	bool feed_txp;
- 	bool txp_armed;
- 	unsigned int assigned_channel;
- 
---- a/drivers/gpu/drm/vc4/vc4_hvs.c
-+++ b/drivers/gpu/drm/vc4/vc4_hvs.c
-@@ -375,7 +375,7 @@ static void vc4_hvs_update_dlist(struct
- 
- 		spin_lock_irqsave(&dev->event_lock, flags);
- 
--		if (!vc4_state->feed_txp || vc4_state->txp_armed) {
-+		if (!vc4_crtc->feeds_txp || vc4_state->txp_armed) {
- 			vc4_crtc->event = crtc->state->event;
- 			crtc->state->event = NULL;
- 		}
-@@ -395,10 +395,9 @@ void vc4_hvs_atomic_enable(struct drm_cr
- {
- 	struct drm_device *dev = crtc->dev;
- 	struct vc4_dev *vc4 = to_vc4_dev(dev);
--	struct drm_crtc_state *new_crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
--	struct vc4_crtc_state *vc4_state = to_vc4_crtc_state(new_crtc_state);
- 	struct drm_display_mode *mode = &crtc->state->adjusted_mode;
--	bool oneshot = vc4_state->feed_txp;
-+	struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
-+	bool oneshot = vc4_crtc->feeds_txp;
- 
- 	vc4_hvs_update_dlist(crtc);
- 	vc4_hvs_init_channel(vc4, crtc, mode, oneshot);
---- a/drivers/gpu/drm/vc4/vc4_kms.c
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c
-@@ -233,6 +233,7 @@ static void vc4_hvs_pv_muxing_commit(str
- 	unsigned int i;
- 
- 	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
-+		struct vc4_crtc *vc4_crtc = to_vc4_crtc(crtc);
- 		struct vc4_crtc_state *vc4_state = to_vc4_crtc_state(crtc_state);
- 		u32 dispctrl;
- 		u32 dsp3_mux;
-@@ -253,7 +254,7 @@ static void vc4_hvs_pv_muxing_commit(str
- 		 * TXP IP, and we need to disable the FIFO2 -> pixelvalve1
- 		 * route.
- 		 */
--		if (vc4_state->feed_txp)
-+		if (vc4_crtc->feeds_txp)
- 			dsp3_mux = VC4_SET_FIELD(3, SCALER_DISPCTRL_DSP3_MUX);
- 		else
- 			dsp3_mux = VC4_SET_FIELD(2, SCALER_DISPCTRL_DSP3_MUX);
---- a/drivers/gpu/drm/vc4/vc4_txp.c
-+++ b/drivers/gpu/drm/vc4/vc4_txp.c
-@@ -391,7 +391,6 @@ static int vc4_txp_atomic_check(struct d
- {
- 	struct drm_crtc_state *crtc_state = drm_atomic_get_new_crtc_state(state,
- 									  crtc);
--	struct vc4_crtc_state *vc4_state = to_vc4_crtc_state(crtc_state);
- 	int ret;
- 
- 	ret = vc4_hvs_atomic_check(crtc, state);
-@@ -399,7 +398,6 @@ static int vc4_txp_atomic_check(struct d
- 		return ret;
- 
- 	crtc_state->no_vblank = true;
--	vc4_state->feed_txp = true;
- 
- 	return 0;
- }
-@@ -482,6 +480,7 @@ static int vc4_txp_bind(struct device *d
- 
- 	vc4_crtc->pdev = pdev;
- 	vc4_crtc->data = &vc4_txp_crtc_data;
-+	vc4_crtc->feeds_txp = true;
- 
- 	txp->pdev = pdev;
- 
+       `basename $0` ARCH=arch_of_dtx_1 DTx_1 >tmp_dtx_1.dts
+       `basename $0` ARCH=arch_of_dtx_2 DTx_2 >tmp_dtx_2.dts
 
 

@@ -2,225 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8209A497F18
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FE0497F15
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 13:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239281AbiAXMQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 07:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241071AbiAXMOU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:14:20 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF56C06177D;
-        Mon, 24 Jan 2022 04:13:59 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id o12so20805143eju.13;
-        Mon, 24 Jan 2022 04:13:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mn408lO+pZH3mrHKxY73LKhzz0Csceev4QSmOp495H8=;
-        b=aTuPbaSPKZvv8buEAdEPUME0jG8i3UrWZJoUxY6IPj93uSUn6UtEUOBlvoZBW+OUdc
-         p6SCCOligO3SDhy7BfB8OYrfByZSLinZ60r97reiTtylpCGU6gCgHFaUAFjKL/b++EIc
-         xMKeOpM0SXTiZsLGy/5o+jDD1kEuc3k1gSsj4ZA1jW0j7VjaAr8l5kYSE+bXWPEbCBWc
-         Mm3AlEURQLP+0M5hZQBpZoT05fL7laggDV0cS5UiQt1SOawxzyQzbcPLmoIQ0WXitZ4D
-         f5Cq2oWVqGoeXgl/WcqnkFVkO66FV9JiqPfH1TtJVSl9b8dN1xFZ41cpYFvvyRFX79w3
-         Jl3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mn408lO+pZH3mrHKxY73LKhzz0Csceev4QSmOp495H8=;
-        b=PcR7Qspm4ajm5bTw93CRZySVUw/Inb9uGj5X3B1jIbuRrS7DkeBeJ/MWj5i4D0Mn3B
-         xkxD+vqri7FfRIG6D/oQ+QicIAYsz2bcVLLqQlPy7KnFz1/jKbrLpJDfaAPqza4wGNx1
-         zXNNOYqVmddR+TD6dwxaQUqr6maSOETNOAzE4c9+rfmEy12ydvoPPS1nHOuKTI86Xwan
-         oHFxLqvWQJxlhJBtjh0sdoxMWK80eQ57Y1/d9oq04exj8i1vCLqSBUJHtvIt89is/kqa
-         XMdq7Sw/QSQ/NCpvnP8Q9Ui5EUJt7bETsswjYVS7r7T0QYGAx5B29dC1sh54RZbEaxNS
-         yz5Q==
-X-Gm-Message-State: AOAM533WLy2O8o5V1g53IljYpqYcJ73HcGquv9Uwih1Y+styoV+vJmmP
-        ftnUoJYCUFgusYslhC8jWvQ=
-X-Google-Smtp-Source: ABdhPJxZi/muDBSqalbc/t15r0dAPfU8smxQUbiMsQO1VRfwYeSMOp3AieK07BdoumjDMGt90sg9pw==
-X-Received: by 2002:a17:907:3e96:: with SMTP id hs22mr3640399ejc.640.1643026438039;
-        Mon, 24 Jan 2022 04:13:58 -0800 (PST)
-Received: from ponky.lan ([2a04:241e:502:a09c:a21f:7a9f:9158:4a40])
-        by smtp.gmail.com with ESMTPSA id b16sm4847517eja.211.2022.01.24.04.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 04:13:57 -0800 (PST)
-From:   Leonard Crestez <cdleonard@gmail.com>
-To:     David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Philip Paeps <philip@trouble.is>,
-        Dmitry Safonov <0x7f454c46@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yuchung Cheng <ycheng@google.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Ivan Delalande <colona@arista.com>,
-        Priyaranjan Jha <priyarjha@google.com>, netdev@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 20/20] tcp: authopt: Try to respect rnextkeyid from SYN on SYNACK
-Date:   Mon, 24 Jan 2022 14:13:06 +0200
-Message-Id: <2008e2c33acc60883ff41adc33158b63ec2d3acb.1643026076.git.cdleonard@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1643026076.git.cdleonard@gmail.com>
-References: <cover.1643026076.git.cdleonard@gmail.com>
+        id S238940AbiAXMQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 07:16:22 -0500
+Received: from mga05.intel.com ([192.55.52.43]:4341 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242216AbiAXMPc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:15:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643026532; x=1674562532;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sYibUVZxAIos3Y+42FqhQ+3de5FeeBaOdC4uBXCfPlA=;
+  b=dsS6CZC2d7qvYf3myzizZqybidQonlAEtIPCOA8eU5fBppxGWOaj4JTy
+   tCejUrjUgA6i79NHUp8rpgI98pa6SUcZmaSo54BEC3DBX3BlGWqbUEAOz
+   U/XEdmSOkcGie9OLIGqa2XPVli4HNFlCwX1OEeYw8FDdqiaQNUepaEob/
+   PiuJVlHe8JenpfE+vsZyx1WZaNRQYUgYONEW9wcU35onD5aQCvzCh4qe3
+   oLM+LOln10pwiT9xXCej0MrOWiNd2tkZ3rtYQeJ8yMUT7zTgGEi4upJgb
+   X3eIsS4Uo4FE25y9XhNWw4D3ZPBnMV3HWV8H/OjeLnKhv9Nkl0YYgrCvg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="332385123"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="332385123"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 04:14:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="766378082"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 24 Jan 2022 04:14:39 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nByF5-000IHz-1N; Mon, 24 Jan 2022 12:14:39 +0000
+Date:   Mon, 24 Jan 2022 20:14:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xin Ji <xji@analogixsemi.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, bliang@analogixsemi.com,
+        qwen@analogixsemi.com, jli@analogixsemi.com,
+        Xin Ji <xji@analogixsemi.com>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] usb: typec: anx7411: Add Analogix PD ANX7411
+ support
+Message-ID: <202201242014.N4URst2I-lkp@intel.com>
+References: <20220121061856.2038958-2-xji@analogixsemi.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121061856.2038958-2-xji@analogixsemi.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the RFC we should use the key that the peer suggests via
-rnextkeyid.
+Hi Xin,
 
-This is currently done by storing recv_rnextkeyid in tcp_authopt_info
-but this does not work for the SYNACK case because the tcp_request_sock
-does not hold an info pointer for reasons of memory usage.
+Thank you for the patch! Perhaps something to improve:
 
-Handle this by storing recv_rnextkeyid inside tcp_request_sock. This
-doesn't increase the memory usage because there are unused bytes at the
-end.
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on robh/for-next peter-chen-usb/for-usb-next v5.17-rc1 next-20220124]
+[cannot apply to balbi-usb/testing/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Signed-off-by: Leonard Crestez <cdleonard@gmail.com>
+url:    https://github.com/0day-ci/linux/commits/Xin-Ji/dt-bindings-usb-Add-analogix-anx7411-PD-binding/20220121-142000
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: s390-randconfig-s031-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242014.N4URst2I-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/f75d15d4f011dabf8a702d85fb788f9aefb326e2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Xin-Ji/dt-bindings-usb-Add-analogix-anx7411-PD-binding/20220121-142000
+        git checkout f75d15d4f011dabf8a702d85fb788f9aefb326e2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash drivers/irqchip/ drivers/usb/typec/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/typec/anx7411.c:636:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] @@     got restricted __le32 [usertype] @@
+   drivers/usb/typec/anx7411.c:636:28: sparse:     expected unsigned int [usertype]
+   drivers/usb/typec/anx7411.c:636:28: sparse:     got restricted __le32 [usertype]
+
+vim +636 drivers/usb/typec/anx7411.c
+
+   621	
+   622	static void anx7411_translate_payload(struct device *dev, u32 *payload,
+   623					      u32 *pdo, int nr, const char *type)
+   624	{
+   625		int i;
+   626	
+   627		dev_info(dev, "convert %s pdos to little endian format\n", type);
+   628		if (nr > PDO_MAX_OBJECTS) {
+   629			dev_err(dev, "nr(%d) exceed PDO_MAX_OBJECTS(%d)\n",
+   630				nr, PDO_MAX_OBJECTS);
+   631	
+   632			return;
+   633		}
+   634	
+   635		for (i = 0; i < nr; i++)
+ > 636			payload[i] = cpu_to_le32(pdo[i]);
+   637	}
+   638	
+
 ---
- include/linux/tcp.h    |  6 ++++++
- net/ipv4/tcp_authopt.c | 26 ++++++++++++++++++++------
- net/ipv4/tcp_input.c   | 12 ++++++++++++
- 3 files changed, 38 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-index 497604176119..0c346c2c2145 100644
---- a/include/linux/tcp.h
-+++ b/include/linux/tcp.h
-@@ -95,10 +95,13 @@ struct tcp_options_received {
- 	u8	saw_unknown:1,	/* Received unknown option		*/
- 		unused:7;
- 	u8	num_sacks;	/* Number of SACK blocks		*/
- 	u16	user_mss;	/* mss requested by user in ioctl	*/
- 	u16	mss_clamp;	/* Maximal mss, negotiated at connection setup */
-+#if IS_ENABLED(CONFIG_TCP_AUTHOPT)
-+	u8	rnextkeyid;
-+#endif
- };
- 
- static inline void tcp_clear_options(struct tcp_options_received *rx_opt)
- {
- 	rx_opt->tstamp_ok = rx_opt->sack_ok = 0;
-@@ -133,10 +136,13 @@ struct tcp_request_sock {
- 	u32				rcv_nxt; /* the ack # by SYNACK. For
- 						  * FastOpen it's the seq#
- 						  * after data-in-SYN.
- 						  */
- 	u8				syn_tos;
-+#if IS_ENABLED(CONFIG_TCP_AUTHOPT)
-+	u8				recv_rnextkeyid;
-+#endif
- };
- 
- static inline struct tcp_request_sock *tcp_rsk(const struct request_sock *req)
- {
- 	return (struct tcp_request_sock *)req;
-diff --git a/net/ipv4/tcp_authopt.c b/net/ipv4/tcp_authopt.c
-index 5ea93eb495f1..4b316488c805 100644
---- a/net/ipv4/tcp_authopt.c
-+++ b/net/ipv4/tcp_authopt.c
-@@ -1,7 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- 
-+#include "linux/tcp.h"
-+#include "net/tcp_states.h"
- #include <net/tcp_authopt.h>
- #include <net/ip.h>
- #include <net/ipv6.h>
- #include <net/tcp.h>
- #include <linux/kref.h>
-@@ -424,21 +426,33 @@ struct tcp_authopt_key_info *__tcp_authopt_select_key(const struct sock *sk,
- {
- 	struct tcp_authopt_key_info *key, *new_key = NULL;
- 	struct netns_tcp_authopt *net = sock_net_tcp_authopt(sk);
- 
- 	/* Listen sockets don't refer to any specific connection so we don't try
--	 * to keep using the same key and ignore any received keyids.
-+	 * to keep using the same key.
-+	 * The rnextkeyid is stored in tcp_request_sock
- 	 */
- 	if (sk->sk_state == TCP_LISTEN) {
--		int send_keyid = -1;
--
-+		int send_id = -1;
-+		struct tcp_request_sock *rsk;
-+
-+		if (WARN_ONCE(addr_sk->sk_state != TCP_NEW_SYN_RECV, "bad socket state"))
-+			return NULL;
-+		rsk = tcp_rsk((struct request_sock *)addr_sk);
-+		/* Forcing a specific send_keyid on a listen socket forces it for
-+		 * all clients so is unlikely to be useful.
-+		 */
- 		if (info->flags & TCP_AUTHOPT_FLAG_LOCK_KEYID)
--			send_keyid = info->send_keyid;
--		key = tcp_authopt_lookup_send(net, addr_sk, send_keyid);
-+			send_id = info->send_keyid;
-+		else
-+			send_id = rsk->recv_rnextkeyid;
-+		key = tcp_authopt_lookup_send(net, addr_sk, send_id);
-+		/* If no key found with specific send_id try anything else. */
-+		if (!key)
-+			key = tcp_authopt_lookup_send(net, addr_sk, -1);
- 		if (key)
- 			*rnextkeyid = key->recv_id;
--
- 		return key;
- 	}
- 
- 	if (locked) {
- 		sock_owned_by_me(sk);
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 91f1b04c1933..667da79df4ae 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -4094,10 +4094,18 @@ void tcp_parse_options(const struct net *net,
- 				/*
- 				 * The MD5 Hash has already been
- 				 * checked (see tcp_v{4,6}_do_rcv()).
- 				 */
- 				break;
-+#endif
-+#ifdef CONFIG_TCP_AUTHOPT
-+			case TCPOPT_AUTHOPT:
-+				/* Hash has already been checked.
-+				 * We parse rnextkeyid here so we can match it on synack
-+				 */
-+				opt_rx->rnextkeyid = ptr[1];
-+				break;
- #endif
- 			case TCPOPT_FASTOPEN:
- 				tcp_parse_fastopen_option(
- 					opsize - TCPOLEN_FASTOPEN_BASE,
- 					ptr, th->syn, foc, false);
-@@ -6891,10 +6899,14 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
- 		tcp_clear_options(&tmp_opt);
- 
- 	if (IS_ENABLED(CONFIG_SMC) && want_cookie)
- 		tmp_opt.smc_ok = 0;
- 
-+#if IS_ENABLED(CONFIG_TCP_AUTHOPT)
-+	tcp_rsk(req)->recv_rnextkeyid = tmp_opt.rnextkeyid;
-+#endif
-+
- 	tmp_opt.tstamp_ok = tmp_opt.saw_tstamp;
- 	tcp_openreq_init(req, &tmp_opt, skb, sk);
- 	inet_rsk(req)->no_srccheck = inet_sk(sk)->transparent;
- 
- 	/* Note: tcp_v6_init_req() might override ir_iif for link locals */
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

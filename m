@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B5D499F47
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD9C499F46
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840891AbiAXWzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:55:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
+        id S1840850AbiAXWzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:55:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1576003AbiAXVwv (ORCPT
+        with ESMTP id S1576017AbiAXVww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:52:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE9AC0939AD;
-        Mon, 24 Jan 2022 12:34:11 -0800 (PST)
+        Mon, 24 Jan 2022 16:52:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C226CC08B4EA;
+        Mon, 24 Jan 2022 12:34:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B16746152F;
-        Mon, 24 Jan 2022 20:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95F9FC340E5;
-        Mon, 24 Jan 2022 20:34:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AF4BB81229;
+        Mon, 24 Jan 2022 20:34:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6160FC340E5;
+        Mon, 24 Jan 2022 20:34:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056450;
-        bh=qB3Fi/c2OFkg4thTeRXKRkzxotAB/uDfhq1PIFW3rw8=;
+        s=korg; t=1643056456;
+        bh=bLZe5OoYsGgnPbNAU3HWfa4F/i/GsLBmkpOXd9PxLn0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNNjEJp4EO+B58is/Ox61WeIUbdfZKQ4J4PISkYl5XQ0oHnvFRNoaibyhQdi11s4k
-         XXS4gCQWobptKE7r5lyWdweKlGbJ7pc7t5Jv/0GPNmyjtSO3+yYsbkpnrsFZxR0f1p
-         Fg9bWSSo3Rn21Jla7ieYAZ+XVcfJ0TZ2Hnxbc7ts=
+        b=N9cp7ChTbTvFD7Nzsr4IgAr6lBsLzQqddz9IxNEx8hWob6HkfbRGYg4auw8TZU+G1
+         Zud9D7khMhbQJlHbKB34mMBQD6+j96xjoPjbv8Qka0XIR6C7EPP1pV+Xflo10hnxCJ
+         QJrJqNNfDx/uxRW7bMlqSMLy9QyWXF12Hn1O6Q7c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Michal Simek <michal.simek@xilinx.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 488/846] libbpf: Accommodate DWARF/compiler bug with duplicated structs
-Date:   Mon, 24 Jan 2022 19:40:05 +0100
-Message-Id: <20220124184117.847023427@linuxfoundation.org>
+Subject: [PATCH 5.15 490/846] EDAC/synopsys: Use the quirk for version instead of ddr version
+Date:   Mon, 24 Jan 2022 19:40:07 +0100
+Message-Id: <20220124184117.919126272@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -50,113 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Dinh Nguyen <dinguyen@kernel.org>
 
-[ Upstream commit efdd3eb8015e7447095f02a26eaabd164cd18004 ]
+[ Upstream commit bd1d6da17c296bd005bfa656952710d256e77dd3 ]
 
-According to [0], compilers sometimes might produce duplicate DWARF
-definitions for exactly the same struct/union within the same
-compilation unit (CU). We've had similar issues with identical arrays
-and handled them with a similar workaround in 6b6e6b1d09aa ("libbpf:
-Accomodate DWARF/compiler bug with duplicated identical arrays"). Do the
-same for struct/union by ensuring that two structs/unions are exactly
-the same, down to the integer values of field referenced type IDs.
+Version 2.40a supports DDR_ECC_INTR_SUPPORT for a quirk, so use that
+quirk to determine a call to setup_address_map().
 
-Solving this more generically (allowing referenced types to be
-equivalent, but using different type IDs, all within a single CU)
-requires a huge complexity increase to handle many-to-many mappings
-between canonidal and candidate type graphs. Before we invest in that,
-let's see if this approach handles all the instances of this issue in
-practice. Thankfully it's pretty rare, it seems.
-
-  [0] https://lore.kernel.org/bpf/YXr2NFlJTAhHdZqq@krava/
-
-Reported-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20211117194114.347675-1-andrii@kernel.org
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Michal Simek <michal.simek@xilinx.com>
+Link: https://lkml.kernel.org/r/20211012190709.1504152-1-dinguyen@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/btf.c | 45 +++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 41 insertions(+), 4 deletions(-)
+ drivers/edac/synopsys_edac.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 5fa64a7f0dda8..5f3d20ae66d56 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -3358,8 +3358,8 @@ static long btf_hash_struct(struct btf_type *t)
- }
- 
- /*
-- * Check structural compatibility of two FUNC_PROTOs, ignoring referenced type
-- * IDs. This check is performed during type graph equivalence check and
-+ * Check structural compatibility of two STRUCTs/UNIONs, ignoring referenced
-+ * type IDs. This check is performed during type graph equivalence check and
-  * referenced types equivalence is checked separately.
-  */
- static bool btf_shallow_equal_struct(struct btf_type *t1, struct btf_type *t2)
-@@ -3730,6 +3730,31 @@ static int btf_dedup_identical_arrays(struct btf_dedup *d, __u32 id1, __u32 id2)
- 	return btf_equal_array(t1, t2);
- }
- 
-+/* Check if given two types are identical STRUCT/UNION definitions */
-+static bool btf_dedup_identical_structs(struct btf_dedup *d, __u32 id1, __u32 id2)
-+{
-+	const struct btf_member *m1, *m2;
-+	struct btf_type *t1, *t2;
-+	int n, i;
-+
-+	t1 = btf_type_by_id(d->btf, id1);
-+	t2 = btf_type_by_id(d->btf, id2);
-+
-+	if (!btf_is_composite(t1) || btf_kind(t1) != btf_kind(t2))
-+		return false;
-+
-+	if (!btf_shallow_equal_struct(t1, t2))
-+		return false;
-+
-+	m1 = btf_members(t1);
-+	m2 = btf_members(t2);
-+	for (i = 0, n = btf_vlen(t1); i < n; i++, m1++, m2++) {
-+		if (m1->type != m2->type)
-+			return false;
-+	}
-+	return true;
-+}
-+
- /*
-  * Check equivalence of BTF type graph formed by candidate struct/union (we'll
-  * call it "candidate graph" in this description for brevity) to a type graph
-@@ -3841,6 +3866,8 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
- 
- 	hypot_type_id = d->hypot_map[canon_id];
- 	if (hypot_type_id <= BTF_MAX_NR_TYPES) {
-+		if (hypot_type_id == cand_id)
-+			return 1;
- 		/* In some cases compiler will generate different DWARF types
- 		 * for *identical* array type definitions and use them for
- 		 * different fields within the *same* struct. This breaks type
-@@ -3849,8 +3876,18 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
- 		 * types within a single CU. So work around that by explicitly
- 		 * allowing identical array types here.
- 		 */
--		return hypot_type_id == cand_id ||
--		       btf_dedup_identical_arrays(d, hypot_type_id, cand_id);
-+		if (btf_dedup_identical_arrays(d, hypot_type_id, cand_id))
-+			return 1;
-+		/* It turns out that similar situation can happen with
-+		 * struct/union sometimes, sigh... Handle the case where
-+		 * structs/unions are exactly the same, down to the referenced
-+		 * type IDs. Anything more complicated (e.g., if referenced
-+		 * types are different, but equivalent) is *way more*
-+		 * complicated and requires a many-to-many equivalence mapping.
-+		 */
-+		if (btf_dedup_identical_structs(d, hypot_type_id, cand_id))
-+			return 1;
-+		return 0;
+diff --git a/drivers/edac/synopsys_edac.c b/drivers/edac/synopsys_edac.c
+index 7d08627e738b3..a5486d86fdd2f 100644
+--- a/drivers/edac/synopsys_edac.c
++++ b/drivers/edac/synopsys_edac.c
+@@ -1352,8 +1352,7 @@ static int mc_probe(struct platform_device *pdev)
+ 		}
  	}
  
- 	if (btf_dedup_hypot_map_add(d, canon_id, cand_id))
+-	if (of_device_is_compatible(pdev->dev.of_node,
+-				    "xlnx,zynqmp-ddrc-2.40a"))
++	if (priv->p_data->quirks & DDR_ECC_INTR_SUPPORT)
+ 		setup_address_map(priv);
+ #endif
+ 
 -- 
 2.34.1
 

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 502DC4992DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AA3498B06
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382462AbiAXUZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:25:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376677AbiAXUDd (ORCPT
+        id S238139AbiAXTJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:09:18 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33282 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343934AbiAXTC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:03:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC58C03463F;
-        Mon, 24 Jan 2022 11:29:39 -0800 (PST)
+        Mon, 24 Jan 2022 14:02:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DDDA60917;
-        Mon, 24 Jan 2022 19:29:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1209EC340E5;
-        Mon, 24 Jan 2022 19:29:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8354A6090C;
+        Mon, 24 Jan 2022 19:02:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57C7FC340E5;
+        Mon, 24 Jan 2022 19:02:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052578;
-        bh=rntYQlCVPisB/5zHJxmM6EaBvY6oz+EzaTcSMqEAHt0=;
+        s=korg; t=1643050976;
+        bh=dxUf+U6Z7K+kw5Lnyb3mdDP9kwZPt1I3PrYQHepooz4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Euo8RtWl8H13dS/S1naGHRv2+aM6/h3sn3gV6LDojOSHkiFvt5cfSGK6ZsocWo+of
-         rzm43TPG3NO8TXMZDaRtOA4bOZNuC8rhfFkooxRFfCDRLI5ReLGDTYQJdkKD7gIHqn
-         oRqJ2ik/ZMvk/Yr3WJdpzBPmsDtVAA+dhJlxvHRc=
+        b=HZFvdtilGcnlTX5X4fqgZ0VUXS1J1aBasEYQkKPDGUL9DtYQCyToMmSucrFqOhjIV
+         7jPNuVcfxK6qnzL9ctQoNGzyncwd6S4a26UcVT+ik4oOjv5+e4uPR6zqowfqwK2yif
+         DUg99cbmms0UzT4iDToFn617PcQ0yU67RxAVunbE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 106/320] fsl/fman: Check for null pointer after calling devm_ioremap
+        stable@vger.kernel.org,
+        Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.14 015/186] Bluetooth: fix init and cleanup of sco_conn.timeout_work
 Date:   Mon, 24 Jan 2022 19:41:30 +0100
-Message-Id: <20220124183957.330849637@linuxfoundation.org>
+Message-Id: <20220124183937.598856978@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,96 +47,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>
 
-[ Upstream commit d5a73ec96cc57cf67e51b12820fc2354e7ca46f8 ]
+commit 49d8a5606428ca0962d09050a5af81461ff90fbb upstream.
 
-As the possible failure of the allocation, the devm_ioremap() may return
-NULL pointer.
-Take tgec_initialization() as an example.
-If allocation fails, the params->base_addr will be NULL pointer and will
-be assigned to tgec->regs in tgec_config().
-Then it will cause the dereference of NULL pointer in set_mac_address(),
-which is called by tgec_init().
-Therefore, it should be better to add the sanity check after the calling
-of the devm_ioremap().
+Before freeing struct sco_conn, all delayed timeout work should be
+cancelled. Otherwise, sco_sock_timeout could potentially use the
+sco_conn after it has been freed.
 
-Fixes: 3933961682a3 ("fsl/fman: Add FMan MAC driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Additionally, sco_conn.timeout_work should be initialized when the
+connection is allocated, not when the channel is added. This is
+because an sco_conn can create channels with multiple sockets over its
+lifetime, which happens if sockets are released but the connection
+isn't deleted.
+
+Fixes: ba316be1b6a0 ("Bluetooth: schedule SCO timeouts with delayed_work")
+Signed-off-by: Desmond Cheong Zhi Xi <desmondcheongzx@gmail.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+[OP: adjusted context for 4.14]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/fman/mac.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ net/bluetooth/sco.c |    9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/fman/mac.c b/drivers/net/ethernet/freescale/fman/mac.c
-index 7ab8095db1928..147126e79986c 100644
---- a/drivers/net/ethernet/freescale/fman/mac.c
-+++ b/drivers/net/ethernet/freescale/fman/mac.c
-@@ -94,14 +94,17 @@ static void mac_exception(void *handle, enum fman_mac_exceptions ex)
- 		__func__, ex);
- }
+--- a/net/bluetooth/sco.c
++++ b/net/bluetooth/sco.c
+@@ -133,6 +133,7 @@ static struct sco_conn *sco_conn_add(str
+ 		return NULL;
  
--static void set_fman_mac_params(struct mac_device *mac_dev,
--				struct fman_mac_params *params)
-+static int set_fman_mac_params(struct mac_device *mac_dev,
-+			       struct fman_mac_params *params)
- {
- 	struct mac_priv_s *priv = mac_dev->priv;
+ 	spin_lock_init(&conn->lock);
++	INIT_DELAYED_WORK(&conn->timeout_work, sco_sock_timeout);
  
- 	params->base_addr = (typeof(params->base_addr))
- 		devm_ioremap(priv->dev, mac_dev->res->start,
- 			     resource_size(mac_dev->res));
-+	if (!params->base_addr)
-+		return -ENOMEM;
+ 	hcon->sco_data = conn;
+ 	conn->hcon = hcon;
+@@ -196,11 +197,11 @@ static void sco_conn_del(struct hci_conn
+ 		sco_chan_del(sk, err);
+ 		bh_unlock_sock(sk);
+ 		sock_put(sk);
+-
+-		/* Ensure no more work items will run before freeing conn. */
+-		cancel_delayed_work_sync(&conn->timeout_work);
+ 	}
+ 
++	/* Ensure no more work items will run before freeing conn. */
++	cancel_delayed_work_sync(&conn->timeout_work);
 +
- 	memcpy(&params->addr, mac_dev->addr, sizeof(mac_dev->addr));
- 	params->max_speed	= priv->max_speed;
- 	params->phy_if		= mac_dev->phy_if;
-@@ -112,6 +115,8 @@ static void set_fman_mac_params(struct mac_device *mac_dev,
- 	params->event_cb	= mac_exception;
- 	params->dev_id		= mac_dev;
- 	params->internal_phy_node = priv->internal_phy_node;
-+
-+	return 0;
+ 	hcon->sco_data = NULL;
+ 	kfree(conn);
  }
+@@ -213,8 +214,6 @@ static void __sco_chan_add(struct sco_co
+ 	sco_pi(sk)->conn = conn;
+ 	conn->sk = sk;
  
- static int tgec_initialization(struct mac_device *mac_dev)
-@@ -123,7 +128,9 @@ static int tgec_initialization(struct mac_device *mac_dev)
- 
- 	priv = mac_dev->priv;
- 
--	set_fman_mac_params(mac_dev, &params);
-+	err = set_fman_mac_params(mac_dev, &params);
-+	if (err)
-+		goto _return;
- 
- 	mac_dev->fman_mac = tgec_config(&params);
- 	if (!mac_dev->fman_mac) {
-@@ -169,7 +176,9 @@ static int dtsec_initialization(struct mac_device *mac_dev)
- 
- 	priv = mac_dev->priv;
- 
--	set_fman_mac_params(mac_dev, &params);
-+	err = set_fman_mac_params(mac_dev, &params);
-+	if (err)
-+		goto _return;
- 
- 	mac_dev->fman_mac = dtsec_config(&params);
- 	if (!mac_dev->fman_mac) {
-@@ -218,7 +227,9 @@ static int memac_initialization(struct mac_device *mac_dev)
- 
- 	priv = mac_dev->priv;
- 
--	set_fman_mac_params(mac_dev, &params);
-+	err = set_fman_mac_params(mac_dev, &params);
-+	if (err)
-+		goto _return;
- 
- 	if (priv->max_speed == SPEED_10000)
- 		params.phy_if = PHY_INTERFACE_MODE_XGMII;
--- 
-2.34.1
-
+-	INIT_DELAYED_WORK(&conn->timeout_work, sco_sock_timeout);
+-
+ 	if (parent)
+ 		bt_accept_enqueue(parent, sk, true);
+ }
 
 

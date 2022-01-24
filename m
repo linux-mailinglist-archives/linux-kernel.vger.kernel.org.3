@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C1749A0E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF58499EA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1848365AbiAXXWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584614AbiAXWV3 (ORCPT
+        id S1836905AbiAXWlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:41:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59902 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1457543AbiAXVlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:21:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02D3C0424E8;
-        Mon, 24 Jan 2022 12:52:07 -0800 (PST)
+        Mon, 24 Jan 2022 16:41:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96FE9B80FA3;
-        Mon, 24 Jan 2022 20:52:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3855C340E7;
-        Mon, 24 Jan 2022 20:52:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 135F761521;
+        Mon, 24 Jan 2022 21:41:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FE8C340E4;
+        Mon, 24 Jan 2022 21:41:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057525;
-        bh=yu+IE5+gItyP4e2FuDlpjTgxMD8d6Lf0tXsdlecCLis=;
+        s=korg; t=1643060508;
+        bh=DKaIZ44jXhAHBBxgsqnKrT5Vc0etjfMDYpjpcuu0RIM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y4ooI4gY7h3FZ+76eXjWsQxusg6R153r+WaYvUEF5N4pSWxen4TvA6rEvEGo99iEW
-         /1ixmjoenjq7Rya0emsNcf1CTD5QV3iJBBzIciYVo/LZyI7GlpD9aIK44UE+51ecjk
-         07jYTkyGsnOlNAG1iu5sKsV1Jo9fV2Q1TjzhxFcg=
+        b=Ql+Go9qqWBq3vYFCFyXv76g828PV4MfEnkDRF/d40rXvgyEQk+YLUw773IL3PtaxP
+         wTS1jTmQp24Zg3QsNln2zjyVk2imGvkzgGq/30w4p0ltFDe3LtBh7FUbV2Ui+EH5+O
+         WAdL/JD852UzPybkVxomo62TZG+n+AG7rjPOxHtE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Frank Rowand <frank.rowand@sony.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 5.15 842/846] scripts/dtc: dtx_diff: remove broken example from help text
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.16 0970/1039] net: axienet: add missing memory barriers
 Date:   Mon, 24 Jan 2022 19:45:59 +0100
-Message-Id: <20220124184129.956085407@linuxfoundation.org>
+Message-Id: <20220124184157.899224815@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,46 +45,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit d8adf5b92a9d2205620874d498c39923ecea8749 upstream.
+commit 95978df6fa328df619c15312e65ece469c2be2d2 upstream.
 
-dtx_diff suggests to use <(...) syntax to pipe two inputs into it, but
-this has never worked: The /proc/self/fds/... paths passed by the shell
-will fail the `[ -f "${dtx}" ] && [ -r "${dtx}" ]` check in compile_to_dts,
-but even with this check removed, the function cannot work: hexdump will
-eat up the DTB magic, making the subsequent dtc call fail, as a pipe
-cannot be rewound.
+This driver was missing some required memory barriers:
 
-Simply remove this broken example, as there is already an alternative one
-that works fine.
+Use dma_rmb to ensure we see all updates to the descriptor after we see
+that an entry has been completed.
 
-Fixes: 10eadc253ddf ("dtc: create tool to diff device trees")
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Reviewed-by: Frank Rowand <frank.rowand@sony.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220113081918.10387-1-matthias.schiffer@ew.tq-group.com
+Use wmb and rmb to avoid stale descriptor status between the TX path and
+TX complete IRQ path.
+
+Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/dtc/dtx_diff |    8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/scripts/dtc/dtx_diff
-+++ b/scripts/dtc/dtx_diff
-@@ -59,12 +59,8 @@ Otherwise DTx is treated as a dts source
-    or '/include/' to be processed.
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -632,6 +632,8 @@ static int axienet_free_tx_chain(struct
+ 		if (nr_bds == -1 && !(status & XAXIDMA_BD_STS_COMPLETE_MASK))
+ 			break;
  
-    If DTx_1 and DTx_2 are in different architectures, then this script
--   may not work since \${ARCH} is part of the include path.  Two possible
--   workarounds:
--
--      `basename $0` \\
--          <(ARCH=arch_of_dtx_1 `basename $0` DTx_1) \\
--          <(ARCH=arch_of_dtx_2 `basename $0` DTx_2)
-+   may not work since \${ARCH} is part of the include path.  The following
-+   workaround can be used:
++		/* Ensure we see complete descriptor update */
++		dma_rmb();
+ 		phys = desc_get_phys_addr(lp, cur_p);
+ 		dma_unmap_single(ndev->dev.parent, phys,
+ 				 (cur_p->cntrl & XAXIDMA_BD_CTRL_LENGTH_MASK),
+@@ -645,8 +647,10 @@ static int axienet_free_tx_chain(struct
+ 		cur_p->app1 = 0;
+ 		cur_p->app2 = 0;
+ 		cur_p->app4 = 0;
+-		cur_p->status = 0;
+ 		cur_p->skb = NULL;
++		/* ensure our transmit path and device don't prematurely see status cleared */
++		wmb();
++		cur_p->status = 0;
  
-       `basename $0` ARCH=arch_of_dtx_1 DTx_1 >tmp_dtx_1.dts
-       `basename $0` ARCH=arch_of_dtx_2 DTx_2 >tmp_dtx_2.dts
+ 		if (sizep)
+ 			*sizep += status & XAXIDMA_BD_STS_ACTUAL_LEN_MASK;
+@@ -704,6 +708,9 @@ static inline int axienet_check_tx_bd_sp
+ 					    int num_frag)
+ {
+ 	struct axidma_bd *cur_p;
++
++	/* Ensure we see all descriptor updates from device or TX IRQ path */
++	rmb();
+ 	cur_p = &lp->tx_bd_v[(lp->tx_bd_tail + num_frag) % lp->tx_bd_num];
+ 	if (cur_p->status & XAXIDMA_BD_STS_ALL_MASK)
+ 		return NETDEV_TX_BUSY;
+@@ -843,6 +850,8 @@ static void axienet_recv(struct net_devi
+ 
+ 		tail_p = lp->rx_bd_p + sizeof(*lp->rx_bd_v) * lp->rx_bd_ci;
+ 
++		/* Ensure we see complete descriptor update */
++		dma_rmb();
+ 		phys = desc_get_phys_addr(lp, cur_p);
+ 		dma_unmap_single(ndev->dev.parent, phys, lp->max_frm_size,
+ 				 DMA_FROM_DEVICE);
 
 

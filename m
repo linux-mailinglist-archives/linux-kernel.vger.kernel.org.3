@@ -2,41 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3788949A72E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B8449A323
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3423335AbiAYCda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:33:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53278 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356849AbiAXU2c (ORCPT
+        id S2364921AbiAXXtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1844754AbiAXXKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:28:32 -0500
+        Mon, 24 Jan 2022 18:10:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716E9C0A0285;
+        Mon, 24 Jan 2022 13:18:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EBEE6150E;
-        Mon, 24 Jan 2022 20:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748BEC340E5;
-        Mon, 24 Jan 2022 20:28:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FABB614A8;
+        Mon, 24 Jan 2022 21:18:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C28A2C340E4;
+        Mon, 24 Jan 2022 21:18:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056111;
-        bh=60cLQvpCN4PqXns9qUE1a06rKf2YK4MYdVLXKQLv6t8=;
+        s=korg; t=1643059103;
+        bh=CHPzfW6i5bXLXtdsGALLpzo6sxfPO+RZtns6yyzQsS4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s57ZaHOyLyvZHl+aEfTaE/fwWqYVG1PaNnwrrVIh7P1Rqqkm/1TRHgUqAAY+8nhci
-         GRaMNjuZYJinxatyMwcjoCUOwwyRjpCTbmJT2JMV+W7Rh+Q2+l7XxhShLpM1wLzdhO
-         wt8OBvNx1L3d5kfQGH3G/gK0ugJzN24Expxz0PLQ=
+        b=eLV/Eh/ZRff51G0ujXwdMedbVNX41Ex8/IXUBizB2xpCUvgHGHUdiUyyisPy1qnuq
+         t9c9Ez86gegZkbvBcXVEw9lv22THeFZDurmex0YE+Hm2sq67S1egD2XBQ7m58e3xw2
+         3eR23Z9MvCvtaohwkrdMCRsjVTw4L7+o9QEbg2Bs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 375/846] ALSA: PCM: Add missing rwsem around snd_ctl_remove() calls
-Date:   Mon, 24 Jan 2022 19:38:12 +0100
-Message-Id: <20220124184113.868119759@linuxfoundation.org>
+        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Xiang Chen <chenxiang66@hisilicon.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH 5.16 0504/1039] scsi: block: pm: Always set request queue runtime active in blk_post_runtime_resume()
+Date:   Mon, 24 Jan 2022 19:38:13 +0100
+Message-Id: <20220124184142.209470147@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,39 +52,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-[ Upstream commit 5471e9762e1af4b7df057a96bfd46cc250979b88 ]
+[ Upstream commit 6e1fcab00a23f7fe9f4fe9704905a790efa1eeab ]
 
-snd_ctl_remove() has to be called with card->controls_rwsem held (when
-called after the card instantiation).  This patch add the missing
-rwsem calls around it.
+John Garry reported a deadlock that occurs when trying to access a
+runtime-suspended SATA device.  For obscure reasons, the rescan procedure
+causes the link to be hard-reset, which disconnects the device.
 
-Fixes: a8ff48cb7083 ("ALSA: pcm: Free chmap at PCM free callback, too")
-Link: https://lore.kernel.org/r/20211116071314.15065-2-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+The rescan tries to carry out a runtime resume when accessing the device.
+scsi_rescan_device() holds the SCSI device lock and won't release it until
+it can put commands onto the device's block queue.  This can't happen until
+the queue is successfully runtime-resumed or the device is unregistered.
+But the runtime resume fails because the device is disconnected, and
+__scsi_remove_device() can't do the unregistration because it can't get the
+device lock.
+
+The best way to resolve this deadlock appears to be to allow the block
+queue to start running again even after an unsuccessful runtime resume.
+The idea is that the driver or the SCSI error handler will need to be able
+to use the queue to resolve the runtime resume failure.
+
+This patch removes the err argument to blk_post_runtime_resume() and makes
+the routine act as though the resume was successful always.  This fixes the
+deadlock.
+
+Link: https://lore.kernel.org/r/1639999298-244569-4-git-send-email-chenxiang66@hisilicon.com
+Fixes: e27829dc92e5 ("scsi: serialize ->rescan against ->remove")
+Reported-and-tested-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/core/pcm.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ block/blk-pm.c         | 22 +++++++---------------
+ drivers/scsi/scsi_pm.c |  2 +-
+ include/linux/blk-pm.h |  2 +-
+ 3 files changed, 9 insertions(+), 17 deletions(-)
 
-diff --git a/sound/core/pcm.c b/sound/core/pcm.c
-index 6fd3677685d70..ba4a987ed1c62 100644
---- a/sound/core/pcm.c
-+++ b/sound/core/pcm.c
-@@ -810,7 +810,11 @@ EXPORT_SYMBOL(snd_pcm_new_internal);
- static void free_chmap(struct snd_pcm_str *pstr)
+diff --git a/block/blk-pm.c b/block/blk-pm.c
+index 17bd020268d42..2dad62cc15727 100644
+--- a/block/blk-pm.c
++++ b/block/blk-pm.c
+@@ -163,27 +163,19 @@ EXPORT_SYMBOL(blk_pre_runtime_resume);
+ /**
+  * blk_post_runtime_resume - Post runtime resume processing
+  * @q: the queue of the device
+- * @err: return value of the device's runtime_resume function
+  *
+  * Description:
+- *    Update the queue's runtime status according to the return value of the
+- *    device's runtime_resume function. If the resume was successful, call
+- *    blk_set_runtime_active() to do the real work of restarting the queue.
++ *    For historical reasons, this routine merely calls blk_set_runtime_active()
++ *    to do the real work of restarting the queue.  It does this regardless of
++ *    whether the device's runtime-resume succeeded; even if it failed the
++ *    driver or error handler will need to communicate with the device.
+  *
+  *    This function should be called near the end of the device's
+  *    runtime_resume callback.
+  */
+-void blk_post_runtime_resume(struct request_queue *q, int err)
++void blk_post_runtime_resume(struct request_queue *q)
  {
- 	if (pstr->chmap_kctl) {
--		snd_ctl_remove(pstr->pcm->card, pstr->chmap_kctl);
-+		struct snd_card *card = pstr->pcm->card;
-+
-+		down_write(&card->controls_rwsem);
-+		snd_ctl_remove(card, pstr->chmap_kctl);
-+		up_write(&card->controls_rwsem);
- 		pstr->chmap_kctl = NULL;
- 	}
+-	if (!q->dev)
+-		return;
+-	if (!err) {
+-		blk_set_runtime_active(q);
+-	} else {
+-		spin_lock_irq(&q->queue_lock);
+-		q->rpm_status = RPM_SUSPENDED;
+-		spin_unlock_irq(&q->queue_lock);
+-	}
++	blk_set_runtime_active(q);
  }
+ EXPORT_SYMBOL(blk_post_runtime_resume);
+ 
+@@ -201,7 +193,7 @@ EXPORT_SYMBOL(blk_post_runtime_resume);
+  * runtime PM status and re-enable peeking requests from the queue. It
+  * should be called before first request is added to the queue.
+  *
+- * This function is also called by blk_post_runtime_resume() for successful
++ * This function is also called by blk_post_runtime_resume() for
+  * runtime resumes.  It does everything necessary to restart the queue.
+  */
+ void blk_set_runtime_active(struct request_queue *q)
+diff --git a/drivers/scsi/scsi_pm.c b/drivers/scsi/scsi_pm.c
+index b5a858c29488a..f06ca9d2a597d 100644
+--- a/drivers/scsi/scsi_pm.c
++++ b/drivers/scsi/scsi_pm.c
+@@ -181,7 +181,7 @@ static int sdev_runtime_resume(struct device *dev)
+ 	blk_pre_runtime_resume(sdev->request_queue);
+ 	if (pm && pm->runtime_resume)
+ 		err = pm->runtime_resume(dev);
+-	blk_post_runtime_resume(sdev->request_queue, err);
++	blk_post_runtime_resume(sdev->request_queue);
+ 
+ 	return err;
+ }
+diff --git a/include/linux/blk-pm.h b/include/linux/blk-pm.h
+index b80c65aba2493..2580e05a8ab67 100644
+--- a/include/linux/blk-pm.h
++++ b/include/linux/blk-pm.h
+@@ -14,7 +14,7 @@ extern void blk_pm_runtime_init(struct request_queue *q, struct device *dev);
+ extern int blk_pre_runtime_suspend(struct request_queue *q);
+ extern void blk_post_runtime_suspend(struct request_queue *q, int err);
+ extern void blk_pre_runtime_resume(struct request_queue *q);
+-extern void blk_post_runtime_resume(struct request_queue *q, int err);
++extern void blk_post_runtime_resume(struct request_queue *q);
+ extern void blk_set_runtime_active(struct request_queue *q);
+ #else
+ static inline void blk_pm_runtime_init(struct request_queue *q,
 -- 
 2.34.1
 

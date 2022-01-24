@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07733498DD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092BF498FE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354623AbiAXTgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:36:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59380 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346571AbiAXTcB (ORCPT
+        id S1343848AbiAXT4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354667AbiAXTg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:32:01 -0500
+        Mon, 24 Jan 2022 14:36:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD11AC0612F8;
+        Mon, 24 Jan 2022 11:17:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34AC66121F;
-        Mon, 24 Jan 2022 19:32:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FBFC340E5;
-        Mon, 24 Jan 2022 19:31:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AE56B81236;
+        Mon, 24 Jan 2022 19:17:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E49C36AE9;
+        Mon, 24 Jan 2022 19:17:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052719;
-        bh=1qafoHmQHzEeYvZZ5mPQtfK7V5ZbfodQBUKQCPnWoO0=;
+        s=korg; t=1643051823;
+        bh=M2+xpmoMG2NGJVhNb6RBrBI9zSJc9RCc0W1WeKz/v80=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z1vDJuXvfXWFIXdmxt2V+JEvXAggnDSeS3cMJ3gFfIpgDLkqo7Bv3QCpBP+DZR5x0
-         AWGTAl1A689kn2uXywkQUASiFyI/rCKMx4uTouLnhhIG7BlfxYepJY+hlEhzjPanuZ
-         NOiXepZFPBLw5oprbYyype/M0XsaiFRGdklQNN5o=
+        b=ucL6Fnu2dcFxzz5Oz4SHNvrjL8pybacqBj8WblczGozRsJp+m0SrZeAkoB8Uk0SCg
+         ByLea2dXXIJkLaPMqimPhM42xVomdLI0UsN05S74Vxoxe5ah7gZD3+WD7r1HFiGA0q
+         0HeXf3orYJNeGwsk/Qx5yazEId1nkIdi/HtoA3B4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Lukas Czerner <lczerner@redhat.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 152/320] Bluetooth: Fix debugfs entry leak in hci_register_dev()
+Subject: [PATCH 4.19 098/239] ext4: avoid trim error on fs with small groups
 Date:   Mon, 24 Jan 2022 19:42:16 +0100
-Message-Id: <20220124183958.807958146@linuxfoundation.org>
+Message-Id: <20220124183946.222952786@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
-References: <20220124183953.750177707@linuxfoundation.org>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+References: <20220124183943.102762895@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,38 +49,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit 5a4bb6a8e981d3d0d492aa38412ee80b21033177 ]
+[ Upstream commit 173b6e383d2a204c9921ffc1eca3b87aa2106c33 ]
 
-Fault injection test report debugfs entry leak as follows:
+A user reported FITRIM ioctl failing for him on ext4 on some devices
+without apparent reason.  After some debugging we've found out that
+these devices (being LVM volumes) report rather large discard
+granularity of 42MB and the filesystem had 1k blocksize and thus group
+size of 8MB. Because ext4 FITRIM implementation puts discard
+granularity into minlen, ext4_trim_fs() declared the trim request as
+invalid. However just silently doing nothing seems to be a more
+appropriate reaction to such combination of parameters since user did
+not specify anything wrong.
 
-debugfs: Directory 'hci0' with parent 'bluetooth' already present!
-
-When register_pm_notifier() failed in hci_register_dev(), the debugfs
-create by debugfs_create_dir() do not removed in the error handing path.
-
-Add the remove debugfs code to fix it.
-
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+CC: Lukas Czerner <lczerner@redhat.com>
+Fixes: 5c2ed62fd447 ("ext4: Adjust minlen with discard_granularity in the FITRIM ioctl")
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20211112152202.26614-1-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/ext4/ioctl.c   | 2 --
+ fs/ext4/mballoc.c | 8 ++++++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index c50e3e8afbd34..2edaa601df13a 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -3387,6 +3387,7 @@ int hci_register_dev(struct hci_dev *hdev)
- 	return id;
+diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
+index 21c9ebfe83478..484cb68c34d92 100644
+--- a/fs/ext4/ioctl.c
++++ b/fs/ext4/ioctl.c
+@@ -1052,8 +1052,6 @@ resizefs_out:
+ 		    sizeof(range)))
+ 			return -EFAULT;
  
- err_wqueue:
-+	debugfs_remove_recursive(hdev->debugfs);
- 	destroy_workqueue(hdev->workqueue);
- 	destroy_workqueue(hdev->req_workqueue);
- err:
+-		range.minlen = max((unsigned int)range.minlen,
+-				   q->limits.discard_granularity);
+ 		ret = ext4_trim_fs(sb, &range);
+ 		if (ret < 0)
+ 			return ret;
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index 447aa17c804e2..db8243627b085 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -5260,6 +5260,7 @@ out:
+  */
+ int ext4_trim_fs(struct super_block *sb, struct fstrim_range *range)
+ {
++	struct request_queue *q = bdev_get_queue(sb->s_bdev);
+ 	struct ext4_group_info *grp;
+ 	ext4_group_t group, first_group, last_group;
+ 	ext4_grpblk_t cnt = 0, first_cluster, last_cluster;
+@@ -5278,6 +5279,13 @@ int ext4_trim_fs(struct super_block *sb, struct fstrim_range *range)
+ 	    start >= max_blks ||
+ 	    range->len < sb->s_blocksize)
+ 		return -EINVAL;
++	/* No point to try to trim less than discard granularity */
++	if (range->minlen < q->limits.discard_granularity) {
++		minlen = EXT4_NUM_B2C(EXT4_SB(sb),
++			q->limits.discard_granularity >> sb->s_blocksize_bits);
++		if (minlen > EXT4_CLUSTERS_PER_GROUP(sb))
++			goto out;
++	}
+ 	if (end >= max_blks)
+ 		end = max_blks - 1;
+ 	if (end <= first_data_blk)
 -- 
 2.34.1
 

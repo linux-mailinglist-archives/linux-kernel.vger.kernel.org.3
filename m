@@ -2,39 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F4A498C66
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106F5498E6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344881AbiAXTWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:22:05 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41294 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345871AbiAXTNm (ORCPT
+        id S1349313AbiAXTl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348143AbiAXT3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 14:13:42 -0500
+        Mon, 24 Jan 2022 14:29:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3A0C08E881;
+        Mon, 24 Jan 2022 11:13:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B2D56131E;
-        Mon, 24 Jan 2022 19:13:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27FEC340E5;
-        Mon, 24 Jan 2022 19:13:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1764760BFB;
+        Mon, 24 Jan 2022 19:13:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F00C340E5;
+        Mon, 24 Jan 2022 19:13:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643051620;
-        bh=TKHdAe18EnCv1jjv/mi7ToHGM4RUPP9CaKAtUZa8NvQ=;
+        s=korg; t=1643051623;
+        bh=lDnMZdm1qIoBNi8zGpb9L19ogrWHp8r6Rf4WFn0gvus=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NKK8D8YVxVBLYDkzJc9P0whTNBjapIAGCg1z3Lm3mRxczoqX+T4G5otD/Ab37dLq4
-         q6LlWUmPMRIeyA/Xxm6/LT8MLgexUNyR2HX31o+Ust0EF9dTRNMo5MPit4FmZU2dLF
-         zTXPwAhccnx7fPmZCEE4uVGik0ZrwRT5UrDclKys=
+        b=ZWdQBpr4dXoOfLdqAfiYgVr1AuInPcd+krYj9KVptkkFCLtGdD7fXQpx+0THuCoux
+         Le2rCVhSoBFOIPPOTi+OwFP6vxGlIXkIgEaKD8lFCwMeulkySfCAKPV2X/Eh4Cc825
+         0QR7H8DY+QpnJbHkz1aigb64uGq2x76WB9m5TAzE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.19 032/239] media: mceusb: fix control-message timeouts
-Date:   Mon, 24 Jan 2022 19:41:10 +0100
-Message-Id: <20220124183944.146935455@linuxfoundation.org>
+Subject: [PATCH 4.19 033/239] media: em28xx: fix control-message timeouts
+Date:   Mon, 24 Jan 2022 19:41:11 +0100
+Message-Id: <20220124183944.177318541@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
 References: <20220124183943.102762895@linuxfoundation.org>
@@ -48,55 +51,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Johan Hovold <johan@kernel.org>
 
-commit 16394e998cbb050730536bdf7e89f5a70efbd974 upstream.
+commit d9b7e8df3aa9b8c10708aab60e72e79ac08237e4 upstream.
 
 USB control-message timeouts are specified in milliseconds and should
 specifically not vary with CONFIG_HZ.
 
-Fixes: 66e89522aff7 ("V4L/DVB: IR: add mceusb IR receiver driver")
-Cc: stable@vger.kernel.org      # 2.6.36
+Fixes: a6c2ba283565 ("[PATCH] v4l: 716: support for em28xx board family")
+Cc: stable@vger.kernel.org      # 2.6.16
 Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/rc/mceusb.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/usb/em28xx/em28xx-core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/media/rc/mceusb.c
-+++ b/drivers/media/rc/mceusb.c
-@@ -1367,7 +1367,7 @@ static void mceusb_gen1_init(struct mceu
- 	 */
- 	ret = usb_control_msg(ir->usbdev, usb_rcvctrlpipe(ir->usbdev, 0),
- 			      USB_REQ_SET_ADDRESS, USB_TYPE_VENDOR, 0, 0,
--			      data, USB_CTRL_MSG_SZ, HZ * 3);
-+			      data, USB_CTRL_MSG_SZ, 3000);
- 	dev_dbg(dev, "set address - ret = %d", ret);
- 	dev_dbg(dev, "set address - data[0] = %d, data[1] = %d",
- 						data[0], data[1]);
-@@ -1375,20 +1375,20 @@ static void mceusb_gen1_init(struct mceu
- 	/* set feature: bit rate 38400 bps */
- 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
- 			      USB_REQ_SET_FEATURE, USB_TYPE_VENDOR,
--			      0xc04e, 0x0000, NULL, 0, HZ * 3);
-+			      0xc04e, 0x0000, NULL, 0, 3000);
+--- a/drivers/media/usb/em28xx/em28xx-core.c
++++ b/drivers/media/usb/em28xx/em28xx-core.c
+@@ -89,7 +89,7 @@ int em28xx_read_reg_req_len(struct em28x
+ 	mutex_lock(&dev->ctrl_urb_lock);
+ 	ret = usb_control_msg(udev, pipe, req,
+ 			      USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			      0x0000, reg, dev->urb_buf, len, HZ);
++			      0x0000, reg, dev->urb_buf, len, 1000);
+ 	if (ret < 0) {
+ 		em28xx_regdbg("(pipe 0x%08x): IN:  %02x %02x %02x %02x %02x %02x %02x %02x  failed with error %i\n",
+ 			      pipe,
+@@ -158,7 +158,7 @@ int em28xx_write_regs_req(struct em28xx
+ 	memcpy(dev->urb_buf, buf, len);
+ 	ret = usb_control_msg(udev, pipe, req,
+ 			      USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-			      0x0000, reg, dev->urb_buf, len, HZ);
++			      0x0000, reg, dev->urb_buf, len, 1000);
+ 	mutex_unlock(&dev->ctrl_urb_lock);
  
- 	dev_dbg(dev, "set feature - ret = %d", ret);
- 
- 	/* bRequest 4: set char length to 8 bits */
- 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
- 			      4, USB_TYPE_VENDOR,
--			      0x0808, 0x0000, NULL, 0, HZ * 3);
-+			      0x0808, 0x0000, NULL, 0, 3000);
- 	dev_dbg(dev, "set char length - retB = %d", ret);
- 
- 	/* bRequest 2: set handshaking to use DTR/DSR */
- 	ret = usb_control_msg(ir->usbdev, usb_sndctrlpipe(ir->usbdev, 0),
- 			      2, USB_TYPE_VENDOR,
--			      0x0000, 0x0100, NULL, 0, HZ * 3);
-+			      0x0000, 0x0100, NULL, 0, 3000);
- 	dev_dbg(dev, "set handshake  - retC = %d", ret);
- 
- 	/* device resume */
+ 	if (ret < 0) {
 
 

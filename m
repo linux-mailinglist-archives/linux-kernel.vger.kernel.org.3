@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F66B49A7D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2758D49A7CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1314752AbiAYCvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        id S1314642AbiAYCv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:51:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349192AbiAXVFL (ORCPT
+        with ESMTP id S1353277AbiAXVFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 16:05:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E51C068095;
-        Mon, 24 Jan 2022 12:04:52 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5259C068096;
+        Mon, 24 Jan 2022 12:04:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47A4AB810BD;
-        Mon, 24 Jan 2022 20:04:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B043C340E5;
-        Mon, 24 Jan 2022 20:04:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7538F6131F;
+        Mon, 24 Jan 2022 20:04:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1BBC340E5;
+        Mon, 24 Jan 2022 20:04:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054690;
-        bh=wDexgYPxIcnur2R9Xoptda8AzH+1e7S/lnUXV2G5T8c=;
+        s=korg; t=1643054698;
+        bh=9eZ9Mv8v14jvy7gY6J9fTqWGXGy5n8+bAcU7ppON4YQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t8Gt+/5H+srMlqfDqVng6zkDZ3tegF1h5D7ng1+IKyXBfsv6dc64Gn6q8NRL5jQaq
-         XolpjB5KicjxezAPUq0wGbQx/LLpfKH0lZiEoBvVo11ch+JfHnTC4JlGHe0/6ksye9
-         kyIKVkhx+VHgZ5DqUrsfKBciSMR2fWIotY+0jQ08=
+        b=EMMgGAmXsth3PYc29O0U2WxswzUEIevB10IuTBl5cxqev+v7MTHZQPGTLupZNINBV
+         53tc389HaKFQ42Hyzx2/hS7zgPk2RsecGAxceBUENoyzm7/9DEST+kT1rY0FvJjpIK
+         ZNRi14T78zh1GAkhvrfFiQZQaxhIDf/LzJRUqFMo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>, stable@kernel.org,
-        Theodore Tso <tytso@mit.edu>,
-        syzbot+3b6f9218b1301ddda3e2@syzkaller.appspotmail.com
-Subject: [PATCH 5.10 472/563] ext4: make sure to reset inode lockdep class when quota enabling fails
-Date:   Mon, 24 Jan 2022 19:43:57 +0100
-Message-Id: <20220124184040.797286521@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Tso <tytso@mit.edu>, stable@kernel.org
+Subject: [PATCH 5.10 475/563] ext4: initialize err_blk before calling __ext4_get_inode_loc
+Date:   Mon, 24 Jan 2022 19:44:00 +0100
+Message-Id: <20220124184040.900353306@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
 References: <20220124184024.407936072@linuxfoundation.org>
@@ -49,49 +49,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
 
-commit 4013d47a5307fdb5c13370b5392498b00fedd274 upstream.
+commit c27c29c6af4f3f4ce925a2111c256733c5a5b430 upstream.
 
-When we succeed in enabling some quota type but fail to enable another
-one with quota feature, we correctly disable all enabled quota types.
-However we forget to reset i_data_sem lockdep class. When the inode gets
-freed and reused, it will inherit this lockdep class (i_data_sem is
-initialized only when a slab is created) and thus eventually lockdep
-barfs about possible deadlocks.
+It is not guaranteed that __ext4_get_inode_loc will definitely set
+err_blk pointer when it returns EIO. To avoid using uninitialized
+variables, let's first set err_blk to 0.
 
-Reported-and-tested-by: syzbot+3b6f9218b1301ddda3e2@syzkaller.appspotmail.com
-Signed-off-by: Jan Kara <jack@suse.cz>
-Cc: stable@kernel.org
-Link: https://lore.kernel.org/r/20211007155336.12493-3-jack@suse.cz
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Harshad Shirwadkar <harshadshirwadkar@gmail.com>
+Link: https://lore.kernel.org/r/20211201163421.2631661-1-harshads@google.com
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/super.c |   13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ fs/ext4/inode.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -6427,8 +6427,19 @@ static int ext4_enable_quotas(struct sup
- 					"Failed to enable quota tracking "
- 					"(type=%d, err=%d). Please run "
- 					"e2fsck to fix.", type, err);
--				for (type--; type >= 0; type--)
-+				for (type--; type >= 0; type--) {
-+					struct inode *inode;
-+
-+					inode = sb_dqopt(sb)->files[type];
-+					if (inode)
-+						inode = igrab(inode);
- 					dquot_quota_off(sb, type);
-+					if (inode) {
-+						lockdep_set_quota_inode(inode,
-+							I_DATA_SEM_NORMAL);
-+						iput(inode);
-+					}
-+				}
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -4445,7 +4445,7 @@ has_buffer:
+ static int __ext4_get_inode_loc_noinmem(struct inode *inode,
+ 					struct ext4_iloc *iloc)
+ {
+-	ext4_fsblk_t err_blk;
++	ext4_fsblk_t err_blk = 0;
+ 	int ret;
  
- 				return err;
- 			}
+ 	ret = __ext4_get_inode_loc(inode->i_sb, inode->i_ino, iloc, 0,
+@@ -4460,7 +4460,7 @@ static int __ext4_get_inode_loc_noinmem(
+ 
+ int ext4_get_inode_loc(struct inode *inode, struct ext4_iloc *iloc)
+ {
+-	ext4_fsblk_t err_blk;
++	ext4_fsblk_t err_blk = 0;
+ 	int ret;
+ 
+ 	/* We have all inode data except xattrs in memory here. */
 
 

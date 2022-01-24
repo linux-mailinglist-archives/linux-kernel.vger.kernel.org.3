@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4B349988F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE2D499655
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452820AbiAXV0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391192AbiAXUrD (ORCPT
+        id S1359358AbiAXVDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:03:10 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35354 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1389010AbiAXUkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:47:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09341C0424D8;
-        Mon, 24 Jan 2022 11:57:32 -0800 (PST)
+        Mon, 24 Jan 2022 15:40:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80781B81218;
-        Mon, 24 Jan 2022 19:57:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDFBC33DA0;
-        Mon, 24 Jan 2022 19:57:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C771961372;
+        Mon, 24 Jan 2022 20:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A91C340E5;
+        Mon, 24 Jan 2022 20:40:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054250;
-        bh=mMVMuisXCIt+zCi8F5XYc+fsmSAixmNaldXMRbfRe4I=;
+        s=korg; t=1643056821;
+        bh=+2CGRR58hyrC+e0/rwMd7vvHpmue7xOZCLaTjHMreKA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TU/o+f6rnXqlsgW1HlLNttZdlrrgw1ptwsndQYtQ3t4OlPardNnFSaRTgtNl8Zl35
-         mxhGQojMAp3tABAGz0zIPRURJ7ZK57LOqOXLVCJuo4pUBUILo0gI5SyxHUp9Cf9UZ3
-         YPKDJsbCs1UlEmfRsW74b49rKq1i8mh6Q1uyNUa8=
+        b=HowtncY5Wvn2XYoLYcUTR93HuOQXzuxp4HmNpYnkxAyjlr9sA9w7wEPkNgTRZSe1Q
+         PSFVLH3Szc1Vv+WivTgPQ8JpoEjABKqHmcgdzZNxt8e5D0XfaQ3U6VWiczKKZuD6Xn
+         vypnePK1SX1v3o14ne2zdalEoqDjhW9B0MgLq3HM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brendan Dolan-Gavitt <brendandg@nyu.edu>,
-        Zekun Shen <bruceshenzk@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        stable@vger.kernel.org, Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 328/563] mwifiex: Fix skb_over_panic in mwifiex_usb_recv()
-Date:   Mon, 24 Jan 2022 19:41:33 +0100
-Message-Id: <20220124184035.773561830@linuxfoundation.org>
+Subject: [PATCH 5.15 579/846] iwlwifi: pcie: make sure prph_info is set when treating wakeup IRQ
+Date:   Mon, 24 Jan 2022 19:41:36 +0100
+Message-Id: <20220124184121.016112149@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,66 +45,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zekun Shen <bruceshenzk@gmail.com>
+From: Luca Coelho <luciano.coelho@intel.com>
 
-[ Upstream commit 04d80663f67ccef893061b49ec8a42ff7045ae84 ]
+[ Upstream commit 459fc0f2c6b0f6e280bfa0f230c100c9dfe3a199 ]
 
-Currently, with an unknown recv_type, mwifiex_usb_recv
-just return -1 without restoring the skb. Next time
-mwifiex_usb_rx_complete is invoked with the same skb,
-calling skb_put causes skb_over_panic.
+In some rare cases when the HW is in a bad state, we may get this
+interrupt when prph_info is not set yet.  Then we will try to
+dereference it to check the sleep_notif element, which will cause an
+oops.
 
-The bug is triggerable with a compromised/malfunctioning
-usb device. After applying the patch, skb_over_panic
-no longer shows up with the same input.
+Fix that by ignoring the interrupt if prph_info is not set yet.
 
-Attached is the panic report from fuzzing.
-skbuff: skb_over_panic: text:000000003bf1b5fa
- len:2048 put:4 head:00000000dd6a115b data:000000000a9445d8
- tail:0x844 end:0x840 dev:<NULL>
-kernel BUG at net/core/skbuff.c:109!
-invalid opcode: 0000 [#1] SMP KASAN NOPTI
-CPU: 0 PID: 198 Comm: in:imklog Not tainted 5.6.0 #60
-RIP: 0010:skb_panic+0x15f/0x161
-Call Trace:
- <IRQ>
- ? mwifiex_usb_rx_complete+0x26b/0xfcd [mwifiex_usb]
- skb_put.cold+0x24/0x24
- mwifiex_usb_rx_complete+0x26b/0xfcd [mwifiex_usb]
- __usb_hcd_giveback_urb+0x1e4/0x380
- usb_giveback_urb_bh+0x241/0x4f0
- ? __hrtimer_run_queues+0x316/0x740
- ? __usb_hcd_giveback_urb+0x380/0x380
- tasklet_action_common.isra.0+0x135/0x330
- __do_softirq+0x18c/0x634
- irq_exit+0x114/0x140
- smp_apic_timer_interrupt+0xde/0x380
- apic_timer_interrupt+0xf/0x20
- </IRQ>
-
-Reported-by: Brendan Dolan-Gavitt <brendandg@nyu.edu>
-Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/YX4CqjfRcTa6bVL+@Zekuns-MBP-16.fios-router.home
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20211219132536.0537aa562313.I183bb336345b9b3da196ba9e596a6f189fbcbd09@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/marvell/mwifiex/usb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/wireless/intel/iwlwifi/pcie/rx.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/usb.c b/drivers/net/wireless/marvell/mwifiex/usb.c
-index 9736aa0ab7fd4..8f01fcbe93961 100644
---- a/drivers/net/wireless/marvell/mwifiex/usb.c
-+++ b/drivers/net/wireless/marvell/mwifiex/usb.c
-@@ -130,7 +130,8 @@ static int mwifiex_usb_recv(struct mwifiex_adapter *adapter,
- 		default:
- 			mwifiex_dbg(adapter, ERROR,
- 				    "unknown recv_type %#x\n", recv_type);
--			return -1;
-+			ret = -1;
-+			goto exit_restore_skb;
+diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/rx.c b/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
+index 8e45eb38304b2..fea89330f692c 100644
+--- a/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
++++ b/drivers/net/wireless/intel/iwlwifi/pcie/rx.c
+@@ -2261,7 +2261,12 @@ irqreturn_t iwl_pcie_irq_msix_handler(int irq, void *dev_id)
  		}
- 		break;
- 	case MWIFIEX_USB_EP_DATA:
+ 	}
+ 
+-	if (inta_hw & MSIX_HW_INT_CAUSES_REG_WAKEUP) {
++	/*
++	 * In some rare cases when the HW is in a bad state, we may
++	 * get this interrupt too early, when prph_info is still NULL.
++	 * So make sure that it's not NULL to prevent crashing.
++	 */
++	if (inta_hw & MSIX_HW_INT_CAUSES_REG_WAKEUP && trans_pcie->prph_info) {
+ 		u32 sleep_notif =
+ 			le32_to_cpu(trans_pcie->prph_info->sleep_notif);
+ 		if (sleep_notif == IWL_D3_SLEEP_STATUS_SUSPEND ||
 -- 
 2.34.1
 

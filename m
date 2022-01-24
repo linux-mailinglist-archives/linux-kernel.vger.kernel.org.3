@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5413B499644
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DCF499D7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444793AbiAXVBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:01:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40348 "EHLO
+        id S1584726AbiAXWVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:21:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42502 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387885AbiAXUh3 (ORCPT
+        with ESMTP id S1452905AbiAXV1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:37:29 -0500
+        Mon, 24 Jan 2022 16:27:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B839BB81060;
-        Mon, 24 Jan 2022 20:37:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B42DC340E5;
-        Mon, 24 Jan 2022 20:37:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F20BBB812A5;
+        Mon, 24 Jan 2022 21:27:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19136C340E4;
+        Mon, 24 Jan 2022 21:27:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056646;
-        bh=zzwXETvO8DRgU0B6/KjTgVdtgOFdMCxyOYkTNdKrc3I=;
+        s=korg; t=1643059639;
+        bh=Fx/sNdMmIck3JScTDW/y+z6oGo4OB0WD0tkuFaVyqCs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l2HUbUl4K4GDXOe1I79HbT6YPuac2NnZqrUz98Mhh+j1Ugn+bMM37Tir8sV2cvi4o
-         5dxXk5XYPmldMAFcIjcga1stilzRJuhPz8egDNHwu8DPC9olKbM2k/2GnY3akAN9S+
-         CkTlDqpVyFSwbRclccVD8mxhncrN3C0oVovwMRRk=
+        b=KOAriap2AXEkGbgILJwbfOFs5ISwqa20a5ymCbuZ7vkMGo7RKz3sxpa8pzKgCp2tH
+         SODtiyAbCmIUgY1kgjh8eHWJErzVh7Ylv5Dj+45gvHMAMrVMDWv0DKYSXQ6YwRLsey
+         FWqU6Wn8gdv3uRd/BYtMIE9hHChPB4zjU4Sbjwn0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 554/846] media: saa7146: hexium_gemini: Fix a NULL pointer dereference in hexium_attach()
+Subject: [PATCH 5.16 0682/1039] iwlwifi: remove module loading failure message
 Date:   Mon, 24 Jan 2022 19:41:11 +0100
-Message-Id: <20220124184120.137322515@linuxfoundation.org>
+Message-Id: <20220124184148.283824646@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,71 +46,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit 3af86b046933ba513d08399dba0d4d8b50d607d0 ]
+[ Upstream commit 6518f83ffa51131daaf439b66094f684da3fb0ae ]
 
-In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
-a new memory for dev->vv_data. saa7146_vv_release() will be called on
-failure of saa7146_register_device(). There is a dereference of
-dev->vv_data in saa7146_vv_release(), which could lead to a NULL
-pointer dereference on failure of saa7146_vv_init().
+When CONFIG_DEBUG_TEST_DRIVER_REMOVE is set, iwlwifi crashes
+when the opmode module cannot be loaded, due to completing
+the completion before using drv->dev, which can then already
+be freed.
 
-Fix this bug by adding a check of saa7146_vv_init().
+Fix this by removing the (fairly useless) message. Moving the
+completion later causes a deadlock instead, so that's not an
+option.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_VIDEO_HEXIUM_GEMINI=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Link: https://lore.kernel.org/linux-media/20211203154030.111210-1-zhou1615@umn.edu
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/20211210091245.289008-2-luca@coelho.fi
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/common/saa7146/saa7146_fops.c | 2 +-
- drivers/media/pci/saa7146/hexium_gemini.c   | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/iwl-drv.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/media/common/saa7146/saa7146_fops.c b/drivers/media/common/saa7146/saa7146_fops.c
-index baf5772c52a96..be32159777142 100644
---- a/drivers/media/common/saa7146/saa7146_fops.c
-+++ b/drivers/media/common/saa7146/saa7146_fops.c
-@@ -521,7 +521,7 @@ int saa7146_vv_init(struct saa7146_dev* dev, struct saa7146_ext_vv *ext_vv)
- 		ERR("out of memory. aborting.\n");
- 		kfree(vv);
- 		v4l2_ctrl_handler_free(hdl);
--		return -1;
-+		return -ENOMEM;
- 	}
+diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+index ad94526a4e1e7..f53ce9c086947 100644
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-drv.c
+@@ -1639,15 +1639,8 @@ static void iwl_req_fw_callback(const struct firmware *ucode_raw, void *context)
+ 	 * else from proceeding if the module fails to load
+ 	 * or hangs loading.
+ 	 */
+-	if (load_module) {
++	if (load_module)
+ 		request_module("%s", op->name);
+-#ifdef CONFIG_IWLWIFI_OPMODE_MODULAR
+-		if (err)
+-			IWL_ERR(drv,
+-				"failed to load module %s (error %d), is dynamic loading enabled?\n",
+-				op->name, err);
+-#endif
+-	}
+ 	failure = false;
+ 	goto free;
  
- 	saa7146_video_uops.init(dev,vv);
-diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
-index 2214c74bbbf15..3947701cd6c7e 100644
---- a/drivers/media/pci/saa7146/hexium_gemini.c
-+++ b/drivers/media/pci/saa7146/hexium_gemini.c
-@@ -284,7 +284,12 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
- 	hexium_set_input(hexium, 0);
- 	hexium->cur_input = 0;
- 
--	saa7146_vv_init(dev, &vv_data);
-+	ret = saa7146_vv_init(dev, &vv_data);
-+	if (ret) {
-+		i2c_del_adapter(&hexium->i2c_adapter);
-+		kfree(hexium);
-+		return ret;
-+	}
- 
- 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
- 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
 -- 
 2.34.1
 

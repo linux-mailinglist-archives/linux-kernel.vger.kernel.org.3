@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E47C49A72B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA0C49A2E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3423243AbiAYCdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:33:21 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52350 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383330AbiAXU1J (ORCPT
+        id S2366012AbiAXXwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:52:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1845355AbiAXXMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:27:09 -0500
+        Mon, 24 Jan 2022 18:12:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04DEC067A44;
+        Mon, 24 Jan 2022 13:19:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6557F614EC;
-        Mon, 24 Jan 2022 20:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 492A8C340E5;
-        Mon, 24 Jan 2022 20:27:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FC7761469;
+        Mon, 24 Jan 2022 21:19:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29807C340E5;
+        Mon, 24 Jan 2022 21:19:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056028;
-        bh=3bYJ1Uv45V46z7TGSRB+5GaY5VET5wRoQDd1kBkBs3M=;
+        s=korg; t=1643059141;
+        bh=QGCFPH1WYvDgr9p4O+VQEVXKCX82xetHO6mmGWOWw2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2pYqU4GbYQCklm0JVshHrPvdC5ObQnmilOZhsFt8+n8xp8mNvil8EQyw1R6uNLj4s
-         wrVyxXZU5OkTQhwUjTphcMstpX/4FytIRrIGXKo8hvPfXxkNnx0amdLE7sFL5NopD/
-         qiMAZGnuccxmHHC9GEYMWj940aZw5391r3RaeRAg=
+        b=swGStBzQ+zlmn9eToWmrcllx0TqZ2ZFgOQxv14PT+sPSTDzOCB2aDbEOhSzpf8FlN
+         uOG0nd7gWda3gmmoMblf62BvdTeui2hmoYOvAdcuxNHRoyHFvDGcxXzje7Kww7Jjlg
+         vf7/qwMWchZk+D0ROlZSXCfbUVMd7/GfZSrZYHHM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zizhuang Deng <sunsetdzz@gmail.com>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 346/846] lib/mpi: Add the return value check of kcalloc()
+Subject: [PATCH 5.16 0474/1039] uio: uio_dmem_genirq: Catch the Exception
 Date:   Mon, 24 Jan 2022 19:37:43 +0100
-Message-Id: <20220124184112.880158506@linuxfoundation.org>
+Message-Id: <20220124184141.205188392@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,35 +48,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zizhuang Deng <sunsetdzz@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit dd827abe296fe4249b2f8c9b95f72f814ea8348c ]
+[ Upstream commit eec91694f927d1026974444eb6a3adccd4f1cbc2 ]
 
-Add the return value check of kcalloc() to avoid potential
-NULL ptr dereference.
+The return value of dma_set_coherent_mask() is not always 0.
+To catch the exception in case that dma is not support the mask.
 
-Fixes: a8ea8bdd9df9 ("lib/mpi: Extend the MPI library")
-Signed-off-by: Zizhuang Deng <sunsetdzz@gmail.com>
-Reviewed-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 0a0c3b5a24bd ("Add new uio device for dynamic memory allocation")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20211204000326.1592687-1-jiasheng@iscas.ac.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/mpi/mpi-mod.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/uio/uio_dmem_genirq.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/lib/mpi/mpi-mod.c b/lib/mpi/mpi-mod.c
-index 47bc59edd4ff9..54fcc01564d9d 100644
---- a/lib/mpi/mpi-mod.c
-+++ b/lib/mpi/mpi-mod.c
-@@ -40,6 +40,8 @@ mpi_barrett_t mpi_barrett_init(MPI m, int copy)
+diff --git a/drivers/uio/uio_dmem_genirq.c b/drivers/uio/uio_dmem_genirq.c
+index 6b5cfa5b06733..1106f33764047 100644
+--- a/drivers/uio/uio_dmem_genirq.c
++++ b/drivers/uio/uio_dmem_genirq.c
+@@ -188,7 +188,11 @@ static int uio_dmem_genirq_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 	}
  
- 	mpi_normalize(m);
- 	ctx = kcalloc(1, sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return NULL;
+-	dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
++	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
++	if (ret) {
++		dev_err(&pdev->dev, "DMA enable failed\n");
++		return ret;
++	}
  
- 	if (copy) {
- 		ctx->m = mpi_copy(m);
+ 	priv->uioinfo = uioinfo;
+ 	spin_lock_init(&priv->lock);
 -- 
 2.34.1
 

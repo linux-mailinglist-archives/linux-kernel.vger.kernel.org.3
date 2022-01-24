@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A31049A034
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CA749A00A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843057AbiAXXDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S1843032AbiAXXDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:03:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577015AbiAXV5K (ORCPT
+        with ESMTP id S1577048AbiAXV5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:57:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AA8C09427B;
-        Mon, 24 Jan 2022 12:38:45 -0800 (PST)
+        Mon, 24 Jan 2022 16:57:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407C6C02C307;
+        Mon, 24 Jan 2022 12:38:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25A53614FF;
-        Mon, 24 Jan 2022 20:38:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EE7C340E5;
-        Mon, 24 Jan 2022 20:38:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB910B811FB;
+        Mon, 24 Jan 2022 20:38:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D935BC340E5;
+        Mon, 24 Jan 2022 20:38:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056724;
-        bh=iIcfM+H8IGt2OdfW65l2nBT0+BJsI2zRIUQJ8nSCAbE=;
+        s=korg; t=1643056727;
+        bh=uSOMnpLBoWbmn1u3zPszgvPwiLRvJiLR/eIsGJPtN6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zgOLe2pEhdljyz87KUcXx56cKft5TzYR0hYwHGEtrK/ynOUt5QrX1I4rVaMmxGQHE
-         S338iMBfwjqNDiUukzmbe7Q2WWCsVb14zC8MSQKZWeMWL3Og01XCDC2PTHhMv0UiaQ
-         tnDx9idniwHTUczUmvyfZnr5Zwywiv9I9+D1OxWo=
+        b=VlnZ9FEFV8Z/vlL5DcAMmrV91gnMG2/FH1b8mLNbpap387C2v+lxDVR2ytt8xSx8r
+         DSco0Tv/RHCnJJoTw5AhxhJ/r8Od0AbdGJfcPT0gYKX9WsaJjW0T2SDnzmQ/5ydIbF
+         WtZPMkC8yCBC5R3qiIWfz6U1JR4zFwj8zAoOuH5o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Suresh Kumar <suresh2514@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Daniel Latypov <dlatypov@google.com>,
+        David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 546/846] net: bonding: debug: avoid printing debug logs when bond is not notifying peers
-Date:   Mon, 24 Jan 2022 19:41:03 +0100
-Message-Id: <20220124184119.858064545@linuxfoundation.org>
+Subject: [PATCH 5.15 547/846] kunit: Dont crash if no parameters are generated
+Date:   Mon, 24 Jan 2022 19:41:04 +0100
+Message-Id: <20220124184119.893371050@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -49,67 +51,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suresh Kumar <surkumar@redhat.com>
+From: David Gow <davidgow@google.com>
 
-[ Upstream commit fee32de284ac277ba434a2d59f8ce46528ff3946 ]
+[ Upstream commit 37dbb4c7c7442dbfc9b651e4ddd4afe30b26afc9 ]
 
-Currently "bond_should_notify_peers: slave ..." messages are printed whenever
-"bond_should_notify_peers" function is called.
+It's possible that a parameterised test could end up with zero
+parameters. At the moment, the test function will nevertheless be called
+with NULL as the parameter. Instead, don't try to run the test code, and
+just mark the test as SKIPped.
 
-+++
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Received LACPDU on port 1
-Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): Rx Machine: Port=1, Last State=6, Curr State=6
-Dec 12 12:33:26 node1 kernel: bond0: (slave enp0s25): partner sync=1
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:26 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-...
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Received LACPDU on port 2
-Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): Rx Machine: Port=2, Last State=6, Curr State=6
-Dec 12 12:33:30 node1 kernel: bond0: (slave enp4s3): partner sync=1
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-Dec 12 12:33:30 node1 kernel: bond0: bond_should_notify_peers: slave enp0s25
-+++
-
-This is confusing and can also clutter up debug logs.
-Print logs only when the peer notification happens.
-
-Signed-off-by: Suresh Kumar <suresh2514@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reported-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ lib/kunit/test.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 77dc79a7f5748..d779fed900ffa 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -1096,9 +1096,6 @@ static bool bond_should_notify_peers(struct bonding *bond)
- 	slave = rcu_dereference(bond->curr_active_slave);
- 	rcu_read_unlock();
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index f246b847024e3..9aef816e573c1 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -504,16 +504,18 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 		struct kunit_result_stats param_stats = { 0 };
+ 		test_case->status = KUNIT_SKIPPED;
  
--	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
--		   slave ? slave->dev->name : "NULL");
--
- 	if (!slave || !bond->send_peer_notif ||
- 	    bond->send_peer_notif %
- 	    max(1, bond->params.peer_notif_delay) != 0 ||
-@@ -1106,6 +1103,9 @@ static bool bond_should_notify_peers(struct bonding *bond)
- 	    test_bit(__LINK_STATE_LINKWATCH_PENDING, &slave->dev->state))
- 		return false;
+-		if (test_case->generate_params) {
++		if (!test_case->generate_params) {
++			/* Non-parameterised test. */
++			kunit_run_case_catch_errors(suite, test_case, &test);
++			kunit_update_stats(&param_stats, test.status);
++		} else {
+ 			/* Get initial param. */
+ 			param_desc[0] = '\0';
+ 			test.param_value = test_case->generate_params(NULL, param_desc);
+-		}
  
-+	netdev_dbg(bond->dev, "bond_should_notify_peers: slave %s\n",
-+		   slave ? slave->dev->name : "NULL");
-+
- 	return true;
- }
+-		do {
+-			kunit_run_case_catch_errors(suite, test_case, &test);
++			while (test.param_value) {
++				kunit_run_case_catch_errors(suite, test_case, &test);
+ 
+-			if (test_case->generate_params) {
+ 				if (param_desc[0] == '\0') {
+ 					snprintf(param_desc, sizeof(param_desc),
+ 						 "param-%d", test.param_index);
+@@ -530,11 +532,11 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 				param_desc[0] = '\0';
+ 				test.param_value = test_case->generate_params(test.param_value, param_desc);
+ 				test.param_index++;
+-			}
+ 
+-			kunit_update_stats(&param_stats, test.status);
++				kunit_update_stats(&param_stats, test.status);
++			}
++		}
+ 
+-		} while (test.param_value);
+ 
+ 		kunit_print_test_stats(&test, param_stats);
  
 -- 
 2.34.1

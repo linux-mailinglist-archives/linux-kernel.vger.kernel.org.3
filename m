@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA1B499E33
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D7D49A093
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350134AbiAXWap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:30:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50960 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456450AbiAXVjU (ORCPT
+        id S1845245AbiAXXLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:11:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584568AbiAXWVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:39:20 -0500
+        Mon, 24 Jan 2022 17:21:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF01C0424DD;
+        Mon, 24 Jan 2022 12:51:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1676B8123A;
-        Mon, 24 Jan 2022 21:39:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB36C340E4;
-        Mon, 24 Jan 2022 21:39:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9CE2B81061;
+        Mon, 24 Jan 2022 20:51:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB04C340E5;
+        Mon, 24 Jan 2022 20:51:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060348;
-        bh=eN+mCr4skE+vq5zxPwBpW4c7azPJ/28oHfu3vTochZU=;
+        s=korg; t=1643057476;
+        bh=hgTMhcKXn0qipvk81yvlR5VaiWMS55P9EIckJyt9sxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LRYQvcnZc45NxvW9bQD1ZoWvYAgN9DVLIzW86aRiLjuRZC55NTzxmLpkROXHLNyVB
-         SPevsSnXmUIVAUv1bAnPZYHfqktXrXGcR9qAFLwbUB0rC86/L4vF04aQDsnT/GJr+Q
-         wsP2Cuk42bjgoY3UssCjoq0egu/EQe+G0vsZV55o=
+        b=cVzk2u0PzY/98LBanGWPMOzv1bTlqE3M/mr39WgW6gr5gczzP9eQgkos1e5IoE7iq
+         1wUk9hp4qj+AcJl+bbxGPrImjPg07AlevbR9tSuSVyaqTRd6ok+EPtw8v2pivPOix5
+         gH6D0f2XPnwU7Bul/Eld3NB8Fgvrl+oHC7lBYWLU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH 5.16 0919/1039] Bluetooth: hci_sync: Fix not setting adv set duration
-Date:   Mon, 24 Jan 2022 19:45:08 +0100
-Message-Id: <20220124184156.191792917@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 792/846] net: axienet: Wait for PhyRstCmplt after core reset
+Date:   Mon, 24 Jan 2022 19:45:09 +0100
+Message-Id: <20220124184128.274931321@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,32 +49,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit f16a491c65d9eb19398b25aefc10c2d3313d17b3 upstream.
+commit b400c2f4f4c53c86594dd57098970d97d488bfde upstream.
 
-10bbffa3e88e attempted to fix the use of rotation duration as
-advertising duration but it didn't change the if condition which still
-uses the duration instead of the timeout.
+When resetting the device, wait for the PhyRstCmplt bit to be set
+in the interrupt status register before continuing initialization, to
+ensure that the core is actually ready. When using an external PHY, this
+also ensures we do not start trying to access the PHY while it is still
+in reset. The PHY reset is initiated by the core reset which is
+triggered just above, but remains asserted for 5ms after the core is
+reset according to the documentation.
 
-Fixes: 10bbffa3e88e ("Bluetooth: Fix using advertising instance duration as timeout")
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+The MgtRdy bit could also be waited for, but unfortunately when using
+7-series devices, the bit does not appear to work as documented (it
+seems to behave as some sort of link state indication and not just an
+indication the transceiver is ready) so it can't really be relied on for
+this purpose.
+
+Fixes: 8a3b7a252dca9 ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bluetooth/hci_request.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/net/bluetooth/hci_request.c
-+++ b/net/bluetooth/hci_request.c
-@@ -1935,7 +1935,7 @@ int __hci_req_enable_ext_advertising(str
- 	/* Set duration per instance since controller is responsible for
- 	 * scheduling it.
- 	 */
--	if (adv_instance && adv_instance->duration) {
-+	if (adv_instance && adv_instance->timeout) {
- 		u16 duration = adv_instance->timeout * MSEC_PER_SEC;
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -516,6 +516,16 @@ static int __axienet_device_reset(struct
+ 		return ret;
+ 	}
  
- 		/* Time = N * 10 ms */
++	/* Wait for PhyRstCmplt bit to be set, indicating the PHY reset has finished */
++	ret = read_poll_timeout(axienet_ior, value,
++				value & XAE_INT_PHYRSTCMPLT_MASK,
++				DELAY_OF_ONE_MILLISEC, 50000, false, lp,
++				XAE_IS_OFFSET);
++	if (ret) {
++		dev_err(lp->dev, "%s: timeout waiting for PhyRstCmplt\n", __func__);
++		return ret;
++	}
++
+ 	return 0;
+ }
+ 
 
 

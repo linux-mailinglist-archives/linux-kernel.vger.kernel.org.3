@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B844985A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A314985C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 18:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244069AbiAXRDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 12:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243962AbiAXRDU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:03:20 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72468C061744
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:03:20 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id j14so11209509lja.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 09:03:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w4LPuie2gZC/4gV/HI33snifTw+KkH8sPMZQ+z2ss9g=;
-        b=GMNghxZcUBO0n0fyg056ZLP7pohxEmoQNb+q9Gx3aJL7yN5OgP3L3sAXKKeG0FS2FZ
-         Z6pDM9krJxdYNIX5JVA7jIf5PVEaWB3PGmkC7PzXiUasK0mbo88jhYgwCX1k5jbVbMqb
-         sJ3IiMLRCt+4TpzmjqS9TqholOAk3g9plbBE2UYD+tiolZfJWQ8Tpv/UiU12e2qoNkKc
-         ODqMMR230gAhWRVkS6W1VlA7aC/0QEKLOCbIpRFoA5Y/sHPFuo5qFoGPwmFbwk3Sb3qz
-         8/5ZUZJrGisb4JDzOH3FxSWlIGyw2MCJJOMZVNMiLFQ1TAbmhgYe1jIk4F2YTgopqVaN
-         sjaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w4LPuie2gZC/4gV/HI33snifTw+KkH8sPMZQ+z2ss9g=;
-        b=owr0KyFCmNeRLMwUCQgNYZhdUCCAV0uidY4i/HKD1WAkobynkCjEGLITiA/oTaFtrL
-         GLA1RVYB2rKU4Ea9r9jvpvbtTtQLucA3Rm11eiT9nsvEE0fqFheCqL4J89SVfWi/d7l6
-         wOP3WbehLEqNy6F7ITqDYjxo0II0eEQToQckn7qE+QhdefRl1qo62SGBc7bbvHNZAKMi
-         1oZCXfwg1Y88uDzSD9GZ7dxKgpcHlVGDmNHCWogmNPRORo9hSt1sAbskyhOYzh7h3jtT
-         qJSAZQLl+lIckdEbkjkCjVrf7XKy+W3+jgUySAb7Rx+ufzEooMALDLAzV8jn4OJ69JvW
-         NLWA==
-X-Gm-Message-State: AOAM5330nZRlzENekPRtyxMYM1m7eZZFfrj3CWrsRPrIkHOLoAaEPsSd
-        srr3o/D/dQ2/xaa06cOQ2pU0XXe67LW1Sms6xUNLXw==
-X-Google-Smtp-Source: ABdhPJwIH+cyPsq9bO3FdraGj6OvSy6jgmkNSoCj6ohDecG2rjLAnn9SJiY8LIXwnWs9epmvSWObibUgPiIYbVjqz4c=
-X-Received: by 2002:a2e:b8d3:: with SMTP id s19mr12244345ljp.401.1643043798747;
- Mon, 24 Jan 2022 09:03:18 -0800 (PST)
+        id S244173AbiAXRFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 12:05:05 -0500
+Received: from mga09.intel.com ([134.134.136.24]:37754 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244205AbiAXREs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:04:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643043888; x=1674579888;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5GW29a7dNLwPV7sPNKD+sRYk/vKbBA0PW2mGmkEjUQA=;
+  b=InGaoFLOIPpa/k11Kx1AtYwl+KLr4bSGMTfrpjaXVFtVybDCwMC7wufq
+   fGaVZ2ZN6+tFQZZsLkgGn/Gh9pc46dr94EOai4PLRB5EJje+NtQtO32j5
+   zVEwUH5oD6kqN5Jqnzsdju1AuYC0tUPphpi9RY/IlJhsaZJb44ub7nWxT
+   38Ajgl+vFuIt0IO4gGLgpEhFOGMLErGqom3EfdsGtGM56aaVUQB3ovFx7
+   5QLTBZp2GoPOXrRcXHG9aQS0gDJXj+zn3zlBk2KUG6Nko8gBwBlh9ftNj
+   tIL6dBs/LeXZl5afLopS1NrdpTdYno/0twGX1zDYkQkEBbP0wIf1qqzG4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10236"; a="245875352"
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="245875352"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 09:03:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,311,1635231600"; 
+   d="scan'208";a="768741206"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Jan 2022 09:03:13 -0800
+Received: from [10.209.54.174] (kliang2-MOBL.ccr.corp.intel.com [10.209.54.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 1D880580921;
+        Mon, 24 Jan 2022 09:03:12 -0800 (PST)
+Message-ID: <3bfa617e-007c-ebc3-8c71-0bcb83b24794@linux.intel.com>
+Date:   Mon, 24 Jan 2022 12:03:10 -0500
 MIME-Version: 1.0
-References: <20211118192130.48b8f04c@xhacker> <20211118192651.605d0c80@xhacker>
- <CAN37VV6vfee+T18UkbDLe1ts87+Zvg25oQR1+VJD3e6SJFPPiA@mail.gmail.com>
- <YeqkIKUsdHH0ORxf@xhacker> <Ye0cCI8aAC8rL1IE@xhacker>
-In-Reply-To: <Ye0cCI8aAC8rL1IE@xhacker>
-From:   Mayuresh Chitale <mchitale@ventanamicro.com>
-Date:   Mon, 24 Jan 2022 22:32:43 +0530
-Message-ID: <CAN37VV4H=ts6GU1aV6M1mZk+SRb-3n3R_nz9Ao3_W1zcEKW4-A@mail.gmail.com>
-Subject: Re: [PATCH 11/12] riscv: extable: add a dedicated uaccess handler
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] x86/perf: Default freeze_on_smi on for Comet Lake and
+ later.
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kyle Huey <me@kylehuey.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Robert O'Callahan <rocallahan@gmail.com>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Andi Kleen <ak@linux.intel.com>
+References: <20220122072644.92292-1-khuey@kylehuey.com>
+ <Ye6Z31keWVPrsNWU@hirez.programming.kicks-ass.net>
+ <3c35dc76-c187-8d3f-7fc9-75de32e7cbf6@linux.intel.com>
+ <Ye7UDFAV5/OPaE5N@hirez.programming.kicks-ass.net>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <Ye7UDFAV5/OPaE5N@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jisheng,
 
-On Sun, Jan 23, 2022 at 2:50 PM Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> On Fri, Jan 21, 2022 at 08:16:51PM +0800, Jisheng Zhang wrote:
-> > On Thu, Jan 20, 2022 at 11:45:34PM +0530, Mayuresh Chitale wrote:
-> > > Hello Jisheng,
-> >
-> > Hi,
-> >
-> > >
-> > > Just wanted to inform you that this patch breaks the writev02 test
-> > > case in LTP and if it is reverted then the test passes. If we run the
-> > > test through strace then we see that the test hangs and following is
-> > > the last line printed by strace:
-> > >
-> > > "writev(3, [{iov_base=0x7fff848a6000, iov_len=8192}, {iov_base=NULL,
-> > > iov_len=0}]"
-> > >
-> >
-> > Thanks for the bug report. I will try to fix it.
->
-> Hi Mayuresh,
->
-> I just sent out a fix for this bug. Per my test, the issue is fixed.
-> Could you please try?
->
-> Thanks
 
-Your fix works as expected.
+On 1/24/2022 11:30 AM, Peter Zijlstra wrote:
+> On Mon, Jan 24, 2022 at 11:00:56AM -0500, Liang, Kan wrote:
+>>
+>>
+>> On 1/24/2022 7:21 AM, Peter Zijlstra wrote:
+>>> On Fri, Jan 21, 2022 at 11:26:44PM -0800, Kyle Huey wrote:
+>>>> Beginning in Comet Lake, Intel extended the concept of privilege rings to
+>>>> SMM.[0] A side effect of this is that events caused by execution of code
+>>>> in SMM are now visible to performance counters with IA32_PERFEVTSELx.USR
+>>>> set.
+>>>>
+>>>> rr[1] depends on exact counts of performance events for the user space
+>>>> tracee, so this change in behavior is fatal for us. It is, however, easily
+>>>> corrected by setting IA32_DEBUGCTL.FREEZE_WHILE_SMM to 1 (visible in sysfs
+>>>> as /sys/devices/cpu/freeze_on_smi). While we can and will tell our users to
+>>>> set freeze_on_smi manually when appropriate, because observing events in
+>>>> SMM is rarely useful to anyone, we propose to change the default value of
+>>>> this switch.
+>>
+>> + Andi
+>>
+>>  From we heard many times from sophisticated customers, they really hate
+>> blind spots. They want to see everything. That's why we set freeze_on_smi to
+>> 0 as default. I think the patch breaks the principle.
+> 
+> Well, USR really, as in *REALLY* should not be counting SMM. That's just
+> plain broken.
+> 
+
+For the USR only case, the bit could be set.
+
+> There's maybe an argument to include it in OS, but USR is ring-3.
+
+But we don't have an option for the USR only case. The changing will 
+impact the SYS case as well. Personally, maybe it's better to let the 
+user apace app control the bit as needed rather than changing the 
+default kernel value for all cases.
 
 Thanks,
-Mayuresh.
+Kan

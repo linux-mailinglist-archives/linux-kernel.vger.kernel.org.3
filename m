@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D56949A465
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12EE49A6AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2374712AbiAYARn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S1353240AbiAYCVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:21:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1851187AbiAXXcH (ORCPT
+        with ESMTP id S1345378AbiAXTJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:32:07 -0500
+        Mon, 24 Jan 2022 14:09:14 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FA5C075966;
-        Mon, 24 Jan 2022 13:35:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B10C08C5C8;
+        Mon, 24 Jan 2022 11:02:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65E8E612D6;
-        Mon, 24 Jan 2022 21:35:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA12C340E4;
-        Mon, 24 Jan 2022 21:35:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4270B60B88;
+        Mon, 24 Jan 2022 19:02:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BF9CC340E5;
+        Mon, 24 Jan 2022 19:02:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060130;
-        bh=LvKt4kNdalNrtHc1yjv9UoZIUONIbwelUZZZPp/IQas=;
+        s=korg; t=1643050929;
+        bh=QCtmgIcGnpfCyyzcV5Uihv/WnmLZGb5ICQw+jPbJ7zQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HDtjA3mIWLLOrBLrbuwxi0Mis/DNj+l3IbJ9Vl8+rkT5kPZ7pbPqhmndbtkuIQ+lN
-         GORxUFTvYsb7Pw6L2eMaGCALzF6GtBqAdI0Sjai05Jm1Cm4xkdv6gRvsChkmxm/GMJ
-         pbz+Q0QFgzSvsyZA83pRTfdpJcy9IudRj0T4Argg=
+        b=lfOllt7y4kt6cl8JiDFcmBh3RD8gXxTYUNJid4Je3l8LtVJFw8MQ00QzYYEi8PemF
+         RWrAZTJfj5801+6xC66HOENXaqLwlucRaorV+1gmCOMqzMJ3sL6hOhvJOIQVleG6K0
+         b/o9yiMOfRupgMoIlUwX3w7UgMNOqsclc44l2KHI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrey Ryabinin <arbn@yandex-team.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH 5.16 0850/1039] cputime, cpuacct: Include guest time in user time in cpuacct.stat
+        stable@vger.kernel.org, Andy Spencer <aspencer@spacex.com>,
+        Jim Gruen <jgruen@spacex.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: [PATCH 4.9 149/157] gianfar: simplify FCS handling and fix memory leak
 Date:   Mon, 24 Jan 2022 19:43:59 +0100
-Message-Id: <20220124184153.855085884@linuxfoundation.org>
+Message-Id: <20220124183937.491196016@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,44 +50,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Ryabinin <arbn@yandex-team.com>
+From: Andy Spencer <aspencer@spacex.com>
 
-commit 9731698ecb9c851f353ce2496292ff9fcea39dff upstream.
+commit d903ec77118c09f93a610b384d83a6df33a64fe6 upstream.
 
-cpuacct.stat in no-root cgroups shows user time without guest time
-included int it. This doesn't match with user time shown in root
-cpuacct.stat and /proc/<pid>/stat. This also affects cgroup2's cpu.stat
-in the same way.
+Previously, buffer descriptors containing only the frame check sequence
+(FCS) were skipped and not added to the skb. However, the page reference
+count was still incremented, leading to a memory leak.
 
-Make account_guest_time() to add user time to cgroup's cpustat to
-fix this.
+Fixing this inside gfar_add_rx_frag() is difficult due to reserved
+memory handling and page reuse. Instead, move the FCS handling to
+gfar_process_frame() and trim off the FCS before passing the skb up the
+networking stack.
 
-Fixes: ef12fefabf94 ("cpuacct: add per-cgroup utime/stime statistics")
-Signed-off-by: Andrey Ryabinin <arbn@yandex-team.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20211115164607.23784-1-arbn@yandex-team.com
+Signed-off-by: Andy Spencer <aspencer@spacex.com>
+Signed-off-by: Jim Gruen <jgruen@spacex.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Cc: Ben Hutchings <ben@decadent.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/sched/cputime.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/freescale/gianfar.c |   23 +++++++----------------
+ 1 file changed, 7 insertions(+), 16 deletions(-)
 
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -148,10 +148,10 @@ void account_guest_time(struct task_stru
+--- a/drivers/net/ethernet/freescale/gianfar.c
++++ b/drivers/net/ethernet/freescale/gianfar.c
+@@ -2939,29 +2939,17 @@ static bool gfar_add_rx_frag(struct gfar
+ {
+ 	int size = lstatus & BD_LENGTH_MASK;
+ 	struct page *page = rxb->page;
+-	bool last = !!(lstatus & BD_LFLAG(RXBD_LAST));
+-
+-	/* Remove the FCS from the packet length */
+-	if (last)
+-		size -= ETH_FCS_LEN;
  
- 	/* Add guest time to cpustat. */
- 	if (task_nice(p) > 0) {
--		cpustat[CPUTIME_NICE] += cputime;
-+		task_group_account_field(p, CPUTIME_NICE, cputime);
- 		cpustat[CPUTIME_GUEST_NICE] += cputime;
+ 	if (likely(first)) {
+ 		skb_put(skb, size);
  	} else {
--		cpustat[CPUTIME_USER] += cputime;
-+		task_group_account_field(p, CPUTIME_USER, cputime);
- 		cpustat[CPUTIME_GUEST] += cputime;
+ 		/* the last fragments' length contains the full frame length */
+-		if (last)
++		if (lstatus & BD_LFLAG(RXBD_LAST))
+ 			size -= skb->len;
+ 
+-		/* Add the last fragment if it contains something other than
+-		 * the FCS, otherwise drop it and trim off any part of the FCS
+-		 * that was already received.
+-		 */
+-		if (size > 0)
+-			skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
+-					rxb->page_offset + RXBUF_ALIGNMENT,
+-					size, GFAR_RXB_TRUESIZE);
+-		else if (size < 0)
+-			pskb_trim(skb, skb->len + size);
++		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
++				rxb->page_offset + RXBUF_ALIGNMENT,
++				size, GFAR_RXB_TRUESIZE);
  	}
- }
+ 
+ 	/* try reuse page */
+@@ -3074,6 +3062,9 @@ static void gfar_process_frame(struct ne
+ 	if (priv->padding)
+ 		skb_pull(skb, priv->padding);
+ 
++	/* Trim off the FCS */
++	pskb_trim(skb, skb->len - ETH_FCS_LEN);
++
+ 	if (ndev->features & NETIF_F_RXCSUM)
+ 		gfar_rx_checksum(skb, fcb);
+ 
 
 

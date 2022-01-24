@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE65498A62
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D88D4992E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343693AbiAXTDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 14:03:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S1382626AbiAXU0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344678AbiAXS6z (ORCPT
+        with ESMTP id S1352002AbiAXUDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:58:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6C0C0612B2;
-        Mon, 24 Jan 2022 10:56:12 -0800 (PST)
+        Mon, 24 Jan 2022 15:03:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6307C02B742;
+        Mon, 24 Jan 2022 11:30:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 933E1B81227;
-        Mon, 24 Jan 2022 18:56:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E31C340E5;
-        Mon, 24 Jan 2022 18:56:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 651A260917;
+        Mon, 24 Jan 2022 19:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A002C340E5;
+        Mon, 24 Jan 2022 19:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050571;
-        bh=szx3KHnAGqYPCIQSnKc2YO2cne5YMw4r5dPOGfee4w8=;
+        s=korg; t=1643052616;
+        bh=/lpNPmWX5dfLrKHdBpEYNnkutGKFPRmgQYn9v2IX4JM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gDA3qoz1BCSoPeI7kQzY9xiO/MZKav2tbhtPnwK4mVJy0jld8g8oVWFZi8OkSKqMI
-         EkcPNyxjNd3H8oD2CNPmFhSGEI0pfXBlxRbTJFZ/Dbfj2BcvQLcUMjd/RAfNS/e08z
-         CfySvCJdHsUEQrJVHQYkz/t8Y9AUu27STFUrQq4M=
+        b=VWzI3hiIshJ9UmK0pIE8QXoMttJDuNtPd6oJlef0mOHKNb1K5kqBb+CkGIje8iH0q
+         e5/ODueCEwdjn4qqszBLK9kQF7IcUmN3AwSZLrftlhNUmM9F36vp72s9f478J1/8Vm
+         KbMD4LgvBSKZKUK8u3jKQriDTriN2L5Os5BfnPVo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+cce1ee31614c171f5595@syzkaller.appspotmail.com,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 4.9 012/157] rtlwifi: rtl8192cu: Fix WARNING when calling local_irq_restore() with interrupts enabled
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 118/320] can: softing: softing_startstop(): fix set but not used variable warning
 Date:   Mon, 24 Jan 2022 19:41:42 +0100
-Message-Id: <20220124183933.183700115@linuxfoundation.org>
+Message-Id: <20220124183957.707029762@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,45 +50,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Larry Finger <Larry.Finger@lwfinger.net>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-commit 8b144dedb928e4e2f433a328d58f44c3c098d63e upstream.
+[ Upstream commit 370d988cc529598ebaec6487d4f84c2115dc696b ]
 
-Syzbot reports the following WARNING:
+In the function softing_startstop() the variable error_reporting is
+assigned but not used. The code that uses this variable is commented
+out. Its stated that the functionality is not finally verified.
 
-[200~raw_local_irq_restore() called with IRQs enabled
-WARNING: CPU: 1 PID: 1206 at kernel/locking/irqflag-debug.c:10
-   warn_bogus_irq_restore+0x1d/0x20 kernel/locking/irqflag-debug.c:10
+To fix the warning:
 
-Hardware initialization for the rtl8188cu can run for as long as 350 ms,
-and the routine may be called with interrupts disabled. To avoid locking
-the machine for this long, the current routine saves the interrupt flags
-and enables local interrupts. The problem is that it restores the flags
-at the end without disabling local interrupts first.
+| drivers/net/can/softing/softing_fw.c:424:9: error: variable 'error_reporting' set but not used [-Werror,-Wunused-but-set-variable]
 
-This patch fixes commit a53268be0cb9 ("rtlwifi: rtl8192cu: Fix too long
-disable of IRQs").
+remove the comment, activate the code, but add a "0 &&" to the if
+expression and rely on the optimizer rather than the preprocessor to
+remove the code.
 
-Reported-by: syzbot+cce1ee31614c171f5595@syzkaller.appspotmail.com
-Cc: stable@vger.kernel.org
-Fixes: a53268be0cb9 ("rtlwifi: rtl8192cu: Fix too long disable of IRQs")
-Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20211215171105.20623-1-Larry.Finger@lwfinger.net
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/all/20220109103126.1872833-1-mkl@pengutronix.de
+Fixes: 03fd3cf5a179 ("can: add driver for Softing card")
+Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/can/softing/softing_fw.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c
-@@ -1037,6 +1037,7 @@ int rtl92cu_hw_init(struct ieee80211_hw
- 	_InitPABias(hw);
- 	rtl92c_dm_init(hw);
- exit:
-+	local_irq_disable();
- 	local_irq_restore(flags);
- 	return err;
- }
+diff --git a/drivers/net/can/softing/softing_fw.c b/drivers/net/can/softing/softing_fw.c
+index 8f44fdd8804bf..1c2afa17c26d1 100644
+--- a/drivers/net/can/softing/softing_fw.c
++++ b/drivers/net/can/softing/softing_fw.c
+@@ -565,18 +565,19 @@ int softing_startstop(struct net_device *dev, int up)
+ 		if (ret < 0)
+ 			goto failed;
+ 	}
+-	/* enable_error_frame */
+-	/*
++
++	/* enable_error_frame
++	 *
+ 	 * Error reporting is switched off at the moment since
+ 	 * the receiving of them is not yet 100% verified
+ 	 * This should be enabled sooner or later
+-	 *
+-	if (error_reporting) {
++	 */
++	if (0 && error_reporting) {
+ 		ret = softing_fct_cmd(card, 51, "enable_error_frame");
+ 		if (ret < 0)
+ 			goto failed;
+ 	}
+-	*/
++
+ 	/* initialize interface */
+ 	iowrite16(1, &card->dpram[DPRAM_FCT_PARAM + 2]);
+ 	iowrite16(1, &card->dpram[DPRAM_FCT_PARAM + 4]);
+-- 
+2.34.1
+
 
 

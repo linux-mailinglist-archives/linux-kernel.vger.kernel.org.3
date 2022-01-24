@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C36499875
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CBA499D31
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452476AbiAXVZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:25:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50964 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444177AbiAXVAM (ORCPT
+        id S1576877AbiAXWRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:17:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1448508AbiAXVM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:00:12 -0500
+        Mon, 24 Jan 2022 16:12:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325E6C06E00D;
+        Mon, 24 Jan 2022 12:10:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8690660916;
-        Mon, 24 Jan 2022 21:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4FBC340E5;
-        Mon, 24 Jan 2022 21:00:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFCF4B8121A;
+        Mon, 24 Jan 2022 20:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 276B4C340E5;
+        Mon, 24 Jan 2022 20:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058012;
-        bh=bTwDCjyp1FfNlpPdJ01CRAf9JzQtnnaDyzG6MorJD20=;
+        s=korg; t=1643055049;
+        bh=sPzD3sIHCoQZ6kq2zRn0RcdzuU13RsPBbpmhmt4Sj7g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XXQIHGeLBZkm7hOdrbkTwjs0R/nYoBsOz1m65fFkyiELlgecuYFYjCmJy89nKcH2j
-         ob7odbtOAdsK9i5FsgaIQ2u0l/tOAUXIMoNfxLhyYufvsPrNZgr6AjlYPgDgoy1M6p
-         juLOGvfQq9H5fQGw2Mghi7QSNaPvI+TurUtRN/Jo=
+        b=Vcgph0N9XDuqUqGDjRvT1AbwfnWB/qVHz4r2zigyhs4jex3GyC6vrRNdsmfXnM0df
+         vHrto3vipvZ3OF+u9qgRWgmmGSDPiG/kQj78uCyq7tCSiZyXvSM4aZH2paW10tKWCk
+         EDh9RnyHQ+8FSabFJjZDdCiCbXAi0akYAFMqw9RA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0151/1039] drm/vboxvideo: fix a NULL vs IS_ERR() check
-Date:   Mon, 24 Jan 2022 19:32:20 +0100
-Message-Id: <20220124184130.236313729@linuxfoundation.org>
+        stable@vger.kernel.org, Nick Kossifidis <mick@ics.forth.gr>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.15 024/846] riscv: Dont use va_pa_offset on kdump
+Date:   Mon, 24 Jan 2022 19:32:21 +0100
+Message-Id: <20220124184101.760975660@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,40 +49,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Nick Kossifidis <mick@ics.forth.gr>
 
-[ Upstream commit cebbb5c46d0cb0615fd0c62dea9b44273d0a9780 ]
+commit a11c07f032a0e9a562a32ece73af96b0e754c4b3 upstream.
 
-The devm_gen_pool_create() function never returns NULL, it returns
-error pointers.
+On kdump instead of using an intermediate step to relocate the kernel,
+that lives in a "control buffer" outside the current kernel's mapping,
+we jump to the crash kernel directly by calling riscv_kexec_norelocate().
+The current implementation uses va_pa_offset while switching to physical
+addressing, however since we moved the kernel outside the linear mapping
+this won't work anymore since riscv_kexec_norelocate() is part of the
+kernel mapping and we should use kernel_map.va_kernel_pa_offset, and also
+take XIP kernel into account.
 
-Fixes: 4cc9b565454b ("drm/vboxvideo: Use devm_gen_pool_create")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211118111233.GA1147@kili
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+We don't really need to use va_pa_offset on riscv_kexec_norelocate, we
+can just set STVEC to the physical address of the new kernel instead and
+let the hart jump to the new kernel on the next instruction after setting
+SATP to zero. This fixes kdump and is also simpler/cleaner.
+
+I tested this on the latest qemu and HiFive Unmatched and works as
+expected.
+
+Fixes: 2bfc6cd81bd1 ("riscv: Move kernel mapping outside of linear mapping")
+Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
+Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
+Cc: stable@vger.kernel.org
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/vboxvideo/vbox_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/riscv/kernel/kexec_relocate.S |   20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/vboxvideo/vbox_main.c b/drivers/gpu/drm/vboxvideo/vbox_main.c
-index f28779715ccda..c9e8b3a63c621 100644
---- a/drivers/gpu/drm/vboxvideo/vbox_main.c
-+++ b/drivers/gpu/drm/vboxvideo/vbox_main.c
-@@ -127,8 +127,8 @@ int vbox_hw_init(struct vbox_private *vbox)
- 	/* Create guest-heap mem-pool use 2^4 = 16 byte chunks */
- 	vbox->guest_pool = devm_gen_pool_create(vbox->ddev.dev, 4, -1,
- 						"vboxvideo-accel");
--	if (!vbox->guest_pool)
--		return -ENOMEM;
-+	if (IS_ERR(vbox->guest_pool))
-+		return PTR_ERR(vbox->guest_pool);
+--- a/arch/riscv/kernel/kexec_relocate.S
++++ b/arch/riscv/kernel/kexec_relocate.S
+@@ -159,25 +159,15 @@ SYM_CODE_START(riscv_kexec_norelocate)
+ 	 * s0: (const) Phys address to jump to
+ 	 * s1: (const) Phys address of the FDT image
+ 	 * s2: (const) The hartid of the current hart
+-	 * s3: (const) kernel_map.va_pa_offset, used when switching MMU off
+ 	 */
+ 	mv	s0, a1
+ 	mv	s1, a2
+ 	mv	s2, a3
+-	mv	s3, a4
  
- 	ret = gen_pool_add_virt(vbox->guest_pool,
- 				(unsigned long)vbox->guest_heap,
--- 
-2.34.1
-
+ 	/* Disable / cleanup interrupts */
+ 	csrw	CSR_SIE, zero
+ 	csrw	CSR_SIP, zero
+ 
+-	/* Switch to physical addressing */
+-	la	s4, 1f
+-	sub	s4, s4, s3
+-	csrw	CSR_STVEC, s4
+-	csrw	CSR_SATP, zero
+-
+-.align 2
+-1:
+ 	/* Pass the arguments to the next kernel  / Cleanup*/
+ 	mv	a0, s2
+ 	mv	a1, s1
+@@ -214,7 +204,15 @@ SYM_CODE_START(riscv_kexec_norelocate)
+ 	csrw	CSR_SCAUSE, zero
+ 	csrw	CSR_SSCRATCH, zero
+ 
+-	jalr	zero, a2, 0
++	/*
++	 * Switch to physical addressing
++	 * This will also trigger a jump to CSR_STVEC
++	 * which in this case is the address of the new
++	 * kernel.
++	 */
++	csrw	CSR_STVEC, a2
++	csrw	CSR_SATP, zero
++
+ SYM_CODE_END(riscv_kexec_norelocate)
+ 
+ .section ".rodata"
 
 

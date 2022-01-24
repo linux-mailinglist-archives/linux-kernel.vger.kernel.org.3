@@ -2,109 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FEB499503
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D60B54994CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392039AbiAXUuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:50:19 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:53524 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381728AbiAXUWq (ORCPT
+        id S1390380AbiAXUpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:45:15 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:45828 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381739AbiAXUWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 15:22:46 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 0F6B41C0B76; Mon, 24 Jan 2022 21:22:35 +0100 (CET)
-Date:   Mon, 24 Jan 2022 21:22:34 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 000/563] 5.10.94-rc1 review
-Message-ID: <20220124202234.GC16782@duo.ucw.cz>
-References: <20220124184024.407936072@linuxfoundation.org>
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: detlev)
+        with ESMTPSA id CA2881F43F0D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643055758;
+        bh=GSNEWPnRJLYM9HcdPN2TTX4m27DGQnVdB0QfH3N3Syc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DUrWJvmJXDk944dJo8YvSY2F65VFBtgApUNnZkEKR+F/ZnUD+jXt2aNI73eFKEPt4
+         bZy/J75hQXpRxQfiCK8xeXMapkeJWPODVicoluPrnfi9joOwgKrfVT+CPd5HaxElDL
+         GF8mKXeE4UVQqdU1ZdE3I3r3RGH76wqiQ4WVxph9Y/IXNCITyXgVYIV8+wN/d+ENcb
+         f0YG0pDZOCQGEQOPm/2YDRA9u2pXOqXhrEtS22LMFaUuAVtHHnytE2dBuI6bU22XOf
+         bz6ldXAbfwrAPLbf4wyeJI+jmDdeOkwxeKz34Xhyq3VWIqbm/Nhj3EUtVIk1GLWVRe
+         DYZbnBIvplBsg==
+From:   Detlev Casanova <detlev.casanova@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v2 8/9] regulator/rpi-panel-attiny: Don't read the LCD power status
+Date:   Mon, 24 Jan 2022 15:22:35 -0500
+Message-ID: <5533342.DvuYhMxLoT@falcon9>
+In-Reply-To: <Yerfr8Nj43TTPcAF@sirena.org.uk>
+References: <20220121152056.2044551-1-detlev.casanova@collabora.com> <20220121152056.2044551-9-detlev.casanova@collabora.com> <Yerfr8Nj43TTPcAF@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="nmemrqcdn5VTmUEE"
-Content-Disposition: inline
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Friday, January 21, 2022 11:30:39 A.M. EST Mark Brown wrote:
+> On Fri, Jan 21, 2022 at 10:20:55AM -0500, Detlev Casanova wrote:
+> > From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > 
+> > The I2C to the Atmel is very fussy, and locks up easily on
+> > Pi0-3 particularly on reads.
+> > 
+> > The LCD power status is controlled solely by this driver, so
+> > rather than reading it back from the Atmel, use the cached
+> > status last set.
+> 
+> If that's the case since you're using regmap would it not make sense to
+> enable caching in order to minimise reads in general.
 
---nmemrqcdn5VTmUEE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Would caching avoid all reads if the values are written at least once before? 
+The idea here is to make sure they are never read, I'm not sure if the regmap 
+cache ensures no read in this situation.
 
-Hi!
 
-> This is the start of the stable review cycle for the 5.10.94 release.
-> There are 563 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
 
-Our tests are unhappy, and it is more than gmp.h problem:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
-
-arm64_ctj:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/jobs/201007=
-0033
-
-arch/arm64/mm/extable.c: In function 'fixup_exception':
-1095arch/arm64/mm/extable.c:17:6: error: implicit declaration of function '=
-in_bpf_jit' [-Werror=3Dimplicit-function-declaration]
-1096  if (in_bpf_jit(regs))
-1097      ^~~~~~~~~~
-1098cc1: some warnings being treated as errors
-1099scripts/Makefile.build:280: recipe for target 'arch/arm64/mm/extable.o'=
- failed
-1100make[2]: *** [arch/arm64/mm/extable.o] Error 1
-1101make[2]: *** Waiting for unfinished jobs....
-1102  CC      kernel/sched/loadavg.o
-1103  CC      arch/arm64/kernel/entry-common.o
-1104
-
-arm64_defconfig:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/jobs/201007=
-0044
-
-arch/arm64/mm/extable.c: In function 'fixup_exception':
-1129arch/arm64/mm/extable.c:17:6: error: implicit declaration of function '=
-in_bpf_jit' [-Werror=3Dimplicit-function-declaration]
-1130  if (in_bpf_jit(regs))
-1131      ^~~~~~~~~~
-1132  CC      arch/arm64/crypto/ghash-ce-glue.o
-1133cc1: some warnings being treated as errors
-1134scripts/Makefile.build:280: recipe for target 'arch/arm64/mm/extable.o'=
- failed
-1135make[2]: *** [arch/arm64/mm/extable.o] Error 1
-1136make[2]: *** Waiting for unfinished jobs....
-1137  CC      arch/arm64/kvm/hyp/vhe/sysreg-sr.o
-1138
-
-Best regards,
-									Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---nmemrqcdn5VTmUEE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYe8KigAKCRAw5/Bqldv6
-8vwdAJ9DYr0MICHQaJW/2sq7Lc9vQCg6cgCgu3gXmPmjdfD78dlYcFxP1V2xOTY=
-=0YOT
------END PGP SIGNATURE-----
-
---nmemrqcdn5VTmUEE--

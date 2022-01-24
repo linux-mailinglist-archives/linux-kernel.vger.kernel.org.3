@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A782499A23
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632A1499B89
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457113AbiAXVk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:40:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55124 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445339AbiAXVCu (ORCPT
+        id S1576352AbiAXVx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:53:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1450662AbiAXVVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:02:50 -0500
+        Mon, 24 Jan 2022 16:21:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4203CC0604D5;
+        Mon, 24 Jan 2022 12:15:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BD54B80CCF;
-        Mon, 24 Jan 2022 21:02:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53CBBC340E5;
-        Mon, 24 Jan 2022 21:02:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03487B8122D;
+        Mon, 24 Jan 2022 20:15:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E4D1C340E5;
+        Mon, 24 Jan 2022 20:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058167;
-        bh=DyGvZKJ4HcQ9TVvA+xGuZUF4BUUr1iPoMEjkyNhdvKU=;
+        s=korg; t=1643055334;
+        bh=Of7o8sUp1oF0WnG3m2QjNpOrdoJeej0KI0tKW8m4LpU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mVPHCJti2RTteHHnO5ztfBk2MmwhJRfOcHzllsnpCmwfH1DnqFpkl9hMShmn4zCfv
-         RDtS8H/7fd3Y//pOmNGaK/Dtq0ksKvhUGhG5EXtgJgCB2twPJKgmoXn9pMG6y7v8Za
-         /6Ud7iHWhUQZ3NGHhzjbt7ocQxLReRZmOG3tFT7w=
+        b=WWggblfSrHy+k88gY4OJy9rItJfft5HNzntYLCyritFZlqc6Xzf4o0xKtdid0j59b
+         1wevG6FHckwW7EnPncAPUmjlQ+nie4YRX1BIARuApvec9Q6qciMMMNekvbyJtxhDp9
+         EpxLJk7EYe4+JAXpi6TGSYYtbK5AwJCqhkVp6M60=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>, Amish Chana <amish@3g.co.za>
-Subject: [PATCH 5.16 0202/1039] netfilter: bridge: add support for pppoe filtering
-Date:   Mon, 24 Jan 2022 19:33:11 +0100
-Message-Id: <20220124184132.117825471@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        xinhui pan <xinhui.pan@amd.com>
+Subject: [PATCH 5.15 075/846] drm/ttm: Put BO in its memory managers lru list
+Date:   Mon, 24 Jan 2022 19:33:12 +0100
+Message-Id: <20220124184103.575400530@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,77 +49,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: xinhui pan <xinhui.pan@amd.com>
 
-[ Upstream commit 28b78ecffea8078d81466b2e01bb5a154509f1ba ]
+commit 781050b0a3164934857c300bb0bc291e38c26b6f upstream.
 
-This makes 'bridge-nf-filter-pppoe-tagged' sysctl work for
-bridged traffic.
+After we move BO to a new memory region, we should put it to
+the new memory manager's lru list regardless we unlock the resv or not.
 
-Looking at the original commit it doesn't appear this ever worked:
-
- static unsigned int br_nf_post_routing(unsigned int hook, struct sk_buff **pskb,
-[..]
-        if (skb->protocol == htons(ETH_P_8021Q)) {
-                skb_pull(skb, VLAN_HLEN);
-                skb->network_header += VLAN_HLEN;
-+       } else if (skb->protocol == htons(ETH_P_PPP_SES)) {
-+               skb_pull(skb, PPPOE_SES_HLEN);
-+               skb->network_header += PPPOE_SES_HLEN;
-        }
- [..]
-	NF_HOOK(... POST_ROUTING, ...)
-
-... but the adjusted offsets are never restored.
-
-The alternative would be to rip this code out for good,
-but otoh we'd have to keep this anyway for the vlan handling
-(which works because vlan tag info is in the skb, not the packet
- payload).
-
-Reported-and-tested-by: Amish Chana <amish@3g.co.za>
-Fixes: 516299d2f5b6f97 ("[NETFILTER]: bridge-nf: filter bridged IPv4/IPv6 encapsulated in pppoe traffic")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: xinhui pan <xinhui.pan@amd.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211110043149.57554-1-xinhui.pan@amd.com
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/bridge/br_netfilter_hooks.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/ttm/ttm_bo.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/bridge/br_netfilter_hooks.c b/net/bridge/br_netfilter_hooks.c
-index b5af68c105a83..4fd882686b04d 100644
---- a/net/bridge/br_netfilter_hooks.c
-+++ b/net/bridge/br_netfilter_hooks.c
-@@ -743,6 +743,9 @@ static int br_nf_dev_queue_xmit(struct net *net, struct sock *sk, struct sk_buff
- 	if (nf_bridge->frag_max_size && nf_bridge->frag_max_size < mtu)
- 		mtu = nf_bridge->frag_max_size;
+--- a/drivers/gpu/drm/ttm/ttm_bo.c
++++ b/drivers/gpu/drm/ttm/ttm_bo.c
+@@ -724,6 +724,8 @@ int ttm_mem_evict_first(struct ttm_devic
+ 	ret = ttm_bo_evict(bo, ctx);
+ 	if (locked)
+ 		ttm_bo_unreserve(bo);
++	else
++		ttm_bo_move_to_lru_tail_unlocked(bo);
  
-+	nf_bridge_update_protocol(skb);
-+	nf_bridge_push_encap_header(skb);
-+
- 	if (skb_is_gso(skb) || skb->len + mtu_reserved <= mtu) {
- 		nf_bridge_info_free(skb);
- 		return br_dev_queue_push_xmit(net, sk, skb);
-@@ -760,8 +763,6 @@ static int br_nf_dev_queue_xmit(struct net *net, struct sock *sk, struct sk_buff
- 
- 		IPCB(skb)->frag_max_size = nf_bridge->frag_max_size;
- 
--		nf_bridge_update_protocol(skb);
--
- 		data = this_cpu_ptr(&brnf_frag_data_storage);
- 
- 		if (skb_vlan_tag_present(skb)) {
-@@ -789,8 +790,6 @@ static int br_nf_dev_queue_xmit(struct net *net, struct sock *sk, struct sk_buff
- 
- 		IP6CB(skb)->frag_max_size = nf_bridge->frag_max_size;
- 
--		nf_bridge_update_protocol(skb);
--
- 		data = this_cpu_ptr(&brnf_frag_data_storage);
- 		data->encap_size = nf_bridge_encap_header_len(skb);
- 		data->size = ETH_HLEN + data->encap_size;
--- 
-2.34.1
-
+ 	ttm_bo_put(bo);
+ 	return ret;
 
 

@@ -2,243 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0022849A104
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6317649A109
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849215AbiAXXZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:25:06 -0500
-Received: from mga11.intel.com ([192.55.52.93]:54756 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1835371AbiAXWgO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:36:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643063774; x=1674599774;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Iircemg3vWao/BZNlZr/3KGI0RO5jh1+adxYhQ3KDa8=;
-  b=WVdSvtg18pIDCEfY9h6RZxeo4oJAojiCOUH4zvF2tvAUIgUMCqDN6/RH
-   WAUqpw7H4UBy17GGkafyGnsOtRkniftVsTVIIIJ2IkZvBPc3HH/ZwHV0C
-   BntNR+qdqQ2LlSLt735iR6OujdYbB9S/5KwUJ2ZiUronNd+fp7aC+V0qQ
-   1nDMZ9Zk0qOQjeZMFgbADJgfuwDRO8dW+QRrsCsFOC6OpDCteQ5hjaVMG
-   jIngVtxjlzTD1CxkDl+fvtJSYNt5zylAw66YBXoWtIY/rw0yeaf8LPmJn
-   vEpzldgM/56TPD7fWQaivNxGWU2cbERN/vQZESRnpFSMicW9HnWIUnS2+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="243762387"
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="243762387"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 14:36:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="479258309"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jan 2022 14:36:11 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nC7wY-000J1p-VF; Mon, 24 Jan 2022 22:36:10 +0000
-Date:   Tue, 25 Jan 2022 06:35:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hemant Kumar <hemantk@codeaurora.org>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Connor O'Brien <connoro@google.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Mayank Rana <mrana@codeaurora.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 160/9999] drivers/usb/host/xhci-mem.c:1880:56: sparse: sparse: restricted
- __le32 degrades to integer
-Message-ID: <202201250600.k9Yd3XQD-lkp@intel.com>
+        id S1849396AbiAXXZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:25:44 -0500
+Received: from mail-dm6nam10on2082.outbound.protection.outlook.com ([40.107.93.82]:30483
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1835484AbiAXWgj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 17:36:39 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oTf4tsxyuputmfGXELkdy4GtQtvLtOVbX1v9AmhtCg9u42H/pvGUpi3f7FIRM3NN1DO4b7IJoJ5KDNX6Oh8Uzxxpl+pHyfMXlhaP07Pz91B/hDf7/Aw23LipGsRG7jkS8q7k3MmqK5ajo43bpJs0mFEKu/r2bHtYQhUnLJI5okmaO/ps0ob9tmnvc+TLD+GPr/M/6cvQ/iE6FKkpo0HMf1zzCmDY2zZ52J1pcHRocghOUaOGrmdJ7dLoJ1d7ZYwcl5wPweQKMwWbDd5KxUFCuImDxGfUqSyFLoguhFkQfRuX5hEiaWhqtKzzUWuXQE5EBFnsjYcdTsYvYSCeNunEkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R4YyT85HSu0uD6uiBPnqcT+3lHPXeqIILXqLKcUE9lI=;
+ b=MIPi1Hs9NqFoS5KJ+yweZsMs/GdrfQccdf3EoOFh2Uuo3InUHI/3Euqd/Lx2mF5pnir4GeUe2O3O2S2mqM2XteWeT5iRb9ZCfM6Rh/YCkNonpou89vD/LD9rE7NRW2Yy8GsuAhSxamjKvH35uUFXkxE0/ssuBG4eeOkRPyQQZ5K0vwN/t9K16XuLNKLrr6kC+CBfybTn6y289RJ8U91qGoNcS729X+LXMhlWiffMZG/FcwHX9/rTyz7iFE/Rfi8Q6TDquapUtpC7Riwg0wFtOc38/uyPJc5hlp65SjmxjuPqwmvqg2d/ShZ0WTYU020S2ccAbie9SpBxtAaMUAoyRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R4YyT85HSu0uD6uiBPnqcT+3lHPXeqIILXqLKcUE9lI=;
+ b=S6LycuDq1baJw3jokgM+uXf4VHciNIHNwFJZOcFT9idfio7XNaOxBe0/N0dGKSqwG84lBf9ICs7YKgkVL2j9GZfIScoZXaoyzcYNi4JMsoHvqromo2XNoECp13TyIGb4swm4nCTK3nKNgs3RN8TNi4UPvJ5jH5vf2othyeJ8934=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH0PR12MB5346.namprd12.prod.outlook.com (2603:10b6:610:d5::24)
+ by MW3PR12MB4443.namprd12.prod.outlook.com (2603:10b6:303:2d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Mon, 24 Jan
+ 2022 22:36:36 +0000
+Received: from CH0PR12MB5346.namprd12.prod.outlook.com
+ ([fe80::ad10:b9b4:d5cb:af1e]) by CH0PR12MB5346.namprd12.prod.outlook.com
+ ([fe80::ad10:b9b4:d5cb:af1e%4]) with mapi id 15.20.4909.017; Mon, 24 Jan 2022
+ 22:36:36 +0000
+Subject: Re: [PATCH v3 3/4] Watchdog: sp5100_tco: Add initialization using
+ EFCH MMIO
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+ <20220118202234.410555-4-terry.bowman@amd.com>
+ <20220124183651.62d5a97d@endymion>
+From:   Terry Bowman <Terry.Bowman@amd.com>
+Message-ID: <2b6c9dbb-08c9-e28e-a18c-89f215567c7b@amd.com>
+Date:   Mon, 24 Jan 2022 16:36:33 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <20220124183651.62d5a97d@endymion>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0442.namprd13.prod.outlook.com
+ (2603:10b6:208:2c3::27) To CH0PR12MB5346.namprd12.prod.outlook.com
+ (2603:10b6:610:d5::24)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7136d397-df59-4417-de8b-08d9df89fa95
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4443:EE_
+X-Microsoft-Antispam-PRVS: <MW3PR12MB444374780C53A11EDA873D7B835E9@MW3PR12MB4443.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PJyHWHjbrbeon6YUlciWnEd+4lBcHGIcjusyOfI3OB7a00H5LyfpSymyPQbueXbs7JqdtPD5O5HAVuX3syF5lvU0vr6NBvp/MFHgLmO/kV5XR3PsFOQyl2XDgXMvAQexV+4XK176VWyvA1h7cYvFe9XMMKlJQB/gNNHPSdzKlxQLvCx+5RyX34HVMsLd1yzsR9zyppfgWX9RHKmfmGf09pBckz7hlOPeb3VhI4ga+nfUCGOLAsE43FmDJXMJyaGv/PsGkROGfvTPS+8g1wz+A6+AauLV1FlunVK7AnY3r6VPFXauAFPQEdz8Y63k7jbD4i8hDsjDfymRlapSaD6EE7RzGHxvFb9mCqd26uiDYXln3x1rV8KsxuZmV7cRLbEvvW7GgnoVitJCGlMIebOfkIo8RhHbF+ybw5HOPHbA9YhWp8ww/DHpUrV+x5i+VQTe69nPzmpbVa8n0MHqnXyb6H0qkKOY4lzrwcDbBveEH8IgP2tAzgmQ1buQF3bxUH0gu/7jU5FISI5mPNgB6BdbnVRZeeUi5vTMyRSbNrvnePp4W0U4q0ysKqrcEoVAGPG6Ufobh02AiIaXE5rOBkLxMeM8hpsWi6lVW18dVcJyRHFP8izNzM/KNdJ5U/Q6lpbRMMNWRfeKMkxJ/6cOnquoX2flEO1QHKXuxUagQJvATBaNJYcWs68jX1opX5yZd65fJVbtOJnhcGzJ0wOLIOlgAy1HlGRpWe9g3mj7fj30KvKi2n9LB8+cUG0oJ4VGTbYL
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5346.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(36756003)(6916009)(6486002)(66946007)(5660300002)(6506007)(2906002)(66476007)(53546011)(26005)(316002)(4326008)(66556008)(8936002)(2616005)(8676002)(31696002)(38100700002)(31686004)(86362001)(6512007)(83380400001)(186003)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dUdqSXh1Y2xCcVFiNk5BVmszd2VIMFFFdWNPL09oNE5Kd2VKL21Ibm1jczh1?=
+ =?utf-8?B?M1hCNDZ1UmFaNjN1WnFWdE4vbGJGTnRHdDdtTjIxQm4rZmRTZDJuQmZic3Jq?=
+ =?utf-8?B?OUZEcXA2QXJMZmoyVk93aXF5NGpXVXZPMTF4a0kzaHhhem52MmV3QkFTWk84?=
+ =?utf-8?B?VC94bXpoVlBGMUpkejhvTmdZYm9pVll5WHFhN2hqeWN0VXhIM2htUHFOb2Ey?=
+ =?utf-8?B?aDdnSFNIang4YWM5RExDZ0JQMmJZZXV2cGkrS1hsUXpnNVZjdkM2ZUgxbk1B?=
+ =?utf-8?B?TGxCNUoxWC9UZ1NyYTQ2Nng3STExcWxWYXdIS0tGTTlpZW9aeU9VUEdlcFI2?=
+ =?utf-8?B?ZzQ1Mk9KNGFTZzRiN28wOWVqOHowMmZjcngrRzlxVjhvTlV5TlZobElGbkh3?=
+ =?utf-8?B?YmZMVy9zeGJUVm9NMEhNMWZOVGNXcjcxR09mVkJRclVlVXlmVzZ6MHlZcENj?=
+ =?utf-8?B?STQxZTFFQ05kZDVoWU1MbStMa3p6NWxyYjN0MFBZaXB6RVlORDlCMGlSR0tC?=
+ =?utf-8?B?bjJYZXNwN1AvY0tCRFlNL3lCbFpVWU9lYjc2MTNTWWZjZERNSEhPR3FSRlU3?=
+ =?utf-8?B?OGQrSGF0TGdsQVgrSW4wTmhKV2Y3dHNYYjV0NytvWjJTZGtlVnMxUERpNjN0?=
+ =?utf-8?B?WXFLc1RWcmc1TTBkVHlhU3JISHFoNk92Q0xRNE16TmtuNXpLTEFhUGo1ZUVL?=
+ =?utf-8?B?OFU1MGxSYUh3Q3hneGpRSXhCOXlWaytOc0k4V1ZVaVJoUXRyU3FyMWREQkZK?=
+ =?utf-8?B?eVNlU0I4MkxnQS9wQ2FCNXFwQjNaZkJveDJLYWt1ZzNoMVc3ekxnSmFEZVhU?=
+ =?utf-8?B?Y01TUWprem9PQjVKRXhnYXlWSnN0bTVXdGRtZlZFR3BMeW40QTBMaTQ3K2Jx?=
+ =?utf-8?B?ZUVWSnU2Q3hvckxJdWxLaHlBbEtZQ2R5QTl6V21JeldXQVdoM0dtRHdrTkFB?=
+ =?utf-8?B?MDlGdkxQekoxZjhJelVlU3pPNk54cFlubnhxMnFNR2p5c3VkKzFiMGZtajZj?=
+ =?utf-8?B?c0doai9EUnAxb0Q0QSthYXZBdVRrTTRUN1VQUlV5NU5zT2FLYVdwTTA5SWtk?=
+ =?utf-8?B?T2FTYjBRUDR3enpuVlpoQnhCVGFUSEIyR0h4TXcrUkdHVno5Snc3d2V4bURE?=
+ =?utf-8?B?b09iNFRoZUdYanJoc0NKcThFMTdTTmpwaVlzbHJrTHlTYmhrV29BMis2Nlht?=
+ =?utf-8?B?ZEJKakJJd2srVjFiUGNVMTVnV21DeTFkOCtGQkxNWG1QVnVlV2ZER2lSVnZN?=
+ =?utf-8?B?aDFwUWxvSndPTTdLYVNCL0F6R1lLSzk0WE1Kd1U0QzVVd2Y4TW03Zisvck5H?=
+ =?utf-8?B?MlhmSTE5TU5HV0MvVDZ5MS82ZzZTM0lsZ1F5YWtNV0xKMzM3Vmx1endMbzVu?=
+ =?utf-8?B?VEFNYjM4aGxFZHNQZkp4Qm9GRDFPMkVpN3VvYWkyWTA1dDNtZ3FDc1F6bFJK?=
+ =?utf-8?B?UzcxOFFaaDRRbFFFK2pPT3hmYzk4aUJxc29MQ1BFSUwxN0h4b3EzTkh2WG5j?=
+ =?utf-8?B?SUI0WUZrLzFPS2paNUJ6N25uQkdRZDl3VEhHcjErRHEwZVNQVisyMXlSUmJl?=
+ =?utf-8?B?TmlpRUdMeHpXTHE2dW5HbFdic2kxR1I1SWUvR21Pam94RWJzci8zaFlwTDY1?=
+ =?utf-8?B?cUwzTnBFcHJhMzZwUjBzem92OEdKajZWS0dNS245STN3SkdDWDJGSXkzeUZY?=
+ =?utf-8?B?VHBDb2lZK3ZBMitOVHdjUlFPSFR0T1UzblJTN0JzWU1EOUpQQ1NFZmVTQjZ2?=
+ =?utf-8?B?alE5V1BsK3ZHMmZwTkJvM1FJSFhJWllDYi94cEhuVzRQTk54aUxwcGNLYWFk?=
+ =?utf-8?B?UlozSzNvUkNtV290QkJpZTlIV3ZUZ3FiK0gxbGdlM0lwNWRqMWtBL213NU03?=
+ =?utf-8?B?TEIwTWxtdThLREdLYmQwVkEraHZwYmE4amJTdDViRGJic0VKZ3k3TEtxWU5s?=
+ =?utf-8?B?VXcva0JrOUpPQ3JZSGIyVkpzOGV1Z2FMN1hJN0xocEJwNlY2UWVlTDJrSGFo?=
+ =?utf-8?B?ZkYrL1pETlVHVk9hZ3ZrM25aWVp6RSs5Y2l5UWFidFhaUjRaYWxrN0tYR3Jq?=
+ =?utf-8?B?cUFjNGs1VWJ4M25PcDYwa3UrNEVkeUZHWTFVbmJWQkVDa2h4Zjd3ZE9xeGdu?=
+ =?utf-8?B?bWVTWFRCbkxXWTJrK2VkbEhpbDUzVEZueUlqMnZDaGZXMjFFNjVLUE9ZWlJV?=
+ =?utf-8?Q?ylaludY/J3jKdIlrI7BUU2Y=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7136d397-df59-4417-de8b-08d9df89fa95
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5346.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2022 22:36:35.9306
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J3/k3LjhGUmQFZ4QwH4MujDy1w8dC7/sltMDr8AWuanxMKtlL9mS/OGLMxIqi+G0zDa9WfurU4zrhOQYQ348tQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4443
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   90a691fca4c2525068d9908ac203e9f09e4e33c0
-commit: 5dfdaa15caebc782d1c90ff6513d4cc9f6ac3663 [160/9999] ANDROID: GKI: usb: xhci: Add support for secondary interrupters
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220125/202201250600.k9Yd3XQD-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/5dfdaa15caebc782d1c90ff6513d4cc9f6ac3663
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout 5dfdaa15caebc782d1c90ff6513d4cc9f6ac3663
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ drivers/usb/host/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/usb/host/xhci-mem.c:936:6: sparse: sparse: symbol 'xhci_free_virt_devices_depth_first' was not declared. Should it be static?
->> drivers/usb/host/xhci-mem.c:1880:56: sparse: sparse: restricted __le32 degrades to integer
->> drivers/usb/host/xhci-mem.c:1840:6: sparse: sparse: symbol 'xhci_handle_sec_intr_events' was not declared. Should it be static?
->> drivers/usb/host/xhci-mem.c:1947:6: sparse: sparse: symbol 'xhci_event_ring_cleanup' was not declared. Should it be static?
->> drivers/usb/host/xhci-mem.c:2486:5: sparse: sparse: symbol 'xhci_event_ring_setup' was not declared. Should it be static?
->> drivers/usb/host/xhci-mem.c:2590:5: sparse: sparse: symbol 'xhci_event_ring_init' was not declared. Should it be static?
-   drivers/usb/host/xhci-mem.c:936:6: warning: no previous prototype for 'xhci_free_virt_devices_depth_first' [-Wmissing-prototypes]
-     936 | void xhci_free_virt_devices_depth_first(struct xhci_hcd *xhci, int slot_id)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:1840:6: warning: no previous prototype for 'xhci_handle_sec_intr_events' [-Wmissing-prototypes]
-    1840 | void xhci_handle_sec_intr_events(struct xhci_hcd *xhci, int intr_num)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:1947:6: warning: no previous prototype for 'xhci_event_ring_cleanup' [-Wmissing-prototypes]
-    1947 | void xhci_event_ring_cleanup(struct xhci_hcd *xhci)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:2486:5: warning: no previous prototype for 'xhci_event_ring_setup' [-Wmissing-prototypes]
-    2486 | int xhci_event_ring_setup(struct xhci_hcd *xhci, struct xhci_ring **er,
-         |     ^~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:2590:5: warning: no previous prototype for 'xhci_event_ring_init' [-Wmissing-prototypes]
-    2590 | int xhci_event_ring_init(struct xhci_hcd *xhci, gfp_t flags)
-         |     ^~~~~~~~~~~~~~~~~~~~
-   drivers/usb/host/xhci-mem.c:365: warning: Function parameter or member 'xhci' not described in 'xhci_ring_alloc'
-   drivers/usb/host/xhci-mem.c:365: warning: Function parameter or member 'num_segs' not described in 'xhci_ring_alloc'
-   drivers/usb/host/xhci-mem.c:365: warning: Function parameter or member 'cycle_state' not described in 'xhci_ring_alloc'
-   drivers/usb/host/xhci-mem.c:365: warning: Function parameter or member 'type' not described in 'xhci_ring_alloc'
-   drivers/usb/host/xhci-mem.c:365: warning: Function parameter or member 'max_packet' not described in 'xhci_ring_alloc'
-   drivers/usb/host/xhci-mem.c:365: warning: Function parameter or member 'flags' not described in 'xhci_ring_alloc'
+On 1/24/22 11:36 AM, Jean Delvare wrote:
+> Hi Terry,
+> 
+> On Tue, 18 Jan 2022 14:22:33 -0600, Terry Bowman wrote:
+>> cd6h/cd7h port I/O can be disabled on recent AMD hardware. Read
+>> accesses to disabled cd6h/cd7h port I/O will return F's and written
+>> data is dropped. It is recommended to replace the cd6h/cd7h
+>> port I/O with MMIO.
+>>
+>> Co-developed-by: Robert Richter <rrichter@amd.com>
+>> Signed-off-by: Robert Richter <rrichter@amd.com>
+>> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+>> To: Guenter Roeck <linux@roeck-us.net>
+>> To: linux-watchdog@vger.kernel.org
+>> To: Jean Delvare <jdelvare@suse.com>
+>> To: linux-i2c@vger.kernel.org
+>> To: Wolfram Sang <wsa@kernel.org>
+>> To: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> To: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> Cc: linux-kernel@vger.kernel.org
+>> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+>> Cc: Robert Richter <rrichter@amd.com>
+>> Cc: Thomas Lendacky <thomas.lendacky@amd.com>
+>> ---
+>>  drivers/watchdog/sp5100_tco.c | 88 ++++++++++++++++++++++++++++++++++-
+>>  drivers/watchdog/sp5100_tco.h |  5 ++
+>>  2 files changed, 92 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+>> index 64ecebd93403..36519a992ca1 100644
+>> --- a/drivers/watchdog/sp5100_tco.c
+>> +++ b/drivers/watchdog/sp5100_tco.c
+>> @@ -49,7 +49,7 @@
+>>  /* internal variables */
+>>  
+>>  enum tco_reg_layout {
+>> -	sp5100, sb800, efch
+>> +	sp5100, sb800, efch, efch_mmio
+>>  };
+>>  
+>>  struct sp5100_tco {
+>> @@ -209,6 +209,8 @@ static void tco_timer_enable(struct sp5100_tco *tco)
+>>  					  ~EFCH_PM_WATCHDOG_DISABLE,
+>>  					  EFCH_PM_DECODEEN_SECOND_RES);
+>>  		break;
+>> +	default:
+>> +		break;
+>>  	}
+>>  }
+>>  
+>> @@ -318,6 +320,87 @@ static int sp5100_tco_timer_init(struct sp5100_tco *tco)
+>>  	return 0;
+>>  }
+>>  
+>> +static u8 efch_read_pm_reg8(void __iomem *addr, u8 index)
+>> +{
+>> +	return readb(addr + index);
+>> +}
+>> +
+>> +static void efch_update_pm_reg8(void __iomem *addr, u8 index, u8 reset, u8 set)
+>> +{
+>> +	u8 val;
+>> +
+>> +	val = readb(addr + index);
+>> +	val &= reset;
+>> +	val |= set;
+>> +	writeb(val, addr + index);
+>> +}
+>> +
+>> +static void tco_timer_enable_mmio(void __iomem *addr)
+>> +{
+>> +	efch_update_pm_reg8(addr, EFCH_PM_DECODEEN3,
+>> +			    ~EFCH_PM_WATCHDOG_DISABLE,
+>> +			    EFCH_PM_DECODEEN_SECOND_RES);
+>> +}
+>> +
+>> +static int sp5100_tco_setupdevice_mmio(struct device *dev,
+>> +				       struct watchdog_device *wdd)
+>> +{
+>> +	struct sp5100_tco *tco = watchdog_get_drvdata(wdd);
+>> +	const char *dev_name = SB800_DEVNAME;
+>> +	u32 mmio_addr = 0, alt_mmio_addr = 0;
+>> +	struct resource *res;
+>> +	void __iomem *addr;
+>> +	int ret;
+>> +
+>> +	res = request_mem_region(EFCH_PM_ACPI_MMIO_PM_ADDR,
+>> +				 EFCH_PM_ACPI_MMIO_PM_SIZE,
+>> +				 "sp5100_tco");
+>> +
+>> +	if (!res) {
+>> +		dev_err(dev,
+>> +			"SMB base address memory region 0x%x already in use.\n",
+> 
+> SMB -> SMBus
+> 
+>> +			EFCH_PM_ACPI_MMIO_PM_ADDR);
+>> +		return -EBUSY;
+>> +	}
+>> +
+>> +	addr = ioremap(EFCH_PM_ACPI_MMIO_PM_ADDR,
+>> +		       EFCH_PM_ACPI_MMIO_PM_SIZE);
+>> +	if (!addr) {
+>> +		release_resource(res);
+>> +		dev_err(dev, "SMB base address mapping failed.\n");
+> 
+> SMB -> SMBus
+> 
+>> +		return -ENOMEM;
+>> +	}
+>> +
+> 
+> A short comment saying what the next command is doing would be
+> appreciated.
+> 
+>> +	if (!(efch_read_pm_reg8(addr, EFCH_PM_DECODEEN) &
+>> +	      EFCH_PM_DECODEEN_WDT_TMREN)) {
+> 
+> I find such splits hard to read. If checkpatch complains when you don't
+> split it (but I think it no longer does, right?) then just introduce a
+> local variable to store the register value. Same for the 2 occurrences
+> below.
+> 
+>> +		efch_update_pm_reg8(addr, EFCH_PM_DECODEEN,
+>> +				    0xff,
+>> +				    EFCH_PM_DECODEEN_WDT_TMREN);
+> 
+> Easily fits in one fewer line.
+> 
+>> +	}
+>> +
+>> +	/* Determine MMIO base address */
+>> +	if (efch_read_pm_reg8(addr, EFCH_PM_DECODEEN) &
+>> +	    EFCH_PM_DECODEEN_WDT_TMREN)
+>> +		mmio_addr = EFCH_PM_WDT_ADDR;
+>> +
+>> +	/* Determine alternate MMIO base address */
+>> +	if (efch_read_pm_reg8(addr, EFCH_PM_ISACONTROL) &
+>> +	    EFCH_PM_ISACONTROL_MMIOEN)
+>> +		alt_mmio_addr = EFCH_PM_ACPI_MMIO_ADDR +
+>> +			EFCH_PM_ACPI_MMIO_WDT_OFFSET;
+>> +
+>> +	ret = sp5100_tco_prepare_base(tco, mmio_addr, alt_mmio_addr, dev_name);
+>> +	if (!ret) {
+>> +		tco_timer_enable_mmio(addr);
+>> +		ret = sp5100_tco_timer_init(tco);
+>> +	}
+>> +
+>> +	iounmap(addr);
+>> +	release_resource(res);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>>  static int sp5100_tco_setupdevice(struct device *dev,
+>>  				  struct watchdog_device *wdd)
+>>  {
+>> @@ -327,6 +410,9 @@ static int sp5100_tco_setupdevice(struct device *dev,
+>>  	u32 alt_mmio_addr = 0;
+>>  	int ret;
+>>  
+>> +	if (tco->tco_reg_layout == efch_mmio)
+>> +		return sp5100_tco_setupdevice_mmio(dev, wdd);
+>> +
+>>  	/* Request the IO ports used by this driver */
+>>  	if (!request_muxed_region(SP5100_IO_PM_INDEX_REG,
+>>  				  SP5100_PM_IOPORTS_SIZE, "sp5100_tco")) {
+>> diff --git a/drivers/watchdog/sp5100_tco.h b/drivers/watchdog/sp5100_tco.h
+>> index adf015aa4126..2df8f8b2c55b 100644
+>> --- a/drivers/watchdog/sp5100_tco.h
+>> +++ b/drivers/watchdog/sp5100_tco.h
+>> @@ -83,3 +83,8 @@
+>>  
+>>  #define EFCH_PM_ACPI_MMIO_ADDR		0xfed80000
+>>  #define EFCH_PM_ACPI_MMIO_WDT_OFFSET	0x00000b00
+>> +#define EFCH_PM_ACPI_MMIO_PM_OFFSET	0x00000300
+>> +
+>> +#define EFCH_PM_ACPI_MMIO_PM_ADDR	(EFCH_PM_ACPI_MMIO_ADDR +	\
+>> +					 EFCH_PM_ACPI_MMIO_PM_OFFSET)
+>> +#define EFCH_PM_ACPI_MMIO_PM_SIZE       8
+> 
+> Other than these minor details, patch looks good to me, thanks.
+> 
+> Tested-by: Jean Delvare <jdelvare@suse.de>
+> 
 
-vim +1880 drivers/usb/host/xhci-mem.c
+Hi Jean,
 
-  1839	
-> 1840	void xhci_handle_sec_intr_events(struct xhci_hcd *xhci, int intr_num)
-  1841	{
-  1842		union xhci_trb *erdp_trb, *current_trb;
-  1843		struct xhci_segment	*seg;
-  1844		u64 erdp_reg;
-  1845		u32 iman_reg;
-  1846		dma_addr_t deq;
-  1847		unsigned long segment_offset;
-  1848	
-  1849		/* disable irq, ack pending interrupt and ack all pending events */
-  1850	
-  1851		iman_reg =
-  1852			readl_relaxed(&xhci->sec_ir_set[intr_num]->irq_pending);
-  1853		iman_reg &= ~IMAN_IE;
-  1854		writel_relaxed(iman_reg,
-  1855				&xhci->sec_ir_set[intr_num]->irq_pending);
-  1856		iman_reg =
-  1857			readl_relaxed(&xhci->sec_ir_set[intr_num]->irq_pending);
-  1858		if (iman_reg & IMAN_IP)
-  1859			writel_relaxed(iman_reg,
-  1860				&xhci->sec_ir_set[intr_num]->irq_pending);
-  1861	
-  1862		/* last acked event trb is in erdp reg  */
-  1863		erdp_reg =
-  1864			xhci_read_64(xhci, &xhci->sec_ir_set[intr_num]->erst_dequeue);
-  1865		deq = (dma_addr_t)(erdp_reg & ~ERST_PTR_MASK);
-  1866		if (!deq) {
-  1867			pr_debug("%s: event ring handling not required\n", __func__);
-  1868			return;
-  1869		}
-  1870	
-  1871		seg = xhci->sec_event_ring[intr_num]->first_seg;
-  1872		segment_offset = deq - seg->dma;
-  1873	
-  1874		/* find out virtual address of the last acked event trb */
-  1875		erdp_trb = current_trb = &seg->trbs[0] +
-  1876					(segment_offset/sizeof(*current_trb));
-  1877	
-  1878		/* read cycle state of the last acked trb to find out CCS */
-  1879		xhci->sec_event_ring[intr_num]->cycle_state =
-> 1880					(current_trb->event_cmd.flags & TRB_CYCLE);
-  1881	
-  1882		while (1) {
-  1883			/* last trb of the event ring: toggle cycle state */
-  1884			if (current_trb == &seg->trbs[TRBS_PER_SEGMENT - 1]) {
-  1885				xhci->sec_event_ring[intr_num]->cycle_state ^= 1;
-  1886				current_trb = &seg->trbs[0];
-  1887			} else {
-  1888				current_trb++;
-  1889			}
-  1890	
-  1891			/* cycle state transition */
-  1892			if ((le32_to_cpu(current_trb->event_cmd.flags) & TRB_CYCLE) !=
-  1893			    xhci->sec_event_ring[intr_num]->cycle_state)
-  1894				break;
-  1895		}
-  1896	
-  1897		if (erdp_trb != current_trb) {
-  1898			deq =
-  1899			xhci_trb_virt_to_dma(xhci->sec_event_ring[intr_num]->deq_seg,
-  1900						current_trb);
-  1901			if (deq == 0)
-  1902				xhci_warn(xhci,
-  1903					"WARN invalid SW event ring dequeue ptr.\n");
-  1904			/* Update HC event ring dequeue pointer */
-  1905			erdp_reg &= ERST_PTR_MASK;
-  1906			erdp_reg |= ((u64) deq & (u64) ~ERST_PTR_MASK);
-  1907		}
-  1908	
-  1909		/* Clear the event handler busy flag (RW1C); event ring is empty. */
-  1910		erdp_reg |= ERST_EHB;
-  1911		xhci_write_64(xhci, erdp_reg,
-  1912				&xhci->sec_ir_set[intr_num]->erst_dequeue);
-  1913	}
-  1914	
-  1915	int xhci_sec_event_ring_cleanup(struct usb_hcd *hcd, unsigned int intr_num)
-  1916	{
-  1917		int size;
-  1918		struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-  1919		struct device	*dev = xhci_to_hcd(xhci)->self.sysdev;
-  1920	
-  1921		if (intr_num >= xhci->max_interrupters) {
-  1922			xhci_err(xhci, "invalid secondary interrupter num %d\n",
-  1923				intr_num);
-  1924			return -EINVAL;
-  1925		}
-  1926	
-  1927		size =
-  1928		sizeof(struct xhci_erst_entry)*(xhci->sec_erst[intr_num].num_entries);
-  1929		if (xhci->sec_erst[intr_num].entries) {
-  1930			xhci_handle_sec_intr_events(xhci, intr_num);
-  1931			dma_free_coherent(dev, size, xhci->sec_erst[intr_num].entries,
-  1932					xhci->sec_erst[intr_num].erst_dma_addr);
-  1933			xhci->sec_erst[intr_num].entries = NULL;
-  1934		}
-  1935		xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Freed SEC ERST#%d",
-  1936			intr_num);
-  1937		if (xhci->sec_event_ring[intr_num])
-  1938			xhci_ring_free(xhci, xhci->sec_event_ring[intr_num]);
-  1939	
-  1940		xhci->sec_event_ring[intr_num] = NULL;
-  1941		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-  1942			"Freed sec event ring");
-  1943	
-  1944		return 0;
-  1945	}
-  1946	
-> 1947	void xhci_event_ring_cleanup(struct xhci_hcd *xhci)
-  1948	{
-  1949		unsigned int i;
-  1950	
-  1951		/* sec event ring clean up */
-  1952		for (i = 1; i < xhci->max_interrupters; i++)
-  1953			xhci_sec_event_ring_cleanup(xhci_to_hcd(xhci), i);
-  1954	
-  1955		kfree(xhci->sec_ir_set);
-  1956		xhci->sec_ir_set = NULL;
-  1957		kfree(xhci->sec_erst);
-  1958		xhci->sec_erst = NULL;
-  1959		kfree(xhci->sec_event_ring);
-  1960		xhci->sec_event_ring = NULL;
-  1961	
-  1962		/* primary event ring clean up */
-  1963		xhci_free_erst(xhci, &xhci->erst);
-  1964		xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Freed primary ERST");
-  1965		if (xhci->event_ring)
-  1966			xhci_ring_free(xhci, xhci->event_ring);
-  1967		xhci->event_ring = NULL;
-  1968		xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Freed priamry event ring");
-  1969	}
-  1970	
+Is your "Tested-by" for patch 3/4 or the sp5100_tco series?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Regards,
+Terry

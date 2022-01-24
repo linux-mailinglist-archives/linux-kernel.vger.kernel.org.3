@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39998499ED8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 548D449A0A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838194AbiAXWqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:46:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51902 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457231AbiAXVlP (ORCPT
+        id S1846360AbiAXXPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:15:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584674AbiAXWVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:41:15 -0500
+        Mon, 24 Jan 2022 17:21:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291F7C0424FE;
+        Mon, 24 Jan 2022 12:52:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53A2EB80FA1;
-        Mon, 24 Jan 2022 21:41:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71380C340E5;
-        Mon, 24 Jan 2022 21:41:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA2FAB80CCF;
+        Mon, 24 Jan 2022 20:52:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B22C340E5;
+        Mon, 24 Jan 2022 20:52:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060473;
-        bh=vtrHks515mWWDB8VUuf53R07+1bjr6PyWKO1q/bUdAk=;
+        s=korg; t=1643057562;
+        bh=Fr/LKWtC4UyTPQgHsHi1fEAW/E12tFtoUubYw4q27BA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MJr4evXSCfy6Y7me42GLRX+GY/tXtGApTzG12Bo3Bu21oOzRlHbwyLMrQBFLWoY8O
-         o0qNntsyeKgpiaXhhWLgDbc7A8ifSdgrkqJymvdEcAJqkUBC52noQtIOclfCGrFtzP
-         HGHKbuLKG0RqBi8xCq4gKifBvDsVFw1UXJt6QeQc=
+        b=lc2P/Aft5jTaMPIJCLSXGnbJme7Sj+M6/hOn3P5ZNzdnUlA4W4o0R5Hm4/uXlKqCS
+         EQtexxmkCeBw4ijJ8ZVoMsYvyj4AZRn5OvcYe5XthZ2tqXYv+bd6tZTnm+tNszJWqB
+         4SXd9OgzOpzc9SLf0fmprNO/jT0cGQcKjlSXS00c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.16 0959/1039] crypto: octeontx2 - uninitialized variable in kvf_limits_store()
-Date:   Mon, 24 Jan 2022 19:45:48 +0100
-Message-Id: <20220124184157.530557206@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 832/846] net: ethernet: mtk_eth_soc: fix error checking in mtk_mac_config()
+Date:   Mon, 24 Jan 2022 19:45:49 +0100
+Message-Id: <20220124184129.612885100@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,39 +48,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Tom Rix <trix@redhat.com>
 
-commit 0ea275df84c389e910a3575a9233075118c173ee upstream.
+commit 214b3369ab9b0a6f28d6c970220c209417edbc65 upstream.
 
-If kstrtoint() fails then "lfs_num" is uninitialized and the warning
-doesn't make any sense.  Just delete it.
+Clang static analysis reports this problem
+mtk_eth_soc.c:394:7: warning: Branch condition evaluates
+  to a garbage value
+                if (err)
+                    ^~~
 
-Fixes: 8ec8015a3168 ("crypto: octeontx2 - add support to process the crypto request")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+err is not initialized and only conditionally set.
+So intitialize err.
+
+Fixes: 7e538372694b ("net: ethernet: mediatek: Re-add support SGMII")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c |    9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptpf_main.c
-@@ -494,12 +494,11 @@ static ssize_t kvf_limits_store(struct d
- {
- 	struct otx2_cptpf_dev *cptpf = dev_get_drvdata(dev);
- 	int lfs_num;
-+	int ret;
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -224,7 +224,7 @@ static void mtk_mac_config(struct phylin
+ 					   phylink_config);
+ 	struct mtk_eth *eth = mac->hw;
+ 	u32 mcr_cur, mcr_new, sid, i;
+-	int val, ge_mode, err;
++	int val, ge_mode, err = 0;
  
--	if (kstrtoint(buf, 0, &lfs_num)) {
--		dev_err(dev, "lfs count %d must be in range [1 - %d]\n",
--			lfs_num, num_online_cpus());
--		return -EINVAL;
--	}
-+	ret = kstrtoint(buf, 0, &lfs_num);
-+	if (ret)
-+		return ret;
- 	if (lfs_num < 1 || lfs_num > num_online_cpus()) {
- 		dev_err(dev, "lfs count %d must be in range [1 - %d]\n",
- 			lfs_num, num_online_cpus());
+ 	/* MT76x8 has no hardware settings between for the MAC */
+ 	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628) &&
 
 

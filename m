@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1AA499CDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B264996F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581092AbiAXWLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:11:12 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40640 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452034AbiAXVX5 (ORCPT
+        id S1446414AbiAXVII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358518AbiAXUmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:23:57 -0500
+        Mon, 24 Jan 2022 15:42:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F1FC04966E;
+        Mon, 24 Jan 2022 11:52:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80C7EB8105C;
-        Mon, 24 Jan 2022 21:23:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E10FC340E4;
-        Mon, 24 Jan 2022 21:23:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3D3360B43;
+        Mon, 24 Jan 2022 19:52:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC940C340E8;
+        Mon, 24 Jan 2022 19:52:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643059435;
-        bh=Wz1PAbR8+iIe/jPfTcBbjPHkLNB0RxFEi0fK8+Aossk=;
+        s=korg; t=1643053975;
+        bh=stAZSoMPzPSb71CrbNvLWrWhQ3nE4fD5aHfcj2BwaxA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qjykP7M5h+P0t6FONbe5Y4Il+khgq8anEhWRnw95lwkybsstbqn7FUHtj5+rVu1GY
-         Tw6MuYHnOV+HGcsPb+9Kzwnwf+wZekeKgdicUxlJF6RwclEHYpmBx0EYNS6ZjkYmwg
-         DPST2mL7YTK/Yt3Kwk9U5ATAi8nXiKBqEMck9KhQ=
+        b=SZgEKaoam9ojbWuVvHT7zYb6PRW7Xm9pav5Qlrp863Gss8KZ3pM89ubHxFpprqALY
+         RWv0Nn/qrqfPbrWEoVT53UosoSDiwWnwGKmkv4rh+eX38LQlg6Lw5lcrd3Op7seDFM
+         6Y8cj4ykqkUkEOajxN3CuqB4LGPPJgP6xNDI2EvE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Neal Liu <neal_liu@aspeedtech.com>,
+        stable@vger.kernel.org, Lukas Czerner <lczerner@redhat.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0613/1039] usb: uhci: add aspeed ast2600 uhci support
-Date:   Mon, 24 Jan 2022 19:40:02 +0100
-Message-Id: <20220124184145.942021026@linuxfoundation.org>
+Subject: [PATCH 5.10 238/563] ext4: avoid trim error on fs with small groups
+Date:   Mon, 24 Jan 2022 19:40:03 +0100
+Message-Id: <20220124184032.672243166@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,34 +49,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neal Liu <neal_liu@aspeedtech.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit 554abfe2eadec97d12c71d4a69da1518478f69eb ]
+[ Upstream commit 173b6e383d2a204c9921ffc1eca3b87aa2106c33 ]
 
-Enable ast2600 uhci quirks.
+A user reported FITRIM ioctl failing for him on ext4 on some devices
+without apparent reason.  After some debugging we've found out that
+these devices (being LVM volumes) report rather large discard
+granularity of 42MB and the filesystem had 1k blocksize and thus group
+size of 8MB. Because ext4 FITRIM implementation puts discard
+granularity into minlen, ext4_trim_fs() declared the trim request as
+invalid. However just silently doing nothing seems to be a more
+appropriate reaction to such combination of parameters since user did
+not specify anything wrong.
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-Link: https://lore.kernel.org/r/20211126100021.2331024-1-neal_liu@aspeedtech.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Lukas Czerner <lczerner@redhat.com>
+Fixes: 5c2ed62fd447 ("ext4: Adjust minlen with discard_granularity in the FITRIM ioctl")
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20211112152202.26614-1-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/uhci-platform.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/ext4/ioctl.c   | 2 --
+ fs/ext4/mballoc.c | 8 ++++++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/uhci-platform.c b/drivers/usb/host/uhci-platform.c
-index 70dbd95c3f063..be9e9db7cad10 100644
---- a/drivers/usb/host/uhci-platform.c
-+++ b/drivers/usb/host/uhci-platform.c
-@@ -113,7 +113,8 @@ static int uhci_hcd_platform_probe(struct platform_device *pdev)
- 				num_ports);
- 		}
- 		if (of_device_is_compatible(np, "aspeed,ast2400-uhci") ||
--		    of_device_is_compatible(np, "aspeed,ast2500-uhci")) {
-+		    of_device_is_compatible(np, "aspeed,ast2500-uhci") ||
-+		    of_device_is_compatible(np, "aspeed,ast2600-uhci")) {
- 			uhci->is_aspeed = 1;
- 			dev_info(&pdev->dev,
- 				 "Enabled Aspeed implementation workarounds\n");
+diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
+index cb54ea6461fd8..413bf3d2f7844 100644
+--- a/fs/ext4/ioctl.c
++++ b/fs/ext4/ioctl.c
+@@ -1123,8 +1123,6 @@ resizefs_out:
+ 		    sizeof(range)))
+ 			return -EFAULT;
+ 
+-		range.minlen = max((unsigned int)range.minlen,
+-				   q->limits.discard_granularity);
+ 		ret = ext4_trim_fs(sb, &range);
+ 		if (ret < 0)
+ 			return ret;
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index d7cb7d719ee58..60aef7fdd61d0 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -5815,6 +5815,7 @@ out:
+  */
+ int ext4_trim_fs(struct super_block *sb, struct fstrim_range *range)
+ {
++	struct request_queue *q = bdev_get_queue(sb->s_bdev);
+ 	struct ext4_group_info *grp;
+ 	ext4_group_t group, first_group, last_group;
+ 	ext4_grpblk_t cnt = 0, first_cluster, last_cluster;
+@@ -5833,6 +5834,13 @@ int ext4_trim_fs(struct super_block *sb, struct fstrim_range *range)
+ 	    start >= max_blks ||
+ 	    range->len < sb->s_blocksize)
+ 		return -EINVAL;
++	/* No point to try to trim less than discard granularity */
++	if (range->minlen < q->limits.discard_granularity) {
++		minlen = EXT4_NUM_B2C(EXT4_SB(sb),
++			q->limits.discard_granularity >> sb->s_blocksize_bits);
++		if (minlen > EXT4_CLUSTERS_PER_GROUP(sb))
++			goto out;
++	}
+ 	if (end >= max_blks)
+ 		end = max_blks - 1;
+ 	if (end <= first_data_blk)
 -- 
 2.34.1
 

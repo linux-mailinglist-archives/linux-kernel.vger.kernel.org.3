@@ -2,39 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0385749997F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FCF49980F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455526AbiAXVfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:35:34 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44392 "EHLO
+        id S1449632AbiAXVTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:19:38 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44502 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392277AbiAXUvB (ORCPT
+        with ESMTP id S1392408AbiAXUvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:51:01 -0500
+        Mon, 24 Jan 2022 15:51:10 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C4DC60C60;
-        Mon, 24 Jan 2022 20:50:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C27C340E5;
-        Mon, 24 Jan 2022 20:50:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2663860C44;
+        Mon, 24 Jan 2022 20:51:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6E5AC340E5;
+        Mon, 24 Jan 2022 20:51:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057458;
-        bh=p0y5hJByeFplk5ECbWCT3NibhmV/f6yWSLLTnzSRmkU=;
+        s=korg; t=1643057467;
+        bh=fhcehs13K324S4NcYX+VvjBRl1SSEGNfMfH7EvgCHdk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lu03jff0stm+RoIN1RUrVVMv2o4R+gOoSPSQTQz/dxQmOTYvyT2cGVIcJ9MEikP2A
-         3DxvH2RH5s7ramByfXwP+8Q5EZGpmznzHikvF9dEPRa+ZCPMliUqXGTL+v+ApBrJGe
-         TQKSQJfVepY2zK2D7DyYaRDa/vrBCBHq7ElCDh0c=
+        b=C7kLsUK20rDWue9Uyg1ZVFrQZ7nwBRiLVWup05cwTaffk4DFKiQhByxotCWEQpsKG
+         BMFWgwW5wPbLWy9Lb9N+nRRfkG/R8nJk2+/Am5UfWDvwEcC4vKVa2jslN5J8NhQ4I7
+         RFWWsyWZ/2lhgaasPBJyExU1gOzRawFEcjdSs+Qk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.15 818/846] dmaengine: at_xdmac: Fix concurrency over xfers_list
-Date:   Mon, 24 Jan 2022 19:45:35 +0100
-Message-Id: <20220124184129.118939908@linuxfoundation.org>
+        stable@vger.kernel.org, James Clark <james.clark@arm.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Adrian Bunk <bunk@debian.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Branislav Rankov <branislav.rankov@arm.com>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.15 821/846] perf tools: Drop requirement for libstdc++.so for libopencsd check
+Date:   Mon, 24 Jan 2022 19:45:38 +0100
+Message-Id: <20220124184129.225160788@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -46,50 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Uwe Kleine-König <uwe@kleine-koenig.org>
 
-commit 18deddea9184b62941395889ff7659529c877326 upstream.
+commit ed17b1914978eddb2b01f2d34577f1c82518c650 upstream.
 
-Since tx_submit can be called from a hard IRQ, xfers_list must be
-protected with a lock to avoid concurency on the list's elements.
-Since at_xdmac_handle_cyclic() is called from a tasklet, spin_lock_irq
-is enough to protect from a hard IRQ.
+It's possible to link against libopencsd_c_api without having
+libstdc++.so available, only libstdc++.so.6.0.28 (or whatever version is
+in use) needs to be available. The same holds true for libopencsd.so.
+When -lstdc++ (or -lopencsd) is explicitly passed to the linker however
+the .so file must be available.
 
-Fixes: e1f7c9eee707 ("dmaengine: at_xdmac: creation of the atmel eXtended DMA Controller driver")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Link: https://lore.kernel.org/r/20211215110115.191749-8-tudor.ambarus@microchip.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+So wrap adding the dependencies into a check for static linking that
+actually requires adding them all. The same construct is already used
+for some other tests in the same file to reduce dependencies in the
+dynamic linking case.
+
+Fixes: 573cf5c9a152 ("perf build: Add missing -lstdc++ when linking with libopencsd")
+Reviewed-by: James Clark <james.clark@arm.com>
+Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
+Cc: Adrian Bunk <bunk@debian.org>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Branislav Rankov <branislav.rankov@arm.com>
+Cc: Diederik de Haas <didi.debian@cknow.org>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/all/20211203210544.1137935-1-uwe@kleine-koenig.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/at_xdmac.c |   17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ tools/perf/Makefile.config |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1619,14 +1619,17 @@ static void at_xdmac_handle_cyclic(struc
- 	struct at_xdmac_desc		*desc;
- 	struct dma_async_tx_descriptor	*txd;
- 
--	if (!list_empty(&atchan->xfers_list)) {
--		desc = list_first_entry(&atchan->xfers_list,
--					struct at_xdmac_desc, xfer_node);
--		txd = &desc->tx_dma_desc;
--
--		if (txd->flags & DMA_PREP_INTERRUPT)
--			dmaengine_desc_get_callback_invoke(txd, NULL);
-+	spin_lock_irq(&atchan->lock);
-+	if (list_empty(&atchan->xfers_list)) {
-+		spin_unlock_irq(&atchan->lock);
-+		return;
- 	}
-+	desc = list_first_entry(&atchan->xfers_list, struct at_xdmac_desc,
-+				xfer_node);
-+	spin_unlock_irq(&atchan->lock);
-+	txd = &desc->tx_dma_desc;
-+	if (txd->flags & DMA_PREP_INTERRUPT)
-+		dmaengine_desc_get_callback_invoke(txd, NULL);
- }
- 
- static void at_xdmac_handle_error(struct at_xdmac_chan *atchan)
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -143,7 +143,10 @@ FEATURE_CHECK_LDFLAGS-libcrypto = -lcryp
+ ifdef CSINCLUDES
+   LIBOPENCSD_CFLAGS := -I$(CSINCLUDES)
+ endif
+-OPENCSDLIBS := -lopencsd_c_api -lopencsd -lstdc++
++OPENCSDLIBS := -lopencsd_c_api
++ifeq ($(findstring -static,${LDFLAGS}),-static)
++  OPENCSDLIBS += -lopencsd -lstdc++
++endif
+ ifdef CSLIBS
+   LIBOPENCSD_LDFLAGS := -L$(CSLIBS)
+ endif
 
 

@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B68024992AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F55498C25
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344528AbiAXUXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:23:38 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60596 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376878AbiAXUES (ORCPT
+        id S1348801AbiAXTTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:19:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37678 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344191AbiAXTLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:04:18 -0500
+        Mon, 24 Jan 2022 14:11:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A495611CD;
-        Mon, 24 Jan 2022 20:04:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E8FC340E7;
-        Mon, 24 Jan 2022 20:04:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90C0EB81235;
+        Mon, 24 Jan 2022 19:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93B74C340E5;
+        Mon, 24 Jan 2022 19:11:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054656;
-        bh=IvIQaEZt2ffRaMJJrLZuUpbFT8T8VG/ahiVl4TyEc7g=;
+        s=korg; t=1643051498;
+        bh=0NWLm4MpjGOMUQ6L/3GRQzNj72Wo2Ip9yWEX2IoCPiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j3mRs8GUiwWC6VDVYhxMtwxFCHgELilDZ6qA9IJF/CUo9l8qzyM6b0WhSVRqO5vZw
-         WSFIz9bbwbBrRsH8WT0vwqiuBAGCq8KaM+hYtA58nFTtcEtSnsbYckqZ7hhCCV4OTr
-         vatnzB2yCJRT2njGVGGExHitiQhPB8xGTTvS352Y=
+        b=hZIEwKxNHzuHmtvQ8HYkCgMBArjs3WJw3upEg93d8Femu8eA5YG6WhvU/Ut3L5YNA
+         /by5kzFrSgXbyF8clPNCzRmI46b9Iwr1Y5MkUkv2R4YN2m4XYFYr7WN6LV8AA3SGlQ
+         385rYS4F6Qv3UYNS2f8fKpf0aI8kdLs0bfFJKzDA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.10 459/563] powerpc/64s/radix: Fix huge vmap false positive
+        stable@vger.kernel.org, Rafael Gago Castano <rgc@hms.se>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Su Bao Cheng <baocheng.su@siemens.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: [PATCH 4.14 149/186] serial: Fix incorrect rs485 polarity on uart open
 Date:   Mon, 24 Jan 2022 19:43:44 +0100
-Message-Id: <20220124184040.330083950@linuxfoundation.org>
+Message-Id: <20220124183941.900319614@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
+References: <20220124183937.101330125@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,95 +47,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Piggin <npiggin@gmail.com>
+From: Lukas Wunner <lukas@wunner.de>
 
-commit 467ba14e1660b52a2f9338b484704c461bd23019 upstream.
+commit d3b3404df318504ec084213ab1065b73f49b0f1d upstream.
 
-pmd_huge() is defined to false when HUGETLB_PAGE is not configured, but
-the vmap code still installs huge PMDs. This leads to false bad PMD
-errors when vunmapping because it is not seen as a huge PTE, and the bad
-PMD check catches it. The end result may not be much more serious than
-some bad pmd warning messages, because the pmd_none_or_clear_bad() does
-what we wanted and clears the huge PTE anyway.
+Commit a6845e1e1b78 ("serial: core: Consider rs485 settings to drive
+RTS") sought to deassert RTS when opening an rs485-enabled uart port.
+That way, the transceiver does not occupy the bus until it transmits
+data.
 
-Fix this by checking pmd_is_leaf(), which checks for a PTE regardless of
-config options. The whole huge/large/leaf stuff is a tangled mess but
-that's kernel-wide and not something we can improve much in arch/powerpc
-code.
+Unfortunately, the commit mixed up the logic and *asserted* RTS instead
+of *deasserting* it:
 
-pmd_page(), pud_page(), etc., called by vmalloc_to_page() on huge vmaps
-can similarly trigger a false VM_BUG_ON when CONFIG_HUGETLB_PAGE=n, so
-those checks are adjusted. The checks were added by commit d6eacedd1f0e
-("powerpc/book3s: Use config independent helpers for page table walk"),
-while implementing a similar fix for other page table walking functions.
+The commit amended uart_port_dtr_rts(), which raises DTR and RTS when
+opening an rs232 port.  "Raising" actually means lowering the signal
+that's coming out of the uart, because an rs232 transceiver not only
+changes a signal's voltage level, it also *inverts* the signal.  See
+the simplified schematic in the MAX232 datasheet for an example:
+https://www.ti.com/lit/ds/symlink/max232.pdf
 
-Fixes: d909f9109c30 ("powerpc/64s/radix: Enable HAVE_ARCH_HUGE_VMAP")
-Cc: stable@vger.kernel.org # v5.3+
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211216103342.609192-1-npiggin@gmail.com
+So, to raise RTS on an rs232 port, TIOCM_RTS is *set* in port->mctrl
+and that results in the signal being driven low.
+
+In contrast to rs232, the signal level for rs485 Transmit Enable is the
+identity, not the inversion:  If the transceiver expects a "high" RTS
+signal for Transmit Enable, the signal coming out of the uart must also
+be high, so TIOCM_RTS must be *cleared* in port->mctrl.
+
+The commit did the exact opposite, but it's easy to see why given the
+confusing semantics of rs232 and rs485.  Fix it.
+
+Fixes: a6845e1e1b78 ("serial: core: Consider rs485 settings to drive RTS")
+Cc: stable@vger.kernel.org # v4.14+
+Cc: Rafael Gago Castano <rgc@hms.se>
+Cc: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: Su Bao Cheng <baocheng.su@siemens.com>
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Link: https://lore.kernel.org/r/9395767847833f2f3193c49cde38501eeb3b5669.1639821059.git.lukas@wunner.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/mm/book3s64/radix_pgtable.c |    4 ++--
- arch/powerpc/mm/pgtable_64.c             |   14 +++++++++++---
- 2 files changed, 13 insertions(+), 5 deletions(-)
+ drivers/tty/serial/serial_core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/powerpc/mm/book3s64/radix_pgtable.c
-+++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
-@@ -1152,7 +1152,7 @@ int pud_set_huge(pud_t *pud, phys_addr_t
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -172,7 +172,7 @@ static void uart_port_dtr_rts(struct uar
+ 	int RTS_after_send = !!(uport->rs485.flags & SER_RS485_RTS_AFTER_SEND);
  
- int pud_clear_huge(pud_t *pud)
- {
--	if (pud_huge(*pud)) {
-+	if (pud_is_leaf(*pud)) {
- 		pud_clear(pud);
- 		return 1;
- 	}
-@@ -1199,7 +1199,7 @@ int pmd_set_huge(pmd_t *pmd, phys_addr_t
+ 	if (raise) {
+-		if (rs485_on && !RTS_after_send) {
++		if (rs485_on && RTS_after_send) {
+ 			uart_set_mctrl(uport, TIOCM_DTR);
+ 			uart_clear_mctrl(uport, TIOCM_RTS);
+ 		} else {
+@@ -181,7 +181,7 @@ static void uart_port_dtr_rts(struct uar
+ 	} else {
+ 		unsigned int clear = TIOCM_DTR;
  
- int pmd_clear_huge(pmd_t *pmd)
- {
--	if (pmd_huge(*pmd)) {
-+	if (pmd_is_leaf(*pmd)) {
- 		pmd_clear(pmd);
- 		return 1;
+-		clear |= (!rs485_on || !RTS_after_send) ? TIOCM_RTS : 0;
++		clear |= (!rs485_on || RTS_after_send) ? TIOCM_RTS : 0;
+ 		uart_clear_mctrl(uport, clear);
  	}
---- a/arch/powerpc/mm/pgtable_64.c
-+++ b/arch/powerpc/mm/pgtable_64.c
-@@ -102,7 +102,8 @@ EXPORT_SYMBOL(__pte_frag_size_shift);
- struct page *p4d_page(p4d_t p4d)
- {
- 	if (p4d_is_leaf(p4d)) {
--		VM_WARN_ON(!p4d_huge(p4d));
-+		if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMAP))
-+			VM_WARN_ON(!p4d_huge(p4d));
- 		return pte_page(p4d_pte(p4d));
- 	}
- 	return virt_to_page(p4d_page_vaddr(p4d));
-@@ -112,7 +113,8 @@ struct page *p4d_page(p4d_t p4d)
- struct page *pud_page(pud_t pud)
- {
- 	if (pud_is_leaf(pud)) {
--		VM_WARN_ON(!pud_huge(pud));
-+		if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMAP))
-+			VM_WARN_ON(!pud_huge(pud));
- 		return pte_page(pud_pte(pud));
- 	}
- 	return virt_to_page(pud_page_vaddr(pud));
-@@ -125,7 +127,13 @@ struct page *pud_page(pud_t pud)
- struct page *pmd_page(pmd_t pmd)
- {
- 	if (pmd_is_leaf(pmd)) {
--		VM_WARN_ON(!(pmd_large(pmd) || pmd_huge(pmd)));
-+		/*
-+		 * vmalloc_to_page may be called on any vmap address (not only
-+		 * vmalloc), and it uses pmd_page() etc., when huge vmap is
-+		 * enabled so these checks can't be used.
-+		 */
-+		if (!IS_ENABLED(CONFIG_HAVE_ARCH_HUGE_VMAP))
-+			VM_WARN_ON(!(pmd_large(pmd) || pmd_huge(pmd)));
- 		return pte_page(pmd_pte(pmd));
- 	}
- 	return virt_to_page(pmd_page_vaddr(pmd));
+ }
 
 

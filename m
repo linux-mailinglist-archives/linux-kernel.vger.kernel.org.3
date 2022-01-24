@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D877A49A747
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA0849A2B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352289AbiAYCgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:36:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54132 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385205AbiAXUbo (ORCPT
+        id S2364125AbiAXXqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1845416AbiAXXMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:31:44 -0500
+        Mon, 24 Jan 2022 18:12:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F59C067A52;
+        Mon, 24 Jan 2022 13:19:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EA1861382;
-        Mon, 24 Jan 2022 20:31:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA8B6C340E5;
-        Mon, 24 Jan 2022 20:31:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE23761491;
+        Mon, 24 Jan 2022 21:19:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91117C340E7;
+        Mon, 24 Jan 2022 21:19:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056300;
-        bh=jYIRWSiUZSWF2+JFSFBxoVE0otIiJf+SdqOpEdwYg0E=;
+        s=korg; t=1643059163;
+        bh=4k89oqbZmtEv29d2sp//Spqf8XbzF1OSGGeSkQN8Vws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=apku6Q1OctwavvNQ5sjJsMGZlqVWYYk9401xdpKnp3wqe6xu2UEIPYQ0pMvB2GD0X
-         ZzmSjXnbaA/ycgIChNrHcKw7lfXev7A3lNRGn/962kSxdNDUMCFo5YwxDdBRRFAxFZ
-         9NrXzYlmjV4MsiI1hFLw3M8ClandQp/KdwlNiK1M=
+        b=spxP35QjNwK/HH+zpzLG46dZ5Bo/A1N2FMVa5KevKpZq74aLFfkdYiE9nTHW9n+c4
+         eraF1CSj3dWXiQSv6dkt5njXKLF9eK/i49lBtpC5wZ/6rHGkEBzsVtTBW00Rt3tnPN
+         pG6+/KlZdbZOyTJUWj4n1Jm7ndFgoiDcBXEjf9cM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 396/846] misc: at25: Make driver OF independent again
-Date:   Mon, 24 Jan 2022 19:38:33 +0100
-Message-Id: <20220124184114.618403515@linuxfoundation.org>
+Subject: [PATCH 5.16 0525/1039] ASoC: imx-card: Need special setting for ak4497 on i.MX8MQ
+Date:   Mon, 24 Jan 2022 19:38:34 +0100
+Message-Id: <20220124184142.932239769@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-References: <20220124184100.867127425@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,61 +49,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
 
-[ Upstream commit 5b557298d7d09cce04e0565a535fbca63661724a ]
+[ Upstream commit 3349b3d0c63b8b6fcca58156d72407f0b2e101ac ]
 
-The commit f60e7074902a ("misc: at25: Make use of device property API")
-made a good job by enabling the driver for non-OF platforms, but the
-recent commit 604288bc6196 ("nvmem: eeprom: at25: fix type compiler warnings")
-brought that back.
+The SAI on i.MX8MQ don't support one2one ratio for mclk:bclk, so
+the mclk frequency exceeds the supported range of codec for
+the case that sample rate is larger than 705kHZ and format is
+S32_LE. Update the supported width for such case.
 
-Restore greatness of the driver once again.
-
-Fixes: eab61fb1cc2e ("nvmem: eeprom: at25: fram discovery simplification")
-Fixes: fd307a4ad332 ("nvmem: prepare basics for FRAM support")
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20211125212729.86585-2-andriy.shevchenko@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: aa736700f42f ("ASoC: imx-card: Add imx-card machine driver")
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Link: https://lore.kernel.org/r/1641292835-19085-2-git-send-email-shengjiu.wang@nxp.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/eeprom/at25.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ sound/soc/fsl/imx-card.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/misc/eeprom/at25.c b/drivers/misc/eeprom/at25.c
-index b38978a3b3ffa..9193b812bc07e 100644
---- a/drivers/misc/eeprom/at25.c
-+++ b/drivers/misc/eeprom/at25.c
-@@ -17,8 +17,6 @@
- #include <linux/spi/spi.h>
- #include <linux/spi/eeprom.h>
- #include <linux/property.h>
--#include <linux/of.h>
--#include <linux/of_device.h>
- #include <linux/math.h>
+diff --git a/sound/soc/fsl/imx-card.c b/sound/soc/fsl/imx-card.c
+index 6f06afd23b16a..96ac1e465fade 100644
+--- a/sound/soc/fsl/imx-card.c
++++ b/sound/soc/fsl/imx-card.c
+@@ -553,8 +553,23 @@ static int imx_card_parse_of(struct imx_card_data *data)
+ 			link_data->cpu_sysclk_id = FSL_SAI_CLK_MAST1;
  
- /*
-@@ -380,13 +378,14 @@ static int at25_probe(struct spi_device *spi)
- 	int			sr;
- 	u8 id[FM25_ID_LEN];
- 	u8 sernum[FM25_SN_LEN];
-+	bool is_fram;
- 	int i;
--	const struct of_device_id *match;
--	bool is_fram = 0;
+ 			/* sai may support mclk/bclk = 1 */
+-			if (of_find_property(np, "fsl,mclk-equal-bclk", NULL))
++			if (of_find_property(np, "fsl,mclk-equal-bclk", NULL)) {
+ 				link_data->one2one_ratio = true;
++			} else {
++				int i;
++
++				/*
++				 * i.MX8MQ don't support one2one ratio, then
++				 * with ak4497 only 16bit case is supported.
++				 */
++				for (i = 0; i < ARRAY_SIZE(ak4497_fs_mul); i++) {
++					if (ak4497_fs_mul[i].rmin == 705600 &&
++					    ak4497_fs_mul[i].rmax == 768000) {
++						ak4497_fs_mul[i].wmin = 32;
++						ak4497_fs_mul[i].wmax = 32;
++					}
++				}
++			}
+ 		}
  
--	match = of_match_device(of_match_ptr(at25_of_match), &spi->dev);
--	if (match && !strcmp(match->compatible, "cypress,fm25"))
--		is_fram = 1;
-+	err = device_property_match_string(&spi->dev, "compatible", "cypress,fm25");
-+	if (err >= 0)
-+		is_fram = true;
-+	else
-+		is_fram = false;
- 
- 	at25 = devm_kzalloc(&spi->dev, sizeof(struct at25_data), GFP_KERNEL);
- 	if (!at25)
+ 		link->cpus->of_node = args.np;
 -- 
 2.34.1
 

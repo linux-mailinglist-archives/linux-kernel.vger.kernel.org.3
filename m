@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DA249973C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0EF499638
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447784AbiAXVL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:11:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390230AbiAXUpD (ORCPT
+        id S1444457AbiAXVA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:00:59 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59758 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387145AbiAXUg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:45:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7C9C061396;
-        Mon, 24 Jan 2022 11:55:38 -0800 (PST)
+        Mon, 24 Jan 2022 15:36:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B030360B02;
-        Mon, 24 Jan 2022 19:55:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802DDC340E5;
-        Mon, 24 Jan 2022 19:55:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADDB561506;
+        Mon, 24 Jan 2022 20:36:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB22C340E5;
+        Mon, 24 Jan 2022 20:36:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054137;
-        bh=4F+FoEJCjA5dc535C82+wg9z4q7LEbCQMztv5Eb7YX0=;
+        s=korg; t=1643056586;
+        bh=1XtZLBYLo8vRVDv6RwMfDJXo36eB71DbQs/OchA+8xU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iiYS0Py4XIQ08NX6b06t6PjXLOta0vw5ZKxO3vMlJVxpLul4RW080D9WyHhGztAkJ
-         thAeRo3TxksxPMWMaD6jYLgAeDfYCGshn6EAySpQixgLh/5jVE6RrgADugovL4oDn+
-         5fGmrFycEHbF4R6YccfMJbo32FCZ/l7wEndM6N3w=
+        b=16H8C59woIAAolXgC7Zxhoop45LF4KPF4r2xvY3iaP1WIvuRgEltpJfoCGwcFqi6z
+         3Rh0ax3QARyfQdbkkq550rFQMGkpf7JP4+hz4OUMEyG37TVL7bwZ914/ftPXqHjqm8
+         r9vfXvIw0qCvcZTitp6bNHgnaO8kJvCFjIKiiLkE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Wander Lairson Costa <wander@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 283/563] ASoC: mediatek: Check for error clk pointer
-Date:   Mon, 24 Jan 2022 19:40:48 +0100
-Message-Id: <20220124184034.226566770@linuxfoundation.org>
+Subject: [PATCH 5.15 532/846] rcutorture: Avoid soft lockup during cpu stall
+Date:   Mon, 24 Jan 2022 19:40:49 +0100
+Message-Id: <20220124184119.354074053@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,66 +46,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Wander Lairson Costa <wander@redhat.com>
 
-[ Upstream commit 9de2b9286a6dd16966959b3cb34fc2ddfd39213e ]
+[ Upstream commit 5ff7c9f9d7e3e0f6db5b81945fa11b69d62f433a ]
 
-Yes, you are right and now the return code depending on the
-init_clks().
+If we use the module stall_cpu option, we may get a soft lockup warning
+in case we also don't pass the stall_cpu_block option.
 
-Fixes: 6078c651947a ("soc: mediatek: Refine scpsys to support multiple platform")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20211222015157.1025853-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Introduce the stall_no_softlockup option to avoid a soft lockup on
+cpu stall even if we don't use the stall_cpu_block option.
+
+Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/mediatek/mtk-scpsys.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ kernel/rcu/rcutorture.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/soc/mediatek/mtk-scpsys.c
-index ca75b14931ec9..670cc82d17dc2 100644
---- a/drivers/soc/mediatek/mtk-scpsys.c
-+++ b/drivers/soc/mediatek/mtk-scpsys.c
-@@ -411,12 +411,17 @@ out:
- 	return ret;
- }
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 968696ace8f3f..f922937eb39ad 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -46,6 +46,7 @@
+ #include <linux/oom.h>
+ #include <linux/tick.h>
+ #include <linux/rcupdate_trace.h>
++#include <linux/nmi.h>
  
--static void init_clks(struct platform_device *pdev, struct clk **clk)
-+static int init_clks(struct platform_device *pdev, struct clk **clk)
- {
- 	int i;
+ #include "rcu.h"
  
--	for (i = CLK_NONE + 1; i < CLK_MAX; i++)
-+	for (i = CLK_NONE + 1; i < CLK_MAX; i++) {
- 		clk[i] = devm_clk_get(&pdev->dev, clk_names[i]);
-+		if (IS_ERR(clk[i]))
-+			return PTR_ERR(clk[i]);
-+	}
-+
-+	return 0;
- }
- 
- static struct scp *init_scp(struct platform_device *pdev,
-@@ -426,7 +431,7 @@ static struct scp *init_scp(struct platform_device *pdev,
- {
- 	struct genpd_onecell_data *pd_data;
- 	struct resource *res;
--	int i, j;
-+	int i, j, ret;
- 	struct scp *scp;
- 	struct clk *clk[CLK_MAX];
- 
-@@ -481,7 +486,9 @@ static struct scp *init_scp(struct platform_device *pdev,
- 
- 	pd_data->num_domains = num;
- 
--	init_clks(pdev, clk);
-+	ret = init_clks(pdev, clk);
-+	if (ret)
-+		return ERR_PTR(ret);
- 
- 	for (i = 0; i < num; i++) {
- 		struct scp_domain *scpd = &scp->domains[i];
+@@ -109,6 +110,8 @@ torture_param(int, shutdown_secs, 0, "Shutdown time (s), <= zero to disable.");
+ torture_param(int, stall_cpu, 0, "Stall duration (s), zero to disable.");
+ torture_param(int, stall_cpu_holdoff, 10,
+ 	     "Time to wait before starting stall (s).");
++torture_param(bool, stall_no_softlockup, false,
++	     "Avoid softlockup warning during cpu stall.");
+ torture_param(int, stall_cpu_irqsoff, 0, "Disable interrupts while stalling.");
+ torture_param(int, stall_cpu_block, 0, "Sleep while stalling.");
+ torture_param(int, stall_gp_kthread, 0,
+@@ -2052,6 +2055,8 @@ static int rcu_torture_stall(void *args)
+ #else
+ 				schedule_timeout_uninterruptible(HZ);
+ #endif
++			} else if (stall_no_softlockup) {
++				touch_softlockup_watchdog();
+ 			}
+ 		if (stall_cpu_irqsoff)
+ 			local_irq_enable();
 -- 
 2.34.1
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C471E49A29B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D371749A502
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2362957AbiAXXnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 18:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S2370534AbiAYAFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843478AbiAXXED (ORCPT
+        with ESMTP id S1846542AbiAXXQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:04:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CDCC061A7C;
-        Mon, 24 Jan 2022 13:14:55 -0800 (PST)
+        Mon, 24 Jan 2022 18:16:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97816C08B4F4;
+        Mon, 24 Jan 2022 11:43:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EB7CB811FB;
-        Mon, 24 Jan 2022 21:14:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FC5C340E5;
-        Mon, 24 Jan 2022 21:14:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 351A06153E;
+        Mon, 24 Jan 2022 19:43:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F54C340E5;
+        Mon, 24 Jan 2022 19:43:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643058893;
-        bh=14/r+hbS3Go8S3OHeRGpUygNx3H7+e9c8m+YWqIr+MA=;
+        s=korg; t=1643053421;
+        bh=PkwYfJNj13eKaScjRBJkbBJh0gjPuH/Z/VPnCw8A9+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QpxPhhaj+AbaTHGnTkM0/ARnXPAZMGZr3kMiKpGSBAdLJtNM+khj0gS8fS3U9AIei
-         uS5QP+BOU1JkXajajtC+DvXMu2Tqf5dTyzR4DL6qTszOuJ4R313pi4XEg37wgCNLJc
-         1Vj5xN77RURn6gkGaQNPcbKOAjqSRXmKxuGR2RS0=
+        b=QGPeIYh1FI07cNbIQNE81Hbx2VCTbLRYCX6lBs8uW+aL09KHqKyxlG1y7u2qHOxI7
+         TuIuiDEuGUhiNhPSVWuXBqh9ZiHcJjT2rRW5Ef0akwsGugL4MMJYpVpGGBkJDpq/Vc
+         vEAFp6J25oAsALLbhx5iRLuX13AW3i9ylnV1mLn4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0435/1039] can: rcar_canfd: rcar_canfd_channel_probe(): make sure we free CAN network device
+Subject: [PATCH 5.10 059/563] wcn36xx: Put DXE block into reset before freeing memory
 Date:   Mon, 24 Jan 2022 19:37:04 +0100
-Message-Id: <20220124184139.921784434@linuxfoundation.org>
+Message-Id: <20220124184026.455111306@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,50 +50,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-[ Upstream commit 72b1e360572f9fa7d08ee554f1da29abce23f288 ]
+[ Upstream commit ed04ea76e69e7194f7489cebe23a32a68f39218d ]
 
-Make sure we free CAN network device in the error path. There are
-several jumps to fail label after allocating the CAN network device
-successfully. This patch places the free_candev() under fail label so
-that in failure path a jump to fail label frees the CAN network
-device.
+When deiniting the DXE hardware we should reset the block to ensure there
+is no spurious DMA write transaction from the downstream WCNSS to upstream
+MSM at a skbuff address we will have released.
 
-Fixes: 76e9353a80e9 ("can: rcar_canfd: Add support for RZ/G2L family")
-Link: https://lore.kernel.org/all/20220106114801.20563-1-prabhakar.mahadev-lad.rj@bp.renesas.com
-Reported-by: Pavel Machek <pavel@denx.de>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Fixes: 8e84c2582169 ("wcn36xx: mac80211 driver for Qualcomm WCN3660/WCN3680 hardware")
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+Link: https://lore.kernel.org/r/20211105122152.1580542-4-bryan.odonoghue@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/rcar/rcar_canfd.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/net/wireless/ath/wcn36xx/dxe.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index ff9d0f5ae0dd2..388521e70837f 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1640,8 +1640,7 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 	ndev = alloc_candev(sizeof(*priv), RCANFD_FIFO_DEPTH);
- 	if (!ndev) {
- 		dev_err(&pdev->dev, "alloc_candev() failed\n");
--		err = -ENOMEM;
--		goto fail;
-+		return -ENOMEM;
+diff --git a/drivers/net/wireless/ath/wcn36xx/dxe.c b/drivers/net/wireless/ath/wcn36xx/dxe.c
+index b117d8a0f446f..6c62ffc799a2b 100644
+--- a/drivers/net/wireless/ath/wcn36xx/dxe.c
++++ b/drivers/net/wireless/ath/wcn36xx/dxe.c
+@@ -997,6 +997,8 @@ out_err_txh_ch:
+ 
+ void wcn36xx_dxe_deinit(struct wcn36xx *wcn)
+ {
++	int reg_data = 0;
++
+ 	/* Disable channel interrupts */
+ 	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_H);
+ 	wcn36xx_dxe_disable_ch_int(wcn, WCN36XX_INT_MASK_CHAN_RX_L);
+@@ -1012,6 +1014,10 @@ void wcn36xx_dxe_deinit(struct wcn36xx *wcn)
+ 		wcn->tx_ack_skb = NULL;
  	}
- 	priv = netdev_priv(ndev);
  
-@@ -1735,8 +1734,8 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
- 
- fail_candev:
- 	netif_napi_del(&priv->napi);
--	free_candev(ndev);
- fail:
-+	free_candev(ndev);
- 	return err;
- }
++	/* Put the DXE block into reset before freeing memory */
++	reg_data = WCN36XX_DXE_REG_RESET;
++	wcn36xx_dxe_write_register(wcn, WCN36XX_DXE_REG_CSR_RESET, reg_data);
++
+ 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_l_ch);
+ 	wcn36xx_dxe_ch_free_skbs(wcn, &wcn->dxe_rx_h_ch);
  
 -- 
 2.34.1

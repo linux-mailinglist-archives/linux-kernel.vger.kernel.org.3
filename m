@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCB549972B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7574996C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447232AbiAXVKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 16:10:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46710 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390720AbiAXUqG (ORCPT
+        id S1446108AbiAXVGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:06:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40144 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351903AbiAXUoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:46:06 -0500
+        Mon, 24 Jan 2022 15:44:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31C84B81061;
-        Mon, 24 Jan 2022 20:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2A1C340E5;
-        Mon, 24 Jan 2022 20:46:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CE0D60B0B;
+        Mon, 24 Jan 2022 20:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3E7C340E5;
+        Mon, 24 Jan 2022 20:44:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643057163;
-        bh=1UkMZa/royLpHMxGh9IRPXpsoz9kl6dKbdO4wAyXQCA=;
+        s=korg; t=1643057072;
+        bh=xI5hEJ3lhDIHA1QI9owRidjMV8Rm3Aur9/+X8usPUKA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Pqtye1jbfVWluzV/MSxWVZLvYQ80GIYrpaeS3V/KSVGPzm0DxhMpPWfKDAoVeQVS
-         80Q4eYZ+2RV0RDJtVkWgtyKmjXz17LrK1MINnFo0IoM5jicNs8U8h/TeyfpepCt+JX
-         XpZU9IdafJUZosqmGroTkvony6pgrEvuQFiVovNQ=
+        b=fBI9oJzXdsIXDh561HNCaOpqcQ+uhLx++H4fuSwtnDdX8cXr0OR2/E7S+KMMaucAC
+         NLl4DuesPRYkxbNwUUp8h8nGOtDfw93C0rE0DTAMPwbPV5DuBZmfVXn1IdB4dLhuTj
+         +IHAtqkjAEnuRru4cNHi0RnN6uA1EoOx8FJZXya4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.15 689/846] device property: Fix fwnode_graph_devcon_match() fwnode leak
-Date:   Mon, 24 Jan 2022 19:43:26 +0100
-Message-Id: <20220124184124.825727206@linuxfoundation.org>
+        stable@vger.kernel.org, "Nathan E. Egge" <unlord@xiph.org>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>
+Subject: [PATCH 5.15 693/846] drm/nouveau/kms/nv04: use vzalloc for nv04_display
+Date:   Mon, 24 Jan 2022 19:43:30 +0100
+Message-Id: <20220124184124.950008539@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -47,41 +47,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Ilia Mirkin <imirkin@alum.mit.edu>
 
-commit 4a7f4110f79163fd53ea65438041994ed615e3af upstream.
+commit bd6e07e72f37f34535bec7eebc807e5fcfe37b43 upstream.
 
-For each endpoint it encounters, fwnode_graph_devcon_match() checks
-whether the endpoint's remote port parent device is available. If it is
-not, it ignores the endpoint but does not put the reference to the remote
-endpoint port parent fwnode. For available devices the fwnode handle
-reference is put as expected.
+The struct is giant, and triggers an order-7 allocation (512K). There is
+no reason for this to be kmalloc-type memory, so switch to vmalloc. This
+should help loading nouveau on low-memory and/or long-running systems.
 
-Put the reference for unavailable devices now.
-
-Fixes: 637e9e52b185 ("device connection: Find device connections also from device graphs")
-Cc: 5.1+ <stable@vger.kernel.org> # 5.1+
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reported-by: Nathan E. Egge <unlord@xiph.org>
+Signed-off-by: Ilia Mirkin <imirkin@alum.mit.edu>
+Cc: stable@vger.kernel.org
+Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://gitlab.freedesktop.org/drm/nouveau/-/merge_requests/10
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/property.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/nouveau/dispnv04/disp.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -1269,8 +1269,10 @@ fwnode_graph_devcon_match(struct fwnode_
+--- a/drivers/gpu/drm/nouveau/dispnv04/disp.c
++++ b/drivers/gpu/drm/nouveau/dispnv04/disp.c
+@@ -205,7 +205,7 @@ nv04_display_destroy(struct drm_device *
+ 	nvif_notify_dtor(&disp->flip);
  
- 	fwnode_graph_for_each_endpoint(fwnode, ep) {
- 		node = fwnode_graph_get_remote_port_parent(ep);
--		if (!fwnode_device_is_available(node))
-+		if (!fwnode_device_is_available(node)) {
-+			fwnode_handle_put(node);
- 			continue;
-+		}
+ 	nouveau_display(dev)->priv = NULL;
+-	kfree(disp);
++	vfree(disp);
  
- 		ret = match(node, con_id, data);
- 		fwnode_handle_put(node);
+ 	nvif_object_unmap(&drm->client.device.object);
+ }
+@@ -223,7 +223,7 @@ nv04_display_create(struct drm_device *d
+ 	struct nv04_display *disp;
+ 	int i, ret;
+ 
+-	disp = kzalloc(sizeof(*disp), GFP_KERNEL);
++	disp = vzalloc(sizeof(*disp));
+ 	if (!disp)
+ 		return -ENOMEM;
+ 
 
 

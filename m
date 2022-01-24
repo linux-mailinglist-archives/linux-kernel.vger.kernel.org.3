@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F56A499ECA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD663499E94
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837716AbiAXWpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
+        id S1835682AbiAXWhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 17:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456733AbiAXVjy (ORCPT
+        with ESMTP id S1457288AbiAXVlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:39:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3484C0419CE;
-        Mon, 24 Jan 2022 12:27:03 -0800 (PST)
+        Mon, 24 Jan 2022 16:41:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8618C07E313;
+        Mon, 24 Jan 2022 12:27:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73A80614EC;
-        Mon, 24 Jan 2022 20:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7C4C340E5;
-        Mon, 24 Jan 2022 20:27:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0CACB8122D;
+        Mon, 24 Jan 2022 20:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63C4C340E5;
+        Mon, 24 Jan 2022 20:27:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643056022;
-        bh=spR1xNJx3bFfMAPFkVgQoFMpMInnlTc6YT27FCUaXOQ=;
+        s=korg; t=1643056055;
+        bh=anTBheG/cQTrGNr9zNDhDMuwJYqOQuxzSHzVVM1jvHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MYnSIfaockbukrz+5FzqR1719wCU+neKVUQ/OqWfVzgt+3loNr5dpOphPMdiVLotd
-         nlzAPleItYr47BEcv8ATaXc6izEFk7G6NaDjICVMoymQpOdgOxcWiajoFu5QtnlvXH
-         f2xpjk6ujQtV93jlyfeKMao/kozVTNajkcJR4SpQ=
+        b=jejG87W9F0cIZpnjSW2hWmG8tUx94yFLDh89T0xj4usW0nfo50zU3aDfUAL1cHf5b
+         g77y4rwZcMC5SAK9r+oGT4evNuXYNXFouTwRYy9j5foNIZ7T1BXwHZNoRSnX7GA5SS
+         Yl/grQ5EkfACoCNe/kSJKFysX1PzOeZcokI/eiCo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Hofman <pavel.hofman@ivitera.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 327/846] usb: gadget: u_audio: Subdevice 0 for capture ctls
-Date:   Mon, 24 Jan 2022 19:37:24 +0100
-Message-Id: <20220124184112.184479178@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 328/846] HID: hid-uclogic-params: Invalid parameter check in uclogic_params_init
+Date:   Mon, 24 Jan 2022 19:37:25 +0100
+Message-Id: <20220124184112.216495020@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
 References: <20220124184100.867127425@linuxfoundation.org>
@@ -48,44 +49,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Hofman <pavel.hofman@ivitera.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit 601a5bc1aeef772ab1f47582fd322957799f5ab5 ]
+[ Upstream commit f364c571a5c77e96de2d32062ff019d6b8d2e2bc ]
 
-Both capture and playback alsa devices use subdevice 0. Yet capture-side
-ctls are defined for subdevice 1. The patch sets subdevice 0 for them.
+The function performs a check on its input parameters, however, the
+hdev parameter is used before the check.
 
-Fixes: 02de698ca812 ("usb: gadget: u_audio: add bi-directional volume and mute support")
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-Link: https://lore.kernel.org/r/20220105104643.90125-1-pavel.hofman@ivitera.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Initialize the stack variables after checking the input parameters to
+avoid a possible NULL pointer dereference.
+
+Fixes: 9614219e9310e ("HID: uclogic: Extract tablet parameter discovery into a module")
+Addresses-Coverity-ID: 1443831 ("Null pointer dereference")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/u_audio.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hid/hid-uclogic-params.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index ad16163b5ff80..d22ac23c94b0f 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -1097,7 +1097,7 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
- 			}
+diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+index adff1bd68d9f8..3c10b858cf74c 100644
+--- a/drivers/hid/hid-uclogic-params.c
++++ b/drivers/hid/hid-uclogic-params.c
+@@ -834,10 +834,10 @@ int uclogic_params_init(struct uclogic_params *params,
+ 			struct hid_device *hdev)
+ {
+ 	int rc;
+-	struct usb_device *udev = hid_to_usb_dev(hdev);
+-	__u8  bNumInterfaces = udev->config->desc.bNumInterfaces;
+-	struct usb_interface *iface = to_usb_interface(hdev->dev.parent);
+-	__u8 bInterfaceNumber = iface->cur_altsetting->desc.bInterfaceNumber;
++	struct usb_device *udev;
++	__u8  bNumInterfaces;
++	struct usb_interface *iface;
++	__u8 bInterfaceNumber;
+ 	bool found;
+ 	/* The resulting parameters (noop) */
+ 	struct uclogic_params p = {0, };
+@@ -848,6 +848,11 @@ int uclogic_params_init(struct uclogic_params *params,
+ 		goto cleanup;
+ 	}
  
- 			kctl->id.device = pcm->device;
--			kctl->id.subdevice = i;
-+			kctl->id.subdevice = 0;
- 
- 			err = snd_ctl_add(card, kctl);
- 			if (err < 0)
-@@ -1120,7 +1120,7 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
- 			}
- 
- 			kctl->id.device = pcm->device;
--			kctl->id.subdevice = i;
-+			kctl->id.subdevice = 0;
- 
- 
- 			kctl->tlv.c = u_audio_volume_tlv;
++	udev = hid_to_usb_dev(hdev);
++	bNumInterfaces = udev->config->desc.bNumInterfaces;
++	iface = to_usb_interface(hdev->dev.parent);
++	bInterfaceNumber = iface->cur_altsetting->desc.bInterfaceNumber;
++
+ 	/*
+ 	 * Set replacement report descriptor if the original matches the
+ 	 * specified size. Otherwise keep interface unchanged.
 -- 
 2.34.1
 

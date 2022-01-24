@@ -2,192 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 252F2499F21
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 558CD499FB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 00:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840072AbiAXWwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 17:52:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52686 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573520AbiAXVpF (ORCPT
+        id S1842062AbiAXXAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 18:00:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1577804AbiAXWBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 16:45:05 -0500
+        Mon, 24 Jan 2022 17:01:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1AAC0680A4;
+        Mon, 24 Jan 2022 11:29:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0E54B811A9;
-        Mon, 24 Jan 2022 21:45:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6216C340E4;
-        Mon, 24 Jan 2022 21:45:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643060702;
-        bh=oA0SrxgSf2DHn1f9C5JzgLmAYlmqZ8cXWCLRmdb5jC4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DZ2b1LZ6nOzTUqF7SoZ8nfn8dQg0gkRV/JK1FdrjtPN62WwJk6z9WtgLMtLiQeCYq
-         tzftQnpVolJgZdtmW4jbExgs93q0DY7sywmyzj3hPoAO/yfIe4d3ap8FWouLlN3huT
-         1z1xqHRBm29f1Y60VlxQqarnOf1o+mCReTAj7mdw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 1035/1039] KVM: selftests: Test KVM_SET_CPUID2 after KVM_RUN
-Date:   Mon, 24 Jan 2022 19:47:04 +0100
-Message-Id: <20220124184200.082019564@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-References: <20220124184125.121143506@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D22F6148B;
+        Mon, 24 Jan 2022 19:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8ECC340E5;
+        Mon, 24 Jan 2022 19:29:16 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PPnruihN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1643052554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YfXcMYvtLUn7d14Gnis94IiLaEOFq0Ds4XfgcosuDFQ=;
+        b=PPnruihNHl9OeIN5HrkdQeki0Sje9B7XzWOIi+7Lux+sPDqXhAyi5IpauqszZQIyDXjM7t
+        2V1BDCV/8UBfpDNIdua3bl16nyWv+KpP30lNfLqUlnAk8y0X3+p6JE9cEvAsfvzkGyOVry
+        TJUeCr8WMNCaftd8cw/0IoCCj8B6NhM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5b3516fc (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 24 Jan 2022 19:29:14 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v2] lib/crypto: blake2s: avoid indirect calls to compression function for Clang CFI
+Date:   Mon, 24 Jan 2022 20:28:49 +0100
+Message-Id: <20220124192849.14755-1-Jason@zx2c4.com>
+In-Reply-To: <20220119135450.564115-1-Jason@zx2c4.com>
+References: <20220119135450.564115-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+blake2s_compress_generic is weakly aliased by blake2s_generic. The
+current harness for function selection uses a function pointer, which is
+ordinarily inlined and resolved at compile time. But when Clang's CFI is
+enabled, CFI still triggers when making an indirect call via a weak
+symbol. This seems like a bug in Clang's CFI, as though it's bucketing
+weak symbols and strong symbols differently. It also only seems to
+trigger when "full LTO" mode is used, rather than "thin LTO".
 
-commit ecebb966acaab2466d9857d1cc435ee1fc9eee50 upstream.
+[    0.000000][    T0] Kernel panic - not syncing: CFI failure (target: blake2s_compress_generic+0x0/0x1444)
+[    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-mainline-06981-g076c855b846e #1
+[    0.000000][    T0] Hardware name: MT6873 (DT)
+[    0.000000][    T0] Call trace:
+[    0.000000][    T0]  dump_backtrace+0xfc/0x1dc
+[    0.000000][    T0]  dump_stack_lvl+0xa8/0x11c
+[    0.000000][    T0]  panic+0x194/0x464
+[    0.000000][    T0]  __cfi_check_fail+0x54/0x58
+[    0.000000][    T0]  __cfi_slowpath_diag+0x354/0x4b0
+[    0.000000][    T0]  blake2s_update+0x14c/0x178
+[    0.000000][    T0]  _extract_entropy+0xf4/0x29c
+[    0.000000][    T0]  crng_initialize_primary+0x24/0x94
+[    0.000000][    T0]  rand_initialize+0x2c/0x6c
+[    0.000000][    T0]  start_kernel+0x2f8/0x65c
+[    0.000000][    T0]  __primary_switched+0xc4/0x7be4
+[    0.000000][    T0] Rebooting in 5 seconds..
 
-KVM forbids KVM_SET_CPUID2 after KVM_RUN was performed on a vCPU unless
-the supplied CPUID data is equal to what was previously set. Test this.
+Nonetheless, the function pointer method isn't so terrific anyway, so
+this patch replaces it with a simple boolean, which also gets inlined
+away. This successfully works around the Clang bug.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220117150542.2176196-5-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+In general, I'm not too keen on all of the indirection involved here; it
+clearly does more harm than good. Hopefully the whole thing can get
+cleaned up down the road when lib/crypto is overhauled more
+comprehensively. But for now, we go with a simple bandaid.
+
+Fixes: 6048fdcc5f26 ("lib/crypto: blake2s: include as built-in")
+Reported-by: Miles Chen <miles.chen@mediatek.com>
+Tested-by: Miles Chen <miles.chen@mediatek.com>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1567
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- tools/testing/selftests/kvm/include/x86_64/processor.h |    7 +++
- tools/testing/selftests/kvm/lib/x86_64/processor.c     |   33 ++++++++++++++---
- tools/testing/selftests/kvm/x86_64/cpuid_test.c        |   30 +++++++++++++++
- 3 files changed, 66 insertions(+), 4 deletions(-)
+Changes v1->v2:
+- Wrapped columns at 80 for Eric.
 
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -358,6 +358,8 @@ uint64_t kvm_get_feature_msr(uint64_t ms
- struct kvm_cpuid2 *kvm_get_supported_cpuid(void);
- 
- struct kvm_cpuid2 *vcpu_get_cpuid(struct kvm_vm *vm, uint32_t vcpuid);
-+int __vcpu_set_cpuid(struct kvm_vm *vm, uint32_t vcpuid,
-+		     struct kvm_cpuid2 *cpuid);
- void vcpu_set_cpuid(struct kvm_vm *vm, uint32_t vcpuid,
- 		    struct kvm_cpuid2 *cpuid);
- 
-@@ -402,6 +404,11 @@ void vm_set_page_table_entry(struct kvm_
- 			     uint64_t pte);
- 
- /*
-+ * get_cpuid() - find matching CPUID entry and return pointer to it.
-+ */
-+struct kvm_cpuid_entry2 *get_cpuid(struct kvm_cpuid2 *cpuid, uint32_t function,
-+				   uint32_t index);
-+/*
-  * set_cpuid() - overwrites a matching cpuid entry with the provided value.
-  *		 matches based on ent->function && ent->index. returns true
-  *		 if a match was found and successfully overwritten.
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -847,6 +847,17 @@ kvm_get_supported_cpuid_index(uint32_t f
- 	return entry;
+ arch/arm/crypto/blake2s-shash.c   |  4 ++--
+ arch/x86/crypto/blake2s-shash.c   |  4 ++--
+ crypto/blake2s_generic.c          |  4 ++--
+ include/crypto/internal/blake2s.h | 40 +++++++++++++++++++------------
+ lib/crypto/blake2s.c              |  4 ++--
+ 5 files changed, 33 insertions(+), 23 deletions(-)
+
+diff --git a/arch/arm/crypto/blake2s-shash.c b/arch/arm/crypto/blake2s-shash.c
+index 17c1c3bfe2f5..763c73beea2d 100644
+--- a/arch/arm/crypto/blake2s-shash.c
++++ b/arch/arm/crypto/blake2s-shash.c
+@@ -13,12 +13,12 @@
+ static int crypto_blake2s_update_arm(struct shash_desc *desc,
+ 				     const u8 *in, unsigned int inlen)
+ {
+-	return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
++	return crypto_blake2s_update(desc, in, inlen, false);
  }
  
-+
-+int __vcpu_set_cpuid(struct kvm_vm *vm, uint32_t vcpuid,
-+		     struct kvm_cpuid2 *cpuid)
-+{
-+	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
-+
-+	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
-+
-+	return ioctl(vcpu->fd, KVM_SET_CPUID2, cpuid);
-+}
-+
- /*
-  * VM VCPU CPUID Set
-  *
-@@ -864,12 +875,9 @@ kvm_get_supported_cpuid_index(uint32_t f
- void vcpu_set_cpuid(struct kvm_vm *vm,
- 		uint32_t vcpuid, struct kvm_cpuid2 *cpuid)
+ static int crypto_blake2s_final_arm(struct shash_desc *desc, u8 *out)
  {
--	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
- 	int rc;
+-	return crypto_blake2s_final(desc, out, blake2s_compress);
++	return crypto_blake2s_final(desc, out, false);
+ }
  
--	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
+ #define BLAKE2S_ALG(name, driver_name, digest_size)			\
+diff --git a/arch/x86/crypto/blake2s-shash.c b/arch/x86/crypto/blake2s-shash.c
+index f9e2fecdb761..59ae28abe35c 100644
+--- a/arch/x86/crypto/blake2s-shash.c
++++ b/arch/x86/crypto/blake2s-shash.c
+@@ -18,12 +18,12 @@
+ static int crypto_blake2s_update_x86(struct shash_desc *desc,
+ 				     const u8 *in, unsigned int inlen)
+ {
+-	return crypto_blake2s_update(desc, in, inlen, blake2s_compress);
++	return crypto_blake2s_update(desc, in, inlen, false);
+ }
+ 
+ static int crypto_blake2s_final_x86(struct shash_desc *desc, u8 *out)
+ {
+-	return crypto_blake2s_final(desc, out, blake2s_compress);
++	return crypto_blake2s_final(desc, out, false);
+ }
+ 
+ #define BLAKE2S_ALG(name, driver_name, digest_size)			\
+diff --git a/crypto/blake2s_generic.c b/crypto/blake2s_generic.c
+index 72fe480f9bd6..5f96a21f8788 100644
+--- a/crypto/blake2s_generic.c
++++ b/crypto/blake2s_generic.c
+@@ -15,12 +15,12 @@
+ static int crypto_blake2s_update_generic(struct shash_desc *desc,
+ 					 const u8 *in, unsigned int inlen)
+ {
+-	return crypto_blake2s_update(desc, in, inlen, blake2s_compress_generic);
++	return crypto_blake2s_update(desc, in, inlen, true);
+ }
+ 
+ static int crypto_blake2s_final_generic(struct shash_desc *desc, u8 *out)
+ {
+-	return crypto_blake2s_final(desc, out, blake2s_compress_generic);
++	return crypto_blake2s_final(desc, out, true);
+ }
+ 
+ #define BLAKE2S_ALG(name, driver_name, digest_size)			\
+diff --git a/include/crypto/internal/blake2s.h b/include/crypto/internal/blake2s.h
+index d39cfa0d333e..52363eee2b20 100644
+--- a/include/crypto/internal/blake2s.h
++++ b/include/crypto/internal/blake2s.h
+@@ -24,14 +24,11 @@ static inline void blake2s_set_lastblock(struct blake2s_state *state)
+ 	state->f[0] = -1;
+ }
+ 
+-typedef void (*blake2s_compress_t)(struct blake2s_state *state,
+-				   const u8 *block, size_t nblocks, u32 inc);
 -
--	rc = ioctl(vcpu->fd, KVM_SET_CPUID2, cpuid);
-+	rc = __vcpu_set_cpuid(vm, vcpuid, cpuid);
- 	TEST_ASSERT(rc == 0, "KVM_SET_CPUID2 failed, rc: %i errno: %i",
- 		    rc, errno);
+ /* Helper functions for BLAKE2s shared by the library and shash APIs */
  
-@@ -1337,6 +1345,23 @@ void assert_on_unhandled_exception(struc
+-static inline void __blake2s_update(struct blake2s_state *state,
+-				    const u8 *in, size_t inlen,
+-				    blake2s_compress_t compress)
++static __always_inline void
++__blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen,
++		 bool force_generic)
+ {
+ 	const size_t fill = BLAKE2S_BLOCK_SIZE - state->buflen;
+ 
+@@ -39,7 +36,12 @@ static inline void __blake2s_update(struct blake2s_state *state,
+ 		return;
+ 	if (inlen > fill) {
+ 		memcpy(state->buf + state->buflen, in, fill);
+-		(*compress)(state, state->buf, 1, BLAKE2S_BLOCK_SIZE);
++		if (force_generic)
++			blake2s_compress_generic(state, state->buf, 1,
++						 BLAKE2S_BLOCK_SIZE);
++		else
++			blake2s_compress(state, state->buf, 1,
++					 BLAKE2S_BLOCK_SIZE);
+ 		state->buflen = 0;
+ 		in += fill;
+ 		inlen -= fill;
+@@ -47,7 +49,12 @@ static inline void __blake2s_update(struct blake2s_state *state,
+ 	if (inlen > BLAKE2S_BLOCK_SIZE) {
+ 		const size_t nblocks = DIV_ROUND_UP(inlen, BLAKE2S_BLOCK_SIZE);
+ 		/* Hash one less (full) block than strictly possible */
+-		(*compress)(state, in, nblocks - 1, BLAKE2S_BLOCK_SIZE);
++		if (force_generic)
++			blake2s_compress_generic(state, in, nblocks - 1,
++						 BLAKE2S_BLOCK_SIZE);
++		else
++			blake2s_compress(state, in, nblocks - 1,
++					 BLAKE2S_BLOCK_SIZE);
+ 		in += BLAKE2S_BLOCK_SIZE * (nblocks - 1);
+ 		inlen -= BLAKE2S_BLOCK_SIZE * (nblocks - 1);
  	}
+@@ -55,13 +62,16 @@ static inline void __blake2s_update(struct blake2s_state *state,
+ 	state->buflen += inlen;
  }
  
-+struct kvm_cpuid_entry2 *get_cpuid(struct kvm_cpuid2 *cpuid, uint32_t function,
-+				   uint32_t index)
-+{
-+	int i;
-+
-+	for (i = 0; i < cpuid->nent; i++) {
-+		struct kvm_cpuid_entry2 *cur = &cpuid->entries[i];
-+
-+		if (cur->function == function && cur->index == index)
-+			return cur;
-+	}
-+
-+	TEST_FAIL("CPUID function 0x%x index 0x%x not found ", function, index);
-+
-+	return NULL;
-+}
-+
- bool set_cpuid(struct kvm_cpuid2 *cpuid,
- 	       struct kvm_cpuid_entry2 *ent)
+-static inline void __blake2s_final(struct blake2s_state *state, u8 *out,
+-				   blake2s_compress_t compress)
++static __always_inline void
++__blake2s_final(struct blake2s_state *state, u8 *out, bool force_generic)
  {
---- a/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-@@ -154,6 +154,34 @@ struct kvm_cpuid2 *vcpu_alloc_cpuid(stru
- 	return guest_cpuids;
+ 	blake2s_set_lastblock(state);
+ 	memset(state->buf + state->buflen, 0,
+ 	       BLAKE2S_BLOCK_SIZE - state->buflen); /* Padding */
+-	(*compress)(state, state->buf, 1, state->buflen);
++	if (force_generic)
++		blake2s_compress_generic(state, state->buf, 1, state->buflen);
++	else
++		blake2s_compress(state, state->buf, 1, state->buflen);
+ 	cpu_to_le32_array(state->h, ARRAY_SIZE(state->h));
+ 	memcpy(out, state->h, state->outlen);
  }
+@@ -99,20 +109,20 @@ static inline int crypto_blake2s_init(struct shash_desc *desc)
  
-+static void set_cpuid_after_run(struct kvm_vm *vm, struct kvm_cpuid2 *cpuid)
-+{
-+	struct kvm_cpuid_entry2 *ent;
-+	int rc;
-+	u32 eax, ebx, x;
-+
-+	/* Setting unmodified CPUID is allowed */
-+	rc = __vcpu_set_cpuid(vm, VCPU_ID, cpuid);
-+	TEST_ASSERT(!rc, "Setting unmodified CPUID after KVM_RUN failed: %d", rc);
-+
-+	/* Changing CPU features is forbidden */
-+	ent = get_cpuid(cpuid, 0x7, 0);
-+	ebx = ent->ebx;
-+	ent->ebx--;
-+	rc = __vcpu_set_cpuid(vm, VCPU_ID, cpuid);
-+	TEST_ASSERT(rc, "Changing CPU features should fail");
-+	ent->ebx = ebx;
-+
-+	/* Changing MAXPHYADDR is forbidden */
-+	ent = get_cpuid(cpuid, 0x80000008, 0);
-+	eax = ent->eax;
-+	x = eax & 0xff;
-+	ent->eax = (eax & ~0xffu) | (x - 1);
-+	rc = __vcpu_set_cpuid(vm, VCPU_ID, cpuid);
-+	TEST_ASSERT(rc, "Changing MAXPHYADDR should fail");
-+	ent->eax = eax;
-+}
-+
- int main(void)
+ static inline int crypto_blake2s_update(struct shash_desc *desc,
+ 					const u8 *in, unsigned int inlen,
+-					blake2s_compress_t compress)
++					bool force_generic)
  {
- 	struct kvm_cpuid2 *supp_cpuid, *cpuid2;
-@@ -175,5 +203,7 @@ int main(void)
- 	for (stage = 0; stage < 3; stage++)
- 		run_vcpu(vm, VCPU_ID, stage);
+ 	struct blake2s_state *state = shash_desc_ctx(desc);
  
-+	set_cpuid_after_run(vm, cpuid2);
-+
- 	kvm_vm_free(vm);
+-	__blake2s_update(state, in, inlen, compress);
++	__blake2s_update(state, in, inlen, force_generic);
+ 	return 0;
  }
-
+ 
+ static inline int crypto_blake2s_final(struct shash_desc *desc, u8 *out,
+-				       blake2s_compress_t compress)
++				       bool force_generic)
+ {
+ 	struct blake2s_state *state = shash_desc_ctx(desc);
+ 
+-	__blake2s_final(state, out, compress);
++	__blake2s_final(state, out, force_generic);
+ 	return 0;
+ }
+ 
+diff --git a/lib/crypto/blake2s.c b/lib/crypto/blake2s.c
+index 9364f79937b8..c71c09621c09 100644
+--- a/lib/crypto/blake2s.c
++++ b/lib/crypto/blake2s.c
+@@ -18,14 +18,14 @@
+ 
+ void blake2s_update(struct blake2s_state *state, const u8 *in, size_t inlen)
+ {
+-	__blake2s_update(state, in, inlen, blake2s_compress);
++	__blake2s_update(state, in, inlen, false);
+ }
+ EXPORT_SYMBOL(blake2s_update);
+ 
+ void blake2s_final(struct blake2s_state *state, u8 *out)
+ {
+ 	WARN_ON(IS_ENABLED(DEBUG) && !out);
+-	__blake2s_final(state, out, blake2s_compress);
++	__blake2s_final(state, out, false);
+ 	memzero_explicit(state, sizeof(*state));
+ }
+ EXPORT_SYMBOL(blake2s_final);
+-- 
+2.34.1
 

@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF3949891B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC527498A0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245386AbiAXSw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:52:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50446 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343541AbiAXSux (ORCPT
+        id S1345256AbiAXS76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:59:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56362 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344243AbiAXS5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:50:53 -0500
+        Mon, 24 Jan 2022 13:57:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5BEAB8122D;
-        Mon, 24 Jan 2022 18:50:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFBF7C36AEC;
-        Mon, 24 Jan 2022 18:50:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E825A61506;
+        Mon, 24 Jan 2022 18:57:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B53A5C340E5;
+        Mon, 24 Jan 2022 18:57:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050251;
-        bh=c/VsU68PR/sAcuUNBYexTDgEwJxQ72KXGmsmTdrHLqg=;
+        s=korg; t=1643050638;
+        bh=DuW7291uSSX9Mly7trvoT7UBTolHWvx9CQ3PWEItId8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h7uX4RX6UmZYBlwxO4NhXXzjhRYKoQxWqDJTqxlui1LQCs/RJs6QtaUBfiVRxS6HA
-         EF+uztE6fmlPfSM4U/AXOatFnSGauM8xcbptMHEcLXwff9bAcKqsKJFiusCxRpQr98
-         Vz3OXwREAuLOltUwb77iy7nntzBciF1QmUNd9KlY=
+        b=S1g+QH4SGWR1piRYRYj16psptdSV2rO17U5AAWUt4kscIUeE4yKcg5Gl3nki46Rgy
+         lthy04I8XOIYGDmBviJ+7Y4tXbIBKuFr530olT5ZvNrlaxt3sLNDCh9XzR2f4aNIy+
+         qj977yTpibL8liXK4a8GMi2osThZbOmZFDI+HKTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zekun Shen <bruceshenzk@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
+        stable@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 059/114] ar5523: Fix null-ptr-deref with unexpected WDCMSG_TARGET_START reply
-Date:   Mon, 24 Jan 2022 19:42:34 +0100
-Message-Id: <20220124183928.927893679@linuxfoundation.org>
+Subject: [PATCH 4.9 065/157] scsi: ufs: Fix race conditions related to driver data
+Date:   Mon, 24 Jan 2022 19:42:35 +0100
+Message-Id: <20220124183934.847864454@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
-References: <20220124183927.095545464@linuxfoundation.org>
+In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
+References: <20220124183932.787526760@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,61 +48,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zekun Shen <bruceshenzk@gmail.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit ae80b6033834342601e99f74f6a62ff5092b1cee ]
+[ Upstream commit 21ad0e49085deb22c094f91f9da57319a97188e4 ]
 
-Unexpected WDCMSG_TARGET_START replay can lead to null-ptr-deref
-when ar->tx_cmd->odata is NULL. The patch adds a null check to
-prevent such case.
+The driver data pointer must be set before any callbacks are registered
+that use that pointer. Hence move the initialization of that pointer from
+after the ufshcd_init() call to inside ufshcd_init().
 
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
- ar5523_cmd+0x46a/0x581 [ar5523]
- ar5523_probe.cold+0x1b7/0x18da [ar5523]
- ? ar5523_cmd_rx_cb+0x7a0/0x7a0 [ar5523]
- ? __pm_runtime_set_status+0x54a/0x8f0
- ? _raw_spin_trylock_bh+0x120/0x120
- ? pm_runtime_barrier+0x220/0x220
- ? __pm_runtime_resume+0xb1/0xf0
- usb_probe_interface+0x25b/0x710
- really_probe+0x209/0x5d0
- driver_probe_device+0xc6/0x1b0
- device_driver_attach+0xe2/0x120
-
-I found the bug using a custome USBFuzz port. It's a research work
-to fuzz USB stack/drivers. I modified it to fuzz ath9k driver only,
-providing hand-crafted usb descriptors to QEMU.
-
-After fixing the code (fourth byte in usb packet) to WDCMSG_TARGET_START,
-I got the null-ptr-deref bug. I believe the bug is triggerable whenever
-cmd->odata is NULL. After patching, I tested with the same input and no
-longer see the KASAN report.
-
-This was NOT tested on a real device.
-
-Signed-off-by: Zekun Shen <bruceshenzk@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
-Link: https://lore.kernel.org/r/YXsmPQ3awHFLuAj2@10-18-43-117.dynapool.wireless.nyu.edu
+Link: https://lore.kernel.org/r/20211203231950.193369-7-bvanassche@acm.org
+Fixes: 3b1d05807a9a ("[SCSI] ufs: Segregate PCI Specific Code")
+Reported-by: Alexey Dobriyan <adobriyan@gmail.com>
+Tested-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ar5523/ar5523.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/ufs/tc-dwc-g210-pci.c | 1 -
+ drivers/scsi/ufs/ufshcd-pltfrm.c   | 2 --
+ drivers/scsi/ufs/ufshcd.c          | 7 +++++++
+ 3 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ar5523/ar5523.c b/drivers/net/wireless/ath/ar5523/ar5523.c
-index bc6330b437958..67c20cb92f138 100644
---- a/drivers/net/wireless/ath/ar5523/ar5523.c
-+++ b/drivers/net/wireless/ath/ar5523/ar5523.c
-@@ -153,6 +153,10 @@ static void ar5523_cmd_rx_cb(struct urb *urb)
- 			ar5523_err(ar, "Invalid reply to WDCMSG_TARGET_START");
- 			return;
- 		}
-+		if (!cmd->odata) {
-+			ar5523_err(ar, "Unexpected WDCMSG_TARGET_START reply");
-+			return;
-+		}
- 		memcpy(cmd->odata, hdr + 1, sizeof(u32));
- 		cmd->olen = sizeof(u32);
- 		cmd->res = 0;
+diff --git a/drivers/scsi/ufs/tc-dwc-g210-pci.c b/drivers/scsi/ufs/tc-dwc-g210-pci.c
+index c09a0fef0fe60..a1785b0239667 100644
+--- a/drivers/scsi/ufs/tc-dwc-g210-pci.c
++++ b/drivers/scsi/ufs/tc-dwc-g210-pci.c
+@@ -140,7 +140,6 @@ tc_dwc_g210_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		return err;
+ 	}
+ 
+-	pci_set_drvdata(pdev, hba);
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_allow(&pdev->dev);
+ 
+diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
+index b47decc1fb5ba..e9b0cc4cbb4d2 100644
+--- a/drivers/scsi/ufs/ufshcd-pltfrm.c
++++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+@@ -350,8 +350,6 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+ 		goto dealloc_host;
+ 	}
+ 
+-	platform_set_drvdata(pdev, hba);
+-
+ 	pm_runtime_set_active(&pdev->dev);
+ 	pm_runtime_enable(&pdev->dev);
+ 
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index a767d942bfca5..cf7946c840165 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -6766,6 +6766,13 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+ 	struct Scsi_Host *host = hba->host;
+ 	struct device *dev = hba->dev;
+ 
++	/*
++	 * dev_set_drvdata() must be called before any callbacks are registered
++	 * that use dev_get_drvdata() (frequency scaling, clock scaling, hwmon,
++	 * sysfs).
++	 */
++	dev_set_drvdata(dev, hba);
++
+ 	if (!mmio_base) {
+ 		dev_err(hba->dev,
+ 		"Invalid memory reference for mmio_base is NULL\n");
 -- 
 2.34.1
 

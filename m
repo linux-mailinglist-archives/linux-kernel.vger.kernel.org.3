@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4503849775F
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE77497760
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 03:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240990AbiAXCcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Jan 2022 21:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
+        id S240926AbiAXCcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Jan 2022 21:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240918AbiAXCbw (ORCPT
+        with ESMTP id S240938AbiAXCby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Jan 2022 21:31:52 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B77C061744;
-        Sun, 23 Jan 2022 18:31:51 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id 9so2141751iou.2;
-        Sun, 23 Jan 2022 18:31:51 -0800 (PST)
+        Sun, 23 Jan 2022 21:31:54 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CD8C061401;
+        Sun, 23 Jan 2022 18:31:54 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id n17so1908489iod.4;
+        Sun, 23 Jan 2022 18:31:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wM27uiC4jZN6SIACqztmxLT6jE1eUS0JxDrZiiXzyRg=;
-        b=OeEzUz+xSnEJ37CVSWNU73LKZ0yZoFVZW300ZrxE0zAlrUsF5B00SQDxDtIgduR0qe
-         wjo+DFeHXaKCvIpUxXIFbK4SgqgFafQY2aFDBZtoanjokOm2VxhV7DApE36kYOI+qqk3
-         qXdObbAmy7fUyTuApsbsl8TCJxZuO/SnVDPIuV+Dstc4lZg2GlxRZUcgU9Y20Hji7HZ4
-         wzL/MIagejiycvC0z9eb39TB+hjzYvTywl7dF52F2Q+xmkcVkngQAHohfaqN2TiMSoKF
-         kqZB5Unnk90Jlk5hThs1ymZYgncn4s9DwQzGWnmiI/JdMHdhBPu4x4TEj4WuUQ6wN4cS
-         uOtg==
+        bh=py21+nfXCxvH9ed7Sw22S2QRAUR7jaIm1Q/EYwP+WYo=;
+        b=da5jAzAfPPfk7mp4wncKvvJCkduKpIsOZSGZ4OC4dqDZ/6Md4hsvMmGsFAXJBLgQLJ
+         P5mPJjhdeaaoS7l/uzxg0e/NbeInrpL4Ikdy7c19AhUAZBVGHP2oKNz5K5MzKyuxsJxl
+         2ivf5v7yHpBAw75VUsuSnqcH16Djq+vyvLo9jmPMpgoXYoLfkBZFv2iO7tuyvD19k3b1
+         s7qmOLY1siN8qT/ycFjkm65zbIq0f2/IQm1sZP8w1pAI9WHUvk/bwae694GpdWMZObv8
+         psFvVslJeDiGo9C30C+SE+i/cLLG6mFsrIw++B1UVOLdnA9Yhv5hoX1sv2yZDMzbRGn7
+         W/HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wM27uiC4jZN6SIACqztmxLT6jE1eUS0JxDrZiiXzyRg=;
-        b=DAu3EyAji5mA5hoTF7sCBjeSrD8x179HmrCHV3wb+TlouICUxTr+CMjo45BYD7Q8ew
-         m+U0yRsogBu82YEq/UOrIX8dQQuo4zJ98JgHLY9+QgDAQAdB0VfOI+c3eUwjiM0IsFNJ
-         kea1V436Vk5R+3K6Zw+9EmCIjY0/auIOR+RRvMcslpJ+f2ai9V2SvWoiJih/2iPZQziW
-         bPeLRXZUdsDalhKFoE2vi5VfJfqhARV5cwJudx43AZoHOSO3kqZMlsGcm/99FclvX9OX
-         wD8xO5h8jQtbmNXKb7YNRVHg8SBQO8Syfh0V2mZib0OJRmcpOXbVh4Eu7MQKLbf6AiCa
-         7tpg==
-X-Gm-Message-State: AOAM530ytGOcgHsUBPm1O0oZU7IlHLLWThTtREEKTFK7MgPznp1qZH/i
-        +ax37iFot6nbY1+sfnIkxZ/2PX/YNG0=
-X-Google-Smtp-Source: ABdhPJwVCAXerAQEZRw1wksjIQuYDlek3Gm5nUOSoAy/LVpBfHxOaxA2QAELIH/ZTZREKTlcu6u43w==
-X-Received: by 2002:a02:3904:: with SMTP id l4mr5957775jaa.161.1642991510607;
-        Sun, 23 Jan 2022 18:31:50 -0800 (PST)
+        bh=py21+nfXCxvH9ed7Sw22S2QRAUR7jaIm1Q/EYwP+WYo=;
+        b=couxggUQBESYh359pmuJmwoNRPDpw86IbNQ8iiDMXqhoaoXJYkjTyapwOlWGHhGnqp
+         jnwVdKvd/1Q+nsFEPSiKsA+FdLd9nmZ7Pe71H0Quw4O5OFNKHUrwD60skxNMqib6jQpD
+         5T6kDbvMMo0IvK32V9thaMf6DJ3JJ1zdIw7Wg+JXGUyZ7bzO4SMymud8E5qOjAywVNM2
+         kYReW2nwSQNJDUZp05wl8h0iSK2hb/uM+czBBELoIV3SkFPocbDHmerGjQJNwOfhd6eU
+         /bsar+qfXBTjagqJTzeGyQaub8nLmUScZWBw3dnEGbnuPQeEr6RtS3pSNOcVDR4O8BfP
+         XmTQ==
+X-Gm-Message-State: AOAM530YphnWJ/FVsCgIT/mTVqKBo4pOcZaWHXWgdIPL4dC/PfdhUS1A
+        QJLRcChvzQNa769ouFJcC8ZMAyCy9Jg=
+X-Google-Smtp-Source: ABdhPJwUjw8XT5/iEV0iZ2cPeS0gZ9iHkopEETPmY56ydUqeJ6JKeUC8o3B9CTZsNY/bhPBfUXxbHg==
+X-Received: by 2002:a02:29cc:: with SMTP id p195mr5841271jap.134.1642991513028;
+        Sun, 23 Jan 2022 18:31:53 -0800 (PST)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:582d:ad0e:e5a6:94b6])
-        by smtp.gmail.com with ESMTPSA id w4sm6625633ilq.56.2022.01.23.18.31.49
+        by smtp.gmail.com with ESMTPSA id w4sm6625633ilq.56.2022.01.23.18.31.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jan 2022 18:31:50 -0800 (PST)
+        Sun, 23 Jan 2022 18:31:52 -0800 (PST)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
@@ -64,9 +64,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
         Lucas Stach <l.stach@pengutronix.de>,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH V3 08/10] dt-bindings: media: nxp, imx8mq-vpu: Add support for G1 on imx8mm
-Date:   Sun, 23 Jan 2022 20:31:22 -0600
-Message-Id: <20220124023125.414794-9-aford173@gmail.com>
+Subject: [PATCH V3 09/10] media: hantro: Add support for i.MX8MM Hantro-G1
+Date:   Sun, 23 Jan 2022 20:31:23 -0600
+Message-Id: <20220124023125.414794-10-aford173@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220124023125.414794-1-aford173@gmail.com>
 References: <20220124023125.414794-1-aford173@gmail.com>
@@ -76,34 +76,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i.MX8M mini appears to have a similar G1 decoder but the
-post-processing isn't present, so different compatible flag is required.
-Since all the other parameters are the same with imx8mq, just add
-the new compatible flag to nxp,imx8mq-vpu.yaml.
+The i.MX8MM has a Hantro G1 video decoder similar to the
+imx8mq but lacks the post-processor present in the imx8mq.
+Add support in the driver for it with the post-processing
+removed.
 
 Signed-off-by: Adam Ford <aford173@gmail.com>
 
-diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-index 9c28d562112b..7dc13a4b1805 100644
---- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-+++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
-@@ -5,7 +5,7 @@
- $id: "http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#"
- $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index a670ddd29c4c..b281ac4fb79c 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -615,6 +615,7 @@ static const struct of_device_id of_hantro_match[] = {
+ 	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+ #endif
+ #ifdef CONFIG_VIDEO_HANTRO_IMX8M
++	{ .compatible = "nxp,imx8mm-vpu-g1", .data = &imx8mm_vpu_g1_variant, },
+ 	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+ 	{ .compatible = "nxp,imx8mq-vpu-g1", .data = &imx8mq_vpu_g1_variant },
+ 	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index f0bd2ffe290b..c00b46e06055 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -299,6 +299,7 @@ enum hantro_enc_fmt {
+ 	ROCKCHIP_VPU_ENC_FMT_UYVY422 = 3,
+ };
  
--title: Hantro G1/G2 VPU codecs implemented on i.MX8MQ SoCs
-+title: Hantro G1/G2 VPU codecs implemented on i.MX8M SoCs
- 
- maintainers:
-   - Philipp Zabel <p.zabel@pengutronix.de>
-@@ -20,6 +20,7 @@ properties:
-         deprecated: true
-       - const: nxp,imx8mq-vpu-g1
-       - const: nxp,imx8mq-vpu-g2
-+      - const: nxp,imx8mm-vpu-g1
- 
-   reg:
-     maxItems: 1
++extern const struct hantro_variant imx8mm_vpu_g1_variant;
+ extern const struct hantro_variant imx8mq_vpu_g1_variant;
+ extern const struct hantro_variant imx8mq_vpu_g2_variant;
+ extern const struct hantro_variant imx8mq_vpu_variant;
+diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+index 849ea7122d47..9802508bade2 100644
+--- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
++++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
+@@ -327,3 +327,15 @@ const struct hantro_variant imx8mq_vpu_g2_variant = {
+ 	.clk_names = imx8mq_g2_clk_names,
+ 	.num_clocks = ARRAY_SIZE(imx8mq_g2_clk_names),
+ };
++
++const struct hantro_variant imx8mm_vpu_g1_variant = {
++	.dec_fmts = imx8m_vpu_dec_fmts,
++	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_dec_fmts),
++	.codec = HANTRO_MPEG2_DECODER | HANTRO_VP8_DECODER |
++		 HANTRO_H264_DECODER,
++	.codec_ops = imx8mq_vpu_g1_codec_ops,
++	.irqs = imx8mq_irqs,
++	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
++	.clk_names = imx8mq_g1_clk_names,
++	.num_clocks = ARRAY_SIZE(imx8mq_g1_clk_names),
++};
 -- 
 2.32.0
 

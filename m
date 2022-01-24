@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAA84989D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C25498898
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 19:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344491AbiAXS6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 13:58:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:54730 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242005AbiAXS40 (ORCPT
+        id S245310AbiAXSse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 13:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245274AbiAXSs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 13:56:26 -0500
+        Mon, 24 Jan 2022 13:48:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AD0C061401;
+        Mon, 24 Jan 2022 10:48:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1180B8121F;
-        Mon, 24 Jan 2022 18:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28248C340E5;
-        Mon, 24 Jan 2022 18:56:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC497B81214;
+        Mon, 24 Jan 2022 18:48:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCF10C340E5;
+        Mon, 24 Jan 2022 18:48:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643050583;
-        bh=28t1sweoB4qHEe4T76xab8j4fhECdC4c7ySIQE2cgDk=;
+        s=korg; t=1643050103;
+        bh=fZdxtjsP9F4pYFdU33TBh0qEMt10NcGpyNRNnIcGzIs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GaiUig8efS81yFkK8fBJJuG377O1NOHG8BrG4Q78OzBJpGi/nVp8+j3PEYH8zzQz0
-         50oPYl1w3n1GXkZpZXrc4ip5rOuQ2WRhezTMGZb682qmULZPqe8nZ9/W6ehglSeFVm
-         kP+j/I/JcXekOYOMyxBg3kNjP4Q0agr9aAhK23YE=
+        b=BYO9myR5zPG5Cu5rgyXUxcjHLnCqWRsEyQzqB/6QqNHw6rfKnQTFhegEu9cqPSmic
+         AX87rSGE1tHzdvS46VNwjORFE1Vq4AkzCRxsBNA5tIPCaGW+owbUCG8oN/h67XMUdf
+         fXynujkqmlaaJgldocx1zw2Lz6wMOfqYT7FztQMA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Brian Silverman <brian.silverman@bluerivertech.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.9 006/157] can: gs_usb: gs_can_start_xmit(): zero-initialize hf->{flags,reserved}
-Date:   Mon, 24 Jan 2022 19:41:36 +0100
-Message-Id: <20220124183932.989219541@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan McDowell <noodles@earth.li>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH 4.4 002/114] USB: core: Fix bug in resuming hubs handling of wakeup requests
+Date:   Mon, 24 Jan 2022 19:41:37 +0100
+Message-Id: <20220124183927.176753026@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124183932.787526760@linuxfoundation.org>
-References: <20220124183932.787526760@linuxfoundation.org>
+In-Reply-To: <20220124183927.095545464@linuxfoundation.org>
+References: <20220124183927.095545464@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,39 +48,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Silverman <brian.silverman@bluerivertech.com>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-commit 89d58aebe14a365c25ba6645414afdbf4e41cea4 upstream.
+commit 0f663729bb4afc92a9986b66131ebd5b8a9254d1 upstream.
 
-No information is deliberately sent in hf->flags in host -> device
-communications, but the open-source candleLight firmware echoes it
-back, which can result in the GS_CAN_FLAG_OVERFLOW flag being set and
-generating spurious ERRORFRAMEs.
+Bugzilla #213839 reports a 7-port hub that doesn't work properly when
+devices are plugged into some of the ports; the kernel goes into an
+unending disconnect/reinitialize loop as shown in the bug report.
 
-While there also initialize the reserved member with 0.
+This "7-port hub" comprises two four-port hubs with one plugged into
+the other; the failures occur when a device is plugged into one of the
+downstream hub's ports.  (These hubs have other problems too.  For
+example, they bill themselves as USB-2.0 compliant but they only run
+at full speed.)
 
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-Link: https://lore.kernel.org/all/20220106002952.25883-1-brian.silverman@bluerivertech.com
-Link: https://github.com/candle-usb/candleLight_fw/issues/87
-Cc: stable@vger.kernel.org
-Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
-[mkl: initialize the reserved member, too]
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+It turns out that the failures are caused by bugs in both the kernel
+and the hub.  The hub's bug is that it reports a different
+bmAttributes value in its configuration descriptor following a remote
+wakeup (0xe0 before, 0xc0 after -- the wakeup-support bit has
+changed).
+
+The kernel's bug is inside the hub driver's resume handler.  When
+hub_activate() sees that one of the hub's downstream ports got a
+wakeup request from a child device, it notes this fact by setting the
+corresponding bit in the hub->change_bits variable.  But this variable
+is meant for connection changes, not wakeup events; setting it causes
+the driver to believe the downstream port has been disconnected and
+then connected again (in addition to having received a wakeup
+request).
+
+Because of this, the hub driver then tries to check whether the device
+currently plugged into the downstream port is the same as the device
+that had been attached there before.  Normally this check succeeds and
+wakeup handling continues with no harm done (which is why the bug
+remained undetected until now).  But with these dodgy hubs, the check
+fails because the config descriptor has changed.  This causes the hub
+driver to reinitialize the child device, leading to the
+disconnect/reinitialize loop described in the bug report.
+
+The proper way to note reception of a downstream wakeup request is
+to set a bit in the hub->event_bits variable instead of
+hub->change_bits.  That way the hub driver will realize that something
+has happened to the port but will not think the port and child device
+have been disconnected.  This patch makes that change.
+
+Cc: <stable@vger.kernel.org>
+Tested-by: Jonathan McDowell <noodles@earth.li>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/YdCw7nSfWYPKWQoD@rowland.harvard.edu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/gs_usb.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/core/hub.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -515,6 +515,8 @@ static netdev_tx_t gs_can_start_xmit(str
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -1169,7 +1169,7 @@ static void hub_activate(struct usb_hub
+ 			 */
+ 			if (portchange || (hub_is_superspeed(hub->hdev) &&
+ 						port_resumed))
+-				set_bit(port1, hub->change_bits);
++				set_bit(port1, hub->event_bits);
  
- 	hf->echo_id = idx;
- 	hf->channel = dev->channel;
-+	hf->flags = 0;
-+	hf->reserved = 0;
- 
- 	cf = (struct can_frame *)skb->data;
- 
+ 		} else if (udev->persist_enabled) {
+ #ifdef CONFIG_PM
 
 

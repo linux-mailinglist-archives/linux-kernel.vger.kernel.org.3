@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A28499298
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502DC4992DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350332AbiAXUVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:21:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
+        id S1382462AbiAXUZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 15:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354685AbiAXUDc (ORCPT
+        with ESMTP id S1376677AbiAXUDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:03:32 -0500
+        Mon, 24 Jan 2022 15:03:33 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88346C0680BF;
-        Mon, 24 Jan 2022 11:29:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC58C03463F;
+        Mon, 24 Jan 2022 11:29:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A0706142C;
-        Mon, 24 Jan 2022 19:29:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE01C340E5;
-        Mon, 24 Jan 2022 19:29:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DDDA60917;
+        Mon, 24 Jan 2022 19:29:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1209EC340E5;
+        Mon, 24 Jan 2022 19:29:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643052575;
-        bh=Dv2PrsEKWm7VT9rQNz9Uu+sSGVoXUWQfD7FuoCeluW4=;
+        s=korg; t=1643052578;
+        bh=rntYQlCVPisB/5zHJxmM6EaBvY6oz+EzaTcSMqEAHt0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e0WSezQLONzQtkV68x7SZZPfDhc/AdRECO02CNiz2cmIlcpHYlv8IZIK0jyDS64v+
-         7vDen61Sabe69nS3rCWQbJMFWAOPgRK+H/YfoWMuOQqGwee6LOdOPovI4oE7lX4SmU
-         5ghzBtnjO+iujZKgZhEmCa3xnOzGv0sdUwv8I6HU=
+        b=Euo8RtWl8H13dS/S1naGHRv2+aM6/h3sn3gV6LDojOSHkiFvt5cfSGK6ZsocWo+of
+         rzm43TPG3NO8TXMZDaRtOA4bOZNuC8rhfFkooxRFfCDRLI5ReLGDTYQJdkKD7gIHqn
+         oRqJ2ik/ZMvk/Yr3WJdpzBPmsDtVAA+dhJlxvHRc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 105/320] staging: greybus: audio: Check null pointer
-Date:   Mon, 24 Jan 2022 19:41:29 +0100
-Message-Id: <20220124183957.297874723@linuxfoundation.org>
+Subject: [PATCH 5.4 106/320] fsl/fman: Check for null pointer after calling devm_ioremap
+Date:   Mon, 24 Jan 2022 19:41:30 +0100
+Message-Id: <20220124183957.330849637@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
 References: <20220124183953.750177707@linuxfoundation.org>
@@ -51,87 +51,92 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 2e81948177d769106754085c3e03534e6cc1f623 ]
+[ Upstream commit d5a73ec96cc57cf67e51b12820fc2354e7ca46f8 ]
 
-As the possible alloc failure of devm_kcalloc(), it could return null
-pointer.
-Therefore, 'strings' should be checked and return NULL if alloc fails to
-prevent the dereference of the NULL pointer.
-Also, the caller should also deal with the return value of the
-gb_generate_enum_strings() and return -ENOMEM if returns NULL.
-Moreover, because the memory allocated with devm_kzalloc() will be
-freed automatically when the last reference to the device is dropped,
-the 'gbe' in gbaudio_tplg_create_enum_kctl() and
-gbaudio_tplg_create_enum_ctl() do not need to free manually.
-But the 'control' in gbaudio_tplg_create_widget() and
-gbaudio_tplg_process_kcontrols() has a specially error handle to
-cleanup.
-So it should be better to cleanup 'control' when fails.
+As the possible failure of the allocation, the devm_ioremap() may return
+NULL pointer.
+Take tgec_initialization() as an example.
+If allocation fails, the params->base_addr will be NULL pointer and will
+be assigned to tgec->regs in tgec_config().
+Then it will cause the dereference of NULL pointer in set_mac_address(),
+which is called by tgec_init().
+Therefore, it should be better to add the sanity check after the calling
+of the devm_ioremap().
 
-Fixes: e65579e335da ("greybus: audio: topology: Enable enumerated control support")
-Reviewed-by: Alex Elder <elder@linaro.org>
+Fixes: 3933961682a3 ("fsl/fman: Add FMan MAC driver")
 Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220104150628.1987906-1-jiasheng@iscas.ac.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/greybus/audio_topology.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/net/ethernet/freescale/fman/mac.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/greybus/audio_topology.c b/drivers/staging/greybus/audio_topology.c
-index a8cfea957868a..3e2fbcd20598a 100644
---- a/drivers/staging/greybus/audio_topology.c
-+++ b/drivers/staging/greybus/audio_topology.c
-@@ -145,6 +145,9 @@ static const char **gb_generate_enum_strings(struct gbaudio_module_info *gb,
+diff --git a/drivers/net/ethernet/freescale/fman/mac.c b/drivers/net/ethernet/freescale/fman/mac.c
+index 7ab8095db1928..147126e79986c 100644
+--- a/drivers/net/ethernet/freescale/fman/mac.c
++++ b/drivers/net/ethernet/freescale/fman/mac.c
+@@ -94,14 +94,17 @@ static void mac_exception(void *handle, enum fman_mac_exceptions ex)
+ 		__func__, ex);
+ }
  
- 	items = le32_to_cpu(gbenum->items);
- 	strings = devm_kcalloc(gb->dev, items, sizeof(char *), GFP_KERNEL);
-+	if (!strings)
-+		return NULL;
+-static void set_fman_mac_params(struct mac_device *mac_dev,
+-				struct fman_mac_params *params)
++static int set_fman_mac_params(struct mac_device *mac_dev,
++			       struct fman_mac_params *params)
+ {
+ 	struct mac_priv_s *priv = mac_dev->priv;
+ 
+ 	params->base_addr = (typeof(params->base_addr))
+ 		devm_ioremap(priv->dev, mac_dev->res->start,
+ 			     resource_size(mac_dev->res));
++	if (!params->base_addr)
++		return -ENOMEM;
 +
- 	data = gbenum->names;
+ 	memcpy(&params->addr, mac_dev->addr, sizeof(mac_dev->addr));
+ 	params->max_speed	= priv->max_speed;
+ 	params->phy_if		= mac_dev->phy_if;
+@@ -112,6 +115,8 @@ static void set_fman_mac_params(struct mac_device *mac_dev,
+ 	params->event_cb	= mac_exception;
+ 	params->dev_id		= mac_dev;
+ 	params->internal_phy_node = priv->internal_phy_node;
++
++	return 0;
+ }
  
- 	for (i = 0; i < items; i++) {
-@@ -662,6 +665,8 @@ static int gbaudio_tplg_create_enum_kctl(struct gbaudio_module_info *gb,
- 	/* since count=1, and reg is dummy */
- 	gbe->max = le32_to_cpu(gb_enum->items);
- 	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
-+	if (!gbe->texts)
-+		return -ENOMEM;
+ static int tgec_initialization(struct mac_device *mac_dev)
+@@ -123,7 +128,9 @@ static int tgec_initialization(struct mac_device *mac_dev)
  
- 	/* debug enum info */
- 	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->max,
-@@ -871,6 +876,8 @@ static int gbaudio_tplg_create_enum_ctl(struct gbaudio_module_info *gb,
- 	/* since count=1, and reg is dummy */
- 	gbe->max = le32_to_cpu(gb_enum->items);
- 	gbe->texts = gb_generate_enum_strings(gb, gb_enum);
-+	if (!gbe->texts)
-+		return -ENOMEM;
+ 	priv = mac_dev->priv;
  
- 	/* debug enum info */
- 	dev_dbg(gb->dev, "Max:%d, name_length:%d\n", gbe->max,
-@@ -1081,6 +1088,10 @@ static int gbaudio_tplg_create_widget(struct gbaudio_module_info *module,
- 			csize += le16_to_cpu(gbenum->names_length);
- 			control->texts = (const char * const *)
- 				gb_generate_enum_strings(module, gbenum);
-+			if (!control->texts) {
-+				ret = -ENOMEM;
-+				goto error;
-+			}
- 			control->items = le32_to_cpu(gbenum->items);
- 		} else {
- 			csize = sizeof(struct gb_audio_control);
-@@ -1190,6 +1201,10 @@ static int gbaudio_tplg_process_kcontrols(struct gbaudio_module_info *module,
- 			csize += le16_to_cpu(gbenum->names_length);
- 			control->texts = (const char * const *)
- 				gb_generate_enum_strings(module, gbenum);
-+			if (!control->texts) {
-+				ret = -ENOMEM;
-+				goto error;
-+			}
- 			control->items = le32_to_cpu(gbenum->items);
- 		} else {
- 			csize = sizeof(struct gb_audio_control);
+-	set_fman_mac_params(mac_dev, &params);
++	err = set_fman_mac_params(mac_dev, &params);
++	if (err)
++		goto _return;
+ 
+ 	mac_dev->fman_mac = tgec_config(&params);
+ 	if (!mac_dev->fman_mac) {
+@@ -169,7 +176,9 @@ static int dtsec_initialization(struct mac_device *mac_dev)
+ 
+ 	priv = mac_dev->priv;
+ 
+-	set_fman_mac_params(mac_dev, &params);
++	err = set_fman_mac_params(mac_dev, &params);
++	if (err)
++		goto _return;
+ 
+ 	mac_dev->fman_mac = dtsec_config(&params);
+ 	if (!mac_dev->fman_mac) {
+@@ -218,7 +227,9 @@ static int memac_initialization(struct mac_device *mac_dev)
+ 
+ 	priv = mac_dev->priv;
+ 
+-	set_fman_mac_params(mac_dev, &params);
++	err = set_fman_mac_params(mac_dev, &params);
++	if (err)
++		goto _return;
+ 
+ 	if (priv->max_speed == SPEED_10000)
+ 		params.phy_if = PHY_INTERFACE_MODE_XGMII;
 -- 
 2.34.1
 

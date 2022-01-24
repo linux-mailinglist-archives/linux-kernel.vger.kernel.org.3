@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0244995E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 22:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C374B499BB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 23:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443535AbiAXU5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386440AbiAXUfa (ORCPT
+        id S1576029AbiAXVwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 16:52:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38990 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1450514AbiAXVUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:35:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54643C02C308;
-        Mon, 24 Jan 2022 11:48:52 -0800 (PST)
+        Mon, 24 Jan 2022 16:20:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 111B9B8122A;
-        Mon, 24 Jan 2022 19:48:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DCFAC340E7;
-        Mon, 24 Jan 2022 19:48:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B927B8122A;
+        Mon, 24 Jan 2022 21:20:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97DDDC340E4;
+        Mon, 24 Jan 2022 21:20:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643053729;
-        bh=Yp1NnFfvlH+1ASCwb2Hc7AdUpcyrvhhExdH1MabsrVw=;
+        s=korg; t=1643059242;
+        bh=jSECrfroaRL6gnqItNOsQdsp2IFqaB2YwhTsNYAREpQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Re8pzJ5qsdd6Si+w4sXiRmwzAOLqOLAhxtB4X99mO6WfcSizoPfrKgoHc4U9ztXO+
-         Ey5qkzr/OQLL47Z+RkdZKxVKiJesKO2JuCa5DpiaVUtkQa/+Z0osfZT3htz8Hrf5ys
-         oX6VSLBagNl/N5EhjXVhe1N8nJGntQnJjcPrNMYs=
+        b=FK+WdRPGTGbxXmsYUEMr4CGo1hbxvACrv9wdL7J2lY6KR4QnbFBSiyS4hctE3lxO7
+         rB5PXpFVyxXDqSY0JeJtP8Dx9P61EAISci+W21z9KfpiXawQ+bvX73MwLtpCWTeYXh
+         8vFmOhxgWmgIUNSYsvO57qXZHLfYoTlZHvhivRhc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        stable@vger.kernel.org, Ammar Faizi <ammarfaizi2@gmail.com>,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 141/563] media: dib8000: Fix a memleak in dib8000_init()
+Subject: [PATCH 5.16 0517/1039] powerpc/xive: Add missing null check after calling kmalloc
 Date:   Mon, 24 Jan 2022 19:38:26 +0100
-Message-Id: <20220124184029.274901219@linuxfoundation.org>
+Message-Id: <20220124184142.670010140@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+References: <20220124184125.121143506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,53 +47,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Ammar Faizi <ammarfaizi2@gmail.com>
 
-[ Upstream commit 8dbdcc7269a83305ee9d677b75064d3530a48ee2 ]
+[ Upstream commit 18dbfcdedc802f9500b2c29794f22a31d27639c0 ]
 
-In dib8000_init(), the variable fe is not freed or passed out on the
-failure of dib8000_identify(&state->i2c), which could lead to a memleak.
+Commit 930914b7d528fc ("powerpc/xive: Add a debugfs file to dump
+internal XIVE state") forgot to add a null check.
 
-Fix this bug by adding a kfree of fe in the error path.
+Add it.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DVB_DIB8000=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 77e2c0f5d471 ("V4L/DVB (12900): DiB8000: added support for DiBcom ISDB-T/ISDB-Tsb demodulator DiB8000")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Fixes: 930914b7d528fc6b0249bffc00564100bcf6ef75 ("powerpc/xive: Add a debugfs file to dump internal XIVE state")
+Signed-off-by: Ammar Faizi <ammarfaizi2@gmail.com>
+Reviewed-by: Cédric Le Goater <clg@kaod.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211226135314.251221-1-ammar.faizi@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/dib8000.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/powerpc/sysdev/xive/spapr.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
-index bb02354a48b81..d67f2dd997d06 100644
---- a/drivers/media/dvb-frontends/dib8000.c
-+++ b/drivers/media/dvb-frontends/dib8000.c
-@@ -4473,8 +4473,10 @@ static struct dvb_frontend *dib8000_init(struct i2c_adapter *i2c_adap, u8 i2c_ad
+diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
+index f143b6f111ac0..1179632560b8d 100644
+--- a/arch/powerpc/sysdev/xive/spapr.c
++++ b/arch/powerpc/sysdev/xive/spapr.c
+@@ -653,6 +653,9 @@ static int xive_spapr_debug_show(struct seq_file *m, void *private)
+ 	struct xive_irq_bitmap *xibm;
+ 	char *buf = kmalloc(PAGE_SIZE, GFP_KERNEL);
  
- 	state->timf_default = cfg->pll->timf;
- 
--	if (dib8000_identify(&state->i2c) == 0)
-+	if (dib8000_identify(&state->i2c) == 0) {
-+		kfree(fe);
- 		goto error;
-+	}
- 
- 	dibx000_init_i2c_master(&state->i2c_master, DIB8000, state->i2c.adap, state->i2c.addr);
- 
++	if (!buf)
++		return -ENOMEM;
++
+ 	list_for_each_entry(xibm, &xive_irq_bitmaps, list) {
+ 		memset(buf, 0, PAGE_SIZE);
+ 		bitmap_print_to_pagebuf(true, buf, xibm->bitmap, xibm->count);
 -- 
 2.34.1
 

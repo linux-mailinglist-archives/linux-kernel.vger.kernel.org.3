@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E109B4992F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 21:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103B1498DF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Jan 2022 20:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382902AbiAXU02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 15:26:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44306 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353131AbiAXUAp (ORCPT
+        id S245289AbiAXTiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 14:38:23 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60426 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348935AbiAXTdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:00:45 -0500
+        Mon, 24 Jan 2022 14:33:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32398B80FA1;
-        Mon, 24 Jan 2022 20:00:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62427C36AEB;
-        Mon, 24 Jan 2022 20:00:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A518161451;
+        Mon, 24 Jan 2022 19:33:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E108C340E5;
+        Mon, 24 Jan 2022 19:33:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054440;
-        bh=zA1vUZ3qOrUG9ozfGNzjuB1i+/p5YXJFjtVkvmVp47k=;
+        s=korg; t=1643052782;
+        bh=cMWfF3LQ/nrwIEZTaE5UU7LojT9m35M4Ai0G8V+NHt4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jjc6107ueyZgwc+kXKR/GMxc9dzpNU9Ab4vWHeDAcown23Gyl3OBVp0XJsfkZX+G9
-         FZ31SRKUhsb76bqTFi+OK8sqB+EqZo33Emc7fECv+kyWuRZPXGx5d2NA9jR0uVIA55
-         6GQYB9RMSs0pLLFQQmrfbmFs5Md/VgqijLz8wNL8=
+        b=SdaUOSQ7VQfVohEfrxv5FeuhnZvRfJhbrJhUKSsYT71jLCGU/NwQX9zm3jUxoiQGK
+         5HotdXB1Xb7r37V1GQYBj1ESwyi7Ck/Nv7cSwIHLf2W0MG5xAyKq/BMcUMbRZPaKNM
+         39JkpgyGB5XobdKPSnkEjIxZQVTWAEYUZjz9YCeA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        stable@vger.kernel.org, Avihai Horon <avihaih@nvidia.com>,
+        Mark Zhang <markzhang@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 358/563] x86/mce: Mark mce_end() noinstr
+Subject: [PATCH 5.4 139/320] RDMA/cma: Let cma_resolve_ib_dev() continue search even after empty entry
 Date:   Mon, 24 Jan 2022 19:42:03 +0100
-Message-Id: <20220124184036.798384907@linuxfoundation.org>
+Message-Id: <20220124183958.379115860@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+References: <20220124183953.750177707@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,64 +48,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Avihai Horon <avihaih@nvidia.com>
 
-[ Upstream commit b4813539d37fa31fed62cdfab7bd2dd8929c5b2e ]
+[ Upstream commit 20679094a0161c94faf77e373fa3f7428a8e14bd ]
 
-It is called by the #MC handler which is noinstr.
+Currently, when cma_resolve_ib_dev() searches for a matching GID it will
+stop searching after encountering the first empty GID table entry. This
+behavior is wrong since neither IB nor RoCE spec enforce tightly packed
+GID tables.
 
-Fixes
+For example, when the matching valid GID entry exists at index N, and if a
+GID entry is empty at index N-1, cma_resolve_ib_dev() will fail to find
+the matching valid entry.
 
-  vmlinux.o: warning: objtool: do_machine_check()+0xbd6: call to memset() leaves .noinstr.text section
+Fix it by making cma_resolve_ib_dev() continue searching even after
+encountering missing entries.
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20211208111343.8130-9-bp@alien8.de
+Fixes: f17df3b0dede ("RDMA/cma: Add support for AF_IB to rdma_resolve_addr()")
+Link: https://lore.kernel.org/r/b7346307e3bb396c43d67d924348c6c496493991.1639055490.git.leonro@nvidia.com
+Signed-off-by: Avihai Horon <avihaih@nvidia.com>
+Reviewed-by: Mark Zhang <markzhang@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/cpu/mce/core.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/infiniband/core/cma.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 64d8a96a2bf1e..2a608f0819765 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1070,10 +1070,13 @@ static int mce_start(int *no_way_out)
-  * Synchronize between CPUs after main scanning loop.
-  * This invokes the bulk of the Monarch processing.
-  */
--static int mce_end(int order)
-+static noinstr int mce_end(int order)
- {
--	int ret = -1;
- 	u64 timeout = (u64)mca_cfg.monarch_timeout * NSEC_PER_USEC;
-+	int ret = -1;
-+
-+	/* Allow instrumentation around external facilities. */
-+	instrumentation_begin();
+diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+index ec9e9598894f6..5e2b688e36fca 100644
+--- a/drivers/infiniband/core/cma.c
++++ b/drivers/infiniband/core/cma.c
+@@ -820,6 +820,7 @@ static int cma_resolve_ib_dev(struct rdma_id_private *id_priv)
+ 	u16 pkey, index;
+ 	u8 p;
+ 	enum ib_port_state port_state;
++	int ret;
+ 	int i;
  
- 	if (!timeout)
- 		goto reset;
-@@ -1117,7 +1120,8 @@ static int mce_end(int order)
- 		/*
- 		 * Don't reset anything. That's done by the Monarch.
- 		 */
--		return 0;
-+		ret = 0;
-+		goto out;
- 	}
+ 	cma_dev = NULL;
+@@ -838,9 +839,14 @@ static int cma_resolve_ib_dev(struct rdma_id_private *id_priv)
  
- 	/*
-@@ -1132,6 +1136,10 @@ reset:
- 	 * Let others run again.
- 	 */
- 	atomic_set(&mce_executing, 0);
+ 			if (ib_get_cached_port_state(cur_dev->device, p, &port_state))
+ 				continue;
+-			for (i = 0; !rdma_query_gid(cur_dev->device,
+-						    p, i, &gid);
+-			     i++) {
 +
-+out:
-+	instrumentation_end();
++			for (i = 0; i < cur_dev->device->port_data[p].immutable.gid_tbl_len;
++			     ++i) {
++				ret = rdma_query_gid(cur_dev->device, p, i,
++						     &gid);
++				if (ret)
++					continue;
 +
- 	return ret;
- }
- 
+ 				if (!memcmp(&gid, dgid, sizeof(gid))) {
+ 					cma_dev = cur_dev;
+ 					sgid = gid;
 -- 
 2.34.1
 

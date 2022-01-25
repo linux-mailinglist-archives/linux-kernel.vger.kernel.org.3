@@ -2,126 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B51B349B165
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2D249B164
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242974AbiAYKLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:11:18 -0500
-Received: from mga11.intel.com ([192.55.52.93]:37261 "EHLO mga11.intel.com"
+        id S242918AbiAYKLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:11:13 -0500
+Received: from foss.arm.com ([217.140.110.172]:59968 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238837AbiAYKCo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:02:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643104964; x=1674640964;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4VKGIB8DQpC+F+Cykxy5ATSZQvYmTLXbDBDQQx0vGuE=;
-  b=O01pn0kIScb2CQF8/UUH4nLFIXyCQSO1nuGV7IOMzMF9oDphGFlcWWHG
-   ejxAu2KGR3GJQP5of3LlAXdgubPG5XCA0Nr+KXi6sODtASSnsGJgcMF+Y
-   KK6S+7B7Mxomyq18REItbMYZEwGgSs6ZsovFYUDQH1yeC6+B/BSRqkx4x
-   m4PFQqzmtYoDbt0tuj8Mc4ltiObMSPQLh7tJT04vgoYDcZBF5mXugPxvY
-   ZOirGAdiG5HP/gswfomupQSKc/WzDrGFMA5bCbxn2KEOZjmtRyiHy++UB
-   yhlqiXOIZIL4awmLdv+g0eISLBAddvo9Pl4kCywEV1eVj8gjNYio6F5ik
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="243867803"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="243867803"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 02:02:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="494945228"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 25 Jan 2022 02:02:36 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCIep-000Jhq-BU; Tue, 25 Jan 2022 10:02:35 +0000
-Date:   Tue, 25 Jan 2022 18:02:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in
- initializer (different address spaces)
-Message-ID: <202201251708.BOnUdbSj-lkp@intel.com>
+        id S238734AbiAYKCj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 05:02:39 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65ADF1FB;
+        Tue, 25 Jan 2022 02:02:34 -0800 (PST)
+Received: from [10.57.86.86] (unknown [10.57.86.86])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0ACE63F7D8;
+        Tue, 25 Jan 2022 02:02:32 -0800 (PST)
+Message-ID: <8a348786-d028-a991-178f-60b17d3d6554@arm.com>
+Date:   Tue, 25 Jan 2022 10:02:31 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH V3 0/7] coresight: trbe: Workaround Cortex-A510 erratas
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1641872346-3270-1-git-send-email-anshuman.khandual@arm.com>
+ <ec21e5da-7b2a-e99f-b24f-89b459e2d5cb@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <ec21e5da-7b2a-e99f-b24f-89b459e2d5cb@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-commit: 4ebbd075bcde7884e078d4360510b989f559bfec KVM: PPC: Book3S HV P9: Use host timer accounting to avoid decrementer read
-date:   9 weeks ago
-config: powerpc64-randconfig-s031-20220125 (https://download.01.org/0day-ci/archive/20220125/202201251708.BOnUdbSj-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4ebbd075bcde7884e078d4360510b989f559bfec
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4ebbd075bcde7884e078d4360510b989f559bfec
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash
+On 25/01/2022 03:21, Anshuman Khandual wrote:
+> 
+> 
+> On 1/11/22 9:08 AM, Anshuman Khandual wrote:
+>> 	This series adds three different workarounds in the TRBE driver for
+>> Cortex-A510 specific erratas. But first, this adds Cortex-A510 specific cpu
+>> part number definition in the platform. This series applies on 5.16.
+>>
+>> Relevant errata documents can be found here.
+>>
+>> https://developer.arm.com/documentation/SDEN2397239/900
+>> https://developer.arm.com/documentation/SDEN2397589/900
+>>
+>> Changes in V3:
+>>
+>> - Moved the comment inside trbe_needs_drain_after_disable()
+>> - Moved the comment inside trbe_needs_ctxt_sync_after_enable()
+>>
+>> Changes in V2:
+>>
+>> https://lore.kernel.org/all/1641517808-5735-1-git-send-email-anshuman.khandual@arm.com/
+>>
+>> Accommodated most review comments from the previous version.
+>>
+>> - Split all patches into CPU errata definition, detection and TRBE workarounds
+>> - s/TRBE_WORKAROUND_SYSREG_WRITE_FAILURE/TRBE_NEEDS_DRAIN_AFTER_DISABLE
+>> - s/TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE/TRBE_NEEDS_CTXT_SYNC_AFTER_ENABLE
+>> - s/trbe_may_fail_sysreg_write()/trbe_needs_drain_after_disable()
+>> - s/trbe_may_corrupt_with_enable()/trbe_needs_ctxt_sync_after_enable()
+>> - Updated Kconfig help message for config ARM64_ERRATUM_1902691
+>> - Updated error message for trbe_is_broken() detection
+>> - Added new trblimitr parameter to set_trbe_enabled(), improving performance
+>> - Added COMPILE_TEST dependency in the errata, until TRBE part is available
+>>
+>> Changes in V1:
+>>
+>> https://lore.kernel.org/lkml/1641359159-22726-1-git-send-email-anshuman.khandual@arm.com/
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+>> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+>> Cc: coresight@lists.linaro.org
+>> Cc: linux-doc@vger.kernel.org
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>>
+>> Anshuman Khandual (7):
+>>    arm64: Add Cortex-A510 CPU part definition
+>>    arm64: errata: Add detection for TRBE ignored system register writes
+>>    arm64: errata: Add detection for TRBE invalid prohibited states
+>>    arm64: errata: Add detection for TRBE trace data corruption
+>>    coresight: trbe: Work around the ignored system register writes
+>>    coresight: trbe: Work around the invalid prohibited states
+>>    coresight: trbe: Work around the trace data corruption
+> 
+> Hello Catalin/Mathieu,
+> 
+> I am wondering how this series is going to be merged i.e via arm64 or coresight
+> tree ? Also will this require rebasing (and resend) against v5.17-rc1 release.
+> Please do suggest. Thank you.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I would recommend rebasing on rc1.
 
-
-sparse warnings: (new ones prefixed by >>)
-   arch/powerpc/kernel/time.c:90:5: sparse: sparse: symbol 'decrementer_max' was not declared. Should it be static?
->> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
-   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
->> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
-   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
->> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
-   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
->> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
-   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
->> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
-   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
-   arch/powerpc/kernel/time.c:626:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
-   arch/powerpc/kernel/time.c:626:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   arch/powerpc/kernel/time.c:626:24: sparse:     got unsigned long long *
-   arch/powerpc/kernel/time.c:557:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
-   arch/powerpc/kernel/time.c:557:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   arch/powerpc/kernel/time.c:557:24: sparse:     got unsigned long long *
-
-vim +846 arch/powerpc/kernel/time.c
-
-4a4cfe3836916e1 Tony Breeds            2007-09-22  842  
-d831d0b83f20588 Tony Breeds            2007-09-21  843  static int decrementer_set_next_event(unsigned long evt,
-d831d0b83f20588 Tony Breeds            2007-09-21  844  				      struct clock_event_device *dev)
-d831d0b83f20588 Tony Breeds            2007-09-21  845  {
-6601ec1c2ba9294 Christophe Leroy       2020-09-29 @846  	__this_cpu_write(decrementers_next_tb, get_tb() + evt);
-d831d0b83f20588 Tony Breeds            2007-09-21  847  	set_dec(evt);
-0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  848  
-0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  849  	/* We may have raced with new irq work */
-0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  850  	if (test_irq_work_pending())
-0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  851  		set_dec(1);
-0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  852  
-d831d0b83f20588 Tony Breeds            2007-09-21  853  	return 0;
-d831d0b83f20588 Tony Breeds            2007-09-21  854  }
-d831d0b83f20588 Tony Breeds            2007-09-21  855  
-
-:::::: The code at line 846 was first introduced by commit
-:::::: 6601ec1c2ba929430f5585ce7f9d9960b0e0a01d powerpc: Remove get_tb_or_rtc()
-
-:::::: TO: Christophe Leroy <christophe.leroy@csgroup.eu>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks
+Suzuki

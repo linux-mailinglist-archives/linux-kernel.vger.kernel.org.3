@@ -2,96 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 190C949B4F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2843449B4EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386615AbiAYNZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:25:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:55363 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1385378AbiAYNTJ (ORCPT
+        id S1576533AbiAYNWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:22:49 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:47315 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1575982AbiAYNSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:19:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643116748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nw6/P4vFvvsk6C4bAS0kt4Nq/2orgfJm/8P78VRSln8=;
-        b=OINu0tXjJyl2T6cLYaSJD58tkMtpg+Az4VLC48yroNQeJt7w9E6E9UzZGNlQ6dDaE3f2CH
-        LJd41rM9ywYt9NKtHBfPym1oRa+gC5jNhI/QzjDWPlQkxaNpOhoAC2yoQE0DGrAXtW7sZD
-        xKi4AwPEOoPXzRWen1JDSdnumMXkC2E=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-CT81lrWwOvarZbzjdKCIwg-1; Tue, 25 Jan 2022 08:19:07 -0500
-X-MC-Unique: CT81lrWwOvarZbzjdKCIwg-1
-Received: by mail-ed1-f70.google.com with SMTP id h21-20020aa7c955000000b0040390b2bfc5so14888287edt.15
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:19:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=nw6/P4vFvvsk6C4bAS0kt4Nq/2orgfJm/8P78VRSln8=;
-        b=1/OjyMg0PBOQiGI98zTT3oHx5e2IsnM/LDlzIvsSp70HqX/Wv1JaE43DsZyFVtsYcg
-         x3eMMzwubUBfgfnGlW/sl5gd3ITfkXJ+1sA/RUewOzWij52jhQKb/zpt8/kzR+zGkW8s
-         4z37YxlLmH4simculB1u9RuSlj6MA/vqmoEQ1CaTHoJ9J2hA96rnaC14WVcwLuXemrsy
-         6UvT+iMji+ZtHWWou2AUKVFlzGHoXggMHyBfnauZV8+w9pTsvaw/eMwrIATzE6AhDdI6
-         wLZG+R48PDEH2P0yG3V1fsWO7qRp/glPaJSVnqNFkEI8yaqkJyQwGUnzE84TSrYi+Nfc
-         pw1w==
-X-Gm-Message-State: AOAM5316DTOFp8e6iRQjSWeeILuWML6knwZ/L7Pa/56lju80PMGApRGd
-        Zf6EeMxC9ZTt3vFdXKDTRMl5fi2XuAKE8yGUuHYWeTULQH9+ks7/tJup0oaU4V3pOPxcrJgkv4b
-        Ynd/JfNbu7UmaKay/7LNDpvm/
-X-Received: by 2002:a17:907:d07:: with SMTP id gn7mr16409836ejc.575.1643116746360;
-        Tue, 25 Jan 2022 05:19:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyyw5RW8Nh2bZKDlZodVPV9SulaXaDHTqbUkgiy0r0JjRo0OABJCVp63qdCsEhkiHdy6HcIvA==
-X-Received: by 2002:a17:907:d07:: with SMTP id gn7mr16409827ejc.575.1643116746154;
-        Tue, 25 Jan 2022 05:19:06 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70f:8000:9797:8f:1ed9:7596? (p200300cbc70f80009797008f1ed97596.dip0.t-ipconnect.de. [2003:cb:c70f:8000:9797:8f:1ed9:7596])
-        by smtp.gmail.com with ESMTPSA id o11sm8214857edq.5.2022.01.25.05.19.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 05:19:03 -0800 (PST)
-Message-ID: <fccf697d-919e-8e99-ea08-3ab991b610eb@redhat.com>
-Date:   Tue, 25 Jan 2022 14:18:57 +0100
+        Tue, 25 Jan 2022 08:18:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1643116714; x=1674652714;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zEy6c3Xr7K/oyYt7/Wet9D7vJ9CLbnE1y+wa+Dz6Xns=;
+  b=sIKEqSha92jvmkDnSRUrWx4GNjIDgoQ6rL5qEqxobwVwaiY87hjrd7ax
+   6qgPU7mG3YyNC8QbbZ2pzgS6B8P68Ghb5w7w9Q+XW21O14O7XbNQov0g+
+   A32Ixa1OulUa+l+/Qc4RsaFCJ+8BO/IAyG6W69uDelyhXOxOWgLInWbX+
+   reIqLVgUeD9ku8tCVs3zkn2NVKhIpprGUb3NWCRiXPSwjbLz/mHZAWQVX
+   WupQsxZQXhjaXAa3nHkOfsqB9RxbIedjCMGbeqS17Hg1x5x7rCwkatRYg
+   mTOWnsO4YDmsGhIWkluvnzKP4lTYHNzj2bCXKabBmiym6tjLwONKZE1kF
+   Q==;
+IronPort-SDR: LLQFX5w+UQNRZF5jDfF95sy2BnM9f5Mmn7Y7WQqT0dUfBEpnvqtLQKl2E1A+IC3GdW4lM9QNMz
+ Jqp/PxtWLyoPeBMwWeyoizcjPzK2ccvhZahdxGJrjoJO0vQONgHd795jjoDxRcwZFaRYZ0c2lA
+ Yo7hgm2cMX9deInCfVSevm01WqBEaFsCBzi+KdNOoq7Sm0QQ0xeO3JiJc4pGL+Cto4FQ4TEP04
+ oVxVDgCWcQFjn7nt69qHItKTEkFAirvqm0gW2Gom9uRGD5PXHbymRGZf37Ly9RuQAdSknl2Daa
+ s7h/lrQNCokfFKWbumxKsrBD
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="146528375"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Jan 2022 06:18:25 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 25 Jan 2022 06:18:25 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 25 Jan 2022 06:18:23 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH 2/2] pinctrl: ocelot: Add support for ServalT SoC
+Date:   Tue, 25 Jan 2022 14:18:58 +0100
+Message-ID: <20220125131858.309237-3-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220125131858.309237-1-horatiu.vultur@microchip.com>
+References: <20220125131858.309237-1-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
-Content-Language: en-US
-To:     William Kucharski <kucharsk@gmail.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
-        willy@infradead.org, longpeng2@huawei.com, arnd@arndb.de,
-        dave.hansen@linux.intel.com, rppt@kernel.org, surenb@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
- <E44A9AB1-DBF0-4B8E-B049-293DD4DE6093@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <E44A9AB1-DBF0-4B8E-B049-293DD4DE6093@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.01.22 13:09, William Kucharski wrote:
-> I would think this should be the case; certainly it seems to be a more effective approach than having to manually enable sharing via the API in every case or via changes to ld.so.
-> 
-> If anything it might be useful to have an API for shutting it off, though there are already multiple areas where the system shares resources in ways that cannot be shut off by user action.
-> 
+This patch adds support for ServalT pinctrl, using the ocelot driver as
+basis.
 
-I don't have time to look into details right now, but I see various
-possible hard-to-handle issues with sharing anon pages via this
-mechanism between processes. If we could restrict it to MAP_SHARED and
-have some magic toggle to opt in, that would be great. Features like
-uffd that we might soon see on some MAP_SHARED pages will require to not
-share page tables automatically I assume.
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/pinctrl/pinctrl-ocelot.c | 102 +++++++++++++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
 
+diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
+index fc969208d904..685c79e08d40 100644
+--- a/drivers/pinctrl/pinctrl-ocelot.c
++++ b/drivers/pinctrl/pinctrl-ocelot.c
+@@ -695,6 +695,98 @@ static const struct pinctrl_pin_desc jaguar2_pins[] = {
+ 	JAGUAR2_PIN(63),
+ };
+ 
++#define SERVALT_P(p, f0, f1, f2)					\
++static struct ocelot_pin_caps servalt_pin_##p = {			\
++	.pin = p,							\
++	.functions = {							\
++		FUNC_GPIO, FUNC_##f0, FUNC_##f1, FUNC_##f2		\
++	},								\
++}
++
++SERVALT_P(0,  SG0,        NONE,      NONE);
++SERVALT_P(1,  SG0,        NONE,      NONE);
++SERVALT_P(2,  SG0,        NONE,      NONE);
++SERVALT_P(3,  SG0,        NONE,      NONE);
++SERVALT_P(4,  IRQ0_IN,    IRQ0_OUT,  TWI_SCL_M);
++SERVALT_P(5,  IRQ1_IN,    IRQ1_OUT,  TWI_SCL_M);
++SERVALT_P(6,  UART,       NONE,      NONE);
++SERVALT_P(7,  UART,       NONE,      NONE);
++SERVALT_P(8,  SI,         SFP,       TWI_SCL_M);
++SERVALT_P(9,  PCI_WAKE,   SFP,       SI);
++SERVALT_P(10, PTP0,       SFP,       TWI_SCL_M);
++SERVALT_P(11, PTP1,       SFP,       TWI_SCL_M);
++SERVALT_P(12, REF_CLK,    SFP,       TWI_SCL_M);
++SERVALT_P(13, REF_CLK,    SFP,       TWI_SCL_M);
++SERVALT_P(14, REF_CLK,    IRQ0_OUT,  SI);
++SERVALT_P(15, REF_CLK,    IRQ1_OUT,  SI);
++SERVALT_P(16, TACHO,      SFP,       SI);
++SERVALT_P(17, PWM,        NONE,      TWI_SCL_M);
++SERVALT_P(18, PTP2,       SFP,       SI);
++SERVALT_P(19, PTP3,       SFP,       SI);
++SERVALT_P(20, UART2,      SFP,       SI);
++SERVALT_P(21, UART2,      NONE,      NONE);
++SERVALT_P(22, MIIM,       SFP,       TWI2);
++SERVALT_P(23, MIIM,       SFP,       TWI2);
++SERVALT_P(24, TWI,        NONE,      NONE);
++SERVALT_P(25, TWI,        SFP,       TWI_SCL_M);
++SERVALT_P(26, TWI_SCL_M,  SFP,       SI);
++SERVALT_P(27, TWI_SCL_M,  SFP,       SI);
++SERVALT_P(28, TWI_SCL_M,  SFP,       SI);
++SERVALT_P(29, TWI_SCL_M,  NONE,      NONE);
++SERVALT_P(30, TWI_SCL_M,  NONE,      NONE);
++SERVALT_P(31, TWI_SCL_M,  NONE,      NONE);
++SERVALT_P(32, TWI_SCL_M,  NONE,      NONE);
++SERVALT_P(33, RCVRD_CLK,  NONE,      NONE);
++SERVALT_P(34, RCVRD_CLK,  NONE,      NONE);
++SERVALT_P(35, RCVRD_CLK,  NONE,      NONE);
++SERVALT_P(36, RCVRD_CLK,  NONE,      NONE);
++
++#define SERVALT_PIN(n) {					\
++	.number = n,						\
++	.name = "GPIO_"#n,					\
++	.drv_data = &servalt_pin_##n				\
++}
++
++static const struct pinctrl_pin_desc servalt_pins[] = {
++	SERVALT_PIN(0),
++	SERVALT_PIN(1),
++	SERVALT_PIN(2),
++	SERVALT_PIN(3),
++	SERVALT_PIN(4),
++	SERVALT_PIN(5),
++	SERVALT_PIN(6),
++	SERVALT_PIN(7),
++	SERVALT_PIN(8),
++	SERVALT_PIN(9),
++	SERVALT_PIN(10),
++	SERVALT_PIN(11),
++	SERVALT_PIN(12),
++	SERVALT_PIN(13),
++	SERVALT_PIN(14),
++	SERVALT_PIN(15),
++	SERVALT_PIN(16),
++	SERVALT_PIN(17),
++	SERVALT_PIN(18),
++	SERVALT_PIN(19),
++	SERVALT_PIN(20),
++	SERVALT_PIN(21),
++	SERVALT_PIN(22),
++	SERVALT_PIN(23),
++	SERVALT_PIN(24),
++	SERVALT_PIN(25),
++	SERVALT_PIN(26),
++	SERVALT_PIN(27),
++	SERVALT_PIN(28),
++	SERVALT_PIN(29),
++	SERVALT_PIN(30),
++	SERVALT_PIN(31),
++	SERVALT_PIN(32),
++	SERVALT_PIN(33),
++	SERVALT_PIN(34),
++	SERVALT_PIN(35),
++	SERVALT_PIN(36),
++};
++
+ #define SPARX5_P(p, f0, f1, f2)					\
+ static struct ocelot_pin_caps sparx5_pin_##p = {			\
+ 	.pin = p,							\
+@@ -1497,6 +1589,15 @@ static struct pinctrl_desc jaguar2_desc = {
+ 	.owner = THIS_MODULE,
+ };
+ 
++static struct pinctrl_desc servalt_desc = {
++	.name = "servalt-pinctrl",
++	.pins = servalt_pins,
++	.npins = ARRAY_SIZE(servalt_pins),
++	.pctlops = &ocelot_pctl_ops,
++	.pmxops = &ocelot_pmx_ops,
++	.owner = THIS_MODULE,
++};
++
+ static struct pinctrl_desc sparx5_desc = {
+ 	.name = "sparx5-pinctrl",
+ 	.pins = sparx5_pins,
+@@ -1774,6 +1875,7 @@ static const struct of_device_id ocelot_pinctrl_of_match[] = {
+ 	{ .compatible = "mscc,serval-pinctrl", .data = &serval_desc },
+ 	{ .compatible = "mscc,ocelot-pinctrl", .data = &ocelot_desc },
+ 	{ .compatible = "mscc,jaguar2-pinctrl", .data = &jaguar2_desc },
++	{ .compatible = "mscc,servalt-pinctrl", .data = &servalt_desc },
+ 	{ .compatible = "microchip,sparx5-pinctrl", .data = &sparx5_desc },
+ 	{ .compatible = "microchip,lan966x-pinctrl", .data = &lan966x_desc },
+ 	{},
 -- 
-Thanks,
-
-David / dhildenb
+2.33.0
 

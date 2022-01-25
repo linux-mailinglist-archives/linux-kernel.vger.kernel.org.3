@@ -2,293 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B9E49AFF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8084649B03D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573030AbiAYJSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457010AbiAYJNw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:13:52 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F848C061756;
-        Tue, 25 Jan 2022 01:07:02 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id k18so18505705wrg.11;
-        Tue, 25 Jan 2022 01:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=iwmoJT9J3KW1qHLuBB0lUUWGzwPfXFvj7N2whex8G5A=;
-        b=blOqohD34M+Eu3szMq32ApG8R02FFfQ9RdaG6nOKomGRDSBl++Gy+q0Vl22yaM8ejZ
-         Q4nlCN/+D8x3GNlOCdSzhbyCCe/E+x1xX1z680e16Hg+MRvjIMQ8WCphrK/ON5hxIkMA
-         4p+j7cg6ujm1XQtwNZclsMBXgq21ZdnIFyd9tr0L+Rvfbg8x/LWI+B67WoRECPvl+nVZ
-         vBMqsmP4+0hDs3SPwRltS+SmFpP9ZFVsHdcSRpt3UnwJ2T/htlWWoCLIUeUvcSV8RHyX
-         T7nIfihtO50u6qI5A0A7PXjjzLJPi2nODIDist2I7pOBmzJfdAxKgl+TkjJG1MmJNEOu
-         ga6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=iwmoJT9J3KW1qHLuBB0lUUWGzwPfXFvj7N2whex8G5A=;
-        b=w2UVqj0zemDUKTv4+iVpNarOvsWBF2Vmo9X62AXcqiOVyfORNWhP1QKSuzED4XRHYL
-         9YXRcjk5Q8cLtu1/KoC6+L8xmf8TvrX8Smgr9JpRKvx3cv7LNQEKCA/e3XcYJ3g3O/a0
-         X7cTSsRZCtomLipTTbUWqXE/CeoPIJDz0GllBJ9V4lmH+M44eEUcqmLLS3zMOd8HP0Qp
-         TOPzCREDIz+KIf1aOA/5PikLOtkJjihNjz5xRtLg6g0tVUF1/PjpXygo16Y/nWDnyL32
-         3XKkvRJpToRA8U1mE5VbCVJ7tQ4YKnyfHCyHThUr7nHdhJqhoaWeu340W90gl7K8myii
-         gjXQ==
-X-Gm-Message-State: AOAM5314hLkajZC92vz92pYxbvy3KWQYOisLANBUvt2w+OJL8th6/AiH
-        +WPImXBYV2pmbhNbBfSolJs=
-X-Google-Smtp-Source: ABdhPJzhLxpgI40CqB6uKpmEMH5Xy3E0lAekUjQG/OHxmTB0Mqggo/e8zioXHddQWarG7hy0OXEV+Q==
-X-Received: by 2002:adf:edcb:: with SMTP id v11mr17321618wro.257.1643101620589;
-        Tue, 25 Jan 2022 01:07:00 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f4d:2b00:5c73:9a8b:4a19:9778? (p200300ea8f4d2b005c739a8b4a199778.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:5c73:9a8b:4a19:9778])
-        by smtp.googlemail.com with ESMTPSA id p13sm1120278wrx.86.2022.01.25.01.06.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 01:07:00 -0800 (PST)
-Message-ID: <bc9a18d7-3250-ce2e-bc54-7600f3b83e28@gmail.com>
-Date:   Tue, 25 Jan 2022 10:06:51 +0100
+        id S1573897AbiAYJaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:30:12 -0500
+Received: from mail-mw2nam10on2088.outbound.protection.outlook.com ([40.107.94.88]:48224
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1379691AbiAYJIh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 04:08:37 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JdG/mPjkRQip4sJhQJouh56kDEDKaZL1tv7r4vqK8Idu9bxAPlh0C4GEhSGKI+JHCb2o4TaBneZGwlza3vFqEZnCNi9mQ/dHTHdi7EYrtg5Dy2qTngC6AZ4HLGO3VeFSfq5OTREPD55zOybbzFneuKoEeSpIWPgvApfDQo7UoMI2kGCJRMpJmHp6XdOQFrnL6f2KvEMmCA390XsEot/wTJEqMRmC87Qm7D9oY0Rm7PVX3EFfJ3lwPSIh2wfD3MPKOkJDLD9E7kiThHwCD9WXsyG9sWvAQ8owvJo06NR8ALEuaYWAXeQtdCIptygi36XT8znKGG7KYbg/CeLXnWEvSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FzkqF3CuXAbyLSKc1MLu1CCbkfd3U+dE+ZAOlYufDCo=;
+ b=SloL92YNMDE2SBFTwnb6+PcUCrZWcw3whQRjyNFMYH4k96vV8r1fZEQ57ZBv/hJ/u53uGFMXM1yp7njRS4Z15A8JvXo8lP6coq2ZpHTAWmejNcouQF7HyfVAU9DuSkOHhq/JYTil33zB/xpYSgzN88ajUjeuhVBXok3BCbXF/a+PGnbGdY54ixnUg4PF537mGDzXdPSXxkZ5VPHxmNqR4LacT1/61x3R0YHC0ml75Bi1fKAsGfQVTy3blF1MIlLpsoaWOaN+RXgbfrK6Xqa9wPVUa7uP9Pjg3H+WIYtDvG/5SGosqv4acp5PMyMTLI1+oA9R2g8LqV/Wj8SLpfHRHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FzkqF3CuXAbyLSKc1MLu1CCbkfd3U+dE+ZAOlYufDCo=;
+ b=U4wXsvR4CZ7CB+AXx19vdxEXoB+/R5PBAOCF3HZ1LQzodX4a+PHM+5jbo23bYvDjTqDMmyDkQRpr7h90378X2KvM3ucPfI9kWVWgyJj0TOfKZxhTWFznWMBKTxSrPvxE4P+qdgNYCappgsNllK1uqyWEZ8OqrlUN1GX2PzDvFZzZx/rMip8KJNgWguRn/L75aP9p33VXK49kmrirQhNcMgFKl5fn8h55s4l9IIxwOf1WkH7d66SJ2/2WoVuRcOcR9hV0CEHGEhcloCFG8MJfBFAujXu22IQ+OCgAVz9DUotTWMJsSLPw96agF2P5/m+EH3d3Thq8AI3q6BeIgO7P6g==
+Received: from CO2PR05CA0100.namprd05.prod.outlook.com (2603:10b6:104:1::26)
+ by DM6PR12MB4943.namprd12.prod.outlook.com (2603:10b6:5:1bc::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Tue, 25 Jan
+ 2022 09:08:31 +0000
+Received: from CO1NAM11FT056.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:104:1:cafe::af) by CO2PR05CA0100.outlook.office365.com
+ (2603:10b6:104:1::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
+ Transport; Tue, 25 Jan 2022 09:08:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ CO1NAM11FT056.mail.protection.outlook.com (10.13.175.107) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Tue, 25 Jan 2022 09:08:30 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ DRHQMAIL105.nvidia.com (10.27.9.14) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.18; Tue, 25 Jan 2022 09:08:30 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9;
+ Tue, 25 Jan 2022 01:08:30 -0800
+Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Tue, 25 Jan 2022 01:08:26 -0800
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     <digetx@gmail.com>, <jonathanh@nvidia.com>, <ldewangan@nvidia.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <mperttunen@nvidia.com>,
+        <thierry.reding@gmail.com>, <sumit.semwal@linaro.org>,
+        <p.zabel@pengutronix.de>, <christian.koenig@amd.com>
+CC:     <akhilrajeev@nvidia.com>
+Subject: [PATCH] i2c: tegra: Add SMBus block read function
+Date:   Tue, 25 Jan 2022 14:38:22 +0530
+Message-ID: <1643101702-16206-1-git-send-email-akhilrajeev@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Content-Language: en-US
-To:     Hau <hau@realtek.com>, Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>
-Cc:     nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "grundler@chromium.org" <grundler@chromium.org>
-References: <20220124181937.6331-1-hau@realtek.com>
- <b71ee3d2-5ecd-e4ee-d6ca-25bf017920cd@gmail.com>
- <1f089edfb1824b19bbf87b2ce725ce50@realtek.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH net-next 1/1] r8169: enable RTL8125 ASPM L1.2
-In-Reply-To: <1f089edfb1824b19bbf87b2ce725ce50@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b5f6c050-8a05-4f9c-30a6-08d9dfe241ca
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4943:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB494373E12527C314B972EEEEC05F9@DM6PR12MB4943.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1227;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HdA7mAcvTb3gxonG3AsBSPnMBUpVEDEn8SeidZlc1jFIx/HXaD0jLbKcO/ujxpy29FOxDpczmCkkTB5AYDBtzwgMSAnRPcxCv60R7Mk+oxZ1a3ma7wKOjdEikli3/+0t1l1CxV5YKakbDRlf/fSyyLvwgmsoMF8L/nJs1f+mhUGk0G2ic7ejhtQP7Y83Ruq5Wq1s4Cwc4VMqhmPC0cmgXFVGBU7IAf2DQaQyCv80ITdhPK9i+dHq7R1n/eKj/AU2LWmowrtXctjN5uu02ArY5SDlFyaQwkf3x8s8fSUZ9hhoYTUOl138YvXKYbndJchm9sNTwhmorLln2CATV8YhTQJsHBRKTEJ0y4yq7lD1JOGdexh3kpIDBFYQKriZM/ZajwaH8+lFpMoMwbUHtTMLlAW86RL7VPg5/EMQuek8ouXd6IeAuaanovGEJMDyo2N6hU7XHW3cr26avYz7nH4CjugVutR1aReXUzSRrNz1Y5jR7VRN0MrZ+qV2WGemg49O2mL+hHtcmRonFhoJ48cvuPMgWm9ZuYni9ykf17SapE+Wkz9wdiPEZYISJYHug7vPynR+4cdx0Qy7BRyWeRCJpUt6pNFbnjAtPdAKl73Hko1QReiU2mr04M9QgkkeiqEP00hse5qhT215U89KsvQdDtRA/HENLSegbSlXWn2OlwbLiZBvvxbFGd2iBmaWLOssq6U/MVGBGWv6MSX/wRMIJ/KbNbl8JRMt9HJoXW0FvaS42Kc2N2+mY4NgXJrTMQfzaOdzrDLTusK0HhKEaJpyKOrHg8AGBZMHBARoYMfxXFNQiq96jEoVf7bf6mETPE85XBmdGBb6EaKyPR+VMbzADnhI/kuuptANgK5/n3oDino=
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(40470700004)(36840700001)(46966006)(110136005)(316002)(81166007)(36756003)(8936002)(26005)(8676002)(36860700001)(6666004)(426003)(86362001)(107886003)(336012)(40460700003)(186003)(356005)(508600001)(83380400001)(2906002)(5660300002)(2616005)(921005)(47076005)(4326008)(7696005)(70206006)(70586007)(82310400004)(83996005)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 09:08:30.7914
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5f6c050-8a05-4f9c-30a6-08d9dfe241ca
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT056.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4943
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.01.2022 09:51, Hau wrote:
->> On 24.01.2022 19:19, Chunhao Lin wrote:
->>> This patch will enable RTL8125 ASPM L1.2 on the platforms that have
->>> tested RTL8125 with ASPM L1.2 enabled.
->>> Register mac ocp 0xc0b2 will help to identify if RTL8125 has been
->>> tested on L1.2 enabled platform. If it is, this register will be set to 0xf.
->>> If not, this register will be default value 0.
->>>
->> Who and what defines which value this register has? The BIOS? ACPI?
->> Mainboard vendors test and can control the flagging? How about add-on
->> cards and systems with other boot loaders, e.g. SBC's with RTL8125 like
->> Odroid H2+?
->>
->    Soc vendor can opt-in to enable these bits to enable L1.2 through programming tool/bios/uboot.
->    Right now, there is no plan for set these bits for add-on card.
-> 
->> What is actually the critical component that makes L1.2 work or not with
->> RTL8125 on a particular system? The chipset? Or electrical characteristics?
->>
->    RTL8125 can support L1.2, but it disabled by r8169. So we create an option
->    to let soc vendor can opn-in to enabled L1.2 with r8169.
->    
+Emulate SMBus block read using ContinueXfer to read the length byte
 
-Thanks, Hau. Still the question is open what's the root cause of L1.2 not working
-with RTL8125 on *some* systems. I can't imagine that it just by chance works or not.
-If we know which component conflicts with RTL8125 then maybe a PCI quirk could
-be used.
+Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+---
+ drivers/i2c/busses/i2c-tegra.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
->> The difference in power consumption between L1.1 and L1.2 is a few mW
->> ([0]).
->> So I wonder whether it's worth it to add this flagging mechanism.
->> Or does it also impact reaching certain package power saving states?
->>
->    Upstream port also can save power when rtl8125 L1.2 is enabled.
-> 
->> [0] https://pcisig.com/making-most-pcie%C2%AE-low-power-features
->>
->>> Signed-off-by: Chunhao Lin <hau@realtek.com>
->>> ---
->>>  drivers/net/ethernet/realtek/r8169_main.c | 99
->>> ++++++++++++++++++-----
->>>  1 file changed, 79 insertions(+), 20 deletions(-)
->>>
->>> diff --git a/drivers/net/ethernet/realtek/r8169_main.c
->>> b/drivers/net/ethernet/realtek/r8169_main.c
->>> index 19e2621e0645..b1e013969d4c 100644
->>> --- a/drivers/net/ethernet/realtek/r8169_main.c
->>> +++ b/drivers/net/ethernet/realtek/r8169_main.c
->>> @@ -2238,21 +2238,6 @@ static void rtl_wol_enable_rx(struct
->> rtl8169_private *tp)
->>>  			AcceptBroadcast | AcceptMulticast |
->> AcceptMyPhys);  }
->>>
->>> -static void rtl_prepare_power_down(struct rtl8169_private *tp) -{
->>> -	if (tp->dash_type != RTL_DASH_NONE)
->>> -		return;
->>> -
->>> -	if (tp->mac_version == RTL_GIGA_MAC_VER_32 ||
->>> -	    tp->mac_version == RTL_GIGA_MAC_VER_33)
->>> -		rtl_ephy_write(tp, 0x19, 0xff64);
->>> -
->>> -	if (device_may_wakeup(tp_to_dev(tp))) {
->>> -		phy_speed_down(tp->phydev, false);
->>> -		rtl_wol_enable_rx(tp);
->>> -	}
->>> -}
->>> -
->>>  static void rtl_init_rxcfg(struct rtl8169_private *tp)  {
->>>  	switch (tp->mac_version) {
->>> @@ -2650,6 +2635,34 @@ static void rtl_pcie_state_l2l3_disable(struct
->> rtl8169_private *tp)
->>>  	RTL_W8(tp, Config3, RTL_R8(tp, Config3) & ~Rdy_to_L23);  }
->>>
->>> +static void rtl_disable_exit_l1(struct rtl8169_private *tp) {
->>
->> Why is this function needed? The chip should be quiet anyway.
->> IOW: What could be the impact of not having this function currently?
->> If it fixes something then it should be a separate patch.
->>
-This question would still be open.
-
->>> +	/* Bits control which events trigger ASPM L1 exit:
->>> +	 * Bit 12: rxdv
->>> +	 * Bit 11: ltr_msg
->>> +	 * Bit 10: txdma_poll
->>> +	 * Bit  9: xadm
->>> +	 * Bit  8: pktavi
->>> +	 * Bit  7: txpla
->>> +	 */
->>> +	switch (tp->mac_version) {
->>> +	case RTL_GIGA_MAC_VER_34 ... RTL_GIGA_MAC_VER_36:
->>> +		rtl_eri_clear_bits(tp, 0xd4, 0x1f00);
->>> +		break;
->>> +	case RTL_GIGA_MAC_VER_37 ... RTL_GIGA_MAC_VER_38:
->>> +		rtl_eri_clear_bits(tp, 0xd4, 0x0c00);
->>> +		break;
->>> +	case RTL_GIGA_MAC_VER_40 ... RTL_GIGA_MAC_VER_53:
->>> +		rtl_eri_clear_bits(tp, 0xd4, 0x1f80);
->>> +		break;
->>> +	case RTL_GIGA_MAC_VER_60 ... RTL_GIGA_MAC_VER_63:
->>> +		r8168_mac_ocp_modify(tp, 0xc0ac, 0x1f80, 0);
->>> +		break;
->>> +	default:
->>> +		break;
->>> +	}
->>> +}
->>> +
->>>  static void rtl_enable_exit_l1(struct rtl8169_private *tp)  {
->>>  	/* Bits control which events trigger ASPM L1 exit:
->>> @@ -2692,6 +2705,33 @@ static void rtl_hw_aspm_clkreq_enable(struct
->> rtl8169_private *tp, bool enable)
->>>  	udelay(10);
->>>  }
->>>
->>> +static void rtl_hw_aspm_l12_enable(struct rtl8169_private *tp, bool
->>> +enable) {
->>
->> I assume this code works on RTL8125 only. Then this should be reflected in
->> the function naming, like we do it for other version-specific functions.
->>
->>> +	/* Don't enable L1.2 in the chip if OS can't control ASPM */
->>> +	if (enable && tp->aspm_manageable) {
->>> +		r8168_mac_ocp_modify(tp, 0xe094, 0xff00, 0);
->>> +		r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, BIT(2));
->>> +	} else {
->>> +		r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, 0);
->>> +	}
->>> +}
->>> +
->>> +static void rtl_prepare_power_down(struct rtl8169_private *tp) {
->>> +	if (tp->dash_type != RTL_DASH_NONE)
->>> +		return;
->>> +
->>> +	if (tp->mac_version == RTL_GIGA_MAC_VER_32 ||
->>> +	    tp->mac_version == RTL_GIGA_MAC_VER_33)
->>> +		rtl_ephy_write(tp, 0x19, 0xff64);
->>> +
->>> +	if (device_may_wakeup(tp_to_dev(tp))) {
->>> +		rtl_disable_exit_l1(tp);
->>> +		phy_speed_down(tp->phydev, false);
->>> +		rtl_wol_enable_rx(tp);
->>> +	}
->>> +}
->>> +
->>>  static void rtl_set_fifo_size(struct rtl8169_private *tp, u16 rx_stat,
->>>  			      u16 tx_stat, u16 rx_dyn, u16 tx_dyn)  { @@ -
->> 3675,6 +3715,7
->>> @@ static void rtl_hw_start_8125b(struct rtl8169_private *tp)
->>>  	rtl_ephy_init(tp, e_info_8125b);
->>>  	rtl_hw_start_8125_common(tp);
->>>
->>> +	rtl_hw_aspm_l12_enable(tp, true);
->>>  	rtl_hw_aspm_clkreq_enable(tp, true);  }
->>>
->>> @@ -5255,6 +5296,20 @@ static void rtl_init_mac_address(struct
->> rtl8169_private *tp)
->>>  	rtl_rar_set(tp, mac_addr);
->>>  }
->>>
->>> +/* mac ocp 0xc0b2 will help to identify if RTL8125 has been tested
->>> + * on L1.2 enabled platform. If it is, this register will be set to 0xf.
->>> + * If not, this register will be default value 0.
->>> + */
->>> +static bool rtl_platform_l12_enabled(struct rtl8169_private *tp) {
->>
->> The function name is misleading. It could be read as checking whether the
->> platform supports L1.2.
->>
->>> +	switch (tp->mac_version) {
->>> +	case RTL_GIGA_MAC_VER_60 ... RTL_GIGA_MAC_VER_63:
->>> +		return (r8168_mac_ocp_read(tp, 0xc0b2) & 0xf) ? true : false;
->>> +	default:
->>> +		return false;
->>> +	}
->>> +}
->>> +
->>>  static int rtl_init_one(struct pci_dev *pdev, const struct
->>> pci_device_id *ent)  {
->>>  	struct rtl8169_private *tp;
->>> @@ -5333,11 +5388,15 @@ static int rtl_init_one(struct pci_dev *pdev,
->> const struct pci_device_id *ent)
->>>  	 * Chips from RTL8168h partially have issues with L1.2, but seem
->>>  	 * to work fine with L1 and L1.1.
->>>  	 */
->>> -	if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
->>> -		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
->>> -	else
->>> -		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
->>> -	tp->aspm_manageable = !rc;
->>> +	if (!rtl_platform_l12_enabled(tp)) {
->>> +		if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
->>> +			rc = pci_disable_link_state(pdev,
->> PCIE_LINK_STATE_L1_2);
->>> +		else
->>> +			rc = pci_disable_link_state(pdev,
->> PCIE_LINK_STATE_L1);
->>> +		tp->aspm_manageable = !rc;
->>> +	} else {
->>> +		tp->aspm_manageable = pcie_aspm_enabled(pdev);
->>> +	}
->>>
->>
->> Better readable may be the following:
->>
->> if (rtl_platform_l12_enabled(tp)) {
->> 	tp->aspm_manageable = pcie_aspm_enabled(pdev); } else if (tp-
->>> mac_version >= RTL_GIGA_MAC_VER_45) {
->> 	rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
->> 	tp->aspm_manageable = !rc;
->> } else {
->> 	rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
->> 	tp->aspm_manageable = !rc;
->> }
->>
->>>  	tp->dash_type = rtl_check_dash(tp);
->>>
->>
->> ------Please consider the environment before printing this e-mail.
+diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+index 03cea10..2941e42 100644
+--- a/drivers/i2c/busses/i2c-tegra.c
++++ b/drivers/i2c/busses/i2c-tegra.c
+@@ -1233,6 +1233,11 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev *i2c_dev,
+ 		return err;
+ 
+ 	i2c_dev->msg_buf = msg->buf;
++
++	/* The condition true implies smbus block read and len is already read */
++	if (msg->flags & I2C_M_RECV_LEN && end_state != MSG_END_CONTINUE)
++		i2c_dev->msg_buf = msg->buf + 1;
++
+ 	i2c_dev->msg_buf_remaining = msg->len;
+ 	i2c_dev->msg_err = I2C_ERR_NONE;
+ 	i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
+@@ -1389,6 +1394,15 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+ 			else
+ 				end_type = MSG_END_REPEAT_START;
+ 		}
++		/* If M_RECV_LEN use ContinueXfer to read the first byte */
++		if (msgs[i].flags & I2C_M_RECV_LEN) {
++			ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], MSG_END_CONTINUE);
++			if (ret)
++				break;
++			/* Set the read byte as msg len */
++			msgs[i].len = msgs[i].buf[0];
++			dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
++		}
+ 		ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
+ 		if (ret)
+ 			break;
+@@ -1416,10 +1430,10 @@ static u32 tegra_i2c_func(struct i2c_adapter *adap)
+ {
+ 	struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
+ 	u32 ret = I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL & ~I2C_FUNC_SMBUS_QUICK) |
+-		  I2C_FUNC_10BIT_ADDR |	I2C_FUNC_PROTOCOL_MANGLING;
++		  I2C_FUNC_10BIT_ADDR | I2C_FUNC_PROTOCOL_MANGLING;
+ 
+ 	if (i2c_dev->hw->has_continue_xfer_support)
+-		ret |= I2C_FUNC_NOSTART;
++		ret |= I2C_FUNC_NOSTART | I2C_FUNC_SMBUS_READ_BLOCK_DATA;
+ 
+ 	return ret;
+ }
+-- 
+2.7.4
 

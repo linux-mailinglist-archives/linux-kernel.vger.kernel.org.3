@@ -2,68 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 686E049B7C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515D549B7CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389809AbiAYPh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:37:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50243 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354013AbiAYPet (ORCPT
+        id S1358306AbiAYPjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:39:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46462 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378931AbiAYPgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:34:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643124889;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QjyE7wz6cil8LO6HiDitf7P9QNfNrKVet24hXy+TY64=;
-        b=CVLTX1Ir3t+M5d+UitgvJFTzsmDEzQsNnQJTBU2CKtPC2MscPIWnTiZVm3gQhtSJEz1bEx
-        8mxKqqcCK6qy50zX++d1IfQsJNYErWedz77+fZ4GmZJqJK2FPfUyNVmwLGL7GSpPEGoPjp
-        ocxuVmoNszm74XND0fji25NoeQHCg1U=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-224-5MdDGyFQNUC_uojbNYtUKg-1; Tue, 25 Jan 2022 10:34:45 -0500
-X-MC-Unique: 5MdDGyFQNUC_uojbNYtUKg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 25 Jan 2022 10:36:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 06D8C84B9A7;
-        Tue, 25 Jan 2022 15:34:44 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 210947DE2F;
-        Tue, 25 Jan 2022 15:34:32 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220118131216.85338-12-jefflexu@linux.alibaba.com>
-References: <20220118131216.85338-12-jefflexu@linux.alibaba.com> <20220118131216.85338-1-jefflexu@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 11/20] erofs: add cookie context helper functions
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67268616ED;
+        Tue, 25 Jan 2022 15:36:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 259B7C340E0;
+        Tue, 25 Jan 2022 15:36:09 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 10:36:07 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Trond Myklebust <trondmy@gmail.com>,
+        NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: Re: linux-next: runtime warning in next-20220125
+Message-ID: <20220125103607.2dc307e2@gandalf.local.home>
+In-Reply-To: <20220125100138.0d19c8ca@gandalf.local.home>
+References: <20220125160505.068dbb52@canb.auug.org.au>
+        <20220125162146.13872bdb@canb.auug.org.au>
+        <20220125100138.0d19c8ca@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2812798.1643124872.1@warthog.procyon.org.uk>
-Date:   Tue, 25 Jan 2022 15:34:32 +0000
-Message-ID: <2812799.1643124872@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+On Tue, 25 Jan 2022 10:01:38 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> +static int erofs_fscahce_init_ctx(struct erofs_fscache_context *ctx,
+> On Tue, 25 Jan 2022 16:21:46 +1100
+> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> > Hi all,
+> > 
+> > On Tue, 25 Jan 2022 16:05:05 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:  
+> > >
+> > > My qemu boot test of a powerpc pseries_le_defconfig kernel produces the
+> > > following trace:
+> > > 
+> > > ------------[ cut here ]------------
+> > > WARNING: CPU: 0 PID: 0 at kernel/trace/trace_events.c:417 trace_event_raw_init+0x194/0x730
+> > > Modules linked in:
+> > > CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1 #2
+> > > NIP:  c0000000002bdbb4 LR: c0000000002bdcb0 CTR: c0000000002bdb70
+> > > 
+> > > I have no idea what has caused this :-(  Maybe commit
+> > > 
+> > >   5544d5318802 ("SUNRPC: Same as SVC_RQST_ENDPOINT, but without the xid")    
+> > 
+> > Actually, reverting commits
+> > 
+> >   6ff851d98af8 ("SUNRPC: Improve sockaddr handling in the svc_xprt_create_error trace point")
+> >   5544d5318802 ("SUNRPC: Same as SVC_RQST_ENDPOINT, but without the xid")
+> >   e2d3613db12a ("SUNRPC: Record endpoint information in trace log")
+> > 
+> > makes the warning go away.
+> >   
+> 
+> We added a new way to save items on the ring buffer, but did not update the
+> safety checks to know about them. I'll fix this shortly.
+> 
 
-fscahce => fscache?
+This should fix it:
 
-David
+I'll make it a real patch and start running it through my tests.
 
+-- Steve
+
+
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index 3147614c1812..f527ae807e77 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -384,6 +384,12 @@ static void test_event_printk(struct trace_event_call *call)
+ 			if (!(dereference_flags & (1ULL << arg)))
+ 				goto next_arg;
+ 
++			/* Check for __get_sockaddr */;
++			if (str_has_prefix(fmt + i, "__get_sockaddr(")) {
++				dereference_flags &= ~(1ULL << arg);
++				goto next_arg;
++			}
++
+ 			/* Find the REC-> in the argument */
+ 			c = strchr(fmt + i, ',');
+ 			r = strstr(fmt + i, "REC->");

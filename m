@@ -2,129 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADF049B645
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0782F49B646
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238255AbiAYOaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:30:55 -0500
-Received: from foss.arm.com ([217.140.110.172]:46708 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1579152AbiAYOYA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:24:00 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63F22D6E;
-        Tue, 25 Jan 2022 06:23:59 -0800 (PST)
-Received: from [10.57.68.26] (unknown [10.57.68.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CBEB3F793;
-        Tue, 25 Jan 2022 06:23:56 -0800 (PST)
-Message-ID: <ab09f75c-08cc-1845-9aa7-81fed779d636@arm.com>
-Date:   Tue, 25 Jan 2022 14:23:52 +0000
+        id S238482AbiAYObK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:31:10 -0500
+Received: from mail-ua1-f48.google.com ([209.85.222.48]:44941 "EHLO
+        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1579171AbiAYOYM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:24:12 -0500
+Received: by mail-ua1-f48.google.com with SMTP id f24so37548314uab.11;
+        Tue, 25 Jan 2022 06:24:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GAnke+D6ckPyUnCwTZ2+u4TaSpv96tbXWZba/2UslR8=;
+        b=5MKpUYW7F8DVmb5R/0qNn/BZ0LsgruxaGa0lR3tKUfhywgfT/S44otpaz2/DvWcTvR
+         jOlQpHQ+6Tbx/mqEenDKZy79q/N/E3iNOt8sPhARod7YKIgmq+BpVDTiF413d7sPlG/V
+         MJlkmoWVV8eq71Q2Y9w84+n9YRDQTk4XMBtkRj8Qx8iPcegvAyvEzUnatUSDjSvewTfG
+         n3ciSLEagUVuQkzhTV+X/ffQKKnsQ6h5V7sGRTda+V32gj3yWbHayEjaZW9nakEp352c
+         wNZJAZY/SjIHEZuZPQ3dyDgwA7UQ3hj5xXYKL+a1MpMYVCmtZ1SswNyPAxzvEiTiPPkp
+         fjyg==
+X-Gm-Message-State: AOAM5314vxIs4/hdzdkqO4gh7TRtbwJXCgSxWsVws9ED3OKgnHKdlb3M
+        JEhUzPNCLhymYIozD8i4h/XWqB6r6mCeiiK9
+X-Google-Smtp-Source: ABdhPJxJmJtTE/62A4hzMm/0VtrqyqG1UIUvM4ID8D/ckB6hHLudnxMEi2oV1Sb4W7oqROwALuHUGQ==
+X-Received: by 2002:ab0:484:: with SMTP id 4mr7451936uaw.62.1643120647821;
+        Tue, 25 Jan 2022 06:24:07 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id e17sm605735vsl.21.2022.01.25.06.24.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 06:24:07 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id y4so37695300uad.1;
+        Tue, 25 Jan 2022 06:24:07 -0800 (PST)
+X-Received: by 2002:a05:6102:34e:: with SMTP id e14mr644513vsa.68.1643120647054;
+ Tue, 25 Jan 2022 06:24:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 7/7] iommu: Add iommu_domain::domain_ops
-Content-Language: en-GB
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
- <20220124071103.2097118-8-baolu.lu@linux.intel.com>
- <99023cd7-f037-282f-3f25-629a14a1578b@arm.com>
- <82c5db53-088f-a51f-6fbc-c977ef871d8f@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <82c5db53-088f-a51f-6fbc-c977ef871d8f@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220110134659.30424-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220110134659.30424-11-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAL_JsqKnWwSEneKTvQWWmGk1gJG2dx37vAJAFWOLVm5wL5t31g@mail.gmail.com>
+In-Reply-To: <CAL_JsqKnWwSEneKTvQWWmGk1gJG2dx37vAJAFWOLVm5wL5t31g@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 25 Jan 2022 15:23:55 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUz-E1NNYMpB8PXT67H1_SGEn9=FOR2DZHqBDFbRSmbtA@mail.gmail.com>
+Message-ID: <CAMuHMdUz-E1NNYMpB8PXT67H1_SGEn9=FOR2DZHqBDFbRSmbtA@mail.gmail.com>
+Subject: Re: [PATCH v2 10/12] arm64: dts: renesas: Add initial DTSI for RZ/V2L SoC
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-25 06:27, Lu Baolu wrote:
-> On 1/25/22 8:57 AM, Robin Murphy wrote:
->> On 2022-01-24 07:11, Lu Baolu wrote:
->>> Add a domain specific callback set, domain_ops, for vendor iommu driver
->>> to provide domain specific operations. Move domain-specific callbacks
->>> from iommu_ops to the domain_ops and hook them when a domain is 
->>> allocated.
->>
->> I think it would make a lot of sense for iommu_domain_ops to be a 
->> substructure *within* iommu_ops. That way we can save most of the 
->> driver boilerplate here by not needing extra variables everywhere, and 
->> letting iommu_domain_alloc() still do a default initialisation like 
->> "domain->ops = bus->iommu_ops->domain_ops;"
-> 
-> In the new model, iommu_domain_ops and iommu_ops are not 1:1 mapped.
-> For example, a PASID-capable IOMMU could support DMA domain (which
-> supports map/unmap), SVA domain (which does not), and others in the
-> future. Different type of domain has its own domain_ops.
+Hi Rob,
 
-Sure, it's clear that that's the direction in which this is headed, and 
-as I say I'm quite excited about that. However there are a couple of 
-points I think are really worth considering:
+On Tue, Jan 25, 2022 at 3:00 PM Rob Herring <robh+dt@kernel.org> wrote:
+> On Mon, Jan 10, 2022 at 7:47 AM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > From: Biju Das <biju.das.jz@bp.renesas.com>
+> >
+> > The RZ/V2L is package- and pin-compatible with the RZ/G2L. The only
+> > difference being the RZ/V2L SoC has additional DRP-AI IP (AI
+> > accelerator).
+> >
+> > Add initial DTSI for RZ/V2L SoC with below SoC specific dtsi files for
+> > supporting single core and dual core devices.
+> >
+> > r9a07g054l1.dtsi => RZ/V2L R9A07G054L1 SoC specific parts
+> > r9a07g054l2.dtsi => RZ/V2L R9A07G054L2 SoC specific parts
+> >
+> > Both RZ/G2L and RZ/V2L SMARC EVK SoM  are identical apart from SoC's
+> > used hence the common dtsi files (rzg2l-smarc*.dtsi) are share between
+> > RZ/G2L and RZ/V2L SMARC EVK. Place holders are added in device nodes to
+> > avoid compilation errors for the devices which have not been enabled yet
+> > on RZ/V2L SoC.
+> >
+> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Where it's just about which operations are valid for which domains, it's 
-even simpler for the core interface wrappers to validate the domain 
-type, rather than forcing drivers to implement multiple ops structures 
-purely for the sake of having different callbacks populated. We already 
-have this in places, e.g. where iommu_map() checks for 
-__IOMMU_DOMAIN_PAGING.
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/renesas/r9a07g054.dtsi
+> > @@ -0,0 +1,491 @@
+> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +/*
+> > + * Device Tree Source for the RZ/V2L SoC
+> > + *
+> > + * Copyright (C) 2021 Renesas Electronics Corp.
+> > + */
+> > +
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +#include <dt-bindings/clock/r9a07g054-cpg.h>
+>
+> linux-next is failing because this header is missing:
+>
+> In file included from arch/arm64/boot/dts/renesas/r9a07g054l2.dtsi:9,
+>                  from arch/arm64/boot/dts/renesas/r9a07g054l2-smarc.dts:9:
+> arch/arm64/boot/dts/renesas/r9a07g054.dtsi:9:10: fatal error:
+> dt-bindings/clock/r9a07g054-cpg.h: No such file or directory
+>     9 | #include <dt-bindings/clock/r9a07g054-cpg.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Paging domains are also effectively the baseline level of IOMMU API 
-functionality. All drivers support them, and for the majority of drivers 
-it's all they will ever support. Those drivers really don't benefit from 
-any of the churn and boilerplate in this patch as-is, and it's so easy 
-to compromise with a couple of lines of core code to handle the common 
-case by default when the driver *isn't* one of the handful which ever 
-actually cares to install their own per-domain ops. Consider how much 
-cleaner this patch would look if the typical driver diff could be 
-something completely minimal like this:
+Thanks, I have already removed the offending commits from renesas-next.
+as the header is not ready yet.
 
------>8-----
-diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-index be22fcf988ce..6aff493e37ee 100644
---- a/drivers/iommu/mtk_iommu_v1.c
-+++ b/drivers/iommu/mtk_iommu_v1.c
-@@ -514,12 +514,14 @@ static int mtk_iommu_hw_init(const struct 
-mtk_iommu_data *data)
+Interestingly, kernel test robot reported a success for that branch...
 
-  static const struct iommu_ops mtk_iommu_ops = {
-  	.domain_alloc	= mtk_iommu_domain_alloc,
--	.domain_free	= mtk_iommu_domain_free,
--	.attach_dev	= mtk_iommu_attach_device,
--	.detach_dev	= mtk_iommu_detach_device,
--	.map		= mtk_iommu_map,
--	.unmap		= mtk_iommu_unmap,
--	.iova_to_phys	= mtk_iommu_iova_to_phys,
-+	.domain_ops = &(const struct iommu_domain_ops){
-+		.domain_free	= mtk_iommu_domain_free,
-+		.attach_dev	= mtk_iommu_attach_device,
-+		.detach_dev	= mtk_iommu_detach_device,
-+		.map		= mtk_iommu_map,
-+		.unmap		= mtk_iommu_unmap,
-+		.iova_to_phys	= mtk_iommu_iova_to_phys,
-+	}
-  	.probe_device	= mtk_iommu_probe_device,
-  	.probe_finalize = mtk_iommu_probe_finalize,
-  	.release_device	= mtk_iommu_release_device,
+Gr{oetje,eeting}s,
 
------8<-----
+                        Geert
 
-And of course I have to shy away from calling it default_domain_ops, 
-since although it's logically default ops for domains, it is not 
-specifically ops for default domains, sigh... :)
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Cheers,
-Robin.
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

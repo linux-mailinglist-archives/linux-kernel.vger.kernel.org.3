@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D9449BCBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DCE49BCBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbiAYUNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 15:13:18 -0500
-Received: from mail-vk1-f169.google.com ([209.85.221.169]:37451 "EHLO
-        mail-vk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiAYUMn (ORCPT
+        id S231440AbiAYUOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 15:14:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229506AbiAYUOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:12:43 -0500
-Received: by mail-vk1-f169.google.com with SMTP id v192so13108075vkv.4;
-        Tue, 25 Jan 2022 12:12:43 -0800 (PST)
+        Tue, 25 Jan 2022 15:14:06 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365B0C06173B;
+        Tue, 25 Jan 2022 12:14:06 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id l25so21928210wrb.13;
+        Tue, 25 Jan 2022 12:14:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=um8d9+s1XSjgsk+lNomKxkc38qhFGc/J9+962ua/YsM=;
+        b=gMwIXMDWIXfGlmOLKGK2+LXWO5JTVPu1p+Jzn3NMkNe/piruZKacx3Vj5nfFiB+yVM
+         8GcJS47eozMSgtAXPpt4TFH17PSUOJdezOCG9+M0GQPPJlIpuhdh9xytNRxXWHwehTNJ
+         eYqehwaFOiDqfxLABuQoG4UiIs5ci2+a2YW9LorrpASuzneEdRRClO082vfY69O88QS1
+         11VLbN8vSEs6fV+mhPVxIC05yX8kc9LZpniet7E6EBboAPXLUmRU6EdFadsJCE7ZPaFI
+         Ut35de3ZF+sR9GmgAGHJzJ5lbUNau47x7vQB5ctD855WoqvYYEBF9gvTmKRtJ1g2+SF2
+         BfTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1cqbsPNZ64vIJQYyE3XbIMBM01AmRJigHSuPYUkGB7E=;
-        b=2cTOSUtH0nuvQ35Lea6dJqBpOCAQJlyDCB3FnF5O3fSv765Lj7/eO6B+AQHZFGhDYU
-         ATZd3z+YqHRMp4cr9s4MfL/SK8UtkjjGUuq2XY3FQvDpVgp2QMOQn7/AOFHPMJcaCA+F
-         lt/ntFeHtb+Byd5CCtFeGCVgAMP77SlTby95tC5hfjb35keDuo2xyJW4ColYQuLnPeI2
-         2K0IkyPEzCEe/cjeoLQiQZtGZ1D2piKPn5QyIYiJjSwFemc9R5VFly/afzFa4wplazB0
-         67H8nePS5w9UnfRUIMMfeld40qa6tZicH7xxQa1sW31KD70sHiLS8PIN1cbK7KNgWhaS
-         S7bQ==
-X-Gm-Message-State: AOAM532Vu41EQQtb2nmmXvXMHXdlU2o2rHZtejbe0Sw4SAd0XY5qpN2p
-        2jausvD85xu7BuRFotCuF3NzvsjR97KQaHm0
-X-Google-Smtp-Source: ABdhPJyGI8hnAKqtNw2OqJoN4MwPWLXeZD5TNXRUsGPzwsTHt6NROtt+tkC0XVbJIKIAoLNX6c5K8w==
-X-Received: by 2002:a05:6122:588:: with SMTP id i8mr2124559vko.41.1643141562489;
-        Tue, 25 Jan 2022 12:12:42 -0800 (PST)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id d202sm1125006vkd.38.2022.01.25.12.12.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 12:12:42 -0800 (PST)
-Received: by mail-ua1-f43.google.com with SMTP id r15so39566043uao.3;
-        Tue, 25 Jan 2022 12:12:41 -0800 (PST)
-X-Received: by 2002:a67:a401:: with SMTP id n1mr4458394vse.38.1643141561680;
- Tue, 25 Jan 2022 12:12:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=um8d9+s1XSjgsk+lNomKxkc38qhFGc/J9+962ua/YsM=;
+        b=cBp8JGeD6QGj33zUC8zolE7nsL9NHUQ+Wy6jegveULrIFn1N2qUupqIDsJ7+fzZ+5Q
+         KYO5xZerLTjIFXol5cmn+SB29L/fZ+FFJJPteoUsJtcZra3Ud4we74UWpMsd2MdhSz4m
+         pcQm+pT34IegLLvf35JG+Db7oyVjD6vzhNy6PAWQK8LCpvrsQkzkWCEHF3KrNNSTU5ae
+         qs9A61jhEelM+gImCp0Kib+LL3qHqAUW22I8MYnJZcAENT7JC97KWwaNMAeBjqyaIdwJ
+         E2Xw1iIRLKYn+94NomrhSUBqkQzUxBkAhaxyXXUzZ87w6OhqxOdRBIO25orsfsrErAwR
+         FSNg==
+X-Gm-Message-State: AOAM532ShPzGi0i9VX/SUMXyyozU/GaoVioYrrjIJ8KM6TDA7a9EGYd1
+        M74zFoxkaWbFFtfnchK8634=
+X-Google-Smtp-Source: ABdhPJzCUMy77BVhpMrOx4JvikcWFix1WLk8dZ8XA44Xl5jwxS2LoKOO8sEUb8FTj22K/dkjKbQVTA==
+X-Received: by 2002:a5d:6510:: with SMTP id x16mr10744414wru.613.1643141644669;
+        Tue, 25 Jan 2022 12:14:04 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id v5sm1166257wmh.19.2022.01.25.12.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 12:14:04 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] perf/x86/rapl: replace 0 with NULL to initialize pointers
+Date:   Tue, 25 Jan 2022 20:14:03 +0000
+Message-Id: <20220125201403.670011-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20220120090918.2646626-1-atishp@rivosinc.com> <20220120090918.2646626-7-atishp@rivosinc.com>
-In-Reply-To: <20220120090918.2646626-7-atishp@rivosinc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 25 Jan 2022 21:12:30 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXJoREF7jZaYWrDUjJqKUSCd82qDVaMEo7VO38ok8J-AA@mail.gmail.com>
-Message-ID: <CAMuHMdXJoREF7jZaYWrDUjJqKUSCd82qDVaMEo7VO38ok8J-AA@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] RISC-V: Do not use cpumask data structure for
- hartid bitmap
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Atish,
+Pointers should be initialized with NULL rather than zero. Fix these.
+Cleans up sparse warning:
 
-On Thu, Jan 20, 2022 at 10:12 AM Atish Patra <atishp@rivosinc.com> wrote:
-> Currently, SBI APIs accept a hartmask that is generated from struct
-> cpumask. Cpumask data structure can hold upto NR_CPUs value. Thus, it
-> is not the correct data structure for hartids as it can be higher
-> than NR_CPUs for platforms with sparse or discontguous hartids.
->
-> Remove all association between hartid mask and struct cpumask.
->
-> Reviewed-by: Anup Patel <anup@brainfault.org> (For Linux RISC-V changes)
-> Acked-by: Anup Patel <anup@brainfault.org> (For KVM RISC-V changes)
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+arch/x86/events/rapl.c:540:59: warning: Using plain integer as NULL pointer
 
-Thanks for your patch, which is now commit 26fb751ca37846c9 ("RISC-V:
-Do not use cpumask data structure for hartid bitmap") in v5.17-rc1.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ arch/x86/events/rapl.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I am having an issue with random userspace SEGVs on Starlight Beta
-(which needs out-of-tree patches).  It doesn't always manifest
-itself immediately, so it took a while to bisect, but I suspect the
-above commit to be the culprit.
+diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+index 77e3a47af5ad..7d70690fded5 100644
+--- a/arch/x86/events/rapl.c
++++ b/arch/x86/events/rapl.c
+@@ -537,11 +537,11 @@ static struct perf_msr intel_rapl_spr_msrs[] = {
+  * - want to use same event codes across both architectures
+  */
+ static struct perf_msr amd_rapl_msrs[] = {
+-	[PERF_RAPL_PP0]  = { 0, &rapl_events_cores_group, 0, false, 0 },
++	[PERF_RAPL_PP0]  = { 0, &rapl_events_cores_group, NULL, false, 0 },
+ 	[PERF_RAPL_PKG]  = { MSR_AMD_PKG_ENERGY_STATUS,  &rapl_events_pkg_group,   test_msr, false, RAPL_MSR_MASK },
+-	[PERF_RAPL_RAM]  = { 0, &rapl_events_ram_group,   0, false, 0 },
+-	[PERF_RAPL_PP1]  = { 0, &rapl_events_gpu_group,   0, false, 0 },
+-	[PERF_RAPL_PSYS] = { 0, &rapl_events_psys_group,  0, false, 0 },
++	[PERF_RAPL_RAM]  = { 0, &rapl_events_ram_group,   NULL, false, 0 },
++	[PERF_RAPL_PP1]  = { 0, &rapl_events_gpu_group,   NULL, false, 0 },
++	[PERF_RAPL_PSYS] = { 0, &rapl_events_psys_group,  NULL, false, 0 },
+ };
+ 
+ static int rapl_cpu_offline(unsigned int cpu)
+-- 
+2.33.1
 
-So far the Icicle looks unaffected.
-
-Do you have a clue?
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

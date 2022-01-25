@@ -2,163 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 294BE49B906
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8F649B94B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1584299AbiAYQiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:38:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40573 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1583782AbiAYQdy (ORCPT
+        id S1585812AbiAYQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:45:01 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:23715 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346610AbiAYQg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:33:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643128433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KfgMJjJLkuse5GtAchEf6Kwh02fgOfErvUbiicxCd3s=;
-        b=h9+t6qa5iEbmghmdYYYZDdHAGtfJ+obFYCEnERWjQ4LlMoXQjaiNWSByx9TlgzrXpx3nFB
-        qOc5KSPkmEGT/FHQKgR0JFIgVY0553q+pUbx357dWQHUY6RCsGFhL9Bk5v9L2fcy+kLto0
-        asb0wPyzxfeZqwWMXRdpKWW8NpChYmk=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-480--ndh3Z-NNbS-jtoxzh0D7Q-1; Tue, 25 Jan 2022 11:33:52 -0500
-X-MC-Unique: -ndh3Z-NNbS-jtoxzh0D7Q-1
-Received: by mail-ed1-f69.google.com with SMTP id eg24-20020a056402289800b00407f95c4c35so4786251edb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:33:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=KfgMJjJLkuse5GtAchEf6Kwh02fgOfErvUbiicxCd3s=;
-        b=hPflgnaaz3EjiMEsXZHLNIniAir9Ss9T5sUyVeHmOH9lu5+QegI8WmxetpQd6CuM7h
-         ntueRoOGldHaO68oquj2tKHFNPnk2JN4nMPPQUaJUJPWPa+HDtQ197HNSvj5wQr6cJGQ
-         ag1Zk77r2BuaBG9Jmjx2R7GAVrExK1vgOqQpuRbh7x94FjfGBVvyp1G0fz8G8HdKMuHd
-         WfILfWr95pC62whpobafov6//bYBX5Mf6F1zc+YgHB4VjcHPxnuXrVrYiilOj8CoZW+0
-         Ty31V2rrW3BOMetW3izeCi8jhEJegCs8F6HKqZ4lbCoq+FCWNEn8rDiPJum9+befD+LY
-         3x1A==
-X-Gm-Message-State: AOAM531uTcw/4h+qW8RnNPN+Wod9PFzDK5lRU7jCBz+wayWtMPbuO8U4
-        GEi6cNGJRrTjfoplzWOaOgyL8FsfbSSxj+2OqdKD+Y7QWaKHoahVQ6CRjnV/XlD0EzG9kX3RaHm
-        1Kn/48Nlk5365sD+MUjafXcCJ
-X-Received: by 2002:a17:907:3e98:: with SMTP id hs24mr5686281ejc.615.1643128431435;
-        Tue, 25 Jan 2022 08:33:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyeyf5mAQBARaflP79k/1usfZgp11GmPqAXlH9bD84k9hx/lc6ZGcZS3QYF6aaWGyAbIL/opw==
-X-Received: by 2002:a17:907:3e98:: with SMTP id hs24mr5686263ejc.615.1643128431147;
-        Tue, 25 Jan 2022 08:33:51 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70f:8000:9797:8f:1ed9:7596? (p200300cbc70f80009797008f1ed97596.dip0.t-ipconnect.de. [2003:cb:c70f:8000:9797:8f:1ed9:7596])
-        by smtp.gmail.com with ESMTPSA id n25sm4995831ejx.92.2022.01.25.08.33.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 08:33:50 -0800 (PST)
-Message-ID: <517e1ea1-f826-228b-16a0-da1dc76017cc@redhat.com>
-Date:   Tue, 25 Jan 2022 17:33:49 +0100
+        Tue, 25 Jan 2022 11:36:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643128588; x=1674664588;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=0WnV+EmPb8krky3QwTcyyzwQkQl+BhKbWAGWV4smPyc=;
+  b=vpfVJVu+lgJADXsRNAEROAPp5JNr06ci5m9H4ewteMbsUWuo98ICNeuO
+   vDrMQud3MwG4G1kTJyH1y1JJ/iPGISu0pVHUGhiKGvkX9qxh27Okkprn2
+   E43mgQ8LF5MTCtHiCVE7Hf40HAVGYGY3O31X+GRPi/yWu9+hdL5TFuyXr
+   w=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Jan 2022 08:36:24 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:36:24 -0800
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 25 Jan 2022 08:36:24 -0800
+Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 25 Jan
+ 2022 08:36:21 -0800
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Amit Kucheria" <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+Subject: [PATCH v4] drivers: thermal: clear all mitigation when thermal zone is disabled
+Date:   Tue, 25 Jan 2022 22:06:05 +0530
+Message-ID: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Dong Aisheng <aisheng.dong@nxp.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dongas86@gmail.com, jason.hui.liu@nxp.com, leoyang.li@nxp.com,
-        abel.vesa@nxp.com, shawnguo@kernel.org, linux-imx@nxp.com,
-        akpm@linux-foundation.org, m.szyprowski@samsung.com,
-        lecopzer.chen@mediatek.com, vbabka@suse.cz, stable@vger.kernel.org,
-        shijie.qin@nxp.com
-References: <20220112131552.3329380-1-aisheng.dong@nxp.com>
- <20220112131552.3329380-3-aisheng.dong@nxp.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 2/2] mm: cma: try next MAX_ORDER_NR_PAGES during retry
-In-Reply-To: <20220112131552.3329380-3-aisheng.dong@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.01.22 14:15, Dong Aisheng wrote:
-> On an ARMv7 platform with 32M pageblock(MAX_ORDER 14), we observed a
+Whenever a thermal zone is in trip violated state, there is a chance
+that the same thermal zone mode can be disabled either via
+thermal core API or via thermal zone sysfs. Once it is disabled,
+the framework bails out any re-evaluation of thermal zone. It leads
+to a case where if it is already in mitigation state, it will stay
+the same state forever.
 
-Did you actually intend to talk about pageblocks here (and below)?
+To avoid above mentioned issue, add support to bind/unbind
+governor from thermal zone during thermal zone mode change request
+and clear all existing throttling in governor unbind_from_tz()
+callback.
 
-I assume you have to be clearer here that you talk about the maximum
-allocation granularity, which is usually bigger than actual pageblock size.
+Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+---
+ drivers/thermal/gov_power_allocator.c |  3 +++
+ drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
+ drivers/thermal/thermal_core.c        | 31 +++++++++++++++++++++++++++----
+ 3 files changed, 56 insertions(+), 4 deletions(-)
 
-> huge number of repeat retries of CMA allocation (1k+) during booting
-> when allocating one page for each of 3 mmc instance probe.
-> 
-> This is caused by CMA now supports cocurrent allocation since commit
-> a4efc174b382 ("mm/cma.c: remove redundant cma_mutex lock").
-> The pageblock or (MAX_ORDER -1) from which we are trying to allocate
-> memory may have already been acquired and isolated by others.
-> Current cma_alloc() will then retry the next area by the step of
-> bitmap_no + mask + 1 which are very likely within the same isolated range
-> and fail again. So when the pageblock or MAX_ORDER is big (e.g. 8192),
-> keep retrying in a small step become meaningless because it will be known
-> to fail at a huge number of times due to the pageblock has been isolated
-> by others, especially when allocating only one or two pages.
-> 
-> Instread of looping in the same pageblock and wasting CPU mips a lot,
-> especially for big pageblock system (e.g. 16M or 32M),
-> we try the next MAX_ORDER_NR_PAGES directly.
-> 
-> Doing this way can greatly mitigate the situtation.
-> 
-> Below is the original error log during booting:
-> [    2.004804] cma: cma_alloc(cma (ptrval), count 1, align 0)
-> [    2.010318] cma: cma_alloc(cma (ptrval), count 1, align 0)
-> [    2.010776] cma: cma_alloc(): memory range at (ptrval) is busy, retrying
-> [    2.010785] cma: cma_alloc(): memory range at (ptrval) is busy, retrying
-> [    2.010793] cma: cma_alloc(): memory range at (ptrval) is busy, retrying
-> [    2.010800] cma: cma_alloc(): memory range at (ptrval) is busy, retrying
-> [    2.010807] cma: cma_alloc(): memory range at (ptrval) is busy, retrying
-> [    2.010814] cma: cma_alloc(): memory range at (ptrval) is busy, retrying
-> .... (+1K retries)
-> 
-> After fix, the 1200+ reties can be reduced to 0.
-> Another test running 8 VPU decoder in parallel shows that 1500+ retries
-> dropped to ~145.
-> 
-> IOW this patch can improve the CMA allocation speed a lot when there're
-> enough CMA memory by reducing retries significantly.
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Lecopzer Chen <lecopzer.chen@mediatek.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> CC: stable@vger.kernel.org # 5.11+
-> Fixes: a4efc174b382 ("mm/cma.c: remove redundant cma_mutex lock")
-> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
-> ---
-> v1->v2:
->  * change to align with MAX_ORDER_NR_PAGES instead of pageblock_nr_pages
-> ---
->  mm/cma.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/cma.c b/mm/cma.c
-> index 1c13a729d274..1251f65e2364 100644
-> --- a/mm/cma.c
-> +++ b/mm/cma.c
-> @@ -500,7 +500,9 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
->  		trace_cma_alloc_busy_retry(cma->name, pfn, pfn_to_page(pfn),
->  					   count, align);
->  		/* try again with a bit different memory target */
-> -		start = bitmap_no + mask + 1;
-> +		start = ALIGN(bitmap_no + mask + 1,
-> +			      MAX_ORDER_NR_PAGES >> cma->order_per_bit);
-
-Mind giving the reader a hint in the code why we went for
-MAX_ORDER_NR_PAGES?
-
-What would happen if the CMA granularity is bigger than
-MAX_ORDER_NR_PAGES? I'd assume no harm done, as we'd try aligning to 0.
-
--- 
-Thanks,
-
-David / dhildenb
-
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 13e3757..9ff0c5f 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -696,6 +696,9 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
+ 
+ 	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
+ 
++	tz->passive = 0;
++	allow_maximum_power(tz, true);
++
+ 	if (params->allocated_tzp) {
+ 		kfree(tz->tzp);
+ 		tz->tzp = NULL;
+diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+index 12acb12..2132c14 100644
+--- a/drivers/thermal/gov_step_wise.c
++++ b/drivers/thermal/gov_step_wise.c
+@@ -168,6 +168,31 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+ }
+ 
+ /**
++ * step_wise_unbind() - unbind the step_wise governor to a thermal zone
++ * @tz:	thermal zone to unbind it to
++ *
++ * Clear all previous throttling and reset passive counter.
++ *
++ */
++static void step_wise_unbind(struct thermal_zone_device *tz)
++{
++	struct thermal_instance *instance;
++
++	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
++
++	mutex_lock(&tz->lock);
++	tz->passive = 0;
++	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
++		instance->initialized = false;
++		instance->target = THERMAL_NO_TARGET;
++		mutex_lock(&instance->cdev->lock);
++		 __thermal_cdev_update(instance->cdev);
++		mutex_unlock(&instance->cdev->lock);
++	}
++	mutex_unlock(&tz->lock);
++}
++
++/**
+  * step_wise_throttle - throttles devices associated with the given zone
+  * @tz: thermal_zone_device
+  * @trip: trip point index
+@@ -196,6 +221,7 @@ static int step_wise_throttle(struct thermal_zone_device *tz, int trip)
+ 
+ static struct thermal_governor thermal_gov_step_wise = {
+ 	.name		= "step_wise",
++	.unbind_from_tz	= step_wise_unbind,
+ 	.throttle	= step_wise_throttle,
+ };
+ THERMAL_GOVERNOR_DECLARE(thermal_gov_step_wise);
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 1389174..9828eb3 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -274,6 +274,26 @@ static int __init thermal_register_governors(void)
+ 	return ret;
+ }
+ 
++static void thermal_governor_attach(struct thermal_zone_device *tz)
++{
++	mutex_lock(&thermal_governor_lock);
++	if (tz->governor && tz->governor->bind_to_tz) {
++		if (tz->governor->bind_to_tz(tz))
++			dev_err(&tz->device,
++				"governor %s failed to bind to thermal zone %s\n",
++				tz->governor->name, tz->type);
++	}
++	mutex_unlock(&thermal_governor_lock);
++}
++
++static void thermal_governor_detach(struct thermal_zone_device *tz)
++{
++	mutex_lock(&thermal_governor_lock);
++	if (tz->governor && tz->governor->unbind_from_tz)
++		tz->governor->unbind_from_tz(tz);
++	mutex_unlock(&thermal_governor_lock);
++}
++
+ /*
+  * Zone update section: main control loop applied to each zone while monitoring
+  *
+@@ -447,12 +467,15 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+ 
+ 	mutex_unlock(&tz->lock);
+ 
+-	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+-
+-	if (mode == THERMAL_DEVICE_ENABLED)
++	if (mode == THERMAL_DEVICE_ENABLED) {
++		thermal_governor_attach(tz);
++		thermal_zone_device_init(tz);
++		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ 		thermal_notify_tz_enable(tz->id);
+-	else
++	} else {
++		thermal_governor_detach(tz);
+ 		thermal_notify_tz_disable(tz->id);
++	}
+ 
+ 	return ret;
+ }

@@ -2,99 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1536149ACD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 276A249ACDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376659AbiAYHEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S1351995AbiAYHET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 02:04:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S248970AbiAYEDM (ORCPT
+        with ESMTP id S248974AbiAYEDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Jan 2022 23:03:12 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C0FC061394
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:41:46 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id s61-20020a17090a69c300b001b4d0427ea2so607031pjj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:41:46 -0800 (PST)
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57387C0613A0;
+        Mon, 24 Jan 2022 16:44:09 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id c190-20020a1c9ac7000000b0035081bc722dso394796wme.5;
+        Mon, 24 Jan 2022 16:44:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=NefrKzx5OHKKvYYf1TiO3FvEJzN+eja5s5Q735QU1F0=;
-        b=hQBTs3rPEaX5QpMhGJN0sQ1KIvn0GCl7Ol7ejuwTF4A8bAYknvdCviHNLZ2J7WURPU
-         7J411kY6kdxD5njmZAbInNsypAC/jukuL/Fc1TU+7ByEu7bsLqZl1iU4XEat6Vrfk4wi
-         EHHMLFDJS5km0IEUXAO9Mty8aOqT4FF8MxUbD01sNJaQ3fiFgKVwWa/2dFfdEC9VMauL
-         eEZmOUYJITLEQDTN8XjGXbgfTWn9erMQxRhNaAofRKQmFxar0KImFrYedGHcE+WElgfO
-         z78aBat3R2A7j99osBhvSALy6qYnr/XDCeQp+b3zBjJ6ANjLScbli0FpYKg0a00VboQK
-         b34g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fLRx9U/2NmB44pdLfJwKGSap2HFuUnZgoHSikvYyf1Y=;
+        b=Uri3ZygruRiJrNQhOePq8oZkEEomTzM8IcTOvseIjxw6EGnuo4ouml6ZToHiWPeeCF
+         9BF6aHgCHSxQqRmJn7Fz6eP5ybedfIMEqA0Cgiw837k6VqVPzFOqaXSTG8ETZut+juGG
+         FcayrugHrMuu0XpBzU8b8NYycxZCnABQ44ZPddny/6d9x0b/6uxVcw+9aXj4NX8cQ0V5
+         hVWo8mWoszhMdoJfvKdGHcltZVpE8s6V/XuxPFDs+BKS+JCJiGmH/twVLqtt9H/Xeujt
+         jmiCuB7fQQAvPPk92/TW/t+F3D34u1txrJ/3MjbVXFj2YwQDH2vOXwrhc5qp2s7yI1tN
+         K5eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=NefrKzx5OHKKvYYf1TiO3FvEJzN+eja5s5Q735QU1F0=;
-        b=7x/5xW1FUYfnFjAY41Sl01UQ3VNgu73Oa98T2M8UYvPRu/h3zDxVEPQhyYhtcBOK7c
-         U3U2tEFwTjpZq8T2dXe3/ch0urV8PtJBHoSM2OrtUCA+ql8+GXF5zXQc3BisBpjbOsam
-         G57DMMFuJxxKoc7GFQXxE5/ST+WqGBoyfk8rX3JFmkzN8MtYcFSOdqcRvnOgP9+EWExi
-         tOXP65TO0pHxlB4uZayr8VkfrNBkLjrbAUjSShYqWWln3h9xODfTjBmW4AVUmUsak5DI
-         8A326qBv73RDiZWG0P6kDy6FwjTQMvh+6TB1G+4wPFO9aIoJZdJizaMOcxlpMYgL+kd/
-         UR1Q==
-X-Gm-Message-State: AOAM530TWupD0LVkJ+/K7OoHyVVPqEt7vJ+G9JqPo7chn96STHOEeTpX
-        rwXYJ1Wi+WMhE9y7gKEVTsT8NQ==
-X-Google-Smtp-Source: ABdhPJzY2YXYLCkrS4vtJeyIT+l3DZOSE+RZqG87uCqApw6tGl6rk3GXgFX62r1zW7xY1DkqAl2eMA==
-X-Received: by 2002:a17:902:e88a:b0:14b:3aa4:4d17 with SMTP id w10-20020a170902e88a00b0014b3aa44d17mr9876178plg.160.1643071305403;
-        Mon, 24 Jan 2022 16:41:45 -0800 (PST)
-Received: from [2620:15c:29:204:1f99:bd65:fcbb:146c] ([2620:15c:29:204:1f99:bd65:fcbb:146c])
-        by smtp.gmail.com with ESMTPSA id me4sm471426pjb.26.2022.01.24.16.41.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fLRx9U/2NmB44pdLfJwKGSap2HFuUnZgoHSikvYyf1Y=;
+        b=2Lte37nn0Z6fISVIL6YG8PDsDogdoDxhvVik9jvodOJKxnughvn4p6bKfXHst8aS9y
+         /cYU0N/QquR9B5t3URzwgMmniOmevuCNxN8c3P14lvlc46n6VY2Il+zlwOYcAzAgKm1l
+         kbITloPdtEYGNQqgxWe8PYfa/6D9AZziSmn7oWnAWfW0ago1GUIGj1PeMhgMIDJ9s/7J
+         JeO72ju2sjAMAlREbBgEWcYLktM6m5me3x5JgdWLWRiuLUQOSGZOSRxNNALKLuK2nkpy
+         pWGDO2oYJjhDcBCeGK5jRwUulk6LZAoqWPaXM6tBhy5Ja6t6XABcsyaz32aYuxudWhaa
+         BnEw==
+X-Gm-Message-State: AOAM532KdzkZF344hZY2sHtFvRUTd8HScjg/KZjXsAqjckXhntagC8/+
+        aaIo58lDjDszQnjnRk1yKSI=
+X-Google-Smtp-Source: ABdhPJz5o+URFYf4JkJc3R99+zOF/mY6qpbpL6hjRWY5PsvVBvKIC7+1cAsO8rmcqD0Yawnz5WqATA==
+X-Received: by 2002:a05:600c:35d0:: with SMTP id r16mr642530wmq.195.1643071447836;
+        Mon, 24 Jan 2022 16:44:07 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id g20sm925194wmq.9.2022.01.24.16.44.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 16:41:44 -0800 (PST)
-Date:   Mon, 24 Jan 2022 16:41:43 -0800 (PST)
-From:   David Rientjes <rientjes@google.com>
-To:     Zi Yan <ziy@nvidia.com>
-cc:     Muchun Song <songmuchun@bytedance.com>, akpm@linux-foundation.org,
-        kirill.shutemov@linux.intel.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        Lars Persson <lars.persson@axis.com>
-Subject: Re: [PATCH v2 2/2] mm: fix missing cache flush for all tail pages
- of THP
-In-Reply-To: <5D9B52E1-A74B-4964-AACF-ADB91536C4C0@nvidia.com>
-Message-ID: <91608087-a650-bf1c-a225-7afd63adf63d@google.com>
-References: <20220124051752.83281-1-songmuchun@bytedance.com> <20220124051752.83281-2-songmuchun@bytedance.com> <4d5044e7-cac9-b6e6-1467-59ea6010b0f5@google.com> <5D9B52E1-A74B-4964-AACF-ADB91536C4C0@nvidia.com>
+        Mon, 24 Jan 2022 16:44:07 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stable@vger.kernel.org
+Subject: [PATCH] carl9170: fix missing bit-wise or operator for tx_params
+Date:   Tue, 25 Jan 2022 00:44:06 +0000
+Message-Id: <20220125004406.344422-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="447496086-858381783-1643071304=:26091"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Currently tx_params is being re-assigned with a new value and the
+previous setting IEEE80211_HT_MCS_TX_RX_DIFF is being overwritten.
+The assignment operator is incorrect, the original intent was to
+bit-wise or the value in. Fix this by replacing the = operator
+with |= instead.
 
---447496086-858381783-1643071304=:26091
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Kudos to Christian Lamparter for suggesting the correct fix.
 
-On Mon, 24 Jan 2022, Zi Yan wrote:
+Fixes: fe8ee9ad80b2 ("carl9170: mac80211 glue and command interface")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Cc: <Stable@vger.kernel.org>
 
-> >> The D-cache maintenance inside move_to_new_page() only consider one page,
-> >> there is still D-cache maintenance issue for tail pages of THP. Fix this
-> >> by not using flush_dcache_folio() since it is not backportable.
-> >>
-> >
-> > The mention of being backportable suggests that we should backport this,
-> > likely to 4.14+.  So should it be marked as stable?
-> 
-> Hmm, after more digging, I am not sure if the bug exists. For THP migration,
-> flush_cache_range() is used in remove_migration_pmd(). The flush_dcache_page()
-> was added by Lars Persson (cc’d) to solve the data corruption on MIPS[1],
-> but THP migration is only enabled on x86_64, PPC_BOOK3S_64, and ARM64.
-> 
-> To make code more consistent, I guess flush_cache_range() in remove_migration_pmd()
-> can be removed, since it is superseded by the flush_dcache_page() below.
-> 
-> The Fixes can be dropped. Let me know if I miss anything.
-> 
+---
 
-Yeah, I don't think the Fixes needs to exist here because there doesn't 
-appear to be an issue today.  We likely need to choose one of the two 
-paths from above to handle the flush only in a single place.
---447496086-858381783-1643071304=:26091--
+V2: change subject line to match the correct fix, add in the
+    missing | operator
+---
+ drivers/net/wireless/ath/carl9170/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/ath/carl9170/main.c b/drivers/net/wireless/ath/carl9170/main.c
+index 49f7ee1c912b..2208ec800482 100644
+--- a/drivers/net/wireless/ath/carl9170/main.c
++++ b/drivers/net/wireless/ath/carl9170/main.c
+@@ -1914,7 +1914,7 @@ static int carl9170_parse_eeprom(struct ar9170 *ar)
+ 		WARN_ON(!(tx_streams >= 1 && tx_streams <=
+ 			IEEE80211_HT_MCS_TX_MAX_STREAMS));
+ 
+-		tx_params = (tx_streams - 1) <<
++		tx_params |= (tx_streams - 1) <<
+ 			    IEEE80211_HT_MCS_TX_MAX_STREAMS_SHIFT;
+ 
+ 		carl9170_band_2GHz.ht_cap.mcs.tx_params |= tx_params;
+-- 
+2.33.1
+

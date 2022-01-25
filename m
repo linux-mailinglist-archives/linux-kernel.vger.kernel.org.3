@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4BEA49BD73
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9F549BD75
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbiAYUte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 15:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S232575AbiAYUux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 15:50:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbiAYUtM (ORCPT
+        with ESMTP id S232484AbiAYUuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:49:12 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDB7C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:49:12 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id z5so6620124plg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:49:12 -0800 (PST)
+        Tue, 25 Jan 2022 15:50:51 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFC4C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:50:51 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id h30so17886046ila.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:50:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=5qRcSiWYVZPeLOQtDxt+I8vSASVfNGyZI4wIHLpAlDo=;
-        b=Trvz/Cz2N9lcF0eFlQVpWY21DJ3TOSbHJf4IWmmvu90ccgpijQhtHdKsUP5Y/Cm0sI
-         KhKLj2nvQ2U02V9QTSFXCEWv3UGCrW5yhB8i+0xiGhipZUzkPXvt8DMBhdLWmZRYk6tB
-         0TZTaEPQ+3WKkRgs4z20Eb5mrkTDT/p1vkvb1PfVoFrSKZkiM/dJg+yz1omJvbkKzVVJ
-         4NHm3tqtqlX89980sJWn5Fin8m9fX+Vn7PlXx9Xn/YWGal/ma5LumZyyS5v4Sh0XhiCk
-         5/Bftr3yhEO5smW5ay+QnAKNyQD8kd0073sqzCuDvWdJGi8rpotAWrNEMKH8654LuV5L
-         uvXw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wgQdS4IzPtcda4TTBz0E+m3BUhmDwULpA1MzE+UZAmI=;
+        b=KGrZvjplA+rHiodvaOUX7qiXtIkmnP5JmlbG2VWghfiIQcdb4f3J86vThDH7DmXMs+
+         UweNN5AbNj6Q/7jed8B/yQFEpTK4o7mgIk1+70zep8n6F51N0mZ7Ay26n2bq4OG9kuvG
+         fR4QWkUeVTv9SeecePhAItem583GwX85GWSSI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=5qRcSiWYVZPeLOQtDxt+I8vSASVfNGyZI4wIHLpAlDo=;
-        b=7WBf5F6GWry8xTVutPY1m9YzYM/uCIANC1BRB+9nOKL1FiBBXAyoHoHmbVzSxI6KKb
-         8y+ZaOINWPRox09XUSwVAWqFkDom5lm/shuzpOpKa3eXwtqL6lpuISLKL3Fyh9tlGv76
-         BXkpUCvCUmEV/EtQSwq36bBwkdTKbW+/CvithPqUXFA09nlONKYzOD7S77lGc+c/oK4T
-         AIyevaCIjSG3iE3PEh5rorBscnhZ+hT+2TDD9zP56RHeZMFCKBjCbp2hRiscrzn894kT
-         rW8rbN/3Hu21bK9ozDIGFUR1MG/iqf7qKAqzSFzX7dNAaQlQ8n0oPWFyVm6V+XFofzNa
-         B/0Q==
-X-Gm-Message-State: AOAM530Zz5BGFsvSYSwnGeffiv9Z9XaHltcmYRi+KXxLIp5y27v9Msd9
-        DzGQrKiKo425hBIQZnqYshTA8dSVXjf4AkC6udQ=
-X-Google-Smtp-Source: ABdhPJxEIUSppniJtcpyjGfTYivvhS/j0jWcQ/kAR9KS68587uozltp9C8Sa2gDXZZhUiff7nocHcA70+mGcmzyxWWo=
-X-Received: by 2002:a17:90b:1806:: with SMTP id lw6mr5331979pjb.82.1643143752414;
- Tue, 25 Jan 2022 12:49:12 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wgQdS4IzPtcda4TTBz0E+m3BUhmDwULpA1MzE+UZAmI=;
+        b=EL2j8kJeYYyPrEx81DUv4HiUZOEbmR5jgCq7U/SB6ILGlgH4ksTJy9rqSlD1TzVh9f
+         C10eATnSYXXBa1QSWV6YhkMF7gaPjWdImzlPxe4oInYmxzrqebaxoODM7BzlXN+LpMzn
+         WiyUXbMtYeDa7Ea6wYFMszyQ7gBPK3M4lrqLJIk1kQRiVXGQYm942TFYRZ8KoBQXL6eB
+         8XrYYJicOcLobwiWywe9SVDkWJeUjIAciiHIFkYwZlYigwR/wPPrAhOAVMJ2jxn+zeJm
+         GGANo19xEb0ZHjdLxNqcvnCo/D/VTTvLgC2W3prlJqvanjpiUtv0C5i1TH74A5dtRt5h
+         f+kQ==
+X-Gm-Message-State: AOAM532+oUF+Reeku1O8tQ60LbELmV/+kD4S2BiXjwP6tWW9RWJ+3tsy
+        giaWGxD1oTpqR679TpjNTOOZKQ==
+X-Google-Smtp-Source: ABdhPJzfwgpSR/C3UaofMecMsZe5O6qh5sb1gGWvN6CE4EK2w8MHzy0VILcusNJvymELTClctMV89w==
+X-Received: by 2002:a05:6e02:184a:: with SMTP id b10mr9730445ilv.185.1643143850867;
+        Tue, 25 Jan 2022 12:50:50 -0800 (PST)
+Received: from ?IPv6:2601:282:8200:4c:4ef8:d404:554b:9671? ([2601:282:8200:4c:4ef8:d404:554b:9671])
+        by smtp.gmail.com with ESMTPSA id j6sm9584239ils.33.2022.01.25.12.50.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 12:50:50 -0800 (PST)
+Subject: Re: [PATCH v2] kselftest: signal all child processes
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "christian@brauner.io" <christian@brauner.io>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "wad@chromium.org" <wad@chromium.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211217092955.9472-1-lizhijian@cn.fujitsu.com>
+ <196e8de7-d295-5bc0-66e1-f5d6433edbd2@fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <66e4dfaf-d447-789f-d2d6-5e0ad4426e66@linuxfoundation.org>
+Date:   Tue, 25 Jan 2022 13:50:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Received: by 2002:a05:6a11:5604:0:0:0:0 with HTTP; Tue, 25 Jan 2022 12:49:11
- -0800 (PST)
-Reply-To: jennifermbaya38@gmail.com
-From:   Mrs Jennifer Mbaya <kokossousylvie@gmail.com>
-Date:   Tue, 25 Jan 2022 12:49:11 -0800
-Message-ID: <CAFBEt+m8TLAxpx6oaYC4imYUm+mn67WUT804FCDA2jtf7wx+OQ@mail.gmail.com>
-Subject: =?UTF-8?Q?Kedvezm=C3=A9nyezett?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <196e8de7-d295-5bc0-66e1-f5d6433edbd2@fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Az =C3=96n nev=C3=A9ben az Egyes=C3=BClt Nemzetek =C3=A9s az Eg=C3=A9szs=C3=
-=A9g=C3=BCgyi Vil=C3=A1gszervezet a
-nemzetk=C3=B6zi valutaalaphoz kapcsol=C3=B3dva d=C3=ADjat adom=C3=A1nyoz, a=
-melyben az =C3=96n
-e-mail c=C3=ADm=C3=A9t =C3=A9s p=C3=A9nzeszk=C3=B6z=C3=A9t =C3=A1tadtuk nek=
-=C3=BCnk az =C3=96n =C3=A1tutal=C3=A1sa =C3=A9rdek=C3=A9ben,
-k=C3=A9rj=C3=BCk, eros=C3=ADtse meg adatait az =C3=96n =C3=A1tutal=C3=A1sa =
-=C3=A9rdek=C3=A9ben.
-Azt az utas=C3=ADt=C3=A1st kaptuk, hogy minden f=C3=BCggoben l=C3=A9vo tran=
-zakci=C3=B3t vigy=C3=BCnk
-=C3=A1t a k=C3=B6vetkezo k=C3=A9t napon bel=C3=BCl, de ha megkapta az alapj=
-=C3=A1t, akkor
-hagyja figyelmen k=C3=ADv=C3=BCl ezt az =C3=BCzenetet, ha nem azonnal.
-S=C3=BCrgosen v=C3=A1laszolnia kell erre az =C3=BCzenetre, ez nem egy olyan
-internetes csal=C3=B3, ez a vil=C3=A1gj=C3=A1rv=C3=A1ny enyh=C3=ADt=C3=A9se=
-.
+On 1/12/22 10:48 PM, lizhijian@fujitsu.com wrote:
+> kindly ping
+> 
+> 
+> On 17/12/2021 17:29, Li Zhijian wrote:
+>> We have some many cases that will create child process as well, such as
+>> pidfd_wait. Previously, we will signal/kill the parent process when it
+>> is time out, but this signal will not be sent to its child process. In
+>> such case, if child process doesn't terminate itself, ksefltest framework
+>> will hang forever.
+>>
+
+Thank you for the patch. Applied to linux-kselftest fixes for rc2/3
+
+thanks,
+-- Shuah

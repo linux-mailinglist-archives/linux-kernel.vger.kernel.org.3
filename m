@@ -2,261 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F13A49BCEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F2F49BCF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiAYUV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 15:21:26 -0500
-Received: from mga03.intel.com ([134.134.136.65]:16186 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231687AbiAYUVU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:21:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643142080; x=1674678080;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5bzSfljY1YSz8887v/yq7xlM6sikYIoDRsSS5+W86wQ=;
-  b=PwurqGaDbIUN6c3pVDM4Tpx0bSEGFG41pElQeFEs70aQwxdlcL/cXtjl
-   YbmIWuksrBakBWKelrxxeSrTejIqPg6e7MoBKuJJ8AqxF2GCCUG7cqZ4h
-   RAZYFGX1KbYKqAqMv4qzTii03L7n/FB8mbEytEfMVL68VQVCKmLW/q3Zk
-   lgoXvhAjNZF5Ew0hOyB4p9s4Dsx1WMkZ6die+h8pVqRw0dIpqfD3opXkz
-   mpeHaD9vDmvLieASYMsLtM2K3Nk1nn6cOTb+7Z2KHwq1VBrv+JT0/6rt5
-   OHnBCcmtv/1co7YHlTEeUEoKIh98Qhtx0rfnvVWHQ2FokX3E4Y9nLBefD
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246353990"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="246353990"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 12:21:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="624600071"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 25 Jan 2022 12:21:09 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 83E2F287; Tue, 25 Jan 2022 22:21:22 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Carlis <zhangxuezhi1@yulong.com>, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Michael Hennerich <michael.hennerich@analog.com>,
-        Helge Deller <deller@gmx.de>, Andy Shevchenko <andy@kernel.org>
-Subject: [PATCH v1 4/4] fbtft: Replace 'depends on FB_TFT' by 'if FB_TFT ... endif'
-Date:   Tue, 25 Jan 2022 22:21:17 +0200
-Message-Id: <20220125202118.63362-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+        id S231822AbiAYUWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 15:22:03 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:54530 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231913AbiAYUVj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 15:21:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A351B61732
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:21:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E7BBC340E0;
+        Tue, 25 Jan 2022 20:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643142099;
+        bh=FywkvxG5D1EowJubkY32RQoFAminRY/vfD+fc11MnDE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=bTq/shjtK744MQLncqtW+jj5+B7pJEkYY0MJXtiUTvB//GhFxDmUCkWWKm9zkdnlJ
+         YyIii5EhmSJImHTdePq7Dr1/Eea7yozC5NVFQ1FacNGsGWTh+KrzEcRkoaPfCClEdQ
+         oPS5hy3+ObxokvJv3GWSBoXY0h8raeihzyyekU9jtBR1D4xIHmyyEsZnSxTlrTtOzX
+         4XWuU7L/75zh+54jmYcTGsr7sklKniifwCcyyPlcnglHDnBVjnb1M5D83Tf/NXchV/
+         HZsf+uQ63a0c28kdFsXT/WsdhxDqeyLK7Ajbq21ngpPhBmHS74g6e0hLcxG4v2UXdm
+         bDq7XqVJedQsA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BF6C95C0641; Tue, 25 Jan 2022 12:21:38 -0800 (PST)
+Date:   Tue, 25 Jan 2022 12:21:38 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     Tejun Heo <tj@kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, jiangshanlai@gmail.com
+Subject: Re: synchronize_rcu_expedited gets stuck in hotplug path
+Message-ID: <20220125202138.GS4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com>
+ <20220118200646.GJ947480@paulmck-ThinkPad-P17-Gen-1>
+ <Yece9mH3nzwGxar6@slm.duckdns.org>
+ <20220118214155.GK947480@paulmck-ThinkPad-P17-Gen-1>
+ <4f2ada96-234f-31d8-664a-c84f5b461385@quicinc.com>
+ <20220124164452.GG4285@paulmck-ThinkPad-P17-Gen-1>
+ <05cdeb95-1e16-c1c1-30df-135a4d4ebfcc@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05cdeb95-1e16-c1c1-30df-135a4d4ebfcc@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace 'depends on FB_TFT' by 'if FB_TFT ... endif'
-for the sake of deduplication.
+On Mon, Jan 24, 2022 at 10:28:28PM +0530, Mukesh Ojha wrote:
+> 
+> On 1/24/2022 10:14 PM, Paul E. McKenney wrote:
+> > On Mon, Jan 24, 2022 at 07:32:01PM +0530, Mukesh Ojha wrote:
+> > > On 1/19/2022 3:11 AM, Paul E. McKenney wrote:
+> > > > On Tue, Jan 18, 2022 at 10:11:34AM -1000, Tejun Heo wrote:
+> > > > > Hello,
+> > > > > 
+> > > > > On Tue, Jan 18, 2022 at 12:06:46PM -0800, Paul E. McKenney wrote:
+> > > > > > Interesting.  Adding Tejun and Lai on CC for their perspective.
+> > > > > > 
+> > > > > > As you say, the incoming CPU invoked synchronize_rcu_expedited() which
+> > > > > > in turn invoked queue_work().  By default, workqueues will of course
+> > > > > > queue that work on the current CPU.  But in this case, the CPU's bit
+> > > > > > is not yet set in the cpu_active_mask.  Thus, a workqueue scheduled on
+> > > > > > the incoming CPU won't be invoked until CPUHP_AP_ACTIVE, which won't
+> > > > > > be reached until after the grace period ends, which cannot happen until
+> > > > > > the workqueue handler is invoked.
+> > > > > > 
+> > > > > > I could imagine doing something as shown in the (untested) patch below,
+> > > > > > but first does this help?
+> > > > > > 
+> > > > > > If it does help, would this sort of check be appropriate here or
+> > > > > > should it instead go into workqueues?
+> > > > > Maybe it can be solved by rearranging the hotplug sequence but it's fragile
+> > > > > to schedule per-cpu work items from hotplug paths. Maybe the whole issue can
+> > > > > be side-stepped by making synchronize_rcu_expedited() use unbound workqueue
+> > > > > instead? Does it require to be per-cpu?
+> > > > Good point!
+> > > > 
+> > > > And now that you mention it, RCU expedited grace periods already avoid
+> > > > using workqueues during early boot.  The (again untested) patch below
+> > > > extends that approach to incoming CPUs.
+> > > > 
+> > > > Thoughts?
+> > > Hi Paul,
+> > > 
+> > > We are not seeing the issue after this patch.
+> > > Can we merge this patch ?
+> > It is currently in -rcu and should also be in -next shortly.  Left to
+> > myself, and assuming further testing and reviews all go well, I would
+> > submit it during the upcoming v5.18 merge window.
+> > 
+> > Does that work for you?  Or do you need it in mainline sooner?
+> 
+> Before reporting this issue, we saw only one instance of it.
+> Also got this fix tested with same set of test cases, did not observe any
+> issue as of yet.
+> 
+> I would be happy to get a mail once it clear all the testing and get merges
+> to -next. I would cherry-pick it in android branch-5.10.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/video/fbtft/Kconfig | 33 ++++-----------------------------
- 1 file changed, 4 insertions(+), 29 deletions(-)
+It is in -next as of next-20220125.
 
-diff --git a/drivers/video/fbtft/Kconfig b/drivers/video/fbtft/Kconfig
-index 4d29e8c1014e..14ea3c6a60da 100644
---- a/drivers/video/fbtft/Kconfig
-+++ b/drivers/video/fbtft/Kconfig
-@@ -10,87 +10,75 @@ menuconfig FB_TFT
- 	select FB_DEFERRED_IO
- 	select FB_BACKLIGHT
- 
-+if FB_TFT
-+
- config FB_TFT_AGM1264K_FL
- 	tristate "FB driver for the AGM1264K-FL LCD display"
--	depends on FB_TFT
- 	help
- 	  Framebuffer support for the AGM1264K-FL LCD display (two Samsung KS0108 compatible chips)
- 
- config FB_TFT_BD663474
- 	tristate "FB driver for the BD663474 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for BD663474
- 
- config FB_TFT_HX8340BN
- 	tristate "FB driver for the HX8340BN LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for HX8340BN
- 
- config FB_TFT_HX8347D
- 	tristate "FB driver for the HX8347D LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for HX8347D
- 
- config FB_TFT_HX8353D
- 	tristate "FB driver for the HX8353D LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for HX8353D
- 
- config FB_TFT_HX8357D
- 	tristate "FB driver for the HX8357D LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for HX8357D
- 
- config FB_TFT_ILI9163
- 	tristate "FB driver for the ILI9163 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for ILI9163
- 
- config FB_TFT_ILI9320
- 	tristate "FB driver for the ILI9320 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for ILI9320
- 
- config FB_TFT_ILI9325
- 	tristate "FB driver for the ILI9325 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for ILI9325
- 
- config FB_TFT_ILI9340
- 	tristate "FB driver for the ILI9340 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for ILI9340
- 
- config FB_TFT_ILI9341
- 	tristate "FB driver for the ILI9341 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for ILI9341
- 
- config FB_TFT_ILI9481
- 	tristate "FB driver for the ILI9481 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for ILI9481
- 
- config FB_TFT_ILI9486
- 	tristate "FB driver for the ILI9486 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for ILI9486
- 
- config FB_TFT_PCD8544
- 	tristate "FB driver for the PCD8544 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for PCD8544
- 
-@@ -108,62 +96,52 @@ config FB_TFT_S6D02A1
- 
- config FB_TFT_S6D1121
- 	tristate "FB driver for the S6D1211 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for S6D1121
- 
- config FB_TFT_SEPS525
- 	tristate "FB driver for the SEPS525 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for SEPS525
- 	  Say Y if you have such a display that utilizes this controller.
- 
- config FB_TFT_SH1106
- 	tristate "FB driver for the SH1106 OLED Controller"
--	depends on FB_TFT
- 	help
- 	  Framebuffer support for SH1106
- 
- config FB_TFT_SSD1289
- 	tristate "FB driver for the SSD1289 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Framebuffer support for SSD1289
- 
- config FB_TFT_SSD1305
- 	tristate "FB driver for the SSD1305 OLED Controller"
--	depends on FB_TFT
- 	help
- 	  Framebuffer support for SSD1305
- 
- config FB_TFT_SSD1306
- 	tristate "FB driver for the SSD1306 OLED Controller"
--	depends on FB_TFT
- 	help
- 	  Framebuffer support for SSD1306
- 
- config FB_TFT_SSD1331
- 	tristate "FB driver for the SSD1331 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Framebuffer support for SSD1331
- 
- config FB_TFT_SSD1351
- 	tristate "FB driver for the SSD1351 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Framebuffer support for SSD1351
- 
- config FB_TFT_ST7735R
- 	tristate "FB driver for the ST7735R LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for ST7735R
- 
- config FB_TFT_ST7789V
- 	tristate "FB driver for the ST7789V LCD Controller"
--	depends on FB_TFT
- 	help
- 	  This enables generic framebuffer support for the Sitronix ST7789V
- 	  display controller. The controller is intended for small color
-@@ -173,30 +151,27 @@ config FB_TFT_ST7789V
- 
- config FB_TFT_TINYLCD
- 	tristate "FB driver for tinylcd.com display"
--	depends on FB_TFT
- 	help
- 	  Custom Framebuffer support for tinylcd.com display
- 
- config FB_TFT_TLS8204
- 	tristate "FB driver for the TLS8204 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for TLS8204
- 
- config FB_TFT_UC1611
- 	tristate "FB driver for the UC1611 LCD controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for UC1611
- 
- config FB_TFT_UC1701
- 	tristate "FB driver for the UC1701 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for UC1701
- 
- config FB_TFT_UPD161704
- 	tristate "FB driver for the uPD161704 LCD Controller"
--	depends on FB_TFT
- 	help
- 	  Generic Framebuffer support for uPD161704
-+
-+endif
--- 
-2.34.1
+							Thanx, Paul
 
+> -Mukesh
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > > -Mukesh
+> > > 
+> > > > 							Thanx, Paul
+> > > > 
+> > > > ------------------------------------------------------------------------
+> > > > 
+> > > > diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> > > > index 60197ea24ceb9..1a45667402260 100644
+> > > > --- a/kernel/rcu/tree_exp.h
+> > > > +++ b/kernel/rcu/tree_exp.h
+> > > > @@ -816,7 +816,7 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
+> > > >     */
+> > > >    void synchronize_rcu_expedited(void)
+> > > >    {
+> > > > -	bool boottime = (rcu_scheduler_active == RCU_SCHEDULER_INIT);
+> > > > +	bool no_wq;
+> > > >    	struct rcu_exp_work rew;
+> > > >    	struct rcu_node *rnp;
+> > > >    	unsigned long s;
+> > > > @@ -841,9 +841,15 @@ void synchronize_rcu_expedited(void)
+> > > >    	if (exp_funnel_lock(s))
+> > > >    		return;  /* Someone else did our work for us. */
+> > > > +	/* Don't use workqueue during boot or from an incoming CPU. */
+> > > > +	preempt_disable();
+> > > > +	no_wq = rcu_scheduler_active == RCU_SCHEDULER_INIT ||
+> > > > +		!cpumask_test_cpu(smp_processor_id(), cpu_active_mask);
+> > > > +	preempt_enable();
+> > > > +
+> > > >    	/* Ensure that load happens before action based on it. */
+> > > > -	if (unlikely(boottime)) {
+> > > > -		/* Direct call during scheduler init and early_initcalls(). */
+> > > > +	if (unlikely(no_wq)) {
+> > > > +		/* Direct call for scheduler init, early_initcall()s, and incoming CPUs. */
+> > > >    		rcu_exp_sel_wait_wake(s);
+> > > >    	} else {
+> > > >    		/* Marshall arguments & schedule the expedited grace period. */
+> > > > @@ -861,7 +867,7 @@ void synchronize_rcu_expedited(void)
+> > > >    	/* Let the next expedited grace period start. */
+> > > >    	mutex_unlock(&rcu_state.exp_mutex);
+> > > > -	if (likely(!boottime))
+> > > > +	if (likely(!no_wq))
+> > > >    		destroy_work_on_stack(&rew.rew_work);
+> > > >    }
+> > > >    EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);

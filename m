@@ -2,100 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEB249B6FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F87A49B70F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580300AbiAYOxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:53:46 -0500
-Received: from gproxy4-pub.mail.unifiedlayer.com ([69.89.23.142]:35041 "EHLO
-        gproxy4-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1580410AbiAYOtV (ORCPT
+        id S1345964AbiAYO75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1580814AbiAYOwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:49:21 -0500
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 444CD10048474
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:49:11 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id CN8AnHAhbnAlUCN8An9JQZ; Tue, 25 Jan 2022 14:49:11 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=QIOt+iHL c=1 sm=1 tr=0 ts=61f00de7
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=DghFqjY3_ZEA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aQAIBmicJCSxrmNyH3iv9LFB+3idbl+44IkGVHzPsZQ=; b=Jx4qh/VKtn/MFl0Ep7ecOLLtGJ
-        cyPjOsoxdZL4ygKDRuJ3Afqak+u+Qp/IsQ7s7uz3Apw+KkURTn4sxBftgwwcR4SoOuOmCTeD6kk3t
-        p0gWR1TqOcyeJQEfmauEEFLj8;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51644 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nCN8A-000lzi-Ew; Tue, 25 Jan 2022 07:49:10 -0700
-Message-ID: <0ea51623-2455-4860-cca7-7e9765e3ae6f@w6rz.net>
-Date:   Tue, 25 Jan 2022 06:49:09 -0800
+        Tue, 25 Jan 2022 09:52:35 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33793C061401;
+        Tue, 25 Jan 2022 06:52:34 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id u18so49343789edt.6;
+        Tue, 25 Jan 2022 06:52:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+kGacvdzzCD6QPq8PV1iVn7D6O+2KzgMqS70OsbrFYQ=;
+        b=Yu7pLJMLfgzlzf9ovzBXVxyYr/qzb+CvjSdDzhO42TEjdsuuJoEasVu17KFNUY+Z9/
+         ++83IAn3Gao+GtQQN8+4YjMbC8gHgSr+M2HQNZRokWwrDutGSEh4vfszqzqaJ2y8X6oP
+         Zq949DML/m7S2eqeiNtThdqEGFw/iGA7sJmS3TKcmoW2CjbdDQdWtlYJwU9qImp8AGJ4
+         l1znaDsNSoXNwUSJjpe4HEFc4mVRWvdN0oyw6dGovLYyreYf6RaCftxe//j75hNQ1kID
+         ksjyQHrUznDS2YOR9jU4eSl7kMsDe1FF5NfAnSE3iIz7XdzNiZzCgusNI+z/IUu4snlb
+         zbsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+kGacvdzzCD6QPq8PV1iVn7D6O+2KzgMqS70OsbrFYQ=;
+        b=JlRrrmRO9T+8uBv8AuyBpJeUtvlJnb5GInzmP45GTt+DMOfLC3hBbmsV/Pn0ynb9xB
+         M+OKX4Qbs8Iq3xkyYBMzQFg80yH4WhbxNQ8QqjEKbBovvydcltMOxColtK4IBqc+8dvP
+         5xHnmClrm7OnSmhh2lUKrOP8EgnkMnCrfcJ7Fc5IF0pp8DSMPuB9J5pvUzU4sFKMl8rQ
+         aiZVpu8+BRwmioqRam/E1ZY3YATkYY2KRZM2hgMDqph3YTYp4mYVXQ/SlB7UocMofZma
+         uZpmBvsrEyXrNkiN07mqvRqoBBauVrT06Vh8ym2d+gkTzk7zuT28uocSvLLpDZa5KVMh
+         4+jg==
+X-Gm-Message-State: AOAM530kw4357Axx+FzqDvekrKA9ZpAPQmxwsIEHQrua9xFUeWeRJxOo
+        uVO3xdHtFtwhCczfK9oZLYzZ0Dcq3Y3S2fm4IhU=
+X-Google-Smtp-Source: ABdhPJxNcdIZR214oE7LafSn66ibQhAT6BqnKIutmDO1RoylpDHkgokt7k3YXTz+7+x0/44BmJdUjIZVfU11PrtXqPg=
+X-Received: by 2002:a05:6402:35d5:: with SMTP id z21mr13592745edc.29.1643122352627;
+ Tue, 25 Jan 2022 06:52:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.16 0000/1039] 5.16.3-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-References: <20220124184125.121143506@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nCN8A-000lzi-Ew
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:51644
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+References: <20220125085837.10357-1-josright123@gmail.com> <20220125085837.10357-3-josright123@gmail.com>
+In-Reply-To: <20220125085837.10357-3-josright123@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 25 Jan 2022 16:50:53 +0200
+Message-ID: <CAHp75VfrP7ZkeYGu_7XL98veJNDNmjnkL_cieS+53WNOM7KVHQ@mail.gmail.com>
+Subject: Re: [PATCH v13, 2/2] net: Add dm9051 driver
+To:     Joseph CHAMG <josright123@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Leon Romanovsky <leon@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22 10:29, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.3 release.
-> There are 1039 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Jan 25, 2022 at 10:59 AM Joseph CHAMG <josright123@gmail.com> wrote:
 >
-> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> Add davicom dm9051 spi ethernet driver. The driver work for the
+> device platform with spi master
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+This is better, but please use a grammar period as well.
 
-Tested-by: Ron Economos <re@w6rz.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: andy Shevchenko <andy.shevchenko@gmail.com>
 
+Andy
+
+And you may utilize --cc parameter to git send-email or move this Cc
+block behind the cutter '--- ' line.
+
+...
+
+> +#include <linux/etherdevice.h>
+> +#include <linux/ethtool.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/mii.h>
+> +#include <linux/module.h>
+> +#include <linux/netdevice.h>
+> +#include <linux/phy.h>
+> +#include <linux/regmap.h>
+> +#include <linux/skbuff.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/spi/spi.h>
+
+types.h is missing
+
+...
+
+> +/**
+> + * struct rx_ctl_mach - rx activities record
+
+> + *
+
+In all similar cases remove this blank line.
+
+> + * @status_err_counter: rx status error counter
+> + * @large_err_counter: rx get large packet length error counter
+> + * @fifo_rst_counter: reset operation counter
+> + *
+> + * To keep track for the driver operation statistics
+> + */
+
+...
+
+> +/**
+> + * struct dm9051_rxhdr - rx packet data header
+> + *
+> + * @rxpktready: lead byte is 0x01 tell a valid packet
+> + * @rxstatus: status bits for the received packet
+> + * @rxlen: packet length
+> + *
+
+> + * The rx packet enter into the fifo memory is start with these four
+
+The Rx packed, entered into the FIFO memory, starts with
+
+> + * bytes which is the rx header, follow this header is the ethernet
+
+Rx header, followed by the ethernet
+
+> + * packet data and end with a appended 4-byte CRC data.
+
+ends
+an appended
+
+
+> + * Both rx packet and CRC data are for check purpose and finally are
+> + * dropped by this driver
+> + */
+
+...
+
+> + * @kw_rxctrl: kernel thread worke structure for rx control
+
+worker?
+
+...
+
+> +       int ret = regmap_read_poll_timeout(db->regmap_dm, DM9051_NSR, mval,
+> +                                          mval & (NSR_TX2END | NSR_TX1END), 1, 20);
+> +
+> +       if (ret)
+
+Please, split the assignment and get it closer to its user, so
+
+  int ret;
+
+  ret = ...
+  if (ret)
+
+This applies to all similar cases.
+
+Actually all comments are against the entire code even if it's given
+only for one occurrence of the similar code block.
+
+> +               netdev_err(db->ndev, "timeout in checking for tx ends\n");
+> +       return ret;
+> +}
+
+...
+
+> +       ret = regmap_bulk_read(db->regmap_dmbulk, DM9051_EPDRL, to, 2);
+> +       if (ret < 0)
+> +               return ret;
+> +       return ret;
+
+  return regmap_...(...);
+
+Same for other similar places.
+
+...
+
+> +       /* this is a 2 bytes data written via regmap_bulk_write
+> +        */
+
+Useless comments.
+
+...
+
+> +static int dm9051_mdiobus_read(struct mii_bus *mdiobus, int phy_id, int reg)
+> +{
+> +       struct board_info *db = mdiobus->priv;
+
+> +       unsigned int val = 0;
+
+You can  do
+
+  val = 0xffff;
+
+here...
+
+> +       int ret;
+> +
+> +       if (phy_id == DM9051_PHY_ID) {
+> +               ret = ctrl_dm9051_phyread(db, reg, &val);
+> +               if (ret)
+> +                       return ret;
+
+> +               return val;
+> +       }
+> +       return 0xffff;
+
+...and
+
+  }
+  return val;
+
+here.
+
+> +}
+
+
+> +       while (count--) {
+
+If the count is guaranteed to be greater than 0, it would be better to use
+
+  do {
+    ...
+  } while (--count);
+
+> +               ret = regmap_read(db->regmap_dm, reg, &rb);
+> +               if (ret) {
+> +                       netif_err(db, drv, ndev, "%s: error %d dumping read reg %02x\n",
+> +                                 __func__, ret, reg);
+> +                       break;
+> +               }
+> +       }
+> +       return ret;
+> +}
+
+...
+
+> +#ifndef _DM9051_H_
+> +#define _DM9051_H_
+> +
+> +#include <linux/bitfield.h>
+
+There is no user of this header, but missing bits.h and one that
+provides netdev_priv().
+
+...
+
+> +#define DRVNAME_9051           "dm9051"
+
+Why is this in the header?
+
+
+--
+With Best Regards,
+Andy Shevchenko

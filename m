@@ -2,98 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFA849B229
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 349EB49B230
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355489AbiAYKke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:40:34 -0500
-Received: from mail-ed1-f45.google.com ([209.85.208.45]:45010 "EHLO
-        mail-ed1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358978AbiAYKiJ (ORCPT
+        id S1355827AbiAYKqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:46:04 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44728 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359709AbiAYKnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:38:09 -0500
-Received: by mail-ed1-f45.google.com with SMTP id u24so15885674eds.11;
-        Tue, 25 Jan 2022 02:38:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=FnyumMuINSTl10b4Z1f77CLpKT4vvjCzwh3tAHHSoQs=;
-        b=LHb1lUmkmFukBRLZLG55kHFJYkFpiiMl6Qm9cGVq5/DiaCbmFVUcVu+Qz2pmZ+W/2r
-         Yd5YJSI46gE9HvD1W9pQOr0NV5c5YjyV++wZM00lcRmm6IeKjxZ7pl2KvL5z6mQR2uke
-         si+NzFWWeXY84P1oVHzeHjPrJ3/2i2CM0JHMXUi7R3INRxyjxI6RgMmvuRKeQ3iQ5PS4
-         EOtRX9Iw84A9NWhfKKUzY6eMdqlLH/x9ZPFKzcuXw6GfBw9ur2nsWB1/okGDiXJ64kwf
-         kUcAgRp8KFrMbAsOyohNJ7FVknVgPlxrP9dmD4xCvx5pMyonLHs42mdHPs3YFj/EZ5BZ
-         DI8w==
-X-Gm-Message-State: AOAM530TyXOtYrKdoWTqi4yCy+XfwdczgoF4zceRyC74sayjNgaLGGQ1
-        EJbiMVtNmQybEPpIpeehVHA=
-X-Google-Smtp-Source: ABdhPJzcd86llx4XOWtpgGa1Ng7tiuLZoGKKB7qTySUUk++C9x0aCvnCJ78BWfFojtkGWywurGWJTQ==
-X-Received: by 2002:a50:9e6c:: with SMTP id z99mr19963324ede.71.1643107087231;
-        Tue, 25 Jan 2022 02:38:07 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id gu2sm5944053ejb.221.2022.01.25.02.38.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 02:38:06 -0800 (PST)
-Message-ID: <b6392347-c347-137a-d97e-f621b3a7e099@kernel.org>
-Date:   Tue, 25 Jan 2022 11:38:05 +0100
+        Tue, 25 Jan 2022 05:43:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDCF161679;
+        Tue, 25 Jan 2022 10:43:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADEBC340E0;
+        Tue, 25 Jan 2022 10:43:11 +0000 (UTC)
+Message-ID: <c3202b1f-ff8f-8108-e8a3-8710c8c74d10@xs4all.nl>
+Date:   Tue, 25 Jan 2022 11:43:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] tty: serial: Use fifo in 8250 console driver
+Subject: Re: [PATCH v4 0/2] Fix incorrect resolution detected
 Content-Language: en-US
-To:     Wander Costa <wcosta@redhat.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20211029201402.428284-1-wander@redhat.com>
- <a1ac6254-f79e-d131-fa2a-c7ad714c6d4a@nvidia.com>
- <f451e67d-adb9-01e8-bd11-bf7804863b4b@kernel.org>
- <8e57400f-d6a8-bd42-6214-fca1fe37a972@kernel.org>
- <CAAq0SUm-NQ6kwxhSJsOwHaBsi7dagAy8Pj4vOHOd6wy33Nqp2g@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAAq0SUm-NQ6kwxhSJsOwHaBsi7dagAy8Pj4vOHOd6wy33Nqp2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jammy Huang <jammy_huang@aspeedtech.com>, eajames@linux.ibm.com,
+        mchehab@kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        linux-media@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20220118100729.7651-1-jammy_huang@aspeedtech.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220118100729.7651-1-jammy_huang@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25. 01. 22, 11:18, Wander Costa wrote:
->> In particular, the test is checking whether there is no interrupt
->> pending (UART_FCR_ENABLE_FIFO == UART_IIR_NO_INT). So it oscillates
->> between use_fifo and not, depending on the interrupt state of the chip.
->>
->> Could you change it into something like this:
->> --- a/drivers/tty/serial/8250/8250_port.c
->> +++ b/drivers/tty/serial/8250/8250_port.c
->> @@ -3396,7 +3396,7 @@ void serial8250_console_write(struct
->> uart_8250_port *up, const char *s,
->>
->>           use_fifo = (up->capabilities & UART_CAP_FIFO) &&
->>                   port->fifosize > 1 &&
->> -               (serial_port_in(port, UART_FCR) & UART_FCR_ENABLE_FIFO) &&
->> +               (up->fcr & UART_FCR_ENABLE_FIFO) &&
->>                   /*
->>                    * After we put a data in the fifo, the controller will
->> send
->>                    * it regardless of the CTS state. Therefore, only use fifo
->>
+Hi Jammy,
+
+On 18/01/2022 11:07, Jammy Huang wrote:
+> This series fixes incorrect resolution detected.
+> We found this problem happened occasionally in the switch between bios
+> and bootloader.
+
+Can you rebase this on top of:
+
+https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=for-v5.18f
+
+This series doesn't apply cleanly.
+
+Regards,
+
+	Hans
+
 > 
-> Indeed I made a mistake here. Independent of the reported this, this
-> should be fixed.
-> Jiri, do you intend to send an official patch or should I do so?
+> Changes in v4:
+>  - Correct the subject of patch
+> 
+> Changes in v3:
+>  - In v2, we tried to increase the min-required-count of stable signal
+>    to avoid incorrect transient state in timing detection. But it is
+>    not working for all conditions.
+>    Thus, we go another way in v3. Use regs, which can represent the
+>    signal status, to decide if we needs to do detection again.
+>  
+> Changes in v2:
+>  - Separate the patch into two patches
+> 
+> Jammy Huang (2):
+>   media: aspeed: Add macro for the fields of the mode-detect registers
+>   media: aspeed: Fix unstable timing detection
+> 
+>  drivers/media/platform/aspeed-video.c | 25 ++++++++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
+> 
 
-Please you send the fix after testing the fifo mode still works with 
-that fix.
-
-thanks,
--- 
-js

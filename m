@@ -2,338 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF70649ACC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E200C49AC26
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384256AbiAYGyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 01:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376539AbiAYGuc (ORCPT
+        id S240796AbiAYGHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 01:07:11 -0500
+Received: from esa13.fujitsucc.c3s2.iphmx.com ([68.232.156.96]:33740 "EHLO
+        esa13.fujitsucc.c3s2.iphmx.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S256342AbiAYFVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 01:50:32 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA27DC07851F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 21:19:50 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id h14so1254807plf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 21:19:50 -0800 (PST)
+        Tue, 25 Jan 2022 00:21:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1643088112; x=1674624112;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version;
+  bh=1o7U0Y7Tu/hYHXorXJTFtRUqN/CPO689S4FzgDCzff0=;
+  b=K7DTiAX/bu/NYORCYOcFZM9paLcTOUBeaGrnv6Ein3/P7SgSeH1uCrlV
+   wKbgQqOLNkax0rgRkdtS9q7354vYxdZ0mQvqfQtBcIpKuuq1aW+tZDREs
+   /QlRBdHMCEK1aZflC+SN7mPfUFSYITMaoTEQiNEtcU21ShWufwahJyV67
+   FF+WSrLaiy7AJVteq4tEtjw4clyw1xelEyFEk7LVzN6jKbRPopw3PmjAY
+   gvubpe4JgxqXXuaeTQzWgx+D8RyJZyelV1Xkp1BkEEY7z9fAPx4BQfRb/
+   IaN5hfjEi4+6oWKjUq15NGMybsQYL9mOAhpkfdo1j1uyDdDcygly8j58p
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="48121015"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635174000"; 
+   d="scan'208";a="48121015"
+Received: from mail-tycjpn01lp2174.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.174])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 14:21:31 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ho3JRiHdmOVAwExaazErgWvozEOgoU3u2InTGnT4WKTyaC3MoAeljamrjQ5rBOWhHP7XMGzFs8OuXUz7odPWFnkc1K6rVIZvp+qsdLAIDZveQoeGd6A86HWbsalq5+W4yfmUZgxzPD4DGsvaiI2RGYrfuF7xgWX03286VUZ0fOEQEbNoClix1XTF/rnBJD25Aaqci900CE0CMOzJd7rEOMzaLTovQjRgNluvhPAIt/mWrRmEI5J1dpUeYjszqMKSaEGFCOaOCSNhMibGcIg27eTuQD3N7rLKThuMDaTytXjHLE3S5kjlwSj0wZa/zW7cWhXYE+0srn2xDHG5lgaLtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YLbUUX+G2I2T8FR2U9/mpXMVEpaOGwcSXgoq9+e8bAk=;
+ b=oMdcgK1h+CIgyTRYuB/0F16i40xsMOaxiVxAjkOzCf1kXqOH6C4QGqGLsR2Uouhhybe3ulePbkFlwq6bPJ5cUuOJ94diCgm1TvXbC7FhEnnf8Cm47R4qOwmL7iWmG+s8d9dM7URlgy9FDfNSQjeVTuV2qXxFHUJtizwurKln2ThMSZU9u+xxERR7gPAZd6SbtIJJsQSAmTGLDGq3Zq42zerYLA2+SkDXWkaabdufCSbX/lQREb2EuL09mRVKuSI6xHrdyeswG76N7sVTQWR5KQlNdLn0ML2sLCAm3eNWE+PmmNfGKog1tXnfKWYjGZEGNiHf5jPtjNmicPfndMGjgg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9g6KBkre2BFoosp7D2Ahbfqd085BZ7a6ZvmcPUHUFa0=;
-        b=5GljMn+wAkmQhaUszwM0ant7VEZH1Q6PgU1nIC9zsQ246sJ9yXQqWI5OjYiJBbuZka
-         hXemwJuorh0PN3nd3an99MII6zerTGj2eS0a1+1v7ZO3wZUpikqSMm+1+y+O1deLw3hQ
-         oIvQYfQhyqt06dVl8zJKl7VMNg0Qe4dZOWXm3LfDuu0lEYO0fkP2oQSIpKu2fuPuQaft
-         9NpOIkkhG8MhNVggokHcZKCxMLwQ98Rs5MVvAyMWtkuZSXzm3ChaI5HKZQYHVmW4SncL
-         Qp601fy9A9Zg0/pinuCgzApGQe7XhYjAfjPqXB/C8ZojzbCM8q/1NPxD7NBIT47OZm00
-         8Hog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9g6KBkre2BFoosp7D2Ahbfqd085BZ7a6ZvmcPUHUFa0=;
-        b=n+xTkHh824owcnrqpJfziRbzJaj7eRz1cyEh/tOOBxHmod/ktel2M9csuAihAYMhM6
-         LW5cGLGXmUoejqJ4vl4ZALAcjsPZLzE75R3g5UsfuTBk1IjueGI+GUCYIni8Xgu0qWaA
-         puN7VX5hW+nW/pCHiHxUFlkmBrveCr44HZMZ7lm2vdu5VyeyB3Xzxu5vnzQmYOWo9Fpp
-         RAurihbgAM77dA0rt8ZVeBc+PZ5WhjMucBhRgEeZZJc4qCqTfkFEMkiT7x7zNimhf9Wk
-         139+OAZ5Cl2L3uW07MoU0xL4+LcI56aPkt7CXLQqXBqDQSlUw6xobkAzWWDDp/N/yegu
-         1c+Q==
-X-Gm-Message-State: AOAM532gfLVp2H+DDvvO6ovXLCr4j6G3v/+18hKAeGqS8syZKUhphLWA
-        exbM4MjXvW3gnJL/j1MGkL92pg==
-X-Google-Smtp-Source: ABdhPJx3tJwGX0zcVGZdtSwy24wcOQUhybth6WJAMbYUBfqr5MH3qFb04LHdgWgH3blgvWE89QBDxA==
-X-Received: by 2002:a17:902:9884:b0:14a:c885:720a with SMTP id s4-20020a170902988400b0014ac885720amr17439833plp.68.1643087990313;
-        Mon, 24 Jan 2022 21:19:50 -0800 (PST)
-Received: from [10.16.129.73] (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id g5sm966103pjj.36.2022.01.24.21.19.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 21:19:49 -0800 (PST)
-Message-ID: <c4455e8e-1e9e-76ed-8e31-34da6efc7ee6@igel.co.jp>
-Date:   Tue, 25 Jan 2022 14:19:40 +0900
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YLbUUX+G2I2T8FR2U9/mpXMVEpaOGwcSXgoq9+e8bAk=;
+ b=Lx9BPBVbL1xUabORlRD+fNGHMoALa+PTvYBGvSdECTYsL4NwMVOG5SanIR1ynrO1Cg8FaaZEBE8LrI94rZimdIeMZnHzomOFyVFz/gZva8nf4jv+X0CpxiXElzNwT9Ges5Es4rCV77jmVmyE4D/fK1WN3s2/ypvQRxo0g0dB4s0=
+Received: from TY2PR01MB5257.jpnprd01.prod.outlook.com (2603:1096:404:11a::10)
+ by OSBPR01MB1575.jpnprd01.prod.outlook.com (2603:1096:603:7::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17; Tue, 25 Jan
+ 2022 05:21:28 +0000
+Received: from TY2PR01MB5257.jpnprd01.prod.outlook.com
+ ([fe80::30bc:c0c1:4bbd:a207]) by TY2PR01MB5257.jpnprd01.prod.outlook.com
+ ([fe80::30bc:c0c1:4bbd:a207%4]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
+ 05:21:28 +0000
+From:   "nobuta.keiya@fujitsu.com" <nobuta.keiya@fujitsu.com>
+To:     "'madvenka@linux.microsoft.com'" <madvenka@linux.microsoft.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "sjitindarsingh@gmail.com" <sjitindarsingh@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v13 11/11] arm64: Select HAVE_RELIABLE_STACKTRACE
+Thread-Topic: [PATCH v13 11/11] arm64: Select HAVE_RELIABLE_STACKTRACE
+Thread-Index: AQHYC7J0j/1dz1/1vkuQ8Ct1CeQ76axzKz3Q
+Date:   Tue, 25 Jan 2022 05:21:27 +0000
+Message-ID: <TY2PR01MB5257518B8EB381E16D52B244855F9@TY2PR01MB5257.jpnprd01.prod.outlook.com>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-12-madvenka@linux.microsoft.com>
+In-Reply-To: <20220117145608.6781-12-madvenka@linux.microsoft.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=true;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2022-01-25T04:09:16Z;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED?;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ActionId=2b55f2dd-a276-44f3-9483-73332c382755;
+ MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e7304776-a53f-48f4-9c29-08d9dfc289ee
+x-ms-traffictypediagnostic: OSBPR01MB1575:EE_
+x-microsoft-antispam-prvs: <OSBPR01MB157572756FDB1428FD9F8F5D855F9@OSBPR01MB1575.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HKwOSmD9qJnKipwmEhYWpdQyw2mZYvcqutPVYZQRlmcqhr9nCeCliVwpfJBlJslS7UjPEvFrDf0aar+/C5OZhYA0h3mpGQz9NtnWWAz7O8LuXekO9EarvNs3qQyU44sLlNT9X6gX0wGxpSsnra+QYNfk/cfN9+5kQQzrlfOKN0Xt04WbM8Q67L2TOBSIYIaGP1CrxQq+01M76Rn7lNkz3a8PpQ/koG9lGyRF1BHTQj+K9fpMbF/mS59STOFrFPoKMKJFsyZf8unebyS6Ps9qysTHQRaEmgAKR3tdWbgvVy/THVqUj4XYaCAmuYLMlbqb5ouVdWBDftl2XlJLzkxj26RSB66+q4DEb5BLaOzCXxrzPQL0DXYcNsLF3lhWZMzm6ZkKZZKAHGzsv/onyY3V9CyCeyEZpkwHdS5zIbJtT1b+zFDzAKcpszAW3PYa9qgmYLYrcAvY3bOClUXsd+lTEcSwJpEhvtkqsMFtIeqAM+dXsP08GvWR6A0S/3QKherP/TPYX5F40+/iHw4AqOMRiS1MB7iHGqfUmDXTOg6zu1ltJxKZe4iSNuYmkGyh74RzWs8DzxMF8JYllta1HmYq8okp55gOOB7STfRz36ONbZ69QZcpivhDHruervvSLtpEaAF9Mmbi9BnWZCDWGypXv6YLXp6ypoE0fNii5X+kFt6IATyaNFm6zIo26/Ea97LByFmsl1Rm6QaFeaoLFHmE1beBzmjLNlAdmdSBmN5cbSNB1MNRwXcB9CjQIqkzzr9sCY3EreU7/VnTqjB1PROZo6k2Uqot7wXGM+hABMtYXTQP/i2UoUeLOemodDAx/Pu+wVKn7JmUl3UDf7SALJJ43A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB5257.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(122000001)(38100700002)(8936002)(8676002)(83380400001)(921005)(66476007)(7416002)(64756008)(110136005)(66446008)(66556008)(76116006)(85182001)(66946007)(316002)(82960400001)(9686003)(52536014)(71200400001)(186003)(5660300002)(26005)(2906002)(6506007)(7696005)(33656002)(38070700005)(55016003)(508600001)(966005)(491001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?YnlqYnUxRTFDbk9PdHFocXdFK0RjNVBoTnJXL0w4TlZWTG1BZkc2aldw?=
+ =?iso-2022-jp?B?OXBRZFFoR3N6UGJIb2trN2dnczhzQjZ6R1ZISk9aWlJaZFFaSHV2bTlT?=
+ =?iso-2022-jp?B?NFNndGNWNW1DdUk4WEhMdnJWWVhrc0o0NS9POVNKOVg0NlI3MXorSUNN?=
+ =?iso-2022-jp?B?UTZieWVzNUxmNTZiL2FBNUNPZGExeW5oWDVoRWVmcUJaeVZqdTZEU0M3?=
+ =?iso-2022-jp?B?d21iOVdSaVNDbnN1RnN3bGpRZjdOYkVMN0t0R0FsdWVybjdML0VPZThE?=
+ =?iso-2022-jp?B?TE8zNUhUQ2dGUEo2YmxGL0tHTU94VzdWWTJwYnIvS21YSGdjaUpuRHV3?=
+ =?iso-2022-jp?B?Mk5tc044bDMyQ1RpM3p1eHA0dGoxamlRTXBDUlNiQTZEc3J5M0VlcFUz?=
+ =?iso-2022-jp?B?Zkt6cEp2akZhdDdNa1pDTzM4Um8xcDV3MXZVQnhxRWI4c2EzaHBKQ0dl?=
+ =?iso-2022-jp?B?Mk1QZTJLdmI3Ui9kVnU1SlRheXZncmRoQXlMN0VSamxNVmp6RmJkTis3?=
+ =?iso-2022-jp?B?a0hEcGZ2ajFFcHI1RjM4TlVydmwxYk9qbWdEL0J6WmpkNE1YeGRCb0FN?=
+ =?iso-2022-jp?B?ZHJTekltazN2TlpBL1JJcUFMYU0zK1lOTXBVWVhuL3ZIbkRGWGYydTVC?=
+ =?iso-2022-jp?B?UUlQYzFaakZubUdOaTEwMEFwRmRYUERGSnU4MytSSUFYNElEVlk2eTVQ?=
+ =?iso-2022-jp?B?UDcvdjVtRWZaOU1kWEV4TzNBMVBWMklJVnFiMHg3YVJteEUrQldKY09N?=
+ =?iso-2022-jp?B?TWZVQjI2b0Y3RW9KelZ6NlZ6TVoydmJSem1PeU5Ed3dPQ1JUVzBXN2hh?=
+ =?iso-2022-jp?B?clJYeTgvR1ArZERDblRBTW9oU0NrUDFNNThmaXhIZm1wNTV0RXJUUWh2?=
+ =?iso-2022-jp?B?Z0RhdHF5d2xud1hwRkRmMkVnRk9wWllnVUx1M2xYUDNydWpYbnpCNEJt?=
+ =?iso-2022-jp?B?Y1Z2anE5bWxYeWVuQmgvZlFyVDl2WkRQeFk1YWFnVDdSSDVsMEJlM2tL?=
+ =?iso-2022-jp?B?dmNLelB6Q3JFZWhUWU9QaS90NzAzTXpxZVdMZVBoc2hINm5aSE5KdDBs?=
+ =?iso-2022-jp?B?QTR4ZkViSWpXRlhFdkNDVFZVL1lMREVoaUNpeHRVZi9CUW82Z2FsZW9N?=
+ =?iso-2022-jp?B?YVhNSVI2NGZJM0Rud1FJZlNXT1J3b3hIb09DSkNoc0RrVmkwVHkrWDFT?=
+ =?iso-2022-jp?B?KzZDTjExMkRnRElmRkcybjNkS2NhNzFkS1Ficy9PSnhHKzdrM1JPSlJj?=
+ =?iso-2022-jp?B?QkF0dk9rWXVjNG8rZStwQUtWMWhmRG1FM0pyMHRLZUNjTjBNUWQvM2NB?=
+ =?iso-2022-jp?B?cXhMLzR0K2x2ajFhTnNjcUdDS1FSQTAxLy82MUFoVm0wSzNoUUw1bElG?=
+ =?iso-2022-jp?B?TnhlRnMwMVRaQ1lOWGVJemdaM3hOUEFEbjBLc25sTDE3eU90T3g5dFB5?=
+ =?iso-2022-jp?B?WWE5c2ZqdVc1ZC9NQUQwa05ORkJQbWVIOCtoNmNjNFcwWnI4K1VSWXZC?=
+ =?iso-2022-jp?B?VmZXeE5ISVp4bm9IdDJrL0pQdUFDN3NqRmlxVkpVMFRlcUxzUkxHV29o?=
+ =?iso-2022-jp?B?djBMajNZaUFwVVdvZHh0d2J0SE9VMUFJNWVUVW02Rk4vRjhPZ3MvaVZt?=
+ =?iso-2022-jp?B?K0lHck94bW5aaVkwRWFRSnYzWGlQY2N4MFpLZ1N3TmFnVkxTU1BIUUZY?=
+ =?iso-2022-jp?B?amZ4U0ZCVFNRRkcxdnA3d2FYRHRodW9TSmNxcUNKWFl3YUQ5Y1hlUWwv?=
+ =?iso-2022-jp?B?Q0NLYjgvREpXZ3kwUjZSZittNWhxOVZKdFVBSG44a0sxRlN4UkNGellB?=
+ =?iso-2022-jp?B?KzJLdlIzdi8vR0xLelF5aU93NTc4VGVDRGx3L2NwR3pocjZMR09aL20z?=
+ =?iso-2022-jp?B?T0FrWWFzNFVNRGJydmZpUWVZZW1DZXJLY2EvZjV2ZU1QbURNMzF6OVQv?=
+ =?iso-2022-jp?B?RTFrbHMwMXNFWkNwWGU4N3RVK3VKM3cyT2VoemtHc1BwTVFlZ1hMNm1M?=
+ =?iso-2022-jp?B?OU52RDAyTjc1Y0hzYXpjZ00xeW5EU2VnNGVENmVkSWdXVDR0K1hRd2dz?=
+ =?iso-2022-jp?B?T3lZYU1nNEZJWDZQOVE0bjRxVWFRUitsdCtZNEhCMjE4RG1PMC9rRE85?=
+ =?iso-2022-jp?B?RXFqYi9SbExILzJwZWFzS3dqUTd1NEZNamtWYk1USUx2S3A2TEhpUHdl?=
+ =?iso-2022-jp?B?ZzlEVitLOVRiQXh0VytZWlBxVGtvZTV4MDFnTzNrMGhUZ0hkOHlLYlM4?=
+ =?iso-2022-jp?B?SnQ3ZklBWUNreEwxNFdlL29UMzc0dFh6UzZWa3loUndsaStwWlhCcURQ?=
+ =?iso-2022-jp?B?YWRzdHl0VUg4RUVGQUs5ZzY2eU1kM3hKb0ZxY2Z2VUowV21lWERGelpy?=
+ =?iso-2022-jp?B?TVhrQVVBc0QzaW9DbWM4ajRFODdWUUppeGNWVmhtS0JIN1dPMDhYejBJ?=
+ =?iso-2022-jp?B?S0hOV0x3PT0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v3 1/3] drm: introduce fb_modifiers_not_supported flag
- in mode_config
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <mdaenzer@redhat.com>,
-        Simon Ser <contact@emersion.fr>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Mark Yacoub <markyacoub@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Evan Quan <evan.quan@amd.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, Daniel Stone <daniel@fooishbar.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>,
-        Takanari Hayama <taki@igel.co.jp>
-References: <20220114101753.24996-1-etom@igel.co.jp>
- <20220114101753.24996-2-etom@igel.co.jp>
- <Ye3b0x3QwlKBF7nl@pendragon.ideasonboard.com>
-From:   Esaki Tomohito <etom@igel.co.jp>
-In-Reply-To: <Ye3b0x3QwlKBF7nl@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB5257.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7304776-a53f-48f4-9c29-08d9dfc289ee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2022 05:21:27.9620
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZrrepEXuTKEpzCXCQSyIPPAP4DqMpdJKy4W34oaYM8el26QQITWoPez4u7+RJG/5razjCeQQ5zJM5kx2HOk01i6P2L5y5PPAKwNx9yq2Nr8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB1575
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Laurent-san
+Hi Madhavan,
 
-Thank you for your reviews and advices.
+> Select HAVE_RELIABLE_STACKTRACE in arm64/Kconfig to allow
+> arch_stack_walk_reliable() to be used.
+>=20
+> Note that this is conditional upon STACK_VALIDATION which will be added w=
+hen frame pointer validation is implemented (say
+> via objtool).
 
-I'll fix this patch series following your advice.
+I know that Julien Thierry published objtool support for arm64 [1], but I'm=
+ not
+sure if it has been updated. Could you tell me other threads if you know?
+
+[1] https://lore.kernel.org/linux-arm-kernel/20210303170932.1838634-1-jthie=
+rry@redhat.com/
+
 
 Thanks,
-Esaki
+Keiya
 
-On 2022/01/24 7:50, Laurent Pinchart wrote:
-> Hello Esaki-san,
-> 
-> On Fri, Jan 14, 2022 at 07:17:51PM +0900, Tomohito Esaki wrote:
->> If only linear modifier is advertised, since there are many drivers that
->> only linear supported, the DRM core should handle this rather than
->> open-coding in every driver. However, there are legacy drivers such as
->> radeon that do not support modifiers but infer the actual layout of the
->> underlying buffer. Therefore, a new flag fb_modifiers_not_supported is
->> introduced for these legacy drivers, and allow_fb_modifiers is replaced
->> with this new flag.
->>
->> Signed-off-by: Tomohito Esaki <etom@igel.co.jp>
->> ---
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_display.c       |  6 +++---
->>   drivers/gpu/drm/amd/amdgpu/dce_v10_0.c            |  2 ++
->>   drivers/gpu/drm/amd/amdgpu/dce_v11_0.c            |  2 ++
->>   drivers/gpu/drm/amd/amdgpu/dce_v6_0.c             |  1 +
->>   drivers/gpu/drm/amd/amdgpu/dce_v8_0.c             |  2 ++
->>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  3 +++
->>   drivers/gpu/drm/drm_framebuffer.c                 |  6 +++---
->>   drivers/gpu/drm/drm_ioctl.c                       |  2 +-
->>   drivers/gpu/drm/nouveau/nouveau_display.c         |  6 ++++--
->>   drivers/gpu/drm/radeon/radeon_display.c           |  2 ++
->>   include/drm/drm_mode_config.h                     | 10 ++++++++++
->>   11 files changed, 33 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
->> index 82011e75ed85..edbb30d47b8c 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_display.c
->> @@ -954,7 +954,7 @@ static int amdgpu_display_verify_sizes(struct amdgpu_framebuffer *rfb)
->>   	int ret;
->>   	unsigned int i, block_width, block_height, block_size_log2;
->>   
->> -	if (!rfb->base.dev->mode_config.allow_fb_modifiers)
->> +	if (rfb->base.dev->mode_config.fb_modifiers_not_supported)
->>   		return 0;
->>   
->>   	for (i = 0; i < format_info->num_planes; ++i) {
->> @@ -1141,7 +1141,7 @@ int amdgpu_display_framebuffer_init(struct drm_device *dev,
->>   	if (ret)
->>   		return ret;
->>   
->> -	if (!dev->mode_config.allow_fb_modifiers) {
->> +	if (dev->mode_config.fb_modifiers_not_supported) {
->>   		drm_WARN_ONCE(dev, adev->family >= AMDGPU_FAMILY_AI,
->>   			      "GFX9+ requires FB check based on format modifier\n");
->>   		ret = check_tiling_flags_gfx6(rfb);
->> @@ -1149,7 +1149,7 @@ int amdgpu_display_framebuffer_init(struct drm_device *dev,
->>   			return ret;
->>   	}
->>   
->> -	if (dev->mode_config.allow_fb_modifiers &&
->> +	if (!dev->mode_config.fb_modifiers_not_supported &&
->>   	    !(rfb->base.flags & DRM_MODE_FB_MODIFIERS)) {
->>   		ret = convert_tiling_flags_to_modifier(rfb);
->>   		if (ret) {
->> diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
->> index d1570a462a51..fb61c0814115 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/dce_v10_0.c
->> @@ -2798,6 +2798,8 @@ static int dce_v10_0_sw_init(void *handle)
->>   	adev_to_drm(adev)->mode_config.preferred_depth = 24;
->>   	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
->>   
->> +	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
->> +
->>   	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
->>   
->>   	r = amdgpu_display_modeset_create_props(adev);
->> diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
->> index 18a7b3bd633b..17942a11366d 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/dce_v11_0.c
->> @@ -2916,6 +2916,8 @@ static int dce_v11_0_sw_init(void *handle)
->>   	adev_to_drm(adev)->mode_config.preferred_depth = 24;
->>   	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
->>   
->> +	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
->> +
->>   	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
->>   
->>   	r = amdgpu_display_modeset_create_props(adev);
->> diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
->> index c7803dc2b2d5..2ec99ec8e1a3 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/dce_v6_0.c
->> @@ -2674,6 +2674,7 @@ static int dce_v6_0_sw_init(void *handle)
->>   	adev_to_drm(adev)->mode_config.max_height = 16384;
->>   	adev_to_drm(adev)->mode_config.preferred_depth = 24;
->>   	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
->> +	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
->>   	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
->>   
->>   	r = amdgpu_display_modeset_create_props(adev);
->> diff --git a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
->> index 8318ee8339f1..de11fbe5aba2 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/dce_v8_0.c
->> @@ -2695,6 +2695,8 @@ static int dce_v8_0_sw_init(void *handle)
->>   	adev_to_drm(adev)->mode_config.preferred_depth = 24;
->>   	adev_to_drm(adev)->mode_config.prefer_shadow = 1;
->>   
->> +	adev_to_drm(adev)->mode_config.fb_modifiers_not_supported = true;
->> +
->>   	adev_to_drm(adev)->mode_config.fb_base = adev->gmc.aper_base;
->>   
->>   	r = amdgpu_display_modeset_create_props(adev);
->> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
->> index 2f0b14f8f833..61cb41766fae 100644
->> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
->> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
->> @@ -7868,6 +7868,9 @@ static int amdgpu_dm_plane_init(struct amdgpu_display_manager *dm,
->>   	if (res)
->>   		return res;
->>   
->> +	if (modifiers == NULL)
->> +		adev_to_drm(dm->adev)->mode_config.fb_modifiers_not_supported = true;
->> +
->>   	res = drm_universal_plane_init(adev_to_drm(dm->adev), plane, possible_crtcs,
->>   				       &dm_plane_funcs, formats, num_formats,
->>   				       modifiers, plane->type, NULL);
->> diff --git a/drivers/gpu/drm/drm_framebuffer.c b/drivers/gpu/drm/drm_framebuffer.c
->> index 07f5abc875e9..4562a8b86579 100644
->> --- a/drivers/gpu/drm/drm_framebuffer.c
->> +++ b/drivers/gpu/drm/drm_framebuffer.c
->> @@ -309,7 +309,7 @@ drm_internal_framebuffer_create(struct drm_device *dev,
->>   	}
->>   
->>   	if (r->flags & DRM_MODE_FB_MODIFIERS &&
->> -	    !dev->mode_config.allow_fb_modifiers) {
->> +	    dev->mode_config.fb_modifiers_not_supported) {
->>   		DRM_DEBUG_KMS("driver does not support fb modifiers\n");
->>   		return ERR_PTR(-EINVAL);
->>   	}
->> @@ -594,7 +594,7 @@ int drm_mode_getfb2_ioctl(struct drm_device *dev,
->>   	r->pixel_format = fb->format->format;
->>   
->>   	r->flags = 0;
->> -	if (dev->mode_config.allow_fb_modifiers)
->> +	if (!dev->mode_config.fb_modifiers_not_supported)
->>   		r->flags |= DRM_MODE_FB_MODIFIERS;
->>   
->>   	for (i = 0; i < ARRAY_SIZE(r->handles); i++) {
->> @@ -607,7 +607,7 @@ int drm_mode_getfb2_ioctl(struct drm_device *dev,
->>   	for (i = 0; i < fb->format->num_planes; i++) {
->>   		r->pitches[i] = fb->pitches[i];
->>   		r->offsets[i] = fb->offsets[i];
->> -		if (dev->mode_config.allow_fb_modifiers)
->> +		if (!dev->mode_config.fb_modifiers_not_supported)
->>   			r->modifier[i] = fb->modifier;
->>   	}
->>   
->> diff --git a/drivers/gpu/drm/drm_ioctl.c b/drivers/gpu/drm/drm_ioctl.c
->> index 8b8744dcf691..51fcf1298023 100644
->> --- a/drivers/gpu/drm/drm_ioctl.c
->> +++ b/drivers/gpu/drm/drm_ioctl.c
->> @@ -297,7 +297,7 @@ static int drm_getcap(struct drm_device *dev, void *data, struct drm_file *file_
->>   			req->value = 64;
->>   		break;
->>   	case DRM_CAP_ADDFB2_MODIFIERS:
->> -		req->value = dev->mode_config.allow_fb_modifiers;
->> +		req->value = !dev->mode_config.fb_modifiers_not_supported;
->>   		break;
->>   	case DRM_CAP_CRTC_IN_VBLANK_EVENT:
->>   		req->value = 1;
->> diff --git a/drivers/gpu/drm/nouveau/nouveau_display.c b/drivers/gpu/drm/nouveau/nouveau_display.c
->> index 2b460835a438..2cd0932b3d68 100644
->> --- a/drivers/gpu/drm/nouveau/nouveau_display.c
->> +++ b/drivers/gpu/drm/nouveau/nouveau_display.c
->> @@ -708,10 +708,12 @@ nouveau_display_create(struct drm_device *dev)
->>   				     &disp->disp);
->>   		if (ret == 0) {
->>   			nouveau_display_create_properties(dev);
->> -			if (disp->disp.object.oclass < NV50_DISP)
->> +			if (disp->disp.object.oclass < NV50_DISP) {
->> +				dev->mode_config.fb_modifiers_not_supported = true;
->>   				ret = nv04_display_create(dev);
->> -			else
->> +			} else {
->>   				ret = nv50_display_create(dev);
->> +			}
->>   		}
->>   	} else {
->>   		ret = 0;
->> diff --git a/drivers/gpu/drm/radeon/radeon_display.c b/drivers/gpu/drm/radeon/radeon_display.c
->> index 573154268d43..b9a07677a71e 100644
->> --- a/drivers/gpu/drm/radeon/radeon_display.c
->> +++ b/drivers/gpu/drm/radeon/radeon_display.c
->> @@ -1596,6 +1596,8 @@ int radeon_modeset_init(struct radeon_device *rdev)
->>   	rdev->ddev->mode_config.preferred_depth = 24;
->>   	rdev->ddev->mode_config.prefer_shadow = 1;
->>   
->> +	rdev->ddev->mode_config.fb_modifiers_not_supported = true;
->> +
->>   	rdev->ddev->mode_config.fb_base = rdev->mc.aper_base;
->>   
->>   	ret = radeon_modeset_create_props(rdev);
->> diff --git a/include/drm/drm_mode_config.h b/include/drm/drm_mode_config.h
->> index 91ca575a78de..da82f45351c7 100644
->> --- a/include/drm/drm_mode_config.h
->> +++ b/include/drm/drm_mode_config.h
->> @@ -933,6 +933,16 @@ struct drm_mode_config {
->>   	 */
->>   	bool allow_fb_modifiers;
->>   
->> +	/**
->> +	 * @fb_modifiers_not_supported:
->> +	 *
->> +	 * This flag is for legacy drivers such as radeon that do not support
->> +	 * modifiers but infer the actual layout of the underlying buffer.
->> +	 * Generally, each drivers must support modifiers, this flag should not
->> +	 * be set.
-> 
-> I'd write it a bit differently, to explain what the flag does:
-> 
-> 	 * When this flag is set, the DRM device will not expose modifier
-> 	 * support to userspace. This is only used by legacy drivers (such as
-> 	 * radeon) that infer the buffer layout through heuristics without using
-> 	 * modifiers. New drivers shall not set fhis flag.
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
->> +	 */
->> +	bool fb_modifiers_not_supported;
->> +
->>   	/**
->>   	 * @normalize_zpos:
->>   	 *
-> 
+>=20
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> ---
+>  arch/arm64/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig index f6e333b59314..=
+bc7b3514b563 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -223,6 +223,7 @@ config ARM64
+>  	select THREAD_INFO_IN_TASK
+>  	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
+>  	select TRACE_IRQFLAGS_SUPPORT
+> +	select HAVE_RELIABLE_STACKTRACE if FRAME_POINTER && STACK_VALIDATION
+>  	help
+>  	  ARM 64-bit (AArch64) Linux support.
+>=20
+> --
+> 2.25.1
+

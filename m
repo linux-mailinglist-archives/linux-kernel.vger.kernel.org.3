@@ -2,94 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC5649B593
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB6F49B59E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386314AbiAYOCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386886AbiAYN6r (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:58:47 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DD9C061744
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:58:46 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id x23so9973454lfc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:58:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4t35tkSfhawZj3YdmXeypgJh5HQgRVLYdhSyxfOKLTU=;
-        b=u85tLHy1j+MBDPRG6pUcVnt8usiu3geVBkYlAX+KvLLDhkRuW5txGMJrgl8RWApWVP
-         KsiHdEUru6gtGc69w3lWx4SAB3F+RML896b2tUaoAFAmE+qkQF30hxUt37HhargEVIIi
-         fDaimZ6yC1KFgz8LhshXO3L1/ngUK7PpOSdGnbNnBJsjRrZUJgT1vJ8weuOBsl3UY12G
-         KhtPYvAIvqv9xYEQ+d4FNHFZAU4F9YICgzW+LqM4A4QkRKDnbRW0UPcHwjLT91Kk4MIX
-         DL5upOIhDvPBINtxHsq/X/rCkpHIKm/rSJzpiYFB3ldyKBA5eaXL5KwIEp2aXqA++WDJ
-         T/nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4t35tkSfhawZj3YdmXeypgJh5HQgRVLYdhSyxfOKLTU=;
-        b=VH+wrE+H/x7qFYjnRwuztGTqEo6TW7LDDBfML0neidKx7Yc77YjNOhqIFrEnMhQ/Sq
-         aRXcOzRykNv5BMlQSxriZtjPsYUhjsXWL+wQnLdu9sVmUOCY15nDToGlJFUoLtPp6fa8
-         RAjohbwUEMSNfm8TcOk4zuCr+luAhGdMK202pAkFA+ItElV0nKK7RfZ0WDWqs4UKrALd
-         QQLK9TdBOwnNVJ8x6qQjpeICy9vWwOjkiYvxoUb7y4Hh9rX9zPY0X/2s9BOO+Bg3xfC7
-         ISxehZY7L1M1En1onytKUuFFZXLMsIdAMeiKS6/WnE+O1dIw6JusA8FwB/RBP/VgyJXw
-         NUiQ==
-X-Gm-Message-State: AOAM530wobzkymLYmgDlxfMLjJTQgjXWRIKo233+OyBfye13mJ9oSMr/
-        5Q0gkrZxFExJKH8yh37CbG2KzQ==
-X-Google-Smtp-Source: ABdhPJzS/I+6lscy9Eg1GYbSwvsvywkknT8P6cHPDwk98dijkuNaRB7GfDzGKtrG0LQtwkz7qNGUgQ==
-X-Received: by 2002:a05:6512:785:: with SMTP id x5mr15447646lfr.614.1643119124417;
-        Tue, 25 Jan 2022 05:58:44 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id a4sm1500028lfg.31.2022.01.25.05.58.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 05:58:43 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 355B7103C0E; Tue, 25 Jan 2022 16:59:17 +0300 (+03)
-Date:   Tue, 25 Jan 2022 16:59:17 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
-        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
-        david@redhat.com, rppt@kernel.org, surenb@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
-Message-ID: <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
-References: <cover.1642526745.git.khalid.aziz@oracle.com>
- <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
- <Ye/5yUyEqO0ws0G5@casper.infradead.org>
+        id S1387892AbiAYODc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:03:32 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:53066 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1385581AbiAYN7q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 08:59:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ox78QD2G7Vl4O8u8fw2FuKHaFOQlJwcYfnNDAIdWWt4=; b=GGtpgHhjFCVP5d5DvN9Be/8S37
+        qPF6rga96LpRgWr7aKH/DGBZwNQi76wPWZXDVAXOWYhuY0eBJTbW1hHLIkpRVTPHkrh+eu1iB4TQx
+        yK6KbUeJ1vCQDN0S1T5UwI2qL7oxhb4kcmcI49fN4SDSOgLyBOqWRCKUMk4ezWq5/RQM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nCMM9-002esZ-4A; Tue, 25 Jan 2022 14:59:33 +0100
+Date:   Tue, 25 Jan 2022 14:59:33 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Joseph CHAMG <josright123@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
+        leon@kernel.org
+Subject: Re: [PATCH v13, 2/2] net: Add dm9051 driver
+Message-ID: <YfACRXnsAUVxlZze@lunn.ch>
+References: <20220125085837.10357-1-josright123@gmail.com>
+ <20220125085837.10357-3-josright123@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ye/5yUyEqO0ws0G5@casper.infradead.org>
+In-Reply-To: <20220125085837.10357-3-josright123@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 01:23:21PM +0000, Matthew Wilcox wrote:
-> On Tue, Jan 25, 2022 at 02:42:12PM +0300, Kirill A. Shutemov wrote:
-> > I wounder if we can get away with zero-API here: we can transparently
-> > create/use shared page tables for any inode on mmap(MAP_SHARED) as long as
-> > size and alignment is sutiable. Page tables will be linked to the inode
-> > and will be freed when the last of such mapping will go away. I don't see
-> > a need in new syscalls of flags to existing one.
-> 
-> That's how HugeTLBfs works today, right?  Would you want that mechanism
-> hoisted into the real MM?  Because my plan was the opposite -- remove it
-> from the shadow MM once mshare() is established.
+> +static int dm9051_mdiobus_read(struct mii_bus *mdiobus, int phy_id, int reg)
+> +{
+> +	struct board_info *db = mdiobus->priv;
+> +	unsigned int val = 0;
+> +	int ret;
+> +
+> +	if (phy_id == DM9051_PHY_ID) {
 
-I hate HugeTLBfs because it is a special place with own rules. mshare() as
-it proposed creates a new special place. I don't like this.
+phy_id is a poor choice of name. It normally means the value you find
+in register 2 and 3 of the PHY which identifies the manufacture, make
+and possibly revision.
 
-It's better to find a way to integrate the feature natively into core-mm
-and make as much users as possible to benefit from it.
+If you look at the read function prototype in struct mii_bus:
 
-I think zero-API approach (plus madvise() hints to tweak it) is worth
-considering.
+https://elixir.bootlin.com/linux/v5.17-rc1/source/include/linux/phy.h#L357
 
--- 
- Kirill A. Shutemov
+the normal name is addr.
+
+Ideally your driver needs to look similar to other drivers. Ideally
+you use the same variable names for the same things. That makes it
+easier for somebody else to read your driver and debug it. It makes it
+easier to review, etc. It is worth spending time reading a few other
+drivers and looking for common patterns, and making use of those
+patterns in your driver.
+
+> +static int dm9051_map_phyup(struct board_info *db)
+> +{
+> +	int ret;
+> +
+> +	/* ~BMCR_PDOWN to power-up the internal phy
+> +	 */
+> +	ret = mdiobus_modify(db->mdiobus, DM9051_PHY_ID, MII_BMCR, BMCR_PDOWN, 0);
+> +	if (ret < 0)
+> +		return ret;
+
+You are still touching PHY registers from the MAC driver. Why is your
+PHY driver not going this as part of the _config() function?
+
+    Andrew

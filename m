@@ -2,84 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 596C449B6B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108D849B6A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580153AbiAYOpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:45:06 -0500
-Received: from mail-yb1-f179.google.com ([209.85.219.179]:38844 "EHLO
-        mail-yb1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389262AbiAYOkT (ORCPT
+        id S1579901AbiAYOoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:44:21 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:48844 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1388586AbiAYOkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:40:19 -0500
-Received: by mail-yb1-f179.google.com with SMTP id i62so15962560ybg.5;
-        Tue, 25 Jan 2022 06:40:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qmXgH7zvCKX7VHBhpaIeJiGEHk4KUYcP0Ex/yLKpPRw=;
-        b=6H9+F/nMrttzgBGtZU3fM2qnAlAR7KVAXR+P0s5h/nqDNTjZafFa8k+A0docFREHBo
-         v+UNaAppgBLuEzJ0Zw3kM/P0nZeSfWx0xBGdL3jdNaZrrsSrFaHl52JrsuaqlnpG+wUO
-         qkilZta4eSlvWl9Wcq6CgxGHHwLNwLY7CGAEPrzOCt090tH99Dn056Ql86bc8qlyhPju
-         Pn9lyTcNtzuSDspgA8UungONARLYR4T9cXyYwNjAx9g53ohnVf/CZSV3B5XW49rPtWGj
-         orfn9tAy5VYJk8GOADDbb9/DiuF8actN2z/1vwsIYPDmeLmP9fPgWFQNX9mkL8WtLcrf
-         ZWAQ==
-X-Gm-Message-State: AOAM5312sBf6MilPQnB3HJ81awEeW9Q7/18jy/PC+qbX2SA6xO4ApbB7
-        qObpEtJ7QHLPLM4bZMCjThF8FQH3gvTWEGgbbloc49nu
-X-Google-Smtp-Source: ABdhPJyf4NeSGDSjgs2JLUl9Ym4PFBwT201JLgx/QXUQCHDWtDkDZoHe8Rmk0nWCImELThqsOUzv2R/oSJ1fmxEwliY=
-X-Received: by 2002:a5b:5c7:: with SMTP id w7mr30536273ybp.343.1643121613569;
- Tue, 25 Jan 2022 06:40:13 -0800 (PST)
+        Tue, 25 Jan 2022 09:40:09 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C88F3218E2;
+        Tue, 25 Jan 2022 14:40:08 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id B224AA3B87;
+        Tue, 25 Jan 2022 14:40:08 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] amd: declance: use eth_hw_addr_set()
+Date:   Tue, 25 Jan 2022 15:40:06 +0100
+Message-Id: <20220125144007.64407-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20220120000409.2706549-1-rajatja@google.com> <20220121214117.GA1154852@bhelgaas>
- <Ye5GvQbFKo+CFtRb@lahna> <Ye/X7E2dKb+zem34@lahna>
-In-Reply-To: <Ye/X7E2dKb+zem34@lahna>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Jan 2022 15:40:01 +0100
-Message-ID: <CAJZ5v0gii3z=DfFbGvubyg=f3t+74eNFdtpJDauwzH4roL-dAQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as untrusted
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:59 AM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> On Mon, Jan 24, 2022 at 08:27:17AM +0200, Mika Westerberg wrote:
-> > > > This patch introduces a new "UntrustedDevice" property that can be used
-> > > > by the firmware to mark any device as untrusted.
-> >
-> > I think this new property should be documented somewhere too (also
-> > explain when to use it instead of ExternalFacingPort). If not in the
-> > next ACPI spec or some supplemental doc then perhaps in the DT bindings
-> > under Documentation/devicetree/bindings.
->
-> Actually Microsoft has similar already:
->
-> https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
->
-> I think we should use that too here.
+Copy scattered mac address octets into an array then eth_hw_addr_set().
 
-Agreed.
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ drivers/net/ethernet/amd/declance.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-This is what the platform firmware will need to use anyway for Windows
-compatibility and OEMs may not care about running Linux on their
-platforms.
+diff --git a/drivers/net/ethernet/amd/declance.c b/drivers/net/ethernet/amd/declance.c
+index 493b0cefcc2a..ec8df05e7bf6 100644
+--- a/drivers/net/ethernet/amd/declance.c
++++ b/drivers/net/ethernet/amd/declance.c
+@@ -1032,6 +1032,7 @@ static int dec_lance_probe(struct device *bdev, const int type)
+ 	int i, ret;
+ 	unsigned long esar_base;
+ 	unsigned char *esar;
++	u8 addr[ETH_ALEN];
+ 	const char *desc;
+ 
+ 	if (dec_lance_debug && version_printed++ == 0)
+@@ -1228,7 +1229,8 @@ static int dec_lance_probe(struct device *bdev, const int type)
+ 		break;
+ 	}
+ 	for (i = 0; i < 6; i++)
+-		dev->dev_addr[i] = esar[i * 4];
++		addr[i] = esar[i * 4];
++	eth_hw_addr_set(dev, addr);
+ 
+ 	printk("%s: %s, addr = %pM, irq = %d\n",
+ 	       name, desc, dev->dev_addr, dev->irq);
+-- 
+2.29.2
+

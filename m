@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B44D49BA10
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FB349BA00
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587450AbiAYRRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:17:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S1573861AbiAYRQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:16:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351300AbiAYRNs (ORCPT
+        with ESMTP id S1348519AbiAYRNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:13:48 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E455AC06179A;
-        Tue, 25 Jan 2022 09:12:43 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id z199so9995348iof.10;
-        Tue, 25 Jan 2022 09:12:43 -0800 (PST)
+        Tue, 25 Jan 2022 12:13:35 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55926C061787
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:12:04 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id h7so31964290ejf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:12:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mMhTEWTe94/lxvR3iguUuMULiaaMgsYkOT2qY7s3xZk=;
-        b=qB2b/OBznQg3vk7eTmRQbFKLqe2+4F4LAv/FT+/VISI9E/t+vC7+NkOzq4wv+6QySV
-         +744jOtOv+sGHlR0nyyGUM0vxeC0TxpFCud4vSJkeK5RakqjjuqgLuv3H/5RqiWEnQ9n
-         wYYm2OY31foCQJse4oYNYs8J2ESDsDSEFBQHUzB3uf4bWrHji3edtox6F5a4svB4Wjq8
-         JLEBOG/bZOtR9A7GcF4dYJ1oig7VxKh2r/jo1dRLXKKWInGd7g80fCgs30ktZC9yU4Rm
-         J8sv2RMlprVUsLHlCHYOyDvTfFnHpFNcwHRT693mwN5qw77AoZfNk1EtdYbG1vh42FZQ
-         c2nw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=nNrS4+Y2kpA/4I+O0j+MEfMovuuGqzczw7+9uw0ZYvg=;
+        b=EaRGks4nbAE4mkVHSDRIbiOGDioTn/fqsLtEg9/e+4eKwfA1Ut+bLO3nDodkfPBU/f
+         tVZHJQzF5S0rjo8VYXuANl90qXnPRK7AeNwqZuM08shxx0JAzuTPUy1XEkaSu60DRur/
+         HjMB9zpP6IrthUKpCLH2ns7n+d7fC6GUlRJb+xNL7h5rHkGqnO6t1vbk2fDySuq0epD+
+         ng0gd87ppFm2UqV51IDKbK5vF+58T6zxVXIfdutX+cV4i+ZWiDkeBP0E+EQLW2nI456X
+         wve5ABcDOKMxc5mtP6S+hrUWjW7pzEtThHTmRW5iDzBMRDNb65p90Vcn5pljivBC7NnM
+         GG3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mMhTEWTe94/lxvR3iguUuMULiaaMgsYkOT2qY7s3xZk=;
-        b=JOcdAq5XawIvdpwzD4YyYQM1YDn9JUJPyp+9+t/SaFZ1QC3V0hU97ACMJLQ42nRKxG
-         NGl2JChKdiRk/JAzZOpY0xl/MxcWRmyZ931AJG1FfDi1E6s5JT0AOwNZrxiEQQlvn2YX
-         MUc8DNZe0s3r0K2ha7sFkiYTosEVoIWewalFSv3APHWkughzPQXvTgmnXovJzy4CiFAw
-         PUOkBBfEWiqJuQNvxyYiBFb+Nf7bg4/Dg520LqdxaQBrf/+YFLHxcC9RhnWPcxlmpyyg
-         s4e13UGSE6n3+6DQQ2oawax0FglXVpjIsCkLmgBfd+NbZtZXKRt35LRSRpdph3Emd+GB
-         4sEQ==
-X-Gm-Message-State: AOAM530fIublLzT2kpB5mODNSknObyVOl6O+HoXjNZFoEfmqyLeIktTz
-        RJKihDBMXJFT4mc/y2ndtTq8tIPpLWc=
-X-Google-Smtp-Source: ABdhPJy1nwamHHzfnVEdxv0YvhkimiB59p6R05mZq7ZjaEJgqSMeDW2gAxduxonHAE26uHuWpAonqQ==
-X-Received: by 2002:a02:5b0a:: with SMTP id g10mr9341784jab.169.1643130762991;
-        Tue, 25 Jan 2022 09:12:42 -0800 (PST)
-Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:6592:b6fe:71b1:9f4c])
-        by smtp.gmail.com with ESMTPSA id m14sm8090291iov.0.2022.01.25.09.12.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 09:12:42 -0800 (PST)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     aford@beaconembedded.com, cphealy@gmail.com,
-        Adam Ford <aford173@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: [PATCH V4 08/11] arm64: dts: imx8mm: Fix VPU Hanging
-Date:   Tue, 25 Jan 2022 11:11:25 -0600
-Message-Id: <20220125171129.472775-9-aford173@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220125171129.472775-1-aford173@gmail.com>
-References: <20220125171129.472775-1-aford173@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=nNrS4+Y2kpA/4I+O0j+MEfMovuuGqzczw7+9uw0ZYvg=;
+        b=QKg0VoxsdphtpPxFTZs6ev47oR4XISN19ucUOvzmhQaVYGyywn/u5QtkxI2nwoK0v5
+         p//hDdw6CsB9/iABIQLdda3V3+YCJ8plwaZMitq8cT3TEOc/1NJMNRTRNFRvm+SQqi5y
+         Mg2faB/pxpNweLtjmA5+5nvXqYYqS6+T5DE2UgR0aCVxi64OwG8Y2hJj9EgHjtF4F3ZP
+         yruJCWh3aZDYk503Qkv3Zd7ZAvuvYVgkNAlOHDJj/uwKwn+ezcwjA7YGTouKgfNZ1Kgy
+         bpb1u0U38nZ80ntdcAho6CER41FIIxNaGkpXyMCu5XyQXMdc0dpGzQDPImt3UaOa8AT5
+         cwTA==
+X-Gm-Message-State: AOAM533Mm32+2wCbOn8BEz/qqYVDsPpr5rhe5FFsQMDGLfXitGvXxYTT
+        OgulSmMwAm2MPGKs80zKyLjPenXuS2RSfguSmXBTDQ==
+X-Google-Smtp-Source: ABdhPJyLfH1HWR8h43VVS0XIc2bSN8+5RKivIAAJh8I8ticiEoS9VRmwfk9Jaw3pumNtgYCON/DHMifOOqFaP9jHNro=
+X-Received: by 2002:a17:907:e87:: with SMTP id ho7mr1513006ejc.481.1643130722625;
+ Tue, 25 Jan 2022 09:12:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220124150209.22202-1-bgeffon@google.com> <20220124151434.GB20331@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
+ <CADyq12ykDCswWZw05OdyYfP-zT6afuhXbckii1m1egQ2fSwB4w@mail.gmail.com> <20220125002025.GA21887@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
+In-Reply-To: <20220125002025.GA21887@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
+From:   Brian Geffon <bgeffon@google.com>
+Date:   Tue, 25 Jan 2022 12:11:26 -0500
+Message-ID: <CADyq12wE7mx2tPeK0gaLhBaUStrvV7cgfXqj7vWZ4F=KfR7zzQ@mail.gmail.com>
+Subject: Re: [PATCH] dm: introduce a no open flag for deferred remove
+To:     Brian Geffon <bgeffon@google.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vpumix power domain has a reset assigned to it, however
-when used, it causes a system hang.  Testing has shown that
-it does not appear to be needed anywhere.
+On Mon, Jan 24, 2022 at 7:21 PM Alasdair G Kergon <agk@redhat.com> wrote:
+>
+> On Mon, Jan 24, 2022 at 10:25:47AM -0500, Brian Geffon wrote:
+> > Thank you for looking at this. There are a few reasons this might be
+> > useful, the first is if you're trying to speed up a graceful teardown
+> > of the device by informing userspace that this device is going to be
+> > removed in the near future. Another might be on systems where it might
+> > be worthwhile to not have users with CAP_DAC_OVERRIDE be able to open
+> > the device. The logic on this second case is that, suppose you have a
+> > dm-crypt block device which is backing swap, the data on this device
+> > is ephemeral so a flow might be to setup swap followed by dmsetup
+> > remove --deferred /dev/mapper/encrypted-swap. This will guarantee that
+> > as soon as swap is torn down the encrypted block device is dropped,
+> > additionally with this new flag you'll be guaranteed that there can be
+> > no further opens on it.
+>
+> And is that the reason you propose this?
+> - You want a special exclusive 'one time open' device that
+>   self-destructs when closed?
+>
+> > No, this is fully backwards compatible with the current deferred
+> > remove behavior, it's not required. Additionally, since on the actual
+> > remove userspace would receive an -ENXIO already once the remove
+> > process has started it seems reasonable to return -ENXIO in the
+> > deferred remove case when this flag is enabled.
+>
+> Well I feel it does break existing semantics which is why we wrote
+> the code the way we did.  The state can be long-lived, the code
+> that has it open might legitimately want to open it again in
+> parallel etc. - in general this seems a bad idea.
+>
+> But if the reason for this is basically "make it harder for
+> anything else to access my encrypted swap" and to deliberately
+> prevent access, then let's approach the requirement from that angle.
+> Are there alternative implementations with interventions at different
+> points?
 
-Fixes: d39d4bb15310 ("arm64: dts: imx8mm: add GPC node")
-Signed-off-by: Adam Ford <aford173@gmail.com>
+I was thinking perhaps another implementation might involve using
+open_count on dm_ioctl as an in param on DM_DEV_CREATE only. Using
+open_count as an in parameter on DM_DEV_CREATE could be activated by a
+new flag, perhaps DM_ENFORCE_OPEN_COUNT_FLAG. This would allow the
+behavior to be baked into the device from the start. We would then
+enforce it in dm_blk_open. What would you think about an approach like
+this?
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index f77f90ed416f..0c7a72c51a31 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -707,7 +707,6 @@ pgc_vpumix: power-domain@6 {
- 						clocks = <&clk IMX8MM_CLK_VPU_DEC_ROOT>;
- 						assigned-clocks = <&clk IMX8MM_CLK_VPU_BUS>;
- 						assigned-clock-parents = <&clk IMX8MM_SYS_PLL1_800M>;
--						resets = <&src IMX8MQ_RESET_VPU_RESET>;
- 					};
- 
- 					pgc_vpu_g1: power-domain@7 {
--- 
-2.32.0
-
+Thanks,
+Brian

@@ -2,151 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D90E49B168
+	by mail.lfdr.de (Postfix) with ESMTP id 67D8949B169
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238775AbiAYKNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242088AbiAYKIF (ORCPT
+        id S237913AbiAYKOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:14:41 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:42242 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243031AbiAYKLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:08:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6A3C061749
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:08:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 25 Jan 2022 05:11:47 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B639615F0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A19DAC340E0;
-        Tue, 25 Jan 2022 10:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643105282;
-        bh=55mtZOKFeyp+SDLZZ67pEsuV8ej24DyQkF/qOQmEonE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=q+oPq44ojvLTeTCZQhjgGRkBAsTiBSRWSXr15J0VXdiilnPjgT1ipa37higB19i12
-         EueAVyzzGaHw3L9V8XT+9ff1c8A2Q5eL3mDXNqk87FoGXEaugxXfTS13Zvs/eShvim
-         C+4mc+0jEAO8Nssx5f0CiPpV8mVeJ5BC6CjQwx07ydkQAYGGas46gd+CmRL4ZrQYTF
-         NWuyecQz6E8PBMrHI9SIibHuRAkrZrXL3n6Rj6ExTeHD5xKoOudYPrG8XCmrUY8HCA
-         nLk6+NvwZVa1MNCp8rlWU5Rqlatc3r8cgXa0d59b2DH9m1pEDSO/wTlRmxeHWoe9PW
-         N6W5P0L08xW0w==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nCIk4-002ogN-Kz; Tue, 25 Jan 2022 10:08:00 +0000
-Date:   Tue, 25 Jan 2022 10:08:00 +0000
-Message-ID: <871r0w86wv.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3E0191F380;
+        Tue, 25 Jan 2022 10:11:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643105501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AuI+jNij7ZPjm9a8uQJJ8LMvjCha8hdxxOquAm8i2AQ=;
+        b=bPcWn+h1KGhccNbv/A0I46rDS1W5ystZ3W6W9y5PQ4iIi1HKpX3dHpkRgdWn+e2b5ZG6eb
+        e8n8Eg6z2jCpBgbdfkw+iDpV205rlnTV+ZC0meiv+Pzg6O2pcSgpi+Jtv7QkAbfCIQbXNN
+        emogd7htzQ9FmZ1wW8aOu6CKMQVtKVg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643105501;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AuI+jNij7ZPjm9a8uQJJ8LMvjCha8hdxxOquAm8i2AQ=;
+        b=e81ccG092lk1h5kw4iSQLz1bOFgAoZD9AaSu1nfkTcXMMrOq+kGtS7U3Tf4RSnIV0SwXh6
+        F+e3pCjJ+Zv39FDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 140F213DAE;
+        Tue, 25 Jan 2022 10:11:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tUIZBN3M72FgXwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 25 Jan 2022 10:11:41 +0000
+Message-ID: <581f4247-83b1-df39-6724-af0565d0c7ea@suse.cz>
+Date:   Tue, 25 Jan 2022 11:11:40 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] mm: remove offset check on page->compound_head and
+ folio->lru
+Content-Language: en-US
+To:     Wei Yang <richard.weiyang@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        peterz@infradead.org, will@kernel.org, linyunsheng@huawei.com,
+        aarcange@redhat.com, feng.tang@intel.com, ebiederm@xmission.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drivers: irqchip: add irq-type-changer
-In-Reply-To: <a7a6ddd2-9d40-3ac2-2b7f-bb521c8d3728@cogentembedded.com>
-References: <20220124095652.522099-1-nikita.yoush@cogentembedded.com>
-        <878rv58ghy.wl-maz@kernel.org>
-        <a179c80c-7ce8-da1a-f344-5d72b65c3da4@cogentembedded.com>
-        <874k5s8a32.wl-maz@kernel.org>
-        <a7a6ddd2-9d40-3ac2-2b7f-bb521c8d3728@cogentembedded.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: nikita.yoush@cogentembedded.com, tglx@linutronix.de, geert@linux-m68k.org, erosca@de.adit-jv.com, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+References: <20220106235254.19190-1-richard.weiyang@gmail.com>
+ <Yde6hZ41agqa2zs3@casper.infradead.org>
+ <20220107134059.flxr2hcd6ilb6vt7@master>
+ <Ydi6iMbSZ/FewYPT@casper.infradead.org>
+ <20220107160825.13c71fdd871d7d5611d116b9@linux-foundation.org>
+ <YdjfsbAR0UlwyC6b@casper.infradead.org>
+ <20220108081340.3oi2z2rm3cbqozzt@master>
+ <20220123013852.mm7eyn3z26v3hkc2@master>
+ <93c48e68-2266-72ee-0763-65805b94c968@suse.cz>
+ <20220124225531.26yyse52yo5x3fr5@master>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220124225531.26yyse52yo5x3fr5@master>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 09:35:22 +0000,
-Nikita Yushchenko <nikita.yoush@cogentembedded.com> wrote:
+On 1/24/22 23:55, Wei Yang wrote:
+> On Mon, Jan 24, 2022 at 11:30:10AM +0100, Vlastimil Babka wrote:
+>>On 1/23/22 02:38, Wei Yang wrote:
+>>> On Sat, Jan 08, 2022 at 08:13:40AM +0000, Wei Yang wrote:
+>>>>On Sat, Jan 08, 2022 at 12:49:53AM +0000, Matthew Wilcox wrote:
+>>>>>On Fri, Jan 07, 2022 at 04:08:25PM -0800, Andrew Morton wrote:
+>>>>
+>>>>To me, if folio has the same layout of page, folio meets this requirement. I
+>>>>still not catch the point why we need this check here.
+>>>>
+>>> 
+>>> Hi, Matthew
+>>> 
+>>> Are you back from vocation? If you could give more insight on this check, I
+>>> would be appreciated.
+>>
+>>I can offer my insight (which might be of course wrong). Ideally one day
+>>page.lru will be gone and only folio will be used for LRU pages. Then there
+>>won't be a  FOLIO_MATCH(lru, lru); and FOLIO_MATCH(compound_head, lru);
+>>won't appear to be redundant anymore. lru is list_head so two pointers and
 > 
-> >>> I also don't see why you model this as the actual device that triggers
-> >>> the interrupt.
-> >> 
-> >> Well, that somehow matches the physical reality. In the case of wl18xx
-> >> on KF, physically the interrupt signal indeed originates from the
-> >> intermediate chip - the inverting level-shifter.
-> > 
-> > Reality? By allowing something like an edge-to-level conversion? How
-> > can that work?
+> Thanks for your comment.
 > 
-> Edge to level can be problematic, but level to edge does not cause any
-> difficulties, nor in generating nor in handling.
+> I can't imagine the final result. If we would remove page.lru, we could remove
+> FOLIO_MATCH(lru, lru) and add FOLIO_MATCH(compound_head, lru) at that moment?
 
-Hmmm. A whole industry seems to disagree with you.
+Yes, or we could forget to do it. Adding it right now is another option that
+Matthew has chosen and I don't see a strong reason to change it. Can you
+measure a kernel build speedup thanks to removing the now redundant check?
 
+>>thus valid pointers are aligned in such a way they can't accidentaly set the
+>>bit 0.
+>>
 > 
-> >> In contrary, an abstraction of intermediate entity that does a static
-> >> conversion of the trigger type and does not need any software control,
-> >> looks sane. And, hardware designers do strange things sometimes, I
-> >> won't be surprised observing a change from level to edge one day.
-> > 
-> > If you think that it can happen without a HW register that latches the
-> > edge and requires an ack, you need to question your understanding of
-> > an interrupt life cycle, and of the properties of the various trigger
-> > types.
-> 
-> There are plenty of devices capable to signal both level and edge
-> interrupts, configurable by a register. Basic handling is always the
-> same, and involves masking the interrupt at interrupt controller while
-> IRQs disabled, then enabling IRQs, then programming the device to
-> clear the interrupt condition, then unmasking the interrupt at
-> interrupt controller. If the trigger type is level or edge, is only
-> interesting to interrupt controller driver, but not to a wider scope.
-> 
-> Nothing stops hw designers from doing all sort of strange things with
-> interrupt signals. Right now I have a board on my desk where interrupt
-> signals from several chips are wired to inputs of a logical AND
-> element and the output of that is wired to SoC's gpio. I don't see
-> what stops them tomorrow from setting up their CPLDs to issue a short
-> impulse at output in return to a level change on input. And that will
-> be a level to edge converter.
 
-And a broken one, as you'd have nothing to regenerate an edge if the
-input stays high. Such HW can stay in the bin.
-
-> 
-> >> In driver's init, I only call of_irq_parse_one() for interrupt defined
-> >> in the changer's node. This does not create a mapping for it. The
-> >> mapping is only created when changer's "interrupt-child" creates a
-> >> mapping for their interrupt - then changer's alloc() routine calls
-> >> irq_domain_alloc_irqs_parent() in the same way as all other
-> >> hierarchical irqchips do.
-> >> 
-> >> I don't see where double mapping can appear here. Please explain.
-> > 
-> > Just look at your code. You start probing a device that has an
-> > 'interrupts' property. This triggers the allocation of an interrupt.
-> 
-> Where does it trigger it?
-
-I'll let you follow the path from of_device_alloc() all the way to the
-actual DT parsing of the interrupt specifier, allocation of the
-interrupt descriptor and mapping in the parent domain. You then
-override the mapping (I really should put a WARN_ON() in the irqdomain
-code to catch this sort of things).
-
-> And what is this "allocation", after all? Is it allocation of virq
-> number?
-
-And descriptor, and mapping in the domain.
-
-> That allocation happens when irq_create_fwspec_mapping() calls
-> irq_domain_alloc_irqs(). But this path does not necessary gets
-> executed in probing. In the current irq_tyoe_changer driver, it is
-> not.
-
-I don't think you see the full extent of the problem.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.

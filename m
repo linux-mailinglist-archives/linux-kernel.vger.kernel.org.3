@@ -2,121 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4C049BAB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053CA49BAC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358215AbiAYRzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:55:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379794AbiAYRyQ (ORCPT
+        id S1385185AbiAYR4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:56:55 -0500
+Received: from mail-yb1-f182.google.com ([209.85.219.182]:40758 "EHLO
+        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357539AbiAYRzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:54:16 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19941C061753
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:54:16 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id h12so20670622pjq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:54:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aIV6eSMSODWibmjbStB+qKd/AvnMQkOZd3vv2gOpFy0=;
-        b=ll5W9H/HRJqzopdwRXtU8gikl/FzPb+JXHP6WmoFVz4eH+wYbfNK3NFW0z7VTdIBq9
-         EJVs1deIsktmrWw9xQmoZgXGVfzBPaQ2A0sZlswVlxRAEb2HScQTId1k4gUcewwFOebp
-         zNAvgfpHfR/qQKwfpLwRVCFbIv2I5VP3Q5RG8=
+        Tue, 25 Jan 2022 12:55:02 -0500
+Received: by mail-yb1-f182.google.com with SMTP id 23so63924631ybf.7;
+        Tue, 25 Jan 2022 09:54:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aIV6eSMSODWibmjbStB+qKd/AvnMQkOZd3vv2gOpFy0=;
-        b=jG+Pr5YQ9XFS/CucvqbCqz3fXK3FdEvjdmHP1JrDD12ovmSw2jQXg59dSvBEo262rI
-         XBfyjFAefIIPv1h7tPEi5DTJOSG2J04WwkYq7lZFC2LSbIf0ZUGiBnQQA/gyag+4isU3
-         XSLcWDT167ryj42NxOafC4I68gsvUZvubP+ZC/78azNyPc32BBtWCG6SYaKGDeMOAqVk
-         duKraQ8Y0/OIaqQe83miUMKb+GnrK3PvW+KJqgX6A4ppRK7Z5nW3kFdj3VXUz/L3AvXL
-         xU9ZqL3yCXMaiZU+VbYbVyUNUW7xgE6T2hD6EzTTiBLgqYv7BV7Rjs4qx2M7GDdVIBXZ
-         4u7A==
-X-Gm-Message-State: AOAM530z6Br5iVxcS+kYkfhr2ZIIfye6ZIwRYS9DeKJW6vM28APsdvqu
-        Q9tz9kc+kc4K1VBRBxaXWFz3/g==
-X-Google-Smtp-Source: ABdhPJzyT4Nwg0+TTagvzVcv7RVSYSao1rl+8zt3eBqdMaUdgBlFntA35C+9SFj740GOzoDpEiJr4Q==
-X-Received: by 2002:a17:90a:f283:: with SMTP id fs3mr4595049pjb.173.1643133255559;
-        Tue, 25 Jan 2022 09:54:15 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 13sm19569673pfm.161.2022.01.25.09.54.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 09:54:15 -0800 (PST)
-Date:   Tue, 25 Jan 2022 09:54:14 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202201250953.3F4D0499@keescook>
-References: <20220125145006.677e3709@canb.auug.org.au>
- <202201242230.C54A6BCDFE@keescook>
- <20220125222732.98ce2e445726e773f40e122e@kernel.org>
- <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y+R3o3okOUEIZN8/dDxsGECLwf9ITaDap15PmIOOEJw=;
+        b=tsaGoOSmVk7vaXbB33hs4k9q3BbeTHUtBXwyeQUuY62ng6sjhay1Kb4Lkgq/AUAgN+
+         6qPdLnFELJywM6E1EE3SVz6+TRd+7bnuB0tpov/WrsG3Svjy7GrVu8HZ/CbIDGP+QNJe
+         oQEbuXHgOXLaHVLD24h2Y9Y/kXEefHWPXYT5bsrULtvYDNCfjkm3GDoPUe8hDayhTVVO
+         Kz9Ms1OfHUy3KbMJp18jW8fgRMT87MzcCpM93IUAuBEeSiuySK97rE0ZoYdf+6HoURyf
+         NGnh9UrhQrCFuOxTSDngSUEDDCzYrcrpIda+jjDv+UFSx1suftZpy/p6ntJvcZR8tCCq
+         RDoQ==
+X-Gm-Message-State: AOAM530pDc2Zout0EHUtZV5IwPRSuSgNf6aZjx1i3U89GfCmC64SQrv0
+        5jnhfKkCY70mzNNEEnxmMQt4tbgQ+yC8QKXnGf0=
+X-Google-Smtp-Source: ABdhPJx+RSxvIz+QTS29NNZlNto0r/PEcq1x9Ah2IeEOnqDbQuwUZ7x2ZQ/2bvu5VBLp3XyWBQoxhvNKmB0ZgYbANKg=
+X-Received: by 2002:a25:1bd5:: with SMTP id b204mr34517304ybb.552.1643133297390;
+ Tue, 25 Jan 2022 09:54:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+References: <1642851166-27096-1-git-send-email-akhilrajeev@nvidia.com> <1642851166-27096-3-git-send-email-akhilrajeev@nvidia.com>
+In-Reply-To: <1642851166-27096-3-git-send-email-akhilrajeev@nvidia.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Jan 2022 18:54:46 +0100
+Message-ID: <CAJZ5v0gt+aDr_Te_mco_0CyRJAWgyeDKUb+dksfZz0mj91G0hw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] docs: firmware-guide: ACPI: Add named interrupt doc
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:31:54PM +0900, Masami Hiramatsu wrote:
-> On Tue, 25 Jan 2022 22:27:32 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> 
-> > > /*
-> > >  * struct trace_event_data_offsets_<call> {
-> > >  *      u32                             <item1>;
-> > >  *      u32                             <item2>;
-> > >  *      [...]
-> > >  * };
-> > >  *
-> > >  * The __dynamic_array() macro will create each u32 <item>, this is
-> > >  * to keep the offset of each array from the beginning of the event.
-> > >  * The size of an array is also encoded, in the higher 16 bits of
-> > >  * <item>.
-> > >  */
-> > > 
-> > > So, I think -Warray-bounds is refusing to see the destination as
-> > > anything except a u32, but being accessed at 4 (sizeof(u32)) + 8
-> > > (address && 0xffff) (?)
-> > 
-> > Ah, I got it. Yes, that's right. __data_loc() will access the data
-> > from the __entry, but the __rel_loc() points the same address from
-> > the encoded field ("__rel_loc_foo" in this case) itself.
-> > This is introduced for the user application event, which doesn't
-> > know the actual __entry size because the __entry includes some
-> > kernel internal defined fields.
-> > 
-> > > But if this is true, I would imagine there would be plenty of other
-> > > warnings? I'm currently stumped.
-> > 
-> > That is because __rel_loc is used only in the sample code in the kernel
-> > for testing. Other use-cases comes from user-space.
-> > Hmm, can we skip this boundary check for this example?
-> 
-> If the -Warray-bounds determines the destination array size from
-> the type of given pointer, we can just change the macro as below;
-> 
-> #define __get_rel_dynamic_array(field) 
-> 			((void *)__entry +                                 \
-> 			 offsetof(typeof(*__entry), __rel_loc_##field) +   \
-> 			 sizeof(__entry->__rel_loc_##field) +              \
-> 			 (__entry->__rel_loc_##field & 0xffff))
-> 
-> This must works same as __get_dynamic_array() macro.
-> 
-> Could you try this patch?
+On Sat, Jan 22, 2022 at 12:33 PM Akhil R <akhilrajeev@nvidia.com> wrote:
+>
+> Add a detailed example of the named interrupts in the ACPI table.
+>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
 
-Thanks, I'll give this a spin. I need to reproduce sfr's warning first,
-but now that I've fetched next-20220125, it should be easy. *famous last
-words*
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
--- 
-Kees Cook
+> ---
+>  Documentation/firmware-guide/acpi/enumeration.rst | 39 +++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>
+> diff --git a/Documentation/firmware-guide/acpi/enumeration.rst b/Documentation/firmware-guide/acpi/enumeration.rst
+> index 74b830b2..d002256 100644
+> --- a/Documentation/firmware-guide/acpi/enumeration.rst
+> +++ b/Documentation/firmware-guide/acpi/enumeration.rst
+> @@ -143,6 +143,45 @@ In robust cases the client unfortunately needs to call
+>  acpi_dma_request_slave_chan_by_index() directly and therefore choose the
+>  specific FixedDMA resource by its index.
+>
+> +Named Interrupts
+> +================
+> +
+> +Drivers enumerated via ACPI can have names to interrupts in the ACPI table
+> +which can be used to get the IRQ number in the driver.
+> +
+> +The interrupt name can be listed in _DSD as 'interrupt-names'. The names
+> +should be listed as an array of strings which will map to the Interrupt()
+> +resource in the ACPI table corresponding to its index.
+> +
+> +The table below shows an example of its usage::
+> +
+> +    Device (DEV0) {
+> +        ...
+> +        Name (_CRS, ResourceTemplate() {
+> +            ...
+> +            Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {
+> +                0x20,
+> +                0x24
+> +            }
+> +        })
+> +
+> +        Name (_DSD, Package () {
+> +            ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+> +            Package () {
+> +                Package () {"interrupt-names",
+> +                Package (2) {"default", "alert"}},
+> +            }
+> +        ...
+> +        })
+> +    }
+> +
+> +The interrupt name 'default' will correspond to 0x20 in Interrupt()
+> +resource and 'alert' to 0x24. Note that only the Interrupt() resource
+> +is mapped and not GpioInt() or similar.
+> +
+> +The driver can call the function - fwnode_irq_get_byname() with the fwnode
+> +and interrupt name as arguments to get the corresponding IRQ number.
+> +
+>  SPI serial bus support
+>  ======================
+>
+> --
+> 2.7.4
+>

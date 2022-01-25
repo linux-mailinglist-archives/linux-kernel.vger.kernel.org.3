@@ -2,88 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE95349B64C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC0249B651
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiAYOb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:31:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30914 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1578999AbiAYO0Y (ORCPT
+        id S238251AbiAYOea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238463AbiAYObJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:26:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643120777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dLtIFJjgUtOUVDA99ng5/AGYu7PV8wK1w9Iei4rx6Qg=;
-        b=eN7cCiL1RTWtEPi+pCzfJ+JeAsLx6NWd0J5Na1+geEwjo27YSHQEDvWWsZiLz3D3najCzu
-        8xR4bJyDHUJY9wHmILqbObrtt4jmu1FWwOZSNFLonykallljz5qs0W8+7yfJNDfhmKs2V7
-        NXERGBqOAoE8SD+x1hqZ+/hmL64Is8w=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-454-488mywHbN5SQtNDqinftjg-1; Tue, 25 Jan 2022 09:26:16 -0500
-X-MC-Unique: 488mywHbN5SQtNDqinftjg-1
-Received: by mail-ed1-f72.google.com with SMTP id h21-20020aa7c955000000b0040390b2bfc5so15035001edt.15
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:26:15 -0800 (PST)
+        Tue, 25 Jan 2022 09:31:09 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26209C061773
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:26:44 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id g14so62104148ybs.8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:26:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wl6G1I8d7amrdxFUYe5VdZlTB2njtWsoXMFyPet+gSM=;
+        b=AGW72ryFUV7dVhvx7fItSQe6ZZHiMtTV5Da/c6LbG0unTjI5NleXJ6OdX+dcMAo3XP
+         Egpc2Ui/iAx/cdbFGKKIggUeC7r+FbsAeu6d9h+vTDvb25dE8nqSP7ccD+/WTQdWj0+s
+         9aMo3rC131UNWFHlxKUd5aZ62wkqORyZpgNvACVVaLR4Mumpf7Qm438DHuTrBqP9jpCm
+         /Ft8pdlHTjs9Qq/e2gNrC2s7q43TXwOr/RCgSdSyWjsqC6Ezc2J/L1jjSNPDh7F1RRgB
+         kCh2H1qKG+GhLqK22qGSxvtGlAjTFmh+zZb8yyte+M1KeTy4OO71L38j3uGr51G9usH7
+         sqPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dLtIFJjgUtOUVDA99ng5/AGYu7PV8wK1w9Iei4rx6Qg=;
-        b=qgySIFMEfkIE5WOzF7dup0PI1gwZILzMyh5r61s+BPb9iiVOI7ZbLR3Lrg18bQqkRl
-         aRIX9wG0akZ0Gkyra5PSYGzscA8L4WFqtl4C/5VAQ7QFxVTs9dv9GhvuLv9c0bdFefLt
-         rk/Yf7CjrRT5e18/3cjgKm9uKbArYCeMnioQlZYxSfhk6vMxgl6wDNRdFWGESvEADn8e
-         FiabCDTIzmwHWF/D14xr3K18Jdq5SqaBiRkECs89PNE6kAcMZ61FiYYowWOtEe/FFvcI
-         T/uWhpog+M1rMk8HivYfrjRJiRZI4DmXmLYpQ/ulAnuSX4FPcoaFg2lHuOaOXZ+yyKR6
-         9lUA==
-X-Gm-Message-State: AOAM530/UrBtJbLd4Tc30WsKCjzFJN30y6JN4Y/JRmziG0dVb1bdrSVN
-        8fygi3DHe8odpbprbJjQCVyr9AsORI4M8o5+px47BQgY11ie/b0PfvbcjotPN9jPh/D670GElsF
-        dmVZvId0EAGQlMHdjMV7NwerbUblHyH+19YruAzrs
-X-Received: by 2002:a17:906:1f15:: with SMTP id w21mr16253527ejj.205.1643120774973;
-        Tue, 25 Jan 2022 06:26:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz9O9o4wfs8N1leHAikkbwJT29Az/OoR2DjwNtoJWQuQqqvtGNb1WTEw1Hy2QO4rGn2JAk000qaKRVjx7pfKF8=
-X-Received: by 2002:a17:906:1f15:: with SMTP id w21mr16253499ejj.205.1643120774706;
- Tue, 25 Jan 2022 06:26:14 -0800 (PST)
+        bh=wl6G1I8d7amrdxFUYe5VdZlTB2njtWsoXMFyPet+gSM=;
+        b=wlYIwAn7U8VXPflFGqsJs538RN6yLOtUeOXZHN1VVeYl5pfa3og/z9j7PYMi+xUay2
+         VZ3tbaHNogbxIBUwh2t9rpw0O+NzaPw8BnPw+CEgdc+dPi4Xm6705v3/h3D0iOHKKGwo
+         FdDD1lLQvBOcl36SHBb1yDpe9hablBcbhud6g+mQKhNhLUxV7unCTeA5qkLHxKTPBRXf
+         GM3XVF5pc2166eteP6KIhWJHO+c8/7SgW4nlHrex0neCP/qY3YZVA4WLg0Mv/5iNyx8F
+         sfwtTNo6Sazr/13skD8tP7vlVcztZOq97jLIO+renzqzqT4gKg7SwTc+kv6Q6+aYFc2D
+         yHIQ==
+X-Gm-Message-State: AOAM531bduWYYvAVZHANIQPj7OGlJXbi1ul0JQtsBHZ5WTH2OTqa9KuW
+        WHXoFmk/JXGKSYV5FvkfSA9yNxmXYhVjetWZK7NUOaAwAiXS1w==
+X-Google-Smtp-Source: ABdhPJyFvo0J2ACdgGip0xhojHQiB4Fhvy8CYFKQFGItnOFG8EzOF30f7xwY1X3oEdihcoOJrEv5uvnaovhwTDuhnyE=
+X-Received: by 2002:a25:af4b:: with SMTP id c11mr29461798ybj.49.1643120803495;
+ Tue, 25 Jan 2022 06:26:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20211222112831.1968392-1-wander@redhat.com> <20211222112831.1968392-2-wander@redhat.com>
- <Ye/1+Z8mEzbKbrqG@linutronix.de> <CAAq0SUmdGinqdWXrHztx8g9hb+5UF5rDJJjVeVMj3CQ=Fw3kJg@mail.gmail.com>
- <YfAFAcYmJ+Zrontd@linutronix.de>
-In-Reply-To: <YfAFAcYmJ+Zrontd@linutronix.de>
-From:   Wander Costa <wcosta@redhat.com>
-Date:   Tue, 25 Jan 2022 11:26:03 -0300
-Message-ID: <CAAq0SUkuG2uyouBhT5yDiq_KbOGUCO=9ondq6dkt1QZLN_C4uA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] tty: serial: Use fifo in 8250 console driver
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
+References: <20220125132221.2220-1-linmiaohe@huawei.com>
+In-Reply-To: <20220125132221.2220-1-linmiaohe@huawei.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 25 Jan 2022 22:26:07 +0800
+Message-ID: <CAMZfGtUJ08hL8RW0VCxx6KMmf0eUvMaO1hu_Mhhhu90HQQ31rQ@mail.gmail.com>
+Subject: Re: [PATCH] mm/balloon_compaction: make balloon page compaction
+ callbacks static
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:11 AM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
+On Tue, Jan 25, 2022 at 9:29 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
 >
-> On 2022-01-25 10:15:04 [-0300], Wander Costa wrote:
-> > There is another thread[1] reporting some issues with this patch.
-> > There, this diff seems to fix the problems, could you please try and
-> > report if it works for you too?
+> Since commit b1123ea6d3b3 ("mm: balloon: use general non-lru movable page
+> feature"), these functions are called via balloon_aops callbacks. They're
+> not called directly outside this file. So make them static and clean up
+> the relevant code.
 >
-> Nope. Still there.
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-I will check on my side if I see something similar. Do you still get
-lines lost as well?
-
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>

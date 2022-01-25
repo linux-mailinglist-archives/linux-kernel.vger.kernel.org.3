@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD3D49BE73
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7701349BE7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233802AbiAYW1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbiAYW1P (ORCPT
+        id S233833AbiAYW3b convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 25 Jan 2022 17:29:31 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:54456 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233824AbiAYW3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:27:15 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC36C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:27:15 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id w14so12937347edd.10
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:27:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/1BiB0LlRhrBnkIdJld33ntWmu5J0JJj0Fcrw4TDuSI=;
-        b=codcubGyPRRa9Co1DwYI2ifTPo2sxWpxhfC162hwvfv0Dvj34aQMGqFZRV+Fb2oImP
-         YpQ02SJTC8gYN4g1JmYjUiqx+ZGdRf3JxCvvepEPZ3YpTdzCmnsRqP74xG00slnsfB+u
-         4xuSx8u/lS9VDpfe9MwjJKJneITNky/Le68TZyQyLDyUH4T+w+PWeJ8Igu2HT5b6VpEl
-         cfIkvq3BZdEDsTfy/SW7uKUQAsA5A7Q0VdZ8kkr4a+Yp8jpTMnbe+KebgjevbzkM5X3l
-         qpJbeaR8+ZXrHfrkX8i4u7kjQOIV0mBbZjfbgS5QSZSt7U+d7952i/y2bjS3bwCWniS9
-         NqCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/1BiB0LlRhrBnkIdJld33ntWmu5J0JJj0Fcrw4TDuSI=;
-        b=pewWE0LseDt5S4ugsVEUnpHx1bt6xkXR6NK9UzNa/p768RTv6MM52PwJGWU+Mh/le0
-         VcnhhRjYmSBcLNKyEfqI6B5V92GKNBvw+x3naprqWItZrb9R0muYwPSNZTFYQILH17ZC
-         PeurVthNZjWcOivmYvf7Y6yBPDDXwWbezA5Q4JRQfh8fXljUYCLeuFCpQZSE/fSlfp1x
-         6UbRzdeUC/+rnzbBbqWoKZI5r6CEVkv3DCjCx+gepkvt2z+gTXibOMvBHJyPHvt3A8iz
-         JTO3OlAiFJHfXYXiocz26l7pqGyyBurJiEFHi9ZOqVBtdcmIs0QEE/ltUJu5dvPovaMh
-         NyoA==
-X-Gm-Message-State: AOAM530GgmtVNETC6lcdopdFBgckBS7W/tHCH63mMoq24A4dXMuImDyR
-        r2WXB9wp23yMeGjwehGUM9yGliHhmwK1DVz0CA2u
-X-Google-Smtp-Source: ABdhPJyMnhB7AjQM90R3rAyHkw09pciULNZQsSRVFJsPjgGXkMK5fv7dlJ9igPXCWWBfuR6Qb8adl5BW2dDLMR1lkNk=
-X-Received: by 2002:a05:6402:1e93:: with SMTP id f19mr21939603edf.343.1643149633597;
- Tue, 25 Jan 2022 14:27:13 -0800 (PST)
+        Tue, 25 Jan 2022 17:29:30 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-312-9uUIQKOKPQeq0Z4xvNcZPA-1; Tue, 25 Jan 2022 22:29:28 +0000
+X-MC-Unique: 9uUIQKOKPQeq0Z4xvNcZPA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 25 Jan 2022 22:29:26 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 25 Jan 2022 22:29:26 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Jessica Clarke' <jrtc27@jrtc27.com>,
+        Atish Patra <atishp@rivosinc.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: RE: [PATCH v3 6/6] RISC-V: Do not use cpumask data structure for
+ hartid bitmap
+Thread-Topic: [PATCH v3 6/6] RISC-V: Do not use cpumask data structure for
+ hartid bitmap
+Thread-Index: AQHYEjqOgNf2MUyCekGjzXIezYRolax0US8A
+Date:   Tue, 25 Jan 2022 22:29:26 +0000
+Message-ID: <63b1a64fc25d44dabab777bf1f247863@AcuMS.aculab.com>
+References: <20220120090918.2646626-1-atishp@rivosinc.com>
+ <20220120090918.2646626-7-atishp@rivosinc.com>
+ <1AA3005C-E9C8-4E4B-900D-DD48B37CEA41@jrtc27.com>
+In-Reply-To: <1AA3005C-E9C8-4E4B-900D-DD48B37CEA41@jrtc27.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
-In-Reply-To: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 25 Jan 2022 17:27:02 -0500
-Message-ID: <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
-Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
-To:     Demi Marie Obenour <demiobenour@gmail.com>
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 4:34 PM Demi Marie Obenour
-<demiobenour@gmail.com> wrote:
->
-> These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
-> always allows too.  Furthermore, a failed FIOCLEX could result in a file
-> descriptor being leaked to a process that should not have access to it.
->
-> Signed-off-by: Demi Marie Obenour <demiobenour@gmail.com>
-> ---
->  security/selinux/hooks.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> On 20 Jan 2022, at 09:09, Atish Patra <atishp@rivosinc.com> wrote:
+> >
+> > Currently, SBI APIs accept a hartmask that is generated from struct
+> > cpumask. Cpumask data structure can hold upto NR_CPUs value. Thus, it
+> > is not the correct data structure for hartids as it can be higher
+> > than NR_CPUs for platforms with sparse or discontguous hartids.
+> >
+> > Remove all association between hartid mask and struct cpumask.
+....
+> > -static int __sbi_rfence_v01(int fid, const unsigned long *hart_mask,
+> > +static int __sbi_rfence_v01(int fid, const struct cpumask *cpu_mask,
+> > 			    unsigned long start, unsigned long size,
+> > 			    unsigned long arg4, unsigned long arg5)
+> > {
+> > 	int result = 0;
+> > +	unsigned long hart_mask;
+> > +
+> > +	if (!cpu_mask)
+> > +		cpu_mask = cpu_online_mask;
+> > +	hart_mask = __sbi_v01_cpumask_to_hartmask(cpu_mask);
+> >
+> > 	/* v0.2 function IDs are equivalent to v0.1 extension IDs */
+> > 	switch (fid) {
+> > 	case SBI_EXT_RFENCE_REMOTE_FENCE_I:
+> > 		sbi_ecall(SBI_EXT_0_1_REMOTE_FENCE_I, 0,
+> > -			  (unsigned long)hart_mask, 0, 0, 0, 0, 0);
+> > +			  (unsigned long)&hart_mask, 0, 0, 0, 0, 0);
 
-I'm not convinced that these two ioctls should be exempt from SELinux
-policy control, can you explain why allowing these ioctls with the
-file:ioctl permission is not sufficient for your use case?  Is it a
-matter of granularity?
+You don't need the cast.
 
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 5b6895e4fc29..8f3b2f15c1f3 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -3728,6 +3728,11 @@ static int selinux_file_ioctl(struct file *file, unsigned int cmd,
->                 error = file_has_perm(cred, file, FILE__GETATTR);
->                 break;
->
-> +       /* must always succeed */
-> +       case FIOCLEX:
-> +       case FIONCLEX:
-> +               break;
-> +
->         case FS_IOC_SETFLAGS:
->         case FS_IOC_SETVERSION:
->                 error = file_has_perm(cred, file, FILE__SETATTR);
+	David
 
---
-paul-moore.com
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

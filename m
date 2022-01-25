@@ -2,135 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA9D49BC28
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B52849BC2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiAYTd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        id S230293AbiAYTf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:35:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiAYTdv (ORCPT
+        with ESMTP id S230205AbiAYTe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:33:51 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1905C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:33:50 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id q127so3514893ljq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:33:50 -0800 (PST)
+        Tue, 25 Jan 2022 14:34:27 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69D3C061747
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:34:25 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id u130so16440537pfc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:34:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2mh7I9RVtB7UsMUi3Pap6a4lxrdNL9g+CKep6e2zGwo=;
-        b=B7Tf5SdiuBdrN+Zs/966hzqHG9UrbgGVknyldysY95ZcbKqHKXR4VkZQ1t0Tf5asCM
-         mLIFt9y9ibVlRl1vXK9UxYaFiH/MTHacO/WZuAiXoq5S4h/ErAN1ECYbzCe+vTsULIkD
-         HMrl8LXAGJWEzNrKB/dzTD8TKo6l2cjxS5U1/bbD3Ap36hppcAog26Fo2NJvOCU6FR5R
-         2xKW1IS/eCyBJToYAuP5knvUqaGa/iH05lpFEmltyfGghzywL5d/Rs560dtQyNuBh59A
-         MMoOvc/4+pGpKg35vRsfcZI8KOmOuEhM/xh7uvi4mEXjUMF5viqEmNp7k9VOhhhYAgKh
-         PgwQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wqkKZwea4Ntd1UMLoEnxDe91teRkaMMO7ADnYpsEdMY=;
+        b=Xax9igYolzgTI16rjcvA8qDy9hafAlD+40MG99uerzRhh0xcnwKx0vFFRpRLKXYeH8
+         tXPv3lZv2wlrAdPIBPf33UKrEC6hN3ZTkTy65/mll1hln7phNHyMfgImIu018DPHuTHC
+         lMkw2UyJ6vdDWTzyFzUHtVqaKKSjOFKPDm+o57lPjotAHyTHwxSAa3fQooLvtqb4LXb0
+         5s+Dym2nVR1PFfXPpg/9jAMYwRTxQfmTaMz7PQuafw4Le9KX3N8RI3n0SGZtqocxO4qX
+         p6d6ohiKn3Z8GugQHJq2QwVTs442Q97jxAXKnld2tZVN1zn4e0zZ8FmRxhTM7HwuTF7U
+         F4TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2mh7I9RVtB7UsMUi3Pap6a4lxrdNL9g+CKep6e2zGwo=;
-        b=1HDvENI/usnWKnlu+rPYiOMkJe9fGrOOmg28uk2ShJzXHmcW8itqYzdD46KKNMzbJ6
-         iQXRDA2Vc0FwtcI7csVHJWAMUVq6OUf47KogSliNOhlehW4WsYw+OKWZg+i+Rc9Np2dw
-         jECwiWGilDuFR8wvXUAXLboAsxFdao++95r7kCk5Y25jWTdtpN5i8sBELhYiSj6/eDA1
-         0U80aVDxHqh8wIodOTO3eAMl5MbhgTYoiPuNypl3x0WlHqD9S3qHveOX25ZCnPkD64QE
-         TXGEbEHsLd+ViG99jj7Snn7+s6s7u1h3XLTXvRgF/r2QHDfojC8B90LgxWmn1uGTpt1I
-         a56g==
-X-Gm-Message-State: AOAM530058vYc4RrUkjkdgO0C2rp/icfqOJAWikwpHXJ2pFinIMb7r5H
-        hy1u0lpCpOuapGlzEW3psWw/hCCNfi1CBoRb
-X-Google-Smtp-Source: ABdhPJweHb/RUDIVB9kRybj0CmKxyU0F5QQKq2fVl8DmULjUEwvzP7kn9X1wPhZ5NVMNzBAgDGOREA==
-X-Received: by 2002:a2e:a4c6:: with SMTP id p6mr9764301ljm.20.1643139229329;
-        Tue, 25 Jan 2022 11:33:49 -0800 (PST)
-Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id b24sm1581642lfj.26.2022.01.25.11.33.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 11:33:48 -0800 (PST)
-Message-ID: <8b5681a0-a9ab-8ad7-b293-ce1342e43099@cogentembedded.com>
-Date:   Tue, 25 Jan 2022 22:33:47 +0300
+        bh=wqkKZwea4Ntd1UMLoEnxDe91teRkaMMO7ADnYpsEdMY=;
+        b=qkPcV7bfukEKm1wZZ8R8EonqaExH9MKn1i3IoaWY2kG+mTJrZUpJzhDWdw1R5l0JTE
+         6TR1uwWiCtPHZnlzAqSC2zFUmSrL4W+yYA4bs29pJMrp10U2vWyZ/f2K4Ybf3Sak7lG2
+         Hxzur17dljCdWdfGbkoJ8Ic9owMEfq2upuEF1uYzPLz1xibHWS4+Jl59+acrOCsucMRR
+         qWRTKIH1qZY3t0fGn93g2xOASIKkefJW2a0fMTv9BKs12zHRW0VjNw6DPoZN6ix2Oz1s
+         Bpo9wxlNcyBxVXYXUUmjKd9l3N/9XyLiFVLC3lfOCk+kHTaoSzSw/37A/9BVbgp4FqNF
+         NqQg==
+X-Gm-Message-State: AOAM530X/NDs9wpESpvTaQLCEMNsU/wwXb63PYsrlO02Q+1vMDUufxZ+
+        tYuHNBLYsWtj2JMlwils1eobVA==
+X-Google-Smtp-Source: ABdhPJwKn4xsubm3B306tmrdkEHk+6IyVkLSe3+CfFCGvzbf6On+fSFVFQ3hGvWDObdK1oO/yyE/RQ==
+X-Received: by 2002:a05:6a00:1312:b0:4c4:cffa:a4c0 with SMTP id j18-20020a056a00131200b004c4cffaa4c0mr19606314pfu.79.1643139265175;
+        Tue, 25 Jan 2022 11:34:25 -0800 (PST)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id q7sm19499854pfs.32.2022.01.25.11.34.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 11:34:24 -0800 (PST)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     peterz@infradead.org
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+Subject: [PATCH v3] sched/fair: Fix fault in reweight_entity
+Date:   Tue, 25 Jan 2022 11:34:03 -0800
+Message-Id: <20220125193403.778497-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] drivers: irqchip: add irq-type-changer
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        linux-kernel@vger.kernel.org
-References: <20220124095652.522099-1-nikita.yoush@cogentembedded.com>
- <878rv58ghy.wl-maz@kernel.org>
- <a179c80c-7ce8-da1a-f344-5d72b65c3da4@cogentembedded.com>
- <874k5s8a32.wl-maz@kernel.org>
- <a7a6ddd2-9d40-3ac2-2b7f-bb521c8d3728@cogentembedded.com>
- <871r0w86wv.wl-maz@kernel.org>
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-In-Reply-To: <871r0w86wv.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- > Such HW can stay in the bin.
+Syzbot found a GPF in reweight_entity. This has been bisected to commit
+4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
 
-Huh? Industry is full of ugly hardware (that is still surprisingly useful to cover practical needs at 
-low cost - which ensures it will persist). Sure I'd prefer to spend time for something better than 
-negotiating workarounds to keep ugly hardware working. But after 20+ years in the industry, I can only 
-agree with the statement Linus wrote back in 2006 in [1]:
+There is a race between sched_post_fork() and setpriority(PRIO_PGRP)
+within a thread group that causes a null-ptr-deref in reweight_entity()
+in CFS. The scenario is that the main process spawns number of new
+threads, which then call setpriority(PRIO_PGRP, 0, -20), wait, and exit.
+For each of the new threads the copy_process() gets invoked, which adds
+the new task_struct and calls sched_post_fork() for it.
 
-| For a driver writer, there is one rule above _all_ other rules:
-|
-|	"Reality sucks, deal with it"
-|
-| That rule is inviolate, and no amount of "I wish", and "it _should_
-| work this way" or "..but the documentation says" matters at all.
+In the above scenario there is a possibility that setpriority(PRIO_PGRP)
+and set_one_prio() will be called for a thread in the group that is just
+being created by copy_process(), and for which the sched_post_fork() has
+not been executed yet. This will trigger a null pointer dereference in
+reweight_entity(), as it will try to access the run queue pointer, which
+hasn't been set. This results it a crash as shown below:
 
-[1] https://lore.kernel.org/lkml/Pine.LNX.4.64.0604241156340.3701@g5.osdl.org/
+KASAN: null-ptr-deref in range [0x00000000000000a0-0x00000000000000a7]
+CPU: 0 PID: 2392 Comm: reduced_repro Not tainted 5.16.0-11201-gb42c5a161ea3
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
+RIP: 0010:reweight_entity+0x15d/0x440
+RSP: 0018:ffffc900035dfcf8 EFLAGS: 00010006
+Call Trace:
+<TASK>
+reweight_task+0xde/0x1c0
+set_load_weight+0x21c/0x2b0
+set_user_nice.part.0+0x2d1/0x519
+set_user_nice.cold+0x8/0xd
+set_one_prio+0x24f/0x263
+__do_sys_setpriority+0x2d3/0x640
+__x64_sys_setpriority+0x84/0x8b
+do_syscall_64+0x35/0xb0
+entry_SYSCALL_64_after_hwframe+0x44/0xae
+</TASK>
+---[ end trace 9dc80a9d378ed00a ]---
 
+Before the mentioned change the cfs_rq pointer for the task  has been
+set in sched_fork(), which is called much earlier in copy_process(),
+before the new task is added to the thread_group.
+Now it is done in the sched_post_fork(), which is called after that.
+To fix the issue the update_load condition passed to set_load_weight()
+in set_user_nice() and __sched_setscheduler() has been changed from
+always true to true if the task->state != TASK_NEW.
 
-Can we finally stop blaming and propose a practical way to solve the original issue?
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Zhang Qiao <zhangqiao22@huawei.com>
+Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: stable@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-If the only solution you are ready to accept is the code that supports inversion only, and uses node's 
-"interrupts" property to provide info for interrupt-grand-parent, please state that explicitly.
+Link: https://syzkaller.appspot.com/bug?id=9d9c27adc674e3a7932b22b61c79a02da82cbdc1
+Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+Reported-by: syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+---
+Changes in v3:
+- Removed the new check and changed the update_load condition from
+  always true to true if p->state != TASK_NEW
 
+Changes in v2:
+- Added a check in set_user_nice(), and return from there if the task
+  is not fully setup instead of returning from reweight_entity()
+---
+---
+ kernel/sched/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-<skipping all the statements I don't agree with>
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 848eaa0efe0e..3d7ede06b971 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6921,7 +6921,7 @@ void set_user_nice(struct task_struct *p, long nice)
+ 		put_prev_task(rq, p);
+ 
+ 	p->static_prio = NICE_TO_PRIO(nice);
+-	set_load_weight(p, true);
++	set_load_weight(p, !(READ_ONCE(p->__state) & TASK_NEW));
+ 	old_prio = p->prio;
+ 	p->prio = effective_prio(p);
+ 
+@@ -7212,7 +7212,7 @@ static void __setscheduler_params(struct task_struct *p,
+ 	 */
+ 	p->rt_priority = attr->sched_priority;
+ 	p->normal_prio = normal_prio(p);
+-	set_load_weight(p, true);
++	set_load_weight(p, !(READ_ONCE(p->__state) & TASK_NEW));
+ }
+ 
+ /*
+-- 
+2.34.1
 
-
- > (I really should put a WARN_ON() in the irqdomain
- > code to catch this sort of things).
-
-I do support this idea.
-
-Is a WARN_ON() in irq_domain_set_mapping() checking that nothing is already assigned to this hwirq in 
-this domain good enough to serve this purpose?
-
-I.e. for a linear domain (which shall be enough to catch the wl18xx-on-kf case where both parent domain 
-and irq-type-changer's domain are linear):
-
---- a/kernel/irq/irqdomain.c
-+++ b/kernel/irq/irqdomain.c
-@@ -521,9 +521,10 @@ static void irq_domain_set_mapping(struct irq_domain *domain,
-                 return;
-
-         mutex_lock(&domain->revmap_mutex);
--       if (hwirq < domain->revmap_size)
-+       if (hwirq < domain->revmap_size) {
-+               WARN_ON(domain->revmap[hwirq] != NULL);
-                 rcu_assign_pointer(domain->revmap[hwirq], irq_data);
--       else
-+       } else
-                 radix_tree_insert(&domain->revmap_tree, hwirq, irq_data);
-         mutex_unlock(&domain->revmap_mutex);
-  }
-
-This does not hit on my code.
-
-Could you please suggest a better location for WARN_ON() that will hit?
-
-
-Nikita

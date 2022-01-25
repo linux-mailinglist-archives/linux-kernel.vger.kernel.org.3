@@ -2,123 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E60049BE92
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A094F49BE94
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233888AbiAYWdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbiAYWdH (ORCPT
+        id S233903AbiAYWdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:33:42 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:55937 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233892AbiAYWdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:33:07 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B165EC061747
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:33:06 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id j2so33764941ejk.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:33:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oeeJHO8TMWJMimBDwT2b+COdmax7x8vmymErPKX3jxc=;
-        b=DzijtXi0FpfwwMBwStqu3UmmHy6WLI6KJjaJCTw5TVkmEqNdXft9MrLSeXBntoO7Mw
-         fWSvmO7h/R5mQ/yU+34k8tfHIU5T7UxRE0tWGCE66lLTfaILezBkt/1UkJvP9pVH0Yzb
-         HHNrjbdaOKT86FyOQ4Jf88N4t5t/R3zJhuJwDslag8fbYnvwj1+kSYMm+Az5xDFrSoYc
-         knCjS+ili0zFQfE5Tfu8zpiesGviybOMiD+yOzaswnbUAmmPC8T35oz+wE4i8da9xo9A
-         Cxn3uNaT3ALpZ+5PyJS8v8W9GaSLLCJqkiGKhzgIDTWBp7Qme5nzQ2I/BzjbPf8Vhkt1
-         p03Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oeeJHO8TMWJMimBDwT2b+COdmax7x8vmymErPKX3jxc=;
-        b=JdnRgCloOEWoS08EcKaXSDozVKLPNc5v1VEG4MpSf6WtsLJt9FYtonxfuZ0ySfhZfT
-         K2OaFRck4Q3YHsSb8GEbPPrZ0aNEBmJr5TRpdygFXNuHinc9o8hQjVp5PAU7qRZYVlsK
-         70Uapa0nHcpzXtY3sAyPiz5gHg8Jhw6s9MPq/v4sns260OhsO/p5tQq33XvjPDavE62A
-         +sszdYVbrXCkX6uy3lEUP5X/lz5tNTras3hUDInzxjLeC8u5FOQFio8/Pf5Nt/WstVWg
-         K+zkbQCGmAYv2Wli1lqoSVzSqJOjtwab+QRyerDyYzMNjR6hy0b315LfY0wCeo9L9ZY6
-         wfAQ==
-X-Gm-Message-State: AOAM533tgzlalutESzkH0Ex888k69/W+8AKOSSeNlZNTxBCY1cQoCI/L
-        bx43ETlwY0EjYre8kVDKSnFscYVSTGD4ClFoCV9w
-X-Google-Smtp-Source: ABdhPJwzCS4uLiZK6VG/8/+4YA+LVnkgPcisQkj57oqNq+GSah4sXm1jFpQGtsy59McG8IOvdIVYqDfpF+TVv9/mvao=
-X-Received: by 2002:a17:907:6d03:: with SMTP id sa3mr4722991ejc.517.1643149985174;
- Tue, 25 Jan 2022 14:33:05 -0800 (PST)
+        Tue, 25 Jan 2022 17:33:12 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jk1pB4qZGz4xdl;
+        Wed, 26 Jan 2022 09:33:06 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643149986;
+        bh=4N5QEyxMjjwZITic1lYF0XkgVn9dsIlL0PsrC3TOMHo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=L02PQ8pCXcMps5P7QIe5ola+But/eUFTITsxdmJ3adm3d+d/f8UJEZBYo9ahf8NoW
+         BXfICohdsogLlQpCdjrTjGQn7FuOu6Kwmmlx/sp6CH/CCtY6mbstli8wpmh97zCM3E
+         bhpKQ0KLXsZSWhqFOs98s+nixxdCO+3ATPAR1UoMmmMlS8bt7FyOZoj1dtIRGF2C6A
+         fTFiDU6kpmx5tUDa01fGYzZsh9N+Q3kD4QJULzaI4sByECRpbkYSt0nbwPsCnL2lSV
+         7csDDekaISwpRWsGWutj3zGzo42fMEp6NfLNIJF5UDy5UeS0H7Mvu7U8CS/p4tVTBp
+         RMA5XsY/f2nsw==
+Date:   Wed, 26 Jan 2022 09:33:05 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the samsung-krzk
+ tree
+Message-ID: <20220126093305.5726fcbb@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220120214948.3637895-1-smayhew@redhat.com> <20220120214948.3637895-2-smayhew@redhat.com>
- <CAHC9VhT2RhnXtK3aQuDCFUr5qayH25G8HHjRTJzhWM3H41YNog@mail.gmail.com>
- <YfAz0EAim7Q9ifGI@aion.usersys.redhat.com> <CAHC9VhTwXUE9dYBHrkA3Xkr=AgXvcnfSzLLBJ4QqYd4R+kFbbA@mail.gmail.com>
- <YfBGx+M9jQZa80rZ@aion.usersys.redhat.com>
-In-Reply-To: <YfBGx+M9jQZa80rZ@aion.usersys.redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 25 Jan 2022 17:32:54 -0500
-Message-ID: <CAHC9VhRoWbnV-cs2HzmiTEd7_kP914stdVpN9Tm2-6uua2-ELA@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
-To:     Scott Mayhew <smayhew@redhat.com>
-Cc:     selinux@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 1:51 PM Scott Mayhew <smayhew@redhat.com> wrote:
-> On Tue, 25 Jan 2022, Paul Moore wrote:
-> > On Tue, Jan 25, 2022 at 12:31 PM Scott Mayhew <smayhew@redhat.com> wrote:
-> > > On Mon, 24 Jan 2022, Paul Moore wrote:
-> > > > On Thu, Jan 20, 2022 at 4:50 PM Scott Mayhew <smayhew@redhat.com> wrote:
-> > > > >
-> > > > > selinux_sb_mnt_opts_compat() is called under the sb_lock spinlock and
-> > > > > shouldn't be performing any memory allocations.  Fix this by parsing the
-> > > > > sids at the same time we're chopping up the security mount options
-> > > > > string and then using the pre-parsed sids when doing the comparison.
-> > > > >
-> > > > > Fixes: cc274ae7763d ("selinux: fix sleeping function called from invalid context")
-> > > > > Fixes: 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an existing mount")
-> > > > > Signed-off-by: Scott Mayhew <smayhew@redhat.com>
-> > > > > ---
-> > > > >  security/selinux/hooks.c | 112 ++++++++++++++++++++++++++-------------
-> > > > >  1 file changed, 76 insertions(+), 36 deletions(-)
-> >
-> > ...
-> >
-> > > > >         switch (token) {
-> > > > >         case Opt_context:
-> > > > >                 if (opts->context || opts->defcontext)
-> > > > >                         goto err;
-> > > > >                 opts->context = s;
-> > > > > +               if (preparse_sid) {
-> > > > > +                       rc = parse_sid(NULL, s, &sid);
-> > > > > +                       if (rc == 0) {
-> > > > > +                               opts->context_sid = sid;
-> > > > > +                               opts->preparsed |= CONTEXT_MNT;
-> > > > > +                       }
-> > > > > +               }
-> > > >
-> > > > Is there a reason why we need a dedicated sid variable as opposed to
-> > > > passing opt->context_sid as the parameter?  For example:
-> > > >
-> > > >   rc = parse_sid(NULL, s, &opts->context_sid);
-> > >
-> > > We don't need a dedicated sid variable.  Should I make similar changes
-> > > in the second patch (get rid of the local sid variable in
-> > > selinux_sb_remount() and the *context_sid variables in
-> > > selinux_set_mnt_opts())?
-> >
-> > Yes please, I should have explicitly mentioned that.
->
-> Actually, delayed_superblock_init() calls selinux_set_mnt_opts() with
-> mnt_opts == NULL, so there would have to be a lot of checks like
->
->         if (opts && opts->fscontext_sid) {
->
-> in the later parts of that function, which is kind of clunky.  I can
-> still do it if you want though.
+--Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I might be misunderstanding your concern, but in
-selinux_set_mnt_opts() all of the "opts->XXX" if-conditionals are
-protected by being inside an if-statement that checks to ensure "opts"
-is not NULL.  Am I missing something?
+Hi all,
 
--- 
-paul-moore.com
+Commits
+
+  1f22c720691e ("Revert "arm64: dts: fsd: Add initial device tree support"")
+  191448a71471 ("Revert "arm64: dts: fsd: Add initial pinctrl support"")
+
+are missing a Signed-off-by from their author and committer.
+
+Reverts are changes too and so should be signed off and have reasonable
+("why did we do this?") changelogs.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHweqEACgkQAVBC80lX
+0Gx10wf/RZM9esQhP2tnVjq+YvXAw+l0pZmPJS31cHltX9HJl5Qmu3qe8mMCkuLf
+BgL3cTrrjyBaBGtEN68vffkeOxlVMD28dU0b2tydnSWYH+2FWckiGUIhGJ4oCpA0
+ItxlQt8UWJ+sRpSAQazqBxp7vyicSSTeISkpwukzUKw8/MGoyRvLsaxS+9h1pLpM
+k6AsZ3IYVGBaWwCQf+Go1sKogjaBHPKzOAEpj9uT8x0I7ipRx/4u3Pt/8a2royHF
+Yn9Sbqfr4h5fgPirtlVUKBwf2MfxaDIk9G+Bd+u8e39Z0mlvW8+oJvGbBQ1MUrL5
+X4XpScUH+eZCbEipYDAlEEoMhpOlLQ==
+=/k5Y
+-----END PGP SIGNATURE-----
+
+--Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv--

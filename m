@@ -2,228 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADEFD49B7D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 038E549B7D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582219AbiAYPlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:41:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59208 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1581988AbiAYPjG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:39:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1ED6B81818;
-        Tue, 25 Jan 2022 15:39:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D13C340E0;
-        Tue, 25 Jan 2022 15:38:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643125139;
-        bh=3+IIyO4s9LRB2WJTD77TQ1psxFyUDAivLJQg1pOB6c0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Pi1B/S1XqQwEErfMBvI/lQ+vMJznZoW2tBZuA6TrAoIxdFVFIV9uAYtuHus8INUmK
-         FqJMXQ6SWoIOJDeEwAfgxexxhfsmhtK/j8Q5NrbOh9mGFQV4x0bYLQN45WTIb+3vli
-         zMR4ZJdQt493xqFWC9yhVnwI7W5sbZpTxX8czi/QJghc/1/bUgNgd/pCMA+t1Dg7Vz
-         47qdsECIxUvg+allRMzAedu1CMPqh1ESqMmPsLjoZRqig/wQtP3bZQYCEjV8Xf6KM9
-         KE0sfiXEIRtd8EUwRH8cyF4ccARZl0s1sYCG9MPRH1SPA5yUy0/bgQUNvRNvb8rJxn
-         g1B4yVi3AjkVg==
-Date:   Tue, 25 Jan 2022 09:38:58 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     David Airlie <airlied@linux.ie>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Bruno =?iso-8859-1?Q?Pr=E9mont?= <bonbons@linux-vserver.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v8 04/10] vgaarb: Move framebuffer detection to
- ADD_DEVICE path
-Message-ID: <20220125153858.GA1609157@bhelgaas>
+        id S1582243AbiAYPlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:41:53 -0500
+Received: from foss.arm.com ([217.140.110.172]:51224 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354426AbiAYPj3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 10:39:29 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3CCBD6E;
+        Tue, 25 Jan 2022 07:39:27 -0800 (PST)
+Received: from [10.32.33.50] (e121896.warwick.arm.com [10.32.33.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A5683F793;
+        Tue, 25 Jan 2022 07:39:26 -0800 (PST)
+Subject: Re: [RFC V1 11/11] perf: Capture branch privilege information
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
+ <1642998653-21377-12-git-send-email-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <82d586d3-358b-724b-0eac-7fb5c6e03efb@arm.com>
+Date:   Tue, 25 Jan 2022 15:39:24 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H4GAgKh4HBeWQ+LGf2x_uKy_T5MaMv0dNcYXFKVGAZEzw@mail.gmail.com>
+In-Reply-To: <1642998653-21377-12-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Maarten, Maxime, Thomas; beginning of thread:
-https://lore.kernel.org/r/20220106000658.243509-1-helgaas@kernel.org]
 
-On Tue, Jan 25, 2022 at 10:51:15AM +0800, Huacai Chen wrote:
-> Hi, Bjorn,
+
+On 24/01/2022 04:30, Anshuman Khandual wrote:
+> Platforms like arm64 could capture privilege level information for all the
+> branch records. Hence this adds a new element in the struct branch_entry to
+> record the privilege level information, which could be requested through a
+> new event.attr.branch_sample_type flag PERF_SAMPLE_BRANCH_PRIV_SAVE. While
+> here, update the BRBE driver as required.
 > 
-> Why this series still missing in 5.17-rc1? :(
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-perf-users@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  drivers/perf/arm_pmu_brbe.c              | 28 ++++++++++++++++++++++++
+>  include/linux/perf_event.h               |  5 +++++
+>  include/uapi/linux/perf_event.h          | 13 ++++++++++-
+>  tools/include/uapi/linux/perf_event.h    | 13 ++++++++++-
+>  tools/perf/Documentation/perf-record.txt |  1 +
+>  tools/perf/util/parse-branch-options.c   |  1 +
+>  6 files changed, 59 insertions(+), 2 deletions(-)
+> 
+[...]
+> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+> index 361fdc6b87a0..4d77710f7a4e 100644
+> --- a/include/uapi/linux/perf_event.h
+> +++ b/include/uapi/linux/perf_event.h
+> @@ -204,6 +204,8 @@ enum perf_branch_sample_type_shift {
+>  
+>  	PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT	= 17, /* save low level index of raw branch records */
+>  
+> +	PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT	= 18, /* save privillege mode */
 
-1) It was posted late in the cycle (Jan 6, when the merge window
-opened Jan 9), so it was too late to expect a significant change like
-this to be merged for v5.17.  Right now is a good time to consider it
-again so it would some time in -next.
+privillege -> privilege
 
-2) As of now, this code is still in drivers/gpu, and I don't maintain
-that area.  It's up to the DRM folks, who are all cc'd here.
+> +
+>  	PERF_SAMPLE_BRANCH_MAX_SHIFT		/* non-ABI */
+>  };
+>  
+> @@ -233,6 +235,8 @@ enum perf_branch_sample_type {
+>  
+>  	PERF_SAMPLE_BRANCH_HW_INDEX	= 1U << PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT,
+>  
+> +	PERF_SAMPLE_BRANCH_PRIV_SAVE	= 1U << PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT,
+> +
 
-I would like to move this from drivers/gpu to drivers/pci, but that
-requires a little more work to resolve the initcall ordering problem
-with respect to vga_arb_device_init() and misc_init() [1].
+Can you also add the new entry to the perf verbose printer otherwise it looks like
+it's not being set on branch_sample_type
+(as in when using ./perf record -j any_call,u,priv -vvv):
 
-Bjorn
+	static void __p_branch_sample_type(char *buf, size_t size, u64 value)
+	{
+	#define bit_name(n) { PERF_SAMPLE_BRANCH_##n, #n }
+		struct bit_names bits[] = {
+			bit_name(USER), bit_name(KERNEL), bit_name(HV), bit_name(ANY),
+			bit_name(ANY_CALL), bit_name(ANY_RETURN), bit_name(IND_CALL),
+			bit_name(ABORT_TX), bit_name(IN_TX), bit_name(NO_TX),
+			bit_name(COND), bit_name(CALL_STACK), bit_name(IND_JUMP),
+			bit_name(CALL), bit_name(NO_FLAGS), bit_name(NO_CYCLES),
+			bit_name(HW_INDEX),
+			{ .name = NULL, }
+		};
+	#undef bit_name
+		__p_bits(buf, size, value, bits);
+	}
 
-[1] https://lore.kernel.org/linux-pci/CAAhV-H7FhAjM-Ha42Z1dLrE4PvC9frfyeU27KHWcyWKkMftEsA@mail.gmail.com/
+PERF_SAMPLE_BRANCH_TYPE_SAVE_SHIFT is also missing so it probably makes sense to add it
+at the same time as that was expanded for BRBE.
 
-> On Fri, Jan 7, 2022 at 12:21 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > On Thu, Jan 06, 2022 at 02:44:42PM +0800, Huacai Chen wrote:
-> > > On Thu, Jan 6, 2022 at 8:07 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > Previously we selected a device that owns the boot framebuffer as the
-> > > > default device in vga_arb_select_default_device().  This was only done in
-> > > > the vga_arb_device_init() subsys_initcall, so devices enumerated later,
-> > > > e.g., by pcibios_init(), were not eligible.
-> > > >
-> > > > Fix this by moving the framebuffer device selection from
-> > > > vga_arb_select_default_device() to vga_arbiter_add_pci_device(), which is
-> > > > called after every PCI device is enumerated, either by the
-> > > > vga_arb_device_init() subsys_initcall or as an ADD_DEVICE notifier.
-> > > >
-> > > > Note that if vga_arb_select_default_device() found a device owning the boot
-> > > > framebuffer, it unconditionally set it to be the default VGA device, and no
-> > > > subsequent device could replace it.
-> > > >
-> > > > Link: https://lore.kernel.org/r/20211015061512.2941859-7-chenhuacai@loongson.cn
-> > > > Based-on-patch-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > > > Cc: Bruno Prémont <bonbons@linux-vserver.org>
-> > > > ---
-> > > >  drivers/gpu/vga/vgaarb.c | 37 +++++++++++++++++--------------------
-> > > >  1 file changed, 17 insertions(+), 20 deletions(-)
-> > > >
-> > > > diff --git a/drivers/gpu/vga/vgaarb.c b/drivers/gpu/vga/vgaarb.c
-> > > > index b0ae0f177c6f..aefa4f406f7d 100644
-> > > > --- a/drivers/gpu/vga/vgaarb.c
-> > > > +++ b/drivers/gpu/vga/vgaarb.c
-> > > > @@ -72,6 +72,7 @@ struct vga_device {
-> > > >         unsigned int io_norm_cnt;       /* normal IO count */
-> > > >         unsigned int mem_norm_cnt;      /* normal MEM count */
-> > > >         bool bridge_has_one_vga;
-> > > > +       bool is_framebuffer;    /* BAR covers firmware framebuffer */
-> > > >         unsigned int (*set_decode)(struct pci_dev *pdev, bool decode);
-> > > >  };
-> > > >
-> > > > @@ -565,10 +566,9 @@ void vga_put(struct pci_dev *pdev, unsigned int rsrc)
-> > > >  }
-> > > >  EXPORT_SYMBOL(vga_put);
-> > > >
-> > > > -static void __init vga_select_framebuffer_device(struct pci_dev *pdev)
-> > > > +static bool vga_is_framebuffer_device(struct pci_dev *pdev)
-> > > >  {
-> > > >  #if defined(CONFIG_X86) || defined(CONFIG_IA64)
-> > > > -       struct device *dev = &pdev->dev;
-> > > >         u64 base = screen_info.lfb_base;
-> > > >         u64 size = screen_info.lfb_size;
-> > > >         u64 limit;
-> > > > @@ -583,15 +583,6 @@ static void __init vga_select_framebuffer_device(struct pci_dev *pdev)
-> > > >
-> > > >         limit = base + size;
-> > > >
-> > > > -       /*
-> > > > -        * Override vga_arbiter_add_pci_device()'s I/O based detection
-> > > > -        * as it may take the wrong device (e.g. on Apple system under
-> > > > -        * EFI).
-> > > > -        *
-> > > > -        * Select the device owning the boot framebuffer if there is
-> > > > -        * one.
-> > > > -        */
-> > > > -
-> > > >         /* Does firmware framebuffer belong to us? */
-> > > >         for (i = 0; i < DEVICE_COUNT_RESOURCE; i++) {
-> > > >                 flags = pci_resource_flags(pdev, i);
-> > > > @@ -608,13 +599,10 @@ static void __init vga_select_framebuffer_device(struct pci_dev *pdev)
-> > > >                 if (base < start || limit >= end)
-> > > >                         continue;
-> > > >
-> > > > -               if (!vga_default_device())
-> > > > -                       vgaarb_info(dev, "setting as boot device\n");
-> > > > -               else if (pdev != vga_default_device())
-> > > > -                       vgaarb_info(dev, "overriding boot device\n");
-> > > > -               vga_set_default_device(pdev);
-> > > > +               return true;
-> > > >         }
-> > > >  #endif
-> > > > +       return false;
-> > > >  }
-> > > >
-> > > >  static bool vga_arb_integrated_gpu(struct device *dev)
-> > > > @@ -635,6 +623,7 @@ static bool vga_arb_integrated_gpu(struct device *dev)
-> > > >  static bool vga_is_boot_device(struct vga_device *vgadev)
-> > > >  {
-> > > >         struct vga_device *boot_vga = vgadev_find(vga_default_device());
-> > > > +       struct pci_dev *pdev = vgadev->pdev;
-> > > >
-> > > >         /*
-> > > >          * We select the default VGA device in this order:
-> > > > @@ -645,6 +634,18 @@ static bool vga_is_boot_device(struct vga_device *vgadev)
-> > > >          *   Other device (see vga_arb_select_default_device())
-> > > >          */
-> > > >
-> > > > +       /*
-> > > > +        * We always prefer a firmware framebuffer, so if we've already
-> > > > +        * found one, there's no need to consider vgadev.
-> > > > +        */
-> > > > +       if (boot_vga && boot_vga->is_framebuffer)
-> > > > +               return false;
-> > > > +
-> > > > +       if (vga_is_framebuffer_device(pdev)) {
-> > > > +               vgadev->is_framebuffer = true;
-> > > > +               return true;
-> > > > +       }
-> > > Maybe it is better to rename vga_is_framebuffer_device() to
-> > > vga_is_firmware_device() and rename is_framebuffer to
-> > > is_fw_framebuffer?
-> >
-> > That's a great point, thanks!
-> >
-> > The "framebuffer" term is way too generic.  *All* VGA devices have a
-> > framebuffer, so it adds no information.  This is really about finding
-> > the device that was used by firmware.
-> >
-> > I renamed:
-> >
-> >   vga_is_framebuffer_device() -> vga_is_firmware_default()
-> >   vga_device.is_framebuffer   -> vga_device.is_firmware_default
-> >
-> > I updated my local branch and pushed it to:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=pci/vga
-> > with head 0f4caffa1297 ("vgaarb: Replace full MIT license text with
-> > SPDX identifier").
-> >
-> > I don't maintain drivers/gpu/vga/vgaarb.c, so this branch is just for
-> > reference.  It'll ultimately be up to the DRM folks to handle this.
-> >
-> > I'll wait for any other comments or testing reports before reposting.
-> >
-> > > >         /*
-> > > >          * A legacy VGA device has MEM and IO enabled and any bridges
-> > > >          * leading to it have PCI_BRIDGE_CTL_VGA enabled so the legacy
-> > > > @@ -1531,10 +1532,6 @@ static void __init vga_arb_select_default_device(void)
-> > > >         struct pci_dev *pdev, *found = NULL;
-> > > >         struct vga_device *vgadev;
-> > > >
-> > > > -       list_for_each_entry(vgadev, &vga_list, list) {
-> > > > -               vga_select_framebuffer_device(vgadev->pdev);
-> > > > -       }
-> > > > -
-> > > >         if (!vga_default_device()) {
-> > > >                 list_for_each_entry_reverse(vgadev, &vga_list, list) {
-> > > >                         struct device *dev = &vgadev->pdev->dev;
-> > > > --
-> > > > 2.25.1
-> > > >
+>  	PERF_SAMPLE_BRANCH_MAX		= 1U << PERF_SAMPLE_BRANCH_MAX_SHIFT,
+>  };
+>  
+> @@ -265,6 +269,12 @@ enum {
+>  	PERF_BR_MAX,
+>  };
+>  
+> +enum {
+> +	PERF_BR_USER	= 0,
+> +	PERF_BR_KERNEL	= 1,
+> +	PERF_BR_HV	= 2,
+> +};
+> +
+>  #define PERF_SAMPLE_BRANCH_PLM_ALL \
+>  	(PERF_SAMPLE_BRANCH_USER|\
+>  	 PERF_SAMPLE_BRANCH_KERNEL|\
+> @@ -1377,7 +1387,8 @@ struct perf_branch_entry {
+>  		abort:1,    /* transaction abort */
+>  		cycles:16,  /* cycle count to last branch */
+>  		type:6,     /* branch type */
+> -		reserved:38;
+> +		priv:2,     /* privilege level */
+> +		reserved:36;
+>  };
+>  
+>  union perf_sample_weight {
+> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+> index 9a82b8aaed93..a2208400b0b9 100644
+> --- a/tools/include/uapi/linux/perf_event.h
+> +++ b/tools/include/uapi/linux/perf_event.h
+> @@ -204,6 +204,8 @@ enum perf_branch_sample_type_shift {
+>  
+>  	PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT	= 17, /* save low level index of raw branch records */
+>  
+> +	PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT	= 18, /* save privillege mode */
+> +
+>  	PERF_SAMPLE_BRANCH_MAX_SHIFT		/* non-ABI */
+>  };
+>  
+> @@ -233,6 +235,8 @@ enum perf_branch_sample_type {
+>  
+>  	PERF_SAMPLE_BRANCH_HW_INDEX	= 1U << PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT,
+>  
+> +	PERF_SAMPLE_BRANCH_PRIV_SAVE	= 1U << PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT,
+> +
+>  	PERF_SAMPLE_BRANCH_MAX		= 1U << PERF_SAMPLE_BRANCH_MAX_SHIFT,
+>  };
+>  
+> @@ -265,6 +269,12 @@ enum {
+>  	PERF_BR_MAX,
+>  };
+>  
+> +enum {
+> +	PERF_BR_USER    = 0,
+> +	PERF_BR_KERNEL  = 1,
+> +	PERF_BR_HV      = 2,
+> +};
+> +
+>  #define PERF_SAMPLE_BRANCH_PLM_ALL \
+>  	(PERF_SAMPLE_BRANCH_USER|\
+>  	 PERF_SAMPLE_BRANCH_KERNEL|\
+> @@ -1377,7 +1387,8 @@ struct perf_branch_entry {
+>  		abort:1,    /* transaction abort */
+>  		cycles:16,  /* cycle count to last branch */
+>  		type:6,     /* branch type */
+> -		reserved:38;
+> +		priv:2,     /* privilege level */
+> +		reserved:36;
+>  };
+>  
+>  union perf_sample_weight {
+> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+> index 9ccc75935bc5..3e33686977a1 100644
+> --- a/tools/perf/Documentation/perf-record.txt
+> +++ b/tools/perf/Documentation/perf-record.txt
+> @@ -387,6 +387,7 @@ following filters are defined:
+>  	- abort_tx: only when the target is a hardware transaction abort
+>  	- cond: conditional branches
+>  	- save_type: save branch type during sampling in case binary is not available later
+> +	- priv: save privilege state during sampling in case binary is not available later
+>  
+>  +
+>  The option requires at least one branch type among any, any_call, any_ret, ind_call, cond.
+> diff --git a/tools/perf/util/parse-branch-options.c b/tools/perf/util/parse-branch-options.c
+> index bb4aa88c50a8..00588b9db474 100644
+> --- a/tools/perf/util/parse-branch-options.c
+> +++ b/tools/perf/util/parse-branch-options.c
+> @@ -32,6 +32,7 @@ static const struct branch_mode branch_modes[] = {
+>  	BRANCH_OPT("call", PERF_SAMPLE_BRANCH_CALL),
+>  	BRANCH_OPT("save_type", PERF_SAMPLE_BRANCH_TYPE_SAVE),
+>  	BRANCH_OPT("stack", PERF_SAMPLE_BRANCH_CALL_STACK),
+> +	BRANCH_OPT("priv", PERF_SAMPLE_BRANCH_PRIV_SAVE),
+>  	BRANCH_END
+>  };
+>  
+> 

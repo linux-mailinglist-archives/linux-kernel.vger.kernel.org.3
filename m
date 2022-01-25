@@ -2,69 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AFF49AD08
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B572F49AD35
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442164AbiAYHGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:06:10 -0500
-Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:48360
-        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1376648AbiAYHEQ (ORCPT
+        id S1442700AbiAYHKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 02:10:39 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54032 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1442405AbiAYHIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:04:16 -0500
-Received: from [10.5.5.3] (unknown [68.183.184.174])
-        by gnuweeb.org (Postfix) with ESMTPSA id 81C96C317D;
-        Tue, 25 Jan 2022 07:04:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
-        s=default; t=1643094247;
-        bh=3i058DVKQlYsfwYKEaGSqiqciIFIbPRYmTn0V/pN72I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oHdJZrgTp28F9DTYtcxBCOSNatT991wTstu8B4DElfZLkHNSM29Vf0oEKOVV4pvC6
-         Bf8auM+KG/QV2Gy4TNW7mIYVLE3/hysuL8vH+RpQZrYgF0lZF0H+2qifj8YUrFxaxn
-         cMGiMEKgsoJD7SQ8rMmAhHIu1Vovx04kBhkr40vtXFEJj/dfDPkSZyppoATHhQ11Ao
-         +BIludh26UDI2TgZI6VjvVhFMuWefAUDmdatVzeVFAH0ncIUuqzKTrUijTHLm09tt/
-         UnBvK+Oy7ecPa3xPraqQp7eUHoOtSkMm/svxsNSkML/DpOVBQpFbcg8nzGUUjB1RaX
-         veTidWJ1nDd2w==
-Message-ID: <df2d15fe-bc81-bdb1-1c31-2d717f274ab0@gnuweeb.org>
-Date:   Tue, 25 Jan 2022 14:04:04 +0700
+        Tue, 25 Jan 2022 02:08:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BFE87CE1764;
+        Tue, 25 Jan 2022 07:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D93C340E6;
+        Tue, 25 Jan 2022 07:07:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643094477;
+        bh=u4sZb43o6v9pvDvs7BsPPpiWoB/VBKMPiOOl3tPLaEs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GftWM3c1oIqLFALD23owKTErEZfdczcMT8uVPxGLP1FOkBmR1KtCfQlDYB8d6riL8
+         DPO4fVeV5rN4oKIV/NGuFFriOPq0d9MNMXrycCIeRnZtIDSC888/FqYqeJAd1loBtA
+         hXx+UyrWJRWu5z0Liq3idU4Acw4Krc4kyOXxUymIUCtW2CeSt/my0j5CtcpE11hz82
+         efA+jIDbZ5nwan6om754XfkbxhyZ1x7WanhNeGUoHS6K4izmm/GuBYsh/FFkJyAM+d
+         4eJsnOwPf+hR2epbDvchWReD02znUZ4KI+EtbSobJIn5nlYbvmni6AuNhx6MRAVv3e
+         3cd7v/zi0KY/A==
+Received: by mail-yb1-f169.google.com with SMTP id r65so55267861ybc.11;
+        Mon, 24 Jan 2022 23:07:57 -0800 (PST)
+X-Gm-Message-State: AOAM532Eymuk8g76qQJeJ6llUNBNDzuA8/8PA7ajb2YILHgMD/VEIpmI
+        9+2GPoYApt17FypcDiJAlIx31dcZcOAgMwd6Ajk=
+X-Google-Smtp-Source: ABdhPJxhRopogeep+UB2H+4fwzAnBfxW+obMKHyynYJuQjl+/u9U0011KEHGoECdFaAAZ+09H1f4CSH4mTvEV+mXA4s=
+X-Received: by 2002:a25:fd6:: with SMTP id 205mr29018898ybp.654.1643094475930;
+ Mon, 24 Jan 2022 23:07:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] rcu: Add per-CPU rcuc task info to RCU CPU stall
- warnings
-Content-Language: en-US
-To:     Zqiang <qiang1.zhang@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20220125024744.4186726-1-qiang1.zhang@intel.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220125024744.4186726-1-qiang1.zhang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
+In-Reply-To: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 24 Jan 2022 23:07:45 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
+Message-ID: <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
+Subject: Re: [Question] How to reliably get BuildIDs from bpf prog
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Blake Jones <blakejones@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Namhyung Kim <namhyung@google.com>,
+        Ian Rogers <irogers@google.com>,
+        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 9:47 AM, Zqiang wrote:
-> When the 'use_softirq' be set zero, all RCU_SOFTIRQ processing
-> be moved to per-CPU rcuc kthreads, if the rcuc kthreads is
-> being starved, quiescent state can not report in time. the
-> RCU stall may be triggered. this commit adds a stack trace of
-> this CPU and dump rcuc kthreads stack to help analyze what
-> prevents rcuc kthreads from running.
-> 
-> Suggested-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
+On Mon, Jan 24, 2022 at 2:43 PM Hao Luo <haoluo@google.com> wrote:
+>
+> Dear BPF experts,
+>
+> I'm working on collecting some kernel performance data using BPF
+> tracing prog. Our performance profiling team wants to associate the
+> data with user stack information. One of the requirements is to
+> reliably get BuildIDs from bpf_get_stackid() and other similar helpers
+> [1].
+>
+> As part of an early investigation, we found that there are a couple
+> issues that make bpf_get_stackid() much less reliable than we'd like
+> for our use:
+>
+> 1. The first page of many binaries (which contains the ELF headers and
+> thus the BuildID that we need) is often not in memory. The failure of
+> find_get_page() (called from build_id_parse()) is higher than we would
+> want.
 
-For https://lore.kernel.org/lkml/20220125024744.4186726-1-qiang1.zhang@intel.com/T/
+Our top use case of bpf_get_stack() is called from NMI, so there isn't
+much we can do. Maybe it is possible to improve it by changing the
+layout of the binary and the libraries? Specifically, if the text is
+also in the first page, it is likely to stay in memory?
 
-```
+> 2. When anonymous huge pages are used to hold some regions of process
+> text, build_id_parse() also fails to get a BuildID because
+> vma->vm_file is NULL.
 
-Reviewed-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+How did the text get in anonymous memory? I guess it is NOT from JIT?
+We had a hack to use transparent huge page for application text. The
+hack looks like:
 
-```
-Thank you!
--- 
-Ammar Faizi
+"At run time, the application creates an 8MB temporary buffer and the
+hot section of the executable memory is copied to it. The 8MB region in
+the executable memory is then converted to a huge page (by way of an
+mmap() to anonymous pages and an madvise() to create a huge page), the
+data is copied back to it, and it is made executable again using
+mprotect()."
 
+If your case is the same (or similar), it can probably be fixed with
+CONFIG_READ_ONLY_THP_FOR_FS, and modified user space.
+
+Thanks,
+Song

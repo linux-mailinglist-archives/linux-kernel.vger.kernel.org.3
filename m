@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B8549BA54
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C630A49BA45
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356830AbiAYR0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:26:45 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:52228 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1587972AbiAYRUz (ORCPT
+        id S237989AbiAYRX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:23:56 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45374 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1588062AbiAYRV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:20:55 -0500
-X-UUID: 184af9e70a2e4f999570725a7bbf33c2-20220126
-X-UUID: 184af9e70a2e4f999570725a7bbf33c2-20220126
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1183598316; Wed, 26 Jan 2022 01:20:49 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 26 Jan 2022 01:20:48 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 Jan 2022 01:20:48 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <wenst@chromium.org>
-CC:     <chun-jie.chen@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>
-Subject: Re: [PATCH 09/31] clk: mediatek: mux: Implement unregister API
-Date:   Wed, 26 Jan 2022 01:20:48 +0800
-Message-ID: <20220125172048.4239-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220122091731.283592-10-wenst@chromium.org>
-References: <20220122091731.283592-10-wenst@chromium.org>
+        Tue, 25 Jan 2022 12:21:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 745676115D;
+        Tue, 25 Jan 2022 17:21:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2942C340E0;
+        Tue, 25 Jan 2022 17:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643131283;
+        bh=gPCdN8hHlNnY+V2scDQMdjEgjDrE7whfrHiP+g10BFA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=juhfXXTiGnYRUe2bYtmQAkzPKYBykTnU3r6H8snpH0i9nGBIfUXKesIJs7rOSrMGz
+         L6o5DdmAYdAZlaCcdLwNFfot2efLwMrZztC9y5cRihsvP9kuqVyLznEHoTWoNIdjER
+         nuR5AUW9TW/GZ/DIBaOXebYPQCzma1tFrqUlmDZOUV/6z0CU7Hh4qObSqW9uVGC9wt
+         7+dE7cGN0ojt/rcUVHk3RBJjkwhkC3nGrOzlJLhqNqWDj7KxHW9iXOrd54b24Swyrl
+         i5rwdhJwkHgRh0E/IuNEY64HYb3QokAGmwyChr4BAHn+eT606BlLHqqI8eiuOc1rUC
+         Nl99mnqgHTPNg==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nCPVR-002yy2-RP; Tue, 25 Jan 2022 17:21:21 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Date:   Tue, 25 Jan 2022 17:21:21 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     qizhong cheng <qizhong.cheng@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy?= =?UTF-8?Q?=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com
+Subject: Re: [PATCH] PCI: mediatek: Change MSI interrupt processing sequence
+In-Reply-To: <20220125165748.GA1458116@bhelgaas>
+References: <20220125165748.GA1458116@bhelgaas>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e8e42eba6e7cf49bc2260f20844a7849@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: helgaas@kernel.org, qizhong.cheng@mediatek.com, ryder.lee@mediatek.com, jianjun.wang@mediatek.com, lorenzo.pieralisi@arm.com, kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The mux clk type within the MediaTek clk driver library only has a
-> register function, and no corresponding unregister function. This
-> means there is no way for its users to properly implement cleanup
-> and removal.
+On 2022-01-25 16:57, Bjorn Helgaas wrote:
+> All patches change *something*.  Can you update the subject line so it
+> says something specific about the change?
 > 
-> Add a matching unregister function for the mux type clk.
+> Maybe something like "Clear MSI status before dispatching handler"?
 > 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-
-> ---
->  drivers/clk/mediatek/clk-mux.c | 35 ++++++++++++++++++++++++++++++++++
->  drivers/clk/mediatek/clk-mux.h |  3 +++
->  2 files changed, 38 insertions(+)
+> On Sun, Jan 23, 2022 at 11:33:06AM +0800, qizhong cheng wrote:
+>> As an edge-triggered interrupts, its interrupt status should be 
+>> cleared
+>> before dispatch to the handler of device.
 > 
-> diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
-> index 89f23e111d91..6f0c22a699c3 100644
-> --- a/drivers/clk/mediatek/clk-mux.c
-> +++ b/drivers/clk/mediatek/clk-mux.c
-> @@ -164,6 +164,21 @@ static struct clk *mtk_clk_register_mux(const struct mtk_mux *mux,
->  	return clk;
->  }
->  
-> +static void mtk_clk_unregister_mux(struct clk *clk)
-> +{
-> +	struct mtk_clk_mux *mux;
-> +	struct clk_hw *hw;
-> +
-> +	hw = __clk_get_hw(clk);
-> +	if (!hw)
-> +		return;
-> +
-> +	mux = to_mtk_clk_mux(hw);
-> +
-> +	clk_unregister(clk);
-> +	kfree(mux);
-> +}
-> +
->  int mtk_clk_register_muxes(const struct mtk_mux *muxes,
->  			   int num, struct device_node *node,
->  			   spinlock_t *lock,
-> @@ -198,4 +213,24 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
->  }
->  EXPORT_SYMBOL_GPL(mtk_clk_register_muxes);
->  
-> +void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
-> +			      struct clk_onecell_data *clk_data)
-> +{
-> +	int i;
-> +
-> +	if (!clk_data)
-> +		return;
-> +
-> +	for (i = num; i > 0; i--) {
-> +		const struct mtk_mux *mux = &muxes[i - 1];
-> +
-> +		if (IS_ERR_OR_NULL(clk_data->clks[mux->id]))
-> +			continue;
-> +
-> +		mtk_clk_unregister_mux(clk_data->clks[mux->id]);
-> +		clk_data->clks[mux->id] = ERR_PTR(-ENOENT);
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(mtk_clk_unregister_muxes);
-> +
->  MODULE_LICENSE("GPL");
-> diff --git a/drivers/clk/mediatek/clk-mux.h b/drivers/clk/mediatek/clk-mux.h
-> index 27841d649118..cb2ac4f04c58 100644
-> --- a/drivers/clk/mediatek/clk-mux.h
-> +++ b/drivers/clk/mediatek/clk-mux.h
-> @@ -88,4 +88,7 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
->  			   spinlock_t *lock,
->  			   struct clk_onecell_data *clk_data);
->  
-> +void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
-> +			      struct clk_onecell_data *clk_data);
-> +
->  #endif /* __DRV_CLK_MTK_MUX_H */
-> -- 
-> 2.35.0.rc0.227.g00780c9af4-goog
+> I'm not an IRQ expert, but the reasoning that "we should clear the MSI
+> interrupt status before dispatching the handler because MSI is an
+> edge-triggered interrupt" doesn't seem completely convincing because
+> your code will now look like this:
+> 
+>   /* Clear the INTx */
+>   writel(1 << bit, port->base + PCIE_INT_STATUS);
+>   generic_handle_domain_irq(port->irq_domain, bit - INTX_SHIFT);
+>   ...
+> 
+>   /* Clear MSI interrupt status */
+>   writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
+>   generic_handle_domain_irq(port->inner_domain, bit);
+> 
+> You clear interrupt status before dispatching the handler for *both*
+> level-triggered INTx interrupts and edge-triggered MSI interrupts.
+> 
+> So it doesn't seem that simply being edge-triggered is the critical
+> factor here.
 
+This is the usual problem with these half-baked implementations.
+The signalling to the primary interrupt controller is level, as
+they take a multitude of input and (crucially) latch the MSI
+edges. Effectively, this is an edge-to-level converter, with
+all the problems that this creates.
 
+By clearing the status *after* the handling, you lose edges that
+have been received and coalesced after the read of the status
+register. By clearing it *before*, you are acknowledging the
+interrupts early, and allowing them to be coalesced independently
+of the ones that have been received earlier.
+
+This is however mostly an educated guess. Someone with access
+to the TRM should verify this.
+
+Thanks,
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...

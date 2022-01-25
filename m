@@ -2,97 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 931E249B26B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F83949B276
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379615AbiAYK4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S1379898AbiAYLAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 06:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236392AbiAYKyV (ORCPT
+        with ESMTP id S1379810AbiAYK5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:54:21 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171D5C061401;
-        Tue, 25 Jan 2022 02:54:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3C26yCyaXzcVvHeWZfOkXSeuOkga4w7PGrbQGmRCHFU=; b=HrETcTbUllahnnU5GBR4Dd4EMz
-        Pdv5BnIeodT7+zYAewTIOo3KfHQHagfZcdPShEueRJIrLoel288NVcNPrJu+6Mw61oAefybrA8wY+
-        snQWvD+ceANIg2Jr7pIwcvvHH5iQHBqv+IukBc2BcfOUDQX2IlVOZbWWkQw1YA6YFQ6+zHzKhmbHA
-        TSb4bLxwL6+JV66tVdZP72ONwyyZisTD82O5hLjSBgdMKPepiFZvcnqfKOSd3g/alyn7Oazcbzy1I
-        1vi34EyIOzNUNJT9VAPLAbBF3RiVfkFHiSj2ubJDM4eEgHruF5jmkp/8VcEfBvJoPXrZO/KEZqZgF
-        70yVy4rg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCJSh-003Rt2-FS; Tue, 25 Jan 2022 10:54:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 439213002C5;
-        Tue, 25 Jan 2022 11:54:06 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2A346212DC040; Tue, 25 Jan 2022 11:54:06 +0100 (CET)
-Date:   Tue, 25 Jan 2022 11:54:06 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: Re: earlyprintk=xdbc seems broken
-Message-ID: <Ye/Wzte0qr/LVLfL@hirez.programming.kicks-ass.net>
-References: <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
- <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
- <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
- <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
- <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
- <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
- <Ye7WLM+NyVQlEMXN@hirez.programming.kicks-ass.net>
- <Ye7X5I4lm8gtRaBv@hirez.programming.kicks-ass.net>
- <6e2700c4-07dd-76ac-cd8f-d9e5b9b24e74@linux.intel.com>
- <Ye/VL4b1PUCsCeds@hirez.programming.kicks-ass.net>
+        Tue, 25 Jan 2022 05:57:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F85C061751;
+        Tue, 25 Jan 2022 02:57:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A373E6168C;
+        Tue, 25 Jan 2022 10:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E424C340E0;
+        Tue, 25 Jan 2022 10:57:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643108252;
+        bh=64WEc7pcjWdPNj74JeYR5KiScRakP+CCGpEFsBeMNVs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ILp0AsXbtwNkLs91cv8y7WBjlDnuvN+K1Drs34qWXyqB47YrVypA32xHwH5oDLZGE
+         qvWGsxGhieFDWVB1EYbmU9XjDWp+O60vZwv6SVxXAsqR2ebcFG6xZ8GGVKKzJavKZa
+         VxdFF6C+Xl4VMo7nblpSLHSStyt240YV/hz8hDqw=
+Date:   Tue, 25 Jan 2022 11:57:29 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.10 262/563] uio: uio_dmem_genirq: Catch the Exception
+Message-ID: <Ye/Xmfm4odaglfsc@kroah.com>
+References: <20220124184024.407936072@linuxfoundation.org>
+ <20220124184033.490683244@linuxfoundation.org>
+ <20220125104725.GA19281@duo.ucw.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ye/VL4b1PUCsCeds@hirez.programming.kicks-ass.net>
+In-Reply-To: <20220125104725.GA19281@duo.ucw.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:47:11AM +0100, Peter Zijlstra wrote:
-> On Tue, Jan 25, 2022 at 10:51:00AM +0200, Mathias Nyman wrote:
-> > On 24.1.2022 18.46, Peter Zijlstra wrote:
+On Tue, Jan 25, 2022 at 11:47:25AM +0100, Pavel Machek wrote:
+> Hi!
 > 
-> > > FYI, I'm thinking early_xdbc_parse_parameter should've now given
-> > > dpgp_num: 1 ?
-> > > 
+> > From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > > 
-> > Yes, it should. 
+> > [ Upstream commit eec91694f927d1026974444eb6a3adccd4f1cbc2 ]
 > > 
-> > Looks like there's a parsing issue.
-> > "earlyprintk=xdbc1,keep" fails on our Tigerlake as well.
-> >   
-> > Without the "keep" option it works for me:
+> > The return value of dma_set_coherent_mask() is not always 0.
+> > To catch the exception in case that dma is not support the mask.
 > > 
-> > [    0.000000] Command line: console=ttyS0,115200n8 buildroot_hostname=tgl04 earlyprintk=xdbc1 dmi_entry_point=0x74374000
-> > [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 1
+> > Fixes: 0a0c3b5a24bd ("Add new uio device for dynamic memory allocation")
 > 
-> [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.16.0+ root=UUID=a652986c-fbc6-4341-85c3-b4ad4402f130 ro debug ignore_loglevel sysrq_always_enabled usbcore.autosuspend=-1 earlyprintk=xdbc1,keep force_early_printk sched_verbose ft
-> race=nop mitigations=off nokaslr
 > 
-> [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 1
+> > +++ b/drivers/uio/uio_dmem_genirq.c
+> > @@ -183,7 +183,11 @@ static int uio_dmem_genirq_probe(struct platform_device *pdev)
+> >  		goto bad0;
+> >  	}
+> >  
+> > -	dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
+> > +	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
+> > +	if (ret) {
+> > +		dev_err(&pdev->dev, "DMA enable failed\n");
+> > +		return ret;
+> > +	}
 > 
-> [    0.399988] xhci_dbc:xdbc_start: DbC is running now, control 0x8d000003 port ID 15
-> [    0.399998] xhci_dbc:xdbc_handle_port_status: connect status change event
-> [    0.399999] xhci_dbc:xdbc_handle_port_status: port reset change event
-> [    0.431217] printk: console [earlyxdbc0] enabled
+> Handing errors is good, but you may not directly return here as it
+> would leak the resources. Something like this?
 > 
-> Success!! I'll go submit proper patches for this then.
+> Signed-off-by: Pavel Machek <pavel@denx.de>
+> 
+> Best regards,
+> 								Pavel
+> 
+> diff --git a/drivers/uio/uio_dmem_genirq.c b/drivers/uio/uio_dmem_genirq.c
+> index bf39a424ea77..7b80d0c02735 100644
+> --- a/drivers/uio/uio_dmem_genirq.c
+> +++ b/drivers/uio/uio_dmem_genirq.c
+> @@ -186,7 +186,7 @@ static int uio_dmem_genirq_probe(struct platform_device *pdev)
+>  	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "DMA enable failed\n");
+> -		return ret;
+> +		goto bad0;
+>  	}
+>  
+>  	priv->uioinfo = uioinfo;
+> 
+> 
+> 
+> -- 
+> DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+> HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-Next up, I don't suppose there's working patches for GRUB ? Because the
-moment the thing gets stuck on a non-working kernel I'm screwed again :/
+Yeah, this commit should not be backported, I'll go drop it from
+everywhere.  But the original commit in Linus's tree is fine as the
+error handling is not like this anymore.
+
+thanks,
+
+greg k-h

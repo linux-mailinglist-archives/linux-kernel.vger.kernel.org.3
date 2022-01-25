@@ -2,108 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B572F49AD35
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8F149AD48
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442700AbiAYHKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:10:39 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:54032 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442405AbiAYHIP (ORCPT
+        id S1442903AbiAYHMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 02:12:01 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:6123 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1442276AbiAYHJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:08:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BFE87CE1764;
-        Tue, 25 Jan 2022 07:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D93C340E6;
-        Tue, 25 Jan 2022 07:07:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643094477;
-        bh=u4sZb43o6v9pvDvs7BsPPpiWoB/VBKMPiOOl3tPLaEs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GftWM3c1oIqLFALD23owKTErEZfdczcMT8uVPxGLP1FOkBmR1KtCfQlDYB8d6riL8
-         DPO4fVeV5rN4oKIV/NGuFFriOPq0d9MNMXrycCIeRnZtIDSC888/FqYqeJAd1loBtA
-         hXx+UyrWJRWu5z0Liq3idU4Acw4Krc4kyOXxUymIUCtW2CeSt/my0j5CtcpE11hz82
-         efA+jIDbZ5nwan6om754XfkbxhyZ1x7WanhNeGUoHS6K4izmm/GuBYsh/FFkJyAM+d
-         4eJsnOwPf+hR2epbDvchWReD02znUZ4KI+EtbSobJIn5nlYbvmni6AuNhx6MRAVv3e
-         3cd7v/zi0KY/A==
-Received: by mail-yb1-f169.google.com with SMTP id r65so55267861ybc.11;
-        Mon, 24 Jan 2022 23:07:57 -0800 (PST)
-X-Gm-Message-State: AOAM532Eymuk8g76qQJeJ6llUNBNDzuA8/8PA7ajb2YILHgMD/VEIpmI
-        9+2GPoYApt17FypcDiJAlIx31dcZcOAgMwd6Ajk=
-X-Google-Smtp-Source: ABdhPJxhRopogeep+UB2H+4fwzAnBfxW+obMKHyynYJuQjl+/u9U0011KEHGoECdFaAAZ+09H1f4CSH4mTvEV+mXA4s=
-X-Received: by 2002:a25:fd6:: with SMTP id 205mr29018898ybp.654.1643094475930;
- Mon, 24 Jan 2022 23:07:55 -0800 (PST)
+        Tue, 25 Jan 2022 02:09:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643094542; x=1674630542;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Zr+uci7nAntwhy8NrWrL5PmRMbYwGWsGjAlVl3fZ4k0=;
+  b=cCIsVpRp+Hp7ZnvPMKZvI6zOPlq8SyeACy5LWty6UNFH93bQpbPDggrl
+   5DGYmXa4XhTouQUN7VhetFlQNz0acGXWtmrdOyJ1aY93lxVtJQGtpkUic
+   Qexs7fAzCS/cB6AiU/lmKd0iXe6MyxgT2sQpmjwd7DuSdoYYue9rj8L79
+   M=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jan 2022 23:08:59 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 23:08:59 -0800
+Received: from [10.216.52.178] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 24 Jan
+ 2022 23:08:54 -0800
+Message-ID: <e60c7e8a-3eb4-d6b4-18c5-819089256c34@quicinc.com>
+Date:   Tue, 25 Jan 2022 12:38:51 +0530
 MIME-Version: 1.0
-References: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
-In-Reply-To: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 24 Jan 2022 23:07:45 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
-Message-ID: <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
-Subject: Re: [Question] How to reliably get BuildIDs from bpf prog
-To:     Hao Luo <haoluo@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Blake Jones <blakejones@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Namhyung Kim <namhyung@google.com>,
-        Ian Rogers <irogers@google.com>,
-        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] sched/fair: Prefer small idle cores for forkees
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <joel@joelfernandes.org>,
+        <linux-arm-msm@vger.kernel.org>, <quic_lingutla@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <quic_rjendra@quicinc.com>,
+        <Vincent.Donnefort@arm.com>
+References: <20220121050233.8708-1-quic_ctheegal@quicinc.com>
+ <CAKfTPtDTm5O_P504=_6Gjk2Uv0DiLS8Mu=c6km3uVO0h8BB1Lw@mail.gmail.com>
+From:   Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+In-Reply-To: <CAKfTPtDTm5O_P504=_6Gjk2Uv0DiLS8Mu=c6km3uVO0h8BB1Lw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 2:43 PM Hao Luo <haoluo@google.com> wrote:
->
-> Dear BPF experts,
->
-> I'm working on collecting some kernel performance data using BPF
-> tracing prog. Our performance profiling team wants to associate the
-> data with user stack information. One of the requirements is to
-> reliably get BuildIDs from bpf_get_stackid() and other similar helpers
-> [1].
->
-> As part of an early investigation, we found that there are a couple
-> issues that make bpf_get_stackid() much less reliable than we'd like
-> for our use:
->
-> 1. The first page of many binaries (which contains the ELF headers and
-> thus the BuildID that we need) is often not in memory. The failure of
-> find_get_page() (called from build_id_parse()) is higher than we would
-> want.
 
-Our top use case of bpf_get_stack() is called from NMI, so there isn't
-much we can do. Maybe it is possible to improve it by changing the
-layout of the binary and the libraries? Specifically, if the text is
-also in the first page, it is likely to stay in memory?
+On 1/21/2022 7:57 PM, Vincent Guittot wrote:
+> On Fri, 21 Jan 2022 at 06:03, Chitti Babu Theegala
+> <quic_ctheegal@quicinc.com> wrote:
+>>
+>> Newly forked threads don't have any useful utilization data yet and
+>> it's not possible to forecast their impact on energy consumption.
+> 
+> It would be worth mentioning that you consider only EAS mode in the patch
+> 
+>> These forkees (though very small, most times) end up waking big
+> 
+> The assumption that " (though very small, most times)" is maybe true
+> for the cases that you are interested in and you monitor, but it's not
+> always true. It seems that Vincent D. raised some concerns about
+> forkee which would not be small at the end
+Agreed.
 
-> 2. When anonymous huge pages are used to hold some regions of process
-> text, build_id_parse() also fails to get a BuildID because
-> vma->vm_file is NULL.
+>> cores from deep sleep for that very small durations.
+>>
+>> Bias all forkees to small cores to prevent waking big cores from deep
+> 
+> you are testing idlest_sgs->idle_cpus so you don't bias to small cores
+> but small & idle cores but if there is no small idle core then you
+> will wake up a big core though the forkees are small most times
+> 
 
-How did the text get in anonymous memory? I guess it is NOT from JIT?
-We had a hack to use transparent huge page for application text. The
-hack looks like:
+The function "find_idlest_cpu" expected to return idle cpu. So, I 
+followed the same. If idle small cpu is available, then we can use it 
+otherwise its ok to wakeup big cpu for newly forked tasks.
+I felt that using idle CPUs for new tasks will be better as that would 
+give them a faster chance to run immediately.
 
-"At run time, the application creates an 8MB temporary buffer and the
-hot section of the executable memory is copied to it. The 8MB region in
-the executable memory is then converted to a huge page (by way of an
-mmap() to anonymous pages and an madvise() to create a huge page), the
-data is copied back to it, and it is made executable again using
-mprotect()."
+>> sleep to save power.
+> 
+> Then why do you want to wake up a small core from deep state instead
+> of packing in one of these already running cpus? If you care about
+> power, selecting a small idle core may not always be the best choice.
+> Would it be better to select a non idle cpu with largest spare
+> capacity at the current opp ?
+> 
 
-If your case is the same (or similar), it can probably be fixed with
-CONFIG_READ_ONLY_THP_FOR_FS, and modified user space.
+How about running find_energy_efficient_cpu() for newly forked tasks as 
+well (with some default util value configured) ?
 
-Thanks,
-Song
+>>
+>> Signed-off-by: Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+>> ---
+>> Changes in v2:
+>> 1. Enclosed the EAS check for this small core preferring logic
+>> ---
+>>   kernel/sched/fair.c | 18 +++++++++++++-----
+>>   1 file changed, 13 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index c6046446c50b3..72f9ea7c98c05 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -5872,7 +5872,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
+>>   }
+>>
+>>   static struct sched_group *
+>> -find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu);
+>> +find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu, int sd_flag);
+>>
+>>   /*
+>>    * find_idlest_group_cpu - find the idlest CPU among the CPUs in the group.
+>> @@ -5959,7 +5959,7 @@ static inline int find_idlest_cpu(struct sched_domain *sd, struct task_struct *p
+>>                          continue;
+>>                  }
+>>
+>> -               group = find_idlest_group(sd, p, cpu);
+>> +               group = find_idlest_group(sd, p, cpu, sd_flag);
+>>                  if (!group) {
+>>                          sd = sd->child;
+>>                          continue;
+>> @@ -8885,7 +8885,8 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
+>>   static bool update_pick_idlest(struct sched_group *idlest,
+>>                                 struct sg_lb_stats *idlest_sgs,
+>>                                 struct sched_group *group,
+>> -                              struct sg_lb_stats *sgs)
+>> +                              struct sg_lb_stats *sgs,
+>> +                              int sd_flag)
+>>   {
+>>          if (sgs->group_type < idlest_sgs->group_type)
+>>                  return true;
+>> @@ -8922,6 +8923,13 @@ static bool update_pick_idlest(struct sched_group *idlest,
+>>                  if (idlest_sgs->idle_cpus > sgs->idle_cpus)
+>>                          return false;
+>>
+>> +               if (sched_energy_enabled()) {
+> 
+> This is not enough, the find_energy_efficient_cpu() returns early to
+> fallback to the default performance mode when the system is
+> overutilized
+> 
+> 
+>> +                   /* Select smaller cpu group for newly woken up forkees */
+>> +                   if ((sd_flag & SD_BALANCE_FORK) && (idlest_sgs->idle_cpus &&
+>> +                       !capacity_greater(idlest->sgc->max_capacity, group->sgc->max_capacity)))
+>> +                       return false;
+>> +               }
+>> +
+>>                  /* Select group with lowest group_util */
+>>                  if (idlest_sgs->idle_cpus == sgs->idle_cpus &&
+>>                          idlest_sgs->group_util <= sgs->group_util)
+>> @@ -8940,7 +8948,7 @@ static bool update_pick_idlest(struct sched_group *idlest,
+>>    * Assumes p is allowed on at least one CPU in sd.
+>>    */
+>>   static struct sched_group *
+>> -find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+>> +find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu, int sd_flag)
+>>   {
+>>          struct sched_group *idlest = NULL, *local = NULL, *group = sd->groups;
+>>          struct sg_lb_stats local_sgs, tmp_sgs;
+>> @@ -8978,7 +8986,7 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+>>
+>>                  update_sg_wakeup_stats(sd, group, sgs, p);
+>>
+>> -               if (!local_group && update_pick_idlest(idlest, &idlest_sgs, group, sgs)) {
+>> +               if (!local_group && update_pick_idlest(idlest, &idlest_sgs, group, sgs, sd_flag)) {
+>>                          idlest = group;
+>>                          idlest_sgs = *sgs;
+>>                  }
+>> --
+>> 2.17.1
+>>

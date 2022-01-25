@@ -2,108 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FB349BA00
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F8449BA13
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573861AbiAYRQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        id S1587542AbiAYRSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348519AbiAYRNf (ORCPT
+        with ESMTP id S1351700AbiAYRNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:13:35 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55926C061787
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:12:04 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id h7so31964290ejf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:12:04 -0800 (PST)
+        Tue, 25 Jan 2022 12:13:50 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCF8C0617A3;
+        Tue, 25 Jan 2022 09:12:46 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id y17so5866180ilm.1;
+        Tue, 25 Jan 2022 09:12:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=nNrS4+Y2kpA/4I+O0j+MEfMovuuGqzczw7+9uw0ZYvg=;
-        b=EaRGks4nbAE4mkVHSDRIbiOGDioTn/fqsLtEg9/e+4eKwfA1Ut+bLO3nDodkfPBU/f
-         tVZHJQzF5S0rjo8VYXuANl90qXnPRK7AeNwqZuM08shxx0JAzuTPUy1XEkaSu60DRur/
-         HjMB9zpP6IrthUKpCLH2ns7n+d7fC6GUlRJb+xNL7h5rHkGqnO6t1vbk2fDySuq0epD+
-         ng0gd87ppFm2UqV51IDKbK5vF+58T6zxVXIfdutX+cV4i+ZWiDkeBP0E+EQLW2nI456X
-         wve5ABcDOKMxc5mtP6S+hrUWjW7pzEtThHTmRW5iDzBMRDNb65p90Vcn5pljivBC7NnM
-         GG3g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RU3KIa4qrZXY9R48xjJEZLxL91fbwb33hYcDZGPVEeA=;
+        b=KHvX4bjGcFWJPXQ91el6u/lSljusxx8pbcvu7lMe5WJ9FwnlTXtJ69WFqEVLsE4976
+         RuF7fIouyHo1iSezLZbFkPem8wnA2SDnrF6rDwwnYZfdIbwv1dXNCkLCBTy+WpJydfm5
+         EqcVwTs5S1iFUN1XY7i4NIgw7SCwiNg0+j7y7/lWwOjBk3HPSxr9t9cYTZpcSGbPaIIq
+         or0eYS9JxmErq4ojq2ZQyvjFRmkcNA8Ava9Sm0s2Jg//dgpzGKZYQtbJibU+RLiyb1jV
+         SHJnDa+wuTcz0PNhOea/uzau8fwSq0CQtWw5Q1KBWhJunAzkSrfVScL4LrwCdHeluWx8
+         /w7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=nNrS4+Y2kpA/4I+O0j+MEfMovuuGqzczw7+9uw0ZYvg=;
-        b=QKg0VoxsdphtpPxFTZs6ev47oR4XISN19ucUOvzmhQaVYGyywn/u5QtkxI2nwoK0v5
-         p//hDdw6CsB9/iABIQLdda3V3+YCJ8plwaZMitq8cT3TEOc/1NJMNRTRNFRvm+SQqi5y
-         Mg2faB/pxpNweLtjmA5+5nvXqYYqS6+T5DE2UgR0aCVxi64OwG8Y2hJj9EgHjtF4F3ZP
-         yruJCWh3aZDYk503Qkv3Zd7ZAvuvYVgkNAlOHDJj/uwKwn+ezcwjA7YGTouKgfNZ1Kgy
-         bpb1u0U38nZ80ntdcAho6CER41FIIxNaGkpXyMCu5XyQXMdc0dpGzQDPImt3UaOa8AT5
-         cwTA==
-X-Gm-Message-State: AOAM533Mm32+2wCbOn8BEz/qqYVDsPpr5rhe5FFsQMDGLfXitGvXxYTT
-        OgulSmMwAm2MPGKs80zKyLjPenXuS2RSfguSmXBTDQ==
-X-Google-Smtp-Source: ABdhPJyLfH1HWR8h43VVS0XIc2bSN8+5RKivIAAJh8I8ticiEoS9VRmwfk9Jaw3pumNtgYCON/DHMifOOqFaP9jHNro=
-X-Received: by 2002:a17:907:e87:: with SMTP id ho7mr1513006ejc.481.1643130722625;
- Tue, 25 Jan 2022 09:12:02 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RU3KIa4qrZXY9R48xjJEZLxL91fbwb33hYcDZGPVEeA=;
+        b=xyR5r63bt2pPc/8yClL1+QKFsEPo2dcV3FyR24eQHpIiblNiU+tK7Ckh1qcGqFza2n
+         DwUlIv1jO/ym/Phc3bjTMbS1yHvQHG+EApyEsjZh7wrM9c1rGSEr460JI7Ylxw2+gh29
+         Ia9c+fY3PIfgzVol37oD13NpTDWMIOgCzAuVf2ncyXYvWkZcjJL/cy8dvZT+VSk6Io3Z
+         DqTp1iM6xgCIWWdxEt8PAjkxzih81bE1JeeU49bn+ZftGXyxO+B3p/aCNgmMQQP+QRqD
+         2KYVl5BLR12CHQBb7GnGZ9m1TK2bbgFbLMoFd3x0agb1gJ7BGCoXkags8ENUGyd/nBHg
+         QffQ==
+X-Gm-Message-State: AOAM532jnmVVANLINwaTxH8h3xGWBB3hej8a2zIqejcg+PMPOGxohls0
+        Ee0phqnxv6bZMK3IL0qShOraQJcD1e8=
+X-Google-Smtp-Source: ABdhPJysd/AktlKpxM3/2Jwk3iYtFwARQhWgrwR964Q7bKGasZLBkRVo7UQcFFUdCsdTaVEYa5IG8A==
+X-Received: by 2002:a92:cd85:: with SMTP id r5mr12345147ilb.182.1643130765506;
+        Tue, 25 Jan 2022 09:12:45 -0800 (PST)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:6592:b6fe:71b1:9f4c])
+        by smtp.gmail.com with ESMTPSA id m14sm8090291iov.0.2022.01.25.09.12.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 09:12:44 -0800 (PST)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     aford@beaconembedded.com, cphealy@gmail.com,
+        Adam Ford <aford173@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH V4 09/11] dt-bindings: media: nxp, imx8mq-vpu: Add support for G1 on imx8mm
+Date:   Tue, 25 Jan 2022 11:11:26 -0600
+Message-Id: <20220125171129.472775-10-aford173@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220125171129.472775-1-aford173@gmail.com>
+References: <20220125171129.472775-1-aford173@gmail.com>
 MIME-Version: 1.0
-References: <20220124150209.22202-1-bgeffon@google.com> <20220124151434.GB20331@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
- <CADyq12ykDCswWZw05OdyYfP-zT6afuhXbckii1m1egQ2fSwB4w@mail.gmail.com> <20220125002025.GA21887@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
-In-Reply-To: <20220125002025.GA21887@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Tue, 25 Jan 2022 12:11:26 -0500
-Message-ID: <CADyq12wE7mx2tPeK0gaLhBaUStrvV7cgfXqj7vWZ4F=KfR7zzQ@mail.gmail.com>
-Subject: Re: [PATCH] dm: introduce a no open flag for deferred remove
-To:     Brian Geffon <bgeffon@google.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 7:21 PM Alasdair G Kergon <agk@redhat.com> wrote:
->
-> On Mon, Jan 24, 2022 at 10:25:47AM -0500, Brian Geffon wrote:
-> > Thank you for looking at this. There are a few reasons this might be
-> > useful, the first is if you're trying to speed up a graceful teardown
-> > of the device by informing userspace that this device is going to be
-> > removed in the near future. Another might be on systems where it might
-> > be worthwhile to not have users with CAP_DAC_OVERRIDE be able to open
-> > the device. The logic on this second case is that, suppose you have a
-> > dm-crypt block device which is backing swap, the data on this device
-> > is ephemeral so a flow might be to setup swap followed by dmsetup
-> > remove --deferred /dev/mapper/encrypted-swap. This will guarantee that
-> > as soon as swap is torn down the encrypted block device is dropped,
-> > additionally with this new flag you'll be guaranteed that there can be
-> > no further opens on it.
->
-> And is that the reason you propose this?
-> - You want a special exclusive 'one time open' device that
->   self-destructs when closed?
->
-> > No, this is fully backwards compatible with the current deferred
-> > remove behavior, it's not required. Additionally, since on the actual
-> > remove userspace would receive an -ENXIO already once the remove
-> > process has started it seems reasonable to return -ENXIO in the
-> > deferred remove case when this flag is enabled.
->
-> Well I feel it does break existing semantics which is why we wrote
-> the code the way we did.  The state can be long-lived, the code
-> that has it open might legitimately want to open it again in
-> parallel etc. - in general this seems a bad idea.
->
-> But if the reason for this is basically "make it harder for
-> anything else to access my encrypted swap" and to deliberately
-> prevent access, then let's approach the requirement from that angle.
-> Are there alternative implementations with interventions at different
-> points?
+The i.MX8M mini appears to have a similar G1 decoder but the
+post-processing isn't present, so different compatible flag is required.
+Since all the other parameters are the same with imx8mq, just add
+the new compatible flag to nxp,imx8mq-vpu.yaml.
 
-I was thinking perhaps another implementation might involve using
-open_count on dm_ioctl as an in param on DM_DEV_CREATE only. Using
-open_count as an in parameter on DM_DEV_CREATE could be activated by a
-new flag, perhaps DM_ENFORCE_OPEN_COUNT_FLAG. This would allow the
-behavior to be baked into the device from the start. We would then
-enforce it in dm_blk_open. What would you think about an approach like
-this?
+Signed-off-by: Adam Ford <aford173@gmail.com>
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Thanks,
-Brian
+diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+index 9c28d562112b..7dc13a4b1805 100644
+--- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
++++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+@@ -5,7 +5,7 @@
+ $id: "http://devicetree.org/schemas/media/nxp,imx8mq-vpu.yaml#"
+ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ 
+-title: Hantro G1/G2 VPU codecs implemented on i.MX8MQ SoCs
++title: Hantro G1/G2 VPU codecs implemented on i.MX8M SoCs
+ 
+ maintainers:
+   - Philipp Zabel <p.zabel@pengutronix.de>
+@@ -20,6 +20,7 @@ properties:
+         deprecated: true
+       - const: nxp,imx8mq-vpu-g1
+       - const: nxp,imx8mq-vpu-g2
++      - const: nxp,imx8mm-vpu-g1
+ 
+   reg:
+     maxItems: 1
+-- 
+2.32.0
+

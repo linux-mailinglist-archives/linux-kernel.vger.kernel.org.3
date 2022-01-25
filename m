@@ -2,143 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C31B649B742
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C7B49B74B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390729AbiAYPHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:07:19 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:44040 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1581305AbiAYPFK (ORCPT
+        id S1581541AbiAYPKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1581504AbiAYPH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:05:10 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 34C591F380;
-        Tue, 25 Jan 2022 15:05:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643123103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xumwwOa5ECEt7uJfX+ahH0fKv36XmsrcJ45EDKOzk2Y=;
-        b=BDYbbDvDaid88aRNMa4xIrza9kxLUE2bA4n4F77BPq2fo9S8/MCbACHv42ce8ZTCC8G1bq
-        204BHbwcaivKah+f1KSCsLsI6E1h6kbo2KtOpPADzIpFpujfM5LPDtsJWbbYXe+4aejASd
-        I0D36cexJPxGsdxp1bY8lwU5bVGZEFs=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 1A299A3B87;
-        Tue, 25 Jan 2022 15:05:03 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 16:04:59 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] printk: Drop console_sem during panic
-Message-ID: <YfARmwyLyl8gj6Zy@alley>
-References: <20220121190222.572694-1-stephen.s.brennan@oracle.com>
- <20220121190222.572694-5-stephen.s.brennan@oracle.com>
- <87pmoh3yf9.fsf@jogness.linutronix.de>
+        Tue, 25 Jan 2022 10:07:57 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4852BC06173B;
+        Tue, 25 Jan 2022 07:07:55 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id k18so20457312wrg.11;
+        Tue, 25 Jan 2022 07:07:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Q/fYKtq/uNf0miY8CtdiX8sLBbDL2BMLOTm05YpJTQM=;
+        b=CbydCRkPrgyu1CJCN2XMMm5A9DbRZp8I0x3XANUUCYcj6A2hdojUL3yDx6SSL3mGTt
+         ZGTmca6lkB48QwjeFZ3y8CcfcvB0+Q9IZ4FOhq9krgOVORSprKeiV9LtfUFtmDH4xxNZ
+         TrKcfNm1KzvGR7Ms74iXv4c2MjGZcpG/C/gbXwjEWHuwj46iVitff6wqqT+OWarQaBED
+         1BZScYr8Q4rscmPXmCx2xPCMdehBB4liaKI21pIQopgLhtkkk05SQWJ/vcrAfHClOiAP
+         gA2UY+1063GTVyj7C/RNjhhNaHI7XxcQu8PtZVy7Re1TlwtB0H6xeuEbhqv+Vpg8vgt3
+         5Jtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q/fYKtq/uNf0miY8CtdiX8sLBbDL2BMLOTm05YpJTQM=;
+        b=qFzd0i/Ut+H8UIiStblgSAV0xMtNAr8vXF42GE6NZoWpSvQHTyRhCQN/FjdV2dcEuL
+         fGsQ9/rJbyHmKVishpnjHi6kfNbcuUb7SJLokZFWHOeXjaxV763WdgPRjBcQAxHnaJhY
+         sOEsYJLkyh6a5SYGmTIOsvdxL0bosMh4/qwsPAWlgQuYbGs+srrABDqrEHQ228QIMoAm
+         E0G538nMN4Hj79z86A3ZQjpS24vGCeHEfeL5o34H1LmqtWM9p4azWl20ipawoiJLv5Bd
+         PzgJ5Lt+hFbHXqzKvRDVfT4LqoPC44y94JwbNooCWDnfQiZeYu98V1xbdunEQzpTcu+m
+         Ypiw==
+X-Gm-Message-State: AOAM531XQOZ6N0YsZEDtZ2nIacZUKabDMX6OTyf+/n/xKj8vA9RRnRnv
+        3Nc6G8d79pfoq+Bon1KwN6o=
+X-Google-Smtp-Source: ABdhPJytssNoYrdxhSp9bU/5zbsjnmIBG7CPAKSfSeYMNNA0Ue87xjlMTLE0IH/WRYTdG7gdYxEwag==
+X-Received: by 2002:a05:6000:1e10:: with SMTP id bj16mr10440979wrb.536.1643123273741;
+        Tue, 25 Jan 2022 07:07:53 -0800 (PST)
+Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
+        by smtp.gmail.com with ESMTPSA id l13sm21868193wry.87.2022.01.25.07.07.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 07:07:53 -0800 (PST)
+Date:   Tue, 25 Jan 2022 15:07:51 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.19 000/239] 4.19.226-rc1 review
+Message-ID: <YfASR0DlU4+Y2vOS@debian>
+References: <20220124183943.102762895@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87pmoh3yf9.fsf@jogness.linutronix.de>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-01-24 17:18:42, John Ogness wrote:
-> On 2022-01-21, Stephen Brennan <stephen.s.brennan@oracle.com> wrote:
-> > If another CPU is in panic, we are about to be halted. Try to gracefully
-> > drop console_sem and allow the panic CPU to grab it easily.
-> >
-> > Suggested-by: Petr Mladek <pmladek@suse.com>
-> > Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-> > ---
-> >  kernel/printk/printk.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> > index ca253ac07615..c2dc8ebd9509 100644
-> > --- a/kernel/printk/printk.c
-> > +++ b/kernel/printk/printk.c
-> > @@ -2668,7 +2668,7 @@ void console_unlock(void)
-> >  
-> >  	for (;;) {
-> >  		size_t ext_len = 0;
-> > -		int handover;
-> > +		int handover, pcpu;
-> >  		size_t len;
-> >  
-> >  skip:
-> > @@ -2739,6 +2739,12 @@ void console_unlock(void)
-> >  		if (handover)
-> >  			return;
-> >  
-> > +		/* Allow panic_cpu to take over the consoles safely */
-> > +		pcpu = atomic_read(&panic_cpu);
-> > +		if (unlikely(pcpu != PANIC_CPU_INVALID &&
-> > +		    pcpu != raw_smp_processor_id()))
-> > +			break;
-> > +
+Hi Greg,
+
+On Mon, Jan 24, 2022 at 07:40:38PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.226 release.
+> There are 239 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Keep in mind that after the "break", this context will try to re-acquire
-> the console lock and continue printing. That is a pretty small window
-> for the panic CPU to attempt a trylock.
->
-> Perhaps the retry after the loop should also be avoided for non-panic
-> CPUs. This would rely on the panic CPU taking over (as your comment
-> suggests will happen). Since the panic-CPU calls pr_emerg() as the final
-> record before drifting off to neverland, that is probably OK.
+> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
+> Anything received after that time might be too late.
 
-Great catch!
+Build test:
+mips (gcc version 11.2.1 20220121): 63 configs -> no failure
+arm (gcc version 11.2.1 20220121): 116 configs -> no new failure
+arm64 (gcc version 11.2.1 20220121): 2 configs -> no failure
+x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
 
-> Something like:
-> 
-> @@ -2731,7 +2731,8 @@ void console_unlock(void)
->  	 * there's a new owner and the console_unlock() from them will do the
->  	 * flush, no worries.
->  	 */
-> -	retry = prb_read_valid(prb, next_seq, NULL);
-> +	retry = (pcpu != raw_smp_processor_id()) &&
-> +		prb_read_valid(prb, next_seq, NULL);
->  	if (retry && console_trylock())
->  		goto again;
->  }
-> 
-> I would also like to see a comment about why it is acceptable to use
-> raw_smp_processor_id() in a context that has migration
-> enabled. Something like: raw_smp_processor_id() can be used because this
-> context cannot be migrated to the panic CPU.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
-Yup. It would be nice to mention this.
+[1]. https://openqa.qa.codethink.co.uk/tests/651
 
-We actually need the same check in both locations. I would either put
-it into a helper or I would pass the result via a variable:
 
-The helper might look like:
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-/*
- * Return true when this CPU should unlock console_sem without pushing
- * all messages to the console. It would allow to call console in
- * panic CPU a safe way even after other CPUs are stopped.
- *
- * It can be called safely even in preemptive context because panic
- * CPU does not longer schedule.
- */
-static bool abandon_console_lock_in_panic()
-{
-	if (!panic_in_progress())
-		return false;
+--
+Regards
+Sudip
 
-	return atomic_read(&panic_cpu) != raw_smp_processor_id();
-}
-
-Note that I used panic_in_progress() because it makes the code more
-readable. Using pcpu variable is small optimization. But it has effect
-only during panic() where it is not important. It is slow path anyway.
-
-Best Regards,
-Petr

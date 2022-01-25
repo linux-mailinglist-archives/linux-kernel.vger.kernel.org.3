@@ -2,114 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FA849B502
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ECE49B4ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576809AbiAYN0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:26:13 -0500
-Received: from mga02.intel.com ([134.134.136.20]:49181 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1576255AbiAYNS5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:18:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643116737; x=1674652737;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s1cFwXVuWmH1WB6LHxaChd1NCzMYJ5RAUlwC/vLPmuA=;
-  b=LNqMmM/2z9bjR5mLEJG7C1wIwmdFGe4OQPgFs4R0ZgM+KdFSLaUZ5i72
-   tW7PJ98F7/L8Su432kccOT24jDtsg8LvG/P/GMlYfkjFCusJu9RUPtUDK
-   IoN8UiMQwdMwIBWaZFWypzZeIqxxItQyfJxFXvTIpbQgVU7mJRn40i42y
-   xQOBQty1OyWtPli2kip6OVnwVIBtu+HJvBuSP2M/30TSLAFsjEThC6zEP
-   T64zBA4s2De37WuP1BiKXoHLkJaz1c5loQsf/lwZyJYNKzseZR4VjKFwF
-   /XeuhGhs80wHCdELnEV/2e2ulsvutDvh8G72nonhDhkwqM+MO7cnqVqMC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="233667539"
+        id S1385706AbiAYNW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:22:27 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:2794 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1450629AbiAYNSe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 08:18:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1643116714; x=1674652714;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FwsaWjSKkuZkjObWuatzweam4HfqUJ6urkQQ4ZbcMfc=;
+  b=kL+Di5krC9hHpolQMJt4Pqa8JHPo6HULdK978mLroDLSycuHgexwp4oX
+   D4RBBE7IGJNdmPHf5QGH2h4ex327Zn8/XSqwHymknSXMNIYXACYnhTPsf
+   47jmTEqaBJa3hUWn5b4Kzv6NqC9WvvVYwTVt+YZ7sXKalvSwRPuSwH4G+
+   eEUxVXHY+XlSSOnK9qGn9patnLNsq1/vbAVDarZbJeKA2IWjITPzYeQy2
+   rFLgzufRMYQ1u7u5DRPzm5gJHiESQVFeMOvWDMwCBRvReJO37AiGHDmWx
+   iVUSDyVP3W3CVvfM4vJGSEb56xgXJezasJ20C/P1/BEEuVv/hmr3ou8+9
+   g==;
+IronPort-SDR: gWioOZyOP0ZwI9zAEoNuHEnK2uPHu3JW0Q8OBka308RHJmRxO+Jdp+OxznTzZfD6siN/UvVXjK
+ x+hRkoDuVV7jixdosaIWtAqMjISm61Sf8Xuz4XjzmfTlr3lBF4soaZIOzlZc0yzqAnKgf6kuYx
+ uHqAcV3ere6yBOAAYTpD48lQ8ZHDzHzY56n34StX3eEK7BzqT+O5i+04jg9aMyW3e8l0zntLC/
+ ZUR2PQitAaW67u7km4futzQZ2yu1JM4WHdKh5ANHXSLkS0eNgf5/BhzhlKzBsy2gxAXC1e7kFc
+ s3OthP2f2pBax5eVgGt1t6LH
 X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="233667539"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 05:18:54 -0800
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="477099894"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 05:18:51 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nCLhg-00EFxD-FN;
-        Tue, 25 Jan 2022 15:17:44 +0200
-Date:   Tue, 25 Jan 2022 15:17:44 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: [PATCH v2 5/5] iio: afe: iio-rescale: Re-use generic struct
- s32_fract
-Message-ID: <Ye/4eJ/RhlWF7q70@smile.fi.intel.com>
-References: <20220110193104.75225-1-andriy.shevchenko@linux.intel.com>
- <20220110193104.75225-5-andriy.shevchenko@linux.intel.com>
- <20220115185203.567780e8@jic23-huawei>
- <Ye7DSAN4gdhXfEUs@smile.fi.intel.com>
- <Ye8Z6dS5cCji9LNQ@shaak>
+   d="scan'208";a="159889610"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Jan 2022 06:18:22 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 25 Jan 2022 06:18:21 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 25 Jan 2022 06:18:20 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH 0/2] pinctrl: ocelot Add support for ServalT
+Date:   Tue, 25 Jan 2022 14:18:56 +0100
+Message-ID: <20220125131858.309237-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ye8Z6dS5cCji9LNQ@shaak>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 04:28:09PM -0500, Liam Beguin wrote:
-> On Mon, Jan 24, 2022 at 05:18:32PM +0200, Andy Shevchenko wrote:
-> > On Sat, Jan 15, 2022 at 06:52:03PM +0000, Jonathan Cameron wrote:
-> > > On Mon, 10 Jan 2022 21:31:04 +0200
-> > > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > 
-> > > > Instead of custom data type re-use generic struct s32_fract.
-> > > > No changes intended.
-> > > > 
-> > > > The new member is put to be the first one to avoid additional
-> > > > pointer arithmetic. Besides that one may switch to use fract
-> > > > member to perform container_of(), which will be no-op in this
-> > > > case, to get struct rescale.
-> > > > 
-> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > 
-> > > I'm not totally sold on this series showing there is a strong case for
-> > > these macros so interested to hear what others think.
-> > 
-> > So far no news :-)
-> 
-> Like I mentioned briefly in the other thread[1], I don't really see the
-> advantage for the AFE driver given that it's almost just like renaming
-> the parameters.
+This patch series adds support for ServalT pinctrl.
 
-I tend to disagree, perhaps I wasn't so clear in my points.
+Horatiu Vultur (2):
+  dt-bindings: pinctrl: ocelot: Add ServalT SoC support
+  pinctrl: ocelot: Add support for ServalT SoC
 
-The change reveals that the layering can be improved. In OOP
-the object A which is inherited (or encapsulated as we see here)
-allows to clearly get what kind of data the methods are operating
-with / on. As you may see the two functions and the method
-declaration appears to have interest only in the fraction data
-for rescaling. The cleanup I consider helpful in the terms
-of layering and OOP.
-
-> For the other drivers affected by the change, it drops the definition of
-> the structure which is nice. So overall, it's a plus IMO :-)
-
-Thanks!
-
-> [1] https://lore.kernel.org/linux-iio/20220108205319.2046348-1-liambeguin@gmail.com/
+ .../bindings/pinctrl/mscc,ocelot-pinctrl.txt  |   4 +-
+ drivers/pinctrl/pinctrl-ocelot.c              | 102 ++++++++++++++++++
+ 2 files changed, 104 insertions(+), 2 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.33.0
 

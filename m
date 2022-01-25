@@ -2,132 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA1B49A81A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EB449A868
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381078AbiAYC4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:56:11 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.222]:58288 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S3413917AbiAYAlW (ORCPT
+        id S1318532AbiAYDGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3415997AbiAYBxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:41:22 -0500
-HMM_SOURCE_IP: 172.18.0.48:50016.1962489051
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.38 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id DA46C280029;
-        Tue, 25 Jan 2022 08:30:13 +0800 (CST)
-X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id ff90be4f69a445f5b32540480a51d8bc for j.vosburgh@gmail.com;
-        Tue, 25 Jan 2022 08:30:16 CST
-X-Transaction-ID: ff90be4f69a445f5b32540480a51d8bc
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
-To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jay.vosburgh@canonical.com, nikolay@nvidia.com,
-        huyd12@chinatelecom.cn
-Subject: [PATCH v8] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
-Date:   Mon, 24 Jan 2022 19:29:54 -0500
-Message-Id: <20220125002954.94405-1-sunshouxin@chinatelecom.cn>
-X-Mailer: git-send-email 2.27.0
+        Mon, 24 Jan 2022 20:53:55 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A29C046E37
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:31:17 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id m6so56671312ybc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:31:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=93SQc4Tl/JWybIwI62dfNMnzDWuRQfWaA9+g/v1rj7M=;
+        b=lsJekgDbRNlLuo/YxbZWVWXVamDLmOe4ov4KcsQXtoKeC9A6qzCOypbMjErscac52k
+         L9hUF1ZObhuxBufOclO8I6V25tsedAOXQyKyxu6tgS8arOCphWj6QZigKEaN9vpr4k/6
+         TOPXBNAVqURtWd7Gwi6IN4ueAnwNohjQ71IwXJcwV3WZBwqJOGvjNmqgX7caewkstyCP
+         097fk3I17DKTgF0uaAkbE+l7Ymz5Oxv3NZmOGwHmuvJer8+mg+WoY3mCmVe63KU5pCww
+         79Uc4d8MZENKw0qX7Orn570AMhDSSp+Z9gOXXs0N0SxUW5GBp5tQVqcp17GdQ290haEw
+         az/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=93SQc4Tl/JWybIwI62dfNMnzDWuRQfWaA9+g/v1rj7M=;
+        b=VQWA4QbCs1p8l+PW9LVy799HwdMnp1+KY143/RwPqpIDVE+Fw4YUShONoezCVFSfQV
+         4/fYlOL8lJY5qAHyfuDYeRPZs6Sy+Z50XfLQTBAsvCEudvQdOOntX92a6U0Fn+v2zt2o
+         JLr6RTF7HgRPyw8OqAcv8tu0v7Tji+Kg3dN8/zWeOIiiLGju4sW1qyNCRIcqQzZRXGmH
+         /jLQC5lTgMuwipTc0aBf676OO66iRq1N+/hZyMbyXmPJ2ihkfrfiPMsO6OU2ITe3ylBE
+         kbbBjxdeR3MEkJo8YEjftGvXLcNGndI7nOYMK8b1CmbUkW5p6eGsjHreHkvfWk3ruy5A
+         O/Mg==
+X-Gm-Message-State: AOAM530XTB+aITJBmpfJykE7BbaCAqB3QFfNuv5mO5BhO3EAqWTCHdul
+        Kym5nEbuVVBNPg101xgMGLa2VZF69/BXorq1p51e6uzoNAuUTw==
+X-Google-Smtp-Source: ABdhPJzs0cTkYj0j3B+cYgCXNhFbR9tmvMzmtySH3aKbceEYTXHZ9j5Hut9O0cVbohLq2c4MqiITaN3vzm5st35vLis=
+X-Received: by 2002:a05:6902:1244:: with SMTP id t4mr702006ybu.192.1643070676164;
+ Mon, 24 Jan 2022 16:31:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220124105247.2118990-1-brauner@kernel.org> <20220124105247.2118990-3-brauner@kernel.org>
+In-Reply-To: <20220124105247.2118990-3-brauner@kernel.org>
+From:   Josh Don <joshdon@google.com>
+Date:   Mon, 24 Jan 2022 16:31:05 -0800
+Message-ID: <CABk29NtFnswO3iaQobbijV1-FwCJd06prm2UMq7S8Tt736hYMA@mail.gmail.com>
+Subject: Re: [resend RFC 2/3] sched/prctl: add PR_SCHED_CORE_SHARE command
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Balbir Singh <sblbir@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since ipv6 neighbor solicitation and advertisement messages
-isn't handled gracefully in bond6 driver, we can see packet
-drop due to inconsistency between mac address in the option
-message and source MAC .
+Hey Christian,
 
-Another examples is ipv6 neighbor solicitation and advertisement
-messages from VM via tap attached to host bridge, the src mac
-might be changed through balance-alb mode, but it is not synced
-with Link-layer address in the option message.
+This seems like a reasonable extension of the interface to me.
 
-The patch implements bond6's tx handle for ipv6 neighbor
-solicitation and advertisement messages.
+> @@ -200,6 +212,20 @@ int sched_core_share_pid(unsigned int cmd, pid_t pid, enum pid_type type,
+>                 __sched_core_set(current, cookie);
+>                 goto out;
+>
+> +       case PR_SCHED_CORE_SHARE:
+> +               rcu_read_lock();
+> +               p = task_by_pid(pid_share);
+> +               if (!p)
+> +                       err = -ESRCH;
+> +               else if (!ptrace_may_access(p, PTRACE_MODE_READ_REALCREDS))
+> +                       err = -EPERM;
+> +               if (!err)
+> +                       cookie = sched_core_clone_cookie(p);
+> +               rcu_read_unlock();
+> +               if (err)
+> +                       goto out;
+> +               break;
+> +
 
-Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
----
- drivers/net/bonding/bond_alb.c | 37 +++++++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
-index 533e476988f2..d4d8670643e9 100644
---- a/drivers/net/bonding/bond_alb.c
-+++ b/drivers/net/bonding/bond_alb.c
-@@ -1269,6 +1269,34 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
- 	return res;
- }
- 
-+/* determine if the packet is NA or NS */
-+static bool __alb_determine_nd(struct icmp6hdr *hdr)
-+{
-+	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
-+	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
-+{
-+	struct ipv6hdr *ip6hdr;
-+	struct icmp6hdr *hdr;
-+
-+	ip6hdr = ipv6_hdr(skb);
-+	if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
-+		if (!pskb_may_pull(skb, sizeof(struct ipv6hdr) + sizeof(struct icmp6hdr)))
-+			return true;
-+
-+		hdr = icmp6_hdr(skb);
-+		return __alb_determine_nd(hdr);
-+	}
-+
-+	return false;
-+}
-+
- /************************ exported alb functions ************************/
- 
- int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
-@@ -1348,8 +1376,10 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
- 	/* Do not TX balance any multicast or broadcast */
- 	if (!is_multicast_ether_addr(eth_data->h_dest)) {
- 		switch (skb->protocol) {
--		case htons(ETH_P_IP):
- 		case htons(ETH_P_IPV6):
-+			if (alb_determine_nd(skb, bond))
-+				break;
-+		case htons(ETH_P_IP):
- 			hash_index = bond_xmit_hash(bond, skb);
- 			if (bond->params.tlb_dynamic_lb) {
- 				tx_slave = tlb_choose_channel(bond,
-@@ -1446,6 +1476,11 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
- 			break;
- 		}
- 
-+		if (alb_determine_nd(skb, bond)) {
-+			do_tx_balance = false;
-+			break;
-+		}
-+
- 		hash_start = (char *)&ip6hdr->daddr;
- 		hash_size = sizeof(ip6hdr->daddr);
- 		break;
-
-base-commit: dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
--- 
-2.27.0
-
+Did you consider folding this into SCHED_CORE_SHARE_TO? SHARE_TO isn't
+using the last arg right now; it could use it as an override for the
+task we copy the cookie from instead of always choosing 'current'.
+Since the code currently rejects any SCHED_CORE prctl calls with a
+non-zero last arg for commands other than SCHED_CORE_GET, this would
+be a safe change for userspace.

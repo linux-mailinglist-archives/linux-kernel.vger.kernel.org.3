@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E9249B4C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD9A49B4C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576099AbiAYNQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:16:33 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:60894 "EHLO
+        id S1386209AbiAYNQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:16:59 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:60900 "EHLO
         lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1575756AbiAYNLn (ORCPT
+        with ESMTP id S1575758AbiAYNLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Jan 2022 08:11:43 -0500
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20PDBQVK048497;
-        Tue, 25 Jan 2022 07:11:27 -0600
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20PDBTSM048507;
+        Tue, 25 Jan 2022 07:11:29 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643116287;
-        bh=u74SvgnQpFgRTQo95zXgLxSkoe5HgeHEMU00TPE9Obw=;
+        s=ti-com-17Q1; t=1643116289;
+        bh=d/jdGM1htgiSvFkoszmoTHbanaVa1iRW/KEZaM8sikQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=dDeo5VhH7MeKLZ0+62FSxR6J1WI3ZvhOHz9TcVNqXndR8nl1NvHWoPdZ7bRCNHo2T
-         rC6yysiOHOJl3sXjDN0Yxv5IAROq9YfBlefzvsy2Hd8yq5drhR3yeQHS7OOvCchL3a
-         IRug6u1hbzA2SicylAw/dJmLriDGC6oHOuFMMukM=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20PDBQ1c030028
+        b=HRCXryEd1MN9BmweCSAw9pGCe2drwzbxL5tgy8xvAzoaR2BO+2WQn42znkHus3rYC
+         fk6Gqjrt8/sWWLudCsX+ueaV3hSuRCDr5DgyJTqRHWE2Ov7TyvUcvfq95oXaREY2J4
+         XKYJJxn7tblSwQ91X3+3Fjrp6b6I5Qdu/jNyP+O8=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20PDBTQA030060
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Jan 2022 07:11:26 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 25 Jan 2022 07:11:29 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 25
- Jan 2022 07:11:26 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2022 07:11:29 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 25 Jan 2022 07:11:26 -0600
+ Frontend Transport; Tue, 25 Jan 2022 07:11:28 -0600
 Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20PDBE39032789;
-        Tue, 25 Jan 2022 07:11:24 -0600
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20PDBE3A032789;
+        Tue, 25 Jan 2022 07:11:27 -0600
 From:   Aswath Govindraju <a-govindraju@ti.com>
 CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -44,9 +44,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Nishanth Menon <nm@ti.com>,
         Aswath Govindraju <a-govindraju@ti.com>
-Subject: [PATCH 4/6] arm64: dts: ti: k3-j721s2-common-proc-board: Enable SERDES0
-Date:   Tue, 25 Jan 2022 18:41:11 +0530
-Message-ID: <20220125131113.727-5-a-govindraju@ti.com>
+Subject: [PATCH 5/6] arm64: dts: ti: k3-j721s2-common-proc-board: Add USB support
+Date:   Tue, 25 Jan 2022 18:41:12 +0530
+Message-ID: <20220125131113.727-6-a-govindraju@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220125131113.727-1-a-govindraju@ti.com>
 References: <20220125131113.727-1-a-govindraju@ti.com>
@@ -58,9 +58,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure first lane to PCIe, the second lane to USB and the last two lanes
-to eDP. Also, add sub-nodes to SERDES0 DT node to represent SERDES0 is
-connected to PCIe.
+The board uses lane 1 of SERDES for USB. Set the mux
+accordingly.
+
+The USB controller and EVM supports super-speed for USB0
+on the Type-C port. However, the SERDES has a limitation
+that upto 2 protocols can be used at a time. The SERDES is
+wired for PCIe, eDP and USB super-speed. It has been
+chosen to use PCIe and eDP as default. So restrict
+USB0 to high-speed mode.
 
 Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 ---
@@ -68,40 +74,40 @@ Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
  1 file changed, 22 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index b210cc07c539..791f235bd95f 100644
+index 791f235bd95f..aa75dc541842 100644
 --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
 +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -9,6 +9,9 @@
- 
- #include "k3-j721s2-som-p0.dtsi"
- #include <dt-bindings/net/ti-dp83867.h>
-+#include <dt-bindings/phy/phy-cadence.h>
-+#include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/mux/ti-serdes.h>
- 
- / {
- 	compatible = "ti,j721s2-evm", "ti,j721s2";
-@@ -350,6 +353,25 @@
- 	phy-handle = <&phy0>;
+@@ -147,6 +147,12 @@
+ 			J721S2_IOPAD(0x020, PIN_INPUT, 7) /* (AA23) MCAN15_RX.GPIO0_8 */
+ 		>;
+ 	};
++
++	main_usbss0_pins_default: main-usbss0-pins-default {
++		pinctrl-single,pins = <
++			J721S2_IOPAD(0x0ec, PIN_OUTPUT, 6) /* (AG25) TIMER_IO1.USB0_DRVVBUS */
++		>;
++	};
  };
  
-+&serdes_ln_ctrl {
-+	idle-states = <J721S2_SERDES0_LANE0_PCIE1_LANE0>, <J721S2_SERDES0_LANE1_USB>,
-+		      <J721S2_SERDES0_LANE2_EDP_LANE2>, <J721S2_SERDES0_LANE3_EDP_LANE3>;
+ &wkup_pmx0 {
+@@ -372,6 +378,22 @@
+ 	};
+ };
+ 
++&usb_serdes_mux {
++	idle-states = <1>; /* USB0 to SERDES lane 1 */
 +};
 +
-+&serdes_refclk {
-+	clock-frequency = <100000000>;
++&usbss0 {
++	pinctrl-0 = <&main_usbss0_pins_default>;
++	pinctrl-names = "default";
++	ti,vbus-divider;
++	ti,usb2-only;
 +};
 +
-+&serdes0 {
-+	serdes0_pcie_link: phy@0 {
-+		reg = <0>;
-+		cdns,num-lanes = <1>;
-+		#phy-cells = <0>;
-+		cdns,phy-type = <PHY_TYPE_PCIE>;
-+		resets = <&serdes_wiz0 1>;
-+	};
++&usb0 {
++	dr_mode = "otg";
++	maximum-speed = "high-speed";
 +};
 +
  &mcu_mcan0 {

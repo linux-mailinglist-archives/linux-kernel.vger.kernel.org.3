@@ -2,104 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 259F249ABF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 06:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F22749AC42
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237951AbiAYFqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 00:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235329AbiAYFnL (ORCPT
+        id S244407AbiAYGTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 01:19:09 -0500
+Received: from out162-62-57-64.mail.qq.com ([162.62.57.64]:58729 "EHLO
+        out162-62-57-64.mail.qq.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1357793AbiAYEYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 00:43:11 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB808C0613AF;
-        Mon, 24 Jan 2022 20:03:13 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id h10so60312wmh.4;
-        Mon, 24 Jan 2022 20:03:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=C3FYe6TcjYjJbJdwbX6OqfjeFpVDE2oMdSSX3Pq1Ukk=;
-        b=pKcHkaFv8cJewfXGxbaoexn8ygvz6aAsVsgb9im1bfgH1/UQPgeCfqahJ2dR2Jd6hw
-         AOgIxBugel8w8NhNgNGUc96a62L5XLi7ClRbyVQaZ/sWNJTCZIFAWX3weKU8H0yMhADj
-         GshQQfTaDIR+ZlBSv64qpiXbAhGVgFWhYXgI1NfaxBLlAfZYrCChvz7mNWx8KV61CCBN
-         oipUOMRVHvtv4shz3+ZU5vVYSz283rDSviTI8EVMkwsiULDNG+eCrrZhNHOmOIOsMsrK
-         ISx+Ta2LMa0Eh2OF2o+sGHLDFeQv4ktn5kAjzEIZJGfbHqgi10b/wM+h1LpOutSeBVLN
-         rghg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=C3FYe6TcjYjJbJdwbX6OqfjeFpVDE2oMdSSX3Pq1Ukk=;
-        b=pcio16Ww+L0DZKc+O6hwKqRlTUhl1byC78D9FPewjLNks1ojDHsG9x6iloAFcfTAh1
-         vRFV2s5zsZaOIK1+yH/RVBlWy2FUX4ASiR+KsLVuxVsuypBZD+H2aOCjRVetquaQg0LW
-         oTvYilpr7tMapfNI0Wkxgx6ZozQ/ZxXfWKjeJeoqT8a1P7tNsc2GHEEGvN0CLbX+Ynjr
-         DyegoWSde+frn35KJeDWRnB2e+60sS9wbb7BwIMiZ5PCplUUOfdwjlEJ52ZHjlUlV2ut
-         qln5U0JfP/aE8R8RmSZdu3IT6z2/0//zpprg7jr+BtDKbENz5trVwCWfg/0psirIG6Ze
-         pEmQ==
-X-Gm-Message-State: AOAM530t+8zPFH0Xzm01ES00c8ZDsySXpBRDP1oATRsMXkvsgDDdhrCP
-        lJPPumIj/Ycf4Frea5HV54s=
-X-Google-Smtp-Source: ABdhPJw35D0LrxgrZWlhbeSpwAo2a4wXCmg7DUqpptX4Hs+orfcpR6co5iihxpSUNgAQICwdVQ+zVQ==
-X-Received: by 2002:a05:600c:3797:: with SMTP id o23mr1116133wmr.158.1643083392066;
-        Mon, 24 Jan 2022 20:03:12 -0800 (PST)
-Received: from [172.16.20.20] ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id z1sm1039020wma.20.2022.01.24.20.03.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jan 2022 20:03:11 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.7\))
-Subject: Re: [PATCH 0/3] arm64: dts: meson: add BL32 reserved region to
- Beelink g12b devices
-From:   Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <7h7daoyka3.fsf@baylibre.com>
-Date:   Tue, 25 Jan 2022 08:03:09 +0400
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Furkan Kardame <furkan@fkardame.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3A7E4C5F-AECB-4A3E-B074-E2E3419DD749@gmail.com>
-References: <20220122073221.2398-1-christianshewitt@gmail.com>
- <7h7daoyka3.fsf@baylibre.com>
-To:     Kevin Hilman <khilman@baylibre.com>
-X-Mailer: Apple Mail (2.3608.120.23.2.7)
+        Mon, 24 Jan 2022 23:24:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1643084647;
+        bh=7945bRSZNev1fxXSkPlWshLRauTragynEtURS2/Qcwk=;
+        h=From:To:Cc:Subject:Date;
+        b=mwM39YK3Z+8NXHXyfi2j+2ExPO0n0rQY/SMCxQEPBQvUed7nqhcNV7wnimw45JIbS
+         iLiCoVVgFSfVmYbMnGT26wPEqM4XZq85v5Q1fz/2fsgHfGLTWUIPNEv8rh2sUPBVmn
+         b/w9ZIg/vNcZyNaTsJIFX8P9sZWKqTYhJJUP55FU=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc7.qq.com (NewEsmtp) with SMTP
+        id 1F808456; Tue, 25 Jan 2022 12:07:56 +0800
+X-QQ-mid: xmsmtpt1643083676t5wn7vuix
+Message-ID: <tencent_C52895FD37802832A3E5B272D05008866F0A@qq.com>
+X-QQ-XMAILINFO: ObFHHlrAm440WFqxXpfy2OMEFUwmcfhEw6FCfS53x9Jq1IXUo3IRffNwG19du7
+         RFda4CCqLn7tKxMtg2r4ZJlfK7OIeRj8PxwhqhTsYLjMrvmT+MpphFrU/HqwQoDS0qF0zkUT/QkN
+         KK5rzw6P+UCzGljmG/7iTSDvk9KDtHciHw5m72OPt4Km1W+9P7u5+nidc9lPCSgEE9ZjEWOHZxRb
+         i0BrVbOiS3CgeXPIi4L+sbaYVmagqZJiFEh6WMkGdF+zpprInFxd7QnSGbh98lC8HHq7nSCYU13M
+         mFZMCRO5uTFH8E5FivSS+wgpbvLGHwMaBTYk33rLEm1gEa8lDrnJniLpKa35d0CbhSceO2/XCjL7
+         DJBdlnambp7sstXFU+BQcEbGYFVRw8+OkGjUvqwB/hZKvDFMwGjmNY2UOPRAV8u8sSNZZCtvLuJk
+         t4CUMtf6QRjubs+2wyFj0IvDjiJC8BaTbUMNt8SgGKogKbq2iowQJJm1hEjB5vjbKvnYs2ygIqL7
+         /tQ8Yj1mzOfFSnOdSkXI8yr+nU6+5gQJaJHk0+24sjaGcVvILs7RutH3/RBaYL3pRemjyYNbxX5L
+         9RW2Ioe6bOeGFXFWnXmqIT7S4b+QGgwcUHd06ddWva2yXCDw4xDcFTVfuzOHsadjOWreFNPeewQX
+         CecQp7hb/LaoETFR3g2G9k9+egWCTZqr8jjijNhQVL5yNwkt46gp200NHjq0j9R54ZzyeBSJ3hBX
+         dr4cX7sNgJXFQ7j8PPq9HGdoFVOmPiDVH5CxN1DwTrkO5xjzvrxCXi9Q+mGFk+RX2TozD3uBTDc6
+         h8FBPgylsNJcRegAdtdloJgc7HwD8CVZY4Q4t19sryAvDCERYE0N7KtLjRwwQd07xrlmvj94RgB1
+         O1QYkBEkBO4vV0Hpj8AAJfVtaa6HnTzkBJLPS0EJ5sKgA6gwPcOlCqfx2l3zlXpA==
+From:   xkernel.wang@foxmail.com
+To:     rostedt@goodmis.org, mingo@redhat.com
+Cc:     linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH] tracing/histogram: fix a potential memory leak for kstrdup()
+Date:   Tue, 25 Jan 2022 12:07:15 +0800
+X-OQ-MSGID: <20220125040715.2057-1-xkernel.wang@foxmail.com>
+X-Mailer: git-send-email 2.33.0.windows.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->=20
-> On 25 Jan 2022, at 12:02 am, Kevin Hilman <khilman@baylibre.com> =
-wrote:
->=20
-> Christian Hewitt <christianshewitt@gmail.com> writes:
->=20
->> This resolves a long-running issue where Beelink GT-King/Pro and
->> GS-King-X wedge on boot or shortly after when booting from vendor
->> u-boot. In some distros the issue is often reported as triggered
->> by large file transfers to/from USB or SD cards. Reserving the
->> BL32 memory region prevents the issue.
->=20
-> The BL32 is typically common for the SoC family, so this change should
-> probably go into the g12b.dtsi.  Or probably even
-> meson-g12-common.dtsi, which is where the BL31 reserved-memory is
-> described.
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Hi Kevin,
+kfree() is missing on an error path to free the memory allocated by
+kstrdup():
+> p = param = kstrdup(data->params[i], GFP_KERNEL);
+So it is better to free it via kfree(p).
 
-Would you be okay with the same change applied to GX devices too? - I
-normally have these two catch-all patches in my tree to deal with random
-tv box hardware and it would be great to drop them:
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+---
+ kernel/trace/trace_events_hist.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-=
-https://github.com/chewitt/linux/commit/4315ea4612389fc08d0a008b562cafbda9=
-6374fc
-=
-https://github.com/chewitt/linux/commit/3c0df794baa7ea9d32d8ad54530b5a056c=
-770ea9
-
-Christian=
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index f01e442..1fac14c 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -3578,6 +3578,7 @@ static int trace_action_create(struct hist_trigger_data *hist_data,
+ 
+ 			var_ref_idx = find_var_ref_idx(hist_data, var_ref);
+ 			if (WARN_ON(var_ref_idx < 0)) {
++				kfree(p);
+ 				ret = var_ref_idx;
+ 				goto err;
+ 			}
+-- 

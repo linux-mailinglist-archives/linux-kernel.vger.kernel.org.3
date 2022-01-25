@@ -2,204 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67ECF49BDCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7986C49BDD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233042AbiAYVU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 16:20:26 -0500
-Received: from mga17.intel.com ([192.55.52.151]:58702 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233025AbiAYVUY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 16:20:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643145624; x=1674681624;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1mC3jvFOz6BcF/JErbN9jY4zCH09JH3fVuzVeAT3IJ8=;
-  b=IuSCT4+pMNSsjWYxFK7HjJUwopo+y7CxrcBRY+GRMfDAf67OvWExTa/1
-   DcykAB6ZH2MEhr4K1tQOOT3rrGNyXTqaNHZmWO5B+WRlWb2TLEPUcYmkh
-   Io2P5rOOwVy10dmPRBXm6HWNq8HU1oZ9QiI3Bhm2Tvc1G5ckPi6ia9vPM
-   q4eies72tVyf+Xbij1xwXoDfBAIhmx/haeFANzrRoPZ22useb+Vfb4G98
-   oEwVNeUMx197fgWZU6Ft3qv3Q9UEt42xoyeb3v+S+nyLxk522GaA54hBW
-   SVWVINk6qr7MiqG+kiIzY6LBwe8tUkP65EVGKJMk4iQLwrCF/V2wdaX7L
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="227092737"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="227092737"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 13:20:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="695991612"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2022 13:20:22 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCTEj-000KRq-Ms; Tue, 25 Jan 2022 21:20:21 +0000
-Date:   Wed, 26 Jan 2022 05:19:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mark:linkage/alias-rework 2/7]
- arch/arm/mach-omap1/ams-delta-fiq-handler.S:272:5: error: expected absolute
- expression
-Message-ID: <202201260540.vObCbIBt-lkp@intel.com>
+        id S233055AbiAYVXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 16:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233025AbiAYVX3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 16:23:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B388AC06173B;
+        Tue, 25 Jan 2022 13:23:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 572F9617D6;
+        Tue, 25 Jan 2022 21:23:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D8A2C340E0;
+        Tue, 25 Jan 2022 21:23:28 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 16:23:26 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220125162326.3d1ca960@gandalf.local.home>
+In-Reply-To: <202201251256.CCCBE9851E@keescook>
+References: <20220125145006.677e3709@canb.auug.org.au>
+        <202201242230.C54A6BCDFE@keescook>
+        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+        <202201251256.CCCBE9851E@keescook>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git linkage/alias-rework
-head:   a024fcf01f6ed383d5d22d6784fbba21ac0f4d2a
-commit: 18767f88b5593b40e521c45b58af8c0ea7953927 [2/7] linkage: add SYM_{ENTRY,START,END}_AT()
-config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20220126/202201260540.vObCbIBt-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=18767f88b5593b40e521c45b58af8c0ea7953927
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark linkage/alias-rework
-        git checkout 18767f88b5593b40e521c45b58af8c0ea7953927
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Tue, 25 Jan 2022 12:57:24 -0800
+Kees Cook <keescook@chromium.org> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On Tue, Jan 25, 2022 at 11:31:54PM +0900, Masami Hiramatsu wrote:
+> > On Tue, 25 Jan 2022 22:27:32 +0900
+> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >   
+> > > > /*
+> > > >  * struct trace_event_data_offsets_<call> {
+> > > >  *      u32                             <item1>;
+> > > >  *      u32                             <item2>;
+> > > >  *      [...]
+> > > >  * };
+> > > >  *
+> > > >  * The __dynamic_array() macro will create each u32 <item>, this is
+> > > >  * to keep the offset of each array from the beginning of the event.
+> > > >  * The size of an array is also encoded, in the higher 16 bits of
+> > > >  * <item>.
+> > > >  */
+> > > > 
+> > > > So, I think -Warray-bounds is refusing to see the destination as
+> > > > anything except a u32, but being accessed at 4 (sizeof(u32)) + 8
+> > > > (address && 0xffff) (?)  
+> > > 
+> > > Ah, I got it. Yes, that's right. __data_loc() will access the data
+> > > from the __entry, but the __rel_loc() points the same address from
+> > > the encoded field ("__rel_loc_foo" in this case) itself.
+> > > This is introduced for the user application event, which doesn't
+> > > know the actual __entry size because the __entry includes some
+> > > kernel internal defined fields.
+> > >   
+> > > > But if this is true, I would imagine there would be plenty of other
+> > > > warnings? I'm currently stumped.  
+> > > 
+> > > That is because __rel_loc is used only in the sample code in the kernel
+> > > for testing. Other use-cases comes from user-space.
+> > > Hmm, can we skip this boundary check for this example?  
+> > 
+> > If the -Warray-bounds determines the destination array size from
+> > the type of given pointer, we can just change the macro as below;
+> > 
+> > #define __get_rel_dynamic_array(field) 
+> > 			((void *)__entry +                                 \
+> > 			 offsetof(typeof(*__entry), __rel_loc_##field) +   \
+> > 			 sizeof(__entry->__rel_loc_##field) +              \
+> > 			 (__entry->__rel_loc_##field & 0xffff))
+> > 
+> > This must works same as __get_dynamic_array() macro.
+> > 
+> > Could you try this patch?
+> > 
+> > From 2982ba01367ec1f746a4f128512436e5325a7f9d Mon Sep 17 00:00:00 2001
+> > From: Masami Hiramatsu <mhiramat@kernel.org>
+> > Date: Tue, 25 Jan 2022 23:19:30 +0900
+> > Subject: [PATCH] tracing: Avoid -Warray-bounds warning for __rel_loc macro
+> > 
+> > Since -Warray-bounds checks the destination size from the
+> > type of given pointer, __assign_rel_str() macro gets warned
+> > because it passes the pointer to the 'u32' field instead of
+> > 'trace_event_raw_*' data structure.
+> > Pass the data address calculated from the 'trace_event_raw_*'
+> > instead of 'u32' __rel_loc field.
+> > 
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > ---
+> >  include/trace/trace_events.h | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+> > index 8c6f7c433518..65d927e059d3 100644
+> > --- a/include/trace/trace_events.h
+> > +++ b/include/trace/trace_events.h
+> > @@ -318,9 +318,10 @@ TRACE_MAKE_SYSTEM_STR();
+> >  #define __get_str(field) ((char *)__get_dynamic_array(field))
+> >  
+> >  #undef __get_rel_dynamic_array
+> > -#define __get_rel_dynamic_array(field)	\
+> > -		((void *)(&__entry->__rel_loc_##field) +	\
+> > -		 sizeof(__entry->__rel_loc_##field) +		\
+> > +#define __get_rel_dynamic_array(field)					\
+> > +		((void *)__entry + 					\
+> > +		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
+> > +		 sizeof(__entry->__rel_loc_##field) +			\
+> >  		 (__entry->__rel_loc_##field & 0xffff))
+> >  
+> >  #undef __get_rel_dynamic_array_len  
+> 
+> This patch doesn't silence the warning, but now that I see the shape of
+> things more clearly, let me see if I can find the right combo.
 
-All errors (new ones prefixed by >>):
+Hmm, could the zero size array cause an issues here. That is, does this
+help?
 
->> arch/arm/mach-omap1/ams-delta-fiq-handler.S:272:5: error: expected absolute expression
-   .if (qwerty_fiqin_end - qwerty_fiqin_start) > (0x200 - 0x1c)
-       ^
->> arch/arm/mach-omap1/ams-delta-fiq-handler.S:273:2: error: .err encountered
-    .err
-    ^
+diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+index 65d927e059d3..3d29919045af 100644
+--- a/include/trace/trace_events.h
++++ b/include/trace/trace_events.h
+@@ -128,7 +128,7 @@ TRACE_MAKE_SYSTEM_STR();
+ 	struct trace_event_raw_##name {					\
+ 		struct trace_entry	ent;				\
+ 		tstruct							\
+-		char			__data[0];			\
++		char			__data[];			\
+ 	};								\
+ 									\
+ 	static struct trace_event_class event_class_##name;
 
 
-vim +272 arch/arm/mach-omap1/ams-delta-fiq-handler.S
-
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  167  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  168  	@ r8 still contains GPIO input bits
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  169  	ands r8, r8, #KEYBRD_DATA_MASK		@ is keyboard data line low?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  170  	ldreq r8, [r9, #BUF_KEY]		@ yes - fetch collected so far,
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  171  	orreq r8, r8, r10			@ set 1 at current mask position
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  172  	streq r8, [r9, #BUF_KEY]		@ and save back
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  173  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  174  	mov r10, r10, lsl #1			@ shift mask left
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  175  	bics r10, r10, #0x800			@ have we got all the bits?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  176  	strne r10, [r9, #BUF_MASK]		@ not yet - store the mask
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  177  	bne restart				@ and restart
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  178  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  179  	@ r10 already contains 0, reuse it
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  180  	str r10, [r9, #BUF_STATE]		@ reset state to start
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  181  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  182  	@ Key done - restore interrupt mask
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  183  	ldr r10, [r9, #BUF_GPIO_INT_MASK]	@ fetch saved mask
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  184  	and r11, r11, r10			@ unmask all saved as unmasked
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  185  	str r11, [r12, #OMAP1510_GPIO_INT_MASK]	@ restore into the mask register
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  186  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  187  	@ Try appending the keycode to the circular buffer
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  188  	ldr r10, [r9, #BUF_KEYS_CNT]		@ get saved keystrokes count
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  189  	ldr r8, [r9, #BUF_BUF_LEN]		@ get buffer size
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  190  	cmp r10, r8				@ is buffer full?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  191  	beq hksw				@ yes - key lost, next source
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  192  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  193  	add r10, r10, #1			@ incremet keystrokes counter
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  194  	str r10, [r9, #BUF_KEYS_CNT]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  195  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  196  	ldr r10, [r9, #BUF_TAIL_OFFSET]		@ get buffer tail offset
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  197  	@ r8 already contains buffer size
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  198  	cmp r10, r8				@ end of buffer?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  199  	moveq r10, #0				@ yes - rewind to buffer start
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  200  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  201  	ldr r12, [r9, #BUF_BUFFER_START]	@ get buffer start address
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  202  	add r12, r12, r10, LSL #2		@ calculate buffer tail address
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  203  	ldr r8, [r9, #BUF_KEY]			@ get last keycode
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  204  	str r8, [r12]				@ append it to the buffer tail
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  205  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  206  	add r10, r10, #1			@ increment buffer tail offset
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  207  	str r10, [r9, #BUF_TAIL_OFFSET]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  208  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  209  	ldr r10, [r9, #BUF_CNT_INT_KEY]		@ increment interrupts counter
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  210  	add r10, r10, #1
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  211  	str r10, [r9, #BUF_CNT_INT_KEY]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  212  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  213  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  214  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  215  hksw:	@Is hook switch interrupt requested?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  216  	tst r13, #HOOK_SWITCH_MASK 		@ is hook switch status bit set?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  217  	beq mdm					@ no - try next source
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  218  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  219  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  220  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  221  	@ Hook switch interrupt FIQ mode simple handler
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  222  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  223  	@ Don't toggle active edge, the switch always bounces
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  224  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  225  	@ Increment hook switch interrupt counter
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  226  	ldr r10, [r9, #BUF_CNT_INT_HSW]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  227  	add r10, r10, #1
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  228  	str r10, [r9, #BUF_CNT_INT_HSW]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  229  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  230  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  231  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  232  mdm:	@Is it a modem interrupt?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  233  	tst r13, #MODEM_IRQ_MASK 		@ is modem status bit set?
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  234  	beq irq					@ no - check for next interrupt
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  235  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  236  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  237  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  238  	@ Modem FIQ mode interrupt handler stub
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  239  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  240  	@ Increment modem interrupt counter
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  241  	ldr r10, [r9, #BUF_CNT_INT_MDM]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  242  	add r10, r10, #1
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  243  	str r10, [r9, #BUF_CNT_INT_MDM]
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  244  	@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  245  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  246  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  247  irq:	@ Place deferred_fiq interrupt request
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  248  	ldr r12, deferred_fiq_ih_base		@ set pointer to IRQ handler
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  249  	mov r10, #DEFERRED_FIQ_MASK		@ set deferred_fiq bit
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  250  	str r10, [r12, #IRQ_ISR_REG_OFFSET] 	@ place it in the ISR register
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  251  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  252  	ldr r12, omap1510_gpio_base		@ set pointer back to GPIO bank
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  253  	b restart				@ check for next GPIO interrupt
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  254  	@@@@@@@@@@@@@@@@@@@@@@@@@@@
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  255  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  256  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  257  /*
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  258   * Virtual addresses for IO
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  259   */
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  260  omap_ih1_base:
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  261  	.word OMAP1_IO_ADDRESS(OMAP_IH1_BASE)
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  262  deferred_fiq_ih_base:
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  263  	.word OMAP1_IO_ADDRESS(DEFERRED_FIQ_IH_BASE)
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  264  omap1510_gpio_base:
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  265  	.word OMAP1_IO_ADDRESS(OMAP1510_GPIO_BASE)
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  266  qwerty_fiqin_end:
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  267  
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  268  /*
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  269   * Check the size of the FIQ,
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  270   * it cannot go beyond 0xffff0200, and is copied to 0xffff001c
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28  271   */
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28 @272  .if (qwerty_fiqin_end - qwerty_fiqin_start) > (0x200 - 0x1c)
-60c3bf3f121545 Janusz Krzysztofik 2010-04-28 @273  	.err
-
-:::::: The code at line 272 was first introduced by commit
-:::::: 60c3bf3f1215453a4f30f0b91db7fd301d558693 OMAP1: Amstrad Delta: add FIQ handler for serial keyboardport interrupt processing
-
-:::::: TO: Janusz Krzysztofik <jkrzyszt@tis.icnet.pl>
-:::::: CC: Tony Lindgren <tony@atomide.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- Steve

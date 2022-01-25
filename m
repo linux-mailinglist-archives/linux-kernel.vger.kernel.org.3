@@ -2,77 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F70449BA99
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3774A49BAA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385067AbiAYRrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:47:45 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56542 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382198AbiAYRqC (ORCPT
+        id S1355401AbiAYRxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239596AbiAYRxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:46:02 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6DB6B819DB;
-        Tue, 25 Jan 2022 17:46:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32BDC340E6;
-        Tue, 25 Jan 2022 17:45:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643132759;
-        bh=dpNFflG1Kul0cblc0qXDQXXmYLTowF2QDwhwsWST6u8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YSaMWp2lLtvrFg8QwQ1S5JB8pAwi3XxyG3y2BfJviBW4/fhmASqZAZAUMlsqY07iy
-         jhNpyOQFJCzMIkKYej0uP1C0XcLvqTPiGedh2sSVbDtqgUJf9XYMpBZnOyI55kwZ89
-         hx3+qfcw9uiBccsDtVQze6OnVOt5T7Xr3Yb4M+Ci1+NafAe8VMvaUjVF62AEO6ntT2
-         pONrQPhwlrQOT4yjvng/IavPvNw2bB6CM0YFeNE832ktu3sqVo5KTbhGgI6h0usaPL
-         TY+hWAOp65b1/xmNK615x6akKZfP1c8Ypk8J9/RQBhlXdqs04WQqBl3HBDvX0fJF2a
-         ovL21RV50wSFg==
-Date:   Tue, 25 Jan 2022 11:52:45 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] power: supply: cros_usbpd: Use struct_size() helper in
- kzalloc()
-Message-ID: <20220125175245.GA66154@embeddedor>
+        Tue, 25 Jan 2022 12:53:15 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04C2C06173D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:53:14 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id y17so9707880plg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:53:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TdEpPt26Kd5ANAoShc8sbb2YgnlITBWoslxb5vWIwEY=;
+        b=YzgYg9UDALgHKyWstuZhVyuAwx51TXB1k3kl+r9JbhLEv9o5u0Znx7TJiFssZ5VvSH
+         qa+/jjs1oRx5XNbHLM5RkVGqX3YfJ2qwlh6Cs+H+WP+GpCRVf2bI7P5k5g0xjwHPJ3U+
+         tWtTDd8//8grF1A1PYoLrjaRlfST5DAEPJlmo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TdEpPt26Kd5ANAoShc8sbb2YgnlITBWoslxb5vWIwEY=;
+        b=OcBo5mbzIaorkkuOfPoB4kvahQv+/Zfyeuog4Lc4tB/fcfWL1vzT2XnMxVxxBqUIIa
+         Em+C0Sh29mOgxsmoupJM/lnKbdAYMoNtti2Av6tmAoQ61obEkeFmW2joxz61NSH+Pmkw
+         ydOXUbDRmm2/o9iR72KUV36tScst9FElt8Az4wVnOcxA8uACM+V7B2nQ2XlXCHifAPDT
+         n5cst7HknaXGUSjKfzrQRi5s+d2os+GcsCmFrQ3BzD6y7XmMBFxc5lxwTiVst16Ch3QM
+         C9X33JEwjNuUPloaMWGWVyY2VhSO1Tx/iCBLcurk/aAw4RzFLPlMhT1gLQflXQQG+b40
+         BLwQ==
+X-Gm-Message-State: AOAM532+Ndikds7lJ9RiW4lCTDWawuzar00D/aXRD36m+ES0dbpxwMrZ
+        CnIkcTw9qWWE4SHddkWTd+Cbyg==
+X-Google-Smtp-Source: ABdhPJwNGoJh0Y7zhQk0/VKPgKclIQQBKnQecn44cSa8KoSPv8nXiehDcI7fK/eKC+dpURSfjOIW/A==
+X-Received: by 2002:a17:902:7143:b0:14a:62ed:c2a7 with SMTP id u3-20020a170902714300b0014a62edc2a7mr19990530plm.80.1643133194479;
+        Tue, 25 Jan 2022 09:53:14 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p38sm14430104pgb.36.2022.01.25.09.53.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 09:53:14 -0800 (PST)
+Date:   Tue, 25 Jan 2022 09:53:13 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <202201250952.2C89D08@keescook>
+References: <20220125145006.677e3709@canb.auug.org.au>
+ <202201242230.C54A6BCDFE@keescook>
+ <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+ <20220125090152.0c457aae@gandalf.local.home>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220125090152.0c457aae@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version,
-in order to avoid any potential type mistakes or integer overflows that,
-in the worst scenario, could lead to heap overflows.
+On Tue, Jan 25, 2022 at 09:01:52AM -0500, Steven Rostedt wrote:
+> On Tue, 25 Jan 2022 22:27:32 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > > But if this is true, I would imagine there would be plenty of other
+> > > warnings? I'm currently stumped.  
+> > 
+> > That is because __rel_loc is used only in the sample code in the kernel
+> > for testing. Other use-cases comes from user-space.
+> > Hmm, can we skip this boundary check for this example?
+> 
+> Is this only checked when __CHECKER__ is defined? If so, would this work?
 
-Also, address the following sparse warnings:
-drivers/power/supply/cros_usbpd-charger.c:107:23: warning: using sizeof on a flexible structure
+__CHECKER__ is only for sparse. This is from re-enabling -Warray-bounds
+for gcc.
 
-Link: https://github.com/KSPP/linux/issues/174
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/power/supply/cros_usbpd-charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
-index d89e08efd2ad..cadb6a0c2cc7 100644
---- a/drivers/power/supply/cros_usbpd-charger.c
-+++ b/drivers/power/supply/cros_usbpd-charger.c
-@@ -104,7 +104,7 @@ static int cros_usbpd_charger_ec_command(struct charger_data *charger,
- 	struct cros_ec_command *msg;
- 	int ret;
- 
--	msg = kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
-+	msg = kzalloc(struct_size(msg, data, max(outsize, insize)), GFP_KERNEL);
- 	if (!msg)
- 		return -ENOMEM;
- 
 -- 
-2.27.0
-
+Kees Cook

@@ -2,157 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F6749BE34
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9415E49BE3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiAYWHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiAYWHQ (ORCPT
+        id S233558AbiAYWLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:11:49 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60182 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230384AbiAYWLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:07:16 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265D8C061744
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:07:16 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id e16so10122311pgn.4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:07:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JEF4zKgPP5NwFQij2garUdemoLu5qnPKXjSaY5UzW1E=;
-        b=GRiOUztm2xR9USR3s3T4JI1JgtmWtSNFAhEtMxDQ56W7VQWjzI9HEc05Xsc4cHXq53
-         P1i6H90+j3r4fr1Ao3/l19B1U0wV9gfryrYKB6cKipw7uQxUpbdtRGSbolcpbgz3zBAJ
-         03AVGzxDBI97/FBXWaQpBVBanBmRaWmuQ+Hlc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JEF4zKgPP5NwFQij2garUdemoLu5qnPKXjSaY5UzW1E=;
-        b=fILEeIb7zHvdmOfUr8M7N14Qv+r5pMlLHIf0LqbtFBFj3IzKUFqZOJ4qMnEv+oQ9MV
-         9r3Nj0+S4eisWfv2t2OR9vaPwLf3wodTjDxevZ0GfGrg1MZTGAsrl4wxR228z6SvuXWk
-         HttrMBQtDi/lKOByCt04y+P4tg7vicR6D/6AAe5etsa73knL2o25jh8XpKdTVoyQ0a+w
-         q1gjIC96fVEHGdQBjp7XoCG1k6wt8e541bTdr7VNuBD5bQZ+T4jz5alAKIbLBQyetZqp
-         VjxpoR/USdaEd3aa8ZBEKNOsqgnCSsDo3e3nMhAUL9uyE3RGwdtYBxo7hFJcJFL5r6bi
-         C8Wg==
-X-Gm-Message-State: AOAM531Wguw/K86173bKa/GAao4uObEQ70sKizzqRNVyXz28vaRGb5kT
-        gRh7BQm2ETn3w9bleH8IN9XmRD8VEiAOyg==
-X-Google-Smtp-Source: ABdhPJwAMaF19PxTaafBwuZzPWOXEe7mBo2vCPx6Is1UC15RdVgBDIqqr9w510IcG2VTUP9szTXgFg==
-X-Received: by 2002:a63:8048:: with SMTP id j69mr13923611pgd.485.1643148435658;
-        Tue, 25 Jan 2022 14:07:15 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a4sm1263614pjs.24.2022.01.25.14.07.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 14:07:15 -0800 (PST)
-Date:   Tue, 25 Jan 2022 14:07:14 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202201251402.0FB08DB@keescook>
-References: <20220125145006.677e3709@canb.auug.org.au>
- <202201242230.C54A6BCDFE@keescook>
- <20220125222732.98ce2e445726e773f40e122e@kernel.org>
- <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
- <202201251256.CCCBE9851E@keescook>
- <20220125162326.3d1ca960@gandalf.local.home>
- <20220125162859.2b3cc8a0@gandalf.local.home>
+        Tue, 25 Jan 2022 17:11:46 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id EF8EA1F4466C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643148705;
+        bh=haA1xD8icyCw96+5lD3ONdPtel9Z0YzFWe4Lj84edoI=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=gGWC8WrnglbRpa2lZ+JF+2BhOaLozx2WUUs7LujBWqzFnzm8vDFAwONl+shJ5/L6R
+         Oh/TxTJhaFGHPHpEcuVFy3TGWyEt1MabgjXbczKy+mM0KaCE7DeZbQeMbm/+E0NTuE
+         FxQffYo2xpJQscg8oyATSEguoAUZFv4I44UE2d3nTGVP1j+z122Z1YF5Cx8tL0u+jv
+         PxlZ8EFDtRPu56J4dmsPYwOFbEYldyCtYJZKYKdrJUtrQqjUxPGqkbecpn7XuiXlT1
+         3GfiUFSoslDNsLDssgT9AQUg0DSQ9enYp0dfEClpYxOmlOXSC/u7vuZKeDWc0fUiUW
+         4NAJhDqmehRag==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Michal Simek <monstr@monstr.eu>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kbuild: unify cmd_copy and cmd_shipped
+Organization: Collabora
+References: <20220125064027.873131-1-masahiroy@kernel.org>
+        <CAKwvOdm=-x1EP_xu2V_OZNdPid=gacVzCTx+=uSYqzCv+1Rbfw@mail.gmail.com>
+Date:   Tue, 25 Jan 2022 17:11:41 -0500
+In-Reply-To: <CAKwvOdm=-x1EP_xu2V_OZNdPid=gacVzCTx+=uSYqzCv+1Rbfw@mail.gmail.com>
+        (Nick Desaulniers's message of "Tue, 25 Jan 2022 13:04:56 -0800")
+Message-ID: <87h79rsbxe.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125162859.2b3cc8a0@gandalf.local.home>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 04:28:59PM -0500, Steven Rostedt wrote:
-> On Tue, 25 Jan 2022 16:23:26 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > > >  #undef __get_rel_dynamic_array
-> > > > -#define __get_rel_dynamic_array(field)	\
-> > > > -		((void *)(&__entry->__rel_loc_##field) +	\
-> > > > -		 sizeof(__entry->__rel_loc_##field) +		\
-> > > > +#define __get_rel_dynamic_array(field)					\
-> > > > +		((void *)__entry + 					\
-> > > > +		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
-> > > > +		 sizeof(__entry->__rel_loc_##field) +			\
-> > > >  		 (__entry->__rel_loc_##field & 0xffff))
-> > > >  
-> > > >  #undef __get_rel_dynamic_array_len    
-> > > 
-> 
-> I also do not like the the inconsistency between
-> sizeof(__entry->__rel_loc_##field) and sizeof(u32) that is used in the
-> calculation part:
-> 
-> 
-> #define __rel_dynamic_array(type, item, len)				\
-> 	__item_length = (len) * sizeof(type);				\
-> 	__data_offsets->item = __data_size +				\
-> 			       offsetof(typeof(*entry), __data) -	\
-> 			       offsetof(typeof(*entry), __rel_loc_##item) -	\
-> 			       sizeof(u32);				\
-> 	__data_offsets->item |= __item_length << 16;			\
-> 	__data_size += __item_length;
-> 
-> Why is one using sizeof(u32) and the other using the size of the field?
+Nick Desaulniers <ndesaulniers@google.com> writes:
 
-It might make more sense to calculate everything as an offset within
-__data[] instead of from the start of __entry. The patch I sent just did
-in perf.h exactly what Masami did in trace_event.h. That worked. I had
-an earlier version that did this horrible thing which could probably be
-significantly improved, since I just subtract the offset of __data:
+> On Mon, Jan 24, 2022 at 10:41 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>>
+>> cmd_copy and cmd_shipped have similar functionality. The difference is
+>> that cmd_copy uses 'cp' while cmd_shipped 'cat'.
+>>
+>> Unify them into cmd_copy because this macro name is more intuitive.
+>>
+>> Going forward, cmd_copy will use 'cat' to avoid the permission issue.
+>> I also thought of 'cp --no-preserve=mode' but this option is not
+>> mentioned in the POSIX spec [1], so I am keeping the 'cat' command.
+>>
+>> [1]: https://pubs.opengroup.org/onlinepubs/009695299/utilities/cp.html
+>> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>> ---
+>>
+>>  arch/microblaze/boot/Makefile     |  2 +-
+>>  arch/microblaze/boot/dts/Makefile |  2 +-
+>>  fs/unicode/Makefile               |  2 +-
+>>  scripts/Makefile.lib              | 12 ++++--------
+>>  usr/Makefile                      |  4 ++--
+>>  5 files changed, 9 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/arch/microblaze/boot/Makefile b/arch/microblaze/boot/Makefile
+>> index cff570a71946..2b42c370d574 100644
+>> --- a/arch/microblaze/boot/Makefile
+>> +++ b/arch/microblaze/boot/Makefile
+>> @@ -29,7 +29,7 @@ $(obj)/simpleImage.$(DTB).ub: $(obj)/simpleImage.$(DTB) FORCE
+>>         $(call if_changed,uimage)
+>>
+>>  $(obj)/simpleImage.$(DTB).unstrip: vmlinux FORCE
+>> -       $(call if_changed,shipped)
+>> +       $(call if_changed,copy)
+>>
+>>  $(obj)/simpleImage.$(DTB).strip: vmlinux FORCE
+>>         $(call if_changed,strip)
+>> diff --git a/arch/microblaze/boot/dts/Makefile b/arch/microblaze/boot/dts/Makefile
+>> index ef00dd30d19a..b84e2cbb20ee 100644
+>> --- a/arch/microblaze/boot/dts/Makefile
+>> +++ b/arch/microblaze/boot/dts/Makefile
+>> @@ -12,7 +12,7 @@ $(obj)/linked_dtb.o: $(obj)/system.dtb
+>>  # Generate system.dtb from $(DTB).dtb
+>>  ifneq ($(DTB),system)
+>>  $(obj)/system.dtb: $(obj)/$(DTB).dtb
+>> -       $(call if_changed,shipped)
+>> +       $(call if_changed,copy)
+>>  endif
+>>  endif
+>>
+>> diff --git a/fs/unicode/Makefile b/fs/unicode/Makefile
+>> index 2f9d9188852b..74ae80fc3a36 100644
+>> --- a/fs/unicode/Makefile
+>> +++ b/fs/unicode/Makefile
+>> @@ -31,7 +31,7 @@ $(obj)/utf8data.c: $(obj)/mkutf8data $(filter %.txt, $(cmd_utf8data)) FORCE
+>>  else
+>>
+>>  $(obj)/utf8data.c: $(src)/utf8data.c_shipped FORCE
+>
+> do we want to retitle the _shipped suffix for this file to _copy now, too?
+> fs/unicode/Makefile:11
+> fs/unicode/Makefile:33
+> fs/unicode/Makefile:34
 
- #undef __get_rel_dynamic_array
- #define __get_rel_dynamic_array(field) \
--		((void *)(&__entry->__rel_loc_##field) +        \
--		 sizeof(__entry->__rel_loc_##field) +           \
--		 (__entry->__rel_loc_##field & 0xffff))
-+		((void *)&__entry->__data[			\
-+		 offsetof(typeof(*__entry), __rel_loc_##field)	\
-+		 + sizeof(__entry->__rel_loc_##field)		\
-+		 + (__entry->__rel_loc_##field & 0xffff)	\
-+		 - offsetof(typeof(*__entry), __data)		\
-+		])
+I think _copy doesn't convey the sense that this is distributed with the
+kernel tree, even though it is also generated from in-tree sources.
+Even if that is not the original sense of _shipped (is it?), it makes
+sense to me that way, but _copy doesn't.
 
-> Just to let you know what is happening. As dynamic elements of the trace
-> event needs to be appended at the end of the event, the above macros are
-> defined and then run through the TRACE_EVENT() macro, where the
-> TP_STRUCT__entry() is parsed to calculate where each item will be for that
-> event.
-> 
-> static inline notrace int trace_event_get_offsets_##call(		\
-> 	struct trace_event_data_offsets_##call *__data_offsets, proto)	\
-> {									\
-> 	int __data_size = 0;						\
-> 	int __maybe_unused __item_length;				\
-> 	struct trace_event_raw_##call __maybe_unused *entry;		\
-> 									\
-> 	tstruct;							\
-> 									\
-> 	return __data_size;						\
-> }
-> 
-> 
-> The tstruct is the TP_STRUCT__entry() and for each __rel_dynamic_array() or
-> __dynamic_array(), the __data_size gets updated and saved into the
-> __data_offsets that holds where each item is.
-> 
-> The rel versions sets the offset from its location to the data, where as
-> the non rel versions sets the offset from the beginning of the event to the
-> data.
+The patch looks good to me, though.
 
-Could this just be
+Reviewed-by: Gabriel Krisman Bertazi <krisman@collabora.com>
 
-#define __get_rel_dynamic_array(field) \
-	((void *)(&__entry->data[__entry->__rel_loc_##field & 0xffff])
 
-?
+>
+> Either way
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+>> -       $(call if_changed,shipped)
+>> +       $(call if_changed,copy)
+>>
+>>  endif
+>>
+>> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+>> index 79be57fdd32a..40735a3adb54 100644
+>> --- a/scripts/Makefile.lib
+>> +++ b/scripts/Makefile.lib
+>> @@ -246,20 +246,16 @@ $(foreach m, $(notdir $1), \
+>>         $(addprefix $(obj)/, $(foreach s, $3, $($(m:%$(strip $2)=%$(s)))))))
+>>  endef
+>>
+>> -quiet_cmd_copy = COPY    $@
+>> -      cmd_copy = cp $< $@
+>> -
+>> -# Shipped files
+>> +# Copy a file
+>>  # ===========================================================================
+>>  # 'cp' preserves permissions. If you use it to copy a file in read-only srctree,
+>>  # the copy would be read-only as well, leading to an error when executing the
+>>  # rule next time. Use 'cat' instead in order to generate a writable file.
+>> -
+>> -quiet_cmd_shipped = SHIPPED $@
+>> -cmd_shipped = cat $< > $@
+>> +quiet_cmd_copy = COPY    $@
+>> +      cmd_copy = cat $< > $@
+>>
+>>  $(obj)/%: $(src)/%_shipped
+>> -       $(call cmd,shipped)
+>> +       $(call cmd,copy)
+>>
+>>  # Commands useful for building a boot image
+>>  # ===========================================================================
+>> diff --git a/usr/Makefile b/usr/Makefile
+>> index cc0d2824e100..59d9e8b07a01 100644
+>> --- a/usr/Makefile
+>> +++ b/usr/Makefile
+>> @@ -3,7 +3,7 @@
+>>  # kbuild file for usr/ - including initramfs image
+>>  #
+>>
+>> -compress-y                                     := shipped
+>> +compress-y                                     := copy
+>>  compress-$(CONFIG_INITRAMFS_COMPRESSION_GZIP)  := gzip
+>>  compress-$(CONFIG_INITRAMFS_COMPRESSION_BZIP2) := bzip2
+>>  compress-$(CONFIG_INITRAMFS_COMPRESSION_LZMA)  := lzma
+>> @@ -37,7 +37,7 @@ endif
+>>  # .cpio.*, use it directly as an initramfs, and avoid double compression.
+>>  ifeq ($(words $(subst .cpio.,$(space),$(ramfs-input))),2)
+>>  cpio-data := $(ramfs-input)
+>> -compress-y := shipped
+>> +compress-y := copy
+>>  endif
+>>
+>>  endif
+>> --
+>> 2.32.0
+>>
 
 -- 
-Kees Cook
+Gabriel Krisman Bertazi

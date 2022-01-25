@@ -2,118 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D06B49B640
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D91A449B630
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbiAYOaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:30:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:46652 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1579100AbiAYOXH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:23:07 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BFED613D5;
-        Tue, 25 Jan 2022 06:21:29 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.42.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B7FAA3F793;
-        Tue, 25 Jan 2022 06:21:25 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 RESEND 7/7] coresight: trbe: Work around the trace data corruption
-Date:   Tue, 25 Jan 2022 19:50:37 +0530
-Message-Id: <1643120437-14352-8-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643120437-14352-1-git-send-email-anshuman.khandual@arm.com>
-References: <1643120437-14352-1-git-send-email-anshuman.khandual@arm.com>
+        id S1578293AbiAYOZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:25:56 -0500
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:46762 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1578679AbiAYOU6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:20:58 -0500
+Received: by mail-ua1-f43.google.com with SMTP id c36so37608502uae.13;
+        Tue, 25 Jan 2022 06:20:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N429jTRG2O6NpwCQqF4KlOiX82MStuHyIsrCgU8SIEI=;
+        b=SwSrGk3NaP00TQJUYmXnZs/orTsj+vlnuiugvHFevLsmwa7oNsedl31vXLaaMHhPky
+         sesQzq5/cceh5dX15EzAYhOD+zoVX+h5JQzRv6RRCOvp638Cvs8g77tj4Zx5AfQWPWw6
+         QaKXCZgJ0k1/4BRUb3/aoHHi6dVP1x6HyIbAf2Ta0ZoVoSj8v/KtH7umjNkMCc6Iwq9Q
+         DcXVDCg1btusDs0Q1Kt7JwBcW6NtMWMFtcCGjPZEw4DJpOVczKSoOXz1xym2UdyFa97F
+         vHckb1qY2KJoX8v88GjNctBUVZ3A7Qij2AaF8p9t2gnkMYHD314d6wD42ZHjXOIwSTB5
+         gaTg==
+X-Gm-Message-State: AOAM533sD5rVNdXvVmuCgh9dkLEeM2rJrfkjLFAO7pqzID4+J6PZETjc
+        dvVxA/b3ZtPOQPIiZjHBkrwtQlvHXD9dvQZg
+X-Google-Smtp-Source: ABdhPJwRy1ZyMEDc6L+ES1Y7H4L11mpJAP4Bu5+tAHDCTAofUYCmWfJPBVYQwK0Ee8ttzqw4zLGiEA==
+X-Received: by 2002:ab0:1543:: with SMTP id p3mr7204112uae.88.1643120450538;
+        Tue, 25 Jan 2022 06:20:50 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id k203sm3376480vka.56.2022.01.25.06.20.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 06:20:50 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id n15so36117376uaq.5;
+        Tue, 25 Jan 2022 06:20:49 -0800 (PST)
+X-Received: by 2002:a67:a401:: with SMTP id n1mr3524348vse.38.1643120449745;
+ Tue, 25 Jan 2022 06:20:49 -0800 (PST)
+MIME-Version: 1.0
+References: <20220118182003.3385019-1-keescook@chromium.org>
+In-Reply-To: <20220118182003.3385019-1-keescook@chromium.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 25 Jan 2022 15:20:38 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWu-unMfV1U_HAKwJwPkB_LY3kU88_D69M=bX8y1B=QTg@mail.gmail.com>
+Message-ID: <CAMuHMdWu-unMfV1U_HAKwJwPkB_LY3kU88_D69M=bX8y1B=QTg@mail.gmail.com>
+Subject: Re: [PATCH 5.17-rc1 v2] eeprom: at25: Restore missing allocation
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jiri Prchal <jiri.prchal@aksignal.cz>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Ralph Siemsen <ralph.siemsen@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TRBE implementations affected by Arm erratum #1902691 might corrupt trace
-data or deadlock, when it's being written into the memory. Workaround this
-problem in the driver, by preventing TRBE initialization on affected cpus.
-The firmware must have disabled the access to TRBE for the kernel on such
-implementations. This will cover the kernel for any firmware that doesn't
-do this already. This just updates the TRBE driver as required.
+Hi Kees,
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Suzuki Poulose <suzuki.poulose@arm.com>
-Cc: coresight@lists.linaro.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/arm64/Kconfig                           |  2 +-
- drivers/hwtracing/coresight/coresight-trbe.c | 12 ++++++++++++
- 2 files changed, 13 insertions(+), 1 deletion(-)
+Thanks for your patch!
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index f37c9d2d697d..ee0fe8a04b9b 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -821,7 +821,7 @@ config ARM64_ERRATUM_2038923
- 
- config ARM64_ERRATUM_1902691
- 	bool "Cortex-A510: 1902691: workaround TRBE trace corruption"
--	depends on COMPILE_TEST # Until the CoreSight TRBE driver changes are in
-+	depends on CORESIGHT_TRBE
- 	default y
- 	help
- 	  This option adds the workaround for ARM Cortex-A510 erratum 1902691.
-diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
-index 6254ba598df2..75b608bc400b 100644
---- a/drivers/hwtracing/coresight/coresight-trbe.c
-+++ b/drivers/hwtracing/coresight/coresight-trbe.c
-@@ -93,12 +93,14 @@ struct trbe_buf {
- #define TRBE_WORKAROUND_WRITE_OUT_OF_RANGE	1
- #define TRBE_NEEDS_DRAIN_AFTER_DISABLE		2
- #define TRBE_NEEDS_CTXT_SYNC_AFTER_ENABLE	3
-+#define TRBE_IS_BROKEN				4
- 
- static int trbe_errata_cpucaps[] = {
- 	[TRBE_WORKAROUND_OVERWRITE_FILL_MODE] = ARM64_WORKAROUND_TRBE_OVERWRITE_FILL_MODE,
- 	[TRBE_WORKAROUND_WRITE_OUT_OF_RANGE] = ARM64_WORKAROUND_TRBE_WRITE_OUT_OF_RANGE,
- 	[TRBE_NEEDS_DRAIN_AFTER_DISABLE] = ARM64_WORKAROUND_2064142,
- 	[TRBE_NEEDS_CTXT_SYNC_AFTER_ENABLE] = ARM64_WORKAROUND_2038923,
-+	[TRBE_IS_BROKEN] = ARM64_WORKAROUND_1902691,
- 	-1,		/* Sentinel, must be the last entry */
- };
- 
-@@ -192,6 +194,11 @@ static inline bool trbe_needs_ctxt_sync_after_enable(struct trbe_cpudata *cpudat
- 	return trbe_has_erratum(cpudata, TRBE_NEEDS_CTXT_SYNC_AFTER_ENABLE);
- }
- 
-+static inline bool trbe_is_broken(struct trbe_cpudata *cpudata)
-+{
-+	return trbe_has_erratum(cpudata, TRBE_IS_BROKEN);
-+}
-+
- static int trbe_alloc_node(struct perf_event *event)
- {
- 	if (event->cpu == -1)
-@@ -1288,6 +1295,11 @@ static void arm_trbe_probe_cpu(void *info)
- 	 */
- 	trbe_check_errata(cpudata);
- 
-+	if (trbe_is_broken(cpudata)) {
-+		pr_err("Disabling TRBE on cpu%d due to erratum\n", cpu);
-+		goto cpu_clear;
-+	}
-+
- 	/*
- 	 * If the TRBE is affected by erratum TRBE_WORKAROUND_OVERWRITE_FILL_MODE,
- 	 * we must always program the TBRPTR_EL1, 256bytes from a page
--- 
-2.25.1
+On Fri, Jan 21, 2022 at 12:33 AM Kees Cook <keescook@chromium.org> wrote:
+> The at25 driver regressed in v5.17-rc1 due to a broken conflict
+> resolution: the allocation of the object was accidentally removed. Restore
+> it.
+>
+> This was found when building under CONFIG_FORTIFY_SOURCE=y and
+> -Warray-bounds, which complained about strncpy() being used against an
+> empty object:
+>
+> In function 'strncpy',
+>     inlined from 'at25_fw_to_chip.constprop' at drivers/misc/eeprom/at25.c:312:2:
+> ./include/linux/fortify-string.h:48:33: warning: '__builtin_strncpy' offset [0, 9] is out of the bounds [0, 0] [-Warray-bounds]
+>    48 | #define __underlying_strncpy    __builtin_strncpy
+>       |                                 ^
+> ./include/linux/fortify-string.h:59:16: note: in expansion of macro '__underlying_strncpy'
+>    59 |         return __underlying_strncpy(p, q, size);
+>       |                ^~~~~~~~~~~~~~~~~~~~
+> In function 'strncpy',
+>     inlined from 'at25_fram_to_chip' at drivers/misc/eeprom/at25.c:373:2,
+>     inlined from 'at25_probe' at drivers/misc/eeprom/at25.c:453:10:
+> ./include/linux/fortify-string.h:48:33: warning: '__builtin_strncpy' offset [0, 9] is out of the bounds [0, 0] [-Warray-bounds]
+>    48 | #define __underlying_strncpy    __builtin_strncpy
+>       |                                 ^
+> ./include/linux/fortify-string.h:59:16: note: in expansion of macro '__underlying_strncpy'
+>    59 |         return __underlying_strncpy(p, q, size);
+>       |                ^~~~~~~~~~~~~~~~~~~~
 
+On real hardware:
+
+    Unable to handle kernel access to user memory outside uaccess
+routines at virtual address 0000000000000028
+    ...
+    pc : __mutex_init+0x20/0x68
+    lr : at25_probe+0x8c/0x4d8
+
+
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

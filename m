@@ -2,118 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D01BE49BC18
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E0E49BC15
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiAYT3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:29:23 -0500
-Received: from mga03.intel.com ([134.134.136.65]:11326 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229950AbiAYT3S (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:29:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643138958; x=1674674958;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hQmnd2z0xZ1yNKAyq7oRxRm6ON7kmbBDck/k3cU4e44=;
-  b=kAAakVFDdQeo7s3JHUtAvnnnmNn/jQ4sH+6Qm2Jh3+SxkYnv4oSOaFmv
-   g+CfsENUiEoes0Vsd6xb2zDxWo6z36Zl2tQWx5XoIuOhWEq7gJoKG2GmY
-   an3cIty+j06VSorKshCDoe+hGZvO9TxMi5RHK7nocWNR2AfivZdf+kRf+
-   DBs9acGbCVwCyiwtW88FKUV7vwSdpgfc3OiqZ8Jyl3JBHNDDCY3+AgeO8
-   D0QazkgGwMoMGyku3fX8pcoZ2K6CSIa/Vb68fBDcuq9SU2Q91Gkzvb5zl
-   eIzqnzwv2RIgRnhPgNfrm4w6gIa0NCepDV9YtTiQgjSZrn1v+BX9rzz5n
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246339983"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="246339983"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 11:29:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="563159521"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 25 Jan 2022 11:29:17 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCRVE-000KNA-QX; Tue, 25 Jan 2022 19:29:16 +0000
-Date:   Wed, 26 Jan 2022 03:28:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        James Morse <james.morse@arm.com>
-Subject: [morse:mpam/snapshot/v5.16 88/137] include/linux/cacheinfo.h:114:24:
- warning: conversion from 'long long unsigned int' to 'long unsigned int'
- changes value from '18446744073709551615' to '4294967295'
-Message-ID: <202201260308.f359R4GZ-lkp@intel.com>
+        id S230051AbiAYT2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:28:37 -0500
+Received: from mail-pl1-f175.google.com ([209.85.214.175]:35700 "EHLO
+        mail-pl1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229950AbiAYT2c (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 14:28:32 -0500
+Received: by mail-pl1-f175.google.com with SMTP id d18so7633582plg.2;
+        Tue, 25 Jan 2022 11:28:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Rkz5i91jrZJto37j3RGSd05f/eRfvo2BCm796nin8Vs=;
+        b=XRSGOlm1VFqT3avvfzptjdr/V8D9yTVMulgMxGpZ7G7ejzNVUmBrSCSSzGdQIbyBGA
+         wLOATfMRkgFf7AKjLokOWmvQ71CTQzSyBSMu32dH9GIJwiRDS5KY51i2SYfY0XPneHL/
+         ryCWbdsIcvWIxwUcQruluk6MN1ULgD5779AyhvV50OPqRmw+gqJ494us1srnl3Ds/4Tw
+         FA+szLQkz+NTKT5gBSs8lhlo3if8ALpz98+fE8QN7vc+AWMtHB22xJKpNFyz/WEPjT5a
+         EUJbOhxxGarJRbtGkRONvQB963Qct9mbEQnP1NF+wi7cC9Cppqh/vlLxWz03d0sdhqgn
+         bGnA==
+X-Gm-Message-State: AOAM533sXRFtcUNigiJ0DQlIB32sZGa/bv9zSZa0r8EZkSOwfSQbHV9n
+        CPnYdKZ9giKc43jEewCH4OA=
+X-Google-Smtp-Source: ABdhPJyeNd/r+jQn3mMtMf9He8DTH104dq3dEwAvQtFQxWx1zXikeSDUCeamDKcdFDb0ku5F8bxZDQ==
+X-Received: by 2002:a17:902:6bc9:b0:149:fdf1:f031 with SMTP id m9-20020a1709026bc900b00149fdf1f031mr19734916plt.58.1643138906187;
+        Tue, 25 Jan 2022 11:28:26 -0800 (PST)
+Received: from localhost ([2601:647:5b00:ece0:aab:34ff:52ca:a7a5])
+        by smtp.gmail.com with ESMTPSA id qe15sm1162214pjb.47.2022.01.25.11.28.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 11:28:25 -0800 (PST)
+Date:   Tue, 25 Jan 2022 11:28:24 -0800
+From:   Moritz Fischer <mdf@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
+        rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        davem@davemloft.net, airlied@linux.ie, vkoul@kernel.org,
+        hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        yilun.xu@intel.com, awalls@md.metrocast.net, mchehab@kernel.org,
+        sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, mporter@kernel.crashing.org,
+        alex.bou9@gmail.com, bhelgaas@google.com,
+        linux-alpha@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-media@vger.kernel.org,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 00/16] Remove usage of the deprecated "pci-dma-compat.h"
+ API
+Message-ID: <YfBPWB9m5TWcZuFY@epycbox.lan>
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
-head:   364c1c42b229912132e1615c2ce15be7154e2156
-commit: 626a68b7eb02b0a0bb7faaa4b91371c2f3d550d0 [88/137] cacheinfo: Allow for >32-bit cache 'id'
-config: arc-randconfig-r043-20220124 (https://download.01.org/0day-ci/archive/20220126/202201260308.f359R4GZ-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=626a68b7eb02b0a0bb7faaa4b91371c2f3d550d0
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.16
-        git checkout 626a68b7eb02b0a0bb7faaa4b91371c2f3d550d0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/base/
+On Thu, Jan 06, 2022 at 10:45:13PM +0100, Christophe JAILLET wrote:
+> This serie axes all the remaining usages of the deprecated "pci-dma-compat.h"
+> API.
+> 
+> All these patches have already been posted.
+> 
+> They have been generated with a coccinelle script.
+> The tricky parts are patches that use dma_alloc_coherent() because the correct
+> GFP flag has to be used in place of the previous embedded GFP_ATOMIC.
+> 
+> Patches 1-3 are already Reviewed. References to the corresponding mail is
+> given below the ---
+> 
+> Patch 1-2,4-10 are just generated from the coccinelle script. Only too long
+> lines have been hand modified. dma_alloc_coherent() modification are NOT part
+> of these patches.
+> 
+> Patch 3 also includes some 'dma_set_mask_and_coherent()' instead of
+> 'pci_set_dma_mask()/pci_set_consistent_dma_mask()'.
+> I've left this additional modification because it was reviewed with it.
+> 
+> Patch 10-15 are the tricky parts. Explanation of which GFP flag is the right one
+> is given in each patch. It has been divided in several patches to ease review.
+> 
+> Patch 15 is the only one I'm slighly unsure with. The old code was using a
+> GFP_USER flag in the function. I'm not familiar with it.
+> I *guess*  that GFP_KERNEL is fine, but maybe it should also be GFP_USER or left
+> as GFP_ATOMIC so that nothing is changed.
+> 
+> Patch 16 is the last step that remove "pci-dma-compat.h" and its only usage.
+> 
+> 
+> All patches, exept 1-2,6 that are architecture specific, have been compile tested.
+> 
+> 
+> After all that, a few rst files, 1 or 2 strings in error messages and some
+> error branching labels should still need some attention. 
+> This is some minor issues.
+> 
+> 
+> Only the cover letter is sent to every one. Each patch is sent to the
+> corresponding maintainer(s) + Andrew Morton, Christoph Hellwig and Arnd Bergmann.
+> 
+> 
+> Best regards.
+> 
+> 
+> Christophe JAILLET (16):
+>   alpha: Remove usage of the deprecated "pci-dma-compat.h" API
+>   floppy: Remove usage of the deprecated "pci-dma-compat.h" API
+>   fpga: dfl: pci: Remove usage of the deprecated "pci-dma-compat.h" API
+>   media: Remove usage of the deprecated "pci-dma-compat.h" API
+>   agp/intel: Remove usage of the deprecated "pci-dma-compat.h" API
+>   sparc: Remove usage of the deprecated "pci-dma-compat.h" API
+>   dmaengine: pch_dma: Remove usage of the deprecated "pci-dma-compat.h"
+>     API
+>   rapidio/tsi721: Remove usage of the deprecated "pci-dma-compat.h" API
+>   media: v4l2-pci-skeleton: Remove usage of the deprecated
+>     "pci-dma-compat.h" API
+>   scsi: message: fusion: Remove usage of the deprecated
+>     "pci-dma-compat.h" API
+>   scsi: mptbase: Use dma_alloc_coherent() in 'mpt_alloc_fw_memory()'
+>   scsi: mptbase: Use dma_alloc_coherent()
+>   scsi: mptsas: Use dma_alloc_coherent() in
+>     mptsas_exp_repmanufacture_info()
+>   scsi: mptsas: Use dma_alloc_coherent()
+>   scsi: mptctl: Use dma_alloc_coherent()
+>   PCI: Remove usage of the deprecated "pci-dma-compat.h" API
+> 
+>  arch/alpha/include/asm/floppy.h     |   7 +-
+>  arch/alpha/kernel/pci_iommu.c       |  12 +--
+>  arch/powerpc/include/asm/floppy.h   |   8 +-
+>  arch/sparc/kernel/ioport.c          |   2 +-
+>  drivers/char/agp/intel-gtt.c        |  26 ++---
+>  drivers/dma/pch_dma.c               |   2 +-
+>  drivers/fpga/dfl-pci.c              |  14 +--
+>  drivers/media/pci/cx18/cx18-queue.h |   6 +-
+>  drivers/media/pci/ivtv/ivtv-queue.h |  25 +++--
+>  drivers/media/pci/ivtv/ivtv-udma.h  |   8 +-
+>  drivers/message/fusion/mptbase.c    | 149 ++++++++++++++++------------
+>  drivers/message/fusion/mptctl.c     |  82 +++++++++------
+>  drivers/message/fusion/mptlan.c     |  90 +++++++++--------
+>  drivers/message/fusion/mptsas.c     |  94 +++++++++---------
+>  drivers/rapidio/devices/tsi721.c    |   8 +-
+>  include/linux/pci-dma-compat.h      | 129 ------------------------
+>  include/linux/pci.h                 |   3 -
+>  samples/v4l/v4l2-pci-skeleton.c     |   2 +-
+>  18 files changed, 289 insertions(+), 378 deletions(-)
+>  delete mode 100644 include/linux/pci-dma-compat.h
+> 
+> -- 
+> 2.32.0
+> 
+Applied [03/16] to linux-fpga for-next.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/base/cacheinfo.c:12:
-   include/linux/cacheinfo.h: In function 'get_cpu_cacheinfo_id':
->> include/linux/cacheinfo.h:114:24: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '18446744073709551615' to '4294967295' [-Woverflow]
-     114 |                 return ~0ULL;
-         |                        ^
-   include/linux/cacheinfo.h:120:32: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '18446744073709551615' to '4294967295' [-Woverflow]
-     120 |                         return ~0ULL;
-         |                                ^
-   include/linux/cacheinfo.h:124:16: warning: conversion from 'long long unsigned int' to 'long unsigned int' changes value from '18446744073709551615' to '4294967295' [-Woverflow]
-     124 |         return ~0ULL;
-         |                ^
-
-
-vim +114 include/linux/cacheinfo.h
-
-   103	
-   104	/*
-   105	 * Get the id of the cache associated with @cpu at level @level.
-   106	 * cpuhp lock must be held.
-   107	 */
-   108	static inline unsigned long get_cpu_cacheinfo_id(int cpu, int level)
-   109	{
-   110		struct cpu_cacheinfo *ci = get_cpu_cacheinfo(cpu);
-   111		int i;
-   112	
-   113		if (!ci->info_list)
- > 114			return ~0ULL;
-   115	
-   116		for (i = 0; i < ci->num_leaves; i++) {
-   117			if (ci->info_list[i].level == level) {
-   118				if (ci->info_list[i].attributes & CACHE_ID)
-   119					return ci->info_list[i].id;
-   120				return ~0ULL;
-   121			}
-   122		}
-   123	
-   124		return ~0ULL;
-   125	}
-   126	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Moritz

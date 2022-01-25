@@ -2,185 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C2749AF0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EBC49AFB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454352AbiAYI7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
+        id S1354911AbiAYJPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453978AbiAYI4w (ORCPT
+        with ESMTP id S1454669AbiAYJAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:56:52 -0500
-Received: from forward500j.mail.yandex.net (forward500j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5664AC058CB3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 00:01:25 -0800 (PST)
-Received: from vla1-d53b4f396d89.qloud-c.yandex.net (vla1-d53b4f396d89.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:b8c:0:640:d53b:4f39])
-        by forward500j.mail.yandex.net (Yandex) with ESMTP id 748156CB6689;
-        Tue, 25 Jan 2022 11:01:08 +0300 (MSK)
-Received: from vla1-62318bfe5573.qloud-c.yandex.net (vla1-62318bfe5573.qloud-c.yandex.net [2a02:6b8:c0d:3819:0:640:6231:8bfe])
-        by vla1-d53b4f396d89.qloud-c.yandex.net (mxback/Yandex) with ESMTP id pNAwKE7dnK-17d8u1YQ;
-        Tue, 25 Jan 2022 11:01:08 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1643097668;
-        bh=q9aiavGIEsjbNTguZm0W5pY728tsRKPQNL57qb/RJnA=;
-        h=In-Reply-To:Subject:To:From:References:Date:Message-ID:Cc;
-        b=FcSm1notg3awy/NpOlZDklhUfmE4arK/fI6+B9/ury8N/qa7hpcSzj1jJGVSfeCLT
-         syMQDpKguyReiAdhZpVjwp4KEMJRHu4XaZdpqXHQ9YS2zJBPef9BHcirc4sKVcmWQK
-         7ZBq+XmpKRNQ3x5x7xmd87n9vKAKAGFfF0JBDcbI=
-Authentication-Results: vla1-d53b4f396d89.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Received: by vla1-62318bfe5573.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id yIWdB9Nobz-17IiQ4Sd;
-        Tue, 25 Jan 2022 11:01:07 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 2
-Date:   Tue, 25 Jan 2022 11:01:06 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        kernel test robot <yujie.liu@intel.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        Philip Li <philip.li@intel.com>
-Subject: Re: arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory
- after it is freed [clang-analyzer-unix.Malloc]
-Message-ID: <20220125110106.7043f846@redslave.neermore.group>
-In-Reply-To: <CAKwvOd=NVZs7bfz-OTnhPmk4xZfmJq6zQzJaEtaX4AO0N7Pi9A@mail.gmail.com>
-References: <202201200359.lTk9zHg4-lkp@intel.com>
-        <39230575-13ea-7384-71bc-2aac1fa2edb8@intel.com>
-        <CAKwvOd=NVZs7bfz-OTnhPmk4xZfmJq6zQzJaEtaX4AO0N7Pi9A@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 25 Jan 2022 04:00:24 -0500
+X-Greylist: delayed 572 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Jan 2022 00:29:43 PST
+Received: from mail.valdk.tel (mail.valdk.tel [IPv6:2a02:e00:ffe7:c::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B7FC061A7F;
+        Tue, 25 Jan 2022 00:29:42 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D20D630E0B2;
+        Tue, 25 Jan 2022 11:19:28 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valdikss.org.ru;
+        s=msrv; t=1643098785;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         content-language:in-reply-to:references;
+        bh=ajetHMusOMv5MjA4FqtJV4K6Rv1DXIf2A7NFybvtOBg=;
+        b=ujOBqSM7nDajeMukRW01MApD5VpGTge2NqZpuKjf7kAjIrteoat/HGOSFYNQByv+8bPA5j
+        ULKcEcPKEP7QTt37CN4Y/BddHVubhMOe2Gjv7nnFX0y4cmGmc5WRVMeKEcHda+WLD8a44k
+        kAfn/L1rKTpijAgjCPNNRf2vF6wZGODGl9lhjLI5vaf9rndD4mmECcV9a4z5gTKoabPETB
+        pCVQEuDjvF9HMsshVfXKxxdCB/U1UaKbxYXzcb1P8LvjM7xmilrtTBZxJvinQmwvTpxnwY
+        tHhzQYrvxeGL387sUUFgL+ilSsT0vf0h8ndDWmezp1axkqYL0OVJzrBZqCXhOg==
+Message-ID: <f6a335b7-9cd8-eb02-69b3-bdf15ebf69fa@valdikss.org.ru>
+Date:   Tue, 25 Jan 2022 11:19:24 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.5.0) Gecko/20100101,
+ Thunderbird/78.5.0
+Subject: Re: [PATCH] mm/vmscan: add sysctl knobs for protecting the working
+ set
+Content-Language: en-US
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Alexey Avramov <hakavlad@inbox.lv>, Linux-MM <linux-mm@kvack.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>, mcgrof@kernel.org,
+        Kees Cook <keescook@chromium.org>, yzaikin@google.com,
+        oleksandr@natalenko.name, kernel@xanmod.org, aros@gmx.com,
+        hakavlad@gmail.com, Yu Zhao <yuzhao@google.com>
+References: <20211130201652.2218636d@mail.inbox.lv>
+ <2dc51fc8-f14e-17ed-a8c6-0ec70423bf54@valdikss.org.ru>
+ <CAGsJ_4zMoV6UJGC_X-VRM7p8w68a0Q8sLVfS3sRFxuQUtHoASw@mail.gmail.com>
+From:   ValdikSS <iam@valdikss.org.ru>
+In-Reply-To: <CAGsJ_4zMoV6UJGC_X-VRM7p8w68a0Q8sLVfS3sRFxuQUtHoASw@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------060fOdz280xaOYH35TqyCEYA"
+X-Last-TLS-Session-Version: TLSv1.3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Nick,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------060fOdz280xaOYH35TqyCEYA
+Content-Type: multipart/mixed; boundary="------------GpvSgEWNSIxnhxGEHv7X0t4X";
+ protected-headers="v1"
+From: ValdikSS <iam@valdikss.org.ru>
+To: Barry Song <21cnbao@gmail.com>
+Cc: Alexey Avramov <hakavlad@inbox.lv>, Linux-MM <linux-mm@kvack.org>,
+ Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+ linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Morton <akpm@linux-foundation.org>,
+ mcgrof@kernel.org, Kees Cook <keescook@chromium.org>, yzaikin@google.com,
+ oleksandr@natalenko.name, kernel@xanmod.org, aros@gmx.com,
+ hakavlad@gmail.com, Yu Zhao <yuzhao@google.com>
+Message-ID: <f6a335b7-9cd8-eb02-69b3-bdf15ebf69fa@valdikss.org.ru>
+Subject: Re: [PATCH] mm/vmscan: add sysctl knobs for protecting the working
+ set
+References: <20211130201652.2218636d@mail.inbox.lv>
+ <2dc51fc8-f14e-17ed-a8c6-0ec70423bf54@valdikss.org.ru>
+ <CAGsJ_4zMoV6UJGC_X-VRM7p8w68a0Q8sLVfS3sRFxuQUtHoASw@mail.gmail.com>
+In-Reply-To: <CAGsJ_4zMoV6UJGC_X-VRM7p8w68a0Q8sLVfS3sRFxuQUtHoASw@mail.gmail.com>
 
-On Mon, 24 Jan 2022 13:50:02 -0800
-Nick Desaulniers <ndesaulniers@google.com> wrote:
+--------------GpvSgEWNSIxnhxGEHv7X0t4X
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> On Wed, Jan 19, 2022 at 5:46 PM kernel test robot
-> <yujie.liu@intel.com> wrote:
-> >
-> > tree:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > master head:   1d1df41c5a33359a00e919d54eaebfb789711fdc commit:
-> > 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert
-> > in-place to COMMON_CLK date:   3 months ago config:
-> > arm-randconfig-c002-20220118
-> > (https://download.01.org/0day-ci/archive/20220120/202201200359.lTk9zHg4-lkp@intel.com/config)
-> > compiler: clang version 14.0.0
-> > (https://github.com/llvm/llvm-project
-> > 5f782d25a742302d25ef3c8b84b54f7483c2deb9) reproduce (this is a W=1
-> > build): wget
-> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
-> > -O ~/bin/make.cross chmod +x ~/bin/make.cross # install arm cross
-> > compiling tool for clang build # apt-get install
-> > binutils-arm-linux-gnueabi #
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
-> > git remote add linus
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > git fetch --no-tags linus master git checkout
-> > 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 # save the config file to
-> > linux build tree COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
-> > make.cross ARCH=arm clang-analyzer  
-> 
-> Hey! This check finally caught something that looks legit! Cool to see
-> 0day bot running clang-analyzer, too!
-> Nikita, can you PTAL?
+T24gMTMuMTIuMjAyMSAxMTozOCwgQmFycnkgU29uZyB3cm90ZToNCj4gT24gVHVlLCBEZWMg
+NywgMjAyMSBhdCA1OjQ3IEFNIFZhbGRpa1NTIDxpYW1AdmFsZGlrc3Mub3JnLnJ1PiB3cm90
+ZToNCj4+DQo+PiBUaGlzIHBhdGNoc2V0IGlzIHN1cnByaXNpbmdseSBlZmZlY3RpdmUgYW5k
+IHZlcnkgdXNlZnVsIGZvciBsb3ctZW5kIFBDDQo+PiB3aXRoIHNsb3cgSERELCBzaW5nbGUt
+Ym9hcmQgQVJNIGJvYXJkcyB3aXRoIHNsb3cgc3RvcmFnZSwgY2hlYXAgQW5kcm9pZA0KPj4g
+c21hcnRwaG9uZXMgd2l0aCBsaW1pdGVkIGFtb3VudCBvZiBtZW1vcnkuIEl0IGFsbW9zdCBj
+b21wbGV0ZWx5IHByZXZlbnRzDQo+PiB0aHJhc2hpbmcgY29uZGl0aW9uIGFuZCBhaWRzIGlu
+IGZhc3QgT09NIGtpbGxlciBpbnZvY2F0aW9uLg0KPj4NCj4gDQo+IENhbiB5b3UgcGxlYXNl
+IHBvc3QgeW91ciBoYXJkd2FyZSBpbmZvcm1hdGlvbiBsaWtlIHdoYXQgaXMgdGhlIGNwdSwg
+aG93IG11Y2gNCj4gbWVtb3J5IHlvdSBoYXZlIGFuZCBhbHNvIHBvc3QgeW91ciBzeXNjdGwg
+a25vYnMsIGxpa2UgaG93IGRvIHlvdSBzZXQNCj4gdm0uYW5vbl9taW5fa2J5dGVzLCAgdm0u
+Y2xlYW5fbG93X2tieXRlcyBhbmQgdm0uY2xlYW5fbWluX2tieXRlcz8NCg0KSSBoYXZlIGEg
+dHlwaWNhbCBvZmZpY2UgY29tcHV0ZXIgb2YgeWVhciAyMDA3Og0KDQoqIE1vdGhlcmJvYXJk
+OiBHaWdhYnl0ZSBHQS05NDVHQ00tUzJMIChlYXJseSBMR0E3NzUgc29ja2V0LCBHTUE5NTAg
+DQppbnRlZ3JhdGVkIGdyYXBoaWNzLCBTZXB0ZW1iZXIgMjAwNykNCiogMiBjb3JlIDY0IGJp
+dCBDUFU6IEludGVswq4gQ29yZeKEojIgRHVvIEU0NjAwICgyIGNvcmVzLCAyLjQgR0h6LCBs
+YXRlIDIwMDcpDQoqIDIgR0Igb2YgUkFNIChERFIyIDY2NyBNSHosIHNpbmdsZSBtb2R1bGUp
+DQoqIFZlcnkgb2xkIGFuZCBzbG93IDE2MCBHQiBIYXJkIERpc2s6IFNhbXN1bmcgSEQxNjFI
+SiAoU0FUQSBJSSwgSnVuZSAyMDA3KToNCiogTm8gZGlzY3JldGUgZ3JhcGhpY3MgY2FyZA0K
+DQpJIHVzZWQgdm0uY2xlYW5fbG93X2tieXRlcz0zODQwMDAgKDM4NCBNQikgdG8ga2VlcCBt
+b3N0IG9mIGZpbGUgY2FjaGUgaW4gDQptZW1vcnksIGJlY2F1c2UgdGhlIEhERCBpcyBzbG93
+IGFuZCBldmVyeSBkYXRhIHJlLXJlYWQgbGVhZHMgdG8gDQp1bmNvbWZvcnRhYmxlIGZyZWV6
+ZXMgYW5kIHNsb3cgd29yay4NCg0KTW9yZSBpbmZvcm1hdGlvbiwgaW5jbHVkaW5nIHRoZSB2
+aWRlbywgaXMgaGVyZTogDQpodHRwczovL25vdGVzLnZhbGRpa3NzLm9yZy5ydS9saW51eC1m
+b3Itb2xkLXBjLWZyb20tMjAwNy9lbi8NCg0KPiANCj4+IFRoZSBzaW1pbGFyIGZpbGUtbG9j
+a2luZyBwYXRjaCBpcyB1c2VkIGluIENocm9tZU9TIGZvciBuZWFybHkgMTAgeWVhcnMNCj4+
+IGJ1dCBub3Qgb24gc3RvY2sgTGludXggb3IgQW5kcm9pZC4gSXQgd291bGQgYmUgdmVyeSBi
+ZW5lZmljaWFsIGZvcg0KPj4gbG93ZXItcGVyZm9ybWFuY2UgQW5kcm9pZCBwaG9uZXMsIFNC
+Q3MsIG9sZCBQQ3MgYW5kIG90aGVyIGRldmljZXMuDQo+Pg0KPiANCj4gQ2FuIHlvdSBwb3N0
+IHRoZSBsaW5rIG9mIHRoZSBzaW1pbGFyIGZpbGUtbG9ja2luZyBwYXRjaD8NCg0KSGVyZSdz
+IGEgcGF0Y2g6IGh0dHBzOi8vbGttbC5vcmcvbGttbC8yMDEwLzEwLzI4LzI4OQ0KSGVyZSdz
+IG1vcmUgaW4tZGVwdGggZGVzY3JpcHRpb246IGh0dHBzOi8vbGttbC5vcmcvbGttbC8yMDEw
+LzExLzEvMjANCg0KUGxlYXNlIGFsc28gbm90ZSB0aGF0IGFub3RoZXIgR29vZ2xlIGRldmVs
+b3BlciwgWXUgWmhhbywgaGFzIGFsc28gbWFkZSBhIA0KbW9kZXJuIHZlcnNpb24gb2YgdGhp
+cyAoQ2hyb21pdW1PUykgcGF0Y2ggY2FsbGVkIE1HTFJVLCB0aGUgZ29hbCBvZiANCndoaWNo
+IGlzIHF1aXRlIHNpbWlsYXIgdG8gbGU5ICh0aGUgcGF0Y2ggd2UncmUgZGlzY3Vzc2luZyBo
+ZXJlKSwgYnV0IA0Kd2l0aCAibW9yZSBicmFpbnMiOg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
+cmcvbGttbC8yMDIyMDEwNDIwMjI0Ny4yOTAzNzAyLTEteXV6aGFvQGdvb2dsZS5jb20vVC8j
+bThmZDJhMjliYzU1N2QyN2QxMDAwZjgzN2Y2NWI2YzkzMGVlZjlkZmYNCg0KUGxlYXNlIHRh
+a2UgYSBtb21lbnQgYW5kIHJlYWQgdGhlIGluZm9ybWF0aW9uIGluIHRoZSBsaW5rIGFib3Zl
+LiBZdSBaaGFvIA0KZGV2ZWxvcHMgdGhpcyBwYXRjaCBmb3IgYWxtb3N0IHR3byB5ZWFycyBh
+bmQga25vd3MgdGhlIGlzc3VlIGJldHRlciB0aGFuIA0KbWUsIGEgY2FzdWFsIHVzZXIuDQoN
+Cg0KPiANCj4+IFdpdGggdGhpcyBwYXRjaCwgY29tYmluZWQgd2l0aCB6cmFtLCBJJ20gYWJs
+ZSB0byBydW4gdGhlIGZvbGxvd2luZw0KPj4gc29mdHdhcmUgb24gYW4gb2xkIG9mZmljZSBQ
+QyBmcm9tIDIwMDcgd2l0aCBfX29ubHkgMkdCIG9mIFJBTV9fDQo+PiBzaW11bHRhbmVvdXNs
+eToNCj4+DQo+PiAgICAqIEZpcmVmb3ggd2l0aCAzNyBhY3RpdmUgdGFicyAoYWxsIGRhdGEg
+aW4gUkFNLCBubyB0YWIgdW5sb2FkaW5nKQ0KPj4gICAgKiBEaXNjb3JkDQo+PiAgICAqIFNr
+eXBlDQo+PiAgICAqIExpYnJlT2ZmaWNlIHdpdGggdGhlIGRvY3VtZW50IG9wZW5lZA0KPj4g
+ICAgKiBUd28gUERGIGZpbGVzICgxNCBhbmQgNDcgbWVnYWJ5dGVzIGluIHNpemUpDQo+Pg0K
+Pj4gQW5kIHRoZSBQQyBkb2Vzbid0IGNyYXdsIGxpa2UgYSBzbmFpbCwgZXZlbiB3aXRoIDIr
+IEdCIGluIHpyYW0hDQo+PiBXaXRob3V0IHRoZSBwYXRjaCwgdGhpcyBQQyBpcyBiYXJlbHkg
+dXNhYmxlLg0KPj4gUGxlYXNlIHdhdGNoIHRoZSB2aWRlbzoNCj4+IGh0dHBzOi8vbm90ZXMu
+dmFsZGlrc3Mub3JnLnJ1L2xpbnV4LWZvci1vbGQtcGMtZnJvbS0yMDA3L2VuLw0KPj4NCj4g
+DQo+IFRoZSB2aWRlbyB3YXMgY2FwdHVyZWQgYmVmb3JlIHVzaW5nIHRoaXMgcGF0Y2g/IHdo
+YXQgdmlkZW8gc2F5cw0KPiAidGhlIHJlc3VsdCBvZiB0aGUgdGVzdCBjb21wdXRlciBhZnRl
+ciB0aGUgY29uZmlndXJhdGlvbiIsIHdoYXQgZG9lcw0KPiAidGhlIGNvbmZpZ3VyYXRpb24i
+IG1lYW4/DQoNClRoZSB2aWRlbyB3YXMgY2FwdHVyZWQgYWZ0ZXIgdGhlIHBhdGNoLiBCZWZv
+cmUgdGhlIHBhdGNoLCBpdCdzIGJhc2ljYWxseSANCm5vdCBwb3NzaWJsZSB0byB1c2UgRmly
+ZWZveCBvbmx5IHdpdGggMjArIHRhYnMgYmVjYXVzZSB0aGUgUEMgZW50ZXJzIA0KdGhyYXNo
+aW5nIGNvbmRpdGlvbiBhbmQgcmVhY3RzIHNvIHNsb3cgdGhhdCBldmVuIG1vdXNlIGN1cnNv
+ciBmcmVlemVzIA0KZnJlcXVlbnRseS4gVGhlIFBDIGlzIGFic29sdXRlbHkgdW51c2FibGUg
+Zm9yIGFueSBkZWNlbnQgd29yayB3aXRob3V0IA0KdGhlIHBhdGNoLCByZWdhcmRsZXNzIG9m
+IHN3YXBwaW5lc3MsIHZtLm1pbl9mcmVlX2tieXRlcyBvciBhbnkgb3RoZXIgDQp0dW5hYmxl
+cy4NCg0KVGhlIGNvbmZpZ3VyYXRpb24gaXMgdGhpcyBwYXRjaCB3aXRoIHZtLmNsZWFuX2xv
+d19rYnl0ZXM9Mzg0MDAwIGFuZCAxNTAlIA0KenJhbS4gTW9yZSBpbmZvcm1hdGlvbiBpcyBw
+cm92aWRlZCBvbiB0aGUgd2Vic2l0ZS4NCg0KPiANCj4gVGhhbmtzDQo+IEJhcnJ5DQo=
 
-Of course, i thought Alexander Sverdlin - already took care of it, he
-is really fast and fires patches before i even realize what happens.
+--------------GpvSgEWNSIxnhxGEHv7X0t4X--
 
-Alexander have you already taken care of it ? If not it's my turn to
-clear my own mess.
+--------------060fOdz280xaOYH35TqyCEYA
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> 
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> >
-> > clang-analyzer warnings: (new ones prefixed by >>)
-> >  
-> >  >> arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory
-> >  >> after it is freed [clang-analyzer-unix.Malloc]  
-> >             return &psc->hw;
-> >             ^
-> >     arch/arm/mach-ep93xx/clock.c:151:2: note: Taking true branch
-> >             if (IS_ERR(clk))
-> >             ^
-> >     arch/arm/mach-ep93xx/clock.c:152:3: note: Memory is released
-> >                     kfree(psc);
-> >                     ^~~~~~~~~~
-> >     arch/arm/mach-ep93xx/clock.c:154:2: note: Use of memory after
-> > it is freed return &psc->hw;
-> >             ^      ~~~~~~~~  
-> >  >> arch/arm/mach-ep93xx/clock.c:484:2: warning: Value stored to
-> >  >> 'hw' is never read [clang-analyzer-deadcode.DeadStores]  
-> >             hw = clk_hw_register_fixed_factor(NULL, "uart",
-> > "xtali", 0, 1, clk_uart_div); ^
-> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >  
-> >  >> arch/arm/mach-ep93xx/clock.c:612:2: warning: Value stored to
-> >  >> 'hw' is never read [clang-analyzer-deadcode.DeadStores]  
-> >             hw = clk_hw_register_fixed_factor(NULL, "usb_clk",
-> > "pll2", 0, 1, clk_usb_div); ^
-> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > vim +154 arch/arm/mach-ep93xx/clock.c
-> >
-> > ff05c0330b9880 Hartley Sweeten 2009-05-07  125
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  126  static struct
-> > clk_hw *ep93xx_clk_register_gate(const char *name, 9645ccc7bd7a16
-> > Nikita Shubin   2021-10-18  127
-> >  const char *parent_name, 9645ccc7bd7a16 Nikita Shubin   2021-10-18
-> >  128                                      void __iomem *reg,
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  129
-> >                 u8 bit_idx) 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  130  { 9645ccc7bd7a16 Nikita Shubin   2021-10-18  131
-> >        struct clk_init_data init; 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  132          struct clk_psc *psc; 9645ccc7bd7a16 Nikita
-> > Shubin   2021-10-18  133          struct clk *clk; 9645ccc7bd7a16
-> > Nikita Shubin   2021-10-18  134 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  135          psc = kzalloc(sizeof(*psc), GFP_KERNEL);
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  136          if (!psc)
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  137
-> > return ERR_PTR(-ENOMEM); 9645ccc7bd7a16 Nikita Shubin   2021-10-18
-> > 138 9645ccc7bd7a16 Nikita Shubin   2021-10-18  139
-> > init.name = name; 9645ccc7bd7a16 Nikita Shubin   2021-10-18  140
-> >       init.ops = &clk_ep93xx_gate_ops; 9645ccc7bd7a16 Nikita Shubin
-> >   2021-10-18  141          init.flags = CLK_SET_RATE_PARENT;
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  142
-> > init.parent_names = (parent_name ? &parent_name : NULL);
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  143
-> > init.num_parents = (parent_name ? 1 : 0); 9645ccc7bd7a16 Nikita
-> > Shubin   2021-10-18  144 9645ccc7bd7a16 Nikita Shubin   2021-10-18
-> > 145          psc->reg = reg; 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  146          psc->bit_idx = bit_idx; 9645ccc7bd7a16
-> > Nikita Shubin   2021-10-18  147          psc->hw.init = &init;
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  148          psc->lock =
-> > &clk_lock; 9645ccc7bd7a16 Nikita Shubin   2021-10-18  149
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  150          clk =
-> > clk_register(NULL, &psc->hw); 9645ccc7bd7a16 Nikita Shubin
-> > 2021-10-18  151          if (IS_ERR(clk)) 9645ccc7bd7a16 Nikita
-> > Shubin   2021-10-18  152                  kfree(psc);  
-> 
-> probably should `return ERR_CAST(clk);` ?
-> 
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  153
-> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18 @154          return
-> > &psc->hw; ff05c0330b9880 Hartley Sweeten 2009-05-07  155  }
-> > ff05c0330b9880 Hartley Sweeten 2009-05-07  156
-> >
-> > ---
-> > 0-DAY CI Kernel Test Service, Intel Corporation
-> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> >  
-> 
-> 
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEEMiogvXcpmS32v71gXNcgLu+I93IFAmHvsowFAwAAAAAACgkQXNcgLu+I93LM
+VA/8CoW/5xkgx7D1CDH+ZGLAq+5TFsxMpWEkBZcx3DPiU4wnbtgbL/IwT5ro0Xo/VQQ9TOudB90M
+zfnpsnlIaO5cVqFcE6vh6mHkVmlOCXod4WJ9P6B87ipd4BQ4pXRQVBBbDSGAexBILjG61/SZuF87
+bsoyb4n9+9ZubAVlm6V596hyrRfTqvSbUS1j8TdruOmzEIssiXlCYXuATxdvjTA3QssFz5F8Gw1C
+rQvIJUcxiZN8kPPCPIH55mZBvv5cwm18pd9s7ZFvJ2i4Cn0+h11/WIDnCopn9ko0wJsBL0CIFfuY
+WtQQOfBsJx2Egd22slfMUpnM+uG96Cm5R55d0dt2OTjHuIpV46aYwSp1wrVF5kLavKibI1ob9j5W
+ChHE9qgfUjTWd/4LyT6V83AqRsyrVlsUX0nWhHZor2Wh/T+51X2Dvc2j8wqUiNokJWsRtQYlrvFc
+7ZGtf1fz62VJhipW1kYO/ZirhM9lseCQWhS6lHrxy7309qaBoCXeQWTqNLwmkW6DPP0XqnrIQUyK
+ZKj8436GMw+2xgF9VIwE1BsfJGkD5Y2PMPP2Ww6tM64iT15/wq9rNEGKQ+GJoYD3wX9MqL4YzoEx
+2WCrphjY2Dlhwdqaf/suW6ikVf38uk0cNwEjJ8vrTsvdrzjuYC9uvnRgSbPjhMISfXfHrfE/mlyp
+Foc=
+=u7UI
+-----END PGP SIGNATURE-----
+
+--------------060fOdz280xaOYH35TqyCEYA--

@@ -2,163 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0118F49BF1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B446B49BF24
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234223AbiAYWuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:50:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S234384AbiAYWvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234807AbiAYWtv (ORCPT
+        with ESMTP id S234640AbiAYWuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:49:51 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10DEC061751;
-        Tue, 25 Jan 2022 14:48:42 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id g20so1390440pgn.10;
-        Tue, 25 Jan 2022 14:48:42 -0800 (PST)
+        Tue, 25 Jan 2022 17:50:24 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D48C06175F;
+        Tue, 25 Jan 2022 14:50:18 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id s6so19745638qvv.11;
+        Tue, 25 Jan 2022 14:50:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K2xlmuTMSLgUzf9hY9UAlOmB3NWjGfRTRPH6tS8SRFU=;
-        b=XXS9yW6R2VJb1Y5S0b5FZUlDL8wKG/F05kyfoZInEh0MRFKNXNNVzioCIjdlN/O2bZ
-         KIfX+Zon2ejX17yCG3ElL/3pfgHf6wsmI1ShV7xgP1IlVoJpB2KjFKV4GJkeHSbaS5XK
-         vfAEz1ia8LJBNgvbChYX8dAenhjYljKX71+Jl4MwCRUGam85nKc1Bbw2rS5Siz7STz+A
-         OlrutnnjS8dBRs513O5AxUeNp/auXvb980T7VQrPbApRGQl9r54UEvdhFHKVdzo9HGgy
-         +VSDloNtRd+Tg2lpFHHMcptAfsUhH+aaD+VYnOG0Vp3uu1BY+6ckCXZbXMnHZ9MyZWbl
-         rr2Q==
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=MRyo4b0CIjGUTTXoXk9MtlW6BaLnv9yE3LtTb5OwcVs=;
+        b=OYZQQsV6WQK79JUg5fG+wh4gQTLA9/hdLuTH6VLPFb5W2MNAFhplA8Cz+FtlzEIYqw
+         4Eclya+UfSXKATCT5ITJKovTwes6FdBrl+UU8JARvgxH/+DE9JTXRyg42hHL5NzkcEn5
+         rwRzJDDESr2cT6xNh+IYrkW386JiHueFy3Tss7RwOgiNxgUMQz5Rj6vBFDweoSGUuFMa
+         5ntLTTXyOVJlYoeQrQTGhlA/sDAE0WZqQMDHoq1HICzAGU0PVw0wQOm1fC0Aab2axdVf
+         LT20yL1stwvnDGgsA6eQnlPvYny5ov+721Jc0zQvMJgWDHFrOYlg4p9Zo78s2WFN0Yxa
+         QCZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K2xlmuTMSLgUzf9hY9UAlOmB3NWjGfRTRPH6tS8SRFU=;
-        b=h1ZoqIlqXzf1xGzTPhwyQhkhbJ6mdo1AwQL+TlX05Gm2b9M3noqFZWjhWxx/QsNaEh
-         xb+i6UL3tmNDfmfHHGoqwMZnsg6ttepJbZ55xdgJmYxHHlwemdfzoPU8+6PYOWPngvwC
-         ju6C9yFT+LVMDPEV8Imvp7mpIyYlLiAcl5LCn3eVcRktWFhy6A7jre3hVcY6VUL0hxVW
-         /710e37AIDDBMC6c9puV7UbbD0S4ZLj7Gdt+rG1fbZpfK26lMgFU3dUt4+0j5RKaq4K4
-         1Q8jZW6GXWYOnrtpH7RMHb2y0pebQdOezcCfLRBh6u2occfUmEkC7UnYbMd8MmXOtxee
-         AO+A==
-X-Gm-Message-State: AOAM531lknj5o9anixw8h+vNN+Rq9njQwheC2pVRQGZRNgxJGbD1uy1t
-        lNp7rHOLVDUfGx+jMsTXfimqeeUVgGNEpfdRdzw=
-X-Google-Smtp-Source: ABdhPJyIIX4I/0POQYD1hmG5DkAk5PlWzd9NrBx5am6yPUW6aWodbRqrqt39MqWVGI4oN7r5UzzccAYSgMaI6jv0tGM=
-X-Received: by 2002:aa7:888d:0:b0:4c2:7965:950d with SMTP id
- z13-20020aa7888d000000b004c27965950dmr20542477pfe.46.1643150922122; Tue, 25
- Jan 2022 14:48:42 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=MRyo4b0CIjGUTTXoXk9MtlW6BaLnv9yE3LtTb5OwcVs=;
+        b=E0B48fI7LBiMh10P+toB/iqqv7GKf/FsU3HrlyCCZyUh7K7KOVhbRieZImIvVe6ZLS
+         dNZtw0Oi1y8CzJXVUxaj+IobGqDT3ji6uarFF99eIMRM6jnnMdxO07JHQ0DtEthBMDA+
+         nNtTE4ky+dEhAZ6SXpKYjxexXtbHk2Y7Py3iz7Y/O0ktcblY+1jzya3V3vKGzrRp3EHc
+         ptA3bufU4pF5GMXCi4gelxO2LbR0/AV5hxz1p3L3uyhz6+SxcIOaKGhnGlZ2HfKWU9sn
+         jGhqljryGDXE9Ysl9ye+/F/4Rie907IbAv64cc5GwdhXjvuXf/T3yb5yhkLChqYEe5Yr
+         5YRw==
+X-Gm-Message-State: AOAM5332vqkfGy2WpXLqC26Ehgi5cnpuArDHJQfBLldf5MQX3g2neZ1P
+        vlhliY06U6S3j6DSoLbJ/mDl9dlXMa4=
+X-Google-Smtp-Source: ABdhPJzluCa3czawjx4QlOjJOGVnXBoEAiK8VbFTScmM3nMvScxlMVAAWqgGoSNdbHQhbwWEwp0aHw==
+X-Received: by 2002:ad4:5aab:: with SMTP id u11mr15031153qvg.42.1643151017412;
+        Tue, 25 Jan 2022 14:50:17 -0800 (PST)
+Received: from [10.139.255.254] ([89.187.171.240])
+        by smtp.gmail.com with ESMTPSA id r2sm5193133qtu.57.2022.01.25.14.50.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 14:50:16 -0800 (PST)
+Message-ID: <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com>
+Date:   Tue, 25 Jan 2022 17:50:14 -0500
 MIME-Version: 1.0
-References: <20220121194926.1970172-1-song@kernel.org> <20220121194926.1970172-7-song@kernel.org>
- <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
- <7393B983-3295-4B14-9528-B7BD04A82709@fb.com> <CAADnVQJLHXaU7tUJN=EM-Nt28xtu4vw9+Ox_uQsjh-E-4VNKoA@mail.gmail.com>
- <5407DA0E-C0F8-4DA9-B407-3DE657301BB2@fb.com> <CAADnVQLOpgGG9qfR4EAgzrdMrfSg9ftCY=9psR46GeBWP7aDvQ@mail.gmail.com>
- <5F4DEFB2-5F5A-4703-B5E5-BBCE05CD3651@fb.com> <CAADnVQLXGu_eF8VT6NmxKVxOHmfx7C=mWmmWF8KmsjFXg6P5OA@mail.gmail.com>
- <5E70BF53-E3FB-4F7A-B55D-199C54A8FDCA@fb.com> <adec88f9-b3e6-bfe4-c09e-54825a60f45d@linux.ibm.com>
- <2AAC8B8C-96F1-400F-AFA6-D4AF41EC82F4@fb.com> <CAADnVQKgdMMeONmjUhbq_3X39t9HNQWteDuyWVfcxmTerTnaMw@mail.gmail.com>
- <CAPhsuW4AXLirZwjH4YfJLYj1VUU2muQx1wTkkUpeBBH9kvw2Ag@mail.gmail.com>
- <CAADnVQL8-Hq=g3u65AOoOcB5y-LcOEA4wwMb1Ep0usWdCCSAcA@mail.gmail.com> <CAPhsuW4K+oDsytLvz4n44Fe3Pbjmpu6tnCk63A-UVxCZpz_rjg@mail.gmail.com>
-In-Reply-To: <CAPhsuW4K+oDsytLvz4n44Fe3Pbjmpu6tnCk63A-UVxCZpz_rjg@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 25 Jan 2022 14:48:30 -0800
-Message-ID: <CAADnVQJ8-XVYb21bFRgsaoj7hzd89NSbSOBj0suwsYSL89pxsg@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
-To:     Song Liu <song@kernel.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
+ <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
+From:   Demi Marie Obenour <demiobenour@gmail.com>
+Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+In-Reply-To: <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 2:25 PM Song Liu <song@kernel.org> wrote:
->
-> On Tue, Jan 25, 2022 at 12:00 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Jan 24, 2022 at 11:21 PM Song Liu <song@kernel.org> wrote:
-> > >
-> > > On Mon, Jan 24, 2022 at 9:21 PM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Mon, Jan 24, 2022 at 10:27 AM Song Liu <songliubraving@fb.com> wrote:
-> > > > > >
-> > > > > > Are arches expected to allocate rw buffers in different ways? If not,
-> > > > > > I would consider putting this into the common code as well. Then
-> > > > > > arch-specific code would do something like
-> > > > > >
-> > > > > >  header = bpf_jit_binary_alloc_pack(size, &prg_buf, &prg_addr, ...);
-> > > > > >  ...
-> > > > > >  /*
-> > > > > >   * Generate code into prg_buf, the code should assume that its first
-> > > > > >   * byte is located at prg_addr.
-> > > > > >   */
-> > > > > >  ...
-> > > > > >  bpf_jit_binary_finalize_pack(header, prg_buf);
-> > > > > >
-> > > > > > where bpf_jit_binary_finalize_pack() would copy prg_buf to header and
-> > > > > > free it.
-> > > >
-> > > > It feels right, but bpf_jit_binary_finalize_pack() sounds 100% arch
-> > > > dependent. The only thing it will do is perform a copy via text_poke.
-> > > > What else?
-> > > >
-> > > > > I think this should work.
-> > > > >
-> > > > > We will need an API like: bpf_arch_text_copy, which uses text_poke_copy()
-> > > > > for x86_64 and s390_kernel_write() for x390. We will use bpf_arch_text_copy
-> > > > > to
-> > > > >   1) write header->size;
-> > > > >   2) do finally copy in bpf_jit_binary_finalize_pack().
-> > > >
-> > > > we can combine all text_poke operations into one.
-> > > >
-> > > > Can we add an 'image' pointer into struct bpf_binary_header ?
-> > >
-> > > There is a 4-byte hole in bpf_binary_header. How about we put
-> > > image_offset there? Actually we only need 2 bytes for offset.
-> > >
-> > > > Then do:
-> > > > int bpf_jit_binary_alloc_pack(size, &ro_hdr, &rw_hdr);
-> > > >
-> > > > ro_hdr->image would be the address used to compute offsets by JIT.
-> > >
-> > > If we only do one text_poke(), we cannot write ro_hdr->image yet. We
-> > > can use ro_hdr + rw_hdr->image_offset instead.
-> >
-> > Good points.
-> > Maybe let's go back to Ilya's suggestion and return 4 pointers
-> > from bpf_jit_binary_alloc_pack ?
->
-> How about we use image_offset, like:
->
-> struct bpf_binary_header {
->         u32 size;
->         u32 image_offset;
->         u8 image[] __aligned(BPF_IMAGE_ALIGNMENT);
-> };
->
-> Then we can use
->
-> image = (void *)header + header->image_offset;
+On 1/25/22 17:27, Paul Moore wrote:
+> On Tue, Jan 25, 2022 at 4:34 PM Demi Marie Obenour
+> <demiobenour@gmail.com> wrote:
+>>
+>> These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
+>> always allows too.  Furthermore, a failed FIOCLEX could result in a file
+>> descriptor being leaked to a process that should not have access to it.
+>>
+>> Signed-off-by: Demi Marie Obenour <demiobenour@gmail.com>
+>> ---
+>>  security/selinux/hooks.c | 5 +++++
+>>  1 file changed, 5 insertions(+)
+> 
+> I'm not convinced that these two ioctls should be exempt from SELinux
+> policy control, can you explain why allowing these ioctls with the
+> file:ioctl permission is not sufficient for your use case?  Is it a
+> matter of granularity?
 
-I'm not excited about it, since it leaks header details into JITs.
-Looks like we don't need JIT to be aware of it.
-How about we do random() % roundup(sizeof(struct bpf_binary_header), 64)
-to pick the image start and populate
-image-sizeof(struct bpf_binary_header) range
-with 'int 3'.
-This way we can completely hide binary_header inside generic code.
-The bpf_jit_binary_alloc_pack() would return ro_image and rw_image only.
-And JIT would pass them back into bpf_jit_binary_finalize_pack().
-From the image pointer it would be trivial to get to binary_header with &63.
-The 128 byte offset that we use today was chosen arbitrarily.
-We were burning the whole page for a single program, so 128 bytes zone
-at the front was ok.
-Now we will be packing progs rounded up to 64 bytes, so it's better
-to avoid wasting those 128 bytes regardless.
+FIOCLEX and FIONCLEX are applicable to *all* file descriptors, not just
+files.  If I want to allow them with SELinux policy, I have to grant
+*:ioctl to all processes and use xperm rules to determine what ioctls
+are actually allowed.  That is incompatible with existing policies and
+needs frequent maintenance when new ioctls are added.
+
+Furthermore, these ioctls do not allow one to do anything that cannot
+already be done by fcntl(F_SETFD), and (unless I have missed something)
+SELinux unconditionally allows that.  Therefore, blocking these ioctls
+does not improve security, but does risk breaking userspace programs.
+The risk is especially great because in the absence of SELinux, I
+believe FIOCLEX and FIONCLEX *will* always succeed, and userspace
+programs may rely on this.  Worse, if a failure of FIOCLEX is ignored,
+a file descriptor can be leaked to a child process that should not have
+access to it, but which SELinux allows access to.  Userspace
+SELinux-naive sandboxes are one way this could happen.  Therefore,
+blocking FIOCLEX may *create* a security issue, and it cannot solve one.
+-- 
+Sincerely,
+Demi Marie Obenour (she/her/hers)

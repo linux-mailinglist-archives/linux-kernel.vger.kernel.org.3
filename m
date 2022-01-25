@@ -2,104 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCFE49B43C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F70649B445
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454580AbiAYMpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:45:18 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:55266 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452800AbiAYMmJ (ORCPT
+        id S1455690AbiAYMqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:46:10 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:34030 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1453058AbiAYMmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:42:09 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E39101F380;
-        Tue, 25 Jan 2022 12:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643114524; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YLtlKuPoADWCEZcM/RaMVq/xOpaxcT6tevD1Rm+nUYA=;
-        b=RpTppQc4leOl0T0HMyo5gixVuROCn5E/wZm/UJ3ydVYLXpETYI5XxkPWN8iGeYGvk6V54D
-        NzTIVRjBTDVvht330nSPUP5ZudYliwjY9xILG9GIngoY3Lrhi/6ex4RUsLinCGc95O5u2d
-        Sowt7oZFbRzjOLBJ158+QkuzD0chcjg=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 25 Jan 2022 07:42:47 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9DB02A3B81;
-        Tue, 25 Jan 2022 12:42:04 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 13:42:03 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] printk: disable optimistic spin during panic
-Message-ID: <Ye/wG5IsIYer7akH@alley>
-References: <20220121190222.572694-1-stephen.s.brennan@oracle.com>
- <20220121190222.572694-3-stephen.s.brennan@oracle.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B63912190B;
+        Tue, 25 Jan 2022 12:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643114546; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L4S5NdclChYm+37M35o9nCi399I97TtP6PnVsYu3Luo=;
+        b=cn6UKb3+e3xOuCyZLA/JXbztoZ72fKvqnARMBeFm2LtB8oSaRdQv5F908O1I2wDf08gzxH
+        /EizippsU7g68gIdlikKFU6XCnO10lc4UDum7s7w+82iI2zAcbhls18YG/70VMM7hsHTqC
+        q6jErn1qXfNvaX9Fpod+HsGZAGkz6LE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643114546;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L4S5NdclChYm+37M35o9nCi399I97TtP6PnVsYu3Luo=;
+        b=Nn+awNBnaWa92hfYNULDfUwjRuQtUW6Kaii9n2zm2cONe5JlxQeX88E7Ei2skQsvvUC534
+        QneO9FDOr/95mNBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 01BBC13DDC;
+        Tue, 25 Jan 2022 12:42:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GmGoOTHw72E5NAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 25 Jan 2022 12:42:25 +0000
+Date:   Tue, 25 Jan 2022 13:42:24 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <Terry.Bowman@amd.com>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v3 3/4] Watchdog: sp5100_tco: Add initialization using
+ EFCH MMIO
+Message-ID: <20220125134224.233b1f80@endymion>
+In-Reply-To: <2b6c9dbb-08c9-e28e-a18c-89f215567c7b@amd.com>
+References: <20220118202234.410555-1-terry.bowman@amd.com>
+        <20220118202234.410555-4-terry.bowman@amd.com>
+        <20220124183651.62d5a97d@endymion>
+        <2b6c9dbb-08c9-e28e-a18c-89f215567c7b@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121190222.572694-3-stephen.s.brennan@oracle.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-01-21 11:02:20, Stephen Brennan wrote:
-> A CPU executing with console lock spinning enabled might be halted
-> during a panic. Before the panicking CPU calls console_flush_on_panic(),
-> it may call console_trylock(), which attempts to optimistically spin,
-> deadlocking the panic CPU:
-> 
-> CPU 0 (panic CPU)             CPU 1
-> -----------------             ------
->                               printk() {
->                                 vprintk_func() {
->                                   vprintk_default() {
->                                     vprintk_emit() {
->                                       console_unlock() {
->                                         console_lock_spinning_enable();
->                                         ... printing to console ...
-> panic() {
->   crash_smp_send_stop() {
->     NMI  -------------------> HALT
->   }
->   atomic_notifier_call_chain() {
->     printk() {
->       ...
->       console_trylock_spinnning() {
->         // optimistic spin infinitely
-> 
-> This hang during panic can be induced when a kdump kernel is loaded, and
-> crash_kexec_post_notifiers=1 is present on the kernel command line. The
-> following script which concurrently writes to /dev/kmsg, and triggers a
-> panic, can result in this hang:
-> 
->     #!/bin/bash
->     date
->     # 991 chars (based on log buffer size):
->     chars="$(printf 'a%.0s' {1..991})"
->     while :; do
->         echo $chars > /dev/kmsg
->     done &
->     echo c > /proc/sysrq-trigger &
->     date
->     exit
-> 
-> To avoid this deadlock, ensure that console_trylock_spinning() does not
-> allow spinning once a panic has begun.
-> 
-> Fixes: dbdda842fe96 ("printk: Add console owner and waiter logic to load balance console writes")
-> 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+On Mon, 24 Jan 2022 16:36:33 -0600, Terry Bowman wrote:
+> Is your "Tested-by" for patch 3/4 or the sp5100_tco series?
 
-Looks good to me:
+For the whole series actually, I only tested with all patches applied,
+not the individual patches.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Best Regards,
-Petr
+-- 
+Jean Delvare
+SUSE L3 Support

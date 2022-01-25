@@ -2,197 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A265549B983
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA2149B988
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388439AbiAYRA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:00:57 -0500
-Received: from foss.arm.com ([217.140.110.172]:56040 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237321AbiAYQ6a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:58:30 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 06E531FB;
-        Tue, 25 Jan 2022 08:58:23 -0800 (PST)
-Received: from [10.32.33.50] (e121896.warwick.arm.com [10.32.33.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5EDE43F766;
-        Tue, 25 Jan 2022 08:58:21 -0800 (PST)
-Subject: Re: [RFC V1 10/11] perf: Expand perf_branch_entry.type
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+        id S1353226AbiAYRBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351746AbiAYQ7X (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 11:59:23 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F5FC061783
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:59:20 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id r25so4387581wrc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:59:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0EPBTQB+lrJUfmAenKtP4vKFgFhxTwuJuGHovZ9LsFE=;
+        b=QhaQEJdMKLqtIqzHjLgydhsRceWU0PhhmbNDNtwNqt62yw+clPUDRqeO3McjtGcb5h
+         61ADGpP/FdrSZSlir/xDTOpCLQ/cIGQ9gRs1zV6v6jwSqOzqt4aDGp3rCAglx/OXuoi3
+         /AkO3meyRxOgscSoNR5Nrf8CQuswv+9iEq2Jpq+OWoaB23diYL2HtGV4WE7uVIAC1xZw
+         7gPEk2TtkO6Yn3oRbB2kXY6SIxoa4uXzB/WHnfTZCnX9H5OCHPhrf3tqZT6NvZPHBhzt
+         qggN4D0baZrmfIGrOebWZDVojORI4G2+B1tAlZPzXOA1OqXdncZOk1rgb81f/0bEM3j9
+         zrow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0EPBTQB+lrJUfmAenKtP4vKFgFhxTwuJuGHovZ9LsFE=;
+        b=wqI+N0xHi6swGzRnJmS2RK/ZF2i052tLXpQNwF+DCqk3YWpfJo5KBibebSapuH/vUx
+         ALiIHa0b5LTNc3FeKsjisHjNl+zlC94cf+OLt/XaQDrqM8DWDTiUs8lod+g6uXo6MsY3
+         z5HqKJsO/RUWzdj+w1Nld803+lmE9ipNiYiuWJmE5vGi5HgQ+rFm5lV43/d9gSbmVovU
+         LQIphh5chZh+UpcE7sZAq/oDx/86ZmYAHsxS29t9LERTTNMPWSNR+IPjmhN7A0nOjIWG
+         YnsyB/r+xvdt+DexyTR7ZBu7BaEPu3QRf8tT50gmCxdJoXAzVpj1ELlslKHHHa9rZYix
+         emXQ==
+X-Gm-Message-State: AOAM531ZleFUQ0F8JKb1PYHKiYgLEoBlBllWihcWDgEFbiTrVk0GP/B4
+        XfJif9z1ckyrbvFNm0FxvptVw0mMaqaXl2R6YecdHA==
+X-Google-Smtp-Source: ABdhPJzhr5UswaMT7F1OyCk083+R2wOZHEwcVvfkypvFYUFRK0pPN7sqIb8CdgutboBR4Raggs4Qj74sny/tSJ1be8k=
+X-Received: by 2002:adf:dfcb:: with SMTP id q11mr18953518wrn.181.1643129959261;
+ Tue, 25 Jan 2022 08:59:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20220122023447.1480995-1-eugenis@google.com> <YfAV6FTN5g6jZGj7@FVFF77S0Q05N>
+ <YfAcKZpDWmKMZy8q@FVFF77S0Q05N>
+In-Reply-To: <YfAcKZpDWmKMZy8q@FVFF77S0Q05N>
+From:   Evgenii Stepanov <eugenis@google.com>
+Date:   Tue, 25 Jan 2022 08:59:07 -0800
+Message-ID: <CAFKCwrjbn3e2w-LikMY5bOvUKbUBi7_4iwBOD7KQUn8QHPwbng@mail.gmail.com>
+Subject: Re: [PATCH] arm64: extable: fix null deref in load_unaligned_zeropad.
+To:     Mark Rutland <mark.rutland@arm.com>
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>
-References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
- <1642998653-21377-11-git-send-email-anshuman.khandual@arm.com>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <2d7297b3-9a22-626b-9840-a4eaab4b94e8@arm.com>
-Date:   Tue, 25 Jan 2022 16:58:20 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <1642998653-21377-11-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Ard Biesheuvel <ardb@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 25, 2022 at 7:50 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Tue, Jan 25, 2022 at 03:23:20PM +0000, Mark Rutland wrote:
+> > On Fri, Jan 21, 2022 at 06:34:47PM -0800, Evgenii Stepanov wrote:
+> > > ex_handler_load_unaligned_zeropad extracts the source and data register
+> > > numbers from the wrong field of the exception table.
+> >
+> > Ouch. Did you find this by inspection, or did this show up in testing?
+> >
+> > Sorry about this.
+> >
+> > I think we should be a little more explicit as to exactly what goes wrong. How
+> > about:
+> >
+> > | In ex_handler_load_unaligned_zeropad() we erroneously extract the data and
+> > | addr register indices from ex->type rather than ex->data. As ex->type will
+> > | contain EX_TYPE_LOAD_UNALIGNED_ZEROPAD (i.e. 4):
+> > |
+> > | * We'll always treat X0 as the address register, since EX_DATA_REG_ADDR is
+> > |   extracted from bits [9:5]. Thus, we may attempt to dereference an arbitrary
+> > |   address as X0 may hold an arbitary value.
+> > |
+> > | * We'll always treat X4 as the data register, since EX_DATA_REG_DATA is
+> > |   extracted from bits [4:0]. Thus we will corrupt X4 and cause arbitrary
+> > |   behaviour within load_unaligned_zeropad() and its caller.
+> > |
+> > | Fix this by extracting both values from ex->data as originally intended.
+> >
+> > > Fixes: 753b3236
+> >
+> > That should be expanded, e.g.
+> >
+> >   Fixes: 753b32368705c396 ("arm64: extable: add load_unaligned_zeropad() handler")
+> >
+> > With those changes:
+> >
+> > Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+>
+> Looking again, sicne this isn't jsut a null-deref, can we also rework the
+> title, something like:
+>
+> | arm64: extable: fix load_unaligned_zeropad() reg indices
 
+That's a much better commit message, thank you! I'll upload v2 shortly.
 
-On 24/01/2022 04:30, Anshuman Khandual wrote:
-> Current perf_branch_entry.type is a 4 bits field just enough to accommodate
-> 16 generic branch types. This is insufficient to accommodate platforms like
-> arm64 which has much more branch types. Lets just expands this field into a
-> 6 bits one, which can now hold 64 generic branch types. This also adds more
-> generic branch types and updates the BRBE driver as required.
-> 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jiri Olsa <jolsa@redhat.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  drivers/perf/arm_pmu_brbe.c           |  7 ++++++-
->  include/uapi/linux/perf_event.h       | 10 ++++++++--
->  tools/include/uapi/linux/perf_event.h | 10 ++++++++--
->  tools/perf/util/branch.c              |  8 +++++++-
->  4 files changed, 29 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/perf/arm_pmu_brbe.c b/drivers/perf/arm_pmu_brbe.c
-> index 8d27ad868359..7cd1208c6c58 100644
-> --- a/drivers/perf/arm_pmu_brbe.c
-> +++ b/drivers/perf/arm_pmu_brbe.c
-> @@ -253,12 +253,17 @@ static int brbe_fetch_perf_type(u64 brbinf)
->  	case BRBINF_TYPE_DEBUG_EXIT:
->  		return PERF_BR_DEBUG_EXIT;
->  	case BRBINF_TYPE_SERROR:
-> +		return PERF_BR_SERROR;
->  	case BRBINF_TYPE_INST_DEBUG:
-> +		return PERF_BR_DEBUG_INST;
->  	case BRBINF_TYPE_DATA_DEBUG:
-> +		return PERF_BR_DEBUG_DATA;
->  	case BRBINF_TYPE_ALGN_FAULT:
-> +		return PERF_BR_FAULT_ALGN;
->  	case BRBINF_TYPE_INST_FAULT:
-> +		return PERF_BR_FAULT_INST;
->  	case BRBINF_TYPE_DATA_FAULT:
-> -		return PERF_BR_UNKNOWN;
-> +		return PERF_BR_FAULT_DATA;
->  	default:
->  		pr_warn("unknown branch type captured\n");
->  		return PERF_BR_UNKNOWN;
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index b91d0f575d0c..361fdc6b87a0 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -256,6 +256,12 @@ enum {
->  	PERF_BR_FIQ		= 13,	/* fiq */
->  	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
->  	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
-> +	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
-> +	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
-> +	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
-> +	PERF_BR_FAULT_DATA	= 19,	/* data fault */
-> +	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
-> +	PERF_BR_SERROR		= 21,	/* system error */
->  	PERF_BR_MAX,
->  };
->  
-> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
->  		in_tx:1,    /* in transaction */
->  		abort:1,    /* transaction abort */
->  		cycles:16,  /* cycle count to last branch */
-> -		type:4,     /* branch type */
-> -		reserved:40;
-> +		type:6,     /* branch type */
-> +		reserved:38;
->  };
->  
->  union perf_sample_weight {
-> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-> index 1882054e8684..9a82b8aaed93 100644
-> --- a/tools/include/uapi/linux/perf_event.h
-> +++ b/tools/include/uapi/linux/perf_event.h
-> @@ -256,6 +256,12 @@ enum {
->  	PERF_BR_FIQ		= 13,	/* fiq */
->  	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
->  	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
-> +	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
-> +	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
-> +	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
-> +	PERF_BR_FAULT_DATA	= 19,	/* data fault */
-> +	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
-> +	PERF_BR_SERROR		= 21,	/* system error */
->  	PERF_BR_MAX,
->  };
->  
-> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
->  		in_tx:1,    /* in transaction */
->  		abort:1,    /* transaction abort */
->  		cycles:16,  /* cycle count to last branch */
-> -		type:4,     /* branch type */
-> -		reserved:40;
-> +		type:6,     /* branch type */
-> +		reserved:38;
->  };
+This was found by updating to a newer QEMU that correctly delivers MTE
+faults from unaligned memory accesses, and triggers this bug reliably
+during Android boot. I'll add a stack trace to v2.
 
-There's another copy of this struct in branch.h that is used to access the same data in
-perf which also needs updating:
-
-	struct branch_flags {
-		union {
-			u64 value;
-			struct {
-				u64 mispred:1;
-				u64 predicted:1;
-				u64 in_tx:1;
-				u64 abort:1;
-				u64 cycles:16;
-				u64 type:4;
-				u64 reserved:40;
-			};
-		};
-	};
-
-It's never assigned directly but there is some casting stuff going on in
-evsel__parse_sample() and it eventually ends up being used to access branch
-records. Same applies to the privilege data change.
-
->  
->  union perf_sample_weight {
-> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-> index 74e5e67b1779..1e216ea2e2a8 100644
-> --- a/tools/perf/util/branch.c
-> +++ b/tools/perf/util/branch.c
-> @@ -54,7 +54,13 @@ const char *branch_type_name(int type)
->  		"IRQ",
->  		"FIQ",
->  		"DEBUG_HALT",
-> -		"DEBUG_EXIT"
-> +		"DEBUG_EXIT",
-> +		"DEBUG_INST",
-> +		"DEBUG_DATA",
-> +		"FAULT_ALGN",
-> +		"FAULT_DATA",
-> +		"FAULT_INST",
-> +		"SERROR"
->  	};
->  
->  	if (type >= 0 && type < PERF_BR_MAX)
-> 
+>
+> Thanks,
+> Mark.

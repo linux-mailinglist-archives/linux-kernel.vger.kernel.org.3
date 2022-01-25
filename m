@@ -2,138 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A86B49B819
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E006849B822
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379370AbiAYP7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:59:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54350 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1379459AbiAYP5S (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:57:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643126231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EOuF9uHjmu6EB+RqEY9DRd/3karDS0G1/LHvYVm6MBE=;
-        b=Xo7kztOvDJvPuWt9RvEClrpENYSVeAiPrtD/LHQG3T+EZOz3AYx1sYkqe1ucDTyfj+q766
-        fpkWphMGpKcvuKBD4lD0RQM1gs+jjOFgMGpDb0pDsFKG3C94OPBMyL904K0g9zZdAh7pe+
-        pyuECelXoEWMfz+dynrp5udNF+PzQ0c=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-542-jr7nDmt-N-G_cRfU0vwTNA-1; Tue, 25 Jan 2022 10:57:08 -0500
-X-MC-Unique: jr7nDmt-N-G_cRfU0vwTNA-1
-Received: by mail-ej1-f72.google.com with SMTP id v2-20020a170906292200b006a94a27f903so3599513ejd.8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 07:57:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EOuF9uHjmu6EB+RqEY9DRd/3karDS0G1/LHvYVm6MBE=;
-        b=XnY2LxtoJLWF8qNnV3MPA9w1mB2K30u9eeLwFS4j1OzqzfSDDMVMkHqWj7xtpIGYcd
-         MogeXRoPlHIDiElFNKxDKmzBXhNUczpIQPxtBlhMPW8Te8EfZc+S+T+KrLGErIQPA0nc
-         cMhqXEzQKyPtaEYdKQMGbJJBGbx64Kc7Obd2puUsurEdmaWB+iZ777jkXJ1X+27dD6C6
-         y5mWva+yIaPJiEsmkLZa6Bpay46h8AoGZURzzBXJJDpAHx44sD+v9lifBf9ubd4Wnko2
-         ZG5xQYAZvvNv3aasW4shekBdbeoA7nYHPv1eE4HBM6u6IyfGyl+pkn8ecvvgA6YJzPGU
-         Uk9A==
-X-Gm-Message-State: AOAM532KPPIzMYqRPzJMMpFIuQ8qSvehpi2ltyrekPYKV4uZL8NtRrA7
-        RxsVi5ENrksi4Ws9FpN/g17XqQCO+HshI48DmijRzBU6dHNfzrjloEK6gY6yH3EoOkHXZd8zMbI
-        iCwsdEUZ+dZXMreZLNd0ZoEWt
-X-Received: by 2002:a17:906:560c:: with SMTP id f12mr17417349ejq.197.1643126227118;
-        Tue, 25 Jan 2022 07:57:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxNe7yqYzq/tN13zpUzE8HyivuSwsjoWYJAYE+e8EPE8nGSTY0zvG86PwdV/oTDtJSYJxpJng==
-X-Received: by 2002:a17:906:560c:: with SMTP id f12mr17417340ejq.197.1643126226886;
-        Tue, 25 Jan 2022 07:57:06 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id ec7sm8453751edb.62.2022.01.25.07.57.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 07:57:06 -0800 (PST)
-Message-ID: <21da89ed-fe72-f824-902c-a7c4999a908e@redhat.com>
-Date:   Tue, 25 Jan 2022 16:57:05 +0100
+        id S1583002AbiAYQAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:00:30 -0500
+Received: from foss.arm.com ([217.140.110.172]:52452 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1582888AbiAYP7C (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 10:59:02 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A30AA1FB;
+        Tue, 25 Jan 2022 07:58:57 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.1.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63F883F793;
+        Tue, 25 Jan 2022 07:58:55 -0800 (PST)
+Date:   Tue, 25 Jan 2022 15:58:51 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        acme@redhat.com, Borislav Petkov <bp@alien8.de>,
+        Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 0/7] linkage: better symbol aliasing
+Message-ID: <YfAeO+8R+XiYtr8l@FVFF77S0Q05N>
+References: <20220125113200.3829108-1-mark.rutland@arm.com>
+ <CAMj1kXGCFFHzZAqhfmJthGCe6uhFsrHwzK0QyOfrGw7_kNbjWQ@mail.gmail.com>
+ <YfAbMY6U4UpyrerB@FVFF77S0Q05N>
+ <CAMj1kXEyzNMWiQFiZW1_QTApmuHfot82USC=Q8nP27sVm+WMMw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/5] KVM: SVM: Drop stale comment from
- svm_hv_vmcb_dirty_nested_enlightenments()
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-References: <20211220152139.418372-1-vkuznets@redhat.com>
- <20211220152139.418372-2-vkuznets@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211220152139.418372-2-vkuznets@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXEyzNMWiQFiZW1_QTApmuHfot82USC=Q8nP27sVm+WMMw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/20/21 16:21, Vitaly Kuznetsov wrote:
-> Commit 3fa5e8fd0a0e4 ("KVM: SVM: delay svm_vcpu_init_msrpm after
-> svm->vmcb is initialized") re-arranged svm_vcpu_init_msrpm() call in
-> svm_create_vcpu() making the comment about vmcb being NULL
-> obsolete. Drop it.
+On Tue, Jan 25, 2022 at 04:49:03PM +0100, Ard Biesheuvel wrote:
+> On Tue, 25 Jan 2022 at 16:46, Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > On Tue, Jan 25, 2022 at 04:28:11PM +0100, Ard Biesheuvel wrote:
+> > > On Tue, 25 Jan 2022 at 12:32, Mark Rutland <mark.rutland@arm.com> wrote:
+> > > >
+> > > > This series aims to make symbol aliasing simpler and more consistent.
+> > > > The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
+> > > > SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
+> > > > that e.g.
+> > > >
+> > > >     SYM_FUNC_START(func)
+> > > >     SYM_FUNC_START_ALIAS(alias1)
+> > > >     SYM_FUNC_START_ALIAS(alias2)
+> > > >         ... asm insns ...
+> > > >     SYM_FUNC_END(func)
+> > > >     SYM_FUNC_END_ALIAS(alias1)
+> > > >     SYM_FUNC_END_ALIAS(alias2)
+> > > >     EXPORT_SYMBOL(alias1)
+> > > >     EXPORT_SYMBOL(alias2)
+> > > >
+> > > > ... can become:
+> > > >
+> > > >     SYM_FUNC_START(name)
+> > > >         ... asm insns ...
+> > > >     SYM_FUNC_END(name)
+> > > >
+> > > >     SYM_FUNC_ALIAS(alias1, func)
+> > > >     EXPORT_SYMBOL(alias1)
+> > > >
+> > > >     SYM_FUNC_ALIAS(alias2, func)
+> > > >     EXPORT_SYMBOL(alias2)
+> > > >
+> > > > This avoids repetition and hopefully make it easier to ensure
+> > > > consistency (e.g. so each function has a single canonical name and
+> > > > associated metadata).
+> > > >
+> > >
+> > > I take it this affects the sizes of the alias ELF symbols? Does that matter?
+> >
+> > The alias should be given the same size as the original symbol, unless I've
+> > made an error. If you look at patch 3:
+> >
+> > * In SYM_FUNC_START(name), via SYM_ENTRY_AT(name, ...), we create a local label
+> >   for the start of the function: .L____sym_entry__##name
+> >
+> > * In SYM_FUNC_END(name), via SYM_END_AT(name, ...), we create a local label for
+> >   the end of the function: .L____sym_end__##name
+> >
+> > * In SYM_FUNC_ALIAS*(alias,name), we define the start and end of the alias as
+> >   the start and end of the original symbol using those local labels, e.g.
+> >
+> >   | #define SYM_FUNC_ALIAS(alias, name)                                     \
+> >   |         SYM_START_AT(alias, .L____sym_entry__##name, SYM_L_GLOBAL)      \
+> >   |         SYM_END_AT(alias, .L____sym_end__##name, SYM_T_FUNC)
+> >
+> > Note that:
+> >
+> > * SYM_FUNC_START() uses SYM_START(), which uses SYM_ENTRY_AT()
+> > * SYM_FUNC_END() uses SYM_END(), which uses SYM_END_AT()
+> >
+> > ... so the definition of tha alias is ultimately structurally identical to the
+> > definition of the canoncial name, at least for now.
+> >
 > 
-> While on it, drop superfluous vmcb_is_clean() check: vmcb_mark_dirty()
-> is a bit flip, an extra check is unlikely to bring any performance gain.
-> Drop now-unneeded vmcb_is_clean() helper as well.
-> 
-> Fixes: 3fa5e8fd0a0e4 ("KVM: SVM: delay svm_vcpu_init_msrpm after svm->vmcb is initialized")
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Ah right, apologies for not looking more carefully - I assumed the
+> changed placement implied that the aliases had zero size.
 
-Queued, but with subject changed to "KVM: SVM: clean up beginning of 
-svm_hv_vmcb_dirty_nested_enlightenments()".
+NP; I didn't make that clear in the cover letter, and now it's written up and
+archived for future reference. :)
 
-Paolo
+> And ultimately, I don't think there is an obviously correct answer
+> anyway, it's just the [apparently non-existent] change in behavior I
+> was curious about.
 
->   arch/x86/kvm/svm/svm.h          | 5 -----
->   arch/x86/kvm/svm/svm_onhyperv.h | 9 +--------
->   2 files changed, 1 insertion(+), 13 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index daa8ca84afcc..5d197aae3a19 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -305,11 +305,6 @@ static inline void vmcb_mark_all_clean(struct vmcb *vmcb)
->   			       & ~VMCB_ALWAYS_DIRTY_MASK;
->   }
->   
-> -static inline bool vmcb_is_clean(struct vmcb *vmcb, int bit)
-> -{
-> -	return (vmcb->control.clean & (1 << bit));
-> -}
-> -
->   static inline void vmcb_mark_dirty(struct vmcb *vmcb, int bit)
->   {
->   	vmcb->control.clean &= ~(1 << bit);
-> diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
-> index c53b8bf8d013..cdbcfc63d171 100644
-> --- a/arch/x86/kvm/svm/svm_onhyperv.h
-> +++ b/arch/x86/kvm/svm/svm_onhyperv.h
-> @@ -83,14 +83,7 @@ static inline void svm_hv_vmcb_dirty_nested_enlightenments(
->   	struct hv_enlightenments *hve =
->   		(struct hv_enlightenments *)vmcb->control.reserved_sw;
->   
-> -	/*
-> -	 * vmcb can be NULL if called during early vcpu init.
-> -	 * And its okay not to mark vmcb dirty during vcpu init
-> -	 * as we mark it dirty unconditionally towards end of vcpu
-> -	 * init phase.
-> -	 */
-> -	if (vmcb_is_clean(vmcb, VMCB_HV_NESTED_ENLIGHTENMENTS) &&
-> -	    hve->hv_enlightenments_control.msr_bitmap)
-> +	if (hve->hv_enlightenments_control.msr_bitmap)
->   		vmcb_mark_dirty(vmcb, VMCB_HV_NESTED_ENLIGHTENMENTS);
->   }
->   
+FWIW, I hadn't really considered whether we actually need that for the aliases;
+it was jsut the path of least resistance implementation-wise, and I'd like to
+be able to use the local labls for the bounds in future for other annotations
+and sanity-checks.
 
+Thanks,
+Mark.

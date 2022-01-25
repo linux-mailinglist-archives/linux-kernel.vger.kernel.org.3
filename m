@@ -2,190 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B443049B042
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0A149B056
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573967AbiAYJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573003AbiAYJSg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:18:36 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95541C06174E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:14:54 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id q22so7068267ljh.7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:14:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qrgiZGQ6iDovOpvrU32QRk7eljkxoPWyGy5MexT9X4I=;
-        b=Yz2JeNHhq5XcFshwTR7g5n40VgZtU4lRAtDEj/GojdZK5RxjDf23wQ/pzu5acf+Dy8
-         2Ugx0biQWhmmP2vWA7xGO7oOFi+maeNvwfeVrjg6zFJhNpWMw5y46Pbrvs8pcI7UPkcO
-         mmuYSf03AAL49jlQiQXGb7HK2595dtPejQBGbHBaVmpuN+2sXyWTC3EdB2UMZlOIKtNi
-         aNz9lN7EEAVxXmBlCi4zbmNEJPG+weJ+ejVUm3QStQzw+lzV3u+badZWBTwf+qEtIuxl
-         IxB2VpHQMu/pMR/3KXXRX0UjZ8qsInINtLA4+1c8J0nvMvn02/1Nt5VVEUCBzwuORlDH
-         /PrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qrgiZGQ6iDovOpvrU32QRk7eljkxoPWyGy5MexT9X4I=;
-        b=RruedDxceHfTeh1bq3hp+EzMA/h850DPu43pBoK8VD1ZWKnWIlEeEBsKz05rJhnJrZ
-         y1bnQ+CiUybkW8LTIpxIj6Q02TXgv9k/JtPRxCjqDqxXV9C64almb2rvVpuyhv+XWLyE
-         Omwvo53e89JbiFOnvzpRFj/rN8Qr22GTbotVRbMAWCKu1e0CJVmzGO7l2KVsYTLqQhE7
-         DtQZrWIJF8yMzvjtbsNI8cJKsUuIMG12gEkqmyn4QZ6CuRV63PW3IpArLcnjSXuCxRnZ
-         SZrwG/JWl86Xm1JM+Bn34hc1aL0VeGfXpFRciJWKkeHBB58XHUbr0I6gcZ/+5ah7MbkU
-         +1Iw==
-X-Gm-Message-State: AOAM531n9DjW6ct7R9m0Q+h8BAh4H82Ym7RJg3Izzd72yZHLaFJBfDOa
-        ymADG/BRmW4DklUza0D514ayP35EgLiYMrriTJ6e9w==
-X-Google-Smtp-Source: ABdhPJzeq/FzwGiCeBTJHEg6r95G1ZdhTdmrdSjD6Yutu6gLbJJWNcXh4b7oAOFsB95LEsMJlk6By0jWGzJ/zBOV8kg=
-X-Received: by 2002:a2e:6a13:: with SMTP id f19mr8258334ljc.365.1643102092835;
- Tue, 25 Jan 2022 01:14:52 -0800 (PST)
+        id S1574279AbiAYJc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:32:58 -0500
+Received: from mga11.intel.com ([192.55.52.93]:32553 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1573833AbiAYJ10 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 04:27:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643102846; x=1674638846;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BslUopwdkn6hqPPPjIlnIuLGFxUBwc2V6iMFkRY3pak=;
+  b=a4u60lE0S3M0cbKlwePYhNia+g6HE/XwfAVdmh9BAMNS0D+bzcEFEUVo
+   icggdexsLQ1vYjtY9D1MW1pLjiGJWiBt0DTYGeDSmjVkmgbNMSWp3nSx5
+   C5e2Mzf5U6CEQOdqt7/stBlHxFLIPl0T8K9Fu8QtM7ElCIHQeQZFA2sJ6
+   O6IP4T0KzH0IxJexw0S+yLcToiOUvRU3nlczw6938rzH2F/DHEhf+By4w
+   aXmYxAqvKaW1SpTZUkwZcTkADxfJcM8i3lLba4bzPpL+bi2ELGnHPzpAQ
+   lxubJmr9btBrM5YyEmTlKFr1wS2z7XPQ8iz8K5GjwVvTTYsLuyqOXuffa
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="243860549"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="243860549"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 01:16:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="673931295"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Jan 2022 01:16:33 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCHwH-000JdQ-9t; Tue, 25 Jan 2022 09:16:33 +0000
+Date:   Tue, 25 Jan 2022 17:15:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ ab2a290a7391fdf42c3d3cf3b278143b84856ee1
+Message-ID: <61efbfcf.LMZi+O1sdP6v9nPU%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220120200139.118978-1-tadeusz.struk@linaro.org> <20220125011804.mhlhdenbjluzqkgf@oracle.com>
-In-Reply-To: <20220125011804.mhlhdenbjluzqkgf@oracle.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 25 Jan 2022 10:14:41 +0100
-Message-ID: <CAKfTPtB7UvUG3C_xiHL-V6eDfDOAkpzFWa0_QQeeRAQG7PovXQ@mail.gmail.com>
-Subject: Re: [PATCH v2] sched/fair: Fix fault in reweight_entity
-To:     Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>, peterz@infradead.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 02:18, Daniel Jordan <daniel.m.jordan@oracle.com> wrote:
->
-> Hi,
->
-> On Thu, Jan 20, 2022 at 12:01:39PM -0800, Tadeusz Struk wrote:
-> > Syzbot found a GPF in reweight_entity(). This has been bisected to commit
-> > 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
-> >
-> > There is a race between sched_post_fork() and setpriority(PRIO_PGRP)
-> > within a thread group that causes a null-ptr-deref in reweight_entity()
-> > in CFS. The scenario is that the main process spawns number of new
-> > threads, which then call setpriority(PRIO_PGRP, 0, prio), wait, and exit.
-> > For each of the new threads the copy_process() gets invoked, which adds
-> > the new task_struct to the group, and eventually calls sched_post_fork() for it.
-> >
-> > In the above scenario there is a possibility that setpriority(PRIO_PGRP)
-> > and set_one_prio() will be called for a thread in the group that is just
-> > being created by copy_process(), and for which the sched_post_fork() has
-> > not been executed yet. This will trigger a null pointer dereference in
-> > reweight_entity(), as it will try to access the run queue pointer, which
-> > hasn't been set.
->
-> It's kinda strange that p->se.cfs_rq is NULLed in __sched_fork().
-> AFAICT, that lets set_task_rq_fair() distinguish between fork and other
-> paths per ad936d8658fd, but it's causing this problem now and it's not
-> the only way that set_task_rq_fair() could tell the difference.
->
-> We might be able to get rid of the NULL assignment instead of adding
-> code to detect it.  Maybe something like this, against today's mainline?
-> set_task_rq_fair() would rely on TASK_NEW instead of NULL.
->
-> Haven't thought it all the way through, so could be missing something.
-> Will think more
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: ab2a290a7391fdf42c3d3cf3b278143b84856ee1  rcu: Replace cpumask_weight with cpumask_empty where appropriate
 
-Could we use :
-set_load_weight(p, !(p->__state & TASK_NEW));
-instead of
-set_load_weight(p, true);
-in set_user_nice and __setscheduler_params.
+elapsed time: 1822m
 
-The current always true value forces the update of the weight of the
-cfs_rq of the task which is not already set in this case
+configs tested: 211
+configs skipped: 4
 
->
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 848eaa0efe0ea..9a5b264c5dc10 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -4241,10 +4241,6 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
->         p->se.vruntime                  = 0;
->         INIT_LIST_HEAD(&p->se.group_node);
->
-> -#ifdef CONFIG_FAIR_GROUP_SCHED
-> -       p->se.cfs_rq                    = NULL;
-> -#endif
-> -
->  #ifdef CONFIG_SCHEDSTATS
->         /* Even if schedstat is disabled, there should not be garbage */
->         memset(&p->stats, 0, sizeof(p->stats));
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5146163bfabb9..7aff3b603220d 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -3339,15 +3339,19 @@ static inline void update_tg_load_avg(struct cfs_rq *cfs_rq)
->   * caller only guarantees p->pi_lock is held; no other assumptions,
->   * including the state of rq->lock, should be made.
->   */
-> -void set_task_rq_fair(struct sched_entity *se,
-> -                     struct cfs_rq *prev, struct cfs_rq *next)
-> +void set_task_rq_fair(struct task_struct *p, struct cfs_rq *next)
->  {
-> +       struct sched_entity *se = &p->se;
-> +       struct cfs_rq *prev = se->cfs_rq;
->         u64 p_last_update_time;
->         u64 n_last_update_time;
->
->         if (!sched_feat(ATTACH_AGE_LOAD))
->                 return;
->
-> +       if (p->__state == TASK_NEW)
-> +               return;
-> +
->         /*
->          * We are supposed to update the task to "current" time, then its up to
->          * date and ready to go to new CPU/cfs_rq. But we have difficulty in
-> @@ -3355,7 +3359,7 @@ void set_task_rq_fair(struct sched_entity *se,
->          * time. This will result in the wakee task is less decayed, but giving
->          * the wakee more load sounds not bad.
->          */
-> -       if (!(se->avg.last_update_time && prev))
-> +       if (!se->avg.last_update_time)
->                 return;
->
->  #ifndef CONFIG_64BIT
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index de53be9057390..a6f749f136ee1 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -514,11 +514,10 @@ extern int sched_group_set_shares(struct task_group *tg, unsigned long shares);
->  extern int sched_group_set_idle(struct task_group *tg, long idle);
->
->  #ifdef CONFIG_SMP
-> -extern void set_task_rq_fair(struct sched_entity *se,
-> -                            struct cfs_rq *prev, struct cfs_rq *next);
-> +extern void set_task_rq_fair(struct task_struct *p, struct cfs_rq *next);
->  #else /* !CONFIG_SMP */
-> -static inline void set_task_rq_fair(struct sched_entity *se,
-> -                            struct cfs_rq *prev, struct cfs_rq *next) { }
-> +static inline void set_task_rq_fair(struct task_struct *p,
-> +                                   struct cfs_rq *next) {}
->  #endif /* CONFIG_SMP */
->  #endif /* CONFIG_FAIR_GROUP_SCHED */
->
-> @@ -1910,7 +1909,7 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
->  #endif
->
->  #ifdef CONFIG_FAIR_GROUP_SCHED
-> -       set_task_rq_fair(&p->se, p->se.cfs_rq, tg->cfs_rq[cpu]);
-> +       set_task_rq_fair(p, tg->cfs_rq[cpu]);
->         p->se.cfs_rq = tg->cfs_rq[cpu];
->         p->se.parent = tg->se[cpu];
->  #endif
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20220124
+powerpc              randconfig-c003-20220124
+arc                 nsimosci_hs_smp_defconfig
+arm                       imx_v6_v7_defconfig
+i386                                defconfig
+xtensa                       common_defconfig
+m68k                          multi_defconfig
+sh                 kfr2r09-romimage_defconfig
+mips                         bigsur_defconfig
+powerpc                     rainier_defconfig
+mips                      maltasmvp_defconfig
+m68k                          hp300_defconfig
+m68k                        mvme16x_defconfig
+sh                   sh7770_generic_defconfig
+arc                           tb10x_defconfig
+sh                           se7722_defconfig
+mips                     decstation_defconfig
+sparc                       sparc64_defconfig
+powerpc                      ppc6xx_defconfig
+mips                            gpr_defconfig
+arc                          axs101_defconfig
+xtensa                    xip_kc705_defconfig
+powerpc                     asp8347_defconfig
+sh                           se7751_defconfig
+sh                         microdev_defconfig
+powerpc                     stx_gp3_defconfig
+sh                          polaris_defconfig
+um                                  defconfig
+m68k                             allyesconfig
+powerpc                           allnoconfig
+arm                         cm_x300_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                 mpc837x_mds_defconfig
+sh                           sh2007_defconfig
+sh                          kfr2r09_defconfig
+nios2                         10m50_defconfig
+powerpc                     sequoia_defconfig
+arm                           h5000_defconfig
+sh                          rsk7269_defconfig
+arm                         vf610m4_defconfig
+sh                            shmin_defconfig
+riscv                    nommu_k210_defconfig
+m68k                          atari_defconfig
+openrisc                            defconfig
+csky                                defconfig
+sh                           se7206_defconfig
+ia64                          tiger_defconfig
+arc                            hsdk_defconfig
+arm                       multi_v4t_defconfig
+arm                        trizeps4_defconfig
+sparc                       sparc32_defconfig
+arm                        mvebu_v7_defconfig
+arm                           viper_defconfig
+sh                   sh7724_generic_defconfig
+ia64                        generic_defconfig
+arm                          simpad_defconfig
+h8300                       h8s-sim_defconfig
+alpha                               defconfig
+ia64                            zx1_defconfig
+xtensa                              defconfig
+xtensa                generic_kc705_defconfig
+openrisc                         alldefconfig
+i386                             alldefconfig
+arc                        vdk_hs38_defconfig
+sh                           se7780_defconfig
+mips                         cobalt_defconfig
+arm                           sunxi_defconfig
+sh                         ap325rxa_defconfig
+arc                         haps_hs_defconfig
+powerpc                     mpc83xx_defconfig
+h8300                            alldefconfig
+sh                          r7780mp_defconfig
+mips                  maltasmvp_eva_defconfig
+sh                             shx3_defconfig
+parisc                generic-32bit_defconfig
+riscv                            allmodconfig
+powerpc                     tqm8541_defconfig
+sh                          sdk7780_defconfig
+microblaze                      mmu_defconfig
+arc                     haps_hs_smp_defconfig
+sh                          r7785rp_defconfig
+powerpc                      cm5200_defconfig
+arm                           u8500_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                    amigaone_defconfig
+arm                            lart_defconfig
+mips                        bcm47xx_defconfig
+xtensa                          iss_defconfig
+mips                            ar7_defconfig
+arm                       aspeed_g5_defconfig
+arm                  randconfig-c002-20220123
+arm                  randconfig-c002-20220124
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a002-20220124
+x86_64               randconfig-a003-20220124
+x86_64               randconfig-a001-20220124
+x86_64               randconfig-a004-20220124
+x86_64               randconfig-a005-20220124
+x86_64               randconfig-a006-20220124
+i386                 randconfig-a002-20220124
+i386                 randconfig-a005-20220124
+i386                 randconfig-a003-20220124
+i386                 randconfig-a004-20220124
+i386                 randconfig-a001-20220124
+i386                 randconfig-a006-20220124
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+arm                  randconfig-c002-20220124
+riscv                randconfig-c006-20220124
+i386                 randconfig-c001-20220124
+powerpc              randconfig-c003-20220124
+mips                 randconfig-c004-20220124
+x86_64               randconfig-c007-20220124
+powerpc                       ebony_defconfig
+mips                       rbtx49xx_defconfig
+arm                        spear3xx_defconfig
+arm                                 defconfig
+arm                     am200epdkit_defconfig
+mips                          ath79_defconfig
+mips                        workpad_defconfig
+mips                     loongson2k_defconfig
+arm                             mxs_defconfig
+mips                        bcm63xx_defconfig
+mips                     cu1000-neo_defconfig
+mips                  cavium_octeon_defconfig
+mips                        omega2p_defconfig
+powerpc                 mpc832x_rdb_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                           sama7_defconfig
+powerpc                     kmeter1_defconfig
+powerpc                     mpc512x_defconfig
+mips                           ip22_defconfig
+mips                   sb1250_swarm_defconfig
+mips                         tb0287_defconfig
+arm                        vexpress_defconfig
+mips                            e55_defconfig
+powerpc                          g5_defconfig
+arm                          imote2_defconfig
+mips                           mtx1_defconfig
+powerpc                   lite5200b_defconfig
+powerpc                     tqm5200_defconfig
+mips                       lemote2f_defconfig
+powerpc                        icon_defconfig
+powerpc                     mpc5200_defconfig
+powerpc                     tqm8560_defconfig
+mips                      maltaaprp_defconfig
+mips                     cu1830-neo_defconfig
+arm                        neponset_defconfig
+arm                     davinci_all_defconfig
+powerpc                      ppc44x_defconfig
+arm                              alldefconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a011-20220124
+x86_64               randconfig-a013-20220124
+x86_64               randconfig-a015-20220124
+x86_64               randconfig-a016-20220124
+x86_64               randconfig-a014-20220124
+x86_64               randconfig-a012-20220124
+i386                 randconfig-a011-20220124
+i386                 randconfig-a016-20220124
+i386                 randconfig-a013-20220124
+i386                 randconfig-a014-20220124
+i386                 randconfig-a015-20220124
+i386                 randconfig-a012-20220124
+riscv                randconfig-r042-20220124
+hexagon              randconfig-r045-20220123
+hexagon              randconfig-r045-20220124
+hexagon              randconfig-r041-20220124
+hexagon              randconfig-r041-20220123
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

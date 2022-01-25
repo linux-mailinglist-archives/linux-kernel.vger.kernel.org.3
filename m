@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AB649B162
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE01949B163
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242243AbiAYKIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238629AbiAYKAG (ORCPT
+        id S242887AbiAYKLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:11:07 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:34778 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237361AbiAYKBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:00:06 -0500
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EDEC061768;
-        Tue, 25 Jan 2022 02:00:04 -0800 (PST)
-Received: by mail-pl1-x644.google.com with SMTP id z5so4853747plg.8;
-        Tue, 25 Jan 2022 02:00:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+9/h4WgwvINM2uXFYzps/DVN0t3qraH1rjLtTgc8ipg=;
-        b=BY1Kpc6uzILlB69ntbdcG2NpCbHQ8Kgd1/1Li8Tju2eMKDY9dOYABLBX/ZV+gNSB4x
-         HKQJ9oDd0SWF0AGc9y99lvHQYi1aKBZUxPtjknshvOzJpm8gnILRuU4pwvel550nWeQz
-         5iRbxJfwOvnPPAejDvi/6WSyjS5KlAq2lnrFu+vqvmn9Iy6dYAFq/uWO1LA71qjEY5oe
-         zdSQZId+y8KwX+VtkbC7XsUzfJ8DfMd1+NtknroUpNHq79pEYBUHqw0shUV7skIXIF8y
-         sF2lPJNBbYgDDzh6yGDM2gepbiOcr0OaSV+5+jn1bdNr5lTNHNpA92Ihrdj1qO1MSUp6
-         D1Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+9/h4WgwvINM2uXFYzps/DVN0t3qraH1rjLtTgc8ipg=;
-        b=Kr+rEoo3hR2Ft1viIC8mRlBAsR7C/NX2q1R6bdCMelumw8T7YOSrZP0twuwM9LXkYe
-         izbihSOk11RRKNUmv124csJj5wxlRVl9PE84HlmNz+9DOcvIWoAWzmtRx2LgWjLC5y2w
-         +Op8JeLHeO02ychT+ZBNbh7XuOMY6ULth9CTE8Bhfxc78ZDzLVZzuTS+bWYsibhvq/pm
-         z/le88QZlh64PazknsxrHhTQnuUMT6Agmgw38BCvnrQfuCQN63o8XFb1yG106GmAmdnM
-         yDdCMwj6lMLKmvAMb+JCzD/4Jr3SG5W48CmKXSOiRRVuIOYhFiH6EMy0BPgsAGmGQQxH
-         z/Fw==
-X-Gm-Message-State: AOAM533DA1OFUDVmNYgjqD6iwX2kchs4P20qIwENgBcDujKm1uCN4lWJ
-        4WaUB7goHi8SoJM+kHrq0oI=
-X-Google-Smtp-Source: ABdhPJx9dQJt1f7yFLZ5RvUiloClMf6N9IKzWq88HkQ/mZTjsAYfIya8rtD+02X0/9THQWaQx6g2cQ==
-X-Received: by 2002:a17:90a:5d8c:: with SMTP id t12mr2601800pji.189.1643104803775;
-        Tue, 25 Jan 2022 02:00:03 -0800 (PST)
-Received: from CLOUDLIANG-MB0.tencent.com ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id mq3sm201606pjb.4.2022.01.25.02.00.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jan 2022 02:00:03 -0800 (PST)
-From:   Jinrong Liang <ljr.kernel@gmail.com>
-X-Google-Original-From: Jinrong Liang <cloudliang@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 19/19] KVM: Remove unused "flags" of kvm_pv_kick_cpu_op()
-Date:   Tue, 25 Jan 2022 17:59:09 +0800
-Message-Id: <20220125095909.38122-20-cloudliang@tencent.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20220125095909.38122-1-cloudliang@tencent.com>
-References: <20220125095909.38122-1-cloudliang@tencent.com>
+        Tue, 25 Jan 2022 05:01:41 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20PA1EMo109847;
+        Tue, 25 Jan 2022 04:01:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1643104874;
+        bh=c0J7TKjHWfZrKCmOVPBiKFm+qVkhcj0TJ8/2B5dklU0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=BkYBpo2PKEqb6rUbS42OJ2zEUPs5WBcWshSAs+SBBzjgmNRvLA4SDM+YmVb0RoijL
+         XXihRz94R8SLwBF97R/ThV/8WO7qPUcSXc6Y1IhMDKB0fghVkCkUN/qPqjOTlwiF7A
+         omyzyyDatkM/xxvQTx6hbzB43j0sCZ+0d6ce6vP8=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20PA1DkI071265
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Jan 2022 04:01:14 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 25
+ Jan 2022 04:01:13 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 25 Jan 2022 04:01:13 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20PA1CZw011949;
+        Tue, 25 Jan 2022 04:01:13 -0600
+Date:   Tue, 25 Jan 2022 15:31:12 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Ley Foon Tan <leyfoon.tan@linux.starfivetech.com>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Ley Foon Tan <lftan.linux@gmail.com>
+Subject: Re: [PATCH] mtd: spi-nor: macronix: Add support for mx66u1g45g
+Message-ID: <20220125100112.jevrd4knhxytmry2@ti.com>
+References: <20220124060225.149007-1-leyfoon.tan@linux.starfivetech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220124060225.149007-1-leyfoon.tan@linux.starfivetech.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinrong Liang <cloudliang@tencent.com>
+Hi,
 
-The "unsigned long flags" parameter of  kvm_pv_kick_cpu_op() is not used,
-so remove it. No functional change intended.
+On 24/01/22 02:02PM, Ley Foon Tan wrote:
+> The Macronix mx66u1g45g [1] is a 1.8V, 1Gbit (128MB) flash device that
+> supports x1, x2, or x4 operation.
+> 
+> The mx66u1g45g is the smaller sibling of the mx66u2g45g that is
+> already supported.
+> 
+> Tested on StarFive Dubhe hardware on FPGA.
+> Validated by erase and read back, write and read back.
+> 
+> [1] https://www.macronix.com/Lists/Datasheet/Attachments/7877/MX66U1G45G,%201.8V,%201Gb,%20v1.4.pdf
+> 
+> Signed-off-by: Ley Foon Tan <leyfoon.tan@linux.starfivetech.com>
+> ---
+>  drivers/mtd/spi-nor/macronix.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
+> index 97dba1ae7fb1..79ee808c5442 100644
+> --- a/drivers/mtd/spi-nor/macronix.c
+> +++ b/drivers/mtd/spi-nor/macronix.c
+> @@ -97,6 +97,9 @@ static const struct flash_info macronix_parts[] = {
+>  			      SPI_NOR_QUAD_READ) },
+>  	{ "mx66l1g55g",  INFO(0xc2261b, 0, 64 * 1024, 2048)
+>  		NO_SFDP_FLAGS(SPI_NOR_QUAD_READ) },
+> +	{ "mx66u1g45g",  INFO(0xc2253b, 0, 64 * 1024, 2048)
+> +		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+> +		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
 
-Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
----
- arch/x86/kvm/x86.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This is the "legacy" way of defining flags. I see from the datasheet 
+that SFDP is supported. Please use PARSE_SFDP to allow these parameters 
+to be discovered via SFDP. If one of the SFDP table has wrong data then 
+please use fixup hooks to correct it.
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 4e438e009ba9..acd34adc097f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8940,7 +8940,7 @@ static int kvm_pv_clock_pairing(struct kvm_vcpu *vcpu, gpa_t paddr,
-  *
-  * @apicid - apicid of vcpu to be kicked.
-  */
--static void kvm_pv_kick_cpu_op(struct kvm *kvm, unsigned long flags, int apicid)
-+static void kvm_pv_kick_cpu_op(struct kvm *kvm, int apicid)
- {
- 	struct kvm_lapic_irq lapic_irq;
- 
-@@ -9059,7 +9059,7 @@ int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
- 		if (!guest_pv_has(vcpu, KVM_FEATURE_PV_UNHALT))
- 			break;
- 
--		kvm_pv_kick_cpu_op(vcpu->kvm, a0, a1);
-+		kvm_pv_kick_cpu_op(vcpu->kvm, a1);
- 		kvm_sched_yield(vcpu, a1);
- 		ret = 0;
- 		break;
+You also need to dump the SFDP table and some other flash parameters in 
+the patch comments. See [0] for an example.
+
+[0] https://patchwork.ozlabs.org/project/linux-mtd/patch/20211209190436.401946-2-tudor.ambarus@microchip.com/
+
+>  	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096)
+>  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+>  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
+> -- 
+> 2.25.1
+> 
+> 
+
 -- 
-2.33.1
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

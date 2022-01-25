@@ -2,109 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 951E749BD41
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3331E49BD43
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbiAYUhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 15:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S232258AbiAYUhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 15:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiAYUhN (ORCPT
+        with ESMTP id S232253AbiAYUhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:37:13 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DC6C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:37:12 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id o3so5479485qtm.12
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:37:12 -0800 (PST)
+        Tue, 25 Jan 2022 15:37:20 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD35EC06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:37:19 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id r144so3188645iod.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:37:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=+JbdAIL0dHyu/M74p8aA5YjzfndB90rS3t+uZU/cRXU=;
-        b=gCddeVXrtQ7+W7o/2Ko4QmrY/BNb9ES0f4KiJhyudrPTflhDjql1piebHPEv4SGzL4
-         qcCowEutu1cEkwHQf65JrBiPw0FmGP+5P1GIfR4ejHnGJ9h8ZHtfzCbwldCpDvdsZxRn
-         BFlctXIIcTNRfxLZrpkUrF/zlgB6qDXnRvq25J/TLY25qU26m1W6MKuoNS8t8JlBT7En
-         TnJ9ZsUf3nNy20c0hKjqFw5UvO49GOuct8zrcINVsxsYv7vwrQ8fBe/Ivc5FLEvXX/Mv
-         dWMY+TovISqsN7YPTr9yiyYjE6PhUtwMdN+izjdxIgQ2sNXhJovxkJXtEEr5/fYn0q86
-         7Bog==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=S114hpLlK1eEOMK2e4rLDa38DT2qlNS0CbSes7k76IU=;
+        b=d378eBTUprEfA0JyKd2BgfcVOIdsU2TDPLJesC0g9fQe6T8z5JCBPGDsoNQtEKr/HE
+         9ln+MKXxHPBYZ7ttXQAJedWDvUDwaiuV4HbrhmkexmJhuALe5Uhk08pKxLSc8pcF1UHc
+         fk3G/swpCUXr5NHD1beQb8N7jZ2NnQed8nS5k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=+JbdAIL0dHyu/M74p8aA5YjzfndB90rS3t+uZU/cRXU=;
-        b=VdOv/URTkQg4KISb4BAnG9/yEgIFcD2AnIFDN89M+8gPTExCrBTSi6PBfV5guiVXlq
-         uoHa4G1yKwqbrCMforWt4KkRPKs+8bPog8bmOWrt+Z9b9XaW6etp7v67RNKgO6pUMjNL
-         o70aJ650wHwW7xbuXYltkRYXKCkeiKEJR+gReaoV1o/kvR0gJqaaTV3Th9PzsUKmVgpD
-         vxCWUoCACVjawHpGxh+LaIbv5nBqQgVTDBKRNccMYCE3k3lluNKN2ERh/0DF8+KML6o2
-         bfdHKxC2ED9XYlDHDhjVepJusOohX1Cu389m5223yW3/kz10h4HGyQ4XG4kJhCSNr/uY
-         bk4g==
-X-Gm-Message-State: AOAM532gQXrrTp9X4tj9VTkzEVG7QA7o4Ynxm0jxJU22uqx9+huO1Zlj
-        OncROQorjAo+nqNJ0KWVE780hw==
-X-Google-Smtp-Source: ABdhPJzOnHSEe2sQobYdCVpNGc6vOQyPkuT9p1HchozV1ea6U6F7yfbM6V2pUl0cETahJ/Y0Gl/uuw==
-X-Received: by 2002:a05:622a:14c9:: with SMTP id u9mr3342837qtx.677.1643143031929;
-        Tue, 25 Jan 2022 12:37:11 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id o10sm9467348qtx.33.2022.01.25.12.37.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 12:37:11 -0800 (PST)
-Message-ID: <8be37d34b7090e3d3adca5b0d298c4b1b5639fa1.camel@ndufresne.ca>
-Subject: Re: [PATCH v2 3/3] media: docs: dev-stateless-decoder: Document
- frame type flags
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        kernel <kernel@collabora.com>
-Date:   Tue, 25 Jan 2022 15:37:10 -0500
-In-Reply-To: <20220116185556.10657-4-digetx@gmail.com>
-References: <20220116185556.10657-1-digetx@gmail.com>
-         <20220116185556.10657-4-digetx@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=S114hpLlK1eEOMK2e4rLDa38DT2qlNS0CbSes7k76IU=;
+        b=wFjEhUm9cq7rlhj4E5Il0AUm8RiMHq3FI0QjpsgUS4rUiPZbeWhMiaEBiaZX5YGME/
+         3nqgDdb0oxMioX10tTW6anvRwSMa4+deAB5EwWCLBc44ZhE2If7s/LzSqb1S7XP6E0Cy
+         rHBuEp/aTCVoGkq/FsvArIqWSzGHqFhBV6br5dMEMp+tHVqGRuJZ+0WzfV8mSN2RQQl3
+         sRSeqJNKNQFqEB5GEx3kU0lIms2Dnlb8FBUar6fykjz2oC8z9A1FYqL+h8tRTH1j/fQc
+         ky0izGrH7Yf+iW9NYdsyiZwARGE3ShtV3GHlDL4I8Zr/vDl0S3dvgL0uFKExah6nTIyA
+         uPdA==
+X-Gm-Message-State: AOAM532yJnT+1h6do4rVgtTcu56R6dk5aSNSLbl2jBWOEtR8AOA9NAWe
+        e1Gb9/TT4vL1Pw2CIIbXBQRsDA==
+X-Google-Smtp-Source: ABdhPJzffMUcrRKU+oI0gJlv+ICn/cAio7G6+5MfpNppQ5u0GppTC4Rj7r7R4SgFU9HjOi5OBsdBtA==
+X-Received: by 2002:a5d:8b82:: with SMTP id p2mr11668599iol.214.1643143039280;
+        Tue, 25 Jan 2022 12:37:19 -0800 (PST)
+Received: from ?IPv6:2601:282:8200:4c:4ef8:d404:554b:9671? ([2601:282:8200:4c:4ef8:d404:554b:9671])
+        by smtp.gmail.com with ESMTPSA id r189sm5103334ior.2.2022.01.25.12.37.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 12:37:19 -0800 (PST)
+Subject: Re: [PATCH 2/3] selftests/zram01.sh: Fix compression ratio
+ calculation
+To:     Yang Xu <xuyang2018.jy@fujitsu.com>,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, naresh.kamboju@linaro.org,
+        aleksei.kodanev@bell-sw.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <1639562171-4434-1-git-send-email-xuyang2018.jy@fujitsu.com>
+ <1639562171-4434-2-git-send-email-xuyang2018.jy@fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f80750cd-d2e8-cc57-37b6-cb4f770c61e2@linuxfoundation.org>
+Date:   Tue, 25 Jan 2022 13:37:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1639562171-4434-2-git-send-email-xuyang2018.jy@fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le dimanche 16 janvier 2022 à 21:55 +0300, Dmitry Osipenko a écrit :
-> Document that frame type flags must be set for the coded buffer.
-> Decoders, like NVIDIA Tegra h264 decoder for example, won't work
-> properly without these flags.
+On 12/15/21 2:56 AM, Yang Xu wrote:
+> zram01 uses `free -m` to measure zram memory usage. The results are nonsense
+> because they are polluted by all running processes on the system.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../userspace-api/media/v4l/dev-stateless-decoder.rst          | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst b/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst
-> index 4a26646eeec5..845f4481d34f 100644
-> --- a/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst
-> +++ b/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst
-> @@ -271,6 +271,9 @@ A typical frame would thus be decoded using the following sequence:
->            we are not sure that the current decode request is the last one needed
->            to produce a fully decoded frame, then
->            ``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` must also be set.
-> +          ``V4L2_BUF_FLAG_KEYFRAME``, ``V4L2_BUF_FLAG_PFRAME`` and
-> +          ``V4L2_BUF_FLAG_BFRAME`` must be set if relevant to the coded
-> +          format.
 
-I think I would rather keep this in the CODEC specific APIs (BFrame being an
-MPEG specific concept). If I knew about this before we made the API final, I
-would have added the slice_type bitstream parameter in the
-v4l2_h264_decode_params structure. But as the types are rather limited, I would
-preserve our "reservered" space and make that part of the
-V4L2_H264_DECODE_PARAM_FLAGS_{} instead. Do you also need that for HEVC ? (do
-you have HEVC on that generation of tegra ?)
+Are the results inaccurate or does /sys/block/zram<id>/mm_stat is a quick
+way to get the information?
 
->  
->        ``request_fd``
->            must be set to the file descriptor of the decoding request.
+In any case, this patch and all 3 patches in this series have:
 
+WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+
+Please run checkpatch.pl and clean these up.
+
+thanks,
+-- Shuah

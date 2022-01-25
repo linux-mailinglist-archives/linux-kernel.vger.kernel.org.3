@@ -2,173 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D0949BD3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951E749BD41
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbiAYUf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 15:35:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
+        id S232243AbiAYUhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 15:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiAYUfv (ORCPT
+        with ESMTP id S231847AbiAYUhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:35:51 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F26BC06173B;
-        Tue, 25 Jan 2022 12:35:51 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso4003416pjm.4;
-        Tue, 25 Jan 2022 12:35:51 -0800 (PST)
+        Tue, 25 Jan 2022 15:37:13 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DC6C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:37:12 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id o3so5479485qtm.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:37:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/3XncuSgpVxyl8Q7vmKZW6EQ/fSYmrQQ0wa5o30oTVc=;
-        b=k1LT7AFOqVsh7qUHUBTJ7G94ldMm1XTdQaw1p6+U34HfDteI6eKGvpjPoufDOEnQ0f
-         sLCuYlK9e37jpj8qSzClxE79bTLjsbswsza/ecRo7GF9VWLq5jN2ojRaYlXB4w4aPnGt
-         1YM63yFh5pwoFmF0NbJsGPjkK2BPDgj09fy1TtRqRep1RG4jfKFBFnjbMnnYCsk2MYuS
-         vubkpcxkp20kuxMuNxwW6Ft14XWYDnO3hyDJdKNhYS+Q9GH+4SSJc1RK6QnisScKR6Eo
-         3Wk1wMZYZ+MHQ2BH7l4bLuXpXr2kNDT7hnsjaqAOkEAA5uGeIX+UwM0zHd+Kfq9W++d8
-         j0zg==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=+JbdAIL0dHyu/M74p8aA5YjzfndB90rS3t+uZU/cRXU=;
+        b=gCddeVXrtQ7+W7o/2Ko4QmrY/BNb9ES0f4KiJhyudrPTflhDjql1piebHPEv4SGzL4
+         qcCowEutu1cEkwHQf65JrBiPw0FmGP+5P1GIfR4ejHnGJ9h8ZHtfzCbwldCpDvdsZxRn
+         BFlctXIIcTNRfxLZrpkUrF/zlgB6qDXnRvq25J/TLY25qU26m1W6MKuoNS8t8JlBT7En
+         TnJ9ZsUf3nNy20c0hKjqFw5UvO49GOuct8zrcINVsxsYv7vwrQ8fBe/Ivc5FLEvXX/Mv
+         dWMY+TovISqsN7YPTr9yiyYjE6PhUtwMdN+izjdxIgQ2sNXhJovxkJXtEEr5/fYn0q86
+         7Bog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/3XncuSgpVxyl8Q7vmKZW6EQ/fSYmrQQ0wa5o30oTVc=;
-        b=XCadArHAIG/axqWRTzYQYd/OGTmesfOG9XMOKIsCU6Y9R3pjFYOQ3t4WEctmjUliu1
-         h2O60EdJsRBlfppbcS/AbfPYV4vQPlu1MHxWh2BatUP4bbCOsb8tRk63DhgnNtEGvhjF
-         s+/p5POkkcWjK1OPX9M5iLNlScidq7ELa1RlTXRPk5ZcTAHLQB9aQHr097iTYVK/cZXh
-         NzcqI3Bb9B99UfH0UKdajZSE4mewvgsJ2kc904563IXExIztX19G22oOYH4rZYALlv4/
-         1jQxvHQP0V9eKkZkfQ17rxVDRYMyO2QwC8aROn3Lq7ffC7mzjV5a6y9F09U4ESLwruXF
-         MwXQ==
-X-Gm-Message-State: AOAM5336JHgEUJr/l3c2KDvSYS53dIhhQ09KeY1A6otyfiYlW1TMnTPW
-        wq4bhtTcbesF/rszAI1rpNuPTgijfrQ=
-X-Google-Smtp-Source: ABdhPJx6hqAtyQhLL4UkKPX0rEpPu9ZOyMaRKEqH0SI759bxBA3dMmBsvfcYToH1qBy1HAajT5CKhw==
-X-Received: by 2002:a17:90b:4a41:: with SMTP id lb1mr5287255pjb.151.1643142950844;
-        Tue, 25 Jan 2022 12:35:50 -0800 (PST)
-Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id d126sm10849352pfd.136.2022.01.25.12.35.49
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=+JbdAIL0dHyu/M74p8aA5YjzfndB90rS3t+uZU/cRXU=;
+        b=VdOv/URTkQg4KISb4BAnG9/yEgIFcD2AnIFDN89M+8gPTExCrBTSi6PBfV5guiVXlq
+         uoHa4G1yKwqbrCMforWt4KkRPKs+8bPog8bmOWrt+Z9b9XaW6etp7v67RNKgO6pUMjNL
+         o70aJ650wHwW7xbuXYltkRYXKCkeiKEJR+gReaoV1o/kvR0gJqaaTV3Th9PzsUKmVgpD
+         vxCWUoCACVjawHpGxh+LaIbv5nBqQgVTDBKRNccMYCE3k3lluNKN2ERh/0DF8+KML6o2
+         bfdHKxC2ED9XYlDHDhjVepJusOohX1Cu389m5223yW3/kz10h4HGyQ4XG4kJhCSNr/uY
+         bk4g==
+X-Gm-Message-State: AOAM532gQXrrTp9X4tj9VTkzEVG7QA7o4Ynxm0jxJU22uqx9+huO1Zlj
+        OncROQorjAo+nqNJ0KWVE780hw==
+X-Google-Smtp-Source: ABdhPJzOnHSEe2sQobYdCVpNGc6vOQyPkuT9p1HchozV1ea6U6F7yfbM6V2pUl0cETahJ/Y0Gl/uuw==
+X-Received: by 2002:a05:622a:14c9:: with SMTP id u9mr3342837qtx.677.1643143031929;
+        Tue, 25 Jan 2022 12:37:11 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id o10sm9467348qtx.33.2022.01.25.12.37.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 12:35:49 -0800 (PST)
-From:   Yang Shi <shy828301@gmail.com>
-To:     axboe@kernel.dk, rostedt@goodmis.org, xiyou.wangcong@gmail.com
-Cc:     shy828301@gmail.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [v4 PATCH] block: introduce block_rq_error tracepoint
-Date:   Tue, 25 Jan 2022 12:35:48 -0800
-Message-Id: <20220125203548.352278-1-shy828301@gmail.com>
-X-Mailer: git-send-email 2.26.3
+        Tue, 25 Jan 2022 12:37:11 -0800 (PST)
+Message-ID: <8be37d34b7090e3d3adca5b0d298c4b1b5639fa1.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 3/3] media: docs: dev-stateless-decoder: Document
+ frame type flags
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        kernel <kernel@collabora.com>
+Date:   Tue, 25 Jan 2022 15:37:10 -0500
+In-Reply-To: <20220116185556.10657-4-digetx@gmail.com>
+References: <20220116185556.10657-1-digetx@gmail.com>
+         <20220116185556.10657-4-digetx@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, rasdaemon uses the existing tracepoint block_rq_complete
-and filters out non-error cases in order to capture block disk errors.
+Le dimanche 16 janvier 2022 à 21:55 +0300, Dmitry Osipenko a écrit :
+> Document that frame type flags must be set for the coded buffer.
+> Decoders, like NVIDIA Tegra h264 decoder for example, won't work
+> properly without these flags.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../userspace-api/media/v4l/dev-stateless-decoder.rst          | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst b/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst
+> index 4a26646eeec5..845f4481d34f 100644
+> --- a/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst
+> +++ b/Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst
+> @@ -271,6 +271,9 @@ A typical frame would thus be decoded using the following sequence:
+>            we are not sure that the current decode request is the last one needed
+>            to produce a fully decoded frame, then
+>            ``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` must also be set.
+> +          ``V4L2_BUF_FLAG_KEYFRAME``, ``V4L2_BUF_FLAG_PFRAME`` and
+> +          ``V4L2_BUF_FLAG_BFRAME`` must be set if relevant to the coded
+> +          format.
 
-But there are a few problems with this approach:
+I think I would rather keep this in the CODEC specific APIs (BFrame being an
+MPEG specific concept). If I knew about this before we made the API final, I
+would have added the slice_type bitstream parameter in the
+v4l2_h264_decode_params structure. But as the types are rather limited, I would
+preserve our "reservered" space and make that part of the
+V4L2_H264_DECODE_PARAM_FLAGS_{} instead. Do you also need that for HEVC ? (do
+you have HEVC on that generation of tegra ?)
 
-1. Even kernel trace filter could do the filtering work, there is
-   still some overhead after we enable this tracepoint.
-
-2. The filter is merely based on errno, which does not align with kernel
-   logic to check the errors for print_req_error().
-
-3. block_rq_complete only provides dev major and minor to identify
-   the block device, it is not convenient to use in user-space.
-
-So introduce a new tracepoint block_rq_error just for the error case
-and provides the device name for convenience too. With this patch,
-rasdaemon could switch to block_rq_error.
-
-Cc: Jens Axboe <axboe@kernel.dk>
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Cong Wang <xiyou.wangcong@gmail.com>
-Signed-off-by: Yang Shi <shy828301@gmail.com>
----
-The v3 patch was submitted in Feb 2020, and Steven reviewed the patch, but
-it was not merged to upstream. See
-https://lore.kernel.org/lkml/20200203053650.8923-1-xiyou.wangcong@gmail.com/.
-
-The problems fixed by that patch still exist and we do need it to make
-disk error handling in rasdaemon easier. So this resurrected it and
-continued the version number.
-
-v3 --> v4:
- * Rebased to v5.17-rc1.
- * Collected reviewed-by tag from Steven.
-
- block/blk-mq.c               |  4 +++-
- include/trace/events/block.h | 41 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+), 1 deletion(-)
-
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index f3bf3358a3bb..bb0593f93675 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -789,8 +789,10 @@ bool blk_update_request(struct request *req, blk_status_t error,
- #endif
- 
- 	if (unlikely(error && !blk_rq_is_passthrough(req) &&
--		     !(req->rq_flags & RQF_QUIET)))
-+		     !(req->rq_flags & RQF_QUIET))) {
-+		trace_block_rq_error(req, blk_status_to_errno(error), nr_bytes);
- 		blk_print_req_error(req, error);
-+	}
- 
- 	blk_account_io_completion(req, nr_bytes);
- 
-diff --git a/include/trace/events/block.h b/include/trace/events/block.h
-index 27170e40e8c9..3ab6cfe5795a 100644
---- a/include/trace/events/block.h
-+++ b/include/trace/events/block.h
-@@ -144,6 +144,47 @@ TRACE_EVENT(block_rq_complete,
- 		  __entry->nr_sector, __entry->error)
- );
- 
-+/**
-+ * block_rq_error - block IO operation error reported by device driver
-+ * @rq: block operations request
-+ * @error: status code
-+ * @nr_bytes: number of completed bytes
-+ *
-+ * The block_rq_error tracepoint event indicates that some portion
-+ * of operation request has failed as reported by the device driver.
-+ */
-+TRACE_EVENT(block_rq_error,
-+
-+	TP_PROTO(struct request *rq, int error, unsigned int nr_bytes),
-+
-+	TP_ARGS(rq, error, nr_bytes),
-+
-+	TP_STRUCT__entry(
-+		__field(  dev_t,	dev			)
-+		__string( name,		rq->q->disk ? rq->q->disk->disk_name : "?")
-+		__field(  sector_t,	sector			)
-+		__field(  unsigned int,	nr_sector		)
-+		__field(  int,		error			)
-+		__array(  char,		rwbs,	RWBS_LEN	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->dev	   = rq->q->disk ? disk_devt(rq->q->disk) : 0;
-+		__assign_str(name,   rq->q->disk ? rq->q->disk->disk_name : "?");
-+		__entry->sector    = blk_rq_pos(rq);
-+		__entry->nr_sector = nr_bytes >> 9;
-+		__entry->error     = error;
-+
-+		blk_fill_rwbs(__entry->rwbs, rq->cmd_flags);
-+	),
-+
-+	TP_printk("%d,%d %s %s %llu + %u [%d]",
-+		  MAJOR(__entry->dev), MINOR(__entry->dev),
-+		  __get_str(name), __entry->rwbs,
-+		  (unsigned long long)__entry->sector,
-+		  __entry->nr_sector, __entry->error)
-+);
-+
- DECLARE_EVENT_CLASS(block_rq,
- 
- 	TP_PROTO(struct request *rq),
--- 
-2.26.3
+>  
+>        ``request_fd``
+>            must be set to the file descriptor of the decoding request.
 

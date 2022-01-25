@@ -2,106 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4898449BB78
+	by mail.lfdr.de (Postfix) with ESMTP id 9331349BB79
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbiAYSos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:44:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
+        id S233450AbiAYSrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:47:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbiAYSoD (ORCPT
+        with ESMTP id S233426AbiAYSqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:44:03 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258E5C061770;
-        Tue, 25 Jan 2022 10:43:34 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 760941EC052A;
-        Tue, 25 Jan 2022 19:43:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643136208;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=wvIvlS2dO1ThS+LV2yQ6h0qiGd4NN+hsLFVW5buEbs0=;
-        b=ejvEMtrV/x1ErR80f7OgCzdqcxU5KzdO9+Ac3btdyfg/CxP+qm/1swhS/pWjt0C92J8iC5
-        uHKxx/bZxLwSU3b8spXf5TW0DlCut6rOPx7VoczJgu0PwancC+Xu1O4NzkoZ9SPpd/thwA
-        1SN8jQOFx0HVOzq0CPayGnJz5UBxBoc=
-Date:   Tue, 25 Jan 2022 19:43:23 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 34/40] x86/sev: add SEV-SNP feature detection/setup
-Message-ID: <YfBEy6QD38u9DSrP@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-35-brijesh.singh@amd.com>
+        Tue, 25 Jan 2022 13:46:47 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC84C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:46:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MfUIdHxxyECsMt00Zm7D5VcUUlj+oDrAaABP9HhL1lQ=; b=cB/gfuQAE//Ww1smWMXp5Ty/1I
+        NRhexO0MY5ZmqJXDsq719SCEa+5tSkzWpK+X3/Q5CG2mCcPx2lSmZsfu3oaXhMjbVdaeDwkaglaXM
+        ZMhFElcFRAqCWUv8Pe+/4eujvtCAZVMvRqiasFDe9ZctxJZWbhYKoYezgqGYqjH2ooNKL01Stg24k
+        WYAxeXLXnAf4WvMqpEiaoJez3G1x5uUP57XnpCg0YGTAYp6WdZEjO9X6Jm+wUVIpL5MtZ3PhrSt89
+        ye9e8iYc3nk9wqoW/fvOsCmvl5WY8nCMyum4k/eu2+QEDtf/niGEDnEErxoDpDnIpx6yif2XkJrdy
+        EoHVWJYg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCQpv-003FQ2-VX; Tue, 25 Jan 2022 18:46:36 +0000
+Date:   Tue, 25 Jan 2022 18:46:35 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
+Subject: Re: [PATCH v2 1/1] mm/vmalloc: Move draining areas out of caller
+ context
+Message-ID: <YfBFi5IqC0MtLADf@casper.infradead.org>
+References: <20220125163912.2809-1-urezki@gmail.com>
+ <YfAqRrGD2UKrZHfJ@casper.infradead.org>
+ <YfAvkKZlVQYukays@pc638.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211210154332.11526-35-brijesh.singh@amd.com>
+In-Reply-To: <YfAvkKZlVQYukays@pc638.lan>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:43:26AM -0600, Brijesh Singh wrote:
-> +static struct cc_blob_sev_info *snp_find_cc_blob(struct boot_params *bp)
-> +{
-> +	struct cc_blob_sev_info *cc_info;
-> +
-> +	/* Boot kernel would have passed the CC blob via boot_params. */
-> +	if (bp->cc_blob_address) {
-> +		cc_info = (struct cc_blob_sev_info *)
-> +			  (unsigned long)bp->cc_blob_address;
+On Tue, Jan 25, 2022 at 06:12:48PM +0100, Uladzislau Rezki wrote:
+> On Tue, Jan 25, 2022 at 04:50:14PM +0000, Matthew Wilcox wrote:
+> > On Tue, Jan 25, 2022 at 05:39:12PM +0100, Uladzislau Rezki (Sony) wrote:
+> > > @@ -1768,7 +1776,8 @@ static void free_vmap_area_noflush(struct vmap_area *va)
+> > >  
+> > >  	/* After this point, we may free va at any time */
+> > >  	if (unlikely(nr_lazy > lazy_max_pages()))
+> > > -		try_purge_vmap_area_lazy();
+> > > +		if (!atomic_xchg(&drain_vmap_work_in_progress, 1))
+> > > +			schedule_work(&drain_vmap_work);
+> > >  }
+> > 
+> > Is it necessary to have drain_vmap_work_in_progress?  The documentation
+> > says:
+> > 
+> >  * This puts a job in the kernel-global workqueue if it was not already
+> >  * queued and leaves it in the same position on the kernel-global
+> >  * workqueue otherwise.
+> > 
+> > and the implementation seems to use test_and_set_bit() to ensure this
+> > is true.
+> >
+> It checks pending state, if the work is in run-queue you can place it
+> one more time. The motivation of having it is to prevent the drain work
+> of being placed several times at once what i see on my stress testing.
+> 
+> CPU_1: invokes vfree() -> queues the drain work -> TASK_RUNNING
+> CPU_2: invokes vfree() -> queues the drain work one more time since it was not pending
 
-No need to break that line.
-
-> +		goto found_cc_info;
-> +	}
-> +
-> +	/*
-> +	 * If kernel was booted directly, without the use of the
-> +	 * boot/decompression kernel, the CC blob may have been passed via
-> +	 * setup_data instead.
-> +	 */
-> +	cc_info = snp_find_cc_blob_setup_data(bp);
-> +	if (!cc_info)
-> +		return NULL;
-> +
-> +found_cc_info:
-> +	if (cc_info->magic != CC_BLOB_SEV_HDR_MAGIC)
-> +		sev_es_terminate(1, GHCB_SNP_UNSUPPORTED);
-
-snp_abort() if you're gonna call it that.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+But why not unconditionally call schedule_work() here?

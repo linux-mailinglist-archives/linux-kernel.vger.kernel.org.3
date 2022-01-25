@@ -2,126 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 053CA49BAC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E80A549BAC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385185AbiAYR4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:56:55 -0500
-Received: from mail-yb1-f182.google.com ([209.85.219.182]:40758 "EHLO
-        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357539AbiAYRzC (ORCPT
+        id S1386714AbiAYR5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:57:24 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:44874 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1357574AbiAYRzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:55:02 -0500
-Received: by mail-yb1-f182.google.com with SMTP id 23so63924631ybf.7;
-        Tue, 25 Jan 2022 09:54:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y+R3o3okOUEIZN8/dDxsGECLwf9ITaDap15PmIOOEJw=;
-        b=tsaGoOSmVk7vaXbB33hs4k9q3BbeTHUtBXwyeQUuY62ng6sjhay1Kb4Lkgq/AUAgN+
-         6qPdLnFELJywM6E1EE3SVz6+TRd+7bnuB0tpov/WrsG3Svjy7GrVu8HZ/CbIDGP+QNJe
-         oQEbuXHgOXLaHVLD24h2Y9Y/kXEefHWPXYT5bsrULtvYDNCfjkm3GDoPUe8hDayhTVVO
-         Kz9Ms1OfHUy3KbMJp18jW8fgRMT87MzcCpM93IUAuBEeSiuySK97rE0ZoYdf+6HoURyf
-         NGnh9UrhQrCFuOxTSDngSUEDDCzYrcrpIda+jjDv+UFSx1suftZpy/p6ntJvcZR8tCCq
-         RDoQ==
-X-Gm-Message-State: AOAM530pDc2Zout0EHUtZV5IwPRSuSgNf6aZjx1i3U89GfCmC64SQrv0
-        5jnhfKkCY70mzNNEEnxmMQt4tbgQ+yC8QKXnGf0=
-X-Google-Smtp-Source: ABdhPJx+RSxvIz+QTS29NNZlNto0r/PEcq1x9Ah2IeEOnqDbQuwUZ7x2ZQ/2bvu5VBLp3XyWBQoxhvNKmB0ZgYbANKg=
-X-Received: by 2002:a25:1bd5:: with SMTP id b204mr34517304ybb.552.1643133297390;
- Tue, 25 Jan 2022 09:54:57 -0800 (PST)
+        Tue, 25 Jan 2022 12:55:04 -0500
+X-UUID: 780410943c914273a37e948af8ad6595-20220126
+X-UUID: 780410943c914273a37e948af8ad6595-20220126
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 823797339; Wed, 26 Jan 2022 01:54:59 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 26 Jan 2022 01:54:58 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Jan
+ 2022 01:54:58 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 26 Jan 2022 01:54:58 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Kiran Kumar S" <kiran.kumar1.s@intel.com>
+CC:     Miles Chen <miles.chen@mediatek.com>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] pinctrl: fix a discarded-qualifiers build error
+Date:   Wed, 26 Jan 2022 01:54:55 +0800
+Message-ID: <20220125175457.23728-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <1642851166-27096-1-git-send-email-akhilrajeev@nvidia.com> <1642851166-27096-3-git-send-email-akhilrajeev@nvidia.com>
-In-Reply-To: <1642851166-27096-3-git-send-email-akhilrajeev@nvidia.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Jan 2022 18:54:46 +0100
-Message-ID: <CAJZ5v0gt+aDr_Te_mco_0CyRJAWgyeDKUb+dksfZz0mj91G0hw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] docs: firmware-guide: ACPI: Add named interrupt doc
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 22, 2022 at 12:33 PM Akhil R <akhilrajeev@nvidia.com> wrote:
->
-> Add a detailed example of the named interrupts in the ACPI table.
->
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+Fix COMPILER=gcc ARCH=arm64 DEFCONFIG=allyesconfig build:
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+log:
+drivers/pinctrl/pinctrl-thunderbay.c:815:29: error: assignment discards
+'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
 
-> ---
->  Documentation/firmware-guide/acpi/enumeration.rst | 39 +++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->
-> diff --git a/Documentation/firmware-guide/acpi/enumeration.rst b/Documentation/firmware-guide/acpi/enumeration.rst
-> index 74b830b2..d002256 100644
-> --- a/Documentation/firmware-guide/acpi/enumeration.rst
-> +++ b/Documentation/firmware-guide/acpi/enumeration.rst
-> @@ -143,6 +143,45 @@ In robust cases the client unfortunately needs to call
->  acpi_dma_request_slave_chan_by_index() directly and therefore choose the
->  specific FixedDMA resource by its index.
->
-> +Named Interrupts
-> +================
-> +
-> +Drivers enumerated via ACPI can have names to interrupts in the ACPI table
-> +which can be used to get the IRQ number in the driver.
-> +
-> +The interrupt name can be listed in _DSD as 'interrupt-names'. The names
-> +should be listed as an array of strings which will map to the Interrupt()
-> +resource in the ACPI table corresponding to its index.
-> +
-> +The table below shows an example of its usage::
-> +
-> +    Device (DEV0) {
-> +        ...
-> +        Name (_CRS, ResourceTemplate() {
-> +            ...
-> +            Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {
-> +                0x20,
-> +                0x24
-> +            }
-> +        })
-> +
-> +        Name (_DSD, Package () {
-> +            ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-> +            Package () {
-> +                Package () {"interrupt-names",
-> +                Package (2) {"default", "alert"}},
-> +            }
-> +        ...
-> +        })
-> +    }
-> +
-> +The interrupt name 'default' will correspond to 0x20 in Interrupt()
-> +resource and 'alert' to 0x24. Note that only the Interrupt() resource
-> +is mapped and not GpioInt() or similar.
-> +
-> +The driver can call the function - fwnode_irq_get_byname() with the fwnode
-> +and interrupt name as arguments to get the corresponding IRQ number.
-> +
->  SPI serial bus support
->  ======================
->
-> --
-> 2.7.4
->
+Fixes: 12422af8194d ("pinctrl: Add Intel Thunder Bay pinctrl driver")
+Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+---
+ drivers/pinctrl/pinctrl-thunderbay.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pinctrl/pinctrl-thunderbay.c b/drivers/pinctrl/pinctrl-thunderbay.c
+index b5b47f4dd774..4e6d718c03fc 100644
+--- a/drivers/pinctrl/pinctrl-thunderbay.c
++++ b/drivers/pinctrl/pinctrl-thunderbay.c
+@@ -812,7 +812,7 @@ static int thunderbay_add_functions(struct thunderbay_pinctrl *tpc, struct funct
+ 				}
+ 			}
+ 
+-			grp = func->group_names;
++			grp = (const char **)func->group_names;
+ 			while (*grp)
+ 				grp++;
+ 
+-- 
+2.18.0
+

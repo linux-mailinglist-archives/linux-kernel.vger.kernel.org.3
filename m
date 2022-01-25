@@ -2,288 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1598F49BE00
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BADB49BE06
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233397AbiAYVxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 16:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S233417AbiAYVyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 16:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbiAYVxd (ORCPT
+        with ESMTP id S233400AbiAYVym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 16:53:33 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DA9C06173B;
-        Tue, 25 Jan 2022 13:53:33 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id h21so4809925wrb.8;
-        Tue, 25 Jan 2022 13:53:33 -0800 (PST)
+        Tue, 25 Jan 2022 16:54:42 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF4DC06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 13:54:42 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id u10so16449343pfg.10
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 13:54:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=c7U0AhtAd8UvvLOu/L0/Gknc1JV4kBu8H1gQJ9Mdsfc=;
-        b=JwCkfR4SNHOq8YagGzKIEI81pxGi5/yCgcrPo5manT4qnFTGnM7i1siNk+2sNK/vUh
-         v5DX4Av0OtXJfkOEm9iuq1HK4q7Koo2OcQr8uriakJrXtAkf8XzU3oCcDjaA4FXICJ70
-         gPaoxniQETifYSHTyaq4B4/f2iW2zhrMUnN7k7It01BxdMFm+w4lICwbdUPIWtFTD0Bp
-         x33SY9NWNGQXUAAfrtCLcLg1p18gfIua6IWEo14cGRlm9xze+xjmXs7SW9oyttiJazbN
-         jDWjUGjk/5waWPbev7NE6vhGLsmUb0q7LndijnQRyMjDIhZIVIRVyr9QwtYtvOJn67PF
-         Wc5w==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CNxeFPmBtV0nU1VBJ9IaThwJBrT6bBJPSlaX6q3YHjo=;
+        b=PwoPwBJ8ayNdLuEzGamBoy4ylPVdvw31+F5KzmlGaEgDzDqgSSC4A5kstr5nZlKGKj
+         QMqNFsg7IRvAiguF8JfU9BT2/f+Xmirhv9h+B4jTGimss0YklotHPbnOsE5QNU/cJBA3
+         6BHqhDg+ptnsYGUtloS0XkQMs5M7LeCFapXHk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=c7U0AhtAd8UvvLOu/L0/Gknc1JV4kBu8H1gQJ9Mdsfc=;
-        b=NaMUZo1JebAcp84DlpdH679BBvNGwI8jynYb8PGoRbmPqlL0+yj39k+WM80aLJ08eW
-         Xd1L59PEmjtIhooxb4e/B/fajcVRrinWnot6G8e1YztLBI/IRCkwyKJwcq0DVy/IRr+5
-         tPF1YbCadt94BJKbYDPmSDnWsvxTY4F+3DjP2DL1iz73jipGg9ra8563itIaTXKkP76M
-         DhKXe0kdrnPEt+vjQOGInX0kFFEqUBJ6h87l1AwXyIuhi35Jsp7jKDzCb4W+7g9LqdWB
-         7ckm8kqdYWvTPewWTd1o7FDcPMVEFeOLDSNOzJnZHTZwGNLzWarHQ8XvsrFcGK1MpE/C
-         uN1g==
-X-Gm-Message-State: AOAM531dV/eiKnupsdAXtZ6MNyeSnwN/Y0IRf/zIquDON9zq/MpT30cL
-        DU3f9xZZX2SGNDVFGNJlOwvcZBZYAGs=
-X-Google-Smtp-Source: ABdhPJyB2CQu0H4jp7QQNyaCwFvl1GZSa009hsa7g78f7nfqI0Za8gNuu4psSVTbt4h12a360WRcqw==
-X-Received: by 2002:a5d:64e8:: with SMTP id g8mr8713050wri.574.1643147611922;
-        Tue, 25 Jan 2022 13:53:31 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f4d:2b00:5062:8000:c669:60de? (p200300ea8f4d2b0050628000c66960de.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:5062:8000:c669:60de])
-        by smtp.googlemail.com with ESMTPSA id n15sm1503732wmr.26.2022.01.25.13.53.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 13:53:31 -0800 (PST)
-Message-ID: <5ec25f20-8acf-544d-30f6-f0eeecd9b2f1@gmail.com>
-Date:   Tue, 25 Jan 2022 22:53:27 +0100
+        bh=CNxeFPmBtV0nU1VBJ9IaThwJBrT6bBJPSlaX6q3YHjo=;
+        b=huqtIOCbsK2g1mRsZOKv/5hDT19vYudONUUXNasBJ/K1rECUMSRNebQrOX4UeJ4sz4
+         e0juiopv3i8EVyY5ws6gPEl5Ny4WY3v4dQlNqjvirAK8tyFT2aDRwK52SRMqMQ2evkNf
+         +0vtgeFiKGbs4P2CEDN9/ciVBwo8ZSbfMbpk3TGiCSm6WdbVPojzOyPjRrVH8GtWGJWk
+         36Qg4IsT8kNE+5BJQfm1gYHv4vpwcLUeWxM1qaqNt0H3xEuz+Cha0tt+BKPzXNObbw79
+         S78hO2RD2LWkrTCg8oA0V6UYov27fUUhOfM+TO2yFo5miGbBRQwuh3mSfY5HUH1Ynq12
+         8f7Q==
+X-Gm-Message-State: AOAM5333GM5chDxZIl2124EgTXFsExU/U/ZlTNnBTolOc11cqEwjC+hZ
+        QnfctjfrrxBwzG7uGvTsrDC/1B9Zzdw00A==
+X-Google-Smtp-Source: ABdhPJw5U6oW/scKNg8xtgVAv6dXvqTxYa5dhg3K6y0xe0gyhH8Y/wW04K2bjOLygk491pB2W6HWnw==
+X-Received: by 2002:a62:798d:0:b0:4c7:3766:e938 with SMTP id u135-20020a62798d000000b004c73766e938mr20354648pfc.64.1643147682258;
+        Tue, 25 Jan 2022 13:54:42 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:f313:ff03:9fc5:6152])
+        by smtp.gmail.com with ESMTPSA id f10sm6385pfe.29.2022.01.25.13.54.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 13:54:41 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     jjsu@chromium.org, lschyi@chromium.org, robert.foss@linaro.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/panel-edp: Allow querying the detected panel via sysfs
+Date:   Tue, 25 Jan 2022 13:54:09 -0800
+Message-Id: <20220125135406.1.I62322abf81dbc1a1b72392a093be0c767da9bf51@changeid>
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Content-Language: en-US
-To:     Chunhao Lin <hau@realtek.com>, netdev@vger.kernel.org
-Cc:     nic_swsd@realtek.com, linux-kernel@vger.kernel.org
-References: <20220124181937.6331-1-hau@realtek.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH net-next 1/1] r8169: enable RTL8125 ASPM L1.2
-In-Reply-To: <20220124181937.6331-1-hau@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.01.2022 19:19, Chunhao Lin wrote:
-> This patch will enable RTL8125 ASPM L1.2 on the platforms that have
-> tested RTL8125 with ASPM L1.2 enabled.
-> Register mac ocp 0xc0b2 will help to identify if RTL8125 has been tested
-> on L1.2 enabled platform. If it is, this register will be set to 0xf.
-> If not, this register will be default value 0.
-> 
-> Signed-off-by: Chunhao Lin <hau@realtek.com>
-> ---
->  drivers/net/ethernet/realtek/r8169_main.c | 99 ++++++++++++++++++-----
->  1 file changed, 79 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
-> index 19e2621e0645..b1e013969d4c 100644
-> --- a/drivers/net/ethernet/realtek/r8169_main.c
-> +++ b/drivers/net/ethernet/realtek/r8169_main.c
-> @@ -2238,21 +2238,6 @@ static void rtl_wol_enable_rx(struct rtl8169_private *tp)
->  			AcceptBroadcast | AcceptMulticast | AcceptMyPhys);
->  }
->  
-> -static void rtl_prepare_power_down(struct rtl8169_private *tp)
-> -{
-> -	if (tp->dash_type != RTL_DASH_NONE)
-> -		return;
-> -
-> -	if (tp->mac_version == RTL_GIGA_MAC_VER_32 ||
-> -	    tp->mac_version == RTL_GIGA_MAC_VER_33)
-> -		rtl_ephy_write(tp, 0x19, 0xff64);
-> -
-> -	if (device_may_wakeup(tp_to_dev(tp))) {
-> -		phy_speed_down(tp->phydev, false);
-> -		rtl_wol_enable_rx(tp);
-> -	}
-> -}
-> -
->  static void rtl_init_rxcfg(struct rtl8169_private *tp)
->  {
->  	switch (tp->mac_version) {
-> @@ -2650,6 +2635,34 @@ static void rtl_pcie_state_l2l3_disable(struct rtl8169_private *tp)
->  	RTL_W8(tp, Config3, RTL_R8(tp, Config3) & ~Rdy_to_L23);
->  }
->  
-> +static void rtl_disable_exit_l1(struct rtl8169_private *tp)
-> +{
-> +	/* Bits control which events trigger ASPM L1 exit:
-> +	 * Bit 12: rxdv
-> +	 * Bit 11: ltr_msg
-> +	 * Bit 10: txdma_poll
-> +	 * Bit  9: xadm
-> +	 * Bit  8: pktavi
-> +	 * Bit  7: txpla
-> +	 */
-> +	switch (tp->mac_version) {
-> +	case RTL_GIGA_MAC_VER_34 ... RTL_GIGA_MAC_VER_36:
-> +		rtl_eri_clear_bits(tp, 0xd4, 0x1f00);
-> +		break;
-> +	case RTL_GIGA_MAC_VER_37 ... RTL_GIGA_MAC_VER_38:
-> +		rtl_eri_clear_bits(tp, 0xd4, 0x0c00);
-> +		break;
-> +	case RTL_GIGA_MAC_VER_40 ... RTL_GIGA_MAC_VER_53:
-> +		rtl_eri_clear_bits(tp, 0xd4, 0x1f80);
-> +		break;
-> +	case RTL_GIGA_MAC_VER_60 ... RTL_GIGA_MAC_VER_63:
-> +		r8168_mac_ocp_modify(tp, 0xc0ac, 0x1f80, 0);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +}
-> +
->  static void rtl_enable_exit_l1(struct rtl8169_private *tp)
->  {
->  	/* Bits control which events trigger ASPM L1 exit:
-> @@ -2692,6 +2705,33 @@ static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool enable)
->  	udelay(10);
->  }
->  
-> +static void rtl_hw_aspm_l12_enable(struct rtl8169_private *tp, bool enable)
-> +{
-> +	/* Don't enable L1.2 in the chip if OS can't control ASPM */
-> +	if (enable && tp->aspm_manageable) {
-> +		r8168_mac_ocp_modify(tp, 0xe094, 0xff00, 0);
-> +		r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, BIT(2));
-> +	} else {
-> +		r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, 0);
-> +	}
-> +}
-> +
-> +static void rtl_prepare_power_down(struct rtl8169_private *tp)
-> +{
-> +	if (tp->dash_type != RTL_DASH_NONE)
-> +		return;
-> +
-> +	if (tp->mac_version == RTL_GIGA_MAC_VER_32 ||
-> +	    tp->mac_version == RTL_GIGA_MAC_VER_33)
-> +		rtl_ephy_write(tp, 0x19, 0xff64);
-> +
-> +	if (device_may_wakeup(tp_to_dev(tp))) {
-> +		rtl_disable_exit_l1(tp);
-> +		phy_speed_down(tp->phydev, false);
-> +		rtl_wol_enable_rx(tp);
-> +	}
-> +}
-> +
->  static void rtl_set_fifo_size(struct rtl8169_private *tp, u16 rx_stat,
->  			      u16 tx_stat, u16 rx_dyn, u16 tx_dyn)
->  {
-> @@ -3675,6 +3715,7 @@ static void rtl_hw_start_8125b(struct rtl8169_private *tp)
->  	rtl_ephy_init(tp, e_info_8125b);
->  	rtl_hw_start_8125_common(tp);
->  
-> +	rtl_hw_aspm_l12_enable(tp, true);
->  	rtl_hw_aspm_clkreq_enable(tp, true);
->  }
->  
-> @@ -5255,6 +5296,20 @@ static void rtl_init_mac_address(struct rtl8169_private *tp)
->  	rtl_rar_set(tp, mac_addr);
->  }
->  
-> +/* mac ocp 0xc0b2 will help to identify if RTL8125 has been tested
-> + * on L1.2 enabled platform. If it is, this register will be set to 0xf.
-> + * If not, this register will be default value 0.
-> + */
-> +static bool rtl_platform_l12_enabled(struct rtl8169_private *tp)
-> +{
-> +	switch (tp->mac_version) {
-> +	case RTL_GIGA_MAC_VER_60 ... RTL_GIGA_MAC_VER_63:
-> +		return (r8168_mac_ocp_read(tp, 0xc0b2) & 0xf) ? true : false;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
->  static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
->  {
->  	struct rtl8169_private *tp;
-> @@ -5333,11 +5388,15 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
->  	 * Chips from RTL8168h partially have issues with L1.2, but seem
->  	 * to work fine with L1 and L1.1.
->  	 */
-> -	if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
-> -		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
-> -	else
-> -		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
-> -	tp->aspm_manageable = !rc;
-> +	if (!rtl_platform_l12_enabled(tp)) {
-> +		if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
-> +			rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
-> +		else
-> +			rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
-> +		tp->aspm_manageable = !rc;
-> +	} else {
-> +		tp->aspm_manageable = pcie_aspm_enabled(pdev);
-> +	}
->  
->  	tp->dash_type = rtl_check_dash(tp);
->  
+Recently we added generic "edp-panel"s probed by EDID. To support
+panels in this way we look at the panel ID in the EDID and look up the
+panel in a table that has power sequence timings. If we find a panel
+that's not in the table we will still attempt to use it but we'll use
+conservative timings. While it's likely that these conservative
+timings will work for most nearly all panels, the performance of
+turning the panel off and on suffers.
 
-Hi Hau,
+We'd like to be able to reliably detect the case that we're using the
+hardcoded timings without relying on parsing dmesg. This allows us to
+implement tests that ensure that no devices get shipped that are
+relying on the conservative timings.
 
-the following is a stripped-down version of the patch. Could you please check/test?
-If function rtl_disable_exit_l1() is actually needed, I'd prefer to add it
-in a separate patch (to facilitate bisecting).
+Let's add a new sysfs entry to panel devices. It will have one of:
+* UNKNOWN - We tried to detect a panel but it wasn't in our table.
+* HARDCODED - We're not using generic "edp-panel" probed by EDID.
+* A panel name - This is the name of the panel from our table.
 
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
- drivers/net/ethernet/realtek/r8169_main.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/panel/panel-edp.c | 39 +++++++++++++++++++++++++++----
+ 1 file changed, 34 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
-index ca95e9266..890a64245 100644
---- a/drivers/net/ethernet/realtek/r8169_main.c
-+++ b/drivers/net/ethernet/realtek/r8169_main.c
-@@ -2684,7 +2684,15 @@ static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool enable)
- 	if (enable && tp->aspm_manageable) {
- 		RTL_W8(tp, Config5, RTL_R8(tp, Config5) | ASPM_en);
- 		RTL_W8(tp, Config2, RTL_R8(tp, Config2) | ClkReqEn);
+diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+index 99ca1bd0091c..719c1bb6c45c 100644
+--- a/drivers/gpu/drm/panel/panel-edp.c
++++ b/drivers/gpu/drm/panel/panel-edp.c
+@@ -222,6 +222,8 @@ struct panel_edp {
+ 	struct gpio_desc *enable_gpio;
+ 	struct gpio_desc *hpd_gpio;
+ 
++	const struct edp_panel_entry *detected_panel;
 +
-+		if (tp->mac_version == RTL_GIGA_MAC_VER_63) {
-+			r8168_mac_ocp_modify(tp, 0xe094, 0xff00, 0);
-+			r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, BIT(2));
-+		}
- 	} else {
-+		if (tp->mac_version == RTL_GIGA_MAC_VER_63)
-+			r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, 0);
-+
- 		RTL_W8(tp, Config2, RTL_R8(tp, Config2) & ~ClkReqEn);
- 		RTL_W8(tp, Config5, RTL_R8(tp, Config5) & ~ASPM_en);
+ 	struct edid *edid;
+ 
+ 	struct drm_display_mode override_mode;
+@@ -666,7 +668,6 @@ static const struct edp_panel_entry *find_edp_panel(u32 panel_id);
+ 
+ static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
+ {
+-	const struct edp_panel_entry *edp_panel;
+ 	struct panel_desc *desc;
+ 	u32 panel_id;
+ 	char vend[4];
+@@ -705,14 +706,14 @@ static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
  	}
-@@ -5251,6 +5259,16 @@ static void rtl_init_mac_address(struct rtl8169_private *tp)
- 	rtl_rar_set(tp, mac_addr);
+ 	drm_edid_decode_panel_id(panel_id, vend, &product_id);
+ 
+-	edp_panel = find_edp_panel(panel_id);
++	panel->detected_panel = find_edp_panel(panel_id);
+ 
+ 	/*
+ 	 * We're using non-optimized timings and want it really obvious that
+ 	 * someone needs to add an entry to the table, so we'll do a WARN_ON
+ 	 * splat.
+ 	 */
+-	if (WARN_ON(!edp_panel)) {
++	if (WARN_ON(!panel->detected_panel)) {
+ 		dev_warn(dev,
+ 			 "Unknown panel %s %#06x, using conservative timings\n",
+ 			 vend, product_id);
+@@ -734,12 +735,14 @@ static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
+ 		 */
+ 		desc->delay.unprepare = 2000;
+ 		desc->delay.enable = 200;
++
++		panel->detected_panel = ERR_PTR(-EINVAL);
+ 	} else {
+ 		dev_info(dev, "Detected %s %s (%#06x)\n",
+-			 vend, edp_panel->name, product_id);
++			 vend, panel->detected_panel->name, product_id);
+ 
+ 		/* Update the delay; everything else comes from EDID */
+-		desc->delay = *edp_panel->delay;
++		desc->delay = *panel->detected_panel->delay;
+ 	}
+ 
+ 	ret = 0;
+@@ -750,6 +753,28 @@ static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
+ 	return ret;
  }
  
-+/* register is set if system vendor successfully tested ASPM 1.2 */
-+static bool rtl_aspm_is_safe(struct rtl8169_private *tp)
++static ssize_t detected_panel_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
 +{
-+	if (tp->mac_version >= RTL_GIGA_MAC_VER_60 &&
-+	    r8168_mac_ocp_read(tp, 0xc0b2) & 0xf)
-+		return true;
++	struct panel_edp *p = dev_get_drvdata(dev);
 +
-+	return false;
++	if (IS_ERR(p->detected_panel))
++		return sysfs_emit(buf, "UNKNOWN\n");
++	else if (!p->detected_panel)
++		return sysfs_emit(buf, "HARDCODED\n");
++	else
++		return sysfs_emit(buf, "%s\n", p->detected_panel->name);
 +}
 +
- static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
++static const DEVICE_ATTR_RO(detected_panel);
++
++static void edp_panel_remove_detected_panel(void *data)
++{
++	struct panel_edp *p = data;
++
++	device_remove_file(p->base.dev, &dev_attr_detected_panel);
++}
++
+ static int panel_edp_probe(struct device *dev, const struct panel_desc *desc,
+ 			   struct drm_dp_aux *aux)
  {
- 	struct rtl8169_private *tp;
-@@ -5329,7 +5347,9 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	 * Chips from RTL8168h partially have issues with L1.2, but seem
- 	 * to work fine with L1 and L1.1.
- 	 */
--	if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
-+	if (rtl_aspm_is_safe(tp))
-+		rc = 0;
-+	else if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
- 		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
- 	else
- 		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
+@@ -849,6 +874,10 @@ static int panel_edp_probe(struct device *dev, const struct panel_desc *desc,
+ 
+ 	drm_panel_add(&panel->base);
+ 
++	err = device_create_file(dev, &dev_attr_detected_panel);
++	if (!err)
++		devm_add_action_or_reset(dev, edp_panel_remove_detected_panel, panel);
++
+ 	return 0;
+ 
+ err_finished_pm_runtime:
 -- 
-2.35.0
-
+2.35.0.rc0.227.g00780c9af4-goog
 

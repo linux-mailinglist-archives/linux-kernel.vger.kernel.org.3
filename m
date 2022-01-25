@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E02C749B85A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6164F49B861
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiAYQOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1583346AbiAYQKz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:10:55 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D215FC061760
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:10:46 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 930DDC0005;
-        Tue, 25 Jan 2022 16:10:41 +0000 (UTC)
-Message-ID: <36519886-cedc-a3e3-70d2-712f8a6d3a10@ghiti.fr>
-Date:   Tue, 25 Jan 2022 17:10:41 +0100
+        id S1582947AbiAYQPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:15:44 -0500
+Received: from mga02.intel.com ([134.134.136.20]:64893 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1583418AbiAYQNL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 11:13:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643127191; x=1674663191;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZhVMjcdlxj873VdA6sEVIlWL3XJpbJPYkvwqeD4zZWU=;
+  b=MJU0uhxfxEo8eRPab4ps3CTe/l0WFeO4OyaItRaEhKODsIhK7123sbB+
+   UBp2hB24ui0/rElFuf+0+iQpu+8NBq8+rPxt8lqzzfk3tXj10a5Ksxipe
+   0wRC3D/vPbhAvw16tiVsmCxWFTlE/QZrP3Qukk0C1dUO9xvHyPb199Ti9
+   3+ZpsaACep1hkbtU4tkBsDuZnfASBitfNikhiEs0cI+hco5WZYvtaJN1G
+   8FHsrzH/m6k7uDzGMGtki4qabzA24k+cDv2QIVycjL/MyeWl2dbcLXXXJ
+   7Isi6YPnE4iGxvNoDZnBumwJH60EFaQYfPdlZJ37YO61x6g9SQy1vDZ8F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="233710407"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="233710407"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:13:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="495043769"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 25 Jan 2022 08:13:05 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCORN-000K85-Aq; Tue, 25 Jan 2022 16:13:05 +0000
+Date:   Wed, 26 Jan 2022 00:12:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org
+Subject: [PATCH] nvme-fabrics: fix returnvar.cocci warnings
+Message-ID: <20220125161210.GA42603@d3bbc358300d>
+References: <202201260046.otELTDdH-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] riscv: mm: remove the BUG_ON check of mapping the last 4K
- bytes of memory
-Content-Language: en-US
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220125155542.3753-1-jszhang@kernel.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20220125155542.3753-1-jszhang@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201260046.otELTDdH-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: kernel test robot <lkp@intel.com>
 
-On 1/25/22 16:55, Jisheng Zhang wrote:
-> remove the BUG_ON check of mapping the last 4K bytes of the addressable
-> memory since "this is true for every kernel actually" as pointed out
-> by Alexandre.
->
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
-> ---
->   arch/riscv/mm/init.c | 8 --------
->   1 file changed, 8 deletions(-)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index cf4d018b7d66..8347d0fda8cd 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -811,14 +811,6 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->   	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
->   	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
->   
-> -#ifdef CONFIG_64BIT
-> -	/*
-> -	 * The last 4K bytes of the addressable memory can not be mapped because
-> -	 * of IS_ERR_VALUE macro.
-> -	 */
-> -	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
-> -#endif
+drivers/nvme/host/fabrics.c:1095:5-8: Unneeded variable: "ret". Return "0" on line 1109
 
 
-This BUG_ON seems pretty legit to me: I re-read the exchanges we had, 
-and I see that I didn't notice that in your v2, you actually removed the 
-BUG_ON. So that's my bad, what I meant in the first place was that the 
-BUG_ON is true for 32-bit and 64-bit kernels actually.
+ Remove unneeded variable used to store return value.
 
-Sorry my RB was not right on this one :(
+Generated by: scripts/coccinelle/misc/returnvar.cocci
 
-Alex
+Fixes: f18ee3d98815 ("nvme-fabrics: print out valid arguments when reading from /dev/nvme-fabrics")
+CC: Hannes Reinecke <hare@suse.de>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a08b41ab9e2e468647f78eb17c28e29b93006394
+commit: f18ee3d988157ebcadc9b7e5fd34811938f50223 nvme-fabrics: print out valid arguments when reading from /dev/nvme-fabrics
+:::::: branch date: 10 hours ago
+:::::: commit date: 5 weeks ago
 
-> -
->   	pt_ops_set_early();
->   
->   	/* Setup early PGD for fixmap */
+ fabrics.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+--- a/drivers/nvme/host/fabrics.c
++++ b/drivers/nvme/host/fabrics.c
+@@ -1092,7 +1092,6 @@ static void __nvmf_concat_opt_tokens(str
+ static int nvmf_dev_show(struct seq_file *seq_file, void *private)
+ {
+ 	struct nvme_ctrl *ctrl;
+-	int ret = 0;
+ 
+ 	mutex_lock(&nvmf_dev_mutex);
+ 	ctrl = seq_file->private;
+@@ -1106,7 +1105,7 @@ static int nvmf_dev_show(struct seq_file
+ 
+ out_unlock:
+ 	mutex_unlock(&nvmf_dev_mutex);
+-	return ret;
++	return 0;
+ }
+ 
+ static int nvmf_dev_open(struct inode *inode, struct file *file)

@@ -2,155 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9F849BE27
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8ACC49BE25
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbiAYWCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:02:31 -0500
-Received: from mail-oln040092070096.outbound.protection.outlook.com ([40.92.70.96]:20356
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233472AbiAYWC3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:02:29 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fea/Ou2LylKHDmVjj0AhRqLyX3jgHkvodZjydrtJsoguWKNqol9jNBKqxvuGXBcSzcTOBEW5gm2bg26m+wloB95SOxWouJh77Y3hhqSoyvHNdOFNDT6zcyVXWhggxheZbSKSR1umXJFAmqXivhkrvfPL5g1jMr3DmmAPmYQUPLt9Pfa/xJ3QlH0I9P9ZDpodNplOlls5bgQfJdmyMWTxap14HRrs50Zjnxi8L46uqXhf4fS8VHwf59fFZljU3RZUa4lDokpprvSTZ1r01AYSX+t/LvLerg7NKa8CUOKVWQQyKGwIxpGR8gM0PxfvvuhbxZkRR3C1mb3C/WWFI6qI9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gpeLw7yJwErO8PIWpxygPviWLz4GjlCFaSfQnCkD2u4=;
- b=h8RjgzmzAQ79rb6l1Rysv2QtMTWPdswjFulFzKPY8Rm+pfhYpyWNZHJI8vll+z15nxGW+FPgDTV73WjiP6jXBqrqVCeiYCHJz3TPurOsc0ra12RCctHGlnArjsq0nYOGL4oQ84+vBjVNWpgK79aRmpc8IfkE+3VZ9JhW2wZcS7sZJJeMvLBUBpFqNKecWSsIHg49zA/bIhz2YYoxWCjK67VZHKYIYATgRSUlhWwwupvUhZB/UjWGi7wjJloFGtmLt3QHbC8AzkTsyc98puy9gIFwh3bVXlAnwWxNVlpPWyDJ2u5HUwQA3diqG8PUX1RNAVHQPM59rKYJCLvuY6vJCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:a2::21)
- by DB6PR10MB1653.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:6:38::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 25 Jan
- 2022 22:02:28 +0000
-Received: from AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::29d8:5a1d:50be:a0b6]) by AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::29d8:5a1d:50be:a0b6%6]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
- 22:02:27 +0000
-From:   Harry Austen <harryausten@hotmail.co.uk>
-To:     Harry Austen <harryausten@hotmail.co.uk>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net, jaegeuk@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix fileattr_set unsupported attribute handling
-Date:   Tue, 25 Jan 2022 22:01:49 +0000
-Message-ID: <AM6PR10MB2838705554FCB6ACE86F12BBFA5F9@AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <Ye79OLCFLR3H+GnY@gmail.com>
-References: <AM6PR10MB2838873D61CE1C0DB91EEDB9FA5C9@AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM> <Ye79OLCFLR3H+GnY@gmail.com>
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-TMN:  [uvzwg11jerwOnBqCsa8BE52wtgSSAWpJ]
-X-ClientProxiedBy: LO2P265CA0262.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:8a::34) To AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:a2::21)
-X-Microsoft-Original-Message-ID: <5424699.vVTlMVzpOe@harry-linuxpc>
+        id S233468AbiAYWCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:02:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233449AbiAYWB6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 17:01:58 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9342C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:01:58 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id 128so20997635pfe.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:01:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f+Aaba2ErpXUq7vBNLVHguof037975X+yPrv7J77Tcg=;
+        b=cNdZeLox84me8aWclC47yRmEs5qsap7dCX3N0KCyd4z/FIo4JTaRHfDIrU0SByXMgN
+         GiVU+Uc+d6ujjYCV2BAW3Rogu9HDub5t+pLGzWlh7fU/bfr1SpgK/bm7JpULBK5dkl43
+         7ZrEc1fzjCZNfiVwvbBTCpct/QcNMnvefpb2M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f+Aaba2ErpXUq7vBNLVHguof037975X+yPrv7J77Tcg=;
+        b=TS16e+Ol0+EYjAOLuivrk1+96OXwq9hglLnnpHCnXCXYkzh3BSoLdcf9SyqvLzmJNu
+         FaN6ljxR6NuhigeWZf8uCnzFL3i4APtFQfVwO1lyb9iXqgEXolVaSOzh6vDagOPXOvkt
+         ev4qsZIcwLsLFc8b4K0kp6GylUVe692oECPd93FnSjw9DFL7Xt4zAusv+L7JxMcw9Vsh
+         Rx7wqLAXOOQZ6ZLQ3C4lZm6LWsqHzJq614IAO4Cwhglb6RgOr6Xaw7WX6MbCh4WAaaz0
+         oe4+/WCmpS1ZD/ICYm1BK3uYcHxdbAry3ZIb1rgyTFCO1mg4Y5RUV0ufL08tVCFZjbeQ
+         ydIA==
+X-Gm-Message-State: AOAM533pMweoIZ+t4sWdXaEoJE1rYw5Ud7hlIA5XuHzgkjZHErcHVWOt
+        ZHJcqBHadxOs8Thc30vB6ApW1Q==
+X-Google-Smtp-Source: ABdhPJzyQCqsG6NPvpV8s4zrvXKBmCTM4IytclQGXToHeWxUa2RmazvbA1BQ6fvga96SoUSlolRY2A==
+X-Received: by 2002:a05:6a00:23c3:b0:4ca:f0d2:aad9 with SMTP id g3-20020a056a0023c300b004caf0d2aad9mr3384176pfc.51.1643148118205;
+        Tue, 25 Jan 2022 14:01:58 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g20sm17818pfv.4.2022.01.25.14.01.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 14:01:57 -0800 (PST)
+Date:   Tue, 25 Jan 2022 14:01:57 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <202201251400.9F091FC@keescook>
+References: <20220125145006.677e3709@canb.auug.org.au>
+ <202201242230.C54A6BCDFE@keescook>
+ <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+ <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+ <202201251256.CCCBE9851E@keescook>
+ <20220125162326.3d1ca960@gandalf.local.home>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6c8131e1-80fc-47ee-9e1b-08d9e04e6014
-X-MS-Exchange-SLBlob-MailProps: S/btQ8cKWiQenZB4DUk7DorRi9oy43xdUPAaBiiV1Z2nZWdOyrxe5ia1KChvwMPz8paj/kntkMwYtMxTeifkvf2Evtfv37DEM3LTYlJsf1AZZh5yDoz6BnCCacfyA3wJs19J0TUFx6FqXnyHptdHEaJNpPtL8Is45KDLkqkglWefJGb9vZ/9IoUCl/I+wn5di8NEgstQ5aH3TPwW4uryjAb78WMIJnboAq9AlZak9DKTxx4wKZTRxT5YbU/lE0pkNF4lnjhrffMszKEdaKXf27n/fzLiLVMx4Kbjv9kGGE8PfiZ47hYz6pDH7UIFZs57mvzTcZE1mciUCDwSBkpDOCjAUwzvRav99c1thQ7XUBfqhZwDJhzz9QSo2yMeixTxI4hR6AvEw00pI8C8DfHHTsZT725hor78wWKgHchGZ9ML9QehlVtFn0bBV4BbeVbCY+FyYU6IYKLucYZzofHO7Azv5OZn4C9INjHUi3INYU1AbJFrWA9AdmGeKHXRIbr82fDaSnJyoyYcRbsnOVeyOsUPwv5PdhDPHm1PRxUFTJv5xSd+xpEkgINRf/+zU8+YqRA6Td4e2sfzAlHrAr7WH8F3ju1PtZnn3Z1CW7IY/KPxq/go2K0ADV5RqY31Qzdw8DMhBkvK7MQzv6JbzHk9LMIetJcwTRa53tjrmf3Hdw7OdrrBCmezTzQUMCMHwRbB3d7tDt685gaXS0qXvvDr550CHeLXGnoqv3QqU6zc127VjHxFfeyWT4mUDw6vCbx9vgonOBvtTXA=
-X-MS-TrafficTypeDiagnostic: DB6PR10MB1653:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q3qFY1f1ywh37XnmU4DBj81Bq9p75OLx7vIsDZqBEkfE0eDzQ2uTwlQxLUiNfIiMYscCv55chjbEjwLv0o9vp99z8Q50fp6Rq8IE1QjKi+szlwoxVKPP0Rhd0mZ0nIg+Wv0Vt8N1tUWDjUBCO8veDKLIX05AIlRKgvz/yXWk+v4fcipWgbpS0QCLoFexNwatqLWL7npkmju2s5BHLC+z5TDAA9O7MsJ4FhoUTh6JENBmqmK4+zAd3FtIeZbTceboHNh11Z1EpkBSMhdR1czkUShJlMwl4tu8bcKN2IwdNDsSYzuP83Fh0VIj18vqgL4N7cLitjy3Xa36YxHEnFe5wb++buYG9fjtVv/P+7BfhHLPOUKXUHUWy6bGqbuLUL/Tp/i8IYK4s1OBz1Y6QKRDyewsS/mONdRvaDV+NQg88VHoRhWqqs04h9hwcfcrB6zSUr7tqG6PjEg4U8Zff5fPnW5+L8HNhOerb6czwrgfhLiISoxAFqIgUKufsodXjcIcOhSz8DgQet3CueU1gjOqEo6y/UMy6UeDym9thxkcFSmnefowWglTkDoTysed7qe+vVU6Zihpuw80zVMe2kKTMg==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z4v4o6elpD9fR96iax47dUN4RBCm+x7EXW4CCgBGkwVBW5/fw0eCss97AmJB?=
- =?us-ascii?Q?4+lJqqoQnCDf2LcjAGO6j4mBhin2NA472e9NU/xtl1ldEMO8kx7xiNmp920A?=
- =?us-ascii?Q?xaB5e8+gfcBhXzyDKfwPiKI+eslJ+PWvyWJe5SGWF9DCGVdtdmyVdIzRX0cs?=
- =?us-ascii?Q?+JYbejRXohtG1mfMLcsqyO9593NrppADnirTmeS0mHDmR+zmPYe7s88NLxkQ?=
- =?us-ascii?Q?+EFoXO7cuDbPKiglE/+42xZGhiRgCui9ndmqKyKYJOv103V1Q+BtWOut2qWH?=
- =?us-ascii?Q?uoRKIDnQV9nGf7LaWA22+qymRIgFSbb89rcRJiGr1v9sKuVUs6rGjjZAz0xs?=
- =?us-ascii?Q?hFyHSzSaDEklwzsJI0y7kdCtBhOwhZC6NK9KLy05ipQYxvN4EulnWsl0vrZ0?=
- =?us-ascii?Q?2b31WZ1J56hwl8aXxiT70xeED4/X9FQqHOhawgONl7RB5mxycb1ZCpU3qu78?=
- =?us-ascii?Q?LvxoW+EZVKFVErIw01iGIA5+D+Z3j90AJnEUx/eRpmBeAhiERgaLz9aZGxX7?=
- =?us-ascii?Q?Wk2Fztxxdw9ZchCkpuGiBGG5UIcGhsBsF4R5nIqE96+b2EDHXbY5/dgyOdYc?=
- =?us-ascii?Q?K2280Vxkjkpo53cMoGBFXm6P+fWtW8DBBxIosBb+UL1o8t9Jr1lYhQ4ZmBdR?=
- =?us-ascii?Q?wF6jRIBsnf3plIfoIpPln/SI5rmBBZuAH5S+7c3zsqmaXzsguztRmv972qyK?=
- =?us-ascii?Q?Ug4MVHl8VZ9XszqXHC9Z6WAcdCMGCXYFW2PWPN82cMWR3A4MHR/tRWwHFU1c?=
- =?us-ascii?Q?2RyFGNXapZdX+r8hTZuy1upG2f0YTWVKNHnKQvM4o8c0qARMsxjnEXS/aPwm?=
- =?us-ascii?Q?AMY7/RH3B2cgdDGl8oWcJ3WGYI5pJ1DfDwtgOoInROTcm0czi4YZuEuPSZD0?=
- =?us-ascii?Q?O0Y4GupiqAYujS4xfPHD5K3y7k2zgNcQ81mZE/+6oVu8p/iKbST42IEA82A1?=
- =?us-ascii?Q?JeagEfwUKm0MASBA5K+nCw=3D=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c8131e1-80fc-47ee-9e1b-08d9e04e6014
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 22:02:27.8670
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR10MB1653
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125162326.3d1ca960@gandalf.local.home>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, 24 January 2022 19:25:44 GMT Eric Biggers wrote:
-> On Sat, Jan 22, 2022 at 12:59:03PM +0000, Harry Austen wrote:
-> > FS_IOC_SETFLAGS ioctl should return EOPNOTSUPP if the file attribute
-> > (e.g. FS_NOCOW_FL) is not supported, rather than silently ignoring it
-> > and returning success.
-> > 
-> > Fixes: 9b1bb01c8ae7 (f2fs: convert to fileattr)
-> > Signed-off-by: Harry Austen <harryausten@hotmail.co.uk>
-> > ---
-> > 
-> >  fs/f2fs/file.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> > index 92ec2699bc85..061bf35c2582 100644
-> > --- a/fs/f2fs/file.c
-> > +++ b/fs/f2fs/file.c
-> > @@ -3085,9 +3085,8 @@ int f2fs_fileattr_set(struct user_namespace
-> > *mnt_userns,> 
-> >  		return -EIO;
-> >  	
-> >  	if (!f2fs_is_checkpoint_ready(F2FS_I_SB(inode)))
-> >  	
-> >  		return -ENOSPC;
-> > 
-> > -	if (fsflags & ~F2FS_GETTABLE_FS_FL)
-> > +	if (fsflags & ~F2FS_SETTABLE_FS_FL)
-> > 
-> >  		return -EOPNOTSUPP;
-> > 
-> > -	fsflags &= F2FS_SETTABLE_FS_FL;
-> > 
-> >  	if (!fa->flags_valid)
-> >  	
-> >  		mask &= FS_COMMON_FL;
+On Tue, Jan 25, 2022 at 04:23:26PM -0500, Steven Rostedt wrote:
+> On Tue, 25 Jan 2022 12:57:24 -0800
+> Kees Cook <keescook@chromium.org> wrote:
 > 
-> This is intentional, and matches what ext4 does; see the comment in the ext4
-> implementation of this:
+> > On Tue, Jan 25, 2022 at 11:31:54PM +0900, Masami Hiramatsu wrote:
+> > > On Tue, 25 Jan 2022 22:27:32 +0900
+> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > >   
+> > > > > /*
+> > > > >  * struct trace_event_data_offsets_<call> {
+> > > > >  *      u32                             <item1>;
+> > > > >  *      u32                             <item2>;
+> > > > >  *      [...]
+> > > > >  * };
+> > > > >  *
+> > > > >  * The __dynamic_array() macro will create each u32 <item>, this is
+> > > > >  * to keep the offset of each array from the beginning of the event.
+> > > > >  * The size of an array is also encoded, in the higher 16 bits of
+> > > > >  * <item>.
+> > > > >  */
+> > > > > 
+> > > > > So, I think -Warray-bounds is refusing to see the destination as
+> > > > > anything except a u32, but being accessed at 4 (sizeof(u32)) + 8
+> > > > > (address && 0xffff) (?)  
+> > > > 
+> > > > Ah, I got it. Yes, that's right. __data_loc() will access the data
+> > > > from the __entry, but the __rel_loc() points the same address from
+> > > > the encoded field ("__rel_loc_foo" in this case) itself.
+> > > > This is introduced for the user application event, which doesn't
+> > > > know the actual __entry size because the __entry includes some
+> > > > kernel internal defined fields.
+> > > >   
+> > > > > But if this is true, I would imagine there would be plenty of other
+> > > > > warnings? I'm currently stumped.  
+> > > > 
+> > > > That is because __rel_loc is used only in the sample code in the kernel
+> > > > for testing. Other use-cases comes from user-space.
+> > > > Hmm, can we skip this boundary check for this example?  
+> > > 
+> > > If the -Warray-bounds determines the destination array size from
+> > > the type of given pointer, we can just change the macro as below;
+> > > 
+> > > #define __get_rel_dynamic_array(field) 
+> > > 			((void *)__entry +                                 \
+> > > 			 offsetof(typeof(*__entry), __rel_loc_##field) +   \
+> > > 			 sizeof(__entry->__rel_loc_##field) +              \
+> > > 			 (__entry->__rel_loc_##field & 0xffff))
+> > > 
+> > > This must works same as __get_dynamic_array() macro.
+> > > 
+> > > Could you try this patch?
+> > > 
+> > > From 2982ba01367ec1f746a4f128512436e5325a7f9d Mon Sep 17 00:00:00 2001
+> > > From: Masami Hiramatsu <mhiramat@kernel.org>
+> > > Date: Tue, 25 Jan 2022 23:19:30 +0900
+> > > Subject: [PATCH] tracing: Avoid -Warray-bounds warning for __rel_loc macro
+> > > 
+> > > Since -Warray-bounds checks the destination size from the
+> > > type of given pointer, __assign_rel_str() macro gets warned
+> > > because it passes the pointer to the 'u32' field instead of
+> > > 'trace_event_raw_*' data structure.
+> > > Pass the data address calculated from the 'trace_event_raw_*'
+> > > instead of 'u32' __rel_loc field.
+> > > 
+> > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Cc: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >  include/trace/trace_events.h | 7 ++++---
+> > >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+> > > index 8c6f7c433518..65d927e059d3 100644
+> > > --- a/include/trace/trace_events.h
+> > > +++ b/include/trace/trace_events.h
+> > > @@ -318,9 +318,10 @@ TRACE_MAKE_SYSTEM_STR();
+> > >  #define __get_str(field) ((char *)__get_dynamic_array(field))
+> > >  
+> > >  #undef __get_rel_dynamic_array
+> > > -#define __get_rel_dynamic_array(field)	\
+> > > -		((void *)(&__entry->__rel_loc_##field) +	\
+> > > -		 sizeof(__entry->__rel_loc_##field) +		\
+> > > +#define __get_rel_dynamic_array(field)					\
+> > > +		((void *)__entry + 					\
+> > > +		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
+> > > +		 sizeof(__entry->__rel_loc_##field) +			\
+> > >  		 (__entry->__rel_loc_##field & 0xffff))
+> > >  
+> > >  #undef __get_rel_dynamic_array_len  
+> > 
+> > This patch doesn't silence the warning, but now that I see the shape of
+> > things more clearly, let me see if I can find the right combo.
 > 
->         /*
->          * chattr(1) grabs flags via GETFLAGS, modifies the result and
->          * passes that to SETFLAGS. So we cannot easily make SETFLAGS
->          * more restrictive than just silently masking off visible but
->          * not settable flags as we always did.
->          */
-
-Ah, my apologies. I thought it looked a little too obvious. Clearly I
-should have looked at the ext4 code. Please disregard this patch.
-
-Is there anything else that could be done to improve unsettable
-attribute handling? For example, is there a reason FS_NOCOW_FL is
-gettable but not settable? Could it be added to the settable list?
-
+> Hmm, could the zero size array cause an issues here. That is, does this
+> help?
 > 
-> Also, even if this patch was correct, the Fixes tag is wrong.
+> diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+> index 65d927e059d3..3d29919045af 100644
+> --- a/include/trace/trace_events.h
+> +++ b/include/trace/trace_events.h
+> @@ -128,7 +128,7 @@ TRACE_MAKE_SYSTEM_STR();
+>  	struct trace_event_raw_##name {					\
+>  		struct trace_entry	ent;				\
+>  		tstruct							\
+> -		char			__data[0];			\
+> +		char			__data[];			\
+>  	};								\
+>  									\
+>  	static struct trace_event_class event_class_##name;
 
-Having looked at this a bit more, I assume you are saying this due to
-the missing double quotes around the commit summary? (just so I know for
-next time as this is my first attempt at sending a kernel patch)
+I changed this too, just to future-proof it, and in an attempt to base
+the address off of __data[] (which turned out not to be needed).
 
-> 
-> - Eric
+It turns out that there was still a version of the __get_rel_dyanmic_array
+in perf.h that was the actual culprit.
 
-Many thanks for your help Eric,
-Harry
-
-
+-- 
+Kees Cook

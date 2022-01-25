@@ -2,165 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2777049ADEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EF449ADF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352937AbiAYIZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:25:18 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:39130 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1449797AbiAYIUS (ORCPT
+        id S1378795AbiAYI0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:26:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44484 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351861AbiAYIWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:20:18 -0500
-X-UUID: 54edde21346943f9a2d85f5a21796c96-20220125
-X-UUID: 54edde21346943f9a2d85f5a21796c96-20220125
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 588502847; Tue, 25 Jan 2022 16:20:07 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 25 Jan 2022 16:20:05 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 25 Jan 2022 16:20:05 +0800
-Message-ID: <356f512b549f90b329775e249fd48eb2954ade02.camel@mediatek.com>
-Subject: Re: [PATCH v11 2/3] dts: arm64: mt8183: add Mediatek MDP3 nodes
-From:   moudy ho <moudy.ho@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        "Maoguang Meng" <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <menghui.lin@mediatek.com>, <sj.huang@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <randy.wu@mediatek.com>,
-        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
-        <river.cheng@mediatek.com>, <srv_heupstream@mediatek.com>
-Date:   Tue, 25 Jan 2022 16:20:05 +0800
-In-Reply-To: <d61ec481-8059-a897-504a-0125f88fad61@collabora.com>
-References: <20220105093758.6850-1-moudy.ho@mediatek.com>
-         <20220105093758.6850-3-moudy.ho@mediatek.com>
-         <d61ec481-8059-a897-504a-0125f88fad61@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 25 Jan 2022 03:22:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4D3A6135B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:22:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACE7C340E7;
+        Tue, 25 Jan 2022 08:22:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643098933;
+        bh=Nrabr/OcOOvdlimFsaQ4E0HmI1VcpnyJlH3q8ui7feY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2c6pxQPKaOT2f0GK9blLBCXFQU+7q2DhXofcxJ66U9SicjaNqyDZhQam1+u+NXpCY
+         2OlbSBQ+9WP/oXAoVtSSePe/8VJlcnxDnNNxxKnd9wpjRWkvY5IxLwc4X7BmDmbI6M
+         mDnjkC8rQS1/xQNUWAiqEC/MrdmTU7+4sgVZNyUY=
+Date:   Tue, 25 Jan 2022 09:22:10 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Aleksa =?utf-8?B?VnXEjWtvdmnEhw==?= <aleksav013@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: dio: fixed coding style issues
+Message-ID: <Ye+zMg9RzQ97Sb4f@kroah.com>
+References: <20220124190201.26741-1-aleksav013@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220124190201.26741-1-aleksav013@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-01-21 at 12:58 +0100, AngeloGioacchino Del Regno wrote:
-> Il 05/01/22 10:37, Moudy Ho ha scritto:
-> > Add device nodes for Media Data Path 3 (MDP3) modules.
-> > 
-> > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> > ---
-> >   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 108
-> > ++++++++++++++++++++++-
-> >   1 file changed, 107 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > index ba4584faca5a..b872ef1ff6b3 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -1325,6 +1325,79 @@
-> >   			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
-> > 0 0x1000>;
-> >   		};
-> >   
-> > +		mdp3_rdma0: mdp3_rdma0@14001000 {
-> > +			compatible = "mediatek,mt8183-mdp3",
-> > +				     "mediatek,mt8183-mdp3-rdma0";
-> > +			mediatek,scp = <&scp>;
-> > +			mediatek,mdp3-comps = "mediatek,mt8183-mdp3-
-> > dl1",
-> > +					      "mediatek,mt8183-mdp3-
-> > dl2",
-> > +					      "mediatek,mt8183-mdp3-
-> > path1",
-> > +					      "mediatek,mt8183-mdp3-
-> > path2",
-> > +					      "mediatek,mt8183-mdp3-
-> > imgi",
-> > +					      "mediatek,mt8183-mdp3-
-> > exto";
-> > +			reg = <0 0x14001000 0 0x1000>,
-> > +			      <0 0x14000000 0 0x1000>,
-> > +			      <0 0x14005000 0 0x1000>,
-> > +			      <0 0x14006000 0 0x1000>,
-> > +			      <0 0x15020000 0 0x1000>;
-> > +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
-> > 0x1000 0x1000>,
-> > +						  <&gce SUBSYS_1400XXXX
-> > 0 0x1000>,
-> > +						  <&gce SUBSYS_1400XXXX
-> > 0x5000 0x1000>,
-> > +						  <&gce SUBSYS_1400XXXX
-> > 0x6000 0x1000>,
-> > +						  <&gce SUBSYS_1502XXXX
-> > 0 0x1000>;
-> > +			power-domains = <&spm
-> > MT8183_POWER_DOMAIN_DISP>;
-> > +			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
-> > +				 <&mmsys CLK_MM_MDP_RSZ1>,
-> > +				 <&mmsys CLK_MM_MDP_DL_TXCK>,
-> > +				 <&mmsys CLK_MM_MDP_DL_RX>,
-> > +				 <&mmsys CLK_MM_IPU_DL_TXCK>,
-> > +				 <&mmsys CLK_MM_IPU_DL_RX>;
-> > +			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
-> > +			mediatek,mmsys = <&mmsys>;
-> > +			mediatek,mm-mutex = <&mutex>;
-> > +			mediatek,mailbox-gce = <&gce>;
-> > +			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
-> > +				 <&gce 21 CMDQ_THR_PRIO_LOWEST>,
-> > +				 <&gce 22 CMDQ_THR_PRIO_LOWEST>,
-> > +				 <&gce 23 CMDQ_THR_PRIO_LOWEST>;
+On Mon, Jan 24, 2022 at 08:02:01PM +0100, Aleksa Vučković wrote:
+> Fixed multiple coding style issues:
+> Converting spaces to tabs and moving braces.
 > 
-> Hello Moudy,
-> the mboxes for gce 21, 22, 23 are missing the third cell. Please fix.
-> 
-> Regards,
-> Angelo
-
-Hi Angelo,
-Thanks for the reminder, but I'm a bit confused, the previous
-version(v10) mentioned that the current upstream mbox has only 2
-cells.
-So I should follow this rule to remove the extra 0 in the first item as
-follows:
- +			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST>,
- +				 <&gce 21 CMDQ_THR_PRIO_LOWEST>,
- +				 <&gce 22 CMDQ_THR_PRIO_LOWEST>,
- +				 <&gce 23 CMDQ_THR_PRIO_LOWEST>;
-
-Thanks,
-Moudy Ho
-> 
-> > +			gce-subsys = <&gce 0x14000000 SUBSYS_1400XXXX>,
-> > +				     <&gce 0x14010000 SUBSYS_1401XXXX>,
-> > +				     <&gce 0x14020000 SUBSYS_1402XXXX>,
-> > +				     <&gce 0x15020000 SUBSYS_1502XXXX>;
-> > +		};
-> > +
-> 
+> Signed-off-by: Aleksa Vučković <aleksav013@gmail.com>
+> ---
+>  drivers/dio/dio.c | 150 +++++++++++++++++++++++-----------------------
+>  1 file changed, 74 insertions(+), 76 deletions(-)
 > 
 
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

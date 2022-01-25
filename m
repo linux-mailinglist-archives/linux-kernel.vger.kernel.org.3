@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A7F49B24E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 182F149B253
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353549AbiAYKtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:49:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355294AbiAYKou (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:44:50 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AC1C061756
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:44:42 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id r2-20020a1c2b02000000b0034f7b261169so1477241wmr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Gue0fJwwcgJTZVNdeX+6H9YxIr2uToB8WYyhrif8Zgg=;
-        b=sfzTb+mBqz0CAb/NiDVYEy4M/U6s+cmQivYUZ8T8HCXtmf47TqVlQa1MVrKhdPAMHN
-         +6sUu1m8cJkI2leNd7KOBhsW/75lhMRZXi2RgH1od2b4BisBeAPZq26RZk0ojhIeqAvU
-         E7sfVfSgMK3D0+Ao8mZk7tESb0rO1VWhWnEa0+IehTUyxqK6eNAffYdfKIAYHypoFwiD
-         pGadS7fcpBpZh2iYufU8CZlSmVr6I+ufZREvlxdmNgy/3VdzFUfs4xUN6DJI2EOWZVZx
-         sR3jFsHtIpGYVQ+FGBhHrmI6E2cPmgy9vVR/gtFq5LoHmrCwZU65QghzCIWNfZ1cV36o
-         INDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Gue0fJwwcgJTZVNdeX+6H9YxIr2uToB8WYyhrif8Zgg=;
-        b=UzoHiaCwSoFevhULovW0lcNkKE1rN30ZHnY7bIEstb/giOFO6M/wHW45qn6zWG8/Nb
-         Hum+ui8FglwXnVcGML+O5G8R3N7mpuZHSQRFdN/c3Cf+BOdLudf+Kz4nuiOXukJBjzQK
-         FbG9I/RnWQmMdrnjeylJb4ERxR1wy/Vp2+gkzZgQwe9h09nNhNOzefkop7Oy6S1+3vEf
-         HHS7EuiKvXH+thui9jXgDwZvYOS1MpQ/tw9vffWWIvCjACnroNyBbnWWA/VTsInhp91K
-         BDubvl9n6FAeZl9BP5+Q/4sAqctfHmu+AC0r/QuLz7zR7UIweMzcakQV923IswtRh0Vd
-         E1Gg==
-X-Gm-Message-State: AOAM532D7gGYD6TE++7VxouOVz4zAlwP49Z+uOqdTrN4EjhYm4Dw6blS
-        pEi7SkcIIuS0ZbDJ/LwP08jeww==
-X-Google-Smtp-Source: ABdhPJwyyIe2jBpAoerujDirbO4rY9Xe5Cophwwo1PvJt0DtwWdDxkzOGYMcccAJJqr8guZLIXQUMQ==
-X-Received: by 2002:a7b:c944:: with SMTP id i4mr2337930wml.174.1643107481389;
-        Tue, 25 Jan 2022 02:44:41 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id o14sm5657228wry.104.2022.01.25.02.44.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 02:44:40 -0800 (PST)
-Message-ID: <3f9a9731-c096-bc9b-63df-bd1dff032737@linaro.org>
-Date:   Tue, 25 Jan 2022 10:44:39 +0000
+        id S1347453AbiAYKtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:49:21 -0500
+Received: from foss.arm.com ([217.140.110.172]:34182 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355798AbiAYKqE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 05:46:04 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 506C5101E;
+        Tue, 25 Jan 2022 02:46:00 -0800 (PST)
+Received: from [10.163.43.67] (unknown [10.163.43.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 40CFD3F7D8;
+        Tue, 25 Jan 2022 02:45:56 -0800 (PST)
+Subject: Re: [PATCH V3 0/7] coresight: trbe: Workaround Cortex-A510 erratas
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1641872346-3270-1-git-send-email-anshuman.khandual@arm.com>
+ <ec21e5da-7b2a-e99f-b24f-89b459e2d5cb@arm.com>
+ <8a348786-d028-a991-178f-60b17d3d6554@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <94430fa0-0cac-79f4-f167-1ac77077ad23@arm.com>
+Date:   Tue, 25 Jan 2022 16:16:03 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/3] nvmem: core: Fix a conflict between MTD and NVMEM on
- wp-gpios property
+In-Reply-To: <8a348786-d028-a991-178f-60b17d3d6554@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Christophe Kerello <christophe.kerello@foss.st.com>,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devicetree@vger.kernel.org, chenshumin86@sina.com
-References: <20220105135734.271313-1-christophe.kerello@foss.st.com>
- <20220105135734.271313-4-christophe.kerello@foss.st.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220105135734.271313-4-christophe.kerello@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 05/01/2022 13:57, Christophe Kerello wrote:
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index e765d3d0542e..e11c74db64f9 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -769,7 +769,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
->   
->   	if (config->wp_gpio)
->   		nvmem->wp_gpio = config->wp_gpio;
-> -	else
-> +	else if (config->reg_write)
-This is clearly not going to work for everyone.
+On 1/25/22 3:32 PM, Suzuki K Poulose wrote:
+> On 25/01/2022 03:21, Anshuman Khandual wrote:
+>>
+>>
+>> On 1/11/22 9:08 AM, Anshuman Khandual wrote:
+>>>     This series adds three different workarounds in the TRBE driver for
+>>> Cortex-A510 specific erratas. But first, this adds Cortex-A510 specific cpu
+>>> part number definition in the platform. This series applies on 5.16.
+>>>
+>>> Relevant errata documents can be found here.
+>>>
+>>> https://developer.arm.com/documentation/SDEN2397239/900
+>>> https://developer.arm.com/documentation/SDEN2397589/900
+>>>
+>>> Changes in V3:
+>>>
+>>> - Moved the comment inside trbe_needs_drain_after_disable()
+>>> - Moved the comment inside trbe_needs_ctxt_sync_after_enable()
+>>>
+>>> Changes in V2:
+>>>
+>>> https://lore.kernel.org/all/1641517808-5735-1-git-send-email-anshuman.khandual@arm.com/
+>>>
+>>> Accommodated most review comments from the previous version.
+>>>
+>>> - Split all patches into CPU errata definition, detection and TRBE workarounds
+>>> - s/TRBE_WORKAROUND_SYSREG_WRITE_FAILURE/TRBE_NEEDS_DRAIN_AFTER_DISABLE
+>>> - s/TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE/TRBE_NEEDS_CTXT_SYNC_AFTER_ENABLE
+>>> - s/trbe_may_fail_sysreg_write()/trbe_needs_drain_after_disable()
+>>> - s/trbe_may_corrupt_with_enable()/trbe_needs_ctxt_sync_after_enable()
+>>> - Updated Kconfig help message for config ARM64_ERRATUM_1902691
+>>> - Updated error message for trbe_is_broken() detection
+>>> - Added new trblimitr parameter to set_trbe_enabled(), improving performance
+>>> - Added COMPILE_TEST dependency in the errata, until TRBE part is available
+>>>
+>>> Changes in V1:
+>>>
+>>> https://lore.kernel.org/lkml/1641359159-22726-1-git-send-email-anshuman.khandual@arm.com/
+>>>
+>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>>> Cc: Will Deacon <will@kernel.org>
+>>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+>>> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+>>> Cc: coresight@lists.linaro.org
+>>> Cc: linux-doc@vger.kernel.org
+>>> Cc: linux-arm-kernel@lists.infradead.org
+>>> Cc: linux-kernel@vger.kernel.org
+>>>
+>>> Anshuman Khandual (7):
+>>>    arm64: Add Cortex-A510 CPU part definition
+>>>    arm64: errata: Add detection for TRBE ignored system register writes
+>>>    arm64: errata: Add detection for TRBE invalid prohibited states
+>>>    arm64: errata: Add detection for TRBE trace data corruption
+>>>    coresight: trbe: Work around the ignored system register writes
+>>>    coresight: trbe: Work around the invalid prohibited states
+>>>    coresight: trbe: Work around the trace data corruption
+>>
+>> Hello Catalin/Mathieu,
+>>
+>> I am wondering how this series is going to be merged i.e via arm64 or coresight
+>> tree ? Also will this require rebasing (and resend) against v5.17-rc1 release.
+>> Please do suggest. Thank you.
+> 
+> I would recommend rebasing on rc1.
 
-A flag in nvmem_config to indicate that wp gpio is managed by provider 
-driver would be the right thing to do here.
->   		nvmem->wp_gpio = gpiod_get_optional(config->dev, "wp",
->   						    GPIOD_OUT_HIGH);
-
---srini
-
+Sure, will do.

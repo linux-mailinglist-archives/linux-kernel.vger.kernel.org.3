@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CEA549BAD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:58:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2DB49BAD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236888AbiAYR6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:58:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59954 "EHLO
+        id S1351529AbiAYSA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:00:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30257 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243744AbiAYR4T (ORCPT
+        by vger.kernel.org with ESMTP id S1351491AbiAYR7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:56:19 -0500
+        Tue, 25 Jan 2022 12:59:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643133374;
+        s=mimecast20190719; t=1643133555;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=E6rxjsOhNxfEiaxINggrBA6x75JFuMQB6f2O2kbHXzE=;
-        b=BXIzrEbjlwjxscJl0uWRCufAHy8cPOcPBVccwf7ZxM9Vy0E9ox0oHYavSq4U86wMexezxM
-        dM4o3oGuxN/YBhLE+UnvweemQpjSpKvkeEvb2P56u8fG/PW0AF4914A8tsZD2yMGpp/5xl
-        1Tro+B8f0sLkVdYIEWP8tJhoaI95hmg=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=tQwnOxnoIr5kWKtczEX49APK7YeWZviqLQA1sp5peAU=;
+        b=QjHh+Hp8TizOE4FgVulGUllZmBkvmk5dtJVN74+84RUT7cKIdFXDrGu3PWSEh8P3NjJvs1
+        agTsfTuTjzioaRv+tQYvoONcr0Dkf9UJJ7WJ6rsj3GxLA7lanU+oCTkAw62tUHN+L19xFy
+        6silaCCw/sO8Bru5wCqGg9JDsPrJNuw=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-k7p6FB7yNK6NBuFrBehQQA-1; Tue, 25 Jan 2022 12:56:13 -0500
-X-MC-Unique: k7p6FB7yNK6NBuFrBehQQA-1
-Received: by mail-ot1-f72.google.com with SMTP id n99-20020a9d206c000000b00590dde2cca8so13846274ota.9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:56:12 -0800 (PST)
+ us-mta-345-HisVQRKKOmeQNvhXVOZbKg-1; Tue, 25 Jan 2022 12:59:13 -0500
+X-MC-Unique: HisVQRKKOmeQNvhXVOZbKg-1
+Received: by mail-ed1-f69.google.com with SMTP id a18-20020aa7d752000000b00403d18712beso15429504eds.17
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:59:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=E6rxjsOhNxfEiaxINggrBA6x75JFuMQB6f2O2kbHXzE=;
-        b=tvqkhUL8uh3n5YYokLN3ytxudBzkqxlY1GMwQq/qvJgfZ40xYAwAyWb50F48LSkVw5
-         UwMZjFCyvqjC9ujprT5SaZfYiGvmvsMEJSOKTyhIdnOjQhwYMCyRAleUUGUH76vDbb4P
-         B+fc5hlNzFpD15AE9cY3Jyl5xftpS4n9WJEgs4rZHq7qEGxp3V8IY5Hee+GQjInFl78A
-         Q1WYYTmPaMZPgR7pN76Rq3kO5hgH594MPq9xikrAJw3jqXFGkYdJ2KPsFRR/5MjuAcqC
-         gzwwb1VrbDmYtuY2tchspLPXOqbHldNtbE3MF8NFpt0VmJZ/L0z7zYrlcP5iuYlGzrbc
-         OhYA==
-X-Gm-Message-State: AOAM530+Tqq51q5tT39hUJ9SER6tEvsjYxOMAdPAh68y2bEelCIN1oVO
-        Gthk49d9jkewat5Ip7qmiIMgAnShl7E3+ulzHuV8a2j0nGdj/Ub/RCmVoxlHp4Nd7Xxl4sDhz3e
-        Q9Z+lqTPkZH8nzh58EWxLlOF8
-X-Received: by 2002:a4a:dd98:: with SMTP id h24mr2975783oov.73.1643133372030;
-        Tue, 25 Jan 2022 09:56:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxYU8KoqYoZGyScgfgxOyqhv/Nbcm50wK1ORJkXgLkUal4jqhtQ/iOtcNXKSPdPLYBPciII5g==
-X-Received: by 2002:a4a:dd98:: with SMTP id h24mr2975775oov.73.1643133371841;
-        Tue, 25 Jan 2022 09:56:11 -0800 (PST)
-Received: from optiplex-fbsd (c-73-182-255-193.hsd1.nh.comcast.net. [73.182.255.193])
-        by smtp.gmail.com with ESMTPSA id a15sm8138436oil.13.2022.01.25.09.56.10
+        bh=tQwnOxnoIr5kWKtczEX49APK7YeWZviqLQA1sp5peAU=;
+        b=pyJC15o6gqhKiyLoIsyVNpjex3Rg9NAaaBEP8hM3E5dyKPtbzff2vIiYIOOo6Ymz2Q
+         1B3BcQR1W+GovwyzIA9dZvXsmwCELi00e2lO60iX1tQNFXMtnN/rn7BJVmpzKwP5H/Cp
+         Wxzl4DKCNY5xObcLsiOe7sMZTaiZB0fzShCiCnNaLc1xgu8Jkl4O2GfRORuYomZYKqPQ
+         XHjmUQ4zjGcHTBfenc7falxmyW00GjVSpqs+h5TjceXduvrZdCeFLbxENtiVE1bg2ePF
+         iz6xCx+6M7GC27axlCQ+/PslWnPMEfeASmn5ZYC2qR9rgQLBsLMcUW6TwHQHXieJokXq
+         6biQ==
+X-Gm-Message-State: AOAM531PWrelispUkQsLlvU1QSZQ81/mHsn9C7TumPcE8fefad7vftH/
+        vGONOzomCXu0gN2/KifNRN1y6eK2JS3t+Am9ZZuGzQzfeqgCVBElvNrDQbqJIJLQvazh5qS+Nts
+        9wpdO0yPke5oZ2QwUzq1HLK/D
+X-Received: by 2002:a17:907:72c4:: with SMTP id du4mr9152823ejc.243.1643133552622;
+        Tue, 25 Jan 2022 09:59:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz7m6XPepvwD9UHHPdetVwWNbg/dFQ1MV8dbRVv9I9eBjYFCvpX/V21GrFvuzJV6aICXTe9mQ==
+X-Received: by 2002:a17:907:72c4:: with SMTP id du4mr9152815ejc.243.1643133552428;
+        Tue, 25 Jan 2022 09:59:12 -0800 (PST)
+Received: from redhat.com ([176.12.185.204])
+        by smtp.gmail.com with ESMTPSA id d5sm8562973edz.78.2022.01.25.09.59.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 09:56:11 -0800 (PST)
-Date:   Tue, 25 Jan 2022 12:56:08 -0500
-From:   Rafael Aquini <aquini@redhat.com>
+        Tue, 25 Jan 2022 09:59:11 -0800 (PST)
+Date:   Tue, 25 Jan 2022 12:59:08 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, mst@redhat.com, david@redhat.com,
+Cc:     akpm@linux-foundation.org, david@redhat.com,
         virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] mm/balloon_compaction: make balloon page compaction
  callbacks static
-Message-ID: <YfA5uLd8ftDxcIrG@optiplex-fbsd>
+Message-ID: <20220125125853-mutt-send-email-mst@kernel.org>
 References: <20220125132221.2220-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -76,6 +76,11 @@ On Tue, Jan 25, 2022 at 09:22:21PM +0800, Miaohe Lin wrote:
 > the relevant code.
 > 
 > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+
+I'll queue this unless someone else does first.
+
 > ---
 >  include/linux/balloon_compaction.h | 22 ----------------------
 >  mm/balloon_compaction.c            |  6 +++---
@@ -154,7 +159,4 @@ On Tue, Jan 25, 2022 at 09:22:21PM +0800, Miaohe Lin wrote:
 >  {
 > -- 
 > 2.23.0
-> 
-> 
-Acked-by: Rafael Aquini <aquini@redhat.com>
 

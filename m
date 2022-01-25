@@ -2,82 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F1B49BB35
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1A949BB37
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiAYSXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:23:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        id S231239AbiAYSXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:23:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiAYSWS (ORCPT
+        with ESMTP id S230429AbiAYSWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:22:18 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B627C061756
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:22:18 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nCQSF-0006WV-FC; Tue, 25 Jan 2022 19:22:07 +0100
-Message-ID: <176f57f1c2c2c32bd937130aad9f1aeb9255c35b.camel@pengutronix.de>
-Subject: Re: [PATCH V4 01/11] arm64: dts: imx8mq-tqma8mq: Remove redundant
- vpu reference
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>, linux-media@vger.kernel.org
-Cc:     aford@beaconembedded.com, cphealy@gmail.com,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Date:   Tue, 25 Jan 2022 19:22:06 +0100
-In-Reply-To: <20220125171129.472775-2-aford173@gmail.com>
-References: <20220125171129.472775-1-aford173@gmail.com>
-         <20220125171129.472775-2-aford173@gmail.com>
+        Tue, 25 Jan 2022 13:22:35 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D90C061753
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:22:35 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id d65-20020a256844000000b00614359972a6so33918284ybc.16
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:22:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Lok6oxADWNe/Lq9Bd8BF739UQWqpIq0qYKa/bk6A5N0=;
+        b=Q7l+l0kOp7iAA251LRk5qfU1ONabSuPZAiJwgqqdIvUyhHRq5IpqYE0NG2FjMa8LI3
+         BOf0LsBOrb5++slHn79YerH9uoCp11FPSy6Bk1I2YWasaNbov63mEXtyjagbrQdhbk4u
+         d+ykI49DmoF40J+nuy6z7Uni3moA4qm18Mo2TtKprOXdqOWQIHq+zsvKbQg7QOwlD5MZ
+         2x0eWn+SQcCkXLrY9t+ikn9LW98pTC2sJf36jaM0RVFCl7BKt0YN5QzVBzk660JBKU78
+         OmF/S/Yf/V7V4h6eZhc5o7qKII3l+IRuydkfe4u8z2fWazTlYOqNaDTs5rcXCVUfusb1
+         TAVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Lok6oxADWNe/Lq9Bd8BF739UQWqpIq0qYKa/bk6A5N0=;
+        b=LXGZ08bpReZAOyV8Io1XHuwyI1toalnKk4MLO19Q8dw4WX9R/7dXPdiwOUxlGrEHj/
+         yYsSGjUBwK1FJjLk77xAHd7lJiIvgPwpeG4lxAHtq6G9hcu8XKyOfmdkj/QeErsCCie3
+         peLNxXgcpJXNeykfRbSqC6q/hdf8Goaqf5TnQBYoCXSK/QbbroGSAApreX3bd7P/QBA2
+         xjt1G9fkjfwLCKEU4ltegKS/wN+6OBCupp4WVNbr9bGPMrPmDtfBvOFTCc2LbVOTdRHk
+         ZfCVeaxbvonEHC9Oe93noMJB6Sn8qBohe6r6fgBgngbSUfySYBkbeI+A+BjsIiP0kYJI
+         DBWQ==
+X-Gm-Message-State: AOAM533MNd14mFVNpZKkVZe+iylr/RU1Eb+I3TPeFnApI+w623UQ3MNA
+        SnmH7R7HsABm1dodGyMBuSfoFxGthG4w
+X-Google-Smtp-Source: ABdhPJywOjHqDnkI+4Tt9DzDqL7Nok6BVw+ygf1J/HuOdAqVIIEzVomSL/CnnzfCvbWdHBqUd9wizHquVF9G
+X-Received: from eugenis.svl.corp.google.com ([2620:15c:2ce:200:d947:cd1e:4976:2712])
+ (user=eugenis job=sendgmr) by 2002:a05:6902:47:: with SMTP id
+ m7mr33544786ybh.69.1643134954491; Tue, 25 Jan 2022 10:22:34 -0800 (PST)
+Date:   Tue, 25 Jan 2022 10:22:17 -0800
+Message-Id: <20220125182217.2605202-1-eugenis@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+Subject: [PATCH v2] arm64: extable: fix load_unaligned_zeropad() reg indices
+From:   Evgenii Stepanov <eugenis@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jisheng Zhang <jszhang@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Evgenii Stepanov <eugenis@google.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, dem 25.01.2022 um 11:11 -0600 schrieb Adam Ford:
-> The vpu is enabled by default, so there is no need to manually
-> enable it.
-> 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
+In ex_handler_load_unaligned_zeropad() we erroneously extract the data and
+addr register indices from ex->type rather than ex->data. As ex->type will
+contain EX_TYPE_LOAD_UNALIGNED_ZEROPAD (i.e. 4):
+ * We'll always treat X0 as the address register, since EX_DATA_REG_ADDR is
+   extracted from bits [9:5]. Thus, we may attempt to dereference an
+   arbitrary address as X0 may hold an arbitrary value.
+ * We'll always treat X4 as the data register, since EX_DATA_REG_DATA is
+   extracted from bits [4:0]. Thus we will corrupt X4 and cause arbitrary
+   behaviour within load_unaligned_zeropad() and its caller.
 
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+Fix this by extracting both values from ex->data as originally intended.
 
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
-> index 8aedcddfeab8..38ffcd145b33 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
-> @@ -272,10 +272,6 @@ &usdhc1 {
->  	status = "okay";
->  };
->  
-> -&vpu {
-> -	status = "okay";
-> -};
-> -
->  /* Attention: wdog reset forcing POR needs baseboard support */
->  &wdog1 {
->  	status = "okay";
+On an MTE-enabled QEMU image we are hitting the following crash:
+ Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+ Call trace:
+  fixup_exception+0xc4/0x108
+  __do_kernel_fault+0x3c/0x268
+  do_tag_check_fault+0x3c/0x104
+  do_mem_abort+0x44/0xf4
+  el1_abort+0x40/0x64
+  el1h_64_sync_handler+0x60/0xa0
+  el1h_64_sync+0x7c/0x80
+  link_path_walk+0x150/0x344
+  path_openat+0xa0/0x7dc
+  do_filp_open+0xb8/0x168
+  do_sys_openat2+0x88/0x17c
+  __arm64_sys_openat+0x74/0xa0
+  invoke_syscall+0x48/0x148
+  el0_svc_common+0xb8/0xf8
+  do_el0_svc+0x28/0x88
+  el0_svc+0x24/0x84
+  el0t_64_sync_handler+0x88/0xec
+  el0t_64_sync+0x1b4/0x1b8
+ Code: f8695a69 71007d1f 540000e0 927df12a (f940014a)
 
+Fixes: 753b32368705 ("arm64: extable: add load_unaligned_zeropad() handler")
+Cc: <stable@vger.kernel.org> # 5.16.x
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Evgenii Stepanov <eugenis@google.com>
+---
+ arch/arm64/mm/extable.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
+index c0181e60cc98..489455309695 100644
+--- a/arch/arm64/mm/extable.c
++++ b/arch/arm64/mm/extable.c
+@@ -40,8 +40,8 @@ static bool
+ ex_handler_load_unaligned_zeropad(const struct exception_table_entry *ex,
+ 				  struct pt_regs *regs)
+ {
+-	int reg_data = FIELD_GET(EX_DATA_REG_DATA, ex->type);
+-	int reg_addr = FIELD_GET(EX_DATA_REG_ADDR, ex->type);
++	int reg_data = FIELD_GET(EX_DATA_REG_DATA, ex->data);
++	int reg_addr = FIELD_GET(EX_DATA_REG_ADDR, ex->data);
+ 	unsigned long data, addr, offset;
+ 
+ 	addr = pt_regs_read_reg(regs, reg_addr);
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
 

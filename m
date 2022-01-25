@@ -2,176 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E0549B99A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4670649B99C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243321AbiAYRFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359421AbiAYRDI (ORCPT
+        id S237661AbiAYRFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:05:50 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:54440
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1376950AbiAYRDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:03:08 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548C5C061751
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:03:04 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id m90so38646967uam.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:03:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lT2ZEVyfUq+RaCtD1SacFhDgchwqLFLjwZATklfqjQo=;
-        b=7kV2ubF4TIQ4dwGGaiZY6131cWDRToAMH/HRzgcl8dHqnGW/u7vnbPaPyT2W7f6wtJ
-         tapTLf+rzYrb3PMcA4y2yPx9tULUJH2eDPtW5yj6k1jjRmQZvBQexwuJ9FHvrasO9fMO
-         c6KcV9CzdSYCh064A9DhFhH/gvu4tFOKZlTiW0bBo5omThzxkNvkwkIqW+f0MbNVL9c1
-         ukaTpDZLYSI/sI1gQYM9zVJI3g5srRQv8IKXXmc8/aeffY8eWY4bQH/1g16oBiqxsAv2
-         rXSc7k3Qyov+weW6wiLNAuhE++nqSJE+fAHYwNxvN0RXke6djmViq6qye5rtNqZYVzsX
-         jyfw==
+        Tue, 25 Jan 2022 12:03:14 -0500
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AECEA3F1CB
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 17:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643130191;
+        bh=rw3iKwjHVF1T+M8vGLUxyKNks1I9pnaON9d7P08zG0k=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=cTm+Bsvs5cdjF6YbRi8GGCFZzHHJPieTzdu5pRTe08/BOS9qGDfaBYv7CXqcKsRH2
+         2EnGDxjYAv5zhOt1GdefRhbNgIukaC9iRamVesqG9khJvYIimQszWcwFCv4cVZmlQH
+         YGxBNGRBzLrMC2gBEkVu2GCi/QaQZRc1q7s3WxpVEKT5DmorMTtQzP2rKVc6oMihQx
+         ZMHY23fH92+2acs7Q6LRGgy4g4DwSR1FuvRdApQVExL0+JT3JcawBFIj2QGHiVNri/
+         z5wuC2H/mZWoxXRRWQdH5yVGBxEhFpfy244/apAaOLrkq1EHqRlujvqe7vum9ZyTRr
+         HGgEcdSy+F4Iw==
+Received: by mail-wm1-f70.google.com with SMTP id v185-20020a1cacc2000000b0034906580813so1446318wme.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:03:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lT2ZEVyfUq+RaCtD1SacFhDgchwqLFLjwZATklfqjQo=;
-        b=G/sMzO45506pk5hhh1yMd7nBxbl1usLetUAT0Cc7Ep5jknGu/FKiakLkMNrOLqi/l3
-         xc2qKEyxpDRIDMhLTfDiYG/eGBqcQbPKdmYFD0MRQZlwoEoyyuoUnID7rB2HRxJfk1uM
-         bfz/c0FOs1mHnY78lv5N7/5NvXqg4t1xisGpQK39JC2SLsWv1V5ACX2mlmcXhSKZI/IK
-         U3v4DYO9Zec2LxrnphJdRSCEThGUwHnUeRwbbwuxDUVS034XqtMFCZZavVHvgQzqrV0I
-         fqdQpr0Qe0UEqmrn9QU2pKk+tDI70uIefiDOiDfiKfddWI5/mNJHNAY0oOBEKwycJYDc
-         BAnA==
-X-Gm-Message-State: AOAM533cUNSsvRcqa/o/P7ZyVVBBvFYuF8GF0f/I5EKHekJ1tp2twc5/
-        S/V55NcAM2ljTfAi0wKbyDfJ2BgtxMxBZWhka4hMEQ==
-X-Google-Smtp-Source: ABdhPJy+Q4MbRbCaNWgzjyIfDeid5bkMbIcQqaOwKnPZ1IalYuAahOQ2HN0GrpLSexg/X+GgIFK06+RLTac33eVQxxw=
-X-Received: by 2002:a67:cc07:: with SMTP id q7mr3762136vsl.21.1643130182745;
- Tue, 25 Jan 2022 09:03:02 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rw3iKwjHVF1T+M8vGLUxyKNks1I9pnaON9d7P08zG0k=;
+        b=azqAncOgfH+KylSYJcwHVxQ9Qs44PFozrb2oXBCtBwz8AUWykes9VDVSb8nwXajnr5
+         x4bp3xhMMD1YHwPsG6kqpPU8JuMDZha47GDmml/brZ7/p4BmEcWjU/APLgFTsvpPaChW
+         zkyekb+dZuBoYScGAIKzZZ3S3iOXHpYvhcT5bUn0+FZmVzCtm8PvF89PLJWc60pSb9nZ
+         HL/gYYnSk3fXAhn9emHXGTp5kHJuITukrWu5FXMy6eqA96CHzMQ6nvGJl/LS4n+2U/Q9
+         OdgJz2GNsXPo7LCRCx2eML4rewGRdDhcQTneF5eYt5GKnRtYolF9mjcB57tB8N5b00R/
+         /cMw==
+X-Gm-Message-State: AOAM530jFK3CAvmE4EKsLlsTFVpxoofua85g9eHXQkWwFm73oenkq9yj
+        pB8JNWJD04U6r2s/hZI9wDjZSKzA650+WSWGxuKuTAQ/26BSlKwu9S8V5lCqcIpZTTWnXdgpinm
+        55s9OfKR+N+y4aTJQvfuQRVz9WykMNKkb7UT1xpZ8IQ==
+X-Received: by 2002:a05:600c:1912:: with SMTP id j18mr3688453wmq.155.1643130191282;
+        Tue, 25 Jan 2022 09:03:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJytGJ9TI5VtzIsjGQXHuW43/peZ43AFiVhcRxKrAIWgj3XRztUpx3XwN+qMJZWd1jMpp/rqWg==
+X-Received: by 2002:a05:600c:1912:: with SMTP id j18mr3688422wmq.155.1643130191014;
+        Tue, 25 Jan 2022 09:03:11 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id i3sm17162548wru.33.2022.01.25.09.03.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 09:03:10 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Henrik Grimler <henrik@grimler.se>, virag.david003@gmail.com,
+        m.szyprowski@samsung.com, cw00.choi@samsung.com,
+        ~postmarketos/upstreaming@lists.sr.ht, alim.akhtar@samsung.com,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, semen.protsenko@linaro.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH 0/2] ARM: dts: exynos: Add support for Samsung Klimt WiFi
+Date:   Tue, 25 Jan 2022 18:02:29 +0100
+Message-Id: <164313008959.78836.16815768434682839337.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220124131241.29946-1-henrik@grimler.se>
+References: <20220124131241.29946-1-henrik@grimler.se>
 MIME-Version: 1.0
-References: <0af17d6952b3677dcd413fefa74b086d5ffb474b.camel@rajagiritech.edu.in>
- <YfAKYWOMdGJ0NxjE@kroah.com> <CAG=yYwksvQmEsfRyFiQTbSxUL39WGf7ryHaywtAxgdL1Nt67OQ@mail.gmail.com>
- <YfAk90OPjlpjruV5@kroah.com>
-In-Reply-To: <YfAk90OPjlpjruV5@kroah.com>
-From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date:   Tue, 25 Jan 2022 22:32:26 +0530
-Message-ID: <CAG=yYw=BK1gU0UV8g5_ZT5gOe5P2W2rKHWdFyPi4ZHSy4CGMFw@mail.gmail.com>
-Subject: Re: review for 5.16.3-rc2
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 9:57 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jan 25, 2022 at 09:49:00PM +0530, Jeffrin Thalakkottoor wrote:
-> > On Tue, Jan 25, 2022 at 8:04 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Tue, Jan 25, 2022 at 06:15:46PM +0530, Jeffrin Jose T wrote:
-> > > > hello greg,
-> > > >
-> > > > compile failed for  5.16.3-rc2 related.
-> > > > a relevent file attached.
-> > > >
-> > > > Tested-by : Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-> > >
-> > > But it failed for you, how did you test it?
-> >
-> > i compiled  5.16.3-rc2  related to "make localmodconfig" and  "make  -j4"
->
-> So it somehow failed?
+On Mon, 24 Jan 2022 14:12:39 +0100, Henrik Grimler wrote:
+> Klimt WiFi has product name Samsung Galaxy Tab S 8.4" and was released
+> in 2014.  It has similar hardware to exynos5420-chagall-wifi and the
+> two devices can hence share a common base dtsi.
+> 
+> Same issues as for Chagall Wifi applies: CCI has to be disabled and
+> only 4 out of 8 CPUs are brought up at boot (see
+> https://lore.kernel.org/r/20220118185746.299832-4-henrik@grimler.se).
+> 
+> [...]
 
-Yes i think so
+Applied, thanks!
 
->
-> > >
-> > > >
-> > > >
-> > >
-> > > >       char *                     typetab;              /*    24     8 */
-> > > >
-> > > >       /* size: 32, cachelines: 1, members: 4 */
-> > > >       /* sum members: 28, holes: 1, sum holes: 4 */
-> > > >       /* last cacheline: 32 bytes */
-> > > > };
-> > > > struct klp_modinfo {
-> > > >       Elf64_Ehdr                 hdr;                  /*     0    64 */
-> > > >       /* --- cacheline 1 boundary (64 bytes) --- */
-> > > >       Elf64_Shdr *               sechdrs;              /*    64     8 */
-> > > >       char *                     secstrings;           /*    72     8 */
-> > > >       unsigned int               symndx;               /*    80     4 */
-> > > >
-> > > >       /* size: 88, cachelines: 2, members: 4 */
-> > > >       /* padding: 4 */
-> > > >       /* last cacheline: 24 bytes */
-> > > > };
-> > > > Segmentation fault
-> > >
-> > > What "faulted"?  Look higher up in the log please.
-> >
-> > a top view...
-> >
-> >   CALL    scripts/atomic/check-atomics.sh
-> >   CALL    scripts/checksyscalls.sh
-> >   CHK     include/generated/compile.h
-> >   GEN     .version
-> >   CHK     include/generated/compile.h
-> >   UPD     include/generated/compile.h
-> >   CC      init/version.o
-> >   AR      init/built-in.a
-> >   LD      vmlinux.o
-> >   MODPOST vmlinux.symvers
-> >   MODINFO modules.builtin.modinfo
-> >   GEN     modules.builtin
-> >   LD      .tmp_vmlinux.btf
-> >   BTF     .btf.vmlinux.bin.o
-> > struct list_head {
-> >     struct list_head *         next;                 /*     0     8 */
-> >     struct list_head *         prev;                 /*     8     8 */
-> >
-> >     /* size: 16, cachelines: 1, members: 2 */
-> >     /* last cacheline: 16 bytes */
-> > };
-> > struct hlist_head {
-> >     struct hlist_node *        first;                /*     0     8 */
-> >
-> >     /* size: 8, cachelines: 1, members: 1 */
-> >     /* last cacheline: 8 bytes */
-> > };
-> > struct hlist_node {
-> >     struct hlist_node *        next;                 /*     0     8 */
-> >     struct hlist_node * *      pprev;                /*     8     8 */
-> >
-> >     /* size: 16, cachelines: 1, members: 2 */
-> >     /* last cacheline: 16 bytes */
-> > };
-> > struct callback_head {
-> >     struct callback_head *     next;                 /*     0     8 */
-> >     void                       (*func)(struct callback_head *); /*
-> > 8     8 */
-> > .
-> > .
-> > .
-> > .
-> > .
-> > .
->
-> I do not know what is failing, there is no error message here.  Does
-> 5.16.2 build properly for you?
+[1/2] dt-bindings: arm: samsung: document Klimt WiFi board binding
+      commit: 8d4d0d7c43e6f87df02a0acac206b50c265962d1
+[2/2] ARM: dts: exynos: Add support for Samsung Klimt WiFi
+      commit: 21fc732222559c7b5a8731571d30501d5fcb631c
 
-stderr has  captured  the  following...
-
-
--------------x-----------------x--------------x---
-FAILED: load BTF from vmlinux: No such file or directory
-make: *** [Makefile:1161: vmlinux] Error 255
-make: *** Deleting file 'vmlinux'
-------------x----------------x------------x--
-5.16.2-rc1 builds for me.
-
-Will the following link help...
-
-https://unix.stackexchange.com/questions/616392/failed-load-btf-from-vmlinux-unknown-error-2make-makefile1162-vmlinu
-
+Best regards,
 -- 
-software engineer
-rajagiri school of engineering and technology
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

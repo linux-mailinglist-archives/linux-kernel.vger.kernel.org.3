@@ -2,173 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA7249B98C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF8749B994
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346475AbiAYRCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354779AbiAYRAU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:00:20 -0500
-X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Jan 2022 09:00:18 PST
-Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E7DC06174E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:00:17 -0800 (PST)
-Received: (qmail 10734 invoked from network); 25 Jan 2022 16:52:27 -0000
-Received: from p200300cf0713e20076d435fffeb7be92.dip0.t-ipconnect.de ([2003:cf:713:e200:76d4:35ff:feb7:be92]:48794 HELO eto.sf-tec.de) (auth=eike@sf-mail.de)
-        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
-        for <linux-mm@kvack.org>; Tue, 25 Jan 2022 17:52:27 +0100
-From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
-To:     linux-mm@kvack.org, Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
-        akpm@linux-foundation.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-parisc@vger.kernel.org
-Subject: Re: [RFC V1 21/31] parisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Tue, 25 Jan 2022 17:53:27 +0100
-Message-ID: <11909976.O9o76ZdvQC@eto.sf-tec.de>
-In-Reply-To: <1643029028-12710-22-git-send-email-anshuman.khandual@arm.com>
-References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com> <1643029028-12710-22-git-send-email-anshuman.khandual@arm.com>
+        id S240541AbiAYRFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:05:10 -0500
+Received: from mga03.intel.com ([134.134.136.65]:59652 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354582AbiAYRCu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 12:02:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643130170; x=1674666170;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/mTnNtkyEJI+5x7IYcfDbJkXYf2eGevEJEqfSB40thE=;
+  b=N/W7+AqbiKQN6UkwT8j4bUeEbG6LhoswMuiKiqyNgjeChq37mtJSW39W
+   vIMkyQYIyubAeopmeDBsqZa9MNXtpIlaMeGLVJF4Xpor3qJTiRFwG+Ip2
+   6np9U1sRt0O5NM0P1A/Ev0LNDgXvGJcBtShp+RdV4wz/62ldsEONX+y8C
+   pLDU7MyJyB+HMm2ws+oafnTX1Uq7JsFsUoSK6F/s2d3qqoWF9HZGs0mCw
+   zSD4P/dk9jFib81i+55OQGlceKlOz5NRWd0zcYJ6ZrqORDHc/MmDc3BFl
+   jBuTFMMO1MIKOkyFA35NdxUzndd39mXmtPR9d9Hrr6ZMC5mVtHSLDO8eE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="246294502"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="246294502"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:54:57 -0800
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="477174004"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:54:54 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nCP4m-00EJqX-Ce;
+        Tue, 25 Jan 2022 18:53:48 +0200
+Date:   Tue, 25 Jan 2022 18:53:48 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Wander Costa <wcosta@redhat.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Johan Hovold <johan@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH] tty: serial: Use fifo in 8250 console driver
+Message-ID: <YfArHDfrVHw7ApDx@smile.fi.intel.com>
+References: <20211029201402.428284-1-wander@redhat.com>
+ <a1ac6254-f79e-d131-fa2a-c7ad714c6d4a@nvidia.com>
+ <f451e67d-adb9-01e8-bd11-bf7804863b4b@kernel.org>
+ <8e57400f-d6a8-bd42-6214-fca1fe37a972@kernel.org>
+ <11ec4350-b890-4949-cf8f-bc62d530d64f@nvidia.com>
+ <CAAq0SU=9R3Y_SAdM+HaqavzWBRd1Li-b5bnZZLd5Opfgd0vnkQ@mail.gmail.com>
+ <fa42a60c-954a-acc0-3962-f00427153f78@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5535662.DvuYhMxLoT"; micalg="pgp-sha1"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fa42a60c-954a-acc0-3962-f00427153f78@nvidia.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart5535662.DvuYhMxLoT
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-
-Anshuman Khandual wrote:
-> This defines and exports a platform specific custom vm_get_page_prot() via
-> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> macros can be dropped which are no longer needed.
+On Tue, Jan 25, 2022 at 12:40:27PM +0000, Jon Hunter wrote:
 > 
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  arch/parisc/Kconfig               |  1 +
->  arch/parisc/include/asm/pgtable.h | 20 ---------------
->  arch/parisc/mm/init.c             | 41 +++++++++++++++++++++++++++++++
->  3 files changed, 42 insertions(+), 20 deletions(-)
+> On 25/01/2022 10:29, Wander Costa wrote:
+> > On Tue, Jan 25, 2022 at 7:06 AM Jon Hunter <jonathanh@nvidia.com> wrote:
+> > > 
+> > > 
+> > > On 25/01/2022 09:36, Jiri Slaby wrote:
+> > > 
+> > > ...
+> > > 
+> > > > > The test is bogus:
+> > > > >           use_fifo = (up->capabilities & UART_CAP_FIFO) &&
+> > > > >                   port->fifosize > 1 &&
+> > > > >                   (serial_port_in(port, UART_FCR) & UART_FCR_ENABLE_FIFO)
+> > > > > 
+> > > > > FCR is write only. Reading it, one gets IIR contents.
+> > > > 
+> > > > In particular, the test is checking whether there is no interrupt
+> > > > pending (UART_FCR_ENABLE_FIFO == UART_IIR_NO_INT). So it oscillates
+> > > > between use_fifo and not, depending on the interrupt state of the chip.
+> > > > 
+> > > > Could you change it into something like this:
+> > > > --- a/drivers/tty/serial/8250/8250_port.c
+> > > > +++ b/drivers/tty/serial/8250/8250_port.c
+> > > > @@ -3396,7 +3396,7 @@ void serial8250_console_write(struct
+> > > > uart_8250_port *up, const char *s,
+> > > > 
+> > > >           use_fifo = (up->capabilities & UART_CAP_FIFO) &&
+> > > >                   port->fifosize > 1 &&
+> > > > -               (serial_port_in(port, UART_FCR) & UART_FCR_ENABLE_FIFO) &&
+> > > > +               (up->fcr & UART_FCR_ENABLE_FIFO) &&
+> > > >                   /*
+> > > >                    * After we put a data in the fifo, the controller will
+> > > > send
+> > > >                    * it regardless of the CTS state. Therefore, only use
+> > > > fifo
+> > > > 
+> > > > 
+> > > > And see whether it fixes the issue. Anyway, of what port type is the
+> > > > serial port (what says dmesg/setserial about that)?
+> > > 
+> > > 
+> > > Thanks. Unfortunately, this did not fix it. The port type is PORT_TEGRA ...
+> > > 
+> > >    70006000.serial: ttyS0 at MMIO 0x70006000 (irq = 72, base_baud = 25500000) is a Tegra
+> > 
+> > I see PORT_TEGRA has different values for fifosize and tx_loadsz.
+> > Maybe we should use tx_loadsz.
+> > Could you please give a try to this patch:
+> > 
+> > diff --git a/drivers/tty/serial/8250/8250_port.c
+> > b/drivers/tty/serial/8250/8250_port.c
+> > index 2abb3de11a48..d3a93e5d55f7 100644
+> > --- a/drivers/tty/serial/8250/8250_port.c
+> > +++ b/drivers/tty/serial/8250/8250_port.c
+> > @@ -3343,7 +3343,7 @@ static void serial8250_console_fifo_write(struct
+> > uart_8250_port *up,
+> >   {
+> >          int i;
+> >          const char *end = s + count;
+> > -       unsigned int fifosize = up->port.fifosize;
+> > +       unsigned int fifosize = up->tx_loadsz;
+> >          bool cr_sent = false;
+> > 
+> >          while (s != end) {
+> > @@ -3409,8 +3409,8 @@ void serial8250_console_write(struct
+> > uart_8250_port *up, const char *s,
+> >          }
+> > 
+> >          use_fifo = (up->capabilities & UART_CAP_FIFO) &&
+> > -               port->fifosize > 1 &&
+> > -               (serial_port_in(port, UART_FCR) & UART_FCR_ENABLE_FIFO) &&
+> > +               up->tx_loadsz > 1 &&
+> > +               (up->fcr & UART_FCR_ENABLE_FIFO) &&
+> >                  /*
+> >                   * After we put a data in the fifo, the controller will send
+> >                   * it regardless of the CTS state. Therefore, only use fifo
+> > 
 > 
-> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-> index 43c1c880def6..de512f120b50 100644
-> --- a/arch/parisc/Kconfig
-> +++ b/arch/parisc/Kconfig
-> @@ -10,6 +10,7 @@ config PARISC
->  	select ARCH_HAS_ELF_RANDOMIZE
->  	select ARCH_HAS_STRICT_KERNEL_RWX
->  	select ARCH_HAS_UBSAN_SANITIZE_ALL
-> +	select ARCH_HAS_VM_GET_PAGE_PROT
->  	select ARCH_NO_SG_CHAIN
->  	select ARCH_SUPPORTS_HUGETLBFS if PA20
->  	select ARCH_SUPPORTS_MEMORY_FAILURE
-> diff --git a/arch/parisc/include/asm/pgtable.h
-> b/arch/parisc/include/asm/pgtable.h index 3e7cf882639f..80d99b2b5913 100644
-> --- a/arch/parisc/include/asm/pgtable.h
-> +++ b/arch/parisc/include/asm/pgtable.h
-> @@ -269,26 +269,6 @@ extern void __update_cache(pte_t pte);
->   * pages.
->   */
 > 
-> -	 /*xwr*/
-> -#define __P000  PAGE_NONE
-> -#define __P001  PAGE_READONLY
-> -#define __P010  __P000 /* copy on write */
-> -#define __P011  __P001 /* copy on write */
-> -#define __P100  PAGE_EXECREAD
-> -#define __P101  PAGE_EXECREAD
-> -#define __P110  __P100 /* copy on write */
-> -#define __P111  __P101 /* copy on write */
-> -
-> -#define __S000  PAGE_NONE
-> -#define __S001  PAGE_READONLY
-> -#define __S010  PAGE_WRITEONLY
-> -#define __S011  PAGE_SHARED
-> -#define __S100  PAGE_EXECREAD
-> -#define __S101  PAGE_EXECREAD
-> -#define __S110  PAGE_RWX
-> -#define __S111  PAGE_RWX
-> -
-> -
->  extern pgd_t swapper_pg_dir[]; /* declared in init_task.c */
+> Thanks. Yes that does fix it.
 > 
->  /* initial page tables for 0-8MB for kernel */
-> diff --git a/arch/parisc/mm/init.c b/arch/parisc/mm/init.c
-> index 1ae31db9988f..c8316e97e1a2 100644
-> --- a/arch/parisc/mm/init.c
-> +++ b/arch/parisc/mm/init.c
-> @@ -866,3 +866,44 @@ void flush_tlb_all(void)
->  	spin_unlock(&sid_lock);
->  }
->  #endif
-> +
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> +{
-> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +	case VM_NONE:
-> +		return PAGE_NONE;
-> +	case VM_READ:
-> +		return PAGE_READONLY;
-> +	case VM_WRITE:
-> +		return PAGE_NONE;
-> +	case VM_READ | VM_WRITE:
-> +		return PAGE_READONLY;
+> Andy, does this work for X86?
 
-This looks extremely strange. It probably is correct when it comes to CoW, how 
-about including the comment that was in the original definitions for the cases 
-where CoW is expected?
+Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> +	case VM_EXEC:
-> +		return PAGE_EXECREAD;
-> +	case VM_EXEC | VM_READ:
-> +		return PAGE_EXECREAD;
-> +	case VM_EXEC | VM_WRITE:
-> +		return PAGE_EXECREAD;
-> +	case VM_EXEC | VM_READ | VM_WRITE:
-> +		return PAGE_EXECREAD;
-> +	case VM_SHARED:
-> +		return PAGE_NONE;
-> +	case VM_SHARED | VM_READ:
-> +		return PAGE_READONLY;
-> +	case VM_SHARED | VM_WRITE:
-> +		return PAGE_WRITEONLY;
-> +	case VM_SHARED | VM_READ | VM_WRITE:
-> +		return PAGE_SHARED;
-> +	case VM_SHARED | VM_EXEC:
-> +		return PAGE_EXECREAD;
-> +	case VM_SHARED | VM_EXEC | VM_READ:
-> +		return PAGE_EXECREAD;
-> +	case VM_SHARED | VM_EXEC | VM_WRITE:
-> +		return PAGE_RWX;
-> +	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
-> +		return PAGE_RWX;
-> +	default:
-> +		BUILD_BUG();
-> +	}
-> +}
-> +EXPORT_SYMBOL(vm_get_page_prot);
+No, it does NOT fix an issue (I see it on a handful x86) with the legacy UART
+(means the 8250_pnp is in use). And I believe the same will be the case on LPSS
+ones (8250_dw / 8250_lpss) and HSU (8250_mid), because the patch influences on
+all of them.
 
-
---nextPart5535662.DvuYhMxLoT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCYfArBwAKCRBcpIk+abn8
-Tn3fAJ9mCiqlAWz0LSE02l6g56q9bKoqEgCfTTU/KTI/Xf7FeIAR89tBwIQgI/A=
-=Hgfz
------END PGP SIGNATURE-----
-
---nextPart5535662.DvuYhMxLoT--
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 

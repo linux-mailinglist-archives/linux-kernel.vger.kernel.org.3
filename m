@@ -2,537 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C432949AE9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 230BA49AE66
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453264AbiAYIxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:53:06 -0500
-Received: from mail-bn8nam11on2062.outbound.protection.outlook.com ([40.107.236.62]:46654
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1452461AbiAYItH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:49:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QWRltsMo0BJt5+wZfeN89EHXgM4h+GfeJZvm4rJP4VyoG6MkidSzi5fvh5NrifI1noRLLlh8Hk8DRy5HQjBKfoaBRUdJLjxEYLJxoPbslCO7050+B9MogdPrx1LneI2yI9kp+iDLxIBZIP6hIm8aShg8hU8Jb1asJxxhJO/d13Df4F6dJgNrx4WvdAsbeRLojCzzSwwEoqUaQuW0kJbuDb0RyNzhciS7NeGH3YYFpzQj2gEmg6N9FgKjDhi4mNjC3T0NqrHEMR+c5MKgPpQCo3GfCMoQgx8WRGp/16I12gQn5czCzwLWxnAb1yU9qvBH9Sk6dnJReKFttOxe+c5u0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Aq4Xsk3GGdSWYopufuwlSilK0VfI46yvDrfqeu9xK/0=;
- b=Q3Tl2EktQZHZdZ0/L1akKKQzghhvn3CzNa84xMToFAygUzJ5zBoqfnXoZnOgv40tGGSP9/p8ugUQs2RL0CXfGSl/mdOkUR1CD6TduP+DS821G+ADO1LKdNTPqtnrBFOSfgYZmrQupCV4zDF9ex+oY4NELJQyN3/AuxowqG5d5arZ1wtEVwYqjDQsvx7tYEBrDnqFoQwJ+eY1iGbkWqddORIE2STeUxcz5nPG6lpyQuss3HC9oJ3hCbkJa6egAmFlYOfbMmJ2/fG03ix18XzZWDtgAb3eQlLFUasbEXQL6zqDsmFu2SnSiHAPv2qKrXw4669/pMgue1B+zi0ek4a86A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Aq4Xsk3GGdSWYopufuwlSilK0VfI46yvDrfqeu9xK/0=;
- b=giiOQMTbVitHEPiS3Pj1mpSsSFeJ7zJrsaaRQLJhlWrdzHoSLD/4rME3ao3KMwDR3Cz+E7iEg2GdrzEhlN4yr8WngaqRumKHlwnNIspiZOUYJbz0ViQYClBw0XWeY4lPfamH6GE6GBPNMBFnWDQBmvCaj2OtofP0OZzMva2FNfJmjyTZ442MhVB8FiYBgy7o2GZomdcsPsMvrk6HkEeQzdonNVKvFH0GErFosLcV8Ie77HkD7aieoiTFkHpK5O/EeXhd2l68QdkfiGfMd+KspFsPwTXK79ethd6ETxHzeJ7+wjfDE1YQdIxUtjmZsXwrGwOfsZzneDrHswQMoNqiXA==
-Received: from DM5PR16CA0016.namprd16.prod.outlook.com (2603:10b6:3:c0::26) by
- CY4PR1201MB0008.namprd12.prod.outlook.com (2603:10b6:903:d5::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Tue, 25 Jan
- 2022 08:49:03 +0000
-Received: from DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:c0:cafe::c2) by DM5PR16CA0016.outlook.office365.com
- (2603:10b6:3:c0::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.19 via Frontend
- Transport; Tue, 25 Jan 2022 08:49:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- DM6NAM11FT014.mail.protection.outlook.com (10.13.173.132) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4909.7 via Frontend Transport; Tue, 25 Jan 2022 08:49:02 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.18; Tue, 25 Jan 2022 08:49:01 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9;
- Tue, 25 Jan 2022 00:49:01 -0800
-Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Tue, 25 Jan 2022 00:48:58 -0800
-From:   Sameer Pujar <spujar@nvidia.com>
-To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
-        <perex@perex.cz>, <robh+dt@kernel.org>, <thierry.reding@gmail.com>
-CC:     <jonathanh@nvidia.com>, <mkumard@nvidia.com>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        Sameer Pujar <spujar@nvidia.com>
-Subject: [PATCH 4/5] arm64: tegra: Add audio devices on Tegra234
-Date:   Tue, 25 Jan 2022 14:18:10 +0530
-Message-ID: <1643100491-5398-5-git-send-email-spujar@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643100491-5398-1-git-send-email-spujar@nvidia.com>
-References: <1643100491-5398-1-git-send-email-spujar@nvidia.com>
+        id S1391192AbiAYIse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:48:34 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:7819 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1452020AbiAYIow (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 03:44:52 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A5iW8n68CIB3TXe/bR6pTDrUDj3+TJUtcMsCJ2f8?=
+ =?us-ascii?q?bfWQNrUoi0zcCn2sZXz+GM/iKMTP3fIolbYqz8kIHvZ+Eyd4wTVdlrnsFo1Bi8?=
+ =?us-ascii?q?5ScXYvDRqvT04J+FuWaFQQ/qZx2huDodKjYdVeB4Ef9WlTdhSMkj/vQH+ChULe?=
+ =?us-ascii?q?s1h1ZHmeIdg9w0HqPpMZp2uaEsfDha++8kYuaT//3YTdJ6BYoWo4g0J9vnTs01?=
+ =?us-ascii?q?BjEVJz0iXRlDRxDlAe2e3D4l/vzL4npR5fzatE88uJX24/+IL+FEmPxp3/BC/u?=
+ =?us-ascii?q?ulPD1b08LXqXPewOJjxK6WYD72l4b+HN0if19aZLwam8O49mNt9Rw2tVMt525T?=
+ =?us-ascii?q?y8nI6/NhP8AFRJfFkmSOIUfoueXeink75H7I0ruNiGEL+9VJFsuMIQC4eFxAXl?=
+ =?us-ascii?q?D3fMdITEJKBuEgoqe0qO5WPhu3Jx7dOHkOYoevjdryjSxJfInSJbMXKjM/dJe0?=
+ =?us-ascii?q?x8wm8lREPeYbM0cARJjZRKGYVtQO1MTCZs7h8+pgGXyd3tTr1f9jbYw5mHI3kp?=
+ =?us-ascii?q?+yr/oOdbHed2iRMNJk0LerWXDl0z9DxYcHN+S0zyI9jSrnOCntSr7UZgVErmQ8?=
+ =?us-ascii?q?OBrjFyagGcUDXU+UFG/pvK5okigWt5eIgof/S9GhbQ18WS3R93lUgz+q3mB1jY?=
+ =?us-ascii?q?YWtxNA6g55RuLx678/QmUHC4HQyRHZdhgs9U5LRQu11mUj5bzCTlmmKOaRGjb9?=
+ =?us-ascii?q?bqOqz62fy8PIgcqZyALZRkE7sHu5oo65i8j5P4L/LWd14WzQG+vhWvR6nVWuln?=
+ =?us-ascii?q?atuZTv43TwLwNq2vESkD1czMI?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AZnrBea7FoelC/nwwxAPXwPTXdLJyesId70hD?=
+ =?us-ascii?q?6qkRc20wTiX8ra2TdZsguyMc9wx6ZJhNo7G90cq7MBbhHPxOkOos1N6ZNWGIhI?=
+ =?us-ascii?q?LCFvAB0WKN+V3dMhy73utc+IMlSKJmFeD3ZGIQse/KpCW+DPYsqePqzJyV?=
+X-IronPort-AV: E=Sophos;i="5.88,314,1635177600"; 
+   d="scan'208";a="120839365"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 25 Jan 2022 16:44:26 +0800
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 5C0594D146E6;
+        Tue, 25 Jan 2022 16:44:26 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Tue, 25 Jan 2022 16:44:26 +0800
+Received: from localhost.localdomain (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Tue, 25 Jan 2022 16:44:23 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <linux-rdma@vger.kernel.org>, <zyjzyj2000@gmail.com>,
+        <jgg@ziepe.ca>, <aharonl@nvidia.com>, <leon@kernel.org>,
+        <tom@talpey.com>, <tomasz.gromadzki@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <mbloch@nvidia.com>,
+        <liangwenpeng@huawei.com>, <yangx.jy@fujitsu.com>,
+        <y-goto@fujitsu.com>, <rpearsonhpe@gmail.com>,
+        <dan.j.williams@intel.com>, Li Zhijian <lizhijian@cn.fujitsu.com>,
+        <yangx.jy@cn.fujitsu.com>
+Subject: [RFC PATCH v2 0/9] RDMA/rxe: Add RDMA FLUSH operation
+Date:   Tue, 25 Jan 2022 16:50:32 +0800
+Message-ID: <20220125085041.49175-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0ef372f1-2424-40f7-953c-08d9dfdf898d
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB0008:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1201MB00080264F66A0CD81CF6C86FA75F9@CY4PR1201MB0008.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:220;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uooDvd5epFEdsDnXif568B9+tkpB9YMbn7gNqq815ZA5o4PYmch6gcHV+kvDCEbatgMPZ4IZ3dyijJLk880s8bhUBsGxKgnIc9KWZ1XEnLjO8MdgUs2wLm7IRCGAj1D48M0C+TEdPu+mCB2hxfSj+HhX9FaOjOBI9cjLFY6CcPuw5skrxo551GeAOPeFNW+XqtAIUiZoVcfU0zfYJ0RYWUk/UL7kFhf4mQ1i5t1rohFwysT5xKnmLiWIea9/Fj5+1vCXnMo/xyUyQc5KzS6pqpYH55HbA6yUsJsBZjY/cTpSRznWos8XCMpGA9imvJSWOcyxfE45/vDkwQTDOIhcxi1tAsRk7mrXJwzQJOslmKKcGsPwM2oTkFlyYYSYKQ2MhIEmyZTqO7L+q0e/Y8ItjBIvC+dAg3Vp5kg8lopvEDqR39kfoR5vkFgsKojoLZgWvW3ih4IRUcKkQvsXULJlLUWtQ5c2MYCe+LaFa3nkSuJOq8CYwC+/zfgOvLpzo31TIbjagRbglFJ3rjK+ymxLm2gDv7WkeBPDQqPYpZuQKawHHh4GUpYFNhpap2x9+9remx9kHK3AYm7eWyNpBJr2s5zxoFOWp58WItbVhbVRylFILprNyRpwDqLs/MCHV32o8y8WM/2pOMJ6Aak6TlG2+4ci20U+mGnKCFw1rQKJ76vZ2gc5s5Z6Z0dK0Z0q67BTsxQS2c2MOet1M/z64DsFheMICNMI8W6wn5Mcyleg8tgSk5SAwiDzOgWN4IGwuoSKhlPUpe1ZtCEbeZ+sFLGZqxEnRps9GUMd7p87+zSNCZ4=
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700004)(316002)(47076005)(6666004)(4326008)(336012)(8676002)(30864003)(86362001)(5660300002)(54906003)(70586007)(356005)(36860700001)(83380400001)(8936002)(110136005)(107886003)(7696005)(26005)(2906002)(426003)(40460700003)(82310400004)(2616005)(508600001)(186003)(81166007)(36756003)(70206006)(7416002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 08:49:02.6375
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ef372f1-2424-40f7-953c-08d9dfdf898d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0008
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-ID: 5C0594D146E6.AEF68
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add following devices which are part of APE subsystem
- * ACONNECT, AGIC and ADMA
- * AHUB and children (ADMAIF, I2S, DMIC, DSPK, MVC, SFC,
-   AMX, ADX and Mixer)
+Hey folks,
 
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra234.dtsi | 414 +++++++++++++++++++++++++++++++
- 1 file changed, 414 insertions(+)
+I wanna thank all of you for the kind feedback in my previous RFC.
+Recently, i have tried my best to do some updates as per your comments.
+Indeed, not all comments have been addressed for some reasons, i still
+wish to post this new one to start a new discussion.
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-index f54ad0d..e1885ca 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-@@ -87,6 +87,420 @@
- 			gpio-controller;
- 		};
- 
-+		aconnect@2900000 {
-+			compatible = "nvidia,tegra234-aconnect",
-+				     "nvidia,tegra210-aconnect";
-+			clocks = <&bpmp TEGRA234_CLK_APE>,
-+				 <&bpmp TEGRA234_CLK_APB2APE>;
-+			clock-names = "ape", "apb2ape";
-+			power-domains = <&bpmp TEGRA234_POWER_DOMAIN_AUD>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x02900000 0x02900000 0x200000>;
-+			status = "disabled";
-+
-+			tegra_ahub: ahub@2900800 {
-+				compatible = "nvidia,tegra234-ahub";
-+				reg = <0x02900800 0x800>;
-+				clocks = <&bpmp TEGRA234_CLK_AHUB>;
-+				clock-names = "ahub";
-+				assigned-clocks = <&bpmp TEGRA234_CLK_AHUB>;
-+				assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+				ranges = <0x02900800 0x02900800 0x11800>;
-+				status = "disabled";
-+
-+				tegra_i2s1: i2s@2901000 {
-+					compatible = "nvidia,tegra234-i2s",
-+						     "nvidia,tegra210-i2s";
-+					reg = <0x2901000 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_I2S1>,
-+						 <&bpmp TEGRA234_CLK_I2S1_SYNC_INPUT>;
-+					clock-names = "i2s", "sync_input";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_I2S1>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <1536000>;
-+					sound-name-prefix = "I2S1";
-+					status = "disabled";
-+				};
-+
-+				tegra_i2s2: i2s@2901100 {
-+					compatible = "nvidia,tegra234-i2s",
-+						     "nvidia,tegra210-i2s";
-+					reg = <0x2901100 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_I2S2>,
-+						 <&bpmp TEGRA234_CLK_I2S2_SYNC_INPUT>;
-+					clock-names = "i2s", "sync_input";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_I2S2>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <1536000>;
-+					sound-name-prefix = "I2S2";
-+					status = "disabled";
-+				};
-+
-+				tegra_i2s3: i2s@2901200 {
-+					compatible = "nvidia,tegra234-i2s",
-+						     "nvidia,tegra210-i2s";
-+					reg = <0x2901200 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_I2S3>,
-+						 <&bpmp TEGRA234_CLK_I2S3_SYNC_INPUT>;
-+					clock-names = "i2s", "sync_input";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_I2S3>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <1536000>;
-+					sound-name-prefix = "I2S3";
-+					status = "disabled";
-+				};
-+
-+				tegra_i2s4: i2s@2901300 {
-+					compatible = "nvidia,tegra234-i2s",
-+						     "nvidia,tegra210-i2s";
-+					reg = <0x2901300 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_I2S4>,
-+						 <&bpmp TEGRA234_CLK_I2S4_SYNC_INPUT>;
-+					clock-names = "i2s", "sync_input";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_I2S4>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <1536000>;
-+					sound-name-prefix = "I2S4";
-+					status = "disabled";
-+				};
-+
-+				tegra_i2s5: i2s@2901400 {
-+					compatible = "nvidia,tegra234-i2s",
-+						     "nvidia,tegra210-i2s";
-+					reg = <0x2901400 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_I2S5>,
-+						 <&bpmp TEGRA234_CLK_I2S5_SYNC_INPUT>;
-+					clock-names = "i2s", "sync_input";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_I2S5>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <1536000>;
-+					sound-name-prefix = "I2S5";
-+					status = "disabled";
-+				};
-+
-+				tegra_i2s6: i2s@2901500 {
-+					compatible = "nvidia,tegra234-i2s",
-+						     "nvidia,tegra210-i2s";
-+					reg = <0x2901500 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_I2S6>,
-+						 <&bpmp TEGRA234_CLK_I2S6_SYNC_INPUT>;
-+					clock-names = "i2s", "sync_input";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_I2S6>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <1536000>;
-+					sound-name-prefix = "I2S6";
-+					status = "disabled";
-+				};
-+
-+				tegra_sfc1: sfc@2902000 {
-+					compatible = "nvidia,tegra234-sfc",
-+						     "nvidia,tegra210-sfc";
-+					reg = <0x2902000 0x200>;
-+					sound-name-prefix = "SFC1";
-+					status = "disabled";
-+				};
-+
-+				tegra_sfc2: sfc@2902200 {
-+					compatible = "nvidia,tegra234-sfc",
-+						     "nvidia,tegra210-sfc";
-+					reg = <0x2902200 0x200>;
-+					sound-name-prefix = "SFC2";
-+					status = "disabled";
-+				};
-+
-+				tegra_sfc3: sfc@2902400 {
-+					compatible = "nvidia,tegra234-sfc",
-+						     "nvidia,tegra210-sfc";
-+					reg = <0x2902400 0x200>;
-+					sound-name-prefix = "SFC3";
-+					status = "disabled";
-+				};
-+
-+				tegra_sfc4: sfc@2902600 {
-+					compatible = "nvidia,tegra234-sfc",
-+						     "nvidia,tegra210-sfc";
-+					reg = <0x2902600 0x200>;
-+					sound-name-prefix = "SFC4";
-+					status = "disabled";
-+				};
-+
-+				tegra_amx1: amx@2903000 {
-+					compatible = "nvidia,tegra234-amx",
-+						     "nvidia,tegra194-amx";
-+					reg = <0x2903000 0x100>;
-+					sound-name-prefix = "AMX1";
-+					status = "disabled";
-+				};
-+
-+				tegra_amx2: amx@2903100 {
-+					compatible = "nvidia,tegra234-amx",
-+						     "nvidia,tegra194-amx";
-+					reg = <0x2903100 0x100>;
-+					sound-name-prefix = "AMX2";
-+					status = "disabled";
-+				};
-+
-+				tegra_amx3: amx@2903200 {
-+					compatible = "nvidia,tegra234-amx",
-+						     "nvidia,tegra194-amx";
-+					reg = <0x2903200 0x100>;
-+					sound-name-prefix = "AMX3";
-+					status = "disabled";
-+				};
-+
-+				tegra_amx4: amx@2903300 {
-+					compatible = "nvidia,tegra234-amx",
-+						     "nvidia,tegra194-amx";
-+					reg = <0x2903300 0x100>;
-+					sound-name-prefix = "AMX4";
-+					status = "disabled";
-+				};
-+
-+				tegra_adx1: adx@2903800 {
-+					compatible = "nvidia,tegra234-adx",
-+						     "nvidia,tegra210-adx";
-+					reg = <0x2903800 0x100>;
-+					sound-name-prefix = "ADX1";
-+					status = "disabled";
-+				};
-+
-+				tegra_adx2: adx@2903900 {
-+					compatible = "nvidia,tegra234-adx",
-+						     "nvidia,tegra210-adx";
-+					reg = <0x2903900 0x100>;
-+					sound-name-prefix = "ADX2";
-+					status = "disabled";
-+				};
-+
-+				tegra_adx3: adx@2903a00 {
-+					compatible = "nvidia,tegra234-adx",
-+						     "nvidia,tegra210-adx";
-+					reg = <0x2903a00 0x100>;
-+					sound-name-prefix = "ADX3";
-+					status = "disabled";
-+				};
-+
-+				tegra_adx4: adx@2903b00 {
-+					compatible = "nvidia,tegra234-adx",
-+						     "nvidia,tegra210-adx";
-+					reg = <0x2903b00 0x100>;
-+					sound-name-prefix = "ADX4";
-+					status = "disabled";
-+				};
-+
-+
-+				tegra_dmic1: dmic@2904000 {
-+					compatible = "nvidia,tegra234-dmic",
-+						     "nvidia,tegra210-dmic";
-+					reg = <0x2904000 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_DMIC1>;
-+					clock-names = "dmic";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_DMIC1>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <3072000>;
-+					sound-name-prefix = "DMIC1";
-+					status = "disabled";
-+				};
-+
-+				tegra_dmic2: dmic@2904100 {
-+					compatible = "nvidia,tegra234-dmic",
-+						     "nvidia,tegra210-dmic";
-+					reg = <0x2904100 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_DMIC2>;
-+					clock-names = "dmic";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_DMIC2>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <3072000>;
-+					sound-name-prefix = "DMIC2";
-+					status = "disabled";
-+				};
-+
-+				tegra_dmic3: dmic@2904200 {
-+					compatible = "nvidia,tegra234-dmic",
-+						     "nvidia,tegra210-dmic";
-+					reg = <0x2904200 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_DMIC3>;
-+					clock-names = "dmic";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_DMIC3>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <3072000>;
-+					sound-name-prefix = "DMIC3";
-+					status = "disabled";
-+				};
-+
-+				tegra_dmic4: dmic@2904300 {
-+					compatible = "nvidia,tegra234-dmic",
-+						     "nvidia,tegra210-dmic";
-+					reg = <0x2904300 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_DMIC4>;
-+					clock-names = "dmic";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_DMIC4>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <3072000>;
-+					sound-name-prefix = "DMIC4";
-+					status = "disabled";
-+				};
-+
-+				tegra_dspk1: dspk@2905000 {
-+					compatible = "nvidia,tegra234-dspk",
-+						     "nvidia,tegra186-dspk";
-+					reg = <0x2905000 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_DSPK1>;
-+					clock-names = "dspk";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_DSPK1>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <12288000>;
-+					sound-name-prefix = "DSPK1";
-+					status = "disabled";
-+				};
-+
-+				tegra_dspk2: dspk@2905100 {
-+					compatible = "nvidia,tegra234-dspk",
-+						     "nvidia,tegra186-dspk";
-+					reg = <0x2905100 0x100>;
-+					clocks = <&bpmp TEGRA234_CLK_DSPK2>;
-+					clock-names = "dspk";
-+					assigned-clocks = <&bpmp TEGRA234_CLK_DSPK2>;
-+					assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+					assigned-clock-rates = <12288000>;
-+					sound-name-prefix = "DSPK2";
-+					status = "disabled";
-+				};
-+
-+				tegra_mvc1: mvc@290a000 {
-+					compatible = "nvidia,tegra234-mvc",
-+						     "nvidia,tegra210-mvc";
-+					reg = <0x290a000 0x200>;
-+					sound-name-prefix = "MVC1";
-+					status = "disabled";
-+				};
-+
-+				tegra_mvc2: mvc@290a200 {
-+					compatible = "nvidia,tegra234-mvc",
-+						     "nvidia,tegra210-mvc";
-+					reg = <0x290a200 0x200>;
-+					sound-name-prefix = "MVC2";
-+					status = "disabled";
-+				};
-+
-+				tegra_amixer: amixer@290bb00 {
-+					compatible = "nvidia,tegra234-amixer",
-+						     "nvidia,tegra210-amixer";
-+					reg = <0x290bb00 0x800>;
-+					sound-name-prefix = "MIXER1";
-+					status = "disabled";
-+				};
-+
-+				tegra_admaif: admaif@290f000 {
-+					compatible = "nvidia,tegra234-admaif",
-+						     "nvidia,tegra186-admaif";
-+					reg = <0x0290f000 0x1000>;
-+					dmas = <&adma 1>, <&adma 1>,
-+					       <&adma 2>, <&adma 2>,
-+					       <&adma 3>, <&adma 3>,
-+					       <&adma 4>, <&adma 4>,
-+					       <&adma 5>, <&adma 5>,
-+					       <&adma 6>, <&adma 6>,
-+					       <&adma 7>, <&adma 7>,
-+					       <&adma 8>, <&adma 8>,
-+					       <&adma 9>, <&adma 9>,
-+					       <&adma 10>, <&adma 10>,
-+					       <&adma 11>, <&adma 11>,
-+					       <&adma 12>, <&adma 12>,
-+					       <&adma 13>, <&adma 13>,
-+					       <&adma 14>, <&adma 14>,
-+					       <&adma 15>, <&adma 15>,
-+					       <&adma 16>, <&adma 16>,
-+					       <&adma 17>, <&adma 17>,
-+					       <&adma 18>, <&adma 18>,
-+					       <&adma 19>, <&adma 19>,
-+					       <&adma 20>, <&adma 20>;
-+					dma-names = "rx1", "tx1",
-+						    "rx2", "tx2",
-+						    "rx3", "tx3",
-+						    "rx4", "tx4",
-+						    "rx5", "tx5",
-+						    "rx6", "tx6",
-+						    "rx7", "tx7",
-+						    "rx8", "tx8",
-+						    "rx9", "tx9",
-+						    "rx10", "tx10",
-+						    "rx11", "tx11",
-+						    "rx12", "tx12",
-+						    "rx13", "tx13",
-+						    "rx14", "tx14",
-+						    "rx15", "tx15",
-+						    "rx16", "tx16",
-+						    "rx17", "tx17",
-+						    "rx18", "tx18",
-+						    "rx19", "tx19",
-+						    "rx20", "tx20";
-+					status = "disabled";
-+				};
-+			};
-+
-+			adma: dma-controller@2930000 {
-+				compatible = "nvidia,tegra234-adma",
-+					     "nvidia,tegra186-adma";
-+				reg = <0x02930000 0x20000>;
-+				interrupt-parent = <&agic>;
-+				interrupts =  <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
-+					      <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
-+				#dma-cells = <1>;
-+				clocks = <&bpmp TEGRA234_CLK_AHUB>;
-+				clock-names = "d_audio";
-+				status = "disabled";
-+			};
-+
-+			agic: interrupt-controller@2a40000 {
-+				compatible = "nvidia,tegra234-agic",
-+					     "nvidia,tegra210-agic";
-+				#interrupt-cells = <3>;
-+				interrupt-controller;
-+				reg = <0x02a41000 0x1000>,
-+				      <0x02a42000 0x2000>;
-+				interrupts = <GIC_SPI 145
-+					      (GIC_CPU_MASK_SIMPLE(4) |
-+					       IRQ_TYPE_LEVEL_HIGH)>;
-+				clocks = <&bpmp TEGRA234_CLK_APE>;
-+				clock-names = "clk";
-+				status = "disabled";
-+			};
-+		};
-+
- 		ethernet@2310000 {
- 			compatible = "nvidia,tegra234-eqos", "nvidia,tegra186-eqos",
- 				     "snps,dwc-qos-ethernet-4.10";
+Outstanding issues:
+- iova_to_addr() without any kmap/kmap_local_page flows might not always
+  work. # existing issue.
+- responder should reply error to requested side when it requests a
+  persistence placement type to DRAM ?
+-------
+
+These patches are going to implement a *NEW* RDMA opcode "RDMA FLUSH".
+In IB SPEC 1.5[1][2], 2 new opcodes, ATOMIC WRITE and RDMA FLUSH were
+added in the MEMORY PLACEMENT EXTENSIONS section.
+
+FLUSH is used by the requesting node to achieve guarantees on the data
+placement within the memory subsystem of preceding accesses to a
+single memory region, such as those performed by RDMA WRITE, Atomics
+and ATOMIC WRITE requests.
+
+The operation indicates the virtual address space of a destination node
+and where the guarantees should apply. This range must be contiguous
+in the virtual space of the memory key but it is not necessarily a
+contiguous range of physical memory.
+
+FLUSH packets carry FLUSH extended transport header (see below) to
+specify the placement type and the selectivity level of the operation
+and RDMA extended header (RETH, see base document RETH definition) to
+specify the R_Key VA and Length associated with this request following
+the BTH in RC, RDETH in RD and XRCETH in XRC.
+
+RC FLUSH:
++----+------+------+
+|BTH | FETH | RETH |
++----+------+------+
+
+RD FLUSH:
++----+------+------+------+
+|BTH | RDETH| FETH | RETH |
++----+------+------+------+
+
+XRC FLUSH:
++----+-------+------+------+
+|BTH | XRCETH| FETH | RETH |
++----+-------+------+------+
+
+Currently, we introduce RC and RD services only, since XRC has not been
+implemented by rxe yet.
+NOTE: only RC service is tested now, and since other HCAs have not
+added/implemented FLUSH yet, we can only test FLUSH operation in both
+SoftRoCE/rxe devices.
+
+The corresponding rdma-core and FLUSH example are available on:
+https://github.com/zhijianli88/rdma-core/tree/rfc
+Can access the kernel source in:
+https://github.com/zhijianli88/linux/tree/rdma-flush
+
+- We introduce is_pmem attribute to MR(memory region)
+- We introduce FLUSH placement type attributes to HCA
+- We introduce FLUSH access flags that users are able to register with
+Below figure shows the valid access flags uses can register with:
++------------------------+------------------+--------------+
+| HCA attributes         |    register access flags        |
+|        and             +-----------------+---------------+
+| MR attribute(is_pmem)  |global visibility |  persistence |
+|------------------------+------------------+--------------+
+| global visibility(DRAM)|        O         |      X       |
+|------------------------+------------------+--------------+
+| global visibility(PMEM)|        O         |      X       |
+|------------------------+------------------+--------------+
+| persistence(DRAM)      |        X         |      X       |
+|------------------------+------------------+--------------+
+| persistence(PMEM)      |        X         |      O       |
++------------------------+------------------+--------------+
+O: allow to register such access flag
+
+In order to make placement guarentees, we currently reject requesting a
+persistent flush to a non-pmem.
+The responder will check the remote requested placement types by checking
+the registered access flags.
++------------------------+------------------+--------------+
+|                        |     registered flags            |
+| remote requested types +------------------+--------------+
+|                        |global visibility |  persistence |
+|------------------------+------------------+--------------+
+| global visibility      |        O         |      x       |
++------------------------+------------------+--------------+
+| persistence            |        X         |      O       |
++------------------------+------------------+--------------+
+O: allow to request such placement type
+
+Below list some details about FLUSH transport packet:
+
+A FLUSH message is built upon FLUSH request packet and is responded
+successfully by RDMA READ response of zero size.
+
+oA19-2: FLUSH shall be single packet message and shall have no payload.
+oA19-5: FLUSH BTH shall hold the Opcode = 0x1C
+
+FLUSH Extended Transport Header(FETH)
++-----+-----------+------------------------+----------------------+
+|Bits |   31-6    |          5-4           |        3-0           |
++-----+-----------+------------------------+----------------------+
+|     | Reserved  | Selectivity Level(SEL) | Placement Type(PLT)  |
++-----+-----------+------------------------+----------------------+
+
+Selectivity Level (SEL) – defines the memory region scope the FLUSH
+should apply on. Values are as follows:
+• b’00 - Memory Region Range: FLUSH applies for all preceding memory
+         updates to the RETH range on this QP. All RETH fields shall be
+         valid in this selectivity mode. RETH:DMALen field shall be
+         between zero and (2 31 -1) bytes (inclusive).
+• b’01 - Memory Region: FLUSH applies for all preceding memory up-
+         dates to RETH.R_key on this QP. RETH:DMALen and RETH:VA
+         shall be ignored in this mode.
+• b'10 - Reserved.
+• b'11 - Reserved.
+
+Placement Type (PLT) – Defines the memory placement guarantee of
+this FLUSH. Multiple bits may be set in this field. Values are as follows:
+• Bit 0 if set to '1' indicated that the FLUSH should guarantee Global
+  Visibility.
+• Bit 1 if set to '1' indicated that the FLUSH should guarantee
+  Persistence.
+• Bits 3:2 are reserved
+
+[1]: https://www.infinibandta.org/ibta-specification/ # login required
+[2]: https://www.infinibandta.org/wp-content/uploads/2021/08/IBTA-Overview-of-IBTA-Volume-1-Release-1.5-and-MPE-2021-08-17-Secure.pptx
+
+CC: yangx.jy@cn.fujitsu.com
+CC: y-goto@fujitsu.com
+CC: Jason Gunthorpe <jgg@ziepe.ca>
+CC: Zhu Yanjun <zyjzyj2000@gmail.com
+CC: Leon Romanovsky <leon@kernel.org>
+CC: Bob Pearson <rpearsonhpe@gmail.com>
+CC: Mark Bloch <mbloch@nvidia.com>
+CC: Wenpeng Liang <liangwenpeng@huawei.com>
+CC: Aharon Landau <aharonl@nvidia.com>
+CC: Tom Talpey <tom@talpey.com>
+CC: "Gromadzki, Tomasz" <tomasz.gromadzki@intel.com>
+CC: Dan Williams <dan.j.williams@intel.com>
+CC: linux-rdma@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+
+V1:
+https://lore.kernel.org/lkml/050c3183-2fc6-03a1-eecd-258744750972@fujitsu.com/T/
+or https://github.com/zhijianli88/linux/tree/rdma-flush-rfcv1
+
+Changes log
+V2:
+https://github.com/zhijianli88/linux/tree/rdma-flush
+RDMA: mr: Introduce is_pmem
+  check 1st byte to avoid crossing page boundary
+  new scheme to check is_pmem # Dan
+
+RDMA: Allow registering MR with flush access flags
+  combine with [03/10] RDMA/rxe: Allow registering FLUSH flags for supported device only to this patch # Jason
+  split RDMA_FLUSH to 2 capabilities
+
+RDMA/rxe: Allow registering persistent flag for pmem MR only
+  update commit message, get rid of confusing ib_check_flush_access_flags() # Tom
+
+RDMA/rxe: Implement RC RDMA FLUSH service in requester side
+  extend flush to include length field. # Tom and Tomasz
+
+RDMA/rxe: Implement flush execution in responder side
+  adjust start for WHOLE MR level # Tom
+  don't support DMA mr for flush # Tom
+  check flush return value
+
+RDMA/rxe: Enable RDMA FLUSH capability for rxe device
+  adjust patch's order. move it here from [04/10]
+
+Li Zhijian (9):
+  RDMA: mr: Introduce is_pmem
+  RDMA: Allow registering MR with flush access flags
+  RDMA/rxe: Allow registering persistent flag for pmem MR only
+  RDMA/rxe: Implement RC RDMA FLUSH service in requester side
+  RDMA/rxe: Set BTH's SE to zero for FLUSH packet
+  RDMA/rxe: Implement flush execution in responder side
+  RDMA/rxe: Implement flush completion
+  RDMA/rxe: Enable RDMA FLUSH capability for rxe device
+  RDMA/rxe: Add RD FLUSH service support
+
+ drivers/infiniband/core/uverbs_cmd.c    |  17 +++
+ drivers/infiniband/sw/rxe/rxe_comp.c    |   4 +-
+ drivers/infiniband/sw/rxe/rxe_hdr.h     |  52 +++++++++
+ drivers/infiniband/sw/rxe/rxe_loc.h     |   2 +
+ drivers/infiniband/sw/rxe/rxe_mr.c      |  37 ++++++-
+ drivers/infiniband/sw/rxe/rxe_opcode.c  |  35 +++++++
+ drivers/infiniband/sw/rxe/rxe_opcode.h  |   3 +
+ drivers/infiniband/sw/rxe/rxe_param.h   |   4 +-
+ drivers/infiniband/sw/rxe/rxe_req.c     |  19 +++-
+ drivers/infiniband/sw/rxe/rxe_resp.c    | 133 +++++++++++++++++++++++-
+ include/rdma/ib_pack.h                  |   3 +
+ include/rdma/ib_verbs.h                 |  30 +++++-
+ include/uapi/rdma/ib_user_ioctl_verbs.h |   2 +
+ include/uapi/rdma/ib_user_verbs.h       |  19 ++++
+ include/uapi/rdma/rdma_user_rxe.h       |   7 ++
+ 15 files changed, 355 insertions(+), 12 deletions(-)
+
 -- 
-2.7.4
+2.31.1
+
+
 

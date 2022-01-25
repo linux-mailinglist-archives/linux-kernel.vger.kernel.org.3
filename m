@@ -2,146 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BF449A939
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9B449A92D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1322336AbiAYDVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:21:34 -0500
-Received: from foss.arm.com ([217.140.110.172]:37344 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1319387AbiAYDIp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:08:45 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 138C0101E;
-        Mon, 24 Jan 2022 19:08:43 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.42.113])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F048D3F766;
-        Mon, 24 Jan 2022 19:08:37 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, naoya.horiguchi@linux.dev,
-        rostedt@goodmis.org, Anshuman Khandual <anshuman.khandual@arm.com>,
-        Ingo Molnar <mingo@redhat.com>, Zi Yan <ziy@nvidia.com>,
-        Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 2/2] mm/migration: Add trace events for base page and HugeTLB migrations
-Date:   Tue, 25 Jan 2022 08:38:25 +0530
-Message-Id: <1643080105-11416-3-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643080105-11416-1-git-send-email-anshuman.khandual@arm.com>
-References: <1643080105-11416-1-git-send-email-anshuman.khandual@arm.com>
+        id S1322257AbiAYDVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:21:30 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17801 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1319315AbiAYDIa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 22:08:30 -0500
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JjWwr6Wz7z9rwC;
+        Tue, 25 Jan 2022 11:07:08 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 25 Jan 2022 11:08:27 +0800
+Subject: Re: [PATCH v1] mm, hwpoison: remove obsolete comment
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+References: <20220125025601.3054511-1-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <4ee2ff7b-4aaf-437d-6827-ebf95bcf6db5@huawei.com>
+Date:   Tue, 25 Jan 2022 11:08:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220125025601.3054511-1-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds two trace events for base page and HugeTLB page migrations. These
-events, closely follow the implementation details like setting and removing
-of PTE migration entries, which are essential operations for migration.
+Hi:
+On 2022/1/25 10:56, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> With the introduction of mf_mutex, most of memory error handling
+> process is mutually exclusive, so the in-line comment about
+> subtlety about double-checking PageHWPoison is no more correct.
+> So remove it.
+> 
+> Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> ---
+>  mm/memory-failure.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 4c9bd1d37301..a6a1e02759e7 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -2146,12 +2146,6 @@ static int __soft_offline_page(struct page *page)
+>  		.gfp_mask = GFP_USER | __GFP_MOVABLE | __GFP_RETRY_MAYFAIL,
+>  	};
+>  
+> -	/*
+> -	 * Check PageHWPoison again inside page lock because PageHWPoison
+> -	 * is set by memory_failure() outside page lock. Note that
+> -	 * memory_failure() also double-checks PageHWPoison inside page lock,
+> -	 * so there's no race between soft_offline_page() and memory_failure().
+> -	 */
+>  	lock_page(page);
+>  	if (!PageHuge(page))
+>  		wait_on_page_writeback(page);
+> 
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Naoya Horiguchi <n-horiguchi@ah.jp.nec.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- include/trace/events/migrate.h | 31 +++++++++++++++++++++++++++++++
- mm/migrate.c                   |  3 +++
- mm/rmap.c                      |  5 +++++
- 3 files changed, 39 insertions(+)
+Looks good to me. Thanks for the patch.
 
-diff --git a/include/trace/events/migrate.h b/include/trace/events/migrate.h
-index 779f3fad9ecd..061b5128f335 100644
---- a/include/trace/events/migrate.h
-+++ b/include/trace/events/migrate.h
-@@ -105,6 +105,37 @@ TRACE_EVENT(mm_migrate_pages_start,
- 		  __print_symbolic(__entry->reason, MIGRATE_REASON))
- );
- 
-+DECLARE_EVENT_CLASS(migration_pte,
-+
-+		TP_PROTO(unsigned long addr, unsigned long pte, int order),
-+
-+		TP_ARGS(addr, pte, order),
-+
-+		TP_STRUCT__entry(
-+			__field(unsigned long, addr)
-+			__field(unsigned long, pte)
-+			__field(int, order)
-+		),
-+
-+		TP_fast_assign(
-+			__entry->addr = addr;
-+			__entry->pte = pte;
-+			__entry->order = order;
-+		),
-+
-+		TP_printk("addr=%lx, pte=%lx order=%d", __entry->addr, __entry->pte, __entry->order)
-+);
-+
-+DEFINE_EVENT(migration_pte, set_migration_pte,
-+	TP_PROTO(unsigned long addr, unsigned long pte, int order),
-+	TP_ARGS(addr, pte, order)
-+);
-+
-+DEFINE_EVENT(migration_pte, remove_migration_pte,
-+	TP_PROTO(unsigned long addr, unsigned long pte, int order),
-+	TP_ARGS(addr, pte, order)
-+);
-+
- #endif /* _TRACE_MIGRATE_H */
- 
- /* This part must be outside protection */
-diff --git a/mm/migrate.c b/mm/migrate.c
-index c7da064b4781..253dc5812949 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -257,6 +257,9 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
- 		if (PageTransHuge(page) && PageMlocked(page))
- 			clear_page_mlock(page);
- 
-+		trace_remove_migration_pte(pvmw.address, pte_val(pte),
-+					   compound_order(new));
-+
- 		/* No need to invalidate - it was non-present before */
- 		update_mmu_cache(vma, pvmw.address, pvmw.pte);
- 	}
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 6a1e8c7f6213..cce5dbae07f2 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -77,6 +77,7 @@
- #include <asm/tlbflush.h>
- 
- #include <trace/events/tlb.h>
-+#include <trace/events/migrate.h>
- 
- #include "internal.h"
- 
-@@ -1861,6 +1862,8 @@ static bool try_to_migrate_one(struct page *page, struct vm_area_struct *vma,
- 			if (pte_swp_uffd_wp(pteval))
- 				swp_pte = pte_swp_mkuffd_wp(swp_pte);
- 			set_pte_at(mm, pvmw.address, pvmw.pte, swp_pte);
-+			trace_set_migration_pte(pvmw.address, pte_val(swp_pte),
-+						compound_order(page));
- 			/*
- 			 * No need to invalidate here it will synchronize on
- 			 * against the special swap migration pte.
-@@ -1929,6 +1932,8 @@ static bool try_to_migrate_one(struct page *page, struct vm_area_struct *vma,
- 			if (pte_uffd_wp(pteval))
- 				swp_pte = pte_swp_mkuffd_wp(swp_pte);
- 			set_pte_at(mm, address, pvmw.pte, swp_pte);
-+			trace_set_migration_pte(address, pte_val(swp_pte),
-+						compound_order(page));
- 			/*
- 			 * No need to invalidate here it will synchronize on
- 			 * against the special swap migration pte.
--- 
-2.20.1
-
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>

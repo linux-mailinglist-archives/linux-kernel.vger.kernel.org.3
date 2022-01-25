@@ -2,155 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B3D49BB25
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F8649BB18
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiAYSUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:20:12 -0500
-Received: from mga05.intel.com ([192.55.52.43]:53955 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229951AbiAYSTG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:19:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643134746; x=1674670746;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tv1tjWDzNBoDUOS+Q8dhCcXjC2IOqiaYcuGKE757/JY=;
-  b=e9iB+OFkjxRB/A6gNVQ+7T3BGi1KLPkyuhRHDrK7OVhCEOsBkS6gnkR+
-   NmIZlEYNa3aCPC1avelFGdcboiHMAKknXd+5FvDhc9XE+ptzwp+UxDtNG
-   Z9AW83urdHHrlt5+YI9HSLpH5Ov5PFSbC8+hMhBhV7/m3JnL2egwG6mGd
-   Q1N/xzFZ6SSUPiW/SDpmoTUbtjcA80HKr3fJhgXAkLcGB9UZI3dYA2FBZ
-   kHTI4DBiHRS3x4UXbkntlRkJ5+l7UAPoFGsTOR7ACFDVRb3c1nekezt+t
-   5P6+66SuevJeIbald3U+7DLBECx9LG+8BN+tUEUYJXS5t020Z2lP1rNbr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="332725513"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="332725513"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 10:18:50 -0800
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="477203483"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 10:18:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nCQNw-00ELWo-LD;
-        Tue, 25 Jan 2022 20:17:40 +0200
-Date:   Tue, 25 Jan 2022 20:17:40 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Liam Beguin <liambeguin@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v2 5/5] iio: afe: iio-rescale: Re-use generic struct
- s32_fract
-Message-ID: <YfA+xFR0oh2ztDKv@smile.fi.intel.com>
-References: <20220110193104.75225-1-andriy.shevchenko@linux.intel.com>
- <20220110193104.75225-5-andriy.shevchenko@linux.intel.com>
- <20220115185203.567780e8@jic23-huawei>
- <Ye7DSAN4gdhXfEUs@smile.fi.intel.com>
- <Ye8Z6dS5cCji9LNQ@shaak>
- <Ye/4eJ/RhlWF7q70@smile.fi.intel.com>
- <b25932d7-91bc-27b4-ada9-8d5da1ef2ddf@axentia.se>
+        id S229814AbiAYSRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:17:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229779AbiAYSRv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 13:17:51 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69270C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:17:50 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id y15so50118151lfa.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:17:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=dSrhbE6iArK7VijAEwS8NR5d4m9Smmxvwd2EDBXBHpo=;
+        b=VUSOPfVzTzm4wRr/wB2VnqTi6Fj2OqDXU8+PHVeLlp3K+Pc/x1RY+fglCx7BhMBSa+
+         PKTHsi4O1AL9e6WXXPWUT7+3SKRkeGq39KUQoXuE9dxFrNqnFz7nmw8odA2lYDnIQ5pl
+         5cek0vjaRZh8ehbk3FUt/iIQEjnU0JdFR4+/+7pBueAAT9kU6lGiLYMGxhTVFL/h/Owt
+         LpL8znqPwu2Wo2BH8xzJUL36k8ldSsODaxbq8Wtf00Hwsoh+muyJEtyC0E/xEaVjJSAO
+         1mVk6Whr4D6GG6syoPyFB8BIjrJS6tWkVk2dixxxZZueeunZx7NiGiUJZoZTiPABF1f1
+         L7dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dSrhbE6iArK7VijAEwS8NR5d4m9Smmxvwd2EDBXBHpo=;
+        b=KBZpmhbn2dPnMpyoxtjWjaNZAHtttpo11Hh4dkO7f1u0Udl54jSVJI90+rqMbR3OrS
+         +EhCLT6fpSSqADQl2N4zTkX4iDlNcyu3ns/jbZ2vLNTOAoeDgzXbim1dDUDIteM0nZD1
+         SQubJj6Chu2NjVgSw+B5HFkwCEZ9/4XvBzcu5m3IIiHJYmPLax/MhHlDJn2ti9/9jGNn
+         b1D3hO4YqzblYqMhibQ7ufrj1khcL+5ZqxIx5R113h1zcwa1RzkuBF3Dc4r2BOE7QklM
+         iIzb/xRjKPMgap67Od5f+P7MI0aq70bv9q5FjX34UAjPvEVmoK/cYJeSiGVXH3rtRSnc
+         qNnA==
+X-Gm-Message-State: AOAM530gAIaX9ba8E6q2FlJdp6lsNchPcSXQhkdTJp53D9arZjTwhRxa
+        7BO9Irhpz20dQNfPahCRf/s=
+X-Google-Smtp-Source: ABdhPJwsxaWTWmvC4LeG2DLDz32vnINItdR3fWQNB9i+auG2YZyF8jicYHresU/0MXauuZ64ffaZDA==
+X-Received: by 2002:a05:6512:2386:: with SMTP id c6mr17510288lfv.684.1643134668514;
+        Tue, 25 Jan 2022 10:17:48 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.227.208])
+        by smtp.gmail.com with ESMTPSA id f22sm1560371lfj.261.2022.01.25.10.17.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 10:17:47 -0800 (PST)
+Message-ID: <47fcbfb5-ee59-a1ef-781d-83989e26e1aa@gmail.com>
+Date:   Tue, 25 Jan 2022 21:17:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b25932d7-91bc-27b4-ada9-8d5da1ef2ddf@axentia.se>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 02/10] staging: r8188eu: remove smaller sets of DBG_88E
+ calls from core dir
+Content-Language: en-US
+To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
+Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
+        straube.linux@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220124224415.831-1-phil@philpotter.co.uk>
+ <20220124224415.831-3-phil@philpotter.co.uk>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220124224415.831-3-phil@philpotter.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 03:54:07PM +0100, Peter Rosin wrote:
-> On 2022-01-25 14:17, Andy Shevchenko wrote:
-> > On Mon, Jan 24, 2022 at 04:28:09PM -0500, Liam Beguin wrote:
-> >> On Mon, Jan 24, 2022 at 05:18:32PM +0200, Andy Shevchenko wrote:
-> >>> On Sat, Jan 15, 2022 at 06:52:03PM +0000, Jonathan Cameron wrote:
-> >>>> On Mon, 10 Jan 2022 21:31:04 +0200
-> >>>> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+Hi Phillip,
 
-...
-
-> >>>> I'm not totally sold on this series showing there is a strong case for
-> >>>> these macros so interested to hear what others think.
-> >>>
-> >>> So far no news :-)
-> >>
-> >> Like I mentioned briefly in the other thread[1], I don't really see the
-> >> advantage for the AFE driver given that it's almost just like renaming
-> >> the parameters.
-> > 
-> > I tend to disagree, perhaps I wasn't so clear in my points.
-> > 
-> > The change reveals that the layering can be improved. In OOP
-> > the object A which is inherited (or encapsulated as we see here)
-> > allows to clearly get what kind of data the methods are operating
-> > with / on. As you may see the two functions and the method
-> > declaration appears to have interest only in the fraction data
-> > for rescaling. The cleanup I consider helpful in the terms
-> > of layering and OOP.
-
-> [Sorry for the delay, I have been far too busy for far too long]
-
-Anyway, thanks for review! My answers below.
-
-> While this is all true for the current set of front-ends, it is not
-> all that far-fetched to imagine some kind of future front-end that
-> requires some other parameter, such that the rescaling fraction is no
-> longer the only thing of interest. So, I have the feeling that changing
-> the type of the 2nd argument of the ->props functions to just the
-> fraction instead of the bigger object is conceptually wrong and
-> something that will later turn out to have been a bad idea.
-
-How? Technically as I mentioned currently it's the case to use
-only the date from fraction. The bigger object would be needed
-in case of using data that is not fraction. Either way it would
-be easy to add a container_of() than supply unneeded data to
-the method.
-
-TL;DR: It makes possible not to mix bananas with wooden boxes.
-
-> Regarding the new xyz_fract types, I have no strong opinion. But as
-> long as there are no helper functions for the new types, I see little
-> value in them. To me, they look mostly like something that newcomers
-> (and others) will not know about or expect, and it will just be
-> another thing that you have to look out for during review, to keep new
-> numerators/denominators from appearing and causing extra rounds of
-> review for something that is mostly a bikeshed issue.
+On 1/25/22 01:44, Phillip Potter wrote:
+> Remove all DBG_88E calls from the core directory, other than those in
+> core/rtw_mlme_ext.c, as this contains over 100 on its own so will be
+> done in a separate patch for ease of review. These calls do not conform
+> to kernel coding standards and are superfluous. Also restructure where
+> appropriate to remove no longer needed code left behind by removal of
+> these calls. This will allow the eventual removal of the DBG_88E macro
+> itself.
 > 
-> My guess is that many times where fractions are used, they are used
-> since fp math is not available. And that means that there will be a
-> lot of special handling and shortcuts done since various things about
-> accuracy and precision can be assumed. I think it will be hard to do
-> all that centrally and in a comprehensible way. But if it is done it
-> will of course also be possible to eliminate bugs since people may
-> have taken too many shortcuts. But simply changing to xyz_fract and
-> then not take it further than that will not change much.
+> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+> ---
 
-I understand your point. I will provide a mult_fract() macro and
-apply it to AFE to show the usability of this. Would it work better?
+[code snip]
 
-I haven't checked the other possible improvements based on new type, but
-I truly believe that the types themselves are good to have.
+> diff --git a/drivers/staging/r8188eu/core/rtw_ieee80211.c b/drivers/staging/r8188eu/core/rtw_ieee80211.c
+> index ad87954bdeb4..62354c3194bd 100644
+> --- a/drivers/staging/r8188eu/core/rtw_ieee80211.c
+> +++ b/drivers/staging/r8188eu/core/rtw_ieee80211.c
+> @@ -653,13 +653,8 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
+>   	/* first 3 bytes in vendor specific information element are the IEEE
+>   	 * OUI of the vendor. The following byte is used a vendor specific
+>   	 * sub-type. */
+> -	if (elen < 4) {
+> -		if (show_errors) {
+> -			DBG_88E("short vendor specific information element ignored (len=%lu)\n",
+> -				(unsigned long)elen);
+> -		}
+> +	if (elen < 4)
+>   		return -1;
+> -	}
 
-> Also, there is already a v4l2_fract which is exposed in UAPI (maybe
-> there are others?). I don't see how we bring that one in line with this
-> new struct xyz_fract scheme?
+show_errors seems unused after this change
 
-UAPI is another story. It might be possible to extend, but I would like
-to avoid expanding the proposed types to UAPI (we don't have many users
-and I believe they more or less unique, so v4l2 is rather exception than
-usual).
+>   
+>   	oui = RTW_GET_BE24(pos);
+>   	switch (oui) {
+> @@ -674,11 +669,8 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
+>   			elems->wpa_ie_len = elen;
+>   			break;
+>   		case WME_OUI_TYPE: /* this is a Wi-Fi WME info. element */
+> -			if (elen < 5) {
+> -				DBG_88E("short WME information element ignored (len=%lu)\n",
+> -					(unsigned long)elen);
+> +			if (elen < 5)
+>   				return -1;
+> -			}
+>   			switch (pos[4]) {
+>   			case WME_OUI_SUBTYPE_INFORMATION_ELEMENT:
+>   			case WME_OUI_SUBTYPE_PARAMETER_ELEMENT:
+> @@ -690,8 +682,6 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
+>   				elems->wme_tspec_len = elen;
+>   				break;
+>   			default:
+> -				DBG_88E("unknown WME information element ignored (subtype=%d len=%lu)\n",
+> -					pos[4], (unsigned long)elen);
+>   				return -1;
+>   			}
+>   			break;
+> @@ -701,8 +691,6 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
+>   			elems->wps_ie_len = elen;
+>   			break;
+>   		default:
+> -			DBG_88E("Unknown Microsoft information element ignored (type=%d len=%lu)\n",
+> -				pos[3], (unsigned long)elen);
+>   			return -1;
+>   		}
+>   		break;
+> @@ -714,14 +702,10 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
+>   			elems->vendor_ht_cap_len = elen;
+>   			break;
+>   		default:
+> -			DBG_88E("Unknown Broadcom information element ignored (type=%d len=%lu)\n",
+> -				pos[3], (unsigned long)elen);
+>   			return -1;
+>   		}
+>   		break;
+>   	default:
+> -		DBG_88E("unknown vendor specific information element ignored (vendor OUI %02x:%02x:%02x len=%lu)\n",
+> -			pos[0], pos[1], pos[2], (unsigned long)elen);
+>   		return -1;
+>   	}
+>   	return 0;
+> @@ -752,13 +736,8 @@ enum parse_res rtw_ieee802_11_parse_elems(u8 *start, uint len,
+>   		elen = *pos++;
+>   		left -= 2;
+>   
+> -		if (elen > left) {
+> -			if (show_errors) {
+> -				DBG_88E("IEEE 802.11 element parse failed (id=%d elen=%d left=%lu)\n",
+> -					id, elen, (unsigned long)left);
+> -			}
 
--- 
-With Best Regards,
-Andy Shevchenko
+same here
+
+> +		if (elen > left)
+>   			return ParseFailed;
+> -		}
+>   
+>   		switch (id) {
+>   		case WLAN_EID_SSID:
+> @@ -839,10 +818,6 @@ enum parse_res rtw_ieee802_11_parse_elems(u8 *start, uint len,
+>   			break;
+>   		default:
+>   			unknown++;
+> -			if (!show_errors)
+> -				break;
+> -			DBG_88E("IEEE 802.11 element parse ignored unknown element (id=%d elen=%d)\n",
+> -				id, elen);
+>   			break;
+
+and here
 
 
+
+With regards,
+Pavel Skripkin

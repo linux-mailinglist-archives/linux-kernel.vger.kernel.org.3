@@ -2,151 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A407749B54B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E3D49B54D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577679AbiAYNpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:45:33 -0500
-Received: from mga04.intel.com ([192.55.52.120]:61114 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1577635AbiAYNnF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:43:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643118180; x=1674654180;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NXJckC/W+O4E+mRqt6qYWHe7c4wwUf10qw2Uz84TlBY=;
-  b=LezBnd8/2jQ234WMRYLk8+92u4MXLlW2x6RZKjMz8jg1NrbpqXK6ZTHC
-   tuXtaGtjmrJOJDycuoUucHOoSsqxpDQNxg8r9ZxS/6BxlP5AbVbRmGAK0
-   OeVbQjQKv6iURcpKGaUfuMf0ZU9PgyvLTOX3kJXXzo5attlDLS1eAVSNY
-   YPj/oAkDrYxopaBA8UtQfghmkn/QJirTBMAyFLDn1XuNIFuWosXgkps1R
-   fqD0aP1Uei6r1I3+2XsW3ImyRFtLRk4qV8EaxFR1dS9bzU6pf6agf96a2
-   pXkS9gXYTzBRWgIpcp+qDzlyfApMmZLyd/eYooASRKo2glVnYfh2jEnMD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="245133581"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="245133581"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 05:42:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="532416313"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Jan 2022 05:42:57 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCM65-000Jxl-9V; Tue, 25 Jan 2022 13:42:57 +0000
-Date:   Tue, 25 Jan 2022 21:42:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qingqing Zhuo <qingqing.zhuo@amd.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c:81:40:
- sparse: sparse: Using plain integer as NULL pointer
-Message-ID: <202201252155.rqBWi1tb-lkp@intel.com>
+        id S1577735AbiAYNqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:46:21 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36176 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1383903AbiAYNny (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 08:43:54 -0500
+Received: from [192.168.254.32] (unknown [47.187.212.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5E17F20B6C61;
+        Tue, 25 Jan 2022 05:43:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5E17F20B6C61
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1643118233;
+        bh=pNSTEP0TRPy0j5oEkFezTz31lZK+4Yx3qQJpktHhUjs=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=QH0fuY0YhBO7vXSfmXGWSFbzJOgdLCyFhrYhzV8LZtGzmrvNybYSgEzDhld46vZ+q
+         3KFYbxmbPXOQpmp5poOJK6Zb3Z2CU8rDW0ls7Xbl21fxkAsCTS7zXbISNDna+eunUc
+         fzB0vE6t+hQelwlPCl4tEIT/f0a90+dP2KsEDVMY=
+Message-ID: <825b8b72-c746-ba24-7142-3fff481e82d6@linux.microsoft.com>
+Date:   Tue, 25 Jan 2022 07:43:51 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v13 11/11] arm64: Select HAVE_RELIABLE_STACKTRACE
+Content-Language: en-US
+To:     "nobuta.keiya@fujitsu.com" <nobuta.keiya@fujitsu.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "sjitindarsingh@gmail.com" <sjitindarsingh@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-12-madvenka@linux.microsoft.com>
+ <TY2PR01MB5257518B8EB381E16D52B244855F9@TY2PR01MB5257.jpnprd01.prod.outlook.com>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <TY2PR01MB5257518B8EB381E16D52B244855F9@TY2PR01MB5257.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a08b41ab9e2e468647f78eb17c28e29b93006394
-commit: d738db6883df3e3c513f9e777c842262693f951b drm/amd/display: move FPU associated DSC code to DML folder
-date:   3 months ago
-config: i386-randconfig-s002-20211122 (https://download.01.org/0day-ci/archive/20220125/202201252155.rqBWi1tb-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d738db6883df3e3c513f9e777c842262693f951b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d738db6883df3e3c513f9e777c842262693f951b
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+I have not seen any activity on that in a long time. IIRC, Julien quit RedHat.
+I don't know if anyone else has taken over this work in RedHat.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sorry, I don't have any more information.
 
+Madhavan
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c: note: in included file:
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:28:18: sparse: sparse: symbol 'qp_table_422_10bpc_min' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:61:18: sparse: sparse: symbol 'qp_table_444_8bpc_max' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:102:18: sparse: sparse: symbol 'qp_table_420_12bpc_max' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:135:18: sparse: sparse: symbol 'qp_table_444_10bpc_min' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:188:18: sparse: sparse: symbol 'qp_table_420_8bpc_max' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:209:18: sparse: sparse: symbol 'qp_table_444_8bpc_min' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:250:18: sparse: sparse: symbol 'qp_table_444_12bpc_min' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:315:18: sparse: sparse: symbol 'qp_table_420_12bpc_min' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:348:18: sparse: sparse: symbol 'qp_table_422_12bpc_min' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:389:18: sparse: sparse: symbol 'qp_table_422_12bpc_max' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:430:18: sparse: sparse: symbol 'qp_table_444_12bpc_max' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:495:18: sparse: sparse: symbol 'qp_table_420_8bpc_min' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:516:18: sparse: sparse: symbol 'qp_table_422_8bpc_min' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:541:18: sparse: sparse: symbol 'qp_table_422_10bpc_max' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:574:16: sparse: sparse: symbol 'qp_table_420_10bpc_max' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:601:18: sparse: sparse: symbol 'qp_table_420_10bpc_min' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:628:18: sparse: sparse: symbol 'qp_table_444_10bpc_max' was not declared. Should it be static?
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:681:18: sparse: sparse: symbol 'qp_table_422_8bpc_max' was not declared. Should it be static?
->> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c:81:40: sparse: sparse: Using plain integer as NULL pointer
-   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c:106:22: sparse: sparse: Using plain integer as NULL pointer
-
-vim +81 drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c
-
-    73	
-    74	static void get_qp_set(qp_set qps, enum colour_mode cm, enum bits_per_comp bpc,
-    75			       enum max_min max_min, float bpp)
-    76	{
-    77		int mode = MODE_SELECT(444, 422, 420);
-    78		int sel = table_hash(mode, bpc, max_min);
-    79		int table_size = 0;
-    80		int index;
-  > 81		const struct qp_entry *table = 0L;
-    82	
-    83		// alias enum
-    84		enum { min = DAL_MM_MIN, max = DAL_MM_MAX };
-    85		switch (sel) {
-    86			TABLE_CASE(444,  8, max);
-    87			TABLE_CASE(444,  8, min);
-    88			TABLE_CASE(444, 10, max);
-    89			TABLE_CASE(444, 10, min);
-    90			TABLE_CASE(444, 12, max);
-    91			TABLE_CASE(444, 12, min);
-    92			TABLE_CASE(422,  8, max);
-    93			TABLE_CASE(422,  8, min);
-    94			TABLE_CASE(422, 10, max);
-    95			TABLE_CASE(422, 10, min);
-    96			TABLE_CASE(422, 12, max);
-    97			TABLE_CASE(422, 12, min);
-    98			TABLE_CASE(420,  8, max);
-    99			TABLE_CASE(420,  8, min);
-   100			TABLE_CASE(420, 10, max);
-   101			TABLE_CASE(420, 10, min);
-   102			TABLE_CASE(420, 12, max);
-   103			TABLE_CASE(420, 12, min);
-   104		}
-   105	
-   106		if (table == 0)
-   107			return;
-   108	
-   109		index = (bpp - table[0].bpp) * 2;
-   110	
-   111		/* requested size is bigger than the table */
-   112		if (index >= table_size) {
-   113			dm_error("ERROR: Requested rc_calc to find a bpp entry that exceeds the table size\n");
-   114			return;
-   115		}
-   116	
-   117		memcpy(qps, table[index].qps, sizeof(qp_set));
-   118	}
-   119	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On 1/24/22 23:21, nobuta.keiya@fujitsu.com wrote:
+> Hi Madhavan,
+> 
+>> Select HAVE_RELIABLE_STACKTRACE in arm64/Kconfig to allow
+>> arch_stack_walk_reliable() to be used.
+>>
+>> Note that this is conditional upon STACK_VALIDATION which will be added when frame pointer validation is implemented (say
+>> via objtool).
+> 
+> I know that Julien Thierry published objtool support for arm64 [1], but I'm not
+> sure if it has been updated. Could you tell me other threads if you know?
+> 
+> [1] https://lore.kernel.org/linux-arm-kernel/20210303170932.1838634-1-jthierry@redhat.com/
+> 
+> 
+> Thanks,
+> Keiya
+> 
+>>
+>> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+>> ---
+>>  arch/arm64/Kconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig index f6e333b59314..bc7b3514b563 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -223,6 +223,7 @@ config ARM64
+>>  	select THREAD_INFO_IN_TASK
+>>  	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
+>>  	select TRACE_IRQFLAGS_SUPPORT
+>> +	select HAVE_RELIABLE_STACKTRACE if FRAME_POINTER && STACK_VALIDATION
+>>  	help
+>>  	  ARM 64-bit (AArch64) Linux support.
+>>
+>> --
+>> 2.25.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

@@ -2,241 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 311F949B941
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:52:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70D549B964
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586012AbiAYQvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:51:01 -0500
-Received: from mga12.intel.com ([192.55.52.136]:41992 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1586194AbiAYQsP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:48:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643129293; x=1674665293;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pwy+5Pq/bNHsNemCHTJYOfGdx+vUEIHXKWFVnkwUvKc=;
-  b=NSsZYzd7fsMtxPCC1l5ZDXckqt9hZIztgKsWci12vxyrxuUTqsG9uAca
-   l4MIEsjM7hxQQO0RYBS4K6dWiTOTYhQE5+7AqtkAMGIj46xM8+Q8edtsA
-   fGXpE0Mv5Y+aeOFVJO2sY9JW3+J3yNuLktbx6IAfqOuX0/sJCNB3/h1sb
-   JdcluGhzj63JB1cj8GjGCaBXvobPt+FiGlCVfUE2cqSiJlgPCl9ejLrQJ
-   KNeiFpCPpjYfmgvHQYqa5CR3LSQE3w5+YqDg6OI1Jh3A4llxIr6ABtawK
-   8Ha9U5APB2qJ/tL3+u69bLD5abTDyRt/gF/aHKUZWIU50nxYcrmNDcSXP
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226326321"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="226326321"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:48:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="477171838"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2022 08:48:10 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCOzK-000KBw-4O; Tue, 25 Jan 2022 16:48:10 +0000
-Date:   Wed, 26 Jan 2022 00:47:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- bd298817dd07c91088a0db2c10e0e08c8df0f097
-Message-ID: <61f029b6.XPtU1BgWqNA3M0ui%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1586836AbiAYQwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:52:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1586502AbiAYQtn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 11:49:43 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D63C0617A7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:48:09 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id d18-20020a9d51d2000000b005a09728a8c2so2567829oth.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:48:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=T+/85uEpu2eNGNWD/5sNn1BpuagkYZLYJyTVK41DIzg=;
+        b=47+BmtZtou4NgWMqWFzPj44eXxCp4g8Py4gfRKN0aqs6+3kLX5R+LnAdpsgCatY21K
+         VSPva87aSIVmuGWoh0uDg2Pb8v8zvKWtEWTM0ur5k9KWk5/0mr7cd0Zr9SrEX484Q/lu
+         mEyKfgPi1rIRTUE4BM8GG1ivH842WQduqi0y6EW99HHrM51LTb8WBwqVm0Z5IwAm3hl1
+         AYFOi1/lE2MZ9HUlhac2QEqZk8z2uYbEBUd4M6fP39XSC9gZLHvn55X0Mbk5/pxlFp9z
+         Tc8eKughnD0QrvI2UIEcaHwHE7HvowgDeQWi71MsOmKI0F1/pzIKeksHCl6MOk8ymEaN
+         GaNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T+/85uEpu2eNGNWD/5sNn1BpuagkYZLYJyTVK41DIzg=;
+        b=0msxCEZrWWJ4gYfdd6vusAg9Ajwq88m5lXWiwqmCHLheHsIafNRdEu6Xshjz7pZ5Ie
+         fQ+Bvo9lS4cfRnwHBiD9c/HGbXtH5XksYVBQWlsSFtQYQsSuH+Wgsd2vdOzkEcdei7p6
+         Azc9hPfnE6sY1Zixp+GCLB0xaAhH7vlfUtxBsNKiADAYlLYYHhK3018HrtnMBURbkBne
+         53OlhMJLkw7wmylfFL6LE/kTsPmPHSfgq6Frc2qyCaLNIG6e2RxB/plYagtiOwoE5CMU
+         U0So6VEwybn4oSfEM2Kv7dxKH90kszQmxbbCWqvhg9ZGzXlXuYAUavzN1LVQ/6TUvzAi
+         7PsA==
+X-Gm-Message-State: AOAM533GfyWGPq+2s0rktM/faLYSxynt3xJw28a5eu0J1L7/9CBzbKgD
+        N3xJ9580gTleXuLcBdRKcIM28A==
+X-Google-Smtp-Source: ABdhPJxWeJgYFK/ES63uSI9wOGCbRto0EWrjGp0VbBNHViImFHdqyepe2K445KbXZQtPfMBmVOg2cQ==
+X-Received: by 2002:a9d:76d2:: with SMTP id p18mr16032229otl.226.1643129288610;
+        Tue, 25 Jan 2022 08:48:08 -0800 (PST)
+Received: from eze-laptop ([186.122.18.78])
+        by smtp.gmail.com with ESMTPSA id j19sm3696308ots.21.2022.01.25.08.48.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 08:48:07 -0800 (PST)
+Date:   Tue, 25 Jan 2022 13:48:00 -0300
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        shawnguo@kernel.org, aford@beaconembedded.com,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH V3 10/10] arm64: dts: imx8mm: Enable Hantro G1 and G2
+ video decoders
+Message-ID: <YfApwHMi5IYxHtq8@eze-laptop>
+References: <20220124023125.414794-1-aford173@gmail.com>
+ <20220124023125.414794-11-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20220124023125.414794-11-aford173@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: bd298817dd07c91088a0db2c10e0e08c8df0f097  Merge x86/paravirt into tip/master
+Hi Adam,
 
-elapsed time: 725m
+On Sun, Jan 23, 2022 at 08:31:24PM -0600, Adam Ford wrote:
+> There are two decoders on the i.MX8M Mini controlled by the
+> vpu-blk-ctrl.  The G1 supports H264 and VP8 while the
+> G2 support HEVC and VP9.
+> 
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> 
 
-configs tested: 165
-configs skipped: 4
+Looks good.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-sh                 kfr2r09-romimage_defconfig
-mips                         bigsur_defconfig
-arc                 nsimosci_hs_smp_defconfig
-powerpc                     rainier_defconfig
-mips                      maltasmvp_defconfig
-powerpc                    sam440ep_defconfig
-arc                            hsdk_defconfig
-sh                           se7722_defconfig
-mips                     decstation_defconfig
-sparc                       sparc64_defconfig
-powerpc                      ppc6xx_defconfig
-mips                            gpr_defconfig
-arc                          axs101_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                     asp8347_defconfig
-sh                          kfr2r09_defconfig
-nios2                         10m50_defconfig
-powerpc                     sequoia_defconfig
-arm                           h5000_defconfig
-riscv                    nommu_k210_defconfig
-m68k                          atari_defconfig
-openrisc                            defconfig
-csky                                defconfig
-powerpc                     tqm8548_defconfig
-sh                           se7206_defconfig
-arm                        mvebu_v7_defconfig
-arm                           viper_defconfig
-powerpc                 mpc8540_ads_defconfig
-sh                         microdev_defconfig
-arm                             ezx_defconfig
-mips                       bmips_be_defconfig
-xtensa                generic_kc705_defconfig
-openrisc                         alldefconfig
-sh                           sh2007_defconfig
-sh                          r7780mp_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                             shx3_defconfig
-powerpc                           allnoconfig
-parisc                generic-32bit_defconfig
-sh                         ap325rxa_defconfig
-arc                    vdk_hs38_smp_defconfig
-ia64                             allyesconfig
-microblaze                          defconfig
-openrisc                  or1klitex_defconfig
-riscv             nommu_k210_sdcard_defconfig
-m68k                        m5272c3_defconfig
-arc                          axs103_defconfig
-powerpc                    amigaone_defconfig
-arm                            lart_defconfig
-arc                         haps_hs_defconfig
-mips                        bcm47xx_defconfig
-xtensa                          iss_defconfig
-mips                            ar7_defconfig
-arm                       aspeed_g5_defconfig
-arm                  randconfig-c002-20220124
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a002-20220124
-x86_64               randconfig-a003-20220124
-x86_64               randconfig-a001-20220124
-x86_64               randconfig-a004-20220124
-x86_64               randconfig-a005-20220124
-x86_64               randconfig-a006-20220124
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                 randconfig-a002-20220124
-i386                 randconfig-a005-20220124
-i386                 randconfig-a003-20220124
-i386                 randconfig-a004-20220124
-i386                 randconfig-a001-20220124
-i386                 randconfig-a006-20220124
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220125
-arc                  randconfig-r043-20220125
-arc                  randconfig-r043-20220124
-s390                 randconfig-r044-20220125
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+Thanks,
+Ezequiel
 
-clang tested configs:
-arm                  randconfig-c002-20220124
-riscv                randconfig-c006-20220124
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-mips                 randconfig-c004-20220124
-x86_64               randconfig-c007-20220124
-mips                     cu1000-neo_defconfig
-mips                  cavium_octeon_defconfig
-mips                        omega2p_defconfig
-powerpc                    mvme5100_defconfig
-arm                         lpc32xx_defconfig
-riscv                          rv32_defconfig
-mips                        bcm63xx_defconfig
-powerpc                     tqm5200_defconfig
-mips                       lemote2f_defconfig
-powerpc                        icon_defconfig
-mips                     cu1830-neo_defconfig
-arm                        neponset_defconfig
-mips                           ip22_defconfig
-arm                     davinci_all_defconfig
-powerpc                      ppc44x_defconfig
-arm                              alldefconfig
-mips                           ip28_defconfig
-riscv                    nommu_virt_defconfig
-x86_64               randconfig-a011-20220124
-x86_64               randconfig-a013-20220124
-x86_64               randconfig-a015-20220124
-x86_64               randconfig-a016-20220124
-x86_64               randconfig-a014-20220124
-x86_64               randconfig-a012-20220124
-i386                 randconfig-a011-20220124
-i386                 randconfig-a016-20220124
-i386                 randconfig-a013-20220124
-i386                 randconfig-a014-20220124
-i386                 randconfig-a015-20220124
-i386                 randconfig-a012-20220124
-riscv                randconfig-r042-20220124
-hexagon              randconfig-r045-20220125
-hexagon              randconfig-r045-20220124
-hexagon              randconfig-r041-20220125
-hexagon              randconfig-r041-20220124
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> index 0c7a72c51a31..98aec4421713 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> @@ -1272,6 +1272,22 @@ gpu_2d: gpu@38008000 {
+>  			power-domains = <&pgc_gpu>;
+>  		};
+>  
+> +		vpu_g1: video-codec@38300000 {
+> +			compatible = "nxp,imx8mm-vpu-g1";
+> +			reg = <0x38300000 0x10000>;
+> +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clk IMX8MM_CLK_VPU_G1_ROOT>;
+> +			power-domains = <&vpu_blk_ctrl IMX8MM_VPUBLK_PD_G1>;
+> +		};
+> +
+> +		vpu_g2: video-codec@38310000 {
+> +			compatible = "nxp,imx8mq-vpu-g2";
+> +			reg = <0x38310000 0x10000>;
+> +			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clk IMX8MM_CLK_VPU_G2_ROOT>;
+> +			power-domains = <&vpu_blk_ctrl IMX8MM_VPUBLK_PD_G2>;
+> +		};
+> +
+>  		vpu_blk_ctrl: blk-ctrl@38330000 {
+>  			compatible = "fsl,imx8mm-vpu-blk-ctrl", "syscon";
+>  			reg = <0x38330000 0x100>;
+> @@ -1282,6 +1298,12 @@ vpu_blk_ctrl: blk-ctrl@38330000 {
+>  				 <&clk IMX8MM_CLK_VPU_G2_ROOT>,
+>  				 <&clk IMX8MM_CLK_VPU_H1_ROOT>;
+>  			clock-names = "g1", "g2", "h1";
+> +			assigned-clocks = <&clk IMX8MM_CLK_VPU_G1>,
+> +					  <&clk IMX8MM_CLK_VPU_G2>;
+> +			assigned-clock-parents = <&clk IMX8MM_VPU_PLL_OUT>,
+> +						 <&clk IMX8MM_VPU_PLL_OUT>;
+> +			assigned-clock-rates = <600000000>,
+> +					       <600000000>;
+>  			#power-domain-cells = <1>;
+>  		};
+>  
+> -- 
+> 2.32.0
+> 

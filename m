@@ -2,94 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DA649AEEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FE849AFA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453904AbiAYI4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
+        id S1457168AbiAYJOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:14:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453174AbiAYIwn (ORCPT
+        with ESMTP id S1453532AbiAYIyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:52:43 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFEEC04D627
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 23:38:47 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id c15so9691697ljf.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 23:38:47 -0800 (PST)
+        Tue, 25 Jan 2022 03:54:45 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F71EC078503
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 23:44:07 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id v3so12322102pgc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 23:44:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=OeP/c5tK7M4yoYnN+Oigk/ENyBx1rxUcEBnWpLxEJJA=;
-        b=MpAYS44XJ9gMslyiGIx2jczQo1CZ6lRbs8DJcXhwH3H9wlvNu010SXn0PLR6O63Xls
-         sKaQ+AWcRJdj77xYAnkFB309YrZJamBwvuS6Cu67oul5XEMlXXQ0GC/gkbGzgamFujHL
-         03Y3mFBYCvwKti7mbf9ms89Sd3vVIj7DzeZJ9dWIga7NtM0S2S8sk9PL0gunVPbL2yyb
-         GoE1s6JuW9CjxieGAtvCR6MZH65HEraEcpMHcwBEkTsZPAHIsvJ7oaVEr2eApF1gbd0i
-         hzbiuDMOR1XvEzlb8IvBhcHJyh7neRv5skG8qama4mFcN0Xx6sZ2FhwF+LELJkWl9eMB
-         0vfA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YDl8tuenOB7OINLaTsYd1+PC6tJZxYpv16l39VyIDDg=;
+        b=jhLcV//DEN8NAy6w0LcFzAs7igIi+ZA17lYQTXWHFHsVoY0ehWuVVsQ1YPRQ/SSvsI
+         u0qOQ/gMEy+9Td2Idd9gSVlVTZPXe76GHBVLil/jwoskzCcRJYwuez58o6gJRmGvoWdp
+         QgzmSigJP7mawexsbZ4FSNnGvZX2o2y0b+Eww=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=OeP/c5tK7M4yoYnN+Oigk/ENyBx1rxUcEBnWpLxEJJA=;
-        b=cYIX9SaZ+DDg7E1wl+tvQ73dK8E4Dz2Sx2lOVRzXrlDPthO/zQx03cHEYqPo+8xU6f
-         IGr/PH9o3PnkrGt046rGMMEjHHbHYFBJPM0bqFYyuKTo46gsVqHMzm39sovV1THh2zw/
-         O9jsXhCk7Gvy3GR6vTWL2vmgqOq7Q6nWKaT8HnaFGpMHBEcsVrvq+UCIbgrNNNh+1vov
-         2RUfBn+o/KQswLNwnrPeRuVWAbg6C5+LUuxutFPH9fbnR/6XSwCMOxXkgr0qhPsFRCdP
-         iSZaR0zY+kXJIg9mukFP1y4npVSLCzvciplLxednOTv/2K11g6AsGQogGluVX5KBr+cg
-         pXVA==
-X-Gm-Message-State: AOAM531nf1agCNgHGVsz9gWXhADOR5239EC9DSDXKH8n3NklFZtDqMeI
-        B843ay0o4Q40ClfH24hPmZG9q37ADBFh8Mi5Bag=
-X-Google-Smtp-Source: ABdhPJy8SB5P15sf5dIYMMXio2t3KMYCEyneHySxjVUz0Yb/pcd777OUghkr2KpypLlLDbSgfqzHZAhcXBJa95+/nd4=
-X-Received: by 2002:a2e:a484:: with SMTP id h4mr649758lji.525.1643096326021;
- Mon, 24 Jan 2022 23:38:46 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YDl8tuenOB7OINLaTsYd1+PC6tJZxYpv16l39VyIDDg=;
+        b=Sy5LeYMC0/SjpQK4hyOUn+s/Eb6SaVlUpxpg1nZvGODnQ6cfabSze7yGYo2QolZS7c
+         XTyZekrVRZva50bqePCN8h0ucG84249Be1bSe6FSFY6K1r2GlhphY4hujR0YSOZ8SuYx
+         c5zd737JSjGuU0xjjr17fSQ+y334wuwLeCPkUj9KaLIc7SHN1//OW+xU6tkoOIj0Brdb
+         bMpxVYZnv77cm6il+XLnpJGjDFAZt/cgLTYFC6mjsrEYcqz9QjwFmRG8L13uTBKbJ6Lq
+         W2vztpsS1rXFSK3DGTnrE6+7AS3pdCWaDZ6HUXunslyaIUzcbYby2Om5lSPD5jr5a30F
+         3S5g==
+X-Gm-Message-State: AOAM533G9KC9f98Hc+bh1kM3YSmuNuz6fDgF2D5HMwW/VYhTcgPOyM7X
+        a6i+RENe1GJxXRRAVvSwP7pF6w==
+X-Google-Smtp-Source: ABdhPJx1eKNMtskZDfwNpOccUTY1Kim/WLynhTPSIe0KGbPCH/+gumJHFG8D9tPvqfTxjWfWVTu7rg==
+X-Received: by 2002:a65:6ab0:: with SMTP id x16mr14730337pgu.24.1643096646857;
+        Mon, 24 Jan 2022 23:44:06 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s23sm20534298pfg.144.2022.01.24.23.44.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 23:44:06 -0800 (PST)
+Date:   Mon, 24 Jan 2022 23:44:05 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <202201242230.C54A6BCDFE@keescook>
+References: <20220125145006.677e3709@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:a2e:b804:0:0:0:0:0 with HTTP; Mon, 24 Jan 2022 23:38:45
- -0800 (PST)
-Reply-To: ag155627727@gmail.com
-From:   Mrs Aisha Gaddafi <humahuma005@gmail.com>
-Date:   Tue, 25 Jan 2022 05:38:45 -0200
-Message-ID: <CAABFLwk05arpj0sSfiZrgnZDNKtcWRFPogbiOWbhWaZZ8GEitA@mail.gmail.com>
-Subject: =?UTF-8?Q?Re=3A_Bitte_antworten_Sie_so_schnell_wie_m=C3=B6glich?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125145006.677e3709@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
- Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh,
+On Tue, Jan 25, 2022 at 02:50:06PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the kspp tree, today's linux-next build (powerpc
+> allmodconfig) failed like this:
+> 
+> In file included from include/linux/string.h:253,
+>                  from include/linux/bitmap.h:11,
+>                  from include/linux/cpumask.h:12,
+>                  from include/linux/mm_types_task.h:14,
+>                  from include/linux/mm_types.h:5,
+>                  from include/linux/buildid.h:5,
+>                  from include/linux/module.h:14,
+>                  from samples/trace_events/trace-events-sample.c:2:
+> In function '__fortify_strcpy',
+>     inlined from 'perf_trace_foo_rel_loc' at samples/trace_events/./trace-events-sample.h:519:1:
+> include/linux/fortify-string.h:47:33: error: '__builtin_strcpy' offset 12 is out of the bounds [0, 4] [-Werror=array-bounds]
 
-Lieber Freund,
+-Warray-bounds thinks something is trying to get at offset 12 of an
+object it thinks is only 4 bytes in size.
 
-Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen,
-als ich Ihre Hilfe ben=C3=B6tigte. Mein Name ist Aisha Gaddafi, eine
-alleinerziehende Mutter und Witwe mit drei Kindern. Ich bin die
-einzige leibliche Tochter des verstorbenen libyschen Pr=C3=A4sidenten (der
-verstorbene Oberst Muammar Gaddafi). derzeit im Oman wohnhaft.
+>    47 | #define __underlying_strcpy     __builtin_strcpy
+>       |                                 ^
+> include/linux/fortify-string.h:445:24: note: in expansion of macro '__underlying_strcpy'
+>   445 |                 return __underlying_strcpy(p, q);
+>       |                        ^~~~~~~~~~~~~~~~~~~
+> 
+> Exposed by (probably) commit
+> 
+>   602670289b69 ("fortify: Detect struct member overflows in memcpy() at compile-time")
+> 
+> Introduced by commit
+> 
+>   b466b1332164 ("samples/trace_event: Add '__rel_loc' using sample event")
+> 
+> I have reverted that latter commit for today.
 
-Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
-f=C3=BCnfhunderttausend US-Dollar (27.500.000,00 $) und ich brauche einen
-Investmentmanager/Partner und aufgrund des Asylstatus werde ich Ihnen
-das Eigentum an den Fonds genehmigen, aber ich bin an Ihnen
-interessiert Investitionsprojektunterst=C3=BCtzung in Ihrem Land,
-m=C3=B6glicherweise von dort, k=C3=B6nnen wir in naher Zukunft eine
-Gesch=C3=A4ftsbeziehung aufbauen.
+Digging through the macros, I end up reconstructing this:
 
-Ich bin bereit, mit Ihnen das
-Investitions-/Gesch=C3=A4ftsgewinnbeteiligungsverh=C3=A4ltnis zu verhandeln=
-,
-basierend auf den zuk=C3=BCnftigen Investitionsgewinnen.
+	strcpy( (char *)((void *)(&__entry->__rel_loc_foo) +
+				  sizeof(__entry->__rel_loc_foo) +
+				  (__entry->__rel_loc_foo & 0xffff)),
+		foo ? (const char *)(foo) : "(null)");
 
-Wenn Sie bereit sind, dieses Projekt zu =C3=BCbernehmen, antworten Sie
-bitte dringend, damit ich Ihnen weitere Informationen =C3=BCber die
-Investmentfonds zukommen lassen kann.
+I couldn't figure out how __entry is being allocated, but it seemed
+maybe related to this note:
 
+/*
+ * struct trace_event_data_offsets_<call> {
+ *      u32                             <item1>;
+ *      u32                             <item2>;
+ *      [...]
+ * };
+ *
+ * The __dynamic_array() macro will create each u32 <item>, this is
+ * to keep the offset of each array from the beginning of the event.
+ * The size of an array is also encoded, in the higher 16 bits of
+ * <item>.
+ */
 
-stehe derzeit unter politischem Asylschutz der omanischen Regierung.
+So, I think -Warray-bounds is refusing to see the destination as
+anything except a u32, but being accessed at 4 (sizeof(u32)) + 8
+(address && 0xffff) (?)
 
-Ihre dringende Antwort wird gesch=C3=A4tzt
-Mit freundlichen Gr=C3=BC=C3=9Fen
-Frau Aisha Gaddafi
+But if this is true, I would imagine there would be plenty of other
+warnings? I'm currently stumped.
+
+Reading 55de2c0b5610 ("tracing: Add '__rel_loc' using trace event
+macros") did not help me. ;)
+
+-Kees
+
+-- 
+Kees Cook

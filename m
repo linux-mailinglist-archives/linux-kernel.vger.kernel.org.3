@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D84B49A88B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A8E49A7FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1319346AbiAYDIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:08:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378622AbiAYC2V (ORCPT
+        id S1315717AbiAYCyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:54:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50435 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S3407874AbiAYAVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:28:21 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761ECC0885B9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:15:09 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id z199so7206762iof.10
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:15:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XOycsyS8WRs8WZM/52QyGEA5jLYLxAJ/W6Zuel7qkRA=;
-        b=f34lBeEz/HehymnXqwwxOdjyY9w+KaosW++K7KCxycK9xeN1xQJgQUcrX1Qv4myWUD
-         ASAxMVGBmSHRkErcLkUXTfeUBExMbmB2J+gUCX3t82Jxq6AsGWKm2JnYRiVSlmLl5k4R
-         QYL5R2OtQSDQS856QugEJt0DqvxJ3bbI0rn+OtxJIj8rcNOFnxt/4AHBJDiD5aOosazN
-         nTt1P+okBemMag/6vQsXhwSqyk0/1OenfLmwa6g12KHh4moUq3cgkK/9GGbn1AHR9big
-         zuZxUDa+GIKKvip+Yd0sJRRqcVxtchRAX6kiSQsY+0dW8B2WHQ1Ua5Copi+5ukWNR2Bq
-         B3gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XOycsyS8WRs8WZM/52QyGEA5jLYLxAJ/W6Zuel7qkRA=;
-        b=lV3VVDZ2smkFzaC1rQezqRNxvu2A/5CEC9tTYK9/gVqETAzFn+3tWjBiQlHcSWRCwV
-         9BgGzwzzOiiEjcpjhSw4zVJU59/4xtuUmqV66hxNvingzwtXlfKPgw1qsdiYlQrxd4Tm
-         Q6ps9zDLlaJTxqGsGil6tiRxCTj9bvbf5Ip1lZMxyXXqO+nfeDFqj2uvGjgJsAZjkWNn
-         NGOYIXfR/1Aq5+D5wbUK1Ceofap2fISJwA7PkfntXsd+FH+Qoklt0cEMPlJjZHysvbMt
-         KkJv7fHGG0/OKVGzLE87hIZ/W2dESJkWFyIXJm2/vbZORRBqlD6CIZFE/J7JXH3amQU3
-         mKQA==
-X-Gm-Message-State: AOAM530H0ogq9RH896l1PAu+731LSt1w5GBHIKlwAwJ0GUEK74o8bitF
-        KFx/ySeqyVDETcJvYn3Pnch1FVapwYhBgUdsWyE=
-X-Google-Smtp-Source: ABdhPJxlao7tW+lPffpN2kE8+THqlB+sycLsujMgVjquvQRKD63tn1vVkqnvCJ5ZEHxWs2N+1HhEOSCL9h1qrWiQMs0=
-X-Received: by 2002:a02:7a0f:: with SMTP id a15mr8025815jac.278.1643069708426;
- Mon, 24 Jan 2022 16:15:08 -0800 (PST)
+        Mon, 24 Jan 2022 19:21:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643070064;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ntjy8+chLJCGytFKA8pelsB5b8BrXmYg/+6iLbMlUec=;
+        b=NRI2RGiRoKkpeY+/Vz6gJ/rFEgGa7NH9YjtpjyKPw2ovKmHtEmkoulrPh9Vw8EPGgUSnQ6
+        J1mGFCaQBM5zps74scpKQxnpq9dqcrEu95IpfW+xYZrydjOr9ncprIeu/wFkf70eSQm1i/
+        jVvWr4tf+M2Gb/gZFLWKCDaCmb4xuAk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-175-kfJhdSBqNVeQGWVao-GqBA-1; Mon, 24 Jan 2022 19:21:00 -0500
+X-MC-Unique: kfJhdSBqNVeQGWVao-GqBA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AB341100CCF2;
+        Tue, 25 Jan 2022 00:20:59 +0000 (UTC)
+Received: from agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (agk-cloud1.hosts.prod.upshift.rdu2.redhat.com [10.0.13.154])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B3E05F90F;
+        Tue, 25 Jan 2022 00:20:25 +0000 (UTC)
+Received: by agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (Postfix, from userid 3883)
+        id CDF2F424F088; Tue, 25 Jan 2022 00:20:25 +0000 (GMT)
+Date:   Tue, 25 Jan 2022 00:20:25 +0000
+From:   Alasdair G Kergon <agk@redhat.com>
+To:     Brian Geffon <bgeffon@google.com>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dm: introduce a no open flag for deferred remove
+Message-ID: <20220125002025.GA21887@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
+Mail-Followup-To: Brian Geffon <bgeffon@google.com>,
+        Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
+        dm-devel@redhat.com, LKML <linux-kernel@vger.kernel.org>
+References: <20220124150209.22202-1-bgeffon@google.com>
+ <20220124151434.GB20331@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
+ <CADyq12ykDCswWZw05OdyYfP-zT6afuhXbckii1m1egQ2fSwB4w@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:1401:0:0:0:0 with HTTP; Mon, 24 Jan 2022 16:15:07
- -0800 (PST)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <dicksonsilva20017@gmail.com>
-Date:   Mon, 24 Jan 2022 16:15:07 -0800
-Message-ID: <CAPKPuhM40XerQ4J3aj6YCzPADjcy1qGMLK8JcMMKq6aB1RExZw@mail.gmail.com>
-Subject: Dearest Friend,?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADyq12ykDCswWZw05OdyYfP-zT6afuhXbckii1m1egQ2fSwB4w@mail.gmail.com>
+Organization: Red Hat UK Ltd. Registered in England and Wales, number
+ 03798903. Registered Office: Amberley Place, 107-111 Peascod Street,
+ Windsor, Berkshire, SL4 1TE.
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dearest Friend,
+On Mon, Jan 24, 2022 at 10:25:47AM -0500, Brian Geffon wrote:
+> Thank you for looking at this. There are a few reasons this might be
+> useful, the first is if you're trying to speed up a graceful teardown
+> of the device by informing userspace that this device is going to be
+> removed in the near future. Another might be on systems where it might
+> be worthwhile to not have users with CAP_DAC_OVERRIDE be able to open
+> the device. The logic on this second case is that, suppose you have a
+> dm-crypt block device which is backing swap, the data on this device
+> is ephemeral so a flow might be to setup swap followed by dmsetup
+> remove --deferred /dev/mapper/encrypted-swap. This will guarantee that
+> as soon as swap is torn down the encrypted block device is dropped,
+> additionally with this new flag you'll be guaranteed that there can be
+> no further opens on it.
+ 
+And is that the reason you propose this?
+- You want a special exclusive 'one time open' device that 
+  self-destructs when closed?
 
-In the name of God, Most Gracious, Most Merciful.
+> No, this is fully backwards compatible with the current deferred
+> remove behavior, it's not required. Additionally, since on the actual
+> remove userspace would receive an -ENXIO already once the remove
+> process has started it seems reasonable to return -ENXIO in the
+> deferred remove case when this flag is enabled.
+ 
+Well I feel it does break existing semantics which is why we wrote
+the code the way we did.  The state can be long-lived, the code
+that has it open might legitimately want to open it again in
+parallel etc. - in general this seems a bad idea.
 
-Peace be upon you and mercy be upon you and blessings be upon you.
-I have the sum of $27.5 million USD for investment, I am interested in
-you for investment project assistance in your country. My name is
-Aisha  Gaddafi and presently living in Oman, I am a Widow and single
-Mother with three Children, the only biological Daughter of late
-Libyan President (Late Colonel Muammar Gaddafi) and presently I am
-under political asylum protection by the Omani Government.
+But if the reason for this is basically "make it harder for 
+anything else to access my encrypted swap" and to deliberately
+prevent access, then let's approach the requirement from that angle.
+Are there alternative implementations with interventions at different
+points?  Are there similar requirements for devices that don't need
+deferred remove?  If this is indeed the best place to insert this type
+of restriction, then we should label it and document it accordingly so
+people don't mistakenly use it for the 'normal' case.  (We always keep
+libdevmapper and dmsetup in sync with kernel interface extensions, so
+we'd seek a tiny patch to do that too.)
 
-Kindly reply urgently for more details.
+Alasdair
 
-my email address below: ayishagddafio@mail.ru
-Thanks
-Yours Truly Aisha

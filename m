@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC5549BE46
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E95349BE49
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbiAYWOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:14:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45284 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiAYWOS (ORCPT
+        id S233609AbiAYWPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:15:08 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:45536 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230384AbiAYWPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:14:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B03CDB81B6B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56ED3C340E0;
-        Tue, 25 Jan 2022 22:14:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643148856;
-        bh=wzQ7De1OASBwcj3eJi86mBXPWkiGQw8ikhGXdFZuX4s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CD6N+fucU5W+Oe0l9yslZOos70un8YyAOxgmEVyiljOD5LNiUrrshae3qKmqz/UfW
-         zRo5ffiEfJbWjIcVeOeKFBVlfi8vThLQ4Dp7jTb25WDhtEwOg+GO8zQJV0sgnYoc7B
-         zUBR3soAR5Uil1cGxJO4zU/P2+yKngc3sDIJFNcBvovrpmW1Iv9kvRVwMBCQVDwATl
-         hF6ATYuwsiQq+b8Tc4GiWzJMQISjrXzgNWvEqpruia1PUZaQu8HmvOW10mpVu3jwoz
-         Oo1lIDqQOZbnTen10a52SgQm6goBIQ4PCtwIU9xzZ5vRJTkrP6ydheCM6WG71/qvO3
-         j2hYTsaW5tIcg==
-Date:   Tue, 25 Jan 2022 22:13:58 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Harry Austen <harryausten@hotmail.co.uk>
-Cc:     linux-f2fs-devel@lists.sourceforge.net, jaegeuk@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix fileattr_set unsupported attribute
- handling
-Message-ID: <YfB2Jqs3RGRnH63R@gmail.com>
-References: <AM6PR10MB2838873D61CE1C0DB91EEDB9FA5C9@AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM>
- <Ye79OLCFLR3H+GnY@gmail.com>
- <AM6PR10MB2838705554FCB6ACE86F12BBFA5F9@AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM>
+        Tue, 25 Jan 2022 17:15:07 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-286-eH9ObO7ZPQOXkYjImAriww-1; Tue, 25 Jan 2022 22:15:00 +0000
+X-MC-Unique: eH9ObO7ZPQOXkYjImAriww-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 25 Jan 2022 22:14:58 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 25 Jan 2022 22:14:58 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Yury Norov' <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joe Perches <joe@perches.com>,
+        "Dennis Zhou" <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH 10/54] net: ethernet: replace bitmap_weight with
+ bitmap_empty for qlogic
+Thread-Topic: [PATCH 10/54] net: ethernet: replace bitmap_weight with
+ bitmap_empty for qlogic
+Thread-Index: AQHYEi/xbFZei8h0ukG4wQKpQdgkw6x0TR0w
+Date:   Tue, 25 Jan 2022 22:14:58 +0000
+Message-ID: <58c222c15b2d43689f43d31afb5cb914@AcuMS.aculab.com>
+References: <20220123183925.1052919-1-yury.norov@gmail.com>
+ <20220123183925.1052919-11-yury.norov@gmail.com>
+ <Ye6bUC1GyLLUV37p@smile.fi.intel.com>
+ <CAAH8bW_u6oNOkMsA_jRyWFHkzjMi0CB7gXmvLYAdjNMSqrrY7w@mail.gmail.com>
+In-Reply-To: <CAAH8bW_u6oNOkMsA_jRyWFHkzjMi0CB7gXmvLYAdjNMSqrrY7w@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM6PR10MB2838705554FCB6ACE86F12BBFA5F9@AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:01:49PM +0000, Harry Austen wrote:
-> On Monday, 24 January 2022 19:25:44 GMT Eric Biggers wrote:
-> > On Sat, Jan 22, 2022 at 12:59:03PM +0000, Harry Austen wrote:
-> > > FS_IOC_SETFLAGS ioctl should return EOPNOTSUPP if the file attribute
-> > > (e.g. FS_NOCOW_FL) is not supported, rather than silently ignoring it
-> > > and returning success.
-> > > 
-> > > Fixes: 9b1bb01c8ae7 (f2fs: convert to fileattr)
-> > > Signed-off-by: Harry Austen <harryausten@hotmail.co.uk>
-> > > ---
-> > > 
-> > >  fs/f2fs/file.c | 3 +--
-> > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > 
-> > > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> > > index 92ec2699bc85..061bf35c2582 100644
-> > > --- a/fs/f2fs/file.c
-> > > +++ b/fs/f2fs/file.c
-> > > @@ -3085,9 +3085,8 @@ int f2fs_fileattr_set(struct user_namespace
-> > > *mnt_userns,> 
-> > >  		return -EIO;
-> > >  	
-> > >  	if (!f2fs_is_checkpoint_ready(F2FS_I_SB(inode)))
-> > >  	
-> > >  		return -ENOSPC;
-> > > 
-> > > -	if (fsflags & ~F2FS_GETTABLE_FS_FL)
-> > > +	if (fsflags & ~F2FS_SETTABLE_FS_FL)
-> > > 
-> > >  		return -EOPNOTSUPP;
-> > > 
-> > > -	fsflags &= F2FS_SETTABLE_FS_FL;
-> > > 
-> > >  	if (!fa->flags_valid)
-> > >  	
-> > >  		mask &= FS_COMMON_FL;
-> > 
-> > This is intentional, and matches what ext4 does; see the comment in the ext4
-> > implementation of this:
-> > 
-> >         /*
-> >          * chattr(1) grabs flags via GETFLAGS, modifies the result and
-> >          * passes that to SETFLAGS. So we cannot easily make SETFLAGS
-> >          * more restrictive than just silently masking off visible but
-> >          * not settable flags as we always did.
-> >          */
-> 
-> Ah, my apologies. I thought it looked a little too obvious. Clearly I
-> should have looked at the ext4 code. Please disregard this patch.
-> 
-> Is there anything else that could be done to improve unsettable
-> attribute handling? For example, is there a reason FS_NOCOW_FL is
-> gettable but not settable? Could it be added to the settable list?
+RnJvbTogWXVyeSBOb3Jvdg0KPiBTZW50OiAyNSBKYW51YXJ5IDIwMjIgMjE6MTANCj4gT24gTW9u
+LCBKYW4gMjQsIDIwMjIgYXQgNDoyOSBBTSBBbmR5IFNoZXZjaGVua28NCj4gPGFuZHJpeS5zaGV2
+Y2hlbmtvQGxpbnV4LmludGVsLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBPbiBTdW4sIEphbiAyMywg
+MjAyMiBhdCAxMDozODo0MUFNIC0wODAwLCBZdXJ5IE5vcm92IHdyb3RlOg0KPiA+ID4gcWxvZ2lj
+L3FlZCBjb2RlIGNhbGxzIGJpdG1hcF93ZWlnaHQoKSB0byBjaGVjayBpZiBhbnkgYml0IG9mIGEg
+Z2l2ZW4NCj4gPiA+IGJpdG1hcCBpcyBzZXQuIEl0J3MgYmV0dGVyIHRvIHVzZSBiaXRtYXBfZW1w
+dHkoKSBpbiB0aGF0IGNhc2UgYmVjYXVzZQ0KPiA+ID4gYml0bWFwX2VtcHR5KCkgc3RvcHMgdHJh
+dmVyc2luZyB0aGUgYml0bWFwIGFzIHNvb24gYXMgaXQgZmluZHMgZmlyc3QNCj4gPiA+IHNldCBi
+aXQsIHdoaWxlIGJpdG1hcF93ZWlnaHQoKSBjb3VudHMgYWxsIGJpdHMgdW5jb25kaXRpb25hbGx5
+Lg0KPiA+DQo+ID4gPiAtICAgICAgICAgICAgIGlmIChiaXRtYXBfd2VpZ2h0KCh1bnNpZ25lZCBs
+b25nICopJnBtYXBbaXRlbV0sIDY0ICogOCkpDQo+ID4gPiArICAgICAgICAgICAgIGlmICghYml0
+bWFwX2VtcHR5KCh1bnNpZ25lZCBsb25nICopJnBtYXBbaXRlbV0sIDY0ICogOCkpDQo+ID4NCj4g
+PiA+IC0gICAgICAgICAoYml0bWFwX3dlaWdodCgodW5zaWduZWQgbG9uZyAqKSZwbWFwW2l0ZW1d
+LA0KPiA+ID4gKyAgICAgICAgICghYml0bWFwX2VtcHR5KCh1bnNpZ25lZCBsb25nICopJnBtYXBb
+aXRlbV0sDQo+ID4NCj4gPiBTaWRlIG5vdGUsIHRoZXNlIGNhc3RpbmdzIHJlbWluZHMgbWUgcHJl
+dmlvdXMgZGlzY3Vzc2lvbiBhbmQgSSdtIHdvbmRlcmluZw0KPiA+IGlmIHlvdSBoYXZlIHRoaXMg
+a2luZCBvZiBwb3RlbnRpYWxseSBwcm9ibGVtYXRpYyBwbGFjZXMgaW4geW91ciBUT0RPIGFzDQo+
+ID4gc3ViamVjdCB0byBmaXguDQo+IA0KPiBJbiB0aGUgZGlzY3Vzc2lvbiB5b3UgbWVudGlvbmVk
+IGFib3ZlLCB0aGUgdTMyKiB3YXMgY2FzdCB0byB1NjQqLA0KPiB3aGljaCBpcyB3cm9uZy4gVGhl
+IGNvZGUNCj4gaGVyZSBpcyBzYWZlIGJlY2F1c2UgaW4gdGhlIHdvcnN0IGNhc2UsIGl0IGNhc3Rz
+IHU2NCogdG8gdTMyKi4gVGhpcw0KPiB3b3VsZCBiZSBPSyB3cnQNCj4gIC1XZXJyb3I9YXJyYXkt
+Ym91bmRzLg0KPiANCj4gVGhlIGZ1bmN0aW9uIGl0c2VsZiBsb29rcyBsaWtlIGRvaW5nIHRoaXMg
+dW5zaWduZWQgbG9uZyA8LT4gdTY0DQo+IGNvbnZlcnNpb25zIGp1c3QgZm9yIHByaW50aW5nDQo+
+IHB1cnBvc2UuIEknbSBub3QgYSBxbG9naWMgZXhwZXJ0LCBzbyBsZXQncyB3YWl0IHdoYXQgcGVv
+cGxlIHNheT8NCg0KSXQnbGwgYmUgd3Jvbmcgb24gQkUgc3lzdGVtcy4NCllvdSBqdXN0IGNhbid0
+IGNhc3QgdGhlIGFyZ3VtZW50IGl0IGhhcyB0byBiZSBsb25nW10uDQoNCglEYXZpZA0KDQotDQpS
+ZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWls
+dG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMp
+DQo=
 
-A lot of flags are gettable by FS_IOC_GETFLAGS but not settable by
-FS_IOC_SETFLAGS, typically because they can only be set through a dedicated
-interface.  For example, the encrypt flag can only be set using
-FS_IOC_SET_ENCRYPTION_POLICY, or via inheritance.
-
-> > 
-> > Also, even if this patch was correct, the Fixes tag is wrong.
-> 
-> Having looked at this a bit more, I assume you are saying this due to
-> the missing double quotes around the commit summary? (just so I know for
-> next time as this is my first attempt at sending a kernel patch)
-> 
-
-There's that, but more importantly the commit you listed is wrong.  The relevant
-code was added by an earlier commit, and that commit just moved it.
-
-- Eric

@@ -2,120 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E1C49B8D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF5D49B8D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350814AbiAYQfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:35:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27401 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1453897AbiAYQbM (ORCPT
+        id S1583680AbiAYQfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:35:48 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46708 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1577104AbiAYQbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:31:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643128271;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ReaBFbcLhGuXS2ueJc4WerhmCTBoSrJa8O+uDsGwdwU=;
-        b=DUjzoNQLvTr9EuzR426/7cCvOxZfjOHfd1iZswoUj5o6CoRc8rw31vznHUD8z/Ak+2g6bG
-        /4UaOyDyHPH98LE1lbecR55iDgU6AfSD2zkiguommTHQW0CGk+cN+w++VE/fppC7lNo+nh
-        oI9K5kGiwqAAhoewMC5SngRXLPsTzec=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-658-dkgMvb2dOxSDmFANXlWRqg-1; Tue, 25 Jan 2022 11:31:09 -0500
-X-MC-Unique: dkgMvb2dOxSDmFANXlWRqg-1
-Received: by mail-ed1-f72.google.com with SMTP id el8-20020a056402360800b00403bbdcef64so15300610edb.14
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:31:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ReaBFbcLhGuXS2ueJc4WerhmCTBoSrJa8O+uDsGwdwU=;
-        b=IzUaVVyQeXFGnzqFd78afnr7G370C0Ij/Xeyy19QBkaQhDOrZhQC1elY3XETX3VyLM
-         OIn3fQ8FSkJpGpPvOcEG1y0RgS8OF+PXOwgS6nnNTgmBm8LY7hRcmT5T/wjpE/jXoArg
-         vvcYm2P0jJhSxOBl9avqGlHTyORsJVcoQ1+wCsMaT7Q4ZFZX6pft/touzA+F2mv8otK9
-         E6ZmOx9FeS38wuQEWpQ5ogd6PThReLDySiCxhrq7v3bl5sc5PMwZ1KpQjEKbFVro7IJw
-         xyj4/FICTmu3y4MIA0GTQPIfl0S0Elxa74LhJaQQq4I8X63LQkVj95Z287eNvWRFaW1C
-         fYCQ==
-X-Gm-Message-State: AOAM531T9xHHMtYTzHSQVD8zWNL0zGTj19C2b1xdXOM5Xm6hfOl8ylKh
-        6sE32nyG8yM28KiPD+sWDSpRnyhy2gUyOQ7pme2KI2qUH9SEpE/snv0v+IVb5wVdfs7MdWal/kz
-        24ko0VY53UmabNRi2tJgyXJit
-X-Received: by 2002:a17:907:97c3:: with SMTP id js3mr3245508ejc.117.1643128268320;
-        Tue, 25 Jan 2022 08:31:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzzhPjvYjqPGvGy/MBqxMjdO2IyfjnQJkOdM0pGh2VfimaHz7DdDd6i5qmMSQiyP7HIsTj0pw==
-X-Received: by 2002:a17:907:97c3:: with SMTP id js3mr3245486ejc.117.1643128268135;
-        Tue, 25 Jan 2022 08:31:08 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id h19sm2158726edv.90.2022.01.25.08.31.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 08:31:07 -0800 (PST)
-Message-ID: <5c5e274f-a09c-8a90-f7b1-51f969dd4c2d@redhat.com>
-Date:   Tue, 25 Jan 2022 17:31:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 16/19] KVM: x86: Remove unused "vcpu" of
- kvm_arch_tsc_has_attr()
-Content-Language: en-US
-To:     Jinrong Liang <ljr.kernel@gmail.com>
-Cc:     Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220125095909.38122-1-cloudliang@tencent.com>
- <20220125095909.38122-17-cloudliang@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220125095909.38122-17-cloudliang@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Tue, 25 Jan 2022 11:31:33 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87F3F6172E;
+        Tue, 25 Jan 2022 16:31:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EBBF3C340E0;
+        Tue, 25 Jan 2022 16:31:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643128293;
+        bh=VQsRuu/jA4nWNWLTdhkAabbKcRrNx4KcfGNroobbkeo=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=AasKlkpnJowQrmZCXnRHYEagzgQFkTa4WOqNiF3hUTWE0uoNVaUVutSsQzFD8H7p/
+         ZBRsiW4dEtyNjuB0yuDwfE+zqgPTuiTNyjwUr7AvosT3g4oUE1XLaQU7stn3y3pZ5+
+         yXifjfnsY7vuw3tGHV0CuOggP6YGlRnD9vAt+aKslxOQxBfEzuvbxHSHfH7nnh8CSq
+         1oRW9nE4iJLG6csMl7dC4jg1vey9T5x+G7U+zti0UmCNLBKI7ot2Ep+ySEsMmVTIhR
+         NzFddqMSCHboxBBXA+/5/Uqe8VUh+6HWAaSPVAwnsTe+g2C93jF752uunLjS9e5AkZ
+         zy7Fnye+tSpaw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D6081E5D084;
+        Tue, 25 Jan 2022 16:31:32 +0000 (UTC)
+Subject: Re: [GIT PULL] Btrfs fixes for 5.17-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <cover.1643122662.git.dsterba@suse.com>
+References: <cover.1643122662.git.dsterba@suse.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <cover.1643122662.git.dsterba@suse.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.17-rc1-tag
+X-PR-Tracked-Commit-Id: 27cdfde181bcacd226c230b2fd831f6f5b8c215f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 49d766f3a0e49624c4cf83909d56c68164e7c545
+Message-Id: <164312829286.8622.16491063957310057694.pr-tracker-bot@kernel.org>
+Date:   Tue, 25 Jan 2022 16:31:32 +0000
+To:     David Sterba <dsterba@suse.com>
+Cc:     torvalds@linux-foundation.org, David Sterba <dsterba@suse.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 10:59, Jinrong Liang wrote:
-> From: Jinrong Liang <cloudliang@tencent.com>
-> 
-> The "struct kvm_vcpu *vcpu" parameter of kvm_arch_tsc_has_attr()
-> is not used, so remove it. No functional change intended.
-> 
-> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
-> ---
->   arch/x86/kvm/x86.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index df46d0737b85..22b73b918884 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -5003,8 +5003,7 @@ static int kvm_set_guest_paused(struct kvm_vcpu *vcpu)
->   	return 0;
->   }
->   
-> -static int kvm_arch_tsc_has_attr(struct kvm_vcpu *vcpu,
-> -				 struct kvm_device_attr *attr)
-> +static int kvm_arch_tsc_has_attr(struct kvm_device_attr *attr)
->   {
->   	int r;
->   
-> @@ -5099,7 +5098,7 @@ static int kvm_vcpu_ioctl_device_attr(struct kvm_vcpu *vcpu,
->   
->   	switch (ioctl) {
->   	case KVM_HAS_DEVICE_ATTR:
-> -		r = kvm_arch_tsc_has_attr(vcpu, &attr);
-> +		r = kvm_arch_tsc_has_attr(&attr);
->   		break;
->   	case KVM_GET_DEVICE_ATTR:
->   		r = kvm_arch_tsc_get_attr(vcpu, &attr);
+The pull request you sent on Tue, 25 Jan 2022 16:36:59 +0100:
 
-I can't make my mind on this.  I think it's better to have the argument 
-in case some attributes depend on VM capabilities in the future.
+> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.17-rc1-tag
 
-Paolo
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/49d766f3a0e49624c4cf83909d56c68164e7c545
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB1849B685
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E93049B690
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579658AbiAYOhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237434AbiAYOeR (ORCPT
+        id S1388495AbiAYOjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:39:07 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:49728 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238093AbiAYOea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:34:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49B9C061747;
-        Tue, 25 Jan 2022 06:34:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95FB8B81810;
-        Tue, 25 Jan 2022 14:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E95F7C340E0;
-        Tue, 25 Jan 2022 14:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643121252;
-        bh=d8VDBh4A7aHxWjRMBX25G1hDZ6OaKc2/U1a3PD1bYKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n/HxYVR0YVUH6wwMl/WoyoeV8igIEZildvImd/jY4TGPDyiXvszoYlF1uKfGJAJ08
-         nS6ZFMjvAzpGXAA5LQq/qUCMx4C/3MJgCvjSAoE4HhDqOIgjSU88UPTNmbR5qBLvh9
-         Y81G2jYQvnaPcqKqrkzfo9RUXnfGT/XNfhlNJ9Q4=
-Date:   Tue, 25 Jan 2022 15:34:09 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: review for  5.16.3-rc2
-Message-ID: <YfAKYWOMdGJ0NxjE@kroah.com>
-References: <0af17d6952b3677dcd413fefa74b086d5ffb474b.camel@rajagiritech.edu.in>
+        Tue, 25 Jan 2022 09:34:30 -0500
+Date:   Tue, 25 Jan 2022 15:34:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643121266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VoqfDBHhTAJ/th+5DzPwXrFiDr1q3BUP6gebHBO03j8=;
+        b=SawjJMZ/l1V8fmswZt/7lMaYWbYT2Kk6D0t5WhyefjCr32Ybk38NN/a9Cu6ufQm5IQDUqj
+        qnWSyKFB/6Rh4nf0s4CgokALBQ5lkMzaRT4s1So0iEAv2SE+x6NiVstbM66FSUxjg6Boec
+        ikH7Qhpm0+MuRVhQTkKHn7bnWNB9Gyt/mJZS6+NBpUBinwyrLlw+JwV7+ZoNH4PLgkiHkv
+        QrNGOoP8SreVCzHlB+GpQ2SY7SPD22ewjqRCQVhf7EDwj+ZnkBmZOcpGT3SLwuWhCjZEaw
+        mwEPBTee+bcwWVwwjPkQLhQde3+fWBJ8qUml9YZCiX2uaesBZLQl3r0A1K2pFQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643121266;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VoqfDBHhTAJ/th+5DzPwXrFiDr1q3BUP6gebHBO03j8=;
+        b=cjQh86pyNGNSp/dlgktgCQDVV3Wm0RrYyt6S1ejk3GSVeaIwzL/6PACzr4UR3vv2ayrQrB
+        Rwva4YQd/2pz+hCQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Wander Costa <wcosta@redhat.com>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Johan Hovold <johan@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v3 1/1] tty: serial: Use fifo in 8250 console driver
+Message-ID: <YfAKcI8APsJmVgFp@linutronix.de>
+References: <20211222112831.1968392-1-wander@redhat.com>
+ <20211222112831.1968392-2-wander@redhat.com>
+ <Ye/1+Z8mEzbKbrqG@linutronix.de>
+ <CAAq0SUmdGinqdWXrHztx8g9hb+5UF5rDJJjVeVMj3CQ=Fw3kJg@mail.gmail.com>
+ <YfAFAcYmJ+Zrontd@linutronix.de>
+ <CAAq0SUkuG2uyouBhT5yDiq_KbOGUCO=9ondq6dkt1QZLN_C4uA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0af17d6952b3677dcd413fefa74b086d5ffb474b.camel@rajagiritech.edu.in>
+In-Reply-To: <CAAq0SUkuG2uyouBhT5yDiq_KbOGUCO=9ondq6dkt1QZLN_C4uA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 06:15:46PM +0530, Jeffrin Jose T wrote:
-> hello greg,
-> 
-> compile failed for  5.16.3-rc2 related.
-> a relevent file attached.
-> 
-> Tested-by : Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+On 2022-01-25 11:26:03 [-0300], Wander Costa wrote:
+> I will check on my side if I see something similar. Do you still get
+> lines lost as well?
 
-But it failed for you, how did you test it?
+Yes. The output is garbage for a while and then it fixes itself. Setting
+"use_fifo = 0" works.
+Thanks.
 
-> 
-> 
-> -- 
-> software engineer
-> rajagiri school of engineering and technology - autonomous
-> 
-> 
-
-> 	char *                     typetab;              /*    24     8 */
-> 
-> 	/* size: 32, cachelines: 1, members: 4 */
-> 	/* sum members: 28, holes: 1, sum holes: 4 */
-> 	/* last cacheline: 32 bytes */
-> };
-> struct klp_modinfo {
-> 	Elf64_Ehdr                 hdr;                  /*     0    64 */
-> 	/* --- cacheline 1 boundary (64 bytes) --- */
-> 	Elf64_Shdr *               sechdrs;              /*    64     8 */
-> 	char *                     secstrings;           /*    72     8 */
-> 	unsigned int               symndx;               /*    80     4 */
-> 
-> 	/* size: 88, cachelines: 2, members: 4 */
-> 	/* padding: 4 */
-> 	/* last cacheline: 24 bytes */
-> };
-> Segmentation fault
-
-What "faulted"?  Look higher up in the log please.
-
-thanks,
-
-greg k-h
+Sebastian

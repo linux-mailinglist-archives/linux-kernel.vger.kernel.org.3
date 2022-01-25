@@ -2,96 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A6E49B1DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1797249B1B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356131AbiAYKaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:30:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:32956 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345277AbiAYKVR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:21:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S1353829AbiAYK0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:26:17 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:32882 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346696AbiAYKVl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 05:21:41 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8A4361645;
-        Tue, 25 Jan 2022 10:21:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85412C340E0;
-        Tue, 25 Jan 2022 10:21:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643106071;
-        bh=dDZYgGbA0BHGN18HiUB3PXb8Mel6TNqbFMOFcstIxX0=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Dk+O+jx9RNfAIRNl+G5yibdxkkq8aTGXmW91f6mxjLCST3oy+fJt+u4/SRVhCxwpw
-         V4COe9T6WaXtk7IlXR17mBCgwBp4NdpQVxrZVQBMRo4fukpDBetZZE/3AhUipDYJfZ
-         xDjnOl5awl586lrBjMlr+/CxVsQxyeLRfUN/t+E2n5TSLam4ejfcYmGSP8J+81pjOo
-         E1JEbrV6QM5bmj7eTrXB6ABpB8aUHr/6lJay6YVAuVOwXsam2ucGeIdLB6MC6PKHJh
-         rs61dpnbb/ib/qZXwyOem11DRLndWGy6AorM4XzUTNqRuyGvWbZ7/xy4q12565R+d4
-         GBF9r1mIDxWGQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linus.walleij@linaro.org, conor.dooley@microchip.com,
-        linux-kernel@vger.kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, aou@eecs.berkeley.edu,
-        lee.jones@linaro.org, jassisinghbrar@gmail.com,
-        linux-usb@vger.kernel.org, thierry.reding@gmail.com,
-        palmer@dabbelt.com, linux-pwm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, gregkh@linuxfoundation.org,
-        bgolaszewski@baylibre.com, linux-crypto@vger.kernel.org,
-        robh+dt@kernel.org, u.kleine-koenig@pengutronix.de,
-        linux-i2c@vger.kernel.org, paul.walmsley@sifive.com
-Cc:     geert@linux-m68k.org, bin.meng@windriver.com,
-        lewis.hanly@microchip.com, ivan.griffin@microchip.com,
-        krzysztof.kozlowski@canonical.com, heiko@sntech.de,
-        atishp@rivosinc.com, daire.mcnamara@microchip.com
-In-Reply-To: <20220117110755.3433142-1-conor.dooley@microchip.com>
-References: <20220117110755.3433142-1-conor.dooley@microchip.com>
-Subject: Re: (subset) [PATCH v4 00/14] Update the Icicle Kit device tree
-Message-Id: <164310606421.75071.15666469655719890555.b4-ty@kernel.org>
-Date:   Tue, 25 Jan 2022 10:21:04 +0000
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5A6061EC0441;
+        Tue, 25 Jan 2022 11:21:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643106093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=nZTEKo7MPhQxeMuwLWwjdWmjG5ba3B1ygZdLV8+Ny7w=;
+        b=m3lZp6WMvvCykmsgvEEKXaXRi9yDGC7m1mBvR81VplAVnBMr0CS7EdiRQjI2BoEHGfVfnI
+        dFQqFGc0YbLxV4eZWNSpNDDFnH/5gB9+8OrVWOtKz53edd866kCrF1JaLxmFVmspUWVEUm
+        XJ/pvuVomw5Az4vEQSobaYppR2ZL784=
+Date:   Tue, 25 Jan 2022 11:21:32 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+Subject: Re: [RESEND PATCH v3 1/2] efi/cper: add cper_mem_err_status_str to
+ decode error description
+Message-ID: <Ye/PLDlOBhYmGb5D@zn.tnic>
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220124024759.19176-2-xueshuai@linux.alibaba.com>
+ <Ye8XMvfXCetzJLTH@zn.tnic>
+ <98aae382-ac38-8811-f147-d00b953f608d@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <98aae382-ac38-8811-f147-d00b953f608d@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022 11:07:41 +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> This series updates the Microchip Icicle Kit device tree by adding a
-> host of peripherals, and some updates to the memory map. In addition,
-> the device tree has been split into a third part, which contains "soft"
-> peripherals that are in the fpga fabric.
-> 
-> [...]
+On Tue, Jan 25, 2022 at 10:45:31AM +0800, Shuai Xue wrote:
+> I will fix it in next version.
 
-Applied to
+Yes, thanks.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+However, you don't have to resend immediately but wait instead until
+people have had time to review the whole thing. And while you're
+waiting, you can read through Documentation/process/...
 
-Thanks!
+There are passages like the following one, for example:
 
-[06/14] dt-bindings: spi: add bindings for microchip mpfs spi
-        commit: 2da187304e556ac59cf2dacb323cc78ded988169
+"Don't get discouraged - or impatient
+------------------------------------
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+After you have submitted your change, be patient and wait.  Reviewers are
+busy people and may not get to your patch right away.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Once upon a time, patches used to disappear into the void without comment,
+but the development process works more smoothly than that now.  You should
+receive comments within a week or so; if that does not happen, make sure
+that you have sent your patches to the right place.  Wait for a minimum of
+one week before resubmitting or pinging reviewers - possibly longer during
+busy times like merge windows.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+It's also ok to resend the patch or the patch series after a couple of
+weeks with the word "RESEND" added to the subject line::
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+   [PATCH Vx RESEND] sub/sys: Condensed patch summary
 
-Thanks,
-Mark
+Don't add "RESEND" when you are submitting a modified version of your
+patch or patch series - "RESEND" only applies to resubmission of a
+patch or patch series which have not been modified in any way from the
+previous submission."
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

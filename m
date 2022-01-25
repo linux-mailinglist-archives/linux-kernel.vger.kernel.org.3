@@ -2,143 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6143149B72A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4BA49B743
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581264AbiAYPDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:03:08 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.226]:36191 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1348596AbiAYPA3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:00:29 -0500
-HMM_SOURCE_IP: 172.18.0.218:50342.2129814880
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.38 (unknown [172.18.0.218])
-        by chinatelecom.cn (HERMES) with SMTP id DE498280029;
-        Tue, 25 Jan 2022 22:25:04 +0800 (CST)
-X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.218])
-        by app0025 with ESMTP id 96b1da56bd6d47aca05ac245d0694740 for j.vosburgh@gmail.com;
-        Tue, 25 Jan 2022 22:25:07 CST
-X-Transaction-ID: 96b1da56bd6d47aca05ac245d0694740
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.218
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
-To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jay.vosburgh@canonical.com, nikolay@nvidia.com,
-        huyd12@chinatelecom.cn
-Subject: [PATCH v10] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
-Date:   Tue, 25 Jan 2022 09:24:18 -0500
-Message-Id: <20220125142418.96167-1-sunshouxin@chinatelecom.cn>
-X-Mailer: git-send-email 2.27.0
+        id S1581490AbiAYPHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:07:50 -0500
+Received: from mga06.intel.com ([134.134.136.31]:32739 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1390517AbiAYPFC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 10:05:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643123102; x=1674659102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g/8CusRbDDiHWxjFMt+CwUueZApoQJ9sBvESGuUIsCU=;
+  b=P1swMMMDHHQmcAHH/mUAtZzHtf+UowWTD3rIRfeLzZ+k3dkDXa3ZPzyR
+   +t+yEHGRbgAS0naMB6Xcfi9t81ORev1Yha7uEQ4+G87pITzqKzZ5TC1jj
+   Y8liYKVFvZfg7Ewr0AzfAfhIshf7oT/1MPoD3r6fjdBWsAdgQkNP/iLgE
+   e1Viyg2FI5JcBfkO5C49v4yTggsaATSXvZqnNuXdl6wAXM3Kx8KESlMIB
+   cPCCz/zoavr2hpHgf48sfbLm6FEAtZ/HFBSy4oidjsx7jwSsHr9SY8dol
+   SzHrUXFTWtsvKhY8cXkayVs9Fel/4n3Pu7lXh1whJlhoOgtOV+hs1Mq/n
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="307031778"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="307031778"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:54:21 -0800
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="534754755"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:54:18 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 25 Jan 2022 16:53:06 +0200
+Date:   Tue, 25 Jan 2022 16:53:05 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Zha Qipeng <qipeng.zha@intel.com>, linux-kernel@vger.kernel.org,
+        Andy Pont <andy.pont@sdcsystems.com>
+Subject: Re: mfd/intel_pmc_bxt: `intel_pmc_get_resources()` results in page
+ fault
+Message-ID: <YfAO0SPAK7r4zvUE@lahna>
+References: <92c233bc-d1e0-b180-efaa-27e05fbd732b@molgen.mpg.de>
+ <YfAIrkJaahKpCta6@lahna>
+ <2ebf7968-a324-6f98-e178-45d4d19cfb48@molgen.mpg.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ebf7968-a324-6f98-e178-45d4d19cfb48@molgen.mpg.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since ipv6 neighbor solicitation and advertisement messages
-isn't handled gracefully in bond6 driver, we can see packet
-drop due to inconsistency between mac address in the option
-message and source MAC .
+On Tue, Jan 25, 2022 at 03:40:54PM +0100, Paul Menzel wrote:
+> [Cc: +Andy]
+> 
+> Dear Mika,
+> 
+> 
+> Am 25.01.22 um 15:26 schrieb Mika Westerberg:
+> 
+> > On Tue, Jan 25, 2022 at 02:08:53PM +0100, Paul Menzel wrote:
+> 
+> > > `intel_pmc_get_resources()` does not set the name member in the `resource`
+> > > struct `gcr_res` resulting in a page fault.
+> > 
+> > On which system you reproduce this,
+> 
+> The dump contains the name:
+> 
+>     Hardware name: Star Labs Lite/Lite, BIOS 8 01/24/2022
+> 
+> > and how? Can you also share ACPI dump from that system.
+> 
+> Note, I only forwarded this from a report in #coreboot. The reporter Andy is
+> now in Cc.
+> 
+> Unrelated from that information, the Linux kernel should never run into a
+> page fault and not trust system data.
 
-Another examples is ipv6 neighbor solicitation and advertisement
-messages from VM via tap attached to host bridge, the src mac
-might be changed through balance-alb mode, but it is not synced
-with Link-layer address in the option message.
-
-The patch implements bond6's tx handle for ipv6 neighbor
-solicitation and advertisement messages.
-
-Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
----
-v9->v10:
-- add IPv6 header pull in alb_determine_nd.
-- combine bond_xmit_alb_slave_get's IPv6 header
-pull with alb_determine_nd's
----
- drivers/net/bonding/bond_alb.c | 40 ++++++++++++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
-index 533e476988f2..d9da6eb7f5c2 100644
---- a/drivers/net/bonding/bond_alb.c
-+++ b/drivers/net/bonding/bond_alb.c
-@@ -1269,6 +1269,37 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
- 	return res;
- }
- 
-+/* determine if the packet is NA or NS */
-+static bool __alb_determine_nd(struct icmp6hdr *hdr)
-+{
-+	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
-+	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
-+{
-+	struct ipv6hdr *ip6hdr;
-+	struct icmp6hdr *hdr;
-+
-+	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr)))
-+		return true;
-+
-+	ip6hdr = ipv6_hdr(skb);
-+	if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
-+		if (!pskb_may_pull(skb, sizeof(*ip6hdr) + sizeof(*hdr)))
-+			return true;
-+
-+		hdr = icmp6_hdr(skb);
-+		return __alb_determine_nd(hdr);
-+	}
-+
-+	return false;
-+}
-+
- /************************ exported alb functions ************************/
- 
- int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
-@@ -1348,8 +1379,11 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
- 	/* Do not TX balance any multicast or broadcast */
- 	if (!is_multicast_ether_addr(eth_data->h_dest)) {
- 		switch (skb->protocol) {
--		case htons(ETH_P_IP):
- 		case htons(ETH_P_IPV6):
-+			if (alb_determine_nd(skb, bond))
-+				break;
-+			fallthrough;
-+		case htons(ETH_P_IP):
- 			hash_index = bond_xmit_hash(bond, skb);
- 			if (bond->params.tlb_dynamic_lb) {
- 				tx_slave = tlb_choose_channel(bond,
-@@ -1432,10 +1466,12 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
- 			break;
- 		}
- 
--		if (!pskb_network_may_pull(skb, sizeof(*ip6hdr))) {
-+		if (alb_determine_nd(skb, bond)) {
- 			do_tx_balance = false;
- 			break;
- 		}
-+
-+		/* The IPv6 header is pulled by alb_determine_nd */
- 		/* Additionally, DAD probes should not be tx-balanced as that
- 		 * will lead to false positives for duplicate addresses and
- 		 * prevent address configuration from working.
-
-base-commit: dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
--- 
-2.27.0
-
+Right but this looks like an issue with the system ACPI tables so at
+least we should report this to the vendor too so they can fix it in
+future revisions.

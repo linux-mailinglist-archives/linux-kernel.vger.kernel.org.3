@@ -2,98 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB37949B213
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8B149B222
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349056AbiAYKgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S241956AbiAYKjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358780AbiAYKdi (ORCPT
+        with ESMTP id S1355376AbiAYKf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:33:38 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B8CC061748
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:33:37 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id l25so18940775wrb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:33:37 -0800 (PST)
+        Tue, 25 Jan 2022 05:35:28 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3F8C061779
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:35:27 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id r82-20020a1c4455000000b0034e043aaac7so857035wma.5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:35:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4KLk48uJDSh7dm6hMRysfiEnctm+6+wF78zxIH1Wen0=;
-        b=o1Wq6iDHZRoJHBNvyNYJitPQBl0zy0dTTWhJMOzi3G/hkZEz9H4Ban72KriTfmzOKD
-         iNdm1tC2X2uZzJVbSpZCOU+T6aNYuP3krRd5b4yWg/Qa/gKF8wwi2YirsEbBWaiDcJ3t
-         QpsYkW7uzo2fAnWuVwrQcsmmvAlSx8cfKoy5McQk0yqzrfwD3Awsj3AiNdrSE1qakXdU
-         r1nwjlNgED+9xKcijhORfvWGjlpgKDM/jOmmVyPUhsxN9ULhLjOOM8QZSGFBxuHJjIhx
-         icyWxeF73hKIf2BPMJfcPWAu1FP+Ty/sJ8F060lA5EEPcUiISzBIX1LsPPqkNBsBl4RD
-         XbuQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uYdg+h4xUgFlS4VbgtGVuleOkynWItCXXdRK+L0ak6M=;
+        b=GTubB8hv4bF/W8pl5G1QRyju+3fXfWPO83WqGYnDfxz6ak26wEZCcfjVnpmxnNX3W/
+         H3A7PbnHfrdr/KHcapPP25NzGTUtX/g8yvTo/Ymjhi1hs0/b0BmLSFqfrE9o+Dz5rn5b
+         K11DjI6yKNdBviS54JKQaHIiqEs5XumCs6PnIwStMPoLmVuMIqaX+CksR4xicdeivJuu
+         893R0XyAXbei5Ap5+nv+TsJkY/0Ziu9ykV1bslhHNJgE2MvHrum0sTeANEEy9PplecCQ
+         /Xjl0YKmNzPJFLLa7kyHEhD8MRvuie+dzmguYI4ITtNen3QTekXrFltTK6rBIgJUhyhU
+         B3hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4KLk48uJDSh7dm6hMRysfiEnctm+6+wF78zxIH1Wen0=;
-        b=RMdYv6lNmpmkNB7NNRBXh4vk6yYrwQCUPMww6/3jBq+gc7Na55W/OsA1hNP1rPpJzT
-         qmc81d57uyaZake7it4u4NEikeYRGasyHqGXByJnZJr/4CHWKTBWNXC8OCLN1gm+sWjv
-         JHly/ShvWvzAnrwt9KoViMp0kEEPaqHUE64u5DMB8No1PVuHkSuMepmLd94W67y2BG6L
-         HQqyEjca4Z/qcAo0K8qCrn8l1EUvL5FGb2r3/OuatJpshj/5dymA3h0YyvoOnq7I+Nbu
-         5KDE5FeurMnFdAankATVfKU9E82BI6HILzoPEJY1Lmn5Bt8BO+4DRqWadKKHiOa2fx6V
-         WKdg==
-X-Gm-Message-State: AOAM532uFCwJr2MqhCz6oX30L3HE898s2jW5Ux9WlaIe92L6GaMy92mW
-        AO1aWbg9aDBdIcCXQh0Xm0w=
-X-Google-Smtp-Source: ABdhPJzeYnIwIwI2bx93AUMmHy9Ljr3qEjp+OgMxz/CXBizsLniJ0tPzBSFdSkmuwzhX3J1zRZKvVw==
-X-Received: by 2002:a5d:6c64:: with SMTP id r4mr11041464wrz.389.1643106816397;
-        Tue, 25 Jan 2022 02:33:36 -0800 (PST)
-Received: from localhost (cable-89-216-134-246.dynamic.sbb.rs. [89.216.134.246])
-        by smtp.gmail.com with ESMTPSA id t30sm17264875wra.95.2022.01.25.02.33.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 02:33:36 -0800 (PST)
-From:   =?UTF-8?q?Aleksa=20Vu=C4=8Dkovi=C4=87?= <aleksav013@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Aleksa=20Vu=C4=8Dkovi=C4=87?= <aleksav013@gmail.com>
-Subject: [PATCH 4/4] drivers: dio: Fixed spaces coding style issue
-Date:   Tue, 25 Jan 2022 11:33:10 +0100
-Message-Id: <20220125103310.13893-4-aleksav013@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220125103310.13893-1-aleksav013@gmail.com>
-References: <20220125103310.13893-1-aleksav013@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uYdg+h4xUgFlS4VbgtGVuleOkynWItCXXdRK+L0ak6M=;
+        b=rzwdUGNnUisjML/lsLB9KgN01VMiUA9WEhFYtDDHbjYL9kKcb5KYLUKX+s+Rtr+EDt
+         46GlxZuxh02y8gLJQNGR65r/7FdvprXXMr6ycpzW3avlCLQne5ewoQ6CizHn0/JSfyAj
+         IGlnyMN9ZaV0dGAI3FRz/nWJjQ9NutoK7pzQiGUPl0AW6CZqOXwNgrWlOInYchIAb5U3
+         fdkjok0B4MDJRcl2KA0RwaDHTPFwOzXIE3CExb0URNdvHe6pNU6578zrayw/WAp8UqRo
+         bQSPvWbPX18TE3YWtjFwAo+zU03jj2rv9rp0jRqBLU46Vn3zhhOXrrsMHl7YP67uNaQm
+         UtXg==
+X-Gm-Message-State: AOAM5326h4Noyoqcsb+W2MFLqtyn2yqMD41gB/TL6QsR4exw0ZHBxLJY
+        i6tB8r4z2fvL9qvvbb8aVa7oQQ==
+X-Google-Smtp-Source: ABdhPJx+w8z5aGYxT5A5QKy6zwet2VVfvd21nx8U+IbtSeToofaDduOXQkk2XZ3Di33nkZhxepnP/g==
+X-Received: by 2002:a7b:c3c5:: with SMTP id t5mr2340963wmj.168.1643106926197;
+        Tue, 25 Jan 2022 02:35:26 -0800 (PST)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id v124sm155335wme.30.2022.01.25.02.35.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 02:35:25 -0800 (PST)
+Message-ID: <11caff0e-6bf3-9d66-6312-c2c2a6fc862a@linaro.org>
+Date:   Tue, 25 Jan 2022 10:35:24 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/5] nvmem: core: Remove unused devm_nvmem_unregister()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+References: <20220124180040.50660-1-andriy.shevchenko@linux.intel.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220124180040.50660-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added or removed spaces in the code according to the checkpatch.pl script.
+Thanks Andy for the cleanup,
 
-Signed-off-by: Aleksa Vučković <aleksav013@gmail.com>
----
- drivers/dio/dio.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 24/01/2022 18:00, Andy Shevchenko wrote:
+> There are no users and seems no will come of the devm_nvmem_unregister().
+> Remove the function and remove the unused devm_nvmem_match() along with it.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-diff --git a/drivers/dio/dio.c b/drivers/dio/dio.c
-index 0f29d4903012..020a3d6219ae 100644
---- a/drivers/dio/dio.c
-+++ b/drivers/dio/dio.c
-@@ -64,7 +64,7 @@ struct dioname {
- 
- /* useful macro */
- #define DIONAME(x) { DIO_ID_##x, DIO_DESC_##x }
--#define DIOFBNAME(x) { DIO_ENCODE_ID( DIO_ID_FBUFFER, DIO_ID2_##x), DIO_DESC2_##x }
-+#define DIOFBNAME(x) { DIO_ENCODE_ID(DIO_ID_FBUFFER, DIO_ID2_##x), DIO_DESC2_##x }
- 
- static struct dioname names[] = {
- 	DIONAME(DCA0), DIONAME(DCA0REM), DIONAME(DCA1), DIONAME(DCA1REM),
-@@ -236,7 +236,7 @@ static int __init dio_init(void)
- 			dev->id = prid;
- 
- 		dev->ipl = DIO_IPL(va);
--		strcpy(dev->name,dio_getname(dev->id));
-+		strcpy(dev->name, dio_getname(dev->id));
- 		printk(KERN_INFO "select code %3d: ipl %d: ID %02X", dev->scode, dev->ipl, prid);
- 		if (DIO_NEEDSSECID(prid))
- 			printk(":%02X", secid);
--- 
-2.34.1
 
+Applied 1/5, 2/5 and 3/5 patches.
+
+Others can go via there own subsystems as I do not see any dependencies.
+
+--srini
+> ---
+> v2: removed unused devm_nvmem_match() (lkp)
+>   drivers/nvmem/core.c           | 22 ----------------------
+>   include/linux/nvmem-provider.h |  8 --------
+>   2 files changed, 30 deletions(-)
+> 
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 23a38dcf0fc4..1a70b3bdb71d 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -945,28 +945,6 @@ struct nvmem_device *devm_nvmem_register(struct device *dev,
+>   }
+>   EXPORT_SYMBOL_GPL(devm_nvmem_register);
+>   
+> -static int devm_nvmem_match(struct device *dev, void *res, void *data)
+> -{
+> -	struct nvmem_device **r = res;
+> -
+> -	return *r == data;
+> -}
+> -
+> -/**
+> - * devm_nvmem_unregister() - Unregister previously registered managed nvmem
+> - * device.
+> - *
+> - * @dev: Device that uses the nvmem device.
+> - * @nvmem: Pointer to previously registered nvmem device.
+> - *
+> - * Return: Will be negative on error or zero on success.
+> - */
+> -int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
+> -{
+> -	return devres_release(dev, devm_nvmem_release, devm_nvmem_match, nvmem);
+> -}
+> -EXPORT_SYMBOL(devm_nvmem_unregister);
+> -
+>   static struct nvmem_device *__nvmem_device_get(void *data,
+>   			int (*match)(struct device *dev, const void *data))
+>   {
+> diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
+> index 98efb7b5660d..99c01c43d7a8 100644
+> --- a/include/linux/nvmem-provider.h
+> +++ b/include/linux/nvmem-provider.h
+> @@ -133,8 +133,6 @@ void nvmem_unregister(struct nvmem_device *nvmem);
+>   struct nvmem_device *devm_nvmem_register(struct device *dev,
+>   					 const struct nvmem_config *cfg);
+>   
+> -int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem);
+> -
+>   void nvmem_add_cell_table(struct nvmem_cell_table *table);
+>   void nvmem_del_cell_table(struct nvmem_cell_table *table);
+>   
+> @@ -153,12 +151,6 @@ devm_nvmem_register(struct device *dev, const struct nvmem_config *c)
+>   	return nvmem_register(c);
+>   }
+>   
+> -static inline int
+> -devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
+> -{
+> -	return -EOPNOTSUPP;
+> -}
+> -
+>   static inline void nvmem_add_cell_table(struct nvmem_cell_table *table) {}
+>   static inline void nvmem_del_cell_table(struct nvmem_cell_table *table) {}
+>   

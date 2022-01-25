@@ -2,132 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3EA49B457
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D4B49B421
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457563AbiAYMwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:52:25 -0500
-Received: from azure-sdnproxy.icoremail.net ([52.237.72.81]:47427 "HELO
-        azure-sdnproxy-1.icoremail.net" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with SMTP id S1457418AbiAYMtr (ORCPT
+        id S1350586AbiAYMjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:39:23 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4509 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1383416AbiAYMfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:49:47 -0500
-X-Greylist: delayed 9084 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Jan 2022 07:49:46 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=5DkymplUnV
-        DC1/piM6/QMhUWW1mHUHUppZ58TGWb3dg=; b=bnrHS/FKJAFTn75dCaC+LA5d8J
-        FNJ6UnDnZK6X9/o3TESX2usNuPAQNJNvsP+iqPsvBYADkhMo1EjgL2Qc67QA9Xzx
-        iKMz+5VGecpvjkT1DIElhUkV9ffVa2TeSOLYlhq4QiqymunF2VRVtX2DhQIdPBo0
-        3Upir0cb/Sk72ODe4=
-Received: from localhost.localdomain (unknown [111.192.165.103])
-        by app2 (Coremail) with SMTP id XQUFCgC3v_cr7u9hhAZlAA--.2538S4;
-        Tue, 25 Jan 2022 20:34:00 +0800 (CST)
-From:   Xin Xiong <xiongx18@fudan.edu.cn>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: [PATCH] mtd: rawnand: atmel: fix refcount leaks in atmel_nand_controller_init
-Date:   Tue, 25 Jan 2022 20:31:56 +0800
-Message-Id: <20220125123155.36891-1-xiongx18@fudan.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 25 Jan 2022 07:35:06 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JjmRz52k3z687Zg;
+        Tue, 25 Jan 2022 20:31:27 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 25 Jan 2022 13:34:52 +0100
+Received: from [10.47.95.36] (10.47.95.36) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 25 Jan
+ 2022 12:34:51 +0000
+Subject: Re: [PATCHv3 0/4] perf tools: Add support for user defined metric
+To:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     lkml <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Joe Mario <jmario@redhat.com>, Andi Kleen <ak@linux.intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "liuqi (BA)" <liuqi115@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Zhangshaokun <zhangshaokun@hisilicon.com>,
+        "irogers@google.com" <irogers@google.com>
+References: <20200511205307.3107775-1-jolsa@kernel.org>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <2e2da73a-7085-b488-4764-705adbff70cc@huawei.com>
+Date:   Tue, 25 Jan 2022 12:34:19 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: XQUFCgC3v_cr7u9hhAZlAA--.2538S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw47ZF4xJrW3Xw4xCFWxJFb_yoW8ury5pF
-        WUt3y3Zw4UtFsxZF9FgayxuFyFva4kJFyUJ39Iqa4kZ3ZxX3WUK345tr10qFyUCFWfuF13
-        ZF47t3W8CF45AFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
-        648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI4
-        8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
-        wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
-        v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
-        Y4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUepB-DUUUU
-X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAg4REFKp2ii5hwABs7
+In-Reply-To: <20200511205307.3107775-1-jolsa@kernel.org>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.95.36]
+X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reference counting issue happens in several error handling paths
-on a refcounted object "nc->dmac". In these paths, the function simply
-returns the error code, forgetting to balance the reference count
-increased earlier by dma_request_channel(), which may cause refcount
-leaks. What's more, the "nc->mck" object also needs to be handled
-correctly.
+On 11/05/2020 21:53, Jiri Olsa wrote:
 
-Fix it by adding specific error handling code in those error paths.
++
 
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
----
- drivers/mtd/nand/raw/atmel/nand-controller.c | 22 +++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+Hi jirka,
 
-diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/nand/raw/atmel/nand-controller.c
-index f3276ee9e..b3801ebd2 100644
---- a/drivers/mtd/nand/raw/atmel/nand-controller.c
-+++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
-@@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	nc->mck = of_clk_get(dev->parent->of_node, 0);
- 	if (IS_ERR(nc->mck)) {
- 		dev_err(dev, "Failed to retrieve MCK clk\n");
--		return PTR_ERR(nc->mck);
-+		ret = PTR_ERR(nc->mck);
-+		goto out_release_dma;
- 	}
- 
- 	np = of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
- 	if (!np) {
- 		dev_err(dev, "Missing or invalid atmel,smc property\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out_put_clk;
- 	}
- 
- 	nc->smc = syscon_node_to_regmap(np);
-@@ -2074,10 +2076,24 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	if (IS_ERR(nc->smc)) {
- 		ret = PTR_ERR(nc->smc);
- 		dev_err(dev, "Could not get SMC regmap (err = %d)\n", ret);
--		return ret;
-+		goto out_put_clk;
- 	}
- 
- 	return 0;
-+
-+out_put_clk:
-+	clk_put(nc->mck);
-+	nc->mck = NULL;
-+
-+out_release_dma:
-+	if (nc->caps->has_dma && !atmel_nand_avoid_dma) {
-+		if (!IS_ERR_OR_NULL(nc->dmac)) {
-+			dma_release_channel(nc->dmac);
-+			nc->dmac = NULL;
-+		}
-+	}
-+
-+	return ret;
- }
- 
- static int
--- 
-2.25.1
+Did you a plan to continue to work? I don't think that this support was 
+ever merged.
+
+We have a requirement to be able to tune parameters of metrics, and 
+support here seems suitable.
+
+Thanks,
+John
+
+> hi,
+> Joe asked for possibility to add user defined metrics. Given that
+> we already have metrics support, I added --metrics-file option that
+> allows to specify custom metrics.
+> 
+>    $ cat metrics
+>    # IPC
+>    mine1 = instructions / cycles;
+>    /* DECODED_ICACHE_UOPS% */
+>    mine2 = 100 * (idq.dsb_uops / \ (idq.ms_uops + idq.mite_uops + idq.dsb_uops + lsd.uops));
+> 
+>    $ sudo perf stat --metrics-file ./metrics -M mine1,mine2 --metric-only -a -I 1000
+>    #           time       insn per cycle                mine1                mine2
+>         1.000536263                0.71                   0.7                 41.4
+>         2.002069025                0.31                   0.3                 14.1
+>         3.003427684                0.27                   0.3                 14.8
+>         4.004807132                0.25                   0.2                 12.1
+>    ...
+> 
+> v3 changes:
+>    - added doc for metrics file in perf stat man page
+>    - reporting error line number now
+>    - changed '#' style comment to C way with '//'
+> 
+> v2 changes:
+>    - add new --metrics-file option
+>    - rebased on current perf/core expression bison/flex enhancements
+> 
+> Also available in:
+>    git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+>    perf/metric
+> 
+> thanks,
+> jirka
+> 
+> 
+> ---
+> Jiri Olsa (4):
+>        perf expr: Add parsing support for multiple expressions
+>        perf expr: Allow comments in custom metric file
+>        perf stat: Add --metrics-file option
+>        perf expr: Report line number with error
+> 
+>   tools/perf/Documentation/perf-stat.txt | 77 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>   tools/perf/builtin-stat.c              |  7 +++++--
+>   tools/perf/tests/expr.c                | 18 ++++++++++++++++++
+>   tools/perf/util/expr.c                 |  6 ++++++
+>   tools/perf/util/expr.h                 | 21 +++++++++++++++++++--
+>   tools/perf/util/expr.l                 | 34 ++++++++++++++++++++++++++++++++++
+>   tools/perf/util/expr.y                 | 21 +++++++++++++++++----
+>   tools/perf/util/metricgroup.c          | 70 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------
+>   tools/perf/util/metricgroup.h          |  3 ++-
+>   tools/perf/util/stat.h                 |  1 +
+>   10 files changed, 242 insertions(+), 16 deletions(-)
+> 
+> .
+> 
 

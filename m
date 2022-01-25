@@ -2,79 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A0C49B5AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA3149B5AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385906AbiAYOFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:05:31 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55862 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348539AbiAYOCA (ORCPT
+        id S1386996AbiAYOFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385713AbiAYODV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:02:00 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58BDA6151D;
-        Tue, 25 Jan 2022 14:01:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1AEC340E0;
-        Tue, 25 Jan 2022 14:01:54 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 09:01:52 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125090152.0c457aae@gandalf.local.home>
-In-Reply-To: <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-References: <20220125145006.677e3709@canb.auug.org.au>
-        <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 25 Jan 2022 09:03:21 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C361FC061753
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:03:19 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id n8so25394934wmk.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:03:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OJrQ9ObzNlNozSIKWvdHvhQL2KbmeMWXNOVyepscZoU=;
+        b=uk3M1RCXBTWUdrrRAHUzNJ8CKFsVVN0hhoVPaMae8S2ApdbeKVVAccs0m+wRZx0pyO
+         E3XvpOBk193CoEFlB2BQSdJZUVVPfjfDX1UOkbWLhHO55xKhQcnF/BWxaw5ei2oeibwP
+         Q1C7aioUvBSRgL78TlCZV1lfjjim6aDegCP5y6njccvXFKeIeY5uTU6LhIOXV8XMFDRJ
+         sw3vhc6xgSFgLDJB7vVFW7wBaQj2DeKipmV7E711TqCj7dLA2CVX7wPJJrbYaaQE3n1g
+         NsjQGxLP+okw6xRt9hEO5oeMS9pDy68aO9MyOxDyqxhhChiHB4uJdUpzeJDQFfDMFM8Q
+         4i4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OJrQ9ObzNlNozSIKWvdHvhQL2KbmeMWXNOVyepscZoU=;
+        b=6CXfkyoht/IdCoUHzyJmqfag9Dy1cksraf3FTcNhqsGiRWvpR/FbCpwanXI92xx7hM
+         49YurSQrxXXkTOUB5i3n2hGU7yFYnMH061GnM9kKkuIN6doEQuZB3xIxakTDLER4UJij
+         r26+aFHhPD5h2NcGWI9Bl6yDkUUJVAXqaMM2GcXFoIi92unnSWbdxuAuipy6vGhWV4gP
+         5AGq1NyN260mSlOk3SJg6gs6B8xfHHrkWRsfxy7aYUHBaFFh0pesLniAPTTeLm//fQQd
+         NOEJ4/qoUBVDzTWiZqNjjIvN07PHp/I8pwfw9hnZiB82/tzhje7ndl4DqFCYDEfdqiz6
+         iKoA==
+X-Gm-Message-State: AOAM533h1m0AjA/nEcxGQvP1gv8R9T0oPkpChgAqB/wx7Jd30qPm9b6y
+        NYEIF63nZIhbyRTEyyPajuxBgsGJZXFkwg==
+X-Google-Smtp-Source: ABdhPJwHpmjb2qYXif/OsOg/To0gQCQz+kE5P8sis36QRCZ/5mTp4L6vQkW2ZAO5ytfKolW6heO63A==
+X-Received: by 2002:a1c:a7c2:: with SMTP id q185mr3150534wme.3.1643119398321;
+        Tue, 25 Jan 2022 06:03:18 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id j15sm598178wmq.19.2022.01.25.06.03.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 06:03:17 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     arnd@arndb.de, clemens@ladisch.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH] hpet: fix style issue about braces and alignment
+Date:   Tue, 25 Jan 2022 14:03:11 +0000
+Message-Id: <20220125140311.4084998-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 22:27:32 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+This patch fix all style issue for braces and alignment
 
-> > But if this is true, I would imagine there would be plenty of other
-> > warnings? I'm currently stumped.  
-> 
-> That is because __rel_loc is used only in the sample code in the kernel
-> for testing. Other use-cases comes from user-space.
-> Hmm, can we skip this boundary check for this example?
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/char/hpet.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-Is this only checked when __CHECKER__ is defined? If so, would this work?
-
--- Steve
-
-diff --git a/samples/trace_events/trace-events-sample.h b/samples/trace_events/trace-events-sample.h
-index cbbbb83beced..cdc68e0f9ef9 100644
---- a/samples/trace_events/trace-events-sample.h
-+++ b/samples/trace_events/trace-events-sample.h
-@@ -506,6 +506,8 @@ DEFINE_EVENT_PRINT(foo_template, foo_with_template_print,
- 	TP_ARGS(foo, bar),
- 	TP_printk("bar %s %d", __get_str(foo), __entry->bar));
+diff --git a/drivers/char/hpet.c b/drivers/char/hpet.c
+index 55bd63c97d00..ee71376f174b 100644
+--- a/drivers/char/hpet.c
++++ b/drivers/char/hpet.c
+@@ -253,9 +253,9 @@ static int hpet_open(struct inode *inode, struct file *file)
  
-+/* rel_loc is for user defined events, the checker will trigger bugs on it */
-+#ifndef __CHECKER__
- /*
-  * There are yet another __rel_loc dynamic data attribute. If you
-  * use __rel_dynamic_array() and __rel_string() etc. macros, you
-@@ -539,6 +541,10 @@ TRACE_EVENT(foo_rel_loc,
- 	TP_printk("foo_rel_loc %s, %d, %s", __get_rel_str(foo), __entry->bar,
- 		  __get_rel_bitmask(bitmask))
- );
-+#else
-+#define trace_foo_rel_loc(foo, bar, mask) do { } while (0)
-+#endif /* __CHECKER __ */
-+
- #endif
+ 	for (devp = NULL, hpetp = hpets; hpetp && !devp; hpetp = hpetp->hp_next)
+ 		for (i = 0; i < hpetp->hp_ntimer; i++)
+-			if (hpetp->hp_dev[i].hd_flags & HPET_OPEN)
++			if (hpetp->hp_dev[i].hd_flags & HPET_OPEN) {
+ 				continue;
+-			else {
++			} else {
+ 				devp = &hpetp->hp_dev[i];
+ 				break;
+ 			}
+@@ -302,9 +302,9 @@ hpet_read(struct file *file, char __user *buf, size_t count, loff_t * ppos)
+ 		devp->hd_irqdata = 0;
+ 		spin_unlock_irq(&hpet_lock);
  
- /***** NOTICE! The #if protection ends here. *****/
+-		if (data)
++		if (data) {
+ 			break;
+-		else if (file->f_flags & O_NONBLOCK) {
++		} else if (file->f_flags & O_NONBLOCK) {
+ 			retval = -EAGAIN;
+ 			goto out;
+ 		} else if (signal_pending(current)) {
+@@ -967,7 +967,8 @@ static acpi_status hpet_resources(struct acpi_resource *res, void *data)
+ 				break;
+ 
+ 			irq = acpi_register_gsi(NULL, irqp->interrupts[i],
+-				      irqp->triggering, irqp->polarity);
++						irqp->triggering,
++						irqp->polarity);
+ 			if (irq < 0)
+ 				return AE_ERROR;
+ 
+-- 
+2.34.1
+

@@ -2,168 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D8C49B6D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14C149B6DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580306AbiAYOrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:47:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55155 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1579081AbiAYOoN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:44:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643121845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rENnptulbHCfDS4+95Um4dqwijjfumjVEPP1UeTIm6E=;
-        b=ZQdc3zUB2sCjeZhOUm1rvstaqT+sD6hvO1ANDEXk8sVs1fxYpFZKTMS4DcNjvxwyZYWTyz
-        HpisUEmNZTy5Q4pXU8IK0WZUW/Zu84VFv7uNP6GY5WMG2YGWn4KNDpIn9F0AKsYXNpX3lq
-        wkSZ8v6njXAUWt1j53Pakw+Le9WFyJQ=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-60-1yJl8RCzN3W-Ne0BqulD7A-1; Tue, 25 Jan 2022 09:44:03 -0500
-X-MC-Unique: 1yJl8RCzN3W-Ne0BqulD7A-1
-Received: by mail-ed1-f72.google.com with SMTP id p17-20020aa7c891000000b004052d1936a5so10763928eds.7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:44:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rENnptulbHCfDS4+95Um4dqwijjfumjVEPP1UeTIm6E=;
-        b=05kf0NAS6amHM4F7i7iO/IJz00KGc56Kg15J4W74WnfjPj3R+6RdjivlOKeHTBPsiC
-         igzDrwohrZ3L5LsxnTCIZP2zJsRRrCrmsOxWKX3cApC1hTZggnP4W5VqKQuuga7lkZQo
-         WNeOmuvLqEBjI985z3tW0xXl2mMqm59JunD+SiCbeS25rnY3svPpujhfxZ/3If+pv7JV
-         L2FlA4tgbDJ5uOGW/H1vf//e1VMIaYqZRRX6/JWTclSHS8g+a/a9RCwVL9+HFIS962Ek
-         xREaZEEYSFbwDNo8IjgxkmbA4YVPyCfJJxm0QjwwbIexZrwjBdRYtWqPynKYeV3TXnK1
-         CPWA==
-X-Gm-Message-State: AOAM532ol7N1pEj7+peOhyT3/HBpA0lddaKqT5PT5mfl64jXa6clpDA/
-        5dSsxJwvDgJVoLE+b/jF/KdvTtpkwxgO9Qd36NQU4CwoFh2VaeYt6npHWzXq0ltSYO5v7ROKo6N
-        MCMti1BqC5Ia0qV6pkm8ZTW86
-X-Received: by 2002:a17:907:3f20:: with SMTP id hq32mr7856862ejc.613.1643121842602;
-        Tue, 25 Jan 2022 06:44:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzEJL6wCGgsczKUNeWJNSRDK85H0EGdelC3UINNqMmijJmdpawYhtQs9uaKEzdWA7vIIicoCQ==
-X-Received: by 2002:a17:907:3f20:: with SMTP id hq32mr7856840ejc.613.1643121842297;
-        Tue, 25 Jan 2022 06:44:02 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id j20sm6211747eje.81.2022.01.25.06.44.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 06:44:01 -0800 (PST)
-Message-ID: <89857bde-f9c8-4d5f-0e3f-a53829520284@redhat.com>
-Date:   Tue, 25 Jan 2022 15:44:00 +0100
+        id S1580548AbiAYOut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:50:49 -0500
+Received: from mail-eopbgr70114.outbound.protection.outlook.com ([40.107.7.114]:28550
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1458155AbiAYOpB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:45:01 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A3HxxmpWQsmGZOir/Nd4Zpaq5VG5JMIx5kSHy/pORXY54xFLt8gkqIFekON1jLg5z1Y/w2I8IMMHfbg/06qYtIV5iO7N4oUqSUuTFKxRHHcx5/Q1hETfFNDCSA7km/7d2xIvlzvvTYKgt3+9c/MLGjBC6yGeOv5MpCJ0vJ3boSrUx4f1WSMOWNR+abaWaWX6ysRwejCobI4yHf0tnY64m6tHbebF/GDM/wKFLwDG/KgoHMozYpSaP3W1Djy9zUjP7bT3/KInvJQQZiIAp9Npppyz7oFdYMf9DE3C+vja4xrAmxR8bph7rfZQ+xnoQ6Gb7gVEQOPbrhn9AmruLLReDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EmRPa0ezI4Q3Ym3nis1pu5DWWX0O5en0ByK21nJL6UE=;
+ b=QggYuv6E6pUbavyAWtuMn9CfhxsO6qzdmowTIIMUhvTdGk2mv5vb6y8/shFq6WpzHPAdTK7zVh/d4HdKsif2rrS5s4lsYrKv2rttbeAO/KssEmuWbN6mS7qbyxGE0K38obf3+Btn8onlIYjdWp/ATQPlADAR1EbVgoCe8lKwiwk72+pVHONk4WuR5VI6CfhWZ1Row6MJpgbMPfYwrTZLbTDQXsnBm57i1sDpjITqNVv+orYowO4MWKoct81+6Nm6bA79juo2aKFNUj180kNnWhSz0sH/k+5kf/U0U6czIiQYywMXDKl+Y8NDNB4jMPEaC6xvvgtmmj+AJE32t47XJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 217.111.95.66) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arri.de;
+ dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EmRPa0ezI4Q3Ym3nis1pu5DWWX0O5en0ByK21nJL6UE=;
+ b=Ymh6aOG7/cNiMLPKhORow1Q8AUBzp2UVOS08XLytSvgUBG1DJEWXzGm/wRcrrralmc4dzQHB2ig8z7RVshYsxPoq9YvxEd7oi3NcPy4absWn8twN0Nlm9WqZWi5Gw5w7HMp9j1SFEfJi9JYCydsv+gdl717l+AqkBgcfH5LZaJ0=
+Received: from AM6P195CA0040.EURP195.PROD.OUTLOOK.COM (2603:10a6:209:87::17)
+ by AM4PR07MB3265.eurprd07.prod.outlook.com (2603:10a6:205:d::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 25 Jan
+ 2022 14:44:50 +0000
+Received: from VE1EUR02FT053.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:209:87:cafe::d0) by AM6P195CA0040.outlook.office365.com
+ (2603:10a6:209:87::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.11 via Frontend
+ Transport; Tue, 25 Jan 2022 14:44:50 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.66)
+ smtp.mailfrom=arri.de; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arri.de;
+Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
+ designate 217.111.95.66 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.111.95.66; helo=mta.arri.de;
+Received: from mta.arri.de (217.111.95.66) by
+ VE1EUR02FT053.mail.protection.outlook.com (10.152.13.137) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Tue, 25 Jan 2022 14:44:49 +0000
+Received: from localhost.de (192.168.54.129) by mta.arri.de (192.168.100.104)
+ with Microsoft SMTP Server (TLS) id 14.3.498.0; Tue, 25 Jan 2022 15:44:48
+ +0100
+From:   Christian Eggers <ceggers@arri.de>
+To:     Abel Vesa <abel.vesa@nxp.com>
+CC:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Stefan Riedmueller <s.riedmueller@phytec.de>, <ceggers@arri.de>
+Subject: [PATCH RESEND 0/6] clk: imx6*: avoid GPMI clock glitches on reparenting/divider change
+Date:   Tue, 25 Jan 2022 15:44:35 +0100
+Message-ID: <20220125144441.17750-1-ceggers@arri.de>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] KVM: x86/cpuid: Exclude unpermitted xfeatures sizes at
- KVM_GET_SUPPORTED_CPUID
-Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Tian Kevin <kevin.tian@intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220125115223.33707-1-likexu@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220125115223.33707-1-likexu@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [192.168.54.129]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 28382c16-5e91-4592-cbbb-08d9e0113d64
+X-MS-TrafficTypeDiagnostic: AM4PR07MB3265:EE_
+X-Microsoft-Antispam-PRVS: <AM4PR07MB3265DDD4BD480DAAE1C265F0BF5F9@AM4PR07MB3265.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cDDMtkkiLiSVx3yXE4FB1nNYQ9EdB/vH9TEeGlJSYZqMYI1L7D1s/l7hreP391auYXb6BswRHv/rmtsOUdSzs+2343H18gkP0preuyZWPNMNvnrENB7i1XAJgCxmJLN8iphz2SoSYbS9YJ0uwv1iB7H6myXLLuKtbhyH7qo25Z/WiuUrpohYIV7t/QI5HdH7Zex/Qkg5xswo7OIhSasmqbXvEOPWANYKwMtD/8SJjaUaNdQ0gaNojfvnOqzgQYbmjTKXmUZjWkiXpw0FL5x4VptBtPL6/3bnxfIBExxPqqNWJaYuNNijNe6iOBiQ+nPfQL6boDzIHjuAJsVIKx0hIrbUaZCkgmMrL0O8qgRnX2Yh0IqZ11AfzKq/GqWrAP3mxFvGypnuaxreXecpqTvybU/fqhVzWCVjwmOfduvwwbN6k1PwJGXgf4Co9uQobHji/9XDmgwHGz1VB3MAnTtEdxy0aq8UjlkQ0Ba8pJsmn8Ycgc6nvBW/YiYN2W4WjTzQfcrFyIM+6Vmc6iOEsO5Ayxn2eQ0isfOnxTaN2oEa5VHz80ZTSSDSRzYT143mjTj35y+BIiuLo+ROOxLTtShMnUgSUMksUhluKvV0kLEx4RwDrgBpH6pCp75g1O4c94vP/RC+TUUQXgkUI+jbt1ZQF+GOJP9y5xvzyNF/tgZVDzufBZGRDIVSskz9cLTaT+2aLzN00ubDiUSdtfsRpKgd8A==
+X-Forefront-Antispam-Report: CIP:217.111.95.66;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(508600001)(8936002)(5660300002)(6862004)(4744005)(4326008)(8676002)(82310400004)(336012)(86362001)(1076003)(2616005)(70206006)(70586007)(316002)(16526019)(83380400001)(426003)(54906003)(47076005)(186003)(356005)(36860700001)(26005)(6666004)(81166007)(107886003)(36756003)(40460700003)(2906002)(36900700001)(20210929001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: arri.de
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 14:44:49.6197
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28382c16-5e91-4592-cbbb-08d9e0113d64
+X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.66];Helo=[mta.arri.de]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT053.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR07MB3265
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 12:52, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> With the help of xstate_get_guest_group_perm(), KVM can exclude unpermitted
-> xfeatures in cpuid.0xd.0.eax, in which case the corresponding xfeatures
-> sizes should also be matched to the permitted xfeatures.
-> 
-> To fix this inconsistency, the permitted_xcr0 and permitted_xss are defined
-> consistently, which implies 'supported' plus certain permissions for this
-> task, and it also fixes cpuid.0xd.1.ebx and later leaf-by-leaf queries.
-> 
-> Fixes: 445ecdf79be0 ("kvm: x86: Exclude unpermitted xfeatures at KVM_GET_SUPPORTED_CPUID")
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
-> v1 -> v2 Changelog:
-> - Drop the use of shadow variable; (Paolo)
-> - Define permitted_xss consistently; (Kevin)
-> 
-> Previous:
-> https://lore.kernel.org/kvm/20220124080251.60558-1-likexu@tencent.com/
-> 
->   arch/x86/kvm/cpuid.c | 25 +++++++++++++------------
->   1 file changed, 13 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 3902c28fb6cb..07844d15dfdf 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -887,13 +887,14 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->   		}
->   		break;
->   	case 0xd: {
-> -		u64 guest_perm = xstate_get_guest_group_perm();
-> +		u64 permitted_xcr0 = supported_xcr0 & xstate_get_guest_group_perm();
-> +		u64 permitted_xss = supported_xss;
->   
-> -		entry->eax &= supported_xcr0 & guest_perm;
-> -		entry->ebx = xstate_required_size(supported_xcr0, false);
-> +		entry->eax &= permitted_xcr0;
-> +		entry->ebx = xstate_required_size(permitted_xcr0, false);
->   		entry->ecx = entry->ebx;
-> -		entry->edx &= (supported_xcr0 & guest_perm) >> 32;
-> -		if (!supported_xcr0)
-> +		entry->edx &= permitted_xcr0 >> 32;
-> +		if (!permitted_xcr0)
->   			break;
->   
->   		entry = do_host_cpuid(array, function, 1);
-> @@ -902,20 +903,20 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->   
->   		cpuid_entry_override(entry, CPUID_D_1_EAX);
->   		if (entry->eax & (F(XSAVES)|F(XSAVEC)))
-> -			entry->ebx = xstate_required_size(supported_xcr0 | supported_xss,
-> +			entry->ebx = xstate_required_size(permitted_xcr0 | permitted_xss,
->   							  true);
->   		else {
-> -			WARN_ON_ONCE(supported_xss != 0);
-> +			WARN_ON_ONCE(permitted_xss != 0);
->   			entry->ebx = 0;
->   		}
-> -		entry->ecx &= supported_xss;
-> -		entry->edx &= supported_xss >> 32;
-> +		entry->ecx &= permitted_xss;
-> +		entry->edx &= permitted_xss >> 32;
->   
->   		for (i = 2; i < 64; ++i) {
->   			bool s_state;
-> -			if (supported_xcr0 & BIT_ULL(i))
-> +			if (permitted_xcr0 & BIT_ULL(i))
->   				s_state = false;
-> -			else if (supported_xss & BIT_ULL(i))
-> +			else if (permitted_xss & BIT_ULL(i))
->   				s_state = true;
->   			else
->   				continue;
-> @@ -929,7 +930,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->   			 * invalid sub-leafs.  Only valid sub-leafs should
->   			 * reach this point, and they should have a non-zero
->   			 * save state size.  Furthermore, check whether the
-> -			 * processor agrees with supported_xcr0/supported_xss
-> +			 * processor agrees with permitted_xcr0/permitted_xss
->   			 * on whether this is an XCR0- or IA32_XSS-managed area.
->   			 */
->   			if (WARN_ON_ONCE(!entry->eax || (entry->ecx & 0x1) != s_state)) {
+RESEND because the series got corrupted on first tranmission
 
-Queued, thanks.
+On the i.MX6 series (but not on i.MX7/8), most clock multiplexers and
+switchable dividers are not "glitch safe", so switching them while a
+consumer is connected can cause glitches with a higher frequency than
+supported by the consuming peripheral.
 
-Paolo
+Without fixes, peripherals can fail occasionally. One example is
+that system boot fails due to lockup of the GPMI NAND controller:
+
+f53d4c109a66 ("mtd: rawnand: gpmi: Add ERR007117 protection for nfc_apply_timings")
+
+The conditions where this can appear also depend on the device
+from which the system is booted and whether the bootloader has already
+performed all reparenting of the clocks.
+
+To avoid these problems, the clock subsystem must:
+ - Gate consumer clocks during reparenting
+ - Enforce that all consumer clocks are gated before client drivers can change the divider
+
 

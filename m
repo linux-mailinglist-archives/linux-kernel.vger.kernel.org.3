@@ -2,97 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC2449B6B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FAE49B6A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580023AbiAYOlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:41:42 -0500
-Received: from foss.arm.com ([217.140.110.172]:47544 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1579753AbiAYOig (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:38:36 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8FF8D6E;
-        Tue, 25 Jan 2022 06:38:34 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.42.158])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1493E3F793;
-        Tue, 25 Jan 2022 06:38:31 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64/mm: Consolidate TCR_EL1 fields
-Date:   Tue, 25 Jan 2022 20:08:33 +0530
-Message-Id: <1643121513-21854-1-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
+        id S244837AbiAYOmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1579776AbiAYOiw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:38:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478D4C061401;
+        Tue, 25 Jan 2022 06:38:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EB82B81812;
+        Tue, 25 Jan 2022 14:38:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22EE7C340E0;
+        Tue, 25 Jan 2022 14:38:48 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 09:38:46 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Cong Wang <xiyou.wangcong@gmail.com>, linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [Patch v3] block: introduce block_rq_error tracepoint
+Message-ID: <20220125093846.59826cad@gandalf.local.home>
+In-Reply-To: <20220125093702.3ffdb721@gandalf.local.home>
+References: <20200203053650.8923-1-xiyou.wangcong@gmail.com>
+        <CAHbLzkoUmhPbnt=yMfBSFs2G6r2S5ggD6AkYQvg0zxBAqQK2fA@mail.gmail.com>
+        <20220125093702.3ffdb721@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This renames and moves SYS_TCR_EL1_TCMA1 and SYS_TCR_EL1_TCMA0 definitions
-into pgtable-hwdef.h thus consolidating all TCR fields in a single header.
-This does not cause any functional change.
+On Tue, 25 Jan 2022 09:37:02 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v5.17-rc1
+> > > +TRACE_EVENT(block_rq_error,
+> > > +
+> > > +       TP_PROTO(struct request *rq, int error, unsigned int nr_bytes),
+> > > +
+> > > +       TP_ARGS(rq, error, nr_bytes),
+> > > +
+> > > +       TP_STRUCT__entry(
+> > > +               __field(  dev_t,        dev                     )
+> > > +               __string( name,         rq->rq_disk ? rq->rq_disk->disk_name : "?")
+> > > +               __field(  sector_t,     sector                  )
+> > > +               __field(  unsigned int, nr_sector               )
+> > > +               __field(  int,          error                   )
+> > > +               __array(  char,         rwbs,   RWBS_LEN        )  
+> 
+> Why is the above not "__string" ?
+> 
+> > > +       ),
+> > > +
+> > > +       TP_fast_assign(
+> > > +               __entry->dev       = rq->rq_disk ? disk_devt(rq->rq_disk) : 0;
+> > > +               __assign_str(name,   rq->rq_disk ? rq->rq_disk->disk_name : "?");  
+> 
+> __assign_str() will not work on an __array() type. It only works here
+> because you added it at the end, but it's just shear luck that it didn't
+> crash.
 
-This was earlier posted with FEAT_LPA2 series.
+Never mind :-p  I see the above is for name which is __string, and the
+array is for rwbs which is filled below. I need to finish my first cup of
+coffee before reviewing patches.
 
-https://lore.kernel.org/all/1632998116-11552-3-git-send-email-anshuman.khandual@arm.com/
+-- Steve
 
- arch/arm64/include/asm/pgtable-hwdef.h | 2 ++
- arch/arm64/include/asm/sysreg.h        | 4 ----
- arch/arm64/mm/proc.S                   | 2 +-
- 3 files changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm64/include/asm/pgtable-hwdef.h b/arch/arm64/include/asm/pgtable-hwdef.h
-index 40085e53f573..66671ff05183 100644
---- a/arch/arm64/include/asm/pgtable-hwdef.h
-+++ b/arch/arm64/include/asm/pgtable-hwdef.h
-@@ -273,6 +273,8 @@
- #define TCR_NFD1		(UL(1) << 54)
- #define TCR_E0PD0		(UL(1) << 55)
- #define TCR_E0PD1		(UL(1) << 56)
-+#define TCR_TCMA0		(UL(1) << 57)
-+#define TCR_TCMA1		(UL(1) << 58)
- 
- /*
-  * TTBR.
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-index 898bee0004ae..34800d264f69 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -1101,10 +1101,6 @@
- #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
- #define CPACR_EL1_ZEN		(CPACR_EL1_ZEN_EL1EN | CPACR_EL1_ZEN_EL0EN)
- 
--/* TCR EL1 Bit Definitions */
--#define SYS_TCR_EL1_TCMA1	(BIT(58))
--#define SYS_TCR_EL1_TCMA0	(BIT(57))
--
- /* GCR_EL1 Definitions */
- #define SYS_GCR_EL1_RRND	(BIT(16))
- #define SYS_GCR_EL1_EXCL_MASK	0xffffUL
-diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
-index d35c90d2e47a..50bbed947bec 100644
---- a/arch/arm64/mm/proc.S
-+++ b/arch/arm64/mm/proc.S
-@@ -46,7 +46,7 @@
- #endif
- 
- #ifdef CONFIG_KASAN_HW_TAGS
--#define TCR_MTE_FLAGS SYS_TCR_EL1_TCMA1 | TCR_TBI1 | TCR_TBID1
-+#define TCR_MTE_FLAGS TCR_TCMA1 | TCR_TBI1 | TCR_TBID1
- #else
- /*
-  * The mte_zero_clear_page_tags() implementation uses DC GZVA, which relies on
--- 
-2.20.1
-
+> 
+> 
+> > > +               __entry->sector    = blk_rq_pos(rq);
+> > > +               __entry->nr_sector = nr_bytes >> 9;
+> > > +               __entry->error     = error;
+> > > +
+> > > +               blk_fill_rwbs(__entry->rwbs, rq->cmd_flags, nr_bytes);
+> > > +       ),
+> > > +
+> > > +       TP_printk("%d,%d %s %s %llu + %u [%d]",
+> > > +                 MAJOR(__entry->dev), MINOR(__entry->dev),
+> > > +                 __get_str(name), __entry->rwbs,
+> > > +                 (unsigned long long)__entry->sector,
+> > > +                 __entry->nr_sector, __entry->error)
+> > > +);
+> > > +

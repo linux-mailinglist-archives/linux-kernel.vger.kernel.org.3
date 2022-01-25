@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9041449B8D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A77B49B8D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583900AbiAYQe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        id S1583874AbiAYQeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:34:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380581AbiAYQ3z (ORCPT
+        with ESMTP id S1380642AbiAYQ34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:29:55 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B43C061747
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:29:54 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id x23so10844180lfc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:29:54 -0800 (PST)
+        Tue, 25 Jan 2022 11:29:56 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A57C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:29:55 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id x23so10844288lfc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:29:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sngM1MTBG7FbSgx6kzN4DBsXrM+u+p1VNu+9KTohzwQ=;
-        b=vXR6w3Ct9pbhQBGqGIWoXvBNUWYe2WkFktusJV1qAdeMikoPAbHFB47bJ6QqSjeNuL
-         lr1LKkfbp0mVu+HlAQd6wowoxaFLoHOp6L5EnS7UyNNZFqN+cmRjSTA49LWQWA5rh+zC
-         GZHB2LJLNOj+MTVc/IiaTvvsDmQlE2EOKyF+N6YvS0ZdNzPYVW9HuYcFLkVwdmGgemwG
-         Je2cNjWc1bB7BqeLPNg5HRT3lYe6fpkdmNY7mi3VDvfhvkfGDB774fiBFMlKyXe5hh0Y
-         FBP0hfznOJGirRdT1Pozi0OZBMhtK5xuiPQkSph3pik8RmuCvThdniVaTvouZT6f+p6j
-         UgSA==
+        bh=wM1CGdwosWr/o/zdNTKI7CddYVnDP6JJ4xL8rpa+Aas=;
+        b=czVsqeDAcTn5kRJ27t75r4cQgrJ0ojxkSDuTanEeKiRZ1UYWagh7myXcwNZtEEplV1
+         rTXiNc5wgrEdembulrWLk9Wdyfts3k8asT3bzaG0yRvOUBtl5tx1wwLyKo8cgRk2o6rS
+         rbw15vDLHlO/ZD9rBE8B7AhLGKEaBuyuPSMBJq+76yTnEeXbpo+e9d3Qam6UhfathHzO
+         BPmO5Q1BiPC37Y8kSnuTkvYuDurAcRYPCYr77bm4FjUdh6rlrXOx+ix4QD6YWuRncbHx
+         esbChIXhWpkDPjMZRZtuHSgHYDb8cHwZ3+VMvV+LS9VG/8lOzCqFZsouCS3DhpZ7NIow
+         Spzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sngM1MTBG7FbSgx6kzN4DBsXrM+u+p1VNu+9KTohzwQ=;
-        b=LbEw28XKqr+jKsezTEsFTQeMPjMnRvQyqOO/ifGNDrY9AbBhXmI7VfVTJPqHoqXPe6
-         HWoQ0wEe8JX/71HBOAoBBllGOLU0P37uzLR7BFP225sV0McA486AtFQ7dZwIUrQUMJyS
-         jcr3URgaknxHIQ66PFr5PqWyrbP3Up4I2o632KKsi8jkox/HocXKGl26PTVxKZqC6twq
-         oJaG8k+MWZXpeYnmVN1X5G1JsE007cvmtIKRXSOiJWnALUYxaD5epNwzbk221iQ5vz3T
-         8e53/6rHsOpTTTQWEuBjBIxn/7d992qp0+yWRzbwV8fRnfFArFflXIAPMMZa7o7Ws5J5
-         GMlQ==
-X-Gm-Message-State: AOAM533mf21XYF1kJ8O51BdsA/Bkv4pHPN3rJ6HfHt+NzXEiYPWWfBRZ
-        d93DwzXZtjWIJEQcvcVNw9Z64AzO+CyWrQ==
-X-Google-Smtp-Source: ABdhPJwGxDw457LD2Vw2V0f5S3EHpS3N44t4L6sI0rbhLQv23J+AO+xeJARfEWNjtfaw4Zix46+DFw==
-X-Received: by 2002:a05:6512:118c:: with SMTP id g12mr17393250lfr.55.1643128192950;
-        Tue, 25 Jan 2022 08:29:52 -0800 (PST)
+        bh=wM1CGdwosWr/o/zdNTKI7CddYVnDP6JJ4xL8rpa+Aas=;
+        b=hebWEzZQJn8RuZWINx0POBd4842qENw2lGd/20zEkafQ8nY4kL9lxM6SZQoHUihBl5
+         c0D1yRXrcKTxdWA2QYhKDJiowYypbAtSEny6rzwu6wL8u9PJW8WlYQtkBEC+0Y19drx7
+         9bqY9VWkbv7ykFl0l+ILEhZHvmqNVFPUPj1nIIVo9orbslEcXeB3I9bB5LuXJU7t6pJf
+         ZBtFAFtUQi7B2EW/9i7MmE0LltfGLgRbGNrOBvFu2MM2+74M6OOOBVgamc5G8cpNbuoE
+         aUSphiDtxs08emojwvvrpxPuEyQtSlO74s9hjxDqg+/LQMjfk1/uMm1TRrvP1QlmbmPb
+         aWeQ==
+X-Gm-Message-State: AOAM530visMherKtdQo9MGhnWGfb8aMdSLo4rxBCjnQAOz/AGKCLImTW
+        A6sl17luA2XoeWvJF2ClDroksi9gi1S1nQ==
+X-Google-Smtp-Source: ABdhPJwQC8ZpuWD/gnJYu1zep0OIKJMceUdl1vKx0nHl35vObk1PDkyOhBH2dXNB94I2vxEAeZSFCw==
+X-Received: by 2002:a05:6512:11d0:: with SMTP id h16mr16878548lfr.307.1643128194030;
+        Tue, 25 Jan 2022 08:29:54 -0800 (PST)
 Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id d13sm536240lfq.75.2022.01.25.08.29.51
+        by smtp.gmail.com with ESMTPSA id d13sm536240lfq.75.2022.01.25.08.29.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 08:29:52 -0800 (PST)
+        Tue, 25 Jan 2022 08:29:53 -0800 (PST)
 From:   Jens Wiklander <jens.wiklander@linaro.org>
 To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
 Cc:     Sumit Garg <sumit.garg@linaro.org>,
@@ -56,11 +56,10 @@ Cc:     Sumit Garg <sumit.garg@linaro.org>,
         Rijo Thomas <Rijo-john.Thomas@amd.com>,
         David Howells <dhowells@redhat.com>,
         Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v3 07/12] optee: use driver internal tee_contex for some rpc
-Date:   Tue, 25 Jan 2022 17:29:33 +0100
-Message-Id: <20220125162938.838382-8-jens.wiklander@linaro.org>
+        Jens Wiklander <jens.wiklander@linaro.org>
+Subject: [PATCH v3 08/12] optee: add optee_pool_op_free_helper()
+Date:   Tue, 25 Jan 2022 17:29:34 +0100
+Message-Id: <20220125162938.838382-9-jens.wiklander@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220125162938.838382-1-jens.wiklander@linaro.org>
 References: <20220125162938.838382-1-jens.wiklander@linaro.org>
@@ -70,123 +69,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Uses the new driver internal tee_context when allocating driver private
-shared memory. This decouples the shared memory object from its original
-tee_context. This is needed when the life time of such a memory
-allocation outlives the client tee_context.
+Adds a common helper function to free a tee_shm allocated using the
+helper function optee_pool_op_alloc_helper().
 
-Fixes: 217e0250cccb ("tee: use reference counting for tee_context")
-Cc: stable@vger.kernel.org
 Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
 Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
 ---
- drivers/tee/optee/ffa_abi.c | 17 +++++++++--------
- drivers/tee/optee/smc_abi.c |  7 ++++---
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ drivers/tee/optee/core.c          | 10 ++++++++++
+ drivers/tee/optee/ffa_abi.c       |  4 +---
+ drivers/tee/optee/optee_private.h |  3 +++
+ drivers/tee/optee/smc_abi.c       |  7 +++----
+ 4 files changed, 17 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
+index f4bccb5f0e93..daf947e98d14 100644
+--- a/drivers/tee/optee/core.c
++++ b/drivers/tee/optee/core.c
+@@ -69,6 +69,16 @@ int optee_pool_op_alloc_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
+ 	return rc;
+ }
+ 
++void optee_pool_op_free_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
++			       int (*shm_unregister)(struct tee_context *ctx,
++						     struct tee_shm *shm))
++{
++	if (shm_unregister)
++		shm_unregister(shm->ctx, shm);
++	free_pages((unsigned long)shm->kaddr, get_order(shm->size));
++	shm->kaddr = NULL;
++}
++
+ static void optee_bus_scan(struct work_struct *work)
+ {
+ 	WARN_ON(optee_enumerate_devices(PTA_CMD_GET_DEVICES_SUPP));
 diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-index 954e88866968..fb7345941024 100644
+index fb7345941024..8cd9c70a9268 100644
 --- a/drivers/tee/optee/ffa_abi.c
 +++ b/drivers/tee/optee/ffa_abi.c
-@@ -424,6 +424,7 @@ static struct tee_shm_pool *optee_ffa_shm_pool_alloc_pages(void)
-  */
- 
- static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
-+					      struct optee *optee,
- 					      struct optee_msg_arg *arg)
+@@ -379,9 +379,7 @@ static int pool_ffa_op_alloc(struct tee_shm_pool *pool,
+ static void pool_ffa_op_free(struct tee_shm_pool *pool,
+ 			     struct tee_shm *shm)
  {
- 	struct tee_shm *shm;
-@@ -439,7 +440,8 @@ static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
- 		shm = optee_rpc_cmd_alloc_suppl(ctx, arg->params[0].u.value.b);
- 		break;
- 	case OPTEE_RPC_SHM_TYPE_KERNEL:
--		shm = tee_shm_alloc_priv_buf(ctx, arg->params[0].u.value.b);
-+		shm = tee_shm_alloc_priv_buf(optee->ctx,
-+					     arg->params[0].u.value.b);
- 		break;
- 	default:
- 		arg->ret = TEEC_ERROR_BAD_PARAMETERS;
-@@ -492,14 +494,13 @@ static void handle_ffa_rpc_func_cmd_shm_free(struct tee_context *ctx,
+-	optee_ffa_shm_unregister(shm->ctx, shm);
+-	free_pages((unsigned long)shm->kaddr, get_order(shm->size));
+-	shm->kaddr = NULL;
++	optee_pool_op_free_helper(pool, shm, optee_ffa_shm_unregister);
  }
  
- static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
-+				    struct optee *optee,
- 				    struct optee_msg_arg *arg)
- {
--	struct optee *optee = tee_get_drvdata(ctx->teedev);
--
- 	arg->ret_origin = TEEC_ORIGIN_COMMS;
- 	switch (arg->cmd) {
- 	case OPTEE_RPC_CMD_SHM_ALLOC:
--		handle_ffa_rpc_func_cmd_shm_alloc(ctx, arg);
-+		handle_ffa_rpc_func_cmd_shm_alloc(ctx, optee, arg);
- 		break;
- 	case OPTEE_RPC_CMD_SHM_FREE:
- 		handle_ffa_rpc_func_cmd_shm_free(ctx, optee, arg);
-@@ -509,12 +510,12 @@ static void handle_ffa_rpc_func_cmd(struct tee_context *ctx,
- 	}
- }
+ static void pool_ffa_op_destroy_pool(struct tee_shm_pool *pool)
+diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+index df3a483bbf46..e77765c78878 100644
+--- a/drivers/tee/optee/optee_private.h
++++ b/drivers/tee/optee/optee_private.h
+@@ -236,6 +236,9 @@ int optee_pool_op_alloc_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
+ 						   struct page **pages,
+ 						   size_t num_pages,
+ 						   unsigned long start));
++void optee_pool_op_free_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
++			       int (*shm_unregister)(struct tee_context *ctx,
++						     struct tee_shm *shm));
  
--static void optee_handle_ffa_rpc(struct tee_context *ctx, u32 cmd,
--				 struct optee_msg_arg *arg)
-+static void optee_handle_ffa_rpc(struct tee_context *ctx, struct optee *optee,
-+				 u32 cmd, struct optee_msg_arg *arg)
- {
- 	switch (cmd) {
- 	case OPTEE_FFA_YIELDING_CALL_RETURN_RPC_CMD:
--		handle_ffa_rpc_func_cmd(ctx, arg);
-+		handle_ffa_rpc_func_cmd(ctx, optee, arg);
- 		break;
- 	case OPTEE_FFA_YIELDING_CALL_RETURN_INTERRUPT:
- 		/* Interrupt delivered by now */
-@@ -581,7 +582,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
- 		 * above.
- 		 */
- 		cond_resched();
--		optee_handle_ffa_rpc(ctx, data->data1, rpc_arg);
-+		optee_handle_ffa_rpc(ctx, optee, data->data1, rpc_arg);
- 		cmd = OPTEE_FFA_YIELDING_CALL_RESUME;
- 		data->data0 = cmd;
- 		data->data1 = 0;
+ 
+ void optee_remove_common(struct optee *optee);
 diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index b1082a34cda2..0dc383c974a3 100644
+index 0dc383c974a3..9c1c9cfb7488 100644
 --- a/drivers/tee/optee/smc_abi.c
 +++ b/drivers/tee/optee/smc_abi.c
-@@ -621,6 +621,7 @@ static void handle_rpc_func_cmd_shm_free(struct tee_context *ctx,
+@@ -548,10 +548,9 @@ static void pool_op_free(struct tee_shm_pool *pool,
+ 			 struct tee_shm *shm)
+ {
+ 	if (!(shm->flags & TEE_SHM_PRIV))
+-		optee_shm_unregister(shm->ctx, shm);
+-
+-	free_pages((unsigned long)shm->kaddr, get_order(shm->size));
+-	shm->kaddr = NULL;
++		optee_pool_op_free_helper(pool, shm, optee_shm_unregister);
++	else
++		optee_pool_op_free_helper(pool, shm, NULL);
  }
  
- static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
-+					  struct optee *optee,
- 					  struct optee_msg_arg *arg,
- 					  struct optee_call_ctx *call_ctx)
- {
-@@ -650,7 +651,7 @@ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
- 		shm = optee_rpc_cmd_alloc_suppl(ctx, sz);
- 		break;
- 	case OPTEE_RPC_SHM_TYPE_KERNEL:
--		shm = tee_shm_alloc_priv_buf(ctx, sz);
-+		shm = tee_shm_alloc_priv_buf(optee->ctx, sz);
- 		break;
- 	default:
- 		arg->ret = TEEC_ERROR_BAD_PARAMETERS;
-@@ -746,7 +747,7 @@ static void handle_rpc_func_cmd(struct tee_context *ctx, struct optee *optee,
- 	switch (arg->cmd) {
- 	case OPTEE_RPC_CMD_SHM_ALLOC:
- 		free_pages_list(call_ctx);
--		handle_rpc_func_cmd_shm_alloc(ctx, arg, call_ctx);
-+		handle_rpc_func_cmd_shm_alloc(ctx, optee, arg, call_ctx);
- 		break;
- 	case OPTEE_RPC_CMD_SHM_FREE:
- 		handle_rpc_func_cmd_shm_free(ctx, arg);
-@@ -775,7 +776,7 @@ static void optee_handle_rpc(struct tee_context *ctx,
- 
- 	switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
- 	case OPTEE_SMC_RPC_FUNC_ALLOC:
--		shm = tee_shm_alloc_priv_buf(ctx, param->a1);
-+		shm = tee_shm_alloc_priv_buf(optee->ctx, param->a1);
- 		if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
- 			reg_pair_from_64(&param->a1, &param->a2, pa);
- 			reg_pair_from_64(&param->a4, &param->a5,
+ static void pool_op_destroy_pool(struct tee_shm_pool *pool)
 -- 
 2.31.1
 

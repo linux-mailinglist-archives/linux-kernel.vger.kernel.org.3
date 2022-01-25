@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E8449BA94
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D81849BA97
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380018AbiAYRpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        id S1384370AbiAYRqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356541AbiAYRpS (ORCPT
+        with ESMTP id S1356784AbiAYRpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:45:18 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5247C06173D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:45:14 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id a18so64567926edj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:45:14 -0800 (PST)
+        Tue, 25 Jan 2022 12:45:31 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E568C061744
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:45:27 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id p15so32175979ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:45:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wLbqBjI2QnhR5W9uEc5kkHoAs2Fwdz+cZ7biUUiwy8I=;
-        b=XI+wODe5OVLQqTQfMtV40bTEaKsreLM3EPk019QiGLOikHZQw2tz4GUN/nEsn3qY9g
-         VS/GjD06yJHcWVGcUTR5DLpphOlZEUhQkrray2nW8tEqDuaXHmKm2w9G9lXgmF56nJlL
-         y4Xmc8N2EFRfMfiEr+4IwSVxKKw0ZD6zgcQusWP3L0bOjw3fEY1DdDtm4y4iQ4oYzZZD
-         ZMLdPdbJ59kN143+7jOdGXVCDaT/G0MQB+Y7gpLmnjnffCAvEswRbc8rijNM+w3YzriD
-         nAxYRZxTlW1iMkMPRluiEcO7ZW3UQphCfeIcBJ26vr3mRojCFk6VqLyhyyt9SaMn5S6e
-         tu8A==
+        bh=v+JhCJG7g15hco1FfpnIJUO82hnrd6NkmYcF+6eeLPo=;
+        b=a4paAk6X+lXbHgR975FUNAILKJjK+GHIKFby7yE+3igVKbZl+vWP1jtoru30kQmR1l
+         AnMm15z8x2VhASr4KBv8zfBSkUW2NmMli4cYPPjEVrjFc1bRboE1LB/lznV3d9opqJsh
+         nkYefRbIVsKskyxlf4Nvdjdlbmplc6NMEUB7tkrukby40kVSu7b36d6c9tsMKAoZknOi
+         lvYR0N1XEPVDmSj9+2Jjl+sM4jJw3IckOViCWT2bDWYv0BQlS6vhGAKrgF1eGVJRb9/R
+         AwwnBJC2MYqNUg2QVYcbm5+Bhq7wV8CQjpts6Ts3pklfGQIFi9nPtrJZSgKxubd3Ijm4
+         xO7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wLbqBjI2QnhR5W9uEc5kkHoAs2Fwdz+cZ7biUUiwy8I=;
-        b=22Y3LFV0H4i2qVQhsWYdK+9pWOG2M21DhveTvSQWGluvnIqnkADQbPAbWdluhoE0jE
-         T2fCbSazTQ889bjWXLqV1oVap1td22+LFZGxlzUwDJ9UxqwWSi7hU4ItGQnZ7cXXHiYe
-         giGGx3W28Wf3MuR41VqOC1MW+2XWUYfh6G8fEsBNDrdZEVlWfnoD8bMzzjR6X9assz1I
-         btrt0Pyst8hodfhcZTNhv0cXph1VL+M+Imt60znEKjuqOHtUJaAmmwYX0PpWVbMNG9Au
-         vvs3Hp5aXSC4KW7R1Iv6VuusUi3OdbWKJyU/xfjCq9Hq82UGN0eP8eqSEOJaDcUytR1/
-         DiLA==
-X-Gm-Message-State: AOAM533VP6ptdwg0DyFHXC9+6pXgh7eGqKT72qx5WG5U47hPTnGL9gkx
-        vVfwiSjUr+XxTklpXMarfRmUjyR5dMrMynXaL+E=
-X-Google-Smtp-Source: ABdhPJy7sDNAtxM6nI6YrtNMouAdltvqi5H3GTLWL14Ws7Rtx1o1qgjY/BjnpCqfjcgQpU+bXrah2e6sBPMvn/ALJhs=
-X-Received: by 2002:a50:cf86:: with SMTP id h6mr21975916edk.82.1643132713452;
- Tue, 25 Jan 2022 09:45:13 -0800 (PST)
+        bh=v+JhCJG7g15hco1FfpnIJUO82hnrd6NkmYcF+6eeLPo=;
+        b=nW/GCHnEyk++iOZ6M4u0fuXWiKHlz8Moex/yR7sqBZnWggEFCbyi15Vz+3syv92xMD
+         VUQN9ahDDLDQ3up8UTSnNX34IowAMwFN//q5EmptqaMLPvczXx+SSTf5lVqwpzSZNgw/
+         7wrdYXujejmqNZtJG6DuvdbxooSVhkdp87FGLINxhGhb0mpdJ8EOhlpsQ2xtfnX4kZQA
+         sp2X7yxXtsTez3zsQIYr+7Hx1X9GGfTdEFb85WwGtdMpjwv0jk7gQmAK2ewJmuK80aZR
+         xFEy6HANCa/auQxgmdPs3C/1VU5Jkv+n8F69qhSUQ/wd/qvGy5pQ+YKTZY0pV7T2mcn3
+         CJ8g==
+X-Gm-Message-State: AOAM532Mxd699iD17mdoQA9qQ9YgHKDjK8Y06OpB0J6iGA86a31CiLoD
+        JKThVDjJSRff6YxmKzlzZEMti1WHwdZfkYWcWCZma7aMww==
+X-Google-Smtp-Source: ABdhPJxtnIJYYulDdtbOM0Ld9l5htRqshcjYAkBm/PB/rZ2vmlkA6WWyHzdHGGfmlT2buUqLPljzImUTRWJicbrIwD4=
+X-Received: by 2002:a17:907:6d03:: with SMTP id sa3mr3976554ejc.517.1643132725758;
+ Tue, 25 Jan 2022 09:45:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20220125025601.3054511-1-naoya.horiguchi@linux.dev>
-In-Reply-To: <20220125025601.3054511-1-naoya.horiguchi@linux.dev>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 25 Jan 2022 09:45:01 -0800
-Message-ID: <CAHbLzkr_w+E7AWoiAwjmjZhGMAt=donXV6SUSep0fkp=ZtOnkg@mail.gmail.com>
-Subject: Re: [PATCH v1] mm, hwpoison: remove obsolete comment
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220120214948.3637895-1-smayhew@redhat.com> <20220120214948.3637895-2-smayhew@redhat.com>
+ <CAHC9VhT2RhnXtK3aQuDCFUr5qayH25G8HHjRTJzhWM3H41YNog@mail.gmail.com> <YfAz0EAim7Q9ifGI@aion.usersys.redhat.com>
+In-Reply-To: <YfAz0EAim7Q9ifGI@aion.usersys.redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 25 Jan 2022 12:45:14 -0500
+Message-ID: <CAHC9VhTwXUE9dYBHrkA3Xkr=AgXvcnfSzLLBJ4QqYd4R+kFbbA@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
+To:     Scott Mayhew <smayhew@redhat.com>
+Cc:     selinux@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 6:56 PM Naoya Horiguchi
-<naoya.horiguchi@linux.dev> wrote:
->
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
->
-> With the introduction of mf_mutex, most of memory error handling
-> process is mutually exclusive, so the in-line comment about
-> subtlety about double-checking PageHWPoison is no more correct.
-> So remove it.
->
-> Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+On Tue, Jan 25, 2022 at 12:31 PM Scott Mayhew <smayhew@redhat.com> wrote:
+> On Mon, 24 Jan 2022, Paul Moore wrote:
+> > On Thu, Jan 20, 2022 at 4:50 PM Scott Mayhew <smayhew@redhat.com> wrote:
+> > >
+> > > selinux_sb_mnt_opts_compat() is called under the sb_lock spinlock and
+> > > shouldn't be performing any memory allocations.  Fix this by parsing the
+> > > sids at the same time we're chopping up the security mount options
+> > > string and then using the pre-parsed sids when doing the comparison.
+> > >
+> > > Fixes: cc274ae7763d ("selinux: fix sleeping function called from invalid context")
+> > > Fixes: 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an existing mount")
+> > > Signed-off-by: Scott Mayhew <smayhew@redhat.com>
+> > > ---
+> > >  security/selinux/hooks.c | 112 ++++++++++++++++++++++++++-------------
+> > >  1 file changed, 76 insertions(+), 36 deletions(-)
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
+...
 
-> ---
->  mm/memory-failure.c | 6 ------
->  1 file changed, 6 deletions(-)
+> > >         switch (token) {
+> > >         case Opt_context:
+> > >                 if (opts->context || opts->defcontext)
+> > >                         goto err;
+> > >                 opts->context = s;
+> > > +               if (preparse_sid) {
+> > > +                       rc = parse_sid(NULL, s, &sid);
+> > > +                       if (rc == 0) {
+> > > +                               opts->context_sid = sid;
+> > > +                               opts->preparsed |= CONTEXT_MNT;
+> > > +                       }
+> > > +               }
+> >
+> > Is there a reason why we need a dedicated sid variable as opposed to
+> > passing opt->context_sid as the parameter?  For example:
+> >
+> >   rc = parse_sid(NULL, s, &opts->context_sid);
 >
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 4c9bd1d37301..a6a1e02759e7 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -2146,12 +2146,6 @@ static int __soft_offline_page(struct page *page)
->                 .gfp_mask = GFP_USER | __GFP_MOVABLE | __GFP_RETRY_MAYFAIL,
->         };
->
-> -       /*
-> -        * Check PageHWPoison again inside page lock because PageHWPoison
-> -        * is set by memory_failure() outside page lock. Note that
-> -        * memory_failure() also double-checks PageHWPoison inside page lock,
-> -        * so there's no race between soft_offline_page() and memory_failure().
-> -        */
->         lock_page(page);
->         if (!PageHuge(page))
->                 wait_on_page_writeback(page);
-> --
-> 2.25.1
->
->
+> We don't need a dedicated sid variable.  Should I make similar changes
+> in the second patch (get rid of the local sid variable in
+> selinux_sb_remount() and the *context_sid variables in
+> selinux_set_mnt_opts())?
+
+Yes please, I should have explicitly mentioned that.
+
+Thanks.
+
+-- 
+paul moore
+paul-moore.com

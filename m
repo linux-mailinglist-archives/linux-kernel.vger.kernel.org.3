@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B2349B4AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B89249B4E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357337AbiAYNMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:12:10 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:20046 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1575474AbiAYNJs (ORCPT
+        id S1576427AbiAYNVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:21:37 -0500
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net ([162.243.164.74]:40249
+        "HELO zg8tmtyylji0my4xnjqunzqa.icoremail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with SMTP id S1576142AbiAYNQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:09:48 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PD5qpY018084;
-        Tue, 25 Jan 2022 13:09:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=DOwUVylm3hgoXpGtEI5hpuFUf0xRn2a+F5Eh8YQ5IkI=;
- b=Jzb2tem9WLKWqa1WbXwb/RXC7Pw6JXM8fita0ZDDsNPnv1BJG5unAtdPNxaj6YZHTFT/
- OT9CnRD5tuJW+4QswNSy6gRt9DTU1D03m+ojNPPYql7IDUF70BZsOI8HolRQ8tDvUeyb
- 1nebrrkCjHMkBt32QGdsXIuwjInUbEI4jI4vN9drUSBqQrg53EeYXhpovxk1m/eVEa2T
- NXch1f9Qs549n2HxZwlFw0zxTRVrsbnRj9NBjVdMlEzSGCCrjmQW+6fuweG2Ib/AsJkW
- WhUPemjUn7N8giUIx4ymtYNaT2AJvtRULDO9An3eSvu6jtsVhB2n6/Xz7ND6dAx68Fn/ dQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dthef8fdv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 13:09:23 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PD3Poo018548;
-        Tue, 25 Jan 2022 13:09:21 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dr9j96an6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 13:09:21 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PD9JI229164000
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 13:09:19 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1F56811C04A;
-        Tue, 25 Jan 2022 13:09:19 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD78811C050;
-        Tue, 25 Jan 2022 13:09:18 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 25 Jan 2022 13:09:18 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: Re: earlyprintk=xdbc seems broken
-References: <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
-        <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
-        <Yao35lElOkwtBYEb@kroah.com>
-        <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
-        <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
-        <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
-        <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
-        <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
-        <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
-        <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
-        <Ye/w/lOf4f8+8fDt@hirez.programming.kicks-ass.net>
-Date:   Tue, 25 Jan 2022 14:09:18 +0100
-In-Reply-To: <Ye/w/lOf4f8+8fDt@hirez.programming.kicks-ass.net> (Peter
-        Zijlstra's message of "Tue, 25 Jan 2022 13:45:50 +0100")
-Message-ID: <yt9dbl00rmgx.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Tue, 25 Jan 2022 08:16:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=KQ8E+I5jgn
+        dpekEIjuxuetI480OK8imxCoO0iKH46S4=; b=iGmegbYJKl0TTCJ9UVfVlywkjU
+        y4hAUgS3gUbn9eo5PyMUqZCJAje+hMTB1fB1EsLdyse43KwUDDPJj/QP7U+Mfpeg
+        1E/ECXjuN3Y8gbnzIdYk83UOxCMutLG0oBS2tQMhCgnPiFfrBPFjH1QaVR6WuWTe
+        lH3gIHkHgIcP6UYtQ=
+Received: from localhost.localdomain (unknown [111.192.165.103])
+        by app1 (Coremail) with SMTP id XAUFCgD3_sIO9+9hW39lAA--.12450S4;
+        Tue, 25 Jan 2022 21:11:48 +0800 (CST)
+From:   Xin Xiong <xiongx18@fudan.edu.cn>
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>
+Subject: [PATCH] NFSv4.2: fix reference count leaks in _nfs42_proc_copy_notify()
+Date:   Tue, 25 Jan 2022 21:10:45 +0800
+Message-Id: <20220125131045.37342-1-xiongx18@fudan.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _kYmxngVCR81fmKqNZ-dl-KA8w8WkKTk
-X-Proofpoint-GUID: _kYmxngVCR81fmKqNZ-dl-KA8w8WkKTk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- clxscore=1011 spamscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=947 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201250085
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: XAUFCgD3_sIO9+9hW39lAA--.12450S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw1rGFW5Gr1rKr4DKFyxuFg_yoW8Aryxpa
+        yrCrWUAF95KF18JFZIyayv93W3uFZ5tryUGF9293y7uF9xX3s8GF1Yyr1Y9r17JrW8X398
+        XF1DKF4UZanYvF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+        648v4I1lc2xSY4AK67AK6ry8MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUboa0DUUUUU==
+X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAg0REFKp2ijNzAAAsG
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
+The reference counting issue happens in two error paths in the
+function _nfs42_proc_copy_notify(). In both error paths, the function
+simply returns the error code and forgets to balance the refcount of
+object `ctx`, bumped by get_nfs_open_context() earlier, which may
+cause refcount leaks.
 
-> Now the documentation states we need this super speed A<->A cable, but
-> could you also update the documentation for usb-c ? There's a fair
-> number of usb-c only devices out there now.
+Fix it by balancing refcount of the `ctx` object before the function
+returns in both error paths.
 
-Stupid beginners question: Would every USB3 A-A cable work, or are the
-debug cables special? I've read the RX/TX pairs have to be swapped, but
-to me it looks like that's always the case?
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+---
+ fs/nfs/nfs42proc.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-I'm just asking because i tried to debug a before-framebuffer crash on
-my Thinkpad X1, but didn't have any luck getting xdbc running. Maybe
-because of the bug above. Would be nice if someone could confirm whether
-that should work with every USB3 A-A cable.
+diff --git a/fs/nfs/nfs42proc.c b/fs/nfs/nfs42proc.c
+index 8b21ff1be..438de4f93 100644
+--- a/fs/nfs/nfs42proc.c
++++ b/fs/nfs/nfs42proc.c
+@@ -592,8 +592,10 @@ static int _nfs42_proc_copy_notify(struct file *src, struct file *dst,
+ 
+ 	ctx = get_nfs_open_context(nfs_file_open_context(src));
+ 	l_ctx = nfs_get_lock_context(ctx);
+-	if (IS_ERR(l_ctx))
+-		return PTR_ERR(l_ctx);
++	if (IS_ERR(l_ctx)) {
++		status = PTR_ERR(l_ctx);
++		goto out;
++	}
+ 
+ 	status = nfs4_set_rw_stateid(&args->cna_src_stateid, ctx, l_ctx,
+ 				     FMODE_READ);
+@@ -601,7 +603,7 @@ static int _nfs42_proc_copy_notify(struct file *src, struct file *dst,
+ 	if (status) {
+ 		if (status == -EAGAIN)
+ 			status = -NFS4ERR_BAD_STATEID;
+-		return status;
++		goto out;
+ 	}
+ 
+ 	status = nfs4_call_sync(src_server->client, src_server, &msg,
+@@ -610,6 +612,7 @@ static int _nfs42_proc_copy_notify(struct file *src, struct file *dst,
+ 	if (status == -ENOTSUPP)
+ 		src_server->caps &= ~NFS_CAP_COPY_NOTIFY;
+ 
++out:
+ 	put_nfs_open_context(nfs_file_open_context(src));
+ 	return status;
+ }
+-- 
+2.25.1
 
-Thanks,
-Sven

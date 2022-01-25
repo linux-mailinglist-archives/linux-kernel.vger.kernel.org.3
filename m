@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C0C49BE65
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E660749BE66
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbiAYWVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:21:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33614 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbiAYWVR (ORCPT
+        id S233744AbiAYWVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:21:36 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:39873 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233724AbiAYWVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:21:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBFCF617DA;
-        Tue, 25 Jan 2022 22:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BBAFC340E0;
-        Tue, 25 Jan 2022 22:21:15 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 17:21:14 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125172114.6807ed8f@gandalf.local.home>
-In-Reply-To: <202201251402.0FB08DB@keescook>
-References: <20220125145006.677e3709@canb.auug.org.au>
-        <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-        <202201251256.CCCBE9851E@keescook>
-        <20220125162326.3d1ca960@gandalf.local.home>
-        <20220125162859.2b3cc8a0@gandalf.local.home>
-        <202201251402.0FB08DB@keescook>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 25 Jan 2022 17:21:35 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-2-fA7wWCh4Ow2lTbVV-GkDJQ-1; Tue, 25 Jan 2022 22:21:32 +0000
+X-MC-Unique: fA7wWCh4Ow2lTbVV-GkDJQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 25 Jan 2022 22:21:31 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 25 Jan 2022 22:21:31 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Aleksey Senin' <aleksey-linux-kernel@senin.name>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: Using memcpy instead of copy_to_user. xprtrdma code.
+Thread-Topic: Using memcpy instead of copy_to_user. xprtrdma code.
+Thread-Index: AQHYEhYs6JOOV6I95k2rDCj4H0ySg6x0T4qw
+Date:   Tue, 25 Jan 2022 22:21:31 +0000
+Message-ID: <55b4da35b6e44bf48306280d900e0fa8@AcuMS.aculab.com>
+References: <CAM=k+5qEfxHOFkiXfobJERr=gMQ9jgcxgpydnkJx3ed3uPPsQg@mail.gmail.com>
+In-Reply-To: <CAM=k+5qEfxHOFkiXfobJERr=gMQ9jgcxgpydnkJx3ed3uPPsQg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 14:07:14 -0800
-Kees Cook <keescook@chromium.org> wrote:
+RnJvbTogQWxla3NleSBTZW5pbiA8YWxla3NleS1saW51eC1rZXJuZWxAc2VuaW4ubmFtZT4NCj4g
+U2VudDogMjUgSmFudWFyeSAyMDIyIDE4OjA0DQo+IA0KPiBUaGlzIHNwZWNpZmljIHBhdGNoIC0g
+IC0gaW1wbGVtZW50cyB1c2luZyBtZW1jcHkgaW5zdGVhZCBvZg0KPiBjb3B5X3RvX3VzZXIuIFdo
+eSBpcyBpdCBjb25zaWRlcmVkIHRvIGJlIHNhZmUgaW4gdGhpcyBzcGVjaWZpYyBjYXNlPw0KPiBB
+bGwgcmVhZGluZ3MgYWJvdXQgaG93IHRvIGNvcHkgZGF0YSBhcmUgbWVudGlvbmluZyB0byB1c2UN
+Cj4gY29weV90b191c2VyL2NvcHlfZnJvbV91c2VyLiBXaHkgdXNlIGRpcmVjdCBjb3B5IGhlcmU/
+IFdoYXQgcHJldmVudHMNCj4gdGhlIGtlcm5lbCBmcm9tIGZhaWx1cmUgaWYgdGhlIHBhZ2UgaXMg
+bm90IHByZXNlbnQgb3IgZG9lc24ndCBoYXZlDQo+IHJlcXVpcmVkIGFjY2VzcyByaWdodHM/DQo+
+IA0KPiBAQCAtMTAzLDggKzEwMiw4IEBAIHN0YXRpYyBpbnQgcmVhZF9yZXNldF9zdGF0KHN0cnVj
+dCBjdGxfdGFibGUNCj4gKnRhYmxlLCBpbnQgd3JpdGUsDQo+ICAgICAgICAgICAgICAgICBsZW4g
+LT0gKnBwb3M7DQo+ICAgICAgICAgICAgICAgICBpZiAobGVuID4gKmxlbnApDQo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgIGxlbiA9ICpsZW5wOw0KPiAtICAgICAgICAgICAgICAgaWYgKGxlbiAm
+JiBjb3B5X3RvX3VzZXIoYnVmZmVyLCBzdHJfYnVmLCBsZW4pKQ0KPiAtICAgICAgICAgICAgICAg
+ICAgICAgICByZXR1cm4gLUVGQVVMVDsNCj4gKyAgICAgICAgICAgICAgIGlmIChsZW4pDQo+ICsg
+ICAgICAgICAgICAgICAgICAgICAgIG1lbWNweShidWZmZXIsIHN0cl9idWYsIGxlbik7DQo+IA0K
+PiBSZWZlcmVuY2UgdG8gdGhlIHNwZWNpZmljIHBhdGNoIGluIHRoZSBzZXJ2aWNlcyBvZiBjb21t
+aXRzOg0KPiBodHRwczovL2xrbWwub3JnL2xrbWwvMjAyMC80LzE3LzYwDQoNClJlYWQgdGhlIGNv
+bW1pdCBtZXNzYWdlLg0KDQo+IA0KPiBDb21taXQgaXRzZWxmOg0KPiAzMjkyNzM5M2RjMWNjZDYw
+ZmIyYmRjMDViOWU4ZTg4NzUzNzYxNDY5DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lk
+ZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0K
+UmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-> > The tstruct is the TP_STRUCT__entry() and for each __rel_dynamic_array() or
-> > __dynamic_array(), the __data_size gets updated and saved into the
-> > __data_offsets that holds where each item is.
-> > 
-> > The rel versions sets the offset from its location to the data, where as
-> > the non rel versions sets the offset from the beginning of the event to the
-> > data.  
-> 
-> Could this just be
-> 
-> #define __get_rel_dynamic_array(field) \
-> 	((void *)(&__entry->data[__entry->__rel_loc_##field & 0xffff])
-> 
-> ?
-
-This is currently user space defined. But since the only user of the rel_*
-version hasn't been upstreamed yet, we could change it. But it also
-requires changing libtraceevent as it depends on this code too.
-
-I'm surprised that it doesn't break with the __get_dynamic_array()
-versions, or is that because it's based off of __entry?
-
--- Steve

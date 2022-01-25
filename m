@@ -2,146 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1C049A81D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFA349A7EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1316344AbiAYC5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:57:02 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:60353 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S3414335AbiAYAot (ORCPT
+        id S1315440AbiAYCxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:53:25 -0500
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:41253 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2370182AbiAYADy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:44:49 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8BAC1580389;
-        Mon, 24 Jan 2022 19:44:48 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 24 Jan 2022 19:44:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=turner.link; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; bh=Hg+/kJzRpMwyU8RBBG9lM29Q4G3SCNyE5PQExK
-        Qjrjg=; b=BqhV2/LX+jA/ib0C3suNSFwh8doiJauUSvPVxk+uBbNEorrAZbP1iR
-        5gNpFk2LgQ7cLfef4t7YtlVJSeAE1tg7pNCtVRYvd5IfU96XR2wTMxWkt5EgqN5O
-        xbZYT20AVlZSDY6PPGchtxHvVVZxZh+6cPw4ahe/8gK2gmshQA7Rb5oAruoy5iD9
-        0lpJlFpQzx8xBboXOi81OZfCQl5D2CoNFJMi4EUzEbEORp5XHpGY1Ae0zEJQFMcG
-        irXojU99SQzfbYshiyxeHeKgyKApQLq43HdA+0p7iRoIL+aYSMhIDLLINo475C4T
-        JiMKE71bQGkV8LTe7hWUbRgrjFnaiyOg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        Mon, 24 Jan 2022 19:03:54 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6F7365C0062;
+        Mon, 24 Jan 2022 19:03:53 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Mon, 24 Jan 2022 19:03:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Hg+/kJzRpMwyU8RBB
-        G9lM29Q4G3SCNyE5PQExKQjrjg=; b=NnF9YKvTgV+/CzqonPrhH6bqt2WlJ4u/V
-        0e5EIJr4hxAwC9+fPKCyjMjLQFL7qrbjxjXFIPrdrUTGfM7J6s3SHwnq67rYY35f
-        AAdyTDYdeqWTj4LCnd+TZ70KSgKLAVdSglmbXgwa+ajA6n/uUMX1EpFmSlYkwj/D
-        w8Xjd3ybbGdoY1DGBiQn2dxoQV8DpbD0T3IQ2uw6cxeFgp9p/TCwyaO+BhzpE0mF
-        LxR/XD6IxXdjTGUUAozzYQknbIZf0gvWcm4ExzybZRggNr/xbIys/rnbBcng0jOh
-        pyPxkrjIS0E8x1ywdW+MBOVpvlDmppAIOE3MijQ16LRpMyXnYn9Yw==
-X-ME-Sender: <xms:_0fvYQ-EfYy1x8ckLKQOASpfF1f8VG1P-YWrZzzpxTHBK9WYhNxFsA>
-    <xme:_0fvYYvQ4J3beV2uRjLa31Bh_ODGeg6dL4-lMaqx4Up28gOo3QlSTswv6YiD-Vtpg
-    IJHUY5k-MA4iSAy4w>
-X-ME-Received: <xmr:_0fvYWAFmvUzQxh0iBiGiqD4fBbfMq3-4nNy1vMXlMHn1BXiEot-KL-OXqPk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdekgddvhecutefuodetggdotefrodftvf
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=xrVlhzn9aqAvyt
+        XYY/7c6YYYVRGhNM6WvivtbLM07nw=; b=iq7pi02PS8sL3wMUrWNyF5p7h24mDK
+        sM3thbyjTfoF7TylAYssOVXZtD9s+jCqJ0TwGcUTBTEHbmCJtTzqeh0ZC7PGZdnC
+        DnvYqeLd13a5LAWuX15LfuI3UAEyCfpLWDZokM1cXwVr1grQiM/pPVZ+hK9Nq1we
+        miFX4xyrtWqIYb/xhy9xnTs5ZnZqcBdxOuA9bO3gxhjAeuSwvb+RzDyTfuv22Cny
+        Jx4wt3qz5Df1pHMIfkK4UH6kwVMuBXc3hEJ2RThHzpUC8eCEZxWcOfB7kQ5XYmXZ
+        hp6F19TgshFiN/QqifsCsc0g/eKlYYxRno1UCJbqcG15SlVJRJIn2OWQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=xrVlhzn9aqAvytXYY/7c6YYYVRGhNM6WvivtbLM07
+        nw=; b=aN0JG3UjJA56Pt3PMsJFofak4UiP4GBcbYFIt+naPgqfyYg/s4cPGtPyo
+        YnNhdaT7JclRWvreVn2Jf+JudWggWln8T/T3X4sZu0scOCtI1bnTQDIZbJTzS072
+        7Jl9ntDcFEyKkWfnFP6brtx+WDW7l6MLYG6d1gLckM9r9venKRZj5iz1oBAAE8e5
+        JBQWDCOYI93f7AvVQxjl+YhqXMySbTs0UbAVy4ARvsmYcHMXTU3mb1XMIYI7vmp2
+        sWc4XfmI9pVaIgXxuLGMQKk9b40UWuFCbHU4ym6vQNBDaGfDF5Sv2036QrToO+Zl
+        OeJYPtp/VUvb2bnuA5JJ3QfFNqUhA==
+X-ME-Sender: <xms:aT7vYQy7RALPBf3IQRAxeZXGRB5ziOOcPbJybZbHOBS7jhK2O94REQ>
+    <xme:aT7vYUSIVtYt8J3NH4EyjNQYvD3oRGuVIZ-rwanFt7S_ytctiUACJZ3Eq_UHzxRU7
+    jr6ZMV1HxN-J8f-hXY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdekgdduiecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpehfhffvufffjgfkgggtsehttdertddttddtnecuhfhrohhmpeflrghmvghsucfv
-    uhhrnhgvrhcuoehlihhnuhigkhgvrhhnvghlrdhfohhsshesughmrghrtgdqnhhonhgvrd
-    htuhhrnhgvrhdrlhhinhhkqeenucggtffrrghtthgvrhhnpeetvdefudehieeufefghfdv
-    teeitddtvefhieetuefhleevudevtddtfffggffgteenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehlihhnuhigkhgvrhhnvghlrdhfohhsshes
-    ughmrghrtgdqnhhonhgvrdhtuhhrnhgvrhdrlhhinhhk
-X-ME-Proxy: <xmx:AEjvYQf2y2zGcFgoCWUciNn9b9e2Ec0Y-WL5xhNm2ABYSv_7GMV4IA>
-    <xmx:AEjvYVPPma5oQKL6quJ8Jk66URimEX_lrvguofqERLdCMTYsPQQsZQ>
-    <xmx:AEjvYal0LCNI_T_XPDgs4DgaDQO3NOORXHUTsx1RGMbZkpFy197sug>
-    <xmx:AEjvYbv6u5vmUwQ8EAKjckw9E1-Hpdolaz4WyHTPJldFQw-3yZxqSQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Jan 2022 19:44:47 -0500 (EST)
-References: <87ee57c8fu.fsf@turner.link>
- <acd2fd5e-d622-948c-82ef-629a8030c9d8@leemhuis.info>
- <87a6ftk9qy.fsf@dmarc-none.turner.link> <87zgnp96a4.fsf@turner.link>
- <fc2b7593-db8f-091c-67a0-ae5ffce71700@leemhuis.info>
- <CADnq5_Nr5-FR2zP1ViVsD_ZMiW=UHC1wO8_HEGm26K_EG2KDoA@mail.gmail.com>
- <87czkk1pmt.fsf@dmarc-none.turner.link>
- <BYAPR12MB46140BE09E37244AE129C01A975C9@BYAPR12MB4614.namprd12.prod.outlook.com>
- <87sftfqwlx.fsf@dmarc-none.turner.link>
- <BYAPR12MB4614E2CFEDDDEAABBAB986A0975E9@BYAPR12MB4614.namprd12.prod.outlook.com>
-From:   James Turner <linuxkernel.foss@dmarc-none.turner.link>
-To:     "Lazar, Lijo" <Lijo.Lazar@amd.com>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-Subject: Re: [REGRESSION] Too-low frequency limit for AMD GPU
- PCI-passed-through to Windows VM
-Date:   Mon, 24 Jan 2022 18:58:10 -0500
-In-reply-to: <BYAPR12MB4614E2CFEDDDEAABBAB986A0975E9@BYAPR12MB4614.namprd12.prod.outlook.com>
-Message-ID: <87ee4wprsx.fsf@turner.link>
-MIME-Version: 1.0
-Content-Type: text/plain
+    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdflihgr
+    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeefteegkeevfeethffgudehgedvueduvdeifedvvdelhfef
+    heekteefueektdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:aT7vYSV1VY_-rDLXexeWyX8qYkX78SD2hCk_PvuHn80ggXwsQMEfvg>
+    <xmx:aT7vYeiKoSdInKeM3dd12OH62u5k8MciwxOfivc5lGWbKXlJaxYSKQ>
+    <xmx:aT7vYSBZuHwpGZxH-MRl3r5m0Ei-Xc5gicij4-B48qOGw0VG9PZNZg>
+    <xmx:aT7vYV_ro25vKsYJago2ixa0Ls4DLvaiunrlEiYT-WB6Mf6u_VamDw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 154A5FA0AA6; Mon, 24 Jan 2022 19:03:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4585-ga9d9773056-fm-20220113.001-ga9d97730
+Mime-Version: 1.0
+Message-Id: <c88b0d87-b238-4889-b033-226bed85bb01@www.fastmail.com>
+In-Reply-To: <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
+References: <20220120214001.1879469-1-nathan@kernel.org>
+ <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
+Date:   Tue, 25 Jan 2022 00:03:32 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc:     "Huacai Chen" <chenhuacai@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] MIPS: Loongson64: Clean up use of cc-ifversion
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lijo,
-
-> Not able to relate to how it affects gfx/mem DPM alone. Unless Alex
-> has other ideas, would you be able to enable drm debug messages and
-> share the log?
-
-Sure, I'm happy to provide drm debug messages. Enabling everything
-(0x1ff) generates *a lot* of log messages, though. Is there a smaller
-subset that would be useful? Fwiw, I don't see much in the full drm logs
-about the AMD GPU anyway; it's mostly about the Intel GPU.
-
-All the messages in the system log containing "01:00" or "1002:6981" are
-identical between the two versions.
-
-I've posted below the only places in the logs which contain "amd". The
-commit with the issue (f9b7f3703ff9) has a few drm log messages from
-amdgpu which are not present in the logs for f1688bd69ec4.
 
 
-# f1688bd69ec4 ("drm/amd/amdgpu:save psp ring wptr to avoid attack")
+=E5=9C=A82022=E5=B9=B41=E6=9C=8824=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
+=8D=888:31=EF=BC=8CNick Desaulniers=E5=86=99=E9=81=93=EF=BC=9A
+> On Thu, Jan 20, 2022 at 1:40 PM Nathan Chancellor <nathan@kernel.org> =
+wrote:
+>>
+>> This Makefile checks that GCC is 4.9 or newer, which is redundant aft=
+er
+>> commit 76ae847497bc ("Documentation: raise minimum supported version =
+of
+>> GCC to 5.1"), so cc-option can be removed.
+>>
+>> Clang does not support -march=3Dloongson3a so it needs to continue to=
+ use
+>> -march=3Dmips64r2, along with binutils less than 2.25, so check that =
+both
+>> GCC and binutils 2.25 or newer are being used before using
+>> -march=3Dloongson3a. These flags do not need to be checked with cc-op=
+tion
+>> anymore because all GCC versions support -march=3Dloongson3a and
+>> -march=3Dmips64r2 and all clang versions support -march=3Dmips64r2.
+>>
+>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>
+> Thanks for the patch. I wonder why `_MIPS_ISA` only seems to be set at
+> all for `-march=3Dloongson3a` AFAICT, though that question is orthogon=
+al
+> to this patch. Perhaps the Loongson or MIPS maintainers know more?
+> Otherwise seems like most uses of _MIPS_ISA can either be deleted or
+> simplified now.
 
-[drm] amdgpu kernel modesetting enabled.
-vga_switcheroo: detected switching method \_SB_.PCI0.GFX0.ATPX handle
-ATPX version 1, functions 0x00000033
-amdgpu: CRAT table not found
-amdgpu: Virtual CRAT table created for CPU
-amdgpu: Topology: Add CPU node
+This is because earlier GCC mistakenly set loongson3a to MIPS64 not MIPS=
+64R2.
 
+But given that it's earlier than the minimal requirement GCC of kernel t=
+oday, I think it should be safe to just move the whole logic.
 
-# f9b7f3703ff9 ("drm/amdgpu/acpi: make ATPX/ATCS structures global (v2)")
+Thanks.
 
-[drm] amdgpu kernel modesetting enabled.
-vga_switcheroo: detected switching method \_SB_.PCI0.GFX0.ATPX handle
-ATPX version 1, functions 0x00000033
-[drm:amdgpu_atif_pci_probe_handle.isra.0 [amdgpu]] Found ATIF handle \_SB_.PCI0.GFX0.ATIF
-[drm:amdgpu_atif_pci_probe_handle.isra.0 [amdgpu]] ATIF version 1
-[drm:amdgpu_acpi_detect [amdgpu]] SYSTEM_PARAMS: mask = 0x6, flags = 0x7
-[drm:amdgpu_acpi_detect [amdgpu]] Notification enabled, command code = 0xd9
-amdgpu: CRAT table not found
-amdgpu: Virtual CRAT table created for CPU
-amdgpu: Topology: Add CPU node
+>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+>> ---
+>>  arch/mips/loongson64/Platform | 13 +++----------
+>>  1 file changed, 3 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Pla=
+tform
+>> index 3e660d6d3c2b..981d3abc150e 100644
+>> --- a/arch/mips/loongson64/Platform
+>> +++ b/arch/mips/loongson64/Platform
+>> @@ -12,17 +12,10 @@ cflags-$(CONFIG_CPU_LOONGSON64)     +=3D -Wa,--tr=
+ap
+>>  # by GAS.  The cc-option can't probe for this behaviour so -march=3D=
+loongson3a
+>>  # can't easily be used safely within the kbuild framework.
+>>  #
+>> -ifeq ($(call cc-ifversion, -ge, 0409, y), y)
+>> -  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
+>> -    cflags-$(CONFIG_CPU_LOONGSON64)  +=3D \
+>> -      $(call cc-option,-march=3Dloongson3a -U_MIPS_ISA -D_MIPS_ISA=3D=
+_MIPS_ISA_MIPS64)
+>> -  else
+>> -    cflags-$(CONFIG_CPU_LOONGSON64)  +=3D \
+>> -      $(call cc-option,-march=3Dmips64r2,-mips64r2 -U_MIPS_ISA -D_MI=
+PS_ISA=3D_MIPS_ISA_MIPS64)
+>> -  endif
+>> +ifeq ($(CONFIG_CC_IS_GCC)$(call ld-ifversion, -ge, 22500, y), yy)
+>> +  cflags-$(CONFIG_CPU_LOONGSON64) +=3D -march=3Dloongson3a -U_MIPS_I=
+SA -D_MIPS_ISA=3D_MIPS_ISA_MIPS64
+>>  else
+>> -    cflags-$(CONFIG_CPU_LOONGSON64)  +=3D \
+>> -      $(call cc-option,-march=3Dmips64r2,-mips64r2 -U_MIPS_ISA -D_MI=
+PS_ISA=3D_MIPS_ISA_MIPS64)
+>> +  cflags-$(CONFIG_CPU_LOONGSON64) +=3D -march=3Dmips64r2
+>>  endif
+>>
+>>  # Some -march=3D flags enable MMI instructions, and GCC complains ab=
+out that
+>>
+>> base-commit: 2c271fe77d52a0555161926c232cd5bc07178b39
+>> --
+>> 2.34.1
+>>
+>
+>
+> --=20
+> Thanks,
+> ~Nick Desaulniers
 
-
-Other things I'm willing to try if they'd be useful:
-
-- I could update to the 21.Q4 Radeon Pro driver in the Windows VM. (The
-  21.Q3 driver is currently installed.)
-
-- I could set up a Linux guest VM with PCI passthrough to compare to the
-  Windows VM and obtain more debugging information.
-
-- I could build a kernel with a patch applied, e.g. to disable some of
-  the changes in f9b7f3703ff9.
-
-James
+--=20
+- Jiaxun

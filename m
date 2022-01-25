@@ -2,76 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEFC49B6A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC2449B6B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579939AbiAYOlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388418AbiAYOhW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:37:22 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395CAC061751;
-        Tue, 25 Jan 2022 06:37:21 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 37D821EC0304;
-        Tue, 25 Jan 2022 15:37:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643121436;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=FmNennP2E1Srxpp/fcleOZgmfWGnml38KdonbDFAk9g=;
-        b=EY5D4y8OnsmgsbSTWnFGOQ3FPGX5qVZzzYXSqqnGcAnVCeoU+QY5snRdZyUseMJPoVqQ+V
-        TQV00VRxFTHqSTsGWYfdLn5zs73ZKvxsHv5zVprxoI0iSWuSB6j0oaVzlqmot4AmhD2bUV
-        eDemfqtQpBw2PQ+5we9APSh7B0yQ0w4=
-Date:   Tue, 25 Jan 2022 15:37:11 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     mchehab@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ronenk@amazon.com, talel@amazon.com,
-        hhhawa@amazon.com, jonnyc@amazon.com, hanochu@amazon.com
-Subject: Re: [PATCH 1/4] EDAC: Fix calculation of returned address and next
- offset in edac_align_ptr()
-Message-ID: <YfALFy7LGGIOS2Fv@zn.tnic>
-References: <20220113100622.12783-1-farbere@amazon.com>
- <20220113100622.12783-2-farbere@amazon.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220113100622.12783-2-farbere@amazon.com>
+        id S1580023AbiAYOlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:41:42 -0500
+Received: from foss.arm.com ([217.140.110.172]:47544 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1579753AbiAYOig (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:38:36 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8FF8D6E;
+        Tue, 25 Jan 2022 06:38:34 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.42.158])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1493E3F793;
+        Tue, 25 Jan 2022 06:38:31 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64/mm: Consolidate TCR_EL1 fields
+Date:   Tue, 25 Jan 2022 20:08:33 +0530
+Message-Id: <1643121513-21854-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 10:06:19AM +0000, Eliav Farber wrote:
-> Do alignment logic properly and use 'ptr' for calculating the remainder
-> of the alignment.
-> 
-> This became an issue because 'struct edac_mc_layer' has a size that is
-> not zero modulo eight, and the next offset that was prepared for the
-> private-data was unaligned, causing an alignment exception.
+This renames and moves SYS_TCR_EL1_TCMA1 and SYS_TCR_EL1_TCMA0 definitions
+into pgtable-hwdef.h thus consolidating all TCR fields in a single header.
+This does not cause any functional change.
 
-How exactly did this "become an issue"?
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+This applies on v5.17-rc1
 
-I'm asking because I have been hearing about weird bugs with that
-pointer alignment contraption and have never managed to reproduce them
-myself or hear a proper explanation from people.
+This was earlier posted with FEAT_LPA2 series.
 
-And that thing is an abomination, frankly, and I'd like to get rid of it
-but maybe some other time...
+https://lore.kernel.org/all/1632998116-11552-3-git-send-email-anshuman.khandual@arm.com/
 
-So, please explain more verbosely, a specific example or how I could
-reproduce it, would be even better.
+ arch/arm64/include/asm/pgtable-hwdef.h | 2 ++
+ arch/arm64/include/asm/sysreg.h        | 4 ----
+ arch/arm64/mm/proc.S                   | 2 +-
+ 3 files changed, 3 insertions(+), 5 deletions(-)
 
-Thx.
-
+diff --git a/arch/arm64/include/asm/pgtable-hwdef.h b/arch/arm64/include/asm/pgtable-hwdef.h
+index 40085e53f573..66671ff05183 100644
+--- a/arch/arm64/include/asm/pgtable-hwdef.h
++++ b/arch/arm64/include/asm/pgtable-hwdef.h
+@@ -273,6 +273,8 @@
+ #define TCR_NFD1		(UL(1) << 54)
+ #define TCR_E0PD0		(UL(1) << 55)
+ #define TCR_E0PD1		(UL(1) << 56)
++#define TCR_TCMA0		(UL(1) << 57)
++#define TCR_TCMA1		(UL(1) << 58)
+ 
+ /*
+  * TTBR.
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index 898bee0004ae..34800d264f69 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -1101,10 +1101,6 @@
+ #define CPACR_EL1_ZEN_EL0EN	(BIT(17)) /* enable EL0 access, if EL1EN set */
+ #define CPACR_EL1_ZEN		(CPACR_EL1_ZEN_EL1EN | CPACR_EL1_ZEN_EL0EN)
+ 
+-/* TCR EL1 Bit Definitions */
+-#define SYS_TCR_EL1_TCMA1	(BIT(58))
+-#define SYS_TCR_EL1_TCMA0	(BIT(57))
+-
+ /* GCR_EL1 Definitions */
+ #define SYS_GCR_EL1_RRND	(BIT(16))
+ #define SYS_GCR_EL1_EXCL_MASK	0xffffUL
+diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+index d35c90d2e47a..50bbed947bec 100644
+--- a/arch/arm64/mm/proc.S
++++ b/arch/arm64/mm/proc.S
+@@ -46,7 +46,7 @@
+ #endif
+ 
+ #ifdef CONFIG_KASAN_HW_TAGS
+-#define TCR_MTE_FLAGS SYS_TCR_EL1_TCMA1 | TCR_TBI1 | TCR_TBID1
++#define TCR_MTE_FLAGS TCR_TCMA1 | TCR_TBI1 | TCR_TBID1
+ #else
+ /*
+  * The mte_zero_clear_page_tags() implementation uses DC GZVA, which relies on
 -- 
-Regards/Gruss,
-    Boris.
+2.20.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

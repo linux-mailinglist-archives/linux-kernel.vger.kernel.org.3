@@ -2,129 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0F049ADDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8301049ADF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449462AbiAYIR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:17:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
+        id S1378478AbiAYIZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448621AbiAYIPX (ORCPT
+        with ESMTP id S1449839AbiAYIUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:15:23 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD2DC0A6ECD
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:46:32 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id v186so58832593ybg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:46:32 -0800 (PST)
+        Tue, 25 Jan 2022 03:20:55 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA0DC06F8EC
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:48:36 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id n17so6654267iod.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:48:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=s9eUukAZSoXLwfwoNX3OA+1nnkr3K0zvB1fY8vDJD/s=;
-        b=hhcPlTxEhl1jkQVwAiq8iZtSSvjbikyRy/5M5ftUybRFLKNr+wkd638MtTiXC78Nj5
-         X4bEJ3F1Nqrz6Aulgth/9t9VN34smaPhUp1SpNyDs8ddwYo+E/pYy7wfdnTJvLVR7T0Z
-         RfJrS5FEssK5CRVJvrx09lyZbv1nbPNQbxCWsqNL0pf9chJLUiv72M46ArHL1+OWqNMs
-         CXDTJr9YcnDpdn+U2ZU80r98Mxj8H7rrYGpNT1GdoAKxfPk8Vmk0DfVGsxVb9nlGkKvE
-         xVEN49T9h8LEGRFik1QqnKvPg5RKmGyM7DPAfs4l4G/gGYFQebXrK+IdOm+Uc8tsXRBR
-         jpuA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2CO/0VtOREtMtGW71kkDBfMgMYeipJa6iXGHC5VC/RU=;
+        b=X1ftQALT1SX5jUMQWj7RoMqtz2ewnU+L3TGQqWmlcbgo3KSmMxF5sCjshQxkke1ZFA
+         jzg3QMPbXZxTMJpqsuUnVp2tRS/gMu7mDs1i1AXKoC0Yn9NtDnO+jiAMoTVASSnpv88c
+         oxTgFX+w+blwFXMcVO+umvS9Edyq2CPSGETtOkEmOYF6ChWDaI8pDRoItSjToYMdRYUV
+         3zSSoseakDUqj/d4eR4g4BvplCQ0+YE8vHSaImz4kwNEIMnc6CD09VE7b2FyutUNyDch
+         Ve7PL8FasxksLlw2ftA7KN04RdQRMY+YmJqacRaP4Qr2KrglAy9VvNHhS6fn8jyA3DE3
+         tKOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=s9eUukAZSoXLwfwoNX3OA+1nnkr3K0zvB1fY8vDJD/s=;
-        b=pD9IZdI5oAfpZg9s0B1AXdFgsygHGTSGcZ+plqQDDlZbuR0iCnhybfEvezzBLhJ/JY
-         5gCN8UMx7wS8zBHXvrWjv7U8Xbi+VCD063bLB8ImVpm462mEHEqIyGb5fkJHo5K7Y9n7
-         sewubne/E9QxLfu5i2EgKLx6UafcCmqcvYzgbDOnclekj6Vlt+g176QXnLQLPmaTgUM9
-         ho0QPWwGJ/stLG0TCsTgbZXihEXL3jLq74+Fmy8RJiGuDXrWOR4X2ycvnmWixpF+r4k3
-         fqt+5HSzh43+Cnkj+vOkouXRTHpWk18sxBrR/rUNmH8Eewuo2c0CPGGENvCW6Dv+0qbq
-         ndpA==
-X-Gm-Message-State: AOAM53140fHB6wdbgrhCWgqf8WbvjVeWNDYJMRllbvNipt6TjMz1gxj3
-        SZ6Up5HnS5nb7BWbs9xJq4EqoKxeebJuhTjaTMjg3w==
-X-Google-Smtp-Source: ABdhPJw2CF2jZmEZwNN6xF7zrJVv6SzcNU/D8oujCUYOSKItda8dOoLF90Mga93UTxPElvHu8X1PlYLBG4YB9RVqFuM=
-X-Received: by 2002:a81:130a:0:b0:2ca:287c:6d64 with SMTP id
- 00721157ae682-2ca2c52ec13mr4426817b3.521.1643093191437; Mon, 24 Jan 2022
- 22:46:31 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2CO/0VtOREtMtGW71kkDBfMgMYeipJa6iXGHC5VC/RU=;
+        b=PR+y9BwaxXCS8cZfzCscn56beN6UYuNsKWK3vHAG4BgQZF0G/XaFlrgk8v3vjoqw7d
+         5ozItjYnJtqoIhj14x62vvjV2xbkgYg0Pb2GVsln90U6BGRVDiGDVgOqMJh/dQsVz5ym
+         hcAWpWXb20ngLGytyi3wchSz1tpTEw/buv1iffMTv7zirE4Ciq3d4O4PdlyM0Vkl6lvf
+         Ls50o/vvfUjnjTwIEPRNBoVqGIjozol1JUe6AFYJmHpnzJvzQJV3Z1E0RfZvjiLW8fDJ
+         rcokQpEhtUH4B6NzaLLjElwxwd2gyGu7Ea2D2+Oe8Cor5QtffHn8TI4DZbgcbp7FmUXU
+         Oh0w==
+X-Gm-Message-State: AOAM532/cGNBVREF+LZMYENFTaUs0bdA0bCHgfsr3TGLIUraiftv9U0Y
+        fI5NLk7USN0G++PoNP71ahjfzw==
+X-Google-Smtp-Source: ABdhPJwDp6hR1qn1SHpSjIF3pYJ7fhWeNimbnilfiMoehjRW8WORjpC4cJ6QnM6/gZMjIwnNZM9XPQ==
+X-Received: by 2002:a02:6d48:: with SMTP id e8mr9063758jaf.250.1643093315535;
+        Mon, 24 Jan 2022 22:48:35 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:c4ed:79a3:8a0e:7ee])
+        by smtp.gmail.com with ESMTPSA id c3sm8292027iow.28.2022.01.24.22.48.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 22:48:34 -0800 (PST)
+Date:   Mon, 24 Jan 2022 23:48:30 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, page-reclaim@google.com,
+        x86 <x86@kernel.org>
+Subject: Re: [PATCH v6 0/9] Multigenerational LRU Framework
+Message-ID: <Ye+dPmO17JN2bNLL@google.com>
+References: <20220104202227.2903605-1-yuzhao@google.com>
+ <CAGsJ_4zULJ5vPwn73Z5Bap3eRkAX+Yv24c-n41+zC7fN8xG60g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220124184100.867127425@linuxfoundation.org> <374e9357-35eb-3555-3fe5-7b72c3a77a39@linaro.org>
- <ef6a4bcf-832b-3a5d-9643-827239293772@linaro.org>
-In-Reply-To: <ef6a4bcf-832b-3a5d-9643-827239293772@linaro.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 25 Jan 2022 12:16:20 +0530
-Message-ID: <CA+G9fYtTU_7DVaxwbLWnKBfqwbW51ebEoP=+vah7f6cWYSrKkQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/846] 5.15.17-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        pavel@denx.de, jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org,
-        Russell King <russell.king@oracle.com>,
-        Alan Maguire <alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGsJ_4zULJ5vPwn73Z5Bap3eRkAX+Yv24c-n41+zC7fN8xG60g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 09:09, Daniel D=C3=ADaz <daniel.diaz@linaro.org> wro=
-te:
->
-> Hello!
->
-> On 1/24/22 16:50, Daniel D=C3=ADaz wrote:
-> > Hello!
-> >
-> > On 1/24/22 12:31, Greg Kroah-Hartman wrote:
-> >> This is the start of the stable review cycle for the 5.15.17 release.
-> >> There are 846 patches in this series, all will be posted as a response
-> >> to this one.  If anyone has any issues with these being applied, pleas=
-e
-> >> let me know.
-> >>
-> >> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> >> Anything received after that time might be too late.
-> >>
-> >> The whole patch series can be found in one patch at:
-> >>     https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5=
-.15.17-rc1.gz
-> >> or in the git tree and branch at:
-> >>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git linux-5.15.y
-> >> and the diffstat can be found below.
-> >>
-> >> thanks,
-> >>
-> >> greg k-h
-> >
+On Sun, Jan 23, 2022 at 06:43:06PM +1300, Barry Song wrote:
+> On Wed, Jan 5, 2022 at 7:17 PM Yu Zhao <yuzhao@google.com> wrote:
 
-Regressions detected on arm, arm64, i386, x86 on 5.15 and 5.10
+<snipped>
 
-> >
-> > This is one from arm64:
-> >    /builds/linux/arch/arm64/mm/extable.c: In function 'fixup_exception'=
-:
-> >    /builds/linux/arch/arm64/mm/extable.c:17:13: error: implicit declara=
-tion of function 'in_bpf_jit' [-Werror=3Dimplicit-function-declaration]
-> >       17 |         if (in_bpf_jit(regs))
-> >          |             ^~~~~~~~~~
-> >    cc1: some warnings being treated as errors
-> >    make[3]: *** [/builds/linux/scripts/Makefile.build:277: arch/arm64/m=
-m/extable.o] Error 1
->
-> Bisection here pointed to "arm64/bpf: Remove 128MB limit for BPF JIT prog=
-rams". Reverting made the build succeed.
+> > Large-scale deployments
+> > -----------------------
+> > We've rolled out MGLRU to tens of millions of Chrome OS users and
+> > about a million Android users. Google's fleetwide profiling [13] shows
+> > an overall 40% decrease in kswapd CPU usage, in addition to
+> 
+> Hi Yu,
+> 
+> Was the overall 40% decrease of kswap CPU usgae seen on x86 or arm64?
+> And I am curious how much we are taking advantage of NONLEAF_PMD_YOUNG.
+> Does it help a lot in decreasing the cpu usage?
 
-arm64/bpf: Remove 128MB limit for BPF JIT programs
-commit b89ddf4cca43f1269093942cf5c4e457fd45c335 upstream.
+Hi Barry,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+The fleet-wide profiling data I shared was from x86. For arm64, I only
+have data from synthetic benchmarks at the moment, and it also shows
+similar improvements.
 
-> Greetings!
->
-> Daniel D=C3=ADaz
-> daniel.diaz@linaro.org
->
+For Chrome OS (individual users), walk_pte_range(), the function that
+would benefit from ARCH_HAS_NONLEAF_PMD_YOUNG, only uses a small
+portion (<4%) of kswapd CPU time. So ARCH_HAS_NONLEAF_PMD_YOUNG isn't
+that helpful.
+
+> If so, this might be
+> a good proof that arm64 also needs this hardware feature?
+> In short, I am curious how much the improvement in this patchset depends
+> on the hardware ability of NONLEAF_PMD_YOUNG.
+
+For data centers, I do think ARCH_HAS_NONLEAF_PMD_YOUNG has some value.
+In addition to cold/hot memory scanning, there are other use cases like
+dirty tracking, which can benefit from the accessed bit on non-leaf
+entries. I know some proprietary software uses this capability on x86
+for different purposes than this patchset does. And AFAIK, x86 is the
+only arch that supports this capability, e.g., risc-v and ppc can only
+set the accessed bit in PTEs.
+
+In fact, I've discussed this with one of the arm maintainers Will. So
+please check with him too if you are interested in moving forward with
+the idea. I might be able to provide with additional data if you need
+it to make a decision.
+
+Thanks.

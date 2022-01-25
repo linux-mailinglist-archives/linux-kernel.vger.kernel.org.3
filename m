@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D7549B9BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4E849B9C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238436AbiAYRI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:08:57 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:50914
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239428AbiAYRFe (ORCPT
+        id S239503AbiAYRJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:09:04 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:54582
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242612AbiAYRFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:05:34 -0500
+        Tue, 25 Jan 2022 12:05:38 -0500
 Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A96E73F1B3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 17:05:32 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9C5CA3F1D8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 17:05:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643130332;
-        bh=dSvKZ8AHHeBFaUwfnKaz2QA3fzKNbqhnfNH57EfO12U=;
+        s=20210705; t=1643130334;
+        bh=nMdW5v69q6Wohx/luhbyzlU9+wYmArcJIac8Q+rwqeU=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Type;
-        b=BOz5CwyW9SZaVU0hdxBLIug4WGNw7Zp8QeR7Qed1cjWli1KLDTH62t/hyQwE6s/sR
-         Rsz1a5dGdUHm6XTBoIbXiXMtYx8KIGS+w9GjfK4+d6HdKTns5PL+wYQHiIUV+160ZD
-         Y5FvpIyeSXwaj+L5kHWhS//bxTz6oW2we95h/jJLBZd5PbSqR9JE/C8GasI4WgqXVX
-         R2P3M3dRh86jjyZ8b43N8XyNniIvU+VdFh2B2FZP7JIHnYg3N8N7fRNA0XUWGAgSWM
-         UGvfQEKp1Ppo49x8sZLDUu12IN2ftn2aRJYoRXRURSg3W76XwlNlhuxCAVqxd08H/l
-         ktDejOOs/RM+g==
-Received: by mail-wm1-f71.google.com with SMTP id f7-20020a1cc907000000b0034b63f314ccso1772100wmb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:05:32 -0800 (PST)
+        b=qGDycotR9fy9D9pUTazcK1pdos+/bsTEs/cc6dTz3ntJ7jzGn3w7Z84CmF2QziLjc
+         3VloLuh0XkSWMHrQK3Xvk+SC6EmzX00hbrp1XH41UZt7PEmRkl6Ysgo/TrcTHQRzLj
+         3um5Ok3gdLi3fMKCcTkemmMnwBCESMVF2pjK7whAIhSTE6tWI//EhiEepJnXAtFeos
+         8gW8NXw8aZAjWHfcob+ekPhKtCLUfGjbpCaxXc4y2lfnQxIvEsTfOchVimvnbUhmbc
+         +e3OC7bxiXWqnh9Exyikloqaa6ZEB0pSud7TW3b5z/wAz2pOLxC02c0hHBoBc/PyW9
+         evZUG8yNloFLQ==
+Received: by mail-wm1-f71.google.com with SMTP id j18-20020a05600c1c1200b0034aeea95dacso1425578wms.8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:05:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dSvKZ8AHHeBFaUwfnKaz2QA3fzKNbqhnfNH57EfO12U=;
-        b=Ka9WOq+oTqCL1Q99kVZxkuL/QDtnHgfttq1cHrixEtRdPSYhVF0GmNQTqlv6QZrGbL
-         FA6Nu9gqFqGIY+5K0h/se09UBqTrOluU+EX1kkc0x0buBIJ7IpHsAeRn4eY26AwXRsWK
-         f9S+s/RuEMkX7QWFH9zYqGXoxmF0OmJ1I3p8y/D8stAREOavJm33t/RdNpujkY0vxGoK
-         Zk5uzu+5ij9QUEqNh7n3PpR29N3weI46Y+IbtTQTyppn79B3VEhqmPjA0XEkVItm6j4U
-         TeR+DUMNaMFgKfBeq4kaWYX66AjfJb9V8xJ6oKw0RL8r0zu1IBr/Qr8m2YnARy2109mE
-         hFBg==
-X-Gm-Message-State: AOAM533H21isASSYFu/PIwUiXXeCNZnkmfZAnwxrqA6cKEfcKhHEML2O
-        mgfjNXV+pwW2zgpAjV3+1dLK6BJA8YOtVD2wFUe01qiLcuEXXWEYVCuMy30n4n5U2FHgHY9c8Zp
-        +k503MSIeJq+EtalcM6/sRl5gDEtoqF/Smik+js+vPw==
-X-Received: by 2002:a1c:c915:: with SMTP id f21mr3793712wmb.39.1643130332352;
-        Tue, 25 Jan 2022 09:05:32 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy7hsKMSTS+c3tg8hbEizs0VHVpl83/TDWW7Ey8qOCr5k/EuXQApytnig+iht+MKtj+BSx35g==
-X-Received: by 2002:a1c:c915:: with SMTP id f21mr3793698wmb.39.1643130332208;
-        Tue, 25 Jan 2022 09:05:32 -0800 (PST)
+        bh=nMdW5v69q6Wohx/luhbyzlU9+wYmArcJIac8Q+rwqeU=;
+        b=btjhp430cOJW7QiHg8V712IwZE9xRIiSKK0a4Ylqbbhy6vdFEKiwa48ELhqCu1G1MR
+         RRQpvnXlmyRl81enMzJ6aGES+wMKxOCmND9qQY68fS+yEaRwHvcY0nzmXA7tbgMUjB1h
+         zt5mOQyng1s85rHdbtXu4ZUmV/2wBkVpuCfOuKKrAAmagEJffICUwDLZHIWHgsHmTqEm
+         uSuPrlNL8yF+AeciKusLzDI0l9G93r7C/oMaQ5rEj5HkgvRVy6wWlomVAk1PCBUIomzt
+         yWWltN/JK0MjdkNOQgFOqbJxQSRL1IXXv53wWJtBhsDty4puh3jxN+ksztynG8nYndvJ
+         RDQw==
+X-Gm-Message-State: AOAM533CQuzzuyAADZznrwmBQ12qfXuzsL+IQ8VCGVki+rG3DERqUhFt
+        tkxSYlToZ/im2CuOFQbW/i++rtfH8cRDytz3/8DXcSIRP9SLMT89TOoIXevA2xVZrUUZ3/yqGCc
+        BHHkH1k04K+AGqYN7pUb7zrkX+gQtN7dRukTpySbwyg==
+X-Received: by 2002:adf:e3cf:: with SMTP id k15mr14685562wrm.5.1643130333916;
+        Tue, 25 Jan 2022 09:05:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyDMNurXGEYwtfMsLt1TRMNkY4zf895J7er0VWSTdW1WADBBTbrJZhBCjzjcyuRZBB6Z7JRYg==
+X-Received: by 2002:adf:e3cf:: with SMTP id k15mr14685547wrm.5.1643130333723;
+        Tue, 25 Jan 2022 09:05:33 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id o15sm1082377wms.9.2022.01.25.09.05.31
+        by smtp.gmail.com with ESMTPSA id o15sm1082377wms.9.2022.01.25.09.05.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 09:05:31 -0800 (PST)
+        Tue, 25 Jan 2022 09:05:32 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+To:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         linux-samsung-soc@vger.kernel.org
-Subject: Re: (subset) [PATCH 1/3] ARM: dts: exynos: drop old thermal properties from Exynos4210
-Date:   Tue, 25 Jan 2022 18:04:54 +0100
-Message-Id: <164313029072.79782.14492454091056440886.b4-ty@canonical.com>
+Subject: Re: [PATCH] ARM: dts: exynos: use define for TMU clock on Exynos4412
+Date:   Tue, 25 Jan 2022 18:04:55 +0100
+Message-Id: <164313029072.79782.9597131661612342819.b4-ty@canonical.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220122132554.65192-1-krzysztof.kozlowski@canonical.com>
-References: <20220122132554.65192-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220122131457.63304-1-krzysztof.kozlowski@canonical.com>
+References: <20220122131457.63304-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -77,20 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 22 Jan 2022 14:25:52 +0100, Krzysztof Kozlowski wrote:
-> The samsung,tmu_gain and samsung,tmu_reference_voltage properties of
-> Exynos Thermal Management Unit driver are not used since April 2018.
-> They were removed with commit fccfe0993b5d ("thermal: exynos: remove
-> parsing of samsung,tmu_gain property") and commit 61020d189dbc
-> ("thermal: exynos: remove parsing of samsung, tmu_reference_voltage
-> property"), so drop them also from Exynos4210 DTS.
+On Sat, 22 Jan 2022 14:14:57 +0100, Krzysztof Kozlowski wrote:
+> Replace clock hard-coded number with a define from bindings.  No
+> functional change.
 > 
-> [...]
+> 
 
 Applied, thanks!
 
-[1/3] ARM: dts: exynos: drop old thermal properties from Exynos4210
-      commit: e20bd06fc421fba4099be51d3f56b9b1741b499b
+[1/1] ARM: dts: exynos: use define for TMU clock on Exynos4412
+      commit: 86955cb6ba16cd35323f498acbf0f07f8671c1b4
 
 Best regards,
 -- 

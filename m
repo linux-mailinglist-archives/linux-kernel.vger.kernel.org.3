@@ -2,54 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D3749B8AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A4B49B8AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:35:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350833AbiAYQcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:32:47 -0500
-Received: from relay033.a.hostedemail.com ([64.99.140.33]:55028 "EHLO
-        relay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230339AbiAYQ1I (ORCPT
+        id S1352492AbiAYQct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:32:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:44964 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350115AbiAYQ1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:27:08 -0500
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id B343B20B49;
-        Tue, 25 Jan 2022 16:27:05 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: andy.pont@sdcsystems.com) by omf03.hostedemail.com (Postfix) with ESMTPA id AC9B460018;
-        Tue, 25 Jan 2022 16:26:46 +0000 (UTC)
-From:   "Andy Pont" <andy.pont@sdcsystems.com>
-To:     "Mika Westerberg" <mika.westerberg@linux.intel.com>
-Subject: Re: mfd/intel_pmc_bxt: `intel_pmc_get_resources()` results in page fault
-Cc:     "Paul Menzel" <pmenzel@molgen.mpg.de>,
-        "Zha Qipeng" <qipeng.zha@intel.com>, linux-kernel@vger.kernel.org
-Date:   Tue, 25 Jan 2022 16:27:02 +0000
-Message-Id: <em1f48e0b2-2380-45ef-a0c1-2c38a477aa5f@andys-imac.local>
-In-Reply-To: <YfAbBIxDvfIYrgPV@lahna>
-References: <92c233bc-d1e0-b180-efaa-27e05fbd732b@molgen.mpg.de> <YfAIrkJaahKpCta6@lahna>
- <2ebf7968-a324-6f98-e178-45d4d19cfb48@molgen.mpg.de>
- <em755e7a07-2a6b-4b3a-9bc8-5f28857392dc@andys-imac.local>
- <YfAbBIxDvfIYrgPV@lahna>
-Reply-To: "Andy Pont" <andy.pont@sdcsystems.com>
-User-Agent: eM_Client/9.0.213.0
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Stat-Signature: 15t61ni5si7pduk38muar4jwqczjnbfg
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: AC9B460018
-X-Spam-Status: No, score=0.51
-X-Session-Marker: 616E64792E706F6E744073646373797374656D732E636F6D
-X-Session-ID: U2FsdGVkX18hczRln8ubIo+oUHgPCEJuuK9LKYzx7qA=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sdcsystems.com; h=from:to:subject:cc:date:message-id:in-reply-to:references:reply-to:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=9wmjJINB3StJwRzo6DcJFOmElYCYvCyrAov+YYo/AOw=; b=UoBgL1uDNyxFzn92lVOiaQKjNVNMx0sxZ6BDUIkhJHE0XNRxCtyp7/Q7ZFTjgvx9ZAv7f2lQildKXjRcuocVhG3JPJUiFdbwMUyGLe6IQiijA/tBB/IyFxm6f6xlTf8qAHWhyP27f+V22qNK0j7tthYnc/pfltJqu7uJOJrwsX/KoHjUiy2fwB//3zH+lu0Qr80k1sJeRXK2gGzNcPATieinwf3ACZxqAb2B61MJxxbNdl5kUQoLUayh4QOBn8eViMmQ2JWwBfTGOqerUpy3HHpSsSAiD68hPD6WMTjXd4S9sk5UTq8GtkeFeAqfiEyolCSHje7yT8xUFxu5MF5KzQ==
-X-HE-Tag: 1643128006-412409
+        Tue, 25 Jan 2022 11:27:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32D2E61754;
+        Tue, 25 Jan 2022 16:27:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8017C340E0;
+        Tue, 25 Jan 2022 16:27:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643128058;
+        bh=codRe+0ce2jhIVpOFlFMM/+SmveQjryatk3nmIhBJqM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Os49opvaWLapvJLEp0pWKPiSG1ucqnGoKjidLNPh4gSsTSNUH8fvpEUUjTHQE4rI6
+         jWt+PAwC2mVHE7tVpvHR1jT/ipdWsrIpmTAhW+cpncnzPDC0xkdgJHjZAbM2NQ8Iwx
+         7cLnaTZ4r/NdaMgNanRi8LuRoa1b40mNW+kMoT1Q=
+Date:   Tue, 25 Jan 2022 17:27:35 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: review for 5.16.3-rc2
+Message-ID: <YfAk90OPjlpjruV5@kroah.com>
+References: <0af17d6952b3677dcd413fefa74b086d5ffb474b.camel@rajagiritech.edu.in>
+ <YfAKYWOMdGJ0NxjE@kroah.com>
+ <CAG=yYwksvQmEsfRyFiQTbSxUL39WGf7ryHaywtAxgdL1Nt67OQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG=yYwksvQmEsfRyFiQTbSxUL39WGf7ryHaywtAxgdL1Nt67OQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mika,=0A=0A>Thanks! The dump looks OK to me wrt. the PMC device. Howe=
-ver, I think I=0A>found the bug.=0A>=0A>Can you try if the below hack fixes =
-the issue?=0AI=E2=80=99ll give the patch a test and let you know how I get =
-on.=0A=0AWhich fields within the ACPI dump are you looking at?  When we bo=
-ot the =0Asame hardware platform / Ubuntu image with the stock AMI BIOS the=
-n we =0Adon=E2=80=99t see the kernel oops.=0A=0A-Andy.=0A
+On Tue, Jan 25, 2022 at 09:49:00PM +0530, Jeffrin Thalakkottoor wrote:
+> On Tue, Jan 25, 2022 at 8:04 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Jan 25, 2022 at 06:15:46PM +0530, Jeffrin Jose T wrote:
+> > > hello greg,
+> > >
+> > > compile failed for  5.16.3-rc2 related.
+> > > a relevent file attached.
+> > >
+> > > Tested-by : Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+> >
+> > But it failed for you, how did you test it?
+> 
+> i compiled  5.16.3-rc2  related to "make localmodconfig" and  "make  -j4"
 
+So it somehow failed?
+
+> >
+> > >
+> > >
+> >
+> > >       char *                     typetab;              /*    24     8 */
+> > >
+> > >       /* size: 32, cachelines: 1, members: 4 */
+> > >       /* sum members: 28, holes: 1, sum holes: 4 */
+> > >       /* last cacheline: 32 bytes */
+> > > };
+> > > struct klp_modinfo {
+> > >       Elf64_Ehdr                 hdr;                  /*     0    64 */
+> > >       /* --- cacheline 1 boundary (64 bytes) --- */
+> > >       Elf64_Shdr *               sechdrs;              /*    64     8 */
+> > >       char *                     secstrings;           /*    72     8 */
+> > >       unsigned int               symndx;               /*    80     4 */
+> > >
+> > >       /* size: 88, cachelines: 2, members: 4 */
+> > >       /* padding: 4 */
+> > >       /* last cacheline: 24 bytes */
+> > > };
+> > > Segmentation fault
+> >
+> > What "faulted"?  Look higher up in the log please.
+> 
+> a top view...
+> 
+>   CALL    scripts/atomic/check-atomics.sh
+>   CALL    scripts/checksyscalls.sh
+>   CHK     include/generated/compile.h
+>   GEN     .version
+>   CHK     include/generated/compile.h
+>   UPD     include/generated/compile.h
+>   CC      init/version.o
+>   AR      init/built-in.a
+>   LD      vmlinux.o
+>   MODPOST vmlinux.symvers
+>   MODINFO modules.builtin.modinfo
+>   GEN     modules.builtin
+>   LD      .tmp_vmlinux.btf
+>   BTF     .btf.vmlinux.bin.o
+> struct list_head {
+>     struct list_head *         next;                 /*     0     8 */
+>     struct list_head *         prev;                 /*     8     8 */
+> 
+>     /* size: 16, cachelines: 1, members: 2 */
+>     /* last cacheline: 16 bytes */
+> };
+> struct hlist_head {
+>     struct hlist_node *        first;                /*     0     8 */
+> 
+>     /* size: 8, cachelines: 1, members: 1 */
+>     /* last cacheline: 8 bytes */
+> };
+> struct hlist_node {
+>     struct hlist_node *        next;                 /*     0     8 */
+>     struct hlist_node * *      pprev;                /*     8     8 */
+> 
+>     /* size: 16, cachelines: 1, members: 2 */
+>     /* last cacheline: 16 bytes */
+> };
+> struct callback_head {
+>     struct callback_head *     next;                 /*     0     8 */
+>     void                       (*func)(struct callback_head *); /*
+> 8     8 */
+> .
+> .
+> .
+> .
+> .
+> .
+
+I do not know what is failing, there is no error message here.  Does
+5.16.2 build properly for you?
+
+thanks,
+
+greg k-h

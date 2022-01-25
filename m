@@ -2,191 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3343F49BE3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC5549BE46
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiAYWMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:12:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiAYWMb (ORCPT
+        id S233591AbiAYWOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:14:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45284 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230384AbiAYWOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:12:31 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683AEC06173B;
-        Tue, 25 Jan 2022 14:12:31 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id d12-20020a17090a628c00b001b4f47e2f51so3024574pjj.3;
-        Tue, 25 Jan 2022 14:12:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3Yoct/VPi8jO4D/aE/BTbIZHXj0319KiEEnpzVlWesc=;
-        b=NdJsKEOryeOjv55P/Tg1skfzUozfpfJ96/zwSoGpshVNSf8710X9EeTECXaJzizESG
-         NEynU3wFfTM8IeLHt1XIw0VxzJyPge2pKzMDApLeocReSiIDdySmrKoYyC79z24YdAbw
-         DuQHLQaEVBQajp0juWw36libRC6KC8eErpRjoEpnLxhRD5xYfCP5p8Qbl1ipkpVft5in
-         p7E6Ab/nYiiUziawFyQJ6EoOr0OxGkkqgu3DoORZ9gaC39YRA2tPBqt7FoE2xwDLxkmu
-         aZeJMiOm0bEknBFJVo1YZwAoHPKoCQOBCUtAUPOqsGNIW5fEHvrYJ5qAg/I53mcx96K3
-         ZbuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3Yoct/VPi8jO4D/aE/BTbIZHXj0319KiEEnpzVlWesc=;
-        b=1Dy753UMtoErmR8QdZONaP4tBCPK2wrWuvbb2qy6KRhXk2vQgZ1sepfgAi9MbIklso
-         3vNlfVpsT/CxeJNVRs5NNq9mwU8lqm3Qws86u1nMR+hwB/hROlIo/QDGXmJg9JcNXw3b
-         Azq11w6WfTr1v6/40G5wB9YbLLKH2A/V5fULUheEJXnMcZyQB8YiV3zsyKjkVRviJZt8
-         FBxd+UfJc7Tp1TZVN2K+OIDbg7BlObp9xPFzTaV9WeWY/Rmc3qF2Wsr8eRMNPtm/T1Vl
-         cx5Kxi44jjYnxe1e+zxa2WmhGEPGA5k+nNdtXC7C5Posf0sNG1I+i3FrYG22YUahdqqv
-         U9Lw==
-X-Gm-Message-State: AOAM5315T5/4qiZL9HFkJB+TGXL206KLY7FgUc2ExM+x7s94xi641lZI
-        d8abGLyC+jsOxWLt3f0iVmN66EBypvI=
-X-Google-Smtp-Source: ABdhPJwFyyb6PnmCgIP2b2dxTy7MQtCoNk1TASRxCjYSPHT75cyJXbe/A/BcNx0Ffv3ulyFRvAAr3Q==
-X-Received: by 2002:a17:902:ecca:b0:14b:4bef:a2c7 with SMTP id a10-20020a170902ecca00b0014b4befa2c7mr11637882plh.25.1643148750906;
-        Tue, 25 Jan 2022 14:12:30 -0800 (PST)
-Received: from jeffreyji1.c.googlers.com.com (173.84.105.34.bc.googleusercontent.com. [34.105.84.173])
-        by smtp.gmail.com with ESMTPSA id q13sm23811pfj.63.2022.01.25.14.12.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 14:12:30 -0800 (PST)
-From:   Jeffrey Ji <jeffreyjilinux@gmail.com>
-X-Google-Original-From: Jeffrey Ji <jeffreyji@google.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, jeffreyji <jeffreyji@google.com>
-Subject: [PATCH v3 net-next] net-core: add InMacErrors counter
-Date:   Tue, 25 Jan 2022 22:12:14 +0000
-Message-Id: <20220125221214.2480419-1-jeffreyji@google.com>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+        Tue, 25 Jan 2022 17:14:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B03CDB81B6B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:14:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56ED3C340E0;
+        Tue, 25 Jan 2022 22:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643148856;
+        bh=wzQ7De1OASBwcj3eJi86mBXPWkiGQw8ikhGXdFZuX4s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CD6N+fucU5W+Oe0l9yslZOos70un8YyAOxgmEVyiljOD5LNiUrrshae3qKmqz/UfW
+         zRo5ffiEfJbWjIcVeOeKFBVlfi8vThLQ4Dp7jTb25WDhtEwOg+GO8zQJV0sgnYoc7B
+         zUBR3soAR5Uil1cGxJO4zU/P2+yKngc3sDIJFNcBvovrpmW1Iv9kvRVwMBCQVDwATl
+         hF6ATYuwsiQq+b8Tc4GiWzJMQISjrXzgNWvEqpruia1PUZaQu8HmvOW10mpVu3jwoz
+         Oo1lIDqQOZbnTen10a52SgQm6goBIQ4PCtwIU9xzZ5vRJTkrP6ydheCM6WG71/qvO3
+         j2hYTsaW5tIcg==
+Date:   Tue, 25 Jan 2022 22:13:58 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Harry Austen <harryausten@hotmail.co.uk>
+Cc:     linux-f2fs-devel@lists.sourceforge.net, jaegeuk@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix fileattr_set unsupported attribute
+ handling
+Message-ID: <YfB2Jqs3RGRnH63R@gmail.com>
+References: <AM6PR10MB2838873D61CE1C0DB91EEDB9FA5C9@AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM>
+ <Ye79OLCFLR3H+GnY@gmail.com>
+ <AM6PR10MB2838705554FCB6ACE86F12BBFA5F9@AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM6PR10MB2838705554FCB6ACE86F12BBFA5F9@AM6PR10MB2838.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jeffreyji <jeffreyji@google.com>
+On Tue, Jan 25, 2022 at 10:01:49PM +0000, Harry Austen wrote:
+> On Monday, 24 January 2022 19:25:44 GMT Eric Biggers wrote:
+> > On Sat, Jan 22, 2022 at 12:59:03PM +0000, Harry Austen wrote:
+> > > FS_IOC_SETFLAGS ioctl should return EOPNOTSUPP if the file attribute
+> > > (e.g. FS_NOCOW_FL) is not supported, rather than silently ignoring it
+> > > and returning success.
+> > > 
+> > > Fixes: 9b1bb01c8ae7 (f2fs: convert to fileattr)
+> > > Signed-off-by: Harry Austen <harryausten@hotmail.co.uk>
+> > > ---
+> > > 
+> > >  fs/f2fs/file.c | 3 +--
+> > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > 
+> > > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > > index 92ec2699bc85..061bf35c2582 100644
+> > > --- a/fs/f2fs/file.c
+> > > +++ b/fs/f2fs/file.c
+> > > @@ -3085,9 +3085,8 @@ int f2fs_fileattr_set(struct user_namespace
+> > > *mnt_userns,> 
+> > >  		return -EIO;
+> > >  	
+> > >  	if (!f2fs_is_checkpoint_ready(F2FS_I_SB(inode)))
+> > >  	
+> > >  		return -ENOSPC;
+> > > 
+> > > -	if (fsflags & ~F2FS_GETTABLE_FS_FL)
+> > > +	if (fsflags & ~F2FS_SETTABLE_FS_FL)
+> > > 
+> > >  		return -EOPNOTSUPP;
+> > > 
+> > > -	fsflags &= F2FS_SETTABLE_FS_FL;
+> > > 
+> > >  	if (!fa->flags_valid)
+> > >  	
+> > >  		mask &= FS_COMMON_FL;
+> > 
+> > This is intentional, and matches what ext4 does; see the comment in the ext4
+> > implementation of this:
+> > 
+> >         /*
+> >          * chattr(1) grabs flags via GETFLAGS, modifies the result and
+> >          * passes that to SETFLAGS. So we cannot easily make SETFLAGS
+> >          * more restrictive than just silently masking off visible but
+> >          * not settable flags as we always did.
+> >          */
+> 
+> Ah, my apologies. I thought it looked a little too obvious. Clearly I
+> should have looked at the ext4 code. Please disregard this patch.
+> 
+> Is there anything else that could be done to improve unsettable
+> attribute handling? For example, is there a reason FS_NOCOW_FL is
+> gettable but not settable? Could it be added to the settable list?
 
-Increment InMacErrors counter when packet dropped due to incorrect dest
-MAC addr.
+A lot of flags are gettable by FS_IOC_GETFLAGS but not settable by
+FS_IOC_SETFLAGS, typically because they can only be set through a dedicated
+interface.  For example, the encrypt flag can only be set using
+FS_IOC_SET_ENCRYPTION_POLICY, or via inheritance.
 
-An example when this drop can occur is when manually crafting raw
-packets that will be consumed by a user space application via a tap
-device. For testing purposes local traffic was generated using trafgen
-for the client and netcat to start a server
+> > 
+> > Also, even if this patch was correct, the Fixes tag is wrong.
+> 
+> Having looked at this a bit more, I assume you are saying this due to
+> the missing double quotes around the commit summary? (just so I know for
+> next time as this is my first attempt at sending a kernel patch)
+> 
 
-example output from nstat:
-\~# nstat -a | grep InMac
-Ip6InMacErrors                  0                  0.0
-IpExtInMacErrors                1                  0.0
+There's that, but more importantly the commit you listed is wrong.  The relevant
+code was added by an earlier commit, and that commit just moved it.
 
-Tested: Created 2 netns, sent 1 packet using trafgen from 1 to the other
-with "{eth(daddr=$INCORRECT_MAC...}", verified that nstat showed the
-counter was incremented.
-
-Change-Id: If820cc676807ba8438a9034873df3ef2e0b07213
-Signed-off-by: jeffreyji <jeffreyji@google.com>
----
- include/linux/skbuff.h    |  1 +
- include/uapi/linux/snmp.h |  1 +
- net/ipv4/ip_input.c       |  7 +++++--
- net/ipv4/proc.c           |  1 +
- net/ipv6/ip6_input.c      | 12 +++++++-----
- net/ipv6/proc.c           |  1 +
- 6 files changed, 16 insertions(+), 7 deletions(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index bf11e1fbd69b..04a36352f677 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -320,6 +320,7 @@ enum skb_drop_reason {
- 	SKB_DROP_REASON_TCP_CSUM,
- 	SKB_DROP_REASON_TCP_FILTER,
- 	SKB_DROP_REASON_UDP_CSUM,
-+	SKB_DROP_REASON_BAD_DEST_MAC,
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/uapi/linux/snmp.h b/include/uapi/linux/snmp.h
-index 904909d020e2..ac2fac12dd7d 100644
---- a/include/uapi/linux/snmp.h
-+++ b/include/uapi/linux/snmp.h
-@@ -57,6 +57,7 @@ enum
- 	IPSTATS_MIB_ECT0PKTS,			/* InECT0Pkts */
- 	IPSTATS_MIB_CEPKTS,			/* InCEPkts */
- 	IPSTATS_MIB_REASM_OVERLAPS,		/* ReasmOverlaps */
-+	IPSTATS_MIB_INMACERRORS,		/* InMacErrors */
- 	__IPSTATS_MIB_MAX
- };
- 
-diff --git a/net/ipv4/ip_input.c b/net/ipv4/ip_input.c
-index 3a025c011971..379ef6b46920 100644
---- a/net/ipv4/ip_input.c
-+++ b/net/ipv4/ip_input.c
-@@ -441,8 +441,11 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
- 	/* When the interface is in promisc. mode, drop all the crap
- 	 * that it receives, do not try to analyse it.
- 	 */
--	if (skb->pkt_type == PACKET_OTHERHOST)
--		goto drop;
-+	if (skb->pkt_type == PACKET_OTHERHOST) {
-+		__IP_INC_STATS(net, IPSTATS_MIB_INMACERRORS);
-+		kfree_skb_reason(skb, SKB_DROP_REASON_BAD_DEST_MAC);
-+		return NULL;
-+	}
- 
- 	__IP_UPD_PO_STATS(net, IPSTATS_MIB_IN, skb->len);
- 
-diff --git a/net/ipv4/proc.c b/net/ipv4/proc.c
-index f30273afb539..dfe0a1dbf8e9 100644
---- a/net/ipv4/proc.c
-+++ b/net/ipv4/proc.c
-@@ -117,6 +117,7 @@ static const struct snmp_mib snmp4_ipextstats_list[] = {
- 	SNMP_MIB_ITEM("InECT0Pkts", IPSTATS_MIB_ECT0PKTS),
- 	SNMP_MIB_ITEM("InCEPkts", IPSTATS_MIB_CEPKTS),
- 	SNMP_MIB_ITEM("ReasmOverlaps", IPSTATS_MIB_REASM_OVERLAPS),
-+	SNMP_MIB_ITEM("InMacErrors", IPSTATS_MIB_INMACERRORS),
- 	SNMP_MIB_SENTINEL
- };
- 
-diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-index 80256717868e..f6245fba7699 100644
---- a/net/ipv6/ip6_input.c
-+++ b/net/ipv6/ip6_input.c
-@@ -149,15 +149,17 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
- 	u32 pkt_len;
- 	struct inet6_dev *idev;
- 
--	if (skb->pkt_type == PACKET_OTHERHOST) {
--		kfree_skb(skb);
--		return NULL;
--	}
--
- 	rcu_read_lock();
- 
- 	idev = __in6_dev_get(skb->dev);
- 
-+	if (skb->pkt_type == PACKET_OTHERHOST) {
-+		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INMACERRORS);
-+		rcu_read_unlock();
-+		kfree_skb_reason(skb, SKB_DROP_REASON_BAD_DEST_MAC);
-+		return NULL;
-+	}
-+
- 	__IP6_UPD_PO_STATS(net, idev, IPSTATS_MIB_IN, skb->len);
- 
- 	if ((skb = skb_share_check(skb, GFP_ATOMIC)) == NULL ||
-diff --git a/net/ipv6/proc.c b/net/ipv6/proc.c
-index d6306aa46bb1..76e6119ba558 100644
---- a/net/ipv6/proc.c
-+++ b/net/ipv6/proc.c
-@@ -84,6 +84,7 @@ static const struct snmp_mib snmp6_ipstats_list[] = {
- 	SNMP_MIB_ITEM("Ip6InECT1Pkts", IPSTATS_MIB_ECT1PKTS),
- 	SNMP_MIB_ITEM("Ip6InECT0Pkts", IPSTATS_MIB_ECT0PKTS),
- 	SNMP_MIB_ITEM("Ip6InCEPkts", IPSTATS_MIB_CEPKTS),
-+	SNMP_MIB_ITEM("Ip6InMacErrors", IPSTATS_MIB_INMACERRORS),
- 	SNMP_MIB_SENTINEL
- };
- 
--- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+- Eric

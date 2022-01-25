@@ -2,112 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED8749B3A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F5849B38B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382772AbiAYMPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
+        id S1355336AbiAYMOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444435AbiAYMKz (ORCPT
+        with ESMTP id S1444538AbiAYMKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Jan 2022 07:10:55 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D80C061747
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 04:08:44 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id d10so30328160eje.10
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 04:08:44 -0800 (PST)
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7307C061753;
+        Tue, 25 Jan 2022 04:09:02 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id e17so3295748ljk.5;
+        Tue, 25 Jan 2022 04:09:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bnTeOdUZ1f18AewsYNZJ5wSThzHFTuycY7IVqVPOkq4=;
-        b=ZvHEkk5xUxPuGXPnF5qSuvyzgrOJuihK9Y7jz5RAAisK5c7Llx+i3W5Cim8Es9HwKQ
-         KeR7WV4260zLaoLr9S7z5ZjLj6L0PiqoTCS+AaxkLgx63ttkPdzm1qZaLEuVgTlw3SY4
-         +TkggyDT1NjuTNf4ubfR+Hi77GRyFzO6PGoKcAAbp3bwQpcPov13FdXRmDc5er8IYhQa
-         7U3WamVIW5u0uoCphTZzxwiCUsanHATz6flPKGpHH5M4fXs0DUYxoQ7soSiu2vbQLfyM
-         xhM9OYRvxgwI0BwQeIl69WroDpTU3u+6NiYm6qikHVDqAKXPFdctOQQSZzIQINkai3md
-         a7sw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=jYOvh3TluQrcjkgjx/socsMLlC7b20Fo9pmrYGjtKZg=;
+        b=e50pbGE8w0eIJVRReXoEZVlQD4WcZK070mmTC4q8/+TTueNm/GMXLNhx9y45Qn7pw4
+         3QN+rL4MuXizPS4/DiGvDnLrR2hzhZGpfizBtgxZkXcAVdNaM6ggpYxgV6WcklQczb9x
+         fb3nicof9MjMt/YxSlFv4dpx5t23LRTM504/diB50diJnpn0aNkW1pu3pO4zylBw6Aes
+         OTJFU28m8O5V9ohzYoFxI4FZNIktw2CKVOkIqeDHvNmbcghbjhGyeGR9TIS/jMuFhlF5
+         e2VyU+246N0qkNcHwErKtrUPGOfBbNCxUKcNmuQn+28pH4N5HGEwda9Yt+odv8k+s3jz
+         Y4jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bnTeOdUZ1f18AewsYNZJ5wSThzHFTuycY7IVqVPOkq4=;
-        b=2B50uuNrZDRKJX8h3wIW4KjnEXSz1GkxB+7FLqbMTUWEaYXzk8H8aBWmok90c188od
-         Io00m+M287pbWCXrx/HS0/FDkL7Z1Mt3lL6G2JY1ETU19v5JH3CFhBaZ+Ba8LaWcd6Tm
-         PILP4YMpwH8eJSZY9PTkiq2XMWStAfn9B4BaRONI+zNaktz1i7ak3O1VO12Y16jr3Xgb
-         m4X1g+mOlKWfheZ9o0T2zJteXdy0Iry/WIkULqZk6CZibpBTvbU8x8wnxzL4My3N7PJq
-         JrtWnU3BwHOhFapbLqjflgxICnZP4seNjkm2kNCIGAlayKIGnUv1JDb7XcGhB7HvuPE0
-         3EwQ==
-X-Gm-Message-State: AOAM5316+7KP00KAlepNcs/3lYtGGO/qDUoZQ0r+NuatOqS4bIRS1Qw5
-        0nBhf6QBDMJWkvSH7ghxJrrMyu7MuPJICq+NXshN8A==
-X-Google-Smtp-Source: ABdhPJz2+mIM5zA6wUdvIdNw7dCbU7p6GO73rgF0MZ2UBLSc7rUHX6MYpPx/oW8XBB/mbeH2j2BN4/3E3HfcMDU6OGs=
-X-Received: by 2002:a17:907:3f84:: with SMTP id hr4mr16347608ejc.443.1643112522894;
- Tue, 25 Jan 2022 04:08:42 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jYOvh3TluQrcjkgjx/socsMLlC7b20Fo9pmrYGjtKZg=;
+        b=NvRuameHfATFJt4l0oi6w5sFket6Z6eqaEty37yMsaukAMHnHhOKGBYuWWfW7VOdH8
+         hHRoPbDE4zfLKo8Fk/vFqafLctzoOzemxnyxiq+C1WS/JqzuDm1+kVU/ycwFQDwSVbbn
+         FR7gW24IDPFQOub2iNz6fs6E2QUTEVlSaCwwucjjCl/65eOXBs3yHE7WnpZDjz2+Ka31
+         cRxxy0fqPBuIAJ0ufzQpBXnQBcZGAmEKiNmk6bMWwv1pAQDUGFPDqZViyjgUcGO9Hb52
+         uSN5Vxu5ZLk4SPTmKlsxs45rfSeQXGWWuLeKxvlAZf55u32aO2Q+XpTr6+YBLWNjYCNp
+         3KCw==
+X-Gm-Message-State: AOAM5325OSL3f7ut0B19G+V6LaLqgelP1lOg+s7JBheUZkGGfo7XRPtJ
+        HXdqtSbYgNiDbH78TH5hiGE=
+X-Google-Smtp-Source: ABdhPJwVub3zDKTOB+wjBLNORR7sCU9xt8UfpG/X3/KvRRBcVKHVtkjQDkJBg0tA78MsiLJC2g6uDA==
+X-Received: by 2002:a2e:a5c9:: with SMTP id n9mr14649555ljp.220.1643112540915;
+        Tue, 25 Jan 2022 04:09:00 -0800 (PST)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id y11sm1168942ljj.122.2022.01.25.04.08.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 04:09:00 -0800 (PST)
+Message-ID: <455f4360-34fe-7fee-66d5-fd945fe1e086@gmail.com>
+Date:   Tue, 25 Jan 2022 13:08:58 +0100
 MIME-Version: 1.0
-References: <1643110372-85470-1-git-send-email-john.garry@huawei.com> <1643110372-85470-2-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1643110372-85470-2-git-send-email-john.garry@huawei.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Tue, 25 Jan 2022 13:08:31 +0100
-Message-ID: <CAMGffEn1mCb=EmspNnRw_H0es5ZfBWMrZj9G8J7y=_YH3PdF6Q@mail.gmail.com>
-Subject: Re: [PATCH 01/16] scsi: libsas: Use enum for response frame DATAPRES field
-To:     John Garry <john.garry@huawei.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        artur.paszkiewicz@intel.com, jinpu.wang@ionos.com,
-        chenxiang66@hisilicon.com, Ajish.Koshy@microchip.com,
-        yanaijie@huawei.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com, liuqi115@huawei.com, Viswas.G@microchip.com,
-        damien.lemoal@opensource.wdc.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH 6/8] nvmem: transformations: ethernet address offset
+ support
+To:     Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+References: <20211228142549.1275412-1-michael@walle.cc>
+ <20211228142549.1275412-7-michael@walle.cc>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20211228142549.1275412-7-michael@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 12:38 PM John Garry <john.garry@huawei.com> wrote:
->
-> As defined in table 126 of the SAS spec 1.1, use an enum for the DATAPRES
-> field, which makes reading the code easier.
->
-> Signed-off-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Thx!
+On 28.12.2021 15:25, Michael Walle wrote:
+> An nvmem cell might just contain a base MAC address. To generate a
+> address of a specific interface, add a transformation to add an offset
+> to this base address.
+> 
+> Add a generic implementation and the first user of it, namely the sl28
+> vpd storage.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
 > ---
->  drivers/scsi/libsas/sas_task.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/scsi/libsas/sas_task.c b/drivers/scsi/libsas/sas_task.c
-> index 2966ead1d421..7240fd22b154 100644
-> --- a/drivers/scsi/libsas/sas_task.c
-> +++ b/drivers/scsi/libsas/sas_task.c
-> @@ -7,6 +7,12 @@
->  #include <scsi/sas.h>
->  #include <scsi/libsas.h>
->
-> +enum {
-> +       NO_DATA = 0,
-> +       RESPONSE_DATA = 1,
-> +       SENSE_DATA = 2,
-> +};
+>   drivers/nvmem/transformations.c | 45 +++++++++++++++++++++++++++++++++
+>   1 file changed, 45 insertions(+)
+> 
+> diff --git a/drivers/nvmem/transformations.c b/drivers/nvmem/transformations.c
+> index 61642a9feefb..15cd26da1f83 100644
+> --- a/drivers/nvmem/transformations.c
+> +++ b/drivers/nvmem/transformations.c
+> @@ -12,7 +12,52 @@ struct nvmem_transformations {
+>   	nvmem_cell_post_process_t pp;
+>   };
+>   
+> +/**
+> + * nvmem_transform_mac_address_offset() - Add an offset to a mac address cell
+> + *
+> + * A simple transformation which treats the index argument as an offset and add
+> + * it to a mac address. This is useful, if the nvmem cell stores a base
+> + * ethernet address.
+> + *
+> + * @index: nvmem cell index
+> + * @data: nvmem data
+> + * @bytes: length of the data
+> + *
+> + * Return: 0 or negative error code on failure.
+> + */
+> +static int nvmem_transform_mac_address_offset(int index, unsigned int offset,
+> +					      void *data, size_t bytes)
+> +{
+> +	if (bytes != ETH_ALEN)
+> +		return -EINVAL;
 > +
->  /* fill task_status_struct based on SSP response frame */
->  void sas_ssp_task_response(struct device *dev, struct sas_task *task,
->                            struct ssp_response_iu *iu)
-> @@ -15,11 +21,11 @@ void sas_ssp_task_response(struct device *dev, struct sas_task *task,
->
->         tstat->resp = SAS_TASK_COMPLETE;
->
-> -       if (iu->datapres == 0)
-> +       if (iu->datapres == NO_DATA)
->                 tstat->stat = iu->status;
-> -       else if (iu->datapres == 1)
-> +       else if (iu->datapres == RESPONSE_DATA)
->                 tstat->stat = iu->resp_data[3];
-> -       else if (iu->datapres == 2) {
-> +       else if (iu->datapres == SENSE_DATA) {
->                 tstat->stat = SAS_SAM_STAT_CHECK_CONDITION;
->                 tstat->buf_valid_size =
->                         min_t(int, SAS_STATUS_BUF_SIZE,
-> --
-> 2.26.2
->
+> +	if (index < 0)
+> +		return -EINVAL;
+> +
+> +	if (!is_valid_ether_addr(data))
+> +		return -EINVAL;
+> +
+> +	eth_addr_add(data, index);
+> +
+> +	return 0;
+> +}
+> +
+> +static int nvmem_kontron_sl28_vpd_pp(void *priv, const char *id, int index,
+> +				     unsigned int offset, void *data,
+> +				     size_t bytes)
+> +{
+> +	if (!id)
+> +		return 0;
+> +
+> +	if (!strcmp(id, "mac-address"))
+> +		return nvmem_transform_mac_address_offset(index, offset, data,
+> +							  bytes);
+> +
+> +	return 0;
+> +}
+> +
+>   static const struct nvmem_transformations nvmem_transformations[] = {
+> +	{ .compatible = "kontron,sl28-vpd", .pp = nvmem_kontron_sl28_vpd_pp },
+>   	{}
+>   };
+
+I think it's a rather bad solution that won't scale well at all.
+
+You'll end up with a lot of NVMEM device specific strings and code in a
+NVMEM core.
+
+You'll have a lot of duplicated code (many device specific functions
+calling e.g. nvmem_transform_mac_address_offset()).
+
+I think it also ignores fact that one NVMEM device can be reused in
+multiple platforms / device models using different (e.g. vendor / device
+specific) cells.
+
+
+What if we have:
+1. Foo company using "kontron,sl28-vpd" with NVMEM cells:
+    a. "mac-address"
+    b. "mac-address-2"
+    c. "mac-address-3"
+2. Bar company using "kontron,sl28-vpd" with NVMEM cell:
+    a. "mac-address"
+
+In the first case you don't want any transformation.
+
+
+If you consider using transformations for ASCII formats too then it
+causes another conflict issue. Consider two devices:
+
+1. Foo company device with BIN format of MAC
+2. Bar company device with ASCII format of MAC
+
+Both may use exactly the same binding:
+
+partition@0 {
+         compatible = "nvmem-cells";
+         reg = <0x0 0x100000>;
+         label = "bootloader";
+
+         #address-cells = <1>;
+         #size-cells = <1>;
+
+         mac-address@100 {
+                 reg = <0x100 0x6>;
+         };
+};
+
+how are you going to handle them with proposed implementation? You can't
+support both if you share "nvmem-cells" compatible string.
+
+
+I think that what can solve those problems is assing "compatible" to
+NVMEM cells.
+
+Let me think about details of that possible solution.

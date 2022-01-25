@@ -2,77 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 855AC49BADC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646FF49BADE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358664AbiAYSBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
+        id S1385461AbiAYSCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357892AbiAYR7g (ORCPT
+        with ESMTP id S1386967AbiAYR7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:59:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF19C061751;
-        Tue, 25 Jan 2022 09:59:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 679FF614F1;
-        Tue, 25 Jan 2022 17:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 634A3C340E0;
-        Tue, 25 Jan 2022 17:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643133574;
-        bh=k21UjJLZbebZ1k0oSRvA1Q+UR3HKMKDNhfsWhlor4lc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OjUVEEPp1xSLAGSKZxsmxPapYBkRTBVU+1ocosZ4VvVMQ7XrHKwkcTdDqkZmyCO7r
-         h5wXBoj8iEhWsHZGDt8H5oN7/fTbuiaAltCr8l4qYTfKoYwkMZu/jVqUOsyXcDPnk4
-         JUEC0Wrt/GGRizfpoQQBXaa/3kLCYpj5w4xVM/Xg30bphX9vpfnrrfM1O2irroNTvD
-         xUuTETbr3OGfYla94YYk397f6jTYjfXS2Kh33g9w0IdwKeCuqDGf8zcj3I/YZgu91k
-         Utl4SXvy33Wguo84gW1pWT3eFzhOFJrR3G5X63FVAy2+uuBcDAwJ9nFur56gSUsctv
-         gyMAQA3wo0rGg==
-Date:   Tue, 25 Jan 2022 09:59:33 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH][next] net: mana: Use struct_size() helper in
- mana_gd_create_dma_region()
-Message-ID: <20220125095933.79ba895c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <BYAPR21MB127022573CE9A4158B2317E9BF5E9@BYAPR21MB1270.namprd21.prod.outlook.com>
-References: <20220124214347.GA24709@embeddedor>
-        <BYAPR21MB127022573CE9A4158B2317E9BF5E9@BYAPR21MB1270.namprd21.prod.outlook.com>
+        Tue, 25 Jan 2022 12:59:53 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34B4C061753
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:59:52 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id t9so6215666lji.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:59:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lFjB3Wm/k6WQfraTITgg2GtwyUa0VJgZe+4Lv6O2Co4=;
+        b=XC5zj1EbYhH7i02SUszkuxdEq0CFUvpTJK9gm5UwhigE44rfmwdE6x6nljyc4wBmr8
+         +9gzi8AOlUFfPFKEFqIwj+klWB2qDZbQlAPOxGka+SkqcGN9CjTVC/vwS1V1i/oD0S3+
+         S8hPQ3oIKDhd1uMCbsp5GLhly7UnWipGCxHLSRRYGY8TEOKQGZgJPMj5E+YcrG3H7ut5
+         7mFlRRRHYV3rnD9QBRZtPiCyULiclVVv7bpi9AsacwAYK3p7HDPXTtboG07mH0LllT/Y
+         nGLk5GMhdQNROjEBLCxP4tUiMaaqyA9Dy065MJcIDkpo5ihz6CFmqFHJiUd1/eegzCxE
+         pVrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lFjB3Wm/k6WQfraTITgg2GtwyUa0VJgZe+4Lv6O2Co4=;
+        b=7GMlMER7TNkYZEFRyO2YR1AAJrBVw+rzbf2B3zTFRHOOgSMFH5IJ+s/eOZmVCBnKuX
+         WTCWnBcyXORJH0/OaNpxSC0uJCdIV/bJEIBQmLDyWMp9nDOQhH6NI+C50d5zChzvTpZa
+         JrmDEyySWDrO/c7Wj2I8+PJSfpsPyI/ri0QknyG4OePjTVBnyPVP8vRD9DQNLxFvosH0
+         25Y46QF76lkjYgEmOpyzGQ5z2Q7B59+fxpbZ5dO1OMV707CCgRlzQeDdy1SV+dJFo97h
+         FUwGHXqV46RzoRXNIUGUeQsiRI/OeDIm+8mMvKxsmawtZgZDD+GyVjwe34ldQb1+8+2q
+         31vw==
+X-Gm-Message-State: AOAM532djfaQ+FNW+x7FBZjJa6oDVFs8FoMHr6I1QZ+ujp5nig5CfLBP
+        YDuzJBlSp0AWsa4jMKVXza5fSufI/dKcxi+kTIDXDg==
+X-Google-Smtp-Source: ABdhPJxQ9nD4vwnn29xZGWj3D6iRwIXJNsR5YJoMUhf3PKdCUcgDUmQUmPwG7N4/S9I9QoC2u/Aky+rHtMS1l9BwtgY=
+X-Received: by 2002:a2e:8e73:: with SMTP id t19mr3579753ljk.132.1643133590805;
+ Tue, 25 Jan 2022 09:59:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220118110621.62462-1-nikunj@amd.com> <20220118110621.62462-4-nikunj@amd.com>
+ <CAMkAt6rxeGZ3SpF9UoSW0U5XWmTNe-iSMc5jgCmOLP587J03Aw@mail.gmail.com> <04698792-95b8-f5b6-5b2c-375806626de6@amd.com>
+In-Reply-To: <04698792-95b8-f5b6-5b2c-375806626de6@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 25 Jan 2022 10:59:39 -0700
+Message-ID: <CAMkAt6rCU3K-dk7edxa9iKrOZ0uh5442K0U5Fbux=js0q6qQ+g@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bharata B Rao <bharata@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Jan 2022 21:47:38 +0000 Dexuan Cui wrote:
-> > From: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > Sent: Monday, January 24, 2022 1:44 PM
-> >  ...
-> > Make use of the struct_size() helper instead of an open-coded version,
-> > in order to avoid any potential type mistakes or integer overflows that,
-> > in the worst scenario, could lead to heap overflows.
-> > 
-> > Also, address the following sparse warnings:
-> > drivers/net/ethernet/microsoft/mana/gdma_main.c:677:24: warning: using
-> > sizeof on a flexible structure
-> >  ...
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>  
-> 
-> Reviewed-by: Dexuan Cui <decui@microsoft.com>
+On Tue, Jan 25, 2022 at 10:49 AM Nikunj A. Dadhania <nikunj@amd.com> wrote:
+>
+> Hi Peter
+>
+> On 1/25/2022 10:17 PM, Peter Gonda wrote:
+> >> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
+> >>         src->handle = 0;
+> >>         src->pages_locked = 0;
+> >>         src->enc_context_owner = NULL;
+> >> -
+> >> -       list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
+> > I think we need to move the pinned SPTE entries into the target, and
+> > repin the pages in the target here. Otherwise the pages will be
+> > unpinned when the source is cleaned up. Have you thought about how
+> > this could be done?
+> >
+> I am testing migration with pinned_list, I see that all the guest pages are
+> transferred/pinned on the other side during migration. I think that there is
+> assumption that all private pages needs to be moved.
+>
+> QEMU: target/i386/sev.c:bool sev_is_gfn_in_unshared_region(unsigned long gfn)
+>
+> Will dig more on this.
 
-Thanks! Applied to net-next, 10cdc794dae8 ("net: mana: Use
-struct_size() helper in mana_gd_create_dma_region()")
+The code you linked appears to be for a remote migration. This
+function is for an "intra-host" migration meaning we are just moving
+the VMs memory and state to a new userspace VMM on the same not an
+entirely new host.
+
+>
+> Regards
+> Nikunj

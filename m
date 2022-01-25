@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED6249AEFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2AE49AEFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454052AbiAYI52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:57:28 -0500
-Received: from mail-eopbgr80105.outbound.protection.outlook.com ([40.107.8.105]:26668
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        id S1454081AbiAYI5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:57:39 -0500
+Received: from mail-am6eur05on2127.outbound.protection.outlook.com ([40.107.22.127]:22496
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1453260AbiAYIxG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:53:06 -0500
+        id S1453277AbiAYIxK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 03:53:10 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xn8cynacdXU81UpPhgUb8c9uMbeP2Ll/zAI7nmv79gVB828yG+q0z1OFGM3/hbIWfq0p2evQM6dYGz6USMGgWuA+DSV9hqle1Z2Bij5YcU0iLARt+OFtahb4QWECxUQru5jlZg1DACYV0qnV4j8ZUCWwIoa33/IUY+QNJ/VfrYu3wZONv9cYLH2P3TND03jV5OTenWLpdgoIgS9dRPALcoDIPahVT1q144YLS0FIOolMHNiSeWdAWTYC9CVD//ZTeK0Mbsu4mHR4wfer67P6yjOHm6KsWCwqajqFNSdItB+sO41FW7MAKkght8N8R0zN8X8OrlSaqn2B+dstdvx7hw==
+ b=ktz3DAs/B7FtCHnU1zzn93bDtXWluBCSKblrWFZRdsG5EVfJ/UdnGzc9nLa4jVfRmqZ0hmCs0bXZQk+Tcb+iX4SCbJ7qoofsz4QE30eG2GcyLewD9YQlWlGPS/500x62A0/0KaXPs4rwR30CveQdKWsffFuIHhMhEVGPajCajpMzw2B3dId2bUOksTbslwj2RKifLDYAPPGcgVWpQxpLIc/YydSlvHqFq69ls+ZHLFsaTS1+jYPACSFzGR+agyKdsoGoVAPSaO687AIozw4A+MNkT8p4SzSu11T8QfrcDC/0Nra94FJOdbBKOKbV0bpuzBpdY3tSnJlTUvSSIgVBgQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p57bgbqHsjsgGqk169a8KxqDwxH/DLCZD/O8vQZ+dL8=;
- b=FnWYROrMNbXn4IyvPqDADFnTJ8Y+KFG/9+qfFunMIpEw4CwTJBqPpbMtHodC7VeE6H1YN+8ftDn7qPwPv73jGjKbC5WDT+KIYrIYgJomzGzvpMlac9OKlUiog3iVc6IfmliFpaBHx30iETlmQxn5/hjaCuMEoWRYDiGkq5fAOM1mesU4O+1dSIjjXskyPP2MVfbYmoWkgHmreiTTDA4hx6gIuNNFdLiw/4xVIIi3Vxd0rqmDoa8y6DSx+ndPlyDHOn/h9hyeWFVAfjEnq5lSLUfWDe3daE6BzR6nBvO1h/xVsTnZ4SrTxWC2yk66MysDqbZeF0wcJs28FF7ZkcDu4w==
+ bh=wvCIEDy7zITFx2byS8YSNhKS1oqfqrc1QYpvQ5k/QlI=;
+ b=gN7Exk+Kb93Tow0h/rtV1t0E0U1OMhMU+uCpAYJs02bcQ30bmkFvXxyhHmHxpRaD9kd2ZE96O4iHA9Bmn0ZxApZf+ny2Hp9IZegAFJG/5drWdQGKS1e0581EfGxcKyLtN3r9GZWIDQZzwyKT8hWqvPjjb0bMxSRkVyLeumnGKhulOGYztt9D6HMmL1YucaIUycbAbxKWQ3vMsjk6pkxrS3fs+SfFekAcj1B0F2EV68DKDJ1cGbQvvYQlh/8suF6kJqJT2rH/fp0VZuHumuAF+n/jeuGkzSs8T3d2u0eYwOeCxb7KCw2lYHguWAeKrSDXL4VS0GiIw1we6FB3OQtJsQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
  217.111.95.66) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arri.de;
  dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p57bgbqHsjsgGqk169a8KxqDwxH/DLCZD/O8vQZ+dL8=;
- b=AfK50w4D5fjR4WgNAlYLle3mt7mylQniDtdYhEmDFkLR8wWZNz3dZclsgPKl3uxXGd/6jwSZHteOn262KQLySp06PflHwUTSMXaQMRk+oHK8xPt81M6QKpPTugGvwu8DwTC5D4z+4uozemoAAfSvjLfmsuTeH75id2I+i0UkM4Q=
-Received: from AM6PR10CA0085.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:209:8c::26)
- by AM0PR07MB5505.eurprd07.prod.outlook.com (2603:10a6:208:104::17) with
+ bh=wvCIEDy7zITFx2byS8YSNhKS1oqfqrc1QYpvQ5k/QlI=;
+ b=M8NPkG6u8CyfnEoD6AWTbUthGArXq6ab3nbSp23J7aiaRRwf9ivYielyzWKJqyssW4SadyEvZFxDl3p4XsJ5IuinNNOViKHgB9GRmT1o1Q4b30am9d08UWy8zS6lNCPjZ/i60+DYwE06jhIgH3sRUnDm6b/eWWOykXQX4r64sJo=
+Received: from AS9PR06CA0346.eurprd06.prod.outlook.com (2603:10a6:20b:466::21)
+ by DB7PR07MB5835.eurprd07.prod.outlook.com (2603:10a6:10:8c::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 25 Jan
- 2022 08:53:04 +0000
-Received: from VE1EUR02FT034.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:209:8c:cafe::3d) by AM6PR10CA0085.outlook.office365.com
- (2603:10a6:209:8c::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12 via Frontend
- Transport; Tue, 25 Jan 2022 08:53:04 +0000
+ 2022 08:53:06 +0000
+Received: from VE1EUR02FT030.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:20b:466:cafe::fe) by AS9PR06CA0346.outlook.office365.com
+ (2603:10a6:20b:466::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8 via Frontend
+ Transport; Tue, 25 Jan 2022 08:53:06 +0000
 X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.66)
  smtp.mailfrom=arri.de; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=arri.de;
@@ -45,11 +45,11 @@ Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
  designate 217.111.95.66 as permitted sender) receiver=protection.outlook.com;
  client-ip=217.111.95.66; helo=mta.arri.de;
 Received: from mta.arri.de (217.111.95.66) by
- VE1EUR02FT034.mail.protection.outlook.com (10.152.12.125) with Microsoft SMTP
+ VE1EUR02FT030.mail.protection.outlook.com (10.152.12.127) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4909.7 via Frontend Transport; Tue, 25 Jan 2022 08:53:03 +0000
+ 15.20.4909.7 via Frontend Transport; Tue, 25 Jan 2022 08:53:05 +0000
 Received: from localhost.de (192.168.54.129) by mta.arri.de (192.168.100.104)
- with Microsoft SMTP Server (TLS) id 14.3.498.0; Tue, 25 Jan 2022 09:53:02
+ with Microsoft SMTP Server (TLS) id 14.3.498.0; Tue, 25 Jan 2022 09:53:04
  +0100
 From:   Christian Eggers <ceggers@arri.de>
 To:     Abel Vesa <abel.vesa@nxp.com>
@@ -64,10 +64,11 @@ CC:     Michael Turquette <mturquette@baylibre.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Christian Eggers <ceggers@arri.de>
-Subject: [PATCH 2/6] clk: imx6ul: enforce gating of gpmi_io clock
-Date:   Tue, 25 Jan 2022 09:52:02 +0100
-Message-ID: <20220125085206.8508-3-ceggers@arri.de>
+        Christian Eggers <ceggers@arri.de>,
+        Stefan Riedmueller <S.Riedmueller@phytec.de>
+Subject: [PATCH 3/6] clk: imx6q: disable gpmi_io and ipt_io clocks before changing parent
+Date:   Tue, 25 Jan 2022 09:52:03 +0100
+Message-ID: <20220125085206.8508-4-ceggers@arri.de>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220125085206.8508-1-ceggers@arri.de>
 References: <20220125085206.8508-1-ceggers@arri.de>
@@ -77,59 +78,88 @@ Content-Type: text/plain
 X-Originating-IP: [192.168.54.129]
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e36446f1-c0a3-413d-6849-08d9dfe01926
-X-MS-TrafficTypeDiagnostic: AM0PR07MB5505:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR07MB5505E46E82352FF1C610FF47BF5F9@AM0PR07MB5505.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:854;
+X-MS-Office365-Filtering-Correlation-Id: 35d1cbe1-4d77-405e-fc56-08d9dfe01a62
+X-MS-TrafficTypeDiagnostic: DB7PR07MB5835:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR07MB5835B5BDEE9D74A506F54200BF5F9@DB7PR07MB5835.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dQumSZfduxv/gVIusJefYFJXKPAgSumcbevPkZ0aQQsIDlYQgOeK2zDn/MD8zEsjwy3NywRv3ZbALNA5TwdtltZFlk4tOsvqe591/g6KFA9bIaPyIwH1d+L114LVYoAv9bsNinkDOcFkhynG3fPCltPpxOImnYJL2eMUntto8sebrcPTt92UdWmvTYd54aQP0SLvo7VbnMZbj4yjGK3QjcCgaM9UTZedeW3k3wJ1dxv5Brj0JhH7pb3XqLhaagKHuznI5bkEg+SdD9NjPWPveGOHa4iegszorLStdS0hPi7+s9kwzcYllQ58KtuPqFV/dAcZh9WBQcaxIzOGD56o85/yfsgIbnHIamjUoIktR7gTY2In3GgOAidMVezSxHNEdZsqkgKxVh/PqpvtYgIdNvaRG5heoRcPjgK+5HZOk+QAkHzO83R7HpRpIW8+3jRcMIIouEA9puExBqvsuMmzbrTYlz78fpkFfoJH198nO2deg+ZuyEi/xL4s55ejmUJEfnWBIPu1uEuKn3UotHYce2ZWsVLU4PexkSxRX5VZnewKoob0rxfQZdXvKD9W7gQXy/rn4Q3QKHNYxG2JhF+eZttmHQJQWVkeljkk90CTHOo4E5HVgGC6YwY6yTn12OnoszTl0G+xexRaszPLUh1qvOxxyE5NBP05EcSqNQxbXBYDBPN4dgDGrFA0QYC7YXuT9EPIYG5LDyryAg1J2jbT60BIBklgM5O0FfiZ7cca3BJ8E7EIJPcGEy/lYpi3vY7Qa1ZtgbCYYIyE4LbWHjhDIzp/gQfgWVliOtkNNDzAoYo=
-X-Forefront-Antispam-Report: CIP:217.111.95.66;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(36756003)(107886003)(2616005)(426003)(1076003)(186003)(336012)(16526019)(26005)(86362001)(5660300002)(40460700003)(2906002)(83380400001)(508600001)(47076005)(82310400004)(36860700001)(8676002)(6862004)(4326008)(8936002)(54906003)(70206006)(81166007)(70586007)(356005)(316002)(32563001)(36900700001)(20210929001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: b+JibGlAPZecFn6OqoJ+bkYFhW51qwHWP6o0l3oqowCUMr2kgZ9UDnqQ7ybMrkJZXeeeeKETco0NokDKcg4gXrHdLYjxNr3YGEAWWR1ti2vFhAAdhH87QaIqaVYSYxGUD2bqipQjF5g7oghuRSx2uYid3p/tH/DrJVuTsjeJiU75ABalUOJu/9EPcEZbdZBwS+Y9WlgqypeLnd1fytd8gqkp6oRhWOzMcmc7Dg5x5a5QrTOxKDlrnH+2eBdffvuhjKIH9iX7K1UG0foJ1Q99owo9Uc3mtwwjrRxXMEYqiGXmcZH7QR0dXkVfRHHo8J09/1h1Bgwe1UnX7IRCMOB1upY3Q0QC+X2bVSPdsUG7/zUv0yWGJrWkOoWTYdzm7ZYH7XQwxLrdfkHZo/IE3rDy2BALamoxmYJArZVnKwuLN8PJjssEe6PEWgAsd0PD139FECJQG8XPiV1DaQBo44YyXhRtrB5bi35AjK4bTWyeJ//cx2yryqkZMDiG5ndKvS2OzUZH9gZT/6Ih0x1vKmHNXbfpbwT3Y0RcBs+2EepboR2RQr/9cIFpwzOaC4Xwkphphz7RGw/Vih2Knd+hFXZvHxA4G2x9VC8l31mRQ3v9sPSK5oFdybnglUtrAJupLXnGg2c4F1LVR4Rg2O2qfauAT/XHuR0ah/jT64c4BTRG3jSmR/6CyZrg/Lp/lNtpFOxQrKwbwxtL5NhwiVFpasihiS+j5g/D3/py6lfLwQ0HT2I=
+X-Forefront-Antispam-Report: CIP:217.111.95.66;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(86362001)(82310400004)(6862004)(8936002)(4326008)(8676002)(5660300002)(2616005)(1076003)(186003)(54906003)(316002)(70586007)(70206006)(426003)(16526019)(508600001)(336012)(83380400001)(47076005)(36860700001)(356005)(81166007)(107886003)(40460700003)(2906002)(36756003)(26005)(32563001)(36900700001)(20210929001);DIR:OUT;SFP:1102;
 X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 08:53:03.4595
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 08:53:05.5499
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e36446f1-c0a3-413d-6849-08d9dfe01926
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35d1cbe1-4d77-405e-fc56-08d9dfe01a62
 X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.66];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT034.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT030.eop-EUR02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR07MB5505
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR07MB5835
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clock parent and divider changes are both glitchy for enfc_clock_root.
-Enforce that the child clock is gated.
+gpmi_io and ipt_io clocks may have been enabled by the boot loader. All
+children of enfc_clk_root must be gated in order to prevent glitches
+during parent change.
+
+Reparenting of enfc_clk_root may disable pll3_usb_otg. In order to avoid
+immediately re-enabling it in imx_register_uart_clocks(), the whole
+section has been moved to the bottom of imx6q_clocks_init().
 
 Signed-off-by: Christian Eggers <ceggers@arri.de>
+Co-developed-by: Stefan Riedmueller <S.Riedmueller@phytec.de>
+Signed-off-by: Stefan Riedmueller <S.Riedmueller@phytec.de>
 ---
- drivers/clk/imx/clk-imx6ul.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/imx/clk-imx6q.c | 27 ++++++++++++++++++++-------
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/clk/imx/clk-imx6ul.c b/drivers/clk/imx/clk-imx6ul.c
-index f599ae50dd9f..5443b5a0dc75 100644
---- a/drivers/clk/imx/clk-imx6ul.c
-+++ b/drivers/clk/imx/clk-imx6ul.c
-@@ -256,7 +256,7 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
- 	if (clk_on_imx6ull())
- 		hws[IMX6ULL_CLK_ESAI_SEL]	  = imx_clk_hw_mux("esai_sel",	base + 0x20, 19, 2, esai_sels, ARRAY_SIZE(esai_sels));
- 	hws[IMX6UL_CLK_UART_SEL]	  = imx_clk_hw_mux("uart_sel",	base + 0x24, 6,  1, uart_sels, ARRAY_SIZE(uart_sels));
--	hws[IMX6UL_CLK_ENFC_SEL]	  = imx_clk_hw_mux("enfc_sel",	base + 0x2c, 15, 3, enfc_sels, ARRAY_SIZE(enfc_sels));
-+	hws[IMX6UL_CLK_ENFC_SEL]	  = imx_clk_hw_mux_flags("enfc_sel",	base + 0x2c, 15, 3, enfc_sels, ARRAY_SIZE(enfc_sels), CLK_SET_PARENT_GATE);
- 	hws[IMX6UL_CLK_LDB_DI0_SEL]	  = imx_clk_hw_mux("ldb_di0_sel",	base + 0x2c, 9,  3, ldb_di0_sels, ARRAY_SIZE(ldb_di0_sels));
- 	hws[IMX6UL_CLK_SPDIF_SEL]	  = imx_clk_hw_mux("spdif_sel",	base + 0x30, 20, 2, spdif_sels, ARRAY_SIZE(spdif_sels));
- 	if (clk_on_imx6ul()) {
-@@ -424,7 +424,7 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
- 	hws[IMX6UL_CLK_PWM4]		= imx_clk_hw_gate2("pwm4",		"perclk",	base + 0x78,	22);
- 	hws[IMX6UL_CLK_GPMI_BCH_APB]	= imx_clk_hw_gate2("gpmi_bch_apb",	"bch_podf",	base + 0x78,	24);
- 	hws[IMX6UL_CLK_GPMI_BCH]	= imx_clk_hw_gate2("gpmi_bch",	"gpmi_podf",	base + 0x78,	26);
--	hws[IMX6UL_CLK_GPMI_IO]	= imx_clk_hw_gate2("gpmi_io",	"enfc_podf",	base + 0x78,	28);
-+	hws[IMX6UL_CLK_GPMI_IO]	= imx_clk_hw_gate2_flags("gpmi_io",	"enfc_podf",	base + 0x78,	28, CLK_SET_RATE_GATE);
- 	hws[IMX6UL_CLK_GPMI_APB]	= imx_clk_hw_gate2("gpmi_apb",	"bch_podf",	base + 0x78,	30);
+diff --git a/drivers/clk/imx/clk-imx6q.c b/drivers/clk/imx/clk-imx6q.c
+index de36f58d551c..fd5c37095ed0 100644
+--- a/drivers/clk/imx/clk-imx6q.c
++++ b/drivers/clk/imx/clk-imx6q.c
+@@ -927,13 +927,6 @@ static void __init imx6q_clocks_init(struct device_node *ccm_node)
+ 	clk_set_parent(hws[IMX6QDL_CLK_IPU2_DI0_SEL]->clk, hws[IMX6QDL_CLK_IPU2_DI0_PRE]->clk);
+ 	clk_set_parent(hws[IMX6QDL_CLK_IPU2_DI1_SEL]->clk, hws[IMX6QDL_CLK_IPU2_DI1_PRE]->clk);
  
- 	/* CCGR5 */
+-	/*
+-	 * The gpmi needs 100MHz frequency in the EDO/Sync mode,
+-	 * We can not get the 100MHz from the pll2_pfd0_352m.
+-	 * So choose pll2_pfd2_396m as enfc_sel's parent.
+-	 */
+-	clk_set_parent(hws[IMX6QDL_CLK_ENFC_SEL]->clk, hws[IMX6QDL_CLK_PLL2_PFD2_396M]->clk);
+-
+ 	if (IS_ENABLED(CONFIG_USB_MXS_PHY)) {
+ 		clk_prepare_enable(hws[IMX6QDL_CLK_USBPHY1_GATE]->clk);
+ 		clk_prepare_enable(hws[IMX6QDL_CLK_USBPHY2_GATE]->clk);
+@@ -975,5 +968,25 @@ static void __init imx6q_clocks_init(struct device_node *ccm_node)
+ 	}
+ 
+ 	imx_register_uart_clocks(2);
++
++	/*
++	 * The gpmi needs 100MHz frequency in the EDO/Sync mode. We can not get
++	 * the 100MHz from the pll2_pfd0_352m. So choose pll2_pfd2_396m as
++	 * enfc_sel's parent.
++	 *
++	 * gpmi_io and ipt_clk_io clocks may have been enabled by the boot
++	 * loader. All children of enfc_clk_root must be gated in order to
++	 * prevent glitches during parent change. The task of re-enabling
++	 * gpio_io is left to the gpmi-nand driver.
++	 */
++	if (clk_hw_is_enabled(hws[IMX6QDL_CLK_GPMI_IO])) {
++		clk_prepare_enable(hws[IMX6QDL_CLK_GPMI_IO]->clk);
++		clk_disable_unprepare(hws[IMX6QDL_CLK_GPMI_IO]->clk);
++	}
++	if (clk_hw_is_enabled(hws[IMX6QDL_CLK_ENFC])) {
++		clk_prepare_enable(hws[IMX6QDL_CLK_ENFC]->clk);
++		clk_disable_unprepare(hws[IMX6QDL_CLK_ENFC]->clk);
++	}
++	clk_set_parent(hws[IMX6QDL_CLK_ENFC_SEL]->clk, hws[IMX6QDL_CLK_PLL2_PFD2_396M]->clk);
+ }
+ CLK_OF_DECLARE(imx6q, "fsl,imx6q-ccm", imx6q_clocks_init);
 -- 
 Christian Eggers
 Embedded software developer

@@ -2,123 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE93B49BCD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A54C49BCD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiAYUSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 15:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
+        id S231597AbiAYUTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 15:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiAYUR4 (ORCPT
+        with ESMTP id S231492AbiAYUTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:17:56 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A5DC061744
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:17:55 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id c10so65209482ybb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:17:55 -0800 (PST)
+        Tue, 25 Jan 2022 15:19:20 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7EFC06173B;
+        Tue, 25 Jan 2022 12:19:20 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id me13so33357266ejb.12;
+        Tue, 25 Jan 2022 12:19:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xH4919BBQDatXV47ZV39NtXvgYYtXrd/TsEbvbZr80k=;
-        b=MfklnOCQVmnZ1DGtZ/7lH8SHjstb5OvkICRH3LZOqLvcVDHKV0C4/qab9nARYCxi07
-         SkqgzSsp4w8mfq9ydwKA+Pq4fo943Kkwmo7LEUszNU5r+EGEZe9b7JQskqSHPiwQ9xjS
-         6+3mmdc2jub7xRbVt6HrtXDQmbjJj3kJkwuzk=
+        bh=xkD++w5wQuM0pFdWNSxU+9PLuYMVyvi7yffqi+Pe620=;
+        b=VpsFLJzitgnUe5tDPxu+bIcWmi2+SD6nhORlPdFdESwnxx9ResacUmvOFpe7kPCUe9
+         hvagcDjvrn/v5+2KpABhX0FIcjk7AtiDIH2wlSDN4fGPQjhe5TZt6Wdi2aouwuYiXU0K
+         zHBnE6/GXgiTIEtG1c07mXwu7vPWh9IalkW0av3RlBapsnzeS46V+gWZwtUSvCxBdKkY
+         //3KLt9InWmM2lhDAX/vz79SlIbjN0rDHdWE4pvRPCymaXi6dvBNcVM9k7olMFGWP1yT
+         8B5tbVgjXMdnvonSkKXes6Yn7UxEp7SItRS0O/A+EcIZqQWenwZUCJz2VFMx4zZSrJIN
+         1RjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xH4919BBQDatXV47ZV39NtXvgYYtXrd/TsEbvbZr80k=;
-        b=inqguAS72/gTDkqPiDefRZAMl5WR5Aa5flUUhhBEEeiW91Yqy8n2r1PwTl32B/itzV
-         CDOmsQ4cmQJ18J0GNvbRqPqz4R8E/lhJZBY5keen/6lxJoH0996/+lw7kFoEbykOZvZD
-         v4ZMqhrEyYNpSuoc4Jv4MGdJvXmGWD1pec86uIcAeuUEKZZbrSRJZQVNL3zF3GjmJBnZ
-         u6lYCMnnfcKlSOQShdJAJJceCY5GIgMI8ZaWlMWrhetpUnZRgCd0kZrYpvr7wKlGzQAM
-         9sMGd4sXrVRg8A+u9+6u9TtMQt7nciRTjW/aRdLVeimoJijqK2/tLtifMJeGIfyQkvIG
-         VSxA==
-X-Gm-Message-State: AOAM531SmUuOVJaKRiYjURotGPD34BrdJ5f+DObjNYfvESTf7zxgrpw9
-        o8YJ4yUnkSF5937BnYUZJu04ECoMu+mIjHEsJkJd
-X-Google-Smtp-Source: ABdhPJz4ErEQdG2kZzS4RU3R+TozqNSpTkyZlNySmm+OUFhQWBU6G++H14erGITpDeyTZi30ICVtSwClulYTDTDEhuI=
-X-Received: by 2002:a25:ac9a:: with SMTP id x26mr4798915ybi.713.1643141875109;
- Tue, 25 Jan 2022 12:17:55 -0800 (PST)
+        bh=xkD++w5wQuM0pFdWNSxU+9PLuYMVyvi7yffqi+Pe620=;
+        b=Fn7CkWckl8Lct662dCotALz329CscC6hfq0ukpmOEmj/o2/WwR9qfDeBsNP7lK1Io9
+         GsB7WgJq87/X2Q3NkNhAufH2Cafxi3EHd/l0dF43RUaSVjoW2Iaj1GiPpQU0Xs5xDsKM
+         3WAkCMt7i8QTxxSBLY18Rjuq1FlCH7ZZTwSS7PyJ3KnXVwNigz4mYX4P0apGfu3yq25N
+         7fxUj9/+n7NUxK2dUUJbwPyvBfhxFLONQQSnB8Ri9cn78HuK27GW15QqT0Z4Z8/0p9xq
+         eicH9TfA0LRKex0zNFKtcdYn0YS4y1j4PDjftQG/SIOBa2edOa+R+bSAGAZjWw/c+iqS
+         LLgw==
+X-Gm-Message-State: AOAM532DXR0ZzpwUyKkMrYBJu18EVreI7WLBVS41OqAq7SEHfUeXW5iX
+        EgHC47fkgsvDIm5hmY5duAdyjJSLWx0h9I/VlCY=
+X-Google-Smtp-Source: ABdhPJxJHR8hzUe4FytmweJ8fcXjxc0YkzwId6iLbh4Lm4OiGTzxJLOOHEl4Lv3fq+NlaZrNs0P9ioUlDiAO0Vx2v5Y=
+X-Received: by 2002:a17:907:608b:: with SMTP id ht11mr17025374ejc.644.1643141958928;
+ Tue, 25 Jan 2022 12:19:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120090918.2646626-1-atishp@rivosinc.com> <20220120090918.2646626-7-atishp@rivosinc.com>
- <CAMuHMdXJoREF7jZaYWrDUjJqKUSCd82qDVaMEo7VO38ok8J-AA@mail.gmail.com>
-In-Reply-To: <CAMuHMdXJoREF7jZaYWrDUjJqKUSCd82qDVaMEo7VO38ok8J-AA@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 25 Jan 2022 12:17:44 -0800
-Message-ID: <CAOnJCULjqeL9Q27n=g19ALbOivzid6pc_gYv6JUF4iP=64kJ-Q@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] RISC-V: Do not use cpumask data structure for
- hartid bitmap
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Atish Patra <atishp@rivosinc.com>,
+References: <20200203053650.8923-1-xiyou.wangcong@gmail.com>
+ <CAHbLzkoUmhPbnt=yMfBSFs2G6r2S5ggD6AkYQvg0zxBAqQK2fA@mail.gmail.com>
+ <20220125093702.3ffdb721@gandalf.local.home> <20220125093846.59826cad@gandalf.local.home>
+ <CAHbLzkq51-_Rxj0YyWR4qxQRzosvP2Tj6D52=OtCZUG_mydDBQ@mail.gmail.com> <20220125150352.147d3c58@gandalf.local.home>
+In-Reply-To: <20220125150352.147d3c58@gandalf.local.home>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 25 Jan 2022 12:19:06 -0800
+Message-ID: <CAHbLzkrkvcnfxQqrAJosLZK_jOxErwGvn5VkLASNfut6_N-+0Q@mail.gmail.com>
+Subject: Re: [Patch v3] block: introduce block_rq_error tracepoint
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Cong Wang <xiyou.wangcong@gmail.com>, linux-block@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>
+        Jens Axboe <axboe@kernel.dk>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 12:12 PM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
+On Tue, Jan 25, 2022 at 12:03 PM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> Hi Atish,
+> On Tue, 25 Jan 2022 11:58:10 -0800
+> Yang Shi <shy828301@gmail.com> wrote:
 >
-> On Thu, Jan 20, 2022 at 10:12 AM Atish Patra <atishp@rivosinc.com> wrote:
-> > Currently, SBI APIs accept a hartmask that is generated from struct
-> > cpumask. Cpumask data structure can hold upto NR_CPUs value. Thus, it
-> > is not the correct data structure for hartids as it can be higher
-> > than NR_CPUs for platforms with sparse or discontguous hartids.
-> >
-> > Remove all association between hartid mask and struct cpumask.
-> >
-> > Reviewed-by: Anup Patel <anup@brainfault.org> (For Linux RISC-V changes)
-> > Acked-by: Anup Patel <anup@brainfault.org> (For KVM RISC-V changes)
-> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > Never mind. Other than the code restructure, I also found some data
+> > structure (struct request) and function (blk_fill_rwbs) change. I
+> > think I'd better rebase the patch to 5.17-rc1 then resubmit it. Since
+> > there is no fundamental change to the patch, can I keep your
+> > reviewed-by tag?
 >
-> Thanks for your patch, which is now commit 26fb751ca37846c9 ("RISC-V:
-> Do not use cpumask data structure for hartid bitmap") in v5.17-rc1.
->
-> I am having an issue with random userspace SEGVs on Starlight Beta
-> (which needs out-of-tree patches).  It doesn't always manifest
-> itself immediately, so it took a while to bisect, but I suspect the
-> above commit to be the culprit.
->
+> Sure, but please Cc me.
 
-I have never seen one before during my testing. How frequently do you see them?
-Does it happen while running anything or just idle user space results
-in SEGVs randomly.
+Yeah, definitely. Thanks.
 
-Do you have a trace that I can look into ?
-
-> So far the Icicle looks unaffected.
 >
-> Do you have a clue?
-> Thanks!
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
-
-
--- 
-Regards,
-Atish
+> -- Steve

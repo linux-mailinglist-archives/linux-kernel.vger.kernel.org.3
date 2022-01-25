@@ -2,146 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5F949B16C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED96849B173
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241381AbiAYKPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S243145AbiAYKUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241533AbiAYKM6 (ORCPT
+        with ESMTP id S243115AbiAYKPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:12:58 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CE0C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:12:56 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6B5A41EC0441;
-        Tue, 25 Jan 2022 11:12:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643105570;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/SkR8C69fbyLSk4Zc2npPvzA0CISECMcPfrCJCLg77I=;
-        b=go2+7PBa4BEBYblHiCBya3fMm2EpAxgvbEsMVQiwDH44iBTDm5+MIRxcSnnMNetOavwdw0
-        nptLlGIB0c9DCEehwbZqSsU9IKnb1IGaAe9pEv88ApA0SV7RK8t5d1VenwWWaElAg40gHJ
-        23iJWnTLYBtk1B6aCHmxVICABRaBszw=
-Date:   Tue, 25 Jan 2022 11:12:45 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     =?utf-8?B?THXDrXM=?= Ferreira <contact@lsferreira.net>,
-        x86-ml <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/fpu: remove memset call for xmm registers on
- xfpregs_set
-Message-ID: <Ye/NHQM3dj8ycUsL@zn.tnic>
-References: <20220125022015.874422-1-contact@lsferreira.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220125022015.874422-1-contact@lsferreira.net>
+        Tue, 25 Jan 2022 05:15:45 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F26C0613E9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:15:42 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id o131-20020a25d789000000b00614957c60dfso25593931ybg.15
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:15:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ueYsGyaLQSVR2x9Kzw6/iG5Y5nhNjYWyB1+Gonc5Ftc=;
+        b=efFdlWFP67mTX8k0yBeFjiDgv0aKG2Mghid1Nf9irHMgdY8QTqF0mQCGGfhXcyiWbr
+         ayMFdRdD17+i2ANJ5Wy+KSdENg18uC3/wXXx7TG+SYsMQrWyKYAnjGx/CyNPrCwhlFGS
+         xh8sc44GhR4+vItWb0/1qYRXTsq0KPTqTY0Z0VldMCIsU5AcDmfY5Y1opYYpp4suuU59
+         duJOuY9RkmRPqmzIAexzQxtYGy/4ud38B0wkC2wUP3ZbHmHo9URRPLDZVMvEPUM9HkmG
+         AK5K2mN90b4eEQN2ZU+HjSCQtpUZv2gdI+iTIqOZD70OW6phUMGL+AMRw4IZS4V33FaD
+         eumQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ueYsGyaLQSVR2x9Kzw6/iG5Y5nhNjYWyB1+Gonc5Ftc=;
+        b=EuA57en4gtRdTkr1uCjrZ7OHFx+ZUD2kHS8NEoOphTnq87kZBaS4hFUSmsRzyV0lSa
+         9cxMgRi2C5Sbz7iA2PvZG//55nkrwKk6zMlS+WoWwaIYv/SV6gTFFUX004SdWDTQqkod
+         BiE0LIDbZKf8J/1zUs5WA9kRRAS7qh4t7zr62mcU+5p2hVGEGRu30xKlLxmtShQIkgmr
+         8/FximirX7wjUjiy5Uyx0bc/OFquvzxaCOHCzWhhIMD1qzVHfNqpI+GMqP9f9veERtnY
+         se+JbMGwgazaxFLiCHoGQcyT4iod1TfpKFcTaqTYk4l2QRXXtMhXn1wD3UPSd4Rlk8bx
+         p4Zg==
+X-Gm-Message-State: AOAM531o1yAWRxnosRN6/Bx+lCLvv8umcHLC+h84HvhLUd7s4MG2L3lS
+        CFR0A56R72+Ws+pgTE6WWUqUm+EDDw+A
+X-Google-Smtp-Source: ABdhPJxt7HJFvzRp0YTgmr7uw8gyt8egDDhLnledf93ScEbYW2WXdwgYiaPdMGFEw8acPIp8uzyTtjizv8cw
+X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:10:69af:7f25:2010:2c85])
+ (user=tzungbi job=sendgmr) by 2002:a05:6902:110d:: with SMTP id
+ o13mr30910873ybu.715.1643105741817; Tue, 25 Jan 2022 02:15:41 -0800 (PST)
+Date:   Tue, 25 Jan 2022 18:15:21 +0800
+Message-Id: <20220125101527.1812887-1-tzungbi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+Subject: [PATCH 0/6] platform/chrome: cros_ec: miscellaneous cleanups
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     bleung@chromium.org
+Cc:     groeck@chromium.org, tzungbi@google.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 02:20:15AM +0000, Luís Ferreira wrote:
-> This patch fixes https://bugzilla.kernel.org/show_bug.cgi?id=215524 by removing
-> the memset introduced by 6164331d15f7d912fb9369245368e9564ea49813, which
-> created a regression on ptrace PTRACE_SETREGSET request with NT_FPREGSET.
+The 1st patch fixes unhandled undos in error handling path.
 
-Is NT_FPREGSET the same as NT_PRFPREG core_note_type?
+The rest of patches cleans drivers/platform/chrome/cros_ec.c.
 
-I can see former is mentioned in elf(5) as an ELF note type:
+Tzung-Bi Shih (6):
+  platform/chrome: cros_ec: fix error handling in cros_ec_register()
+  platform/chrome: cros_ec: remove unused variable `was_wake_device`
+  platform/chrome: cros_ec: determine `wake_enabled` in
+    cros_ec_suspend()
+  platform/chrome: cros_ec: don't initialize `err` in cros_ec_register()
+  platform/chrome: cros_ec: sort header inclusion alphabetically
+  platform/chrome: cros_ec: append newline to all logs
 
-/usr/include/elf.h:
-#define NT_FPREGSET     2               /* Contains copy of fpregset struct */
-
-while latter is defined in the kernel tree like this:
-
-/*
- * Notes used in ET_CORE. Architectures export some of the arch register sets
- * using the corresponding note types via the PTRACE_GETREGSET and
- * PTRACE_SETREGSET requests.
- * The note name for all these is "LINUX".
- */
-#define NT_PRSTATUS     1
-#define NT_PRFPREG      2
-...
-
-I guess those are one and the same thing - just named differently.
-
-> Particularly, it zeros some XMM registers on the wrong offsets. Fixing the offsets
-> only solves the problem for i686, which doesn't include xmm8-15 registers, so
-> the right way is to probably completely remove this call.
-
-It's a good thing you mention i686. I believe the reason for the zeroing
-was the X86_FEATURE_FXSR check which means the CPU has FXSAVE/FXRSTOR,
-CR4.OSFXSR support.
-
-Now, FXSAVE doc says:
-
-"The architecture supports two 512-bit memory formats for FXSAVE, a
-64-bit format that saves XMM0-XMM15, and a 32-bit legacy format that
-saves only XMM0-XMM7. If FXSAVE is executed in 64-bit mode, the 64-bit
-format is used, otherwise the 32-bit format is used."
-
-Then, just to check I went and built a kernel before:
-
-  6164331d15f7 ("x86/fpu: Rewrite xfpregs_set()")
-
-and tried the reproducer with %xmm7 and %xmm9:
-
-$ gdb /bin/bash -batch -x gdbcmds
-warning: Could not load shared library symbols for linux-vdso.so.1.
-Do you need "set solib-search-path" or "set sysroot"?
-
-Program received signal SIGILL, Illegal instruction.
-0x00007ffff79d8a97 in kill () from /lib/x86_64-linux-gnu/libc.so.6
-$1 = 0x20202020202020202020202020202020
-Setting xmm7 to 35322350018591
-$2 = 35322350018591
-
-$  gdb /bin/bash -batch -x gdbcmds
-warning: Could not load shared library symbols for linux-vdso.so.1.
-Do you need "set solib-search-path" or "set sysroot"?
-
-Program received signal SIGILL, Illegal instruction.
-0x00007ffff79d8a97 in kill () from /lib/x86_64-linux-gnu/libc.so.6
-$1 = 0xffffffffffffffffffffffffffffffff
-Setting xmm9 to 35322350018591
-$2 = 35322350018591
-
-So whatever that clearing was supposed to do, it needs to go because it
-used to work before that so this looks like a regression. Unless I'm
-missing an aspect...
-
-> Signed-off-by: Luís Ferreira <contact@lsferreira.net>
-> ---
->  arch/x86/kernel/fpu/regset.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-> index 437d7c930c0b..aec6c49029b1 100644
-> --- a/arch/x86/kernel/fpu/regset.c
-> +++ b/arch/x86/kernel/fpu/regset.c
-> @@ -116,9 +116,7 @@ int xfpregs_set(struct task_struct *target, const struct user_regset *regset,
->  	/* Copy the state  */
->  	memcpy(&fpu->fpstate->regs.fxsave, &newstate, sizeof(newstate));
->  
-> -	/* Clear xmm8..15 */
->  	BUILD_BUG_ON(sizeof(fpu->__fpstate.regs.fxsave.xmm_space) != 16 * 16);
-> -	memset(&fpu->fpstate->regs.fxsave.xmm_space[8], 0, 8 * 16);
->  
->  	/* Mark FP and SSE as in use when XSAVE is enabled */
->  	if (use_xsave())
-> -- 
+ drivers/platform/chrome/cros_ec.c           | 38 ++++++++++++---------
+ include/linux/platform_data/cros_ec_proto.h |  3 --
+ 2 files changed, 21 insertions(+), 20 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.35.0.rc0.227.g00780c9af4-goog
 
-https://people.kernel.org/tglx/notes-about-netiquette

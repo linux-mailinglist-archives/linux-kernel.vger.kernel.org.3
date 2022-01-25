@@ -2,166 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F14D49A84B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F8A49A849
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1317597AbiAYDC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3415365AbiAYBpr (ORCPT
+        id S1317499AbiAYDCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:02:14 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:47120 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3415321AbiAYBmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 20:45:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C65BC01D7C1;
-        Mon, 24 Jan 2022 17:25:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 24 Jan 2022 20:42:39 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9EE561212;
-        Tue, 25 Jan 2022 01:25:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA3EC340E4;
-        Tue, 25 Jan 2022 01:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643073943;
-        bh=UqSazjT8UyPJQUEShMssyVrpCVBuSCCA0ELCO1ImzW0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nSPlo4OqUozVEIEmdVIKHI2ituuKy/T67z+vMSJCANyJDo1i9UEiHVgcXdaJoBb21
-         +IC0jCGd4z2K5cmdJUAkNCvBoTKpcxOvRb+O123AGD3pN8xGq8H0a/DQyblEniCliv
-         gtH/07yXTnvS1+f83chvkucTrBmANoikqXruRDY3xfeTXVa03CP9CIWD/RsawFtVpo
-         CqX9i6NOSAl076Tuw/3zvh8I5Snjvr6YUoXlCJ2Qra2fUcDiAn0NPIu/l6xnbMLcC6
-         JQWCGI2K9x6Y7d+/g8JDPyoXeHjCb3M4siP7I9HQ5el5tcKlyczpH+9l9gHSnduBps
-         48S3SKGI/lWOQ==
-Date:   Mon, 24 Jan 2022 18:25:39 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] MIPS: Loongson64: Clean up use of cc-ifversion
-Message-ID: <Ye9Rk4y9Ck7Bg5pv@dev-arch.archlinux-ax161>
-References: <20220120214001.1879469-1-nathan@kernel.org>
- <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
- <c88b0d87-b238-4889-b033-226bed85bb01@www.fastmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2AC34219A2;
+        Tue, 25 Jan 2022 01:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643073984; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ukdL4uSY7ajaeLLyOy2K7g+OJNEsLFNzoe0K6HxbbBg=;
+        b=BwXWmNKUWNf/QWwndBHhxlD2Xpth4f7ipnaSxOD2XBfHipf1jgH6D0R2Spb2M3qCWIYW6m
+        x8HgPaGGvhDhmCSwpUrMVDzLVO3WKJuln+opQ2oqurTLT2CirjYFmmlkxIvnmpobc9OcMr
+        /XVRrjkS2Bwcj0UP8GK7CtnWdspz7kU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643073984;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ukdL4uSY7ajaeLLyOy2K7g+OJNEsLFNzoe0K6HxbbBg=;
+        b=l73U2zJamff6zF7815X4J+N8Rh0uBqiHROilqBddtxvC5Hb7ncpUxcTc2cZAgSaKaR9EEQ
+        EVSFagbOQhELLeDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA36B13B08;
+        Tue, 25 Jan 2022 01:26:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aIQzLb5R72HYGQAAMHmgww
+        (envelope-from <colyli@suse.de>); Tue, 25 Jan 2022 01:26:22 +0000
+Message-ID: <e3771b5d-87dc-d38e-a957-5ef044a0d5cc@suse.de>
+Date:   Tue, 25 Jan 2022 09:26:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c88b0d87-b238-4889-b033-226bed85bb01@www.fastmail.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH] bcache: Fix a NULL or wild pointer dereference in
+ btree_gc_rewrite_node()
+Content-Language: en-US
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220124164701.53525-1-zhou1615@umn.edu>
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <20220124164701.53525-1-zhou1615@umn.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 12:03:32AM +0000, Jiaxun Yang wrote:
-> 
-> 
-> 在2022年1月24日一月 下午8:31，Nick Desaulniers写道：
-> > On Thu, Jan 20, 2022 at 1:40 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >>
-> >> This Makefile checks that GCC is 4.9 or newer, which is redundant after
-> >> commit 76ae847497bc ("Documentation: raise minimum supported version of
-> >> GCC to 5.1"), so cc-option can be removed.
-> >>
-> >> Clang does not support -march=loongson3a so it needs to continue to use
-> >> -march=mips64r2, along with binutils less than 2.25, so check that both
-> >> GCC and binutils 2.25 or newer are being used before using
-> >> -march=loongson3a. These flags do not need to be checked with cc-option
-> >> anymore because all GCC versions support -march=loongson3a and
-> >> -march=mips64r2 and all clang versions support -march=mips64r2.
-> >>
-> >> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> >
-> > Thanks for the patch. I wonder why `_MIPS_ISA` only seems to be set at
-> > all for `-march=loongson3a` AFAICT, though that question is orthogonal
-> > to this patch. Perhaps the Loongson or MIPS maintainers know more?
-> > Otherwise seems like most uses of _MIPS_ISA can either be deleted or
-> > simplified now.
-> 
-> This is because earlier GCC mistakenly set loongson3a to MIPS64 not MIPS64R2.
-> 
-> But given that it's earlier than the minimal requirement GCC of kernel today, I think it should be safe to just move the whole logic.
-> 
-> Thanks.
+On 1/25/22 12:47 AM, Zhou Qingyang wrote:
+> In btree_gc_rewrite_node(), btree_node_alloc_replacement() is assigned to
+> n and return error code or NULL on failure. n is passed to
+> bch_btree_node_write_sync() and there is a dereference of it in
+> bch_btree_node_write_sync() without checks, which may lead to wild
+> pointer dereference or NULL pointer dereference depending on n.
+>
+> Fix this bug by adding IS_ERR_OR_NULL check of n.
+>
+> This bug was found by a static analyzer.
+>
+> Builds with 'make allyesconfig' show no new warnings,
+> and our static analyzer no longer warns about this code.
+>
+> Fixes: ("bcache: Rework btree cache reserve handling")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> ---
+> The analysis employs differential checking to identify inconsistent
+> security operations (e.g., checks or kfrees) between two code paths
+> and confirms that the inconsistent operations are not recovered in the
+> current function or the callers, so they constitute bugs.
+>
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+>
+>   drivers/md/bcache/btree.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
+> index 88c573eeb598..06d42292e86c 100644
+> --- a/drivers/md/bcache/btree.c
+> +++ b/drivers/md/bcache/btree.c
+> @@ -1504,6 +1504,8 @@ static int btree_gc_rewrite_node(struct btree *b, struct btree_op *op,
+>   		return 0;
+>   
+>   	n = btree_node_alloc_replacement(replace, NULL);
+> +	if (IS_ERR_OR_NULL(n))
+> +		return 0;
+>   
 
-So something like this (completely untested)?
+Hi Qingyang,
 
-diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
-index 3e660d6d3c2b..36ab2fe00835 100644
---- a/arch/mips/loongson64/Platform
-+++ b/arch/mips/loongson64/Platform
-@@ -5,24 +5,9 @@
- 
- cflags-$(CONFIG_CPU_LOONGSON64)	+= -Wa,--trap
- 
--#
--# binutils from v2.25 on and gcc starting from v4.9.0 treat -march=loongson3a
--# as MIPS64 R2; older versions as just R1.  This leaves the possibility open
--# that GCC might generate R2 code for -march=loongson3a which then is rejected
--# by GAS.  The cc-option can't probe for this behaviour so -march=loongson3a
--# can't easily be used safely within the kbuild framework.
--#
--ifeq ($(call cc-ifversion, -ge, 0409, y), y)
--  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
--    cflags-$(CONFIG_CPU_LOONGSON64)  += \
--      $(call cc-option,-march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
--  else
--    cflags-$(CONFIG_CPU_LOONGSON64)  += \
--      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
--  endif
--else
--    cflags-$(CONFIG_CPU_LOONGSON64)  += \
--      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-+ifdef CONFIG_CPU_LOONGSON64
-+cflags-$(CONFIG_CC_IS_CLANG) += -march=mips64r2
-+cflags-$(CONFIG_CC_IS_GCC) += -march=loongson3a
- endif
- 
- # Some -march= flags enable MMI instructions, and GCC complains about that
+This is a valid fix with my first glance. I add this patch into my 
+testing queue.
 
-> >
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> >> ---
-> >>  arch/mips/loongson64/Platform | 13 +++----------
-> >>  1 file changed, 3 insertions(+), 10 deletions(-)
-> >>
-> >> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
-> >> index 3e660d6d3c2b..981d3abc150e 100644
-> >> --- a/arch/mips/loongson64/Platform
-> >> +++ b/arch/mips/loongson64/Platform
-> >> @@ -12,17 +12,10 @@ cflags-$(CONFIG_CPU_LOONGSON64)     += -Wa,--trap
-> >>  # by GAS.  The cc-option can't probe for this behaviour so -march=loongson3a
-> >>  # can't easily be used safely within the kbuild framework.
-> >>  #
-> >> -ifeq ($(call cc-ifversion, -ge, 0409, y), y)
-> >> -  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
-> >> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
-> >> -      $(call cc-option,-march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-> >> -  else
-> >> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
-> >> -      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-> >> -  endif
-> >> +ifeq ($(CONFIG_CC_IS_GCC)$(call ld-ifversion, -ge, 22500, y), yy)
-> >> +  cflags-$(CONFIG_CPU_LOONGSON64) += -march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64
-> >>  else
-> >> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
-> >> -      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-> >> +  cflags-$(CONFIG_CPU_LOONGSON64) += -march=mips64r2
-> >>  endif
-> >>
-> >>  # Some -march= flags enable MMI instructions, and GCC complains about that
-> >>
-> >> base-commit: 2c271fe77d52a0555161926c232cd5bc07178b39
-> >> --
-> >> 2.34.1
-> >>
-> >
-> >
-> > -- 
-> > Thanks,
-> > ~Nick Desaulniers
-> 
-> -- 
-> - Jiaxun
+Thanks.
+
+Coly Li
+
+
+>   	/* recheck reserve after allocating replacement node */
+>   	if (btree_check_reserve(b, NULL)) {
+

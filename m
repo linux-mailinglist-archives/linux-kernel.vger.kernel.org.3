@@ -2,125 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5292749BA2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2B749BA1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587318AbiAYRTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:19:31 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:55146
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231483AbiAYRPd (ORCPT
+        id S1587680AbiAYRTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381187AbiAYROa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:15:33 -0500
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C95073F1E6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 17:12:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643130724;
-        bh=cRuWMxrPXr7Db37oGINTnI2Imc+mdGIhRauTmNnjcco=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=oi9HT76hgwgTZmqgO5+70sfRhubYBtLTfY8aDwFP9tLpxnEEef7gPfvvGwFekbCmv
-         rejQa6MOfJHq1ingAyglF/IOStrwF/ekZqmycHoh58yNdBObHL7QYZbohnShEy3pfC
-         uwX8RMhsIpK5TSbRuxpAAsSMV4e7jFMxYdORQZxK9bZ35oQyaabGijysLydqYl5rtQ
-         i1Es5BsMzz2K5Qn6KNF7i9R9k92/UYwpUP2jDqZTJ1rDIRiuqaps2FBYLtamxyk9nb
-         61yylDGTwnvM5H78jv0UeI3AEj+dFEJSS1DdOH/PMOCbwDJnd7SRbN9bR3RrOld3gf
-         4kCRD2TF6E2Nw==
-Received: by mail-wm1-f71.google.com with SMTP id a3-20020a05600c348300b0034a0dfc86aaso1435396wmq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:12:04 -0800 (PST)
+        Tue, 25 Jan 2022 12:14:30 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26C4C0617A9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:12:53 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id p27so58114310lfa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:12:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7UoNr+FE7GC0nQ8z1tVChh4XpJW2PQJ2WwCVe19A6is=;
+        b=S2Xsca/pBrSKIBu1XKkk91Xs6ui1f21MF3n7w3FTBVND1oL16KZrrPpJdcJhz7N8gq
+         kNPz454MhzpkjAx5abKNt0qGL0SPSWK/V7A2IdmQoioVfo6k+QfsCUJNofdglfsLsuJe
+         OG1POLzTyyAeU9x8rx1YqUgR/WwrpZa+m3ZMeR3L83MwNAOB3HYFBCJIbd4mRYVahCEF
+         PkMSRPs3MDZDLLZkFnWeqyTSd8NGhoR2ryosiLv6PnnBDOu4INgjD/dlABbS3QP8Oznr
+         qzuQTq8oEm9Sq+Ma43usJI2a3QEwKCkkxXZsEuHKCu+ToD2dFF9/2oVU3mtxmUiE3VoW
+         CVhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cRuWMxrPXr7Db37oGINTnI2Imc+mdGIhRauTmNnjcco=;
-        b=o6X97iXsFJuETLRShW5ekxOW0MZbfiXFbxN2Js8T2oPqqieAztbI7x7dD1k4mngfS+
-         CYnAP1vG57UxUpilRNPcrVTbXOVMNspS+VMTn7Mh+rvCOcWNyBUo0T4lhbef58sj3T0E
-         YwfJ7gCXKzmMAX1EkNBWGLxy2XXOJ6J1yda6BpS0k7YnFH/QH4LDQhnvvx3VJOhfn1Qt
-         A432Advj675emaZiSzQx9JqMk1EJUCKpnrU/bRpl5iQwduzJSJBbSNm88dUAOpBJtlvg
-         EVd8R5e3dh6jl72N+FzffjribmYVmqohrNbTjFBTyRrCs1rZUAzQz5fjI/DPTWe79KWY
-         TMoQ==
-X-Gm-Message-State: AOAM533xTgnXmRUaxCjyzg+J/7XqYsypBjktLO1cBXPIbxiov1D30FaJ
-        vfo3D+jA+XA14ZpYpASYS5wqYEwNfXR0a5pqAKJSR5L2qAjDAWh39jClIq2z9NKQjnLtbzBoHdM
-        dTmoTr2Ge4hrIZunrY2TR7ONXPGtcxETfQwYR4r52KQ==
-X-Received: by 2002:a5d:59ac:: with SMTP id p12mr1764868wrr.437.1643130724393;
-        Tue, 25 Jan 2022 09:12:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyn63lsxsGyIy8w2Zle5UfHDf5Cg31gXP3K6sfp7qWzheNoBd+PgghdMtFEcamrKebOUlq3QQ==
-X-Received: by 2002:a5d:59ac:: with SMTP id p12mr1764836wrr.437.1643130724154;
-        Tue, 25 Jan 2022 09:12:04 -0800 (PST)
-Received: from [192.168.0.59] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id u3sm7390429wrs.55.2022.01.25.09.12.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 09:12:03 -0800 (PST)
-Message-ID: <d9682f16-13b7-b6dc-5afd-b2d319143de5@canonical.com>
-Date:   Tue, 25 Jan 2022 18:12:02 +0100
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7UoNr+FE7GC0nQ8z1tVChh4XpJW2PQJ2WwCVe19A6is=;
+        b=RqA9B1r1WSbdHtqxF2yx/ySaRlKzhjAbRcwi6nEl4JJkQ+BDog9bPdsACz8IzWF93O
+         +tNl/OEuP6ZxyaUXOQ1CVHkgxDb6x5fnMzK1FCeM0iAk11xAbkC+k9Y7uKdDpSb2XE34
+         qUUUDrHE39yScnT/X/m2sAKQHPhXzmqACZayDdXe63/3kGP4U/p7Mq0XUrfk4NaIVt0C
+         87DXrGgmDdvOchJRfp+ltYcXqSFXYGz/K6PfLb6lj/CFn9qJmafGEE7v5A5QrAzRdc91
+         rphuwpgbF3GfUOt0XW389PSn3XmhysH3aJvVblhpEi9C/YHcS8XQQaBppyQ2H74OSmYS
+         g2ew==
+X-Gm-Message-State: AOAM533Pdc9SO5n3vL6V5AuLkGk/6IYBnEZMrRun2F4BASvmAUq5fRkp
+        isSg+iYbyrz6ESsWHq8Iny9/Me5PwpMOjA==
+X-Google-Smtp-Source: ABdhPJx4+NuT/KQg6rH8VOKC0RxcPtnDegIVdCANBNAXvi3Iuq/FjmXDFFXH8gMZ2jDn8dNZ6IZcrA==
+X-Received: by 2002:a05:6512:39c6:: with SMTP id k6mr8279504lfu.193.1643130772056;
+        Tue, 25 Jan 2022 09:12:52 -0800 (PST)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id n17sm741684lft.140.2022.01.25.09.12.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 09:12:51 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Tue, 25 Jan 2022 18:12:48 +0100
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
+Subject: Re: [PATCH v2 1/1] mm/vmalloc: Move draining areas out of caller
+ context
+Message-ID: <YfAvkKZlVQYukays@pc638.lan>
+References: <20220125163912.2809-1-urezki@gmail.com>
+ <YfAqRrGD2UKrZHfJ@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 00/16] Add support for Tesla Full Self-Driving (FSD)
- SoC
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        sboyd@kernel.org
-References: <CGME20220124142850epcas5p2f82243b87386b3d49a9302c87e015d6b@epcas5p2.samsung.com>
- <20220124141644.71052-1-alim.akhtar@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220124141644.71052-1-alim.akhtar@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfAqRrGD2UKrZHfJ@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2022 15:16, Alim Akhtar wrote:
-> Adds basic support for the Tesla Full Self-Driving (FSD)
-> SoC. This SoC contains three clusters of four Cortex-A72 CPUs,
-> as well as several IPs.
+On Tue, Jan 25, 2022 at 04:50:14PM +0000, Matthew Wilcox wrote:
+> On Tue, Jan 25, 2022 at 05:39:12PM +0100, Uladzislau Rezki (Sony) wrote:
+> > @@ -1768,7 +1776,8 @@ static void free_vmap_area_noflush(struct vmap_area *va)
+> >  
+> >  	/* After this point, we may free va at any time */
+> >  	if (unlikely(nr_lazy > lazy_max_pages()))
+> > -		try_purge_vmap_area_lazy();
+> > +		if (!atomic_xchg(&drain_vmap_work_in_progress, 1))
+> > +			schedule_work(&drain_vmap_work);
+> >  }
 > 
-> Patches 1 to 9 provide support for the clock controller
-> (which is designed similarly to Exynos SoCs).
+> Is it necessary to have drain_vmap_work_in_progress?  The documentation
+> says:
 > 
-> The remaining changes provide pinmux support, initial device tree support.
+>  * This puts a job in the kernel-global workqueue if it was not already
+>  * queued and leaves it in the same position on the kernel-global
+>  * workqueue otherwise.
 > 
-> - Changes since v4
-> * fixed 'make dtbs_check' warnings on patch 14/16
-> 
-> - Changes since v3
-> * Addressed Stefen's review comments on patch 14/16
-> * Fixed kernel test robot warning on patch 04/16
-> * rebsaed this series on Krzysztof's pinmux new binding schema work [1]
-> 
-> - Changes since v2
-> * Addressed Krzysztof's and Stephen's review comments
-> * Added Reviewed-by and Acked-by tags
-> * Rebased on next-20220120
-> 
-> - Changes since v1
-> * fixed make dt_binding_check error as pointed by Rob
-> * Addressed Krzysztof's and Rob's review comments
-> * Added Reviewed-by and Acked-by tags
-> * Dropped SPI, MCT and ADC from this series (to be posted in small sets)
-> 
-> NOTE: These patches are based on Krzysztof's pinmux for-next branch
-> commit 832ae134ccc1 ("pinctrl: samsung: add support for Exynos850 and ExynosAutov9 wake-ups") 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git/log/?h=for-next
-> 
-> 
+> and the implementation seems to use test_and_set_bit() to ensure this
+> is true.
+>
+It checks pending state, if the work is in run-queue you can place it
+one more time. The motivation of having it is to prevent the drain work
+of being placed several times at once what i see on my stress testing.
 
-Thanks, applied DTS/soc and pinctrl patches.
+CPU_1: invokes vfree() -> queues the drain work -> TASK_RUNNING
+CPU_2: invokes vfree() -> queues the drain work one more time since it was not pending
+...
 
-I expect Sylwester will pick up the clock ones. Otherwise please let me
-know to pick it up as well.
+Instead of drain_vmap_work_in_progress hack we can make use of work_busy()
+helper. The main concern with that was the comment around that function:
 
+/**
+ * work_busy - test whether a work is currently pending or running
+ * @work: the work to be tested
+ *
+ * Test whether @work is currently pending or running.  There is no
+ * synchronization around this function and the test result is
+ * unreliable and only useful as advisory hints or for debugging.
+ *
+ * Return:
+ * OR'd bitmask of WORK_BUSY_* bits.
+ */
 
-Best regards,
-Krzysztof
+i am not sure how reliable this is.
+
+Thoughts?
+
+--
+Vlad Rezki

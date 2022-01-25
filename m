@@ -2,136 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC6249BA5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F69649BA77
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384280AbiAYR3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:29:10 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:55636
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1381363AbiAYR0S (ORCPT
+        id S238648AbiAYRgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:36:19 -0500
+Received: from mail-out1.in.tum.de ([131.159.0.8]:55806 "EHLO
+        mail-out1.informatik.tu-muenchen.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1378673AbiAYRfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:26:18 -0500
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 705853F1BE
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 17:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643131575;
-        bh=tBPSBXWD6lNXgd+PIKKZrS4JET2MiEwqJjtzX3WR0BA=;
-        h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-         In-Reply-To:Content-Type;
-        b=G8c3ia/BSN1RU+ikJX2kFULNHiO0oSsqqcVWbtbLsADS9XUUB/gMGGqpiuSWi7Jwg
-         Ul0H8jlvR/54pvZPfptZhz5hPC7Rcv71zxl51MdXZkp7qct6cLVfR0mR+4mYMetxcN
-         cOQndFKvtGmAgoHqLjH9V4qb3ym/BHYLLkNDmiiu/gGzI0TIQ0087qLrvlO7KFzfFy
-         Z2eU6jy6Q7TsQ3KQVjKB/Tr5/zAq+S/4khimYn7QJUeTIQERk8O/bdWc0I2mohNG80
-         zI6CoAHx4nPQcnIgntniDoDiDzK22wLrDHQGIU+SoaHBuvvKGB9IbrhfwCXK/4apVp
-         qdzjW066/6Wqg==
-Received: by mail-wm1-f72.google.com with SMTP id f7-20020a1cc907000000b0034b63f314ccso1800072wmb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:26:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=tBPSBXWD6lNXgd+PIKKZrS4JET2MiEwqJjtzX3WR0BA=;
-        b=ih53xr0+dye3zWNanShYV6B+kxMCsGjh34v3/M1Rvbom7h/32wUCd8PTqpNKxPggwv
-         W2on6xMFbXFxV2m9dyUgIz6QGI6r6zAEythfs9bft7wu+jecfUmkjWYeBRLpPNz7rZl2
-         u2akzApbnjAe7hZbkQkUwtDk6eeOGvOQozqs6zL1OjWIPeQKuGC/JiaS0SRl6ewftq+O
-         aIheSI90yi53B3lsCt/gsNaTjlp3YyU0Ixxklprz+IJx0tVKZALl36SsXo6WtCxn3GCu
-         YXxGeszHWWXzKQF1BwPbn7OHJHaT5xnAljdoFu4X9ulY2T5+PxZalOWP4QXVnZPMA/lD
-         sDhw==
-X-Gm-Message-State: AOAM531Rbd0XffkEo4R4KTk1kuvFCfPMOmrbG59bQbySch51FhWlnNXc
-        OuQurlLgyqxVnXG1YzN0CNK7ERFfeVUbfOfWf9b2KEqdX42LgQScUYmhnH6oU+EW0CYVvLqnJGw
-        6cAc6FC47bL8/FjLGs9iL2lmMjVtLvV88IDIQW4hQlA==
-X-Received: by 2002:a5d:47ad:: with SMTP id 13mr19223358wrb.268.1643131575150;
-        Tue, 25 Jan 2022 09:26:15 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxYI/XrOuQ3vsEuxgAlunH/u1OuAuphMer+VPxKWkoU6kMBjIKLaf4SHUyoWcg3qCZ2MyGAZg==
-X-Received: by 2002:a5d:47ad:: with SMTP id 13mr19223349wrb.268.1643131574970;
-        Tue, 25 Jan 2022 09:26:14 -0800 (PST)
-Received: from [192.168.0.59] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id k12sm11197616wrd.110.2022.01.25.09.26.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 09:26:14 -0800 (PST)
-Message-ID: <4cfcde38-50cb-646a-0d17-c2cb2977a2e4@canonical.com>
-Date:   Tue, 25 Jan 2022 18:26:13 +0100
+        Tue, 25 Jan 2022 12:35:18 -0500
+X-Greylist: delayed 339 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Jan 2022 12:35:17 EST
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+        by mail-out1.informatik.tu-muenchen.de (Postfix) with ESMTP id 52A5B2400D3;
+        Tue, 25 Jan 2022 18:29:30 +0100 (CET)
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 4EFA85A1; Tue, 25 Jan 2022 18:29:30 +0100 (CET)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 2CF6F591;
+        Tue, 25 Jan 2022 18:29:30 +0100 (CET)
+Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 2905A585;
+        Tue, 25 Jan 2022 18:29:30 +0100 (CET)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 2598D4A03D1; Tue, 25 Jan 2022 18:29:30 +0100 (CET)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id BFD324A00C7;
+        Tue, 25 Jan 2022 18:29:29 +0100 (CET)
+        (Extended-Queue-bit xtech_ed@fff.in.tum.de)
+From:   =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: [PATCH] tools/memory-model: Clarify syntactic and semantic dependencies
+Date:   Tue, 25 Jan 2022 17:28:19 +0000
+Message-Id: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 00/16] Add support for Tesla Full Self-Driving (FSD)
- SoC
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, s.nawrocki@samsung.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        sboyd@kernel.org
-References: <CGME20220124142850epcas5p2f82243b87386b3d49a9302c87e015d6b@epcas5p2.samsung.com>
- <20220124141644.71052-1-alim.akhtar@samsung.com>
- <d9682f16-13b7-b6dc-5afd-b2d319143de5@canonical.com>
-In-Reply-To: <d9682f16-13b7-b6dc-5afd-b2d319143de5@canonical.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2022 18:12, Krzysztof Kozlowski wrote:
-> On 24/01/2022 15:16, Alim Akhtar wrote:
->> Adds basic support for the Tesla Full Self-Driving (FSD)
->> SoC. This SoC contains three clusters of four Cortex-A72 CPUs,
->> as well as several IPs.
->>
->> Patches 1 to 9 provide support for the clock controller
->> (which is designed similarly to Exynos SoCs).
->>
->> The remaining changes provide pinmux support, initial device tree support.
->>
->> - Changes since v4
->> * fixed 'make dtbs_check' warnings on patch 14/16
->>
->> - Changes since v3
->> * Addressed Stefen's review comments on patch 14/16
->> * Fixed kernel test robot warning on patch 04/16
->> * rebsaed this series on Krzysztof's pinmux new binding schema work [1]
->>
->> - Changes since v2
->> * Addressed Krzysztof's and Stephen's review comments
->> * Added Reviewed-by and Acked-by tags
->> * Rebased on next-20220120
->>
->> - Changes since v1
->> * fixed make dt_binding_check error as pointed by Rob
->> * Addressed Krzysztof's and Rob's review comments
->> * Added Reviewed-by and Acked-by tags
->> * Dropped SPI, MCT and ADC from this series (to be posted in small sets)
->>
->> NOTE: These patches are based on Krzysztof's pinmux for-next branch
->> commit 832ae134ccc1 ("pinctrl: samsung: add support for Exynos850 and ExynosAutov9 wake-ups") 
->> [1] https://git.kernel.org/pub/scm/linux/kernel/git/pinctrl/samsung.git/log/?h=for-next
->>
->>
-> 
-> Thanks, applied DTS/soc and pinctrl patches.
-> 
-> I expect Sylwester will pick up the clock ones. Otherwise please let me
-> know to pick it up as well.
+Dependencies which are purely syntactic, i.e. not semantic, might imply
+ordering at first glance. However, since they do not affect defined
+behavior, compilers are within their rights to remove such dependencies
+when optimizing code.
 
-I forgot that clock macros are used in DTS. This does not compile and I
-cannot take drivers into DTS branch.
+Since syntactic dependencies are not related to any kind of dependency
+in particular, explicitly distinguish syntactic and semantic
+dependencies as part of the 'A WARNING' section in explanation.txt,
+which gives examples of how compilers might affect the LKMM's dependency
+orderings in general.
 
-Alim,
-DTS changes dropped. Please resend with the same trick we did for
-Exynos850 board - hard-coded clock IDs as defines. See:
+Link: https://lore.kernel.org/all/20211102190138.GA1497378@rowland.harvard.edu/
+Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+Cc: Marco Elver <elver@google.com>
+Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+---
+ .../Documentation/explanation.txt             | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/diff/arch/arm64/boot/dts/exynos/exynos850.dtsi?h=samsung-dt64-5.17-2&id=e3493220fd3e474abcdcefbe14fb60485097ce06
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index 5d72f3112e56..6d679e5ebdf9 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -411,6 +411,31 @@ Given this version of the code, the LKMM would predict that the load
+ from x could be executed after the store to y.  Thus, the memory
+ model's original prediction could be invalidated by the compiler.
+ 
++Caution is also advised when dependencies are purely syntactic, i.e.
++not semantic.  A dependency between two marked accesses is purely
++syntactic iff the defined behavior of the second access is unaffected
++by its dependency.
++
++Compilers are aware of syntactic dependencies and are within their
++rights to remove them as part of optimizations, thereby breaking any
++guarantees of ordering.
++
++Notable cases are dependencies eliminated through constant propagation
++or those where only one value leads to defined behavior as in the
++following example:
++
++	int a[1];
++	int i;
++
++	r1 = READ_ONCE(i);
++	r2 = READ_ONCE(a[r1]);
++
++The formal LKMM is unaware of syntactic dependencies and therefore
++predicts ordering.  However, since any other value than 0 for r1 would
++result in an out-of-bounds access, which is undefined behavior, r2 is
++not affected by its dependency to r1, making the above a purely
++syntactic dependency.
++
+ Another issue arises from the fact that in C, arguments to many
+ operators and function calls can be evaluated in any order.  For
+ example:
+-- 
+2.33.1
 
-
-Best regards,
-Krzysztof

@@ -2,423 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E794449B51B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8FE49B513
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577071AbiAYN2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:28:23 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19970 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1576611AbiAYNYG (ORCPT
+        id S1577111AbiAYN2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:28:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1576649AbiAYNY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:24:06 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PCJuGu031081;
-        Tue, 25 Jan 2022 13:24:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=jLrcOpzvI8VIHDSYkgypuSuYkQeYLnzarUN+jMDB9js=;
- b=c4NaJz8CYjlRw5dqRPLB6QO52gfpUZBtbUbxS0kTjNVu6YiJXBvwXiTJ9d3wIo8/466n
- S3NWDXFRctS7oYZMAz+/wRZxpO7z1xnpdBDoPJwL6uJq1qmJS2p7gxUynW/S1Ptl1tUr
- XpxwNY/kj9qB4yEy7ZVB8cdKOphyS2Mk/nbsUtXsAZGTkI+TNSWlCcTbH8KUnHggG5Ak
- Wj44StYdOM8Vou6cIreIcruTWe7t4FUfBFdXIkntXHBSKEV+u3q6/v1EsfDZ5qR4MzHw
- WCL6klwIWNblng+MOcBl+QoforSECiV77hL7NmWpNKKyaOQbaryo6otjb9T1xIC4Janw Pg== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dtevcccsf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 13:24:01 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PDCuB8007836;
-        Tue, 25 Jan 2022 13:23:58 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04fra.de.ibm.com with ESMTP id 3dr9j9d2dt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 13:23:58 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PDEH2X47120866
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 13:14:17 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0398EA4065;
-        Tue, 25 Jan 2022 13:23:50 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 97044A405B;
-        Tue, 25 Jan 2022 13:23:49 +0000 (GMT)
-Received: from osiris (unknown [9.145.2.152])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 25 Jan 2022 13:23:49 +0000 (GMT)
-Date:   Tue, 25 Jan 2022 14:23:48 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [RFC PATCH] uaccess: Add mechanism for key checked access to
- user memory
-Message-ID: <Ye/55AdsFzkpD7m7@osiris>
-References: <YerCfDceDszqbdHU@osiris>
- <20220124103812.2340666-1-scgl@linux.ibm.com>
- <Ye7kuJ51QWFBGoJ4@osiris>
- <92c2d051-e25f-7b3a-c811-dd1ce85f1b9b@linux.ibm.com>
+        Tue, 25 Jan 2022 08:24:27 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E28C061749
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:24:26 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id y15so48483463lfa.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:24:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QQ2oTmxqAAHBphVdqj9gFXH4hc7RUo1b+qk83WMu3Ug=;
+        b=Rs6X3pq9Uu+NlJQOR6hsQyUWXuR7MVmMYVb8euWD9l0eReZe7eVMFT4SmKr8LYMjLK
+         pbDaeX7U9kh02d4Yj873Ae7wMrl9nIdQjJl/DEX34ZXHeERn6/AsUnZ/BmVKZup9PzZN
+         dCDXQbChhGF8JlQs1eVNb7jyhC1aXFzUhM5hKuV6lSDIWgKyAv2nscTrUgIZPEZAeq4c
+         iqkMfYD7GLgnRvB6nF948fdZTPCb0u5RNMMcn8yJuZGAAvs1/tylDJpuF1FZrQ6XSNq9
+         Xpm6nr100DOceis5ZP/HE0KaYzMZvczJbsmONyx1MU1UvbBHfZhtApCY4kMT3vL3uVu3
+         ti2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QQ2oTmxqAAHBphVdqj9gFXH4hc7RUo1b+qk83WMu3Ug=;
+        b=xVwelRkkPd0akxRgDqd4uMMdzPuaa8CfYeQm7a3PDNQAwm2TVEJ2hGNmdmyG73ZdvY
+         FOey4YWnArXoMumcfBNeiOItV9Cw6ZJwH53gqE37j9Tey+6OVTjtYoIPFozf40oDEkSq
+         4G+7zhVz5eT+qJ5wK1/faITL+xqlJ9wfny41O720Ogb10eGC2/LUjTCX4jBGs93ITZlx
+         1RdqxN4fJas4B5lv/z7qlzcen7WeXpLhGvHHc/eZFXCuAKC3UO1bBM0utMu1k28acZeZ
+         POtBPmM8MPTuDTlnVX1ysXorDNmpqoc3UFHpMuytzZ1gyamztwxz3f/tox+zczPwsKSO
+         6agw==
+X-Gm-Message-State: AOAM530sEPPkhWJvCrXY7UntH+71pQTgTzbYTrHsfZRVdYmKd6BpkAsw
+        DH9ark4T1X0UY+rfE8+0JAlsR7IWlKQMoIh9YIpZfQ==
+X-Google-Smtp-Source: ABdhPJzUtMZW0ncMTgVMvtsybIJ+1ZPs5OYZXpL7jVFA3VKdq/0gz2hSQYKDrlHqyDBIm+O82nf40pObaCcXifCYvR0=
+X-Received: by 2002:a05:6512:3b96:: with SMTP id g22mr5088964lfv.32.1643117064573;
+ Tue, 25 Jan 2022 05:24:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <92c2d051-e25f-7b3a-c811-dd1ce85f1b9b@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Rj3V75LjHc_qWF_vUoT2Zf4hRzw15sfr
-X-Proofpoint-ORIG-GUID: Rj3V75LjHc_qWF_vUoT2Zf4hRzw15sfr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999
- clxscore=1015 phishscore=0 spamscore=0 bulkscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201250085
+References: <20220121050233.8708-1-quic_ctheegal@quicinc.com>
+ <CAKfTPtDTm5O_P504=_6Gjk2Uv0DiLS8Mu=c6km3uVO0h8BB1Lw@mail.gmail.com> <e60c7e8a-3eb4-d6b4-18c5-819089256c34@quicinc.com>
+In-Reply-To: <e60c7e8a-3eb4-d6b4-18c5-819089256c34@quicinc.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 25 Jan 2022 14:24:13 +0100
+Message-ID: <CAKfTPtD7xSYNFBrDTDrOocgz6s2jHT1BaOZkRtb9N825VprMMA@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/fair: Prefer small idle cores for forkees
+To:     Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org,
+        joel@joelfernandes.org, linux-arm-msm@vger.kernel.org,
+        quic_lingutla@quicinc.com, linux-kernel@vger.kernel.org,
+        quic_rjendra@quicinc.com, Vincent.Donnefort@arm.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Please make this _fully_ symmetrical to the existing copy_to/from_user()
-> > implementations, like I tried to say several times. Maybe I wasn't clear
-> > enough about this. Also the default implementation - that is if an
-> > architecture makes use of copy_to_user_key() without providing a
-> > raw_copy_from_user_key() implementation - should fallback to regular
-> > copy_to_user() semantics, like I tried to outline with the ifndef example
-> > of raw_copy_from_user_key() previously.
-> 
-> That does help. One thing I'm still confused about is the rational
-> for the default implementation.
+On Tue, 25 Jan 2022 at 08:09, Chitti Babu Theegala
+<quic_ctheegal@quicinc.com> wrote:
+>
+>
+> On 1/21/2022 7:57 PM, Vincent Guittot wrote:
+> > On Fri, 21 Jan 2022 at 06:03, Chitti Babu Theegala
+> > <quic_ctheegal@quicinc.com> wrote:
+> >>
+> >> Newly forked threads don't have any useful utilization data yet and
+> >> it's not possible to forecast their impact on energy consumption.
+> >
+> > It would be worth mentioning that you consider only EAS mode in the patch
+> >
+> >> These forkees (though very small, most times) end up waking big
+> >
+> > The assumption that " (though very small, most times)" is maybe true
+> > for the cases that you are interested in and you monitor, but it's not
+> > always true. It seems that Vincent D. raised some concerns about
+> > forkee which would not be small at the end
+> Agreed.
+>
+> >> cores from deep sleep for that very small durations.
+> >>
+> >> Bias all forkees to small cores to prevent waking big cores from deep
+> >
+> > you are testing idlest_sgs->idle_cpus so you don't bias to small cores
+> > but small & idle cores but if there is no small idle core then you
+> > will wake up a big core though the forkees are small most times
+> >
+>
+> The function "find_idlest_cpu" expected to return idle cpu. So, I
+> followed the same. If idle small cpu is available, then we can use it
 
-This is to avoid link errors, and potentially having something that
-works everywhere without having to add ifdefs everywhere in case this
-needs to be used in common code.
+find_idlest_cpu() returns the idlest cpu which may not be idle
 
-Again: this is just a proposal, nothing else.
+> otherwise its ok to wakeup big cpu for newly forked tasks.
+> I felt that using idle CPUs for new tasks will be better as that would
+> give them a faster chance to run immediately.
 
-> Are you suggesting that copy_from/to_user be implemented in terms of
-> copy_from/to_user_with_key? I didn't think so, even tho you said something along
-> those lines, because I assumed you were referring to the architecture specific
-> implementations for copy_from/to_user, since we weren't talking about
-> common code changes back then and Christian's suggestion didn't feature it either.
-> 
-> When you say "fully symmetrical" do you mean all functions that wrap architecture
-> defined access to user space:
-> __copy_from_user_inatomic
-> __copy_from_user
-> __copy_to_user_inatomic
-> __copy_to_user
-> _copy_from_user
-> _copy_to_user
-> copy_from_user
-> copy_to_user
-> __copy_from_user_inatomic_nocache
-> copy_struct_from_user
-> copy_from_user_nofault
-> copy_to_user_nofault
-> strncpy_from_user_nofault
-> strnlen_user_nofault
+But this goes at the opposite of your 1st goal which is to not wake up
+a big core in deep idle state. Just to say that this doesn't seem that
+clear when it's worth waking up a big core
 
-I meant something like below - not even compile tested. It is missing
-any comments, commit message and sanity checks. That's up to you.
+>
+> >> sleep to save power.
+> >
+> > Then why do you want to wake up a small core from deep state instead
+> > of packing in one of these already running cpus? If you care about
+> > power, selecting a small idle core may not always be the best choice.
+> > Would it be better to select a non idle cpu with largest spare
+> > capacity at the current opp ?
+> >
+>
+> How about running find_energy_efficient_cpu() for newly forked tasks as
+> well (with some default util value configured) ?
 
-Patch is on top of your patch, and of course needs to be splitted.
+Regarding what you are trying to do, I feel that it could be better to
+modify and use feec to select a cpu for newly forked task when not
+overutilized. Then you can use more input to select the most efficient
+cpu
 
-diff --git a/arch/s390/include/asm/uaccess.h b/arch/s390/include/asm/uaccess.h
-index 35fda4251f47..422066d7c5e2 100644
---- a/arch/s390/include/asm/uaccess.h
-+++ b/arch/s390/include/asm/uaccess.h
-@@ -33,31 +33,33 @@ static inline int __range_ok(unsigned long addr, unsigned long size)
- 
- #define access_ok(addr, size) __access_ok(addr, size)
- 
--#define raw_copy_from_user_with_key raw_copy_from_user_with_key
-+#define raw_copy_from_user_key raw_copy_from_user_key
- unsigned long __must_check
--raw_copy_from_user_with_key(void *to, const void __user *from, unsigned long n,
--			    unsigned long key);
-+raw_copy_from_user_key(void *to, const void __user *from, unsigned long n,
-+		       unsigned long key);
- 
--#define raw_copy_to_user_with_key raw_copy_to_user_with_key
-+#define raw_copy_to_user_key raw_copy_to_user_key
- unsigned long __must_check
--raw_copy_to_user_with_key(void __user *to, const void *from, unsigned long n,
--			  unsigned long key);
-+raw_copy_to_user_key(void __user *to, const void *from, unsigned long n,
-+		     unsigned long key);
- 
- static __always_inline unsigned long __must_check
- raw_copy_from_user(void *to, const void __user *from, unsigned long n)
- {
--	return raw_copy_from_user_with_key(to, from, n, 0);
-+	return raw_copy_from_user_key(to, from, n, 0);
- }
- 
- static __always_inline unsigned long __must_check
- raw_copy_to_user(void __user *to, const void *from, unsigned long n)
- {
--	return raw_copy_to_user_with_key(to, from, n, 0);
-+	return raw_copy_to_user_key(to, from, n, 0);
- }
- 
- #ifndef CONFIG_KASAN
- #define INLINE_COPY_FROM_USER
- #define INLINE_COPY_TO_USER
-+#define INLINE_COPY_FROM_USER_KEY
-+#define INLINE_COPY_TO_USER_KEY
- #endif
- 
- int __put_user_bad(void) __attribute__((noreturn));
-diff --git a/arch/s390/lib/uaccess.c b/arch/s390/lib/uaccess.c
-index 2e4e55580185..689a5ab3121a 100644
---- a/arch/s390/lib/uaccess.c
-+++ b/arch/s390/lib/uaccess.c
-@@ -59,7 +59,7 @@ static inline int copy_with_mvcos(void)
- #endif
- 
- static inline unsigned long copy_from_user_mvcos(void *x, const void __user *ptr,
--						 unsigned long size, u8 key)
-+						 unsigned long size, unsigned long key)
- {
- 	unsigned long tmp1, tmp2;
- 	union oac spec = {
-@@ -96,7 +96,7 @@ static inline unsigned long copy_from_user_mvcos(void *x, const void __user *ptr
- }
- 
- static inline unsigned long copy_from_user_mvcp(void *x, const void __user *ptr,
--						unsigned long size, u8 key)
-+						unsigned long size, unsigned long key)
- {
- 	unsigned long tmp1, tmp2;
- 
-@@ -130,17 +130,17 @@ static inline unsigned long copy_from_user_mvcp(void *x, const void __user *ptr,
- 	return size;
- }
- 
--unsigned long raw_copy_from_user_with_key(void *to, const void __user *from,
--					  unsigned long n, unsigned long key)
-+unsigned long raw_copy_from_user_key(void *to, const void __user *from,
-+				     unsigned long n, unsigned long key)
- {
- 	if (copy_with_mvcos())
--		return copy_from_user_mvcos(to, from, n, (u8)key);
--	return copy_from_user_mvcp(to, from, n, (u8)key);
-+		return copy_from_user_mvcos(to, from, n, key);
-+	return copy_from_user_mvcp(to, from, n, key);
- }
--EXPORT_SYMBOL(raw_copy_from_user_with_key);
-+EXPORT_SYMBOL(raw_copy_from_user_key);
- 
--inline unsigned long copy_to_user_mvcos(void __user *ptr, const void *x,
--					unsigned long size, u8 key)
-+static inline unsigned long copy_to_user_mvcos(void __user *ptr, const void *x,
-+					       unsigned long size, unsigned long key)
- {
- 	unsigned long tmp1, tmp2;
- 	union oac spec = {
-@@ -177,7 +177,7 @@ inline unsigned long copy_to_user_mvcos(void __user *ptr, const void *x,
- }
- 
- static inline unsigned long copy_to_user_mvcs(void __user *ptr, const void *x,
--					      unsigned long size, u8 key)
-+					      unsigned long size, unsigned long key)
- {
- 	unsigned long tmp1, tmp2;
- 
-@@ -211,14 +211,14 @@ static inline unsigned long copy_to_user_mvcs(void __user *ptr, const void *x,
- 	return size;
- }
- 
--unsigned long raw_copy_to_user_with_key(void __user *to, const void *from,
--					unsigned long n, unsigned long key)
-+unsigned long raw_copy_to_user_key(void __user *to, const void *from,
-+				   unsigned long n, unsigned long key)
- {
- 	if (copy_with_mvcos())
--		return copy_to_user_mvcos(to, from, n, (u8)key);
--	return copy_to_user_mvcs(to, from, n, (u8)key);
-+		return copy_to_user_mvcos(to, from, n, key);
-+	return copy_to_user_mvcs(to, from, n, key);
- }
--EXPORT_SYMBOL(raw_copy_to_user_with_key);
-+EXPORT_SYMBOL(raw_copy_to_user_key);
- 
- static inline unsigned long clear_user_mvcos(void __user *to, unsigned long size)
- {
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index adce966edb7a..644955b31958 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -114,20 +114,6 @@ __copy_from_user(void *to, const void __user *from, unsigned long n)
- 	return raw_copy_from_user(to, from, n);
- }
- 
--#ifdef raw_copy_from_user_with_key
--static __always_inline __must_check unsigned long
--__copy_from_user_with_key(void *to, const void __user *from, unsigned long n,
--			  unsigned long key)
--{
--	might_fault();
--	if (should_fail_usercopy())
--		return n;
--	instrument_copy_from_user(to, from, n);
--	check_object_size(to, n, false);
--	return raw_copy_from_user_with_key(to, from, n, key);
--}
--#endif /* raw_copy_from_user_with_key */
--
- /**
-  * __copy_to_user_inatomic: - Copy a block of data into user space, with less checking.
-  * @to:   Destination address, in user space.
-@@ -162,20 +148,6 @@ __copy_to_user(void __user *to, const void *from, unsigned long n)
- 	return raw_copy_to_user(to, from, n);
- }
- 
--#ifdef raw_copy_to_user_with_key
--static __always_inline __must_check unsigned long
--__copy_to_user_with_key(void __user *to, const void *from, unsigned long n,
--			unsigned long key)
--{
--	might_fault();
--	if (should_fail_usercopy())
--		return n;
--	instrument_copy_to_user(to, from, n);
--	check_object_size(from, n, true);
--	return raw_copy_to_user_with_key(to, from, n, key);
--}
--#endif /* raw_copy_to_user_with_key */
--
- #ifdef INLINE_COPY_FROM_USER
- static inline __must_check unsigned long
- _copy_from_user(void *to, const void __user *from, unsigned long n)
-@@ -229,6 +201,81 @@ copy_to_user(void __user *to, const void *from, unsigned long n)
- 	return n;
- }
- 
-+#ifndef raw_copy_from_user_key
-+static __always_inline unsigned long __must_check
-+raw_copy_from_user_key(void *to, const void __user *from, unsigned long n,
-+		       unsigned long key)
-+{
-+	return raw_copy_from_user(to, from, n);
-+}
-+#endif
-+
-+#ifdef INLINE_COPY_FROM_USER_KEY
-+static inline __must_check unsigned long
-+_copy_from_user_key(void *to, const void __user *from, unsigned long n,
-+		    unsigned long key)
-+{
-+	unsigned long res = n;
-+	might_fault();
-+	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-+		instrument_copy_from_user(to, from, n);
-+		res = raw_copy_from_user_key(to, from, n, key);
-+	}
-+	if (unlikely(res))
-+		memset(to + (n - res), 0, res);
-+	return res;
-+}
-+#else
-+extern __must_check unsigned long
-+_copy_from_user_key(void *, const void __user *, unsigned long, unsigned long);
-+#endif
-+
-+#ifndef raw_copy_to_user
-+static __always_inline unsigned long __must_check
-+raw_copy_to_user_key(void __user *to, const void *from, unsigned long n,
-+		     unsigned long key)
-+{
-+	return raw_copy_to_user(to, from, n);
-+}
-+#endif
-+
-+#ifdef INLINE_COPY_TO_USER_KEY
-+static inline __must_check unsigned long
-+_copy_to_user_key(void __user *to, const void *from, unsigned long n,
-+		  unsigned long key)
-+{
-+	might_fault();
-+	if (should_fail_usercopy())
-+		return n;
-+	if (access_ok(to, n)) {
-+		instrument_copy_to_user(to, from, n);
-+		n = raw_copy_to_user_key(to, from, n, key);
-+	}
-+	return n;
-+}
-+#else
-+extern __must_check unsigned long
-+_copy_to_user_key(void __user *, const void *, unsigned long, unsigned long);
-+#endif
-+
-+static __always_inline unsigned long __must_check
-+copy_from_user_key(void *to, const void __user *from, unsigned long n,
-+		   unsigned long key)
-+{
-+	if (likely(check_copy_size(to, n, false)))
-+		n = _copy_from_user(to, from, n);
-+	return n;
-+}
-+
-+static __always_inline unsigned long __must_check
-+copy_to_user_key(void __user *to, const void *from, unsigned long n,
-+		 unsigned long key)
-+{
-+	if (likely(check_copy_size(from, n, true)))
-+		n = _copy_to_user(to, from, n);
-+	return n;
-+}
-+
- #ifndef copy_mc_to_kernel
- /*
-  * Without arch opt-in this generic copy_mc_to_kernel() will not handle
-diff --git a/lib/usercopy.c b/lib/usercopy.c
-index 7413dd300516..c13394d0f306 100644
---- a/lib/usercopy.c
-+++ b/lib/usercopy.c
-@@ -37,6 +37,39 @@ unsigned long _copy_to_user(void __user *to, const void *from, unsigned long n)
- EXPORT_SYMBOL(_copy_to_user);
- #endif
- 
-+#ifndef INLINE_COPY_FROM_USER_KEY
-+unsigned long _copy_from_user_key(void *to, const void __user *from,
-+				  unsigned long n, unsigned long key)
-+{
-+	unsigned long res = n;
-+	might_fault();
-+	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
-+		instrument_copy_from_user(to, from, n);
-+		res = raw_copy_from_user_key(to, from, n, key);
-+	}
-+	if (unlikely(res))
-+		memset(to + (n - res), 0, res);
-+	return res;
-+}
-+EXPORT_SYMBOL(_copy_from_user_key);
-+#endif
-+
-+#ifndef INLINE_COPY_TO_USER_KEY
-+unsigned long _copy_to_user_key(void __user *to, const void *from,
-+				unsigned long n, unsigned long key)
-+{
-+	might_fault();
-+	if (should_fail_usercopy())
-+		return n;
-+	if (likely(access_ok(to, n))) {
-+		instrument_copy_to_user(to, from, n);
-+		n = raw_copy_to_user_key(to, from, n, key);
-+	}
-+	return n;
-+}
-+EXPORT_SYMBOL(_copy_to_user_key);
-+#endif
-+
- /**
-  * check_zeroed_user: check if a userspace buffer only contains zero bytes
-  * @from: Source address, in userspace.
+>
+> >>
+> >> Signed-off-by: Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+> >> ---
+> >> Changes in v2:
+> >> 1. Enclosed the EAS check for this small core preferring logic
+> >> ---
+> >>   kernel/sched/fair.c | 18 +++++++++++++-----
+> >>   1 file changed, 13 insertions(+), 5 deletions(-)
+> >>
+> >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> >> index c6046446c50b3..72f9ea7c98c05 100644
+> >> --- a/kernel/sched/fair.c
+> >> +++ b/kernel/sched/fair.c
+> >> @@ -5872,7 +5872,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
+> >>   }
+> >>
+> >>   static struct sched_group *
+> >> -find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu);
+> >> +find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu, int sd_flag);
+> >>
+> >>   /*
+> >>    * find_idlest_group_cpu - find the idlest CPU among the CPUs in the group.
+> >> @@ -5959,7 +5959,7 @@ static inline int find_idlest_cpu(struct sched_domain *sd, struct task_struct *p
+> >>                          continue;
+> >>                  }
+> >>
+> >> -               group = find_idlest_group(sd, p, cpu);
+> >> +               group = find_idlest_group(sd, p, cpu, sd_flag);
+> >>                  if (!group) {
+> >>                          sd = sd->child;
+> >>                          continue;
+> >> @@ -8885,7 +8885,8 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
+> >>   static bool update_pick_idlest(struct sched_group *idlest,
+> >>                                 struct sg_lb_stats *idlest_sgs,
+> >>                                 struct sched_group *group,
+> >> -                              struct sg_lb_stats *sgs)
+> >> +                              struct sg_lb_stats *sgs,
+> >> +                              int sd_flag)
+> >>   {
+> >>          if (sgs->group_type < idlest_sgs->group_type)
+> >>                  return true;
+> >> @@ -8922,6 +8923,13 @@ static bool update_pick_idlest(struct sched_group *idlest,
+> >>                  if (idlest_sgs->idle_cpus > sgs->idle_cpus)
+> >>                          return false;
+> >>
+> >> +               if (sched_energy_enabled()) {
+> >
+> > This is not enough, the find_energy_efficient_cpu() returns early to
+> > fallback to the default performance mode when the system is
+> > overutilized
+> >
+> >
+> >> +                   /* Select smaller cpu group for newly woken up forkees */
+> >> +                   if ((sd_flag & SD_BALANCE_FORK) && (idlest_sgs->idle_cpus &&
+> >> +                       !capacity_greater(idlest->sgc->max_capacity, group->sgc->max_capacity)))
+> >> +                       return false;
+> >> +               }
+> >> +
+> >>                  /* Select group with lowest group_util */
+> >>                  if (idlest_sgs->idle_cpus == sgs->idle_cpus &&
+> >>                          idlest_sgs->group_util <= sgs->group_util)
+> >> @@ -8940,7 +8948,7 @@ static bool update_pick_idlest(struct sched_group *idlest,
+> >>    * Assumes p is allowed on at least one CPU in sd.
+> >>    */
+> >>   static struct sched_group *
+> >> -find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+> >> +find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu, int sd_flag)
+> >>   {
+> >>          struct sched_group *idlest = NULL, *local = NULL, *group = sd->groups;
+> >>          struct sg_lb_stats local_sgs, tmp_sgs;
+> >> @@ -8978,7 +8986,7 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+> >>
+> >>                  update_sg_wakeup_stats(sd, group, sgs, p);
+> >>
+> >> -               if (!local_group && update_pick_idlest(idlest, &idlest_sgs, group, sgs)) {
+> >> +               if (!local_group && update_pick_idlest(idlest, &idlest_sgs, group, sgs, sd_flag)) {
+> >>                          idlest = group;
+> >>                          idlest_sgs = *sgs;
+> >>                  }
+> >> --
+> >> 2.17.1
+> >>

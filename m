@@ -2,244 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C45B049B061
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3B149B067
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1458166AbiAYJfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1574028AbiAYJbg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:31:36 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0037FC06176A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:31:31 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id i62so13443479ybg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:31:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uflDic+3dYMyur+pzOgW0lBnBcKIfn/jxiPD4K5JoUE=;
-        b=PA6ZqysnN4fbZTUiJ88SodYcTzem8FLgBNmsfutc4TtXmCs27IKGren09M5I1coohZ
-         25hbEn8GtFOBmmi+UhG8KlwI14LJcyx9D4X/j+5jM5dZ+xAMT3idZPG3jbU4e/LqscW4
-         YPZlMyldHFiH+MMlUK43yLYRG4I6WVXOxIbSl1fWfNgXhqsbCOFMioi0AqZ/aDEcCDhn
-         8/IoUlJI3fKppUtG+6l9X1OAjAvHlZy9xAoc+Zi9OunmlL8FuG/UsB4SY+Zpby0K6TVw
-         erzlBrM3yL/KdFSlGmV3rw0XLdXrrzM0LE2pJSr/x9bcaug2Sid2cKKxjF01o1AEP/gj
-         6ciw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uflDic+3dYMyur+pzOgW0lBnBcKIfn/jxiPD4K5JoUE=;
-        b=Vf9x/nvlFj0zV567thwlTuI2b6UwTC6mjagOZlyKClSICVTj2VkdETrEwKEqNxsVRR
-         aJEYxD+aGDkrRFscBdDgnmTSwvdWV+tdC46s0dVQmikjcevoSAM1HCHRHNpT0HSGdQKj
-         6YGwelhwMBizcs5md5rpEyTMag82CoEm9yeg1IA2us5NZ8r034K/srVOQWPfRoxS+Vg6
-         jnen3y6TLkeui77u+vw4EKsq4oyTAjxOQmNrvRPmqPze4DwGc9DInfpu9t+qUltizrdh
-         hS8Grljchczd7/2TPAQ2UGQp2L/Bry5VvkyvDooImGQ/EQdGU13+Ix1bZFUlmK3SwxUI
-         kvAg==
-X-Gm-Message-State: AOAM533W8jWwL1x0c5XgSu8eh9v9UVbireGivTzOu5DsW4kefWvaAjLW
-        t+gPghUjM1wrpJf/PVjefiiX/N9tZSes1plEuWwXFQ==
-X-Google-Smtp-Source: ABdhPJwUIIFYft0BR/NvApj8YkMD7cN4LvSJxgFjUZHQmZRG9BxGzwdumnRwZw4CnLazXBn5AiuDaerh1zdyhOQjT78=
-X-Received: by 2002:a25:838b:: with SMTP id t11mr26489620ybk.146.1643103090974;
- Tue, 25 Jan 2022 01:31:30 -0800 (PST)
+        id S1574664AbiAYJgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:36:08 -0500
+Received: from mga12.intel.com ([192.55.52.136]:43254 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1574351AbiAYJd3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 04:33:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643103208; x=1674639208;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+VQ5+r1Kq+buQ3KBsLXGaXoqqEJxE2QX8j2kQTLRU9o=;
+  b=i/xdvNXlQtWDkS6tzEBD0cvQzi5D6+i05smEl9aRhwiuTKdFD8D8EBa3
+   YBLJKKMJ7jYYwGx7RIrI/mSCVK1eMBVEzmN1bWIOT2+PO9lYxIutpbEWd
+   uqMzHH5FxERUhlomVYX22qiRH3susrC6M+ZMlHU0lDlctbmPE9IDWa3oM
+   brKA/SQu6tZBxmLyg1AJ7bG+6FgXQubbC6STasomrUokKlLcMBeLm86Ph
+   mBnjEieO0HsWlIrgUvwOyvQZyhcKPHUcXTkmajFnnuMa1r0Tqo7ELgxce
+   QsUCzEmQxddVJ3OQhkCdRzcyrhNEzaT6G5PEUCUWuT0djjs+P8VHqQNsE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226242014"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="226242014"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 01:31:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="597074199"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Jan 2022 01:31:34 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCIAo-000Jf9-1a; Tue, 25 Jan 2022 09:31:34 +0000
+Date:   Tue, 25 Jan 2022 17:31:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
+Cc:     kbuild-all@lists.01.org, dan.carpenter@oracle.com,
+        Larry.Finger@lwfinger.net, straube.linux@gmail.com,
+        martin@kaiser.cx, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, paskripkin@gmail.com
+Subject: Re: [PATCH 06/10] staging: r8188eu: remove DBG_88E calls from
+ os_dep/ioctl_linux.c
+Message-ID: <202201251730.AgK9qxSH-lkp@intel.com>
+References: <20220124224415.831-7-phil@philpotter.co.uk>
 MIME-Version: 1.0
-References: <20220124183943.102762895@linuxfoundation.org>
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 25 Jan 2022 15:01:19 +0530
-Message-ID: <CA+G9fYsXmQvQG1VFQLFHXZTQDu4TR1ozgo_4onNzj8OXO_qagA@mail.gmail.com>
-Subject: Re: [PATCH 4.19 000/239] 4.19.226-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124224415.831-7-phil@philpotter.co.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 00:44, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.226 release.
-> There are 239 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.226-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Phillip,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+I love your patch! Perhaps something to improve:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+[auto build test WARNING on staging/staging-testing]
+[also build test WARNING on v5.17-rc1 next-20220124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-## Build
-* kernel: 4.19.226-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.19.y
-* git commit: ebabcfeda281e1c6226b219845d71930c729dae0
-* git describe: v4.19.225-240-gebabcfeda281
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.225-240-gebabcfeda281
+url:    https://github.com/0day-ci/linux/commits/Phillip-Potter/Cleanup-and-removal-of-DBG_88E-macro/20220125-125206
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git fa783154524a71ab74e293cd8251155e5971952b
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220125/202201251730.AgK9qxSH-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/1724ade2c1f2fa95e0e314ed9229700d6158fbbc
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Phillip-Potter/Cleanup-and-removal-of-DBG_88E-macro/20220125-125206
+        git checkout 1724ade2c1f2fa95e0e314ed9229700d6158fbbc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/staging/r8188eu/
 
-## Test Regressions (compared to v4.19.225-213-gad801d4f7db5)
-No test regressions found.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-## Metric Regressions (compared to v4.19.225-213-gad801d4f7db5)
-No metric regressions found.
+All warnings (new ones prefixed by >>):
 
-## Test Fixes (compared to v4.19.225-213-gad801d4f7db5)
-No test fixes found.
+   drivers/staging/r8188eu/os_dep/ioctl_linux.c: In function 'rtw_wx_set_mlme':
+>> drivers/staging/r8188eu/os_dep/ioctl_linux.c:1022:13: warning: variable 'reason' set but not used [-Wunused-but-set-variable]
+    1022 |         u16 reason;
+         |             ^~~~~~
 
-## Metric Fixes (compared to v4.19.225-213-gad801d4f7db5)
-No metric fixes found.
 
-## Test result summary
-total: 85753, pass: 69950, fail: 717, skip: 13259, xfail: 1827
+vim +/reason +1022 drivers/staging/r8188eu/os_dep/ioctl_linux.c
 
-## Build Summary
-* arm: 250 total, 246 passed, 4 failed
-* arm64: 35 total, 35 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 26 total, 26 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* s390: 12 total, 12 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 34 total, 34 passed, 0 failed
+2b42bd58b32155 Phillip Potter  2021-07-28  1016  
+2b42bd58b32155 Phillip Potter  2021-07-28  1017  static int rtw_wx_set_mlme(struct net_device *dev,
+2b42bd58b32155 Phillip Potter  2021-07-28  1018  			     struct iw_request_info *info,
+2b42bd58b32155 Phillip Potter  2021-07-28  1019  			     union iwreq_data *wrqu, char *extra)
+2b42bd58b32155 Phillip Potter  2021-07-28  1020  {
+2b42bd58b32155 Phillip Potter  2021-07-28  1021  	int ret = 0;
+2b42bd58b32155 Phillip Potter  2021-07-28 @1022  	u16 reason;
+2b42bd58b32155 Phillip Potter  2021-07-28  1023  	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
+2b42bd58b32155 Phillip Potter  2021-07-28  1024  	struct iw_mlme *mlme = (struct iw_mlme *)extra;
+2b42bd58b32155 Phillip Potter  2021-07-28  1025  
+d8062f6adca1ef Michael Straube 2021-07-30  1026  	if (!mlme)
+2b42bd58b32155 Phillip Potter  2021-07-28  1027  		return -1;
+2b42bd58b32155 Phillip Potter  2021-07-28  1028  
+2b42bd58b32155 Phillip Potter  2021-07-28  1029  	reason = mlme->reason_code;
+2b42bd58b32155 Phillip Potter  2021-07-28  1030  
+2b42bd58b32155 Phillip Potter  2021-07-28  1031  	switch (mlme->cmd) {
+2b42bd58b32155 Phillip Potter  2021-07-28  1032  	case IW_MLME_DEAUTH:
+2b42bd58b32155 Phillip Potter  2021-07-28  1033  		if (!rtw_set_802_11_disassociate(padapter))
+2b42bd58b32155 Phillip Potter  2021-07-28  1034  			ret = -1;
+2b42bd58b32155 Phillip Potter  2021-07-28  1035  		break;
+2b42bd58b32155 Phillip Potter  2021-07-28  1036  	case IW_MLME_DISASSOC:
+2b42bd58b32155 Phillip Potter  2021-07-28  1037  		if (!rtw_set_802_11_disassociate(padapter))
+2b42bd58b32155 Phillip Potter  2021-07-28  1038  			ret = -1;
+2b42bd58b32155 Phillip Potter  2021-07-28  1039  		break;
+2b42bd58b32155 Phillip Potter  2021-07-28  1040  	default:
+2b42bd58b32155 Phillip Potter  2021-07-28  1041  		return -EOPNOTSUPP;
+2b42bd58b32155 Phillip Potter  2021-07-28  1042  	}
+2b42bd58b32155 Phillip Potter  2021-07-28  1043  	return ret;
+2b42bd58b32155 Phillip Potter  2021-07-28  1044  }
+2b42bd58b32155 Phillip Potter  2021-07-28  1045  
 
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

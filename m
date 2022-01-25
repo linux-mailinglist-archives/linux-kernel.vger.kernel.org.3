@@ -2,95 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D36A049B420
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFB949B411
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:38:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbiAYMjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:39:17 -0500
-Received: from fanzine2.igalia.com ([213.97.179.56]:40434 "EHLO
-        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383383AbiAYMet (ORCPT
+        id S1383567AbiAYMhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1451351AbiAYMej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:34:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=M+vFOpEIP37an1qVa4Tcx18DBd85JSmMXYYJr1B8Juo=; b=C7E5MvFAQyqvD+w935ILNjP9el
-        jz6JeKwWmB7nslSM4eIWlO2IEQZqrAmI4qGTh3MAKAHOMIaF4CgSx8ZYokwBZuneOyYPrTNqya3vr
-        cdFBj2v+WEL7hlQv61X3qSTQ9hAmBvbha8oqY+OPJcTVVF36GDZfrIaGpLShqImcW7WIWbU5fNsbV
-        HgFKIimlz0G6sisUbTaoDfzjwFQbetdTH33Q0Cbhdg5odiX1B/aHptvzMBN1MM8NgahFlt4A7rKrc
-        7rnjhGYUjvmCFwZE8bEYwSaeikOIzNZ/+w0+sQrJwHEIdPskuQvGuPw9fCqRF+dvnxbvop2w8cUT+
-        Ke4lD5GA==;
-Received: from 200-207-58-141.dsl.telesp.net.br ([200.207.58.141] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nCL20-0007YA-BU; Tue, 25 Jan 2022 13:34:40 +0100
-Message-ID: <fda509a5-ea0d-4d1d-a1c1-ca5e80010fc0@igalia.com>
-Date:   Tue, 25 Jan 2022 09:34:23 -0300
+        Tue, 25 Jan 2022 07:34:39 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB32C061769;
+        Tue, 25 Jan 2022 04:34:38 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id e8so17835987wrc.0;
+        Tue, 25 Jan 2022 04:34:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XU7BD3ZCwSatg7jSB64inzSJiC7IsFXIbFfu4ywKzMU=;
+        b=HFRXWbjFZwTAqv/NjKXo/nKLZ86h7hbHRecQhkPDbgdfezb/qA9aC4UDfkmKy57f8H
+         CalqE9+XDJ8YD0fjFFKvf8A1RfN5lztuEJjhG/g8kTF5AEnKY01G9C90Iy87d27FIYNQ
+         EZG1ow5Hx5BX9tZMD4E61TUONqjDmrKqIqdblTAeySBNSgHkVorBvHt9CD70TyfPgHXI
+         J2a7ONxPEGi5LMdQ4Od3vi6jYexeQ+jeR26tKNA3CDk+7GNtjERlagGM+6o6rpaa/y+n
+         CAhPNdiQO4qt+zH3V3bX+JAMYOtiaI0Wl44j9YKAVchnOYVSmm7r/gGrFnRYwB7Xg71l
+         r+rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XU7BD3ZCwSatg7jSB64inzSJiC7IsFXIbFfu4ywKzMU=;
+        b=pH9lE6dS+tbxt55YvcloUv991cmNY9QJHC1exhI+2vl1Gx1vaJWiVL6Mh+guvroky4
+         njTv0mqF7NN8vfY0JcTIu6zicVxeNmE4J8MtMeWpVyum6xLAQiwiAGmdxGCi4YNFXDSc
+         WFDQjDKmjrOY1ptA18kE9aL2WXjkNmx2ieNwwaNCk4IncN/XefrNj6z1vrqr4GrmoAkq
+         QJqVDfEVArlRIrihELCgns8cAG2YXF5/U+MYNSAtGmwiN55WaiIUysYfgl1ZIn+FzBPE
+         Rl/BnKW+zW/XqeFANEbQJE38DRzBUxYSCsK6yoVP78zAE2CxVDNWRl/+Tppf+R0LjsIy
+         o4CA==
+X-Gm-Message-State: AOAM530emckiLjVt29pq/2OXxdt0VH7A74+ox7sv3fhFwcK57Mc4mOcP
+        cCkQLEkN36Wx+WlMIvqZdiUpSWZOA6Y=
+X-Google-Smtp-Source: ABdhPJwtJj3Putd2RYBejOhKxuX/HNBAXLYwr58mXSXw8ALxLch+seyPNA09653LY7qWWg4gUtuIBg==
+X-Received: by 2002:adf:fc8e:: with SMTP id g14mr18057287wrr.260.1643114077318;
+        Tue, 25 Jan 2022 04:34:37 -0800 (PST)
+Received: from heron.intern.cm-ag (p200300dc6f046a000000000000000fd2.dip0.t-ipconnect.de. [2003:dc:6f04:6a00::fd2])
+        by smtp.gmail.com with ESMTPSA id e10sm1558633wrq.53.2022.01.25.04.34.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 04:34:36 -0800 (PST)
+From:   Max Kellermann <max.kellermann@gmail.com>
+To:     linux-pwm@vger.kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org, andrey@lebedev.lt,
+        Max Kellermann <max.kellermann@gmail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/3] pwm-sun4i: convert "next_period" to local variable
+Date:   Tue, 25 Jan 2022 13:34:27 +0100
+Message-Id: <20220125123429.3490883-1-max.kellermann@gmail.com>
+X-Mailer: git-send-email 2.34.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
-Content-Language: en-US
-To:     "d.hatayama@fujitsu.com" <d.hatayama@fujitsu.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dyoung@redhat.com" <dyoung@redhat.com>
-Cc:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>
-References: <20220108153451.195121-1-gpiccoli@igalia.com>
- <TYAPR01MB6507D06BA6D32218F6E88198955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <TYAPR01MB6507D06BA6D32218F6E88198955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2022 08:50, d.hatayama@fujitsu.com wrote:
->> +       while ((func = strsep(&buf, ","))) {
->> +               addr = kallsyms_lookup_name(func);
->> +               if (!addr) {
->> +                       pr_warn("panic_notifier_filter: invalid symbol %s\n", func);
->> +                       continue;
->> +               }
-> 
-> Could you remove this check?
-> 
-> panic_notifier_list is exported to kernel modules and this check
-> prevents such users from using this feature.
-> 
-> Thanks.
-> HATAYAMA, Daisuke
+Its value is calculated in sun4i_pwm_apply() and is used only there.
 
+Cc: stable@vger.kernel.org
+Signed-off-by: Max Kellermann <max.kellermann@gmail.com>
+---
+ drivers/pwm/pwm-sun4i.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Hi, thanks for the review. First of all, notice that it's very likely
-this patch isn't gonna get merged this way, we are considering a
-refactor that included 2 panic notifiers: one a bit earlier (pre_dump),
-that includes functions less risky, as watchdog unloaders, kernel offset
-dump, etc, and the second panic notifier (post_dump) will keep the
-majority of callbacks, and can be conditionally executed on kdump
-through the usage of "crash_kexec_post_notifiers".
+diff --git a/drivers/pwm/pwm-sun4i.c b/drivers/pwm/pwm-sun4i.c
+index 91ca67651abd..c7c564a6bf36 100644
+--- a/drivers/pwm/pwm-sun4i.c
++++ b/drivers/pwm/pwm-sun4i.c
+@@ -89,7 +89,6 @@ struct sun4i_pwm_chip {
+ 	void __iomem *base;
+ 	spinlock_t ctrl_lock;
+ 	const struct sun4i_pwm_data *data;
+-	unsigned long next_period[2];
+ };
+ 
+ static inline struct sun4i_pwm_chip *to_sun4i_pwm_chip(struct pwm_chip *chip)
+@@ -237,6 +236,7 @@ static int sun4i_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 	int ret;
+ 	unsigned int delay_us, prescaler = 0;
+ 	unsigned long now;
++	unsigned long next_period;
+ 	bool bypass;
+ 
+ 	pwm_get_state(pwm, &cstate);
+@@ -284,7 +284,7 @@ static int sun4i_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 
+ 	val = (duty & PWM_DTY_MASK) | PWM_PRD(period);
+ 	sun4i_pwm_writel(sun4i_pwm, val, PWM_CH_PRD(pwm->hwpwm));
+-	sun4i_pwm->next_period[pwm->hwpwm] = jiffies +
++	next_period = jiffies +
+ 		nsecs_to_jiffies(cstate.period + 1000);
+ 
+ 	if (state->polarity != PWM_POLARITY_NORMAL)
+@@ -306,9 +306,8 @@ static int sun4i_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 
+ 	/* We need a full period to elapse before disabling the channel. */
+ 	now = jiffies;
+-	if (time_before(now, sun4i_pwm->next_period[pwm->hwpwm])) {
+-		delay_us = jiffies_to_usecs(sun4i_pwm->next_period[pwm->hwpwm] -
+-					   now);
++	if (time_before(now, next_period)) {
++		delay_us = jiffies_to_usecs(next_period - now);
+ 		if ((delay_us / 500) > MAX_UDELAY_MS)
+ 			msleep(delay_us / 1000 + 1);
+ 		else
+-- 
+2.34.0
 
-Anyway, I'm curious with your code review - how can we use this filter
-with modules, if the filter setup is invoked as early_param(), before
-modules load? In that case, module functions won't have a valid address,
-correct? So, in that moment, this lookup fails, we cannot record an
-unloaded module address in such list. Please, correct me if I'm wrong.
-
-Cheers,
-
-
-Guilherme

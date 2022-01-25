@@ -2,219 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2D549B04A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D54A49B04F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574038AbiAYJbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:31:40 -0500
-Received: from mga18.intel.com ([134.134.136.126]:37163 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1573290AbiAYJUU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:20:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643102417; x=1674638417;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CvoHKh2Sj7FSwQosQoHJRoEf+DpWTkpPjpylZISDp5A=;
-  b=XXuqlvmikoXuVLELT4LAOnvy7jf3/+p3EDUtVKzq08h/moFcDnJfnli4
-   AM5GOHJPQFvIL6yAe77PMVjdsPmcFf1tDaYm2AdHmHWydjzWXb4yiibtH
-   Jk94WFp7p91T5CG4vUhxhBh239QIZnxIm57vhbMPlOEr7p57BpNEIkJrj
-   GkSL0TsnTJhHr3vYQP5BwzurAKqQsmCjB8eJ4kq5L4xkX39TgnCI05jDB
-   zJLnXkTZFQGjIrTCx5vPwzju1+atbjenb8uQHrJxoNYZzg2J7FD9Z5iE1
-   p1B7eW0Qddcv2ytwhVlecMZRwnVD7hJTAqoPjSPQGgNJ39KwbMrwfg7vS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="229836283"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="229836283"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 01:16:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="562976285"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 25 Jan 2022 01:16:33 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCHwH-000JdN-8e; Tue, 25 Jan 2022 09:16:33 +0000
-Date:   Tue, 25 Jan 2022 17:16:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/paravirt] BUILD SUCCESS
- 2e1f8e55f9e054b4a49ffc06c7e33b5d4725f05e
-Message-ID: <61efbfe9.7zfLb0nKW+J6dWfa%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1574096AbiAYJcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377051AbiAYJV7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 04:21:59 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFD5C061788;
+        Tue, 25 Jan 2022 01:17:51 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id i65so19129932pfc.9;
+        Tue, 25 Jan 2022 01:17:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=VI7aOgi8DP+rWss8fUyiKKAKnxyW61GK39+BQqf7IjQ=;
+        b=kpoc+jN7Oh0Xh8sqifOd+tY8Ghm2bNiqb4sbBQuTro16HbQ2BbOMHBePTsdlmGr1pl
+         hEAewiRLTJx2IXZUrxyIu3hdOmjInM5Zwnk/Td0LTVdcvO2xzKX90rtU7gEpsckEInGI
+         1qGxCKElOueff2YWOXMYF4rsdE8eYnztSNWVTPLgRq+ZgXI+wCc8106BGSg0QJpfnULB
+         nHYLJ+ehlOpBdZrchedyDpZKJ1xakH48GpLwl0KVdu7myWug/yJ/v9BofVUrnC3NulwC
+         W5OrmoishELJOfTHlIPzabjaYu6q8a9egYyQm3Rc6pto0aTgFOFqixSw+g6/Rh66y4uF
+         NbsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=VI7aOgi8DP+rWss8fUyiKKAKnxyW61GK39+BQqf7IjQ=;
+        b=ZDV4dS8dtxv7xiaaMiQXkrPRXwxlDjo/gd9aLlyJnp5/8qaWtj7Cc/DV9iy90zgw5J
+         jDpLjB50ZS4QHaJ/s5JgJIcYMCNpFnkj6VwPXELweRcS3olIYNsOgWGbq44acmNL5FJM
+         PKgThh22VvDTPM/zrc/+Y6bekRRnjawb74KKL2dVAkcjfe8EC1n0EHGI6zQqa7xEkK1O
+         ZLGai2juZC+toHMPMnme3ufr8XVH9GwkZwT9nq2wTgsCVOAzl5PM6+OhVbTkMqQr7flD
+         481Q1yQ8y4Lii+rnn2xRC93LRc+FZpaFGRBj0uDFmX2+AScZ8OJ4FjCCLhqwdKkXCyGI
+         xlcw==
+X-Gm-Message-State: AOAM532zswOQT+xttIRKR+NU3MvfFTIBO3mYwBMyGb7KR7f3HDChioZi
+        xNptAgBQKHGlEZgsywlWvvh5Vzf4o765GQ==
+X-Google-Smtp-Source: ABdhPJzAP7k1ap1vXtrYUwPxmesHj8MzzPsBeIsoCfmfcwnVaT/kuY4a0eAnOru1MxPReVwZLnzPgw==
+X-Received: by 2002:a62:7705:0:b0:4c6:d435:573c with SMTP id s5-20020a627705000000b004c6d435573cmr17716034pfc.57.1643102271349;
+        Tue, 25 Jan 2022 01:17:51 -0800 (PST)
+Received: from localhost.localdomain ([203.205.141.112])
+        by smtp.googlemail.com with ESMTPSA id y13sm2114780pfi.2.2022.01.25.01.17.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 25 Jan 2022 01:17:51 -0800 (PST)
+From:   Wanpeng Li <kernellwp@gmail.com>
+X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: [PATCH] KVM: LAPIC: Also cancel preemption timer during SET_LAPIC
+Date:   Tue, 25 Jan 2022 01:17:00 -0800
+Message-Id: <1643102220-35667-1-git-send-email-wanpengli@tencent.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/paravirt
-branch HEAD: 2e1f8e55f9e054b4a49ffc06c7e33b5d4725f05e  x86/paravirt: Use %rip-relative addressing in hook calls
+From: Wanpeng Li <wanpengli@tencent.com>
 
-elapsed time: 728m
+The below warning is splatting during guest reboot.
 
-configs tested: 146
-configs skipped: 84
+  ------------[ cut here ]------------
+  WARNING: CPU: 0 PID: 1931 at arch/x86/kvm/x86.c:10322 kvm_arch_vcpu_ioctl_run+0x874/0x880 [kvm]
+  CPU: 0 PID: 1931 Comm: qemu-system-x86 Tainted: G          I       5.17.0-rc1+ #5
+  RIP: 0010:kvm_arch_vcpu_ioctl_run+0x874/0x880 [kvm]
+  Call Trace:
+   <TASK>
+   kvm_vcpu_ioctl+0x279/0x710 [kvm]
+   __x64_sys_ioctl+0x83/0xb0
+   do_syscall_64+0x3b/0xc0
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+  RIP: 0033:0x7fd39797350b
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This can be triggered by not exposing tsc-deadline mode and doing a reboot in
+the guest. The lapic_shutdown() function which is called in sys_reboot path
+will not disarm the flying timer, it just masks LVTT. lapic_shutdown() clears
+APIC state w/ LVT_MASKED and timer-mode bit is 0, this can trigger timer-mode
+switch between tsc-deadline and oneshot/periodic, which can result in preemption
+timer be cancelled in apic_update_lvtt(). However, We can't depend on this when 
+not exposing tsc-deadline mode and oneshot/periodic modes emulated by preemption 
+timer. Qemu will synchronise states around reset, let's cancel preemption timer 
+under KVM_SET_LAPIC.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20220124
-sh                 kfr2r09-romimage_defconfig
-mips                         bigsur_defconfig
-arc                 nsimosci_hs_smp_defconfig
-powerpc                     rainier_defconfig
-mips                      maltasmvp_defconfig
-sh                           se7722_defconfig
-mips                     decstation_defconfig
-sparc                       sparc64_defconfig
-powerpc                      ppc6xx_defconfig
-mips                            gpr_defconfig
-arc                          axs101_defconfig
-xtensa                    xip_kc705_defconfig
-powerpc                     asp8347_defconfig
-riscv                    nommu_k210_defconfig
-m68k                          atari_defconfig
-powerpc                     tqm8548_defconfig
-openrisc                            defconfig
-csky                                defconfig
-sh                           se7206_defconfig
-ia64                          tiger_defconfig
-arc                            hsdk_defconfig
-arm                       multi_v4t_defconfig
-arm                        trizeps4_defconfig
-arm                        mvebu_v7_defconfig
-arm                           viper_defconfig
-sh                   sh7724_generic_defconfig
-ia64                        generic_defconfig
-sh                           sh2007_defconfig
-arm                          simpad_defconfig
-sh                          r7780mp_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                             shx3_defconfig
-powerpc                    amigaone_defconfig
-arm                            lart_defconfig
-arc                         haps_hs_defconfig
-mips                        bcm47xx_defconfig
-xtensa                          iss_defconfig
-arm                  randconfig-c002-20220124
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20220124
-x86_64               randconfig-a003-20220124
-x86_64               randconfig-a001-20220124
-x86_64               randconfig-a004-20220124
-x86_64               randconfig-a005-20220124
-x86_64               randconfig-a006-20220124
-i386                 randconfig-a002-20220124
-i386                 randconfig-a005-20220124
-i386                 randconfig-a003-20220124
-i386                 randconfig-a004-20220124
-i386                 randconfig-a001-20220124
-i386                 randconfig-a006-20220124
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-arm                  randconfig-c002-20220124
-riscv                randconfig-c006-20220124
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-mips                 randconfig-c004-20220124
-x86_64               randconfig-c007-20220124
-mips                        workpad_defconfig
-mips                     loongson2k_defconfig
-mips                     cu1000-neo_defconfig
-mips                  cavium_octeon_defconfig
-mips                        omega2p_defconfig
-arm                           sama7_defconfig
-powerpc                     kmeter1_defconfig
-mips                        bcm63xx_defconfig
-powerpc                          g5_defconfig
-arm                          imote2_defconfig
-powerpc                     tqm5200_defconfig
-mips                       lemote2f_defconfig
-powerpc                        icon_defconfig
-powerpc                     mpc5200_defconfig
-powerpc                     tqm8560_defconfig
-mips                     cu1830-neo_defconfig
-arm                        neponset_defconfig
-mips                           ip22_defconfig
-arm                     davinci_all_defconfig
-powerpc                      ppc44x_defconfig
-arm                              alldefconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a011-20220124
-x86_64               randconfig-a013-20220124
-x86_64               randconfig-a015-20220124
-x86_64               randconfig-a016-20220124
-x86_64               randconfig-a014-20220124
-x86_64               randconfig-a012-20220124
-i386                 randconfig-a011-20220124
-i386                 randconfig-a016-20220124
-i386                 randconfig-a013-20220124
-i386                 randconfig-a014-20220124
-i386                 randconfig-a015-20220124
-i386                 randconfig-a012-20220124
-riscv                randconfig-r042-20220124
-hexagon              randconfig-r045-20220124
-hexagon              randconfig-r041-20220124
-
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ arch/x86/kvm/lapic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index baca9fa37a91..4662469240bc 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2629,7 +2629,7 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
+ 	kvm_apic_set_version(vcpu);
+ 
+ 	apic_update_ppr(apic);
+-	hrtimer_cancel(&apic->lapic_timer.timer);
++	cancel_apic_timer(apic);
+ 	apic->lapic_timer.expired_tscdeadline = 0;
+ 	apic_update_lvtt(apic);
+ 	apic_manage_nmi_watchdog(apic, kvm_lapic_get_reg(apic, APIC_LVT0));
+-- 
+2.25.1
+

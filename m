@@ -2,163 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B8849B71B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311EB49B721
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444587AbiAYPAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:00:42 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3900 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1581111AbiAYO51 (ORCPT
+        id S1382686AbiAYPB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:01:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1581257AbiAYO7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:57:27 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PElpep016074;
-        Tue, 25 Jan 2022 14:57:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Nf3VGbuEa9NgDLjSbsvh58gLX9qjCGzfLwEMH/artt4=;
- b=QIOD+RwLSNZCcyR1DLNcQVs4qBiKcD4bF4E+FGB86CF34WzfUtRsfOQGTW9prqT5J4bi
- QW6o/FKQ2MhiA58XdjsjbEyLRQRNmXqfE9onu5y6HfGMnQ1C0GpYMowz0yilk/q4YvWl
- 5PhOTb9ruVXRAZC/5J3JMt7RQJAONLcDnK3ji+Mc1k3cC//AZeZhjtBaThv5JByF7G+Q
- IfVXa7q1iz97hVEJ5oECvcKQhheWgPsv6k3XDKW5l7KymA6uZeCdhmHQMhLh0gPz7Uov
- EvQkvNPpRbcKlWD5AUXuO/KO+Xc6RRe2nArpTTV3Y4RxeruZbHCJ9M8i3SEnmVT0Uuah jA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dtk9h86mx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:57:21 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20PEvLhn010292;
-        Tue, 25 Jan 2022 14:57:21 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dtk9h86mg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:57:21 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PEv1e9017165;
-        Tue, 25 Jan 2022 14:57:20 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma02dal.us.ibm.com with ESMTP id 3dt1x9e6tc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:57:20 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PEvIRG23003470
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 14:57:18 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AE8AEC606E;
-        Tue, 25 Jan 2022 14:57:18 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8241C6067;
-        Tue, 25 Jan 2022 14:57:16 +0000 (GMT)
-Received: from [9.163.21.206] (unknown [9.163.21.206])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Jan 2022 14:57:16 +0000 (GMT)
-Message-ID: <2d9c8cd8-94cf-a1aa-e5e9-d25f607b0b67@linux.ibm.com>
-Date:   Tue, 25 Jan 2022 09:57:16 -0500
+        Tue, 25 Jan 2022 09:59:13 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32B7C06173B;
+        Tue, 25 Jan 2022 06:59:11 -0800 (PST)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 583C222246;
+        Tue, 25 Jan 2022 15:59:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1643122748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sM8Q2KXy+Jfx3tOwipesCkOAKh8jg0scyT5GXZrZG50=;
+        b=dr/FI8+r3AXWq6WCwokEUvanPYljOb5z/fA0yl0aK7v9LYN4nf+fcPyaUxATUtx7RR/GET
+        3tpiqqEVzBVYXRJfCzJNFdUfdhjFOyVwmP+JOSHOvEy8fyLYz4O0hwLuI3/9mJjuzxV2Q+
+        0HZug21gTPv5uo0nmXD8ng/4+Drmjmw=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 15/30] KVM: s390: pci: do initial setup for AEN
- interpretation
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-16-mjrosato@linux.ibm.com>
- <9df849f6-dd99-93ea-8e35-3daffd38e694@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <9df849f6-dd99-93ea-8e35-3daffd38e694@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MSQrLXi2GrqVvHFcDLOY20_s4TOyKrA7
-X-Proofpoint-GUID: nUSSeGzWLQ0nC3Ff0GZT5tPGmmMt9wrM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- phishscore=0 bulkscore=0 adultscore=0 clxscore=1015 malwarescore=0
- spamscore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201250094
+Date:   Tue, 25 Jan 2022 15:59:07 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH 6/8] nvmem: transformations: ethernet address offset
+ support
+In-Reply-To: <455f4360-34fe-7fee-66d5-fd945fe1e086@gmail.com>
+References: <20211228142549.1275412-1-michael@walle.cc>
+ <20211228142549.1275412-7-michael@walle.cc>
+ <455f4360-34fe-7fee-66d5-fd945fe1e086@gmail.com>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <19d7206a42c7616d45733e44c9e52878@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 7:23 AM, Pierre Morel wrote:
-> 
-> 
-> On 1/14/22 21:31, Matthew Rosato wrote:
->> Initial setup for Adapter Event Notification Interpretation for zPCI
->> passthrough devices.  Specifically, allocate a structure for 
->> forwarding of
->> adapter events and pass the address of this structure to firmware.
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Hi,
+
+Am 2022-01-25 13:08, schrieb Rafał Miłecki:
+> On 28.12.2021 15:25, Michael Walle wrote:
+>> An nvmem cell might just contain a base MAC address. To generate a
+>> address of a specific interface, add a transformation to add an offset
+>> to this base address.
+>> 
+>> Add a generic implementation and the first user of it, namely the sl28
+>> vpd storage.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
 >> ---
->>   arch/s390/include/asm/pci.h      |   4 +
->>   arch/s390/include/asm/pci_insn.h |  12 +++
->>   arch/s390/kvm/interrupt.c        |  14 +++
->>   arch/s390/kvm/kvm-s390.c         |   9 ++
->>   arch/s390/kvm/pci.c              | 144 +++++++++++++++++++++++++++++++
->>   arch/s390/kvm/pci.h              |  42 +++++++++
->>   arch/s390/pci/pci.c              |   6 ++
->>   7 files changed, 231 insertions(+)
->>   create mode 100644 arch/s390/kvm/pci.h
->>
-> ...snip...
-> 
->> new file mode 100644
->> index 000000000000..b2000ed7b8c3
->> --- /dev/null
->> +++ b/arch/s390/kvm/pci.h
->> @@ -0,0 +1,42 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * s390 kvm PCI passthrough support
+>>   drivers/nvmem/transformations.c | 45 
+>> +++++++++++++++++++++++++++++++++
+>>   1 file changed, 45 insertions(+)
+>> 
+>> diff --git a/drivers/nvmem/transformations.c 
+>> b/drivers/nvmem/transformations.c
+>> index 61642a9feefb..15cd26da1f83 100644
+>> --- a/drivers/nvmem/transformations.c
+>> +++ b/drivers/nvmem/transformations.c
+>> @@ -12,7 +12,52 @@ struct nvmem_transformations {
+>>   	nvmem_cell_post_process_t pp;
+>>   };
+>>   +/**
+>> + * nvmem_transform_mac_address_offset() - Add an offset to a mac 
+>> address cell
 >> + *
->> + * Copyright IBM Corp. 2021
+>> + * A simple transformation which treats the index argument as an 
+>> offset and add
+>> + * it to a mac address. This is useful, if the nvmem cell stores a 
+>> base
+>> + * ethernet address.
 >> + *
->> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+>> + * @index: nvmem cell index
+>> + * @data: nvmem data
+>> + * @bytes: length of the data
+>> + *
+>> + * Return: 0 or negative error code on failure.
 >> + */
+>> +static int nvmem_transform_mac_address_offset(int index, unsigned int 
+>> offset,
+>> +					      void *data, size_t bytes)
+>> +{
+>> +	if (bytes != ETH_ALEN)
+>> +		return -EINVAL;
 >> +
->> +#ifndef __KVM_S390_PCI_H
->> +#define __KVM_S390_PCI_H
+>> +	if (index < 0)
+>> +		return -EINVAL;
 >> +
->> +#include <linux/pci.h>
->> +#include <linux/mutex.h>
->> +#include <asm/airq.h>
->> +#include <asm/kvm_pci.h>
+>> +	if (!is_valid_ether_addr(data))
+>> +		return -EINVAL;
 >> +
->> +struct zpci_gaite {
->> +    u32 gisa;
->> +    u8 gisc;
->> +    u8 count;
->> +    u8 reserved;
->> +    u8 aisbo;
->> +    u64 aisb;
->> +};
+>> +	eth_addr_add(data, index);
 >> +
->> +struct zpci_aift {
->> +    struct zpci_gaite *gait;
->> +    struct airq_iv *sbv;
->> +    struct kvm_zdev **kzdev;
->> +    spinlock_t gait_lock; /* Protects the gait, used during AEN 
->> forward */
->> +    struct mutex lock; /* Protects the other structures in aift */
+>> +	return 0;
+>> +}
+>> +
+>> +static int nvmem_kontron_sl28_vpd_pp(void *priv, const char *id, int 
+>> index,
+>> +				     unsigned int offset, void *data,
+>> +				     size_t bytes)
+>> +{
+>> +	if (!id)
+>> +		return 0;
+>> +
+>> +	if (!strcmp(id, "mac-address"))
+>> +		return nvmem_transform_mac_address_offset(index, offset, data,
+>> +							  bytes);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static const struct nvmem_transformations nvmem_transformations[] = 
+>> {
+>> +	{ .compatible = "kontron,sl28-vpd", .pp = nvmem_kontron_sl28_vpd_pp 
+>> },
+>>   	{}
+>>   };
 > 
-> To facilitate review and debug, can we please rename the lock aift_lock?
+> I think it's a rather bad solution that won't scale well at all.
 > 
-> 
+> You'll end up with a lot of NVMEM device specific strings and code in a
+> NVMEM core.
 
-OK, sure
+They must not be in the core, but they have to be somewhere. That is
+because Rob isn't fond of describing the actual transformation in
+the device tree but to have it a specific compatible [1]. Thus you have
+to have these strings somewhere in the driver code.
 
+> You'll have a lot of duplicated code (many device specific functions
+> calling e.g. nvmem_transform_mac_address_offset()).
+
+If there will be multiple formats using the same transformation for
+different compatible strings, you could just use the same function
+for all compatibles.
+
+But we have to first agree on the device tree representation because
+that is then fixed. The driver code can change over time.
+
+> I think it also ignores fact that one NVMEM device can be reused in
+> multiple platforms / device models using different (e.g. vendor / 
+> device
+> specific) cells.
+> 
+> 
+> What if we have:
+> 1. Foo company using "kontron,sl28-vpd" with NVMEM cells:
+>    a. "mac-address"
+>    b. "mac-address-2"
+>    c. "mac-address-3"
+> 2. Bar company using "kontron,sl28-vpd" with NVMEM cell:
+>    a. "mac-address"
+> 
+> In the first case you don't want any transformation.
+
+I can't follow you here. The "kontron,sl28-vpd" specifies one
+particular format, namely, that there is a base address
+rather than individual ones.
+
+> If you consider using transformations for ASCII formats too then it
+> causes another conflict issue. Consider two devices:
+> 
+> 1. Foo company device with BIN format of MAC
+> 2. Bar company device with ASCII format of MAC
+> 
+> Both may use exactly the same binding:
+> 
+> partition@0 {
+>         compatible = "nvmem-cells";
+>         reg = <0x0 0x100000>;
+>         label = "bootloader";
+> 
+>         #address-cells = <1>;
+>         #size-cells = <1>;
+> 
+>         mac-address@100 {
+>                 reg = <0x100 0x6>;
+>         };
+> };
+> 
+> how are you going to handle them with proposed implementation? You 
+> can't
+> support both if you share "nvmem-cells" compatible string.
+
+No, you'd need two different compatible strings. Again, that all boils
+down to what the device tree should describe and what not.
+
+But if you have the u-boot environment as an nvmem provider, you already
+know that the mac address is in ascii representation and you'd need
+to transform it to the kernel representation.
+
+> I think that what can solve those problems is assing "compatible" to
+> NVMEM cells.
+> 
+> Let me think about details of that possible solution.
+
+See [2].
+
+-michael
+
+[1] 
+https://lore.kernel.org/linux-devicetree/YaZ5JNCFeKcdIfu8@robh.at.kernel.org/
+[2] 
+https://lore.kernel.org/linux-devicetree/CAL_JsqL55mZJ6jUyQACer2pKMNDV08-FgwBREsJVgitnuF18Cg@mail.gmail.com/

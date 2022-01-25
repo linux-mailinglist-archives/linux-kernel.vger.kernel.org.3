@@ -2,224 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 667A349BB94
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D5B49BB9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233684AbiAYSxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S231391AbiAYS4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbiAYSxk (ORCPT
+        with ESMTP id S231865AbiAYSzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:53:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAB4C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:53:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 832AB6160B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB641C340E0;
-        Tue, 25 Jan 2022 18:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643136819;
-        bh=qT2kCpBubqy6g8hKsVRj202s95xVvuCvpSaSZ3Rq5nE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ZnsYjVp9gg4a/ZkXQm2SmYYXQEHQoK91tLzvqAYqHjUJQzz1VFG+PUyvFS2gO4H6A
-         twO3hzh1cgRYNIlL1AEri05xlyr53wXZAQWWsgdBjVwuAxlNJ7IqY8/AaIeD8jklj4
-         qfyxH8jdIgxJTGWkF1x0RO3p+29YDy5UoCYDcCJvDRxy0gNJ7F/wdUPAWzwkdzqMa8
-         UATk5+j7yfrnHFoSKUllCkDus30ZumhN2yYhrftja/bI4AlD+Ecvh4iP7j94327aSU
-         KCA5TLAMARJjeC84Z0Ze6ymLxX8stlivnz5c/QiNkcv1sCFSYtSB5S2iVk3Vcjrh2J
-         z04ycdPJd49mw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A62CD5C0641; Tue, 25 Jan 2022 10:53:38 -0800 (PST)
-Date:   Tue, 25 Jan 2022 10:53:38 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Corey Minyard <minyard@acm.org>
-Cc:     Juergen Gross <jgross@suse.com>, Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Possible reproduction of CSD locking issue
-Message-ID: <20220125185338.GP4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220125182737.GO34919@minyard.net>
+        Tue, 25 Jan 2022 13:55:40 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5448DC06173B;
+        Tue, 25 Jan 2022 10:55:37 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id z22so64772509edd.12;
+        Tue, 25 Jan 2022 10:55:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=dImgiAhROth/y9Q7puzLJb/vBES0iEIrDyLBhYakYAI=;
+        b=ao7GO+W+V/9V61dpGwBLk1VnJMjMkObtBPM8LSgBA1NOJg4g0CV5aZ5b8CqYPxi8hw
+         9p7F9ybxKmXn/MhvLyD6sWL5HBYg+OPH568Jt6EZmYIauUJH6XIl+YWUFlB/wFhNKfA+
+         OjoL7RQrpjk4Iff5ENzadIn/p5qps08XEkUR8kwsLvYNB8D6y8bPbvZUxPF/gpwhvlSU
+         xyh2RVp49O00ryc8UqbKwaVSIuYxFsB6SULWcPKZLHzRsW6Ij4ui7F7VKI7WkG5xyx4q
+         qdltEkAYgfcS0IPIXByYLTcr9a+yWkWf5KtH/+ythLCH8BrK5wT2FtbEwSyPnb+bkaQH
+         l9tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dImgiAhROth/y9Q7puzLJb/vBES0iEIrDyLBhYakYAI=;
+        b=gixNnlKSKbXMfnHrwc4AnXm3J+XQstHu8F6gIXQ4OKCQW2Fxdv0oo+LsSI7QWKtNAI
+         ZJOi14ERAiprl3PbA4HM6zdniG5j6QiyMIxTnDuYWABNS1aInrSGyEtb9JXfNr3vywEB
+         F/SWhH6Gvsxvhs4cxnCaC0psudIM17bEMVoYKdLsnwEzjom/CWn+44DIL/q+/MGjPipE
+         nIXiPUh03AEgR716qCiqTFUIrJJGVMcMf+YFqoGtKqEqa7njC+mx/0VxCMZz7l532iJ+
+         EDJ6ivnMYinuLBjt62y0gWqiqX5v/v+GCKJOXRuliNhpJ8PYUfTjO2zG74s7eJn45yeE
+         KKhw==
+X-Gm-Message-State: AOAM530dynfUvVm18qKl02VAmzryGb6oqQsqwaV+OPr95mfi8+GezHAM
+        acX5qZIFz6U66hifUh4priE=
+X-Google-Smtp-Source: ABdhPJxQPbPHUSC1k2iBlm7YhwmNdqJ9aVrvQaAgARhfkch2YJaOGr9ttI0Na4589qbDfeGou65m9g==
+X-Received: by 2002:a05:6402:2794:: with SMTP id b20mr11231560ede.340.1643136935787;
+        Tue, 25 Jan 2022 10:55:35 -0800 (PST)
+Received: from [192.168.8.198] ([85.255.233.187])
+        by smtp.gmail.com with ESMTPSA id b30sm8725582edn.16.2022.01.25.10.55.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 10:55:35 -0800 (PST)
+Message-ID: <ea0b2f62-9145-575e-d007-cce2c7244f77@gmail.com>
+Date:   Tue, 25 Jan 2022 18:54:23 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220125182737.GO34919@minyard.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+References: <Yboc/G18R1Vi1eQV@google.com>
+ <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
+ <Ybom69OyOjsR7kmZ@google.com>
+ <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
+ <Yboy2WwaREgo95dy@google.com>
+ <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
+ <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
+ <92f69969-42dc-204a-4138-16fdaaebb78d@gmail.com>
+ <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
+ <7ca623df-73ed-9191-bec7-a4728f2f95e6@gmail.com>
+ <20211216181449.p2izqxgzmfpknbsw@kafai-mbp.dhcp.thefacebook.com>
+ <CAKH8qBuAZoVQddMUkyhur=WyQO5b=z9eom1RAwgwraXg2WTj5w@mail.gmail.com>
+ <9b8632f9-6d7a-738f-78dc-0287d441d1cc@gmail.com>
+ <CAKH8qBvX8_vy0aYhiO-do0rh3y3CzgDGfHqt1bB6uRcr_DxncQ@mail.gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAKH8qBvX8_vy0aYhiO-do0rh3y3CzgDGfHqt1bB6uRcr_DxncQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 12:27:37PM -0600, Corey Minyard wrote:
-> We have a customer that had been seeing CSD lock issues on a Centos 7
-> kernel (unfortunately).  I couldn't find anything or any kernel changes
-> that might fix it, so I was consdering it was the CSD locking issue you
-> have been chasing for a while.
+On 1/24/22 18:25, Stanislav Fomichev wrote:
+> On Mon, Jan 24, 2022 at 7:49 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> On 12/16/21 18:24, Stanislav Fomichev wrote:
+>>> On Thu, Dec 16, 2021 at 10:14 AM Martin KaFai Lau <kafai@fb.com> wrote:
+>>>> On Thu, Dec 16, 2021 at 01:21:26PM +0000, Pavel Begunkov wrote:
+>>>>> On 12/15/21 22:07, Stanislav Fomichev wrote:
+>>>>>>> I'm skeptical I'll be able to measure inlining one function,
+>>>>>>> variability between boots/runs is usually greater and would hide it.
+>>>>>>
+>>>>>> Right, that's why I suggested to mirror what we do in set/getsockopt
+>>>>>> instead of the new extra CGROUP_BPF_TYPE_ENABLED. But I'll leave it up
+>>>>>> to you, Martin and the rest.
+>>>> I also suggested to try to stay with one way for fullsock context in v2
+>>>> but it is for code readability reason.
+>>>>
+>>>> How about calling CGROUP_BPF_TYPE_ENABLED() just next to cgroup_bpf_enabled()
+>>>> in BPF_CGROUP_RUN_PROG_*SOCKOPT_*() instead ?
+>>>
+>>> SG!
+>>>
+>>>> It is because both cgroup_bpf_enabled() and CGROUP_BPF_TYPE_ENABLED()
+>>>> want to check if there is bpf to run before proceeding everything else
+>>>> and then I don't need to jump to the non-inline function itself to see
+>>>> if there is other prog array empty check.
+>>>>
+>>>> Stan, do you have concern on an extra inlined sock_cgroup_ptr()
+>>>> when there is bpf prog to run for set/getsockopt()?  I think
+>>>> it should be mostly noise from looking at
+>>>> __cgroup_bpf_run_filter_*sockopt()?
+>>>
+>>> Yeah, my concern is also mostly about readability/consistency. Either
+>>> __cgroup_bpf_prog_array_is_empty everywhere or this new
+>>> CGROUP_BPF_TYPE_ENABLED everywhere. I'm slightly leaning towards
+>>> __cgroup_bpf_prog_array_is_empty because I don't believe direct
+>>> function calls add any visible overhead and macros are ugly :-) But
+>>> either way is fine as long as it looks consistent.
+>>
+>> Martin, Stanislav, do you think it's good to go? Any other concerns?
+>> It feels it might end with bikeshedding and would be great to finally
+>> get it done, especially since I find the issue to be pretty simple.
 > 
-> So I backported the debug patches.  And of course, they stopped seeing
-> the issue, at least as much, and they had trouble with the extra CPU
-> time the debug code took.  But they just reproduced it.  Here are the
-> logs:
-> 
-> Jan 23 23:39:43 worker0 kernel: [285737.522743] csd: Detected non-responsive CSD lock (#1) on CPU#3, waiting 5000000042 ns for CPU#55 flush_tlb_func+0x0/0xb0(0xffff8e0b3e2afbe8).
-> Jan 23 23:39:43 worker0 kernel: [285737.522744]  csd: CSD lock (#1) unresponsive.
-> Jan 23 23:39:43 worker0 kernel: [285737.522747]  csd: cnt(0000000): 0000->0000 queue
-> Jan 23 23:39:43 worker0 kernel: [285737.522748]  csd: cnt(0000001): ffff->0037 idle
-> Jan 23 23:39:43 worker0 kernel: [285737.522749]  csd: cnt(63d8dd8): 0003->0037 ipi
-> Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dd9): 0003->0037 ping
-> Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dda): 0003->ffff pinged
-> Jan 23 23:39:43 worker0 kernel: [285737.522751]  csd: cnt(63d8dea): 0035->0037 pinged
-> Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8deb): ffff->0037 gotipi
-> Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8dec): ffff->0037 handle
-> Jan 23 23:39:43 worker0 kernel: [285737.522753]  csd: cnt(63d8ded): ffff->0037 dequeue (src CPU 0 == empty)
-> Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8dee): ffff->0037 hdlend (src CPU 0 == early)
-> Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8e1f): 0003->0037 queue
-> Jan 23 23:39:43 worker0 kernel: [285737.522755]  csd: cnt(63d8e20): 0003->0037 ipi
-> Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e21): 0003->0037 ping
-> Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e22): 0003->0037 queue
-> Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt(63d8e23): 0003->0037 noipi
-> Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt now: 63fe4cd
-> Jan 23 23:39:43 worker0 kernel: [285737.522758] Task dump for CPU 55:
-> Jan 23 23:39:43 worker0 kernel: [285737.522761] kubelet         R  running task        0 277695      1 0x00080000
-> Jan 23 23:39:43 worker0 kernel: [285737.522761] Call Trace:
-> Jan 23 23:39:43 worker0 kernel: [285737.522769]  [<ffffffff84376b6a>] ? __schedule+0x46a/0x990
-> Jan 23 23:39:43 worker0 kernel: [285737.522774]  [<ffffffff83db6353>] ? context_tracking_user_enter+0x13/0x20
-> Jan 23 23:39:43 worker0 kernel: [285737.522776]  [<ffffffff843775b5>] ? schedule_user+0x45/0x50
-> Jan 23 23:39:43 worker0 kernel: [285737.522779]  [<ffffffff8437b518>] ? retint_careful+0x16/0x34
+> I'll leave it up to the bpf maintainers/reviewers. Personally, I'd
+> still prefer a respin with a consistent
+> __cgroup_bpf_prog_array_is_empty or CGROUP_BPF_TYPE_ENABLED everywhere
+> (shouldn't be a lot of effort?)
 
-Long-running interrupt handler, maybe?  Or am I misinterpreting this
-stack trace?
+I can make CGROUP_BPF_TYPE_ENABLED() used everywhere, np.
 
-> Jan 23 23:39:43 worker0 kernel: [285737.522780] csd: Re-sending CSD lock (#1) IPI from CPU#03 to CPU#55
-> Jan 23 23:39:43 worker0 kernel: [285737.522788] CPU: 3 PID: 54671 Comm: runc:[2:INIT] Kdump: loaded Tainted: G           OE  ------------ T 3.10.0-1062.12.1.rt56.1042.mvista.test.14.el7.x86_64 #1
-> Jan 23 23:39:43 worker0 kernel: [285737.522789] Hardware name: Dell Inc. PowerEdge R740/0YWR7D, BIOS 2.9.4 11/06/2020
-> Jan 23 23:39:43 worker0 kernel: [285737.522789] Call Trace:
-> Jan 23 23:39:43 worker0 kernel: [285737.522793]  [<ffffffff843718ba>] dump_stack+0x19/0x1b
-> Jan 23 23:39:43 worker0 kernel: [285737.522798]  [<ffffffff83d0bcd8>] __csd_lock_wait+0x1a8/0x2a0
-> Jan 23 23:39:43 worker0 kernel: [285737.522800]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
-> Jan 23 23:39:43 worker0 kernel: [285737.522802]  [<ffffffff83d0bfa4>] smp_call_function_single+0xc4/0x1b0
-> Jan 23 23:39:43 worker0 kernel: [285737.522804]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
-> Jan 23 23:39:43 worker0 kernel: [285737.522809]  [<ffffffff83e2684b>] ? page_counter_uncharge+0x3b/0x70
-> Jan 23 23:39:43 worker0 kernel: [285737.522811]  [<ffffffff83d0c614>] smp_call_function_many+0x344/0x380
-> Jan 23 23:39:43 worker0 kernel: [285737.522813]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
-> Jan 23 23:39:43 worker0 kernel: [285737.522816]  [<ffffffff83c6da38>] native_flush_tlb_others+0xb8/0xc0
-> Jan 23 23:39:43 worker0 kernel: [285737.522818]  [<ffffffff83c6dc25>] flush_tlb_page+0x65/0xf0
-> Jan 23 23:39:43 worker0 kernel: [285737.522821]  [<ffffffff83dfdf98>] ptep_clear_flush+0x68/0xa0
-> Jan 23 23:39:43 worker0 kernel: [285737.522825]  [<ffffffff83de6806>] wp_page_copy.isra.83+0x3d6/0x650
-> Jan 23 23:39:43 worker0 kernel: [285737.522828]  [<ffffffff83de8cb4>] do_wp_page+0xb4/0x710
-> Jan 23 23:39:43 worker0 kernel: [285737.522832]  [<ffffffff83decbb4>] handle_mm_fault+0x884/0x1340
-> Jan 23 23:39:43 worker0 kernel: [285737.522835]  [<ffffffff83cd7799>] ? update_cfs_shares+0xa9/0xf0
-> Jan 23 23:39:43 worker0 kernel: [285737.522839]  [<ffffffff8437efc3>] __do_page_fault+0x213/0x5a0
-> Jan 23 23:39:43 worker0 kernel: [285737.522841]  [<ffffffff8437f385>] do_page_fault+0x35/0x90
-> Jan 23 23:39:43 worker0 kernel: [285737.522842]  [<ffffffff8437b728>] page_fault+0x28/0x30
-> Jan 23 23:39:43 worker0 kernel: [285737.522845] csd: CSD lock (#1) got unstuck on CPU#03, CPU#55 released the lock.
-> 
-> Hopefully this is the issue you are chasing and not something else.
-> I've been studying them to see what they mean, but I thought you might
-> be interested to get them asap.
+I'll leave out unification with cgroup_bpf_enabled() as don't
+really understand the fullsock dancing in
+BPF_CGROUP_RUN_PROG_INET_EGRESS(). Any idea whether it's needed
+and/or how to shove it out of inlined checks?
 
-Well, there have been several bugs causing these CSD lock issues, so what
-is one more?  ;-)
-
-More seriously, have you tried Frederic's patch?  This fixes the issue
-described here:  https://paulmck.livejournal.com/62071.html
-If your stack above was due to an interrupt storm rather than a
-long-running interrupt, this might well be the fix.
-
-Oh, and Jürgen Groß reportedly found an issue about a year ago that
-could potentially be related, but I see that he is already on CC.
-
-And, unfortunately, even more seriously, this CSD-lock diagnostic code
-will very likely continue to find problems, just as the infamous RCU
-CPU stall warnings and hard/soft lockup warnings do.
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 53e87e3cdc155f20c3417b689df8d2ac88d79576
-Author: Frederic Weisbecker <frederic@kernel.org>
-Date:   Tue Oct 26 16:10:54 2021 +0200
-
-    timers/nohz: Last resort update jiffies on nohz_full IRQ entry
-    
-    When at least one CPU runs in nohz_full mode, a dedicated timekeeper CPU
-    is guaranteed to stay online and to never stop its tick.
-    
-    Meanwhile on some rare case, the dedicated timekeeper may be running
-    with interrupts disabled for a while, such as in stop_machine.
-    
-    If jiffies stop being updated, a nohz_full CPU may end up endlessly
-    programming the next tick in the past, taking the last jiffies update
-    monotonic timestamp as a stale base, resulting in an tick storm.
-    
-    Here is a scenario where it matters:
-    
-    0) CPU 0 is the timekeeper and CPU 1 a nohz_full CPU.
-    
-    1) A stop machine callback is queued to execute somewhere.
-    
-    2) CPU 0 reaches MULTI_STOP_DISABLE_IRQ while CPU 1 is still in
-       MULTI_STOP_PREPARE. Hence CPU 0 can't do its timekeeping duty. CPU 1
-       can still take IRQs.
-    
-    3) CPU 1 receives an IRQ which queues a timer callback one jiffy forward.
-    
-    4) On IRQ exit, CPU 1 schedules the tick one jiffy forward, taking
-       last_jiffies_update as a base. But last_jiffies_update hasn't been
-       updated for 2 jiffies since the timekeeper has interrupts disabled.
-    
-    5) clockevents_program_event(), which relies on ktime_get(), observes
-       that the expiration is in the past and therefore programs the min
-       delta event on the clock.
-    
-    6) The tick fires immediately, goto 3)
-    
-    7) Tick storm, the nohz_full CPU is drown and takes ages to reach
-       MULTI_STOP_DISABLE_IRQ, which is the only way out of this situation.
-    
-    Solve this with unconditionally updating jiffies if the value is stale
-    on nohz_full IRQ entry. IRQs and other disturbances are expected to be
-    rare enough on nohz_full for the unconditional call to ktime_get() to
-    actually matter.
-    
-    Reported-by: Paul E. McKenney <paulmck@kernel.org>
-    Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-    Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-    Tested-by: Paul E. McKenney <paulmck@kernel.org>
-    Link: https://lore.kernel.org/r/20211026141055.57358-2-frederic@kernel.org
-
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index 322b65d456767..41f470929e991 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -595,7 +595,8 @@ void irq_enter_rcu(void)
- {
- 	__irq_enter_raw();
- 
--	if (is_idle_task(current) && (irq_count() == HARDIRQ_OFFSET))
-+	if (tick_nohz_full_cpu(smp_processor_id()) ||
-+	    (is_idle_task(current) && (irq_count() == HARDIRQ_OFFSET)))
- 		tick_irq_enter();
- 
- 	account_hardirq_enter(current);
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 6bffe5af8cb11..17a283ce2b20f 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -1375,6 +1375,13 @@ static inline void tick_nohz_irq_enter(void)
- 	now = ktime_get();
- 	if (ts->idle_active)
- 		tick_nohz_stop_idle(ts, now);
-+	/*
-+	 * If all CPUs are idle. We may need to update a stale jiffies value.
-+	 * Note nohz_full is a special case: a timekeeper is guaranteed to stay
-+	 * alive but it might be busy looping with interrupts disabled in some
-+	 * rare case (typically stop machine). So we must make sure we have a
-+	 * last resort.
-+	 */
- 	if (ts->tick_stopped)
- 		tick_nohz_update_jiffies(now);
- }
+-- 
+Pavel Begunkov

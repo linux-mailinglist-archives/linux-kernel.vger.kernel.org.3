@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C15E49BFA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFB249BF93
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbiAYXje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 18:39:34 -0500
-Received: from gate.crashing.org ([63.228.1.57]:54754 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234898AbiAYXjb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 18:39:31 -0500
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 20PNVUiB032739;
-        Tue, 25 Jan 2022 17:31:30 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 20PNVSKH032738;
-        Tue, 25 Jan 2022 17:31:28 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Tue, 25 Jan 2022 17:31:28 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        x86@kernel.org, llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile & __COUNTER__
-Message-ID: <20220125233128.GT614@gate.crashing.org>
-References: <20220114010526.1776605-1-ndesaulniers@google.com> <YeQei0xNzMq7bFdg@zn.tnic> <20220118192256.jzk5dnceeusq7x7u@treble> <20220118230120.pivvson7qekfiqic@treble> <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+        id S234834AbiAYXcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 18:32:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234817AbiAYXcR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 18:32:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E713C06161C;
+        Tue, 25 Jan 2022 15:32:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04ED5612F0;
+        Tue, 25 Jan 2022 23:32:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A054C340E0;
+        Tue, 25 Jan 2022 23:32:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643153536;
+        bh=nox2JDb71V6+3/Gd1PXffpHZVO8KUrMDHzJBsxv8zZI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ulnqkyNjHRFt55m6gwbrzidf8G7941AKR1UTrW1uB5eIegDxlJEEq1gbt/aOo8TxF
+         dx8snYBt8qI5Fpfdz28I3kGf1KQ60e5El2cuHf0dvN8T1g2VouEt/cvbA7U9fbgHY8
+         5i6aM3voVhftNCjD85Hc9YtRBwiqDfvjxWLNZPt2Tf209X49RX1JcyZp/mOOfQ+0Gy
+         e6H4awicu2iqu5mJV4NAa86ZiJu8kHe5h/nx2KsvWd8vH8kWrDw4HcZHGr7nCFfFhi
+         5JDXDUStGsJsFDDdW/moB9le3EbFj6INDuqbNCrJWj6VGHAlZ+yCwE7N+NMZ72lVzx
+         +RtO2nShCTDkA==
+Date:   Tue, 25 Jan 2022 15:32:14 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     pablo@netfilter.org
+Cc:     menglong8.dong@gmail.com, rostedt@goodmis.org, mingo@redhat.com,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kadlec@netfilter.org, fw@strlen.de, imagedong@tencent.com,
+        edumazet@google.com, alobakin@pm.me, paulb@nvidia.com,
+        pabeni@redhat.com, talalahmad@google.com, haokexin@gmail.com,
+        keescook@chromium.org, memxor@gmail.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        cong.wang@bytedance.com
+Subject: Re: [PATCH net-next 1/6] net: netfilter: use kfree_drop_reason()
+ for NF_DROP
+Message-ID: <20220125153214.180d2c09@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220124131538.1453657-2-imagedong@tencent.com>
+References: <20220124131538.1453657-1-imagedong@tencent.com>
+        <20220124131538.1453657-2-imagedong@tencent.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Mon, 24 Jan 2022 21:15:33 +0800 menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+> 
+> Replace kfree_skb() with kfree_skb_reason() in nf_hook_slow() when
+> skb is dropped by reason of NF_DROP.
 
-On Mon, Jan 24, 2022 at 03:26:36PM -0800, Nick Desaulniers wrote:
-> I noticed in that report and
-> https://lore.kernel.org/lkml/202201190702.XNSXrMTK-lkp@intel.com/
-> that gcc-9 was used.  I wonder if %= has been fixed in gcc-10+? Have
-> there been other reports with gcc-10+ for my patch?
+Netfilter folks, does this look good enough to you?
 
-None of the %= code (which is trivial) has been changed since 1992.
-
-> If this is fixed in gcc-10, then we can probably add a comment with a
-> FIXME link to the issue or commit to replace __COUNTER__ with %= one
-> day.  If not, then we can probably come up with a reduced test case
-> for the GCC devs to take a look at, then add the FIXME comment to
-> kernel sources.
-
-Please open a PR?
-
-> I'm more confident that we can remove the `volatile` keyword (I was
-> thinking about adding a new diagnostic to clang to warn that volatile
-> is redundate+implied for asm goto or inline asm that doesn't have
-> outputs) though that's not the problem here and will probably generate
-> some kernel wide cleanup before we could enable such a flag.
-
-Its main value is that it would discourage users from thinking volatile
-is magic.  Seriously worth some pain!
-
-> Perhaps
-> there are known compiler versions that still require the keyword for
-> those cases for some reason.
-
-It was removed from compiler-gcc.h in 3347acc6fcd4 (which changed the
-minimum required GCC version to GCC 5).
-
-
-Segher
+Do you prefer to take the netfilter changes via your tree? I'm asking
+because enum skb_drop_reason is probably going to be pretty hot so if
+the patch is simple enough maybe no point dealing with merge conflicts.

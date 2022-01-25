@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE4049B5CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE96949B5D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578112AbiAYOOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:14:23 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:49588 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385495AbiAYOL1 (ORCPT
+        id S1387981AbiAYOOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:14:55 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:36692 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385445AbiAYOLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:11:27 -0500
-Date:   Tue, 25 Jan 2022 15:11:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643119874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 25 Jan 2022 09:11:53 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E916E1F381;
+        Tue, 25 Jan 2022 14:11:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643119910; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=h+wE1mLTdMlmWkAW7/tM+Umy8zPTuE4e9hSvnL89+pw=;
-        b=ftU/JGCC/X8WRV7lYnZBtY1zN4pqHDeQnAa2q4koZBBXCPqPUy921Vm9xmjYUp7HUo87AN
-        jMxXR6Y9oqJrP5tJ+DyEs/PhRR/LXve1RkiyXutaMCT/ooHNnPT1iXGzfSq3vSGDDMlQCf
-        RvitRXpRh0yoiZGdx6g8Ebtl2NxlcK2Q4phPUzoZdNb0rUg8hV/rhhp9s9ETMNfFS9klIT
-        b9kF/pA6PSpVTsQNEvdFBAWKHJkGI+M4ANyMF5eLTtkOSmdHNMKB0haSgarvqIGOP6pa0O
-        v/DVlRoESDFueo7cFZGSChgtDLkK0by5YTIa40gdMfVKkYWxu7r8fNXuqJ3Wyw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643119874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        bh=Rz6I6KvsbC3JmWn5u5HiUD6dpDAY3TCPycX+RIt0T+Q=;
+        b=ghgzhHxMu1tPiPbtdJeYr8a2pdLL3mMziV+Nwc68coiiVOB7r/Jv58qZtMlU9/T0c6oaVt
+        w8fYuYD9YYBpA94gk2GjaCFeRHU2y8c7ozH8bh7wm/a5unrFe6gI73xfKaE+88WVxFbpXN
+        BIpPpe7YE5yJFFU3YblQcRX7wFJWmpk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643119910;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=h+wE1mLTdMlmWkAW7/tM+Umy8zPTuE4e9hSvnL89+pw=;
-        b=FelGQCJ9DU5ujDud+PuIKWVMqiR1OA2veGCDfpMU/zakW6DjMoYVUZEXg5x7X5AgMy1IwQ
-        bbuoU6nTltnyRwAw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Wander Costa <wcosta@redhat.com>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v3 1/1] tty: serial: Use fifo in 8250 console driver
-Message-ID: <YfAFAcYmJ+Zrontd@linutronix.de>
-References: <20211222112831.1968392-1-wander@redhat.com>
- <20211222112831.1968392-2-wander@redhat.com>
- <Ye/1+Z8mEzbKbrqG@linutronix.de>
- <CAAq0SUmdGinqdWXrHztx8g9hb+5UF5rDJJjVeVMj3CQ=Fw3kJg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAAq0SUmdGinqdWXrHztx8g9hb+5UF5rDJJjVeVMj3CQ=Fw3kJg@mail.gmail.com>
+        bh=Rz6I6KvsbC3JmWn5u5HiUD6dpDAY3TCPycX+RIt0T+Q=;
+        b=ULvJZ3taZUVAIUUVzlJqZodE6YiS/D8iIIb+yITXZ45PFf/6JUVzvdoYA2nWCNWm8kCwJk
+        Xrxx+6CBr8rkVZCg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id F2834A3B84;
+        Tue, 25 Jan 2022 14:11:48 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 15:11:48 +0100
+Message-ID: <s5h1r0vq50b.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     "Geoffrey D. Bennett" <g@b4.vu>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2][next] ALSA: usb-audio: scarlett2: Use struct_size() helper in scarlett2_usb()
+In-Reply-To: <20220120211600.GA28841@embeddedor>
+References: <20220120211600.GA28841@embeddedor>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-25 10:15:04 [-0300], Wander Costa wrote:
-> There is another thread[1] reporting some issues with this patch.
-> There, this diff seems to fix the problems, could you please try and
-> report if it works for you too?
+On Thu, 20 Jan 2022 22:16:00 +0100,
+Gustavo A. R. Silva wrote:
+> 
+> Make use of the struct_size() helper instead of an open-coded version,
+> in order to avoid any potential type mistakes or integer overflows that,
+> in the worst scenario, could lead to heap overflows.
+> 
+> Also, address the following sparse warnings:
+> sound/usb/mixer_scarlett_gen2.c:1064:28: warning: using sizeof on a flexible structure
+> sound/usb/mixer_scarlett_gen2.c:1065:29: warning: using sizeof on a flexible structure
+> 
+> Link: https://github.com/KSPP/linux/issues/174
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+> Changes in v2:
+>  - Use correct format specifier %zu for type size_t argument.
 
-Nope. Still there.
+Applied now.  Thanks.
 
-Sebastian
+
+Takashi

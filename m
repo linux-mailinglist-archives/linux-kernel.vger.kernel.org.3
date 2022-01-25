@@ -2,109 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B446B49BF24
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 818A849BF26
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbiAYWvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234640AbiAYWuY (ORCPT
+        id S234438AbiAYWva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:51:30 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50620 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234479AbiAYWvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:50:24 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D48C06175F;
-        Tue, 25 Jan 2022 14:50:18 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id s6so19745638qvv.11;
-        Tue, 25 Jan 2022 14:50:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=MRyo4b0CIjGUTTXoXk9MtlW6BaLnv9yE3LtTb5OwcVs=;
-        b=OYZQQsV6WQK79JUg5fG+wh4gQTLA9/hdLuTH6VLPFb5W2MNAFhplA8Cz+FtlzEIYqw
-         4Eclya+UfSXKATCT5ITJKovTwes6FdBrl+UU8JARvgxH/+DE9JTXRyg42hHL5NzkcEn5
-         rwRzJDDESr2cT6xNh+IYrkW386JiHueFy3Tss7RwOgiNxgUMQz5Rj6vBFDweoSGUuFMa
-         5ntLTTXyOVJlYoeQrQTGhlA/sDAE0WZqQMDHoq1HICzAGU0PVw0wQOm1fC0Aab2axdVf
-         LT20yL1stwvnDGgsA6eQnlPvYny5ov+721Jc0zQvMJgWDHFrOYlg4p9Zo78s2WFN0Yxa
-         QCZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=MRyo4b0CIjGUTTXoXk9MtlW6BaLnv9yE3LtTb5OwcVs=;
-        b=E0B48fI7LBiMh10P+toB/iqqv7GKf/FsU3HrlyCCZyUh7K7KOVhbRieZImIvVe6ZLS
-         dNZtw0Oi1y8CzJXVUxaj+IobGqDT3ji6uarFF99eIMRM6jnnMdxO07JHQ0DtEthBMDA+
-         nNtTE4ky+dEhAZ6SXpKYjxexXtbHk2Y7Py3iz7Y/O0ktcblY+1jzya3V3vKGzrRp3EHc
-         ptA3bufU4pF5GMXCi4gelxO2LbR0/AV5hxz1p3L3uyhz6+SxcIOaKGhnGlZ2HfKWU9sn
-         jGhqljryGDXE9Ysl9ye+/F/4Rie907IbAv64cc5GwdhXjvuXf/T3yb5yhkLChqYEe5Yr
-         5YRw==
-X-Gm-Message-State: AOAM5332vqkfGy2WpXLqC26Ehgi5cnpuArDHJQfBLldf5MQX3g2neZ1P
-        vlhliY06U6S3j6DSoLbJ/mDl9dlXMa4=
-X-Google-Smtp-Source: ABdhPJzluCa3czawjx4QlOjJOGVnXBoEAiK8VbFTScmM3nMvScxlMVAAWqgGoSNdbHQhbwWEwp0aHw==
-X-Received: by 2002:ad4:5aab:: with SMTP id u11mr15031153qvg.42.1643151017412;
-        Tue, 25 Jan 2022 14:50:17 -0800 (PST)
-Received: from [10.139.255.254] ([89.187.171.240])
-        by smtp.gmail.com with ESMTPSA id r2sm5193133qtu.57.2022.01.25.14.50.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 14:50:16 -0800 (PST)
-Message-ID: <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com>
-Date:   Tue, 25 Jan 2022 17:50:14 -0500
+        Tue, 25 Jan 2022 17:51:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0398660AE5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:51:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6573EC340E0;
+        Tue, 25 Jan 2022 22:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643151068;
+        bh=uiTJ4/Cwbp9a9UygsPvC0ow08oTKDn4D42IS4AmQhUw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=YuTDfwa2Z9zxInepM9A5cocaFTZ5YbXCkd49xoF4eS967PY8aROnpbVfU468ANSYY
+         S7oqBhiVcHpuHC+RZNYZz67Vi9q89uPCz7ObF1ccYhk828PKkMVSPY/ef4/2XGqu+z
+         C18+TdJc7YCWau/sEB2OzLp+XzBH4JTh2BwArB59aCLlejKDv1ZFIjwNyzm8Bm4e9K
+         kAn8HQLCg6zkUeJwspg18QFJCWtP912Qv5lI49X4p9ozZaoVVybOoQjSHBPzq97YBi
+         IUfNe/uogmyIzZ4YIB4qDBtTJD5GcYXOJLDZMLRlyiBRzVzEf8IO05ALlopVsT5kek
+         9+UvSZyT2zY/Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2DD385C14B7; Tue, 25 Jan 2022 14:51:08 -0800 (PST)
+Date:   Tue, 25 Jan 2022 14:51:08 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Corey Minyard <minyard@acm.org>
+Cc:     Juergen Gross <jgross@suse.com>, Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Possible reproduction of CSD locking issue
+Message-ID: <20220125225108.GV4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220125182737.GO34919@minyard.net>
+ <20220125185338.GP4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220125215238.GP34919@minyard.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
- <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
-From:   Demi Marie Obenour <demiobenour@gmail.com>
-Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
-In-Reply-To: <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220125215238.GP34919@minyard.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 17:27, Paul Moore wrote:
-> On Tue, Jan 25, 2022 at 4:34 PM Demi Marie Obenour
-> <demiobenour@gmail.com> wrote:
->>
->> These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
->> always allows too.  Furthermore, a failed FIOCLEX could result in a file
->> descriptor being leaked to a process that should not have access to it.
->>
->> Signed-off-by: Demi Marie Obenour <demiobenour@gmail.com>
->> ---
->>  security/selinux/hooks.c | 5 +++++
->>  1 file changed, 5 insertions(+)
+On Tue, Jan 25, 2022 at 03:52:38PM -0600, Corey Minyard wrote:
+> On Tue, Jan 25, 2022 at 10:53:38AM -0800, Paul E. McKenney wrote:
+> > On Tue, Jan 25, 2022 at 12:27:37PM -0600, Corey Minyard wrote:
+> > > We have a customer that had been seeing CSD lock issues on a Centos 7
+> > > kernel (unfortunately).  I couldn't find anything or any kernel changes
+> > > that might fix it, so I was consdering it was the CSD locking issue you
+> > > have been chasing for a while.
+> > > 
+> > > So I backported the debug patches.  And of course, they stopped seeing
+> > > the issue, at least as much, and they had trouble with the extra CPU
+> > > time the debug code took.  But they just reproduced it.  Here are the
+> > > logs:
+> > > 
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522743] csd: Detected non-responsive CSD lock (#1) on CPU#3, waiting 5000000042 ns for CPU#55 flush_tlb_func+0x0/0xb0(0xffff8e0b3e2afbe8).
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522744]  csd: CSD lock (#1) unresponsive.
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522747]  csd: cnt(0000000): 0000->0000 queue
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522748]  csd: cnt(0000001): ffff->0037 idle
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522749]  csd: cnt(63d8dd8): 0003->0037 ipi
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dd9): 0003->0037 ping
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dda): 0003->ffff pinged
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522751]  csd: cnt(63d8dea): 0035->0037 pinged
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8deb): ffff->0037 gotipi
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8dec): ffff->0037 handle
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522753]  csd: cnt(63d8ded): ffff->0037 dequeue (src CPU 0 == empty)
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8dee): ffff->0037 hdlend (src CPU 0 == early)
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8e1f): 0003->0037 queue
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522755]  csd: cnt(63d8e20): 0003->0037 ipi
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e21): 0003->0037 ping
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e22): 0003->0037 queue
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt(63d8e23): 0003->0037 noipi
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt now: 63fe4cd
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522758] Task dump for CPU 55:
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522761] kubelet         R  running task        0 277695      1 0x00080000
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522761] Call Trace:
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522769]  [<ffffffff84376b6a>] ? __schedule+0x46a/0x990
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522774]  [<ffffffff83db6353>] ? context_tracking_user_enter+0x13/0x20
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522776]  [<ffffffff843775b5>] ? schedule_user+0x45/0x50
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522779]  [<ffffffff8437b518>] ? retint_careful+0x16/0x34
+> > 
+> > Long-running interrupt handler, maybe?  Or am I misinterpreting this
+> > stack trace?
 > 
-> I'm not convinced that these two ioctls should be exempt from SELinux
-> policy control, can you explain why allowing these ioctls with the
-> file:ioctl permission is not sufficient for your use case?  Is it a
-> matter of granularity?
+> Well, maybe.  But why would the condition clear up immediately when
+> another IPI is sent?  If I understand correctly this box is doing mostly
+> polled I/O, there shouldn't be many interrupts.  But possibly a driver
+> bug, I hadn't thought of that.
 
-FIOCLEX and FIONCLEX are applicable to *all* file descriptors, not just
-files.  If I want to allow them with SELinux policy, I have to grant
-*:ioctl to all processes and use xperm rules to determine what ioctls
-are actually allowed.  That is incompatible with existing policies and
-needs frequent maintenance when new ioctls are added.
+All fair points!
 
-Furthermore, these ioctls do not allow one to do anything that cannot
-already be done by fcntl(F_SETFD), and (unless I have missed something)
-SELinux unconditionally allows that.  Therefore, blocking these ioctls
-does not improve security, but does risk breaking userspace programs.
-The risk is especially great because in the absence of SELinux, I
-believe FIOCLEX and FIONCLEX *will* always succeed, and userspace
-programs may rely on this.  Worse, if a failure of FIOCLEX is ignored,
-a file descriptor can be leaked to a child process that should not have
-access to it, but which SELinux allows access to.  Userspace
-SELinux-naive sandboxes are one way this could happen.  Therefore,
-blocking FIOCLEX may *create* a security issue, and it cannot solve one.
--- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
+Me, I suspected lost interrupts for the longest time, but never found
+any hard evidence of such a thing.  But maybe that is what you are seeing.
+
+> I could have the system panic when this happens and maybe I can find
+> some breadcrumbs lying around in the core dump.  The trouble is it's
+> been two months now to reproduce this.
+
+And being as it is a customer machine, you probably do not want to take
+steps to make it happen more often...
+
+But would it be possible to trace interrupt entry and exit, and then
+dump the offending CPU's trace buffer when things recover?
+
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522780] csd: Re-sending CSD lock (#1) IPI from CPU#03 to CPU#55
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522788] CPU: 3 PID: 54671 Comm: runc:[2:INIT] Kdump: loaded Tainted: G           OE  ------------ T 3.10.0-1062.12.1.rt56.1042.mvista.test.14.el7.x86_64 #1
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522789] Hardware name: Dell Inc. PowerEdge R740/0YWR7D, BIOS 2.9.4 11/06/2020
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522789] Call Trace:
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522793]  [<ffffffff843718ba>] dump_stack+0x19/0x1b
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522798]  [<ffffffff83d0bcd8>] __csd_lock_wait+0x1a8/0x2a0
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522800]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522802]  [<ffffffff83d0bfa4>] smp_call_function_single+0xc4/0x1b0
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522804]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522809]  [<ffffffff83e2684b>] ? page_counter_uncharge+0x3b/0x70
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522811]  [<ffffffff83d0c614>] smp_call_function_many+0x344/0x380
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522813]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522816]  [<ffffffff83c6da38>] native_flush_tlb_others+0xb8/0xc0
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522818]  [<ffffffff83c6dc25>] flush_tlb_page+0x65/0xf0
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522821]  [<ffffffff83dfdf98>] ptep_clear_flush+0x68/0xa0
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522825]  [<ffffffff83de6806>] wp_page_copy.isra.83+0x3d6/0x650
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522828]  [<ffffffff83de8cb4>] do_wp_page+0xb4/0x710
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522832]  [<ffffffff83decbb4>] handle_mm_fault+0x884/0x1340
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522835]  [<ffffffff83cd7799>] ? update_cfs_shares+0xa9/0xf0
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522839]  [<ffffffff8437efc3>] __do_page_fault+0x213/0x5a0
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522841]  [<ffffffff8437f385>] do_page_fault+0x35/0x90
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522842]  [<ffffffff8437b728>] page_fault+0x28/0x30
+> > > Jan 23 23:39:43 worker0 kernel: [285737.522845] csd: CSD lock (#1) got unstuck on CPU#03, CPU#55 released the lock.
+> > > 
+> > > Hopefully this is the issue you are chasing and not something else.
+> > > I've been studying them to see what they mean, but I thought you might
+> > > be interested to get them asap.
+> > 
+> > Well, there have been several bugs causing these CSD lock issues, so what
+> > is one more?  ;-)
+> > 
+> > More seriously, have you tried Frederic's patch?  This fixes the issue
+> > described here:  https://paulmck.livejournal.com/62071.html
+> > If your stack above was due to an interrupt storm rather than a
+> > long-running interrupt, this might well be the fix.
+> 
+> The code is so different that it will take me some time.  I'll have to
+> understand the issue more deeply to trace that down.  But thanks for the
+> reference.
+
+Understood!
+
+> > Oh, and Jürgen Groß reportedly found an issue about a year ago that
+> > could potentially be related, but I see that he is already on CC.
+> > 
+> > And, unfortunately, even more seriously, this CSD-lock diagnostic code
+> > will very likely continue to find problems, just as the infamous RCU
+> > CPU stall warnings and hard/soft lockup warnings do.
+> 
+> Yeah, I've already fixed a couple of bugs related to CSD lockups.  So I
+> suppose I've handled all the low-hanging fruit.  With a 104 core box it
+> makes uncovering these sorts of issues more likely, I suppose.
+
+Especially if that system has more than one socket.
+
+							Thanx, Paul
+
+> -corey
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > commit 53e87e3cdc155f20c3417b689df8d2ac88d79576
+> > Author: Frederic Weisbecker <frederic@kernel.org>
+> > Date:   Tue Oct 26 16:10:54 2021 +0200
+> > 
+> >     timers/nohz: Last resort update jiffies on nohz_full IRQ entry
+> >     
+> >     When at least one CPU runs in nohz_full mode, a dedicated timekeeper CPU
+> >     is guaranteed to stay online and to never stop its tick.
+> >     
+> >     Meanwhile on some rare case, the dedicated timekeeper may be running
+> >     with interrupts disabled for a while, such as in stop_machine.
+> >     
+> >     If jiffies stop being updated, a nohz_full CPU may end up endlessly
+> >     programming the next tick in the past, taking the last jiffies update
+> >     monotonic timestamp as a stale base, resulting in an tick storm.
+> >     
+> >     Here is a scenario where it matters:
+> >     
+> >     0) CPU 0 is the timekeeper and CPU 1 a nohz_full CPU.
+> >     
+> >     1) A stop machine callback is queued to execute somewhere.
+> >     
+> >     2) CPU 0 reaches MULTI_STOP_DISABLE_IRQ while CPU 1 is still in
+> >        MULTI_STOP_PREPARE. Hence CPU 0 can't do its timekeeping duty. CPU 1
+> >        can still take IRQs.
+> >     
+> >     3) CPU 1 receives an IRQ which queues a timer callback one jiffy forward.
+> >     
+> >     4) On IRQ exit, CPU 1 schedules the tick one jiffy forward, taking
+> >        last_jiffies_update as a base. But last_jiffies_update hasn't been
+> >        updated for 2 jiffies since the timekeeper has interrupts disabled.
+> >     
+> >     5) clockevents_program_event(), which relies on ktime_get(), observes
+> >        that the expiration is in the past and therefore programs the min
+> >        delta event on the clock.
+> >     
+> >     6) The tick fires immediately, goto 3)
+> >     
+> >     7) Tick storm, the nohz_full CPU is drown and takes ages to reach
+> >        MULTI_STOP_DISABLE_IRQ, which is the only way out of this situation.
+> >     
+> >     Solve this with unconditionally updating jiffies if the value is stale
+> >     on nohz_full IRQ entry. IRQs and other disturbances are expected to be
+> >     rare enough on nohz_full for the unconditional call to ktime_get() to
+> >     actually matter.
+> >     
+> >     Reported-by: Paul E. McKenney <paulmck@kernel.org>
+> >     Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> >     Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> >     Tested-by: Paul E. McKenney <paulmck@kernel.org>
+> >     Link: https://lore.kernel.org/r/20211026141055.57358-2-frederic@kernel.org
+> > 
+> > diff --git a/kernel/softirq.c b/kernel/softirq.c
+> > index 322b65d456767..41f470929e991 100644
+> > --- a/kernel/softirq.c
+> > +++ b/kernel/softirq.c
+> > @@ -595,7 +595,8 @@ void irq_enter_rcu(void)
+> >  {
+> >  	__irq_enter_raw();
+> >  
+> > -	if (is_idle_task(current) && (irq_count() == HARDIRQ_OFFSET))
+> > +	if (tick_nohz_full_cpu(smp_processor_id()) ||
+> > +	    (is_idle_task(current) && (irq_count() == HARDIRQ_OFFSET)))
+> >  		tick_irq_enter();
+> >  
+> >  	account_hardirq_enter(current);
+> > diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> > index 6bffe5af8cb11..17a283ce2b20f 100644
+> > --- a/kernel/time/tick-sched.c
+> > +++ b/kernel/time/tick-sched.c
+> > @@ -1375,6 +1375,13 @@ static inline void tick_nohz_irq_enter(void)
+> >  	now = ktime_get();
+> >  	if (ts->idle_active)
+> >  		tick_nohz_stop_idle(ts, now);
+> > +	/*
+> > +	 * If all CPUs are idle. We may need to update a stale jiffies value.
+> > +	 * Note nohz_full is a special case: a timekeeper is guaranteed to stay
+> > +	 * alive but it might be busy looping with interrupts disabled in some
+> > +	 * rare case (typically stop machine). So we must make sure we have a
+> > +	 * last resort.
+> > +	 */
+> >  	if (ts->tick_stopped)
+> >  		tick_nohz_update_jiffies(now);
+> >  }

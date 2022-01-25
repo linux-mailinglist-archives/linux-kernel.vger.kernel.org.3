@@ -2,197 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0B549BB91
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 667A349BB94
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233674AbiAYSxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:53:08 -0500
-Received: from mga17.intel.com ([192.55.52.151]:45031 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231197AbiAYSw1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:52:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643136747; x=1674672747;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=S0Rc9wFrrUnPDVrInUyBnrw35Bv+a/KxQ5W0b0hWqZY=;
-  b=Qj4FapjWFZDE/xsS6fTQdG+gLFQqYqmHc3K2Smqi4AG1LLUhvXX6YXSC
-   rHrSAkay+ceIAeZJMuutQ0sNsYUbr6UNgVSurAHI8UO6tEtbofNX87YWU
-   +V3ZaO/aYcqML0VkuYJEjjZwu/YE7AdAm+Eka/f+Mds5DjecPdexUOhHL
-   WVFT30+xcnBoCzgVjjiH5dhyiWNLqu9Vyy5ihl8EUYG9d+xbKAtBmVH4t
-   LjCQxxvRB8WsPM/LbZPUEjRE+AoFv+RfJlKLvhevQ/mm08YBnjanOqKug
-   9hHtTQPXlV+MjfZuItY9jAfi3nb4C5E4C3xuaP4YyigoZGXeh1e+w5v5k
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="227057663"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="227057663"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 10:52:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="477217243"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2022 10:52:27 -0800
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 25 Jan 2022 10:52:26 -0800
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 25 Jan 2022 10:52:26 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Tue, 25 Jan 2022 10:52:26 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.109)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 25 Jan 2022 10:52:25 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MIQ96gTaBvce/jJLzMSnigfUGNwcbEFpdTwUV5jDf6OY4DkyjzQAdSPwMdUm9YX4fiIUILwZDRoj9YPQra0mdei3y+znPbEG5xfI6HRooF8IpjPo5bo7o7+dx4/DrlynWbMyUJzQTW4+4fDKJA77WSV6ZDzx3Ys/gVRGhJuxJiGpQOLKPxr45xIyxiKYdRktgL0QwLNJYFVzZ5mkqjVyk3WavRCB6JTXTIRMcJMIc1+QcvBYCjdJK1m1QNNieRzu3MjyYleg/D8lXNyD3nXVhH1rL6HtoGIsTIswTKRL4FxeDXOLWTMSR4r1LxOePZwMi5j9hPx3gQZ38v06W8ssPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=unorHrHFK69yrV12ajadq1SQeOcR5ezjEJO06Yd0dAY=;
- b=WdnXYRNdr4v81sp3YwZDsvwWNYuWa/ji9iN0V3fuFVhoTGDp+bfT1ZA/lvvfDM5DBTewwgtOCYD7Cc/w5eZR+Ot0VgDD53h3f/7bdvEk+EoBq0OWksaykNGkgWMf6q6WTdzd8h0TOpsfiJTmPm7n5RJGg4QbjnfLEC97i52NUPzBSstP33WKwA0xpye5m/20XDc11ExGGQ4JQ5n34bcGxR/F1ON/hDWVyrK4/yignt8qJXb7a7LpfP/gUDDF1gt5ILSJzmct5L/cUPD3F9PKvynsk+BoW1v4cWuiRJO4Qjmw9Y2XkMM1wAjtFnvdXUpKXt1qnsiHnXz0EeRRF/Bnzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BY5PR11MB3911.namprd11.prod.outlook.com (2603:10b6:a03:18d::29)
- by BN8PR11MB3603.namprd11.prod.outlook.com (2603:10b6:408:8b::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Tue, 25 Jan
- 2022 18:52:23 +0000
-Received: from BY5PR11MB3911.namprd11.prod.outlook.com
- ([fe80::b006:30e2:f354:3ea5]) by BY5PR11MB3911.namprd11.prod.outlook.com
- ([fe80::b006:30e2:f354:3ea5%5]) with mapi id 15.20.4930.015; Tue, 25 Jan 2022
- 18:52:23 +0000
-Message-ID: <83d085f0-8f2e-dc92-dab3-61c0b7677df8@intel.com>
-Date:   Tue, 25 Jan 2022 10:52:19 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH][next] drm/i915/guc: fix spelling mistake "notificaion" ->
- "notification"
-Content-Language: en-GB
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Brost <matthew.brost@intel.com>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220125091359.350918-1-colin.i.king@gmail.com>
-From:   John Harrison <john.c.harrison@intel.com>
-In-Reply-To: <20220125091359.350918-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW2PR2101CA0011.namprd21.prod.outlook.com
- (2603:10b6:302:1::24) To BY5PR11MB3911.namprd11.prod.outlook.com
- (2603:10b6:a03:18d::29)
+        id S233684AbiAYSxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231478AbiAYSxk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 13:53:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAB4C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:53:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 832AB6160B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:53:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB641C340E0;
+        Tue, 25 Jan 2022 18:53:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643136819;
+        bh=qT2kCpBubqy6g8hKsVRj202s95xVvuCvpSaSZ3Rq5nE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZnsYjVp9gg4a/ZkXQm2SmYYXQEHQoK91tLzvqAYqHjUJQzz1VFG+PUyvFS2gO4H6A
+         twO3hzh1cgRYNIlL1AEri05xlyr53wXZAQWWsgdBjVwuAxlNJ7IqY8/AaIeD8jklj4
+         qfyxH8jdIgxJTGWkF1x0RO3p+29YDy5UoCYDcCJvDRxy0gNJ7F/wdUPAWzwkdzqMa8
+         UATk5+j7yfrnHFoSKUllCkDus30ZumhN2yYhrftja/bI4AlD+Ecvh4iP7j94327aSU
+         KCA5TLAMARJjeC84Z0Ze6ymLxX8stlivnz5c/QiNkcv1sCFSYtSB5S2iVk3Vcjrh2J
+         z04ycdPJd49mw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A62CD5C0641; Tue, 25 Jan 2022 10:53:38 -0800 (PST)
+Date:   Tue, 25 Jan 2022 10:53:38 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Corey Minyard <minyard@acm.org>
+Cc:     Juergen Gross <jgross@suse.com>, Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Possible reproduction of CSD locking issue
+Message-ID: <20220125185338.GP4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220125182737.GO34919@minyard.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e6ab0c20-7cf1-43ea-af29-08d9e033d263
-X-MS-TrafficTypeDiagnostic: BN8PR11MB3603:EE_
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <BN8PR11MB3603883DA75DAE87408B93FDBD5F9@BN8PR11MB3603.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2803;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pVOXxTKpDl32L98nDZkR2w9Vv7PzgMNmnu54RVClezPZ75m7T5FtTIX47iE7L0elFOqoKrVh2WKSgLh6qwICZFnuhtwCZ6cpMdTm8aJkYajLd1hRXGAH5gNOnPfR9YADjdm4D8vfYu+d6F0dUff2Gb9w1+4ZqAgUZ4J0WIaYqalqEp4fwPU3X0SNmq/fHtssPXpQ4gTDx3U0avh/+y+NiVpib2h3cYIoIzn0yT29TB/w9/fS4iKgqmCKGL0eOKvKeiYpokj1lDAaZdNDrAen4IRbMBlQgL380zPSvQtPsNHsuSSZitmmIB8ecTi0OYibTpj6HEECekN7TdBCcVmZ1HbkFOACMkH/UPT9zraVjKv/kvdocfo9GdBupqC8eUQkSj6ZzOaF1Z8Ja65phcLCtQN/ObtQuJqUEuu80zn9cmIdsvYuX7DxskyDMvxEasrXcvc1U+POhB/iRbNnVghQRJsI2YgRifWkWx8bAk0IcaevFXW2hVWzo7uWceMH40cLmLZwMqAfr+b4J7pHDFJQVTFWFYc4Cpflyy1lGtdBi/h44w3+Zmiq2W5ZWH8VkXPejmWkpD99a2/2XmdTY/BQvKWY1BpAwxYYo73gpNry/40tiswOOmZuAmgb/5iYcFiyMnQUPoA9LIJyP0RmBIlqIgSYsGzK6ly/DJfElkzhBO/dF26/8qFR0zGcvvn0OgjUO3+OZJHuKWb2AwL8ACcSAM+wlUCvjGpWADTiQww/Q99Zris5VGgWCsgvrm3knl7SqdlzHUhM8sXJsySzSiQ8uA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB3911.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(83380400001)(26005)(4326008)(316002)(66556008)(66476007)(36756003)(66946007)(31686004)(8676002)(6506007)(53546011)(508600001)(186003)(5660300002)(6666004)(15650500001)(8936002)(7416002)(6486002)(921005)(2616005)(38100700002)(110136005)(2906002)(86362001)(82960400001)(31696002)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U240NStzWWMveEVkbkZXK0M0dkRORHN6OXRRVmRqYWo0TDI5QlRRVDhuZG9H?=
- =?utf-8?B?dlphYWlPV0V2YXdiNHJqZUFmSDRuNWhuM3M1OUs0RTV3K0s3Z1FWdWpuNFRT?=
- =?utf-8?B?aUxiVTN3Z3V3anZqRmJ5RGJTcW56NVc2ZHNmNGtpNERnamFQcWw5dEJZNjNF?=
- =?utf-8?B?U3NhNnpGeW5uSmkwYjdpVzB5Vy84cUtBUFJlK0dkS052SkM4QXlJYmdubERJ?=
- =?utf-8?B?c1pKT3BiN1g4c1kydGJxWjdCSG9JYmFzcWFwNFdCR3A1VXVxaDJpZ2srckRS?=
- =?utf-8?B?bG93ZlNmZ3FBRDVZdFJuQzdOcGVIRDhPWjJSbzJRaitXTjdQdTFBczAzdk02?=
- =?utf-8?B?aFFqcEt1QlZGSUN3NmxlbytpNytscDYweDVoNWY0dGE1eWplTEsrZVk2OGFL?=
- =?utf-8?B?M2FmdjNrWjcxUXk2RU9Tdkw5TmdRV2Zwa0JPVE53NjhZRFFmQWVCV0JocEhq?=
- =?utf-8?B?eW1xZThjaysyQ1ZiR2NBb2NjbEt0YmdMQWVWQkdvL0dxQXJUeGhqK0FCR0NC?=
- =?utf-8?B?cmdaY1Y1bWthTmwvK1BBVTZFTkF5TURYbGNpcEpjNGFuQjgxcTEyZUVzL3Nk?=
- =?utf-8?B?TEg2ZjFiNFVtbkVEN3hNenQ4dEdoSXlwSzk4bjd1d25xMndmNHkyVnB6WkxD?=
- =?utf-8?B?SGUwT3FiTWViNDdKRU5MY1lFLy9ud2svbUNHaW1WSCs0QXQvOXVZbTRGZ3RX?=
- =?utf-8?B?VmpvOHkrc3lmSTBIMSsrNWU2K1FzQnoycDBoWXA3ODU4UFJkbmJnVXVuWFh0?=
- =?utf-8?B?UUJZWDVCUDR0MW5zVnE4ZmJyM3FLcmJYYngrcDU1SFBkTTNtQ0FEOEt6WFhJ?=
- =?utf-8?B?NGFCY2Z4S1paRHQ3S2pYVG1ta1kwMmU4T0p3ZUdHY2ZBeXBQWFVXMFdaZ1N4?=
- =?utf-8?B?VVNSZDlzRlhVeEhGdXp3bWM0VVN4Y1ZYTGpGOVVWK2ltQnhiS09yNEgrN0Rv?=
- =?utf-8?B?VXF6QkQ1ellKQlBPQ1pxdWVEL1lzcHRZdGJ6VS85VExZYVpud1RLYVhPVlNa?=
- =?utf-8?B?bGVFeWhsSzIxMUorcTdDVmMxZmNYREhTeDhnQjBSTGVSZHlxL2ozc2NFcHVu?=
- =?utf-8?B?cDkxb3lrNWJNR0pWR1RRTEJMekVRdUJaNVc3aldYOXNCSHFscUh5QmtHSTI2?=
- =?utf-8?B?aVljcW1QY0NWMVJaR1dVZEgwT2trb3RpTGpFc0w2VXpVaXBsZjdqTjJ6b1VG?=
- =?utf-8?B?S1I3NVI1dTRBai9MckxnL1RRUjBLQVV5WUVqVmhSUUt4Z0JtdSt2QzcvWUcx?=
- =?utf-8?B?NWcwRzExODlDVTZ0c3U5ZzBzVlZ6aXUyTkxOQ2JXemlBUFhjOENqbEw5Sjlk?=
- =?utf-8?B?MlhXbWtveEx6OE80L0NlQll3cGFycVRSb1ZxM25wQ3FtTVZEdW5MZGdHQU4r?=
- =?utf-8?B?NXQzRFpZRVpWMFFPS3pTUTl5ZUdiS0JqdlNta0ZtWTZCZUxSMnlaWmlYdktz?=
- =?utf-8?B?emVGbGQvelpaVXgxcHNFWkc5b3B3c2dnVm9zbnhzNytvTkNJQWx6K0l2dzlY?=
- =?utf-8?B?TFFjaWpLYWxSRmhOeGNvUm9ZL0piTWxHQ01SUDF2QTNNbExWWVZkcnZCZFEy?=
- =?utf-8?B?U2I1VVlpMklvRHZqYUNLUVBjUmRMai9zamZ3Wjh0KzFScldZOCtmeUlocnUr?=
- =?utf-8?B?UDl3WUVqQ21UYjJDamhvZGRuVnRtRlM5NXg4TU5tS29vMmJoWjZla3JPNnRv?=
- =?utf-8?B?cGgzb1N0cnhwemlLNTRBRW5lWFBTL1hsZGNSRUtXNDVzOGkvWlRiVTBtMEY1?=
- =?utf-8?B?RFhXSDZXVEpoNkg0UFBtejJGTkZ4Wkdsa3lxazArR1MrRUpUdnp2OEhmcnh4?=
- =?utf-8?B?NkpGT3l4cVZSTS85allKb0g3R054RHJaVktEOCtwMy9obmU5d1MyeHdzU1hB?=
- =?utf-8?B?dTE4c2Q1TXRCS3ZUNWlVa1JLOEMzUXdNZEdCS1Z0bGtnUFgvZlhjNXl0bm9y?=
- =?utf-8?B?Ym9PSU51UDlnZlhibEt4OWtnbno1TXp6VndLU3VuMEQ4dVlNOTRBNUlDeGxs?=
- =?utf-8?B?czBYTzg2MjJENmsxdXBJUnVrWUJaUGRuMjRGejd1aGZpT3hIdzNaNm5VNWM3?=
- =?utf-8?B?R3VzejRrZ3ZxaEF6Rk5vbWViTW5pK29qbkZiNkk3MjUzMkhYdmwyN2lXMm1j?=
- =?utf-8?B?YjQ3TEQxSStreW1WU3pmcmxodGxJL0I1NUlwcTBpcmxWZzFrWnV2d2RDeTBs?=
- =?utf-8?B?Mm0xeUc3NVZRZ2IxbVpHWU0yWThHOWlETEpwRjNqWWFGeDFLdStGQXhQMUNy?=
- =?utf-8?Q?vrRQSuFay2C0p60pEAFZkM9+QRGZC1K5AT5RPpAoM0=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6ab0c20-7cf1-43ea-af29-08d9e033d263
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB3911.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 18:52:22.9212
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zwm5+J3EqTzvVayCj8IQVY9HvVG7Opnf639GxI7sn1002yhvYI4qmBb+S3u7SklzL0j24qYJPqZXeBRTPvoNg/pQYyMCFgvfo1j+6D3bIUM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR11MB3603
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220125182737.GO34919@minyard.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/2022 01:13, Colin Ian King wrote:
-> There is a spelling mistake in a drm_err error message. Fix it.
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-Reviewed-by: John Harrison <John.C.Harrison@Intel.com>
+On Tue, Jan 25, 2022 at 12:27:37PM -0600, Corey Minyard wrote:
+> We have a customer that had been seeing CSD lock issues on a Centos 7
+> kernel (unfortunately).  I couldn't find anything or any kernel changes
+> that might fix it, so I was consdering it was the CSD locking issue you
+> have been chasing for a while.
+> 
+> So I backported the debug patches.  And of course, they stopped seeing
+> the issue, at least as much, and they had trouble with the extra CPU
+> time the debug code took.  But they just reproduced it.  Here are the
+> logs:
+> 
+> Jan 23 23:39:43 worker0 kernel: [285737.522743] csd: Detected non-responsive CSD lock (#1) on CPU#3, waiting 5000000042 ns for CPU#55 flush_tlb_func+0x0/0xb0(0xffff8e0b3e2afbe8).
+> Jan 23 23:39:43 worker0 kernel: [285737.522744]  csd: CSD lock (#1) unresponsive.
+> Jan 23 23:39:43 worker0 kernel: [285737.522747]  csd: cnt(0000000): 0000->0000 queue
+> Jan 23 23:39:43 worker0 kernel: [285737.522748]  csd: cnt(0000001): ffff->0037 idle
+> Jan 23 23:39:43 worker0 kernel: [285737.522749]  csd: cnt(63d8dd8): 0003->0037 ipi
+> Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dd9): 0003->0037 ping
+> Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dda): 0003->ffff pinged
+> Jan 23 23:39:43 worker0 kernel: [285737.522751]  csd: cnt(63d8dea): 0035->0037 pinged
+> Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8deb): ffff->0037 gotipi
+> Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8dec): ffff->0037 handle
+> Jan 23 23:39:43 worker0 kernel: [285737.522753]  csd: cnt(63d8ded): ffff->0037 dequeue (src CPU 0 == empty)
+> Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8dee): ffff->0037 hdlend (src CPU 0 == early)
+> Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8e1f): 0003->0037 queue
+> Jan 23 23:39:43 worker0 kernel: [285737.522755]  csd: cnt(63d8e20): 0003->0037 ipi
+> Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e21): 0003->0037 ping
+> Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e22): 0003->0037 queue
+> Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt(63d8e23): 0003->0037 noipi
+> Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt now: 63fe4cd
+> Jan 23 23:39:43 worker0 kernel: [285737.522758] Task dump for CPU 55:
+> Jan 23 23:39:43 worker0 kernel: [285737.522761] kubelet         R  running task        0 277695      1 0x00080000
+> Jan 23 23:39:43 worker0 kernel: [285737.522761] Call Trace:
+> Jan 23 23:39:43 worker0 kernel: [285737.522769]  [<ffffffff84376b6a>] ? __schedule+0x46a/0x990
+> Jan 23 23:39:43 worker0 kernel: [285737.522774]  [<ffffffff83db6353>] ? context_tracking_user_enter+0x13/0x20
+> Jan 23 23:39:43 worker0 kernel: [285737.522776]  [<ffffffff843775b5>] ? schedule_user+0x45/0x50
+> Jan 23 23:39:43 worker0 kernel: [285737.522779]  [<ffffffff8437b518>] ? retint_careful+0x16/0x34
 
-However, note that this message is going to be deleted anyway. Or at 
-least dropped down to an informational. Partly, there was confusion over 
-how the issue could arise. Partly the firmware bug leading to part of 
-the problem has now been fixed and the w/a removed from the driver. 
-Cleaning this error up accordingly is on my todo list...
+Long-running interrupt handler, maybe?  Or am I misinterpreting this
+stack trace?
 
-Thanks,
-John.
+> Jan 23 23:39:43 worker0 kernel: [285737.522780] csd: Re-sending CSD lock (#1) IPI from CPU#03 to CPU#55
+> Jan 23 23:39:43 worker0 kernel: [285737.522788] CPU: 3 PID: 54671 Comm: runc:[2:INIT] Kdump: loaded Tainted: G           OE  ------------ T 3.10.0-1062.12.1.rt56.1042.mvista.test.14.el7.x86_64 #1
+> Jan 23 23:39:43 worker0 kernel: [285737.522789] Hardware name: Dell Inc. PowerEdge R740/0YWR7D, BIOS 2.9.4 11/06/2020
+> Jan 23 23:39:43 worker0 kernel: [285737.522789] Call Trace:
+> Jan 23 23:39:43 worker0 kernel: [285737.522793]  [<ffffffff843718ba>] dump_stack+0x19/0x1b
+> Jan 23 23:39:43 worker0 kernel: [285737.522798]  [<ffffffff83d0bcd8>] __csd_lock_wait+0x1a8/0x2a0
+> Jan 23 23:39:43 worker0 kernel: [285737.522800]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
+> Jan 23 23:39:43 worker0 kernel: [285737.522802]  [<ffffffff83d0bfa4>] smp_call_function_single+0xc4/0x1b0
+> Jan 23 23:39:43 worker0 kernel: [285737.522804]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
+> Jan 23 23:39:43 worker0 kernel: [285737.522809]  [<ffffffff83e2684b>] ? page_counter_uncharge+0x3b/0x70
+> Jan 23 23:39:43 worker0 kernel: [285737.522811]  [<ffffffff83d0c614>] smp_call_function_many+0x344/0x380
+> Jan 23 23:39:43 worker0 kernel: [285737.522813]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
+> Jan 23 23:39:43 worker0 kernel: [285737.522816]  [<ffffffff83c6da38>] native_flush_tlb_others+0xb8/0xc0
+> Jan 23 23:39:43 worker0 kernel: [285737.522818]  [<ffffffff83c6dc25>] flush_tlb_page+0x65/0xf0
+> Jan 23 23:39:43 worker0 kernel: [285737.522821]  [<ffffffff83dfdf98>] ptep_clear_flush+0x68/0xa0
+> Jan 23 23:39:43 worker0 kernel: [285737.522825]  [<ffffffff83de6806>] wp_page_copy.isra.83+0x3d6/0x650
+> Jan 23 23:39:43 worker0 kernel: [285737.522828]  [<ffffffff83de8cb4>] do_wp_page+0xb4/0x710
+> Jan 23 23:39:43 worker0 kernel: [285737.522832]  [<ffffffff83decbb4>] handle_mm_fault+0x884/0x1340
+> Jan 23 23:39:43 worker0 kernel: [285737.522835]  [<ffffffff83cd7799>] ? update_cfs_shares+0xa9/0xf0
+> Jan 23 23:39:43 worker0 kernel: [285737.522839]  [<ffffffff8437efc3>] __do_page_fault+0x213/0x5a0
+> Jan 23 23:39:43 worker0 kernel: [285737.522841]  [<ffffffff8437f385>] do_page_fault+0x35/0x90
+> Jan 23 23:39:43 worker0 kernel: [285737.522842]  [<ffffffff8437b728>] page_fault+0x28/0x30
+> Jan 23 23:39:43 worker0 kernel: [285737.522845] csd: CSD lock (#1) got unstuck on CPU#03, CPU#55 released the lock.
+> 
+> Hopefully this is the issue you are chasing and not something else.
+> I've been studying them to see what they mean, but I thought you might
+> be interested to get them asap.
 
+Well, there have been several bugs causing these CSD lock issues, so what
+is one more?  ;-)
 
-> ---
->   drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c b/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
-> index 1331ff91c5b0..1ae3d1f259e3 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
-> @@ -3942,7 +3942,7 @@ static void guc_handle_context_reset(struct intel_guc *guc,
->   		guc_context_replay(ce);
->   	} else {
->   		drm_err(&guc_to_gt(guc)->i915->drm,
-> -			"Invalid GuC engine reset notificaion for 0x%04X on %s: banned = %d, blocked = %d",
-> +			"Invalid GuC engine reset notification for 0x%04X on %s: banned = %d, blocked = %d",
->   			ce->guc_id.id, ce->engine->name, intel_context_is_banned(ce),
->   			context_blocked(ce));
->   	}
+More seriously, have you tried Frederic's patch?  This fixes the issue
+described here:  https://paulmck.livejournal.com/62071.html
+If your stack above was due to an interrupt storm rather than a
+long-running interrupt, this might well be the fix.
 
+Oh, and Jürgen Groß reportedly found an issue about a year ago that
+could potentially be related, but I see that he is already on CC.
+
+And, unfortunately, even more seriously, this CSD-lock diagnostic code
+will very likely continue to find problems, just as the infamous RCU
+CPU stall warnings and hard/soft lockup warnings do.
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 53e87e3cdc155f20c3417b689df8d2ac88d79576
+Author: Frederic Weisbecker <frederic@kernel.org>
+Date:   Tue Oct 26 16:10:54 2021 +0200
+
+    timers/nohz: Last resort update jiffies on nohz_full IRQ entry
+    
+    When at least one CPU runs in nohz_full mode, a dedicated timekeeper CPU
+    is guaranteed to stay online and to never stop its tick.
+    
+    Meanwhile on some rare case, the dedicated timekeeper may be running
+    with interrupts disabled for a while, such as in stop_machine.
+    
+    If jiffies stop being updated, a nohz_full CPU may end up endlessly
+    programming the next tick in the past, taking the last jiffies update
+    monotonic timestamp as a stale base, resulting in an tick storm.
+    
+    Here is a scenario where it matters:
+    
+    0) CPU 0 is the timekeeper and CPU 1 a nohz_full CPU.
+    
+    1) A stop machine callback is queued to execute somewhere.
+    
+    2) CPU 0 reaches MULTI_STOP_DISABLE_IRQ while CPU 1 is still in
+       MULTI_STOP_PREPARE. Hence CPU 0 can't do its timekeeping duty. CPU 1
+       can still take IRQs.
+    
+    3) CPU 1 receives an IRQ which queues a timer callback one jiffy forward.
+    
+    4) On IRQ exit, CPU 1 schedules the tick one jiffy forward, taking
+       last_jiffies_update as a base. But last_jiffies_update hasn't been
+       updated for 2 jiffies since the timekeeper has interrupts disabled.
+    
+    5) clockevents_program_event(), which relies on ktime_get(), observes
+       that the expiration is in the past and therefore programs the min
+       delta event on the clock.
+    
+    6) The tick fires immediately, goto 3)
+    
+    7) Tick storm, the nohz_full CPU is drown and takes ages to reach
+       MULTI_STOP_DISABLE_IRQ, which is the only way out of this situation.
+    
+    Solve this with unconditionally updating jiffies if the value is stale
+    on nohz_full IRQ entry. IRQs and other disturbances are expected to be
+    rare enough on nohz_full for the unconditional call to ktime_get() to
+    actually matter.
+    
+    Reported-by: Paul E. McKenney <paulmck@kernel.org>
+    Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+    Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+    Tested-by: Paul E. McKenney <paulmck@kernel.org>
+    Link: https://lore.kernel.org/r/20211026141055.57358-2-frederic@kernel.org
+
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index 322b65d456767..41f470929e991 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -595,7 +595,8 @@ void irq_enter_rcu(void)
+ {
+ 	__irq_enter_raw();
+ 
+-	if (is_idle_task(current) && (irq_count() == HARDIRQ_OFFSET))
++	if (tick_nohz_full_cpu(smp_processor_id()) ||
++	    (is_idle_task(current) && (irq_count() == HARDIRQ_OFFSET)))
+ 		tick_irq_enter();
+ 
+ 	account_hardirq_enter(current);
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 6bffe5af8cb11..17a283ce2b20f 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -1375,6 +1375,13 @@ static inline void tick_nohz_irq_enter(void)
+ 	now = ktime_get();
+ 	if (ts->idle_active)
+ 		tick_nohz_stop_idle(ts, now);
++	/*
++	 * If all CPUs are idle. We may need to update a stale jiffies value.
++	 * Note nohz_full is a special case: a timekeeper is guaranteed to stay
++	 * alive but it might be busy looping with interrupts disabled in some
++	 * rare case (typically stop machine). So we must make sure we have a
++	 * last resort.
++	 */
+ 	if (ts->tick_stopped)
+ 		tick_nohz_update_jiffies(now);
+ }

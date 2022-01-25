@@ -2,121 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CCA49B2F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A1E49B2FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349251AbiAYLcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 06:32:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244055AbiAYLaS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 06:30:18 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217A8C061401
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:28:25 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id l68so60130170ybl.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nKfpQISqriKOsG4ekJR5vF8uuiCgZwGiWhtxeLFlL4Y=;
-        b=uRyJ8dFIbEA6wV3dKfUeKLZnoKW9Jfc+zmlHkz5aFm+W5IyLGdYNIZu6HvMRe/RfLI
-         Z0wAN5OVA4XfC0zSbicOQjiKYcyrzhJ98QMKwpCHMZD/U+5F6TceNtDBtJBOUq78poSC
-         JWEzm1iz3F08UJBcthUYi2fL/ixmeLTKTYQYUgwNG7KC4cgK0VAI9eVSSVIpYisdktvJ
-         EpGxOmV0FfJpsZuhVQvfFWfnNVPuTdUCQ0QKhtDvK2SV9FpVYjUo7AW03E/d9Th79HuZ
-         zMISbNr99FnW5pd4WTH7sLM3w21bTVf3QKMm0SPhT2NJmpABuj/uUHVu+nWjNU7zHs3i
-         NQVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nKfpQISqriKOsG4ekJR5vF8uuiCgZwGiWhtxeLFlL4Y=;
-        b=BaH145o2khS0YLRtfmxMg4uPfan54NiQyPDoZmN36ik8o4IKJQHk0aEbHd34RP3onO
-         nL5h0Cxyt5NLu2kuPGy6AlzJ+anxqQZcaZydX0aobW+JlGOmXcPr/VdX9tp9S0fPzug8
-         SOnzssv0lgZLFx1gB/LhpP5hD692wM9C1vPnyGIli8dscofijjikVC0/zccbNbn7nTpS
-         gTX3iN3WpLm5thY6LfdD8/efUctnKRr5WgftmucQAKTEszebDLaiLmcfqMK6ieEBaBZM
-         9qy0B5KdstZvioG0D87On8Uc8JvQWGk8yglzQxXKVYDKaFMcj8IV2DNqYZTgPSjFvKLd
-         QaKw==
-X-Gm-Message-State: AOAM533i2qryBl/pGUxRGbDv8Guk55R9fxsisNaL0jsJPa/JO4JQdQI5
-        EaUDNTXo3o1UOjii4IjbsxzfWqUILTVOzbR7FUy86g==
-X-Google-Smtp-Source: ABdhPJw+2dPoVdljHBFLY7lLCAbrmWVow5rNy/aBKbCDl91AQV8Eqt1nhEeHMwcJKEUsQVgMh0MaEzXsQkK7WIoS5BI=
-X-Received: by 2002:a25:838b:: with SMTP id t11mr27044230ybk.146.1643110104215;
- Tue, 25 Jan 2022 03:28:24 -0800 (PST)
+        id S1351946AbiAYLea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 06:34:30 -0500
+Received: from foss.arm.com ([217.140.110.172]:36768 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241188AbiAYLcK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 06:32:10 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E75C41FB;
+        Tue, 25 Jan 2022 03:32:08 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E5D8E3F7D8;
+        Tue, 25 Jan 2022 03:32:06 -0800 (PST)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     acme@redhat.com, ardb@kernel.org, bp@alien8.de, broonie@kernel.org,
+        catalin.marinas@arm.com, dave.hansen@linux.intel.com,
+        jpoimboe@redhat.com, jslaby@suse.cz,
+        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
+        mark.rutland@arm.com, mingo@redhat.com, peterz@infradead.org,
+        tglx@linutronix.de, will@kernel.org
+Subject: [PATCH v2 0/7] linkage: better symbol aliasing
+Date:   Tue, 25 Jan 2022 11:31:53 +0000
+Message-Id: <20220125113200.3829108-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220124183937.101330125@linuxfoundation.org>
-In-Reply-To: <20220124183937.101330125@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 25 Jan 2022 16:58:13 +0530
-Message-ID: <CA+G9fYshfJ-WCB141=ha8uf0-FhE9Pim6hd5BWAVxDpvHhTR0w@mail.gmail.com>
-Subject: Re: [PATCH 4.14 000/186] 4.14.263-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 00:34, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.263 release.
-> There are 186 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.263-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+This series aims to make symbol aliasing simpler and more consistent.
+The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
+SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
+that e.g.
 
-Following patch caused build failures on arm imx_v6_v7_defconfig
+    SYM_FUNC_START(func)
+    SYM_FUNC_START_ALIAS(alias1)
+    SYM_FUNC_START_ALIAS(alias2)
+        ... asm insns ...
+    SYM_FUNC_END(func)
+    SYM_FUNC_END_ALIAS(alias1)
+    SYM_FUNC_END_ALIAS(alias2)
+    EXPORT_SYMBOL(alias1)
+    EXPORT_SYMBOL(alias2)
 
-> Lucas Stach <l.stach@pengutronix.de>
->     drm/etnaviv: limit submit sizes
+... can become:
 
- build/clang-nightly-imx_v6_v7_defconfig
- build/gcc-11-imx_v6_v7_defconfig
- build/gcc-10-imx_v6_v7_defconfig
- build/clang-11-imx_v6_v7_defconfig
- build/clang-12-imx_v6_v7_defconfig
- build/clang-13-imx_v6_v7_defconfig
+    SYM_FUNC_START(name)
+        ... asm insns ...
+    SYM_FUNC_END(name)
 
-Error:
--------
-make --silent --keep-going --jobs=8 ARCH=arm
-CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
-arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
+    SYM_FUNC_ALIAS(alias1, func)
+    EXPORT_SYMBOL(alias1)
 
-drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c: In function
-'etnaviv_ioctl_gem_submit':
-drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c:345:37: error: 'struct
-drm_etnaviv_gem_submit' has no member named 'nr_pmrs'; did you mean
-'nr_bos'?
-      args->nr_bos > SZ_64K || args->nr_pmrs > 128) {
-                                     ^~~~~~~
-                                     nr_bos
-make[5]: *** [scripts/Makefile.build:329:
-drivers/gpu/drm/etnaviv/etnaviv_gem_submit.o] Error 1
+    SYM_FUNC_ALIAS(alias2, func)
+    EXPORT_SYMBOL(alias2)
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+This avoids repetition and hopefully make it easier to ensure
+consistency (e.g. so each function has a single canonical name and
+associated metadata).
 
- --
-Linaro LKFT
-https://lkft.linaro.org
+I've build+boot tested arm64 defconfig without issues, and also build
+tested arm/i386/x86_64 defconfig without issues. I've pushed the series
+to my `linkage/alias-rework` branch on git.kernel.org, atop v5.17-rc1:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git linkage/alias-rework
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=linkage/alias-rework
+
+Since RFCv1 [1]:
+* Drop arm64 dma alias removal (taken via arm64 for v5.17)
+* Rename SYM_FUNC_LOCAL_ALIAS() -> SYM_FUNC_ALIAS_LOCAL()
+* Update the tools/ copies of x86 routines
+* Add preparatory fix for 32-bit arm
+* Rebase to v5.17-rc1
+
+[1] https://lore.kernel.org/r/20211206124715.4101571-1-mark.rutland@arm.com/
+
+Thanks,
+Mark.
+
+Mark Rutland (7):
+  arm: lib: remove leading whitespace in bitop macro
+  linkage: add SYM_{ENTRY,START,END}_AT()
+  linkage: add SYM_FUNC_ALIAS{,_LOCAL,_WEAK}()
+  arm64: clean up symbol aliasing
+  x86: clean up symbol aliasing
+  linkage: remove SYM_FUNC_{START,END}_ALIAS()
+  tools: update x86 string routines
+
+ Documentation/asm-annotations.rst       | 11 ++--
+ arch/arm/lib/bitops.h                   |  8 +--
+ arch/arm64/include/asm/linkage.h        | 24 -------
+ arch/arm64/kvm/hyp/nvhe/cache.S         |  5 +-
+ arch/arm64/lib/clear_page.S             |  5 +-
+ arch/arm64/lib/copy_page.S              |  5 +-
+ arch/arm64/lib/memchr.S                 |  5 +-
+ arch/arm64/lib/memcmp.S                 |  6 +-
+ arch/arm64/lib/memcpy.S                 | 21 +++---
+ arch/arm64/lib/memset.S                 | 12 ++--
+ arch/arm64/lib/strchr.S                 |  6 +-
+ arch/arm64/lib/strcmp.S                 |  6 +-
+ arch/arm64/lib/strlen.S                 |  6 +-
+ arch/arm64/lib/strncmp.S                |  6 +-
+ arch/arm64/lib/strnlen.S                |  6 +-
+ arch/arm64/lib/strrchr.S                |  5 +-
+ arch/arm64/mm/cache.S                   | 35 ++++++----
+ arch/x86/boot/compressed/head_32.S      |  3 +-
+ arch/x86/boot/compressed/head_64.S      |  3 +-
+ arch/x86/crypto/aesni-intel_asm.S       |  4 +-
+ arch/x86/lib/memcpy_64.S                | 10 +--
+ arch/x86/lib/memmove_64.S               |  4 +-
+ arch/x86/lib/memset_64.S                |  6 +-
+ include/linux/linkage.h                 | 87 +++++++++++++++----------
+ tools/arch/x86/lib/memcpy_64.S          | 10 +--
+ tools/arch/x86/lib/memset_64.S          |  6 +-
+ tools/perf/util/include/linux/linkage.h | 80 +++++++++++++++--------
+ 27 files changed, 209 insertions(+), 176 deletions(-)
+
+-- 
+2.30.2
+

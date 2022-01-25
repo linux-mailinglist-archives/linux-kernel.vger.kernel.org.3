@@ -2,116 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5A049BB00
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F71B49BB03
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiAYSLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:11:31 -0500
-Received: from mga03.intel.com ([134.134.136.65]:3493 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229462AbiAYSLQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:11:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643134267; x=1674670267;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jdLQfxgAH6W2Y1TTjkAJ74N2Bxd2GuUgCsHwgxo/Rzc=;
-  b=U/MvH5a8bFWavozyt4c68EBkTgdiEU1FZdlo7jSkmPUEN+EoyrUcCwkv
-   JDwbO5NmQczmSPJd3NIieuebSBii45+bcXj2hQn4RRjf26/qmqlFLyYrL
-   gjfxrFY1ZqLyyH0u4oz7F6ikl9dOhus3L9eXuDkTfpKv35mDpupWrpbAA
-   yfPNBolmkVrUipK1dIPkNTA08pFEr89/15EuzX0d/RqfxEp+kS3NSIvIk
-   sk5IsusXfprQTFF0Hinm7tC+kT9L2OqAipOry8gHL3vCHjjh7LOoWkauO
-   LS5x/n1DafCTWHbmr2SEgTUxTeVYKVo+69AvVAQyAqZfnc1v56QorhAkJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246313823"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="246313823"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 10:11:00 -0800
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="580837202"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 10:10:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nCQGM-00ELO6-FX;
-        Tue, 25 Jan 2022 20:09:50 +0200
-Date:   Tue, 25 Jan 2022 20:09:50 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Tang Bin <tangbin@cmss.chinamobile.com>, broonie@kernel.org,
-        cezary.rojewski@intel.com, liam.r.girdwood@linux.intel.com,
-        yang.jie@linux.intel.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: Intel: atom: Remove redundant check to simplify
- the code
-Message-ID: <YfA87pkRPA95aG2f@smile.fi.intel.com>
-References: <20211125075028.8500-1-tangbin@cmss.chinamobile.com>
- <3ca07ce3-6d5c-20cc-8992-4700490ea472@linux.intel.com>
+        id S235677AbiAYSMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:12:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36106 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234038AbiAYSL7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 13:11:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643134318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZYZFcKeTPsQCFaSsqNlB8G3oqmreXQCJIoK82/wxEkU=;
+        b=XEI8APwOLMstwDfrWdiGxohk0Tj8iYSCVRKmV+JMtqSXFTuhnopJyp3loDxYaHHf8o6WO3
+        zXkPX9jUNBdvt/mZ5qSie953p3xwpFT67vrMTvNMTWIr8HrCqg8yCIjR4ZExKqYfBDjcK3
+        WoGPRhqRNFS9hfmvU8oHnW67UDy54qE=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-522-LX73ie07OE-z8NKud-CURg-1; Tue, 25 Jan 2022 13:11:56 -0500
+X-MC-Unique: LX73ie07OE-z8NKud-CURg-1
+Received: by mail-ej1-f69.google.com with SMTP id v2-20020a170906292200b006a94a27f903so3781951ejd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:11:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZYZFcKeTPsQCFaSsqNlB8G3oqmreXQCJIoK82/wxEkU=;
+        b=KS68YnZ8Fx6kiTay/fmCTijkvy0RBmtpw7MiXZF3ErO+rysM0UhmIVQgtEbFu+F3gN
+         dPoXQ8UXop7v6l5WjB+UAPAcYTHJnshHH8n07dlsNP+oaoExySm08Fqj3isG5Sm3AgIU
+         jqbq0EQgRDlmTJ5IjGmuh7dOk4OgzoEDmHC0qZzPQ50VIw6oHDfqZ5CV6zO0hdPo35EU
+         Z8g0pgyCbduyo+epTTt10TUkhc48R7oi3mT/VyXmmwG03lENdsW+Iku7xTZfUP2MUCQG
+         M1rNyyXtjlGjEU5IvF0++n7PrhaDwH/JYzWLqsTu8Sul7ewc96uEhOwAMLswLKwbF9fK
+         ZjyA==
+X-Gm-Message-State: AOAM530N9MJ51uxQeH0Vu98/9jXgjRezaX6H0Mya0QxsSFp/xVaDs62a
+        RvBXF41pv2ikYJuuiyQFK8fn7tJMxFtZLBVN7A6307dNCZcdBiuVv3bvP4cBdNAvFj1RcVNjo9z
+        ajEndir3vlLPhFA3HOPGoOaYW
+X-Received: by 2002:a17:907:9605:: with SMTP id gb5mr17348662ejc.685.1643134315388;
+        Tue, 25 Jan 2022 10:11:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyoPAYB5FVJEoP403NezL+MUS0Tv2jX6/UgHpSL8/pKp8IUbV8+JT6INoyPbobrfnoWYRryPQ==
+X-Received: by 2002:a17:907:9605:: with SMTP id gb5mr17348639ejc.685.1643134315151;
+        Tue, 25 Jan 2022 10:11:55 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id k7sm6425341ejp.182.2022.01.25.10.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 10:11:54 -0800 (PST)
+Date:   Tue, 25 Jan 2022 19:11:52 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 2/9] fprobe: Add ftrace based probe APIs
+Message-ID: <YfA9aC5quQNc89Hc@krava>
+References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
+ <164311271777.1933078.9066058105807126444.stgit@devnote2>
+ <YfAoMW6i4gqw2Na0@krava>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3ca07ce3-6d5c-20cc-8992-4700490ea472@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <YfAoMW6i4gqw2Na0@krava>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 10:22:41AM -0600, Pierre-Louis Bossart wrote:
-> On 11/25/21 1:50 AM, Tang Bin wrote:
+On Tue, Jan 25, 2022 at 05:41:24PM +0100, Jiri Olsa wrote:
+> On Tue, Jan 25, 2022 at 09:11:57PM +0900, Masami Hiramatsu wrote:
+> 
+> SNIP
+> 
+> > +
+> > +/* Convert ftrace location address from symbols */
+> > +static int convert_func_addresses(struct fprobe *fp)
+> > +{
+> > +	unsigned long addr, size;
+> > +	unsigned int i;
+> > +
+> > +	/* Convert symbols to symbol address */
+> > +	if (fp->syms) {
+> > +		fp->addrs = kcalloc(fp->nentry, sizeof(*fp->addrs), GFP_KERNEL);
+> > +		if (!fp->addrs)
+> > +			return -ENOMEM;
+> > +
+> > +		for (i = 0; i < fp->nentry; i++) {
+> > +			fp->addrs[i] = kallsyms_lookup_name(fp->syms[i]);
+> > +			if (!fp->addrs[i])	/* Maybe wrong symbol */
+> > +				goto error;
+> > +		}
+> > +	}
+> > +
+> > +	/* Convert symbol address to ftrace location. */
+> > +	for (i = 0; i < fp->nentry; i++) {
+> > +		if (!kallsyms_lookup_size_offset(fp->addrs[i], &size, NULL))
+> > +			size = MCOUNT_INSN_SIZE;
+> > +		addr = ftrace_location_range(fp->addrs[i], fp->addrs[i] + size);
+> 
+> you need to substract 1 from 'end' in here, as explained in
+> __within_notrace_func comment:
+> 
+>         /*
+>          * Since ftrace_location_range() does inclusive range check, we need
+>          * to subtract 1 byte from the end address.
+>          */
+> 
+> like in the patch below
+> 
+> also this convert is for archs where address from kallsyms does not match
+> the real attach addresss, like for arm you mentioned earlier, right?
+> 
+> could we have that arch specific, so we don't have extra heavy search
+> loop for archs that do not need it?
 
-> > In the function sst_platform_get_resources(), if platform_get_irq()
-> > failed, the return should not be zero, as the example in
-> > platform.c is
-> >   * int irq = platform_get_irq(pdev, 0)
-> >   * if (irq < 0)
-> >   * return irq;
-> > So remove the redundant check to simplify the code.
-> 
-> Humm, it's a bit of a gray area.
-> 
-> the comments for platform_get_irq and platform_get_irq_optional say:
-> 
-> * Return: non-zero IRQ number on success, negative error number on failure.
-> 
-> but if you look at platform_get_irq_optional, there are two references
-> to zero being a possible return value:
-> 
-> 	if (num == 0 && has_acpi_companion(&dev->dev)) {
-> 		ret = acpi_dev_gpio_irq_get(ACPI_COMPANION(&dev->dev), num);
-> 		/* Our callers expect -ENXIO for missing IRQs. */
-> 		if (ret >= 0 || ret == -EPROBE_DEFER)
+one more question..
 
-This is bogus == 0 check.
+I'm adding support for user to pass function symbols to bpf fprobe link
+and I thought I'd pass symbols array to register_fprobe, but I'd need to
+copy the whole array of strings from user space first, which could take
+lot of memory considering attachment of 10k+ functions
 
-> 			goto out;
-> 
-> out_not_found:
-> 	ret = -ENXIO;
-> out:
-> 	WARN(ret == 0, "0 is an invalid IRQ number\n");
-> 	return ret;
-> 
-> https://elixir.bootlin.com/linux/latest/source/drivers/base/platform.c#L234
-> 
-> I am not sure if there's any merit in removing the test for the zero
-> return value. It may be on the paranoid side but it's aligned with a
-> possible code path in the platform code.
-> 
-> Or it could be that the platform code is wrong, and the label used
-> should have been
-> 
-> /* Our callers expect -ENXIO for missing IRQs. */
-> if (ret >= 0 || ret == -EPROBE_DEFER)
-> 	goto out_not_found;
+so I'm thinking better way is to resolve symbols already in bpf fprobe
+link code and pass just addresses to register_fprobe
 
-In case one wants to dive into new discussion on the topic:
+I assume you want to keep symbol interface, right? could we have some
+flag ensuring the conversion code is skipped, so we don't go through
+it twice?
 
-https://lore.kernel.org/linux-serial/20220110195449.12448-2-s.shtylyov@omp.ru/T/#u
+in any case I need addresses before I call register_fprobe, because
+of the bpf cookies setup
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+thanks,
+jirka
 

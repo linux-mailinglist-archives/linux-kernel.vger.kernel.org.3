@@ -2,108 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A3B49BD83
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D84849BD88
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232761AbiAYUxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 15:53:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S232644AbiAYU51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 15:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbiAYUwj (ORCPT
+        with ESMTP id S232627AbiAYU50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:52:39 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D351C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:52:39 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id i62so9527055ioa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:52:39 -0800 (PST)
+        Tue, 25 Jan 2022 15:57:26 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC6DC061744
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:57:25 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id a8so15531849pfa.6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:57:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/uOHuMBWIqzsPRu5jrm/RXJrpyoE9KrZzrG0nDPUmUQ=;
-        b=JA+X+D2+jQGjPHUgwaZzAw+G+IQHrce37PdG/w1rApmU3BRC+yo8W8Xt69hHa3+5Nn
-         hnu9oK6xriVCICmj+Nqb5d/iCrD3X3jdE4DyRwouIhxfexMlkg7AniiMN8p6YVmMPFtF
-         6fL2JBp5Q8l3cbo5zDPEc0mPpMzonGORnkZfA=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zNnJZ8cULoAFIJoo6anuEJ9z/gTYkfvN9kje7W7RV4o=;
+        b=nz81gq6QaZlSyl/2nVpfQTbtLIFlSJX0bcTS30c3i7dQ9JkjfUYWX+EyAC2dppdYLj
+         jYubDxKLkO/SvkRwVlxV4OwhWKn38NPbrcu9pedSYv0zJEg3D/sI2C5YEbaQ88a8HWDf
+         4IB96WsmKBm7jpWHs3pqpa+A/3bFXOAELKf0k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/uOHuMBWIqzsPRu5jrm/RXJrpyoE9KrZzrG0nDPUmUQ=;
-        b=psRB8p3ftCRE68qrIPPiFneExiDZASSpX5uuV0LL4iTVn3f/c2/+vjEjbjdDCkE8CA
-         yL5yqFeyCeenhchryU2CqjINUxIgrx2KjqGwcH5fUOBfhTroiOV5yjDSmSBxIxEKqm3z
-         aWVE4ba6PbVzMfyyQHFk1FAvKCBmpirBEA19/OnZuNalZYmADzWzRsurghDdAyvTc/+w
-         TIu6769zyVp1+DnM5CUbT+2sKe/XCz4ex6gOxetWrAsMUP6K1lZoqHxpdA5gW8zVd74D
-         V8zGSUdFURVAJE51np3ldltc2QtvXMg/qhsv6JPABqv+hs56yGoZ/qZlb2jiFe5bCPol
-         u7Lg==
-X-Gm-Message-State: AOAM532AJDdLcgdrjRfdLyXK9ova01IBK/6gTXLH6EhGrflijDwwFG2w
-        jA9MYwtsaMVwmPGKPy8XuX/8iw==
-X-Google-Smtp-Source: ABdhPJxN5vxdRGXKizCDaf0QNPFfb9X1rWosGXVW7lkFLPqOqM7d9XyixC0OdcgYRCUYQrxNgJtUsA==
-X-Received: by 2002:a6b:8d42:: with SMTP id p63mr7839784iod.27.1643143958887;
-        Tue, 25 Jan 2022 12:52:38 -0800 (PST)
-Received: from ?IPv6:2601:282:8200:4c:4ef8:d404:554b:9671? ([2601:282:8200:4c:4ef8:d404:554b:9671])
-        by smtp.gmail.com with ESMTPSA id e17sm9299318ilm.67.2022.01.25.12.52.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 12:52:38 -0800 (PST)
-Subject: Re: [PATCH v2] selftests: rtc: Increase test timeout so that all
- tests run
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220112194142.3276385-1-nfraprado@collabora.com>
- <Yd84cDlW9+f7wQxq@piout.net>
- <f286a86d-6371-d8bd-6ca9-5f622468d1a4@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ae754c5f-909c-776d-ac65-7ea95fe22acc@linuxfoundation.org>
-Date:   Tue, 25 Jan 2022 13:52:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zNnJZ8cULoAFIJoo6anuEJ9z/gTYkfvN9kje7W7RV4o=;
+        b=AXvdvO7XJUoQ1Uy5JUoQyeUz9vJamYiZtpShvPW26XSHWGOxV4tlk5O8EGjzWkM2lE
+         Qr9sXEBn/iU4/9afFQ8GCGJD2j2nflYzlIf9+yOztP7+Gl4blU0Vpoz8iq1ohd1frLa4
+         KktSMvR9iOONxAVQLE7k1YS+0YGCeuT3uGKhCLHbz1KZe/nPC9QR4CHWQz0H4uVYNjZx
+         an9CXoot48sdJ/W8aERF6/nPVbQSFtnb9rhkWLrcJW8Di1zYsz/eWDqhd5/O7zwj5608
+         CAB2pJaHW3nw4rzrs8+h/REIzaqT5xCzrlc0AJFSsrGK2QxsM2epvQymgB14ujuHrU+u
+         HqTw==
+X-Gm-Message-State: AOAM531B281DS5nafisWJ1z4nYmmsEQmu8455yv/5aUrAmXMkDrsShJh
+        Z23NMH+kTmolsbrt3nFu8b0HIw==
+X-Google-Smtp-Source: ABdhPJzgvACB2egAfulYVCRGcnQXy//k48Ir8AaaGOefnXMaodm6XT6dVXWkZ6OQVqUnDywk2vV0Ig==
+X-Received: by 2002:a05:6a00:1589:b0:4c3:cc45:58e2 with SMTP id u9-20020a056a00158900b004c3cc4558e2mr20129245pfk.86.1643144245304;
+        Tue, 25 Jan 2022 12:57:25 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 198sm11472118pgg.4.2022.01.25.12.57.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 12:57:25 -0800 (PST)
+Date:   Tue, 25 Jan 2022 12:57:24 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <202201251256.CCCBE9851E@keescook>
+References: <20220125145006.677e3709@canb.auug.org.au>
+ <202201242230.C54A6BCDFE@keescook>
+ <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+ <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <f286a86d-6371-d8bd-6ca9-5f622468d1a4@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 4:51 PM, Shuah Khan wrote:
-> On 1/12/22 1:22 PM, Alexandre Belloni wrote:
->> On 12/01/2022 14:41:42-0500, Nícolas F. R. A. Prado wrote:
->>> The timeout setting for the rtc kselftest is currently 90 seconds. This
->>> setting is used by the kselftest runner to stop running a test if it
->>> takes longer than the assigned value.
->>>
->>> However, two of the test cases inside rtc set alarms. These alarms are
->>> set to the next beginning of the minute, so each of these test cases may
->>> take up to, in the worst case, 60 seconds.
->>>
->>> In order to allow for all test cases in rtc to run, even in the worst
->>> case, when using the kselftest runner, the timeout value should be
->>> increased to at least 120. Set it to 180, so there's some additional
->>> slack.
->>>
->>> Correct operation can be tested by running the following command right
->>> after the start of a minute (low second count), and checking that all
->>> test cases run:
->>>
->>>     ./run_kselftest.sh -c rtc
->>>
->>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Tue, Jan 25, 2022 at 11:31:54PM +0900, Masami Hiramatsu wrote:
+> On Tue, 25 Jan 2022 22:27:32 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> Thank you both. Will apply this for 5.17-rc2 once the merge window
-> closes.
+> > > /*
+> > >  * struct trace_event_data_offsets_<call> {
+> > >  *      u32                             <item1>;
+> > >  *      u32                             <item2>;
+> > >  *      [...]
+> > >  * };
+> > >  *
+> > >  * The __dynamic_array() macro will create each u32 <item>, this is
+> > >  * to keep the offset of each array from the beginning of the event.
+> > >  * The size of an array is also encoded, in the higher 16 bits of
+> > >  * <item>.
+> > >  */
+> > > 
+> > > So, I think -Warray-bounds is refusing to see the destination as
+> > > anything except a u32, but being accessed at 4 (sizeof(u32)) + 8
+> > > (address && 0xffff) (?)
+> > 
+> > Ah, I got it. Yes, that's right. __data_loc() will access the data
+> > from the __entry, but the __rel_loc() points the same address from
+> > the encoded field ("__rel_loc_foo" in this case) itself.
+> > This is introduced for the user application event, which doesn't
+> > know the actual __entry size because the __entry includes some
+> > kernel internal defined fields.
+> > 
+> > > But if this is true, I would imagine there would be plenty of other
+> > > warnings? I'm currently stumped.
+> > 
+> > That is because __rel_loc is used only in the sample code in the kernel
+> > for testing. Other use-cases comes from user-space.
+> > Hmm, can we skip this boundary check for this example?
 > 
+> If the -Warray-bounds determines the destination array size from
+> the type of given pointer, we can just change the macro as below;
+> 
+> #define __get_rel_dynamic_array(field) 
+> 			((void *)__entry +                                 \
+> 			 offsetof(typeof(*__entry), __rel_loc_##field) +   \
+> 			 sizeof(__entry->__rel_loc_##field) +              \
+> 			 (__entry->__rel_loc_##field & 0xffff))
+> 
+> This must works same as __get_dynamic_array() macro.
+> 
+> Could you try this patch?
+> 
+> From 2982ba01367ec1f746a4f128512436e5325a7f9d Mon Sep 17 00:00:00 2001
+> From: Masami Hiramatsu <mhiramat@kernel.org>
+> Date: Tue, 25 Jan 2022 23:19:30 +0900
+> Subject: [PATCH] tracing: Avoid -Warray-bounds warning for __rel_loc macro
+> 
+> Since -Warray-bounds checks the destination size from the
+> type of given pointer, __assign_rel_str() macro gets warned
+> because it passes the pointer to the 'u32' field instead of
+> 'trace_event_raw_*' data structure.
+> Pass the data address calculated from the 'trace_event_raw_*'
+> instead of 'u32' __rel_loc field.
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
+>  include/trace/trace_events.h | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+> index 8c6f7c433518..65d927e059d3 100644
+> --- a/include/trace/trace_events.h
+> +++ b/include/trace/trace_events.h
+> @@ -318,9 +318,10 @@ TRACE_MAKE_SYSTEM_STR();
+>  #define __get_str(field) ((char *)__get_dynamic_array(field))
+>  
+>  #undef __get_rel_dynamic_array
+> -#define __get_rel_dynamic_array(field)	\
+> -		((void *)(&__entry->__rel_loc_##field) +	\
+> -		 sizeof(__entry->__rel_loc_##field) +		\
+> +#define __get_rel_dynamic_array(field)					\
+> +		((void *)__entry + 					\
+> +		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
+> +		 sizeof(__entry->__rel_loc_##field) +			\
+>  		 (__entry->__rel_loc_##field & 0xffff))
+>  
+>  #undef __get_rel_dynamic_array_len
 
-Applied to linux-kselftest fixes branch for rc2/rc3
+This patch doesn't silence the warning, but now that I see the shape of
+things more clearly, let me see if I can find the right combo.
 
-thanks,
--- Shuah
+Thanks!
 
+-Kees
+
+-- 
+Kees Cook

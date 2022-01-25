@@ -2,76 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC2749BED7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 183E449BF1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbiAYWrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:47:06 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:54076 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234071AbiAYWrE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:47:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=k9ztBqKotNbQORGVCT2yV1IoZPY2YsBdgTZyhwhHWaI=; b=s5+z/ky0lF06aNRAoie37oxf4b
-        +UN0ENOaYGYd2VSlC7mAvBX5Z30YcH+xy4OmNCLCFWEU7PUiMyzm3obQRNaOD77bCbc+E3+5Xfjmz
-        tH8wGQeNLxADNWRMl5ZbAmQbRkJzWbQ2Ff0VDEm/Ddajp6DeugRjIBp//n63Xn+vTXF4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nCUaM-002ilJ-Lp; Tue, 25 Jan 2022 23:46:46 +0100
-Date:   Tue, 25 Jan 2022 23:46:46 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hao Fang <fanghao11@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] Adding architectural support for HPE's GXP BMC. This is
- the first of a series of patches to support HPE's BMC with Linux Kernel.
-Message-ID: <YfB91lWAtBgNLaGQ@lunn.ch>
-References: <nick.hawkins@hpe.com>
- <20220125194609.32314-1-nick.hawkins@hpe.com>
+        id S234271AbiAYWuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234211AbiAYWsh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 17:48:37 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7084BC06176D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:48:06 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id u6so27871969lfm.10
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 14:48:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mGu4hUVfAAPMG/lySmrJGJl6zgwYxA7GIIsE6nUuYeM=;
+        b=F8cdrBtSHqo2Z0Wdu2hZS6TosImMwSBca7DPk7TU+0dPo1RQzmbWmsGN+2aV81aGaN
+         81izACf7gyAjcLV9mkx+6Giz0f7M8f2nIey89tbfswPBzAgyzyWlWjD4a+gtGQzR39RF
+         IKb6ZiR5Kkj9qwbwHwF/YexTDhfQEF49pqApQtFPt3XsBo+oM6LOz3HTnD9SP6B09lcq
+         yj3oBE03IT9NdM5kMPf51sZun0hta9DeBk8eLKXsgu6rppFVO0URuOPgDAvs6L2kgPgs
+         LauhbruVRXhQd3K0TNzPF/7sbi1qd0ad9GSU0iwY7ncFTtkd5tvwdB0qNFg8RkbUGfNo
+         WHdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mGu4hUVfAAPMG/lySmrJGJl6zgwYxA7GIIsE6nUuYeM=;
+        b=2NlIBkSsmD0eKxBD+mrsivCbk1QuXxg6/2+EGMh66iRY/g6mpWQ1d/Q6RAa+STkODh
+         L4AIZG7SY43ZhBL3HVswlNsS2X7gTFhXw4YBRol+te0hgHF4cn4+KZBTeJEyzWfrO8nF
+         zh9EDm5atpCJMYTHTyKgvHY+MAsdYw8iNTMWGFFm56/LiLkPO4RrGP0J1B4f13vqDWHy
+         fePB29z2ijmMkeWNQyPNj0r1cIuabU/ylAJlm0LrK04fF6BGV3q3X330m/59wO48Ysla
+         U7EEJmmVpTK68OPBluMeY4Vd7fB+bVTpXg0qVSJjp7JC1Y8LZ+0R9Pl0p2I/1iup18O5
+         83Ig==
+X-Gm-Message-State: AOAM532RCnddyZK8KhfabyLs9h/OisgyLcTE1Ufnex7X1J8/DZg9IZBe
+        OxsaLzXFgm2bHlLlJorN85UmySYnRuiea1qXgOBUGA==
+X-Google-Smtp-Source: ABdhPJzmT2Y2xsealukDgOL1p4z8US3rq7Fw9rDMzOG6kMf1xrw83Fr6LXmzEo8/vnYGtFzKjztv+NqSXUZdyu0Aygk=
+X-Received: by 2002:a05:6512:1506:: with SMTP id bq6mr18829314lfb.444.1643150884606;
+ Tue, 25 Jan 2022 14:48:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125194609.32314-1-nick.hawkins@hpe.com>
+References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-8-cgzones@googlemail.com>
+In-Reply-To: <20220125141422.32655-8-cgzones@googlemail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 25 Jan 2022 14:47:52 -0800
+Message-ID: <CAKwvOdkFOCTE5tTjrhPrfTWDwogvJ59LXZDnQ4wruHE93_6qMg@mail.gmail.com>
+Subject: Re: [PATCH 9/9] selinux: drop unused macro
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Jeff Vander Stoep <jeffv@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +		umac0: umac@c0004000 {
-> +			compatible = "hpe, gxp-umac";
-> +			reg = <0xc0004000 0x80>;
-> +			interrupts = <10>;
-> +			interrupt-parent = <&vic0>;
-> +			mac-address = [94 18 82 16 04 d8];
-> +			phy-handle = <&ext_phy0>;
-> +			int-phy-handle = <&int_phy0>;
-> +		};
+On Tue, Jan 25, 2022 at 6:15 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> The macro _DEBUG_HASHES is nowhere used. The configuration DEBUG_HASHES
+> enables debugging of the SELinux hash tables, but the with an underscore
+> prefixed macro definition has no direct impact or any documentation.
+>
+> Reported by clang [-Wunused-macros]
+>
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
 
-I suggest you don't add any DT for drivers which have not been
-accepted yet. When you MAC driver is posted to netdev, the DT binding
-will get reviewed. And i expect int-phy-handle will be rejected.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Often the first dtsi and dts submission for a new SoC have just the
-CPUs and the serial port, since none of the other drivers have been
-reviewed yet, unless they reuse existing drivers. The additional nodes
-are then added one by one as the drivers get accepted.
+> ---
+>  security/selinux/ss/policydb.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/policyd=
+b.c
+> index 67e03f6e8966..d036e1238e77 100644
+> --- a/security/selinux/ss/policydb.c
+> +++ b/security/selinux/ss/policydb.c
+> @@ -41,8 +41,6 @@
+>  #include "mls.h"
+>  #include "services.h"
+>
+> -#define _DEBUG_HASHES
+> -
+>  #ifdef DEBUG_HASHES
+>  static const char *symtab_name[SYM_NUM] =3D {
+>         "common prefixes",
+> --
+> 2.34.1
+>
 
-	 Andrew
+
+--=20
+Thanks,
+~Nick Desaulniers

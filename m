@@ -2,99 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F032949B52D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9405249B52A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387388AbiAYNcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:32:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42296 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348654AbiAYN3t (ORCPT
+        id S1387212AbiAYNcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:32:02 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59768 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1577065AbiAYN2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:29:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 683C2614A1;
-        Tue, 25 Jan 2022 13:29:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A86B9C340E0;
-        Tue, 25 Jan 2022 13:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643117386;
-        bh=G9+jbEdgn6dqtJ1KUO5cKlCRbG9bB4kcC0JiROCSfAc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lq5JRw21XJ3ellYkVHi+Euv3EhrSWzaQYKcF67rTLnyD8zzt/TJGIryT63bMGcqRR
-         2mezgv1hSW4XOH7d8OKnSnTlKgPLj4A8H6D7J2g8XKxb9gugPI1XYgYH10By0XAFCe
-         dYjNuV37OZGBRAamlDYhnlTKuVyCJIkwhfio9UE8FlQN/itN9Gnh+e/uGshha2IfHm
-         2tyRviIUI+qkS4Q3U5/h1X0o6fQcFPws5clh4PzE0ZyM6hYXQngQxdO2oyBtvUtoPs
-         yVxp5P2t0howyqjtECf03Nbou74Xo8xIBFCgC2oso+j/JdaJouZLxkpe33iZDrTP4O
-         Ij4CkRTHiD7xw==
-Date:   Tue, 25 Jan 2022 14:29:42 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] vfs: Pre-allocate superblock in sget_fc() if !test
-Message-ID: <20220125132942.o7rnqwvqx5w6ifz4@wittgenstein>
-References: <20220124161006.141323-1-longman@redhat.com>
+        Tue, 25 Jan 2022 08:28:19 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PDC68N013984;
+        Tue, 25 Jan 2022 13:28:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Y8AQAx7pdo5NCiqYDsxe/2JWdeVRlx9pu21d8bMBJws=;
+ b=SF9S6u1m5soRO80JbcCwrgWYj+PcbPNrQPX0CFyQb+Ifn6zp065Utq0cGNntntExd5le
+ PqFnsjStZTnREZRb42Y3Js0OtdcmUChcrG8dEaY6kocZGEUXP02ns/tQUb4qsT7ol8/l
+ 1sowCTYxxs6ufKJMtJsYJBhrS0cBapRSNa1QQOI4JJY/I8dBfe05CcltWPCAd9hUq3IB
+ s5kqBSem0WGjUv8yVxEbTaAmdlUXNXIvSQYXcFCWWQk5rB8IqBctWbAnOpx3gZMFgSSz
+ uxXAaStBq2qhz/DARI0VJzvUw+FO44tPRNc8FqzEFOj5NwS6XkEv8XLg6hb/prn4R9l7 jw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dthvh8a0n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 13:28:13 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20PDJCYX005651;
+        Tue, 25 Jan 2022 13:28:13 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dthvh8a09-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 13:28:13 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PDRPNR015144;
+        Tue, 25 Jan 2022 13:28:11 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3dr9j9d48h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 13:28:11 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PDS8hT27591118
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 13:28:08 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0FE70AE045;
+        Tue, 25 Jan 2022 13:28:08 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EB597AE057;
+        Tue, 25 Jan 2022 13:28:06 +0000 (GMT)
+Received: from [9.171.58.95] (unknown [9.171.58.95])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 25 Jan 2022 13:28:06 +0000 (GMT)
+Message-ID: <12b9fba1-38b4-057d-49f4-969f2e7e1be3@linux.ibm.com>
+Date:   Tue, 25 Jan 2022 14:29:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220124161006.141323-1-longman@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 20/30] KVM: s390: pci: provide routines for
+ enabling/disabling IOAT assist
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-21-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220114203145.242984-21-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: X8kfcrxN8VCzGWKZdicZwnHJcGAKAyZ9
+X-Proofpoint-ORIG-GUID: 1hXTUuoSq8xFdx-m3Q3Uz5R2aEGJfYqM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ clxscore=1015 impostorscore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201250085
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:10:06AM -0500, Waiman Long wrote:
-> When the test function is not defined in sget_fc(), we always need
-> to allocate a new superblock. So there is no point in acquiring the
-> sb_lock twice in this case. Optimize the !test case by pre-allocating
-> the superblock first before acquring the lock.
+
+
+On 1/14/22 21:31, Matthew Rosato wrote:
+> These routines will be wired into the vfio_pci_zdev ioctl handlers to
+> respond to requests to enable / disable a device for PCI I/O Address
+> Translation assistance.
 > 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 > ---
->  fs/super.c | 3 +++
->  1 file changed, 3 insertions(+)
+>   arch/s390/include/asm/kvm_pci.h |  15 ++++
+>   arch/s390/include/asm/pci_dma.h |   2 +
+>   arch/s390/kvm/pci.c             | 139 ++++++++++++++++++++++++++++++++
+>   arch/s390/kvm/pci.h             |   2 +
+>   4 files changed, 158 insertions(+)
 > 
-> diff --git a/fs/super.c b/fs/super.c
-> index a6405d44d4ca..6601267f6fe0 100644
-> --- a/fs/super.c
-> +++ b/fs/super.c
-> @@ -520,6 +520,8 @@ struct super_block *sget_fc(struct fs_context *fc,
->  	struct user_namespace *user_ns = fc->global ? &init_user_ns : fc->user_ns;
->  	int err;
->  
-> +	if (!test)
-> +		goto prealloc;
+> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
+> index 01fe14fffd7a..770849f13a70 100644
+> --- a/arch/s390/include/asm/kvm_pci.h
+> +++ b/arch/s390/include/asm/kvm_pci.h
+> @@ -16,11 +16,21 @@
+>   #include <linux/kvm_host.h>
+>   #include <linux/kvm.h>
+>   #include <linux/pci.h>
+> +#include <linux/mutex.h>
+>   #include <asm/pci_insn.h>
+> +#include <asm/pci_dma.h>
+> +
+> +struct kvm_zdev_ioat {
+> +	unsigned long *head[ZPCI_TABLE_PAGES];
+> +	unsigned long **seg;
+> +	unsigned long ***pt;
+> +	struct mutex lock;
 
-I mean, now its another goto in there that adds to the confusion.
-sget_fc() could _probably_ benefit if it were split into
-__sget_test_fc() and __sget_independent_fc() with both ending up being
-called from sget_fc() dending on whether or not test is NULL ofc.
+Can we please rename the mutex ioat_lock to have a unique name easy to 
+follow for maintenance.
+Can you please add a description about when the lock should be used?
 
-This way the test and non-test cases would stop being mangled together
-possibly making the logic easier to follow. Would probably also require
-to move the common initialization part into a helper callable from both
-__sget_independent_fc() and __sget_test_fc() sm like idk:
+> +};
+>   
+>   struct kvm_zdev {
+>   	struct zpci_dev *zdev;
+>   	struct kvm *kvm;
+> +	struct kvm_zdev_ioat ioat;
+>   	struct zpci_fib fib;
+>   };
+>   
+> @@ -33,6 +43,11 @@ int kvm_s390_pci_aif_enable(struct zpci_dev *zdev, struct zpci_fib *fib,
+>   			    bool assist);
+>   int kvm_s390_pci_aif_disable(struct zpci_dev *zdev);
+>   
+> +int kvm_s390_pci_ioat_probe(struct zpci_dev *zdev);
+> +int kvm_s390_pci_ioat_enable(struct zpci_dev *zdev, u64 iota);
+> +int kvm_s390_pci_ioat_disable(struct zpci_dev *zdev);
+> +u8 kvm_s390_pci_get_dtsm(struct zpci_dev *zdev);
+> +
+>   int kvm_s390_pci_interp_probe(struct zpci_dev *zdev);
+>   int kvm_s390_pci_interp_enable(struct zpci_dev *zdev);
+>   int kvm_s390_pci_interp_disable(struct zpci_dev *zdev);
+> diff --git a/arch/s390/include/asm/pci_dma.h b/arch/s390/include/asm/pci_dma.h
+> index 91e63426bdc5..69e616d0712c 100644
+> --- a/arch/s390/include/asm/pci_dma.h
+> +++ b/arch/s390/include/asm/pci_dma.h
+> @@ -50,6 +50,8 @@ enum zpci_ioat_dtype {
+>   #define ZPCI_TABLE_ALIGN		ZPCI_TABLE_SIZE
+>   #define ZPCI_TABLE_ENTRY_SIZE		(sizeof(unsigned long))
+>   #define ZPCI_TABLE_ENTRIES		(ZPCI_TABLE_SIZE / ZPCI_TABLE_ENTRY_SIZE)
+> +#define ZPCI_TABLE_PAGES		(ZPCI_TABLE_SIZE >> PAGE_SHIFT)
+> +#define ZPCI_TABLE_ENTRIES_PAGES	(ZPCI_TABLE_ENTRIES * ZPCI_TABLE_PAGES)
+>   
+>   #define ZPCI_TABLE_BITS			11
+>   #define ZPCI_PT_BITS			8
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> index 7ed9abc476b6..39c13c25a700 100644
+> --- a/arch/s390/kvm/pci.c
+> +++ b/arch/s390/kvm/pci.c
+> @@ -13,12 +13,15 @@
+>   #include <asm/pci.h>
+>   #include <asm/pci_insn.h>
+>   #include <asm/pci_io.h>
+> +#include <asm/pci_dma.h>
+>   #include <asm/sclp.h>
+>   #include "pci.h"
+>   #include "kvm-s390.h"
+>   
+>   struct zpci_aift *aift;
+>   
+> +#define shadow_ioat_init zdev->kzdev->ioat.head[0]
+> +
+>   static inline int __set_irq_noiib(u16 ctl, u8 isc)
+>   {
+>   	union zpci_sic_iib iib = {{0}};
+> @@ -344,6 +347,135 @@ int kvm_s390_pci_aif_disable(struct zpci_dev *zdev)
+>   }
+>   EXPORT_SYMBOL_GPL(kvm_s390_pci_aif_disable);
+>   
+> +int kvm_s390_pci_ioat_probe(struct zpci_dev *zdev)
+> +{
+> +	/* Must have a KVM association registered */
 
-static struct super_block *__finish_init_super(........)
-{
-	s->s_fs_info = fc->s_fs_info;
-	err = set(s, fc);
-	if (err) {
-		s->s_fs_info = NULL;
-		spin_unlock(&sb_lock);
-		destroy_unused_super(s);
-		return ERR_PTR(err);
-	}
-	fc->s_fs_info = NULL;
-	s->s_type = fc->fs_type;
-	s->s_iflags |= fc->s_iflags;
-	strlcpy(s->s_id, s->s_type->name, sizeof(s->s_id));
-	list_add_tail(&s->s_list, &super_blocks);
-	hlist_add_head(&s->s_instances, &s->s_type->fs_supers);
-	spin_unlock(&sb_lock);
-	get_filesystem(s->s_type);
-	register_shrinker_prepared(&s->s_shrink);
-	return s;
-}
+may be add something like : "The ioat structure is embeded in kzdev"
+
+> +	if (!zdev->kzdev || !zdev->kzdev->kvm)
+
+Why do we need to check for kvm ?
+Having kzdev is already tested by the unique caller.
+
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_ioat_probe);
+> +
+> +int kvm_s390_pci_ioat_enable(struct zpci_dev *zdev, u64 iota)
+> +{
+> +	gpa_t gpa = (gpa_t)(iota & ZPCI_RTE_ADDR_MASK);
+> +	struct kvm_zdev_ioat *ioat;
+> +	struct page *page;
+> +	struct kvm *kvm;
+> +	unsigned int idx;
+> +	void *iaddr;
+> +	int i, rc = 0;
+
+no need to initialize rc
+
+> +
+> +	if (shadow_ioat_init)
+> +		return -EINVAL;
+> +
+> +	/* Ensure supported type specified */
+> +	if ((iota & ZPCI_IOTA_RTTO_FLAG) != ZPCI_IOTA_RTTO_FLAG)
+> +		return -EINVAL;
+> +
+> +	kvm = zdev->kzdev->kvm;
+> +	ioat = &zdev->kzdev->ioat;
+> +	mutex_lock(&ioat->lock);
+> +	idx = srcu_read_lock(&kvm->srcu);
+> +	for (i = 0; i < ZPCI_TABLE_PAGES; i++) {
+> +		page = gfn_to_page(kvm, gpa_to_gfn(gpa));
+> +		if (is_error_page(page)) {
+> +			srcu_read_unlock(&kvm->srcu, idx);
+> +			rc = -EIO;
+> +			goto out;
+
+			goto unpin ?
+
+> +		}
+> +		iaddr = page_to_virt(page) + (gpa & ~PAGE_MASK);
+> +		ioat->head[i] = (unsigned long *)iaddr;
+> +		gpa += PAGE_SIZE;
+> +	}
+> +	srcu_read_unlock(&kvm->srcu, idx);
+> +
+> +	zdev->kzdev->ioat.seg = kcalloc(ZPCI_TABLE_ENTRIES_PAGES,
+> +					sizeof(unsigned long *), GFP_KERNEL);
+
+What about:
+
+         ioat->seg = kcalloc(ZPCI_TABLE_ENTRIES_PAGES,
+                             sizeof(*ioat->seg), GFP_KERNEL);
+	if (!ioat->seg)
+...
+	ioat->pt = ...
+?
+
+> +	if (!zdev->kzdev->ioat.seg)
+> +		goto unpin;
+> +	zdev->kzdev->ioat.pt = kcalloc(ZPCI_TABLE_ENTRIES,
+> +				       sizeof(unsigned long **), GFP_KERNEL);
+> +	if (!zdev->kzdev->ioat.pt)
+> +		goto free_seg;
+> +
+> +out:
+> +	mutex_unlock(&ioat->lock);
+> +	return rc;
+
+	return 0 ?
+
+> +
+> +free_seg:
+> +	kfree(zdev->kzdev->ioat.seg);
+
+kfree(ioat->seg) ?
+rc = -ENOMEM;
+
+> +unpin:
+> +	for (i = 0; i < ZPCI_TABLE_PAGES; i++) {
+> +		kvm_release_pfn_dirty((u64)ioat->head[i] >> PAGE_SHIFT);
+> +		ioat->head[i] = 0;
+> +	}
+> +	mutex_unlock(&ioat->lock);
+> +	return -ENOMEM;
+
+	return rc;
+
+> +}
+...snip...
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

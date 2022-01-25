@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0519E49A8C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A8E49A8CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1320542AbiAYDNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:13:16 -0500
-Received: from mga04.intel.com ([192.55.52.120]:38508 "EHLO mga04.intel.com"
+        id S1320873AbiAYDPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:15:01 -0500
+Received: from mga01.intel.com ([192.55.52.88]:63761 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1381285AbiAYDAo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:00:44 -0500
+        id S1318491AbiAYDGC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 22:06:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643079644; x=1674615644;
+  t=1643079962; x=1674615962;
   h=cc:subject:to:references:from:message-id:date:
    mime-version:in-reply-to:content-transfer-encoding;
-  bh=hcjXanRyyzUabhBOjDATgrq+wFYZUEv0LZVR5v+RCiM=;
-  b=WMt64R1HH3cQvA1FW2Xnmp6sdqYJxAwyImTvxQS3lNi+SabtULNESSDQ
-   2PT7IAF8NOP93DbdVKOvNcA+B3Epuy+Huh0UKeb3vI0P64zPIKFiFdKG0
-   8LCexSdDqS9Z7EFznoSF6t7xRmbHhOMDaJYuNTl2/o5O+6ud87/af+hg3
-   DXT8IGM5RCf3r7AZlYvOLKNiIIgoTBtKJlyESbwqPHRXPKyh2pce8nK0r
-   I0239VzXjhODGQrX9ZevfhDGffM9c7niaOKwkWfNOrRClPByGImXDc0zg
-   Pr2DaAEpcbvfIRMyc8tZZap2+VkdHnsVSIYrLovujBKANTquVGB3XoDps
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="245039202"
+  bh=by9ZO+ZTDaK468UmSn4Yi/q3n6O9rPWIIHQ/Z6V2Pus=;
+  b=V1sZsfiyN8T4D944xM4WGXhYmpEpZDUx1MqHjV+E8/dhd55TXlVZnezd
+   IaWQA+xtkppwDTeO2pcMY+va2psU4czhhIk5WwyLELn4KoVy/u9s7c92h
+   I6IHjDsNboQq8SfJ5jiWUV0JLRgNopb8jZ+0urexY1eRu+3b36iVKmsgc
+   Ku5idTD8/91QNevRrQvGrnrf2Hs3/QG74B0tce8sZmNUOsei+e7ANeZRY
+   LyyEIPj6/wpy/w3eyYf8gFEJduryPxBDTkhdyKExBwtiiLJKDwpo7Mf4F
+   Qjm6fhxHOv74kjHDHEE9iWKV9BswPxVO7T85ezbJWOW33E6GFgvtxITzN
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="270647151"
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="245039202"
+   d="scan'208";a="270647151"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 19:00:38 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 19:02:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="534530804"
+   d="scan'208";a="534531392"
 Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 24 Jan 2022 19:00:34 -0800
+  by orsmga008.jf.intel.com with ESMTP; 24 Jan 2022 19:02:03 -0800
 Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
         Jason Gunthorpe <jgg@nvidia.com>,
         Ben Skeggs <bskeggs@redhat.com>,
@@ -49,19 +49,18 @@ Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] drm/nouveau/device: Get right pgsize_bitmap of
- iommu_domain
+Subject: Re: [PATCH 6/7] iommu: Use right way to retrieve iommu_ops
 To:     Christoph Hellwig <hch@infradead.org>
 References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
- <20220124071103.2097118-6-baolu.lu@linux.intel.com>
- <Ye5xlSbwAw5JJ8k2@infradead.org>
+ <20220124071103.2097118-7-baolu.lu@linux.intel.com>
+ <Ye5yHejpaAnJQYeR@infradead.org>
 From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <5977c231-fbd3-ac26-ff13-94ed7a08f347@linux.intel.com>
-Date:   Tue, 25 Jan 2022 10:59:34 +0800
+Message-ID: <f59b5cf7-0275-b979-1d57-a629fd81450a@linux.intel.com>
+Date:   Tue, 25 Jan 2022 11:01:03 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <Ye5xlSbwAw5JJ8k2@infradead.org>
+In-Reply-To: <Ye5yHejpaAnJQYeR@infradead.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -69,27 +68,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22 5:29 PM, Christoph Hellwig wrote:
-> On Mon, Jan 24, 2022 at 03:11:00PM +0800, Lu Baolu wrote:
->> The supported page sizes of an iommu_domain are saved in the pgsize_bitmap
->> field. Retrieve the value from the right place.
->>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
->> Link: https://lore.kernel.org/r/20211218074546.1772553-1-baolu.lu@linux.intel.com
+On 1/24/22 5:32 PM, Christoph Hellwig wrote:
+> On Mon, Jan 24, 2022 at 03:11:01PM +0800, Lu Baolu wrote:
+>> The common iommu_ops is hooked to both device and domain. When a helper
+>> has both device and domain pointer, the way to get the iommu_ops looks
+>> messy in iommu core. This sorts out the way to get iommu_ops. The device
+>> related helpers go through device pointer, while the domain related ones
+>> go through domain pointer.
 > 
-> Looks good:
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> 
-> Wouldn't it mke sense to remove the pgsize_bitmap in struct iommu_ops
-> and initialize the domain field in the domain_alloc methods?  Or am I
-> missing something?
-> 
+> Ugg. This really sounds like we should have a different structures for
+> each set of ops?
+>
 
-It looks reasonable to me. The pgsize_bitmap is an attribute of a domain
-that provides the map/unmap interfaces. It could be moved out of the
-iommu_ops structure.
+Yes. Do this in the following patch.
 
 Best regards,
 baolu

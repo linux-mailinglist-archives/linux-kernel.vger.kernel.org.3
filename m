@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5118F49A800
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B1D49A816
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1315810AbiAYCyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:54:21 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:34791 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3409082AbiAYAYz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:24:55 -0500
-Received: by mail-ot1-f46.google.com with SMTP id m8-20020a9d4c88000000b00592bae7944bso24618688otf.1;
-        Mon, 24 Jan 2022 16:24:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hKgu9rmUk95J97wO8FZCJYIlIG/PvU+dGhgzBVkVwN8=;
-        b=MZE5ndUCCOr/b4NI4VHdNhqVZNbcnfNVW+pUDQlubdmhX9/QaRvzE1/y6iiu5Kr/a0
-         NbYQPtaQPHFxKq2RPmErQsxnl/ur1plF+nnuPyA7HnGTOm4Vurflsqrvtbt2NO0qQs26
-         d0pj8unzscOwT1TKYeqbKyBD8BI7I7HC5ZOrExMbGN8ORAeTa4CPVl7QG1ivPvz2a7yh
-         CK0HLgtFgFZHhr8+3ysq6JiHwv8AnkbjR8Frte41Oh5ZSSYhMsSJlyEwkhgPcrkkGclS
-         +2oMOy6k4xTyOWkdIaTYGlPP+UFUudAT/mJoGuRxLvwsmibBlbH5r6AnIZnkb1Nh3WLv
-         EUCQ==
-X-Gm-Message-State: AOAM531oUs1mqAOcvcdIDosnWbAY5WmN6j6q2ZEx5AE3dHR7brRSihDT
-        wQcoL//ydUwFDYNYDfxFbQ==
-X-Google-Smtp-Source: ABdhPJwBQlZsDWkm3dE9/hvTrL4jN/68Lxk+HhTDBRoQqFgYwJwB6VNNcUYx1ZcvnXNEAfY0RZ18Zg==
-X-Received: by 2002:a9d:5c86:: with SMTP id a6mr7103969oti.163.1643070291812;
-        Mon, 24 Jan 2022 16:24:51 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a19sm2751280otf.27.2022.01.24.16.24.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 16:24:51 -0800 (PST)
-Received: (nullmailer pid 809305 invoked by uid 1000);
-        Tue, 25 Jan 2022 00:24:50 -0000
-Date:   Mon, 24 Jan 2022 18:24:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 5/6] ASoC: dt-bindings: samsung,snow: convert to dtschema
-Message-ID: <Ye9DUjVGWDmhvPtu@robh.at.kernel.org>
-References: <20220124170336.164320-1-krzysztof.kozlowski@canonical.com>
- <20220124170336.164320-5-krzysztof.kozlowski@canonical.com>
+        id S1316297AbiAYCzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:55:43 -0500
+Received: from mga05.intel.com ([192.55.52.43]:6167 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S3413644AbiAYAjg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 19:39:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643071176; x=1674607176;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RkpYEPfF7bArgAh5McSlrTbYd3M7mMqu9dUInBEThIc=;
+  b=B7hM2jrWv29ypfNYB2mAF5OGmBJXuA/Tx91AB2JJWHCmzCPfI9IVUl9H
+   mz6o/OH5bBK63b5PIOK6IyF69QWyF3eex/qL/0NC8JZ0GlB1ZSvZjnk2f
+   zPPruhGlenXQF8Fc2F+zPga9J8/gMEtSiW3VhpJJNBjru5vqxen6rrbXE
+   CLC1v1usEp8F6efC9XR1++O9cbk7trAmmOUOXDWGELneUO9u5DmQTyPXi
+   kF4DqRv5lHvOkvRGY61TKueUPMFZY939AQkkTphAkImJeQllttxFmhdZe
+   88pOzYH9/F0OkdZzGMZyRvS5y7K87jK21nC1KIcvrzQtWIw/IW/5JJ5TH
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332536821"
+X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
+   d="scan'208";a="332536821"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 16:27:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
+   d="scan'208";a="768849518"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Jan 2022 16:27:15 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nC9g2-000J6v-DD; Tue, 25 Jan 2022 00:27:14 +0000
+Date:   Tue, 25 Jan 2022 08:26:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2259/2384]
+ arch/mips/include/asm/sgi/heart.h:321:25: error: implicit declaration of
+ function '____raw_writeq'
+Message-ID: <202201250737.EsYDONpH-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124170336.164320-5-krzysztof.kozlowski@canonical.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 06:03:35PM +0100, Krzysztof Kozlowski wrote:
-> Convert the audio complex on Google Snow boards with Samsung Exynos SoC
-> to DT schema format.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> 
-> ---
-> 
-> TODO: The DTS do not pass cleanly. cpu/sound-dai should be fixed.
-> ---
->  .../bindings/sound/samsung,snow.yaml          | 78 +++++++++++++++++++
->  .../devicetree/bindings/sound/snow.txt        | 31 --------
->  2 files changed, 78 insertions(+), 31 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/sound/samsung,snow.yaml
->  delete mode 100644 Documentation/devicetree/bindings/sound/snow.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/samsung,snow.yaml b/Documentation/devicetree/bindings/sound/samsung,snow.yaml
-> new file mode 100644
-> index 000000000000..df969b384839
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/samsung,snow.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/samsung,snow.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Google Snow audio complex with MAX9809x codec
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> +  - Sylwester Nawrocki <s.nawrocki@samsung.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - google,snow-audio-max98090
-> +      - google,snow-audio-max98091
-> +      - google,snow-audio-max98095
-> +
-> +  codec:
-> +    type: object
-> +    properties:
-> +      sound-dai:
-> +        description: List of phandles to the CODEC and HDMI IP nodes.
-> +        $ref: /schemas/types.yaml#/definitions/phandle-array
-> +        items:
-> +          - description: Phandle to the MAX98090, MAX98091 or MAX98095 CODEC.
-> +          - description: Phandle to the HDMI IP block node.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: a589a381615b4e9581c08e10c86d4fc56bd817ea [2259/2384] headers/deps: irq: Optimize <linux/interrupt.h> dependencies
+config: mips-randconfig-m031-20220124 (https://download.01.org/0day-ci/archive/20220125/202201250737.EsYDONpH-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=a589a381615b4e9581c08e10c86d4fc56bd817ea
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout a589a381615b4e9581c08e10c86d4fc56bd817ea
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/sgi-ip30/ drivers/media/test-drivers/vidtv/ drivers/usb/chipidea/ drivers/usb/usbip/
 
-Thinking about this and the issue you raised some more, we should make 
-sure there's a common definition for sound-dai. And then here, it should 
-just be the number of entries ('maxItems: 1').
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Rob
+All errors (new ones prefixed by >>):
+
+   In file included from arch/mips/sgi-ip30/ip30-power.c:21:
+   arch/mips/sgi-ip30/ip30-power.c: In function 'ip30_machine_restart':
+>> arch/mips/include/asm/sgi/heart.h:321:25: error: implicit declaration of function '____raw_writeq' [-Werror=implicit-function-declaration]
+     321 | #define heart_write     ____raw_writeq
+         |                         ^~~~~~~~~~~~~~
+   arch/mips/sgi-ip30/ip30-power.c:29:9: note: in expansion of macro 'heart_write'
+      29 |         heart_write((heart_read(&heart_regs->mode) | HM_COLD_RST),
+         |         ^~~~~~~~~~~
+>> arch/mips/include/asm/sgi/heart.h:320:25: error: implicit declaration of function '____raw_readq' [-Werror=implicit-function-declaration]
+     320 | #define heart_read      ____raw_readq
+         |                         ^~~~~~~~~~~~~
+   arch/mips/sgi-ip30/ip30-power.c:29:22: note: in expansion of macro 'heart_read'
+      29 |         heart_write((heart_read(&heart_regs->mode) | HM_COLD_RST),
+         |                      ^~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+>> drivers/usb/usbip/vhci_hcd.c:287:43: error: implicit declaration of function 'ilog2' [-Werror=implicit-function-declaration]
+     287 |                 .bFunctionalitySupport  = ilog2(USB_5GBPS_OPERATION),
+         |                                           ^~~~~
+>> drivers/usb/usbip/vhci_hcd.c:287:43: error: initializer element is not constant
+   drivers/usb/usbip/vhci_hcd.c:287:43: note: (near initialization for 'usb3_bos_desc.ss_cap.bFunctionalitySupport')
+   cc1: some warnings being treated as errors
+
+
+vim +/____raw_writeq +321 arch/mips/include/asm/sgi/heart.h
+
+7505576d1c1ac0 Thomas Bogendoerfer 2019-10-24  319  
+7505576d1c1ac0 Thomas Bogendoerfer 2019-10-24 @320  #define heart_read	____raw_readq
+7505576d1c1ac0 Thomas Bogendoerfer 2019-10-24 @321  #define heart_write	____raw_writeq
+7505576d1c1ac0 Thomas Bogendoerfer 2019-10-24  322  
+
+:::::: The code at line 321 was first introduced by commit
+:::::: 7505576d1c1ac0cfe85fdf90999433dd8b673012 MIPS: add support for SGI Octane (IP30)
+
+:::::: TO: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+:::::: CC: Paul Burton <paulburton@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,184 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8F649B94B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F222249B91B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1585812AbiAYQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:45:01 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:23715 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346610AbiAYQg3 (ORCPT
+        id S1585861AbiAYQpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:45:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55994 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1584097AbiAYQhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:36:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643128588; x=1674664588;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=0WnV+EmPb8krky3QwTcyyzwQkQl+BhKbWAGWV4smPyc=;
-  b=vpfVJVu+lgJADXsRNAEROAPp5JNr06ci5m9H4ewteMbsUWuo98ICNeuO
-   vDrMQud3MwG4G1kTJyH1y1JJ/iPGISu0pVHUGhiKGvkX9qxh27Okkprn2
-   E43mgQ8LF5MTCtHiCVE7Hf40HAVGYGY3O31X+GRPi/yWu9+hdL5TFuyXr
-   w=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Jan 2022 08:36:24 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:36:24 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 08:36:24 -0800
-Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 25 Jan
- 2022 08:36:21 -0800
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Amit Kucheria" <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
-Subject: [PATCH v4] drivers: thermal: clear all mitigation when thermal zone is disabled
-Date:   Tue, 25 Jan 2022 22:06:05 +0530
-Message-ID: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 25 Jan 2022 11:37:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BDE0B818FB
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:37:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12369C340F3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:37:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643128620;
+        bh=MqT1/YM8yz57ScwjXyZoESAPskHYwhQ6QYACyXMLxHo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=baad0ljDsifAga31C+GMBV2wWKEAMCAn9FJoBa4SbeXnn0Fk6SfWhhMNXe5KOmasI
+         y3dIUwXIGEm+wkRuDDZCG/3Xf3SmcGxzSK2ogMmQ5X2N5krIFLDqfcPuqUAHQkbSKc
+         OjSYjIJXnoY5ltIuDqB5sXFP0Adle5oOYMNnoSCQGAMBOADLlgrp/AtolHO5kO+cy8
+         vEKMX6rqx5VkzWdkI/azoCRN8RmYM/BIrkjg15M5lZ1cirtxQbPxfKD+Cl3arsuZmq
+         ypAFaA+gBuRowSOeEA7kLqmgQ16W8VXhVZ5H/CA/9+osg0L2gU6UT5KPxiWBxy94ma
+         2T9qN/thp+9KQ==
+Received: by mail-ed1-f43.google.com with SMTP id b13so64630315edn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:36:59 -0800 (PST)
+X-Gm-Message-State: AOAM530MXwWsBrfWo/nZeuBNkF7G6IkdZ086Hb2zlzo33RIHk8umwl4t
+        2rAa2hz/z37UdpXw6EvMtCE/F0kPgcj8BjT1Iw==
+X-Google-Smtp-Source: ABdhPJxGM+g3Uu2HDqaNpJm+NgUad4fQE8NjbMLaTbNsb2LzJkuECmijFPehPNLukaqDLw10PRHtgG/M/Xr+zx1eZCg=
+X-Received: by 2002:a05:6402:1003:: with SMTP id c3mr21574647edu.405.1643128618189;
+ Tue, 25 Jan 2022 08:36:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+References: <20220118133759.112458-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220118133759.112458-1-angelogioacchino.delregno@collabora.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Wed, 26 Jan 2022 00:36:46 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__59-tYZNAQqFytdZgAYs+hmFxHUrF1FAj4zphiguv12g@mail.gmail.com>
+Message-ID: <CAAOTY__59-tYZNAQqFytdZgAYs+hmFxHUrF1FAj4zphiguv12g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm: mediatek: mtk_drm_plane: Use kmalloc in mtk_plane_duplicate_state
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Whenever a thermal zone is in trip violated state, there is a chance
-that the same thermal zone mode can be disabled either via
-thermal core API or via thermal zone sysfs. Once it is disabled,
-the framework bails out any re-evaluation of thermal zone. It leads
-to a case where if it is already in mitigation state, it will stay
-the same state forever.
+Hi, AngeloGioacchino:
 
-To avoid above mentioned issue, add support to bind/unbind
-governor from thermal zone during thermal zone mode change request
-and clear all existing throttling in governor unbind_from_tz()
-callback.
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> =E6=96=
+=BC
+2022=E5=B9=B41=E6=9C=8818=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=889:3=
+8=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> There is no need to zero out the newly allocated memory because we are
+> duplicating all members of struct mtk_plane_state: switch to kmalloc
+> to save some overhead.
 
-Suggested-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
----
- drivers/thermal/gov_power_allocator.c |  3 +++
- drivers/thermal/gov_step_wise.c       | 26 ++++++++++++++++++++++++++
- drivers/thermal/thermal_core.c        | 31 +++++++++++++++++++++++++++----
- 3 files changed, 56 insertions(+), 4 deletions(-)
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 13e3757..9ff0c5f 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -696,6 +696,9 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
- 
- 	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
- 
-+	tz->passive = 0;
-+	allow_maximum_power(tz, true);
-+
- 	if (params->allocated_tzp) {
- 		kfree(tz->tzp);
- 		tz->tzp = NULL;
-diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
-index 12acb12..2132c14 100644
---- a/drivers/thermal/gov_step_wise.c
-+++ b/drivers/thermal/gov_step_wise.c
-@@ -168,6 +168,31 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
- }
- 
- /**
-+ * step_wise_unbind() - unbind the step_wise governor to a thermal zone
-+ * @tz:	thermal zone to unbind it to
-+ *
-+ * Clear all previous throttling and reset passive counter.
-+ *
-+ */
-+static void step_wise_unbind(struct thermal_zone_device *tz)
-+{
-+	struct thermal_instance *instance;
-+
-+	dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
-+
-+	mutex_lock(&tz->lock);
-+	tz->passive = 0;
-+	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
-+		instance->initialized = false;
-+		instance->target = THERMAL_NO_TARGET;
-+		mutex_lock(&instance->cdev->lock);
-+		 __thermal_cdev_update(instance->cdev);
-+		mutex_unlock(&instance->cdev->lock);
-+	}
-+	mutex_unlock(&tz->lock);
-+}
-+
-+/**
-  * step_wise_throttle - throttles devices associated with the given zone
-  * @tz: thermal_zone_device
-  * @trip: trip point index
-@@ -196,6 +221,7 @@ static int step_wise_throttle(struct thermal_zone_device *tz, int trip)
- 
- static struct thermal_governor thermal_gov_step_wise = {
- 	.name		= "step_wise",
-+	.unbind_from_tz	= step_wise_unbind,
- 	.throttle	= step_wise_throttle,
- };
- THERMAL_GOVERNOR_DECLARE(thermal_gov_step_wise);
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 1389174..9828eb3 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -274,6 +274,26 @@ static int __init thermal_register_governors(void)
- 	return ret;
- }
- 
-+static void thermal_governor_attach(struct thermal_zone_device *tz)
-+{
-+	mutex_lock(&thermal_governor_lock);
-+	if (tz->governor && tz->governor->bind_to_tz) {
-+		if (tz->governor->bind_to_tz(tz))
-+			dev_err(&tz->device,
-+				"governor %s failed to bind to thermal zone %s\n",
-+				tz->governor->name, tz->type);
-+	}
-+	mutex_unlock(&thermal_governor_lock);
-+}
-+
-+static void thermal_governor_detach(struct thermal_zone_device *tz)
-+{
-+	mutex_lock(&thermal_governor_lock);
-+	if (tz->governor && tz->governor->unbind_from_tz)
-+		tz->governor->unbind_from_tz(tz);
-+	mutex_unlock(&thermal_governor_lock);
-+}
-+
- /*
-  * Zone update section: main control loop applied to each zone while monitoring
-  *
-@@ -447,12 +467,15 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
- 
- 	mutex_unlock(&tz->lock);
- 
--	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
--
--	if (mode == THERMAL_DEVICE_ENABLED)
-+	if (mode == THERMAL_DEVICE_ENABLED) {
-+		thermal_governor_attach(tz);
-+		thermal_zone_device_init(tz);
-+		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
- 		thermal_notify_tz_enable(tz->id);
--	else
-+	} else {
-+		thermal_governor_detach(tz);
- 		thermal_notify_tz_disable(tz->id);
-+	}
- 
- 	return ret;
- }
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_drm_plane.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/m=
+ediatek/mtk_drm_plane.c
+> index c74cb94e445e..39cb9a80d976 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+> @@ -57,7 +57,7 @@ static struct drm_plane_state *mtk_plane_duplicate_stat=
+e(struct drm_plane *plane
+>         struct mtk_plane_state *old_state =3D to_mtk_plane_state(plane->s=
+tate);
+>         struct mtk_plane_state *state;
+>
+> -       state =3D kzalloc(sizeof(*state), GFP_KERNEL);
+> +       state =3D kmalloc(sizeof(*state), GFP_KERNEL);
+>         if (!state)
+>                 return NULL;
+>
+> --
+> 2.33.1
+>

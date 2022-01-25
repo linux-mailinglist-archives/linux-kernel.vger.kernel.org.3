@@ -2,144 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE0549BBFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65E849BC02
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiAYTVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:21:08 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:50250 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiAYTUn (ORCPT
+        id S229916AbiAYTYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229840AbiAYTYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:20:43 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 064A61C0B88; Tue, 25 Jan 2022 20:20:39 +0100 (CET)
-Date:   Tue, 25 Jan 2022 20:20:38 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        rkardell@mida.se,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 4.4 066/114] media: m920x: dont use stack on USB reads
-Message-ID: <20220125192038.GB5395@duo.ucw.cz>
-References: <20220124183927.095545464@linuxfoundation.org>
- <20220124183929.139516454@linuxfoundation.org>
+        Tue, 25 Jan 2022 14:24:34 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0352BC06173D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:24:31 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso2326595wmj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:24:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=2GxzEUJrbvJEXdIt4dxtW3JqvSSBS0SEXbo+rF+J2Es=;
+        b=h/LU+OQkCLJaflAwiAhLZhROf9gu0u04QOiiywp8MbAdXWHbLv9BJWIWqdgLBJqXlQ
+         jziDd2CzVsTHo9l/pMK7FMnADO1aIFzR7RehLiBIFJYQtWmj4qmOrQMgv1SEOxjkeksa
+         /HWOr+68PnTLuFbyEPa22a3ia8ELcYfVJ1+TY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=2GxzEUJrbvJEXdIt4dxtW3JqvSSBS0SEXbo+rF+J2Es=;
+        b=DRwtV6LQe2lR434IVYWYwUkGJbAv1PyVsf5r+GLd6fx2bGElzHUJz+0vwnrAOsurhX
+         gFMXEnQ/U90B+D8T2UV2G7SgTe4I1ie2cp2ntWspK+mEKi1LlN+5sCtnoBe0uTv+l4Iy
+         2ahb7URVdY+/thv6S2a3vlSOITti/eRg4ZkPPOrUB/AHdKhz7T/dt0HgGvkrAz226dHF
+         5/QFDm0CskjkuORh0k3VsBYqwL6kFT+1jZXbtXUvON4to26ZAKO2cxAuS2T+gLPKbPwx
+         hdaEeapPmzW2ZAzGcts5Xv1Vn/J9F8B06BkAb9tf9gOcmLZlodk17kRdFEmbIT7TBmDF
+         hGfw==
+X-Gm-Message-State: AOAM531mqfKCjGQw8a0+jWRl7sNtCJeMx8FvQqPAFCnxiMutCO8MpK2I
+        5L49FYEBqLx91EB0fRPAIKFx+A==
+X-Google-Smtp-Source: ABdhPJyGrZuTRIehTH5rIo4cKX3JZjHM45w9hw7K1RgCCI0IgmWRQrkgjedGBbyeSK4Ic7PRc0cpDg==
+X-Received: by 2002:a05:600c:4e46:: with SMTP id e6mr4165180wmq.15.1643138669440;
+        Tue, 25 Jan 2022 11:24:29 -0800 (PST)
+Received: from cloudflare.com (2a01-110f-4809-d800-0000-0000-0000-0e00.aa.ipv6.supernova.orange.pl. [2a01:110f:4809:d800::e00])
+        by smtp.gmail.com with ESMTPSA id h127sm1279065wmh.27.2022.01.25.11.24.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 11:24:28 -0800 (PST)
+References: <20220113070245.791577-1-imagedong@tencent.com>
+User-agent: mu4e 1.1.0; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     menglong8.dong@gmail.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mengensun@tencent.com,
+        flyingpeng@tencent.com, mungerjiang@tencent.com,
+        Menglong Dong <imagedong@tencent.com>
+Subject: Re: [PATCH bpf-next] bpf: Add document for 'dst_port' of 'struct
+ bpf_sock'
+In-reply-to: <20220113070245.791577-1-imagedong@tencent.com>
+Date:   Tue, 25 Jan 2022 20:24:27 +0100
+Message-ID: <87sftbobys.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="1LKvkjL3sHcu1TtY"
-Content-Disposition: inline
-In-Reply-To: <20220124183929.139516454@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 13, 2022 at 08:02 AM CET, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> The description of 'dst_port' in 'struct bpf_sock' is not accurated.
+> In fact, 'dst_port' is not in network byte order, it is 'partly' in
+> network byte order.
+>
+> We can see it in bpf_sock_convert_ctx_access():
+>
+>> case offsetof(struct bpf_sock, dst_port):
+>> 	*insn++ = BPF_LDX_MEM(
+>> 		BPF_FIELD_SIZEOF(struct sock_common, skc_dport),
+>> 		si->dst_reg, si->src_reg,
+>> 		bpf_target_off(struct sock_common, skc_dport,
+>> 			       sizeof_field(struct sock_common,
+>> 					    skc_dport),
+>> 			       target_size));
+>
+> It simply passes 'sock_common->skc_dport' to 'bpf_sock->dst_port',
+> which makes that the low 16-bits of 'dst_port' is equal to 'skc_port'
+> and is in network byte order, but the high 16-bites of 'dst_port' is
+> 0. And the actual port is 'bpf_ntohs((__u16)dst_port)', and
+> 'bpf_ntohl(dst_port)' is totally not the right port.
+>
+> This is different form 'remote_port' in 'struct bpf_sock_ops' or
+> 'struct __sk_buff':
+>
+>> case offsetof(struct __sk_buff, remote_port):
+>> 	BUILD_BUG_ON(sizeof_field(struct sock_common, skc_dport) != 2);
+>>
+>> 	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, sk),
+>> 			      si->dst_reg, si->src_reg,
+>> 				      offsetof(struct sk_buff, sk));
+>> 	*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->dst_reg,
+>> 			      bpf_target_off(struct sock_common,
+>> 					     skc_dport,
+>> 					     2, target_size));
+>> #ifndef __BIG_ENDIAN_BITFIELD
+>> 	*insn++ = BPF_ALU32_IMM(BPF_LSH, si->dst_reg, 16);
+>> #endif
+>
+> We can see that it will left move 16-bits in little endian, which makes
+> the whole 'remote_port' is in network byte order, and the actual port
+> is bpf_ntohl(remote_port).
+>
+> Note this in the document of 'dst_port'. ( Maybe this should be unified
+> in the code? )
+>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>  include/uapi/linux/bpf.h | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index b0383d371b9a..891a182a749a 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -5500,7 +5500,11 @@ struct bpf_sock {
+>  	__u32 src_ip4;
+>  	__u32 src_ip6[4];
+>  	__u32 src_port;		/* host byte order */
+> -	__u32 dst_port;		/* network byte order */
+> +	__u32 dst_port;		/* low 16-bits are in network byte order,
+> +				 * and high 16-bits are filled by 0.
+> +				 * So the real port in host byte order is
+> +				 * bpf_ntohs((__u16)dst_port).
+> +				 */
+>  	__u32 dst_ip4;
+>  	__u32 dst_ip6[4];
+>  	__u32 state;
 
---1LKvkjL3sHcu1TtY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm probably missing something obvious, but is there anything stopping
+us from splitting the field, so that dst_ports is 16-bit wide?
 
-Hi!
+I gave a quick check to the change below and it seems to pass verifier
+checks and sock_field tests.
 
-> From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
->=20
-> [ Upstream commit a2ab06d7c4d6bfd0b545a768247a70463e977e27 ]
->=20
-> Using stack-allocated pointers for USB message data don't work.
-> This driver is almost OK with that, except for the I2C read
-> logic.
->=20
-> Fix it by using a temporary read buffer, just like on all other
-> calls to m920x_read().
+IDK, just an idea. Didn't give it a deeper thought.
 
-Maybe the driver is buggy, but the fix is not okay.
+--8<--
 
-> +++ b/drivers/media/usb/dvb-usb/m920x.c
-> @@ -284,6 +284,13 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, =
-struct i2c_msg msg[], int nu
->  			/* Should check for ack here, if we knew how. */
->  		}
->  		if (msg[i].flags & I2C_M_RD) {
-> +			char *read =3D kmalloc(1, GFP_KERNEL);
-> +			if (!read) {
-> +				ret =3D -ENOMEM;
-> +				kfree(read);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 4a2f7041ebae..344d62ccafba 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5574,7 +5574,8 @@ struct bpf_sock {
+ 	__u32 src_ip4;
+ 	__u32 src_ip6[4];
+ 	__u32 src_port;		/* host byte order */
+-	__u32 dst_port;		/* network byte order */
++	__u16 unused;
++	__u16 dst_port;		/* network byte order */
+ 	__u32 dst_ip4;
+ 	__u32 dst_ip6[4];
+ 	__u32 state;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index a06931c27eeb..c56b8ba82de5 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8276,7 +8276,6 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 	case offsetof(struct bpf_sock, family):
+ 	case offsetof(struct bpf_sock, type):
+ 	case offsetof(struct bpf_sock, protocol):
+-	case offsetof(struct bpf_sock, dst_port):
+ 	case offsetof(struct bpf_sock, src_port):
+ 	case offsetof(struct bpf_sock, rx_queue_mapping):
+ 	case bpf_ctx_range(struct bpf_sock, src_ip4):
+@@ -8285,6 +8284,9 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 	case bpf_ctx_range_till(struct bpf_sock, dst_ip6[0], dst_ip6[3]):
+ 		bpf_ctx_record_field_size(info, size_default);
+ 		return bpf_ctx_narrow_access_ok(off, size, size_default);
++	case offsetof(struct bpf_sock, dst_port):
++		bpf_ctx_record_field_size(info, sizeof(__u16));
++		return bpf_ctx_narrow_access_ok(off, size, sizeof(__u16));
+ 	}
 
-kfree(NULL). You probably did not want to do that.
-
-> +				goto unlock;
-> +			}
-> +
->  			for (j =3D 0; j < msg[i].len; j++) {
->  				/* Last byte of transaction?
->  				 * Send STOP, otherwise send ACK. */
-> @@ -291,9 +298,12 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, =
-struct i2c_msg msg[], int nu
-> =20
->  				if ((ret =3D m920x_read(d->udev, M9206_I2C, 0x0,
->  						      0x20 | stop,
-> -						      &msg[i].buf[j], 1)) !=3D 0)
-> +						      read, 1)) !=3D 0)
->  					goto unlock;
-
-Memory leak here.
-
-> +				msg[i].buf[j] =3D read[0];
->  			}
-> +
-> +			kfree(read);
->  		} else {
->  			for (j =3D 0; j < msg[i].len; j++) {
->  				/* Last byte of transaction? Then send STOP. */
-
-Plus really running malloc in a loop like that looks strange.
-
-Anyway, this should stop the leaks.
-
-Best regards,
-									Pavel
-
-diff --git a/drivers/media/usb/dvb-usb/m920x.c b/drivers/media/usb/dvb-usb/=
-m920x.c
-index 691e05833db1..da81fa189b5d 100644
---- a/drivers/media/usb/dvb-usb/m920x.c
-+++ b/drivers/media/usb/dvb-usb/m920x.c
-@@ -277,7 +277,6 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, str=
-uct i2c_msg msg[], int nu
- 			char *read =3D kmalloc(1, GFP_KERNEL);
- 			if (!read) {
- 				ret =3D -ENOMEM;
--				kfree(read);
- 				goto unlock;
- 			}
-=20
-@@ -288,8 +287,10 @@ static int m920x_i2c_xfer(struct i2c_adapter *adap, st=
-ruct i2c_msg msg[], int nu
-=20
- 				if ((ret =3D m920x_read(d->udev, M9206_I2C, 0x0,
- 						      0x20 | stop,
--						      read, 1)) !=3D 0)
-+						      read, 1)) !=3D 0) {
-+					kfree(read);
- 					goto unlock;
-+				}
- 				msg[i].buf[j] =3D read[0];
- 			}
-=20
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---1LKvkjL3sHcu1TtY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYfBNhgAKCRAw5/Bqldv6
-8t7LAJoDhqGxBvYonwdoJn/5f2zVgq8lOACgt6NRIlXWvC7bZ4FmODlxwjEKzoQ=
-=3Hof
------END PGP SIGNATURE-----
-
---1LKvkjL3sHcu1TtY--
+ 	return size == size_default;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 4a2f7041ebae..344d62ccafba 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5574,7 +5574,8 @@ struct bpf_sock {
+ 	__u32 src_ip4;
+ 	__u32 src_ip6[4];
+ 	__u32 src_port;		/* host byte order */
+-	__u32 dst_port;		/* network byte order */
++	__u16 unused;
++	__u16 dst_port;		/* network byte order */
+ 	__u32 dst_ip4;
+ 	__u32 dst_ip6[4];
+ 	__u32 state;

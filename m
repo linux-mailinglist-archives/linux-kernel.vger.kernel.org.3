@@ -2,134 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD13C49B247
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A7F49B24E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376751AbiAYKrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:47:41 -0500
-Received: from foss.arm.com ([217.140.110.172]:34102 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355114AbiAYKou (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1353549AbiAYKtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:49:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355294AbiAYKou (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Jan 2022 05:44:50 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 792DB1FB;
-        Tue, 25 Jan 2022 02:44:44 -0800 (PST)
-Received: from ip-10-252-15-108.eu-west-1.compute.internal (unknown [10.252.15.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9E0813F7D8;
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AC1C061756
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:44:42 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id r2-20020a1c2b02000000b0034f7b261169so1477241wmr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:44:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Gue0fJwwcgJTZVNdeX+6H9YxIr2uToB8WYyhrif8Zgg=;
+        b=sfzTb+mBqz0CAb/NiDVYEy4M/U6s+cmQivYUZ8T8HCXtmf47TqVlQa1MVrKhdPAMHN
+         +6sUu1m8cJkI2leNd7KOBhsW/75lhMRZXi2RgH1od2b4BisBeAPZq26RZk0ojhIeqAvU
+         E7sfVfSgMK3D0+Ao8mZk7tESb0rO1VWhWnEa0+IehTUyxqK6eNAffYdfKIAYHypoFwiD
+         pGadS7fcpBpZh2iYufU8CZlSmVr6I+ufZREvlxdmNgy/3VdzFUfs4xUN6DJI2EOWZVZx
+         sR3jFsHtIpGYVQ+FGBhHrmI6E2cPmgy9vVR/gtFq5LoHmrCwZU65QghzCIWNfZ1cV36o
+         INDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Gue0fJwwcgJTZVNdeX+6H9YxIr2uToB8WYyhrif8Zgg=;
+        b=UzoHiaCwSoFevhULovW0lcNkKE1rN30ZHnY7bIEstb/giOFO6M/wHW45qn6zWG8/Nb
+         Hum+ui8FglwXnVcGML+O5G8R3N7mpuZHSQRFdN/c3Cf+BOdLudf+Kz4nuiOXukJBjzQK
+         FbG9I/RnWQmMdrnjeylJb4ERxR1wy/Vp2+gkzZgQwe9h09nNhNOzefkop7Oy6S1+3vEf
+         HHS7EuiKvXH+thui9jXgDwZvYOS1MpQ/tw9vffWWIvCjACnroNyBbnWWA/VTsInhp91K
+         BDubvl9n6FAeZl9BP5+Q/4sAqctfHmu+AC0r/QuLz7zR7UIweMzcakQV923IswtRh0Vd
+         E1Gg==
+X-Gm-Message-State: AOAM532D7gGYD6TE++7VxouOVz4zAlwP49Z+uOqdTrN4EjhYm4Dw6blS
+        pEi7SkcIIuS0ZbDJ/LwP08jeww==
+X-Google-Smtp-Source: ABdhPJwyyIe2jBpAoerujDirbO4rY9Xe5Cophwwo1PvJt0DtwWdDxkzOGYMcccAJJqr8guZLIXQUMQ==
+X-Received: by 2002:a7b:c944:: with SMTP id i4mr2337930wml.174.1643107481389;
         Tue, 25 Jan 2022 02:44:41 -0800 (PST)
-From:   German Gomez <german.gomez@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     irogers@google.com, German Gomez <german.gomez@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] perf test: update arm64 perf_event_attr tests for --call-graph
-Date:   Tue, 25 Jan 2022 10:44:34 +0000
-Message-Id: <20220125104435.2737-1-german.gomez@arm.com>
-X-Mailer: git-send-email 2.25.1
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id o14sm5657228wry.104.2022.01.25.02.44.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 02:44:40 -0800 (PST)
+Message-ID: <3f9a9731-c096-bc9b-63df-bd1dff032737@linaro.org>
+Date:   Tue, 25 Jan 2022 10:44:39 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/3] nvmem: core: Fix a conflict between MTD and NVMEM on
+ wp-gpios property
+Content-Language: en-US
+To:     Christophe Kerello <christophe.kerello@foss.st.com>,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        devicetree@vger.kernel.org, chenshumin86@sina.com
+References: <20220105135734.271313-1-christophe.kerello@foss.st.com>
+ <20220105135734.271313-4-christophe.kerello@foss.st.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220105135734.271313-4-christophe.kerello@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct perf_event_attr is initialised differently in Arm64 when
-recording in call-graph fp mode, so update the relevant tests, and add
-two extra arm64-only tests.
 
-Fixes: 7248e308a575 ("perf tools: Record ARM64 LR register automatically")
-Signed-off-by: German Gomez <german.gomez@arm.com>
----
- tools/perf/tests/attr/README                            | 2 ++
- tools/perf/tests/attr/test-record-graph-default         | 2 ++
- tools/perf/tests/attr/test-record-graph-default-aarch64 | 9 +++++++++
- tools/perf/tests/attr/test-record-graph-fp              | 2 ++
- tools/perf/tests/attr/test-record-graph-fp-aarch64      | 9 +++++++++
- 5 files changed, 24 insertions(+)
- create mode 100644 tools/perf/tests/attr/test-record-graph-default-aarch64
- create mode 100644 tools/perf/tests/attr/test-record-graph-fp-aarch64
 
-diff --git a/tools/perf/tests/attr/README b/tools/perf/tests/attr/README
-index a36f49fb4dbe..1116fc6bf2ac 100644
---- a/tools/perf/tests/attr/README
-+++ b/tools/perf/tests/attr/README
-@@ -45,8 +45,10 @@ Following tests are defined (with perf commands):
-   perf record -d kill                           (test-record-data)
-   perf record -F 100 kill                       (test-record-freq)
-   perf record -g kill                           (test-record-graph-default)
-+  perf record -g kill                           (test-record-graph-default-aarch64)
-   perf record --call-graph dwarf kill		(test-record-graph-dwarf)
-   perf record --call-graph fp kill              (test-record-graph-fp)
-+  perf record --call-graph fp kill              (test-record-graph-fp-aarch64)
-   perf record --group -e cycles,instructions kill (test-record-group)
-   perf record -e '{cycles,instructions}' kill   (test-record-group1)
-   perf record -e '{cycles/period=1/,instructions/period=2/}:S' kill (test-record-group2)
-diff --git a/tools/perf/tests/attr/test-record-graph-default b/tools/perf/tests/attr/test-record-graph-default
-index 5d8234d50845..f0a18b4ea4f5 100644
---- a/tools/perf/tests/attr/test-record-graph-default
-+++ b/tools/perf/tests/attr/test-record-graph-default
-@@ -2,6 +2,8 @@
- command = record
- args    = --no-bpf-event -g kill >/dev/null 2>&1
- ret     = 1
-+# arm64 enables registers in the default mode (fp)
-+arch    = !aarch64
- 
- [event:base-record]
- sample_type=295
-diff --git a/tools/perf/tests/attr/test-record-graph-default-aarch64 b/tools/perf/tests/attr/test-record-graph-default-aarch64
-new file mode 100644
-index 000000000000..e98d62efb6f7
---- /dev/null
-+++ b/tools/perf/tests/attr/test-record-graph-default-aarch64
-@@ -0,0 +1,9 @@
-+[config]
-+command = record
-+args    = --no-bpf-event -g kill >/dev/null 2>&1
-+ret     = 1
-+arch    = aarch64
-+
-+[event:base-record]
-+sample_type=4391
-+sample_regs_user=1073741824
-diff --git a/tools/perf/tests/attr/test-record-graph-fp b/tools/perf/tests/attr/test-record-graph-fp
-index 5630521c0b0f..a6e60e839205 100644
---- a/tools/perf/tests/attr/test-record-graph-fp
-+++ b/tools/perf/tests/attr/test-record-graph-fp
-@@ -2,6 +2,8 @@
- command = record
- args    = --no-bpf-event --call-graph fp kill >/dev/null 2>&1
- ret     = 1
-+# arm64 enables registers in fp mode
-+arch    = !aarch64
- 
- [event:base-record]
- sample_type=295
-diff --git a/tools/perf/tests/attr/test-record-graph-fp-aarch64 b/tools/perf/tests/attr/test-record-graph-fp-aarch64
-new file mode 100644
-index 000000000000..cbeea9971285
---- /dev/null
-+++ b/tools/perf/tests/attr/test-record-graph-fp-aarch64
-@@ -0,0 +1,9 @@
-+[config]
-+command = record
-+args    = --no-bpf-event --call-graph fp kill >/dev/null 2>&1
-+ret     = 1
-+arch    = aarch64
-+
-+[event:base-record]
-+sample_type=4391
-+sample_regs_user=1073741824
--- 
-2.25.1
+On 05/01/2022 13:57, Christophe Kerello wrote:
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index e765d3d0542e..e11c74db64f9 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -769,7 +769,7 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+>   
+>   	if (config->wp_gpio)
+>   		nvmem->wp_gpio = config->wp_gpio;
+> -	else
+> +	else if (config->reg_write)
+This is clearly not going to work for everyone.
+
+A flag in nvmem_config to indicate that wp gpio is managed by provider 
+driver would be the right thing to do here.
+>   		nvmem->wp_gpio = gpiod_get_optional(config->dev, "wp",
+>   						    GPIOD_OUT_HIGH);
+
+--srini
 

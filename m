@@ -2,152 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6778949AB9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 06:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F84449ABBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 06:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378996AbiAYFUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 00:20:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S1442241AbiAYFVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 00:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391195AbiAYFD5 (ORCPT
+        with ESMTP id S251061AbiAYFNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 00:03:57 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE7FC0AD1A0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 19:35:58 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id u130so13831126pfc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 19:35:58 -0800 (PST)
+        Tue, 25 Jan 2022 00:13:42 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B013C068084
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 19:39:08 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id s9so28742597oib.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 19:39:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9x/Lsa7ti7gTSupQfhnG6ZXqf3XFn7FMKDh1kMENpvw=;
-        b=OMYsr3z2K+XI/ZQ+BWmynvWMXqDyN50mi/156DKaicA8Rq1srJ9KHg/MEuYUKlumnT
-         khIzm+PT8QwnBKfFhhBZD3936ZzZp4mBsnH010vHbZtwKHsTGxzwjQf6ktZDQ9RL+HC+
-         UWTNZ/vY2xZZM5bQDWFQv1M9j837LeV4nk538=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=Oy9GFdQG+i/uy7nSZPfjNKex4OropmmdyXnqD6sHR7Q=;
+        b=Sr0MTFPKvLlYp1aCMiVa+wOnlhnvuGkKRot55/T5nlLy4fqG+mNDGW8e0qZCJkoGdJ
+         knYSq02ywWQ3VHX0t5grRit4Cjl26lMLUQPuRI3Zjvt1omCrTjPRHN/6QQPSkTVRdiOM
+         K9Ypb5BEaOSl8ZE5fq7a3zgp5YHtmYWZYlwvaZnBKL4wMRIqjSNXb+y7lYdFAsLZt6O7
+         gVMxaFT4JPaQUThOJjtwPn4fFv8o9fQGjVRXLdJ77RO0Ymc+Jyr19L5QrcMs6sgSnC0D
+         Fps8n1PrBwYUkJcTyDci4PdbXtYc7b5y4/2IlmwkIcAD5dwXs160NU3mwqDcH181LHLz
+         nsYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9x/Lsa7ti7gTSupQfhnG6ZXqf3XFn7FMKDh1kMENpvw=;
-        b=JNGG9wtl9vsDhA6QkJZ3tzI9B5jZxrKFDVz1TgrqkhPHXjhjeMnBi3UAR1DAqy5wwe
-         vSraEh8PzcnSnOuIMsl/NTj7boA5RPDA0n3s3XK3hDKGaXKdGcmt3kItcJYmHzs9Gp8C
-         rgHSNsbwmrA6BgGctNj7bxJir5XluwYrA0gixeGzpnVJgt6ua2TGhTpuPDcLpe6gitDr
-         ZbQuGRss0V+/SE6bEn6nDQc8tQZAlZL9AeRP5VVM0i2DG4kdnMV9HGJ3vf4ix4hb0C3s
-         XrMkeRwiJsK4zuSGJ72MtFZlDNwEf2LOy86T/Ia0nn2ehRDpwGO5fgJ3bZ0tYEzvIx+v
-         PO8A==
-X-Gm-Message-State: AOAM533LEABUe283m+HoRSQMAJ55p10JZ9D5maaMwW6OfmUnKKiVSe8o
-        eAcMyktt+lz+kyXEmtl2CzG1FcucTHRvrw==
-X-Google-Smtp-Source: ABdhPJzOSHR28VSWx0ruqnBVgXS6IERsb1Z/aoPvcziYyRFHW8j/TUdZRzIE1/2HprGg7JLj893NDg==
-X-Received: by 2002:a63:8c06:: with SMTP id m6mr13843903pgd.498.1643081757547;
-        Mon, 24 Jan 2022 19:35:57 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d4sm5854164pgw.30.2022.01.24.19.35.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 19:35:57 -0800 (PST)
-Date:   Mon, 24 Jan 2022 19:35:56 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Sterba <dsterba@suse.cz>, David Sterba <dsterba@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202201241924.20B85B89@keescook>
-References: <20220125115757.20bc45e8@canb.auug.org.au>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=Oy9GFdQG+i/uy7nSZPfjNKex4OropmmdyXnqD6sHR7Q=;
+        b=Wskkix2A7Z4XXlvc5oTST1d4DNT5cbNur28pE+D4A/Zr4Ye+bCF120TN99SrLwY6IL
+         brno/2KNFs5kgtsaMf3tS9pY0xjcSA8HuF/WPbzDtMqfMEKkWkQTa1auxwkS+9wD/Kp7
+         L3Qx1GRqbq/ZPt6W4ExiUnOffvbErpwoFK7PCkNNo2LeBdv1bBVta6c7C1L3TZO4+RK5
+         MrOQwhhj2oZTBfZwUpkI270KECJzx+mb3itpDWr3VNFqKFhux6S74mkGmx2kl8sELaRu
+         BKhsN9rHFzrJ4sB3j64u34b+DgMYGrLBvK25bqic1pLpmWFXE+wC6hU71q/98JVfojww
+         I2Eg==
+X-Gm-Message-State: AOAM532jGDVIx7Bsn6RFgogSIh4pGmq23UpmEBxnCxb6JUHCLFNf0ZcU
+        CgBQD1eS7A3S/B7odRBFqFHKYg==
+X-Google-Smtp-Source: ABdhPJyto1uQdv7ys+altyklBUbZNp6mhQQCGnrZM9FFHj3jlaxdl3P7sk5GXa6ZtjUz+Qf/ENUfdQ==
+X-Received: by 2002:aca:1c16:: with SMTP id c22mr3931833oic.83.1643081947335;
+        Mon, 24 Jan 2022 19:39:07 -0800 (PST)
+Received: from [192.168.17.16] ([189.219.72.83])
+        by smtp.gmail.com with ESMTPSA id l16sm5141685oop.45.2022.01.24.19.39.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jan 2022 19:39:06 -0800 (PST)
+Message-ID: <ef6a4bcf-832b-3a5d-9643-827239293772@linaro.org>
+Date:   Mon, 24 Jan 2022 21:39:04 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125115757.20bc45e8@canb.auug.org.au>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.15 000/846] 5.15.17-rc1 review
+Content-Language: en-US
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        stable@vger.kernel.org
+References: <20220124184100.867127425@linuxfoundation.org>
+ <374e9357-35eb-3555-3fe5-7b72c3a77a39@linaro.org>
+In-Reply-To: <374e9357-35eb-3555-3fe5-7b72c3a77a39@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:57:57AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the kspp tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/string.h:253,
->                  from include/linux/bitmap.h:11,
->                  from include/linux/cpumask.h:12,
->                  from arch/x86/include/asm/cpumask.h:5,
->                  from arch/x86/include/asm/msr.h:11,
->                  from arch/x86/include/asm/processor.h:22,
->                  from arch/x86/include/asm/cpufeature.h:5,
->                  from arch/x86/include/asm/thread_info.h:53,
->                  from include/linux/thread_info.h:60,
->                  from arch/x86/include/asm/preempt.h:7,
->                  from include/linux/preempt.h:78,
->                  from include/linux/spinlock.h:55,
->                  from include/linux/wait.h:9,
->                  from include/linux/mempool.h:8,
->                  from include/linux/bio.h:8,
->                  from fs/btrfs/ioctl.c:7:
-> In function 'fortify_memcpy_chk',
->     inlined from 'btrfs_ioctl_encoded_write' at fs/btrfs/ioctl.c:5082:3:
-> include/linux/fortify-string.h:316:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   316 |                         __write_overflow_field(p_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/fortify-string.h:324:25: error: call to '__read_overflow2_field' declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   324 |                         __read_overflow2_field(q_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   602670289b69 ("fortify: Detect struct member overflows in memcpy() at compile-time")
-> 
-> interacting with commit
-> 
->   504e1ebb6316 ("btrfs: add BTRFS_IOC_ENCODED_WRITE")
-> 
-> from the btrfs tree.
+Hello!
 
-Thanks!
-
-I found the btrfs patch here:
-https://lore.kernel.org/all/ec08e6f559ab47b3300ca5a67e8fc984fd3f040f.1637179348.git.osandov@fb.com/
-
+On 1/24/22 16:50, Daniel Díaz wrote:
+> Hello!
 > 
-> I applied the following hack:
+> On 1/24/22 12:31, Greg Kroah-Hartman wrote:
+>> This is the start of the stable review cycle for the 5.15.17 release.
+>> There are 846 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+>>
+>> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
+>> Anything received after that time might be too late.
+>>
+>> The whole patch series can be found in one patch at:
+>>     https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.17-rc1.gz
+>> or in the git tree and branch at:
+>>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+>> and the diffstat can be found below.
+>>
+>> thanks,
+>>
+>> greg k-h
 > 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 25 Jan 2022 11:47:17 +1100
-> Subject: [PATCH] fix up for "btrfs: add BTRFS_IOC_ENCODED_WRITE"
+> Regressions detected on arm, arm64, i386, x86.
 > 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  fs/btrfs/ioctl.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-> index 73ad918a05a9..d34620034f8e 100644
-> --- a/fs/btrfs/ioctl.c
-> +++ b/fs/btrfs/ioctl.c
-> @@ -5079,9 +5079,14 @@ static int btrfs_ioctl_encoded_write(struct file *file, void __user *argp,
->  		}
->  		args.iov = compat_ptr(args32.iov);
->  		args.iovcnt = args32.iovcnt;
-> -		memcpy(&args.offset, &args32.offset,
-> -		       sizeof(args) -
-> -		       offsetof(struct btrfs_ioctl_encoded_io_args, offset));
-> +		args.offset = args32.offset;
-> +		args.flags = args32.flags;
-> +		args.len = args32.len;
-> +		args.unencoded_len = args32.unencoded_len;
-> +		args.unencoded_offset = args32.unencoded_offset;
-> +		args.compression = args32.compression;
-> +		args.encryption = args32.encryption;
-> +		memcpy(args.reserved, args32.reserved, sizeof(args.reserved));
->  #else
->  		return -ENOTTY;
->  #endif
+> This is one from arm64:
+>    /builds/linux/arch/arm64/mm/extable.c: In function 'fixup_exception':
+>    /builds/linux/arch/arm64/mm/extable.c:17:13: error: implicit declaration of function 'in_bpf_jit' [-Werror=implicit-function-declaration]
+>       17 |         if (in_bpf_jit(regs))
+>          |             ^~~~~~~~~~
+>    cc1: some warnings being treated as errors
+>    make[3]: *** [/builds/linux/scripts/Makefile.build:277: arch/arm64/mm/extable.o] Error 1
 
-I'll see if I can construct something shorter using struct_group().
+Bisection here pointed to "arm64/bpf: Remove 128MB limit for BPF JIT programs". Reverting made the build succeed.
 
--Kees
+Greetings!
 
--- 
-Kees Cook
+Daniel Díaz
+daniel.diaz@linaro.org
+

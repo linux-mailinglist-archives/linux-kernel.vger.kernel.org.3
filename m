@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE0849B3F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEE949B3F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449139AbiAYM0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448286AbiAYMXp (ORCPT
+        id S1450382AbiAYM1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:27:23 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.167]:38926 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1448671AbiAYMY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:23:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4086C06173D;
-        Tue, 25 Jan 2022 04:23:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8569FB817F6;
-        Tue, 25 Jan 2022 12:23:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 050AAC340F0;
-        Tue, 25 Jan 2022 12:23:40 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YAi8qqDM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1643113417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z0daSbrlFhUGQBa4NrvEt61mYUrNnIWgDTSbk+DLVWQ=;
-        b=YAi8qqDME9TueElwkEnU2PnRqDfqiosLaNVxLpl80ljalp7P8BpR+CK4o5gFedL8CZO/eb
-        cq/iT2BcVfF8VYAkwduRgNo8+c7dc7dm9arcX5BCs1lcb8oU6/wuEh6qq32xAwmG785IDp
-        JMkhIf319Ux53nyH/4QJuo3q7A3aCjE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6b4a1e72 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 25 Jan 2022 12:23:37 +0000 (UTC)
-Received: by mail-yb1-f174.google.com with SMTP id i62so14780350ybg.5;
-        Tue, 25 Jan 2022 04:23:37 -0800 (PST)
-X-Gm-Message-State: AOAM533J19h+zv49W8j2pwyoq8seIpWqo3pn9mCfC8GSkNyUqD3fB/7x
-        fRQ/TBbutArrQuQ3JG+frXj02A6vnzPtyboMn9I=
-X-Google-Smtp-Source: ABdhPJyUJnn5+nIAkLGSsrMbq+oJOt12e+lDPM0wxq8+GDwA0xFEB0LhtHzFxy0HtG1im5paHvbTdwpEDVxTYrfKUOg=
-X-Received: by 2002:a05:6902:13c4:: with SMTP id y4mr146168ybu.115.1643113414984;
- Tue, 25 Jan 2022 04:23:34 -0800 (PST)
+        Tue, 25 Jan 2022 07:24:29 -0500
+X-KPN-MessageId: bb7be0c6-7dd9-11ec-8226-005056abbe64
+Received: from smtp.kpnmail.nl (unknown [10.31.155.37])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id bb7be0c6-7dd9-11ec-8226-005056abbe64;
+        Tue, 25 Jan 2022 13:24:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=dolYya/a860xjT4wUBYK+PxeDQUA6/qNUXyKqrOAog8=;
+        b=W06r8mjFLwPAe6bDZVcIeUq310tutvd4hfcRyC0fSVoPFBwm3qaj62q64xqieXVvFwONShcZPaBLQ
+         B5KxL3S11TaFWxT+kOOHUpHvUUb/FrpLDAgFQmzjwHyD3QTbfwdFWGN4smibT2yI5CX4ouBe3FXng7
+         lB3w8BAjlwlDlzOLW5Op74lJ+7DsuMVNUY1xoGSbxonJyJM1U1uL5uTVC8edvSM5ByEEkulxV/hnfY
+         xrmz2p6/BBPTPLMGugBDctv80URDr6sbbvuhvuWVAWrFEA83R/fXZzyB8nErTXjhXusyB7UN0V/Nat
+         l+8E1vG8t+dR968BAfjuV6KDgrZdUpQ==
+X-KPN-VerifiedSender: No
+X-CMASSUN: 33|ztIXQRl/g7NziXQTlSZ6TbQDjImAN7jwv0bG2jJ3G2XSlDcKttdmFVV5dixB+oz
+ 19NFh5ulxy5bERUAqqjsehA==
+X-Originating-IP: 80.101.105.217
+Received: from [192.168.1.10] (marune.xs4all.nl [80.101.105.217])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id bc1e48a9-7dd9-11ec-9812-005056ab1411;
+        Tue, 25 Jan 2022 13:24:26 +0100 (CET)
+Message-ID: <7e49399a-beb1-9dda-8bae-b715162f4fb9@xs4all.nl>
+Date:   Tue, 25 Jan 2022 13:24:25 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:7110:209:b0:11c:1b85:d007 with HTTP; Tue, 25 Jan 2022
- 04:23:34 -0800 (PST)
-In-Reply-To: <Ye+bam3aSIjz8n9E@sol.localdomain>
-References: <20220119135450.564115-1-Jason@zx2c4.com> <20220124192849.14755-1-Jason@zx2c4.com>
- <Ye+bam3aSIjz8n9E@sol.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 25 Jan 2022 13:23:34 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oQuKLo2D_OGMy-8PS-u=a-ERvP+1L7RvpjJ2_xBaM5eQ@mail.gmail.com>
-Message-ID: <CAHmME9oQuKLo2D_OGMy-8PS-u=a-ERvP+1L7RvpjJ2_xBaM5eQ@mail.gmail.com>
-Subject: Re: [PATCH v2] lib/crypto: blake2s: avoid indirect calls to
- compression function for Clang CFI
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v15 12/13] firmware: imx: scu-pd: imx8q: add vpu mu
+ resources
+Content-Language: en-US
+To:     shawnguo@kernel.org
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        aisheng.dong@nxp.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Ming Qian <ming.qian@nxp.com>, s.hauer@pengutronix.de
+References: <cover.1643077283.git.ming.qian@nxp.com>
+ <8717d91000002047c7d0925f5eae66fc7f795e27.1643077283.git.ming.qian@nxp.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <8717d91000002047c7d0925f5eae66fc7f795e27.1643077283.git.ming.qian@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22, Eric Biggers <ebiggers@kernel.org> wrote:
-> On Mon, Jan 24, 2022 at 08:28:49PM +0100, Jason A. Donenfeld wrote:
->> blake2s_compress_generic is weakly aliased by blake2s_generic. The
->
-> Don't you mean "weakly aliased by blake2s_compress"?
+Shawn, can you Ack this? I think it makes sense if I take this one through the
+media subsystem.
 
-Grrrr. Thanks.
+Alternatively, if you prefer to take this patch yourself, then let me know.
 
->> Changes v1->v2:
->> - Wrapped columns at 80 for Eric.
->
-> It is the recommended coding style, so not just for me :-)
+Regards,
 
-I was under the impression this increased to 100 mid-2020 or so, and
-checkpatch.pl now makes noise at that width instead.
+	Hans
+
+On 25/01/2022 08:11, Ming Qian wrote:
+> the vpu core depends on the mu resources.
+> if they're missed, the vpu can't work.
+> 
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
+> Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
+> ---
+>  drivers/firmware/imx/scu-pd.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/firmware/imx/scu-pd.c b/drivers/firmware/imx/scu-pd.c
+> index ff6569c4a53b..af3d057e6421 100644
+> --- a/drivers/firmware/imx/scu-pd.c
+> +++ b/drivers/firmware/imx/scu-pd.c
+> @@ -155,6 +155,10 @@ static const struct imx_sc_pd_range imx8qxp_scu_pd_ranges[] = {
+>  	{ "vpu-pid", IMX_SC_R_VPU_PID0, 8, true, 0 },
+>  	{ "vpu-dec0", IMX_SC_R_VPU_DEC_0, 1, false, 0 },
+>  	{ "vpu-enc0", IMX_SC_R_VPU_ENC_0, 1, false, 0 },
+> +	{ "vpu-enc1", IMX_SC_R_VPU_ENC_1, 1, false, 0 },
+> +	{ "vpu-mu0", IMX_SC_R_VPU_MU_0, 1, false, 0 },
+> +	{ "vpu-mu1", IMX_SC_R_VPU_MU_1, 1, false, 0 },
+> +	{ "vpu-mu2", IMX_SC_R_VPU_MU_2, 1, false, 0 },
+>  
+>  	/* GPU SS */
+>  	{ "gpu0-pid", IMX_SC_R_GPU_0_PID0, 4, true, 0 },
+

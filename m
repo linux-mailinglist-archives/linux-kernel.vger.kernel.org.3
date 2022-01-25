@@ -2,230 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D2149A827
+	by mail.lfdr.de (Postfix) with ESMTP id 97F6749A828
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1316657AbiAYC6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:58:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:60768 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S3415163AbiAYA55 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:57:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D7FD1FB;
-        Mon, 24 Jan 2022 16:57:57 -0800 (PST)
-Received: from [10.57.68.26] (unknown [10.57.68.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 503873F793;
-        Mon, 24 Jan 2022 16:57:54 -0800 (PST)
-Message-ID: <99023cd7-f037-282f-3f25-629a14a1578b@arm.com>
-Date:   Tue, 25 Jan 2022 00:57:49 +0000
+        id S1316687AbiAYC60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:58:26 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:50179 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3415164AbiAYA6B (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 19:58:01 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjT3q0XSKz4xNp;
+        Tue, 25 Jan 2022 11:57:58 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643072279;
+        bh=f3nUSDyey+3emcvOFkTIpsD48NeCC0JpEvrTdXnbHP8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RnaYgb9Nr+gkbn/N2LHSY3O5bGhTKez+ktdy6lt/XryTllaTxSsOaj3Hl1YfqJN6Y
+         0LBHL7CcjaU/F/33nP8ZpfBWzYuSXiedrTPl+Gg4ayhHn9doCs/InvlRKTFu5VvOYI
+         py6MNsANyDR0rCbB7Zory7W4hBzLTN7AhxMOptCrc4l7C1a0eP4hWpCbD1FK41ORY3
+         MgSq21hkI63cbgDfZrCLJWZ3P8pT7/WBWXazSJEd/gqHMwFWO+1TBcIR5YDTD26q48
+         6hhay9bLYH12Iw67zk8sQNFCNPifFioNj5hpUN0Xm2w9ja/XEo7d67L4kCldRffPZ2
+         t6VABksOW+Deg==
+Date:   Tue, 25 Jan 2022 11:57:57 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>, David Sterba <dsterba@suse.cz>
+Cc:     David Sterba <dsterba@suse.com>, Omar Sandoval <osandov@fb.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220125115757.20bc45e8@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 7/7] iommu: Add iommu_domain::domain_ops
-Content-Language: en-GB
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
- <20220124071103.2097118-8-baolu.lu@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220124071103.2097118-8-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/mWXtgt44xfe97I9Ky8aKrVT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-24 07:11, Lu Baolu wrote:
-> Add a domain specific callback set, domain_ops, for vendor iommu driver
-> to provide domain specific operations. Move domain-specific callbacks
-> from iommu_ops to the domain_ops and hook them when a domain is allocated.
+--Sig_/mWXtgt44xfe97I9Ky8aKrVT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think it would make a lot of sense for iommu_domain_ops to be a 
-substructure *within* iommu_ops. That way we can save most of the driver 
-boilerplate here by not needing extra variables everywhere, and letting 
-iommu_domain_alloc() still do a default initialisation like "domain->ops 
-= bus->iommu_ops->domain_ops;"
+Hi all,
 
-I do like the future possibility of trying to flatten some of the 
-io-pgtable indirection by having the SMMU drivers subsequently swizzle 
-in alternate domain ops once they've picked a format, though. That was a 
-bit too clunky to achieve at the whole iommu_ops level when I 
-experimented with it years ago, but now it might well be worth another 
-try...
+After merging the kspp tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-One other comment below.
+In file included from include/linux/string.h:253,
+                 from include/linux/bitmap.h:11,
+                 from include/linux/cpumask.h:12,
+                 from arch/x86/include/asm/cpumask.h:5,
+                 from arch/x86/include/asm/msr.h:11,
+                 from arch/x86/include/asm/processor.h:22,
+                 from arch/x86/include/asm/cpufeature.h:5,
+                 from arch/x86/include/asm/thread_info.h:53,
+                 from include/linux/thread_info.h:60,
+                 from arch/x86/include/asm/preempt.h:7,
+                 from include/linux/preempt.h:78,
+                 from include/linux/spinlock.h:55,
+                 from include/linux/wait.h:9,
+                 from include/linux/mempool.h:8,
+                 from include/linux/bio.h:8,
+                 from fs/btrfs/ioctl.c:7:
+In function 'fortify_memcpy_chk',
+    inlined from 'btrfs_ioctl_encoded_write' at fs/btrfs/ioctl.c:5082:3:
+include/linux/fortify-string.h:316:25: error: call to '__write_overflow_fie=
+ld' declared with attribute warning: detected write beyond size of field (1=
+st parameter); maybe use struct_group()? [-Werror=3Dattribute-warning]
+  316 |                         __write_overflow_field(p_size_field, size);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/fortify-string.h:324:25: error: call to '__read_overflow2_fie=
+ld' declared with attribute warning: detected read beyond size of field (2n=
+d parameter); maybe use struct_group()? [-Werror=3Dattribute-warning]
+  324 |                         __read_overflow2_field(q_size_field, size);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->   include/linux/iommu.h                       | 93 ++++++++++++---------
->   drivers/iommu/amd/iommu.c                   | 21 +++--
->   drivers/iommu/apple-dart.c                  | 24 ++++--
->   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 22 +++--
->   drivers/iommu/arm/arm-smmu/arm-smmu.c       | 23 +++--
->   drivers/iommu/arm/arm-smmu/qcom_iommu.c     | 17 ++--
->   drivers/iommu/exynos-iommu.c                | 17 ++--
->   drivers/iommu/fsl_pamu_domain.c             | 13 ++-
->   drivers/iommu/intel/iommu.c                 | 25 ++++--
->   drivers/iommu/iommu.c                       | 15 ++--
->   drivers/iommu/ipmmu-vmsa.c                  | 21 +++--
->   drivers/iommu/msm_iommu.c                   | 17 ++--
->   drivers/iommu/mtk_iommu.c                   | 24 ++++--
->   drivers/iommu/mtk_iommu_v1.c                | 19 +++--
->   drivers/iommu/omap-iommu.c                  | 15 ++--
->   drivers/iommu/rockchip-iommu.c              | 17 ++--
->   drivers/iommu/s390-iommu.c                  | 15 ++--
->   drivers/iommu/sprd-iommu.c                  | 19 +++--
->   drivers/iommu/sun50i-iommu.c                | 18 ++--
->   drivers/iommu/tegra-gart.c                  | 15 ++--
->   drivers/iommu/tegra-smmu.c                  | 16 ++--
->   drivers/iommu/virtio-iommu.c                | 18 ++--
->   22 files changed, 305 insertions(+), 179 deletions(-)
-> 
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 111b3e9c79bb..33c5c0e5c465 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -88,7 +88,7 @@ struct iommu_domain_geometry {
->   
->   struct iommu_domain {
->   	unsigned type;
-> -	const struct iommu_ops *ops;
-> +	const struct domain_ops *ops;
->   	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
->   	iommu_fault_handler_t handler;
->   	void *handler_token;
-> @@ -192,26 +192,11 @@ struct iommu_iotlb_gather {
->    * struct iommu_ops - iommu ops and capabilities
->    * @capable: check capability
->    * @domain_alloc: allocate iommu domain
-> - * @domain_free: free iommu domain
-> - * @attach_dev: attach device to an iommu domain
-> - * @detach_dev: detach device from an iommu domain
-> - * @map: map a physically contiguous memory region to an iommu domain
-> - * @map_pages: map a physically contiguous set of pages of the same size to
-> - *             an iommu domain.
-> - * @unmap: unmap a physically contiguous memory region from an iommu domain
-> - * @unmap_pages: unmap a number of pages of the same size from an iommu domain
-> - * @flush_iotlb_all: Synchronously flush all hardware TLBs for this domain
-> - * @iotlb_sync_map: Sync mappings created recently using @map to the hardware
-> - * @iotlb_sync: Flush all queued ranges from the hardware TLBs and empty flush
-> - *            queue
-> - * @iova_to_phys: translate iova to physical address
->    * @probe_device: Add device to iommu driver handling
->    * @release_device: Remove device from iommu driver handling
->    * @probe_finalize: Do final setup work after the device is added to an IOMMU
->    *                  group and attached to the groups domain
->    * @device_group: find iommu group for a particular device
-> - * @enable_nesting: Enable nesting
-> - * @set_pgtable_quirks: Set io page table quirks (IO_PGTABLE_QUIRK_*)
->    * @get_resv_regions: Request list of reserved regions for a device
->    * @put_resv_regions: Free list of reserved regions for a device
->    * @apply_resv_region: Temporary helper call-back for iova reserved ranges
-> @@ -237,33 +222,11 @@ struct iommu_ops {
->   
->   	/* Domain allocation and freeing by the iommu driver */
->   	struct iommu_domain *(*domain_alloc)(unsigned iommu_domain_type);
-> -	void (*domain_free)(struct iommu_domain *);
->   
-> -	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
-> -	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
-> -	int (*map)(struct iommu_domain *domain, unsigned long iova,
-> -		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
-> -	int (*map_pages)(struct iommu_domain *domain, unsigned long iova,
-> -			 phys_addr_t paddr, size_t pgsize, size_t pgcount,
-> -			 int prot, gfp_t gfp, size_t *mapped);
-> -	size_t (*unmap)(struct iommu_domain *domain, unsigned long iova,
-> -		     size_t size, struct iommu_iotlb_gather *iotlb_gather);
-> -	size_t (*unmap_pages)(struct iommu_domain *domain, unsigned long iova,
-> -			      size_t pgsize, size_t pgcount,
-> -			      struct iommu_iotlb_gather *iotlb_gather);
-> -	void (*flush_iotlb_all)(struct iommu_domain *domain);
-> -	void (*iotlb_sync_map)(struct iommu_domain *domain, unsigned long iova,
-> -			       size_t size);
-> -	void (*iotlb_sync)(struct iommu_domain *domain,
-> -			   struct iommu_iotlb_gather *iotlb_gather);
-> -	phys_addr_t (*iova_to_phys)(struct iommu_domain *domain, dma_addr_t iova);
->   	struct iommu_device *(*probe_device)(struct device *dev);
->   	void (*release_device)(struct device *dev);
->   	void (*probe_finalize)(struct device *dev);
->   	struct iommu_group *(*device_group)(struct device *dev);
-> -	int (*enable_nesting)(struct iommu_domain *domain);
-> -	int (*set_pgtable_quirks)(struct iommu_domain *domain,
-> -				  unsigned long quirks);
->   
->   	/* Request/Free a list of reserved regions for a device */
->   	void (*get_resv_regions)(struct device *dev, struct list_head *list);
-> @@ -296,6 +259,60 @@ struct iommu_ops {
->   	struct module *owner;
->   };
->   
-> +/**
-> + * struct domain_ops - per-domain ops
-> + * @attach_dev: attach an iommu domain to a device
-> + * @detach_dev: detach an iommu domain from a device
-> + * @map: map a physically contiguous memory region to an iommu domain
-> + * @map_pages: map a physically contiguous set of pages of the same size to
-> + *             an iommu domain.
-> + * @unmap: unmap a physically contiguous memory region from an iommu domain
-> + * @unmap_pages: unmap a number of pages of the same size from an iommu domain
-> + * @flush_iotlb_all: Synchronously flush all hardware TLBs for this domain
-> + * @iotlb_sync_map: Sync mappings created recently using @map to the hardware
-> + * @iotlb_sync: Flush all queued ranges from the hardware TLBs and empty flush
-> + *            queue
-> + * @iova_to_phys: translate iova to physical address
-> + * @enable_nesting: Enable nesting
-> + * @set_pgtable_quirks: Set io page table quirks (IO_PGTABLE_QUIRK_*)
-> + * @release: Release the domain after use.
+Caused by commit
 
-Not sure about the name change here - it's still logically a "free" that 
-matches an "alloc", we're not doing anything clever like refcounting or 
-devres, which is what I'd tend to associate with a "release" function 
-for an allocated resource.
+  602670289b69 ("fortify: Detect struct member overflows in memcpy() at com=
+pile-time")
 
-Robin.
+interacting with commit
 
-> + */
-> +struct domain_ops {
-> +	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
-> +	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
-> +
-> +	int (*map)(struct iommu_domain *domain, unsigned long iova,
-> +		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
-> +	int (*map_pages)(struct iommu_domain *domain, unsigned long iova,
-> +			 phys_addr_t paddr, size_t pgsize, size_t pgcount,
-> +			 int prot, gfp_t gfp, size_t *mapped);
-> +	size_t (*unmap)(struct iommu_domain *domain, unsigned long iova,
-> +			size_t size, struct iommu_iotlb_gather *iotlb_gather);
-> +	size_t (*unmap_pages)(struct iommu_domain *domain, unsigned long iova,
-> +			      size_t pgsize, size_t pgcount,
-> +			      struct iommu_iotlb_gather *iotlb_gather);
-> +
-> +	void (*flush_iotlb_all)(struct iommu_domain *domain);
-> +	void (*iotlb_sync_map)(struct iommu_domain *domain, unsigned long iova,
-> +			       size_t size);
-> +	void (*iotlb_sync)(struct iommu_domain *domain,
-> +			   struct iommu_iotlb_gather *iotlb_gather);
-> +
-> +	phys_addr_t (*iova_to_phys)(struct iommu_domain *domain, dma_addr_t iova);
-> +
-> +	int (*enable_nesting)(struct iommu_domain *domain);
-> +	int (*set_pgtable_quirks)(struct iommu_domain *domain,
-> +				  unsigned long quirks);
-> +
-> +	void (*release)(struct iommu_domain *domain);
-> +};
+  504e1ebb6316 ("btrfs: add BTRFS_IOC_ENCODED_WRITE")
+
+from the btrfs tree.
+
+I applied the following hack:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 25 Jan 2022 11:47:17 +1100
+Subject: [PATCH] fix up for "btrfs: add BTRFS_IOC_ENCODED_WRITE"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ fs/btrfs/ioctl.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index 73ad918a05a9..d34620034f8e 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -5079,9 +5079,14 @@ static int btrfs_ioctl_encoded_write(struct file *fi=
+le, void __user *argp,
+ 		}
+ 		args.iov =3D compat_ptr(args32.iov);
+ 		args.iovcnt =3D args32.iovcnt;
+-		memcpy(&args.offset, &args32.offset,
+-		       sizeof(args) -
+-		       offsetof(struct btrfs_ioctl_encoded_io_args, offset));
++		args.offset =3D args32.offset;
++		args.flags =3D args32.flags;
++		args.len =3D args32.len;
++		args.unencoded_len =3D args32.unencoded_len;
++		args.unencoded_offset =3D args32.unencoded_offset;
++		args.compression =3D args32.compression;
++		args.encryption =3D args32.encryption;
++		memcpy(args.reserved, args32.reserved, sizeof(args.reserved));
+ #else
+ 		return -ENOTTY;
+ #endif
+--=20
+2.34.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mWXtgt44xfe97I9Ky8aKrVT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvSxYACgkQAVBC80lX
+0GwcMAf/Uzc/nOW403lZ3BYhmmg5KZfP7Or66ER6ha2sNYSk49gJywjWh+mOnNNn
+tcsHBMMY6Sc6fpSdx/fWrblFXkd1uEkURwJXDkpMAwGFEcqoNhu4mgKQ3QhDZGgg
+UUrj5L4xAwwKrQgP6S0v4qYssePA3R9+dJnmanfcQVGKuZWno2X7xI9GT8avUYnn
+gldlJGatHzSJRYpTj0dZ5E+5DFmsp8x0ZYZWWJtbQufnq2O2WEUFTWtL6l4+ZHq3
+yBW4z960YKrJq0m8S0t/d1rmBYeECsNMoVVx5RV/7eXOIpHyLcG+BvtpVRoNElmi
+6kNEEmHQQEf9owTgvXAcvj9/jcHLiA==
+=0n8w
+-----END PGP SIGNATURE-----
+
+--Sig_/mWXtgt44xfe97I9Ky8aKrVT--

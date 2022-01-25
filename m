@@ -2,76 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 512AC49BAAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F0349BAAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356563AbiAYRyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:54:01 -0500
-Received: from mail-yb1-f182.google.com ([209.85.219.182]:45884 "EHLO
-        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346936AbiAYRxm (ORCPT
+        id S1385170AbiAYRyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354977AbiAYRxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:53:42 -0500
-Received: by mail-yb1-f182.google.com with SMTP id h14so63923263ybe.12;
-        Tue, 25 Jan 2022 09:53:40 -0800 (PST)
+        Tue, 25 Jan 2022 12:53:47 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9C9C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:53:47 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id i187-20020a1c3bc4000000b0034d2ed1be2aso2172606wma.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:53:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WhuuXHFJMAbuaVPhoPEVC9jC8MwTp/NZVNJewIORlvs=;
+        b=s3f1D54qdscWFEa7Uoi1oq7p/IHQBan8WXzRVkwdC8LEd67XsDDVCsaS2odDT/CbrY
+         HuWl367BDVbn0OO6TYjeOLvgyX01GmtwLNdcIPKFhb7bYw8vC8/fq0FHqY6QXPxblrd/
+         LxdpSW3E8zlTJclOULBkl6pTkBURLvDizTL8FaqIDeicfL3xNNdWecHle8vALKS+FT3p
+         f0H48TOa/ZZOW/8Wxch1S6Nnelnp56hxxlfndFU+0zQ8nea4Fcgv8UsuXdMPnfvj64V0
+         L2BunarPltl/xo9Sw/FuMhVle3ul7oWh1VZ95t8g5dTenCaMpmuXBjK7nwBfDon4WZzZ
+         pPKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=ESd77Xjv8MULwN2sVsXIepn2DozliSsyhZzc4OEAn5Y=;
-        b=Vypuex+C8p4R5p+3YKXwb8gf9Dr6G0V/5fHFGM1nvbzq1xWF5Uh6iIs9yK68+eyOF3
-         /wv8CybudL2TOYNqTbQRoIK1Y2vh7yvjFH9o7LkiDaCNUHcPyMLuJV0sjrVl0cfnSfsS
-         +5fsPtVSKQeylQp9uoqW6/AzB5Pv8ONItrbofi08g4LcdCx9BA/HTeG+4Fn2QZAavCQk
-         78+P73S29OIMTns+tHB7mwxHW7AHjgP3wUPBABfBL2JWX983MtT0yGZ1ZR7MwsFyYYOq
-         PTaI1FEyWWTJSkf4FAG2DFS613cqujYIvRym3FGHLP7CPthoh2zk3/c+bRD6bF5Ozc8W
-         hILQ==
-X-Gm-Message-State: AOAM531LV5gHtaN69pRzCZC0rgX7nMghMbh2tvasUJzjxnTjGACQ8r9R
-        vPiBqYoJlSjHtrmITOuH9MstKVd6NXl1O6ky3mg=
-X-Google-Smtp-Source: ABdhPJw+fZA+ABzpvnyGB5SeD53YCf+9JGrRh1dC9imogsYshEbzHroZVd66d41wgactfWyqDhegwH8IfU6+3GWu4r0=
-X-Received: by 2002:a25:1e0b:: with SMTP id e11mr30127312ybe.272.1643133207177;
- Tue, 25 Jan 2022 09:53:27 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WhuuXHFJMAbuaVPhoPEVC9jC8MwTp/NZVNJewIORlvs=;
+        b=eRwuOwVSpzPHZCirINY09fbZl1uJ3waK5Tvc9TAG7ITIQuHJHcyjZXUzJYAsdE0Kis
+         aML3iIxd45Z4E/2l3Te90oyueu6Bl2ICEMihAeECjcPQs4d/zil3zzzCanjiZOQ+qXKJ
+         k5B6Dh+WBx8pgggD7b9VcXs4A5IX+mep7RloFZ9QwGtMxahmodhULBKog09pRHuxrlJi
+         sp605o5rljq3WT67T5mMxfTA51DLKYXFMDw6a+GVKOyKhhCg04PY5sG6HxiuawZaaCTw
+         xXjcbkSYX3rqrRzkWCgilI5+UwU2QGWioR8jIfco/TXCxl9e9geAH3Bs2IJ7uYQZGBp2
+         fZ+Q==
+X-Gm-Message-State: AOAM532oTjaso5tkYvc5sJcExWC5xX3uQma3f7AyO3WRPs8PAcFnhCK0
+        eVeZPMjGWFraYEjs9deZ7AZcbQ==
+X-Google-Smtp-Source: ABdhPJwAqzkVTq3dZH0KhhRlUciAuK1eBUyi+58WhWOwf5b5Hm5NrjMDK3e6xDBrBvAe6Taq9I34Og==
+X-Received: by 2002:a05:600c:5028:: with SMTP id n40mr3901446wmr.10.1643133225573;
+        Tue, 25 Jan 2022 09:53:45 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e? ([2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e])
+        by smtp.googlemail.com with ESMTPSA id b2sm8476521wri.88.2022.01.25.09.53.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 09:53:45 -0800 (PST)
+Subject: Re: [PATCH v7 2/5] powercap/drivers/dtpm: Add hierarchy creation
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     rjw@rjwysocki.net, robh@kernel.org, lukasz.luba@arm.com,
+        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>
+References: <20220125171809.1273269-1-daniel.lezcano@linaro.org>
+ <20220125171809.1273269-3-daniel.lezcano@linaro.org>
+ <CAPDyKFoKCY1sBPA8eDxZPqSmaPBWeJix=A2b_Z7fBsn-CD-4DQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <cc6b66f1-c918-041e-9965-07a417a31088@linaro.org>
+Date:   Tue, 25 Jan 2022 18:53:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <1642851166-27096-1-git-send-email-akhilrajeev@nvidia.com>
- <CAHp75Ve-zYz27baJ9SV3wcyKS5iMnxFO61gGE2LXQPU_hTt+qw@mail.gmail.com>
- <CAJZ5v0guL4nk21gvvs2K9Ak6sjhDSzMvDQZJvmnq6Frsj3+7yA@mail.gmail.com> <Ye8UTQlHphVtAYUW@shikoro>
-In-Reply-To: <Ye8UTQlHphVtAYUW@shikoro>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Jan 2022 18:53:16 +0100
-Message-ID: <CAJZ5v0gzfJYG40UdJUncd=b1E=YfLKyUZafEDC0Ej=7OA6867w@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] Enable named interrupt smbus-alert for ACPI
-To:     Wolfram Sang <wsa@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Akhil R <akhilrajeev@nvidia.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAPDyKFoKCY1sBPA8eDxZPqSmaPBWeJix=A2b_Z7fBsn-CD-4DQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 10:04 PM Wolfram Sang <wsa@kernel.org> wrote:
->
->
-> > It looks good to me.
-> >
-> > If no one else has concerns regarding it, I'll queue it up for 5.18.
->
-> I'd prefer this to go via I2C because it touches the I2C core. And SMBus
-> alert is I2C material anyway :)
+On 25/01/2022 18:36, Ulf Hansson wrote:
+> On Tue, 25 Jan 2022 at 18:18, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> The DTPM framework is available but without a way to configure it.
+>>
+>> This change provides a way to create a hierarchy of DTPM node where
+>> the power consumption reflects the sum of the children's power
+>> consumption.
+>>
+>> It is up to the platform to specify an array of dtpm nodes where each
+>> element has a pointer to its parent, except the top most one. The type
+>> of the node gives the indication of which initialization callback to
+>> call. At this time, we can create a virtual node, where its purpose is
+>> to be a parent in the hierarchy, and a DT node where the name
+>> describes its path.
+>>
+>> In order to ensure a nice self-encapsulation, the DTPM subsys array
+>> contains a couple of initialization functions, one to setup the DTPM
+>> backend and one to initialize it up. With this approach, the DTPM
+>> framework has a very few material to export.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> 
+> Yes, this looks good to me now. Thanks for adopting my suggestions.
 
-OK, so I've just sent an ACK for the first patch and you can go ahead.
 
-Thanks!
+Thanks for your time to review the code
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

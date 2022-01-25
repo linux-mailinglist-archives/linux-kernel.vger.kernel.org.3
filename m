@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9F549BD75
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F5D49BD78
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232575AbiAYUux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 15:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
+        id S232596AbiAYUv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 15:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbiAYUuv (ORCPT
+        with ESMTP id S232620AbiAYUvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:50:51 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFC4C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:50:51 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id h30so17886046ila.12
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:50:51 -0800 (PST)
+        Tue, 25 Jan 2022 15:51:32 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14792C061744
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:51:32 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id q204so10661330iod.8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:51:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wgQdS4IzPtcda4TTBz0E+m3BUhmDwULpA1MzE+UZAmI=;
-        b=KGrZvjplA+rHiodvaOUX7qiXtIkmnP5JmlbG2VWghfiIQcdb4f3J86vThDH7DmXMs+
-         UweNN5AbNj6Q/7jed8B/yQFEpTK4o7mgIk1+70zep8n6F51N0mZ7Ay26n2bq4OG9kuvG
-         fR4QWkUeVTv9SeecePhAItem583GwX85GWSSI=
+        bh=T8xWDu4VUa1KMmhWTT9ApCS91QssIS1sg0FGU1r8EdQ=;
+        b=fPq3W1qMhDmrc3O/H8jdKQejjyFMQcM1Nf2I2cWXLB9x+cYe7GtZ0SOc+D8gTv3JC9
+         px3drDlrNv8oN6Vd4UkFmJDaixRaMa1Z/7xVc3/TNd1u7J0OmTKAhVvt2X3h8qtXvhvg
+         LM9w+SFq8dO7kFkvlcUUZV3xdeaARAZFjuobc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=wgQdS4IzPtcda4TTBz0E+m3BUhmDwULpA1MzE+UZAmI=;
-        b=EL2j8kJeYYyPrEx81DUv4HiUZOEbmR5jgCq7U/SB6ILGlgH4ksTJy9rqSlD1TzVh9f
-         C10eATnSYXXBa1QSWV6YhkMF7gaPjWdImzlPxe4oInYmxzrqebaxoODM7BzlXN+LpMzn
-         WiyUXbMtYeDa7Ea6wYFMszyQ7gBPK3M4lrqLJIk1kQRiVXGQYm942TFYRZ8KoBQXL6eB
-         8XrYYJicOcLobwiWywe9SVDkWJeUjIAciiHIFkYwZlYigwR/wPPrAhOAVMJ2jxn+zeJm
-         GGANo19xEb0ZHjdLxNqcvnCo/D/VTTvLgC2W3prlJqvanjpiUtv0C5i1TH74A5dtRt5h
-         f+kQ==
-X-Gm-Message-State: AOAM532+oUF+Reeku1O8tQ60LbELmV/+kD4S2BiXjwP6tWW9RWJ+3tsy
-        giaWGxD1oTpqR679TpjNTOOZKQ==
-X-Google-Smtp-Source: ABdhPJzfwgpSR/C3UaofMecMsZe5O6qh5sb1gGWvN6CE4EK2w8MHzy0VILcusNJvymELTClctMV89w==
-X-Received: by 2002:a05:6e02:184a:: with SMTP id b10mr9730445ilv.185.1643143850867;
-        Tue, 25 Jan 2022 12:50:50 -0800 (PST)
+        bh=T8xWDu4VUa1KMmhWTT9ApCS91QssIS1sg0FGU1r8EdQ=;
+        b=PtnaB+VszxISB1dpuXYWD3nICc9PWpwYZTccHCFrBY2Mpo69XdGVjzCAldGr7KG3sN
+         BKrX4kYD6LNXlb7pigiK8Wfji0xlhGUanupAwNpKfw8ktBV0s9TRSIwdNo2O4viCto+g
+         VTn8sqbZjbqaVmWIZmFv23mgdTi61QvRn1kog5rdBxmlemA3iuBubcgrrBuLZ8OCsVKY
+         hWCxURXq56y3GxrcanYW8MdgsddDyz+aNT8R0x6sTXMa/8OpwO83DEg6dCpbP1r6HXUc
+         rTG2CAq1SjyuogpaTehsXahxZ/yVZRUfaQXPmQdeIcYRhNzCPA9dHnIQXZQCsAltn6fO
+         dDCw==
+X-Gm-Message-State: AOAM533tCLrclte5WBzSPElfgfqf5qLlFyNw0HmejC05bWTX/4nR4li8
+        Qtgfc+xs/o4aMyuDrekXsi2wYA==
+X-Google-Smtp-Source: ABdhPJx/5kXDAPM3pl1xICZm6MAV5zSuAmwkrZES9NWzUNvjzNE6hLuNOCqo1WYWsXaDO98YHEW5og==
+X-Received: by 2002:a05:6638:31e:: with SMTP id w30mr5046563jap.57.1643143891513;
+        Tue, 25 Jan 2022 12:51:31 -0800 (PST)
 Received: from ?IPv6:2601:282:8200:4c:4ef8:d404:554b:9671? ([2601:282:8200:4c:4ef8:d404:554b:9671])
-        by smtp.gmail.com with ESMTPSA id j6sm9584239ils.33.2022.01.25.12.50.49
+        by smtp.gmail.com with ESMTPSA id e5sm9374160ilq.9.2022.01.25.12.51.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 12:50:50 -0800 (PST)
-Subject: Re: [PATCH v2] kselftest: signal all child processes
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@amacapital.net" <luto@amacapital.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "christian@brauner.io" <christian@brauner.io>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     "wad@chromium.org" <wad@chromium.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211217092955.9472-1-lizhijian@cn.fujitsu.com>
- <196e8de7-d295-5bc0-66e1-f5d6433edbd2@fujitsu.com>
+        Tue, 25 Jan 2022 12:51:31 -0800 (PST)
+Subject: Re: [PATCH] selftests: cpufreq: Write test output to stdout as well
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220114232126.92043-1-nfraprado@collabora.com>
+ <20220117064144.bovae2r4wnln7g7k@vireshk-i7>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <66e4dfaf-d447-789f-d2d6-5e0ad4426e66@linuxfoundation.org>
-Date:   Tue, 25 Jan 2022 13:50:48 -0700
+Message-ID: <31ebfa0a-5e2d-332c-cbe1-22bdfeee8cd9@linuxfoundation.org>
+Date:   Tue, 25 Jan 2022 13:51:29 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <196e8de7-d295-5bc0-66e1-f5d6433edbd2@fujitsu.com>
+In-Reply-To: <20220117064144.bovae2r4wnln7g7k@vireshk-i7>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/12/22 10:48 PM, lizhijian@fujitsu.com wrote:
-> kindly ping
-> 
-> 
-> On 17/12/2021 17:29, Li Zhijian wrote:
->> We have some many cases that will create child process as well, such as
->> pidfd_wait. Previously, we will signal/kill the parent process when it
->> is time out, but this signal will not be sent to its child process. In
->> such case, if child process doesn't terminate itself, ksefltest framework
->> will hang forever.
+On 1/16/22 11:41 PM, Viresh Kumar wrote:
+> On 14-01-22, 18:21, Nícolas F. R. A. Prado wrote:
+>> Use 'tee' to send the test output to stdout in addition to the current
+>> output file. This makes the output easier to handle in automated test
+>> systems and is superior to only later dumping the output file contents
+>> to stdout, since this way the test output can be interleaved with other
+>> log messages, like from the kernel, so that chronology is preserved,
+>> making it easier to detect issues.
 >>
+>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>> ---
+>>   tools/testing/selftests/cpufreq/main.sh | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/cpufreq/main.sh b/tools/testing/selftests/cpufreq/main.sh
+>> index 31f8c9a76c5f..60ce18ed0666 100755
+>> --- a/tools/testing/selftests/cpufreq/main.sh
+>> +++ b/tools/testing/selftests/cpufreq/main.sh
+>> @@ -194,5 +194,5 @@ prerequisite
+>>   
+>>   # Run requested functions
+>>   clear_dumps $OUTFILE
+>> -do_test >> $OUTFILE.txt
+>> +do_test | tee -a $OUTFILE.txt
+>>   dmesg_dumps $OUTFILE
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
 
-Thank you for the patch. Applied to linux-kselftest fixes for rc2/3
+Thank you. Applied to linux-kselftest fixes for rc2/3
 
 thanks,
 -- Shuah

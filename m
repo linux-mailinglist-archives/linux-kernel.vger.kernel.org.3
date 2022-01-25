@@ -2,145 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B93D49B67C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C4749B680
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579490AbiAYOg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
+        id S1579627AbiAYOhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388297AbiAYOdL (ORCPT
+        with ESMTP id S1388342AbiAYOdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:33:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259A1C06175F;
-        Tue, 25 Jan 2022 06:32:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB0C0B8180A;
-        Tue, 25 Jan 2022 14:31:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3D2DC340E0;
-        Tue, 25 Jan 2022 14:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643121118;
-        bh=TjiX/pJ3jr1qZrQo1Hb5I+RhGqJRpdiNcaSW38hFvnM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=e1hvj+wKBMDc9NHJ/xRYFOPWv5n/MtaAM3F4UlC2BsUaiRgMLLxmsB902n4OgqXu3
-         zp1HhY5+TwltC9oFSD/J3iIMa6+Q2mdF0eVNvr+tW+6Lcktjr+m2H+4zoGY/PkIfoz
-         Ab4TV2TWjYDvWJyhlL0frwnaJKQ+ENBZGnEYcqlW+O2tQU3H/b7rRjSdYPIrAKJCf1
-         LSNIEQ229hJjpl/I1dbUNGpg+uTvbbz3QNdvlwmwBdbKWPNfScWnRr/AUCmagRbRJU
-         edsg8f3i5R1Sk/nCutJrdIEgJe0Z4b5YAwVsCP65mtpuR2IPmumAsPMxSnTPAxyKC6
-         6UH8vt6C+SJzg==
-Date:   Tue, 25 Jan 2022 23:31:54 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-Id: <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-In-Reply-To: <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-References: <20220125145006.677e3709@canb.auug.org.au>
-        <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Tue, 25 Jan 2022 09:33:12 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C510C061762
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:32:07 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nCMrc-0007qU-Ck; Tue, 25 Jan 2022 15:32:04 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nCMrb-00CMQF-9W; Tue, 25 Jan 2022 15:32:02 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nCMrZ-001Jm0-PV; Tue, 25 Jan 2022 15:32:01 +0100
+Date:   Tue, 25 Jan 2022 15:31:58 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Max Kellermann <max.kellermann@gmail.com>
+Cc:     linux-pwm@vger.kernel.org, thierry.reding@gmail.com,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        andrey@lebedev.lt, stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] pwm-sun4i: convert "next_period" to local variable
+Message-ID: <20220125143158.qbelqvr5mjq33zay@pengutronix.de>
+References: <20220125123429.3490883-1-max.kellermann@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nv55ukvgufa57okb"
+Content-Disposition: inline
+In-Reply-To: <20220125123429.3490883-1-max.kellermann@gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 22:27:32 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-> > /*
-> >  * struct trace_event_data_offsets_<call> {
-> >  *      u32                             <item1>;
-> >  *      u32                             <item2>;
-> >  *      [...]
-> >  * };
-> >  *
-> >  * The __dynamic_array() macro will create each u32 <item>, this is
-> >  * to keep the offset of each array from the beginning of the event.
-> >  * The size of an array is also encoded, in the higher 16 bits of
-> >  * <item>.
-> >  */
-> > 
-> > So, I think -Warray-bounds is refusing to see the destination as
-> > anything except a u32, but being accessed at 4 (sizeof(u32)) + 8
-> > (address && 0xffff) (?)
-> 
-> Ah, I got it. Yes, that's right. __data_loc() will access the data
-> from the __entry, but the __rel_loc() points the same address from
-> the encoded field ("__rel_loc_foo" in this case) itself.
-> This is introduced for the user application event, which doesn't
-> know the actual __entry size because the __entry includes some
-> kernel internal defined fields.
-> 
-> > But if this is true, I would imagine there would be plenty of other
-> > warnings? I'm currently stumped.
-> 
-> That is because __rel_loc is used only in the sample code in the kernel
-> for testing. Other use-cases comes from user-space.
-> Hmm, can we skip this boundary check for this example?
+--nv55ukvgufa57okb
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If the -Warray-bounds determines the destination array size from
-the type of given pointer, we can just change the macro as below;
+Hello,
 
-#define __get_rel_dynamic_array(field) 
-			((void *)__entry +                                 \
-			 offsetof(typeof(*__entry), __rel_loc_##field) +   \
-			 sizeof(__entry->__rel_loc_##field) +              \
-			 (__entry->__rel_loc_##field & 0xffff))
+On Tue, Jan 25, 2022 at 01:34:27PM +0100, Max Kellermann wrote:
+> Its value is calculated in sun4i_pwm_apply() and is used only there.
+>=20
+> Cc: stable@vger.kernel.org
 
-This must works same as __get_dynamic_array() macro.
+I think I'd drop this. This isn't a fix worth on it's own to be
+backported and if this is needed for one of the next patches, the stable
+maintainers will notice themselves (and it might be worth to shuffle
+this series to make the fixes come first).
 
-Could you try this patch?
+> Signed-off-by: Max Kellermann <max.kellermann@gmail.com>
 
-From 2982ba01367ec1f746a4f128512436e5325a7f9d Mon Sep 17 00:00:00 2001
-From: Masami Hiramatsu <mhiramat@kernel.org>
-Date: Tue, 25 Jan 2022 23:19:30 +0900
-Subject: [PATCH] tracing: Avoid -Warray-bounds warning for __rel_loc macro
+Other than that, LGTM:
 
-Since -Warray-bounds checks the destination size from the
-type of given pointer, __assign_rel_str() macro gets warned
-because it passes the pointer to the 'u32' field instead of
-'trace_event_raw_*' data structure.
-Pass the data address calculated from the 'trace_event_raw_*'
-instead of 'u32' __rel_loc field.
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Kees Cook <keescook@chromium.org>
----
- include/trace/trace_events.h | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Thanks
+Uwe
 
-diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-index 8c6f7c433518..65d927e059d3 100644
---- a/include/trace/trace_events.h
-+++ b/include/trace/trace_events.h
-@@ -318,9 +318,10 @@ TRACE_MAKE_SYSTEM_STR();
- #define __get_str(field) ((char *)__get_dynamic_array(field))
- 
- #undef __get_rel_dynamic_array
--#define __get_rel_dynamic_array(field)	\
--		((void *)(&__entry->__rel_loc_##field) +	\
--		 sizeof(__entry->__rel_loc_##field) +		\
-+#define __get_rel_dynamic_array(field)					\
-+		((void *)__entry + 					\
-+		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
-+		 sizeof(__entry->__rel_loc_##field) +			\
- 		 (__entry->__rel_loc_##field & 0xffff))
- 
- #undef __get_rel_dynamic_array_len
--- 
-2.25.1
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--nv55ukvgufa57okb
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHwCdsACgkQwfwUeK3K
+7AlCUQgAmTJBEU1qYIFs7bSSrRibekONtOo/9V9pse9XnO7rJAsW9HW/0wCvSETt
+8LsEqV4XrhNhZQ3Xjd+Mv14jsY+uux1oKQdtto+BsWChWkw6LBtOf6CiPh1KjuHb
+cxPOIn2dIQMVeEuAJ51G9vSOD/zpp7N4r+rPt1cUBkHt0Cvng0K+ogrxfnrfueiI
+NcnLnor2D1QXDXyM70cfStiaE7+prL7c82B+3GprzrVMt/QB0CJI8N+u4boS7D8H
+WGu7dCKwb+qk8QcwWIGqsTxRC4z1E3jef9qz/aSH8YlASIg5gfT8wvKcYK+MLjG4
+46Xa7o+mSN8ZmZk16Dfz//CzFj4snA==
+=ntdC
+-----END PGP SIGNATURE-----
+
+--nv55ukvgufa57okb--

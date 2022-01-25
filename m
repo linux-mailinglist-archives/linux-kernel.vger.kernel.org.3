@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F0549BFAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F1649BFAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234938AbiAYXjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 18:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234931AbiAYXjo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 18:39:44 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFB9C061747
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:39:44 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id e79so25641006iof.13
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:39:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3EGAwwEJ1UFzCDVb++WP09dEeEE8cQffQQY/gexv+tw=;
-        b=Qae0ZTtqjocmY0Ravf5tq6h8wF8LGSOwgVdIsQeW+atXcVBL7ij5nxtNqYBRJs+mML
-         0G42t7d1SA3+ZKDAb9blJK1jggBfu1thzmapEH+kYO0VvTGNCsw1yM3+pPXZac/Qt6v4
-         a0DVYlThxayvdUm7QhLesXrDF3yLnijz7nTEM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3EGAwwEJ1UFzCDVb++WP09dEeEE8cQffQQY/gexv+tw=;
-        b=Xb/3OcawdhgiHmdDVV2k9jcGQ1QnZXLAsy/bGVD0b5ngLmXRNspMLni+2RUGTGHTV9
-         HTONh1IxG5H4+sTcqPfr6tezJZ0UoHdpqA1sL7L5mzcBkHlxoPLqRMjbJitVY+/j+s+A
-         /YsuoWELemEkmU4EjDeMDN+LnxegBeWORTS2fB6bALWKsSJy/AY3rhd5669xV/60QSfP
-         sD1xc1FhCQL/sczduWyWxxhMCkWf86MYlGA9zs2uE99GVzbw+FUDjdmeRbFvYz9UYbLP
-         NDVYdB6FGUAQ1VjGIqv4QOMpJOijeWmAILo/ozVg5WVBmBIxiz7L7YR98o2WOptpwVrU
-         RToA==
-X-Gm-Message-State: AOAM531iJsb9gA2hLBeKgDCeXsw61j7cvJLI/ROxOjD4DBCrjXbKsAxa
-        bXluNgsAtaVfC2QUtXncQdlggw==
-X-Google-Smtp-Source: ABdhPJx+r3KufkOqCDwgWoIEMdDUZvZOUwJZIWuUXZno6vmkS0bEKKvB96shjxxwL7qyzVnI8MWtHA==
-X-Received: by 2002:a02:7b1b:: with SMTP id q27mr6030853jac.27.1643153983448;
-        Tue, 25 Jan 2022 15:39:43 -0800 (PST)
-Received: from ?IPv6:2601:282:8200:4c:4ef8:d404:554b:9671? ([2601:282:8200:4c:4ef8:d404:554b:9671])
-        by smtp.gmail.com with ESMTPSA id u26sm3697804ior.52.2022.01.25.15.39.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 15:39:43 -0800 (PST)
-Subject: Re: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220125155447.179130255@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <b89ab685-41fa-c78b-b0fc-bbf90b33b01f@linuxfoundation.org>
-Date:   Tue, 25 Jan 2022 16:39:41 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S234955AbiAYXoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 18:44:02 -0500
+Received: from mga05.intel.com ([192.55.52.43]:17329 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234941AbiAYXoB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 18:44:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643154241; x=1674690241;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fSz9k08FH3ICVnzjJ3/Kj5pWt7+PnpZf9JKIfaROch8=;
+  b=M1LE4gRa4dQ9Rc7JAgMVSFfbItQVPEJNwGeLl8SY9nIMgn7XiYYOWzO/
+   j80UpqkE4UjdrR4d+9Vlfad9vglHJwJF6sz6dVk7lwFw0JY7VqjEAEz68
+   IpEd0qwqcYDVMZLDIsS/MT8od5YPAEo4SHgVx2TzvFJFrtNlLkkruRvkh
+   LuWr5T1fuDjjOHHn9BooRFB4jz4zW1P8ajVZb7rl1DU4xve9GSNt9q9Zk
+   Tws+RoBjJt1E6Ib05pBcU55Zqd5C4eOuWyCula0RrVu2sRa4Z1/ttYsPU
+   cN9/0gEK4rwjD89FL7asP6Q2xkSEpu9Uvxlrwz3nmSwPVRwYSPe3X61qB
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="332794368"
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="332794368"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 15:43:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="617790660"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 25 Jan 2022 15:43:26 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCVTC-000KZC-0C; Tue, 25 Jan 2022 23:43:26 +0000
+Date:   Wed, 26 Jan 2022 07:42:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     glider <glider@google.com>
+Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.14-stable
+ 5156/9999] aarch64-linux-gcc: error: unrecognized command line option
+ '-ftrivial-auto-var-init=pattern'
+Message-ID: <202201260753.XHIT2rMz-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220125155447.179130255@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 9:33 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.3 release.
-> There are 1033 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.14-stable
+head:   4ab5bac1598e3ed91a6267f6cada336467312112
+commit: a7eda6eddca559c1c3a897a35692f9d49d46c9dd [5156/9999] BACKPORT: security: allow using Clang's zero initialization for stack variables
+config: arm64-randconfig-r025-20220124 (https://download.01.org/0day-ci/archive/20220126/202201260753.XHIT2rMz-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 7.5.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/a7eda6eddca559c1c3a897a35692f9d49d46c9dd
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.14-stable
+        git checkout a7eda6eddca559c1c3a897a35692f9d49d46c9dd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross O=build_dir ARCH=arm64 prepare
 
-Compiled and booted on my test system. No dmesg regressions.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+All errors (new ones prefixed by >>):
 
-thanks,
--- Shuah
+   WARNING: Disabling clang-specific options with gcc
+>> aarch64-linux-gcc: error: unrecognized command line option '-ftrivial-auto-var-init=pattern'
+   make[2]: *** [./Kbuild:22: kernel/bounds.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1214: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:146: sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

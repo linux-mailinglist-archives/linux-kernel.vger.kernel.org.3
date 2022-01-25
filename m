@@ -2,123 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE65949A7FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5118F49A800
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1315762AbiAYCyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:54:09 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:39108 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3408073AbiAYAVd (ORCPT
+        id S1315810AbiAYCyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:54:21 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:34791 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3409082AbiAYAYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:21:33 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52]:40422)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nC9aR-001AUJ-QT; Mon, 24 Jan 2022 17:21:28 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:53348 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nC9aP-00E0KF-8z; Mon, 24 Jan 2022 17:21:26 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-ia64@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <20220124213129.29306-1-rdunlap@infradead.org>
-Date:   Mon, 24 Jan 2022 18:20:54 -0600
-In-Reply-To: <20220124213129.29306-1-rdunlap@infradead.org> (Randy Dunlap's
-        message of "Mon, 24 Jan 2022 13:31:29 -0800")
-Message-ID: <87ee4w1x95.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 24 Jan 2022 19:24:55 -0500
+Received: by mail-ot1-f46.google.com with SMTP id m8-20020a9d4c88000000b00592bae7944bso24618688otf.1;
+        Mon, 24 Jan 2022 16:24:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hKgu9rmUk95J97wO8FZCJYIlIG/PvU+dGhgzBVkVwN8=;
+        b=MZE5ndUCCOr/b4NI4VHdNhqVZNbcnfNVW+pUDQlubdmhX9/QaRvzE1/y6iiu5Kr/a0
+         NbYQPtaQPHFxKq2RPmErQsxnl/ur1plF+nnuPyA7HnGTOm4Vurflsqrvtbt2NO0qQs26
+         d0pj8unzscOwT1TKYeqbKyBD8BI7I7HC5ZOrExMbGN8ORAeTa4CPVl7QG1ivPvz2a7yh
+         CK0HLgtFgFZHhr8+3ysq6JiHwv8AnkbjR8Frte41Oh5ZSSYhMsSJlyEwkhgPcrkkGclS
+         +2oMOy6k4xTyOWkdIaTYGlPP+UFUudAT/mJoGuRxLvwsmibBlbH5r6AnIZnkb1Nh3WLv
+         EUCQ==
+X-Gm-Message-State: AOAM531oUs1mqAOcvcdIDosnWbAY5WmN6j6q2ZEx5AE3dHR7brRSihDT
+        wQcoL//ydUwFDYNYDfxFbQ==
+X-Google-Smtp-Source: ABdhPJwBQlZsDWkm3dE9/hvTrL4jN/68Lxk+HhTDBRoQqFgYwJwB6VNNcUYx1ZcvnXNEAfY0RZ18Zg==
+X-Received: by 2002:a9d:5c86:: with SMTP id a6mr7103969oti.163.1643070291812;
+        Mon, 24 Jan 2022 16:24:51 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id a19sm2751280otf.27.2022.01.24.16.24.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 16:24:51 -0800 (PST)
+Received: (nullmailer pid 809305 invoked by uid 1000);
+        Tue, 25 Jan 2022 00:24:50 -0000
+Date:   Mon, 24 Jan 2022 18:24:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC 5/6] ASoC: dt-bindings: samsung,snow: convert to dtschema
+Message-ID: <Ye9DUjVGWDmhvPtu@robh.at.kernel.org>
+References: <20220124170336.164320-1-krzysztof.kozlowski@canonical.com>
+ <20220124170336.164320-5-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nC9aP-00E0KF-8z;;;mid=<87ee4w1x95.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+l7gNz9P0ebhyrkVdO1CIxfUNRBVsTFsw=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4964]
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Randy Dunlap <rdunlap@infradead.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1443 ms - load_scoreonly_sql: 0.10 (0.0%),
-        signal_user_changed: 11 (0.8%), b_tie_ro: 9 (0.6%), parse: 1.68 (0.1%),
-         extract_message_metadata: 28 (2.0%), get_uri_detail_list: 2.4 (0.2%),
-        tests_pri_-1000: 47 (3.3%), tests_pri_-950: 1.59 (0.1%),
-        tests_pri_-900: 1.34 (0.1%), tests_pri_-90: 93 (6.5%), check_bayes: 91
-        (6.3%), b_tokenize: 8 (0.6%), b_tok_get_all: 8 (0.6%), b_comp_prob:
-        2.7 (0.2%), b_tok_touch_all: 68 (4.7%), b_finish: 1.16 (0.1%),
-        tests_pri_0: 1240 (85.9%), check_dkim_signature: 0.89 (0.1%),
-        check_dkim_adsp: 3.6 (0.2%), poll_dns_idle: 0.03 (0.0%), tests_pri_10:
-        2.2 (0.2%), tests_pri_500: 11 (0.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH -next v2] ia64: make IA64_MCA_RECOVERY bool instead of
- tristate
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124170336.164320-5-krzysztof.kozlowski@canonical.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
-
-> In linux-next, IA64_MCA_RECOVERY uses the (new) function make_task_dead(),
-> which is not exported for use by modules. Instead of exporting it for
-> one user, convert IA64_MCA_RECOVERY to be a bool Kconfig symbol.
->
-> In a config file from "kernel test robot <lkp@intel.com>" for a
-> different problem, this linker error was exposed when
-> CONFIG_IA64_MCA_RECOVERY=m.
->
-> Fixes this build error:
->
-> ERROR: modpost: "make_task_dead" [arch/ia64/kernel/mca_recovery.ko] undefined!
-
-Reviewed-by: "Eric W. Biederman" <ebiederm@xmission.com>
-
-I looked and ia64_unreg_MCA_extension has no synchronization so I don't
-think it has ever been safe to this code when built as a module.
-
-
-> Fixes: 0e25498f8cd4 ("exit: Add and use make_task_dead.")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-ia64@vger.kernel.org
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: kernel test robot <lkp@intel.com>
-> Suggested-by: Christoph Hellwig <hch@infradead.org>
+On Mon, Jan 24, 2022 at 06:03:35PM +0100, Krzysztof Kozlowski wrote:
+> Convert the audio complex on Google Snow boards with Samsung Exynos SoC
+> to DT schema format.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
 > ---
-> v1 was [PATCH -next] exit: export make_task_dead().
-> Christoph suggests and prefers that IA64 MCA recovery code just be
-> forced to be builtin if it is enabled.
->
->  arch/ia64/Kconfig |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> --- linux-next-20220121.orig/arch/ia64/Kconfig
-> +++ linux-next-20220121/arch/ia64/Kconfig
-> @@ -318,7 +318,7 @@ config ARCH_PROC_KCORE_TEXT
->  	depends on PROC_KCORE
->  
->  config IA64_MCA_RECOVERY
-> -	tristate "MCA recovery from errors other than TLB."
-> +	bool "MCA recovery from errors other than TLB."
->  
->  config IA64_PALINFO
->  	tristate "/proc/pal support"
+> 
+> TODO: The DTS do not pass cleanly. cpu/sound-dai should be fixed.
+> ---
+>  .../bindings/sound/samsung,snow.yaml          | 78 +++++++++++++++++++
+>  .../devicetree/bindings/sound/snow.txt        | 31 --------
+>  2 files changed, 78 insertions(+), 31 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/samsung,snow.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/snow.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/samsung,snow.yaml b/Documentation/devicetree/bindings/sound/samsung,snow.yaml
+> new file mode 100644
+> index 000000000000..df969b384839
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/samsung,snow.yaml
+> @@ -0,0 +1,78 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/samsung,snow.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Google Snow audio complex with MAX9809x codec
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> +  - Sylwester Nawrocki <s.nawrocki@samsung.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - google,snow-audio-max98090
+> +      - google,snow-audio-max98091
+> +      - google,snow-audio-max98095
+> +
+> +  codec:
+> +    type: object
+> +    properties:
+> +      sound-dai:
+> +        description: List of phandles to the CODEC and HDMI IP nodes.
+> +        $ref: /schemas/types.yaml#/definitions/phandle-array
+> +        items:
+> +          - description: Phandle to the MAX98090, MAX98091 or MAX98095 CODEC.
+> +          - description: Phandle to the HDMI IP block node.
+
+Thinking about this and the issue you raised some more, we should make 
+sure there's a common definition for sound-dai. And then here, it should 
+just be the number of entries ('maxItems: 1').
+
+Rob

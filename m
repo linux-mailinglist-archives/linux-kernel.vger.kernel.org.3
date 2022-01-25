@@ -2,127 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3C649AE4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB1949AE40
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1451686AbiAYImt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:42:49 -0500
-Received: from mga11.intel.com ([192.55.52.93]:30867 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379179AbiAYIkO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:40:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643100014; x=1674636014;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NHLvk2Fxtqipkr7bYbTQ1H648fwihIa5MUSjSjqjR/Q=;
-  b=ZbGhIobYJUcyMGxrAYi+mi8Ws55e6RgqiJcjl/+E6+90rsFZEPASvB9C
-   IeP1mYLk9b5sLM1G/Qgo2c6q5X9SK0qgII+ePd0f2jzxCBAkPgOBuKqNq
-   /RlpfPWm0KjKbeJ6e5SkFmPYEyB+/tmeMsOoaRa3wKHs6pZSk3PZnMe0Y
-   oTVuQ1eqHUtlut9tvC3hXr2R5b2YioXkqO0EqwwVrHmsH/CXLGx4+qqqQ
-   q4PrjBoTAKnsKahExclx7Uf5J6SMYnDZ/dzOPw3aTUW6tA+iyKxOMfNkx
-   ijN76xouJu2wMbRhHE+Brlj/X6yAWHPQRY/lKWBQL+rLN+erhrPmWXqAZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="243853441"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="243853441"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 00:38:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="477032902"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2022 00:38:32 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCHLT-000JaE-Hl; Tue, 25 Jan 2022 08:38:31 +0000
-Date:   Tue, 25 Jan 2022 16:37:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream-workaround 155/162]
- arch/x86/kvm/mmu/tdp_mmu.c:774:32: warning: operator '?:' has lower
- precedence than '|'; '|' will be evaluated first
-Message-ID: <202201251603.34lAUK9o-lkp@intel.com>
+        id S1447561AbiAYIlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:41:11 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4490 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1451456AbiAYIis (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 03:38:48 -0500
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JjgGr2qtRz6H7cN;
+        Tue, 25 Jan 2022 16:38:12 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 25 Jan 2022 09:38:34 +0100
+Received: from [10.47.84.133] (10.47.84.133) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 25 Jan
+ 2022 08:38:33 +0000
+Subject: Re: [PATCH 5.16 1026/1039] blk-mq: fix tag_get wait task cant be
+ awakened
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, Ming Lei <ming.lei@redhat.com>,
+        Laibin Qiu <qiulaibin@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jens Axboe <axboe@kernel.dk>, <alex_y_xu@yahoo.ca>
+References: <20220124184125.121143506@linuxfoundation.org>
+ <20220124184159.785093232@linuxfoundation.org>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <e8558aeb-7343-da56-88bb-14c1a27d099c@huawei.com>
+Date:   Tue, 25 Jan 2022 08:38:01 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220124184159.785093232@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.84.133]
+X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   9ba9d8e36b0fa25f5f20109a0ae61619a421f550
-commit: 6d8632a26d7060510bfe4fbb3011c2d6e2d2f079 [155/162] KVM, x86/tdp_mmu: optimize remote tlb flush
-config: x86_64-randconfig-a015-20220124 (https://download.01.org/0day-ci/archive/20220125/202201251603.34lAUK9o-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/6d8632a26d7060510bfe4fbb3011c2d6e2d2f079
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 6d8632a26d7060510bfe4fbb3011c2d6e2d2f079
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
+On 24/01/2022 18:46, Greg Kroah-Hartman wrote:
+> From: Laibin Qiu<qiulaibin@huawei.com>
+> 
+> commit 180dccb0dba4f5e84a4a70c1be1d34cbb6528b32 upstream.
+> 
+> In case of shared tags, there might be more than one hctx which
+> allocates from the same tags, and each hctx is limited to allocate at
+> most:
+>          hctx_max_depth = max((bt->sb.depth + users - 1) / users, 4U);
+> 
+> tag idle detection is lazy, and may be delayed for 30sec, so there
+> could be just one real active hctx(queue) but all others are actually
+> idle and still accounted as active because of the lazy idle detection.
+> Then if wake_batch is > hctx_max_depth, driver tag allocation may wait
+> forever on this real active hctx.
+> 
+> Fix this by recalculating wake_batch when inc or dec active_queues.
+> 
+> Fixes: 0d2602ca30e41 ("blk-mq: improve support for shared tags maps")
+> Suggested-by: Ming Lei<ming.lei@redhat.com>
+> Suggested-by: John Garry<john.garry@huawei.com>
+> Signed-off-by: Laibin Qiu<qiulaibin@huawei.com>
+> Reviewed-by: Andy Shevchenko<andriy.shevchenko@linux.intel.com>
+> Link:https://lore.kernel.org/r/20220113025536.1479653-1-qiulaibin@huawei.com
+> Signed-off-by: Jens Axboe<axboe@kernel.dk>
+> Signed-off-by: Greg Kroah-Hartman<gregkh@linuxfoundation.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+JFYI, Somebody reported a hang with this commit:
+https://lore.kernel.org/linux-block/78cafe94-a787-e006-8851-69906f0c2128@huawei.com/T/#t
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/mmu/tdp_mmu.c:774:32: warning: operator '?:' has lower precedence than '|'; '|' will be evaluated first [-Wbitwise-conditional-parentheses]
-                   is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   arch/x86/kvm/mmu/tdp_mmu.c:774:32: note: place parentheses around the '|' expression to silence this warning
-                   is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
-                                                ^
-                                               )
-   arch/x86/kvm/mmu/tdp_mmu.c:774:32: note: place parentheses around the '?:' expression to evaluate it first
-                   is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
-                                                ^
-                   (                                                   )
-   1 warning generated.
-
-
-vim +774 arch/x86/kvm/mmu/tdp_mmu.c
-
-   745	
-   746	#define tdp_root_for_each_pte(_iter, _root, _start, _end) \
-   747		for_each_tdp_pte(_iter, _root->spt, _root->role.level, _start, _end)
-   748	
-   749	/*
-   750	 * Note temporarily blocked private SPTE is consider as valid leaf,
-   751	 * although !is_shadow_present_pte() returns true for it, since the
-   752	 * target page (which the mapping maps to ) is still there.
-   753	 */
-   754	#define tdp_root_for_each_leaf_pte(_iter, _root, _start, _end)	\
-   755		tdp_root_for_each_pte(_iter, _root, _start, _end)		\
-   756			if ((!is_shadow_present_pte(_iter.old_spte) &&		\
-   757				!is_zapped_private_pte(_iter.old_spte)) ||	\
-   758			    !is_last_spte(_iter.old_spte, _iter.level))		\
-   759				continue;					\
-   760			else
-   761	
-   762	#define tdp_mmu_for_each_pte(_iter, _mmu, _private, _start, _end)	\
-   763		for_each_tdp_pte(_iter,						\
-   764			__va((_private) ? _mmu->private_root_hpa : _mmu->root_hpa),	\
-   765			 _mmu->shadow_root_level, _start, _end)
-   766	
-   767	static u64 zapped_private_spte(struct kvm *kvm, const struct tdp_iter *iter)
-   768	{
-   769		if (!kvm_gfn_stolen_mask(kvm))
-   770			return shadow_init_value;
-   771	
-   772		return shadow_init_value | SPTE_PRIVATE_ZAPPED |
-   773			(spte_to_pfn(iter->old_spte) << PAGE_SHIFT) |
- > 774			is_large_pte(iter->old_spte) ? PT_PAGE_SIZE_MASK : 0;
-   775	}
-   776	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+John

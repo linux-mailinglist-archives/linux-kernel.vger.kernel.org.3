@@ -2,141 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA9749BFC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 342D349BFC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbiAYXyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 18:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235010AbiAYXyi (ORCPT
+        id S235036AbiAYX5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 18:57:10 -0500
+Received: from mail-qv1-f53.google.com ([209.85.219.53]:38674 "EHLO
+        mail-qv1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235010AbiAYX5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 18:54:38 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C3DC06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:54:38 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id g12so2589169qto.13
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:54:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mi0Q8WQvhL64eujn43o9araRQ9PmZV6oTtIkZaqBYj0=;
-        b=Pj23Ifpq3NXEUmdJWFASfN/tfOWg323SUwogg6VIXUgj5Wzr/NZHhnHEDUtaS0yqFL
-         NVzF23imTw0GBMm4Bn4U306sZ8MrqfbOeFnBw2xNhqCSNpvnBPn23Une71DqKajKhU/Z
-         wZunmuixgHbAq8TTLaJj3GZLgf8le8TLPXWt6wprE5ru0n15Kri8gSGu+rKQGxCzetlp
-         oUFZyD4KU7BWVm07Jql2mgqpSLzGraf+xDlIcJOJEk83KfVTKG1NZ6JsY+SSP4Z3tif0
-         FU/4YubKbvZpup4UYob6J1IA6cRLaHvv3lJS0G4TZmtz0x+pUDu3wthjfUFc+kr1lxGr
-         81Zw==
+        Tue, 25 Jan 2022 18:57:08 -0500
+Received: by mail-qv1-f53.google.com with SMTP id b12so7401465qvz.5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:57:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mi0Q8WQvhL64eujn43o9araRQ9PmZV6oTtIkZaqBYj0=;
-        b=QgU8L0wab+Khep3dmyRKk27wDZVwWfFKBqBeQYaksCRmMTjn6P53gsh7/GzpbVB/3t
-         KOFy54S3Xz8KuLwr31wz/vmTl2Sc6fuYeA5Oy9geA8eTrnELImQ7+mkLn7vDITpZJ4bZ
-         yS/8xTp93YXqkgoHg8skpNDdsPDxfbx/LykYBlIlSJwLhAf59G5OTHdVJ7H3iH/HowMU
-         K2bEHVnG5M6ThzuYWv+UcJJniCp8qJ/OjPXpNSC71aoUNjpVIvu8QaZ92HodhuKmn+6A
-         ATUj2C+fnICnMXFS53gpu93OY5KV0pLY+9LVTPwpD0wf24Slj63mJlr4JRYL30BJpeK+
-         3eXA==
-X-Gm-Message-State: AOAM530lLFbGhyX/bcUsqW8mPwp3zPv7mmn+Hr3NiYB7g+wI5FteFzWx
-        rIxmt0WzRwFmlA9hI8CxgLClW7lXu2WpZOwPbrJPsg==
-X-Google-Smtp-Source: ABdhPJwJCVoeaf/sSkHJaEYC6MJtl9CWc3DEmrcpIvdHHYy3jOVqdK+2CyJFrczBtduGqa7HhqsT36CE+rSvpeZmsTs=
-X-Received: by 2002:ac8:5fd1:: with SMTP id k17mr3647351qta.566.1643154877635;
- Tue, 25 Jan 2022 15:54:37 -0800 (PST)
+        bh=Gxwqg8D1Ma9afcfX+Lz0vVJUSn5slwhkWJibMLeSw38=;
+        b=UEwBzW3+hJvW/xwcSf6dMtldh9V+tvTSN80K/reXNbcnqIs6rs2bk7Fp6xc07+aOCg
+         Az0RY2aYzKzZldw14Xuub0jg6AeSnZFSlXS+5/7YSXIj5id7zcDMMYLr3JY0rK0Bz/Fx
+         yAuldlwUlAMda7TQFW16Dw83tGkcXFneD3g/yxTIeT2zgKeuTrqzhwZGaD/a+CCHOT4p
+         /oT7cOu7MYTKPI25yv4wiIevElmpVIwbsP5d3pTibgJY7qANTBhHJHBN9fZKMK3Pcu2E
+         4iJgO+Q0wfoRQmU7Wdpok4G7dxzpyPXceiIYSwCcHW/Hhj8tgWWbmxc51VCRf+O82R/Y
+         5W0Q==
+X-Gm-Message-State: AOAM531+HP+EvnCyUa9j/pEjMfll0yRV/cAxohqE/vreih7MVUWtKERO
+        R5ABmvwW0eg1qNzGmyo7glgvm0HWB1BOkbxwaackPlwRbSMZsQ==
+X-Google-Smtp-Source: ABdhPJyMZ1i2gyggE9FaJauaXH+V1m2KrJqyYzgrY7wzC/nG4cpyf5g9wApH+P2QDsiqFEefmcHrSU6JHlrwzcxrxjE=
+X-Received: by 2002:a05:6214:d04:: with SMTP id 4mr21989258qvh.62.1643155028014;
+ Tue, 25 Jan 2022 15:57:08 -0800 (PST)
 MIME-Version: 1.0
-References: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
- <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
-In-Reply-To: <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 25 Jan 2022 15:54:26 -0800
-Message-ID: <CA+khW7jx_4K46gH+tyZZn9ApSYGMqYpxCm0ywmuWdSiogv7dqw@mail.gmail.com>
-Subject: Re: [Question] How to reliably get BuildIDs from bpf prog
-To:     Song Liu <song@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Blake Jones <blakejones@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Namhyung Kim <namhyung@google.com>,
-        Ian Rogers <irogers@google.com>,
-        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
+References: <CAM=k+5qEfxHOFkiXfobJERr=gMQ9jgcxgpydnkJx3ed3uPPsQg@mail.gmail.com>
+ <55b4da35b6e44bf48306280d900e0fa8@AcuMS.aculab.com>
+In-Reply-To: <55b4da35b6e44bf48306280d900e0fa8@AcuMS.aculab.com>
+From:   Aleksey Senin <aleksey-linux-kernel@senin.name>
+Date:   Tue, 25 Jan 2022 17:56:57 -0600
+Message-ID: <CAM=k+5p4hF1_d+XUR8xUm18Y=BJQPYG2==Tq=7HOY8Z2rwRUxg@mail.gmail.com>
+Subject: Re: Using memcpy instead of copy_to_user. xprtrdma code.
+To:     David Laight <david.laight@aculab.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Song for your suggestion.
+Hi,
+It seems clue is in new proc_sys_call_handler code that allocates the
+kernel buffer first, calls to particular function and than copying
+obtained buffer to user space using copy_to_user. Right?
 
-On Mon, Jan 24, 2022 at 11:08 PM Song Liu <song@kernel.org> wrote:
+On Tue, Jan 25, 2022 at 4:21 PM David Laight <David.Laight@aculab.com> wrote:
 >
-> On Mon, Jan 24, 2022 at 2:43 PM Hao Luo <haoluo@google.com> wrote:
+> From: Aleksey Senin <aleksey-linux-kernel@senin.name>
+> > Sent: 25 January 2022 18:04
 > >
-> > Dear BPF experts,
+> > This specific patch -  - implements using memcpy instead of
+> > copy_to_user. Why is it considered to be safe in this specific case?
+> > All readings about how to copy data are mentioning to use
+> > copy_to_user/copy_from_user. Why use direct copy here? What prevents
+> > the kernel from failure if the page is not present or doesn't have
+> > required access rights?
 > >
-> > I'm working on collecting some kernel performance data using BPF
-> > tracing prog. Our performance profiling team wants to associate the
-> > data with user stack information. One of the requirements is to
-> > reliably get BuildIDs from bpf_get_stackid() and other similar helpers
-> > [1].
+> > @@ -103,8 +102,8 @@ static int read_reset_stat(struct ctl_table
+> > *table, int write,
+> >                 len -= *ppos;
+> >                 if (len > *lenp)
+> >                         len = *lenp;
+> > -               if (len && copy_to_user(buffer, str_buf, len))
+> > -                       return -EFAULT;
+> > +               if (len)
+> > +                       memcpy(buffer, str_buf, len);
 > >
-> > As part of an early investigation, we found that there are a couple
-> > issues that make bpf_get_stackid() much less reliable than we'd like
-> > for our use:
+> > Reference to the specific patch in the services of commits:
+> > https://lkml.org/lkml/2020/4/17/60
+>
+> Read the commit message.
+>
 > >
-> > 1. The first page of many binaries (which contains the ELF headers and
-> > thus the BuildID that we need) is often not in memory. The failure of
-> > find_get_page() (called from build_id_parse()) is higher than we would
-> > want.
+> > Commit itself:
+> > 32927393dc1ccd60fb2bdc05b9e8e88753761469
 >
-> Our top use case of bpf_get_stack() is called from NMI, so there isn't
-> much we can do. Maybe it is possible to improve it by changing the
-> layout of the binary and the libraries? Specifically, if the text is
-> also in the first page, it is likely to stay in memory?
->
-
-We are seeing 30-40% of stack frames not able to get build ids due to
-this. This is a place where we could improve the reliability of build
-id.
-
-There were a few proposals coming up when we found this issue. One of
-them is to have userspace mlock the first page. This would be the
-easiest fix, if it works. Another proposal from Ian Rogers (cc'ed) is
-to embed build id in vma. This is an idea similar to [1], but it's
-unclear (at least to me) where to store the string. I'm wondering if
-we can introduce a sleepable version of bpf_get_stack() if it helps.
-When a page is not present, sleepable bpf_get_stack() can bring in the
-page.
-
-[1] https://lwn.net/Articles/867818/
-
-> > 2. When anonymous huge pages are used to hold some regions of process
-> > text, build_id_parse() also fails to get a BuildID because
-> > vma->vm_file is NULL.
->
-> How did the text get in anonymous memory? I guess it is NOT from JIT?
-> We had a hack to use transparent huge page for application text. The
-> hack looks like:
->
-> "At run time, the application creates an 8MB temporary buffer and the
-> hot section of the executable memory is copied to it. The 8MB region in
-> the executable memory is then converted to a huge page (by way of an
-> mmap() to anonymous pages and an madvise() to create a huge page), the
-> data is copied back to it, and it is made executable again using
-> mprotect()."
->
-> If your case is the same (or similar), it can probably be fixed with
-> CONFIG_READ_ONLY_THP_FOR_FS, and modified user space.
->
-
-In our use cases, we have text mapped to huge pages that are not
-backed by files. vma->vm_file could be null or points some fake file.
-This causes challenges for us on getting build id for these code text.
-
-> Thanks,
-> Song
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)

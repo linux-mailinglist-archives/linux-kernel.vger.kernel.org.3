@@ -2,136 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 329A349B3DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6845849B3E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447801AbiAYMUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:20:19 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:53356 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354562AbiAYMR6 (ORCPT
+        id S1445890AbiAYM0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:26:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58562 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1444963AbiAYMWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:17:58 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 770941F380;
-        Tue, 25 Jan 2022 12:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643113072; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hVqHXUz3Jk2sVZPobpwss8wYXdEwQhEkUDfTqU6jT1c=;
-        b=tuKwVeRGyMDb2VZ7lsq2tT/lEEKkXD4V1KG7HhiPQXYjM1MMrNCHHZ7auGcys1mCftKDGC
-        s0LWiIIeHKRISWuaIq2GSqcHD4RQYF2b627WVXxihUHuHddAruSb/ORBGoMtaYMNQ3u+JP
-        4v1SxOFrZZ3r+QYYJk3EgvhnrmZSj20=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643113072;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hVqHXUz3Jk2sVZPobpwss8wYXdEwQhEkUDfTqU6jT1c=;
-        b=VCZjPdrGnM7d1HUGXoXQd3hRCeAU1h0LWuD+W314V+Qhasb2GjNlTWFT4KaIBmvzXw7IVA
-        cUB2oZsAwISCrDCg==
-Received: from quack3.suse.cz (unknown [10.163.43.118])
+        Tue, 25 Jan 2022 07:22:13 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 60066A3B8A;
-        Tue, 25 Jan 2022 12:17:52 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 8EB67A05E6; Tue, 25 Jan 2022 13:17:46 +0100 (CET)
-Date:   Tue, 25 Jan 2022 13:17:46 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Richard Palethorpe <rpalethorpe@suse.de>
-Cc:     Jan Kara <jack@suse.cz>, Cyril Hrubis <chrubis@suse.cz>,
-        Miklos Szeredi <mszeredi@redhat.com>, lkp@intel.com,
-        Chi Wu <wuchi.zero@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, Jens Axboe <axboe@fb.com>,
-        lkp@lists.01.org, kernel test robot <oliver.sang@intel.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>, Tejun Heo <tj@kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id D668CB817E6;
+        Tue, 25 Jan 2022 12:22:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1FAEC340E0;
+        Tue, 25 Jan 2022 12:21:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643113324;
+        bh=smHriwhZRzmYd06A5ADB/HEiixrqxr9u1mD1v+Ab6Rs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LlF0UtQmRh0zWYeJwpjdNbcl+auvhufZbOuRQRLHGYYtnDjxug/riXLFSSl2/cva9
+         UPOtl3tKKDG+IwxiqznI6SEzWmoqfrbPngwY1qQ7DGH7sOPphdsjmz1jQo+wpj/esN
+         7XyHDDOyMXsYMAsvY6AL193unLLV1ALpaqEUnjMeR7mj6z/M7OpaE+XWIDJMOxtJTa
+         Mv1qF4fI2pGgMcx2aEIDdzFksSv0g2OUCHdrqcTYxQNkN2gTpYM/xJHfwLHyBVlvPp
+         rqv4dxpLUpJHJds/ckQUtLTL/VcVkh1PCwIdZs5FS0EFdtESiG6Z6/bXvIU3Q7zX0C
+         /JbVI4irv9Hxg==
+Date:   Tue, 25 Jan 2022 13:21:56 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, Florian Weimer <fw@deneb.enyo.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dave Watson <davejwatson@fb.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Russell King <linux@arm.linux.org.uk>,
+        Andi Kleen <andi@firstfloor.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Ben Maurer <bmaurer@fb.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Josh Triplett <josh@joshtriplett.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        ltp@lists.linux.it
-Subject: Re: [LTP] [mm/page]  ab19939a6a: ltp.msync04.fail
-Message-ID: <20220125121746.wrs4254pfs2mwexb@quack3.lan>
-References: <20210912123429.GA25450@xsang-OptiPlex-9020>
- <YT8HqsXsHFeMdDxS@yuki>
- <20210917121331.GA14905@quack2.suse.cz>
- <87o840xiel.fsf@suse.de>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Joel Fernandes <joelaf@google.com>
+Subject: Re: [RFC PATCH 02/15] rseq: Remove broken uapi field layout on
+ 32-bit little endian
+Message-ID: <20220125122156.v2f5anzcs35i3rii@wittgenstein>
+References: <20220124171253.22072-1-mathieu.desnoyers@efficios.com>
+ <20220124171253.22072-3-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87o840xiel.fsf@suse.de>
+In-Reply-To: <20220124171253.22072-3-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 25-01-22 09:27:30, Richard Palethorpe wrote:
-> Hello,
+On Mon, Jan 24, 2022 at 12:12:40PM -0500, Mathieu Desnoyers wrote:
+> The rseq rseq_cs.ptr.{ptr32,padding} uapi endianness handling is
+> entirely wrong on 32-bit little endian: a preprocessor logic mistake
+> wrongly uses the big endian field layout on 32-bit little endian
+> architectures.
 > 
-> Jan Kara <jack@suse.cz> writes:
+> Fortunately, those ptr32 accessors were never used within the kernel,
+> and only meant as a convenience for user-space.
 > 
-> > On Mon 13-09-21 10:11:22, Cyril Hrubis wrote:
-> >> Hi!
-> >> > FYI, we noticed the following commit (built with gcc-9):
-> >> > 
-> >> > commit: ab19939a6a5010cba4e9cb04dd8bee03c72edcbd ("mm/page-writeback: Fix performance when BDI's share of ratio is 0.")
-> >> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> >> > 
-> >> > 
-> >> > in testcase: ltp
-> >> > version: ltp-x86_64-14c1f76-1_20210907
-> >> > with following parameters:
-> >> > 
-> >> > 	disk: 1HDD
-> >> > 	fs: xfs
-> >> > 	test: syscalls-03
-> >> > 	ucode: 0xe2
-> >> > 
-> >> > test-description: The LTP testsuite contains a collection of tools for testing the Linux kernel and related features.
-> >> > test-url: http://linux-test-project.github.io/
-> >> 
-> >> The msync04 test formats a device with a diffrent filesystems, for each
-> >> filesystem it maps a file, writes to the mapped page and the checks a
-> >> dirty bit in /proc/kpageflags before and after msync() on that page.
-> >> 
-> >> This seems to be broken after this patch for ntfs over FUSE and it looks
-> >> like the page does not have a dirty bit set right after it has been
-> >> written to.
-> >> 
-> >> Also I guess that we should increase the number of the pages we dirty or
-> >> attempt to retry since a single page may be flushed to the storage if we
-> >> are unlucky and the process is preempted between the write and the
-> >> initial check for the dirty bit.
-> >
-> > Yes, I agree. The most likely explanation I see for this is that the
-> > identified commit results in waking flush worker earlier so it may now
-> > succeed in cleaning the page before get_dirty_bit() in the LTP testcase
-> > manages to see it. This is a principial race in this testcase, you can
-> > perhaps make it less likely but not completely fix it AFAICT.
+> Remove those and only leave the "ptr64" union field, as this is the only
+> thing really needed to express the ABI. Document how 32-bit
+> architectures are meant to interact with this "ptr64" union field.
 > 
-> If the dirty bit is not set, then I guess dropping the pagecache will
-> not write anything to the underlying storage?
+> Fixes: ec9c82e03a74 ("rseq: uapi: Declare rseq_cs field as union, update includes")
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Florian Weimer <fw@deneb.enyo.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: linux-api@vger.kernel.org
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: Dave Watson <davejwatson@fb.com>
+> Cc: Paul Turner <pjt@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Russell King <linux@arm.linux.org.uk>
+> Cc: "H . Peter Anvin" <hpa@zytor.com>
+> Cc: Andi Kleen <andi@firstfloor.org>
+> Cc: Christian Brauner <christian.brauner@ubuntu.com>
+> Cc: Ben Maurer <bmaurer@fb.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will.deacon@arm.com>
+> Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Joel Fernandes <joelaf@google.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>  include/uapi/linux/rseq.h | 17 ++++-------------
+>  1 file changed, 4 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+> index 9a402fdb60e9..31290f2424a7 100644
+> --- a/include/uapi/linux/rseq.h
+> +++ b/include/uapi/linux/rseq.h
+> @@ -105,22 +105,13 @@ struct rseq {
+>  	 * Read and set by the kernel. Set by user-space with single-copy
+>  	 * atomicity semantics. This field should only be updated by the
+>  	 * thread which registered this data structure. Aligned on 64-bit.
+> +	 *
+> +	 * 32-bit architectures should update the low order bits of the
+> +	 * rseq_cs.ptr64 field, leaving the high order bits initialized
+> +	 * to 0.
+>  	 */
+>  	union {
 
-Correct.
-
-> So when we see no dirty bit is set, we can drop the pagecache then read
-> the file to check the value was written correctly? If so then we can
-> exit with TCONF saying msync couldn't be tested because the storage was
-> written to too quickly.
-
-Yes, that would work.
-
-> Also I guess we can optimize the get_dirty_bit function. It's doing 3
-> syscalls instead of 1 AFAICT.
-
-And this could reduce the race window. So nice I guess.
-
-But IMHO what would be a more sensible test is that msync is indeed persisting
-the data. So something like: mmap file, write to mmap, msync, abort fs,
-mount fs again, check the data is there. We do have framework for stuff
-like this in fstests (but we don't test msync AFAIK, only fsync), not sure
-if LTP has something for this as well.
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+A bit unfortunate we seem to have to keep the union around even though
+it's just one field now.

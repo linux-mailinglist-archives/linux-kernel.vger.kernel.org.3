@@ -2,120 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E3049ACC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD6549AC24
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385930AbiAYGzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 01:55:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376960AbiAYGwE (ORCPT
+        id S240114AbiAYGGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 01:06:52 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:58115 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S256366AbiAYFWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 01:52:04 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568CCC0419D2;
-        Mon, 24 Jan 2022 21:21:40 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id h12so18743179pjq.3;
-        Mon, 24 Jan 2022 21:21:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2JyjXhsZHrYi9l/DoJTaQgjCKN4lD5LnNO41dT9vNks=;
-        b=SeWhln3X4+SoMhpZU+pjXcqQ0y1Pm6fDTjhiHF8opWSSWcMpymGPTTmwhedeVyuIYm
-         BrIMDsEOvf8qdVKDWkOsTi0XxDM9CaPQVPQiAa3CM5C5CcitkQYVp1EQSHTdy14vRuRp
-         mN3ybN6shHshovx9QBMN25j03uj04XQT+qmLS8+7LeoBXPCI4YNNk2dGP7w1yjb1reho
-         +kFWHLmEeryjmpwEG43M0dn2Qkx0YopIIELYZBVk6DcQGmHlJnW6ZTkjlqQg1PTfQTim
-         5RMVR3Hu7kBCV/SyNTy0zBXkFY3DCREvTgWlkkDZJU0/JxmqQHQXRZoBfPW2Ivgm9VIb
-         fnWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2JyjXhsZHrYi9l/DoJTaQgjCKN4lD5LnNO41dT9vNks=;
-        b=rxE2HwACPRLcpepLfkc9RxslZ+T28wt4mpxuOphr3nntZWwB/BDNpzxIuKHqwZ9v6t
-         664zpX/+PgcxKQNGqRFf4MKycHWWGEqBz6iDn0fA6vOpyCEZW9R7wtGT47A6ndl3PH+Q
-         LzZE9+1qZwpMT51T5FermIq3otJTVpo/u7W04p5Ak8xppw8lMT/PGKYM9g8917Qt9xv0
-         5/evKnGIp4QwsKiqAPbx6dVKAST8Pam9d6VpkvFMMzdJRYZLs58ueeaidCypPRAtJs8R
-         AY0qbdJrnuM9ejnbQaPGe55q7MuZGpdAI2G5jKesWUtq3YBLZcjsa6ye+l8LTSalam2N
-         jizw==
-X-Gm-Message-State: AOAM532d14Ymb4jUWzvFF9eKX6Vx9MqzLBbzbe6H+d81DSSqJ7uMr04E
-        eO/Ee3JfkGik8kAhG5hyDFk/tgMEGwzGk7HqXt4=
-X-Google-Smtp-Source: ABdhPJzhmi79JGKGRPuYnoxbQJpn2/dNIGOqCLfn+2p6JavciXjFEjoRJ2CYqqHW7AIvi8+sKVxt6L+HkH/sflr3dGs=
-X-Received: by 2002:a17:90b:3b4c:: with SMTP id ot12mr1826113pjb.62.1643088099826;
- Mon, 24 Jan 2022 21:21:39 -0800 (PST)
+        Tue, 25 Jan 2022 00:22:00 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjZwC20rDz4xNm;
+        Tue, 25 Jan 2022 16:21:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643088108;
+        bh=EXHDGMBkz/WT0lNUnQj7KDfXlPwfDl9vmteB2k6cJ3g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EdnIAN3Dje7TsR0qLc+kvP3CKJZXsiXEiv5aBCcj083DxKac3+abPPCAhie1cgZYw
+         cT6dqjqE84E/qHpW/3nph5OmiAPelmoPcwV3Rg05oMi5OLIpBGhxN0jTCsiHFJ2/+u
+         /roc9Spb+C0aH61oZQuBc+cfkoZ1O5OTT7kSadLv8xBDcpvFqpgDsOBDjEsKA0Mb2+
+         YXWT6GKw1+XGHVNF/YiP8srvXlfIZoQGe/8e/undAt9RVWTqJSUZlDNj4bjsg2e3ou
+         pDdTJ0ODV2qNfkoBpOy5XPygYoFAbe2cr09gq4TX7fqu48RujXWOohUm/SFv67xOj6
+         R/VYHrcEkzfuQ==
+Date:   Tue, 25 Jan 2022 16:21:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Trond Myklebust <trondmy@gmail.com>,
+        NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: Re: linux-next: runtime warning in next-20220125
+Message-ID: <20220125162146.13872bdb@canb.auug.org.au>
+In-Reply-To: <20220125160505.068dbb52@canb.auug.org.au>
+References: <20220125160505.068dbb52@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220121194926.1970172-1-song@kernel.org> <20220121194926.1970172-7-song@kernel.org>
- <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
- <7393B983-3295-4B14-9528-B7BD04A82709@fb.com> <CAADnVQJLHXaU7tUJN=EM-Nt28xtu4vw9+Ox_uQsjh-E-4VNKoA@mail.gmail.com>
- <5407DA0E-C0F8-4DA9-B407-3DE657301BB2@fb.com> <CAADnVQLOpgGG9qfR4EAgzrdMrfSg9ftCY=9psR46GeBWP7aDvQ@mail.gmail.com>
- <5F4DEFB2-5F5A-4703-B5E5-BBCE05CD3651@fb.com> <CAADnVQLXGu_eF8VT6NmxKVxOHmfx7C=mWmmWF8KmsjFXg6P5OA@mail.gmail.com>
- <5E70BF53-E3FB-4F7A-B55D-199C54A8FDCA@fb.com> <adec88f9-b3e6-bfe4-c09e-54825a60f45d@linux.ibm.com>
- <2AAC8B8C-96F1-400F-AFA6-D4AF41EC82F4@fb.com>
-In-Reply-To: <2AAC8B8C-96F1-400F-AFA6-D4AF41EC82F4@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 24 Jan 2022 21:21:28 -0800
-Message-ID: <CAADnVQKgdMMeONmjUhbq_3X39t9HNQWteDuyWVfcxmTerTnaMw@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>, Song Liu <song@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/GcmYL3f6WLHjIlgotq6pgNq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 10:27 AM Song Liu <songliubraving@fb.com> wrote:
-> >
-> > Are arches expected to allocate rw buffers in different ways? If not,
-> > I would consider putting this into the common code as well. Then
-> > arch-specific code would do something like
-> >
-> >  header = bpf_jit_binary_alloc_pack(size, &prg_buf, &prg_addr, ...);
-> >  ...
-> >  /*
-> >   * Generate code into prg_buf, the code should assume that its first
-> >   * byte is located at prg_addr.
-> >   */
-> >  ...
-> >  bpf_jit_binary_finalize_pack(header, prg_buf);
-> >
-> > where bpf_jit_binary_finalize_pack() would copy prg_buf to header and
-> > free it.
+--Sig_/GcmYL3f6WLHjIlgotq6pgNq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It feels right, but bpf_jit_binary_finalize_pack() sounds 100% arch
-dependent. The only thing it will do is perform a copy via text_poke.
-What else?
+Hi all,
 
-> I think this should work.
+On Tue, 25 Jan 2022 16:05:05 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> We will need an API like: bpf_arch_text_copy, which uses text_poke_copy()
-> for x86_64 and s390_kernel_write() for x390. We will use bpf_arch_text_copy
-> to
->   1) write header->size;
->   2) do finally copy in bpf_jit_binary_finalize_pack().
+> My qemu boot test of a powerpc pseries_le_defconfig kernel produces the
+> following trace:
+>=20
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 0 at kernel/trace/trace_events.c:417 trace_event_raw=
+_init+0x194/0x730
+> Modules linked in:
+> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1 #2
+> NIP:  c0000000002bdbb4 LR: c0000000002bdcb0 CTR: c0000000002bdb70
+>=20
+> I have no idea what has caused this :-(  Maybe commit
+>=20
+>   5544d5318802 ("SUNRPC: Same as SVC_RQST_ENDPOINT, but without the xid")
 
-we can combine all text_poke operations into one.
+Actually, reverting commits
 
-Can we add an 'image' pointer into struct bpf_binary_header ?
-Then do:
-int bpf_jit_binary_alloc_pack(size, &ro_hdr, &rw_hdr);
+  6ff851d98af8 ("SUNRPC: Improve sockaddr handling in the svc_xprt_create_e=
+rror trace point")
+  5544d5318802 ("SUNRPC: Same as SVC_RQST_ENDPOINT, but without the xid")
+  e2d3613db12a ("SUNRPC: Record endpoint information in trace log")
 
-ro_hdr->image would be the address used to compute offsets by JIT.
-rw_hdr->image would point to kvmalloc-ed area for emitting insns.
-rw_hdr->size would already be populated.
+makes the warning go away.
 
-The JITs would write insns into rw_hdr->image including 'int 3' insns.
-At the end the JIT will do text_poke_copy(ro_hdr, rw_hdr, rw_hdr->size);
-That would be the only copy that will transfer everything into final
-location.
-Then kvfree(rw_hdr)
+--=20
+Cheers,
+Stephen Rothwell
 
-wdyt?
+--Sig_/GcmYL3f6WLHjIlgotq6pgNq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHviOoACgkQAVBC80lX
+0Gys6QgAlGSkaap9eq9MYZ7vSaG4FckU4s2yeO0WuT8ESDW3LLEhh5QMs74MqdRH
+5H9ZftfOAQnzEsyboKAJC6heWbxpHG2yJ+NlKtMWviIRSm4TYPvL3fxxueq0KDiY
+Peo16xh4yyERxGOHHU2u77mQGy1Qi77bJJtt0eL5b7Ur95yfG86EoRpRp3uzi7F4
+ESCZ/UYPTN0lexyafnZzI6TAThwnyq1bHdXCvPyinibryzNwbrEjwibtdlaAkzdL
+AICl655j7ya/rzkWMkS/MWdW18L1af8vagM87+i9ynA7QRbT0JY9l/c+BMOYE81I
+Fv5BdzURvzJe7qqdNsNgwudRnn63wA==
+=6Eui
+-----END PGP SIGNATURE-----
+
+--Sig_/GcmYL3f6WLHjIlgotq6pgNq--

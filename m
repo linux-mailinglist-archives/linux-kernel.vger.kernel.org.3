@@ -2,156 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C9049BB87
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6B749BB8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbiAYSvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbiAYSuf (ORCPT
+        id S232381AbiAYSwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:52:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28619 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232343AbiAYSv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:50:35 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EB9C061744;
-        Tue, 25 Jan 2022 10:50:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wgDA9fP7U4eL48s1ELGNzJnpgnC00E8ctU7slTh1x70=; b=BDrV42wP0MTNpKdOsq+CgxPR41
-        XylFLZEfpc7AhwKkAvQlmqFNZybub36TqSMxrzODwNdvzWVBjYifALdKPVLoxIMF+cf3B/ewAmFH9
-        GWUvJc7NHgpAJIVHBgYVE0uR29Lumc40neFkHLfFycszbeP9wG/qo0ps54soiTfE1hPxyUJyTsDdT
-        iDu1lMyLzRHaOAVHithuQETPKoodbCqfm7forTkYLFm3kmXd9/vT+2Crc8zvaeeeL5I/kgVCTg0c8
-        DJ4p//fQoNMKCO8sKipbtWVD/7oo8L5cJXKlag0lVCM7Gbwy4844sutAc5Z7RyilIuNsexgSfAu0f
-        3m5ZR0dg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCQtm-009G7u-1e; Tue, 25 Jan 2022 18:50:34 +0000
-Date:   Tue, 25 Jan 2022 10:50:34 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, Jessica Yu <jeyu@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: Re: [PATCH bpf-next v6 01/11] kernel: Implement try_module_get_live
-Message-ID: <YfBGetHxW+qdk8WD@bombadil.infradead.org>
-References: <20220102162115.1506833-1-memxor@gmail.com>
- <20220102162115.1506833-2-memxor@gmail.com>
+        Tue, 25 Jan 2022 13:51:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643136717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MFNBLU9fi1/P19BC1N9d+ep2tphTew1fPzk0R1jaXnE=;
+        b=cOUcHHiSPue560ACgQJnmZ6GXSGeOgklIYpO+a0oQCcjhzRKCQ+bXdLvBrosa9f6gwLHWr
+        qi7aYKqTSAtTqKZoFFrmSaY8Lh1HDmG2yd3SwsJhj6kwz6QzzcZ7cVrEJh2VEy09XYkC3Y
+        bTzMNRDvdN+fF6YK+EXepCVveMVuwEU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-146-Aku6xU8LOGO17Wb6B0WNoA-1; Tue, 25 Jan 2022 13:51:53 -0500
+X-MC-Unique: Aku6xU8LOGO17Wb6B0WNoA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 961ED8519E3;
+        Tue, 25 Jan 2022 18:51:52 +0000 (UTC)
+Received: from aion.usersys.redhat.com (unknown [10.22.17.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 75B7572FA5;
+        Tue, 25 Jan 2022 18:51:52 +0000 (UTC)
+Received: by aion.usersys.redhat.com (Postfix, from userid 1000)
+        id 98B171A001F; Tue, 25 Jan 2022 13:51:51 -0500 (EST)
+Date:   Tue, 25 Jan 2022 13:51:51 -0500
+From:   Scott Mayhew <smayhew@redhat.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     selinux@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
+Message-ID: <YfBGx+M9jQZa80rZ@aion.usersys.redhat.com>
+References: <20220120214948.3637895-1-smayhew@redhat.com>
+ <20220120214948.3637895-2-smayhew@redhat.com>
+ <CAHC9VhT2RhnXtK3aQuDCFUr5qayH25G8HHjRTJzhWM3H41YNog@mail.gmail.com>
+ <YfAz0EAim7Q9ifGI@aion.usersys.redhat.com>
+ <CAHC9VhTwXUE9dYBHrkA3Xkr=AgXvcnfSzLLBJ4QqYd4R+kFbbA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220102162115.1506833-2-memxor@gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <CAHC9VhTwXUE9dYBHrkA3Xkr=AgXvcnfSzLLBJ4QqYd4R+kFbbA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 02, 2022 at 09:51:05PM +0530, Kumar Kartikeya Dwivedi wrote:
-> Refactor shared functionality between strong_try_module_get and
-> try_module_get into a common helper, and expose try_module_get_live
-> that returns a bool similar to try_module_get.
+On Tue, 25 Jan 2022, Paul Moore wrote:
+
+> On Tue, Jan 25, 2022 at 12:31 PM Scott Mayhew <smayhew@redhat.com> wrote:
+> > On Mon, 24 Jan 2022, Paul Moore wrote:
+> > > On Thu, Jan 20, 2022 at 4:50 PM Scott Mayhew <smayhew@redhat.com> wrote:
+> > > >
+> > > > selinux_sb_mnt_opts_compat() is called under the sb_lock spinlock and
+> > > > shouldn't be performing any memory allocations.  Fix this by parsing the
+> > > > sids at the same time we're chopping up the security mount options
+> > > > string and then using the pre-parsed sids when doing the comparison.
+> > > >
+> > > > Fixes: cc274ae7763d ("selinux: fix sleeping function called from invalid context")
+> > > > Fixes: 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an existing mount")
+> > > > Signed-off-by: Scott Mayhew <smayhew@redhat.com>
+> > > > ---
+> > > >  security/selinux/hooks.c | 112 ++++++++++++++++++++++++++-------------
+> > > >  1 file changed, 76 insertions(+), 36 deletions(-)
 > 
-> It will be used in the next patch for btf_try_get_module, to eliminate a
-> race between module __init function invocation and module_put from BPF
-> side.
+> ...
 > 
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Jessica Yu <jeyu@kernel.org>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-modules@vger.kernel.org
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  include/linux/module.h | 26 +++++++++++++++++++-------
->  kernel/module.c        | 20 ++++++++------------
->  2 files changed, 27 insertions(+), 19 deletions(-)
+> > > >         switch (token) {
+> > > >         case Opt_context:
+> > > >                 if (opts->context || opts->defcontext)
+> > > >                         goto err;
+> > > >                 opts->context = s;
+> > > > +               if (preparse_sid) {
+> > > > +                       rc = parse_sid(NULL, s, &sid);
+> > > > +                       if (rc == 0) {
+> > > > +                               opts->context_sid = sid;
+> > > > +                               opts->preparsed |= CONTEXT_MNT;
+> > > > +                       }
+> > > > +               }
+> > >
+> > > Is there a reason why we need a dedicated sid variable as opposed to
+> > > passing opt->context_sid as the parameter?  For example:
+> > >
+> > >   rc = parse_sid(NULL, s, &opts->context_sid);
+> >
+> > We don't need a dedicated sid variable.  Should I make similar changes
+> > in the second patch (get rid of the local sid variable in
+> > selinux_sb_remount() and the *context_sid variables in
+> > selinux_set_mnt_opts())?
 > 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index c9f1200b2312..eb83aaeaa76e 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -608,17 +608,17 @@ void symbol_put_addr(void *addr);
->  /* Sometimes we know we already have a refcount, and it's easier not
->     to handle the error case (which only happens with rmmod --wait). */
->  extern void __module_get(struct module *module);
-> -
-> -/* This is the Right Way to get a module: if it fails, it's being removed,
-> - * so pretend it's not there. */
-> -extern bool try_module_get(struct module *module);
-> -
-> +extern int __try_module_get(struct module *module, bool strong);
->  extern void module_put(struct module *module);
->  
->  #else /*!CONFIG_MODULE_UNLOAD*/
-> -static inline bool try_module_get(struct module *module)
-> +static inline int __try_module_get(struct module *module, bool strong)
->  {
-> -	return !module || module_is_live(module);
-> +	if (module && !module_is_live(module))
-> +		return -ENOENT;
-> +	if (strong && module && module->state == MODULE_STATE_COMING)
-> +		return -EBUSY;
-> +	return 0;
->  }
+> Yes please, I should have explicitly mentioned that.
 
-The bool return is clear here before on try_module_get().
+Actually, delayed_superblock_init() calls selinux_set_mnt_opts() with
+mnt_opts == NULL, so there would have to be a lot of checks like
 
->  static inline void module_put(struct module *module)
->  {
-> @@ -631,6 +631,18 @@ static inline void __module_get(struct module *module)
->  
->  #endif /* CONFIG_MODULE_UNLOAD */
->  
-> +/* This is the Right Way to get a module: if it fails, it's being removed,
-> + * so pretend it's not there. */
-> +static inline bool try_module_get(struct module *module)
-> +{
-> +	return !__try_module_get(module, false);
+        if (opts && opts->fscontext_sid) {
 
-Now you're making it negate an int return... 
+in the later parts of that function, which is kind of clunky.  I can
+still do it if you want though.
 
-> +}
-> +/* Only take reference for modules which have fully initialized */
-> +static inline bool try_module_get_live(struct module *module)
-> +{
-> +	return !__try_module_get(module, true);
-> +}
-> +
->  /* This is a #define so the string doesn't get put in every .o file */
->  #define module_name(mod)			\
->  ({						\
-> diff --git a/kernel/module.c b/kernel/module.c
-> index 84a9141a5e15..a9bb0a5576c8 100644
-> --- a/kernel/module.c
-> +++ b/kernel/module.c
-> @@ -318,12 +318,7 @@ EXPORT_SYMBOL(unregister_module_notifier);
->  static inline int strong_try_module_get(struct module *mod)
->  {
->  	BUG_ON(mod && mod->state == MODULE_STATE_UNFORMED);
-> -	if (mod && mod->state == MODULE_STATE_COMING)
-> -		return -EBUSY;
-> -	if (try_module_get(mod))
-> -		return 0;
-> -	else
-> -		return -ENOENT;
+-Scott
 
-Before this change, this check had no disabled preemption
-prior to the first branch, now we are having it moved with
-preemption disabled. That's an OK change, but it is a
-small functional change.
+> 
+> Thanks.
+> 
+> -- 
+> paul moore
+> paul-moore.com
+> 
 
-Because of these two things NACK on this patch for now.
-Please split the patch up if you intend to make a new
-functional change. And this patch should be easy to read,
-this is not.
-
-  Luis

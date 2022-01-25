@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA8449B7C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 686E049B7C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350557AbiAYPjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377400AbiAYPfq (ORCPT
+        id S1389809AbiAYPh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:37:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50243 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354013AbiAYPet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:35:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD6BC061797
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 07:33:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 25 Jan 2022 10:34:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643124889;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QjyE7wz6cil8LO6HiDitf7P9QNfNrKVet24hXy+TY64=;
+        b=CVLTX1Ir3t+M5d+UitgvJFTzsmDEzQsNnQJTBU2CKtPC2MscPIWnTiZVm3gQhtSJEz1bEx
+        8mxKqqcCK6qy50zX++d1IfQsJNYErWedz77+fZ4GmZJqJK2FPfUyNVmwLGL7GSpPEGoPjp
+        ocxuVmoNszm74XND0fji25NoeQHCg1U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-224-5MdDGyFQNUC_uojbNYtUKg-1; Tue, 25 Jan 2022 10:34:45 -0500
+X-MC-Unique: 5MdDGyFQNUC_uojbNYtUKg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A685616E1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:33:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD70FC340E0;
-        Tue, 25 Jan 2022 15:33:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643124796;
-        bh=gHVxOv13aYes0ARGGaSYnRjF6hXkSucB+sDl7T24GrA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bnWFTSrSkU+J57CeUkaAbggOvz/fA5UK1mXbQ74fD29E6RBmcSudwItit9UDbIpWx
-         I2A8Rryv/R6PJXdhYvJDJZc+sdE/quLsa7f/t17d8a6ngSLn76Q8MF6k6x/SKemvDB
-         F51m/zH7qtOS2b9YhS8a5emolpxEMqNQtIUsEBz0=
-Date:   Tue, 25 Jan 2022 16:33:13 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Phillip Potter <phil@philpotter.co.uk>
-Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
-        straube.linux@gmail.com, martin@kaiser.cx,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        paskripkin@gmail.com
-Subject: Re: [PATCH 00/10] Cleanup and removal of DBG_88E macro
-Message-ID: <YfAYOVY7jFDubwc5@kroah.com>
-References: <20220124224415.831-1-phil@philpotter.co.uk>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 06D8C84B9A7;
+        Tue, 25 Jan 2022 15:34:44 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 210947DE2F;
+        Tue, 25 Jan 2022 15:34:32 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220118131216.85338-12-jefflexu@linux.alibaba.com>
+References: <20220118131216.85338-12-jefflexu@linux.alibaba.com> <20220118131216.85338-1-jefflexu@linux.alibaba.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
+        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
+        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/20] erofs: add cookie context helper functions
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124224415.831-1-phil@philpotter.co.uk>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2812798.1643124872.1@warthog.procyon.org.uk>
+Date:   Tue, 25 Jan 2022 15:34:32 +0000
+Message-ID: <2812799.1643124872@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 10:44:05PM +0000, Phillip Potter wrote:
-> This series does a few things in order to effect the removal of the
-> DBG_88E macro:
-> 
-> (1) It removes previously converted calls for consistency.
-> (2) It removes all current DBG_88E calls.
-> (3) It removes all aliased DBG_88E calls.
-> (4) It removes the GlobalDebugLevel flag and the file that defines it.
-> 
-> By its very nature, it is a large patchset, so I've tried to group as
-> appropriate. I went by file as I did the work, which led to over 40
-> patches originally, so I've listed the largest C files as their own
-> patches and then grouped everything else by subdir which gives closer
-> sizes for the other patches.
+Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
 
-Can you rebase this on my staging-testing branch?  It no longer applies
-:(
+> +static int erofs_fscahce_init_ctx(struct erofs_fscache_context *ctx,
 
-thanks,
+fscahce => fscache?
 
-greg k-h
+David
+

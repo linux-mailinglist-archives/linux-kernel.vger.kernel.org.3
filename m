@@ -2,135 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7101D49BF6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 935E349BF52
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbiAYXKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 18:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
+        id S234607AbiAYXEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 18:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234246AbiAYXKN (ORCPT
+        with ESMTP id S230468AbiAYXDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 18:10:13 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CA1C06161C;
-        Tue, 25 Jan 2022 15:10:12 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id g2so19562801pgo.9;
-        Tue, 25 Jan 2022 15:10:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o8ok+yx3CpNyWAo+hZwQcGMusI+MSV0R31Eo88H3Tvs=;
-        b=DWuVhOqmYpDgPLQ0wkQ3FpovddbNqP/WIHh2XJo5TBIS8qyWUaCfNF8Bue6lseS+d/
-         SCVTQGpoW+5Yl8O9oMl/JQXSE1NmlkoaxYemxt7FSMNVlzF+aZ4ZChVjAIWeaTFjOyzk
-         kfLdHf26tKjfw5zbOoSqL6imDmUbhy6ysvDE/J8MuNA4Z5MydfyEIaRg+iUBnVVVUwqu
-         /I3l2YfSrRG5iZGKyltz8yeNZYXmCJfS/FKFKJ0zcuO07zcbBO8UZ/QVZJlWNAoMemDK
-         QypAoyidvOpWKHEBc4Ssje2dhGPGoeQy4hU5ZJjI6LK3jIE4XjK3LJhlKj0GpgdzUoww
-         qHCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o8ok+yx3CpNyWAo+hZwQcGMusI+MSV0R31Eo88H3Tvs=;
-        b=aPmEYOo0WgD+tdogRztEdNpHICSxKWTPgFyh/Iw1ydXTi6XVY8YrYELcqVnMwfHZH4
-         c662hznSJGndXKcew/NenmBmnxtHRBNl0JSTA/3NCe/WvPqyMeBHQQJV0+7JjK3qLGhe
-         K5afDoFM67qEmhoaPWbax9676PBHqKJN7OibIF6Sy3/oxY2AG6xZaF8NtrAxUEl2kpne
-         uvVmj6BemfHNDgoHIeWmqiWcn54+VdiTfWODWYPpIhUnKRd0nDmoo0zD+YB2jwH5PB9G
-         JNSlzf8HrCb0g57EsuIb6x8Uqb4nDOGBq9/gdmyo7cXF94iXNrh0SoeJFamsoh1xAHTj
-         8f+Q==
-X-Gm-Message-State: AOAM531+GBQpWgN/KPAo0oNl9fdh4WFSw1OQi8Yrimycx815V2D0pkvP
-        AC0Ixjxzz1QxdaYAanwVCjeGiJ9E6whZ5z3P9QU=
-X-Google-Smtp-Source: ABdhPJxR622cpR+WywO3DNEzc/o4P3BzlZ/AkRmMfxl9mZTaODqCnlBJ0CfTvCxrfoCtINGCMoU3h5pem/IkGQOWEL8=
-X-Received: by 2002:a63:91c4:: with SMTP id l187mr16702237pge.513.1643152212326;
- Tue, 25 Jan 2022 15:10:12 -0800 (PST)
+        Tue, 25 Jan 2022 18:03:50 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6C6C06161C;
+        Tue, 25 Jan 2022 15:03:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6FBC2CE19A7;
+        Tue, 25 Jan 2022 23:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C5A8C340E0;
+        Tue, 25 Jan 2022 23:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643151826;
+        bh=j21Bv3ihuDIqFh63lBoPgd7clmpHK7UKh1kdC+XWpAE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Wq/rpAPH+zWq5OzOXZ8qSslul+4yXrHab4r5LVIUOTblZplHC7zOwiylgP4gjVScA
+         bpoiQcROcLUFVhsQThsb4tT5772yC7brI2u5SOla8o1A56mHm669lr1Dwyav/Z2WIa
+         MaHgSl8ayo9hx7pL8nb+AGCBDORdcaSrdTOOCJxjng4S6KDhGzIYM64akX+6EluOFV
+         CGlCJyR3fq3P+a4P0Arsaq0G7THBr0OQNPjugN1yk9830k4ZLC9iOvTriPRxdxQWrc
+         +fNAL56ucoZyIFlpCFjWiA+0OihvTXH0shJMWYatjuDQo0kIoI/Gx+xpbr3dtuYBaR
+         hLx1RdyfSqccw==
+Date:   Tue, 25 Jan 2022 17:10:33 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] scsi: core: Use struct_size() helper in kmalloc()
+Message-ID: <20220125231033.GA79247@embeddedor>
 MIME-Version: 1.0
-References: <20220123183925.1052919-1-yury.norov@gmail.com>
- <20220123183925.1052919-11-yury.norov@gmail.com> <Ye6bUC1GyLLUV37p@smile.fi.intel.com>
- <CAAH8bW_u6oNOkMsA_jRyWFHkzjMi0CB7gXmvLYAdjNMSqrrY7w@mail.gmail.com> <58c222c15b2d43689f43d31afb5cb914@AcuMS.aculab.com>
-In-Reply-To: <58c222c15b2d43689f43d31afb5cb914@AcuMS.aculab.com>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Tue, 25 Jan 2022 15:10:00 -0800
-Message-ID: <CAAH8bW8f5vGB33fwzehJHeMRi7-Z1vgO5TLCiTUXfZB1DJ_xCQ@mail.gmail.com>
-Subject: Re: [PATCH 10/54] net: ethernet: replace bitmap_weight with
- bitmap_empty for qlogic
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 2:15 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Yury Norov
-> > Sent: 25 January 2022 21:10
-> > On Mon, Jan 24, 2022 at 4:29 AM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > On Sun, Jan 23, 2022 at 10:38:41AM -0800, Yury Norov wrote:
-> > > > qlogic/qed code calls bitmap_weight() to check if any bit of a given
-> > > > bitmap is set. It's better to use bitmap_empty() in that case because
-> > > > bitmap_empty() stops traversing the bitmap as soon as it finds first
-> > > > set bit, while bitmap_weight() counts all bits unconditionally.
-> > >
-> > > > -             if (bitmap_weight((unsigned long *)&pmap[item], 64 * 8))
-> > > > +             if (!bitmap_empty((unsigned long *)&pmap[item], 64 * 8))
-> > >
-> > > > -         (bitmap_weight((unsigned long *)&pmap[item],
-> > > > +         (!bitmap_empty((unsigned long *)&pmap[item],
-> > >
-> > > Side note, these castings reminds me previous discussion and I'm wondering
-> > > if you have this kind of potentially problematic places in your TODO as
-> > > subject to fix.
-> >
-> > In the discussion you mentioned above, the u32* was cast to u64*,
-> > which is wrong. The code
-> > here is safe because in the worst case, it casts u64* to u32*. This
-> > would be OK wrt
-> >  -Werror=array-bounds.
-> >
-> > The function itself looks like doing this unsigned long <-> u64
-> > conversions just for printing
-> > purpose. I'm not a qlogic expert, so let's wait what people say?
->
-> It'll be wrong on BE systems.
+Make use of the struct_size() helper instead of an open-coded version,
+in order to avoid any potential type mistakes or integer overflows that,
+in the worst scenario, could lead to heap overflows.
 
-The bitmap_weigh() result will be correct. As you can see, the address
-is 64-bit aligned anyways. The array boundary violation will never happen
-as well.
+Also, address the following sparse warnings:
+drivers/scsi/scsi.c:390:27: warning: using sizeof on a flexible structure
 
-DP_NOTICE() may be wrong, or may not. It depends on how important
-the absolute position of the bit in the printed bitmap is. Nevertheless,
-printk("%pb") is better and should be used.
+Link: https://github.com/KSPP/linux/issues/174
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/scsi/scsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This whole concern may be simply irrelevant if QED is not supported
-on 32-bit BE machines. From what I can see, at least Infiniband requires
-64BIT.
+diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+index 211aace69c22..949cb530e360 100644
+--- a/drivers/scsi/scsi.c
++++ b/drivers/scsi/scsi.c
+@@ -387,7 +387,7 @@ static struct scsi_vpd *scsi_get_vpd_buf(struct scsi_device *sdev, u8 page)
+ 	int vpd_len = SCSI_VPD_PG_LEN, result;
+ 
+ retry_pg:
+-	vpd_buf = kmalloc(sizeof(*vpd_buf) + vpd_len, GFP_KERNEL);
++	vpd_buf = kmalloc(struct_size(vpd_buf, data, vpd_len), GFP_KERNEL);
+ 	if (!vpd_buf)
+ 		return NULL;
+ 
+-- 
+2.27.0
 
-Thanks,
-Yury
-
-> You just can't cast the argument it has to be long[].
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)

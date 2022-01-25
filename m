@@ -2,245 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9EB49B259
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA7D49B25D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349331AbiAYKuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S1377822AbiAYKuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240054AbiAYKqx (ORCPT
+        with ESMTP id S1376709AbiAYKrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:46:53 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE67FC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:46:52 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id a13so19046187wrh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:46:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ODHhtpuCmlqbjTbHm7GxkArm+DSdAOP3TtnFywy+XCo=;
-        b=HmvFaF91GZm0DymBzoHuOcm36L25FbImJBqbmmxCXNcRLvmmmhn11beqmxS91cgwtO
-         ygyU0UDTC2Rv4gSMI2lwGx+J8qehCq+YpnyW/4fR9NksEquu3qcDFodZWMUXKkHXATI2
-         gQQ16sZ0jkYCOBZi9U80VhZH7lzbMpaqXl9q//Y4PaHhm88tzrPOqHyNBL1WGzy1CtEg
-         gHgMfyhuUBbd7NtveONKtXgQvKQ+nAJPslsRIwRMH6oZCrlG61IrAHbcKp4UISjbavDs
-         TmpI/z/5QQswMKpB70MYlgsXaHd+qc5njVsdcKSt2myqneM7cJrHMkGj+O5DC/t+ZuVy
-         8kSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ODHhtpuCmlqbjTbHm7GxkArm+DSdAOP3TtnFywy+XCo=;
-        b=d8kwV8U1+ZpxeabxK7G1gvneHrfZV+mFTMCKSjDKJ5m6xcy9NynBljhwNhbsA3J+gz
-         3wYkGrsuo5Vmh+dFjoaMYPpZWc9p5sK4a5bcNupC7ULaj1iV0Ov4zLlf2KPGAwC99dkn
-         U+tEH/sDzRomzUEnQbp3usMwOVPnVwcbuc21c/CJ2Ag4PY3Viqmh7boCrvkBlGJ85ISi
-         3/t9aYBmlCuJ3IfFKOPp6OuRx7ZLAjmYQDONhNGwGk9TO54DNz/IWt7iHfvgGKxo8Z2B
-         t45gJg54M+UMw1Yi5ATvtCcEPMyEi5AeNnu3AKwMAo9hadRPeDR4v1ex158gpbLef9B4
-         Az4A==
-X-Gm-Message-State: AOAM531EAezlv+dK1N3GMOr5mcCZGtUSZtYT3g0Od8rAaPbfghT8e5Zf
-        qiqzASOhCU0TeI84yIIEihGUq9nUhpctcA==
-X-Google-Smtp-Source: ABdhPJwwYsaVtN/JMQj85M9Nhk3qx3KgFaCxZJu9P/WNzNz0qAG506UC4zor7KqLyhQWoeAaS86hvw==
-X-Received: by 2002:adf:9d85:: with SMTP id p5mr17950595wre.694.1643107611071;
-        Tue, 25 Jan 2022 02:46:51 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:6406:77e0:3787:258a? ([2a01:e34:ed2f:f020:6406:77e0:3787:258a])
-        by smtp.googlemail.com with ESMTPSA id j15sm261351wmq.19.2022.01.25.02.46.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 02:46:50 -0800 (PST)
-Subject: Re: [PATCH v6 2/5] powercap/drivers/dtpm: Add hierarchy creation
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     rjw@rjwysocki.net, robh@kernel.org, lukasz.luba@arm.com,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>
-References: <20220119085719.1357874-1-daniel.lezcano@linaro.org>
- <20220119085719.1357874-3-daniel.lezcano@linaro.org>
- <CAPDyKFrtq0J2O0WBwLr7Zb+WkomhLcR1h+eDzzV-SxpiJmm_yQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <061cd428-c022-4058-9a11-c5dbe3cb9777@linaro.org>
-Date:   Tue, 25 Jan 2022 11:46:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 25 Jan 2022 05:47:47 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158ECC061773;
+        Tue, 25 Jan 2022 02:47:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=k6IRqDL20I9/iZr4XnUVcjDnXG5tq+iBxynWuS6ogdg=; b=sdd4cTeba7EfOnTUHsQgRgl0Lv
+        eIss2FIPzU3hfEPkDFpHRm2xCR3QcmnLDXmalTGNvTpiD/E3/LgDpd+HtX48Ru88P3pYxE1y9tjcs
+        a/3TeB9NXCiocertZo0e6m3v86japXVQaYTAUPWR1Cnn2wV/obfZ1uq5ai0FATcmxciOTnr7B0SQy
+        gHNrl6Dz8k6fChu8LkKltP17m7/yEpIlExGMDXu3RxR8rQUQRvsqAFfHHDZJI4egePfIAn1R9GeSr
+        KMTx/UjupI9BrCuuOsrJAfAKvrd2OvQvxb6fGLYX4Q0x8NCJaGPQPG1GHsXdrH2h9u5uhTIBgW+95
+        lkRdC2VQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCJM0-002Z23-Tx; Tue, 25 Jan 2022 10:47:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7A02C300296;
+        Tue, 25 Jan 2022 11:47:11 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2F515201A0863; Tue, 25 Jan 2022 11:47:11 +0100 (CET)
+Date:   Tue, 25 Jan 2022 11:47:11 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <Ye/VL4b1PUCsCeds@hirez.programming.kicks-ass.net>
+References: <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+ <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
+ <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
+ <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
+ <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
+ <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
+ <Ye7WLM+NyVQlEMXN@hirez.programming.kicks-ass.net>
+ <Ye7X5I4lm8gtRaBv@hirez.programming.kicks-ass.net>
+ <6e2700c4-07dd-76ac-cd8f-d9e5b9b24e74@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFrtq0J2O0WBwLr7Zb+WkomhLcR1h+eDzzV-SxpiJmm_yQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6e2700c4-07dd-76ac-cd8f-d9e5b9b24e74@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/01/2022 21:00, Ulf Hansson wrote:
-> On Wed, 19 Jan 2022 at 09:58, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> The DTPM framework is available but without a way to configure it.
->>
->> This change provides a way to create a hierarchy of DTPM node where
->> the power consumption reflects the sum of the children's power
->> consumption.
->>
->> It is up to the platform to specify an array of dtpm nodes where each
->> element has a pointer to its parent, except the top most one. The type
->> of the node gives the indication of which initialization callback to
->> call. At this time, we can create a virtual node, where its purpose is
->> to be a parent in the hierarchy, and a DT node where the name
->> describes its path.
->>
->> In order to ensure a nice self-encapsulation, the DTPM subsys array
->> contains a couple of initialization functions, one to setup the DTPM
->> backend and one to initialize it up. With this approach, the DTPM
->> framework has a very few material to export.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>  drivers/powercap/Kconfig |   1 +
->>  drivers/powercap/dtpm.c  | 168 ++++++++++++++++++++++++++++++++++++++-
->>  include/linux/dtpm.h     |  15 ++++
->>  3 files changed, 181 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
->> index 8242e8c5ed77..b1ca339957e3 100644
->> --- a/drivers/powercap/Kconfig
->> +++ b/drivers/powercap/Kconfig
->> @@ -46,6 +46,7 @@ config IDLE_INJECT
->>
->>  config DTPM
->>         bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
->> +       depends on OF
->>         help
->>           This enables support for the power capping for the dynamic
->>           thermal power management userspace engine.
->> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
->> index 0e5c93443c70..10032f7132c4 100644
->> --- a/drivers/powercap/dtpm.c
->> +++ b/drivers/powercap/dtpm.c
->> @@ -23,6 +23,7 @@
->>  #include <linux/powercap.h>
->>  #include <linux/slab.h>
->>  #include <linux/mutex.h>
->> +#include <linux/of.h>
->>
->>  #include "dtpm_subsys.h"
->>
->> @@ -463,14 +464,175 @@ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
->>         return 0;
->>  }
->>
->> -static int __init init_dtpm(void)
->> +static struct dtpm *dtpm_setup_virtual(const struct dtpm_node *hierarchy,
->> +                                      struct dtpm *parent)
->>  {
->> +       struct dtpm *dtpm;
->> +       int ret;
->> +
->> +       dtpm = kzalloc(sizeof(*dtpm), GFP_KERNEL);
->> +       if (!dtpm)
->> +               return ERR_PTR(-ENOMEM);
->> +       dtpm_init(dtpm, NULL);
->> +
->> +       ret = dtpm_register(hierarchy->name, dtpm, parent);
->> +       if (ret) {
->> +               pr_err("Failed to register dtpm node '%s': %d\n",
->> +                      hierarchy->name, ret);
->> +               kfree(dtpm);
->> +               return ERR_PTR(ret);
->> +       }
->> +
->> +       return dtpm;
->> +}
->> +
->> +static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
->> +                                 struct dtpm *parent)
->> +{
->> +       struct device_node *np;
->> +       int i, ret;
->> +
->> +       np = of_find_node_by_path(hierarchy->name);
->> +       if (!np) {
->> +               pr_err("Failed to find '%s'\n", hierarchy->name);
->> +               return ERR_PTR(-ENXIO);
->> +       }
->> +
->> +       for (i = 0; i < ARRAY_SIZE(dtpm_subsys); i++) {
->> +
->> +               if (!dtpm_subsys[i]->setup)
->> +                       continue;
->> +
->> +               ret = dtpm_subsys[i]->setup(parent, np);
->> +               if (ret) {
->> +                       pr_err("Failed to setup '%s': %d\n", dtpm_subsys[i]->name, ret);
->> +                       of_node_put(np);
->> +                       return ERR_PTR(ret);
->> +               }
->> +       }
->> +
->> +       of_node_put(np);
->> +
->> +       /*
->> +        * By returning a NULL pointer, we let know the caller there
->> +        * is no child for us as we are a leaf of the tree
->> +        */
->> +       return NULL;
->> +}
->> +
->> +typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
->> +
->> +dtpm_node_callback_t dtpm_node_callback[] = {
->> +       [DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
->> +       [DTPM_NODE_DT] = dtpm_setup_dt,
->> +};
->> +
->> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
->> +                              const struct dtpm_node *it, struct dtpm *parent)
->> +{
->> +       struct dtpm *dtpm;
->> +       int i, ret;
->> +
->> +       for (i = 0; hierarchy[i].name; i++) {
->> +
->> +               if (hierarchy[i].parent != it)
->> +                       continue;
->> +
->> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
->> +               if (!dtpm || IS_ERR(dtpm))
-> 
-> This can be tested with the "IS_ERR_OR_NULL()" macro.
-> 
->> +                       continue;
-> 
-> We have discussed the error path previously. Just ignoring errors here
-> and continuing with the initialization, isn't normally how we design
-> good kernel code.
-> 
-> However, you have also explained that the error path is special and
-> somewhat non-trivial to manage in this case. I get that now and thanks
-> for clarifying.
-> 
-> Nevertheless, I think it deserves to be explained a bit with a comment
-> in the code of what goes on here. Otherwise another developer that
-> looks at this code in the future, may think it looks suspicious too.
-> 
->> +
->> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
->> +               if (ret)
->> +                       return ret;
->> +       }
->> +
->> +       return 0;
->> +}
-> 
-> [...]
-> 
-> Other than the above, this looks good to me!
+On Tue, Jan 25, 2022 at 10:51:00AM +0200, Mathias Nyman wrote:
+> On 24.1.2022 18.46, Peter Zijlstra wrote:
 
-With the above fixed, shall I add your reviewed-by ?
+> > FYI, I'm thinking early_xdbc_parse_parameter should've now given
+> > dpgp_num: 1 ?
+> > 
+> 
+> Yes, it should. 
+> 
+> Looks like there's a parsing issue.
+> "earlyprintk=xdbc1,keep" fails on our Tigerlake as well.
+>   
+> Without the "keep" option it works for me:
+> 
+> [    0.000000] Command line: console=ttyS0,115200n8 buildroot_hostname=tgl04 earlyprintk=xdbc1 dmi_entry_point=0x74374000
+> [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 1
 
+[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-5.16.0+ root=UUID=a652986c-fbc6-4341-85c3-b4ad4402f130 ro debug ignore_loglevel sysrq_always_enabled usbcore.autosuspend=-1 earlyprintk=xdbc1,keep force_early_printk sched_verbose ft
+race=nop mitigations=off nokaslr
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+[    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+[    0.399988] xhci_dbc:xdbc_start: DbC is running now, control 0x8d000003 port ID 15
+[    0.399998] xhci_dbc:xdbc_handle_port_status: connect status change event
+[    0.399999] xhci_dbc:xdbc_handle_port_status: port reset change event
+[    0.431217] printk: console [earlyxdbc0] enabled
+
+Success!! I'll go submit proper patches for this then.
+
+---
+
+diff --git a/arch/x86/kernel/early_printk.c b/arch/x86/kernel/early_printk.c
+index d3c531d3b244..68b38925a74f 100644
+--- a/arch/x86/kernel/early_printk.c
++++ b/arch/x86/kernel/early_printk.c
+@@ -387,7 +387,7 @@ static int __init setup_early_printk(char *buf)
+ #endif
+ #ifdef CONFIG_EARLY_PRINTK_USB_XDBC
+ 		if (!strncmp(buf, "xdbc", 4))
+-			early_xdbc_parse_parameter(buf + 4);
++			early_xdbc_parse_parameter(buf + 4, keep);
+ #endif
+ 
+ 		buf++;
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index a698196377be..9bf3872895ab 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -1505,6 +1505,7 @@ void __init tsc_early_init(void)
+ 	loops_per_jiffy = get_loops_per_jiffy();
+ 
+ 	tsc_enable_sched_clock();
++	use_tsc_delay();
+ }
+ 
+ void __init tsc_init(void)
+diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+index 4502108069cd..a40db9618e8e 100644
+--- a/drivers/usb/early/xhci-dbc.c
++++ b/drivers/usb/early/xhci-dbc.c
+@@ -29,11 +29,15 @@
+ static struct xdbc_state xdbc;
+ static bool early_console_keep;
+ 
++#if 0
+ #ifdef XDBC_TRACE
+ #define	xdbc_trace	trace_printk
+ #else
+ static inline void xdbc_trace(const char *fmt, ...) { }
+ #endif /* XDBC_TRACE */
++#else
++#define xdbc_trace	pr_err
++#endif
+ 
+ static void __iomem * __init xdbc_map_pci_mmio(u32 bus, u32 dev, u32 func)
+ {
+@@ -417,9 +421,11 @@ static void xdbc_ring_doorbell(int target)
+ 
+ static int xdbc_start(void)
+ {
++	bool first_try = true;
+ 	u32 ctrl, status;
+ 	int ret;
+ 
++retry:
+ 	ctrl = readl(&xdbc.xdbc_reg->control);
+ 	writel(ctrl | CTRL_DBC_ENABLE | CTRL_PORT_ENABLE, &xdbc.xdbc_reg->control);
+ 	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_ENABLE, CTRL_DBC_ENABLE, 100000, 100);
+@@ -429,13 +435,21 @@ static int xdbc_start(void)
+ 	}
+ 
+ 	/* Reset port to avoid bus hang: */
+-	if (xdbc.vendor == PCI_VENDOR_ID_INTEL)
++	if (xdbc.vendor == PCI_VENDOR_ID_INTEL && first_try)
+ 		xdbc_reset_debug_port();
+ 
+ 	/* Wait for port connection: */
+ 	ret = handshake(&xdbc.xdbc_reg->portsc, PORTSC_CONN_STATUS, PORTSC_CONN_STATUS, 5000000, 100);
+ 	if (ret) {
+-		xdbc_trace("waiting for connection timed out\n");
++		xdbc_trace("waiting for connection timed out, DCPORTSC:0x%x\n",
++				readl(&xdbc.xdbc_reg->portsc));
++		if (first_try) {
++			first_try = false;
++			/* Toggle DCE and retry without port reset */
++			writel(0, &xdbc.xdbc_reg->control);
++			handshake(&xdbc.xdbc_reg->control, CTRL_DBC_ENABLE, 0, 100000, 10);
++			goto retry;
++		}
+ 		return ret;
+ 	}
+ 
+@@ -599,23 +631,26 @@ static int __init xdbc_early_setup(void)
+ 	return 0;
+ }
+ 
+-int __init early_xdbc_parse_parameter(char *s)
++int __init early_xdbc_parse_parameter(char *s, int keep_early)
+ {
+ 	unsigned long dbgp_num = 0;
+ 	u32 bus, dev, func, offset;
++	char *e;
+ 	int ret;
+ 
+ 	if (!early_pci_allowed())
+ 		return -EPERM;
+ 
+-	if (strstr(s, "keep"))
+-		early_console_keep = true;
++	early_console_keep = keep_early;
+ 
+ 	if (xdbc.xdbc_reg)
+ 		return 0;
+ 
+-	if (*s && kstrtoul(s, 0, &dbgp_num))
+-		dbgp_num = 0;
++	if (*s) {
++	       dbgp_num = simple_strtoul(s, &e, 10);
++	       if (s == e)
++		       dbgp_num = 0;
++	}
+ 
+ 	pr_notice("dbgp_num: %lu\n", dbgp_num);
+ 
+diff --git a/include/linux/usb/xhci-dbgp.h b/include/linux/usb/xhci-dbgp.h
+index 0a37f1283bf0..01fe768873f9 100644
+--- a/include/linux/usb/xhci-dbgp.h
++++ b/include/linux/usb/xhci-dbgp.h
+@@ -15,7 +15,7 @@
+ #define __LINUX_XHCI_DBGP_H
+ 
+ #ifdef CONFIG_EARLY_PRINTK_USB_XDBC
+-int __init early_xdbc_parse_parameter(char *s);
++int __init early_xdbc_parse_parameter(char *s, int keep_early);
+ int __init early_xdbc_setup_hardware(void);
+ void __init early_xdbc_register_console(void);
+ #else

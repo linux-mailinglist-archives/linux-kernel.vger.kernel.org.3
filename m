@@ -2,75 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F3649BBAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE65849BBB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbiAYTAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbiAYTAN (ORCPT
+        id S231693AbiAYTBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:01:00 -0500
+Received: from mail.efficios.com ([167.114.26.124]:51906 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229610AbiAYTAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:00:13 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5899C06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:00:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bt8DG4kv/HiKHmCxuEq4ti3BrhnQMbSnttO4/8+9Xs4=; b=sl1vLhCyZd3T8KmPTjKxZcrVsT
-        yHbYNZfD0SvdklJb+XFTy6+SRgqlug+6n3hTafjWom8+t6HNsM/kinSWuwgRZCUGLx7tIXmxgA+dU
-        vCS89F3ztYMaw23a4R+qztj+agAyg0rwnXi1SOlME1Uu2GQA1EKzIQhX9cg3e22vquRlV3ICyETMj
-        9kV9sCClzEc7Y+vM9ym4CDlTO49jmrIVLe6IwTczO8MrQLT/+dYnmi7pF9mGBTRCiA3IqfrJ0lWAI
-        SwpoxqO/d8GcivW55uKjW00PHVJ83rpOncMgm1/HcBGxHsoNe+P5b79TCmqADb1hL4bY20Cuiu5+p
-        OJsyB/XA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCR2k-003GLD-An; Tue, 25 Jan 2022 18:59:50 +0000
-Date:   Tue, 25 Jan 2022 18:59:50 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
-        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
-        david@redhat.com, rppt@kernel.org, surenb@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
-Message-ID: <YfBIpmxvc0+mFByf@casper.infradead.org>
-References: <cover.1642526745.git.khalid.aziz@oracle.com>
- <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
- <Ye/5yUyEqO0ws0G5@casper.infradead.org>
- <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
- <YfAEqzTeBJSIOKcA@casper.infradead.org>
- <20220125185705.wf7p2l77vggipfry@box.shutemov.name>
+        Tue, 25 Jan 2022 14:00:50 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id EC54F34FA18;
+        Tue, 25 Jan 2022 14:00:48 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 5xdczh2_v_rL; Tue, 25 Jan 2022 14:00:48 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 8B3A834F568;
+        Tue, 25 Jan 2022 14:00:48 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 8B3A834F568
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643137248;
+        bh=xG2OTorEeD0amCPtFxqQHT32yhM8ef9v4q4M9il8G7k=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=JtD3PQQ94e5OxufsRH8LXTmTTVgOwXJnukhcYA7gs1L+a5UeqvuZd305VMTd5ew8s
+         5GxrhQ1Mx6obyvxKKPAYTDVG+2K+WRsV0POwdrPMKlwj3ADTqlV71Tu6XMJlAU2QWG
+         YhJ3V5UwzS/5HdOll28wgL9fQpeQ/3cTXKz3E9xcZykG7RjLrn6OueGvuDxe/fLUCB
+         lpUzoBJcVHCxFfM2lPs7S/N/3PIfQ4O8lZUcr1UQjjsduGvbhY4ImFKge70wvYMHL7
+         m8eci4G1P2Ps7Jg6xMt3o5U8XxFe/TqObHR8MNDsYxkXNN4ZUvEKg5en1QbetjWJQP
+         EVrhOWRTm4twg==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id nyPQtUQPY9hv; Tue, 25 Jan 2022 14:00:48 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 6D88334F565;
+        Tue, 25 Jan 2022 14:00:48 -0500 (EST)
+Date:   Tue, 25 Jan 2022 14:00:48 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>, shuah <shuah@kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dave Watson <davejwatson@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Russell King <linux@arm.linux.org.uk>,
+        Andi Kleen <andi@firstfloor.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Ben Maurer <bmaurer@fb.com>, rostedt <rostedt@goodmis.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Joel Fernandes <joelaf@google.com>
+Message-ID: <1445357149.71067.1643137248305.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1234069751.70438.1643121673355.JavaMail.zimbra@efficios.com>
+References: <20220124171253.22072-1-mathieu.desnoyers@efficios.com> <20220124171253.22072-3-mathieu.desnoyers@efficios.com> <20220125122156.v2f5anzcs35i3rii@wittgenstein> <1234069751.70438.1643121673355.JavaMail.zimbra@efficios.com>
+Subject: Re: [RFC PATCH 02/15] rseq: Remove broken uapi field layout on
+ 32-bit little endian
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125185705.wf7p2l77vggipfry@box.shutemov.name>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
+Thread-Topic: rseq: Remove broken uapi field layout on 32-bit little endian
+Thread-Index: jBpzgk+GT1oWkc+mziLmJCxydp6hDf1GHpYP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 09:57:05PM +0300, Kirill A. Shutemov wrote:
-> On Tue, Jan 25, 2022 at 02:09:47PM +0000, Matthew Wilcox wrote:
-> > > I think zero-API approach (plus madvise() hints to tweak it) is worth
-> > > considering.
-> > 
-> > I think the zero-API approach actually misses out on a lot of
-> > possibilities that the mshare() approach offers.  For example, mshare()
-> > allows you to mmap() many small files in the shared region -- you
-> > can't do that with zeroAPI.
+----- On Jan 25, 2022, at 9:41 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+
+> ----- On Jan 25, 2022, at 7:21 AM, Christian Brauner brauner@kernel.org wrote:
+[...]
+>>>  include/uapi/linux/rseq.h | 17 ++++-------------
+[...]
+>>>  	union {
+>> 
+>> A bit unfortunate we seem to have to keep the union around even though
+>> it's just one field now.
 > 
-> Do you consider a use-case for many small files to be common? I would
-> think that the main consumer of the feature to be mmap of huge files.
-> And in this case zero enabling burden on userspace side sounds like a
-> sweet deal.
+> Well, as far as the user-space projects that I know of which use rseq
+> are concerned (glibc, librseq, tcmalloc), those end up with their own
+> copy of the uapi header anyway to deal with the big/little endian field
+> on 32-bit. So I'm very much open to remove the union if we accept that
+> this uapi header is really just meant to express the ABI and is not
+> expected to be used as an API by user-space.
+> 
+> That would mean we also bring a uapi header copy into the kernel
+> rseq selftests as well to minimize the gap between librseq and
+> the kernel sefltests (the kernel sefltests pretty much include a
+> copy of librseq for convenience. librseq is maintained out of tree).
+> 
+> Thoughts ?
 
-mmap() of huge files is certainly the Oracle use-case.  With occasional
-funny business like mprotect() of a single page in the middle of a 1GB
-hugepage.
+Actually, if we go ahead and remove the union, and replace:
 
-The approach of designating ranges of a process's address space as
-sharable with other processes felt like the cleaner & frankly more
-interesting approach that opens up use-cases other than "hurr, durr, we
-are Oracle, we like big files, kernel get out of way now, transactions
-to perform".
+struct rseq {
+  union {
+    __u64 ptr64;
+  } rseq_cs;
+[...]
+} v;
+
+by:
+
+struct rseq {
+  __u64 rseq_cs;
+} v;
+
+expressions such as these are unchanged:
+
+- sizeof(v.rseq_cs),
+- &v.rseq_cs,
+- __alignof__(v.rseq_cs),
+- offsetof(struct rseq, rseq_cs).
+
+So users of the uapi rseq.h (as an API) can still use rseq_abi->rseq_cs before
+and after the change.
+
+Based on this, I am inclined to remove the union, and just make the rseq_cs field
+a __u64.
+
+Any objections ?
+
+Thanks,
+
+Mathieu
+
+
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> 
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

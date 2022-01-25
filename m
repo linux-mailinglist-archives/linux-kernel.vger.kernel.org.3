@@ -2,150 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1D749B5AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC5649B593
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386983AbiAYOGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:06:09 -0500
-Received: from mga17.intel.com ([192.55.52.151]:12204 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1387856AbiAYODn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:03:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643119423; x=1674655423;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tFnuLuY9oElKJDCq2VE/qinMRbQq/Wj5fuO0jaXmt2g=;
-  b=GqH8McwTltsCz6wF7REFuaq1IUelQXr+5v9RZel+1fBBPFzORO+Snbih
-   ojXuuU4yqhqsMEPcaxH6cvTs5ZRKrVjcSNSsY6RXrK9z9q1vERZVELXVX
-   94R4WYX864BLWsD6BmyY98EYcG6n/sWwHTHXkz73xGRVPj983Y9Wv6pUu
-   d6jaYwwufFBj5A8WUgb13ZwXe0dlEQpDDhXnZMc8MQFB9oqb09rw03uua
-   cxCl/87Qw1fXuWuQ/Nt9RhupDrVSJ2VEWvX4T5G2+IvguQCRU1GX0ZprR
-   ql+ltYVP16NJ9x8uc5fUIlCZAGKC5b/S6IL4202KN0K6oUOGo12JP//qU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226972497"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="226972497"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 05:57:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="597129564"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Jan 2022 05:57:12 -0800
-Received: from [10.209.56.163] (bdobabaa-mobl.amr.corp.intel.com [10.209.56.163])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 58D86580808;
-        Tue, 25 Jan 2022 05:57:10 -0800 (PST)
-Message-ID: <7ef1bf66-4184-7f5b-c0bd-351ec743d4e9@linux.intel.com>
-Date:   Tue, 25 Jan 2022 08:57:09 -0500
+        id S1386314AbiAYOCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386886AbiAYN6r (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 08:58:47 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DD9C061744
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:58:46 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id x23so9973454lfc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:58:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4t35tkSfhawZj3YdmXeypgJh5HQgRVLYdhSyxfOKLTU=;
+        b=u85tLHy1j+MBDPRG6pUcVnt8usiu3geVBkYlAX+KvLLDhkRuW5txGMJrgl8RWApWVP
+         KsiHdEUru6gtGc69w3lWx4SAB3F+RML896b2tUaoAFAmE+qkQF30hxUt37HhargEVIIi
+         fDaimZ6yC1KFgz8LhshXO3L1/ngUK7PpOSdGnbNnBJsjRrZUJgT1vJ8weuOBsl3UY12G
+         KhtPYvAIvqv9xYEQ+d4FNHFZAU4F9YICgzW+LqM4A4QkRKDnbRW0UPcHwjLT91Kk4MIX
+         DL5upOIhDvPBINtxHsq/X/rCkpHIKm/rSJzpiYFB3ldyKBA5eaXL5KwIEp2aXqA++WDJ
+         T/nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4t35tkSfhawZj3YdmXeypgJh5HQgRVLYdhSyxfOKLTU=;
+        b=VH+wrE+H/x7qFYjnRwuztGTqEo6TW7LDDBfML0neidKx7Yc77YjNOhqIFrEnMhQ/Sq
+         aRXcOzRykNv5BMlQSxriZtjPsYUhjsXWL+wQnLdu9sVmUOCY15nDToGlJFUoLtPp6fa8
+         RAjohbwUEMSNfm8TcOk4zuCr+luAhGdMK202pAkFA+ItElV0nKK7RfZ0WDWqs4UKrALd
+         QQLK9TdBOwnNVJ8x6qQjpeICy9vWwOjkiYvxoUb7y4Hh9rX9zPY0X/2s9BOO+Bg3xfC7
+         ISxehZY7L1M1En1onytKUuFFZXLMsIdAMeiKS6/WnE+O1dIw6JusA8FwB/RBP/VgyJXw
+         NUiQ==
+X-Gm-Message-State: AOAM530wobzkymLYmgDlxfMLjJTQgjXWRIKo233+OyBfye13mJ9oSMr/
+        5Q0gkrZxFExJKH8yh37CbG2KzQ==
+X-Google-Smtp-Source: ABdhPJzS/I+6lscy9Eg1GYbSwvsvywkknT8P6cHPDwk98dijkuNaRB7GfDzGKtrG0LQtwkz7qNGUgQ==
+X-Received: by 2002:a05:6512:785:: with SMTP id x5mr15447646lfr.614.1643119124417;
+        Tue, 25 Jan 2022 05:58:44 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id a4sm1500028lfg.31.2022.01.25.05.58.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 05:58:43 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 355B7103C0E; Tue, 25 Jan 2022 16:59:17 +0300 (+03)
+Date:   Tue, 25 Jan 2022 16:59:17 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
+        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
+        david@redhat.com, rppt@kernel.org, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
+Message-ID: <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
+References: <cover.1642526745.git.khalid.aziz@oracle.com>
+ <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
+ <Ye/5yUyEqO0ws0G5@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] x86/perf: Default freeze_on_smi on for Comet Lake and
- later.
-Content-Language: en-US
-To:     Kyle Huey <me@kylehuey.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Robert O'Callahan <rocallahan@gmail.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Andi Kleen <ak@linux.intel.com>
-References: <20220122072644.92292-1-khuey@kylehuey.com>
- <Ye6Z31keWVPrsNWU@hirez.programming.kicks-ass.net>
- <3c35dc76-c187-8d3f-7fc9-75de32e7cbf6@linux.intel.com>
- <CAP045ArbX7cYKyv0H4X2SxUJWycB1VoLZWLME=_RXttBFBfP3A@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CAP045ArbX7cYKyv0H4X2SxUJWycB1VoLZWLME=_RXttBFBfP3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ye/5yUyEqO0ws0G5@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/24/2022 9:59 PM, Kyle Huey wrote:
-> On Mon, Jan 24, 2022 at 8:01 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->>
->>
->>
->> On 1/24/2022 7:21 AM, Peter Zijlstra wrote:
->>> On Fri, Jan 21, 2022 at 11:26:44PM -0800, Kyle Huey wrote:
->>>> Beginning in Comet Lake, Intel extended the concept of privilege rings to
->>>> SMM.[0] A side effect of this is that events caused by execution of code
->>>> in SMM are now visible to performance counters with IA32_PERFEVTSELx.USR
->>>> set.
->>>>
->>>> rr[1] depends on exact counts of performance events for the user space
->>>> tracee, so this change in behavior is fatal for us. It is, however, easily
->>>> corrected by setting IA32_DEBUGCTL.FREEZE_WHILE_SMM to 1 (visible in sysfs
->>>> as /sys/devices/cpu/freeze_on_smi). While we can and will tell our users to
->>>> set freeze_on_smi manually when appropriate, because observing events in
->>>> SMM is rarely useful to anyone, we propose to change the default value of
->>>> this switch.
->>
->> + Andi
->>
->>   From we heard many times from sophisticated customers, they really hate
->> blind spots. They want to see everything. That's why we set
->> freeze_on_smi to 0 as default. I think the patch breaks the principle.
+On Tue, Jan 25, 2022 at 01:23:21PM +0000, Matthew Wilcox wrote:
+> On Tue, Jan 25, 2022 at 02:42:12PM +0300, Kirill A. Shutemov wrote:
+> > I wounder if we can get away with zero-API here: we can transparently
+> > create/use shared page tables for any inode on mmap(MAP_SHARED) as long as
+> > size and alignment is sutiable. Page tables will be linked to the inode
+> > and will be freed when the last of such mapping will go away. I don't see
+> > a need in new syscalls of flags to existing one.
 > 
-> The default kernel settings for perf events prioritize preventing
-> information leaks to less privileged code. perf_event_paranoid
-> defaults to 2, preventing unprivileged users from observing kernel
-> space. If "sophisticated customers" want to see everything they have
-> already needed privileges (or an explicit opt-in through decreasing
-> perf_event_paranoid) for some time.
-> 
-> The current situation on Comet Lake+ where an unprivileged user
-> *cannot* observe kernel code due to security concerns but
-> simultaneously *must* observe SMM code seems rather absurd.
->
+> That's how HugeTLBfs works today, right?  Would you want that mechanism
+> hoisted into the real MM?  Because my plan was the opposite -- remove it
+> from the shadow MM once mshare() is established.
 
-I see. I was thought the unprivileged user can observe the SMM code on 
-the previous platforms. The CML+ change only makes part of the SMM code 
-CPL0. Seems I'm wrong. The change looks like changing the previous CPL0 
-code to CPL3 code. If so, yes, I think we should prevent the information 
-leaks for the unprivileged user.
+I hate HugeTLBfs because it is a special place with own rules. mshare() as
+it proposed creates a new special place. I don't like this.
 
->> I don't think there is a way to notify all the users that the default
->> kernel value will be changed. (Yes, the end user can always check the
->> /sys/devices/cpu/freeze_on_smi to get the latest value. But in practice,
->> no one checks it unless some errors found.) I think it may bring
->> troubles to the users if they rely on the counts in SMM.
-> 
-> Unfortunately the new hardware has already changed the behavior
-> without notifying users, no matter what we do here.
-> 
->> The patch only changes the default values for some platforms, not all
->> platforms. The default value is not consistent among platforms anymore.
->> It can bring confusion.
-> 
-> I don't personally object to changing freeze_on_smi for all platforms
-> :) I was merely trying to limit the changes.
+It's better to find a way to integrate the feature natively into core-mm
+and make as much users as possible to benefit from it.
 
+I think zero-API approach (plus madvise() hints to tweak it) is worth
+considering.
 
-Changing it to all platforms seems a too big hammer. I agree we should 
-limit it to the impacted platforms.
-
-I've contacted the author of the white paper. I was told that the change 
-is for the client vPro platforms. They are not sure whether it impacts 
-Server platform or Atom platforms. I'm still working on it. I will let 
-you and Peter know once I get more information.
-
-Thanks,
-Kan
+-- 
+ Kirill A. Shutemov

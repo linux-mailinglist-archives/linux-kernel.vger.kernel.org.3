@@ -2,97 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8C149B750
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F10149B759
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581734AbiAYPM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1581480AbiAYPK2 (ORCPT
+        id S1581851AbiAYPNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:13:40 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48054 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1581574AbiAYPLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:10:28 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288F6C06173B;
-        Tue, 25 Jan 2022 07:10:22 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id s18so20468209wrv.7;
-        Tue, 25 Jan 2022 07:10:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=b+aJqHjUM6wBLG6fdB9sZHHDOYN7JvFJNs9aC/vUzpc=;
-        b=l8o3qd20zXDphPmRbrbOrku69rKa3Gzy6rv5qlG99dQmTNh07FWavpjUsiaTCKDB5o
-         +ftfYgrl3DkzZ/RL9aAI46svrvfTsa/kEUB/Harz02ODSbXK90QQuDM9UMe10yDF8tmz
-         rw7bQTO+bub05fwf935TsKxMvDAaoxXGzilaX9n1WVF7MjTW6A+HENQ8gS3FeqrC6Dwk
-         VhzQ5h7S+7QHt8E9MULDbfHqM9k0ckEVrxIaoNiB2blmHuvjwbvw3a8ySzZbTU07URLV
-         /rIuoL1stTJIRGb3FmfxEhxS2AWDDWawSCjJE68kG4H/tdR2lmbGkagGizYNb+MJ+Two
-         i6QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=b+aJqHjUM6wBLG6fdB9sZHHDOYN7JvFJNs9aC/vUzpc=;
-        b=HUNQIjzMXShbOJd0JI0YHIL9QRftGFWsF+IJVMrxJMBCQaXrsIkGExaUVpPIOH4dgh
-         5Zq8E+5xRLV7a4UqtfwfdCLfIIIN5fbWnPKpb5x7JqgX5ZAxF3F2NVC3qIXW167jARB7
-         uW5mA8L7uk5WfqnjkmoVJcsxZnVHjM9RQlOACnCo8+lkbQ4oyQPd3VfoapktlLt4rDwG
-         7TxNbXoPi3wPIifSuzb0sBSe7CTUl1NZH1CreansBEBGEop8sWmOviVKQut6GUHJuU2y
-         Lr2GE+uoe5PyVC0xhu6idxm1LZ24EBn+xp6HFGfKaiZ/MXl2jruR0OYjh8Uskb4PZLtH
-         QmkQ==
-X-Gm-Message-State: AOAM531LcdybWMR8Lzn4lfRBlKTV9yLEXvcxCXMdLI8M5C4G59bsURvl
-        LnQ55fG4SixnC+PFdABMPHjEq4GxADk=
-X-Google-Smtp-Source: ABdhPJzyphbfb5sUPiFf0+9NZAbs7VDikz95H6KcIbKpEK6UTiiJYjbTYFH8xzSgjj200JMP4LZO9w==
-X-Received: by 2002:a05:6000:1549:: with SMTP id 9mr4997354wry.210.1643123420731;
-        Tue, 25 Jan 2022 07:10:20 -0800 (PST)
-Received: from debian (host-2-98-43-34.as13285.net. [2.98.43.34])
-        by smtp.gmail.com with ESMTPSA id k18sm851349wms.14.2022.01.25.07.10.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 07:10:20 -0800 (PST)
-Date:   Tue, 25 Jan 2022 15:10:18 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.4 000/320] 5.4.174-rc1 review
-Message-ID: <YfAS2pieDqCH1HnC@debian>
-References: <20220124183953.750177707@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124183953.750177707@linuxfoundation.org>
+        Tue, 25 Jan 2022 10:11:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33B14B81817;
+        Tue, 25 Jan 2022 15:10:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB4B6C340E5;
+        Tue, 25 Jan 2022 15:10:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643123454;
+        bh=827Zl6UTbu4+DODgqO5pwb2rOj9GCDpTQYVElhmcxEk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vAftbCY6wfyApG6ImaV7i4/RB+857+ZVJG5aasCxCyYUaBgWyju/37RZVSeoZNQm0
+         ePQJq1yfPtHz4E8LAG23pqp6Qv/305+5RSMdyf0B5jQBw6hD6ICgWZpFk6i+NnNza+
+         Z/RdHWNh35bj5WVSklD+twb6YCCMMatGVd6+iKjvbkl4BStJa2nGmLEUXJ6d0Jz/AO
+         JCejWJ3Ycz3eIX85LP9y0t5BNE58/3caA4QzIW98rCKZ14mE/rYjPl2YI8wxPUKGOf
+         0eaE+/Qf7d1W8U//CIG4h4EhNiaximmfy8drzLYznmu22dubxrKEpTWOXMR3jlijiO
+         v7xGW9oF4LMzA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nCNTA-002wXr-LC; Tue, 25 Jan 2022 15:10:52 +0000
+Date:   Tue, 25 Jan 2022 15:10:52 +0000
+Message-ID: <87pmof7sw3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Raghavendra Rao Ananta <rananta@google.com>,
+        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        kvmarm@lists.cs.columbia.edu,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+In-Reply-To: <YeBfj89mIf8SezfD@google.com>
+References: <20220104194918.373612-1-rananta@google.com>
+        <20220104194918.373612-2-rananta@google.com>
+        <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
+        <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
+        <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
+        <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
+        <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
+        <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
+        <CALMp9eR+evJ+w9VTSvR2KHciQDgTsnS=bh=1OUL4yy8gG6O51A@mail.gmail.com>
+        <CAJHc60zw1o=JdUJ+sNNtv3mc_JTRMKG3kPp=-cchWkHm74hUYA@mail.gmail.com>
+        <YeBfj89mIf8SezfD@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, rananta@google.com, jmattson@google.com, kvm@vger.kernel.org, will@kernel.org, pshier@google.com, linux-kernel@vger.kernel.org, catalin.marinas@arm.com, pbonzini@redhat.com, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+It's probably time I jump on this thread
 
-On Mon, Jan 24, 2022 at 07:39:44PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.174 release.
-> There are 320 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, 13 Jan 2022 17:21:19 +0000,
+Sean Christopherson <seanjc@google.com> wrote:
 > 
-> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> Anything received after that time might be too late.
+> On Wed, Jan 12, 2022, Raghavendra Rao Ananta wrote:
+> > On Tue, Jan 11, 2022 at 11:16 AM Jim Mattson <jmattson@google.com> wrote:
+> > > Perhaps it would help if you explained *why* you are doing this. It
+> > > sounds like you are either trying to protect against a malicious
+> > > userspace, or you are trying to keep userspace from doing something
+> > > stupid. In general, kvm only enforces constraints that are necessary
+> > > to protect the host. If that's what you're doing, I don't understand
+> > > why live migration doesn't provide an end-run around your protections.
+> > It's mainly to safeguard the guests. With respect to migration, KVM
+> > and the userspace are collectively playing a role here. It's up to the
+> > userspace to ensure that the registers are configured the same across
+> > migrations and KVM ensures that the userspace doesn't modify the
+> > registers after KVM_RUN so that they don't see features turned OFF/ON
+> > during execution. I'm not sure if it falls into the definition of
+> > protecting the host. Do you see a value in adding this extra
+> > protection from KVM?
+> 
+> Short answer: probably not?
 
-Build test:
-mips (gcc version 11.2.1 20220121): 65 configs -> no new failure
-arm (gcc version 11.2.1 20220121): 107 configs -> no new failure
-arm64 (gcc version 11.2.1 20220121): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+Well, I beg to defer.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+> There is precedent for disallowing userspace from doing stupid
+> things, but that's either for KVM's protection (as Jim pointed out),
+> or because KVM can't honor the change, e.g. x86 is currently in the
+> process of disallowing most CPUID changes after KVM_RUN because KVM
+> itself consumes the CPUID information and KVM doesn't support
+> updating some of it's own internal state (because removing features
+> like GB hugepage support is nonsensical and would require a large
+> pile of complicated, messy code).
 
-[1]. https://openqa.qa.codethink.co.uk/tests/652
+We provide quite a lot of CPU emulation based on the feature
+registers exposed to the guest. Allowing userspace to change this
+stuff once the guest is running is a massive attack vector.
 
+> Restricing CPUID changes does offer some "protection" to the guest, but that's
+> not the goal.  E.g. KVM won't detect CPUID misconfiguration in the migration
+> case, and trying to do so is a fool's errand.
+> 
+> If restricting updates in the arm64 is necessary to ensure KVM provides sane
+> behavior, then it could be justified.  But if it's purely a sanity check on
+> behalf of the guest, then it's not justified.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+No. This is about preventing userspace from tripping the kernel into
+doing things it really shouldn't by flipping bits of configuration
+that should be set in stone.
 
---
-Regards
-Sudip
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.

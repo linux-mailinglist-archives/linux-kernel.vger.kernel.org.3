@@ -2,128 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 765E049A8F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D47849A8C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1321648AbiAYDT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:19:27 -0500
-Received: from lgeamrelo12.lge.com ([156.147.23.52]:49067 "EHLO
-        lgeamrelo11.lge.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1318658AbiAYDGx (ORCPT
+        id S1320523AbiAYDNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:13:13 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.222]:47114 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1317112AbiAYC7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:06:53 -0500
-Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
-        by 156.147.23.52 with ESMTP; 25 Jan 2022 11:36:48 +0900
-X-Original-SENDERIP: 156.147.1.126
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
-        by 156.147.1.126 with ESMTP; 25 Jan 2022 11:36:48 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     torvalds@linux-foundation.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
-        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
-        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
-        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-        amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com
-Subject: [RFC 14/14] dept: Apply SDT to swait
-Date:   Tue, 25 Jan 2022 11:36:44 +0900
-Message-Id: <1643078204-12663-15-git-send-email-byungchul.park@lge.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1643078204-12663-1-git-send-email-byungchul.park@lge.com>
-References: <1643078204-12663-1-git-send-email-byungchul.park@lge.com>
+        Mon, 24 Jan 2022 21:59:45 -0500
+HMM_SOURCE_IP: 172.18.0.218:35484.1819251938
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id 45B41280100;
+        Tue, 25 Jan 2022 10:38:40 +0800 (CST)
+X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 09c87cdde5144ab48d00bffe4b83c960 for j.vosburgh@gmail.com;
+        Tue, 25 Jan 2022 10:38:44 CST
+X-Transaction-ID: 09c87cdde5144ab48d00bffe4b83c960
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
+To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jay.vosburgh@canonical.com, nikolay@nvidia.com,
+        huyd12@chinatelecom.cn
+Subject: [PATCH v9] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
+Date:   Mon, 24 Jan 2022 21:37:55 -0500
+Message-Id: <20220125023755.94837-1-sunshouxin@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Makes SDT able to track dependencies by swait.
+Since ipv6 neighbor solicitation and advertisement messages
+isn't handled gracefully in bond6 driver, we can see packet
+drop due to inconsistency between mac address in the option
+message and source MAC .
 
-Signed-off-by: Byungchul Park <byungchul.park@lge.com>
+Another examples is ipv6 neighbor solicitation and advertisement
+messages from VM via tap attached to host bridge, the src mac
+might be changed through balance-alb mode, but it is not synced
+with Link-layer address in the option message.
+
+The patch implements bond6's tx handle for ipv6 neighbor
+solicitation and advertisement messages.
+
+Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
 ---
- include/linux/swait.h | 4 ++++
- kernel/sched/swait.c  | 8 ++++++++
- 2 files changed, 12 insertions(+)
+ drivers/net/bonding/bond_alb.c | 38 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/swait.h b/include/linux/swait.h
-index 6a8c22b..dbdf2ce 100644
---- a/include/linux/swait.h
-+++ b/include/linux/swait.h
-@@ -6,6 +6,7 @@
- #include <linux/stddef.h>
- #include <linux/spinlock.h>
- #include <linux/wait.h>
-+#include <linux/dept_sdt.h>
- #include <asm/current.h>
- 
- /*
-@@ -43,6 +44,7 @@
- struct swait_queue_head {
- 	raw_spinlock_t		lock;
- 	struct list_head	task_list;
-+	struct dept_map		dmap;
- };
- 
- struct swait_queue {
-@@ -61,6 +63,7 @@ struct swait_queue {
- #define __SWAIT_QUEUE_HEAD_INITIALIZER(name) {				\
- 	.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),		\
- 	.task_list	= LIST_HEAD_INIT((name).task_list),		\
-+	.dmap		= DEPT_SDT_MAP_INIT(name),			\
+diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+index 533e476988f2..ba7cc1a9bf6c 100644
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -1269,6 +1269,34 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
+ 	return res;
  }
  
- #define DECLARE_SWAIT_QUEUE_HEAD(name)					\
-@@ -72,6 +75,7 @@ extern void __init_swait_queue_head(struct swait_queue_head *q, const char *name
- #define init_swait_queue_head(q)				\
- 	do {							\
- 		static struct lock_class_key __key;		\
-+		sdt_map_init(&(q)->dmap);			\
- 		__init_swait_queue_head((q), #q, &__key);	\
- 	} while (0)
- 
-diff --git a/kernel/sched/swait.c b/kernel/sched/swait.c
-index e1c655f..b6c2efb 100644
---- a/kernel/sched/swait.c
-+++ b/kernel/sched/swait.c
-@@ -27,6 +27,7 @@ void swake_up_locked(struct swait_queue_head *q)
- 		return;
- 
- 	curr = list_first_entry(&q->task_list, typeof(*curr), task_list);
-+	sdt_event(&q->dmap);
- 	wake_up_process(curr->task);
- 	list_del_init(&curr->task_list);
- }
-@@ -69,6 +70,7 @@ void swake_up_all(struct swait_queue_head *q)
- 	while (!list_empty(&tmp)) {
- 		curr = list_first_entry(&tmp, typeof(*curr), task_list);
- 
-+		sdt_event(&q->dmap);
- 		wake_up_state(curr->task, TASK_NORMAL);
- 		list_del_init(&curr->task_list);
- 
-@@ -97,6 +99,9 @@ void prepare_to_swait_exclusive(struct swait_queue_head *q, struct swait_queue *
- 	__prepare_to_swait(q, wait);
- 	set_current_state(state);
- 	raw_spin_unlock_irqrestore(&q->lock, flags);
++/* determine if the packet is NA or NS */
++static bool __alb_determine_nd(struct icmp6hdr *hdr)
++{
++	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
++	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
++		return true;
++	}
 +
-+	if (state & TASK_NORMAL)
-+		sdt_wait(&q->dmap);
- }
- EXPORT_SYMBOL(prepare_to_swait_exclusive);
- 
-@@ -119,6 +124,9 @@ long prepare_to_swait_event(struct swait_queue_head *q, struct swait_queue *wait
- 	}
- 	raw_spin_unlock_irqrestore(&q->lock, flags);
- 
-+	if (!ret && state & TASK_NORMAL)
-+		sdt_wait(&q->dmap);
++	return false;
++}
 +
- 	return ret;
- }
- EXPORT_SYMBOL(prepare_to_swait_event);
++static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
++{
++	struct ipv6hdr *ip6hdr;
++	struct icmp6hdr *hdr;
++
++	ip6hdr = ipv6_hdr(skb);
++	if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
++		if (!pskb_may_pull(skb, sizeof(struct ipv6hdr) + sizeof(struct icmp6hdr)))
++			return true;
++
++		hdr = icmp6_hdr(skb);
++		return __alb_determine_nd(hdr);
++	}
++
++	return false;
++}
++
+ /************************ exported alb functions ************************/
+ 
+ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+@@ -1348,8 +1376,11 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+ 	/* Do not TX balance any multicast or broadcast */
+ 	if (!is_multicast_ether_addr(eth_data->h_dest)) {
+ 		switch (skb->protocol) {
+-		case htons(ETH_P_IP):
+ 		case htons(ETH_P_IPV6):
++			if (alb_determine_nd(skb, bond))
++				break;
++			fallthrough;
++		case htons(ETH_P_IP):
+ 			hash_index = bond_xmit_hash(bond, skb);
+ 			if (bond->params.tlb_dynamic_lb) {
+ 				tx_slave = tlb_choose_channel(bond,
+@@ -1446,6 +1477,11 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
+ 			break;
+ 		}
+ 
++		if (alb_determine_nd(skb, bond)) {
++			do_tx_balance = false;
++			break;
++		}
++
+ 		hash_start = (char *)&ip6hdr->daddr;
+ 		hash_size = sizeof(ip6hdr->daddr);
+ 		break;
+
+base-commit: dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
 -- 
-1.9.1
+2.27.0
 

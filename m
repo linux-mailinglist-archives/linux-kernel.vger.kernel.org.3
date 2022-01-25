@@ -2,190 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F8649BB18
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E83C49BB19
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiAYSRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiAYSRv (ORCPT
+        id S229915AbiAYSSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:18:40 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42558 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229819AbiAYSRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:17:51 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69270C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:17:50 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id y15so50118151lfa.9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dSrhbE6iArK7VijAEwS8NR5d4m9Smmxvwd2EDBXBHpo=;
-        b=VUSOPfVzTzm4wRr/wB2VnqTi6Fj2OqDXU8+PHVeLlp3K+Pc/x1RY+fglCx7BhMBSa+
-         PKTHsi4O1AL9e6WXXPWUT7+3SKRkeGq39KUQoXuE9dxFrNqnFz7nmw8odA2lYDnIQ5pl
-         5cek0vjaRZh8ehbk3FUt/iIQEjnU0JdFR4+/+7pBueAAT9kU6lGiLYMGxhTVFL/h/Owt
-         LpL8znqPwu2Wo2BH8xzJUL36k8ldSsODaxbq8Wtf00Hwsoh+muyJEtyC0E/xEaVjJSAO
-         1mVk6Whr4D6GG6syoPyFB8BIjrJS6tWkVk2dixxxZZueeunZx7NiGiUJZoZTiPABF1f1
-         L7dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dSrhbE6iArK7VijAEwS8NR5d4m9Smmxvwd2EDBXBHpo=;
-        b=KBZpmhbn2dPnMpyoxtjWjaNZAHtttpo11Hh4dkO7f1u0Udl54jSVJI90+rqMbR3OrS
-         +EhCLT6fpSSqADQl2N4zTkX4iDlNcyu3ns/jbZ2vLNTOAoeDgzXbim1dDUDIteM0nZD1
-         SQubJj6Chu2NjVgSw+B5HFkwCEZ9/4XvBzcu5m3IIiHJYmPLax/MhHlDJn2ti9/9jGNn
-         b1D3hO4YqzblYqMhibQ7ufrj1khcL+5ZqxIx5R113h1zcwa1RzkuBF3Dc4r2BOE7QklM
-         iIzb/xRjKPMgap67Od5f+P7MI0aq70bv9q5FjX34UAjPvEVmoK/cYJeSiGVXH3rtRSnc
-         qNnA==
-X-Gm-Message-State: AOAM530gAIaX9ba8E6q2FlJdp6lsNchPcSXQhkdTJp53D9arZjTwhRxa
-        7BO9Irhpz20dQNfPahCRf/s=
-X-Google-Smtp-Source: ABdhPJwsxaWTWmvC4LeG2DLDz32vnINItdR3fWQNB9i+auG2YZyF8jicYHresU/0MXauuZ64ffaZDA==
-X-Received: by 2002:a05:6512:2386:: with SMTP id c6mr17510288lfv.684.1643134668514;
-        Tue, 25 Jan 2022 10:17:48 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.227.208])
-        by smtp.gmail.com with ESMTPSA id f22sm1560371lfj.261.2022.01.25.10.17.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 10:17:47 -0800 (PST)
-Message-ID: <47fcbfb5-ee59-a1ef-781d-83989e26e1aa@gmail.com>
-Date:   Tue, 25 Jan 2022 21:17:46 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 02/10] staging: r8188eu: remove smaller sets of DBG_88E
- calls from core dir
-Content-Language: en-US
-To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
-Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
-        straube.linux@gmail.com, martin@kaiser.cx,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220124224415.831-1-phil@philpotter.co.uk>
- <20220124224415.831-3-phil@philpotter.co.uk>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220124224415.831-3-phil@philpotter.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Tue, 25 Jan 2022 13:17:55 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A5936159C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:17:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A5CC340E0;
+        Tue, 25 Jan 2022 18:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643134673;
+        bh=w8DhvSPrXEB9alnX3J3PnwweYaByIDz9SKl6VrLdkDA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HjvX3UIiQXJM4UrqvgBGfUjgIDkaGQBjFtqFbHuVcaiCPU740K/5Mmd7z/dXhAbJc
+         bvKCGA1M9ZK9S5PvSlOI0jxSwnokPgClj0sPR1wr9bPfNM+zgT+GxkokeDchLpGxyT
+         +exMiXzRd19srOzVHZ82cpaCm4514fDYkhUH6TrLUYCCD7Wv35IW8wkhcEv5StA3jP
+         kgBzuLikQQKoCFedzHdR/aa11wZi6aQTtH5P8xd1GYklicvg3To0eG9d5qU7l4H0B/
+         EfxHsMnxQXp4J0Oz7WTqXTjqjaGji7k/EuXec1/wGcSxI2KU6KQkWGKhJMO1ZnZ5yW
+         055wtQtaG+0zw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nCQO7-002zhb-7B; Tue, 25 Jan 2022 18:17:51 +0000
+Date:   Tue, 25 Jan 2022 18:17:50 +0000
+Message-ID: <87lez37k8h.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/6] irqchip/riscv-intc: Set intc domain as the default host
+In-Reply-To: <20220125054217.383482-3-apatel@ventanamicro.com>
+References: <20220125054217.383482-1-apatel@ventanamicro.com>
+        <20220125054217.383482-3-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, robh+dt@kernel.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phillip,
-
-On 1/25/22 01:44, Phillip Potter wrote:
-> Remove all DBG_88E calls from the core directory, other than those in
-> core/rtw_mlme_ext.c, as this contains over 100 on its own so will be
-> done in a separate patch for ease of review. These calls do not conform
-> to kernel coding standards and are superfluous. Also restructure where
-> appropriate to remove no longer needed code left behind by removal of
-> these calls. This will allow the eventual removal of the DBG_88E macro
-> itself.
+On Tue, 25 Jan 2022 05:42:13 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
 > 
-> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+> We have quite a few RISC-V drivers (such as RISC-V SBI IPI driver,
+> RISC-V timer driver, RISC-V PMU driver, etc) which do not have a
+> dedicated DT/ACPI fwnode. This patch makes intc domain as the default
+> host so that these drivers can directly create local interrupt mapping
+> using standardized local interrupt numbers
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
-
-[code snip]
-
-> diff --git a/drivers/staging/r8188eu/core/rtw_ieee80211.c b/drivers/staging/r8188eu/core/rtw_ieee80211.c
-> index ad87954bdeb4..62354c3194bd 100644
-> --- a/drivers/staging/r8188eu/core/rtw_ieee80211.c
-> +++ b/drivers/staging/r8188eu/core/rtw_ieee80211.c
-> @@ -653,13 +653,8 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
->   	/* first 3 bytes in vendor specific information element are the IEEE
->   	 * OUI of the vendor. The following byte is used a vendor specific
->   	 * sub-type. */
-> -	if (elen < 4) {
-> -		if (show_errors) {
-> -			DBG_88E("short vendor specific information element ignored (len=%lu)\n",
-> -				(unsigned long)elen);
-> -		}
-> +	if (elen < 4)
->   		return -1;
+>  drivers/clocksource/timer-riscv.c | 17 +----------------
+>  drivers/irqchip/irq-riscv-intc.c  |  9 +++++++++
+>  2 files changed, 10 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+> index 1767f8bf2013..dd6916ae6365 100644
+> --- a/drivers/clocksource/timer-riscv.c
+> +++ b/drivers/clocksource/timer-riscv.c
+> @@ -102,8 +102,6 @@ static irqreturn_t riscv_timer_interrupt(int irq, void *dev_id)
+>  static int __init riscv_timer_init_dt(struct device_node *n)
+>  {
+>  	int cpuid, hartid, error;
+> -	struct device_node *child;
+> -	struct irq_domain *domain;
+>  
+>  	hartid = riscv_of_processor_hartid(n);
+>  	if (hartid < 0) {
+> @@ -121,20 +119,7 @@ static int __init riscv_timer_init_dt(struct device_node *n)
+>  	if (cpuid != smp_processor_id())
+>  		return 0;
+>  
+> -	domain = NULL;
+> -	child = of_get_compatible_child(n, "riscv,cpu-intc");
+> -	if (!child) {
+> -		pr_err("Failed to find INTC node [%pOF]\n", n);
+> -		return -ENODEV;
 > -	}
+> -	domain = irq_find_host(child);
+> -	of_node_put(child);
+> -	if (!domain) {
+> -		pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+> -		return -ENODEV;
+> -	}
+> -
+> -	riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
+> +	riscv_clock_event_irq = irq_create_mapping(NULL, RV_IRQ_TIMER);
+>  	if (!riscv_clock_event_irq) {
+>  		pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+>  		return -ENODEV;
+> diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> index b65bd8878d4f..9f0a7a8a5c4d 100644
+> --- a/drivers/irqchip/irq-riscv-intc.c
+> +++ b/drivers/irqchip/irq-riscv-intc.c
+> @@ -125,6 +125,15 @@ static int __init riscv_intc_init(struct device_node *node,
+>  		return rc;
+>  	}
+>  
+> +	/*
+> +	 * Make INTC as the default domain which will allow drivers
+> +	 * not having dedicated DT/ACPI fwnode (such as RISC-V SBI IPI
+> +	 * driver, RISC-V timer driver, RISC-V PMU driver, etc) can
+> +	 * directly create local interrupt mapping using standardized
+> +	 * local interrupt numbers.
+> +	 */
+> +	irq_set_default_host(intc_domain);
 
-show_errors seems unused after this change
+No, please. This really is a bad idea. This sort of catch-all have
+constantly proven to be a nuisance, because they discard all the
+topology information. Eventually, you realise that you need to know
+where this is coming from, but it really is too late.
 
->   
->   	oui = RTW_GET_BE24(pos);
->   	switch (oui) {
-> @@ -674,11 +669,8 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
->   			elems->wpa_ie_len = elen;
->   			break;
->   		case WME_OUI_TYPE: /* this is a Wi-Fi WME info. element */
-> -			if (elen < 5) {
-> -				DBG_88E("short WME information element ignored (len=%lu)\n",
-> -					(unsigned long)elen);
-> +			if (elen < 5)
->   				return -1;
-> -			}
->   			switch (pos[4]) {
->   			case WME_OUI_SUBTYPE_INFORMATION_ELEMENT:
->   			case WME_OUI_SUBTYPE_PARAMETER_ELEMENT:
-> @@ -690,8 +682,6 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
->   				elems->wme_tspec_len = elen;
->   				break;
->   			default:
-> -				DBG_88E("unknown WME information element ignored (subtype=%d len=%lu)\n",
-> -					pos[4], (unsigned long)elen);
->   				return -1;
->   			}
->   			break;
-> @@ -701,8 +691,6 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
->   			elems->wps_ie_len = elen;
->   			break;
->   		default:
-> -			DBG_88E("Unknown Microsoft information element ignored (type=%d len=%lu)\n",
-> -				pos[3], (unsigned long)elen);
->   			return -1;
->   		}
->   		break;
-> @@ -714,14 +702,10 @@ static int rtw_ieee802_11_parse_vendor_specific(u8 *pos, uint elen,
->   			elems->vendor_ht_cap_len = elen;
->   			break;
->   		default:
-> -			DBG_88E("Unknown Broadcom information element ignored (type=%d len=%lu)\n",
-> -				pos[3], (unsigned long)elen);
->   			return -1;
->   		}
->   		break;
->   	default:
-> -		DBG_88E("unknown vendor specific information element ignored (vendor OUI %02x:%02x:%02x len=%lu)\n",
-> -			pos[0], pos[1], pos[2], (unsigned long)elen);
->   		return -1;
->   	}
->   	return 0;
-> @@ -752,13 +736,8 @@ enum parse_res rtw_ieee802_11_parse_elems(u8 *start, uint len,
->   		elen = *pos++;
->   		left -= 2;
->   
-> -		if (elen > left) {
-> -			if (show_errors) {
-> -				DBG_88E("IEEE 802.11 element parse failed (id=%d elen=%d left=%lu)\n",
-> -					id, elen, (unsigned long)left);
-> -			}
+I'd rather you *synthesise* a fwnode (like ACPI does) rather then do
+this.
 
-same here
+	M.
 
-> +		if (elen > left)
->   			return ParseFailed;
-> -		}
->   
->   		switch (id) {
->   		case WLAN_EID_SSID:
-> @@ -839,10 +818,6 @@ enum parse_res rtw_ieee802_11_parse_elems(u8 *start, uint len,
->   			break;
->   		default:
->   			unknown++;
-> -			if (!show_errors)
-> -				break;
-> -			DBG_88E("IEEE 802.11 element parse ignored unknown element (id=%d elen=%d)\n",
-> -				id, elen);
->   			break;
-
-and here
-
-
-
-With regards,
-Pavel Skripkin
+-- 
+Without deviation from the norm, progress is not possible.

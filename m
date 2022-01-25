@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF25949B3D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D8949B3D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383915AbiAYMTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355805AbiAYMOe (ORCPT
+        id S1382643AbiAYMTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:19:41 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34050 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381836AbiAYMP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:14:34 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392DAC06173D;
-        Tue, 25 Jan 2022 04:14:24 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id jx6so30442555ejb.0;
-        Tue, 25 Jan 2022 04:14:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vvFgFjh/h8Rzded/DiWiu2ZGRJkVIhHilEl7/kR6X8M=;
-        b=k+TGVTJJ7eqYdNfHflsvQ0/CtFdbBeyJUdmt0tPSKVTZwZpnQWB0AqQ7OowpIVboW+
-         f+BeYrtvnbGdpstNuxicHa9jJOnpnLJ+6q7vTx6tBuKY79FZXNWDhYmhz6pHLnNnI9eE
-         C3YTjGB4s37lbKmD8tPz/H1r/g3zy4F5HQxqpS7J7j6tCXWUElEEVWhYHKt28I2kUgTO
-         jZzCGwis0NR/jBYNu8veItHwD9Kp0wtBwYWiz2oceRB0YwQiazbvnZb1YT13h3ZnMvgF
-         TWeq44HJuMwpzLOFgfwpkBUca7QGUPoAsjWGe689iKFNt99XpE4PFhgSxd5dsR739K+u
-         TcHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vvFgFjh/h8Rzded/DiWiu2ZGRJkVIhHilEl7/kR6X8M=;
-        b=LxF7CN3uIOR0qinX49FfpE3vvtjF3cNngd0ofQUUqdaksbqJW6Cgf7IGQ1ie7JJTvS
-         XfKWbugYyR4DA/CvX8wjKS007Gmlkars1DuHABE9EZCXgUT9SPu+9la0GqIBbNR4Nsxh
-         qq/Lpt0zuXShtvAiA3E1GikkrphbA8YtNEwwKsJm1fALLWminFB8+/JxFDZuDBboT7BE
-         2FuxYMKCfaCQvNkhcdg+GiGBNTRO0OeSeV4oOBJ/6GJzvhx/22nsoTlOeLq89BfaA9DW
-         S/c1bnlIZZF4FtZktMMZsonyP/PenroHfdESCogwCqeGGoLKp0kfNBiyxAFn8Up+XbXC
-         aWNQ==
-X-Gm-Message-State: AOAM531wUB5S4Ztn+fVmZ6Av8f9oifCwq6K7dYIsJN7KVLRc0imWJtFX
-        iKyMVrmx9ENBZmlgD7J+EnE=
-X-Google-Smtp-Source: ABdhPJzNj7jDwhu3m6E+S4oK27aeFpCkMtpa7L9AlQobvrCSyRqA3TwmwStawhWD+mzUWp69QrW1VA==
-X-Received: by 2002:a17:906:d542:: with SMTP id cr2mr16059095ejc.720.1643112862686;
-        Tue, 25 Jan 2022 04:14:22 -0800 (PST)
-Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id o11sm8173097edh.75.2022.01.25.04.14.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 04:14:22 -0800 (PST)
-Message-ID: <7e935740-66a3-da07-a196-0584dab310b9@gmail.com>
-Date:   Tue, 25 Jan 2022 13:14:21 +0100
+        Tue, 25 Jan 2022 07:15:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8843C60E9A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 12:15:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39FDC340E0;
+        Tue, 25 Jan 2022 12:15:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643112957;
+        bh=mAalbFUhg2H+qPw2Vc2gO83s4pxQ5Vy4efnC7pLZGR4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QwwQgU8avm+TrG4TnU9Qk/i93XlpmimHmamC7WJ3/hN2Ty7sQvTJzli0Y0+5CoFDR
+         YrEsyYiZbVI78qxbTCES3YvWQKPGLc87fIJfq/rnINAYPNfpkhAiBZZM0V7+CaFte6
+         javZTiP7yecDelmXUqTt5JwHD2D7GoLG64YtzHsZfZYqrlMFd+rEeomfSt4i8ZCVFG
+         luh0FGhKPqCpl77sA3bFE+Otlv1rI0xt8jFGNTs0phibdio4iFzEQD4mazuUd61UXA
+         +EZlxFu4P6mkLxW/wVlXwQhy42gaLaFoVDbZBSlOzLvHk3PC9ob5Sk5IOhTiuhfKFM
+         gZ3GZnkiXdwKQ==
+Date:   Tue, 25 Jan 2022 13:15:45 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Josh Don <joshdon@google.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Balbir Singh <sblbir@amazon.com>
+Subject: Re: [resend RFC 2/3] sched/prctl: add PR_SCHED_CORE_SHARE command
+Message-ID: <20220125121545.rul2vqgrc7io4vio@wittgenstein>
+References: <20220124105247.2118990-1-brauner@kernel.org>
+ <20220124105247.2118990-3-brauner@kernel.org>
+ <CABk29NtFnswO3iaQobbijV1-FwCJd06prm2UMq7S8Tt736hYMA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ARM: dts: rockchip: fix MMC compatibles for rk3288
-Content-Language: en-US
-To:     John Keeping <john@metanate.com>, Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220125115007.3138311-1-john@metanate.com>
-From:   Johan Jonker <jbx6244@gmail.com>
-In-Reply-To: <20220125115007.3138311-1-john@metanate.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CABk29NtFnswO3iaQobbijV1-FwCJd06prm2UMq7S8Tt736hYMA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
-
-MMC aliases should go in the dts board files.
-Sort on reg address, based on availability and without number gab.
-(For rk3288 a lot of boards to change. That's why it wasn't done
-yet...Could someone pick that up?)
-
-Johan
-
-On 1/25/22 12:50, John Keeping wrote:
-> Prior to commit 4bac670aa5cb ("mmc: dw_mmc: rockchip: use common_caps")
-> the mshcN aliases were used in an unusual way by the dw_mmc driver and
-> affected behaviour.  Now that this has been fixed, rename the mmc
-> aliases to use the standard form.
+On Mon, Jan 24, 2022 at 04:31:05PM -0800, Josh Don wrote:
+> Hey Christian,
 > 
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
->  arch/arm/boot/dts/rk3288.dtsi | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> This seems like a reasonable extension of the interface to me.
 > 
-> diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
-> index aaaa61875701..50fa0a4652b5 100644
-> --- a/arch/arm/boot/dts/rk3288.dtsi
-> +++ b/arch/arm/boot/dts/rk3288.dtsi
-> @@ -25,10 +25,10 @@ aliases {
->  		i2c3 = &i2c3;
->  		i2c4 = &i2c4;
->  		i2c5 = &i2c5;
-> -		mshc0 = &emmc;
-> -		mshc1 = &sdmmc;
-> -		mshc2 = &sdio0;
-> -		mshc3 = &sdio1;
-> +		mmc0 = &emmc;
-> +		mmc1 = &sdmmc;
-> +		mmc2 = &sdio0;
-> +		mmc3 = &sdio1;
->  		serial0 = &uart0;
->  		serial1 = &uart1;
->  		serial2 = &uart2;
+> > @@ -200,6 +212,20 @@ int sched_core_share_pid(unsigned int cmd, pid_t pid, enum pid_type type,
+> >                 __sched_core_set(current, cookie);
+> >                 goto out;
+> >
+> > +       case PR_SCHED_CORE_SHARE:
+> > +               rcu_read_lock();
+> > +               p = task_by_pid(pid_share);
+> > +               if (!p)
+> > +                       err = -ESRCH;
+> > +               else if (!ptrace_may_access(p, PTRACE_MODE_READ_REALCREDS))
+> > +                       err = -EPERM;
+> > +               if (!err)
+> > +                       cookie = sched_core_clone_cookie(p);
+> > +               rcu_read_unlock();
+> > +               if (err)
+> > +                       goto out;
+> > +               break;
+> > +
+> 
+> Did you consider folding this into SCHED_CORE_SHARE_TO? SHARE_TO isn't
+> using the last arg right now; it could use it as an override for the
+> task we copy the cookie from instead of always choosing 'current'.
+> Since the code currently rejects any SCHED_CORE prctl calls with a
+> non-zero last arg for commands other than SCHED_CORE_GET, this would
+> be a safe change for userspace.
+
+Yeah, that sounds good to me too. I can certainly rework the patch to do
+that!

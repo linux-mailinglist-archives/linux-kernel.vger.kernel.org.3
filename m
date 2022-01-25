@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7B149B2D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FE249B2D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380948AbiAYLRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 06:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381315AbiAYLPM (ORCPT
+        id S1381520AbiAYLTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 06:19:09 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59802 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354601AbiAYLQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 06:15:12 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96454C06176D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:14:34 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id h14so60544042ybe.12
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:14:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=zyQIoOa6N6q0TEt2o50SPU/4lPYa3wgP3S1KXQUGnmA=;
-        b=TwhpFr9925pf37kYM1Z9z7iWjfeyQqwTekqqjjsSTMWLo9qQc3gNXBPrMUP7R51Wv2
-         bxFPoWj5yQq4yz/FGJb5D+cQ0/HHFOBlAjg6eOBKohJqz0GA7wDysIZhzItwEeHMfQE6
-         Pu4WpU5FBOn7mK01fE9wJ5w0c7KKTUY5EGdC+1//2xtiL/2VkGVr5cB71oVHX5UeS3QH
-         HmgVQRI4Uuv9xjRlOZfdFGdEhXDIYD9lKJzgoYQHBCzn5HD64kXjzu97FmQtDNhJLwNX
-         skzgtnU0drzx8AZhxSQGAw7DagGoi1E2FoANx4+LfFQol7zHuAwXOapsSf3v7WtEyiPX
-         8nNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=zyQIoOa6N6q0TEt2o50SPU/4lPYa3wgP3S1KXQUGnmA=;
-        b=cwzMo6a+qZYxnZhVlRQw7VH98qPJtF8ziy22Pb2AudYCv1zdkURhkYw0kjNHJAuhUS
-         JEQyLcvJtAHH2+kfN40ZmLflHimDWnDHk/pwQbxPB8S+YS7aEdQJCmIzPbDQx9M25zN4
-         7YB9aI7ZboMIXxyeVn4/Rr8Oo2OvrMLcNuHOcyfETtkUeUT7GIPccnSEspve2LFJb6F6
-         QO34Auw4ONT1i1ztZJKRiSJBbRrVPHMrmthAPhbM+U2U+4EJ+lpKJ6/oz27P7KEoUy4U
-         i8dFFzeCcvs1OtePpyS5E1XVapkWlFOSHQNF0V+8TevF+Q+X2Ruoy+baB7lrGmcIbRD0
-         KKkA==
-X-Gm-Message-State: AOAM531/DlN5vDlDXHT+fv6yK+Q8EQRZNSs2B0M71fBs6NtE7ZEGGX8m
-        4MpQMGLu5Ma5i/KhWii8TdGOr8OfrXWM5W9l3Tk=
-X-Google-Smtp-Source: ABdhPJwbYOF26yPxkZtnqFv0gU1yP29m8Skufvz19sKT97DyGs8/As5U8Eg09EGrNC1A7uWozZ9vOhQmS9kn2+D+hEc=
-X-Received: by 2002:a5b:790:: with SMTP id b16mr27827750ybq.74.1643109273511;
- Tue, 25 Jan 2022 03:14:33 -0800 (PST)
+        Tue, 25 Jan 2022 06:16:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CB0C61675;
+        Tue, 25 Jan 2022 11:15:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1410AC340E0;
+        Tue, 25 Jan 2022 11:15:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643109304;
+        bh=jiWy23PF8gjrQaHK3eXhaNjTOKYRVwwmMnm35rIo+0A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n5ZJASWZdjsDgI5Yj4x6P4PF3mQyrPW5hfOpwJj0EUvkkHU7PFA7HaYhNMVo0X5kL
+         7Xho5IbY3Lx1FIvE3PVsDbYUhyUh/LyyaZ3lOxZsj00LHO0Jrg09vMder2WgMLXxpr
+         cLfp4O2NryuU+nwRIwVvU7aMQ6EDGOHijPh1OCdE=
+Date:   Tue, 25 Jan 2022 12:15:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajatxjain@gmail.com,
+        dtor@google.com, jsbarnes@google.com,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as
+ untrusted
+Message-ID: <Ye/btvA1rLB2rp02@kroah.com>
+References: <20220120000409.2706549-1-rajatja@google.com>
+ <20220121214117.GA1154852@bhelgaas>
+ <Ye5GvQbFKo+CFtRb@lahna>
+ <Ye/X7E2dKb+zem34@lahna>
 MIME-Version: 1.0
-Received: by 2002:a05:7108:5004:0:0:0:0 with HTTP; Tue, 25 Jan 2022 03:14:33
- -0800 (PST)
-Reply-To: kaborehamza100@gmail.com
-From:   Kabore Hamza <lee732752@gmail.com>
-Date:   Tue, 25 Jan 2022 11:14:33 +0000
-Message-ID: <CAGnC-u6-ugXk1ef0WJV_1861eT+TCMxMe3OsPU7g_+hBcg0xYw@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ye/X7E2dKb+zem34@lahna>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jan 25, 2022 at 12:58:52PM +0200, Mika Westerberg wrote:
+> On Mon, Jan 24, 2022 at 08:27:17AM +0200, Mika Westerberg wrote:
+> > > > This patch introduces a new "UntrustedDevice" property that can be used
+> > > > by the firmware to mark any device as untrusted.
+> > 
+> > I think this new property should be documented somewhere too (also
+> > explain when to use it instead of ExternalFacingPort). If not in the
+> > next ACPI spec or some supplemental doc then perhaps in the DT bindings
+> > under Documentation/devicetree/bindings.
+> 
+> Actually Microsoft has similar already:
+> 
+> https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
+> 
+> I think we should use that too here.
 
-I am Mr. Kabore Hamza , from Burkina Faso in West Africa. I
-work here with the African Bank of which I am the audit director. Can
-you protect me this amount (18 million USD) in your country?
-Further details will be provided to you if you express your interest.
+But we do not have "dma protection" for Linux, so how will that value
+make sense?
 
-Greetings,
+And shouldn't this be an ACPI standard?
 
-Mr. Kabore Hamza
+thanks,
+
+greg k-h

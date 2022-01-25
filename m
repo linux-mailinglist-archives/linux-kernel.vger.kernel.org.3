@@ -2,403 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 130FE49A892
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 948F349A878
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1319510AbiAYDJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3423536AbiAYCfX (ORCPT
+        id S1318943AbiAYDHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:07:31 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:39052 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S3417838AbiAYCLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:35:23 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBDBC04967E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 18:10:04 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id i14so15576966ila.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 18:10:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Aw1DWEcQIEt8m+nktD6YAgCCZ66sXTqiTlvo4jZ+Ooc=;
-        b=IV4UUBTWv7dCWuKKUmqYaTqZ6BSPJXwQPCMLyUQtbxvSktF6MqhJiebjkrbQB+v6wx
-         nkYGW9GnuzlTEzoSlGB4FD9TFIYYweO/VzNgLF55/tMWgCjeBtaLcwVxJF5HEznh1qp7
-         cv0ZTIIOLS+vB1zI0iZlaSM9B5+X14oIQEGvBKOzzqCFEByCoMEeMCRQVcQ1DmsJ6u/A
-         2URcjpXTgtDbDsyyKsOWtpg+YmwnZSvqttK7NyQVhsSiTC21J6aCjIX/S50Ic3jP2pGQ
-         dZ9ghDbQK+7lsYCHdF5CFZ17L6AcSDdUxbah1dPgfp9t81Emk9274rkOLbWWY701Y3as
-         +AyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Aw1DWEcQIEt8m+nktD6YAgCCZ66sXTqiTlvo4jZ+Ooc=;
-        b=BwMHgjRi4xyPOBgc4RgWPOA9TUUSwl8mJX/BdisQ6QFbfR7+ixGUNJEmyCKUbT3rYE
-         AujC6Rf8/kSOXLpuccwfmNjzucQaBQeSzML4HysTNiwqif2pGQPTwTCx9E3S2P8psaJq
-         S4HU3RGWghEAYFVc05P13fRvfxwhM+2gPEiGy0H9Ih4452viyLqjDXEsNkOoCGhisx22
-         dWuYrEDG7zeNzz6YBEqjHOFgBIM1tbh2PDoiowqzMz8PF68z15n5zhzfn5QnorqMW90O
-         oUG2RCp2LDe7gn61aY2/i/e7hfNw14CgUZPR1OiY9F0oW7Qih9B4+V3opmRc0idyyDYb
-         E55g==
-X-Gm-Message-State: AOAM530MynAo+xLbgMQC9egv4ZP+3X8MUJJKHCBY/qy52XPSThuhjNpA
-        mj94fxetJUsO4JX7Ni2kJqyqVH73efEOhdj0rwwX0Q==
-X-Google-Smtp-Source: ABdhPJzUKOwOTPGCN93MmdPXJ3xAz6M1rwWubCf/hb2F9I8m+/OrWMDeX8iB0GQ+2nwGsGoNuGLVwfigts5QuSSshsQ=
-X-Received: by 2002:a92:c9c8:: with SMTP id k8mr9677860ilq.2.1643076603057;
- Mon, 24 Jan 2022 18:10:03 -0800 (PST)
+        Mon, 24 Jan 2022 21:11:43 -0500
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AA979C08EB;
+        Tue, 25 Jan 2022 02:11:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1643076694; bh=gqt/T234sCOILUz/DJVsTVJupsjrQoNzlqlXGR6YQi0=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=O8OCnc2aHgpS8ZGrCcPYa0zEhHZx/rLVnkgmT4os77fMiJAzfWAoGENA+d7wE/Ket
+         RIqpkbxjj6wruk5U1WpZnL/LLt0/dOEEy4fiG/6q32AGU1wgLCW5UD0qVsbZIqZver
+         S964sqSDo9YT2gZbxXU4PSxacszQTKlbTyT6zSXo6ULU+EFUYPmwzT/8KEFagJvZOI
+         njPmnugfMa1tRat4Qv33Ahn4oEvmBYDs+ZtGJQYijs/54V9m5SUkOtkxnypcpBR83a
+         5KggD+ojj4eJOWJkmqljv5XZAl52myIlDAMNyGia5QqOXEhplFxsYIacW7hVgwWfFV
+         aejbrWTZM3mGw==
+Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 96016A0070;
+        Tue, 25 Jan 2022 02:11:29 +0000 (UTC)
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id D1AED80071;
+        Tue, 25 Jan 2022 02:11:26 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="UdjcVWUX";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O0/Tlk1GMrYxds/Gm9aFJ8ARBKjW+HlLn/w90u2XMZn4MZZ3NdserA16t0Y21+r+z4j2TFOsBBu9V1WVSIm6hKlDFaVxjazUOXpdEBLNOk/n583AZ71UepZ9m/nI6EaaOHtVq2zyAIoizdtt3g5Mowh0vwP9Oc+xHPApeXnYDFrFHIC0nBJYrtan7Pk8zcw9vjQRaLWUAlpkA/ETDX4VmfJEinHHQDwXC+InIsYeuQZaZvq9sj519+9jBZZSI/beQ3QQbUBiBTjgpb4CYQA3/esBZK+49cLozxLfp6cY29SqJwFTf/az7NrflHiZ/IvlBi1Qi6KdqIAvGAWdBiSGSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gqt/T234sCOILUz/DJVsTVJupsjrQoNzlqlXGR6YQi0=;
+ b=D4g6LsTdEqVMueN8ngrBCMjJSh1sy8dtv0TtV9fmrVW+dCA0Y6Hu2BoTFERVRtyH6D7vf0oMuT81DZU5idmSv1+90Wl/onMghDAwrMpEf5ja1Wl77ja69YVtQgtdHL9Cty9Psoe8ocWNAs1E6lXIE/N9ZUM/hpxa/FyTKQlr3feFSCGCwHsa1VAVeTAYOnGS0yRzSPudwCisGS+uIRAOXRuSLW45oTucmVinQB3ITlLgBXR6Bf0jZKd3Iq+wivLgYlWdCJ/RqpME0hX6PixRktzeJjBJ7iskoS8YZtesn7StBrH9/dk5mr275FK9fxbZMlR1qcIzjKVudszjt3kK/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gqt/T234sCOILUz/DJVsTVJupsjrQoNzlqlXGR6YQi0=;
+ b=UdjcVWUXvJpXBf7zLKVEieKl1GNHi07tkCA60V11hjoLH0jxLcPBeci+gpy6wzI9+TpqzkiOF0ra0kwSYSNpqDPWnV83txpNHvcJrELX5sY5IBwYYiQyPixtuSGA8mvdTLpBOxPqKWsgYAvSeM+06FR2jq2ulqEfjXxDJNbLKII=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by SA0PR12MB4560.namprd12.prod.outlook.com (2603:10b6:806:97::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Tue, 25 Jan
+ 2022 02:11:23 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::c5f4:5df4:b5bf:b13e]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::c5f4:5df4:b5bf:b13e%3]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
+ 02:11:23 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Baruch Siach <baruch@tkos.co.il>
+Subject: Re: [PATCH v2 4/7] usb: dwc3: Program GFLADJ
+Thread-Topic: [PATCH v2 4/7] usb: dwc3: Program GFLADJ
+Thread-Index: AQHYDMsCIy0SvjCLEk29RiHsv2qI76xyzwGAgAAFUACAADPKAA==
+Date:   Tue, 25 Jan 2022 02:11:23 +0000
+Message-ID: <3ca6fb9e-94cf-6483-26a6-ae2682d1f55e@synopsys.com>
+References: <20220119002438.106079-1-sean.anderson@seco.com>
+ <20220119002438.106079-5-sean.anderson@seco.com>
+ <4696c5a4-5921-f7cb-196c-5ad956e696f9@synopsys.com>
+ <f528aeb5-6155-a75e-9d35-9bf473e0bbc7@seco.com>
+In-Reply-To: <f528aeb5-6155-a75e-9d35-9bf473e0bbc7@seco.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e504078f-2c32-4a2f-0363-08d9dfa7fc5c
+x-ms-traffictypediagnostic: SA0PR12MB4560:EE_
+x-microsoft-antispam-prvs: <SA0PR12MB4560C6D4B046D9A0A98E9B43AA5F9@SA0PR12MB4560.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2512;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AOhRSAujs1ciO05VX/yj6MQEIDjLjl1Amh8gb++XuuyyX0zUjXvK9kktZI7CxgD1EUvvOJvht+YYkZCZCuX9OavxYN8AheVTOnAg7B5az0J0KIUlpZKzVp8TAuBZA+gzxJrWPfQ9AaVqbv/HAVlf3cPbYW2z0yS3DgRiE+JyF/mrwLZbWSaCbbFuGd48+w5eUI+eQjwjH0tEVVe8kIgATdS5sI5oMCWsPdd3wKUC0G28PVFjqHgvkinhmrn/QHNWSyU51H3yFvYbB7BSWjXZlTDFjMC0TSWtWo7PfOHSzV9j1Uw4U2FfocNeqRvt9HLgn7XOkJWayAFD8g0J8MnSfe4mse80/8ED+hmECQE2chAmRXTI4B82eaTLGte4fjaRQzEYdmbbEUjjZvDKiCb1FDlTexNekaBvjYEg9/8wIilHtMN1Q+PSXzRfMvLbPhhJq1CpYWNsnIhTWz1BPRbPPWc/p2NYwGaoIr2Xyh+BoE+bZr777h+cCWB66pF0coTAKTvv78z0lLDSv8Zs8gzBN4cmaVBAT2bP26pWzsOOqAyqKzGbeqyrhOhyKafU6hZ5pwKw9btIEI7Y7XSKrqfFdpBG2Se50BOLHRYzeO1h1ArwUNb5NaM/MGcLE7tgGIly72sbXqrzpA2SsAF4D/LdvI0kOIG60fjE4XvTt33GjbziWZRO+58ky3+OnkVlR5dig8Vs41ovtmR5bpLSBLR4GWO+smvVVKRk7cnDdiDreKf6gyvg23GqlQrYrAzawcbJPSK78D/LczIj62693xuDSA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(110136005)(38100700002)(8936002)(316002)(8676002)(86362001)(53546011)(508600001)(36756003)(186003)(26005)(122000001)(66446008)(54906003)(5660300002)(6506007)(31686004)(2616005)(6486002)(66476007)(83380400001)(64756008)(2906002)(38070700005)(31696002)(66556008)(66946007)(4326008)(6512007)(76116006)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?blI5RUFBbjNYOEdma0d3TlNhd3V1TmpsWFJtWDhnZGRwcUxQSExtUi9vaU03?=
+ =?utf-8?B?N3k0Z0Z2akgrdmZHS3RSMm5OUTUyU2hDS09HaVdmRmttdm50QU9sU2hhc08v?=
+ =?utf-8?B?dzhvMGhVOGpEMnJhWStSdWVIeFVra2tvdmpqZGlPNWdvVEp5NWJnaHBNajdm?=
+ =?utf-8?B?RVJieHBRQ2IzU2RGRmpvT3l5SjhyZnloME9Kb1hrQTdEUFRBdk9mbWVLdE5x?=
+ =?utf-8?B?dHZGcDlMMW9DN01jd0tyNndUUm9UNVNmaE5IaERxSytIT0VLS3VEZEhWWHFT?=
+ =?utf-8?B?ZktFMGhIWmF2bFRPbWVCbTlUV2x5dFhSZlZPbjdxZ1NuZzhoSExPNFV5ZWJu?=
+ =?utf-8?B?aXAyMEhKdWlSQ3RDTThoYWE3MkdlOHIyOWtvYkhPbkJjQTc4VWVKdS9kZnJ5?=
+ =?utf-8?B?QkdwQ1VsWDZWRlV6NmU5Njc0SGw3WVBKMkxyRXV2QjBpWlhIWDI0a044MXQx?=
+ =?utf-8?B?djVZVW1ndTAzbWNSUmg0SkFEa1BNaldIYmIrNSs5VTQ1RTVTYm9IUHdCWlNj?=
+ =?utf-8?B?UGtRY3paNVc4ajdqcGNuVFNNNm9BSDFBNklRazVERDZVTytDdkNtNm9NZW0z?=
+ =?utf-8?B?T0RCdVAwQVdJVkFORndHYks3MTVSemhuUlcrOE52dUVTOUhEWU9GTUJSMXZM?=
+ =?utf-8?B?ZW5FREpiQXBFcnFxYTlTWml5b1pOUmh1SGcwa0swZGVVUGZXbDdCNTUxS0hJ?=
+ =?utf-8?B?RDF5K3RxM0hDbDNSV3J6WnpWL1k2SEp2V2V3OUlkRy8wamthSFRxdkw2SkFM?=
+ =?utf-8?B?ZGV0bmdKNHpVTFFiVjJTdU5wUkdMVjZVaTJmUS96UnFOeUs5RDg1cmREcVpr?=
+ =?utf-8?B?YWsyQnVjUitGVHJ4Q1lJT1k1Z2cvc0tzS2YwaStSSkZYb3pJU0JmekR0cUVB?=
+ =?utf-8?B?UnhzRzRJQ2kwZzF5TlVORndlWjF6S2ZrS0xKNU00djY2d0F5RS9vYldOeTFn?=
+ =?utf-8?B?K2Z6RnphQUlIbmVJNG9IMG1aaTN4M2Z4MDY2QzhoMUZ1Ri9UTHQ2MHd0MXNj?=
+ =?utf-8?B?VnNWWERVZ28zK2d0OHZpbXFuczZyWjJNbjI2UkpLWlhBN2J5UGVvdlhBcSts?=
+ =?utf-8?B?cGNld0hDQjhiM1FXYnp3dXM4WWJrWGJrREU4T0lTYXF0eStndzl2MHlVWjhS?=
+ =?utf-8?B?RzMwb0luRVhBYSt0YnRUYjNzT0J4R1hNS3VxUWErOVNwZStmZis0RjZGdzh5?=
+ =?utf-8?B?dkJ6Nnhrc2RiRjd2YWk3bWxWUWJpWmExR05mY0wzNUNGcThXNVFGWVIxQUVW?=
+ =?utf-8?B?dHh3ZFY4K21ONXFVREJyK1NXY09XNUxxb3ptUG9VYTdDZWQrNXN1MjRWRDA0?=
+ =?utf-8?B?dUcySFNRNDd4azZENU5EM1JrNG1rMTU1Mlp5UC9yd211ZEdEeEFiYy83MVQ3?=
+ =?utf-8?B?c1J4QThSeE1qZk1kRkxvVWptd2NaYUM2U3p5VG9zS28ydzJURExDQ0ZWOW1w?=
+ =?utf-8?B?dHZuTTlwSGN2cGo4RE1yNjNhU3JDOFg0SGRNU3hrcHY1U0R3Mm5GZzVFQ2s5?=
+ =?utf-8?B?MitlRTFGZXVnSEhUeEZwT2FWbDZ2aFd6YjdwYlZ5ZGRKOVRySm5FTmNockNE?=
+ =?utf-8?B?NnNMZ2hqTU1xREp3ZWgrUU9hWnlDbWN4RTVXSUpwWFl0Mkk3WVIyUWVXVk82?=
+ =?utf-8?B?dnBKR0RvRjVpZVZvanZIQ1hTUkNVNnkweWZRWWx1a2JobHBpcldCVTNNUTBK?=
+ =?utf-8?B?WDVKcEYza2oxWlhuZjFDd1Z0dzhTY01CSHMreEtYNi9venRVWXJVL0pMMXVi?=
+ =?utf-8?B?a2FIV3JtaHhjMlY3TGtERkFrVFkwaEg2UkV4MUpCUWV2UjBjbVFiS3E1YjVN?=
+ =?utf-8?B?WHRiYjZaMXQzdjZHUmc1UEZMRjFUNjRkRzZ2b25DNDBBQzJPdDBWS2tuUHJu?=
+ =?utf-8?B?NVdqaUNsS2NvZ0tDbjhVNDgxbW9DcHdIM1Y0cVh2Wm1hR0NyTlIyV291Y2NS?=
+ =?utf-8?B?RU83eVNkbmMxNXVtYU1scUU0WVF5Qmp5ZGpNK3pBeENmZTJ3TWpKU1VIVDhX?=
+ =?utf-8?B?NllsSW9sSU1WOGt4NC84bWlKTnIraDg1Mi9qZlNUYklOdEpZTDZrd2drMlFC?=
+ =?utf-8?B?NzRlSXgreFhpcUxDcnVwN29NSmFjVlYrV05ZNjJWbHdCMk96dkpoYmI3RW1a?=
+ =?utf-8?B?aEFaQ3NRZ0lVMHhXNzZ0bDNTMHd6c2ZMTUlVSWRORHA5cUYyUDZwSk1BOG9V?=
+ =?utf-8?Q?+4P/b0N0YUW6zNT51pl3xOs=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4347504DD6777348807F0BD3D0D2553D@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211118193714.2293728-1-irogers@google.com> <YaOi6pYqoc3boYX/@krava>
- <YaY8eBB+PnklIxZA@kernel.org> <CAP-5=fXR952+Rfa8yPAwO7FmHTctuTxfY0yEREtvJkHtx=PfYA@mail.gmail.com>
-In-Reply-To: <CAP-5=fXR952+Rfa8yPAwO7FmHTctuTxfY0yEREtvJkHtx=PfYA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 24 Jan 2022 18:09:50 -0800
-Message-ID: <CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com>
-Subject: Re: [PATCH] perf map: Fix namespace memory leak
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e504078f-2c32-4a2f-0363-08d9dfa7fc5c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2022 02:11:23.3088
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /oaXXMvkeO2KKkb/GzWeFeD2scIPGbaacHD4/iUoeiG9ZQlvhTRpdcrVYQiBnbOUTQ7szKWNo+q3cC+DD8hN6g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4560
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-As with:
-https://lore.kernel.org/linux-perf-users/20220122045811.3402706-4-irogers@google.com/
-I implemented REFCNT_CHECKING for nsinfo (I'll mail it soon). This
-more accurately identifies the problem. In one run I got:
-```
-=================================================================
-==3900722==ERROR: AddressSanitizer: attempting double-free on
-0x602000026710 in thread T6:
-    #0 0x7f9a1dd6f4d7 in __interceptor_free
-../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127
-    #1 0x5650d04cb29c in nsinfo__put util/namespaces.c:259
-    #2 0x5650d04aba93 in map__new util/map.c:198
-    #3 0x5650d04a11f6 in machine__process_mmap2_event util/machine.c:1798
-    #4 0x5650d04a24bf in machine__process_event util/machine.c:2019
-    #5 0x5650d03e78b3 in perf_event__process util/event.c:567
-    #6 0x5650d056e3bb in perf_tool__process_synth_event
-util/synthetic-events.c:65
-    #7 0x5650d05711a6 in perf_event__synthesize_mmap_events
-util/synthetic-events.c:501
-    #8 0x5650d0572fc0 in __event__synthesize_thread util/synthetic-events.c:792
-    #9 0x5650d05739fd in __perf_event__synthesize_threads
-util/synthetic-events.c:929
-    #10 0x5650d0573cbd in synthesize_threads_worker util/synthetic-events.c:961
-    #11 0x7f9a1dc48d7f in start_thread nptl/pthread_create.c:481
-    #12 0x7f9a1cfdcb6e in clone (/lib/x86_64-linux-gnu/libc.so.6+0xfcb6e)
-
-0x602000026710 is located 0 bytes inside of 8-byte region
-[0x602000026710,0x602000026718)
-freed by thread T13 here:
-    #0 0x7f9a1dd6f4d7 in __interceptor_free
-../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127
-    #1 0x5650d04cb29c in nsinfo__put util/namespaces.c:259
-    #2 0x5650d04aba93 in map__new util/map.c:198
-    #3 0x5650d04a11f6 in machine__process_mmap2_event util/machine.c:1798
-    #4 0x5650d04a24bf in machine__process_event util/machine.c:2019
-    #5 0x5650d03e78b3 in perf_event__process util/event.c:567
-    #6 0x5650d056e3bb in perf_tool__process_synth_event
-util/synthetic-events.c:65
-    #7 0x5650d05711a6 in perf_event__synthesize_mmap_events
-util/synthetic-events.c:501
-    #8 0x5650d0572fc0 in __event__synthesize_thread util/synthetic-events.c:792
-    #9 0x5650d05739fd in __perf_event__synthesize_threads
-util/synthetic-events.c:929
-    #10 0x5650d0573cbd in synthesize_threads_worker util/synthetic-events.c:961
-    #11 0x7f9a1dc48d7f in start_thread nptl/pthread_create.c:481
-
-previously allocated by thread T3 here:
-    #0 0x7f9a1dd6f7cf in __interceptor_malloc
-../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:145
-    #1 0x5650d04cb17f in nsinfo__get util/namespaces.c:244
-    #2 0x5650d04ab7df in map__new util/map.c:150
-    #3 0x5650d04a11f6 in machine__process_mmap2_event util/machine.c:1798
-    #4 0x5650d04a24bf in machine__process_event util/machine.c:2019
-    #5 0x5650d03e78b3 in perf_event__process util/event.c:567
-    #6 0x5650d056e3bb in perf_tool__process_synth_event
-util/synthetic-events.c:65
-    #7 0x5650d05711a6 in perf_event__synthesize_mmap_events
-util/synthetic-events.c:501
-    #8 0x5650d0572fc0 in __event__synthesize_thread util/synthetic-events.c:792
-    #9 0x5650d05739fd in __perf_event__synthesize_threads
-util/synthetic-events.c:929
-    #10 0x5650d0573cbd in synthesize_threads_worker util/synthetic-events.c:961
-    #11 0x7f9a1dc48d7f in start_thread nptl/pthread_create.c:481
-
-Thread T6 created by T0 here:
-    #0 0x7f9a1dd17716 in __interceptor_pthread_create
-../../../../src/libsanitizer/asan/asan_interceptors.cpp:216
-    #1 0x5650d05745eb in perf_event__synthesize_threads
-util/synthetic-events.c:1039
-    #2 0x5650d05789fc in __machine__synthesize_threads
-util/synthetic-events.c:1791
-    #3 0x5650d0578a81 in machine__synthesize_threads
-util/synthetic-events.c:1802
-    #4 0x5650d024edd8 in __cmd_top
-/usr/local/google/home/irogers/kernel-trees/kernel.org/tip/tools/perf/builtin-top.c:1273
-    #5 0x5650d025629b in cmd_top
-/usr/local/google/home/irogers/kernel-trees/kernel.org/tip/tools/perf/builtin-top.c:1774
-    #6 0x5650d03b132b in run_builtin
-/usr/local/google/home/irogers/kernel-trees/kernel.org/tip/tools/perf/perf.c:313
-    #7 0x5650d03b188d in handle_internal_command
-/usr/local/google/home/irogers/kernel-trees/kernel.org/tip/tools/perf/perf.c:365
-    #8 0x5650d03b1c52 in run_argv
-/usr/local/google/home/irogers/kernel-trees/kernel.org/tip/tools/perf/perf.c:409
-    #9 0x5650d03b246b in main
-/usr/local/google/home/irogers/kernel-trees/kernel.org/tip/tools/perf/perf.c:539
-    #10 0x7f9a1cf077ec in __libc_start_main ../csu/libc-start.c:332
-
-Thread T13 created by T0 here:
-    #0 0x7f9a1dd17716 in __interceptor_pthread_create
-../../../../src/libsanitizer/asan/asan_interceptors.cpp:216
-    #1 0x5650d05745eb in perf_event__synthesize_threads
-util/synthetic-events.c:1039
-    #2 0x5650d05789fc in __machine__synthesize_threads
-util/synthetic-events.c:1791
-```
-That is thread 3 had created the wrapper object around the nsinfo,
-thread 13 had put and freed it which cause a double free when thread 6
-tried to do the same thing. How did thread 6 and 13 have the same
-value for dso->nsinfo? In this patch we read then put the value, as
-the put is slow another thread reads and puts the value too. We need
-to atomically swap the value of dso->nsinfo with nsi and then do a put
-on nsi which holds the old value of dso->nsinfo. The question is how
-to do the swap?
-
-C11 has atomic_exchange, but Makefile.config sets the std as gnu99.
-C11 is used in some selftests. atomic_t and atomic_long_t aren't
-guaranteed to be 64-bit, a long can be 32-bit with 64-bit pointers.
-Using a non-atomic swap fixes the issue, memory leak, etc. but clearly
-this needs to be atomic. My preference would be to bump to C11, but I
-can do a linux atomic or poor man's swap if others prefer. Wdyt?
-
-Thanks,
-Ian
-
-On Tue, Nov 30, 2021 at 9:20 AM Ian Rogers <irogers@google.com> wrote:
->
-> On Tue, Nov 30, 2021 at 7:00 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Sun, Nov 28, 2021 at 04:40:26PM +0100, Jiri Olsa escreveu:
-> > > On Thu, Nov 18, 2021 at 11:37:14AM -0800, Ian Rogers wrote:
-> > > > This leak was happening reliably with test "Lookup mmap thread" with
-> > > > stack traces like:
-> > > >
-> > > > Direct leak of 5504 byte(s) in 172 object(s) allocated from:
-> > > >     #0 0x7f4685e47987 in __interceptor_calloc
-> > > >     #1 0x56063b974c2a in nsinfo__new util/namespaces.c:142
-> > > >     #2 0x56063b9781ff in thread__new util/thread.c:70
-> > > >     #3 0x56063b944953 in ____machine__findnew_thread util/machine.c:543
-> > > >     #4 0x56063b944ac6 in __machine__findnew_thread util/machine.c:574
-> > > >     #5 0x56063b944b36 in machine__findnew_thread util/machine.c:584
-> > > >     #6 0x56063b94c892 in machine__process_fork_event util/machine.c:1954
-> > > >     #7 0x56063b94cc1f in machine__process_event util/machine.c:2019
-> > > >     #8 0x56063b894f18 in perf_event__process util/event.c:567
-> > > >     #9 0x56063ba17951 in perf_tool__process_synth_event util/synthetic-events.c:65
-> > > >     #10 0x56063ba19086 in perf_event__synthesize_fork util/synthetic-events.c:287
-> > > >     #11 0x56063ba1c39d in __event__synthesize_thread util/synthetic-events.c:775
-> > > >     #12 0x56063ba1cf6f in __perf_event__synthesize_threads util/synthetic-events.c:929
-> > > >     #13 0x56063ba1d4ab in perf_event__synthesize_threads util/synthetic-events.c:1000
-> > > >     #14 0x56063b821a3d in synth_all tests/mmap-thread-lookup.c:136
-> > > >     #15 0x56063b821c86 in mmap_events tests/mmap-thread-lookup.c:174
-> > > >     #16 0x56063b8221b7 in test__mmap_thread_lookup tests/mmap-thread-lookup.c:230
-> > > >
-> > > > The dso->nsinfo is overwritten, but without a nsinfo__put this can leak
-> > > > the overwritten nsinfo.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > >
-> > > nice catch!
-> > >
-> > > Acked-by: Jiri Olsa <jolsa@redhat.com>
-> >
-> > This one is tricky, I have to retrieve the details from last time this
-> > surfaced, but try:
-> >
-> > # perf top -F 10000
-> >
-> > leave it for a while and press 'q':
-> >
-> > perf: /home/acme/git/perf/tools/include/linux/refcount.h:131: refcount_sub_and_test: Assertion `!(new > val)' failed.
-> >                                                                                                                      Aborted (core dumped)
-> >
-> > I reproduced the above assertion a few times, now I'm not being able,
-> > probably some namespace related activity took place when it hit.
->
-> I was able to reproduce in about 1 run in 3. With address sanitizer
-> the core dump turns into a heap-use-after-free with a report of:
->
-> ==235440==ERROR: AddressSanitizer: heap-use-after-free on address
-> 0x6030000485c8 at pc 0x55d8b882bfb7 bp 0x7fffd3426e90 sp
-> 0x7fffd3426e88
-> READ of size 4 at 0x6030000485c8 thread T0
->     #0 0x55d8b882bfb6 in __read_once_size ./tools/include/linux/compiler.h:132
->     #1 0x55d8b882bfb6 in atomic_read
-> ./tools/include/asm/../../arch/x86/include/asm/atomic.h:28
->     #2 0x55d8b882c35c in refcount_sub_and_test
-> ./tools/include/linux/refcount.h:123
->     #3 0x55d8b882c45e in refcount_dec_and_test
-> ./tools/include/linux/refcount.h:148
->     #4 0x55d8b882d4af in nsinfo__put util/namespaces.c:204
->     #5 0x55d8b87adecd in __nsinfo__zput util/namespaces.h:65
->     #6 0x55d8b87b4bcc in dso__delete util/dso.c:1327
->     #7 0x55d8b87b4c8d in dso__put util/dso.c:1342
->     #8 0x55d8b87fb23b in dsos__purge util/machine.c:182
->     #9 0x55d8b87fb2e3 in dsos__exit util/machine.c:190
->     #10 0x55d8b87fb46e in machine__exit util/machine.c:222
->     #11 0x55d8b87fb715 in machines__exit util/machine.c:262
->     #12 0x55d8b88149d2 in perf_session__delete util/session.c:305
->     #13 0x55d8b85c0924 in cmd_top ./tools/perf/builtin-top.c:1781
->     #14 0x55d8b87176b7 in run_builtin ./tools/perf/perf.c:313
->     #15 0x55d8b8717c10 in handle_internal_command ./tools/perf/perf.c:365
->     #16 0x55d8b8717fcd in run_argv ./tools/perf/perf.c:409
->     #17 0x55d8b87187bc in main ./tools/perf/perf.c:539
->
-> 0x6030000485c8 is located 24 bytes inside of 32-byte region
-> [0x6030000485b0,0x6030000485d0)
-> freed by thread T0 here:
->     #0 0x7fb6e7c454d7 in __interceptor_free
-> ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:127
->     #1 0x55d8b882d41a in nsinfo__delete util/namespaces.c:192
->     #2 0x55d8b882d4bf in nsinfo__put util/namespaces.c:205
->     #3 0x55d8b87adecd in __nsinfo__zput util/namespaces.h:65
->     #4 0x55d8b87b4bcc in dso__delete util/dso.c:1327
->     #5 0x55d8b87b4c8d in dso__put util/dso.c:1342
->     #6 0x55d8b87fb23b in dsos__purge util/machine.c:182
->     #7 0x55d8b87fb2e3 in dsos__exit util/machine.c:190
->     #8 0x55d8b87fb46e in machine__exit util/machine.c:222
->     #9 0x55d8b87fb715 in machines__exit util/machine.c:262
->     #10 0x55d8b88149d2 in perf_session__delete util/session.c:305
->     #11 0x55d8b85c0924 in cmd_top ./tools/perf/builtin-top.c:1781
->     #12 0x55d8b87176b7 in run_builtin ./tools/perf/perf.c:313
->     #13 0x55d8b8717c10 in handle_internal_command ./tools/perf/perf.c:365
->     #14 0x55d8b8717fcd in run_argv ./tools/perf/perf.c:409
->     #15 0x55d8b87187bc in main ./tools/perf/perf.c:539
->
-> previously allocated by thread T11 here:
->     #0 0x7fb6e7c45987 in __interceptor_calloc
-> ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:154
->     #1 0x55d8b882ceaa in nsinfo__new util/namespaces.c:142
->     #2 0x55d8b883047f in thread__new util/thread.c:70
->     #3 0x55d8b87fcb93 in ____machine__findnew_thread util/machine.c:543
->     #4 0x55d8b87fcd06 in __machine__findnew_thread util/machine.c:574
->     #5 0x55d8b87fcd76 in machine__findnew_thread util/machine.c:584
->     #6 0x55d8b8804ad2 in machine__process_fork_event util/machine.c:1954
->     #7 0x55d8b8804e5f in machine__process_event util/machine.c:2019
->     #8 0x55d8b874cf18 in perf_event__process util/event.c:567
->     #9 0x55d8b88cfbd1 in perf_tool__process_synth_event
-> util/synthetic-events.c:65
->     #10 0x55d8b88d1306 in perf_event__synthesize_fork
-> util/synthetic-events.c:287
->     #11 0x55d8b88d461d in __event__synthesize_thread util/synthetic-events.c:775
->     #12 0x55d8b88d51ef in __perf_event__synthesize_threads
-> util/synthetic-events.c:929
->     #13 0x55d8b88d54af in synthesize_threads_worker util/synthetic-events.c:961
->     #14 0x7fb6e7b1eead in start_thread nptl/pthread_create.c:463
->
-> Thread T11 created by T0 here:
->     #0 0x7fb6e7bed716 in __interceptor_pthread_create
-> ../../../../src/libsanitizer/asan/asan_interceptors.cpp:216
->     #1 0x55d8b88d5ddd in perf_event__synthesize_threads
-> util/synthetic-events.c:1039
->     #2 0x55d8b88da3b8 in __machine__synthesize_threads
-> util/synthetic-events.c:1791
->     #3 0x55d8b88da43d in machine__synthesize_threads
-> util/synthetic-events.c:1802
->     #4 0x55d8b85b9378 in __cmd_top ./tools/perf/builtin-top.c:1273
->     #5 0x55d8b85c0811 in cmd_top ./tools/perf/builtin-top.c:1774
->     #6 0x55d8b87176b7 in run_builtin ./tools/perf/perf.c:313
->     #7 0x55d8b8717c10 in handle_internal_command ./tools/perf/perf.c:365
->     #8 0x55d8b8717fcd in run_argv ./tools/perf/perf.c:409
->     #9 0x55d8b87187bc in main ./tools/perf/perf.c:539
->
-> SUMMARY: AddressSanitizer: heap-use-after-free
-> ./tools/include/linux/compiler.h:132 in __read_once_size
-> Shadow bytes around the buggy address:
->   0x0c0680001060: fa fa fa fa fa fa fa fa fd fd fd fd fa fa fa fa
->   0x0c0680001070: fa fa fa fa fa fa fa fa fa fa fd fd fd fd fa fa
->   0x0c0680001080: fa fa fa fa fa fa fa fa fa fa fa fa fd fd fd fd
->   0x0c0680001090: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
->   0x0c06800010a0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
-> =>0x0c06800010b0: fa fa fa fa fa fa fd fd fd[fd]fa fa fa fa fa fa
->   0x0c06800010c0: fa fa fa fa fa fa fa fa fd fd fd fa fa fa fd fd
->   0x0c06800010d0: fd fa fa fa fd fd fd fd fa fa fd fd fd fa fa fa
->   0x0c06800010e0: fd fd fd fd fa fa fd fd fd fd fa fa fd fd fd fa
->   0x0c06800010f0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fd fd
->   0x0c0680001100: fd fd fa fa fa fa fa fa fa fa fa fa fa fa fa fa
-> Shadow byte legend (one shadow byte represents 8 application bytes):
->   Addressable:           00
->   Partially addressable: 01 02 03 04 05 06 07
->   Heap left redzone:       fa
->   Freed heap region:       fd
->   Stack left redzone:      f1
->   Stack mid redzone:       f2
->   Stack right redzone:     f3
->   Stack after return:      f5
->   Stack use after scope:   f8
->   Global redzone:          f9
->   Global init order:       f6
->   Poisoned by user:        f7
->   Container overflow:      fc
->   Array cookie:            ac
->   Intra object redzone:    bb
->   ASan internal:           fe
->   Left alloca redzone:     ca
->   Right alloca redzone:    cb
->   Shadow gap:              cc
-> ==235440==ABORTING
->
-> My hope was to land this so that 'perf test' wouldn't have new
-> failures caused by leak sanitizer. So one option could be to guard the
-> change with an address sanitizer #ifdef. The larger fix is to rework
-> the reference counting logic, but I'd really hope we could switch that
-> work to being in a language like Rust to get us out of the current
-> memory leak vs crash wac-a-mole.
->
-> +Riccardo as he did some great and related fixes over the summer.
->
-> Thanks,
-> Ian
->
->
->
-> > - Arnaldo
-> >
-> > > thanks,
-> > > jirka
-> > >
-> > > > ---
-> > > >  tools/perf/util/map.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-> > > > index 8af693d9678c..ceed8f407bc0 100644
-> > > > --- a/tools/perf/util/map.c
-> > > > +++ b/tools/perf/util/map.c
-> > > > @@ -192,6 +192,7 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
-> > > >                     if (!(prot & PROT_EXEC))
-> > > >                             dso__set_loaded(dso);
-> > > >             }
-> > > > +           nsinfo__put(dso->nsinfo);
-> > > >             dso->nsinfo = nsi;
-> > > >
-> > > >             if (build_id__is_defined(bid))
-> > > > --
-> > > > 2.34.0.rc2.393.gf8c9666880-goog
-> > > >
-> >
-> > --
-> >
-> > - Arnaldo
+U2VhbiBBbmRlcnNvbiB3cm90ZToNCj4gDQo+IA0KPiBPbiAxLzI0LzIyIDU6NDYgUE0sIFRoaW5o
+IE5ndXllbiB3cm90ZToNCj4+IFNlYW4gQW5kZXJzb24gd3JvdGU6DQo+Pj4gR1VDVEwuUkVGQ0xL
+UEVSIGNhbiBvbmx5IGFjY291bnQgZm9yIGNsb2NrIGZyZXF1ZW5jaWVzIHdpdGggaW50ZWdlcg0K
+Pj4+IHBlcmlvZHMuIFRvIGFkZHJlc3MgdGhpcywgcHJvZ3JhbSBSRUZDTEtfRkxBREogd2l0aCB0
+aGUgcmVsYXRpdmUgZXJyb3INCj4+PiBjYXVzZWQgYnkgcGVyaW9kIHRydW5jYXRpb24uIFRoZSBm
+b3JtdWxhIGdpdmVuIGluIHRoZSByZWdpc3RlciByZWZlcmVuY2UNCj4+PiBoYXMgYmVlbiByZWFy
+cmFuZ2VkIHRvIGFsbG93IGNhbGN1bGF0aW9uIGJhc2VkIG9uIHJhdGUgKGluc3RlYWQgb2YNCj4+
+PiBwZXJpb2QpLCBhbmQgdG8gYWxsb3cgZm9yIGZpeGVkLXBvaW50IGFyaXRobWV0aWMuDQo+Pj4N
+Cj4+PiBBZGRpdGlvbmFsbHksIGNhbGN1bGF0ZSBhIHZhbHVlIGZvciAyNDBNSFpERUNSLiBUaGlz
+IGNvbmZpZ3VyZXMgYQ0KPj4+IHNpbXVsYXRlZCAyNDBNaHogY2xvY2sgdXNpbmcgYSBjb3VudGVy
+IHdpdGggb25lIGZyYWN0aW9uYWwgYml0IChQTFMxKS4NCj4+Pg0KPj4+IFRoaXMgcmVnaXN0ZXIg
+aXMgcHJvZ3JhbW1lZCBvbmx5IGZvciB2ZXJzaW9ucyA+PSAyLjUwYSwgc2luY2UgdGhpcyBpcw0K
+Pj4+IHRoZSBjaGVjayBhbHNvIHVzZWQgYnkgY29tbWl0IGRiMmJlNGU5ZTMwYyAoInVzYjogZHdj
+MzogQWRkIGZyYW1lIGxlbmd0aA0KPj4+IGFkanVzdG1lbnQgcXVpcmsiKS4NCj4+Pg0KPj4+IFNp
+Z25lZC1vZmYtYnk6IFNlYW4gQW5kZXJzb24gPHNlYW4uYW5kZXJzb25Ac2Vjby5jb20+DQo+Pj4g
+LS0tDQo+Pj4NCj4+PiBDaGFuZ2VzIGluIHYyOg0KPj4+IC0gQWxzbyBwcm9ncmFtIEdGTEFESi4y
+NDBNSFpERUNSDQo+Pj4gLSBEb24ndCBwcm9ncmFtIEdGTEFESiBpZiB0aGUgdmVyc2lvbiBpcyA8
+IDIuNTBhDQo+Pj4NCj4+PiAgZHJpdmVycy91c2IvZHdjMy9jb3JlLmMgfCAzNyArKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKy0tDQo+Pj4gIGRyaXZlcnMvdXNiL2R3YzMvY29yZS5o
+IHwgIDMgKysrDQo+Pj4gIDIgZmlsZXMgY2hhbmdlZCwgMzggaW5zZXJ0aW9ucygrKSwgMiBkZWxl
+dGlvbnMoLSkNCj4+Pg0KPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyBi
+L2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQo+Pj4gaW5kZXggNTIxNGRhY2VkYTg2Li44ODNlMTE5
+Mzc3ZjAgMTAwNjQ0DQo+Pj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMy9jb3JlLmMNCj4+PiArKysg
+Yi9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYw0KPj4+IEBAIC0zNDgsNyArMzQ4LDcgQEAgc3RhdGlj
+IHZvaWQgZHdjM19mcmFtZV9sZW5ndGhfYWRqdXN0bWVudChzdHJ1Y3QgZHdjMyAqZHdjKQ0KPj4+
+ICBzdGF0aWMgdm9pZCBkd2MzX3JlZl9jbGtfcGVyaW9kKHN0cnVjdCBkd2MzICpkd2MpDQo+Pj4g
+IHsNCj4+PiAgCXUzMiByZWc7DQo+Pj4gLQl1bnNpZ25lZCBsb25nIHJhdGUsIHBlcmlvZDsNCj4+
+PiArCXVuc2lnbmVkIGxvbmcgZGVjciwgZmxhZGosIHJhdGUsIHBlcmlvZDsNCj4+DQo+PiBNaW5v
+ciBzdHlsZSBuaXQ6IEZlbGlwZSBwcmVmZXJzIHRvIGtlZXAgdGhlIGRlY2xhcmF0aW9uIG9uIHNl
+cGFyYXRlDQo+PiBsaW5lcywgbGV0J3Mga2VlcCBpdCBjb25zaXN0ZW50IHdpdGggdGhlIHJlc3Qg
+aW4gdGhpcyBkcml2ZXIuDQo+IA0KPiBTbyANCj4gDQo+IHVuc2lnbmVkIGludCBkZWNyOw0KPiB1
+bnNpZ25lZCBpbnQgZmxhZGo7DQo+IHVuc2lnbmVkIGludCByYXRlOw0KPiB1bnNpZ25lZCBpbnQg
+cGVyaW9kOw0KPiANCj4gPw0KPiANCj4gRnJhbmtseSB0aGF0IHNlZW1zIHJhdGhlciB2ZXJib3Nl
+Lg0KDQpBIGNvdXBsZSBvZiB0aGUgYmVuZWZpdHMgb2YgaGF2aW5nIGl0IGxpa2UgdGhpcyBpcyB0
+byBoZWxwIHdpdGggdmlld2luZw0KZ2l0LWJsYW1lIGlmIHdlIGludHJvZHVjZSBuZXcgdmFyaWFi
+bGVzIGFuZCBoZWxwIHdpdGggYmFja3BvcnRpbmcgZml4DQpwYXRjaCBhIGJpdCBzaW1wbGVyLiBN
+YWlubHkgSSdtIGp1c3QgZm9sbG93aW5nIEZlbGlwZSdzIHN0eWxlIGFuZCBrZWVwDQppdCBjb25z
+aXN0ZW50IGluIHRoaXMgZHJpdmVyLCBidXQgSSBkb24ndCB0aGluayBpdCdzIGEgYmlnIGRlYWwu
+DQoNCj4gDQo+Pj4gIA0KPj4+ICAJaWYgKGR3Yy0+cmVmX2Nsaykgew0KPj4+ICAJCXJhdGUgPSBj
+bGtfZ2V0X3JhdGUoZHdjLT5yZWZfY2xrKTsNCj4+PiBAQCAtMzU3LDYgKzM1Nyw3IEBAIHN0YXRp
+YyB2b2lkIGR3YzNfcmVmX2Nsa19wZXJpb2Qoc3RydWN0IGR3YzMgKmR3YykNCj4+PiAgCQlwZXJp
+b2QgPSBOU0VDX1BFUl9TRUMgLyByYXRlOw0KPj4+ICAJfSBlbHNlIGlmIChkd2MtPnJlZl9jbGtf
+cGVyKSB7DQo+Pj4gIAkJcGVyaW9kID0gZHdjLT5yZWZfY2xrX3BlcjsNCj4+PiArCQlyYXRlID0g
+TlNFQ19QRVJfU0VDIC8gcGVyaW9kOw0KPj4+ICAJfSBlbHNlIHsNCj4+PiAgCQlyZXR1cm47DQo+
+Pj4gIAl9DQo+Pj4gQEAgLTM2NSw5ICszNjYsNDEgQEAgc3RhdGljIHZvaWQgZHdjM19yZWZfY2xr
+X3BlcmlvZChzdHJ1Y3QgZHdjMyAqZHdjKQ0KPj4+ICAJcmVnICY9IH5EV0MzX0dVQ1RMX1JFRkNM
+S1BFUl9NQVNLOw0KPj4+ICAJcmVnIHw9ICBGSUVMRF9QUkVQKERXQzNfR1VDVExfUkVGQ0xLUEVS
+X01BU0ssIHBlcmlvZCk7DQo+Pj4gIAlkd2MzX3dyaXRlbChkd2MtPnJlZ3MsIERXQzNfR1VDVEws
+IHJlZyk7DQo+Pj4gKw0KPj4+ICsJaWYgKERXQzNfVkVSX0lTX1BSSU9SKERXQzMsIDI1MEEpKQ0K
+Pj4+ICsJCXJldHVybjsNCj4+PiArDQo+Pj4gKwkvKg0KPj4+ICsJICogVGhlIGNhbGN1bGF0aW9u
+IGJlbG93IGlzDQo+Pj4gKwkgKg0KPj4+ICsJICogMTI1MDAwICogKE5TRUNfUEVSX1NFQyAvIChy
+YXRlICogcGVyaW9kKSAtIDEpDQo+Pj4gKwkgKg0KPj4+ICsJICogYnV0IHJlYXJyYW5nZWQgZm9y
+IGZpeGVkLXBvaW50IGFyaXRobWV0aWMuDQo+Pj4gKwkgKg0KPj4+ICsJICogTm90ZSB0aGF0IHJh
+dGUgKiBwZXJpb2Qgfj0gTlNFQ19QRVJfU0VDT05ELCBtaW51cyB0aGUgbnVtYmVyIG9mDQo+Pj4g
+KwkgKiBuYW5vc2Vjb25kcyBvZiBlcnJvciBjYXVzZWQgYnkgdGhlIHRydW5jYXRpb24gd2hpY2gg
+aGFwcGVuZWQgZHVyaW5nDQo+Pj4gKwkgKiB0aGUgZGl2aXNpb24gd2hlbiBjYWxjdWxhdGluZyBy
+YXRlIG9yIHBlcmlvZCAod2hpY2hldmVyIG9uZSB3YXMNCj4+PiArCSAqIGRlcml2ZWQgZnJvbSB0
+aGUgb3RoZXIpLiBXZSBmaXJzdCBjYWxjdWxhdGUgdGhlIHJlbGF0aXZlIGVycm9yLCB0aGVuDQo+
+Pj4gKwkgKiBzY2FsZSBpdCB0byB1bml0cyBvZiAwLjA4JS4NCj4+PiArCSAqLw0KPj4+ICsJZmxh
+ZGogPSBkaXY2NF91NjQoMTI1MDAwVUxMICogTlNFQ19QRVJfU0VDLCAodTY0KXJhdGUgKiBwZXJp
+b2QpOw0KPj4NCj4+IENhbiB3ZSByZWFycmFuZ2UgdGhlIG1hdGggc28gd2UgZG9uJ3QgaGF2ZSB0
+byBvcGVyYXRlIG9uIGRpZmZlcmVudCBkYXRhDQo+PiB0eXBlIGFuZCBkZWFsIHdpdGggY29udmVy
+c2lvbi90cnVuY2F0aW9uPw0KPiANCj4gSSBkb24ndCB1bmRlcnN0YW5kIHdoYXQgZGF0YSB0eXBl
+cyB5b3UgYXJlIHJlZmVycmluZyB0by4NCj4gDQo+IFRoZSB0cnVuY2F0aW9uIGFib3ZlIChpbiB0
+aGUgY2FsY3VsYWlvbiBmb3IgcmF0ZS9wZXJpb2QpIGlzIGludGVudGlvbmFsLA0KPiBzbyB3ZSBj
+YW4gZGV0ZXJtaW5lIHRoZSBlcnJvciBpbnRyb2R1Y2VkIGJ5IHJlcHJlc2VudGluZyBwZXJpb2Qg
+dXNpbmcNCj4gb25seSBucy4NCg0KSSB3YXMgd29uZGVyaW5nIGlmIHdlIHJlYXJyYW5nZSB0aGUg
+bWF0aCBzbyB3ZSBkb24ndCBuZWVkIHRvIGNhc3QgYW5kDQp1c2UgNjQtYml0IGhlcmUsIGJ1dCB0
+aGF0IG1heSBub3QgYmUgcG9zc2libGUuIEp1c3QgY29tcHV0aW5nL3Jldmlld2luZw0KaW4gbXkg
+aGVhZCB3aGlsZSBhY2NvdW50aW5nIGZvciB0cnVuY2F0aW9uIGZyb20gNjQtYml0IHRvIDMyLWJp
+dCB2YWx1ZQ0KaXMgdGF4aW5nLg0KDQo+IA0KPj4+ICsJZmxhZGogLT0gMTI1MDAwOw0KPj4+ICsN
+Cj4+PiArCS8qDQo+Pj4gKwkgKiBUaGUgZG9jdW1lbnRlZCAyNDBNSHogY29uc3RhbnQgaXMgc2Nh
+bGVkIGJ5IDIgdG8gZ2V0IFBMUzEgYXMgd2VsbC4NCj4+PiArCSAqLw0KPj4+ICsJZGVjciA9IDQ4
+MDAwMDAwMCAvIHJhdGU7DQo+Pj4gKw0KPj4+ICsJcmVnID0gZHdjM19yZWFkbChkd2MtPnJlZ3Ms
+IERXQzNfR0ZMQURKKTsNCj4+PiArCXJlZyAmPSB+RFdDM19HRkxBREpfUkVGQ0xLX0ZMQURKX01B
+U0sNCj4+PiArCSAgICAmICB+RFdDM19HRkxBREpfMjQwTUhaREVDUg0KPj4+ICsJICAgICYgIH5E
+V0MzX0dGTEFESl8yNDBNSFpERUNSX1BMUzE7DQo+Pj4gKwlyZWcgfD0gRklFTERfUFJFUChEV0Mz
+X0dGTEFESl9SRUZDTEtfRkxBREpfTUFTSywgZmxhZGopDQo+Pj4gKwkgICAgfCAgRklFTERfUFJF
+UChEV0MzX0dGTEFESl8yNDBNSFpERUNSLCBkZWNyID4+IDEpDQo+Pj4gKwkgICAgfCAgRklFTERf
+UFJFUChEV0MzX0dGTEFESl8yNDBNSFpERUNSX1BMUzEsIGRlY3IgJiAxKTsNCj4+DQo+PiBEb2Vz
+IHRoaXMgcGFzcyBjaGVja3BhdGNoPw0KPiANCj4gWWVzLg0KPiANCj4gLS1TZWFuDQo+IA0KPj4+
+ICsJZHdjM193cml0ZWwoZHdjLT5yZWdzLCBEV0MzX0dGTEFESiwgcmVnKTsNCj4+PiAgfQ0KPj4+
+ICANCj4+PiAtDQo+Pj4gIC8qKg0KPj4+ICAgKiBkd2MzX2ZyZWVfb25lX2V2ZW50X2J1ZmZlciAt
+IEZyZWVzIG9uZSBldmVudCBidWZmZXINCj4+PiAgICogQGR3YzogUG9pbnRlciB0byBvdXIgY29u
+dHJvbGxlciBjb250ZXh0IHN0cnVjdHVyZQ0KPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9k
+d2MzL2NvcmUuaCBiL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5oDQo+Pj4gaW5kZXggNDVjZmE3ZDlm
+MjdhLi5lYjljMWVmY2VkMDUgMTAwNjQ0DQo+Pj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMy9jb3Jl
+LmgNCj4+PiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuaA0KPj4+IEBAIC0zODgsNiArMzg4
+LDkgQEANCj4+PiAgLyogR2xvYmFsIEZyYW1lIExlbmd0aCBBZGp1c3RtZW50IFJlZ2lzdGVyICov
+DQo+Pj4gICNkZWZpbmUgRFdDM19HRkxBREpfMzBNSFpfU0RCTkRfU0VMCQlCSVQoNykNCj4+PiAg
+I2RlZmluZSBEV0MzX0dGTEFESl8zME1IWl9NQVNLCQkJMHgzZg0KPj4+ICsjZGVmaW5lIERXQzNf
+R0ZMQURKX1JFRkNMS19GTEFESl9NQVNLCQlHRU5NQVNLKDIxLCA4KQ0KPj4+ICsjZGVmaW5lIERX
+QzNfR0ZMQURKXzI0ME1IWkRFQ1IJCQlHRU5NQVNLKDMwLCAyNCkNCj4+PiArI2RlZmluZSBEV0Mz
+X0dGTEFESl8yNDBNSFpERUNSX1BMUzEJCUJJVCgzMSkNCj4+PiAgDQo+Pj4gIC8qIEdsb2JhbCBV
+c2VyIENvbnRyb2wgUmVnaXN0ZXIqLw0KPj4+ICAjZGVmaW5lIERXQzNfR1VDVExfUkVGQ0xLUEVS
+X01BU0sJCTB4ZmZjMDAwMDANCg0KDQpUaGFua3MsDQpUaGluaA0K

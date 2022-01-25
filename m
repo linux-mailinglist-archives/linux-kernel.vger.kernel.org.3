@@ -2,87 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E6349B583
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1D749B5AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385593AbiAYN5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:57:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42046 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385478AbiAYNyv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:54:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1386983AbiAYOGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:06:09 -0500
+Received: from mga17.intel.com ([192.55.52.151]:12204 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1387856AbiAYODn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:03:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643119423; x=1674655423;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tFnuLuY9oElKJDCq2VE/qinMRbQq/Wj5fuO0jaXmt2g=;
+  b=GqH8McwTltsCz6wF7REFuaq1IUelQXr+5v9RZel+1fBBPFzORO+Snbih
+   ojXuuU4yqhqsMEPcaxH6cvTs5ZRKrVjcSNSsY6RXrK9z9q1vERZVELXVX
+   94R4WYX864BLWsD6BmyY98EYcG6n/sWwHTHXkz73xGRVPj983Y9Wv6pUu
+   d6jaYwwufFBj5A8WUgb13ZwXe0dlEQpDDhXnZMc8MQFB9oqb09rw03uua
+   cxCl/87Qw1fXuWuQ/Nt9RhupDrVSJ2VEWvX4T5G2+IvguQCRU1GX0ZprR
+   ql+ltYVP16NJ9x8uc5fUIlCZAGKC5b/S6IL4202KN0K6oUOGo12JP//qU
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226972497"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="226972497"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 05:57:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="597129564"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Jan 2022 05:57:12 -0800
+Received: from [10.209.56.163] (bdobabaa-mobl.amr.corp.intel.com [10.209.56.163])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79CD4B81800;
-        Tue, 25 Jan 2022 13:54:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE166C340E0;
-        Tue, 25 Jan 2022 13:54:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643118882;
-        bh=4rIe1zqG4uqfonzu3BiGJCEJZPf0mpGzKQWhiuYB+xc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WEl+jx3XcfxdD1HyyZsL5xuZY0ecR9GJgiqCB5aw7sQJ5O+wkpfQeXbBaCp93Ex30
-         bsxfHIh9sUnNOSpAOjQCUEpn8i0zikJOkxKjMJUT4N+yqQl08CV1/vdwA3GFZvFt+t
-         Bck5npqcB2YiloVpGWVdiT6Viuy7zh8mVstQH9EDBvUdTZkhJ2MxLaqkP21aY6QwAn
-         AhJhLf10J5U98pDwrpCI2IDx7e2ycsrQyzyZrOhi6AED5yLtLCXeWdpA6luZdkbdea
-         cfzC5v/CynRTp79nN4Ybri/FrTWSWi3ETPHstcek2W210bHDJNmdX11pyWkIvzC9rx
-         jbVmYRVUrJr0A==
-Date:   Tue, 25 Jan 2022 13:54:36 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linus.walleij@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        andi@etezian.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Add FSD SPI support
-Message-ID: <YfABHDjdTgxytcUY@sirena.org.uk>
-References: <CGME20220125032811epcas5p3ef7b2f4e4906c1da8ccb4a0b3ed9a591@epcas5p3.samsung.com>
- <20220125031604.76009-1-alim.akhtar@samsung.com>
+        by linux.intel.com (Postfix) with ESMTPS id 58D86580808;
+        Tue, 25 Jan 2022 05:57:10 -0800 (PST)
+Message-ID: <7ef1bf66-4184-7f5b-c0bd-351ec743d4e9@linux.intel.com>
+Date:   Tue, 25 Jan 2022 08:57:09 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6JkcGt5fzoOL7xil"
-Content-Disposition: inline
-In-Reply-To: <20220125031604.76009-1-alim.akhtar@samsung.com>
-X-Cookie: Formatted to fit your screen.
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] x86/perf: Default freeze_on_smi on for Comet Lake and
+ later.
+Content-Language: en-US
+To:     Kyle Huey <me@kylehuey.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Robert O'Callahan <rocallahan@gmail.com>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Andi Kleen <ak@linux.intel.com>
+References: <20220122072644.92292-1-khuey@kylehuey.com>
+ <Ye6Z31keWVPrsNWU@hirez.programming.kicks-ass.net>
+ <3c35dc76-c187-8d3f-7fc9-75de32e7cbf6@linux.intel.com>
+ <CAP045ArbX7cYKyv0H4X2SxUJWycB1VoLZWLME=_RXttBFBfP3A@mail.gmail.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CAP045ArbX7cYKyv0H4X2SxUJWycB1VoLZWLME=_RXttBFBfP3A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---6JkcGt5fzoOL7xil
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 25, 2022 at 08:46:01AM +0530, Alim Akhtar wrote:
+On 1/24/2022 9:59 PM, Kyle Huey wrote:
+> On Mon, Jan 24, 2022 at 8:01 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>
+>>
+>>
+>> On 1/24/2022 7:21 AM, Peter Zijlstra wrote:
+>>> On Fri, Jan 21, 2022 at 11:26:44PM -0800, Kyle Huey wrote:
+>>>> Beginning in Comet Lake, Intel extended the concept of privilege rings to
+>>>> SMM.[0] A side effect of this is that events caused by execution of code
+>>>> in SMM are now visible to performance counters with IA32_PERFEVTSELx.USR
+>>>> set.
+>>>>
+>>>> rr[1] depends on exact counts of performance events for the user space
+>>>> tracee, so this change in behavior is fatal for us. It is, however, easily
+>>>> corrected by setting IA32_DEBUGCTL.FREEZE_WHILE_SMM to 1 (visible in sysfs
+>>>> as /sys/devices/cpu/freeze_on_smi). While we can and will tell our users to
+>>>> set freeze_on_smi manually when appropriate, because observing events in
+>>>> SMM is rarely useful to anyone, we propose to change the default value of
+>>>> this switch.
+>>
+>> + Andi
+>>
+>>   From we heard many times from sophisticated customers, they really hate
+>> blind spots. They want to see everything. That's why we set
+>> freeze_on_smi to 0 as default. I think the patch breaks the principle.
+> 
+> The default kernel settings for perf events prioritize preventing
+> information leaks to less privileged code. perf_event_paranoid
+> defaults to 2, preventing unprivileged users from observing kernel
+> space. If "sophisticated customers" want to see everything they have
+> already needed privileges (or an explicit opt-in through decreasing
+> perf_event_paranoid) for some time.
+> 
+> The current situation on Comet Lake+ where an unprivileged user
+> *cannot* observe kernel code due to security concerns but
+> simultaneously *must* observe SMM code seems rather absurd.
+>
 
-> Note: This series is depended on [1] patches which adds
-> support of FSD SoC and on Krzysztof's v6 [2] of spi schema changes
->=20
-> [1] https://lkml.org/lkml/2022/1/24/583
-> [2] https://lkml.org/lkml/2022/1/24/120
+I see. I was thought the unprivileged user can observe the SMM code on 
+the previous platforms. The CML+ change only makes part of the SMM code 
+CPL0. Seems I'm wrong. The change looks like changing the previous CPL0 
+code to CPL3 code. If so, yes, I think we should prevent the information 
+leaks for the unprivileged user.
 
-Please resend this when it can be applied, either wait until the
-dependencies are in place or rebase on top of current code.  In general
-only build time dependencies matter here, the SoC support being merged
-shouldn't be an issue one way or another.
+>> I don't think there is a way to notify all the users that the default
+>> kernel value will be changed. (Yes, the end user can always check the
+>> /sys/devices/cpu/freeze_on_smi to get the latest value. But in practice,
+>> no one checks it unless some errors found.) I think it may bring
+>> troubles to the users if they rely on the counts in SMM.
+> 
+> Unfortunately the new hardware has already changed the behavior
+> without notifying users, no matter what we do here.
+> 
+>> The patch only changes the default values for some platforms, not all
+>> platforms. The default value is not consistent among platforms anymore.
+>> It can bring confusion.
+> 
+> I don't personally object to changing freeze_on_smi for all platforms
+> :) I was merely trying to limit the changes.
 
---6JkcGt5fzoOL7xil
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Changing it to all platforms seems a too big hammer. I agree we should 
+limit it to the impacted platforms.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHwARsACgkQJNaLcl1U
-h9CrDgf/XVhh2NrG4TbUGu2fJfgKzSEfgDJWYGaXXHThEbTw8/2XQbUYZ1WCLXcT
-SPdwv/cJEHFV4x3vjTyf99wE56WhowWyTFG6ubBr7AgMr1oM4nb2En6zrJChgqPd
-sI0AdFMZEh4z3CohEc4xQL8Z9PZZMXyI6DMv+OHIzYk+QYal9jXj7Hj2DEKjjRE+
-2RzmU1d3rTYHZSgaHi0yDetG+PzLqH75Hv+VuYWBuBeBoughWBk/Z0IpS2tglA4Q
-n7yrOFg805GgduKJjz5PefNDka0XmUMFlpFgfw8xhrlIPTvb1KaKvUu4iSyrJJPg
-J7INAl0E2QXPIwz8YrixYxvy8SrP/A==
-=Itzz
------END PGP SIGNATURE-----
+I've contacted the author of the white paper. I was told that the change 
+is for the client vPro platforms. They are not sure whether it impacts 
+Server platform or Atom platforms. I'm still working on it. I will let 
+you and Peter know once I get more information.
 
---6JkcGt5fzoOL7xil--
+Thanks,
+Kan

@@ -2,73 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3BD49A86C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95FD49A88F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1318681AbiAYDGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:06:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3416067AbiAYBy3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 20:54:29 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343C0C02B86A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:12:58 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id p37so17792912pfh.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:12:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=juHcihMU504MExcTZ9GLv7lBDDM16Zik+9Orkm7/GTI=;
-        b=KLwkpP+q4x5XMX/jnXWG3fY+/0wY1bYlCFIKbH4s9Ms/2M408GBXQ2AcIrtmLJIexK
-         gy8nus3KU7jtyyF/v6Deesi8D9c04gizslrKQjDEX7dQ8djYZiggvQTzTnnY9KXar2Uq
-         FQeNgv19sV7EDKZOY1bib1xVAp/EzNza19DPpCIA7sfPZV4LqmFC472e9s9KhNnKCeQ4
-         RazQQK+ObmTTJbYg9ZR/nq01NuaQ80znKxvBwJOZRNz9qaL4EalZK88mQeS7yyZqKXlO
-         ohA/9RoRh6+5yU9Sen01iwVfvzw1wzie3LXuBfdXmiX62jhYsk5u30YFdd3kZtV/sQvU
-         FVEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=juHcihMU504MExcTZ9GLv7lBDDM16Zik+9Orkm7/GTI=;
-        b=4gidiXZCaHNuayRaNHl8ff6pKL6Y+wzamqBvL2tsr5JJeOhXj8cVwEI5PtVcNW5xq6
-         ma6csdVIj+Wc/EdlIwhWT6uXmq0tLH5Jofwh7cQAGKdIidmhPI7Jyk5L2tTzHiYmVyJ+
-         6nOA6TEhwSVLo4kNi3TtG25cbKLU+5q0jgMneDp9lpF+STgBFibi/vsz1LKjJZfUexxH
-         on0kJixIdyq3wakavK1VkJOx25SmzIUxSpGqhQ6YrcFsnEUHCTe+eSkWrxKHK/AjGLP+
-         2aBLUnfAp11ltpBsGOo8ysJd+WiaXJPjCpc2ZE66AR464aGk3vhCup1I4In+B1Poyw3Z
-         HhqA==
-X-Gm-Message-State: AOAM5322Mx6D8RcIFrJnLF2/mjgfsx8EtdyUcDVUiocuXzC3Oii0PAns
-        wb0s9ov6dGR5ZD5lxhpFXNtFj9vj+ej9RXqFAaX3RXPWQNk=
-X-Google-Smtp-Source: ABdhPJy6/hRB7xHzNbOoBC98EAuozrsI80oV9sSX1lfyCFZZVO0quV4pwoKzg8R+7D+Iw/5WcQm0rBLgCkuROG0JD7o=
-X-Received: by 2002:a63:6b44:: with SMTP id g65mr13597344pgc.175.1643073177245;
- Mon, 24 Jan 2022 17:12:57 -0800 (PST)
+        id S1319443AbiAYDIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:08:52 -0500
+Received: from mga04.intel.com ([192.55.52.120]:35769 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S3411286AbiAYCSx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 21:18:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643077133; x=1674613133;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KAXXV2h5IEh2o2heBK5sVGCZvPMYLdPslBngGuuOVBA=;
+  b=ZIWz8CN7CRMFseHfZJh3+yQJlAIcs9fhXGCdoPrN5lMslp3VYPaRQ7MR
+   UCB7gDlCvzOu8wq2sj3V/Lk8b1duXqd4Z/66vd72QqSLcgAC8u5hQw3K6
+   YuowgbPpKuWH+r4qF3yQoqCT7k63TRjGiyeBc2XE2Jhm4JStC+BuVdxCW
+   LrDKsoj8AZMa+4gz+eenqrIEGc60DHcIbvI4hJPBO/jzywNpgUq7vcuWM
+   Gv/59vMQq9PGNkDba7A2f4YGLm8uPe9OsmTZvjcpX3AjCuGxy6y+UfaY4
+   2whiHNFp+CXfZDyqckCHIFrooJrDWwTXAgkGLcOO2qJ3N7+gP6+dpuFDn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="245024170"
+X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
+   d="scan'208";a="245024170"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:14:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
+   d="scan'208";a="520174651"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 24 Jan 2022 17:14:17 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCAPY-000J9c-Ki; Tue, 25 Jan 2022 01:14:16 +0000
+Date:   Tue, 25 Jan 2022 09:13:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hao Lee <haolee.swjtu@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        0day robot <lkp@intel.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>
+Subject: [PATCH] proc: fix alloc_cast.cocci warnings
+Message-ID: <20220125011328.GA21479@a311be8fcee1>
+References: <202201250941.1xbLnDRA-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220105031242.287751-1-dustin@howett.net> <Ye8RaQcIuR6kpaYj@google.com>
-In-Reply-To: <Ye8RaQcIuR6kpaYj@google.com>
-From:   Tzung-Bi Shih <tzungbi@google.com>
-Date:   Tue, 25 Jan 2022 09:12:46 +0800
-Message-ID: <CA+Px+wV8Ygz3n=4TtX1F6YB3Gcz8amNmotru09ftn9w776nDuA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] platform/chrome: Add support for the Framework Laptop
-To:     Benson Leung <bleung@google.com>
-Cc:     "Dustin L. Howett" <dustin@howett.net>,
-        linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202201250941.1xbLnDRA-lkp@intel.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benson,
+From: kernel test robot <lkp@intel.com>
 
-On Tue, Jan 25, 2022 at 4:52 AM Benson Leung <bleung@google.com> wrote:
-> Tzung-Bi, could you help take a look at Dustin's series?
+fs/proc/base.c:1767:14-18: WARNING: casting value returned by memory allocation function to (char *) is useless.
 
-Pardon me, I didn't subscribe LKML due to it is too noisy.  Could you
-also forward the 2 patches?
+ Remove casting the values returned by memory allocation functions
+ like kmalloc, kzalloc, kmem_cache_alloc, kmem_cache_zalloc etc.
 
-I will try some magic
-(https://chromium.googlesource.com/chromiumos/docs/+/HEAD/kernel_development.md#Downloading-a-patch-from-patchwork-into-IMAP)
-to get the mail thread.  And subscribe LKML to get further patch
-series.
+Semantic patch information:
+ This makes an effort to find cases of casting of values returned by
+ kmalloc, kzalloc, kcalloc, kmem_cache_alloc, kmem_cache_zalloc,
+ kmem_cache_alloc_node, kmalloc_node and kzalloc_node and removes
+ the casting as it is not required. The result in the patch case may
+ need some reformatting.
+
+Generated by: scripts/coccinelle/api/alloc/alloc_cast.cocci
+
+CC: Hao Lee <haolee.swjtu@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+
+tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220123-215907/Hao-Lee/proc-use-kmalloc-instead-of-__get_free_page-to-alloc-path-buffer/20220123-181005
+head:   98106e76de95ae9aefa914ec056448a5571155dc
+commit: 98106e76de95ae9aefa914ec056448a5571155dc proc: alloc PATH_MAX bytes for /proc/${pid}/fd/ symlinks
+:::::: branch date: 35 hours ago
+:::::: commit date: 35 hours ago
+
+ base.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -1764,7 +1764,7 @@ out:
+ 
+ static int do_proc_readlink(struct path *path, char __user *buffer, int buflen)
+ {
+-	char *tmp = (char *)kmalloc(PATH_MAX, GFP_KERNEL);
++	char *tmp = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	char *pathname;
+ 	int len;
+ 

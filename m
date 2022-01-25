@@ -2,107 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4074449AC62
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DEE49AC67
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345748AbiAYG0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 01:26:44 -0500
-Received: from qproxy1-pub.mail.unifiedlayer.com ([173.254.64.10]:48314 "EHLO
-        qproxy1-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343753AbiAYGXQ (ORCPT
+        id S1345955AbiAYG1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 01:27:23 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:49780 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344098AbiAYGXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 01:23:16 -0500
-Received: from alt-proxy28.mail.unifiedlayer.com (unknown [74.220.216.123])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 532CC802A686
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:23:14 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 5D52B1003DC88
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:23:13 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id CFEWnqHErikTnCFEXnSm85; Tue, 25 Jan 2022 06:23:13 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=CeHNWJnl c=1 sm=1 tr=0 ts=61ef9751
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=DghFqjY3_ZEA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=phuVY786h0ah0nGSDhKW+P+Zw2u0CfItLI6aweYy2yo=; b=l8sRAWt2268Esv9pq7jY5j8LLO
-        R7NeUeIGPbVWCsZcYiv+XaGu4LiIoM9XxtA2pNSTLBkyW5Wwjcu5ptiAEOAi1DRjpUUv+Zbcdhfb6
-        M87nXPVTrjrAJjZUkzNrZIAng;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51624 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nCFEW-001GOf-HP; Mon, 24 Jan 2022 23:23:12 -0700
-Message-ID: <4e2113c7-481d-a3f7-6611-d805d88263b5@w6rz.net>
-Date:   Mon, 24 Jan 2022 22:23:10 -0800
+        Tue, 25 Jan 2022 01:23:51 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 064461F380;
+        Tue, 25 Jan 2022 06:23:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643091827; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SxB22q2urXIdsrmoPoT22ET5VLL7DY5GwQTRZaWBW4k=;
+        b=zzHOzRVpDg59xKWbExTM2/HqgZWsRi4itrBoEkpBmycht04q+RJ8l1Qi1laURT8PHz4Oab
+        LHsGRuS21D2Njw5+Rhxv2AEFlyFZnN9TPzzMn/dKmksWvxMze7T/UsO5biJ0hYg+D0/lxJ
+        ABZ+HQkBmjrYGLC8E1Rc0wWyiwYzVKw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643091827;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SxB22q2urXIdsrmoPoT22ET5VLL7DY5GwQTRZaWBW4k=;
+        b=r5M9bjkVQyRw9A8wG8mbR8CjiorcPAjhdDcb4urtIt5x1C1NZ/0/s0Hv3QDrLBkE6xzwhc
+        ZyzLjlvANPU60DCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D81F113D7B;
+        Tue, 25 Jan 2022 06:23:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kQk5NHKX72GxdgAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 25 Jan 2022 06:23:46 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 000/846] 5.15.17-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        stable@vger.kernel.org
-References: <20220124184100.867127425@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Tue, 25 Jan 2022 07:23:46 +0100
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Eric Ren <renzhengeek@gmail.com>
+Subject: Re: [PATCH v4 2/7] mm: page_isolation: move has_unmovable_pages() to
+ mm/page_isolation.c
+In-Reply-To: <20220119190623.1029355-3-zi.yan@sent.com>
+References: <20220119190623.1029355-1-zi.yan@sent.com>
+ <20220119190623.1029355-3-zi.yan@sent.com>
+User-Agent: Roundcube Webmail
+Message-ID: <d8809f69b4e813f981a2f13d81849b7b@suse.de>
+X-Sender: osalvador@suse.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nCFEW-001GOf-HP
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:51624
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 12
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22 10:31, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.17 release.
-> There are 846 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.17-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 2022-01-19 20:06, Zi Yan wrote:
+> From: Zi Yan <ziy@nvidia.com>
+> 
+> has_unmovable_pages() is only used in mm/page_isolation.c. Move it from
+> mm/page_alloc.c and make it static.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
-Tested-by: Ron Economos <re@w6rz.net>
-
+-- 
+Oscar Salvador
+SUSE Labs

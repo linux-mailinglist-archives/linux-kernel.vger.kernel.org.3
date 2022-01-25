@@ -2,198 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A0149BCDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 184C749BCE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 21:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbiAYUVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 15:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiAYUVM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 15:21:12 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADA2C06173B;
-        Tue, 25 Jan 2022 12:21:12 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id q127so3681169ljq.2;
-        Tue, 25 Jan 2022 12:21:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=wafinEPcxutmBkrShhaSw3X/2HKKywFLaTiGIm9CmRI=;
-        b=OgC0ZXfJS6RDbAsvgzpP8R8q7oes1LRkUulaqLkSOb8T4vKiTkaOWGMVwiCvrbYJOw
-         Uo+DrHEsCLK2DP/LjE09+Oz9cRDnowq0MZXdzwjhjerUYmSDWZUGJMdPhaUWWG5yT9TO
-         p2A6bES1xcBsDYQ7kyr6G9LirrOjWWH/DXfjNSr4AHVJf1JZzuv1VakNv2RTJh6mQeZG
-         hT9EcKz4PUlK2OopEsb/Fsxq+KQ/Ki7MVZMBEPod9I5L8BTHXchUlghrJMeh0mB1xJyt
-         KlkzRYsc6ZQBSg3qQ2ARnGiJka+lg5dIiNf7aMDC69o2x/IGGkhkGo2o+mXWlkRfKJrl
-         +SOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wafinEPcxutmBkrShhaSw3X/2HKKywFLaTiGIm9CmRI=;
-        b=r/1vP7acSEJl1Nt0nMTLbwKbf9XIzT60N+N9vYjN60IDlX/OJPgTumNk+lSkU5Jm75
-         bmi8xbBTNcr5XicSyieYXm+dxDdviF4Tu464DbaG+zSMY1E6is+cCkXDdBSTWD9Mina8
-         dJ0Mz++CM/IZPqrtWvq3jpgd03OPjdbYzAmjx/zOBuXThRSqYF+bC7f58mVyujZ3CyhD
-         UF+Tc0MYq3Yfge8td3LLF7eQaRrD/Cwav3FR887p9p9npdDZNg8/sCwM3EbUjB/LjRT0
-         GnrJW05/F/rgL5dnu5jCpegtGA1oOg5JCuA6JK6mqt7+vs5AMCdkbze9kpwjt5SkAH7J
-         z4bA==
-X-Gm-Message-State: AOAM530kSq2IJ3+Xkon9X0RzUfqnLtTy7Snmjy1TIUfvj6pRVysu/dlE
-        IrmwWnDx2SnZWybm5QXZgtCrfOufqzE=
-X-Google-Smtp-Source: ABdhPJy6HDs1CyUW9jvlp5wSS+hPzQ3Rcr4T4/6dPyxGg1Y47p9T/G3A21GU3yBpyt76TgnlmtNTxw==
-X-Received: by 2002:a2e:3109:: with SMTP id x9mr3487152ljx.428.1643142070395;
-        Tue, 25 Jan 2022 12:21:10 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id f26sm1152917lfm.251.2022.01.25.12.21.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 12:21:09 -0800 (PST)
-Message-ID: <ef34a0b2-3b13-863b-86b9-71832eace360@gmail.com>
-Date:   Tue, 25 Jan 2022 21:21:04 +0100
+        id S231719AbiAYUVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 15:21:23 -0500
+Received: from mga04.intel.com ([192.55.52.120]:36582 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231644AbiAYUVR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 15:21:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643142077; x=1674678077;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lUZK4l/4nhTIU+qINgzNeJUNGAB8cORP+SXj5e08x/Q=;
+  b=cm5lmuG08guK0GzOD3YxxZ5jOxfg1Ebf4HugO4WvR6xyJOuv8CpfRaur
+   wlBJCgHVty75MA2FjDGANvkU2AKcN2yLb0NWm3t1W9NwfO+TbAZc1X7NV
+   GqDmkERCnSTrnHRIBeALT+UJuE3J/HD55XFUeM+gN2PUcUJ+OheMQJEW4
+   kH0HI83hR5u9XQEzNuJeI8Awga62gYb7Gw2U0Dpm1Mwun62D1AEpNM3Cr
+   r9Lf5I2btZdsiepxWrhC7LmVmYG3vJbtPbvWVuVITQMKUHAJTXPWJrlNe
+   M4wqsB0WNpYX+mhv1VGR9bUU368zwhrYQM3BIfNLSZrLcv6hRRlvU0+At
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="245242267"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="245242267"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 12:21:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="477249110"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2022 12:21:09 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 5E917FD; Tue, 25 Jan 2022 22:21:22 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Carlis <zhangxuezhi1@yulong.com>, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Michael Hennerich <michael.hennerich@analog.com>,
+        Helge Deller <deller@gmx.de>, Andy Shevchenko <andy@kernel.org>
+Subject: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+Date:   Tue, 25 Jan 2022 22:21:13 +0200
+Message-Id: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [RFC PATCH 1/2] dt-bindings: mtd: partitions: Document new
- dynamic-partitions node
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220120202615.28076-1-ansuelsmth@gmail.com>
- <20220120202615.28076-2-ansuelsmth@gmail.com>
- <a823e730-853d-901b-1b9f-937e1ec76444@gmail.com>
- <61ef243a.1c69fb81.26cae.716b@mx.google.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <61ef243a.1c69fb81.26cae.716b@mx.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.01.2022 23:12, Ansuel Smith wrote:
-> On Mon, Jan 24, 2022 at 11:02:24PM +0100, Rafał Miłecki wrote:
->> On 20.01.2022 21:26, Ansuel Smith wrote:
->>> Document new dynamic-partitions node used to provide an of node for
->>> partition registred at runtime by parsers. This is required for nvmem
->>> system to declare and detect nvmem-cells.
->>>
->>> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
->>> ---
->>>    .../mtd/partitions/dynamic-partitions.yaml    | 59 +++++++++++++++++++
->>>    1 file changed, 59 insertions(+)
->>>    create mode 100644 Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
->>> new file mode 100644
->>> index 000000000000..7528e49f2d7e
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partitions.yaml
->>> @@ -0,0 +1,59 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/mtd/partitions/dynamic-partitions.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Dynamic partitions
->>> +
->>> +description: |
->>> +  This binding can be used on platforms which have partitions registered at
->>> +  runtime by parsers or partition table present on the flash. Example are
->>> +  partitions declared from smem parser or cmdlinepart. This will create an
->>> +  of node for these dynamic partition where systems like Nvmem can get a
->>> +  reference to register nvmem-cells.
->>> +
->>> +  The partition table should be a node named "dynamic-partitions".
->>> +  Partitions are then defined as subnodes. Only the label is required
->>> +  as any other data will be taken from the parser.
->>> +
->>> +maintainers:
->>> +  - Ansuel Smith <ansuelsmth@gmail.com>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: dynamic-partitions
->>> +
->>> +patternProperties:
->>> +  "@[0-9a-f]+$":
->>> +    $ref: "partition.yaml#"
->>> +
->>> +additionalProperties: true
->>> +
->>> +examples:
->>> +  - |
->>> +    partitions {
->>> +        compatible = "qcom,smem";
->>> +        #address-cells = <1>;
->>> +        #size-cells = <1>;
->>> +    };
->>> +
->>> +    dynamic-partitions {
->>> +      compatible = "dynamic-partitions";
->>> +
->>> +      art: art {
->>> +        label = "0:art";
->>> +        read-only;
->>> +        compatible = "nvmem-cells";
->>> +        #address-cells = <1>;
->>> +        #size-cells = <1>;
->>> +
->>> +        macaddr_art_0: macaddr@0 {
->>> +          reg = <0x0 0x6>;
->>> +        };
->>> +
->>> +        macaddr_art_6: macaddr@6 {
->>> +          reg = <0x6 0x6>;
->>> +        };
->>> +      };
->>> +    };
->>
->> First of all: I fully support such a feature. I need it for Broadom
->> platforms that use "brcm,bcm947xx-cfe-partitions" dynamic partitions.
->> In my case bootloader partition is created dynamically (it doesn't have
->> const offset and size). It contains NVMEM data however that needs to be
->> described in DT.
->>
->> This binding however looks loose and confusing to me.
->>
-> 
-> I agree.
-> 
->> First of all did you really mean to use "qcom,smem"? My first guess is
->> you meant "qcom,smem-part".
->>
-> 
-> Yes sorry, I was referring to the smem parser qcom,smem-part
-> 
->> Secondly can't we have partitions defined just as subnodes of the
->> partitions { ... }; node?
->>
-> 
-> I would love to use it. My only concern is that due to the fact
-> that we have to support legacy partition declaring, wonder if this could
-> create some problem. I'm referring to declaring fixed partition without
-> using any compatible/standard binding name.
+Since we got a maintainer for fbdev, I would like to
+unorphan fbtft (with the idea of sending PRs to Helge)
+and move it out of staging since there is no more clean
+up work expected and no more drivers either.
 
-Legacy partitioning won't kick in if you have "partitions" with
-"compatible" string. We're safe here. Just checked to be sure.
+Thoughts?
 
+Andy Shevchenko (4):
+  fbtft: Unorphan the driver
+  fbtft: Move driver out from staging
+  fbtft: Kill outdated documentation
+  fbtft: Replace 'depends on FB_TFT' by 'if FB_TFT ... endif'
 
-> I remember we improved that with the introduction of the nvmem binding
-> by making the fixed-partition compatible mandatory. But I would like to
-> have extra check. Wonder if to be on the safe part we can consider
-> appending to the "dynamic parser" a compatible like "dynamic-partitions"
-> and use your way to declare them (aka keeping the dynamic-partition and
-> removing the extra parallel partitions list)
-> 
-> Feel free to tell me it's just a stupid and unnecessary idea. I just
-> have fear to introduce regression in the partition parsing logic.
+ MAINTAINERS                                   |  6 ++--
+ drivers/staging/Kconfig                       |  2 --
+ drivers/staging/Makefile                      |  1 -
+ drivers/staging/fbtft/README                  | 32 ------------------
+ drivers/staging/fbtft/TODO                    |  3 --
+ drivers/video/Kconfig                         |  1 +
+ drivers/video/Makefile                        |  1 +
+ drivers/{staging => video}/fbtft/Kconfig      | 33 +++----------------
+ drivers/{staging => video}/fbtft/Makefile     |  0
+ .../{staging => video}/fbtft/fb_agm1264k-fl.c |  0
+ .../{staging => video}/fbtft/fb_bd663474.c    |  0
+ .../{staging => video}/fbtft/fb_hx8340bn.c    |  0
+ drivers/{staging => video}/fbtft/fb_hx8347d.c |  0
+ drivers/{staging => video}/fbtft/fb_hx8353d.c |  0
+ drivers/{staging => video}/fbtft/fb_hx8357d.c |  0
+ drivers/{staging => video}/fbtft/fb_hx8357d.h |  0
+ drivers/{staging => video}/fbtft/fb_ili9163.c |  0
+ drivers/{staging => video}/fbtft/fb_ili9320.c |  0
+ drivers/{staging => video}/fbtft/fb_ili9325.c |  0
+ drivers/{staging => video}/fbtft/fb_ili9340.c |  0
+ drivers/{staging => video}/fbtft/fb_ili9341.c |  0
+ drivers/{staging => video}/fbtft/fb_ili9481.c |  0
+ drivers/{staging => video}/fbtft/fb_ili9486.c |  0
+ drivers/{staging => video}/fbtft/fb_pcd8544.c |  0
+ drivers/{staging => video}/fbtft/fb_ra8875.c  |  0
+ drivers/{staging => video}/fbtft/fb_s6d02a1.c |  0
+ drivers/{staging => video}/fbtft/fb_s6d1121.c |  0
+ drivers/{staging => video}/fbtft/fb_seps525.c |  0
+ drivers/{staging => video}/fbtft/fb_sh1106.c  |  0
+ drivers/{staging => video}/fbtft/fb_ssd1289.c |  0
+ drivers/{staging => video}/fbtft/fb_ssd1305.c |  0
+ drivers/{staging => video}/fbtft/fb_ssd1306.c |  0
+ drivers/{staging => video}/fbtft/fb_ssd1325.c |  0
+ drivers/{staging => video}/fbtft/fb_ssd1331.c |  0
+ drivers/{staging => video}/fbtft/fb_ssd1351.c |  0
+ drivers/{staging => video}/fbtft/fb_st7735r.c |  0
+ drivers/{staging => video}/fbtft/fb_st7789v.c |  0
+ drivers/{staging => video}/fbtft/fb_tinylcd.c |  0
+ drivers/{staging => video}/fbtft/fb_tls8204.c |  0
+ drivers/{staging => video}/fbtft/fb_uc1611.c  |  0
+ drivers/{staging => video}/fbtft/fb_uc1701.c  |  0
+ .../{staging => video}/fbtft/fb_upd161704.c   |  0
+ drivers/{staging => video}/fbtft/fbtft-bus.c  |  0
+ drivers/{staging => video}/fbtft/fbtft-core.c |  0
+ drivers/{staging => video}/fbtft/fbtft-io.c   |  0
+ .../{staging => video}/fbtft/fbtft-sysfs.c    |  0
+ drivers/{staging => video}/fbtft/fbtft.h      |  0
+ drivers/{staging => video}/fbtft/internal.h   |  0
+ 48 files changed, 10 insertions(+), 69 deletions(-)
+ delete mode 100644 drivers/staging/fbtft/README
+ delete mode 100644 drivers/staging/fbtft/TODO
+ rename drivers/{staging => video}/fbtft/Kconfig (89%)
+ rename drivers/{staging => video}/fbtft/Makefile (100%)
+ rename drivers/{staging => video}/fbtft/fb_agm1264k-fl.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_bd663474.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_hx8340bn.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_hx8347d.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_hx8353d.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_hx8357d.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_hx8357d.h (100%)
+ rename drivers/{staging => video}/fbtft/fb_ili9163.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ili9320.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ili9325.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ili9340.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ili9341.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ili9481.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ili9486.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_pcd8544.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ra8875.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_s6d02a1.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_s6d1121.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_seps525.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_sh1106.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ssd1289.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ssd1305.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ssd1306.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ssd1325.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ssd1331.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_ssd1351.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_st7735r.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_st7789v.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_tinylcd.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_tls8204.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_uc1611.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_uc1701.c (100%)
+ rename drivers/{staging => video}/fbtft/fb_upd161704.c (100%)
+ rename drivers/{staging => video}/fbtft/fbtft-bus.c (100%)
+ rename drivers/{staging => video}/fbtft/fbtft-core.c (100%)
+ rename drivers/{staging => video}/fbtft/fbtft-io.c (100%)
+ rename drivers/{staging => video}/fbtft/fbtft-sysfs.c (100%)
+ rename drivers/{staging => video}/fbtft/fbtft.h (100%)
+ rename drivers/{staging => video}/fbtft/internal.h (100%)
 
-I'm confused. I think all dynamic partitioners already have a
-"compatible" set.
+-- 
+2.34.1
 
-Can you post an example of DT binging you described above, please?

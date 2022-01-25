@@ -2,99 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DE449AC27
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC0649AB69
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 06:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243367AbiAYGHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 01:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242172AbiAYGDI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 01:03:08 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC84C0613E6;
-        Mon, 24 Jan 2022 20:21:50 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id r59so746058pjg.4;
-        Mon, 24 Jan 2022 20:21:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GCtYDXOant2JMvhCArTGBt3s3S3YwfTxu+0hSAqbaFY=;
-        b=bPm//ca9cRtkGd+2Dr98rlgBg8qrvpDBparI78AdS2DhP7V1yzeVR8pQLNCJZwhwNL
-         hj6OVuU0hIFjofP9p1gmthDDovSM8rlD7r0MNBIbbo8rou//x9XwcJkJNAq7tHVQegcg
-         Bhucwo/Wnq6EhzVxYn2ycOXmYT2g80DfkFDBPh/jy3RU2uXpXovSuowgXP0eJwnRuANg
-         KpJm2fGrXNwTaz2lYGmAduQyuZMuAGJof/S5vcvn37si6lqDu9NHog7DTWwBKhkj8juW
-         70cLbuvp5XUREjKbO0UB3QzS24r1VEaT0+djg4i6AQV/YFKsGT+xSKB4XX7CA2l98c83
-         NiFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GCtYDXOant2JMvhCArTGBt3s3S3YwfTxu+0hSAqbaFY=;
-        b=kAzrtn1vFFMzeyrWGZCE61HfAyzLFuw74Eku0dzCFuFZ56Y43DBuwUe/aD7KJCP6aa
-         jHx6ydwy+rBxrBq3kbYc2noJ3f32H844Ym1g1OImF0NTB1nIEBDQuIINgkRhs0JF5G00
-         qyfpxY+yKW0ZWu2/HJo9wCkZlr7lP976LTKN8Mc5Fj7rJyHYUnfRJtE4SdMKk/EHvT0E
-         uRPymEK0W40tFDfUmSACnJsxmFJXQlJCYjKIxF6huZ3++rPUx1MmFGHL8nAqEaWVV++h
-         fCIIvlEWcUmldvm/0RwSFZ8WzvjOHhoTxW48LUIifhY5IgtabYXCRmrYvU96+uXJ+w7I
-         0UKA==
-X-Gm-Message-State: AOAM532I+RWPRF5BxCXB5ft5/Qy24YdM8/9lD8qWktQ6ehREaKejTRRS
-        OZLWHezj1i/aq1o5BoiXUCn+EaHlwfk=
-X-Google-Smtp-Source: ABdhPJxB13Ct+i192lnu46CHP73DLx4EdFj4X0yZVhsWbzSzMqJukCt2emFJeP5zdX/DVTlrTyIXxg==
-X-Received: by 2002:a17:90a:788e:: with SMTP id x14mr1626228pjk.174.1643084509773;
-        Mon, 24 Jan 2022 20:21:49 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id nm14sm827452pjb.32.2022.01.24.20.21.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 20:21:49 -0800 (PST)
-Message-ID: <ce5c2323-2bd6-12fe-5fb9-1a09a40fe1ba@gmail.com>
-Date:   Mon, 24 Jan 2022 20:21:48 -0800
+        id S1390748AbiAYEwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 23:52:02 -0500
+Received: from mga17.intel.com ([192.55.52.151]:10061 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S254077AbiAYEfi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 23:35:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643085336; x=1674621336;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=btpSsofGXMb//G1HnIaGfv9hthpngTmm6P9YloCibIM=;
+  b=hjAsUs4NhDYcpF7hdbRfaEhby1kDUsKSrOqK7EE90ja3uncrHr8FQ5n5
+   SbMYtFSYPcTf5txhg8IOt+qO0Mju7sZDay5v0W6NRuNkYZAZtexlqWArG
+   /zyD2Aq77l6NIG5h4mxV4z22ULOtZ+oQHzTea+1mq4mAk+9QvMC6f0FsP
+   LHgj0d/WY+vK24+4pZ80Se50ETu2AWRMJ1GCAbHSfpzKESTdcRb0WM24g
+   C6e6MzfufZrybeATc19RcHuuyeIP5y+JaZqUFHUJ6Co10O9FxbOjgszTF
+   YeoSrAtFadNHCwDtjT671osfWGewhwS/VCyRXh1wgeaZZIvgd4d7HQWBm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226886255"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="226886255"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 20:30:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="768899550"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Jan 2022 20:30:23 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCDTK-000JMB-Gj; Tue, 25 Jan 2022 04:30:22 +0000
+Date:   Tue, 25 Jan 2022 12:29:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2357/2384]
+ drivers/usb/chipidea/ci.h:427:32: error: implicit declaration of function
+ '__ffs'
+Message-ID: <202201251220.wdEh9zG4-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.16 0000/1039] 5.16.3-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-References: <20220124184125.121143506@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   4c707c1c0de83967079b4e385012fa5b00e2cd11
+commit: 61ea5a6fab5c8fae043a02a100970041dc6a877e [2357/2384] headers/deps: delay: Optimize <linux/delay.h> dependencies, remove <linux/sched.h> inclusion
+config: mips-randconfig-m031-20220124 (https://download.01.org/0day-ci/archive/20220125/202201251220.wdEh9zG4-lkp@intel.com/config)
+compiler: mips64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=61ea5a6fab5c8fae043a02a100970041dc6a877e
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 61ea5a6fab5c8fae043a02a100970041dc6a877e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/usb/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/usb/chipidea/otg.c:23:
+   drivers/usb/chipidea/ci.h: In function 'hw_test_and_write':
+>> drivers/usb/chipidea/ci.h:427:32: error: implicit declaration of function '__ffs' [-Werror=implicit-function-declaration]
+     427 |         return (val & mask) >> __ffs(mask);
+         |                                ^~~~~
+   cc1: some warnings being treated as errors
 
 
-On 1/24/2022 10:29 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.3 release.
-> There are 1039 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+vim +/__ffs +427 drivers/usb/chipidea/ci.h
 
-BTW it does not look like the same CC list was used for this one and the 
-other stable release candidates, can you copy the same list next time? 
-Thanks!
+e443b333629f82 Alexander Shishkin 2012-05-11  411  
+e443b333629f82 Alexander Shishkin 2012-05-11  412  /**
+e443b333629f82 Alexander Shishkin 2012-05-11  413   * hw_test_and_write: tests & writes a hw register
+19353881b4afc9 Peter Chen         2014-09-22  414   * @ci: the controller
+e443b333629f82 Alexander Shishkin 2012-05-11  415   * @reg:  register index
+e443b333629f82 Alexander Shishkin 2012-05-11  416   * @mask: bitfield mask
+e443b333629f82 Alexander Shishkin 2012-05-11  417   * @data: new value
+e443b333629f82 Alexander Shishkin 2012-05-11  418   *
+e443b333629f82 Alexander Shishkin 2012-05-11  419   * This function returns register contents
+e443b333629f82 Alexander Shishkin 2012-05-11  420   */
+8e22978c57087a Alexander Shishkin 2013-06-24  421  static inline u32 hw_test_and_write(struct ci_hdrc *ci, enum ci_hw_regs reg,
+e443b333629f82 Alexander Shishkin 2012-05-11  422  				    u32 mask, u32 data)
+e443b333629f82 Alexander Shishkin 2012-05-11  423  {
+26c696c678c4ce Richard Zhao       2012-07-07  424  	u32 val = hw_read(ci, reg, ~0);
+e443b333629f82 Alexander Shishkin 2012-05-11  425  
+26c696c678c4ce Richard Zhao       2012-07-07  426  	hw_write(ci, reg, mask, data);
+727b4ddb48dcd8 Felipe Balbi       2013-03-30 @427  	return (val & mask) >> __ffs(mask);
+e443b333629f82 Alexander Shishkin 2012-05-11  428  }
+e443b333629f82 Alexander Shishkin 2012-05-11  429  
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+:::::: The code at line 427 was first introduced by commit
+:::::: 727b4ddb48dcd8c9ca81b58ca58191233bdf75aa usb: chipidea: don't redefine __ffs()
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+:::::: TO: Felipe Balbi <balbi@ti.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

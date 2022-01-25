@@ -2,80 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA8A49BF42
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F21E49BF49
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiAYXBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 18:01:38 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58116 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbiAYXBh (ORCPT
+        id S234564AbiAYXBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 18:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234566AbiAYXBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 18:01:37 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8A266CE1B77;
-        Tue, 25 Jan 2022 23:01:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93FF3C340E0;
-        Tue, 25 Jan 2022 23:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643151693;
-        bh=KqrPjnST4T/693ZtQvTVZgR8S99aEPz7KM7WLhgCZYQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HXBS2spGqbJUazPgaxyit/sTd5D67dnsxLFYoPq4Z+U1fQLYtC1CdDu/U3skN2RkO
-         1pSWFa+hxlS+WhtBq6RUs29a69qowzVPEO/xQW75ZCJ5ON013FgHtM7ZSyFPKd9amT
-         6QCuvU85sTe1uccaqkMGfMp5DZP1qdB2fcO35RvWWrVNxdx1QE4JXz+OX0qwicfXoA
-         DJxFrL4FWDHcihWmdSFzTuNZTvDN/AMEXaFg9EOQl5Plf3GuBZmZQw+Bh3BBnrejlB
-         GMLxgUvg7D6ztj/rMOxMugFeZGRbZGXF9fNi2RUPDF1F+GkzLNfzWwvIbiHLFCmu4E
-         WAKeniml+dXEg==
-Date:   Tue, 25 Jan 2022 15:01:32 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jeffrey Ji <jeffreyjilinux@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Brian Vazquez <brianvv@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        jeffreyji <jeffreyji@google.com>
-Subject: Re: [PATCH v2 net-next] net-core: add InMacErrors counter
-Message-ID: <20220125150132.3f4291fa@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220125190717.2459068-1-jeffreyji@google.com>
-References: <20220125190717.2459068-1-jeffreyji@google.com>
+        Tue, 25 Jan 2022 18:01:45 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41407C061744;
+        Tue, 25 Jan 2022 15:01:45 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id w27-20020a9d5a9b000000b005a17d68ae89so431160oth.12;
+        Tue, 25 Jan 2022 15:01:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jj8yAEXMoW1YOr4cIyIA1NShiqvkXIc5M2zpkHZV3M8=;
+        b=oppo2Xe515X+Ou6ZhtNfbWd4XPTzk5Gz1+q9j4buYOLK1QMztj43c0m/b8icFD85qu
+         TXIQcIsWh0uV0Nr3JziGpama7N4NrB3/V7EKESlJ2ZHZ+dhMO6GKtmsFfKdfwYMzawgI
+         3dFIPXnCNDn/1UUTc6HT4PUfpnX5TM84KwvzJhAJUZF73H4hUZqWDDgSpo6bbRj4aeQw
+         ZJfjRRuvIszjhtViWlEH2AQtap95Or42BbAR8MB+k3FcNtuJaVWmg2okVVHThyB2yj/o
+         yt2KOCKi8vnNvjAEheyvB0t+JW/VkL5syt7VPaDuk+Mrj7AH006ZpI1gCeyBAoNCn0nT
+         EQmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jj8yAEXMoW1YOr4cIyIA1NShiqvkXIc5M2zpkHZV3M8=;
+        b=Eo2rD8USYq7iqrJGGvrAKbpwGs7MeOeKiBGmiHK4hJRM670digu/jPH1fG27gP4xF4
+         8w0NDWk1uq9+KWsxMMKPSvEfpk0T+b0Bp5a8tnGtydQyGwb4vwV63/YPNZNhG7Fn/cGC
+         Nqlsg45SE2X9dt46mILgQYs35nCtSknYdsABS6w5pdvkRj7iPqas+mX8d6zsSjfAcfXg
+         VUpivdDTNc636fcwYoog8d1KHvL80AmeeQ0jE6nZc2D/nooe/lVHkWZ1fE5H+4PUVho7
+         dhQ9bGAxBSN9SIu/GCgVSuFTdLxEsFDfeZO6lK+fLKdGof00W0YDLZGgARiSrNDE9n5o
+         q/9Q==
+X-Gm-Message-State: AOAM533ma7EqWSv7NFVKTIfLag5VSMWgDJnnuh/uw6ieNSTfcwOt+5Sm
+        2QfN6kUhNFBB4nM8GCZw8r7iE1ie2VgMoou0RYOpSpjY
+X-Google-Smtp-Source: ABdhPJwXFT0Ka4NKG0D7RN7JlP3I5uUJqfYSY82X9BMgEsXjIGwO02MjzQpl2LiPM2/16XH/k+s/QS/y4n+2WgJ7j0Y=
+X-Received: by 2002:a05:6830:1d90:: with SMTP id y16mr16022996oti.200.1643151704608;
+ Tue, 25 Jan 2022 15:01:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220126094035.631da5e3@canb.auug.org.au> <999b1940-3e72-be82-8acd-0634ae50cda9@amd.com>
+In-Reply-To: <999b1940-3e72-be82-8acd-0634ae50cda9@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 25 Jan 2022 18:01:33 -0500
+Message-ID: <CADnq5_N+CiA2wja+2ArtCTSiBdmMEA6Q2VvTqz=8Evf6XFPN7g@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+To:     Luben Tuikov <luben.tuikov@amd.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 19:07:17 +0000 Jeffrey Ji wrote:
-> From: jeffreyji <jeffreyji@google.com>
-> 
-> Increment InMacErrors counter when packet dropped due to incorrect dest
-> MAC addr.
-> 
-> An example when this drop can occur is when manually crafting raw
-> packets that will be consumed by a user space application via a tap
-> device. For testing purposes local traffic was generated using trafgen
-> for the client and netcat to start a server
-> 
-> example output from nstat:
-> \~# nstat -a | grep InMac
-> Ip6InMacErrors                  0                  0.0
-> IpExtInMacErrors                1                  0.0
-> 
-> Tested: Created 2 netns, sent 1 packet using trafgen from 1 to the other
-> with "{eth(daddr=$INCORRECT_MAC...}", verified that nstat showed the
-> counter was incremented.
+On Tue, Jan 25, 2022 at 5:59 PM Luben Tuikov <luben.tuikov@amd.com> wrote:
+>
+> Not sure what to do with this, because in our tree, I see this:
+>
+> commit 824c2051039dfc
+> Author: shaoyunl <shaoyun.liu@amd.com>
+> Date:   Thu Jan 20 10:39:41 2022 -0500
+>
+>     drm/amdgpu: Disable FRU EEPROM access for SRIOV
+>
+>
+> And this is what I used.
 
-> diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-> index 80256717868e..2903869274ca 100644
-> --- a/net/ipv6/ip6_input.c
-> +++ b/net/ipv6/ip6_input.c
-> @@ -150,6 +150,7 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
->  	struct inet6_dev *idev;
->  
->  	if (skb->pkt_type == PACKET_OTHERHOST) {
-> +		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INMACERRORS);
+I typo-ed it when I fixed it up.  Properly fixed up now.
 
-Clang points out idev is not initialized at this point, yet.
+Alex
+
+>
+> Regards,
+> Luben
+>
+>
+> On 2022-01-25 17:40, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > In commit
+> >
+> >   69bba523d97a ("drm/amdgpu: Fix kernel compilation; style")
+> >
+> > Fixes tag
+> >
+> >   Fixes: 1b08dfb889b2c5 ("drm/amdgpu: Disable FRU EEPROM access for SRIOV")
+> >
+> > has these problem(s):
+> >
+> >   - Subject does not match target commit subject
+> >     Just use
+> >       git log -1 --format='Fixes: %h ("%s")'
+> >
+> > Thus:
+> >
+> > Fixes: 1b08dfb889b2 ("drm/amdgpu: remove gart.ready flag")
+> >
+> > or
+> >
+> > Fixes: eadabcc2bc6c ("drm/amdgpu: Disable FRU EEPROM access for SRIOV")
+> >
+>
+> Regards,
+> --
+> Luben
+>

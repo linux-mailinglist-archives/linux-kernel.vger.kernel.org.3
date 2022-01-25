@@ -2,83 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A811149B42C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F86449B439
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383578AbiAYMlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:41:17 -0500
-Received: from foss.arm.com ([217.140.110.172]:40508 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1383607AbiAYMhr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:37:47 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 968681FB;
-        Tue, 25 Jan 2022 04:37:39 -0800 (PST)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7719C3F7D8;
-        Tue, 25 Jan 2022 04:37:39 -0800 (PST)
-Received: by e110455-lin.cambridge.arm.com (Postfix, from userid 1000)
-        id 3856D684477; Tue, 25 Jan 2022 12:37:38 +0000 (GMT)
-Date:   Tue, 25 Jan 2022 12:37:38 +0000
-From:   Liviu Dudau <liviu.dudau@arm.com>
-To:     carsten.haitzler@foss.arm.com
-Cc:     dri-devel@lists.freedesktop.org, brian.starkey@arm.com,
-        airlied@linux.ie, daniel@ffwll.ch, steven.price@arm.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/arm: arm hdlcd select DRM_GEM_CMA_HELPER
-Message-ID: <Ye/vEilz6j8gX3wu@e110455-lin.cambridge.arm.com>
-References: <20220124162437.2470344-1-carsten.haitzler@foss.arm.com>
+        id S1384052AbiAYMn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:43:27 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45572 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1451482AbiAYMk2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 07:40:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C56DA612ED;
+        Tue, 25 Jan 2022 12:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D710C340E0;
+        Tue, 25 Jan 2022 12:40:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643114425;
+        bh=mx0DvKjnIC23tbm60JZ4vLXJ/iDWJTXgRGeNJfsdvAA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u/M/F7ubhrQBBuDUhuLKW7zh1WRd4gU+oIyFQYCVjdbqHSyryEXJBM6JEUJP/na2m
+         tFK3q3v+HXxJgEUj+1vlMgazK30TCUVzaHItF/3GDzgUWYKhB7f6vJFWREHXVVRf6X
+         fcTDe3dI9vB3TcIMAjhad1SAi7me8sfS+fmDHrro=
+Date:   Tue, 25 Jan 2022 13:40:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.14 000/186] 4.14.263-rc1 review
+Message-ID: <Ye/vtmYtku6yna4X@kroah.com>
+References: <20220124183937.101330125@linuxfoundation.org>
+ <CA+G9fYshfJ-WCB141=ha8uf0-FhE9Pim6hd5BWAVxDpvHhTR0w@mail.gmail.com>
+ <CA+G9fYvPfpq+ptuzEW7S4S3o_vGxVGus4n0xAFxLoMzaH+Jnxw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220124162437.2470344-1-carsten.haitzler@foss.arm.com>
+In-Reply-To: <CA+G9fYvPfpq+ptuzEW7S4S3o_vGxVGus4n0xAFxLoMzaH+Jnxw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 04:24:37PM +0000, carsten.haitzler@foss.arm.com wrote:
-> From: Carsten Haitzler <carsten.haitzler@arm.com>
+On Tue, Jan 25, 2022 at 05:42:18PM +0530, Naresh Kamboju wrote:
+> On Tue, 25 Jan 2022 at 16:58, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > On Tue, 25 Jan 2022 at 00:34, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 4.14.263 release.
+> > > There are 186 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.263-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > Following patch caused build failures on arm imx_v6_v7_defconfig
+> >
+> > > Lucas Stach <l.stach@pengutronix.de>
+> > >     drm/etnaviv: limit submit sizes
 > 
-> Without DRM_GEM_CMA_HELPER HDLCD won't build. This needs to be there too.
+> The following patch might be missing,
 > 
-> Fixes: 09717af7d13d ("drm: Remove CONFIG_DRM_KMS_CMA_HELPER option")
+> commit 05916bed11b6d4c61b473a76220151a7d0547164
+> Christian Gmeiner <christian.gmeiner@gmail.com>
+>  drm/etnaviv: add uapi for perfmon feature
 > 
-> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
-
-Acked-by: Liviu Dudau <liviu.dudau@arm.com>
-
-I will add Steven's reviewed-by as well when pushing it.
-
-Best regards,
-Liviu
-
-> ---
->  drivers/gpu/drm/arm/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/arm/Kconfig b/drivers/gpu/drm/arm/Kconfig
-> index 58a242871b28..6e3f1d600541 100644
-> --- a/drivers/gpu/drm/arm/Kconfig
-> +++ b/drivers/gpu/drm/arm/Kconfig
-> @@ -6,6 +6,7 @@ config DRM_HDLCD
->  	depends on DRM && OF && (ARM || ARM64 || COMPILE_TEST)
->  	depends on COMMON_CLK
->  	select DRM_KMS_HELPER
-> +	select DRM_GEM_CMA_HELPER
->  	help
->  	  Choose this option if you have an ARM High Definition Colour LCD
->  	  controller.
-> -- 
-> 2.30.1
 > 
 
--- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+Thanks, I'll drop the limit commit from 4.14 and older as it doesn't
+seem like this option is present on kernels older than 4.15.
+
+thanks,
+
+greg k-h

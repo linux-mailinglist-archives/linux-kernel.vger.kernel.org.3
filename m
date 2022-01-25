@@ -2,66 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 465F549B597
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5269B49B560
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386656AbiAYOCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:02:35 -0500
-Received: from protestant.ebb.org ([50.56.179.12]:57469 "EHLO
-        protestant.ebb.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387012AbiAYN7K (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:59:10 -0500
-X-Greylist: delayed 534 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Jan 2022 08:59:10 EST
-Received: from localhost (unknown [216.161.86.19])
-        (Authenticated sender: bkuhn)
-        by protestant.ebb.org (Postfix) with ESMTPSA id CC12F820C4;
-        Tue, 25 Jan 2022 05:50:13 -0800 (PST)
-Date:   Tue, 25 Jan 2022 05:47:39 -0800
-From:   "Bradley M. Kuhn" <bkuhn@ebb.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        id S1353766AbiAYNvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:51:45 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:32900 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1577805AbiAYNtD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 08:49:03 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 376201EC01B7;
+        Tue, 25 Jan 2022 14:48:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643118536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=JQN8XD6k6puvlSUuf8A5aQx4ew310N7RwtnuTiZnHb8=;
+        b=EBAYLLI8ZKdEmazAnudhSelafx11VzBXAhRuc9nYJyQhp2LpsI0UmGGAOdRz66aFffbETc
+        hCkJcMLrjFST9eUShtGEQdgddvtR0BF2inaRz6BebGta3+5aTH7+CKm3Dp4uIM8Y6HCT4A
+        SbwvPtfNj63BrzWM1xMA1pzgCEGYiwE=
+Date:   Tue, 25 Jan 2022 14:48:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        "linux-spdx@vger.kernel.org" <linux-spdx@vger.kernel.org>
-Subject: Re: [PATCH v3] powerpc: Add missing SPDX license identifiers
-Message-ID: <Ye//e3q46n57x/1l@ebb.org>
-References: <d2c52284244d6dcb3472d2041abe43b456d116df.1642762977.git.christophe.leroy@csgroup.eu>
- <YerEuE6XlslE3Goo@kroah.com>
- <24829c2f-6855-c8d6-7ae4-17c5517f890d@csgroup.eu>
- <YerO8MjbXlvbMEsZ@kroah.com>
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v8 33/40] x86/compressed/64: add identity mapping for
+ Confidential Computing blob
+Message-ID: <Ye//w6Qm4P6HX870@zn.tnic>
+References: <20211210154332.11526-1-brijesh.singh@amd.com>
+ <20211210154332.11526-34-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YerO8MjbXlvbMEsZ@kroah.com>
+In-Reply-To: <20211210154332.11526-34-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Jan 21, 2022 at 03:13:50PM +0000, Christophe Leroy wrote:
-> > Isn't it what GPL-2.0+ means ?
+On Fri, Dec 10, 2021 at 09:43:25AM -0600, Brijesh Singh wrote:
+> +static void sev_prep_identity_maps(void)
+> +{
+> +	/*
+> +	 * The ConfidentialComputing blob is used very early in uncompressed
+> +	 * kernel to find the in-memory cpuid table to handle cpuid
+> +	 * instructions. Make sure an identity-mapping exists so it can be
+> +	 * accessed after switchover.
+> +	 */
+> +	if (sev_snp_enabled()) {
+> +		struct cc_blob_sev_info *cc_info =
+> +			(void *)(unsigned long)boot_params->cc_blob_address;
+> +
+> +		add_identity_map((unsigned long)cc_info,
+> +				 (unsigned long)cc_info + sizeof(*cc_info));
+> +		add_identity_map((unsigned long)cc_info->cpuid_phys,
+> +				 (unsigned long)cc_info->cpuid_phys + cc_info->cpuid_len);
+> +	}
+> +
+> +	sev_verify_cbit(top_level_pgt);
+> +}
+> +
 
-Greg Kroah-Hartman wrote:
-> Yes, but look further down, as I point out below...
->
-> > >> 	include/asm/epapr_hcalls.h:/* SPDX-License-Identifier: GPL-2.0+ OR BSD */
-> > >> 	include/asm/fsl_hcalls.h:/* SPDX-License-Identifier: GPL-2.0+ OR BSD */
-> > >> 	include/asm/ibmebus.h:/* SPDX-License-Identifier: GPL-2.0 OR OpenIB BSD */
-> > >> 	include/asm/sfp-machine.h:/* SPDX-License-Identifier: LGPL-2.0+ */
-> > >> 	kvm/mpic.c:// SPDX-License-Identifier: GPL-2.0
-> > >> 	lib/crtsavres.S:/* SPDX-License-Identifier: GPL-2.0+ */
-> > >> 	mm/book3s64/hash_4k.c:// SPDX-License-Identifier: LGPL-2.0
-> > >> 	mm/book3s64/hash_64k.c:// SPDX-License-Identifier: LGPL-2.0
-> > >> 	mm/book3s64/hash_hugepage.c:// SPDX-License-Identifier: LGPL-2.1
-> > >> 	platforms/pseries/ibmebus.c:// SPDX-License-Identifier: GPL-2.0 OR OpenIB BSD
-> > >> 	tools/head_check.sh:# SPDX-License-Identifier: GPL-2.0+
-> > >> 	xmon/ppc.h:/* SPDX-License-Identifier: GPL-1.0+ */
+Also, that function can just as well live in compressed/sev.c and
+you can export add_identity_map() instead.
 
-If you're combining GPLv2-or-later works with LGPLv2.0/2.1 works, you'll have
-to normalize to some GPLv2-based license (such as GPLv2-or-later), since
-LGPLv2.1 requires that for combinations.  You won't be able to carry along
-the "OR 3-Clause-BSD" part once the combination is made.  Similarly true with
-GPLv2-or-later, but LGPL is the interesting one because it's explicit about
-the need to change license notices to GPL notices when you combine.
+That latter function calls kernel_ident_mapping_init() which is
+already exported. add_identity_map() doesn't do anything special
+and it is limited to the decompressor kernel so nothing stands in
+the way of exporting it in a pre-patch and renaming it there to
+kernel_add_identity_map() or so...
 
- -- bkuhn
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

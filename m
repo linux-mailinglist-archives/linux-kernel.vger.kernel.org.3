@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E32A849BC3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB9949BC62
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiAYTgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
+        id S230395AbiAYTm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbiAYTfp (ORCPT
+        with ESMTP id S230321AbiAYTma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:35:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC2DC061755;
-        Tue, 25 Jan 2022 11:35:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01B78B819D9;
-        Tue, 25 Jan 2022 19:35:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91FC3C340E6;
-        Tue, 25 Jan 2022 19:35:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643139327;
-        bh=2SKgMeaepEa/3fqmOk3qpuRploR2lWhnOwQ1mCTG4l8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=svmfcgT96x5RmVksMCBJvYdIuMEaOvAt+P5FqTHqYL1XJONcH3ydicPxs5N35LEUb
-         9cCSgKfYet6QPhmh/03Vx6xIZ55/j/ULba+Iua+QuhGaVVDLRZeN7rV/tVP2t0wjEu
-         yVV7a48kjsXtLdRBUsbPDT81z5jHvlR39f5tYG9h95l7tjJp47S1hSZJ8aGaRz2XKI
-         mXkwr3J4wJSeZaWQOaQtZpuXupwcELyp+qlp/Au30u+qNuAaLkmAypZ/wC8WSrFbl9
-         5OQmfLCr4mb4wox0Sd9B2Vi2HYPOBD0/RpCDgc/PFD+oNGC4Zh7njIlUZhxhEuA/dZ
-         L+gUhbJCnczXA==
-Date:   Tue, 25 Jan 2022 13:42:13 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] scsi: storvsc: Use struct_size() helper in
- storvsc_queuecommand()
-Message-ID: <20220125194213.GA74670@embeddedor>
+        Tue, 25 Jan 2022 14:42:30 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E2BC06173B;
+        Tue, 25 Jan 2022 11:42:30 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id i1so2678641pla.9;
+        Tue, 25 Jan 2022 11:42:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kTJVFwQiwO8BLs8+JSIrt1xbVtpPlaHIF9g4dJgPwyg=;
+        b=SyXfO+Gr4ipD0NgzH7yFZK+MKSyx/TYpzEWenjNrvAJK7/k8Sv1e90gy8KTJ3cafxv
+         i4vXkUY+tbYbZzpzNTc41vQae9avLgqw3V2ws76+cxDIzrM6d6Z4hDa9uABSSXus5uw0
+         KB538qzdLugNghL1YT0N0OdEP/U5sAB2tQI5PDJAOGEHVHeHM8bEmeHRJCgzTgAKB0gN
+         HTLeC0ezktnwu2QaQWk/xmpqnXXFo+MFI2AxCoNBQpzFOXehl1OCvRJRDwMyq5FV7ias
+         eb5stz1lQcZ7kARQ5sZTuoYJwbHUkEjC9hiojwcEB/w0sd0qc/UWDjMy9SUMNxioBJjH
+         0Kmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kTJVFwQiwO8BLs8+JSIrt1xbVtpPlaHIF9g4dJgPwyg=;
+        b=TMddaNlHTxNlTkSv4ERVS9VbDhA9Nl5xrnqgsSeC5jHqZ678MxQdjYC224jKFKbM9e
+         gxyvT6DFdM5qjEkc30f3RzP22DCRX+U4d7aTX9StBOFZ7ss/5PiHW4pWNuouel4wVXAR
+         m4hobJy7Ek38cQtkIO6NpGhbeEpKYdeJ6eu8a/iOe0z9Ofr7Y92XfKiY5SggHPFteb2C
+         QMaQUJ/aPepDc2g4vGY3SygQ+RpMjb3wf8mdLa5GdAYgT2PjqsCq9x5kB5QVWHStIoKb
+         dDdae+x+kcgLVL8zmDDR35EzpoUVCiGU0z6YSRcBaaUx7+TS+ZM8m3I4TiuBR0XCn8B6
+         xzQg==
+X-Gm-Message-State: AOAM532BhBreD+BGTx/Spdu7sVU9eVMW3HEVjPlXM1+y80/vUg66eL2i
+        /SjFMJqHkj9BW61fvaGZuGkk8TnemCk=
+X-Google-Smtp-Source: ABdhPJxuJxb83PUP7ERdwGGSRwW06hDJbWyMuOkH4UW2Zs4HZhWJdCDZl8gnu3XQqPk2WL2F8upHUw==
+X-Received: by 2002:a17:903:32d2:b0:14b:612:7fae with SMTP id i18-20020a17090332d200b0014b06127faemr20140195plr.80.1643139749065;
+        Tue, 25 Jan 2022 11:42:29 -0800 (PST)
+Received: from 7YHHR73.igp.broadcom.net (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id a1sm15087343pgm.83.2022.01.25.11.42.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 11:42:28 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     stable@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM
+        BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE...),
+        Linus Walleij <linus.walleij@linaro.org>,
+        Eric Anholt <eric@anholt.net>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list),
+        linux-gpio@vger.kernel.org (open list:PIN CONTROL SUBSYSTEM),
+        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE)
+Subject: [PATCH stable 5.4 0/7] pinctrl-bcm2835 gpio-ranges bugfix
+Date:   Tue, 25 Jan 2022 11:42:15 -0800
+Message-Id: <20220125194222.12783-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version,
-in order to avoid any potential type mistakes or integer overflows that,
-in the worst scenario, could lead to heap overflows.
+Hi all,
 
-Also, address the following sparse warnings:
-drivers/scsi/storvsc_drv.c:1843:39: warning: using sizeof on a flexible structure
+This patch series is intended to backport the fix from Phil "pinctrl:
+bcm2835: Change init order for gpio hogs" into the 5.4 tree since the
+blamed commit:
 
-Link: https://github.com/KSPP/linux/issues/174
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/scsi/storvsc_drv.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+73345a18d464b ("pinctrl: bcm2835: Pass irqchip when adding gpiochip")
 
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index 9a0bba5a51a7..89c20dfc6609 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -1755,7 +1755,7 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
- 	struct scatterlist *sgl;
- 	struct vmscsi_request *vm_srb;
- 	struct vmbus_packet_mpb_array  *payload;
--	u32 payload_sz;
-+	size_t payload_sz;
- 	u32 length;
- 
- 	if (vmstor_proto_version <= VMSTOR_PROTO_VERSION_WIN8) {
-@@ -1839,8 +1839,8 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
- 
- 		if (hvpg_count > MAX_PAGE_BUFFER_COUNT) {
- 
--			payload_sz = (hvpg_count * sizeof(u64) +
--				      sizeof(struct vmbus_packet_mpb_array));
-+			payload_sz = struct_size(payload, range.pfn_array,
-+						 hvpg_count);
- 			payload = kzalloc(payload_sz, GFP_ATOMIC);
- 			if (!payload)
- 				return SCSI_MLQUEUE_DEVICE_BUSY;
+is in 5.4. To get there, I did backport a number of changes in order for
+the commit "pinctrl: bcm2835: Change init order for gpio hogs" to apply
+cleanly with no hunks.
+
+Those should have no functional impact since we do not have support for
+7211 or 2711 in the upstream stable 5.4.
+
+Both the pinctrl *and* the DTS changes must be taken in lockstep
+otherwise the GPIO pins are simply not usable unfortunately.
+
+Thanks!
+
+Florian Fainelli (2):
+  pinctrl: bcm2835: Match BCM7211 compatible string
+  pinctrl: bcm2835: Add support for wake-up interrupts
+
+Phil Elwell (2):
+  pinctrl: bcm2835: Change init order for gpio hogs
+  ARM: dts: gpio-ranges property is now required
+
+Stefan Wahren (3):
+  pinctrl: bcm2835: Drop unused define
+  pinctrl: bcm2835: Refactor platform data
+  pinctrl: bcm2835: Add support for all GPIOs on BCM2711
+
+ arch/arm/boot/dts/bcm283x.dtsi        |   1 +
+ drivers/pinctrl/bcm/pinctrl-bcm2835.c | 209 +++++++++++++++++++++-----
+ 2 files changed, 175 insertions(+), 35 deletions(-)
+
 -- 
-2.27.0
+2.25.1
 

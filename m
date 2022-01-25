@@ -2,97 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D65449B89F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F23E049B8AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233157AbiAYQb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:31:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350808AbiAYQZ2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:25:28 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5347CC06175B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:25:27 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nCOdJ-0006iI-Bf; Tue, 25 Jan 2022 17:25:25 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C0B3A22EEF;
-        Tue, 25 Jan 2022 16:25:14 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 17:25:07 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>
-Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/4] can: esd: add support for esd GmbH PCIe/402 CAN
- interface
-Message-ID: <20220125162507.sxjzjk5pqdpppxsl@pengutronix.de>
-References: <20211201220328.3079270-1-stefan.maetje@esd.eu>
+        id S242623AbiAYQcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:32:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:54028 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233590AbiAYQZv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 11:25:51 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BFF71FB;
+        Tue, 25 Jan 2022 08:25:43 -0800 (PST)
+Received: from e127744.arm.com (unknown [10.57.88.59])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 38F633F766;
+        Tue, 25 Jan 2022 08:25:41 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [PATCH 0/1] perf test: Add branch stack sampling tests for ARM64
+Date:   Tue, 25 Jan 2022 16:25:08 +0000
+Message-Id: <20220125162510.2860932-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
+References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ockqoulgc4mli6xe"
-Content-Disposition: inline
-In-Reply-To: <20211201220328.3079270-1-stefan.maetje@esd.eu>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Adds testing of branch stack sampling on ARM64. Branch stack sampling is
+supported by the Branch Record Buffer Extension (BRBE). In order to run
+the tests, the Kernel must have BRBE support enabled.
 
---ockqoulgc4mli6xe
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+At the time of writing, BRBE support in the Kernel is provided by the
+patches in RFC [1]. If BRBE support is not detected, the tests will be
+skipped.
 
-On 01.12.2021 23:03:24, Stefan M=C3=A4tje wrote:
-> *Note*: scripts/checkpatch.pl still emits the following warnings:
->   - esd_402_pci-core.c:270: Possible unnecessary 'out of memory' message
->     This error message is there to tell the user that the DMA allocation
->     failed and not an allocation for normal kernel memory.
+Information about BRBE can be found in [2].
 
-The kernel takes care of printing a error message in case the DMA mem
-allocation fails. This is why checkpatch asks you to remove that message.
+[1]: https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
+[2]: https://developer.arm.com/documentation/ddi0608/latest
 
->   - esdacc.h:255: The irq_cnt pointer is still declared volatile and
->     this has a reason and is explained in detail in the header
->     referencing the exception noted in volatile-considered-harmful.rst.
+German Gomez (1):
+  perf test: Add branch stack sampling tests for ARM64
 
-I'll look into this, I'll probably ask you to explain the IRQ demux to
-me :)
+ .../perf/tests/shell/test_arm_brbe_kernel.sh  | 42 ++++++++++
+ .../tests/shell/test_arm_brbe_userspace.sh    | 80 +++++++++++++++++++
+ 2 files changed, 122 insertions(+)
+ create mode 100755 tools/perf/tests/shell/test_arm_brbe_kernel.sh
+ create mode 100755 tools/perf/tests/shell/test_arm_brbe_userspace.sh
 
-regards,
-Marc
+-- 
+2.25.1
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ockqoulgc4mli6xe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmHwJGAACgkQqclaivrt
-76ldxwf/aB9FKOCrDocj0sQzhnkX2fMunr+Hs16al4ZgxsLG/KJa4/tlLJwAjPz3
-NjlXIy++bEJmmBREDQ+6QKUXKoMewvEn1AM4qDRykO2os2DgitDpWHspEPShe8/N
-sFIU6cl0yOzKFsTzvTxnbT6K+aqyPX8LkSOsyIc3ASZGjFgsoY34sSprE2Hm8iN2
-S87Iy54Wec/P/C34xrg+JCYFpigDwheRqqKld3czddD6UmOvtEJvkp41HxFM20H1
-mSHTimgXQYtaZd4PZj0nCbSpl2s3Q6j9+3Dyd1HchR5xXlLHhjxlR6tLFt1zc2xj
-/G+hjrMggmGWOl+gsdfKAAytdRT+kw==
-=EW4t
------END PGP SIGNATURE-----
-
---ockqoulgc4mli6xe--

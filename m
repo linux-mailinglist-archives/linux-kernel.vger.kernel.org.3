@@ -2,172 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFCA549A872
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:12:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D2149A827
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1318832AbiAYDHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3416556AbiAYCES (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:04:18 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BA4C067A79
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:56:19 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id g81so56823635ybg.10
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:56:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oUSMwHpfIXP327oX5UsCB8xSQ0xCQbkTD62LxiomNN8=;
-        b=IybJkGsDeCF6sRlhjGADTGlR29U+WCuv2VLT0Y7Ypt5R+2jPexhhhxmBpFrGzgcg1j
-         pTu5oQfqlqcbG+B30fPZR6LjWdRhKpHquiuAhx30Zg4jHyj/AJJL2TTFuY8XSxUe88va
-         lJXfpSSAUHSiwVFelfislmQ+tl2tpZZkfUxYHCdb+vBULoCXEFrdQhVNv1KVyNYsbpU4
-         YiGZwVEAz94QfqdEEiuKKVLOANTNL7nK/qLNYerhcidLevGfYcGI4gZ/1VWbS6r3xYqy
-         muI+QmJgzQjt8S6lIrkBR3EwtyIS4unjnFpbcY2WNBbI67KUm5JqU91RkjpmoSiyPKcU
-         Up3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oUSMwHpfIXP327oX5UsCB8xSQ0xCQbkTD62LxiomNN8=;
-        b=zCaAfcSFX6PgtilABiSO+My75Uub6wu764L7AZma9dOOwRsrAH/uTPfIbgz01PWom3
-         H/FTDf1w7Vff9FWToxgmTy03Uk9NfsZuSqt3l2sQ5k+mRXmxT6E0ndGZ0VgO/hfjQaxp
-         WJfvAENY51tq7IlJ4eaddIf3B6A2Iw+O86JeMvxGY3E8JwVdJlDF+q3th1mgiQDLIsZL
-         kxvbBdCuhjDXOlGNp7aCVCK+gDUgASc3p9O/cNrqBdH+lx3hZM4Y8wRDmI/vGl7JH8q7
-         UZAzkmaBhfZjh2oEroyblPvcmDWk4IHKU71omdPRFDXEqlLSSmMYl7LYNmON8C0WlfCJ
-         z9PA==
-X-Gm-Message-State: AOAM531m6pe83D9Xqnxl0/zTLYPHlCDl1DZv4FveBfq44Cj2aMR3w8D4
-        MNY6UxXdB2T/NHB/LGl6FyK6Yl8QgK9TJ8lKv3PB99fIEfT2ldgp
-X-Google-Smtp-Source: ABdhPJy0GkjfgB3eDLM6IluHUPnhWC58iVSK51emno/k8FDZmqhaNvVCTR8rIbfaTVH4nEt6fsznaXISf/ZFA4Djpw4=
-X-Received: by 2002:a25:c245:: with SMTP id s66mr28600574ybf.243.1643072179000;
- Mon, 24 Jan 2022 16:56:19 -0800 (PST)
+        id S1316657AbiAYC6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:58:22 -0500
+Received: from foss.arm.com ([217.140.110.172]:60768 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S3415163AbiAYA55 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 19:57:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D7FD1FB;
+        Mon, 24 Jan 2022 16:57:57 -0800 (PST)
+Received: from [10.57.68.26] (unknown [10.57.68.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 503873F793;
+        Mon, 24 Jan 2022 16:57:54 -0800 (PST)
+Message-ID: <99023cd7-f037-282f-3f25-629a14a1578b@arm.com>
+Date:   Tue, 25 Jan 2022 00:57:49 +0000
 MIME-Version: 1.0
-References: <202201250818.178Aw4sD-lkp@intel.com>
-In-Reply-To: <202201250818.178Aw4sD-lkp@intel.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 24 Jan 2022 16:56:08 -0800
-Message-ID: <CAJuCfpHQaG_W4JRdBaV9CgYGxYTC5hGjFQyy3v8grW8OtGV+Yw@mail.gmail.com>
-Subject: Re: kernel/sched/psi.c:1193:6: warning: no previous prototype for 'psi_trigger_destroy'
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, LKML <linux-kernel@vger.kernel.org>,
-        Eric Biggers <ebiggers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 7/7] iommu: Add iommu_domain::domain_ops
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
+ <20220124071103.2097118-8-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220124071103.2097118-8-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 4:27 PM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-> commit: a06247c6804f1a7c86a2e5398a4c1f1db1471848 psi: Fix uaf issue when psi trigger is destroyed while being polled
-> date:   7 days ago
-> config: sh-randconfig-r012-20220124 (https://download.01.org/0day-ci/archive/20220125/202201250818.178Aw4sD-lkp@intel.com/config)
-> compiler: sh4-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a06247c6804f1a7c86a2e5398a4c1f1db1471848
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout a06247c6804f1a7c86a2e5398a4c1f1db1471848
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash kernel/sched/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->    kernel/sched/psi.c:1123:21: warning: no previous prototype for 'psi_trigger_create' [-Wmissing-prototypes]
->     1123 | struct psi_trigger *psi_trigger_create(struct psi_group *group,
->          |                     ^~~~~~~~~~~~~~~~~~
-> >> kernel/sched/psi.c:1193:6: warning: no previous prototype for 'psi_trigger_destroy' [-Wmissing-prototypes]
->     1193 | void psi_trigger_destroy(struct psi_trigger *t)
->          |      ^~~~~~~~~~~~~~~~~~~
->    kernel/sched/psi.c:1260:10: warning: no previous prototype for 'psi_trigger_poll' [-Wmissing-prototypes]
->     1260 | __poll_t psi_trigger_poll(void **trigger_ptr,
->          |          ^~~~~~~~~~~~~~~~
->
+On 2022-01-24 07:11, Lu Baolu wrote:
+> Add a domain specific callback set, domain_ops, for vendor iommu driver
+> to provide domain specific operations. Move domain-specific callbacks
+> from iommu_ops to the domain_ops and hook them when a domain is allocated.
 
-https://lore.kernel.org/all/YemFa5ouZXEnR%2FD+@cmpxchg.org fixes these warnings.
+I think it would make a lot of sense for iommu_domain_ops to be a 
+substructure *within* iommu_ops. That way we can save most of the driver 
+boilerplate here by not needing extra variables everywhere, and letting 
+iommu_domain_alloc() still do a default initialisation like "domain->ops 
+= bus->iommu_ops->domain_ops;"
 
->
-> vim +/psi_trigger_destroy +1193 kernel/sched/psi.c
->
->   1192
-> > 1193  void psi_trigger_destroy(struct psi_trigger *t)
->   1194  {
->   1195          struct psi_group *group;
->   1196          struct task_struct *task_to_destroy = NULL;
->   1197
->   1198          /*
->   1199           * We do not check psi_disabled since it might have been disabled after
->   1200           * the trigger got created.
->   1201           */
->   1202          if (!t)
->   1203                  return;
->   1204
->   1205          group = t->group;
->   1206          /*
->   1207           * Wakeup waiters to stop polling. Can happen if cgroup is deleted
->   1208           * from under a polling process.
->   1209           */
->   1210          wake_up_interruptible(&t->event_wait);
->   1211
->   1212          mutex_lock(&group->trigger_lock);
->   1213
->   1214          if (!list_empty(&t->node)) {
->   1215                  struct psi_trigger *tmp;
->   1216                  u64 period = ULLONG_MAX;
->   1217
->   1218                  list_del(&t->node);
->   1219                  group->nr_triggers[t->state]--;
->   1220                  if (!group->nr_triggers[t->state])
->   1221                          group->poll_states &= ~(1 << t->state);
->   1222                  /* reset min update period for the remaining triggers */
->   1223                  list_for_each_entry(tmp, &group->triggers, node)
->   1224                          period = min(period, div_u64(tmp->win.size,
->   1225                                          UPDATES_PER_WINDOW));
->   1226                  group->poll_min_period = period;
->   1227                  /* Destroy poll_task when the last trigger is destroyed */
->   1228                  if (group->poll_states == 0) {
->   1229                          group->polling_until = 0;
->   1230                          task_to_destroy = rcu_dereference_protected(
->   1231                                          group->poll_task,
->   1232                                          lockdep_is_held(&group->trigger_lock));
->   1233                          rcu_assign_pointer(group->poll_task, NULL);
->   1234                          del_timer(&group->poll_timer);
->   1235                  }
->   1236          }
->   1237
->   1238          mutex_unlock(&group->trigger_lock);
->   1239
->   1240          /*
->   1241           * Wait for psi_schedule_poll_work RCU to complete its read-side
->   1242           * critical section before destroying the trigger and optionally the
->   1243           * poll_task.
->   1244           */
->   1245          synchronize_rcu();
->   1246          /*
->   1247           * Stop kthread 'psimon' after releasing trigger_lock to prevent a
->   1248           * deadlock while waiting for psi_poll_work to acquire trigger_lock
->   1249           */
->   1250          if (task_to_destroy) {
->   1251                  /*
->   1252                   * After the RCU grace period has expired, the worker
->   1253                   * can no longer be found through group->poll_task.
->   1254                   */
->   1255                  kthread_stop(task_to_destroy);
->   1256          }
->   1257          kfree(t);
->   1258  }
->   1259
->
+I do like the future possibility of trying to flatten some of the 
+io-pgtable indirection by having the SMMU drivers subsequently swizzle 
+in alternate domain ops once they've picked a format, though. That was a 
+bit too clunky to achieve at the whole iommu_ops level when I 
+experimented with it years ago, but now it might well be worth another 
+try...
+
+One other comment below.
+
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 > ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>   include/linux/iommu.h                       | 93 ++++++++++++---------
+>   drivers/iommu/amd/iommu.c                   | 21 +++--
+>   drivers/iommu/apple-dart.c                  | 24 ++++--
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 22 +++--
+>   drivers/iommu/arm/arm-smmu/arm-smmu.c       | 23 +++--
+>   drivers/iommu/arm/arm-smmu/qcom_iommu.c     | 17 ++--
+>   drivers/iommu/exynos-iommu.c                | 17 ++--
+>   drivers/iommu/fsl_pamu_domain.c             | 13 ++-
+>   drivers/iommu/intel/iommu.c                 | 25 ++++--
+>   drivers/iommu/iommu.c                       | 15 ++--
+>   drivers/iommu/ipmmu-vmsa.c                  | 21 +++--
+>   drivers/iommu/msm_iommu.c                   | 17 ++--
+>   drivers/iommu/mtk_iommu.c                   | 24 ++++--
+>   drivers/iommu/mtk_iommu_v1.c                | 19 +++--
+>   drivers/iommu/omap-iommu.c                  | 15 ++--
+>   drivers/iommu/rockchip-iommu.c              | 17 ++--
+>   drivers/iommu/s390-iommu.c                  | 15 ++--
+>   drivers/iommu/sprd-iommu.c                  | 19 +++--
+>   drivers/iommu/sun50i-iommu.c                | 18 ++--
+>   drivers/iommu/tegra-gart.c                  | 15 ++--
+>   drivers/iommu/tegra-smmu.c                  | 16 ++--
+>   drivers/iommu/virtio-iommu.c                | 18 ++--
+>   22 files changed, 305 insertions(+), 179 deletions(-)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 111b3e9c79bb..33c5c0e5c465 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -88,7 +88,7 @@ struct iommu_domain_geometry {
+>   
+>   struct iommu_domain {
+>   	unsigned type;
+> -	const struct iommu_ops *ops;
+> +	const struct domain_ops *ops;
+>   	unsigned long pgsize_bitmap;	/* Bitmap of page sizes in use */
+>   	iommu_fault_handler_t handler;
+>   	void *handler_token;
+> @@ -192,26 +192,11 @@ struct iommu_iotlb_gather {
+>    * struct iommu_ops - iommu ops and capabilities
+>    * @capable: check capability
+>    * @domain_alloc: allocate iommu domain
+> - * @domain_free: free iommu domain
+> - * @attach_dev: attach device to an iommu domain
+> - * @detach_dev: detach device from an iommu domain
+> - * @map: map a physically contiguous memory region to an iommu domain
+> - * @map_pages: map a physically contiguous set of pages of the same size to
+> - *             an iommu domain.
+> - * @unmap: unmap a physically contiguous memory region from an iommu domain
+> - * @unmap_pages: unmap a number of pages of the same size from an iommu domain
+> - * @flush_iotlb_all: Synchronously flush all hardware TLBs for this domain
+> - * @iotlb_sync_map: Sync mappings created recently using @map to the hardware
+> - * @iotlb_sync: Flush all queued ranges from the hardware TLBs and empty flush
+> - *            queue
+> - * @iova_to_phys: translate iova to physical address
+>    * @probe_device: Add device to iommu driver handling
+>    * @release_device: Remove device from iommu driver handling
+>    * @probe_finalize: Do final setup work after the device is added to an IOMMU
+>    *                  group and attached to the groups domain
+>    * @device_group: find iommu group for a particular device
+> - * @enable_nesting: Enable nesting
+> - * @set_pgtable_quirks: Set io page table quirks (IO_PGTABLE_QUIRK_*)
+>    * @get_resv_regions: Request list of reserved regions for a device
+>    * @put_resv_regions: Free list of reserved regions for a device
+>    * @apply_resv_region: Temporary helper call-back for iova reserved ranges
+> @@ -237,33 +222,11 @@ struct iommu_ops {
+>   
+>   	/* Domain allocation and freeing by the iommu driver */
+>   	struct iommu_domain *(*domain_alloc)(unsigned iommu_domain_type);
+> -	void (*domain_free)(struct iommu_domain *);
+>   
+> -	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
+> -	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
+> -	int (*map)(struct iommu_domain *domain, unsigned long iova,
+> -		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
+> -	int (*map_pages)(struct iommu_domain *domain, unsigned long iova,
+> -			 phys_addr_t paddr, size_t pgsize, size_t pgcount,
+> -			 int prot, gfp_t gfp, size_t *mapped);
+> -	size_t (*unmap)(struct iommu_domain *domain, unsigned long iova,
+> -		     size_t size, struct iommu_iotlb_gather *iotlb_gather);
+> -	size_t (*unmap_pages)(struct iommu_domain *domain, unsigned long iova,
+> -			      size_t pgsize, size_t pgcount,
+> -			      struct iommu_iotlb_gather *iotlb_gather);
+> -	void (*flush_iotlb_all)(struct iommu_domain *domain);
+> -	void (*iotlb_sync_map)(struct iommu_domain *domain, unsigned long iova,
+> -			       size_t size);
+> -	void (*iotlb_sync)(struct iommu_domain *domain,
+> -			   struct iommu_iotlb_gather *iotlb_gather);
+> -	phys_addr_t (*iova_to_phys)(struct iommu_domain *domain, dma_addr_t iova);
+>   	struct iommu_device *(*probe_device)(struct device *dev);
+>   	void (*release_device)(struct device *dev);
+>   	void (*probe_finalize)(struct device *dev);
+>   	struct iommu_group *(*device_group)(struct device *dev);
+> -	int (*enable_nesting)(struct iommu_domain *domain);
+> -	int (*set_pgtable_quirks)(struct iommu_domain *domain,
+> -				  unsigned long quirks);
+>   
+>   	/* Request/Free a list of reserved regions for a device */
+>   	void (*get_resv_regions)(struct device *dev, struct list_head *list);
+> @@ -296,6 +259,60 @@ struct iommu_ops {
+>   	struct module *owner;
+>   };
+>   
+> +/**
+> + * struct domain_ops - per-domain ops
+> + * @attach_dev: attach an iommu domain to a device
+> + * @detach_dev: detach an iommu domain from a device
+> + * @map: map a physically contiguous memory region to an iommu domain
+> + * @map_pages: map a physically contiguous set of pages of the same size to
+> + *             an iommu domain.
+> + * @unmap: unmap a physically contiguous memory region from an iommu domain
+> + * @unmap_pages: unmap a number of pages of the same size from an iommu domain
+> + * @flush_iotlb_all: Synchronously flush all hardware TLBs for this domain
+> + * @iotlb_sync_map: Sync mappings created recently using @map to the hardware
+> + * @iotlb_sync: Flush all queued ranges from the hardware TLBs and empty flush
+> + *            queue
+> + * @iova_to_phys: translate iova to physical address
+> + * @enable_nesting: Enable nesting
+> + * @set_pgtable_quirks: Set io page table quirks (IO_PGTABLE_QUIRK_*)
+> + * @release: Release the domain after use.
+
+Not sure about the name change here - it's still logically a "free" that 
+matches an "alloc", we're not doing anything clever like refcounting or 
+devres, which is what I'd tend to associate with a "release" function 
+for an allocated resource.
+
+Robin.
+
+> + */
+> +struct domain_ops {
+> +	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
+> +	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
+> +
+> +	int (*map)(struct iommu_domain *domain, unsigned long iova,
+> +		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
+> +	int (*map_pages)(struct iommu_domain *domain, unsigned long iova,
+> +			 phys_addr_t paddr, size_t pgsize, size_t pgcount,
+> +			 int prot, gfp_t gfp, size_t *mapped);
+> +	size_t (*unmap)(struct iommu_domain *domain, unsigned long iova,
+> +			size_t size, struct iommu_iotlb_gather *iotlb_gather);
+> +	size_t (*unmap_pages)(struct iommu_domain *domain, unsigned long iova,
+> +			      size_t pgsize, size_t pgcount,
+> +			      struct iommu_iotlb_gather *iotlb_gather);
+> +
+> +	void (*flush_iotlb_all)(struct iommu_domain *domain);
+> +	void (*iotlb_sync_map)(struct iommu_domain *domain, unsigned long iova,
+> +			       size_t size);
+> +	void (*iotlb_sync)(struct iommu_domain *domain,
+> +			   struct iommu_iotlb_gather *iotlb_gather);
+> +
+> +	phys_addr_t (*iova_to_phys)(struct iommu_domain *domain, dma_addr_t iova);
+> +
+> +	int (*enable_nesting)(struct iommu_domain *domain);
+> +	int (*set_pgtable_quirks)(struct iommu_domain *domain,
+> +				  unsigned long quirks);
+> +
+> +	void (*release)(struct iommu_domain *domain);
+> +};

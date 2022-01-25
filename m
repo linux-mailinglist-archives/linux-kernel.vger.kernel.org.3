@@ -2,110 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC49249ABA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 06:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443CB49ABBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 06:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392334AbiAYFUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 00:20:52 -0500
-Received: from mga02.intel.com ([134.134.136.20]:56374 "EHLO mga02.intel.com"
+        id S1392351AbiAYFVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 00:21:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:43848 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1391184AbiAYFD5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 00:03:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643087037; x=1674623037;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=jvQi+RQyehALY6K5e0Jia9BEKYL9WZi+E3wSrVsSdpc=;
-  b=KYTkHIe4OaXs+LdZ3z3baNpAl0ovDiedY05FA5I7GaU5dZQxn3r8c51N
-   fkqf3c+iTH8O6QcoXzJ1LhkR0Ty/rkLRUPGvieGWL34VrVe2Ai9nSZp1W
-   gsWq0AVFdbZA/xbgcnD4+aRJY1FrARRHl7Z1hjlKbV3U3ebUS6DmicjPH
-   XB1VXm6DUWxdiJFN0E5UWhgYTmsCf4BbBDIRjYbFpJB0YaXAFPze9W0R8
-   1DWfm2nk+t/muxbrFrO6NbSZhLqJ6GPPV8Z5cSDRYtGYjvx2p8OydLGCS
-   mxuBdpq4Axs+s3arssqkZtUG7wM3z5QE1DfOM/e7ZZ528awUH5T+5xSKX
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="233587806"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="233587806"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 21:00:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="534563268"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 24 Jan 2022 21:00:14 -0800
-Cc:     baolu.lu@linux.intel.com,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 7/7] iommu: Add iommu_domain::domain_ops
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
- <20220124071103.2097118-8-baolu.lu@linux.intel.com>
- <BN9PR11MB5276BE30652988271878E78C8C5E9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <33060cd9-9115-013c-7253-52a36aa467e7@linux.intel.com>
-Date:   Tue, 25 Jan 2022 12:59:14 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1391262AbiAYFE0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 00:04:26 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A0441FB;
+        Mon, 24 Jan 2022 21:04:22 -0800 (PST)
+Received: from [10.163.42.113] (unknown [10.163.42.113])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0AC593F7D8;
+        Mon, 24 Jan 2022 21:04:17 -0800 (PST)
+Subject: Re: [RFC V1 02/11] arm64/perf: Add register definitions for BRBE
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
+ <1642998653-21377-3-git-send-email-anshuman.khandual@arm.com>
+ <877dap8c0o.wl-maz@kernel.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <165b3f65-c92e-75e3-9485-548e1c862ec4@arm.com>
+Date:   Tue, 25 Jan 2022 10:34:22 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <BN9PR11MB5276BE30652988271878E78C8C5E9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <877dap8c0o.wl-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/24/22 5:58 PM, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Monday, January 24, 2022 3:11 PM
->> +/**
->> + * struct domain_ops - per-domain ops
->> + * @attach_dev: attach an iommu domain to a device
->> + * @detach_dev: detach an iommu domain from a device
+
+
+On 1/24/22 7:35 PM, Marc Zyngier wrote:
+> On Mon, 24 Jan 2022 04:30:44 +0000,
+> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+>>
+>> This adds BRBE related register definitions and various other related field
+>> macros there in. These will be used subsequently in a BRBE driver which is
+>> being added later on.
+>>
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Marc Zyngier <maz@kernel.org>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>  arch/arm64/include/asm/sysreg.h | 216 ++++++++++++++++++++++++++++++++
+>>  1 file changed, 216 insertions(+)
+>>
+>> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+>> index 898bee0004ae..d8fd7e806a47 100644
+>> --- a/arch/arm64/include/asm/sysreg.h
+>> +++ b/arch/arm64/include/asm/sysreg.h
+>> @@ -141,6 +141,218 @@
+>>  #define SYS_DBGDTRTX_EL0		sys_reg(2, 3, 0, 5, 0)
+>>  #define SYS_DBGVCR32_EL2		sys_reg(2, 4, 0, 7, 0)
+>>  
+>> +/*
+>> + * BRBINF<N>_EL1 Encoding: [2, 1, 8, CRm, op2]
+>> + *
+>> + * derived as <CRm> = c{N<3:0>} <op2> = (N<4>x4 + 0)
+>> + */
+>> +#define SYS_BRBINF0_EL1			sys_reg(2, 1, 8, 0, 0)
+>> +#define SYS_BRBINF1_EL1			sys_reg(2, 1, 8, 1, 0)
+>> +#define SYS_BRBINF2_EL1			sys_reg(2, 1, 8, 2, 0)
+>> +#define SYS_BRBINF3_EL1			sys_reg(2, 1, 8, 3, 0)
+>> +#define SYS_BRBINF4_EL1			sys_reg(2, 1, 8, 4, 0)
+>> +#define SYS_BRBINF5_EL1			sys_reg(2, 1, 8, 5, 0)
+>> +#define SYS_BRBINF6_EL1			sys_reg(2, 1, 8, 6, 0)
+>> +#define SYS_BRBINF7_EL1			sys_reg(2, 1, 8, 7, 0)
+>> +#define SYS_BRBINF8_EL1			sys_reg(2, 1, 8, 8, 0)
+>> +#define SYS_BRBINF9_EL1			sys_reg(2, 1, 8, 9, 0)
 > 
-> What is the criteria about whether an op should be iommu_ops or domain_ops
-> when it requires both domain and device pointers like above two (and future
-> PASID-based attach)?
+> [snip]
+> 
+> Since the architecture gives you the formula to build these, why do
+> you enumerate each and every register encoding? I'd rather see
+> something like:
+> 
+> #define __SYS_BRBINFO(n) sys_reg(2, 1, 8, ((n) & 0xf), (((n) & 0x10)) >> 2)
+> #define SYS_BRBINF0_EL1	__SYS_BRBINFO(0)
+> [...]
+> 
+> and something similar for all the new registers that come in packs of
+> 32... We already have similar things for AMU, PMU, GIC and co.
 
-Generally ops belong to iommu_ops if they are only device oriented, and
-domain_ops if they are only domain oriented. But it's really hard to
-judge when both device and domain are involved. Good question. :-)
-
-Perhaps we should leave the attach/detach interfaces in iommu_ops since
-they are related to device capabilities. For example, some devices
-support attach_dev_pasid, while others not.
+Sure, above method seems like a better idea indeed. I will create these
+constructs for BRBINF, BRBSRC and BRBTGT based registers set.
 
 > 
-> Other examples include:
-> 	@apply_resv_region
-
-This will be deprecated.
-
-> 	@is_attach_deferred
-
-Should be at least device centric (domain doesn't play any role here).
-Further step is to save the is_attach_deferred at a flag in dev_iommu
-and remove the ops (as Robin suggested).
-
+> Thanks,
 > 
-> Thanks
-> Kevin
+> 	M.
 > 
-
-Best regards,
-baolu
+> 

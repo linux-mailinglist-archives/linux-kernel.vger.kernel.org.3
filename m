@@ -2,113 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE01949B163
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51B349B165
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242887AbiAYKLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:11:07 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:34778 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237361AbiAYKBl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:01:41 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20PA1EMo109847;
-        Tue, 25 Jan 2022 04:01:14 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643104874;
-        bh=c0J7TKjHWfZrKCmOVPBiKFm+qVkhcj0TJ8/2B5dklU0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=BkYBpo2PKEqb6rUbS42OJ2zEUPs5WBcWshSAs+SBBzjgmNRvLA4SDM+YmVb0RoijL
-         XXihRz94R8SLwBF97R/ThV/8WO7qPUcSXc6Y1IhMDKB0fghVkCkUN/qPqjOTlwiF7A
-         omyzyyDatkM/xxvQTx6hbzB43j0sCZ+0d6ce6vP8=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20PA1DkI071265
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Jan 2022 04:01:14 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 25
- Jan 2022 04:01:13 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 25 Jan 2022 04:01:13 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20PA1CZw011949;
-        Tue, 25 Jan 2022 04:01:13 -0600
-Date:   Tue, 25 Jan 2022 15:31:12 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Ley Foon Tan <leyfoon.tan@linux.starfivetech.com>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Ley Foon Tan <lftan.linux@gmail.com>
-Subject: Re: [PATCH] mtd: spi-nor: macronix: Add support for mx66u1g45g
-Message-ID: <20220125100112.jevrd4knhxytmry2@ti.com>
-References: <20220124060225.149007-1-leyfoon.tan@linux.starfivetech.com>
+        id S242974AbiAYKLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:11:18 -0500
+Received: from mga11.intel.com ([192.55.52.93]:37261 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238837AbiAYKCo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 05:02:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643104964; x=1674640964;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4VKGIB8DQpC+F+Cykxy5ATSZQvYmTLXbDBDQQx0vGuE=;
+  b=O01pn0kIScb2CQF8/UUH4nLFIXyCQSO1nuGV7IOMzMF9oDphGFlcWWHG
+   ejxAu2KGR3GJQP5of3LlAXdgubPG5XCA0Nr+KXi6sODtASSnsGJgcMF+Y
+   KK6S+7B7Mxomyq18REItbMYZEwGgSs6ZsovFYUDQH1yeC6+B/BSRqkx4x
+   m4PFQqzmtYoDbt0tuj8Mc4ltiObMSPQLh7tJT04vgoYDcZBF5mXugPxvY
+   ZOirGAdiG5HP/gswfomupQSKc/WzDrGFMA5bCbxn2KEOZjmtRyiHy++UB
+   yhlqiXOIZIL4awmLdv+g0eISLBAddvo9Pl4kCywEV1eVj8gjNYio6F5ik
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="243867803"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="243867803"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 02:02:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="494945228"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 25 Jan 2022 02:02:36 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCIep-000Jhq-BU; Tue, 25 Jan 2022 10:02:35 +0000
+Date:   Tue, 25 Jan 2022 18:02:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in
+ initializer (different address spaces)
+Message-ID: <202201251708.BOnUdbSj-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124060225.149007-1-leyfoon.tan@linux.starfivetech.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
+commit: 4ebbd075bcde7884e078d4360510b989f559bfec KVM: PPC: Book3S HV P9: Use host timer accounting to avoid decrementer read
+date:   9 weeks ago
+config: powerpc64-randconfig-s031-20220125 (https://download.01.org/0day-ci/archive/20220125/202201251708.BOnUdbSj-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4ebbd075bcde7884e078d4360510b989f559bfec
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4ebbd075bcde7884e078d4360510b989f559bfec
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-On 24/01/22 02:02PM, Ley Foon Tan wrote:
-> The Macronix mx66u1g45g [1] is a 1.8V, 1Gbit (128MB) flash device that
-> supports x1, x2, or x4 operation.
-> 
-> The mx66u1g45g is the smaller sibling of the mx66u2g45g that is
-> already supported.
-> 
-> Tested on StarFive Dubhe hardware on FPGA.
-> Validated by erase and read back, write and read back.
-> 
-> [1] https://www.macronix.com/Lists/Datasheet/Attachments/7877/MX66U1G45G,%201.8V,%201Gb,%20v1.4.pdf
-> 
-> Signed-off-by: Ley Foon Tan <leyfoon.tan@linux.starfivetech.com>
-> ---
->  drivers/mtd/spi-nor/macronix.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-> index 97dba1ae7fb1..79ee808c5442 100644
-> --- a/drivers/mtd/spi-nor/macronix.c
-> +++ b/drivers/mtd/spi-nor/macronix.c
-> @@ -97,6 +97,9 @@ static const struct flash_info macronix_parts[] = {
->  			      SPI_NOR_QUAD_READ) },
->  	{ "mx66l1g55g",  INFO(0xc2261b, 0, 64 * 1024, 2048)
->  		NO_SFDP_FLAGS(SPI_NOR_QUAD_READ) },
-> +	{ "mx66u1g45g",  INFO(0xc2253b, 0, 64 * 1024, 2048)
-> +		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
-> +		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This is the "legacy" way of defining flags. I see from the datasheet 
-that SFDP is supported. Please use PARSE_SFDP to allow these parameters 
-to be discovered via SFDP. If one of the SFDP table has wrong data then 
-please use fixup hooks to correct it.
 
-You also need to dump the SFDP table and some other flash parameters in 
-the patch comments. See [0] for an example.
+sparse warnings: (new ones prefixed by >>)
+   arch/powerpc/kernel/time.c:90:5: sparse: sparse: symbol 'decrementer_max' was not declared. Should it be static?
+>> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
+   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
+>> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
+   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
+>> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
+   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
+>> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
+   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
+>> arch/powerpc/kernel/time.c:846:9: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
+   arch/powerpc/kernel/time.c:846:9: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/powerpc/kernel/time.c:846:9: sparse:     got unsigned long long *
+   arch/powerpc/kernel/time.c:626:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
+   arch/powerpc/kernel/time.c:626:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/powerpc/kernel/time.c:626:24: sparse:     got unsigned long long *
+   arch/powerpc/kernel/time.c:557:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got unsigned long long * @@
+   arch/powerpc/kernel/time.c:557:24: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   arch/powerpc/kernel/time.c:557:24: sparse:     got unsigned long long *
 
-[0] https://patchwork.ozlabs.org/project/linux-mtd/patch/20211209190436.401946-2-tudor.ambarus@microchip.com/
+vim +846 arch/powerpc/kernel/time.c
 
->  	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096)
->  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
->  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-> -- 
-> 2.25.1
-> 
-> 
+4a4cfe3836916e1 Tony Breeds            2007-09-22  842  
+d831d0b83f20588 Tony Breeds            2007-09-21  843  static int decrementer_set_next_event(unsigned long evt,
+d831d0b83f20588 Tony Breeds            2007-09-21  844  				      struct clock_event_device *dev)
+d831d0b83f20588 Tony Breeds            2007-09-21  845  {
+6601ec1c2ba9294 Christophe Leroy       2020-09-29 @846  	__this_cpu_write(decrementers_next_tb, get_tb() + evt);
+d831d0b83f20588 Tony Breeds            2007-09-21  847  	set_dec(evt);
+0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  848  
+0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  849  	/* We may have raced with new irq work */
+0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  850  	if (test_irq_work_pending())
+0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  851  		set_dec(1);
+0215f7d8c53fb19 Benjamin Herrenschmidt 2014-01-14  852  
+d831d0b83f20588 Tony Breeds            2007-09-21  853  	return 0;
+d831d0b83f20588 Tony Breeds            2007-09-21  854  }
+d831d0b83f20588 Tony Breeds            2007-09-21  855  
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+:::::: The code at line 846 was first introduced by commit
+:::::: 6601ec1c2ba929430f5585ce7f9d9960b0e0a01d powerpc: Remove get_tb_or_rtc()
+
+:::::: TO: Christophe Leroy <christophe.leroy@csgroup.eu>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

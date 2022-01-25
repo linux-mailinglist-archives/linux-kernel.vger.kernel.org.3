@@ -2,218 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2252F49AC29
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DE449AC27
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358400AbiAYGIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 01:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S243367AbiAYGHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 01:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242159AbiAYGDI (ORCPT
+        with ESMTP id S242172AbiAYGDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Jan 2022 01:03:08 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884F1C061744
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 20:21:16 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id n14so11527021vkk.6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 20:21:16 -0800 (PST)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC84C0613E6;
+        Mon, 24 Jan 2022 20:21:50 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id r59so746058pjg.4;
+        Mon, 24 Jan 2022 20:21:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BVAMq9GRKYiZni2C1DYbJu82DtncqP/nDFyPD+aovCw=;
-        b=e5CkqIGcdixXlWQEdLDqofUhbG7SDHyJUqj4Ax1VIBXZlMEIBv3ExR9f5IHBgGHdeU
-         GNggMSsSfSRnAX7/mfN7VynjngrT2HeMmuueegIBVYFXnVl1a1UhY9AAbhv5QPc+dhZk
-         /g28OpgWAezz67gU9k22USRpLb0DrNwcqJGwW7q/YFCPQEuNPMFDkF7kEzuwNzh5Gq05
-         xFT43opxBeMP3gP3agQGQohJebV/m4C1rS4OvVaTCN0eVah8rlFINlYjPGB/9UaUfgQd
-         V3caZVDXeegwzMnsUH1pwONeGwy4IMQuAomFb8Altt0ZvlGe+clKdwh94f0DcPJI+U8A
-         7ysw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GCtYDXOant2JMvhCArTGBt3s3S3YwfTxu+0hSAqbaFY=;
+        b=bPm//ca9cRtkGd+2Dr98rlgBg8qrvpDBparI78AdS2DhP7V1yzeVR8pQLNCJZwhwNL
+         hj6OVuU0hIFjofP9p1gmthDDovSM8rlD7r0MNBIbbo8rou//x9XwcJkJNAq7tHVQegcg
+         Bhucwo/Wnq6EhzVxYn2ycOXmYT2g80DfkFDBPh/jy3RU2uXpXovSuowgXP0eJwnRuANg
+         KpJm2fGrXNwTaz2lYGmAduQyuZMuAGJof/S5vcvn37si6lqDu9NHog7DTWwBKhkj8juW
+         70cLbuvp5XUREjKbO0UB3QzS24r1VEaT0+djg4i6AQV/YFKsGT+xSKB4XX7CA2l98c83
+         NiFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BVAMq9GRKYiZni2C1DYbJu82DtncqP/nDFyPD+aovCw=;
-        b=leqvgVlJ+n6qIVkMF3UkHdt8FBZ0t2Co4OtAD7cWQ8ybuUJaE3LPf7ARYAkLLSfNEM
-         pQouNnsEKBvyjPO7WHXRzoeTToxk4eXfHYZfa1H1eTcJEGBbeRxiN5BVGFkTGUU3Mef0
-         wi6gfvaKsU7YNoVmH1199x0prr+BUelor/NpYMUp/znV3KUwxYfugty6eYhnNLhuGnJ5
-         ejoCclUwOlfXy7OR89NudFqXXI+83s1JmNKT7X7AUe1oTSiiLH0/1AfId6RSWS64bfLs
-         JeObNf+nsbx6PtzmfQREL/iOUO20vwZ/0BnlgwTBtR/Po7AV/GypE5cc8Ah4fdZKnOzr
-         GNDg==
-X-Gm-Message-State: AOAM531/XmLZ7EY1PocDMMCFBZqNlulPCVTGc23t2e/9C+x/E2DU8Gj/
-        yKiYF7mhZZg+VG9LmyaVT9KssVBKfWKywuacsTziu5TapO5lMi57
-X-Google-Smtp-Source: ABdhPJz2VrElZsxccwpEn/n75+2hy/f8HeARaOgFCMw6IouglGVvbMU33LG9o3Csl//Ri2h1KSsc6qaALyXLZTdoWEE=
-X-Received: by 2002:a1f:a086:: with SMTP id j128mr7222321vke.17.1643084475611;
- Mon, 24 Jan 2022 20:21:15 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GCtYDXOant2JMvhCArTGBt3s3S3YwfTxu+0hSAqbaFY=;
+        b=kAzrtn1vFFMzeyrWGZCE61HfAyzLFuw74Eku0dzCFuFZ56Y43DBuwUe/aD7KJCP6aa
+         jHx6ydwy+rBxrBq3kbYc2noJ3f32H844Ym1g1OImF0NTB1nIEBDQuIINgkRhs0JF5G00
+         qyfpxY+yKW0ZWu2/HJo9wCkZlr7lP976LTKN8Mc5Fj7rJyHYUnfRJtE4SdMKk/EHvT0E
+         uRPymEK0W40tFDfUmSACnJsxmFJXQlJCYjKIxF6huZ3++rPUx1MmFGHL8nAqEaWVV++h
+         fCIIvlEWcUmldvm/0RwSFZ8WzvjOHhoTxW48LUIifhY5IgtabYXCRmrYvU96+uXJ+w7I
+         0UKA==
+X-Gm-Message-State: AOAM532I+RWPRF5BxCXB5ft5/Qy24YdM8/9lD8qWktQ6ehREaKejTRRS
+        OZLWHezj1i/aq1o5BoiXUCn+EaHlwfk=
+X-Google-Smtp-Source: ABdhPJxB13Ct+i192lnu46CHP73DLx4EdFj4X0yZVhsWbzSzMqJukCt2emFJeP5zdX/DVTlrTyIXxg==
+X-Received: by 2002:a17:90a:788e:: with SMTP id x14mr1626228pjk.174.1643084509773;
+        Mon, 24 Jan 2022 20:21:49 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id nm14sm827452pjb.32.2022.01.24.20.21.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jan 2022 20:21:49 -0800 (PST)
+Message-ID: <ce5c2323-2bd6-12fe-5fb9-1a09a40fe1ba@gmail.com>
+Date:   Mon, 24 Jan 2022 20:21:48 -0800
 MIME-Version: 1.0
-References: <20211216125157.631992-1-chenhuacai@loongson.cn>
- <20211216125356.632067-1-chenhuacai@loongson.cn> <20211216125356.632067-2-chenhuacai@loongson.cn>
- <87pmpwwpw5.wl-maz@kernel.org> <CAAhV-H75SwqWiRjey_9MiRQtY-_Wjm7Tppx31XM8EfLDb_YUhQ@mail.gmail.com>
- <87czlrwk2k.wl-maz@kernel.org> <CAAhV-H6VFaRtiyhgq-vDQPUbiAtf9L1M6ZNyeApTu11O9JCXnw@mail.gmail.com>
- <87wnjuz5xr.wl-maz@kernel.org>
-In-Reply-To: <87wnjuz5xr.wl-maz@kernel.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Tue, 25 Jan 2022 12:21:10 +0800
-Message-ID: <CAAhV-H6P2xXutw8vz5xQp5bhs9AFtiLgDHQPHBDRc-sxjSnBtg@mail.gmail.com>
-Subject: Re: [PATCH V8 02/10] irqchip/loongson-pch-pic: Add ACPI init support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 0000/1039] 5.16.3-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20220124184125.121143506@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220124184125.121143506@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Marc,
 
-On Fri, Dec 24, 2021 at 5:51 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Fri, 24 Dec 2021 07:31:53 +0000,
-> Huacai Chen <chenhuacai@gmail.com> wrote:
-> >
-> > Hi, Marc,
-> >
-> > On Mon, Dec 20, 2021 at 8:13 PM Marc Zyngier <maz@kernel.org> wrote:
-> > >
-> > > On Fri, 17 Dec 2021 04:45:24 +0000,
-> > > Huacai Chen <chenhuacai@gmail.com> wrote:
-> > > >
-> > > > Hi, Marc,
-> > > >
-> > > > On Thu, Dec 16, 2021 at 11:06 PM Marc Zyngier <maz@kernel.org> wrot=
-e:
-> > > > >
-> > > > > On Thu, 16 Dec 2021 12:53:48 +0000,
-> > > > > Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > > >
-> > > > > > We are preparing to add new Loongson (based on LoongArch, not c=
-ompatible
-> > > > > > with old MIPS-based Loongson) support. LoongArch use ACPI other=
- than DT
-> > > > > > as its boot protocol, so add ACPI init support.
-> > > > > >
-> > > > > > PCH-PIC/PCH-MSI stands for "Interrupt Controller" that describe=
-d in
-> > > > > > Section 5 of "Loongson 7A1000 Bridge User Manual". For more inf=
-ormation
-> > > > > > please refer Documentation/loongarch/irq-chip-model.rst.
-> > > > > >
-> > > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > > > ---
-> > > > > >  drivers/irqchip/irq-loongson-pch-pic.c | 108 +++++++++++++++++=
-+-------
-> > > > > >  1 file changed, 81 insertions(+), 27 deletions(-)
-> > > > >
-> > > > > [...]
-> > > > >
-> > > > > >
-> > > > > > +#ifdef CONFIG_ACPI
-> > > > > > +
-> > > > > > +struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent=
-,
-> > > > > > +                                     struct acpi_madt_bio_pic =
-*acpi_pchpic)
-> > > > >
-> > > > > Who is calling this? This works the opposite way from what the ar=
-m64
-> > > > > irqchips are doing. Why? I have the ugly feeling that this is cal=
-led
-> > > > > from the arch code, bypassing the existing infrastructure...
-> > > > Yes, this is called from the arch code and a bit ugly, but I can't
-> > > > find a better way to do this.
-> > > >
-> > > > Is the "existing infrastructure" declare the irqchip init function
-> > > > with  IRQCHIP_ACPI_DECLARE and the arch code only need to call
-> > > > irqchip_init()? Then we have a problem: our irqchips have a 4 level
-> > > > hierachy and the parent should be initialized before its children. =
-In
-> > > > FDT world this is not a problem, because of_irq_init() will sort
-> > > > irqchip drivers to ensure the right order. But in ACPI world,
-> > > > acpi_probe_device_table just call init functions in the linking ord=
-er.
-> > > > If we want to control the order, it seems we can only sort the driv=
-ers
-> > > > in drivers/irq/Makefile. But I don't think this is a good idea...
-> > > >
-> > > > If there are better solutions, please let me know. Thanks.
-> > >
-> > > We have the exact same thing on the arm64 side, and we don't need of
-> > > this to be arch specific:
-> > >
-> > > - The MADT table describes the root interrupt controller, and it is
-> > >   probed via IRQCHIP_ACPI_DECLARE().
-> > >
-> > > - Each children controller is declared in ACPI as a *device*, and is
-> > >   both an interrupt producer and an interrupt consumer. Normal probe
-> > >   deferral rules apply. See irq-mbigen.c for an example of how this i=
-s
-> > >   done.
-> > Thank you for your suggestions, I have tried but failed. It seems
-> > there are some differences between irq-mbigen.c and our irqchips.
-> > Because our irqchips are mandatory while mbigen is optional.
->
-> The fact that this is optional has nothing to do with it. On a system
-> that requires mbigen to boot (both mass storage and networking are
-> hanging off it), there is a guarantee that the probe order will
-> respect the resource dependency.
->
-> And if that's not enough, -EPROBE_DEFER is your friend, always.
->
-> > If we declare our irqchips as devices, they are initialized in the
-> > initcall phase, which is too late for pci devices.
->
-> This suggests that your PCIe driver is either not enforcing the
-> dependencies on the interrupt controller (bad), or that the core code
-> is not made aware of the dependencies (equally bad).
->
-> In any case, this needs sorting, because a new architecture should be
-> able to boot without resorting to handcrafted dependencies that will
-> inevitably result in a larger pile of hacks over time. It is much
-> easier to solve it before day-1.
 
-Sorry for the long delay, but we still failed.
+On 1/24/2022 10:29 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.3 release.
+> There are 1039 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-- There are several kinds of irq chips(e.g. pchpic=E3=80=81eiointc=E3=80=81=
-cpuintc)
-for LoongArch. SCI interrupt (Fixed hardware is implemented for
-LoongArch in pch such as LS7A1000, and SCI interrupt is used for fixed
-event handling.) is an irq input of pch irq chip which routes
-interrupts to cpu as following irq chips path:
+BTW it does not look like the same CC list was used for this one and the 
+other stable release candidates, can you copy the same list next time? 
+Thanks!
 
-sci interrupt->|pchpic| ->|eiointc|->|cpuintc|
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-sci_interrupt will be transferred from gsi to irq through
-acpi_gsi_to_irq in acpi_enable_subsystem called from acpi_bus_init
-before acpi_scan_init where acpi device namespace is created, so we
-should build pch irq domain and related upstream irq domains before
-acpi_bus_init.
-
-- PCI bus enumeration is executed from acpi_scan_init, and
-pci_set_msi_domain will be called for setting msi_domain of enumerated
-pci device. In pci_set_msi_domain, msi domain may be got through
-pcibios_device_add, fdt, iort(used for arm64) or inheriting from host
-bridge domain. And in each way, the msi domain needs to be found by
-calling irq_find_matching_fwnode(fwnode, DOMAIN_BUS_PCI_MSI) to match
-one from the registered msi domain before. So we build the msi domain
-as x86 and arm64 before acpi_scan_init. The msi domain is hierarchic
-as following:
-
-msi interrupt->|msipic| ->|eiointc|->|cpuintc|
-
-- Yes, a driver can be deferred probed when get -EPROBE_DEFER on
-probing, but both sci interrupt transfer and pci bus enumeration are
-common code (not private driver for LoongArch).
-
-So, declaring pic devices in DSDT for seems not suitable, we can only
-select the X86-like way which is a bit ugly.
-
-Huacai
-
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

@@ -2,171 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C6349BD90
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6449749BD99
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232770AbiAYVAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 16:00:17 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:51263 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232684AbiAYVAM (ORCPT
+        id S232820AbiAYVBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 16:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232793AbiAYVAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 16:00:12 -0500
-Received: (qmail 117653 invoked by uid 1000); 25 Jan 2022 16:00:11 -0500
-Date:   Tue, 25 Jan 2022 16:00:11 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Re: [PATCH] tools/memory-model: Clarify syntactic and semantic
- dependencies
-Message-ID: <YfBk265vVo4FL4MJ@rowland.harvard.edu>
-References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
+        Tue, 25 Jan 2022 16:00:33 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F3DC061747
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 13:00:32 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id n198-20020a2540cf000000b00614c2ee23b7so26807649yba.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 13:00:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=PnhbZKIYa8wTZ5Q0pqZwN7UuO5Cn2oSOpbwAfA2BCf4=;
+        b=J6ih3SCpSCowfaTACnSWbAYrjoWbOfS+5K8syXJCtBDstndXOzeMD/klS6/EGxc5Bc
+         Rlg8t+1dyc+jL9Aq8p0kZ50BhKa0wcqGnWZ9YjS/r5z9bqOsHmHzMy5As7ZuanFUJahE
+         wfroa1+9qVzH71JD2x1VnBNVIXniLD8hL6viK4tMT8Ix3M901WTTFnrvjcn4PXpU9GYi
+         yfezwd0YJ7FqucIXoO0ytC34eBPrrH4anYNcWeSHdB0fXrM14A3pDmw7mXA2anLeq8JJ
+         DrCeuzdXNCmI3nCk2bYIxERGZ09vgPAhlLKzNac0jHxF/EMCvVoLgcEGDerxlVOdnoOc
+         N1rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=PnhbZKIYa8wTZ5Q0pqZwN7UuO5Cn2oSOpbwAfA2BCf4=;
+        b=F9q/FvAppWa438IJ/b0OucK6S9LLOXdC3faV8Mxo8SXTPkpUMwEUmYYXaDrWUg4eDs
+         y6hWxR6AMWJskPHJLBvUqc4cPuuiGlAM0fQeTrX/xluevxNvdAOzI3ucF2O8Giop16yr
+         k3//25uibBDGoStGYfn90L+F2Y1dhrCQ03knPSz69CRd8B/1osdDZ0d+7+JHJqTTMEtF
+         19ZDn1TeJczCvYmqJaZYdNL5Txl/zJZF0dpZ92mwqG6xVBEPLI7fgu8Nj8Vly3JzKdA2
+         eU6yPXsnIWtiGIO2Jd6ON7flT7vWBZyGRDok7NcbPhdj5UgQrvg78X1uu6NEaCR/KEaT
+         tRBw==
+X-Gm-Message-State: AOAM532h1hKb+y18zcId+dEsTrV8pNnl+QpkH81HVHCZvauUHu8l3Xxg
+        BJKvWrpX9OUIYBjB60HwtjprbqnW6oLi7A==
+X-Google-Smtp-Source: ABdhPJyMZhNYyS83wOWFPezd3HvWn8rCBp+/mGJ50rt71YCf2/TwJNzf8xalNeNJreVU2FGNkol0rw41eob3Iw==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:ec63:7812:5e4a:c688])
+ (user=dlatypov job=sendgmr) by 2002:a25:2743:: with SMTP id
+ n64mr31434847ybn.417.1643144432175; Tue, 25 Jan 2022 13:00:32 -0800 (PST)
+Date:   Tue, 25 Jan 2022 13:00:11 -0800
+In-Reply-To: <20220125210011.3817742-1-dlatypov@google.com>
+Message-Id: <20220125210011.3817742-4-dlatypov@google.com>
+Mime-Version: 1.0
+References: <20220125210011.3817742-1-dlatypov@google.com>
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH 3/3] kunit: factor out str constants from binary assertion structs
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:28:19PM +0000, Paul Heidekrüger wrote:
-> Dependencies which are purely syntactic, i.e. not semantic, might imply
-> ordering at first glance. However, since they do not affect defined
-> behavior, compilers are within their rights to remove such dependencies
-> when optimizing code.
-> 
-> Since syntactic dependencies are not related to any kind of dependency
-> in particular, explicitly distinguish syntactic and semantic
-> dependencies as part of the 'A WARNING' section in explanation.txt,
-> which gives examples of how compilers might affect the LKMM's dependency
-> orderings in general.
+If the compiler doesn't optimize them away, each kunit assertion (use of
+KUNIT_EXPECT_EQ, etc.) can use 88 bytes of stack space in the worst and
+most common case. This has led to compiler warnings and a suggestion
+from Linus to move data from the structs into static const's where
+possible [1].
 
-The "A WARNING" section is a bad place to put this material, because it 
-comes before dependencies have been introduced.  It would be better to 
-put this at the end of the "DEPENDENCY RELATIONS: data, addr, and ctrl" 
-section.
+This builds upon [2] which did so for the base struct kunit_assert type.
+That only reduced sizeof(struct kunit_binary_assert) from 88 to 64.
 
-> Link: https://lore.kernel.org/all/20211102190138.GA1497378@rowland.harvard.edu/
-> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-> ---
->  .../Documentation/explanation.txt             | 25 +++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> index 5d72f3112e56..6d679e5ebdf9 100644
-> --- a/tools/memory-model/Documentation/explanation.txt
-> +++ b/tools/memory-model/Documentation/explanation.txt
-> @@ -411,6 +411,31 @@ Given this version of the code, the LKMM would predict that the load
->  from x could be executed after the store to y.  Thus, the memory
->  model's original prediction could be invalidated by the compiler.
->  
-> +Caution is also advised when dependencies are purely syntactic, i.e.
-> +not semantic.  A dependency between two marked accesses is purely
-> +syntactic iff the defined behavior of the second access is unaffected
-> +by its dependency.
+Given these are by far the most commonly used asserts, this patch
+factors out the textual representations of the operands and comparator
+into another static const, saving 16 more bytes.
 
-That's a very abstract way of describing the situation; it doesn't do a 
-good job of getting the real idea across.  It also mixes up two separate 
-ideas: behaviors being unaffected by a syntactic dependency and 
-behaviors being undefined.  They should be described separately.  I 
-would prefer something along these lines...
+In detail, KUNIT_EXPECT_EQ(test, 2 + 2, 5) yields the following struct
+  (struct kunit_binary_assert) {
+    .assert = <struct kunit_assert>,
+    .operation = "==",
+    .left_text = "2 + 2",
+    .left_value = 4,
+    .right_text = "5",
+    .right_value = 5,
+  }
+After this change
+  static const struct kunit_binary_assert_text __text = {
+    .operation = "==",
+    .left_text = "2 + 2",
+    .right_text = "5",
+  };
+  (struct kunit_binary_assert) {
+    .assert = <struct kunit_assert>,
+    .text = &__text,
+    .left_value = 4,
+    .right_value = 5,
+  }
 
-----------------------------------------
+This also DRYs the code a bit more since these str fields were repeated
+for the string and pointer versions of kunit_binary_assert.
 
-Here's a trick question: When is a dependency not a dependency? Answer: 
-When it is purely syntactic rather than semantic.  We say a dependency 
-between two accesses is purely syntactic if the second access doesn't 
-actually depend on the result of the first.  Here is a trivial example:
+Note: we could name the kunit_binary_assert_text fields left/right
+instead of left_text/right_text. But that would require changing the
+macros a bit since they have args called "left" and "right" which would
+be substituted in `.left = #left` as `.2 + 2 = \"2 + 2\"`.
 
-	r1 = READ_ONCE(x);
-	WRITE_ONCE(y, r1 * 0);
+[1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
+[2] https://lore.kernel.org/linux-kselftest/20220113165931.451305-6-dlatypov@google.com/
 
-There appears to be a data dependency from the load of x to the store of 
-y, since the value to be stored is computed from the value that was 
-loaded.  But in fact, the value stored does not really depend on 
-anything since it will always be 0.  Thus the data dependency is only 
-syntactic (it appears to exist in the code) but not semantic (the second 
-access will always be the same, regardless of the value of the first 
-access).  Given code like this, a compiler could simply eliminate the 
-load from x, which would certainly destroy any dependency.
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ include/kunit/assert.h | 49 +++++++++++++++++++-----------------------
+ include/kunit/test.h   | 20 +++++++++++------
+ lib/kunit/assert.c     | 38 ++++++++++++++++----------------
+ 3 files changed, 54 insertions(+), 53 deletions(-)
 
-(It's natural to object that no one in their right mind would write code 
-like the above.  However, macro expansions can easily give rise to this 
-sort of thing, in ways that generally are not apparent to the 
-programmer.)
+diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+index 649bfac9f406..4b52e12c2ae8 100644
+--- a/include/kunit/assert.h
++++ b/include/kunit/assert.h
+@@ -150,14 +150,25 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+ 	.value = val							       \
+ }
+ 
++/**
++ * struct kunit_binary_assert_text - holds strings for &struct
++ *	kunit_binary_assert and friends to try and make the structs smaller.
++ * @operation: A string representation of the comparison operator (e.g. "==").
++ * @left_text: A string representation of the left expression (e.g. "2+2").
++ * @right_text: A string representation of the right expression (e.g. "2+2").
++ */
++struct kunit_binary_assert_text {
++	const char *operation;
++	const char *left_text;
++	const char *right_text;
++};
++
+ /**
+  * struct kunit_binary_assert - An expectation/assertion that compares two
+  *	non-pointer values (for example, KUNIT_EXPECT_EQ(test, 1 + 1, 2)).
+  * @assert: The parent of this type.
+- * @operation: A string representation of the comparison operator (e.g. "==").
+- * @left_text: A string representation of the expression in the left slot.
++ * @text: Holds the textual representations of the operands and op (e.g.  "==").
+  * @left_value: The actual evaluated value of the expression in the left slot.
+- * @right_text: A string representation of the expression in the right slot.
+  * @right_value: The actual evaluated value of the expression in the right slot.
+  *
+  * Represents an expectation/assertion that compares two non-pointer values. For
+@@ -166,10 +177,8 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
+  */
+ struct kunit_binary_assert {
+ 	struct kunit_assert assert;
+-	const char *operation;
+-	const char *left_text;
++	const struct kunit_binary_assert_text *text;
+ 	long long left_value;
+-	const char *right_text;
+ 	long long right_value;
+ };
+ 
+@@ -182,10 +191,8 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+  *	kunit_binary_assert, kunit_binary_ptr_assert, etc.
+  *
+  * @format_func: a function which formats the assert to a string.
+- * @op_str: A string representation of the comparison operator (e.g. "==").
+- * @left_str: A string representation of the expression in the left slot.
++ * @text_: Pointer to a kunit_binary_assert_text.
+  * @left_val: The actual evaluated value of the expression in the left slot.
+- * @right_str: A string representation of the expression in the right slot.
+  * @right_val: The actual evaluated value of the expression in the right slot.
+  *
+  * Initializes a binary assert like kunit_binary_assert,
+@@ -194,16 +201,12 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+  * This is ultimately used by binary assertion macros like KUNIT_EXPECT_EQ, etc.
+  */
+ #define KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,			       \
+-					op_str,				       \
+-					left_str,			       \
++					text_,				       \
+ 					left_val,			       \
+-					right_str,			       \
+ 					right_val) {			       \
+ 	.assert = { .format = format_func },				       \
+-	.operation = op_str,						       \
+-	.left_text = left_str,						       \
++	.text = text_,							       \
+ 	.left_value = left_val,						       \
+-	.right_text = right_str,					       \
+ 	.right_value = right_val					       \
+ }
+ 
+@@ -211,10 +214,8 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+  * struct kunit_binary_ptr_assert - An expectation/assertion that compares two
+  *	pointer values (for example, KUNIT_EXPECT_PTR_EQ(test, foo, bar)).
+  * @assert: The parent of this type.
+- * @operation: A string representation of the comparison operator (e.g. "==").
+- * @left_text: A string representation of the expression in the left slot.
++ * @text: Holds the textual representations of the operands and op (e.g.  "==").
+  * @left_value: The actual evaluated value of the expression in the left slot.
+- * @right_text: A string representation of the expression in the right slot.
+  * @right_value: The actual evaluated value of the expression in the right slot.
+  *
+  * Represents an expectation/assertion that compares two pointer values. For
+@@ -223,10 +224,8 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+  */
+ struct kunit_binary_ptr_assert {
+ 	struct kunit_assert assert;
+-	const char *operation;
+-	const char *left_text;
++	const struct kunit_binary_assert_text *text;
+ 	const void *left_value;
+-	const char *right_text;
+ 	const void *right_value;
+ };
+ 
+@@ -238,10 +237,8 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
+  * struct kunit_binary_str_assert - An expectation/assertion that compares two
+  *	string values (for example, KUNIT_EXPECT_STREQ(test, foo, "bar")).
+  * @assert: The parent of this type.
+- * @operation: A string representation of the comparison operator (e.g. "==").
+- * @left_text: A string representation of the expression in the left slot.
++ * @text: Holds the textual representations of the operands and comparator.
+  * @left_value: The actual evaluated value of the expression in the left slot.
+- * @right_text: A string representation of the expression in the right slot.
+  * @right_value: The actual evaluated value of the expression in the right slot.
+  *
+  * Represents an expectation/assertion that compares two string values. For
+@@ -250,10 +247,8 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
+  */
+ struct kunit_binary_str_assert {
+ 	struct kunit_assert assert;
+-	const char *operation;
+-	const char *left_text;
++	const struct kunit_binary_assert_text *text;
+ 	const char *left_value;
+-	const char *right_text;
+ 	const char *right_value;
+ };
+ 
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index a93dfb8ff393..088ff394ae94 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -874,16 +874,19 @@ void kunit_do_failed_assertion(struct kunit *test,
+ do {									       \
+ 	typeof(left) __left = (left);					       \
+ 	typeof(right) __right = (right);				       \
++	static const struct kunit_binary_assert_text __text = {		       \
++		.operation = #op,					       \
++		.left_text = #left,					       \
++		.right_text = #right,					       \
++	};								       \
+ 									       \
+ 	KUNIT_ASSERTION(test,						       \
+ 			assert_type,					       \
+ 			__left op __right,				       \
+ 			assert_class,					       \
+ 			KUNIT_INIT_BINARY_ASSERT_STRUCT(format_func,	       \
+-							#op,		       \
+-							#left,		       \
++							&__text,	       \
+ 							__left,		       \
+-							#right,		       \
+ 							__right),	       \
+ 			fmt,						       \
+ 			##__VA_ARGS__);					       \
+@@ -928,17 +931,20 @@ do {									       \
+ 				   ...)					       \
+ do {									       \
+ 	const char *__left = (left);					       \
+-	const char *__right = (right);				       \
++	const char *__right = (right);					       \
++	static const struct kunit_binary_assert_text __text = {		       \
++		.operation = #op,					       \
++		.left_text = #left,					       \
++		.right_text = #right,					       \
++	};								       \
+ 									       \
+ 	KUNIT_ASSERTION(test,						       \
+ 			assert_type,					       \
+ 			strcmp(__left, __right) op 0,			       \
+ 			kunit_binary_str_assert,			       \
+ 			KUNIT_INIT_BINARY_ASSERT_STRUCT(kunit_binary_str_assert_format,\
+-							#op,		       \
+-							#left,		       \
++							&__text,	       \
+ 							__left,		       \
+-							#right,		       \
+ 							__right),	       \
+ 			fmt,						       \
+ 			##__VA_ARGS__);					       \
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index c9c7ee0dfafa..d00d6d181ee8 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -122,18 +122,18 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+ 
+ 	string_stream_add(stream,
+ 			  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+-			  binary_assert->left_text,
+-			  binary_assert->operation,
+-			  binary_assert->right_text);
+-	if (!is_literal(stream->test, binary_assert->left_text,
++			  binary_assert->text->left_text,
++			  binary_assert->text->operation,
++			  binary_assert->text->right_text);
++	if (!is_literal(stream->test, binary_assert->text->left_text,
+ 			binary_assert->left_value, stream->gfp))
+ 		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld\n",
+-				  binary_assert->left_text,
++				  binary_assert->text->left_text,
+ 				  binary_assert->left_value);
+-	if (!is_literal(stream->test, binary_assert->right_text,
++	if (!is_literal(stream->test, binary_assert->text->right_text,
+ 			binary_assert->right_value, stream->gfp))
+ 		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld",
+-				  binary_assert->right_text,
++				  binary_assert->text->right_text,
+ 				  binary_assert->right_value);
+ 	kunit_assert_print_msg(message, stream);
+ }
+@@ -150,14 +150,14 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
+ 
+ 	string_stream_add(stream,
+ 			  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+-			  binary_assert->left_text,
+-			  binary_assert->operation,
+-			  binary_assert->right_text);
++			  binary_assert->text->left_text,
++			  binary_assert->text->operation,
++			  binary_assert->text->right_text);
+ 	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
+-			  binary_assert->left_text,
++			  binary_assert->text->left_text,
+ 			  binary_assert->left_value);
+ 	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px",
+-			  binary_assert->right_text,
++			  binary_assert->text->right_text,
+ 			  binary_assert->right_value);
+ 	kunit_assert_print_msg(message, stream);
+ }
+@@ -190,16 +190,16 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+ 
+ 	string_stream_add(stream,
+ 			  KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n",
+-			  binary_assert->left_text,
+-			  binary_assert->operation,
+-			  binary_assert->right_text);
+-	if (!is_str_literal(binary_assert->left_text, binary_assert->left_value))
++			  binary_assert->text->left_text,
++			  binary_assert->text->operation,
++			  binary_assert->text->right_text);
++	if (!is_str_literal(binary_assert->text->left_text, binary_assert->left_value))
+ 		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"\n",
+-				  binary_assert->left_text,
++				  binary_assert->text->left_text,
+ 				  binary_assert->left_value);
+-	if (!is_str_literal(binary_assert->right_text, binary_assert->right_value))
++	if (!is_str_literal(binary_assert->text->right_text, binary_assert->right_value))
+ 		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"",
+-				  binary_assert->right_text,
++				  binary_assert->text->right_text,
+ 				  binary_assert->right_value);
+ 	kunit_assert_print_msg(message, stream);
+ }
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
 
-Another mechanism that can give rise to purely syntactic dependencies is 
-related to the notion of "undefined behavior". Certain program behaviors 
-are called "undefined" in the C language specification, which means that 
-when they occur there are no guarantees at all about the outcome.  
-Consider the following example:
-
-	int a[1];
-	int i;
-
-	r1 = READ_ONCE(i);
-	r2 = READ_ONCE(a[r1]);
-
-Access beyond the end or before the beginning of an array is one kind of 
-undefined behavior.  Therefore the compiler doesn't have to worry about 
-what will happen if r1 is nonzero, and it can assume that r1 will always 
-be zero without actually loading anything from i.  (If the assumption 
-turns out to be wrong, the resulting behavior will be undefined anyway 
-so the compiler doesn't care!)  Thus the load from i can be eliminated, 
-breaking the address dependency.
-
-The LKMM is unaware that purely syntactic dependencies are different 
-from semantic dependencies and therefore mistakenly predicts that the 
-accesses in the two examples above will be ordered.  This is another 
-example of how the compiler can undermine the memory model.  Be warned.
-
-----------------------------------------
-
-Alan
-
-> +Compilers are aware of syntactic dependencies and are within their
-> +rights to remove them as part of optimizations, thereby breaking any
-> +guarantees of ordering.
-> +
-> +Notable cases are dependencies eliminated through constant propagation
-> +or those where only one value leads to defined behavior as in the
-> +following example:
-> +
-> +	int a[1];
-> +	int i;
-> +
-> +	r1 = READ_ONCE(i);
-> +	r2 = READ_ONCE(a[r1]);
-> +
-> +The formal LKMM is unaware of syntactic dependencies and therefore
-> +predicts ordering.  However, since any other value than 0 for r1 would
-> +result in an out-of-bounds access, which is undefined behavior, r2 is
-> +not affected by its dependency to r1, making the above a purely
-> +syntactic dependency.
-> +
->  Another issue arises from the fact that in C, arguments to many
->  operators and function calls can be evaluated in any order.  For
->  example:
-> -- 
-> 2.33.1
-> 

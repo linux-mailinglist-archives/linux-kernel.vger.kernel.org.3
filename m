@@ -2,142 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9133F49B3B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D58E549B3CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382107AbiAYMQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:16:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59782 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355907AbiAYMLm (ORCPT
+        id S1445425AbiAYMRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354562AbiAYMMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:11:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 705A560FFB;
-        Tue, 25 Jan 2022 12:11:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7418EC340E8;
-        Tue, 25 Jan 2022 12:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643112700;
-        bh=s/++T4vWmGwl42K8BOKMjcTgDgC5RAaZIAeyuP1TZj8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZJS+FA0Q8+xLsXW24zmFHFubs1V+od2Jg1gEZG2lRCqe1+7Dc8wsIq/IH7GprIg8g
-         vyFl4vH8fyW/bXzYjxKU+BReikOScUnbCVMi5M2qNw6rMc11hTQQipPf79vRx0qc20
-         sMiHHeAfw/zDK4jmfqGu2ZQ/j6fTnwRzKihj2C6IZbU/QL/U/ninW9A7qKkqwA4P9S
-         U/pxb/B1l9/FibMe8/6x8heEBFmQFvQ4jV8qpMG2JGVaHvmdt82/aKhLR2wP2bI9v/
-         Mnj1wCaGotnXDebto6Y/WZonD4eJSBtV8h4mjPxCReXLDD9etXS0NthVd1j3PuDS8p
-         DzS5IJsue/ghA==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v5 0/9] fprobe: Introduce fprobe function entry/exit probe 
-Date:   Tue, 25 Jan 2022 21:11:34 +0900
-Message-Id: <164311269435.1933078.6963769885544050138.stgit@devnote2>
+        Tue, 25 Jan 2022 07:12:15 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85F9C061744;
+        Tue, 25 Jan 2022 04:11:57 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id jx6so30423912ejb.0;
+        Tue, 25 Jan 2022 04:11:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sKnKru+rLN7ZmClVqR3FLwKLuS+kqBx+yEtQ0RgrvIA=;
+        b=VPa/38D/iK8xrFFQOve/ExPTwb19OvH5pPB6z5zWJZAIB6pB6SaGw2TSgaCRaEU6zv
+         dEqDeApRwCvHWRMT3k2BbiLO1A+2UvBa+HaC7E4pEFTg5KAa0wpcs6U7u7kX6m5NZ+Hw
+         Aw7S8YmfTH7/Kol1uaooN3y6Lxgoyu37pdsZ1bABwt2Nm77yolvsfddTL1lxHB2qD8F3
+         1nKUaWyWpkhPATIxKkvOmzo3FVqlwxWKQgo5A84x4RuaePjGCiZQH0lTi8BWg93ghdnE
+         B1zUq3UWRv0ggvRi1YMsXlpzkTAu+OnQpDhXRAxD5GjeCZR8gJphsJzE5lR64vTFbKEa
+         jm8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sKnKru+rLN7ZmClVqR3FLwKLuS+kqBx+yEtQ0RgrvIA=;
+        b=QoNcKY3QmdYLUrfeoeu+NB5QOEe9Ub5I3dKTyE+z+O8HzYXjsD82g8BO49z0JsTBQg
+         zzO42UeuG9nemyLoYfDopaQVGCCqb8SNx+FZ1xmY4opbqnzmk+ylThXCTMxSHiw0xVqq
+         T6YGydUYm9xWHMr+QrCd/CzxizozCQQMul+W85+1nDliIxG/4asdzKNlcf23lay1ZFbA
+         c3YXlb8NYRGJFkv4nC4/NsJSnZfRHwVbx6eOLmnf9kn87Ep2BMT1C/636NNotFDwp4Hp
+         zt/eS/kJ8mwd5F7RBUx3UjcV7PlCM+WSE+tspr8TYQqFsYzJ3yXS8XJMR5/wK/OiV1l7
+         T4UQ==
+X-Gm-Message-State: AOAM533im1YO4seiuEjBLjqpkdk6a8fZIEGJvIl5wBewW9TXeg2MrMOX
+        GEa9jwowDf7/bCxCS0yywaPEfYE58EtqwQ==
+X-Google-Smtp-Source: ABdhPJwIKrUuoxJSLy8gQcb9j6ZO/rW71Z0XB/m9qkB9e/u2qYE377DjXFlkbEwQhA2bGtQkrOqFsg==
+X-Received: by 2002:a17:906:f19a:: with SMTP id gs26mr15841159ejb.106.1643112716207;
+        Tue, 25 Jan 2022 04:11:56 -0800 (PST)
+Received: from localhost.localdomain ([39.48.168.136])
+        by smtp.gmail.com with ESMTPSA id qf6sm6107334ejc.49.2022.01.25.04.11.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 04:11:55 -0800 (PST)
+From:   Ameer Hamza <amhamza.mgc@gmail.com>
+To:     mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        rickyman7@gmail.com, alexey.v.bayduraev@linux.intel.com,
+        adrian.hunter@intel.com, leo.yan@linaro.org, german.gomez@arm.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amhamza.mgc@gmail.com, James Clark <james.clark@arm.com>
+Subject: [PATCH v2] perf session: check for null pointer before derefernce
+Date:   Tue, 25 Jan 2022 17:11:41 +0500
+Message-Id: <20220125121141.18347-1-amhamza.mgc@gmail.com>
 X-Mailer: git-send-email 2.25.1
-User-Agent: StGit/0.19
+In-Reply-To: <8983b963-2139-ecb3-3a31-b5e225db389c@arm.com>
+References: <8983b963-2139-ecb3-3a31-b5e225db389c@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Move null pointer check before dereferncing the variable
 
-Here is the 5th version of fprobe. This version fixed some build
-issues on fprobe and rethook (thanks for kernel test bot to give
-a hint!). The previous version is here[1];
+Addresses-Coverity: 1497622 ("Derereference before null check")
 
-[1] https://lore.kernel.org/all/164304056155.1680787.14081905648619647218.stgit@devnote2/
+Reviewed-by: James Clark <james.clark@arm.com>
 
-This series introduces the fprobe, the function entry/exit probe
-with multiple probe point support. This also introduces the rethook
-for hooking function return as same as kretprobe does. This
-abstraction will help us to generalize the fgraph tracer,
-because we can just switch it from rethook in fprobe, depending
-on the kernel configuration.
-
-The patch [1/9] is from Jiri's series[2].
-
-[2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
-
-
-Thank you,
+Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
 
 ---
+v1 -> v2: It should be possible to dump stuff if machine is NULL.
+---
+ tools/perf/util/session.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Jiri Olsa (1):
-      ftrace: Add ftrace_set_filter_ips function
+diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+index f19348dddd55..210eeee3dd70 100644
+--- a/tools/perf/util/session.c
++++ b/tools/perf/util/session.c
+@@ -1503,11 +1503,12 @@ static int machines__deliver_event(struct machines *machines,
+ 			++evlist->stats.nr_unknown_id;
+ 			return 0;
+ 		}
+-		dump_sample(evsel, event, sample, perf_env__arch(machine->env));
+ 		if (machine == NULL) {
+ 			++evlist->stats.nr_unprocessable_samples;
++			dump_sample(evsel, event, sample, perf_env__arch(NULL));
+ 			return 0;
+ 		}
++		dump_sample(evsel, event, sample, perf_env__arch(machine->env));
+ 		return evlist__deliver_sample(evlist, tool, event, sample, evsel, machine);
+ 	case PERF_RECORD_MMAP:
+ 		return tool->mmap(tool, event, sample, machine);
+-- 
+2.25.1
 
-Masami Hiramatsu (8):
-      fprobe: Add ftrace based probe APIs
-      rethook: Add a generic return hook
-      rethook: x86: Add rethook x86 implementation
-      ARM: rethook: Add rethook arm implementation
-      arm64: rethook: Add arm64 rethook implementation
-      fprobe: Add exit_handler support
-      fprobe: Add sample program for fprobe
-      docs: fprobe: Add fprobe description to ftrace-use.rst
-
-
- Documentation/trace/fprobe.rst                |  131 +++++++++++
- Documentation/trace/index.rst                 |    1 
- arch/arm/Kconfig                              |    1 
- arch/arm/include/asm/stacktrace.h             |    4 
- arch/arm/kernel/stacktrace.c                  |    6 
- arch/arm/probes/Makefile                      |    1 
- arch/arm/probes/rethook.c                     |   71 ++++++
- arch/arm64/Kconfig                            |    1 
- arch/arm64/include/asm/stacktrace.h           |    2 
- arch/arm64/kernel/probes/Makefile             |    1 
- arch/arm64/kernel/probes/rethook.c            |   25 ++
- arch/arm64/kernel/probes/rethook_trampoline.S |   87 +++++++
- arch/arm64/kernel/stacktrace.c                |    7 -
- arch/x86/Kconfig                              |    1 
- arch/x86/include/asm/unwind.h                 |    8 +
- arch/x86/kernel/Makefile                      |    1 
- arch/x86/kernel/kprobes/common.h              |    1 
- arch/x86/kernel/rethook.c                     |  115 +++++++++
- include/linux/fprobe.h                        |   86 +++++++
- include/linux/ftrace.h                        |    3 
- include/linux/rethook.h                       |   99 ++++++++
- include/linux/sched.h                         |    3 
- kernel/exit.c                                 |    2 
- kernel/fork.c                                 |    3 
- kernel/trace/Kconfig                          |   25 ++
- kernel/trace/Makefile                         |    2 
- kernel/trace/fprobe.c                         |  198 ++++++++++++++++
- kernel/trace/ftrace.c                         |   53 ++++
- kernel/trace/rethook.c                        |  311 +++++++++++++++++++++++++
- samples/Kconfig                               |    7 +
- samples/Makefile                              |    1 
- samples/fprobe/Makefile                       |    3 
- samples/fprobe/fprobe_example.c               |  103 ++++++++
- 33 files changed, 1349 insertions(+), 14 deletions(-)
- create mode 100644 Documentation/trace/fprobe.rst
- create mode 100644 arch/arm/probes/rethook.c
- create mode 100644 arch/arm64/kernel/probes/rethook.c
- create mode 100644 arch/arm64/kernel/probes/rethook_trampoline.S
- create mode 100644 arch/x86/kernel/rethook.c
- create mode 100644 include/linux/fprobe.h
- create mode 100644 include/linux/rethook.h
- create mode 100644 kernel/trace/fprobe.c
- create mode 100644 kernel/trace/rethook.c
- create mode 100644 samples/fprobe/Makefile
- create mode 100644 samples/fprobe/fprobe_example.c
-
---
-Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

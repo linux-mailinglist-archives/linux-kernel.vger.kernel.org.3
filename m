@@ -2,138 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B70D549B964
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE73A49B955
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586836AbiAYQwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:52:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1586502AbiAYQtn (ORCPT
+        id S1586774AbiAYQv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:51:57 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55240 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1586339AbiAYQs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:49:43 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D63C0617A7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:48:09 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id d18-20020a9d51d2000000b005a09728a8c2so2567829oth.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:48:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T+/85uEpu2eNGNWD/5sNn1BpuagkYZLYJyTVK41DIzg=;
-        b=47+BmtZtou4NgWMqWFzPj44eXxCp4g8Py4gfRKN0aqs6+3kLX5R+LnAdpsgCatY21K
-         VSPva87aSIVmuGWoh0uDg2Pb8v8zvKWtEWTM0ur5k9KWk5/0mr7cd0Zr9SrEX484Q/lu
-         mEyKfgPi1rIRTUE4BM8GG1ivH842WQduqi0y6EW99HHrM51LTb8WBwqVm0Z5IwAm3hl1
-         AYFOi1/lE2MZ9HUlhac2QEqZk8z2uYbEBUd4M6fP39XSC9gZLHvn55X0Mbk5/pxlFp9z
-         Tc8eKughnD0QrvI2UIEcaHwHE7HvowgDeQWi71MsOmKI0F1/pzIKeksHCl6MOk8ymEaN
-         GaNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T+/85uEpu2eNGNWD/5sNn1BpuagkYZLYJyTVK41DIzg=;
-        b=0msxCEZrWWJ4gYfdd6vusAg9Ajwq88m5lXWiwqmCHLheHsIafNRdEu6Xshjz7pZ5Ie
-         fQ+Bvo9lS4cfRnwHBiD9c/HGbXtH5XksYVBQWlsSFtQYQsSuH+Wgsd2vdOzkEcdei7p6
-         Azc9hPfnE6sY1Zixp+GCLB0xaAhH7vlfUtxBsNKiADAYlLYYHhK3018HrtnMBURbkBne
-         53OlhMJLkw7wmylfFL6LE/kTsPmPHSfgq6Frc2qyCaLNIG6e2RxB/plYagtiOwoE5CMU
-         U0So6VEwybn4oSfEM2Kv7dxKH90kszQmxbbCWqvhg9ZGzXlXuYAUavzN1LVQ/6TUvzAi
-         7PsA==
-X-Gm-Message-State: AOAM533GfyWGPq+2s0rktM/faLYSxynt3xJw28a5eu0J1L7/9CBzbKgD
-        N3xJ9580gTleXuLcBdRKcIM28A==
-X-Google-Smtp-Source: ABdhPJxWeJgYFK/ES63uSI9wOGCbRto0EWrjGp0VbBNHViImFHdqyepe2K445KbXZQtPfMBmVOg2cQ==
-X-Received: by 2002:a9d:76d2:: with SMTP id p18mr16032229otl.226.1643129288610;
-        Tue, 25 Jan 2022 08:48:08 -0800 (PST)
-Received: from eze-laptop ([186.122.18.78])
-        by smtp.gmail.com with ESMTPSA id j19sm3696308ots.21.2022.01.25.08.48.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 08:48:07 -0800 (PST)
-Date:   Tue, 25 Jan 2022 13:48:00 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        shawnguo@kernel.org, aford@beaconembedded.com,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH V3 10/10] arm64: dts: imx8mm: Enable Hantro G1 and G2
- video decoders
-Message-ID: <YfApwHMi5IYxHtq8@eze-laptop>
-References: <20220124023125.414794-1-aford173@gmail.com>
- <20220124023125.414794-11-aford173@gmail.com>
-MIME-Version: 1.0
+        Tue, 25 Jan 2022 11:48:59 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PF4BGi000357;
+        Tue, 25 Jan 2022 16:48:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=AMeUWw9QE5S+iubtCjgVF4UNwJUctJS/odXW19bAR58=;
+ b=L5vQnd5mr+RwR5kDLUc7Gu1Y7zid5tj+xUnhc9WDF4bIHsoaqG6w8Ywt8tAyjZeVidFz
+ 9EwZRVydlfAAT8BQU652Y2bWwQ2r1BwGBe2/KsLZA4g55gKZQUHzb6rDIvNARqEva/4s
+ Xvvn9W1WkI8AcbSyOcVta4Y3tO5X7v9PuOADZOiivWApm/EHXb3mwA48dh1B1zpSGwWW
+ LZgA9Ze6GWMZQ4gMQS47T38CeMCYuOyTpnEHaz4kYGWI+MIQZu194k5euKGgNtQAofaF
+ q2uMAiQtd1shzrerS7bg0Kg1dQ89DDgZpjTovmBkCWoLYODatIInmQboN6sIhGXHwaC3 yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dtjcxvwj2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 16:48:59 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20PFtiFZ002040;
+        Tue, 25 Jan 2022 16:48:58 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dtjcxvwhc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 16:48:58 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PGlS6T017888;
+        Tue, 25 Jan 2022 16:48:56 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3dr9j988kt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 16:48:56 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PGmsB223396794
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 16:48:54 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EFB10A4060;
+        Tue, 25 Jan 2022 16:48:53 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F498A405B;
+        Tue, 25 Jan 2022 16:48:53 +0000 (GMT)
+Received: from localhost (unknown [9.43.56.228])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 25 Jan 2022 16:48:52 +0000 (GMT)
+Date:   Tue, 25 Jan 2022 22:18:51 +0530
+From:   Ritesh Harjani <riteshh@linux.ibm.com>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <mszeredi@redhat.com>
+Subject: Re: [PATCH] bad_inode: add missing i_op initializers for
+ fileattr_get/_set
+Message-ID: <20220125164851.m2p3glqlsdpnvdjg@riteshh-domain>
+References: <4bdc14fd6bf5cbe17bebeea2165840a2af6c4cf8.1642002262.git.riteshh@linux.ibm.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124023125.414794-11-aford173@gmail.com>
+In-Reply-To: <4bdc14fd6bf5cbe17bebeea2165840a2af6c4cf8.1642002262.git.riteshh@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kMJ33tApT7rCzvGNnahs5B09sBOtVuCn
+X-Proofpoint-ORIG-GUID: 5N6lm9wCoexO0XZ2SJvgNg5_YVaIVheh
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-25_03,2022-01-25_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 lowpriorityscore=0 adultscore=0 phishscore=0
+ clxscore=1015 bulkscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201250105
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
+Gentle Ping!!
 
-On Sun, Jan 23, 2022 at 08:31:24PM -0600, Adam Ford wrote:
-> There are two decoders on the i.MX8M Mini controlled by the
-> vpu-blk-ctrl.  The G1 supports H264 and VP8 while the
-> G2 support HEVC and VP9.
-> 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> 
-
-Looks good.
-
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-
-Thanks,
-Ezequiel
-
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> index 0c7a72c51a31..98aec4421713 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> @@ -1272,6 +1272,22 @@ gpu_2d: gpu@38008000 {
->  			power-domains = <&pgc_gpu>;
->  		};
->  
-> +		vpu_g1: video-codec@38300000 {
-> +			compatible = "nxp,imx8mm-vpu-g1";
-> +			reg = <0x38300000 0x10000>;
-> +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clk IMX8MM_CLK_VPU_G1_ROOT>;
-> +			power-domains = <&vpu_blk_ctrl IMX8MM_VPUBLK_PD_G1>;
-> +		};
+On 22/01/12 09:20PM, Ritesh Harjani wrote:
+> Let's bring inode_operations in sync for bad_inode_ops.
+> Some of the reasons are listed here [1]. But mostly it is
+> just for completeness sake I think.
+>
+> This patch also removes some of the whitespaces at the end of line
+> which is due to my editor config settings for kernel work.
+>
+> [1]: https://lore.kernel.org/lkml/1473708559-12714-2-git-send-email-mszeredi@redhat.com/
+>
+> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> ---
+>  fs/bad_inode.c | 30 +++++++++++++++++++++---------
+>  1 file changed, 21 insertions(+), 9 deletions(-)
+>
+> diff --git a/fs/bad_inode.c b/fs/bad_inode.c
+> index 12b8fdcc445b..08d5e44316cc 100644
+> --- a/fs/bad_inode.c
+> +++ b/fs/bad_inode.c
+> @@ -160,6 +160,17 @@ static int bad_inode_set_acl(struct user_namespace *mnt_userns,
+>  	return -EIO;
+>  }
+>
+> +static int bad_inode_fileattr_set(struct user_namespace *mnt_userns,
+> +			struct dentry *dentry, struct fileattr *fa)
+> +{
+> +	return -EIO;
+> +}
 > +
-> +		vpu_g2: video-codec@38310000 {
-> +			compatible = "nxp,imx8mq-vpu-g2";
-> +			reg = <0x38310000 0x10000>;
-> +			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clk IMX8MM_CLK_VPU_G2_ROOT>;
-> +			power-domains = <&vpu_blk_ctrl IMX8MM_VPUBLK_PD_G2>;
-> +		};
+> +static int bad_inode_fileattr_get(struct dentry *dentry, struct fileattr *fa)
+> +{
+> +	return -EIO;
+> +}
 > +
->  		vpu_blk_ctrl: blk-ctrl@38330000 {
->  			compatible = "fsl,imx8mm-vpu-blk-ctrl", "syscon";
->  			reg = <0x38330000 0x100>;
-> @@ -1282,6 +1298,12 @@ vpu_blk_ctrl: blk-ctrl@38330000 {
->  				 <&clk IMX8MM_CLK_VPU_G2_ROOT>,
->  				 <&clk IMX8MM_CLK_VPU_H1_ROOT>;
->  			clock-names = "g1", "g2", "h1";
-> +			assigned-clocks = <&clk IMX8MM_CLK_VPU_G1>,
-> +					  <&clk IMX8MM_CLK_VPU_G2>;
-> +			assigned-clock-parents = <&clk IMX8MM_VPU_PLL_OUT>,
-> +						 <&clk IMX8MM_VPU_PLL_OUT>;
-> +			assigned-clock-rates = <600000000>,
-> +					       <600000000>;
->  			#power-domain-cells = <1>;
->  		};
->  
-> -- 
-> 2.32.0
-> 
+>  static const struct inode_operations bad_inode_ops =
+>  {
+>  	.create		= bad_inode_create,
+> @@ -183,18 +194,19 @@ static const struct inode_operations bad_inode_ops =
+>  	.atomic_open	= bad_inode_atomic_open,
+>  	.tmpfile	= bad_inode_tmpfile,
+>  	.set_acl	= bad_inode_set_acl,
+> +	.fileattr_set	= bad_inode_fileattr_set,
+> +	.fileattr_get	= bad_inode_fileattr_get,
+>  };
+>
+> -
+>  /*
+>   * When a filesystem is unable to read an inode due to an I/O error in
+>   * its read_inode() function, it can call make_bad_inode() to return a
+> - * set of stubs which will return EIO errors as required.
+> + * set of stubs which will return EIO errors as required.
+>   *
+>   * We only need to do limited initialisation: all other fields are
+>   * preinitialised to zero automatically.
+>   */
+> -
+> +
+>  /**
+>   *	make_bad_inode - mark an inode bad due to an I/O error
+>   *	@inode: Inode to mark bad
+> @@ -203,7 +215,7 @@ static const struct inode_operations bad_inode_ops =
+>   *	failure this function makes the inode "bad" and causes I/O operations
+>   *	on it to fail from this point on.
+>   */
+> -
+> +
+>  void make_bad_inode(struct inode *inode)
+>  {
+>  	remove_inode_hash(inode);
+> @@ -211,9 +223,9 @@ void make_bad_inode(struct inode *inode)
+>  	inode->i_mode = S_IFREG;
+>  	inode->i_atime = inode->i_mtime = inode->i_ctime =
+>  		current_time(inode);
+> -	inode->i_op = &bad_inode_ops;
+> +	inode->i_op = &bad_inode_ops;
+>  	inode->i_opflags &= ~IOP_XATTR;
+> -	inode->i_fop = &bad_file_ops;
+> +	inode->i_fop = &bad_file_ops;
+>  }
+>  EXPORT_SYMBOL(make_bad_inode);
+>
+> @@ -222,17 +234,17 @@ EXPORT_SYMBOL(make_bad_inode);
+>   * &bad_inode_ops to cover the case of invalidated inodes as well as
+>   * those created by make_bad_inode() above.
+>   */
+> -
+> +
+>  /**
+>   *	is_bad_inode - is an inode errored
+>   *	@inode: inode to test
+>   *
+>   *	Returns true if the inode in question has been marked as bad.
+>   */
+> -
+> +
+>  bool is_bad_inode(struct inode *inode)
+>  {
+> -	return (inode->i_op == &bad_inode_ops);
+> +	return (inode->i_op == &bad_inode_ops);
+>  }
+>
+>  EXPORT_SYMBOL(is_bad_inode);
+> --
+> 2.31.1
+>

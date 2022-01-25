@@ -2,187 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B61E249B935
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F011449B953
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1585335AbiAYQus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:50:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25834 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1586011AbiAYQqO (ORCPT
+        id S1586475AbiAYQvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1586331AbiAYQsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:46:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643129172;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a7zU+HQutEO/qQ6hrk2sWMOj/1/xvFwsw5cfqIUqTFg=;
-        b=YXrLkOqQp00vD3xY5HGVg5e3UoHk1GahXyyxKgAcMSt3+3YLwBHuvpMooY7pnkgMAa+p3o
-        wFj3ugFNbmmgZqzPSOeY/n3IzZdhqLUM24+NenDLZ07lAys9Q5bCKIRvpW3uxja3iLVwdY
-        Rb6B0atUerd7QdR1G/k+BmVgAHRi87s=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-606-pYnsr5RQN9222Gl1cmQzlQ-1; Tue, 25 Jan 2022 11:46:11 -0500
-X-MC-Unique: pYnsr5RQN9222Gl1cmQzlQ-1
-Received: by mail-wm1-f70.google.com with SMTP id o3-20020a1ca503000000b0035056b042deso1772589wme.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:46:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a7zU+HQutEO/qQ6hrk2sWMOj/1/xvFwsw5cfqIUqTFg=;
-        b=Rdgi2DFi7wyZIasvTWn5wOp4i+z3ubisqzeABleRqFWkwj0oXPE3PqdicpPMJpGDk0
-         gnUjqGDLSy3pNhfAaerxxp2xTe9XjabIsRyiMyHmh++FT36Ahm4RZe4W4Y5I6BjHpyLD
-         5HFXzwDejAXfhFZC711Lr+t2hfmEGe0S/CehpE4PqRz98RNGWV4ojG7bHt7MslphbRKJ
-         XO7BpF1FaMP95MotSVuO/mD+9YGDYO43vGF6URgrj5kNRGWxGIhJFkyZ8nFNxYzkHgOz
-         vSrMkzvMJmDFJPvFlEQMWRXIB1iQVWVthAi01kjIK8WUoPyziUfnhkXEDKRSH4jJQUsC
-         FhEA==
-X-Gm-Message-State: AOAM533NHyJOotrvoRZcF7eoJYYAXbggpsRLyGWXw9jxgaTYrSjloLvJ
-        iMaePuLsaD8CiBowp9Yaprqnqct60rsd9/DEz5zzXK7zhCKT0mLOM884XUOB2Jm8Kn10qHxoq1o
-        plSrFXwrFGJu+HGHRZOHvTost
-X-Received: by 2002:a05:600c:3583:: with SMTP id p3mr2201517wmq.172.1643129170005;
-        Tue, 25 Jan 2022 08:46:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwIqCv/3FYPOntW4ojvotT2V0jZL/2g+sZaZcGFbPNk+L/RtU0NW5/Vdzdeumf5jW5EHMfqMA==
-X-Received: by 2002:a05:600c:3583:: with SMTP id p3mr2201493wmq.172.1643129169747;
-        Tue, 25 Jan 2022 08:46:09 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id 8sm21412748wrz.57.2022.01.25.08.46.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 08:46:09 -0800 (PST)
-Date:   Tue, 25 Jan 2022 17:46:07 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 1/9] ftrace: Add ftrace_set_filter_ips function
-Message-ID: <YfApT8uAoCODPAGu@krava>
-References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
- <164311270629.1933078.4596694198103138848.stgit@devnote2>
- <20220125110659.2cc8df29@gandalf.local.home>
+        Tue, 25 Jan 2022 11:48:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCEBC061786;
+        Tue, 25 Jan 2022 08:46:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD01160B43;
+        Tue, 25 Jan 2022 16:46:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 38BDAC340E9;
+        Tue, 25 Jan 2022 16:46:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643129174;
+        bh=lWUX+M/m5LBPUZVAosLkpl2CMXtqXfCRE6ggsbUarCk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Go7wfveBOvEByjFtpvgQX0vWqUpDDAnLWtFVaPVb2A9O95uDe8asBb5ENTb27yJB/
+         s7Yn5JL5i4vRnyzpLMRlsWeSi3dtZ/wq1KMshaK23UBHogsKXt2pvCyVhJsb2dhZdV
+         3J090yq/zTkmJ3uAZWJdnmU+ZhRs2XmHprSYcBixxl89eahUpEgepjGamjad+kkwMi
+         9y4FrbCd+MN4GdI1XpIN27vXcJIzsONUaum8ypGhMs0hoX4itnDPZuaGfMb6DQRSWI
+         /CrRl3d/HFD7pm0e9vWYSXcvGf/BQ8YcOMQ9G28ru5Odv+5rX1u8GjP2SHkrPM9wHS
+         p0vtjoEXW/iqw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C48BF6079C;
+        Tue, 25 Jan 2022 16:46:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125110659.2cc8df29@gandalf.local.home>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] yam: fix a memory leak in yam_siocdevprivate()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164312917410.15904.16284523460013653550.git-patchwork-notify@kernel.org>
+Date:   Tue, 25 Jan 2022 16:46:14 +0000
+References: <20220124032954.18283-1-hbh25y@gmail.com>
+In-Reply-To: <20220124032954.18283-1-hbh25y@gmail.com>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     jpr@f6fbb.org, davem@davemloft.net, kuba@kernel.org,
+        wang6495@umn.edu, linux-hams@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:06:59AM -0500, Steven Rostedt wrote:
+Hello:
 
-SNIP
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> > index be5f6b32a012..39350aa38649 100644
-> > --- a/kernel/trace/ftrace.c
-> > +++ b/kernel/trace/ftrace.c
-> > @@ -4958,7 +4958,7 @@ ftrace_notrace_write(struct file *file, const char __user *ubuf,
-> >  }
-> >  
-> >  static int
-> > -ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
-> > +__ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
-> >  {
-> >  	struct ftrace_func_entry *entry;
-> >  
-> > @@ -4976,9 +4976,25 @@ ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
-> >  	return add_hash_entry(hash, ip);
-> >  }
-> >  
-> > +static int
-> > +ftrace_match_addr(struct ftrace_hash *hash, unsigned long *ips,
-> > +		  unsigned int cnt, int remove)
-> > +{
-> > +	unsigned int i;
-> > +	int err;
-> > +
-> > +	for (i = 0; i < cnt; i++) {
-> > +		err = __ftrace_match_addr(hash, ips[i], remove);
-> > +		if (err)
-> > +			return err;
+On Mon, 24 Jan 2022 11:29:54 +0800 you wrote:
+> ym needs to be free when ym->cmd != SIOCYAMSMCS.
 > 
-> On error should we revert what was done?
-> 
-> 			goto err;
-> > +	}
-> > +	return 0;
-> 
-> err:
-> 	for (i--; i >= 0; i--)
-> 		__ftrace_match_addr(hash, ips[i], !remove);
-> 	return err;
-> 
-> Although it may not matter as it looks like it is only used on a temporary
-> hash. But either it should be commented that is the case, or we do the above
-> just to be more robust.
+> Fixes: 0781168e23a2 ("yam: fix a missing-check bug")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>  drivers/net/hamradio/yam.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-yes, that's the case.. it populates just the hash at this point
-and if __ftrace_match_addr fails, the thehash is relased after
-jumping to out_regex_unlock
+Here is the summary with links:
+  - yam: fix a memory leak in yam_siocdevprivate()
+    https://git.kernel.org/netdev/net/c/29eb31542787
 
-> 
-> > +}
-> > +
-> >  static int
-> >  ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
-> > -		unsigned long ip, int remove, int reset, int enable)
-> > +		unsigned long *ips, unsigned int cnt,
-> > +		int remove, int reset, int enable)
-> >  {
-> >  	struct ftrace_hash **orig_hash;
-> >  	struct ftrace_hash *hash;
-> > @@ -5008,8 +5024,8 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
-> >  		ret = -EINVAL;
-> >  		goto out_regex_unlock;
-> >  	}
-> > -	if (ip) {
-> > -		ret = ftrace_match_addr(hash, ip, remove);
-> > +	if (ips) {
-> > +		ret = ftrace_match_addr(hash, ips, cnt, remove);
-> >  		if (ret < 0)
-> >  			goto out_regex_unlock;
-> >  	}
-> > @@ -5026,10 +5042,10 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
-> >  }
-> >  
-> >  static int
-> > -ftrace_set_addr(struct ftrace_ops *ops, unsigned long ip, int remove,
-> > -		int reset, int enable)
-> > +ftrace_set_addr(struct ftrace_ops *ops, unsigned long *ips, unsigned int cnt,
-> > +		int remove, int reset, int enable)
-> >  {
-> > -	return ftrace_set_hash(ops, NULL, 0, ip, remove, reset, enable);
-> > +	return ftrace_set_hash(ops, NULL, 0, ips, cnt, remove, reset, enable);
-> >  }
-> >  
-> >  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> > @@ -5634,10 +5650,29 @@ int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
-> >  			 int remove, int reset)
-> >  {
-> >  	ftrace_ops_init(ops);
-> > -	return ftrace_set_addr(ops, ip, remove, reset, 1);
-> > +	return ftrace_set_addr(ops, &ip, 1, remove, reset, 1);
-> >  }
-> >  EXPORT_SYMBOL_GPL(ftrace_set_filter_ip);
-> >  
-> > +/**
-> > + * ftrace_set_filter_ips - set a functions to filter on in ftrace by addresses
-> 
-> 		- set functions to filter on ...
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-will fix,
-
-thanks,
-jirka
 

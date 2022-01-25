@@ -2,195 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE47349BBC4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC60949BBC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiAYTIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:08:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiAYTIm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:08:42 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5A3C06173B;
-        Tue, 25 Jan 2022 11:08:41 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id p12so65136428edq.9;
-        Tue, 25 Jan 2022 11:08:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2KHYuO9BIb/dJb7fY+KxNNxhyGeTxeET42tjQ6h3Wb8=;
-        b=PErttFt/Al+rGnJ4DLDMNiS9Bze6yfOzYGODufHp62yyztZZkWj4PIVOYGWYHnan1T
-         RGENBNcXptSl3gN9P7z6h9NVeXjj0etWWXfDw6+ZnBYM3XJy8dTJI58ZQz+Z2T7aGH4V
-         +Wf8KIPfakDj7RWHkRnl4XhDvdwt+RnNHfUaRdLQfiPCVV5ihAl8WXwPXbDiAodMExl/
-         t1QcUZPwW8hQ6IQAlHRWc4RxnxCuWZADQUpS02Qvt1D2DxNS59zlRB+d2j/kHqPlMEGC
-         zq3Wp6WUBBzYefo03eGVqgIEQKWYHhiCw3u3fb86naoZyXBbU0s5GlIDafVZR3oPyHpS
-         d/nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2KHYuO9BIb/dJb7fY+KxNNxhyGeTxeET42tjQ6h3Wb8=;
-        b=YiAxJIayfHAz6CxBqCm90WVpwICFLH2+ot3bgBHJ8tchCVf0yGNzRa3sw5m38QAvv6
-         AsIE/RFqLnynFQxt3QNVTfhMfqd5oGa2szVf+y6soNicmJUvQ8/MtMhtHNHGQGJt9AO0
-         op+OOaJD2ITIbtJr4YZzgV3ponzz0EAJQ8T8w8VlEXTgDZcrkmuKOvcKi/dDdN2OaLWa
-         k3EkOH1MJgD7EcAOcktLiFHCedfcAQTs56LRBPIJbEmbB//XbXW63vOElSrhMmW/sfTL
-         y/DWASIQ6KNhL1jcg4UH+5H461aplRBZZ8xwxuuJ7qypF1F6JKjQ8twok3GqdcL3i5VJ
-         VW9w==
-X-Gm-Message-State: AOAM533emUNxiJQyrEa5NgHq8ziRnTZ4h0NWLqOAXngR59UPi/DA++pg
-        kX7X5JqE5lmwAUnLXd2W0fBcdCPfv9tC4PVYQJk=
-X-Google-Smtp-Source: ABdhPJzYHpFJlqDny6UdInSzsBm83WymJLGUWmYMSCU/OrIsUErfJZw2nBNbbNX7o16vjFmSwnoDr7q+9M1Wx8ARXyQ=
-X-Received: by 2002:a05:6402:1119:: with SMTP id u25mr21599441edv.367.1643137719736;
- Tue, 25 Jan 2022 11:08:39 -0800 (PST)
+        id S229595AbiAYTJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:09:09 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:52008 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229582AbiAYTJD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 14:09:03 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 604A21EC0441;
+        Tue, 25 Jan 2022 20:08:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643137737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=5dre2/Xoj69vksLt8aXgzTbDFCPxTScJvpBPEiFuIbQ=;
+        b=IHzJITh+VdU95Z41M40ydSHyrkALBX7HVqwjLxp4UiekH8GB0N5/xLb5qCknqNI8wtf9pr
+        fo0NzV4rRS8gd3piweS+CnBXWxnaxks6r3gInZaMFULNRZk1ovT7fYgdI9ansMvlSuR1CS
+        tygs6LXYUSaeqh1d+PEEGciwvosrc1E=
+Date:   Tue, 25 Jan 2022 20:08:52 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+Subject: Re: [PATCH v4 1/2] efi/cper: add cper_mem_err_status_str to decode
+ error description
+Message-ID: <YfBKxGFbRozNdJiD@zn.tnic>
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220125024939.30635-2-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220125171129.472775-1-aford173@gmail.com> <20220125171129.472775-8-aford173@gmail.com>
- <YfBJxmgwLGbVqGba@eze-laptop>
-In-Reply-To: <YfBJxmgwLGbVqGba@eze-laptop>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Tue, 25 Jan 2022 13:08:28 -0600
-Message-ID: <CAHCN7xL-c4rXFW3cO4c0QmnqtaRpU_HfPb46UQFzPzb2RojChw@mail.gmail.com>
-Subject: Re: [PATCH V4 07/11] arm64: dts: imx8mq: Enable both G1 and G2 VPU's
- with vpu-blk-ctrl
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Chris Healy <cphealy@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220125024939.30635-2-xueshuai@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 1:04 PM Ezequiel Garcia
-<ezequiel@vanguardiasur.com.ar> wrote:
->
-> On Tue, Jan 25, 2022 at 11:11:24AM -0600, Adam Ford wrote:
-> > With the Hantro G1 and G2 now setup to run independently, update
-> > the device tree to allow both to operate.  This requires the
-> > vpu-blk-ctrl node to be configured.  Since vpu-blk-ctrl needs
-> > certain clock enabled to handle the gating of the G1 and G2
-> > fuses, the clock-parents and clock-rates for the various VPU's
-> > to be moved into the pgc_vpu because they cannot get re-parented
-> > once enabled, and the pgc_vpu is the highest in the chain.
-> >
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
->
-> It doesn't seem correct to have the Reported-by on this commit.
+On Tue, Jan 25, 2022 at 10:49:38AM +0800, Shuai Xue wrote:
+> Introduce a new helper function cper_mem_err_status_str() which is used to
+> decode the description of error status, and the cper_print_mem() will call
+> it and report the details of error status.
+> 
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> ---
+>  drivers/firmware/efi/cper.c | 29 ++++++++++++++++++++++++++++-
+>  include/linux/cper.h        |  1 +
+>  2 files changed, 29 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+> index 6ec8edec6329..7f08d4ea906e 100644
+> --- a/drivers/firmware/efi/cper.c
+> +++ b/drivers/firmware/efi/cper.c
+> @@ -211,6 +211,31 @@ const char *cper_mem_err_type_str(unsigned int etype)
+>  }
+>  EXPORT_SYMBOL_GPL(cper_mem_err_type_str);
+>  
+> +const char *cper_mem_err_status_str(u64 status)
+> +{
+> +	switch ((status >> 8) & 0xff) {
+> +	case  1:	return "Error detected internal to the component";
+> +	case  4:	return "Storage error in DRAM memory";
+> +	case  5:	return "Storage error in TLB";
+> +	case  6:	return "Storage error in cache";
+> +	case  7:	return "Error in one or more functional units";
+> +	case  8:	return "component failed self test";
 
-I didn't put it here, because I fixed it in a whole different patch
-(Patch 1/11).  This patch remains unchanged.  I probably should have
-put in the other patch, but I didn't think it was essential.  Sorry
-about that. Do I need to resend to just add the r-b tag?
+Well, at least start them all with capital letters: "Component... " And
+yes, I know this is how it is in the spec but the spec has typos and
+other problems - doesn't mean we have to copy them too.
 
-adam
+> +	case  9:	return "Overflow or undervalue of internal queue";
+> +	case 16:	return "Error detected in the bus";
+> +	case 17:	return "Virtual address not found on IO-TLB or IO-PDIR";
+> +	case 18:	return "Improper access error";
+> +	case 19:	return "Access to a memory address which is not mapped to any component";
+> +	case 20:	return "Loss of Lockstep";
+> +	case 21:	return "Response not associated with a request";
+> +	case 22:	return "Bus parity error - must also set the A, C, or D Bits";
+> +	case 23:	return "Detection of a PATH_ERROR ";
 
->
-> Thanks,
-> Ezequiel
->
-> > Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> >
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > index 2df2510d0118..549b2440f55d 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > @@ -737,7 +737,21 @@ pgc_gpu: power-domain@5 {
-> >                                       pgc_vpu: power-domain@6 {
-> >                                               #power-domain-cells = <0>;
-> >                                               reg = <IMX8M_POWER_DOMAIN_VPU>;
-> > -                                             clocks = <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-> > +                                             clocks = <&clk IMX8MQ_CLK_VPU_DEC_ROOT>,
-> > +                                                      <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-> > +                                                      <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> > +                                             assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
-> > +                                                               <&clk IMX8MQ_CLK_VPU_G2>,
-> > +                                                               <&clk IMX8MQ_CLK_VPU_BUS>,
-> > +                                                               <&clk IMX8MQ_VPU_PLL_BYPASS>;
-> > +                                             assigned-clock-parents = <&clk IMX8MQ_VPU_PLL_OUT>,
-> > +                                                                      <&clk IMX8MQ_VPU_PLL_OUT>,
-> > +                                                                      <&clk IMX8MQ_SYS1_PLL_800M>,
-> > +                                                                      <&clk IMX8MQ_VPU_PLL>;
-> > +                                             assigned-clock-rates = <600000000>,
-> > +                                                                    <600000000>,
-> > +                                                                    <800000000>,
-> > +                                                                    <0>;
-> >                                       };
-> >
-> >                                       pgc_disp: power-domain@7 {
-> > @@ -1457,30 +1471,31 @@ usb3_phy1: usb-phy@382f0040 {
-> >                       status = "disabled";
-> >               };
-> >
-> > -             vpu: video-codec@38300000 {
-> > -                     compatible = "nxp,imx8mq-vpu";
-> > -                     reg = <0x38300000 0x10000>,
-> > -                           <0x38310000 0x10000>,
-> > -                           <0x38320000 0x10000>;
-> > -                     reg-names = "g1", "g2", "ctrl";
-> > -                     interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> > -                                  <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> > -                     interrupt-names = "g1", "g2";
-> > +             vpu_g1: video-codec@38300000 {
-> > +                     compatible = "nxp,imx8mq-vpu-g1";
-> > +                     reg = <0x38300000 0x10000>;
-> > +                     interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> > +                     clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>;
-> > +                     power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G1>;
-> > +             };
-> > +
-> > +             vpu_g2: video-codec@38310000 {
-> > +                     compatible = "nxp,imx8mq-vpu-g2";
-> > +                     reg = <0x38310000 0x10000>;
-> > +                     interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-> > +                     clocks = <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> > +                     power-domains = <&vpu_blk_ctrl IMX8MQ_VPUBLK_PD_G2>;
-> > +             };
-> > +
-> > +             vpu_blk_ctrl: blk-ctrl@38320000 {
-> > +                     compatible = "fsl,imx8mq-vpu-blk-ctrl";
-> > +                     reg = <0x38320000 0x100>;
-> > +                     power-domains = <&pgc_vpu>, <&pgc_vpu>, <&pgc_vpu>;
-> > +                     power-domain-names = "bus", "g1", "g2";
-> >                       clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-> > -                              <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-> > -                              <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-> > -                     clock-names = "g1", "g2", "bus";
-> > -                     assigned-clocks = <&clk IMX8MQ_CLK_VPU_G1>,
-> > -                                       <&clk IMX8MQ_CLK_VPU_G2>,
-> > -                                       <&clk IMX8MQ_CLK_VPU_BUS>,
-> > -                                       <&clk IMX8MQ_VPU_PLL_BYPASS>;
-> > -                     assigned-clock-parents = <&clk IMX8MQ_VPU_PLL_OUT>,
-> > -                                              <&clk IMX8MQ_VPU_PLL_OUT>,
-> > -                                              <&clk IMX8MQ_SYS1_PLL_800M>,
-> > -                                              <&clk IMX8MQ_VPU_PLL>;
-> > -                     assigned-clock-rates = <600000000>, <600000000>,
-> > -                                            <800000000>, <0>;
-> > -                     power-domains = <&pgc_vpu>;
-> > +                              <&clk IMX8MQ_CLK_VPU_G2_ROOT>;
-> > +                     clock-names = "g1", "g2";
-> > +                     #power-domain-cells = <1>;
-> >               };
-> >
-> >               pcie0: pcie@33800000 {
-> > --
-> > 2.32.0
-> >
+Trailing space here. Also what is PATH_ERROR?
+
+That "PATH_ERROR" is nowhere else explained in that big fat UEFI spec.
+2558 pages and they can't explain *that*. Geez.
+
+> +	case 25:	return "Bus operation timeout";
+> +	case 26:	return "A read was issued to data that has been poisoned";
+> +	default:	return "reserved";
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(cper_mem_err_status_str);
+> +
+>  static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
+>  {
+>  	u32 len, n;
+> @@ -334,7 +359,9 @@ static void cper_print_mem(const char *pfx, const struct cper_sec_mem_err *mem,
+>  		return;
+>  	}
+>  	if (mem->validation_bits & CPER_MEM_VALID_ERROR_STATUS)
+> -		printk("%s""error_status: 0x%016llx\n", pfx, mem->error_status);
+> +		printk("%s""error_status: %s (0x%016llx)\n",
+
+Why do you insist on having two back-to-back strings instead of one
+here?
+
+(And don't tell me it is because the other function calls here do it
+too.)
+
+FWIW, even checkpatch complains here:
+
+WARNING: Consecutive strings are generally better as a single string
+#87: FILE: drivers/firmware/efi/cper.c:362:
++               printk("%s""error_status: %s (0x%016llx)\n",
+
+Btw, please integrate scripts/checkpatch.pl into your patch creation
+workflow. Some of the warnings/errors *actually* make sense.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

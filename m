@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 033E349BC7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A2649BC84
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbiAYTuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
+        id S231160AbiAYTz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiAYTuq (ORCPT
+        with ESMTP id S230488AbiAYTzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:50:46 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE82C061744;
-        Tue, 25 Jan 2022 11:50:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XnOpHOntQOg5wjymzDOHXiPanYFDFvY26sbX++O0fnA=; b=VELGeg2hS4JKT8txctMPaShzdT
-        ZaTFITxIlYbm2Uj12Qxez0OYx7e1MYq2UoZXodMrCxvGeygRgn7gKfoteE1diO3iyBZJ8KUdAXnkd
-        eVAkqTeoOFrGj3sLsiX9+iWSotgN5NABPqUvVZLsX7KpOqjNgZ/+r6lfu3muAyMmARu6UsZ4kKGJk
-        IUwfX9k2+58not7Pl+Jj6UBm1ZuLWYel2TbXXc/qQqvVDrr1tJEXuVK2i/LQlI0eoA+KQtMZLL+rc
-        82XvPYvLKUvHncE/yTFMR8MgTBVyT8p5PPrgBmYj2GxjTIvZFopD3jmNjkMNdUZk2hHBKLycT/68x
-        dZlX6Vag==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCRpw-009QFo-M3; Tue, 25 Jan 2022 19:50:40 +0000
-Date:   Tue, 25 Jan 2022 11:50:40 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Michal Suchanek <msuchanek@suse.de>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] s390/kexec_file: Don't opencode appended
- signature check.
-Message-ID: <YfBUkIlvQc0U0ylo@bombadil.infradead.org>
-References: <cover.1641822505.git.msuchanek@suse.de>
- <940cd6a0e88793060cdf5ddb7880c03564b38bdd.1641822505.git.msuchanek@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <940cd6a0e88793060cdf5ddb7880c03564b38bdd.1641822505.git.msuchanek@suse.de>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+        Tue, 25 Jan 2022 14:55:25 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4DEC06173B;
+        Tue, 25 Jan 2022 11:55:25 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id w5so13573677ilo.2;
+        Tue, 25 Jan 2022 11:55:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=mwx4R51tDde945NwTITMzneq7WCyFOACKE0rm7tkswc=;
+        b=jqLyFOBxbBXhtPgKrMFF+1wcWKHCyNfChGoR8WkBZxbYbQW0a0tsiYuzZG77QMF7wd
+         phetNVLJcRps5G0f9jc8sMPmklJziKbtlIprJ7i/p2Fc5lCS85zTSvCQVJuTfLrxaAuI
+         uh8I0qTmDmnr4lP5wU4Zv7/VOkwWugko98SEd5h4TfE5fO3p7tdByH3+sWN6H2ptgM6H
+         oAaZT+GYQ4bQIEEjVE2oZaPa1RszBkK7V0af2g6FBLI8Pv2OcO47fgqWKi+cNqzEiEt3
+         3hDzwjjT3uNE/ajqs+WuWWvWi4JzJO2aGMzhPQiZJ9C+yyeMSWvngdqNnV+XGmzBQllL
+         m+UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=mwx4R51tDde945NwTITMzneq7WCyFOACKE0rm7tkswc=;
+        b=a0gHJyUN1mqFsGJbOmItJFSjHjPqUBgMaUC0qa5gcSSFtAo5HyYDQtgZbNDNA6P8Ae
+         xcPAtenkNqbeiP6+68Td6WjgubcGShyDCZuw/m5Jpz4gnBUUgm/hbNPvMs5gLIuUOPi+
+         uvNDusd//l5i8CTv172hbktkMIVWWbgT00gtIlTVlKmCYK1KTqpj2SiEkasFfYP/EFep
+         r8+gWJh/vQJJ+FTIQXaP+NjTltOpVTI1+2we2b41k58Tt2JdXTf4VJ/YBCnlL2UWow7o
+         xPOnZFk01oEug3qky0G40ds3XfasBrxReZSLERlM7F1co8CwAIbd0R9zT6DjPR56HmGc
+         QBSQ==
+X-Gm-Message-State: AOAM530KKkrNLRXOHlrteGXVijeL8ZMVZnB53e6Rv5B79MLT2SHOnZs9
+        7+GmKKCbxPycfa8ohkxcBDs=
+X-Google-Smtp-Source: ABdhPJywhrD1lQyMvj4JDiOC9v80DY/8AHWvMwZslYWooJ6fPjdqAtqc8LGvmtNi/mDQmrvTfR9sZA==
+X-Received: by 2002:a05:6e02:1786:: with SMTP id y6mr12777811ilu.99.1643140524520;
+        Tue, 25 Jan 2022 11:55:24 -0800 (PST)
+Received: from localhost ([99.197.200.79])
+        by smtp.gmail.com with ESMTPSA id q14sm2803192iow.1.2022.01.25.11.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 11:55:24 -0800 (PST)
+Date:   Tue, 25 Jan 2022 11:55:16 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     He Fengqing <hefengqing@huawei.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com
+Cc:     songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-ID: <61f055a4b6451_2e4c520871@john.notmuch>
+In-Reply-To: <20220122102936.1219518-1-hefengqing@huawei.com>
+References: <20220122102936.1219518-1-hefengqing@huawei.com>
+Subject: RE: [bpf-next] bpf: Fix possible race in inc_misses_counter
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 02:49:53PM +0100, Michal Suchanek wrote:
-> Module verification already implements appeded signature check.
+He Fengqing wrote:
+> It seems inc_misses_counter() suffers from same issue fixed in
+> the commit d979617aa84d ("bpf: Fixes possible race in update_prog_stats()
+> for 32bit arches"):
+> As it can run while interrupts are enabled, it could
+> be re-entered and the u64_stats syncp could be mangled.
 > 
-> Reuse it for kexec_file.
-> 
-> The kexec_file implementation uses EKEYREJECTED error in some cases when
-> there is no key and the common implementation uses ENOPKG or EBADMSG
-> instead.
-> 
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> Acked-by: Heiko Carstens <hca@linux.ibm.com>
+> Fixes: 9ed9e9ba2337 ("bpf: Count the number of times recursion was prevented")
+> Signed-off-by: He Fengqing <hefengqing@huawei.com>
 > ---
-> v3: Philipp Rudo <prudo@redhat.com>: Update the commit with note about
-> change of return value
-> ---
->  arch/s390/kernel/machine_kexec_file.c | 22 +++++-----------------
->  1 file changed, 5 insertions(+), 17 deletions(-)
+>  kernel/bpf/trampoline.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+
+Appears possible through sleepable progs.
+
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index 4b6974a195c1..5e7edf913060 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -550,11 +550,12 @@ static __always_inline u64 notrace bpf_prog_start_time(void)
+>  static void notrace inc_misses_counter(struct bpf_prog *prog)
+>  {
+>  	struct bpf_prog_stats *stats;
+> +	unsigned int flags;
+>  
+>  	stats = this_cpu_ptr(prog->stats);
+> -	u64_stats_update_begin(&stats->syncp);
+> +	flags = u64_stats_update_begin_irqsave(&stats->syncp);
+>  	u64_stats_inc(&stats->misses);
+> -	u64_stats_update_end(&stats->syncp);
+> +	u64_stats_update_end_irqrestore(&stats->syncp, flags);
+>  }
+>  
+>  /* The logic is similar to bpf_prog_run(), but with an explicit
+> -- 
+> 2.25.1
 > 
-> diff --git a/arch/s390/kernel/machine_kexec_file.c b/arch/s390/kernel/machine_kexec_file.c
-> index 8f43575a4dd3..c944d71316c7 100644
-> --- a/arch/s390/kernel/machine_kexec_file.c
-> +++ b/arch/s390/kernel/machine_kexec_file.c
-> @@ -31,6 +31,7 @@ int s390_verify_sig(const char *kernel, unsigned long kernel_len)
->  	const unsigned long marker_len = sizeof(MODULE_SIG_STRING) - 1;
->  	struct module_signature *ms;
->  	unsigned long sig_len;
-> +	int ret;
->  
->  	/* Skip signature verification when not secure IPLed. */
->  	if (!ipl_secure_flag)
-> @@ -45,25 +46,12 @@ int s390_verify_sig(const char *kernel, unsigned long kernel_len)
->  	kernel_len -= marker_len;
->  
->  	ms = (void *)kernel + kernel_len - sizeof(*ms);
-> -	kernel_len -= sizeof(*ms);
-> +	ret = mod_check_sig(ms, kernel_len, "kexec");
-> +	if (ret)
-> +		return ret;
->  
->  	sig_len = be32_to_cpu(ms->sig_len);
-> -	if (sig_len >= kernel_len)
-> -		return -EKEYREJECTED;
 
-There is a small minor fix here, where by using mod_check_sig() now
-decreased the kernel_len by the sizeof(*ms). It is minor though.
 
-> -	kernel_len -= sig_len;
-> -
-> -	if (ms->id_type != PKEY_ID_PKCS7)
-> -		return -EKEYREJECTED;
-
-More importantly is the return value used here changes but given the
-Ack by Heiko I suspect this if fine and does not break old userspace,
-the only change here is the possible error value returned by the
-kexec_file_load() system call.
-
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-
-   Luis

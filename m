@@ -2,145 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D4A49AE6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8850C49AD8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452518AbiAYIta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:49:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452171AbiAYIpi (ORCPT
+        id S1345317AbiAYHZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 02:25:07 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21140 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1443677AbiAYHV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:45:38 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918FEC06C5B2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 23:19:54 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id i62so12569917ybg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 23:19:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zemX1b6TJ8preP7NBXduR0Q+ixTKnGjWqI4oVSUxJQM=;
-        b=ULwRLrFEYm108CDMrUWSDAjZ5CNZj7xP47ZhW6t5cSurZtNEpy8S1q65A4RaDVKx12
-         Bun3OqnuM6P09OUGoTcZpk9ocmDZjs7lAYDSJMmGWqstk5fja0AefHFEveaAcAPAn/9C
-         ZJVkh8z2L5HWXJwB9tAiaQUlfaegKhzuR++Y2/r8arrEl3mAZDL0MKx+WCwLZZWJyqwO
-         CM+pJpEIKHtrozEByp/X9nC+GR7FoyLBorufFQn8LEs2nSFOoVXIQBQbjr7SJCpijZwL
-         P8R+EXKhPUNeaxLdFAzvHx5QKvXJr3o8+6LsiLVWlYKolaygMAidzxGJc7N1rhgGjSJq
-         Jz4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zemX1b6TJ8preP7NBXduR0Q+ixTKnGjWqI4oVSUxJQM=;
-        b=YDUtdvedxkm3KOApuf6eWbm6KiXCD73Xg7ljiBga/+7ARxuLBgR67F6n0wIgWiRGcR
-         ePCDS0Q6ZHZyZUkoWcWMkLh02VG8qaxcjAKz7Uny1Y9qrnMjco94mn0PiGehN3lBNJfE
-         3Ri2e8QL/4ak2lOVYozIPnNrJANaIXaLyeo+A8FXu7yHCJQRYG+dy7FORFmUE/ki21QP
-         uECZxFDY6Eh4Kl4tSIsrEa2E/AkhvvOyYSKY9HX7US+JNSioIgrj7guHDk2/RNmd71P3
-         pa0mSaXArzhEFSmt8Vgm0yvVzqwgM2I+DT28WYVBETb4WAyPSK2r+O9/4ns4KtHl6/ZR
-         WfCw==
-X-Gm-Message-State: AOAM533nL1ly8PexRMxZUL3hJDqXn1ffLY1Ksta3ZYGSM+f9ympzqbMR
-        BwCO7Jm9nACOlCPJzxDji3yDXvZgf0KYLs/Eqe3wVA==
-X-Google-Smtp-Source: ABdhPJzSCNIwSW9knqOAWRknnTZN1kDocqrpGezHGXfDLZyDvdZTj/Sd+9zHZuCWNPheDPwKCUWGePMrat72HKT+abc=
-X-Received: by 2002:a81:1186:0:b0:2ca:287c:6cd5 with SMTP id
- 00721157ae682-2ca287c6f97mr4858637b3.378.1643095193592; Mon, 24 Jan 2022
- 23:19:53 -0800 (PST)
+        Tue, 25 Jan 2022 02:21:29 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20P4kQqF031034;
+        Tue, 25 Jan 2022 07:21:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=dyT61F/+H7CcwaycbWvxPVLwL6aVpoLq1rauxes63zs=;
+ b=rgGrd1A+UD8slBcMvDc/3dl3yYSXOc4LF7saLwl79d7a/DQPNQix65N4z2ywxydQMATQ
+ 1K7u7JjcaDme47ImFOnKLRlqatNMU1EH0O4N28X8H/wguA+fIANPpIG8I32N4MMiE5x1
+ HQtC9HHeDTNBd+aU+NX/P+7PpY756mm0i3lokPJ7nQ9/OLcFlQ9nErnLtXf30eS9eAhL
+ 2adUhrJUcI5yAPIu+vPoSLYPZdOyDnk1SYSCiqX7XxY00MsqRsqVz9VEsaFVGvhFKif7
+ Hj1L1Z+DVKIaXrMtok9x7Yk6OMpuSL91IYO7eLcStv/ZqzWV3SAIlRyR8YsPJlRCY+oX gw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dtafr30ff-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 07:21:06 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20P6Fp0f032124;
+        Tue, 25 Jan 2022 07:21:05 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dtafr30f5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 07:21:05 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20P7D94x008053;
+        Tue, 25 Jan 2022 07:21:04 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma04dal.us.ibm.com with ESMTP id 3dr9ja33xr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 07:21:04 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20P7L4Tj17105166
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 07:21:04 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 12FD712405E;
+        Tue, 25 Jan 2022 07:21:04 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B44BD124052;
+        Tue, 25 Jan 2022 07:21:03 +0000 (GMT)
+Received: from localhost (unknown [9.211.142.9])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 25 Jan 2022 07:21:03 +0000 (GMT)
+From:   Nathan Lynch <nathanl@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, mpe@ellerman.id.au,
+        npiggin@gmail.com, brking@linux.ibm.com, srikar@linux.vnet.ibm.com
+Subject: [PATCH] powerpc/smp: poll cpu_callin_map more aggressively in __cpu_up()
+Date:   Tue, 25 Jan 2022 01:21:03 -0600
+Message-Id: <20220125072103.70715-1-nathanl@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220124183953.750177707@linuxfoundation.org> <e2c9b01d-0500-645f-b4cc-f8dcb769996e@linaro.org>
-In-Reply-To: <e2c9b01d-0500-645f-b4cc-f8dcb769996e@linaro.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 25 Jan 2022 12:49:42 +0530
-Message-ID: <CA+G9fYsvgQyUNBnySuiOrAXRrh4_ZAnqygZ0A5y7pGO5vrXAYA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 000/320] 5.4.174-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: dp0YO1CDidMdt_gGX0vysidABI96_2PC
+X-Proofpoint-ORIG-GUID: _wTH7Yl5XuQ-UE0KFyJBm5Q7lWc7Hio3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-25_02,2022-01-24_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ malwarescore=0 spamscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 mlxscore=0 bulkscore=0 mlxlogscore=952
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201250047
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 05:10, Daniel D=C3=ADaz <daniel.diaz@linaro.org> wro=
-te:
->
-> Hello!
->
-> On 1/24/22 12:39, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.4.174 release.
-> > There are 320 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >       https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.174-rc1.gz
-> > or in the git tree and branch at:
-> >       git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
->
+Replace the outdated iteration and timeout calculations here with
+indefinite spin_until_cond()-wrapped poll of cpu_callin_map. __cpu_up()
+already does this when waiting for the cpu to set its online bit before
+returning, so this change is not really making the function more brittle.
 
+Removing the msleep(1) in the hotplug path here reduces the time it takes
+to online a CPU on a P9 PowerVM LPAR from about 30ms to 1ms when exercised
+via thaw_secondary_cpus().
 
-Regressions detected on arm, arm64, i386, x86, parisc.
-There are two build breaks,
+Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
+---
+ arch/powerpc/kernel/smp.c | 25 ++-----------------------
+ 1 file changed, 2 insertions(+), 23 deletions(-)
 
-This is on Perf on arm, arm64, i386, x86:
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index b7fd6a72aa76..990893365fe0 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -1270,7 +1270,7 @@ static void cpu_idle_thread_init(unsigned int cpu, struct task_struct *idle)
+ 
+ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
+ {
+-	int rc, c;
++	int rc;
+ 
+ 	/*
+ 	 * Don't allow secondary threads to come online if inhibited
+@@ -1314,28 +1314,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
+ 		return rc;
+ 	}
+ 
+-	/*
+-	 * wait to see if the cpu made a callin (is actually up).
+-	 * use this value that I found through experimentation.
+-	 * -- Cort
+-	 */
+-	if (system_state < SYSTEM_RUNNING)
+-		for (c = 50000; c && !cpu_callin_map[cpu]; c--)
+-			udelay(100);
+-#ifdef CONFIG_HOTPLUG_CPU
+-	else
+-		/*
+-		 * CPUs can take much longer to come up in the
+-		 * hotplug case.  Wait five seconds.
+-		 */
+-		for (c = 5000; c && !cpu_callin_map[cpu]; c--)
+-			msleep(1);
+-#endif
+-
+-	if (!cpu_callin_map[cpu]) {
+-		printk(KERN_ERR "Processor %u is stuck.\n", cpu);
+-		return -ENOENT;
+-	}
++	spin_until_cond(cpu_callin_map[cpu] != 0);
+ 
+ 	DBG("Processor %u found.\n", cpu);
+ 
+-- 
+2.34.1
 
->
->    libbpf.c: In function 'bpf_object__elf_collect':
->    libbpf.c:1581:31: error: i nvalid type argument of '->' (have 'GElf_Sh=
-dr' {aka 'Elf64_Shdr'})
->     1581 |                         if (sh->sh_type !=3D SHT_PROGBITS)
->          |                               ^~
->    libbpf.c:1585:31: error: invalid type argument of '->' (have 'GElf_Shd=
-r' {aka 'Elf64_Shdr'})
->     1585 |                         if (sh->sh_type !=3D SHT_PROGBITS)
->          |                               ^~
->    make[4]: *** [/builds/linux/tools/build/Makefile.build:97: /home/tuxbu=
-ild/.cache/tuxmake/builds/current/staticobjs/libbpf.o] Error 1
-
-This is due to,
-commit b98ad671ae465a1a4f76d1438b97cd8172e0ce14
-libbpf: Validate that .BTF and .BTF.ext sections contain data
-        [ Upstream commit 62554d52e71797eefa3fc15b54008038837bb2d4 ]
-
-
-This is from PA-RISC with gcc-8, gcc-9, gcc-10, gcc-11:
-
->    /builds/linux/drivers/parisc/sba_iommu.c: In function 'sba_io_pdir_ent=
-ry':
->    /builds/linux/arch/parisc/include/asm/special_insns.h:11:3: error: exp=
-ected ':' or ')' before 'ASM_EXCEPTIONTABLE_ENTRY'
->       ASM_EXCEPTIONTABLE_ENTRY(8b, 9b) \
->       ^~~~~~~~~~~~~~~~~~~~~~~~
->
->
-
-Bisection of the latter points to "parisc: Fix lpa and lpa_user defines".
-
-commit 73c8c7ecdc141c20c9dbc8f3ec176e233942b0d9
-parisc: Fix lpa and lpa_user defines
-    [ commit db19c6f1a2a353cc8dec35b4789733a3cf6e2838 upstream ]
-
->
-> Greetings!
->
-> Daniel D=C3=ADaz
-> daniel.diaz@linaro.org

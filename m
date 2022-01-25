@@ -2,109 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F83949B276
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BC849B283
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379898AbiAYLAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 06:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379810AbiAYK5h (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:57:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F85C061751;
-        Tue, 25 Jan 2022 02:57:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A373E6168C;
-        Tue, 25 Jan 2022 10:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E424C340E0;
-        Tue, 25 Jan 2022 10:57:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643108252;
-        bh=64WEc7pcjWdPNj74JeYR5KiScRakP+CCGpEFsBeMNVs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ILp0AsXbtwNkLs91cv8y7WBjlDnuvN+K1Drs34qWXyqB47YrVypA32xHwH5oDLZGE
-         qvWGsxGhieFDWVB1EYbmU9XjDWp+O60vZwv6SVxXAsqR2ebcFG6xZ8GGVKKzJavKZa
-         VxdFF6C+Xl4VMo7nblpSLHSStyt240YV/hz8hDqw=
-Date:   Tue, 25 Jan 2022 11:57:29 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.10 262/563] uio: uio_dmem_genirq: Catch the Exception
-Message-ID: <Ye/Xmfm4odaglfsc@kroah.com>
-References: <20220124184024.407936072@linuxfoundation.org>
- <20220124184033.490683244@linuxfoundation.org>
- <20220125104725.GA19281@duo.ucw.cz>
+        id S1380113AbiAYLBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 06:01:23 -0500
+Received: from mga17.intel.com ([192.55.52.151]:30554 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1379968AbiAYK7D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 05:59:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643108343; x=1674644343;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SYDGkXed9Zpe3q3nrJrWXDYeh3RYZIJ5yQozPlmXdts=;
+  b=CkFQR20liFfzU4JzRkZyKtkEhEUsxhe2zgIayeii8uQaa7/5IuIYYHw/
+   JTTud31uXukQQrLThCWfPAeI/nJAJXcuLNR0MfhKmbeBk9emoaVc4byGw
+   uBuog6/VgMax43fJjzWlFtaBwcdjSiuGEKHgLDQlkkG4fhalIpfGZq8Hh
+   rZUktTwC79zI+ej7GegxYFsP7Frp+S+RNwspMJfc/oXeB/8XnilXEW73n
+   Ta9AWkOlmJgNJwRi/0O7NvnUVZQEtpDHC84O79BOkbe3F9gWpbLTulyjo
+   exttbBIIJ+/HOzWqV2B50UfhGKeo7F8/2xY7SEFp2RhNr/rJVt5MbT6dc
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226947058"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="226947058"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 02:59:00 -0800
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="562997636"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 02:58:55 -0800
+Received: by lahna (sSMTP sendmail emulation); Tue, 25 Jan 2022 12:58:52 +0200
+Date:   Tue, 25 Jan 2022 12:58:52 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Rajat Jain <rajatja@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajatxjain@gmail.com,
+        dtor@google.com, jsbarnes@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as
+ untrusted
+Message-ID: <Ye/X7E2dKb+zem34@lahna>
+References: <20220120000409.2706549-1-rajatja@google.com>
+ <20220121214117.GA1154852@bhelgaas>
+ <Ye5GvQbFKo+CFtRb@lahna>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220125104725.GA19281@duo.ucw.cz>
+In-Reply-To: <Ye5GvQbFKo+CFtRb@lahna>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:47:25AM +0100, Pavel Machek wrote:
-> Hi!
+On Mon, Jan 24, 2022 at 08:27:17AM +0200, Mika Westerberg wrote:
+> > > This patch introduces a new "UntrustedDevice" property that can be used
+> > > by the firmware to mark any device as untrusted.
 > 
-> > From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > 
-> > [ Upstream commit eec91694f927d1026974444eb6a3adccd4f1cbc2 ]
-> > 
-> > The return value of dma_set_coherent_mask() is not always 0.
-> > To catch the exception in case that dma is not support the mask.
-> > 
-> > Fixes: 0a0c3b5a24bd ("Add new uio device for dynamic memory allocation")
-> 
-> 
-> > +++ b/drivers/uio/uio_dmem_genirq.c
-> > @@ -183,7 +183,11 @@ static int uio_dmem_genirq_probe(struct platform_device *pdev)
-> >  		goto bad0;
-> >  	}
-> >  
-> > -	dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
-> > +	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
-> > +	if (ret) {
-> > +		dev_err(&pdev->dev, "DMA enable failed\n");
-> > +		return ret;
-> > +	}
-> 
-> Handing errors is good, but you may not directly return here as it
-> would leak the resources. Something like this?
-> 
-> Signed-off-by: Pavel Machek <pavel@denx.de>
-> 
-> Best regards,
-> 								Pavel
-> 
-> diff --git a/drivers/uio/uio_dmem_genirq.c b/drivers/uio/uio_dmem_genirq.c
-> index bf39a424ea77..7b80d0c02735 100644
-> --- a/drivers/uio/uio_dmem_genirq.c
-> +++ b/drivers/uio/uio_dmem_genirq.c
-> @@ -186,7 +186,7 @@ static int uio_dmem_genirq_probe(struct platform_device *pdev)
->  	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
->  	if (ret) {
->  		dev_err(&pdev->dev, "DMA enable failed\n");
-> -		return ret;
-> +		goto bad0;
->  	}
->  
->  	priv->uioinfo = uioinfo;
-> 
-> 
-> 
-> -- 
-> DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-> HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+> I think this new property should be documented somewhere too (also
+> explain when to use it instead of ExternalFacingPort). If not in the
+> next ACPI spec or some supplemental doc then perhaps in the DT bindings
+> under Documentation/devicetree/bindings.
 
-Yeah, this commit should not be backported, I'll go drop it from
-everywhere.  But the original commit in Linus's tree is fine as the
-error handling is not like this anymore.
+Actually Microsoft has similar already:
 
-thanks,
+https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
 
-greg k-h
+I think we should use that too here.

@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA3949B1AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5C249B1AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347518AbiAYKZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
+        id S1352903AbiAYKZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243610AbiAYKUo (ORCPT
+        with ESMTP id S243556AbiAYKUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:20:44 -0500
+        Tue, 25 Jan 2022 05:20:48 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5B1C06175B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:20:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAF9C06175D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:20:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AE2E61614
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B62BC340E8;
-        Tue, 25 Jan 2022 10:20:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A91D61614
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:20:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5890EC340E9;
+        Tue, 25 Jan 2022 10:20:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643106040;
-        bh=PPeOvJVjKQk1sgWBgXTRE3M3X/ghG6GwBr17kd9EHAs=;
+        s=k20201202; t=1643106044;
+        bh=V+CXNMlBJLDkVnoMPBK0epjEdchEM7zxpeDI595A+Bw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=dx/CfScUZ2xfA9Ast+sVlMjDabJlKwxJVNGShS4Hgc0IGSpT5qNBm6ZqUhnQpAZJi
-         NH2erSXALoBz7bbfLbkg+qEWYIUHQX9RRCES3p8LkA6B4aMDTvm0nz4SVY2dDKI6jq
-         iTCNsb+6BbxmzEoLzFfzv/9Ad9ggJGLzIkpya2QNTT48/9508YL9LrppFc/Sc8iMOT
-         f6OewycNyKOE50sDAcMHATWyLYlC3UT1UuAiFDdY6CLMtLtasVBlSWEK0K/6cbLmnT
-         2VUGbhU9IG32KLJ/mreOtm/s55njGS16GBCwKEUcsj1A9N+aJCGnuwOEtj1mruyQ+x
-         BNS4Z69RrKCUw==
+        b=te+l92wRX7p451mWxm/bQ9/Y7QwQ07TyYhXRvd9JGv6T/QJXaQwZJbzN9g/qFFxUk
+         7yF5WuiSVn5Hct9ABnMSV/YjmNtZcaWqi/fcXTmlLHaa4Jh/w4s4TJcDf/7gDaFTEv
+         +QUBe5zdsQkVHx5UdhqqFlDxEEtuuDUN6va0lsim7mSQ9CB3rDl4LO1NZwtB/XgzzB
+         k5F1g1ZZjJbeSEBbwuZd9MCvhVnVBNFeJIZBDx6EB5LQVesvo8Y7lacUCouRoHmKzb
+         +pvRQnvYXCGk9sWrb5dWfA2UeZk0Uu/WG0GEeBgxg3GNGlnDH190K3hb+BHf7bChgv
+         M1qT64xqFZYPA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     cezary.rojewski@intel.com, tiwai@suse.com, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, srinivas.kandagatla@linaro.org,
-        perex@perex.cz, alsa-devel@alsa-project.org,
-        bgoswami@codeaurora.org
-In-Reply-To: <20220121171031.2826198-1-jiasheng@iscas.ac.cn>
-References: <20220121171031.2826198-1-jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH v3] ASoC: codecs: Check for error pointer after calling devm_regmap_init_mmio
-Message-Id: <164310603890.74844.13333058824598578375.b4-ty@kernel.org>
-Date:   Tue, 25 Jan 2022 10:20:38 +0000
+To:     V sujith kumar Reddy <vsujithkumar.reddy@amd.com>,
+        alsa-devel@alsa-project.org
+Cc:     Takashi Iwai <tiwai@suse.com>, Liam Girdwood <lgirdwood@gmail.com>,
+        Vijendar.Mukunda@amd.com, Jaroslav Kysela <perex@perex.cz>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        ajitkumar.pandey@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sunil-kumar.Dommati@amd.com
+In-Reply-To: <20220122194707.2661026-1-vsujithkumar.reddy@amd.com>
+References: <20220122194707.2661026-1-vsujithkumar.reddy@amd.com>
+Subject: Re: [PATCH] ASoC: amd: sof-mach: Add support for RT5682S and RT1019 card
+Message-Id: <164310604108.74844.4371897613558454989.b4-ty@kernel.org>
+Date:   Tue, 25 Jan 2022 10:20:41 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -50,15 +56,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 22 Jan 2022 01:10:31 +0800, Jiasheng Jiang wrote:
-> Since the potential failure of the devm_regmap_init_mmio(), it will
-> return error pointer and be assigned to the regmap.
-> Then the error pointer will be dereferenced.
-> For example rx->regmap will be used in rx_macro_mclk_enable().
-> Therefore, it should be better to check it.
+On Sun, 23 Jan 2022 01:16:59 +0530, V sujith kumar Reddy wrote:
+> We have new platform with rt5682s as a primary codec and rt1019 as an
+> amp codec. Add machine struct to register sof audio based sound card
+> on such Chrome machine.
 > 
 > 
-> [...]
 
 Applied to
 
@@ -66,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: codecs: Check for error pointer after calling devm_regmap_init_mmio
-      commit: aa505ecccf2ae7546e0e262d574e18a9241f3005
+[1/1] ASoC: amd: sof-mach: Add support for RT5682S and RT1019 card
+      commit: 330dc18356e697eaf9796732b6acbdf948022136
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,160 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DAC349BFA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED8849BF8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbiAYXga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 18:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234898AbiAYXgV (ORCPT
+        id S234819AbiAYXbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 18:31:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42756 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234780AbiAYXa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 18:36:21 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3706C061747
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:36:20 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id u24so20112174eds.11
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:36:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pYNA1CVJ1M6lrfRYYmGpOXg9P7wsf14wwNEYFVpQGRg=;
-        b=xU6QF2/+7XDapkHCfliHO7u2D33hB0Ch0R0zZzdpTzTPvC1Y047yhrhmDkYlG1ppFH
-         gDW0mIb8aCXFh74WuQjozBdZq/rhW8qM4AQxx9Gc6cVqBnmsb9EmIUcnS26wJDDqHOQE
-         4RVbKQUT85I+CGWgw00+JSAS9l7zZbLAvWCSkp0DwQEc28JTxoc6BwlKJtyHRa/RVTa6
-         S+l/jyHJzEXW6dG/nQAPWnAFvDC15uCBPbvWQTLdw3Fa4dbM3ZEkZYQ3dBcqLrLQPlaV
-         ak8bOHgCGnKCoRhPjerDD31SgD47NnYfjU2UmhwWxXlWNCd5yuiuBTidOBnJO35Ij32W
-         gZNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pYNA1CVJ1M6lrfRYYmGpOXg9P7wsf14wwNEYFVpQGRg=;
-        b=tPcmHyPJlr6rWlJ87JJt7RXJwxajo0UMgvnozHUEK/f5kWupta3c2ZT5jHCS3hjFq5
-         H+lFQfeZUUJ0nSuissThNld/T/fsjwKr2ES60PNfPrHLdEtZm70h6xuQRPQobMZfrkcI
-         yLV4H5DJcjppu/XhWpwdeeX4taThKLyck50u+y0qSIJQ3kPz+OeMTk/FH55aLHOA+tXY
-         DjUWEtS++i0Fd9zuF820xo1M18qgSJqsVx6pY5Z34aHX943UIVYqSiDbqrr0/rmfESsI
-         PFP5N8sKg7fQ11dJ1zjPr9hM4EOOkZqlyNjZrl7BA6IW3g93Px9+OR9WpH5QyjVLW/+3
-         3nmw==
-X-Gm-Message-State: AOAM532yGWZ/0XivjJ5S8cFjZZbpVWboRFlITYdSDwtcF3qc0cQRbvW9
-        nUBYNJpXLu/Yc2PhUtzop5E7yslsJkJyZ1qSp9yU
-X-Google-Smtp-Source: ABdhPJzyKxTfCZQvgfVyP8WAgYiBXBKlAsCF/r32JYcD5TCu4aPsnLVRGgfZiEjWYbgBZ/IJQhgPdfZ0kOdvDMZdfEE=
-X-Received: by 2002:aa7:d407:: with SMTP id z7mr22532317edq.331.1643153779366;
- Tue, 25 Jan 2022 15:36:19 -0800 (PST)
+        Tue, 25 Jan 2022 18:30:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 780D8612D6;
+        Tue, 25 Jan 2022 23:30:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47102C340E0;
+        Tue, 25 Jan 2022 23:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643153457;
+        bh=vB572nhmJuqCEgij4Dpji3wv3pIEvKb1pTOhhC//V2c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bHeH3TlIs6solJO243CJerwTfQLCEsu1sOHUOUVN8WYqvXoL6fuKosKa+BFp6hwIj
+         Db/S2MS8lFNYcuGhjxvoZvDlIMZjIf4Wvg6fgQWyWuMBHm0voOktjco69X2L2hf7x6
+         BvQO2qVDYk0NuXbnrGSDt4QDvBkF7BbJ0U2zcRYYmJyuHgxestrUtm4nM2ZPhdGWcn
+         qxWLMVfn2tGI+DJfupaqeeEmV2oZ2PMff/ibc4EUNld3Zp92126ALUhaVLto+K93Bb
+         fO2qIHAtGiaqsPbZebrIgLkRGCFp2osK3GFRXShB/u5FnO8V7P7LxapLP5iBstGQ64
+         hksE/cEPiagaA==
+Date:   Tue, 25 Jan 2022 17:37:44 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] HID: google: Use struct_size() helper in kzalloc()
+Message-ID: <20220125233744.GA81239@embeddedor>
 MIME-Version: 1.0
-References: <018a9bb4-accb-c19a-5b0a-fde22f4bc822.ref@schaufler-ca.com>
- <018a9bb4-accb-c19a-5b0a-fde22f4bc822@schaufler-ca.com> <20211012103243.xumzerhvhklqrovj@wittgenstein>
- <d15f9647-f67e-2d61-d7bd-c364f4288287@schaufler-ca.com> <CAHC9VhT=dZbWzhst0hMLo0n7=UzWC5OYTMY=0x=LZ97HwG0UsA@mail.gmail.com>
- <e046ab1e-0e59-afb2-ae28-fafa17ea8ddd@schaufler-ca.com>
-In-Reply-To: <e046ab1e-0e59-afb2-ae28-fafa17ea8ddd@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 25 Jan 2022 18:36:08 -0500
-Message-ID: <CAHC9VhRA5HN6zaq=oAfT-RR+FC9v018Y_Am5xcridYj3h3JN-g@mail.gmail.com>
-Subject: Re: [PATCH] LSM: general protection fault in legacy_parse_param
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Brauner <christian@brauner.io>,
-        James Morris <jmorris@namei.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzbot <syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com>,
-        David Howells <dhowells@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 6:30 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->
-> On 1/25/2022 2:18 PM, Paul Moore wrote:
-> > On Tue, Oct 12, 2021 at 10:27 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> >> On 10/12/2021 3:32 AM, Christian Brauner wrote:
-> >>> On Mon, Oct 11, 2021 at 03:40:22PM -0700, Casey Schaufler wrote:
-> >>>> The usual LSM hook "bail on fail" scheme doesn't work for cases where
-> >>>> a security module may return an error code indicating that it does not
-> >>>> recognize an input.  In this particular case Smack sees a mount option
-> >>>> that it recognizes, and returns 0. A call to a BPF hook follows, which
-> >>>> returns -ENOPARAM, which confuses the caller because Smack has processed
-> >>>> its data.
-> >>>>
-> >>>> Reported-by: syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com
-> >>>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> >>>> ---
-> >>> Thanks!
-> >>> Note, I think that we still have the SELinux issue we discussed in the
-> >>> other thread:
-> >>>
-> >>>        rc = selinux_add_opt(opt, param->string, &fc->security);
-> >>>        if (!rc) {
-> >>>                param->string = NULL;
-> >>>                rc = 1;
-> >>>        }
-> >>>
-> >>> SELinux returns 1 not the expected 0. Not sure if that got fixed or is
-> >>> queued-up for -next. In any case, this here seems correct independent of
-> >>> that:
-> >> The aforementioned SELinux change depends on this patch. As the SELinux
-> >> code is today it blocks the problem seen with Smack, but introduces a
-> >> different issue. It prevents the BPF hook from being called.
-> >>
-> >> So the question becomes whether the SELinux change should be included
-> >> here, or done separately. Without the security_fs_context_parse_param()
-> >> change the selinux_fs_context_parse_param() change results in messy
-> >> failures for SELinux mounts.
-> > FWIW, this patch looks good to me, so:
-> >
-> > Acked-by: Paul Moore <paul@paul-moore.com>
-> >
-> > ... and with respect to the SELinux hook implementation returning 1 on
-> > success, I don't have a good answer and looking through my inbox I see
-> > David Howells hasn't responded either.  I see nothing in the original
-> > commit explaining why, so I'm going to say let's just change it to
-> > zero and be done with it; the good news is that if we do it now we've
-> > got almost a full cycle in linux-next to see what falls apart.  As far
-> > as the question of one vs two patches, it might be good to put both
-> > changes into a single patch just so that folks who do backports don't
-> > accidentally skip one and create a bad kernel build.  Casey, did you
-> > want to respin this patch or would you prefer me to submit another
-> > version?
->
-> I can create a single patch. I tried the combination on Fedora
-> and it worked just fine. I'll rebase and resend.
+Make use of the struct_size() helper instead of an open-coded version,
+in order to avoid any potential type mistakes or integer overflows that,
+in the worst scenario, could lead to heap overflows.
 
-Great, thank you.
+Also, address the following sparse warnings:
+drivers/hid/hid-google-hammer.c:61:23: warning: using sizeof on a flexible structure
 
-> >>> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-> >>>
-> >>>>   security/security.c | 14 +++++++++++++-
-> >>>>   1 file changed, 13 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/security/security.c b/security/security.c
-> >>>> index 09533cbb7221..3cf0faaf1c5b 100644
-> >>>> --- a/security/security.c
-> >>>> +++ b/security/security.c
-> >>>> @@ -885,7 +885,19 @@ int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc)
-> >>>>
-> >>>>   int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param)
-> >>>>   {
-> >>>> -    return call_int_hook(fs_context_parse_param, -ENOPARAM, fc, param);
-> >>>> +    struct security_hook_list *hp;
-> >>>> +    int trc;
-> >>>> +    int rc = -ENOPARAM;
-> >>>> +
-> >>>> +    hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
-> >>>> +                         list) {
-> >>>> +            trc = hp->hook.fs_context_parse_param(fc, param);
-> >>>> +            if (trc == 0)
-> >>>> +                    rc = 0;
-> >>>> +            else if (trc != -ENOPARAM)
-> >>>> +                    return trc;
-> >>>> +    }
-> >>>> +    return rc;
-> >>>>   }
+Link: https://github.com/KSPP/linux/issues/174
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/hid/hid-google-hammer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
+index 0403beb3104b..ddbe0de177e2 100644
+--- a/drivers/hid/hid-google-hammer.c
++++ b/drivers/hid/hid-google-hammer.c
+@@ -58,7 +58,7 @@ static int cbas_ec_query_base(struct cros_ec_device *ec_dev, bool get_state,
+ 	struct cros_ec_command *msg;
+ 	int ret;
+ 
+-	msg = kzalloc(sizeof(*msg) + max(sizeof(u32), sizeof(*params)),
++	msg = kzalloc(struct_size(msg, data, max(sizeof(u32), sizeof(*params))),
+ 		      GFP_KERNEL);
+ 	if (!msg)
+ 		return -ENOMEM;
 -- 
-paul-moore.com
+2.27.0
+

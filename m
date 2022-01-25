@@ -2,131 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D29F49AE2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B519C49AE36
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379429AbiAYIgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S1354432AbiAYIiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:38:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379114AbiAYIbl (ORCPT
+        with ESMTP id S1450719AbiAYIdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:31:41 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57A2C0680BE
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:54:25 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id r65so55187236ybc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:54:25 -0800 (PST)
+        Tue, 25 Jan 2022 03:33:13 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4EEC0612AF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:57:18 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d1so18303976plh.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:57:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=f1lt8YRK2UQEZww1aCXWt/M8bZ3Hv2L1sSVuMpXe9ZE=;
-        b=QPouWdi/gzbF4+mQxh5q1TeKToySu2NjOitRnPUXax5Cgxg1turxzuarhOurWA+BgV
-         GM4HAKi/SaY+OMAL2eCMMwbtrQuzCLjGuwsdeyfdaLo60DCjPeONA9VOyuWC48fEtmNB
-         +OrQP2LzVzC98B0mD1rjUkSR/vZlDNScYRGwKWiRcDs8UVL7Iglu2GTZySisXxkpGTga
-         rJ9YuTdnPmItK35VgXHcMNopyPebdxSc8yqnv8jdqJw3TL0LpTEGjUe3jE0YjS/eshT6
-         bXRRCCcQrQaHeG7OmC/Q6NNKdxHqboLOtyasA8Sbh5XMLOBqW9+u3NL3y4xDbfJYgSLT
-         GfCA==
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id;
+        bh=BCtqKKKae1nbJrnhJrOTwrukfpxsmoJefws7zuhcAHw=;
+        b=SSF72/QjjYdyWJdBXKYhYAc8iQHn5Y8zWNSlDi9SMHxnF4VLhtwGVXfqxwNBdantFd
+         L0VliNgqgt1dRmPK7YvWx2eZf4W3iYHMDRgfxa5qYShBhSRJEj7ZcFuv/vp2MUXyygYB
+         qwrvhfSB9pD/rxwAydIzj3jIymkNMMhB2vseOArds+jRlk9CahLSkA0MYJlWExOPH1+u
+         px385Af+ZE3Fq4JQGkeWCpIF+1KCFSZoBYnSbugtS5WG7khPHl19/XQohFJ4oz6Xiq5Z
+         j7n7sZW4x4oj/3PXfSH/EGrCWNcgg0rpnNBG9TcVlDprFqSmJFbvoUZRpY/cRSG/ebyd
+         byDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=f1lt8YRK2UQEZww1aCXWt/M8bZ3Hv2L1sSVuMpXe9ZE=;
-        b=DEYIf2b3IGrmBAHANuKdjcDz3nGVE4f7SJTMeJYkLaErcIbXNlhomC7x6o8czhGknA
-         pSg3KejMs7XCWjuuK/mdGeIVSggDLJBf/DZYimm6j8K7YXw2wH6ZhpGO1eJ+C0/cMCuJ
-         4TviQ6znm6zEaO9FcJCRKeE0X/rBEKKAdxk2OF6snyWDiGOYYNMaY+ECM/vdKdnk3pS4
-         VpVO/JWj3MfvSYUdkt4ZSVviDGlttMxSUB1We8mSsTaDgvOlRoakxAR9yWbudcODh/SG
-         xSYZTduMt0VNv+YwK8aME0wYGkQvlm+EkItUGjIkbTB6AptRmVOQzOeXzJdQ7GBPaVrg
-         MnQg==
-X-Gm-Message-State: AOAM531wUUXUGIWHnfp3W+D7hedFHZ20UEo5gWpB7yKlboor9E+NotVc
-        3hKlUyioczRlHx94W08BQ97cY9ibK8MZgS5YWJsq9QJYKxzo0A==
-X-Google-Smtp-Source: ABdhPJzm36AyBsD/RrOvPYuWDEJgoIL4reeflPXvnGUumoJshfqgnpV0ijP7fzf3oaMG2VqWeOAcaHeguJI8MJK+IKc=
-X-Received: by 2002:a25:ada2:: with SMTP id z34mr20878578ybi.684.1643093664863;
- Mon, 24 Jan 2022 22:54:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20220124184024.407936072@linuxfoundation.org> <12c8fd1e-431e-9a59-9e7a-e8d856c088b9@linaro.org>
-In-Reply-To: <12c8fd1e-431e-9a59-9e7a-e8d856c088b9@linaro.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 25 Jan 2022 12:24:13 +0530
-Message-ID: <CA+G9fYvokaTwyBTJvD73sO8+d56uEY6BDhXFS8O5iWhM-fxQFw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/563] 5.10.94-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        Russell King <russell.king@oracle.com>,
-        Alan Maguire <alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=BCtqKKKae1nbJrnhJrOTwrukfpxsmoJefws7zuhcAHw=;
+        b=dgjeyu7+1cJ5tMiK4rIHg7GUIAD/3LTUeR/ZskJkbakDU8DYxtKwdqjRsP36cgKN0B
+         JKotLhs2I33I5qyiFkEWZGAkEk5ZNuhZh6akJm7MnmKmEPHyHMh16vbLorQOKonqKBkl
+         CIQhBEmOcBt5oNE/FkrQ88v981RoWCxokW9hAidXCrh9QvBTkMT48YANgYXyB/M7JUVe
+         i8fDys0gfS8lgSfFjD2FukZ3hHqolTJHE1DFaoGcsWYI2nFzE5r2e+BSN4bW71pmIuxK
+         PTkoJ//IPQ3+Rv77H87VhuwuZiT8xFJuCMNAYzZr0wNdMX7sH4a7fwYLV7EsaqnN2oZE
+         k38A==
+X-Gm-Message-State: AOAM532Li5hLOto9WTvvsuOzxwO/Y9p3bPrx5l6D8O435457zkGZKAm5
+        eUwbu+oLYOu9d6VjdEU/Y8g=
+X-Google-Smtp-Source: ABdhPJx0nX+TrHs0Ymc7uNiOGdLtM+qgjTddinHZrO8cpYA+uKxfTQvhvGCPnU+OsALRyc7mEO+bxQ==
+X-Received: by 2002:a17:902:e5c5:b0:14b:1bbb:9f5 with SMTP id u5-20020a170902e5c500b0014b1bbb09f5mr16983715plf.62.1643093837548;
+        Mon, 24 Jan 2022 22:57:17 -0800 (PST)
+Received: from bj03382pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id o18sm18941565pfu.45.2022.01.24.22.57.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Jan 2022 22:57:16 -0800 (PST)
+From:   Huangzhaoyang <huangzhaoyang@gmail.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        Ingo Molnar <mingo@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCHv4] psi: fix possible trigger missing in the window
+Date:   Tue, 25 Jan 2022 14:56:58 +0800
+Message-Id: <1643093818-19835-1-git-send-email-huangzhaoyang@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 04:30, Daniel D=C3=ADaz <daniel.diaz@linaro.org> wro=
-te:
->
-> Hello!
->
-> On 1/24/22 12:36, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.10.94 release.
-> > There are 563 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >       https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.94-rc1.gz
-> > or in the git tree and branch at:
-> >       git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
->
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-Regressions detected on arm, arm64, i386, x86 on 5.10 and 5.15.
+When a new threshold breaching stall happens after a psi event was
+generated and within the window duration, the new event is not
+generated because the events are rate-limited to one per window. If
+after that no new stall is recorded then the event will not be
+generated even after rate-limiting duration has passed. This is
+happening because with no new stall, window_update will not be called
+even though threshold was previously breached. To fix this, record
+threshold breaching occurrence and generate the event once window
+duration is passed.
 
+Suggested-by: Suren Baghdasaryan <surenb@google.com>
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+v2: modify the logic according to Suren's suggestion
+v3: update commit message
+v4: update variable name and comments
+---
+---
+ include/linux/psi_types.h |  3 +++
+ kernel/sched/psi.c        | 46 ++++++++++++++++++++++++++++++----------------
+ 2 files changed, 33 insertions(+), 16 deletions(-)
 
-> This is from arm64:
->    /builds/linux/arch/arm64/mm/extable.c: In function 'fixup_exception':
->    /builds/linux/arch/arm64/mm/extable.c:17:13: error: implicit declarati=
-on of function 'in_bpf_jit' [-Werror=3Dimplicit-function-declaration]
->       17 |         if (in_bpf_jit(regs))
->          |             ^~~~~~~~~~
->    cc1: some warnings being treated as errors
->    make[3]: *** [/builds/linux/scripts/Makefile.build:280: arch/arm64/mm/=
-extable.o] Error 1
->
-> And from Perf on arm, arm64, i386, x86:
->    libbpf.c: In function 'bpf_object__elf_collect':
->    libbpf.c:2873:31: error: invalid type argument of '->' (have 'GElf_Shd=
-r' {aka 'Elf64_Shdr'})
->     2873 |                         if (sh->sh_type !=3D SHT_PROGBITS)
->          |                               ^~
->    libbpf.c:2877:31: error: invalid type argument of '->' (have 'GElf_Shd=
-r' {aka 'Elf64_Shdr'})
->     2877 |                         if (sh->sh_type !=3D SHT_PROGBITS)
->          |                               ^~
->    make[4]: *** [/builds/linux/tools/build/Makefile.build:97: /home/tuxbu=
-ild/.cache/tuxmake/builds/current/staticobjs/libbpf.o] Error 1
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index 0a23300..e0ec129 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -132,6 +132,9 @@ struct psi_trigger {
+ 
+ 	/* Refcounting to prevent premature destruction */
+ 	struct kref refcount;
++
++	/* Deferred event(s) from previous ratelimit window */
++	bool pending_event;
+ };
+ 
+ struct psi_group {
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index 1652f2b..dd80bd2 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -515,7 +515,7 @@ static void init_triggers(struct psi_group *group, u64 now)
+ static u64 update_triggers(struct psi_group *group, u64 now)
+ {
+ 	struct psi_trigger *t;
+-	bool new_stall = false;
++	bool update_total = false;
+ 	u64 *total = group->total[PSI_POLL];
+ 
+ 	/*
+@@ -524,24 +524,35 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+ 	 */
+ 	list_for_each_entry(t, &group->triggers, node) {
+ 		u64 growth;
++		bool new_stall;
+ 
+-		/* Check for stall activity */
+-		if (group->polling_total[t->state] == total[t->state])
+-			continue;
++		new_stall = group->polling_total[t->state] != total[t->state];
+ 
++		/* Check for stall activity or a previous threshold breach */
++		if (!new_stall && !t->pending_event)
++			continue;
+ 		/*
+-		 * Multiple triggers might be looking at the same state,
+-		 * remember to update group->polling_total[] once we've
+-		 * been through all of them. Also remember to extend the
+-		 * polling time if we see new stall activity.
++		 * Check for new stall activity, as well as deferred
++		 * events that occurred in the last window after the
++		 * trigger had already fired (we want to ratelimit
++		 * events without dropping any).
+ 		 */
+-		new_stall = true;
+-
+-		/* Calculate growth since last update */
+-		growth = window_update(&t->win, now, total[t->state]);
+-		if (growth < t->threshold)
+-			continue;
+-
++		if (new_stall) {
++			/*
++			 * Multiple triggers might be looking at the same state,
++			 * remember to update group->polling_total[] once we've
++			 * been through all of them. Also remember to extend the
++			 * polling time if we see new stall activity.
++			 */
++			update_total = true;
++
++			/* Calculate growth since last update */
++			growth = window_update(&t->win, now, total[t->state]);
++			if (growth < t->threshold)
++				continue;
++
++			t->pending_event = true;
++		}
+ 		/* Limit event signaling to once per window */
+ 		if (now < t->last_event_time + t->win.size)
+ 			continue;
+@@ -550,9 +561,11 @@ static u64 update_triggers(struct psi_group *group, u64 now)
+ 		if (cmpxchg(&t->event, 0, 1) == 0)
+ 			wake_up_interruptible(&t->event_wait);
+ 		t->last_event_time = now;
++		/* Reset threshold breach flag once event got generated */
++		t->pending_event = false;
+ 	}
+ 
+-	if (new_stall)
++	if (update_total)
+ 		memcpy(group->polling_total, total,
+ 				sizeof(group->polling_total));
+ 
+@@ -1152,6 +1165,7 @@ struct psi_trigger *psi_trigger_create(struct psi_group *group,
+ 	t->last_event_time = 0;
+ 	init_waitqueue_head(&t->event_wait);
+ 	kref_init(&t->refcount);
++	t->pending_event = false;
+ 
+ 	mutex_lock(&group->trigger_lock);
+ 
+-- 
+1.9.1
 
-Due to this patch,
-arm64/bpf: Remove 128MB limit for BPF JIT programs
-commit b89ddf4cca43f1269093942cf5c4e457fd45c335 upstream.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
---
-Linaro LKFT
-https://lkft.linaro.org

@@ -2,81 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0099649B82A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A86B49B819
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378495AbiAYQEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:04:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344537AbiAYQD0 (ORCPT
+        id S1379370AbiAYP7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:59:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54350 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1379459AbiAYP5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:03:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB21AC06173D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:03:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96281B818D8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:03:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75246C340E0;
-        Tue, 25 Jan 2022 16:03:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643126598;
-        bh=KHKViS+ZOMcXA32XNvw1CZnIuutNB5Xs6JKM3HBXQfI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hYM1D5+uPzvDjlfDRdH4f3pp48z93xP+lQQiLcp5LxIr24/ysoaQzRTJ6Buw8OdjZ
-         Dof/Z0dUBMVgcCOQebSZE1MmT1z0Z6Ta9EyDfH32tRo4/m8AC1KnpjwQkzQr5toEro
-         UnLN2SQ/uKQTEOgD2z3IEwUXyfDZyQCUHAjpw8Ax6dvkQTFDI5UF0E7HOp10RrqsbY
-         5WqYEURdPCuJT34B3A+fKODtI2Ng1vr6gfKSdkUctMOuvKtnQxHdl1Gps6lkUNeJMz
-         WWJnPCBFe3jzG5vRMiPKKeYjitGF9pE9zmekMDbdNo83H6LyNbonlwnTK43eeANvoK
-         bBccW2HwkjjvA==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Ghiti <alex@ghiti.fr>
-Subject: [PATCH] riscv: mm: remove the BUG_ON check of mapping the last 4K bytes of memory
-Date:   Tue, 25 Jan 2022 23:55:42 +0800
-Message-Id: <20220125155542.3753-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Jan 2022 10:57:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643126231;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EOuF9uHjmu6EB+RqEY9DRd/3karDS0G1/LHvYVm6MBE=;
+        b=Xo7kztOvDJvPuWt9RvEClrpENYSVeAiPrtD/LHQG3T+EZOz3AYx1sYkqe1ucDTyfj+q766
+        fpkWphMGpKcvuKBD4lD0RQM1gs+jjOFgMGpDb0pDsFKG3C94OPBMyL904K0g9zZdAh7pe+
+        pyuECelXoEWMfz+dynrp5udNF+PzQ0c=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-542-jr7nDmt-N-G_cRfU0vwTNA-1; Tue, 25 Jan 2022 10:57:08 -0500
+X-MC-Unique: jr7nDmt-N-G_cRfU0vwTNA-1
+Received: by mail-ej1-f72.google.com with SMTP id v2-20020a170906292200b006a94a27f903so3599513ejd.8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 07:57:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EOuF9uHjmu6EB+RqEY9DRd/3karDS0G1/LHvYVm6MBE=;
+        b=XnY2LxtoJLWF8qNnV3MPA9w1mB2K30u9eeLwFS4j1OzqzfSDDMVMkHqWj7xtpIGYcd
+         MogeXRoPlHIDiElFNKxDKmzBXhNUczpIQPxtBlhMPW8Te8EfZc+S+T+KrLGErIQPA0nc
+         cMhqXEzQKyPtaEYdKQMGbJJBGbx64Kc7Obd2puUsurEdmaWB+iZ777jkXJ1X+27dD6C6
+         y5mWva+yIaPJiEsmkLZa6Bpay46h8AoGZURzzBXJJDpAHx44sD+v9lifBf9ubd4Wnko2
+         ZG5xQYAZvvNv3aasW4shekBdbeoA7nYHPv1eE4HBM6u6IyfGyl+pkn8ecvvgA6YJzPGU
+         Uk9A==
+X-Gm-Message-State: AOAM532KPPIzMYqRPzJMMpFIuQ8qSvehpi2ltyrekPYKV4uZL8NtRrA7
+        RxsVi5ENrksi4Ws9FpN/g17XqQCO+HshI48DmijRzBU6dHNfzrjloEK6gY6yH3EoOkHXZd8zMbI
+        iCwsdEUZ+dZXMreZLNd0ZoEWt
+X-Received: by 2002:a17:906:560c:: with SMTP id f12mr17417349ejq.197.1643126227118;
+        Tue, 25 Jan 2022 07:57:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxNe7yqYzq/tN13zpUzE8HyivuSwsjoWYJAYE+e8EPE8nGSTY0zvG86PwdV/oTDtJSYJxpJng==
+X-Received: by 2002:a17:906:560c:: with SMTP id f12mr17417340ejq.197.1643126226886;
+        Tue, 25 Jan 2022 07:57:06 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id ec7sm8453751edb.62.2022.01.25.07.57.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 07:57:06 -0800 (PST)
+Message-ID: <21da89ed-fe72-f824-902c-a7c4999a908e@redhat.com>
+Date:   Tue, 25 Jan 2022 16:57:05 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/5] KVM: SVM: Drop stale comment from
+ svm_hv_vmcb_dirty_nested_enlightenments()
+Content-Language: en-US
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org
+References: <20211220152139.418372-1-vkuznets@redhat.com>
+ <20211220152139.418372-2-vkuznets@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211220152139.418372-2-vkuznets@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove the BUG_ON check of mapping the last 4K bytes of the addressable
-memory since "this is true for every kernel actually" as pointed out
-by Alexandre.
+On 12/20/21 16:21, Vitaly Kuznetsov wrote:
+> Commit 3fa5e8fd0a0e4 ("KVM: SVM: delay svm_vcpu_init_msrpm after
+> svm->vmcb is initialized") re-arranged svm_vcpu_init_msrpm() call in
+> svm_create_vcpu() making the comment about vmcb being NULL
+> obsolete. Drop it.
+> 
+> While on it, drop superfluous vmcb_is_clean() check: vmcb_mark_dirty()
+> is a bit flip, an extra check is unlikely to bring any performance gain.
+> Drop now-unneeded vmcb_is_clean() helper as well.
+> 
+> Fixes: 3fa5e8fd0a0e4 ("KVM: SVM: delay svm_vcpu_init_msrpm after svm->vmcb is initialized")
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Alexandre Ghiti <alex@ghiti.fr>
----
- arch/riscv/mm/init.c | 8 --------
- 1 file changed, 8 deletions(-)
+Queued, but with subject changed to "KVM: SVM: clean up beginning of 
+svm_hv_vmcb_dirty_nested_enlightenments()".
 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index cf4d018b7d66..8347d0fda8cd 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -811,14 +811,6 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	BUG_ON((PAGE_OFFSET % PGDIR_SIZE) != 0);
- 	BUG_ON((kernel_map.phys_addr % PMD_SIZE) != 0);
- 
--#ifdef CONFIG_64BIT
--	/*
--	 * The last 4K bytes of the addressable memory can not be mapped because
--	 * of IS_ERR_VALUE macro.
--	 */
--	BUG_ON((kernel_map.virt_addr + kernel_map.size) > ADDRESS_SPACE_END - SZ_4K);
--#endif
--
- 	pt_ops_set_early();
- 
- 	/* Setup early PGD for fixmap */
--- 
-2.34.1
+Paolo
+
+>   arch/x86/kvm/svm/svm.h          | 5 -----
+>   arch/x86/kvm/svm/svm_onhyperv.h | 9 +--------
+>   2 files changed, 1 insertion(+), 13 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index daa8ca84afcc..5d197aae3a19 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -305,11 +305,6 @@ static inline void vmcb_mark_all_clean(struct vmcb *vmcb)
+>   			       & ~VMCB_ALWAYS_DIRTY_MASK;
+>   }
+>   
+> -static inline bool vmcb_is_clean(struct vmcb *vmcb, int bit)
+> -{
+> -	return (vmcb->control.clean & (1 << bit));
+> -}
+> -
+>   static inline void vmcb_mark_dirty(struct vmcb *vmcb, int bit)
+>   {
+>   	vmcb->control.clean &= ~(1 << bit);
+> diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
+> index c53b8bf8d013..cdbcfc63d171 100644
+> --- a/arch/x86/kvm/svm/svm_onhyperv.h
+> +++ b/arch/x86/kvm/svm/svm_onhyperv.h
+> @@ -83,14 +83,7 @@ static inline void svm_hv_vmcb_dirty_nested_enlightenments(
+>   	struct hv_enlightenments *hve =
+>   		(struct hv_enlightenments *)vmcb->control.reserved_sw;
+>   
+> -	/*
+> -	 * vmcb can be NULL if called during early vcpu init.
+> -	 * And its okay not to mark vmcb dirty during vcpu init
+> -	 * as we mark it dirty unconditionally towards end of vcpu
+> -	 * init phase.
+> -	 */
+> -	if (vmcb_is_clean(vmcb, VMCB_HV_NESTED_ENLIGHTENMENTS) &&
+> -	    hve->hv_enlightenments_control.msr_bitmap)
+> +	if (hve->hv_enlightenments_control.msr_bitmap)
+>   		vmcb_mark_dirty(vmcb, VMCB_HV_NESTED_ENLIGHTENMENTS);
+>   }
+>   
 

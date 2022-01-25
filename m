@@ -2,89 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F1649BFAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3F049BFB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbiAYXoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 18:44:02 -0500
-Received: from mga05.intel.com ([192.55.52.43]:17329 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234941AbiAYXoB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 18:44:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643154241; x=1674690241;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fSz9k08FH3ICVnzjJ3/Kj5pWt7+PnpZf9JKIfaROch8=;
-  b=M1LE4gRa4dQ9Rc7JAgMVSFfbItQVPEJNwGeLl8SY9nIMgn7XiYYOWzO/
-   j80UpqkE4UjdrR4d+9Vlfad9vglHJwJF6sz6dVk7lwFw0JY7VqjEAEz68
-   IpEd0qwqcYDVMZLDIsS/MT8od5YPAEo4SHgVx2TzvFJFrtNlLkkruRvkh
-   LuWr5T1fuDjjOHHn9BooRFB4jz4zW1P8ajVZb7rl1DU4xve9GSNt9q9Zk
-   Tws+RoBjJt1E6Ib05pBcU55Zqd5C4eOuWyCula0RrVu2sRa4Z1/ttYsPU
-   cN9/0gEK4rwjD89FL7asP6Q2xkSEpu9Uvxlrwz3nmSwPVRwYSPe3X61qB
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="332794368"
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="332794368"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 15:43:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="617790660"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 25 Jan 2022 15:43:26 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCVTC-000KZC-0C; Tue, 25 Jan 2022 23:43:26 +0000
-Date:   Wed, 26 Jan 2022 07:42:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     glider <glider@google.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.14-stable
- 5156/9999] aarch64-linux-gcc: error: unrecognized command line option
- '-ftrivial-auto-var-init=pattern'
-Message-ID: <202201260753.XHIT2rMz-lkp@intel.com>
+        id S234959AbiAYXqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 18:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230472AbiAYXqK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 18:46:10 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782FDC06161C;
+        Tue, 25 Jan 2022 15:46:09 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id z20so8307621ljo.6;
+        Tue, 25 Jan 2022 15:46:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zaINez3rSSjlWvImf4qb8L/2ha5D25vy6vOExgL5WaQ=;
+        b=iV2aH8lTgzOeF0OfA9lwfhljizJow9SpdPc45/DZRASudSweStW612jn+PZ/SLp1iM
+         PkFIPw+KeTj3jctJArVvg40BhNj9efuvDxUAj99GkzbheimDRi3Db7xMMbeVQl3JE0d/
+         +YYv2PdLlgBLI2N4zigOsoa3y6nR+qFWEhOQVB7hZTFr0HFWlmdpWW8KTvbbb+9zkC9j
+         BIVnY5qViAXQvKir3vwPjuIqBYI0X2Zt8WqAakV09DDTG+q1g/aq1CHiJg9WbIdm9kVm
+         J+ReF+9GDJuIs4W5VxGBPnlMNod9ddq+uDmP1cGgn3K9lU4DdvGGfveo5IcDYqsVBv0L
+         sRhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zaINez3rSSjlWvImf4qb8L/2ha5D25vy6vOExgL5WaQ=;
+        b=AsgWOrru6ZYd26D4Ym+9uxsi5fe0d7U/fqqKGCJNd+tJwxWRQg2eFPQrWoMnFofJDT
+         nDsTu/OLGqhb9oVZJEd4Xn7P4Q7S0TYxmyZm1FuQ3RgsqsrFbAiP6ukhDG1+dPRw9Pvk
+         mbazXz7Ap+pQpCMrgkZS1eiZPh/Gj9+pn+ovECCl4ZSpZU2hDAap7XOFrPlGrXfw72A5
+         ca2HtyggrSP30qZ6HtQ9DZGJWtWcpqKJ4efp7qNF2FLm/TH3p+jVtoenE+VI1VqKvREL
+         q8JstKHKuCNTc/siGHmhcSuFHOL4owjOf874PG/PBGDNpFOgGDQp70WJkZdEHi2+XOnP
+         8rWw==
+X-Gm-Message-State: AOAM532hSV0ho1hKMgtkvbUAIyENKSlJSmhpLfG49N5fkQF5tvuS75m8
+        /0D5kEojldORt9obbYrWpFU=
+X-Google-Smtp-Source: ABdhPJzguO9tzrOFKU/gflOLSpo2MsfX3F0pmTBxx/6XNlHW1oZOrdA/q/xNp6vlajb3Tox4CbN8rg==
+X-Received: by 2002:a2e:96cf:: with SMTP id d15mr2043717ljj.342.1643154367641;
+        Tue, 25 Jan 2022 15:46:07 -0800 (PST)
+Received: from localhost.localdomain (h-155-4-221-129.NA.cust.bahnhof.se. [155.4.221.129])
+        by smtp.gmail.com with ESMTPSA id k3sm900383lfo.127.2022.01.25.15.46.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 15:46:07 -0800 (PST)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] media: go7007: Constify static struct snd_device_ops
+Date:   Wed, 26 Jan 2022 00:46:02 +0100
+Message-Id: <20220125234602.10481-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.14-stable
-head:   4ab5bac1598e3ed91a6267f6cada336467312112
-commit: a7eda6eddca559c1c3a897a35692f9d49d46c9dd [5156/9999] BACKPORT: security: allow using Clang's zero initialization for stack variables
-config: arm64-randconfig-r025-20220124 (https://download.01.org/0day-ci/archive/20220126/202201260753.XHIT2rMz-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 7.5.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/a7eda6eddca559c1c3a897a35692f9d49d46c9dd
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.14-stable
-        git checkout a7eda6eddca559c1c3a897a35692f9d49d46c9dd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-7.5.0 make.cross O=build_dir ARCH=arm64 prepare
+The only usage of go7007_snd_device_ops is to pass its address to
+snd_device_new() which takes a pointer to const struct snd_device_ops.
+Make it const to allow the compiler to put it in read-only memory.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   WARNING: Disabling clang-specific options with gcc
->> aarch64-linux-gcc: error: unrecognized command line option '-ftrivial-auto-var-init=pattern'
-   make[2]: *** [./Kbuild:22: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1214: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:146: sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/media/usb/go7007/snd-go7007.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/go7007/snd-go7007.c b/drivers/media/usb/go7007/snd-go7007.c
+index 2ce85ab38db5..9a6bd87fce03 100644
+--- a/drivers/media/usb/go7007/snd-go7007.c
++++ b/drivers/media/usb/go7007/snd-go7007.c
+@@ -191,7 +191,7 @@ static int go7007_snd_free(struct snd_device *device)
+ 	return 0;
+ }
+ 
+-static struct snd_device_ops go7007_snd_device_ops = {
++static const struct snd_device_ops go7007_snd_device_ops = {
+ 	.dev_free	= go7007_snd_free,
+ };
+ 
+-- 
+2.35.0
+

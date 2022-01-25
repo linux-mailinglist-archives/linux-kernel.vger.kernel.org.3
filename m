@@ -2,458 +2,482 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E93C49AB3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29D649AB4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S254806AbiAYEqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 23:46:46 -0500
-Received: from mga07.intel.com ([134.134.136.100]:14177 "EHLO mga07.intel.com"
+        id S1390131AbiAYErn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 23:47:43 -0500
+Received: from mga07.intel.com ([134.134.136.100]:14053 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1326941AbiAYDnh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:43:37 -0500
+        id S248010AbiAYDzp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 22:55:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643082216; x=1674618216;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ftj6jgx8RwpkP0vXmNcC3D4q/G2CggJO85GIv+Ix1nQ=;
-  b=cGhlpeBYFDNti2Osz+phK5tcfR7mfSj06CkZuxBrZYkqYQ7e9/X4NPVA
-   3wZ+bJeHYHui8jmMrg952BhlJ3vOpJYDf8yK4eXymfAz1KuhcU4o4l1k5
-   xZXkI+0LphL/9MXsoMoGg3zwzzrSsRIx1ld+knnGco2T1R6JwsyNks7jW
-   E9fs4FWPy39ROXB6t0Z5UbFJ9FsLhglSxohc+/lQKNn+4ybCAxs3Vc+0g
-   eSbHxcV8BCbsmYipjd7C+Cwt3Xg71j6WGoNaTjQ+P3t/8olDYXeHG0bG1
-   7WnJH/oyDxR/93BX3gICgi8VKiUz1eqosERyM++fzHUqpQrA0AxTdccO6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="309529285"
+  t=1643082945; x=1674618945;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=63ESE7Tc2CYT1m5Oit+Z+quuqyGdO13wm2AqQxbFE78=;
+  b=eZw3OglALguvmks8gYQ/WABk6lI+B2qOrw5jSF1p5lUC4ODxhXJOPWyj
+   GB8WiA6WYSqa1aZFoE9jFG4cp7gq1BCOz/Ke2Q/WBAyNzP+JF2gNnjwEQ
+   y6HNTWs38z8Y5DOWrykXKeWmYNXxwB8ny9wfOmkdqFffMPW0FDwHCduoN
+   GAqqtfHJ5Zi0xDlIiD93UHuD+lMgvWxgRUc3sU1YFJqjxakm/dl9VATQC
+   2sUQnBPJLOEiarjk+fT9u2/LUo34cgk2Hi2mLPz8XP1XnO4vcA/mcR4Sk
+   g5zy1l4a1yFCXdkNdzgyukxAf0J2k3coS6hv2/XJzzTV5IwpslXbFjAD6
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="309530415"
 X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="309529285"
+   d="scan'208";a="309530415"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 19:38:23 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 19:48:24 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="627753001"
+   d="scan'208";a="627754818"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 19:38:21 -0800
+  by orsmga004.jf.intel.com with ESMTP; 24 Jan 2022 19:48:21 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nCCey-000JIb-P4; Tue, 25 Jan 2022 03:38:20 +0000
-Date:   Tue, 25 Jan 2022 11:37:36 +0800
+        id 1nCCoe-000JIq-Sr; Tue, 25 Jan 2022 03:48:20 +0000
+Date:   Tue, 25 Jan 2022 11:48:17 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Jason Ekstrand <jason@jlekstrand.net>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Subject: [mlankhorst:xe 8/165] drivers/gpu/drm/xe/xe_pci.c:1230:39: error:
- 'adl_p_info' defined but not used
-Message-ID: <202201251102.C8Uyp5F7-lkp@intel.com>
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Tian Kevin <kevin.tian@intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/cpuid: Exclude unpermitted xfeatures sizes at
+ KVM_GET_SUPPORTED_CPUID
+Message-ID: <202201251137.85eenHWr-lkp@intel.com>
+References: <20220124080251.60558-1-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220124080251.60558-1-likexu@tencent.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://people.freedesktop.org/~mlankhorst/linux xe
-head:   4bc3039b4403c76a13d58f7ac1f7c07dca6f88d8
-commit: 6fc3424d304d6766e3abe371a586b83fc10d625f [8/165] drm/xe: Initial commit
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220125/202201251102.C8Uyp5F7-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+Hi Like,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on v5.17-rc1 next-20220124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Like-Xu/KVM-x86-cpuid-Exclude-unpermitted-xfeatures-sizes-at-KVM_GET_SUPPORTED_CPUID/20220124-160452
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220125/202201251137.85eenHWr-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2e58a18910867ba6795066e044293e6daf89edf5)
 reproduce (this is a W=1 build):
-        git remote add mlankhorst git://people.freedesktop.org/~mlankhorst/linux
-        git fetch --no-tags mlankhorst xe
-        git checkout 6fc3424d304d6766e3abe371a586b83fc10d625f
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/b29c71ea177d9a2225208d501987598610261749
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Like-Xu/KVM-x86-cpuid-Exclude-unpermitted-xfeatures-sizes-at-KVM_GET_SUPPORTED_CPUID/20220124-160452
+        git checkout b29c71ea177d9a2225208d501987598610261749
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   drivers/gpu/drm/xe/xe_pci.c:1373:5: error: no previous prototype for 'i915_register_pci_driver' [-Werror=missing-prototypes]
-    1373 | int i915_register_pci_driver(void)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:1378:6: error: no previous prototype for 'i915_unregister_pci_driver' [-Werror=missing-prototypes]
-    1378 | void i915_unregister_pci_driver(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1230:39: error: 'adl_p_info' defined but not used [-Werror=unused-const-variable=]
-    1230 | static const struct intel_device_info adl_p_info = {
-         |                                       ^~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1175:39: error: 'adl_s_info' defined but not used [-Werror=unused-const-variable=]
-    1175 | static const struct intel_device_info adl_s_info = {
-         |                                       ^~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1142:39: error: 'rkl_info' defined but not used [-Werror=unused-const-variable=]
-    1142 | static const struct intel_device_info rkl_info = {
-         |                                       ^~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:1134:39: error: 'tgl_info' defined but not used [-Werror=unused-const-variable=]
-    1134 | static const struct intel_device_info tgl_info = {
-         |                                       ^~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1099:39: error: 'jsl_info' defined but not used [-Werror=unused-const-variable=]
-    1099 | static const struct intel_device_info jsl_info = {
-         |                                       ^~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1092:39: error: 'ehl_info' defined but not used [-Werror=unused-const-variable=]
-    1092 | static const struct intel_device_info ehl_info = {
-         |                                       ^~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1085:39: error: 'icl_info' defined but not used [-Werror=unused-const-variable=]
-    1085 | static const struct intel_device_info icl_info = {
-         |                                       ^~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1045:39: error: 'cnl_info' defined but not used [-Werror=unused-const-variable=]
-    1045 | static const struct intel_device_info cnl_info = {
-         |                                       ^~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1032:39: error: 'cml_gt2_info' defined but not used [-Werror=unused-const-variable=]
-    1032 | static const struct intel_device_info cml_gt2_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1027:39: error: 'cml_gt1_info' defined but not used [-Werror=unused-const-variable=]
-    1027 | static const struct intel_device_info cml_gt1_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1016:39: error: 'cfl_gt3_info' defined but not used [-Werror=unused-const-variable=]
-    1016 | static const struct intel_device_info cfl_gt3_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1011:39: error: 'cfl_gt2_info' defined but not used [-Werror=unused-const-variable=]
-    1011 | static const struct intel_device_info cfl_gt2_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:1006:39: error: 'cfl_gt1_info' defined but not used [-Werror=unused-const-variable=]
-    1006 | static const struct intel_device_info cfl_gt1_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:995:39: error: 'kbl_gt3_info' defined but not used [-Werror=unused-const-variable=]
-     995 | static const struct intel_device_info kbl_gt3_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:990:39: error: 'kbl_gt2_info' defined but not used [-Werror=unused-const-variable=]
-     990 | static const struct intel_device_info kbl_gt2_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:985:39: error: 'kbl_gt1_info' defined but not used [-Werror=unused-const-variable=]
-     985 | static const struct intel_device_info kbl_gt1_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:973:39: error: 'glk_info' defined but not used [-Werror=unused-const-variable=]
-     973 | static const struct intel_device_info glk_info = {
-         |                                       ^~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:967:39: error: 'bxt_info' defined but not used [-Werror=unused-const-variable=]
-     967 | static const struct intel_device_info bxt_info = {
-         |                                       ^~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:925:39: error: 'skl_gt4_info' defined but not used [-Werror=unused-const-variable=]
-     925 | static const struct intel_device_info skl_gt4_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:920:39: error: 'skl_gt3_info' defined but not used [-Werror=unused-const-variable=]
-     920 | static const struct intel_device_info skl_gt3_info = {
-         |                                       ^~~~~~~~~~~~
->> drivers/gpu/drm/xe/xe_pci.c:909:39: error: 'skl_gt2_info' defined but not used [-Werror=unused-const-variable=]
-     909 | static const struct intel_device_info skl_gt2_info = {
-         |                                       ^~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:904:39: error: 'skl_gt1_info' defined but not used [-Werror=unused-const-variable=]
-     904 | static const struct intel_device_info skl_gt1_info = {
-         |                                       ^~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:857:39: error: 'chv_info' defined but not used [-Werror=unused-const-variable=]
-     857 | static const struct intel_device_info chv_info = {
-         |                                       ^~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:850:39: error: 'bdw_gt3_info' defined but not used [-Werror=unused-const-variable=]
-     850 | static const struct intel_device_info bdw_gt3_info = {
-         |                                       ^~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:842:39: error: 'bdw_rsvd_info' defined but not used [-Werror=unused-const-variable=]
-     842 | static const struct intel_device_info bdw_rsvd_info = {
-         |                                       ^~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:837:39: error: 'bdw_gt2_info' defined but not used [-Werror=unused-const-variable=]
-     837 | static const struct intel_device_info bdw_gt2_info = {
-         |                                       ^~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:832:39: error: 'bdw_gt1_info' defined but not used [-Werror=unused-const-variable=]
-     832 | static const struct intel_device_info bdw_gt1_info = {
-         |                                       ^~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:814:39: error: 'hsw_gt3_info' defined but not used [-Werror=unused-const-variable=]
-     814 | static const struct intel_device_info hsw_gt3_info = {
-         |                                       ^~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:809:39: error: 'hsw_gt2_info' defined but not used [-Werror=unused-const-variable=]
-     809 | static const struct intel_device_info hsw_gt2_info = {
-         |                                       ^~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:804:39: error: 'hsw_gt1_info' defined but not used [-Werror=unused-const-variable=]
-     804 | static const struct intel_device_info hsw_gt1_info = {
-         |                                       ^~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:759:39: error: 'vlv_info' defined but not used [-Werror=unused-const-variable=]
-     759 | static const struct intel_device_info vlv_info = {
-         |                                       ^~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:750:39: error: 'ivb_q_info' defined but not used [-Werror=unused-const-variable=]
-     750 | static const struct intel_device_info ivb_q_info = {
-         |                                       ^~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:745:39: error: 'ivb_m_gt2_info' defined but not used [-Werror=unused-const-variable=]
-     745 | static const struct intel_device_info ivb_m_gt2_info = {
-         |                                       ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:740:39: error: 'ivb_m_gt1_info' defined but not used [-Werror=unused-const-variable=]
-     740 | static const struct intel_device_info ivb_m_gt1_info = {
-         |                                       ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:729:39: error: 'ivb_d_gt2_info' defined but not used [-Werror=unused-const-variable=]
-     729 | static const struct intel_device_info ivb_d_gt2_info = {
-         |                                       ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:724:39: error: 'ivb_d_gt1_info' defined but not used [-Werror=unused-const-variable=]
-     724 | static const struct intel_device_info ivb_d_gt1_info = {
-         |                                       ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:692:39: error: 'snb_m_gt2_info' defined but not used [-Werror=unused-const-variable=]
-     692 | static const struct intel_device_info snb_m_gt2_info = {
-         |                                       ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:687:39: error: 'snb_m_gt1_info' defined but not used [-Werror=unused-const-variable=]
-     687 | static const struct intel_device_info snb_m_gt1_info = {
-         |                                       ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:676:39: error: 'snb_d_gt2_info' defined but not used [-Werror=unused-const-variable=]
-     676 | static const struct intel_device_info snb_d_gt2_info = {
-         |                                       ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:671:39: error: 'snb_d_gt1_info' defined but not used [-Werror=unused-const-variable=]
-     671 | static const struct intel_device_info snb_d_gt1_info = {
-         |                                       ^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:638:39: error: 'ilk_m_info' defined but not used [-Werror=unused-const-variable=]
-     638 | static const struct intel_device_info ilk_m_info = {
-         |                                       ^~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:633:39: error: 'ilk_d_info' defined but not used [-Werror=unused-const-variable=]
-     633 | static const struct intel_device_info ilk_d_info = {
-         |                                       ^~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:606:39: error: 'gm45_info' defined but not used [-Werror=unused-const-variable=]
-     606 | static const struct intel_device_info gm45_info = {
-         |                                       ^~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:599:39: error: 'g45_info' defined but not used [-Werror=unused-const-variable=]
-     599 | static const struct intel_device_info g45_info = {
-         |                                       ^~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:588:39: error: 'i965gm_info' defined but not used [-Werror=unused-const-variable=]
-     588 | static const struct intel_device_info i965gm_info = {
-         |                                       ^~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:580:39: error: 'i965g_info' defined but not used [-Werror=unused-const-variable=]
-     580 | static const struct intel_device_info i965g_info = {
-         |                                       ^~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:554:39: error: 'pnv_m_info' defined but not used [-Werror=unused-const-variable=]
-     554 | static const struct intel_device_info pnv_m_info = {
-         |                                       ^~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:546:39: error: 'pnv_g_info' defined but not used [-Werror=unused-const-variable=]
-     546 | static const struct intel_device_info pnv_g_info = {
-         |                                       ^~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:538:39: error: 'g33_info' defined but not used [-Werror=unused-const-variable=]
-     538 | static const struct intel_device_info g33_info = {
-         |                                       ^~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:524:39: error: 'i945gm_info' defined but not used [-Werror=unused-const-variable=]
-     524 | static const struct intel_device_info i945gm_info = {
-         |                                       ^~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:513:39: error: 'i945g_info' defined but not used [-Werror=unused-const-variable=]
-     513 | static const struct intel_device_info i945g_info = {
-         |                                       ^~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:500:39: error: 'i915gm_info' defined but not used [-Werror=unused-const-variable=]
-     500 | static const struct intel_device_info i915gm_info = {
-         |                                       ^~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:489:39: error: 'i915g_info' defined but not used [-Werror=unused-const-variable=]
-     489 | static const struct intel_device_info i915g_info = {
-         |                                       ^~~~~~~~~~
-   drivers/gpu/drm/xe/xe_pci.c:467:39: error: 'i865g_info' defined but not used [-Werror=unused-const-variable=]
-     467 | static const struct intel_device_info i865g_info = {
+>> arch/x86/kvm/cpuid.c:890:24: error: variable 'supported_xcr0' is uninitialized when used within its own initialization [-Werror,-Wuninitialized]
+                   u64 supported_xcr0 = supported_xcr0 & xstate_get_guest_group_perm();
+                       ~~~~~~~~~~~~~~   ^~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/adl_p_info +1230 drivers/gpu/drm/xe/xe_pci.c
+vim +/supported_xcr0 +890 arch/x86/kvm/cpuid.c
 
-  1031	
-> 1032	static const struct intel_device_info cml_gt2_info = {
-  1033		CML_PLATFORM,
-  1034		.gt = 2,
-  1035	};
-  1036	
-  1037	#define GEN10_FEATURES \
-  1038		GEN9_FEATURES, \
-  1039		GEN(10), \
-  1040		.dbuf.size = 1024 - 4, /* 4 blocks for bypass path allocation */ \
-  1041		.display.has_dsc = 1, \
-  1042		.has_coherent_ggtt = false, \
-  1043		GLK_COLORS
-  1044	
-> 1045	static const struct intel_device_info cnl_info = {
-  1046		GEN10_FEATURES,
-  1047		PLATFORM(INTEL_CANNONLAKE),
-  1048		.gt = 2,
-  1049	};
-  1050	
-  1051	#define GEN11_DEFAULT_PAGE_SIZES \
-  1052		.page_sizes = I915_GTT_PAGE_SIZE_4K | \
-  1053			      I915_GTT_PAGE_SIZE_64K | \
-  1054			      I915_GTT_PAGE_SIZE_2M
-  1055	
-  1056	#define GEN11_FEATURES \
-  1057		GEN10_FEATURES, \
-  1058		GEN11_DEFAULT_PAGE_SIZES, \
-  1059		.abox_mask = BIT(0), \
-  1060		.cpu_transcoder_mask = BIT(TRANSCODER_A) | BIT(TRANSCODER_B) | \
-  1061			BIT(TRANSCODER_C) | BIT(TRANSCODER_EDP) | \
-  1062			BIT(TRANSCODER_DSI_0) | BIT(TRANSCODER_DSI_1), \
-  1063		.pipe_offsets = { \
-  1064			[TRANSCODER_A] = PIPE_A_OFFSET, \
-  1065			[TRANSCODER_B] = PIPE_B_OFFSET, \
-  1066			[TRANSCODER_C] = PIPE_C_OFFSET, \
-  1067			[TRANSCODER_EDP] = PIPE_EDP_OFFSET, \
-  1068			[TRANSCODER_DSI_0] = PIPE_DSI0_OFFSET, \
-  1069			[TRANSCODER_DSI_1] = PIPE_DSI1_OFFSET, \
-  1070		}, \
-  1071		.trans_offsets = { \
-  1072			[TRANSCODER_A] = TRANSCODER_A_OFFSET, \
-  1073			[TRANSCODER_B] = TRANSCODER_B_OFFSET, \
-  1074			[TRANSCODER_C] = TRANSCODER_C_OFFSET, \
-  1075			[TRANSCODER_EDP] = TRANSCODER_EDP_OFFSET, \
-  1076			[TRANSCODER_DSI_0] = TRANSCODER_DSI0_OFFSET, \
-  1077			[TRANSCODER_DSI_1] = TRANSCODER_DSI1_OFFSET, \
-  1078		}, \
-  1079		GEN(11), \
-  1080		.dbuf.size = 2048, \
-  1081		.dbuf.slice_mask = BIT(DBUF_S1) | BIT(DBUF_S2), \
-  1082		.has_logical_ring_elsq = 1, \
-  1083		.color = { .degamma_lut_size = 33, .gamma_lut_size = 262145 }
-  1084	
-> 1085	static const struct intel_device_info icl_info = {
-  1086		GEN11_FEATURES,
-  1087		PLATFORM(INTEL_ICELAKE),
-  1088		.platform_engine_mask =
-  1089			BIT(RCS0) | BIT(BCS0) | BIT(VECS0) | BIT(VCS0) | BIT(VCS2),
-  1090	};
-  1091	
-> 1092	static const struct intel_device_info ehl_info = {
-  1093		GEN11_FEATURES,
-  1094		PLATFORM(INTEL_ELKHARTLAKE),
-  1095		.platform_engine_mask = BIT(RCS0) | BIT(BCS0) | BIT(VCS0) | BIT(VECS0),
-  1096		.ppgtt_size = 36,
-  1097	};
-  1098	
-> 1099	static const struct intel_device_info jsl_info = {
-  1100		GEN11_FEATURES,
-  1101		PLATFORM(INTEL_JASPERLAKE),
-  1102		.platform_engine_mask = BIT(RCS0) | BIT(BCS0) | BIT(VCS0) | BIT(VECS0),
-  1103		.ppgtt_size = 36,
-  1104	};
-  1105	
-  1106	#define GEN12_FEATURES \
-  1107		GEN11_FEATURES, \
-  1108		GEN(12), \
-  1109		.abox_mask = GENMASK(2, 1), \
-  1110		.pipe_mask = BIT(PIPE_A) | BIT(PIPE_B) | BIT(PIPE_C) | BIT(PIPE_D), \
-  1111		.cpu_transcoder_mask = BIT(TRANSCODER_A) | BIT(TRANSCODER_B) | \
-  1112			BIT(TRANSCODER_C) | BIT(TRANSCODER_D) | \
-  1113			BIT(TRANSCODER_DSI_0) | BIT(TRANSCODER_DSI_1), \
-  1114		.pipe_offsets = { \
-  1115			[TRANSCODER_A] = PIPE_A_OFFSET, \
-  1116			[TRANSCODER_B] = PIPE_B_OFFSET, \
-  1117			[TRANSCODER_C] = PIPE_C_OFFSET, \
-  1118			[TRANSCODER_D] = PIPE_D_OFFSET, \
-  1119			[TRANSCODER_DSI_0] = PIPE_DSI0_OFFSET, \
-  1120			[TRANSCODER_DSI_1] = PIPE_DSI1_OFFSET, \
-  1121		}, \
-  1122		.trans_offsets = { \
-  1123			[TRANSCODER_A] = TRANSCODER_A_OFFSET, \
-  1124			[TRANSCODER_B] = TRANSCODER_B_OFFSET, \
-  1125			[TRANSCODER_C] = TRANSCODER_C_OFFSET, \
-  1126			[TRANSCODER_D] = TRANSCODER_D_OFFSET, \
-  1127			[TRANSCODER_DSI_0] = TRANSCODER_DSI0_OFFSET, \
-  1128			[TRANSCODER_DSI_1] = TRANSCODER_DSI1_OFFSET, \
-  1129		}, \
-  1130		TGL_CURSOR_OFFSETS, \
-  1131		.has_global_mocs = 1, \
-  1132		.display.has_dsb = 1
-  1133	
-  1134	static const struct intel_device_info tgl_info = {
-  1135		GEN12_FEATURES,
-  1136		PLATFORM(INTEL_TIGERLAKE),
-  1137		.display.has_modular_fia = 1,
-  1138		.platform_engine_mask =
-  1139			BIT(RCS0) | BIT(BCS0) | BIT(VECS0) | BIT(VCS0) | BIT(VCS2),
-  1140	};
-  1141	
-> 1142	static const struct intel_device_info rkl_info = {
-  1143		GEN12_FEATURES,
-  1144		PLATFORM(INTEL_ROCKETLAKE),
-  1145		.abox_mask = BIT(0),
-  1146		.pipe_mask = BIT(PIPE_A) | BIT(PIPE_B) | BIT(PIPE_C),
-  1147		.cpu_transcoder_mask = BIT(TRANSCODER_A) | BIT(TRANSCODER_B) |
-  1148			BIT(TRANSCODER_C),
-  1149		.display.has_hti = 1,
-  1150		.display.has_psr_hw_tracking = 0,
-  1151		.platform_engine_mask =
-  1152			BIT(RCS0) | BIT(BCS0) | BIT(VECS0) | BIT(VCS0),
-  1153	};
-  1154	
-  1155	#define DGFX_FEATURES \
-  1156		.memory_regions = REGION_SMEM | REGION_LMEM | REGION_STOLEN_LMEM, \
-  1157		.has_llc = 0, \
-  1158		.has_snoop = 1, \
-  1159		.is_dgfx = 1
-  1160	
-  1161	static const struct intel_device_info dg1_info __maybe_unused = {
-  1162		GEN12_FEATURES,
-  1163		DGFX_FEATURES,
-  1164		.graphics_rel = 10,
-  1165		PLATFORM(INTEL_DG1),
-  1166		.pipe_mask = BIT(PIPE_A) | BIT(PIPE_B) | BIT(PIPE_C) | BIT(PIPE_D),
-  1167		.require_force_probe = 1,
-  1168		.platform_engine_mask =
-  1169			BIT(RCS0) | BIT(BCS0) | BIT(VECS0) |
-  1170			BIT(VCS0) | BIT(VCS2),
-  1171		/* Wa_16011227922 */
-  1172		.ppgtt_size = 47,
-  1173	};
-  1174	
-> 1175	static const struct intel_device_info adl_s_info = {
-  1176		GEN12_FEATURES,
-  1177		PLATFORM(INTEL_ALDERLAKE_S),
-  1178		.pipe_mask = BIT(PIPE_A) | BIT(PIPE_B) | BIT(PIPE_C) | BIT(PIPE_D),
-  1179		.require_force_probe = 1,
-  1180		.display.has_hti = 1,
-  1181		.display.has_psr_hw_tracking = 0,
-  1182		.platform_engine_mask =
-  1183			BIT(RCS0) | BIT(BCS0) | BIT(VECS0) | BIT(VCS0) | BIT(VCS2),
-  1184		.dma_mask_size = 39,
-  1185	};
-  1186	
-  1187	#define XE_LPD_CURSOR_OFFSETS \
-  1188		.cursor_offsets = { \
-  1189			[PIPE_A] = CURSOR_A_OFFSET, \
-  1190			[PIPE_B] = IVB_CURSOR_B_OFFSET, \
-  1191			[PIPE_C] = IVB_CURSOR_C_OFFSET, \
-  1192			[PIPE_D] = TGL_CURSOR_D_OFFSET, \
-  1193		}
-  1194	
-  1195	#define XE_LPD_FEATURES \
-  1196		.abox_mask = GENMASK(1, 0),						\
-  1197		.color = { .degamma_lut_size = 0, .gamma_lut_size = 0 },		\
-  1198		.cpu_transcoder_mask = BIT(TRANSCODER_A) | BIT(TRANSCODER_B) |		\
-  1199			BIT(TRANSCODER_C) | BIT(TRANSCODER_D),				\
-  1200		.dbuf.size = 4096,							\
-  1201		.dbuf.slice_mask = BIT(DBUF_S1) | BIT(DBUF_S2) | BIT(DBUF_S3) |		\
-  1202			BIT(DBUF_S4),							\
-  1203		.display.has_ddi = 1,							\
-  1204		.display.has_dmc = 1,							\
-  1205		.display.has_dp_mst = 1,						\
-  1206		.display.has_dsb = 1,							\
-  1207		.display.has_dsc = 1,							\
-  1208		.display.has_fbc = 1,							\
-  1209		.display.has_fpga_dbg = 1,						\
-  1210		.display.has_hdcp = 1,							\
-  1211		.display.has_hotplug = 1,						\
-  1212		.display.has_ipc = 1,							\
-  1213		.display.has_psr = 1,							\
-  1214		.display.ver = 13,							\
-  1215		.pipe_mask = BIT(PIPE_A) | BIT(PIPE_B) | BIT(PIPE_C) | BIT(PIPE_D),	\
-  1216		.pipe_offsets = {							\
-  1217			[TRANSCODER_A] = PIPE_A_OFFSET,					\
-  1218			[TRANSCODER_B] = PIPE_B_OFFSET,					\
-  1219			[TRANSCODER_C] = PIPE_C_OFFSET,					\
-  1220			[TRANSCODER_D] = PIPE_D_OFFSET,					\
-  1221		},									\
-  1222		.trans_offsets = {							\
-  1223			[TRANSCODER_A] = TRANSCODER_A_OFFSET,				\
-  1224			[TRANSCODER_B] = TRANSCODER_B_OFFSET,				\
-  1225			[TRANSCODER_C] = TRANSCODER_C_OFFSET,				\
-  1226			[TRANSCODER_D] = TRANSCODER_D_OFFSET,				\
-  1227		},									\
-  1228		XE_LPD_CURSOR_OFFSETS
-  1229	
-> 1230	static const struct intel_device_info adl_p_info = {
-  1231		GEN12_FEATURES,
-  1232		XE_LPD_FEATURES,
-  1233		PLATFORM(INTEL_ALDERLAKE_P),
-  1234		.require_force_probe = 1,
-  1235		.display.has_cdclk_crawl = 1,
-  1236		.display.has_modular_fia = 1,
-  1237		.display.has_psr_hw_tracking = 0,
-  1238		.platform_engine_mask =
-  1239			BIT(RCS0) | BIT(BCS0) | BIT(VECS0) | BIT(VCS0) | BIT(VCS2),
-  1240		.ppgtt_size = 48,
-  1241		.dma_mask_size = 39,
-  1242	};
-  1243	
+   758	
+   759	static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+   760	{
+   761		struct kvm_cpuid_entry2 *entry;
+   762		int r, i, max_idx;
+   763	
+   764		/* all calls to cpuid_count() should be made on the same cpu */
+   765		get_cpu();
+   766	
+   767		r = -E2BIG;
+   768	
+   769		entry = do_host_cpuid(array, function, 0);
+   770		if (!entry)
+   771			goto out;
+   772	
+   773		switch (function) {
+   774		case 0:
+   775			/* Limited to the highest leaf implemented in KVM. */
+   776			entry->eax = min(entry->eax, 0x1fU);
+   777			break;
+   778		case 1:
+   779			cpuid_entry_override(entry, CPUID_1_EDX);
+   780			cpuid_entry_override(entry, CPUID_1_ECX);
+   781			break;
+   782		case 2:
+   783			/*
+   784			 * On ancient CPUs, function 2 entries are STATEFUL.  That is,
+   785			 * CPUID(function=2, index=0) may return different results each
+   786			 * time, with the least-significant byte in EAX enumerating the
+   787			 * number of times software should do CPUID(2, 0).
+   788			 *
+   789			 * Modern CPUs, i.e. every CPU KVM has *ever* run on are less
+   790			 * idiotic.  Intel's SDM states that EAX & 0xff "will always
+   791			 * return 01H. Software should ignore this value and not
+   792			 * interpret it as an informational descriptor", while AMD's
+   793			 * APM states that CPUID(2) is reserved.
+   794			 *
+   795			 * WARN if a frankenstein CPU that supports virtualization and
+   796			 * a stateful CPUID.0x2 is encountered.
+   797			 */
+   798			WARN_ON_ONCE((entry->eax & 0xff) > 1);
+   799			break;
+   800		/* functions 4 and 0x8000001d have additional index. */
+   801		case 4:
+   802		case 0x8000001d:
+   803			/*
+   804			 * Read entries until the cache type in the previous entry is
+   805			 * zero, i.e. indicates an invalid entry.
+   806			 */
+   807			for (i = 1; entry->eax & 0x1f; ++i) {
+   808				entry = do_host_cpuid(array, function, i);
+   809				if (!entry)
+   810					goto out;
+   811			}
+   812			break;
+   813		case 6: /* Thermal management */
+   814			entry->eax = 0x4; /* allow ARAT */
+   815			entry->ebx = 0;
+   816			entry->ecx = 0;
+   817			entry->edx = 0;
+   818			break;
+   819		/* function 7 has additional index. */
+   820		case 7:
+   821			entry->eax = min(entry->eax, 1u);
+   822			cpuid_entry_override(entry, CPUID_7_0_EBX);
+   823			cpuid_entry_override(entry, CPUID_7_ECX);
+   824			cpuid_entry_override(entry, CPUID_7_EDX);
+   825	
+   826			/* KVM only supports 0x7.0 and 0x7.1, capped above via min(). */
+   827			if (entry->eax == 1) {
+   828				entry = do_host_cpuid(array, function, 1);
+   829				if (!entry)
+   830					goto out;
+   831	
+   832				cpuid_entry_override(entry, CPUID_7_1_EAX);
+   833				entry->ebx = 0;
+   834				entry->ecx = 0;
+   835				entry->edx = 0;
+   836			}
+   837			break;
+   838		case 9:
+   839			break;
+   840		case 0xa: { /* Architectural Performance Monitoring */
+   841			struct x86_pmu_capability cap;
+   842			union cpuid10_eax eax;
+   843			union cpuid10_edx edx;
+   844	
+   845			perf_get_x86_pmu_capability(&cap);
+   846	
+   847			/*
+   848			 * The guest architecture pmu is only supported if the architecture
+   849			 * pmu exists on the host and the module parameters allow it.
+   850			 */
+   851			if (!cap.version || !enable_pmu)
+   852				memset(&cap, 0, sizeof(cap));
+   853	
+   854			eax.split.version_id = min(cap.version, 2);
+   855			eax.split.num_counters = cap.num_counters_gp;
+   856			eax.split.bit_width = cap.bit_width_gp;
+   857			eax.split.mask_length = cap.events_mask_len;
+   858	
+   859			edx.split.num_counters_fixed = min(cap.num_counters_fixed, MAX_FIXED_COUNTERS);
+   860			edx.split.bit_width_fixed = cap.bit_width_fixed;
+   861			if (cap.version)
+   862				edx.split.anythread_deprecated = 1;
+   863			edx.split.reserved1 = 0;
+   864			edx.split.reserved2 = 0;
+   865	
+   866			entry->eax = eax.full;
+   867			entry->ebx = cap.events_mask;
+   868			entry->ecx = 0;
+   869			entry->edx = edx.full;
+   870			break;
+   871		}
+   872		/*
+   873		 * Per Intel's SDM, the 0x1f is a superset of 0xb,
+   874		 * thus they can be handled by common code.
+   875		 */
+   876		case 0x1f:
+   877		case 0xb:
+   878			/*
+   879			 * Populate entries until the level type (ECX[15:8]) of the
+   880			 * previous entry is zero.  Note, CPUID EAX.{0x1f,0xb}.0 is
+   881			 * the starting entry, filled by the primary do_host_cpuid().
+   882			 */
+   883			for (i = 1; entry->ecx & 0xff00; ++i) {
+   884				entry = do_host_cpuid(array, function, i);
+   885				if (!entry)
+   886					goto out;
+   887			}
+   888			break;
+   889		case 0xd: {
+ > 890			u64 supported_xcr0 = supported_xcr0 & xstate_get_guest_group_perm();
+   891	
+   892			entry->eax &= supported_xcr0;
+   893			entry->ebx = xstate_required_size(supported_xcr0, false);
+   894			entry->ecx = entry->ebx;
+   895			entry->edx &= supported_xcr0 >> 32;
+   896			if (!supported_xcr0)
+   897				break;
+   898	
+   899			entry = do_host_cpuid(array, function, 1);
+   900			if (!entry)
+   901				goto out;
+   902	
+   903			cpuid_entry_override(entry, CPUID_D_1_EAX);
+   904			if (entry->eax & (F(XSAVES)|F(XSAVEC)))
+   905				entry->ebx = xstate_required_size(supported_xcr0 | supported_xss,
+   906								  true);
+   907			else {
+   908				WARN_ON_ONCE(supported_xss != 0);
+   909				entry->ebx = 0;
+   910			}
+   911			entry->ecx &= supported_xss;
+   912			entry->edx &= supported_xss >> 32;
+   913	
+   914			for (i = 2; i < 64; ++i) {
+   915				bool s_state;
+   916				if (supported_xcr0 & BIT_ULL(i))
+   917					s_state = false;
+   918				else if (supported_xss & BIT_ULL(i))
+   919					s_state = true;
+   920				else
+   921					continue;
+   922	
+   923				entry = do_host_cpuid(array, function, i);
+   924				if (!entry)
+   925					goto out;
+   926	
+   927				/*
+   928				 * The supported check above should have filtered out
+   929				 * invalid sub-leafs.  Only valid sub-leafs should
+   930				 * reach this point, and they should have a non-zero
+   931				 * save state size.  Furthermore, check whether the
+   932				 * processor agrees with supported_xcr0/supported_xss
+   933				 * on whether this is an XCR0- or IA32_XSS-managed area.
+   934				 */
+   935				if (WARN_ON_ONCE(!entry->eax || (entry->ecx & 0x1) != s_state)) {
+   936					--array->nent;
+   937					continue;
+   938				}
+   939	
+   940				if (!kvm_cpu_cap_has(X86_FEATURE_XFD))
+   941					entry->ecx &= ~BIT_ULL(2);
+   942				entry->edx = 0;
+   943			}
+   944			break;
+   945		}
+   946		case 0x12:
+   947			/* Intel SGX */
+   948			if (!kvm_cpu_cap_has(X86_FEATURE_SGX)) {
+   949				entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+   950				break;
+   951			}
+   952	
+   953			/*
+   954			 * Index 0: Sub-features, MISCSELECT (a.k.a extended features)
+   955			 * and max enclave sizes.   The SGX sub-features and MISCSELECT
+   956			 * are restricted by kernel and KVM capabilities (like most
+   957			 * feature flags), while enclave size is unrestricted.
+   958			 */
+   959			cpuid_entry_override(entry, CPUID_12_EAX);
+   960			entry->ebx &= SGX_MISC_EXINFO;
+   961	
+   962			entry = do_host_cpuid(array, function, 1);
+   963			if (!entry)
+   964				goto out;
+   965	
+   966			/*
+   967			 * Index 1: SECS.ATTRIBUTES.  ATTRIBUTES are restricted a la
+   968			 * feature flags.  Advertise all supported flags, including
+   969			 * privileged attributes that require explicit opt-in from
+   970			 * userspace.  ATTRIBUTES.XFRM is not adjusted as userspace is
+   971			 * expected to derive it from supported XCR0.
+   972			 */
+   973			entry->eax &= SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT |
+   974				      SGX_ATTR_PROVISIONKEY | SGX_ATTR_EINITTOKENKEY |
+   975				      SGX_ATTR_KSS;
+   976			entry->ebx &= 0;
+   977			break;
+   978		/* Intel PT */
+   979		case 0x14:
+   980			if (!kvm_cpu_cap_has(X86_FEATURE_INTEL_PT)) {
+   981				entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+   982				break;
+   983			}
+   984	
+   985			for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+   986				if (!do_host_cpuid(array, function, i))
+   987					goto out;
+   988			}
+   989			break;
+   990		/* Intel AMX TILE */
+   991		case 0x1d:
+   992			if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
+   993				entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+   994				break;
+   995			}
+   996	
+   997			for (i = 1, max_idx = entry->eax; i <= max_idx; ++i) {
+   998				if (!do_host_cpuid(array, function, i))
+   999					goto out;
+  1000			}
+  1001			break;
+  1002		case 0x1e: /* TMUL information */
+  1003			if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
+  1004				entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+  1005				break;
+  1006			}
+  1007			break;
+  1008		case KVM_CPUID_SIGNATURE: {
+  1009			const u32 *sigptr = (const u32 *)KVM_SIGNATURE;
+  1010			entry->eax = KVM_CPUID_FEATURES;
+  1011			entry->ebx = sigptr[0];
+  1012			entry->ecx = sigptr[1];
+  1013			entry->edx = sigptr[2];
+  1014			break;
+  1015		}
+  1016		case KVM_CPUID_FEATURES:
+  1017			entry->eax = (1 << KVM_FEATURE_CLOCKSOURCE) |
+  1018				     (1 << KVM_FEATURE_NOP_IO_DELAY) |
+  1019				     (1 << KVM_FEATURE_CLOCKSOURCE2) |
+  1020				     (1 << KVM_FEATURE_ASYNC_PF) |
+  1021				     (1 << KVM_FEATURE_PV_EOI) |
+  1022				     (1 << KVM_FEATURE_CLOCKSOURCE_STABLE_BIT) |
+  1023				     (1 << KVM_FEATURE_PV_UNHALT) |
+  1024				     (1 << KVM_FEATURE_PV_TLB_FLUSH) |
+  1025				     (1 << KVM_FEATURE_ASYNC_PF_VMEXIT) |
+  1026				     (1 << KVM_FEATURE_PV_SEND_IPI) |
+  1027				     (1 << KVM_FEATURE_POLL_CONTROL) |
+  1028				     (1 << KVM_FEATURE_PV_SCHED_YIELD) |
+  1029				     (1 << KVM_FEATURE_ASYNC_PF_INT);
+  1030	
+  1031			if (sched_info_on())
+  1032				entry->eax |= (1 << KVM_FEATURE_STEAL_TIME);
+  1033	
+  1034			entry->ebx = 0;
+  1035			entry->ecx = 0;
+  1036			entry->edx = 0;
+  1037			break;
+  1038		case 0x80000000:
+  1039			entry->eax = min(entry->eax, 0x8000001f);
+  1040			break;
+  1041		case 0x80000001:
+  1042			cpuid_entry_override(entry, CPUID_8000_0001_EDX);
+  1043			cpuid_entry_override(entry, CPUID_8000_0001_ECX);
+  1044			break;
+  1045		case 0x80000006:
+  1046			/* L2 cache and TLB: pass through host info. */
+  1047			break;
+  1048		case 0x80000007: /* Advanced power management */
+  1049			/* invariant TSC is CPUID.80000007H:EDX[8] */
+  1050			entry->edx &= (1 << 8);
+  1051			/* mask against host */
+  1052			entry->edx &= boot_cpu_data.x86_power;
+  1053			entry->eax = entry->ebx = entry->ecx = 0;
+  1054			break;
+  1055		case 0x80000008: {
+  1056			unsigned g_phys_as = (entry->eax >> 16) & 0xff;
+  1057			unsigned virt_as = max((entry->eax >> 8) & 0xff, 48U);
+  1058			unsigned phys_as = entry->eax & 0xff;
+  1059	
+  1060			/*
+  1061			 * If TDP (NPT) is disabled use the adjusted host MAXPHYADDR as
+  1062			 * the guest operates in the same PA space as the host, i.e.
+  1063			 * reductions in MAXPHYADDR for memory encryption affect shadow
+  1064			 * paging, too.
+  1065			 *
+  1066			 * If TDP is enabled but an explicit guest MAXPHYADDR is not
+  1067			 * provided, use the raw bare metal MAXPHYADDR as reductions to
+  1068			 * the HPAs do not affect GPAs.
+  1069			 */
+  1070			if (!tdp_enabled)
+  1071				g_phys_as = boot_cpu_data.x86_phys_bits;
+  1072			else if (!g_phys_as)
+  1073				g_phys_as = phys_as;
+  1074	
+  1075			entry->eax = g_phys_as | (virt_as << 8);
+  1076			entry->edx = 0;
+  1077			cpuid_entry_override(entry, CPUID_8000_0008_EBX);
+  1078			break;
+  1079		}
+  1080		case 0x8000000A:
+  1081			if (!kvm_cpu_cap_has(X86_FEATURE_SVM)) {
+  1082				entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+  1083				break;
+  1084			}
+  1085			entry->eax = 1; /* SVM revision 1 */
+  1086			entry->ebx = 8; /* Lets support 8 ASIDs in case we add proper
+  1087					   ASID emulation to nested SVM */
+  1088			entry->ecx = 0; /* Reserved */
+  1089			cpuid_entry_override(entry, CPUID_8000_000A_EDX);
+  1090			break;
+  1091		case 0x80000019:
+  1092			entry->ecx = entry->edx = 0;
+  1093			break;
+  1094		case 0x8000001a:
+  1095		case 0x8000001e:
+  1096			break;
+  1097		case 0x8000001F:
+  1098			if (!kvm_cpu_cap_has(X86_FEATURE_SEV)) {
+  1099				entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+  1100			} else {
+  1101				cpuid_entry_override(entry, CPUID_8000_001F_EAX);
+  1102	
+  1103				/*
+  1104				 * Enumerate '0' for "PA bits reduction", the adjusted
+  1105				 * MAXPHYADDR is enumerated directly (see 0x80000008).
+  1106				 */
+  1107				entry->ebx &= ~GENMASK(11, 6);
+  1108			}
+  1109			break;
+  1110		/*Add support for Centaur's CPUID instruction*/
+  1111		case 0xC0000000:
+  1112			/*Just support up to 0xC0000004 now*/
+  1113			entry->eax = min(entry->eax, 0xC0000004);
+  1114			break;
+  1115		case 0xC0000001:
+  1116			cpuid_entry_override(entry, CPUID_C000_0001_EDX);
+  1117			break;
+  1118		case 3: /* Processor serial number */
+  1119		case 5: /* MONITOR/MWAIT */
+  1120		case 0xC0000002:
+  1121		case 0xC0000003:
+  1122		case 0xC0000004:
+  1123		default:
+  1124			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
+  1125			break;
+  1126		}
+  1127	
+  1128		r = 0;
+  1129	
+  1130	out:
+  1131		put_cpu();
+  1132	
+  1133		return r;
+  1134	}
+  1135	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

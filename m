@@ -2,112 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA8549B775
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B917C49B779
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455398AbiAYPSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:18:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359582AbiAYPQD (ORCPT
+        id S1581986AbiAYPTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:19:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49880 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359583AbiAYPQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:16:03 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E95AC06177B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 07:15:58 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id l68so62076123ybl.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 07:15:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=howett-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2swlk2R1Iyz8CGGk7h2fU+pmuJYKGgtN7VeZzZ2pbkg=;
-        b=fxvSYu8hoO0zSxzftetHu2jcfxaoONx5V+3hyQXsdGScaJLj7KE9NaLV+M2LJtLPhJ
-         3tAdr8749rMhwIMfinDJEvUTvy8mEp31j5zkl3hQZghV2U2UKJcMOfhrjTbswQ6sgM9M
-         fLeckj4cKAC05JqWaa5pun5hZ5IUUkuQcqhju0EoJxMirkmog8yf0n9RA702PlZKdwzn
-         gQsgYGjmNp/BxLD8I72FFQh17yB8GS7sAhoQOUUIy1xB8LPwwvboraLwCu56HCDxk8A3
-         sI+IPxwPthE1KAPyymnxQUQ5nl3Sg+GruWM6kT9h1ti6uBcp7JUzHjFjzyma/qlDP70X
-         4wEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2swlk2R1Iyz8CGGk7h2fU+pmuJYKGgtN7VeZzZ2pbkg=;
-        b=sBJNPL2QZWjyFJMhH2Jd4jgvRhuw6z+kseM+XYVPR3ZaPG+X2oqmmbisfs0O0MgHmh
-         9GZdjI0ZnuCZEEz9G73AUs9N8gYwk97/6G+tmvaPI9Gr5AGbhbMWaN+3RNTH7Inmac2s
-         p1QiVPvfbL8QFZuU1cNfcT7sw3IOQsfGeR4Pzg+sjf/WKHDkZCSzdZn1NAii9/wx2nOJ
-         wHsIwhn7hFs11FShUhbGY5syX5TL2x13cBMePs70DYbO11sNKfHar8l0WpA9TdtL2gxF
-         EbpD6eaNjF3WmpGcYB5CwrE1OkvH6zYkaROjGkW4mYElFGkSORYJl4dirlexaErUExIq
-         5sGg==
-X-Gm-Message-State: AOAM532mkbjeFGtEMXeHItCb5g47JOkHrPGh+x/sTTdXDKFTaCb+jrIt
-        yFdG64RMGFO4ABErpRaKbExd0au0EvdS+/AYwXBQtg==
-X-Google-Smtp-Source: ABdhPJyXfD8ePAHH9cNUsegT+6sROb6lqO0h6V0Ib39SEWGy2hreYqGW2GxzdpCUOHPg4yE4IRnL3Y6OHCBs03QSyGI=
-X-Received: by 2002:a25:cc47:: with SMTP id l68mr32658286ybf.105.1643123757334;
- Tue, 25 Jan 2022 07:15:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20220105031242.287751-1-dustin@howett.net> <20220105031242.287751-3-dustin@howett.net>
- <CALtnz63d7utST13=S7UbExDzSE0GnoFA7JowQkkFSqrSUTmCdQ@mail.gmail.com> <Ye95vRREnbaLM+EJ@google.com>
-In-Reply-To: <Ye95vRREnbaLM+EJ@google.com>
-From:   Dustin Howett <dustin@howett.net>
-Date:   Tue, 25 Jan 2022 09:15:45 -0600
-Message-ID: <CA+BfgNKRNXVxLhQ2mAxiq-c3ipkFPdYoZee6myO8djmXWnfrYg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] platform/chrome: reserve only the I/O ports required
- for the MEC EC
-To:     Tzung-Bi Shih <tzungbi@google.com>
-Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 25 Jan 2022 10:16:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25137B815F3;
+        Tue, 25 Jan 2022 15:15:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5364C340E0;
+        Tue, 25 Jan 2022 15:15:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643123756;
+        bh=gld+cOICDVSyR3eBycE7Kw4pbeGx/5O8Kju3l/BFsZc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uxCMXUS9vU3rX/8c9OHaV7K9zy+vIlk9FYXci6vHqKNTHiqFFWa5VoQEPxjeSmo78
+         dVZK2zk2T8b97wcUmepHBWBZz9Z0YtsEbRF1hODLtXMlDNFe2pGycWZoBNY+6ebs9b
+         uT18I/myxa1sQhLDgqtgZtjx5ofKpVmGDbq86OkbEUJdIMPB9QsAV4E9AXqg5es3Qt
+         9O+uvPMXRWMES2Z8cKYEeZQOSQ7HHZ+ujQDFUwLZnOk5Vr51p42emfZmN+rIK11EEJ
+         UQ+UBvZ1roGlKILKO+1CeXAN3tpu2vKa53/41SWX9HD9V31UfvsB1eS7w4De7P55ji
+         4yY+q+2hMW/Eg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nCNY2-002weW-Nr; Tue, 25 Jan 2022 15:15:54 +0000
+Date:   Tue, 25 Jan 2022 15:15:54 +0000
+Message-ID: <87o83z7snp.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Reiji Watanabe <reijiw@google.com>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        kvm@vger.kernel.org, Peter Shier <pshier@google.com>,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [RFC PATCH v3 01/11] KVM: Capture VM start
+In-Reply-To: <YedWUJNnQK3HFrWC@google.com>
+References: <CAAeT=Fxyct=WLUvfbpROKwB9huyt+QdJnKTaj8c5NKk+UY51WQ@mail.gmail.com>
+        <CAJHc60za+E-zEO5v2QeKuifoXznPnt5n--g1dAN5jgsuq+SxrA@mail.gmail.com>
+        <CALMp9eQDzqoJMck=_agEZNU9FJY9LB=iW-8hkrRc20NtqN=gDA@mail.gmail.com>
+        <CAJHc60xZ9emY9Rs9ZbV+AH-Mjmkyg4JZU7V16TF48C-HJn+n4A@mail.gmail.com>
+        <CALMp9eTPJZDtMiHZ5XRiYw2NR9EBKSfcP5CYddzyd2cgWsJ9hw@mail.gmail.com>
+        <CAJHc60xD2U36pM4+Dq3yZw6Cokk-16X83JHMPXj4aFnxOJ3BUQ@mail.gmail.com>
+        <CALMp9eR+evJ+w9VTSvR2KHciQDgTsnS=bh=1OUL4yy8gG6O51A@mail.gmail.com>
+        <CAJHc60zw1o=JdUJ+sNNtv3mc_JTRMKG3kPp=-cchWkHm74hUYA@mail.gmail.com>
+        <YeBfj89mIf8SezfD@google.com>
+        <CAAeT=Fz2q4PfJMXes3A9f+c01NnyORbvUrzJZO=ew-LsjPq2jQ@mail.gmail.com>
+        <YedWUJNnQK3HFrWC@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, reijiw@google.com, rananta@google.com, kvm@vger.kernel.org, pshier@google.com, linux-kernel@vger.kernel.org, catalin.marinas@arm.com, pbonzini@redhat.com, will@kernel.org, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org, jmattson@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 10:17 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
->
->
-> The original code:
-> - devm_request_region(dev, EC_LPC_ADDR_MEMMAP, ...) and then
-> - cros_ec_lpc_ops.read(EC_LPC_ADDR_MEMMAP + EC_MEMMAP_ID, ...).
->
-> After the patch:
-> - devm_request_region(dev, EC_HOST_CMD_REGION0, ...) and then
-> - cros_ec_lpc_ops.read(EC_LPC_ADDR_MEMMAP + EC_MEMMAP_ID, ...).
->
-> Does it work if it reads out of request_region range?
->
->
-> The 2 request_region are now guarded by the first "if (buf[0] != 'E' || buf[1] != 'C')".  That is, only non-MEC will request the 2 regions.
->
-> Doesn't other MECs (e.g. non-Framework Laptop) need the 2 regions?
+On Wed, 19 Jan 2022 00:07:44 +0000,
+Sean Christopherson <seanjc@google.com> wrote:
+> 
+> On Fri, Jan 14, 2022, Reiji Watanabe wrote:
+> > The restriction, with which KVM doesn't need to worry about the changes
+> > in the registers after KVM_RUN, could potentially protect or be useful
+> > to protect KVM and simplify future changes/maintenance of the KVM codes
+> > that consumes the values.
+> 
+> That sort of protection is definitely welcome, the previously mentioned CPUID mess
+> on x86 would have benefit greatly by KVM being restrictive in the past.  That said,
+> hooking KVM_RUN is likely the wrong way to go about implementing any restrictions.
+> Running a vCPU is where much of the vCPU's state is explicitly consumed, but it's
+> all too easy for KVM to implicity/indirectly consume state via a different ioctl(),
+> e.g. if there are side effects that are visible in other registers, than an update
+> can also be visible to userspace via KVM_{G,S}ET_{S,}REGS, at which point disallowing
+> modifying state after KVM_RUN but not after reading/writing regs is arbitrary and
+> inconsitent.
+> 
+> If possible, preventing modification if kvm->created_vcpus > 0 is
+> ideal as it's a relatively common pattern in KVM, and provides a
+> clear boundary to userpace regarding what is/isn't allowed.
 
-So, in both cases this should be legal. Here's why:
+No, that's way too late. The configuration is in general per-CPU, and
+I really don't want to expand the surface of the userspace API to
+allow all sort of magic trick depending on the nature of what you
+save/restore.
 
-The MEC protocol multiplexes memory-mapped reads through the same 8
-I/O ports (0x800 - 0x807)
-as it does host commands. It works by adjusting the base address,
-EC_LPC_ADDR_MEMMAP (0x900),
-to 0x100 before it initiates a standard MEC LPC xfer.
-See cros_ec_lpc_mec_read_bytes line ~101 (as of 881007522c8fcc3785).
+The "first run" crap is already there. We have it on a per-CPU basis,
+and we need it at the VM level for other reasons (see the recent
+discussion about PMU filtering vs binding to a specific PMU
+implementation).
 
-Therefore, the adjusted flow in the patch is:
+	M.
 
-0. Default cros_ec_lpc_ops to the MEC version of read/xfer [unchanged in patch]
-1. Request 0x800 - 0x807 (MEC region)
-2. read() using the MEC read function (using only the above ports)
-3. if it succeeds, great! we have a MEC EC.
---- if it failed ---
-4. Map the non-MEC port range 0x900 - 0x9FF for memory-mapped reads
-5. read() using the NON-MEC read function (using ports 0x900 - 0x9FF)
-6. if it succeeds, map the remaining host command ports 0x808 - 0x8FF
-
-In short, only non-MEC needs the 0x900 - 0x9FF mapping for "mapped
-memory". Therefore we can defer the
-port allocation until after we've failed to read mapped memory the MEC way. :)
-
-Based on my understanding of the MEC protocol, non-Framework Laptop
-MECs hold this invariant true as well.
-They should only need ports 0x800 - 0x807.
-
-Hope that helps!
-
-Want me to send a v2 with updated commit messages?
-d
+-- 
+Without deviation from the norm, progress is not possible.

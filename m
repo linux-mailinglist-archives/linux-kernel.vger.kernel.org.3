@@ -2,174 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B52849BC2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A89A49BC3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiAYTf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
+        id S230266AbiAYThA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiAYTe1 (ORCPT
+        with ESMTP id S230265AbiAYTf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:34:27 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69D3C061747
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:34:25 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id u130so16440537pfc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:34:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wqkKZwea4Ntd1UMLoEnxDe91teRkaMMO7ADnYpsEdMY=;
-        b=Xax9igYolzgTI16rjcvA8qDy9hafAlD+40MG99uerzRhh0xcnwKx0vFFRpRLKXYeH8
-         tXPv3lZv2wlrAdPIBPf33UKrEC6hN3ZTkTy65/mll1hln7phNHyMfgImIu018DPHuTHC
-         lMkw2UyJ6vdDWTzyFzUHtVqaKKSjOFKPDm+o57lPjotAHyTHwxSAa3fQooLvtqb4LXb0
-         5s+Dym2nVR1PFfXPpg/9jAMYwRTxQfmTaMz7PQuafw4Le9KX3N8RI3n0SGZtqocxO4qX
-         p6d6ohiKn3Z8GugQHJq2QwVTs442Q97jxAXKnld2tZVN1zn4e0zZ8FmRxhTM7HwuTF7U
-         F4TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wqkKZwea4Ntd1UMLoEnxDe91teRkaMMO7ADnYpsEdMY=;
-        b=qkPcV7bfukEKm1wZZ8R8EonqaExH9MKn1i3IoaWY2kG+mTJrZUpJzhDWdw1R5l0JTE
-         6TR1uwWiCtPHZnlzAqSC2zFUmSrL4W+yYA4bs29pJMrp10U2vWyZ/f2K4Ybf3Sak7lG2
-         Hxzur17dljCdWdfGbkoJ8Ic9owMEfq2upuEF1uYzPLz1xibHWS4+Jl59+acrOCsucMRR
-         qWRTKIH1qZY3t0fGn93g2xOASIKkefJW2a0fMTv9BKs12zHRW0VjNw6DPoZN6ix2Oz1s
-         Bpo9wxlNcyBxVXYXUUmjKd9l3N/9XyLiFVLC3lfOCk+kHTaoSzSw/37A/9BVbgp4FqNF
-         NqQg==
-X-Gm-Message-State: AOAM530X/NDs9wpESpvTaQLCEMNsU/wwXb63PYsrlO02Q+1vMDUufxZ+
-        tYuHNBLYsWtj2JMlwils1eobVA==
-X-Google-Smtp-Source: ABdhPJwKn4xsubm3B306tmrdkEHk+6IyVkLSe3+CfFCGvzbf6On+fSFVFQ3hGvWDObdK1oO/yyE/RQ==
-X-Received: by 2002:a05:6a00:1312:b0:4c4:cffa:a4c0 with SMTP id j18-20020a056a00131200b004c4cffaa4c0mr19606314pfu.79.1643139265175;
-        Tue, 25 Jan 2022 11:34:25 -0800 (PST)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id q7sm19499854pfs.32.2022.01.25.11.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 11:34:24 -0800 (PST)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     peterz@infradead.org
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
-Subject: [PATCH v3] sched/fair: Fix fault in reweight_entity
-Date:   Tue, 25 Jan 2022 11:34:03 -0800
-Message-Id: <20220125193403.778497-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Jan 2022 14:35:56 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C70BC061749
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:35:54 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id EC51C1F44554
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643139352;
+        bh=Fut1EPFyHtKExAKjhP5T7L+Q36Hqy+5BGq/LNpKSQ60=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UcQvy6f2q6L4RV6bjrHWQ9PqFKab1srk0pN2Q46jgTU4j4as1qDEf/5pdtSNHzpNk
+         tG5dlIU/3AdWrefA2VWG7FZedLcADBTMUcCO/Q6qCptzHFEctRHuwALlnLIk04zTET
+         y80pASKQeYZ/gk9ic4RuIhspdytILZUzNEK+j9l+G7UVs5QbNtfg1M001x2njf3ZZ2
+         dSEMFVlIpy6KIqRsDnjwj/HrTduvuxHXFxZKLmWnnMUeRKl2cCHdGs9teQ1PgoIRyK
+         mUbWpIuPuzwe7V7sdSizm39CBrWpKqEQZ91rU+eL6XQdUsYHXC+zHiFZnY7UJsCSYy
+         yFMVU1juFTPcA==
+From:   Robert Beckett <bob.beckett@collabora.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Ramalingam C <ramalingam.c@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 1/5] drm/i915: add needs_compact_pt flag
+Date:   Tue, 25 Jan 2022 19:35:26 +0000
+Message-Id: <20220125193530.3272386-2-bob.beckett@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220125193530.3272386-1-bob.beckett@collabora.com>
+References: <20220125193530.3272386-1-bob.beckett@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot found a GPF in reweight_entity. This has been bisected to commit
-4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+From: Ramalingam C <ramalingam.c@intel.com>
 
-There is a race between sched_post_fork() and setpriority(PRIO_PGRP)
-within a thread group that causes a null-ptr-deref in reweight_entity()
-in CFS. The scenario is that the main process spawns number of new
-threads, which then call setpriority(PRIO_PGRP, 0, -20), wait, and exit.
-For each of the new threads the copy_process() gets invoked, which adds
-the new task_struct and calls sched_post_fork() for it.
+Add a new platform flag, needs_compact_pt, to mark the requirement of
+compact pt layout support for the ppGTT when using 64K GTT pages.
 
-In the above scenario there is a possibility that setpriority(PRIO_PGRP)
-and set_one_prio() will be called for a thread in the group that is just
-being created by copy_process(), and for which the sched_post_fork() has
-not been executed yet. This will trigger a null pointer dereference in
-reweight_entity(), as it will try to access the run queue pointer, which
-hasn't been set. This results it a crash as shown below:
+With this flag has_64k_pages will only indicate requirement of 64K
+GTT page sizes or larger for device local memory access.
 
-KASAN: null-ptr-deref in range [0x00000000000000a0-0x00000000000000a7]
-CPU: 0 PID: 2392 Comm: reduced_repro Not tainted 5.16.0-11201-gb42c5a161ea3
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-RIP: 0010:reweight_entity+0x15d/0x440
-RSP: 0018:ffffc900035dfcf8 EFLAGS: 00010006
-Call Trace:
-<TASK>
-reweight_task+0xde/0x1c0
-set_load_weight+0x21c/0x2b0
-set_user_nice.part.0+0x2d1/0x519
-set_user_nice.cold+0x8/0xd
-set_one_prio+0x24f/0x263
-__do_sys_setpriority+0x2d3/0x640
-__x64_sys_setpriority+0x84/0x8b
-do_syscall_64+0x35/0xb0
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-</TASK>
----[ end trace 9dc80a9d378ed00a ]---
-
-Before the mentioned change the cfs_rq pointer for the task  has been
-set in sched_fork(), which is called much earlier in copy_process(),
-before the new task is added to the thread_group.
-Now it is done in the sched_post_fork(), which is called after that.
-To fix the issue the update_load condition passed to set_load_weight()
-in set_user_nice() and __sched_setscheduler() has been changed from
-always true to true if the task->state != TASK_NEW.
-
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Zhang Qiao <zhangqiao22@huawei.com>
-Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc: stable@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-
-Link: https://syzkaller.appspot.com/bug?id=9d9c27adc674e3a7932b22b61c79a02da82cbdc1
-Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
-Reported-by: syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Suggested-by: Matthew Auld <matthew.auld@intel.com>
+Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 ---
-Changes in v3:
-- Removed the new check and changed the update_load condition from
-  always true to true if p->state != TASK_NEW
+ drivers/gpu/drm/i915/i915_drv.h          | 10 +++++++---
+ drivers/gpu/drm/i915/i915_pci.c          |  2 ++
+ drivers/gpu/drm/i915/intel_device_info.h |  1 +
+ 3 files changed, 10 insertions(+), 3 deletions(-)
 
-Changes in v2:
-- Added a check in set_user_nice(), and return from there if the task
-  is not fully setup instead of returning from reweight_entity()
----
----
- kernel/sched/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 848eaa0efe0e..3d7ede06b971 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6921,7 +6921,7 @@ void set_user_nice(struct task_struct *p, long nice)
- 		put_prev_task(rq, p);
- 
- 	p->static_prio = NICE_TO_PRIO(nice);
--	set_load_weight(p, true);
-+	set_load_weight(p, !(READ_ONCE(p->__state) & TASK_NEW));
- 	old_prio = p->prio;
- 	p->prio = effective_prio(p);
- 
-@@ -7212,7 +7212,7 @@ static void __setscheduler_params(struct task_struct *p,
- 	 */
- 	p->rt_priority = attr->sched_priority;
- 	p->normal_prio = normal_prio(p);
--	set_load_weight(p, true);
-+	set_load_weight(p, !(READ_ONCE(p->__state) & TASK_NEW));
- }
+diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
+index 44c1f98144b4..1258b7779705 100644
+--- a/drivers/gpu/drm/i915/i915_drv.h
++++ b/drivers/gpu/drm/i915/i915_drv.h
+@@ -1512,12 +1512,16 @@ IS_SUBPLATFORM(const struct drm_i915_private *i915,
  
  /*
+  * Set this flag, when platform requires 64K GTT page sizes or larger for
+- * device local memory access. Also this flag implies that we require or
+- * at least support the compact PT layout for the ppGTT when using the 64K
+- * GTT pages.
++ * device local memory access.
+  */
+ #define HAS_64K_PAGES(dev_priv) (INTEL_INFO(dev_priv)->has_64k_pages)
+ 
++/* Set this flag when platform doesn't allow both 64k pages and 4k pages in
++ * the same PT. this flag means we need to support compact PT layout for the
++ * ppGTT when using the 64K GTT pages.
++ */
++#define NEEDS_COMPACT_PT(dev_priv) (INTEL_INFO(dev_priv)->needs_compact_pt)
++
+ #define HAS_IPC(dev_priv)		 (INTEL_INFO(dev_priv)->display.has_ipc)
+ 
+ #define HAS_REGION(i915, i) (INTEL_INFO(i915)->memory_regions & (i))
+diff --git a/drivers/gpu/drm/i915/i915_pci.c b/drivers/gpu/drm/i915/i915_pci.c
+index 4081fd50ba9d..799b56569ef5 100644
+--- a/drivers/gpu/drm/i915/i915_pci.c
++++ b/drivers/gpu/drm/i915/i915_pci.c
+@@ -1028,6 +1028,7 @@ static const struct intel_device_info xehpsdv_info = {
+ 	PLATFORM(INTEL_XEHPSDV),
+ 	.display = { },
+ 	.has_64k_pages = 1,
++	.needs_compact_pt = 1,
+ 	.platform_engine_mask =
+ 		BIT(RCS0) | BIT(BCS0) |
+ 		BIT(VECS0) | BIT(VECS1) | BIT(VECS2) | BIT(VECS3) |
+@@ -1045,6 +1046,7 @@ static const struct intel_device_info dg2_info = {
+ 	.media.rel = 55,
+ 	PLATFORM(INTEL_DG2),
+ 	.has_64k_pages = 1,
++	.needs_compact_pt = 1,
+ 	.platform_engine_mask =
+ 		BIT(RCS0) | BIT(BCS0) |
+ 		BIT(VECS0) | BIT(VECS1) |
+diff --git a/drivers/gpu/drm/i915/intel_device_info.h b/drivers/gpu/drm/i915/intel_device_info.h
+index 3699b1c539ea..c8aaf646430c 100644
+--- a/drivers/gpu/drm/i915/intel_device_info.h
++++ b/drivers/gpu/drm/i915/intel_device_info.h
+@@ -130,6 +130,7 @@ enum intel_ppgtt_type {
+ 	/* Keep has_* in alphabetical order */ \
+ 	func(has_64bit_reloc); \
+ 	func(has_64k_pages); \
++	func(needs_compact_pt); \
+ 	func(gpu_reset_clobbers_display); \
+ 	func(has_reset_engine); \
+ 	func(has_global_mocs); \
 -- 
-2.34.1
+2.25.1
 

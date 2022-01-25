@@ -2,321 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D69A349B6F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E9D49B6F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580915AbiAYOw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:52:59 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5398 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1580339AbiAYOs1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1580966AbiAYOxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:53:30 -0500
+Received: from mail-db8eur05on2110.outbound.protection.outlook.com ([40.107.20.110]:53501
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1580353AbiAYOs1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Jan 2022 09:48:27 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PEjLal009848;
-        Tue, 25 Jan 2022 14:48:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=4Yp8VKbahH5DEY6HGI9WGFbr63zbencichZuEQRzo/Y=;
- b=Ws2UnIkBN+UBEMGkkOYkaNYzmChsVHMaqaQd4fHHY6v/KNEJknwJnYivcDIF+ZoIHV36
- cFGw1cze2FPRfWeMd1+Iixc7cz3hP4OPh1RAWZzgKNVUbOOJxka28ZFMUXdwvMePFNVJ
- tTuVNE187MOPNKg7BtoHb0AFgfxVoh2IKOMB0Yt0OhEstsAQHnO40bIroVyFSnSsLp+z
- bQZKtnykp6LoUTAX8kUVd4A3KPEYwMufdmKTHWD+2CalMM42awR254BnAbmYNqbiTBVZ
- oyYtveU4CZ2IiFlN8WbSgup6zZuuRYi/GMex4sQ4LEPWGIiR4gbZ3enTeyPsWejwbHu0 pA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dtk7084fh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:48:06 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20PEjkHc012413;
-        Tue, 25 Jan 2022 14:48:06 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dtk7084f5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:48:06 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PElP8W009875;
-        Tue, 25 Jan 2022 14:48:05 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma04wdc.us.ibm.com with ESMTP id 3dr9jaenua-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:48:05 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PElw2l22151468
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 14:47:58 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F33BC6061;
-        Tue, 25 Jan 2022 14:47:58 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5E41FC6062;
-        Tue, 25 Jan 2022 14:47:56 +0000 (GMT)
-Received: from [9.163.21.206] (unknown [9.163.21.206])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Jan 2022 14:47:56 +0000 (GMT)
-Message-ID: <5de7c3ef-9c25-56d3-cc46-e002f8742dbe@linux.ibm.com>
-Date:   Tue, 25 Jan 2022 09:47:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CFTaCluS5o8rQnfeRpl9GPolXaajW+sck2f05H8MwGAid9FAhXV4jL2yB3E0fg7upKO7+2U9RoAIRQrOinBMl1O6+h3iHDdLO7HtY+XiseQk0PWzQCicoK4wU6VvSdb9wGnWC19oSSMzh3C3IZWq0yDk0RxdL6//mwoUUlcrRbXBQyzGWDRGKnwZzypop+laus1B5q06QlOofQVit7yG7bU59tsEHEhKueWRsCrlPtDdEii7T85rgE8o258PdeduXf7mXEvvE7O6R0bCPSdxRFoT4hLT+zkL45KM1F6CezNXdwhlC8sp9KZS0u1r9DkfY9V11lIQ6Xnbjho4Et+qBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4MUXi3GP3jwU117h9vbCj7WYECEimyoTDiQdzXMRMSY=;
+ b=NPrgocyYrdkX36sJALUUf0ksFymvKvEFNV6Lyg9sWJSGzzrGGWuFQzGBM4QujQ2zcfSgYGttk5LolyRnJSaeVfi93LXDBWOz/Tt35ihGo9jmP1d9y1fLwm0MbzPOdEyZaj23D10MMX+nV1ne6j4rKm0QW7Ctx3eZ7MJewOsYLryB1gsRYDjDlyH0lsDL8eKBIfUp/SF67HggB0qlVBF52VG6u5DVNbmd03aZWz3xMwUFukOtpdzGEYz8wgvIXIn5IUOyvkcI4Q8p+TvJE/Tv/ZTs3x7LmMHrubdk17jGlju71OYPvsIg+4w0rKUf1J+hsCvuG2TRNPoxxPlRWKeWZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 217.111.95.66) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arri.de;
+ dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4MUXi3GP3jwU117h9vbCj7WYECEimyoTDiQdzXMRMSY=;
+ b=mZDW33RNafee50b+cSL30S3DRNlbBGVhiZylKELWr9S/84xjjhCgH27Q9PwXyO0dawFf38U4vR7bBsZ4t6YFFbDCKpchISRgrNptejcexbcinKY3NZQ6Og7e5AolPmgpiR5Ftr0hNH7ox1BAzCIAIgqbcutSJ9WEnvagSPbjIlU=
+Received: from AS8P250CA0006.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:330::11)
+ by AS8PR07MB7687.eurprd07.prod.outlook.com (2603:10a6:20b:25d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.2; Tue, 25 Jan
+ 2022 14:48:18 +0000
+Received: from VE1EUR02FT050.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:20b:330:cafe::fc) by AS8P250CA0006.outlook.office365.com
+ (2603:10a6:20b:330::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17 via Frontend
+ Transport; Tue, 25 Jan 2022 14:48:18 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.66)
+ smtp.mailfrom=arri.de; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arri.de;
+Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
+ designate 217.111.95.66 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.111.95.66; helo=mta.arri.de;
+Received: from mta.arri.de (217.111.95.66) by
+ VE1EUR02FT050.mail.protection.outlook.com (10.152.13.198) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Tue, 25 Jan 2022 14:48:18 +0000
+Received: from localhost.de (192.168.54.129) by mta.arri.de (192.168.100.104)
+ with Microsoft SMTP Server (TLS) id 14.3.498.0; Tue, 25 Jan 2022 15:48:09
+ +0100
+From:   Christian Eggers <ceggers@arri.de>
+To:     Abel Vesa <abel.vesa@nxp.com>
+CC:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Stefan Riedmueller <s.riedmueller@phytec.de>,
+        Christian Eggers <ceggers@arri.de>
+Subject: [PATCH RESEND 6/6] clk: imx6sx: enforce gating of gpmi_io clock
+Date:   Tue, 25 Jan 2022 15:48:01 +0100
+Message-ID: <20220125144801.18158-1-ceggers@arri.de>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220125144441.17750-1-ceggers@arri.de>
+References: <20220125144441.17750-1-ceggers@arri.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 20/30] KVM: s390: pci: provide routines for
- enabling/disabling IOAT assist
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-21-mjrosato@linux.ibm.com>
- <12b9fba1-38b4-057d-49f4-969f2e7e1be3@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <12b9fba1-38b4-057d-49f4-969f2e7e1be3@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -PlSyIzHZkswDFo9yUtdPrsqnSE35ewt
-X-Proofpoint-ORIG-GUID: U0yGsMqQdu3xmgrVCtVy70vD98jSwD6n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1015 impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0
- mlxlogscore=999 spamscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201250094
+Content-Type: text/plain
+X-Originating-IP: [192.168.54.129]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 29754e65-6799-4362-dd80-08d9e011b9a6
+X-MS-TrafficTypeDiagnostic: AS8PR07MB7687:EE_
+X-Microsoft-Antispam-PRVS: <AS8PR07MB768730DCF1F231AC71382E8BBF5F9@AS8PR07MB7687.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:655;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: u/gctByeXbyyScdxoOIpSDoMN+n7UR6OSDN8p9W0rSujNjqIapoTr8stzN9gOBUbzqZnFVobf1nF/Islm8HoTYMgfop7ZEmRL/1OLQypsk8RnFJ7qOaW0jgwIboGbtYYcNZKlzP7FmjN0ue3iQjFO5FKl8Vjg+GhiRbV+i567AIKyRJuFMF86NLOszOWhknBFlqxNeIMxWhuGdKzQcw4jTzysoq9oS1Mygf3ijfC7p/dl757fSLnf5zlumbGb8bqFYB05m7w2Af+vpKPpLhTtuUMYXjSE8eEJ+M2N64I/7hR4IxIYdnut5A8sn4pr+nIXPBrPJ54KN/sqDOn0AcC10khT3TP3JegQPF5XBqOZpD1GmgV/jIUyfi+j3ykNrxwqeQkCpZwzRHPb7KpWUKliEojpW+ZwBKME62lPLCASwauecnaicoI0509jyExcNE+DeEpq7YVpbVZ9CtZmEOtvcHoTpQoZNVBnMHTlyhmiwi1T7UDsfMDmeZkfEQSx0S0JMQ64AhuzudZhk5a9jr/zKBBkqpFSznmOlhDdtPzCcLSP2ea6vWB7LJv9yCDYrFbnE5lRHqnifdhOPzH14BWpH287eliN50/MWuN74uUSGrRWLngjTw0lMmC5kggxxS4HAPHDr3+rK55DR6UeUeDsnVDcOKF4qFun9DFvR2BMakBLiQlziMRcQYyqgte9S5CQkmfNMKQB0IlNHVN9aqnNikb2p4pKOFEtQ5es0p+0TA0cjvN4oktvv+uX6ysKUmDBCkynN/Hsu7Q1FlBWBoqcLU5f/XlO2i3R06Yrx71jeA=
+X-Forefront-Antispam-Report: CIP:217.111.95.66;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(316002)(86362001)(186003)(54906003)(36860700001)(426003)(336012)(16526019)(5660300002)(107886003)(2616005)(1076003)(8936002)(82310400004)(26005)(6862004)(47076005)(83380400001)(2906002)(8676002)(4326008)(70206006)(70586007)(6666004)(81166007)(356005)(40460700003)(508600001)(36756003)(32563001)(36900700001)(20210929001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: arri.de
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 14:48:18.0766
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29754e65-6799-4362-dd80-08d9e011b9a6
+X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.66];Helo=[mta.arri.de]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT050.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB7687
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 8:29 AM, Pierre Morel wrote:
-> 
-> 
-> On 1/14/22 21:31, Matthew Rosato wrote:
->> These routines will be wired into the vfio_pci_zdev ioctl handlers to
->> respond to requests to enable / disable a device for PCI I/O Address
->> Translation assistance.
->>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   arch/s390/include/asm/kvm_pci.h |  15 ++++
->>   arch/s390/include/asm/pci_dma.h |   2 +
->>   arch/s390/kvm/pci.c             | 139 ++++++++++++++++++++++++++++++++
->>   arch/s390/kvm/pci.h             |   2 +
->>   4 files changed, 158 insertions(+)
->>
->> diff --git a/arch/s390/include/asm/kvm_pci.h 
->> b/arch/s390/include/asm/kvm_pci.h
->> index 01fe14fffd7a..770849f13a70 100644
->> --- a/arch/s390/include/asm/kvm_pci.h
->> +++ b/arch/s390/include/asm/kvm_pci.h
->> @@ -16,11 +16,21 @@
->>   #include <linux/kvm_host.h>
->>   #include <linux/kvm.h>
->>   #include <linux/pci.h>
->> +#include <linux/mutex.h>
->>   #include <asm/pci_insn.h>
->> +#include <asm/pci_dma.h>
->> +
->> +struct kvm_zdev_ioat {
->> +    unsigned long *head[ZPCI_TABLE_PAGES];
->> +    unsigned long **seg;
->> +    unsigned long ***pt;
->> +    struct mutex lock;
-> 
-> Can we please rename the mutex ioat_lock to have a unique name easy to 
-> follow for maintenance.
-> Can you please add a description about when the lock should be used?
-> 
+Clock parent and divider changes are both glitchy for qspi2_clock_root.
+Enforce that the child clock is gated.
 
-OK.  The lock is meant to protect the contents of kvm_zdev_ioat -- I'll 
-think of something to describe it.
+Signed-off-by: Christian Eggers <ceggers@arri.de>
+---
+ drivers/clk/imx/clk-imx6sx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->> +};
->>   struct kvm_zdev {
->>       struct zpci_dev *zdev;
->>       struct kvm *kvm;
->> +    struct kvm_zdev_ioat ioat;
->>       struct zpci_fib fib;
->>   };
->> @@ -33,6 +43,11 @@ int kvm_s390_pci_aif_enable(struct zpci_dev *zdev, 
->> struct zpci_fib *fib,
->>                   bool assist);
->>   int kvm_s390_pci_aif_disable(struct zpci_dev *zdev);
->> +int kvm_s390_pci_ioat_probe(struct zpci_dev *zdev);
->> +int kvm_s390_pci_ioat_enable(struct zpci_dev *zdev, u64 iota);
->> +int kvm_s390_pci_ioat_disable(struct zpci_dev *zdev);
->> +u8 kvm_s390_pci_get_dtsm(struct zpci_dev *zdev);
->> +
->>   int kvm_s390_pci_interp_probe(struct zpci_dev *zdev);
->>   int kvm_s390_pci_interp_enable(struct zpci_dev *zdev);
->>   int kvm_s390_pci_interp_disable(struct zpci_dev *zdev);
->> diff --git a/arch/s390/include/asm/pci_dma.h 
->> b/arch/s390/include/asm/pci_dma.h
->> index 91e63426bdc5..69e616d0712c 100644
->> --- a/arch/s390/include/asm/pci_dma.h
->> +++ b/arch/s390/include/asm/pci_dma.h
->> @@ -50,6 +50,8 @@ enum zpci_ioat_dtype {
->>   #define ZPCI_TABLE_ALIGN        ZPCI_TABLE_SIZE
->>   #define ZPCI_TABLE_ENTRY_SIZE        (sizeof(unsigned long))
->>   #define ZPCI_TABLE_ENTRIES        (ZPCI_TABLE_SIZE / 
->> ZPCI_TABLE_ENTRY_SIZE)
->> +#define ZPCI_TABLE_PAGES        (ZPCI_TABLE_SIZE >> PAGE_SHIFT)
->> +#define ZPCI_TABLE_ENTRIES_PAGES    (ZPCI_TABLE_ENTRIES * 
->> ZPCI_TABLE_PAGES)
->>   #define ZPCI_TABLE_BITS            11
->>   #define ZPCI_PT_BITS            8
->> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
->> index 7ed9abc476b6..39c13c25a700 100644
->> --- a/arch/s390/kvm/pci.c
->> +++ b/arch/s390/kvm/pci.c
->> @@ -13,12 +13,15 @@
->>   #include <asm/pci.h>
->>   #include <asm/pci_insn.h>
->>   #include <asm/pci_io.h>
->> +#include <asm/pci_dma.h>
->>   #include <asm/sclp.h>
->>   #include "pci.h"
->>   #include "kvm-s390.h"
->>   struct zpci_aift *aift;
->> +#define shadow_ioat_init zdev->kzdev->ioat.head[0]
->> +
->>   static inline int __set_irq_noiib(u16 ctl, u8 isc)
->>   {
->>       union zpci_sic_iib iib = {{0}};
->> @@ -344,6 +347,135 @@ int kvm_s390_pci_aif_disable(struct zpci_dev *zdev)
->>   }
->>   EXPORT_SYMBOL_GPL(kvm_s390_pci_aif_disable);
->> +int kvm_s390_pci_ioat_probe(struct zpci_dev *zdev)
->> +{
->> +    /* Must have a KVM association registered */
-> 
-> may be add something like : "The ioat structure is embeded in kzdev"
-> 
->> +    if (!zdev->kzdev || !zdev->kzdev->kvm)
-> 
-> Why do we need to check for kvm ?
-> Having kzdev is already tested by the unique caller.
-> 
+diff --git a/drivers/clk/imx/clk-imx6sx.c b/drivers/clk/imx/clk-imx6sx.c
+index cf1c1fad45f9..023a18594ebe 100644
+--- a/drivers/clk/imx/clk-imx6sx.c
++++ b/drivers/clk/imx/clk-imx6sx.c
+@@ -286,7 +286,7 @@ static void __init imx6sx_clocks_init(struct device_node *ccm_node)
+ 	hws[IMX6SX_CLK_ESAI_SEL]           = imx_clk_hw_mux("esai_sel",         base + 0x20,  19,     2,      audio_sels,        ARRAY_SIZE(audio_sels));
+ 	hws[IMX6SX_CLK_CAN_SEL]            = imx_clk_hw_mux("can_sel",          base + 0x20,  8,      2,      can_sels,          ARRAY_SIZE(can_sels));
+ 	hws[IMX6SX_CLK_UART_SEL]           = imx_clk_hw_mux("uart_sel",         base + 0x24,  6,      1,      uart_sels,         ARRAY_SIZE(uart_sels));
+-	hws[IMX6SX_CLK_QSPI2_SEL]          = imx_clk_hw_mux_flags("qspi2_sel", base + 0x2c, 15, 3, qspi2_sels, ARRAY_SIZE(qspi2_sels), CLK_SET_RATE_PARENT);
++	hws[IMX6SX_CLK_QSPI2_SEL]          = imx_clk_hw_mux_flags("qspi2_sel", base + 0x2c, 15, 3, qspi2_sels, ARRAY_SIZE(qspi2_sels), CLK_SET_RATE_PARENT | CLK_SET_PARENT_GATE);
+ 	hws[IMX6SX_CLK_SPDIF_SEL]          = imx_clk_hw_mux("spdif_sel",        base + 0x30,  20,     2,      audio_sels,        ARRAY_SIZE(audio_sels));
+ 	hws[IMX6SX_CLK_AUDIO_SEL]          = imx_clk_hw_mux("audio_sel",        base + 0x30,  7,      2,      audio_sels,        ARRAY_SIZE(audio_sels));
+ 	hws[IMX6SX_CLK_ENET_PRE_SEL]       = imx_clk_hw_mux("enet_pre_sel",     base + 0x34,  15,     3,      enet_pre_sels,     ARRAY_SIZE(enet_pre_sels));
+@@ -441,7 +441,7 @@ static void __init imx6sx_clocks_init(struct device_node *ccm_node)
+ 	hws[IMX6SX_CLK_PWM4]         = imx_clk_hw_gate2("pwm4",          "perclk",            base + 0x78, 22);
+ 	hws[IMX6SX_CLK_GPMI_BCH_APB] = imx_clk_hw_gate2("gpmi_bch_apb",  "usdhc3",            base + 0x78, 24);
+ 	hws[IMX6SX_CLK_GPMI_BCH]     = imx_clk_hw_gate2("gpmi_bch",      "usdhc4",            base + 0x78, 26);
+-	hws[IMX6SX_CLK_GPMI_IO]      = imx_clk_hw_gate2("gpmi_io",       "qspi2_podf",        base + 0x78, 28);
++	hws[IMX6SX_CLK_GPMI_IO]      = imx_clk_hw_gate2_flags("gpmi_io",       "qspi2_podf",        base + 0x78, 28, CLK_SET_RATE_GATE);
+ 	hws[IMX6SX_CLK_GPMI_APB]     = imx_clk_hw_gate2("gpmi_apb",      "usdhc3",            base + 0x78, 30);
+ 
+ 	/* CCGR5 */
+-- 
+Christian Eggers
+Embedded software developer
 
-We probably don't need to check for the kzdev because the caller already 
-did this, agreed there.
-
-But as for checking the kvm association, Alex asked for this in a 
-comment to v1 (comment was against one of the vfio patches that call 
-these routines) -- The reason being the probe comes from a userspace 
-request and can be against any vfio-pci(-zdev) device at any time, and 
-there's no point in proceeding if this device is not associated with a 
-KVM guest -- It's possible for the KVM notifier to also pass a null KVM 
-address -- so I think it's better to just be sure here.  In a 
-well-behaved environment we would never see this (so, another case for 
-an s390dbf entry)
-
->> +        return -EINVAL;
->> +
->> +    return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(kvm_s390_pci_ioat_probe);
->> +
->> +int kvm_s390_pci_ioat_enable(struct zpci_dev *zdev, u64 iota)
->> +{
->> +    gpa_t gpa = (gpa_t)(iota & ZPCI_RTE_ADDR_MASK);
->> +    struct kvm_zdev_ioat *ioat;
->> +    struct page *page;
->> +    struct kvm *kvm;
->> +    unsigned int idx;
->> +    void *iaddr;
->> +    int i, rc = 0;
-> 
-> no need to initialize rc
-
-Agree based on the changes below
-
-> 
->> +
->> +    if (shadow_ioat_init)
->> +        return -EINVAL;
->> +
->> +    /* Ensure supported type specified */
->> +    if ((iota & ZPCI_IOTA_RTTO_FLAG) != ZPCI_IOTA_RTTO_FLAG)
->> +        return -EINVAL;
->> +
->> +    kvm = zdev->kzdev->kvm;
->> +    ioat = &zdev->kzdev->ioat;
->> +    mutex_lock(&ioat->lock);
->> +    idx = srcu_read_lock(&kvm->srcu);
->> +    for (i = 0; i < ZPCI_TABLE_PAGES; i++) {
->> +        page = gfn_to_page(kvm, gpa_to_gfn(gpa));
->> +        if (is_error_page(page)) {
->> +            srcu_read_unlock(&kvm->srcu, idx);
->> +            rc = -EIO;
->> +            goto out;
-> 
->              goto unpin ?
-
-Ah, right, in case we hit this error somewhere in the middle of the loop.
-
-> 
->> +        }
->> +        iaddr = page_to_virt(page) + (gpa & ~PAGE_MASK);
->> +        ioat->head[i] = (unsigned long *)iaddr;
->> +        gpa += PAGE_SIZE;
->> +    }
->> +    srcu_read_unlock(&kvm->srcu, idx);
->> +
->> +    zdev->kzdev->ioat.seg = kcalloc(ZPCI_TABLE_ENTRIES_PAGES,
->> +                    sizeof(unsigned long *), GFP_KERNEL);
-> 
-> What about:
-> 
->          ioat->seg = kcalloc(ZPCI_TABLE_ENTRIES_PAGES,
->                              sizeof(*ioat->seg), GFP_KERNEL);
->      if (!ioat->seg)
-> ...
->      ioat->pt = ...
-> ?
-
-Yep, would be fine (seems I forgot about the local *ioat here)
-
-> 
->> +    if (!zdev->kzdev->ioat.seg)
->> +        goto unpin;
->> +    zdev->kzdev->ioat.pt = kcalloc(ZPCI_TABLE_ENTRIES,
->> +                       sizeof(unsigned long **), GFP_KERNEL);
->> +    if (!zdev->kzdev->ioat.pt)
->> +        goto free_seg;
->> +
->> +out:
->> +    mutex_unlock(&ioat->lock);
->> +    return rc;
-> 
->      return 0 ?
-
-Yes, we can do that now that we don't goto out: after is_error_page
-
-> 
->> +
->> +free_seg:
->> +    kfree(zdev->kzdev->ioat.seg);
-> 
-> kfree(ioat->seg) ?
-> rc = -ENOMEM;
-> 
->> +unpin:
->> +    for (i = 0; i < ZPCI_TABLE_PAGES; i++) {
->> +        kvm_release_pfn_dirty((u64)ioat->head[i] >> PAGE_SHIFT);
->> +        ioat->head[i] = 0;
->> +    }
->> +    mutex_unlock(&ioat->lock);
->> +    return -ENOMEM;
-> 
->      return rc;
-
-And yes, agreed, now that we come here for other reasons (-EIO) we must 
-return rc here and also set rc=-ENOMEM as you say for the kfree case above.
+Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRA 57918
+Persoenlich haftender Gesellschafter: Arnold & Richter Cine Technik GmbH
+Sitz: Muenchen - Registergericht: Amtsgericht Muenchen - Handelsregisternummer: HRB 54477
+Geschaeftsfuehrer: Dr. Michael Neuhaeuser; Stephan Schenk; Walter Trauninger; Markus Zeiler
 

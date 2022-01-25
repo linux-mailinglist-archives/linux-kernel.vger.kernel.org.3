@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAAA49B44F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E8049B451
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245648AbiAYMuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S1378304AbiAYMvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455460AbiAYMqG (ORCPT
+        with ESMTP id S1457057AbiAYMsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:46:06 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E537C061760;
-        Tue, 25 Jan 2022 04:46:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/pi/hUUlS91esbzGCPX8RrA4mReY8qXH6MTNTD3QQsY=; b=nh0jtatPM+dv1vDo8NvVTs+zdo
-        rKJGgiqzkMhmmKjHUcPHaQQLuW4v6utD/NacbzRNqPD5RKhrn8xvR1tMw+uSFvvdk1vjImrnIkzII
-        CIcEXFn/nRwDCSv4C8gOabceTHfUzsN2D394Azj8YLUQKsJIFn6PHIkFvBGK9haUJuH+Cqj1p4oFL
-        dm+KzDIN7t0RCPMud1uV4IsPmwD+PAwNc4tqw68B5d+kOFzvQjqgOsHWvsFd8S/+Naxy65RnZXSL1
-        Qjb3qipXGUh1TsHVXsf/Sm//hUy8Zlr8DBb+rOUj1mRH05gHgXrPJQl8V5fTcFuaO1PhOYifdxS3M
-        DIN/E3sQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCLCq-003TIy-Tp; Tue, 25 Jan 2022 12:45:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 49CE63002FC;
-        Tue, 25 Jan 2022 13:45:51 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F24E12B37266D; Tue, 25 Jan 2022 13:45:50 +0100 (CET)
-Date:   Tue, 25 Jan 2022 13:45:50 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: Re: earlyprintk=xdbc seems broken
-Message-ID: <Ye/w/lOf4f8+8fDt@hirez.programming.kicks-ass.net>
-References: <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
- <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
- <Yao35lElOkwtBYEb@kroah.com>
- <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
- <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
- <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
- <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
- <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
- <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
- <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
+        Tue, 25 Jan 2022 07:48:36 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9607C06173E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 04:48:35 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id q127so1801429ljq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 04:48:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZAMOdaZV3kaz6DNePCCcseQo6HQuQu7Jogq542aV50U=;
+        b=kZymcFPiqTrN6lay77u5I0pKKqy2ePROp3bdw2vGb8US+M0sWOhNhaqYtxFsK6XlWR
+         dIQRE4DeBE7TxBj+NGMkPXgtz76s9jy0dTstR5MrSue8bnRaJabAw6uhlwpqeLFFFAOR
+         ZSJGt/PXAZVjf93sLfwIsbvGJij0XBJn1vZ5CvU81dBY3+B/ucKnTRHhZmPKQWk7PBJL
+         hSussOi/wXrQjzlqTJNsw9XWl6lJGHw7zpQukUEqWFlCCXNoDRgV9Igurb14+aQgCA/S
+         G1k+kySrajDS+Mua7l6UXeEFUGgGUuKSpMtI5uH4iyI7on+g/9Of5mmWaf2TEhQfDQei
+         lIcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZAMOdaZV3kaz6DNePCCcseQo6HQuQu7Jogq542aV50U=;
+        b=QCRAtz56GyhKRKHCuBQ6NrEwZwM1NCCryyzaukRQU+HSrSY+WRAD8fzz/wkXnOFkB+
+         WV2oO0dNk4WJkHKULFjx8qZup2Pm/YnlzcKkv6erGQ025vfLcjhSnGNpQsAdCODBIPuF
+         lrwxlEjTyTI0tVJbmp83YaRPsVATdvQztsI17pIb1ZG0Dlfe94fX4Ctz62yqs1kcI8oM
+         Ts+MJCN0BcVOCurgWtmjS9L+QBN8lfrNNrphdD9L+Ndsr09fj0AuGJg1i2UYTRccHHDW
+         2NgpUYKLw2B4jrr6fagTcKnvApsRKyp1gbfdH+1Gb061UKMVIoCnF3b6H3/pyqJnDdOw
+         GCwQ==
+X-Gm-Message-State: AOAM532EEiV1KZJIF/AWD1ODZ3ScKsNRl44A1bScCD3DIjYBw4VaJXwF
+        p2mNvuUqPxyfILo8YfBQ52k=
+X-Google-Smtp-Source: ABdhPJzD0Dpm374X8XGe9j8y27j8+MrVZsA3uxyWNkyDoKVx4BpSAuxrJHa9ZGTTJW3EUDmd8kf0yQ==
+X-Received: by 2002:a2e:22c6:: with SMTP id i189mr760695lji.496.1643114914006;
+        Tue, 25 Jan 2022 04:48:34 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.227.208])
+        by smtp.gmail.com with ESMTPSA id j23sm781579lfh.35.2022.01.25.04.48.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 04:48:33 -0800 (PST)
+Message-ID: <67ddc4d7-e19f-7c9d-a4b7-4eb555830ea1@gmail.com>
+Date:   Tue, 25 Jan 2022 15:48:32 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 05/10] staging: r8188eu: remove smaller sets of DBG_88E
+ calls from os_dep dir
+Content-Language: en-US
+To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
+Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
+        straube.linux@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220124224415.831-1-phil@philpotter.co.uk>
+ <20220124224415.831-6-phil@philpotter.co.uk>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220124224415.831-6-phil@philpotter.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 04:55:22PM +0200, Mathias Nyman wrote:
->  
-> > [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
-> > [    4.984106] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
-> > [    9.946159] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
-> > [    9.946163] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
-> >
-> > [   12.818364] xhci_hcd 0000:00:0d.0: xHCI Host Controller
-> > [   12.818373] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 1
-> > [   12.820360] xhci_hcd 0000:00:0d.0: xHCI Host Controller
-> > [   12.820363] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 2
-> > [   12.821036] xhci_hcd 0000:00:14.0: xHCI Host Controller
-> > [   12.821040] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 3
-> > [   12.823451] xhci_hcd 0000:00:14.0: xHCI Host Controller
-> > [   12.823453] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 4
-> > [   17.115089] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
-> > [   17.115163] usb usb4-port4: config error
+Hi Phillip,
+
+On 1/25/22 01:44, Phillip Potter wrote:
+> Remove all DBG_88E calls from the os_dep directory, other than those in
+> os_dep/ioctl_linux.c, as this contains almost 200 on its own so will be
+> done in a separate patch for ease of review. These calls do not conform
+> to kernel coding standards and are superfluous. Also restructure where
+> appropriate to remove no longer needed code left behind by removal of
+> these calls. This will allow the eventual removal of the DBG_88E macro
+> itself.
 > 
-> Ok, I see it now.
-> Your setup has two xhci controllers, earlypringk=dbc enables dbc on the first xhci
-> it finds, which would be at 0000:00:0d.0.
-> Your cable is connected to the second xhci host at 0000:00:14.0
+> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+> ---
 
-I suspect the first xhci controller is for the usb-c ports on the
-machine, while the second one has the usb-a ports covered.
+[code snip]
 
-Now the documentation states we need this super speed A<->A cable, but
-could you also update the documentation for usb-c ? There's a fair
-number of usb-c only devices out there now.
+>   
+> -	/* 2012-07-11 Move here to prevent the 8723AS-VAU BT auto
+> -	 * suspend influence */
+> -	if (usb_autopm_get_interface(pusb_intf) < 0)
+> -			DBG_88E("can't get autopm:\n");
+> -
 
-C<->A and C<->C cables are fairly easy to come by, would they 'just
-work' ?
+Didn't you make a function change here? I didn't test and also didn't 
+find any mentions of tests in cover letter.
+
+I am asking just to be sure you done it not by accident :)
+
+
+
+
+
+With regards,
+Pavel Skripkin

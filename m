@@ -2,281 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BE849AF05
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C2749AF0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454124AbiAYI65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        id S1454352AbiAYI7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453808AbiAYIzv (ORCPT
+        with ESMTP id S1453978AbiAYI4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:55:51 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB62C049642
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 23:51:32 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id q75so17609998pgq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 23:51:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A/aENFTNzjAM+uwrag3B1qHd/TFz6oxzOU+9OgjpBY0=;
-        b=IHPSFI00pYZGfTVdBdN2epoh1vkXxSzZ97M46BMuvnIKU74J96xadoI9PzAegAn3HK
-         RIlGWMpclfeWbmKM7y7qayMtalDQ/RF0tlQ8WByl4Ru38QaCouqw1q9qoVNUMiFCKjO5
-         xUfU1iOsT1D0C3i5Mue2dPzRsYfbYBWHX6U40=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A/aENFTNzjAM+uwrag3B1qHd/TFz6oxzOU+9OgjpBY0=;
-        b=JikDqSbqLA7v1S3V1l+NUFnUBFOqMoV22wGA43u3fJyjGtq4/O2ZhpdHgYaOFufJDo
-         IU0NQbWY/A/dZ63RuHELKfXLRXLEU8jSCigO8E6TUt1NHbpDt2iHlqkny+Hd/+DRBFaF
-         lYcRXnBd2eMuj8VBaa/zE5mKwzPv/F4oSOlEs2BVZPl9409FPm49Df0LeRfP/L3SNtjn
-         aX+VQnwxhqjQVhmOEpV5mbqC0bdO3XVFMGIix2FXfa7BRkfoKZ8vW6WonAi0f3nzSYKm
-         A2Lmw5gZleErzDWg2d81DY1vLYPSOuLXt58c5jr7aN7aCfyaAd2HncyU0VJ4uMO9scv7
-         I7TQ==
-X-Gm-Message-State: AOAM530Kp+2s8+N0R3sUMBS4SN+kh2GayveKtOxUW9fHZL5bNFJgh/6T
-        bHzidMObeJ76WssviowjJqxeig==
-X-Google-Smtp-Source: ABdhPJxYMmUV6UNJ1kx5yW1QIZXaLDl74r72N+JUDDQM3aNEgpZhzyMmtW9/b2H7LKIZg17H45nJGg==
-X-Received: by 2002:a05:6a00:d64:b0:4ba:cb6f:87e0 with SMTP id n36-20020a056a000d6400b004bacb6f87e0mr17310243pfv.72.1643097091380;
-        Mon, 24 Jan 2022 23:51:31 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h25sm18804198pfn.208.2022.01.24.23.51.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 23:51:31 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Isabella Basso <isabbasso@riseup.net>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v3] Kconfig.debug: Make DEBUG_INFO selectable from a choice
-Date:   Mon, 24 Jan 2022 23:51:26 -0800
-Message-Id: <20220125075126.891825-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 25 Jan 2022 03:56:52 -0500
+Received: from forward500j.mail.yandex.net (forward500j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5664AC058CB3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 00:01:25 -0800 (PST)
+Received: from vla1-d53b4f396d89.qloud-c.yandex.net (vla1-d53b4f396d89.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:b8c:0:640:d53b:4f39])
+        by forward500j.mail.yandex.net (Yandex) with ESMTP id 748156CB6689;
+        Tue, 25 Jan 2022 11:01:08 +0300 (MSK)
+Received: from vla1-62318bfe5573.qloud-c.yandex.net (vla1-62318bfe5573.qloud-c.yandex.net [2a02:6b8:c0d:3819:0:640:6231:8bfe])
+        by vla1-d53b4f396d89.qloud-c.yandex.net (mxback/Yandex) with ESMTP id pNAwKE7dnK-17d8u1YQ;
+        Tue, 25 Jan 2022 11:01:08 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1643097668;
+        bh=q9aiavGIEsjbNTguZm0W5pY728tsRKPQNL57qb/RJnA=;
+        h=In-Reply-To:Subject:To:From:References:Date:Message-ID:Cc;
+        b=FcSm1notg3awy/NpOlZDklhUfmE4arK/fI6+B9/ury8N/qa7hpcSzj1jJGVSfeCLT
+         syMQDpKguyReiAdhZpVjwp4KEMJRHu4XaZdpqXHQ9YS2zJBPef9BHcirc4sKVcmWQK
+         7ZBq+XmpKRNQ3x5x7xmd87n9vKAKAGFfF0JBDcbI=
+Authentication-Results: vla1-d53b4f396d89.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
+Received: by vla1-62318bfe5573.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id yIWdB9Nobz-17IiQ4Sd;
+        Tue, 25 Jan 2022 11:01:07 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+Date:   Tue, 25 Jan 2022 11:01:06 +0300
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        kernel test robot <yujie.liu@intel.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Philip Li <philip.li@intel.com>
+Subject: Re: arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory
+ after it is freed [clang-analyzer-unix.Malloc]
+Message-ID: <20220125110106.7043f846@redslave.neermore.group>
+In-Reply-To: <CAKwvOd=NVZs7bfz-OTnhPmk4xZfmJq6zQzJaEtaX4AO0N7Pi9A@mail.gmail.com>
+References: <202201200359.lTk9zHg4-lkp@intel.com>
+        <39230575-13ea-7384-71bc-2aac1fa2edb8@intel.com>
+        <CAKwvOd=NVZs7bfz-OTnhPmk4xZfmJq6zQzJaEtaX4AO0N7Pi9A@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8150; h=from:subject; bh=Sk6bdOF055YpWVSI90zrcLZOsF2giKdwSSCMnUw/2Vc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh76v+ed6XRMKylDRICIuwyHz3AwiXdzYskYuNnvYs U5jvS1KJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYe+r/gAKCRCJcvTf3G3AJnEpD/ sHGPkKwHcb4aul5Defn5aISeEIE7j6GeWdkuhaVJsmMhkekO/EU3P6qUMn8KdFv+6IyD+juTzcMn9o uNwAk0ebBEO9iXbhJajo2zpcvStmsNCyDpCI5H2b1rgsog4c4DLIr8NxE3eEyzK88lif/ckVR9/XYW BxPfrINbO11OfCPfiU0GA6octLNFabW3cUtZp5mlz0/JreZqfEHrjLmfU7i++tQLFONKWxg7gTzL1L KezpUoWAYGmVkFr5uh8p5gtlYugsB8ahPMXNSMnAm5aQjK/K080pnKK75X9J6jVIrCrKMpRjEJ6cRE DDtgfDSS8ASRQPZ0k0s01GveNJNFkFyb3dxJESfUkbGxTYOIbjD81MeYoa/xCfsja2SANNkJRNSu4F RjpQU4FfuOrGwg1As29AugdBUwVO78OI3rmihqd4QgoWYqOSV7sko4iSWCQg5Axza/OL+Iu70A1TKV YpWt0B90Iu0XJzu090yd46D+mh0dIGcnFwdw+xd7SJsoCvjTDUtTdbgLwv3tKGzLXCwbl7LA2UrHh1 yegRWwUfWaT4xFVbEtglhuY6cQ/d6KYMBdgBT91Spc+xuXpWfce3YJDo1PzXYWiLQGJ1lFlvfKlnfM nyBDaIot7t3BoqR7n/G3UQUv0/lQzPptdRx9LrqmdZzOcaufS8e5d1++p6sg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently it's not possible to enable DEBUG_INFO for an all*config build,
-since it is marked as "depends on !COMPILE_TEST". This generally makes
-sense because a debug build of an all*config target ends up taking much
-longer and the output is much larger. Having this be "default off" makes
-sense. However, there are cases where enabling DEBUG_INFO for such builds
-is useful for doing treewide A/B comparisons of build options, etc.
+Hello Nick,
 
-Make DEBUG_INFO selectable from any of the DWARF version choice options,
-with DEBUG_INFO_NONE being the default for COMPILE_TEST. The mutually
-exclusive relationship between DWARF5 and BTF must be inverted, but the
-result remains the same. Additionally moves DEBUG_KERNEL and DEBUG_MISC
-up to the top of the menu because they were enabling features _above_
-it, making it weird to navigate menuconfig.
+On Mon, 24 Jan 2022 13:50:02 -0800
+Nick Desaulniers <ndesaulniers@google.com> wrote:
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v1: https://lore.kernel.org/lkml/20211210000910.3597609-1-keescook@chromium.org
-v2: https://lore.kernel.org/lkml/20220121001204.4023842-1-keescook@chromium.org
-v3: - rebase to v5.17-rc1
----
- lib/Kconfig.debug | 140 +++++++++++++++++++++++++---------------------
- 1 file changed, 75 insertions(+), 65 deletions(-)
+> On Wed, Jan 19, 2022 at 5:46 PM kernel test robot
+> <yujie.liu@intel.com> wrote:
+> >
+> > tree:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > master head:   1d1df41c5a33359a00e919d54eaebfb789711fdc commit:
+> > 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 ep93xx: clock: convert
+> > in-place to COMMON_CLK date:   3 months ago config:
+> > arm-randconfig-c002-20220118
+> > (https://download.01.org/0day-ci/archive/20220120/202201200359.lTk9zHg4-lkp@intel.com/config)
+> > compiler: clang version 14.0.0
+> > (https://github.com/llvm/llvm-project
+> > 5f782d25a742302d25ef3c8b84b54f7483c2deb9) reproduce (this is a W=1
+> > build): wget
+> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+> > -O ~/bin/make.cross chmod +x ~/bin/make.cross # install arm cross
+> > compiling tool for clang build # apt-get install
+> > binutils-arm-linux-gnueabi #
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9645ccc7bd7a16cd73c3be9dee70cd702b03be37
+> > git remote add linus
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > git fetch --no-tags linus master git checkout
+> > 9645ccc7bd7a16cd73c3be9dee70cd702b03be37 # save the config file to
+> > linux build tree COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
+> > make.cross ARCH=arm clang-analyzer  
+> 
+> Hey! This check finally caught something that looks legit! Cool to see
+> 0day bot running clang-analyzer, too!
+> Nikita, can you PTAL?
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 14b89aa37c5c..1290e0906236 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -208,20 +208,88 @@ config DEBUG_BUGVERBOSE
- 
- endmenu # "printk and dmesg options"
- 
-+config DEBUG_KERNEL
-+	bool "Kernel debugging"
-+	help
-+	  Say Y here if you are developing drivers or trying to debug and
-+	  identify kernel problems.
-+
-+config DEBUG_MISC
-+	bool "Miscellaneous debug code"
-+	default DEBUG_KERNEL
-+	depends on DEBUG_KERNEL
-+	help
-+	  Say Y here if you need to enable miscellaneous debug code that should
-+	  be under a more specific debug option but isn't.
-+
- menu "Compile-time checks and compiler options"
- 
- config DEBUG_INFO
--	bool "Compile the kernel with debug info"
--	depends on DEBUG_KERNEL && !COMPILE_TEST
-+	bool
- 	help
--	  If you say Y here the resulting kernel image will include
--	  debugging info resulting in a larger kernel image.
-+	  A kernel debug info option other than "None" has been selected
-+	  in the "Debug information" choice below, indicating that debug
-+	  information will be generated for build targets.
-+
-+choice
-+	prompt "Debug information"
-+	depends on DEBUG_KERNEL
-+	default DEBUG_INFO_NONE if COMPILE_TEST
-+	help
-+	  Selecting something other than "None" results in a kernel image
-+	  that will include debugging info resulting in a larger kernel image.
- 	  This adds debug symbols to the kernel and modules (gcc -g), and
- 	  is needed if you intend to use kernel crashdump or binary object
- 	  tools like crash, kgdb, LKCD, gdb, etc on the kernel.
--	  Say Y here only if you plan to debug the kernel.
- 
--	  If unsure, say N.
-+	  Choose which version of DWARF debug info to emit. If unsure,
-+	  select "Toolchain default".
-+
-+config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-+	bool "Rely on the toolchain's implicit default DWARF version"
-+	select DEBUG_INFO
-+	help
-+	  The implicit default version of DWARF debug info produced by a
-+	  toolchain changes over time.
-+
-+	  This can break consumers of the debug info that haven't upgraded to
-+	  support newer revisions, and prevent testing newer versions, but
-+	  those should be less common scenarios.
-+
-+config DEBUG_INFO_DWARF4
-+	bool "Generate DWARF Version 4 debuginfo"
-+	select DEBUG_INFO
-+	help
-+	  Generate DWARF v4 debug info. This requires gcc 4.5+ and gdb 7.0+.
-+
-+	  If you have consumers of DWARF debug info that are not ready for
-+	  newer revisions of DWARF, you may wish to choose this or have your
-+	  config select this.
-+
-+config DEBUG_INFO_DWARF5
-+	bool "Generate DWARF Version 5 debuginfo"
-+	select DEBUG_INFO
-+	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
-+	help
-+	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
-+	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
-+	  draft features until 7.0), and gdb 8.0+.
-+
-+	  Changes to the structure of debug info in Version 5 allow for around
-+	  15-18% savings in resulting image and debug info section sizes as
-+	  compared to DWARF Version 4. DWARF Version 5 standardizes previous
-+	  extensions such as accelerators for symbol indexing and the format
-+	  for fission (.dwo/.dwp) files. Users may not want to select this
-+	  config if they rely on tooling that has not yet been updated to
-+	  support DWARF Version 5.
-+
-+config DEBUG_INFO_NONE
-+	bool "Disable debug information"
-+	help
-+	  Do not build the kernel with debugging information, which will
-+	  result in a faster and smaller build.
-+
-+endchoice # "Debug information"
- 
- if DEBUG_INFO
- 
-@@ -267,56 +335,12 @@ config DEBUG_INFO_SPLIT
- 	  to know about the .dwo files and include them.
- 	  Incompatible with older versions of ccache.
- 
--choice
--	prompt "DWARF version"
--	help
--	  Which version of DWARF debug info to emit.
--
--config DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
--	bool "Rely on the toolchain's implicit default DWARF version"
--	help
--	  The implicit default version of DWARF debug info produced by a
--	  toolchain changes over time.
--
--	  This can break consumers of the debug info that haven't upgraded to
--	  support newer revisions, and prevent testing newer versions, but
--	  those should be less common scenarios.
--
--	  If unsure, say Y.
--
--config DEBUG_INFO_DWARF4
--	bool "Generate DWARF Version 4 debuginfo"
--	help
--	  Generate DWARF v4 debug info. This requires gcc 4.5+ and gdb 7.0+.
--
--	  If you have consumers of DWARF debug info that are not ready for
--	  newer revisions of DWARF, you may wish to choose this or have your
--	  config select this.
--
--config DEBUG_INFO_DWARF5
--	bool "Generate DWARF Version 5 debuginfo"
--	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
--	depends on !DEBUG_INFO_BTF
--	help
--	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
--	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
--	  draft features until 7.0), and gdb 8.0+.
--
--	  Changes to the structure of debug info in Version 5 allow for around
--	  15-18% savings in resulting image and debug info section sizes as
--	  compared to DWARF Version 4. DWARF Version 5 standardizes previous
--	  extensions such as accelerators for symbol indexing and the format
--	  for fission (.dwo/.dwp) files. Users may not want to select this
--	  config if they rely on tooling that has not yet been updated to
--	  support DWARF Version 5.
--
--endchoice # "DWARF version"
--
- config DEBUG_INFO_BTF
- 	bool "Generate BTF typeinfo"
- 	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
- 	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
- 	depends on BPF_SYSCALL
-+	depends on !DEBUG_INFO_DWARF5
- 	help
- 	  Generate deduplicated BTF type information from DWARF debug info.
- 	  Turning this on expects presence of pahole tool, which will convert
-@@ -585,20 +609,6 @@ source "lib/Kconfig.kcsan"
- 
- endmenu
- 
--config DEBUG_KERNEL
--	bool "Kernel debugging"
--	help
--	  Say Y here if you are developing drivers or trying to debug and
--	  identify kernel problems.
--
--config DEBUG_MISC
--	bool "Miscellaneous debug code"
--	default DEBUG_KERNEL
--	depends on DEBUG_KERNEL
--	help
--	  Say Y here if you need to enable miscellaneous debug code that should
--	  be under a more specific debug option but isn't.
--
- menu "Networking Debugging"
- 
- source "net/Kconfig.debug"
--- 
-2.30.2
+Of course, i thought Alexander Sverdlin - already took care of it, he
+is really fast and fires patches before i even realize what happens.
+
+Alexander have you already taken care of it ? If not it's my turn to
+clear my own mess.
+
+> 
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> >
+> > clang-analyzer warnings: (new ones prefixed by >>)
+> >  
+> >  >> arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory
+> >  >> after it is freed [clang-analyzer-unix.Malloc]  
+> >             return &psc->hw;
+> >             ^
+> >     arch/arm/mach-ep93xx/clock.c:151:2: note: Taking true branch
+> >             if (IS_ERR(clk))
+> >             ^
+> >     arch/arm/mach-ep93xx/clock.c:152:3: note: Memory is released
+> >                     kfree(psc);
+> >                     ^~~~~~~~~~
+> >     arch/arm/mach-ep93xx/clock.c:154:2: note: Use of memory after
+> > it is freed return &psc->hw;
+> >             ^      ~~~~~~~~  
+> >  >> arch/arm/mach-ep93xx/clock.c:484:2: warning: Value stored to
+> >  >> 'hw' is never read [clang-analyzer-deadcode.DeadStores]  
+> >             hw = clk_hw_register_fixed_factor(NULL, "uart",
+> > "xtali", 0, 1, clk_uart_div); ^
+> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  
+> >  >> arch/arm/mach-ep93xx/clock.c:612:2: warning: Value stored to
+> >  >> 'hw' is never read [clang-analyzer-deadcode.DeadStores]  
+> >             hw = clk_hw_register_fixed_factor(NULL, "usb_clk",
+> > "pll2", 0, 1, clk_usb_div); ^
+> > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > vim +154 arch/arm/mach-ep93xx/clock.c
+> >
+> > ff05c0330b9880 Hartley Sweeten 2009-05-07  125
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  126  static struct
+> > clk_hw *ep93xx_clk_register_gate(const char *name, 9645ccc7bd7a16
+> > Nikita Shubin   2021-10-18  127
+> >  const char *parent_name, 9645ccc7bd7a16 Nikita Shubin   2021-10-18
+> >  128                                      void __iomem *reg,
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  129
+> >                 u8 bit_idx) 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  130  { 9645ccc7bd7a16 Nikita Shubin   2021-10-18  131
+> >        struct clk_init_data init; 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  132          struct clk_psc *psc; 9645ccc7bd7a16 Nikita
+> > Shubin   2021-10-18  133          struct clk *clk; 9645ccc7bd7a16
+> > Nikita Shubin   2021-10-18  134 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  135          psc = kzalloc(sizeof(*psc), GFP_KERNEL);
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  136          if (!psc)
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  137
+> > return ERR_PTR(-ENOMEM); 9645ccc7bd7a16 Nikita Shubin   2021-10-18
+> > 138 9645ccc7bd7a16 Nikita Shubin   2021-10-18  139
+> > init.name = name; 9645ccc7bd7a16 Nikita Shubin   2021-10-18  140
+> >       init.ops = &clk_ep93xx_gate_ops; 9645ccc7bd7a16 Nikita Shubin
+> >   2021-10-18  141          init.flags = CLK_SET_RATE_PARENT;
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  142
+> > init.parent_names = (parent_name ? &parent_name : NULL);
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  143
+> > init.num_parents = (parent_name ? 1 : 0); 9645ccc7bd7a16 Nikita
+> > Shubin   2021-10-18  144 9645ccc7bd7a16 Nikita Shubin   2021-10-18
+> > 145          psc->reg = reg; 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  146          psc->bit_idx = bit_idx; 9645ccc7bd7a16
+> > Nikita Shubin   2021-10-18  147          psc->hw.init = &init;
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  148          psc->lock =
+> > &clk_lock; 9645ccc7bd7a16 Nikita Shubin   2021-10-18  149
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  150          clk =
+> > clk_register(NULL, &psc->hw); 9645ccc7bd7a16 Nikita Shubin
+> > 2021-10-18  151          if (IS_ERR(clk)) 9645ccc7bd7a16 Nikita
+> > Shubin   2021-10-18  152                  kfree(psc);  
+> 
+> probably should `return ERR_CAST(clk);` ?
+> 
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18  153
+> > 9645ccc7bd7a16 Nikita Shubin   2021-10-18 @154          return
+> > &psc->hw; ff05c0330b9880 Hartley Sweeten 2009-05-07  155  }
+> > ff05c0330b9880 Hartley Sweeten 2009-05-07  156
+> >
+> > ---
+> > 0-DAY CI Kernel Test Service, Intel Corporation
+> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >  
+> 
+> 
 

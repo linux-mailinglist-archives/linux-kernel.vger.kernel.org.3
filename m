@@ -2,14 +2,14 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B593B49B7A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E7349B7A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346060AbiAYPbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:31:38 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50014 "EHLO
+        id S1349509AbiAYPaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:30:03 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:50034 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345304AbiAYP1N (ORCPT
+        with ESMTP id S1345447AbiAYP1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Jan 2022 10:27:13 -0500
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
@@ -17,21 +17,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1643124418;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=W/WvrXWAOiUd/il6zz5aedxI9lPYVnntFYe85PGF5Oo=;
-        b=TehafuZQ7DfVbwv20uSr5uBa7E+wmWo7Eoqiq1nwpKakG30LII2YHsLXCCvXLjj7Gx7Uj8
-        uX5TW1FWee4i0D/sVnYRZsynJjGxCbZCIP5uQI8B9/0VKztKg1PfEB5KApBvLFQ6gip7dL
-        EOsOJCIDASXsPP7tFe4vBnAFnvZROFbpCNiJZVOie2fgB2GwsVs3WzQzXDpaAL++WO8CSw
-        2h4bumRVzShRObpN8VUiviwzHXZ+6tEoJxzWKyExf4EvZixskHg02ELZmeHK2E1aMoe/kP
-        hLYoV81YUuHNovzceRYyja08oERrnybgVM2kennT9q7CHtsHRliDjdg0HgV+Aw==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OqTj/MWZ/KJ2RN1mgDHy03k6dnz1y2VoL1uj4/vvUAQ=;
+        b=LbbMdRo1XXg6KVBHbbqPBcqdbG25p3Spy5dyBjTDPwNUCaIo1Et6mXdc9EdWJ9RKagpE8P
+        sdXgUE914mMUVB54BVaZrA15CKnzZ1EXhfbgG0TuW88AIpdytOJ18S/dLyS79RcUvI+Bxc
+        mwdiLCIdbLZEwKFHWlfh2PYFyREEqcpyJZyEV/JrJBw/xEW8jXJf/HpsG6qr3gpfH016Es
+        ZWlHUrx6j1U+Ho2rQwYxaGySdQOYhYS9J4f4scTOKgrt4mmgkOxKStCwrHi7h6zS+zaVo6
+        0irxj1KR1lJEc+QvGUkaOjaleOZg2/aiqcIxlxXnzw0fg5gNrR9pUyZ5en8RJw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1643124418;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=W/WvrXWAOiUd/il6zz5aedxI9lPYVnntFYe85PGF5Oo=;
-        b=ySGzEscXiSjsrymjBso2WTz3RdrST3peLqs5g+AAX+ReHxK8vSUhHOs7JazKesZ5fnAm9X
-        Mt5QCgUwxMm3mzDw==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OqTj/MWZ/KJ2RN1mgDHy03k6dnz1y2VoL1uj4/vvUAQ=;
+        b=Ztyu45yMZ5XpxvMPjIGx8jVo3+SiuxbOyIjYqQ8Zrcfg3HpFXcPvaOZb6qVCWRcytPYA30
+        4W3V+fxptbgZFaDg==
 To:     linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org
 Cc:     Andy Lutomirski <luto@kernel.org>, Ben Segall <bsegall@google.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
@@ -41,97 +43,183 @@ Cc:     Andy Lutomirski <luto@kernel.org>, Ben Segall <bsegall@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH REPOST 0/8] kernel/fork: Move thread stack free otu of the scheduler path.
-Date:   Tue, 25 Jan 2022 16:26:44 +0100
-Message-Id: <20220125152652.1963111-1-bigeasy@linutronix.de>
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH 1/8] kernel/fork: Redo ifdefs around task's handling.
+Date:   Tue, 25 Jan 2022 16:26:45 +0100
+Message-Id: <20220125152652.1963111-2-bigeasy@linutronix.de>
+In-Reply-To: <20220125152652.1963111-1-bigeasy@linutronix.de>
+References: <20220125152652.1963111-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ This is a repost of https://lkml.kernel.org/r/20211118143452.136421-1-big=
-easy@linutronix.de ]
+The use of ifdef CONFIG_VMAP_STACK is confusing in terms what is
+actually happenning and what can happen.
+For instance from reading free_thread_stack() it appears that in the
+CONFIG_VMAP_STACK case we may receive a non-NULL vm pointer but it may
+also be NULL in which case __free_pages() is used to free the stack.
+This is however not the case because in the VMAP case a non-NULL pointer
+is always returned here.
+Since it looks like this might happen, the compiler creates the correct
+dead code with the invocation to __free_pages() and everything around
+it. Twice.
 
-This is a follup-up on the patch
-    sched: Delay task stack freeing on RT=20
-    https://lkml.kernel.org/r/20210928122411.593486363@linutronix.de
+Add spaces between the ifdef and the identifer to recognize the ifdef
+level that we are currently in.
+Add the current identifer as a comment behind #else and #endif.
+Move the code within free_thread_stack() and alloc_thread_stack_node()
+into the relavant ifdef block.
 
-It addresses the review feedback:
-- Decouple stack accounting from its free invocation. The accounting
-  happens in do_exit(), the final free call happens later.
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ kernel/fork.c | 74 +++++++++++++++++++++++++++------------------------
+ 1 file changed, 39 insertions(+), 35 deletions(-)
 
-- Add put_task_stack_sched() to finish_task_switch(). Here the VMAP
-  stack is cached only. If it fails, or in the !VMAP case then the final
-  free happens in delayed_put_task_struct(). This is also an oportunity
-  to cache the stack.
-
-From testing I observe the following:
-
-|            bash-1715    [006] .....   124.901510: copy_process: allocC ff=
-ffc90007e70000
-|      sh-cmds.sh-1746    [007] .....   124.907389: copy_process: allocC ff=
-ffc90007dc4000
-|          <idle>-0       [019] ...1.   124.918126: free_thread_stack: cach=
-e ffffc90007dc4000
-|      sh-cmds.sh-1746    [007] .....   124.918279: copy_process: allocC ff=
-ffc90007de8000
-|          <idle>-0       [004] ...1.   124.920121: free_thread_stack: dela=
-y ffffc90007de8001
-|          <idle>-0       [007] ...1.   124.920299: free_thread_stack: cach=
-e ffffc90007e70000
-|          <idle>-0       [007] ..s1.   124.945433: free_thread_stack: cach=
-e ffffc90007de8000
-
-TS 124.901510, bash started sh-cmds.sh, obtained stack from cache.
-TS 124.907389, script invokes its first command, obtained stacak from
-cache. As you can see bash was running on CPU6 but its child was moved
-CPU7.=20
-TS 124.918126, the first command is done, stack is ached on CPU19.
-TS 124.918279, script's second command, ache from stack.
-TS 124.920121, the command is done. The stack cache on CPU4 is full.
-TS 124.920299, the script is done, caches stack on CPU7.
-TS 124.945433, the RCU-callback of last command is now happening. On
-CPU7, which is where the command was invoked (but not running). Instead
-of freeing the stack, it was cached since CPU7 had an empty slot.
-
-If I pin the script to CPU5 and run it with multiple commands then it
-works as expected:
-
-|            bash-1799    [005] .....   993.608131: copy_process: allocC ff=
-ffc90007fa0000
-|      sh-cmds.sh-1827    [005] .....   993.608888: copy_process: allocC ff=
-ffc90007fa8000
-|      sh-cmds.sh-1827    [005] .....   993.610734: copy_process: allocV ff=
-ffc90007ff4000
-|      sh-cmds.sh-1829    [005] ...1.   993.610757: free_thread_stack: cach=
-e ffffc90007fa8000
-|      sh-cmds.sh-1827    [005] .....   993.612401: copy_process: allocC ff=
-ffc90007fa8000
-|           <...>-1830    [005] ...1.   993.612416: free_thread_stack: cach=
-e ffffc90007ff4000
-|      sh-cmds.sh-1827    [005] .....   993.613707: copy_process: allocC ff=
-ffc90007ff4000
-|      sh-cmds.sh-1831    [005] ...1.   993.613723: free_thread_stack: cach=
-e ffffc90007fa8000
-|      sh-cmds.sh-1827    [005] .....   993.615024: copy_process: allocC ff=
-ffc90007fa8000
-|           <...>-1832    [005] ...1.   993.615040: free_thread_stack: cach=
-e ffffc90007ff4000
-|      sh-cmds.sh-1827    [005] .....   993.616380: copy_process: allocC ff=
-ffc90007ff4000
-|           <...>-1833    [005] ...1.   993.616397: free_thread_stack: cach=
-e ffffc90007fa8000
-|            bash-1799    [005] ...1.   993.617759: free_thread_stack: cach=
-e ffffc90007fa0000
-|          <idle>-0       [005] ...1.   993.617871: free_thread_stack: dela=
-y ffffc90007ff4001
-|          <idle>-0       [005] ..s1.   993.638311: free_thread_stack: free=
- ffffc90007ff4000
-
-and no new is allocated during its runtime and a cached stack is used.
-
-Sebastian
-
+diff --git a/kernel/fork.c b/kernel/fork.c
+index d75a528f7b219..f63c0af6002da 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -185,7 +185,7 @@ static inline void free_task_struct(struct task_struct =
+*tsk)
+  */
+ # if THREAD_SIZE >=3D PAGE_SIZE || defined(CONFIG_VMAP_STACK)
+=20
+-#ifdef CONFIG_VMAP_STACK
++#  ifdef CONFIG_VMAP_STACK
+ /*
+  * vmalloc() is a bit slow, and calling vfree() enough times will force a =
+TLB
+  * flush.  Try to minimize the number of calls by caching stacks.
+@@ -210,11 +210,9 @@ static int free_vm_stack_cache(unsigned int cpu)
+=20
+ 	return 0;
+ }
+-#endif
+=20
+ static unsigned long *alloc_thread_stack_node(struct task_struct *tsk, int=
+ node)
+ {
+-#ifdef CONFIG_VMAP_STACK
+ 	void *stack;
+ 	int i;
+=20
+@@ -258,7 +256,34 @@ static unsigned long *alloc_thread_stack_node(struct t=
+ask_struct *tsk, int node)
+ 		tsk->stack =3D stack;
+ 	}
+ 	return stack;
+-#else
++}
++
++static void free_thread_stack(struct task_struct *tsk)
++{
++	struct vm_struct *vm =3D task_stack_vm_area(tsk);
++	int i;
++
++	for (i =3D 0; i < THREAD_SIZE / PAGE_SIZE; i++)
++		memcg_kmem_uncharge_page(vm->pages[i], 0);
++
++	for (i =3D 0; i < NR_CACHED_STACKS; i++) {
++		if (this_cpu_cmpxchg(cached_stacks[i], NULL,
++				     tsk->stack_vm_area) !=3D NULL)
++			continue;
++
++		tsk->stack =3D NULL;
++		tsk->stack_vm_area =3D NULL;
++		return;
++	}
++	vfree_atomic(tsk->stack);
++	tsk->stack =3D NULL;
++	tsk->stack_vm_area =3D NULL;
++}
++
++#  else /* !CONFIG_VMAP_STACK */
++
++static unsigned long *alloc_thread_stack_node(struct task_struct *tsk, int=
+ node)
++{
+ 	struct page *page =3D alloc_pages_node(node, THREADINFO_GFP,
+ 					     THREAD_SIZE_ORDER);
+=20
+@@ -267,36 +292,17 @@ static unsigned long *alloc_thread_stack_node(struct =
+task_struct *tsk, int node)
+ 		return tsk->stack;
+ 	}
+ 	return NULL;
+-#endif
+ }
+=20
+-static inline void free_thread_stack(struct task_struct *tsk)
++static void free_thread_stack(struct task_struct *tsk)
+ {
+-#ifdef CONFIG_VMAP_STACK
+-	struct vm_struct *vm =3D task_stack_vm_area(tsk);
+-
+-	if (vm) {
+-		int i;
+-
+-		for (i =3D 0; i < THREAD_SIZE / PAGE_SIZE; i++)
+-			memcg_kmem_uncharge_page(vm->pages[i], 0);
+-
+-		for (i =3D 0; i < NR_CACHED_STACKS; i++) {
+-			if (this_cpu_cmpxchg(cached_stacks[i],
+-					NULL, tsk->stack_vm_area) !=3D NULL)
+-				continue;
+-
+-			return;
+-		}
+-
+-		vfree_atomic(tsk->stack);
+-		return;
+-	}
+-#endif
+-
+ 	__free_pages(virt_to_page(tsk->stack), THREAD_SIZE_ORDER);
++	tsk->stack =3D NULL;
+ }
+-# else
++
++#  endif /* CONFIG_VMAP_STACK */
++# else /* !(THREAD_SIZE >=3D PAGE_SIZE || defined(CONFIG_VMAP_STACK)) */
++
+ static struct kmem_cache *thread_stack_cache;
+=20
+ static unsigned long *alloc_thread_stack_node(struct task_struct *tsk,
+@@ -312,6 +318,7 @@ static unsigned long *alloc_thread_stack_node(struct ta=
+sk_struct *tsk,
+ static void free_thread_stack(struct task_struct *tsk)
+ {
+ 	kmem_cache_free(thread_stack_cache, tsk->stack);
++	tsk->stack =3D NULL;
+ }
+=20
+ void thread_stack_cache_init(void)
+@@ -321,8 +328,9 @@ void thread_stack_cache_init(void)
+ 					THREAD_SIZE, NULL);
+ 	BUG_ON(thread_stack_cache =3D=3D NULL);
+ }
+-# endif
+-#endif
++
++# endif /* THREAD_SIZE >=3D PAGE_SIZE || defined(CONFIG_VMAP_STACK) */
++#endif /* !CONFIG_ARCH_THREAD_STACK_ALLOCATOR */
+=20
+ /* SLAB cache for signal_struct structures (tsk->signal) */
+ static struct kmem_cache *signal_cachep;
+@@ -432,10 +440,6 @@ static void release_task_stack(struct task_struct *tsk)
+=20
+ 	account_kernel_stack(tsk, -1);
+ 	free_thread_stack(tsk);
+-	tsk->stack =3D NULL;
+-#ifdef CONFIG_VMAP_STACK
+-	tsk->stack_vm_area =3D NULL;
+-#endif
+ }
+=20
+ #ifdef CONFIG_THREAD_INFO_IN_TASK
+--=20
+2.34.1
 

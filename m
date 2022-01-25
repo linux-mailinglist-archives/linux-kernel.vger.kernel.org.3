@@ -2,121 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F8A49A849
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 537A749A84E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1317499AbiAYDCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:02:14 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:47120 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3415321AbiAYBmj (ORCPT
+        id S1317664AbiAYDCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:02:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3415398AbiAYBqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 20:42:39 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 24 Jan 2022 20:46:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D363C01D7C4;
+        Mon, 24 Jan 2022 17:26:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2AC34219A2;
-        Tue, 25 Jan 2022 01:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643073984; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ukdL4uSY7ajaeLLyOy2K7g+OJNEsLFNzoe0K6HxbbBg=;
-        b=BwXWmNKUWNf/QWwndBHhxlD2Xpth4f7ipnaSxOD2XBfHipf1jgH6D0R2Spb2M3qCWIYW6m
-        x8HgPaGGvhDhmCSwpUrMVDzLVO3WKJuln+opQ2oqurTLT2CirjYFmmlkxIvnmpobc9OcMr
-        /XVRrjkS2Bwcj0UP8GK7CtnWdspz7kU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643073984;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ukdL4uSY7ajaeLLyOy2K7g+OJNEsLFNzoe0K6HxbbBg=;
-        b=l73U2zJamff6zF7815X4J+N8Rh0uBqiHROilqBddtxvC5Hb7ncpUxcTc2cZAgSaKaR9EEQ
-        EVSFagbOQhELLeDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA36B13B08;
-        Tue, 25 Jan 2022 01:26:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id aIQzLb5R72HYGQAAMHmgww
-        (envelope-from <colyli@suse.de>); Tue, 25 Jan 2022 01:26:22 +0000
-Message-ID: <e3771b5d-87dc-d38e-a957-5ef044a0d5cc@suse.de>
-Date:   Tue, 25 Jan 2022 09:26:21 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 951406091F;
+        Tue, 25 Jan 2022 01:26:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF017C340E4;
+        Tue, 25 Jan 2022 01:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643074006;
+        bh=DKZpPmTZIetqIDVYlUryUPp3fLyRnrqt6nngfQ3lB4Y=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=IqDkS1IjYRpBOf/mkV0kT/Yus3trXD82kifFYwhBxcIyr88lFNDaJ70F3M0p7cN/8
+         CMTBlUaSfjPy3N1FU/LmcYcQFS+S9yZfYvgqQhgOY/O/2tkeJwg9BDel74/W+ISHNo
+         YN0wpf4mNq4A+aFu8exQeNPp9GfNrVJjLUDJsLCRypEX5vRvMrRlPo6bug8ocSPTGm
+         e68zhBrKSo5LmHoNJ5eMuPOkFukY1nNjY9oDLGS3mOKP1FrXkGqUg5yrhTJvlt/D8B
+         RbsX8jRL+PFJFbcSGxQhM+rq87UmcnP9cCzVJQ1anGVOAQ9j1iMPtt+Uxfi4BtoHqG
+         9VhyFtFfzHI5A==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH] bcache: Fix a NULL or wild pointer dereference in
- btree_gc_rewrite_node()
-Content-Language: en-US
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     kjlu@umn.edu, Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220124164701.53525-1-zhou1615@umn.edu>
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <20220124164701.53525-1-zhou1615@umn.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220120175902.2165958-1-sboyd@kernel.org>
+References: <20220120175902.2165958-1-sboyd@kernel.org>
+Subject: Re: [PATCH v3] clk: gate: Add some kunit test suites
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Date:   Mon, 24 Jan 2022 17:26:44 -0800
+User-Agent: alot/0.10
+Message-Id: <20220125012645.EF017C340E4@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 12:47 AM, Zhou Qingyang wrote:
-> In btree_gc_rewrite_node(), btree_node_alloc_replacement() is assigned to
-> n and return error code or NULL on failure. n is passed to
-> bch_btree_node_write_sync() and there is a dereference of it in
-> bch_btree_node_write_sync() without checks, which may lead to wild
-> pointer dereference or NULL pointer dereference depending on n.
->
-> Fix this bug by adding IS_ERR_OR_NULL check of n.
->
-> This bug was found by a static analyzer.
->
-> Builds with 'make allyesconfig' show no new warnings,
-> and our static analyzer no longer warns about this code.
->
-> Fixes: ("bcache: Rework btree cache reserve handling")
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Quoting Stephen Boyd (2022-01-20 09:59:02)
+> Test various parts of the clk gate implementation with the kunit testing
+> framework.
+>=20
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> Acked-by: Daniel Latypov <dlatypov@google.com>
+> Cc: <kunit-dev@googlegroups.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 > ---
-> The analysis employs differential checking to identify inconsistent
-> security operations (e.g., checks or kfrees) between two code paths
-> and confirms that the inconsistent operations are not recovered in the
-> current function or the callers, so they constitute bugs.
->
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
->
->   drivers/md/bcache/btree.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-> index 88c573eeb598..06d42292e86c 100644
-> --- a/drivers/md/bcache/btree.c
-> +++ b/drivers/md/bcache/btree.c
-> @@ -1504,6 +1504,8 @@ static int btree_gc_rewrite_node(struct btree *b, struct btree_op *op,
->   		return 0;
->   
->   	n = btree_node_alloc_replacement(replace, NULL);
-> +	if (IS_ERR_OR_NULL(n))
-> +		return 0;
->   
 
-Hi Qingyang,
-
-This is a valid fix with my first glance. I add this patch into my 
-testing queue.
-
-Thanks.
-
-Coly Li
-
-
->   	/* recheck reserve after allocating replacement node */
->   	if (btree_check_reserve(b, NULL)) {
-
+Applied to clk-next

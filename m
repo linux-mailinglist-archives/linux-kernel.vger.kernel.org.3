@@ -2,66 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B833749B42B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9730849B458
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452104AbiAYMlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:41:02 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:51206 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1383593AbiAYMhn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:37:43 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 968B81EC0535;
-        Tue, 25 Jan 2022 13:37:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643114242;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=XOfcXG5D0BWs6riYAWX/iHVHCXWqsmpsqiMz41YIXWo=;
-        b=UiQegtUMv/LtTTUXUPq7/b+JSe2nB68D2N8gRr+1V2n0nm44SbOCSEt6PjAykaVKQzE/TI
-        hNYY1kL5oy2GGQ77DxwIrl+2J7U2ihZQKIR+549K1B5pTOVyYTZk+wRttN9jC+tNO7nxs2
-        G4z/J8Gw1ffTCt/pN41O22FpWEnB1i0=
-Date:   Tue, 25 Jan 2022 13:37:17 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-Subject: Re: [RESEND PATCH v3 1/2] efi/cper: add cper_mem_err_status_str to
- decode error description
-Message-ID: <Ye/u/UNqXr1/WUXH@zn.tnic>
-References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
- <20220124024759.19176-2-xueshuai@linux.alibaba.com>
- <Ye8XMvfXCetzJLTH@zn.tnic>
- <98aae382-ac38-8811-f147-d00b953f608d@linux.alibaba.com>
- <Ye/PLDlOBhYmGb5D@zn.tnic>
- <0e156b79-6343-72b2-47fb-baa29ffe60fd@linux.alibaba.com>
+        id S1457773AbiAYMwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:52:34 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.228]:39968 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1457437AbiAYMtv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 07:49:51 -0500
+HMM_SOURCE_IP: 172.18.0.218:48792.662813070
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-112.38.63.33 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id D15D1280029;
+        Tue, 25 Jan 2022 20:37:29 +0800 (CST)
+X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 9423f2faf0214720bbdbdc2eb317ba02 for nikolay@nvidia.com;
+        Tue, 25 Jan 2022 20:37:34 CST
+X-Transaction-ID: 9423f2faf0214720bbdbdc2eb317ba02
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+Message-ID: <6f7b59b2-1d97-5257-f68b-1658cc5b7cc9@chinatelecom.cn>
+Date:   Tue, 25 Jan 2022 20:37:26 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0e156b79-6343-72b2-47fb-baa29ffe60fd@linux.alibaba.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v9] net: bonding: Add support for IPV6 ns/na to
+ balance-alb/balance-tlb mode
+To:     Nikolay Aleksandrov <nikolay@nvidia.com>, j.vosburgh@gmail.com,
+        vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jay.vosburgh@canonical.com, huyd12@chinatelecom.cn
+References: <20220125023755.94837-1-sunshouxin@chinatelecom.cn>
+ <d0afa956-6852-2749-fce8-2a3e06cae556@nvidia.com>
+ <8eac3258-8b2a-37eb-2a1e-6a71d5d1f859@nvidia.com>
+From:   =?UTF-8?B?5a2Z5a6I6ZGr?= <sunshouxin@chinatelecom.cn>
+In-Reply-To: <8eac3258-8b2a-37eb-2a1e-6a71d5d1f859@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 07:49:41PM +0800, Shuai Xue wrote:
-> I am sorry if you feel the RESEND tag is pushing you.
 
-It is not pushing me - there are rules, simply. Rules you should read
-first before sending patches.
+在 2022/1/25 17:02, Nikolay Aleksandrov 写道:
+> On 25/01/2022 10:51, Nikolay Aleksandrov wrote:
+>> On 25/01/2022 04:37, Sun Shouxin wrote:
+>>> Since ipv6 neighbor solicitation and advertisement messages
+>>> isn't handled gracefully in bond6 driver, we can see packet
+>>> drop due to inconsistency between mac address in the option
+>>> message and source MAC .
+>>>
+>>> Another examples is ipv6 neighbor solicitation and advertisement
+>>> messages from VM via tap attached to host bridge, the src mac
+>>> might be changed through balance-alb mode, but it is not synced
+>>> with Link-layer address in the option message.
+>>>
+>>> The patch implements bond6's tx handle for ipv6 neighbor
+>>> solicitation and advertisement messages.
+>>>
+>>> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>>> Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+>>> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>>> ---
+>>>   drivers/net/bonding/bond_alb.c | 38 +++++++++++++++++++++++++++++++++-
+>>>   1 file changed, 37 insertions(+), 1 deletion(-)
+>>>
+> [snip]
+>
+> Also forgot to mention, you should add a changelog between patch versions.
+> You can add it below the --- marker so it won't be included in the commit
+> message. Otherwise it's hard to track how the patch reached v9 and what
+> changed between versions.
+>
+> E.g. v8 -> v9: <changed blah>
+>
+> Thanks,
+>   Nik
+>
+>
 
-How about I start flooding you a patchset every day?
+Thanks your comment, I'll adjust it and send out V10 soon.
 
-Also, please do not top-post. That's also explained in that
-documentation directory I mentioned. Read about it too pls.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

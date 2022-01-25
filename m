@@ -2,103 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 257AB49AD9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6443B49ADCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445253AbiAYH1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:27:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S1351356AbiAYIBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444563AbiAYHWq (ORCPT
+        with ESMTP id S1357852AbiAYH7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:22:46 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831D3C06E039;
-        Mon, 24 Jan 2022 22:27:47 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id b16so35536049uaq.4;
-        Mon, 24 Jan 2022 22:27:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x7OWhLsmJS1+uUOEexpDwoIKITm+x9XBIi30vSgK1xg=;
-        b=hkWuAz/YuA6uirgqIr8pVE292nRVrNT1FRntEAbq6BSmuV1RjGikjVpCJ91lvOiWTI
-         wsSfkTZlPqf02zgXbqLu59iYosJKmRfHg9UN4n4eofqmvQSx24qipIN2arr5JrhMgs2o
-         UbVYyHuG3MrfZG3BR/VubSt4JsNDJWK1I5Q3IIaK9xATYai+n5SM0iOngkYc89ZUEinE
-         ZCW8ujZ79F1WoVYy5wmQzUPcE54FTEkgU98Ngt+xWYhUmXJTsD6h2aQo5YR5fGPI3i9K
-         dFfww1Uqm4jRM60BxU3/W42mUddMTt8OoHrM3+yYOWgNkrld2w4uraPYqsW3pkYsj1a2
-         4skA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x7OWhLsmJS1+uUOEexpDwoIKITm+x9XBIi30vSgK1xg=;
-        b=RPPkLZ43GCj5+OEhz+JlbqRVrKlui86EiARCri8cXjAspUj5HS5aGvSIJnIwVnnRJK
-         M18yXyyWxs/tTiOBaRJB/Jw30ghuxhQEwtrtbqH1SV+ZSqXe5uMrAQetL76onlwPIpZ9
-         oQ2C0QHqIS+3A8GeS4zmOVNZ7TlqP9wJ0vM7NmwGYvDebEZtOt36WeWMnED7LrAOpKks
-         WupxLLHpw6RAEBD8eAtHvENyz+Q4sHKywvQbmWDPOX/KAFVUX64Wubm+6nNaxEpb9HJm
-         BuVejrmTpgxupVuTNKeaYLpdm9CQwpRc4KdezQsHKxKyKIQjjwIk7H/HE867n1hLw1R+
-         DwSQ==
-X-Gm-Message-State: AOAM532AWL+2ue3rGgkizmkaqkbA9oMcHAJ5x5/1U5VUiZhOdrDBogYi
-        ZCfbTrI8psC9kujGPZpkO9xJGEfGokZIDsfOAvaCutwQwyU=
-X-Google-Smtp-Source: ABdhPJx+rYdRl8Z7+AGuvxfELBIQDGePT2oG2nEhInJMqyAa5hjsASHccpDLr9LNE0L1Vk3U7tCnise0rK2hMuuJdiI=
-X-Received: by 2002:ab0:3caa:: with SMTP id a42mr296234uax.46.1643092066597;
- Mon, 24 Jan 2022 22:27:46 -0800 (PST)
+        Tue, 25 Jan 2022 02:59:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF43FC0544EE;
+        Mon, 24 Jan 2022 22:40:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB3F1B8162C;
+        Tue, 25 Jan 2022 06:40:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A039C340E0;
+        Tue, 25 Jan 2022 06:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643092844;
+        bh=Lwx8mO5mMqVbKGdRGLJ5Wq0V96nxImmH2K5npNDXyPo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aDYbJ54OdpYQH01sLWo6acgjo8qZxxsj5hf0BEz/3pM17AdmYDd79I60lzTIhUpBK
+         tZ/Zd0fkpj1zZVVnwb8BY7KdPS6sn/d8iGvu3AGEeoa8s5JGpLsc/+8QoBTSn5sy4K
+         87ue1vH1zG2J+UYhwUx8uABQlsy4hNN5IXf1XY2azdir6SF+kaA/SlosgGa2efuaF1
+         dIS+zic5ikcm9DkMo/w3YJOlOas99uUHjhYpq45XLImKkrP2s48ipbUuHkqZ+T5XT0
+         RNiRAINIfyy47CjENgEG8forPLg5AJ7Rng/PFlnhr63dgLAxKNdpQ53/wntdqWq2Oa
+         QILBRw3Jb5mgA==
+Date:   Mon, 24 Jan 2022 22:40:42 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v2] lib/crypto: blake2s: avoid indirect calls to
+ compression function for Clang CFI
+Message-ID: <Ye+bam3aSIjz8n9E@sol.localdomain>
+References: <20220119135450.564115-1-Jason@zx2c4.com>
+ <20220124192849.14755-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220110114930.1406665-1-sergio.paracuellos@gmail.com>
- <20220110114930.1406665-4-sergio.paracuellos@gmail.com> <20220125011429.93D9FC340E4@smtp.kernel.org>
-In-Reply-To: <20220125011429.93D9FC340E4@smtp.kernel.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 25 Jan 2022 07:27:35 +0100
-Message-ID: <CAMhs-H9e4Ww2GNk4JqfkuRketb3ZR54UbrqaOx4qH+EJQiNakQ@mail.gmail.com>
-Subject: Re: [PATCH v8 3/4] clk: ralink: make system controller node a reset provider
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124192849.14755-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 2:14 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Sergio Paracuellos (2022-01-10 03:49:29)
-> > MT7621 system controller node is already providing the clocks for the whole
-> > system but must also serve as a reset provider. Hence, add reset controller
-> > related code to the clock driver itself. To get resets properly ready for
-> > the rest of the world we need to move platform driver initialization process
-> > to 'arch_initcall'.
-> >
-> > CC: Philipp Zabel <p.zabel@pengutronix.de>
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >  drivers/clk/ralink/clk-mt7621.c | 92 ++++++++++++++++++++++++++++++++-
-> >  1 file changed, 91 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/clk/ralink/clk-mt7621.c b/drivers/clk/ralink/clk-mt7621.c
-> > index a2c045390f00..99256659dd96 100644
-> > --- a/drivers/clk/ralink/clk-mt7621.c
-> > +++ b/drivers/clk/ralink/clk-mt7621.c
-> > @@ -11,14 +11,17 @@
-> >  #include <linux/mfd/syscon.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/regmap.h>
-> > +#include <linux/reset-controller.h>
-> >  #include <linux/slab.h>
-> >  #include <dt-bindings/clock/mt7621-clk.h>
-> > +#include <dt-bindings/reset/mt7621-reset.h>
->
-> I can't take this patch without taking the first patch. I suppose if
-> Greg is OK I can take the staging patch #4 through clk tree too? Let me
-> know.
+On Mon, Jan 24, 2022 at 08:28:49PM +0100, Jason A. Donenfeld wrote:
+> blake2s_compress_generic is weakly aliased by blake2s_generic. The
 
-Greg, can you Ack patch 4 of the series to get all applied through CLK tree?
+Don't you mean "weakly aliased by blake2s_compress"?
 
-Thanks!
+> Fixes: 6048fdcc5f26 ("lib/crypto: blake2s: include as built-in")
+> Reported-by: Miles Chen <miles.chen@mediatek.com>
+> Tested-by: Miles Chen <miles.chen@mediatek.com>
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1567
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
 
-Best regards,
-    Sergio Paracuellos
+Otherwise this looks fine, though it's unfortunate this is needed.  You can add:
+
+	Reviewed-by: Eric Biggers <ebiggers@google.com>
+
+> Changes v1->v2:
+> - Wrapped columns at 80 for Eric.
+
+It is the recommended coding style, so not just for me :-)
+
+- Eric

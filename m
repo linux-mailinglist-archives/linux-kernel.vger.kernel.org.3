@@ -2,62 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC20349B7F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E535149B7F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582500AbiAYPtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:49:19 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50476 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356552AbiAYPpP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:45:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73C7A61708;
-        Tue, 25 Jan 2022 15:45:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D28C340E8;
-        Tue, 25 Jan 2022 15:45:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643125513;
-        bh=CcIRjfm17aVakeeVnaDmo1N/8z0dKUqDwIOCF455pyg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PzdVvAi+XKWBtlAo5HeCx7ZHwYJbZQti60n0ZrEtI+d4JBsSQ5AwRR6lMIYnMjYrC
-         wkpZ9/oLtxf7lblkl2jlbwO6hzrCZpZGHtB81cY1rfoC4ZhBwuImj52ynbKWr9Eww5
-         pz1u/LklUez7FC4055Mq/DvOfYNzM0/45E//yBMRZHpnNmkFAoPVZbrwSAEl0aQ+Zf
-         IrIF4sAiXT2oceh/uclpaCPoQj9c2mKYACQTQ1JO9TOXHuAuujH0p7lsKTZHNLh8V2
-         6dByHdZT57tNcmD9DdUZJ+X8YURpRJ49bCkEmWVlpdfQDyvRsA5hfCeJaS0RTgCF01
-         gwCsfmW6MwheA==
-Date:   Tue, 25 Jan 2022 07:45:12 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Colin Ian King <colin.i.king@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-parisc@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: tulip: remove redundant assignment to variable
- new_csr6
-Message-ID: <20220125074512.73cc5cec@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220125141401.GV1951@kadam>
-References: <20220123183440.112495-1-colin.i.king@gmail.com>
-        <20220124103038.76f15516@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <20220125141401.GV1951@kadam>
+        id S1582351AbiAYPt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:49:28 -0500
+Received: from foss.arm.com ([217.140.110.172]:51628 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1376525AbiAYPqA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 10:46:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6FB5101E;
+        Tue, 25 Jan 2022 07:45:58 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.1.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 318CC3F793;
+        Tue, 25 Jan 2022 07:45:56 -0800 (PST)
+Date:   Tue, 25 Jan 2022 15:45:53 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        acme@redhat.com, Borislav Petkov <bp@alien8.de>,
+        Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 0/7] linkage: better symbol aliasing
+Message-ID: <YfAbMY6U4UpyrerB@FVFF77S0Q05N>
+References: <20220125113200.3829108-1-mark.rutland@arm.com>
+ <CAMj1kXGCFFHzZAqhfmJthGCe6uhFsrHwzK0QyOfrGw7_kNbjWQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGCFFHzZAqhfmJthGCe6uhFsrHwzK0QyOfrGw7_kNbjWQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 17:14:01 +0300 Dan Carpenter wrote:
-> You're looking at the wrong function.  This is pnic_do_nway() and you're
-> looking at pnic_timer().
+On Tue, Jan 25, 2022 at 04:28:11PM +0100, Ard Biesheuvel wrote:
+> On Tue, 25 Jan 2022 at 12:32, Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > This series aims to make symbol aliasing simpler and more consistent.
+> > The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
+> > SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
+> > that e.g.
+> >
+> >     SYM_FUNC_START(func)
+> >     SYM_FUNC_START_ALIAS(alias1)
+> >     SYM_FUNC_START_ALIAS(alias2)
+> >         ... asm insns ...
+> >     SYM_FUNC_END(func)
+> >     SYM_FUNC_END_ALIAS(alias1)
+> >     SYM_FUNC_END_ALIAS(alias2)
+> >     EXPORT_SYMBOL(alias1)
+> >     EXPORT_SYMBOL(alias2)
+> >
+> > ... can become:
+> >
+> >     SYM_FUNC_START(name)
+> >         ... asm insns ...
+> >     SYM_FUNC_END(name)
+> >
+> >     SYM_FUNC_ALIAS(alias1, func)
+> >     EXPORT_SYMBOL(alias1)
+> >
+> >     SYM_FUNC_ALIAS(alias2, func)
+> >     EXPORT_SYMBOL(alias2)
+> >
+> > This avoids repetition and hopefully make it easier to ensure
+> > consistency (e.g. so each function has a single canonical name and
+> > associated metadata).
+> >
+> 
+> I take it this affects the sizes of the alias ELF symbols? Does that matter?
 
-Ah, that explains it! Thanks, applied now.
+The alias should be given the same size as the original symbol, unless I've
+made an error. If you look at patch 3:
 
-> Of course, Colin's patch assumes the current behavior is correct...  I
-> guess the current behavior can't be that terrible since it predates git
-> and no one has complained.
+* In SYM_FUNC_START(name), via SYM_ENTRY_AT(name, ...), we create a local label
+  for the start of the function: .L____sym_entry__##name
 
-Entirely possible this driver was never used in the git era.
+* In SYM_FUNC_END(name), via SYM_END_AT(name, ...), we create a local label for
+  the end of the function: .L____sym_end__##name
+
+* In SYM_FUNC_ALIAS*(alias,name), we define the start and end of the alias as
+  the start and end of the original symbol using those local labels, e.g.
+
+  | #define SYM_FUNC_ALIAS(alias, name)                                     \
+  |         SYM_START_AT(alias, .L____sym_entry__##name, SYM_L_GLOBAL)      \
+  |         SYM_END_AT(alias, .L____sym_end__##name, SYM_T_FUNC)
+
+Note that:
+
+* SYM_FUNC_START() uses SYM_START(), which uses SYM_ENTRY_AT()
+* SYM_FUNC_END() uses SYM_END(), which uses SYM_END_AT()
+
+... so the definition of tha alias is ultimately structurally identical to the
+definition of the canoncial name, at least for now.
+
+Thanks,
+Mark.

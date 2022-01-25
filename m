@@ -2,88 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6537749B538
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E208349B53C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386423AbiAYNjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:39:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23043 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1382470AbiAYNgT (ORCPT
+        id S1389171AbiAYNkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386420AbiAYNhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:36:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643117774;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yYJzBr/Gnzr1F/U/C/od8YhWfQek25WEk/n1vGgEdv8=;
-        b=U0WpCFHo/tcg2g8Rn6IyOCSN9l2uX6AcvXYjdEuWUZR1G/mF/S2yYyZy4Rj06J/8lLKEOq
-        H+B+XYsMBgXJQgt1xPkEHUEsDpx8XbEfg9hxK7p58RXPQEt3Eb0BJCrqhGwVSrQQgKGNk6
-        J4inqAwlntehZ1FJqyOQDK8D4MVT++M=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659-PHbuR-4wMraAXPpE8XR5Ow-1; Tue, 25 Jan 2022 08:36:13 -0500
-X-MC-Unique: PHbuR-4wMraAXPpE8XR5Ow-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E68926409A;
-        Tue, 25 Jan 2022 13:36:11 +0000 (UTC)
-Received: from work (unknown [10.40.194.155])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 91EDA7BB5E;
-        Tue, 25 Jan 2022 13:36:10 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 14:36:07 +0100
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     Ameer Hamza <amhamza.mgc@gmail.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: handle unsuccessful sbi allocation
-Message-ID: <20220125133607.hioap2ggmiodmgr5@work>
-References: <20220125130604.26473-1-amhamza.mgc@gmail.com>
+        Tue, 25 Jan 2022 08:37:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBB1C061748;
+        Tue, 25 Jan 2022 05:37:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=hIWwu7CZHoqXC33UGi3MUTqAEWUOsFTRpTUBCT7WnHs=; b=V1Pkn7653tgtgPGveH+VmAJb8P
+        JneUFzY5tzZW+hK5YC2E4wglaygLKzwoMcKLLqpmH3STe/DK3eT8OP+WqgPHOB8YFR2NPOR4jD4iu
+        jgncI+6thbj9FCmzMg7gRrHxfIwHj378nk9L8aD35LRNJH4gs3B0Gt9bvN1bLBauzDKWXSe0QgG7I
+        yUBQ/Dog3pZd1e6UX/qmuMe8lAzx6sfFBNY4ozLo6M2uRqmSj4FkcKoaxv/AFyojnPe7ttY6TIvVI
+        uVs0aY5l2tTXy/RvhvtisYr7YaTfCC9i1+pv6slMX668samW7c52CBb2yuWKoKvaAeqC1fsHL1B9z
+        Zn2SZc1Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCM0k-002rKG-AM; Tue, 25 Jan 2022 13:37:26 +0000
+Date:   Tue, 25 Jan 2022 13:37:26 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        artur.paszkiewicz@intel.com, jinpu.wang@cloud.ionos.com,
+        chenxiang66@hisilicon.com, Ajish.Koshy@microchip.com,
+        yanaijie@huawei.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com, liuqi115@huawei.com, Viswas.G@microchip.com,
+        damien.lemoal@opensource.wdc.com
+Subject: Re: [PATCH 05/16] scsi: libsas: Add struct sas_tmf_task
+Message-ID: <Ye/9Fs+JrtlMC+Mb@casper.infradead.org>
+References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
+ <1643110372-85470-6-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220125130604.26473-1-amhamza.mgc@gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+In-Reply-To: <1643110372-85470-6-git-send-email-john.garry@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We already have a patch to fix the problem on this list
-
-https://lore.kernel.org/linux-ext4/20220119130209.40112-1-lczerner@redhat.com/T/#u
-
--Lukas
-
-On Tue, Jan 25, 2022 at 06:06:04PM +0500, Ameer Hamza wrote:
-> Move to common fail path in case of unsuccessful sbi allocation
+On Tue, Jan 25, 2022 at 07:32:41PM +0800, John Garry wrote:
+> Some of the LLDDs which use libsas have their own definition of a struct
+> to hold TMF info, so add a common struct for libsas.
 > 
-> Addresses-Coverity: 1497833 ("Unused value")
+> Also add an interim force phy id field for hisi_sas driver, which will be
+> removed once the STP "TMF" code is factored out.
 > 
-> Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
-> ---
->  fs/ext4/super.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 57914acc5402..0dccf1ed931b 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -5540,8 +5540,10 @@ static int ext4_fill_super(struct super_block *sb, struct fs_context *fc)
->  	int ret;
->  
->  	sbi = ext4_alloc_sbi(sb);
-> -	if (!sbi)
-> +	if (!sbi) {
->  		ret = -ENOMEM;
-> +		goto free_sbi;
-> +	}
->  
->  	fc->s_fs_info = sbi;
->  
-> -- 
-> 2.25.1
-> 
+> Even though some LLDDs (pm8001) use a u32 for the tag, u16 should be
+> enough.
 
+... because pm8001 limits the number of tags to 1024.

@@ -2,112 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A3C49B447
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EFA49B44E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1456423AbiAYMrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:47:06 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:55548 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453870AbiAYMn6 (ORCPT
+        id S1384069AbiAYMuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:50:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1384547AbiAYMpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:43:58 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BA5371F397;
-        Tue, 25 Jan 2022 12:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643114636; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GuvCUoMQeQ8ExblQico0vSd8Fo9ymvlCDvFGhydQyJE=;
-        b=MsNUYOFzaYK8fFUv9rsEs+L91soobIR+Z5Nk6qLIJ4bNdQxaFInuDAFKjWtBETwaJxB3mW
-        ymtAtBlIrWsv2kX1E77BcQ3fJzrgwzAQrNAe5ggi7Eoy+bsNvfMXsuj+5rseyvoaw30HfQ
-        2c5GOooX/NoYlkMc7+RInt9pt0nMDZc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643114636;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GuvCUoMQeQ8ExblQico0vSd8Fo9ymvlCDvFGhydQyJE=;
-        b=XZ0/saN2AncO8DnvNKQYgk/IDQqAmpvhai0UuDniXnMAi2x0luXmY+2cSAXOaXQVEZUTWu
-        3AFjaegWR7lrSIAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0842013DDC;
-        Tue, 25 Jan 2022 12:43:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9B88O4vw72HvNAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 25 Jan 2022 12:43:55 +0000
-Date:   Tue, 25 Jan 2022 13:43:54 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Terry Bowman <terry.bowman@amd.com>
-Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
-        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
-        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
-        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
-        <Nehal-bakulchandra.Shah@amd.com>, <Basavaraj.Natikar@amd.com>,
-        <Shyam-sundar.S-k@amd.com>, <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v3 4/4] Watchdog: sp5100_tco: Enable Family 17h+ CPUs
-Message-ID: <20220125134354.4db24118@endymion>
-In-Reply-To: <20220118202234.410555-5-terry.bowman@amd.com>
-References: <20220118202234.410555-1-terry.bowman@amd.com>
-        <20220118202234.410555-5-terry.bowman@amd.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 25 Jan 2022 07:45:51 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB850C061753
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 04:45:50 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id e28so15223204pfj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 04:45:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:user-agent:mime-version;
+        bh=g8fPoNFbM2MKGQXuUpmaNAqe4Rt5cBc36ZwCaR5F95o=;
+        b=dNoC//Ti2VpKHGQvJtgZMqrw/3iq4uQWDiYr9hp/8d+aAFgIdA4Y/WO4h/vyweRp4j
+         ch0ZGngJdxi9Xbkq8P2uHRbiXTIkz4bl5Kqc4FAPP5s7l7OdI00x5oQ+iPAqWW7M/Lxn
+         CsMOKyBjl4i6ePan2Aw5SaRn7TajJwL7a3a5PzRqaKnsIewIx7ftfk2BZ041+sRxs+lz
+         ocNr5RdDJPeFYPIBqsnp6veMDZuIkDf5Jy6Q+Eb0MqVWkrm1BUqUOhgjZnpBYMQqq9Tt
+         QD7/exb27ZLiOO4Jg1dow2ZOkAyMvr+ZO2TqvXGEIRX4GIyFQHiuWEfjsIqgAMI5PLPG
+         3Mzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:user-agent
+         :mime-version;
+        bh=g8fPoNFbM2MKGQXuUpmaNAqe4Rt5cBc36ZwCaR5F95o=;
+        b=pdsZcRPIYEu3DjPjWWlWW748eZjpkeh7RtgbWaVWSVyD/BwoyolVUZbshwOqIIWBBB
+         Fs1tgPwJJs72X6/elN0+Yh3iDJaW9gzsGvParbrZQ3c+T/9XGgFvmPBGRjedWZCB4Wky
+         7YKHxym72KoKAd6I2zM2uVbnouBOgnUZf047C6gUleNTf0y+NDu6WpJQHnRV/n1Ic58/
+         vbxwNN49lzT4I8ODT4FmxAddsFpoViWPmIuP90NH6SSX4FQ9ihS1CkYmsGQF4pUT78Dz
+         MMJRqskADz/NzioGN7mCpqNIhZExJEUzMFXscfTwNS493Cqh8NyCNcAjUc6GpnpYGomm
+         vLnA==
+X-Gm-Message-State: AOAM5302zl3bIMY87hs3HvRd6/IPeha4EuCIrFlHUB3LPdwaiOFpxumk
+        xBUp6NGVCDeTm/C/XqXnF6hl7w==
+X-Google-Smtp-Source: ABdhPJw7vfyggNO09DCqL25gUQwAaCS0IWO8zAjg0K/+L8URMePIy1z5j0CBiq5Y118WTwfgGCvobw==
+X-Received: by 2002:a05:6a00:114d:b0:4c4:3df:edf8 with SMTP id b13-20020a056a00114d00b004c403dfedf8mr18365857pfm.54.1643114750098;
+        Tue, 25 Jan 2022 04:45:50 -0800 (PST)
+Received: from [192.168.1.32] ([122.178.19.178])
+        by smtp.gmail.com with ESMTPSA id s3sm348125pji.31.2022.01.25.04.45.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 04:45:49 -0800 (PST)
+Message-ID: <0af17d6952b3677dcd413fefa74b086d5ffb474b.camel@rajagiritech.edu.in>
+Subject: review for  5.16.3-rc2
+From:   Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>
+Date:   Tue, 25 Jan 2022 18:15:46 +0530
+Content-Type: multipart/mixed; boundary="=-a4u6oguv8pYyTbmRWk8O"
+User-Agent: Evolution 3.42.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Terry,
 
-On Tue, 18 Jan 2022 14:22:34 -0600, Terry Bowman wrote:
-> The driver currently uses a CPU family match of 17h to determine
-> EFCH_PM_DECODEEN_WDT_TMREN register support. This family check will not
-> support future AMD CPUs and instead will require driver updates to add
-> support.
-> 
-> Remove the family 17h family check and add a check for SMBus PCI
-> revision ID 0x51 or greater. The MMIO access method has been available
-> since at least SMBus controllers using PCI revision 0x51. This revision
-> check will support family 17h and future AMD processors including EFCH
-> functionality without requiring driver changes.
-> 
-> Co-developed-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> To: Guenter Roeck <linux@roeck-us.net>
-> To: linux-watchdog@vger.kernel.org
-> To: Jean Delvare <jdelvare@suse.com>
-> To: linux-i2c@vger.kernel.org
-> To: Wolfram Sang <wsa@kernel.org>
-> To: Andy Shevchenko <andy.shevchenko@gmail.com>
-> To: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Robert Richter <rrichter@amd.com>
-> Cc: Thomas Lendacky <thomas.lendacky@amd.com>
-> ---
->  drivers/watchdog/sp5100_tco.c | 16 ++++------------
->  drivers/watchdog/sp5100_tco.h |  1 +
->  2 files changed, 5 insertions(+), 12 deletions(-)
-> (...)
+--=-a4u6oguv8pYyTbmRWk8O
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-Looks good to me.
+hello greg,
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+compile failed for  5.16.3-rc2 related.
+a relevent file attached.
+
+Tested-by : Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+
 
 -- 
-Jean Delvare
-SUSE L3 Support
+software engineer
+rajagiri school of engineering and technology - autonomous
+
+
+
+--=-a4u6oguv8pYyTbmRWk8O
+Content-Disposition: attachment; filename="5.16.3-rc2.txt"
+Content-Type: text/plain; name="5.16.3-rc2.txt"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+CWNoYXIgKiAgICAgICAgICAgICAgICAgICAgIHR5cGV0YWI7ICAgICAgICAgICAgICAvKiAgICAy
+NCAgICAgOCAqLwoKCS8qIHNpemU6IDMyLCBjYWNoZWxpbmVzOiAxLCBtZW1iZXJzOiA0ICovCgkv
+KiBzdW0gbWVtYmVyczogMjgsIGhvbGVzOiAxLCBzdW0gaG9sZXM6IDQgKi8KCS8qIGxhc3QgY2Fj
+aGVsaW5lOiAzMiBieXRlcyAqLwp9OwpzdHJ1Y3Qga2xwX21vZGluZm8gewoJRWxmNjRfRWhkciAg
+ICAgICAgICAgICAgICAgaGRyOyAgICAgICAgICAgICAgICAgIC8qICAgICAwICAgIDY0ICovCgkv
+KiAtLS0gY2FjaGVsaW5lIDEgYm91bmRhcnkgKDY0IGJ5dGVzKSAtLS0gKi8KCUVsZjY0X1NoZHIg
+KiAgICAgICAgICAgICAgIHNlY2hkcnM7ICAgICAgICAgICAgICAvKiAgICA2NCAgICAgOCAqLwoJ
+Y2hhciAqICAgICAgICAgICAgICAgICAgICAgc2Vjc3RyaW5nczsgICAgICAgICAgIC8qICAgIDcy
+ICAgICA4ICovCgl1bnNpZ25lZCBpbnQgICAgICAgICAgICAgICBzeW1uZHg7ICAgICAgICAgICAg
+ICAgLyogICAgODAgICAgIDQgKi8KCgkvKiBzaXplOiA4OCwgY2FjaGVsaW5lczogMiwgbWVtYmVy
+czogNCAqLwoJLyogcGFkZGluZzogNCAqLwoJLyogbGFzdCBjYWNoZWxpbmU6IDI0IGJ5dGVzICov
+Cn07ClNlZ21lbnRhdGlvbiBmYXVsdAogIExEICAgICAgLnRtcF92bWxpbnV4LmthbGxzeW1zMQog
+IEtTWU1TICAgLnRtcF92bWxpbnV4LmthbGxzeW1zMS5TCiAgQVMgICAgICAudG1wX3ZtbGludXgu
+a2FsbHN5bXMxLlMKICBMRCAgICAgIC50bXBfdm1saW51eC5rYWxsc3ltczIKICBLU1lNUyAgIC50
+bXBfdm1saW51eC5rYWxsc3ltczIuUwogIEFTICAgICAgLnRtcF92bWxpbnV4LmthbGxzeW1zMi5T
+CiAgTEQgICAgICB2bWxpbnV4CiAgQlRGSURTICB2bWxpbnV4CkZBSUxFRDogbG9hZCBCVEYgZnJv
+bSB2bWxpbnV4OiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5Cm1ha2U6ICoqKiBbTWFrZWZpbGU6
+MTE2MTogdm1saW51eF0gRXJyb3IgMjU1Cm1ha2U6ICoqKiBEZWxldGluZyBmaWxlICd2bWxpbnV4
+JwokCgo=
+
+
+--=-a4u6oguv8pYyTbmRWk8O--

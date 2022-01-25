@@ -2,131 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0311D49ABCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 06:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259F249ABF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 06:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234735AbiAYFgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 00:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S237951AbiAYFqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 00:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbiAYFdq (ORCPT
+        with ESMTP id S235329AbiAYFnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 00:33:46 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97584C06E01F;
-        Mon, 24 Jan 2022 19:55:01 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id c9so17905467plg.11;
-        Mon, 24 Jan 2022 19:55:01 -0800 (PST)
+        Tue, 25 Jan 2022 00:43:11 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB808C0613AF;
+        Mon, 24 Jan 2022 20:03:13 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id h10so60312wmh.4;
+        Mon, 24 Jan 2022 20:03:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nnMW+oRu4DVxVHkHPaguOniEjD4jPCA0ZR9hQdtETnc=;
-        b=TL9TVAyK+MLuQCyGB3q+JDujoNxa48HahZSSiKFGi856DfVwSMIHz6O/rSgGzJt3+w
-         qPFda++lJxb0CWbcSppe9Aq8DxpRj3slu2RBB+Aki14zYXX0qPaC/c3oeZpckDsAZ9Y/
-         ei6sddRLsjm5pzEg44lKnvLCtYOaF2UJxLrlz5lGHJekLHogMzO7kEgSEockpTEYL3PP
-         ox1VW8fusiGMQeP+mNX6zPqxh8eq1u10nSV1aK6zSoFVaNYJprPAIZB6Q4mAmKg8NGwk
-         HuMdMkar0ePyQSoI9Jgx8TCqQqn6dLDnFouYAl0Xr08kWRkyiThEoMS+YeEicLjzzVpq
-         KhDQ==
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=C3FYe6TcjYjJbJdwbX6OqfjeFpVDE2oMdSSX3Pq1Ukk=;
+        b=pKcHkaFv8cJewfXGxbaoexn8ygvz6aAsVsgb9im1bfgH1/UQPgeCfqahJ2dR2Jd6hw
+         AOgIxBugel8w8NhNgNGUc96a62L5XLi7ClRbyVQaZ/sWNJTCZIFAWX3weKU8H0yMhADj
+         GshQQfTaDIR+ZlBSv64qpiXbAhGVgFWhYXgI1NfaxBLlAfZYrCChvz7mNWx8KV61CCBN
+         oipUOMRVHvtv4shz3+ZU5vVYSz283rDSviTI8EVMkwsiULDNG+eCrrZhNHOmOIOsMsrK
+         ISx+Ta2LMa0Eh2OF2o+sGHLDFeQv4ktn5kAjzEIZJGfbHqgi10b/wM+h1LpOutSeBVLN
+         rghg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nnMW+oRu4DVxVHkHPaguOniEjD4jPCA0ZR9hQdtETnc=;
-        b=wZTavnKUKHbf1g/rydP0RX2lYVGGS6Pn18xfughqxYPRwoqyHXrH9f/VxuzXd1rtyA
-         fTh1H+7V+T7v6MIgYajPLEAVEEotpd3nJzoZuz7WB5bT+jdts0F/uD3bVqxGZmVBELnL
-         UR0TLLJ/MM8gj6exGvo0hQj9iVABPDdMrC5dPIaXUMbWzeu+Hp7uV0BIFcq8zjPsEPtv
-         yhv0LHp+G3xYtv23Oqb8H9++sgSsIOLorX4KNWthzTiKResdBYT/a5ufJCBteauWzBXp
-         2gtZOIn9eLeUJFKfo2Ww2Grr56J71COEu6y5Yb3ufArFqnCE6KA+2TvwL/DF0H/zYLwi
-         sbWg==
-X-Gm-Message-State: AOAM533YpqoMDBM2S10OVBU99/imuOeVCTq4dO62XEtckBdijcx+KH6A
-        q0x25vWQxO8yVlEx0Hzx8IQ=
-X-Google-Smtp-Source: ABdhPJzed9KGNQAqFKexv+5574X1JYThuPt97H/wcHkIGwuoucIUEJSvN0FgsYjnN4o+6z74CMmPPw==
-X-Received: by 2002:a17:902:d712:b0:14a:d880:f20 with SMTP id w18-20020a170902d71200b0014ad8800f20mr17460544ply.41.1643082900979;
-        Mon, 24 Jan 2022 19:55:00 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id s12sm4935544pfk.65.2022.01.24.19.54.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 19:55:00 -0800 (PST)
-Message-ID: <67b47645-016c-2d23-4710-b3743b073766@gmail.com>
-Date:   Mon, 24 Jan 2022 19:54:58 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.10 000/563] 5.10.94-rc1 review
-Content-Language: en-US
-To:     =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
-References: <20220124184024.407936072@linuxfoundation.org>
- <12c8fd1e-431e-9a59-9e7a-e8d856c088b9@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <12c8fd1e-431e-9a59-9e7a-e8d856c088b9@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=C3FYe6TcjYjJbJdwbX6OqfjeFpVDE2oMdSSX3Pq1Ukk=;
+        b=pcio16Ww+L0DZKc+O6hwKqRlTUhl1byC78D9FPewjLNks1ojDHsG9x6iloAFcfTAh1
+         vRFV2s5zsZaOIK1+yH/RVBlWy2FUX4ASiR+KsLVuxVsuypBZD+H2aOCjRVetquaQg0LW
+         oTvYilpr7tMapfNI0Wkxgx6ZozQ/ZxXfWKjeJeoqT8a1P7tNsc2GHEEGvN0CLbX+Ynjr
+         DyegoWSde+frn35KJeDWRnB2e+60sS9wbb7BwIMiZ5PCplUUOfdwjlEJ52ZHjlUlV2ut
+         qln5U0JfP/aE8R8RmSZdu3IT6z2/0//zpprg7jr+BtDKbENz5trVwCWfg/0psirIG6Ze
+         pEmQ==
+X-Gm-Message-State: AOAM530t+8zPFH0Xzm01ES00c8ZDsySXpBRDP1oATRsMXkvsgDDdhrCP
+        lJPPumIj/Ycf4Frea5HV54s=
+X-Google-Smtp-Source: ABdhPJw35D0LrxgrZWlhbeSpwAo2a4wXCmg7DUqpptX4Hs+orfcpR6co5iihxpSUNgAQICwdVQ+zVQ==
+X-Received: by 2002:a05:600c:3797:: with SMTP id o23mr1116133wmr.158.1643083392066;
+        Mon, 24 Jan 2022 20:03:12 -0800 (PST)
+Received: from [172.16.20.20] ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id z1sm1039020wma.20.2022.01.24.20.03.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Jan 2022 20:03:11 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.7\))
+Subject: Re: [PATCH 0/3] arm64: dts: meson: add BL32 reserved region to
+ Beelink g12b devices
+From:   Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <7h7daoyka3.fsf@baylibre.com>
+Date:   Tue, 25 Jan 2022 08:03:09 +0400
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Furkan Kardame <furkan@fkardame.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3A7E4C5F-AECB-4A3E-B074-E2E3419DD749@gmail.com>
+References: <20220122073221.2398-1-christianshewitt@gmail.com>
+ <7h7daoyka3.fsf@baylibre.com>
+To:     Kevin Hilman <khilman@baylibre.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.7)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+>=20
+> On 25 Jan 2022, at 12:02 am, Kevin Hilman <khilman@baylibre.com> =
+wrote:
+>=20
+> Christian Hewitt <christianshewitt@gmail.com> writes:
+>=20
+>> This resolves a long-running issue where Beelink GT-King/Pro and
+>> GS-King-X wedge on boot or shortly after when booting from vendor
+>> u-boot. In some distros the issue is often reported as triggered
+>> by large file transfers to/from USB or SD cards. Reserving the
+>> BL32 memory region prevents the issue.
+>=20
+> The BL32 is typically common for the SoC family, so this change should
+> probably go into the g12b.dtsi.  Or probably even
+> meson-g12-common.dtsi, which is where the BL31 reserved-memory is
+> described.
 
+Hi Kevin,
 
-On 1/24/2022 3:00 PM, Daniel Díaz wrote:
-> Hello!
-> 
-> On 1/24/22 12:36, Greg Kroah-Hartman wrote:
->> This is the start of the stable review cycle for the 5.10.94 release.
->> There are 563 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>     https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.94-rc1.gz 
->>
->> or in the git tree and branch at:
->>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git 
->> linux-5.10.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
-> 
-> Regressions detected on arm, arm64, i386, x86.
-> 
-> This is from arm64:
->    /builds/linux/arch/arm64/mm/extable.c: In function 'fixup_exception':
->    /builds/linux/arch/arm64/mm/extable.c:17:13: error: implicit 
-> declaration of function 'in_bpf_jit' 
-> [-Werror=implicit-function-declaration]
->       17 |         if (in_bpf_jit(regs))
->          |             ^~~~~~~~~~
->    cc1: some warnings being treated as errors
->    make[3]: *** [/builds/linux/scripts/Makefile.build:280: 
-> arch/arm64/mm/extable.o] Error 1
-> 
-> And from Perf on arm, arm64, i386, x86:
->    libbpf.c: In function 'bpf_object__elf_collect':
->    libbpf.c:2873:31: error: invalid type argument of '->' (have 
-> 'GElf_Shdr' {aka 'Elf64_Shdr'})
->     2873 |                         if (sh->sh_type != SHT_PROGBITS)
->          |                               ^~
->    libbpf.c:2877:31: error: invalid type argument of '->' (have 
-> 'GElf_Shdr' {aka 'Elf64_Shdr'})
->     2877 |                         if (sh->sh_type != SHT_PROGBITS)
->          |                               ^~
->    make[4]: *** [/builds/linux/tools/build/Makefile.build:97: 
-> /home/tuxbuild/.cache/tuxmake/builds/current/staticobjs/libbpf.o] Error 1
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Would you be okay with the same change applied to GX devices too? - I
+normally have these two catch-all patches in my tree to deal with random
+tv box hardware and it would be great to drop them:
 
-Same here.
--- 
-Florian
+=
+https://github.com/chewitt/linux/commit/4315ea4612389fc08d0a008b562cafbda9=
+6374fc
+=
+https://github.com/chewitt/linux/commit/3c0df794baa7ea9d32d8ad54530b5a056c=
+770ea9
+
+Christian=

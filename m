@@ -2,72 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 003BB49A8A5
+	by mail.lfdr.de (Postfix) with ESMTP id 18A0B49A8A3
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1319902AbiAYDJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:09:50 -0500
-Received: from mga17.intel.com ([192.55.52.151]:54892 "EHLO mga17.intel.com"
+        id S1319858AbiAYDJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:09:45 -0500
+Received: from mga05.intel.com ([192.55.52.43]:15988 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1315599AbiAYCxw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:53:52 -0500
+        id S1314190AbiAYCu1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 21:50:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643079232; x=1674615232;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UoCuvw3w2BM2aEqWp16vgbE/rRS3x3FZ2GO5SqEMH08=;
-  b=lwwUBkHnQ/2iku9qA58Unb5lI1Uh8JopoH8oCb79DZRtEif3v61Wv22K
-   SrrIt7TJ5a4BExU9ezlXcnYt3IqwI1OylzXDiE5ujKAYHKyTrWsb6e2xd
-   OWXOEUWo+P9Utu39b/tmmrs/QcNyKLtTZTTKif+mlhU/SCdd2GGSpJDEN
-   bJnOgR08YMiHBWv218SoGpgeVcqEt2cPcStdjdMyoYQmgo+EddrpFT8Lf
-   yWDzBSLUAdgJsLmU6E5bvKTaFAHNy0PjJ4YLGoYcNfmFC9XUwaWr+/K4+
-   HWqraH5CvYIA8KuY/hYv+2uCbmM/qjd1OIFHY9RvE9DBKjlfICMy8T75T
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226872346"
+  t=1643079027; x=1674615027;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BQEKrxu8mZSdmInIO8R3Ao2+sKCwBgclP+u7CtUFXMo=;
+  b=Xt2C9bNQTChDT8rcGD+DV3ZrK4czsyAkvAaXCDFKCckAU3KI6e5t2hxn
+   poqluX25dA2+/+dwbGXCOHizctXXd94RF3YWcPrXz5l2ibbDT1gfVmuBy
+   gNLL1M8A/nCbnTgCrYHoXZ+t2gddo95beIEYJFR7vxwILmojys31bCkcc
+   gYLsZABVq+xBLZgjkUc5MY4VVxr4RUM8X9uuzWa6C7aOb8O2PGSfhsUdT
+   jo9Vha9UzHbrwO9VRVTlyyVICBH3nycIjhYB6oZY5ceYfMw7ECWWxBi0w
+   +BSnkDpQcjg+d/97MWLBUx9MPUWWLtJHqI7oJbkFcdhi9+jQG4gbz6mAQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332556566"
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="226872346"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 18:36:21 -0800
+   d="scan'208";a="332556566"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 18:36:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="617464132"
+   d="scan'208";a="476945379"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Jan 2022 18:36:19 -0800
+  by orsmga003.jf.intel.com with ESMTP; 24 Jan 2022 18:36:19 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nCBgx-000JEf-5P; Tue, 25 Jan 2022 02:36:19 +0000
-Date:   Tue, 25 Jan 2022 10:35:28 +0800
+        id 1nCBgx-000JEd-4r; Tue, 25 Jan 2022 02:36:19 +0000
+Date:   Tue, 25 Jan 2022 10:35:31 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Hao Lee <haolee.swjtu@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        0day robot <lkp@intel.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>
-Subject: fs/proc/base.c:1767:14-18: WARNING: casting value returned by memory
- allocation function to (char *) is useless.
-Message-ID: <202201250941.1xbLnDRA-lkp@intel.com>
+To:     lostway@zju.edu.cn, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, bp@alien8.de, tony.luck@intel.com
+Cc:     kbuild-all@lists.01.org
+Subject: Re: [PATCH] RAS: Report ARM processor information to userspace
+Message-ID: <202201250944.dyy7niOd-lkp@intel.com>
+References: <20220124093034.33095-1-lostway@zju.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220124093034.33095-1-lostway@zju.edu.cn>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220123-215907/Hao-Lee/proc-use-kmalloc-instead-of-__get_free_page-to-alloc-path-buffer/20220123-181005
-head:   98106e76de95ae9aefa914ec056448a5571155dc
-commit: 98106e76de95ae9aefa914ec056448a5571155dc proc: alloc PATH_MAX bytes for /proc/${pid}/fd/ symlinks
-date:   35 hours ago
-config: i386-randconfig-c001-20220124 (https://download.01.org/0day-ci/archive/20220125/202201250941.1xbLnDRA-lkp@intel.com/config)
+Hi,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on linux/master]
+[also build test WARNING on rafael-pm/linux-next linus/master v5.17-rc1 next-20220124]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/lostway-zju-edu-cn/RAS-Report-ARM-processor-information-to-userspace/20220124-174203
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: x86_64-randconfig-m001-20220124 (https://download.01.org/0day-ci/archive/20220125/202201250944.dyy7niOd-lkp@intel.com/config)
 compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+smatch warnings:
+drivers/ras/ras.c:51 log_arm_hw_error() warn: unsigned 'vsei_len' is never less than zero.
 
-cocci warnings: (new ones prefixed by >>)
->> fs/proc/base.c:1767:14-18: WARNING: casting value returned by memory allocation function to (char *) is useless.
+vim +/vsei_len +51 drivers/ras/ras.c
 
-Please review and possibly fold the followup patch.
+    23	
+    24	void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
+    25	{
+    26		u32 pei_len;
+    27		u32 ctx_len = 0;
+    28		u32 vsei_len;
+    29		u8 *pei_err;
+    30		u8 *ctx_err;
+    31		u8 *ven_err_data;
+    32		struct cper_arm_err_info *err_info;
+    33		struct cper_arm_ctx_info *ctx_info;
+    34		int n, sz;
+    35		int cpu;
+    36	
+    37		pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
+    38		pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
+    39	
+    40		err_info = (struct cper_arm_err_info *)(err + 1);
+    41		ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
+    42		ctx_err = (u8 *)ctx_info;
+    43		for (n = 0; n < err->context_info_num; n++) {
+    44			sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
+    45			ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
+    46			ctx_len += sz;
+    47		}
+    48	
+    49		vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
+    50							pei_len + ctx_len);
+  > 51		if (vsei_len < 0) {
+    52			pr_warn(FW_BUG
+    53				"section length: %d\n", err->section_length);
+    54			pr_warn(FW_BUG
+    55				"section length is too small\n");
+    56			pr_warn(FW_BUG
+    57				"firmware-generated error record is incorrect\n");
+    58			vsei_len = 0;
+    59		}
+    60		ven_err_data = (u8 *)ctx_info;
+    61	
+    62		cpu = GET_LOGICAL_INDEX(err->mpidr);
+    63		/* when return value is invalid, set cpu index to -1 */
+    64		if (cpu < 0)
+    65			cpu = -1;
+    66	
+    67		trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
+    68				ven_err_data, vsei_len, sev, cpu);
+    69	}
+    70	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

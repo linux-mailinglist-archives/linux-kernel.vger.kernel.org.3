@@ -2,268 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C50549BDFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1598F49BE00
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233375AbiAYVwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 16:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
+        id S233397AbiAYVxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 16:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbiAYVwm (ORCPT
+        with ESMTP id S233383AbiAYVxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 16:52:42 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811D4C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 13:52:42 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id c15so12663484qtv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 13:52:42 -0800 (PST)
+        Tue, 25 Jan 2022 16:53:33 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DA9C06173B;
+        Tue, 25 Jan 2022 13:53:33 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h21so4809925wrb.8;
+        Tue, 25 Jan 2022 13:53:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=72lp1h1NE04/5RpYbW2oG//YRFgvq4Xep4kkAwmBrdQ=;
-        b=FawlhgnHfc1kqfPadpGH5/REBqIBencJQcPBRhkXvwJJxUOCLo0Plg01bzxsPOE0Xd
-         80Y1UpYNVLUB/WepPRN4z1ZpbVaN5MBLeMW0AMBBdbRKC7KPu98Pn47SDkI6ukL6csWK
-         wT0FGtRlbE5MaqAcxGEcvde04YshZf44/g5pd97Xz4AM28GfCIh6alwoUKavF7B63MWh
-         Ejye6OLYtetYDc6UjFia+iOcDCP2j9O+yqA0NRyArq9kOKQ5G6IoPGkH3VuxG0s1KQRr
-         lv6KZfGrk1Bq4+4MdUhnLrCNTgOcrrahD3bV2khpswOH+n6kZbAXugIVuunJW8BSVhE/
-         vTwg==
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=c7U0AhtAd8UvvLOu/L0/Gknc1JV4kBu8H1gQJ9Mdsfc=;
+        b=JwCkfR4SNHOq8YagGzKIEI81pxGi5/yCgcrPo5manT4qnFTGnM7i1siNk+2sNK/vUh
+         v5DX4Av0OtXJfkOEm9iuq1HK4q7Koo2OcQr8uriakJrXtAkf8XzU3oCcDjaA4FXICJ70
+         gPaoxniQETifYSHTyaq4B4/f2iW2zhrMUnN7k7It01BxdMFm+w4lICwbdUPIWtFTD0Bp
+         x33SY9NWNGQXUAAfrtCLcLg1p18gfIua6IWEo14cGRlm9xze+xjmXs7SW9oyttiJazbN
+         jDWjUGjk/5waWPbev7NE6vhGLsmUb0q7LndijnQRyMjDIhZIVIRVyr9QwtYtvOJn67PF
+         Wc5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=72lp1h1NE04/5RpYbW2oG//YRFgvq4Xep4kkAwmBrdQ=;
-        b=gynzqMXY4pqJpSn8GIybgQMvWcGS3YrSuikdRKwYsyIFEzGMrSwzQsW0pkv/fjWx3X
-         kvybmfthHCdKlMRfFw+b1Wg3AJQcZF/LbULtgsAuRZLRkeJWZhve8sW7/IDSfrT7jJml
-         8EFn3nPXn8cWmAl9A/amphp0mXsxNBOQS2Si/angmsjliXKITGO+qqrrzoYq4EWdgXYV
-         QP7fHewqJQuDn1fEHh7YuYc+vScJ7dwPB6nWsfGOko83ah1jjnVoL/LIhb1PXR95s5Wl
-         kVR2cOyxqI7ukun1ODn5ojjspruhVvRrRafU7GKjpIUukJxaoTLdgzTNlURSJWgEr5Vp
-         i1gg==
-X-Gm-Message-State: AOAM531GBH6cjwjut2nxfEQtqnkI+XS4AMNYdnGsQFAOnJpMLrc5a/g+
-        +16HjHGJQcQeHmfp8XthcZJhkA3Fvw==
-X-Google-Smtp-Source: ABdhPJxUJU+Zmg/JlqRDmbOyk/1I+Em/5rVi9Wn2gF3hJWrUKIsxV1DTz83qIUMwgGXWkh+ggPK5uw==
-X-Received: by 2002:a05:622a:1394:: with SMTP id o20mr4781433qtk.364.1643147561341;
-        Tue, 25 Jan 2022 13:52:41 -0800 (PST)
-Received: from serve.minyard.net ([47.184.144.75])
-        by smtp.gmail.com with ESMTPSA id f8sm9575695qtf.81.2022.01.25.13.52.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 13:52:40 -0800 (PST)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:119b:19f9:7c76:518a])
-        by serve.minyard.net (Postfix) with ESMTPSA id BC7811800BB;
-        Tue, 25 Jan 2022 21:52:39 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 15:52:38 -0600
-From:   Corey Minyard <minyard@acm.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Juergen Gross <jgross@suse.com>, Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Possible reproduction of CSD locking issue
-Message-ID: <20220125215238.GP34919@minyard.net>
-Reply-To: minyard@acm.org
-References: <20220125182737.GO34919@minyard.net>
- <20220125185338.GP4285@paulmck-ThinkPad-P17-Gen-1>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=c7U0AhtAd8UvvLOu/L0/Gknc1JV4kBu8H1gQJ9Mdsfc=;
+        b=NaMUZo1JebAcp84DlpdH679BBvNGwI8jynYb8PGoRbmPqlL0+yj39k+WM80aLJ08eW
+         Xd1L59PEmjtIhooxb4e/B/fajcVRrinWnot6G8e1YztLBI/IRCkwyKJwcq0DVy/IRr+5
+         tPF1YbCadt94BJKbYDPmSDnWsvxTY4F+3DjP2DL1iz73jipGg9ra8563itIaTXKkP76M
+         DhKXe0kdrnPEt+vjQOGInX0kFFEqUBJ6h87l1AwXyIuhi35Jsp7jKDzCb4W+7g9LqdWB
+         7ckm8kqdYWvTPewWTd1o7FDcPMVEFeOLDSNOzJnZHTZwGNLzWarHQ8XvsrFcGK1MpE/C
+         uN1g==
+X-Gm-Message-State: AOAM531dV/eiKnupsdAXtZ6MNyeSnwN/Y0IRf/zIquDON9zq/MpT30cL
+        DU3f9xZZX2SGNDVFGNJlOwvcZBZYAGs=
+X-Google-Smtp-Source: ABdhPJyB2CQu0H4jp7QQNyaCwFvl1GZSa009hsa7g78f7nfqI0Za8gNuu4psSVTbt4h12a360WRcqw==
+X-Received: by 2002:a5d:64e8:: with SMTP id g8mr8713050wri.574.1643147611922;
+        Tue, 25 Jan 2022 13:53:31 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f4d:2b00:5062:8000:c669:60de? (p200300ea8f4d2b0050628000c66960de.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:5062:8000:c669:60de])
+        by smtp.googlemail.com with ESMTPSA id n15sm1503732wmr.26.2022.01.25.13.53.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 13:53:31 -0800 (PST)
+Message-ID: <5ec25f20-8acf-544d-30f6-f0eeecd9b2f1@gmail.com>
+Date:   Tue, 25 Jan 2022 22:53:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220125185338.GP4285@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Content-Language: en-US
+To:     Chunhao Lin <hau@realtek.com>, netdev@vger.kernel.org
+Cc:     nic_swsd@realtek.com, linux-kernel@vger.kernel.org
+References: <20220124181937.6331-1-hau@realtek.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net-next 1/1] r8169: enable RTL8125 ASPM L1.2
+In-Reply-To: <20220124181937.6331-1-hau@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:53:38AM -0800, Paul E. McKenney wrote:
-> On Tue, Jan 25, 2022 at 12:27:37PM -0600, Corey Minyard wrote:
-> > We have a customer that had been seeing CSD lock issues on a Centos 7
-> > kernel (unfortunately).  I couldn't find anything or any kernel changes
-> > that might fix it, so I was consdering it was the CSD locking issue you
-> > have been chasing for a while.
-> > 
-> > So I backported the debug patches.  And of course, they stopped seeing
-> > the issue, at least as much, and they had trouble with the extra CPU
-> > time the debug code took.  But they just reproduced it.  Here are the
-> > logs:
-> > 
-> > Jan 23 23:39:43 worker0 kernel: [285737.522743] csd: Detected non-responsive CSD lock (#1) on CPU#3, waiting 5000000042 ns for CPU#55 flush_tlb_func+0x0/0xb0(0xffff8e0b3e2afbe8).
-> > Jan 23 23:39:43 worker0 kernel: [285737.522744]  csd: CSD lock (#1) unresponsive.
-> > Jan 23 23:39:43 worker0 kernel: [285737.522747]  csd: cnt(0000000): 0000->0000 queue
-> > Jan 23 23:39:43 worker0 kernel: [285737.522748]  csd: cnt(0000001): ffff->0037 idle
-> > Jan 23 23:39:43 worker0 kernel: [285737.522749]  csd: cnt(63d8dd8): 0003->0037 ipi
-> > Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dd9): 0003->0037 ping
-> > Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dda): 0003->ffff pinged
-> > Jan 23 23:39:43 worker0 kernel: [285737.522751]  csd: cnt(63d8dea): 0035->0037 pinged
-> > Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8deb): ffff->0037 gotipi
-> > Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8dec): ffff->0037 handle
-> > Jan 23 23:39:43 worker0 kernel: [285737.522753]  csd: cnt(63d8ded): ffff->0037 dequeue (src CPU 0 == empty)
-> > Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8dee): ffff->0037 hdlend (src CPU 0 == early)
-> > Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8e1f): 0003->0037 queue
-> > Jan 23 23:39:43 worker0 kernel: [285737.522755]  csd: cnt(63d8e20): 0003->0037 ipi
-> > Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e21): 0003->0037 ping
-> > Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e22): 0003->0037 queue
-> > Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt(63d8e23): 0003->0037 noipi
-> > Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt now: 63fe4cd
-> > Jan 23 23:39:43 worker0 kernel: [285737.522758] Task dump for CPU 55:
-> > Jan 23 23:39:43 worker0 kernel: [285737.522761] kubelet         R  running task        0 277695      1 0x00080000
-> > Jan 23 23:39:43 worker0 kernel: [285737.522761] Call Trace:
-> > Jan 23 23:39:43 worker0 kernel: [285737.522769]  [<ffffffff84376b6a>] ? __schedule+0x46a/0x990
-> > Jan 23 23:39:43 worker0 kernel: [285737.522774]  [<ffffffff83db6353>] ? context_tracking_user_enter+0x13/0x20
-> > Jan 23 23:39:43 worker0 kernel: [285737.522776]  [<ffffffff843775b5>] ? schedule_user+0x45/0x50
-> > Jan 23 23:39:43 worker0 kernel: [285737.522779]  [<ffffffff8437b518>] ? retint_careful+0x16/0x34
+On 24.01.2022 19:19, Chunhao Lin wrote:
+> This patch will enable RTL8125 ASPM L1.2 on the platforms that have
+> tested RTL8125 with ASPM L1.2 enabled.
+> Register mac ocp 0xc0b2 will help to identify if RTL8125 has been tested
+> on L1.2 enabled platform. If it is, this register will be set to 0xf.
+> If not, this register will be default value 0.
 > 
-> Long-running interrupt handler, maybe?  Or am I misinterpreting this
-> stack trace?
-
-Well, maybe.  But why would the condition clear up immediately when
-another IPI is sent?  If I understand correctly this box is doing mostly
-polled I/O, there shouldn't be many interrupts.  But possibly a driver
-bug, I hadn't thought of that.
-
-I could have the system panic when this happens and maybe I can find
-some breadcrumbs lying around in the core dump.  The trouble is it's
-been two months now to reproduce this.
-
+> Signed-off-by: Chunhao Lin <hau@realtek.com>
+> ---
+>  drivers/net/ethernet/realtek/r8169_main.c | 99 ++++++++++++++++++-----
+>  1 file changed, 79 insertions(+), 20 deletions(-)
 > 
-> > Jan 23 23:39:43 worker0 kernel: [285737.522780] csd: Re-sending CSD lock (#1) IPI from CPU#03 to CPU#55
-> > Jan 23 23:39:43 worker0 kernel: [285737.522788] CPU: 3 PID: 54671 Comm: runc:[2:INIT] Kdump: loaded Tainted: G           OE  ------------ T 3.10.0-1062.12.1.rt56.1042.mvista.test.14.el7.x86_64 #1
-> > Jan 23 23:39:43 worker0 kernel: [285737.522789] Hardware name: Dell Inc. PowerEdge R740/0YWR7D, BIOS 2.9.4 11/06/2020
-> > Jan 23 23:39:43 worker0 kernel: [285737.522789] Call Trace:
-> > Jan 23 23:39:43 worker0 kernel: [285737.522793]  [<ffffffff843718ba>] dump_stack+0x19/0x1b
-> > Jan 23 23:39:43 worker0 kernel: [285737.522798]  [<ffffffff83d0bcd8>] __csd_lock_wait+0x1a8/0x2a0
-> > Jan 23 23:39:43 worker0 kernel: [285737.522800]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
-> > Jan 23 23:39:43 worker0 kernel: [285737.522802]  [<ffffffff83d0bfa4>] smp_call_function_single+0xc4/0x1b0
-> > Jan 23 23:39:43 worker0 kernel: [285737.522804]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
-> > Jan 23 23:39:43 worker0 kernel: [285737.522809]  [<ffffffff83e2684b>] ? page_counter_uncharge+0x3b/0x70
-> > Jan 23 23:39:43 worker0 kernel: [285737.522811]  [<ffffffff83d0c614>] smp_call_function_many+0x344/0x380
-> > Jan 23 23:39:43 worker0 kernel: [285737.522813]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
-> > Jan 23 23:39:43 worker0 kernel: [285737.522816]  [<ffffffff83c6da38>] native_flush_tlb_others+0xb8/0xc0
-> > Jan 23 23:39:43 worker0 kernel: [285737.522818]  [<ffffffff83c6dc25>] flush_tlb_page+0x65/0xf0
-> > Jan 23 23:39:43 worker0 kernel: [285737.522821]  [<ffffffff83dfdf98>] ptep_clear_flush+0x68/0xa0
-> > Jan 23 23:39:43 worker0 kernel: [285737.522825]  [<ffffffff83de6806>] wp_page_copy.isra.83+0x3d6/0x650
-> > Jan 23 23:39:43 worker0 kernel: [285737.522828]  [<ffffffff83de8cb4>] do_wp_page+0xb4/0x710
-> > Jan 23 23:39:43 worker0 kernel: [285737.522832]  [<ffffffff83decbb4>] handle_mm_fault+0x884/0x1340
-> > Jan 23 23:39:43 worker0 kernel: [285737.522835]  [<ffffffff83cd7799>] ? update_cfs_shares+0xa9/0xf0
-> > Jan 23 23:39:43 worker0 kernel: [285737.522839]  [<ffffffff8437efc3>] __do_page_fault+0x213/0x5a0
-> > Jan 23 23:39:43 worker0 kernel: [285737.522841]  [<ffffffff8437f385>] do_page_fault+0x35/0x90
-> > Jan 23 23:39:43 worker0 kernel: [285737.522842]  [<ffffffff8437b728>] page_fault+0x28/0x30
-> > Jan 23 23:39:43 worker0 kernel: [285737.522845] csd: CSD lock (#1) got unstuck on CPU#03, CPU#55 released the lock.
-> > 
-> > Hopefully this is the issue you are chasing and not something else.
-> > I've been studying them to see what they mean, but I thought you might
-> > be interested to get them asap.
-> 
-> Well, there have been several bugs causing these CSD lock issues, so what
-> is one more?  ;-)
-> 
-> More seriously, have you tried Frederic's patch?  This fixes the issue
-> described here:  https://paulmck.livejournal.com/62071.html
-> If your stack above was due to an interrupt storm rather than a
-> long-running interrupt, this might well be the fix.
-
-The code is so different that it will take me some time.  I'll have to
-understand the issue more deeply to trace that down.  But thanks for the
-reference.
-
-> 
-> Oh, and Jürgen Groß reportedly found an issue about a year ago that
-> could potentially be related, but I see that he is already on CC.
-> 
-> And, unfortunately, even more seriously, this CSD-lock diagnostic code
-> will very likely continue to find problems, just as the infamous RCU
-> CPU stall warnings and hard/soft lockup warnings do.
-
-Yeah, I've already fixed a couple of bugs related to CSD lockups.  So I
-suppose I've handled all the low-hanging fruit.  With a 104 core box it
-makes uncovering these sorts of issues more likely, I suppose.
-
--corey
-
-> 
-> 							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> commit 53e87e3cdc155f20c3417b689df8d2ac88d79576
-> Author: Frederic Weisbecker <frederic@kernel.org>
-> Date:   Tue Oct 26 16:10:54 2021 +0200
-> 
->     timers/nohz: Last resort update jiffies on nohz_full IRQ entry
->     
->     When at least one CPU runs in nohz_full mode, a dedicated timekeeper CPU
->     is guaranteed to stay online and to never stop its tick.
->     
->     Meanwhile on some rare case, the dedicated timekeeper may be running
->     with interrupts disabled for a while, such as in stop_machine.
->     
->     If jiffies stop being updated, a nohz_full CPU may end up endlessly
->     programming the next tick in the past, taking the last jiffies update
->     monotonic timestamp as a stale base, resulting in an tick storm.
->     
->     Here is a scenario where it matters:
->     
->     0) CPU 0 is the timekeeper and CPU 1 a nohz_full CPU.
->     
->     1) A stop machine callback is queued to execute somewhere.
->     
->     2) CPU 0 reaches MULTI_STOP_DISABLE_IRQ while CPU 1 is still in
->        MULTI_STOP_PREPARE. Hence CPU 0 can't do its timekeeping duty. CPU 1
->        can still take IRQs.
->     
->     3) CPU 1 receives an IRQ which queues a timer callback one jiffy forward.
->     
->     4) On IRQ exit, CPU 1 schedules the tick one jiffy forward, taking
->        last_jiffies_update as a base. But last_jiffies_update hasn't been
->        updated for 2 jiffies since the timekeeper has interrupts disabled.
->     
->     5) clockevents_program_event(), which relies on ktime_get(), observes
->        that the expiration is in the past and therefore programs the min
->        delta event on the clock.
->     
->     6) The tick fires immediately, goto 3)
->     
->     7) Tick storm, the nohz_full CPU is drown and takes ages to reach
->        MULTI_STOP_DISABLE_IRQ, which is the only way out of this situation.
->     
->     Solve this with unconditionally updating jiffies if the value is stale
->     on nohz_full IRQ entry. IRQs and other disturbances are expected to be
->     rare enough on nohz_full for the unconditional call to ktime_get() to
->     actually matter.
->     
->     Reported-by: Paul E. McKenney <paulmck@kernel.org>
->     Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
->     Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
->     Tested-by: Paul E. McKenney <paulmck@kernel.org>
->     Link: https://lore.kernel.org/r/20211026141055.57358-2-frederic@kernel.org
-> 
-> diff --git a/kernel/softirq.c b/kernel/softirq.c
-> index 322b65d456767..41f470929e991 100644
-> --- a/kernel/softirq.c
-> +++ b/kernel/softirq.c
-> @@ -595,7 +595,8 @@ void irq_enter_rcu(void)
->  {
->  	__irq_enter_raw();
->  
-> -	if (is_idle_task(current) && (irq_count() == HARDIRQ_OFFSET))
-> +	if (tick_nohz_full_cpu(smp_processor_id()) ||
-> +	    (is_idle_task(current) && (irq_count() == HARDIRQ_OFFSET)))
->  		tick_irq_enter();
->  
->  	account_hardirq_enter(current);
-> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> index 6bffe5af8cb11..17a283ce2b20f 100644
-> --- a/kernel/time/tick-sched.c
-> +++ b/kernel/time/tick-sched.c
-> @@ -1375,6 +1375,13 @@ static inline void tick_nohz_irq_enter(void)
->  	now = ktime_get();
->  	if (ts->idle_active)
->  		tick_nohz_stop_idle(ts, now);
-> +	/*
-> +	 * If all CPUs are idle. We may need to update a stale jiffies value.
-> +	 * Note nohz_full is a special case: a timekeeper is guaranteed to stay
-> +	 * alive but it might be busy looping with interrupts disabled in some
-> +	 * rare case (typically stop machine). So we must make sure we have a
-> +	 * last resort.
-> +	 */
->  	if (ts->tick_stopped)
->  		tick_nohz_update_jiffies(now);
+> diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+> index 19e2621e0645..b1e013969d4c 100644
+> --- a/drivers/net/ethernet/realtek/r8169_main.c
+> +++ b/drivers/net/ethernet/realtek/r8169_main.c
+> @@ -2238,21 +2238,6 @@ static void rtl_wol_enable_rx(struct rtl8169_private *tp)
+>  			AcceptBroadcast | AcceptMulticast | AcceptMyPhys);
 >  }
+>  
+> -static void rtl_prepare_power_down(struct rtl8169_private *tp)
+> -{
+> -	if (tp->dash_type != RTL_DASH_NONE)
+> -		return;
+> -
+> -	if (tp->mac_version == RTL_GIGA_MAC_VER_32 ||
+> -	    tp->mac_version == RTL_GIGA_MAC_VER_33)
+> -		rtl_ephy_write(tp, 0x19, 0xff64);
+> -
+> -	if (device_may_wakeup(tp_to_dev(tp))) {
+> -		phy_speed_down(tp->phydev, false);
+> -		rtl_wol_enable_rx(tp);
+> -	}
+> -}
+> -
+>  static void rtl_init_rxcfg(struct rtl8169_private *tp)
+>  {
+>  	switch (tp->mac_version) {
+> @@ -2650,6 +2635,34 @@ static void rtl_pcie_state_l2l3_disable(struct rtl8169_private *tp)
+>  	RTL_W8(tp, Config3, RTL_R8(tp, Config3) & ~Rdy_to_L23);
+>  }
+>  
+> +static void rtl_disable_exit_l1(struct rtl8169_private *tp)
+> +{
+> +	/* Bits control which events trigger ASPM L1 exit:
+> +	 * Bit 12: rxdv
+> +	 * Bit 11: ltr_msg
+> +	 * Bit 10: txdma_poll
+> +	 * Bit  9: xadm
+> +	 * Bit  8: pktavi
+> +	 * Bit  7: txpla
+> +	 */
+> +	switch (tp->mac_version) {
+> +	case RTL_GIGA_MAC_VER_34 ... RTL_GIGA_MAC_VER_36:
+> +		rtl_eri_clear_bits(tp, 0xd4, 0x1f00);
+> +		break;
+> +	case RTL_GIGA_MAC_VER_37 ... RTL_GIGA_MAC_VER_38:
+> +		rtl_eri_clear_bits(tp, 0xd4, 0x0c00);
+> +		break;
+> +	case RTL_GIGA_MAC_VER_40 ... RTL_GIGA_MAC_VER_53:
+> +		rtl_eri_clear_bits(tp, 0xd4, 0x1f80);
+> +		break;
+> +	case RTL_GIGA_MAC_VER_60 ... RTL_GIGA_MAC_VER_63:
+> +		r8168_mac_ocp_modify(tp, 0xc0ac, 0x1f80, 0);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +}
+> +
+>  static void rtl_enable_exit_l1(struct rtl8169_private *tp)
+>  {
+>  	/* Bits control which events trigger ASPM L1 exit:
+> @@ -2692,6 +2705,33 @@ static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool enable)
+>  	udelay(10);
+>  }
+>  
+> +static void rtl_hw_aspm_l12_enable(struct rtl8169_private *tp, bool enable)
+> +{
+> +	/* Don't enable L1.2 in the chip if OS can't control ASPM */
+> +	if (enable && tp->aspm_manageable) {
+> +		r8168_mac_ocp_modify(tp, 0xe094, 0xff00, 0);
+> +		r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, BIT(2));
+> +	} else {
+> +		r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, 0);
+> +	}
+> +}
+> +
+> +static void rtl_prepare_power_down(struct rtl8169_private *tp)
+> +{
+> +	if (tp->dash_type != RTL_DASH_NONE)
+> +		return;
+> +
+> +	if (tp->mac_version == RTL_GIGA_MAC_VER_32 ||
+> +	    tp->mac_version == RTL_GIGA_MAC_VER_33)
+> +		rtl_ephy_write(tp, 0x19, 0xff64);
+> +
+> +	if (device_may_wakeup(tp_to_dev(tp))) {
+> +		rtl_disable_exit_l1(tp);
+> +		phy_speed_down(tp->phydev, false);
+> +		rtl_wol_enable_rx(tp);
+> +	}
+> +}
+> +
+>  static void rtl_set_fifo_size(struct rtl8169_private *tp, u16 rx_stat,
+>  			      u16 tx_stat, u16 rx_dyn, u16 tx_dyn)
+>  {
+> @@ -3675,6 +3715,7 @@ static void rtl_hw_start_8125b(struct rtl8169_private *tp)
+>  	rtl_ephy_init(tp, e_info_8125b);
+>  	rtl_hw_start_8125_common(tp);
+>  
+> +	rtl_hw_aspm_l12_enable(tp, true);
+>  	rtl_hw_aspm_clkreq_enable(tp, true);
+>  }
+>  
+> @@ -5255,6 +5296,20 @@ static void rtl_init_mac_address(struct rtl8169_private *tp)
+>  	rtl_rar_set(tp, mac_addr);
+>  }
+>  
+> +/* mac ocp 0xc0b2 will help to identify if RTL8125 has been tested
+> + * on L1.2 enabled platform. If it is, this register will be set to 0xf.
+> + * If not, this register will be default value 0.
+> + */
+> +static bool rtl_platform_l12_enabled(struct rtl8169_private *tp)
+> +{
+> +	switch (tp->mac_version) {
+> +	case RTL_GIGA_MAC_VER_60 ... RTL_GIGA_MAC_VER_63:
+> +		return (r8168_mac_ocp_read(tp, 0xc0b2) & 0xf) ? true : false;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+>  static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  {
+>  	struct rtl8169_private *tp;
+> @@ -5333,11 +5388,15 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  	 * Chips from RTL8168h partially have issues with L1.2, but seem
+>  	 * to work fine with L1 and L1.1.
+>  	 */
+> -	if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
+> -		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
+> -	else
+> -		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
+> -	tp->aspm_manageable = !rc;
+> +	if (!rtl_platform_l12_enabled(tp)) {
+> +		if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
+> +			rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
+> +		else
+> +			rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
+> +		tp->aspm_manageable = !rc;
+> +	} else {
+> +		tp->aspm_manageable = pcie_aspm_enabled(pdev);
+> +	}
+>  
+>  	tp->dash_type = rtl_check_dash(tp);
+>  
+
+Hi Hau,
+
+the following is a stripped-down version of the patch. Could you please check/test?
+If function rtl_disable_exit_l1() is actually needed, I'd prefer to add it
+in a separate patch (to facilitate bisecting).
+
+
+ drivers/net/ethernet/realtek/r8169_main.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+index ca95e9266..890a64245 100644
+--- a/drivers/net/ethernet/realtek/r8169_main.c
++++ b/drivers/net/ethernet/realtek/r8169_main.c
+@@ -2684,7 +2684,15 @@ static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool enable)
+ 	if (enable && tp->aspm_manageable) {
+ 		RTL_W8(tp, Config5, RTL_R8(tp, Config5) | ASPM_en);
+ 		RTL_W8(tp, Config2, RTL_R8(tp, Config2) | ClkReqEn);
++
++		if (tp->mac_version == RTL_GIGA_MAC_VER_63) {
++			r8168_mac_ocp_modify(tp, 0xe094, 0xff00, 0);
++			r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, BIT(2));
++		}
+ 	} else {
++		if (tp->mac_version == RTL_GIGA_MAC_VER_63)
++			r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, 0);
++
+ 		RTL_W8(tp, Config2, RTL_R8(tp, Config2) & ~ClkReqEn);
+ 		RTL_W8(tp, Config5, RTL_R8(tp, Config5) & ~ASPM_en);
+ 	}
+@@ -5251,6 +5259,16 @@ static void rtl_init_mac_address(struct rtl8169_private *tp)
+ 	rtl_rar_set(tp, mac_addr);
+ }
+ 
++/* register is set if system vendor successfully tested ASPM 1.2 */
++static bool rtl_aspm_is_safe(struct rtl8169_private *tp)
++{
++	if (tp->mac_version >= RTL_GIGA_MAC_VER_60 &&
++	    r8168_mac_ocp_read(tp, 0xc0b2) & 0xf)
++		return true;
++
++	return false;
++}
++
+ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ {
+ 	struct rtl8169_private *tp;
+@@ -5329,7 +5347,9 @@ static int rtl_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	 * Chips from RTL8168h partially have issues with L1.2, but seem
+ 	 * to work fine with L1 and L1.1.
+ 	 */
+-	if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
++	if (rtl_aspm_is_safe(tp))
++		rc = 0;
++	else if (tp->mac_version >= RTL_GIGA_MAC_VER_45)
+ 		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1_2);
+ 	else
+ 		rc = pci_disable_link_state(pdev, PCIE_LINK_STATE_L1);
+-- 
+2.35.0
+
+

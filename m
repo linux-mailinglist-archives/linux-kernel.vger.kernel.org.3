@@ -2,84 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDEB349AD4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D05F49AD64
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443381AbiAYHPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:15:20 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:30301 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442940AbiAYHM3 (ORCPT
+        id S1443846AbiAYHRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 02:17:43 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:13093 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1443252AbiAYHOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:12:29 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JjdLs2xN3zbkF5;
-        Tue, 25 Jan 2022 15:11:33 +0800 (CST)
-Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 25 Jan 2022 15:12:22 +0800
-Received: from huawei.com (10.67.174.102) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 25 Jan
- 2022 15:12:22 +0800
-From:   "GONG, Ruiqi" <gongruiqi1@huawei.com>
-To:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>
-CC:     Ondrej Mosnacek <omosnace@redhat.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        <selinux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-Subject: [PATCH -next] selinux: access superblock_security_struct in LSM blob way
-Date:   Tue, 25 Jan 2022 15:11:33 +0800
-Message-ID: <20220125071133.188172-1-gongruiqi1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 25 Jan 2022 02:14:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643094845; x=1674630845;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=E62i9EEK7Epg0ugbthAoba+EqU6MQTNhvud0W4cIoig=;
+  b=f016lUelD6QokYiH4nV9n/hCow+qtX+wipMa2UyoZVia5miYmV56hMd9
+   7YMsDquljzyYoJ20ALTCLMgUDmdb7n0sdfmj1+MFWgmh8EFoK6bCkD6fd
+   KmyB6z7NoEh8BN1e8Lzd6J18q5OySrrvM8nFL5Qwma74km10vgWjOs6v3
+   E=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jan 2022 23:14:04 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 23:14:04 -0800
+Received: from [10.216.52.178] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 24 Jan
+ 2022 23:14:00 -0800
+Message-ID: <55d5af8e-c29b-77f8-980d-7e8f713d2c35@quicinc.com>
+Date:   Tue, 25 Jan 2022 12:43:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.102]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] sched/fair: Prefer small idle cores for forkees
+Content-Language: en-US
+To:     Vincent Donnefort <vincent.donnefort@arm.com>
+CC:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <joel@joelfernandes.org>, <linux-arm-msm@vger.kernel.org>,
+        <quic_lingutla@quicinc.com>, <linux-kernel@vger.kernel.org>,
+        <quic_rjendra@quicinc.com>
+References: <20220112143902.13239-1-quic_ctheegal@quicinc.com>
+ <YeBRD9zKSLPBFX+j@FVFF7649Q05P>
+ <b528a922-da84-32c2-963f-458b1e834c15@quicinc.com>
+ <YeqIMAqeP9ou7QFr@FVFF7649Q05P>
+From:   Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+In-Reply-To: <YeqIMAqeP9ou7QFr@FVFF7649Q05P>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LSM blob has been involved for superblock's security struct. So fix the
-remaining direct access to sb->s_security by using the LSM blob
-mechanism.
 
-Fixes: 08abe46b2cfc ("selinux: fall back to SECURITY_FS_USE_GENFS if no xattr support")
-Fixes: 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an existing mount")
-Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
----
- security/selinux/hooks.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 1/21/2022 3:47 PM, Vincent Donnefort wrote:
+> On Thu, Jan 20, 2022 at 10:15:07PM +0530, Chitti Babu Theegala wrote:
+>>
+>>
+>> On 1/13/2022 10:05 PM, Vincent Donnefort wrote:
+>>> On Wed, Jan 12, 2022 at 08:09:02PM +0530, Chitti Babu Theegala wrote:
+>>>> Newly forked threads don't have any useful utilization data yet and
+>>>> it's not possible to forecast their impact on energy consumption.
+>>>> update_pick_idlest These forkees (though very small, most times) end up waking big
+>>>> cores from deep sleep for that very small durations.
+>>>>
+>>>> Bias all forkees to small cores to prevent waking big cores from deep
+>>>> sleep to save power.
+>>>
+>>> This bias might be interesting for some workloads, but what about the
+>>> others? (see find_energy_efficient_cpu() comment, which discusses forkees).
+>>>
+>>
+>> Yes, I agree with the find_energy_efficient_cpu() comment that we don't have
+>> any useful utilization data yet and hence not possible to forecast. However,
+>> I don't see any point in penalizing the power by waking up bigger cores
+>> which are in deep sleep state for very small workloads.
+>>
+>> This patch helps lighter workloads during idle conditions w.r.t power POV.
+>> For active (interactive or heavier) workloads, on most big.Little systems'
+>> these foreground tasks get pulled into gold affined cpu-sets where this
+>> patch would not play any spoilsport. Even for systems with such cpu-sets not
+>> defined, heavy workloads might need just another 1 or 2 scheduling windows
+>> for ramping to better freq or core.
+> 
+> Scheduling windows? I suppose you do not refer to PELT here, so I'm not sure
+> this argument applies here.
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 5b6895e4fc29..a0243bae8423 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -479,7 +479,7 @@ static int selinux_is_sblabel_mnt(struct super_block *sb)
- 
- static int sb_check_xattr_support(struct super_block *sb)
- {
--	struct superblock_security_struct *sbsec = sb->s_security;
-+	struct superblock_security_struct *sbsec = selinux_superblock(sb);
- 	struct dentry *root = sb->s_root;
- 	struct inode *root_inode = d_backing_inode(root);
- 	u32 sid;
-@@ -2647,7 +2647,7 @@ static int selinux_sb_eat_lsm_opts(char *options, void **mnt_opts)
- static int selinux_sb_mnt_opts_compat(struct super_block *sb, void *mnt_opts)
- {
- 	struct selinux_mnt_opts *opts = mnt_opts;
--	struct superblock_security_struct *sbsec = sb->s_security;
-+	struct superblock_security_struct *sbsec = selinux_superblock(sb);
- 	u32 sid;
- 	int rc;
- 
--- 
-2.17.1
+Sorry. I didn’t mean it to be WALT. I meant that ramp up would happen in 
+next couple of ms which can give very small penalty for such heavy 
+workloads for the initial ms.
 
+> 
+> Beside, CFS always bias toward performance (except feec(), which does it in a
+> lesser extent).
+> 
+
+Yes, aware that CFS is perf bias. Can we have a knob atleast which can 
+turn-on such power friendly features ?
+
+>>
+>>>>
+>>>> Signed-off-by: Chitti Babu Theegala <quic_ctheegal@quicinc.com>
+>>>> ---
+>>>>    kernel/sched/fair.c | 16 +++++++++++-----
+>>>>    1 file changed, 11 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>>> index 6e476f6..d407bbc 100644
+>>>> --- a/kernel/sched/fair.c
+>>>> +++ b/kernel/sched/fair.c
+>>>> @@ -5976,7 +5976,7 @@ static int wake_affine(struct sched_domain *sd, struct task_struct *p,
+>>>>    }
+>>>>    static struct sched_group *
+>>>> -find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu);
+>>>> +find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu, int sd_flag);
+>>>>    /*
+>>>>     * find_idlest_group_cpu - find the idlest CPU among the CPUs in the group.
+>>>> @@ -6063,7 +6063,7 @@ static inline int find_idlest_cpu(struct sched_domain *sd, struct task_struct *p
+>>>>    			continue;
+>>>>    		}
+>>>> -		group = find_idlest_group(sd, p, cpu);
+>>>> +		group = find_idlest_group(sd, p, cpu, sd_flag);
+>>>>    		if (!group) {
+>>>>    			sd = sd->child;
+>>>>    			continue;
+>>>> @@ -8997,7 +8997,8 @@ static inline void update_sg_wakeup_stats(struct sched_domain *sd,
+>>>>    static bool update_pick_idlest(struct sched_group *idlest,
+>>>>    			       struct sg_lb_stats *idlest_sgs,
+>>>>    			       struct sched_group *group,
+>>>> -			       struct sg_lb_stats *sgs)
+>>>> +			       struct sg_lb_stats *sgs,
+>>>> +			       int sd_flag)
+>>>>    {
+>>>>    	if (sgs->group_type < idlest_sgs->group_type)
+>>>>    		return true;
+>>>> @@ -9034,6 +9035,11 @@ static bool update_pick_idlest(struct sched_group *idlest,
+>>>>    		if (idlest_sgs->idle_cpus > sgs->idle_cpus)
+>>>>    			return false;
+>>>> +		/* Select smaller cpu group for newly woken up forkees */
+>>>> +		if ((sd_flag & SD_BALANCE_FORK) && (idlest_sgs->idle_cpus &&
+>>>> +			!capacity_greater(idlest->sgc->max_capacity, group->sgc->max_capacity)))
+>>>> +			return false;
+>>>> +
+>>>
+>>> Energy biased placement should probably be applied only when EAS is enabled.
+>>>
+>>> It's especially true here, if all CPUs have the same capacity, capacity_greater
+>>> would be always false. So unless I missed something, we wouldn't let the group_util
+>>> evaluation happen, would we?
+>>
+>> True. I am uploading new version patch with a EAS enablement check in place.
+>>
+>>>
+>>> [...]

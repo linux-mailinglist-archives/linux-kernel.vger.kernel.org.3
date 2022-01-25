@@ -2,166 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFF649B3E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 911E449B3ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383786AbiAYM0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:26:05 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64122 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1448003AbiAYMVk (ORCPT
+        id S1383234AbiAYM02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:26:28 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58964 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1448232AbiAYMXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:21:40 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PCK3Xl009939;
-        Tue, 25 Jan 2022 12:21:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=DSC4tF8JBAB/RYcyPBdMDahatWCJeXMwVRaiqjTudKw=;
- b=k3tTxNJUykPlLxHQ4+C5L6F+0fDTKJFiMZX5rdCCPS22AAF2+7Vx73wQZSOYbh3oQBmv
- Z/4ysrk1ufIkXoeGnUs9dxyHfZ1P1hbW78e/S/ylRDOo6nAVNwCm3eevRqUN9jkv+ePk
- 1DHbnFmR8zyy8tqhI5zS9MH0NJP7K6ZAv9fK/gRaxmvsohqHXnI/QngnHH7jKZ0+n56V
- NIJDXiRIY3W2m3zGovvt+wRjgvjKKy9opLierbZplYMvEKTqJTKZa+zFJbHPZVG+5JH7
- TfsatcukEY7j5VP+hoZMlUOjhm12LQ+wBls0vxk8yKeDyPOSGXelVfWv1h/IRf3zj0gz Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dtgj68taa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 12:21:28 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20PCK4UM009982;
-        Tue, 25 Jan 2022 12:21:28 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dtgj68t9d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 12:21:27 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PCI6ue015267;
-        Tue, 25 Jan 2022 12:21:25 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 3dr9j8vhu2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 12:21:25 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PCLLIK40567078
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 12:21:21 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74BBCAE05D;
-        Tue, 25 Jan 2022 12:21:21 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8838AAE053;
-        Tue, 25 Jan 2022 12:21:20 +0000 (GMT)
-Received: from [9.171.58.95] (unknown [9.171.58.95])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Jan 2022 12:21:20 +0000 (GMT)
-Message-ID: <9df849f6-dd99-93ea-8e35-3daffd38e694@linux.ibm.com>
-Date:   Tue, 25 Jan 2022 13:23:10 +0100
+        Tue, 25 Jan 2022 07:23:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6193FB81625;
+        Tue, 25 Jan 2022 12:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED1FC340E0;
+        Tue, 25 Jan 2022 12:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643113406;
+        bh=BGcqT1Hh464xaMuyKTMsKYRn4Nlvv0BL5hEvK5Qz5/o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=op0NLFetD4D+ZQ5Ac90Nzpo6BxW9KTBSvwOsN+Z+FNTqqhQ/rmkokq+21VK03Mp9f
+         V9OJM6Y4c8LOEiRlLxv28yw6KjNZ+/q7VUYBuVM+EXcrtH1hszern7lEOD/BpCFBP7
+         x8dLZYiJJR+0OHlvGtRuxT/tCVTPmp27F7Lm6SpdIFGszxZFS38cRgOrXi1xwFjlvJ
+         RRtp51HZH23y5lFxzNJNKYN9Wa8zi5vG5H2vFRA8Pycpw3neHNLyaoBKCY9vllT5q9
+         mCvkr0RmqUX63j+FXiTGcz2WfK6CJvS+1M3DF0xruv4FuqvCgVoJftDKGH3FtL1LWS
+         HLn/AZW933VKA==
+Date:   Tue, 25 Jan 2022 06:23:23 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Theodore Tso <tytso@mit.edu>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH 5.16 0873/1039] PCI: pciehp: Use
+ down_read/write_nested(reset_lock) to fix lockdep errors
+Message-ID: <20220125122323.GA1597465@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 15/30] KVM: s390: pci: do initial setup for AEN
- interpretation
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-16-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220114203145.242984-16-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: S5PrdewDgWoiq6HanT2AfCrqJNJX_R9I
-X-Proofpoint-GUID: 7nA0Zl6bEdcQ2DuoV6JU8y0LH4XESY5o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- mlxlogscore=999 priorityscore=1501 bulkscore=0 spamscore=0 malwarescore=0
- adultscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201250078
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124184154.642601971@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/14/22 21:31, Matthew Rosato wrote:
-> Initial setup for Adapter Event Notification Interpretation for zPCI
-> passthrough devices.  Specifically, allocate a structure for forwarding of
-> adapter events and pass the address of this structure to firmware.
+On Mon, Jan 24, 2022 at 07:44:22PM +0100, Greg Kroah-Hartman wrote:
+> From: Hans de Goede <hdegoede@redhat.com>
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> commit 085a9f43433f30cbe8a1ade62d9d7827c3217f4d upstream.
+
+I would hold off on backporting the pciehp changes until we resolve
+this regression in v5.17-rc1:
+
+  https://bugzilla.kernel.org/show_bug.cgi?id=215525
+
+> Use down_read_nested() and down_write_nested() when taking the
+> ctrl->reset_lock rw-sem, passing the number of PCIe hotplug controllers in
+> the path to the PCI root bus as lock subclass parameter.
+> 
+> This fixes the following false-positive lockdep report when unplugging a
+> Lenovo X1C8 from a Lenovo 2nd gen TB3 dock:
+> 
+>   pcieport 0000:06:01.0: pciehp: Slot(1): Link Down
+>   pcieport 0000:06:01.0: pciehp: Slot(1): Card not present
+>   ============================================
+>   WARNING: possible recursive locking detected
+>   5.16.0-rc2+ #621 Not tainted
+>   --------------------------------------------
+>   irq/124-pciehp/86 is trying to acquire lock:
+>   ffff8e5ac4299ef8 (&ctrl->reset_lock){.+.+}-{3:3}, at: pciehp_check_presence+0x23/0x80
+> 
+>   but task is already holding lock:
+>   ffff8e5ac4298af8 (&ctrl->reset_lock){.+.+}-{3:3}, at: pciehp_ist+0xf3/0x180
+> 
+>    other info that might help us debug this:
+>    Possible unsafe locking scenario:
+> 
+> 	 CPU0
+> 	 ----
+>     lock(&ctrl->reset_lock);
+>     lock(&ctrl->reset_lock);
+> 
+>    *** DEADLOCK ***
+> 
+>    May be due to missing lock nesting notation
+> 
+>   3 locks held by irq/124-pciehp/86:
+>    #0: ffff8e5ac4298af8 (&ctrl->reset_lock){.+.+}-{3:3}, at: pciehp_ist+0xf3/0x180
+>    #1: ffffffffa3b024e8 (pci_rescan_remove_lock){+.+.}-{3:3}, at: pciehp_unconfigure_device+0x31/0x110
+>    #2: ffff8e5ac1ee2248 (&dev->mutex){....}-{3:3}, at: device_release_driver+0x1c/0x40
+> 
+>   stack backtrace:
+>   CPU: 4 PID: 86 Comm: irq/124-pciehp Not tainted 5.16.0-rc2+ #621
+>   Hardware name: LENOVO 20U90SIT19/20U90SIT19, BIOS N2WET30W (1.20 ) 08/26/2021
+>   Call Trace:
+>    <TASK>
+>    dump_stack_lvl+0x59/0x73
+>    __lock_acquire.cold+0xc5/0x2c6
+>    lock_acquire+0xb5/0x2b0
+>    down_read+0x3e/0x50
+>    pciehp_check_presence+0x23/0x80
+>    pciehp_runtime_resume+0x5c/0xa0
+>    device_for_each_child+0x45/0x70
+>    pcie_port_device_runtime_resume+0x20/0x30
+>    pci_pm_runtime_resume+0xa7/0xc0
+>    __rpm_callback+0x41/0x110
+>    rpm_callback+0x59/0x70
+>    rpm_resume+0x512/0x7b0
+>    __pm_runtime_resume+0x4a/0x90
+>    __device_release_driver+0x28/0x240
+>    device_release_driver+0x26/0x40
+>    pci_stop_bus_device+0x68/0x90
+>    pci_stop_bus_device+0x2c/0x90
+>    pci_stop_and_remove_bus_device+0xe/0x20
+>    pciehp_unconfigure_device+0x6c/0x110
+>    pciehp_disable_slot+0x5b/0xe0
+>    pciehp_handle_presence_or_link_change+0xc3/0x2f0
+>    pciehp_ist+0x179/0x180
+> 
+> This lockdep warning is triggered because with Thunderbolt, hotplug ports
+> are nested. When removing multiple devices in a daisy-chain, each hotplug
+> port's reset_lock may be acquired recursively. It's never the same lock, so
+> the lockdep splat is a false positive.
+> 
+> Because locks at the same hierarchy level are never acquired recursively, a
+> per-level lockdep class is sufficient to fix the lockdep warning.
+> 
+> The choice to use one lockdep subclass per pcie-hotplug controller in the
+> path to the root-bus was made to conserve class keys because their number
+> is limited and the complexity grows quadratically with number of keys
+> according to Documentation/locking/lockdep-design.rst.
+> 
+> Link: https://lore.kernel.org/linux-pci/20190402021933.GA2966@mit.edu/
+> Link: https://lore.kernel.org/linux-pci/de684a28-9038-8fc6-27ca-3f6f2f6400d7@redhat.com/
+> Link: https://lore.kernel.org/r/20211217141709.379663-1-hdegoede@redhat.com
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=208855
+> Reported-by: "Theodore Ts'o" <tytso@mit.edu>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Reviewed-by: Lukas Wunner <lukas@wunner.de>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
->   arch/s390/include/asm/pci.h      |   4 +
->   arch/s390/include/asm/pci_insn.h |  12 +++
->   arch/s390/kvm/interrupt.c        |  14 +++
->   arch/s390/kvm/kvm-s390.c         |   9 ++
->   arch/s390/kvm/pci.c              | 144 +++++++++++++++++++++++++++++++
->   arch/s390/kvm/pci.h              |  42 +++++++++
->   arch/s390/pci/pci.c              |   6 ++
->   7 files changed, 231 insertions(+)
->   create mode 100644 arch/s390/kvm/pci.h
+>  drivers/pci/hotplug/pciehp.h      |    3 +++
+>  drivers/pci/hotplug/pciehp_core.c |    2 +-
+>  drivers/pci/hotplug/pciehp_hpc.c  |   21 ++++++++++++++++++---
+>  3 files changed, 22 insertions(+), 4 deletions(-)
 > 
-...snip...
-
-> new file mode 100644
-> index 000000000000..b2000ed7b8c3
-> --- /dev/null
-> +++ b/arch/s390/kvm/pci.h
-> @@ -0,0 +1,42 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * s390 kvm PCI passthrough support
-> + *
-> + * Copyright IBM Corp. 2021
-> + *
-> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
-> + */
+> --- a/drivers/pci/hotplug/pciehp.h
+> +++ b/drivers/pci/hotplug/pciehp.h
+> @@ -75,6 +75,8 @@ extern int pciehp_poll_time;
+>   * @reset_lock: prevents access to the Data Link Layer Link Active bit in the
+>   *	Link Status register and to the Presence Detect State bit in the Slot
+>   *	Status register during a slot reset which may cause them to flap
+> + * @depth: Number of additional hotplug ports in the path to the root bus,
+> + *	used as lock subclass for @reset_lock
+>   * @ist_running: flag to keep user request waiting while IRQ thread is running
+>   * @request_result: result of last user request submitted to the IRQ thread
+>   * @requester: wait queue to wake up on completion of user request,
+> @@ -106,6 +108,7 @@ struct controller {
+>  
+>  	struct hotplug_slot hotplug_slot;	/* hotplug core interface */
+>  	struct rw_semaphore reset_lock;
+> +	unsigned int depth;
+>  	unsigned int ist_running;
+>  	int request_result;
+>  	wait_queue_head_t requester;
+> --- a/drivers/pci/hotplug/pciehp_core.c
+> +++ b/drivers/pci/hotplug/pciehp_core.c
+> @@ -166,7 +166,7 @@ static void pciehp_check_presence(struct
+>  {
+>  	int occupied;
+>  
+> -	down_read(&ctrl->reset_lock);
+> +	down_read_nested(&ctrl->reset_lock, ctrl->depth);
+>  	mutex_lock(&ctrl->state_lock);
+>  
+>  	occupied = pciehp_card_present_or_link_active(ctrl);
+> --- a/drivers/pci/hotplug/pciehp_hpc.c
+> +++ b/drivers/pci/hotplug/pciehp_hpc.c
+> @@ -583,7 +583,7 @@ static void pciehp_ignore_dpc_link_chang
+>  	 * the corresponding link change may have been ignored above.
+>  	 * Synthesize it to ensure that it is acted on.
+>  	 */
+> -	down_read(&ctrl->reset_lock);
+> +	down_read_nested(&ctrl->reset_lock, ctrl->depth);
+>  	if (!pciehp_check_link_active(ctrl))
+>  		pciehp_request(ctrl, PCI_EXP_SLTSTA_DLLSC);
+>  	up_read(&ctrl->reset_lock);
+> @@ -746,7 +746,7 @@ static irqreturn_t pciehp_ist(int irq, v
+>  	 * Disable requests have higher priority than Presence Detect Changed
+>  	 * or Data Link Layer State Changed events.
+>  	 */
+> -	down_read(&ctrl->reset_lock);
+> +	down_read_nested(&ctrl->reset_lock, ctrl->depth);
+>  	if (events & DISABLE_SLOT)
+>  		pciehp_handle_disable_request(ctrl);
+>  	else if (events & (PCI_EXP_SLTSTA_PDC | PCI_EXP_SLTSTA_DLLSC))
+> @@ -906,7 +906,7 @@ int pciehp_reset_slot(struct hotplug_slo
+>  	if (probe)
+>  		return 0;
+>  
+> -	down_write(&ctrl->reset_lock);
+> +	down_write_nested(&ctrl->reset_lock, ctrl->depth);
+>  
+>  	if (!ATTN_BUTTN(ctrl)) {
+>  		ctrl_mask |= PCI_EXP_SLTCTL_PDCE;
+> @@ -962,6 +962,20 @@ static inline void dbg_ctrl(struct contr
+>  
+>  #define FLAG(x, y)	(((x) & (y)) ? '+' : '-')
+>  
+> +static inline int pcie_hotplug_depth(struct pci_dev *dev)
+> +{
+> +	struct pci_bus *bus = dev->bus;
+> +	int depth = 0;
 > +
-> +#ifndef __KVM_S390_PCI_H
-> +#define __KVM_S390_PCI_H
+> +	while (bus->parent) {
+> +		bus = bus->parent;
+> +		if (bus->self && bus->self->is_hotplug_bridge)
+> +			depth++;
+> +	}
 > +
-> +#include <linux/pci.h>
-> +#include <linux/mutex.h>
-> +#include <asm/airq.h>
-> +#include <asm/kvm_pci.h>
+> +	return depth;
+> +}
 > +
-> +struct zpci_gaite {
-> +	u32 gisa;
-> +	u8 gisc;
-> +	u8 count;
-> +	u8 reserved;
-> +	u8 aisbo;
-> +	u64 aisb;
-> +};
-> +
-> +struct zpci_aift {
-> +	struct zpci_gaite *gait;
-> +	struct airq_iv *sbv;
-> +	struct kvm_zdev **kzdev;
-> +	spinlock_t gait_lock; /* Protects the gait, used during AEN forward */
-> +	struct mutex lock; /* Protects the other structures in aift */
-
-To facilitate review and debug, can we please rename the lock aift_lock?
-
-
-> +};
-> +
-> +extern struct zpci_aift *aift;
-> +
-...snip...
-
-
--- 
-Pierre Morel
-IBM Lab Boeblingen
+>  struct controller *pcie_init(struct pcie_device *dev)
+>  {
+>  	struct controller *ctrl;
+> @@ -975,6 +989,7 @@ struct controller *pcie_init(struct pcie
+>  		return NULL;
+>  
+>  	ctrl->pcie = dev;
+> +	ctrl->depth = pcie_hotplug_depth(dev->port);
+>  	pcie_capability_read_dword(pdev, PCI_EXP_SLTCAP, &slot_cap);
+>  
+>  	if (pdev->hotplug_user_indicators)
+> 
+> 

@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E1249BA86
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBDF49BA88
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240593AbiAYRkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:40:40 -0500
-Received: from mail-yb1-f176.google.com ([209.85.219.176]:45826 "EHLO
-        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381711AbiAYRj1 (ORCPT
+        id S1384065AbiAYRlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1383334AbiAYRkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:39:27 -0500
-Received: by mail-yb1-f176.google.com with SMTP id h14so63810832ybe.12;
-        Tue, 25 Jan 2022 09:39:23 -0800 (PST)
+        Tue, 25 Jan 2022 12:40:13 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11F0C06173B;
+        Tue, 25 Jan 2022 09:40:12 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id v74so17201667pfc.1;
+        Tue, 25 Jan 2022 09:40:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=A4i9D5idz/4RqGlidUA5oO1C77kyiF14iIIXmZ6Fhck=;
+        b=SkfW5quf1m7ZKWjE8OnUg+WWDrIBB3Xtiz/5zw6hRPTwTZ+ldd1ubl5n+k59hanx8H
+         VPaD68bDkPZ2iP+VTa4DF+AJB+hF++N3heyGboRSCidjdq3Kgg+YJ4AftWpKuaHmDZp/
+         a11cDsoT6sGE0u5Us7NEWPocmrgJimOHdZRf/u0sL1rsZNrDQr3A5IaDJvB8UjfxHF8P
+         ckOLeHfDbKiMikVvYD1YEwxQK7Jvyza/K50mlHVASbPxIemcckigzGrHP7BZjQgOHNC5
+         mRQOQb5h7aqSb8DEYCg7qCIKOiJEa4eHQcUszkYihPBDHL/nLLCL0fVVTEAOERrFccfe
+         yXeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=37oLDsr51k3XVENJHyR2l3wKXsdRvCveBrsGiXcmGKU=;
-        b=iWRrhny68w0EEoaLWGQLaMzkc3fznQs1cpBqjXg3/IgZIo0lj0FhljoNdU9zkwBG/G
-         zc3767nDt9dJ4E5kF4c0xVAtlXeC5GxEIwdtZXvZBgaIodQ040jkUPl96MW6f3gHFIJk
-         uSbmtB1Dsgb/U8MEQyo2cun52mDril01PKNEWXFlbtt/DwhSZOk9U7hQaeKKUGugGGE2
-         kjnnTJ4/SEwhNeD5kuBxVSpwtceIXUvHLGT7Ro0Vy4KQnKqpzIT1i4MxqULPfvue/LIR
-         HK4FdSpGnTmqMpWWT5WAK6l6AY3hncoPgLisgxL2T51KXwE/DWmrOGAhJt4ksBQ1CE+R
-         N7zg==
-X-Gm-Message-State: AOAM532tYQ6Cvykvvr7dKYS089okpa1rthYetPKq1orED4a6CrmUs3AZ
-        /hrPiu7p74zpO3Fliscvw2wDpMcMYcv0QT3NFyc=
-X-Google-Smtp-Source: ABdhPJwtTEgfCu7ZxhU+Cl89dSmfhCglhDWpNPPhuaSYofKPq0gq5ox/ViOixr7dYRXyDMNmWvVH3u8jmh76ZUpAEwQ=
-X-Received: by 2002:a25:b8f:: with SMTP id 137mr19315933ybl.330.1643132363575;
- Tue, 25 Jan 2022 09:39:23 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=A4i9D5idz/4RqGlidUA5oO1C77kyiF14iIIXmZ6Fhck=;
+        b=2ccMyBBu8fjTsazEAfRXppOLZjhZdcp5XOqW8GaDVsNXmVfMJEKupLHI/2ygwAQ3xq
+         +IU0P3ivMcN/n+URgrPXFKBcbQv9aI/agflR+Vy8xyXd0x96N9Zz2JAoCPecVNpa+1f+
+         7F4FjF/41QWpe3Cy57e69Fe9tu9doe5aUQ3jnse7/p8gkdG43LSqZJzqBAeHCDoerDib
+         9qBoCq538eueZMnem5OEwvXnmJbmU33aCTZ5Cj7L7AF2/myNmVuJ2FIVVI3M4uHDn1m4
+         sqS4TTKdVrqEj1TuMPMKEK4mN4+PgTJ8miRpsX8MCMFPUYLqP8oIL7I7osw+yJGsD69b
+         OKGg==
+X-Gm-Message-State: AOAM530SD/np7cWeU/yeHqqaiJJGRQ9x+BckkFWwRtVj334TKAph91Ls
+        GvI2hOvg9dehk7tqd2d1yKA=
+X-Google-Smtp-Source: ABdhPJxXiMogpmdw9Mu0RlCbeyE+HxHOn5FjP1a1lFw0PxvrBu/QBnkzpceM16E3rjhjR/GPzkfGmQ==
+X-Received: by 2002:a63:6e45:: with SMTP id j66mr8959707pgc.81.1643132412466;
+        Tue, 25 Jan 2022 09:40:12 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id k16sm6486194pgh.45.2022.01.25.09.40.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 09:40:11 -0800 (PST)
+Message-ID: <4076304d-19ef-4eb8-f4e3-5bbc218e1d62@gmail.com>
+Date:   Tue, 25 Jan 2022 09:40:10 -0800
 MIME-Version: 1.0
-References: <20220107144405.4081288-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20220107144405.4081288-1-jiasheng@iscas.ac.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Jan 2022 18:39:12 +0100
-Message-ID: <CAJZ5v0hmb_4zC8FtMff1=v7uRF8DeH7sD7+UtBtD7JJXOrOCew@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal/int340x_thermal: Check for null pointer after
- calling kmemdup
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.4 000/316] 5.4.174-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
+References: <20220125155315.237374794@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220125155315.237374794@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 3:44 PM Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
->
-> As the possible failure of the allocation, kmemdup() may return NULL
-> pointer.
-> Then the 'bin_attr_data_vault.private' will be NULL pointer but the
-> 'bin_attr_data_vault.size' is not 0.
-> Therefore, it should be better to check the return value of kmemdup() to
-> avoid the wrong size.
->
-> Fixes: 0ba13c763aac ("thermal/int340x_thermal: Export GDDV")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog
->
-> v1 -> v2
->
-> * Change 1. Use out_kfree to simplify the code.
-> ---
->  .../thermal/intel/int340x_thermal/int3400_thermal.c  | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 19926beeb3b7..f869aeb087d3 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -457,17 +457,21 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
->
->         obj = buffer.pointer;
->         if (obj->type != ACPI_TYPE_PACKAGE || obj->package.count != 1
-> -           || obj->package.elements[0].type != ACPI_TYPE_BUFFER) {
-> -               kfree(buffer.pointer);
-> -               return;
-> -       }
-> +           || obj->package.elements[0].type != ACPI_TYPE_BUFFER)
-> +               goto out_kfree;
 
-This change isn't strictly necessary.
 
->
->         priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
->                                    obj->package.elements[0].buffer.length,
->                                    GFP_KERNEL);
-> +       if (!priv->data_vault)
-> +               goto out_kfree;
-> +
->         bin_attr_data_vault.private = priv->data_vault;
->         bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
->         kfree(buffer.pointer);
-> +
-> +out_kfree:
-> +       kfree(buffer.pointer);
+On 1/25/2022 8:32 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.174 release.
+> There are 316 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.174-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-On success, this would be the second kfree() for the same pointer in a
-row, which would be a bug.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
->  }
->
->  static int int3400_thermal_probe(struct platform_device *pdev)
-> --
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

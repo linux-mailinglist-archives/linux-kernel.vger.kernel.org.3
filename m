@@ -2,124 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 056CA49A875
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D0449A871
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1318888AbiAYDHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
+        id S1318810AbiAYDHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3416590AbiAYCEW (ORCPT
+        with ESMTP id S3416559AbiAYCES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:04:22 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A30C055A86
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:56:25 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id h14so57128566ybe.12
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:56:25 -0800 (PST)
+        Mon, 24 Jan 2022 21:04:18 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFB0C055A83
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:55:59 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id e81so28488901oia.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 17:55:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lHJliPzR279xWRXhqBN4mhw5A2O3eJYJXWRIXm9nJ7U=;
-        b=c4ZrTT0eAdXNGxCG98ZES9L3QEm5taMcchJryHvpEXDGxCvVOiu3C6G6lxqwY4VTeg
-         +hEBfZCBfv44EirmJF5ebHWqlo84cIzOI1qv7F93hN623ipeae4AkA4EOHDlxBpma6i8
-         3oC9riKAEO3WD13In52b+XIUipp+YCmsjfBbSHRLu4rAzRJMp0zPvMMxtPcRK8mozBAv
-         YR4bj87yyQqxZG2GaJKlPp7fLKve6796XzGnmXSff3aRx8VEfu9vet6Vc8uxD3ciiPJU
-         nRZzIpUkhq9la0IwcCePM1vFat0ZVJZcFY2Nj1yRggdjJ6mOeb+QV6wEGdiY0v5wvKu5
-         V6NQ==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=T4rF0hLY7ipw4hc6cLAFZLFsJmiutz6BweB8Dz29VfE=;
+        b=mvEF6fOKLUpg42CVbbypm40M0/3KmMchADzb3NMDmLowUcZqsdQ9ybGgFg0NFGWzwh
+         b9WHGpDfddcXAyDpMpRpB5KzlYxFPoJ4xXSMLdA5smZ6UkM91INnKst7AlTuayeQvzbs
+         Uxx0n2Jukd4i1d5M70kWyTYutk/S9Qa+S1XOk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lHJliPzR279xWRXhqBN4mhw5A2O3eJYJXWRIXm9nJ7U=;
-        b=Yw7tnxP3o2WZ8IQpvOr7g1w1rBEFe7TjwHmgS0RV1nQrIFfk+rS3wCtYG9dhFTF7ED
-         piITk8Olq0Y7WXzjxhUW0AwJiJvjhYHmcVx93LvwG481gps6UsObwhhCfJpESDUL8La+
-         6sIE6wSpYFnmb+ialLdCoiwdqWH4p2hrXZEF3b5QBpDzF3um0j3fzawMfHpZv01t44MO
-         uYh1Joe+sLL27LHUx4j7ZptpTeOaVo4bL2sMHwId+VXa8tl/oRd/IKQUJxaI5BYGyGGA
-         CBDUBziFGM5634QH3sTUNrIzAh9GMYPpQrCjOpsymDw7g7RRmZ/B/HqPRBjRYSrJC22m
-         fKwQ==
-X-Gm-Message-State: AOAM531j0pECuFI/hPxQuYatrQlefzmlP1slYcv2SDZ8Cz0wpUNH4dYx
-        bltR+P3Ihv/k8eFcToC7nw6aRC2qnluef4ZZxJ8zoA==
-X-Google-Smtp-Source: ABdhPJyi/CJlc+fw5FPZ/8Fg68s6dHRQ87up3INQgfExn142TqnS/ziNQlk5Fgqvs4Fk1AR7Uy6Zx+eJVOg5mx6zbFI=
-X-Received: by 2002:a25:af4b:: with SMTP id c11mr26452669ybj.49.1643075784723;
- Mon, 24 Jan 2022 17:56:24 -0800 (PST)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=T4rF0hLY7ipw4hc6cLAFZLFsJmiutz6BweB8Dz29VfE=;
+        b=BpAZLHnhaCTMYFvEShodUYhqniuSStUE2trWCHwgz03HC3Yn4Hsoq5tUyiA1A0j5gZ
+         h3RxZikgjP7ll5gvBCj87roLiklDokkRQuUvJezaTt4+LN0evWKCPs40Nri8qXEM820V
+         WteBUJR9eO2es6PI2gd2mxUmV/41HF1rB+mqwFnx6rYZwIjnh/yNW1nuSNXnZzUOh0jY
+         mdKIAYjII7IXBt216/g/viJtSk5ksDE5yp8Pa3djcYq8oNqU+4qb8eUOiLQ2vFTOQFOL
+         N+CtqOHmyRYh2xpmKr23C2naORa0PZZyk4ozIM9TUAVM47r4VHamiiq159eUvqBpGJs2
+         E++A==
+X-Gm-Message-State: AOAM531jJg5obZNmf0aD6Oe8tYuoLv1qqj/+3zP38aTL6jFWUg1skVD7
+        As8r/NOXCVHdIhK8jP1hPmQFIDQ+WTxAwkWSK5eTUg==
+X-Google-Smtp-Source: ABdhPJzHi4N4zlikwEiCyjUIatqOZ90959JBrz7E38fa6Tao/XK98LwlytlQgYDcXpHvnll2OI4toRTtnC5NjDJLSCQ=
+X-Received: by 2002:a05:6808:252:: with SMTP id m18mr1234653oie.164.1643075759011;
+ Mon, 24 Jan 2022 17:55:59 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 24 Jan 2022 17:55:58 -0800
 MIME-Version: 1.0
-References: <20220124051752.83281-1-songmuchun@bytedance.com>
- <20220124051752.83281-2-songmuchun@bytedance.com> <4d5044e7-cac9-b6e6-1467-59ea6010b0f5@google.com>
- <5D9B52E1-A74B-4964-AACF-ADB91536C4C0@nvidia.com>
-In-Reply-To: <5D9B52E1-A74B-4964-AACF-ADB91536C4C0@nvidia.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 25 Jan 2022 09:55:48 +0800
-Message-ID: <CAMZfGtXsLyagpo8rM6RmayAFR_hgk0987X1usxYWRZLeA5H45Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mm: fix missing cache flush for all tail pages of THP
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Lars Persson <lars.persson@axis.com>
+In-Reply-To: <Ye8nmnQ3F4QcTIJs@ripper>
+References: <20220120204132.17875-1-quic_amelende@quicinc.com>
+ <20220120204132.17875-4-quic_amelende@quicinc.com> <YenpwnE3WrIEAOlm@ripper>
+ <e2015c19-b73b-39a7-ba73-708b2c4552c7@quicinc.com> <CAE-0n50+1OU2yt2gihHHCEn-cE-CZuqa_U9W=xWCuYeCQdzExw@mail.gmail.com>
+ <Ye8nmnQ3F4QcTIJs@ripper>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 24 Jan 2022 17:55:58 -0800
+Message-ID: <CAE-0n51bYEkvxu8z2gc_KUv0u+J2Esg0_3AiQRLyTaouNoa78g@mail.gmail.com>
+Subject: Re: [PATCH 3/3] input: misc: pm8941-pwrkey: avoid potential null
+ pointer dereference
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Anjelique Melendez <quic_amelende@quicinc.com>,
+        dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        collinsd@codeaurora.org, skakit@codeaurora.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 3:22 AM Zi Yan <ziy@nvidia.com> wrote:
+Quoting Bjorn Andersson (2022-01-24 14:26:34)
+> On Thu 20 Jan 20:18 PST 2022, Stephen Boyd wrote:
 >
-> On 24 Jan 2022, at 13:11, David Rientjes wrote:
->
-> > On Mon, 24 Jan 2022, Muchun Song wrote:
+> > Quoting Anjelique Melendez (2022-01-20 16:25:26)
+> > >
+> > > On 1/20/2022 3:01 PM, Bjorn Andersson wrote:
+> > > > On Thu 20 Jan 12:41 PST 2022, Anjelique Melendez wrote:
+> > > >
+> > > >> From: David Collins <collinsd@codeaurora.org>
+> > > >>
+> > > >> Add a null check for the pwrkey->data pointer after it is assigned
+> > > >> in pm8941_pwrkey_probe().  This avoids a potential null pointer
+> > > >> dereference when pwrkey->data->has_pon_pbs is accessed later in
+> > > >> the probe function.
+> > > >>
+> > > >> Change-Id: I589c4851e544d79a1863fd110b32a0b45ac03caf
+> > > >> Signed-off-by: David Collins <collinsd@codeaurora.org>
+> > > >> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> > > >> ---
+> > > >>  drivers/input/misc/pm8941-pwrkey.c | 4 ++++
+> > > >>  1 file changed, 4 insertions(+)
+> > > >>
+> > > >> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
+> > > >> index 0ce00736e695..ac08ed025802 100644
+> > > >> --- a/drivers/input/misc/pm8941-pwrkey.c
+> > > >> +++ b/drivers/input/misc/pm8941-pwrkey.c
+> > > >> @@ -263,6 +263,10 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+> > > >>
+> > > >>      pwrkey->dev = &pdev->dev;
+> > > >>      pwrkey->data = of_device_get_match_data(&pdev->dev);
+> > > >> +    if (!pwrkey->data) {
+> > > > The only way this can happen is if you add a new compatible and forget
+> > > > to specify data and when that happens you will get a print in the log
+> > > > somewhere, which once you realize that you don't have your pwrkey you
+> > > > might be able to find among all the other prints.
+> > > >
+> > > > If you instead don't NULL check this pointer you will get a large splat
+> > > > in the log, with callstack and all, immediately hinting you that
+> > > > pwrkey->data is NULL.
+> > > >
+> > > >
+> > > > In other words, there's already a print, a much larger print and I don't
+> > > > think there's value in handling this mistake gracefully.
+> > > >
+> > > > Regards,
+> > > > Bjorn
+> > >
+> > >
+> > > We would like to the null pointer check in place to avoid static analysis
+> > >
+> > > warnings that can be easily fixed.
+> > >
 > >
-> >> The D-cache maintenance inside move_to_new_page() only consider one pa=
-ge,
-> >> there is still D-cache maintenance issue for tail pages of THP. Fix th=
-is
-> >> by not using flush_dcache_folio() since it is not backportable.
-> >>
-> >
-> > The mention of being backportable suggests that we should backport this=
-,
-> > likely to 4.14+.  So should it be marked as stable?
+> > Many drivers check that their device_get_match_data() returns a valid
+> > pointer. I'd like to see that API used in addition to checking the
+> > return value for NULL so that we can keep the static analysis tools
+> > happy. Yes it's an impossible case assuming the driver writer didn't
+> > mess up but it shuts SA up and we don't really have a better solution
+> > to tell tools that device_get_match_data() can't return NULL.
 >
-> Hmm, after more digging, I am not sure if the bug exists. For THP migrati=
-on,
-> flush_cache_range() is used in remove_migration_pmd(). The flush_dcache_p=
-age()
-> was added by Lars Persson (cc=E2=80=99d) to solve the data corruption on =
-MIPS[1],
-> but THP migration is only enabled on x86_64, PPC_BOOK3S_64, and ARM64.
+> I'm not saying that device_get_match_data() can't return NULL,
 
-I only mention the THP case. After some more thinking, I think the HugeTLB
-should also be considered, Right? The HugeTLB is enabled on arm, arm64,
-mips, parisc, powerpc, riscv, s390 and sh.
+Indeed, I wasn't implying that you were saying that.
 
->
-> To make code more consistent, I guess flush_cache_range() in remove_migra=
-tion_pmd()
-> can be removed, since it is superseded by the flush_dcache_page() below.
+> I'm
+> saying that in the very specific cases that it would return NULL it's
+> useful to have a kernel panic - as that's a much faster way to figure
+> out that something is wrong.
 
-From my point of view, flush_cache_range() in remove_migration_pmd() is
-a wrong usage, which cannot replace flush_dcache_page(). I think the commit
-c2cc499c5bcf ("mm compaction: fix of improper cache flush in migration code=
-")
-, which is similar to the situation here, can offer more infos.
-
->
-> The Fixes can be dropped. Let me know if I miss anything.
->
-> >
-> > That aside, should there be a follow-up patch that converts to using
-> > flush_dcache_folio()?
->
-> Are you suggesting to convert just this code or the entire move_to_new_pa=
-ge()
-> to use folio? The latter might be more desirable, since the code will be
-> more consistent.
->
->
-> [1] https://lore.kernel.org/all/20190315083502.11849-1-larper@axis.com/T/=
-#u
->
+I see it as more annoying, but maybe that's my workflow? When my kernel
+oopses I have to go back to a recovery kernel, which takes me a few more
+seconds to "repair" my device. If the driver only failed to probe then
+I'd probably be able to boot far enough to get networking and more
+easily replace my kernel with a working device. And I'd have userspace
+access so I could poke around and figure out why the driver failed to
+probe. Now obviously a big stacktrace would be helpful to know that it's
+the power key driver that's busted, but it's not like we're calling some
+internal API here. We're trying to probe a driver and if that oopses
+because the driver writer failed at their job then it's bad on them for
+writing a bad patch but also annoying for the integrator who has to deal
+with the mess they created. I'd rather have a half working system here
+vs. a totally broken one.

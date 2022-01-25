@@ -2,95 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE81449B9CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A275949B9D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239517AbiAYRJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:09:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:56628 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353604AbiAYRHg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:07:36 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 892521FB;
-        Tue, 25 Jan 2022 09:07:33 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.1.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C3133F766;
-        Tue, 25 Jan 2022 09:07:31 -0800 (PST)
-Date:   Tue, 25 Jan 2022 17:07:29 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Evgenii Stepanov <eugenis@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: extable: fix null deref in load_unaligned_zeropad.
-Message-ID: <YfAuUYovRP7BpUIa@FVFF77S0Q05N>
-References: <20220122023447.1480995-1-eugenis@google.com>
- <YfAV6FTN5g6jZGj7@FVFF77S0Q05N>
- <YfAcKZpDWmKMZy8q@FVFF77S0Q05N>
- <CAFKCwrjbn3e2w-LikMY5bOvUKbUBi7_4iwBOD7KQUn8QHPwbng@mail.gmail.com>
+        id S1359109AbiAYRJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:09:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38026 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359219AbiAYRII (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 12:08:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B047561155;
+        Tue, 25 Jan 2022 17:08:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F60C340E0;
+        Tue, 25 Jan 2022 17:08:05 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 12:08:04 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 7/9] fprobe: Add exit_handler support
+Message-ID: <20220125120804.595afd8b@gandalf.local.home>
+In-Reply-To: <164311277634.1933078.2632008023256564980.stgit@devnote2>
+References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
+        <164311277634.1933078.2632008023256564980.stgit@devnote2>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFKCwrjbn3e2w-LikMY5bOvUKbUBi7_4iwBOD7KQUn8QHPwbng@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 08:59:07AM -0800, Evgenii Stepanov wrote:
-> On Tue, Jan 25, 2022 at 7:50 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Tue, Jan 25, 2022 at 03:23:20PM +0000, Mark Rutland wrote:
-> > > On Fri, Jan 21, 2022 at 06:34:47PM -0800, Evgenii Stepanov wrote:
-> > > > ex_handler_load_unaligned_zeropad extracts the source and data register
-> > > > numbers from the wrong field of the exception table.
-> > >
-> > > Ouch. Did you find this by inspection, or did this show up in testing?
-> > >
-> > > Sorry about this.
-> > >
-> > > I think we should be a little more explicit as to exactly what goes wrong. How
-> > > about:
-> > >
-> > > | In ex_handler_load_unaligned_zeropad() we erroneously extract the data and
-> > > | addr register indices from ex->type rather than ex->data. As ex->type will
-> > > | contain EX_TYPE_LOAD_UNALIGNED_ZEROPAD (i.e. 4):
-> > > |
-> > > | * We'll always treat X0 as the address register, since EX_DATA_REG_ADDR is
-> > > |   extracted from bits [9:5]. Thus, we may attempt to dereference an arbitrary
-> > > |   address as X0 may hold an arbitary value.
-> > > |
-> > > | * We'll always treat X4 as the data register, since EX_DATA_REG_DATA is
-> > > |   extracted from bits [4:0]. Thus we will corrupt X4 and cause arbitrary
-> > > |   behaviour within load_unaligned_zeropad() and its caller.
-> > > |
-> > > | Fix this by extracting both values from ex->data as originally intended.
-> > >
-> > > > Fixes: 753b3236
-> > >
-> > > That should be expanded, e.g.
-> > >
-> > >   Fixes: 753b32368705c396 ("arm64: extable: add load_unaligned_zeropad() handler")
-> > >
-> > > With those changes:
-> > >
-> > > Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-> >
-> > Looking again, sicne this isn't jsut a null-deref, can we also rework the
-> > title, something like:
-> >
-> > | arm64: extable: fix load_unaligned_zeropad() reg indices
-> 
-> That's a much better commit message, thank you! I'll upload v2 shortly.
-> 
-> This was found by updating to a newer QEMU that correctly delivers MTE
-> faults from unaligned memory accesses, and triggers this bug reliably
-> during Android boot. I'll add a stack trace to v2.
+On Tue, 25 Jan 2022 21:12:56 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-That'd be great, thanks!
+> Add exit_handler to fprobe. fprobe + rethook allows us
+> to hook the kernel function return without fgraph tracer.
+> Eventually, the fgraph tracer will be generic array based
+> return hooking and fprobe may use it if user requests.
+> Since both array-based approach and list-based approach
+> have Pros and Cons, (e.g. memory consumption v.s. less
+> missing events) it is better to keep both but fprobe
+> will provide the same exit-handler interface.
 
-Mark.
+Again the 55 character width ;-)
+
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  Changes in v5:
+>   - Add dependency for HAVE_RETHOOK.
+>  Changes in v4:
+>   - Check fprobe is disabled in the exit handler.
+>  Changes in v3:
+>   - Make sure to clear rethook->data before free.
+>   - Handler checks the data is not NULL.
+>   - Free rethook only if the rethook is using.
+> ---
+
+> @@ -82,6 +117,7 @@ static int convert_func_addresses(struct fprobe *fp)
+>   */
+>  int register_fprobe(struct fprobe *fp)
+>  {
+> +	unsigned int i, size;
+>  	int ret;
+>  
+>  	if (!fp || !fp->nentry || (!fp->syms && !fp->addrs) ||
+> @@ -96,10 +132,29 @@ int register_fprobe(struct fprobe *fp)
+>  	fp->ops.func = fprobe_handler;
+>  	fp->ops.flags = FTRACE_OPS_FL_SAVE_REGS;
+>  
+> +	/* Initialize rethook if needed */
+> +	if (fp->exit_handler) {
+> +		size = fp->nentry * num_possible_cpus() * 2;
+> +		fp->rethook = rethook_alloc((void *)fp, fprobe_exit_handler);
+
+Shouldn't we check if fp->rethook succeeded to be allocated?
+
+> +		for (i = 0; i < size; i++) {
+> +			struct rethook_node *node;
+> +
+> +			node = kzalloc(sizeof(struct fprobe_rethook_node), GFP_KERNEL);
+> +			if (!node) {
+> +				rethook_free(fp->rethook);
+> +				ret = -ENOMEM;
+> +				goto out;
+> +			}
+> +			rethook_add_node(fp->rethook, node);
+> +		}
+> +	} else
+> +		fp->rethook = NULL;
+> +
+>  	ret = ftrace_set_filter_ips(&fp->ops, fp->addrs, fp->nentry, 0, 0);
+>  	if (!ret)
+>  		ret = register_ftrace_function(&fp->ops);
+>  
+> +out:
+>  	if (ret < 0 && fp->syms) {
+>  		kfree(fp->addrs);
+>  		fp->addrs = NULL;
+> @@ -125,8 +180,16 @@ int unregister_fprobe(struct fprobe *fp)
+>  		return -EINVAL;
+>  
+>  	ret = unregister_ftrace_function(&fp->ops);
+> +	if (ret < 0)
+> +		return ret;
+
+If we fail to unregister the fp->ops, we do not free the allocated nodes
+above?
+
+-- Steve
+
+>  
+> -	if (!ret && fp->syms) {
+> +	if (fp->rethook) {
+> +		/* Make sure to clear rethook->data before freeing. */
+> +		WRITE_ONCE(fp->rethook->data, NULL);
+> +		barrier();
+> +		rethook_free(fp->rethook);
+> +	}
+> +	if (fp->syms) {
+>  		kfree(fp->addrs);
+>  		fp->addrs = NULL;
+>  	}
+

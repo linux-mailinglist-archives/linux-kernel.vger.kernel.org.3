@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4657549B5C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D567849B5C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577840AbiAYOLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:11:01 -0500
-Received: from mga01.intel.com ([192.55.52.88]:34418 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1578027AbiAYOIZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:08:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643119705; x=1674655705;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XgfYTpAKCUjsVgEWndslqumPAtQ3LFT5BEWLwncUR10=;
-  b=KFvdTrXcfZS+/+Ks3U5nreMdxBo8uXt4h7ZXI5fZdfrqcCW+u8cqayOK
-   42AmSrp5f2KxJxeK3m3uKJJ16GZCqU1hfqwBD5364OohARCVyLKHUlikt
-   zDitERCgaQsXuDwEOrRYqXceFxGauAV+D0kBlD5BSldQbln/JqRZZk/fQ
-   hCpBbaLpQa3bngiXiE7wRY2mVIPxvCRl8cowFhqUfW3+lzRWZczQJgjfw
-   rj8f8lX8jQGTsrR5308lrkw7S0seuO42Oh7CuYPqqVJ0dthhREs2dPj5T
-   1Tm84Twr+Czg+xiNgigl19ofiIp7b1M/MzoWzFIfxlIvpc8HAwh7QWWkH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="270752320"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="270752320"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:05:22 -0800
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="580757906"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 06:05:18 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nCMQd-00EGe2-Nv;
-        Tue, 25 Jan 2022 16:04:11 +0200
-Date:   Tue, 25 Jan 2022 16:04:11 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [PATCH v2 1/5] nvmem: core: Remove unused devm_nvmem_unregister()
-Message-ID: <YfADW9YZ8Hbt8Phq@smile.fi.intel.com>
-References: <20220124180040.50660-1-andriy.shevchenko@linux.intel.com>
- <11caff0e-6bf3-9d66-6312-c2c2a6fc862a@linaro.org>
+        id S1386350AbiAYOK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:10:26 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4511 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386082AbiAYOFx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:05:53 -0500
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JjpSq2Dnpz67ZkT;
+        Tue, 25 Jan 2022 22:02:19 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 25 Jan 2022 15:05:44 +0100
+Received: from [10.47.95.36] (10.47.95.36) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 25 Jan
+ 2022 14:05:43 +0000
+Subject: Re: [PATCH 05/16] scsi: libsas: Add struct sas_tmf_task
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <artur.paszkiewicz@intel.com>, <jinpu.wang@cloud.ionos.com>,
+        <chenxiang66@hisilicon.com>, <Ajish.Koshy@microchip.com>,
+        <yanaijie@huawei.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
+        <Viswas.G@microchip.com>, <damien.lemoal@opensource.wdc.com>
+References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
+ <1643110372-85470-6-git-send-email-john.garry@huawei.com>
+ <Ye/9Fs+JrtlMC+Mb@casper.infradead.org>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <6b31b15c-98d9-ee07-0092-cbcc5f5c71fe@huawei.com>
+Date:   Tue, 25 Jan 2022 14:05:11 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11caff0e-6bf3-9d66-6312-c2c2a6fc862a@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <Ye/9Fs+JrtlMC+Mb@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.95.36]
+X-ClientProxiedBy: lhreml744-chm.china.huawei.com (10.201.108.194) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:35:24AM +0000, Srinivas Kandagatla wrote:
-> On 24/01/2022 18:00, Andy Shevchenko wrote:
-> > There are no users and seems no will come of the devm_nvmem_unregister().
-> > Remove the function and remove the unused devm_nvmem_match() along with it.
+On 25/01/2022 13:37, Matthew Wilcox wrote:
+>> Also add an interim force phy id field for hisi_sas driver, which will be
+>> removed once the STP "TMF" code is factored out.
+>>
+>> Even though some LLDDs (pm8001) use a u32 for the tag, u16 should be
+>> enough.
+> ... because pm8001 limits the number of tags to 1024.
+> .
 
-> Applied 1/5, 2/5 and 3/5 patches.
+Sure, but the pm8001 HW does has a 32b field, which is strange as the 
+SAS spec defines a 16b field in the task management Function information 
+unit "tag of task to be managed" field.
 
-Thanks!
-
-> Others can go via there own subsystems as I do not see any dependencies.
-
-They are dependent on the patch 3 ("nvmem: core: Check input parameter for
-NULL in nvmem_unregister()"). Since there are tags, can you apply them as
-well?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+John

@@ -2,82 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C74149AFA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4094849AFA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457133AbiAYJO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:14:28 -0500
-Received: from gateway34.websitewelcome.com ([192.185.148.104]:28230 "EHLO
-        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1453538AbiAYIyr (ORCPT
+        id S1456918AbiAYJNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1455319AbiAYJEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:54:47 -0500
-X-Greylist: delayed 1206 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Jan 2022 03:54:47 EST
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 03AFCA680FD
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:34:38 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id CHGknnGspXvvJCHGknyI2l; Tue, 25 Jan 2022 02:33:38 -0600
-X-Authority-Reason: nr=8
-Received: from host-79-47-126-144.retail.telecomitalia.it ([79.47.126.144]:33426 helo=[10.0.0.238])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1nCHGj-0017BZ-SE; Tue, 25 Jan 2022 02:33:38 -0600
-Message-ID: <1c2fe9ac-804e-2068-0800-2cee012b96d3@kernel.org>
-Date:   Tue, 25 Jan 2022 09:33:35 +0100
+        Tue, 25 Jan 2022 04:04:07 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B49CC061344
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 00:47:23 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id a25so11788408lji.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 00:47:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oUbvyNj5dnaM8qXXPaaN3calf58RmDrlF6ofRRGF5q8=;
+        b=30zRHP3cawR9fo/gEqHpAmA2Q78/yKunsBnxe6QD4YYv2dV+ZUH16nD9lEUozhnFLi
+         nHYLbBGOmgFfFBCvtZJX7kuVEvBu4m2+9ms9+7pTOTgRtfMzxt9YVEANSGx/w7I4cGpC
+         jw3p/2FY/utquahuDCkPXVf9cP3dMXh1ALo00N0iSNlmm5xLEruBjkjf+/iYCKkWgFNS
+         nstYMxpGvhRqCzKyuj3KxC4h/xGy312OnG1vehytswq716BF3P9bMbZeGDgSYjV9wyX6
+         cy63f40FQeAPdxgeXgEgCLnSMUkFb/BH97zBfi7vKsVuAPm6i8bghcJniZYkJcjOpML/
+         5gnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oUbvyNj5dnaM8qXXPaaN3calf58RmDrlF6ofRRGF5q8=;
+        b=CAx6jqCuO8EfJNdFWpwbew4pxFKfv7AOLtYv7edRrvW2DzDa6SUGNzsKEiGO2xEdcu
+         UP3WMItQBUrlceWgZoYdzAFReDqUSnO1EfXiDOtMdFUtM17GamN3SO0tNyv/EdGmwhPN
+         1+Bhjou0i5jls4cfwdbsYWHac0+ZTxkAAUm7rYTnpDzoK2ttNcgw3/HucI1GLdmUw/Il
+         UM9PNQsPhIRW6t8zgwmr+pnrea7BB18pcSuMj8qkByXF65iryyjo1GAtlUIAv5Um4uDM
+         lgYifh1JxAl8FBCtck8PBO0uszALDO0zDJyA0W/EISfeNXEdD3ieyTSP4Vq0ZQ/9mC3f
+         91vA==
+X-Gm-Message-State: AOAM530bJepBCN5Vg8vcKQ9bUn5qFK6SWlCXFDGEo/bkb9I3Kx0NcR8q
+        bQYAtjukoLOzPwNUvkuU+CigCA==
+X-Google-Smtp-Source: ABdhPJxmuLUFKp9der5dVvy/11NTxMaDlAPxrJvNLiMLIAlXxg1yxjfnkjVt3mTw9T6dl7CBTLbrbA==
+X-Received: by 2002:a05:651c:b2a:: with SMTP id b42mr13381928ljr.168.1643100440664;
+        Tue, 25 Jan 2022 00:47:20 -0800 (PST)
+Received: from navi.cosmonova.net.ua ([95.67.24.131])
+        by smtp.gmail.com with ESMTPSA id q5sm1418944lfe.279.2022.01.25.00.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 00:47:20 -0800 (PST)
+From:   Andrew Melnychenko <andrew@daynix.com>
+To:     davem@davemloft.net, kuba@kernel.org, mst@redhat.com,
+        jasowang@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     yuri.benditovich@daynix.com, yan@daynix.com
+Subject: [RFC PATCH 0/5] TUN/VirtioNet USO features support.
+Date:   Tue, 25 Jan 2022 10:46:57 +0200
+Message-Id: <20220125084702.3636253-1-andrew@daynix.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] docs: Hook the RTLA documents into the kernel docs build
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <877dau555q.fsf@meer.lwn.net>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <877dau555q.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.47.126.144
-X-Source-L: No
-X-Exim-ID: 1nCHGj-0017BZ-SE
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-47-126-144.retail.telecomitalia.it ([10.0.0.238]) [79.47.126.144]:33426
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 4
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/22 01:00, Jonathan Corbet wrote:
-> The RTLA documents were added to Documentation/ but never hooked into the
-> rest of the docs build, leading to a bunch of warnings like:
-> 
->   Documentation/tools/rtla/rtla-osnoise.rst: WARNING: document isn't included in any toctree
-> 
-> Add some basic glue to wire these documents into the build so that they are
-> available with the rest of the rendered docs.  No attempt has been made to
-> turn the RTLA docs into proper RST files rather than warmed-over man pages;
-> that is an exercise for the future.
-> 
-> Fixes: d40d48e1f1f2 ("rtla: Add Documentation")
-> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
+Technically they enable NETIF_F_GSO_UDP_L4
+(and only if USO4 & USO6 are set simultaneously).
+It allows to transmission of large UDP packets.
 
-Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Different features USO4 and USO6 are required for qemu where Windows guests can
+enable disable USO receives for IPv4 and IPv6 separately.
+On the other side, Linux can't really differentiate USO4 and USO6, for now.
+For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
+In the future, there would be a mechanism to control UDP_L4 GSO separately.
 
-Thanks, Jon!
+Test it WIP Qemu https://github.com/daynix/qemu/tree/Dev_USOv2
 
--- Daniel
+New types for VirtioNet already on mailing:
+https://lists.oasis-open.org/archives/virtio-comment/202110/msg00010.html
+
+Also, there is a known issue with transmitting packages between two guests.
+Without hacks with skb's GSO - packages are still segmented on the host's postrouting.
+
+Andrew Melnychenko (5):
+  uapi/linux/if_tun.h: Added new ioctl for tun/tap.
+  driver/net/tun: Added features for USO.
+  uapi/linux/virtio_net.h: Added USO types.
+  linux/virtio_net.h: Added Support for GSO_UDP_L4 offload.
+  drivers/net/virtio_net.c: Added USO support.
+
+ drivers/net/tap.c               | 18 ++++++++++++++++--
+ drivers/net/tun.c               | 15 ++++++++++++++-
+ drivers/net/virtio_net.c        | 22 ++++++++++++++++++----
+ include/linux/virtio_net.h      | 11 +++++++++++
+ include/uapi/linux/if_tun.h     |  3 +++
+ include/uapi/linux/virtio_net.h |  4 ++++
+ 6 files changed, 66 insertions(+), 7 deletions(-)
+
+-- 
+2.34.1
+

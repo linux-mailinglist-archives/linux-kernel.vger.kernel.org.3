@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4548F49B058
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100EA49B060
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574338AbiAYJdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:33:20 -0500
-Received: from mga09.intel.com ([134.134.136.24]:10422 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1456409AbiAYJ27 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:28:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643102939; x=1674638939;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=/3uEJq4zPTSgXMeNYS74/NJZJxAc2UOZUhqwmZmqIfw=;
-  b=BTGEaOqB1W/J8BzO+bDSEQhZ9eEotYEsiXr959Z4Y3GDonZuHhKreqO6
-   RKkazeERMBnrziJ0G1rt6lJf2b1aMFI/4kTP0w8WwLVWfp4a49RIUrOhb
-   7gTl7csQW0jxBYjtSqkvW4H4SxIUDgWxzr5ibfRu/UiH0//Fcx91qE0Ob
-   ffgmcZ75+hM10VQFDGYGP5pwZAWRqyJwr79KSVqh5iF1XjOH9fo2xkOZW
-   cnL82tTuTXLbEPsloXQKlbFW74IpY2onR/RwqkK911lHisAwMqYQDTVWM
-   3eYK1jV2eQZ6mxFBc3GbswEY0xP3KQ0NJWE2tDMbTQE0GczJm9A3WX2Wh
+        id S1457774AbiAYJfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:35:00 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:62005 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1574000AbiAYJbM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 04:31:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1643103071; x=1674639071;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uecLW4Oa2p9q3WykZcsVxmxvdL1GbmZ8rq+yUs5wlZQ=;
+  b=F3Z9QrPN96b3vxrsK/9dR4GlofrcFM6I+AevPG9DvWVQ2VjCNhNzxl1m
+   I7wmigUkzrj+6LU3g0+mChUJkMb49fsxsp+QB0kqtVyD2eMP3Mi7TUKWv
+   PbMnSrZFd1oey89naQcUXq1UlWJq5NgMzta6YFjyo341wLMfgRDgG1dKU
+   SIr6gflv3H4MxB32n+JquSIYkBmh00LWZMoNvoXXqk74EEvVj9KLTMFrK
+   OGlNhZ4Vy9ZUScb43BBcMws1HT32UviTk4zG6bKYE4B21UwNE4q80SOnZ
+   5uH1c5Cjm57DLPc1p+JUcYQ841f3GCl7GkS+vuRPm/td1YKBART1llMJB
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="246044824"
+IronPort-SDR: vjLdE/sfqOM8LeoEPGXtGkjFeDhXjzx/705QuJUu/GUxRDt3DVQJkhU6HjqTNaYv9ZbgzeZULr
+ HlwEyrqAKnx4mSP3GraMhMRK6D6Nq1StMawIYirZqeFuTTQmLtQycQHxtgo+TwHZPc1Cbq92wy
+ fHVSEW61IWmLEbz8Va0oPCWdZ+UoPEZSFPLMTDtf+Qw73d4kyp5RVYZ4u0eoel4fnVzAajU2kQ
+ HQ1JCN5qjv09Uuw7gRBAuGTrc7BBY8YRe2HeUd0dE2DWfNNEYTcJx5ZFDAHOvKXunAWRCqHbJ1
+ XBfHAQR+ALKe8OEZjkuqRJ20
 X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="246044824"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 01:28:55 -0800
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="532366265"
-Received: from thpham-mobl1.amr.corp.intel.com (HELO [10.213.172.16]) ([10.213.172.16])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 01:28:51 -0800
-Message-ID: <bab43c36-a3de-f96a-6530-4ab3a55b8ba0@linux.intel.com>
-Date:   Tue, 25 Jan 2022 09:28:44 +0000
+   d="scan'208";a="143790576"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Jan 2022 02:31:03 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 25 Jan 2022 02:31:03 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 25 Jan 2022 02:31:01 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <f.fainelli@gmail.com>,
+        <vivien.didelot@gmail.com>, <vladimir.oltean@nxp.com>,
+        <andrew@lunn.ch>, Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net 0/2] net: lan966x: Fixes for sleep in atomic context
+Date:   Tue, 25 Jan 2022 10:30:22 +0100
+Message-ID: <20220125093024.121072-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [PATCH 17/54] gpu: drm: replace cpumask_weight with cpumask_empty
- where appropriate
-Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20220123183925.1052919-1-yury.norov@gmail.com>
- <20220123183925.1052919-18-yury.norov@gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20220123183925.1052919-18-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series contains 2 fixes for lan966x that is sleeping in atomic
+context. The first patch fixes the injection of the frames while the second
+one fixes the updating of the MAC table.
 
-On 23/01/2022 18:38, Yury Norov wrote:
-> i915_pmu_cpu_online() calls cpumask_weight() to check if any bit of a
-> given cpumask is set. We can do it more efficiently with cpumask_empty()
-> because cpumask_empty() stops traversing the cpumask as soon as it finds
-> first set bit, while cpumask_weight() counts all bits unconditionally.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->   drivers/gpu/drm/i915/i915_pmu.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/i915_pmu.c b/drivers/gpu/drm/i915/i915_pmu.c
-> index ea655161793e..1894c876b31d 100644
-> --- a/drivers/gpu/drm/i915/i915_pmu.c
-> +++ b/drivers/gpu/drm/i915/i915_pmu.c
-> @@ -1048,7 +1048,7 @@ static int i915_pmu_cpu_online(unsigned int cpu, struct hlist_node *node)
->   	GEM_BUG_ON(!pmu->base.event_init);
->   
->   	/* Select the first online CPU as a designated reader. */
-> -	if (!cpumask_weight(&i915_pmu_cpumask))
-> +	if (cpumask_empty(&i915_pmu_cpumask))
->   		cpumask_set_cpu(cpu, &i915_pmu_cpumask);
->   
->   	return 0;
-> 
+Horatiu Vultur (2):
+  net: lan966x: Fix sleep in atomic context when injecting frames
+  net: lan966x: Fix sleep in atomic context when updating MAC table
 
-Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+ drivers/net/ethernet/microchip/lan966x/lan966x_mac.c  | 11 ++++++-----
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.c |  6 +++---
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-I see it's a large series which only partially appeared on our mailing 
-lists. So for instance it hasn't got tested by our automated CI. (Not 
-that I expect any problems in this patch.)
+-- 
+2.33.0
 
-What are the plans in terms of which tree will it get merged through?
-
-Regards,
-
-Tvrtko

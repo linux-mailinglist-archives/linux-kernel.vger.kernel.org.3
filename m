@@ -2,639 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E9949B94D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B629C49B93C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586284AbiAYQv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1586333AbiAYQsy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:48:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DE5C061787;
-        Tue, 25 Jan 2022 08:46:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 922CCB818FB;
-        Tue, 25 Jan 2022 16:46:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B180C340E6;
-        Tue, 25 Jan 2022 16:46:16 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 11:46:15 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 3/9] rethook: Add a generic return hook
-Message-ID: <20220125114615.0533446c@gandalf.local.home>
-In-Reply-To: <164311272945.1933078.2077074421506087620.stgit@devnote2>
-References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
-        <164311272945.1933078.2077074421506087620.stgit@devnote2>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1585977AbiAYQu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:50:58 -0500
+Received: from mail-co1nam11on2135.outbound.protection.outlook.com ([40.107.220.135]:51424
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1381064AbiAYQrG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 11:47:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AdQXH5DKGKGvCsi9qJByscuRXWhE60v9jCvxcu25qmgLA0iYr46fp6cSY4bbHxi9uRQuJ3ksVRTxZF0aMXFtn8J5BvgzkowKSS2Wiod6Z1BitXtbpBt5NZo/4r1j+YsNzuCKB7acPul88mlwCkI9yfkC9HSacqvt4/5XpcfAztkBpojQo5VH9oc9C8n9ohBk1JK1R1xtBjp2b7sNuPFRSpWv4da3tnFySa3A/V+QO/9+k4ss0j1AYaEb0nLStOI/5lI68coO4hPVDklaWk3QPrONgHGAtUlVVd4EezwWGPBHqED7uzRFTKNZTsLDtqIFZzzlIADGX9FzxfFmpsxD/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/jYi/sep1Kl2Xny7t/UL4JEAB0h8meCxntsKjgThiXg=;
+ b=UMyY9i/BcYOqTr5T55sjoBgt0RPZi9mdScH7jBJbPg4cmcMFbZJlOFemamE1Ys4HFcRKB7cKvlKJqucIXA+UpZw7QmvVuSVKe60yu5qXtGptZ8abPD2BwD9vDCYM6TDHYK/rolqsNhe8HKxQ7Hm482nKz5vc34lB+xSHHBCNNiQo3iFQWpRhoJCW2k4bIbBNwgwnBx4M9Gre3V32gvbQ4PghhjoYRXG7zL76c2RidlKEJ4lvtxZsu/FKsJBiHQV/H6L3XCe4cGc231MKvKlPhx5uPoQ7er4JTG5N0w2d22I2vdoqCtmkK1zp0f8jkg/uwHmKeZ4Ux3sfA/HuyocKrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/jYi/sep1Kl2Xny7t/UL4JEAB0h8meCxntsKjgThiXg=;
+ b=SG+5qUM4vIyLX44D6wLVPG/50QubFZ8kZ7NQDELgANGi0BqRMl7f+FzFzHEp9m3eaIllNkmSj9q/3dm8+C6Te/JThVjFDoLt0+wWNnRlTPRaGF3Uas781ax0Z43MrGVXSEa9Mee48eratLZ9IkO3vjXxDjttSKtJUxLT5doNazU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by MWHPR10MB1520.namprd10.prod.outlook.com
+ (2603:10b6:300:26::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Tue, 25 Jan
+ 2022 16:46:58 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
+ 16:46:58 +0000
+Date:   Tue, 25 Jan 2022 08:46:59 -0800
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        linus.walleij@linaro.org
+Subject: Re: [PATCH] pinctrl: microchip-sgpio: Fix support for regmap
+Message-ID: <20220125164659.GA31440@COLIN-DESKTOP1.localdomain>
+References: <20220125161245.418882-1-horatiu.vultur@microchip.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125161245.418882-1-horatiu.vultur@microchip.com>
+X-ClientProxiedBy: MW4P221CA0023.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:303:8b::28) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bf1387cc-775b-4634-f120-08d9e0224d51
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1520:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1520D680912578450714F65EA45F9@MWHPR10MB1520.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zYP9JLdAvqAlo97mpPhivBdNOcQ74MECn2Lnx6MXVE+Zho6DrSuOsYyoARKnN4ClON+7SX1Y7AO4H6YE592/dR/WiKs5EamZB4PGlWmLVx9MuqukhghhRodC128AAcjMU+P0Ns0XBsMtcPZv2IMhk11ToNwywtHe9mUoDZ/YOFzeWMUHvn2BjENJBlTgpQhY0OCrcI1/8XIPI0wWRSNbqzXRb2MX52wPBOE5/4Zq7WfhOYzCRZvGk1syRlsKlWaxQjH7Wuc3f4qapUOHIrJJ/kGWxdl4ty7qZoShoq28TV58HJaH7CE+X376blgfhCVjh2EEoLBzxvgQgtvaxJqcAGk222oE8bZymtyn3SRqk4Td9xqfK4RADZ2u1ZTGJYpW4WhALDPmRDlM9nvcNiD+zye8COWfiR5DL4I2H1AzoX2ViS+pyg1OaRH54C6tziBVegvDfYk3SVTYKeZvcFL+z4yVQ9x4rBOw8AJY1T24Hpbpu3EEpIMFpYkyRyGanVbz/NuXNxC8pMc4Xioi3j3lWLrQskG0JAwH30D3SduUWSIwoXigeYqIPvNCVZZrnQpxnVXzz6U4Fj3CGRpFzMgLQ4rHH+0y5YqqGFwrnq4coGGeW9nwULE0ZZzcV2NUtbO8Jqu98RiZCka4V5unM1KGETRODAacVNDpA3UznOFo0ZVSGThVZf0MPL62MQER40oo21kASH41yoBrQBZGjHI+ug==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(396003)(346002)(39840400004)(366004)(42606007)(136003)(316002)(44832011)(33656002)(8676002)(38100700002)(38350700002)(4326008)(86362001)(2906002)(6512007)(83380400001)(186003)(6486002)(508600001)(1076003)(66476007)(26005)(9686003)(66946007)(66556008)(52116002)(6916009)(5660300002)(6506007)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iFFtYq8FTJAGTnvRj0ZYIlruEK7/h5dFK090MqCCeMQAZ6xVVc5NFmBoEhDy?=
+ =?us-ascii?Q?uRFDqurUIhLNztXCXctLFBICfPHM9NHJZ+VAHl9tFbuO+o68gsDZcqNt43sv?=
+ =?us-ascii?Q?2y7/8w9ugGw9IcWyqfNGJ+QFcEN1DU/X/4J0NOu3kDRevs3kBLPmPctTe/34?=
+ =?us-ascii?Q?ISqWxrFg5Oml6KIH7mxCA/f+51AZx451lf0L7KFT24rKnkIb07lzmyiMsB/Z?=
+ =?us-ascii?Q?XyR1G2as+4oXsts2U+AK5tNfNQH/BLBkkWYrGS2Si5rXpOSgEl1ArskDzrYb?=
+ =?us-ascii?Q?gZgVhXMzAJWfFMfRQhfKE/bZ6wx+mXbBrlSe8UwawCKbwdXZlE2EoZcS22Dl?=
+ =?us-ascii?Q?Rw29zoVMYuiK6tc8HRQOsJrVm5Tk2Mm42LZxS2KpV4sYOidbpAVG7owGozio?=
+ =?us-ascii?Q?ZW1OObLoTCX703L+MsNdgUR4GObgf1yBs1tley4y3ImnmnAqTyyYXZOBiRAU?=
+ =?us-ascii?Q?ehLwlAOMYE3oj8voQibreRJh49jcnPq3PvyYEu2fKUjK6YELrEbhujRziZEJ?=
+ =?us-ascii?Q?NvmO0nEeR3fL6MnM6KjInLGkaIhg9v5cH3RBC7xYTlNf6XSbBuT2HUYA04or?=
+ =?us-ascii?Q?DgrKB2QIfZyeynvdwIvPTO8Fdir82+VH45+CCaPriKoKRVfSnEkTlj7G66VL?=
+ =?us-ascii?Q?Ysb1zDz/1DTbWR+j340VcNzneExLncQbL+ep4aiJ/P9ZqC683P17x+5qS+9o?=
+ =?us-ascii?Q?44wUesxVpkEUG5XijTsRNnNgjD1vvDFc9NVxpvirAMhkRnecy/ESJv288pwy?=
+ =?us-ascii?Q?Cpto/f9l74OE/Vdki3WnfjnYxXxHnjhSDqezxLs1OQNYV4/wvK2b0eSm97bj?=
+ =?us-ascii?Q?3cZWWFTl7OIFFBacaMMzqtaUflJUWJ4XtV0yOmKeB7XvKYUFc0t8BwOBcBoA?=
+ =?us-ascii?Q?0/Mou5SmF7fRpTjmYebYZUwgUjq3iSin1GWBGT675QvCbS/R2S5wGLP26NQ2?=
+ =?us-ascii?Q?gwUn1j906bynbdOY+DQNXpvRkrgrOXFtt+croxjaF9Ts43qcZ2YyE0eZ2uFy?=
+ =?us-ascii?Q?6t5QtLD+WpkQwbfe0078UIdH6/jwdNtCLuAuuD/JwUlC6g9XnLziHEQVwRSZ?=
+ =?us-ascii?Q?zPJaCVpi/7C7JbIkXbRNlzGfggjas+fMhUIi5lHOsfrgj5qT4Z+ubLI/nqCK?=
+ =?us-ascii?Q?ggwmGS+AWbasxAsKEBbT5ZZoqegmZ5vg6OwM5DixBrb+hhyfnOgywvjkYMGK?=
+ =?us-ascii?Q?bVXzOxPMTGKpH9Jp6Nu7dcs+kbBVCsZByJi/SoLK7WapNP1dRI52hYOSLvoR?=
+ =?us-ascii?Q?BxqGGImbiHxRSPFpvzL0hybI3cZsvrVxblG3SgV6+L2tU2kxU1y4ox1SA+7Q?=
+ =?us-ascii?Q?Y9RHvQa9+hNvn1YlnjVPJjULyZZDjv5qgM3zgSO7qHqzBmA5+O2O1jpbQdtT?=
+ =?us-ascii?Q?0eBMai0qsh9d4aF9LictxUlxF/apFBqz8zHkovGGH9kHdQuY8XhVWDEuDUUz?=
+ =?us-ascii?Q?Zvtfx3Kz+5JU9xe0EdFEddl6vXMT7T9d6fNdHr8utqs7PDb4Pt1QMbvK11OC?=
+ =?us-ascii?Q?AiJTW9PEA1nC/z0UgyC9vLDAZ19pu6tbHCRLWXyGQ1ce5emmIdbG7eIDmnPN?=
+ =?us-ascii?Q?ObBBlJJ+vGrZvx2NRdrnNIVQC0kVeTls9/UWfMdDFbitcKRU82zQAYZkr1Yr?=
+ =?us-ascii?Q?GXiVJB7jSVo/Gr8LU6hnDNkT4Ol0qGIsaG9H/iXoNihSeq7Vo5R8RHp4dwbd?=
+ =?us-ascii?Q?bC8hSg=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf1387cc-775b-4634-f120-08d9e0224d51
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 16:46:58.3486
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: o7UQ6fHZc/HlLVwKeQqHlLeC8q39fFyWTATzIhSzHbMUSO930Mm2oagjdzd2p9aR+nnudfaTn6C3RJaaiiUByfvw8eeV0/XrUDOCu7brQ5g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1520
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 21:12:09 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Hi Horatiu,
 
-> Add a return hook framework which hooks the function
-> return. Most of the idea came from the kretprobe, but
-> this is independent from kretprobe.
-> Note that this is expected to be used with other
-> function entry hooking feature, like ftrace, fprobe,
-> adn kprobes. Eventually this will replace the
-> kretprobe (e.g. kprobe + rethook = kretprobe), but
-> at this moment, this is just a additional hook.
-
-BTW, 74 characters is the recommended width of a change log (I usually use
-76). Not sure why your width is set to 55 characters.
-
+On Tue, Jan 25, 2022 at 05:12:45PM +0100, Horatiu Vultur wrote:
+> Initially the driver accessed the registers using u32 __iomem but then
+> in the blamed commit it changed it to use regmap. The problem is that now
+> the offset of the registers is not calculated anymore at word offset but
+> at byte offset. Therefore make sure to multiply the offset with word size.
 > 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Sorry about this one. I see it must have slipped through the cracks
+because I had made the same change in my tree. The only difference is I
+had copied reg_stride into sgpio_priv instead of making regmap_config
+file-scope. For what its worth, with apologies:
+
+Reviewed-by: Colin Foster <colin.foster@in-advantage.com>
+
+> Fixes: 2afbbab45c261a ("pinctrl: microchip-sgpio: update to support regmap")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 > ---
->  Changes in v4:
->   - Fix rethook_trampoline_handler() loops as same as
->     what currently kretprobe does.  This will fix some
->     stacktrace issue in the rethook handler.
-> ---
->  include/linux/rethook.h |   99 +++++++++++++++
->  include/linux/sched.h   |    3 
->  kernel/exit.c           |    2 
->  kernel/fork.c           |    3 
->  kernel/trace/Kconfig    |   11 ++
->  kernel/trace/Makefile   |    1 
->  kernel/trace/rethook.c  |  311 +++++++++++++++++++++++++++++++++++++++++++++++
->  7 files changed, 430 insertions(+)
->  create mode 100644 include/linux/rethook.h
->  create mode 100644 kernel/trace/rethook.c
+>  drivers/pinctrl/pinctrl-microchip-sgpio.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 > 
-> diff --git a/include/linux/rethook.h b/include/linux/rethook.h
-> new file mode 100644
-> index 000000000000..39cfbff1a03c
-> --- /dev/null
-> +++ b/include/linux/rethook.h
-> @@ -0,0 +1,99 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Return hooking with list-based shadow stack.
-> + */
-> +#ifndef _LINUX_RETHOOK_H
-> +#define _LINUX_RETHOOK_H
-> +
-> +#include <linux/compiler.h>
-> +#include <linux/freelist.h>
-> +#include <linux/llist.h>
-> +#include <linux/rcupdate.h>
-> +#include <linux/refcount.h>
-> +
-> +struct rethook_node;
-> +
-> +typedef void (*rethook_handler_t) (struct rethook_node *, void *, struct pt_regs *);
-> +
-> +/**
-> + * struct rethook - The rethook management data structure.
-> + * @data: The user-defined data storage.
-> + * @handler: The user-defined return hook handler.
-> + * @pool: The pool of struct rethook_node.
-> + * @ref: The reference counter.
-> + * @rcu: The rcu_head for deferred freeing.
-> + *
-> + * Don't embed to another data structure, because this is a self-destructive
-> + * data structure when all rethook_node are freed.
-> + */
-> +struct rethook {
-> +	void			*data;
-> +	rethook_handler_t	handler;
-> +	struct freelist_head	pool;
-> +	refcount_t		ref;
-> +	struct rcu_head		rcu;
+> diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+> index 8e081c90bdb2..2999c98bbdee 100644
+> --- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
+> +++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+> @@ -98,6 +98,12 @@ static const struct sgpio_properties properties_sparx5 = {
+>  	.regoff = { 0x00, 0x06, 0x26, 0x04, 0x05, 0x2a, 0x32, 0x3a, 0x3e, 0x42 },
+>  };
+>  
+> +static const struct regmap_config regmap_config = {
+> +		.reg_bits = 32,
+> +		.val_bits = 32,
+> +		.reg_stride = 4,
 > +};
 > +
-> +/**
-> + * struct rethook_node - The rethook shadow-stack entry node.
-> + * @freelist: The freelist, linked to struct rethook::pool.
-> + * @rcu: The rcu_head for deferred freeing.
-> + * @llist: The llist, linked to a struct task_struct::rethooks.
-> + * @rethook: The pointer to the struct rethook.
-> + * @ret_addr: The storage for the real return address.
-> + * @frame: The stroage for the frame pointer.
-
-		"storage"
-
-> + *
-> + * You can embed this with your extended data structure to store any data
-> + * on the entry of shadow stack.
-
-	"the shadow stack"?
-
-> + */
-> +struct rethook_node {
-> +	union {
-> +		struct freelist_node freelist;
-> +		struct rcu_head      rcu;
-> +	};
-> +	struct llist_node	llist;
-> +	struct rethook		*rethook;
-> +	unsigned long		ret_addr;
-> +	unsigned long		frame;
-> +};
-> +
-> +struct rethook *rethook_alloc(void *data, rethook_handler_t handler);
-> +void rethook_free(struct rethook *rh);
-> +void rethook_add_node(struct rethook *rh, struct rethook_node *node);
-> +struct rethook_node *rethook_try_get(struct rethook *rh);
-> +void rethook_recycle(struct rethook_node *node);
-> +void rethook_hook(struct rethook_node *node, struct pt_regs *regs);
-> +unsigned long rethook_find_ret_addr(struct task_struct *tsk, unsigned long frame,
-> +				    struct llist_node **cur);
-> +
-> +/* Arch dependent code must implement arch_* and trampoline code */
-> +void arch_rethook_prepare(struct rethook_node *node, struct pt_regs *regs);
-> +void arch_rethook_trampoline(void);
-> +
-> +/**
-> + * is_rethook_trampoline() - Check whether the address is rethook trampoline
-> + * @addr: The address to be checked
-> + *
-> + * Return true if the @addr is rethook trampoline address.
-
-	"is a rethook"
-
-> + */
-> +static inline bool is_rethook_trampoline(unsigned long addr)
-> +{
-> +	return addr == (unsigned long)arch_rethook_trampoline;
-
-Will this work on architectures like PPC that have strange ways of holding
-the function addresses? Or is that what the below fixup handles?
-
-> +}
-> +
-> +/* If the architecture needs a fixup the return address, implement it. */
-
-	"needs to fixup the"
-
-> +void arch_rethook_fixup_return(struct pt_regs *regs,
-> +			       unsigned long correct_ret_addr);
-> +
-> +/* Generic trampoline handler, arch code must prepare asm stub */
-> +unsigned long rethook_trampoline_handler(struct pt_regs *regs,
-> +					 unsigned long frame);
-> +
-> +#ifdef CONFIG_RETHOOK
-> +void rethook_flush_task(struct task_struct *tk);
-> +#else
-> +#define rethook_flush_task(tsk)	do { } while (0)
-> +#endif
-> +
-> +#endif
-> +
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 78c351e35fec..2bfabf5355b7 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1473,6 +1473,9 @@ struct task_struct {
->  #ifdef CONFIG_KRETPROBES
->  	struct llist_head               kretprobe_instances;
->  #endif
-> +#ifdef CONFIG_RETHOOK
-> +	struct llist_head               rethooks;
-> +#endif
+>  static const char * const functions[] = { "gpio" };
 >  
->  #ifdef CONFIG_ARCH_HAS_PARANOID_L1D_FLUSH
->  	/*
-> diff --git a/kernel/exit.c b/kernel/exit.c
-> index f702a6a63686..a39a321c1f37 100644
-> --- a/kernel/exit.c
-> +++ b/kernel/exit.c
-> @@ -64,6 +64,7 @@
->  #include <linux/compat.h>
->  #include <linux/io_uring.h>
->  #include <linux/kprobes.h>
-> +#include <linux/rethook.h>
+>  struct sgpio_bank {
+> @@ -137,7 +143,7 @@ static inline int sgpio_addr_to_pin(struct sgpio_priv *priv, int port, int bit)
 >  
->  #include <linux/uaccess.h>
->  #include <asm/unistd.h>
-> @@ -169,6 +170,7 @@ static void delayed_put_task_struct(struct rcu_head *rhp)
->  	struct task_struct *tsk = container_of(rhp, struct task_struct, rcu);
+>  static inline u32 sgpio_get_addr(struct sgpio_priv *priv, u32 rno, u32 off)
+>  {
+> -	return priv->properties->regoff[rno] + off;
+> +	return (priv->properties->regoff[rno] + off) * regmap_config.reg_stride;
+>  }
 >  
->  	kprobe_flush_task(tsk);
-> +	rethook_flush_task(tsk);
->  	perf_event_delayed_put(tsk);
->  	trace_sched_process_free(tsk);
->  	put_task_struct(tsk);
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 3244cc56b697..ffae38be64c4 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -2282,6 +2282,9 @@ static __latent_entropy struct task_struct *copy_process(
->  #ifdef CONFIG_KRETPROBES
->  	p->kretprobe_instances.first = NULL;
->  #endif
-> +#ifdef CONFIG_RETHOOK
-> +	p->rethooks.first = NULL;
-> +#endif
+>  static u32 sgpio_readl(struct sgpio_priv *priv, u32 rno, u32 off)
+> @@ -821,11 +827,6 @@ static int microchip_sgpio_probe(struct platform_device *pdev)
+>  	struct clk *clk;
+>  	u32 __iomem *regs;
+>  	u32 val;
+> -	struct regmap_config regmap_config = {
+> -		.reg_bits = 32,
+> -		.val_bits = 32,
+> -		.reg_stride = 4,
+> -	};
 >  
->  	/*
->  	 * Ensure that the cgroup subsystem policies allow the new process to be
-> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> index 23483dd474b0..4d27e56c6e76 100644
-> --- a/kernel/trace/Kconfig
-> +++ b/kernel/trace/Kconfig
-> @@ -10,6 +10,17 @@ config USER_STACKTRACE_SUPPORT
->  config NOP_TRACER
->  	bool
->  
-> +config HAVE_RETHOOK
-> +	bool
-> +
-> +config RETHOOK
-> +	bool
-> +	depends on HAVE_RETHOOK
-> +	help
-> +	  Enable generic return hooking feature. This is an internal
-> +	  API, which will be used by other function-entry hooking
-> +	  feature like fprobe and kprobes.
-
-	"features"
-
-> +
->  config HAVE_FUNCTION_TRACER
->  	bool
->  	help
-> diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-> index 79255f9de9a4..c6f11a139eac 100644
-> --- a/kernel/trace/Makefile
-> +++ b/kernel/trace/Makefile
-> @@ -98,6 +98,7 @@ obj-$(CONFIG_UPROBE_EVENTS) += trace_uprobe.o
->  obj-$(CONFIG_BOOTTIME_TRACING) += trace_boot.o
->  obj-$(CONFIG_FTRACE_RECORD_RECURSION) += trace_recursion_record.o
->  obj-$(CONFIG_FPROBE) += fprobe.o
-> +obj-$(CONFIG_RETHOOK) += rethook.o
->  
->  obj-$(CONFIG_TRACEPOINT_BENCHMARK) += trace_benchmark.o
->  
-> diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
-> new file mode 100644
-> index 000000000000..76c9848b44a9
-> --- /dev/null
-> +++ b/kernel/trace/rethook.c
-> @@ -0,0 +1,311 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define pr_fmt(fmt) "rethook: " fmt
-> +
-> +#include <linux/bug.h>
-> +#include <linux/kallsyms.h>
-> +#include <linux/kprobes.h>
-> +#include <linux/preempt.h>
-> +#include <linux/rethook.h>
-> +#include <linux/slab.h>
-> +#include <linux/sort.h>
-> +
-> +/* Return hook list (shadow stack by list) */
-> +
-> +/*
-> + * This function is called from delayed_put_task_struct() when a task is
-> + * dead and cleaned up to recycle any kretprobe instances associated with
-> + * this task. These left over instances represent probed functions that
-> + * have been called but will never return.
-> + */
-> +void rethook_flush_task(struct task_struct *tk)
-> +{
-> +	struct rethook_node *rhn;
-> +	struct llist_node *node;
-> +
-> +	preempt_disable();
-> +
-> +	node = __llist_del_all(&tk->rethooks);
-
-Hmm, this keeps preemption disabled for the entire walk of the list.
-Can we enable it here, and then just disable it when calling
-rethook_recycle()?
-
-> +	while (node) {
-> +		rhn = container_of(node, struct rethook_node, llist);
-> +		node = node->next;
-
-		preempt_disable();
-> +		rethook_recycle(rhn);
-		preempt_enable();
-
-? I'm concerned about the latency that this can add on RT tasks.
-
-> +	}
-> +
-> +	preempt_enable();
-> +}
-> +
-> +static void rethook_free_rcu(struct rcu_head *head)
-> +{
-> +	struct rethook *rh = container_of(head, struct rethook, rcu);
-> +	struct rethook_node *rhn;
-> +	struct freelist_node *node;
-> +	int count = 1;
-> +
-> +	node = rh->pool.head;
-> +	while (node) {
-> +		rhn = container_of(node, struct rethook_node, freelist);
-> +		node = node->next;
-> +		kfree(rhn);
-> +		count++;
-> +	}
-> +
-> +	/* The rh->ref is the number of pooled node + 1 */
-> +	if (refcount_sub_and_test(count, &rh->ref))
-> +		kfree(rh);
-> +}
-> +
-> +/**
-> + * rethook_free() - Free struct rethook.
-> + * @rh: the struct rethook to be freed.
-> + *
-> + * Free the rethook. Before calling this function, user must ensure the
-> + * @rh::data is cleaned if needed (or, the handler can access it after
-> + * calling this function.) This function will set the @rh to be freed
-> + * after all rethook_node are freed (not soon). And the caller must
-> + * not touch @rh after calling this.
-> + */
-> +void rethook_free(struct rethook *rh)
-> +{
-> +	rcu_assign_pointer(rh->handler, NULL);
-> +
-> +	call_rcu(&rh->rcu, rethook_free_rcu);
-> +}
-> +
-> +/**
-> + * rethook_alloc() - Allocate struct rethook.
-> + * @data: a data to pass the @handler when hooking the return.
-> + * @handler: the return hook callback function.
-> + *
-> + * Allocate and initialize a new rethook with @data and @handler.
-> + * Return NULL if memory allocation fails or @handler is NULL.
-> + * Note that @handler == NULL means this rethook is going to be freed.
-> + */
-> +struct rethook *rethook_alloc(void *data, rethook_handler_t handler)
-> +{
-> +	struct rethook *rh = kzalloc(sizeof(struct rethook), GFP_KERNEL);
-> +
-> +	if (!rh || !handler)
-> +		return NULL;
-> +
-> +	rh->data = data;
-> +	rh->handler = handler;
-> +	rh->pool.head = NULL;
-> +	refcount_set(&rh->ref, 1);
-> +
-> +	return rh;
-> +}
-> +
-> +/**
-> + * rethook_add_node() - Add a new node to the rethook.
-> + * @rh: the struct rethook.
-> + * @node: the struct rethook_node to be added.
-> + *
-> + * Add @node to @rh. User must allocate @node (as a part of user's
-> + * data structure.) The @node fields are initialized in this function.
-> + */
-> +void rethook_add_node(struct rethook *rh, struct rethook_node *node)
-> +{
-> +	node->rethook = rh;
-> +	freelist_add(&node->freelist, &rh->pool);
-> +	refcount_inc(&rh->ref);
-> +}
-> +
-> +static void free_rethook_node_rcu(struct rcu_head *head)
-> +{
-> +	struct rethook_node *node = container_of(head, struct rethook_node, rcu);
-> +
-> +	if (refcount_dec_and_test(&node->rethook->ref))
-> +		kfree(node->rethook);
-> +	kfree(node);
-> +}
-> +
-> +/**
-> + * rethook_recycle() - return the node to rethook.
-> + * @node: The struct rethook_node to be returned.
-> + *
-> + * Return back the @node to @node::rethook. If the @node::rethook is already
-> + * marked as freed, this will free the @node.
-> + */
-> +void rethook_recycle(struct rethook_node *node)
-> +{
-> +	lockdep_assert_preemption_disabled();
-> +
-> +	if (likely(READ_ONCE(node->rethook->handler)))
-> +		freelist_add(&node->freelist, &node->rethook->pool);
-> +	else
-> +		call_rcu(&node->rcu, free_rethook_node_rcu);
-> +}
-> +NOKPROBE_SYMBOL(rethook_recycle);
-> +
-> +/**
-> + * rethook_try_get() - get an unused rethook node.
-> + * @rh: The struct rethook which pools the nodes.
-> + *
-> + * Get an unused rethook node from @rh. If the node pool is empty, this
-> + * will return NULL. Caller must disable preemption.
-> + */
-> +struct rethook_node *rethook_try_get(struct rethook *rh)
-> +{
-> +	rethook_handler_t handler = READ_ONCE(rh->handler);
-> +	struct freelist_node *fn;
-> +
-> +	lockdep_assert_preemption_disabled();
-> +
-> +	/* Check whether @rh is going to be freed. */
-> +	if (unlikely(!handler))
-> +		return NULL;
-> +
-> +	fn = freelist_try_get(&rh->pool);
-> +	if (!fn)
-> +		return NULL;
-> +
-> +	return container_of(fn, struct rethook_node, freelist);
-> +}
-> +NOKPROBE_SYMBOL(rethook_try_get);
-> +
-> +/**
-> + * rethook_hook() - Hook the current function return.
-> + * @node: The struct rethook node to hook the function return.
-> + * @regs: The struct pt_regs for the function entry.
-> + *
-> + * Hook the current running function return. This must be called when the
-> + * function entry (or at least @regs must be the registers of the function
-> + * entry.)
-> + */
-> +void rethook_hook(struct rethook_node *node, struct pt_regs *regs)
-> +{
-> +	arch_rethook_prepare(node, regs);
-> +	__llist_add(&node->llist, &current->rethooks);
-> +}
-> +NOKPROBE_SYMBOL(rethook_hook);
-> +
-> +/* This assumes the 'tsk' is the current task or the is not running. */
-
-	"or the is not running" ?
-
-> +static unsigned long __rethook_find_ret_addr(struct task_struct *tsk,
-> +					     struct llist_node **cur)
-> +{
-> +	struct rethook_node *rh = NULL;
-> +	struct llist_node *node = *cur;
-> +
-> +	if (!node)
-> +		node = tsk->rethooks.first;
-> +	else
-> +		node = node->next;
-> +
-> +	while (node) {
-> +		rh = container_of(node, struct rethook_node, llist);
-> +		if (rh->ret_addr != (unsigned long)arch_rethook_trampoline) {
-> +			*cur = node;
-> +			return rh->ret_addr;
-> +		}
-> +		node = node->next;
-> +	}
-> +	return 0;
-> +}
-> +NOKPROBE_SYMBOL(__rethook_find_ret_addr);
-> +
-> +/**
-> + * rethook_find_ret_addr -- Find correct return address modified by rethook
-> + * @tsk: Target task
-> + * @frame: A frame pointer
-> + * @cur: a storage of the loop cursor llist_node pointer for next call
-> + *
-> + * Find the correct return address modified by a rethook on @tsk in unsigned
-> + * long type. If it finds the return address, this returns that address value,
-> + * or this returns 0.
-
-space
-
-> + * The @tsk must be 'current' or a task which is not running. @frame is a hint
-
-How do you know a tsk is not running? How can that be guaranteed?
-
-> + * to get the currect return address - which is compared with the
-> + * rethook::frame field. The @cur is a loop cursor for searching the
-> + * kretprobe return addresses on the @tsk. The '*@cur' should be NULL at the
-> + * first call, but '@cur' itself must NOT NULL.
-
-I know you state what the return value is above, but it should be stated
-(again) here. As kernel-doc should have a separate section for return
-values:
-
- * Returns found address value or zero if not found.
-
-> + */
-> +unsigned long rethook_find_ret_addr(struct task_struct *tsk, unsigned long frame,
-> +				    struct llist_node **cur)
-> +{
-> +	struct rethook_node *rhn = NULL;
-> +	unsigned long ret;
-> +
-> +	if (WARN_ON_ONCE(!cur))
-> +		return 0;
-> +
-> +	do {
-> +		ret = __rethook_find_ret_addr(tsk, cur);
-> +		if (!ret)
-> +			break;
-> +		rhn = container_of(*cur, struct rethook_node, llist);
-> +	} while (rhn->frame != frame);
-> +
-> +	return ret;
-> +}
-
--- Steve
-
-
-> +NOKPROBE_SYMBOL(rethook_find_ret_addr);
-> +
-> +void __weak arch_rethook_fixup_return(struct pt_regs *regs,
-> +				      unsigned long correct_ret_addr)
-> +{
-> +	/*
-> +	 * Do nothing by default. If the architecture which uses a
-> +	 * frame pointer to record real return address on the stack,
-> +	 * it should fill this function to fixup the return address
-> +	 * so that stacktrace works from the rethook handler.
-> +	 */
-> +}
-> +
-> +/* This function will be called from each arch-defined trampoline. */
-> +unsigned long rethook_trampoline_handler(struct pt_regs *regs,
-> +					 unsigned long frame)
-> +{
-> +	struct llist_node *first, *node = NULL;
-> +	unsigned long correct_ret_addr;
-> +	rethook_handler_t handler;
-> +	struct rethook_node *rhn;
-> +
-> +	correct_ret_addr = __rethook_find_ret_addr(current, &node);
-> +	if (!correct_ret_addr) {
-> +		pr_err("rethook: Return address not found! Maybe there is a bug in the kernel\n");
-> +		BUG_ON(1);
-> +	}
-> +
-> +	instruction_pointer_set(regs, correct_ret_addr);
-> +
-> +	/*
-> +	 * These loops must be protected from rethook_free_rcu() because those
-> +	 * are accessing 'rhn->rethook'.
-> +	 */
-> +	preempt_disable();
-> +
-> +	/*
-> +	 * Run the handler on the shadow stack. Do not unlink the list here because
-> +	 * stackdump inside the handlers needs to decode it.
-> +	 */
-> +	first = current->rethooks.first;
-> +	while (first) {
-> +		rhn = container_of(first, struct rethook_node, llist);
-> +		if (WARN_ON_ONCE(rhn->frame != frame))
-> +			break;
-> +		handler = READ_ONCE(rhn->rethook->handler);
-> +		if (handler)
-> +			handler(rhn, rhn->rethook->data, regs);
-> +
-> +		if (first == node)
-> +			break;
-> +		first = first->next;
-> +	}
-> +
-> +	/* Fixup registers for returning to correct address. */
-> +	arch_rethook_fixup_return(regs, correct_ret_addr);
-> +
-> +	/* Unlink used shadow stack */
-> +	first = current->rethooks.first;
-> +	current->rethooks.first = node->next;
-> +	node->next = NULL;
-> +
-> +	while (first) {
-> +		rhn = container_of(first, struct rethook_node, llist);
-> +		first = first->next;
-> +		rethook_recycle(rhn);
-> +	}
-> +	preempt_enable();
-> +
-> +	return correct_ret_addr;
-> +}
-> +NOKPROBE_SYMBOL(rethook_trampoline_handler);
-
+>  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+> -- 
+> 2.33.0
+> 

@@ -2,72 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7699849B35E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE37049B363
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382461AbiAYL4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 06:56:05 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:58802 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386228AbiAYLsa (ORCPT
+        id S1388594AbiAYL4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 06:56:21 -0500
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:53432 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1382406AbiAYLtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 06:48:30 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 86C02212C7;
-        Tue, 25 Jan 2022 11:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643111303; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QoCmbL6yF8nAeIRzqFCzh43LMHBbGGNszo61Ae1SiqY=;
-        b=g8O6QNd7mPHllF8xeb65UeuukiV1733Krha7YsYyqa/OErZgYtNRtqcRIWolUqs3g7nlYv
-        cQ5KZnilrRbk4tVuzmF+ko+wUFV9aUSOBBgIwc9R6ySgJ56s9vi2csE3U0oE9HjktEY30e
-        WC7pgjwpVB0ZEzIaJ9XDCavCkVaxUcQ=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 34836A3B81;
-        Tue, 25 Jan 2022 11:48:23 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 12:48:22 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] panic: Add panic_in_progress helper
-Message-ID: <Ye/jhjBaN35L76BF@alley>
-References: <20220121190222.572694-1-stephen.s.brennan@oracle.com>
- <20220121190222.572694-2-stephen.s.brennan@oracle.com>
+        Tue, 25 Jan 2022 06:49:53 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2qSlR6_1643111382;
+Received: from 30.240.125.206(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V2qSlR6_1643111382)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 25 Jan 2022 19:49:43 +0800
+Message-ID: <0e156b79-6343-72b2-47fb-baa29ffe60fd@linux.alibaba.com>
+Date:   Tue, 25 Jan 2022 19:49:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121190222.572694-2-stephen.s.brennan@oracle.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [RESEND PATCH v3 1/2] efi/cper: add cper_mem_err_status_str to
+ decode error description
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220124024759.19176-2-xueshuai@linux.alibaba.com>
+ <Ye8XMvfXCetzJLTH@zn.tnic>
+ <98aae382-ac38-8811-f147-d00b953f608d@linux.alibaba.com>
+ <Ye/PLDlOBhYmGb5D@zn.tnic>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <Ye/PLDlOBhYmGb5D@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-01-21 11:02:19, Stephen Brennan wrote:
+Hi, Borislav,
 
-Please, add explanation why the new helper is added. It will be
-used in printk code to reduce risk of deadlocks during panic().
+Thank you for your reply.
 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-> ---
-> We cannot define a static inline without including linux/atomic.h, so
-> I just added a macro for convenience in later patches. Since macros were
-> the only option, I didn't include a helper for
-> panic_in_progress_different_cpu().
+I am sorry if you feel the RESEND tag is pushing you.
 
-What is the exact problem with including atomic.h and using static
-inline, please?
-
-IMHO, the define is not a real solution. The macro won't be usable
-without including atomic.h. So, it would work only by chance.
-
-But it is possible that I miss something.
+Take your time, I will be more patient :)
 
 Best Regards,
-Petr
+Shuai
+
+在 2022/1/25 PM6:21, Borislav Petkov 写道:
+> On Tue, Jan 25, 2022 at 10:45:31AM +0800, Shuai Xue wrote:
+>> I will fix it in next version.
+> 
+> Yes, thanks.
+> 
+> However, you don't have to resend immediately but wait instead until
+> people have had time to review the whole thing. And while you're
+> waiting, you can read through Documentation/process/...
+> 
+> There are passages like the following one, for example:
+> 
+> "Don't get discouraged - or impatient
+> ------------------------------------
+> 
+> After you have submitted your change, be patient and wait.  Reviewers are
+> busy people and may not get to your patch right away.
+> 
+> Once upon a time, patches used to disappear into the void without comment,
+> but the development process works more smoothly than that now.  You should
+> receive comments within a week or so; if that does not happen, make sure
+> that you have sent your patches to the right place.  Wait for a minimum of
+> one week before resubmitting or pinging reviewers - possibly longer during
+> busy times like merge windows.
+> 
+> It's also ok to resend the patch or the patch series after a couple of
+> weeks with the word "RESEND" added to the subject line::
+> 
+>    [PATCH Vx RESEND] sub/sys: Condensed patch summary
+> 
+> Don't add "RESEND" when you are submitting a modified version of your
+> patch or patch series - "RESEND" only applies to resubmission of a
+> patch or patch series which have not been modified in any way from the
+> previous submission."
+> 

@@ -2,839 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 287EF49A87F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5001C49A88E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1319087AbiAYDHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 22:07:54 -0500
-Received: from mga12.intel.com ([192.55.52.136]:22031 "EHLO mga12.intel.com"
+        id S1319414AbiAYDIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:08:50 -0500
+Received: from mga04.intel.com ([192.55.52.120]:35763 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S3420126AbiAYCWr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 21:22:47 -0500
+        id S1355137AbiAYCSj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 21:18:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643077367; x=1674613367;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qGotw2GBrBBBYCP1jR7RZISLfp2fzY+3NpEYtRDAb2w=;
-  b=hcdY4f01/kmJHBuBAIoIEO2iNO7iUtk9RrIRsEjl8MG6BdoOop34ZLXb
-   imh+qn6G29f8q0WpDokBLAgbN8tAPnWg4sg7kPiLpnEXe6fR1y3gU1k+K
-   7IQS7IzHC960MecchTw1M9TvnXi35IY+IRLyUDiI1mTe50EDsenfB2Kad
-   9WAIOmukP4I7fPjfi6O7COvqQsyAwwKvdS6jFPE3wD7uiABN9o5a2WTme
-   W9dTykIMEQEEOLw73CqdvDVuTrOLowKbS6SNHPB3oURn6ggp9YoSZ2TM+
-   PfeVAll0v7z3nBQxLlbrpDAJeZB0wmKcJo1788RQ/fPc7g+cw/oV8og2N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226168589"
+  t=1643077114; x=1674613114;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ysCdau5dfWoCYdKfXE6D2rnxKwA3nLjvIEkQ5UFTDO0=;
+  b=faCWLxH419WUSzxj7cLKwT2/lM+OgTM+rRR8cC61BsrUJuGhVYepHJWg
+   V5ek375lLNNiFC0V/dz3X8PbyzkQqI75VQMNmdV5HhCfom1XhhYEpzH38
+   lyMRhsQ/7hlzfjN+aeZsqo5HoGRbhKzXwQ9qd1tHa4f1M+KP42eg/lAPL
+   e1PeAMzdfBchrMahlAfOoRE8PLe3xIpN8dX6o26sDcT8Okif3z8ng7WmA
+   vE1ffJsaSKbugfp+30ZI6kZiugL0Xylss1c1Qkl6GM3OXKtxE1Uv3hND2
+   7gUP/AmEpWbvG0rdRHAf9srmby7OGN1UN+kxYvvxhlezxeE5XPThrdVbL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="245023604"
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="226168589"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:16:52 -0800
+   d="scan'208";a="245023604"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:11:04 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="479302265"
-Received: from kerguder-mobl.ger.corp.intel.com (HELO localhost) ([10.249.158.133])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 17:16:42 -0800
-From:   Iwona Winiarska <iwona.winiarska@intel.com>
-To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Borislav Petkov <bp@alien8.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Zev Weiss <zweiss@equinix.com>,
-        David Muller <d.mueller@elsoft.ch>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v6 10/13] hwmon: peci: Add cputemp driver
-Date:   Tue, 25 Jan 2022 02:11:01 +0100
-Message-Id: <20220125011104.2480133-11-iwona.winiarska@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220125011104.2480133-1-iwona.winiarska@intel.com>
-References: <20220125011104.2480133-1-iwona.winiarska@intel.com>
+   d="scan'208";a="532265181"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2022 17:11:04 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 24 Jan 2022 17:11:04 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20 via Frontend Transport; Mon, 24 Jan 2022 17:11:04 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.20; Mon, 24 Jan 2022 17:11:04 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m31iZO2y/lMub1hKdK0M8WDlg5EnP3xagxme7n8+sQwHqqJqWKNg2oFQvO5N7biX5dAQg16mAIofBYOO/0zx6MvgKOjdGHomLe8fS7MqmTlkV7AZgJJm0q9VOVUbKonAMKRMIHHlYs5v61h9RQQQE47DdKaFcLmdIXlrV1rU8It5fuw52iiAUhCp/36q0ZR1tw9X9yCs3bukihSSy3qWOHvOElEJm2bwIfG1V47xZaqtu83QPiXt4jsTjfUrWL5qGmfrwWFSsJDIJZQtTLE58RtWp4y9JyPEQbhzCN9HJ4Eq4rpEP96f0+SMNZMzARfbVWgW0nnLkghlfjcXjS6uTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=or7mcvbCLZco9G19PQobCSITQBKP7ViYJuRbDDS7phQ=;
+ b=JPtRBBhM0mb73ZW9mDzMQQJpW0uFk/5r7SdnC0E6OluE64ChJDOb6YnXHMTqf2X4ko9CSh+PahHLsJY+5aRudcQ4hD3LYSRpdGaQj/7yviFd8vs8GoyWKE7mPJa4LAzdc5BOPjRhhohpbn2U/xNoJoX8MKvx7JbRtaFbQWP51ePT+AF8ttIsKp23+RgLoE4qx3cz92A+LD+Wdec8o5KFXd+zrtvPauqbO/AzUAqFj2OAR4Eoz8u65QzPtzI/dSB98BD1mwIvGHpi0wLWfS/ChUmBzPV0Yr+85vvtkLi+hvyUB+a7FDlZymj6qQKX+cFp2ab8o7j/NvK3H/8NVa5wqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by DM5PR11MB1724.namprd11.prod.outlook.com (2603:10b6:3:e::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4909.12; Tue, 25 Jan 2022 01:11:01 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::e46b:a312:2f85:76dc]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::e46b:a312:2f85:76dc%5]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
+ 01:11:01 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>
+CC:     "Raj, Ashok" <ashok.raj@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Alex Williamson" <alex.williamson@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Will Deacon <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>
+Subject: RE: [PATCH 6/7] iommu: Use right way to retrieve iommu_ops
+Thread-Topic: [PATCH 6/7] iommu: Use right way to retrieve iommu_ops
+Thread-Index: AQHYEPHSpa6rqOl4/k+RfGCHsL5bBqxycAsAgAB8WRA=
+Date:   Tue, 25 Jan 2022 01:11:01 +0000
+Message-ID: <BN9PR11MB5276232DDAFC8041D5E795DE8C5F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
+ <20220124071103.2097118-7-baolu.lu@linux.intel.com>
+ <20220124173650.GF966497@nvidia.com>
+In-Reply-To: <20220124173650.GF966497@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b93f7806-13a2-4ffc-af94-08d9df9f8d7f
+x-ms-traffictypediagnostic: DM5PR11MB1724:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <DM5PR11MB172435153CD77E1698A7D4AC8C5F9@DM5PR11MB1724.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cWzTO2VHl1lNL1HcjE+uArfJZy3Ei6yGzXBCR4wXsydicxBxFJO1lEOwMSxv5xZBWfWIY/q3LSMYVDLfs27cC/6Le9ceNVhdBXQnPnFJB64XC1QKOjW9iJkcHQhWK3CkFsKqN9s3tXm9REm1632VVA05voX2oOZok3GYP7fTy1Vl2UI05TNjNWIIM6KVN6onBH7mFwZnYwWIokUjif+OemZXin5RL04QJ49KWLbbr5u2t6vOACX97gZGzA9hP/ZzOgjy58yjpOo5YEyqcdRfsioeaCjPxL74QMXDLS5KFs0d6pcHk4RdRvmPWumclNgvb0n7gLYL8Ns1FP9DvxhH4k8ezA3hPqgpUKE2QTD7c4iWXheOaSt9ZWzMHcIYg5Cz5f9Lzkq6QPrPEhf9xLVvjxlTuMHHXR1xWhbbir1pgdA83cwoMvLzWTrbKq2uBYWsvj63NbzeOYgSys3j6Urq79DauLXRLT6tFAxbUJRFt7+P+n5Dr8IszhuHLqdOuDOM5bJd8nZDb/Zk9fLKbBrmkcTEsjHtNOmnU8kChjJIFmDbDYDrdwE7OC2FBUJV+FjTfbAj+1KVUj/6HLb3jgI5iDrNCaL+rE/JI2jiDVY9Gx3v53xWwd6WmFBb88gG6fDjn2eRntjJsrys7l7o5wQL3cOk6evbIL/Y/97AvzL0Vq9LFSPCuKmEKtTdub+cDdt/apvrC5ybr6I9fTq+gly3U1MvqhmDm82QPPeJh+AYh/U=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(38070700005)(86362001)(6506007)(64756008)(8936002)(38100700002)(316002)(508600001)(52536014)(110136005)(7696005)(33656002)(9686003)(7416002)(2906002)(186003)(4326008)(54906003)(71200400001)(66556008)(66946007)(8676002)(5660300002)(122000001)(4744005)(82960400001)(66476007)(66446008)(76116006)(55016003)(26005)(43043002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eZvf0qAB0m3+WkmEdlTnYH/3K6emlpn4GbX1y9NjA6sPpUkAWR0p/m+IcV6C?=
+ =?us-ascii?Q?yeJJ7vr+ZE1+qtGeydNqmLFRXkiTEGkGfh/NWpY0oNCRRGPKBVctos51KbSE?=
+ =?us-ascii?Q?oT8JNwl6HgnyruHc8/SyK0gdz2yofJ0s/5/LiKvkn9+IJwasCtCu+RkoGTEj?=
+ =?us-ascii?Q?xBlTo0ySr0svHFKdGFa88chifF/vS4lyvVuG2X8j53aHNZ1MUgo4/S4UO+/a?=
+ =?us-ascii?Q?Z9YgoOIqHLfuk/JtJow/OdoaW0AIcXZ7vVPOOLarUlZZ/IH3btZNdyZG8Iab?=
+ =?us-ascii?Q?3Klwb5LrWUV58iMZfAOTL9IKxkzWMy1MvzSqdZEC/x8e7yf2RkzgMvLzoKx+?=
+ =?us-ascii?Q?PabvA+n0Hkm305THe5Xn1nv1eLYTOr8O/HaNpCkC6NP6mEckbKvXiJBbRM61?=
+ =?us-ascii?Q?Jh7eNI2HGNSNdOjCvlJQnUkfeBxChnV7eehENg1Z3ztu+RbvfODnr2y8xL4X?=
+ =?us-ascii?Q?/OCfIUCUBxyBmAIgiUPlLW2LZDKwlr8EXXb7sGmZhT9fyhlWP04upFFwE6ux?=
+ =?us-ascii?Q?XtpoJ9ceaFNGolvmSgoBlzu3027uiWoOf5qG2Bc6aUhb1cEyuamMeosYTcvq?=
+ =?us-ascii?Q?T/60AwvukovSA58R2fgQExat0LmbrwiXpD/ibz6pIvFTeX42kXcWaoEwgy3l?=
+ =?us-ascii?Q?4QdVvzAEdq14aZAe42c1mcztT0XuBXYIxIZC6X9ixcotE6m2hbMptY+mRYXQ?=
+ =?us-ascii?Q?I8UZn0yy38kZ80qT6wut8qLphqso1DAIG65UmbxNqBW1gK+MzpZoHjWbXC/x?=
+ =?us-ascii?Q?rnNeky07YoSxTqUwb5lvK0mXO1rqrAF35EcB6btM6doy54smnuDol5sTcLAT?=
+ =?us-ascii?Q?1JBrvueDzNDCjgKaaCahoOJ42ZfQHj+SQ2CwTfofkOKUwsjv4vCh6hgZrPaB?=
+ =?us-ascii?Q?B8/8awhXIoWAFWv891vpgw+1X0NovuPxbxHfC89HYcxUbjvstkYWjYQ6WT8i?=
+ =?us-ascii?Q?M3gi6K0jUmQf4hXIVVYJ3vyp/2fWYoPYTDbp5HDozv7m1I1ZndudVZhJN8kp?=
+ =?us-ascii?Q?8YhMliElWXj3xBwf646AEN01gX9O/S20VkgHcAG0RruH1Mexxvh1a1LIPaV+?=
+ =?us-ascii?Q?ZC/JK4uS7Tnc0r62Ksp5nHXEuMf9WkSedEdBVT6Vx1wLsKhxjjCDSgZJxs3U?=
+ =?us-ascii?Q?qaaLinvx6aKdyZb8nFcROG/GdzITJm37CbGZS0Qv/rrGuldVFwGFWCvbxr7v?=
+ =?us-ascii?Q?uRJLfvaJGf5p+bOXoJNhNNtxpCGV48T2xG3/Zf6HYtzaRc995CzEVfOZ4Uth?=
+ =?us-ascii?Q?qH59nUVywp6Lh+lKCgOaGzB1PyyEk60CQWhxQTNiU6P8JUZ2WetT+smvbOlu?=
+ =?us-ascii?Q?D+zTs8VUT/+2oamPI2r5MmpuNPIu0kfAcm5dhLf7cc8j//jXx20nXOpmJKOU?=
+ =?us-ascii?Q?BngAFjHWE4+SU/uQGDBVbHxS1LI21ytcg4eTa3s1UXS5zJPGOjzV4I67Ssy4?=
+ =?us-ascii?Q?6uexye0murKfGvNPZZlHLc9I9/bgL+Y+dNaNqav09NURMP9DW7gPgV/p1LcY?=
+ =?us-ascii?Q?GSeJrO0A3b4xYIALQupGYkt9y+jUZ7XE+OCJi4BuJRTj3iAI1iC3qYCYXV4M?=
+ =?us-ascii?Q?WzRCfuYmuibxO0PGgK6vk/nYNdShdpyTzmvpy7AmOPKsuiGgkdO7SP/NbasF?=
+ =?us-ascii?Q?6qvskmV7Q+ZY+3+kzIntdK0=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b93f7806-13a2-4ffc-af94-08d9df9f8d7f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2022 01:11:01.4879
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Y05rF5TGtqjpafwGclvkszUYCLjJzh7lOpQlmPMCKqXJF82bpiHzPNj8yM4+WdtsL8zc/q92Z8N6XzDL0Jt+qw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1724
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add peci-cputemp driver for Digital Thermal Sensor (DTS) thermal
-readings of the processor package and processor cores that are
-accessible via the PECI interface.
+> From: Jason Gunthorpe via iommu
+> Sent: Tuesday, January 25, 2022 1:37 AM
+> > @@ -1295,7 +1298,7 @@ int iommu_page_response(struct device *dev,
+> >  			msg->pasid =3D 0;
+> >  		}
+> >
+> > -		ret =3D domain->ops->page_response(dev, evt, msg);
+> > +		ret =3D ops->page_response(dev, evt, msg);
+> >  		list_del(&evt->list);
+> >  		kfree(evt);
+> >  		break;
+>=20
+> Feels weird that page_response is not connected to a domain, the fault
+> originated from a domain after all. I would say this op should be
+> moved to the domain and the caller should provide the a pointer to the
+> domain that originated the fault.
+>=20
 
-The main use case for the driver (and PECI interface) is out-of-band
-management, where we're able to obtain the DTS readings from an external
-entity connected with PECI, e.g. BMC on server platforms.
+In concept yes.=20
 
-Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
----
- MAINTAINERS                  |   6 +
- drivers/hwmon/Kconfig        |   2 +
- drivers/hwmon/Makefile       |   1 +
- drivers/hwmon/peci/Kconfig   |  18 ++
- drivers/hwmon/peci/Makefile  |   5 +
- drivers/hwmon/peci/common.h  |  58 ++++
- drivers/hwmon/peci/cputemp.c | 592 +++++++++++++++++++++++++++++++++++
- 7 files changed, 682 insertions(+)
- create mode 100644 drivers/hwmon/peci/Kconfig
- create mode 100644 drivers/hwmon/peci/Makefile
- create mode 100644 drivers/hwmon/peci/common.h
- create mode 100644 drivers/hwmon/peci/cputemp.c
+But currently the entire sva path is not associated with domain. This was
+one mistake as we discussed in the cover letter. Before extending iommu
+domain to cover CPU page tables we may have to leave it in iommu_ops=20
+given this series is just for cleanup...
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7c31e29c885a..369ac3524f33 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15099,6 +15099,12 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/peaq-wmi.c
- 
-+PECI HARDWARE MONITORING DRIVERS
-+M:	Iwona Winiarska <iwona.winiarska@intel.com>
-+L:	linux-hwmon@vger.kernel.org
-+S:	Supported
-+F:	drivers/hwmon/peci/
-+
- PECI SUBSYSTEM
- M:	Iwona Winiarska <iwona.winiarska@intel.com>
- L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 8df25f1079ba..af6c3bd65ebd 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -1538,6 +1538,8 @@ config SENSORS_PCF8591
- 	  These devices are hard to detect and rarely found on mainstream
- 	  hardware. If unsure, say N.
- 
-+source "drivers/hwmon/peci/Kconfig"
-+
- source "drivers/hwmon/pmbus/Kconfig"
- 
- config SENSORS_PWM_FAN
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 185f946d698b..6139e5a5aa00 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -208,6 +208,7 @@ obj-$(CONFIG_SENSORS_WM8350)	+= wm8350-hwmon.o
- obj-$(CONFIG_SENSORS_XGENE)	+= xgene-hwmon.o
- 
- obj-$(CONFIG_SENSORS_OCC)	+= occ/
-+obj-$(CONFIG_SENSORS_PECI)	+= peci/
- obj-$(CONFIG_PMBUS)		+= pmbus/
- 
- ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
-diff --git a/drivers/hwmon/peci/Kconfig b/drivers/hwmon/peci/Kconfig
-new file mode 100644
-index 000000000000..e10eed68d70a
---- /dev/null
-+++ b/drivers/hwmon/peci/Kconfig
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+config SENSORS_PECI_CPUTEMP
-+	tristate "PECI CPU temperature monitoring client"
-+	depends on PECI
-+	select SENSORS_PECI
-+	select PECI_CPU
-+	help
-+	  If you say yes here you get support for the generic Intel PECI
-+	  cputemp driver which provides Digital Thermal Sensor (DTS) thermal
-+	  readings of the CPU package and CPU cores that are accessible via
-+	  the processor PECI interface.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called peci-cputemp.
-+
-+config SENSORS_PECI
-+	tristate
-diff --git a/drivers/hwmon/peci/Makefile b/drivers/hwmon/peci/Makefile
-new file mode 100644
-index 000000000000..e8a0ada5ab1f
---- /dev/null
-+++ b/drivers/hwmon/peci/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+peci-cputemp-y := cputemp.o
-+
-+obj-$(CONFIG_SENSORS_PECI_CPUTEMP)	+= peci-cputemp.o
-diff --git a/drivers/hwmon/peci/common.h b/drivers/hwmon/peci/common.h
-new file mode 100644
-index 000000000000..734506b0eca2
---- /dev/null
-+++ b/drivers/hwmon/peci/common.h
-@@ -0,0 +1,58 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2021 Intel Corporation */
-+
-+#include <linux/mutex.h>
-+#include <linux/types.h>
-+
-+#ifndef __PECI_HWMON_COMMON_H
-+#define __PECI_HWMON_COMMON_H
-+
-+#define PECI_HWMON_UPDATE_INTERVAL	HZ
-+
-+/**
-+ * struct peci_sensor_state - PECI state information
-+ * @valid: flag to indicate the sensor value is valid
-+ * @last_updated: time of the last update in jiffies
-+ * @lock: mutex to protect sensor access
-+ */
-+struct peci_sensor_state {
-+	bool valid;
-+	unsigned long last_updated;
-+	struct mutex lock; /* protect sensor access */
-+};
-+
-+/**
-+ * struct peci_sensor_data - PECI sensor information
-+ * @value: sensor value in milli units
-+ * @state: sensor update state
-+ */
-+
-+struct peci_sensor_data {
-+	s32 value;
-+	struct peci_sensor_state state;
-+};
-+
-+/**
-+ * peci_sensor_need_update() - check whether sensor update is needed or not
-+ * @sensor: pointer to sensor data struct
-+ *
-+ * Return: true if update is needed, false if not.
-+ */
-+
-+static inline bool peci_sensor_need_update(struct peci_sensor_state *state)
-+{
-+	return !state->valid ||
-+	       time_after(jiffies, state->last_updated + PECI_HWMON_UPDATE_INTERVAL);
-+}
-+
-+/**
-+ * peci_sensor_mark_updated() - mark the sensor is updated
-+ * @sensor: pointer to sensor data struct
-+ */
-+static inline void peci_sensor_mark_updated(struct peci_sensor_state *state)
-+{
-+	state->valid = true;
-+	state->last_updated = jiffies;
-+}
-+
-+#endif /* __PECI_HWMON_COMMON_H */
-diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
-new file mode 100644
-index 000000000000..12156328f5cf
---- /dev/null
-+++ b/drivers/hwmon/peci/cputemp.c
-@@ -0,0 +1,592 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2018-2021 Intel Corporation
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/hwmon.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
-+#include <linux/peci.h>
-+#include <linux/peci-cpu.h>
-+#include <linux/units.h>
-+
-+#include "common.h"
-+
-+#define CORE_NUMS_MAX		64
-+
-+#define BASE_CHANNEL_NUMS	5
-+#define CPUTEMP_CHANNEL_NUMS	(BASE_CHANNEL_NUMS + CORE_NUMS_MAX)
-+
-+#define TEMP_TARGET_FAN_TEMP_MASK	GENMASK(15, 8)
-+#define TEMP_TARGET_REF_TEMP_MASK	GENMASK(23, 16)
-+#define TEMP_TARGET_TJ_OFFSET_MASK	GENMASK(29, 24)
-+
-+#define DTS_MARGIN_MASK		GENMASK(15, 0)
-+#define PCS_MODULE_TEMP_MASK	GENMASK(15, 0)
-+
-+struct resolved_cores_reg {
-+	u8 bus;
-+	u8 dev;
-+	u8 func;
-+	u8 offset;
-+};
-+
-+struct cpu_info {
-+	struct resolved_cores_reg *reg;
-+	u8 min_peci_revision;
-+	s32 (*thermal_margin_to_millidegree)(u16 val);
-+};
-+
-+struct peci_temp_target {
-+	s32 tcontrol;
-+	s32 tthrottle;
-+	s32 tjmax;
-+	struct peci_sensor_state state;
-+};
-+
-+enum peci_temp_target_type {
-+	tcontrol_type,
-+	tthrottle_type,
-+	tjmax_type,
-+	crit_hyst_type,
-+};
-+
-+struct peci_cputemp {
-+	struct peci_device *peci_dev;
-+	struct device *dev;
-+	const char *name;
-+	const struct cpu_info *gen_info;
-+	struct {
-+		struct peci_temp_target target;
-+		struct peci_sensor_data die;
-+		struct peci_sensor_data dts;
-+		struct peci_sensor_data core[CORE_NUMS_MAX];
-+	} temp;
-+	const char **coretemp_label;
-+	DECLARE_BITMAP(core_mask, CORE_NUMS_MAX);
-+};
-+
-+enum cputemp_channels {
-+	channel_die,
-+	channel_dts,
-+	channel_tcontrol,
-+	channel_tthrottle,
-+	channel_tjmax,
-+	channel_core,
-+};
-+
-+static const char * const cputemp_label[BASE_CHANNEL_NUMS] = {
-+	"Die",
-+	"DTS",
-+	"Tcontrol",
-+	"Tthrottle",
-+	"Tjmax",
-+};
-+
-+static int update_temp_target(struct peci_cputemp *priv)
-+{
-+	s32 tthrottle_offset, tcontrol_margin;
-+	u32 pcs;
-+	int ret;
-+
-+	if (!peci_sensor_need_update(&priv->temp.target.state))
-+		return 0;
-+
-+	ret = peci_pcs_read(priv->peci_dev, PECI_PCS_TEMP_TARGET, 0, &pcs);
-+	if (ret)
-+		return ret;
-+
-+	priv->temp.target.tjmax =
-+		FIELD_GET(TEMP_TARGET_REF_TEMP_MASK, pcs) * MILLIDEGREE_PER_DEGREE;
-+
-+	tcontrol_margin = FIELD_GET(TEMP_TARGET_FAN_TEMP_MASK, pcs);
-+	tcontrol_margin = sign_extend32(tcontrol_margin, 7) * MILLIDEGREE_PER_DEGREE;
-+	priv->temp.target.tcontrol = priv->temp.target.tjmax - tcontrol_margin;
-+
-+	tthrottle_offset = FIELD_GET(TEMP_TARGET_TJ_OFFSET_MASK, pcs) * MILLIDEGREE_PER_DEGREE;
-+	priv->temp.target.tthrottle = priv->temp.target.tjmax - tthrottle_offset;
-+
-+	peci_sensor_mark_updated(&priv->temp.target.state);
-+
-+	return 0;
-+}
-+
-+static int get_temp_target(struct peci_cputemp *priv, enum peci_temp_target_type type, long *val)
-+{
-+	int ret;
-+
-+	mutex_lock(&priv->temp.target.state.lock);
-+
-+	ret = update_temp_target(priv);
-+	if (ret)
-+		goto unlock;
-+
-+	switch (type) {
-+	case tcontrol_type:
-+		*val = priv->temp.target.tcontrol;
-+		break;
-+	case tthrottle_type:
-+		*val = priv->temp.target.tthrottle;
-+		break;
-+	case tjmax_type:
-+		*val = priv->temp.target.tjmax;
-+		break;
-+	case crit_hyst_type:
-+		*val = priv->temp.target.tjmax - priv->temp.target.tcontrol;
-+		break;
-+	default:
-+		ret = -EOPNOTSUPP;
-+		break;
-+	}
-+unlock:
-+	mutex_unlock(&priv->temp.target.state.lock);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Error codes:
-+ *   0x8000: General sensor error
-+ *   0x8001: Reserved
-+ *   0x8002: Underflow on reading value
-+ *   0x8003-0x81ff: Reserved
-+ */
-+static bool dts_valid(u16 val)
-+{
-+	return val < 0x8000 || val > 0x81ff;
-+}
-+
-+/*
-+ * Processors return a value of DTS reading in S10.6 fixed point format
-+ * (16 bits: 10-bit signed magnitude, 6-bit fraction).
-+ */
-+static s32 dts_ten_dot_six_to_millidegree(u16 val)
-+{
-+	return sign_extend32(val, 15) * MILLIDEGREE_PER_DEGREE / 64;
-+}
-+
-+/*
-+ * For older processors, thermal margin reading is returned in S8.8 fixed
-+ * point format (16 bits: 8-bit signed magnitude, 8-bit fraction).
-+ */
-+static s32 dts_eight_dot_eight_to_millidegree(u16 val)
-+{
-+	return sign_extend32(val, 15) * MILLIDEGREE_PER_DEGREE / 256;
-+}
-+
-+static int get_die_temp(struct peci_cputemp *priv, long *val)
-+{
-+	int ret = 0;
-+	long tjmax;
-+	u16 temp;
-+
-+	mutex_lock(&priv->temp.die.state.lock);
-+	if (!peci_sensor_need_update(&priv->temp.die.state))
-+		goto skip_update;
-+
-+	ret = peci_temp_read(priv->peci_dev, &temp);
-+	if (ret)
-+		goto err_unlock;
-+
-+	if (!dts_valid(temp)) {
-+		ret = -EIO;
-+		goto err_unlock;
-+	}
-+
-+	ret = get_temp_target(priv, tjmax_type, &tjmax);
-+	if (ret)
-+		goto err_unlock;
-+
-+	priv->temp.die.value = (s32)tjmax + dts_ten_dot_six_to_millidegree(temp);
-+
-+	peci_sensor_mark_updated(&priv->temp.die.state);
-+
-+skip_update:
-+	*val = priv->temp.die.value;
-+err_unlock:
-+	mutex_unlock(&priv->temp.die.state.lock);
-+	return ret;
-+}
-+
-+static int get_dts(struct peci_cputemp *priv, long *val)
-+{
-+	int ret = 0;
-+	u16 thermal_margin;
-+	long tcontrol;
-+	u32 pcs;
-+
-+	mutex_lock(&priv->temp.dts.state.lock);
-+	if (!peci_sensor_need_update(&priv->temp.dts.state))
-+		goto skip_update;
-+
-+	ret = peci_pcs_read(priv->peci_dev, PECI_PCS_THERMAL_MARGIN, 0, &pcs);
-+	if (ret)
-+		goto err_unlock;
-+
-+	thermal_margin = FIELD_GET(DTS_MARGIN_MASK, pcs);
-+	if (!dts_valid(thermal_margin)) {
-+		ret = -EIO;
-+		goto err_unlock;
-+	}
-+
-+	ret = get_temp_target(priv, tcontrol_type, &tcontrol);
-+	if (ret)
-+		goto err_unlock;
-+
-+	/* Note that the tcontrol should be available before calling it */
-+	priv->temp.dts.value =
-+		(s32)tcontrol - priv->gen_info->thermal_margin_to_millidegree(thermal_margin);
-+
-+	peci_sensor_mark_updated(&priv->temp.dts.state);
-+
-+skip_update:
-+	*val = priv->temp.dts.value;
-+err_unlock:
-+	mutex_unlock(&priv->temp.dts.state.lock);
-+	return ret;
-+}
-+
-+static int get_core_temp(struct peci_cputemp *priv, int core_index, long *val)
-+{
-+	int ret = 0;
-+	u16 core_dts_margin;
-+	long tjmax;
-+	u32 pcs;
-+
-+	mutex_lock(&priv->temp.core[core_index].state.lock);
-+	if (!peci_sensor_need_update(&priv->temp.core[core_index].state))
-+		goto skip_update;
-+
-+	ret = peci_pcs_read(priv->peci_dev, PECI_PCS_MODULE_TEMP, core_index, &pcs);
-+	if (ret)
-+		goto err_unlock;
-+
-+	core_dts_margin = FIELD_GET(PCS_MODULE_TEMP_MASK, pcs);
-+	if (!dts_valid(core_dts_margin)) {
-+		ret = -EIO;
-+		goto err_unlock;
-+	}
-+
-+	ret = get_temp_target(priv, tjmax_type, &tjmax);
-+	if (ret)
-+		goto err_unlock;
-+
-+	/* Note that the tjmax should be available before calling it */
-+	priv->temp.core[core_index].value =
-+		(s32)tjmax + dts_ten_dot_six_to_millidegree(core_dts_margin);
-+
-+	peci_sensor_mark_updated(&priv->temp.core[core_index].state);
-+
-+skip_update:
-+	*val = priv->temp.core[core_index].value;
-+err_unlock:
-+	mutex_unlock(&priv->temp.core[core_index].state.lock);
-+	return ret;
-+}
-+
-+static int cputemp_read_string(struct device *dev, enum hwmon_sensor_types type,
-+			       u32 attr, int channel, const char **str)
-+{
-+	struct peci_cputemp *priv = dev_get_drvdata(dev);
-+
-+	if (attr != hwmon_temp_label)
-+		return -EOPNOTSUPP;
-+
-+	*str = channel < channel_core ?
-+		cputemp_label[channel] : priv->coretemp_label[channel - channel_core];
-+
-+	return 0;
-+}
-+
-+static int cputemp_read(struct device *dev, enum hwmon_sensor_types type,
-+			u32 attr, int channel, long *val)
-+{
-+	struct peci_cputemp *priv = dev_get_drvdata(dev);
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		switch (channel) {
-+		case channel_die:
-+			return get_die_temp(priv, val);
-+		case channel_dts:
-+			return get_dts(priv, val);
-+		case channel_tcontrol:
-+			return get_temp_target(priv, tcontrol_type, val);
-+		case channel_tthrottle:
-+			return get_temp_target(priv, tthrottle_type, val);
-+		case channel_tjmax:
-+			return get_temp_target(priv, tjmax_type, val);
-+		default:
-+			return get_core_temp(priv, channel - channel_core, val);
-+		}
-+		break;
-+	case hwmon_temp_max:
-+		return get_temp_target(priv, tcontrol_type, val);
-+	case hwmon_temp_crit:
-+		return get_temp_target(priv, tjmax_type, val);
-+	case hwmon_temp_crit_hyst:
-+		return get_temp_target(priv, crit_hyst_type, val);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static umode_t cputemp_is_visible(const void *data, enum hwmon_sensor_types type,
-+				  u32 attr, int channel)
-+{
-+	const struct peci_cputemp *priv = data;
-+
-+	if (channel > CPUTEMP_CHANNEL_NUMS)
-+		return 0;
-+
-+	if (channel < channel_core)
-+		return 0444;
-+
-+	if (test_bit(channel - channel_core, priv->core_mask))
-+		return 0444;
-+
-+	return 0;
-+}
-+
-+static int init_core_mask(struct peci_cputemp *priv)
-+{
-+	struct peci_device *peci_dev = priv->peci_dev;
-+	struct resolved_cores_reg *reg = priv->gen_info->reg;
-+	u64 core_mask;
-+	u32 data;
-+	int ret;
-+
-+	/* Get the RESOLVED_CORES register value */
-+	switch (peci_dev->info.model) {
-+	case INTEL_FAM6_ICELAKE_X:
-+	case INTEL_FAM6_ICELAKE_D:
-+		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
-+					     reg->func, reg->offset + 4, &data);
-+		if (ret)
-+			return ret;
-+
-+		core_mask = (u64)data << 32;
-+
-+		ret = peci_ep_pci_local_read(peci_dev, 0, reg->bus, reg->dev,
-+					     reg->func, reg->offset, &data);
-+		if (ret)
-+			return ret;
-+
-+		core_mask |= data;
-+
-+		break;
-+	default:
-+		ret = peci_pci_local_read(peci_dev, reg->bus, reg->dev,
-+					  reg->func, reg->offset, &data);
-+		if (ret)
-+			return ret;
-+
-+		core_mask = data;
-+
-+		break;
-+	}
-+
-+	if (!core_mask)
-+		return -EIO;
-+
-+	bitmap_from_u64(priv->core_mask, core_mask);
-+
-+	return 0;
-+}
-+
-+static int create_temp_label(struct peci_cputemp *priv)
-+{
-+	unsigned long core_max = find_last_bit(priv->core_mask, CORE_NUMS_MAX);
-+	int i;
-+
-+	priv->coretemp_label = devm_kzalloc(priv->dev, core_max * sizeof(char *), GFP_KERNEL);
-+	if (!priv->coretemp_label)
-+		return -ENOMEM;
-+
-+	for_each_set_bit(i, priv->core_mask, CORE_NUMS_MAX) {
-+		priv->coretemp_label[i] = devm_kasprintf(priv->dev, GFP_KERNEL, "Core %d", i);
-+		if (!priv->coretemp_label[i])
-+			return -ENOMEM;
-+	}
-+
-+	return 0;
-+}
-+
-+static void check_resolved_cores(struct peci_cputemp *priv)
-+{
-+	/*
-+	 * Failure to resolve cores is non-critical, we're still able to
-+	 * provide other sensor data.
-+	 */
-+
-+	if (init_core_mask(priv))
-+		return;
-+
-+	if (create_temp_label(priv))
-+		bitmap_zero(priv->core_mask, CORE_NUMS_MAX);
-+}
-+
-+static void sensor_init(struct peci_cputemp *priv)
-+{
-+	int i;
-+
-+	mutex_init(&priv->temp.target.state.lock);
-+	mutex_init(&priv->temp.die.state.lock);
-+	mutex_init(&priv->temp.dts.state.lock);
-+
-+	for_each_set_bit(i, priv->core_mask, CORE_NUMS_MAX)
-+		mutex_init(&priv->temp.core[i].state.lock);
-+}
-+
-+static const struct hwmon_ops peci_cputemp_ops = {
-+	.is_visible = cputemp_is_visible,
-+	.read_string = cputemp_read_string,
-+	.read = cputemp_read,
-+};
-+
-+static const u32 peci_cputemp_temp_channel_config[] = {
-+	/* Die temperature */
-+	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRIT_HYST,
-+	/* DTS margin */
-+	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT | HWMON_T_CRIT_HYST,
-+	/* Tcontrol temperature */
-+	HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_CRIT,
-+	/* Tthrottle temperature */
-+	HWMON_T_LABEL | HWMON_T_INPUT,
-+	/* Tjmax temperature */
-+	HWMON_T_LABEL | HWMON_T_INPUT,
-+	/* Core temperature - for all core channels */
-+	[channel_core ... CPUTEMP_CHANNEL_NUMS - 1] = HWMON_T_LABEL | HWMON_T_INPUT,
-+	0
-+};
-+
-+static const struct hwmon_channel_info peci_cputemp_temp_channel = {
-+	.type = hwmon_temp,
-+	.config = peci_cputemp_temp_channel_config,
-+};
-+
-+static const struct hwmon_channel_info *peci_cputemp_info[] = {
-+	&peci_cputemp_temp_channel,
-+	NULL
-+};
-+
-+static const struct hwmon_chip_info peci_cputemp_chip_info = {
-+	.ops = &peci_cputemp_ops,
-+	.info = peci_cputemp_info,
-+};
-+
-+static int peci_cputemp_probe(struct auxiliary_device *adev,
-+			      const struct auxiliary_device_id *id)
-+{
-+	struct device *dev = &adev->dev;
-+	struct peci_device *peci_dev = to_peci_device(dev->parent);
-+	struct peci_cputemp *priv;
-+	struct device *hwmon_dev;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->name = devm_kasprintf(dev, GFP_KERNEL, "peci_cputemp.cpu%d",
-+				    peci_dev->info.socket_id);
-+	if (!priv->name)
-+		return -ENOMEM;
-+
-+	priv->dev = dev;
-+	priv->peci_dev = peci_dev;
-+	priv->gen_info = (const struct cpu_info *)id->driver_data;
-+
-+	/*
-+	 * This is just a sanity check. Since we're using commands that are
-+	 * guaranteed to be supported on a given platform, we should never see
-+	 * revision lower than expected.
-+	 */
-+	if (peci_dev->info.peci_revision < priv->gen_info->min_peci_revision)
-+		dev_warn(priv->dev,
-+			 "Unexpected PECI revision %#x, some features may be unavailable\n",
-+			 peci_dev->info.peci_revision);
-+
-+	check_resolved_cores(priv);
-+
-+	sensor_init(priv);
-+
-+	hwmon_dev = devm_hwmon_device_register_with_info(priv->dev, priv->name,
-+							 priv, &peci_cputemp_chip_info, NULL);
-+
-+	return PTR_ERR_OR_ZERO(hwmon_dev);
-+}
-+
-+/*
-+ * RESOLVED_CORES PCI configuration register may have different location on
-+ * different platforms.
-+ */
-+static struct resolved_cores_reg resolved_cores_reg_hsx = {
-+	.bus = 1,
-+	.dev = 30,
-+	.func = 3,
-+	.offset = 0xb4,
-+};
-+
-+static struct resolved_cores_reg resolved_cores_reg_icx = {
-+	.bus = 14,
-+	.dev = 30,
-+	.func = 3,
-+	.offset = 0xd0,
-+};
-+
-+static const struct cpu_info cpu_hsx = {
-+	.reg		= &resolved_cores_reg_hsx,
-+	.min_peci_revision = 0x33,
-+	.thermal_margin_to_millidegree = &dts_eight_dot_eight_to_millidegree,
-+};
-+
-+static const struct cpu_info cpu_icx = {
-+	.reg		= &resolved_cores_reg_icx,
-+	.min_peci_revision = 0x40,
-+	.thermal_margin_to_millidegree = &dts_ten_dot_six_to_millidegree,
-+};
-+
-+static const struct auxiliary_device_id peci_cputemp_ids[] = {
-+	{
-+		.name = "peci_cpu.cputemp.hsx",
-+		.driver_data = (kernel_ulong_t)&cpu_hsx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.bdx",
-+		.driver_data = (kernel_ulong_t)&cpu_hsx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.bdxd",
-+		.driver_data = (kernel_ulong_t)&cpu_hsx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.skx",
-+		.driver_data = (kernel_ulong_t)&cpu_hsx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.icx",
-+		.driver_data = (kernel_ulong_t)&cpu_icx,
-+	},
-+	{
-+		.name = "peci_cpu.cputemp.icxd",
-+		.driver_data = (kernel_ulong_t)&cpu_icx,
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(auxiliary, peci_cputemp_ids);
-+
-+static struct auxiliary_driver peci_cputemp_driver = {
-+	.probe		= peci_cputemp_probe,
-+	.id_table	= peci_cputemp_ids,
-+};
-+
-+module_auxiliary_driver(peci_cputemp_driver);
-+
-+MODULE_AUTHOR("Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>");
-+MODULE_AUTHOR("Iwona Winiarska <iwona.winiarska@intel.com>");
-+MODULE_DESCRIPTION("PECI cputemp driver");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PECI_CPU);
--- 
-2.31.1
-
+Thanks
+Kevin

@@ -2,106 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A8E49A7FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAC949A7FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1315717AbiAYCyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:54:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50435 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S3407874AbiAYAVG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:21:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643070064;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ntjy8+chLJCGytFKA8pelsB5b8BrXmYg/+6iLbMlUec=;
-        b=NRI2RGiRoKkpeY+/Vz6gJ/rFEgGa7NH9YjtpjyKPw2ovKmHtEmkoulrPh9Vw8EPGgUSnQ6
-        J1mGFCaQBM5zps74scpKQxnpq9dqcrEu95IpfW+xYZrydjOr9ncprIeu/wFkf70eSQm1i/
-        jVvWr4tf+M2Gb/gZFLWKCDaCmb4xuAk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-175-kfJhdSBqNVeQGWVao-GqBA-1; Mon, 24 Jan 2022 19:21:00 -0500
-X-MC-Unique: kfJhdSBqNVeQGWVao-GqBA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AB341100CCF2;
-        Tue, 25 Jan 2022 00:20:59 +0000 (UTC)
-Received: from agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (agk-cloud1.hosts.prod.upshift.rdu2.redhat.com [10.0.13.154])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B3E05F90F;
-        Tue, 25 Jan 2022 00:20:25 +0000 (UTC)
-Received: by agk-cloud1.hosts.prod.upshift.rdu2.redhat.com (Postfix, from userid 3883)
-        id CDF2F424F088; Tue, 25 Jan 2022 00:20:25 +0000 (GMT)
-Date:   Tue, 25 Jan 2022 00:20:25 +0000
-From:   Alasdair G Kergon <agk@redhat.com>
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dm: introduce a no open flag for deferred remove
-Message-ID: <20220125002025.GA21887@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
-Mail-Followup-To: Brian Geffon <bgeffon@google.com>,
-        Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
-        dm-devel@redhat.com, LKML <linux-kernel@vger.kernel.org>
-References: <20220124150209.22202-1-bgeffon@google.com>
- <20220124151434.GB20331@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
- <CADyq12ykDCswWZw05OdyYfP-zT6afuhXbckii1m1egQ2fSwB4w@mail.gmail.com>
+        id S1315694AbiAYCx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 21:53:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:59140 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2375567AbiAYAUi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 19:20:38 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BB891FB;
+        Mon, 24 Jan 2022 16:20:33 -0800 (PST)
+Received: from [10.57.68.26] (unknown [10.57.68.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E31B3F793;
+        Mon, 24 Jan 2022 16:20:30 -0800 (PST)
+Message-ID: <363b8f7d-5459-0d19-c1ac-a2c6bce9d26f@arm.com>
+Date:   Tue, 25 Jan 2022 00:20:26 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADyq12ykDCswWZw05OdyYfP-zT6afuhXbckii1m1egQ2fSwB4w@mail.gmail.com>
-Organization: Red Hat UK Ltd. Registered in England and Wales, number
- 03798903. Registered Office: Amberley Place, 107-111 Peascod Street,
- Windsor, Berkshire, SL4 1TE.
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 6/7] iommu: Use right way to retrieve iommu_ops
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>
+Cc:     David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
+ <20220124071103.2097118-7-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220124071103.2097118-7-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 10:25:47AM -0500, Brian Geffon wrote:
-> Thank you for looking at this. There are a few reasons this might be
-> useful, the first is if you're trying to speed up a graceful teardown
-> of the device by informing userspace that this device is going to be
-> removed in the near future. Another might be on systems where it might
-> be worthwhile to not have users with CAP_DAC_OVERRIDE be able to open
-> the device. The logic on this second case is that, suppose you have a
-> dm-crypt block device which is backing swap, the data on this device
-> is ephemeral so a flow might be to setup swap followed by dmsetup
-> remove --deferred /dev/mapper/encrypted-swap. This will guarantee that
-> as soon as swap is torn down the encrypted block device is dropped,
-> additionally with this new flag you'll be guaranteed that there can be
-> no further opens on it.
- 
-And is that the reason you propose this?
-- You want a special exclusive 'one time open' device that 
-  self-destructs when closed?
+On 2022-01-24 07:11, Lu Baolu wrote:
+> The common iommu_ops is hooked to both device and domain. When a helper
+> has both device and domain pointer, the way to get the iommu_ops looks
+> messy in iommu core. This sorts out the way to get iommu_ops. The device
+> related helpers go through device pointer, while the domain related ones
+> go through domain pointer.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>   include/linux/iommu.h |  8 ++++++++
+>   drivers/iommu/iommu.c | 25 ++++++++++++++-----------
+>   2 files changed, 22 insertions(+), 11 deletions(-)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index aa5486243892..111b3e9c79bb 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -385,6 +385,14 @@ static inline void iommu_iotlb_gather_init(struct iommu_iotlb_gather *gather)
+>   	};
+>   }
+>   
+> +static inline const struct iommu_ops *dev_iommu_ops_get(struct device *dev)
+> +{
+> +	if (dev && dev->iommu && dev->iommu->iommu_dev)
+> +		return dev->iommu->iommu_dev->ops;
+> +
+> +	return NULL;
 
-> No, this is fully backwards compatible with the current deferred
-> remove behavior, it's not required. Additionally, since on the actual
-> remove userspace would receive an -ENXIO already once the remove
-> process has started it seems reasonable to return -ENXIO in the
-> deferred remove case when this flag is enabled.
- 
-Well I feel it does break existing semantics which is why we wrote
-the code the way we did.  The state can be long-lived, the code
-that has it open might legitimately want to open it again in
-parallel etc. - in general this seems a bad idea.
+This probably warrants at least a WARN, but it's arguable to just assume 
+that valid ops must be installed if iommu_probe_device() has succeeded. 
+The device ops are essentially for internal use within the IOMMU 
+subsystem itself, so we should be able to trust ourselves not to misuse 
+the helper.
 
-But if the reason for this is basically "make it harder for 
-anything else to access my encrypted swap" and to deliberately
-prevent access, then let's approach the requirement from that angle.
-Are there alternative implementations with interventions at different
-points?  Are there similar requirements for devices that don't need
-deferred remove?  If this is indeed the best place to insert this type
-of restriction, then we should label it and document it accordingly so
-people don't mistakenly use it for the 'normal' case.  (We always keep
-libdevmapper and dmsetup in sync with kernel interface extensions, so
-we'd seek a tiny patch to do that too.)
+> +}
+> +
+>   #define IOMMU_BUS_NOTIFY_PRIORITY		0
+>   #define IOMMU_GROUP_NOTIFY_ADD_DEVICE		1 /* Device added */
+>   #define IOMMU_GROUP_NOTIFY_DEL_DEVICE		2 /* Pre Device removed */
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 5230c6d90ece..6631e2ea44df 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -764,6 +764,7 @@ EXPORT_SYMBOL_GPL(iommu_group_set_name);
+>   static int iommu_create_device_direct_mappings(struct iommu_group *group,
+>   					       struct device *dev)
+>   {
+> +	const struct iommu_ops *ops = dev_iommu_ops_get(dev);
+>   	struct iommu_domain *domain = group->default_domain;
+>   	struct iommu_resv_region *entry;
+>   	struct list_head mappings;
+> @@ -785,8 +786,8 @@ static int iommu_create_device_direct_mappings(struct iommu_group *group,
+>   		dma_addr_t start, end, addr;
+>   		size_t map_size = 0;
+>   
+> -		if (domain->ops->apply_resv_region)
+> -			domain->ops->apply_resv_region(dev, domain, entry);
+> +		if (ops->apply_resv_region)
+> +			ops->apply_resv_region(dev, domain, entry);
 
-Alasdair
+Strictly I think this was a domain op, as it was about reserving the 
+IOVA range in the given DMA domain. Also taking the domain as an 
+argument is a bit of a giveaway. However it's now just dead code either 
+way since there are no remaining implementations, and no reason for any 
+new ones.
 
+>   
+>   		start = ALIGN(entry->start, pg_size);
+>   		end   = ALIGN(entry->start + entry->length, pg_size);
+> @@ -831,8 +832,10 @@ static int iommu_create_device_direct_mappings(struct iommu_group *group,
+>   static bool iommu_is_attach_deferred(struct iommu_domain *domain,
+>   				     struct device *dev)
+>   {
+> -	if (domain->ops->is_attach_deferred)
+> -		return domain->ops->is_attach_deferred(domain, dev);
+> +	const struct iommu_ops *ops = dev_iommu_ops_get(dev);
+> +
+> +	if (ops->is_attach_deferred)
+> +		return ops->is_attach_deferred(domain, dev);
+
+Similarly if this takes a domain as its first argument then it's de 
+facto a domain method. However, I'd concur that logically it *is* a 
+device op, so let's drop that (unused) domain argument if we're cleaning up.
+
+Maybe there's even an argument for factoring this out to a standard flag 
+in dev_iommu rather than an op at all?
+
+The others covered here look OK - we can blame PCI for page response 
+being weirdly device-centric - however could we also convert all the 
+feasible instances of dev->bus->iommu_ops to dev_iommu_ops() as well? 
+(Subtly implying that I'm also not a fan of having "_get" in the name 
+for a non-refcounted lookup...) Obviously iommu_probe_device() and 
+iommmu_domain_alloc() still need bus ops at this point, but I'm working 
+on that... :)
+
+Thanks,
+Robin.
+
+>   	return false;
+>   }
+> @@ -1251,10 +1254,10 @@ int iommu_page_response(struct device *dev,
+>   	struct iommu_fault_event *evt;
+>   	struct iommu_fault_page_request *prm;
+>   	struct dev_iommu *param = dev->iommu;
+> +	const struct iommu_ops *ops = dev_iommu_ops_get(dev);
+>   	bool has_pasid = msg->flags & IOMMU_PAGE_RESP_PASID_VALID;
+> -	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+>   
+> -	if (!domain || !domain->ops->page_response)
+> +	if (!ops || !ops->page_response)
+>   		return -ENODEV;
+>   
+>   	if (!param || !param->fault_param)
+> @@ -1295,7 +1298,7 @@ int iommu_page_response(struct device *dev,
+>   			msg->pasid = 0;
+>   		}
+>   
+> -		ret = domain->ops->page_response(dev, evt, msg);
+> +		ret = ops->page_response(dev, evt, msg);
+>   		list_del(&evt->list);
+>   		kfree(evt);
+>   		break;
+> @@ -1758,10 +1761,10 @@ static int __iommu_group_dma_attach(struct iommu_group *group)
+>   
+>   static int iommu_group_do_probe_finalize(struct device *dev, void *data)
+>   {
+> -	struct iommu_domain *domain = data;
+> +	const struct iommu_ops *ops = dev_iommu_ops_get(dev);
+>   
+> -	if (domain->ops->probe_finalize)
+> -		domain->ops->probe_finalize(dev);
+> +	if (ops->probe_finalize)
+> +		ops->probe_finalize(dev);
+>   
+>   	return 0;
+>   }
+> @@ -2020,7 +2023,7 @@ EXPORT_SYMBOL_GPL(iommu_attach_device);
+>   
+>   int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+>   {
+> -	const struct iommu_ops *ops = domain->ops;
+> +	const struct iommu_ops *ops = dev_iommu_ops_get(dev);
+>   
+>   	if (ops->is_attach_deferred && ops->is_attach_deferred(domain, dev))
+>   		return __iommu_attach_device(domain, dev);

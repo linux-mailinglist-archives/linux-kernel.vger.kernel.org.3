@@ -2,228 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF68E49B545
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D53549B52E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577531AbiAYNmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:42:03 -0500
-Received: from mga02.intel.com ([134.134.136.20]:49990 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1382648AbiAYNjV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:39:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643117961; x=1674653961;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D7hlzJPeHygbU5POvuC9qTcjfzuKUzeZK78Zs9FRQi0=;
-  b=goYer07lq7U2EKLxGcmwq3KzIYb6BjmoFNTNf6YyUIPmTOT9t57ZRuCU
-   Apn8mPw9DojBSJ6lD3t45GCGsFnw3aJtuwHvjBfjD202F8mcj26ue6A0R
-   ANKd7vAuo7gCOE7qNMCA7xCPMaRhNL9nJobr0alT1xoQrYHg/6k3mPmh8
-   9wgpvgwAE85B2zVro3BzmGduzDUsNFQ5DlFwIXye9s+lne+hW9om4Xvlm
-   nf2PuGAuI6/+bhriCg5S1iAr7kJ6VihxF9fzM0O0e7fJ3HNaafEbQoDaK
-   7fjEjsjzI6Q7yqI8Jwe122hCY3efz3YWetPVNvaPpjV+qUAkM1btVylN3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="233669662"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="233669662"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 05:32:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="627928236"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 25 Jan 2022 05:31:57 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCLvQ-000Jwk-AH; Tue, 25 Jan 2022 13:31:56 +0000
-Date:   Tue, 25 Jan 2022 21:31:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Iwona Winiarska <iwona.winiarska@intel.com>,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>
-Subject: Re: [PATCH v6 05/13] peci: Add peci-aspeed controller driver
-Message-ID: <202201252130.U4qxBhmg-lkp@intel.com>
-References: <20220125011104.2480133-6-iwona.winiarska@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125011104.2480133-6-iwona.winiarska@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1387380AbiAYNeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1381875AbiAYNbq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 08:31:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA780C061401
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:31:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2A73B81808
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 13:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57BFFC340E0;
+        Tue, 25 Jan 2022 13:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643117500;
+        bh=VFFdhBpsOtOA9gLsN7npiOLz+ztAhun2ZxBpU+Q5C64=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kC2Xu95kvANS/QX2cmpTb2ymReoAJy0TIn8BhL+cSLQmbNUu7Ug5q9QvMNLV/ttix
+         Gg3LEhnG9TraPICGKuAQUMDeXVsFgQGpq/0v9UfGvFjn3zvF27JPAGxf3/fvPisbWK
+         5KPywb2bwEXeWcYd4welhKPUfFpP8ridVFWk9PM+Hk+/0CYLQLmqmTO/gj887LI45D
+         nT4E5Qg/656ewOFWjfXjzO7El5UxbJlrnphj6Zrcezre3zmtlIixFOfjd3WgJMvTCI
+         x8G+Okb7nq5Gba33paDMkYJzs2c65ZXh8rRk+0QALBhStNNAq7skPsxJ7iV7YjbPlp
+         a3PDNNbLv/bmw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nCLv8-002uqs-C5; Tue, 25 Jan 2022 13:31:38 +0000
+Date:   Tue, 25 Jan 2022 13:31:38 +0000
+Message-ID: <87sftc6ix1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     <tglx@linutronix.de>, <linux-kernel@vger.kernel.org>,
+        <guohanjun@huawei.com>, John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH] irqchip/gic-v3-its: Select housekeeping CPUs preferentially for managed IRQs
+In-Reply-To: <12ac7447-34dc-8497-b608-ada5a2ba17c4@huawei.com>
+References: <20220124073440.88598-1-wangxiongfeng2@huawei.com>
+        <87a6fl8jgb.wl-maz@kernel.org>
+        <12ac7447-34dc-8497-b608-ada5a2ba17c4@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: wangxiongfeng2@huawei.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, john.garry@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Iwona,
+On Tue, 25 Jan 2022 12:49:20 +0000,
+Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
+> 
+> Hi Marc,
+> 
+> On 2022/1/24 19:24, Marc Zyngier wrote:
+> > + John Garry, as he was reporting issues around the same piece of code[1]
+> > 
+> > On Mon, 24 Jan 2022 07:34:40 +0000,
+> > Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
+> >>
+> >> When using kernel parameter 'isolcpus=managed_irq,xxxx' to bind the
+> >> managed IRQs to housekeeping CPUs, the effective_affinity sometimes
+> >> still contains the non-housekeeping CPUs.
+> >>
+> >> irq_do_set_affinity() passes the housekeeping cpumask to
+> >> chip->irq_set_affinity(), but ITS driver select CPU according to
+> >> irq_common_data->affinity. While 'irq_common_data->affinity' is updated
+> >> after chip->irq_set_affinity() is called in irq_do_set_affinity(). Also
+> >> 'irq_common_data->affinity' may contains non-housekeeping CPUs. I found
+> >> the below link explaining the reason.
+> >>   https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2267032.html
+> >>
+> >> To modify CPU selecting logic to prefer housekeeping CPUs, select CPU
+> >> from the input cpumask parameter first. If none of it is online, then
+> >> select CPU from 'irq_common_data->affinity'.
+> >>
+> >> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> >> ---
+> >>  drivers/irqchip/irq-gic-v3-its.c | 5 ++++-
+> >>  1 file changed, 4 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> >> index d25b7a864bbb..17c15d3b2784 100644
+> >> --- a/drivers/irqchip/irq-gic-v3-its.c
+> >> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> >> @@ -1624,7 +1624,10 @@ static int its_select_cpu(struct irq_data *d,
+> >>  
+> >>  		cpu = cpumask_pick_least_loaded(d, tmpmask);
+> >>  	} else {
+> >> -		cpumask_and(tmpmask, irq_data_get_affinity_mask(d), cpu_online_mask);
+> >> +		cpumask_and(tmpmask, aff_mask, cpu_online_mask);
+> >> +		if (cpumask_empty(tmpmask))
+> >> +			cpumask_and(tmpmask, irq_data_get_affinity_mask(d),
+> >> +				    cpu_online_mask);
+> > 
+> > I think that the online_cpu_mask logical and is a bit wrong. A managed
+> > interrupt should be able to target an offline CPU:
+> > 
+> > diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> > index eb0882d15366..0cea46bdaf99 100644
+> > --- a/drivers/irqchip/irq-gic-v3-its.c
+> > +++ b/drivers/irqchip/irq-gic-v3-its.c
+> > @@ -1620,7 +1620,7 @@ static int its_select_cpu(struct irq_data *d,
+> >  
+> >  		cpu = cpumask_pick_least_loaded(d, tmpmask);
+> >  	} else {
+> > -		cpumask_and(tmpmask, irq_data_get_affinity_mask(d), cpu_online_mask);
+> > +		cpumask_copy(tmpmask, aff_mask);
+> >  
+> >  		/* If we cannot cross sockets, limit the search to that node */
+> >  		if ((its_dev->its->flags & ITS_FLAGS_WORKAROUND_CAVIUM_23144) &&
+> 
+> I have tested the above modification with 'maxcpus=1' kernel parameter and got
+> the following CallTrace.
+> 
+> [   14.679493][    T5] pstate: 204000c9 (nzCv daIF +PAN -UAO -TCO -DIT -SSBS
+> BTYPE=--)
+> [   14.687114][    T5] pc : lpi_update_config+0xe0/0x300
+> [   14.692146][    T5] lr : lpi_update_config+0x3c/0x300
 
-Thank you for the patch! Yet something to improve:
+That's a problem similar to what John was seeing: the CPU isn't there,
+and a lot of stuff goes very wrong in the absence of a CPU targeted by
+a managed interrupt.
 
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linux/master linus/master v5.17-rc1 next-20220125]
-[cannot apply to joel-aspeed/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > We still have an issue when the system hasn't booted with all its
+> > CPUs, as the corresponding collections aren't initialised and we
+> > end-up in a rather bad place.
+> 
+> Shall we fix this 'effective CPU of managed IRQs is not housekeeping
+> CPU' issue first, or we will wait until the 'maxcpus=1' issue is
+> fixed.
 
-url:    https://github.com/0day-ci/linux/commits/Iwona-Winiarska/Introduce-PECI-subsystem/20220125-115946
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220125/202201252130.U4qxBhmg-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/35075a61a26913806122a9b500915dc66ad678bd
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Iwona-Winiarska/Introduce-PECI-subsystem/20220125-115946
-        git checkout 35075a61a26913806122a9b500915dc66ad678bd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/
+I this we need to address this first. There is no point in only half
+fixing it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks,
 
-All errors (new ones prefixed by >>):
+	M.
 
->> drivers/clk/clk.c:856:6: error: redefinition of 'clk_unprepare'
-     856 | void clk_unprepare(struct clk *clk)
-         |      ^~~~~~~~~~~~~
-   In file included from drivers/clk/clk.c:9:
-   include/linux/clk.h:303:20: note: previous definition of 'clk_unprepare' with type 'void(struct clk *)'
-     303 | static inline void clk_unprepare(struct clk *clk)
-         |                    ^~~~~~~~~~~~~
->> drivers/clk/clk.c:937:5: error: redefinition of 'clk_prepare'
-     937 | int clk_prepare(struct clk *clk)
-         |     ^~~~~~~~~~~
-   In file included from drivers/clk/clk.c:9:
-   include/linux/clk.h:271:19: note: previous definition of 'clk_prepare' with type 'int(struct clk *)'
-     271 | static inline int clk_prepare(struct clk *clk)
-         |                   ^~~~~~~~~~~
->> drivers/clk/clk.c:1183:6: error: redefinition of 'clk_is_enabled_when_prepared'
-    1183 | bool clk_is_enabled_when_prepared(struct clk *clk)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/clk/clk.c:9:
-   include/linux/clk.h:284:20: note: previous definition of 'clk_is_enabled_when_prepared' with type 'bool(struct clk *)' {aka '_Bool(struct clk *)'}
-     284 | static inline bool clk_is_enabled_when_prepared(struct clk *clk)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for COMMON_CLK
-   Depends on !HAVE_LEGACY_CLK
-   Selected by
-   - PECI_ASPEED && PECI && (ARCH_ASPEED || COMPILE_TEST && OF && HAS_IOMEM
-
-
-vim +/clk_unprepare +856 drivers/clk/clk.c
-
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  844  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  845  /**
-4dff95dc9477a3 Stephen Boyd     2015-04-30  846   * clk_unprepare - undo preparation of a clock source
-4dff95dc9477a3 Stephen Boyd     2015-04-30  847   * @clk: the clk being unprepared
-4dff95dc9477a3 Stephen Boyd     2015-04-30  848   *
-4dff95dc9477a3 Stephen Boyd     2015-04-30  849   * clk_unprepare may sleep, which differentiates it from clk_disable.  In a
-4dff95dc9477a3 Stephen Boyd     2015-04-30  850   * simple case, clk_unprepare can be used instead of clk_disable to gate a clk
-4dff95dc9477a3 Stephen Boyd     2015-04-30  851   * if the operation may sleep.  One example is a clk which is accessed over
-4dff95dc9477a3 Stephen Boyd     2015-04-30  852   * I2c.  In the complex case a clk gate operation may require a fast and a slow
-4dff95dc9477a3 Stephen Boyd     2015-04-30  853   * part.  It is this reason that clk_unprepare and clk_disable are not mutually
-4dff95dc9477a3 Stephen Boyd     2015-04-30  854   * exclusive.  In fact clk_disable must be called before clk_unprepare.
-4dff95dc9477a3 Stephen Boyd     2015-04-30  855   */
-4dff95dc9477a3 Stephen Boyd     2015-04-30 @856  void clk_unprepare(struct clk *clk)
-b2476490ef1113 Mike Turquette   2012-03-15  857  {
-4dff95dc9477a3 Stephen Boyd     2015-04-30  858  	if (IS_ERR_OR_NULL(clk))
-4dff95dc9477a3 Stephen Boyd     2015-04-30  859  		return;
-b2476490ef1113 Mike Turquette   2012-03-15  860  
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  861  	clk_core_unprepare_lock(clk->core);
-1e435256d625c2 Olof Johansson   2013-04-27  862  }
-4dff95dc9477a3 Stephen Boyd     2015-04-30  863  EXPORT_SYMBOL_GPL(clk_unprepare);
-1e435256d625c2 Olof Johansson   2013-04-27  864  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  865  static int clk_core_prepare(struct clk_core *core)
-4dff95dc9477a3 Stephen Boyd     2015-04-30  866  {
-4dff95dc9477a3 Stephen Boyd     2015-04-30  867  	int ret = 0;
-b2476490ef1113 Mike Turquette   2012-03-15  868  
-a63347251907d7 Stephen Boyd     2015-05-06  869  	lockdep_assert_held(&prepare_lock);
-a63347251907d7 Stephen Boyd     2015-05-06  870  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  871  	if (!core)
-4dff95dc9477a3 Stephen Boyd     2015-04-30  872  		return 0;
-b2476490ef1113 Mike Turquette   2012-03-15  873  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  874  	if (core->prepare_count == 0) {
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  875  		ret = clk_pm_runtime_get(core);
-4dff95dc9477a3 Stephen Boyd     2015-04-30  876  		if (ret)
-4dff95dc9477a3 Stephen Boyd     2015-04-30  877  			return ret;
-b2476490ef1113 Mike Turquette   2012-03-15  878  
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  879  		ret = clk_core_prepare(core->parent);
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  880  		if (ret)
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  881  			goto runtime_put;
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  882  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  883  		trace_clk_prepare(core);
-1c155b3dfe0835 Ulf Hansson      2013-03-12  884  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  885  		if (core->ops->prepare)
-4dff95dc9477a3 Stephen Boyd     2015-04-30  886  			ret = core->ops->prepare(core->hw);
-1c155b3dfe0835 Ulf Hansson      2013-03-12  887  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  888  		trace_clk_prepare_complete(core);
-b2476490ef1113 Mike Turquette   2012-03-15  889  
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  890  		if (ret)
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  891  			goto unprepare;
-b2476490ef1113 Mike Turquette   2012-03-15  892  	}
-b2476490ef1113 Mike Turquette   2012-03-15  893  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  894  	core->prepare_count++;
-b2476490ef1113 Mike Turquette   2012-03-15  895  
-9461f7b33d11cb Jerome Brunet    2018-06-19  896  	/*
-9461f7b33d11cb Jerome Brunet    2018-06-19  897  	 * CLK_SET_RATE_GATE is a special case of clock protection
-9461f7b33d11cb Jerome Brunet    2018-06-19  898  	 * Instead of a consumer claiming exclusive rate control, it is
-9461f7b33d11cb Jerome Brunet    2018-06-19  899  	 * actually the provider which prevents any consumer from making any
-9461f7b33d11cb Jerome Brunet    2018-06-19  900  	 * operation which could result in a rate change or rate glitch while
-9461f7b33d11cb Jerome Brunet    2018-06-19  901  	 * the clock is prepared.
-9461f7b33d11cb Jerome Brunet    2018-06-19  902  	 */
-9461f7b33d11cb Jerome Brunet    2018-06-19  903  	if (core->flags & CLK_SET_RATE_GATE)
-9461f7b33d11cb Jerome Brunet    2018-06-19  904  		clk_core_rate_protect(core);
-9461f7b33d11cb Jerome Brunet    2018-06-19  905  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  906  	return 0;
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  907  unprepare:
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  908  	clk_core_unprepare(core->parent);
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  909  runtime_put:
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  910  	clk_pm_runtime_put(core);
-9a34b45397e5a3 Marek Szyprowski 2017-08-21  911  	return ret;
-b2476490ef1113 Mike Turquette   2012-03-15  912  }
-b2476490ef1113 Mike Turquette   2012-03-15  913  
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  914  static int clk_core_prepare_lock(struct clk_core *core)
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  915  {
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  916  	int ret;
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  917  
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  918  	clk_prepare_lock();
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  919  	ret = clk_core_prepare(core);
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  920  	clk_prepare_unlock();
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  921  
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  922  	return ret;
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  923  }
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  924  
-4dff95dc9477a3 Stephen Boyd     2015-04-30  925  /**
-4dff95dc9477a3 Stephen Boyd     2015-04-30  926   * clk_prepare - prepare a clock source
-4dff95dc9477a3 Stephen Boyd     2015-04-30  927   * @clk: the clk being prepared
-4dff95dc9477a3 Stephen Boyd     2015-04-30  928   *
-4dff95dc9477a3 Stephen Boyd     2015-04-30  929   * clk_prepare may sleep, which differentiates it from clk_enable.  In a simple
-4dff95dc9477a3 Stephen Boyd     2015-04-30  930   * case, clk_prepare can be used instead of clk_enable to ungate a clk if the
-4dff95dc9477a3 Stephen Boyd     2015-04-30  931   * operation may sleep.  One example is a clk which is accessed over I2c.  In
-4dff95dc9477a3 Stephen Boyd     2015-04-30  932   * the complex case a clk ungate operation may require a fast and a slow part.
-4dff95dc9477a3 Stephen Boyd     2015-04-30  933   * It is this reason that clk_prepare and clk_enable are not mutually
-4dff95dc9477a3 Stephen Boyd     2015-04-30  934   * exclusive.  In fact clk_prepare must be called before clk_enable.
-4dff95dc9477a3 Stephen Boyd     2015-04-30  935   * Returns 0 on success, -EERROR otherwise.
-4dff95dc9477a3 Stephen Boyd     2015-04-30  936   */
-4dff95dc9477a3 Stephen Boyd     2015-04-30 @937  int clk_prepare(struct clk *clk)
-b2476490ef1113 Mike Turquette   2012-03-15  938  {
-035a61c314eb3d Tomeu Vizoso     2015-01-23  939  	if (!clk)
-4dff95dc9477a3 Stephen Boyd     2015-04-30  940  		return 0;
-035a61c314eb3d Tomeu Vizoso     2015-01-23  941  
-a6adc30ba7bef8 Dong Aisheng     2016-06-30  942  	return clk_core_prepare_lock(clk->core);
-7ef3dcc8145263 James Hogan      2013-07-29  943  }
-4dff95dc9477a3 Stephen Boyd     2015-04-30  944  EXPORT_SYMBOL_GPL(clk_prepare);
-035a61c314eb3d Tomeu Vizoso     2015-01-23  945  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Without deviation from the norm, progress is not possible.

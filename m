@@ -2,114 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6893949AE33
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E23349AE06
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1451384AbiAYIhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:37:52 -0500
-Received: from mga07.intel.com ([134.134.136.100]:16141 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1450276AbiAYIc6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:32:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643099578; x=1674635578;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PJYavozYdAkdPl4SALbJVcV0klynjxDcedKqP+BV1no=;
-  b=OL3WshurAOgS+G3BIMyyWaVpKXioeLTaRMTOn/JnoZZYFZujZXAfTykT
-   x2QqHZIu9epNkpMNGdY4eMhwOVV9Po37jPbeBXRkrPnc2KUsVrKeWObTy
-   EqzYLVpntcHzcXF7ucMEdzPpiTxn+knxV/cTwUrqpPHY3yNRsbCxR5RQr
-   FNoK5+3cSMISokQWPJ7AaxuYNvITjxozIb51+T3C/GlJYYBCwvg6+R/YA
-   +MBRttXTT6UmadeM++DBzLKbgX/h/KStH69wkabMF5s9lODc+heDA9i2V
-   wRSyQ6ENDVQgla74rOuftaMmQjAK9K3NFpt3gX+iMycddZHo987tBFPss
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="309570663"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="309570663"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 00:28:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="479409002"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2022 00:28:31 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCHBn-000JZc-7p; Tue, 25 Jan 2022 08:28:31 +0000
-Date:   Tue, 25 Jan 2022 16:27:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
-Cc:     kbuild-all@lists.01.org, dan.carpenter@oracle.com,
-        Larry.Finger@lwfinger.net, straube.linux@gmail.com,
-        martin@kaiser.cx, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, paskripkin@gmail.com
-Subject: Re: [PATCH 04/10] staging: r8188eu: remove all DBG_88E calls from
- hal dir
-Message-ID: <202201251642.5tYQO4Fb-lkp@intel.com>
-References: <20220124224415.831-5-phil@philpotter.co.uk>
+        id S1450703AbiAYIa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:30:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52849 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1450455AbiAYI15 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 03:27:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643099276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xGAGC8ZSjobiyDfU0CWYjPdtebj6fAowX1E7dpabtwo=;
+        b=h7srgkEhudQxcGQNpJ+7hgupuIc4FXN8lolhOR6S/6j5/QlNnL7ihaznqtUynbwGFSX0q4
+        93hvRpP+EH+9pWQkGyfHcvsx6fdsE0jsPE3gKxB+u5+lC3RB0J5O7qRyLDh3RSIKv0frr7
+        TCru7mzCYC0PsUp6XDbD/3Mcv5os7j4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-614-C55O4mNcNXeIY76bicNTVw-1; Tue, 25 Jan 2022 03:27:55 -0500
+X-MC-Unique: C55O4mNcNXeIY76bicNTVw-1
+Received: by mail-ed1-f69.google.com with SMTP id w3-20020a50c443000000b0040696821132so7480194edf.22
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 00:27:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xGAGC8ZSjobiyDfU0CWYjPdtebj6fAowX1E7dpabtwo=;
+        b=3Mh3YUZ8029WgiSkXCrhI+fvzxLS6u37xuADkOTYMUa/2LKyBtSA1iLYccE0wpFuMr
+         AEm1abtjO1coPiXLZQpG0wHUBFI9sPNdRGpdS71czie+FwLm0pfqNfgrdZIb3CB9tZZk
+         7GA5z4nTOuVU/o2y9BVx/RggbYBEzEdfDuPwSHKCpPt3PSLKD7h/31LtpROaF+2zhuhH
+         eiwLARcW3yuuOh598x2uE/JGSnZisWZmqlam7ygnA8gHy9f/WwHtBK9KLPhvRv3Siz5R
+         ZCF/M4orKgIRG/WoW8r9LLdWLx0F/ns2n4w2mURWHN3CIhade5N2VeelSeQWHzWv+9Yo
+         pM1w==
+X-Gm-Message-State: AOAM53311N7xjUQEQwQPQyFlo+4GEsrt1lufX1gswV5f0nJXYvjtmEhB
+        RhuVE+4qQTiAyoC7pNlObgzSFwMnGL978uJEUz11tUI3ffDYf8UY0Wo0jEzpoUoBkCjA6PQ132X
+        2q92spchSjRgedGYBCV9RvikM
+X-Received: by 2002:a05:6402:11ca:: with SMTP id j10mr19666875edw.169.1643099274040;
+        Tue, 25 Jan 2022 00:27:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzCXChr6Nh3ynRGb84TO3tGZbNPGj7Pfqsa1dBNHIpYahatyjTZ5IoE6kYc3KjFcQ9PBgrAMg==
+X-Received: by 2002:a05:6402:11ca:: with SMTP id j10mr19666860edw.169.1643099273816;
+        Tue, 25 Jan 2022 00:27:53 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id a11sm7867537edv.76.2022.01.25.00.27.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 00:27:53 -0800 (PST)
+Message-ID: <f00d0e56-e5d3-4ac6-1519-fa843fb4d734@redhat.com>
+Date:   Tue, 25 Jan 2022 09:27:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124224415.831-5-phil@philpotter.co.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] KVM: x86/cpuid: Exclude unpermitted xfeatures for
+ vcpu->arch.guest_supported_xcr0
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Like Xu <like.xu.linux@gmail.com>
+Cc:     "Liu, Jing2" <jing2.liu@intel.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Zhong, Yang" <yang.zhong@intel.com>
+References: <20220123055025.81342-1-likexu@tencent.com>
+ <BN9PR11MB52762E2DEF810DF9AFAE1DDC8C5E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <38c1fbc3-d770-48f3-5432-8fa1fde033f5@gmail.com>
+ <Ye7SbfPL/QAjOI6s@google.com>
+ <e5744e0b-00fc-8563-edb7-b6bf52c63b0e@redhat.com>
+ <BN9PR11MB5276170712A9EF842B36ACE48C5F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <BN9PR11MB5276170712A9EF842B36ACE48C5F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phillip,
+On 1/25/22 02:54, Tian, Kevin wrote:
+>> The extra complication is that arch_prctl(ARCH_REQ_XCOMP_GUEST_PERM)
+>> changes what host userspace can/can't do.  It would be easier if we
+>> could just say that KVM_GET_SUPPORTED_CPUID returns "the most" that
+>> userspace can do, but we already have the contract that userspace can
+>> take KVM_GET_SUPPORTED_CPUID and pass it straight to KVM_SET_CPUID2.
+>>
+>> Therefore,  KVM_GET_SUPPORTED_CPUID must limit its returned values to
+>> what has already been enabled.
+>>
+>> While reviewing the QEMU part of AMX support (this morning), I also
+>> noticed that there is no equivalent for guest permissions of
+>> ARCH_GET_XCOMP_SUPP.  This needs to know KVM's supported_xcr0, so it's
+>> probably best realized as a new KVM_CHECK_EXTENSION rather than as an
+>> arch_prctl.
+>>
+> Would that lead to a weird situation where although KVM says no support
+> of guest permissions while the user can still request them via prctl()?
 
-I love your patch! Perhaps something to improve:
+This is already the case for the current implementation of 
+KVM_GET_SUPPORTED_CPUID.
 
-[auto build test WARNING on staging/staging-testing]
-[also build test WARNING on v5.17-rc1 next-20220124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Paolo
 
-url:    https://github.com/0day-ci/linux/commits/Phillip-Potter/Cleanup-and-removal-of-DBG_88E-macro/20220125-125206
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git fa783154524a71ab74e293cd8251155e5971952b
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220125/202201251642.5tYQO4Fb-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/041fe115dad9245f83646e7674341f28094d62a5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Phillip-Potter/Cleanup-and-removal-of-DBG_88E-macro/20220125-125206
-        git checkout 041fe115dad9245f83646e7674341f28094d62a5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/staging/r8188eu/
+> I wonder whether it's cleaner to do it still via prctl() if we really want to
+> enhance this part. But as you said then it needs a mechanism to know
+> KVM's supported_xcr0 (and if KVM is not loaded then no guest permission
+> support at all)...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/staging/r8188eu/hal/rtl8188e_cmd.c: In function 'rtl8188e_set_FwMediaStatus_cmd':
->> drivers/staging/r8188eu/hal/rtl8188e_cmd.c:195:20: warning: variable 'macid' set but not used [-Wunused-but-set-variable]
-     195 |         u8 opmode, macid;
-         |                    ^~~~~
->> drivers/staging/r8188eu/hal/rtl8188e_cmd.c:195:12: warning: variable 'opmode' set but not used [-Wunused-but-set-variable]
-     195 |         u8 opmode, macid;
-         |            ^~~~~~
-
-
-vim +/macid +195 drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-
-8cd574e6af5463 Phillip Potter 2021-07-28  192  
-8cd574e6af5463 Phillip Potter 2021-07-28  193  void rtl8188e_set_FwMediaStatus_cmd(struct adapter *adapt, __le16 mstatus_rpt)
-8cd574e6af5463 Phillip Potter 2021-07-28  194  {
-8cd574e6af5463 Phillip Potter 2021-07-28 @195  	u8 opmode, macid;
-8cd574e6af5463 Phillip Potter 2021-07-28  196  	u16 mst_rpt = le16_to_cpu(mstatus_rpt);
-8cd574e6af5463 Phillip Potter 2021-07-28  197  	opmode = (u8)mst_rpt;
-8cd574e6af5463 Phillip Potter 2021-07-28  198  	macid = (u8)(mst_rpt >> 8);
-8cd574e6af5463 Phillip Potter 2021-07-28  199  
-8cd574e6af5463 Phillip Potter 2021-07-28  200  	FillH2CCmd_88E(adapt, H2C_COM_MEDIA_STATUS_RPT, sizeof(mst_rpt), (u8 *)&mst_rpt);
-8cd574e6af5463 Phillip Potter 2021-07-28  201  }
-8cd574e6af5463 Phillip Potter 2021-07-28  202  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

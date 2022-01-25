@@ -2,199 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B65E849BC02
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A8649BC03
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiAYTYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiAYTYe (ORCPT
+        id S229868AbiAYTYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:24:49 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:13638 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229849AbiAYTYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:24:34 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0352BC06173D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:24:31 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso2326595wmj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:24:30 -0800 (PST)
+        Tue, 25 Jan 2022 14:24:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=2GxzEUJrbvJEXdIt4dxtW3JqvSSBS0SEXbo+rF+J2Es=;
-        b=h/LU+OQkCLJaflAwiAhLZhROf9gu0u04QOiiywp8MbAdXWHbLv9BJWIWqdgLBJqXlQ
-         jziDd2CzVsTHo9l/pMK7FMnADO1aIFzR7RehLiBIFJYQtWmj4qmOrQMgv1SEOxjkeksa
-         /HWOr+68PnTLuFbyEPa22a3ia8ELcYfVJ1+TY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=2GxzEUJrbvJEXdIt4dxtW3JqvSSBS0SEXbo+rF+J2Es=;
-        b=DRwtV6LQe2lR434IVYWYwUkGJbAv1PyVsf5r+GLd6fx2bGElzHUJz+0vwnrAOsurhX
-         gFMXEnQ/U90B+D8T2UV2G7SgTe4I1ie2cp2ntWspK+mEKi1LlN+5sCtnoBe0uTv+l4Iy
-         2ahb7URVdY+/thv6S2a3vlSOITti/eRg4ZkPPOrUB/AHdKhz7T/dt0HgGvkrAz226dHF
-         5/QFDm0CskjkuORh0k3VsBYqwL6kFT+1jZXbtXUvON4to26ZAKO2cxAuS2T+gLPKbPwx
-         hdaEeapPmzW2ZAzGcts5Xv1Vn/J9F8B06BkAb9tf9gOcmLZlodk17kRdFEmbIT7TBmDF
-         hGfw==
-X-Gm-Message-State: AOAM531mqfKCjGQw8a0+jWRl7sNtCJeMx8FvQqPAFCnxiMutCO8MpK2I
-        5L49FYEBqLx91EB0fRPAIKFx+A==
-X-Google-Smtp-Source: ABdhPJyGrZuTRIehTH5rIo4cKX3JZjHM45w9hw7K1RgCCI0IgmWRQrkgjedGBbyeSK4Ic7PRc0cpDg==
-X-Received: by 2002:a05:600c:4e46:: with SMTP id e6mr4165180wmq.15.1643138669440;
-        Tue, 25 Jan 2022 11:24:29 -0800 (PST)
-Received: from cloudflare.com (2a01-110f-4809-d800-0000-0000-0000-0e00.aa.ipv6.supernova.orange.pl. [2a01:110f:4809:d800::e00])
-        by smtp.gmail.com with ESMTPSA id h127sm1279065wmh.27.2022.01.25.11.24.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 11:24:28 -0800 (PST)
-References: <20220113070245.791577-1-imagedong@tencent.com>
-User-agent: mu4e 1.1.0; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     menglong8.dong@gmail.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mengensun@tencent.com,
-        flyingpeng@tencent.com, mungerjiang@tencent.com,
-        Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH bpf-next] bpf: Add document for 'dst_port' of 'struct
- bpf_sock'
-In-reply-to: <20220113070245.791577-1-imagedong@tencent.com>
-Date:   Tue, 25 Jan 2022 20:24:27 +0100
-Message-ID: <87sftbobys.fsf@cloudflare.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643138678; x=1674674678;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uJ9S2I9JwIcsZP3Xg/NZAPRy9Xc3MsaKcTkgUlFWqcQ=;
+  b=KIbcWQm4tptz1WSlYFCodAjdzNjGdcU9qRj6gEaCm1TXrkQvgT0FuW0s
+   PkEX5qWHA5ylEQis7FT4RF6UrR6Bci3Kp+Td6G4vWBFZC4Qg4eV8LBBjr
+   bosYehPmHZ88x+2DP7djZBMT5QNx/Rs/dMDwtG82RnsZHs4vQNdANahY2
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 25 Jan 2022 11:24:37 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 11:24:36 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 25 Jan 2022 11:24:36 -0800
+Received: from [10.110.14.237] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 25 Jan
+ 2022 11:24:35 -0800
+Message-ID: <15868e85-d48e-e2a8-a8da-c7b87c22564a@quicinc.com>
+Date:   Tue, 25 Jan 2022 11:24:35 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/3] input: misc: pm8941-pwrkey: add software key press
+ debouncing support
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <dmitry.torokhov@gmail.com>
+CC:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <collinsd@codeaurora.org>,
+        <bjorn.andersson@linaro.org>, <skakit@codeaurora.org>
+References: <20220120204132.17875-1-quic_amelende@quicinc.com>
+ <20220120204132.17875-2-quic_amelende@quicinc.com>
+ <CAE-0n508nxF_c9pzsTaQfSi42ZGQXkqb3NyQebuMBec2DCV0KA@mail.gmail.com>
+ <efa57fd8-d2ac-4c02-04ac-c62315b3b28c@quicinc.com>
+ <CAE-0n51GUGskL17MGhk-=-dbdPU_3ChE37Hbzq6VBZc2Ge0vkA@mail.gmail.com>
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+In-Reply-To: <CAE-0n51GUGskL17MGhk-=-dbdPU_3ChE37Hbzq6VBZc2Ge0vkA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 08:02 AM CET, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
->
-> The description of 'dst_port' in 'struct bpf_sock' is not accurated.
-> In fact, 'dst_port' is not in network byte order, it is 'partly' in
-> network byte order.
->
-> We can see it in bpf_sock_convert_ctx_access():
->
->> case offsetof(struct bpf_sock, dst_port):
->> 	*insn++ = BPF_LDX_MEM(
->> 		BPF_FIELD_SIZEOF(struct sock_common, skc_dport),
->> 		si->dst_reg, si->src_reg,
->> 		bpf_target_off(struct sock_common, skc_dport,
->> 			       sizeof_field(struct sock_common,
->> 					    skc_dport),
->> 			       target_size));
->
-> It simply passes 'sock_common->skc_dport' to 'bpf_sock->dst_port',
-> which makes that the low 16-bits of 'dst_port' is equal to 'skc_port'
-> and is in network byte order, but the high 16-bites of 'dst_port' is
-> 0. And the actual port is 'bpf_ntohs((__u16)dst_port)', and
-> 'bpf_ntohl(dst_port)' is totally not the right port.
->
-> This is different form 'remote_port' in 'struct bpf_sock_ops' or
-> 'struct __sk_buff':
->
->> case offsetof(struct __sk_buff, remote_port):
->> 	BUILD_BUG_ON(sizeof_field(struct sock_common, skc_dport) != 2);
+
+
+On 1/24/2022 11:33 AM, Stephen Boyd wrote:
+> Quoting Anjelique Melendez (2022-01-21 16:04:13)
 >>
->> 	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, sk),
->> 			      si->dst_reg, si->src_reg,
->> 				      offsetof(struct sk_buff, sk));
->> 	*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->dst_reg,
->> 			      bpf_target_off(struct sock_common,
->> 					     skc_dport,
->> 					     2, target_size));
->> #ifndef __BIG_ENDIAN_BITFIELD
->> 	*insn++ = BPF_ALU32_IMM(BPF_LSH, si->dst_reg, 16);
->> #endif
->
-> We can see that it will left move 16-bits in little endian, which makes
-> the whole 'remote_port' is in network byte order, and the actual port
-> is bpf_ntohl(remote_port).
->
-> Note this in the document of 'dst_port'. ( Maybe this should be unified
-> in the code? )
->
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
->  include/uapi/linux/bpf.h | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index b0383d371b9a..891a182a749a 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -5500,7 +5500,11 @@ struct bpf_sock {
->  	__u32 src_ip4;
->  	__u32 src_ip6[4];
->  	__u32 src_port;		/* host byte order */
-> -	__u32 dst_port;		/* network byte order */
-> +	__u32 dst_port;		/* low 16-bits are in network byte order,
-> +				 * and high 16-bits are filled by 0.
-> +				 * So the real port in host byte order is
-> +				 * bpf_ntohs((__u16)dst_port).
-> +				 */
->  	__u32 dst_ip4;
->  	__u32 dst_ip6[4];
->  	__u32 state;
+>> On 1/20/2022 8:08 PM, Stephen Boyd wrote:
+>>> Quoting Anjelique Melendez (2022-01-20 12:41:33)
+>>>> @@ -200,15 +268,21 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>>>>                         dev_err(&pdev->dev, "failed to locate regmap\n");
+>>>>                         return -ENODEV;
+>>>>                 }
+>>>> +       }
+>>>>
+>>>> -               error = of_property_read_u32(parent->of_node,
+>>>> -                                            "reg", &pwrkey->baseaddr);
+>>>> -       } else {
+>>>> -               error = of_property_read_u32(pdev->dev.of_node, "reg",
+>>>> -                                            &pwrkey->baseaddr);
+>>>> +       addr = of_get_address(regmap_node, 0, NULL, NULL);
+>>>> +       if (!addr) {
+>>>> +               dev_err(&pdev->dev, "reg property missing\n");
+>>>> +               return -EINVAL;
+>>>> +       }
+>>>> +       pwrkey->baseaddr = be32_to_cpu(*addr);
+>>> Can this hunk be split off? A new API is used and it doesn't look
+>>> relevant to this patch.
+>> In PMK8350 and following chips the reg property will have the pon hlos address first,
+>> followed by a second pon pbs address. This change is needed so that both the older chipsets
+>> and the newer can be used regardless of how many reg addresses are being used.
+> Got it, but do we ned to change to of_get_address() in this patch? I was
+> suggesting that the change to the new API be done first so that it's
+> clearer what's going on with the change in address location.
 
-I'm probably missing something obvious, but is there anything stopping
-us from splitting the field, so that dst_ports is 16-bit wide?
+Ok, makes sense. Will separate this into it's own patch for v2.
 
-I gave a quick check to the change below and it seems to pass verifier
-checks and sock_field tests.
+>>>> +
+>>>> +       if (pwrkey->data->has_pon_pbs) {
+>>>> +               /* PON_PBS base address is optional */
+>>>> +               addr = of_get_address(regmap_node, 1, NULL, NULL);
+>>>> +               if (addr)
+>>>> +                       pwrkey->pon_pbs_baseaddr = be32_to_cpu(*addr);
+>>>>         }
+>>>> -       if (error)
+>>>> -               return error;
+>>>>
+>>>>         pwrkey->irq = platform_get_irq(pdev, 0);
+>>>>         if (pwrkey->irq < 0)
+>>>> @@ -217,7 +291,14 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>>>>         error = regmap_read(pwrkey->regmap, pwrkey->baseaddr + PON_REV2,
+>>>>                             &pwrkey->revision);
+>>>>         if (error) {
+>>>> -               dev_err(&pdev->dev, "failed to set debounce: %d\n", error);
+>>>> +               dev_err(&pdev->dev, "failed to read revision: %d\n", error);
+>>> Nice error message fix!
+> This can be split off to a different patch as well.
 
-IDK, just an idea. Didn't give it a deeper thought.
+Will do.
 
---8<--
+>>>> +               return error;
+>>>> +       }
+>>>> +
+>>>> +       error = regmap_read(pwrkey->regmap, pwrkey->baseaddr + PON_SUBTYPE,
+>>>> +                           &pwrkey->subtype);
+>>>> +       if (error) {
+>>>> +               dev_err(&pdev->dev, "failed to read subtype: %d\n", error);
+>>>>                 return error;
+>>>>         }
+>>>>
+>>>> @@ -255,6 +336,12 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>>>>                 }
+>>>>         }
+>>>>
+>>>> +       if (pwrkey->data->needs_sw_debounce) {
+>>>> +               error = pm8941_pwrkey_sw_debounce_init(pwrkey);
+>>>> +               if (error)
+>>>> +                       return error;
+>>>> +       }
+>>>> +
+>>>>         if (pwrkey->data->pull_up_bit) {
+>>>>                 error = regmap_update_bits(pwrkey->regmap,
+>>>>                                            pwrkey->baseaddr + PON_PULL_CTL,
+>>>> @@ -316,6 +403,8 @@ static const struct pm8941_data pwrkey_data = {
+>>>>         .phys = "pm8941_pwrkey/input0",
+>>>>         .supports_ps_hold_poff_config = true,
+>>>>         .supports_debounce_config = true,
+>>>> +       .needs_sw_debounce = true,
+>>> needs_sw_debounce is always true? Why is it even an option then?
+>> As of right now the "needs_sw_debounce" property is being used for a sw work around for a hw
+>> problem. We anticipate that chips in the future will fix this hw problem and we would then have
+>> devices where needs_sw_debounce would be set to false.
+> Hmm ok. Why can't future chips be supported in this series? What happens
+> if nobody ever adds support for the new chips? We're left with this
+> condition that looks like dead code.
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 4a2f7041ebae..344d62ccafba 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5574,7 +5574,8 @@ struct bpf_sock {
- 	__u32 src_ip4;
- 	__u32 src_ip6[4];
- 	__u32 src_port;		/* host byte order */
--	__u32 dst_port;		/* network byte order */
-+	__u16 unused;
-+	__u16 dst_port;		/* network byte order */
- 	__u32 dst_ip4;
- 	__u32 dst_ip6[4];
- 	__u32 state;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index a06931c27eeb..c56b8ba82de5 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8276,7 +8276,6 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
- 	case offsetof(struct bpf_sock, family):
- 	case offsetof(struct bpf_sock, type):
- 	case offsetof(struct bpf_sock, protocol):
--	case offsetof(struct bpf_sock, dst_port):
- 	case offsetof(struct bpf_sock, src_port):
- 	case offsetof(struct bpf_sock, rx_queue_mapping):
- 	case bpf_ctx_range(struct bpf_sock, src_ip4):
-@@ -8285,6 +8284,9 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
- 	case bpf_ctx_range_till(struct bpf_sock, dst_ip6[0], dst_ip6[3]):
- 		bpf_ctx_record_field_size(info, size_default);
- 		return bpf_ctx_narrow_access_ok(off, size, size_default);
-+	case offsetof(struct bpf_sock, dst_port):
-+		bpf_ctx_record_field_size(info, sizeof(__u16));
-+		return bpf_ctx_narrow_access_ok(off, size, sizeof(__u16));
- 	}
-
- 	return size == size_default;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 4a2f7041ebae..344d62ccafba 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5574,7 +5574,8 @@ struct bpf_sock {
- 	__u32 src_ip4;
- 	__u32 src_ip6[4];
- 	__u32 src_port;		/* host byte order */
--	__u32 dst_port;		/* network byte order */
-+	__u16 unused;
-+	__u16 dst_port;		/* network byte order */
- 	__u32 dst_ip4;
- 	__u32 dst_ip6[4];
- 	__u32 state;
+Sure, makes sense. Will remove "needs_sw_debounce" property for V2.

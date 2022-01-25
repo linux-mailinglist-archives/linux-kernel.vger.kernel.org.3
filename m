@@ -2,111 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C31849B97E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A265549B983
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348298AbiAYQ7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:59:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38048 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1587075AbiAYQ55 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:57:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00110B81910;
-        Tue, 25 Jan 2022 16:57:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D488C340E0;
-        Tue, 25 Jan 2022 16:57:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643129869;
-        bh=6XkwXgsw19qj7USLrufn0h/tjB7gak8V19SNDIbm7V8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LJ678dooB3UE1J+39GaMMyngBcQRH9jk6vt/5V1WPObw1WTcNf87X/MvOI02+KCsk
-         ZSGZbwVHwrnXd5ybU5Caxd0VIqT6wHtu7sshlroYRQHKp1zinrqKA6QIUZMONlsOrH
-         jxPNE1B1lqteRYJ0ePeUInqCQs0p0uuITFc37fJlRN87P+q8s1W2GGk3UN8SgYxxkI
-         S/f4p1PTvgTGq/tpMhI6MHdjFZi5QsIq3xkZKXNJ+B+yFExbGB1F3PC+AL+jJO0Nl8
-         QGkStm965gjNBUgErdUUe00An9cLRjJYjawdvvi79/WnvnMXB+in8AV0A9yVPGpsVR
-         hCtO/WYvAK7DQ==
-Date:   Tue, 25 Jan 2022 10:57:48 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     qizhong cheng <qizhong.cheng@mediatek.com>
-Cc:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com
-Subject: Re: [PATCH] PCI: mediatek: Change MSI interrupt processing sequence
-Message-ID: <20220125165748.GA1458116@bhelgaas>
+        id S1388439AbiAYRA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:00:57 -0500
+Received: from foss.arm.com ([217.140.110.172]:56040 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237321AbiAYQ6a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 11:58:30 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 06E531FB;
+        Tue, 25 Jan 2022 08:58:23 -0800 (PST)
+Received: from [10.32.33.50] (e121896.warwick.arm.com [10.32.33.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5EDE43F766;
+        Tue, 25 Jan 2022 08:58:21 -0800 (PST)
+Subject: Re: [RFC V1 10/11] perf: Expand perf_branch_entry.type
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
+ <1642998653-21377-11-git-send-email-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <2d7297b3-9a22-626b-9840-a4eaab4b94e8@arm.com>
+Date:   Tue, 25 Jan 2022 16:58:20 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220123033306.29799-1-qizhong.cheng@mediatek.com>
+In-Reply-To: <1642998653-21377-11-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All patches change *something*.  Can you update the subject line so it
-says something specific about the change?
 
-Maybe something like "Clear MSI status before dispatching handler"?
 
-On Sun, Jan 23, 2022 at 11:33:06AM +0800, qizhong cheng wrote:
-> As an edge-triggered interrupts, its interrupt status should be cleared
-> before dispatch to the handler of device.
-
-I'm not an IRQ expert, but the reasoning that "we should clear the MSI
-interrupt status before dispatching the handler because MSI is an
-edge-triggered interrupt" doesn't seem completely convincing because
-your code will now look like this:
-
-  /* Clear the INTx */
-  writel(1 << bit, port->base + PCIE_INT_STATUS);
-  generic_handle_domain_irq(port->irq_domain, bit - INTX_SHIFT);
-  ...
-
-  /* Clear MSI interrupt status */
-  writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
-  generic_handle_domain_irq(port->inner_domain, bit);
-
-You clear interrupt status before dispatching the handler for *both*
-level-triggered INTx interrupts and edge-triggered MSI interrupts.
-
-So it doesn't seem that simply being edge-triggered is the critical
-factor here.
-
-> Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
+On 24/01/2022 04:30, Anshuman Khandual wrote:
+> Current perf_branch_entry.type is a 4 bits field just enough to accommodate
+> 16 generic branch types. This is insufficient to accommodate platforms like
+> arm64 which has much more branch types. Lets just expands this field into a
+> 6 bits one, which can now hold 64 generic branch types. This also adds more
+> generic branch types and updates the BRBE driver as required.
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-perf-users@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 > ---
->  drivers/pci/controller/pcie-mediatek.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/perf/arm_pmu_brbe.c           |  7 ++++++-
+>  include/uapi/linux/perf_event.h       | 10 ++++++++--
+>  tools/include/uapi/linux/perf_event.h | 10 ++++++++--
+>  tools/perf/util/branch.c              |  8 +++++++-
+>  4 files changed, 29 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-> index 2f3f974977a3..705ea33758b1 100644
-> --- a/drivers/pci/controller/pcie-mediatek.c
-> +++ b/drivers/pci/controller/pcie-mediatek.c
-> @@ -624,12 +624,12 @@ static void mtk_pcie_intr_handler(struct irq_desc *desc)
->  		if (status & MSI_STATUS){
->  			unsigned long imsi_status;
+> diff --git a/drivers/perf/arm_pmu_brbe.c b/drivers/perf/arm_pmu_brbe.c
+> index 8d27ad868359..7cd1208c6c58 100644
+> --- a/drivers/perf/arm_pmu_brbe.c
+> +++ b/drivers/perf/arm_pmu_brbe.c
+> @@ -253,12 +253,17 @@ static int brbe_fetch_perf_type(u64 brbinf)
+>  	case BRBINF_TYPE_DEBUG_EXIT:
+>  		return PERF_BR_DEBUG_EXIT;
+>  	case BRBINF_TYPE_SERROR:
+> +		return PERF_BR_SERROR;
+>  	case BRBINF_TYPE_INST_DEBUG:
+> +		return PERF_BR_DEBUG_INST;
+>  	case BRBINF_TYPE_DATA_DEBUG:
+> +		return PERF_BR_DEBUG_DATA;
+>  	case BRBINF_TYPE_ALGN_FAULT:
+> +		return PERF_BR_FAULT_ALGN;
+>  	case BRBINF_TYPE_INST_FAULT:
+> +		return PERF_BR_FAULT_INST;
+>  	case BRBINF_TYPE_DATA_FAULT:
+> -		return PERF_BR_UNKNOWN;
+> +		return PERF_BR_FAULT_DATA;
+>  	default:
+>  		pr_warn("unknown branch type captured\n");
+>  		return PERF_BR_UNKNOWN;
+> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+> index b91d0f575d0c..361fdc6b87a0 100644
+> --- a/include/uapi/linux/perf_event.h
+> +++ b/include/uapi/linux/perf_event.h
+> @@ -256,6 +256,12 @@ enum {
+>  	PERF_BR_FIQ		= 13,	/* fiq */
+>  	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
+>  	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
+> +	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
+> +	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
+> +	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
+> +	PERF_BR_FAULT_DATA	= 19,	/* data fault */
+> +	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
+> +	PERF_BR_SERROR		= 21,	/* system error */
+>  	PERF_BR_MAX,
+>  };
 >  
-> +			/* Clear MSI interrupt status */
-> +			writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
->  			while ((imsi_status = readl(port->base + PCIE_IMSI_STATUS))) {
->  				for_each_set_bit(bit, &imsi_status, MTK_MSI_IRQS_NUM)
->  					generic_handle_domain_irq(port->inner_domain, bit);
->  			}
-> -			/* Clear MSI interrupt status */
-> -			writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
->  		}
->  	}
+> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+>  		in_tx:1,    /* in transaction */
+>  		abort:1,    /* transaction abort */
+>  		cycles:16,  /* cycle count to last branch */
+> -		type:4,     /* branch type */
+> -		reserved:40;
+> +		type:6,     /* branch type */
+> +		reserved:38;
+>  };
 >  
-> -- 
-> 2.25.1
+>  union perf_sample_weight {
+> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+> index 1882054e8684..9a82b8aaed93 100644
+> --- a/tools/include/uapi/linux/perf_event.h
+> +++ b/tools/include/uapi/linux/perf_event.h
+> @@ -256,6 +256,12 @@ enum {
+>  	PERF_BR_FIQ		= 13,	/* fiq */
+>  	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
+>  	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
+> +	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
+> +	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
+> +	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
+> +	PERF_BR_FAULT_DATA	= 19,	/* data fault */
+> +	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
+> +	PERF_BR_SERROR		= 21,	/* system error */
+>  	PERF_BR_MAX,
+>  };
+>  
+> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+>  		in_tx:1,    /* in transaction */
+>  		abort:1,    /* transaction abort */
+>  		cycles:16,  /* cycle count to last branch */
+> -		type:4,     /* branch type */
+> -		reserved:40;
+> +		type:6,     /* branch type */
+> +		reserved:38;
+>  };
+
+There's another copy of this struct in branch.h that is used to access the same data in
+perf which also needs updating:
+
+	struct branch_flags {
+		union {
+			u64 value;
+			struct {
+				u64 mispred:1;
+				u64 predicted:1;
+				u64 in_tx:1;
+				u64 abort:1;
+				u64 cycles:16;
+				u64 type:4;
+				u64 reserved:40;
+			};
+		};
+	};
+
+It's never assigned directly but there is some casting stuff going on in
+evsel__parse_sample() and it eventually ends up being used to access branch
+records. Same applies to the privilege data change.
+
+>  
+>  union perf_sample_weight {
+> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
+> index 74e5e67b1779..1e216ea2e2a8 100644
+> --- a/tools/perf/util/branch.c
+> +++ b/tools/perf/util/branch.c
+> @@ -54,7 +54,13 @@ const char *branch_type_name(int type)
+>  		"IRQ",
+>  		"FIQ",
+>  		"DEBUG_HALT",
+> -		"DEBUG_EXIT"
+> +		"DEBUG_EXIT",
+> +		"DEBUG_INST",
+> +		"DEBUG_DATA",
+> +		"FAULT_ALGN",
+> +		"FAULT_DATA",
+> +		"FAULT_INST",
+> +		"SERROR"
+>  	};
+>  
+>  	if (type >= 0 && type < PERF_BR_MAX)
 > 
-> 
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek

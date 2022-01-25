@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2193949B805
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC43349B804
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582685AbiAYPxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1582407AbiAYPtt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:49:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3286EC061771;
-        Tue, 25 Jan 2022 07:49:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3A0CB818D0;
-        Tue, 25 Jan 2022 15:49:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11A37C340E5;
-        Tue, 25 Jan 2022 15:49:39 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 10:49:38 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125104938.566da04f@gandalf.local.home>
-In-Reply-To: <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-References: <20220125145006.677e3709@canb.auug.org.au>
-        <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1582653AbiAYPwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:52:42 -0500
+Received: from foss.arm.com ([217.140.110.172]:51900 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1582582AbiAYPuM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 10:50:12 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F1C9D6E;
+        Tue, 25 Jan 2022 07:50:08 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.1.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BCC023F793;
+        Tue, 25 Jan 2022 07:50:06 -0800 (PST)
+Date:   Tue, 25 Jan 2022 15:50:01 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Evgenii Stepanov <eugenis@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: extable: fix null deref in load_unaligned_zeropad.
+Message-ID: <YfAcKZpDWmKMZy8q@FVFF77S0Q05N>
+References: <20220122023447.1480995-1-eugenis@google.com>
+ <YfAV6FTN5g6jZGj7@FVFF77S0Q05N>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfAV6FTN5g6jZGj7@FVFF77S0Q05N>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 23:31:54 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> Could you try this patch?
+On Tue, Jan 25, 2022 at 03:23:20PM +0000, Mark Rutland wrote:
+> On Fri, Jan 21, 2022 at 06:34:47PM -0800, Evgenii Stepanov wrote:
+> > ex_handler_load_unaligned_zeropad extracts the source and data register
+> > numbers from the wrong field of the exception table.
 > 
-> >From 2982ba01367ec1f746a4f128512436e5325a7f9d Mon Sep 17 00:00:00 2001  
-> From: Masami Hiramatsu <mhiramat@kernel.org>
-> Date: Tue, 25 Jan 2022 23:19:30 +0900
-> Subject: [PATCH] tracing: Avoid -Warray-bounds warning for __rel_loc macro
+> Ouch. Did you find this by inspection, or did this show up in testing?
 > 
-> Since -Warray-bounds checks the destination size from the
-> type of given pointer, __assign_rel_str() macro gets warned
-> because it passes the pointer to the 'u32' field instead of
-> 'trace_event_raw_*' data structure.
-> Pass the data address calculated from the 'trace_event_raw_*'
-> instead of 'u32' __rel_loc field.
+> Sorry about this.
 > 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Cc: Kees Cook <keescook@chromium.org>
+> I think we should be a little more explicit as to exactly what goes wrong. How
+> about:
+> 
+> | In ex_handler_load_unaligned_zeropad() we erroneously extract the data and
+> | addr register indices from ex->type rather than ex->data. As ex->type will
+> | contain EX_TYPE_LOAD_UNALIGNED_ZEROPAD (i.e. 4):
+> | 
+> | * We'll always treat X0 as the address register, since EX_DATA_REG_ADDR is
+> |   extracted from bits [9:5]. Thus, we may attempt to dereference an arbitrary
+> |   address as X0 may hold an arbitary value.
+> | 
+> | * We'll always treat X4 as the data register, since EX_DATA_REG_DATA is
+> |   extracted from bits [4:0]. Thus we will corrupt X4 and cause arbitrary
+> |   behaviour within load_unaligned_zeropad() and its caller.
+> | 
+> | Fix this by extracting both values from ex->data as originally intended.
+> 
+> > Fixes: 753b3236
+> 
+> That should be expanded, e.g.
+> 
+>   Fixes: 753b32368705c396 ("arm64: extable: add load_unaligned_zeropad() handler")
+> 
+> With those changes:
+> 
+> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 
-If this works, I'll add it instead of the one that just turns it off it
-__CHECKER__ is defined.
+Looking again, sicne this isn't jsut a null-deref, can we also rework the
+title, something like:
 
-Can you please let me know if it fixes the issue for you. I have a test run
-waiting on it.
+| arm64: extable: fix load_unaligned_zeropad() reg indices
 
 Thanks,
-
--- Steve
+Mark.

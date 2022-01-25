@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3290849B171
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC6449B174
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242275AbiAYKUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S243257AbiAYKUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239137AbiAYKPt (ORCPT
+        with ESMTP id S241215AbiAYKPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:15:49 -0500
+        Tue, 25 Jan 2022 05:15:55 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB8AC0613EC
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:15:49 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id 4-20020a250304000000b006137f4a9920so39594713ybd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:15:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D320C0613F0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:15:55 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id n2-20020a255902000000b0060f9d75eafeso40633980ybb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:15:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=doB02I4qSIR86llAlGQe+kwodmbCH1lEdNRlPOZ7RJM=;
-        b=Q+ZIkfTltqz4qOuwoZbjAXVwZkFHvt0AQRjZ6h5mJ67D6lTbnrm+bPFcLOu8wShVK/
-         4D71NwBWnNkevWqEtzjzuif2JuO/zovBD8IoOT9U7cx+hW04NWDPr272TLJp7a/5I4kv
-         mQ8t4Ot9XGq0Cr5Vy8QDxydT7JVf2l6fTznlnMOGWEC2QPaiMn0Jut+ecgFgFjtzd3E6
-         blV+1TThV7ZqC1Ub2U8BiMfc4FGJreB+EZ9MI+70L2jtk6Vr1fYfnkaSgetGLZ0/n5dO
-         FnV+E58JkIPQKE9xjGxeWCvpt+hLwkhliI/eqg3NUlVaOW+q7CLyYLGe5eb1Zn3dxaa0
-         Kp2w==
+        bh=DaKuIzTI79zUYcyKsPYW3TP3Y5c4qM860aXt8MCFVpA=;
+        b=B1z9pW3hP5IkrS9SKJlmIhOiXdn+Sn3m9MTLWw3FMTjoYB4ROZksTJVEhqTJjxurGz
+         Ts53c+Xivbcwykk2ZX5Pfm3Y5dya2YEQ8WSs/Uo7d9UOXd92cXdyo5GAR+itUP7j9OIj
+         vekEXD5+XSiPOOxIDPIo5lmQEwtfwxnr97qd7dAAPLoNzEAoAwbUhn+EL+5WqyTgn+SO
+         dWlswKO+Gm93VP368y+DFmsOVThKIbrGmHQf9rKbCUOzmM1E797gLwj3Nul+rpDSVaRi
+         Bdf3eHohE6J9O92e+YU3CgLILCuxGmpUiIaC83z2q7m8ftIctrt3dIOABISOZp2yl9B/
+         NSAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=doB02I4qSIR86llAlGQe+kwodmbCH1lEdNRlPOZ7RJM=;
-        b=V3XNW1qL7VKyUR1We2M9Tl2whL2FN9EYQHeapNSS0DhrADjCvRq/JB3EEChsuGHa99
-         pcKaHwCxoSP9Eoh1L0r/I6Zn5LgejKIzU57cDeLYmDjBD1CJSFcQdsRjIBfMqL7Y8G+i
-         i1Fytf6CIwZKIsLdmnsN+VtGuaHDqZsIjWEe8EaBlqW/9ucjO6mwal48U6ZV36TIM3eY
-         OsnaiBDQs4W/oFIk75o8KOS5XALz8jKvAIsg0bInx1OCJRLRj4AZwMlVHAKyaUJN6j/T
-         qB5yWVRIZL/tpURKKeGHS5Q3RhewvksaIcuwqJcJp3jVNNVdvUJXmn1Ogc/nT5F4u6OT
-         0Neg==
-X-Gm-Message-State: AOAM530iCzruZ+GhtM5EtfLTVGWd30kK6IzL95EDNid/6m2YdVGexh4I
-        XB0xUfWnr/b9URTGx1Trsk//8Beo53iS
-X-Google-Smtp-Source: ABdhPJyOhFP5FqSpeywDFHUbBXaMD2WR8iKvWmZKfzHPZowdZTykVxzzx6348bJ1lA6I9ZspUFBLUPDDOJ+n
+        bh=DaKuIzTI79zUYcyKsPYW3TP3Y5c4qM860aXt8MCFVpA=;
+        b=x89mrv0I22T7fV7nbHKuvV6bWSfJZHnqwdsYQd4wBZBJRVeZX2ONFt6mJA2yI1sSwE
+         sVoMd5TLvE0LPsE3h8lAk1Gsvu0v5HyC3ss93LIllpMfNzIdpFJD4ZKipLSdIG+4kwP9
+         pFYoO/EzXhb3Cxuzqsv0wFGHo842YUexaUWVMx8Dt1UBFfeE+7grB7m88L13FF3wNRNV
+         YOlJegNY62l3Vm4Yqzcbzer5i/b+3csc10yeYeVrLEnA+udYSj5Wv6UzTfmGp3WNQOtQ
+         4/SDztnLnBlByXeYUBVBvGM7i7Cbug1+EnrKBoiqx5N2u3zJdfuXj/WuL9LpF/QibBU0
+         zqDg==
+X-Gm-Message-State: AOAM533cUrydjYZ8U921APoOJtrxOSbkMiS8U8RDIXx9FfW1x653zv7O
+        Wf5gp4t+RvTIjoKtk/p0I7SHB3M+7dLC
+X-Google-Smtp-Source: ABdhPJx9VPCW9B9P6v/6chD1IlB38QClG4/aZWYqKBbntTx7hwJRbYpkOBIBsPa3DDFUJNhoTCVNz6AQYZNl
 X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:10:69af:7f25:2010:2c85])
- (user=tzungbi job=sendgmr) by 2002:a81:a105:0:b0:2ca:287c:6cff with SMTP id
- 00721157ae682-2ca287c6f46mr6115897b3.420.1643105747887; Tue, 25 Jan 2022
- 02:15:47 -0800 (PST)
-Date:   Tue, 25 Jan 2022 18:15:22 +0800
+ (user=tzungbi job=sendgmr) by 2002:a25:cb96:: with SMTP id
+ b144mr1872368ybg.338.1643105754411; Tue, 25 Jan 2022 02:15:54 -0800 (PST)
+Date:   Tue, 25 Jan 2022 18:15:23 +0800
 In-Reply-To: <20220125101527.1812887-1-tzungbi@google.com>
-Message-Id: <20220125101527.1812887-2-tzungbi@google.com>
+Message-Id: <20220125101527.1812887-3-tzungbi@google.com>
 Mime-Version: 1.0
 References: <20220125101527.1812887-1-tzungbi@google.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH 1/6] platform/chrome: cros_ec: fix error handling in cros_ec_register()
+Subject: [PATCH 2/6] platform/chrome: cros_ec: remove unused variable `was_wake_device`
 From:   Tzung-Bi Shih <tzungbi@google.com>
 To:     bleung@chromium.org
 Cc:     groeck@chromium.org, tzungbi@google.com,
@@ -62,69 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes cros_ec_register() doesn't unregister platform devices if
-blocking_notifier_chain_register() fails.
+`was_wake_device` is unused.  Removes it.
 
-Also uses the single exit path to handle the platform device
-unregistration.
-
-This fix depends on the fact that all the callers of cros_ec_register()
-allocate zeroed memory.
-
-Fixes: 42cd0ab476e2 ("platform/chrome: cros_ec: Query EC protocol version if EC transitions between RO/RW")
 Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
 ---
- drivers/platform/chrome/cros_ec.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ drivers/platform/chrome/cros_ec.c           | 1 -
+ include/linux/platform_data/cros_ec_proto.h | 3 ---
+ 2 files changed, 4 deletions(-)
 
 diff --git a/drivers/platform/chrome/cros_ec.c b/drivers/platform/chrome/cros_ec.c
-index fc5aa1525d13..3aec890edd39 100644
+index 3aec890edd39..a37448f3e179 100644
 --- a/drivers/platform/chrome/cros_ec.c
 +++ b/drivers/platform/chrome/cros_ec.c
-@@ -245,18 +245,16 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
- 		if (IS_ERR(ec_dev->pd)) {
- 			dev_err(ec_dev->dev,
- 				"Failed to create CrOS PD platform device\n");
--			platform_device_unregister(ec_dev->ec);
--			return PTR_ERR(ec_dev->pd);
-+			err = PTR_ERR(ec_dev->pd);
-+			goto exit;
- 		}
- 	}
+@@ -344,7 +344,6 @@ int cros_ec_suspend(struct cros_ec_device *ec_dev)
+ 		ec_dev->wake_enabled = !enable_irq_wake(ec_dev->irq);
  
- 	if (IS_ENABLED(CONFIG_OF) && dev->of_node) {
- 		err = devm_of_platform_populate(dev);
- 		if (err) {
--			platform_device_unregister(ec_dev->pd);
--			platform_device_unregister(ec_dev->ec);
- 			dev_err(dev, "Failed to register sub-devices\n");
--			return err;
-+			goto exit;
- 		}
- 	}
- 
-@@ -278,7 +276,7 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
- 		err = blocking_notifier_chain_register(&ec_dev->event_notifier,
- 						      &ec_dev->notifier_ready);
- 		if (err)
--			return err;
-+			goto exit;
- 	}
- 
- 	dev_info(dev, "Chrome EC device registered\n");
-@@ -291,6 +289,12 @@ int cros_ec_register(struct cros_ec_device *ec_dev)
- 		cros_ec_irq_thread(0, ec_dev);
+ 	disable_irq(ec_dev->irq);
+-	ec_dev->was_wake_device = ec_dev->wake_enabled;
+ 	ec_dev->suspended = true;
  
  	return 0;
-+exit:
-+	if (ec_dev->pd && !IS_ERR(ec_dev->pd))
-+		platform_device_unregister(ec_dev->pd);
-+	if (ec_dev->ec && !IS_ERR(ec_dev->ec))
-+		platform_device_unregister(ec_dev->ec);
-+	return err;
- }
- EXPORT_SYMBOL(cros_ec_register);
- 
+diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
+index df3c78c92ca2..c65971ec90ea 100644
+--- a/include/linux/platform_data/cros_ec_proto.h
++++ b/include/linux/platform_data/cros_ec_proto.h
+@@ -76,8 +76,6 @@ struct cros_ec_command {
+  * struct cros_ec_device - Information about a ChromeOS EC device.
+  * @phys_name: Name of physical comms layer (e.g. 'i2c-4').
+  * @dev: Device pointer for physical comms device
+- * @was_wake_device: True if this device was set to wake the system from
+- *                   sleep at the last suspend.
+  * @cros_class: The class structure for this device.
+  * @cmd_readmem: Direct read of the EC memory-mapped region, if supported.
+  *     @offset: Is within EC_LPC_ADDR_MEMMAP region.
+@@ -137,7 +135,6 @@ struct cros_ec_device {
+ 	/* These are used by other drivers that want to talk to the EC */
+ 	const char *phys_name;
+ 	struct device *dev;
+-	bool was_wake_device;
+ 	struct class *cros_class;
+ 	int (*cmd_readmem)(struct cros_ec_device *ec, unsigned int offset,
+ 			   unsigned int bytes, void *dest);
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

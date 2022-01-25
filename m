@@ -2,194 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BE049B643
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADF049B645
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579316AbiAYO0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:26:51 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51342 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1578903AbiAYOVf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:21:35 -0500
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PDAMUt004305;
-        Tue, 25 Jan 2022 14:21:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=BWyFErJ1Xi2teG/3cp2YJJ7J41rYNrurkfiOgtjVstQ=;
- b=gpaHJW8erHex1Ak+4j+fXANjlH7zFw2Rk4QlSsZ48+unY/o1iDaaS9n2anOvPQ9aji0U
- ATpEXK/32E8b0DXMR0biSKioXud3s9v9wR8sftnxTL5x681qvZnRN0LCpKKkEaP52gsw
- 8BZvwydBuqaou1WjIs+XpT+7576z5F+t1yOpGt2odz7z/Kctn530E2r4V+HPvWyB6/pb
- F8b7YHN0MM+Ah9pMsldCYdpn1NokNfQQRBzf8tInpG3EdccMgXCYXGQmyq4ttIHHd4AB
- 8Ha++2cFWqfwCFnIVf/LJ2V05IbWKwV//a+RE/qYAqx0NOFAdS7LR3Oaf6IGFk6roqPm vw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dthgusvxe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:21:34 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20PE7X8F000876;
-        Tue, 25 Jan 2022 14:21:33 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dthgusvwt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:21:33 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PEDmVd016227;
-        Tue, 25 Jan 2022 14:21:32 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02wdc.us.ibm.com with ESMTP id 3dr9j9x2w9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 14:21:32 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PELUol34406678
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 14:21:31 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD9FBC6066;
-        Tue, 25 Jan 2022 14:21:30 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04974C6057;
-        Tue, 25 Jan 2022 14:21:29 +0000 (GMT)
-Received: from [9.163.21.206] (unknown [9.163.21.206])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Jan 2022 14:21:28 +0000 (GMT)
-Message-ID: <d9cd7c5f-4e3a-2814-eb96-6d3daefcefc0@linux.ibm.com>
-Date:   Tue, 25 Jan 2022 09:21:28 -0500
+        id S238255AbiAYOaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:30:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:46708 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1579152AbiAYOYA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 09:24:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63F22D6E;
+        Tue, 25 Jan 2022 06:23:59 -0800 (PST)
+Received: from [10.57.68.26] (unknown [10.57.68.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CBEB3F793;
+        Tue, 25 Jan 2022 06:23:56 -0800 (PST)
+Message-ID: <ab09f75c-08cc-1845-9aa7-81fed779d636@arm.com>
+Date:   Tue, 25 Jan 2022 14:23:52 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2 25/30] vfio-pci/zdev: wire up zPCI interpretive
- execution support
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-26-mjrosato@linux.ibm.com>
- <17ccab21-b654-636f-2dfa-57014f4cd4eb@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <17ccab21-b654-636f-2dfa-57014f4cd4eb@linux.ibm.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 7/7] iommu: Add iommu_domain::domain_ops
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
+ <20220124071103.2097118-8-baolu.lu@linux.intel.com>
+ <99023cd7-f037-282f-3f25-629a14a1578b@arm.com>
+ <82c5db53-088f-a51f-6fbc-c977ef871d8f@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <82c5db53-088f-a51f-6fbc-c977ef871d8f@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1UCz4G8bEN1lG4XGed0dfK8ezkgHm9e9
-X-Proofpoint-ORIG-GUID: mvhauzxgP4Br9mPrZWiKEoUYhv5r0xyu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0 mlxlogscore=999
- clxscore=1015 impostorscore=0 mlxscore=0 priorityscore=1501 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201250092
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 8:01 AM, Pierre Morel wrote:
-> 
-> 
-> On 1/14/22 21:31, Matthew Rosato wrote:
->> Introduce support for VFIO_DEVICE_FEATURE_ZPCI_INTERP, which is a new
->> VFIO_DEVICE_FEATURE ioctl.  This interface is used to indicate that an
->> s390x vfio-pci device wishes to enable/disable zPCI interpretive
->> execution, which allows zPCI instructions to be executed directly by
->> underlying firmware without KVM involvement.
+On 2022-01-25 06:27, Lu Baolu wrote:
+> On 1/25/22 8:57 AM, Robin Murphy wrote:
+>> On 2022-01-24 07:11, Lu Baolu wrote:
+>>> Add a domain specific callback set, domain_ops, for vendor iommu driver
+>>> to provide domain specific operations. Move domain-specific callbacks
+>>> from iommu_ops to the domain_ops and hook them when a domain is 
+>>> allocated.
 >>
->> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->> ---
->>   arch/s390/include/asm/kvm_pci.h  |  1 +
->>   drivers/vfio/pci/vfio_pci_core.c |  2 +
->>   drivers/vfio/pci/vfio_pci_zdev.c | 78 ++++++++++++++++++++++++++++++++
->>   include/linux/vfio_pci_core.h    | 10 ++++
->>   include/uapi/linux/vfio.h        |  7 +++
->>   include/uapi/linux/vfio_zdev.h   | 15 ++++++
->>   6 files changed, 113 insertions(+)
->>
->> diff --git a/arch/s390/include/asm/kvm_pci.h 
->> b/arch/s390/include/asm/kvm_pci.h
->> index 97a90b37c87d..dc00c3f27a00 100644
->> --- a/arch/s390/include/asm/kvm_pci.h
->> +++ b/arch/s390/include/asm/kvm_pci.h
->> @@ -35,6 +35,7 @@ struct kvm_zdev {
->>       struct kvm_zdev_ioat ioat;
->>       struct zpci_fib fib;
->>       struct notifier_block nb;
->> +    bool interp;
+>> I think it would make a lot of sense for iommu_domain_ops to be a 
+>> substructure *within* iommu_ops. That way we can save most of the 
+>> driver boilerplate here by not needing extra variables everywhere, and 
+>> letting iommu_domain_alloc() still do a default initialisation like 
+>> "domain->ops = bus->iommu_ops->domain_ops;"
 > 
-> NIT: s/interp/interpretation/ ?
+> In the new model, iommu_domain_ops and iommu_ops are not 1:1 mapped.
+> For example, a PASID-capable IOMMU could support DMA domain (which
+> supports map/unmap), SVA domain (which does not), and others in the
+> future. Different type of domain has its own domain_ops.
 
-OK
+Sure, it's clear that that's the direction in which this is headed, and 
+as I say I'm quite excited about that. However there are a couple of 
+points I think are really worth considering:
 
-> 
->>   };
->>   int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
->> diff --git a/drivers/vfio/pci/vfio_pci_core.c 
->> b/drivers/vfio/pci/vfio_pci_core.c
->> index fc57d4d0abbe..2b2d64a2190c 100644
->> --- a/drivers/vfio/pci/vfio_pci_core.c
->> +++ b/drivers/vfio/pci/vfio_pci_core.c
->> @@ -1172,6 +1172,8 @@ long vfio_pci_core_ioctl(struct vfio_device 
->> *core_vdev, unsigned int cmd,
->>               mutex_unlock(&vdev->vf_token->lock);
->>               return 0;
->> +        case VFIO_DEVICE_FEATURE_ZPCI_INTERP:
->> +            return vfio_pci_zdev_feat_interp(vdev, feature, arg);
->>           default:
->>               return -ENOTTY;
->>           }
->> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c 
->> b/drivers/vfio/pci/vfio_pci_zdev.c
->> index 5c2bddc57b39..4339f48b98bc 100644
->> --- a/drivers/vfio/pci/vfio_pci_zdev.c
->> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
->> @@ -54,6 +54,10 @@ static int zpci_group_cap(struct zpci_dev *zdev, 
->> struct vfio_info_cap *caps)
->>           .version = zdev->version
->>       };
->> +    /* Some values are different for interpreted devices */
->> +    if (zdev->kzdev && zdev->kzdev->interp)
->> +        cap.maxstbl = zdev->maxstbl;
->> +
->>       return vfio_info_add_capability(caps, &cap.header, sizeof(cap));
->>   }
->> @@ -138,6 +142,72 @@ int vfio_pci_info_zdev_add_caps(struct 
->> vfio_pci_core_device *vdev,
->>       return ret;
->>   }
->> +int vfio_pci_zdev_feat_interp(struct vfio_pci_core_device *vdev,
->> +                  struct vfio_device_feature feature,
->> +                  unsigned long arg)
->> +{
->> +    struct zpci_dev *zdev = to_zpci(vdev->pdev);
->> +    struct vfio_device_zpci_interp *data;
->> +    struct vfio_device_feature *feat;
->> +    unsigned long minsz;
->> +    int size, rc;
->> +
->> +    if (!zdev || !zdev->kzdev)
->> +        return -EINVAL;
->> +
->> +    /* If PROBE specified, return probe results immediately */
->> +    if (feature.flags & VFIO_DEVICE_FEATURE_PROBE)
->> +        return kvm_s390_pci_interp_probe(zdev);
->> +
->> +    /* GET and SET are mutually exclusive */
->> +    if ((feature.flags & VFIO_DEVICE_FEATURE_GET) &&
->> +        (feature.flags & VFIO_DEVICE_FEATURE_SET))
->> +        return -EINVAL;
-> 
-> Isn't the check already done in VFIO core?
+Where it's just about which operations are valid for which domains, it's 
+even simpler for the core interface wrappers to validate the domain 
+type, rather than forcing drivers to implement multiple ops structures 
+purely for the sake of having different callbacks populated. We already 
+have this in places, e.g. where iommu_map() checks for 
+__IOMMU_DOMAIN_PAGING.
 
-Oh, yes you are correct.  Then this can be removed for this patch as 
-well as the next 2 patches.
+Paging domains are also effectively the baseline level of IOMMU API 
+functionality. All drivers support them, and for the majority of drivers 
+it's all they will ever support. Those drivers really don't benefit from 
+any of the churn and boilerplate in this patch as-is, and it's so easy 
+to compromise with a couple of lines of core code to handle the common 
+case by default when the driver *isn't* one of the handful which ever 
+actually cares to install their own per-domain ops. Consider how much 
+cleaner this patch would look if the typical driver diff could be 
+something completely minimal like this:
 
+----->8-----
+diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+index be22fcf988ce..6aff493e37ee 100644
+--- a/drivers/iommu/mtk_iommu_v1.c
++++ b/drivers/iommu/mtk_iommu_v1.c
+@@ -514,12 +514,14 @@ static int mtk_iommu_hw_init(const struct 
+mtk_iommu_data *data)
 
+  static const struct iommu_ops mtk_iommu_ops = {
+  	.domain_alloc	= mtk_iommu_domain_alloc,
+-	.domain_free	= mtk_iommu_domain_free,
+-	.attach_dev	= mtk_iommu_attach_device,
+-	.detach_dev	= mtk_iommu_detach_device,
+-	.map		= mtk_iommu_map,
+-	.unmap		= mtk_iommu_unmap,
+-	.iova_to_phys	= mtk_iommu_iova_to_phys,
++	.domain_ops = &(const struct iommu_domain_ops){
++		.domain_free	= mtk_iommu_domain_free,
++		.attach_dev	= mtk_iommu_attach_device,
++		.detach_dev	= mtk_iommu_detach_device,
++		.map		= mtk_iommu_map,
++		.unmap		= mtk_iommu_unmap,
++		.iova_to_phys	= mtk_iommu_iova_to_phys,
++	}
+  	.probe_device	= mtk_iommu_probe_device,
+  	.probe_finalize = mtk_iommu_probe_finalize,
+  	.release_device	= mtk_iommu_release_device,
+
+-----8<-----
+
+And of course I have to shy away from calling it default_domain_ops, 
+since although it's logically default ops for domains, it is not 
+specifically ops for default domains, sigh... :)
+
+Cheers,
+Robin.

@@ -2,128 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6E749B3EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFF649B3E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446691AbiAYM0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:26:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37148 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382639AbiAYMWX (ORCPT
+        id S1383786AbiAYM0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:26:05 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64122 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1448003AbiAYMVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:22:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00C836126C;
-        Tue, 25 Jan 2022 12:22:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2169DC340E0;
-        Tue, 25 Jan 2022 12:22:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643113342;
-        bh=WZgO22+Z41hUUnG+yTkDEt6WmhMHvEbX48CXDgypOPg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=TVGn6ji+04fRMq28KB/1cjlHYNpIIJ4OywZA1vkyTcwNt2WHJnhyFsE/xPiAe1262
-         btXQ4AoQC5lzEfK8o48szz2vCf70IWVeVjk1ix1mz3uFRKXWmHgabEQ043FXD9U6tP
-         6t6X/ejgdZROZKkGyzxqB8Hu6vSQpEXHKqixF7u3Lz4ZaIChC/XKfza0zpDFlTnX3M
-         VAsbTH782DGRhDP/8uLVqwmHhOn/WNZ6Cjnl1EihIdYpY9kiVhCfCJoOyGL/PK+T3j
-         tkgdJ1uwr+juxUDNhXktkXwoGzYfyFuMVVFIZnLhFLstHAlr3cgS3TtJdE3ioYwqiB
-         lHu2MhpmqRbRQ==
-Date:   Tue, 25 Jan 2022 06:22:19 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Joseph Bao <joseph.bao@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stuart Hayes <stuart.w.hayes@gmail.com>
-Subject: Re: [PATCH 5.4 260/320] PCI: pciehp: Fix infinite loop in IRQ
- handler upon power fault
-Message-ID: <20220125122219.GA1597322@bhelgaas>
+        Tue, 25 Jan 2022 07:21:40 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PCK3Xl009939;
+        Tue, 25 Jan 2022 12:21:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=DSC4tF8JBAB/RYcyPBdMDahatWCJeXMwVRaiqjTudKw=;
+ b=k3tTxNJUykPlLxHQ4+C5L6F+0fDTKJFiMZX5rdCCPS22AAF2+7Vx73wQZSOYbh3oQBmv
+ Z/4ysrk1ufIkXoeGnUs9dxyHfZ1P1hbW78e/S/ylRDOo6nAVNwCm3eevRqUN9jkv+ePk
+ 1DHbnFmR8zyy8tqhI5zS9MH0NJP7K6ZAv9fK/gRaxmvsohqHXnI/QngnHH7jKZ0+n56V
+ NIJDXiRIY3W2m3zGovvt+wRjgvjKKy9opLierbZplYMvEKTqJTKZa+zFJbHPZVG+5JH7
+ TfsatcukEY7j5VP+hoZMlUOjhm12LQ+wBls0vxk8yKeDyPOSGXelVfWv1h/IRf3zj0gz Wg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dtgj68taa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 12:21:28 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20PCK4UM009982;
+        Tue, 25 Jan 2022 12:21:28 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dtgj68t9d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 12:21:27 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PCI6ue015267;
+        Tue, 25 Jan 2022 12:21:25 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 3dr9j8vhu2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 12:21:25 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PCLLIK40567078
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 12:21:21 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 74BBCAE05D;
+        Tue, 25 Jan 2022 12:21:21 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8838AAE053;
+        Tue, 25 Jan 2022 12:21:20 +0000 (GMT)
+Received: from [9.171.58.95] (unknown [9.171.58.95])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 25 Jan 2022 12:21:20 +0000 (GMT)
+Message-ID: <9df849f6-dd99-93ea-8e35-3daffd38e694@linux.ibm.com>
+Date:   Tue, 25 Jan 2022 13:23:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124184002.827563143@linuxfoundation.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 15/30] KVM: s390: pci: do initial setup for AEN
+ interpretation
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-16-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220114203145.242984-16-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: S5PrdewDgWoiq6HanT2AfCrqJNJX_R9I
+X-Proofpoint-GUID: 7nA0Zl6bEdcQ2DuoV6JU8y0LH4XESY5o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 priorityscore=1501 bulkscore=0 spamscore=0 malwarescore=0
+ adultscore=0 impostorscore=0 clxscore=1015 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201250078
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 07:44:04PM +0100, Greg Kroah-Hartman wrote:
-> From: Lukas Wunner <lukas@wunner.de>
-> 
-> commit 23584c1ed3e15a6f4bfab8dc5a88d94ab929ee12 upstream.
 
-I would hold off on backporting the pciehp changes until we resolve
-this regression in v5.17-rc1:
 
-  https://bugzilla.kernel.org/show_bug.cgi?id=215525
-
-> The Power Fault Detected bit in the Slot Status register differs from
-> all other hotplug events in that it is sticky:  It can only be cleared
-> after turning off slot power.  Per PCIe r5.0, sec. 6.7.1.8:
+On 1/14/22 21:31, Matthew Rosato wrote:
+> Initial setup for Adapter Event Notification Interpretation for zPCI
+> passthrough devices.  Specifically, allocate a structure for forwarding of
+> adapter events and pass the address of this structure to firmware.
 > 
->   If a power controller detects a main power fault on the hot-plug slot,
->   it must automatically set its internal main power fault latch [...].
->   The main power fault latch is cleared when software turns off power to
->   the hot-plug slot.
-> 
-> The stickiness used to cause interrupt storms and infinite loops which
-> were fixed in 2009 by commits 5651c48cfafe ("PCI pciehp: fix power fault
-> interrupt storm problem") and 99f0169c17f3 ("PCI: pciehp: enable
-> software notification on empty slots").
-> 
-> Unfortunately in 2020 the infinite loop issue was inadvertently
-> reintroduced by commit 8edf5332c393 ("PCI: pciehp: Fix MSI interrupt
-> race"):  The hardirq handler pciehp_isr() clears the PFD bit until
-> pciehp's power_fault_detected flag is set.  That happens in the IRQ
-> thread pciehp_ist(), which never learns of the event because the hardirq
-> handler is stuck in an infinite loop.  Fix by setting the
-> power_fault_detected flag already in the hardirq handler.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=214989
-> Link: https://lore.kernel.org/linux-pci/DM8PR11MB5702255A6A92F735D90A4446868B9@DM8PR11MB5702.namprd11.prod.outlook.com
-> Fixes: 8edf5332c393 ("PCI: pciehp: Fix MSI interrupt race")
-> Link: https://lore.kernel.org/r/66eaeef31d4997ceea357ad93259f290ededecfd.1637187226.git.lukas@wunner.de
-> Reported-by: Joseph Bao <joseph.bao@intel.com>
-> Tested-by: Joseph Bao <joseph.bao@intel.com>
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: stable@vger.kernel.org # v4.19+
-> Cc: Stuart Hayes <stuart.w.hayes@gmail.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 > ---
->  drivers/pci/hotplug/pciehp_hpc.c |    7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>   arch/s390/include/asm/pci.h      |   4 +
+>   arch/s390/include/asm/pci_insn.h |  12 +++
+>   arch/s390/kvm/interrupt.c        |  14 +++
+>   arch/s390/kvm/kvm-s390.c         |   9 ++
+>   arch/s390/kvm/pci.c              | 144 +++++++++++++++++++++++++++++++
+>   arch/s390/kvm/pci.h              |  42 +++++++++
+>   arch/s390/pci/pci.c              |   6 ++
+>   7 files changed, 231 insertions(+)
+>   create mode 100644 arch/s390/kvm/pci.h
 > 
-> --- a/drivers/pci/hotplug/pciehp_hpc.c
-> +++ b/drivers/pci/hotplug/pciehp_hpc.c
-> @@ -577,6 +577,8 @@ read_status:
->  	 */
->  	if (ctrl->power_fault_detected)
->  		status &= ~PCI_EXP_SLTSTA_PFD;
-> +	else if (status & PCI_EXP_SLTSTA_PFD)
-> +		ctrl->power_fault_detected = true;
->  
->  	events |= status;
->  	if (!events) {
-> @@ -586,7 +588,7 @@ read_status:
->  	}
->  
->  	if (status) {
-> -		pcie_capability_write_word(pdev, PCI_EXP_SLTSTA, events);
-> +		pcie_capability_write_word(pdev, PCI_EXP_SLTSTA, status);
->  
->  		/*
->  		 * In MSI mode, all event bits must be zero before the port
-> @@ -660,8 +662,7 @@ static irqreturn_t pciehp_ist(int irq, v
->  	}
->  
->  	/* Check Power Fault Detected */
-> -	if ((events & PCI_EXP_SLTSTA_PFD) && !ctrl->power_fault_detected) {
-> -		ctrl->power_fault_detected = 1;
-> +	if (events & PCI_EXP_SLTSTA_PFD) {
->  		ctrl_err(ctrl, "Slot(%s): Power fault\n", slot_name(ctrl));
->  		pciehp_set_indicators(ctrl, PCI_EXP_SLTCTL_PWR_IND_OFF,
->  				      PCI_EXP_SLTCTL_ATTN_IND_ON);
-> 
-> 
+...snip...
+
+> new file mode 100644
+> index 000000000000..b2000ed7b8c3
+> --- /dev/null
+> +++ b/arch/s390/kvm/pci.h
+> @@ -0,0 +1,42 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * s390 kvm PCI passthrough support
+> + *
+> + * Copyright IBM Corp. 2021
+> + *
+> + *    Author(s): Matthew Rosato <mjrosato@linux.ibm.com>
+> + */
+> +
+> +#ifndef __KVM_S390_PCI_H
+> +#define __KVM_S390_PCI_H
+> +
+> +#include <linux/pci.h>
+> +#include <linux/mutex.h>
+> +#include <asm/airq.h>
+> +#include <asm/kvm_pci.h>
+> +
+> +struct zpci_gaite {
+> +	u32 gisa;
+> +	u8 gisc;
+> +	u8 count;
+> +	u8 reserved;
+> +	u8 aisbo;
+> +	u64 aisb;
+> +};
+> +
+> +struct zpci_aift {
+> +	struct zpci_gaite *gait;
+> +	struct airq_iv *sbv;
+> +	struct kvm_zdev **kzdev;
+> +	spinlock_t gait_lock; /* Protects the gait, used during AEN forward */
+> +	struct mutex lock; /* Protects the other structures in aift */
+
+To facilitate review and debug, can we please rename the lock aift_lock?
+
+
+> +};
+> +
+> +extern struct zpci_aift *aift;
+> +
+...snip...
+
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

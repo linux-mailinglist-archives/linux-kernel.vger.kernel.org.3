@@ -2,106 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3507A49B25C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6779049B260
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377593AbiAYKuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 05:50:37 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:55854 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376602AbiAYKrm (ORCPT
+        id S1378643AbiAYKvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 05:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377096AbiAYKsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:47:42 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id BDB371C0B76; Tue, 25 Jan 2022 11:47:25 +0100 (CET)
-Date:   Tue, 25 Jan 2022 11:47:25 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.10 262/563] uio: uio_dmem_genirq: Catch the Exception
-Message-ID: <20220125104725.GA19281@duo.ucw.cz>
-References: <20220124184024.407936072@linuxfoundation.org>
- <20220124184033.490683244@linuxfoundation.org>
+        Tue, 25 Jan 2022 05:48:33 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31D7C061753
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:48:32 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id z14so14614610ljc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 02:48:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kempniu.pl; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gu9HMdud+xkKETJLVBlwtrA+0/HcBrnYD8Y8ONHhjbw=;
+        b=XqFH2feDD8JjHKuyp9SAg78+XlDrY5wAyHBaybW3XGs/mxABZasVQZRNrfJkKZPzBX
+         41qMQLW4E4vL+Mu4o2jbMQl2B2PMuUHGWBXCK9xTFbDAe8UTaqPWMJz9Bd+N/n050Odg
+         b2QDNR2PTuY1IxOGyaiE1MrJ/HNTJqPw6ycYI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gu9HMdud+xkKETJLVBlwtrA+0/HcBrnYD8Y8ONHhjbw=;
+        b=345cZAQqkJVCJ+XjAz0agGklAWXToopbLTyHbgm6YWGmTiFOjV8/ci7ffBUNdI4mk3
+         KnjDbpyScqICVpS+ZRqvKiFTUPKXjXf3LteMIYgJBK74QYkrNUEoMt8vJfMB7y7LwLvn
+         luu6ABD9j2nY95imfZfktGLqw/b9yotJavp0xqpEQeC9dJ35Nbj9a+yRYPUxGOX1Usz5
+         B3n1c5npJPxkyubrX4ahhlRbIW/IxyYlgUpoID072k9y5qaloSigQM0JiVgYlMynwObn
+         ub87xoqEiHf5wQXr/uHxvOWziNYw+9Ze2rIFd3xJH3Jgm13NkaNSjjF1Lw01ufppuQKp
+         2FEA==
+X-Gm-Message-State: AOAM533brF71q8Ju9+dkfmXXLHCAfsL7UIm9ysZcghYG6c19wWp2nBs0
+        dhqf57vUiuA5ORUwmGg8IRwHPw==
+X-Google-Smtp-Source: ABdhPJzoWpgBXJdXeQDWfB/o0rRTP0iziqQCqAaon+GoLfHwtxAwJbWZVBOrVhWYeqHsaZhcJ42FPQ==
+X-Received: by 2002:a05:651c:91:: with SMTP id 17mr2512072ljq.211.1643107711256;
+        Tue, 25 Jan 2022 02:48:31 -0800 (PST)
+Received: from larwa.hq.kempniu.pl ([2001:470:64df:111::221])
+        by smtp.gmail.com with ESMTPSA id d16sm461896ljj.74.2022.01.25.02.48.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 02:48:30 -0800 (PST)
+From:   =?UTF-8?q?Micha=C5=82=20K=C4=99pie=C5=84?= <kernel@kempniu.pl>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] mtdchar: add MEMREAD ioctl
+Date:   Tue, 25 Jan 2022 11:48:18 +0100
+Message-Id: <20220125104822.8420-1-kernel@kempniu.pl>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="7JfCtLOvnd9MIVvH"
-Content-Disposition: inline
-In-Reply-To: <20220124184033.490683244@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series adds a new mtdchar ioctl, MEMREAD.  Its purpose is to
+serve as a read counterpart of the MEMWRITE ioctl, exposing a broader
+set of capabilities for read operations (e.g. use of MTD_OPS_AUTO_OOB,
+access to ECC statistics) to user-space applications making use of MTD
+devices via /dev/mtd* character devices.
 
---7JfCtLOvnd9MIVvH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes from v2:
 
-Hi!
+  - Squashed patch 1/5 into patch 5/5 to prevent breaking bisectability
+    due to an incompatible ABI change between those two patches.
+    Revised commit messages accordingly.
 
-> From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
->=20
-> [ Upstream commit eec91694f927d1026974444eb6a3adccd4f1cbc2 ]
->=20
-> The return value of dma_set_coherent_mask() is not always 0.
-> To catch the exception in case that dma is not support the mask.
->=20
-> Fixes: 0a0c3b5a24bd ("Add new uio device for dynamic memory allocation")
+Changes from v1:
 
+  - Added patches 2-5 which enable the new MEMREAD ioctl to report ECC
+    statistics for the read operation back to user space.  (There are
+    obviously different ways these changes can be split up into separate
+    commits; I was aiming for maximum ease of review.)
 
-> +++ b/drivers/uio/uio_dmem_genirq.c
-> @@ -183,7 +183,11 @@ static int uio_dmem_genirq_probe(struct platform_dev=
-ice *pdev)
->  		goto bad0;
->  	}
-> =20
-> -	dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
-> +	ret =3D dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "DMA enable failed\n");
-> +		return ret;
-> +	}
+  - The 'retlen' and 'oobretlen' fields were not set in the struct
+    mtd_read_req returned to userspace.  This was done properly in
+    Boris' original draft patch [1], but I missed it in my v1.
 
-Handing errors is good, but you may not directly return here as it
-would leak the resources. Something like this?
+  - Invalid IS_ERR() checks were replaced with NULL checks.  This was an
+    artifact of copy-pasting mtdchar_write_ioctl() in v1: unlike
+    memdup_user() used therein, kmalloc() always returns NULL on error.
 
-Signed-off-by: Pavel Machek <pavel@denx.de>
+  - Minor subject prefix adjustment for patch 1/5 ("mtd" -> "mtdchar").
 
-Best regards,
-								Pavel
+Michał Kępień (4):
+  mtd: track maximum number of bitflips for each read request
+  mtd: always initialize 'stats' in struct mtd_oob_ops
+  mtd: add ECC error accounting for each read request
+  mtdchar: add MEMREAD ioctl
 
-diff --git a/drivers/uio/uio_dmem_genirq.c b/drivers/uio/uio_dmem_genirq.c
-index bf39a424ea77..7b80d0c02735 100644
---- a/drivers/uio/uio_dmem_genirq.c
-+++ b/drivers/uio/uio_dmem_genirq.c
-@@ -186,7 +186,7 @@ static int uio_dmem_genirq_probe(struct platform_device=
- *pdev)
- 	ret =3D dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
- 	if (ret) {
- 		dev_err(&pdev->dev, "DMA enable failed\n");
--		return ret;
-+		goto bad0;
- 	}
-=20
- 	priv->uioinfo =3D uioinfo;
+ drivers/mtd/devices/docg3.c             |   8 ++
+ drivers/mtd/inftlcore.c                 |   6 +-
+ drivers/mtd/mtdchar.c                   | 136 ++++++++++++++++++++++++
+ drivers/mtd/mtdcore.c                   |   5 +
+ drivers/mtd/mtdswap.c                   |   6 +-
+ drivers/mtd/nand/onenand/onenand_base.c |  16 ++-
+ drivers/mtd/nand/onenand/onenand_bbt.c  |   2 +-
+ drivers/mtd/nand/raw/nand_base.c        |  10 ++
+ drivers/mtd/nand/raw/nand_bbt.c         |   8 +-
+ drivers/mtd/nand/raw/sm_common.c        |   2 +-
+ drivers/mtd/nand/spi/core.c             |  10 ++
+ drivers/mtd/nftlcore.c                  |   6 +-
+ drivers/mtd/sm_ftl.c                    |   4 +-
+ drivers/mtd/ssfdc.c                     |   2 +-
+ drivers/mtd/tests/nandbiterrs.c         |   2 +-
+ drivers/mtd/tests/oobtest.c             |   8 +-
+ drivers/mtd/tests/readtest.c            |   2 +-
+ fs/jffs2/wbuf.c                         |   6 +-
+ include/linux/mtd/mtd.h                 |   7 ++
+ include/uapi/mtd/mtd-abi.h              |  64 ++++++++++-
+ 20 files changed, 276 insertions(+), 34 deletions(-)
 
+-- 
+2.34.1
 
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---7JfCtLOvnd9MIVvH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYe/VPQAKCRAw5/Bqldv6
-8oUIAJ9/7cpk9jh44ON8YaFNToFokd9auQCfcVbS8avbK2Kv861oa1mJdPLGrI8=
-=2Gqd
------END PGP SIGNATURE-----
-
---7JfCtLOvnd9MIVvH--

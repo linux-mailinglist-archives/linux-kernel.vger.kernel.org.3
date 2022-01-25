@@ -2,72 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E93049B690
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C5949B695
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388495AbiAYOjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:39:07 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:49728 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238093AbiAYOea (ORCPT
+        id S1579495AbiAYOjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:39:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1389251AbiAYOfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:34:30 -0500
-Date:   Tue, 25 Jan 2022 15:34:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643121266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VoqfDBHhTAJ/th+5DzPwXrFiDr1q3BUP6gebHBO03j8=;
-        b=SawjJMZ/l1V8fmswZt/7lMaYWbYT2Kk6D0t5WhyefjCr32Ybk38NN/a9Cu6ufQm5IQDUqj
-        qnWSyKFB/6Rh4nf0s4CgokALBQ5lkMzaRT4s1So0iEAv2SE+x6NiVstbM66FSUxjg6Boec
-        ikH7Qhpm0+MuRVhQTkKHn7bnWNB9Gyt/mJZS6+NBpUBinwyrLlw+JwV7+ZoNH4PLgkiHkv
-        QrNGOoP8SreVCzHlB+GpQ2SY7SPD22ewjqRCQVhf7EDwj+ZnkBmZOcpGT3SLwuWhCjZEaw
-        mwEPBTee+bcwWVwwjPkQLhQde3+fWBJ8qUml9YZCiX2uaesBZLQl3r0A1K2pFQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643121266;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VoqfDBHhTAJ/th+5DzPwXrFiDr1q3BUP6gebHBO03j8=;
-        b=cjQh86pyNGNSp/dlgktgCQDVV3Wm0RrYyt6S1ejk3GSVeaIwzL/6PACzr4UR3vv2ayrQrB
-        Rwva4YQd/2pz+hCQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Wander Costa <wcosta@redhat.com>
-Cc:     Wander Lairson Costa <wander@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v3 1/1] tty: serial: Use fifo in 8250 console driver
-Message-ID: <YfAKcI8APsJmVgFp@linutronix.de>
-References: <20211222112831.1968392-1-wander@redhat.com>
- <20211222112831.1968392-2-wander@redhat.com>
- <Ye/1+Z8mEzbKbrqG@linutronix.de>
- <CAAq0SUmdGinqdWXrHztx8g9hb+5UF5rDJJjVeVMj3CQ=Fw3kJg@mail.gmail.com>
- <YfAFAcYmJ+Zrontd@linutronix.de>
- <CAAq0SUkuG2uyouBhT5yDiq_KbOGUCO=9ondq6dkt1QZLN_C4uA@mail.gmail.com>
+        Tue, 25 Jan 2022 09:35:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63CCC061756;
+        Tue, 25 Jan 2022 06:34:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54677615B4;
+        Tue, 25 Jan 2022 14:34:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04018C340E0;
+        Tue, 25 Jan 2022 14:34:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643121279;
+        bh=1DQnWgHZJKj5ukHqGYmPdLyxXLH9Wa25z3VPX1fMJC8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kuAIhNpBlHeJepM6g0GgkQjv6J5Qlik6/db2hAuO6vQuTisg77AROUkzA0ld2TXc9
+         oJ+9Skhu+UuT2p5yXaRSpEzyUoooIz4rB+O8zMU2KMZZPZFst40ja4/N27TgP2yG1I
+         DUbp3yyMXwt34UsMCPdmGJ9SGi+Nz2nWuhYhYt/A=
+Date:   Tue, 25 Jan 2022 15:34:37 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4.9 000/157] 4.9.298-rc1 review
+Message-ID: <YfAKfTtZqb7EIm3T@kroah.com>
+References: <20220124183932.787526760@linuxfoundation.org>
+ <CA+G9fYvzftL7cWFysem9z4AMKFXMRShy6-Ewp74ckP1xeaBCAA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAq0SUkuG2uyouBhT5yDiq_KbOGUCO=9ondq6dkt1QZLN_C4uA@mail.gmail.com>
+In-Reply-To: <CA+G9fYvzftL7cWFysem9z4AMKFXMRShy6-Ewp74ckP1xeaBCAA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-25 11:26:03 [-0300], Wander Costa wrote:
-> I will check on my side if I see something similar. Do you still get
-> lines lost as well?
+On Tue, Jan 25, 2022 at 06:24:39PM +0530, Naresh Kamboju wrote:
+> On Tue, 25 Jan 2022 at 00:24, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 4.9.298 release.
+> > There are 157 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.298-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+> 
+> same as 4.14 build error.
+> stable-rc 4.9 build failed.
+> arm (imx_v6_v7_defconfig) with gcc-8, gcc-9, gcc-10 and gcc-11 - FAILED
+> 
+>  > Lucas Stach <l.stach@pengutronix.de>
+>  >     drm/etnaviv: limit submit sizes
+> 
+> drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c: In function
+> 'etnaviv_ioctl_gem_submit':
+> drivers/gpu/drm/etnaviv/etnaviv_gem_submit.c:329:37: error: 'struct
+> drm_etnaviv_gem_submit' has no member named 'nr_pmrs'; did you mean
+> 'nr_bos'?
+>       args->nr_bos > SZ_64K || args->nr_pmrs > 128) {
+>                                      ^~~~~~~
+>                                      nr_bos
+> make[5]: *** [scripts/Makefile.build:307:
+> drivers/gpu/drm/etnaviv/etnaviv_gem_submit.o] Error 1
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Yes. The output is garbage for a while and then it fixes itself. Setting
-"use_fifo = 0" works.
-Thanks.
+Thanks, already dropped.
 
-Sebastian
+greg k-h

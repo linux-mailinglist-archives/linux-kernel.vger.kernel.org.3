@@ -2,164 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCB449B0F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B528E49B0FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 11:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237039AbiAYJy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
+        id S233357AbiAYJy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:54:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232645AbiAYJvH (ORCPT
+        with ESMTP id S237054AbiAYJwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:51:07 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F5EC06175C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:51:06 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id r10so30628002edt.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:51:06 -0800 (PST)
+        Tue, 25 Jan 2022 04:52:15 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA20C06176C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:52:15 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id b37so18628717uad.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:52:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HlPvap3s7pdO0i3AvOfOgwK8HydV4tcDe28Yz+r5dr0=;
-        b=czSb6VFvgku1bVsTdGbcRTR0h8h7GNK9U7KQbStWcKMBxUQIn8d5yU5gfXgnxAmfvr
-         2OsmpbsMIKQIJzgXfb/MHunf7rUu/HGy0aTFyNATY4s5oSHnUwkn+ccspaA7B4xMMS1x
-         ODBXUhk+iS4skIxEjJktEEBsCu1Mqmf1LYWH64SqZdlpNzh3svpwMTEynwMu1BHsJCQh
-         s/nSaUKZT5NM+M527n8NWD/Z6I5Nc9AKrr4oIkAPNW16pRI9PW4+GrJAo9N+219PjRZh
-         p3qKj2+9BdnsGQKJ/+Afhue35T2O3LgrmT+bzwkIXvYESr2x0PxpiBd3hO+zmXQ08DjV
-         O1hw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=qR5YJcLW2GI0pCEyIs9uAaekT483+eeoDNQCmnpeWL0=;
+        b=oBz6bkmpMKQDFtjXTSMZMGJwW4VzyQrF+9lg0ezZlkiheqPmGAyxsv1rcXZsmJ/teU
+         9rjT4qeeZKcW0z6/nlXrH1WjzSoldzf91e10GAgSe03uuyHAbSny42LNQVcPy1jtJHYB
+         gBbnLdXqNMOn6lVolju1wGy3+GjrgpVGWwabCxbzW815wpsL7OA2NDwTB5ZtOdHBv5cc
+         EFxDPah7IUJsVPioo3prDv8cH3Tc7atS/+2bx9btVzld4WdF8YWdA+njbhJ3IIRBuX5Z
+         Wj7GWaLhx/feClQaAv27SUwh3tZZJnFHCbTGQWn8odio9A86Hy9Y4EITdGQQEr27jNbz
+         FQXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HlPvap3s7pdO0i3AvOfOgwK8HydV4tcDe28Yz+r5dr0=;
-        b=TjsJIlkG3f+2rBIUGzLm8CheIoLSUcZpBPMW2gxgiLuT9AFYujmg8dI9efHz0qvAwT
-         SHyKictOznJtPUZA+iS3wzV8fJqSLBTlDmjoA36o697EuFcvVgfczYGFqZNWTDZ8rs7H
-         0hFxoqIhyCxzCcHV6CtGnteDBuzvUWZlp5eYS3PomKfXmHziLRxLvV0RQd7qmT63n9wm
-         I47+fctoG8LRmPMXKZ0nPPSStC9Ob5HoXGhJ0nx4O7HS+EzvxBPYyhFnsG1MGaimkpVx
-         k++JJ5nCZCzvYxLt4+d1SVd2ttxxZd/RUipCQx29d7Swxm/p1V8eLxNSIOZrHq2cwSwl
-         fQ5A==
-X-Gm-Message-State: AOAM533xBdFEOeg8FDa6IspBA0qr3/oXOMwDUZnXKlPT8o97PxCDpgz0
-        GBe/CJjspo8LFA1zyd7hzQpn8f7o956zT3qQwyCQ/A==
-X-Google-Smtp-Source: ABdhPJwQzlX3EMzz8K17JeuAaI2l2wrQ2t9jeb+BkBrkVLHJV+P7nqMNLX4xKtjzYu9msSkcu7xBJKtfWdWFjHaLCAI=
-X-Received: by 2002:a05:6402:1604:: with SMTP id f4mr19666005edv.352.1643104264783;
- Tue, 25 Jan 2022 01:51:04 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=qR5YJcLW2GI0pCEyIs9uAaekT483+eeoDNQCmnpeWL0=;
+        b=CT2ZxINKUuOkfzBDVow0AFaVgwEHCG4BQMfjSzjkOKKsson4aVVO8R24ZCMnECrKnQ
+         FgwLGeP2AVPhRj0Wkbe+LpKXD9aOc/7UvzBXlsnJxBeAlO5ZZYaCdAOUFolrSiEpyOHx
+         1EPBjOZ7oIdiTcMTg42uipg6ZZNLA7mVMWXMoFHAUjWYSURHtaEzFjjHH0FvN9WUTEYh
+         P0MhexkRkk4FAwpfapuaGvc3AXzHUEMmziM0pZ6bXY+irHk58oGr1VaSav838cwfUEnC
+         /sW1+kTGy7MWOCzwRQ1RcRc+VbAUNmFlnVASY5df9jwOh+E2Gp2O0Gs/eIkhwOEH23+D
+         qINQ==
+X-Gm-Message-State: AOAM530q0JBlTVVTFpOKm1GtUYu6zFheKgUeSBut1oeNtRciqUhC+TxY
+        S5DhQmijKXrHz6uk64/iGzTtqqUwBiuNvBcvAmE=
+X-Google-Smtp-Source: ABdhPJw1kee37xDnHxsvIxx/V2KHgXmL9VIO4H25+PcVbS9btHnWwXL66vZ+DGAfWLmHFKf6fGSBMi8FkaReeQEP29E=
+X-Received: by 2002:a67:c093:: with SMTP id x19mr5350370vsi.20.1643104334444;
+ Tue, 25 Jan 2022 01:52:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120070226.1492-1-biao.huang@mediatek.com> <20220120070226.1492-2-biao.huang@mediatek.com>
-In-Reply-To: <20220120070226.1492-2-biao.huang@mediatek.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 25 Jan 2022 10:50:54 +0100
-Message-ID: <CAMRc=Mc+DqcQFGqxoYXYG-VCuaKkJusoVGSHb0G-MtYsiVCxVw@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 1/9] net: ethernet: mtk-star-emac: store
- bit_clk_div in compat structure
-To:     Biao Huang <biao.huang@mediatek.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        Jakub Kicinski <kuba@kernel.org>, Felix Fietkau <nbd@nbd.name>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
-        srv_heupstream@mediatek.com, Macpaul Lin <macpaul.lin@mediatek.com>
+Received: by 2002:a05:612c:2109:b0:275:d70f:63a3 with HTTP; Tue, 25 Jan 2022
+ 01:52:13 -0800 (PST)
+Reply-To: sgtmanthey10@gmail.com
+From:   kayla manthey <93531103abala@gmail.com>
+Date:   Tue, 25 Jan 2022 09:52:13 +0000
+Message-ID: <CAGEfFFcv-POSyP1Y3BwFYumTGUiuE04yhiBDvDTa-Z32SoasdQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 8:02 AM Biao Huang <biao.huang@mediatek.com> wrote:
->
-> From: Fabien Parent <fparent@baylibre.com>
->
-> Not all the SoC are using the same clock divider. Move the divider into
-> a compat structure specific to the SoCs.
->
-> Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> ---
->  drivers/net/ethernet/mediatek/mtk_star_emac.c | 23 +++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/net/ethernet/mediatek/mtk_star_emac.c b/drivers/net/ethernet/mediatek/mtk_star_emac.c
-> index 1d5dd2015453..26f5020f2e9c 100644
-> --- a/drivers/net/ethernet/mediatek/mtk_star_emac.c
-> +++ b/drivers/net/ethernet/mediatek/mtk_star_emac.c
-> @@ -17,6 +17,7 @@
->  #include <linux/module.h>
->  #include <linux/netdevice.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <linux/of_mdio.h>
->  #include <linux/of_net.h>
->  #include <linux/platform_device.h>
-> @@ -232,6 +233,10 @@ struct mtk_star_ring {
->         unsigned int tail;
->  };
->
-> +struct mtk_star_compat {
-> +       unsigned char bit_clk_div;
-> +};
-> +
->  struct mtk_star_priv {
->         struct net_device *ndev;
->
-> @@ -257,6 +262,8 @@ struct mtk_star_priv {
->         int duplex;
->         int pause;
->
-> +       const struct mtk_star_compat *compat_data;
-> +
->         /* Protects against concurrent descriptor access. */
->         spinlock_t lock;
->
-> @@ -899,7 +906,7 @@ static void mtk_star_init_config(struct mtk_star_priv *priv)
->         regmap_write(priv->regs, MTK_STAR_REG_SYS_CONF, val);
->         regmap_update_bits(priv->regs, MTK_STAR_REG_MAC_CLK_CONF,
->                            MTK_STAR_MSK_MAC_CLK_CONF,
-> -                          MTK_STAR_BIT_CLK_DIV_10);
-> +                          priv->compat_data->bit_clk_div);
->  }
->
->  static void mtk_star_set_mode_rmii(struct mtk_star_priv *priv)
-> @@ -1461,6 +1468,7 @@ static int mtk_star_probe(struct platform_device *pdev)
->
->         priv = netdev_priv(ndev);
->         priv->ndev = ndev;
-> +       priv->compat_data = of_device_get_match_data(&pdev->dev);
->         SET_NETDEV_DEV(ndev, dev);
->         platform_set_drvdata(pdev, ndev);
->
-> @@ -1556,10 +1564,17 @@ static int mtk_star_probe(struct platform_device *pdev)
->         return devm_register_netdev(dev, ndev);
->  }
->
-> +static struct mtk_star_compat mtk_star_mt8516_compat = {
-
-static const ... ?
-
-> +       .bit_clk_div = MTK_STAR_BIT_CLK_DIV_10,
-> +};
-> +
->  static const struct of_device_id mtk_star_of_match[] = {
-> -       { .compatible = "mediatek,mt8516-eth", },
-> -       { .compatible = "mediatek,mt8518-eth", },
-> -       { .compatible = "mediatek,mt8175-eth", },
-> +       { .compatible = "mediatek,mt8516-eth",
-> +         .data = &mtk_star_mt8516_compat },
-> +       { .compatible = "mediatek,mt8518-eth",
-> +         .data = &mtk_star_mt8516_compat },
-> +       { .compatible = "mediatek,mt8175-eth",
-> +         .data = &mtk_star_mt8516_compat },
->         { }
->  };
->  MODULE_DEVICE_TABLE(of, mtk_star_of_match);
-> --
-> 2.25.1
->
+--=20
+Bitte, ich m=C3=B6chte wissen, ob Sie meine vorherigen Nachrichten erhalten=
+ haben.

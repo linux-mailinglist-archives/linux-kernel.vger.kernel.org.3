@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D3B49B4CB
+	by mail.lfdr.de (Postfix) with ESMTP id F278049B4CC
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575789AbiAYNRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:17:38 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:60006 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1575597AbiAYNMb (ORCPT
+        id S1576243AbiAYNSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:18:41 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:56596 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1575806AbiAYNMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:12:31 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20PDCTes027728;
-        Tue, 25 Jan 2022 07:12:29 -0600
+        Tue, 25 Jan 2022 08:12:41 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20PDCWNL037183;
+        Tue, 25 Jan 2022 07:12:32 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643116349;
-        bh=tZfRakDxr6IaVcXNqJg09wazOdGm6s80/dTUcsPL8iY=;
-        h=From:To:CC:Subject:Date;
-        b=caAShyOdaBhkuinLemgAHclHjRHauWotXgHNvJnqlA7qIKHqiQLz01o7OscVu03U6
-         fb04WXz8AG12ydBpI8TfaPKo/bi5LPeeq8NmyQ0c+bUEHmNLjJbffLHdi+jOPksjH9
-         WvJBibxMem4JQsdNq7TyGkyA3JO/z/rqbPcLa3pY=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20PDCTHA074017
+        s=ti-com-17Q1; t=1643116352;
+        bh=VOyq+81USSsidTXpTspuPB4lfGW+i6cGdLVbOdeI7dQ=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=J5Ja9ZtoCy9A+OVABPQHbSlnjEL6lm5YB+cehKlFqPCuzxw1mBDfAAUuBDdP0n9uN
+         xZ5gD4J2BAzk2J2Ih64C2aJDl0lHEOY5/13TmfAJbN+FNfnXwIpi3rgzPWnQKy20sA
+         KALha8YsKsktURcNaZbvUlJGandqk/UQd24fhWYs=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20PDCVHV030990
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Jan 2022 07:12:29 -0600
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 25 Jan 2022 07:12:32 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 25
- Jan 2022 07:12:28 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2022 07:12:31 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 25 Jan 2022 07:12:28 -0600
+ Frontend Transport; Tue, 25 Jan 2022 07:12:31 -0600
 Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20PDCPWD008001;
-        Tue, 25 Jan 2022 07:12:26 -0600
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20PDCPWE008001;
+        Tue, 25 Jan 2022 07:12:29 -0600
 From:   Aswath Govindraju <a-govindraju@ti.com>
 CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,10 +45,12 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Nishanth Menon <nm@ti.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Aswath Govindraju <a-govindraju@ti.com>
-Subject: [PATCH 0/2] J721S2: Add support for PCIE
-Date:   Tue, 25 Jan 2022 18:42:23 +0530
-Message-ID: <20220125131225.871-1-a-govindraju@ti.com>
+Subject: [PATCH 1/2] arm64: dts: ti: k3-j721s2-main: Add PCIe device tree node
+Date:   Tue, 25 Jan 2022 18:42:24 +0530
+Message-ID: <20220125131225.871-2-a-govindraju@ti.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220125131225.871-1-a-govindraju@ti.com>
+References: <20220125131225.871-1-a-govindraju@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -57,29 +59,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following series of patches add support for single
-instance of PCIe brought out on J721S2 common processor
-board.
+Add PCIe device tree node (both RC and EP) for the single PCIe
+instance present in j721s2.
 
-Notes:
-- Applying this patch series **breaks the boot** of J721S2.
-  This is because of the following commit,
-  "19e863828acf PCI: j721e: Drop redundant struct device *"
-  Dicussions are currently ongoing regarding the required
-  fix.
+Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-- This needs to be merged after the following patch
-  to avoid dtbs_check errors
-  https://lkml.org/lkml/2021/11/29/1752
-
-Aswath Govindraju (2):
-  arm64: dts: ti: k3-j721s2-main: Add PCIe device tree node
-  arm64: dts: ti: k3-j721s2-common-proc-board: Enable PCIe
-
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 ++++++
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 48 +++++++++++++++++++
- 2 files changed, 62 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+index ebd55032e59c..dc365a1880d0 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+@@ -795,6 +795,54 @@
+ 		};
+ 	};
+ 
++	pcie1_rc: pcie@2910000 {
++		compatible = "ti,j7200-pcie-host", "ti,j721e-pcie-host";
++		reg = <0x00 0x02910000 0x00 0x1000>,
++		      <0x00 0x02917000 0x00 0x400>,
++		      <0x00 0x0d800000 0x00 0x00800000>,
++		      <0x00 0x18000000 0x00 0x00001000>;
++		reg-names = "intd_cfg", "user_cfg", "reg", "cfg";
++		interrupt-names = "link_state";
++		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
++		device_type = "pci";
++		ti,syscon-pcie-ctrl = <&scm_conf 0x074>;
++		max-link-speed = <3>;
++		num-lanes = <4>;
++		power-domains = <&k3_pds 276 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 276 41>;
++		clock-names = "fck";
++		#address-cells = <3>;
++		#size-cells = <2>;
++		bus-range = <0x0 0xff>;
++		vendor-id = <0x104c>;
++		device-id = <0xb013>;
++		msi-map = <0x0 &gic_its 0x0 0x10000>;
++		dma-coherent;
++		ranges = <0x01000000 0x0 0x18001000  0x00 0x18001000  0x0 0x0010000>,
++			 <0x02000000 0x0 0x18011000  0x00 0x18011000  0x0 0x7fef000>;
++		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
++	};
++
++	pcie1_ep: pcie-ep@2910000 {
++		compatible = "ti,j7200-pcie-ep", "ti,j721e-pcie-ep";
++		reg = <0x00 0x02910000 0x00 0x1000>,
++		      <0x00 0x02917000 0x00 0x400>,
++		      <0x00 0x0d800000 0x00 0x00800000>,
++		      <0x00 0x18000000 0x00 0x08000000>;
++		reg-names = "intd_cfg", "user_cfg", "reg", "mem";
++		interrupt-names = "link_state";
++		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
++		ti,syscon-pcie-ctrl = <&scm_conf 0x074>;
++		max-link-speed = <3>;
++		num-lanes = <4>;
++		power-domains = <&k3_pds 276 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 276 41>;
++		clock-names = "fck";
++		max-functions = /bits/ 8 <6>;
++		max-virtual-functions = /bits/ 8 <4 4 4 4 0 0>;
++		dma-coherent;
++	};
++
+ 	main_mcan0: can@2701000 {
+ 		compatible = "bosch,m_can";
+ 		reg = <0x00 0x02701000 0x00 0x200>,
 -- 
 2.17.1
 

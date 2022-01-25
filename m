@@ -2,155 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2A849B36D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E726C49B37F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386800AbiAYL50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 06:57:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
+        id S241817AbiAYMEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386558AbiAYLwi (ORCPT
+        with ESMTP id S1382757AbiAYMAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 06:52:38 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDBEC061401;
-        Tue, 25 Jan 2022 03:52:34 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id i17so2015685pfq.13;
-        Tue, 25 Jan 2022 03:52:34 -0800 (PST)
+        Tue, 25 Jan 2022 07:00:44 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBB3C06173B;
+        Tue, 25 Jan 2022 04:00:30 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id w12-20020a17090a528c00b001b276aa3aabso1911538pjh.0;
+        Tue, 25 Jan 2022 04:00:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6ah5l1D0e53j/TNN2l2oD6uzzld/ChKHxACn/WjMnXw=;
-        b=ZUOZzEiiIeoBmuueZJlIyuA5Yyl8fzNEoPX6viN5ap+oULD+C8EhJs5uKlNYvKIvVS
-         NVtVp9Kxo/vEGUCXjjnQ5n4cBlRCmueBWheMhdXbTV7W4wLoaxL3cbrbSOag7TAq9yuP
-         xkArWofc5Ajhx7SNuO85atzhs0P9rqljxgupnGeCnuKR9IBjVN+HbrW3OJX8MYo4WEif
-         ydv4p1ehnYkKoWLom+SiOK794lgMXt+ONiANqxg+2vpd4Dm37sgAgRWgSpQYL4FY9kpd
-         /FzilJ7tGPFpWuzs0Cnz/TEVPPxaO2MEyTcpyiMsQdbQnNQNLs18JWDnfjpOfyy1Ue4G
-         thNg==
+        h=from:to:cc:subject:date:message-id;
+        bh=Z2eSIKO2hPoT+F0EzCBQkbD8++MWEeeyBWhA5iN+68Y=;
+        b=ALI7ZgAa3oPCEuVPuONBKC63VKdQnQJeEy7qFRK699JkPvR7gWOFbzGjLsglzuYD52
+         2yHA3r92N2bIK0ZksZD8njL5BAlHHcNCheGp1PHn+D1fVjO76qBpFlTNfLnUv/DlR7DW
+         AO2VFW08Twc34e8cqgQS/gaYEmzYtu2iaW6IVT/QEfqVPibZoSv/2zt8U8wwCsqJuEAH
+         1M2Vl5l55ywHvBrjbwXyTAM1idFUjbWRv+K5t5Tz/yk+mObHo5H3zy6OG02HLn9MUZsS
+         T7MCeAg5A30xSfp9RtGu0u+EoShs6bZ6VVL7rvBi6YfpwnJ7BGb+qeovwbebc1cVJICc
+         vE2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6ah5l1D0e53j/TNN2l2oD6uzzld/ChKHxACn/WjMnXw=;
-        b=uFaZWJdCNc1REiaebaPvf7eYbkimYzekvo64ZFnoo9ZWdG0mhXDkFiXF0lFXNfFvXP
-         W4wrKoSiqHrouH9i7uPF2fJJNSjL4jisH32Sky6MPYCZVvPwz3Ep15WLu4YqaeYqr5OT
-         +Z1TPXxmGV6cpvQu9Oj1nW9wk1dvIJ758SpUEJwwuw3pK9Iw1ZLfblp5ZFc6DjXHnq8n
-         mvFx/IJCsZYkjqwbWyf49K9wBxwevRKFxrMqaCoGkKq4dwiomU/gFGIDyehSkFOj+WwU
-         WJa/NJr04c7BvzRi9D2YYnuvxfUwkH1Xqb224IV+38ghQLUPr5B0JlZM+z3AAGd1GOZe
-         UAkg==
-X-Gm-Message-State: AOAM530ScspVgIW0XcNba7c0SgOAIwe31TOng/7c1YIfHZtY3l8FaQuT
-        +4KI8LlkbLV46YP5+eg1t2cU/yvISQEMJQ==
-X-Google-Smtp-Source: ABdhPJwSI5Uxzhc1kA5HdaNpZMdx4vlj5nYn1XV49bP01FNKLHZ+tYqXagIi8HvyIq2DGKUqlXoSXw==
-X-Received: by 2002:a63:114:: with SMTP id 20mr8114462pgb.524.1643111554401;
-        Tue, 25 Jan 2022 03:52:34 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id b4sm14353030pgq.75.2022.01.25.03.52.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 03:52:33 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Tian Kevin <kevin.tian@intel.com>,
-        Jim Mattson <jmattson@google.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Z2eSIKO2hPoT+F0EzCBQkbD8++MWEeeyBWhA5iN+68Y=;
+        b=sfFITQCQSJDzN0Sq3ap2cHgQGRfVa1SXUSIB9o26LwUsDPGE1f81dRli186yl3jtU7
+         E/tg3kx9rZo48Q+pELESi+WplbsRK5AmnjOtF7IE7TVGoQuQNOYdbLZQ02Wav1iYCFND
+         qy9HXsZh8F5HeQkDZg+dcAE/stGR6qIC4OdSwFEBnYYCcfW6/j7SRWXX6Swa2m4rNBsi
+         hDF2hXux+QwIcltL36eu0t5BpsN1JVKFQshdaaPLagCFx4iirFmYHaw3ofBDoj1y33SD
+         mnGi6BcoeXQw0e6MxMNU8GkNbs2L9LWCECR1kZMRW5kx5XHhztMjoLSYaUfeQYBfRgYi
+         9gzQ==
+X-Gm-Message-State: AOAM531ZIVAp1gjlCBeSEHd6gAazQ3KIHWB5BVIgawcHNEiV+HDnLl0s
+        ypRGLMm0ma8R2RWLnzdlgODJ+VhPlwoAsQ==
+X-Google-Smtp-Source: ABdhPJxboyPEW0uwim9wsTVOxgUlkUtCTkh+LyP78FY20vNjpwPE1Uw/P3LJf5XOzjr/65Rvwj6LJQ==
+X-Received: by 2002:a17:90a:de08:: with SMTP id m8mr3209326pjv.102.1643112029424;
+        Tue, 25 Jan 2022 04:00:29 -0800 (PST)
+Received: from localhost.localdomain ([203.205.141.110])
+        by smtp.googlemail.com with ESMTPSA id ga21sm2566108pjb.2.2022.01.25.04.00.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 25 Jan 2022 04:00:29 -0800 (PST)
+From:   Wanpeng Li <kernellwp@gmail.com>
+X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] KVM: x86/cpuid: Exclude unpermitted xfeatures sizes at KVM_GET_SUPPORTED_CPUID
-Date:   Tue, 25 Jan 2022 19:52:23 +0800
-Message-Id: <20220125115223.33707-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.33.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: [PATCH RESEND v2] KVM: VMX: Dont' send posted IRQ if vCPU == this vCPU and vCPU is IN_GUEST_MODE
+Date:   Tue, 25 Jan 2022 03:59:39 -0800
+Message-Id: <1643111979-36447-1-git-send-email-wanpengli@tencent.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+From: Wanpeng Li <wanpengli@tencent.com>
 
-With the help of xstate_get_guest_group_perm(), KVM can exclude unpermitted
-xfeatures in cpuid.0xd.0.eax, in which case the corresponding xfeatures
-sizes should also be matched to the permitted xfeatures.
+When delivering a virtual interrupt, don't actually send a posted interrupt
+if the target vCPU is also the currently running vCPU and is IN_GUEST_MODE,
+in which case the interrupt is being sent from a VM-Exit fastpath and the
+core run loop in vcpu_enter_guest() will manually move the interrupt from
+the PIR to vmcs.GUEST_RVI.  IRQs are disabled while IN_GUEST_MODE, thus
+there's no possibility of the virtual interrupt being sent from anything
+other than KVM, i.e. KVM won't suppress a wake event from an IRQ handler
+(see commit fdba608f15e2, "KVM: VMX: Wake vCPU when delivering posted IRQ
+even if vCPU == this vCPU").
 
-To fix this inconsistency, the permitted_xcr0 and permitted_xss are defined
-consistently, which implies 'supported' plus certain permissions for this
-task, and it also fixes cpuid.0xd.1.ebx and later leaf-by-leaf queries.
+Eliding the posted interrupt restores the performance provided by the
+combination of commits 379a3c8ee444 ("KVM: VMX: Optimize posted-interrupt
+delivery for timer fastpath") and 26efe2fd92e5 ("KVM: VMX: Handle
+preemption timer fastpath").
 
-Fixes: 445ecdf79be0 ("kvm: x86: Exclude unpermitted xfeatures at KVM_GET_SUPPORTED_CPUID")
-Signed-off-by: Like Xu <likexu@tencent.com>
+Thanks Sean for better comments.
+
+Suggested-by: Chao Gao <chao.gao@intel.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
 ---
-v1 -> v2 Changelog:
-- Drop the use of shadow variable; (Paolo)
-- Define permitted_xss consistently; (Kevin)
+ arch/x86/kvm/vmx/vmx.c | 40 +++++++++++++++++++++-------------------
+ 1 file changed, 21 insertions(+), 19 deletions(-)
 
-Previous:
-https://lore.kernel.org/kvm/20220124080251.60558-1-likexu@tencent.com/
-
- arch/x86/kvm/cpuid.c | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
-
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 3902c28fb6cb..07844d15dfdf 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -887,13 +887,14 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 		}
- 		break;
- 	case 0xd: {
--		u64 guest_perm = xstate_get_guest_group_perm();
-+		u64 permitted_xcr0 = supported_xcr0 & xstate_get_guest_group_perm();
-+		u64 permitted_xss = supported_xss;
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index fe06b02994e6..e06377c9a4cf 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -3908,31 +3908,33 @@ static inline void kvm_vcpu_trigger_posted_interrupt(struct kvm_vcpu *vcpu,
+ #ifdef CONFIG_SMP
+ 	if (vcpu->mode == IN_GUEST_MODE) {
+ 		/*
+-		 * The vector of interrupt to be delivered to vcpu had
+-		 * been set in PIR before this function.
++		 * The vector of the virtual has already been set in the PIR.
++		 * Send a notification event to deliver the virtual interrupt
++		 * unless the vCPU is the currently running vCPU, i.e. the
++		 * event is being sent from a fastpath VM-Exit handler, in
++		 * which case the PIR will be synced to the vIRR before
++		 * re-entering the guest.
+ 		 *
+-		 * Following cases will be reached in this block, and
+-		 * we always send a notification event in all cases as
+-		 * explained below.
++		 * When the target is not the running vCPU, the following
++		 * possibilities emerge:
+ 		 *
+-		 * Case 1: vcpu keeps in non-root mode. Sending a
+-		 * notification event posts the interrupt to vcpu.
++		 * Case 1: vCPU stays in non-root mode. Sending a notification
++		 * event posts the interrupt to the vCPU.
+ 		 *
+-		 * Case 2: vcpu exits to root mode and is still
+-		 * runnable. PIR will be synced to vIRR before the
+-		 * next vcpu entry. Sending a notification event in
+-		 * this case has no effect, as vcpu is not in root
+-		 * mode.
++		 * Case 2: vCPU exits to root mode and is still runnable. The
++		 * PIR will be synced to the vIRR before re-entering the guest.
++		 * Sending a notification event is ok as the host IRQ handler
++		 * will ignore the spurious event.
+ 		 *
+-		 * Case 3: vcpu exits to root mode and is blocked.
+-		 * vcpu_block() has already synced PIR to vIRR and
+-		 * never blocks vcpu if vIRR is not cleared. Therefore,
+-		 * a blocked vcpu here does not wait for any requested
+-		 * interrupts in PIR, and sending a notification event
+-		 * which has no effect is safe here.
++		 * Case 3: vCPU exits to root mode and is blocked. vcpu_block()
++		 * has already synced PIR to vIRR and never blocks the vCPU if
++		 * the vIRR is not empty. Therefore, a blocked vCPU here does
++		 * not wait for any requested interrupts in PIR, and sending a
++		 * notification event also results in a benign, spurious event.
+ 		 */
  
--		entry->eax &= supported_xcr0 & guest_perm;
--		entry->ebx = xstate_required_size(supported_xcr0, false);
-+		entry->eax &= permitted_xcr0;
-+		entry->ebx = xstate_required_size(permitted_xcr0, false);
- 		entry->ecx = entry->ebx;
--		entry->edx &= (supported_xcr0 & guest_perm) >> 32;
--		if (!supported_xcr0)
-+		entry->edx &= permitted_xcr0 >> 32;
-+		if (!permitted_xcr0)
- 			break;
- 
- 		entry = do_host_cpuid(array, function, 1);
-@@ -902,20 +903,20 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 
- 		cpuid_entry_override(entry, CPUID_D_1_EAX);
- 		if (entry->eax & (F(XSAVES)|F(XSAVEC)))
--			entry->ebx = xstate_required_size(supported_xcr0 | supported_xss,
-+			entry->ebx = xstate_required_size(permitted_xcr0 | permitted_xss,
- 							  true);
- 		else {
--			WARN_ON_ONCE(supported_xss != 0);
-+			WARN_ON_ONCE(permitted_xss != 0);
- 			entry->ebx = 0;
- 		}
--		entry->ecx &= supported_xss;
--		entry->edx &= supported_xss >> 32;
-+		entry->ecx &= permitted_xss;
-+		entry->edx &= permitted_xss >> 32;
- 
- 		for (i = 2; i < 64; ++i) {
- 			bool s_state;
--			if (supported_xcr0 & BIT_ULL(i))
-+			if (permitted_xcr0 & BIT_ULL(i))
- 				s_state = false;
--			else if (supported_xss & BIT_ULL(i))
-+			else if (permitted_xss & BIT_ULL(i))
- 				s_state = true;
- 			else
- 				continue;
-@@ -929,7 +930,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 			 * invalid sub-leafs.  Only valid sub-leafs should
- 			 * reach this point, and they should have a non-zero
- 			 * save state size.  Furthermore, check whether the
--			 * processor agrees with supported_xcr0/supported_xss
-+			 * processor agrees with permitted_xcr0/permitted_xss
- 			 * on whether this is an XCR0- or IA32_XSS-managed area.
- 			 */
- 			if (WARN_ON_ONCE(!entry->eax || (entry->ecx & 0x1) != s_state)) {
+-		apic->send_IPI_mask(get_cpu_mask(vcpu->cpu), pi_vec);
++		if (vcpu != kvm_get_running_vcpu())
++			apic->send_IPI_mask(get_cpu_mask(vcpu->cpu), pi_vec);
+ 		return;
+ 	}
+ #endif
 -- 
-2.33.1
+2.25.1
 

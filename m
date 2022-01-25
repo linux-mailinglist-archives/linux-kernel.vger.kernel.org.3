@@ -2,62 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A0C49B6F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 596C449B6B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580878AbiAYOwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1580352AbiAYOsW (ORCPT
+        id S1580153AbiAYOpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:45:06 -0500
+Received: from mail-yb1-f179.google.com ([209.85.219.179]:38844 "EHLO
+        mail-yb1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1389262AbiAYOkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:48:22 -0500
-X-Greylist: delayed 535 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Jan 2022 06:48:13 PST
-Received: from swift.blarg.de (swift.blarg.de [IPv6:2a01:4f8:c17:52a8::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CBC0C061401;
-        Tue, 25 Jan 2022 06:48:13 -0800 (PST)
-Received: by swift.blarg.de (Postfix, from userid 1000)
-        id D0BE040E4E; Tue, 25 Jan 2022 15:39:16 +0100 (CET)
-Date:   Tue, 25 Jan 2022 15:39:16 +0100
-From:   Max Kellermann <max@blarg.de>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-pwm@vger.kernel.org, thierry.reding@gmail.com,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        andrey@lebedev.lt, stable@vger.kernel.org
-Subject: Re: [PATCH 1/3] pwm-sun4i: convert "next_period" to local variable
-Message-ID: <YfALlLgo3MAcbFrZ@swift.blarg.de>
-Mail-Followup-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-pwm@vger.kernel.org, thierry.reding@gmail.com,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        andrey@lebedev.lt, stable@vger.kernel.org
-References: <20220125123429.3490883-1-max.kellermann@gmail.com>
- <20220125143158.qbelqvr5mjq33zay@pengutronix.de>
+        Tue, 25 Jan 2022 09:40:19 -0500
+Received: by mail-yb1-f179.google.com with SMTP id i62so15962560ybg.5;
+        Tue, 25 Jan 2022 06:40:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qmXgH7zvCKX7VHBhpaIeJiGEHk4KUYcP0Ex/yLKpPRw=;
+        b=6H9+F/nMrttzgBGtZU3fM2qnAlAR7KVAXR+P0s5h/nqDNTjZafFa8k+A0docFREHBo
+         v+UNaAppgBLuEzJ0Zw3kM/P0nZeSfWx0xBGdL3jdNaZrrsSrFaHl52JrsuaqlnpG+wUO
+         qkilZta4eSlvWl9Wcq6CgxGHHwLNwLY7CGAEPrzOCt090tH99Dn056Ql86bc8qlyhPju
+         Pn9lyTcNtzuSDspgA8UungONARLYR4T9cXyYwNjAx9g53ohnVf/CZSV3B5XW49rPtWGj
+         orfn9tAy5VYJk8GOADDbb9/DiuF8actN2z/1vwsIYPDmeLmP9fPgWFQNX9mkL8WtLcrf
+         ZWAQ==
+X-Gm-Message-State: AOAM5312sBf6MilPQnB3HJ81awEeW9Q7/18jy/PC+qbX2SA6xO4ApbB7
+        qObpEtJ7QHLPLM4bZMCjThF8FQH3gvTWEGgbbloc49nu
+X-Google-Smtp-Source: ABdhPJyf4NeSGDSjgs2JLUl9Ym4PFBwT201JLgx/QXUQCHDWtDkDZoHe8Rmk0nWCImELThqsOUzv2R/oSJ1fmxEwliY=
+X-Received: by 2002:a5b:5c7:: with SMTP id w7mr30536273ybp.343.1643121613569;
+ Tue, 25 Jan 2022 06:40:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220125143158.qbelqvr5mjq33zay@pengutronix.de>
+References: <20220120000409.2706549-1-rajatja@google.com> <20220121214117.GA1154852@bhelgaas>
+ <Ye5GvQbFKo+CFtRb@lahna> <Ye/X7E2dKb+zem34@lahna>
+In-Reply-To: <Ye/X7E2dKb+zem34@lahna>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Jan 2022 15:40:01 +0100
+Message-ID: <CAJZ5v0gii3z=DfFbGvubyg=f3t+74eNFdtpJDauwzH4roL-dAQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as untrusted
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/01/25 15:31, Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
-> I think I'd drop this. This isn't a fix worth on it's own to be
-> backported and if this is needed for one of the next patches, the stable
-> maintainers will notice themselves (and it might be worth to shuffle
-> this series to make the fixes come first).
+On Tue, Jan 25, 2022 at 11:59 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> On Mon, Jan 24, 2022 at 08:27:17AM +0200, Mika Westerberg wrote:
+> > > > This patch introduces a new "UntrustedDevice" property that can be used
+> > > > by the firmware to mark any device as untrusted.
+> >
+> > I think this new property should be documented somewhere too (also
+> > explain when to use it instead of ExternalFacingPort). If not in the
+> > next ACPI spec or some supplemental doc then perhaps in the DT bindings
+> > under Documentation/devicetree/bindings.
+>
+> Actually Microsoft has similar already:
+>
+> https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
+>
+> I think we should use that too here.
 
-The first two patches are preparation for the third patch, which fixes
-the actual bug.
+Agreed.
 
-Of course, I could have done everything in one patch, but I thought
-splitting the first two out makes review easier.  This way, every step
-is almost trivial.
-
-If you want me to fold the three patches into one, I can do that.  But
-I can't reorder them (or backport only the bug fix to stable).
-
-Max
-
-
+This is what the platform firmware will need to use anyway for Windows
+compatibility and OEMs may not care about running Linux on their
+platforms.

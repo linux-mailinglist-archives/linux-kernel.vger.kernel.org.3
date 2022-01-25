@@ -2,105 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5191D49BA82
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DB249BA84
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbiAYRjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 12:39:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355493AbiAYRii (ORCPT
+        id S1355343AbiAYRj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:39:27 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42414 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1355743AbiAYRiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:38:38 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE71C061744
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:38:33 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id m4so32208214ejb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 09:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ElAqA9onDrcE3b1LB/Qm4CeXxIULTeYtlnRjkAHHhdU=;
-        b=DbQzrWW6/5E1N8I7oC6Cqdocm71AzBfAUnV9GmIHGyNV7ENE839MSWXYnKDCjF94vh
-         X+RIlrItMTvOMac3eC/mdgrlbfNctpuSJwjLWpHP6cfqvbNQca+2T6cDM7LOKI4QmU5A
-         hR5zDxT7XC2lliZcVbxf3tStAK0bMvRz0M8SAMyjYsDC4PG4H2L79kD9R0ixht+Sgo/7
-         opFm3ii9vfzKhW19IaYDh3I2mA6s67SlzplXa5q0FJf/SZv2uhRv1fb2UKnM6mnIx1qG
-         +N9izoRE9PMWYAdTkRbUZL9+rAf57B88A5o5jaaOIPnOEC76BhUk4qe/kwHt67m8HW5j
-         VYng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ElAqA9onDrcE3b1LB/Qm4CeXxIULTeYtlnRjkAHHhdU=;
-        b=k2ziZL8qnK15jwo0QB9DDXfP4ox645RMarHW1OQAidFcpnHn50VcWdj+rVmCsNP5fN
-         +LBAl4hVXNVrYBY115Gido6fEx7Xrw4gBSdmBY+xCeb9H9MWaUCHmWEYyrtK+x/VjxsF
-         FbgOYaE4bp83uQUaIOaTAr53kUF+3nyIwuKxNbQCtiEt99E4Xztt8O66nd2QsUC4fG5U
-         hDnOySdyTCQPmqjtKxaggxYo8FH8V/CViZvHDWkBocODlmLK3rEkpZRMIlEh6Zjcq34T
-         OmTUF2RUYl60srDF3ofqBlNK/hEWpydvKLVs17d/SCxKKSX6320wbQ9vrMrO1DFloEyt
-         8rNw==
-X-Gm-Message-State: AOAM533anmeeE7k1Jz/ML4FXsH5LG3onULEERKAW05K/hBy+9pMDX632
-        260uxgTxm567tI2Pum0QNhXUcnsLhNtYZoXNWC9DMtFoVJ8=
-X-Google-Smtp-Source: ABdhPJwrmXjjCaTHpFggSQNjOGEPkhBSh8aztCxr0XWin1xIFuUNzdgHDgDk83HhUs0z2Pz/fPK6obyBtboVDI8MOLo=
-X-Received: by 2002:a17:906:5d0f:: with SMTP id g15mr16847415ejt.670.1643132311941;
- Tue, 25 Jan 2022 09:38:31 -0800 (PST)
+        Tue, 25 Jan 2022 12:38:46 -0500
+X-UUID: 7efdd4e424524ae382e652fcd3169434-20220126
+X-UUID: 7efdd4e424524ae382e652fcd3169434-20220126
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1918787813; Wed, 26 Jan 2022 01:38:37 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 26 Jan 2022 01:38:36 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 26 Jan 2022 01:38:36 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <wenst@chromium.org>
+CC:     <chun-jie.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>
+Subject: Re: [PATCH 11/31] clk: mediatek: mux: Clean up included headers
+Date:   Wed, 26 Jan 2022 01:38:36 +0800
+Message-ID: <20220125173836.14548-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220122091731.283592-12-wenst@chromium.org>
+References: <20220122091731.283592-12-wenst@chromium.org>
 MIME-Version: 1.0
-References: <20220105031242.287751-1-dustin@howett.net> <Ye8RaQcIuR6kpaYj@google.com>
- <CA+Px+wV8Ygz3n=4TtX1F6YB3Gcz8amNmotru09ftn9w776nDuA@mail.gmail.com> <CABXOdTdyHWNckqmB9Ya2tZitghdxPuhNGSXdrLYZPU26w4JO=g@mail.gmail.com>
-In-Reply-To: <CABXOdTdyHWNckqmB9Ya2tZitghdxPuhNGSXdrLYZPU26w4JO=g@mail.gmail.com>
-From:   Benson Leung <bleung@google.com>
-Date:   Tue, 25 Jan 2022 09:38:20 -0800
-Message-ID: <CANLzEksGAdewMRz1kLCXdn2dBtTpgkELq3LZgs+UbpwZ4UHzcQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] platform/chrome: Add support for the Framework Laptop
-To:     Guenter Roeck <groeck@google.com>
-Cc:     Tzung-Bi Shih <tzungbi@google.com>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <groeck@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+> Some included headers aren't actually used anywhere, while other headers
+> with the declaration of functions and structures aren't directly
+> included.
+> 
+> Get rid of the unused ones, and add the ones that should be included
+> directly.
+> 
+> On the header side, replace headers that are included purely for data
+> structure definitions with forward declarations. This decreases the
+> amount of preprocessing and compilation effort required for each
+> inclusion.
 
-On Tue, Jan 25, 2022 at 8:52 AM Guenter Roeck <groeck@google.com> wrote:
+Is this inspired by [1]?
+[1] https://lore.kernel.org/lkml/YdIfz+LMewetSaEB@gmail.com/ 
+
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 >
-> If nothing else helps, you should be able to find and download the
-> series from lore.kernel.org/lkml
-> (https://lore.kernel.org/lkml/?q=%22framework+laptop%22). Long term it
-> might be useful to set up patchwork to track cros related patches.
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+> ---
+>  drivers/clk/mediatek/clk-mux.c | 11 +++++++----
+>  drivers/clk/mediatek/clk-mux.h |  8 +++++++-
+>  2 files changed, 14 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
+> index 2d4d8dc0120a..01af6a52711a 100644
+> --- a/drivers/clk/mediatek/clk-mux.c
+> +++ b/drivers/clk/mediatek/clk-mux.c
+> @@ -4,13 +4,16 @@
+>   * Author: Owen Chen <owen.chen@mediatek.com>
+>   */
+>  
+> -#include <linux/of.h>
+> -#include <linux/of_address.h>
+> -#include <linux/slab.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/compiler_types.h>
+> +#include <linux/container_of.h>
+> +#include <linux/err.h>
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/module.h>
+> +#include <linux/regmap.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/slab.h>
+>  
+> -#include "clk-mtk.h"
+>  #include "clk-mux.h"
+>  
+>  struct mtk_clk_mux {
+> diff --git a/drivers/clk/mediatek/clk-mux.h b/drivers/clk/mediatek/clk-mux.h
+> index 38a2b6014b08..903a3c937959 100644
+> --- a/drivers/clk/mediatek/clk-mux.h
+> +++ b/drivers/clk/mediatek/clk-mux.h
+> @@ -7,7 +7,13 @@
+>  #ifndef __DRV_CLK_MTK_MUX_H
+>  #define __DRV_CLK_MTK_MUX_H
+>  
+> -#include <linux/clk-provider.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/types.h>
+> +
+> +struct clk;
+> +struct clk_onecell_data;
+> +struct clk_ops;
+> +struct device_node;
+>  
+>  struct mtk_mux {
+>  	int id;
+> -- 
+> 2.35.0.rc0.227.g00780c9af4-goog
 
-I've inquired about creating a patchwork for chrome/platform.
-Definitely agree that this could be organized better.
 
-Benson
-
->
-> Guenter
->
-> On Mon, Jan 24, 2022 at 5:13 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
-> >
-> > Hi Benson,
-> >
-> > On Tue, Jan 25, 2022 at 4:52 AM Benson Leung <bleung@google.com> wrote:
-> > > Tzung-Bi, could you help take a look at Dustin's series?
-> >
-> > Pardon me, I didn't subscribe LKML due to it is too noisy.  Could you
-> > also forward the 2 patches?
-> >
-> > I will try some magic
-> > (https://chromium.googlesource.com/chromiumos/docs/+/HEAD/kernel_development.md#Downloading-a-patch-from-patchwork-into-IMAP)
-> > to get the mail thread.  And subscribe LKML to get further patch
-> > series.
-
-
-
--- 
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org

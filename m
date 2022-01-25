@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A094F49BE94
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0E249BE74
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 23:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbiAYWdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 17:33:42 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:55937 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233892AbiAYWdM (ORCPT
+        id S233810AbiAYW2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 17:28:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37110 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233794AbiAYW15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 17:33:12 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 25 Jan 2022 17:27:57 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jk1pB4qZGz4xdl;
-        Wed, 26 Jan 2022 09:33:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643149986;
-        bh=4N5QEyxMjjwZITic1lYF0XkgVn9dsIlL0PsrC3TOMHo=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EF566184A;
+        Tue, 25 Jan 2022 22:27:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B7F5C340E0;
+        Tue, 25 Jan 2022 22:27:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643149676;
+        bh=21Wcgn1j9relNyi3Uz6u2QsAkpxOeBhxGiQVPqE19R4=;
         h=Date:From:To:Cc:Subject:From;
-        b=L02PQ8pCXcMps5P7QIe5ola+But/eUFTITsxdmJ3adm3d+d/f8UJEZBYo9ahf8NoW
-         BXfICohdsogLlQpCdjrTjGQn7FuOu6Kwmmlx/sp6CH/CCtY6mbstli8wpmh97zCM3E
-         bhpKQ0KLXsZSWhqFOs98s+nixxdCO+3ATPAR1UoMmmMlS8bt7FyOZoj1dtIRGF2C6A
-         fTFiDU6kpmx5tUDa01fGYzZsh9N+Q3kD4QJULzaI4sByECRpbkYSt0nbwPsCnL2lSV
-         7csDDekaISwpRWsGWutj3zGzo42fMEp6NfLNIJF5UDy5UeS0H7Mvu7U8CS/p4tVTBp
-         RMA5XsY/f2nsw==
-Date:   Wed, 26 Jan 2022 09:33:05 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the samsung-krzk
- tree
-Message-ID: <20220126093305.5726fcbb@canb.auug.org.au>
+        b=Gj0nd8JJzBg2ACxpoOnKSAcoEBiYNetMzpqhFkBlB8pUui+yl2xZdzXiV5bfg2hAI
+         +5U2cQKH2/DUpwIyfrjcJN1c03InGAJ1p9eHpF0s/Xr0bhM4maFEqYz0jlWHSg03cG
+         VYwqPX9XEImDw0ojzIzhtfsULg80yFT5FVCsneauZoKgyXw2vJDngxmgbSyUJxZL6m
+         iaKD10QhK4Ua9NCiZdZzw4dvh31PsatVTyw3Lre0S9lVL8OB2MHjq+6MqjSG8ra0iq
+         n0k1NuRBz2HY0bJQ3savB8v6LJuRnFOSl8JJMXooLF+2enassriW2Q91Vvx8FtP3nW
+         Q1tLdEbmK/kxw==
+Date:   Tue, 25 Jan 2022 16:34:43 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     David Kershner <david.kershner@unisys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] staging: unisys: visorinput: Use struct_size() helper
+ in kzalloc()
+Message-ID: <20220125223443.GA76937@embeddedor>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Make use of the struct_size() helper instead of an open-coded version,
+in order to avoid any potential type mistakes or integer overflows that,
+in the worst scenario, could lead to heap overflows.
 
-Hi all,
+Also, address the following sparse warnings:
+drivers/staging/unisys/visorinput/visorinput.c:409:27: warning: using sizeof on a flexible structure
 
-Commits
+Link: https://github.com/KSPP/linux/issues/174
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/staging/unisys/visorinput/visorinput.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-  1f22c720691e ("Revert "arm64: dts: fsd: Add initial device tree support"")
-  191448a71471 ("Revert "arm64: dts: fsd: Add initial pinctrl support"")
+diff --git a/drivers/staging/unisys/visorinput/visorinput.c b/drivers/staging/unisys/visorinput/visorinput.c
+index 426deab22d62..dffa71ac3cc5 100644
+--- a/drivers/staging/unisys/visorinput/visorinput.c
++++ b/drivers/staging/unisys/visorinput/visorinput.c
+@@ -406,7 +406,8 @@ static struct visorinput_devdata *devdata_create(struct visor_device *dev,
+ 	if (dtype == visorinput_keyboard)
+ 		/* allocate room for devdata->keycode_table, filled in below */
+ 		extra_bytes = KEYCODE_TABLE_BYTES * 2;
+-	devdata = kzalloc(sizeof(*devdata) + extra_bytes, GFP_KERNEL);
++	devdata = kzalloc(struct_size(devdata, keycode_table, extra_bytes),
++			  GFP_KERNEL);
+ 	if (!devdata)
+ 		return NULL;
+ 	mutex_init(&devdata->lock_visor_dev);
+-- 
+2.27.0
 
-are missing a Signed-off-by from their author and committer.
-
-Reverts are changes too and so should be signed off and have reasonable
-("why did we do this?") changelogs.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHweqEACgkQAVBC80lX
-0Gx10wf/RZM9esQhP2tnVjq+YvXAw+l0pZmPJS31cHltX9HJl5Qmu3qe8mMCkuLf
-BgL3cTrrjyBaBGtEN68vffkeOxlVMD28dU0b2tydnSWYH+2FWckiGUIhGJ4oCpA0
-ItxlQt8UWJ+sRpSAQazqBxp7vyicSSTeISkpwukzUKw8/MGoyRvLsaxS+9h1pLpM
-k6AsZ3IYVGBaWwCQf+Go1sKogjaBHPKzOAEpj9uT8x0I7ipRx/4u3Pt/8a2royHF
-Yn9Sbqfr4h5fgPirtlVUKBwf2MfxaDIk9G+Bd+u8e39Z0mlvW8+oJvGbBQ1MUrL5
-X4XpScUH+eZCbEipYDAlEEoMhpOlLQ==
-=/k5Y
------END PGP SIGNATURE-----
-
---Sig_/p5Q/XEB/c8t.Pm0IKDvOYcv--

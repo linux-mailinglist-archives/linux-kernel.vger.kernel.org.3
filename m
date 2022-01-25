@@ -2,103 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA4D49ADB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E6449ADAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446284AbiAYHjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:39:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:38178 "EHLO foss.arm.com"
+        id S1446153AbiAYHfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 02:35:40 -0500
+Received: from mga05.intel.com ([192.55.52.43]:19550 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1322422AbiAYDVq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 22:21:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57D826D;
-        Mon, 24 Jan 2022 19:21:45 -0800 (PST)
-Received: from [10.163.42.113] (unknown [10.163.42.113])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63E9A3F766;
-        Mon, 24 Jan 2022 19:21:42 -0800 (PST)
-Subject: Re: [PATCH V3 0/7] coresight: trbe: Workaround Cortex-A510 erratas
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1641872346-3270-1-git-send-email-anshuman.khandual@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <ec21e5da-7b2a-e99f-b24f-89b459e2d5cb@arm.com>
-Date:   Tue, 25 Jan 2022 08:51:47 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <1641872346-3270-1-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1384456AbiAYDdH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 22:33:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643081587; x=1674617587;
+  h=from:to:cc:subject:date:message-id;
+  bh=BqpKz/iORHV93aKuPrxht0whdEK91qzqUrqhI+YPHgI=;
+  b=f2EFNr9Vhafi+DDlNZ6PZtvg0wgqL0/0d4P13m6lR8d0wICl+yTmcDqu
+   IWWOfv8T8olEPPMMPe/3b/o34S/3B/sERKHGagRYpQoegVjYLsHVtQDkV
+   rkTCWRyJMsW/E8xuJAviGpX1PJZzKvMr+HRCGOMiQ/s8GLd7WZiDHodY9
+   pWcbOd6jkIqeMjDu3g4Bc7snLoCXYtidzuZqakLSMTsmb0MWNuVndwk/R
+   lljAXirZht7XUPUFkvDRlmg8mkygy2VbAtm4ST95lzZrT/eGirb8QTH0x
+   O5TkfRKrH8VFH7gY69KCQv/4W1jJyFv+Ka2k7QMqrqtPxpigX0g+VTcMY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332562382"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="332562382"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 19:24:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="532293049"
+Received: from mismail5-ilbpg0.png.intel.com ([10.88.229.13])
+  by fmsmga007.fm.intel.com with ESMTP; 24 Jan 2022 19:24:09 -0800
+From:   Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, mohammad.athari.ismail@intel.com
+Subject: [PATCH net 0/2] Fix PTP issue in stmmac
+Date:   Tue, 25 Jan 2022 11:23:22 +0800
+Message-Id: <20220125032324.4055-1-mohammad.athari.ismail@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series to fix PTP issue in stmmac related to:
+1/ PTP clock source configuration during initialization.
+2/ PTP initialization during resume from suspend.
 
+Mohammad Athari Bin Ismail (2):
+  net: stmmac: configure PTP clock source prior to PTP initialization
+  net: stmmac: skip only stmmac_ptp_register when resume from suspend
 
-On 1/11/22 9:08 AM, Anshuman Khandual wrote:
-> 	This series adds three different workarounds in the TRBE driver for
-> Cortex-A510 specific erratas. But first, this adds Cortex-A510 specific cpu
-> part number definition in the platform. This series applies on 5.16.
-> 
-> Relevant errata documents can be found here.
-> 
-> https://developer.arm.com/documentation/SDEN2397239/900
-> https://developer.arm.com/documentation/SDEN2397589/900
-> 
-> Changes in V3:
-> 
-> - Moved the comment inside trbe_needs_drain_after_disable()
-> - Moved the comment inside trbe_needs_ctxt_sync_after_enable()
-> 
-> Changes in V2:
-> 
-> https://lore.kernel.org/all/1641517808-5735-1-git-send-email-anshuman.khandual@arm.com/
-> 
-> Accommodated most review comments from the previous version.
-> 
-> - Split all patches into CPU errata definition, detection and TRBE workarounds
-> - s/TRBE_WORKAROUND_SYSREG_WRITE_FAILURE/TRBE_NEEDS_DRAIN_AFTER_DISABLE
-> - s/TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE/TRBE_NEEDS_CTXT_SYNC_AFTER_ENABLE
-> - s/trbe_may_fail_sysreg_write()/trbe_needs_drain_after_disable()
-> - s/trbe_may_corrupt_with_enable()/trbe_needs_ctxt_sync_after_enable()
-> - Updated Kconfig help message for config ARM64_ERRATUM_1902691
-> - Updated error message for trbe_is_broken() detection
-> - Added new trblimitr parameter to set_trbe_enabled(), improving performance
-> - Added COMPILE_TEST dependency in the errata, until TRBE part is available
-> 
-> Changes in V1:
-> 
-> https://lore.kernel.org/lkml/1641359159-22726-1-git-send-email-anshuman.khandual@arm.com/
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
-> Cc: coresight@lists.linaro.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Anshuman Khandual (7):
->   arm64: Add Cortex-A510 CPU part definition
->   arm64: errata: Add detection for TRBE ignored system register writes
->   arm64: errata: Add detection for TRBE invalid prohibited states
->   arm64: errata: Add detection for TRBE trace data corruption
->   coresight: trbe: Work around the ignored system register writes
->   coresight: trbe: Work around the invalid prohibited states
->   coresight: trbe: Work around the trace data corruption
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 25 +++++++++++--------
+ .../net/ethernet/stmicro/stmmac/stmmac_ptp.c  |  3 ---
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-Hello Catalin/Mathieu,
+-- 
+2.17.1
 
-I am wondering how this series is going to be merged i.e via arm64 or coresight
-tree ? Also will this require rebasing (and resend) against v5.17-rc1 release.
-Please do suggest. Thank you.
-
-- Anshuman

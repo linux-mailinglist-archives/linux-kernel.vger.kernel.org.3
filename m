@@ -2,69 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E103449BDE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:32:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 083A549BDE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbiAYVcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 16:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
+        id S233183AbiAYVeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 16:34:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233148AbiAYVcx (ORCPT
+        with ESMTP id S233148AbiAYVeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 16:32:53 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1EFC06173B;
-        Tue, 25 Jan 2022 13:32:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=klGnJioOcgDKO/TJKK9IN06R18s20W+7JvkgdEv4Aw4=; b=qIoYpP71UhPHE0K6vzujD18XKY
-        7SZzWx6zDIvvHkm9p/b7r9nm8aBtuGldnLOZQLopnx1bdHrmVGn91GDbOFj4oHwrClngRjCrW5A3T
-        Cg/ea39ydmIASfDUj2/J22tIlEPgnRQN5a97KLRX4iXLuLVgoA9FAvxAnF+eNg78cys2yI1POMgiB
-        2nEzh91MCuMOwMcjMNktKbkKUM/81yNMZit+OPVr1YCm/rx3TlcbqvMUdm/g+6NOs2MPl9cszqqrx
-        NSXHC9aJE72mOsenqa1alw3Zx3F0XCuhDfHRA/DLp5NDcXI7Am1nsHFN+CEZB8lwHXR4fTxS91R4g
-        hbYjyhwA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCTQX-003Zaf-Pi; Tue, 25 Jan 2022 21:32:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AAB4F3002FC;
-        Tue, 25 Jan 2022 22:32:31 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 928D620172667; Tue, 25 Jan 2022 22:32:31 +0100 (CET)
-Date:   Tue, 25 Jan 2022 22:32:31 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        linux-perf-users@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] perf/x86/rapl: replace 0 with NULL to initialize
- pointers
-Message-ID: <YfBsb/3fR7v7tnr4@hirez.programming.kicks-ass.net>
-References: <20220125201403.670011-1-colin.i.king@gmail.com>
+        Tue, 25 Jan 2022 16:34:16 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C447BC06173B;
+        Tue, 25 Jan 2022 13:34:15 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id w8so12731808qkw.8;
+        Tue, 25 Jan 2022 13:34:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=JOQ3PmaJtbdtPUYBzN8lYyLwqfEwyWGHTqG8SXs6IXQ=;
+        b=DLJtQB/iPbudM4U5QdnFTufb8Ay0mLqmLcSVPxmc8P4p1gEtaJ3bvEx3FZmixDmyHF
+         03V4e0Z1BRn8noHW/vGg3uurht3vEnpwnxqQ7PrgKZO1YWOfsFKTB66vM829GeKyWqJw
+         4ON1cEHGSIqbJ0x5IjCNI9aQr+Ickgpp64iXjee09+YjZe44jJlFRwlY1uhlLj/t2vs1
+         D7NzK4h+/rwbpDQ5rJ1Fi4JdbHBgVXTHjywfRsw2k0GgC9mbefixvwlliCNETQBRqjtI
+         K2xD6FdmnbyJDmyvPfb+O2lwAm1FoE4b0BAbv9l5IAhi8F20h5lasjHSkCNajCc2KwUm
+         CiCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=JOQ3PmaJtbdtPUYBzN8lYyLwqfEwyWGHTqG8SXs6IXQ=;
+        b=HATUK3x3CjTkjMUACxuqhOQBb2Vs9N0x5Mm0u5YMjU+Qy5c3AlQWUvTpZGX2AqIXdH
+         5NViHIqycNlmSvs9hZHJBNIp3ZQcjQ0VuT1kvwBro2N9LnonP+F67wk+R4jETsFeX3+a
+         41GkBuEfzy60byN8/P3uwfk9HmS2/cqpZghzqt6LK4jKqXRwRNupydta2+CJX4p5xFQs
+         YMa4pcRQnEOkSjRwCeaMRpd8aBc2eVu15GVOQYXa2UqPlht1pTrSF8sDrJHMOFBdlF/g
+         33fXbTA5VzKG9W0Kk+60AM31dKUqUybDcnd61/jezYTtEpBh1L85Fnca6mR3X8P6700o
+         pjqA==
+X-Gm-Message-State: AOAM532QaaX8t4uogOZaoDumPwuS7ticFzn416mCwHA1dBq9G77HWSIU
+        zreT56OyGVwl6t22GeOX62k=
+X-Google-Smtp-Source: ABdhPJw/2YXrKi+2Ss6HpuhQYRNalRDThCcOA5ft3LnqcnRjQoz65yWuuVC0x1Wotv6N8VP9xTKe5w==
+X-Received: by 2002:a37:996:: with SMTP id 144mr8982462qkj.247.1643146455014;
+        Tue, 25 Jan 2022 13:34:15 -0800 (PST)
+Received: from [10.139.255.254] ([89.187.171.240])
+        by smtp.gmail.com with ESMTPSA id h21sm9484295qth.16.2022.01.25.13.34.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 13:34:14 -0800 (PST)
+Message-ID: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
+Date:   Tue, 25 Jan 2022 16:34:12 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125201403.670011-1-colin.i.king@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Demi Marie Obenour <demiobenour@gmail.com>
+Subject: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+To:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>
+Cc:     Demi Marie Obenour <demiobenour@gmail.com>,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 08:14:03PM +0000, Colin Ian King wrote:
-> Pointers should be initialized with NULL rather than zero. Fix these.
+These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
+always allows too.  Furthermore, a failed FIOCLEX could result in a file
+descriptor being leaked to a process that should not have access to it.
 
-Why ? This isn't C++, heck, this isn't even C, this is the kernel, we
-hard rely on NULL being 0.
+Signed-off-by: Demi Marie Obenour <demiobenour@gmail.com>
+---
+ security/selinux/hooks.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 5b6895e4fc29..8f3b2f15c1f3 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -3728,6 +3728,11 @@ static int selinux_file_ioctl(struct file *file, unsigned int cmd,
+ 		error = file_has_perm(cred, file, FILE__GETATTR);
+ 		break;
+ 
++	/* must always succeed */
++	case FIOCLEX:
++	case FIONCLEX:
++		break;
++
+ 	case FS_IOC_SETFLAGS:
+ 	case FS_IOC_SETVERSION:
+ 		error = file_has_perm(cred, file, FILE__SETATTR);
+-- 
+Sincerely,
+Demi Marie Obenour
+

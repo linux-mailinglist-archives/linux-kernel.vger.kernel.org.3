@@ -2,107 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 918CE49AFF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEE249AF50
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1572974AbiAYJSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:18:21 -0500
-Received: from mga01.intel.com ([192.55.52.88]:12212 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1456817AbiAYJNI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:13:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643101984; x=1674637984;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hPcnFwQ5EIleBYS17H6mw711aNUx7ZkEMpr7D4Wkijw=;
-  b=adiD69KokN6cxOfHDI0hKZURYKj04JmfqyDvxJE4VnQeZYQOzNkExs4u
-   btOaPfnEmuG2eS5uAyQnVxCvPMfUSf7yLB9mQiCH6sAFwVxc2oqXoPki6
-   AUg31hU5s91fHIx2me7/UPLlEHIan5Oxp8fGcE/buBBzvquyMpK9YiwKH
-   kEsbO8kAkLWsM9jwpd4DBRhHAvacUTKpdqxP9BS1PzEpus3uN11bkO1Qh
-   TnbU+U1p0oDY7kEyVXSdcuX1qkzV0KT8wvGcF79EuXmLcps2e2uAS1dXE
-   pd0bwcx74/X8kugy6/NJvSow4kWCF5oZI6SsrnMW8S+pONRXdIuvdPNJ6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="270703135"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="270703135"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 01:01:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="673927372"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 25 Jan 2022 01:01:48 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 25 Jan 2022 11:01:47 +0200
-Date:   Tue, 25 Jan 2022 11:01:47 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] usb: typec: tcpm: Do not disconnect while
- receiving VBUS off
-Message-ID: <Ye+8exwtqAqs4bNg@kuha.fi.intel.com>
-References: <20220122015520.332507-1-badhri@google.com>
+        id S1455290AbiAYJIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:08:47 -0500
+Received: from mail-dm6nam11on2044.outbound.protection.outlook.com ([40.107.223.44]:32864
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1454601AbiAYJCY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 04:02:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PzkWuyROLMMb7NEtb+dIKmH6sQiZKv/mqrOLDJo5o26x4DCAAIBdlZa7SGsKawtEHKwYoQbAxU5r5bUB3dWWNjZGIwBo7/mzBTttf48Kpvnd2/IJT7WP0SQTcED/R6pW2UnJdfZBKNj76VyX3eJRgX1KOIGBcy8hCLZYhS45+EQJWDqCNnyoMMCKP2p3q2HCsIT29e3plD//EdguOmemATi1XkqQwS5SxpZY36ooQtVpEVHm2qO+u2xZJojo+FVUfLkwnR54omWeXOfvBzTa6svjKdNcE/XnszqlNKW6CI899jUHsq5ZEspYTJxSWWUIoFtXWqzSlOJtLmZAHI43Og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F0+snOPrwPmIcfSkeIkGiMB7ydHFtx1Q3E/CUB0RnoQ=;
+ b=MurGswS6oPCQIPtd689MOZpLjFiSr4KkP4gI8sWbox/Xw97rOOBG4k2PisXj5HFp3+LubHz1IjjcqYEUD6HJqLA2SlZkcZqZzkCd9EebPKmvdFYieu29lhtMbEb2pA5qarcUvOpjTOQhKGL9YwM5nYU4DFEzYY72cDtud6lIbtqYJzOwJLuc+GHtWCqOs95sYwwysASALfYpvrxC1nfcA6hggvTs/zFF9tzaZS1Q45Xf3598z8kLV/4vexQor/R8uCTAOUj/QMhnuIt15ZjaNJfvX0Ao6eiRvqDr9ZCycJDeIh1ittGyDcC2tUfr7ixvV6o4fqJdOg/tX+tlfwLOkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F0+snOPrwPmIcfSkeIkGiMB7ydHFtx1Q3E/CUB0RnoQ=;
+ b=Mwu+14zMuAivEcydnEP6MCDduZO9Jvco8zj2IbrrnAqgVJdR5qdYJN82vCp4P9QX865wYLBoubnGY1gT6KhTdOpP6ReBLtC4uyVpqX2usNNeogzKr7tDN+wFybMyn4SxkFtFMi1i3xgAi/83jcV7wGefNBpQSezFSbu2+a0wBZ3iuwMZSU7GaQJQU4ql8asyhPQo5HJa5na/QYSbUWiV+277/vHW0qznnismh3xlDzgmqEb+pmZ6omHXDC9haqEV0KfiZyHJZMsCyYo//wDM0IIJq0BlRKgLnMDy1iaNFFXV5WZ+MepcTWLySgYmWNYIQ1U/56EnQCLYa6V6FckKHg==
+Received: from BN6PR22CA0072.namprd22.prod.outlook.com (2603:10b6:404:ca::34)
+ by MWHPR12MB1774.namprd12.prod.outlook.com (2603:10b6:300:112::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Tue, 25 Jan
+ 2022 09:02:15 +0000
+Received: from BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:ca:cafe::ad) by BN6PR22CA0072.outlook.office365.com
+ (2603:10b6:404:ca::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17 via Frontend
+ Transport; Tue, 25 Jan 2022 09:02:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ BN8NAM11FT005.mail.protection.outlook.com (10.13.176.69) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4909.7 via Frontend Transport; Tue, 25 Jan 2022 09:02:14 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 25 Jan
+ 2022 09:02:14 +0000
+Received: from [172.27.12.100] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Tue, 25 Jan 2022
+ 01:02:08 -0800
+Message-ID: <8eac3258-8b2a-37eb-2a1e-6a71d5d1f859@nvidia.com>
+Date:   Tue, 25 Jan 2022 11:02:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220122015520.332507-1-badhri@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v9] net: bonding: Add support for IPV6 ns/na to
+ balance-alb/balance-tlb mode
+Content-Language: en-US
+From:   Nikolay Aleksandrov <nikolay@nvidia.com>
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>, <j.vosburgh@gmail.com>,
+        <vfalico@gmail.com>, <andy@greyhouse.net>, <davem@davemloft.net>,
+        <kuba@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jay.vosburgh@canonical.com>, <huyd12@chinatelecom.cn>
+References: <20220125023755.94837-1-sunshouxin@chinatelecom.cn>
+ <d0afa956-6852-2749-fce8-2a3e06cae556@nvidia.com>
+In-Reply-To: <d0afa956-6852-2749-fce8-2a3e06cae556@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: drhqmail202.nvidia.com (10.126.190.181) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6a12e97e-2006-4faf-7db2-08d9dfe161c0
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1774:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1774ACCDDDC337986EAE47C5DF5F9@MWHPR12MB1774.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:506;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rMkGsa60DZ7KZcBwZmy16gxniR06NY4jVfC1VSuzGhW2AGKjd9Lp4PpFlOjLEfGVsJWGKP0xz4U84GU4jZJbg+FJFsFKTEf+rwtWCzB2Cy1oGyoDfntLIKQzx+hhiFI7OuNeoW2InAZeUk5vswyqUpqaOSBuu+IfimTvBz4CS3ch0h7vJsDYlSnJVHT7ay+/Xr+m+iFY5N4owSl5DRNDKyv0OtPQ4rJuYz8+1QozBZSy4SqZa/9gwbGcqyalmd93CnU9SYG1u9a7pXO89SxYbYxdGJNumA7I8nrJJSSWAaHlZq0Z9ZrKfv3QI9ARNxcipoFsZHX7jy/6XkBcB+tJ0upskVB0anAwLxkiA07eTOt5YK9yfmqDorTnySpZxtITamHt3T6yCO8k7bkWUb44y91+lT5lME5p7zMXZSE9fKufmAgCDxEs8uoKh/oyzOL7ZelK+C9XYqlQYHJO48X33GkndMAdCIeEgrD5kFAHcCWrtOBfcZXyL+Y2d3YvkfUXEIZHlNJ5zDqVYBqSAqaTcCSPVXCcWcQC+Z7lqIs+eILehdlAYbPOAtxx7eLdc9RyYI5/TmntapzrSaBx1z1B8N/kKK36rzFvpqYlq+nikkQJcPu9t9kKYVpRh0dwW3P9uxUP2EaOjiEPTOtWLt78S4nrxAvZGu2Ztw5Jf9F9Gq/Q3ppzEPFwtxcRvch81cCEK8GfCHKHPbaWn26Nm5Mu3+pkWJ7XoHifYt8FtTSFICs6Po7uuWWm5mgxYw7Li6w4Z6RjBJGxLbaRwEISCqSJbNexZVYOsp8r3Tt2Ui1KeoaxEqVWdTW1Fk7jznzOoKzT0m8nGiamAx+xGtOTpNhMQA==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(4636009)(46966006)(40470700004)(36840700001)(4326008)(86362001)(82310400004)(5660300002)(16576012)(7416002)(316002)(83380400001)(53546011)(31686004)(40460700003)(81166007)(70586007)(70206006)(36860700001)(508600001)(8676002)(2906002)(426003)(47076005)(26005)(336012)(16526019)(31696002)(356005)(6666004)(36756003)(110136005)(2616005)(54906003)(8936002)(186003)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 09:02:14.8557
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a12e97e-2006-4faf-7db2-08d9dfe161c0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1774
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 05:55:19PM -0800, Badhri Jagan Sridharan wrote:
-> With some chargers, vbus might momentarily raise above VSAFE5V and fall
-> back to 0V before tcpm gets to read port->tcpc->get_vbus. This will
-> will report a VBUS off event causing TCPM to transition to
-> SNK_UNATTACHED where it should be waiting in either SNK_ATTACH_WAIT
-> or SNK_DEBOUNCED state. This patch makes TCPM avoid vbus off events
-> while in SNK_ATTACH_WAIT or SNK_DEBOUNCED state.
-> 
-> Stub from the spec:
->     "4.5.2.2.4.2 Exiting from AttachWait.SNK State
->     A Sink shall transition to Unattached.SNK when the state of both
->     the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
->     A DRP shall transition to Unattached.SRC when the state of both
->     the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
-> 
-> [23.194131] CC1: 0 -> 0, CC2: 0 -> 5 [state SNK_UNATTACHED, polarity 0, connected]
-> [23.201777] state change SNK_UNATTACHED -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
-> [23.209949] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
-> [23.300579] VBUS off
-> [23.300668] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [rev3 NONE_AMS]
-> [23.301014] VBUS VSAFE0V
-> [23.301111] Start toggling
-> 
-> Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+On 25/01/2022 10:51, Nikolay Aleksandrov wrote:
+> On 25/01/2022 04:37, Sun Shouxin wrote:
+>> Since ipv6 neighbor solicitation and advertisement messages
+>> isn't handled gracefully in bond6 driver, we can see packet
+>> drop due to inconsistency between mac address in the option
+>> message and source MAC .
+>>
+>> Another examples is ipv6 neighbor solicitation and advertisement
+>> messages from VM via tap attached to host bridge, the src mac
+>> might be changed through balance-alb mode, but it is not synced
+>> with Link-layer address in the option message.
+>>
+>> The patch implements bond6's tx handle for ipv6 neighbor
+>> solicitation and advertisement messages.
+>>
+>> Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>> Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+>> Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
+>> ---
+>>  drivers/net/bonding/bond_alb.c | 38 +++++++++++++++++++++++++++++++++-
+>>  1 file changed, 37 insertions(+), 1 deletion(-)
+>>
+[snip]
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Also forgot to mention, you should add a changelog between patch versions.
+You can add it below the --- marker so it won't be included in the commit
+message. Otherwise it's hard to track how the patch reached v9 and what
+changed between versions.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 59d4fa2443f2..b8afe3d8c882 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5156,7 +5156,8 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
->  	case SNK_TRYWAIT_DEBOUNCE:
->  		break;
->  	case SNK_ATTACH_WAIT:
-> -		tcpm_set_state(port, SNK_UNATTACHED, 0);
-> +	case SNK_DEBOUNCED:
-> +		/* Do nothing, as TCPM is still waiting for vbus to reaach VSAFE5V to connect */
->  		break;
->  
->  	case SNK_NEGOTIATE_CAPABILITIES:
-> -- 
-> 2.35.0.rc0.227.g00780c9af4-goog
+E.g. v8 -> v9: <changed blah>
 
--- 
-heikki
+Thanks,
+ Nik
+
+
+

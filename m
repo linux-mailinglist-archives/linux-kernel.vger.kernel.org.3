@@ -2,108 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EFA49B44E
+	by mail.lfdr.de (Postfix) with ESMTP id CFAAA49B44F
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384069AbiAYMuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:50:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S245648AbiAYMuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384547AbiAYMpv (ORCPT
+        with ESMTP id S1455460AbiAYMqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:45:51 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB850C061753
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 04:45:50 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id e28so15223204pfj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 04:45:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:user-agent:mime-version;
-        bh=g8fPoNFbM2MKGQXuUpmaNAqe4Rt5cBc36ZwCaR5F95o=;
-        b=dNoC//Ti2VpKHGQvJtgZMqrw/3iq4uQWDiYr9hp/8d+aAFgIdA4Y/WO4h/vyweRp4j
-         ch0ZGngJdxi9Xbkq8P2uHRbiXTIkz4bl5Kqc4FAPP5s7l7OdI00x5oQ+iPAqWW7M/Lxn
-         CsMOKyBjl4i6ePan2Aw5SaRn7TajJwL7a3a5PzRqaKnsIewIx7ftfk2BZ041+sRxs+lz
-         ocNr5RdDJPeFYPIBqsnp6veMDZuIkDf5Jy6Q+Eb0MqVWkrm1BUqUOhgjZnpBYMQqq9Tt
-         QD7/exb27ZLiOO4Jg1dow2ZOkAyMvr+ZO2TqvXGEIRX4GIyFQHiuWEfjsIqgAMI5PLPG
-         3Mzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:user-agent
-         :mime-version;
-        bh=g8fPoNFbM2MKGQXuUpmaNAqe4Rt5cBc36ZwCaR5F95o=;
-        b=pdsZcRPIYEu3DjPjWWlWW748eZjpkeh7RtgbWaVWSVyD/BwoyolVUZbshwOqIIWBBB
-         Fs1tgPwJJs72X6/elN0+Yh3iDJaW9gzsGvParbrZQ3c+T/9XGgFvmPBGRjedWZCB4Wky
-         7YKHxym72KoKAd6I2zM2uVbnouBOgnUZf047C6gUleNTf0y+NDu6WpJQHnRV/n1Ic58/
-         vbxwNN49lzT4I8ODT4FmxAddsFpoViWPmIuP90NH6SSX4FQ9ihS1CkYmsGQF4pUT78Dz
-         MMJRqskADz/NzioGN7mCpqNIhZExJEUzMFXscfTwNS493Cqh8NyCNcAjUc6GpnpYGomm
-         vLnA==
-X-Gm-Message-State: AOAM5302zl3bIMY87hs3HvRd6/IPeha4EuCIrFlHUB3LPdwaiOFpxumk
-        xBUp6NGVCDeTm/C/XqXnF6hl7w==
-X-Google-Smtp-Source: ABdhPJw7vfyggNO09DCqL25gUQwAaCS0IWO8zAjg0K/+L8URMePIy1z5j0CBiq5Y118WTwfgGCvobw==
-X-Received: by 2002:a05:6a00:114d:b0:4c4:3df:edf8 with SMTP id b13-20020a056a00114d00b004c403dfedf8mr18365857pfm.54.1643114750098;
-        Tue, 25 Jan 2022 04:45:50 -0800 (PST)
-Received: from [192.168.1.32] ([122.178.19.178])
-        by smtp.gmail.com with ESMTPSA id s3sm348125pji.31.2022.01.25.04.45.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 04:45:49 -0800 (PST)
-Message-ID: <0af17d6952b3677dcd413fefa74b086d5ffb474b.camel@rajagiritech.edu.in>
-Subject: review for  5.16.3-rc2
-From:   Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>
-Date:   Tue, 25 Jan 2022 18:15:46 +0530
-Content-Type: multipart/mixed; boundary="=-a4u6oguv8pYyTbmRWk8O"
-User-Agent: Evolution 3.42.3-1 
+        Tue, 25 Jan 2022 07:46:06 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E537C061760;
+        Tue, 25 Jan 2022 04:46:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/pi/hUUlS91esbzGCPX8RrA4mReY8qXH6MTNTD3QQsY=; b=nh0jtatPM+dv1vDo8NvVTs+zdo
+        rKJGgiqzkMhmmKjHUcPHaQQLuW4v6utD/NacbzRNqPD5RKhrn8xvR1tMw+uSFvvdk1vjImrnIkzII
+        CIcEXFn/nRwDCSv4C8gOabceTHfUzsN2D394Azj8YLUQKsJIFn6PHIkFvBGK9haUJuH+Cqj1p4oFL
+        dm+KzDIN7t0RCPMud1uV4IsPmwD+PAwNc4tqw68B5d+kOFzvQjqgOsHWvsFd8S/+Naxy65RnZXSL1
+        Qjb3qipXGUh1TsHVXsf/Sm//hUy8Zlr8DBb+rOUj1mRH05gHgXrPJQl8V5fTcFuaO1PhOYifdxS3M
+        DIN/E3sQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCLCq-003TIy-Tp; Tue, 25 Jan 2022 12:45:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 49CE63002FC;
+        Tue, 25 Jan 2022 13:45:51 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F24E12B37266D; Tue, 25 Jan 2022 13:45:50 +0100 (CET)
+Date:   Tue, 25 Jan 2022 13:45:50 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: Re: earlyprintk=xdbc seems broken
+Message-ID: <Ye/w/lOf4f8+8fDt@hirez.programming.kicks-ass.net>
+References: <88f466ff-a065-1e9a-4226-0abe2e71b686@linux.intel.com>
+ <972a0e28-ad63-9766-88da-02743f80181b@intel.com>
+ <Yao35lElOkwtBYEb@kroah.com>
+ <c2b5c9bb-1b75-bf56-3754-b5b18812d65e@linux.intel.com>
+ <YbyWuxoBSicFBGuv@hirez.programming.kicks-ass.net>
+ <YcGhIm7yqYPk4Nuu@hirez.programming.kicks-ass.net>
+ <YeE4rtq6t73OxOi+@hirez.programming.kicks-ass.net>
+ <cd534ff9-e500-c7ea-426a-347ac2b0830b@linux.intel.com>
+ <YeLxE3zQ7Vexk3gv@hirez.programming.kicks-ass.net>
+ <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dfb311e3-1a83-31a2-3c82-fd982c0757f6@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 24, 2022 at 04:55:22PM +0200, Mathias Nyman wrote:
+>  
+> > [    0.000000] xhci_dbc:early_xdbc_parse_parameter: dbgp_num: 0
+> > [    4.984106] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
+> > [    9.946159] xhci_dbc:xdbc_start: waiting for connection timed out, DCPORTSC:0xa0
+> > [    9.946163] xhci_dbc:early_xdbc_setup_hardware: failed to setup the connection to host
+> >
+> > [   12.818364] xhci_hcd 0000:00:0d.0: xHCI Host Controller
+> > [   12.818373] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 1
+> > [   12.820360] xhci_hcd 0000:00:0d.0: xHCI Host Controller
+> > [   12.820363] xhci_hcd 0000:00:0d.0: new USB bus registered, assigned bus number 2
+> > [   12.821036] xhci_hcd 0000:00:14.0: xHCI Host Controller
+> > [   12.821040] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 3
+> > [   12.823451] xhci_hcd 0000:00:14.0: xHCI Host Controller
+> > [   12.823453] xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 4
+> > [   17.115089] usb usb4-port4: Cannot enable. Maybe the USB cable is bad?
+> > [   17.115163] usb usb4-port4: config error
+> 
+> Ok, I see it now.
+> Your setup has two xhci controllers, earlypringk=dbc enables dbc on the first xhci
+> it finds, which would be at 0000:00:0d.0.
+> Your cable is connected to the second xhci host at 0000:00:14.0
 
---=-a4u6oguv8pYyTbmRWk8O
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+I suspect the first xhci controller is for the usb-c ports on the
+machine, while the second one has the usb-a ports covered.
 
-hello greg,
+Now the documentation states we need this super speed A<->A cable, but
+could you also update the documentation for usb-c ? There's a fair
+number of usb-c only devices out there now.
 
-compile failed for  5.16.3-rc2 related.
-a relevent file attached.
-
-Tested-by : Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-
-
--- 
-software engineer
-rajagiri school of engineering and technology - autonomous
-
-
-
---=-a4u6oguv8pYyTbmRWk8O
-Content-Disposition: attachment; filename="5.16.3-rc2.txt"
-Content-Type: text/plain; name="5.16.3-rc2.txt"; charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-CWNoYXIgKiAgICAgICAgICAgICAgICAgICAgIHR5cGV0YWI7ICAgICAgICAgICAgICAvKiAgICAy
-NCAgICAgOCAqLwoKCS8qIHNpemU6IDMyLCBjYWNoZWxpbmVzOiAxLCBtZW1iZXJzOiA0ICovCgkv
-KiBzdW0gbWVtYmVyczogMjgsIGhvbGVzOiAxLCBzdW0gaG9sZXM6IDQgKi8KCS8qIGxhc3QgY2Fj
-aGVsaW5lOiAzMiBieXRlcyAqLwp9OwpzdHJ1Y3Qga2xwX21vZGluZm8gewoJRWxmNjRfRWhkciAg
-ICAgICAgICAgICAgICAgaGRyOyAgICAgICAgICAgICAgICAgIC8qICAgICAwICAgIDY0ICovCgkv
-KiAtLS0gY2FjaGVsaW5lIDEgYm91bmRhcnkgKDY0IGJ5dGVzKSAtLS0gKi8KCUVsZjY0X1NoZHIg
-KiAgICAgICAgICAgICAgIHNlY2hkcnM7ICAgICAgICAgICAgICAvKiAgICA2NCAgICAgOCAqLwoJ
-Y2hhciAqICAgICAgICAgICAgICAgICAgICAgc2Vjc3RyaW5nczsgICAgICAgICAgIC8qICAgIDcy
-ICAgICA4ICovCgl1bnNpZ25lZCBpbnQgICAgICAgICAgICAgICBzeW1uZHg7ICAgICAgICAgICAg
-ICAgLyogICAgODAgICAgIDQgKi8KCgkvKiBzaXplOiA4OCwgY2FjaGVsaW5lczogMiwgbWVtYmVy
-czogNCAqLwoJLyogcGFkZGluZzogNCAqLwoJLyogbGFzdCBjYWNoZWxpbmU6IDI0IGJ5dGVzICov
-Cn07ClNlZ21lbnRhdGlvbiBmYXVsdAogIExEICAgICAgLnRtcF92bWxpbnV4LmthbGxzeW1zMQog
-IEtTWU1TICAgLnRtcF92bWxpbnV4LmthbGxzeW1zMS5TCiAgQVMgICAgICAudG1wX3ZtbGludXgu
-a2FsbHN5bXMxLlMKICBMRCAgICAgIC50bXBfdm1saW51eC5rYWxsc3ltczIKICBLU1lNUyAgIC50
-bXBfdm1saW51eC5rYWxsc3ltczIuUwogIEFTICAgICAgLnRtcF92bWxpbnV4LmthbGxzeW1zMi5T
-CiAgTEQgICAgICB2bWxpbnV4CiAgQlRGSURTICB2bWxpbnV4CkZBSUxFRDogbG9hZCBCVEYgZnJv
-bSB2bWxpbnV4OiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5Cm1ha2U6ICoqKiBbTWFrZWZpbGU6
-MTE2MTogdm1saW51eF0gRXJyb3IgMjU1Cm1ha2U6ICoqKiBEZWxldGluZyBmaWxlICd2bWxpbnV4
-JwokCgo=
-
-
---=-a4u6oguv8pYyTbmRWk8O--
+C<->A and C<->C cables are fairly easy to come by, would they 'just
+work' ?

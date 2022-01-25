@@ -2,143 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 980D949B6A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1346249B64D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579660AbiAYOk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:40:28 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.226]:33199 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1579081AbiAYOgN (ORCPT
+        id S230380AbiAYOb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1579375AbiAYO1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:36:13 -0500
-HMM_SOURCE_IP: 172.18.0.218:50342.2129814880
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.38 (unknown [172.18.0.218])
-        by chinatelecom.cn (HERMES) with SMTP id DE498280029;
-        Tue, 25 Jan 2022 22:25:04 +0800 (CST)
-X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
-Received: from  ([172.18.0.218])
-        by app0025 with ESMTP id 96b1da56bd6d47aca05ac245d0694740 for j.vosburgh@gmail.com;
-        Tue, 25 Jan 2022 22:25:07 CST
-X-Transaction-ID: 96b1da56bd6d47aca05ac245d0694740
-X-Real-From: sunshouxin@chinatelecom.cn
-X-Receive-IP: 172.18.0.218
-X-MEDUSA-Status: 0
-Sender: sunshouxin@chinatelecom.cn
-From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
-To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jay.vosburgh@canonical.com, nikolay@nvidia.com,
-        huyd12@chinatelecom.cn
-Subject: [PATCH v10] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
-Date:   Tue, 25 Jan 2022 09:24:18 -0500
-Message-Id: <20220125142418.96167-1-sunshouxin@chinatelecom.cn>
-X-Mailer: git-send-email 2.27.0
+        Tue, 25 Jan 2022 09:27:13 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F1FC061755
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:25:33 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id c6so62194983ybk.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:25:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lFnSDupuYaQ1MQejso8mT1I5AQneR3nub9bSmJN8qsM=;
+        b=Byf4Ud2Ux5oawS5IIueddrkK9fhvRtMk6ntgz9b7jSl2gVLjeV49ZS86Xo68ZceTKe
+         SxwfCzE9AnTtQ0NmdpOZqlPTAn4Rg//G+lBk2mNOuiXFfQ7aRbKlDHvEh+T9ACDBfyqF
+         wJkjNzSFW6XITY8jPHGjE1StTuJ5RzjK5tUbDk2GKM3wBeWmEmVCeA+jNFl5XG0UhTZv
+         t5DJApD5A4i6vUJP03oprjbWgg7SfijRUskCiqgvAehg1q7dVv+t5hEtfxWCsoxrGsLc
+         p4+/hUIYLmlp0BZRC/tn0/J99/s8EMDIOu53U+xHGOwirlbSQgD3RJkHvspmMza6m7DC
+         6J5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lFnSDupuYaQ1MQejso8mT1I5AQneR3nub9bSmJN8qsM=;
+        b=NmGpXufddsf20jwh79Yr0RmYAiyJs1QQBz/ICQCtn6+efikALR+qO5VIh4RCz4lWHk
+         iLfJoSkZ/cYxYydVZB3asGwU1d5EyPgbCgfZy0dnTmr1ZcBIVWhS2H4VD4xo5XwAHWbP
+         FxLoUZH5qugWxBuNhyahGAnAOQYd84U/SZaElkVMMfHKL/0ZYnG2CHqlTFr82Js7P55j
+         IYdWpQGNfa1MwHXENtFPa+fBvwFYJFbAjGhezza8kV5/wdKk0+ecd1cJmWgarsUHHu2G
+         xipif9kUAAzAU99XbByUVL3lXRB5o4vKswTC7PuyvaIUJaf5x5Wxi3W1GsWfH3A4ZEm0
+         yu1A==
+X-Gm-Message-State: AOAM533MQE+PjWbYFeCVvXJdwahnofah51uRo27XvUrK6279zWdXHkud
+        dNz5c67kbIf/hdYCG/6l2sumv7VR5kUXtvJ1k0Otjw==
+X-Google-Smtp-Source: ABdhPJxELYtJvtY502AMwplDdVTZkQ1wElvFurJ537bcOYFxpfhh9Q1yIm5DMfTGoFH7if2ZoPOMjTmFVcQbHOiaZVY=
+X-Received: by 2002:a25:ab6b:: with SMTP id u98mr28752508ybi.523.1643120732730;
+ Tue, 25 Jan 2022 06:25:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220125124833.39718-1-linmiaohe@huawei.com>
+In-Reply-To: <20220125124833.39718-1-linmiaohe@huawei.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 25 Jan 2022 22:24:56 +0800
+Message-ID: <CAMZfGtUjFOayWco-5yF=BvTpQ5-Bv3qUq3N5_b8dBU6vo8ZFHw@mail.gmail.com>
+Subject: Re: [PATCH] mm/hmm.c: remove unneeded local variable ret
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, jglisse@redhat.com,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since ipv6 neighbor solicitation and advertisement messages
-isn't handled gracefully in bond6 driver, we can see packet
-drop due to inconsistency between mac address in the option
-message and source MAC .
+On Tue, Jan 25, 2022 at 8:52 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> The local variable ret is always 0. Remove it to make code more tight.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Another examples is ipv6 neighbor solicitation and advertisement
-messages from VM via tap attached to host bridge, the src mac
-might be changed through balance-alb mode, but it is not synced
-with Link-layer address in the option message.
-
-The patch implements bond6's tx handle for ipv6 neighbor
-solicitation and advertisement messages.
-
-Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
----
-v9->v10:
-- add IPv6 header pull in alb_determine_nd.
-- combine bond_xmit_alb_slave_get's IPv6 header
-pull with alb_determine_nd's
----
- drivers/net/bonding/bond_alb.c | 40 ++++++++++++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
-index 533e476988f2..d9da6eb7f5c2 100644
---- a/drivers/net/bonding/bond_alb.c
-+++ b/drivers/net/bonding/bond_alb.c
-@@ -1269,6 +1269,37 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
- 	return res;
- }
- 
-+/* determine if the packet is NA or NS */
-+static bool __alb_determine_nd(struct icmp6hdr *hdr)
-+{
-+	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
-+	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
-+{
-+	struct ipv6hdr *ip6hdr;
-+	struct icmp6hdr *hdr;
-+
-+	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr)))
-+		return true;
-+
-+	ip6hdr = ipv6_hdr(skb);
-+	if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
-+		if (!pskb_may_pull(skb, sizeof(*ip6hdr) + sizeof(*hdr)))
-+			return true;
-+
-+		hdr = icmp6_hdr(skb);
-+		return __alb_determine_nd(hdr);
-+	}
-+
-+	return false;
-+}
-+
- /************************ exported alb functions ************************/
- 
- int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
-@@ -1348,8 +1379,11 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
- 	/* Do not TX balance any multicast or broadcast */
- 	if (!is_multicast_ether_addr(eth_data->h_dest)) {
- 		switch (skb->protocol) {
--		case htons(ETH_P_IP):
- 		case htons(ETH_P_IPV6):
-+			if (alb_determine_nd(skb, bond))
-+				break;
-+			fallthrough;
-+		case htons(ETH_P_IP):
- 			hash_index = bond_xmit_hash(bond, skb);
- 			if (bond->params.tlb_dynamic_lb) {
- 				tx_slave = tlb_choose_channel(bond,
-@@ -1432,10 +1466,12 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
- 			break;
- 		}
- 
--		if (!pskb_network_may_pull(skb, sizeof(*ip6hdr))) {
-+		if (alb_determine_nd(skb, bond)) {
- 			do_tx_balance = false;
- 			break;
- 		}
-+
-+		/* The IPv6 header is pulled by alb_determine_nd */
- 		/* Additionally, DAD probes should not be tx-balanced as that
- 		 * will lead to false positives for duplicate addresses and
- 		 * prevent address configuration from working.
-
-base-commit: dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
--- 
-2.27.0
-
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>

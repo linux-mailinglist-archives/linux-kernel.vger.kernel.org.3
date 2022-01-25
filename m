@@ -2,219 +2,415 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD9649B433
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FF449B432
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 13:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384057AbiAYMnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 07:43:09 -0500
-Received: from mail-bn8nam08on2062.outbound.protection.outlook.com ([40.107.100.62]:28383
-        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1451799AbiAYMki (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:40:38 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CKdB/Lh8RcR6VNAaMpwyWciN4GKZBuwcyLfE+lIwVwCt5leCQ+b5pMaVQFQemmHcIued7OOpD+0jwp7bHFvlpTgY6/fjMPGChSXj7oZRheQZztTN8NxxyLRXSrWe4Pp70lCrhpQFX5WUD0tT7u1K7JqWdq0tiOG1AyIyc0KZDJ5FDOW0TqGJMj+ew6CggSLNIw8oca9cg4dS5XWrx8EFzzfIWDUE0n8tqqnpZQPeTwYzn7POshtuxUTreFCWPsTGyiJkb6YSxOyIi2UX6NdhUH0RMcT9Ek9JQmWvBsT1FIe+VPYAbIWax3YzhOYh5XnczpUSZ/5e/u7Zzv/+Ptagjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wO3eeAISLzHXBXLjoELWN+9TwTchQLsq0OSHp3UhY2w=;
- b=HSYRDhGj6zMGdx9EbB5L1I1YJ58OHw1Ur0eYMaQ8EoPxP0ExLdLqyPT3H/dpchN2B7CIMfznZHRgGFK0G7y5lhxyG9HnF3dYZ2iL/kjvTy5bH93wicowXgNJ/WErxEmJxRR0O9DvX4DqEXPW5ViVkF27/w4d21+qQobyzhPWDtHZWbWokfa6khgwOq3Nd0ZaTjdSZbsMewulhazUU0LJprQVys8GrvYXQn4kYytuN31R6M972i5Y4QMiIDCFW2wMpbhAkmzb34foQOH7Ip7Fjf7t/P8Gtddkdu+9jTV3Dwn/AWjw+IX0r7C9D6jvzFYxzNP1gnJEN8jjd/LaoqBX1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wO3eeAISLzHXBXLjoELWN+9TwTchQLsq0OSHp3UhY2w=;
- b=YFftvxSVesI6cwY7+bci3oIB+P6n6HAJ6a1NZMt+0JFKpBuatfxHZAnW0W81clQNPoHaDdxVeolT5BreQKL3YhFxhAnBOZX3ihPeM8U+ec0fdjqDqGgkX4rWen4mWT1N/BAnkIAVJ71ZACynvGowixsg96lvJ55dzOnZHZ1W9NcVOjGWVQCZDxPnj/aVzJ48XcJn6SYlG/yoNXBu0R1N8jcMxInNPVNj7VFWsrTH8dZDxm8Zp11RzkMo44kV6MlFgWk+ZcLKCAnqICUHzcUBsriPUoyurCXWmaQQ+piwVbjkAjPvGzEmLYVnwOLwuYsigKD+SZBnmjwBdmytgkP4Tg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MWHPR1201MB2493.namprd12.prod.outlook.com (2603:10b6:300:ec::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.14; Tue, 25 Jan
- 2022 12:40:34 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::b120:5877:dc4b:1a7e]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::b120:5877:dc4b:1a7e%7]) with mapi id 15.20.4909.019; Tue, 25 Jan 2022
- 12:40:34 +0000
-Message-ID: <fa42a60c-954a-acc0-3962-f00427153f78@nvidia.com>
-Date:   Tue, 25 Jan 2022 12:40:27 +0000
+        id S1352489AbiAYMmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 07:42:37 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:18872 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1383526AbiAYMjy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 07:39:54 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PCK2EM007397;
+        Tue, 25 Jan 2022 12:39:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=SlywLxpsS5eWz0E4+pWBh8y5971KSf+ttGtRG3Lqu3k=;
+ b=b9VVPRtMSo22exWAFDoH4O/QIR9Y6OgPBkvDs2370CnA/pbyoKhzSyuSv0Q1mPLQngJH
+ pnM6il1efSAj5qFDKsPDzbIwJmdGcmuTTQpjbIuwyuWEVFBWwbaGR9H2MtWbJDNhUPdG
+ JG+xev46hhslSyO0ri66ZYsHI4lILxHWDZ3Bdby+caedlp9RQwM107JWTIWraHHW+5co
+ Qulu92yBpCAZsLwP3rcMug2yzZ0VmLXsDTF1fjr3hLkEexw2R7UTMM/MkVwZnbdiYIrX
+ G84Li9jItckRzTcK4jEEWrAPLH0FY84rsuaBt2CjdVO9fKm2Bbdp2V21JyIOoMgud1p7 2A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dth2rgf30-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 12:39:52 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20PCK3oH007628;
+        Tue, 25 Jan 2022 12:39:52 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dth2rgf1v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 12:39:52 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PCWKxY011423;
+        Tue, 25 Jan 2022 12:39:50 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dr96je31y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jan 2022 12:39:49 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PCdkuW41157052
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 12:39:46 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3C427AE058;
+        Tue, 25 Jan 2022 12:39:46 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2F90DAE059;
+        Tue, 25 Jan 2022 12:39:45 +0000 (GMT)
+Received: from [9.171.58.95] (unknown [9.171.58.95])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 25 Jan 2022 12:39:45 +0000 (GMT)
+Message-ID: <bb8f5da2-19d2-bf94-a2b4-f5b6f0f91995@linux.ibm.com>
+Date:   Tue, 25 Jan 2022 13:41:35 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] tty: serial: Use fifo in 8250 console driver
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 19/30] KVM: s390: pci: provide routines for
+ enabling/disabling interrupt forwarding
 Content-Language: en-US
-To:     Wander Costa <wcosta@redhat.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20211029201402.428284-1-wander@redhat.com>
- <a1ac6254-f79e-d131-fa2a-c7ad714c6d4a@nvidia.com>
- <f451e67d-adb9-01e8-bd11-bf7804863b4b@kernel.org>
- <8e57400f-d6a8-bd42-6214-fca1fe37a972@kernel.org>
- <11ec4350-b890-4949-cf8f-bc62d530d64f@nvidia.com>
- <CAAq0SU=9R3Y_SAdM+HaqavzWBRd1Li-b5bnZZLd5Opfgd0vnkQ@mail.gmail.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <CAAq0SU=9R3Y_SAdM+HaqavzWBRd1Li-b5bnZZLd5Opfgd0vnkQ@mail.gmail.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-20-mjrosato@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <20220114203145.242984-20-mjrosato@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0046.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2ac::20) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 43ae2c43-2ca6-46e3-56bc-08d9dfffe155
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB2493:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR1201MB2493596FB37C0C31EA24D867D95F9@MWHPR1201MB2493.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1122;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KP2pWzy/H7/rqAObHZ/J/57ZtCdVIWwWgW0E9vRj/aI7EFKkUbtTi+I+f4VCbxGBhOaH82NS3st+kNUYWVEwiwTvz3u9t3n6eA+IGbL3wgivZL991KsCxtKdRZUKD6gfvB7Av+vZBRPfmoToaehr+rjHbPmW2LEd9RDj8QzXiV+HHXAH1jBzxBoioCLjMymv3F97krLaskbIzY1Ay4IqtVLYhfGMaIjOGlpK5/sZqVHD7X7CKIv9sNMBT1Md6ux/SBbRUhwmIHgnYw1pkgusHDQqxXI+MOZ9Ns/xdy7foLiXtnEAmDMwh+W8fDKfKBwMh7u5XbntVkDiDYq+7YpDrF7uen7TtqiQGDhsWXyahXuHSh5veuEPk1Orim95iUVn7PhsXM6HvPzTtWpGt+IcOWOSe9Qmjc+TjDGVwMJNiaXjFfMlJLXHsyoQqhrVcq0/a6/J1H1QMMAuZ2g3FvWCsSrOraI7G/j3OGi4u4hqczvQGMxXaIRmYIqyHMmjkFCD08oojqFaIzOdEl4fCOe85mNhuFcOraUxUPOpgzclpUi5ESfi9FRvxmPRPj3QPu0s5K7M1aTuU1NL7HdBFHUIuc+Mh18ZLXPnoubOP2vSxl2CuPbmvwpE6/QKOZryg4M4R3ZzwB1C+Pd22PQWfLTjYO4rYz+JmMyUthCZsOu+GQjYAbJo2tUL6cwqKgsAEYDQtxIeKew4uYI2f2yehzaOtAE+21lHd1bx1DCJwAOP1JUxYdQI6IEEUiZN1M6KHgPD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(54906003)(36756003)(5660300002)(8676002)(6506007)(6666004)(53546011)(4326008)(6512007)(38100700002)(8936002)(31696002)(86362001)(316002)(2616005)(7416002)(66476007)(508600001)(66946007)(66556008)(6916009)(26005)(186003)(31686004)(55236004)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZTh5emxDTkNscXdjM3Z3emlUZ3lzbC9BV2dHMk5acGFiS0ZoNmU1TC81eFJL?=
- =?utf-8?B?ZTlGbk9POW9RcVMwTisrZGVHdjhGd0czckI1MG5pS0luTEozQ0VIN1B6bzJ1?=
- =?utf-8?B?WTNJU1g0NTYwUWNmWTg1WW42dXlyUVlPSXArUlZ1ZHZmSWhmd3dxdnBZUFEz?=
- =?utf-8?B?WTU2R1M5azYwQzZIWThaR3hvVTQ1NWtUdjJrOTV3NEZCd0pyUiswVzVuTEh1?=
- =?utf-8?B?T0l1NTdab0ltWERUWG4wb0ZFVjUySXg3ME82UmczOW9DWFFtb01ndVlwNnN6?=
- =?utf-8?B?aDlzR1BlUWQvUmdXbG1iOUlkNjE5UWhseTl5UzZMaERCYWgvcEJ6V1JwQ1JR?=
- =?utf-8?B?N1ZuZ1JyREZFZVl0YkFGSm1vU0pyd0gyT2FIMFVtTytxcHZubWZIb1FGVzdO?=
- =?utf-8?B?YVlqdCt2TkNzMVlNYUR2dFBuVlVUbmtGeGVZRWZySGpZZEVXQ2Z3NDU0V3pm?=
- =?utf-8?B?cU85T2liRTRQUHhGTFY3SnNHOHphTWVJczdrdlRzMUxXNjhrS0hpS1ZVY1VE?=
- =?utf-8?B?NDE4SUJQSXNzcGNGNkxaOTEyWjM3ZnFoenlKMkh6bXhPNzNLOEF2aG5PMlUz?=
- =?utf-8?B?Q1VkdzlINkxLSnl0Uk5TWS8xTGQxMkJjSUR6M1doMGZCMUUybkcyN0s0dklD?=
- =?utf-8?B?UndHRlBVRzd1RFFKaVlaQlJWSUNUcXVTY0paRkpPUVJpWjRBUytSQ2MyaXpr?=
- =?utf-8?B?djJkNDQ2SGd3T24zWHp5RnhmeWl2d2pIZTlxZXM5QjVZY216S2dFbzliMmZ1?=
- =?utf-8?B?NDVWUzRWajgvaVljM3l1NWVDeFNxdkM2TnNTQmRUUHh1RWlJeHVZbHc0MjZW?=
- =?utf-8?B?bXpWWFgzNTJPdWVSekV6QWVhWFJGdnRiT1VBZ2ZaNFYvT2tnNkVaZ3puWkVk?=
- =?utf-8?B?S2RCTGJRVkM4Z2lXWXliWVR5bE1ZdlRlVGZudW1mN2NZYTAxYnJheUF3bmZq?=
- =?utf-8?B?MHhXTFJYSTFWUFdQZWR6UGlvV2k0U3lnalNUeUNQalkyRndHeEZjTmgraVJx?=
- =?utf-8?B?M1dsbjNzSUxseWN5QTFDWjB5TGhJQzFUOHV2dkNsc1ppSVlNWi9Nb3BNdzdq?=
- =?utf-8?B?cGtieWJaS2RTamJkcmh1NU5aWFlacjh6WXpwQTgrdXR5WmI2SGs5T1ZqUWlS?=
- =?utf-8?B?cFQ2My9GQ285ekVJcG1MUEt4WElPd1lnUkVrM0FVcUtiMG5ldll5WDk0NnJN?=
- =?utf-8?B?bDJYaGpwZGhrTmMrcUljT2U5YWswTmc1MytGSXR6NVh5VDZFRzM1SUlKUVgx?=
- =?utf-8?B?YmRZTjZPRVNUdG1CM05zb3ZjdUVxSytwL3ptQldPeXFIRlVxZTRKRTg4RWZp?=
- =?utf-8?B?Vm5mQ3VQTCtxTFJYUThPaVpOYVBoNytlcFRkakU1a1FteUxTM2xaR29tY3Ni?=
- =?utf-8?B?YWxoQmFhTjFtWVc0T0dhODBtUTgwUC9tRlNaZkhxRXR3WGFidFd5dlh4eTlx?=
- =?utf-8?B?d0NlcE1KdnRzaHpEcVVLbWlpSnlZZUlwQmZ5N1VmMDdnU1RwU0FQcFlYck9h?=
- =?utf-8?B?eFhZdDFGVW93amhkOWFDSFVMNlJmRkV6QkZZV1VkQjZFUkY0YUVOMnhpcGhZ?=
- =?utf-8?B?aE1lRkJnRUx0ZWZlTUllSkJ3RFVVamE4cmJHQ0ZHZDZsa2owRzdYajBRVDVE?=
- =?utf-8?B?QmlObEtlVDZNOXJyYmEvZHgzcm8zclFhbXVqUmlNanh6WVN5WDlja0FRRVVY?=
- =?utf-8?B?VHNqdkJBRE4zOVQwT0xBMjNFSWlJV0VSZng5aSs4d0h2K3lMaktDVENBQkFq?=
- =?utf-8?B?MnlmZnR0M0w4ejJPNG50ZC8yaVR4Y290NG5JQUJqMUJsZ3VUZ0hvWkEydHpP?=
- =?utf-8?B?cTJVcG9GYVcrSnlkUWljNVNjOWs3YVEyZThsWHdCcTB2NjEvaWlLU1p4YjVJ?=
- =?utf-8?B?c1RscC9UUHRaTERDamZGK1dsd2g1MXVxQkIzVHJYd25NZXJ3ano1d3pRRkN5?=
- =?utf-8?B?N0pLL21lemlMYWl1R0V6Z3FUbUU3a1NOeEJhRGdCeUlpY1ZPNU95M1dwdFRK?=
- =?utf-8?B?cHFaMWE1cTVQSzJMMmFkNEMxOWxtRjRwaWdjZ0dtY3QydTBmc084MnRDbmJM?=
- =?utf-8?B?QVduQVZCdWVxSUxVeXVVUXVGQXhqZGc2VGVOazJFRkdadUhFbmswQ0FPYTVF?=
- =?utf-8?B?aDh3RjdqVXJqT0NGd254cVNqVTZuZWlrYmVzR1dQN3YvenhFYU1kbFpINElm?=
- =?utf-8?Q?i7w4Nxxxz41BbaQJX1MIB1E=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43ae2c43-2ca6-46e3-56bc-08d9dfffe155
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 12:40:34.5550
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +P80UPq7cXopGsH67XB+xDhh8K09THB2Uk0qndNutJYxEj/I3lJlzBLX5YiGRcq+7RiIDNezxPouMt/cTY6Bkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB2493
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oP0Omze7txDfAZSgiv_LhcVOwylGaruv
+X-Proofpoint-ORIG-GUID: MJmP7jYmdwQA9dkL3Pmloyp__ruAlOpw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 clxscore=1015 spamscore=0
+ adultscore=0 mlxlogscore=999 lowpriorityscore=0 priorityscore=1501
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201250081
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 25/01/2022 10:29, Wander Costa wrote:
-> On Tue, Jan 25, 2022 at 7:06 AM Jon Hunter <jonathanh@nvidia.com> wrote:
->>
->>
->> On 25/01/2022 09:36, Jiri Slaby wrote:
->>
->> ...
->>
->>>> The test is bogus:
->>>>           use_fifo = (up->capabilities & UART_CAP_FIFO) &&
->>>>                   port->fifosize > 1 &&
->>>>                   (serial_port_in(port, UART_FCR) & UART_FCR_ENABLE_FIFO)
->>>>
->>>> FCR is write only. Reading it, one gets IIR contents.
->>>
->>> In particular, the test is checking whether there is no interrupt
->>> pending (UART_FCR_ENABLE_FIFO == UART_IIR_NO_INT). So it oscillates
->>> between use_fifo and not, depending on the interrupt state of the chip.
->>>
->>> Could you change it into something like this:
->>> --- a/drivers/tty/serial/8250/8250_port.c
->>> +++ b/drivers/tty/serial/8250/8250_port.c
->>> @@ -3396,7 +3396,7 @@ void serial8250_console_write(struct
->>> uart_8250_port *up, const char *s,
->>>
->>>           use_fifo = (up->capabilities & UART_CAP_FIFO) &&
->>>                   port->fifosize > 1 &&
->>> -               (serial_port_in(port, UART_FCR) & UART_FCR_ENABLE_FIFO) &&
->>> +               (up->fcr & UART_FCR_ENABLE_FIFO) &&
->>>                   /*
->>>                    * After we put a data in the fifo, the controller will
->>> send
->>>                    * it regardless of the CTS state. Therefore, only use
->>> fifo
->>>
->>>
->>> And see whether it fixes the issue. Anyway, of what port type is the
->>> serial port (what says dmesg/setserial about that)?
->>
->>
->> Thanks. Unfortunately, this did not fix it. The port type is PORT_TEGRA ...
->>
->>    70006000.serial: ttyS0 at MMIO 0x70006000 (irq = 72, base_baud = 25500000) is a Tegra
+
+On 1/14/22 21:31, Matthew Rosato wrote:
+> These routines will be wired into the vfio_pci_zdev ioctl handlers to
+> respond to requests to enable / disable a device for Adapter Event
+> Notifications / Adapter Interuption Forwarding.
 > 
-> I see PORT_TEGRA has different values for fifosize and tx_loadsz.
-> Maybe we should use tx_loadsz.
-> Could you please give a try to this patch:
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> ---
+>   arch/s390/include/asm/kvm_pci.h |   7 ++
+>   arch/s390/kvm/pci.c             | 203 ++++++++++++++++++++++++++++++++
+>   arch/s390/pci/pci_insn.c        |   1 +
+>   3 files changed, 211 insertions(+)
 > 
-> diff --git a/drivers/tty/serial/8250/8250_port.c
-> b/drivers/tty/serial/8250/8250_port.c
-> index 2abb3de11a48..d3a93e5d55f7 100644
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -3343,7 +3343,7 @@ static void serial8250_console_fifo_write(struct
-> uart_8250_port *up,
+> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
+> index 072401aa7922..01fe14fffd7a 100644
+> --- a/arch/s390/include/asm/kvm_pci.h
+> +++ b/arch/s390/include/asm/kvm_pci.h
+> @@ -16,16 +16,23 @@
+>   #include <linux/kvm_host.h>
+>   #include <linux/kvm.h>
+>   #include <linux/pci.h>
+> +#include <asm/pci_insn.h>
+>   
+>   struct kvm_zdev {
+>   	struct zpci_dev *zdev;
+>   	struct kvm *kvm;
+> +	struct zpci_fib fib;
+>   };
+>   
+>   int kvm_s390_pci_dev_open(struct zpci_dev *zdev);
+>   void kvm_s390_pci_dev_release(struct zpci_dev *zdev);
+>   void kvm_s390_pci_attach_kvm(struct zpci_dev *zdev, struct kvm *kvm);
+>   
+> +int kvm_s390_pci_aif_probe(struct zpci_dev *zdev);
+> +int kvm_s390_pci_aif_enable(struct zpci_dev *zdev, struct zpci_fib *fib,
+> +			    bool assist);
+> +int kvm_s390_pci_aif_disable(struct zpci_dev *zdev);
+> +
+>   int kvm_s390_pci_interp_probe(struct zpci_dev *zdev);
+>   int kvm_s390_pci_interp_enable(struct zpci_dev *zdev);
+>   int kvm_s390_pci_interp_disable(struct zpci_dev *zdev);
+> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
+> index 122d0992b521..7ed9abc476b6 100644
+> --- a/arch/s390/kvm/pci.c
+> +++ b/arch/s390/kvm/pci.c
+> @@ -12,6 +12,7 @@
+>   #include <asm/kvm_pci.h>
+>   #include <asm/pci.h>
+>   #include <asm/pci_insn.h>
+> +#include <asm/pci_io.h>
+>   #include <asm/sclp.h>
+>   #include "pci.h"
+>   #include "kvm-s390.h"
+> @@ -145,6 +146,204 @@ int kvm_s390_pci_aen_init(u8 nisc)
+>   	return rc;
+>   }
+>   
+> +/* Modify PCI: Register floating adapter interruption forwarding */
+> +static int kvm_zpci_set_airq(struct zpci_dev *zdev)
+> +{
+> +	u64 req = ZPCI_CREATE_REQ(zdev->fh, 0, ZPCI_MOD_FC_REG_INT);
+> +	struct zpci_fib fib = {0};
+
+I prefer {} instead of {0} even it does the same it looks wrong to me.
+
+> +	u8 status;
+> +
+> +	fib.fmt0.isc = zdev->kzdev->fib.fmt0.isc;
+> +	fib.fmt0.sum = 1;       /* enable summary notifications */
+> +	fib.fmt0.noi = airq_iv_end(zdev->aibv);
+> +	fib.fmt0.aibv = virt_to_phys(zdev->aibv->vector);
+> +	fib.fmt0.aibvo = 0;
+> +	fib.fmt0.aisb = virt_to_phys(aift->sbv->vector + (zdev->aisb / 64) * 8);
+> +	fib.fmt0.aisbo = zdev->aisb & 63;
+> +	fib.gd = zdev->gd;
+> +
+> +	return zpci_mod_fc(req, &fib, &status) ? -EIO : 0;
+> +}
+> +
+> +/* Modify PCI: Unregister floating adapter interruption forwarding */
+> +static int kvm_zpci_clear_airq(struct zpci_dev *zdev)
+> +{
+> +	u64 req = ZPCI_CREATE_REQ(zdev->fh, 0, ZPCI_MOD_FC_DEREG_INT);
+> +	struct zpci_fib fib = {0};
+
+same here
+
+> +	u8 cc, status;
+> +
+> +	fib.gd = zdev->gd;
+> +
+> +	cc = zpci_mod_fc(req, &fib, &status);
+> +	if (cc == 3 || (cc == 1 && status == 24))
+> +		/* Function already gone or IRQs already deregistered. */
+> +		cc = 0;
+> +
+> +	return cc ? -EIO : 0;
+> +}
+> +
+> +int kvm_s390_pci_aif_probe(struct zpci_dev *zdev)
+> +{
+> +	/* Must have appropriate hardware facilities */
+> +	if (!(sclp.has_aeni && test_facility(71)))
+> +		return -EINVAL;
+> +
+> +	/* Must have a KVM association registered */
+> +	if (!zdev->kzdev || !zdev->kzdev->kvm)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_aif_probe);
+> +
+> +int kvm_s390_pci_aif_enable(struct zpci_dev *zdev, struct zpci_fib *fib,
+> +			    bool assist)
+> +{
+> +	struct page *aibv_page, *aisb_page = NULL;
+> +	unsigned int msi_vecs, idx;
+> +	struct zpci_gaite *gaite;
+> +	unsigned long bit;
+> +	struct kvm *kvm;
+> +	phys_addr_t gaddr;
+> +	int rc = 0;
+> +
+> +	/*
+> +	 * Interrupt forwarding is only applicable if the device is already
+> +	 * enabled for interpretation
+> +	 */
+> +	if (zdev->gd == 0)
+> +		return -EINVAL;
+> +
+> +	kvm = zdev->kzdev->kvm;
+> +	msi_vecs = min_t(unsigned int, fib->fmt0.noi, zdev->max_msi);
+> +
+> +	/* Replace AIBV address */
+> +	idx = srcu_read_lock(&kvm->srcu);
+> +	aibv_page = gfn_to_page(kvm, gpa_to_gfn((gpa_t)fib->fmt0.aibv));
+> +	srcu_read_unlock(&kvm->srcu, idx);
+> +	if (is_error_page(aibv_page)) {
+> +		rc = -EIO;
+> +		goto out;
+> +	}
+> +	gaddr = page_to_phys(aibv_page) + (fib->fmt0.aibv & ~PAGE_MASK);
+> +	fib->fmt0.aibv = gaddr;
+> +
+> +	/* Pin the guest AISB if one was specified */
+> +	if (fib->fmt0.sum == 1) {
+> +		idx = srcu_read_lock(&kvm->srcu);
+> +		aisb_page = gfn_to_page(kvm, gpa_to_gfn((gpa_t)fib->fmt0.aisb));
+> +		srcu_read_unlock(&kvm->srcu, idx);
+> +		if (is_error_page(aisb_page)) {
+> +			rc = -EIO;
+> +			goto unpin1;
+> +		}
+> +	}
+> +
+> +	/* AISB must be allocated before we can fill in GAITE */
+> +	mutex_lock(&aift->lock);
+> +	bit = airq_iv_alloc_bit(aift->sbv);
+> +	if (bit == -1UL)
+> +		goto unpin2;
+> +	zdev->aisb = bit;
+
+aisb here is the aisb offset right?
+Then may be add a comment as in gait and fmt0 aisb is an address.
+
+> +	zdev->aibv = airq_iv_create(msi_vecs, AIRQ_IV_DATA |
+> +					      AIRQ_IV_BITLOCK |
+> +					      AIRQ_IV_GUESTVEC,
+> +				    (unsigned long *)fib->fmt0.aibv);
+
+phys_to_virt ?
+
+> +
+> +	spin_lock_irq(&aift->gait_lock);
+> +	gaite = (struct zpci_gaite *)aift->gait + (zdev->aisb *
+> +						   sizeof(struct zpci_gaite));
+> +
+> +	/* If assist not requested, host will get all alerts */
+> +	if (assist)
+> +		gaite->gisa = (u32)(u64)&kvm->arch.sie_page2->gisa;
+
+virt_to_phys ?
+
+> +	else
+> +		gaite->gisa = 0;
+> +
+> +	gaite->gisc = fib->fmt0.isc;
+> +	gaite->count++;
+> +	gaite->aisbo = fib->fmt0.aisbo;
+> +	gaite->aisb = virt_to_phys(page_address(aisb_page) + (fib->fmt0.aisb &
+> +							      ~PAGE_MASK));
+> +	aift->kzdev[zdev->aisb] = zdev->kzdev;
+> +	spin_unlock_irq(&aift->gait_lock);
+> +
+> +	/* Update guest FIB for re-issue */
+> +	fib->fmt0.aisbo = zdev->aisb & 63;
+> +	fib->fmt0.aisb = virt_to_phys(aift->sbv->vector + (zdev->aisb / 64) * 8);
+> +	fib->fmt0.isc = kvm_s390_gisc_register(kvm, gaite->gisc);
+> +
+> +	/* Save some guest fib values in the host for later use */
+> +	zdev->kzdev->fib.fmt0.isc = fib->fmt0.isc;
+> +	zdev->kzdev->fib.fmt0.aibv = fib->fmt0.aibv;
+> +	mutex_unlock(&aift->lock);
+> +
+> +	/* Issue the clp to setup the irq now */
+> +	rc = kvm_zpci_set_airq(zdev);
+> +	return rc;
+> +
+> +unpin2:
+> +	mutex_unlock(&aift->lock);
+> +	if (fib->fmt0.sum == 1) {
+> +		gaddr = page_to_phys(aisb_page);
+> +		kvm_release_pfn_dirty(gaddr >> PAGE_SHIFT);
+> +	}
+> +unpin1:
+> +	kvm_release_pfn_dirty(fib->fmt0.aibv >> PAGE_SHIFT);
+> +out:
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_aif_enable);
+> +
+> +int kvm_s390_pci_aif_disable(struct zpci_dev *zdev)
+> +{
+> +	struct kvm_zdev *kzdev = zdev->kzdev;
+> +	struct zpci_gaite *gaite;
+> +	int rc;
+> +	u8 isc;
+> +
+> +	if (zdev->gd == 0)
+> +		return -EINVAL;
+> +
+> +	/* Even if the clear fails due to an error, clear the GAITE */
+> +	rc = kvm_zpci_clear_airq(zdev);
+
+Having a look at kvm_zpci_clear_airq() the only possible error seems to 
+be when an error recovery is in progress.
+The error returned for a wrong FH, function does not exist anymore, or 
+if the interrupt vectors are already deregistered by the instruction are 
+returned as success by the function.
+
+How can we be sure that we have no conflict with a recovery in progress?
+Shouldn't we in this case let the recovery process handle the function 
+and stop here?
+
+Doesn't the aif lock mutex placed after and not before the clear_irq 
+open a door for race condition with the recovery?
+
+> +
+> +	mutex_lock(&aift->lock);
+> +	if (zdev->kzdev->fib.fmt0.aibv == 0)
+> +		goto out;
+> +	spin_lock_irq(&aift->gait_lock);
+> +	gaite = (struct zpci_gaite *)aift->gait + (zdev->aisb *
+> +						   sizeof(struct zpci_gaite));
+> +	isc = gaite->gisc;
+> +	gaite->count--;
+> +	if (gaite->count == 0) {
+> +		/* Release guest AIBV and AISB */
+> +		kvm_release_pfn_dirty(kzdev->fib.fmt0.aibv >> PAGE_SHIFT);
+> +		if (gaite->aisb != 0)
+> +			kvm_release_pfn_dirty(gaite->aisb >> PAGE_SHIFT);
+> +		/* Clear the GAIT entry */
+> +		gaite->aisb = 0;
+> +		gaite->gisc = 0;
+> +		gaite->aisbo = 0;
+> +		gaite->gisa = 0;
+> +		aift->kzdev[zdev->aisb] = 0;
+> +		/* Clear zdev info */
+> +		airq_iv_free_bit(aift->sbv, zdev->aisb);
+> +		airq_iv_release(zdev->aibv);
+> +		zdev->aisb = 0;
+> +		zdev->aibv = NULL;
+> +	}
+> +	spin_unlock_irq(&aift->gait_lock);
+> +	kvm_s390_gisc_unregister(kzdev->kvm, isc);
+
+Don't we need to check the return value?
+And maybe to report it to the caller?
+
+> +	kzdev->fib.fmt0.isc = 0;
+> +	kzdev->fib.fmt0.aibv = 0;
+> +out:
+> +	mutex_unlock(&aift->lock);
+> +
+> +	return rc;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_s390_pci_aif_disable);
+> +
+>   int kvm_s390_pci_interp_probe(struct zpci_dev *zdev)
 >   {
->          int i;
->          const char *end = s + count;
-> -       unsigned int fifosize = up->port.fifosize;
-> +       unsigned int fifosize = up->tx_loadsz;
->          bool cr_sent = false;
+>   	/* Must have appropriate hardware facilities */
+> @@ -221,6 +420,10 @@ int kvm_s390_pci_interp_disable(struct zpci_dev *zdev)
+>   	if (zdev->gd == 0)
+>   		return -EINVAL;
+>   
+> +	/* Forwarding must be turned off before interpretation */
+> +	if (zdev->kzdev->fib.fmt0.aibv != 0)
+> +		kvm_s390_pci_aif_disable(zdev);
+> +
+>   	/* Remove the host CLP guest designation */
+>   	zdev->gd = 0;
+>   
+> diff --git a/arch/s390/pci/pci_insn.c b/arch/s390/pci/pci_insn.c
+> index ca6399d52767..f7d0e29bbf0b 100644
+> --- a/arch/s390/pci/pci_insn.c
+> +++ b/arch/s390/pci/pci_insn.c
+> @@ -59,6 +59,7 @@ u8 zpci_mod_fc(u64 req, struct zpci_fib *fib, u8 *status)
+>   
+>   	return cc;
+>   }
+> +EXPORT_SYMBOL_GPL(zpci_mod_fc);
+>   
+>   /* Refresh PCI Translations */
+>   static inline u8 __rpcit(u64 fn, u64 addr, u64 range, u8 *status)
 > 
->          while (s != end) {
-> @@ -3409,8 +3409,8 @@ void serial8250_console_write(struct
-> uart_8250_port *up, const char *s,
->          }
-> 
->          use_fifo = (up->capabilities & UART_CAP_FIFO) &&
-> -               port->fifosize > 1 &&
-> -               (serial_port_in(port, UART_FCR) & UART_FCR_ENABLE_FIFO) &&
-> +               up->tx_loadsz > 1 &&
-> +               (up->fcr & UART_FCR_ENABLE_FIFO) &&
->                  /*
->                   * After we put a data in the fifo, the controller will send
->                   * it regardless of the CTS state. Therefore, only use fifo
-> 
-
-
-Thanks. Yes that does fix it.
-
-Andy, does this work for X86?
-
-Jon
 
 -- 
-nvpublic
+Pierre Morel
+IBM Lab Boeblingen

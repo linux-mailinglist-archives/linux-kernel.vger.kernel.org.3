@@ -2,136 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3904C49BA79
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1031749BA7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 18:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349448AbiAYRgw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 25 Jan 2022 12:36:52 -0500
-Received: from mail-yb1-f178.google.com ([209.85.219.178]:45015 "EHLO
-        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351433AbiAYRfe (ORCPT
+        id S1355506AbiAYRhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 12:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239068AbiAYRfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 12:35:34 -0500
-Received: by mail-yb1-f178.google.com with SMTP id r65so60244704ybc.11;
-        Tue, 25 Jan 2022 09:35:33 -0800 (PST)
+        Tue, 25 Jan 2022 12:35:45 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20B2C061751;
+        Tue, 25 Jan 2022 09:35:45 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id h4so3805194qtm.2;
+        Tue, 25 Jan 2022 09:35:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yVJgv+46R+iVcs9RtG4FewPPN7Oe5szgAktholdMCSQ=;
+        b=opAm1WoYeQnBuA1LM6os+SwLTDYSra807LsTGEREgVzsCh/+OMrlzuHQMXShxa545C
+         zpra7QREhGs0YDpf/Z+O0h6PaJL1jkldQgWf+tzDnj82KU/MCUj6OmAeDHQjudU9obyW
+         YZFDzGIzW2hPw6eoFPX8/1YPJEo2UVlA2tbZlkKQ7A8t6Goxal4PFq82AJ6zWq+8JCkI
+         X7VebQv7gP8eE02dq5pUu9Ex8UTYGe2NJ2Y/FoLq8LIVBZF65sjRxJ3jm0/ti73xxUgt
+         L8DndnVPR4afozmy2gJ2s50DPpRl1CnzZUbN9eZj3BpGmx+JNUNzCYDfQphptxxK/DNd
+         vyFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ikPquhjsfRMVv47QVMlRm0HBAR3in6p60nhuEa0N4a8=;
-        b=HYzFpyV5XQp2Hg/gDOBuMpV3YuUxQjacP9fVpj9qJjsFE/pNiFI8r9sV4KUqNg/QiU
-         XPIKJwKBHDUWDz8Ge9UTterIcG6Nhwb/spoUSR2f43owtZ2hndCOcu1yK3dIeOEj6LXA
-         7s9osdW4KaNW39U4XZcxNKVhCcprHSrubo+1qFSbAZqELAkLFgpQlIwaxO5eD2LVwL4q
-         dOIqZLxVH9nmvpRjj9frQGi8f2/nDvq7AkbROUHbfmlkaleaVH39BAMUw8fsKGkfXZkO
-         wcPIp2w4APcfvklwNr9JIm8jUqYKdtj3WqC7uczGpNzvRv7j/2aKLNLjEIKWX5hVOOj2
-         /g0Q==
-X-Gm-Message-State: AOAM530FLhw0qC4KUXhywJDgmv2/M4l/fZaII6X0PGHNqk2zpxc6sU+i
-        sc9ZS/odeQlGoOEAHK8FbkUTTnZMh4f1a2yShoz90WYK
-X-Google-Smtp-Source: ABdhPJzBZwoaHgdiozvV59S3tZsGA0B+fRzmVS1HUkPFzreaDACHAcmZrXojlbU3Xrd6yAzLsL2ay1u84Mo6lC5ioRU=
-X-Received: by 2002:a25:3793:: with SMTP id e141mr30656856yba.624.1643132130665;
- Tue, 25 Jan 2022 09:35:30 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yVJgv+46R+iVcs9RtG4FewPPN7Oe5szgAktholdMCSQ=;
+        b=gdMIXYCKuBdPpp7aVTr6AQ5aYSHhN6CfbpNkIzx8vlEQNO/VQsHAlH6qam22h5buKz
+         OX1HcTN0ZOiwsOkn5sdvXzPz/8o9HfuZHkNyX7u9QgW1yHnxCDJ7ZDhOQqH4Vftvfik5
+         /fkd+AOg7Xy4/3tnW7gU+83Dr4egApYTwZljyujCPZSi2BAmY2rk9XL3mnDL/d4uSrFk
+         /ut/KqRtdXisfz5Bb+MDOxvyaTdZUvTwswy0PvE/HYzU+W8li9Zk9MvGl4uoqkYww0gs
+         5I9e7m5wbKTGqDYtUbN0Z3T5BsCcQ3B4WzS0fUHeSgqqVUFnMbPT7LkB8a0ab2tuYVw/
+         dUNg==
+X-Gm-Message-State: AOAM532iPI3ieHYSg0rUxmYaxp7KAeQ9d0fm05UmzDygmiEqoNaEQ3z9
+        ar6L5OrTbckFgCVklgV/WkQSR1hCb4Y=
+X-Google-Smtp-Source: ABdhPJwp7wWMc/nz5EWzmBTPh6oHiTEh8ssQzLQHCrsLy2sIHd49658aaJvcFr2XEcfnrI3/b9JZbA==
+X-Received: by 2002:a05:622a:40d:: with SMTP id n13mr17480123qtx.511.1643132144606;
+        Tue, 25 Jan 2022 09:35:44 -0800 (PST)
+Received: from vps.qemfd.net (vps.qemfd.net. [173.230.130.29])
+        by smtp.gmail.com with ESMTPSA id m22sm8914855qtk.37.2022.01.25.09.35.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 09:35:44 -0800 (PST)
+Received: from schwarzgerat.orthanc (schwarzgerat.danknet [192.168.128.2])
+        by vps.qemfd.net (Postfix) with ESMTP id 7E33A2B1C6;
+        Tue, 25 Jan 2022 12:35:43 -0500 (EST)
+Received: by schwarzgerat.orthanc (Postfix, from userid 1000)
+        id 7325C603828; Tue, 25 Jan 2022 12:35:43 -0500 (EST)
+Date:   Tue, 25 Jan 2022 12:35:43 -0500
+From:   nick black <dankamongmen@gmail.com>
+To:     "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+Cc:     linux-man@vger.kernel.org,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [patch] console_codes.4: ffix
+Message-ID: <YfA07xh8an0c4AIt@schwarzgerat.orthanc>
+References: <YeEc2pYvKEckcAmv@schwarzgerat.orthanc>
+ <98d87c52-da33-9ee4-b9df-253c8ae8e093@gmail.com>
+ <YehE3p7es9/4wBuM@schwarzgerat.orthanc>
 MIME-Version: 1.0
-References: <20220119104751.1764414-1-amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20220119104751.1764414-1-amadeuszx.slawinski@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Jan 2022 18:35:19 +0100
-Message-ID: <CAJZ5v0gov=Tra2Z7H99CSnMt7Vf4LKEH3rGzVUjXiiBrusYdGQ@mail.gmail.com>
-Subject: Re: [PATCH] x86: Remove register_nosave_region_late()
-To:     =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YehE3p7es9/4wBuM@schwarzgerat.orthanc>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 11:48 AM Amadeusz Sławiński
-<amadeuszx.slawinski@linux.intel.com> wrote:
->
-> It is an unused wrapper forcing kmalloc allocation for registering
-> nosave regions. Also, rename __register_nosave_region() to
-> register_nosave_region() now that there is no need for disambiguation.
->
-> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-> Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-> ---
->  include/linux/suspend.h | 11 +----------
->  kernel/power/snapshot.c | 21 +++++++--------------
->  2 files changed, 8 insertions(+), 24 deletions(-)
->
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 5785d909c321..3e8ecdebe601 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -430,15 +430,7 @@ struct platform_hibernation_ops {
->
->  #ifdef CONFIG_HIBERNATION
->  /* kernel/power/snapshot.c */
-> -extern void __register_nosave_region(unsigned long b, unsigned long e, int km);
-> -static inline void __init register_nosave_region(unsigned long b, unsigned long e)
-> -{
-> -       __register_nosave_region(b, e, 0);
-> -}
-> -static inline void __init register_nosave_region_late(unsigned long b, unsigned long e)
-> -{
-> -       __register_nosave_region(b, e, 1);
-> -}
-> +extern void register_nosave_region(unsigned long b, unsigned long e);
->  extern int swsusp_page_is_forbidden(struct page *);
->  extern void swsusp_set_page_free(struct page *);
->  extern void swsusp_unset_page_free(struct page *);
-> @@ -458,7 +450,6 @@ int pfn_is_nosave(unsigned long pfn);
->  int hibernate_quiet_exec(int (*func)(void *data), void *data);
->  #else /* CONFIG_HIBERNATION */
->  static inline void register_nosave_region(unsigned long b, unsigned long e) {}
-> -static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
->  static inline int swsusp_page_is_forbidden(struct page *p) { return 0; }
->  static inline void swsusp_set_page_free(struct page *p) {}
->  static inline void swsusp_unset_page_free(struct page *p) {}
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index f7a986078213..330d49937692 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -978,8 +978,7 @@ static void memory_bm_recycle(struct memory_bitmap *bm)
->   * Register a range of page frames the contents of which should not be saved
->   * during hibernation (to be used in the early initialization code).
->   */
-> -void __init __register_nosave_region(unsigned long start_pfn,
-> -                                    unsigned long end_pfn, int use_kmalloc)
-> +void __init register_nosave_region(unsigned long start_pfn, unsigned long end_pfn)
->  {
->         struct nosave_region *region;
->
-> @@ -995,18 +994,12 @@ void __init __register_nosave_region(unsigned long start_pfn,
->                         goto Report;
->                 }
->         }
-> -       if (use_kmalloc) {
-> -               /* During init, this shouldn't fail */
-> -               region = kmalloc(sizeof(struct nosave_region), GFP_KERNEL);
-> -               BUG_ON(!region);
-> -       } else {
-> -               /* This allocation cannot fail */
-> -               region = memblock_alloc(sizeof(struct nosave_region),
-> -                                       SMP_CACHE_BYTES);
-> -               if (!region)
-> -                       panic("%s: Failed to allocate %zu bytes\n", __func__,
-> -                             sizeof(struct nosave_region));
-> -       }
-> +       /* This allocation cannot fail */
-> +       region = memblock_alloc(sizeof(struct nosave_region),
-> +                               SMP_CACHE_BYTES);
-> +       if (!region)
-> +               panic("%s: Failed to allocate %zu bytes\n", __func__,
-> +                     sizeof(struct nosave_region));
->         region->start_pfn = start_pfn;
->         region->end_pfn = end_pfn;
->         list_add_tail(&region->list, &nosave_regions);
-> --
+nick black left as an exercise for the reader:
+> if we're going to keep it, we ought add OSC to this section by
+> the same reasoning. i can do that and send a fresh patch, or you
+> can do it to my patch, or we can do with what i have.
+...
+> sequence, especially since there's really no user-relevant
+> reason as to why one is in any given group. but i can go ahead
+> and break this section out if you'd like.
+...
+> put another way, some people might read the man page wanting to
+> know "how do i change a color". i can't imagine anyone ever
+> wanting to know "what are the various OSC-prefixed commands?"
+> that said, i'm happy to introduce the substructure if it gets
+> the formatting fixed =].
 
-Applied as 5.18 material, thanks!
+Alejandro, would you like me to make some/all of the mentioned
+changes, or is this patch fine as it is, or will you be making
+the changes? Right now the console_codes(4) page has nasty
+formatting errors (addressed herein); even if we make no content
+changes, they should be fixed IMHO.
+
+-- 
+nick black -=- https://www.nick-black.com
+to make an apple pie from scratch,
+you need first invent a universe.

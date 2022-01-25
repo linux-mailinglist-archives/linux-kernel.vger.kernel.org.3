@@ -2,160 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A59849B7F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F1749B808
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347131AbiAYPus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:50:48 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:46500 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1582494AbiAYPs7 (ORCPT
+        id S1351264AbiAYPxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1582506AbiAYPtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:48:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643125739; x=1674661739;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uuU7P40JMh4ZEKpl+/QMPGzxGUUPCLs+4G9cP3BtI2U=;
-  b=f1li3HJFgUxgMB+frFACGtcVeOnZmUUBMgWNcs1Ig0wblm9egzrJl1vX
-   EUEGJjc/7141J5gQDKrLqfVcvc58r0/1yX0M9AaoO/bpuIddcGfkiFuE3
-   5ZsRxDk9zvmEgIjH5j7c0YUxcPNd0lCEdx8ufwVxhd4oCJPX6muFmpdzI
-   w=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 25 Jan 2022 07:48:54 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 07:48:54 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 07:48:53 -0800
-Received: from [10.216.12.29] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 25 Jan
- 2022 07:48:47 -0800
-Message-ID: <d0ecfe37-b8f8-c6f8-49d7-0bdbc2bde47e@quicinc.com>
-Date:   Tue, 25 Jan 2022 21:18:42 +0530
+        Tue, 25 Jan 2022 10:49:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E80C061762
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 07:49:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D8DEB818B5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:49:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42891C340E5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:49:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643125758;
+        bh=L1QYqyaORrLlX00Z4Deiwi7zX9ymNIf7ploH0m39Kq0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=baRNDh751XAmB4Q8J0rWatkHqIrXWdw+eJTjVvVrLmsqwc+y95g6w8SYKPEj/HlC6
+         zgGr8n6jBvydEkEqtmsfiZiRUKwTfI3RJwjzxgeyNs8kdDaIEnbtLsZcgAwglzUabr
+         LdWdGrB72yWhK5DBZU0izK7FxpBQBlNriBbENPinP19EW6cy0nQmdHuG5J4YiTyEyz
+         viCYvwJu/YMSbpWmAFL8v4yGGLiRDvzc/rWifL7WV1s1uRujIb0hjIjJNoUxiuN3JB
+         OYCU9rD07gH4u1Bi/FPAUIYKYmmDPJKfh5ViI+PCloxw9DzQ/EPy+8tUtTiNnTzpxM
+         bqgkI+fh0WkNg==
+Received: by mail-wr1-f54.google.com with SMTP id v13so20670347wrv.10
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 07:49:18 -0800 (PST)
+X-Gm-Message-State: AOAM530iMk08OMFn66yWKrJtDBAW2dsdtvHTDuxXTQgSRqWC2QPALwrU
+        hejdCyXmY0LcUdDRqyoA2voPsl6UKINvrBM4XPY=
+X-Google-Smtp-Source: ABdhPJxULFKWIaH5W/JWDZGAReMwgfwspFkabyCqOvVGj9INKQ7bokWPB4JYAZxoWyp55QvLz7hfgHU+0yaEOULtMxk=
+X-Received: by 2002:a5d:6d85:: with SMTP id l5mr19373385wrs.447.1643125756606;
+ Tue, 25 Jan 2022 07:49:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] thermal/core: Clear all mitigation when thermal zone
- is disabled
-To:     "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "thara.gopinath@linaro.org" <thara.gopinath@linaro.org>,
-        "mka@chromium.org" <mka@chromium.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1641581806-32550-1-git-send-email-quic_manafm@quicinc.com>
- <927aca29-fca7-bdf9-9ad6-2599125ca1b4@linaro.org>
- <ab6134bd1ca7f7fd8cedad90c1bbb81f642ac647.camel@intel.com>
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-In-Reply-To: <ab6134bd1ca7f7fd8cedad90c1bbb81f642ac647.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+References: <20220125113200.3829108-1-mark.rutland@arm.com>
+ <CAMj1kXGCFFHzZAqhfmJthGCe6uhFsrHwzK0QyOfrGw7_kNbjWQ@mail.gmail.com> <YfAbMY6U4UpyrerB@FVFF77S0Q05N>
+In-Reply-To: <YfAbMY6U4UpyrerB@FVFF77S0Q05N>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 25 Jan 2022 16:49:03 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEyzNMWiQFiZW1_QTApmuHfot82USC=Q8nP27sVm+WMMw@mail.gmail.com>
+Message-ID: <CAMj1kXEyzNMWiQFiZW1_QTApmuHfot82USC=Q8nP27sVm+WMMw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] linkage: better symbol aliasing
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        acme@redhat.com, Borislav Petkov <bp@alien8.de>,
+        Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Daniel,
+On Tue, 25 Jan 2022 at 16:46, Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Tue, Jan 25, 2022 at 04:28:11PM +0100, Ard Biesheuvel wrote:
+> > On Tue, 25 Jan 2022 at 12:32, Mark Rutland <mark.rutland@arm.com> wrote:
+> > >
+> > > This series aims to make symbol aliasing simpler and more consistent.
+> > > The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
+> > > SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
+> > > that e.g.
+> > >
+> > >     SYM_FUNC_START(func)
+> > >     SYM_FUNC_START_ALIAS(alias1)
+> > >     SYM_FUNC_START_ALIAS(alias2)
+> > >         ... asm insns ...
+> > >     SYM_FUNC_END(func)
+> > >     SYM_FUNC_END_ALIAS(alias1)
+> > >     SYM_FUNC_END_ALIAS(alias2)
+> > >     EXPORT_SYMBOL(alias1)
+> > >     EXPORT_SYMBOL(alias2)
+> > >
+> > > ... can become:
+> > >
+> > >     SYM_FUNC_START(name)
+> > >         ... asm insns ...
+> > >     SYM_FUNC_END(name)
+> > >
+> > >     SYM_FUNC_ALIAS(alias1, func)
+> > >     EXPORT_SYMBOL(alias1)
+> > >
+> > >     SYM_FUNC_ALIAS(alias2, func)
+> > >     EXPORT_SYMBOL(alias2)
+> > >
+> > > This avoids repetition and hopefully make it easier to ensure
+> > > consistency (e.g. so each function has a single canonical name and
+> > > associated metadata).
+> > >
+> >
+> > I take it this affects the sizes of the alias ELF symbols? Does that matter?
+>
+> The alias should be given the same size as the original symbol, unless I've
+> made an error. If you look at patch 3:
+>
+> * In SYM_FUNC_START(name), via SYM_ENTRY_AT(name, ...), we create a local label
+>   for the start of the function: .L____sym_entry__##name
+>
+> * In SYM_FUNC_END(name), via SYM_END_AT(name, ...), we create a local label for
+>   the end of the function: .L____sym_end__##name
+>
+> * In SYM_FUNC_ALIAS*(alias,name), we define the start and end of the alias as
+>   the start and end of the original symbol using those local labels, e.g.
+>
+>   | #define SYM_FUNC_ALIAS(alias, name)                                     \
+>   |         SYM_START_AT(alias, .L____sym_entry__##name, SYM_L_GLOBAL)      \
+>   |         SYM_END_AT(alias, .L____sym_end__##name, SYM_T_FUNC)
+>
+> Note that:
+>
+> * SYM_FUNC_START() uses SYM_START(), which uses SYM_ENTRY_AT()
+> * SYM_FUNC_END() uses SYM_END(), which uses SYM_END_AT()
+>
+> ... so the definition of tha alias is ultimately structurally identical to the
+> definition of the canoncial name, at least for now.
+>
 
-On 1/24/2022 6:35 AM, Pandruvada, Srinivas wrote:
-> On Sun, 2022-01-23 at 21:51 +0100, Daniel Lezcano wrote:
->> Hi Manaf,
->>
->> semantically speaking disabling a thermal zone would be to detach the
->> thermal zone from its governor and stop the monitoring.
->>
->> May be add the functions
->>
->>   - thermal_governor_attach(struct thermal_zone_device *tzd)
->>     {
->>          ...
->>          if (tz->governor && tz->governor->bind_to_tz) {
->>                  if (tz->governor->bind_to_tz(tz)) {
->>          }
->>          ...
->>     }
->>
->>   - thermal_governor_detach(struct thermal_zone_device *tzd)
->>     {
->>          ...
->>          if (tz->governor && tz->governor->unbind_from_tz)
->>                  tz->governor->unbind_from_tz(tz);
->>          ...
->>     }
->>
->> And add in the step_wise and power_allocator the reset of the
->> governor's
->> data as well as the cooling device instances in the unbind_from_tz()
->> callback
->>
->> Then, thermal_zone_device_enable() attaches and
->> thermal_zone_device_disable() detaches the governor.
->>
->> Does it make sense ?
-> This is better.
->
-> Thanks,
-> Srinivas
-Yes, it makes sense. I will update it in v4
->
->>
->> On 07/01/2022 19:56, Manaf Meethalavalappu Pallikunhi wrote:
->>> Whenever a thermal zone is in trip violated state, there is a
->>> chance
->>> that the same thermal zone mode can be disabled either via thermal
->>> core API or via thermal zone sysfs. Once it is disabled, the
->>> framework
->>> bails out any re-evaluation of thermal zone. It leads to a case
->>> where
->>> if it is already in mitigation state, it will stay the same state
->>> until it is re-enabled.
->>>
->>> To avoid above mentioned issue, on thermal zone disable request
->>> reset thermal zone and clear mitigation for each trip explicitly.
->>>
->>> Signed-off-by: Manaf Meethalavalappu Pallikunhi
->>> <quic_manafm@quicinc.com>
->>> ---
->>>   drivers/thermal/thermal_core.c | 12 ++++++++++--
->>>   1 file changed, 10 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/thermal/thermal_core.c
->>> b/drivers/thermal/thermal_core.c
->>> index 51374f4..e288c82 100644
->>> --- a/drivers/thermal/thermal_core.c
->>> +++ b/drivers/thermal/thermal_core.c
->>> @@ -447,10 +447,18 @@ static int
->>> thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->>>   
->>>          thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
->>>   
->>> -       if (mode == THERMAL_DEVICE_ENABLED)
->>> +       if (mode == THERMAL_DEVICE_ENABLED) {
->>>                  thermal_notify_tz_enable(tz->id);
->>> -       else
->>> +       } else {
->>> +               int trip;
->>> +
->>> +               /* make sure all previous throttlings are cleared
->>> */
->>> +               thermal_zone_device_init(tz);
->>> +               for (trip = 0; trip < tz->trips; trip++)
->>> +                       handle_thermal_trip(tz, trip);
->>> +
->>>                  thermal_notify_tz_disable(tz->id);
->>> +       }
->>>   
->>>          return ret;
->>>   }
->>>
->>
+Ah right, apologies for not looking more carefully - I assumed the
+changed placement implied that the aliases had zero size.
+
+And ultimately, I don't think there is an obviously correct answer
+anyway, it's just the [apparently non-existent] change in behavior I
+was curious about.

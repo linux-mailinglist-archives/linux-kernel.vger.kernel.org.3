@@ -2,171 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D0949AD3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3048949AD3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442955AbiAYHMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S1443024AbiAYHMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 02:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442568AbiAYHJV (ORCPT
+        with ESMTP id S1442577AbiAYHJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:09:21 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0860C0619C4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:02:35 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id k17so3274050ybk.6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:02:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=dME7WGjycfCPYxmjYIqrFH1YXeqs+InmpqysLjTPlzM=;
-        b=amYBEOB2sMOECjGPhfMEQ/UEOLKvNfub12ZZk6Kgde8UISLhPq4P1tKSS/hAze0p9j
-         nQK8P40wup1JaOHr9cpNR8PdlxRSiqyf6zbqlpbP8jTRjj+5Zxjq5qC1BYhFd6XGobq1
-         wvuQK1Y6HWvKRFS7JckDgPpQ/KCUvYBDwejHVepaDsKNPpdRwME7gDaIlm1ibJY4Uv71
-         EucJgwOtoNl1GoJUoH5SWV70wr2EDE9STpBxi2NGfryDM7a3IXoulow8sGajQVJoYgzD
-         CZbXO6nmX+RyjSa3++7xyC348NY/OUAYAfSdoUbPmrUMNKmTpbpA9sBTihbzEsH+87xS
-         KtDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dME7WGjycfCPYxmjYIqrFH1YXeqs+InmpqysLjTPlzM=;
-        b=7rC4WMHRWf5DrVmtYH1GpLarE3SltRJkx0Ow32zfJvaFHvuDk8PgfognNsVTkOpnG4
-         jlD4lKwaDT/2zyQqrr41as83b+IHIuYWTXZ74kZvFDIckVLH0iJXtzbJlxZ7Oc0h807j
-         p4JmNbP8K+9E/o2S32CxGUdgocsTPQ0FrY67/rtd0flEGBdEmRvfpH5qaqh6NVU/m9oy
-         Atf/DYegvMInJSmcdhkEWVTytmAMlJpunZc/12ikLEApqmPY/dHjSdXRxMxO3CfTAGFk
-         HgLtFPx5r4L+v3rdCOm2tjV9dk4ULcm0UN96WmIT6rda1SBw2r5Um0hRo8DxYTao7ZwY
-         H7Rg==
-X-Gm-Message-State: AOAM530WPECWn4pEl3sHa2+whjdBD+1W9kVpgNJaVjzTpSr4F0KtlONw
-        RAOwbBgNAea86dbSoV4cC+5KfwOKV+K0sgZGFemOhw==
-X-Google-Smtp-Source: ABdhPJxNPvQ168PEeWD7QNNQOJuXjSDRCMLiP0b4oKX2jpsdp1/k4rOpI6Ja8FztN3a3gYj8rhYa9MlsOo7okUFG6wg=
-X-Received: by 2002:a05:6902:100c:: with SMTP id w12mr12601077ybt.317.1643090555052;
- Mon, 24 Jan 2022 22:02:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20220124051752.83281-1-songmuchun@bytedance.com>
- <20220124051752.83281-2-songmuchun@bytedance.com> <4d5044e7-cac9-b6e6-1467-59ea6010b0f5@google.com>
- <5D9B52E1-A74B-4964-AACF-ADB91536C4C0@nvidia.com> <CAMZfGtXsLyagpo8rM6RmayAFR_hgk0987X1usxYWRZLeA5H45Q@mail.gmail.com>
- <7D7EB27F-DEA7-41AA-B24E-B61A2A1A5F07@nvidia.com>
-In-Reply-To: <7D7EB27F-DEA7-41AA-B24E-B61A2A1A5F07@nvidia.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 25 Jan 2022 14:01:59 +0800
-Message-ID: <CAMZfGtVCUbTa6xv2R9x+_a5_dK4ZLUX8ECNkF8mkJgEy4kdnfQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mm: fix missing cache flush for all tail pages of THP
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Lars Persson <lars.persson@axis.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 25 Jan 2022 02:09:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31032C0619C8;
+        Mon, 24 Jan 2022 22:02:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB3F2B815AD;
+        Tue, 25 Jan 2022 06:02:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C99C340E0;
+        Tue, 25 Jan 2022 06:02:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643090574;
+        bh=lYHCTAfuBpcW1fQv1mxPpJzytki5j6wH1OTSPUKFVR8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=X+ETSgoBC0jQWUiVRbZpaZN6tRrzqVuvEwUWlBxilgPYDFrfpnuJQghWNmN3toE7v
+         tA5mQXh/7m4WnjgvP/FjKWr5Rj/C/M/JbEQ+0immcsceu3+hR0IIRzCgxIUsV0fSQT
+         o+yOXCexL8RsducOQhBbMIGQCmTWkIWOX7VeBhhBApdgJtZWFL6eNVuCLLjQBjS8LU
+         Mb7TITx/6nrUOYTSqk+5JFbFz+2GEL7HS6ld0ZTea4miSGor8m9x+DTpoYIbbO9Q4J
+         rvJz2C3kZ74y8ThllmOeEVyV+F+q8EtG7Fj4DQNWCjz5+gN3e8GGO7tbc8+StDz6Eg
+         srn3D29dsq86w==
+Date:   Tue, 25 Jan 2022 15:02:49 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v4 4/9] rethook: x86: Add rethook x86 implementation
+Message-Id: <20220125150249.620fe4dc6bbefb5dcfdff816@kernel.org>
+In-Reply-To: <164304060913.1680787.1167309209346264268.stgit@devnote2>
+References: <164304056155.1680787.14081905648619647218.stgit@devnote2>
+        <164304060913.1680787.1167309209346264268.stgit@devnote2>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:42 AM Zi Yan <ziy@nvidia.com> wrote:
->
-> On 24 Jan 2022, at 20:55, Muchun Song wrote:
->
-> > On Tue, Jan 25, 2022 at 3:22 AM Zi Yan <ziy@nvidia.com> wrote:
-> >>
-> >> On 24 Jan 2022, at 13:11, David Rientjes wrote:
-> >>
-> >>> On Mon, 24 Jan 2022, Muchun Song wrote:
-> >>>
-> >>>> The D-cache maintenance inside move_to_new_page() only consider one =
-page,
-> >>>> there is still D-cache maintenance issue for tail pages of THP. Fix =
-this
-> >>>> by not using flush_dcache_folio() since it is not backportable.
-> >>>>
-> >>>
-> >>> The mention of being backportable suggests that we should backport th=
-is,
-> >>> likely to 4.14+.  So should it be marked as stable?
-> >>
-> >> Hmm, after more digging, I am not sure if the bug exists. For THP migr=
-ation,
-> >> flush_cache_range() is used in remove_migration_pmd(). The flush_dcach=
-e_page()
-> >> was added by Lars Persson (cc=E2=80=99d) to solve the data corruption =
-on MIPS[1],
-> >> but THP migration is only enabled on x86_64, PPC_BOOK3S_64, and ARM64.
-> >
-> > I only mention the THP case. After some more thinking, I think the Huge=
-TLB
-> > should also be considered, Right? The HugeTLB is enabled on arm, arm64,
-> > mips, parisc, powerpc, riscv, s390 and sh.
-> >
->
-> +Mike for HugeTLB
->
-> If HugeTLB page migration also misses flush_dcache_page() on its tail pag=
-es,
-> you will need a different patch for the commit introducing hugetlb page m=
-igration.
+On Tue, 25 Jan 2022 01:10:09 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Agree. I think arm (see the following commit) has handled this issue, while=
- most
-others do not.
+> Add rethook for x86 implementation. Most of the code
+> has been copied from kretprobes on x86.
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  Changes in v4:
+>   - fix stack backtrace as same as kretprobe does.
+> ---
+>  arch/x86/Kconfig              |    1 
+>  arch/x86/include/asm/unwind.h |    4 +
+>  arch/x86/kernel/Makefile      |    1 
+>  arch/x86/kernel/rethook.c     |  115 +++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 121 insertions(+)
+>  create mode 100644 arch/x86/kernel/rethook.c
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 5c2ccb85f2ef..0a7d48a63787 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -219,6 +219,7 @@ config X86
+>  	select HAVE_KPROBES_ON_FTRACE
+>  	select HAVE_FUNCTION_ERROR_INJECTION
+>  	select HAVE_KRETPROBES
+> +	select HAVE_RETHOOK
+>  	select HAVE_KVM
+>  	select HAVE_LIVEPATCH			if X86_64
+>  	select HAVE_MIXED_BREAKPOINTS_REGS
+> diff --git a/arch/x86/include/asm/unwind.h b/arch/x86/include/asm/unwind.h
+> index 2a1f8734416d..9fe5f73f22f1 100644
+> --- a/arch/x86/include/asm/unwind.h
+> +++ b/arch/x86/include/asm/unwind.h
+> @@ -5,6 +5,7 @@
+>  #include <linux/sched.h>
+>  #include <linux/ftrace.h>
+>  #include <linux/kprobes.h>
+> +#include <linux/rethook.h>
+>  #include <asm/ptrace.h>
+>  #include <asm/stacktrace.h>
+>  
+> @@ -107,6 +108,9 @@ static inline
+>  unsigned long unwind_recover_kretprobe(struct unwind_state *state,
+>  				       unsigned long addr, unsigned long *addr_p)
+>  {
+> +	if (IS_ENABLED(CONFIG_RETHOOK) && is_rethook_trampoline(addr))
+> +		return rethook_find_ret_addr(state->task, (unsigned long)addr_p,
+> +					     &state->kr_cur);
 
-  commit 0b19f93351dd ("ARM: mm: Add support for flushing HugeTLB pages.")
+Hm, I found that this doesn't work since state->kr_cur is not defined when
+CONFIG_KRETPROBES=n. Even if I define it with CONFIG_RETHOOK=y, if both
+CONFIG_RETHOOK and CONFIG_KRETPROBES are 'n', the compiler caused a build
+error. So I decided to use #ifdef here in the next version.
 
-But I do not have any real devices to test if this issue exists on other ar=
-chs.
-In theory, it exists.
+Thank you,
 
->
-> >>
-> >> To make code more consistent, I guess flush_cache_range() in remove_mi=
-gration_pmd()
-> >> can be removed, since it is superseded by the flush_dcache_page() belo=
-w.
-> >
-> > From my point of view, flush_cache_range() in remove_migration_pmd() is
-> > a wrong usage, which cannot replace flush_dcache_page(). I think the co=
-mmit
-> > c2cc499c5bcf ("mm compaction: fix of improper cache flush in migration =
-code")
-> > , which is similar to the situation here, can offer more infos.
-> >
->
-> Thanks for the information. That helps. But remove_migration_pmd() did no=
-t cause
-> any issue at the commit pointed by Fixes but at the commit which enabled =
-THP
-> migration on IBM and ARM64, whichever came first.
->
-> IIUC, there will be different versions of the fix targeting different sta=
-ble
-> trees:
->
-> 1. pre-4.14, THP migration did not exist: you will need to fix the use of
-> flush_dcache_page() at that time for HugeTLB page migration. Both flushin=
-g
-> dcache page for all subpages and moving flush_dcache_page from
-> remove_migration_pte() to move_to_new_page(). 4.9 and 4.4 are affected.
-> But EOL of 4.4 is next month, so you might skip it.
->
-> 2. 4.14 to before device public page is removed: your current fix will no=
-t
-> apply directly, but the for loop works. flush_cache_range() in
-> remove_migration_pmd() should be removed, since it is dead code based on
-> the commit you mentioned. It might not be worth the effort to find when
-> IBM and ARM64 enable THP migration.
->
-> 3. after device public page is removed: your current fix will apply clean=
-ly
-> and the removal of flush_cache_range() in remove_migration_pmd() should
-> be added.
->
-> Let me know if it makes sense.
 
-Make sense.
-
-Thanks.
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

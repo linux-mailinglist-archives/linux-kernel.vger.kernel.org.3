@@ -2,78 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6FB49BBFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8D449BC0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiAYTVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:21:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34844 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiAYTTv (ORCPT
+        id S229977AbiAYT2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:28:10 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:51024 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229951AbiAYT1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:19:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09AFEB818C2;
-        Tue, 25 Jan 2022 19:19:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118A1C340E0;
-        Tue, 25 Jan 2022 19:19:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643138388;
-        bh=uqDC31ymycx+13e+X3l+SfAMSoIqwEOmqiRflFpE9BU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QpP4AkUmRkqerJMgs8ED5wO7VPAKGbOijgtvDl3NIWOgj5RGh5ffI94Bom8wKoK9S
-         9kWniWywjr/cB6ap88gI9oTBWmmEmWxiZCE+nct+1S8xzILN1jlYRPs6PDSnNDAd2U
-         0gCSq7l333iz9/YRW806DcCUeYP1jLXtNGLmlqg1QY0OLolj+tEorYLfqtu914Da2L
-         QSUxMS0AaXv0ESkdQfaFtiqawmr8U8AUKGGVGF9HYBS1smMOzTUPvyFnOUHkSaMPQm
-         9+s/Fs/e2GuogoPSlkpurZVYsvoKpwBZZ+Yn2x/q1VO2BChocZhCpVdPAylWhfTz9P
-         u6lMg0nR8ZBaQ==
-Date:   Tue, 25 Jan 2022 13:26:34 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] extcon: usbc-cros-ec: Use struct_size() helper in
- kzalloc()
-Message-ID: <20220125192634.GA70834@embeddedor>
+        Tue, 25 Jan 2022 14:27:37 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 58B371C0B98; Tue, 25 Jan 2022 20:27:36 +0100 (CET)
+Date:   Tue, 25 Jan 2022 20:27:35 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.10 138/563] bpf: Remove config check to enable bpf
+ support for branch records
+Message-ID: <20220125192735.GD5395@duo.ucw.cz>
+References: <20220124184024.407936072@linuxfoundation.org>
+ <20220124184029.173197383@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="NtwzykIc2mflq5ck"
 Content-Disposition: inline
+In-Reply-To: <20220124184029.173197383@linuxfoundation.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version,
-in order to avoid any potential type mistakes or integer overflows that,
-in the worst scenario, could lead to heap overflows.
 
-Also, address the following sparse warnings:
-drivers/extcon/extcon-usbc-cros-ec.c:71:23: warning: using sizeof on a flexible structure
+--NtwzykIc2mflq5ck
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Link: https://github.com/KSPP/linux/issues/174
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/extcon/extcon-usbc-cros-ec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi!
 
-diff --git a/drivers/extcon/extcon-usbc-cros-ec.c b/drivers/extcon/extcon-usbc-cros-ec.c
-index 5290cc2d19d9..fde1db62be0d 100644
---- a/drivers/extcon/extcon-usbc-cros-ec.c
-+++ b/drivers/extcon/extcon-usbc-cros-ec.c
-@@ -68,7 +68,7 @@ static int cros_ec_pd_command(struct cros_ec_extcon_info *info,
- 	struct cros_ec_command *msg;
- 	int ret;
- 
--	msg = kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
-+	msg = kzalloc(struct_size(msg, data, max(outsize, insize)), GFP_KERNEL);
- 	if (!msg)
- 		return -ENOMEM;
- 
--- 
-2.27.0
+> Branch data available to BPF programs can be very useful to get stack tra=
+ces
+> out of userspace application.
+>=20
+> Commit fff7b64355ea ("bpf: Add bpf_read_branch_records() helper") added B=
+PF
+> support to capture branch records in x86. Enable this feature also for ot=
+her
+> architectures as well by removing checks specific to x86.
+>=20
+> If an architecture doesn't support branch records, bpf_read_branch_record=
+s()
+> still has appropriate checks and it will return an -EINVAL in that scenar=
+io.
+> Based on UAPI helper doc in include/uapi/linux/bpf.h, unsupported archite=
+ctures
+> should return -ENOENT in such case. Hence, update the appropriate check to
+> return -ENOENT instead.
+>=20
+> Selftest 'perf_branches' result on power9 machine which has the branch st=
+acks
+> support:
+>=20
+>  - Before this patch:
+>=20
+>   [command]# ./test_progs -t perf_branches
+>    #88/1 perf_branches/perf_branches_hw:FAIL
+>    #88/2 perf_branches/perf_branches_no_hw:OK
+>    #88 perf_branches:FAIL
+>   Summary: 0/1 PASSED, 0 SKIPPED, 1 FAILED
+>=20
+>  - After this patch:
+>=20
+>   [command]# ./test_progs -t perf_branches
+>    #88/1 perf_branches/perf_branches_hw:OK
+>    #88/2 perf_branches/perf_branches_no_hw:OK
+>    #88 perf_branches:OK
+>   Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+>=20
+> Selftest 'perf_branches' result on power9 machine which doesn't have bran=
+ch
+> stack report:
+>=20
+>  - After this patch:
+>=20
+>   [command]# ./test_progs -t perf_branches
+>    #88/1 perf_branches/perf_branches_hw:SKIP
+>    #88/2 perf_branches/perf_branches_no_hw:OK
+>    #88 perf_branches:OK
+>   Summary: 1/1 PASSED, 1 SKIPPED, 0 FAILED
 
+This makes me nervous, it is not really a bugfix and probably noone
+tested it on the stable branch. It would be safer to keep it disabled.
+
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--NtwzykIc2mflq5ck
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYfBPJwAKCRAw5/Bqldv6
+8iEpAJ9sCL3h7VF39/KJbJcKOvb5z5BoVACgjZkTQY96JjevdX7yawuiLtAjLpc=
+=Wh42
+-----END PGP SIGNATURE-----
+
+--NtwzykIc2mflq5ck--

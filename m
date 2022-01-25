@@ -2,195 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F9C49B54A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A407749B54B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577367AbiAYNpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577601AbiAYNm0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:42:26 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3222C061775
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:42:20 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id z4so1688185lft.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 05:42:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ojgoY+KUyxiibIuMzhCoB4rg4Imbet3s08pVEvqDBx4=;
-        b=MCM1/8M2NziPVqX0m7+Em5anPyiici4oInyCSDGq1B9pO+aAEzN2h2Dzvpo3t+VI7I
-         oRGU/8VsEo8r4qMnyUXsm2xz6Y2Lmg20iikDL2yKiIsixm61mQ8I2Xm6vSNplDt3zO5A
-         OjwKla8MRgABnfFfJOI+jWnbhVvwwcLh6XzpHTR6pTxT2NB7sLy4tKIP8yRiyp4cJDm+
-         QCIRw5xL7NzZf/4F8KPjDcbsvHKR6R8uVhgr1yYXtmk45R3Yb9UsyssQ/ZTtk/QvtDh2
-         J3SIh1JIARoz9pnbf4EPxnvjGffo8SlKScOmzj64s+OQkfR/Yz0D7PydYbtJoPm+fINz
-         B0lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ojgoY+KUyxiibIuMzhCoB4rg4Imbet3s08pVEvqDBx4=;
-        b=VuCmbK+6mS0vBFOk8oSo+stDnMM/H/YFYlGw7/FQT7F6Os33+tQe8RZJ/L1ARgzf5W
-         vgFbahGkEBSUPV+qqayPcv1Db89jUgMBGc6Fj4dH4CgQ2D/DCTu9ju8uUGc+v0BRJ8wh
-         +aAsjHv1QXrQdgHFuubwkQkZMI9aEVRZAFxAIPgDKjRenWd9/i+yjDbRqmAWWmpYbO2b
-         tXGfH+HHSTO+2B6VCauU1UqhEStXVB00DYLgeQ42f3+9ZIvkTJI0iGOgm6jDKcRkgm8y
-         ae9EH/YGhb02/lASYpAhvzkbckohSEWvrINpdc0ZMjDDcAl+95xF/wFaAG9aBQRHEryt
-         dWDg==
-X-Gm-Message-State: AOAM532S/pzkIoL6vIt45443eGRZEOw5/N7rtaD8TpKSPnqbxZRXr9Uu
-        j4siXpaf8pG9wL97jQZ9tl3T7g==
-X-Google-Smtp-Source: ABdhPJwzWP0Vkniwk8qfbEF+/pX9FC2wXrfjLy0kl++aFH5+MySBTQVWDICmbqT5iD62u8EWPoGZfQ==
-X-Received: by 2002:a05:6512:1506:: with SMTP id bq6mr17300338lfb.444.1643118138782;
-        Tue, 25 Jan 2022 05:42:18 -0800 (PST)
-Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
-        by smtp.gmail.com with ESMTPSA id p16sm895859ljn.55.2022.01.25.05.42.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 05:42:18 -0800 (PST)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org,
-        Stefan Agner <stefan@agner.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [4.9 PATCH] ARM: 8800/1: use choice for kernel unwinders
-Date:   Tue, 25 Jan 2022 14:41:48 +0100
-Message-Id: <20220125134148.3390940-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        id S1577679AbiAYNpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:45:33 -0500
+Received: from mga04.intel.com ([192.55.52.120]:61114 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1577635AbiAYNnF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 08:43:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643118180; x=1674654180;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NXJckC/W+O4E+mRqt6qYWHe7c4wwUf10qw2Uz84TlBY=;
+  b=LezBnd8/2jQ234WMRYLk8+92u4MXLlW2x6RZKjMz8jg1NrbpqXK6ZTHC
+   tuXtaGtjmrJOJDycuoUucHOoSsqxpDQNxg8r9ZxS/6BxlP5AbVbRmGAK0
+   OeVbQjQKv6iURcpKGaUfuMf0ZU9PgyvLTOX3kJXXzo5attlDLS1eAVSNY
+   YPj/oAkDrYxopaBA8UtQfghmkn/QJirTBMAyFLDn1XuNIFuWosXgkps1R
+   fqD0aP1Uei6r1I3+2XsW3ImyRFtLRk4qV8EaxFR1dS9bzU6pf6agf96a2
+   pXkS9gXYTzBRWgIpcp+qDzlyfApMmZLyd/eYooASRKo2glVnYfh2jEnMD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="245133581"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="245133581"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 05:42:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="532416313"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Jan 2022 05:42:57 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCM65-000Jxl-9V; Tue, 25 Jan 2022 13:42:57 +0000
+Date:   Tue, 25 Jan 2022 21:42:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Qingqing Zhuo <qingqing.zhuo@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c:81:40:
+ sparse: sparse: Using plain integer as NULL pointer
+Message-ID: <202201252155.rqBWi1tb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Agner <stefan@agner.ch>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a08b41ab9e2e468647f78eb17c28e29b93006394
+commit: d738db6883df3e3c513f9e777c842262693f951b drm/amd/display: move FPU associated DSC code to DML folder
+date:   3 months ago
+config: i386-randconfig-s002-20211122 (https://download.01.org/0day-ci/archive/20220125/202201252155.rqBWi1tb-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d738db6883df3e3c513f9e777c842262693f951b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d738db6883df3e3c513f9e777c842262693f951b
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
 
-commit f9b58e8c7d031b0daa5c9a9ee27f5a4028ba53ac upstream.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-While in theory multiple unwinders could be compiled in, it does
-not make sense in practise. Use a choice to make the unwinder
-selection mutually exclusive and mandatory.
 
-Already before this commit it has not been possible to deselect
-FRAME_POINTER. Remove the obsolete comment.
+sparse warnings: (new ones prefixed by >>)
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c: note: in included file:
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:28:18: sparse: sparse: symbol 'qp_table_422_10bpc_min' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:61:18: sparse: sparse: symbol 'qp_table_444_8bpc_max' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:102:18: sparse: sparse: symbol 'qp_table_420_12bpc_max' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:135:18: sparse: sparse: symbol 'qp_table_444_10bpc_min' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:188:18: sparse: sparse: symbol 'qp_table_420_8bpc_max' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:209:18: sparse: sparse: symbol 'qp_table_444_8bpc_min' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:250:18: sparse: sparse: symbol 'qp_table_444_12bpc_min' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:315:18: sparse: sparse: symbol 'qp_table_420_12bpc_min' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:348:18: sparse: sparse: symbol 'qp_table_422_12bpc_min' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:389:18: sparse: sparse: symbol 'qp_table_422_12bpc_max' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:430:18: sparse: sparse: symbol 'qp_table_444_12bpc_max' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:495:18: sparse: sparse: symbol 'qp_table_420_8bpc_min' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:516:18: sparse: sparse: symbol 'qp_table_422_8bpc_min' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:541:18: sparse: sparse: symbol 'qp_table_422_10bpc_max' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:574:16: sparse: sparse: symbol 'qp_table_420_10bpc_max' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:601:18: sparse: sparse: symbol 'qp_table_420_10bpc_min' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:628:18: sparse: sparse: symbol 'qp_table_444_10bpc_max' was not declared. Should it be static?
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/qp_tables.h:681:18: sparse: sparse: symbol 'qp_table_422_8bpc_max' was not declared. Should it be static?
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c:81:40: sparse: sparse: Using plain integer as NULL pointer
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c:106:22: sparse: sparse: Using plain integer as NULL pointer
 
-Furthermore, to produce a meaningful backtrace with FRAME_POINTER
-enabled the kernel needs a specific function prologue:
-    mov    ip, sp
-    stmfd    sp!, {fp, ip, lr, pc}
-    sub    fp, ip, #4
+vim +81 drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c
 
-To get to the required prologue gcc uses apcs and no-sched-prolog.
-This compiler options are not available on clang, and clang is not
-able to generate the required prologue. Make the FRAME_POINTER
-config symbol depending on !clang.
+    73	
+    74	static void get_qp_set(qp_set qps, enum colour_mode cm, enum bits_per_comp bpc,
+    75			       enum max_min max_min, float bpp)
+    76	{
+    77		int mode = MODE_SELECT(444, 422, 420);
+    78		int sel = table_hash(mode, bpc, max_min);
+    79		int table_size = 0;
+    80		int index;
+  > 81		const struct qp_entry *table = 0L;
+    82	
+    83		// alias enum
+    84		enum { min = DAL_MM_MIN, max = DAL_MM_MAX };
+    85		switch (sel) {
+    86			TABLE_CASE(444,  8, max);
+    87			TABLE_CASE(444,  8, min);
+    88			TABLE_CASE(444, 10, max);
+    89			TABLE_CASE(444, 10, min);
+    90			TABLE_CASE(444, 12, max);
+    91			TABLE_CASE(444, 12, min);
+    92			TABLE_CASE(422,  8, max);
+    93			TABLE_CASE(422,  8, min);
+    94			TABLE_CASE(422, 10, max);
+    95			TABLE_CASE(422, 10, min);
+    96			TABLE_CASE(422, 12, max);
+    97			TABLE_CASE(422, 12, min);
+    98			TABLE_CASE(420,  8, max);
+    99			TABLE_CASE(420,  8, min);
+   100			TABLE_CASE(420, 10, max);
+   101			TABLE_CASE(420, 10, min);
+   102			TABLE_CASE(420, 12, max);
+   103			TABLE_CASE(420, 12, min);
+   104		}
+   105	
+   106		if (table == 0)
+   107			return;
+   108	
+   109		index = (bpp - table[0].bpp) * 2;
+   110	
+   111		/* requested size is bigger than the table */
+   112		if (index >= table_size) {
+   113			dm_error("ERROR: Requested rc_calc to find a bpp entry that exceeds the table size\n");
+   114			return;
+   115		}
+   116	
+   117		memcpy(qps, table[index].qps, sizeof(qp_set));
+   118	}
+   119	
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Stefan Agner <stefan@agner.ch>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Russell King <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 ---
- arch/arm/Kconfig.debug | 44 +++++++++++++++++++++++++++---------------
- lib/Kconfig.debug      |  6 +++---
- 2 files changed, 31 insertions(+), 19 deletions(-)
-
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 8349a171a8f3..e1d21c6449ea 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -15,30 +15,42 @@ config ARM_PTDUMP
- 	  kernel.
- 	  If in doubt, say "N"
- 
--# RMK wants arm kernels compiled with frame pointers or stack unwinding.
--# If you know what you are doing and are willing to live without stack
--# traces, you can get a slightly smaller kernel by setting this option to
--# n, but then RMK will have to kill you ;).
--config FRAME_POINTER
--	bool
--	depends on !THUMB2_KERNEL
--	default y if !ARM_UNWIND || FUNCTION_GRAPH_TRACER
-+choice
-+	prompt "Choose kernel unwinder"
-+	default UNWINDER_ARM if AEABI && !FUNCTION_GRAPH_TRACER
-+	default UNWINDER_FRAME_POINTER if !AEABI || FUNCTION_GRAPH_TRACER
-+	help
-+	  This determines which method will be used for unwinding kernel stack
-+	  traces for panics, oopses, bugs, warnings, perf, /proc/<pid>/stack,
-+	  livepatch, lockdep, and more.
-+
-+config UNWINDER_FRAME_POINTER
-+	bool "Frame pointer unwinder"
-+	depends on !THUMB2_KERNEL && !CC_IS_CLANG
-+	select ARCH_WANT_FRAME_POINTERS
-+	select FRAME_POINTER
- 	help
--	  If you say N here, the resulting kernel will be slightly smaller and
--	  faster. However, if neither FRAME_POINTER nor ARM_UNWIND are enabled,
--	  when a problem occurs with the kernel, the information that is
--	  reported is severely limited.
-+	  This option enables the frame pointer unwinder for unwinding
-+	  kernel stack traces.
- 
--config ARM_UNWIND
--	bool "Enable stack unwinding support (EXPERIMENTAL)"
-+config UNWINDER_ARM
-+	bool "ARM EABI stack unwinder"
- 	depends on AEABI
--	default y
-+	select ARM_UNWIND
- 	help
- 	  This option enables stack unwinding support in the kernel
- 	  using the information automatically generated by the
- 	  compiler. The resulting kernel image is slightly bigger but
- 	  the performance is not affected. Currently, this feature
--	  only works with EABI compilers. If unsure say Y.
-+	  only works with EABI compilers.
-+
-+endchoice
-+
-+config ARM_UNWIND
-+	bool
-+
-+config FRAME_POINTER
-+	bool
- 
- config OLD_MCOUNT
- 	bool
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index bc5ff3a53d4a..e7addfcd302f 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1091,7 +1091,7 @@ config LOCKDEP
- 	bool
- 	depends on DEBUG_KERNEL && TRACE_IRQFLAGS_SUPPORT && STACKTRACE_SUPPORT && LOCKDEP_SUPPORT
- 	select STACKTRACE
--	select FRAME_POINTER if !MIPS && !PPC && !ARM_UNWIND && !S390 && !MICROBLAZE && !ARC && !SCORE
-+	select FRAME_POINTER if !MIPS && !PPC && !ARM && !S390 && !MICROBLAZE && !ARC && !SCORE
- 	select KALLSYMS
- 	select KALLSYMS_ALL
- 
-@@ -1670,7 +1670,7 @@ config FAULT_INJECTION_STACKTRACE_FILTER
- 	depends on FAULT_INJECTION_DEBUG_FS && STACKTRACE_SUPPORT
- 	depends on !X86_64
- 	select STACKTRACE
--	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM_UNWIND && !ARC && !SCORE
-+	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM && !ARC && !SCORE
- 	help
- 	  Provide stacktrace filter for fault-injection capabilities
- 
-@@ -1679,7 +1679,7 @@ config LATENCYTOP
- 	depends on DEBUG_KERNEL
- 	depends on STACKTRACE_SUPPORT
- 	depends on PROC_FS
--	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM_UNWIND && !ARC
-+	select FRAME_POINTER if !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM && !ARC
- 	select KALLSYMS
- 	select KALLSYMS_ALL
- 	select STACKTRACE
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

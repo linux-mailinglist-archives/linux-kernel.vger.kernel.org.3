@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBDA49B79D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E515149B7AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349259AbiAYP3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:29:06 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50162 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245413AbiAYP1G (ORCPT
+        id S237482AbiAYPcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:32:32 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54922 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348141AbiAYP2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:27:06 -0500
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643124421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5xPl6JJmaxFMiMF1HCiC/9kPvONkq8tgAsmevFg4jzY=;
-        b=iVdADx/xPjvAQGiDep5yk3M0GtKam0QpkJOF+cPo0VKvQoISkzoHagUSU74m7xt4GbZO64
-        8dHmy5Sf2ScJDgSLbB+DX9c1bbfUGg6Yf+0peMgk8xnsRFjFrXrQguesBC3tgrCpQPEhGY
-        O4tZNAcZqe4TMpFCS/hVDyO3124Em6DCBKVvqyQ4uMSat3vH9sOZ6pTWyASI1IItTNh2Ya
-        HnzTyhVls1ZPs2gDBKlNuWuX+dNLY2Mu+67j1Ll5VyVmqcR3vkZQ9YAIJgIlLGNjEgoOeq
-        fAn2EXm1+Etl8EHs9sxCoGytaEZ3zZXmZOxXg1Rsm0uDszEYYtmyTb05G3qm3g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643124421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5xPl6JJmaxFMiMF1HCiC/9kPvONkq8tgAsmevFg4jzY=;
-        b=Ha/zzR85LuJA1nsKu3bh/UKX5GfnHRbj7uPJ6fYxNZv6dZoWppUB1t5SYEWJOSgBPxhm6V
-        U4RNFtKaHZUPpVBg==
-To:     linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org
-Cc:     Andy Lutomirski <luto@kernel.org>, Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 8/8] kernel/fork: Use IS_ENABLED() in account_kernel_stack().
-Date:   Tue, 25 Jan 2022 16:26:52 +0100
-Message-Id: <20220125152652.1963111-9-bigeasy@linutronix.de>
-In-Reply-To: <20220125152652.1963111-1-bigeasy@linutronix.de>
-References: <20220125152652.1963111-1-bigeasy@linutronix.de>
+        Tue, 25 Jan 2022 10:28:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4F82B81878
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76523C36AEB
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 15:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643124505;
+        bh=gy68J/WtNh4xtDiQTkwlHfgqhTp+SaYHlKVlJM6Ezgk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=E1r/GvIMCuo1+PWyPRlTqCySiZSkyU2Qh86hukt+ZBuuc7ifM4FnGRreMq/grHZj8
+         16TljCOtBl26LW63xBd3v5fn29SlGl9lLKtXr/2TnUjUAo01HpuofJ+lb+Rn8jXa4v
+         3zKp7t0FRUcQziyd4i0Fk13eXiZ6TenNSHrGqDawWHDzasAz8RQ5p3jdkHs8ZianjZ
+         jB9NO3N3svjTlGEWdXM+Mjos1YhsLJEw9X8j6VGO1ju9S8h2J6fPa/UqxlLKkNg6y6
+         8WV4LaMWQA0ORuBBhp81dxXQXwaTkd1xjrBJx7uBZep7AXuxpu+XT39+334qe90pYE
+         1VH6PdAJRn6nw==
+Received: by mail-wr1-f49.google.com with SMTP id a13so20583059wrh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 07:28:25 -0800 (PST)
+X-Gm-Message-State: AOAM530hxm5i1edmBNadmwMLFchFHbxYvuiQrAVzqV1FMcEEvKBFFxYd
+        G5yehZOx1vVMAoH40cC2dtOZ6PDLCLWVRvAhH0w=
+X-Google-Smtp-Source: ABdhPJyPGDxExzZZHc857QOlZPHirDqnFWgDAwtsVNbMO9KJEWC4Nnz8nj7D2qBBP0+Z4tlZmp5hUOaUwwqY9O29V0M=
+X-Received: by 2002:a5d:4944:: with SMTP id r4mr18962020wrs.550.1643124503651;
+ Tue, 25 Jan 2022 07:28:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20220125113200.3829108-1-mark.rutland@arm.com>
+In-Reply-To: <20220125113200.3829108-1-mark.rutland@arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 25 Jan 2022 16:28:11 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGCFFHzZAqhfmJthGCe6uhFsrHwzK0QyOfrGw7_kNbjWQ@mail.gmail.com>
+Message-ID: <CAMj1kXGCFFHzZAqhfmJthGCe6uhFsrHwzK0QyOfrGw7_kNbjWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] linkage: better symbol aliasing
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        acme@redhat.com, Borislav Petkov <bp@alien8.de>,
+        Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not strickly needed but checking CONFIG_VMAP_STACK instead of
-task_stack_vm_area()' result allows the compiler the remove the else
-path in the CONFIG_VMAP_STACK case where the pointer can't be NULL.
+On Tue, 25 Jan 2022 at 12:32, Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> This series aims to make symbol aliasing simpler and more consistent.
+> The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
+> SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
+> that e.g.
+>
+>     SYM_FUNC_START(func)
+>     SYM_FUNC_START_ALIAS(alias1)
+>     SYM_FUNC_START_ALIAS(alias2)
+>         ... asm insns ...
+>     SYM_FUNC_END(func)
+>     SYM_FUNC_END_ALIAS(alias1)
+>     SYM_FUNC_END_ALIAS(alias2)
+>     EXPORT_SYMBOL(alias1)
+>     EXPORT_SYMBOL(alias2)
+>
+> ... can become:
+>
+>     SYM_FUNC_START(name)
+>         ... asm insns ...
+>     SYM_FUNC_END(name)
+>
+>     SYM_FUNC_ALIAS(alias1, func)
+>     EXPORT_SYMBOL(alias1)
+>
+>     SYM_FUNC_ALIAS(alias2, func)
+>     EXPORT_SYMBOL(alias2)
+>
+> This avoids repetition and hopefully make it easier to ensure
+> consistency (e.g. so each function has a single canonical name and
+> associated metadata).
+>
 
-Check for CONFIG_VMAP_STACK in order to use the proper path.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- kernel/fork.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/fork.c b/kernel/fork.c
-index f48f666582b09..92cafad00c653 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -468,16 +468,16 @@ void vm_area_free(struct vm_area_struct *vma)
-=20
- static void account_kernel_stack(struct task_struct *tsk, int account)
- {
--	void *stack =3D task_stack_page(tsk);
--	struct vm_struct *vm =3D task_stack_vm_area(tsk);
--
--	if (vm) {
-+	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-+		struct vm_struct *vm =3D task_stack_vm_area(tsk);
- 		int i;
-=20
- 		for (i =3D 0; i < THREAD_SIZE / PAGE_SIZE; i++)
- 			mod_lruvec_page_state(vm->pages[i], NR_KERNEL_STACK_KB,
- 					      account * (PAGE_SIZE / 1024));
- 	} else {
-+		void *stack =3D task_stack_page(tsk);
-+
- 		/* All stack pages are in the same node. */
- 		mod_lruvec_kmem_state(stack, NR_KERNEL_STACK_KB,
- 				      account * (THREAD_SIZE / 1024));
---=20
-2.34.1
-
+I take it this affects the sizes of the alias ELF symbols? Does that matter?

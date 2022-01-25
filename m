@@ -2,113 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7F449BB59
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C9049BB5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbiAYScA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbiAYSbb (ORCPT
+        id S232432AbiAYScF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:32:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24765 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232377AbiAYSbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:31:31 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5567FC06173E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:31:30 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id j14so16487685lja.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:31:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OlIBnpkTLBL6sH3W/KXcb2UEgw4pfOFIKhtFEyjrjXg=;
-        b=FHIOwTMrIgkrHCmEbk0yOERz2+rKuWBQWNsU9Bdktyt5XpnW0LjleS/S/XQi8l6uGt
-         03IeHKCGxGw3Z2tJ+ssmZQ1cYVVmWjsy1nkE+VjZ05Z2g72yZzSO71lefk/36q2L6mzr
-         xTIGThNJw8EZz6dd2bLNK4Ff0Ldq05vSwJfrqAbSZZC9ZiVSDst1JBVgRK8NzvPmeesx
-         wS5tJg+xaEBIZvhZjhW09UY20gQwlM5hTIMMfQsZ3dAwsXcoXPosqfRdPTez5qd4bwnb
-         ZAeTPRaeVVKnqOQ17BoV5KavTeCb+WralSZgGk2fkjEpIpHBTAQnaRlVZxtBzSzEFJuz
-         PQ1w==
+        Tue, 25 Jan 2022 13:31:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643135504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZiMvtf0ISdZjP/XjkwKlDCax9+P+Wq5+7WeQC/1x/e0=;
+        b=HeP3RJUIuZ8gm/2Vqe4BPhH4wFgtOXef1/8l29Oh2Z/03KKzS56Kil20VopEFviebd2Sxh
+        Prtqtp8N/qnIN7ehUQyKRgzfZ0+pbjv/+ETFgHjzG7LVj+IbyWPfYUKCGYyMkagxC+4iv3
+        nFwQYBM0GUa+MZXpKZYv0NgNpxt8JKE=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-Jnxv3xLLPm2901E-dlcFPQ-1; Tue, 25 Jan 2022 13:31:42 -0500
+X-MC-Unique: Jnxv3xLLPm2901E-dlcFPQ-1
+Received: by mail-wr1-f71.google.com with SMTP id k12-20020adfe3cc000000b001d6806dfde1so3441637wrm.16
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:31:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=OlIBnpkTLBL6sH3W/KXcb2UEgw4pfOFIKhtFEyjrjXg=;
-        b=uP4hvTeUAh8rCZ7nsX0KUDPrjSGpL7HYL7/Fh9YdTgy3IZw8AgHtfl+J7hf6j15YPN
-         gDwVEb4G7DY1B5ptHLnkVTWOPa2gZOnVfPa3QXhiMTJxa4lGS2om063udud9K8MaNNCc
-         D3QF2aXmTds5oguSwe8XsolgW7EYfscAiln9eb4OfSs530Xy5RiCyRq0Di46Cteg0hio
-         U4hta8IOwOMdHQ7+lmg6r8dGYddmwrbYoN6wIYd43JBd+D5+bZ0Saok87zJpTFmR3frN
-         +UFmC3qCN9ckZ79NWh8JQ29t/1HsQNZ/zsO0+zLQKJMMjvpYQQSG2666xxC9Oim3IpOE
-         3eYQ==
-X-Gm-Message-State: AOAM533kIJqjdOxRg5gBeg3Z8ONYu6RDLVkgcvAxzTQdjKZfUR+W0dzu
-        R/Lh9ZToEfVomEPwbyaouSM=
-X-Google-Smtp-Source: ABdhPJzMETM7h/HoAr3mua4MEe+7OlBNZZ024HhjTIEUx+vZgj5sSn7S1MbNXwqVzy/XYnwYAxHWgQ==
-X-Received: by 2002:a2e:80cb:: with SMTP id r11mr6131870ljg.359.1643135488614;
-        Tue, 25 Jan 2022 10:31:28 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.227.208])
-        by smtp.gmail.com with ESMTPSA id h6sm490020ljg.58.2022.01.25.10.31.27
+        bh=ZiMvtf0ISdZjP/XjkwKlDCax9+P+Wq5+7WeQC/1x/e0=;
+        b=fe1qjKV/sqcnXU1ikGcZmTyEU8yOj7Tno2KIwBj1tuFK8RJtC5+/oD17qKgr0FS6Ea
+         e53x7SQA7vWMCCC87DhhmA+/gm4ETQLh2izXtHMfsy0PH0ScUfWu8ZijGvE0HlKQh5Qm
+         CUihJygzYlOfAfCoE96HfApML6VJgoGT5gvQYVO7Z0ke17YtQiCzcL6A4qNq04XWLeFd
+         cwwiUbo6BmdK4zpBU7ktHNQmkAfwVUj4SdBQemPs59C3qzXYDVSCY6Atj7YqD0zzy0q9
+         gMNgQVPAJg9mKKwcuQ9ldVhtM+YGtKs/ohR1+hRNcA3h+/LE7Uz5aGohUPJYNXU3jtr8
+         D1oQ==
+X-Gm-Message-State: AOAM531saklfl8MFnyygqe3l+KfffunoGOYOoJvi3nsO/XbhtYG7Wv+e
+        52Lbtj39Ooh9oFQQW4SL/7PjdPEO9TAp20XHJ9DDl9AgQu6oq+FseBm1OQuKBCPgKXVCQXtPyZb
+        BSw1HV682Erl4MREDRx6my2Ba
+X-Received: by 2002:a05:600c:3b9c:: with SMTP id n28mr4026525wms.128.1643135501327;
+        Tue, 25 Jan 2022 10:31:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyN0IgX820Ekp2FGnNepZZuBtQxuN7cmwVJ8BQ4uskdVHzzxIheTLTx4aGzRFqWOkVsmlYLoA==
+X-Received: by 2002:a05:600c:3b9c:: with SMTP id n28mr4026515wms.128.1643135501089;
+        Tue, 25 Jan 2022 10:31:41 -0800 (PST)
+Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id d4sm1656669wri.39.2022.01.25.10.31.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 10:31:28 -0800 (PST)
-Message-ID: <f766f910-4f7c-d3b5-d7a8-4d0d9de33a66@gmail.com>
-Date:   Tue, 25 Jan 2022 21:31:27 +0300
+        Tue, 25 Jan 2022 10:31:40 -0800 (PST)
+Subject: Re: [PATCH v4 06/21] KVM: arm64: Support SDEI_EVENT_CONTEXT hypercall
+To:     Gavin Shan <gshan@redhat.com>,
+        Shannon Zhao <shannon.zhaosl@gmail.com>,
+        kvmarm@lists.cs.columbia.edu
+Cc:     maz@kernel.org, pbonzini@redhat.com, will@kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan.Cameron@huawei.com
+References: <20210815001352.81927-1-gshan@redhat.com>
+ <20210815001352.81927-7-gshan@redhat.com>
+ <40d818a2-0c91-e06e-6ce8-ac8123b8d1d4@gmail.com>
+ <798ecbb0-f369-f3e7-ad50-78acfd902d1d@redhat.com>
+From:   Eric Auger <eauger@redhat.com>
+Message-ID: <3d791443-d3d3-29fb-98a4-bebadb84597e@redhat.com>
+Date:   Tue, 25 Jan 2022 19:31:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 03/10] staging: r8188eu: remove DBG_88E calls from
- core/rtw_mlme_ext.c
+In-Reply-To: <798ecbb0-f369-f3e7-ad50-78acfd902d1d@redhat.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
-Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
-        straube.linux@gmail.com, martin@kaiser.cx,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220124224415.831-1-phil@philpotter.co.uk>
- <20220124224415.831-4-phil@philpotter.co.uk>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220124224415.831-4-phil@philpotter.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Phillip,
+Hi Gavin,
 
-On 1/25/22 01:44, Phillip Potter wrote:
-> Remove all DBG_88E calls from core/rtw_mlme_ext.c, including the commented
-> one, as they do not conform to kernel coding standards and are
-> superfluous. Also restructure where appropriate to remove no longer needed
-> code left behind by removal of these calls. This will allow the eventual
-> removal of the DBG_88E macro itself.
+On 1/13/22 8:02 AM, Gavin Shan wrote:
+> Hi Shannon,
 > 
-> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-> ---
+> On 1/11/22 5:43 PM, Shannon Zhao wrote:
+>> On 2021/8/15 8:13, Gavin Shan wrote:
+>>> +static unsigned long kvm_sdei_hypercall_context(struct kvm_vcpu *vcpu)
+>>> +{
+>>> +    struct kvm *kvm = vcpu->kvm;
+>>> +    struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
+>>> +    struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
+>>> +    struct kvm_sdei_vcpu_regs *regs;
+>>> +    unsigned long index = smccc_get_arg1(vcpu);
+>>> +    unsigned long ret = SDEI_SUCCESS;
+>>> +
+>>> +    /* Sanity check */
+>>> +    if (!(ksdei && vsdei)) {
+>>> +        ret = SDEI_NOT_SUPPORTED;
+>>> +        goto out;
+>>> +    }
+>> Maybe we could move these common sanity check codes to
+>> kvm_sdei_hypercall to save some lines.
+>>
+> 
+> Not all hypercalls need this check. For example,
+> COMPLETE/COMPLETE_RESUME/CONTEXT don't
+> have SDEI event number as the argument. If we really want move this
+> check into function
+> kvm_sdei_hypercall(), we would have code like below. Too much duplicated
+> snippets will
+> be seen. I don't think it's better than what we have if I fully
+> understand your comments.
+> 
+>       switch (...) {
+>       case REGISTER:
+>            if (!(ksdei && vsdei)) {
+>                ret = SDEI_NOT_SUPPORTED;
+>                break;
+>            }
+at least you can use an inline function taking the vcpu as param?
 
-[code snip]
+Thanks
 
->   static u8 chk_ap_is_alive(struct adapter *padapter, struct sta_info *psta)
-> @@ -7141,18 +6905,11 @@ static u8 chk_ap_is_alive(struct adapter *padapter, struct sta_info *psta)
->   static void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
->   {
->   	u32 rx_dma_status =  rtw_read32(padapter, REG_RXDMA_STATUS);
-> -	u8 fw_status;
->   
-> -	if (rx_dma_status != 0x00) {
-> -		DBG_88E("%s REG_RXDMA_STATUS:0x%08x\n", __func__, rx_dma_status);
-> +	if (rx_dma_status != 0x00)
->   		rtw_write32(padapter, REG_RXDMA_STATUS, rx_dma_status);
-> -	}
->   
-> -	fw_status = rtw_read8(padapter, REG_FMETHR);
-> -	if (fw_status == 1)
-> -		DBG_88E("%s REG_FW_STATUS (0x%02x), Read_Efuse_Fail !!\n", __func__, fw_status);
-> -	else if (fw_status == 2)
-> -		DBG_88E("%s REG_FW_STATUS (0x%02x), Condition_No_Match !!\n", __func__, fw_status);
-> +	rtw_read8(padapter, REG_FMETHR);
->   }
+Eric
+> 
+>            ret = kvm_sdei_hypercall_register(vcpu);
+>            break;
+>       case UNREGISTER:
+>            if (!(ksdei && vsdei)) {
+>                ret = SDEI_NOT_SUPPORTED;
+>                break;
+>            }
+> 
+>            ret = kvm_sdei_hypercall_unregister(vcpu);
+>            break;
+>      case CONTEXT:
+>            ret = kvm_sdei_hypercall_context(vcpu);
+>            break;
+>        :
+>     }
+> 
+> Thanks,
+> Gavin
+> 
+> _______________________________________________
+> kvmarm mailing list
+> kvmarm@lists.cs.columbia.edu
+> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
 
-Unused read. Can be dropped
-
-
-
-With regards,
-Pavel Skripkin

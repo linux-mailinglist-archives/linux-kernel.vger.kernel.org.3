@@ -2,109 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E535149B7F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B65949B7F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582351AbiAYPt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:49:28 -0500
-Received: from foss.arm.com ([217.140.110.172]:51628 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376525AbiAYPqA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:46:00 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6FB5101E;
-        Tue, 25 Jan 2022 07:45:58 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.1.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 318CC3F793;
-        Tue, 25 Jan 2022 07:45:56 -0800 (PST)
-Date:   Tue, 25 Jan 2022 15:45:53 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        acme@redhat.com, Borislav Petkov <bp@alien8.de>,
-        Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 0/7] linkage: better symbol aliasing
-Message-ID: <YfAbMY6U4UpyrerB@FVFF77S0Q05N>
-References: <20220125113200.3829108-1-mark.rutland@arm.com>
- <CAMj1kXGCFFHzZAqhfmJthGCe6uhFsrHwzK0QyOfrGw7_kNbjWQ@mail.gmail.com>
+        id S1582402AbiAYPti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:49:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33970 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1582332AbiAYPq4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 10:46:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E71A0B8189A;
+        Tue, 25 Jan 2022 15:46:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF88C340E0;
+        Tue, 25 Jan 2022 15:46:49 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 10:46:48 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Trond Myklebust <trondmy@gmail.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: Re: linux-next: runtime warning in next-20220125
+Message-ID: <20220125104648.7ecce604@gandalf.local.home>
+In-Reply-To: <E23F5174-F706-40FC-9072-143B04905208@oracle.com>
+References: <20220125160505.068dbb52@canb.auug.org.au>
+        <20220125162146.13872bdb@canb.auug.org.au>
+        <20220125100138.0d19c8ca@gandalf.local.home>
+        <20220125103607.2dc307e2@gandalf.local.home>
+        <E23F5174-F706-40FC-9072-143B04905208@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGCFFHzZAqhfmJthGCe6uhFsrHwzK0QyOfrGw7_kNbjWQ@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 04:28:11PM +0100, Ard Biesheuvel wrote:
-> On Tue, 25 Jan 2022 at 12:32, Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > This series aims to make symbol aliasing simpler and more consistent.
-> > The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
-> > SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
-> > that e.g.
-> >
-> >     SYM_FUNC_START(func)
-> >     SYM_FUNC_START_ALIAS(alias1)
-> >     SYM_FUNC_START_ALIAS(alias2)
-> >         ... asm insns ...
-> >     SYM_FUNC_END(func)
-> >     SYM_FUNC_END_ALIAS(alias1)
-> >     SYM_FUNC_END_ALIAS(alias2)
-> >     EXPORT_SYMBOL(alias1)
-> >     EXPORT_SYMBOL(alias2)
-> >
-> > ... can become:
-> >
-> >     SYM_FUNC_START(name)
-> >         ... asm insns ...
-> >     SYM_FUNC_END(name)
-> >
-> >     SYM_FUNC_ALIAS(alias1, func)
-> >     EXPORT_SYMBOL(alias1)
-> >
-> >     SYM_FUNC_ALIAS(alias2, func)
-> >     EXPORT_SYMBOL(alias2)
-> >
-> > This avoids repetition and hopefully make it easier to ensure
-> > consistency (e.g. so each function has a single canonical name and
-> > associated metadata).
-> >
+On Tue, 25 Jan 2022 15:38:22 +0000
+Chuck Lever III <chuck.lever@oracle.com> wrote:
+
+> > This should fix it:
+> > 
+> > I'll make it a real patch and start running it through my tests.  
 > 
-> I take it this affects the sizes of the alias ELF symbols? Does that matter?
+> Should this be squashed into the patch that adds __get_sockaddr() ?
+> 
+> I have an updated version of that patch that applies on kernels
+> that have __rel_dynamic_array.
 
-The alias should be given the same size as the original symbol, unless I've
-made an error. If you look at patch 3:
+Heh, I thought the patch was already in mainline. I just posted the fix.
 
-* In SYM_FUNC_START(name), via SYM_ENTRY_AT(name, ...), we create a local label
-  for the start of the function: .L____sym_entry__##name
+Just add it to your queue. No need to squash it.
 
-* In SYM_FUNC_END(name), via SYM_END_AT(name, ...), we create a local label for
-  the end of the function: .L____sym_end__##name
+You can remove the Fixes: tag, as it may not reference the right commit.
 
-* In SYM_FUNC_ALIAS*(alias,name), we define the start and end of the alias as
-  the start and end of the original symbol using those local labels, e.g.
-
-  | #define SYM_FUNC_ALIAS(alias, name)                                     \
-  |         SYM_START_AT(alias, .L____sym_entry__##name, SYM_L_GLOBAL)      \
-  |         SYM_END_AT(alias, .L____sym_end__##name, SYM_T_FUNC)
-
-Note that:
-
-* SYM_FUNC_START() uses SYM_START(), which uses SYM_ENTRY_AT()
-* SYM_FUNC_END() uses SYM_END(), which uses SYM_END_AT()
-
-... so the definition of tha alias is ultimately structurally identical to the
-definition of the canoncial name, at least for now.
-
-Thanks,
-Mark.
+-- Steve

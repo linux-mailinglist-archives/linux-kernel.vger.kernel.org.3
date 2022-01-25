@@ -2,76 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACEC149A653
+	by mail.lfdr.de (Postfix) with ESMTP id 4989C49A652
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 03:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S3413193AbiAYAif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 19:38:35 -0500
-Received: from mout.gmx.net ([212.227.15.19]:46419 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2367774AbiAXX4e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:56:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643068589;
-        bh=NmbQOTuyirKT5v/51AXWjexT5k8SiMW52h0CGvFQpkY=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=QjJouGxwkReiOhQCKCkjFnntMmQG1QaxS7lFVHdfqR/g2wTRpj9b4KUEOmyNkuznb
-         EyvmIvLP4j9GrEdKC14bSkd+MLtKS4CQp3Gfft9kUWuuINInlIaRRWKXXMF6H7oj9h
-         BFm76T3WhdEgw3Rk3IGI1+JCBfSiMfGS51darGVc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.35.142]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N7i8O-1mGYd52wL4-014kui; Tue, 25
- Jan 2022 00:56:29 +0100
-Message-ID: <3f11ae4c-82c2-a2b9-1795-5d7824b15b5a@gmx.de>
-Date:   Tue, 25 Jan 2022 00:56:29 +0100
+        id S3413177AbiAYAid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 19:38:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42802 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2368892AbiAYAAd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 24 Jan 2022 19:00:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643068825;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HVEOi3JfLG07H4d80rMuAmt9ScZ2srvvDue0ndS/BKY=;
+        b=UEBlveCPYKYCW95UTHz0kPgIawFYPCtfAHg+cedWLjYggs47rKMii1su8M12W/TlWaIv7y
+        Rwrs1xM9+4xuimXsxUVP0FSBk40kJe1G5a9EaNXMLzccZrGAtBzjH8Rkm17CebCISjRgX1
+        KDdYxGj3BZD1q/wsY+qgu6+vEdZZA88=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-192-U3MDzZnaMZ-IHjlhMiodGQ-1; Mon, 24 Jan 2022 19:00:23 -0500
+X-MC-Unique: U3MDzZnaMZ-IHjlhMiodGQ-1
+Received: by mail-oi1-f198.google.com with SMTP id s131-20020acac289000000b002c6a61fd43fso10034375oif.23
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 16:00:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HVEOi3JfLG07H4d80rMuAmt9ScZ2srvvDue0ndS/BKY=;
+        b=rb207SfU2GFBCYU2gLMB6yxdLOl0NMJ+sWZ1UdIw2m4hpkzKbjgZbuMi7DcyvdqmT4
+         oJefOss9UFIBpxmKjaK5AUy0dHAzBFWtqONPinQQCVPRonoMs2d+7H2QVzuUccnwU9g2
+         lIWthmC6jVHCV3pCQ2TNcrZeqj9nbHdF2j2HqKe1IPvQ/cHgsYvXHD4TaPoSvZbNOL9k
+         tXVeoQdh1CwuG0+xLyXHjvZxkbcldNDPh2lXnQ/PTVJw41KyP4+IyBOdgoMlf3rb5nMt
+         ZlnMUDiskHZ+qxdzeV5ppcl+9gaozHpO+H/CJttLzYW2gEazPQuonQssdTkuhnghKpuh
+         0xkg==
+X-Gm-Message-State: AOAM530P/xh3ekRTgtXakPfLc1UXOifJ3Ok3UWh5jwYkZ6VC6xdy2qxj
+        NCegndIoVLWgA0aeQIEhy6rEtUe9YXvh1PqwxeHIXq9gZ4gCAgNvwpz4bWoSsOQ8g/rb6+UGL28
+        9jPcMF+bPerrql059Whv7bwoo
+X-Received: by 2002:a4a:d51a:: with SMTP id m26mr5125956oos.1.1643068822874;
+        Mon, 24 Jan 2022 16:00:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyNLHUrHkZ0VgdUS81Fer4PLBA/LSFqmOEBwroF1KbQGd41b07ynHntqxgpZ6oKP+0FbdIuog==
+X-Received: by 2002:a4a:d51a:: with SMTP id m26mr5125950oos.1.1643068822654;
+        Mon, 24 Jan 2022 16:00:22 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id x1sm452732oto.38.2022.01.24.16.00.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 16:00:22 -0800 (PST)
+Date:   Mon, 24 Jan 2022 17:00:21 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: Build regressions/improvements in v5.17-rc1
+Message-ID: <20220124170021.011b6a0e.alex.williamson@redhat.com>
+In-Reply-To: <20220123125737.2658758-1-geert@linux-m68k.org>
+References: <20220123125737.2658758-1-geert@linux-m68k.org>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.16 0000/1039] 5.16.3-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:EJQTTqdFj0fNUKDkU/qAAJIs7WM01fiQLmSPrdv/4jO+VaUGxr+
- XKm8Q9jp7TIpk4xP8WqAT6fiQlobdLO1vp1iNkSh89oLggRc5dNgvMzwYgnqC/XmA3gQUzD
- NGLB3cXpaj0WZDirAccZhzR2AlRBPpFIon+ZhajVMHOyXxcNAusBlvkFh43l2EX/lWTLz2W
- 50Qgwqlg3J1e3mpn7TJ3g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MBI8Pw3aryo=:i4nO4bph94kQbvjjNbu/zI
- EF/3fddXA2KFPBVD7coS+yqc851ohVj1R6u8okqcvSqo0qlCZS89tYPgyshUxf2wO0tQEbKVl
- HfButs5eFGXmEfGny+1wXbFjADn9D2STJXO56HRoyi2GXtyKuaL9999qCsssjqmzAn0+Bej6c
- QFlsyOR5A+S3qFacirsA6EwQcVsLbH27Ychk+mRTModGTLsmHB3GFqby2+6lM0bWkQ/gmkQtd
- FQeWtULk9pl4SEmRgQFqF307CnHmjKJuF4a/bFtuUOn9jmzMUgn01Sok/K+aqooOL3CE3xf/b
- 4NdmqEwjt5xUpCzoTsAg1khfUa5eL2wAmsAHd0iTprLZt427z6AnFzgjUjucDTGnrQ6FtMno8
- GmVXy5Jpe37q6WTp0XEjIeJv3Uz3njqAFvZ5TfzHmk8EJHT34px0PbAqy6lbvWL0JnTBHVFMk
- fAtZ4W56n7zF/Qc+Z8uMD/SjJg6lTxD/QHek4xRB1ZTH1Udcm1e6a1fPqiKWjfg1CA3cEQ8l0
- KQcCwHxg0cqbGoYa/cwG6Hw2PplPCUYompuBcDTlk4SnoVQ/jnis8akiXO1jRmWD42OVINVzw
- dQJvqFc6NL9qX/56RIYQfyDsXTyroIHONifhhjPAG7IHtsZcELXDiT4SQ7btL3Etl2D7Zw/da
- 0TvIl63OcJrqnzpiBVzsj2+hc5p65zgYb/g9h6jPEyo23Api9Z6LPogM4FeBBeTlCEIzwcv+o
- H9blO64OyS1IF6GV0ckFYAWckwpg13fLZ/O+ddzHcYaN6rRIio5oXdQf9qwJOCnYfZEQjIb3q
- IlZfRFyyBLlpWABys+ADbvfzTojV3rnq6LWlh88fBKXhnYIzxXaT5OIy6MoXeRVPu7TdQ+8qG
- MBt1Nq0nAKVUg/yu6ZI2XQiHMuyc+t9cxDlExpG4QiUJQs7kCV/+JS6XxyM26+qUtFeIjusx0
- rkIv2ZvtY8VHyQVrhph+D7dFPNEUc6WMi1oxggsXGEvL5kFBx10nzd8mZQt3tNR/RQG4nv3rn
- d4lAjYnAfffiQzB6OmOMsY2/5ppNtJkzcZ9FljNol29RDN6aNyWOIxLzUOf89Ur0edkfkGmQZ
- QaqV9S89HWwsnM=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+On Sun, 23 Jan 2022 13:57:37 +0100
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-5.16.3-rc1
+> Below is the list of build error/warning regressions/improvements in
+> v5.17-rc1[1] compared to v5.16[2].
+> 
+> Summarized:
+>   - build errors: +17/-2
+>   - build warnings: +23/-25
+> 
+> Note that there may be false regressions, as some logs are incomplete.
+> Still, they're build errors/warnings.
+> 
+> Happy fixing! ;-)
+> 
+> Thanks to the linux-next team for providing the build service.
+> 
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e783362eb54cd99b2cac8b3a9aeac942e6f6ac07/ (all 99 configs)
+> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/df0cc57e057f18e44dac8e6c18aba47ab53202f9/ (98 out of 99 configs)
+> 
+> 
+> *** ERRORS ***
+> 
+> 17 error regressions:
+...
+>   + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]:  => 324:9, 317:9
+>   + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declaration of function 'ioport_map' [-Werror=implicit-function-declaration]:  => 317:11
+>   + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declaration of function 'ioport_unmap' [-Werror=implicit-function-declaration]:  => 338:15
 
-compiles, boots and runs on my x86_64
-(Intel i5-11400, Fedora 35)
+Patch posted:
 
-Thanks
+https://lore.kernel.org/all/164306582968.3758255.15192949639574660648.stgit@omen/
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+Sorry I forgot to list Geert in Reported-by, I've done that in the
+local copy that I'll use for a pull request.  Thanks,
 
-=2D-
-regards
-Ronald
+Alex
 

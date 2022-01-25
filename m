@@ -2,175 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED25249B4A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C954649B4A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575651AbiAYNKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1575353AbiAYNHL (ORCPT
+        id S1575671AbiAYNKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:10:41 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:18912 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1575450AbiAYNIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:07:11 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C82C061401;
-        Tue, 25 Jan 2022 05:07:10 -0800 (PST)
-Date:   Tue, 25 Jan 2022 14:07:05 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643116027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=embjUAgs3gi9i4P5ZgYkqf5dsjaVIQcBbySu5M2DZ/4=;
-        b=mPl51bvKhZD4jxXnaFxnUJPHpaaLtG8vCLhAnTQVaTfpvCnVIPa87OPGlNOdGL3HdIgSQY
-        U1ulizrh3+qZrI7g0Ydl/3xLCE1jPDXbzJGHeIuWhVosT6zMlq4D2wHZRozGmY6Cwx7rIC
-        hbducSS2Ik4JQc5IL+k8AuIgEGY7rm0xomkJfK3pZK//0opjeeNX6tnsseiYz5gGXXySpV
-        VsmcbGfzYpT/f21tcwT8xgmuM79N/cxfymcwo9FiiEuLvsjbAu3ZwTZ+rJIl6+Aoravj+n
-        0PScTorhlnSyPiuBNB4wfIXu0HZYoe3gxM0li5b/cYwMprTTiN1CU3fnZP309A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643116027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=embjUAgs3gi9i4P5ZgYkqf5dsjaVIQcBbySu5M2DZ/4=;
-        b=QRhSjCd5kEh1gkOHcrlGmjZJRU5C6GOlaePtfRPX1y5jGv9fkUX7MEnKjBdVi0F85dE1pb
-        JPBsfHnYFFzVyKCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v3 1/1] tty: serial: Use fifo in 8250 console driver
-Message-ID: <Ye/1+Z8mEzbKbrqG@linutronix.de>
-References: <20211222112831.1968392-1-wander@redhat.com>
- <20211222112831.1968392-2-wander@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Tue, 25 Jan 2022 08:08:02 -0500
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PAx8rp026528;
+        Tue, 25 Jan 2022 13:07:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=KP7W6iQ9JHCpq3WmUmy1/TWFF1+L0A7GVQ3XQJo/JyU=;
+ b=F5zMJwZ1Nk90uzXX1iIh0jNoJFBUCV+WzE+ufUetmc7ndp9ccQxddxSUizVF1OpmVVEv
+ +xn7/So9jq357jxDbhxkvo5NAgsazXH69j31SE9o1wCFpiqmgmWn7TYt510Ld8LWsMCd
+ f3sl9O33X5OK2+IMk1ffr0LfV2Bi4DIhvpH4Q2CxXjoL+LCyAcssr+QjU94ZJeXRL/y1
+ 70Ql8dDFK1sN6PPgiTcu60248vgs+a+DNSmZFIFFSLlTJp7x+WfaZ5e9tGJqCoEP8RV+
+ 61CvdYNfv5K6vzdi1yxVDN7rkmw29Wk0dFR8Po+QIJVNNe9S8qpbmR4iZQ6MRgtyt+gT TQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dsvmjbgdh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 13:07:45 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20PD0QUu110300;
+        Tue, 25 Jan 2022 13:07:44 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
+        by userp3020.oracle.com with ESMTP id 3drbcnudah-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 13:07:43 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DW/ZNkTalS6OvzksXkFEpEBsgiJvFGSkV/Df/QGl872PPKjxFGYOFuZgg8/pwqDLKcmdt3+A+RnifzqIOgBsI9c45Ge6PvqwKwS/Grn/ppYpMgoEWu2oaSsPYUJKZOBc0pzG+X8/iqM/9vHn54+HbnW3VN9waw0nq0+uiiPlFlR+w7POjhMKoTJu3MfM9ddRD9+/PPfLAwqwJstVCR4IAWLwGSKmkBFDLNVs1PF3lBTE8OI4kmHvhrWqBjtKdxoKaH4NZcrBnbSwGXs6KrCt1QZVI0RrvEKnFzDauyzBJxoo5funOESHR1Vv/Bp0F8KrWJ230F51/UJdA/EbynZ1UQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KP7W6iQ9JHCpq3WmUmy1/TWFF1+L0A7GVQ3XQJo/JyU=;
+ b=Uj5K1xytEQbomSlsm2I4jq3kqFaLxgkQkFBrBzohThfO5MXySUW0Ny7d2OBazAkZDAyoaXFQgdv1fC3WkME6hpF3VD6tWNAyk4mZhBUMv6eXNBFcB2mPieoNHvOfQ9EHZ//HOc5JgP6xe3twSeCGIn3zfH6vrFo39AF8I8+pe60JzT25XG0g4PNSeuWyGI2GbGpOCGvFSsuHB9OwnoXUsjqoYhupZLiJ0SvTo3WFcEJKXH6YXCsX1SFjLdTROYmHjqiwByjRNPn5jtD0GiMS6P1yVHzhcHwRs1evx41MtghZqcsmHBDbnVStSGnqRvYNOB/W+CaDbEf4GCqiolZ8BQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KP7W6iQ9JHCpq3WmUmy1/TWFF1+L0A7GVQ3XQJo/JyU=;
+ b=ramnnjKOMvzCzT7sNKtVDeoAEOdHLKDcSJf2oFaRSwzFDR+EFjyDVmyg/4aB7J685rdkKEK+eOTxEXSk/La7Z80zo2EY7ZXlEiP1DMm3YIs4tX+uqvFCKKBXk0WTG7cl8XrYJJ6/KmgfugaFvTz5vHQzQQZltaDbTHGjAtg4jkc=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by PH0PR10MB5482.namprd10.prod.outlook.com
+ (2603:10b6:510:e4::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Tue, 25 Jan
+ 2022 13:07:40 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c13b:5812:a403:6d96]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::c13b:5812:a403:6d96%6]) with mapi id 15.20.4909.019; Tue, 25 Jan 2022
+ 13:07:40 +0000
+Date:   Tue, 25 Jan 2022 16:07:20 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org,
+        Larry.Finger@lwfinger.net, straube.linux@gmail.com,
+        martin@kaiser.cx, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/10] staging: r8188eu: remove smaller sets of DBG_88E
+ calls from os_dep dir
+Message-ID: <20220125130720.GT1978@kadam>
+References: <20220124224415.831-1-phil@philpotter.co.uk>
+ <20220124224415.831-6-phil@philpotter.co.uk>
+ <67ddc4d7-e19f-7c9d-a4b7-4eb555830ea1@gmail.com>
+ <20220125125942.GS1978@kadam>
+ <fa0a2717-aca7-a323-2e57-93a9f7b8c371@gmail.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211222112831.1968392-2-wander@redhat.com>
+In-Reply-To: <fa0a2717-aca7-a323-2e57-93a9f7b8c371@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JN2P275CA0045.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:2::33)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a6fddcf9-2066-4fc0-13ca-08d9e003aa31
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5482:EE_
+X-Microsoft-Antispam-PRVS: <PH0PR10MB548229030906201A389ACFE88E5F9@PH0PR10MB5482.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5YRmN7U2+wgI9U4ZQacAbCw49iMK3p2IORRx76R9m6DlWjPGoNPji1B0E0cYE6ejvGm6hn+ACIQi2t85WoYhzHd4ley9di7B9TFTZ8A0d7HRxTclgtX5Dcx05AmKD+b1xsh7eU/N8RifMQRe+jV/9E6l7LXf3Af1+6sYq97ow7BOXjgX5cD3uQF+ecj371mLp4d1dCJ54iN2JtGYrmVXa6MnAOtQN7QWAbel5EcV3N62jovNQw6QOCGO8FtrxFV5tgZvbYTDSYgJGHlkfkgNXBVAnsE3H11fTt7LGJriiofyVujrDAGe6r43umS9NTcfHfBxGEjUZoB+fWwVDsK/h82TDOw/qG22hrEDRsuPT3LEZG7Z9am2lDXp4rY0TGNm2dAWhd48lNtDWAgYgrRYZQEjVMtaYDE6B77CbSyB4xXK80pcRpzreMj+8a5Fmd2vwlXUYL8TDvRrO4+2us2hAhG1QgjvgzO8sY25Eu5fpaIVi/94pD47dQblTqxhPKyMN6d9ySWmK3+IamuB3m3hi/whF91w5r5zuoYxqB0vS63u5N9Kt6w7B2xtN+PbheqfQzmkj4A5POg1RNMtxtscTvhNdP2fnQA+THPy02HT3OmKsc9FYMplKPVz1erEHRmf5QXqiNrbF2Sieuv2ihD9lyIbtatkraYaArUvXmap3fS08ZezVt3JDp/O1DFp1bHxxrCN2UtB/nemkgwrR26J+w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(5660300002)(52116002)(6916009)(6506007)(53546011)(508600001)(2906002)(26005)(6486002)(186003)(86362001)(1076003)(8936002)(6512007)(9686003)(44832011)(8676002)(6666004)(33716001)(38100700002)(33656002)(316002)(38350700002)(83380400001)(66946007)(66476007)(66556008)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r0GXBkcBjY6sl/Kk2I+/QAuUH4J+kaQ+X2ahFa2axwcXXiQqiK3HHLdazDzy?=
+ =?us-ascii?Q?86fUeS8w/1FfwW0CgMKREx+sEfwCiOqMXKIvJ44k+d4XZvwNolZr6hDuC3yf?=
+ =?us-ascii?Q?q70sB/glDZy7gfOmido/zfebWLYjK/qeaziRXyphKO/sns9wS4lz0ifypxnD?=
+ =?us-ascii?Q?7hxWFsDDy9szPD7UaOn/xODjxFi5+mVIyPMEBt3mu+OHNJ9KYieLdX8ABJAH?=
+ =?us-ascii?Q?onjBZsJH2EXraxRW/excQUp5CmqTGVSkrMHNiJi0Fuywog3U/+4g9oQ6HAay?=
+ =?us-ascii?Q?eWyT8zZws8Sy7HdQgVLyz3CKfDhEQ96Bs6ZJL0b7euf3s4ljV+r3Jl18+6S2?=
+ =?us-ascii?Q?QYD7QOBgK7Nn24O+xPg+wLB2eH4yATksGhQNTR9XP2dVcWKwWFL9ZbA9mEFI?=
+ =?us-ascii?Q?8JagGk3ptmtHjipM8lxBAc2JY9/gLS+19W1Ku823dFTrxTi7wUYRXJF/R7Lo?=
+ =?us-ascii?Q?Sp+VcdnsBxAtSoW4nV7q/McpVFvClrGBtvGO7qhkmVXQvYGLTMq6UioUQtaH?=
+ =?us-ascii?Q?kILZr1MR/HMDDT6v0tAvyEbLw/6WPmmjgC+dnGL6wEZI6gs8C5LKvmEmVhU4?=
+ =?us-ascii?Q?IhNDErpdehuKGq0mlPZAaBXnejr2HCklMIs90ClT2Cr40W34LulKAgVa0y7c?=
+ =?us-ascii?Q?92lUg+G4O0Gc/CieJOTOiwxXR9b9qS2999icgwt0ehWpNqx6oWFh4rolAwLY?=
+ =?us-ascii?Q?6c37frObRCtTc7RWma0mSfOUPMsOSpZD7wNha1SrcEYkXUbwMRzgDGCpnH3T?=
+ =?us-ascii?Q?ELvxSMrt5oTRCyo1rjrYvQl55nP3H2piBUCFdvsPzEtlSYJAdmXicVoA2NsG?=
+ =?us-ascii?Q?pJ8wKweoSh30v0/f37xiutgcqw8/1rAmvyKCu+XA/SdUtxkpsKnfJhcDeqt3?=
+ =?us-ascii?Q?16DP47L86QzPOU8M/prQUMdmSxf3qMwZR5HARP2AfUdg9X/JskUWWaukeiYq?=
+ =?us-ascii?Q?i3Psgna+GI95B4LmDRUs+iUb0HTUET5mP+lwanM4N+irXOxQFQG9Io0pnRv8?=
+ =?us-ascii?Q?3oy4VtJwV2o9YgkjDD6PpgxG6zykfL+3pxZAEyOxOypEbGnzYF4QZ5kCgZtI?=
+ =?us-ascii?Q?DczijIWEWu2ewMkYZrdQytUmIky5NV1UBe/IrPOXav01OYXxc925Ys5I4wRI?=
+ =?us-ascii?Q?21TlETFdSxZYlmMZZ4NwSCL4AnSIy+wxRUokwDNF8ikVHCd7taESmlhCF7/N?=
+ =?us-ascii?Q?9EDeaa0Lym8VgNsGz66gQ8Yc8zkqPh8ebORGflTiKSz1c0VwrP0/rNmdvc4c?=
+ =?us-ascii?Q?naDSz9RfyFJ/ckw3gt295qhWFIcOEb1WkxyG0xZkOAXgdw1H4RE3AvjyvhBO?=
+ =?us-ascii?Q?AbZOiFHowN+BHtLy1DpAzwqoLlYWAXKjexyl1qDlYy4JR8Da3zgJkavu5blP?=
+ =?us-ascii?Q?LYfYxNIVm/+DKxBnnQFonuBRPIkd92Jc49o4vq4nL83Pfe1gR/W6yvwZj6Rn?=
+ =?us-ascii?Q?lvhiCo+760mhSpBAqL8bk7Cdci8a2idUzAs7VvjpRb4DGCDfBnPl1kn04s/T?=
+ =?us-ascii?Q?Bjwb2v/8IubSzwb0CM2uIfQQ+92Rk7jVwHBQnB1XI6cFP6GyImoSxLxzb0Xd?=
+ =?us-ascii?Q?Utl04+QIdizFqhls5FklPmWOLGPqfideNVKcBvPjQIvaDZGMHV+FetgNi86h?=
+ =?us-ascii?Q?OKKUac95bDEiNmW3pHUu1CkflM97G9HARWulgl9MA4dt3m+cWgjxnd15jAiS?=
+ =?us-ascii?Q?ixv4AfsnqhvNLkZn5sIngp7OXDk=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6fddcf9-2066-4fc0-13ca-08d9e003aa31
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 13:07:39.9345
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6cKt2OSL8HsAEU0eyTrYyUimmCJ1TSgg/Vji49eRQF9PRryeG1kzCEgcEifFTAT8GWQ/lGVrmenB1E5uy7Si4hLNLi6Tyf1mWDhAIOEOxXk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5482
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10237 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 malwarescore=0
+ spamscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=945
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201250085
+X-Proofpoint-GUID: nTItlMDXJsIjHE5aR8l0SE-9i0Wfu-0T
+X-Proofpoint-ORIG-GUID: nTItlMDXJsIjHE5aR8l0SE-9i0Wfu-0T
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-22 08:28:30 [-0300], Wander Lairson Costa wrote:
-> Note: I am using a small test app + driver located at [0] for the
-> problem description. serco is a driver whose write function dispatches
-> to the serial controller. sertest is a user-mode app that writes n bytes
-> to the serial console using the serco driver.
->=20
-> While investigating a bug in the RHEL kernel, I noticed that the serial
-> console throughput is way below the configured speed of 115200 bps in
-> a HP Proliant DL380 Gen9. I was expecting something above 10KB/s, but
-> I got 2.5KB/s.
->=20
-> $ time ./sertest -n 2500 /tmp/serco
->=20
-> real    0m0.997s
-> user    0m0.000s
-> sys     0m0.997s
->=20
-> With the help of the function tracer, I then noticed the serial
-> controller was taking around 410us seconds to dispatch one single byte:
+On Tue, Jan 25, 2022 at 04:04:48PM +0300, Pavel Skripkin wrote:
+> Hi Dan,
+> 
+> On 1/25/22 15:59, Dan Carpenter wrote:
+> > On Tue, Jan 25, 2022 at 03:48:32PM +0300, Pavel Skripkin wrote:
+> > > Hi Phillip,
+> > > 
+> > > On 1/25/22 01:44, Phillip Potter wrote:
+> > > > Remove all DBG_88E calls from the os_dep directory, other than those in
+> > > > os_dep/ioctl_linux.c, as this contains almost 200 on its own so will be
+> > > > done in a separate patch for ease of review. These calls do not conform
+> > > > to kernel coding standards and are superfluous. Also restructure where
+> > > > appropriate to remove no longer needed code left behind by removal of
+> > > > these calls. This will allow the eventual removal of the DBG_88E macro
+> > > > itself.
+> > > > > Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+> > > > ---
+> > > 
+> > > [code snip]
+> > > 
+> > > > -	/* 2012-07-11 Move here to prevent the 8723AS-VAU BT auto
+> > > > -	 * suspend influence */
+> > > > -	if (usb_autopm_get_interface(pusb_intf) < 0)
+> > > > -			DBG_88E("can't get autopm:\n");
+> > > > -
+> > > 
+> > > Didn't you make a function change here? I didn't test and also didn't find
+> > > any mentions of tests in cover letter.
+> > 
+> > It is obviously a bug.  Please avoid ask rhetorical questions or someone
+> > will answer them.
+> > 
+> 
+> It isn't so obvious for me. Might be Phillip knows something about
+> 8723AS-VAU BT (whatever it is) issue.
+> 
+> I prefer not to say "it's an error", when I am not 100% sure :)
 
-was this the HW access or did this include the wait-for-fifo empty?
+Oh, in that case, well done.  Good job on the review.  :)
 
-> $ trace-cmd record -p function_graph -g serial8250_console_write \
->    ./sertest -n 1 /tmp/serco
->=20
-> $ trace-cmd report
->=20
->             |  serial8250_console_write() {
->  0.384 us   |    _raw_spin_lock_irqsave();
->  1.836 us   |    io_serial_in();
->  1.667 us   |    io_serial_out();
->             |    uart_console_write() {
->             |      serial8250_console_putchar() {
->             |        wait_for_xmitr() {
->  1.870 us   |          io_serial_in();
->  2.238 us   |        }
->  1.737 us   |        io_serial_out();
->  4.318 us   |      }
->  4.675 us   |    }
->             |    wait_for_xmitr() {
->  1.635 us   |      io_serial_in();
->             |      __const_udelay() {
->  1.125 us   |        delay_tsc();
->  1.429 us   |      }
-> ...
-> ...
-> ...
->  1.683 us   |      io_serial_in();
->             |      __const_udelay() {
->  1.248 us   |        delay_tsc();
->  1.486 us   |      }
->  1.671 us   |      io_serial_in();
->  411.342 us |    }
+regards,
+dan carpenter
 
-So this includes waiting for empty slot. It is wait_for_xmitr() only.
-
-> In another machine, I measured a throughput of 11.5KB/s, with the serial
-> controller taking between 80-90us to send each byte. That matches the
-> expected throughput for a configuration of 115200 bps.
->=20
-> This patch changes the serial8250_console_write to use the 16550 fifo
-> if available. In my benchmarks I got around 25% improvement in the slow
-> machine, and no performance penalty in the fast machine.
-
-Either the HW is slow on starting to work, or=E2=80=A6
-
-What I noticed now in -rc1 is this output during boot:
-
-|[    6.370196] ACPI: button: Power Button [PWRF]
-|[    6.443501] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-|[0I 15
-|      [0I 15
-|            [No
-|               [ld
-|                  [a2
-|                     [a20tm
-|                           [a2nct
-|                                 [s
-|[s
-|[s
-|[s
-=E2=80=A6
-|[sk65,
-|      [rt
-|         [Pe
-|            [a
-|               [    6.873611] ata1: SATA link down (SStatus 0 SControl 300)
-|[    6.879680] ata3: SATA link down (SStatus 0 SControl 300)
-
-The kernel buffer reports here:
-
-|[    6.370196] ACPI: button: Power Button [PWRF]
-|[    6.443501] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-|[    6.450643] 00:03: ttyS0 at I/O 0x3f8 (irq =3D 4, base_baud =3D 115200)=
- is a 16550A
-|[    6.451625] 00:04: ttyS1 at I/O 0x2f8 (irq =3D 3, base_baud =3D 115200)=
- is a 16550A
-|[    6.453808] Non-volatile memory driver v1.3
-|[    6.475688] loop: module loaded
-|[    6.476401] ahci 0000:00:1f.2: version 3.0
-|[    6.487238] ahci 0000:00:1f.2: AHCI 0001.0300 32 slots 6 ports 6 Gbps 0=
-x3f impl SATA mode
-
-I did remove the last few lines but it appears that since the
-initialisation of the port some of the lines got lost.
-
-Do you see the same?
-
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-
-Sebastian

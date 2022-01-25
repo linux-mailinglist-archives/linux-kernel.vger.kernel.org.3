@@ -2,94 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B34C49B048
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B443049B042
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455864AbiAYJb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S1573967AbiAYJa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573004AbiAYJSg (ORCPT
+        with ESMTP id S1573003AbiAYJSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Jan 2022 04:18:36 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7419EC061401;
-        Tue, 25 Jan 2022 01:14:02 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id l35-20020a05600c1d2300b0034d477271c1so1285648wms.3;
-        Tue, 25 Jan 2022 01:14:02 -0800 (PST)
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95541C06174E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:14:54 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id q22so7068267ljh.7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:14:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sRD6qyOpLvPcbfxyrO55uccAQnyiA9egM9CuSrcd7Oc=;
-        b=pxDtXbN4xMP3UQSMn75sFL/SaeutiFSKz3kyKW6caQJyCeyRxcWrn7GX9HpWclAX7Z
-         dOIbygVko6RUJ/wt6z/a095spH8ZQrmCIPD7+FxqN+rexXZo86O9CQyYthLZ4/37WKN3
-         RIEOsH+MByBUUHXUyyl+eVy7OlEWbgjzuOs6QI7e0OXOlacH5EaTneJZHG0gNex2UHOt
-         sUaTXry+PvodKcsJNnvv6exMgY6eos/9VZOhdIMFMf2UTnH+coNJ8RoHHjKxCqC886p2
-         uy8HF9SmsVkV70U6Vvd81B6fE8yREd+3EaFq6CirH1obIK0hImClV0TNBLZqGnugmzdk
-         7b8A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qrgiZGQ6iDovOpvrU32QRk7eljkxoPWyGy5MexT9X4I=;
+        b=Yz2JeNHhq5XcFshwTR7g5n40VgZtU4lRAtDEj/GojdZK5RxjDf23wQ/pzu5acf+Dy8
+         2Ugx0biQWhmmP2vWA7xGO7oOFi+maeNvwfeVrjg6zFJhNpWMw5y46Pbrvs8pcI7UPkcO
+         mmuYSf03AAL49jlQiQXGb7HK2595dtPejQBGbHBaVmpuN+2sXyWTC3EdB2UMZlOIKtNi
+         aNz9lN7EEAVxXmBlCi4zbmNEJPG+weJ+ejVUm3QStQzw+lzV3u+badZWBTwf+qEtIuxl
+         IxB2VpHQMu/pMR/3KXXRX0UjZ8qsInINtLA4+1c8J0nvMvn02/1Nt5VVEUCBzwuORlDH
+         /PrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sRD6qyOpLvPcbfxyrO55uccAQnyiA9egM9CuSrcd7Oc=;
-        b=JvxoIiIheczynPHFlHGx2hyComFCMJpfK1IQNTcTxCwfDvitVMe4CjimEjJ+X4Ht35
-         dCTNO//CMhL6Y3fXyXeFYCr+k6pz/2rfyt9pwCWVxFbwm1nDxWT4rD0PP6FxgNzORoUS
-         SZ8H5uay6yii6uE5RKanXw7FSpQBCA0ItNP2OzDpBRziGxXrnZm9rObv7PhNNpL1lHq0
-         T/E9jwkfHUKW8z4HTz28F5ILjb57eSII8MPUJxEwOYDGkt1VXZsGUp9J+3jYR2M+mV3X
-         tRBioCHpQ/2i3OwfE72ITmfWiNjPrV1OsFVqkSDNnLQF2g10dgtYNMj983dYUMKKxyMS
-         bZ6A==
-X-Gm-Message-State: AOAM531NEbna1KYqxTOnsMcHnOr+QQmlZHc8GvffVcjGWIMpOn5fV4Cq
-        x/kVc0rtBSodvoNcg6Pf7Js=
-X-Google-Smtp-Source: ABdhPJxzyKb03iquT0LFx2oqC90sGv/+nQr+qE2QH5pD8+5O0GEBKjf4WlPRN0eo54vLAvnnDr0wuA==
-X-Received: by 2002:a7b:c4c3:: with SMTP id g3mr2038528wmk.125.1643102040934;
-        Tue, 25 Jan 2022 01:14:00 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id l4sm3859839wrs.6.2022.01.25.01.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 01:14:00 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] drm/i915/guc: fix spelling mistake "notificaion" -> "notification"
-Date:   Tue, 25 Jan 2022 09:13:59 +0000
-Message-Id: <20220125091359.350918-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qrgiZGQ6iDovOpvrU32QRk7eljkxoPWyGy5MexT9X4I=;
+        b=RruedDxceHfTeh1bq3hp+EzMA/h850DPu43pBoK8VD1ZWKnWIlEeEBsKz05rJhnJrZ
+         y1bnQ+CiUybkW8LTIpxIj6Q02TXgv9k/JtPRxCjqDqxXV9C64almb2rvVpuyhv+XWLyE
+         Omwvo53e89JbiFOnvzpRFj/rN8Qr22GTbotVRbMAWCKu1e0CJVmzGO7l2KVsYTLqQhE7
+         DtQZrWIJF8yMzvjtbsNI8cJKsUuIMG12gEkqmyn4QZ6CuRV63PW3IpArLcnjSXuCxRnZ
+         SZrwG/JWl86Xm1JM+Bn34hc1aL0VeGfXpFRciJWKkeHBB58XHUbr0I6gcZ/+5ah7MbkU
+         +1Iw==
+X-Gm-Message-State: AOAM531n9DjW6ct7R9m0Q+h8BAh4H82Ym7RJg3Izzd72yZHLaFJBfDOa
+        ymADG/BRmW4DklUza0D514ayP35EgLiYMrriTJ6e9w==
+X-Google-Smtp-Source: ABdhPJzeq/FzwGiCeBTJHEg6r95G1ZdhTdmrdSjD6Yutu6gLbJJWNcXh4b7oAOFsB95LEsMJlk6By0jWGzJ/zBOV8kg=
+X-Received: by 2002:a2e:6a13:: with SMTP id f19mr8258334ljc.365.1643102092835;
+ Tue, 25 Jan 2022 01:14:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20220120200139.118978-1-tadeusz.struk@linaro.org> <20220125011804.mhlhdenbjluzqkgf@oracle.com>
+In-Reply-To: <20220125011804.mhlhdenbjluzqkgf@oracle.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 25 Jan 2022 10:14:41 +0100
+Message-ID: <CAKfTPtB7UvUG3C_xiHL-V6eDfDOAkpzFWa0_QQeeRAQG7PovXQ@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/fair: Fix fault in reweight_entity
+To:     Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>, peterz@infradead.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a drm_err error message. Fix it.
+On Tue, 25 Jan 2022 at 02:18, Daniel Jordan <daniel.m.jordan@oracle.com> wrote:
+>
+> Hi,
+>
+> On Thu, Jan 20, 2022 at 12:01:39PM -0800, Tadeusz Struk wrote:
+> > Syzbot found a GPF in reweight_entity(). This has been bisected to commit
+> > 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+> >
+> > There is a race between sched_post_fork() and setpriority(PRIO_PGRP)
+> > within a thread group that causes a null-ptr-deref in reweight_entity()
+> > in CFS. The scenario is that the main process spawns number of new
+> > threads, which then call setpriority(PRIO_PGRP, 0, prio), wait, and exit.
+> > For each of the new threads the copy_process() gets invoked, which adds
+> > the new task_struct to the group, and eventually calls sched_post_fork() for it.
+> >
+> > In the above scenario there is a possibility that setpriority(PRIO_PGRP)
+> > and set_one_prio() will be called for a thread in the group that is just
+> > being created by copy_process(), and for which the sched_post_fork() has
+> > not been executed yet. This will trigger a null pointer dereference in
+> > reweight_entity(), as it will try to access the run queue pointer, which
+> > hasn't been set.
+>
+> It's kinda strange that p->se.cfs_rq is NULLed in __sched_fork().
+> AFAICT, that lets set_task_rq_fair() distinguish between fork and other
+> paths per ad936d8658fd, but it's causing this problem now and it's not
+> the only way that set_task_rq_fair() could tell the difference.
+>
+> We might be able to get rid of the NULL assignment instead of adding
+> code to detect it.  Maybe something like this, against today's mainline?
+> set_task_rq_fair() would rely on TASK_NEW instead of NULL.
+>
+> Haven't thought it all the way through, so could be missing something.
+> Will think more
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Could we use :
+set_load_weight(p, !(p->__state & TASK_NEW));
+instead of
+set_load_weight(p, true);
+in set_user_nice and __setscheduler_params.
 
-diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c b/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
-index 1331ff91c5b0..1ae3d1f259e3 100644
---- a/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
-+++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c
-@@ -3942,7 +3942,7 @@ static void guc_handle_context_reset(struct intel_guc *guc,
- 		guc_context_replay(ce);
- 	} else {
- 		drm_err(&guc_to_gt(guc)->i915->drm,
--			"Invalid GuC engine reset notificaion for 0x%04X on %s: banned = %d, blocked = %d",
-+			"Invalid GuC engine reset notification for 0x%04X on %s: banned = %d, blocked = %d",
- 			ce->guc_id.id, ce->engine->name, intel_context_is_banned(ce),
- 			context_blocked(ce));
- 	}
--- 
-2.33.1
+The current always true value forces the update of the weight of the
+cfs_rq of the task which is not already set in this case
 
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 848eaa0efe0ea..9a5b264c5dc10 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4241,10 +4241,6 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
+>         p->se.vruntime                  = 0;
+>         INIT_LIST_HEAD(&p->se.group_node);
+>
+> -#ifdef CONFIG_FAIR_GROUP_SCHED
+> -       p->se.cfs_rq                    = NULL;
+> -#endif
+> -
+>  #ifdef CONFIG_SCHEDSTATS
+>         /* Even if schedstat is disabled, there should not be garbage */
+>         memset(&p->stats, 0, sizeof(p->stats));
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 5146163bfabb9..7aff3b603220d 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3339,15 +3339,19 @@ static inline void update_tg_load_avg(struct cfs_rq *cfs_rq)
+>   * caller only guarantees p->pi_lock is held; no other assumptions,
+>   * including the state of rq->lock, should be made.
+>   */
+> -void set_task_rq_fair(struct sched_entity *se,
+> -                     struct cfs_rq *prev, struct cfs_rq *next)
+> +void set_task_rq_fair(struct task_struct *p, struct cfs_rq *next)
+>  {
+> +       struct sched_entity *se = &p->se;
+> +       struct cfs_rq *prev = se->cfs_rq;
+>         u64 p_last_update_time;
+>         u64 n_last_update_time;
+>
+>         if (!sched_feat(ATTACH_AGE_LOAD))
+>                 return;
+>
+> +       if (p->__state == TASK_NEW)
+> +               return;
+> +
+>         /*
+>          * We are supposed to update the task to "current" time, then its up to
+>          * date and ready to go to new CPU/cfs_rq. But we have difficulty in
+> @@ -3355,7 +3359,7 @@ void set_task_rq_fair(struct sched_entity *se,
+>          * time. This will result in the wakee task is less decayed, but giving
+>          * the wakee more load sounds not bad.
+>          */
+> -       if (!(se->avg.last_update_time && prev))
+> +       if (!se->avg.last_update_time)
+>                 return;
+>
+>  #ifndef CONFIG_64BIT
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index de53be9057390..a6f749f136ee1 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -514,11 +514,10 @@ extern int sched_group_set_shares(struct task_group *tg, unsigned long shares);
+>  extern int sched_group_set_idle(struct task_group *tg, long idle);
+>
+>  #ifdef CONFIG_SMP
+> -extern void set_task_rq_fair(struct sched_entity *se,
+> -                            struct cfs_rq *prev, struct cfs_rq *next);
+> +extern void set_task_rq_fair(struct task_struct *p, struct cfs_rq *next);
+>  #else /* !CONFIG_SMP */
+> -static inline void set_task_rq_fair(struct sched_entity *se,
+> -                            struct cfs_rq *prev, struct cfs_rq *next) { }
+> +static inline void set_task_rq_fair(struct task_struct *p,
+> +                                   struct cfs_rq *next) {}
+>  #endif /* CONFIG_SMP */
+>  #endif /* CONFIG_FAIR_GROUP_SCHED */
+>
+> @@ -1910,7 +1909,7 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
+>  #endif
+>
+>  #ifdef CONFIG_FAIR_GROUP_SCHED
+> -       set_task_rq_fair(&p->se, p->se.cfs_rq, tg->cfs_rq[cpu]);
+> +       set_task_rq_fair(p, tg->cfs_rq[cpu]);
+>         p->se.cfs_rq = tg->cfs_rq[cpu];
+>         p->se.parent = tg->se[cpu];
+>  #endif

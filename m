@@ -2,79 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BC849B283
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DDA49B289
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380113AbiAYLBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 06:01:23 -0500
-Received: from mga17.intel.com ([192.55.52.151]:30554 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379968AbiAYK7D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 05:59:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643108343; x=1674644343;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SYDGkXed9Zpe3q3nrJrWXDYeh3RYZIJ5yQozPlmXdts=;
-  b=CkFQR20liFfzU4JzRkZyKtkEhEUsxhe2zgIayeii8uQaa7/5IuIYYHw/
-   JTTud31uXukQQrLThCWfPAeI/nJAJXcuLNR0MfhKmbeBk9emoaVc4byGw
-   uBuog6/VgMax43fJjzWlFtaBwcdjSiuGEKHgLDQlkkG4fhalIpfGZq8Hh
-   rZUktTwC79zI+ej7GegxYFsP7Frp+S+RNwspMJfc/oXeB/8XnilXEW73n
-   Ta9AWkOlmJgNJwRi/0O7NvnUVZQEtpDHC84O79BOkbe3F9gWpbLTulyjo
-   exttbBIIJ+/HOzWqV2B50UfhGKeo7F8/2xY7SEFp2RhNr/rJVt5MbT6dc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226947058"
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="226947058"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 02:59:00 -0800
-X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
-   d="scan'208";a="562997636"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 02:58:55 -0800
-Received: by lahna (sSMTP sendmail emulation); Tue, 25 Jan 2022 12:58:52 +0200
-Date:   Tue, 25 Jan 2022 12:58:52 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Rajat Jain <rajatja@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rajatxjain@gmail.com,
-        dtor@google.com, jsbarnes@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as
- untrusted
-Message-ID: <Ye/X7E2dKb+zem34@lahna>
-References: <20220120000409.2706549-1-rajatja@google.com>
- <20220121214117.GA1154852@bhelgaas>
- <Ye5GvQbFKo+CFtRb@lahna>
+        id S1380071AbiAYLEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 06:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376381AbiAYLAl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 06:00:41 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49CFC061749
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:00:40 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id y15so47719409lfa.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:00:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=R1rX36zWAJlM8JyYNriAtoNcVhkGAZu72srBxAcEfN8=;
+        b=HaNDbakvgJKPl1LPg2nVgOeBK9N3XRgxpnoJig8XdYscQ3vG5Swk4cTLQc8AEvTptB
+         iNFk20O2Rf4yPyyuqfVh+Ht10NQA0EerIfnwHfa8K1zYoCb2uQ8eo5k1f5PfAV55060A
+         fKsalapyORXhfL+rWjstPSrOGti4j1Y0kAu/qnxkbpW2cTK4frU6pBPrh9mBVoqrtBgs
+         9rGLcPFOMhkDyufGE6UIkYrwn/Ruv1naYlre71lMGjD8lF1A7AwpppMsDkqA+w+bPoYp
+         MWuBhRdjw6Gs2WtZLR1QPh4xzkBYwIomeKqew70ajrgjJY3Ri0/VzoMvwQHVQmhD6PqD
+         Tq1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=R1rX36zWAJlM8JyYNriAtoNcVhkGAZu72srBxAcEfN8=;
+        b=JuMUhD/dIbDRG6LVXi6yxrQ1LqyRn/04cZ+RXcTMfGCYJvd7iBBgJGyrfIgYXv2klT
+         9dvEMCGUWacikdrweeemebPJGw9IaRAGWTerSEx+sz+1wS14SwpZblzw15TGReU46mZR
+         M8WFkwafJ+E5aE2sRn+Kchzw1LdcIrVK1zRN/rU/huuOQtJDSlbUhuUnefXJ3/4gCFNT
+         ZB/7dUfqjkGUs5C7WIWovNhvC02gWSRij0Y5UDq1JSVv+6PuTqa03bQw2ZoyxJtPmfRw
+         ROJJgLraODghRT6MIEsg0BlpzxAL9OikPaz1y27TjvsQSdSLveuEF9NBB5GJCsBS+8JT
+         V48Q==
+X-Gm-Message-State: AOAM533BMVwzS13ZuH/fG4C0XacSaxocCLMI4T6W4jLVGHP5aX97IF1T
+        pyJSwTJlprymwYQTwsXKBNv7nog5bf0lAWoOt/s=
+X-Google-Smtp-Source: ABdhPJwz89lL4pwyHmce+rGvrrsmc5a7UaxfiRJqJ6JPl9cLyqgbbM0S3BxQyijLHpHPdkx7KXhgudQOcQIjww8pi+I=
+X-Received: by 2002:ac2:4e04:: with SMTP id e4mr16084459lfr.453.1643108439127;
+ Tue, 25 Jan 2022 03:00:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ye5GvQbFKo+CFtRb@lahna>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Received: by 2002:aa6:c392:0:b0:190:29a4:7cd7 with HTTP; Tue, 25 Jan 2022
+ 03:00:38 -0800 (PST)
+Reply-To: cristinacampeell@outlook.com
+From:   "Mrs. Cristina Campbell" <lj2670971@gmail.com>
+Date:   Tue, 25 Jan 2022 11:00:38 +0000
+Message-ID: <CA+sy9a6bhMDMbNnucVtQrwFLdTSvBU3HV0uFH_X=K2XTzdXkVg@mail.gmail.com>
+Subject: =?UTF-8?B?0KLRiyDQvNC+0LbQtdGI0Ywg0LzQvdC1INC/0L7QvNC+0YfRjD8=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 08:27:17AM +0200, Mika Westerberg wrote:
-> > > This patch introduces a new "UntrustedDevice" property that can be used
-> > > by the firmware to mark any device as untrusted.
-> 
-> I think this new property should be documented somewhere too (also
-> explain when to use it instead of ExternalFacingPort). If not in the
-> next ACPI spec or some supplemental doc then perhaps in the DT bindings
-> under Documentation/devicetree/bindings.
-
-Actually Microsoft has similar already:
-
-https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-internal-pcie-ports-accessible-to-users-and-requiring-dma-protection
-
-I think we should use that too here.
+0JTQvtGA0L7Qs9C+0Lkg0LvRjtCx0LjQvNGL0LksDQoNCtCf0L7QttCw0LvRg9C50YHRgtCwLCDQ
+v9GA0L7Rh9C40YLQsNC50YLQtSDRjdGC0L4g0LzQtdC00LvQtdC90L3QviDQuCDQstC90LjQvNCw
+0YLQtdC70YzQvdC+LCDRgtCw0Log0LrQsNC6INGN0YLQviDQvNC+0LbQtdGCDQrQsdGL0YLRjCDQ
+vtC00L3QviDQuNC3INGB0LDQvNGL0YUg0LLQsNC20L3Ri9GFINGN0LvQtdC60YLRgNC+0L3QvdGL
+0YUg0L/QuNGB0LXQvCwg0LrQvtGC0L7RgNGL0LUg0LLRiyDQutC+0LPQtNCwLdC70LjQsdC+DQrQ
+v9C+0LvRg9GH0LDQu9C4LiDQryDQvNC40YHRgdC40YEg0JrRgNC40YHRgtC40L3QsCDQmtGN0LzQ
+v9Cx0LXQu9C7LCDRjyDQsdGL0LvQsCDQt9Cw0LzRg9C20LXQvCDQt9CwINC/0L7QutC+0LnQvdGL
+0LwNCtCt0LTQstCw0YDQtNC+0Lwg0JrRjdC80L/QsdC10LvQu9C+0LwuINC+0L/Ri9GC0L3Ri9C5
+INC/0L7QtNGA0Y/QtNGH0LjQuiDQsiDRgNC10LPQuNC+0L3QtSDQktC+0YHRgtC+0YfQvdC+0Lkg
+0JDQt9C40LguINCe0L0NCtGD0LzQtdGAINCyINC/0L7QvdC10LTQtdC70YzQvdC40LosIDMxINC4
+0Y7Qu9GPIDIwMDMg0LPQvtC00LAsINCyINCf0LDRgNC40LbQtS4g0JzRiyDQsdGL0LvQuCDQttC1
+0L3QsNGC0Ysg0YHQtdC80YwNCtC70LXRgiDQsdC10Lcg0YDQtdCx0LXQvdC60LAuDQoNCtCf0L7Q
+utCwINCy0Ysg0YfQuNGC0LDQtdGC0LUg0Y3RgtC+LCDRjyDQvdC1INGF0L7Rh9GDLCDRh9GC0L7Q
+sdGLINCy0Ysg0LbQsNC70LXQu9C4INC80LXQvdGPLCDQv9C+0YLQvtC80YMg0YfRgtC+INGPDQrQ
+stC10YDRjiwg0YfRgtC+INCy0YHQtSDQutC+0LPQtNCwLdC90LjQsdGD0LTRjCDRg9C80YDRg9GC
+LiDQoyDQvNC10L3RjyDQsdGL0Lsg0LTQuNCw0LPQvdC+0YHRgtC40YDQvtCy0LDQvSDRgNCw0LoN
+CtC/0LjRidC10LLQvtC00LAsINC4INC80L7QuSDQstGA0LDRhyDRgdC60LDQt9Cw0Lsg0LzQvdC1
+LCDRh9GC0L4g0Y8g0L3QtSDQv9GA0L7RgtGP0L3RgyDQtNC+0LvQs9C+INC40Lct0LfQsCDQvNC+
+0LjRhQ0K0YHQu9C+0LbQvdGL0YUg0L/RgNC+0LHQu9C10Lwg0YHQviDQt9C00L7RgNC+0LLRjNC1
+0LwuDQoNCtCvINGF0L7Rh9GDLCDRh9GC0L7QsdGLINCR0L7QsyDQsdGL0Lsg0LzQuNC70L7RgdGC
+0LjQsiDQutC+INC80L3QtSDQuCDQv9GA0LjQvdGP0Lsg0LzQvtGOINC00YPRiNGDLCDQv9C+0Y3R
+gtC+0LzRgyDRjw0K0YDQtdGI0LjQuyDQv9C+0LTQsNCy0LDRgtGMINC80LjQu9C+0YHRgtGL0L3R
+jiDQsdC70LDQs9C+0YLQstC+0YDQuNGC0LXQu9GM0L3Ri9C8INC+0YDQs9Cw0L3QuNC30LDRhtC4
+0Y/QvCAvINGG0LXRgNC60LLRj9C8IC8NCtCx0YPQtNC00LjQudGB0LrQuNC8INGF0YDQsNC80LDQ
+vCAvINC80LXRh9C10YLQuCAvINGB0LjRgNC+0YLQsNC8IC8g0LzQsNC70L7QvtCx0LXRgdC/0LXR
+h9C10L3QvdGL0Lwg0Lgg0LLQtNC+0LLQsNC8LCDRgtCw0LoNCtC60LDQuiDRjyDRhdC+0YfRgywg
+0YfRgtC+0LHRiyDRjdGC0L4g0LHRi9C70L4g0L7QtNC90LjQvCDQuNC3INC/0L7RgdC70LXQtNC9
+0LjRhSDQtNC+0LHRgNGL0YUg0LTQtdC7LiDQryDQtNC10LvQsNGOINC90LANCtC30LXQvNC70LUs
+INC/0YDQtdC20LTQtSDRh9C10Lwg0Y8g0YPQvNGA0YMuINCU0L4g0YHQuNGFINC/0L7RgCDRjyDR
+gNCw0LfQtNCw0LLQsNC7INC00LXQvdGM0LPQuCDQvdC10LrQvtGC0L7RgNGL0LwNCtCx0LvQsNCz
+0L7RgtCy0L7RgNC40YLQtdC70YzQvdGL0Lwg0L7RgNCz0LDQvdC40LfQsNGG0LjRj9C8INCyINCo
+0L7RgtC70LDQvdC00LjQuCwg0KPRjdC70YzRgdC1LCDQn9Cw0L3QsNC80LUsINCk0LjQvdC70Y/Q
+vdC00LjQuA0K0Lgg0JPRgNC10YbQuNC4LiDQotC10L/QtdGA0YwsINC60L7Qs9C00LAg0LzQvtC1
+INC30LTQvtGA0L7QstGM0LUg0YLQsNC6INGB0LjQu9GM0L3QviDRg9GF0YPQtNGI0LjQu9C+0YHR
+jCwg0Y8g0LHQvtC70YzRiNC1DQrQvdC1INC80L7Qs9GDINC30LDQvdC40LzQsNGC0YzRgdGPINGN
+0YLQuNC8INGB0LDQvNCwLg0KDQrQntC00L3QsNC20LTRiyDRjyDQv9C+0L/RgNC+0YHQuNC7INGH
+0LvQtdC90L7QsiDQvNC+0LXQuSDRgdC10LzRjNC4INC30LDQutGA0YvRgtGMINC+0LTQuNC9INC4
+0Lcg0LzQvtC40YUg0YHRh9C10YLQvtCyINC4DQrRgNCw0YHQv9GA0LXQtNC10LvQuNGC0Ywg0LTQ
+tdC90YzQs9C4LCDQutC+0YLQvtGA0YvQtSDRgyDQvNC10L3RjyDQtdGB0YLRjCwg0L3QsCDQsdC7
+0LDQs9C+0YLQstC+0YDQuNGC0LXQu9GM0L3Ri9C1DQrQvtGA0LPQsNC90LjQt9Cw0YbQuNC4INCy
+INCQ0LLRgdGC0YDQuNC4LCDQoNC+0YHRgdC40LgsINCT0LXRgNC80LDQvdC40LgsINCY0YLQsNC7
+0LjQuCDQuCDQqNCy0LXQudGG0LDRgNC40LgsINC+0L3QuA0K0L7RgtC60LDQt9Cw0LvQuNGB0Ywg
+0Lgg0L7RgdGC0LDQstC40LvQuCDQtNC10L3RjNCz0Lgg0YHQtdCx0LUuINCh0LvQtdC00L7QstCw
+0YLQtdC70YzQvdC+LCDRjyDQvdC1INC00L7QstC10YDRj9GOINC40YUNCtCx0L7Qu9GM0YjQtSwg
+0YLQsNC6INC60LDQuiDQvtC90LgsINC60LDQttC10YLRgdGPLCDQvdC1INCx0L7RgNGO0YLRgdGP
+INGBINGC0LXQvCwg0YfRgtC+INGPINC+0YHRgtCw0LLQuNC7INC00LvRjyDQvdC40YUuDQrQn9C+
+0YHQu9C10LTQvdC40LUg0LjQtyDQvNC+0LjRhSDQtNC10L3QtdCzLCDQviDQutC+0YLQvtGA0YvR
+hSDQvdC40LrRgtC+INC90LUg0LfQvdCw0LXRgiwgLSDRjdGC0L4g0L7Qs9GA0L7QvNC90YvQuQ0K
+0LTQtdC90LXQttC90YvQuSDQtNC10L/QvtC30LjRgiDQsiDRgNCw0LfQvNC10YDQtSDRiNC10YHR
+gtC4INC80LjQu9C70LjQvtC90L7QsiDQtNC+0LvQu9Cw0YDQvtCyINCh0KjQkCwg0LrQvtGC0L7R
+gNGL0Lkg0YMNCtC80LXQvdGPINC10YHRgtGMINCyINCx0LDQvdC60LUg0LIg0KLQsNC40LvQsNC9
+0LTQtSwg0LPQtNC1INGPINGA0LDQt9C80LXRgdGC0LjQuyDRjdGC0L7RgiDRhNC+0L3QtC4g0K8g
+0YXQvtGH0YMsINGH0YLQvtCx0YsNCtCy0Ysg0LjRgdC/0L7Qu9GM0LfQvtCy0LDQu9C4INGN0YLQ
+vtGCINGE0L7QvdC0INC00LvRjyDQsdC70LDQs9C+0YLQstC+0YDQuNGC0LXQu9GM0L3Ri9GFINC/
+0YDQvtCz0YDQsNC80Lwg0LgNCtC/0L7QtNC00LXRgNC20LjQstCw0LvQuCDRh9C10LvQvtCy0LXR
+h9C10YHRgtCy0L4g0LIg0YHQstC+0LXQuSDRgdGC0YDQsNC90LUsINC10YHQu9C4INGC0L7Qu9GM
+0LrQviDQstGLINCx0YPQtNC10YLQtQ0K0LjRgdC60YDQtdC90L3QuNC80LguDQoNCtCvINC/0YDQ
+uNC90Y/QuyDRjdGC0L4g0YDQtdGI0LXQvdC40LUsINC/0L7RgtC+0LzRgyDRh9GC0L4g0YMg0LzQ
+tdC90Y8g0L3QtdGCINGA0LXQsdC10L3QutCwLCDQutC+0YLQvtGA0YvQuQ0K0YPQvdCw0YHQu9C1
+0LTRg9C10YIg0Y3RgtC4INC00LXQvdGM0LPQuCwg0Y8g0L3QtSDQsdC+0Y7RgdGMINGB0LzQtdGA
+0YLQuCwg0L/QvtGN0YLQvtC80YMg0Y8g0LfQvdCw0Y4sINC60YPQtNCwINGPINC40LTRgy4NCtCv
+INC30L3QsNGOLCDRh9GC0L4g0Y8g0LHRg9C00YMg0LIg0LvQvtC90LUg0JPQvtGB0L/QvtC00LAu
+INCa0LDQuiDRgtC+0LvRjNC60L4g0Y8g0L/QvtC70YPRh9GDINCy0LDRiCDQvtGC0LLQtdGCLCDR
+jw0K0LTQsNC8INCy0LDQvCDQutC+0L3RgtCw0LrRgiDQkdCw0L3QutCwINC4INCy0YvRiNC70Y4g
+0LLQsNC8INC/0LjRgdGM0LzQvi3RgNCw0LfRgNC10YjQtdC90LjQtSwg0LrQvtGC0L7RgNC+0LUg
+0LTQsNGB0YIg0LLQsNC8DQrQv9GA0LDQstC+INC60LDQuiDQv9C10YDQstC+0L3QsNGH0LDQu9GM
+0L3QvtC80YMg0LHQtdC90LXRhNC40YbQuNCw0YDRgyDRjdGC0L7Qs9C+INGE0L7QvdC00LAsINGH
+0YLQvtCx0Ysg0LLRiyDQvNC+0LPQu9C4DQrQvdC10LzQtdC00LvQtdC90L3QviDQvdCw0YfQsNGC
+0Ywg0Y3RgtGDINCx0LvQsNCz0L7RgtCy0L7RgNC40YLQtdC70YzQvdGD0Y4g0L/RgNC+0LPRgNCw
+0LzQvNGDINCyINCy0LDRiNC10Lkg0YHRgtGA0LDQvdC1Lg0KDQrQotC+0LvRjNC60L4g0LbQuNC3
+0L3RjCwg0L/RgNC+0LbQuNGC0LDRjyDQtNC70Y8g0LTRgNGD0LPQuNGFLCDQuNC80LXQtdGCINGB
+0LzRi9GB0LsuINCvINGF0L7Rh9GDLCDRh9GC0L7QsdGLINCy0YsNCtCy0YHQtdCz0LTQsCDQvNC+
+0LvQuNC70LjRgdGMINC30LAg0LzQtdC90Y8uINCb0Y7QsdCw0Y8g0LfQsNC00LXRgNC20LrQsCDR
+gSDQstCw0YjQuNC8INC+0YLQstC10YLQvtC8INC00LDRgdGCINC80L3QtQ0K0LLQvtC30LzQvtC2
+0L3QvtGB0YLRjCDQvdCw0LnRgtC4INC00YDRg9Cz0L7Qs9C+INGH0LXQu9C+0LLQtdC60LAg0LTQ
+u9GPINGC0L7QuSDQttC1INGG0LXQu9C4LiDQldGB0LvQuCDQstGLINC90LUNCtC30LDQuNC90YLQ
+tdGA0LXRgdC+0LLQsNC90YssINC/0L7QttCw0LvRg9C50YHRgtCwLCDQuNC30LLQuNC90LjRgtC1
+INC80LXQvdGPINC30LAg0YLQviwg0YfRgtC+INGB0LLRj9C30LDQu9GB0Y8g0YEg0LLQsNC80Lgu
+DQrQktGLINC80L7QttC10YLQtSDRgdCy0Y/Qt9Cw0YLRjNGB0Y8g0YHQviDQvNC90L7QuSDQuNC7
+0Lgg0L7RgtCy0LXRgtC40YLRjCDQvNC90LUg0L3QsCDQvNC+0Y4g0LvQuNGH0L3Rg9GOINGN0LvQ
+tdC60YLRgNC+0L3QvdGD0Y4NCtC/0L7Rh9GC0YM6IChjcmlzdGluYWNhbXBlZWxsQG91dGxvb2su
+Y29tKS4NCg0K0KHQv9Cw0YHQuNCx0L4sDQrQmNGB0LrRgNC10L3QvdC1INCS0LDRiCwNCtC80LjR
+gdGB0LjRgSDQmtGA0LjRgdGC0LjQvdCwINCa0Y3QvNC/0LHQtdC70LsNCtCt0LvQtdC60YLRgNC+
+0L3QvdC+0LUg0L/QuNGB0YzQvNC+Ow0KY3Jpc3RpbmFjYW1wZWVsbEBvdXRsb29rLmNvbQ0K

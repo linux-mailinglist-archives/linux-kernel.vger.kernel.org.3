@@ -2,161 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC4849B093
+	by mail.lfdr.de (Postfix) with ESMTP id 0015A49B094
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 10:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574660AbiAYJjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 04:39:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S235945AbiAYJju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 04:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355481AbiAYJfE (ORCPT
+        with ESMTP id S1574598AbiAYJfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 04:35:04 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CCDC06177E;
-        Tue, 25 Jan 2022 01:35:04 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id j16so8131227plx.4;
-        Tue, 25 Jan 2022 01:35:04 -0800 (PST)
+        Tue, 25 Jan 2022 04:35:25 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF4FC0613EC
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:35:25 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id t9so4094618lji.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 01:35:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+yQlaQTidkaW+1qPreQX8/B3xGfNTHM3RX9ZKojZFPc=;
-        b=bY9qsQoUFZxjwUM6Vk6zgKNRBb+piR3OFtIWuvC9NPD9ajKtxf1SLCGA/c31p2LlT3
-         B8oc71m0V8V0LhHYBSTQ2omkNLEOwhQAwc260IDt9qRb+GVCQW2PmDiBuOZ7YucAQ5wf
-         rnB8OUWI1w1aVJy/9jnGIv16/vTsd+yAq4G7PuhPkVv8Jw6cRH2JtoM6xpTY7aUJnHeE
-         4vj+6KlCIPUk6Ww378dd3w/bRN7v+AlvPC/p/MIg9VobThs76BXr/gw4Z10dzh/L5AVM
-         wKSrsGVvPVtyjCCILZVxAOwutingeaFM1BkljWKVZOtwKZ69FJ8Z20gOmjqE8x57FFKx
-         Y6Ig==
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ds7Vt/tFNVx1HfjRDYOvcP2J7EyY9TlFxYDikA7nbJ0=;
+        b=qbcQnPQQ2zXFB+OtbktgbOTcYl45D+Hu8HRufY3rYgzbZVIeWHxdg2bv6C6eNjMbKI
+         Zpmq23qIrrxaH/lb6lFd8+EsA4NYaKH6kTZdBvNH8MfGBKlOvpSviQH2DqH7IvPehpQK
+         HozEjAWjVZ1E+kjWAH3gSQM4bFxtr6y8TY7KZUJXt+5o4ngpb3d9mUm5Muw5oB5Rx24q
+         0EEEdAmE9+L15lOXx6rndJcCMpddOKG8hCYfcW5IzMSx9fEiYS5Zf/8A3EnPFVYyrvKU
+         nw5NiErF9wJF+0RujXrRZZEy449AmS5ufFYJbM8XY3p3jBViceYTUeNldsAq3LWJXpXK
+         rgXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+yQlaQTidkaW+1qPreQX8/B3xGfNTHM3RX9ZKojZFPc=;
-        b=GST5Qvxe454v3VnfaQp5ANgRUxsJ+1Z9I6AIrOX8R00p48itS//y9Ql3m1ZZVUS7u0
-         pnydpKDEuODMjGjwiDvR/OL7q0sSJr4gFycYSbPH8CrgGhrjmH9cOhi/SGorDVu60831
-         oH+3Hxb90r3MDnPYrdh0Md6BR8t9OC3Wrl88MA7AWA3Nx4GYnOnY+cm/ZHVx83vDiz5a
-         4KDfAfqF3kkunsDLt9XWdTHUoIlEcD0evg2r462DtXH3SAIU22ISCjODVss5yivgCJ2f
-         1FrJUFw5O3rwu0gKmUq9ckquJ1sevikY6shfEAukxunC75XD7E+9IB48mdwqEEAu7zH9
-         TrDg==
-X-Gm-Message-State: AOAM5337JG/uCC6mEV6DqF0HqVFj8hOhhu5/USrDKk+X9/HwNH+9vmN5
-        uvAfly3GzEM0YJhyB03yKsmPN6fXcBm6tg==
-X-Google-Smtp-Source: ABdhPJxK0drWhoEulv/ADBxE6BbuYPFG5/iWFKBFKt5lWcBjenRxTBeXLCBWglgjeav57ha1MyzvEg==
-X-Received: by 2002:a17:902:c947:b0:14a:ff21:afe3 with SMTP id i7-20020a170902c94700b0014aff21afe3mr17932350pla.49.1643103304004;
-        Tue, 25 Jan 2022 01:35:04 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id x25sm17773688pfu.205.2022.01.25.01.35.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 01:35:03 -0800 (PST)
-Date:   Tue, 25 Jan 2022 09:34:58 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Shay Agroskin <shayagr@amazon.com>
-Cc:     Julian Wiedmann <jwiedmann.dev@gmail.com>, netdev@vger.kernel.org,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sameeh Jubran <sameehj@amazon.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ena: Do not waste napi skb cache
-Message-ID: <Ye/EQgqCBogZR87T@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220123115623.94843-1-42.hyeyoo@gmail.com>
- <f835cbb3-a028-1daf-c038-516dd47ce47c@gmail.com>
- <5cca8bdd-bed0-f26a-6c96-d18947d3a50b@gmail.com>
- <pj41zlmtjk7t9a.fsf@u570694869fb251.ant.amazon.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ds7Vt/tFNVx1HfjRDYOvcP2J7EyY9TlFxYDikA7nbJ0=;
+        b=bSfiBvl9Ej9kfavW8N1RY42Ewl4BFlWtfsArFX2wna05eBB+Hewc6TpDeGWoTodr2U
+         WgkBGTYHbvK/uSz8WQDJI1myJAHjT/iyJJh3lMZnsDpadW6fpak0Ff2MBCiCduLww3km
+         15foa9qxUruIctCHozv8fxCoiG/Zjn1hEPqEb4LfyIpyOstym5biEp27AESYUQZryFUE
+         wb9QxS+bTrK4oIFKcu+s67PWZYD7zjrGWsC0lGGpymtaDXn51uYEqXR2tr9NS3378Hgz
+         lOyo8aptfo84SwsbE9kuguYhQZde1+Ojypj48UgXdnDvanyDbEbXWw/2NqndbWnHMYKc
+         SIhg==
+X-Gm-Message-State: AOAM530UirQZ9LsF0eGIAKlKGXF+90YI5OeyMMIYZpk1qS9ryZHyYI/E
+        PbO/Y/O0ZnKFisS3Jy//kEJgSA==
+X-Google-Smtp-Source: ABdhPJx3bagG4o8dfiP2tuzEmgv0sHDRPbmKATo01+IryqyUsHfd0gbOBfqDjquWLls8b8Tc3+w8mg==
+X-Received: by 2002:a2e:9217:: with SMTP id k23mr13723170ljg.229.1643103323585;
+        Tue, 25 Jan 2022 01:35:23 -0800 (PST)
+Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id i9sm1431729lfj.32.2022.01.25.01.35.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 01:35:23 -0800 (PST)
+Message-ID: <a7a6ddd2-9d40-3ac2-2b7f-bb521c8d3728@cogentembedded.com>
+Date:   Tue, 25 Jan 2022 12:35:22 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <pj41zlmtjk7t9a.fsf@u570694869fb251.ant.amazon.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] drivers: irqchip: add irq-type-changer
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        linux-kernel@vger.kernel.org
+References: <20220124095652.522099-1-nikita.yoush@cogentembedded.com>
+ <878rv58ghy.wl-maz@kernel.org>
+ <a179c80c-7ce8-da1a-f344-5d72b65c3da4@cogentembedded.com>
+ <874k5s8a32.wl-maz@kernel.org>
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+In-Reply-To: <874k5s8a32.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 10:50:05PM +0200, Shay Agroskin wrote:
+>>> I also don't see why you model this as the actual device that triggers
+>>> the interrupt.
+>>
+>> Well, that somehow matches the physical reality. In the case of wl18xx
+>> on KF, physically the interrupt signal indeed originates from the
+>> intermediate chip - the inverting level-shifter.
 > 
-> Julian Wiedmann <jwiedmann.dev@gmail.com> writes:
+> Reality? By allowing something like an edge-to-level conversion? How
+> can that work?
+
+Edge to level can be problematic, but level to edge does not cause any difficulties, nor in generating 
+nor in handling.
+
+>> In contrary, an abstraction of intermediate entity that does a static
+>> conversion of the trigger type and does not need any software control,
+>> looks sane. And, hardware designers do strange things sometimes, I
+>> won't be surprised observing a change from level to edge one day.
 > 
-> > On 24.01.22 10:57, Julian Wiedmann wrote:
-> > > On 23.01.22 13:56, Hyeonggon Yoo wrote:
-> > > > By profiling, discovered that ena device driver allocates skb by
-> > > > build_skb() and frees by napi_skb_cache_put(). Because the
-> > > > driver
-> > > > does not use napi skb cache in allocation path, napi skb cache
-> > > > is
-> > > > periodically filled and flushed. This is waste of napi skb
-> > > > cache.
-> > > > 
-> > > > As ena_alloc_skb() is called only in napi, Use napi_build_skb()
-> > > > instead of build_skb() to when allocating skb.
-> > > > 
-> > > > This patch was tested on aws a1.metal instance.
-> > > > 
-> > > > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > > > ---
-> > > >  drivers/net/ethernet/amazon/ena/ena_netdev.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> > > > b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> > > > index c72f0c7ff4aa..2c67fb1703c5 100644
-> > > > --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> > > > +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> > > > @@ -1407,7 +1407,7 @@ static struct sk_buff
-> > > > *ena_alloc_skb(struct ena_ring *rx_ring, void *first_frag)
-> > > >  		skb = netdev_alloc_skb_ip_align(rx_ring->netdev,
-> > > >  						rx_ring->rx_copybreak);
-> > > 
-> > > To keep things consistent, this should then also be
-> > > napi_alloc_skb().
-> > >
+> If you think that it can happen without a HW register that latches the
+> edge and requires an ack, you need to question your understanding of
+> an interrupt life cycle, and of the properties of the various trigger
+> types.
 
-Right. I missed this. Thank you for pointing this!
+There are plenty of devices capable to signal both level and edge interrupts, configurable by a 
+register. Basic handling is always the same, and involves masking the interrupt at interrupt controller 
+while IRQs disabled, then enabling IRQs, then programming the device to clear the interrupt condition, 
+then unmasking the interrupt at interrupt controller. If the trigger type is level or edge, is only 
+interesting to interrupt controller driver, but not to a wider scope.
 
-> > 
-> > And on closer look, this copybreak path also looks buggy. If
-> > rx_copybreak
-> > gets reduced _while_ receiving a frame, the allocated skb can end up too
-> > small to take all the data.
-> > 
-> > @ ena maintainers: can you please fix this?
-> > 
+Nothing stops hw designers from doing all sort of strange things with interrupt signals. Right now I 
+have a board on my desk where interrupt signals from several chips are wired to inputs of a logical AND 
+element and the output of that is wired to SoC's gpio. I don't see what stops them tomorrow from setting 
+up their CPLDs to issue a short impulse at output in return to a level change on input. And that will be 
+a level to edge converter.
+
+>> In driver's init, I only call of_irq_parse_one() for interrupt defined
+>> in the changer's node. This does not create a mapping for it. The
+>> mapping is only created when changer's "interrupt-child" creates a
+>> mapping for their interrupt - then changer's alloc() routine calls
+>> irq_domain_alloc_irqs_parent() in the same way as all other
+>> hierarchical irqchips do.
+>>
+>> I don't see where double mapping can appear here. Please explain.
 > 
+> Just look at your code. You start probing a device that has an
+> 'interrupts' property. This triggers the allocation of an interrupt.
 
-Shay and Julian, Thank you for reviewing this.
+Where does it trigger it?
 
-> Updating the copybreak value is done through ena_ethtool.c
-> (ena_set_tunable()) which updates `adapter->rx_copybreak`.
-> The adapter->rx_copybreak value is "propagated back" to the ring local
-> attributes (rx_ring->rx_copybreak) only after an interface toggle which
-> stops the napi routine first.
-> 
-> Unless I'm missing something here I don't think the bug you're describing
-> exists.
-> 
-> I agree that the netdev_alloc_skb_ip_align() can become napi_alloc_skb().
-> Hyeonggon Yoo, can you please apply this change as well to this patch?
-> 
+And what is this "allocation", after all? Is it allocation of virq number? That allocation happens when 
+irq_create_fwspec_mapping() calls irq_domain_alloc_irqs(). But this path does not necessary gets 
+executed in probing. In the current irq_tyoe_changer driver, it is not.
 
-Okay. I'll update and test it again.
 
-BTW, It seems netdev_alloc_skb_ip_align() is used to make some fields
-be aligned. It's okay to just ignore this?
-
-Thanks,
-Hyeonggon.
-
-> Thanks,
-> Shay
-> 
-> 
-> > > >  	else
-> > > > -		skb = build_skb(first_frag, ENA_PAGE_SIZE);
-> > > > +		skb = napi_build_skb(first_frag, ENA_PAGE_SIZE);
-> > > >  	if (unlikely(!skb)) {
-> > > >  		ena_increase_stat(&rx_ring->rx_stats.skb_alloc_fail,  1,
-> > > 
+Nikita

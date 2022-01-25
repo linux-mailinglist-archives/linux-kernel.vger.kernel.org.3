@@ -2,263 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F87A49B70F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2886749B6FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 15:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345964AbiAYO75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 09:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1580814AbiAYOwf (ORCPT
+        id S1357135AbiAYOys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 09:54:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45077 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1580799AbiAYOwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:52:35 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33793C061401;
-        Tue, 25 Jan 2022 06:52:34 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id u18so49343789edt.6;
-        Tue, 25 Jan 2022 06:52:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+kGacvdzzCD6QPq8PV1iVn7D6O+2KzgMqS70OsbrFYQ=;
-        b=Yu7pLJMLfgzlzf9ovzBXVxyYr/qzb+CvjSdDzhO42TEjdsuuJoEasVu17KFNUY+Z9/
-         ++83IAn3Gao+GtQQN8+4YjMbC8gHgSr+M2HQNZRokWwrDutGSEh4vfszqzqaJ2y8X6oP
-         Zq949DML/m7S2eqeiNtThdqEGFw/iGA7sJmS3TKcmoW2CjbdDQdWtlYJwU9qImp8AGJ4
-         l1znaDsNSoXNwUSJjpe4HEFc4mVRWvdN0oyw6dGovLYyreYf6RaCftxe//j75hNQ1kID
-         ksjyQHrUznDS2YOR9jU4eSl7kMsDe1FF5NfAnSE3iIz7XdzNiZzCgusNI+z/IUu4snlb
-         zbsg==
+        Tue, 25 Jan 2022 09:52:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643122351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=000N8i0ck0tOaQfaIosTwzm6+d1XOHKA+Or39H8w7yU=;
+        b=U2g3dz1yPLwkFzEk0cboxsBoQzKHfH4LFvKe1vpLgOFDYEGX5C6w9c1CqgUd7c7fWUBjvd
+        QnVeVP1RIu0XUnF04pw6gV0QMtVNxLGsOH2p6CPPEmRq7P1CjW4xx82TkchMG4g4pky8zK
+        7Mc16yp+ouqPkXZyuORhh0Ki0c1Ichg=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-189-uMLFNgDPPuaAoTbFdeoK9w-1; Tue, 25 Jan 2022 09:52:29 -0500
+X-MC-Unique: uMLFNgDPPuaAoTbFdeoK9w-1
+Received: by mail-ed1-f70.google.com with SMTP id i22-20020a50fd16000000b00405039f2c59so11074543eds.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:52:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+kGacvdzzCD6QPq8PV1iVn7D6O+2KzgMqS70OsbrFYQ=;
-        b=JlRrrmRO9T+8uBv8AuyBpJeUtvlJnb5GInzmP45GTt+DMOfLC3hBbmsV/Pn0ynb9xB
-         M+OKX4Qbs8Iq3xkyYBMzQFg80yH4WhbxNQ8QqjEKbBovvydcltMOxColtK4IBqc+8dvP
-         5xHnmClrm7OnSmhh2lUKrOP8EgnkMnCrfcJ7Fc5IF0pp8DSMPuB9J5pvUzU4sFKMl8rQ
-         aiZVpu8+BRwmioqRam/E1ZY3YATkYY2KRZM2hgMDqph3YTYp4mYVXQ/SlB7UocMofZma
-         uZpmBvsrEyXrNkiN07mqvRqoBBauVrT06Vh8ym2d+gkTzk7zuT28uocSvLLpDZa5KVMh
-         4+jg==
-X-Gm-Message-State: AOAM530kw4357Axx+FzqDvekrKA9ZpAPQmxwsIEHQrua9xFUeWeRJxOo
-        uVO3xdHtFtwhCczfK9oZLYzZ0Dcq3Y3S2fm4IhU=
-X-Google-Smtp-Source: ABdhPJxNcdIZR214oE7LafSn66ibQhAT6BqnKIutmDO1RoylpDHkgokt7k3YXTz+7+x0/44BmJdUjIZVfU11PrtXqPg=
-X-Received: by 2002:a05:6402:35d5:: with SMTP id z21mr13592745edc.29.1643122352627;
- Tue, 25 Jan 2022 06:52:32 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=000N8i0ck0tOaQfaIosTwzm6+d1XOHKA+Or39H8w7yU=;
+        b=119TT9S9BuihVtkNPzopOQ7+JUQ5VVs794mRyDgtOkfyOKsbTEUTLvYjwSbqn7+H42
+         awEuseaQ2Es6YWLGvgO4DLfJ/bcEIkyUEEaOXvhbmRihjLomwuUYWtvt8NYTeON3BPnF
+         JpaFZpQ++m2pmXcozcJ9G/mfvJUCB5wJQYWO8FiyIVQMFbXYfCokahg8VK7MmxKe3DvU
+         Ek9N16Ve4oDWcVrhak5KTs6Y01BQpTuLVxk66xFrxBhm/AIcW+vktJd4qYlB+8wT+7kl
+         12rqIKOWBzdD4/C1MTWTGg7HwrPEA5iFQb9qo2onPawdt8XiuXZ+hV0KodmnEITI+3/W
+         hLrg==
+X-Gm-Message-State: AOAM531Xr7cfTUYvnp+GFBm+Gja4j+u8CjLJGYZynZYwqASa1OvTj8Ww
+        RLQZDNfHG9zAS97Zvqj93eWvvMQaCb9kOSI0bqiCPpuzI0OVQwsigjHvgvomhwJcN4X2oscU06d
+        Eg/EYoDoMlvwe0vUCdt83IagX
+X-Received: by 2002:a17:906:5d0f:: with SMTP id g15mr16299069ejt.670.1643122348431;
+        Tue, 25 Jan 2022 06:52:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwuLAUZcxf2zf3QzTwsEbiyKjOaNCI+O1Cluqag6g3b96dEm1xslHqRRBbInR4PoPT/UamFPA==
+X-Received: by 2002:a17:906:5d0f:: with SMTP id g15mr16299058ejt.670.1643122348252;
+        Tue, 25 Jan 2022 06:52:28 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id t6sm6172259ejd.85.2022.01.25.06.52.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 06:52:27 -0800 (PST)
+Message-ID: <d0a79b9a-6ead-2fd3-00fe-7d96d4f7f428@redhat.com>
+Date:   Tue, 25 Jan 2022 15:52:25 +0100
 MIME-Version: 1.0
-References: <20220125085837.10357-1-josright123@gmail.com> <20220125085837.10357-3-josright123@gmail.com>
-In-Reply-To: <20220125085837.10357-3-josright123@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 25 Jan 2022 16:50:53 +0200
-Message-ID: <CAHp75VfrP7ZkeYGu_7XL98veJNDNmjnkL_cieS+53WNOM7KVHQ@mail.gmail.com>
-Subject: Re: [PATCH v13, 2/2] net: Add dm9051 driver
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Leon Romanovsky <leon@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 0/9] KVM: SVM: Fix and clean up "can emulate" mess
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Liam Merwick <liam.merwick@oracle.com>
+References: <20220120010719.711476-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220120010719.711476-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:59 AM Joseph CHAMG <josright123@gmail.com> wrote:
->
-> Add davicom dm9051 spi ethernet driver. The driver work for the
-> device platform with spi master
+On 1/20/22 02:07, Sean Christopherson wrote:
+> Revert an amusing/embarassing goof reported by Liam Merwick, where KVM
+> attempts to determine if RIP is backed by a valid memslot without first
+> translating RIP to its associated GPA/GFN.  Fix the underlying bug that
+> was "fixed" by the misguided memslots check by (a) never rejecting
+> emulation for !SEV guests and (b) using the #NPF error code to determine
+> if the fault happened on the code fetch or on guest page tables, which is
+> effectively what the memslots check attempted to do.
+> 
+> Further clean up, harden, and document SVM's "can emulate" helper, and
+> fix a #GP interception SEV bug found in the process of doing so.
+> 
+> Sean Christopherson (9):
+>    KVM: SVM: Never reject emulation due to SMAP errata for !SEV guests
+>    Revert "KVM: SVM: avoid infinite loop on NPF from bad address"
+>    KVM: SVM: Don't intercept #GP for SEV guests
+>    KVM: SVM: Explicitly require DECODEASSISTS to enable SEV support
+>    KVM: x86: Pass emulation type to can_emulate_instruction()
+>    KVM: SVM: WARN if KVM attempts emulation on #UD or #GP for SEV guests
+>    KVM: SVM: Inject #UD on attempted emulation for SEV guest w/o insn
+>      buffer
+>    KVM: SVM: Don't apply SEV+SMAP workaround on code fetch or PT access
+>    KVM: SVM: Don't kill SEV guest if SMAP erratum triggers in usermode
+> 
+>   arch/x86/include/asm/kvm_host.h |   3 +-
+>   arch/x86/kvm/svm/sev.c          |   9 +-
+>   arch/x86/kvm/svm/svm.c          | 162 ++++++++++++++++++++++----------
+>   arch/x86/kvm/vmx/vmx.c          |   7 +-
+>   arch/x86/kvm/x86.c              |  11 ++-
+>   virt/kvm/kvm_main.c             |   1 -
+>   6 files changed, 135 insertions(+), 58 deletions(-)
+> 
+> 
+> base-commit: edb9e50dbe18394d0fc9d0494f5b6046fc912d33
+
+Queued, thanks.
+
+Paolo
 
-This is better, but please use a grammar period as well.
-
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: andy Shevchenko <andy.shevchenko@gmail.com>
-
-Andy
-
-And you may utilize --cc parameter to git send-email or move this Cc
-block behind the cutter '--- ' line.
-
-...
-
-> +#include <linux/etherdevice.h>
-> +#include <linux/ethtool.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/mii.h>
-> +#include <linux/module.h>
-> +#include <linux/netdevice.h>
-> +#include <linux/phy.h>
-> +#include <linux/regmap.h>
-> +#include <linux/skbuff.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/spi/spi.h>
-
-types.h is missing
-
-...
-
-> +/**
-> + * struct rx_ctl_mach - rx activities record
-
-> + *
-
-In all similar cases remove this blank line.
-
-> + * @status_err_counter: rx status error counter
-> + * @large_err_counter: rx get large packet length error counter
-> + * @fifo_rst_counter: reset operation counter
-> + *
-> + * To keep track for the driver operation statistics
-> + */
-
-...
-
-> +/**
-> + * struct dm9051_rxhdr - rx packet data header
-> + *
-> + * @rxpktready: lead byte is 0x01 tell a valid packet
-> + * @rxstatus: status bits for the received packet
-> + * @rxlen: packet length
-> + *
-
-> + * The rx packet enter into the fifo memory is start with these four
-
-The Rx packed, entered into the FIFO memory, starts with
-
-> + * bytes which is the rx header, follow this header is the ethernet
-
-Rx header, followed by the ethernet
-
-> + * packet data and end with a appended 4-byte CRC data.
-
-ends
-an appended
-
-
-> + * Both rx packet and CRC data are for check purpose and finally are
-> + * dropped by this driver
-> + */
-
-...
-
-> + * @kw_rxctrl: kernel thread worke structure for rx control
-
-worker?
-
-...
-
-> +       int ret = regmap_read_poll_timeout(db->regmap_dm, DM9051_NSR, mval,
-> +                                          mval & (NSR_TX2END | NSR_TX1END), 1, 20);
-> +
-> +       if (ret)
-
-Please, split the assignment and get it closer to its user, so
-
-  int ret;
-
-  ret = ...
-  if (ret)
-
-This applies to all similar cases.
-
-Actually all comments are against the entire code even if it's given
-only for one occurrence of the similar code block.
-
-> +               netdev_err(db->ndev, "timeout in checking for tx ends\n");
-> +       return ret;
-> +}
-
-...
-
-> +       ret = regmap_bulk_read(db->regmap_dmbulk, DM9051_EPDRL, to, 2);
-> +       if (ret < 0)
-> +               return ret;
-> +       return ret;
-
-  return regmap_...(...);
-
-Same for other similar places.
-
-...
-
-> +       /* this is a 2 bytes data written via regmap_bulk_write
-> +        */
-
-Useless comments.
-
-...
-
-> +static int dm9051_mdiobus_read(struct mii_bus *mdiobus, int phy_id, int reg)
-> +{
-> +       struct board_info *db = mdiobus->priv;
-
-> +       unsigned int val = 0;
-
-You can  do
-
-  val = 0xffff;
-
-here...
-
-> +       int ret;
-> +
-> +       if (phy_id == DM9051_PHY_ID) {
-> +               ret = ctrl_dm9051_phyread(db, reg, &val);
-> +               if (ret)
-> +                       return ret;
-
-> +               return val;
-> +       }
-> +       return 0xffff;
-
-...and
-
-  }
-  return val;
-
-here.
-
-> +}
-
-
-> +       while (count--) {
-
-If the count is guaranteed to be greater than 0, it would be better to use
-
-  do {
-    ...
-  } while (--count);
-
-> +               ret = regmap_read(db->regmap_dm, reg, &rb);
-> +               if (ret) {
-> +                       netif_err(db, drv, ndev, "%s: error %d dumping read reg %02x\n",
-> +                                 __func__, ret, reg);
-> +                       break;
-> +               }
-> +       }
-> +       return ret;
-> +}
-
-...
-
-> +#ifndef _DM9051_H_
-> +#define _DM9051_H_
-> +
-> +#include <linux/bitfield.h>
-
-There is no user of this header, but missing bits.h and one that
-provides netdev_priv().
-
-...
-
-> +#define DRVNAME_9051           "dm9051"
-
-Why is this in the header?
-
-
---
-With Best Regards,
-Andy Shevchenko

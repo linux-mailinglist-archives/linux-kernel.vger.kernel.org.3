@@ -2,148 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E9349BBB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9180549BBB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 20:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiAYTCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 14:02:01 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:56568 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiAYTBs (ORCPT
+        id S229527AbiAYTDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 14:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234046AbiAYTDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 14:01:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EDECCCE1915
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 19:01:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46BB4C340E0;
-        Tue, 25 Jan 2022 19:01:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643137302;
-        bh=UQRqfdw9oE/jz+/DQPe2xfq5AbzC5GF1NfNp/IMAXxQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=KaNDWv4vUpABnRXXu7oB8U8jf/m/0c3uWRq/87d+Hc+XzReQGE9qDnMVKwlyIWIxN
-         qYsNIWDbSgGc41HdrrfWKFKmzF/zxvkibXagDeUKbZMkB2iI2kohGrXDekP1dRg1N7
-         6DMfd3JO+emn/Y0jTx91UTnS2mC88YZgijHjQAsqRwsjDqEG30yT6FmV4nldNQJz+v
-         vdK8FSza5eud6+NzHTK5N3F8IeACMLPmtIrnscqxlCUDJ4o72K8Ztg00KKhy+KNEui
-         EFacIs3/oHnHv5fFghR8wRFDOzUZkSTVNEDhxveROKHmSRQzOIQH2rbW2D88SyQmxN
-         dRSZEQdF3TbbQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1334B5C0641; Tue, 25 Jan 2022 11:01:42 -0800 (PST)
-Date:   Tue, 25 Jan 2022 11:01:42 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev 80/85]
- kernel/rcu/srcutree.c:1168:27: warning: variable 'sdp' set but not used
-Message-ID: <20220125190142.GQ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202201251933.iaAyduWp-lkp@intel.com>
+        Tue, 25 Jan 2022 14:03:10 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2900C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:03:09 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b9so9543924lfq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 11:03:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9gdYrrg8x04ug7UjMhLRJzA5TbsZ5ufvAwyd3dzX5Zc=;
+        b=OF+M1jImGD65G86hbWx/Mp3H9qEXxLV6k58BVfn8Fjjs1FiaBFqIT77J5aMGtfagM4
+         az2NcbOyd4h6lQUnPrnfF8XIpVanD2j0EOO4R8vGloNCPoJORMv+o1L3lFS8q0uvtO1f
+         CN2PaQQj0UHtPbu7W7GlWZcUmNyRhDI528C8mqrlW5e1xdY9bfEIS/1+Q1qlf9/9k8j3
+         gnUoBZa3B6CsmR25OSDIXmWEUYUZYNzJwiNKcqZZoqjfWkChGMmnbjH4JpHwjiIySyw1
+         TbBTv6FWUEkiCGIi4ZmtXexdsz480MFXTpDF8hlS1Yac7RYIz/P+8RGvKgCEXadxcAaE
+         zvPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9gdYrrg8x04ug7UjMhLRJzA5TbsZ5ufvAwyd3dzX5Zc=;
+        b=zayqtSXtsr5rwufWNg7mlhGpHhga52Mftt/uV8YBt4fdVD5+IJjBFHebu+EldpFu0d
+         ooMJmFf/bp/KXbesGgUhcK57uCPi6E74/sKV2QQVWKT2wrPT7R716pX8FmAJG/gxeIOB
+         fw4KUqEWN/ZQZGpOIQMX28CAIaV/L//cfXrHjQmxzz/3i/xpNBTknNEfsM21ZHE7eU5j
+         RaomTRp9O4IiDsM4IbSDH/++i2AmKHnpuPNhICUfzmGvxV76OKTt0+EIz8BqrgzZop5g
+         WCJt4b7p3sOfjcS8tQvabxqJ95TmgnfWMnm4tqX0mPt/G6OkASJlSrDl5lFxxuwtu1UJ
+         /Tog==
+X-Gm-Message-State: AOAM5336ZtK5A8u7MoAExMKc3A3YSOGsco3ncALt0UmnEUlcH6LKEADd
+        r4CJC0BPJgFzZ4ZqL5Jp2Lw=
+X-Google-Smtp-Source: ABdhPJzVxK69QJVS1EwxnFny0TDTGSI/9M1GtVkBMAEfugUNeg1wTJAGYE5M5ex2UsChGmeDqpZSnw==
+X-Received: by 2002:a05:6512:68a:: with SMTP id t10mr1657328lfe.10.1643137388089;
+        Tue, 25 Jan 2022 11:03:08 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.227.208])
+        by smtp.gmail.com with ESMTPSA id s4sm899971lfb.215.2022.01.25.11.03.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 11:03:07 -0800 (PST)
+Message-ID: <a681a562-eb41-9dc8-703a-5b235c15a3a1@gmail.com>
+Date:   Tue, 25 Jan 2022 22:03:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202201251933.iaAyduWp-lkp@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 06/10] staging: r8188eu: remove DBG_88E calls from
+ os_dep/ioctl_linux.c
+Content-Language: en-US
+To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
+Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
+        straube.linux@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220124224415.831-1-phil@philpotter.co.uk>
+ <20220124224415.831-7-phil@philpotter.co.uk>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220124224415.831-7-phil@philpotter.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 07:24:14PM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-> head:   3cd375aa70d563fe8aa3e5f03280bdd8a334de45
-> commit: 2c773bcaf4dd5031d0b2c980cc623ecfbcc6ab62 [80/85] squash! srcu: Make Tree SRCU able to operate without snp_node array
-> config: nds32-defconfig (https://download.01.org/0day-ci/archive/20220125/202201251933.iaAyduWp-lkp@intel.com/config)
-> compiler: nds32le-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/ammarfaizi2/linux-block/commit/2c773bcaf4dd5031d0b2c980cc623ecfbcc6ab62
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
->         git checkout 2c773bcaf4dd5031d0b2c980cc623ecfbcc6ab62
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash kernel/rcu/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    kernel/rcu/srcutree.c: In function 'srcu_barrier':
-> >> kernel/rcu/srcutree.c:1168:27: warning: variable 'sdp' set but not used [-Wunused-but-set-variable]
->     1168 |         struct srcu_data *sdp;
->          |                           ^~~
+Hi Phillip,
 
-Fixed in e3ec4a4e8733 ("srcu: Make Tree SRCU able to operate without
-snp_node array").
-
-Thank you for your testing efforts!
-
-							Thanx, Paul
-
-> vim +/sdp +1168 kernel/rcu/srcutree.c
+On 1/25/22 01:44, Phillip Potter wrote:
+> Remove all DBG_88E calls from os_dep/ioctl_linux.c, as they do not
+> conform to kernel coding standards and are superfluous. Also restructure
+> where appropriate to remove no longer needed code left behind by removal
+> of these calls. This will allow the eventual removal of the DBG_88E macro
+> itself.
 > 
-> 2c773bcaf4dd50 Paul E. McKenney 2022-01-24  1160  
-> dad81a2026841b Paul E. McKenney 2017-03-25  1161  /**
-> dad81a2026841b Paul E. McKenney 2017-03-25  1162   * srcu_barrier - Wait until all in-flight call_srcu() callbacks complete.
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1163   * @ssp: srcu_struct on which to wait for in-flight callbacks.
-> dad81a2026841b Paul E. McKenney 2017-03-25  1164   */
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1165  void srcu_barrier(struct srcu_struct *ssp)
-> dad81a2026841b Paul E. McKenney 2017-03-25  1166  {
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1167  	int cpu;
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05 @1168  	struct srcu_data *sdp;
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1169  	unsigned long s = rcu_seq_snap(&ssp->srcu_barrier_seq);
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1170  
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1171  	check_init_srcu_struct(ssp);
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1172  	mutex_lock(&ssp->srcu_barrier_mutex);
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1173  	if (rcu_seq_done(&ssp->srcu_barrier_seq, s)) {
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1174  		smp_mb(); /* Force ordering following return. */
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1175  		mutex_unlock(&ssp->srcu_barrier_mutex);
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1176  		return; /* Someone else did our work for us. */
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1177  	}
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1178  	rcu_seq_start(&ssp->srcu_barrier_seq);
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1179  	init_completion(&ssp->srcu_barrier_completion);
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1180  
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1181  	/* Initial count prevents reaching zero until all CBs are posted. */
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1182  	atomic_set(&ssp->srcu_barrier_cpu_cnt, 1);
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1183  
-> 2c773bcaf4dd50 Paul E. McKenney 2022-01-24  1184  	if (!smp_load_acquire(&ssp->srcu_size_state)) {
-> 2c773bcaf4dd50 Paul E. McKenney 2022-01-24  1185  		srcu_barrier_one_cpu(ssp, per_cpu_ptr(ssp->sda, 0));
-> 2c773bcaf4dd50 Paul E. McKenney 2022-01-24  1186  	} else {
-> 2c773bcaf4dd50 Paul E. McKenney 2022-01-24  1187  
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1188  		/*
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1189  		 * Each pass through this loop enqueues a callback, but only
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1190  		 * on CPUs already having callbacks enqueued.  Note that if
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1191  		 * a CPU already has callbacks enqueue, it must have already
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1192  		 * registered the need for a future grace period, so all we
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1193  		 * need do is enqueue a callback that will use the same
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1194  		 * grace period as the last callback already in the queue.
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1195  		 */
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1196  		for_each_possible_cpu(cpu) {
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1197  			sdp = per_cpu_ptr(ssp->sda, cpu);
-> 2c773bcaf4dd50 Paul E. McKenney 2022-01-24  1198  			srcu_barrier_one_cpu(ssp, per_cpu_ptr(ssp->sda, cpu));
-> a602538e46c9c6 Paul E. McKenney 2017-04-28  1199  		}
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1200  	}
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1201  
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1202  	/* Remove the initial count, at which point reaching zero can happen. */
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1203  	if (atomic_dec_and_test(&ssp->srcu_barrier_cpu_cnt))
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1204  		complete(&ssp->srcu_barrier_completion);
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1205  	wait_for_completion(&ssp->srcu_barrier_completion);
-> da915ad5cf25b5 Paul E. McKenney 2017-04-05  1206  
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1207  	rcu_seq_end(&ssp->srcu_barrier_seq);
-> aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1208  	mutex_unlock(&ssp->srcu_barrier_mutex);
-> dad81a2026841b Paul E. McKenney 2017-03-25  1209  }
-> dad81a2026841b Paul E. McKenney 2017-03-25  1210  EXPORT_SYMBOL_GPL(srcu_barrier);
-> dad81a2026841b Paul E. McKenney 2017-03-25  1211  
-> 
-> :::::: The code at line 1168 was first introduced by commit
-> :::::: da915ad5cf25b5f5d358dd3670c3378d8ae8c03e srcu: Parallelize callback handling
-> 
-> :::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-> :::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-> 
+> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
 > ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+[code snip]
+
+> @@ -3746,7 +3541,6 @@ static int rtw_dbg_port(struct net_device *dev,
+>   			u32 write_num = extra_arg;
+>   
+>   			int i;
+> -			u16 final;
+>   			struct xmit_frame	*xmit_frame;
+>   
+>   			xmit_frame = rtw_IOL_accquire_xmit_frame(padapter);
+> @@ -3760,11 +3554,7 @@ static int rtw_dbg_port(struct net_device *dev,
+>   			if (rtl8188e_IOL_exec_cmds_sync(padapter, xmit_frame, 5000, 0) != _SUCCESS)
+>   				ret = -EPERM;
+>   
+> -			final = rtw_read16(padapter, reg);
+> -			if (start_value + write_num - 1 == final)
+> -				DBG_88E("continuous IOL_CMD_WW_REG to 0x%x %u times Success, start:%u, final:%u\n", reg, write_num, start_value, final);
+> -			else
+> -				DBG_88E("continuous IOL_CMD_WW_REG to 0x%x %u times Fail, start:%u, final:%u\n", reg, write_num, start_value, final);
+> +			rtw_read16(padapter, reg);
+>   		}
+>   			break;
+
+I see, that you somewhere removes reads and somewhere leaves them. 
+What's the difference? I saw, that one of the places has the comment, 
+that asks not to remove the read, but others do not have such comment
+
+I can point to few places in 2 and 4 patches where you have removed reads.
+
+
+
+[code snip]
+
+> @@ -4014,16 +3664,8 @@ static int rtw_dbg_port(struct net_device *dev,
+>   			{
+>   				u32 odm_flag;
+>   
+> -				if (0xf == extra_arg) {
+> +				if (extra_arg == 0xf) {
+>   					GetHalDefVar8188EUsb(padapter, HAL_DEF_DBG_DM_FUNC, &odm_flag);
+> -					DBG_88E(" === DMFlag(0x%08x) ===\n", odm_flag);
+> -					DBG_88E("extra_arg = 0  - disable all dynamic func\n");
+> -					DBG_88E("extra_arg = 1  - disable DIG- BIT(0)\n");
+> -					DBG_88E("extra_arg = 2  - disable High power - BIT(1)\n");
+> -					DBG_88E("extra_arg = 3  - disable tx power tracking - BIT(2)\n");
+> -					DBG_88E("extra_arg = 4  - disable BT coexistence - BIT(3)\n");
+> -					DBG_88E("extra_arg = 5  - disable antenna diversity - BIT(4)\n");
+> -					DBG_88E("extra_arg = 6  - enable all dynamic func\n");
+>   				} else {
+>   					/*	extra_arg = 0  - disable all dynamic func
+>   						extra_arg = 1  - disable DIG
+> @@ -4032,51 +3674,17 @@ static int rtw_dbg_port(struct net_device *dev,
+>   					*/
+>   					SetHalDefVar8188EUsb(padapter, HAL_DEF_DBG_DM_FUNC, &extra_arg);
+>   					GetHalDefVar8188EUsb(padapter, HAL_DEF_DBG_DM_FUNC, &odm_flag);
+> -					DBG_88E(" === DMFlag(0x%08x) ===\n", odm_flag);
+>   				}
+>   			}
+>   			break;
+>   
+
+Is odm_flag needed now? Seems like it was used only for printing random 
+debug info
+
+>   		case 0xfd:
+>   			rtw_write8(padapter, 0xc50, arg);
+> -			DBG_88E("wr(0xc50) = 0x%x\n", rtw_read8(padapter, 0xc50));
+>   			rtw_write8(padapter, 0xc58, arg);
+> -			DBG_88E("wr(0xc58) = 0x%x\n", rtw_read8(padapter, 0xc58));
+> -			break;
+> -		case 0xfe:
+> -			DBG_88E("rd(0xc50) = 0x%x\n", rtw_read8(padapter, 0xc50));
+> -			DBG_88E("rd(0xc58) = 0x%x\n", rtw_read8(padapter, 0xc58));
+> -			break;
+> -		case 0xff:
+> -			DBG_88E("dbg(0x210) = 0x%x\n", rtw_read32(padapter, 0x210));
+> -			DBG_88E("dbg(0x608) = 0x%x\n", rtw_read32(padapter, 0x608));
+> -			DBG_88E("dbg(0x280) = 0x%x\n", rtw_read32(padapter, 0x280));
+> -			DBG_88E("dbg(0x284) = 0x%x\n", rtw_read32(padapter, 0x284));
+> -			DBG_88E("dbg(0x288) = 0x%x\n", rtw_read32(padapter, 0x288));
+> -
+> -			DBG_88E("dbg(0x664) = 0x%x\n", rtw_read32(padapter, 0x664));
+> -
+> -			DBG_88E("\n");
+> -
+> -			DBG_88E("dbg(0x430) = 0x%x\n", rtw_read32(padapter, 0x430));
+> -			DBG_88E("dbg(0x438) = 0x%x\n", rtw_read32(padapter, 0x438));
+> -
+> -			DBG_88E("dbg(0x440) = 0x%x\n", rtw_read32(padapter, 0x440));
+> -
+> -			DBG_88E("dbg(0x458) = 0x%x\n", rtw_read32(padapter, 0x458));
+> -
+> -			DBG_88E("dbg(0x484) = 0x%x\n", rtw_read32(padapter, 0x484));
+> -			DBG_88E("dbg(0x488) = 0x%x\n", rtw_read32(padapter, 0x488));
+> -
+> -			DBG_88E("dbg(0x444) = 0x%x\n", rtw_read32(padapter, 0x444));
+> -			DBG_88E("dbg(0x448) = 0x%x\n", rtw_read32(padapter, 0x448));
+> -			DBG_88E("dbg(0x44c) = 0x%x\n", rtw_read32(padapter, 0x44c));
+> -			DBG_88E("dbg(0x450) = 0x%x\n", rtw_read32(padapter, 0x450));
+>   			break;
+>   		}
+
+And here you also removes the reads. I guess, some kind of magic pattern 
+is used
+
+
+
+
+With regards,
+Pavel Skripkin

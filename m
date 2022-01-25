@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD6549AC24
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 025B349ABF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 06:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240114AbiAYGGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 01:06:52 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:58115 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S256366AbiAYFWA (ORCPT
+        id S237979AbiAYFqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 00:46:07 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:31400 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235409AbiAYFkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 00:22:00 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjZwC20rDz4xNm;
-        Tue, 25 Jan 2022 16:21:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643088108;
-        bh=EXHDGMBkz/WT0lNUnQj7KDfXlPwfDl9vmteB2k6cJ3g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EdnIAN3Dje7TsR0qLc+kvP3CKJZXsiXEiv5aBCcj083DxKac3+abPPCAhie1cgZYw
-         cT6dqjqE84E/qHpW/3nph5OmiAPelmoPcwV3Rg05oMi5OLIpBGhxN0jTCsiHFJ2/+u
-         /roc9Spb+C0aH61oZQuBc+cfkoZ1O5OTT7kSadLv8xBDcpvFqpgDsOBDjEsKA0Mb2+
-         YXWT6GKw1+XGHVNF/YiP8srvXlfIZoQGe/8e/undAt9RVWTqJSUZlDNj4bjsg2e3ou
-         pDdTJ0ODV2qNfkoBpOy5XPygYoFAbe2cr09gq4TX7fqu48RujXWOohUm/SFv67xOj6
-         R/VYHrcEkzfuQ==
-Date:   Tue, 25 Jan 2022 16:21:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Trond Myklebust <trondmy@gmail.com>,
-        NFS Mailing List <linux-nfs@vger.kernel.org>
-Subject: Re: linux-next: runtime warning in next-20220125
-Message-ID: <20220125162146.13872bdb@canb.auug.org.au>
-In-Reply-To: <20220125160505.068dbb52@canb.auug.org.au>
-References: <20220125160505.068dbb52@canb.auug.org.au>
+        Tue, 25 Jan 2022 00:40:55 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20P1VRwS019388;
+        Tue, 25 Jan 2022 05:40:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=LZnB4L07KX57W1nMkDDt+14Tce7jS78AInJQ9XIn0JA=;
+ b=a1XlucWmtEK0B0zfylAZIH+2vDa8Z9PyRPgAxAyGpaDuE2zuCCwOjKqIPxyRGsgcMdDB
+ AG9c1OGS+/Nt3yfG6XfDfFLvVS2RkIKbLUouFodWxiZ9f0BMmIaePlX+SnFk8k4OQ4uj
+ pq59t8veCB3190LQyTmetwd034x8Pcp9SDDURwKDhci6s020IUPAJCYEzDdyTU8vL5Oc
+ HCTBq+Csc1RFyJ8Z0UDQ7W8jiVZdokPbmo+j8OvFndXn2mEcaBWl7vXjSQf50pFweC8e
+ bjlCikElctuTMSiVKKtgtxyePTVlGrc0RqanEDJuNxqDHbaN9HPcgeHqzQFUKt0HQX6j 5Q== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dsy7asxpg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 05:40:50 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20P5auwX172061;
+        Tue, 25 Jan 2022 05:40:49 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 3dr71x1shf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jan 2022 05:40:49 +0000
+Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 20P5embe181395;
+        Tue, 25 Jan 2022 05:40:48 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by userp3030.oracle.com with ESMTP id 3dr71x1sgc-1;
+        Tue, 25 Jan 2022 05:40:48 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Adam Radford <aradford@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] scsi: 3w-sas: Remove useless DMA-32 fallback configuration
+Date:   Tue, 25 Jan 2022 00:40:37 -0500
+Message-Id: <164308671272.32373.7479857078284374730.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <dbbe8671ca760972d80f8d35f3170b4609bee368.1642236763.git.christophe.jaillet@wanadoo.fr>
+References: <dbbe8671ca760972d80f8d35f3170b4609bee368.1642236763.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GcmYL3f6WLHjIlgotq6pgNq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: wfgt_y3oIB8nlCN-vsMWRsww0p-0Ae3t
+X-Proofpoint-ORIG-GUID: wfgt_y3oIB8nlCN-vsMWRsww0p-0Ae3t
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/GcmYL3f6WLHjIlgotq6pgNq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sat, 15 Jan 2022 09:53:03 +0100, Christophe JAILLET wrote:
 
-Hi all,
+> As stated in [1], dma_set_mask() with a 64-bit mask never fails if
+> dev->dma_mask is non-NULL.
+> So, if it fails, the 32 bits case will also fail for the same reason.
+> 
+> Simplify code and remove some dead code accordingly.
+> 
+> [1]: https://lore.kernel.org/linux-kernel/YL3vSPK5DXTNvgdx@infradead.org/#t
+> 
+> [...]
 
-On Tue, 25 Jan 2022 16:05:05 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> My qemu boot test of a powerpc pseries_le_defconfig kernel produces the
-> following trace:
->=20
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 0 at kernel/trace/trace_events.c:417 trace_event_raw=
-_init+0x194/0x730
-> Modules linked in:
-> CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1 #2
-> NIP:  c0000000002bdbb4 LR: c0000000002bdcb0 CTR: c0000000002bdb70
->=20
-> I have no idea what has caused this :-(  Maybe commit
->=20
->   5544d5318802 ("SUNRPC: Same as SVC_RQST_ENDPOINT, but without the xid")
+Applied to 5.17/scsi-fixes, thanks!
 
-Actually, reverting commits
+[1/1] scsi: 3w-sas: Remove useless DMA-32 fallback configuration
+      https://git.kernel.org/mkp/scsi/c/fb8d5ea8fd90
 
-  6ff851d98af8 ("SUNRPC: Improve sockaddr handling in the svc_xprt_create_e=
-rror trace point")
-  5544d5318802 ("SUNRPC: Same as SVC_RQST_ENDPOINT, but without the xid")
-  e2d3613db12a ("SUNRPC: Record endpoint information in trace log")
-
-makes the warning go away.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/GcmYL3f6WLHjIlgotq6pgNq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHviOoACgkQAVBC80lX
-0Gys6QgAlGSkaap9eq9MYZ7vSaG4FckU4s2yeO0WuT8ESDW3LLEhh5QMs74MqdRH
-5H9ZftfOAQnzEsyboKAJC6heWbxpHG2yJ+NlKtMWviIRSm4TYPvL3fxxueq0KDiY
-Peo16xh4yyERxGOHHU2u77mQGy1Qi77bJJtt0eL5b7Ur95yfG86EoRpRp3uzi7F4
-ESCZ/UYPTN0lexyafnZzI6TAThwnyq1bHdXCvPyinibryzNwbrEjwibtdlaAkzdL
-AICl655j7ya/rzkWMkS/MWdW18L1af8vagM87+i9ynA7QRbT0JY9l/c+BMOYE81I
-Fv5BdzURvzJe7qqdNsNgwudRnn63wA==
-=6Eui
------END PGP SIGNATURE-----
-
---Sig_/GcmYL3f6WLHjIlgotq6pgNq--
+-- 
+Martin K. Petersen	Oracle Linux Engineering

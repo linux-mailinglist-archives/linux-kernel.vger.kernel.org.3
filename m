@@ -2,147 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFAC49AC5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4074449AC62
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236987AbiAYG0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 01:26:21 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:58894 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S245346AbiAYGVw (ORCPT
+        id S1345748AbiAYG0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 01:26:44 -0500
+Received: from qproxy1-pub.mail.unifiedlayer.com ([173.254.64.10]:48314 "EHLO
+        qproxy1-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343753AbiAYGXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 01:21:52 -0500
-X-UUID: eb6ac2ceb41d4d1d9cb8b2e768a12f91-20220125
-X-UUID: eb6ac2ceb41d4d1d9cb8b2e768a12f91-20220125
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1135649776; Tue, 25 Jan 2022 14:21:33 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 25 Jan 2022 14:21:33 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 25 Jan 2022 14:21:33 +0800
-Message-ID: <102ea6303dd16fdf9ec931d0a1845a93afe92545.camel@mediatek.com>
-Subject: Re: [PATCH v9 2/3] dt-bindings: pinctrl: mt8195: Add
- mediatek,drive-strength-adv property
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "David Matlack" <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        "Marc Zyngier" <maz@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Sean Wang <sean.wang@mediatek.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <ryder.lee@kernel.org>, <wenst@chromium.org>,
-        <chunfeng.yun@mediatek.com>
-Date:   Tue, 25 Jan 2022 14:21:33 +0800
-In-Reply-To: <18f7a647-6153-6d38-dff1-727b9592b01e@gmail.com>
-References: <20220112114724.1953-1-tinghan.shen@mediatek.com>
-         <20220112114724.1953-3-tinghan.shen@mediatek.com>
-         <18f7a647-6153-6d38-dff1-727b9592b01e@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 25 Jan 2022 01:23:16 -0500
+Received: from alt-proxy28.mail.unifiedlayer.com (unknown [74.220.216.123])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 532CC802A686
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:23:14 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 5D52B1003DC88
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 06:23:13 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id CFEWnqHErikTnCFEXnSm85; Tue, 25 Jan 2022 06:23:13 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=CeHNWJnl c=1 sm=1 tr=0 ts=61ef9751
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=DghFqjY3_ZEA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=phuVY786h0ah0nGSDhKW+P+Zw2u0CfItLI6aweYy2yo=; b=l8sRAWt2268Esv9pq7jY5j8LLO
+        R7NeUeIGPbVWCsZcYiv+XaGu4LiIoM9XxtA2pNSTLBkyW5Wwjcu5ptiAEOAi1DRjpUUv+Zbcdhfb6
+        M87nXPVTrjrAJjZUkzNrZIAng;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51624 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nCFEW-001GOf-HP; Mon, 24 Jan 2022 23:23:12 -0700
+Message-ID: <4e2113c7-481d-a3f7-6611-d805d88263b5@w6rz.net>
+Date:   Mon, 24 Jan 2022 22:23:10 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.15 000/846] 5.15.17-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        stable@vger.kernel.org
+References: <20220124184100.867127425@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nCFEW-001GOf-HP
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:51624
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 12
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-01-13 at 17:31 +0100, Matthias Brugger wrote:
-> [dopping Maciej, Paolo and Sean Christopherson]
-> 
-> On 12/01/2022 12:47, Tinghan Shen wrote:
-> > Extend driving support for I2C pins on SoC mt8195.
-> > This property is already documented in mediatek,mt8183-pinctrl.yaml.
-> > 
-> > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> Looks good to me. Linus please let me know when you are queuing this patch and 
-> I'll take the rest of the series. Another option is, that you provide an 
-> Acked-by and I can take the whole set through my branch.
-> 
-> Regards,
-> Matthias
+On 1/24/22 10:31, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.17 release.
+> There are 846 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.17-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hi Matthias,
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-I want to send next version to update the CC list of this series, but I'm not sure 
-whether this will break the conversation between you and Linus.
-
-Is it ok to send next version? or waiting the response?
-
-Best regards,
-TingHan
-
-> 
-> > ---
-> >   .../bindings/pinctrl/pinctrl-mt8195.yaml      | 35 +++++++++++++++++++
-> >   1 file changed, 35 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-> > b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-> > index 328ea59c5466..4db4899af6b1 100644
-> > --- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-> > +++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8195.yaml
-> > @@ -98,6 +98,32 @@ patternProperties:
-> >             drive-strength:
-> >               enum: [2, 4, 6, 8, 10, 12, 14, 16]
-> >   
-> > +          mediatek,drive-strength-adv:
-> > +            description: |
-> > +              Describe the specific driving setup property.
-> > +              For I2C pins, the existing generic driving setup can only support
-> > +              2/4/6/8/10/12/14/16mA driving. But in specific driving setup, they
-> > +              can support 0.125/0.25/0.5/1mA adjustment. If we enable specific
-> > +              driving setup, the existing generic setup will be disabled.
-> > +              The specific driving setup is controlled by E1E0EN.
-> > +              When E1=0/E0=0, the strength is 0.125mA.
-> > +              When E1=0/E0=1, the strength is 0.25mA.
-> > +              When E1=1/E0=0, the strength is 0.5mA.
-> > +              When E1=1/E0=1, the strength is 1mA.
-> > +              EN is used to enable or disable the specific driving setup.
-> > +              Valid arguments are described as below:
-> > +              0: (E1, E0, EN) = (0, 0, 0)
-> > +              1: (E1, E0, EN) = (0, 0, 1)
-> > +              2: (E1, E0, EN) = (0, 1, 0)
-> > +              3: (E1, E0, EN) = (0, 1, 1)
-> > +              4: (E1, E0, EN) = (1, 0, 0)
-> > +              5: (E1, E0, EN) = (1, 0, 1)
-> > +              6: (E1, E0, EN) = (1, 1, 0)
-> > +              7: (E1, E0, EN) = (1, 1, 1)
-> > +              So the valid arguments are from 0 to 7.
-> > +            $ref: /schemas/types.yaml#/definitions/uint32
-> > +            enum: [0, 1, 2, 3, 4, 5, 6, 7]
-> > +
-> >             bias-pull-down:
-> >               description: |
-> >                 For pull down type is normal, it don't need add RSEL & R1R0 define
-> > @@ -268,4 +294,13 @@ examples:
-> >             bias-pull-down;
-> >           };
-> >         };
-> > +
-> > +      i2c0-pins {
-> > +        pins {
-> > +          pinmux = <PINMUX_GPIO8__FUNC_SDA0>,
-> > +                   <PINMUX_GPIO9__FUNC_SCL0>;
-> > +          bias-disable;
-> > +          mediatek,drive-strength-adv = <7>;
-> > +        };
-> > +      };
-> >       };
-> > 
+Tested-by: Ron Economos <re@w6rz.net>
 

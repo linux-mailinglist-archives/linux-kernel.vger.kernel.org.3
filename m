@@ -2,235 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B9D49B35D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EC449B360
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbiAYLzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 06:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S1351073AbiAYL4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 06:56:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385897AbiAYLrh (ORCPT
+        with ESMTP id S1382272AbiAYLtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 06:47:37 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93650C061749
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:45:38 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id c15so10608016ljf.11
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:45:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wod5gWshu23pmO/7zcX1A3gygVLcoqtrX7j57tlK/80=;
-        b=rtB3ApHks/v1XsvTvyj4TgPQXU1wdN5rxb8uGTGOLMWmblyXHIM2xjP0mefAXnFyrZ
-         YKGI3iIYLXGdib5TLqP1l9wE7VzSph5SF2lXLPFtNSdQhcPUKNrbu2SEuMzeEWI5VLUJ
-         6CjpMl8abJpCDCb8WRYnsBPyawPRGFV3oQABpCbF+rFmDJcMJc+IRFHipBjcNhesLsSf
-         BwIgxkcPo0VyzDh+zIR8gvNqhYM0xguZf7hfxPLz5y9iPOLTpaBp5DKtmQt0j4vR07bS
-         nGVYbl9sjdwopWwFdKfAFBrilMvRsP0DCgsNC0xd3T9GTIYLztb0xuWyFZsMsj+OVksg
-         XOkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wod5gWshu23pmO/7zcX1A3gygVLcoqtrX7j57tlK/80=;
-        b=sp1zgffL46u6dUithoc6IXIM0jKIByhb+hBSl7//yQBUO5XL0I5LOFkR6b1QeSRw8h
-         pB7BO/pZRR20HkhYPDiRsxQiyqCcKIjPc0wnTQGkwwDTLTUFi8rA24KEm6bYxzvH9px+
-         MsbMZ0U9EcKNwL9r4ArzpEyiZy1s1f8mJftW86jcPwboIK6w+g4lKOcJFN/TiNVkMOBJ
-         DLSl0oohKNVwjcQFASfzX4Ex+ABbqSFLtoQRdZv9hvJvEHvZeCHcj3zfPw7hfaAbBjAd
-         5R23mFSsVonpPfbnan4bkbB2b65kiAaB5pY5E1hwwMaRJqiln1eWbR7d22BqppxsrOgp
-         oXiQ==
-X-Gm-Message-State: AOAM533TCMmPRIvczxRvZl36La6VYeOcAsG9u1QaXUNmgqDUBBEbRnmJ
-        hkJauo5h4870G2R8Yl77GwbLljAwx2cRM2h/m95O2AKmw8A=
-X-Google-Smtp-Source: ABdhPJzhx0lTUZpuJBlVSGIRLZlgdAD/dyygJTz/K7hU1+coUIWH4WBBke5nmhZf8ZLxq8cqag0js0bP7vpVxqS3Pt0=
-X-Received: by 2002:a2e:5356:: with SMTP id t22mr6955614ljd.300.1643111136879;
- Tue, 25 Jan 2022 03:45:36 -0800 (PST)
+        Tue, 25 Jan 2022 06:49:08 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC465C061759
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:45:57 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2FBAB1EC0535;
+        Tue, 25 Jan 2022 12:45:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643111152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lYvYSfQSagek4CZDcnE7J88PEozcFNkL2m0Wwjtl3sA=;
+        b=jn24QfU+dM2+SGEXSWHEeMaOBKiPWe+hFeey+IOtjXBVuuDuTyNVOZcZn3uAOH4nCf6e3Z
+        plH3a4h0PDLgKBEjuW9q5WkVcUxeUXsjsD6nwasd1xExwHSw40nz7P4FKgvyAsQ/M4F8V3
+        zIgxoN9640XmdlZdl7r/LN0+mC0Ap/Q=
+Date:   Tue, 25 Jan 2022 12:45:47 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     X86 ML <x86@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1.1] x86/cpu: Allow feature bit names from /proc/cpuinfo in
+ clearcpuid=
+Message-ID: <Ye/i67y8ypnlLsu7@zn.tnic>
+References: <20211112103246.7555-1-bp@alien8.de>
+ <20211112103246.7555-2-bp@alien8.de>
 MIME-Version: 1.0
-References: <20220119085719.1357874-1-daniel.lezcano@linaro.org>
- <20220119085719.1357874-3-daniel.lezcano@linaro.org> <CAPDyKFrtq0J2O0WBwLr7Zb+WkomhLcR1h+eDzzV-SxpiJmm_yQ@mail.gmail.com>
- <061cd428-c022-4058-9a11-c5dbe3cb9777@linaro.org>
-In-Reply-To: <061cd428-c022-4058-9a11-c5dbe3cb9777@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 25 Jan 2022 12:44:59 +0100
-Message-ID: <CAPDyKFptf9QGB9+ke5x25eBiYS5aXpX5Hng2Hebkc1vo=hn+og@mail.gmail.com>
-Subject: Re: [PATCH v6 2/5] powercap/drivers/dtpm: Add hierarchy creation
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, robh@kernel.org, lukasz.luba@arm.com,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211112103246.7555-2-bp@alien8.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 11:46, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 24/01/2022 21:00, Ulf Hansson wrote:
-> > On Wed, 19 Jan 2022 at 09:58, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> The DTPM framework is available but without a way to configure it.
-> >>
-> >> This change provides a way to create a hierarchy of DTPM node where
-> >> the power consumption reflects the sum of the children's power
-> >> consumption.
-> >>
-> >> It is up to the platform to specify an array of dtpm nodes where each
-> >> element has a pointer to its parent, except the top most one. The type
-> >> of the node gives the indication of which initialization callback to
-> >> call. At this time, we can create a virtual node, where its purpose is
-> >> to be a parent in the hierarchy, and a DT node where the name
-> >> describes its path.
-> >>
-> >> In order to ensure a nice self-encapsulation, the DTPM subsys array
-> >> contains a couple of initialization functions, one to setup the DTPM
-> >> backend and one to initialize it up. With this approach, the DTPM
-> >> framework has a very few material to export.
-> >>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> ---
-> >>  drivers/powercap/Kconfig |   1 +
-> >>  drivers/powercap/dtpm.c  | 168 ++++++++++++++++++++++++++++++++++++++-
-> >>  include/linux/dtpm.h     |  15 ++++
-> >>  3 files changed, 181 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
-> >> index 8242e8c5ed77..b1ca339957e3 100644
-> >> --- a/drivers/powercap/Kconfig
-> >> +++ b/drivers/powercap/Kconfig
-> >> @@ -46,6 +46,7 @@ config IDLE_INJECT
-> >>
-> >>  config DTPM
-> >>         bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
-> >> +       depends on OF
-> >>         help
-> >>           This enables support for the power capping for the dynamic
-> >>           thermal power management userspace engine.
-> >> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-> >> index 0e5c93443c70..10032f7132c4 100644
-> >> --- a/drivers/powercap/dtpm.c
-> >> +++ b/drivers/powercap/dtpm.c
-> >> @@ -23,6 +23,7 @@
-> >>  #include <linux/powercap.h>
-> >>  #include <linux/slab.h>
-> >>  #include <linux/mutex.h>
-> >> +#include <linux/of.h>
-> >>
-> >>  #include "dtpm_subsys.h"
-> >>
-> >> @@ -463,14 +464,175 @@ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
-> >>         return 0;
-> >>  }
-> >>
-> >> -static int __init init_dtpm(void)
-> >> +static struct dtpm *dtpm_setup_virtual(const struct dtpm_node *hierarchy,
-> >> +                                      struct dtpm *parent)
-> >>  {
-> >> +       struct dtpm *dtpm;
-> >> +       int ret;
-> >> +
-> >> +       dtpm = kzalloc(sizeof(*dtpm), GFP_KERNEL);
-> >> +       if (!dtpm)
-> >> +               return ERR_PTR(-ENOMEM);
-> >> +       dtpm_init(dtpm, NULL);
-> >> +
-> >> +       ret = dtpm_register(hierarchy->name, dtpm, parent);
-> >> +       if (ret) {
-> >> +               pr_err("Failed to register dtpm node '%s': %d\n",
-> >> +                      hierarchy->name, ret);
-> >> +               kfree(dtpm);
-> >> +               return ERR_PTR(ret);
-> >> +       }
-> >> +
-> >> +       return dtpm;
-> >> +}
-> >> +
-> >> +static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
-> >> +                                 struct dtpm *parent)
-> >> +{
-> >> +       struct device_node *np;
-> >> +       int i, ret;
-> >> +
-> >> +       np = of_find_node_by_path(hierarchy->name);
-> >> +       if (!np) {
-> >> +               pr_err("Failed to find '%s'\n", hierarchy->name);
-> >> +               return ERR_PTR(-ENXIO);
-> >> +       }
-> >> +
-> >> +       for (i = 0; i < ARRAY_SIZE(dtpm_subsys); i++) {
-> >> +
-> >> +               if (!dtpm_subsys[i]->setup)
-> >> +                       continue;
-> >> +
-> >> +               ret = dtpm_subsys[i]->setup(parent, np);
-> >> +               if (ret) {
-> >> +                       pr_err("Failed to setup '%s': %d\n", dtpm_subsys[i]->name, ret);
-> >> +                       of_node_put(np);
-> >> +                       return ERR_PTR(ret);
-> >> +               }
-> >> +       }
-> >> +
-> >> +       of_node_put(np);
-> >> +
-> >> +       /*
-> >> +        * By returning a NULL pointer, we let know the caller there
-> >> +        * is no child for us as we are a leaf of the tree
-> >> +        */
-> >> +       return NULL;
-> >> +}
-> >> +
-> >> +typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
-> >> +
-> >> +dtpm_node_callback_t dtpm_node_callback[] = {
-> >> +       [DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
-> >> +       [DTPM_NODE_DT] = dtpm_setup_dt,
-> >> +};
-> >> +
-> >> +static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
-> >> +                              const struct dtpm_node *it, struct dtpm *parent)
-> >> +{
-> >> +       struct dtpm *dtpm;
-> >> +       int i, ret;
-> >> +
-> >> +       for (i = 0; hierarchy[i].name; i++) {
-> >> +
-> >> +               if (hierarchy[i].parent != it)
-> >> +                       continue;
-> >> +
-> >> +               dtpm = dtpm_node_callback[hierarchy[i].type](&hierarchy[i], parent);
-> >> +               if (!dtpm || IS_ERR(dtpm))
-> >
-> > This can be tested with the "IS_ERR_OR_NULL()" macro.
-> >
-> >> +                       continue;
-> >
-> > We have discussed the error path previously. Just ignoring errors here
-> > and continuing with the initialization, isn't normally how we design
-> > good kernel code.
-> >
-> > However, you have also explained that the error path is special and
-> > somewhat non-trivial to manage in this case. I get that now and thanks
-> > for clarifying.
-> >
-> > Nevertheless, I think it deserves to be explained a bit with a comment
-> > in the code of what goes on here. Otherwise another developer that
-> > looks at this code in the future, may think it looks suspicious too.
-> >
-> >> +
-> >> +               ret = dtpm_for_each_child(hierarchy, &hierarchy[i], dtpm);
-> >> +               if (ret)
-> >> +                       return ret;
-> >> +       }
-> >> +
-> >> +       return 0;
-> >> +}
-> >
-> > [...]
-> >
-> > Other than the above, this looks good to me!
->
-> With the above fixed, shall I add your reviewed-by ?
+On Fri, Nov 12, 2021 at 11:32:41AM +0100, Borislav Petkov wrote:
+> clearcpuid=de,440,smca,succory,bmi1,3dnow ("succory" is wrong on
+> purpose).
 
-Sure, that's fine!
+Here's v1.1 which handles the case where we have ""-defined feature
+flags - for example:
 
-Kind regards
-Uffe
+#define X86_FEATURE_AMD_SSBD            (13*32+24) /* "" Speculative Store Bypass Disable */
+
+and for which there's no string name generated.
+
+---
+From: Borislav Petkov <bp@suse.de>
+Date: Wed, 10 Nov 2021 19:30:07 +0100
+Subject: [PATCH v1.1] x86/cpu: Allow feature bit names from /proc/cpuinfo in clearcpuid=
+
+Having to give the X86_FEATURE array indices in order to disable a
+feature bit for testing is not really user-friendly. So accept the
+feature bit names too.
+
+Some feature bits don't have names so there the array indices are still
+accepted, of course.
+
+Clearing CPUID flags is not something which should be done in production
+so taint the kernel too.
+
+An exemplary cmdline would then be something like:
+
+  clearcpuid=de,440,smca,succory,bmi1,3dnow
+
+("succory" is wrong on purpose). And it says:
+
+[    0.000000] Clearing CPUID bits: de 13:24 smca bmi1 3dnow
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20211112103246.7555-2-bp@alien8.de
+---
+ .../admin-guide/kernel-parameters.txt         | 11 +++-
+ arch/x86/include/asm/cpufeature.h             |  7 ++-
+ arch/x86/kernel/cpu/common.c                  | 57 +++++++++++++++----
+ 3 files changed, 58 insertions(+), 17 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index f5a27f067db9..b67d0cf27997 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -631,12 +631,17 @@
+ 			Defaults to zero when built as a module and to
+ 			10 seconds when built into the kernel.
+ 
+-	clearcpuid=BITNUM[,BITNUM...] [X86]
++	clearcpuid=X[,X...] [X86]
+ 			Disable CPUID feature X for the kernel. See
+ 			arch/x86/include/asm/cpufeatures.h for the valid bit
+-			numbers. Note the Linux specific bits are not necessarily
+-			stable over kernel options, but the vendor specific
++			numbers X. Note the Linux-specific bits are not necessarily
++			stable over kernel options, but the vendor-specific
+ 			ones should be.
++			X can also be a string as appearing in the flags: line
++			in /proc/cpuinfo which does not have the above
++			instability issue. However, not all features have names
++			in /proc/cpuinfo.
++			Note that using this option will taint your kernel.
+ 			Also note that user programs calling CPUID directly
+ 			or using the feature without checking anything
+ 			will still see it. This just prevents it from
+diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
+index 1261842d006c..66d3e3b1d24d 100644
+--- a/arch/x86/include/asm/cpufeature.h
++++ b/arch/x86/include/asm/cpufeature.h
+@@ -34,14 +34,17 @@ enum cpuid_leafs
+ 	CPUID_8000_001F_EAX,
+ };
+ 
++#define X86_CAP_FMT_NUM "%d:%d"
++#define x86_cap_flag_num(flag) ((flag) >> 5), ((flag) & 31)
++
+ #ifdef CONFIG_X86_FEATURE_NAMES
+ extern const char * const x86_cap_flags[NCAPINTS*32];
+ extern const char * const x86_power_flags[32];
+ #define X86_CAP_FMT "%s"
+ #define x86_cap_flag(flag) x86_cap_flags[flag]
+ #else
+-#define X86_CAP_FMT "%d:%d"
+-#define x86_cap_flag(flag) ((flag) >> 5), ((flag) & 31)
++#define X86_CAP_FMT X86_CAP_FMT_NUM
++#define x86_cap_flag x86_cap_flag_num
+ #endif
+ 
+ /*
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 7b8382c11788..aaac18d800a4 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1237,8 +1237,8 @@ static void detect_nopl(void)
+ static void __init cpu_parse_early_param(void)
+ {
+ 	char arg[128];
+-	char *argptr = arg;
+-	int arglen, res, bit;
++	char *argptr = arg, *opt;
++	int arglen, taint = 0;
+ 
+ #ifdef CONFIG_X86_32
+ 	if (cmdline_find_option_bool(boot_command_line, "no387"))
+@@ -1266,21 +1266,54 @@ static void __init cpu_parse_early_param(void)
+ 		return;
+ 
+ 	pr_info("Clearing CPUID bits:");
+-	do {
+-		res = get_option(&argptr, &bit);
+-		if (res == 0 || res == 3)
+-			break;
+ 
+-		/* If the argument was too long, the last bit may be cut off */
+-		if (res == 1 && arglen >= sizeof(arg))
+-			break;
++	while (argptr) {
++		unsigned int bit;
++
++		opt = strsep(&argptr, ",");
+ 
+-		if (bit >= 0 && bit < NCAPINTS * 32) {
+-			pr_cont(" " X86_CAP_FMT, x86_cap_flag(bit));
++		/*
++		 * Handle naked numbers first for feature flags which don't
++		 * have names.
++		 */
++		if (!kstrtouint(opt, 10, &bit)) {
++			if (bit < NCAPINTS * 32) {
++
++				/* empty-string, i.e., ""-defined feature flags */
++				if (!x86_cap_flags[bit])
++					pr_cont(" " X86_CAP_FMT_NUM, x86_cap_flag_num(bit));
++				else
++					pr_cont(" " X86_CAP_FMT, x86_cap_flag(bit));
++
++				setup_clear_cpu_cap(bit);
++				taint++;
++			}
++			/*
++			 * The assumption is that there are no feature names with only
++			 * numbers in the name thus go to the next argument.
++			 */
++			continue;
++		}
++
++#ifdef CONFIG_X86_FEATURE_NAMES
++		for (bit = 0; bit < 32 * NCAPINTS; bit++) {
++			if (!x86_cap_flag(bit))
++				continue;
++
++			if (strcmp(x86_cap_flag(bit), opt))
++				continue;
++
++			pr_cont(" %s", opt);
+ 			setup_clear_cpu_cap(bit);
++			taint++;
++			break;
+ 		}
+-	} while (res == 2);
++#endif
++	}
+ 	pr_cont("\n");
++
++	if (taint)
++		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
+ }
+ 
+ /*
+-- 
+2.29.2
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,140 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8850C49AD8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5654A49AE77
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345317AbiAYHZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:25:07 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21140 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1443677AbiAYHV3 (ORCPT
+        id S1452580AbiAYItq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1452376AbiAYIql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:21:29 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20P4kQqF031034;
-        Tue, 25 Jan 2022 07:21:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=dyT61F/+H7CcwaycbWvxPVLwL6aVpoLq1rauxes63zs=;
- b=rgGrd1A+UD8slBcMvDc/3dl3yYSXOc4LF7saLwl79d7a/DQPNQix65N4z2ywxydQMATQ
- 1K7u7JjcaDme47ImFOnKLRlqatNMU1EH0O4N28X8H/wguA+fIANPpIG8I32N4MMiE5x1
- HQtC9HHeDTNBd+aU+NX/P+7PpY756mm0i3lokPJ7nQ9/OLcFlQ9nErnLtXf30eS9eAhL
- 2adUhrJUcI5yAPIu+vPoSLYPZdOyDnk1SYSCiqX7XxY00MsqRsqVz9VEsaFVGvhFKif7
- Hj1L1Z+DVKIaXrMtok9x7Yk6OMpuSL91IYO7eLcStv/ZqzWV3SAIlRyR8YsPJlRCY+oX gw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dtafr30ff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 07:21:06 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20P6Fp0f032124;
-        Tue, 25 Jan 2022 07:21:05 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dtafr30f5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 07:21:05 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20P7D94x008053;
-        Tue, 25 Jan 2022 07:21:04 GMT
-Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
-        by ppma04dal.us.ibm.com with ESMTP id 3dr9ja33xr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 07:21:04 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20P7L4Tj17105166
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 07:21:04 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12FD712405E;
-        Tue, 25 Jan 2022 07:21:04 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B44BD124052;
-        Tue, 25 Jan 2022 07:21:03 +0000 (GMT)
-Received: from localhost (unknown [9.211.142.9])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Jan 2022 07:21:03 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, mpe@ellerman.id.au,
-        npiggin@gmail.com, brking@linux.ibm.com, srikar@linux.vnet.ibm.com
-Subject: [PATCH] powerpc/smp: poll cpu_callin_map more aggressively in __cpu_up()
-Date:   Tue, 25 Jan 2022 01:21:03 -0600
-Message-Id: <20220125072103.70715-1-nathanl@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Jan 2022 03:46:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961EDC055A8C;
+        Mon, 24 Jan 2022 23:21:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FFE161307;
+        Tue, 25 Jan 2022 07:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A75C340E8;
+        Tue, 25 Jan 2022 07:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643095289;
+        bh=/7vav1tP1IFHJLsPaTScBMjyW/1YdDoF34LK07MnAaw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=O2BCshx+Gvniy0Y60rn1m43b24EsUlYsOT6aMKgW8HlxYziOQZJiE79PEhUYG0ISg
+         pCph+I+WK0BwuVIcqeEODNwzEfgOWgjPdVAqI3kPxC0340goLtbFMAyh8GFGX5c7tb
+         jjEttOxIEKlFt8LZRUWRh6yJaMrMAkD3jLqFUoBekbt8FY7iwye7gNQXe9zmIQwsDS
+         bjnLAS/424xi2N9ry4FETJlYKAsRCoEmHrjs3T2PWZzNIjlYG/EympisqdFXttfH7z
+         Q6nKFMH7wnju6NVVBzuMelO4G/VlXRxiWQuwUIg6ouGrwX2BLtjT59DYRUHMcJPh2F
+         Ld2dDFkb5pLkA==
+Received: by mail-yb1-f177.google.com with SMTP id k17so3718029ybk.6;
+        Mon, 24 Jan 2022 23:21:29 -0800 (PST)
+X-Gm-Message-State: AOAM533pIRDiaHX8ID7cV64He8OZZRp5OnPNuiVNYONZN13Vsqr83Oqm
+        xKMBz/rlfLamP1AmA5C5wFQzbvoB+9XjT6tm0M0=
+X-Google-Smtp-Source: ABdhPJyqYR4DFbAGWIBtoB383m5E/+ETS5HAwrtiClUKnfSskVUeJQfarucshkcm6G/i3SfpNfQq1VBWaHCevUsDBfw=
+X-Received: by 2002:a5b:c01:: with SMTP id f1mr27513023ybq.47.1643095288812;
+ Mon, 24 Jan 2022 23:21:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: dp0YO1CDidMdt_gGX0vysidABI96_2PC
-X-Proofpoint-ORIG-GUID: _wTH7Yl5XuQ-UE0KFyJBm5Q7lWc7Hio3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_02,2022-01-24_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- malwarescore=0 spamscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 mlxscore=0 bulkscore=0 mlxlogscore=952
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201250047
+References: <20220121194926.1970172-1-song@kernel.org> <20220121194926.1970172-7-song@kernel.org>
+ <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
+ <7393B983-3295-4B14-9528-B7BD04A82709@fb.com> <CAADnVQJLHXaU7tUJN=EM-Nt28xtu4vw9+Ox_uQsjh-E-4VNKoA@mail.gmail.com>
+ <5407DA0E-C0F8-4DA9-B407-3DE657301BB2@fb.com> <CAADnVQLOpgGG9qfR4EAgzrdMrfSg9ftCY=9psR46GeBWP7aDvQ@mail.gmail.com>
+ <5F4DEFB2-5F5A-4703-B5E5-BBCE05CD3651@fb.com> <CAADnVQLXGu_eF8VT6NmxKVxOHmfx7C=mWmmWF8KmsjFXg6P5OA@mail.gmail.com>
+ <5E70BF53-E3FB-4F7A-B55D-199C54A8FDCA@fb.com> <adec88f9-b3e6-bfe4-c09e-54825a60f45d@linux.ibm.com>
+ <2AAC8B8C-96F1-400F-AFA6-D4AF41EC82F4@fb.com> <CAADnVQKgdMMeONmjUhbq_3X39t9HNQWteDuyWVfcxmTerTnaMw@mail.gmail.com>
+In-Reply-To: <CAADnVQKgdMMeONmjUhbq_3X39t9HNQWteDuyWVfcxmTerTnaMw@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 24 Jan 2022 23:21:17 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4AXLirZwjH4YfJLYj1VUU2muQx1wTkkUpeBBH9kvw2Ag@mail.gmail.com>
+Message-ID: <CAPhsuW4AXLirZwjH4YfJLYj1VUU2muQx1wTkkUpeBBH9kvw2Ag@mail.gmail.com>
+Subject: Re: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the outdated iteration and timeout calculations here with
-indefinite spin_until_cond()-wrapped poll of cpu_callin_map. __cpu_up()
-already does this when waiting for the cpu to set its online bit before
-returning, so this change is not really making the function more brittle.
+On Mon, Jan 24, 2022 at 9:21 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Jan 24, 2022 at 10:27 AM Song Liu <songliubraving@fb.com> wrote:
+> > >
+> > > Are arches expected to allocate rw buffers in different ways? If not,
+> > > I would consider putting this into the common code as well. Then
+> > > arch-specific code would do something like
+> > >
+> > >  header = bpf_jit_binary_alloc_pack(size, &prg_buf, &prg_addr, ...);
+> > >  ...
+> > >  /*
+> > >   * Generate code into prg_buf, the code should assume that its first
+> > >   * byte is located at prg_addr.
+> > >   */
+> > >  ...
+> > >  bpf_jit_binary_finalize_pack(header, prg_buf);
+> > >
+> > > where bpf_jit_binary_finalize_pack() would copy prg_buf to header and
+> > > free it.
+>
+> It feels right, but bpf_jit_binary_finalize_pack() sounds 100% arch
+> dependent. The only thing it will do is perform a copy via text_poke.
+> What else?
+>
+> > I think this should work.
+> >
+> > We will need an API like: bpf_arch_text_copy, which uses text_poke_copy()
+> > for x86_64 and s390_kernel_write() for x390. We will use bpf_arch_text_copy
+> > to
+> >   1) write header->size;
+> >   2) do finally copy in bpf_jit_binary_finalize_pack().
+>
+> we can combine all text_poke operations into one.
+>
+> Can we add an 'image' pointer into struct bpf_binary_header ?
 
-Removing the msleep(1) in the hotplug path here reduces the time it takes
-to online a CPU on a P9 PowerVM LPAR from about 30ms to 1ms when exercised
-via thaw_secondary_cpus().
+There is a 4-byte hole in bpf_binary_header. How about we put
+image_offset there? Actually we only need 2 bytes for offset.
 
-Signed-off-by: Nathan Lynch <nathanl@linux.ibm.com>
----
- arch/powerpc/kernel/smp.c | 25 ++-----------------------
- 1 file changed, 2 insertions(+), 23 deletions(-)
+> Then do:
+> int bpf_jit_binary_alloc_pack(size, &ro_hdr, &rw_hdr);
+>
+> ro_hdr->image would be the address used to compute offsets by JIT.
 
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index b7fd6a72aa76..990893365fe0 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1270,7 +1270,7 @@ static void cpu_idle_thread_init(unsigned int cpu, struct task_struct *idle)
- 
- int __cpu_up(unsigned int cpu, struct task_struct *tidle)
- {
--	int rc, c;
-+	int rc;
- 
- 	/*
- 	 * Don't allow secondary threads to come online if inhibited
-@@ -1314,28 +1314,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
- 		return rc;
- 	}
- 
--	/*
--	 * wait to see if the cpu made a callin (is actually up).
--	 * use this value that I found through experimentation.
--	 * -- Cort
--	 */
--	if (system_state < SYSTEM_RUNNING)
--		for (c = 50000; c && !cpu_callin_map[cpu]; c--)
--			udelay(100);
--#ifdef CONFIG_HOTPLUG_CPU
--	else
--		/*
--		 * CPUs can take much longer to come up in the
--		 * hotplug case.  Wait five seconds.
--		 */
--		for (c = 5000; c && !cpu_callin_map[cpu]; c--)
--			msleep(1);
--#endif
--
--	if (!cpu_callin_map[cpu]) {
--		printk(KERN_ERR "Processor %u is stuck.\n", cpu);
--		return -ENOENT;
--	}
-+	spin_until_cond(cpu_callin_map[cpu] != 0);
- 
- 	DBG("Processor %u found.\n", cpu);
- 
--- 
-2.34.1
+If we only do one text_poke(), we cannot write ro_hdr->image yet. We
+can use ro_hdr + rw_hdr->image_offset instead.
 
+> rw_hdr->image would point to kvmalloc-ed area for emitting insns.
+> rw_hdr->size would already be populated.
+>
+> The JITs would write insns into rw_hdr->image including 'int 3' insns.
+> At the end the JIT will do text_poke_copy(ro_hdr, rw_hdr, rw_hdr->size);
+> That would be the only copy that will transfer everything into final
+> location.
+> Then kvfree(rw_hdr)
+
+The only problem is the asymmetry of allocating rw_hdr from bpf/core.c,
+and freeing it from arch/bpf_jit_comp.c. But it doesn't bother me too much.
+
+Thanks,
+Song

@@ -2,147 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F71B49BB03
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8136849BB08
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235677AbiAYSMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:12:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36106 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234038AbiAYSL7 (ORCPT
+        id S237024AbiAYSMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236942AbiAYSMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:11:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643134318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZYZFcKeTPsQCFaSsqNlB8G3oqmreXQCJIoK82/wxEkU=;
-        b=XEI8APwOLMstwDfrWdiGxohk0Tj8iYSCVRKmV+JMtqSXFTuhnopJyp3loDxYaHHf8o6WO3
-        zXkPX9jUNBdvt/mZ5qSie953p3xwpFT67vrMTvNMTWIr8HrCqg8yCIjR4ZExKqYfBDjcK3
-        WoGPRhqRNFS9hfmvU8oHnW67UDy54qE=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-522-LX73ie07OE-z8NKud-CURg-1; Tue, 25 Jan 2022 13:11:56 -0500
-X-MC-Unique: LX73ie07OE-z8NKud-CURg-1
-Received: by mail-ej1-f69.google.com with SMTP id v2-20020a170906292200b006a94a27f903so3781951ejd.8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:11:56 -0800 (PST)
+        Tue, 25 Jan 2022 13:12:16 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8D8C06173D;
+        Tue, 25 Jan 2022 10:12:15 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id d1so20111108plh.10;
+        Tue, 25 Jan 2022 10:12:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oncvTFBiH1AN1qkgKqjjo5usjPdYcyTNfm6ebR6GGgg=;
+        b=U55+0RvH9Ct33KOJYfC3NT19EgIgJJHI/p9+j3KfYpMa/R2U6tbhwX52hQjM8W4cAR
+         gDox1Lw+iLj3ibZ/nJTyZ/56wvlxdsxb3gJ24OQVe0wsx9ASg3qTh+sJTMRwvGAwsDO8
+         UzXxZKnCYpxdWzrnhWfkwXokfs4E2vzQslt9KC4fdpHssDMDV25FcWX2RPiSZu2Yt6jt
+         4BkMMLShSGEk0MYvaJUqCmFXBR1Qk5S+mtQDIoaNjwDcOQ6b6NfDnbTEeZMtQLxXUi+j
+         6O4Prm5GoKCyztuNRT9fwGouHNM60NXB21+23CkyMkV9P+iCE4xe0wHnoU3RSvGVBsJ6
+         wyKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZYZFcKeTPsQCFaSsqNlB8G3oqmreXQCJIoK82/wxEkU=;
-        b=KS68YnZ8Fx6kiTay/fmCTijkvy0RBmtpw7MiXZF3ErO+rysM0UhmIVQgtEbFu+F3gN
-         dPoXQ8UXop7v6l5WjB+UAPAcYTHJnshHH8n07dlsNP+oaoExySm08Fqj3isG5Sm3AgIU
-         jqbq0EQgRDlmTJ5IjGmuh7dOk4OgzoEDmHC0qZzPQ50VIw6oHDfqZ5CV6zO0hdPo35EU
-         Z8g0pgyCbduyo+epTTt10TUkhc48R7oi3mT/VyXmmwG03lENdsW+Iku7xTZfUP2MUCQG
-         M1rNyyXtjlGjEU5IvF0++n7PrhaDwH/JYzWLqsTu8Sul7ewc96uEhOwAMLswLKwbF9fK
-         ZjyA==
-X-Gm-Message-State: AOAM530N9MJ51uxQeH0Vu98/9jXgjRezaX6H0Mya0QxsSFp/xVaDs62a
-        RvBXF41pv2ikYJuuiyQFK8fn7tJMxFtZLBVN7A6307dNCZcdBiuVv3bvP4cBdNAvFj1RcVNjo9z
-        ajEndir3vlLPhFA3HOPGoOaYW
-X-Received: by 2002:a17:907:9605:: with SMTP id gb5mr17348662ejc.685.1643134315388;
-        Tue, 25 Jan 2022 10:11:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyoPAYB5FVJEoP403NezL+MUS0Tv2jX6/UgHpSL8/pKp8IUbV8+JT6INoyPbobrfnoWYRryPQ==
-X-Received: by 2002:a17:907:9605:: with SMTP id gb5mr17348639ejc.685.1643134315151;
-        Tue, 25 Jan 2022 10:11:55 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id k7sm6425341ejp.182.2022.01.25.10.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 10:11:54 -0800 (PST)
-Date:   Tue, 25 Jan 2022 19:11:52 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 2/9] fprobe: Add ftrace based probe APIs
-Message-ID: <YfA9aC5quQNc89Hc@krava>
-References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
- <164311271777.1933078.9066058105807126444.stgit@devnote2>
- <YfAoMW6i4gqw2Na0@krava>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oncvTFBiH1AN1qkgKqjjo5usjPdYcyTNfm6ebR6GGgg=;
+        b=CnC+jFtx1L+EjyFVmanUDczCTF4/r2rmG6ybBcYudH2dnSdi0cYjdbYbk3+ZsqiZI4
+         fkIHK94EDqsKqOUOUhuR73VVezEJBhGgd+/eQ/kzUINIz1X6dN1ozuciZhh2alxlSYLe
+         U44ZTuU1OGqZzm15uGA0vY36da27iQ5GHNSgNXpIWGRhENk11FcSom2jRV+cVQKo1aAN
+         RBtWaxCpgS+V4ucsgGhxjij/VGRW1z43zidb1ZYeVQxp1nYptxb2hQEVoKmwMymHikem
+         D4TDXjLq3vTg8V/RUCA6hsosWvGA7hU9p9Mzu27UYB6OyEjFszv/o9A0K4rtMuZGEtq5
+         s8lg==
+X-Gm-Message-State: AOAM533vaKS0nAXNQns1wzQoI7JSA7O8s6o3P7NBlshKemm3VGwQ8pTw
+        EbO3XkKfGeY49aVmbaO1ppA=
+X-Google-Smtp-Source: ABdhPJxjnybuFczjajxTOaUK9aAEWMUSJ4x+gaOCBS6OBH/udUgi3+mMcluTSwOAF7N8OZ70JH9bzg==
+X-Received: by 2002:a17:902:dacf:b0:14b:2081:1c20 with SMTP id q15-20020a170902dacf00b0014b20811c20mr17657075plx.13.1643134334658;
+        Tue, 25 Jan 2022 10:12:14 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id ha11sm2879550pjb.3.2022.01.25.10.12.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 10:12:13 -0800 (PST)
+Message-ID: <79dc2061-e3db-50a0-3cea-cce87abef718@gmail.com>
+Date:   Tue, 25 Jan 2022 10:12:11 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfAoMW6i4gqw2Na0@krava>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.15 000/841] 5.15.17-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
+References: <20220125155423.959812122@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220125155423.959812122@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:41:24PM +0100, Jiri Olsa wrote:
-> On Tue, Jan 25, 2022 at 09:11:57PM +0900, Masami Hiramatsu wrote:
-> 
-> SNIP
-> 
-> > +
-> > +/* Convert ftrace location address from symbols */
-> > +static int convert_func_addresses(struct fprobe *fp)
-> > +{
-> > +	unsigned long addr, size;
-> > +	unsigned int i;
-> > +
-> > +	/* Convert symbols to symbol address */
-> > +	if (fp->syms) {
-> > +		fp->addrs = kcalloc(fp->nentry, sizeof(*fp->addrs), GFP_KERNEL);
-> > +		if (!fp->addrs)
-> > +			return -ENOMEM;
-> > +
-> > +		for (i = 0; i < fp->nentry; i++) {
-> > +			fp->addrs[i] = kallsyms_lookup_name(fp->syms[i]);
-> > +			if (!fp->addrs[i])	/* Maybe wrong symbol */
-> > +				goto error;
-> > +		}
-> > +	}
-> > +
-> > +	/* Convert symbol address to ftrace location. */
-> > +	for (i = 0; i < fp->nentry; i++) {
-> > +		if (!kallsyms_lookup_size_offset(fp->addrs[i], &size, NULL))
-> > +			size = MCOUNT_INSN_SIZE;
-> > +		addr = ftrace_location_range(fp->addrs[i], fp->addrs[i] + size);
-> 
-> you need to substract 1 from 'end' in here, as explained in
-> __within_notrace_func comment:
-> 
->         /*
->          * Since ftrace_location_range() does inclusive range check, we need
->          * to subtract 1 byte from the end address.
->          */
-> 
-> like in the patch below
-> 
-> also this convert is for archs where address from kallsyms does not match
-> the real attach addresss, like for arm you mentioned earlier, right?
-> 
-> could we have that arch specific, so we don't have extra heavy search
-> loop for archs that do not need it?
 
-one more question..
 
-I'm adding support for user to pass function symbols to bpf fprobe link
-and I thought I'd pass symbols array to register_fprobe, but I'd need to
-copy the whole array of strings from user space first, which could take
-lot of memory considering attachment of 10k+ functions
+On 1/25/2022 8:32 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.17 release.
+> There are 841 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.17-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-so I'm thinking better way is to resolve symbols already in bpf fprobe
-link code and pass just addresses to register_fprobe
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-I assume you want to keep symbol interface, right? could we have some
-flag ensuring the conversion code is skipped, so we don't go through
-it twice?
-
-in any case I need addresses before I call register_fprobe, because
-of the bpf cookies setup
-
-thanks,
-jirka
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

@@ -2,189 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C9A49BF58
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679CD49BF62
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 00:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234640AbiAYXFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 18:05:43 -0500
-Received: from mail-dm6nam12on2114.outbound.protection.outlook.com ([40.107.243.114]:44859
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234612AbiAYXFf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 18:05:35 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m42zKkYm37u11lGiVcezgx+Opx7Z99EYxUxQjKD6MvrKTCSrx2SSBxxNaYYHr7vftUi9sw6zJvT9FS3SFsTnWvP2gltjQvgXzoMDcEsQXFPvM16lX55/KJZA0imLWhufBkAoRcSTfLJao+LE+wJqBnrnbd3RC33/aKjnS394/xVvFZzTT53f9l0yyUmnwICBZqZ5jQ0ewfLrsvZ5ld2ZR9kqQNVh/SfJTsnkxHqbEbb2Wg40ry6zowZRxxbKet+KuyFbvhqLllpv3dF7CZ2X6oA7BL771frhUDaGlMTq25FtlVHVIsbvrGcwmCCoHjjZlJXmm7P84kIlU8ZyjhhIHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4qpG3nTaPL2bYLU98yhSVCsfUH7Tq1rRzfIVyCVXt0c=;
- b=FDL5qCZTrKV/A8Ps9J3YRKY7XzxBBxgI8/yGE1xzuGRYCjLBQEfvfZsT+S8MPhZxb3RiIM2tYBmUDD6DBkplv/9tsRxYYsLewuHvgrJ0pPeIvpjaPKte0vHZSlBD1YXS8Bht2VzCC6FOjYKMpXrE3ikktMTTL6/lR6AkWEzsxPUSm6vB4433bHaaAM+epTXj+iVnQ8agB/1G9MOn7FEqjsWRLl9RJmn/TmuVmN/98w54lmnJTMFR4GHcjwbWyaxKEG9UORMU/kh8UvbcmCj5RDOvwIevBO+CmH4OrjCposM8uBvh5oqnNDDauL/wS2Dez6mSbPkVkv1WYeLop5YxdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4qpG3nTaPL2bYLU98yhSVCsfUH7Tq1rRzfIVyCVXt0c=;
- b=YFj8572/kbQsLMk50nQSvDuE3FjnkjswdcmXWUrNgb3OaMgHvI1/Auc0NgTGTP1+kG0/fixBBJy7vHXHTROWmOEUUOd1kY42f320+cDlBPljr8JdvemMspzQtgm8QantR5lFnqDH9jzHePuwm95YMZCcAWlNjdYnzbr+8Si/vYk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
- CY4PR0101MB2854.prod.exchangelabs.com (2603:10b6:910:47::34) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4909.17; Tue, 25 Jan 2022 23:05:22 +0000
-Received: from DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::c4f4:4df1:380a:2ad8]) by DM5PR0102MB3590.prod.exchangelabs.com
- ([fe80::c4f4:4df1:380a:2ad8%5]) with mapi id 15.20.4909.019; Tue, 25 Jan 2022
- 23:05:22 +0000
-Date:   Tue, 25 Jan 2022 15:04:13 -0800 (PST)
-From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
-X-X-Sender: ikoskine@ubuntu200401
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        guohanjun@huawei.com, sudeep.holla@arm.com, rafael@kernel.org,
-        linux@armlinux.org.uk, lenb@kernel.org, robert.moore@intel.com,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, patches@amperecomputing.com,
-        scott@os.amperecomputing.com, darren@os.amperecomputing.com,
-        james.morse@arm.com
-Subject: Re: [PATCH v3 2/2] ACPI: AGDI: Add driver for Arm Generic Diagnostic
- Dump and Reset device
-In-Reply-To: <20220120163819.GA8187@lpieralisi>
-Message-ID: <alpine.DEB.2.22.394.2201251458550.2578@ubuntu200401>
-References: <20211231033725.21109-1-ilkka@os.amperecomputing.com> <20211231033725.21109-3-ilkka@os.amperecomputing.com> <20220105104602.GA4752@lpieralisi> <alpine.DEB.2.22.394.2201051530290.2489@ubuntu200401> <alpine.DEB.2.22.394.2201131801380.3166@ubuntu200401>
- <20220120163819.GA8187@lpieralisi>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-ClientProxiedBy: CO2PR04CA0170.namprd04.prod.outlook.com
- (2603:10b6:104:4::24) To DM5PR0102MB3590.prod.exchangelabs.com
- (2603:10b6:4:a4::25)
+        id S234678AbiAYXJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 18:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234660AbiAYXJe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 18:09:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E50C06161C;
+        Tue, 25 Jan 2022 15:09:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 96887CE1B70;
+        Tue, 25 Jan 2022 23:09:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B03CC340EE;
+        Tue, 25 Jan 2022 23:09:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643152170;
+        bh=LOMrUiyIHgsNDTx3vAWDhuWxHmuk2gjyVrwtUk6gu8A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZAkaIE/Gj9GJgqqI8WYv8FuktPvTInCnAXzJ0h+F6sA/Kh0gFf21RXlQ0yumHCu46
+         xCaSssZRxku6HaokLRwxkCGuKKEXKtj3mXENaCK8+Z2kQvGttL+AGMX7EdEvuNsd8a
+         yU11dFwOuudGhYp3LpnZgIJmbj+N2FRCXooa2RDsQrWwgl40GnEKb25gIbVX9RQsyU
+         2tJtp2UBQTT71kaIG+VdcQ5DJxVMC08bAdmO5HsAO0xVtp7pnJU3RKVd0U0Ur+TM8i
+         FWmD1mUSTEdIhcY8csplDZDJeyh8AyhSMaPbX06WZ8p61QvMNDpdJxOvOUNThns/aG
+         VRg6LWv5cuyeg==
+Received: by mail-yb1-f172.google.com with SMTP id p5so66066990ybd.13;
+        Tue, 25 Jan 2022 15:09:29 -0800 (PST)
+X-Gm-Message-State: AOAM532uCiuLzGNwJEkVN34pNYSF9c+XbAp4LBvh0lvV+/TiGZ/ItziJ
+        CrNbWLMj22HTHHOVdN2l0GmbV4JJU5+Pu2SBpKo=
+X-Google-Smtp-Source: ABdhPJzoiUW3GraN2bn5nJm+QtYEaBoQ2F8JLg42y/MpPJLnmhsLoeljoRnFtGgcOcu3l6dMrtV+krTfYZKTrFJyJDU=
+X-Received: by 2002:a25:8b85:: with SMTP id j5mr31467798ybl.558.1643152169079;
+ Tue, 25 Jan 2022 15:09:29 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c0004d28-24b5-4737-14d4-08d9e0572991
-X-MS-TrafficTypeDiagnostic: CY4PR0101MB2854:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR0101MB28543CA6A1E9C3257B0571A59D5F9@CY4PR0101MB2854.prod.exchangelabs.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 17qBUqcmv5razoKzHcSClzKnm/Kzt7JxzVpLj34MAi04CWaGibgWCo9R3FQoOdiG+RvxKLKqYHUU9WW29twQ0PzVAnmga9Evgy84W0sbRxo8u9zbVPxzzuJQxaBsD51GK9Wti43TQmS1LkwJgTf6JHlvEkKFx4HqMsiJC9ZTYw4VroBN+ncW8q9uLPAV3bdQhMMD94lGHsvTR3tktfeLSsxp+bZ/51V6bf7MLgYifP4I7qBATr2nZQ5hIm2KzIyToBkBHmzCX021sGWJ18gA2HEhrI5he2/DqOOU/fuYcbA8iTrIDidBYjcn6RpWw4QpKQZ9rBBo4H6Dz8zpsBRA0QbU7dqiakeo7QF8VkTMpTirAZM07IiI6lGVHb5n77NOkfICv0Ai/1/vuXhUCok2XjDQ8up3q6IBTki4rfMmXXgVvSDx0+gmZKFmzRwm2y5E7jQJkJVBkrkUSlUzZTrcblhdpZOqtuc49iYmmUFJOWdfsdFVlZEMHh2lOg5j6VYmjm5h3X7qHtAH/unk5Mijelw2SoZQmNORlRAFokYXPx0KwXshdsJt/SXiT/m8Zgs55uoxGmdnqtEvWno2KGpm3AlI7GqhL6jFvfLPKhduTKpzixAlpq75TMPxqUHGtE6T83CiQxnrERi11Ae9jVW8RDnfuueS8xFDNmts9drm5XQ0FD2jqwhDTlxvJbHW0d9vB6OVrrR+BFcXxj3dzpKXwA0YRIQ4KtDxcz0ktBtty6Yz6z1gIkzLzzfS54HSttooH6dcQOBswdHtbZxk4gwPPEviNTLO1rXfMESwQZnWEAjk0Zl6WoGfqkTfpayugbHS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(33716001)(186003)(66476007)(8676002)(66556008)(66946007)(6506007)(38350700002)(966005)(26005)(38100700002)(86362001)(8936002)(83380400001)(316002)(2906002)(52116002)(7416002)(4326008)(508600001)(6486002)(6512007)(9686003)(6916009)(5660300002)(6666004)(41533002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Dqr9lwBLMdvJXZ9jtEEHxZ4mfJF9LefDxA/6BkXUJiYtyw6njQm1BbDrF7SZ?=
- =?us-ascii?Q?Z2F7acEeOdCq66/KKKzGrnbugvEodF+t3dFQP3tRisirdcjBRR3za7Nrxjaw?=
- =?us-ascii?Q?7BBq4/i2so7nWR54UEH8109edyE81mHL25jWGlhYBq7wmhkDIvUiel2g41UJ?=
- =?us-ascii?Q?bKpcqa0q1HTY0aetpQA/QjjkMZrMTEMsd8X783efqXRI8XCXH2dv/Me0dAfA?=
- =?us-ascii?Q?B782f1DR6kfr/zXAMDUGcDbTARx1ym/gt3WqeOA+lF0GFzGWfWp0J7IOXhtl?=
- =?us-ascii?Q?NV7RoiUkQh8RUEtuqtPApYel1TSY0+zuAoG+uZbPIV8wea5pkeGXJkhPAzGa?=
- =?us-ascii?Q?zpl1tVeWR3JjetFUxtG7Tj7cvx51aV/iaiEGOwUkWstea2g8t6ARWd/9pSh3?=
- =?us-ascii?Q?evSQGXpPTWaIb8duCOPE5Bos1U4z64irNStAnWjA/dZilSP5E820kJiIa+K5?=
- =?us-ascii?Q?qrgEdQge9EStI+twORDIrDBIm7ZKMsovpfFepaQHbCjvpiLbuZxP28Y2MvYa?=
- =?us-ascii?Q?+yimypROrPQKh1hvcV1VxR6/VnFz7kZCcZnqF9wkHXcnwMsMool06e1juUKl?=
- =?us-ascii?Q?ZSayQpV/zbAEn5JeD34G+IJ5KpZfsFbwLO9faII6UdzUSdcip2xsD32Jm/iA?=
- =?us-ascii?Q?HuVufwPzaH9WfMp49Ym/dXn8GVMHQWncv2NfWbBZLbKpuyqK3ra6F2++VFHv?=
- =?us-ascii?Q?y2iPqEC0Edb2LmBwvo35cPScICHk+BiLGnFWfQ6p86OK41RFTzj9Xlk9gRvF?=
- =?us-ascii?Q?6M5ymQkeHt34pHEKQslSkyMZACRqiYaIz6OZVDb6UBwpjAKtn/ZvPGwmF28P?=
- =?us-ascii?Q?yEEJxcySZ5Bu0VXbvDS3tG8SFf8HYyUqVtdPnI55W38VyZLWMBFPEiH+69pn?=
- =?us-ascii?Q?Wle8kOD+br5WSbC5Gis3Dh4YPFSXBp7ga8WRXUph9OfH8hvVrj+0QCkOCg17?=
- =?us-ascii?Q?Q9X8KJlA1627d2oOXNzNiVBr5tcdtKlVoqSLbQPWe7s5bq24ET9EDXWlH0Kf?=
- =?us-ascii?Q?q5CFLXZOXjWhmku6DkAbyq4+SzffcCdiLY+VUNAe+JoIahKiFu8u9VSeaPPK?=
- =?us-ascii?Q?k0RdLv0PSWGQrihgTbGsl5wtUy/mcU2crHw0gBR+IoC0/U21LeJElZoI9LHC?=
- =?us-ascii?Q?6cg8UbgmRyopXh4CIWm//1p6K8o306FnIHoCiDyJO/HnegHm3nsPguLOU2m3?=
- =?us-ascii?Q?vWsGIu5gkz7/la1YHW8lpjOrHQ1rRmPpye58bBHqloxGJzW0xpjmmhciNAgw?=
- =?us-ascii?Q?+1Gdj0UBYwZpvSHoIcwGIUhhmHNi8kzqjNbviLBw/q22qALP/5upT5EPO2lc?=
- =?us-ascii?Q?2rxqSiZk5m/TUm/3BC6PgTb2Ot/byzX5jaJuJKktfsdem9nAqWffIVS5agFW?=
- =?us-ascii?Q?8Cz9cjHF43Ewp8H54EUopeWcC8gOxYZq8aA+L+lhD8CwBc4V+/eS4KWiDRSF?=
- =?us-ascii?Q?2I3BkEFOUf3f+G0bYYLZPgtRQaG02Cbb7/4BV+YuRw60HVSzgvzomeONqEd6?=
- =?us-ascii?Q?p0F4+xg6R5xGc9rAB3hwAwYNvVn+JWPVfapgxs7HVvQKrSuWnuBT2G21ZXw/?=
- =?us-ascii?Q?aFaRY0cJu8trFchDYCEP9yo8X2GjIf0k0kr4Sb2CtYlFO6+SlgzUEf/VKNG/?=
- =?us-ascii?Q?xE8l+ON8yTtbzQ7tXqJG+/kNvU/N+QSlrBP+DfCX60KYi7IYWfL7jJN2JuV6?=
- =?us-ascii?Q?K5cntlOIeDG5UVFrYrJIOgtvIFwFc6tbKd7fQ9QsLjmhdr01DDUI6z2Tx9xO?=
- =?us-ascii?Q?PmkoE+NRWA=3D=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0004d28-24b5-4737-14d4-08d9e0572991
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 23:05:22.3160
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tvERhhxZourZiZXzruiB//yrlF0M9aDzZwufvwP8VuAbgcV5ifoTfHnrzt+mFrismma5LmLe6kE3cr1pCxWjvwW5GoEzUWLH/k1OvPijbUzhEoNZuvGlMdMAkZfHqgnZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR0101MB2854
+References: <20220121194926.1970172-1-song@kernel.org> <20220121194926.1970172-7-song@kernel.org>
+ <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
+ <7393B983-3295-4B14-9528-B7BD04A82709@fb.com> <CAADnVQJLHXaU7tUJN=EM-Nt28xtu4vw9+Ox_uQsjh-E-4VNKoA@mail.gmail.com>
+ <5407DA0E-C0F8-4DA9-B407-3DE657301BB2@fb.com> <CAADnVQLOpgGG9qfR4EAgzrdMrfSg9ftCY=9psR46GeBWP7aDvQ@mail.gmail.com>
+ <5F4DEFB2-5F5A-4703-B5E5-BBCE05CD3651@fb.com> <CAADnVQLXGu_eF8VT6NmxKVxOHmfx7C=mWmmWF8KmsjFXg6P5OA@mail.gmail.com>
+ <5E70BF53-E3FB-4F7A-B55D-199C54A8FDCA@fb.com> <adec88f9-b3e6-bfe4-c09e-54825a60f45d@linux.ibm.com>
+ <2AAC8B8C-96F1-400F-AFA6-D4AF41EC82F4@fb.com> <CAADnVQKgdMMeONmjUhbq_3X39t9HNQWteDuyWVfcxmTerTnaMw@mail.gmail.com>
+ <CAPhsuW4AXLirZwjH4YfJLYj1VUU2muQx1wTkkUpeBBH9kvw2Ag@mail.gmail.com>
+ <CAADnVQL8-Hq=g3u65AOoOcB5y-LcOEA4wwMb1Ep0usWdCCSAcA@mail.gmail.com>
+ <CAPhsuW4K+oDsytLvz4n44Fe3Pbjmpu6tnCk63A-UVxCZpz_rjg@mail.gmail.com> <CAADnVQJ8-XVYb21bFRgsaoj7hzd89NSbSOBj0suwsYSL89pxsg@mail.gmail.com>
+In-Reply-To: <CAADnVQJ8-XVYb21bFRgsaoj7hzd89NSbSOBj0suwsYSL89pxsg@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 25 Jan 2022 15:09:18 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7AzQL5y+4stw_MZCg2sR3e5qe1YS0L1evxhCvfTWF5+Q@mail.gmail.com>
+Message-ID: <CAPhsuW7AzQL5y+4stw_MZCg2sR3e5qe1YS0L1evxhCvfTWF5+Q@mail.gmail.com>
+Subject: Re: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Thu, 20 Jan 2022, Lorenzo Pieralisi wrote:
-
-> On Thu, Jan 13, 2022 at 06:17:13PM -0800, Ilkka Koskinen wrote:
->>
->> Hi Lorenzo,
->>
->> On Wed, 5 Jan 2022, Ilkka Koskinen wrote:
->>>
->>> Hi Lorenzo,
->>>
->>> On Wed, 5 Jan 2022, Lorenzo Pieralisi wrote:
->>>> [+James, for SDEI bits]
->>>>
->>>> On Thu, Dec 30, 2021 at 07:37:25PM -0800, Ilkka Koskinen wrote:
->>>>> ACPI for Arm Components 1.1 Platform Design Document v1.1 [0] specifices
->>>>> Arm Generic Diagnostic Device Interface (AGDI). It allows an admin to
->>>>> issue diagnostic dump and reset via an SDEI event or an interrupt.
->>>>> This patch implements SDEI path.
->>>>>
->>>>> [0] https://developer.arm.com/documentation/den0093/latest/
->>>>>
->>>>> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
->>>>> ---
->>>>>  drivers/acpi/arm64/Kconfig  |   8 +++
->>>>>  drivers/acpi/arm64/Makefile |   1 +
->>>>>  drivers/acpi/arm64/agdi.c   | 125 ++++++++++++++++++++++++++++++++++++
->>>>>  3 files changed, 134 insertions(+)
->>>>>  create mode 100644 drivers/acpi/arm64/agdi.c
->>
->> <snip>
->>
->>>>> diff --git a/drivers/acpi/arm64/agdi.c b/drivers/acpi/arm64/agdi.c
->>>>> new file mode 100644
->>>>> index 000000000000..6525ccbae5c1
->>>>> --- /dev/null
->>>>> +++ b/drivers/acpi/arm64/agdi.c
->>
->> <snip>
->>
->>>>>
->>>>> +static int __init agdi_init(void)
->>>>> +{
->>>>> +	int ret;
->>>>> +	acpi_status status;
->>>>> +	struct acpi_table_agdi *agdi_table;
->>>>> +	struct agdi_data pdata;
->>>>> +	struct platform_device *pdev;
->>>>> +
->>>>> +	if (acpi_disabled)
->>>>> +		return 0;
->>>>
->>>> Why don't we call agdi_init() from acpi_init() as we do for IORT/VIOT ?
->>>>
->>>> I don't think it is necessary to add a device_initcall(), with related
->>>> ordering dependencies.
->>>
->>> That's a good point. I change it.
->>
->> Actually, I looked at this more carefully. acpi_init() is called in
->> subsys_initcall() while sdei_init() is called in subsys_initcall_sync().
->> That is, if I call this function in acpi_init(), SDEI driver won't be ready
->> and this driver fails to register the event.
+On Tue, Jan 25, 2022 at 2:48 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Maybe this will help:
+> On Tue, Jan 25, 2022 at 2:25 PM Song Liu <song@kernel.org> wrote:
+> >
+> > On Tue, Jan 25, 2022 at 12:00 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Mon, Jan 24, 2022 at 11:21 PM Song Liu <song@kernel.org> wrote:
+> > > >
+> > > > On Mon, Jan 24, 2022 at 9:21 PM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > >
+> > > > > On Mon, Jan 24, 2022 at 10:27 AM Song Liu <songliubraving@fb.com> wrote:
+> > > > > > >
+> > > > > > > Are arches expected to allocate rw buffers in different ways? If not,
+> > > > > > > I would consider putting this into the common code as well. Then
+> > > > > > > arch-specific code would do something like
+> > > > > > >
+> > > > > > >  header = bpf_jit_binary_alloc_pack(size, &prg_buf, &prg_addr, ...);
+> > > > > > >  ...
+> > > > > > >  /*
+> > > > > > >   * Generate code into prg_buf, the code should assume that its first
+> > > > > > >   * byte is located at prg_addr.
+> > > > > > >   */
+> > > > > > >  ...
+> > > > > > >  bpf_jit_binary_finalize_pack(header, prg_buf);
+> > > > > > >
+> > > > > > > where bpf_jit_binary_finalize_pack() would copy prg_buf to header and
+> > > > > > > free it.
+> > > > >
+> > > > > It feels right, but bpf_jit_binary_finalize_pack() sounds 100% arch
+> > > > > dependent. The only thing it will do is perform a copy via text_poke.
+> > > > > What else?
+> > > > >
+> > > > > > I think this should work.
+> > > > > >
+> > > > > > We will need an API like: bpf_arch_text_copy, which uses text_poke_copy()
+> > > > > > for x86_64 and s390_kernel_write() for x390. We will use bpf_arch_text_copy
+> > > > > > to
+> > > > > >   1) write header->size;
+> > > > > >   2) do finally copy in bpf_jit_binary_finalize_pack().
+> > > > >
+> > > > > we can combine all text_poke operations into one.
+> > > > >
+> > > > > Can we add an 'image' pointer into struct bpf_binary_header ?
+> > > >
+> > > > There is a 4-byte hole in bpf_binary_header. How about we put
+> > > > image_offset there? Actually we only need 2 bytes for offset.
+> > > >
+> > > > > Then do:
+> > > > > int bpf_jit_binary_alloc_pack(size, &ro_hdr, &rw_hdr);
+> > > > >
+> > > > > ro_hdr->image would be the address used to compute offsets by JIT.
+> > > >
+> > > > If we only do one text_poke(), we cannot write ro_hdr->image yet. We
+> > > > can use ro_hdr + rw_hdr->image_offset instead.
+> > >
+> > > Good points.
+> > > Maybe let's go back to Ilya's suggestion and return 4 pointers
+> > > from bpf_jit_binary_alloc_pack ?
+> >
+> > How about we use image_offset, like:
+> >
+> > struct bpf_binary_header {
+> >         u32 size;
+> >         u32 image_offset;
+> >         u8 image[] __aligned(BPF_IMAGE_ALIGNMENT);
+> > };
+> >
+> > Then we can use
+> >
+> > image = (void *)header + header->image_offset;
 >
-> https://lore.kernel.org/linux-arm-kernel/20220120050522.23689-1-xueshuai@linux.alibaba.com/
+> I'm not excited about it, since it leaks header details into JITs.
+> Looks like we don't need JIT to be aware of it.
+> How about we do random() % roundup(sizeof(struct bpf_binary_header), 64)
+> to pick the image start and populate
+> image-sizeof(struct bpf_binary_header) range
+> with 'int 3'.
+> This way we can completely hide binary_header inside generic code.
+> The bpf_jit_binary_alloc_pack() would return ro_image and rw_image only.
+> And JIT would pass them back into bpf_jit_binary_finalize_pack().
+> From the image pointer it would be trivial to get to binary_header with &63.
+> The 128 byte offset that we use today was chosen arbitrarily.
+> We were burning the whole page for a single program, so 128 bytes zone
+> at the front was ok.
+> Now we will be packing progs rounded up to 64 bytes, so it's better
+> to avoid wasting those 128 bytes regardless.
 
-Yep, that should work. I'll wait for his patch to get approved and make 
-the needed changes to mine before submitting the v5.
+In bpf_jit_binary_hdr(), we calculate header as image & PAGE_MASK.
+If we want s/PAGE_MASK/63 for x86_64, we will have different versions
+of bpf_jit_binary_hdr(). It is not on any hot path, so we can use __weak for
+it. Other than this, I think the solution works fine.
 
-Cheers, Ilkka
+Thanks,
+Song

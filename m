@@ -2,294 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9405249B52A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF68E49B545
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 14:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387212AbiAYNcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 08:32:02 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59768 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1577065AbiAYN2T (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 08:28:19 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PDC68N013984;
-        Tue, 25 Jan 2022 13:28:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Y8AQAx7pdo5NCiqYDsxe/2JWdeVRlx9pu21d8bMBJws=;
- b=SF9S6u1m5soRO80JbcCwrgWYj+PcbPNrQPX0CFyQb+Ifn6zp065Utq0cGNntntExd5le
- PqFnsjStZTnREZRb42Y3Js0OtdcmUChcrG8dEaY6kocZGEUXP02ns/tQUb4qsT7ol8/l
- 1sowCTYxxs6ufKJMtJsYJBhrS0cBapRSNa1QQOI4JJY/I8dBfe05CcltWPCAd9hUq3IB
- s5kqBSem0WGjUv8yVxEbTaAmdlUXNXIvSQYXcFCWWQk5rB8IqBctWbAnOpx3gZMFgSSz
- uxXAaStBq2qhz/DARI0VJzvUw+FO44tPRNc8FqzEFOj5NwS6XkEv8XLg6hb/prn4R9l7 jw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dthvh8a0n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 13:28:13 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20PDJCYX005651;
-        Tue, 25 Jan 2022 13:28:13 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dthvh8a09-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 13:28:13 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20PDRPNR015144;
-        Tue, 25 Jan 2022 13:28:11 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3dr9j9d48h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 13:28:11 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20PDS8hT27591118
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jan 2022 13:28:08 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0FE70AE045;
-        Tue, 25 Jan 2022 13:28:08 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB597AE057;
-        Tue, 25 Jan 2022 13:28:06 +0000 (GMT)
-Received: from [9.171.58.95] (unknown [9.171.58.95])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Jan 2022 13:28:06 +0000 (GMT)
-Message-ID: <12b9fba1-38b4-057d-49f4-969f2e7e1be3@linux.ibm.com>
-Date:   Tue, 25 Jan 2022 14:29:57 +0100
+        id S1577531AbiAYNmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 08:42:03 -0500
+Received: from mga02.intel.com ([134.134.136.20]:49990 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1382648AbiAYNjV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 08:39:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643117961; x=1674653961;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D7hlzJPeHygbU5POvuC9qTcjfzuKUzeZK78Zs9FRQi0=;
+  b=goYer07lq7U2EKLxGcmwq3KzIYb6BjmoFNTNf6YyUIPmTOT9t57ZRuCU
+   Apn8mPw9DojBSJ6lD3t45GCGsFnw3aJtuwHvjBfjD202F8mcj26ue6A0R
+   ANKd7vAuo7gCOE7qNMCA7xCPMaRhNL9nJobr0alT1xoQrYHg/6k3mPmh8
+   9wgpvgwAE85B2zVro3BzmGduzDUsNFQ5DlFwIXye9s+lne+hW9om4Xvlm
+   nf2PuGAuI6/+bhriCg5S1iAr7kJ6VihxF9fzM0O0e7fJ3HNaafEbQoDaK
+   7fjEjsjzI6Q7yqI8Jwe122hCY3efz3YWetPVNvaPpjV+qUAkM1btVylN3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="233669662"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="233669662"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 05:32:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="627928236"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 25 Jan 2022 05:31:57 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCLvQ-000Jwk-AH; Tue, 25 Jan 2022 13:31:56 +0000
+Date:   Tue, 25 Jan 2022 21:31:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [PATCH v6 05/13] peci: Add peci-aspeed controller driver
+Message-ID: <202201252130.U4qxBhmg-lkp@intel.com>
+References: <20220125011104.2480133-6-iwona.winiarska@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 20/30] KVM: s390: pci: provide routines for
- enabling/disabling IOAT assist
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-21-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220114203145.242984-21-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: X8kfcrxN8VCzGWKZdicZwnHJcGAKAyZ9
-X-Proofpoint-ORIG-GUID: 1hXTUuoSq8xFdx-m3Q3Uz5R2aEGJfYqM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_02,2022-01-25_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
- clxscore=1015 impostorscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201250085
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125011104.2480133-6-iwona.winiarska@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Iwona,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linux/master linus/master v5.17-rc1 next-20220125]
+[cannot apply to joel-aspeed/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Iwona-Winiarska/Introduce-PECI-subsystem/20220125-115946
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220125/202201252130.U4qxBhmg-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/35075a61a26913806122a9b500915dc66ad678bd
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Iwona-Winiarska/Introduce-PECI-subsystem/20220125-115946
+        git checkout 35075a61a26913806122a9b500915dc66ad678bd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/clk.c:856:6: error: redefinition of 'clk_unprepare'
+     856 | void clk_unprepare(struct clk *clk)
+         |      ^~~~~~~~~~~~~
+   In file included from drivers/clk/clk.c:9:
+   include/linux/clk.h:303:20: note: previous definition of 'clk_unprepare' with type 'void(struct clk *)'
+     303 | static inline void clk_unprepare(struct clk *clk)
+         |                    ^~~~~~~~~~~~~
+>> drivers/clk/clk.c:937:5: error: redefinition of 'clk_prepare'
+     937 | int clk_prepare(struct clk *clk)
+         |     ^~~~~~~~~~~
+   In file included from drivers/clk/clk.c:9:
+   include/linux/clk.h:271:19: note: previous definition of 'clk_prepare' with type 'int(struct clk *)'
+     271 | static inline int clk_prepare(struct clk *clk)
+         |                   ^~~~~~~~~~~
+>> drivers/clk/clk.c:1183:6: error: redefinition of 'clk_is_enabled_when_prepared'
+    1183 | bool clk_is_enabled_when_prepared(struct clk *clk)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/clk/clk.c:9:
+   include/linux/clk.h:284:20: note: previous definition of 'clk_is_enabled_when_prepared' with type 'bool(struct clk *)' {aka '_Bool(struct clk *)'}
+     284 | static inline bool clk_is_enabled_when_prepared(struct clk *clk)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for COMMON_CLK
+   Depends on !HAVE_LEGACY_CLK
+   Selected by
+   - PECI_ASPEED && PECI && (ARCH_ASPEED || COMPILE_TEST && OF && HAS_IOMEM
 
 
-On 1/14/22 21:31, Matthew Rosato wrote:
-> These routines will be wired into the vfio_pci_zdev ioctl handlers to
-> respond to requests to enable / disable a device for PCI I/O Address
-> Translation assistance.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->   arch/s390/include/asm/kvm_pci.h |  15 ++++
->   arch/s390/include/asm/pci_dma.h |   2 +
->   arch/s390/kvm/pci.c             | 139 ++++++++++++++++++++++++++++++++
->   arch/s390/kvm/pci.h             |   2 +
->   4 files changed, 158 insertions(+)
-> 
-> diff --git a/arch/s390/include/asm/kvm_pci.h b/arch/s390/include/asm/kvm_pci.h
-> index 01fe14fffd7a..770849f13a70 100644
-> --- a/arch/s390/include/asm/kvm_pci.h
-> +++ b/arch/s390/include/asm/kvm_pci.h
-> @@ -16,11 +16,21 @@
->   #include <linux/kvm_host.h>
->   #include <linux/kvm.h>
->   #include <linux/pci.h>
-> +#include <linux/mutex.h>
->   #include <asm/pci_insn.h>
-> +#include <asm/pci_dma.h>
-> +
-> +struct kvm_zdev_ioat {
-> +	unsigned long *head[ZPCI_TABLE_PAGES];
-> +	unsigned long **seg;
-> +	unsigned long ***pt;
-> +	struct mutex lock;
+vim +/clk_unprepare +856 drivers/clk/clk.c
 
-Can we please rename the mutex ioat_lock to have a unique name easy to 
-follow for maintenance.
-Can you please add a description about when the lock should be used?
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  844  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  845  /**
+4dff95dc9477a3 Stephen Boyd     2015-04-30  846   * clk_unprepare - undo preparation of a clock source
+4dff95dc9477a3 Stephen Boyd     2015-04-30  847   * @clk: the clk being unprepared
+4dff95dc9477a3 Stephen Boyd     2015-04-30  848   *
+4dff95dc9477a3 Stephen Boyd     2015-04-30  849   * clk_unprepare may sleep, which differentiates it from clk_disable.  In a
+4dff95dc9477a3 Stephen Boyd     2015-04-30  850   * simple case, clk_unprepare can be used instead of clk_disable to gate a clk
+4dff95dc9477a3 Stephen Boyd     2015-04-30  851   * if the operation may sleep.  One example is a clk which is accessed over
+4dff95dc9477a3 Stephen Boyd     2015-04-30  852   * I2c.  In the complex case a clk gate operation may require a fast and a slow
+4dff95dc9477a3 Stephen Boyd     2015-04-30  853   * part.  It is this reason that clk_unprepare and clk_disable are not mutually
+4dff95dc9477a3 Stephen Boyd     2015-04-30  854   * exclusive.  In fact clk_disable must be called before clk_unprepare.
+4dff95dc9477a3 Stephen Boyd     2015-04-30  855   */
+4dff95dc9477a3 Stephen Boyd     2015-04-30 @856  void clk_unprepare(struct clk *clk)
+b2476490ef1113 Mike Turquette   2012-03-15  857  {
+4dff95dc9477a3 Stephen Boyd     2015-04-30  858  	if (IS_ERR_OR_NULL(clk))
+4dff95dc9477a3 Stephen Boyd     2015-04-30  859  		return;
+b2476490ef1113 Mike Turquette   2012-03-15  860  
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  861  	clk_core_unprepare_lock(clk->core);
+1e435256d625c2 Olof Johansson   2013-04-27  862  }
+4dff95dc9477a3 Stephen Boyd     2015-04-30  863  EXPORT_SYMBOL_GPL(clk_unprepare);
+1e435256d625c2 Olof Johansson   2013-04-27  864  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  865  static int clk_core_prepare(struct clk_core *core)
+4dff95dc9477a3 Stephen Boyd     2015-04-30  866  {
+4dff95dc9477a3 Stephen Boyd     2015-04-30  867  	int ret = 0;
+b2476490ef1113 Mike Turquette   2012-03-15  868  
+a63347251907d7 Stephen Boyd     2015-05-06  869  	lockdep_assert_held(&prepare_lock);
+a63347251907d7 Stephen Boyd     2015-05-06  870  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  871  	if (!core)
+4dff95dc9477a3 Stephen Boyd     2015-04-30  872  		return 0;
+b2476490ef1113 Mike Turquette   2012-03-15  873  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  874  	if (core->prepare_count == 0) {
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  875  		ret = clk_pm_runtime_get(core);
+4dff95dc9477a3 Stephen Boyd     2015-04-30  876  		if (ret)
+4dff95dc9477a3 Stephen Boyd     2015-04-30  877  			return ret;
+b2476490ef1113 Mike Turquette   2012-03-15  878  
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  879  		ret = clk_core_prepare(core->parent);
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  880  		if (ret)
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  881  			goto runtime_put;
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  882  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  883  		trace_clk_prepare(core);
+1c155b3dfe0835 Ulf Hansson      2013-03-12  884  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  885  		if (core->ops->prepare)
+4dff95dc9477a3 Stephen Boyd     2015-04-30  886  			ret = core->ops->prepare(core->hw);
+1c155b3dfe0835 Ulf Hansson      2013-03-12  887  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  888  		trace_clk_prepare_complete(core);
+b2476490ef1113 Mike Turquette   2012-03-15  889  
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  890  		if (ret)
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  891  			goto unprepare;
+b2476490ef1113 Mike Turquette   2012-03-15  892  	}
+b2476490ef1113 Mike Turquette   2012-03-15  893  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  894  	core->prepare_count++;
+b2476490ef1113 Mike Turquette   2012-03-15  895  
+9461f7b33d11cb Jerome Brunet    2018-06-19  896  	/*
+9461f7b33d11cb Jerome Brunet    2018-06-19  897  	 * CLK_SET_RATE_GATE is a special case of clock protection
+9461f7b33d11cb Jerome Brunet    2018-06-19  898  	 * Instead of a consumer claiming exclusive rate control, it is
+9461f7b33d11cb Jerome Brunet    2018-06-19  899  	 * actually the provider which prevents any consumer from making any
+9461f7b33d11cb Jerome Brunet    2018-06-19  900  	 * operation which could result in a rate change or rate glitch while
+9461f7b33d11cb Jerome Brunet    2018-06-19  901  	 * the clock is prepared.
+9461f7b33d11cb Jerome Brunet    2018-06-19  902  	 */
+9461f7b33d11cb Jerome Brunet    2018-06-19  903  	if (core->flags & CLK_SET_RATE_GATE)
+9461f7b33d11cb Jerome Brunet    2018-06-19  904  		clk_core_rate_protect(core);
+9461f7b33d11cb Jerome Brunet    2018-06-19  905  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  906  	return 0;
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  907  unprepare:
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  908  	clk_core_unprepare(core->parent);
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  909  runtime_put:
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  910  	clk_pm_runtime_put(core);
+9a34b45397e5a3 Marek Szyprowski 2017-08-21  911  	return ret;
+b2476490ef1113 Mike Turquette   2012-03-15  912  }
+b2476490ef1113 Mike Turquette   2012-03-15  913  
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  914  static int clk_core_prepare_lock(struct clk_core *core)
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  915  {
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  916  	int ret;
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  917  
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  918  	clk_prepare_lock();
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  919  	ret = clk_core_prepare(core);
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  920  	clk_prepare_unlock();
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  921  
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  922  	return ret;
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  923  }
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  924  
+4dff95dc9477a3 Stephen Boyd     2015-04-30  925  /**
+4dff95dc9477a3 Stephen Boyd     2015-04-30  926   * clk_prepare - prepare a clock source
+4dff95dc9477a3 Stephen Boyd     2015-04-30  927   * @clk: the clk being prepared
+4dff95dc9477a3 Stephen Boyd     2015-04-30  928   *
+4dff95dc9477a3 Stephen Boyd     2015-04-30  929   * clk_prepare may sleep, which differentiates it from clk_enable.  In a simple
+4dff95dc9477a3 Stephen Boyd     2015-04-30  930   * case, clk_prepare can be used instead of clk_enable to ungate a clk if the
+4dff95dc9477a3 Stephen Boyd     2015-04-30  931   * operation may sleep.  One example is a clk which is accessed over I2c.  In
+4dff95dc9477a3 Stephen Boyd     2015-04-30  932   * the complex case a clk ungate operation may require a fast and a slow part.
+4dff95dc9477a3 Stephen Boyd     2015-04-30  933   * It is this reason that clk_prepare and clk_enable are not mutually
+4dff95dc9477a3 Stephen Boyd     2015-04-30  934   * exclusive.  In fact clk_prepare must be called before clk_enable.
+4dff95dc9477a3 Stephen Boyd     2015-04-30  935   * Returns 0 on success, -EERROR otherwise.
+4dff95dc9477a3 Stephen Boyd     2015-04-30  936   */
+4dff95dc9477a3 Stephen Boyd     2015-04-30 @937  int clk_prepare(struct clk *clk)
+b2476490ef1113 Mike Turquette   2012-03-15  938  {
+035a61c314eb3d Tomeu Vizoso     2015-01-23  939  	if (!clk)
+4dff95dc9477a3 Stephen Boyd     2015-04-30  940  		return 0;
+035a61c314eb3d Tomeu Vizoso     2015-01-23  941  
+a6adc30ba7bef8 Dong Aisheng     2016-06-30  942  	return clk_core_prepare_lock(clk->core);
+7ef3dcc8145263 James Hogan      2013-07-29  943  }
+4dff95dc9477a3 Stephen Boyd     2015-04-30  944  EXPORT_SYMBOL_GPL(clk_prepare);
+035a61c314eb3d Tomeu Vizoso     2015-01-23  945  
 
-> +};
->   
->   struct kvm_zdev {
->   	struct zpci_dev *zdev;
->   	struct kvm *kvm;
-> +	struct kvm_zdev_ioat ioat;
->   	struct zpci_fib fib;
->   };
->   
-> @@ -33,6 +43,11 @@ int kvm_s390_pci_aif_enable(struct zpci_dev *zdev, struct zpci_fib *fib,
->   			    bool assist);
->   int kvm_s390_pci_aif_disable(struct zpci_dev *zdev);
->   
-> +int kvm_s390_pci_ioat_probe(struct zpci_dev *zdev);
-> +int kvm_s390_pci_ioat_enable(struct zpci_dev *zdev, u64 iota);
-> +int kvm_s390_pci_ioat_disable(struct zpci_dev *zdev);
-> +u8 kvm_s390_pci_get_dtsm(struct zpci_dev *zdev);
-> +
->   int kvm_s390_pci_interp_probe(struct zpci_dev *zdev);
->   int kvm_s390_pci_interp_enable(struct zpci_dev *zdev);
->   int kvm_s390_pci_interp_disable(struct zpci_dev *zdev);
-> diff --git a/arch/s390/include/asm/pci_dma.h b/arch/s390/include/asm/pci_dma.h
-> index 91e63426bdc5..69e616d0712c 100644
-> --- a/arch/s390/include/asm/pci_dma.h
-> +++ b/arch/s390/include/asm/pci_dma.h
-> @@ -50,6 +50,8 @@ enum zpci_ioat_dtype {
->   #define ZPCI_TABLE_ALIGN		ZPCI_TABLE_SIZE
->   #define ZPCI_TABLE_ENTRY_SIZE		(sizeof(unsigned long))
->   #define ZPCI_TABLE_ENTRIES		(ZPCI_TABLE_SIZE / ZPCI_TABLE_ENTRY_SIZE)
-> +#define ZPCI_TABLE_PAGES		(ZPCI_TABLE_SIZE >> PAGE_SHIFT)
-> +#define ZPCI_TABLE_ENTRIES_PAGES	(ZPCI_TABLE_ENTRIES * ZPCI_TABLE_PAGES)
->   
->   #define ZPCI_TABLE_BITS			11
->   #define ZPCI_PT_BITS			8
-> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
-> index 7ed9abc476b6..39c13c25a700 100644
-> --- a/arch/s390/kvm/pci.c
-> +++ b/arch/s390/kvm/pci.c
-> @@ -13,12 +13,15 @@
->   #include <asm/pci.h>
->   #include <asm/pci_insn.h>
->   #include <asm/pci_io.h>
-> +#include <asm/pci_dma.h>
->   #include <asm/sclp.h>
->   #include "pci.h"
->   #include "kvm-s390.h"
->   
->   struct zpci_aift *aift;
->   
-> +#define shadow_ioat_init zdev->kzdev->ioat.head[0]
-> +
->   static inline int __set_irq_noiib(u16 ctl, u8 isc)
->   {
->   	union zpci_sic_iib iib = {{0}};
-> @@ -344,6 +347,135 @@ int kvm_s390_pci_aif_disable(struct zpci_dev *zdev)
->   }
->   EXPORT_SYMBOL_GPL(kvm_s390_pci_aif_disable);
->   
-> +int kvm_s390_pci_ioat_probe(struct zpci_dev *zdev)
-> +{
-> +	/* Must have a KVM association registered */
-
-may be add something like : "The ioat structure is embeded in kzdev"
-
-> +	if (!zdev->kzdev || !zdev->kzdev->kvm)
-
-Why do we need to check for kvm ?
-Having kzdev is already tested by the unique caller.
-
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(kvm_s390_pci_ioat_probe);
-> +
-> +int kvm_s390_pci_ioat_enable(struct zpci_dev *zdev, u64 iota)
-> +{
-> +	gpa_t gpa = (gpa_t)(iota & ZPCI_RTE_ADDR_MASK);
-> +	struct kvm_zdev_ioat *ioat;
-> +	struct page *page;
-> +	struct kvm *kvm;
-> +	unsigned int idx;
-> +	void *iaddr;
-> +	int i, rc = 0;
-
-no need to initialize rc
-
-> +
-> +	if (shadow_ioat_init)
-> +		return -EINVAL;
-> +
-> +	/* Ensure supported type specified */
-> +	if ((iota & ZPCI_IOTA_RTTO_FLAG) != ZPCI_IOTA_RTTO_FLAG)
-> +		return -EINVAL;
-> +
-> +	kvm = zdev->kzdev->kvm;
-> +	ioat = &zdev->kzdev->ioat;
-> +	mutex_lock(&ioat->lock);
-> +	idx = srcu_read_lock(&kvm->srcu);
-> +	for (i = 0; i < ZPCI_TABLE_PAGES; i++) {
-> +		page = gfn_to_page(kvm, gpa_to_gfn(gpa));
-> +		if (is_error_page(page)) {
-> +			srcu_read_unlock(&kvm->srcu, idx);
-> +			rc = -EIO;
-> +			goto out;
-
-			goto unpin ?
-
-> +		}
-> +		iaddr = page_to_virt(page) + (gpa & ~PAGE_MASK);
-> +		ioat->head[i] = (unsigned long *)iaddr;
-> +		gpa += PAGE_SIZE;
-> +	}
-> +	srcu_read_unlock(&kvm->srcu, idx);
-> +
-> +	zdev->kzdev->ioat.seg = kcalloc(ZPCI_TABLE_ENTRIES_PAGES,
-> +					sizeof(unsigned long *), GFP_KERNEL);
-
-What about:
-
-         ioat->seg = kcalloc(ZPCI_TABLE_ENTRIES_PAGES,
-                             sizeof(*ioat->seg), GFP_KERNEL);
-	if (!ioat->seg)
-...
-	ioat->pt = ...
-?
-
-> +	if (!zdev->kzdev->ioat.seg)
-> +		goto unpin;
-> +	zdev->kzdev->ioat.pt = kcalloc(ZPCI_TABLE_ENTRIES,
-> +				       sizeof(unsigned long **), GFP_KERNEL);
-> +	if (!zdev->kzdev->ioat.pt)
-> +		goto free_seg;
-> +
-> +out:
-> +	mutex_unlock(&ioat->lock);
-> +	return rc;
-
-	return 0 ?
-
-> +
-> +free_seg:
-> +	kfree(zdev->kzdev->ioat.seg);
-
-kfree(ioat->seg) ?
-rc = -ENOMEM;
-
-> +unpin:
-> +	for (i = 0; i < ZPCI_TABLE_PAGES; i++) {
-> +		kvm_release_pfn_dirty((u64)ioat->head[i] >> PAGE_SHIFT);
-> +		ioat->head[i] = 0;
-> +	}
-> +	mutex_unlock(&ioat->lock);
-> +	return -ENOMEM;
-
-	return rc;
-
-> +}
-...snip...
-
--- 
-Pierre Morel
-IBM Lab Boeblingen
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

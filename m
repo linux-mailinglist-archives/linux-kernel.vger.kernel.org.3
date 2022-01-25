@@ -2,65 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7973049ADFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E54749ADE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 09:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450348AbiAYI1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 03:27:09 -0500
-Received: from usmail.montage-tech.com ([12.176.92.53]:54318 "EHLO
-        usmail.montage-tech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1450177AbiAYIYw (ORCPT
+        id S1449613AbiAYISw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 03:18:52 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41062 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1448662AbiAYIQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 03:24:52 -0500
-X-Greylist: delayed 385 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Jan 2022 03:24:52 EST
-X-MDAV-Result: clean
-X-MDAV-Processed: usmail.montage-tech.com, Tue, 25 Jan 2022 00:18:24 -0800
-Received: from shmail.montage-tech.com by usmail.montage-tech.com with ESMTP id md5001005969448.msg; 
-        Tue, 25 Jan 2022 00:18:23 -0800
-X-Spam-Processed: usmail.montage-tech.com, Tue, 25 Jan 2022 00:18:23 -0800
-        (not processed: message from trusted or authenticated source)
-X-MDArrival-Date: Tue, 25 Jan 2022 00:18:23 -0800
-X-Return-Path: prvs=1024754431=david.dai@montage-tech.com
-X-Envelope-From: david.dai@montage-tech.com
-X-MDaemon-Deliver-To: linux-kernel@vger.kernel.org
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=montage-tech.com;
-        s=MDaemon; t=1643098688; x=1643703488;
-        i=david.dai@montage-tech.com; q=dns/txt; h=Date:From:To:Cc:
-        Subject:Message-ID:MIME-Version:Content-Type:
-        Content-Disposition; bh=YOwfpUuwTjNfCW92OafX6MvQsskvvk97bUamOD9p
-        SKY=; b=TGefdGneymaKyOLjni8PX6FegYzVngJv/AqfIFAt9N7CTl+OHUggmerQ
-        aZLNIFt9+lFba54im8zOhUXAfAq+2iusksA8qx7XEAem/nv4eEHkTw7tgzQ4CQho
-        RdiTf1/HFis3CV0GCoVFvhWc3b3HOBu5yUTDU58vL8viyxGlqGs=
-X-MDAV-Result: clean
-X-MDAV-Processed: shmail.montage-tech.com, Tue, 25 Jan 2022 16:18:08 +0800
-Received: from tianmu-host-sw-01 by shmail.montage-tech.com with ESMTPA id pp5001018195228.msg; 
-        Tue, 25 Jan 2022 16:18:08 +0800
-X-Spam-Processed: shmail.montage-tech.com, Tue, 25 Jan 2022 16:18:08 +0800
-        (not processed: message from trusted or authenticated source)
-Date:   Tue, 25 Jan 2022 16:14:40 +0800
-From:   "david.dai" <david.dai@montage-tech.com>
-To:     yi.l.liu@intel.com
-Cc:     peterx@redhat.com, linux-kernel@vger.kernel.org
-Subject: qemu vSVM
-Message-ID: <20220125081440.GA3671060@tianmu-host-sw-01>
+        Tue, 25 Jan 2022 03:16:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E124C61356;
+        Tue, 25 Jan 2022 08:15:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DDAC340E0;
+        Tue, 25 Jan 2022 08:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643098559;
+        bh=oOAVFFJCw0q0MIAnSxXXySpATKyLu18DMYIWW4/U0Mo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MixvZQEtJ/M3mWJGBEyVlcZYe2/ILADKZcFMcrfgVQk5Su0dKFZWKGP8rIaNJt5Ig
+         b0/LoqDGEBvvgTGjH2G3PHbXDFHumtUptYwNo8PbyK741yAj7Zb3gB4NWz+mbgcDnH
+         hqs0zGUGr2+toks7mSu1CybGouzpiZLgQgyk2cc3X+3d2s5CqrWApek2oQljYpLp6Y
+         286Ssa9tn+VRq2szT/vFZfItyBkcztB8r1d9iyagt10ttDJpcvg4RjIrtb/T4mnKCB
+         HLZ67A2ymtng7KwK7fnFz5ZuWNISFXE/nIWCDQoroXXnRgR1li49t/nd94zxbMihsZ
+         42UqvS3WnDRjA==
+Date:   Tue, 25 Jan 2022 09:15:51 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Akira Yokosawa <akiyks@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.16 0728/1039] scripts: sphinx-pre-install: Fix ctex
+ support on Debian
+Message-ID: <20220125091551.6a6faaf6@coco.lan>
+In-Reply-To: <ba541d48-826c-3d39-b3e1-05642fa6edd6@gmail.com>
+References: <20220124184125.121143506@linuxfoundation.org>
+        <20220124184149.801920838@linuxfoundation.org>
+        <ba541d48-826c-3d39-b3e1-05642fa6edd6@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-MDCFSigsAdded: montage-tech.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yi,
+Em Tue, 25 Jan 2022 07:48:39 +0900
+Akira Yokosawa <akiyks@gmail.com> escreveu:
 
-I want to have a try on SVA(shared virtual addressing) + pasid on QEMU based on intel IOMMU.
-From my understanding, intel vIOMMU in QEMU and VFIO driver in host are ready, but VFIO
-in qemu may be not.
+> Hi Greg,
+> 
+> On Mon, 24 Jan 2022 19:41:57 +0100,
+> Greg Kroah-Hartman wrote:
+> > From: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > 
+> > [ Upstream commit 87d6576ddf8ac25f36597bc93ca17f6628289c16 ]
+> > 
+> > The name of the package with ctexhook.sty is different on
+> > Debian/Ubuntu.
+> > 
+> > Reported-by: Akira Yokosawa <akiyks@gmail.com>
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Tested-by: Akira Yokosawa <akiyks@gmail.com>
+> > Link: https://lore.kernel.org/r/63882425609a2820fac78f5e94620abeb7ed5f6f.1641429634.git.mchehab@kernel.org
+> > Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>  
+> 
+> This "Fix" is against upstream commit 7baab965896e ("scripts:
+> sphinx-pre-install: add required ctex dependency") which is
+> also new to v5.17-rc1.
+> 
+> So I don't think this is worth backporting to stable branches.
 
-if possible, could you tell where all patch are so that I can have a try?
+Well, either both patches should be backported or none, IMHO.
+I guess I would just backport also commit 7baab965896e.
+
+> 
+>         Thanks, Akira
+> 
+> > ---
+> >  scripts/sphinx-pre-install | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/scripts/sphinx-pre-install b/scripts/sphinx-pre-install
+> > index 288e86a9d1e58..61a79ce705ccf 100755
+> > --- a/scripts/sphinx-pre-install
+> > +++ b/scripts/sphinx-pre-install
+> > @@ -369,6 +369,9 @@ sub give_debian_hints()
+> >  	);
+> >  
+> >  	if ($pdf) {
+> > +		check_missing_file(["/usr/share/texlive/texmf-dist/tex/latex/ctex/ctexhook.sty"],
+> > +				   "texlive-lang-chinese", 2);
+> > +
+> >  		check_missing_file(["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"],
+> >  				   "fonts-dejavu", 2);
+> >    
+
 
 
 Thanks,
-David
-
-
+Mauro

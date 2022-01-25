@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CC949AC84
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4082049AC93
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 07:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354024AbiAYGlC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 25 Jan 2022 01:41:02 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:45513 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1354099AbiAYGhx (ORCPT
+        id S1358705AbiAYGqP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 25 Jan 2022 01:46:15 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:46033 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352125AbiAYGnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 01:37:53 -0500
+        Tue, 25 Jan 2022 01:43:33 -0500
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20P6bSwY5011973, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20P6bSwY5011973
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20P6c9cF5012117, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20P6c9cF5012117
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 25 Jan 2022 14:37:28 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+        Tue, 25 Jan 2022 14:38:09 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 25 Jan 2022 14:37:27 +0800
+ 15.1.2375.17; Tue, 25 Jan 2022 14:38:09 +0800
 Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 24 Jan 2022 22:37:27 -0800
+ 15.1.2308.20; Tue, 25 Jan 2022 14:38:09 +0800
 Received: from RTEXMBS01.realtek.com.tw ([fe80::472:6d76:b35d:421e]) by
  RTEXMBS01.realtek.com.tw ([fe80::472:6d76:b35d:421e%5]) with mapi id
- 15.01.2308.020; Tue, 25 Jan 2022 14:37:27 +0800
+ 15.01.2308.020; Tue, 25 Jan 2022 14:38:09 +0800
 From:   Ricky WU <ricky_wu@realtek.com>
 To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
         "arnd@arndb.de" <arnd@arndb.de>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
 CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Thomas Hebb <tommyhebb@gmail.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v6 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle runtime PM
-Thread-Topic: [PATCH v6 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle
- runtime PM
-Thread-Index: AQHYEa903hqeGpf0tUOwpFCX1CCXxKxzRdPQ
-Date:   Tue, 25 Jan 2022 06:37:27 +0000
-Message-ID: <e17921f54f3640bdba3212803b020ae0@realtek.com>
+Subject: RE: [PATCH v6 2/4] misc: rtsx: Rework runtime power management flow
+Thread-Topic: [PATCH v6 2/4] misc: rtsx: Rework runtime power management flow
+Thread-Index: AQHYEa93UYKQHVCXGUik0r8CTFF8MqxzSL2Q
+Date:   Tue, 25 Jan 2022 06:38:09 +0000
+Message-ID: <aee7446ff3234dc7adb02202d70b121a@realtek.com>
 References: <20220121014039.1693208-1-kai.heng.feng@canonical.com>
  <20220125055010.1866563-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20220125055010.1866563-1-kai.heng.feng@canonical.com>
+ <20220125055010.1866563-2-kai.heng.feng@canonical.com>
+In-Reply-To: <20220125055010.1866563-2-kai.heng.feng@canonical.com>
 Accept-Language: zh-TW, en-US
 Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [172.22.81.97]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
 x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
  rules found
 x-kse-antivirus-interceptor-info: scan successful
@@ -61,7 +61,7 @@ x-kse-bulkmessagesfiltering-scan-result: protection disabled
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
 X-KSE-Attachment-Filter-Triggered-Rules: Clean
 X-KSE-Attachment-Filter-Triggered-Filters: Clean
 X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
@@ -74,17 +74,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 > Sent: Tuesday, January 25, 2022 1:50 PM
 > To: arnd@arndb.de; gregkh@linuxfoundation.org; ulf.hansson@linaro.org
 > Cc: linux-pm@vger.kernel.org; Kai-Heng Feng <kai.heng.feng@canonical.com>;
-> Ricky WU <ricky_wu@realtek.com>; Thomas Hebb <tommyhebb@gmail.com>;
-> linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: [PATCH v6 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle
-> runtime PM
+> Ricky WU <ricky_wu@realtek.com>; Yang Li <yang.lee@linux.alibaba.com>;
+> Christophe JAILLET <christophe.jaillet@wanadoo.fr>;
+> linux-kernel@vger.kernel.org
+> Subject: [PATCH v6 2/4] misc: rtsx: Rework runtime power management flow
 > 
-> Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") doesn't use
-> pm_runtime_{get,put}() helpers when it should, so the RPM refcount keeps at
-> zero, hence its parent driver, rtsx_pci, has to do lots of weird tricks to keep it
-> from runtime suspending.
+> Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") uses
+> "rtd3_work" and "idle_work" to manage it's own runtime PM state machine.
 > 
-> So use those helpers at right places to properly manage runtime PM.
+> When its child device, rtsx_pci_sdmmc, uses runtime PM refcount correctly, all
+> the additional works can be managed by generic runtime PM helpers.
+> 
+> So consolidate "idle_work" and "rtd3_work" into generic runtime idle callback
+> and runtime suspend callback, respectively.
 > 
 > Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
 > Cc: Ricky WU <ricky_wu@realtek.com>
@@ -92,226 +94,292 @@ Tested-by: Ricky WU <ricky_wu@realtek.com>
 > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > ---
 > v6:
->  - Change the auto suspend delay to 200ms as Realtek suggested.
+>  - Change autosuspend delay to 10s as Realtek suggested.
 > 
 > v5:
->  - Revert back to v3 as Realtek suggested.
-> 
 > v4:
->  - Decrease the autosuspend delay to 200ms for more power saving.
-> 
-> v3:
-> v2:
 >  - No change.
 > 
->  drivers/mmc/host/rtsx_pci_sdmmc.c | 44 +++++++++++++++++++++++--------
->  1 file changed, 33 insertions(+), 11 deletions(-)
+> v3:
+>  - Allow runtime PM for all devices, but only schedule runtime suspend
+>    for devices with rtd3_en flagged.
 > 
-> diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c
-> b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> index 58cfaffa3c2d8..2a3f14afe9f83 100644
-> --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-> +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> @@ -806,6 +806,7 @@ static void sd_request(struct work_struct *work)
->  	struct mmc_request *mrq = host->mrq;
->  	struct mmc_command *cmd = mrq->cmd;
->  	struct mmc_data *data = mrq->data;
-> +	struct device *dev = &host->pdev->dev;
+> v2:
+>  - Remove unused idle_work and rtd3_work from rtsx_pcr.
 > 
->  	unsigned int data_size = 0;
->  	int err;
-> @@ -822,6 +823,7 @@ static void sd_request(struct work_struct *work)
->  	}
+>  drivers/misc/cardreader/rtsx_pcr.c | 118 ++++++++++-------------------
+>  include/linux/rtsx_pci.h           |   3 -
+>  2 files changed, 39 insertions(+), 82 deletions(-)
 > 
->  	mutex_lock(&pcr->pcr_mutex);
-> +	pm_runtime_get_sync(dev);
-> 
->  	rtsx_pci_start_run(pcr);
-> 
-> @@ -858,6 +860,8 @@ static void sd_request(struct work_struct *work)
->  			data->bytes_xfered = data->blocks * data->blksz;
->  	}
-> 
-> +	pm_runtime_mark_last_busy(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  	mutex_unlock(&pcr->pcr_mutex);
-> 
->  finish:
-> @@ -1080,6 +1084,7 @@ static void sdmmc_set_ios(struct mmc_host *mmc,
-> struct mmc_ios *ios)  {
->  	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
->  	struct rtsx_pcr *pcr = host->pcr;
-> +	struct device *dev = &host->pdev->dev;
-> 
->  	if (host->eject)
->  		return;
-> @@ -1088,6 +1093,7 @@ static void sdmmc_set_ios(struct mmc_host *mmc,
-> struct mmc_ios *ios)
+> diff --git a/drivers/misc/cardreader/rtsx_pcr.c
+> b/drivers/misc/cardreader/rtsx_pcr.c
+> index 6ac509c1821c9..8aba47a7d9736 100644
+> --- a/drivers/misc/cardreader/rtsx_pcr.c
+> +++ b/drivers/misc/cardreader/rtsx_pcr.c
+> @@ -152,20 +152,12 @@ void rtsx_pci_start_run(struct rtsx_pcr *pcr)
+>  	if (pcr->remove_pci)
 >  		return;
 > 
->  	mutex_lock(&pcr->pcr_mutex);
-> +	pm_runtime_get_sync(dev);
+> -	if (pcr->rtd3_en)
+> -		if (pcr->is_runtime_suspended) {
+> -			pm_runtime_get(&(pcr->pci->dev));
+> -			pcr->is_runtime_suspended = false;
+> -		}
+> -
+>  	if (pcr->state != PDEV_STAT_RUN) {
+>  		pcr->state = PDEV_STAT_RUN;
+>  		if (pcr->ops->enable_auto_blink)
+>  			pcr->ops->enable_auto_blink(pcr);
+>  		rtsx_pm_full_on(pcr);
+>  	}
+> -
+> -	mod_delayed_work(system_wq, &pcr->idle_work, msecs_to_jiffies(200));
+>  }
+>  EXPORT_SYMBOL_GPL(rtsx_pci_start_run);
 > 
->  	rtsx_pci_start_run(pcr);
-> 
-> @@ -1121,6 +1127,8 @@ static void sdmmc_set_ios(struct mmc_host *mmc,
-> struct mmc_ios *ios)
->  	rtsx_pci_switch_clock(pcr, ios->clock, host->ssc_depth,
->  			host->initial_mode, host->double_clk, host->vpclk);
-> 
-> +	pm_runtime_mark_last_busy(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  	mutex_unlock(&pcr->pcr_mutex);
+> @@ -1094,40 +1086,6 @@ static void rtsx_pm_power_saving(struct rtsx_pcr
+> *pcr)
+>  	rtsx_comm_pm_power_saving(pcr);
 >  }
 > 
-> @@ -1128,6 +1136,7 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
+> -static void rtsx_pci_rtd3_work(struct work_struct *work) -{
+> -	struct delayed_work *dwork = to_delayed_work(work);
+> -	struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr, rtd3_work);
+> -
+> -	pcr_dbg(pcr, "--> %s\n", __func__);
+> -	if (!pcr->is_runtime_suspended)
+> -		pm_runtime_put(&(pcr->pci->dev));
+> -}
+> -
+> -static void rtsx_pci_idle_work(struct work_struct *work) -{
+> -	struct delayed_work *dwork = to_delayed_work(work);
+> -	struct rtsx_pcr *pcr = container_of(dwork, struct rtsx_pcr, idle_work);
+> -
+> -	pcr_dbg(pcr, "--> %s\n", __func__);
+> -
+> -	mutex_lock(&pcr->pcr_mutex);
+> -
+> -	pcr->state = PDEV_STAT_IDLE;
+> -
+> -	if (pcr->ops->disable_auto_blink)
+> -		pcr->ops->disable_auto_blink(pcr);
+> -	if (pcr->ops->turn_off_led)
+> -		pcr->ops->turn_off_led(pcr);
+> -
+> -	rtsx_pm_power_saving(pcr);
+> -
+> -	mutex_unlock(&pcr->pcr_mutex);
+> -
+> -	if (pcr->rtd3_en)
+> -		mod_delayed_work(system_wq, &pcr->rtd3_work,
+> msecs_to_jiffies(10000));
+> -}
+> -
+>  static void rtsx_base_force_power_down(struct rtsx_pcr *pcr, u8 pm_state)
 > {
->  	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
->  	struct rtsx_pcr *pcr = host->pcr;
-> +	struct device *dev = &host->pdev->dev;
->  	int ro = 0;
->  	u32 val;
+>  	/* Set relink_time to 0 */
+> @@ -1598,7 +1556,6 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+>  	pcr->card_inserted = 0;
+>  	pcr->card_removed = 0;
+>  	INIT_DELAYED_WORK(&pcr->carddet_work, rtsx_pci_card_detect);
+> -	INIT_DELAYED_WORK(&pcr->idle_work, rtsx_pci_idle_work);
 > 
-> @@ -1135,6 +1144,7 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
->  		return -ENOMEDIUM;
-> 
->  	mutex_lock(&pcr->pcr_mutex);
-> +	pm_runtime_get_sync(dev);
-> 
->  	rtsx_pci_start_run(pcr);
-> 
-> @@ -1144,6 +1154,8 @@ static int sdmmc_get_ro(struct mmc_host *mmc)
->  	if (val & SD_WRITE_PROTECT)
->  		ro = 1;
-> 
-> +	pm_runtime_mark_last_busy(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  	mutex_unlock(&pcr->pcr_mutex);
-> 
->  	return ro;
-> @@ -1153,6 +1165,7 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
-> {
->  	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
->  	struct rtsx_pcr *pcr = host->pcr;
-> +	struct device *dev = &host->pdev->dev;
->  	int cd = 0;
->  	u32 val;
-> 
-> @@ -1160,6 +1173,7 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
->  		return cd;
-> 
->  	mutex_lock(&pcr->pcr_mutex);
-> +	pm_runtime_get_sync(dev);
-> 
->  	rtsx_pci_start_run(pcr);
-> 
-> @@ -1169,6 +1183,8 @@ static int sdmmc_get_cd(struct mmc_host *mmc)
->  	if (val & SD_EXIST)
->  		cd = 1;
-> 
-> +	pm_runtime_mark_last_busy(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  	mutex_unlock(&pcr->pcr_mutex);
-> 
->  	return cd;
-> @@ -1251,6 +1267,7 @@ static int sdmmc_switch_voltage(struct mmc_host
-> *mmc, struct mmc_ios *ios)  {
->  	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
->  	struct rtsx_pcr *pcr = host->pcr;
-> +	struct device *dev = &host->pdev->dev;
->  	int err = 0;
->  	u8 voltage;
-> 
-> @@ -1265,6 +1282,7 @@ static int sdmmc_switch_voltage(struct mmc_host
-> *mmc, struct mmc_ios *ios)
->  		return err;
-> 
->  	mutex_lock(&pcr->pcr_mutex);
-> +	pm_runtime_get_sync(dev);
-> 
->  	rtsx_pci_start_run(pcr);
-> 
-> @@ -1294,6 +1312,8 @@ static int sdmmc_switch_voltage(struct mmc_host
-> *mmc, struct mmc_ios *ios)
->  	err = rtsx_pci_write_register(pcr, SD_BUS_STAT,
->  			SD_CLK_TOGGLE_EN | SD_CLK_FORCE_STOP, 0);
-> 
-> +	pm_runtime_mark_last_busy(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  	mutex_unlock(&pcr->pcr_mutex);
-> 
->  	return err;
-> @@ -1303,6 +1323,7 @@ static int sdmmc_execute_tuning(struct mmc_host
-> *mmc, u32 opcode)  {
->  	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
->  	struct rtsx_pcr *pcr = host->pcr;
-> +	struct device *dev = &host->pdev->dev;
->  	int err = 0;
-> 
->  	if (host->eject)
-> @@ -1313,6 +1334,7 @@ static int sdmmc_execute_tuning(struct mmc_host
-> *mmc, u32 opcode)
->  		return err;
-> 
->  	mutex_lock(&pcr->pcr_mutex);
-> +	pm_runtime_get_sync(dev);
-> 
->  	rtsx_pci_start_run(pcr);
-> 
-> @@ -1345,6 +1367,8 @@ static int sdmmc_execute_tuning(struct mmc_host
-> *mmc, u32 opcode)
->  		err = sd_change_phase(host, DDR50_RX_PHASE(pcr), true);
-> 
->  out:
-> +	pm_runtime_mark_last_busy(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  	mutex_unlock(&pcr->pcr_mutex);
-> 
->  	return err;
-> @@ -1495,12 +1519,12 @@ static int rtsx_pci_sdmmc_drv_probe(struct
-> platform_device *pdev)
-> 
->  	realtek_init_host(host);
+>  	pcr->msi_en = msi_en;
+>  	if (pcr->msi_en) {
+> @@ -1623,20 +1580,14 @@ static int rtsx_pci_probe(struct pci_dev *pcidev,
+>  		rtsx_pcr_cells[i].pdata_size = sizeof(*handle);
+>  	}
 > 
 > -	if (pcr->rtd3_en) {
-> -		pm_runtime_set_autosuspend_delay(&pdev->dev, 5000);
-> -		pm_runtime_use_autosuspend(&pdev->dev);
-> -		pm_runtime_enable(&pdev->dev);
+> -		INIT_DELAYED_WORK(&pcr->rtd3_work, rtsx_pci_rtd3_work);
+> -		pm_runtime_allow(&pcidev->dev);
+> -		pm_runtime_enable(&pcidev->dev);
+> -		pcr->is_runtime_suspended = false;
 > -	}
 > -
-> +	pm_runtime_no_callbacks(&pdev->dev);
-> +	pm_runtime_set_active(&pdev->dev);
-> +	pm_runtime_enable(&pdev->dev);
-> +	pm_runtime_set_autosuspend_delay(&pdev->dev, 200);
-> +	pm_runtime_mark_last_busy(&pdev->dev);
-> +	pm_runtime_use_autosuspend(&pdev->dev);
 > 
->  	mmc_add_host(mmc);
+>  	ret = mfd_add_devices(&pcidev->dev, pcr->id, rtsx_pcr_cells,
+>  			ARRAY_SIZE(rtsx_pcr_cells), NULL, 0, NULL);
+>  	if (ret < 0)
+>  		goto free_slots;
 > 
-> @@ -1521,11 +1545,6 @@ static int rtsx_pci_sdmmc_drv_remove(struct
-> platform_device *pdev)
->  	pcr->slots[RTSX_SD_CARD].card_event = NULL;
->  	mmc = host->mmc;
+> -	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+> +	pm_runtime_allow(&pcidev->dev);
+> +	pm_runtime_put(&pcidev->dev);
 > 
-> -	if (pcr->rtd3_en) {
-> -		pm_runtime_dont_use_autosuspend(&pdev->dev);
-> -		pm_runtime_disable(&pdev->dev);
-> -	}
+>  	return 0;
+> 
+> @@ -1668,11 +1619,11 @@ static void rtsx_pci_remove(struct pci_dev
+> *pcidev)
+>  	struct pcr_handle *handle = pci_get_drvdata(pcidev);
+>  	struct rtsx_pcr *pcr = handle->pcr;
+> 
+> -	if (pcr->rtd3_en)
+> -		pm_runtime_get_noresume(&pcr->pci->dev);
 > -
->  	cancel_work_sync(&host->work);
+>  	pcr->remove_pci = true;
 > 
->  	mutex_lock(&host->host_mutex);
-> @@ -1548,6 +1567,9 @@ static int rtsx_pci_sdmmc_drv_remove(struct
-> platform_device *pdev)
-> 
->  	flush_work(&host->work);
-> 
-> +	pm_runtime_dont_use_autosuspend(&pdev->dev);
-> +	pm_runtime_disable(&pdev->dev);
+> +	pm_runtime_get_sync(&pcidev->dev);
+> +	pm_runtime_forbid(&pcidev->dev);
 > +
->  	mmc_free_host(mmc);
+>  	/* Disable interrupts at the pcr level */
+>  	spin_lock_irq(&pcr->lock);
+>  	rtsx_pci_writel(pcr, RTSX_BIER, 0);
+> @@ -1680,9 +1631,6 @@ static void rtsx_pci_remove(struct pci_dev *pcidev)
+>  	spin_unlock_irq(&pcr->lock);
 > 
->  	dev_dbg(&(pdev->dev),
+>  	cancel_delayed_work_sync(&pcr->carddet_work);
+> -	cancel_delayed_work_sync(&pcr->idle_work);
+> -	if (pcr->rtd3_en)
+> -		cancel_delayed_work_sync(&pcr->rtd3_work);
+> 
+>  	mfd_remove_devices(&pcidev->dev);
+> 
+> @@ -1700,11 +1648,6 @@ static void rtsx_pci_remove(struct pci_dev
+> *pcidev)
+>  	idr_remove(&rtsx_pci_idr, pcr->id);
+>  	spin_unlock(&rtsx_pci_lock);
+> 
+> -	if (pcr->rtd3_en) {
+> -		pm_runtime_disable(&pcr->pci->dev);
+> -		pm_runtime_put_noidle(&pcr->pci->dev);
+> -	}
+> -
+>  	kfree(pcr->slots);
+>  	kfree(pcr);
+>  	kfree(handle);
+> @@ -1726,7 +1669,6 @@ static int __maybe_unused rtsx_pci_suspend(struct
+> device *dev_d)
+>  	pcr = handle->pcr;
+> 
+>  	cancel_delayed_work(&pcr->carddet_work);
+> -	cancel_delayed_work(&pcr->idle_work);
+> 
+>  	mutex_lock(&pcr->pcr_mutex);
+> 
+> @@ -1760,8 +1702,6 @@ static int __maybe_unused rtsx_pci_resume(struct
+> device *dev_d)
+>  	if (ret)
+>  		goto out;
+> 
+> -	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+> -
+>  out:
+>  	mutex_unlock(&pcr->pcr_mutex);
+>  	return ret;
+> @@ -1786,6 +1726,33 @@ static void rtsx_pci_shutdown(struct pci_dev
+> *pcidev)
+>  		pci_disable_msi(pcr->pci);
+>  }
+> 
+> +static int rtsx_pci_runtime_idle(struct device *device) {
+> +	struct pci_dev *pcidev = to_pci_dev(device);
+> +	struct pcr_handle *handle = pci_get_drvdata(pcidev);
+> +	struct rtsx_pcr *pcr = handle->pcr;
+> +
+> +	dev_dbg(device, "--> %s\n", __func__);
+> +
+> +	mutex_lock(&pcr->pcr_mutex);
+> +
+> +	pcr->state = PDEV_STAT_IDLE;
+> +
+> +	if (pcr->ops->disable_auto_blink)
+> +		pcr->ops->disable_auto_blink(pcr);
+> +	if (pcr->ops->turn_off_led)
+> +		pcr->ops->turn_off_led(pcr);
+> +
+> +	rtsx_pm_power_saving(pcr);
+> +
+> +	mutex_unlock(&pcr->pcr_mutex);
+> +
+> +	if (pcr->rtd3_en)
+> +		pm_schedule_suspend(device, 10000);
+> +
+> +	return -EBUSY;
+> +}
+> +
+>  static int rtsx_pci_runtime_suspend(struct device *device)  {
+>  	struct pci_dev *pcidev = to_pci_dev(device); @@ -1794,31 +1761,26 @@
+> static int rtsx_pci_runtime_suspend(struct device *device)
+> 
+>  	handle = pci_get_drvdata(pcidev);
+>  	pcr = handle->pcr;
+> -	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
+> 
+> -	cancel_delayed_work(&pcr->carddet_work);
+> -	cancel_delayed_work(&pcr->rtd3_work);
+> -	cancel_delayed_work(&pcr->idle_work);
+> +	dev_dbg(device, "--> %s\n", __func__);
+> +
+> +	cancel_delayed_work_sync(&pcr->carddet_work);
+> 
+>  	mutex_lock(&pcr->pcr_mutex);
+>  	rtsx_pci_power_off(pcr, HOST_ENTER_S3);
+> 
+>  	mutex_unlock(&pcr->pcr_mutex);
+> 
+> -	pcr->is_runtime_suspended = true;
+> -
+>  	return 0;
+>  }
+> 
+>  static int rtsx_pci_runtime_resume(struct device *device)  {
+>  	struct pci_dev *pcidev = to_pci_dev(device);
+> -	struct pcr_handle *handle;
+> -	struct rtsx_pcr *pcr;
+> +	struct pcr_handle *handle = pci_get_drvdata(pcidev);
+> +	struct rtsx_pcr *pcr = handle->pcr;
+> 
+> -	handle = pci_get_drvdata(pcidev);
+> -	pcr = handle->pcr;
+> -	dev_dbg(&(pcidev->dev), "--> %s\n", __func__);
+> +	dev_dbg(device, "--> %s\n", __func__);
+> 
+>  	mutex_lock(&pcr->pcr_mutex);
+> 
+> @@ -1834,8 +1796,6 @@ static int rtsx_pci_runtime_resume(struct device
+> *device)
+>  				pcr->slots[RTSX_SD_CARD].p_dev);
+>  	}
+> 
+> -	schedule_delayed_work(&pcr->idle_work, msecs_to_jiffies(200));
+> -
+>  	mutex_unlock(&pcr->pcr_mutex);
+>  	return 0;
+>  }
+> @@ -1850,7 +1810,7 @@ static int rtsx_pci_runtime_resume(struct device
+> *device)
+> 
+>  static const struct dev_pm_ops rtsx_pci_pm_ops = {
+>  	SET_SYSTEM_SLEEP_PM_OPS(rtsx_pci_suspend, rtsx_pci_resume)
+> -	SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend,
+> rtsx_pci_runtime_resume, NULL)
+> +	SET_RUNTIME_PM_OPS(rtsx_pci_runtime_suspend,
+> rtsx_pci_runtime_resume,
+> +rtsx_pci_runtime_idle)
+>  };
+> 
+>  static struct pci_driver rtsx_pci_driver = { diff --git a/include/linux/rtsx_pci.h
+> b/include/linux/rtsx_pci.h index 4ab7bfc675f11..89b7d34e25b63 100644
+> --- a/include/linux/rtsx_pci.h
+> +++ b/include/linux/rtsx_pci.h
+> @@ -1201,8 +1201,6 @@ struct rtsx_pcr {
+>  	unsigned int			card_exist;
+> 
+>  	struct delayed_work		carddet_work;
+> -	struct delayed_work		idle_work;
+> -	struct delayed_work		rtd3_work;
+> 
+>  	spinlock_t			lock;
+>  	struct mutex			pcr_mutex;
+> @@ -1212,7 +1210,6 @@ struct rtsx_pcr {
+>  	unsigned int			cur_clock;
+>  	bool				remove_pci;
+>  	bool				msi_en;
+> -	bool				is_runtime_suspended;
+> 
+>  #define EXTRA_CAPS_SD_SDR50		(1 << 0)
+>  #define EXTRA_CAPS_SD_SDR104		(1 << 1)
 > --
 > 2.33.1
 

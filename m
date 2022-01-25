@@ -2,176 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A0449B723
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6143149B72A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359089AbiAYPCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:02:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1581286AbiAYO7m (ORCPT
+        id S1581264AbiAYPDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:03:08 -0500
+Received: from prt-mail.chinatelecom.cn ([42.123.76.226]:36191 "EHLO
+        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1348596AbiAYPA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 09:59:42 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C863EC06173D;
-        Tue, 25 Jan 2022 06:59:39 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id z22so63480901edd.12;
-        Tue, 25 Jan 2022 06:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YETYCy0ly68b/XEmUGegxcn7ozTQ3dOyXFpUqhFaE/o=;
-        b=eOfYABgpp2vlbSwD8rMiUsqjuK+1mENAl/iPVK21tO0pg5SFJRf+yq24rJ7ktHiKlP
-         GjhLJGtovdJYEF2dtok+vKsidzk6hbYHGbL4geD3+wm1jcABqPF/lK+ExDC4ZPWVYdNk
-         y0ucRNVblGZr5Jh+SNkJeqBcKqDqUj3aJusIkm/wGV8B6b0IHyRHk9CE6Y209KMdS+FT
-         zKinWISBPxPHFapAvsjzBYUgntc0EVrYmlrpUitAzZETcaNnSxBXWZJf1WRcB8IM5ax5
-         b/6ZQv4KmqUUk7UOX8g0cgLTP6ArOgbvKRhIzLap+Hg/9Zq5tz1i49qGDpLY9T3qxBTz
-         YDIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YETYCy0ly68b/XEmUGegxcn7ozTQ3dOyXFpUqhFaE/o=;
-        b=1+VyyKesYoN+Fi8A/GuzTqvXWL8Mnh0y+Ufn1h5S/1pbu91yApendcyS1vGrJZ4A1i
-         S3rseBQBahlK8sQW/iRyy1gECURrExxMNJmNr0kPn/Bm0Mg6qb6s2g/VzWcFxgmY/jYZ
-         cl9l0Uutqx1yZLJOKVZfQcsaJdGepYKLR11ae9tBhQxYLTnTLQ/HuhAXzi18xlUb7jno
-         qwJMWeKFcT+7rD1mOlvSqP5456xOfmqWzhhLNxAYbNgU72ZiFmoHgtPuAUuTWKUGt8AS
-         Mn4c9Tfj3Qb0iKm7FXceag/cPZJ0khb+vvdas6q+1CaNVN6TSiXNGJzrS9vr1RcInkuK
-         9AsQ==
-X-Gm-Message-State: AOAM531MeQTXsxFK7StYcPEyt9WGVeWvZaZa4MDfOjfLCQB5fZ9Lcw09
-        hkGXvlpWnAz6auF1M6U1DaxspgzzdKY5DA==
-X-Google-Smtp-Source: ABdhPJw3gBH/Bh+gWmE64TAb93sq3Brc8Qh1KZ45RqheOmVv73F3Ud7kpx3NdkymvO+Glb6ISsZLdA==
-X-Received: by 2002:a17:907:7287:: with SMTP id dt7mr17000513ejc.56.1643122778318;
-        Tue, 25 Jan 2022 06:59:38 -0800 (PST)
-Received: from debianHome.localdomain (dynamic-077-010-144-044.77.10.pool.telefonica.de. [77.10.144.44])
-        by smtp.gmail.com with ESMTPSA id y17sm6353141ejw.172.2022.01.25.06.59.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 06:59:37 -0800 (PST)
-From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-To:     selinux@vger.kernel.org
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Xiong Zhenwu <xiong.zhenwu@zte.com.cn>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] selinux: split no transition execve check
-Date:   Tue, 25 Jan 2022 15:59:27 +0100
-Message-Id: <20220125145931.56831-1-cgzones@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Jan 2022 10:00:29 -0500
+HMM_SOURCE_IP: 172.18.0.218:50342.2129814880
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.38 (unknown [172.18.0.218])
+        by chinatelecom.cn (HERMES) with SMTP id DE498280029;
+        Tue, 25 Jan 2022 22:25:04 +0800 (CST)
+X-189-SAVE-TO-SEND: sunshouxin@chinatelecom.cn
+Received: from  ([172.18.0.218])
+        by app0025 with ESMTP id 96b1da56bd6d47aca05ac245d0694740 for j.vosburgh@gmail.com;
+        Tue, 25 Jan 2022 22:25:07 CST
+X-Transaction-ID: 96b1da56bd6d47aca05ac245d0694740
+X-Real-From: sunshouxin@chinatelecom.cn
+X-Receive-IP: 172.18.0.218
+X-MEDUSA-Status: 0
+Sender: sunshouxin@chinatelecom.cn
+From:   Sun Shouxin <sunshouxin@chinatelecom.cn>
+To:     j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
+        davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jay.vosburgh@canonical.com, nikolay@nvidia.com,
+        huyd12@chinatelecom.cn
+Subject: [PATCH v10] net: bonding: Add support for IPV6 ns/na to balance-alb/balance-tlb mode
+Date:   Tue, 25 Jan 2022 09:24:18 -0500
+Message-Id: <20220125142418.96167-1-sunshouxin@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case a setuid or setgid binary is mislabeled with a generic context,
-either via a policy mistake or a move by the distribution package,
-executing it will be checked by the file permission execute_no_trans on
-the generic file context (e.g. bin_t).  The setuid(2)/setgid(2) syscall
-within will then be checked against the unchanged caller process
-context, which might have been granted the capability permission setuid/
-setgid to initially drop privileges.  To avoid that scenario split the
-execute_no_trans permission in case of a setuid/setgid binary into a new
-permission execute_sxid_no_trans.
+Since ipv6 neighbor solicitation and advertisement messages
+isn't handled gracefully in bond6 driver, we can see packet
+drop due to inconsistency between mac address in the option
+message and source MAC .
 
-For backward compatibility this behavior is contained in a new policy
-capability.
+Another examples is ipv6 neighbor solicitation and advertisement
+messages from VM via tap attached to host bridge, the src mac
+might be changed through balance-alb mode, but it is not synced
+with Link-layer address in the option message.
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+The patch implements bond6's tx handle for ipv6 neighbor
+solicitation and advertisement messages.
+
+Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
 ---
- security/selinux/hooks.c                   | 9 ++++++++-
- security/selinux/include/classmap.h        | 2 +-
- security/selinux/include/policycap.h       | 1 +
- security/selinux/include/policycap_names.h | 3 ++-
- security/selinux/include/security.h        | 8 ++++++++
- 5 files changed, 20 insertions(+), 3 deletions(-)
+v9->v10:
+- add IPv6 header pull in alb_determine_nd.
+- combine bond_xmit_alb_slave_get's IPv6 header
+pull with alb_determine_nd's
+---
+ drivers/net/bonding/bond_alb.c | 40 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 38 insertions(+), 2 deletions(-)
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 5b6895e4fc29..b825fee39a70 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -2348,9 +2348,16 @@ static int selinux_bprm_creds_for_exec(struct linux_binprm *bprm)
- 	ad.u.file = bprm->file;
- 
- 	if (new_tsec->sid == old_tsec->sid) {
-+		u32 perm;
-+
-+		if (selinux_policycap_execute_sxid_no_trans() && is_sxid(inode->i_mode))
-+			perm = FILE__EXECUTE_SXID_NO_TRANS;
-+		else
-+			perm = FILE__EXECUTE_NO_TRANS;
-+
- 		rc = avc_has_perm(&selinux_state,
- 				  old_tsec->sid, isec->sid,
--				  SECCLASS_FILE, FILE__EXECUTE_NO_TRANS, &ad);
-+				  SECCLASS_FILE, perm, &ad);
- 		if (rc)
- 			return rc;
- 	} else {
-diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-index 35aac62a662e..53a1eeeb86fb 100644
---- a/security/selinux/include/classmap.h
-+++ b/security/selinux/include/classmap.h
-@@ -65,7 +65,7 @@ struct security_class_mapping secclass_map[] = {
- 	    "quotaget", "watch", NULL } },
- 	{ "file",
- 	  { COMMON_FILE_PERMS,
--	    "execute_no_trans", "entrypoint", NULL } },
-+	    "execute_no_trans", "entrypoint", "execute_sxid_no_trans", NULL } },
- 	{ "dir",
- 	  { COMMON_FILE_PERMS, "add_name", "remove_name",
- 	    "reparent", "search", "rmdir", NULL } },
-diff --git a/security/selinux/include/policycap.h b/security/selinux/include/policycap.h
-index 2ec038efbb03..23929dc3e1db 100644
---- a/security/selinux/include/policycap.h
-+++ b/security/selinux/include/policycap.h
-@@ -11,6 +11,7 @@ enum {
- 	POLICYDB_CAPABILITY_CGROUPSECLABEL,
- 	POLICYDB_CAPABILITY_NNP_NOSUID_TRANSITION,
- 	POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS,
-+	POLICYDB_CAPABILITY_EXECUTE_SXID_NO_TRANS,
- 	__POLICYDB_CAPABILITY_MAX
- };
- #define POLICYDB_CAPABILITY_MAX (__POLICYDB_CAPABILITY_MAX - 1)
-diff --git a/security/selinux/include/policycap_names.h b/security/selinux/include/policycap_names.h
-index b89289f092c9..4c014c2cf352 100644
---- a/security/selinux/include/policycap_names.h
-+++ b/security/selinux/include/policycap_names.h
-@@ -12,7 +12,8 @@ const char *selinux_policycap_names[__POLICYDB_CAPABILITY_MAX] = {
- 	"always_check_network",
- 	"cgroup_seclabel",
- 	"nnp_nosuid_transition",
--	"genfs_seclabel_symlinks"
-+	"genfs_seclabel_symlinks",
-+	"execute_sxid_no_trans",
- };
- 
- #endif /* _SELINUX_POLICYCAP_NAMES_H_ */
-diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
-index ac0ece01305a..ab95241b6b7b 100644
---- a/security/selinux/include/security.h
-+++ b/security/selinux/include/security.h
-@@ -219,6 +219,14 @@ static inline bool selinux_policycap_genfs_seclabel_symlinks(void)
- 	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS]);
+diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+index 533e476988f2..d9da6eb7f5c2 100644
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -1269,6 +1269,37 @@ static int alb_set_mac_address(struct bonding *bond, void *addr)
+ 	return res;
  }
  
-+static inline bool selinux_policycap_execute_sxid_no_trans(void)
++/* determine if the packet is NA or NS */
++static bool __alb_determine_nd(struct icmp6hdr *hdr)
 +{
-+	struct selinux_state *state = &selinux_state;
++	if (hdr->icmp6_type == NDISC_NEIGHBOUR_ADVERTISEMENT ||
++	    hdr->icmp6_type == NDISC_NEIGHBOUR_SOLICITATION) {
++		return true;
++	}
 +
-+	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_EXECUTE_SXID_NO_TRANS]);
++	return false;
 +}
 +
++static bool alb_determine_nd(struct sk_buff *skb, struct bonding *bond)
++{
++	struct ipv6hdr *ip6hdr;
++	struct icmp6hdr *hdr;
 +
- struct selinux_policy_convert_data;
++	if (!pskb_network_may_pull(skb, sizeof(*ip6hdr)))
++		return true;
++
++	ip6hdr = ipv6_hdr(skb);
++	if (ip6hdr->nexthdr == IPPROTO_ICMPV6) {
++		if (!pskb_may_pull(skb, sizeof(*ip6hdr) + sizeof(*hdr)))
++			return true;
++
++		hdr = icmp6_hdr(skb);
++		return __alb_determine_nd(hdr);
++	}
++
++	return false;
++}
++
+ /************************ exported alb functions ************************/
  
- struct selinux_load_state {
+ int bond_alb_initialize(struct bonding *bond, int rlb_enabled)
+@@ -1348,8 +1379,11 @@ struct slave *bond_xmit_tlb_slave_get(struct bonding *bond,
+ 	/* Do not TX balance any multicast or broadcast */
+ 	if (!is_multicast_ether_addr(eth_data->h_dest)) {
+ 		switch (skb->protocol) {
+-		case htons(ETH_P_IP):
+ 		case htons(ETH_P_IPV6):
++			if (alb_determine_nd(skb, bond))
++				break;
++			fallthrough;
++		case htons(ETH_P_IP):
+ 			hash_index = bond_xmit_hash(bond, skb);
+ 			if (bond->params.tlb_dynamic_lb) {
+ 				tx_slave = tlb_choose_channel(bond,
+@@ -1432,10 +1466,12 @@ struct slave *bond_xmit_alb_slave_get(struct bonding *bond,
+ 			break;
+ 		}
+ 
+-		if (!pskb_network_may_pull(skb, sizeof(*ip6hdr))) {
++		if (alb_determine_nd(skb, bond)) {
+ 			do_tx_balance = false;
+ 			break;
+ 		}
++
++		/* The IPv6 header is pulled by alb_determine_nd */
+ 		/* Additionally, DAD probes should not be tx-balanced as that
+ 		 * will lead to false positives for duplicate addresses and
+ 		 * prevent address configuration from working.
+
+base-commit: dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
 -- 
-2.34.1
+2.27.0
 

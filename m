@@ -2,173 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B629C49B93C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0437349B956
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 17:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1585977AbiAYQu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 11:50:58 -0500
-Received: from mail-co1nam11on2135.outbound.protection.outlook.com ([40.107.220.135]:51424
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1381064AbiAYQrG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:47:06 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AdQXH5DKGKGvCsi9qJByscuRXWhE60v9jCvxcu25qmgLA0iYr46fp6cSY4bbHxi9uRQuJ3ksVRTxZF0aMXFtn8J5BvgzkowKSS2Wiod6Z1BitXtbpBt5NZo/4r1j+YsNzuCKB7acPul88mlwCkI9yfkC9HSacqvt4/5XpcfAztkBpojQo5VH9oc9C8n9ohBk1JK1R1xtBjp2b7sNuPFRSpWv4da3tnFySa3A/V+QO/9+k4ss0j1AYaEb0nLStOI/5lI68coO4hPVDklaWk3QPrONgHGAtUlVVd4EezwWGPBHqED7uzRFTKNZTsLDtqIFZzzlIADGX9FzxfFmpsxD/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/jYi/sep1Kl2Xny7t/UL4JEAB0h8meCxntsKjgThiXg=;
- b=UMyY9i/BcYOqTr5T55sjoBgt0RPZi9mdScH7jBJbPg4cmcMFbZJlOFemamE1Ys4HFcRKB7cKvlKJqucIXA+UpZw7QmvVuSVKe60yu5qXtGptZ8abPD2BwD9vDCYM6TDHYK/rolqsNhe8HKxQ7Hm482nKz5vc34lB+xSHHBCNNiQo3iFQWpRhoJCW2k4bIbBNwgwnBx4M9Gre3V32gvbQ4PghhjoYRXG7zL76c2RidlKEJ4lvtxZsu/FKsJBiHQV/H6L3XCe4cGc231MKvKlPhx5uPoQ7er4JTG5N0w2d22I2vdoqCtmkK1zp0f8jkg/uwHmKeZ4Ux3sfA/HuyocKrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        id S1586794AbiAYQv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 11:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1586493AbiAYQtm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 11:49:42 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A871C06179A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:47:46 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id t14so16165352ljh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 08:47:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/jYi/sep1Kl2Xny7t/UL4JEAB0h8meCxntsKjgThiXg=;
- b=SG+5qUM4vIyLX44D6wLVPG/50QubFZ8kZ7NQDELgANGi0BqRMl7f+FzFzHEp9m3eaIllNkmSj9q/3dm8+C6Te/JThVjFDoLt0+wWNnRlTPRaGF3Uas781ax0Z43MrGVXSEa9Mee48eratLZ9IkO3vjXxDjttSKtJUxLT5doNazU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by MWHPR10MB1520.namprd10.prod.outlook.com
- (2603:10b6:300:26::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Tue, 25 Jan
- 2022 16:46:58 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
- 16:46:58 +0000
-Date:   Tue, 25 Jan 2022 08:46:59 -0800
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lars.povlsen@microchip.com,
-        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
-        linus.walleij@linaro.org
-Subject: Re: [PATCH] pinctrl: microchip-sgpio: Fix support for regmap
-Message-ID: <20220125164659.GA31440@COLIN-DESKTOP1.localdomain>
-References: <20220125161245.418882-1-horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125161245.418882-1-horatiu.vultur@microchip.com>
-X-ClientProxiedBy: MW4P221CA0023.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:303:8b::28) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZxKHsTlFPD/WqwTFCjR7TPuaLt90R4mNRogm3Hute3M=;
+        b=S6WTHqWgA4KZAfJnWX7ED9KyhLUHjqy9o3jta+6fKhjpJGLUNyLpVNy0Y6dNu6NBtt
+         Dif9jvPwXGLoAx8u9emNC1UdxK4/UL57mzQs4JfrU+rT1G9aAZzYmkLCHy9Nbw7i0pVB
+         XObdbOFr1tvU5Ok/GVDS8jriv9fwETEpQqNTGD8dt0LDODOO0MuhjT3F9wjioSyaOrit
+         px06CHsk7ucc0z6gJoedXSRpeCpJWZZ3K7tn9NfWnoWscEWNUQcyzoazXR3kDM6y6zGo
+         +aDD/gCUmoYvn+27DiBliPWCpfT6SfD8gAMKO0oXGplCD+ITt8Mutot89QcmkP+koLTS
+         1jbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZxKHsTlFPD/WqwTFCjR7TPuaLt90R4mNRogm3Hute3M=;
+        b=CmeW7l9X80hIHa35uHh39QRU7z7BoJ8FaVdLm8QtO4VNJe+VBrHsya7wEBCoUclicA
+         NAEArN/DRjRWyYz1BHxO5jq2ClgVe1FppgZJw9jvi9osGaKltsUZ1c09US9fpTI8bcet
+         8wi46EfwgXsYCRJCU2B8PUTnpkGRdC9ENHDtipNZlAOPwcBxjCvOMVEzBsNvJvgPLe0A
+         t6CFC24MD0AeiiI9BV/XdjQhHpQTYgV3krrltAa/6AnYCZ5i2TKU2VxlG9ZFst9KR6M7
+         icnUh+oahHq5aTmLJfPIBg7AUEHmTWTi39K2g0C1tL+l8XoCADMTsbGEM/nH9Fbea7ZX
+         P01w==
+X-Gm-Message-State: AOAM531nvp6jv5V9BqkGXBB7Wpyt3CUiHxuTXx01xUSVfwwm/XunVo0C
+        5EfF2tR/ak7TpOwmqwAsIr97CYB7qT2Y1O/5YPEVJw==
+X-Google-Smtp-Source: ABdhPJwL3cj7hQT4SmKfZmXQLdgggc6MixizD5vULDnBU3FU20x8IpccQmyKjholb5Fn4/1OE1Y9DRv/Tgk3kEad/Is=
+X-Received: by 2002:a2e:7a10:: with SMTP id v16mr9329790ljc.426.1643129264138;
+ Tue, 25 Jan 2022 08:47:44 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bf1387cc-775b-4634-f120-08d9e0224d51
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1520:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1520D680912578450714F65EA45F9@MWHPR10MB1520.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zYP9JLdAvqAlo97mpPhivBdNOcQ74MECn2Lnx6MXVE+Zho6DrSuOsYyoARKnN4ClON+7SX1Y7AO4H6YE592/dR/WiKs5EamZB4PGlWmLVx9MuqukhghhRodC128AAcjMU+P0Ns0XBsMtcPZv2IMhk11ToNwywtHe9mUoDZ/YOFzeWMUHvn2BjENJBlTgpQhY0OCrcI1/8XIPI0wWRSNbqzXRb2MX52wPBOE5/4Zq7WfhOYzCRZvGk1syRlsKlWaxQjH7Wuc3f4qapUOHIrJJ/kGWxdl4ty7qZoShoq28TV58HJaH7CE+X376blgfhCVjh2EEoLBzxvgQgtvaxJqcAGk222oE8bZymtyn3SRqk4Td9xqfK4RADZ2u1ZTGJYpW4WhALDPmRDlM9nvcNiD+zye8COWfiR5DL4I2H1AzoX2ViS+pyg1OaRH54C6tziBVegvDfYk3SVTYKeZvcFL+z4yVQ9x4rBOw8AJY1T24Hpbpu3EEpIMFpYkyRyGanVbz/NuXNxC8pMc4Xioi3j3lWLrQskG0JAwH30D3SduUWSIwoXigeYqIPvNCVZZrnQpxnVXzz6U4Fj3CGRpFzMgLQ4rHH+0y5YqqGFwrnq4coGGeW9nwULE0ZZzcV2NUtbO8Jqu98RiZCka4V5unM1KGETRODAacVNDpA3UznOFo0ZVSGThVZf0MPL62MQER40oo21kASH41yoBrQBZGjHI+ug==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(396003)(346002)(39840400004)(366004)(42606007)(136003)(316002)(44832011)(33656002)(8676002)(38100700002)(38350700002)(4326008)(86362001)(2906002)(6512007)(83380400001)(186003)(6486002)(508600001)(1076003)(66476007)(26005)(9686003)(66946007)(66556008)(52116002)(6916009)(5660300002)(6506007)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iFFtYq8FTJAGTnvRj0ZYIlruEK7/h5dFK090MqCCeMQAZ6xVVc5NFmBoEhDy?=
- =?us-ascii?Q?uRFDqurUIhLNztXCXctLFBICfPHM9NHJZ+VAHl9tFbuO+o68gsDZcqNt43sv?=
- =?us-ascii?Q?2y7/8w9ugGw9IcWyqfNGJ+QFcEN1DU/X/4J0NOu3kDRevs3kBLPmPctTe/34?=
- =?us-ascii?Q?ISqWxrFg5Oml6KIH7mxCA/f+51AZx451lf0L7KFT24rKnkIb07lzmyiMsB/Z?=
- =?us-ascii?Q?XyR1G2as+4oXsts2U+AK5tNfNQH/BLBkkWYrGS2Si5rXpOSgEl1ArskDzrYb?=
- =?us-ascii?Q?gZgVhXMzAJWfFMfRQhfKE/bZ6wx+mXbBrlSe8UwawCKbwdXZlE2EoZcS22Dl?=
- =?us-ascii?Q?Rw29zoVMYuiK6tc8HRQOsJrVm5Tk2Mm42LZxS2KpV4sYOidbpAVG7owGozio?=
- =?us-ascii?Q?ZW1OObLoTCX703L+MsNdgUR4GObgf1yBs1tley4y3ImnmnAqTyyYXZOBiRAU?=
- =?us-ascii?Q?ehLwlAOMYE3oj8voQibreRJh49jcnPq3PvyYEu2fKUjK6YELrEbhujRziZEJ?=
- =?us-ascii?Q?NvmO0nEeR3fL6MnM6KjInLGkaIhg9v5cH3RBC7xYTlNf6XSbBuT2HUYA04or?=
- =?us-ascii?Q?DgrKB2QIfZyeynvdwIvPTO8Fdir82+VH45+CCaPriKoKRVfSnEkTlj7G66VL?=
- =?us-ascii?Q?Ysb1zDz/1DTbWR+j340VcNzneExLncQbL+ep4aiJ/P9ZqC683P17x+5qS+9o?=
- =?us-ascii?Q?44wUesxVpkEUG5XijTsRNnNgjD1vvDFc9NVxpvirAMhkRnecy/ESJv288pwy?=
- =?us-ascii?Q?Cpto/f9l74OE/Vdki3WnfjnYxXxHnjhSDqezxLs1OQNYV4/wvK2b0eSm97bj?=
- =?us-ascii?Q?3cZWWFTl7OIFFBacaMMzqtaUflJUWJ4XtV0yOmKeB7XvKYUFc0t8BwOBcBoA?=
- =?us-ascii?Q?0/Mou5SmF7fRpTjmYebYZUwgUjq3iSin1GWBGT675QvCbS/R2S5wGLP26NQ2?=
- =?us-ascii?Q?gwUn1j906bynbdOY+DQNXpvRkrgrOXFtt+croxjaF9Ts43qcZ2YyE0eZ2uFy?=
- =?us-ascii?Q?6t5QtLD+WpkQwbfe0078UIdH6/jwdNtCLuAuuD/JwUlC6g9XnLziHEQVwRSZ?=
- =?us-ascii?Q?zPJaCVpi/7C7JbIkXbRNlzGfggjas+fMhUIi5lHOsfrgj5qT4Z+ubLI/nqCK?=
- =?us-ascii?Q?ggwmGS+AWbasxAsKEBbT5ZZoqegmZ5vg6OwM5DixBrb+hhyfnOgywvjkYMGK?=
- =?us-ascii?Q?bVXzOxPMTGKpH9Jp6Nu7dcs+kbBVCsZByJi/SoLK7WapNP1dRI52hYOSLvoR?=
- =?us-ascii?Q?BxqGGImbiHxRSPFpvzL0hybI3cZsvrVxblG3SgV6+L2tU2kxU1y4ox1SA+7Q?=
- =?us-ascii?Q?Y9RHvQa9+hNvn1YlnjVPJjULyZZDjv5qgM3zgSO7qHqzBmA5+O2O1jpbQdtT?=
- =?us-ascii?Q?0eBMai0qsh9d4aF9LictxUlxF/apFBqz8zHkovGGH9kHdQuY8XhVWDEuDUUz?=
- =?us-ascii?Q?Zvtfx3Kz+5JU9xe0EdFEddl6vXMT7T9d6fNdHr8utqs7PDb4Pt1QMbvK11OC?=
- =?us-ascii?Q?AiJTW9PEA1nC/z0UgyC9vLDAZ19pu6tbHCRLWXyGQ1ce5emmIdbG7eIDmnPN?=
- =?us-ascii?Q?ObBBlJJ+vGrZvx2NRdrnNIVQC0kVeTls9/UWfMdDFbitcKRU82zQAYZkr1Yr?=
- =?us-ascii?Q?GXiVJB7jSVo/Gr8LU6hnDNkT4Ol0qGIsaG9H/iXoNihSeq7Vo5R8RHp4dwbd?=
- =?us-ascii?Q?bC8hSg=3D=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf1387cc-775b-4634-f120-08d9e0224d51
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 16:46:58.3486
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: o7UQ6fHZc/HlLVwKeQqHlLeC8q39fFyWTATzIhSzHbMUSO930Mm2oagjdzd2p9aR+nnudfaTn6C3RJaaiiUByfvw8eeV0/XrUDOCu7brQ5g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1520
+References: <20220118110621.62462-1-nikunj@amd.com> <20220118110621.62462-4-nikunj@amd.com>
+In-Reply-To: <20220118110621.62462-4-nikunj@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 25 Jan 2022 09:47:32 -0700
+Message-ID: <CAMkAt6rxeGZ3SpF9UoSW0U5XWmTNe-iSMc5jgCmOLP587J03Aw@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
+To:     Nikunj A Dadhania <nikunj@amd.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Horatiu,
-
-On Tue, Jan 25, 2022 at 05:12:45PM +0100, Horatiu Vultur wrote:
-> Initially the driver accessed the registers using u32 __iomem but then
-> in the blamed commit it changed it to use regmap. The problem is that now
-> the offset of the registers is not calculated anymore at word offset but
-> at byte offset. Therefore make sure to multiply the offset with word size.
-> 
-
-Sorry about this one. I see it must have slipped through the cracks
-because I had made the same change in my tree. The only difference is I
-had copied reg_stride into sgpio_priv instead of making regmap_config
-file-scope. For what its worth, with apologies:
-
-Reviewed-by: Colin Foster <colin.foster@in-advantage.com>
-
-> Fixes: 2afbbab45c261a ("pinctrl: microchip-sgpio: update to support regmap")
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+On Tue, Jan 18, 2022 at 4:07 AM Nikunj A Dadhania <nikunj@amd.com> wrote:
+>
+> Use the memslot metadata to store the pinned data along with the pfns.
+> This improves the SEV guest startup time from O(n) to a constant by
+> deferring guest page pinning until the pages are used to satisfy nested
+> page faults. The page reference will be dropped in the memslot free
+> path.
+>
+> Remove the enc_region structure definition and the code which did
+> upfront pinning, as they are no longer needed in view of the demand
+> pinning support.
+>
+> Leave svm_register_enc_region() and svm_unregister_enc_region() as stubs
+> since qemu is dependent on this API.
+>
+> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
 > ---
->  drivers/pinctrl/pinctrl-microchip-sgpio.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
-> index 8e081c90bdb2..2999c98bbdee 100644
-> --- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
-> +++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
-> @@ -98,6 +98,12 @@ static const struct sgpio_properties properties_sparx5 = {
->  	.regoff = { 0x00, 0x06, 0x26, 0x04, 0x05, 0x2a, 0x32, 0x3a, 0x3e, 0x42 },
->  };
->  
-> +static const struct regmap_config regmap_config = {
-> +		.reg_bits = 32,
-> +		.val_bits = 32,
-> +		.reg_stride = 4,
-> +};
-> +
->  static const char * const functions[] = { "gpio" };
->  
->  struct sgpio_bank {
-> @@ -137,7 +143,7 @@ static inline int sgpio_addr_to_pin(struct sgpio_priv *priv, int port, int bit)
->  
->  static inline u32 sgpio_get_addr(struct sgpio_priv *priv, u32 rno, u32 off)
+>  arch/x86/kvm/svm/sev.c | 208 ++++++++++++++++-------------------------
+>  arch/x86/kvm/svm/svm.c |   1 +
+>  arch/x86/kvm/svm/svm.h |   3 +-
+>  3 files changed, 81 insertions(+), 131 deletions(-)
+>
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index d972ab4956d4..a962bed97a0b 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -66,14 +66,6 @@ static unsigned int nr_asids;
+>  static unsigned long *sev_asid_bitmap;
+>  static unsigned long *sev_reclaim_asid_bitmap;
+>
+> -struct enc_region {
+> -       struct list_head list;
+> -       unsigned long npages;
+> -       struct page **pages;
+> -       unsigned long uaddr;
+> -       unsigned long size;
+> -};
+> -
+>  /* Called with the sev_bitmap_lock held, or on shutdown  */
+>  static int sev_flush_asids(int min_asid, int max_asid)
 >  {
-> -	return priv->properties->regoff[rno] + off;
-> +	return (priv->properties->regoff[rno] + off) * regmap_config.reg_stride;
+> @@ -257,8 +249,6 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>         if (ret)
+>                 goto e_free;
+>
+> -       INIT_LIST_HEAD(&sev->regions_list);
+> -
+>         return 0;
+>
+>  e_free:
+> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
+>         src->handle = 0;
+>         src->pages_locked = 0;
+>         src->enc_context_owner = NULL;
+> -
+> -       list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
+
+I think we need to move the pinned SPTE entries into the target, and
+repin the pages in the target here. Otherwise the pages will be
+unpinned when the source is cleaned up. Have you thought about how
+this could be done?
+
 >  }
->  
->  static u32 sgpio_readl(struct sgpio_priv *priv, u32 rno, u32 off)
-> @@ -821,11 +827,6 @@ static int microchip_sgpio_probe(struct platform_device *pdev)
->  	struct clk *clk;
->  	u32 __iomem *regs;
->  	u32 val;
-> -	struct regmap_config regmap_config = {
-> -		.reg_bits = 32,
-> -		.val_bits = 32,
-> -		.reg_stride = 4,
-> -	};
->  
->  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->  	if (!priv)
-> -- 
-> 2.33.0
-> 
+>
+>  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+> @@ -1861,115 +1849,13 @@ int svm_mem_enc_op(struct kvm *kvm, void __user *argp)
+>  int svm_register_enc_region(struct kvm *kvm,
+>                             struct kvm_enc_region *range)
+>  {
+> -       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> -       struct enc_region *region;
+> -       int ret = 0;
+> -
+> -       if (!sev_guest(kvm))
+> -               return -ENOTTY;
+> -
+> -       /* If kvm is mirroring encryption context it isn't responsible for it */
+> -       if (is_mirroring_enc_context(kvm))
+> -               return -EINVAL;
+> -
+> -       if (range->addr > ULONG_MAX || range->size > ULONG_MAX)
+> -               return -EINVAL;
+> -
+> -       region = kzalloc(sizeof(*region), GFP_KERNEL_ACCOUNT);
+> -       if (!region)
+> -               return -ENOMEM;
+> -
+> -       mutex_lock(&kvm->lock);
+> -       region->pages = sev_pin_memory(kvm, range->addr, range->size, &region->npages, 1);
+> -       if (IS_ERR(region->pages)) {
+> -               ret = PTR_ERR(region->pages);
+> -               mutex_unlock(&kvm->lock);
+> -               goto e_free;
+> -       }
+> -
+> -       region->uaddr = range->addr;
+> -       region->size = range->size;
+> -
+> -       list_add_tail(&region->list, &sev->regions_list);
+> -       mutex_unlock(&kvm->lock);
+> -
+> -       /*
+> -        * The guest may change the memory encryption attribute from C=0 -> C=1
+> -        * or vice versa for this memory range. Lets make sure caches are
+> -        * flushed to ensure that guest data gets written into memory with
+> -        * correct C-bit.
+> -        */
+> -       sev_clflush_pages(region->pages, region->npages);
+> -
+> -       return ret;
+> -
+> -e_free:
+> -       kfree(region);
+> -       return ret;
+> -}
+> -
+> -static struct enc_region *
+> -find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
+> -{
+> -       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> -       struct list_head *head = &sev->regions_list;
+> -       struct enc_region *i;
+> -
+> -       list_for_each_entry(i, head, list) {
+> -               if (i->uaddr == range->addr &&
+> -                   i->size == range->size)
+> -                       return i;
+> -       }
+> -
+> -       return NULL;
+> -}
+> -
+> -static void __unregister_enc_region_locked(struct kvm *kvm,
+> -                                          struct enc_region *region)
+> -{
+> -       sev_unpin_memory(kvm, region->pages, region->npages);
+> -       list_del(&region->list);
+> -       kfree(region);
+> +       return 0;
+>  }
+>
+>  int svm_unregister_enc_region(struct kvm *kvm,
+>                               struct kvm_enc_region *range)
+>  {
+> -       struct enc_region *region;
+> -       int ret;
+> -
+> -       /* If kvm is mirroring encryption context it isn't responsible for it */
+> -       if (is_mirroring_enc_context(kvm))
+> -               return -EINVAL;
+> -
+> -       mutex_lock(&kvm->lock);
+> -
+> -       if (!sev_guest(kvm)) {
+> -               ret = -ENOTTY;
+> -               goto failed;
+> -       }
+> -
+> -       region = find_enc_region(kvm, range);
+> -       if (!region) {
+> -               ret = -EINVAL;
+> -               goto failed;
+> -       }
+> -
+> -       /*
+> -        * Ensure that all guest tagged cache entries are flushed before
+> -        * releasing the pages back to the system for use. CLFLUSH will
+> -        * not do this, so issue a WBINVD.
+> -        */
+> -       wbinvd_on_all_cpus();
+> -
+> -       __unregister_enc_region_locked(kvm, region);
+> -
+> -       mutex_unlock(&kvm->lock);
+>         return 0;
+> -
+> -failed:
+> -       mutex_unlock(&kvm->lock);
+> -       return ret;
+>  }
+>
+>  int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+> @@ -2018,7 +1904,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>         mirror_sev->fd = source_sev->fd;
+>         mirror_sev->es_active = source_sev->es_active;
+>         mirror_sev->handle = source_sev->handle;
+> -       INIT_LIST_HEAD(&mirror_sev->regions_list);
+>         ret = 0;
+>
+>         /*
+> @@ -2038,8 +1923,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>  void sev_vm_destroy(struct kvm *kvm)
+>  {
+>         struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> -       struct list_head *head = &sev->regions_list;
+> -       struct list_head *pos, *q;
+>
+>         WARN_ON(sev->num_mirrored_vms);
+>
+> @@ -2066,18 +1949,6 @@ void sev_vm_destroy(struct kvm *kvm)
+>          */
+>         wbinvd_on_all_cpus();
+>
+> -       /*
+> -        * if userspace was terminated before unregistering the memory regions
+> -        * then lets unpin all the registered memory.
+> -        */
+> -       if (!list_empty(head)) {
+> -               list_for_each_safe(pos, q, head) {
+> -                       __unregister_enc_region_locked(kvm,
+> -                               list_entry(pos, struct enc_region, list));
+> -                       cond_resched();
+> -               }
+> -       }
+> -
+>         sev_unbind_asid(kvm, sev->handle);
+>         sev_asid_free(sev);
+>  }
+> @@ -2946,13 +2817,90 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
+>         ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, 1);
+>  }
+>
+> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
+> +                 kvm_pfn_t pfn)
+> +{
+> +       struct kvm_arch_memory_slot *aslot;
+> +       struct kvm_memory_slot *slot;
+> +       gfn_t rel_gfn, pin_pfn;
+> +       unsigned long npages;
+> +       kvm_pfn_t old_pfn;
+> +       int i;
+> +
+> +       if (!sev_guest(kvm))
+> +               return;
+> +
+> +       if (WARN_ON_ONCE(is_error_noslot_pfn(pfn) || kvm_is_reserved_pfn(pfn)))
+> +               return;
+> +
+> +       /* Tested till 1GB pages */
+> +       if (KVM_BUG_ON(level > PG_LEVEL_1G, kvm))
+> +               return;
+> +
+> +       slot = gfn_to_memslot(kvm, gfn);
+> +       if (!slot || !slot->arch.pfns)
+> +               return;
+> +
+> +       /*
+> +        * Use relative gfn index within the memslot for the bitmap as well as
+> +        * the pfns array
+> +        */
+> +       rel_gfn = gfn - slot->base_gfn;
+> +       aslot = &slot->arch;
+> +       pin_pfn = pfn;
+> +       npages = KVM_PAGES_PER_HPAGE(level);
+> +
+> +       /* Pin the page, KVM doesn't yet support page migration. */
+> +       for (i = 0; i < npages; i++, rel_gfn++, pin_pfn++) {
+> +               if (test_bit(rel_gfn, aslot->pinned_bitmap)) {
+> +                       old_pfn = aslot->pfns[rel_gfn];
+> +                       if (old_pfn == pin_pfn)
+> +                               continue;
+> +
+> +                       put_page(pfn_to_page(old_pfn));
+> +               }
+> +
+> +               set_bit(rel_gfn, aslot->pinned_bitmap);
+> +               aslot->pfns[rel_gfn] = pin_pfn;
+> +               get_page(pfn_to_page(pin_pfn));
+> +       }
+> +
+> +       /*
+> +        * Flush any cached lines of the page being added since "ownership" of
+> +        * it will be transferred from the host to an encrypted guest.
+> +        */
+> +       clflush_cache_range(__va(pfn << PAGE_SHIFT), page_level_size(level));
+> +}
+> +
+>  void sev_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
+>  {
+>         struct kvm_arch_memory_slot *aslot = &slot->arch;
+> +       kvm_pfn_t *pfns;
+> +       gfn_t gfn;
+> +       int i;
+>
+>         if (!sev_guest(kvm))
+>                 return;
+>
+> +       if (!aslot->pinned_bitmap || !slot->arch.pfns)
+> +               goto out;
+> +
+> +       pfns = aslot->pfns;
+> +
+> +       /*
+> +        * Iterate the memslot to find the pinned pfn using the bitmap and drop
+> +        * the pfn stored.
+> +        */
+> +       for (i = 0, gfn = slot->base_gfn; i < slot->npages; i++, gfn++) {
+> +               if (test_and_clear_bit(i, aslot->pinned_bitmap)) {
+> +                       if (WARN_ON(!pfns[i]))
+> +                               continue;
+> +
+> +                       put_page(pfn_to_page(pfns[i]));
+> +               }
+> +       }
+> +
+> +out:
+>         if (aslot->pinned_bitmap) {
+>                 kvfree(aslot->pinned_bitmap);
+>                 aslot->pinned_bitmap = NULL;
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 3fb19974f719..22535c680b3f 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4743,6 +4743,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>
+>         .alloc_memslot_metadata = sev_alloc_memslot_metadata,
+>         .free_memslot = sev_free_memslot,
+> +       .pin_spte = sev_pin_spte,
+>  };
+>
+>  static struct kvm_x86_init_ops svm_init_ops __initdata = {
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index b2f8b3b52680..c731bc91ea8f 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -77,7 +77,6 @@ struct kvm_sev_info {
+>         unsigned int handle;    /* SEV firmware handle */
+>         int fd;                 /* SEV device fd */
+>         unsigned long pages_locked; /* Number of pages locked */
+> -       struct list_head regions_list;  /* List of registered regions */
+>         u64 ap_jump_table;      /* SEV-ES AP Jump Table address */
+>         struct kvm *enc_context_owner; /* Owner of copied encryption context */
+>         unsigned long num_mirrored_vms; /* Number of VMs sharing this ASID */
+> @@ -648,5 +647,7 @@ int sev_alloc_memslot_metadata(struct kvm *kvm,
+>                                struct kvm_memory_slot *new);
+>  void sev_free_memslot(struct kvm *kvm,
+>                       struct kvm_memory_slot *slot);
+> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
+> +                 kvm_pfn_t pfn);
+>
+>  #endif
+> --
+> 2.32.0
+>

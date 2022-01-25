@@ -2,172 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFA349A7EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9E349A8A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 05:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1315440AbiAYCxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Jan 2022 21:53:25 -0500
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:41253 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2370182AbiAYADy (ORCPT
+        id S1319929AbiAYDJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Jan 2022 22:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1313536AbiAYCss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:03:54 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6F7365C0062;
-        Mon, 24 Jan 2022 19:03:53 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute4.internal (MEProxy); Mon, 24 Jan 2022 19:03:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=xrVlhzn9aqAvyt
-        XYY/7c6YYYVRGhNM6WvivtbLM07nw=; b=iq7pi02PS8sL3wMUrWNyF5p7h24mDK
-        sM3thbyjTfoF7TylAYssOVXZtD9s+jCqJ0TwGcUTBTEHbmCJtTzqeh0ZC7PGZdnC
-        DnvYqeLd13a5LAWuX15LfuI3UAEyCfpLWDZokM1cXwVr1grQiM/pPVZ+hK9Nq1we
-        miFX4xyrtWqIYb/xhy9xnTs5ZnZqcBdxOuA9bO3gxhjAeuSwvb+RzDyTfuv22Cny
-        Jx4wt3qz5Df1pHMIfkK4UH6kwVMuBXc3hEJ2RThHzpUC8eCEZxWcOfB7kQ5XYmXZ
-        hp6F19TgshFiN/QqifsCsc0g/eKlYYxRno1UCJbqcG15SlVJRJIn2OWQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=xrVlhzn9aqAvytXYY/7c6YYYVRGhNM6WvivtbLM07
-        nw=; b=aN0JG3UjJA56Pt3PMsJFofak4UiP4GBcbYFIt+naPgqfyYg/s4cPGtPyo
-        YnNhdaT7JclRWvreVn2Jf+JudWggWln8T/T3X4sZu0scOCtI1bnTQDIZbJTzS072
-        7Jl9ntDcFEyKkWfnFP6brtx+WDW7l6MLYG6d1gLckM9r9venKRZj5iz1oBAAE8e5
-        JBQWDCOYI93f7AvVQxjl+YhqXMySbTs0UbAVy4ARvsmYcHMXTU3mb1XMIYI7vmp2
-        sWc4XfmI9pVaIgXxuLGMQKk9b40UWuFCbHU4ym6vQNBDaGfDF5Sv2036QrToO+Zl
-        OeJYPtp/VUvb2bnuA5JJ3QfFNqUhA==
-X-ME-Sender: <xms:aT7vYQy7RALPBf3IQRAxeZXGRB5ziOOcPbJybZbHOBS7jhK2O94REQ>
-    <xme:aT7vYUSIVtYt8J3NH4EyjNQYvD3oRGuVIZ-rwanFt7S_ytctiUACJZ3Eq_UHzxRU7
-    jr6ZMV1HxN-J8f-hXY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvdekgdduiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdflihgr
-    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeefteegkeevfeethffgudehgedvueduvdeifedvvdelhfef
-    heekteefueektdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:aT7vYSV1VY_-rDLXexeWyX8qYkX78SD2hCk_PvuHn80ggXwsQMEfvg>
-    <xmx:aT7vYeiKoSdInKeM3dd12OH62u5k8MciwxOfivc5lGWbKXlJaxYSKQ>
-    <xmx:aT7vYSBZuHwpGZxH-MRl3r5m0Ei-Xc5gicij4-B48qOGw0VG9PZNZg>
-    <xmx:aT7vYV_ro25vKsYJago2ixa0Ls4DLvaiunrlEiYT-WB6Mf6u_VamDw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 154A5FA0AA6; Mon, 24 Jan 2022 19:03:53 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4585-ga9d9773056-fm-20220113.001-ga9d97730
-Mime-Version: 1.0
-Message-Id: <c88b0d87-b238-4889-b033-226bed85bb01@www.fastmail.com>
-In-Reply-To: <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
-References: <20220120214001.1879469-1-nathan@kernel.org>
- <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
-Date:   Tue, 25 Jan 2022 00:03:32 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc:     "Huacai Chen" <chenhuacai@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/2] MIPS: Loongson64: Clean up use of cc-ifversion
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Mon, 24 Jan 2022 21:48:48 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336A1C061747;
+        Mon, 24 Jan 2022 16:04:43 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id p15so26021298ejc.7;
+        Mon, 24 Jan 2022 16:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=W71C0v5EvF5HVGKANsilC3VZ/yenGYfwtXQzi/osySw=;
+        b=XglpY4J70hESr9fn8wrqXu8tX4R8GzwrZqkhwstzBzA75O4FsethTLOMOp4fXWlvKe
+         sVWtKliLJl2YKRt4CXb1g9DPBpEMxJGA9DBr6oYCwDpQ/aibJB1IIpzFJX9EgQbnWF0z
+         gWp3HT6XH+Gc3+3y/X+mTyH40FoN/TpRq4JLBgQ6UZJso+vP28uz6p0O/P5pBybo8pBz
+         lrP21YQ98ByoEIGvu5guoLgNGPAacnTlnstwhl2novNzmyrXI/RgeYGNQuStJKIpf4Ej
+         IMRIOpT9lt7IiN8gdMlSChanWXBe78gNVEMSUi/4qQSdc7pP7SgdVpnugWIIU+zm8YJv
+         8E+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W71C0v5EvF5HVGKANsilC3VZ/yenGYfwtXQzi/osySw=;
+        b=rPwF4J2E3RRoS/FuM3cz40TI0oI1zzzzMnaRjClWfoGAM7imiWAwX7ooWosbvtyGfe
+         D3sOuDVBLc4SfrvKcOArGeTyvvjuScUern9inDZ/OvSjcpZ8a+FD2VdLjMZS2Y09DFNJ
+         WPsgiU3NCkXHihWVrB62OM5Z7uPtDeBDDWZfYBEN9xHyY0wSsXS/2nDL//Ha9GQP/sdT
+         86o+BaY8n6lSEFNJ2fIDM8862+eFgrbvGrIt5yW6zVDgzuItHFQonSLPTS+XVZLqH43w
+         +Y6z4C5B5QfDsvvCz7t3oifugL7r9GUN6UfqqSEpkDOvRoEh03rPPtdriNWlksEcVoRi
+         Yvhg==
+X-Gm-Message-State: AOAM533wMywJzggjI69ApA66RxJe+VurVvUFQZOlicCisCHf8s2ZYMqf
+        I47KcOjAH8REWFPSRD1nmEw=
+X-Google-Smtp-Source: ABdhPJxcE7y5RNIqBzFldO7Er81oqzpsubv12PnOVaY8E5PITMD7Ye8STVzFVKLJWSPKkWdVt2wiNQ==
+X-Received: by 2002:a17:907:7b8b:: with SMTP id ne11mr13945663ejc.436.1643069081571;
+        Mon, 24 Jan 2022 16:04:41 -0800 (PST)
+Received: from skbuf ([188.25.255.2])
+        by smtp.gmail.com with ESMTPSA id g8sm5511019ejt.26.2022.01.24.16.04.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 16:04:41 -0800 (PST)
+Date:   Tue, 25 Jan 2022 02:04:39 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] net: dsa: Avoid cross-chip syncing of VLAN
+ filtering
+Message-ID: <20220125000439.c4lbw3ivwunzzz23@skbuf>
+References: <20220124210944.3749235-1-tobias@waldekranz.com>
+ <20220124210944.3749235-3-tobias@waldekranz.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124210944.3749235-3-tobias@waldekranz.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 24, 2022 at 10:09:44PM +0100, Tobias Waldekranz wrote:
+> Changes to VLAN filtering are not applicable to cross-chip
+> notifications.
 
+Yes, it seems so. In a cross-chip setup, ports will individually leave
+the bridge, leaving every switch a chance to unset VLAN filtering.
+We have this check in dsa_port_vlan_filtering(), so it's easy to forget
+that the function is called more times than actually needed:
 
-=E5=9C=A82022=E5=B9=B41=E6=9C=8824=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
-=8D=888:31=EF=BC=8CNick Desaulniers=E5=86=99=E9=81=93=EF=BC=9A
-> On Thu, Jan 20, 2022 at 1:40 PM Nathan Chancellor <nathan@kernel.org> =
-wrote:
->>
->> This Makefile checks that GCC is 4.9 or newer, which is redundant aft=
-er
->> commit 76ae847497bc ("Documentation: raise minimum supported version =
-of
->> GCC to 5.1"), so cc-option can be removed.
->>
->> Clang does not support -march=3Dloongson3a so it needs to continue to=
- use
->> -march=3Dmips64r2, along with binutils less than 2.25, so check that =
-both
->> GCC and binutils 2.25 or newer are being used before using
->> -march=3Dloongson3a. These flags do not need to be checked with cc-op=
-tion
->> anymore because all GCC versions support -march=3Dloongson3a and
->> -march=3Dmips64r2 and all clang versions support -march=3Dmips64r2.
->>
->> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->
-> Thanks for the patch. I wonder why `_MIPS_ISA` only seems to be set at
-> all for `-march=3Dloongson3a` AFAICT, though that question is orthogon=
-al
-> to this patch. Perhaps the Loongson or MIPS maintainers know more?
-> Otherwise seems like most uses of _MIPS_ISA can either be deleted or
-> simplified now.
+	if (dsa_port_is_vlan_filtering(dp) == vlan_filtering)
+		return 0;
 
-This is because earlier GCC mistakenly set loongson3a to MIPS64 not MIPS=
-64R2.
+Sorry.
 
-But given that it's earlier than the minimal requirement GCC of kernel t=
-oday, I think it should be safe to just move the whole logic.
+> On a system like this:
+> 
+> .-----.   .-----.   .-----.
+> | sw1 +---+ sw2 +---+ sw3 |
+> '-1-2-'   '-1-2-'   '-1-2-'
+> 
+> Before this change, upon sw1p1 leaving a bridge, a call to
+> dsa_port_vlan_filtering would also be made to sw2p1 and sw3p1.
+> 
+> In this scenario:
+> 
+> .---------.   .-----.   .-----.
+> |   sw1   +---+ sw2 +---+ sw3 |
+> '-1-2-3-4-'   '-1-2-'   '-1-2-'
+> 
+> When sw1p4 would leave a bridge, dsa_port_vlan_filtering would be
+> called for sw2 and sw3 with a non-existing port - leading to array
+> out-of-bounds accesses and crashes on mv88e6xxx.
+> 
+> Fixes: d371b7c92d19 ("net: dsa: Unset vlan_filtering when ports leave the bridge")
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
+>  net/dsa/switch.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/dsa/switch.c b/net/dsa/switch.c
+> index 9f9b70d6070a..517cc83d13cc 100644
+> --- a/net/dsa/switch.c
+> +++ b/net/dsa/switch.c
+> @@ -180,9 +180,11 @@ static int dsa_switch_bridge_leave(struct dsa_switch *ds,
+>  						info->sw_index, info->port,
+>  						info->bridge);
+>  
+> -	err = dsa_switch_sync_vlan_filtering(ds, info);
+> -	if (err)
+> -		return err;
+> +	if (ds->dst->index == info->tree_index && ds->index == info->sw_index) {
+> +		err = dsa_switch_sync_vlan_filtering(ds, info);
+> +		if (err)
+> +			return err;
+> +	}
 
-Thanks.
+As net-next material, we could probably move this call to
+dsa_port_switchdev_unsync_attrs() where there's even a comment that
+references it, and do away with the targeted switch check.
 
->
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
->> ---
->>  arch/mips/loongson64/Platform | 13 +++----------
->>  1 file changed, 3 insertions(+), 10 deletions(-)
->>
->> diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Pla=
-tform
->> index 3e660d6d3c2b..981d3abc150e 100644
->> --- a/arch/mips/loongson64/Platform
->> +++ b/arch/mips/loongson64/Platform
->> @@ -12,17 +12,10 @@ cflags-$(CONFIG_CPU_LOONGSON64)     +=3D -Wa,--tr=
-ap
->>  # by GAS.  The cc-option can't probe for this behaviour so -march=3D=
-loongson3a
->>  # can't easily be used safely within the kbuild framework.
->>  #
->> -ifeq ($(call cc-ifversion, -ge, 0409, y), y)
->> -  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
->> -    cflags-$(CONFIG_CPU_LOONGSON64)  +=3D \
->> -      $(call cc-option,-march=3Dloongson3a -U_MIPS_ISA -D_MIPS_ISA=3D=
-_MIPS_ISA_MIPS64)
->> -  else
->> -    cflags-$(CONFIG_CPU_LOONGSON64)  +=3D \
->> -      $(call cc-option,-march=3Dmips64r2,-mips64r2 -U_MIPS_ISA -D_MI=
-PS_ISA=3D_MIPS_ISA_MIPS64)
->> -  endif
->> +ifeq ($(CONFIG_CC_IS_GCC)$(call ld-ifversion, -ge, 22500, y), yy)
->> +  cflags-$(CONFIG_CPU_LOONGSON64) +=3D -march=3Dloongson3a -U_MIPS_I=
-SA -D_MIPS_ISA=3D_MIPS_ISA_MIPS64
->>  else
->> -    cflags-$(CONFIG_CPU_LOONGSON64)  +=3D \
->> -      $(call cc-option,-march=3Dmips64r2,-mips64r2 -U_MIPS_ISA -D_MI=
-PS_ISA=3D_MIPS_ISA_MIPS64)
->> +  cflags-$(CONFIG_CPU_LOONGSON64) +=3D -march=3Dmips64r2
->>  endif
->>
->>  # Some -march=3D flags enable MMI instructions, and GCC complains ab=
-out that
->>
->> base-commit: 2c271fe77d52a0555161926c232cd5bc07178b39
->> --
->> 2.34.1
->>
->
->
-> --=20
-> Thanks,
-> ~Nick Desaulniers
+>  
+>  	return dsa_tag_8021q_bridge_leave(ds, info);
+>  }
+> -- 
+> 2.25.1
+> 
 
---=20
-- Jiaxun
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557E649B730
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2928149B734
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 16:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389472AbiAYPEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 10:04:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43930 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358068AbiAYPB5 (ORCPT
+        id S1581336AbiAYPFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 10:05:22 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:52742 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1581208AbiAYPDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 10:01:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D02BB81814;
-        Tue, 25 Jan 2022 15:01:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44222C340E0;
-        Tue, 25 Jan 2022 15:01:40 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 10:01:38 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Trond Myklebust <trondmy@gmail.com>,
-        NFS Mailing List <linux-nfs@vger.kernel.org>
-Subject: Re: linux-next: runtime warning in next-20220125
-Message-ID: <20220125100138.0d19c8ca@gandalf.local.home>
-In-Reply-To: <20220125162146.13872bdb@canb.auug.org.au>
-References: <20220125160505.068dbb52@canb.auug.org.au>
-        <20220125162146.13872bdb@canb.auug.org.au>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 25 Jan 2022 10:03:00 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2qsuta_1643122967;
+Received: from 30.27.234.82(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V2qsuta_1643122967)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 25 Jan 2022 23:02:49 +0800
+Message-ID: <94dababf-76dd-dd9f-61e4-fe05b02f6241@linux.alibaba.com>
+Date:   Tue, 25 Jan 2022 23:02:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [RESEND PATCH v3 1/2] efi/cper: add cper_mem_err_status_str to
+ decode error description
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220124024759.19176-2-xueshuai@linux.alibaba.com>
+ <Ye8XMvfXCetzJLTH@zn.tnic>
+ <98aae382-ac38-8811-f147-d00b953f608d@linux.alibaba.com>
+ <Ye/PLDlOBhYmGb5D@zn.tnic>
+ <0e156b79-6343-72b2-47fb-baa29ffe60fd@linux.alibaba.com>
+ <Ye/u/UNqXr1/WUXH@zn.tnic>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <Ye/u/UNqXr1/WUXH@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 16:21:46 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi Borislav,
 
-> Hi all,
+在 2022/1/25 PM8:37, Borislav Petkov 写道:
+> On Tue, Jan 25, 2022 at 07:49:41PM +0800, Shuai Xue wrote:
+>> I am sorry if you feel the RESEND tag is pushing you.
 > 
-> On Tue, 25 Jan 2022 16:05:05 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > My qemu boot test of a powerpc pseries_le_defconfig kernel produces the
-> > following trace:
-> > 
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 0 PID: 0 at kernel/trace/trace_events.c:417 trace_event_raw_init+0x194/0x730
-> > Modules linked in:
-> > CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1 #2
-> > NIP:  c0000000002bdbb4 LR: c0000000002bdcb0 CTR: c0000000002bdb70
-> > 
-> > I have no idea what has caused this :-(  Maybe commit
-> > 
-> >   5544d5318802 ("SUNRPC: Same as SVC_RQST_ENDPOINT, but without the xid")  
-> 
-> Actually, reverting commits
-> 
->   6ff851d98af8 ("SUNRPC: Improve sockaddr handling in the svc_xprt_create_error trace point")
->   5544d5318802 ("SUNRPC: Same as SVC_RQST_ENDPOINT, but without the xid")
->   e2d3613db12a ("SUNRPC: Record endpoint information in trace log")
-> 
-> makes the warning go away.
-> 
+> It is not pushing me - there are rules, simply. Rules you should read
+> first before sending patches.
 
-We added a new way to save items on the ring buffer, but did not update the
-safety checks to know about them. I'll fix this shortly.
+Got it. I will learn rules first.
 
--- Steve
+> How about I start flooding you a patchset every day?
 
+Haha, I see. I am sorry to bother you and thank you very much for your patient
+and valuable comments, just take your time. By the way, after sending patchset
+v3 8 days, I resend it yesterday, and the patchset v4 sent today is to address
+your comments, not a resend patchset. Anyway, I will be more patient.
 
+> Also, please do not top-post. That's also explained in that
+> documentation directory I mentioned. Read about it too pls.
+
+I will, thank you.
+
+Best Regards,
+Shuai

@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BE149AD40
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7EE49AD4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443088AbiAYHM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S1443626AbiAYHPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 02:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442600AbiAYHJy (ORCPT
+        with ESMTP id S1443057AbiAYHMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:09:54 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05765C061747
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:05:25 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id w14so7773816edd.10
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:05:24 -0800 (PST)
+        Tue, 25 Jan 2022 02:12:52 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC5AC067A47
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:20:32 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id w190so12444157pfw.7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 22:20:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=abBK9VVUqL6UXjuLUzWwVweR3OtIvZP20Nia7ymSDqE=;
-        b=m8brp/KA6L4kEtPy7NYPdztwrNSthgERntr1drcocg6YTINq/qeRvhzDEHxQ6tnhCJ
-         FLuAtoTIKUjRLU6O7dVBAewX/90a7jDupC77e7YK1TRAuKpkYve2SUWLUSiMAFxG/uxF
-         r7VuB5TSBUGkPK7P44njHJNjstoo6Vu6Cifwr1F/LFau7ckMsijIYypqeh/EWQ/qhvJX
-         CXtDrw4/sv+ntsT+6TLBAGpaM5JEPnlwCoGHCfLppNLnYjQXsA/oM3M1xbu+bWdZ16/+
-         CytXv5huuxwJxFf+lLDZpc845kYOEWp2VYS2oO9KH1eFvRNKDcMDtn6vxFpowJaxsWyJ
-         7osQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=e3vV57TzMe9kRVeRrZgfP2eez/5syARdbRmJEpphFR0=;
+        b=bdFK7Zj++DZl4oEsfnp58AL5wLlTmliS1Lt9S6y6ju0xS2ecb4WS620GWVd/EYKlsF
+         qptlAqj/SmNa/qHu7dJRPeI/XO2POg25NWZOb0S3luSxhW7Vd2luOZJPoKaimLIu2v+8
+         DbNF3qpa9ztmd/1CDEkToBQlmpBupG98P6ZwNpB6sAfAncjtgwLg0G1JkLt/SMeQTx2h
+         S+sgtkPtVOD/lAe80ihgmHKbH6DRjqtvDTaeC/v4Ao68lx3r1mC3ay3T7izFhYgaqaXN
+         feO9j9HEDEO5jwopukBL6Np6aS9WKpwCHwr5tPPYRJmYWT3BnwgqGm54zxp+h3ADDsvR
+         UTFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=abBK9VVUqL6UXjuLUzWwVweR3OtIvZP20Nia7ymSDqE=;
-        b=mh2ApQGgYkCReFJUNSZaBv+OpamZOtd2lh1CQqvN7/hSUY/n+LEIt71iIO8orcGlMI
-         FAAl0tvYb89FdqU8Yj0mbGYP5+93zWkNpfyJ0N0reF0aAjGjfJsKQaX7KPwLr5GsTYXR
-         CpWVqVwwM/9ZBIZwGKC6HDtN/slJcdZldbAAOTZ37ncFW4+615ckZKEekkbLZWw9t9Aw
-         PcGz3lUGdqlanAPbKdVj2tG7QJrbfXM9jro7ZmXEUm1ghn0DteX5m4Yd8ewCttIAmRTv
-         owIP7zv3JqmXwBXVX08QjhMyLucwFFqUXwukShFagcWhbslCCnG9wpEivw+xFWiBvxEF
-         f+pw==
-X-Gm-Message-State: AOAM53336v3AB7T2N8gUNJnaulsgasewrbNExkuG/xoW7NSkjFGRSUip
-        IqJiY3riTpJbnZOSmXZYFMGY9oRg53Up9B1IXyM=
-X-Google-Smtp-Source: ABdhPJz3opqJwT2dQuTyCeDjkfvvCqRb7uCqVNzAkTfNe/xl0dc90gK0RUvHWBYwj6QKtN5oeeYPCt2ynzIs2CJ1S0Q=
-X-Received: by 2002:a05:6402:5246:: with SMTP id t6mr11526651edd.35.1643090723501;
- Mon, 24 Jan 2022 22:05:23 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=e3vV57TzMe9kRVeRrZgfP2eez/5syARdbRmJEpphFR0=;
+        b=MUq8ODYtGZGSyTEZasR+czAavoNq6cnVzyk6Savtjen/7qUZ7WIRzOC0Wum8lC2N9F
+         LNNwNoFDC0EiTB3rHqqD+7QXS9UESZ4NKpos1+ynn85FmjjPKufq0AGTGji6nGsdEEzb
+         MkDM8fNFrf0V3J/8jLm1BanMbK6YjNUi1kVUCLZJLLp4WBzyAI8TUGHvAKBv/Mpp3bKf
+         QH9GnZP0Vv929FV4GoMgDU6hpdC4llYtf4zY5Wh+/F/v0GprjWj0X+0d/35j0bAUNSz/
+         tMcLcul6vZV3mzgHVFTZfx+CSOGCQ24N3jptHWN2ySEwRaCy+YCx6eiPLRQ9EZ5Ier/R
+         8hsg==
+X-Gm-Message-State: AOAM530jljrdrYbKs8kmR8Kq+2J5k6AY1qEbBc0zqhLOF8uC7wVqJHPg
+        0Bpu7ST0LmraqBecw8zkICeUK9Hmn8y+uO6g85w=
+X-Google-Smtp-Source: ABdhPJywelndqW+FvIb+UfRfoq3duvREDNgB2XUmPeNgIt1q5m9BTKEdTqIZdHJ13UJROwgWAeHyOowi4t+fxIpNm8E=
+X-Received: by 2002:a05:6a00:1993:b0:4ca:91a8:d39e with SMTP id
+ d19-20020a056a00199300b004ca91a8d39emr3403216pfl.78.1643091631833; Mon, 24
+ Jan 2022 22:20:31 -0800 (PST)
 MIME-Version: 1.0
-References: <202201250941.1xbLnDRA-lkp@intel.com> <CA+PpKP=5RKwLf0TG9yArbvWQupL8_5YQ5dUvrro+gYkKKk2=Qg@mail.gmail.com>
-In-Reply-To: <CA+PpKP=5RKwLf0TG9yArbvWQupL8_5YQ5dUvrro+gYkKKk2=Qg@mail.gmail.com>
-From:   Hao Lee <haolee.swjtu@gmail.com>
-Date:   Tue, 25 Jan 2022 14:05:12 +0800
-Message-ID: <CA+PpKP==M8gYygZJW7nTYBryj7EB6-7go7EikNVx4OoOH1dLGg@mail.gmail.com>
-Subject: Re: fs/proc/base.c:1767:14-18: WARNING: casting value returned by
- memory allocation function to (char *) is useless.
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, LKML <linux-kernel@vger.kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
+Received: by 2002:a05:6a10:e906:0:0:0:0 with HTTP; Mon, 24 Jan 2022 22:20:31
+ -0800 (PST)
+Reply-To: wilsonmrthomas30@gmail.com
+From:   "Mr.Thomas Wilson" <mrs.linaadams1@gmail.com>
+Date:   Mon, 24 Jan 2022 22:20:31 -0800
+Message-ID: <CAK7cw8qJ=P8c=YfZwU6cWM_+f9SFH4DiKKe8zF+SKhdbZVK-Hg@mail.gmail.com>
+Subject: Please get back to me
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:01 AM Hao Lee <haolee.swjtu@gmail.com> wrote:
->
-> On Tue, Jan 25, 2022 at 10:36 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220123-215907/Hao-Lee/proc-use-kmalloc-instead-of-__get_free_page-to-alloc-path-buffer/20220123-181005
-> > head:   98106e76de95ae9aefa914ec056448a5571155dc
-> > commit: 98106e76de95ae9aefa914ec056448a5571155dc proc: alloc PATH_MAX bytes for /proc/${pid}/fd/ symlinks
-> > date:   35 hours ago
-> > config: i386-randconfig-c001-20220124 (https://download.01.org/0day-ci/archive/20220125/202201250941.1xbLnDRA-lkp@intel.com/config)
-> > compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> >
-> > cocci warnings: (new ones prefixed by >>)
-> > >> fs/proc/base.c:1767:14-18: WARNING: casting value returned by memory allocation function to (char *) is useless.
->
-> Hello, Alexey,
->
-> This patch has been added to the -mm tree, how do we deal with this problem...
-> Thanks.
+Attention
 
-Andrew has handled it. Thanks.
+I am Dr. Thomas Wilson from COVID-19 Solidarity Response Fund PAYMENT
+COMMISSION. In line with the Corona-Virus Pandemic The COVID-19
+Solidarity Response Fund Swiss in collaboration with the World health
+Organization through the United Nations have agreed to compensate you
+with the sum of =C2=A3500,000 GBP. This payment Program is organized for
+charity organizations, unpaid government Contractors, Scam victims and
+for those who lost their properties/businesses during the crisis
+Kindly respond to this message in order to direct you on how you will
+receive this fund within 7 days without any further delay.
 
->
-> >
-> > Please review and possibly fold the followup patch.
-> >
-> > ---
-> > 0-DAY CI Kernel Test Service, Intel Corporation
-> > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I look forward to receiving your urgent response.
+
+Regards
+
+Dr. Thomas Wilson
+From United Nations

@@ -2,384 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B04B49BD96
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C6349BD90
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 22:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbiAYVAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 16:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232758AbiAYVA2 (ORCPT
+        id S232770AbiAYVAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 16:00:17 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:51263 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232684AbiAYVAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 16:00:28 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E571AC06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 13:00:27 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id 4-20020a250304000000b006137f4a9920so42812281ybd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 13:00:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=R688BOqi998uMoUSe2juA24py6qr+QQ9+6E7CfL0h8w=;
-        b=JFhHSdXUQYauV/isv6gWaTwFc3y10s4IjXdSUwzkw0WiuFrKaTYBS4o+LM1RIlgji6
-         rraWdg2LzkfuwAeYOY5IdW/ZXCH/vAj7gpHKtrTRSm2NA5Tl/XhcajW+SD0ZyR7PJI2R
-         0r2JN5VHisqSAta6jP82zPEZrUPG6YXjJX4sKJfm9vAeR0yyquLwtt0oNg/zkrc5V8gb
-         ZORckA+ZmDlUC1s/liB0dK5/NW9vBehJUeeJo4lFs7m2Je8ZJJ8TtaIHRjGhFAs9qFW3
-         gSnMdIujZMj+/Fum6YVGt4NhlJ5bk9O6hpN8tawYOUY3k9ju6lyxY0I6sHNXpAD8r2U/
-         NGLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=R688BOqi998uMoUSe2juA24py6qr+QQ9+6E7CfL0h8w=;
-        b=Ja4+fTRD4DCCfhRQqTs9OPpW4FM5nfUevT1O7KbGoEqpmG5pDP7PaZPKgmYyEGlYYv
-         KlUB9+rqEmskYbpXFhHxT2IA1WbGh4QbQn+KZDC/EKkm2QG1LTxuoAuSthcE6ICCvS5E
-         OaCRfi5AK0OW/6R+4pXnbSZyyeUGmiFDZAHq88KEgLPmGj/xYLflRyZ6A/pBWK3Odl3f
-         HJE9Ri7H7d79YDCqk8KtEBl4Tngc32+LRo/1ohWN/Y/szxnZcdPHDeLnyQjed58R3iGq
-         WTSrtBEd8gIHMOsnIHl8H6D0wYE+wn60nKjL+ks7+qWYio3Dwp1lLaVQixJQgVwzWz5w
-         eGxg==
-X-Gm-Message-State: AOAM530BeTPO2MZuSP8aCDk55h3+FHr+mgXzU6yrJc+g0dUt74WNhtE1
-        XORFjbtiLNPOXIxOJI67uf0NzSm8z1EjxA==
-X-Google-Smtp-Source: ABdhPJxnH0p+sBicrChT+vSCovp7VfdTanYniynyWttkJQ8CisUZuDOl1bTO01iplZPiPudkgkAOqHaDJcgr+w==
-X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:ec63:7812:5e4a:c688])
- (user=dlatypov job=sendgmr) by 2002:a25:70d5:: with SMTP id
- l204mr33815488ybc.193.1643144427159; Tue, 25 Jan 2022 13:00:27 -0800 (PST)
-Date:   Tue, 25 Jan 2022 13:00:09 -0800
-In-Reply-To: <20220125210011.3817742-1-dlatypov@google.com>
-Message-Id: <20220125210011.3817742-2-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20220125210011.3817742-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH 1/3] kunit: remove va_format from kunit_assert
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 25 Jan 2022 16:00:12 -0500
+Received: (qmail 117653 invoked by uid 1000); 25 Jan 2022 16:00:11 -0500
+Date:   Tue, 25 Jan 2022 16:00:11 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Re: [PATCH] tools/memory-model: Clarify syntactic and semantic
+ dependencies
+Message-ID: <YfBk265vVo4FL4MJ@rowland.harvard.edu>
+References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The concern is that having a lot of redundant fields in kunit_assert can
-blow up stack usage if the compiler doesn't optimize them away [1].
+On Tue, Jan 25, 2022 at 05:28:19PM +0000, Paul Heidekrüger wrote:
+> Dependencies which are purely syntactic, i.e. not semantic, might imply
+> ordering at first glance. However, since they do not affect defined
+> behavior, compilers are within their rights to remove such dependencies
+> when optimizing code.
+> 
+> Since syntactic dependencies are not related to any kind of dependency
+> in particular, explicitly distinguish syntactic and semantic
+> dependencies as part of the 'A WARNING' section in explanation.txt,
+> which gives examples of how compilers might affect the LKMM's dependency
+> orderings in general.
 
-The comment on this field implies that it was meant to be initialized
-when the expect/assert was declared, but this only happens when we run
-kunit_do_failed_assertion().
+The "A WARNING" section is a bad place to put this material, because it 
+comes before dependencies have been introduced.  It would be better to 
+put this at the end of the "DEPENDENCY RELATIONS: data, addr, and ctrl" 
+section.
 
-We don't need to access it outside of that function, so move it out of
-the struct and make it a local variable there.
+> Link: https://lore.kernel.org/all/20211102190138.GA1497378@rowland.harvard.edu/
+> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+> ---
+>  .../Documentation/explanation.txt             | 25 +++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> index 5d72f3112e56..6d679e5ebdf9 100644
+> --- a/tools/memory-model/Documentation/explanation.txt
+> +++ b/tools/memory-model/Documentation/explanation.txt
+> @@ -411,6 +411,31 @@ Given this version of the code, the LKMM would predict that the load
+>  from x could be executed after the store to y.  Thus, the memory
+>  model's original prediction could be invalidated by the compiler.
+>  
+> +Caution is also advised when dependencies are purely syntactic, i.e.
+> +not semantic.  A dependency between two marked accesses is purely
+> +syntactic iff the defined behavior of the second access is unaffected
+> +by its dependency.
 
-This change also takes the chance to reduce the number of macros by
-inlining the now simplified KUNIT_INIT_ASSERT_STRUCT() macro.
+That's a very abstract way of describing the situation; it doesn't do a 
+good job of getting the real idea across.  It also mixes up two separate 
+ideas: behaviors being unaffected by a syntactic dependency and 
+behaviors being undefined.  They should be described separately.  I 
+would prefer something along these lines...
 
-[1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
+----------------------------------------
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- include/kunit/assert.h | 43 +++++++++++++-----------------------------
- lib/kunit/assert.c     | 27 +++++++++++++++-----------
- lib/kunit/test.c       | 12 +++++++-----
- 3 files changed, 36 insertions(+), 46 deletions(-)
+Here's a trick question: When is a dependency not a dependency? Answer: 
+When it is purely syntactic rather than semantic.  We say a dependency 
+between two accesses is purely syntactic if the second access doesn't 
+actually depend on the result of the first.  Here is a trivial example:
 
-diff --git a/include/kunit/assert.h b/include/kunit/assert.h
-index f2b3ae5cc2de..0b3704db54b6 100644
---- a/include/kunit/assert.h
-+++ b/include/kunit/assert.h
-@@ -42,44 +42,21 @@ struct kunit_loc {
- 
- /**
-  * struct kunit_assert - Data for printing a failed assertion or expectation.
-- * @message: an optional message to provide additional context.
-  * @format: a function which formats the data in this kunit_assert to a string.
-  *
-  * Represents a failed expectation/assertion. Contains all the data necessary to
-  * format a string to a user reporting the failure.
-  */
- struct kunit_assert {
--	struct va_format message;
- 	void (*format)(const struct kunit_assert *assert,
-+		       const struct va_format *message,
- 		       struct string_stream *stream);
- };
- 
--/**
-- * KUNIT_INIT_VA_FMT_NULL - Default initializer for struct va_format.
-- *
-- * Used inside a struct initialization block to initialize struct va_format to
-- * default values where fmt and va are null.
-- */
--#define KUNIT_INIT_VA_FMT_NULL { .fmt = NULL, .va = NULL }
--
--/**
-- * KUNIT_INIT_ASSERT_STRUCT() - Initializer for a &struct kunit_assert.
-- * @fmt: The formatting function which builds a string out of this kunit_assert.
-- *
-- * The base initializer for a &struct kunit_assert.
-- */
--#define KUNIT_INIT_ASSERT_STRUCT(fmt) {					       \
--	.message = KUNIT_INIT_VA_FMT_NULL,				       \
--	.format = fmt							       \
--}
--
- void kunit_assert_prologue(const struct kunit_loc *loc,
- 			   enum kunit_assert_type type,
- 			   struct string_stream *stream);
- 
--void kunit_assert_print_msg(const struct kunit_assert *assert,
--			    struct string_stream *stream);
--
- /**
-  * struct kunit_fail_assert - Represents a plain fail expectation/assertion.
-  * @assert: The parent of this type.
-@@ -91,6 +68,7 @@ struct kunit_fail_assert {
- };
- 
- void kunit_fail_assert_format(const struct kunit_assert *assert,
-+			      const struct va_format *message,
- 			      struct string_stream *stream);
- 
- /**
-@@ -100,7 +78,7 @@ void kunit_fail_assert_format(const struct kunit_assert *assert,
-  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-  */
- #define KUNIT_INIT_FAIL_ASSERT_STRUCT {					\
--	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_fail_assert_format)	\
-+	.assert = { .format = kunit_fail_assert_format },		\
- }
- 
- /**
-@@ -120,6 +98,7 @@ struct kunit_unary_assert {
- };
- 
- void kunit_unary_assert_format(const struct kunit_assert *assert,
-+			       const struct va_format *message,
- 			       struct string_stream *stream);
- 
- /**
-@@ -131,7 +110,7 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
-  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-  */
- #define KUNIT_INIT_UNARY_ASSERT_STRUCT(cond, expect_true) {		       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_unary_assert_format),	       \
-+	.assert = { .format = kunit_unary_assert_format },		       \
- 	.condition = cond,						       \
- 	.expected_true = expect_true					       \
- }
-@@ -153,6 +132,7 @@ struct kunit_ptr_not_err_assert {
- };
- 
- void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
-+				     const struct va_format *message,
- 				     struct string_stream *stream);
- 
- /**
-@@ -165,7 +145,7 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
-  * KUNIT_EXPECT_* and KUNIT_ASSERT_* macros.
-  */
- #define KUNIT_INIT_PTR_NOT_ERR_STRUCT(txt, val) {			       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_ptr_not_err_assert_format),   \
-+	.assert = { .format = kunit_ptr_not_err_assert_format },	       \
- 	.text = txt,							       \
- 	.value = val							       \
- }
-@@ -194,6 +174,7 @@ struct kunit_binary_assert {
- };
- 
- void kunit_binary_assert_format(const struct kunit_assert *assert,
-+				const struct va_format *message,
- 				struct string_stream *stream);
- 
- /**
-@@ -213,7 +194,7 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
- 					left_val,			       \
- 					right_str,			       \
- 					right_val) {			       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_binary_assert_format),	       \
-+	.assert = { .format = kunit_binary_assert_format },		       \
- 	.operation = op_str,						       \
- 	.left_text = left_str,						       \
- 	.left_value = left_val,						       \
-@@ -245,6 +226,7 @@ struct kunit_binary_ptr_assert {
- };
- 
- void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
-+				    const struct va_format *message,
- 				    struct string_stream *stream);
- 
- /**
-@@ -265,7 +247,7 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
- 					    left_val,			       \
- 					    right_str,			       \
- 					    right_val) {		       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_binary_ptr_assert_format),    \
-+	.assert = { .format = kunit_binary_ptr_assert_format },		       \
- 	.operation = op_str,						       \
- 	.left_text = left_str,						       \
- 	.left_value = left_val,						       \
-@@ -297,6 +279,7 @@ struct kunit_binary_str_assert {
- };
- 
- void kunit_binary_str_assert_format(const struct kunit_assert *assert,
-+				    const struct va_format *message,
- 				    struct string_stream *stream);
- 
- /**
-@@ -316,7 +299,7 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
- 					    left_val,			       \
- 					    right_str,			       \
- 					    right_val) {		       \
--	.assert = KUNIT_INIT_ASSERT_STRUCT(kunit_binary_str_assert_format),    \
-+	.assert = { .format = kunit_binary_str_assert_format },		       \
- 	.operation = op_str,						       \
- 	.left_text = left_str,						       \
- 	.left_value = left_val,						       \
-diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-index 9f4492a8e24e..c9c7ee0dfafa 100644
---- a/lib/kunit/assert.c
-+++ b/lib/kunit/assert.c
-@@ -30,22 +30,23 @@ void kunit_assert_prologue(const struct kunit_loc *loc,
- }
- EXPORT_SYMBOL_GPL(kunit_assert_prologue);
- 
--void kunit_assert_print_msg(const struct kunit_assert *assert,
--			    struct string_stream *stream)
-+static void kunit_assert_print_msg(const struct va_format *message,
-+				   struct string_stream *stream)
- {
--	if (assert->message.fmt)
--		string_stream_add(stream, "\n%pV", &assert->message);
-+	if (message->fmt)
-+		string_stream_add(stream, "\n%pV", message);
- }
--EXPORT_SYMBOL_GPL(kunit_assert_print_msg);
- 
- void kunit_fail_assert_format(const struct kunit_assert *assert,
-+			      const struct va_format *message,
- 			      struct string_stream *stream)
- {
--	string_stream_add(stream, "%pV", &assert->message);
-+	string_stream_add(stream, "%pV", message);
- }
- EXPORT_SYMBOL_GPL(kunit_fail_assert_format);
- 
- void kunit_unary_assert_format(const struct kunit_assert *assert,
-+			       const struct va_format *message,
- 			       struct string_stream *stream)
- {
- 	struct kunit_unary_assert *unary_assert;
-@@ -60,11 +61,12 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
- 		string_stream_add(stream,
- 				  KUNIT_SUBTEST_INDENT "Expected %s to be false, but is true\n",
- 				  unary_assert->condition);
--	kunit_assert_print_msg(assert, stream);
-+	kunit_assert_print_msg(message, stream);
- }
- EXPORT_SYMBOL_GPL(kunit_unary_assert_format);
- 
- void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
-+				     const struct va_format *message,
- 				     struct string_stream *stream)
- {
- 	struct kunit_ptr_not_err_assert *ptr_assert;
-@@ -82,7 +84,7 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
- 				  ptr_assert->text,
- 				  PTR_ERR(ptr_assert->value));
- 	}
--	kunit_assert_print_msg(assert, stream);
-+	kunit_assert_print_msg(message, stream);
- }
- EXPORT_SYMBOL_GPL(kunit_ptr_not_err_assert_format);
- 
-@@ -110,6 +112,7 @@ static bool is_literal(struct kunit *test, const char *text, long long value,
- }
- 
- void kunit_binary_assert_format(const struct kunit_assert *assert,
-+				const struct va_format *message,
- 				struct string_stream *stream)
- {
- 	struct kunit_binary_assert *binary_assert;
-@@ -132,11 +135,12 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
- 		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld",
- 				  binary_assert->right_text,
- 				  binary_assert->right_value);
--	kunit_assert_print_msg(assert, stream);
-+	kunit_assert_print_msg(message, stream);
- }
- EXPORT_SYMBOL_GPL(kunit_binary_assert_format);
- 
- void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
-+				    const struct va_format *message,
- 				    struct string_stream *stream)
- {
- 	struct kunit_binary_ptr_assert *binary_assert;
-@@ -155,7 +159,7 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
- 	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px",
- 			  binary_assert->right_text,
- 			  binary_assert->right_value);
--	kunit_assert_print_msg(assert, stream);
-+	kunit_assert_print_msg(message, stream);
- }
- EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
- 
-@@ -176,6 +180,7 @@ static bool is_str_literal(const char *text, const char *value)
- }
- 
- void kunit_binary_str_assert_format(const struct kunit_assert *assert,
-+				    const struct va_format *message,
- 				    struct string_stream *stream)
- {
- 	struct kunit_binary_str_assert *binary_assert;
-@@ -196,6 +201,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
- 		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == \"%s\"",
- 				  binary_assert->right_text,
- 				  binary_assert->right_value);
--	kunit_assert_print_msg(assert, stream);
-+	kunit_assert_print_msg(message, stream);
- }
- EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 7dec3248562f..3bca3bf5c15b 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -241,7 +241,8 @@ static void kunit_print_string_stream(struct kunit *test,
- }
- 
- static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
--		       enum kunit_assert_type type, struct kunit_assert *assert)
-+		       enum kunit_assert_type type, struct kunit_assert *assert,
-+		       const struct va_format *message)
- {
- 	struct string_stream *stream;
- 
-@@ -257,7 +258,7 @@ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
- 	}
- 
- 	kunit_assert_prologue(loc, type, stream);
--	assert->format(assert, stream);
-+	assert->format(assert, message, stream);
- 
- 	kunit_print_string_stream(test, stream);
- 
-@@ -284,12 +285,13 @@ void kunit_do_failed_assertion(struct kunit *test,
- 			       const char *fmt, ...)
- {
- 	va_list args;
-+	struct va_format message;
- 	va_start(args, fmt);
- 
--	assert->message.fmt = fmt;
--	assert->message.va = &args;
-+	message.fmt = fmt;
-+	message.va = &args;
- 
--	kunit_fail(test, loc, type, assert);
-+	kunit_fail(test, loc, type, assert, &message);
- 
- 	va_end(args);
- 
--- 
-2.35.0.rc2.247.g8bbb082509-goog
+	r1 = READ_ONCE(x);
+	WRITE_ONCE(y, r1 * 0);
 
+There appears to be a data dependency from the load of x to the store of 
+y, since the value to be stored is computed from the value that was 
+loaded.  But in fact, the value stored does not really depend on 
+anything since it will always be 0.  Thus the data dependency is only 
+syntactic (it appears to exist in the code) but not semantic (the second 
+access will always be the same, regardless of the value of the first 
+access).  Given code like this, a compiler could simply eliminate the 
+load from x, which would certainly destroy any dependency.
+
+(It's natural to object that no one in their right mind would write code 
+like the above.  However, macro expansions can easily give rise to this 
+sort of thing, in ways that generally are not apparent to the 
+programmer.)
+
+Another mechanism that can give rise to purely syntactic dependencies is 
+related to the notion of "undefined behavior". Certain program behaviors 
+are called "undefined" in the C language specification, which means that 
+when they occur there are no guarantees at all about the outcome.  
+Consider the following example:
+
+	int a[1];
+	int i;
+
+	r1 = READ_ONCE(i);
+	r2 = READ_ONCE(a[r1]);
+
+Access beyond the end or before the beginning of an array is one kind of 
+undefined behavior.  Therefore the compiler doesn't have to worry about 
+what will happen if r1 is nonzero, and it can assume that r1 will always 
+be zero without actually loading anything from i.  (If the assumption 
+turns out to be wrong, the resulting behavior will be undefined anyway 
+so the compiler doesn't care!)  Thus the load from i can be eliminated, 
+breaking the address dependency.
+
+The LKMM is unaware that purely syntactic dependencies are different 
+from semantic dependencies and therefore mistakenly predicts that the 
+accesses in the two examples above will be ordered.  This is another 
+example of how the compiler can undermine the memory model.  Be warned.
+
+----------------------------------------
+
+Alan
+
+> +Compilers are aware of syntactic dependencies and are within their
+> +rights to remove them as part of optimizations, thereby breaking any
+> +guarantees of ordering.
+> +
+> +Notable cases are dependencies eliminated through constant propagation
+> +or those where only one value leads to defined behavior as in the
+> +following example:
+> +
+> +	int a[1];
+> +	int i;
+> +
+> +	r1 = READ_ONCE(i);
+> +	r2 = READ_ONCE(a[r1]);
+> +
+> +The formal LKMM is unaware of syntactic dependencies and therefore
+> +predicts ordering.  However, since any other value than 0 for r1 would
+> +result in an out-of-bounds access, which is undefined behavior, r2 is
+> +not affected by its dependency to r1, making the above a purely
+> +syntactic dependency.
+> +
+>  Another issue arises from the fact that in C, arguments to many
+>  operators and function calls can be evaluated in any order.  For
+>  example:
+> -- 
+> 2.33.1
+> 

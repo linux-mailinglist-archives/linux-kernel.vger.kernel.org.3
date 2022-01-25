@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA3D49AD20
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D339349AD33
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 08:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442159AbiAYHIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 02:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
+        id S1442679AbiAYHKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 02:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378294AbiAYHEg (ORCPT
+        with ESMTP id S1378094AbiAYHEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Jan 2022 02:04:36 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58972C041880
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 21:43:56 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id y27so14352203pfa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 21:43:56 -0800 (PST)
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A25C041883
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 21:44:01 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id 128so18484462pfe.12
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Jan 2022 21:44:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0e9yogaMLiWmOvC9vxOUuPR1xHD22ef7smp5tanFg+4=;
-        b=JdjRBwA2ItC7x0XF8RUVHHfxzCxU1kMYhD6JAiAK4X1ZK/YVkC41CJ+dEp+zaG6MJQ
-         Q4MxXzgel3SyV06z9ylbKff9jbTBYKtAVzoW/XHVqEAo7sG1iDDymGM/liKP46p5IuTf
-         CE6LdggyIu3fHhOgeL9jofga7qXco/xs1JJjTHD1BZU9wICkTYUycnBMqRDhhkfpJ2mG
-         aQ1eFN+HcDK69CWs42a63Gry5MqDCrzW9Q1nCNc+cHVGrBs5Me7W+yNheC6JKNW4RIyP
-         Rdiw/1zqVLC9XUuPX5lyVylwTVu/14fOMxrPSwaXOz98UsaNb9Vie6OcTqEpvvOxOM7n
-         f2ew==
+        bh=uQS+XB01rQTghLAjvmUkl8tFaMQ6CMQ1+K0sDDXtaTI=;
+        b=Ky+UZvUt3KlfSaUIzSkiXKL3tJePDBQAjdWQLddrc4hgN63O6uogDkolOLjlF53Bn9
+         VPvfMSi8100wkYCP4WISvBQWXzxIbuWfrf3xkQJKAhv61BAtY3LWN/vf0IVXJ+jWw7Dj
+         9+zkGdkWRVcNGi0rpqI1bCaF/pgO4jgj6ra97b5428qJbBbGqQ2DDXxYOO5/BLmkvT/9
+         sf/CbFSOr8QDetg0xTCqFexST5SlPPuoYNXzDNyQKvhmL69uxuV421bz1yaA80lFUJ/W
+         zHaq1YQ9ZeFle2HzKjPS0p25cZlX3DbZ3K9E6gVC8zVIJJDm2ffuf5CXF3U7wIxB6fb0
+         M6Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0e9yogaMLiWmOvC9vxOUuPR1xHD22ef7smp5tanFg+4=;
-        b=PTneUwbiuZGFkgpAF9LdaMbL9BuEsGdr0Cm6RyZmSQJtmLYLmIDAt2LZ4GWzrH0baX
-         5/khvW4t3hUlrs9ZKu+ou3RG+SMjKpy/+CxGg6nniuLYWVCj5RJ3r13O6ZW4qYSS0jMG
-         Ysj/KW2SLtWTJg3WedjUTHKmKGd9ZZgrMA676Rx2qNXWtrB+MDlfM5orI9JrLCor1KJp
-         5M6T7yrBV/Oy1sgjBaC1kwX8YtL0XDYyPDsJeC4DKdfICYmVzKiviAV4o8bH3yKiOr6q
-         FJvnDZSAnXnjpW4k7t1yXtB3eS6V5WRkqwUz0+M4uIVvJwJgsJWhao2jjy5xYhA8FNTy
-         mrgQ==
-X-Gm-Message-State: AOAM533aJAxIXv+X5WSncjzdxLpxzsA6hp7O/8xJdNJBo7isPKQhFDoH
-        fmGk4OPC8fFUzjHfUJmktY0RDg==
-X-Google-Smtp-Source: ABdhPJwK3m1JgrMY4NThERVx9U54lSUa4lAfAW78tm/S+5/b0ojZID3Q2xcUGyh6aGHE08T6WnKLbQ==
-X-Received: by 2002:a05:6a00:180e:b0:4c8:f0b8:2382 with SMTP id y14-20020a056a00180e00b004c8f0b82382mr8832309pfa.59.1643089435789;
-        Mon, 24 Jan 2022 21:43:55 -0800 (PST)
+        bh=uQS+XB01rQTghLAjvmUkl8tFaMQ6CMQ1+K0sDDXtaTI=;
+        b=CGb+isdj3lQiAvR5yv6gmbo+ZfSHp1J5BcnEPvgQukNTqCJegdM6bEravPIdj5KKY7
+         S75I734a/kzRpOniuDVM/K8Y5FGwEPNHpze1vOMM/vQqQl/GF29vjYrgo9kw/POOHyWU
+         iX3oxPgN88dgg5oEn9ew6mwXSwoE7rSo91qiRz6nmEWU9jGOJnnmXZlYP4DQ6pKX1DXf
+         y0kdxA5nhJDsBwtdx8dog3UZMSuMUke4KlVU3jkSYv6VCvpi4lLl0iUa/8kfV0ykn7Bm
+         vfvuNzHggSgLfCZSaACsqwm4NQGMcnCRCbRSCGKaDQUjg4Gxe+yfr3FGwSdYqGTvsLjw
+         9TWw==
+X-Gm-Message-State: AOAM532H4HptUd3c+Fy1FB7XWMBI1KruzXttCP/UAnf0wEYEHfxKRBMQ
+        whNco57D31rGSMUwKDQqSpQWyw==
+X-Google-Smtp-Source: ABdhPJzMWcWR6nzR3mwo77XGWNf8PMri0gVk1yT1811+iC80BfVQO9Nmz+o+PxMVKmPrJqIXqV43JQ==
+X-Received: by 2002:a05:6a00:179c:b0:4c9:ef72:87eb with SMTP id s28-20020a056a00179c00b004c9ef7287ebmr5121764pfg.47.1643089440765;
+        Mon, 24 Jan 2022 21:44:00 -0800 (PST)
 Received: from localhost.localdomain ([122.179.14.218])
-        by smtp.gmail.com with ESMTPSA id c6sm19524508pfl.200.2022.01.24.21.43.50
+        by smtp.gmail.com with ESMTPSA id c6sm19524508pfl.200.2022.01.24.21.43.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jan 2022 21:43:55 -0800 (PST)
+        Mon, 24 Jan 2022 21:44:00 -0800 (PST)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -59,11 +59,10 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         Alistair Francis <Alistair.Francis@wdc.com>,
         Anup Patel <anup@brainfault.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Bin Meng <bmeng.cn@gmail.com>
-Subject: [PATCH 1/6] RISC-V: Clear SIP bit only when using SBI IPI operations
-Date:   Tue, 25 Jan 2022 11:12:12 +0530
-Message-Id: <20220125054217.383482-2-apatel@ventanamicro.com>
+        Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH 2/6] irqchip/riscv-intc: Set intc domain as the default host
+Date:   Tue, 25 Jan 2022 11:12:13 +0530
+Message-Id: <20220125054217.383482-3-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220125054217.383482-1-apatel@ventanamicro.com>
 References: <20220125054217.383482-1-apatel@ventanamicro.com>
@@ -73,50 +72,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The software interrupt pending (i.e. [M|S]SIP) bit is writeable for
-S-mode but read-only for M-mode so we clear this bit only when using
-SBI IPI operations.
+We have quite a few RISC-V drivers (such as RISC-V SBI IPI driver,
+RISC-V timer driver, RISC-V PMU driver, etc) which do not have a
+dedicated DT/ACPI fwnode. This patch makes intc domain as the default
+host so that these drivers can directly create local interrupt mapping
+using standardized local interrupt numbers
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
 ---
- arch/riscv/kernel/sbi.c | 8 +++++++-
- arch/riscv/kernel/smp.c | 2 --
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ drivers/clocksource/timer-riscv.c | 17 +----------------
+ drivers/irqchip/irq-riscv-intc.c  |  9 +++++++++
+ 2 files changed, 10 insertions(+), 16 deletions(-)
 
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index f72527fcb347..9786fc641436 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -621,8 +621,14 @@ static void sbi_send_cpumask_ipi(const struct cpumask *target)
- 	sbi_send_ipi(target);
- }
- 
-+static void sbi_ipi_clear(void)
-+{
-+	csr_clear(CSR_IP, IE_SIE);
-+}
-+
- static const struct riscv_ipi_ops sbi_ipi_ops = {
--	.ipi_inject = sbi_send_cpumask_ipi
-+	.ipi_inject = sbi_send_cpumask_ipi,
-+	.ipi_clear = sbi_ipi_clear
- };
- 
- void __init sbi_init(void)
-diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-index b5d30ea92292..6fd8b3cbec1b 100644
---- a/arch/riscv/kernel/smp.c
-+++ b/arch/riscv/kernel/smp.c
-@@ -89,8 +89,6 @@ void riscv_clear_ipi(void)
+diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+index 1767f8bf2013..dd6916ae6365 100644
+--- a/drivers/clocksource/timer-riscv.c
++++ b/drivers/clocksource/timer-riscv.c
+@@ -102,8 +102,6 @@ static irqreturn_t riscv_timer_interrupt(int irq, void *dev_id)
+ static int __init riscv_timer_init_dt(struct device_node *n)
  {
- 	if (ipi_ops && ipi_ops->ipi_clear)
- 		ipi_ops->ipi_clear();
--
--	csr_clear(CSR_IP, IE_SIE);
- }
- EXPORT_SYMBOL_GPL(riscv_clear_ipi);
+ 	int cpuid, hartid, error;
+-	struct device_node *child;
+-	struct irq_domain *domain;
  
+ 	hartid = riscv_of_processor_hartid(n);
+ 	if (hartid < 0) {
+@@ -121,20 +119,7 @@ static int __init riscv_timer_init_dt(struct device_node *n)
+ 	if (cpuid != smp_processor_id())
+ 		return 0;
+ 
+-	domain = NULL;
+-	child = of_get_compatible_child(n, "riscv,cpu-intc");
+-	if (!child) {
+-		pr_err("Failed to find INTC node [%pOF]\n", n);
+-		return -ENODEV;
+-	}
+-	domain = irq_find_host(child);
+-	of_node_put(child);
+-	if (!domain) {
+-		pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+-		return -ENODEV;
+-	}
+-
+-	riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
++	riscv_clock_event_irq = irq_create_mapping(NULL, RV_IRQ_TIMER);
+ 	if (!riscv_clock_event_irq) {
+ 		pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+ 		return -ENODEV;
+diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+index b65bd8878d4f..9f0a7a8a5c4d 100644
+--- a/drivers/irqchip/irq-riscv-intc.c
++++ b/drivers/irqchip/irq-riscv-intc.c
+@@ -125,6 +125,15 @@ static int __init riscv_intc_init(struct device_node *node,
+ 		return rc;
+ 	}
+ 
++	/*
++	 * Make INTC as the default domain which will allow drivers
++	 * not having dedicated DT/ACPI fwnode (such as RISC-V SBI IPI
++	 * driver, RISC-V timer driver, RISC-V PMU driver, etc) can
++	 * directly create local interrupt mapping using standardized
++	 * local interrupt numbers.
++	 */
++	irq_set_default_host(intc_domain);
++
+ 	cpuhp_setup_state(CPUHP_AP_IRQ_RISCV_STARTING,
+ 			  "irqchip/riscv/intc:starting",
+ 			  riscv_intc_cpu_starting,
 -- 
 2.25.1
 

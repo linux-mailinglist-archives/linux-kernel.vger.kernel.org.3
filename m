@@ -2,96 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7937D49B2B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EE649B2C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 12:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380549AbiAYLJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 06:09:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55926 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380383AbiAYLHJ (ORCPT
+        id S1380951AbiAYLN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 06:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380948AbiAYLL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 06:07:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 559FF6168C;
-        Tue, 25 Jan 2022 11:07:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F26C340E0;
-        Tue, 25 Jan 2022 11:06:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643108819;
-        bh=TbnkLQTiTeqIDmw4aTBz+3S4Bt7hZRynS2urFHdSxWg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=chZ5AF4mA741MxVMvKpivMYwdgbZpkckdRsNc+Td/8HWvDIEMRzFzsMDnZbDN7J4i
-         fcbBEz8Pl/iT4G2sUhjrh60LVRLinwPUAbW9eltla13lZY8BvbN139BFEbpPNliFma
-         /8S1gR3ziDtUaBGfBI7F3+O+sIREgEpguBW6a2ug=
-Date:   Tue, 25 Jan 2022 12:06:57 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 000/846] 5.15.17-rc1 review
-Message-ID: <Ye/Z0Z376A6BHKhC@kroah.com>
-References: <20220124184100.867127425@linuxfoundation.org>
- <374e9357-35eb-3555-3fe5-7b72c3a77a39@linaro.org>
+        Tue, 25 Jan 2022 06:11:27 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1416DC061775
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:11:23 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id b16so36697811uaq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 03:11:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=51RIadb6uMG8qQNL2W77cS297AVcIqUghNiTlwSKJng=;
+        b=Zm0RzLlhY/mA468UZM6rLe7w4XN1koPXwe6bdvEhIWfQ7PkP3gvByWyB/s4D4ZzGa4
+         aGPAaOavJsU16kNZvUv/hqO7x42r6BmMWXf2Tw3Jszn6uuTtxZf7hWH+38SXW8NVfGxr
+         6vXdhmUqBMLB+06UAFyM/cQEpAvChRMLTFYs222+O5u8JaRgnmWTgdgVvjRtHwIaajHZ
+         Pk39et+6i2g8dotUlehfD1tbCdJpPdphmDAhCqs+4R0Xb7o4QOMzkGeCrJrezfJG9z6u
+         492uv4a/eLSfDFnKvQ/N04Mrg8TP5PGAsqhSPY438hY9OkzuSGXIiNTZ9wbTnocTRPa6
+         5hoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=51RIadb6uMG8qQNL2W77cS297AVcIqUghNiTlwSKJng=;
+        b=mAdiZPzTxr3l1Msgi1RVgMgeGvuGdH+rg+OhZg5mn5AhfDA5mhN2mAIfOTjP6w5Aij
+         HxqAQ37lg+JGemJg787ByKZdswC/VKUjebcIVJR1ud7i/LmRCLhAAI1hPQeKPPUDQRt/
+         sT1RwBsj36HE5BlHsisije5ymZi3vsRWXIwp2NUcWg+SAIMNgZT4ye62k/+KinxWnm40
+         vaHGSWWzdUddWExHnzHv0U1f0pkA/172+eO974MJQ56TD/LKq4k2JLxQsvW7yfA9uUqI
+         nY1/z/CTMZCG09PmYoAwp22FlqcgRNwWAkbtzu0Oz/WjQlfQphedXWfbrn968ux2Wh13
+         y3bA==
+X-Gm-Message-State: AOAM5331Vz79ZpQyoxtqXub3c2miRcgd0k8u3g7DWzlGkbRcK+g78/+m
+        3oUMoD6nBlc9Gyw9S+dlznH3KJSF5NP/qSV+xVc=
+X-Google-Smtp-Source: ABdhPJzcpmlPQPoG1OZnf42pEBgH23exUPCtBucQhHGZf14s1iyMLjx/ueipLb8KbFXzny3Rzh6JAngi2wDM3DCm234=
+X-Received: by 2002:a67:dd89:: with SMTP id i9mr6360066vsk.69.1643109082076;
+ Tue, 25 Jan 2022 03:11:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <374e9357-35eb-3555-3fe5-7b72c3a77a39@linaro.org>
+Received: by 2002:a59:dd0a:0:b0:27d:6ae1:ebfe with HTTP; Tue, 25 Jan 2022
+ 03:11:21 -0800 (PST)
+Reply-To: nelsonbile450@gmail.com
+From:   Nelson Bile <reverendjohndominic224@gmail.com>
+Date:   Tue, 25 Jan 2022 12:11:21 +0100
+Message-ID: <CACmW=dZKLgG47bzzXZNChCY1yW6FxtLsd20Wd59uLS5dKbeHLg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 04:50:45PM -0600, Daniel Díaz wrote:
-> Hello!
-> 
-> On 1/24/22 12:31, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.17 release.
-> > There are 846 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> > Anything received after that time might be too late.
-> > 
-> > The whole patch series can be found in one patch at:
-> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.17-rc1.gz
-> > or in the git tree and branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > and the diffstat can be found below.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> Regressions detected on arm, arm64, i386, x86.
-> 
-> This is one from arm64:
->   /builds/linux/arch/arm64/mm/extable.c: In function 'fixup_exception':
->   /builds/linux/arch/arm64/mm/extable.c:17:13: error: implicit declaration of function 'in_bpf_jit' [-Werror=implicit-function-declaration]
->      17 |         if (in_bpf_jit(regs))
->         |             ^~~~~~~~~~
->   cc1: some warnings being treated as errors
->   make[3]: *** [/builds/linux/scripts/Makefile.build:277: arch/arm64/mm/extable.o] Error 1
-> 
-> This is another one, in Perf (arm, arm64, i386, x86):
->   libbpf.c: In function 'bpf_object__elf_collect':
->   libbpf.c:3038:31: error: invalid type argument of '->' (have 'GElf_Shdr' {aka 'Elf64_Shdr'})
->    3038 |                         if (sh->sh_type != SHT_PROGBITS)
->         |                               ^~
->   libbpf.c:3042:31: error: invalid type argument of '->' (have 'GElf_Shdr' {aka 'Elf64_Shdr'})
->    3042 |                         if (sh->sh_type != SHT_PROGBITS)
->         |                               ^~
->   make[4]: *** [/builds/linux/tools/build/Makefile.build:97: /home/tuxbuild/.cache/tuxmake/builds/current/staticobjs/libbpf.o] Error 1
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-
-Thanks, should be fixed in -rc2.
-
-greg k-h
+Hallo, ich habe dir vor ein paar Tagen eine E-Mail geschickt. Hast du
+meine Nachricht erhalten? bitte um dringende antwort

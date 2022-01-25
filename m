@@ -2,121 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DE949BB44
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B434949BB47
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Jan 2022 19:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbiAYS1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 13:27:33 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:57442 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231579AbiAYS11 (ORCPT
+        id S231841AbiAYS2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 13:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231748AbiAYS1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 13:27:27 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20PCAuXq025182;
-        Tue, 25 Jan 2022 10:27:17 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=+h39RChS+0CN9mJaBI6E+sK09CmnAMsUeduNbnMVVUA=;
- b=SEQ7WYfGIhigSdDd6nnDC6icR0g56SOV6xMTxh5h3s0ds0Ad7mMR4aJrgNRHF5kOoWAd
- hev2nE8tk4EAVW2k2GNMwpNboJsV3/iuVJSeRVxo2QwTR/3Y+1f1tuFOtMkoub3hDvTG
- e67DZkmRPdnRwLWKGXUf6/SaSneh4Pkq6S6O4s38mQUBNv+J/5nmXvGRW0pY75zUB0tu
- OHV7790uvrZ3NIzpAmR8ZPmqPjAnao81Kw4D/uf4N1qgYdZHRxcMY8mr61ElrrlacSgn
- y3EhL+CcUOrlIQVElSQcoW/KMaR3yTgizZ/LGDH113KcQanmx+yUEWqZVooVV6N52Aop IA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3dt8muk0gr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jan 2022 10:27:17 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 25 Jan
- 2022 10:27:15 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 25 Jan 2022 10:27:15 -0800
-Received: from localhost.localdomain (unknown [10.28.34.29])
-        by maili.marvell.com (Postfix) with ESMTP id 108EC5E6867;
-        Tue, 25 Jan 2022 10:27:11 -0800 (PST)
-From:   Shijith Thotton <sthotton@marvell.com>
-To:     Arnaud Ebalard <arno@natisbad.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Boris Brezillon <bbrezillon@kernel.org>
-CC:     Srujana Challa <schalla@marvell.com>,
-        <linux-crypto@vger.kernel.org>, <jerinj@marvell.com>,
-        <sgoutham@marvell.com>, Shijith Thotton <sthotton@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH] crypto: octeontx2: increase CPT HW instruction queue length
-Date:   Tue, 25 Jan 2022 23:56:24 +0530
-Message-ID: <2088adbb37511e84b963fbcd6eff16c62610e2d2.1643134404.git.sthotton@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ab2269cb3ef3049ed0ab73f28be29f6669a06e36.1643134480.git.sthotton@marvell.com>
-References: <ab2269cb3ef3049ed0ab73f28be29f6669a06e36.1643134480.git.sthotton@marvell.com>
+        Tue, 25 Jan 2022 13:27:43 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4C1C06173D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:27:40 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id t1so25455574qkt.11
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 10:27:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:mime-version
+         :content-disposition;
+        bh=V6n46K/pAXLFpL4WHEMSGlAYgd+7WpRoLKihNnyDQ0Q=;
+        b=cCgtYBNLUzpv92W+FoDZvIULugY6BaagkJKMkIWR3JM3umIDXBrikOyWjloEyq9PYx
+         2/+FJfyY9gpbQoX74PCxsP6Pg6U7MjRbv+iizOOdvOpPHPjcULfexI+5FrOYh+SFjZZy
+         gY39wJEuY+Bzj3bUpZUxqllShPZxM/4V5QU2Z9XkLmThe1bmjYCBIGocE+SKQW42cEa2
+         B7oaV4uKPB/70NpmtcWvPPMZM/HThnRlGR5AE5gqcc/mVooAs7pgw6CKq6Sls1eQp87J
+         5V0lbakzv9kSa3/slNnfs4yVIbVYMCG8oe42CJf7y6/i511jMwfv9HLKJI7idjD4mZ5T
+         1WUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:mime-version:content-disposition;
+        bh=V6n46K/pAXLFpL4WHEMSGlAYgd+7WpRoLKihNnyDQ0Q=;
+        b=6V1eW+pSCwO4dQMhhN6p2/89/m7J1tQw/lMnuCoajXoCHxylTNZs1bMTAETfYauAur
+         Q+rFYDBW7QUe+OKv/1dIKZ+DROr26CL+MzOULGJ3DW77Y6uYU2iymkchq6+dE7ilykXU
+         N+ZIeTD30V0r+v8AA3/IvADkEla9tTifR3yvdsYlGiQFZJwD0y3hEBPceUO4T3pdYPu6
+         KJDMSeglkIy93qWWX9auUTS7PjP/0KBPFDDHme6NC8h0oaXp26ZbRaLu93pIw8Uzz9G0
+         PSvP0ZKW4oBjf/Ed5IL4cve4DMez4CJS/Dq/xwvVVeeJMgmeE1rKDPTae8KA5K42yy+S
+         8M+A==
+X-Gm-Message-State: AOAM533mnTEqJcZYJd4x61u3gGX20x+lsDxbIbyQ6tx5VZx4O63oAouG
+        UHFuRc5To/M07TKg7aEakA==
+X-Google-Smtp-Source: ABdhPJyf6IirNCRBKXd8O8Nl2Sy9B/ImHfndLvsuxeOVdUMC051ZX7F6pQBqK85R4NBpH6JCIrx4CQ==
+X-Received: by 2002:a37:9b83:: with SMTP id d125mr10690990qke.737.1643135259935;
+        Tue, 25 Jan 2022 10:27:39 -0800 (PST)
+Received: from serve.minyard.net ([47.184.144.75])
+        by smtp.gmail.com with ESMTPSA id g21sm8968679qtb.49.2022.01.25.10.27.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 10:27:39 -0800 (PST)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:119b:19f9:7c76:518a])
+        by serve.minyard.net (Postfix) with ESMTPSA id 6200E1800BB;
+        Tue, 25 Jan 2022 18:27:38 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 12:27:37 -0600
+From:   Corey Minyard <minyard@acm.org>
+To:     Juergen Gross <jgross@suse.com>, Ingo Molnar <mingo@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: Possible reproduction of CSD locking issue
+Message-ID: <20220125182737.GO34919@minyard.net>
+Reply-To: minyard@acm.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: i5xHCSonRquudcMAxgH8-RdPxuDR79-9
-X-Proofpoint-GUID: i5xHCSonRquudcMAxgH8-RdPxuDR79-9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_03,2022-01-25_02,2021-12-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srujana Challa <schalla@marvell.com>
+We have a customer that had been seeing CSD lock issues on a Centos 7
+kernel (unfortunately).  I couldn't find anything or any kernel changes
+that might fix it, so I was consdering it was the CSD locking issue you
+have been chasing for a while.
 
-LDWB is getting incorrectly used in HW when
-CPT_AF_LF()_PTR_CTL[IQB_LDWB]=1 and CPT instruction queue has less than
-320 free entries. So, increase HW instruction queue size by 320 and give
-320 entries less for SW/NIX RX as a SW workaround.
+So I backported the debug patches.  And of course, they stopped seeing
+the issue, at least as much, and they had trouble with the extra CPU
+time the debug code took.  But they just reproduced it.  Here are the
+logs:
 
-Signed-off-by: Srujana Challa <schalla@marvell.com>
-Signed-off-by: Shijith Thotton <sthotton@marvell.com>
----
- drivers/crypto/marvell/octeontx2/otx2_cptlf.h | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+Jan 23 23:39:43 worker0 kernel: [285737.522743] csd: Detected non-responsive CSD lock (#1) on CPU#3, waiting 5000000042 ns for CPU#55 flush_tlb_func+0x0/0xb0(0xffff8e0b3e2afbe8).
+Jan 23 23:39:43 worker0 kernel: [285737.522744]  csd: CSD lock (#1) unresponsive.
+Jan 23 23:39:43 worker0 kernel: [285737.522747]  csd: cnt(0000000): 0000->0000 queue
+Jan 23 23:39:43 worker0 kernel: [285737.522748]  csd: cnt(0000001): ffff->0037 idle
+Jan 23 23:39:43 worker0 kernel: [285737.522749]  csd: cnt(63d8dd8): 0003->0037 ipi
+Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dd9): 0003->0037 ping
+Jan 23 23:39:43 worker0 kernel: [285737.522750]  csd: cnt(63d8dda): 0003->ffff pinged
+Jan 23 23:39:43 worker0 kernel: [285737.522751]  csd: cnt(63d8dea): 0035->0037 pinged
+Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8deb): ffff->0037 gotipi
+Jan 23 23:39:43 worker0 kernel: [285737.522752]  csd: cnt(63d8dec): ffff->0037 handle
+Jan 23 23:39:43 worker0 kernel: [285737.522753]  csd: cnt(63d8ded): ffff->0037 dequeue (src CPU 0 == empty)
+Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8dee): ffff->0037 hdlend (src CPU 0 == early)
+Jan 23 23:39:43 worker0 kernel: [285737.522754]  csd: cnt(63d8e1f): 0003->0037 queue
+Jan 23 23:39:43 worker0 kernel: [285737.522755]  csd: cnt(63d8e20): 0003->0037 ipi
+Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e21): 0003->0037 ping
+Jan 23 23:39:43 worker0 kernel: [285737.522756]  csd: cnt(63d8e22): 0003->0037 queue
+Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt(63d8e23): 0003->0037 noipi
+Jan 23 23:39:43 worker0 kernel: [285737.522757]  csd: cnt now: 63fe4cd
+Jan 23 23:39:43 worker0 kernel: [285737.522758] Task dump for CPU 55:
+Jan 23 23:39:43 worker0 kernel: [285737.522761] kubelet         R  running task        0 277695      1 0x00080000
+Jan 23 23:39:43 worker0 kernel: [285737.522761] Call Trace:
+Jan 23 23:39:43 worker0 kernel: [285737.522769]  [<ffffffff84376b6a>] ? __schedule+0x46a/0x990
+Jan 23 23:39:43 worker0 kernel: [285737.522774]  [<ffffffff83db6353>] ? context_tracking_user_enter+0x13/0x20
+Jan 23 23:39:43 worker0 kernel: [285737.522776]  [<ffffffff843775b5>] ? schedule_user+0x45/0x50
+Jan 23 23:39:43 worker0 kernel: [285737.522779]  [<ffffffff8437b518>] ? retint_careful+0x16/0x34
+Jan 23 23:39:43 worker0 kernel: [285737.522780] csd: Re-sending CSD lock (#1) IPI from CPU#03 to CPU#55
+Jan 23 23:39:43 worker0 kernel: [285737.522788] CPU: 3 PID: 54671 Comm: runc:[2:INIT] Kdump: loaded Tainted: G           OE  ------------ T 3.10.0-1062.12.1.rt56.1042.mvista.test.14.el7.x86_64 #1
+Jan 23 23:39:43 worker0 kernel: [285737.522789] Hardware name: Dell Inc. PowerEdge R740/0YWR7D, BIOS 2.9.4 11/06/2020
+Jan 23 23:39:43 worker0 kernel: [285737.522789] Call Trace:
+Jan 23 23:39:43 worker0 kernel: [285737.522793]  [<ffffffff843718ba>] dump_stack+0x19/0x1b
+Jan 23 23:39:43 worker0 kernel: [285737.522798]  [<ffffffff83d0bcd8>] __csd_lock_wait+0x1a8/0x2a0
+Jan 23 23:39:43 worker0 kernel: [285737.522800]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
+Jan 23 23:39:43 worker0 kernel: [285737.522802]  [<ffffffff83d0bfa4>] smp_call_function_single+0xc4/0x1b0
+Jan 23 23:39:43 worker0 kernel: [285737.522804]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
+Jan 23 23:39:43 worker0 kernel: [285737.522809]  [<ffffffff83e2684b>] ? page_counter_uncharge+0x3b/0x70
+Jan 23 23:39:43 worker0 kernel: [285737.522811]  [<ffffffff83d0c614>] smp_call_function_many+0x344/0x380
+Jan 23 23:39:43 worker0 kernel: [285737.522813]  [<ffffffff83c6d870>] ? leave_mm+0x120/0x120
+Jan 23 23:39:43 worker0 kernel: [285737.522816]  [<ffffffff83c6da38>] native_flush_tlb_others+0xb8/0xc0
+Jan 23 23:39:43 worker0 kernel: [285737.522818]  [<ffffffff83c6dc25>] flush_tlb_page+0x65/0xf0
+Jan 23 23:39:43 worker0 kernel: [285737.522821]  [<ffffffff83dfdf98>] ptep_clear_flush+0x68/0xa0
+Jan 23 23:39:43 worker0 kernel: [285737.522825]  [<ffffffff83de6806>] wp_page_copy.isra.83+0x3d6/0x650
+Jan 23 23:39:43 worker0 kernel: [285737.522828]  [<ffffffff83de8cb4>] do_wp_page+0xb4/0x710
+Jan 23 23:39:43 worker0 kernel: [285737.522832]  [<ffffffff83decbb4>] handle_mm_fault+0x884/0x1340
+Jan 23 23:39:43 worker0 kernel: [285737.522835]  [<ffffffff83cd7799>] ? update_cfs_shares+0xa9/0xf0
+Jan 23 23:39:43 worker0 kernel: [285737.522839]  [<ffffffff8437efc3>] __do_page_fault+0x213/0x5a0
+Jan 23 23:39:43 worker0 kernel: [285737.522841]  [<ffffffff8437f385>] do_page_fault+0x35/0x90
+Jan 23 23:39:43 worker0 kernel: [285737.522842]  [<ffffffff8437b728>] page_fault+0x28/0x30
+Jan 23 23:39:43 worker0 kernel: [285737.522845] csd: CSD lock (#1) got unstuck on CPU#03, CPU#55 released the lock.
 
-diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptlf.h b/drivers/crypto/marvell/octeontx2/otx2_cptlf.h
-index b691b6c1d5c4..4fcaf61a70e3 100644
---- a/drivers/crypto/marvell/octeontx2/otx2_cptlf.h
-+++ b/drivers/crypto/marvell/octeontx2/otx2_cptlf.h
-@@ -26,12 +26,22 @@
-  */
- #define OTX2_CPT_INST_QLEN_MSGS	((OTX2_CPT_SIZE_DIV40 - 1) * 40)
- 
-+/*
-+ * LDWB is getting incorrectly used when IQB_LDWB = 1 and CPT instruction
-+ * queue has less than 320 free entries. So, increase HW instruction queue
-+ * size by 320 and give 320 entries less for SW/NIX RX as a workaround.
-+ */
-+#define OTX2_CPT_INST_QLEN_EXTRA_BYTES  (320 * OTX2_CPT_INST_SIZE)
-+#define OTX2_CPT_EXTRA_SIZE_DIV40       (320/40)
-+
- /* CPT instruction queue length in bytes */
--#define OTX2_CPT_INST_QLEN_BYTES (OTX2_CPT_SIZE_DIV40 * 40 * \
--				  OTX2_CPT_INST_SIZE)
-+#define OTX2_CPT_INST_QLEN_BYTES                                               \
-+		((OTX2_CPT_SIZE_DIV40 * 40 * OTX2_CPT_INST_SIZE) +             \
-+		OTX2_CPT_INST_QLEN_EXTRA_BYTES)
- 
- /* CPT instruction group queue length in bytes */
--#define OTX2_CPT_INST_GRP_QLEN_BYTES (OTX2_CPT_SIZE_DIV40 * 16)
-+#define OTX2_CPT_INST_GRP_QLEN_BYTES                                           \
-+		((OTX2_CPT_SIZE_DIV40 + OTX2_CPT_EXTRA_SIZE_DIV40) * 16)
- 
- /* CPT FC length in bytes */
- #define OTX2_CPT_Q_FC_LEN 128
-@@ -179,7 +189,8 @@ static inline void otx2_cptlf_do_set_iqueue_size(struct otx2_cptlf_info *lf)
- {
- 	union otx2_cptx_lf_q_size lf_q_size = { .u = 0x0 };
- 
--	lf_q_size.s.size_div40 = OTX2_CPT_SIZE_DIV40;
-+	lf_q_size.s.size_div40 = OTX2_CPT_SIZE_DIV40 +
-+				 OTX2_CPT_EXTRA_SIZE_DIV40;
- 	otx2_cpt_write64(lf->lfs->reg_base, BLKADDR_CPT0, lf->slot,
- 			 OTX2_CPT_LF_Q_SIZE, lf_q_size.u);
- }
--- 
-2.25.1
+Hopefully this is the issue you are chasing and not something else.
+I've been studying them to see what they mean, but I thought you might
+be interested to get them asap.
 
+-corey

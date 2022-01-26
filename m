@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBB049BFFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B811249C004
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbiAZANJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 19:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S233974AbiAZAOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 19:14:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiAZANG (ORCPT
+        with ESMTP id S232124AbiAZAOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 19:13:06 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66234C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:13:06 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so407090otf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:13:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uJiYJBDIsvc1XsOq0dzZC0zbm7Jkek42UwXJQ7TTqlo=;
-        b=DphUxChGLP7qZsi4i73+pTAM3u7NBJgMGWHQ9+ls95uhryI7FNpP7ZKXOiL4jUDzQX
-         Nl6uzsL6U3tqCt5Z8+UgMznaN/ou+8P8uoGVSigXJni9VITDr5OqAn0FgrXMhb4fs6NW
-         mCNKbC8bG6A8gPAJlmlbtbDlggrLo2c9GfSDw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uJiYJBDIsvc1XsOq0dzZC0zbm7Jkek42UwXJQ7TTqlo=;
-        b=0NXk20yEDdVqPavrinELcDhiEx6g8SowKfWqztwlZjVZPtnsstzgvLanEC070jOOrE
-         NyUoV4LUAYCacHqZ6vZ9nBKTn6146pJbHFECoVuKwgq6nS27/Oh5gYIwwWW1UTjzW5Ld
-         mbp5S6kVOT/CNR/ePth4FDI0gKd1SxQyyzuGKdhtE7jtjNJxt6smufdetRfzvWvtU9Jo
-         bi12mJ9rB9uNBEmdURREN2gnyyGF2xL4oa0d+xJZ0s66/IVaDTQ+N8m3DyO+QwZ0uQON
-         yjzo6KJzqGgN3BMkwoyv0OOxILs8LSlWoQu/e4ZYcxpb9FfgFleIuxMJCkc68VEACZzE
-         e8Vg==
-X-Gm-Message-State: AOAM533p41iYjpKDEc0juiucJJ2AKhDBmcx/snySlp1kObkL0SwGLc8B
-        Gc3xYv4KqgYEcXF+az9T+P5DQA==
-X-Google-Smtp-Source: ABdhPJyPTqxlhePXSwxAO7b6OZpiTTKJPWvD78k7bjIkTN8zuuHVCDTbw5aPyCLzwgY56vY8uDvNkw==
-X-Received: by 2002:a9d:60f:: with SMTP id 15mr15829288otn.266.1643155985426;
-        Tue, 25 Jan 2022 16:13:05 -0800 (PST)
-Received: from shuah-tx13.internal ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id l1sm4031491otd.18.2022.01.25.16.13.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 16:13:05 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     bristot@kernel.org, rostedt@goodmis.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] rtla: make doc build optional
-Date:   Tue, 25 Jan 2022 17:13:01 -0700
-Message-Id: <20220126001301.79096-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 25 Jan 2022 19:14:17 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58450C06161C;
+        Tue, 25 Jan 2022 16:14:17 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 07DD7383;
+        Wed, 26 Jan 2022 00:14:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 07DD7383
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1643156057; bh=jznSEapcUo+3Aq5KyBfFLHbReyAvoHjrY4InTDYlV6g=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=OhpMjDrQd3mIA1FrNusk8Y05T5t6Gxwx+jX5iNZT28HO0/K3CL5YwqqwrcLJVCDUW
+         hA6vfClGKHDW5BflY7U5+Fo3+WKDi6nAhDoYGmLtuLhcT7A4ekhVXa8kMaGGqlN2py
+         5cGCuV+de8IDnlF2VySS9sKJTC9XsVsqfakjC2JGRxQzr1sGL4YYyB9pqCjgRoAeII
+         fAjG5wyTMWPSO10/6BhwDxSg/2gzPxPcRa9QCIOANTVmQLZrBuMhr32cW2vmCMIxHA
+         UQTdTOuIDJcGuf3WX7snLJoTwjt/JW09KJ6wptzk0vEJnORYv7pL9S42qWsr+DTQIl
+         UtroPO/pEQhmQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     GUO Zihua <guozihua@huawei.com>, zohar@linux.ibm.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        roberto.sassu@huawei.com, wangweiyang2@huawei.com,
+        xiujianfeng@huawei.com, linux-integrity@vger.kernel.org,
+        guozihua@huawei.com
+Subject: Re: [RESEND][PATCH] Documentation: added order requirement for
+ ima_hash=
+In-Reply-To: <20220125090237.120357-1-guozihua@huawei.com>
+References: <20220125090237.120357-1-guozihua@huawei.com>
+Date:   Tue, 25 Jan 2022 17:14:45 -0700
+Message-ID: <87o83zwdxm.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rtla build fails due to doc build dependency on rst2man. Make
-doc build optional so rtla could be built without docs. Leave
-the install dependency on doc_install alone.
+GUO Zihua <guozihua@huawei.com> writes:
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/tracing/rtla/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> From: Guo Zihua <guozihua@huawei.com>
+>
+> Commandline parameter ima_hash= and ima_template= has order requirement
+> for them to work correctly together. Namely ima_hash= must be
+> specified after ima_template=, otherwise ima_template= will be ignored.
+>
+> The reason is that when handling ima_hash=, ima template would be set to
+> the default value if it has not been initialized already, and that value
+> cannot be changed afterwards by ima_template=.
+>
+> This patch adds this limitation to the documentation.
+>
+> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Signed-off-by: Guo Zihua <guozihua@huawei.com>
 
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 2d52ff0bff7d..7c39728d08de 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -59,7 +59,7 @@ endif
- .PHONY:	all
- all:	rtla
- 
--rtla: $(OBJ) doc
-+rtla: $(OBJ)
- 	$(CC) -o rtla $(LDFLAGS) $(OBJ) $(LIBS)
- 
- static: $(OBJ)
--- 
-2.32.0
+I've applied this, but I'm wondering: where did this review take place?
+I can't find it on the lists...
 
+Thanks,
+
+jon

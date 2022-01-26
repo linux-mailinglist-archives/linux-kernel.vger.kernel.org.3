@@ -2,139 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D46B049CFD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D411549CFD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243184AbiAZQhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243175AbiAZQhk (ORCPT
+        id S243199AbiAZQiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:38:09 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:58260 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243175AbiAZQiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:37:40 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFA9C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:37:39 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id h14so90747plf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0lkZXVf0iO42qTs6hmWV+2+LZ5uEDOqbitDpMYhaXGE=;
-        b=U35s0iOlg1H127K2jntAKAz9pNUTT4BjIPRQR3LmfMrto8XQT9oVEI8fImw584Xrhg
-         Kb2Fkwx7b2BPIGTNgkGxnyoHslX+Kgt4S4aBPkqamXByT+Nimjw7/9f7Y1oY6XAbtKLW
-         vEd7QNcl9vw82H+7wrUcszlx0+Al5md/yU0u38N5lyfA3rjNhSIIHTbBpW+1td5S3s5a
-         S4gseYjxmHJoRJ2D5Mo32mSoAJqh9ponRVGa+mNPArgvcdBRyHY+KK5UGNNdfyRZGEzm
-         sKzQFDZNBrrTi8PBzUwDu7B/j8Kg1imcXCuG5jyRFpJP93CFbp+YsiNX3X4QxH72ZZIj
-         ecdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0lkZXVf0iO42qTs6hmWV+2+LZ5uEDOqbitDpMYhaXGE=;
-        b=5dweCtmOwQ+fh0HhcXu1zvk4O33zsBRDjLjpCG9k5Ggg0FI+GLFy17tAihV18OYhkV
-         Hs+Lnz+CfNVcZaKAdi9SMcN/chab/MFC4L9LNsMPdF+HJfu7MnTJrwtJaYjjuujehj9D
-         TRaFqI8b+MW54OtDRoZnPUnVx3E1V66qnlBdlaX48gGQTFrlZSyzwpPY098gxBXqZsRy
-         yoWgWaUV5xpp3YHru+CqyMPgb2DBTCrTTwI45RpqquL+w4WnxSMvfRSbI8ytDWCDMf1I
-         Fj9k7SumwPYiDFKoKYrV24y8EkJzCcYboRoRypv6I2BOxg+hqJhvQfF13aEmVDx25y3z
-         wtdg==
-X-Gm-Message-State: AOAM532YBIxix0GPmbjGCApxZdafjXy8we0StmsfcJvz9YDfgINaZdGI
-        SleUN3ijTOMFyg9+g1IxZRmOjA==
-X-Google-Smtp-Source: ABdhPJx3wnTz6Lmd7CP8lDGl/you1LvrfJY9yqRtpA+GKDRZbVlp9xUtDYLSM7/YLkgGC6ty9Ba5jg==
-X-Received: by 2002:a17:902:b718:b0:14a:c2ac:6ae2 with SMTP id d24-20020a170902b71800b0014ac2ac6ae2mr23555204pls.125.1643215059266;
-        Wed, 26 Jan 2022 08:37:39 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id ha11sm5027116pjb.3.2022.01.26.08.37.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 08:37:38 -0800 (PST)
-Date:   Wed, 26 Jan 2022 16:37:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] KVM: x86: Sync the states size with the XCR0/IA32_XSS
- at, any time
-Message-ID: <YfF4z5ye8YCfoqzJ@google.com>
-References: <20220117082631.86143-1-likexu@tencent.com>
- <f9edf9b5-0f84-a424-f8e9-73cad901d993@redhat.com>
- <eacf3f83-96f5-301e-de54-8a0f6c8f9fe5@gmail.com>
- <YerUQa+SN/xWMhvB@google.com>
- <dc8c75a6-a39f-be1d-6cf3-024b88bdf5fe@gmail.com>
+        Wed, 26 Jan 2022 11:38:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4CE061A39
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:38:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F412C340E3;
+        Wed, 26 Jan 2022 16:38:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643215087;
+        bh=ROjn4VlNVmb1WH5kKkS/AXgsukGjTMCpkKDS3wbqDnA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ki+o/+CCgBz5rbYpht6JTrR9xg5fYRtJgBwwRkOLWH9u83mhDhG85ZvFmn/1twYTo
+         rfEpn8MZUF/5+avOkT+7wwd6xMirER04cFu/xLSUirRiVPA88dpQNrw8MNe3vQhENL
+         3XRI0Htpeoya95PtfiQzckptQCa2CwkYPsR1Br9n0d8yOtV+aDf2g0blwSSxtbeoPQ
+         /IO346J+Zu9cUb163FeMppOig/v5xMonYGOU7x3HkLtHZtLaYagH6tFiZyNbebytCD
+         lETlsYJMeY6mygtn7Lru+OPxySKq0B4O25QYPtWhHsuDZfu3HKlADSsdJ2qjI8eD+Q
+         PQlo+JGqsLnlA==
+Date:   Wed, 26 Jan 2022 09:38:02 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        kernel test robot <lkp@intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: Re: [PATCH v3 1/3] string: Make stpcpy() possible to use
+Message-ID: <YfF46oYCaelKU5qU@dev-arch.archlinux-ax161>
+References: <20220126141917.75399-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <dc8c75a6-a39f-be1d-6cf3-024b88bdf5fe@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220126141917.75399-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+On Wed, Jan 26, 2022 at 04:19:15PM +0200, Andy Shevchenko wrote:
+> It is a good rule to avoid submitting code without users.
+
+While I agree with the sentiment in the general case, I don't think that
+it applies in this case and this comment should be dropped. The message
+of the commit this fixes and the comment right above the declaration
+both make it pretty obvious why this interface was added with no in-tree
+users and why the declaration was placed right above the definition.
+
+> Currently the stpcpy() is unusable due to missed declaration.
+> Any attempts to use it will bring something like:
 > 
-> XCR0 is reset to 1 by RESET but not INIT and IA32_XSS is zeroed by
-> both RESET and INIT. The kvm_set_msr_common()'s handling of MSR_IA32_XSS
-> also needs to update kvm_update_cpuid_runtime(). In the above cases, the
-> size in bytes of the XSAVE area containing all states enabled by XCR0 or
-> (XCRO | IA32_XSS) needs to be updated.
+>   error: implicit declaration of function ‘stpcpy’ [-Werror=implicit-function-declaration]
 > 
-> For simplicity and consistency, existing helpers are used to write values
-> and call kvm_update_cpuid_runtime(), and it's not exactly a fast path.
+> Move declaration to the header and guard it as other string functions.
 > 
-> Fixes: a554d207dc46 ("KVM: X86: Processor States following Reset or INIT")
-> Signed-off-by: Like Xu <likexu@tencent.com>
+> Fixes: 1e1b6d63d634 ("lib/string.c: implement stpcpy")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <natechancellor@gmail.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Regardless, the commit itself seems fine from a technical standpoint. I
+won't comment on whether or not this interface should be opened up.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
 > ---
-> v2 -> v3 Changelog:
-> - Apply s/legacy/existing in the commit message; (Sean)
-> - Invoke kvm_update_cpuid_runtime() for MSR_IA32_XSS; (Sean)
+> v3: new patch to fix reported issue
+>  include/linux/string.h | 3 +++
+>  lib/string.c           | 3 ++-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
 > 
->  arch/x86/kvm/x86.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 55518b7d3b96..4b509b26d9ab 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3535,6 +3535,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct
-> msr_data *msr_info)
->  		if (data & ~supported_xss)
->  			return 1;
->  		vcpu->arch.ia32_xss = data;
-> +		kvm_update_cpuid_runtime(vcpu);
->  		break;
->  	case MSR_SMI_COUNT:
->  		if (!msr_info->host_initiated)
-> @@ -11256,7 +11257,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-> 
->  		vcpu->arch.msr_misc_features_enables = 0;
-> 
-> -		vcpu->arch.xcr0 = XFEATURE_MASK_FP;
-> +		__kvm_set_xcr(vcpu, 0, XFEATURE_MASK_FP);
->  	}
-> 
->  	/* All GPRs except RDX (handled below) are zeroed on RESET/INIT. */
-> @@ -11273,7 +11274,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->  	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
->  	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
-> 
-> -	vcpu->arch.ia32_xss = 0;
-> +	__kvm_set_msr(vcpu, MSR_IA32_XSS, 0, true);
-
-Heh, this now conflicts with a patch Xiaoyao just posted, turns out the SDM was
-wrong.  I think there's also some whitespace change or something that prevents
-this from applying cleanly.  For convenience, I'll post a miniseries with this
-and Xiaoyao's patch.
-
-[*] https://lore.kernel.org/all/20220126034750.2495371-1-xiaoyao.li@intel.com
-
-> 
->  	static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
-> 
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index b6572aeca2f5..b1aeb3475396 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -31,6 +31,9 @@ size_t strlcpy(char *, const char *, size_t);
+>  #ifndef __HAVE_ARCH_STRSCPY
+>  ssize_t strscpy(char *, const char *, size_t);
+>  #endif
+> +#ifndef __HAVE_ARCH_STPCPY
+> +char *stpcpy(char *__restrict__ dest, const char *__restrict__ src);
+> +#endif
+>  
+>  /* Wraps calls to strscpy()/memset(), no arch specific code required */
+>  ssize_t strscpy_pad(char *dest, const char *src, size_t count);
+> diff --git a/lib/string.c b/lib/string.c
+> index 485777c9da83..4ecb8ec1fdd1 100644
+> --- a/lib/string.c
+> +++ b/lib/string.c
+> @@ -233,6 +233,7 @@ ssize_t strscpy(char *dest, const char *src, size_t count)
+>  EXPORT_SYMBOL(strscpy);
+>  #endif
+>  
+> +#ifndef __HAVE_ARCH_STPCPY
+>  /**
+>   * stpcpy - copy a string from src to dest returning a pointer to the new end
+>   *          of dest, including src's %NUL-terminator. May overrun dest.
+> @@ -248,7 +249,6 @@ EXPORT_SYMBOL(strscpy);
+>   * not recommended for usage. Instead, its definition is provided in case
+>   * the compiler lowers other libcalls to stpcpy.
+>   */
+> -char *stpcpy(char *__restrict__ dest, const char *__restrict__ src);
+>  char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+>  {
+>  	while ((*dest++ = *src++) != '\0')
+> @@ -256,6 +256,7 @@ char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+>  	return --dest;
+>  }
+>  EXPORT_SYMBOL(stpcpy);
+> +#endif
+>  
+>  #ifndef __HAVE_ARCH_STRCAT
+>  /**
 > -- 
-> 2.33.1
+> 2.34.1
 > 
 > 

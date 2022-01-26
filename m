@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F038349C995
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C3A49C997
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241235AbiAZMZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:25:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49754 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241220AbiAZMZ3 (ORCPT
+        id S241243AbiAZM0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:26:06 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:41247 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241237AbiAZM0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:25:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1984DB81CBB;
-        Wed, 26 Jan 2022 12:25:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 240A7C340E3;
-        Wed, 26 Jan 2022 12:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643199926;
-        bh=LEmuz0iDH1iogcBanvIn+OqS5lY1EbahPHRPxL6nifk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vO4veg9JTHiSb2719N6wyiIBx+hK1D8lPbRNAOKHBFLF6Wpp/gKp1ToGQWCmlkxMA
-         lsoiMdEIfelcUzmtXBZ/oLns4zx2CF2Qk7w99xvLY9iqYql+VvqyDwWqUbMvOwKcdA
-         96k8/k+VnZ8t1Y61Cp9VFOP9V8aOdDR+2Mg3tbeo=
-Date:   Wed, 26 Jan 2022 13:25:23 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com
-Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk
- for DWC3 controller
-Message-ID: <YfE9s06CIv1P3bA/@kroah.com>
-References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
- <Ydb79/twbxLDJB8/@kroah.com>
- <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
+        Wed, 26 Jan 2022 07:26:04 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MUog3-1mm3gZ2tZR-00Qkhw for <linux-kernel@vger.kernel.org>; Wed, 26 Jan
+ 2022 13:26:02 +0100
+Received: by mail-oi1-f177.google.com with SMTP id s9so37082992oib.11
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:26:02 -0800 (PST)
+X-Gm-Message-State: AOAM531HDGxplxCkRoKFd7uv0rC+1qJ0q4AipIiDLLTD7gox6dARMuiG
+        N6IUf/fbKHHUXzBj0GbBldTSGtGWBVdmDO7u4YI=
+X-Google-Smtp-Source: ABdhPJzjEjqhZoVQ+aruRja21IFaCnlBOb64TzKBhR5d9+tIFUiNbT7Go647+tOZs0+HEX4+aquiUBzLNiHHkx3x2jU=
+X-Received: by 2002:a05:6808:2312:: with SMTP id bn18mr3658260oib.102.1643199961403;
+ Wed, 26 Jan 2022 04:26:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
+References: <20220125073137.1.83124@7e6451f583e7> <CAMuHMdVYhwpP0vSK4LT+50ZqB9opD8gcm-2aor8wAc49=GR+-w@mail.gmail.com>
+ <CAAH8bW93TUpyn8GaZfB83pu8Kvrsz9PHPCBHcG3+UStU7v=s=A@mail.gmail.com>
+ <31219CC3-CEE4-4CFA-A416-B98F2115A527@chromium.org> <CAMuHMdUwd=2KGk9JkZPSZsvAWG4wddxZFxd5bFfbrtZi3JynQA@mail.gmail.com>
+In-Reply-To: <CAMuHMdUwd=2KGk9JkZPSZsvAWG4wddxZFxd5bFfbrtZi3JynQA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 26 Jan 2022 13:25:45 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0bLTWc-UG4eX14CQ=hiXms+wHx2VvaovXA-ZUQYAA1fA@mail.gmail.com>
+Message-ID: <CAK8P3a0bLTWc-UG4eX14CQ=hiXms+wHx2VvaovXA-ZUQYAA1fA@mail.gmail.com>
+Subject: Re: kisskb: FAILED linux-next/m68k-allmodconfig/m68k-gcc8 Tue Jan 25, 18:24
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:AdT+uoNBMi5tsaCaWYyxyApQ0iDc4tFP0NTOTRXv0O4XCF3NbBj
+ TWN76RMwlxCd3/9w8zXiW+Sydqxeh5IIvJyaqD2QJw8CzIqX5jf0aYEFAUdpWqGoHaqzEan
+ 6zunuAvVKwh2fWy6sSZJ/8zj/tSBQlDhoGoW/OjymkEnqMCHQcF4h/ZSbOP7W/3GJ845iL/
+ U23hpj0sGeoQVJitJUfDg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ux9Xv5K7uk8=:hUQjQZcC/McLASWnAbe04A
+ sLX5t0Ib5tfjVWp19Fmd8a0Vzaa/zDMUvpnTOFhN2Y/RQnPr4Nlv8QQH1G9i9jXkZbZEmezer
+ j70GR8sHt9oqLJGJmiQuFKlfBZRNqR/RMJF4mnZnXcMJ+wA6Ulh20DnOtdyXiEkjn8w4nKm3S
+ w3abbwyk2uKpgg3iPR1S2sjy3dPY7g5kSG+PsqAeYdZ2MqTbQseqr5E7CNMFZ5XmHZcs/G2xR
+ oengq8ABv0ddUsx6MA/SvuxUWqYgLym/CPYT6uf35vz3a+FwiJee3sUg/Bxuj90mhDaNfHl3q
+ hRtspKXpn6NGVBr1GHaPZOW+Z7nTngIAiRPqSaqwkqozXG8CYTIoKQd+h7jbkm6+WDaAbJg3a
+ 0Q89mpz6cEmxvXj7kB9dM2hyI8GaburQe18oSG4ubhU8lUNMs0DxIIZsXVIUr6l4QkkfO3xSR
+ PN6BVu49wyLCgtq9FWcqewq1pnJzpZB7PTXSUf5v24tzxmDeB0q4uEiegIRGnxC/8x0Jg6Cod
+ Kik+FVRO1Rrp/kDlwRlXVo2H0IpZh2svrqKtrHOO8JVzbxpbqAlMu28+MvtyykQQL4HlKjFSC
+ KrvXECcwVdJNZ8hxLl5QyfaP/JFvTvTJRJ5ow7gs+Jdm7v7zkfGrZCwYRzHzXa40FOElajvzS
+ 1FX2Mx/F6zyoVhKqIP0pNuAT5bgbsPCqC28YsaQxJQ0Fh998fieMh3amciXq1cJXYdUI=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 10:27:59AM +0530, Sandeep Maheswaram wrote:
-> 
-> On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
-> > On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram wrote:
-> > > Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-> > > Runtime suspend of phy drivers was failing from DWC3 driver as runtime
-> > > usage value is 2 because the phy is initialized from DWC3 and HCD core.
-> > > DWC3 manages phy in their core drivers. Set this quirk to avoid phy
-> > > initialization in HCD core.
-> > > 
-> > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > ---
-> > > v5:
-> > > Added comment to explain the change done.
-> > > v4:
-> > > Changed pdev->dev.parent->of_node to sysdev->of_node
-> > > 
-> > >   drivers/usb/host/xhci-plat.c | 8 ++++++++
-> > >   1 file changed, 8 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> > > index c1edcc9..e6014d4 100644
-> > > --- a/drivers/usb/host/xhci-plat.c
-> > > +++ b/drivers/usb/host/xhci-plat.c
-> > > @@ -327,6 +327,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
-> > >   					 &xhci->imod_interval);
-> > >   	}
-> > > +	/*
-> > > +	 * Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-> > > +	 * DWC3 manages phy in their core drivers. Set this quirk to avoid phy
-> > > +	 * initialization in HCD core.
-> > > +	 */
-> > > +	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
-> > > +		xhci->quirks |= XHCI_SKIP_PHY_INIT;
-> > > +
-> > Why is this function caring about dwc3 stuff?  Shoudn't this be a
-> > "generic" device property instead of this device-specific one?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> This quirk is set only if required for some controllers (eg: dwc3 & cdns3).
-> 
-> Please check below commit.
-> 
-> https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/
+On Wed, Jan 26, 2022 at 10:16 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+> On Wed, Jan 26, 2022 at 9:54 AM Kees Cook <keescook@chromium.org> wrote:
+> > >>
+> > >> The code that causes this is drivers/net/ipa/ipa_mem.c:ipa_mem_valid():
+> > >>
+> > >>         DECLARE_BITMAP(regions, IPA_MEM_COUNT) = { };
+> > >>         ...
+> > >>         for_each_clear_bit(mem_id, regions, IPA_MEM_COUNT) {
+> > >>                 if (ipa_mem_id_required(ipa, mem_id))
+> > >>                         dev_err(dev, "required memory region %u missing\n",
+> > >>                                 mem_id);
+> > >>         }
+> > >>
+> > >> This only happens with gcc-8, not with gcc-9, so it might be a
+> > >> compiler bug. I don't see anything wrong with c:ipa_mem_valid()
+> > >> nor with m68k's find_first_zero_bit().
+> > >
+> > >I don't see any problems about how this code uses bitmap API.
+> > >The m68k version of find_first_zero_bit() looks correct as well.
+> >
+> > The trouble is with "enum ipa_mem_id mem_id;" which is an int, and the bitmap API requires unsigned long. I tried to fix this[1] at the source, but the maintainers want each[2] call site to fix it instead. :(
+>
+> Sorry, I don't get it. "mem_id" is not used as the bitmap, "regions" is,
+> and the latter has the correct type?
 
-That commit has nothing to do with a specific "dwc3" quirk anywhere.
-Why not set this flag in the specific platform xhci driver instead where
-it belongs?
+I think you are right here, and even if it was an array of 'unsigned
+int' instead
+of 'unsigned long', this should not change the size of the object on
+a 32-bit architecture.
 
-thanks,
+I ran the preprocessed code through cvise[1], bisecting for a reduced
+test case that fails on gcc-8 but succeeds on gcc-9. The reduced
+case is still fairly complex, and it appears to only happen in the
+presence of an inline asm. Narrowing down the compiler versions shows
+that anything after gcc-9.2 does not warn, but 9.1 and earlier versions do,
+which is further indication that  it was probably a false-positive that got
+fixed in gcc.
 
-greg k-h
+     Arnd
+
+[1] https://github.com/marxin/cvise
+[2] https://www.godbolt.org/z/xMr9v1nPT

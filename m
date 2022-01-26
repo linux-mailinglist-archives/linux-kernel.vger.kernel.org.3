@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D01E049CC0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 536DF49CC10
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242012AbiAZOPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:15:43 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:57449 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235463AbiAZOPm (ORCPT
+        id S242018AbiAZOP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:15:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49100 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235463AbiAZOP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:15:42 -0500
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N7QM9-1mBqPB1rTh-017iJ2; Wed, 26 Jan 2022 15:15:40 +0100
-Received: by mail-wr1-f50.google.com with SMTP id k18so26034955wrg.11;
-        Wed, 26 Jan 2022 06:15:40 -0800 (PST)
-X-Gm-Message-State: AOAM530ugkm/qztGhthuiFIYMdJ5k0aoJjFJMqC0f5rUWoWOdYRS68Fs
-        VonoMytk6WeSBrVTTljHGHDOkuVNkJydbdGWJBA=
-X-Google-Smtp-Source: ABdhPJypUHBTeRx/2wQs8W86Fm5/h6oi7YvMer36TrIuhT81FZ7IHgq/MbBkCknxuUWDS+dxyf0rqtN/tkqX9OjSS6E=
-X-Received: by 2002:adf:fd05:: with SMTP id e5mr22581036wrr.192.1643206539963;
- Wed, 26 Jan 2022 06:15:39 -0800 (PST)
+        Wed, 26 Jan 2022 09:15:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643206557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TBufRetUEaFHPWc7iYpkpHHqiA9eXNXD6Bgulr6vvjA=;
+        b=Bnfdfd0+g2Ypa4KEwpzoA5r+nw3mLByfFSMattg/ZqQgKJVPZL2GuFGv9w1rwjxH68dUnD
+        mZWcF8LEYxHQahb/GAd6GDvhJaL19QDvV80OBRM1CbPkAR20DPEdwqHiWiM+xv+MdXtcFe
+        tp/lJdrCdaKVqukh/VHKhmpo4W/otEM=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-124-Q8cQx6rrN5y_m2hGegxCVA-1; Wed, 26 Jan 2022 09:15:55 -0500
+X-MC-Unique: Q8cQx6rrN5y_m2hGegxCVA-1
+Received: by mail-wr1-f71.google.com with SMTP id g8-20020adfa488000000b001d8e6467fe8so4347517wrb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 06:15:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TBufRetUEaFHPWc7iYpkpHHqiA9eXNXD6Bgulr6vvjA=;
+        b=yLmg2HgY4TvtYNadN9M1uPaUMIL+dgoQPo9x1WSqGEFHCqRaSp+rLPqpRIZGEpo/6A
+         Hez1R9XB8Xk9/tjBVmBxO6Iq0YHfjYSxa2yQ+wsiKcaqe00hqnBpvxvd8HpKxgi5lxzs
+         qmHMBj9/z/YJDyyxJwpW+69aDdK86+TeRO/DguQg5ZLyK7Rv475E8WBaG0eqGMQKnodS
+         GbZZPiqTSV/aMqYt7DyaHRBJq67UGBi2mi65in2wdxtDo122bgFTncBvGrTaSJrRwwcO
+         yxn+XAE0/5upQjAflTj49YNXmxtLmF3QAkRqLCGIYTrAKcUWFH4ykY9WoFzSzdFZr2EZ
+         dzDg==
+X-Gm-Message-State: AOAM533ZiIQUhQU8puFJCj9chlCkGYr97MqCfdz/wqAL6ejBzwaHCtjK
+        gflDtwht1IOeIMygvDvHSwyU2oU9msEM29ewOsiqhmsDRBRqtZk4Drd0YYp5qJvs1d4lli9V27l
+        0pOwzqs76uxYDGv/UMiL974UM
+X-Received: by 2002:adf:f6cb:: with SMTP id y11mr21723792wrp.419.1643206554174;
+        Wed, 26 Jan 2022 06:15:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz+mct3ymMu2U64GGPDGP0AtbI/8Ig4CtqRTRDC/RwNHy3hYZxdpTXJYSMFcmQfPRXBYMePRg==
+X-Received: by 2002:adf:f6cb:: with SMTP id y11mr21723776wrp.419.1643206553991;
+        Wed, 26 Jan 2022 06:15:53 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id 1sm11923387wry.52.2022.01.26.06.15.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 06:15:53 -0800 (PST)
+Message-ID: <6e74d4cc-655a-e38e-0856-a59e4e6deb36@redhat.com>
+Date:   Wed, 26 Jan 2022 15:15:52 +0100
 MIME-Version: 1.0
-References: <20220121200738.2577697-1-laurent@vivier.eu> <20220121200738.2577697-3-laurent@vivier.eu>
- <YfFPjOEELiTWr2uj@kroah.com>
-In-Reply-To: <YfFPjOEELiTWr2uj@kroah.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 26 Jan 2022 15:15:23 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a32PRo4OJmUPmgnhp_14biz4bfs5BnDXej1itwOfkuvKA@mail.gmail.com>
-Message-ID: <CAK8P3a32PRo4OJmUPmgnhp_14biz4bfs5BnDXej1itwOfkuvKA@mail.gmail.com>
-Subject: Re: [PATCH v12 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
-To:     Greg KH <greg@kroah.com>
-Cc:     Laurent Vivier <laurent@vivier.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        John Stultz <john.stultz@linaro.org>,
-        "# 3.4.x" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:da1ACItRTuMgThyod6/gjWphq5DEo5CVHj91Vz8Mu4gVnexpOYC
- 9jPy7BRL5eW693zWdS3/cQpiWH6Y2LxQbAya4pDiXuRzaTfvSMcBdQUlfHHYniDAsl3/fcX
- 7si/NQ5h4+HsxgOzTtOi0QyQIS3CeOiJ8jBe6Sgr8mJ+luyryqzKP6Vi/0nOtabjsXNdtkU
- yqYXzj3INOU80whTAhLlg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:j53BWYrUBMw=:V3FZdYwU2HxGDp1mqEuK7y
- Y2yl4RsgnYFjwB61vcDcOo6syxQLoaFWtDMFQl237mLWFdJApnXjpbIxiallMyUX1IP7QyV6z
- xAz2X9ymX1VB11hFkxv2LQBCirfWpbJ1tzoNF/AfF1z6N7JE75xiEiBio5Pl0oCs4xdyWuM5p
- aWN5iysDeZ16hOU+kkH4SP/g2YsQYPs8CqlIuYq/kodLg88q8Tj8gPoW7Nz54sXh6m7NdSFk0
- d9WRgFaqG4Bs3yIEGV+mJxy56oPvC3hcTyHprR3FFUZBTW0aE6C+buQJNxH3xR4ek9m5r5kIi
- 7g7CDF6VpwOxLwGUKR4KGv5XPF+5k0vp1nLDwi3opOdrQxWDtxUSHU6OUGCSu6uxefJSzeElq
- OnUJOTp8IfVs0iHsctd9w01xYewnQyCgIHTbebfqhUXGW2GBnOS3Hxj6dhKz0qfyZpg+DWboG
- dhSBTP+CvjP8jYE26/grpEq3KeAUTmzXhOfeE6PVBqIlF3V4RVHrOE9FGBCTlntXBhnBDD4q/
- y8riMIS3v2WKcagxutj7rjKPQIVm/ffbgVT+hREnEju3c981Baq/3l/QrttnmKTd2YBmv2Aj/
- N5u7v2+x3pqwxtfGgPm2hZ3+aY4Lku0dmeHHgi8TeFwEbRkU9DvCed+sB3TZoYZN4o9qYA6Pv
- m1c95w1F2tKjOVrlqG9eJOsWVtJH9fnNpC0umOx1niwUtgZgojfpT+UUF/V1SdOx3R5iRqntR
- ALcBk608MAQC4/Pjcs2p6aMIfiDUyMGY7krtE3/VEdrVIeCRyqQ0Xu589EqFIBs1Rw27bkK7P
- dCndg3BnQcPRBPsfJPGU5b2L++bmJCdJvXzSTSB8SbStDIXka4=
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
+ <YfEG2qVO9K9G+g1d@kroah.com>
+ <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
+ <f671a112-880d-1526-a395-360947b40c5a@gmx.de> <YfEv7OQs98O9wJdJ@kroah.com>
+ <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
+ <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
+ <YfFV4EJosayH+e6C@smile.fi.intel.com> <YfFWPmG2D093gz4N@smile.fi.intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YfFWPmG2D093gz4N@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 2:41 PM Greg KH <greg@kroah.com> wrote:
->
-> On Fri, Jan 21, 2022 at 09:07:35PM +0100, Laurent Vivier wrote:
-> > Revert
-> > commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
->
-> Why?
->
-> > and define gf_ioread32()/gf_iowrite32() to be able to use accessors
-> > defined by the architecture.
->
-> What does this do?
+On 1/26/22 15:10, Andy Shevchenko wrote:
+> On Wed, Jan 26, 2022 at 04:08:32PM +0200, Andy Shevchenko wrote:
+>> On Wed, Jan 26, 2022 at 02:46:08PM +0100, Javier Martinez Canillas wrote:
+>>> On 1/26/22 14:12, Andy Shevchenko wrote:
+> 
+> ...
+> 
+>>> I've just bought a SSD1306 (I2C) based one and will attempt to write a DRM
+>>> driver using drivers/staging/fbtft/fb_ssd1306.c as a reference.
+>>
+>> You should take ssd1307fb.c instead. And basically create a MIPI based driver
+>> for I2C. Then we won't go same road again for other similar devices.
+> 
+> For the record it supports your device:
+> 
+> static const struct i2c_device_id ssd1307fb_i2c_id[] = {
+> { "ssd1305fb", 0 },
+> { "ssd1306fb", 0 },
+> { "ssd1307fb", 0 },
+> { "ssd1309fb", 0 },
+> 
+> 
 
-The reverted commit was an incorrect workaround for an old qemu bug:
+Thanks a lot for the pointer. I was only looking at drivers/staging
+and didn't check drivers/video. I'll try to convert that one then
+once I get the display.
 
-The goldfish devices are apparently defined as "native" endianness,
-which in qemu is whatever the architecture maintainers thought it should
-be at the time (little-endian on arm, big-endian on powerpc, board
-specific on mips, etc.) but independent of what kernel is actually running
-on the machine if the CPU supports both.
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-m68k in qemu picked big-endian here, which is the opposite of what
-the kernel driver does, presumably because that is the endianness of
-the CPU itself.
-
-Since we can't fix qemu any more, and runtime detection doesn't work
-on machines without devicetree, having a sane default (whatever the
-driver used to do) and an architecture specific override for those that
-got it wrong is probably our best option.
-
-       Arnd

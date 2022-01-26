@@ -2,132 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA3D49C0EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 02:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADAA49C0EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 02:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236036AbiAZBxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 20:53:00 -0500
-Received: from mga17.intel.com ([192.55.52.151]:15371 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236019AbiAZBxA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 20:53:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643161980; x=1674697980;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=oI90OnN0LBZgNPGK9oSIcHjxmu/Ye7JY6xZhvKkRU+o=;
-  b=ZiZ/b8mZ55Y4FtPJzu1WzHmdQeMdxLp6jW6YCHxBXDwiS8OU4JasSs+U
-   8WuAoyALhGXkEt6gZ/tJavRLDSRo9UmbaZpyPL4RW25N0p6O1tTy6vVPj
-   cvqCxPmfLjUnUBFGF6iBpGHO7m0X4haYUahG3rczvo140O1S9dkSEkZXs
-   WWCYbbPbV0GzdeK1ehbd19gXXEifKAYk4B2/ZbeWRaPPhIjntNPxLHXc8
-   8PiFjQblxH8Z4JthUtvTt0sjMp82U3l+muAWSZapr4CbbQ2gvXue9vXCa
-   hdx/hWeNTg8PEZHApuz1+WA8b5+rBd2oPtrUQTzq+dayDV6vScMOJvYt+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="227133939"
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="227133939"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 17:52:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="534988737"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jan 2022 17:52:37 -0800
-Cc:     baolu.lu@linux.intel.com, "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/7] iommu cleanup and refactoring
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
- <BN9PR11MB52767F46CC13601306001B9E8C5E9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20220124174404.GG966497@nvidia.com>
- <7febcba4-f5bf-6bf6-6180-895b18d1b806@arm.com>
- <20220125151602.GL84788@nvidia.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <a43279ba-8a18-a4a7-f317-a5e2091a0c74@linux.intel.com>
-Date:   Wed, 26 Jan 2022 09:51:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20220125151602.GL84788@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        id S236045AbiAZByD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 20:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236019AbiAZByD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 20:54:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BCFC06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 17:54:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5598615FF
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:54:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06723C340E0;
+        Wed, 26 Jan 2022 01:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1643162041;
+        bh=HmDtfxHw0TkZKeuMjg1E/+s3cS8wl9HTxKT4JJin/A4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n5W4MYLNrHSAzrkjeTunr7ROvRwu84tUqYlWmglWNH4T//dtLXIn3XAJsu5oOdaoH
+         hhxJKASSMVAc5InifAJPSkFHODUBamnR4xjouMwwZkOj3UzrHg03LPUaphyCqFmig0
+         4GWA/ydOhy/CdALNzAxvUlCuplk6C1kKEtRdi8hk=
+Date:   Tue, 25 Jan 2022 17:53:59 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Andy Whitcroft <apw@canonical.com>
+Cc:     Joe Perches <joe@perches.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND][PATCH] checkpatch: make sure fix-up patches have Fixes
+ tag
+Message-Id: <20220125175359.9571d0cb36844ebe69583298@linux-foundation.org>
+In-Reply-To: <CAO=4fJPTiNKvru=+qAasMZYUmsGQe+OBH4A2Dd1v-NFdQ8f-Qw@mail.gmail.com>
+References: <20220119074609.4162747-1-senozhatsky@chromium.org>
+        <a70570a10026203b544e930eb6dbcf6ad0abb2ad.camel@perches.com>
+        <CAO=4fJPTiNKvru=+qAasMZYUmsGQe+OBH4A2Dd1v-NFdQ8f-Qw@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 11:16 PM, Jason Gunthorpe wrote:
-> On Tue, Jan 25, 2022 at 02:48:02PM +0000, Robin Murphy wrote:
->   
->> Agreed, certainly an IOMMU_DOMAIN_SVA type that can both encapsulate the mm
->> and effectively replace iommu_sva seems like a logical and fairly small next
->> step. We already have the paradigm of different domain types supporting
->> different ops, so initially an SVA domain would simply allow bind/unbind
->> rather than attach/detach/map/unmap.
+On Wed, 19 Jan 2022 09:48:32 +0000 Andy Whitcroft <apw@canonical.com> wrote:
+
+> On Wed, Jan 19, 2022 at 9:42 AM Joe Perches <joe@perches.com> wrote:
+> >
+> > On Wed, 2022-01-19 at 16:46 +0900, Sergey Senozhatsky wrote:
+> > > If a patch contains "commit hash (commit name)", in other words
+> > > if the patch fixes some particular commit, then require "Fixes:"
+> > > tag.
+> >
+> > I do not like this patch as many commits merely reference a
+> > previous patch and do not actually fix anything.
 > 
-> I hope we can quickly get to a PASID enabled generic attach/detach
-> scheme - we really need this to do the uAPI part of this interface.
-
-Agreed. Jacob is working on kernel DMA with PASID. He needs such
-interfaces as well. I have worked out an implementation for vt-d driver.
-It could be post for review inside Jacob's series for kernel DMA with
-PASID.
-
+> Agree.  It would need to be a tighter form of language to be safe to
+> automatically suggest a Fixes tag.  The point of a Fixes tag is to be
+> a semantically safe indicator of this relationship not relying on the
+> vagaries of English for that connection.
 > 
->> they are fundamentally different things in their own right, and the ideal
->> API should give us the orthogonality to also bind a device to an SVA domain
->> without PASID (e.g. for KVM stage 2, or userspace assignment of simpler
->> fault/stall-tolerant devices), or attach PASIDs to regular iommu_domains.
-> 
-> Yes, these are orthogonal things. A iommu driver that supports PASID
-> ideally should support PASID enabled attach/detatch for every
-> iommu_domain type it supports.
-> 
-> SVA should not be entangled with PASID beyond that SVA is often used
-> with PASID - a SVA iommu_domain should be fully usable with a RID too.
+> You might be ok with something which is a tighter match on like
+> "fixes <hash> (<name>)" and only suggesting a Fixes.
 
-The prototype of PASID enabled attach/detach ops could look like:
+Also.
 
-        int (*attach_dev_pasid)(struct iommu_domain *domain,
-                                struct device *dev, ioasid_t id);
-        void (*detach_dev_pasid)(struct iommu_domain *domain,
-                                 struct device *dev, ioasid_t id);
+stable tree maintainers appear to have the habit of taking anything
+which has Fixes and cheerfully backporting it.  Sometimes undesirably. 
+This patch will encourage people to worsen this problem.
 
-But the iommu driver should implement different callbacks for
+I wish this would simply stop, kernel-wide.  Make developers and
+tree-owners actually *think* about the backport desirability.
 
-1) attaching an IOMMU DMA domain to a PASID on device;
-    - kernel DMA with PASID
-    - mdev-like device passthrough
-    - etc.
-2) attaching a CPU-shared domain to a PASID on device;
-    - SVA
-    - guest PASID
-    - etc.
+If that were the global approach then checkpatch could
 
-> 
-> I'm hoping to see the core iommu code provide some simplified "SVA"
-> API that under the covers creates a SVA domain and then does a normal
-> PASID attach using the global PASID in the mm_struct - the
-> driver should not care what, or even if, PASID is used for a SVA
-> domain.
-> 
-> Jason
-> 
+a) ask developers if they should have added "Fixes:" (this patch) then
 
-Best regards,
-baolu
+b) if it has "Fixes:", ask developers if they should have added cc:stable.
+
+

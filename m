@@ -2,184 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0AFE49C907
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB99D49C90A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbiAZLqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S234174AbiAZLq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:46:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240984AbiAZLqD (ORCPT
+        with ESMTP id S234071AbiAZLqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:46:03 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF04C061757
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:45:59 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id e28so17966828pfj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:45:59 -0800 (PST)
+        Wed, 26 Jan 2022 06:46:55 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDF1C06161C;
+        Wed, 26 Jan 2022 03:46:55 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id u6so42948367uaq.0;
+        Wed, 26 Jan 2022 03:46:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=b2YyWOge0M5kIT2ntqlrnr8NQs2OgZVVCHIbAnzaaKE=;
-        b=WWfym4P+R3+IwpIxkHRmeB3tynZEscCZnnZFQ1YzNukA01mkuDYl6d6i0ahPydblHO
-         AtQpFKqiEmopvLkUdF8SPT3UCWN2zo2PkJlketuHAyWOJs1Egydvx1C7wfNtGJK3pGsx
-         DIv2rwUpj/l6XDgrxw6d+aHzeeIJY8aBeKMyjw4HWN5NOIWWRTfyS4FCNE9ccyWlkGdb
-         Zf1j5vo2fJosqpjNgc7nwLvJaGWi9wGl1DB3ZFhfTbcFI9HvS1pX3SnT2qLvg3fnH0Ey
-         NWyuC6ckMkdcCBYNd2PTyVoqfPtqgAPpS6Lg/cUpo1nJY6xGWBu6z+Fnegr/1N7X2+1M
-         Hzhw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=N4CNUTqSVWn9bXn7l88zPRdfRlbtM6HbzeC8ZWljLDY=;
+        b=kZlc5lyneJxcG3mgrIIsGcOndeVBblAK0nKqJSIxp5XBRMZDtyWdX5FBwuNfSIkm9a
+         KEa3BbUfSUgVIEcWlYs98e72BJkdt70ayYnbXgyYLT2AGf8mBiDWdNBn4GM7fs4t9y7s
+         tv9chq0HqYSR4PmevC7Ay1dz4ZgO1zXBQaak7iVtaAqHzINmLVcIHjWHrY4iC9LBEQ1z
+         NvtFXX/fQh2btOfQHsd9ie7Hq9Jk9xKK8Yp+oomhROlf1ZbDVzK+Ph9Ciprme7e2np4f
+         a0Ioc50iPwG018CiaEhUt+3VNIM+BzYZITkX0FfQdiQ7uu7jlOfQGewH2itZbhggiEL2
+         z+Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=b2YyWOge0M5kIT2ntqlrnr8NQs2OgZVVCHIbAnzaaKE=;
-        b=HmfHFirpYGMcgIoee+/caAqLVClmXYaTr7wGyJQTuKEzBHpqthrjDOB6JI/2Cf2qXP
-         1uHYHKSvtHtPjDfwtofIjw15MV6nRo2uJKvgbHNv9WJbv6CrohqMkxsP5iAHRVdzGATW
-         HgLQBiwgk6kk7hy9Krnn4ZopkGGxYOKNcBddR73SG2XEu5+ogGbNF4x4Ck6Rnn1+5/Bx
-         8Gh4PgnMhAtofEmPhya0kC+uCi0Nj4KuAT9qstZOeJxco5AehyLaOtbPpya31A9lDtaZ
-         BgTTzyouLqunyFnSByuQez6ee1kBxNur8rp3r+CuJ0hffV8jQ/iJIUkw+6++1zWHirRm
-         NZPg==
-X-Gm-Message-State: AOAM532LMtEDEeMLB4Gof0WbYFxlkQ3ycMoHmFc8KqiZjzo/DmNm1OJU
-        erI9x1nRbdVsJJB++pLQVH9ZDA==
-X-Google-Smtp-Source: ABdhPJyzaxql9iVXuLykTnyDGM1rb4BxxzxCMBfHaQkTumc+35DPn7h/HgwDnFeQSyGT+oLQfq6hHQ==
-X-Received: by 2002:a63:6f07:: with SMTP id k7mr18454510pgc.574.1643197558636;
-        Wed, 26 Jan 2022 03:45:58 -0800 (PST)
-Received: from sunil-ThinkPad-T490 ([49.206.3.187])
-        by smtp.gmail.com with ESMTPSA id na7sm3055210pjb.23.2022.01.26.03.45.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 03:45:58 -0800 (PST)
-Date:   Wed, 26 Jan 2022 17:15:49 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Abner Chang <abner.chang@hpe.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>
-Subject: Re: [RFC PATCH 1/1] riscv/efi_stub: Add support for
- RISCV_EFI_BOOT_PROTOCOL
-Message-ID: <20220126114549.GA35654@sunil-ThinkPad-T490>
-References: <20220126110615.33371-1-sunilvl@ventanamicro.com>
- <20220126110615.33371-2-sunilvl@ventanamicro.com>
- <CAMj1kXGaBJX9qVXQXiFHPySfDz7SWYQ6+cbHvV5v3sw3tEv0Ow@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N4CNUTqSVWn9bXn7l88zPRdfRlbtM6HbzeC8ZWljLDY=;
+        b=G+1nTM3BJ8Ay/6RvEYKzXjeYvPqlV24W3+Xruzcvc8a2kQDYyWPieLE4kHnwp6hrzh
+         gRCewYPva2lk94zzrDTjo4/5sTe+7/7ys4qX6IEkDjX0eYNPYD3QYxF/W+V3aPQE6Ffu
+         Kv2mR2bBmtLzx1QX6pRz0QKIEwBMhDxEhdzFPiCAN9xpBdaNABTGeuQQKXpR0idatfpU
+         zO49aDGp6rwmMDZzEi8iK6SKbRZQIa7+q3Jh6QN2FAupZ0S0kjoStEqM345YiVlS8IrR
+         58w9anhBVUSVKiQBm+uzwEfUIfYQFFziigYpzbMwcD/uL5H18WRXrtwyqwNOHiiU+jQL
+         nT0Q==
+X-Gm-Message-State: AOAM530TaFb7LcMq//RBnEBvwBpXhDA3wyyoON2D6+7D5AP+UE3nTv+c
+        K+E1GGlswn3xFF6nyA1AGviGNfdthaPPAdkCcxc=
+X-Google-Smtp-Source: ABdhPJwZR3GhqHW6vVDPMdvc5RfjPrPxRISo7AxE0yRaHiKPCLToutmaZ91KccUpC53UUHP3+xvCW8VUf4CPP4L+I4g=
+X-Received: by 2002:a67:c98d:: with SMTP id y13mr3479175vsk.43.1643197614279;
+ Wed, 26 Jan 2022 03:46:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGaBJX9qVXQXiFHPySfDz7SWYQ6+cbHvV5v3sw3tEv0Ow@mail.gmail.com>
+References: <20220110114930.1406665-1-sergio.paracuellos@gmail.com>
+ <20220110114930.1406665-5-sergio.paracuellos@gmail.com> <d62d838872d26201b04a1014a925738d29ff3e48.camel@pengutronix.de>
+In-Reply-To: <d62d838872d26201b04a1014a925738d29ff3e48.camel@pengutronix.de>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Wed, 26 Jan 2022 12:46:43 +0100
+Message-ID: <CAMhs-H__SxEZ4OtdN_PFf4g+joWBRgRR0q7hHkZX3d=qZtpxUQ@mail.gmail.com>
+Subject: Re: [PATCH v8 4/4] staging: mt7621-dts: align resets with binding documentation
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
+        Greg KH <gregkh@linuxfoundation.org>,
+        NeilBrown <neil@brown.name>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:13:42PM +0100, Ard Biesheuvel wrote:
-> Hello Sunil,
-> 
-> On Wed, 26 Jan 2022 at 12:06, Sunil V L <sunilvl@ventanamicro.com> wrote:
-> >
-> > This patch adds the support for getting the boot hart ID in
-> > Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL.
-> >
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > ---
-> >  drivers/firmware/efi/libstub/efistub.h    | 15 ++++++++++++
-> >  drivers/firmware/efi/libstub/riscv-stub.c | 28 ++++++++++++++++++++---
-> >  include/linux/efi.h                       |  1 +
-> >  3 files changed, 41 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-> > index edb77b0621ea..0428f8816942 100644
-> > --- a/drivers/firmware/efi/libstub/efistub.h
-> > +++ b/drivers/firmware/efi/libstub/efistub.h
-> > @@ -720,6 +720,21 @@ union efi_tcg2_protocol {
-> >         } mixed_mode;
-> >  };
-> >
-> > +typedef union riscv_efi_boot_protocol riscv_efi_boot_protocol_t;
-> > +
-> > +union riscv_efi_boot_protocol {
-> > +       struct {
-> > +               u64 revision;
-> > +               efi_status_t (__efiapi *get_boot_hartid)(
-> > +                                                        riscv_efi_boot_protocol_t *,
-> > +                                                        size_t *);
-> > +       };
-> > +       struct {
-> > +               u32 revision;
-> > +               u32 get_boot_hartid;
-> > +       } mixed_mode;
-> > +};
-> > +
-> 
-> You don't the mixed mode member here - this is for X64 kernels on IA32
-> firmware only.
+Hi Greg,
 
-Ah OK. Thanks for the feedback, Ard. Will remove it in next version.
+On Mon, Jan 10, 2022 at 12:54 PM Philipp Zabel <p.zabel@pengutronix.de> wrote:
+>
+> On Mon, 2022-01-10 at 12:49 +0100, Sergio Paracuellos wrote:
+> > Binding documentation for compatible 'mediatek,mt7621-sysc' has been updated
+> > to be used as a reset provider. Align reset related bits and system controller
+> > node with binding documentation along the dtsi file.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+>
+> regards
+> Philipp
 
-Thanks
-Sunil
-> 
-> >  typedef union efi_load_file_protocol efi_load_file_protocol_t;
-> >  typedef union efi_load_file_protocol efi_load_file2_protocol_t;
-> >
-> > diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-> > index 380e4e251399..c7add4eb5453 100644
-> > --- a/drivers/firmware/efi/libstub/riscv-stub.c
-> > +++ b/drivers/firmware/efi/libstub/riscv-stub.c
-> > @@ -46,12 +46,34 @@ static u32 get_boot_hartid_from_fdt(void)
-> >         return fdt32_to_cpu(*prop);
-> >  }
-> >
-> > +static u32 get_boot_hartid_from_efi(void)
-> > +{
-> > +       efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
-> > +       efi_status_t status;
-> > +       riscv_efi_boot_protocol_t *boot_protocol;
-> > +       size_t boot_hart_id;
-> > +
-> > +       status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
-> > +                            (void **)&boot_protocol);
-> > +       if (status == EFI_SUCCESS) {
-> > +               status = efi_call_proto(boot_protocol,
-> > +                                       get_boot_hartid, &boot_hart_id);
-> > +               if (status == EFI_SUCCESS) {
-> > +                       return (u32)boot_hart_id;
-> > +               }
-> > +       }
-> > +       return U32_MAX;
-> > +}
-> > +
-> >  efi_status_t check_platform_features(void)
-> >  {
-> > -       hartid = get_boot_hartid_from_fdt();
-> > +       hartid = get_boot_hartid_from_efi();
-> >         if (hartid == U32_MAX) {
-> > -               efi_err("/chosen/boot-hartid missing or invalid!\n");
-> > -               return EFI_UNSUPPORTED;
-> > +               hartid = get_boot_hartid_from_fdt();
-> > +               if (hartid == U32_MAX) {
-> > +                       efi_err("/chosen/boot-hartid missing or invalid!\n");
-> > +                       return EFI_UNSUPPORTED;
-> > +               }
-> >         }
-> >         return EFI_SUCCESS;
-> >  }
-> > diff --git a/include/linux/efi.h b/include/linux/efi.h
-> > index ccd4d3f91c98..9822c730207c 100644
-> > --- a/include/linux/efi.h
-> > +++ b/include/linux/efi.h
-> > @@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
-> >  #define EFI_CONSOLE_OUT_DEVICE_GUID            EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
-> >  #define APPLE_PROPERTIES_PROTOCOL_GUID         EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
-> >  #define EFI_TCG2_PROTOCOL_GUID                 EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
-> > +#define RISCV_EFI_BOOT_PROTOCOL_GUID           EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
-> >  #define EFI_LOAD_FILE_PROTOCOL_GUID            EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
-> >  #define EFI_LOAD_FILE2_PROTOCOL_GUID           EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
-> >  #define EFI_RT_PROPERTIES_TABLE_GUID           EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
-> > --
-> > 2.25.1
-> >
+Can I get your Acked-by on this patch to apply this series through the clk tree?
+
+Thanks in advance for your time.
+
+Best regards,
+    Sergio Paracuellos

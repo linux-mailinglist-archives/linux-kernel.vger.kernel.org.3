@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 255EE49CBF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B822749CBD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241980AbiAZONv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:13:51 -0500
-Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:31022 "EHLO
-        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232541AbiAZONu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:13:50 -0500
-X-Greylist: delayed 471 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jan 2022 09:13:50 EST
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id E2CB73F689;
-        Wed, 26 Jan 2022 15:05:56 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.1
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 tagged_above=-999 required=6.31
-        tests=[BAYES_00=-1.9, DKIM_SIGNED=0.1, DKIM_VALID=-0.1,
-        DKIM_VALID_AU=-0.1, DKIM_VALID_EF=-0.1, NICE_REPLY_A=-0.001,
-        URIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no
-Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
-        dkim=pass (1024-bit key) header.d=shipmail.org
-Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hMX6J1oMPg-X; Wed, 26 Jan 2022 15:05:56 +0100 (CET)
-Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 293F03F66F;
-        Wed, 26 Jan 2022 15:05:53 +0100 (CET)
-Received: from [192.168.0.209] (unknown [192.55.55.54])
-        by mail1.shipmail.org (Postfix) with ESMTPSA id 2B3B33626AA;
-        Wed, 26 Jan 2022 15:05:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
-        t=1643205953; bh=0MTfgcCysP/q4eVXnuzFoCi2k0Jnuri0D10FI7Hd3AM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RsLQLxnyua74FxEE2/64ThYR5+k3uN1bMz9T9qsxrPQ1BBbccs1J23+KBzWmVyycK
-         fpvxv6rm07BNAZdm2ViUlwSDsmVVJQAtVlSH4bjf5Q7Hx6dKWMn3UeKr4FAXKxk811
-         oaT7tYG4JF1jHX1nFr7EF/NUCkPQpW/pox9SPkCE=
-Message-ID: <b6e9a900-435f-148c-826f-a8f6c188df94@shipmail.org>
-Date:   Wed, 26 Jan 2022 15:05:44 +0100
+        id S238974AbiAZOIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:08:00 -0500
+Received: from mga12.intel.com ([192.55.52.136]:18857 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235353AbiAZOH6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 09:07:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643206078; x=1674742078;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ATWiAh5adUik4jh9DAaJE+s1YCh+W1I+c+EDEhALlV0=;
+  b=QRZGS2JA7djqw65FCRjCn/huuSNPto02OUB8Y6UE+VAB3d5+uXxKx/wV
+   yvWriZ2Cy3cCmGQ0qXlrmGmmF5qtrFR9VjNmKhD93nCdTzm+eqgQpwD9i
+   RRH4sCZB7wgYU14dp1bwJ7UWrKxdVAbxMe9F79+fEk6cNgEor7VaZkzS7
+   jStoDckCasxXh3E5sRJIGw+gc9DQ+872EN+fzo+DG4wWWnbma3I0xA5IX
+   3aKclcBTZUyBec0Qq7RPbW12c8hnK/h1tG6yMjPNdKMcVU918ZyCdiJGv
+   8YPabIyMV7/PgcvB6IY4OYDrSombPvqyMMGTzq0ON4FVNNAFiQiTF9B5p
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="226531926"
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="226531926"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 06:07:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="628311015"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 26 Jan 2022 06:07:56 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCixn-000LH9-Df; Wed, 26 Jan 2022 14:07:55 +0000
+Date:   Wed, 26 Jan 2022 22:07:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Maciej W. Rozycki" <macro@embecosm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     kbuild-all@lists.01.org, Christoph Hellwig <hch@infradead.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3] tty: Partially revert the removal of the Cyclades
+ public API
+Message-ID: <202201262147.FNYhDmDi-lkp@intel.com>
+References: <alpine.DEB.2.20.2201260733430.11348@tpp.orcam.me.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [Intel-gfx] [PATCH v5 4/5] drm/i915: add gtt misalignment test
-Content-Language: en-US
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220125193530.3272386-1-bob.beckett@collabora.com>
- <20220125193530.3272386-5-bob.beckett@collabora.com>
-From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
-        <thomas_os@shipmail.org>
-In-Reply-To: <20220125193530.3272386-5-bob.beckett@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.20.2201260733430.11348@tpp.orcam.me.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi "Maciej,
 
-On 1/25/22 20:35, Robert Beckett wrote:
-> add test to check handling of misaligned offsets and sizes
->
-> v4:
-> 	* remove spurious blank lines
-> 	* explicitly cast intel_region_id to intel_memory_type in misaligned_pin
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-> ---
->   drivers/gpu/drm/i915/selftests/i915_gem_gtt.c | 128 ++++++++++++++++++
->   1 file changed, 128 insertions(+)
->
-> diff --git a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-> index b80788a2b7f9..f082b5ff3b5e 100644
-> --- a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-> +++ b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
-> @@ -22,10 +22,12 @@
->    *
->    */
->   
-> +#include "gt/intel_gtt.h"
->   #include <linux/list_sort.h>
->   #include <linux/prime_numbers.h>
->   
->   #include "gem/i915_gem_context.h"
-> +#include "gem/i915_gem_region.h"
->   #include "gem/selftests/mock_context.h"
->   #include "gt/intel_context.h"
->   #include "gt/intel_gpu_commands.h"
-> @@ -1067,6 +1069,120 @@ static int shrink_boom(struct i915_address_space *vm,
->   	return err;
->   }
->   
-> +static int misaligned_case(struct i915_address_space *vm, struct intel_memory_region *mr,
-> +			   u64 addr, u64 size, unsigned long flags)
-> +{
-> +	struct drm_i915_gem_object *obj;
-> +	struct i915_vma *vma;
-> +	int err = 0;
-> +	u64 expected_vma_size, expected_node_size;
-> +
-> +	obj = i915_gem_object_create_region(mr, size, 0, 0);
-> +	if (IS_ERR(obj))
-> +		return PTR_ERR(obj);
-> +
-> +	vma = i915_vma_instance(obj, vm, NULL);
-> +	if (IS_ERR(vma)) {
-> +		err = PTR_ERR(vma);
-> +		goto err_put;
-> +	}
-> +
-> +	err = i915_vma_pin(vma, 0, 0, addr | flags);
-> +	if (err)
-> +		goto err_put;
-> +	i915_vma_unpin(vma);
-> +
-> +	if (!drm_mm_node_allocated(&vma->node)) {
-> +		err = -EINVAL;
-> +		goto err_put;
-> +	}
-> +
-> +	if (i915_vma_misplaced(vma, 0, 0, addr | flags)) {
-> +		err = -EINVAL;
-> +		goto err_put;
-> +	}
-> +
-> +	expected_vma_size = round_up(size, 1 << (ffs(vma->resource->page_sizes_gtt) - 1));
-> +	expected_node_size = expected_vma_size;
-> +
-> +	if (IS_DG2(vm->i915) && i915_gem_object_is_lmem(obj)) {
-> +		/* dg2 should expand lmem node to 2MB */
+I love your patch! Perhaps something to improve:
 
-Should this test be NEEDS_COMPACT_PT()?
+[auto build test WARNING on tty/tty-testing]
+[also build test WARNING on linus/master hch-configfs/for-next v5.17-rc1 next-20220125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Otherwise LGTM. Reviewed-by: Thomas Hellström 
-<thomas.hellstrom@linux.intel.com>
+url:    https://github.com/0day-ci/linux/commits/Maciej-W-Rozycki/tty-Partially-revert-the-removal-of-the-Cyclades-public-API/20220126-172520
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+config: i386-buildonly-randconfig-r002-20220124 (https://download.01.org/0day-ci/archive/20220126/202201262147.FNYhDmDi-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/c9e707e313f471adbe057300f4fb163113cf062c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Maciej-W-Rozycki/tty-Partially-revert-the-removal-of-the-Cyclades-public-API/20220126-172520
+        git checkout c9e707e313f471adbe057300f4fb163113cf062c
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+   In file included from <command-line>:32:
+>> ./usr/include/linux/cyclades.h:6:2: warning: #warning "Support for features provided by this header has been removed" [-Wcpp]
+       6 | #warning "Support for features provided by this header has been removed"
+         |  ^~~~~~~
+>> ./usr/include/linux/cyclades.h:7:2: warning: #warning "Please consider updating your code" [-Wcpp]
+       7 | #warning "Please consider updating your code"
+         |  ^~~~~~~
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

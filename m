@@ -2,185 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FD249C72A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7702D49C72B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239695AbiAZKMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:12:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60374 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239698AbiAZKMl (ORCPT
+        id S239704AbiAZKMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:12:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37088 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239709AbiAZKMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:12:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 26 Jan 2022 05:12:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643191973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YLLMjXe8Y984uSaV8UIQRt4tj6QyBzicSXco+B26HtQ=;
+        b=EAYP7y7yZlTtJfNuH70wNDlDjmhlme+zJJIyPZyg8o9nlDdZp20CxZ6pOa3Sb/plX6cej7
+        FYeewcr7ss3Tknnov3Fr5Ce7nw9saNhSoDlhrjsF00doED4YnQve4CQhL2Y3L/1NbpMQZu
+        9nttRVDRAf2g1bFLR6wJzUI6Wn0lRXI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-397-5d4ldEoyM6aXB6gy3S0T5Q-1; Wed, 26 Jan 2022 05:12:50 -0500
+X-MC-Unique: 5d4ldEoyM6aXB6gy3S0T5Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E0F26177B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:12:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B6CFC340E3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:12:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643191960;
-        bh=ccjGCZoOtKoJYyuXTyfMEeBaTqNpUBC4v5oPj8Lt21Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X4irv7rjiXIgXiM8OvbO6eyW1al5qYwzLzZ908Ala0iUpiAAHxsYf36djejTj3/IF
-         3ZZqdtKReh3c97xWW+/KrovdBvhxR806qp8VXhmMb7ZjG6JxPC5yHe7TwQ8Jf2Ai4J
-         VH6W4LtmqV4Pfm7cs7QoBNea7w4TMh7NNCOBs9mxU2qqzxgarDUfDOqdxTNaSPAX2/
-         6lt++kqL2vivikbaeTSO7wrKH0gzoUVMg3+640xZIkIlaVeVP43jWB2y19EsFpA0vl
-         MPxgqkwfb3eh/eqLHoN60x5JqaU9Bl+roPpDnEBoQN+2KvNVzsetPfobjLUsQCzi4a
-         kfJYQCcaox7cA==
-Received: by mail-wr1-f43.google.com with SMTP id e8so23022048wrc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:12:40 -0800 (PST)
-X-Gm-Message-State: AOAM533zhz8/6CVLpq5KVROe1/aOdxUMwRbZcw6qlZ2j6JzkOb5gSAbt
-        SEdgIEHOWRv14keb1FlnT9677kzlUXyEPJD+mVI=
-X-Google-Smtp-Source: ABdhPJzyqBxCJwFE66pSShlfdBw6USc/daPY7a5frBzVcjJpBHmVgJlAOiGNC0BOEMai/zGiy5mhCrMVkVYF+UPLtB8=
-X-Received: by 2002:a5d:6d85:: with SMTP id l5mr22370201wrs.447.1643191958745;
- Wed, 26 Jan 2022 02:12:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20211216082812.165387-1-jianyong.wu@arm.com> <YdXdjcJ7jbnkFsqp@arm.com>
- <AM9PR08MB7276E0DE6B4224C22B20A89CF44C9@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YdcRLohx777jzWah@arm.com> <AM9PR08MB7276B412F02CA0431E30E06CF44D9@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YdgZJ/mBG+BCxmEv@arm.com> <DB7PR08MB3737631DEE8D6625D3A9E393F7209@DB7PR08MB3737.eurprd08.prod.outlook.com>
- <CAMj1kXF7DJ5UeMn=9gw_Hs3Fa525OFEPsriO=ZprT3rN83=qtQ@mail.gmail.com> <AM9PR08MB72763D5DA0C5F22D2126ABF4F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
-In-Reply-To: <AM9PR08MB72763D5DA0C5F22D2126ABF4F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 26 Jan 2022 11:12:27 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGjAxd2xb0u1PLSLGAe8jJdhJm3wR+y=7qB4C1J6Ebgcw@mail.gmail.com>
-Message-ID: <CAMj1kXGjAxd2xb0u1PLSLGAe8jJdhJm3wR+y=7qB4C1J6Ebgcw@mail.gmail.com>
-Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud mapping
-To:     Jianyong Wu <Jianyong.Wu@arm.com>
-Cc:     Justin He <Justin.He@arm.com>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "david@redhat.com" <david@redhat.com>,
-        "quic_qiancai@quicinc.com" <quic_qiancai@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "gshan@redhat.com" <gshan@redhat.com>, nd <nd@arm.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 945018519E2;
+        Wed, 26 Jan 2022 10:12:48 +0000 (UTC)
+Received: from starship (unknown [10.40.192.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A950078DE9;
+        Wed, 26 Jan 2022 10:12:45 +0000 (UTC)
+Message-ID: <6cf58a4cd925726ef10481d38f9f4e8090f5023d.camel@redhat.com>
+Subject: Re: [PATCH 0/5] iommu/amd: fixes for suspend/resume
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Mike Lothian <mike@fireburn.co.uk>
+Cc:     dwmw@amazon.co.uk, iommu@lists.linux-foundation.org,
+        joro@8bytes.org, linux-kernel@vger.kernel.org,
+        suravee.suthikulpanit@amd.com, tglx@linutronix.de, will@kernel.org
+Date:   Wed, 26 Jan 2022 12:12:44 +0200
+In-Reply-To: <CAHbf0-F8Uemcu8FVcZvY0CPOf4kFXOcaCzWF1ZCwkpa3tyut3A@mail.gmail.com>
+References: <20211123161038.48009-1-mlevitsk@redhat.com>
+         <20220125150832.1570-1-mike@fireburn.co.uk>
+         <6f0d9b07073ca6d3657500ec076edc1ad2a3e40a.camel@redhat.com>
+         <CAHbf0-FJ0c1yAumKCnXLKKFN=tzeJxSd3HyP=dUOBgBTxVG5fw@mail.gmail.com>
+         <7809c3253a997330102b9d779206312d6b3bcaf1.camel@redhat.com>
+         <CAHbf0-F8Uemcu8FVcZvY0CPOf4kFXOcaCzWF1ZCwkpa3tyut3A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 at 11:09, Jianyong Wu <Jianyong.Wu@arm.com> wrote:
->
-> Hi Ard,
->
-> > -----Original Message-----
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> > Sent: Wednesday, January 26, 2022 4:37 PM
-> > To: Justin He <Justin.He@arm.com>
-> > Cc: Catalin Marinas <Catalin.Marinas@arm.com>; Jianyong Wu
-> > <Jianyong.Wu@arm.com>; will@kernel.org; Anshuman Khandual
-> > <Anshuman.Khandual@arm.com>; akpm@linux-foundation.org;
-> > david@redhat.com; quic_qiancai@quicinc.com; linux-
-> > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> > gshan@redhat.com; nd <nd@arm.com>
-> > Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create
-> > pud mapping
-> >
-> > On Wed, 26 Jan 2022 at 05:21, Justin He <Justin.He@arm.com> wrote:
-> > >
-> > > Hi Catalin
-> > >
-> > > > -----Original Message-----
-> > > > From: Catalin Marinas <catalin.marinas@arm.com>
-> > > > Sent: Friday, January 7, 2022 6:43 PM
-> > > > To: Jianyong Wu <Jianyong.Wu@arm.com>
-> > > > Cc: will@kernel.org; Anshuman Khandual
-> > <Anshuman.Khandual@arm.com>;
-> > > > akpm@linux-foundation.org; david@redhat.com;
-> > > > quic_qiancai@quicinc.com; ardb@kernel.org;
-> > > > linux-kernel@vger.kernel.org; linux-arm- kernel@lists.infradead.org;
-> > > > gshan@redhat.com; Justin He <Justin.He@arm.com>; nd <nd@arm.com>
-> > > > Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when
-> > > > create pud mapping
-> > > >
-> > > > On Fri, Jan 07, 2022 at 09:10:57AM +0000, Jianyong Wu wrote:
-> > > > > Hi Catalin,
-> > > > >
-> > > > > I roughly find the root cause.
-> > > > >  alloc_init_pud will be called at the very beginning of kernel
-> > > > > boot in
-> > > > create_mapping_noalloc where no memory allocator is initialized. But
-> > > > lockdep check may need allocate memory. So, kernel take exception
-> > > > when acquire lock.(I have not found the exact code that cause this
-> > > > issue) that's say we may not be able to use a lock so early.
-> > > > >
-> > > > > I come up with 2 methods to address it.
-> > > > > 1) skip dead lock check at the very beginning of kernel boot in
-> > > > > lockdep
-> > > > code.
-> > > > > 2) provided 2 two versions of __create_pgd_mapping, one with lock
-> > > > > in it and the other without. There may be no possible of race for
-> > > > > memory mapping at the very beginning time of kernel boot, thus we
-> > > > > can use the no lock version of __create_pgd_mapping safely.
-> > > > > In my test, this issue is gone if there is no lock held in
-> > > > > create_mapping_noalloc. I think create_mapping_noalloc is called
-> > > > > early enough to avoid the race conditions of memory mapping,
-> > > > > however, I have not proved it.
-> > > >
-> > > > I think method 2 would work better but rather than implementing new
-> > > > nolock functions I'd add a NO_LOCK flag and check it in
-> > > > alloc_init_pud() before mutex_lock/unlock. Also add a comment when
-> > > > passing the NO_LOCK flag on why it's needed and why there wouldn't
-> > > > be any races at that stage (early boot etc.)
-> > > >
-> > > The problematic code path is:
-> > > __primary_switched
-> > >         early_fdt_map->fixmap_remap_fdt
-> > >                 create_mapping_noalloc->alloc_init_pud
-> > >                         mutex_lock (with Jianyong's patch)
-> > >
-> > > The problem seems to be that we will clear BSS segment twice if kaslr
-> > > is enabled. Hence, some of the static variables in lockdep init
-> > > process were messed up. That is to said, with kaslr enabled we might
-> > > initialize lockdep twice if we add mutex_lock/unlock in alloc_init_pud().
-> > >
-> >
-> > Thanks for tracking that down.
-> >
-> > Note that clearing the BSS twice is not the root problem here. The root
-> > problem is that we set global state while the kernel runs at the default link
-> > time address, and then refer to it again after the entire kernel has been
-> > shifted in the kernel VA space. Such global state could consist of mutable
-> > pointers to statically allocated data (which would be reset to their default
-> > values after the relocation code runs again), or global pointer variables in BSS.
-> > In either case, relying on such a global variable after the second relocation
-> > performed by KASLR would be risky, and so we should avoid manipulating
-> > global state at all if it might involve pointer to statically allocated data
-> > structures.
-> >
-> > > In other ways, if we invoke mutex_lock/unlock in such a early booting stage.
-> > > It might be unsafe because lockdep inserts lock_acquire/release as the
-> > > complex hooks.
-> > >
-> > > In summary, would it better if Jianyong splits these early boot and
-> > > late boot case? e.g. introduce a nolock version for
-> > create_mapping_noalloc().
-> > >
-> > > What do you think of it?
-> > >
-> >
-> > The pre-KASLR case definitely doesn't need a lock. But given that
-> > create_mapping_noalloc() is only used to map the FDT, which happens very
-> > early one way or the other, wouldn't it be better to move the lock/unlock
-> > into other callers of __create_pgd_mapping()? (and make sure no other
-> > users of the fixmap slots exist)
->
-> There are server callers of __create_pgd_mapping. I think some of them need no fixmap lock as they are called so early. I figure out all of them here:
-> create_mapping_noalloc:   no lock
-> create_pgd_mapping:   no lock
-> __map_memblock:    no lock
-> map_kernel_segment:  no lock
-> map_entry_trampoline: no lock
-> update_mapping_prot:    need lock
-> arch_add_memory:  need lock
->
-> WDYT?
->
+On Wed, 2022-01-26 at 09:54 +0000, Mike Lothian wrote:
+> On Wed, 26 Jan 2022 at 07:34, Maxim Levitsky <mlevitsk@redhat.com> wrote:
+> > Could you post the whole dmesg, or at least:
+> > 
+> > dmesg | grep AMD-Vi
+> > 
+> > 
+> > What CPU does your system have?
+> > 
+> > I suspect that your system doesn't GA log feature enabled in the IOMMU, and the code never checks
+> > for that, and here it fails enabling it, which  before my patches was just
+> > ignoring it silently.
+> > 
+> > 
+> > Best regards,
+> >         Maxim Levitsky
+> > > Hope that helps
+> > > 
+> > > Mike
+> > > 
+> 
+> Hi
+> 
+> It's an AMD Ryzen 9 5900HX
+> 
+> [    0.186350] AMD-Vi: ivrs, add hid:AMDI0020, uid:\_SB.FUR0, rdevid:160
+> [    0.186353] AMD-Vi: ivrs, add hid:AMDI0020, uid:\_SB.FUR1, rdevid:160
+> [    0.186354] AMD-Vi: ivrs, add hid:AMDI0020, uid:\_SB.FUR2, rdevid:160
+> [    0.186355] AMD-Vi: ivrs, add hid:AMDI0020, uid:\_SB.FUR3, rdevid:160
+> [    0.355628] pci 0000:00:00.2: AMD-Vi: IOMMU performance counters supported
+> [    0.356134] pci 0000:00:00.2: AMD-Vi: Found IOMMU cap 0x40
+> [    0.356136] AMD-Vi: Extended features (0x206d73ef22254ade): PPR
+> X2APIC NX GT IA GA PC GA_vAPIC
+> [    0.356140] AMD-Vi: Interrupt remapping enabled
+> [    0.356141] AMD-Vi: Virtual APIC enabled
+> [    0.356142] AMD-Vi: X2APIC enabled
+> [    0.431377] AMD-Vi: AMD IOMMUv2 loaded and initialized
+> 
+> I've attached the dmesg, I notice that some boots it doesn't happen
+> 
+> Cheers
+> 
+> Mike
 
-That seems reasonable, but it needs to be documented clearly in the code.
+Great, your system does seem to support GA log 
+(but a patch to check if, other that assume blindly that it is supported is 
+something that should be done).
+
+So could you bump the LOOP_TIMEOUT like by 10x or so and see if the problem goes away?
+
+(that code should be rewritten to time based wait and not just blindly loop like that,
+I also can prepare a patch for that as well).
+
+Best regards,
+	Maxim Levitsky
+

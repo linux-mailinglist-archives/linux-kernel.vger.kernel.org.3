@@ -2,90 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B164649C79F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD93349C7A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240028AbiAZKcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:32:13 -0500
-Received: from gateway24.websitewelcome.com ([192.185.50.66]:49213 "EHLO
-        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240044AbiAZKcI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:32:08 -0500
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway24.websitewelcome.com (Postfix) with ESMTP id 0C35F1D562
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:32:06 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id Cfavne83P22u3Cfawn8odr; Wed, 26 Jan 2022 04:32:06 -0600
-X-Authority-Reason: nr=8
-Received: from host-79-47-126-144.retail.telecomitalia.it ([79.47.126.144]:46578 helo=[10.0.0.238])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1nCfav-001LCX-IB; Wed, 26 Jan 2022 04:32:05 -0600
-Message-ID: <86189da9-92b5-c211-e406-5d8b10eb3a77@kernel.org>
-Date:   Wed, 26 Jan 2022 11:32:02 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] rtla: make doc build optional
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>, rostedt@goodmis.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220126001301.79096-1-skhan@linuxfoundation.org>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <20220126001301.79096-1-skhan@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.47.126.144
-X-Source-L: No
-X-Exim-ID: 1nCfav-001LCX-IB
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-47-126-144.retail.telecomitalia.it ([10.0.0.238]) [79.47.126.144]:46578
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 1
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
+        id S240022AbiAZKcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:32:53 -0500
+Received: from foss.arm.com ([217.140.110.172]:58250 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240029AbiAZKco (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 05:32:44 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 251C91FB;
+        Wed, 26 Jan 2022 02:32:44 -0800 (PST)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 02A9D3F766;
+        Wed, 26 Jan 2022 02:32:42 -0800 (PST)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shuah@kernel.org, Cristian Marussi <cristian.marussi@arm.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH v4] selftests/kselftest/runner.sh: Pass optional command parameters in environment
+Date:   Wed, 26 Jan 2022 10:32:30 +0000
+Message-Id: <20220126103230.35285-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/22 01:13, Shuah Khan wrote:
-> rtla build fails due to doc build dependency on rst2man. Make
-> doc build optional so rtla could be built without docs. Leave
-> the install dependency on doc_install alone.
-> 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Some testcases allow for optional commandline parameters but as of now
+there is now way to provide such arguments to the runner script.
 
-Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Add support to retrieve such optional command parameters fron environment
+variables named so as to include the all-uppercase test executable name,
+sanitized substituting any non-acceptable varname characters with "_",
+following the pattern:
 
-Thanks, Shuah!
--- Daniel
+	KSELFTEST_<UPPERCASE_SANITIZED_TEST_NAME>_ARGS="options"
 
-> ---
->  tools/tracing/rtla/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-> index 2d52ff0bff7d..7c39728d08de 100644
-> --- a/tools/tracing/rtla/Makefile
-> +++ b/tools/tracing/rtla/Makefile
-> @@ -59,7 +59,7 @@ endif
->  .PHONY:	all
->  all:	rtla
->  
-> -rtla: $(OBJ) doc
-> +rtla: $(OBJ)
->  	$(CC) -o rtla $(LDFLAGS) $(OBJ) $(LIBS)
->  
->  static: $(OBJ)
+Optional command parameters support is not available if 'tr' is not
+installed on the test system.
+
+Cc: Kees Cook <keescook@chromium.org>
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+---
+v3 --> v4
+- rebased on v5.17-rc1
+v2 --> v3
+- improved varname sanitation
+v1 --> v2
+- using env vars instead of settings file
+- added missing varname sanitation
+
+Usage examples:
+
+	KSELFTEST_RTCTEST_ARGS="/dev/rtc1" /opt/ksft_fixes/run_kselftest.sh -c rtc
+
+	KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10" /opt/ksft_fixes/run_kselftest.sh -c cpu-hotplug
+---
+ tools/testing/selftests/kselftest/runner.sh | 30 ++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index a9ba782d8ca0..294619ade49f 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -18,6 +18,8 @@ if [ -z "$BASE_DIR" ]; then
+ 	exit 1
+ fi
+ 
++TR_CMD=$(command -v tr)
++
+ # If Perl is unavailable, we must fall back to line-at-a-time prefixing
+ # with sed instead of unbuffered output.
+ tap_prefix()
+@@ -49,6 +51,31 @@ run_one()
+ 
+ 	# Reset any "settings"-file variables.
+ 	export kselftest_timeout="$kselftest_default_timeout"
++
++	# Safe default if tr not available
++	kselftest_cmd_args_ref="KSELFTEST_ARGS"
++
++	# Optional arguments for this command, possibly defined as an
++	# environment variable built using the test executable in all
++	# uppercase and sanitized substituting non acceptable shell
++	# variable name characters with "_" as in:
++	#
++	# 	KSELFTEST_<UPPERCASE_SANITIZED_TESTNAME>_ARGS="<options>"
++	#
++	# e.g.
++	#
++	# 	rtctest --> KSELFTEST_RTCTEST_ARGS="/dev/rtc1"
++	#
++	# 	cpu-on-off-test.sh --> KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10"
++	#
++	if [ -n "$TR_CMD" ]; then
++		BASENAME_SANITIZED=$(echo "$BASENAME_TEST" | \
++					$TR_CMD -d "[:blank:][:cntrl:]" | \
++					$TR_CMD -c "[:alnum:]_" "_" | \
++					$TR_CMD [:lower:] [:upper:])
++		kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
++	fi
++
+ 	# Load per-test-directory kselftest "settings" file.
+ 	settings="$BASE_DIR/$DIR/settings"
+ 	if [ -r "$settings" ] ; then
+@@ -69,7 +96,8 @@ run_one()
+ 		echo "# Warning: file $TEST is missing!"
+ 		echo "not ok $test_num $TEST_HDR_MSG"
+ 	else
+-		cmd="./$BASENAME_TEST"
++		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
++		cmd="./$BASENAME_TEST $kselftest_cmd_args"
+ 		if [ ! -x "$TEST" ]; then
+ 			echo "# Warning: file $TEST is not executable"
+ 
+-- 
+2.17.1
 

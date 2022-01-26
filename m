@@ -2,81 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D677049C277
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6333949C27A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237495AbiAZEGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 23:06:49 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55418 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237464AbiAZEGs (ORCPT
+        id S237508AbiAZEGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 23:06:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237499AbiAZEGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 23:06:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34820617AA;
-        Wed, 26 Jan 2022 04:06:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB322C340E3;
-        Wed, 26 Jan 2022 04:06:46 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 23:06:45 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125230645.097dad3a@gandalf.local.home>
-In-Reply-To: <20220126125252.2ef18d786cfaf4a135a2d10f@kernel.org>
-References: <20220125145006.677e3709@canb.auug.org.au>
-        <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-        <202201251256.CCCBE9851E@keescook>
-        <20220125162326.3d1ca960@gandalf.local.home>
-        <20220125162859.2b3cc8a0@gandalf.local.home>
-        <202201251402.0FB08DB@keescook>
-        <20220125172114.6807ed8f@gandalf.local.home>
-        <20220126093538.893fb44a7cb0a7cd840c7fdb@kernel.org>
-        <20220125201634.698cc777@gandalf.local.home>
-        <20220126125252.2ef18d786cfaf4a135a2d10f@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Tue, 25 Jan 2022 23:06:50 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7180BC061747
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:06:50 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id c76-20020a25c04f000000b00613e2c514e2so41784724ybf.21
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:06:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=HkfPmpCPhI4ODIe5DoaH45p7aAixzF8Mvfn5ikpABY8=;
+        b=PcqY+kCDb8UqpK1dbw2lWC2guuzF7QDxlHNXlojxEspoAt0IsvZMUY/4+w4Zmk2i7H
+         POj4/X0fq5WzuXP6mk+hQtEf0PUQa2Yf8EKH0vx+XfAv6bl9dKa30vWtUxA//FgLKQEQ
+         tImo3owgB2h2Tj16PS+IuY35CKVIox2JQKQdtfrVFZPbOdxiLB9o2mlDv58G32ktakfZ
+         dJpgZcSxYPczZyqbguctBdp2G43VJbXeduU9q1rloZxYfNpf9OU7iayZUta38sbS1eHY
+         S3/YGLFmbW/to6LyAKj15/7wbl8jWonI+XP5ZbfPGb7scPT8ySAGRhw4Yx1Wi+EhmVWS
+         vP6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=HkfPmpCPhI4ODIe5DoaH45p7aAixzF8Mvfn5ikpABY8=;
+        b=mZVNqg3aqg2YOZUN9LkucjB4BoCm87tgn2TXMhJIbrbr3SjaFR9Vpw/Wkn5ZNVhQGG
+         5OIsi3l8Ls+0spTvngbY6PjR9v5hwhO5OraKY2Cm/2LHAmLzhwk0Bf3iNT4K76ZNNjcI
+         hZgfRJgPdlPlWiYLisEo5L/BYhayLFvGGPHu0GSPsIy5Q4uIKhjeNAF0LJv0oDBJnjUl
+         LDoRq58/+fytTFADstOZWWo8t0Qi3Sr+jLN3Ery6LIuKusRPvWyxAKfUVM0H33+jqu1r
+         pfQSgwWCZKU9gWQ6WTSEFMD158+qMVMn6VGuOuer9zEw1XBN+rkY9hhQIL7PuxMVMQC0
+         ptuA==
+X-Gm-Message-State: AOAM531pqkk1Ed2aFWzexs0yaLQ6HI3ft7ZGnPVUzUxi86nGt/aAxjF3
+        qHIuJq1aIevhwXbsb8m69OQ0rQeQjKY=
+X-Google-Smtp-Source: ABdhPJzb2Oy2KHD7blNoWFU+7dfaY6NUQZhgukPyDaqmXS3SPggM6Y8slRYZ4fbK8cld6zYI5O1x1+SGBYk=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:f4a7:8e16:f301:160])
+ (user=badhri job=sendgmr) by 2002:a25:b94b:: with SMTP id s11mr34233129ybm.439.1643170009692;
+ Tue, 25 Jan 2022 20:06:49 -0800 (PST)
+Date:   Tue, 25 Jan 2022 20:06:45 -0800
+Message-Id: <20220126040645.3187200-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+Subject: [PATCH v3 2/2] usb: typec: tcpm: Do not disconnect when receiving VSAFE0V
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 12:52:52 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+With some chargers, vbus might momentarily raise above VSAFE5V and fall
+back to 0V causing VSAFE0V to be triggered. This will report a VBUS off
+event causing TCPM to transition to SNK_UNATTACHED state where it
+should be waiting in either SNK_ATTACH_WAIT or SNK_DEBOUNCED state.
+This patch makes TCPM avoid VSAFE0V events while in SNK_ATTACH_WAIT
+or SNK_DEBOUNCED state.
 
-> > On Wed, 26 Jan 2022 09:35:38 +0900
-> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >   
-> > > I think Kees' idea seems better. If you and Beau are good, I will update
-> > > the macros for __rel_loc. (This requires to change some user-space
-> > > application which Beau is making too.)  
-> > 
-> > If Beau is OK with it, I'm OK with it too. I need to release a new version
-> > of libtraceevent anyway, and I can make the update for that too.
-> > 
-> > Who's adding the patch (if Beau says it's OK), you or Kees?  
-> 
-> This will update the __rel_loc spec, so I'll do it :)
+Stub from the spec:
+    "4.5.2.2.4.2 Exiting from AttachWait.SNK State
+    A Sink shall transition to Unattached.SNK when the state of both
+    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
+    A DRP shall transition to Unattached.SRC when the state of both
+    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
 
-As I replied to the other email, I don't think we want to do this.
+[23.194131] CC1: 0 -> 0, CC2: 0 -> 5 [state SNK_UNATTACHED, polarity 0, connected]
+[23.201777] state change SNK_UNATTACHED -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+[23.209949] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+[23.300579] VBUS off
+[23.300668] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [rev3 NONE_AMS]
+[23.301014] VBUS VSAFE0V
+[23.301111] Start toggling
 
-As "rel" means relative, I think it makes more sense to keep it as is, and
-not have it just be from the data section. That may be even more confusing.
+Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
+Cc: stable@vger.kernel.org
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+---
+Changes since v1:
+- Fix typos stated by Guenter Roeck.
+Changes since v2:
+- Add reviewed-by/acked-by tags
+---
+ drivers/usb/typec/tcpm/tcpm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-But I'll wait for Beau to answer.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 3bf79f52bd34..0e0985355a14 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5264,6 +5264,10 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
+ 	case PR_SWAP_SNK_SRC_SOURCE_ON:
+ 		/* Do nothing, vsafe0v is expected during transition */
+ 		break;
++	case SNK_ATTACH_WAIT:
++	case SNK_DEBOUNCED:
++		/* Do nothing, still waiting for VSAFE5V to connect */
++		break;
+ 	default:
+ 		if (port->pwr_role == TYPEC_SINK && port->auto_vbus_discharge_enabled)
+ 			tcpm_set_state(port, SNK_UNATTACHED, 0);
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
 
-Note, I added both your and Kees patches to my queue and I'm currently
-testing it. You can see what I'm testing here:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git/log/?h=ftrace/core
-
--- Steve

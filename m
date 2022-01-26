@@ -2,101 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 744D649C8BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A575449C8C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240799AbiAZLgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240790AbiAZLgE (ORCPT
+        id S240804AbiAZLg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:36:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:56004 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240790AbiAZLg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:36:04 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F040C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:36:04 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id n8so27440237wmk.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:36:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wTvnkKEb+4UL86WLI4y9ZHDzYIRRSQJF903Pn2y7+HU=;
-        b=jte/6bj9Lu4Bn2k+uHE6Nlb3BHk5VedwUaNZG2hSiwCE7TR4bBfsTigqHAcN3aXB1Q
-         3dgOb9H4cRMzlz9RYKQWB9+xtrcxyz/kWLe/9yrdAD3gEcPnR8eKaF4UbzvipPkBdCfW
-         pCoYATosVlFVnGSArIihhOrsDJFkYvI7ZxCgMs5m899RVlIJM++jFILUgkLX82FYA0O+
-         6xZqTmsmGEV6PMGTX5lziQUM/jYrg6g7+3U72oFv8wtKruHpslTaroqVL6847EWsBxP8
-         XblL5KZKFVBkJb8SvhZgxL8hYjK9WMrd7ugCzgR0swA+c+zg6TBvc35nE6BA+FF6SGZM
-         vt0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wTvnkKEb+4UL86WLI4y9ZHDzYIRRSQJF903Pn2y7+HU=;
-        b=LaK+H8N/FM7gffbWnWl0hHSj5LlB+bfYEIgOrcmA3LAeRHw/pl9o2C2zEDhVtM8WOO
-         03yO4w1e4qykaRtQKgKJMcUkAdcWtwB3T5Uod1eGgQra7spk+KWqa5zitloOUL30DK3T
-         XdglmNSe7zpfzWDVl98bdCJ/P7iRJU0kZR1JkjdETl9xQSmjp3DgD2VJr+tcWMgBBEPM
-         riVpbmgR0bC9RTgQ/RjkzfgQOBJNOBHA2av/xDB2MiGv3WGfBc+BYNeTwq/uRfL6RN8e
-         7H2x3l7VOruFXkkc0+AfIQjpsWCjySD1xEz49frYG0YLnMByJvLQnKh50GWzruoVyRAM
-         mrjA==
-X-Gm-Message-State: AOAM533vep9kTdWofw6MZvn2u49F6ekVU2DqGD2gM/XoP7Er5+A1P7LA
-        YrglUJBNWQQ+aOTvIROQo88k0Q==
-X-Google-Smtp-Source: ABdhPJxNol80N6KgPVyzOBjJcP+P3qPnV0rBGrzx5NQUKiryTqB/K9m2g9NoTimj/hv+KNyRbSBHhw==
-X-Received: by 2002:a7b:cd14:: with SMTP id f20mr7156768wmj.110.1643196962831;
-        Wed, 26 Jan 2022 03:36:02 -0800 (PST)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id n14sm11999188wri.75.2022.01.26.03.36.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 03:36:02 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 4/4]  ASoC: qdsp6: q6apm-dai: only stop graphs that are started
-Date:   Wed, 26 Jan 2022 11:35:49 +0000
-Message-Id: <20220126113549.8853-5-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20220126113549.8853-1-srinivas.kandagatla@linaro.org>
-References: <20220126113549.8853-1-srinivas.kandagatla@linaro.org>
+        Wed, 26 Jan 2022 06:36:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33AC4B81CA9;
+        Wed, 26 Jan 2022 11:36:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD8ACC340E3;
+        Wed, 26 Jan 2022 11:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643196986;
+        bh=GHeHlsvXCNKkFQP+IuCKOX43wwk37uoc7LzHlpZ8P2s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DxFgKLu9Ms4VLfvBqkUMjxJpdhebgHNZNqLKVZalbrrs9z4tg5ZpwQtq0Jbu0USu1
+         bkLw3Xsaw/sTWCcyC+a+sNf4w71gpfLrTTu4tB+hXHiSPNgmjgpdCe+YiPJaQq2p/d
+         Ysji4KTQgLYMFZqdnYXoHMJWGP4sKIoniX+F8drO9/Y6tu/tPL8A9sKMZpa+MZibI1
+         2lQAZHghHi5CEeBM/gqslCBrXZA88FRYdS5FV/YmN5twT/VfTp2W0om01xEDYFt3PA
+         XNOhCBOfI3+Mw8IYju+6hsh4EHcVCgyvT9vy8vA5RBm2q33J1tA4i+aspv+NtvtXMx
+         RSiOpqMfM2vrw==
+Date:   Wed, 26 Jan 2022 17:06:18 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
+        sricharan@codeaurora.org
+Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
+ on READID
+Message-ID: <20220126113618.GB212068@thinkpad>
+References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
+ <20220114082718.32a2fc83@xps13>
+ <20220126111613.3ab0021e@xps13>
+ <20220126103316.GA212068@thinkpad>
+ <20220126114200.4cc3c21b@xps13>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220126114200.4cc3c21b@xps13>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Its possible that the sound card is just opened and closed without actually
-playing stream, ex: if the audio file itself is missing.
+On Wed, Jan 26, 2022 at 11:42:00AM +0100, Miquel Raynal wrote:
+> Hi Mani,
+> 
+> mani@kernel.org wrote on Wed, 26 Jan 2022 16:03:16 +0530:
+> 
+> > On Wed, Jan 26, 2022 at 11:16:13AM +0100, Miquel Raynal wrote:
+> > > Hello,
+> > > 
+> > > miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 +0100:
+> > >   
+> > > > Hi Konrad,
+> > > > 
+> > > > konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 19:44:26 +0100:
+> > > >   
+> > > > > While I have absolutely 0 idea why and how, running clear_bam_transaction
+> > > > > when READID is issued makes the DMA totally clog up and refuse to function
+> > > > > at all on mdm9607. In fact, it is so bad that all the data gets garbled
+> > > > > and after a short while in the nand probe flow, the CPU decides that
+> > > > > sepuku is the only option.
+> > > > > 
+> > > > > Removing _READID from the if condition makes it work like a charm, I can
+> > > > > read data and mount partitions without a problem.
+> > > > > 
+> > > > > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > > > > ---
+> > > > > This is totally just an observation which took me an inhumane amount of
+> > > > > debug prints to find.. perhaps there's a better reason behind this, but
+> > > > > I can't seem to find any answers.. Therefore, this is a BIG RFC!    
+> > > > 
+> > > > I'm adding two people from codeaurora who worked a lot on this driver.
+> > > > Hopefully they will have an idea :)  
+> > > 
+> > > Sadre, I've spent a significant amount of time reviewing your patches,
+> > > now it's your turn to not take a month to answer to your peers
+> > > proposals.
+> > > 
+> > > Please help reviewing this patch.
+> > >   
+> > 
+> > Sorry. I was hoping that Qcom folks would chime in as I don't have any idea
+> > about the mdm9607 platform. It could be that the mail server migration from
+> > codeaurora to quicinc put a barrier here.
+> > 
+> > Let me ping them internally.
+> 
+> Oh, ok, I didn't know. Thanks!
+> 
 
-Even in such cases we do call stop on graphs that are not yet started.
-DSP can throw errors in such cases, so add a check to see if the graph
-was started before stopping it.
+Pinged them.
 
-Fixes: 9b4fe0f1cd79 ("ASoC: qdsp6: audioreach: add q6apm-dai support")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/qcom/qdsp6/q6apm-dai.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+> > > BTW why is this driver still using cmdfund? It should have been
+> > > migrated to ->exec_op() a long time ago.  
+> > 
+> > I'll look into it.
+> 
+> That would be great, given the number of updates this driver has
+> received, it would be nice to tackle the legacy bits there.
+> 
 
-diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
-index eb1c3aec479b..19c4a90ec1ea 100644
---- a/sound/soc/qcom/qdsp6/q6apm-dai.c
-+++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
-@@ -308,8 +308,11 @@ static int q6apm_dai_close(struct snd_soc_component *component,
- 	struct snd_pcm_runtime *runtime = substream->runtime;
- 	struct q6apm_dai_rtd *prtd = runtime->private_data;
- 
--	q6apm_graph_stop(prtd->graph);
--	q6apm_unmap_memory_regions(prtd->graph, substream->stream);
-+	if (prtd->state) { /* only stop graph that is started */
-+		q6apm_graph_stop(prtd->graph);
-+		q6apm_unmap_memory_regions(prtd->graph, substream->stream);
-+	}
-+
- 	q6apm_graph_close(prtd->graph);
- 	prtd->graph = NULL;
- 	kfree(prtd);
--- 
-2.21.0
+Sure! I've added this to my to-do list for the coming weeks.
 
+Thanks,
+Mani
+
+> Thanks,
+> Miquèl

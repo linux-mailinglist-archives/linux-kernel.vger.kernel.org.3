@@ -2,91 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8F049D467
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48AC49D469
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbiAZVVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
+        id S231955AbiAZVWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:22:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiAZVVK (ORCPT
+        with ESMTP id S229554AbiAZVWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:21:10 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46113C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:21:10 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id o12so1216840eju.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:21:10 -0800 (PST)
+        Wed, 26 Jan 2022 16:22:34 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2E2C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:22:34 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id o11so864011pjf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:22:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=sfddJG8Ne5pbCi0QrdlrjT/b50oZdx4/kvMtR32BLbo=;
-        b=QIsyaeJL52rp+3sMUQ/8G9bavcWiwWOAPwduuNQzSJTmaE0wmWzJTUXcd6yb7OAw9N
-         /LvLL61/LhqDvVMoD6KM2ou8xCPrVa4xBjQssw+d+82eO2Oa0qqbrJ92xIiA/Fe297Qa
-         zq4y15SlqILN9HRRaHpiVKB2ZQcL2wllShwZl6avz7sIF7hIAEJBO1Mf/xbt3/Q2WHVV
-         LhorNt5gACpE8aU7l7t6YWYZI5IwvludQu6R+YzDS910gZAbgs8gXHu0RWtMcnwX7JqA
-         TFXPJsCamc9Sfz1aGZ8MmF8L77Hu24LMstwIWZb9AZfC9/6hX88Z9s7yMEg0Ird5Rcfi
-         3oDw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WwF77iiskBi0tVOR9grcbM66YdixrtGONmO8eGaXJuM=;
+        b=V1i1qj1oiJh62NhKr9M7Fyd5gODgYFX4zN1hQPxtYWlMzEXVMC85/I1+X2NgQD+LRC
+         0me7e11svC4wFCcWBEAGe3akZh8FmFEanhKJw44KLS3bM7/fvz2gn5TF9DpiHIZhEzCQ
+         NUd6Y9ikCnkixs3SjmCCVGnumh3odJE8CIpVE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=sfddJG8Ne5pbCi0QrdlrjT/b50oZdx4/kvMtR32BLbo=;
-        b=TH2cuwnVpWubZxZRvnxkWPhtyRwulfhpcwl8WRex+dQgicZqgB5YxaBBA32h+KmfyO
-         pqOKgro0EDToMWLKm4uZ19BOsvIPwVf9X9qZc5tixyXR5Cwyc2UwNkEHbqDAzOspzPsE
-         EfCxn0eLn+zRVC/TKQvUAV1z+qfGnDJgWzswDq6fND+PB6Sm5GlbVX/q6X40RTKXgvD5
-         Ioa6TxDUF/onRNHixquigR5E/Zwwd8OSTz9PNBO2BZGJj7houvs20MXJlfl5lsyWa2IZ
-         4Co8/4Uq3mWzmiRDWHjfkaIRAIrba16nR2tm36wCGP3lpaDRshMznMSH4kuzKW5NgOsT
-         KLbA==
-X-Gm-Message-State: AOAM533BmF8EjfgYiRjspgzk6G9wAhHaDNED9n40Ca1Va35Z4tpdeF76
-        btb4OrwZgRXhxIU1IPLEpe/GPGWJk922uMVd5Loj
-X-Google-Smtp-Source: ABdhPJxw3d5mnv3wPnmpUUVOKLaEA0jO8ZEylbqwXDPVekdv65G/G9q1/pcNh+v3zqOWTeUCasC3T9p1EGRX/t+n1iA=
-X-Received: by 2002:a17:907:3e1d:: with SMTP id hp29mr414495ejc.701.1643232068672;
- Wed, 26 Jan 2022 13:21:08 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WwF77iiskBi0tVOR9grcbM66YdixrtGONmO8eGaXJuM=;
+        b=kejsOK/J2OkLcnJX3a1hAKHYVgYEcJtRS6hvg2M0ArdZDRvWpR6MUocpuuL9VqroQ8
+         HsXhzQotRuAOI6L7ydyvz4j4L+qFNkCDHqf5zbFRb80RqeWolnmqa0vHoeImNSx7DyoK
+         FaSbLOii8pRWxS8qPBReJWcrGIy39lJkR2nt2xRUUPnHH9FuKSLevLEhsBIv6mTgrQZm
+         i3CO/O8Avob1j16XPDexnfT3qaodV2WC88GMSCJxW8Td/ZeF8N129rPx0f7WBnoCDgY2
+         A3/0INX/5EsQZungwZRyOB/QFLpFTX4csLa1sd7cUy9YvVeqr5eCk34JaIZB9z4o+H57
+         JIiA==
+X-Gm-Message-State: AOAM531r6Esjs78qzCVWqfKr/Co5PzvvigjpPw2Ut/SjS98s7qjMRu8V
+        1+wyUGZ8Vwj0/V6k63vEMOtQ4A==
+X-Google-Smtp-Source: ABdhPJzL9z4Pxpeqav6p9g9loj8DvsVgb6O3b+CmJ+Ds8EuMGEvhjepebp+uewcyGUBCsYwcuErZ9A==
+X-Received: by 2002:a17:902:ce8f:: with SMTP id f15mr518312plg.3.1643232153633;
+        Wed, 26 Jan 2022 13:22:33 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y13sm3009620pfi.2.2022.01.26.13.22.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 13:22:33 -0800 (PST)
+Date:   Wed, 26 Jan 2022 13:22:32 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Francis Laniel <laniel_francis@privacyrequired.com>,
+        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v3 3/3] vsprintf: Move space out of string literals in
+ fourcc_string()
+Message-ID: <202201261321.34794CCF3@keescook>
+References: <20220126141917.75399-1-andriy.shevchenko@linux.intel.com>
+ <20220126141917.75399-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-8-cgzones@googlemail.com>
-In-Reply-To: <20220125141422.32655-8-cgzones@googlemail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 26 Jan 2022 16:20:57 -0500
-Message-ID: <CAHC9VhSQW3E=K+nDF8tdTi2AxxN91b9Ufk-FSE7XpXimHTA4tA@mail.gmail.com>
-Subject: Re: [PATCH 9/9] selinux: drop unused macro
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Jeff Vander Stoep <jeffv@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126141917.75399-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 9:15 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> The macro _DEBUG_HASHES is nowhere used. The configuration DEBUG_HASHES
-> enables debugging of the SELinux hash tables, but the with an underscore
-> prefixed macro definition has no direct impact or any documentation.
->
-> Reported by clang [-Wunused-macros]
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+On Wed, Jan 26, 2022 at 04:19:17PM +0200, Andy Shevchenko wrote:
+> The literals "big-endian" and "little-endian" may be potentially
+> occurred in other places. Dropping space allows linker to
+> "compress" them by using only a single copy.
+> 
+> Rasmus suggested, while at it, replacing strcpy() + strlen() by
+> p = stpcpy(), which is done here as well.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 > ---
->  security/selinux/ss/policydb.c | 2 --
->  1 file changed, 2 deletions(-)
+> v3: no changes
+>  lib/vsprintf.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+> index 4e8f3e9acb99..e2a1d89f1a5c 100644
+> --- a/lib/vsprintf.c
+> +++ b/lib/vsprintf.c
+> @@ -1781,8 +1781,8 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
+>  		*p++ = isascii(c) && isprint(c) ? c : '.';
+>  	}
+>  
+> -	strcpy(p, orig & BIT(31) ? " big-endian" : " little-endian");
+> -	p += strlen(p);
+> +	*p++ = ' ';
+> +	p = stpcpy(p, orig & BIT(31) ? "big-endian" : "little-endian");
+>  
+>  	*p++ = ' ';
+>  	*p++ = '(';
 
-Merged into selinux/next, thanks Christian.  This macro definition
-predates the move to git so there is no quick answer to "why is this
-here?", but my best guess is that it is an artifact of a developer
-"disabling" the DEBUG_HASHES macro by adding an underscore to the
-front.  Regardless of the reason behind it, I agree it should be
-removed.
+No need for any of the manual construction nor stpcpy():
 
---=20
-paul-moore.com
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index d7ad44f2c8f5..aef8bd2789a9 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -1788,14 +1788,9 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
+ 		*p++ = isascii(c) && isprint(c) ? c : '.';
+ 	}
+ 
+-	strcpy(p, *fourcc & BIT(31) ? " big-endian" : " little-endian");
+-	p += strlen(p);
+-
+-	*p++ = ' ';
+-	*p++ = '(';
+-	p = special_hex_number(p, output + sizeof(output) - 2, *fourcc, sizeof(u32));
+-	*p++ = ')';
+-	*p = '\0';
++	snprintf(p, sizeof(output) - sizeof(*fourcc), " %s (0x%x)",
++		*fourcc & BIT(31) ? "big-endian" : " little-endian",
++		*fourcc);
+ 
+ 	return string(buf, end, output, spec);
+ }
+
+
+(untested)
+
+-- 
+Kees Cook

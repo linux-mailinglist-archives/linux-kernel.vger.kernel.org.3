@@ -2,109 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F6149C742
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3357C49C745
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239759AbiAZKPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S232484AbiAZKQZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Jan 2022 05:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239775AbiAZKO7 (ORCPT
+        with ESMTP id S232071AbiAZKQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:14:59 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C355C06174E
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:14:57 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id e17so7522965ljk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:14:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=yYyA7Dvhv5JH05dt+/m//IIi7iqHJvsuMpECJGKlvh4=;
-        b=ilxqhKe48DT0NtXyXNY+cwIN9bMKeCydVgQ28UFvs4WAPnILVev774zeZ453kQKnQr
-         U6qarLtWu3Hp311kAdhqG000rePikNFW3iXtbXPS3culI+90BrtYfSZbkn+zw6dA1Ik6
-         FKRm5ntMIhmw2JZ1qnHJGh+KpQfTNPQ7B3QS+CLf6/uH4asCKMntcZIgDnObRYySOqaN
-         pcnTTgqTkvTOiRYORuB7fBsbqBEa8sxC2CrIbbw26lZqNzxEyPN8FqlfW0epXJPoHLzH
-         zBIt0MG8FuCM4t0WrMj8hgeDcbDVQZLDe7RqBx2TUfocu0usIgfUuTXcxZbG4BALBI1n
-         dAIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=yYyA7Dvhv5JH05dt+/m//IIi7iqHJvsuMpECJGKlvh4=;
-        b=ybuTW6Ux5lERmCHBWk8IwHAR6SJ6LdFfaO7hr612tzY5z21hQxRV4JnYJ0elhyztCD
-         cqfYLHOgoIG8qBEd7mgR8QwBmn1JY2SWg6U+AIREWRyEkhn1rKjO1R9rVbFHQhjtG5w9
-         7ww6GNfcpiZFHNK4CInwya2ROmOVPHEhzJKL06yIWEpcbYXS2BS8utdGio32R/uqVdk0
-         CfES8nEr1/kRrn2H58oYms71FyuH4PSzamJ8z+0CrG27FLE/H1T0Z7LTv2LOjw3Mty7p
-         3EF/duyyziCRqqoM0r1PiAPo1nqP8vB/bUmOkffeKQ/LCGEvgwNfvF+LEo6/FQmtWDOF
-         L5VQ==
-X-Gm-Message-State: AOAM530k1BHy/eYn9ZUuZ9CH4hAmstauK9wi71b7uVn1mDQ5KOIW9PVX
-        aL6s6qZBNxeJx58meYbo4jVWDQ==
-X-Google-Smtp-Source: ABdhPJzgbNmJSZlbIDHCg+cktCi1VJ/8rcgjfp4OaMvn8WwhJ5KejctOC6lXhpjNgE3oISrMv4IIjg==
-X-Received: by 2002:a2e:9609:: with SMTP id v9mr17890283ljh.306.1643192095350;
-        Wed, 26 Jan 2022 02:14:55 -0800 (PST)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id h13sm1351906lfv.100.2022.01.26.02.14.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 02:14:54 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Madalin Bucur <madalin.bucur@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 5/5] dt-bindings: net: xgmac_mdio: Add "clock-frequency" and "suppress-preamble"
-Date:   Wed, 26 Jan 2022 11:14:32 +0100
-Message-Id: <20220126101432.822818-6-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220126101432.822818-1-tobias@waldekranz.com>
-References: <20220126101432.822818-1-tobias@waldekranz.com>
+        Wed, 26 Jan 2022 05:16:24 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4425DC06161C;
+        Wed, 26 Jan 2022 02:16:21 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B4238100009;
+        Wed, 26 Jan 2022 10:16:15 +0000 (UTC)
+Date:   Wed, 26 Jan 2022 11:16:13 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
+        sricharan@codeaurora.org
+Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
+ on READID
+Message-ID: <20220126111613.3ab0021e@xps13>
+In-Reply-To: <20220114082718.32a2fc83@xps13>
+References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
+        <20220114082718.32a2fc83@xps13>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Organization: Westermo
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver now supports the standard "clock-frequency" and
-"suppress-preamble" properties, do document them in the binding
-description.
+Hello,
 
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
----
- .../devicetree/bindings/net/fsl-fman.txt      | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 +0100:
 
-diff --git a/Documentation/devicetree/bindings/net/fsl-fman.txt b/Documentation/devicetree/bindings/net/fsl-fman.txt
-index cd5288fb4318..801efc7d6818 100644
---- a/Documentation/devicetree/bindings/net/fsl-fman.txt
-+++ b/Documentation/devicetree/bindings/net/fsl-fman.txt
-@@ -388,6 +388,25 @@ PROPERTIES
- 		Value type: <prop-encoded-array>
- 		Definition: A standard property.
- 
-+- clocks
-+		Usage: optional
-+		Value type: <phandle>
-+		Definition: A reference to the input clock of the controller
-+		from which the MDC frequency is derived.
-+
-+- clock-frequency
-+		Usage: optional
-+		Value type: <u32>
-+		Definition: Specifies the external MDC frequency, in Hertz, to
-+		be used. Requires that the input clock is specified in the
-+		"clocks" property. See also: mdio.yaml.
-+
-+- suppress-preamble
-+		Usage: optional
-+		Value type: <boolean>
-+		Definition: Disable generation of preamble bits. See also:
-+		mdio.yaml.
-+
- - interrupts
- 		Usage: required for external MDIO
- 		Value type: <prop-encoded-array>
--- 
-2.25.1
+> Hi Konrad,
+> 
+> konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 19:44:26 +0100:
+> 
+> > While I have absolutely 0 idea why and how, running clear_bam_transaction
+> > when READID is issued makes the DMA totally clog up and refuse to function
+> > at all on mdm9607. In fact, it is so bad that all the data gets garbled
+> > and after a short while in the nand probe flow, the CPU decides that
+> > sepuku is the only option.
+> > 
+> > Removing _READID from the if condition makes it work like a charm, I can
+> > read data and mount partitions without a problem.
+> > 
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > ---
+> > This is totally just an observation which took me an inhumane amount of
+> > debug prints to find.. perhaps there's a better reason behind this, but
+> > I can't seem to find any answers.. Therefore, this is a BIG RFC!  
+> 
+> I'm adding two people from codeaurora who worked a lot on this driver.
+> Hopefully they will have an idea :)
 
+Sadre, I've spent a significant amount of time reviewing your patches,
+now it's your turn to not take a month to answer to your peers
+proposals.
+
+Please help reviewing this patch.
+
+BTW why is this driver still using cmdfund? It should have been
+migrated to ->exec_op() a long time ago.
+
+Thanks,
+Miquèl

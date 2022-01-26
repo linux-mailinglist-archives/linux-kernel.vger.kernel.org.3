@@ -2,185 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A7E49C8D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843EA49C8E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240829AbiAZLlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:41:45 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:35066 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbiAZLln (ORCPT
+        id S240847AbiAZLm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:42:58 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58792 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240850AbiAZLmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:41:43 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 26 Jan 2022 06:42:49 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 59D031F396;
-        Wed, 26 Jan 2022 11:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643197302; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EVy/lJnzFPtdhzlf+AMRGSrpqoRidNBqhqETWPdAk2k=;
-        b=Jdt02zjRukxWFhN5TNlKIEIt7p7FSck1p9BRy9jqL0acAKxXpr7ZHEP2m24IjW7l72nsC4
-        l92Kh21aX9erprxmAatIT+pM0rV9rmpdtseFWe923zpo9twD8SxoVV1Fg4EA2jiWIRxRlf
-        GERioANfC6WJEAaESN8mPqi/VGpAnE4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643197302;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EVy/lJnzFPtdhzlf+AMRGSrpqoRidNBqhqETWPdAk2k=;
-        b=OtDB4TAryW6a0qql7Y9EXRxM7BGlGUrCTYXuaE1Tj/9zFmjSi+Mj1kdACXqy3CuCS6xudU
-        OvIqnoG4pI8pQLBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0719413BA2;
-        Wed, 26 Jan 2022 11:41:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7/xnAHYz8WHyGQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 26 Jan 2022 11:41:42 +0000
-Message-ID: <75a10e6f-ade7-01d9-9523-9a1936f8a2cc@suse.de>
-Date:   Wed, 26 Jan 2022 12:41:41 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DE05B81620;
+        Wed, 26 Jan 2022 11:42:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B71D1C340E3;
+        Wed, 26 Jan 2022 11:42:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643197367;
+        bh=t9+X/e4kJrfvP+h2PpV77QbmVxkh7QVcipQpoeJ2Kwg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JQRELume7i1k+Rq1xY8eBFiq0oCnOAccaKsOGV8BOMAfOofEsx5a+1g5FN6Pm9BYg
+         5hDOuB0YaIKpmdD5V4OlKeG+hc1M3bCslNuhFURpO9omiTMFzpF6Qsj0+jR2LZt+sC
+         aHNid9PV/ym0ZjrzYRCEnw1iIKJIOv26vUsVW+Ic=
+Date:   Wed, 26 Jan 2022 12:42:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jack Wang <jack.wang.usish@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
+        Guoqing Jiang <jiangguoqing@kylinos.cn>,
+        Song Liu <song@kernel.org>,
+        Guillaume Morin <guillaume@morinfr.org>
+Subject: Re: [PATCH 5.10 01/25] md: revert io stats accounting
+Message-ID: <YfEztOTIhGjm3Hvs@kroah.com>
+References: <20220114081542.698002137@linuxfoundation.org>
+ <20220114081542.746291845@linuxfoundation.org>
+ <CA+res+S1GcDzM6hnmar+s1k3ggswURZ+_8BqweifShCTjVJ2aQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Carlis <zhangxuezhi1@yulong.com>, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Andy Shevchenko <andy@kernel.org>
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
- <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
- <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------FMGu0nSHisxtDBmT5BSNd3eL"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+res+S1GcDzM6hnmar+s1k3ggswURZ+_8BqweifShCTjVJ2aQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------FMGu0nSHisxtDBmT5BSNd3eL
-Content-Type: multipart/mixed; boundary="------------SFdg6HIZAysgnDaOZyDvGKX2";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Helge Deller <deller@gmx.de>, Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Phillip Potter <phil@philpotter.co.uk>, Lee Jones <lee.jones@linaro.org>,
- Heiner Kallweit <hkallweit1@gmail.com>, Carlis <zhangxuezhi1@yulong.com>,
- linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
- linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Michael Hennerich <michael.hennerich@analog.com>,
- Andy Shevchenko <andy@kernel.org>
-Message-ID: <75a10e6f-ade7-01d9-9523-9a1936f8a2cc@suse.de>
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
- <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
- <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
-In-Reply-To: <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
+On Wed, Jan 26, 2022 at 11:09:46AM +0100, Jack Wang wrote:
+> Hi,
+> 
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> 于2022年1月14日周五 19:57写道：
+> >
+> > From: Guoqing Jiang <jgq516@gmail.com>
+> >
+> > commit ad3fc798800fb7ca04c1dfc439dba946818048d8 upstream.
+> >
+> > The commit 41d2d848e5c0 ("md: improve io stats accounting") could cause
+> > double fault problem per the report [1], and also it is not correct to
+> > change ->bi_end_io if md don't own it, so let's revert it.
+> >
+> > And io stats accounting will be replemented in later commits.
+> >
+> > [1]. https://lore.kernel.org/linux-raid/3bf04253-3fad-434a-63a7-20214e38cf26@gmail.com/T/#t
+> >
+> > Fixes: 41d2d848e5c0 ("md: improve io stats accounting")
+> > Signed-off-by: Guoqing Jiang <jiangguoqing@kylinos.cn>
+> > Signed-off-by: Song Liu <song@kernel.org>
+> > [GM: backport to 5.10-stable]
+> > Signed-off-by: Guillaume Morin <guillaume@morinfr.org>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/md/md.c |   57 +++++++++++---------------------------------------------
+> >  drivers/md/md.h |    1
+> >  2 files changed, 12 insertions(+), 46 deletions(-)
+> >
+> > --- a/drivers/md/md.c
+> > +++ b/drivers/md/md.c
+> > @@ -459,34 +459,12 @@ check_suspended:
+> >  }
+> >  EXPORT_SYMBOL(md_handle_request);
+> >
+> > -struct md_io {
+> > -       struct mddev *mddev;
+> > -       bio_end_io_t *orig_bi_end_io;
+> > -       void *orig_bi_private;
+> > -       unsigned long start_time;
+> > -       struct hd_struct *part;
+> > -};
+> > -
+> > -static void md_end_io(struct bio *bio)
+> > -{
+> > -       struct md_io *md_io = bio->bi_private;
+> > -       struct mddev *mddev = md_io->mddev;
+> > -
+> > -       part_end_io_acct(md_io->part, bio, md_io->start_time);
+> > -
+> > -       bio->bi_end_io = md_io->orig_bi_end_io;
+> > -       bio->bi_private = md_io->orig_bi_private;
+> > -
+> > -       mempool_free(md_io, &mddev->md_io_pool);
+> > -
+> > -       if (bio->bi_end_io)
+> > -               bio->bi_end_io(bio);
+> > -}
+> > -
+> >  static blk_qc_t md_submit_bio(struct bio *bio)
+> >  {
+> >         const int rw = bio_data_dir(bio);
+> > +       const int sgrp = op_stat_group(bio_op(bio));
+> >         struct mddev *mddev = bio->bi_disk->private_data;
+> > +       unsigned int sectors;
+> >
+> >         if (mddev == NULL || mddev->pers == NULL) {
+> >                 bio_io_error(bio);
+> > @@ -507,26 +485,21 @@ static blk_qc_t md_submit_bio(struct bio
+> >                 return BLK_QC_T_NONE;
+> >         }
+> >
+> > -       if (bio->bi_end_io != md_end_io) {
+> > -               struct md_io *md_io;
+> > -
+> > -               md_io = mempool_alloc(&mddev->md_io_pool, GFP_NOIO);
+> > -               md_io->mddev = mddev;
+> > -               md_io->orig_bi_end_io = bio->bi_end_io;
+> > -               md_io->orig_bi_private = bio->bi_private;
+> > -
+> > -               bio->bi_end_io = md_end_io;
+> > -               bio->bi_private = md_io;
+> > -
+> > -               md_io->start_time = part_start_io_acct(mddev->gendisk,
+> > -                                                      &md_io->part, bio);
+> > -       }
+> > -
+> > +       /*
+> > +        * save the sectors now since our bio can
+> > +        * go away inside make_request
+> > +        */
+> > +       sectors = bio_sectors(bio);
+> This code snip is not inside the original patch, and it's not in
+> latest upstream too.
+> >         /* bio could be mergeable after passing to underlayer */
+> >         bio->bi_opf &= ~REQ_NOMERGE;
+> >
+> >         md_handle_request(mddev, bio);
+> >
+> > +       part_stat_lock();
+> > +       part_stat_inc(&mddev->gendisk->part0, ios[sgrp]);
+> > +       part_stat_add(&mddev->gendisk->part0, sectors[sgrp], sectors);
+> > +       part_stat_unlock();
+> > +
+> same here, this code snip is not inside the original patch, and it's
+> not in latest upstream too.
 
---------------SFdg6HIZAysgnDaOZyDvGKX2
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Is it a problem?
 
-SGkNCg0KQW0gMjYuMDEuMjIgdW0gMTE6NTkgc2NocmllYiBIZWxnZSBEZWxsZXI6DQo+IE9u
-IDEvMjYvMjIgMTE6MDIsIEFuZHkgU2hldmNoZW5rbyB3cm90ZToNCj4+IE9uIFdlZCwgSmFu
-IDI2LCAyMDIyIGF0IDEwOjUyIEFNIFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBz
-dXNlLmRlPiB3cm90ZToNCj4+PiBBbSAyNS4wMS4yMiB1bSAyMToyMSBzY2hyaWViIEFuZHkg
-U2hldmNoZW5rbzoNCj4+Pj4gU2luY2Ugd2UgZ290IGEgbWFpbnRhaW5lciBmb3IgZmJkZXYs
-IEkgd291bGQgbGlrZSB0bw0KPj4+PiB1bm9ycGhhbiBmYnRmdCAod2l0aCB0aGUgaWRlYSBv
-ZiBzZW5kaW5nIFBScyB0byBIZWxnZSkNCj4+Pj4gYW5kIG1vdmUgaXQgb3V0IG9mIHN0YWdp
-bmcgc2luY2UgdGhlcmUgaXMgbm8gbW9yZSBjbGVhbg0KPj4+PiB1cCB3b3JrIGV4cGVjdGVk
-IGFuZCBubyBtb3JlIGRyaXZlcnMgZWl0aGVyLg0KPj4+Pg0KPj4+PiBUaG91Z2h0cz8NCj4g
-DQo+IFBlcnNvbmFsbHkgSSdtIGluIGZhdm91ciBvZiB0aGlzIHByb3Bvc2FsIGFuZCB3b3Vs
-ZCBiZSBoYXBweQ0KPiB0byB0YWtlIHBhdGNoZXMgZm9yIGl0IHRocm91Z2ggdGhlIGZiZGV2
-IGdpdCB0cmVlLg0KPiBSZWFzb25pbmcgYmVsb3cuLi4NCj4gDQo+Pj4gQnV0IHdoeT8gV2Ug
-YWxyZWFkeSBoYXZlIERSTSBkcml2ZXJzIGZvciBzb21lIG9mIHRoZXNlIGRldmljZXMuDQo+
-Pg0KPj4gTm8sIHdlIGRvIG5vdCAob25seSBhIGZldyBhcmUgYXZhaWxhYmxlKS4NCj4gDQo+
-IHNlZW1zIHRvIGJlIDIgb3V0IG9mIDEwIChhY2NvcmRpbmcgdG8gdGhlIG90aGVyIG1haWxz
-KQ0KDQpGWUkgaXQncyBpbGk5MTYzIGFuZCBoeDgzNTdkLiBCb3RoIG9mIHRob3NlIGFyZSBv
-ZiB0aGUgc2FtZSBzaXplICgnd2MgDQotbCcpIG9uIERSTSBhbmQgZmJkZXY6IDIwMCB0byAz
-MDAgbG9jLg0KDQo+Pj4gUG9ydGluZyB0aGUgb3RoZXJzIHRvIERSTSBpcyBzdWNoIGEgYmV0
-dGVyIGxvbmctdGVybSBwbGFuLiAgT1RPSCwNCj4+PiBhcyBubyBvbmUgaGFzIHNob3duIHVw
-IGFuZCBjb252ZXJ0ZWQgdGhlbSwgbWF5YmUgdGhleSBzaG91bGQgYmUNCj4+PiBsZWZ0IGRl
-YWQgb3IgcmVtb3ZlZCBlbnRpcmVseS4NCj4+DQo+PiBBcyBJIG1lbnRpb25lZCBhYm92ZSB0
-aGVyZSBhcmUgZGV2aWNlcyB0aGF0IG5vYm9keSB3aWxsIHRha2UgdGltZSB0bw0KPj4gcG9y
-dCB0byBhIHdheSB0b28gY29tcGxleCBEUk0gc3Vic3lzdGVtLiBCdXQgdGhlIGRldmljZXMg
-YXJlIGNoZWFwIGFuZA0KPj4gcXVpdGUgd2lkZXNwcmVhZCBpbiB0aGUgZW1iZWRkZWQgd29y
-bGQuIEknbSBpbiBwb3NzZXNzaW9uIG9mIDMgb3IgNA0KPj4gZGlmZmVyZW50IG1vZGVscyBh
-bmQgb25seSAxIGlzIHN1cHBvcnRlZCBieSB0aW55IERSTS4NCj4+DQo+PiBPbiB0b3Agb2Yg
-dGhhdCB0aGUgc3VidGxlIGZhY3QgcGVvcGxlIGZvcmdvdCBhYm91dCBGQlRGVCBpcyB0aGF0
-IGl0DQo+PiBkb2VzIHN1cHBvcnQgcGFyYWxsZWwgaW50ZXJmYWNlICh5ZXMsIEkga25vdyB0
-aGF0IGl0J3Mgbm90IHBlcmZvcm1hbnQsDQo+PiBidXQgb25lIG9mIHRoZSBkaXNwbGF5cyBJ
-IGhhdmUgaXMgd2l0aCB0aGF0IHR5cGUgb2YgaW50ZXJmYWNlKS4NCj4gDQo+IEkgZG9uJ3Qg
-a25vdyB0aG9zZSBkZXZpY2VzLCBidXQgaXQgc2VlbXMgdGhleSBhcmUgc3RpbGwgYmVpbmcg
-dXNlZC4NCj4gDQo+IEFuZCB0aGUgcmVhc29ucyB3aHkgdGhleSBoYXZlIG5vdCBiZWVuIHBv
-cnRlZCB0byBEUk0geWV0IGlzDQo+IGxpa2VseSBiZWNhdXNlIGVpdGhlciBsYWNrIG9mIG1h
-bi1wb3dlciwgYSBzbG93LWRvd24gd2l0aCBEUk0gKGR1ZSB0bw0KPiBzbG93IGJ1cyBjb25u
-ZWN0aW9ucyBvciBpbmNyZWFzZWQgbWVtb3J5IHVzYWdlIHdpdGggRFJNKSwgb3INCj4gc2lt
-cGx5IHRoYXQgaXQncyB1c2VkIGluIGVtYmVkZGVkLWxpa2Ugc2NlbmFyaW9zIHdpdGggYSBs
-aW1pdGVkDQo+IHNldCBvZiB1c2Vyc3BhY2UgYXBwbGljYXRpb25zIGZvciB3aGljaCBleGlz
-dGluZyBmYmRldiBhY2Nlc3MgaXMgc3VmZmljaWVudC4NCj4gDQo+IEFnYWluLCBJIGRvbid0
-IGtub3cgdGhlIHJlYXNvbiBmb3IgdGhpcyBzcGVjaWZpYyBkZXZpY2VzLCBidXQgSSBrbm93
-DQo+IG9mIG90aGVyIGRldmljZXMgZm9yIHdoaWNoIHRob3NlIHJlYXNvbnMgYWJvdmUgYXJl
-IHZhbGlkLg0KPiBKdXN0IHRoZSBleGFtcGxlIEkgcG9zdGVkIHllc3RlcmRheSB3aGVyZSBh
-IHNpbXBsZSAidGltZSBkbWVzZyIgbmVlZGVkDQo+IHVuYWNjZWxlcmF0ZWQgMTkgc2Vjb25k
-cyBjb21wYXJlZCB0byAyIHNlY29uZHMgd2l0aCBhY2NlbGVyYXRpb24uDQo+IFNvLCBhcyBs
-b25nIGFzIGFjY2VsZXJhdGlvbiBpc24ndCBwb3NzaWJsZSB3aXRoIHRoYXQgZHJpdmVyIGlu
-DQo+IERSTSwgRFJNIGlzbid0IGEgcHJlZmVycmVkIHRhcmdldCB3aGVyZSB0aGUgZHJpdmVy
-IHNob3VsZCBiZSBwb3J0ZWQuDQo+IA0KPiBTbywgSSdkIGJlIGZpbmUgdG8gdGFrZSBpdCBp
-bnRvIGZiZGV2IHRyZWUuDQo+IA0KPiBJbnRlcmVzdGluZ2x5IHRoZXJlIGlzIGFub3RoZXIg
-ZmJkZXYgZHJpdmVyIGluIHN0YWdpbmcgKHNtNzUwZmIpIHdpdGgNCj4gc2ltaWxpYXIgaXNz
-dWVzLiBUaGUgVE9ETyBtZW50aW9ucyBhIHBvcnRpbmcgdG8gRFJNIHdoaWNoIGhhcHBlbnMg
-YXQNCj4gaHR0cHM6Ly9naXRsYWIuY29tL3N1ZGlwbS9zbTc1MC90cmVlL3NtNzUwDQo+IGJ1
-dCB0aGUgbGFzdCBjb21taXQgdGhlcmUgaXMgMyB5ZWFycyBhZ28uIEkgZG9uJ3Qga25vdyB3
-aHkgaXQgd2Fzbid0DQo+IGNvbnRpbnVlZCB5ZXQuDQoNCkl0J3MgYWx3YXlzIGZvciB0aGUg
-c2FtZSByZWFzb246IHRoZSBodyBpcyBvbGQgYW5kIGRldnMgaGF2ZSBtb3ZlZCBvbi4NCg0K
-QmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhp
-Y3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBH
-bWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4
-MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+> I think would be good keep it as the upstream version.
 
---------------SFdg6HIZAysgnDaOZyDvGKX2--
+Can you send a revert of this commit (it is in 5.10.92), and a backport
+of the correct fix?
 
---------------FMGu0nSHisxtDBmT5BSNd3eL
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+thanks,
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHxM3UFAwAAAAAACgkQlh/E3EQov+Dq
-aA/+NqIYjpyQCBoaYlZ9v9rY1ftCAGoiEIHZDzNBLya11KHZmvBMrHbY8JBFZZEqLJnAfgJXzDqC
-XgRL+OR1vE8jllNfFFF0pZvZyBFk+Ctunz/7xbN+Ti+a+x1bMG/BXBKbnpYrzfDolhTt78bQKbNO
-ZIADh5ETWSa/ORD6J20KUui0rX6UiY8sJ2EKPLbp5RsWiY16Oac73uv+FoMEiXRbSsaq7YXsgg13
-BLZj23pf+VwH7650UWjJUwpn119mxCOK2e8Cmn21XCX3MKB0n3FK1YB0mSe+rGLkzzX993+brnr1
-E5WXRmUu7TRmecnWgCYT9GM7ph6oIvR325yjqteUCePxUZvpdJ1FYZ0SjdZpLfGSxj1OaK3CAL/W
-TmFzMAdeyGAysCTTMC3En423mZVslmGuxybkR39T1rA6y4XTYWrFc6poNbJZ5adojh8CS6KjAQUS
-z63/JMKfKUq3QZHMi4b7yc6BrzVgpuFpFOk2F9u7TPWsLChjB5exMNK30YXkSD1Mw/Lsbd7ElvKF
-jA/s0h8rwqdi/92v1cEsKx8Y5ZJ9mNdX1A9a3AVZedvLXD3uDaby1C/nCJIfZzHvXMJhlUJzMwmq
-wDaTAFlyRBLIHh1FwtlkRfNXanT/MzTL5+R1QoXXRoxMolWZzWlgiKcStEF+4td2aQI8LIwxkeWR
-st4=
-=UZeu
------END PGP SIGNATURE-----
-
---------------FMGu0nSHisxtDBmT5BSNd3eL--
+greg k-h

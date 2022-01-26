@@ -2,292 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5AE949C015
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AFF49C018
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbiAZAW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 19:22:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiAZAWZ (ORCPT
+        id S235268AbiAZAWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 19:22:51 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:33541 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235301AbiAZAWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 19:22:25 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93859C06161C;
-        Tue, 25 Jan 2022 16:22:24 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id me13so34728253ejb.12;
-        Tue, 25 Jan 2022 16:22:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nz0fFNaJv8V071m+0tlnEEBLR27yRJyXOvGx0aRpT0o=;
-        b=K2u9l98i3ZTacNZzQAYnMwsDlash43oe/hAObffA9XOdQxLlMpPXn4sdivZqCzDzXk
-         p144mwg+T5Dp8wABrnJU4jo/LOavXuYaonWNPphB/7T6b6PFJulDQ4qZehzicPXI1AUF
-         51Nvn1qFE/jKfDPntnMVLpuz+yIlV0WCQXvOu8hduM6XN0QcqsuvMmDgLP4e7/lia5Qj
-         ZBWzCrdPYUsj7lfpGkTOTgHxtzH9emoEiaKhX+nXJyR7F4qwMyPNbc279mrJ+mKCY7ND
-         ekpGjoZ9Hhw+/Mwz/KdBbxJ7IoI+Ski8U/KAieyst3vLF8xnqLU1CjlQex7neakki33M
-         qZqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nz0fFNaJv8V071m+0tlnEEBLR27yRJyXOvGx0aRpT0o=;
-        b=Cx8yVXOkE9JXpAwIejVbAg86ZkGIu3rb8c2gIkmrW2MWnzDFS3tIiOmrkXpL17BeCH
-         cmHcvZ6xAuOqM2cYQ26m5SqcLfBmIRr2sEpUAI3hERs/RFLmW/BYDQ9aUZ5fNoepMPJU
-         V49hjrpjR1/9sDPOizGTydd27nR/0Y4Ne59b+pZt+LDdpTilPfgPxhkCdfUE8jmvWgt9
-         YGcaqhorPxiCLGboHG3AuPaM8TPxtkJvCHgHrpod07LG1yXPQLeXlk+cfq0U0Daz7D1Z
-         5j4mFMyJKMw+/wS7t77DmdehpKHXNAbGOvydCWS8qexSrwKOZXZvSjZBg4901Sy8h9vM
-         Q3lA==
-X-Gm-Message-State: AOAM532RA3GJmDWGpRMfXNQ0ALqhaGG+/Hm+sPHHedWr/lvFvY/54FFX
-        drLeReRpO5cSklObNgeBiDN1jkg0zX4=
-X-Google-Smtp-Source: ABdhPJyhpYTRraR77Gj1BHmcpNmWm3/OSvS/VadUPSsjlF47QGdVR58m7lme4Ai/LaBV9f4bSuZ5UA==
-X-Received: by 2002:a17:906:4fc4:: with SMTP id i4mr17308553ejw.81.1643156542797;
-        Tue, 25 Jan 2022 16:22:22 -0800 (PST)
-Received: from 127.0.0.1localhost ([85.255.233.187])
-        by smtp.gmail.com with ESMTPSA id gg14sm6779871ejb.62.2022.01.25.16.22.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 16:22:22 -0800 (PST)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org,
-        Stanislav Fomichev <sdf@google.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH for-next v4] cgroup/bpf: fast path skb BPF filtering
-Date:   Wed, 26 Jan 2022 00:22:13 +0000
-Message-Id: <94e36de3cc2b579e45f95c189a6f5378bf1480ac.1643156174.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Jan 2022 19:22:45 -0500
+Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mekzb-1meYNS2RHB-00aiK6; Wed, 26 Jan 2022 01:22:43 +0100
+Received: by mail-wr1-f53.google.com with SMTP id l25so22781106wrb.13;
+        Tue, 25 Jan 2022 16:22:43 -0800 (PST)
+X-Gm-Message-State: AOAM530RPwVOwARmZg1kOWWExd1Js5E/8xtkMEcpC6mVH0y//eZbbOSF
+        ahwW4TZYCB9VxqzWnzG/syYRUOCBC+txvAd5KIg=
+X-Google-Smtp-Source: ABdhPJw8xL5fP5ImHwVQxAhRwGshiRGsLE9PJc/f7ObQjiNeALTrvvCzKw1NaLGtZgfcZ06SL7/hHTHSlA15h93mLHs=
+X-Received: by 2002:adf:fd05:: with SMTP id e5mr20174849wrr.192.1643156563174;
+ Tue, 25 Jan 2022 16:22:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <nick.hawkins@hpe.com> <20220125194609.32314-1-nick.hawkins@hpe.com>
+In-Reply-To: <20220125194609.32314-1-nick.hawkins@hpe.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 26 Jan 2022 01:22:27 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0ccoH_sNE9eWxQnWHEWNBPFL6k4k6mku=cHs_fRfnL-w@mail.gmail.com>
+Message-ID: <CAK8P3a0ccoH_sNE9eWxQnWHEWNBPFL6k4k6mku=cHs_fRfnL-w@mail.gmail.com>
+Subject: Re: [PATCH] Adding architectural support for HPE's GXP BMC. This is
+ the first of a series of patches to support HPE's BMC with Linux Kernel.
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hao Fang <fanghao11@huawei.com>, Arnd Bergmann <arnd@arndb.de>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:9YTmKU0g5XkTW+/PNIPo2UFVxBa1S+LzApisG0m9GZyV9iz24Q/
+ CIzZXHf/lWu6qGL1Xa1CASWQJgqMtCCl327475D1fsr+RXqr9/M/8IzmWk8Gs7AZaIxaTU9
+ 7oMq8pLcBwYynKuUEWE0QIo9BS1inch4dw/vucbzaGp7qz0A2k2kjqbsVao0TOe0LPhz9/E
+ 92XkOviTWHqjWXCjAS1Rg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cN2TkLQ7SX0=:0QM7x7Oqmj7YQeiSdey3IO
+ foV/rdfeQe6WeRQYPABgCK2Adr61aM4mGYy3UywIhaO9CerHpnfLXuNPAf+jcNATchVDqUnqt
+ r/QCxGONon+Fzg6kqoRLnWjQGkF2MbNxHawJwQIYe7gIjAdBAyLbNCuq0XsJ/l2IP79nD11U5
+ OomvUoaqGcYDaz6EycuvKnWUda/6LsGMSnc36Ybeqgf4KqiAfSvza0ISFo99/SpYAznviffmS
+ o38HRN7JHXslDv6yny92x6sb/pQCvKtvPP3WHBEbne7lNoIOI4MS1pKOvRP6/VplUwv3xXYzA
+ bURygDR5rAqyyRyGjWfC9Ie5VtJ9IHY0OkS3SNtH6oQyZ1h3JYCUmluCNelzu0+qYzBDQGNUs
+ YvTGf4LBI9urPvgj8yIz/Tyvds23l2yTNYDH+l4ANOddMw20Xq1cH8prxtH7/3if48O7+HmSV
+ 10EFKGj1dK0jxacdKi6MWwD2LZSmsbuAUnjuNLD7pR3Fh9OxOGJRoxvXtGBHXydBko8AOGncX
+ bQ8DXbWV2hBqoIjSQhQraAv9Pond2uKuBTj/GOzVqO/+H3wvuedpJK7qq3fJBdFRHbzs+DAR4
+ CFsj5a/yBNO5P+3EW3C6+mn0feqqBfncQMP+6lM1EDvmlLamm1Mn53jsL7oK24bRweLcMuxXg
+ 8o6RnCAS/vvH0M/dtC9ixD4Uli0iQBoaWQV38svUMcra0M2slTPCPERL1pXSkj2BgAhT7sGuq
+ tsXl1or9rRkQjYnusm0Uv3B5IevVja6yf+YgDiqSyrIwLLojn3MI2hde43FNEITE54IW9WGa1
+ CASEb5utSrY33ztCHscq0NfTExoIOEnCGEty1mofZnTECDJ9o0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even though there is a static key protecting from overhead from
-cgroup-bpf skb filtering when there is nothing attached, in many cases
-it's not enough as registering a filter for one type will ruin the fast
-path for all others. It's observed in production servers I've looked
-at but also in laptops, where registration is done during init by
-systemd or something else.
+'On Tue, Jan 25, 2022 at 8:46 PM <nick.hawkins@hpe.com> wrote:
+>
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 
-Add a per-socket fast path check guarding from such overhead. This
-affects both receive and transmit paths of TCP, UDP and other
-protocols. It showed ~1% tx/s improvement in small payload UDP
-send benchmarks using a real NIC and in a server environment and the
-number jumps to 2-3% for preemtible kernels.
+Hi Nick,
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
+Thanks for your submission, it's always nice to see support for a new platform.
 
-v2: replace bitmask appoach with empty_prog_array
-v3: add "bpf_" prefix to empty_prog_array
-v4: replace macros with inline functions
-    use cgroup_bpf_sock_enabled for set/getsockopt() filters
+I assume that you have a number of other drivers that are required for
+an initial
+support, at least to get you booting into a shell. I recommend to keep
+those together
+as a series, and we can merge them through the soc tree initially, with an Ack
+from the corresponding subsystem maintainers. For later updates to the drivers,
+you should send them to the maintainers directly, same for any
+non-essential drivers
 
- include/linux/bpf-cgroup.h | 26 +++++++++++++++++++++-----
- include/linux/bpf.h        | 13 +++++++++++++
- kernel/bpf/cgroup.c        | 30 ------------------------------
- kernel/bpf/core.c          | 16 ++++------------
- 4 files changed, 38 insertions(+), 47 deletions(-)
+Krzysztof already commented on most issues I see, here are a few more things
+to consider:
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index b525d8cdc25b..165b0ba3d6c3 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -8,6 +8,7 @@
- #include <linux/jump_label.h>
- #include <linux/percpu.h>
- #include <linux/rbtree.h>
-+#include <net/sock.h>
- #include <uapi/linux/bpf.h>
- 
- struct sock;
-@@ -165,11 +166,23 @@ int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
- int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
- 				     void *value, u64 flags);
- 
-+/* Opportunistic check to see whether we have any BPF program attached*/
-+static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
-+					   enum cgroup_bpf_attach_type type)
-+{
-+	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-+	struct bpf_prog_array *array;
-+
-+	array = rcu_access_pointer(cgrp->bpf.effective[type]);
-+	return array != &bpf_empty_prog_array.hdr;
-+}
-+
- /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
- #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
- ({									      \
- 	int __ret = 0;							      \
--	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS))		      \
-+	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) && sk &&		      \
-+	    cgroup_bpf_sock_enabled(sk, CGROUP_INET_INGRESS)) 	      \
- 		__ret = __cgroup_bpf_run_filter_skb(sk, skb,		      \
- 						    CGROUP_INET_INGRESS); \
- 									      \
-@@ -181,9 +194,10 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
- 	int __ret = 0;							       \
- 	if (cgroup_bpf_enabled(CGROUP_INET_EGRESS) && sk && sk == skb->sk) { \
- 		typeof(sk) __sk = sk_to_full_sk(sk);			       \
--		if (sk_fullsock(__sk))					       \
-+		if (sk_fullsock(__sk) &&				       \
-+		    cgroup_bpf_sock_enabled(__sk, CGROUP_INET_EGRESS))	       \
- 			__ret = __cgroup_bpf_run_filter_skb(__sk, skb,	       \
--						      CGROUP_INET_EGRESS); \
-+						      CGROUP_INET_EGRESS);     \
- 	}								       \
- 	__ret;								       \
- })
-@@ -347,7 +361,8 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
- 				       kernel_optval)			       \
- ({									       \
- 	int __ret = 0;							       \
--	if (cgroup_bpf_enabled(CGROUP_SETSOCKOPT))			       \
-+	if (cgroup_bpf_enabled(CGROUP_SETSOCKOPT) &&			       \
-+	    cgroup_bpf_sock_enabled(sock, CGROUP_SETSOCKOPT))		       \
- 		__ret = __cgroup_bpf_run_filter_setsockopt(sock, level,	       \
- 							   optname, optval,    \
- 							   optlen,	       \
-@@ -367,7 +382,8 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
- 				       max_optlen, retval)		       \
- ({									       \
- 	int __ret = retval;						       \
--	if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT))			       \
-+	if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT) &&			       \
-+	    cgroup_bpf_sock_enabled(sock, CGROUP_GETSOCKOPT))		       \
- 		if (!(sock)->sk_prot->bpf_bypass_getsockopt ||		       \
- 		    !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass_getsockopt, \
- 					tcp_bpf_bypass_getsockopt,	       \
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 394305a5e02f..dcfe2de59b59 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1233,6 +1233,19 @@ struct bpf_prog_array {
- 	struct bpf_prog_array_item items[];
- };
- 
-+struct bpf_empty_prog_array {
-+	struct bpf_prog_array hdr;
-+	struct bpf_prog *null_prog;
-+};
-+
-+/* to avoid allocating empty bpf_prog_array for cgroups that
-+ * don't have bpf program attached use one global 'bpf_empty_prog_array'
-+ * It will not be modified the caller of bpf_prog_array_alloc()
-+ * (since caller requested prog_cnt == 0)
-+ * that pointer should be 'freed' by bpf_prog_array_free()
-+ */
-+extern struct bpf_empty_prog_array bpf_empty_prog_array;
-+
- struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags);
- void bpf_prog_array_free(struct bpf_prog_array *progs);
- int bpf_prog_array_length(struct bpf_prog_array *progs);
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 279ebbed75a5..098632fdbc45 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1384,20 +1384,6 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
- }
- 
- #ifdef CONFIG_NET
--static bool __cgroup_bpf_prog_array_is_empty(struct cgroup *cgrp,
--					     enum cgroup_bpf_attach_type attach_type)
--{
--	struct bpf_prog_array *prog_array;
--	bool empty;
--
--	rcu_read_lock();
--	prog_array = rcu_dereference(cgrp->bpf.effective[attach_type]);
--	empty = bpf_prog_array_is_empty(prog_array);
--	rcu_read_unlock();
--
--	return empty;
--}
--
- static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen,
- 			     struct bpf_sockopt_buf *buf)
- {
-@@ -1456,19 +1442,11 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
- 	};
- 	int ret, max_optlen;
- 
--	/* Opportunistic check to see whether we have any BPF program
--	 * attached to the hook so we don't waste time allocating
--	 * memory and locking the socket.
--	 */
--	if (__cgroup_bpf_prog_array_is_empty(cgrp, CGROUP_SETSOCKOPT))
--		return 0;
--
- 	/* Allocate a bit more than the initial user buffer for
- 	 * BPF program. The canonical use case is overriding
- 	 * TCP_CONGESTION(nv) to TCP_CONGESTION(cubic).
- 	 */
- 	max_optlen = max_t(int, 16, *optlen);
--
- 	max_optlen = sockopt_alloc_buf(&ctx, max_optlen, &buf);
- 	if (max_optlen < 0)
- 		return max_optlen;
-@@ -1550,15 +1528,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
- 	};
- 	int ret;
- 
--	/* Opportunistic check to see whether we have any BPF program
--	 * attached to the hook so we don't waste time allocating
--	 * memory and locking the socket.
--	 */
--	if (__cgroup_bpf_prog_array_is_empty(cgrp, CGROUP_GETSOCKOPT))
--		return retval;
--
- 	ctx.optlen = max_optlen;
--
- 	max_optlen = sockopt_alloc_buf(&ctx, max_optlen, &buf);
- 	if (max_optlen < 0)
- 		return max_optlen;
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 0a1cfd8544b9..04a8d5bea552 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1968,18 +1968,10 @@ static struct bpf_prog_dummy {
- 	},
- };
- 
--/* to avoid allocating empty bpf_prog_array for cgroups that
-- * don't have bpf program attached use one global 'empty_prog_array'
-- * It will not be modified the caller of bpf_prog_array_alloc()
-- * (since caller requested prog_cnt == 0)
-- * that pointer should be 'freed' by bpf_prog_array_free()
-- */
--static struct {
--	struct bpf_prog_array hdr;
--	struct bpf_prog *null_prog;
--} empty_prog_array = {
-+struct bpf_empty_prog_array bpf_empty_prog_array = {
- 	.null_prog = NULL,
- };
-+EXPORT_SYMBOL(bpf_empty_prog_array);
- 
- struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
- {
-@@ -1989,12 +1981,12 @@ struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
- 			       (prog_cnt + 1),
- 			       flags);
- 
--	return &empty_prog_array.hdr;
-+	return &bpf_empty_prog_array.hdr;
- }
- 
- void bpf_prog_array_free(struct bpf_prog_array *progs)
- {
--	if (!progs || progs == &empty_prog_array.hdr)
-+	if (!progs || progs == &bpf_empty_prog_array.hdr)
- 		return;
- 	kfree_rcu(progs, rcu);
- }
--- 
-2.34.1
+>
+> +GXP ARCHITECTURE
 
+Make this "ARM/HPE GXP ARCHITECTURE", so it does not get mistaken
+for a separate instruction set architecture, or something else with that three
+letter acronym.
+
+> +
+> +/dts-v1/;
+> +/ {
+> +  #address-cells = <1>;
+> +  #size-cells = <1>;
+> +       compatible = "HPE,GXP";
+> +       model = "GXP";
+
+Make this the specific machine rather than the SoC, unless you can guarantee
+that there won't ever be another board revision made from the same SoC (family).
+
+> +       chosen {
+> +               bootargs = "earlyprintk console=ttyS0,115200 user_debug=31";
+> +       };
+
+The bootargs should be set by the bootloader. In particular there should be
+not 'earlyprintk' by default, and the console should be selected using the
+'stdout-path' property.
+
+You seem to be missing CPU nodes.
+
+> +
+> +               usb0: ehci@cefe0000 {
+> +                       compatible = "generic-ehci";
+> +                       reg = <0xcefe0000 0x100>;
+> +                       interrupts = <7>;
+> +                       interrupt-parent = <&vic0>;
+> +               };
+> +
+> +               usb1: ohci@cefe0100 {
+> +                       compatible = "generic-ohci";
+> +                       reg = <0xcefe0100 0x110>;
+> +                       interrupts = <6>;
+> +                       interrupt-parent = <&vic0>;
+> +               };
+
+Add a custom compatible string as a specialization in case you ever
+need to work around some quirk on these devices.
+
+> +               spifi0: spifi@c0000200 {
+> +                       compatible = "hpe,gxp-spifi";
+> +                       reg = <0xc0000200 0x80>, <0xc000c000 0x100>, <0xf8000000 0x8000000>;
+> +                       interrupts = <20>;
+> +                       interrupt-parent = <&vic0>;
+> +                       #address-cells = <1>;
+> +                       #size-cells = <0>;
+> +
+> +                       flash@0 {
+> +                               compatible = "jedec,spi-nor";
+> +                               reg = <0>;
+> +                               partitions {
+> +                                       compatible = "fixed-partitions";
+> +                                       #address-cells = <1>;
+> +                                       #size-cells = <1>;
+> +
+> +                                       bmc@0 {
+> +                                               label = "bmc";
+> +                                               reg = <0x0 0x2000000>;
+> +                                       };
+> +                                       u-boot@0 {
+> +                                               label = "u-boot";
+> +                                               reg = <0x0 0x60000>;
+> +                                       };
+
+
+The partitions should ideally be set by the bootloader as well, or
+at least be in the .dts file separately from the soc .dtsi file.
+
+> diff --git a/arch/arm/configs/gxp_defconfig b/arch/arm/configs/gxp_defconfig
+> new file mode 100644
+> index 000000000000..f37c6630e06d
+> --- /dev/null
+> +++ b/arch/arm/configs/gxp_defconfig
+
+Do you have a strong reason for needing a custom defconfig file?
+Usually this should
+work with the normal multi_v7_defconfig.
+
+
+> diff --git a/arch/arm/mach-hpe/Kconfig b/arch/arm/mach-hpe/Kconfig
+> new file mode 100644
+> index 000000000000..9b27f97c6536
+> --- /dev/null
+> +++ b/arch/arm/mach-hpe/Kconfig
+> @@ -0,0 +1,20 @@
+> +menuconfig ARCH_HPE
+> +       bool "HPE SoC support"
+> +       help
+> +         This enables support for HPE ARM based SoC chips
+> +if ARCH_HPE
+> +
+> +config ARCH_HPE_GXP
+> +       bool "HPE GXP SoC"
+> +       select ARM_VIC
+> +       select PINCTRL
+> +       select IRQ_DOMAIN
+> +       select GENERIC_IRQ_CHIP
+> +       select MULTI_IRQ_HANDLER
+> +       select SPARSE_IRQ
+> +       select CLKSRC_MMIO
+> +       depends on ARCH_MULTI_V7
+
+
+Most of the symbols you select are implied by ARCH_MULTI_V7, so you
+can remove them here.
+
+> +#define IOP_REGS_PHYS_BASE 0xc0000000
+> +#define IOP_REGS_VIRT_BASE 0xf0000000
+> +#define IOP_REGS_SIZE (240*SZ_1M)
+
+We don't normally do custom mappings any more, these should come from
+the device tree and get mapped by the corresponding drivers.
+
+> +#define IOP_EHCI_USBCMD 0x0efe0010
+> +
+> +static struct map_desc gxp_io_desc[] __initdata = {
+> +       {
+> +       .virtual        = (unsigned long)IOP_REGS_VIRT_BASE,
+> +       .pfn            = __phys_to_pfn(IOP_REGS_PHYS_BASE),
+> +       .length         = IOP_REGS_SIZE,
+> +       .type           = MT_DEVICE,
+> +       },
+> +};
+> +
+> +void __init gxp_map_io(void)
+> +{
+> +       iotable_init(gxp_io_desc, ARRAY_SIZE(gxp_io_desc));
+> +}
+> +
+> +static void __init gxp_dt_init(void)
+> +{
+> +       //reset EHCI host controller for clear start
+> +       __raw_writel(0x00080002,
+> +               (void __iomem *)(IOP_REGS_VIRT_BASE + IOP_EHCI_USBCMD));
+
+This belongs into the bootloader, or the EHCI driver, see the comment about a
+custom compatible value above ;-)
+
+> +static void gxp_restart(enum reboot_mode mode, const char *cmd)
+> +{
+> +       pr_info("gpx restart");
+> +       __raw_writel(1, (void __iomem *) IOP_REGS_VIRT_BASE);
+> +}
+
+This should be a reset driver, see
+drivers/power/reset/syscon-reboot.c either as an example, or something you
+can use directly.
+
+         Arnd

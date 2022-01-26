@@ -2,189 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D544249CE90
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA27349CE94
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239133AbiAZPeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:34:18 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:41612 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiAZPeQ (ORCPT
+        id S242907AbiAZPep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242902AbiAZPel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:34:16 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 43A4A21135;
-        Wed, 26 Jan 2022 15:34:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643211255; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1jZs20RGCJa9pVS6y6Z0Y/xifC1MB/foIDCxFxd9Cjw=;
-        b=BGxiJyDM+TzAMOHfH12pNQm/5xJahg5YpswEs3SWZiUauRMdVfe61gNSK/10uH1ar8an2a
-        1c7msSknt8oRfU6LFigcICq3EboYfHRnfH3Wu/npb4BX9vRf7WF9vn2eSNlDTmCoxAqMEj
-        R4iOoQKvWU0XFF+O72tGsiAF8eaXb0Q=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 195CF13DFC;
-        Wed, 26 Jan 2022 15:34:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ixi2A/dp8WGBJAAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 26 Jan 2022 15:34:15 +0000
-Message-ID: <4ada030a-55bc-31fc-bda0-8d1c4dc8546b@suse.com>
-Date:   Wed, 26 Jan 2022 16:34:14 +0100
+        Wed, 26 Jan 2022 10:34:41 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF1CC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:34:41 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id j16so12205590plx.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:34:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Zlq95XEYA8t29+ZUK50ePkrc6VWvZvEpJO4Sweh0ies=;
+        b=aMbvwm6r0K3y78Dz/fQSEB+Xn5ys922n8v6G7GvjDkGE/klEyJiDcPOiEFwgy8wkGX
+         clRF/ORFRNUO3MbtwgXsZaVwdeC3X8uxUf26o/49uEJWxD8chbtYkA6/rOFDRQ10B8qY
+         l27+x2ge+cE/CBBGC7dY5vF49FHIxbXUFWGL64vRo/xn8I84OadIa8FoUGoNzrjhUNOJ
+         mhqy6Z57LMGXFyTZDQeuNS4xdV+7JgvaTGWnQxpVDVoomB5rPNk+0MlqCHS59PJpgDDs
+         POUkCb86Oiy9QrynofGdzrbkLzXtp+tO9x1P54MxnQPCBfqWLIQ8tvsSqowIzVl62Eaa
+         AEUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Zlq95XEYA8t29+ZUK50ePkrc6VWvZvEpJO4Sweh0ies=;
+        b=7jBPzcnIeIko/HxC6QEqFymd8wgJPCtwdSMk6KW0sz8AJRCbjXOePyCvAQ8AElT8ts
+         W4Ltp26hwcKVmtQc1+D38utSoOVe0hk8/rDDkZrPshGjFDlC+hHpOWLXZdi4KoUj7W8x
+         72O2+Ux8UwcDPZI04/roz8eVu5dq4FGeA+lXLhPRLoyz2Q/gotJBBWSU3oxE+XTEgymO
+         PFp2YQsL0lOTsQuddftk6pXsJ+NNky3K1ASFOS+os2Gay+FD13X/SuO4iVV84Vvq3Rqh
+         at7dIeQBKLj8KDBkGxdIE1Nnkv+NV92mbH9cnR1RcGK/9KqKZQPv4+TkA+NjPzEh97Xe
+         kyoQ==
+X-Gm-Message-State: AOAM5314gtbyWTedsO/GlkZ/Llu4dMumUiRuHh322sf5nqvGfwZI8R4n
+        +MPuCVHGUqlFDs3X5di5wTZX9A==
+X-Google-Smtp-Source: ABdhPJzlHXqQfDEJY6fNKPVmfdHF4I09sPw0b03P/eMmpo/sBKl5fW6u7RP8n2Iv5cd8seqO70Y1Ig==
+X-Received: by 2002:a17:90a:7c0b:: with SMTP id v11mr9396176pjf.180.1643211280685;
+        Wed, 26 Jan 2022 07:34:40 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id t2sm16615618pgt.12.2022.01.26.07.34.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 07:34:39 -0800 (PST)
+Date:   Wed, 26 Jan 2022 08:34:37 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Jinlong Mao <quic_jinlmao@quicinc.com>
+Cc:     Mike Leach <mike.leach@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 2/9] Coresight: Add coresight TPDM source driver
+Message-ID: <20220126153437.GA2144852@p14s>
+References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
+ <20211209141543.21314-3-quic_jinlmao@quicinc.com>
+ <20211214185714.GB1549991@p14s>
+ <85ad17fb-c885-831d-d841-4c6f10920355@quicinc.com>
+ <CAJ9a7Vh2d79Ro72ZDsbQSVS8VrH3c+X+xo8849yGS4Z73+yq_w@mail.gmail.com>
+ <20211216190223.GA78825@p14s>
+ <2703bf83-3a87-e69f-2392-7e0568e91712@quicinc.com>
+ <20220121171552.GA1811357@p14s>
+ <24c09945-bcda-81e4-f53c-af871f696094@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: Possible reproduction of CSD locking issue
-Content-Language: en-US
-To:     minyard@acm.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220125182737.GO34919@minyard.net>
- <4609fe56-7d88-8176-a378-0f465670b37d@suse.com>
- <20220126135639.GS34919@minyard.net>
- <70245998-b99e-ebe7-e932-f8a1b46f6ac7@suse.com>
- <20220126153117.GU34919@minyard.net>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220126153117.GU34919@minyard.net>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0lvEI0TcZDUc406Sn004uNqP"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <24c09945-bcda-81e4-f53c-af871f696094@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0lvEI0TcZDUc406Sn004uNqP
-Content-Type: multipart/mixed; boundary="------------hVKBS4b7N0g2X96dNG8Wik1y";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: minyard@acm.org
-Cc: Ingo Molnar <mingo@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>
-Message-ID: <4ada030a-55bc-31fc-bda0-8d1c4dc8546b@suse.com>
-Subject: Re: Possible reproduction of CSD locking issue
-References: <20220125182737.GO34919@minyard.net>
- <4609fe56-7d88-8176-a378-0f465670b37d@suse.com>
- <20220126135639.GS34919@minyard.net>
- <70245998-b99e-ebe7-e932-f8a1b46f6ac7@suse.com>
- <20220126153117.GU34919@minyard.net>
-In-Reply-To: <20220126153117.GU34919@minyard.net>
+On Wed, Jan 26, 2022 at 03:07:38PM +0800, Jinlong Mao wrote:
+> Hi Mathieu,
+> 
+> Good afternoon.
+> 
+> On 1/22/2022 1:15 AM, Mathieu Poirier wrote:
+> > Hey Jinlong,
+> > 
+> > On Fri, Jan 21, 2022 at 10:01:47PM +0800, Jinlong Mao wrote:
+> > > Hi Mathieu,
+> > > 
+> > > Good Day.
+> > > 
+> > > On 12/17/2021 3:02 AM, Mathieu Poirier wrote:
+> > > > [...]
+> > > > 
+> > > > > > > > +
+> > > > > > > > +static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+> > > > > > > > +{
+> > > > > > > > +    static int traceid = TPDM_TRACE_ID_START;
+> > > > > > > > +
+> > > > > > > > +    drvdata->traceid = traceid++;
+> > > > > > > > +}
+> > > > > > > I have been specific on how to properly do this in the last revision.  Given the
+> > > > > > > above about the MAINTAINERS file, I am not sure that I will continue reviewing this set.
+> > > > > > > 
+> > > > > > > There is also no need to rush another revision as I won't have the bandwidth to
+> > > > > > > process it before the holidays.
+> > > > > > > 
+> > > > > > > Thanks,
+> > > > > > > Mathieu
+> > > > > > Hi Mathieu,
+> > > > > > 
+> > > > > > Sorry, not addressed your previous comments here.
+> > > > > > 
+> > > > > > For the trace id, each coresight component has 7 bits to store the trace
+> > > > > > id. So the trace id should be from 1 to 127 as 0 is invalid.
+> > > > > IDs 0x70 - 0x7F (`112 - 127 ) are reserved - see the ARM Coresight
+> > > > > Architecture specification v3.0
+> > > > > 
+> > > > Correct
+> > > > 
+> > > > > > Apart from TPDMs/STM/ETMs, we also have other coresight components in
+> > > > > > our internal device. About 80 ids are already used.
+> > > > > > 
+> > > > > > Some components have fixed trace id in HW. If we use functions below to
+> > > > > > count the trace id, there will be conflict to other components.
+> > > > > > 
+> > > > > > Can we use 1-15 for etm trace ids  and 16 - 127 for other coresight
+> > > > > > components ? And handle trace ids in its' own driver ?
+> > > > > > 
+> > > > > This will limit systems to 15 cores - some have more!
+> > > > > 
+> > > > Correct
+> > > > 
+> > > > > > static inline int coresight_get_system_trace_id(int id)
+> > > > > > {
+> > > > > >            /* Start system IDs above the highest per CPU trace ID. */
+> > > > > >            return coresigth_get_trace_id(cpumask_last(cpu_possible_mask) + 1);
+> > > > > > }
+> > > > Looking at my own suggestion again this won't work since it returns the same traceID
+> > > > when called multiple times.
+> > > > 
+> > > > For this patchset and _without_ taking into account internal devices that have
+> > > > their traceID set in HW:
+> > > > 
+> > > > 1. Define a bitmask that is 7 bit wide.
+> > > Should it be a 128 bit wide bitmask  (0--127)?
+> > Yes, you are correct.
+> > 
+> > > > 2. By default, set bits under 0x10 and between 0x70 - 0x7F.
+> > > > 3. In coresight_get_system_trace_id(), drop the @id parameter and allocate the
+> > > > first available bit after cpumask_last(cpu_possible_mask) + 1.
+> > > Should it allocate the first available bit after (cpumask_last(cpu_possible_mask) *2 ) + 0x10 ?
+> > > Return the first zero bit position as the trace id and set the bit.
+> > I need to clarify something with Mike on this - I will get back to you on
+> > Monday.
+> Do you have more comments on this ?
 
---------------hVKBS4b7N0g2X96dNG8Wik1y
-Content-Type: multipart/mixed; boundary="------------Bq6P7ADTMO6oUm2LMFZJbBVF"
+I just received clarifications on this - there is no need to continue enacting
+the current scheme and as such reserving bits following the above formula will
+not be needed either.  Simply assigning free traceIDs based on request will
+work just fine.  
 
---------------Bq6P7ADTMO6oUm2LMFZJbBVF
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+That of course is taking into account that 0x0, 0x1 and 0x70 - 0x7f are
+reserved.  0x1 is currently used for STM and should eventually be fixed to
+simply request a traceID the same way any other component do.  You can fix it as
+part of this set but it is not mandatory.
 
-T24gMjYuMDEuMjIgMTY6MzEsIENvcmV5IE1pbnlhcmQgd3JvdGU6DQo+IE9uIFdlZCwgSmFu
-IDI2LCAyMDIyIGF0IDAzOjUxOjM2UE0gKzAxMDAsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+
-PiBPbiAyNi4wMS4yMiAxNDo1NiwgQ29yZXkgTWlueWFyZCB3cm90ZToNCj4+PiBPbiBXZWQs
-IEphbiAyNiwgMjAyMiBhdCAwNzowODoyMkFNICswMTAwLCBKdWVyZ2VuIEdyb3NzIHdyb3Rl
-Og0KPiANCj4gc25pcC4uDQo+IA0KPj4+DQo+Pj4gICAgY3NkOiBjbnQoNjNkOGUxZik6IDAw
-MDMtPjAwMzcgcXVldWUNCj4+PiAgICBjc2Q6IGNudCg2M2Q4ZTIwKTogMDAwMy0+MDAzNyBp
-cGkNCj4+PiAgICBjc2Q6IGNudCg2M2Q4ZTIxKTogMDAwMy0+MDAzNyBwaW5nDQo+Pj4NCj4+
-PiBJbiBfX3NtcF9jYWxsX3NpbmdsZV9xdWV1ZV9kZWJ1ZyBDUFUgMyBzZW5kcyBhbm90aGVy
-IG1lc3NhZ2UgdG8NCj4+PiBDUFUgNTUgYW5kIHNlbmRzIGFuIElQSS4gIEJ1dCB0aGVyZSBz
-aG91bGQgYmUgYSBwaW5nZWQgZW50cnkNCj4+PiBhZnRlciB0aGlzLg0KPj4+DQo+Pj4gICAg
-Y3NkOiBjbnQoNjNkOGUyMik6IDAwMDMtPjAwMzcgcXVldWUNCj4+PiAgICBjc2Q6IGNudCg2
-M2Q4ZTIzKTogMDAwMy0+MDAzNyBub2lwaQ0KPj4NCj4+IFRoaXMgaXMgaW50ZXJlc3Rpbmcu
-IFRob3NlIGFyZSA1IGNvbnNlY3V0aXZlIGVudHJpZXMgd2l0aG91dCBhbnkNCj4+IG1pc3Np
-bmcgaW4gYmV0d2VlbiAoc2VlIHRoZSBjb3VudGVyIHZhbHVlcykuIENvdWxkIGl0IGJlIHRo
-YXQgYWZ0ZXINCj4+IHRoZSBwaW5nIHRoZXJlIHdhcyBhbiBpbnRlcnJ1cHQgYW5kIHRoZSBj
-b2RlIHdhcyByZS1lbnRlcmVkIGZvcg0KPj4gc2VuZGluZyBhbm90aGVyIElQST8gVGhpcyB3
-b3VsZCBjbGVhcmx5IHJlc3VsdCBpbiBhIGhhbmcgYXMgc2Vlbi4NCj4gDQo+IFNpbmNlIHBy
-ZWVtcHQgaXMgZW5hYmxlZCwgd291bGRuJ3QgaXQgZXZlbnR1YWxseSBjb21lIGJhY2sgdG8g
-dGhlIGZpcnN0DQo+IHRocmVhZCBhbmQgc2VuZCB0aGUgSVBJPyAgVW5sZXNzIENQVSAzIGlz
-IHN0dWNrIGluIGFuIGludGVycnVwdCBvcg0KPiBpbnRlcnJ1cHQgc3Rvcm0uDQoNCldpdGgg
-cHJlZW1wdCBkaXNhYmxlZCAoeW91IHByb2JhYmx5IG1lYW50IHRoYXQpIG9ubHkgYW4gSVBJ
-IGZyb20NCmludGVycnVwdCBjb250ZXh0IHdvdWxkIGJlIHBvc3NpYmxlLiBBbmQgaXQgd291
-bGQgYmUgc3R1Y2ssIG9mIGNvdXJzZSwNCmFzIGl0IHdvdWxkIG5lZWQgdG8gd2FpdCBmb3Ig
-dGhlIENTRCBsb2NrLg0KDQoNCkp1ZXJnZW4NCg==
---------------Bq6P7ADTMO6oUm2LMFZJbBVF
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Let me know if there are things I haven't been clear on.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Thanks,
+Mathieu
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------Bq6P7ADTMO6oUm2LMFZJbBVF--
-
---------------hVKBS4b7N0g2X96dNG8Wik1y--
-
---------------0lvEI0TcZDUc406Sn004uNqP
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmHxafYFAwAAAAAACgkQsN6d1ii/Ey+R
-mQf+JvXQzHj9zYa0TxSNr34eJDjTpoen8TJz9SF9vWm56gsTttT4HDrA0TzpCizVOHq6TxluEIau
-CelknYZaZ7yMdO0UxsqyvMs155tvvWzHXVXppPU582SK2WrRmdKNlqHs3X7yOTZbsMHZ2IlFv0TL
-EwEY579tDj6cXvLpPhm+iKn+g8qLPNO+TgTKk9WwyL55nhTx/dc1fPqFgYA8Ju0HAkxjliidfNHf
-t7hleM9ntJqeq7uK3cfrZ0o9/RoF1DUwmrNRguEvty1Ph7pC1HoULAilBGDzaLnopubH/QmzE1ur
-7By2mTT/niSWJ44Owm6+Uxidd0qF+QC5hOtiMDvGkw==
-=ItjI
------END PGP SIGNATURE-----
-
---------------0lvEI0TcZDUc406Sn004uNqP--
+> > 
+> > > > 4. Define a new function called coresight_put_system_trace_id(int id) that
+> > > > clears the bit in the mask corresponding to @id.
+> > > > 
+> > > > For now that should work.
+> > > > 
+> > > > > > static inline int coresight_get_trace_id(int cpu)
+> > > > > > {
+> > > > > >        /*
+> > > > > >         * A trace ID of value 0 is invalid, so let's start at some
+> > > > > >         * random value that fits in 7 bits and go from there.  Since
+> > > > > >         * the common convention is to have data trace IDs be I(N) + 1,
+> > > > > >         * set instruction trace IDs as a function of the CPU number.
+> > > > > >         */
+> > > > > >        return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
+> > > > > > }
+> > > > > > 
+> > > > > This fixed relationship between cpu and trace ID is used in the perf
+> > > > > tooling to populate the elements in the perf.data file to correctly
+> > > > > allow association between CPU and trace data, and thus allow correct
+> > > > > trace decode.
+> > > > TraceIDs associated to CPUs are communicated to the perf tooling by way of the
+> > > > perf header - theoretically we should be able to change the allocation scheme
+> > > > without impacting the decoding process.
+> > > > 
+> > > > > It should be possible to create another more dynamic mapping scheme -
+> > > > > but this must include a way to support the perf requirements too.
+> > > > > 
+> > > > TraceIDs have been a lurking problem for as long as the subsystem has existed.
+> > > > For now what I have suggested above should be sufficient to provide an
+> > > > in-between solution that doesn't hold back this patchset.
+> > > > 
+> > > > That being said, we need to start thinking about the best way to do this.  I
+> > > > will put a patchset together in the new year that aims in that direction.
+> > > > 
+> > > > > Regards
+> > > > > 
+> > > > > Mike
+> > > > > 
+> > > > > > Thanks
+> > > > > > 
+> > > > > > Jinlong Mao
+> > > > > > 
+> > > > > > > > +
+> > > > > > > > +static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
+> > > > > > > > +{
+> > > > > > > > +    struct device *dev = &adev->dev;
+> > > > > > > > +    struct coresight_platform_data *pdata;
+> > > > > > > > +    struct tpdm_drvdata *drvdata;
+> > > > > > > > +    struct coresight_desc desc = { 0 };
+> > > > > > > > +
+> > > > > > > > +    desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
+> > > > > > > > +    if (!desc.name)
+> > > > > > > > +            return -ENOMEM;
+> > > > > > > > +    pdata = coresight_get_platform_data(dev);
+> > > > > > > > +    if (IS_ERR(pdata))
+> > > > > > > > +            return PTR_ERR(pdata);
+> > > > > > > > +    adev->dev.platform_data = pdata;
+> > > > > > > > +
+> > > > > > > > +    drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+> > > > > > > > +    if (!drvdata)
+> > > > > > > > +            return -ENOMEM;
+> > > > > > > > +    drvdata->dev = &adev->dev;
+> > > > > > > > +    dev_set_drvdata(dev, drvdata);
+> > > > > > > > +
+> > > > > > > > +    drvdata->base = devm_ioremap_resource(dev, &adev->res);
+> > > > > > > > +    if (!drvdata->base)
+> > > > > > > > +            return -ENOMEM;
+> > > > > > > > +
+> > > > > > > > +    mutex_init(&drvdata->lock);
+> > > > > > > > +
+> > > > > > > > +    desc.type = CORESIGHT_DEV_TYPE_SOURCE;
+> > > > > > > > +    desc.subtype.source_subtype = CORESIGHT_DEV_SUBTYPE_SOURCE_SYS;
+> > > > > > > > +    desc.ops = &tpdm_cs_ops;
+> > > > > > > > +    desc.pdata = adev->dev.platform_data;
+> > > > > > > > +    desc.dev = &adev->dev;
+> > > > > > > > +    drvdata->csdev = coresight_register(&desc);
+> > > > > > > > +    if (IS_ERR(drvdata->csdev))
+> > > > > > > > +            return PTR_ERR(drvdata->csdev);
+> > > > > > > > +
+> > > > > > > > +    tpdm_init_default_data(drvdata);
+> > > > > > > > +    pm_runtime_put(&adev->dev);
+> > > > > > > > +
+> > > > > > > > +    return 0;
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > > +static void __exit tpdm_remove(struct amba_device *adev)
+> > > > > > > > +{
+> > > > > > > > +    struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
+> > > > > > > > +
+> > > > > > > > +    coresight_unregister(drvdata->csdev);
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > > +static struct amba_id tpdm_ids[] = {
+> > > > > > > > +    {
+> > > > > > > > +            .id = 0x000f0e00,
+> > > > > > > > +            .mask = 0x000fff00,
+> > > > > > > > +    },
+> > > > > > > > +    { 0, 0},
+> > > > > > > > +};
+> > > > > > > > +
+> > > > > > > > +static struct amba_driver tpdm_driver = {
+> > > > > > > > +    .drv = {
+> > > > > > > > +            .name   = "coresight-tpdm",
+> > > > > > > > +            .owner  = THIS_MODULE,
+> > > > > > > > +            .suppress_bind_attrs = true,
+> > > > > > > > +    },
+> > > > > > > > +    .probe          = tpdm_probe,
+> > > > > > > > +    .id_table       = tpdm_ids,
+> > > > > > > > +};
+> > > > > > > > +
+> > > > > > > > +module_amba_driver(tpdm_driver);
+> > > > > > > > +
+> > > > > > > > +MODULE_LICENSE("GPL v2");
+> > > > > > > > +MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Monitor driver");
+> > > > > > > > diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
+> > > > > > > > new file mode 100644
+> > > > > > > > index 000000000000..980ae90ff1c8
+> > > > > > > > --- /dev/null
+> > > > > > > > +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+> > > > > > > > @@ -0,0 +1,31 @@
+> > > > > > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > > > > > +/*
+> > > > > > > > + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
+> > > > > > > > + */
+> > > > > > > > +
+> > > > > > > > +#ifndef _CORESIGHT_CORESIGHT_TPDM_H
+> > > > > > > > +#define _CORESIGHT_CORESIGHT_TPDM_H
+> > > > > > > > +
+> > > > > > > > +/* Default value of the traceid */
+> > > > > > > > +#define TPDM_TRACE_ID_START 128
+> > > > > > > > +
+> > > > > > > > +/**
+> > > > > > > > + * struct tpdm_drvdata - specifics associated to an TPDM component
+> > > > > > > > + * @base:       memory mapped base address for this component.
+> > > > > > > > + * @dev:        The device entity associated to this component.
+> > > > > > > > + * @csdev:      component vitals needed by the framework.
+> > > > > > > > + * @lock:       lock for the enable value.
+> > > > > > > > + * @enable:     enable status of the component.
+> > > > > > > > + * @traceid:    value of the current ID for this component.
+> > > > > > > > + */
+> > > > > > > > +
+> > > > > > > > +struct tpdm_drvdata {
+> > > > > > > > +    void __iomem            *base;
+> > > > > > > > +    struct device           *dev;
+> > > > > > > > +    struct coresight_device *csdev;
+> > > > > > > > +    struct mutex            lock;
+> > > > > > > > +    bool                    enable;
+> > > > > > > > +    int                     traceid;
+> > > > > > > > +};
+> > > > > > > > +
+> > > > > > > > +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
+> > > > > > > > diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+> > > > > > > > index 93a2922b7653..e48d463be63b 100644
+> > > > > > > > --- a/include/linux/coresight.h
+> > > > > > > > +++ b/include/linux/coresight.h
+> > > > > > > > @@ -65,6 +65,7 @@ enum coresight_dev_subtype_source {
+> > > > > > > >        CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
+> > > > > > > >        CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
+> > > > > > > >        CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
+> > > > > > > > +    CORESIGHT_DEV_SUBTYPE_SOURCE_SYS,
+> > > > > > > >     };
+> > > > > > > > 
+> > > > > > > >     enum coresight_dev_subtype_helper {
+> > > > > > > > --
+> > > > > > > > 2.17.1
+> > > > > > > > 
+> > > > > 
+> > > > > -- 
+> > > > > Mike Leach
+> > > > > Principal Engineer, ARM Ltd.
+> > > > > Manchester Design Centre. UK

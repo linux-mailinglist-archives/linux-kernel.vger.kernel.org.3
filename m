@@ -2,139 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC8149C849
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B0A49C851
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240479AbiAZLJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:09:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58407 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240462AbiAZLJA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:09:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643195339;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hPtwTDwHghQtVyxWRc+Fq5g+xzmJLLojUxCSBluBiYo=;
-        b=VmXvMu6uli0+sYiiCxIur/HSuspf+qdY38HyEjeBOFnKU4D9+gunA7UGZq/y6wiKdDJU3p
-        LPsPLYtGjTBlcP6HM/tWM3iPUIgS0wpQvpJRacN9TIg/5e0RNuiUnBaXy8zeIqb1nwfsAj
-        1N49nX/5HAVyhpAGMNraA2yuwvxFlwg=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-278-l2sYW9rKN6q9lzoLsmHlsg-1; Wed, 26 Jan 2022 06:08:58 -0500
-X-MC-Unique: l2sYW9rKN6q9lzoLsmHlsg-1
-Received: by mail-ed1-f70.google.com with SMTP id bc24-20020a056402205800b00407cf07b2e0so6036398edb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:08:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=hPtwTDwHghQtVyxWRc+Fq5g+xzmJLLojUxCSBluBiYo=;
-        b=o4GOR618LVqQDM4Sjx3I9Hr8lkF6RbrD+p6KQLcP++drOzsyX/GL/K82kM/OciGvdn
-         3uRyTbrNT9aPQ2IxVDFNTOMwRJ8PnoV6f6CxryfGQ17Se3LBZOeyt5ZjU+Y/AbS9Vc87
-         cqLniV4bEQsID1SDwiG7WuMhSgbHOT/HD7G2Jokyd6xiTtPKK370zwmgjjZSgYYa9M6E
-         ECv2cE0FTCj9wg8dPNFw4+B4yyQ0+hp5S1XKiWiw08P2j/kV4dylCMYchtvgIRlVC4TS
-         3FVNzzzMAnA24FCUx+wLY9bH+i+ELvUt5ADCeQVFp0WxoKtcyNmTac5u6Mlxj3xbcWjE
-         AZaA==
-X-Gm-Message-State: AOAM533giUkD3P2aPjibpWh5gP2FLz6ZG/I0GxepWmkatf9QQJK9jhDl
-        QTQAdz3YvGixHLU00WnzClA2S2Fd0qOk8PZVQy0nZbqrfuJ/RXcn+om11jbSA/vvYHW0G3Qa8Yd
-        Jp9JTwYCh0nzdlNu+oFHfoFTH
-X-Received: by 2002:a17:907:7ea8:: with SMTP id qb40mr12708724ejc.541.1643195337424;
-        Wed, 26 Jan 2022 03:08:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwdUKeSXIU4o2kPWVGr2pmhV25aDoIatAXpL9c40+cFEd5lpNFyesBxrQl6LE484+Sgc9ijKA==
-X-Received: by 2002:a17:907:7ea8:: with SMTP id qb40mr12708697ejc.541.1643195337159;
-        Wed, 26 Jan 2022 03:08:57 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id dc24sm7251220ejb.201.2022.01.26.03.08.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 03:08:56 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+be576ad7655690586eec@syzkaller.appspotmail.com
-Subject: Re: [PATCH] KVM: x86: Free kvm_cpuid_entry2 array on post-KVM_RUN
- KVM_SET_CPUID{,2}
-In-Reply-To: <20220125210445.2053429-1-seanjc@google.com>
-References: <20220125210445.2053429-1-seanjc@google.com>
-Date:   Wed, 26 Jan 2022 12:08:55 +0100
-Message-ID: <875yq6iwjc.fsf@redhat.com>
+        id S240495AbiAZLKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:10:10 -0500
+Received: from mga01.intel.com ([192.55.52.88]:20697 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233213AbiAZLKJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 06:10:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643195409; x=1674731409;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AZ52GxZm2Eq1pzG9AHFhzbjqb/WlLIS9HlqJiBwFpBE=;
+  b=P/xu5lStg8ZjB0PZDjIQmkKbyfUFT/EEOGpbQYsJTIVHg8WpC8Gekq5O
+   QkP/cDUYf94PcHlMLet3vjUgRHIFKV/NLrWrPLs3AEzkbFukDlmmVlRIJ
+   X4WkB1tdU7IYocfNprBeQ9xxv7UtJQJGfIH0FpVGVnEjaCDBwOOR6coHM
+   VJSWlfm7M3natB+zV2HFTI+WX+GCI+SoW1ej/SGGTXZ97R98Ux38iT/VB
+   CEd2x2NgMltvUm4nLNv88fyt7ZJi/wGGZRD+JelPK3h3Cl3pFyL4ae3oI
+   kykrc+u+fefJRiquAcAza5MAiqbO2CPq/aoYGUTHNV16AjFHejDMWKwpH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="270980033"
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="270980033"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 03:10:09 -0800
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="624802639"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 03:10:06 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 26 Jan 2022 13:10:03 +0200
+Date:   Wed, 26 Jan 2022 13:10:03 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     bhelgaas@google.com, koba.ko@canonical.com,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] PCI/DPC: Disable DPC when link is in L2/L3 ready, L2
+ and L3 state
+Message-ID: <YfEsC94BvFwd5MLy@lahna>
+References: <20220126071853.1940111-1-kai.heng.feng@canonical.com>
+ <20220126071853.1940111-2-kai.heng.feng@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126071853.1940111-2-kai.heng.feng@canonical.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Hi,
 
-> Free the "struct kvm_cpuid_entry2" array on successful post-KVM_RUN
-> KVM_SET_CPUID{,2} to fix a memory leak, the callers of kvm_set_cpuid()
-> free the array only on failure.
->
->  BUG: memory leak
->  unreferenced object 0xffff88810963a800 (size 2048):
->   comm "syz-executor025", pid 3610, jiffies 4294944928 (age 8.080s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 0d 00 00 00  ................
->     47 65 6e 75 6e 74 65 6c 69 6e 65 49 00 00 00 00  GenuntelineI....
->   backtrace:
->     [<ffffffff814948ee>] kmalloc_node include/linux/slab.h:604 [inline]
->     [<ffffffff814948ee>] kvmalloc_node+0x3e/0x100 mm/util.c:580
->     [<ffffffff814950f2>] kvmalloc include/linux/slab.h:732 [inline]
->     [<ffffffff814950f2>] vmemdup_user+0x22/0x100 mm/util.c:199
->     [<ffffffff8109f5ff>] kvm_vcpu_ioctl_set_cpuid2+0x8f/0xf0 arch/x86/kvm/cpuid.c:423
->     [<ffffffff810711b9>] kvm_arch_vcpu_ioctl+0xb99/0x1e60 arch/x86/kvm/x86.c:5251
->     [<ffffffff8103e92d>] kvm_vcpu_ioctl+0x4ad/0x950 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4066
->     [<ffffffff815afacc>] vfs_ioctl fs/ioctl.c:51 [inline]
->     [<ffffffff815afacc>] __do_sys_ioctl fs/ioctl.c:874 [inline]
->     [<ffffffff815afacc>] __se_sys_ioctl fs/ioctl.c:860 [inline]
->     [<ffffffff815afacc>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:860
->     [<ffffffff844a3335>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->     [<ffffffff844a3335>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
->
-> Fixes: c6617c61e8fe ("KVM: x86: Partially allow KVM_SET_CPUID{,2} after KVM_RUN")
-> Cc: stable@vger.kernel.org
-> Reported-by: syzbot+be576ad7655690586eec@syzkaller.appspotmail.com
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Wed, Jan 26, 2022 at 03:18:52PM +0800, Kai-Heng Feng wrote:
+> Since TLP and DLLP transmission is disabled for a Link in L2/L3 Ready,
+> L2 and L3, and DPC depends on AER, so also disable DPC here.
+
+Here too I think it is good to mention that the DPC "service" never
+implemented the PM hooks in the first place
+
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
+One minor comment below, but other than that looks good,
+
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
 > ---
->  arch/x86/kvm/cpuid.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 3902c28fb6cb..0a08db384fb9 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -346,8 +346,14 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
->  	 * KVM_SET_CPUID{,2} again. To support this legacy behavior, check
->  	 * whether the supplied CPUID data is equal to what's already set.
->  	 */
-> -	if (vcpu->arch.last_vmentry_cpu != -1)
-> -		return kvm_cpuid_check_equal(vcpu, e2, nent);
-> +	if (vcpu->arch.last_vmentry_cpu != -1) {
-> +		r = kvm_cpuid_check_equal(vcpu, e2, nent);
-> +		if (r)
-> +			return r;
-> +
-> +		kvfree(e2);
-> +		return 0;
-> +	}
+>  drivers/pci/pcie/dpc.c | 61 +++++++++++++++++++++++++++++++-----------
+>  1 file changed, 45 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
+> index 3e9afee02e8d1..9585c10b7c577 100644
+> --- a/drivers/pci/pcie/dpc.c
+> +++ b/drivers/pci/pcie/dpc.c
+> @@ -343,13 +343,34 @@ void pci_dpc_init(struct pci_dev *pdev)
+>  	}
+>  }
 >  
->  	r = kvm_check_cpuid(vcpu, e2, nent);
->  	if (r)
->
-> base-commit: e2e83a73d7ce66f62c7830a85619542ef59c90e4
+> +static void dpc_enable(struct pcie_device *dev)
+> +{
+> +	struct pci_dev *pdev = dev->port;
+> +	u16 ctl;
+> +
+> +	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
+> +
 
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Drop the empty line here.
 
-Thanks!
-
--- 
-Vitaly
-
+> +	ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
+> +	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
+> +}
+> +
+> +static void dpc_disable(struct pcie_device *dev)
+> +{
+> +	struct pci_dev *pdev = dev->port;
+> +	u16 ctl;
+> +
+> +	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
+> +	ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
+> +	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
+> +}

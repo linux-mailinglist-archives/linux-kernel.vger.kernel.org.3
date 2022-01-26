@@ -2,89 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BDA49C70B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B8849C711
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbiAZKF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232925AbiAZKF0 (ORCPT
+        id S239585AbiAZKGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:06:31 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:49686
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239581AbiAZKGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:05:26 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2E3C06161C;
-        Wed, 26 Jan 2022 02:05:26 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id k25so37562920ejp.5;
-        Wed, 26 Jan 2022 02:05:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZIBPG5KdggrxdxTcsYEqUFW4Fhlz+KszjlvwSs+5dP8=;
-        b=GM+KII2Zv2mUcviteB7pgK0Y9FBFJP2nO//R8vEVHLFufcw/LNeiZV4JarZZlqsYkZ
-         typFLgdqp25CkKGspN+0DHGeN5GNkW+3DjPd4XTCHNHBY/e/I6gkmEN3GhUWqlSyGSGj
-         Z8B5WazAgU42xBefblCAiNrg3WVNpF3jLD+DvUzBktRcVvkcg6eC9RdHkCs5+8edRKum
-         Zrw2I70CN9r2Xef0xxX81h5fp4hrMHnprwD6oxttKhgbvmAZP3/2lGv1TWeIGgPTqozd
-         pUsR807hVsRKG2taCPOQU2lv7WJ33Gld6uqElywbeadjRO+VmwV+MOYBV3CETS9ESn/r
-         oLaA==
+        Wed, 26 Jan 2022 05:06:30 -0500
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1C05140049
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643191589;
+        bh=Sjgv+P4vErk8QuuLdD8vbkXOQssB6budl50epcjkaFo=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=sY/OKKObgKMy0bQ11LA7cvkAeF1qzK55GtLZPteC1Tbs9M0Uh3dapQhLxBEBSU5dG
+         7+W5cAqTY91plhuDqDtHGrsy8msJHDEiaijH7qiMyiHvFhdYYGHtrDDNkFXifWI8Dm
+         MEEZGYoUDWPh/3zGkLyb9IAZ/LMLXC8RfedmxyMhAxdVABSJi3AhUzlGjxV9Csr/Nv
+         /0WyIBl10+GwMjQopA34Ku2xzbhLE6ei+Yn4vwvI5F1fPHzFL20lkwI5kClEc6Ic4d
+         ogi3gQPAPencdi5eZAfFAIWXyV7SrymNO8xckgSY1HARMv5nATXNtihz6PRfSxD6/Z
+         waWZPMLSFMOew==
+Received: by mail-wr1-f70.google.com with SMTP id c9-20020adfa709000000b001dde29c3202so230308wrd.22
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:06:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZIBPG5KdggrxdxTcsYEqUFW4Fhlz+KszjlvwSs+5dP8=;
-        b=gva6oZagseaODRd1Ln3ndje9TFKBHSUByqckvpzWYIEDTOfJ1LAssLUJNRJcC5Tz+2
-         wbbq/lrDG10cmgKbxas7iaA9hSQk2JiLXYUU75CnecPHUNyhZw2tA5wBxNczz67klj5w
-         XGdZc1JvTrB3yNAL+DQMpxq/ptC9FHnfWV4ijbHA4i6xesH9FeXX9HhNooCiO9RUdPsP
-         jYiu2ltQwWma9behbOGCVBeGrj6NfqWNkNM3nTbcbegOCY3eCi8dS5dhVEZYwrihXq+f
-         lUfRcGhEooKHbGgvCZ3tMuz3SxLNubUaMy2n3aMDybAz8C6MZKHyz4+3Vei9WN8Rzqoo
-         ZiZQ==
-X-Gm-Message-State: AOAM533LDGOXdvTBshgf7HZSG97kT0w7t1LrR7JZU2WwCYtin4TlOlHk
-        biVJG7u2c+4RQf0WBYlOfmboYXJumDNcyd6buH8=
-X-Google-Smtp-Source: ABdhPJxLTWUKmHtcOeib3twEwVqJGJ4TxCtjycPib6a85lcs7VMVl7shvXiH79nfAsy8Iir3ilNC+ATyz+6Lrri68Ok=
-X-Received: by 2002:a17:907:60d6:: with SMTP id hv22mr3480319ejc.132.1643191525022;
- Wed, 26 Jan 2022 02:05:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Sjgv+P4vErk8QuuLdD8vbkXOQssB6budl50epcjkaFo=;
+        b=8Bt1qaAliK0+QkIEm7urralrDFTSjYqW1rPedXoYFZRMbjzCp71PGBS61UZTWiEqDD
+         RZ3sVIFRTgyYkBBctnJZiAx8eIOg0wqni2TdYcoEccYckNNSUXRdf+p15siWIu3xtPX3
+         G67B7OQipnKQ21KofMDjJb9ERags/P9K07G/yTtL4TkzqDeQmpl44d1WeTiF9K1bFqrA
+         VjZn2mVr9TL2NotZsRkj2DYUJcjtnua1P24wysRgfUbyLChx12kOxm6nieLvMNgKfNah
+         aPXSJHmQyVOKpSb5ph1ImB+t8NetYjg5xI7blNFBZ42+G3o7QQ+cUzF/l1HoynORZcwt
+         E9Cg==
+X-Gm-Message-State: AOAM532oxvDmYm7s/LWhtn2a/D9X99a1Wetq4LTtIkuvpqrNRlGg3Dwt
+        8+3YbEsSrvVMqP1O5nX+id1AA8iCksa+lWktwz+R50BfH8NhITuQOwybs7K8G6xlv068SY1qPwO
+        H5XZdD6O+AD620sFYeFHDoAEeOo8j3lNkiSS4gPTwWg==
+X-Received: by 2002:a5d:6f08:: with SMTP id ay8mr6187702wrb.296.1643191586510;
+        Wed, 26 Jan 2022 02:06:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxQWxymgwDG/P6gJ5lAlxBJfkupquZBQk77a4LSrbyGJvYoG0Zub8FJabFUyrBLH4OAJL4WfQ==
+X-Received: by 2002:a5d:6f08:: with SMTP id ay8mr6187677wrb.296.1643191586317;
+        Wed, 26 Jan 2022 02:06:26 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id m8sm10165544wrn.106.2022.01.26.02.06.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 02:06:25 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     linux-arm-kernel@lists.infradead.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        soc@kernel.org, devicetree@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, robh+dt@kernel.org,
+        catalin.marinas@arm.com, s.nawrocki@samsung.com, arnd@arndb.de,
+        pankaj.dubey@samsung.com, linux-clk@vger.kernel.org,
+        linus.walleij@linaro.org, olof@lixom.net, sboyd@kernel.org
+Subject: Re: [PATCH v5 00/16] Add support for Tesla Full Self-Driving (FSD) SoC (clock parts)
+Date:   Wed, 26 Jan 2022 11:05:49 +0100
+Message-Id: <164319151879.214823.14786470465879458997.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220124141644.71052-1-alim.akhtar@samsung.com>
+References: <CGME20220124142850epcas5p2f82243b87386b3d49a9302c87e015d6b@epcas5p2.samsung.com> <20220124141644.71052-1-alim.akhtar@samsung.com>
 MIME-Version: 1.0
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <991e988b-7225-881b-a59a-33c3eae044be@suse.de> <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
-In-Reply-To: <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 26 Jan 2022 12:04:26 +0200
-Message-ID: <CAHp75Vd7oaYPKx6bxjCqNnm6fieeQFrtq5K4YYrxYbXoXFy=+Q@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-staging@lists.linux.dev,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Helge Deller <deller@gmx.de>, Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:02 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Wed, Jan 26, 2022 at 10:52 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> > Am 25.01.22 um 21:21 schrieb Andy Shevchenko:
+On Mon, 24 Jan 2022 19:46:28 +0530, Alim Akhtar wrote:
+> Adds basic support for the Tesla Full Self-Driving (FSD)
+> SoC. This SoC contains three clusters of four Cortex-A72 CPUs,
+> as well as several IPs.
+> 
+> Patches 1 to 9 provide support for the clock controller
+> (which is designed similarly to Exynos SoCs).
+> 
+> [...]
 
-...
+Applied also clock parts, thanks!
 
-> > But why? We already have DRM drivers for some of these devices.
->
-> No, we do not (only a few are available).
+[01/16] dt-bindings: add vendor prefix for Tesla
+        commit: a5a93e9b9ab9b4f367a773b32bbe1687006d75b7
+[02/16] dt-bindings: clock: Add bindings definitions for FSD CMU blocks
+        commit: d6dc675377261472adda696da456b4ebcc5bb9d9
+[03/16] dt-bindings: clock: Document FSD CMU bindings
+        commit: ed68db7b7f2fd01e930fa3e6fbb75954dc25e41c
+[04/16] clk: samsung: fsd: Add initial clock support
+        commit: 4f346005aaed641042ca18171c4383a6a85f6a8b
+[05/16] clk: samsung: fsd: Add cmu_peric block clock information
+        commit: e3f3dc3810d3765128d28b241f4afb761d81678a
+[06/16] clk: samsung: fsd: Add cmu_fsys0 clock information
+        commit: a15e367b02543f96ae845baf7be4526080437305
+[07/16] clk: samsung: fsd: Add cmu_fsys1 clock information
+        commit: bfbce52e4649b9a2c7296a6296ffbdfc3b07de2e
+[08/16] clk: samsung: fsd: Add cmu_imem block clock information
+        commit: ca0fdfd131c7d33984d8feeda23a99e883ffb0cb
+[09/16] clk: samsung: fsd: Add cmu_mfc block clock information
+        commit: 75c50afaa0d9a3e8f96940451bed6d0ccc6a0a03
+[10/16] clk: samsung: fsd: Add cam_csi block clock information
+        commit: b826c3e4de1a44ad8e5536d86d5ef062a54ed2b2
+[13/16] dt-bindings: arm: add Tesla FSD ARM SoC
+        commit: d25c5eb511df3439cd91517bcbce4b274f8972b9
+[14/16] arm64: dts: fsd: Add initial device tree support
+        commit: 18b1db6a162c29695920fdf212ccb8d7d5c07e9a
+[15/16] arm64: dts: fsd: Add initial pinctrl support
+        commit: 684dac402f212d8ededbe7d97bc42a5e49533f40
+[16/16] arm64: defconfig: Enable Tesla FSD SoC
+        commit: 0d525a653b03a25190650f783026c8e655268b48
 
-Sorry, I missed your word 'some'. Some == almost none from the list (I
-don't remember exact numbers but something like 2 out of 10 are
-supported by tiny DRM and see about interfaces).
-
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

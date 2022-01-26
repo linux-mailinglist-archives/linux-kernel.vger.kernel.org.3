@@ -2,238 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC92249C970
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B43849C9A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241171AbiAZMS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241163AbiAZMS1 (ORCPT
+        id S241267AbiAZM0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:26:47 -0500
+Received: from smtp117.ord1c.emailsrvr.com ([108.166.43.117]:49028 "EHLO
+        smtp117.ord1c.emailsrvr.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241256AbiAZM0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:18:27 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BD1C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:18:27 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id k17so15589309ybk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:18:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pzG5gVW6OLq5ALyV/2L4JM19C/owtDngOvjGjJb1zUc=;
-        b=L3hHvkd7KUwErnOcM92GqbjApftKtzquie/egc6t2z8SQGI/s9MNw4JpN7JvRuQxYb
-         mZNlnszAP0qOhleOc8lkXILqo7pyBoN9k6gaw3wQ3VnL1jWP3qW4yp8q47kE+yBucPnR
-         d+O4Egyqhw8A/aK99ymGBZsnTIkkbCXSNC4Uq4lyuVko7zQJveqvfz6d1mK++Y9Ef9OC
-         jBC4VXJ5lZG+1ULRLGJHcrFxyrBpXmN8HghFFV7T16OV4beyS47/zZph+x/YqmRpcxb7
-         WIWonDc6lBJKWmG+rsPGQkaZ3KH9jjcR+r2TA45Szyz66lb/pQwJxxzUmqwPwZBIFxZK
-         pIqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pzG5gVW6OLq5ALyV/2L4JM19C/owtDngOvjGjJb1zUc=;
-        b=EM9phocUMJAAyCSawHKT3WhUQ8w4BFQbUOhiRn38ygyOAQrJX19J/DzbjmPoCn4Jb1
-         jRmv9eh6ARcapO0XJOMwax0s9Wu3+VsgHGaW8VsVKVASVp2YJ9XR9NJ5d+Y62IyZQQLp
-         tFSKrRJgAQkvPia7OjrFWQZgqAtE2V9kSOseDGCAFkVoA5BXEgyInTrwK/LEdRk6M4Pw
-         AwiMXNfagfGBb+5me54PxkHv2G21HGpLNvouk8ksWE7BFJjpvEZtXPkM7iKojKCSPXlq
-         81/JhYLzsZ26C5mAxOBaEYpAD/Ez45iOqVp3HtBt7EKIxegaAXh3bgjQzKAsWglSDsVJ
-         8sGQ==
-X-Gm-Message-State: AOAM530ZdGH1eq9K5gBxJSS+rz24uN1fQNhCFWfmp9Jvwd566ny/MEzg
-        LiAVAvdHFJUoF9OBKyV4jcKVhl2RBkPQ/soo/0gu8A==
-X-Google-Smtp-Source: ABdhPJwmj1lMbjnaTAFe/3Wp/1OQf1qyC+XG34Bkqxme3NBMyJ3bVD/LHNzKufsLk0VF6lL+TECDhvMXKhPy1FMPRFA=
-X-Received: by 2002:a25:4284:: with SMTP id p126mr37690485yba.108.1643199506486;
- Wed, 26 Jan 2022 04:18:26 -0800 (PST)
+        Wed, 26 Jan 2022 07:26:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
+        s=20190130-41we5z8j; t=1643199583;
+        bh=ReKzEeMpEzLebnKabwkFlt+2OGOIe/9umBBTSRYIrCA=;
+        h=Date:Subject:To:From:From;
+        b=Xq2kMAvt7iEMJOeCphPlF49ooY3LBCSet4g97IAfgbsPtlL605ZBjCxKBXz/8R2a3
+         QQNf0RWKxuYgkXG9+nwEhLEM1/jb3VZlOMxm/cv4sl9hnW9vOh/1kYDqxLYaNuZt5d
+         2VALeFwc0HcCrx48aaedIK5dXiRXbXKmD6RAfLyM=
+X-Auth-ID: abbotti@mev.co.uk
+Received: by smtp15.relay.ord1c.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id F3DA32013E;
+        Wed, 26 Jan 2022 07:19:42 -0500 (EST)
+Message-ID: <43b079ef-1c4a-b4c4-62b3-10d6a62a3bac@mev.co.uk>
+Date:   Wed, 26 Jan 2022 12:19:42 +0000
 MIME-Version: 1.0
-References: <20220125155257.311556629@linuxfoundation.org>
-In-Reply-To: <20220125155257.311556629@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 26 Jan 2022 17:48:15 +0530
-Message-ID: <CA+G9fYthP97HFYPV3+7rH0KQeVt0scGRw9rm+zGvFR6D1cg_QA@mail.gmail.com>
-Subject: Re: [PATCH 4.14 000/184] 4.14.263-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH][next] comedi: das16: Use struct_size() helper in
+ comedi_alloc_spriv()
+Content-Language: en-GB
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220125232525.GA80228@embeddedor>
+From:   Ian Abbott <abbotti@mev.co.uk>
+Organization: MEV Ltd.
+In-Reply-To: <20220125232525.GA80228@embeddedor>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Classification-ID: 26608a2a-c2d7-4583-ba07-c77b0de1dce9-1-1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 22:02, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.263 release.
-> There are 184 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.263-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 25/01/2022 23:25, Gustavo A. R. Silva wrote:
+> Make use of the struct_size() helper instead of an open-coded version,
+> in order to avoid any potential type mistakes or integer overflows that,
+> in the worst scenario, could lead to heap overflows.
+> 
+> Also, address the following sparse warnings:
+> drivers/comedi/drivers/das16.c:964:45: warning: using sizeof on a flexible structure
+> drivers/comedi/drivers/das16.c:998:45: warning: using sizeof on a flexible structure
+> 
+> Link: https://github.com/KSPP/linux/issues/174
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>   drivers/comedi/drivers/das16.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/comedi/drivers/das16.c b/drivers/comedi/drivers/das16.c
+> index 937a69ce0977..728dc02156c8 100644
+> --- a/drivers/comedi/drivers/das16.c
+> +++ b/drivers/comedi/drivers/das16.c
+> @@ -961,7 +961,7 @@ static const struct comedi_lrange *das16_ai_range(struct comedi_device *dev,
+>   
+>   		/* allocate single-range range table */
+>   		lrange = comedi_alloc_spriv(s,
+> -					    sizeof(*lrange) + sizeof(*krange));
+> +					    struct_size(lrange, range, 1));
+>   		if (!lrange)
+>   			return &range_unknown;
+>   
+> @@ -995,7 +995,7 @@ static const struct comedi_lrange *das16_ao_range(struct comedi_device *dev,
+>   
+>   		/* allocate single-range range table */
+>   		lrange = comedi_alloc_spriv(s,
+> -					    sizeof(*lrange) + sizeof(*krange));
+> +					    struct_size(lrange, range, 1));
+>   		if (!lrange)
+>   			return &range_unknown;
+>   
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Looks like a nice tidy-up, thanks!
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Reviewed-by: Ian Abbott <abbotti@mev.co.uk>
 
-## Build
-* kernel: 4.14.263-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.14.y
-* git commit: 1cb56422263318b84ec74390135d405f17a73e5c
-* git describe: v4.14.262-185-g1cb564222633
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.262-185-g1cb564222633
+(Note, I do not have anywhere to commit it, personally.)
 
-## Test Regressions (compared to v4.14.262-187-gb75a88cc2107)
-No test regressions found.
-
-## Metric Regressions (compared to v4.14.262-187-gb75a88cc2107)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.262-187-gb75a88cc2107)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.262-187-gb75a88cc2107)
-No metric fixes found.
-
-## Test result summary
-total: 80406, pass: 64815, fail: 659, skip: 12790, xfail: 2142
-
-## Build Summary
-* arm: 250 total, 242 passed, 8 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* powerpc: 52 total, 0 passed, 52 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 31 total, 31 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+-=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
+-=( registered in England & Wales.  Regd. number: 02862268.  )=-
+-=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
+-=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-

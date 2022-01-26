@@ -2,75 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEA549D488
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5601849D495
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232548AbiAZVaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:30:22 -0500
-Received: from mx1.mailbun.net ([170.39.20.100]:42886 "EHLO mx1.mailbun.net"
+        id S232629AbiAZVgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:36:22 -0500
+Received: from mga11.intel.com ([192.55.52.93]:11770 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229516AbiAZVaV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:30:21 -0500
-Received: from [2607:fb90:d98b:8818:5079:94eb:24d5:e5c3] (unknown [172.58.109.194])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ariadne@dereferenced.org)
-        by mx1.mailbun.net (Postfix) with ESMTPSA id 18CD311A3AC;
-        Wed, 26 Jan 2022 21:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dereferenced.org;
-        s=mailbun; t=1643232621;
-        bh=cEHBNSv/MipZhCDFhhwu1YqdHHuZS1W4Vo1WymB6Av8=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References;
-        b=KtAoMBrKa5duZbZSiJE4d/Wk79MrJ7rb+wsR7yuJEDt3Q2haZcY9ObdQeWp6Y3EOv
-         7FtheXJOKmX/CgGlNC2zu0ZZyqX4yxBgi+JoOlg1VbHICjwo/pqPXsVa5mH/o+FNV4
-         2H4JNhoJqqQZSrqZK+X9QkYmB1JeGY6lAoSzXvTN8KbWcVjI8IFKefhNJTHP7xnH35
-         p//53uAKaDyLIxzoZkvSicMqjnnYfZbZ0rIf9RwOpp7J+ugMzr14uCjAcCmliYMH20
-         eF1To6FeGTFgoW92SfAX20aaUVbDcK+IGsw+6FDyWjSXbFzaBY4f+dih1pECbgwJto
-         sd/mLBtzQo99A==
-Date:   Wed, 26 Jan 2022 15:30:13 -0600 (CST)
-From:   Ariadne Conill <ariadne@dereferenced.org>
-To:     Kees Cook <keescook@chromium.org>
-cc:     Ariadne Conill <ariadne@dereferenced.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
- do_execveat_common()
-In-Reply-To: <202201261323.9499FA51@keescook>
-Message-ID: <64e91dc2-7f5c-6e8-308e-414c82a8ae6b@dereferenced.org>
-References: <20220126114447.25776-1-ariadne@dereferenced.org> <202201261202.EC027EB@keescook> <a8fef39-27bf-b25f-7cfe-21782a8d3132@dereferenced.org> <202201261239.CB5D7C991A@keescook> <5e963fab-88d4-2039-1cf4-6661e9bd16b@dereferenced.org>
- <202201261323.9499FA51@keescook>
+        id S229516AbiAZVgU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 16:36:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643232980; x=1674768980;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bqRTT9ljm8wAPAWjm/qjSQ+Xc2PXWiU5LgkFzLANjPk=;
+  b=k4hYJMXF0HsXeSgOqwJEpan2CMMXKzhl+BCosEV8Qwl4b+lVfOQcXEoE
+   6yDbAw49WisrXNvMHt1umnkibHFyJ+qUSyZ/sxJLxcTC+PqmCTPlfkbQo
+   QN1/e/Qc25DWE2Y5trc3axcpsLOxkwkeD1Za3fkwe/K3XEeZ3n017CwPF
+   IAk0CEEYkLSxad4pYdIgDs92DM/YnQclCO+3celKF6zGIJ4FewJJoRaY1
+   l+7P5hXxUWuqCrZpwTza/+tgTn8fyhuqEL99zObR+tKCV8JFcx58l6UHI
+   JoGMDtJqXSUTj9Dy2woveB+TWU/MUfTle6fvofJIb1ddVulC62bSQYNxo
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="244256208"
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="244256208"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 13:36:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="563543478"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 13:36:18 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCpxh-000Lgj-Lg; Wed, 26 Jan 2022 21:36:17 +0000
+Date:   Thu, 27 Jan 2022 05:35:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PCI: ACPI: Replace acpi_bus_get_device()
+Message-ID: <202201270503.XIRGkUJE-lkp@intel.com>
+References: <4389553.LvFx2qVVIh@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4389553.LvFx2qVVIh@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi "Rafael,
 
-On Wed, 26 Jan 2022, Kees Cook wrote:
+I love your patch! Yet something to improve:
 
-> On Wed, Jan 26, 2022 at 03:13:10PM -0600, Ariadne Conill wrote:
->> Looks good to me, but I wonder if we shouldn't set an argv of
->> {bprm->filename, NULL} instead of {"", NULL}.  Discussion in IRC led to the
->> realization that multicall programs will try to use argv[0] and might crash
->> in this scenario.  If we're going to fake an argv, I guess we should try to
->> do it right.
->
-> They're crashing currently, though, yes? I think the goal is to move
-> toward making execve(..., NULL, NULL) just not work at all. Using the
-> {"", NULL} injection just gets us closer to protecting a bad userspace
-> program. I think things _should_ crash if they try to start depending
-> on this work-around.
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on helgaas-pci/next v5.17-rc1 next-20220125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Is there a reason to spawn a program, just to have it crash, rather than 
-just denying it to begin with, though?
+url:    https://github.com/0day-ci/linux/commits/Rafael-J-Wysocki/PCI-ACPI-Replace-acpi_bus_get_device/20220127-034410
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220127/202201270503.XIRGkUJE-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/f04b15e5b428aa6258b15b7e9bd9091cbf175e2f
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Rafael-J-Wysocki/PCI-ACPI-Replace-acpi_bus_get_device/20220127-034410
+        git checkout f04b15e5b428aa6258b15b7e9bd9091cbf175e2f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/pci/
 
-I mean, it all seems fine enough, and perhaps I'm just a bit picky on the 
-colors and flavors of my bikesheds, so if you want to go with this patch, 
-I'll be glad to carry it in the Alpine security update I am doing to make 
-sure the *other* GLib-using SUID programs people find don't get exploited 
-in the same way.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Ariadne
+All error/warnings (new ones prefixed by >>):
+
+   drivers/pci/hotplug/acpiphp_ibm.c: In function 'ibm_acpiphp_init':
+>> drivers/pci/hotplug/acpiphp_ibm.c:437:21: error: expected statement before ')' token
+     437 |         if (!device)) {
+         |                     ^
+>> drivers/pci/hotplug/acpiphp_ibm.c:437:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+     437 |         if (!device)) {
+         |         ^~
+   drivers/pci/hotplug/acpiphp_ibm.c:437:23: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+     437 |         if (!device)) {
+         |                       ^
+
+
+vim +437 drivers/pci/hotplug/acpiphp_ibm.c
+
+   418	
+   419	static int __init ibm_acpiphp_init(void)
+   420	{
+   421		int retval = 0;
+   422		acpi_status status;
+   423		struct acpi_device *device;
+   424		struct kobject *sysdir = &pci_slots_kset->kobj;
+   425	
+   426		pr_debug("%s\n", __func__);
+   427	
+   428		if (acpi_walk_namespace(ACPI_TYPE_DEVICE, ACPI_ROOT_OBJECT,
+   429				ACPI_UINT32_MAX, ibm_find_acpi_device, NULL,
+   430				&ibm_acpi_handle, NULL) != FOUND_APCI) {
+   431			pr_err("%s: acpi_walk_namespace failed\n", __func__);
+   432			retval = -ENODEV;
+   433			goto init_return;
+   434		}
+   435		pr_debug("%s: found IBM aPCI device\n", __func__);
+   436		device = acpi_fetch_acpi_dev(ibm_acpi_handle);
+ > 437		if (!device)) {
+   438			pr_err("%s: acpi_fetch_acpi_dev failed\n", __func__);
+   439			retval = -ENODEV;
+   440			goto init_return;
+   441		}
+   442		if (acpiphp_register_attention(&ibm_attention_info)) {
+   443			retval = -ENODEV;
+   444			goto init_return;
+   445		}
+   446	
+   447		ibm_note.device = device;
+   448		status = acpi_install_notify_handler(ibm_acpi_handle,
+   449				ACPI_DEVICE_NOTIFY, ibm_handle_events,
+   450				&ibm_note);
+   451		if (ACPI_FAILURE(status)) {
+   452			pr_err("%s: Failed to register notification handler\n",
+   453					__func__);
+   454			retval = -EBUSY;
+   455			goto init_cleanup;
+   456		}
+   457	
+   458		ibm_apci_table_attr.size = ibm_get_table_from_acpi(NULL);
+   459		retval = sysfs_create_bin_file(sysdir, &ibm_apci_table_attr);
+   460	
+   461		return retval;
+   462	
+   463	init_cleanup:
+   464		acpiphp_unregister_attention(&ibm_attention_info);
+   465	init_return:
+   466		return retval;
+   467	}
+   468	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,175 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AFB49C352
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A4F49C35A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbiAZFhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 00:37:37 -0500
-Received: from mga18.intel.com ([134.134.136.126]:50917 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229585AbiAZFhg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 00:37:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643175456; x=1674711456;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K1Ia3evHQmhGL125iZLbYE8s2eqmLUKbbbZVVzu9Ptg=;
-  b=Iwh6QFI/mA1zWKDlhyvK2cabjQkqN1exntXA9CbCDGLKsMywTFEwfh4F
-   U5pRHMMLt4jF+iCqIbMaQ3r2Z8uICtpbL1wZr1BrwFUVtWablJorVPG1a
-   54csn7I3VCFZLSrpvwNfOL2lQTOImoRAhtqsCSrwPf7NGLNw5qCKGGyUT
-   HUklu0fqCAwiLK4mxO5MSKUn5PtuW6DlCZ58W0sui1PTA591NiiCYFWyr
-   XQugdVHUxCKJhGbVWdd+UhdJA/lgGzSzYcUj6OBQR+GbBSS6FupWMzQJ5
-   iyVN9cnn5PbkZyESp50KMe4dzMwTPedwQN3YHAVxz9TpOT1cNcGNzljap
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="230058823"
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="230058823"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 21:37:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="477375590"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2022 21:37:34 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCazu-000KpY-2U; Wed, 26 Jan 2022 05:37:34 +0000
-Date:   Wed, 26 Jan 2022 13:37:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.16 70/137]
- include/linux/irqchip/arm-vgic-info.h:13:15: error: unexpected token in
- argument list
-Message-ID: <202201261305.sZ3Y7MUD-lkp@intel.com>
+        id S233873AbiAZFsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 00:48:17 -0500
+Received: from mail-bn8nam08on2044.outbound.protection.outlook.com ([40.107.100.44]:48225
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229768AbiAZFsQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 00:48:16 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PopCP9mxPyo5La3wr9X2sRrXcj9PKNrBQkYUg05ZRURh9IqG1TeAFmsAQOd1ZWugAcXn0XtnupATwN0Ml9JOsYwZrL7sNFPqrIpxiBwAbh5gh/Vpvd/SZUfglYRSTccOy9OeguJ7v+KYnuH11FN2EoQua8CcfpHwfwRiT/oc+8wsZS6K45ZraDo4vzELs1KHw2RLpbtgMCf8ThHaxMMhZtkLCTxfH3AKrVASH7QTwFtNRkfJR9rUxl6Ch3Hk3sFujMWgbQXzzcA+a45R/1JQSSejbyj/vdIlsXe8oh1JPJy8lXSs6x9kS158E870XO9gVp4eejLN5wF8eAfGNHAUvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=STyt43snmMTD/rp6zCMGN8j16MXXD9FRieJ7gQX6pwY=;
+ b=jWW3rW/a9JOOFItFa9ZXgwNt8yIlTdd6sIUst+M9NkuWyrxWD+oGhsIzFUYRX1flLbTPLj6hWYTEbiDZpn53ZTEoJUsBW5v8jDk7+qiypL9OaiA54FI05yQpTZZtPS/w8HeEGAbQnZoZpEhE6SxcGjgq/YDf27v9TWoREoLXHbcntaKU0kL8eOhB6Gr782RPU8U8VemxmbGR0ehtWRhyfoTO0B6uHgYIRYw/G1TfIhB6iG3y7/wStcSxFrZNlgAhPTiu0jO7+LIQl9x0jv0ueRNLixwo95RCHhEhg9MkpHWgBHWPOfYe4ar5r7rCp15mYVS1Fud0afTmKn83W+3CiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=STyt43snmMTD/rp6zCMGN8j16MXXD9FRieJ7gQX6pwY=;
+ b=IgkJ0D7ooznFWyVP0m1i9ekycapxfJPRvwjrqSNWWWFUyXd3v1GM2C/lV7WoPMecplQRiy/OF++hZvcWXntvMqLD3ACLdQGZRwKLKc+cOXXjEGqp58q4/EPNqzBunJyP8gCfc6pogsdVE3R1XCEQUH3gOlkYd8o2pxp4INtqqv4=
+Received: from BN6PR17CA0024.namprd17.prod.outlook.com (2603:10b6:404:65::34)
+ by DM6PR02MB5561.namprd02.prod.outlook.com (2603:10b6:5:7e::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.13; Wed, 26 Jan
+ 2022 05:48:12 +0000
+Received: from BN1NAM02FT005.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:404:65:cafe::f4) by BN6PR17CA0024.outlook.office365.com
+ (2603:10b6:404:65::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.19 via Frontend
+ Transport; Wed, 26 Jan 2022 05:48:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT005.mail.protection.outlook.com (10.13.2.124) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4930.15 via Frontend Transport; Wed, 26 Jan 2022 05:48:12 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 25 Jan 2022 21:48:10 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 25 Jan 2022 21:48:10 -0800
+Envelope-to: dwmw2@infradead.org,
+ yilun.xu@intel.com,
+ mdf@kernel.org,
+ robh@kernel.org,
+ trix@redhat.com,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [172.19.72.93] (port=40716 helo=xsj-xw9400.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <lizhi.hou@xilinx.com>)
+        id 1nCbAA-000Gro-RZ; Tue, 25 Jan 2022 21:48:10 -0800
+Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
+        id 85B55600196; Tue, 25 Jan 2022 21:48:10 -0800 (PST)
+From:   Lizhi Hou <lizhi.hou@xilinx.com>
+To:     <devicetree@vger.kernel.org>, <robh@kernel.org>
+CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <linux-kernel@vger.kernel.org>,
+        <yilun.xu@intel.com>, <maxz@xilinx.com>, <sonal.santan@xilinx.com>,
+        <yliu@xilinx.com>, <michal.simek@xilinx.com>,
+        <stefanos@xilinx.com>, <trix@redhat.com>, <mdf@kernel.org>,
+        <dwmw2@infradead.org>
+Subject: [PATCH V1 Create empty OF root 0/1] XRT Alveo driver infrastructure overview
+Date:   Tue, 25 Jan 2022 21:48:06 -0800
+Message-ID: <20220126054807.492651-1-lizhi.hou@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 72480f15-10fd-49ed-a4ea-08d9e08f708a
+X-MS-TrafficTypeDiagnostic: DM6PR02MB5561:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR02MB5561D216CE4D64D1F8C34E97A1209@DM6PR02MB5561.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: U2JpLV8F40Su1F6k+tCfEQ4ezhwD1P1EiX5LMLCqPt8kscMXj2ci0MeeTZtICIeU33rGOev7Uo+O4X8dp9gNeXbgLRfR/bOCtAWRtbs2tcAi1E9juXUwlCjdd7LHy0b33gVW8Lx+sANNMrPCXFJAb5w9mTevoqCTaEYwOyT5pV7r55BHfMY18aCdQhKYUy0qsNzaJGoXxMF/L6EaasTO+ifARMYNvkFv1krPv6+ObgtEE1ClEqtypCWnMKOlKRyo11HkuxEQFsnS85Dq1wADaUnf73gwHjrj4swqUO/Np55LLJrLilfcF0DSRczNa/jasE/ind31xQIQn6TU1Oq2TXCc61qQNlxjq1L+5X33Zi2iT4SKTxZbWwN53royTx7XS0JHG3yEcy3xU8hOyxZpuqZuTVdYng/z/xOEXh3IG5mtySkZtaZDfVHrsXgJyr/O25Lm5GeOaqh8m0Qd4NL1u6EnXA1HCRu7Comk2Y2YnPGnIOJqax0KnxP+3kov44nc0vxwpUXuPRd/KTQVCa8Uqh1L1wUGM7zZEd313ZI7ILPEmJxtlbtKre6FBnp4VazahKI4BXq7parS+SoXrG3UCu3jo7Ku2NNSaov8MYOaaROvlkPgxYoHReSHGwamX+N9vEYflOW6tzNpOgbisvmhrbYB4ez3YilAKXSR+NiHSYt0rNLcxPaozd7i+roxCWLqoN4S1m2bSR+Yy1Un135ayEKC6in2tcXkd9PSYyIx/sZ1zvS4SMpGr9BKvHm7gX0P94SN7hGU+Q+jgfXRI8C+BEcH60SuzKLiOC/yXIgurSXuneqGBJBs/gQVPf/lxZWxgvq6OrP7qgRSguRNnM3LJc+dbu/AdWgaZbj0BF6MMB6uTrWDVtecgmshYFYNEz78quf0DaaDOappSPTyu/89LA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700004)(36860700001)(4326008)(47076005)(336012)(6266002)(82310400004)(186003)(54906003)(2906002)(966005)(7636003)(42186006)(26005)(70206006)(8936002)(316002)(1076003)(6666004)(356005)(70586007)(5660300002)(426003)(110136005)(8676002)(2616005)(36756003)(44832011)(508600001)(40460700003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2022 05:48:12.1465
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72480f15-10fd-49ed-a4ea-08d9e08f708a
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT005.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5561
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
-head:   364c1c42b229912132e1615c2ce15be7154e2156
-commit: faf6ce00f9b35ca0a0389a2d66d90214d3c62f34 [70/137] irqchip/gic: Collect GIC_IRQ_TYPE definitions into one place
-config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20220126/202201261305.sZ3Y7MUD-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=faf6ce00f9b35ca0a0389a2d66d90214d3c62f34
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.16
-        git checkout faf6ce00f9b35ca0a0389a2d66d90214d3c62f34
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Hello,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Xilinx Alveo PCIe accelerator cards use flattened device tree to describe
+HW subsystems or endpoints. Each device tree node represents a hardware
+endpoint and each endpoint is an hardware unit which requires a driver.
+The product detail: 
+    https://www.xilinx.com/products/boards-and-kits/alveo.html
 
-All errors (new ones prefixed by >>):
+The feedback from the previous patches was to create a base tree if there
+is not one and apply the unflattened device nodes by existing Linux
+platform device and OF infrastructure. Please refer to previous discussion
+with device tree and fpga maintainers.
+    https://lore.kernel.org/lkml/CAL_JsqJfyRymB=VxLuQqLpep+Q1Eie48dobv9sC5OizDz0d2DQ@mail.gmail.com/
+    https://lore.kernel.org/lkml/20220105225013.1567871-1-lizhi.hou@xilinx.com/
 
->> include/linux/irqchip/arm-vgic-info.h:13:15: error: unexpected token in argument list
-   enum gic_type {
-                 ^
->> include/linux/irqchip/arm-vgic-info.h:15:8: error: unexpected token in operand
-    GIC_V2,
-          ^
-   include/linux/irqchip/arm-vgic-info.h:17:8: error: unexpected token in operand
-    GIC_V3,
-          ^
->> include/linux/irqchip/arm-vgic-info.h:18:1: error: invalid instruction, did you mean: b?
-   };
-   ^
-   include/linux/irqchip/arm-vgic-info.h:20:21: error: unexpected token in argument list
-   struct gic_kvm_info {
-                       ^
-   include/linux/irqchip/arm-vgic-info.h:22:16: error: unexpected token in argument list
-    enum gic_type type;
-                  ^
-   include/linux/irqchip/arm-vgic-info.h:24:18: error: unexpected token in argument list
-    struct resource vcpu;
-                    ^
-   include/linux/irqchip/arm-vgic-info.h:26:15: error: unexpected token in argument list
-    unsigned int maint_irq;
-                 ^
->> include/linux/irqchip/arm-vgic-info.h:28:2: error: invalid instruction, did you mean: bl?
-    bool no_maint_irq_mask;
-    ^
-   include/linux/irqchip/arm-vgic-info.h:30:18: error: unexpected token in argument list
-    struct resource vctrl;
-                    ^
-   include/linux/irqchip/arm-vgic-info.h:32:2: error: invalid instruction, did you mean: bl?
-    bool has_v4;
-    ^
-   include/linux/irqchip/arm-vgic-info.h:34:2: error: invalid instruction, did you mean: bl?
-    bool has_v4_1;
-    ^
-   include/linux/irqchip/arm-vgic-info.h:36:2: error: invalid instruction, did you mean: bl?
-    bool no_hw_deactivation;
-    ^
-   include/linux/irqchip/arm-vgic-info.h:37:1: error: invalid instruction, did you mean: b?
-   };
-   ^
-   include/linux/irqchip/arm-vgic-info.h:42:15: error: unexpected token in argument list
-   static inline void vgic_set_kvm_info(const struct gic_kvm_info *info) {}
-                 ^
->> include/linux/irqchip/arm-gic-common.h:25:1: error: invalid instruction, did you mean: strt?
-   struct irq_domain;
-   ^
-   include/linux/irqchip/arm-gic-common.h:26:1: error: invalid instruction, did you mean: strt?
-   struct fwnode_handle;
-   ^
->> include/linux/irqchip/arm-gic-common.h:27:24: error: unexpected token in variant, expected ')'
-   int gicv2m_init(struct fwnode_handle *parent_handle,
-                          ^
->> include/linux/irqchip/arm-gic-common.h:28:28: error: unexpected token in argument list
-     struct irq_domain *parent);
-                              ^
+This patch adds OF_EMPTY_ROOT config. When it is selected and there is not
+a device tree, create an empty device tree root node.
 
+Lizhi Hou (1):
+  of: create empty of root
 
-vim +13 include/linux/irqchip/arm-vgic-info.h
+ drivers/of/Kconfig         |  3 +++
+ drivers/of/Makefile        |  1 +
+ drivers/of/of_empty_root.c | 51 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 55 insertions(+)
+ create mode 100644 drivers/of/of_empty_root.c
 
-0e5cb7770684b4 Marc Zyngier 2021-02-27  12  
-0e5cb7770684b4 Marc Zyngier 2021-02-27 @13  enum gic_type {
-0e5cb7770684b4 Marc Zyngier 2021-02-27  14  	/* Full GICv2 */
-0e5cb7770684b4 Marc Zyngier 2021-02-27 @15  	GIC_V2,
-0e5cb7770684b4 Marc Zyngier 2021-02-27  16  	/* Full GICv3, optionally with v2 compat */
-0e5cb7770684b4 Marc Zyngier 2021-02-27  17  	GIC_V3,
-0e5cb7770684b4 Marc Zyngier 2021-02-27 @18  };
-0e5cb7770684b4 Marc Zyngier 2021-02-27  19  
-0e5cb7770684b4 Marc Zyngier 2021-02-27  20  struct gic_kvm_info {
-0e5cb7770684b4 Marc Zyngier 2021-02-27  21  	/* GIC type */
-0e5cb7770684b4 Marc Zyngier 2021-02-27 @22  	enum gic_type	type;
-0e5cb7770684b4 Marc Zyngier 2021-02-27  23  	/* Virtual CPU interface */
-0e5cb7770684b4 Marc Zyngier 2021-02-27  24  	struct resource vcpu;
-0e5cb7770684b4 Marc Zyngier 2021-02-27  25  	/* Interrupt number */
-0e5cb7770684b4 Marc Zyngier 2021-02-27  26  	unsigned int	maint_irq;
-669062d2a1aa36 Marc Zyngier 2021-02-28  27  	/* No interrupt mask, no need to use the above field */
-669062d2a1aa36 Marc Zyngier 2021-02-28 @28  	bool		no_maint_irq_mask;
-0e5cb7770684b4 Marc Zyngier 2021-02-27  29  	/* Virtual control interface */
-0e5cb7770684b4 Marc Zyngier 2021-02-27  30  	struct resource vctrl;
-0e5cb7770684b4 Marc Zyngier 2021-02-27  31  	/* vlpi support */
-0e5cb7770684b4 Marc Zyngier 2021-02-27  32  	bool		has_v4;
-0e5cb7770684b4 Marc Zyngier 2021-02-27  33  	/* rvpeid support */
-0e5cb7770684b4 Marc Zyngier 2021-02-27  34  	bool		has_v4_1;
-f6c3e24fb721dd Marc Zyngier 2021-03-15  35  	/* Deactivation impared, subpar stuff */
-f6c3e24fb721dd Marc Zyngier 2021-03-15  36  	bool		no_hw_deactivation;
-0e5cb7770684b4 Marc Zyngier 2021-02-27  37  };
-0e5cb7770684b4 Marc Zyngier 2021-02-27  38  
+-- 
+2.27.0
 
-:::::: The code at line 13 was first introduced by commit
-:::::: 0e5cb7770684b4c81bcc63f4675e488f9a0e31eb irqchip/gic: Split vGIC probing information from the GIC code
-
-:::::: TO: Marc Zyngier <maz@kernel.org>
-:::::: CC: Marc Zyngier <maz@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

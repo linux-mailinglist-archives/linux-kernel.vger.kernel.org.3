@@ -2,177 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 691CD49C5C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107D049C5CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238755AbiAZJFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:05:30 -0500
-Received: from mga17.intel.com ([192.55.52.151]:44553 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231404AbiAZJF3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:05:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643187929; x=1674723929;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ggEHQETAv3lIPyDtUG98X3fyvSWeMQrZEDGtYqjDGro=;
-  b=GsrV4KKkI9aTnAL2asGlOF2XIAK+9sMQv4az0wGVCL6X/0dPYtnWobWZ
-   b12eVG/Y019aQBgft0tyiMUzLEPEEduhS/Pyjz7UqqaN5ryb6CuFa5c1C
-   8UEscW/PQu3mtPXMOn4NSOQP/le9i6HVPSIQzp6xAD/41cWGEwK/ouxIL
-   aX9uBIiyjK5+nwKG1LlJDo8EYrVObpOCPye5/O/21HqZfOdfKTq/a2XUh
-   BcyksDa7zfWNX3LshJMj4Ir0h7uBM9Q00iM6AMtbu6G8JEV6i6kqgghlj
-   bYA9+SW+WxpjR0LGd2SPBj7VdyBAXBwrD08UZqaP7z5tkq56oHAg9sO4N
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="227184325"
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="227184325"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 01:05:28 -0800
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="628246433"
-Received: from richardt-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.143.219])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 01:05:28 -0800
-Date:   Wed, 26 Jan 2022 01:05:27 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@linux.ie>,
-        nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        amd-gfx@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Leo Li <sunpeng.li@amd.com>, intel-gfx@lists.freedesktop.org,
-        Raju Rangoju <rajur@chelsio.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S238760AbiAZJGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:06:30 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50322 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230019AbiAZJG2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 04:06:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 478E16148C;
+        Wed, 26 Jan 2022 09:06:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090C9C340E3;
+        Wed, 26 Jan 2022 09:06:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643187987;
+        bh=915lXUlz+7KXHUvlQ+F2n82DHNWW5u2VIKGWr3z3SnU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UxpSclEb4Az39DweLKoJHfII764GLFs4Q0e3un9/vyR0im00VDpOJqyHFrFuAfhMn
+         oXERpK2vPOAnSQg/c0BCv159rTi5iAD8IIn5vLhLv2THWq7ReZfG3OaszOTgvZhT+p
+         HXWYp5u4eCZf8AKeFLV5uTMx9XNsUvhZexmiUK+Z2PcRGmTBmzay7WJJGrGFGZoyC8
+         jTWT+2d4vbvARNKFIRkWbsaAt1puaxcmbyPEPXWMq6N/sc7bfW6JwPFS0kRHhEteTp
+         XXiU/mh4mTI8/1+cLR58z73TtI1fBiOh8FQm6msSqO3qBXxAlOSwSusXS0V3C9S01u
+         p6pfgOVz1IhzQ==
+Date:   Wed, 26 Jan 2022 18:06:23 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 3/3] drm: Convert open yes/no strings to yesno()
-Message-ID: <20220126090527.ksuah5m6xctx7jjo@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220119072450.2890107-1-lucas.demarchi@intel.com>
- <20220119072450.2890107-4-lucas.demarchi@intel.com>
- <Yehm5/DJ5Ljo1EWs@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Yehm5/DJ5Ljo1EWs@smile.fi.intel.com>
+Subject: Re: [PATCH v5 2/9] fprobe: Add ftrace based probe APIs
+Message-Id: <20220126180623.52c4da59c7996b27dd56e01f@kernel.org>
+In-Reply-To: <20220125112123.515b7450@gandalf.local.home>
+References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
+        <164311271777.1933078.9066058105807126444.stgit@devnote2>
+        <20220125112123.515b7450@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 09:30:47PM +0200, Andy Shevchenko wrote:
->On Tue, Jan 18, 2022 at 11:24:50PM -0800, Lucas De Marchi wrote:
->> linux/string_helpers.h provides a helper to return "yes"/"no"
->> strings. Replace the open coded versions with yesno(). The places were
->> identified with the following semantic patch:
->>
->> 	@@
->> 	expression b;
->> 	@@
->>
->> 	- b ? "yes" : "no"
->> 	+ yesno(b)
->>
->> Then the includes were added, so we include-what-we-use, and parenthesis
->> adjusted in drivers/gpu/drm/v3d/v3d_debugfs.c. After the conversion we
->> still see the same binary sizes:
->>
->>    text    data     bss     dec     hex filename
->> 1442171   60344     800 1503315  16f053 ./drivers/gpu/drm/radeon/radeon.ko
->> 1442171   60344     800 1503315  16f053 ./drivers/gpu/drm/radeon/radeon.ko.old
->> 5985991  324439   33808 6344238  60ce2e ./drivers/gpu/drm/amd/amdgpu/amdgpu.ko
->> 5985991  324439   33808 6344238  60ce2e ./drivers/gpu/drm/amd/amdgpu/amdgpu.ko.old
->>  411986   10490    6176  428652   68a6c ./drivers/gpu/drm/drm.ko
->>  411986   10490    6176  428652   68a6c ./drivers/gpu/drm/drm.ko.old
->> 1970292  109515    2352 2082159  1fc56f ./drivers/gpu/drm/nouveau/nouveau.ko
->> 1970292  109515    2352 2082159  1fc56f ./drivers/gpu/drm/nouveau/nouveau.ko.old
->
->...
->
->>  #include <linux/module.h>
->>  #include <linux/sched.h>
->>  #include <linux/slab.h>
->> +#include <linux/string_helpers.h>
->
->+ blank line?
->
->> +#include <linux/string_helpers.h>
->
->...
->
->>  	seq_printf(m, "\tDP branch device present: %s\n",
->> -		   branch_device ? "yes" : "no");
->> +		   yesno(branch_device));
->
->Now it's possible to keep this on one line.
->
->...
->
->>  	drm_printf_indent(p, indent, "imported=%s\n",
->> -			  obj->import_attach ? "yes" : "no");
->> +			  yesno(obj->import_attach));
->
->81 here, but anyway, ditto!
->
->...
->
->>   */
->
->+blank line here?
->
->> +#include <linux/string_helpers.h>
->> +
->>  #include "aux.h"
->>  #include "pad.h"
->
->...
->
->>  	seq_printf(m, "MMU:        %s\n",
->> -		   (ident2 & V3D_HUB_IDENT2_WITH_MMU) ? "yes" : "no");
->> +		   yesno(ident2 & V3D_HUB_IDENT2_WITH_MMU));
->>  	seq_printf(m, "TFU:        %s\n",
->> -		   (ident1 & V3D_HUB_IDENT1_WITH_TFU) ? "yes" : "no");
->> +		   yesno(ident1 & V3D_HUB_IDENT1_WITH_TFU));
->>  	seq_printf(m, "TSY:        %s\n",
->> -		   (ident1 & V3D_HUB_IDENT1_WITH_TSY) ? "yes" : "no");
->> +		   yesno(ident1 & V3D_HUB_IDENT1_WITH_TSY));
->>  	seq_printf(m, "MSO:        %s\n",
->> -		   (ident1 & V3D_HUB_IDENT1_WITH_MSO) ? "yes" : "no");
->> +		   yesno(ident1 & V3D_HUB_IDENT1_WITH_MSO));
->>  	seq_printf(m, "L3C:        %s (%dkb)\n",
->> -		   (ident1 & V3D_HUB_IDENT1_WITH_L3C) ? "yes" : "no",
->> +		   yesno(ident1 & V3D_HUB_IDENT1_WITH_L3C),
->>  		   V3D_GET_FIELD(ident2, V3D_HUB_IDENT2_L3C_NKB));
->
->I believe it's fine to join back to have less LOCs (yes, it will be 83 or so,
->but I believe in these cases it's very much okay).
+On Tue, 25 Jan 2022 11:21:23 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-now that we are converting to str_yes_no(), we will have a few more
-chars. Some maintainers may be more strict on the 80 or 100 chars. I
-will assume whatever is in the code base is the preferred form.
+> On Tue, 25 Jan 2022 21:11:57 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > The fprobe is a wrapper API for ftrace function tracer.
+> > Unlike kprobes, this probes only supports the function entry, but
+> > it can probe multiple functions by one fprobe. The usage is almost
+> > same as the kprobe, user will specify the function names by
+> > fprobe::syms, the number of syms by fprobe::nentry,
+> > and the user handler by fprobe::entry_handler.
+> > 
+> > struct fprobe fp = { 0 };
+> > const char *targets[] = { "func1", "func2", "func3"};
+> > 
+> > fp.handler = user_handler;
+> > fp.nentry = ARRAY_SIZE(targets);
+> > fp.syms = targets;
+> > 
+> > ret = register_fprobe(&fp);
+> > 
+> > CAUTION: if user entry handler changes registers including
+> > ip address, it will be applied when returns from the
+> > entry handler. So user handler must recover it.
+> 
+> Can you rephrase the above, I'm not sure what you mean by it.
 
-thanks
-Lucas De Marchi
+OK, but I think this should be written in the document.
+I meant entry_handler can change the regs, but that will change
+the execution path. So for some reason if it needs to change the
+registers, those should be recovered in the same entry_handler.
 
->
->-- 
->With Best Regards,
->Andy Shevchenko
->
->
+[SNIP]
+> > +/* Convert ftrace location address from symbols */
+> > +static int convert_func_addresses(struct fprobe *fp)
+> > +{
+> > +	unsigned long addr, size;
+> > +	unsigned int i;
+> > +
+> > +	/* Convert symbols to symbol address */
+> > +	if (fp->syms) {
+> > +		fp->addrs = kcalloc(fp->nentry, sizeof(*fp->addrs), GFP_KERNEL);
+> > +		if (!fp->addrs)
+> > +			return -ENOMEM;
+> > +
+> > +		for (i = 0; i < fp->nentry; i++) {
+> > +			fp->addrs[i] = kallsyms_lookup_name(fp->syms[i]);
+> > +			if (!fp->addrs[i])	/* Maybe wrong symbol */
+> > +				goto error;
+> > +		}
+> > +	}
+> 
+> I wonder if we should just copy the addrs when fp->syms is not set, and
+> not have to worry about not freeing addrs (see below). This will make
+> things easier to maintain. Or better yet, have the syms and addrs passed
+> in, and then we assign it.
+> 
+> static int convert_func_addresses(struct fprobe *fp, const char **syms,
+> 				  unsigned long *addrs)
+> {
+> 	unsigned int i;
+> 
+> 	fp->addrs = kcalloc(fp->nentry, sizeof(*fp->addrs), GFP_KERNEL);
+> 	if (!fp->addrs)
+> 		return -ENOMEM;
+> 
+> 	if (syms) {
+> 		for (i = 0; i < fp->nentry; i++) {
+> 			fp->addrs[i] = kallsyms_lookup_name(fp->syms[i]);
+> 			if (!fp->addrs[i])	/* Maybe wrong symbol */
+> 				goto error;
+> 		}
+> 	} else {
+> 		memcpy(fp->addrs, addrs, fp->nentry * sizeof(*addrs));
+> 	}
+
+Actually, since fprobe doesn't touch the addrs and syms except for the
+registering time, instead of changing the fp->addrs, I would like
+to make a temporary address array just for ftrace_filter_ips(). Then
+we don't need to free it later.
+
+> 
+> > +
+> > +	/* Convert symbol address to ftrace location. */
+> > +	for (i = 0; i < fp->nentry; i++) {
+> > +		if (!kallsyms_lookup_size_offset(fp->addrs[i], &size, NULL))
+> > +			size = MCOUNT_INSN_SIZE;
+> > +		addr = ftrace_location_range(fp->addrs[i], fp->addrs[i] + size);
+> > +		if (!addr) /* No dynamic ftrace there. */
+> > +			goto error;
+> > +		fp->addrs[i] = addr;
+> > +	}
+> > +
+> > +	return 0;
+> > +
+> > +error:
+> > +	kfree(fp->addrs);
+> 
+> The above doesn't check if fp->syms was set, so if it wasn't we just freed
+> the addrs that was passed in. Again, I think these should be passed into
+> the register function as separate parameters and not via the fp handle.
+
+Agreed. I also would like to remove those params from struct fprobe.
+
+> 
+> > +	fp->addrs = NULL;
+> > +	return -ENOENT;
+> > +}
+> > +
+> > +/**
+> > + * register_fprobe() - Register fprobe to ftrace
+> > + * @fp: A fprobe data structure to be registered.
+> > + *
+> > + * This expects the user set @fp::entry_handler, @fp::syms or @fp:addrs,
+> > + * and @fp::nentry. If @fp::addrs are set, that will be updated to point
+> > + * the ftrace location. If @fp::addrs are NULL, this will generate it
+> > + * from @fp::syms.
+> > + * Note that you do not set both of @fp::addrs and @fp::syms.
+> 
+> Again, I think this should pass in the syms and addrs as parameters.
+
+That's good to me :)
+
+Thank you,
+
+> 
+> -- Steve
+> 
+> > + */
+> > +int register_fprobe(struct fprobe *fp)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (!fp || !fp->nentry || (!fp->syms && !fp->addrs) ||
+> > +	    (fp->syms && fp->addrs))
+> > +		return -EINVAL;
+> > +
+> > +	ret = convert_func_addresses(fp);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	fp->nmissed = 0;
+> > +	fp->ops.func = fprobe_handler;
+> > +	fp->ops.flags = FTRACE_OPS_FL_SAVE_REGS;
+> > +
+> > +	ret = ftrace_set_filter_ips(&fp->ops, fp->addrs, fp->nentry, 0, 0);
+> > +	if (!ret)
+> > +		ret = register_ftrace_function(&fp->ops);
+> > +
+> > +	if (ret < 0 && fp->syms) {
+> > +		kfree(fp->addrs);
+> > +		fp->addrs = NULL;
+> > +	}
+> > +
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(register_fprobe);
+> > +
+> > +/**
+> > + * unregister_fprobe() - Unregister fprobe from ftrace
+> > + * @fp: A fprobe data structure to be unregistered.
+> > + *
+> > + * Unregister fprobe (and remove ftrace hooks from the function entries).
+> > + * If the @fp::addrs are generated by register_fprobe(), it will be removed
+> > + * automatically.
+> > + */
+> > +int unregister_fprobe(struct fprobe *fp)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (!fp || !fp->nentry || !fp->addrs)
+> > +		return -EINVAL;
+> > +
+> > +	ret = unregister_ftrace_function(&fp->ops);
+> > +
+> > +	if (!ret && fp->syms) {
+> > +		kfree(fp->addrs);
+> > +		fp->addrs = NULL;
+> > +	}
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(unregister_fprobe);
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

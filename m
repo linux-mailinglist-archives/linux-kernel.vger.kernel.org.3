@@ -2,99 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F95249D5BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC34949D5C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbiAZWxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiAZWxc (ORCPT
+        id S232432AbiAZWyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:54:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53302 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229474AbiAZWya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:53:32 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF48BC061748
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:53:32 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so1043885pja.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:53:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jmylYnPW0itqk7X3kALZZJzsAaqdNt+3di958skR0YI=;
-        b=PHqUwsaNVoleX6lM8/jK8bmNbOWlq2er+xvJuFqzw6iPanil4hooAU8qxSxIqs3gnx
-         yD9wnS+rsC5aOFii+X674igUsl6mXFK8bCd/0xiCKcYur8FlJGVHBVZctdKSCdJgYe1x
-         5UnYTJIOx7UZVbzQCFMMs6OhpI24L0xOF/rR4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jmylYnPW0itqk7X3kALZZJzsAaqdNt+3di958skR0YI=;
-        b=HW76pQXzhk7SWaG8kqq5IrdeDa+9v5JVD0IA6eWQ0sTiA9r5jXHtID/VIj+BMcoJtg
-         1uId3KNPNt4lgVAkRPeAMTpgZAEaZpr0K6Iaj9vxFF9iK6R8gVuG5AZSDWapBAOQB/Dw
-         Dvw3cudz58GQjCOjvlBO3zztZO8hut1HpzQQcneEzN+cepp+LBuFeJf2q6FloAbnKAtB
-         Zlj6LkpOf+IFNqC7rq9jE4sdMN+chDgl5j0o0c/IFN6t4ehElnKwXK8f6QCmwKhxFuBR
-         E56XWQ4igZWUOClO0eewlRQ7uh1g3rTlxB/+nrjUjkTsggpkL02YEtAF2Fe35+7W6P2p
-         0VIg==
-X-Gm-Message-State: AOAM530t7cGWF9fU/bw/Hw/hR/+TQioay6H0NJrJzJqkX1R20205P4A0
-        kLKP3Qw2ts1RefUGcP22oY6kVA==
-X-Google-Smtp-Source: ABdhPJz0naa97lzLP+/kLQLkxJiIfooOGk727zm3c6gKvGHG1g4Up7tKbetD2ZS99Jox6VBbC04MAw==
-X-Received: by 2002:a17:90b:3852:: with SMTP id nl18mr10993180pjb.228.1643237612205;
-        Wed, 26 Jan 2022 14:53:32 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b14sm3246409pfm.17.2022.01.26.14.53.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:53:31 -0800 (PST)
-Date:   Wed, 26 Jan 2022 14:53:31 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH RESEND] net/mlx5e: Use struct_group() for memcpy() region
-Message-ID: <202201261452.97A809BE9C@keescook>
-References: <20220124172242.2410996-1-keescook@chromium.org>
- <20220126212854.6gxffia7vj6cbtbh@sx1>
+        Wed, 26 Jan 2022 17:54:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A263761A0C;
+        Wed, 26 Jan 2022 22:54:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1EC5C340E3;
+        Wed, 26 Jan 2022 22:54:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643237669;
+        bh=55iCsDTeS4TYYqiGASJPJulq2w6UsXoqvp8QlgU+8lU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bQ4pdCQIUH35jlLiU8KlpqtJbUegpHgOPu4nVq4HLkdBpcZ+ZcsX6eUFpZN0YuGEM
+         iWLP41LksYa/t/u7pZDbX4pWxd1IIyzGfBclRlG5h+lRbDdwNyCQ7xfRNf1eeX+7lj
+         xn8InPfOiEBMXiJpLowr4QBoGDovWzMDQahuS5Yq1diqHw4Eufvp541Lg0Xk9r9R1F
+         evQ2/FTYxqw/iAgKxfaWmBq/YtZPortMAfnFIhMkgrMMawVqvpSKYUZDMyEa4l5V1Z
+         zzahVIQzk6/g3g2gC9NBVvzhXNXYcpYqssVcfmJa0I3Yw7x8beFxSH4643qPI7dxzf
+         K2zcrTZTeJViQ==
+Date:   Wed, 26 Jan 2022 14:54:27 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v2] lib/crypto: blake2s: avoid indirect calls to
+ compression function for Clang CFI
+Message-ID: <YfHRIw9aFwCYaXh7@sol.localdomain>
+References: <20220119135450.564115-1-Jason@zx2c4.com>
+ <20220124192849.14755-1-Jason@zx2c4.com>
+ <Ye+bam3aSIjz8n9E@sol.localdomain>
+ <CAHmME9oQuKLo2D_OGMy-8PS-u=a-ERvP+1L7RvpjJ2_xBaM5eQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126212854.6gxffia7vj6cbtbh@sx1>
+In-Reply-To: <CAHmME9oQuKLo2D_OGMy-8PS-u=a-ERvP+1L7RvpjJ2_xBaM5eQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 01:28:54PM -0800, Saeed Mahameed wrote:
-> On 24 Jan 09:22, Kees Cook wrote:
-> > In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> > field bounds checking for memcpy(), memmove(), and memset(), avoid
-> > intentionally writing across neighboring fields.
-> > 
-> > Use struct_group() in struct vlan_ethhdr around members h_dest and
-> > h_source, so they can be referenced together. This will allow memcpy()
-> > and sizeof() to more easily reason about sizes, improve readability,
-> > and avoid future warnings about writing beyond the end of h_dest.
-> > 
-> > "pahole" shows no size nor member offset changes to struct vlan_ethhdr.
-> > "objdump -d" shows no object code changes.
-> > 
-> > Cc: Saeed Mahameed <saeedm@nvidia.com>
-> > Cc: Leon Romanovsky <leon@kernel.org>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: netdev@vger.kernel.org
-> > Cc: linux-rdma@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > Since this results in no binary differences, I will carry this in my tree
-> > unless someone else wants to pick it up. It's one of the last remaining
-> > clean-ups needed for the next step in memcpy() hardening.
-> > ---
+On Tue, Jan 25, 2022 at 01:23:34PM +0100, Jason A. Donenfeld wrote:
+> On 1/25/22, Eric Biggers <ebiggers@kernel.org> wrote:
+> > On Mon, Jan 24, 2022 at 08:28:49PM +0100, Jason A. Donenfeld wrote:
+> >> blake2s_compress_generic is weakly aliased by blake2s_generic. The
+> >
+> > Don't you mean "weakly aliased by blake2s_compress"?
 > 
-> applied to net-next-mlx5
+> Grrrr. Thanks.
+> 
+> >> Changes v1->v2:
+> >> - Wrapped columns at 80 for Eric.
+> >
+> > It is the recommended coding style, so not just for me :-)
+> 
+> I was under the impression this increased to 100 mid-2020 or so, and
+> checkpatch.pl now makes noise at that width instead.
 
-Thanks! How often does net-next-mlx5 flush into net-next?
+From Documentation/process/coding-style.rst:
 
--- 
-Kees Cook
+"The preferred limit on the length of a single line is 80 columns.
+
+ Statements longer than 80 columns should be broken into sensible chunks,
+ unless exceeding 80 columns significantly increases readability and does
+ not hide information."
+
+It's not as strict as it used to be, but checkpatch seems to be overly-lenient.
+I always run it with --max-line-length=80.
+
+- Eric

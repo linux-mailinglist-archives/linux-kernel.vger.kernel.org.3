@@ -2,73 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C650F49D4A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8825949D4AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbiAZVkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbiAZVkO (ORCPT
+        id S232734AbiAZVm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:42:58 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:39174 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232672AbiAZVm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:40:14 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADA8C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:40:14 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id q63so874493pja.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:40:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AjuEqo/szNdkE8sJZ2LmIS7aoI8q/3oLCqQgzbdOm7w=;
-        b=fUylDgRiw2zN+9lqWMjcGPilZXXqjxp5P3NMNG1XyAusP3/ipIkjL+BLrlzOOvcIYM
-         WLXU/UV/c1bOo6tCz6BAClGoSjGm5gqo8CvWFSxm8V0OEQEhQ811Ot6NvTUIouytBpnG
-         /Ovfg1Kpp0Fs0khSxWGc7iRKIhh8jxBNEFATLHARHGrc8+fdAWyeAVJwSQcYcTIlJBt9
-         /TfqrXFWvnSH3J83P9U0iptSjZRY2pDBJB9rQgPA32IEu5bWAQVmiN7AgnGj4JKTywEM
-         tcDSSXnkV1fUeyhCOxhTckEXzIkbTZrQyY18ng4FIF2PurEo/s6i7TAIhl+GpPVUy3r7
-         0ugA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AjuEqo/szNdkE8sJZ2LmIS7aoI8q/3oLCqQgzbdOm7w=;
-        b=3dVbzl3KwW1hhJxc/SA4wcbmRuruIC6u/nJ+VgGlhOZ6GTUaDprDxGa13wcQVT7eJS
-         S7hLM6ofExZubkUDEtTJWnYaU3xcaeLHMtVUWCKHRoxSn7SwQParpnlBI4yXH6Vdl/ET
-         guYiUeb8rD1q7YMGVQ4rT18K64WWAK9QHX7XqfRoR2ukYSMlmTe4zPzy/yXqOBA3GjYD
-         tAXa5u2jGuOpZ3baNAovYX/MSZSj6Tcr3zE2+R+g2Mg4lgJV2lbwzeAkrFnVgWkeUg1C
-         ijvkHgpUbH9yNIIaAmKy5hs7fs9An7QIDBRDoQTTUUtqYHeF0P7y2/bdBL+WLcUzR2ZA
-         6T+g==
-X-Gm-Message-State: AOAM530Xx4WZwOFts9NtVhUnXQgXamz/DdZInLnvotOCCwD/Uul00R+P
-        TFUHVnjYonbwIPGYSvdH7xtRAyy8LwPEAInztLAwYA==
-X-Google-Smtp-Source: ABdhPJx2RWLLzW0RcrplifZ11QPGpoZ7QxkwFy8BUYZQx99cxeLipwasrmPWrgb1LiI7eQh/g0xYSBVrkEfY+RtHLOI=
-X-Received: by 2002:a17:90b:17c4:: with SMTP id me4mr10841971pjb.198.1643233213353;
- Wed, 26 Jan 2022 13:40:13 -0800 (PST)
+        Wed, 26 Jan 2022 16:42:57 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D8054218E8;
+        Wed, 26 Jan 2022 21:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643233375; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j8D3/iSgudTfOpodQ4uNAeH04etbukj0qfZT65VmtRY=;
+        b=O77jZ50FJkC7iNzTXGMDV2hNmUTIPLrSyjOFTujn+j9nacM71F+7k27HTvyaeMEKkwzru+
+        2Mbd4AF5ug1FWf9/Vx/2VBe49pXR9L+CVG86KHUcw7kIEUsfCudpe5UgY4o/DinWN4/tZb
+        pYsAHN+VjSqUL6htxeDYd5g9NSlfX9c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643233375;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j8D3/iSgudTfOpodQ4uNAeH04etbukj0qfZT65VmtRY=;
+        b=dqNYRcFwnQNpOkMjkxCrgrcqfv6bp+DnkNy/sKad0ob00MRP4UtF3/ApM09Uktzou9AKH2
+        URcoL9hBtUB7e6AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0089B13E3C;
+        Wed, 26 Jan 2022 21:42:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hRo/LFzA8WFDQgAAMHmgww
+        (envelope-from <neilb@suse.de>); Wed, 26 Jan 2022 21:42:52 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com>
-In-Reply-To: <20220118190922.1557074-1-dlatypov@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 26 Jan 2022 16:40:02 -0500
-Message-ID: <CAFd5g45on3tNX2YyaE9caTyxY1sXAwgZMNQUq2E5h3DMVt2DdA@mail.gmail.com>
-Subject: Re: [PATCH 1/5] kunit: tool: drop mostly unused KunitResult.result field
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Trond Myklebust" <trondmy@hammerspace.com>
+Cc:     "mgorman@suse.de" <mgorman@suse.de>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "anna.schumaker@netapp.com" <anna.schumaker@netapp.com>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 22/23] NFS: swap-out must always use STABLE writes.
+In-reply-to: <e50bf6286a89d60ee0879e55a30b15d84e97d9a4.camel@hammerspace.com>
+References: <164299573337.26253.7538614611220034049.stgit@noble.brown>,
+ <164299611287.26253.13462969110743208198.stgit@noble.brown>,
+ <e50bf6286a89d60ee0879e55a30b15d84e97d9a4.camel@hammerspace.com>
+Date:   Thu, 27 Jan 2022 08:42:49 +1100
+Message-id: <164323336953.5493.18342144609889647048@noble.neil.brown.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 2:09 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> This field is only used to pass along the parsed Test object from
-> parse_tests().
-> Everywhere else the `result` field is ignored.
->
-> Instead make parse_tests() explicitly return a KunitResult and Test so
-> we can retire the `result` field.
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+On Wed, 26 Jan 2022, Trond Myklebust wrote:
+> On Mon, 2022-01-24 at 14:48 +1100, NeilBrown wrote:
+> > The commit handling code is not safe against memory-pressure
+> > deadlocks
+> > when writing to swap.=C2=A0 In particular, nfs_commitdata_alloc() blocks
+> > indefinitely waiting for memory, and this can consume all available
+> > workqueue threads.
+> >=20
+> > swap-out most likely uses STABLE writes anyway as COND_STABLE
+> > indicates
+> > that a stable write should be used if the write fits in a single
+> > request, and it normally does.=C2=A0 However if we ever swap with a small
+> > wsize, or gather unusually large numbers of pages for a single write,
+> > this might change.
+> >=20
+> > For safety, make it explicit in the code that direct writes used for
+> > swap
+> > must always use FLUSH_COND_STABLE.
+>=20
+> OK. Your explanation above has me extremely confused.
+>=20
+> If you want to avoid commit, then you should be using FLUSH_STABLE,
+> since that forces the writes to be synchronous. FLUSH_COND_STABLE can
+> and will use unstable writes if it sees that there are more writes to
+> come.
+>=20
+> >=20
+> > Signed-off-by: NeilBrown <neilb@suse.de>
+> > ---
+> > =C2=A0fs/nfs/direct.c |=C2=A0=C2=A0=C2=A0 7 ++++---
+> > =C2=A01 file changed, 4 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/fs/nfs/direct.c b/fs/nfs/direct.c
+> > index 43a956d7fd62..29c007b2a17a 100644
+> > --- a/fs/nfs/direct.c
+> > +++ b/fs/nfs/direct.c
+> > @@ -791,7 +791,7 @@ static const struct nfs_pgio_completion_ops
+> > nfs_direct_write_completion_ops =3D {
+> > =C2=A0 */
+> > =C2=A0static ssize_t nfs_direct_write_schedule_iovec(struct nfs_direct_req
+> > *dreq,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct iov_iter *iter,
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 loff_t pos)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 loff_t pos, int
+> > ioflags)
+> > =C2=A0{
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct nfs_pageio_descrip=
+tor desc;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct inode *inode =3D d=
+req->inode;
+> > @@ -799,7 +799,7 @@ static ssize_t
+> > nfs_direct_write_schedule_iovec(struct nfs_direct_req *dreq,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0size_t requested_bytes =
+=3D 0;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0size_t wsize =3D max_t(si=
+ze_t, NFS_SERVER(inode)->wsize,
+> > PAGE_SIZE);
+> > =C2=A0
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0nfs_pageio_init_write(&desc, i=
+node, FLUSH_COND_STABLE, false,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0nfs_pageio_init_write(&desc, i=
+node, ioflags, false,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 &nfs_direct_write_completion_ops);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0desc.pg_dreq =3D dreq;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0get_dreq(dreq);
+> > @@ -905,6 +905,7 @@ ssize_t nfs_file_direct_write(struct kiocb *iocb,
+> > struct iov_iter *iter,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct nfs_direct_req *dr=
+eq;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct nfs_lock_context *=
+l_ctx;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0loff_t pos, end;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ioflags =3D swap ? FLUSH_C=
+OND_STABLE : FLUSH_STABLE;
+>=20
+> This is an unacceptable change in behaviour for the non-swap case, so
+> NACK.
+>=20
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Hi Trond,
+ thanks for the review.
+ You are right - I had that test exactly backwards.  I've fixed for the
+ next version.
+
+Thanks,
+NeilBrown

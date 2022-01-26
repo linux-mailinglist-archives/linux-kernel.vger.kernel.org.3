@@ -2,264 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC7249D272
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB49049D27B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240981AbiAZTWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 14:22:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
+        id S234686AbiAZT0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 14:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244432AbiAZTWm (ORCPT
+        with ESMTP id S232064AbiAZT0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 14:22:42 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3760DC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:22:42 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id s7-20020a5b0447000000b005fb83901511so1139889ybp.11
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:22:42 -0800 (PST)
+        Wed, 26 Jan 2022 14:26:11 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88553C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:26:11 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso576206pjm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:26:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=04sdxbg1x/YeFMRyv9AOCI2xeg6o05KS69MbBAG7QGY=;
-        b=a4RvJo6ASrqusnJN7uPmas81uMdKnvsb1brITuUnXSODDcNV3AJBQtzf49Ni8vB1Gb
-         POZcO79CReKAlS5QN0S/v0TekC1iOXzDBWdzbBJBT1P6H95SfmVlgj/AXOU5tT+9ZLc3
-         fxfFIIgugssUXq36s3MK+XMDg0OsRpaHGZO6yza7jOhq3CNRvF3zCVkaKOGiLuNKwFvc
-         z4idBE4x045MPYsNU5mryLLad01l+9vXPo1EcU0QfiyQPJKDDztpxzLCe+gSjhvt4KsG
-         02Pwdzr8a8ZBFS9DvMk2v3G/XMM3qb8B3vQ6V+9VoiqVIFWtlCSo1neWIIsb4SSltaFe
-         yhNg==
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=FVYHc2+BFBni6BKS9KzbZHsth+59VjQdJh4ifViuJgU=;
+        b=mod3qenkSqfRqSY3ZEMtFoM6tvXmaDwLD363+n8GjuMDUYd0uJQVFw2qsKhxjHy/tq
+         yMF49nGy+Y3OAy5PGHZ3ZBVSFMgQdGGO29IhUtDFsASlRjyBLC/tzkvpmBckhXDFQIjD
+         hRdXnIvdv+3lTTTND8ZBV1rznplZiVNaV61xYJIxtF8RkoXz8VFCGU6A+YiO5Kor6pJd
+         haTklqK9vuYnMOEjZx1H27hGr6T293qJ11qgSOHBxnc9vcvz2PYtQvSThT15TkKDwxgg
+         s2HhOaHN2TKqXCtV687QrfCPgDOsvxzo5EfT6xqL+ZHl4YAvOm1b87KWyRI7xeQ2NBIX
+         gdeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=04sdxbg1x/YeFMRyv9AOCI2xeg6o05KS69MbBAG7QGY=;
-        b=eSOPnGZMHbHV+Wt09pcoDOVp0KARo6jMqnNa5oBd5Mw69UnVnfLMrUcUpbFVeDG/Ct
-         nohPeGw00s5wU1H6OHAPlQknnX148uT8XQku9piJV1m7WdoHCfgRf5qnIGI2bMi9yGxa
-         asSh95sIqflmM+2bMws01sFl46KgaEyDc400whLH9dOTsnFWFmuCQFq4Gy4I+bXfD7K4
-         SxhEMibkpplpBzvGlAkZu8259f9DV10gxSyYm6EyDjo9Ua+6kUi0kMq9WSDpH10VBAuh
-         dDN1cLICYfrGGyqu/Va5VuvSl2gTYAAwTfQFw4HuVlZHGKLwDUy1AqEcXhwBf2Cnc9cb
-         9aYQ==
-X-Gm-Message-State: AOAM5300HIeR1SJeuSHqWIV9cauRu8QAgDUfKmmx/NoLZLHCNak8REc4
-        yDFNxXDB8iRPrDHPx9JubcY8PkAB91Us
-X-Google-Smtp-Source: ABdhPJxnjNIaE09+bgW4aCFWhJbPq7xplPCN0QUq8CKCWlEHAusq4H3cU/VZpfyMHbNlaFIqdSTz5B6bn1Yu
-X-Received: from bg.sfo.corp.google.com ([2620:15c:11a:202:4711:719d:26c1:9f8f])
- (user=bgeffon job=sendgmr) by 2002:a25:6fc4:: with SMTP id
- k187mr480151ybc.709.1643224961441; Wed, 26 Jan 2022 11:22:41 -0800 (PST)
-Date:   Wed, 26 Jan 2022 11:22:34 -0800
-In-Reply-To: <20220125002025.GA21887@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
-Message-Id: <20220126192234.572058-1-bgeffon@google.com>
-Mime-Version: 1.0
-References: <20220125002025.GA21887@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH] dm: introduce a DM_ENFORCE_OPEN_COUNT flag.
-From:   Brian Geffon <bgeffon@google.com>
-To:     Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>
-Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Brian Geffon <bgeffon@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=FVYHc2+BFBni6BKS9KzbZHsth+59VjQdJh4ifViuJgU=;
+        b=LSZSc4aDbgLaA/cjkDvVGtgMFdCPM2V45My5ep+mKBVqr9JYsSert8oZvDOxgyfeZz
+         XO3plOlJjisrIf5LGjI3IBkeCpMi1KE0rpOGOp78Vj6mkNGQXeBeqrIk5E14Hpdv2TrK
+         iT80ORmTtRDlxDKWW4rqJD/F5KWYVLMfV2BPj3SJ7m+SOwJZooBNN821I6i2+k9ehQ4Y
+         bH+gS9ZUosXmXyORpL/pSBDzF5PsDTbdjDG1Fx3w3idnezsgQscKYv4GIWGyw7SBQz3s
+         eKkAP0MN1Jq7nnDZO5jWZb6g1vBUd96eYatU4ca/4Zhmm4H1YHpm+qELawogTATIfYHA
+         mQyg==
+X-Gm-Message-State: AOAM531NQEk7iEsNfmnpSSNKLtrz34lzLE4ku/Ml/C+le/g8jHxA62CD
+        EqSUSWsOpMZdx6dBjS9e7t+TGg==
+X-Google-Smtp-Source: ABdhPJwzi/oqq3KEtgTD8w0cfXbUW9DYcBt6wHefVZe2VJHleRDmpI9yKwxF/T++uqSUiNy6IolADQ==
+X-Received: by 2002:a17:902:eb52:: with SMTP id i18mr56786pli.143.1643225170654;
+        Wed, 26 Jan 2022 11:26:10 -0800 (PST)
+Received: from [2620:15c:29:204:925c:a455:6d75:1ac8] ([2620:15c:29:204:925c:a455:6d75:1ac8])
+        by smtp.gmail.com with ESMTPSA id 13sm2776911pfm.161.2022.01.26.11.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 11:26:10 -0800 (PST)
+Date:   Wed, 26 Jan 2022 11:26:09 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, pjt@google.com, weixugc@google.com,
+        gthelen@google.com, mingo@redhat.com, will@kernel.org,
+        rppt@kernel.org, dave.hansen@linux.intel.com, hpa@zytor.com,
+        aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
+        songmuchun@bytedance.com, qydwhotmail@gmail.com, hughd@google.com,
+        ziy@nvidia.com, anshuman.khandual@arm.com
+Subject: Re: [PATCH v4 4/4] mm/page_table_check: check entries at pmd
+ levels
+In-Reply-To: <20220126183637.1840960-5-pasha.tatashin@soleen.com>
+Message-ID: <cc0ccee-df97-48ea-9a3e-4027c0e11e9d@google.com>
+References: <20220126183637.1840960-1-pasha.tatashin@soleen.com> <20220126183637.1840960-5-pasha.tatashin@soleen.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change introduces a new flag which can be used with
-DM_DEV_CREATE to establish the maximum open count allowed
-for a device. When this flag is set on DM_DEV_CREATE the
-open_count on dm_ioctl will be intrpreted as an input
-parameter. This value must be >= 1 or DM_DEV_CREATE will
-return -ERANGE.
+On Wed, 26 Jan 2022, Pasha Tatashin wrote:
 
-When this flag is set when the open count is equal to
-the max open count any future opens will result in an
--EBUSY.
+> syzbot detected a case where the page table counters were not properly
+> updated.
+> 
+> syzkaller login:  ------------[ cut here ]------------
+> kernel BUG at mm/page_table_check.c:162!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 3099 Comm: pasha Not tainted 5.16.0+ #48
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIO4
+> RIP: 0010:__page_table_check_zero+0x159/0x1a0
+> Code: 7d 3a b2 ff 45 39 f5 74 2a e8 43 38 b2 ff 4d 85 e4 01
+> RSP: 0018:ffff888010667418 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000
+> RDX: ffff88800cea8680 RSI: ffffffff81becaf9 RDI: 0000000003
+> RBP: ffff888010667450 R08: 0000000000000001 R09: 0000000000
+> R10: ffffffff81becaab R11: 0000000000000001 R12: ffff888008
+> R13: 0000000000000001 R14: 0000000000000200 R15: dffffc0000
+> FS:  0000000000000000(0000) GS:ffff888035e00000(0000) knlG0
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffd875cad00 CR3: 00000000094ce000 CR4: 0000000000
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000
+> Call Trace:
+>  <TASK>
+>  free_pcp_prepare+0x3be/0xaa0
+>  free_unref_page+0x1c/0x650
+>  ? trace_hardirqs_on+0x6a/0x1d0
+>  free_compound_page+0xec/0x130
+>  free_transhuge_page+0x1be/0x260
+>  __put_compound_page+0x90/0xd0
+>  release_pages+0x54c/0x1060
+>  ? filemap_remove_folio+0x161/0x210
+>  ? lock_downgrade+0x720/0x720
+>  ? __put_page+0x150/0x150
+>  ? filemap_free_folio+0x164/0x350
+>  __pagevec_release+0x7c/0x110
+>  shmem_undo_range+0x85e/0x1250
+> ...
+> 
+> The repro involved having a huge page that is split due to uprobe event
+> temporarily replacing one of the pages in the huge page. Later the huge
+> page was combined again, but the counters were off, as the PTE level
+> was not properly updated.
+> 
+> Make sure that when PMD is cleared and prior to freeing the level the
+> PTEs are updated.
+> 
+> Fixes: df4e817b7108 ("mm: page table check")
+> 
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-Signed-off-by: Brian Geffon <bgeffon@google.com>
----
- drivers/md/dm-core.h          |  2 ++
- drivers/md/dm-ioctl.c         | 13 ++++++++++++
- drivers/md/dm.c               | 39 ++++++++++++++++++++++++++++++++---
- drivers/md/dm.h               |  7 +++++++
- include/uapi/linux/dm-ioctl.h |  9 +++++++-
- 5 files changed, 66 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/md/dm-core.h b/drivers/md/dm-core.h
-index 55dccdfbcb22..57922a80026e 100644
---- a/drivers/md/dm-core.h
-+++ b/drivers/md/dm-core.h
-@@ -57,6 +57,7 @@ struct mapped_device {
- 
- 	atomic_t holders;
- 	atomic_t open_count;
-+	int max_open_count;
- 
- 	struct dm_target *immutable_target;
- 	struct target_type *immutable_target_type;
-@@ -139,6 +140,7 @@ struct mapped_device {
- #define DMF_SUSPENDED_INTERNALLY 7
- #define DMF_POST_SUSPENDING 8
- #define DMF_EMULATE_ZONE_APPEND 9
-+#define DMF_ENFORCE_OPEN_COUNT 10
- 
- void disable_discard(struct mapped_device *md);
- void disable_write_same(struct mapped_device *md);
-diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
-index 21fe8652b095..8ddf3ab99ef6 100644
---- a/drivers/md/dm-ioctl.c
-+++ b/drivers/md/dm-ioctl.c
-@@ -814,6 +814,9 @@ static void __dev_status(struct mapped_device *md, struct dm_ioctl *param)
- 	if (dm_test_deferred_remove_flag(md))
- 		param->flags |= DM_DEFERRED_REMOVE;
- 
-+	if (dm_test_enforce_open_count_flag(md))
-+		param->flags |= DM_ENFORCE_OPEN_COUNT_FLAG;
-+
- 	param->dev = huge_encode_dev(disk_devt(disk));
- 
- 	/*
-@@ -866,6 +869,16 @@ static int dev_create(struct file *filp, struct dm_ioctl *param, size_t param_si
- 	if (r)
- 		return r;
- 
-+	if (param->flags & DM_ENFORCE_OPEN_COUNT_FLAG) {
-+		if (param->open_count < 1) {
-+			dm_put(md);
-+			dm_destroy(md);
-+			return -ERANGE;
-+		}
-+
-+		dm_set_max_open_count(md, param->open_count);
-+	}
-+
- 	r = dm_hash_insert(param->name, *param->uuid ? param->uuid : NULL, md);
- 	if (r) {
- 		dm_put(md);
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index 76d9da49fda7..718bc9fce7c1 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -307,6 +307,7 @@ int dm_deleting_md(struct mapped_device *md)
- static int dm_blk_open(struct block_device *bdev, fmode_t mode)
- {
- 	struct mapped_device *md;
-+	int ret = -ENXIO;
- 
- 	spin_lock(&_minor_lock);
- 
-@@ -316,16 +317,28 @@ static int dm_blk_open(struct block_device *bdev, fmode_t mode)
- 
- 	if (test_bit(DMF_FREEING, &md->flags) ||
- 	    dm_deleting_md(md)) {
--		md = NULL;
- 		goto out;
- 	}
- 
- 	dm_get(md);
-+
-+	if (test_bit(DMF_ENFORCE_OPEN_COUNT, &md->flags)) {
-+		/*
-+		 * No opens or closes can happen in parallel as both
-+		 * paths hold the _minor_lock.
-+		 */
-+		if (atomic_read(&md->open_count) + 1 > md->max_open_count) {
-+			dm_put(md);
-+			ret = -EBUSY;
-+			goto out;
-+		}
-+	}
-+
- 	atomic_inc(&md->open_count);
-+	ret = 0;
- out:
- 	spin_unlock(&_minor_lock);
--
--	return md ? 0 : -ENXIO;
-+	return ret;
- }
- 
- static void dm_blk_close(struct gendisk *disk, fmode_t mode)
-@@ -2219,6 +2232,21 @@ void dm_put(struct mapped_device *md)
- }
- EXPORT_SYMBOL_GPL(dm_put);
- 
-+/*
-+ * dm_set_max_open count can only be called when the device is created,
-+ * it cannot be changed once set.
-+ */
-+void dm_set_max_open_count(struct mapped_device *md, int count)
-+{
-+	/*
-+	 * The max open count cannot be changed
-+	 */
-+	BUG_ON(test_bit(DMF_ENFORCE_OPEN_COUNT, &md->flags));
-+
-+	set_bit(DMF_ENFORCE_OPEN_COUNT, &md->flags);
-+	md->max_open_count = count;
-+}
-+
- static bool md_in_flight_bios(struct mapped_device *md)
- {
- 	int cpu;
-@@ -2795,6 +2823,11 @@ int dm_test_deferred_remove_flag(struct mapped_device *md)
- 	return test_bit(DMF_DEFERRED_REMOVE, &md->flags);
- }
- 
-+int dm_test_enforce_open_count_flag(struct mapped_device *md)
-+{
-+	return test_bit(DMF_ENFORCE_OPEN_COUNT, &md->flags);
-+}
-+
- int dm_suspended(struct dm_target *ti)
- {
- 	return dm_suspended_md(ti->table->md);
-diff --git a/drivers/md/dm.h b/drivers/md/dm.h
-index 742d9c80efe1..82f56a066b83 100644
---- a/drivers/md/dm.h
-+++ b/drivers/md/dm.h
-@@ -84,6 +84,8 @@ void dm_set_md_type(struct mapped_device *md, enum dm_queue_mode type);
- enum dm_queue_mode dm_get_md_type(struct mapped_device *md);
- struct target_type *dm_get_immutable_target_type(struct mapped_device *md);
- 
-+void dm_set_max_open_count(struct mapped_device *md, int count);
-+
- int dm_setup_md_queue(struct mapped_device *md, struct dm_table *t);
- 
- /*
-@@ -162,6 +164,11 @@ void dm_internal_resume(struct mapped_device *md);
-  */
- int dm_test_deferred_remove_flag(struct mapped_device *md);
- 
-+/*
-+ * Test if the device is enforcing an open count.
-+ */
-+int dm_test_enforce_open_count_flag(struct mapped_device *md);
-+
- /*
-  * Try to remove devices marked for deferred removal.
-  */
-diff --git a/include/uapi/linux/dm-ioctl.h b/include/uapi/linux/dm-ioctl.h
-index c12ce30b52df..9da3700c0442 100644
---- a/include/uapi/linux/dm-ioctl.h
-+++ b/include/uapi/linux/dm-ioctl.h
-@@ -123,7 +123,7 @@ struct dm_ioctl {
- 				 * relative to start of this struct */
- 
- 	__u32 target_count;	/* in/out */
--	__s32 open_count;	/* out */
-+	__s32 open_count;	/* in/out, in on DM_DEV_CREATE only */
- 	__u32 flags;		/* in/out */
- 
- 	/*
-@@ -382,4 +382,11 @@ enum {
-  */
- #define DM_IMA_MEASUREMENT_FLAG	(1 << 19) /* In */
- 
-+/*
-+ * If set with DM_DEV_CREATE then the open_count on device creation
-+ * will be set as the maximum concurrent opens allowed on the device.
-+ * Once the open_count has been hit any new opens will result in
-+ * -EBUSY until other users close the device.
-+ */
-+#define DM_ENFORCE_OPEN_COUNT_FLAG	 (1 << 20) /* In/Out */
- #endif				/* _LINUX_DM_IOCTL_H */
--- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+Acked-by: David Rientjes <rientjes@google.com>

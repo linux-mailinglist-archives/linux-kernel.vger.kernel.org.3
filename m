@@ -2,124 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D5A49D587
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88A249D589
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiAZWhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:37:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S229595AbiAZWhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiAZWhV (ORCPT
+        with ESMTP id S229537AbiAZWhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:37:21 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B68C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:37:21 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id u129so2463943oib.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:37:21 -0800 (PST)
+        Wed, 26 Jan 2022 17:37:43 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C17EC06161C;
+        Wed, 26 Jan 2022 14:37:43 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id p63so543538iod.11;
+        Wed, 26 Jan 2022 14:37:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PifLMi0zlGTgQS9puH7XvyhNJKKGKBmnkxGjrrgwy5Q=;
-        b=GmUR4KytawYOJqKRpnN088ETGAv0pHwfsXThUth7+jNbCxxZ7WKC1pSlHNC372YjB7
-         3moR9FBbLK7Hy5tlWLYW2rmXU1yacgo1jR2KEJoSMCFTG9XzYfw5Q5gEmjHFK1hKj+jh
-         brZH8ZXPAHAd6XcjvmokbcJL22NduYNXI+9xY=
+        bh=1Gr+VjFFLhz7S6VXwMqEIihZJ584fho7AEDsoOCYiI0=;
+        b=U0mnARbKSH7vnAwcMrBYC5RtAm7VrIUN42wZLa5SWUbXGUxMmCvRo6gD6AnRGzfEBe
+         QeZdfBlSy/yMuqUtRS61e8VOHemccXUPCYOmzWdvjiqds17/YVDk8Gp1QvKblRe82Uwv
+         4LSdHBGAe3t0k11Fkad+X56S/JyjSLFx/J3V7SBbPE10sULYee5gTZuMQZc0C8dbw3D+
+         rIunNFJ1z39YoFcW28VDVebaefiKjOtsLFwRleXDXKBSn5SnEqmY2HVgh+XReZ0kvvwH
+         w6P7ef94/Wf2X4SDaZfywEyLUs+qTyyUzGCwDM2XFIdSE3NLFvZz32Z9uGb9Ndc4HAhW
+         DK6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PifLMi0zlGTgQS9puH7XvyhNJKKGKBmnkxGjrrgwy5Q=;
-        b=lVZ0xWO8qugn7Tr6dm16LiVBYTcVpWhlBxylK7fL6MHdjXQfvs90nrXFIO5gwQAYst
-         U3OQpr7zjjF1edGpV0eoAIGpgo1qiG3qkJpxjlTSSIqtLE3SLLno8FZ3jSFGvrW89IAS
-         axEY/WPaoC3nzuTUiN7v+ld+pifGg1RYH2qFK1TDMHL7jxpNdS3C9cmRxtRdGpQp2zcZ
-         qtO6lcdBsZ7K+Hom3eURAVbpqNwIVbc5lIVpNfMMOv7nPY57lCzjlln9hlRd1Vz7Q8S2
-         43woHuqDgfKnkc67fN4BWigdaQc9mGlRu01KMDhSdjdG3KXmOCaL4v+o+ZehLV3b4HoB
-         MSpQ==
-X-Gm-Message-State: AOAM533RvusYhs01qH6w6dSmJbNhCELAf57PaF4USHkqa4XesrvT0PxQ
-        EmFo5glhj95yyK0Hkfb3b/npzKTYMFZ2IzAhWirJXw==
-X-Google-Smtp-Source: ABdhPJynVYV2Qw40URajg8X99oS9Kekj6o6l97S3dWfHfSque0qeESj02QYmiIRzacI/nhXJ7inCFFpWeT+C9NYUHDo=
-X-Received: by 2002:a05:6808:1406:: with SMTP id w6mr501539oiv.330.1643236640611;
- Wed, 26 Jan 2022 14:37:20 -0800 (PST)
+        bh=1Gr+VjFFLhz7S6VXwMqEIihZJ584fho7AEDsoOCYiI0=;
+        b=5feHn2gK6reOjB1Kaexj/65t6zevtUay58Js6kgkqu24qSaF7WzfkHUMI+06+paLvM
+         NcPlx7aACrAtrVJQb7piLwko4Z7mq3M/tV9LW4RkJh1kkjU4l6r7uN8PlxHSWNHYeUnz
+         W1JXGrkqAEQqcPJdOkyWpMABd+UsDZcYxaKiprKW9ngURUlubDuBDRFWETCt3hbHfaH+
+         IBCc41/Vo/DEtCb8ZGATTt7EoteSch0KFGla9T0g5QFU7UJEvLNK4inS/4mEMXBM6e9j
+         BWKvKVdBSCYrvUR3WHxURLcuLsPLbdDqiHVSaBIJ/J4XDPcaMv0NK0Gp/QsMUFO+G6mn
+         GCMQ==
+X-Gm-Message-State: AOAM532nzY86mfEG/8xwIKMQWrVbAxsh6YdZZRKiUbgGx4fTQKf4Iysk
+        8TVux7o/Am8sKSbiroAYPJARVgWbsfUYy6Ef7e8=
+X-Google-Smtp-Source: ABdhPJzGCPKmUKac8oqOoS6GtvYoUTDDesEjikIlkXwKxeU9U35wfUUCY0XJ6wfatw2r58N4ahfTV+u1SnMJno56n28=
+X-Received: by 2002:a02:c496:: with SMTP id t22mr453240jam.117.1643236662760;
+ Wed, 26 Jan 2022 14:37:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <991e988b-7225-881b-a59a-33c3eae044be@suse.de> <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
- <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de> <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
- <YfFMSkhbvHaR0YNE@smile.fi.intel.com> <f6ffe9bb-8683-4061-c876-1d559267ebae@redhat.com>
- <YfFWmmJFtEB93jUi@smile.fi.intel.com> <3430838d-1c63-da49-b774-c5a883e7085f@redhat.com>
- <YfFZkgE3wfPXLpYA@kroah.com>
-In-Reply-To: <YfFZkgE3wfPXLpYA@kroah.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Wed, 26 Jan 2022 23:37:09 +0100
-Message-ID: <CAKMK7uF=75vCS1z4wfvEdGEaHu9-Uxpyu94Y4umbXO9ihBhbvQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220126205214.2149936-1-jannh@google.com> <CA+fCnZe_p+JwUWwumgGm185vWSdAK_z-UFDp7-HWKANB4YjA=g@mail.gmail.com>
+ <CAG48ez0pke5fqEuWGecMAKLpsdVoW3JM3M-SkajHcq_dsrQ_4A@mail.gmail.com>
+In-Reply-To: <CAG48ez0pke5fqEuWGecMAKLpsdVoW3JM3M-SkajHcq_dsrQ_4A@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Wed, 26 Jan 2022 23:37:32 +0100
+Message-ID: <CA+fCnZdXpBHFN3u5exkbLkUsPaFVsbFi=evsPd3uMMfV=tKAeg@mail.gmail.com>
+Subject: Re: [PATCH] usb: raw-gadget: fix handling of dual-direction-capable endpoints
+To:     Jann Horn <jannh@google.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 3:24 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Wed, Jan 26, 2022 at 03:18:14PM +0100, Javier Martinez Canillas wrote:
-> > On 1/26/22 15:11, Andy Shevchenko wrote:
-> > > On Wed, Jan 26, 2022 at 02:47:33PM +0100, Javier Martinez Canillas wrote:
-> > >> On 1/26/22 14:27, Andy Shevchenko wrote:
-> > >>> On Wed, Jan 26, 2022 at 12:18:30PM +0100, Javier Martinez Canillas wrote:
-> > >>>> On 1/26/22 11:59, Helge Deller wrote:
-> > >>>>> On 1/26/22 11:02, Andy Shevchenko wrote:
-> > >
-> > > ...
-> > >
-> > >>>>>> P.S. For the record, I will personally NAK any attempts to remove that
-> > >>>>>> driver from the kernel. And this is another point why it's better not
-> > >>>>>> to be under the staging.
-> > >>>>>
-> > >>>>> I agree. Same as for me to NAK the disabling of fbcon's acceleration
-> > >>>>> features or even attempting to remove fbdev altogether (unless all
-> > >>>>> relevant drivers are ported to DRM).
-> > >>>>
-> > >>>> But that will never happen if we keep moving the goal post.
-> > >>>>
-> > >>>> At some point new fbdev drivers should not be added anymore, otherwise
-> > >>>> the number of existing drivers that need conversion will keep growing.
-> > >>>
-> > >>> This thread is not about adding a new driver.
-> > >>
-> > >> It was about adding a new drivers to drivers/video/ (taken from staging).
-> > >
-> > > Does it mean gates are open to take any new fbdev drivers to the staging?
-> > > If not, I do not see a point here.
-> > >
-> >
-> > Good question. I don't know really.
-> >
-> > But staging has always been more flexible in what's accepted there and
-> > that's why some distros avoid to enable CONFIG_STAGING=y in the kernel.
+On Wed, Jan 26, 2022 at 11:31 PM Jann Horn <jannh@google.com> wrote:
 >
-> And that's why if you load a staging driver, it enables TAINT_CRAP in
-> your runtime flags :)
+> On Wed, Jan 26, 2022 at 11:12 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
+> > On Wed, Jan 26, 2022 at 9:52 PM Jann Horn <jannh@google.com> wrote:
+> > >
+> > > Under dummy_hcd, every available endpoint is *either* IN or OUT capable.
+> > > But with some real hardware, there are endpoints that support both IN and
+> > > OUT. In particular, the PLX 2380 has four available endpoints that each
+> > > support both IN and OUT.
+> > >
+> > > raw-gadget currently gets confused and thinks that any endpoint that is
+> > > usable as an IN endpoint can never be used as an OUT endpoint.
+> > >
+> > > Fix it by looking at the direction in the configured endpoint descriptor
+> > > instead of looking at the hardware capabilities.
+> > >
+> > > With this change, I can use the PLX 2380 with raw-gadget.
+> > >
+> > > Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+> > > Signed-off-by: Jann Horn <jannh@google.com>
+> > > ---
+> > >  drivers/usb/gadget/legacy/raw_gadget.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> > > index c5a2c734234a..d86c3a36441e 100644
+> > > --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> > > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> > > @@ -1004,7 +1004,7 @@ static int raw_process_ep_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+> > >                 ret = -EBUSY;
+> > >                 goto out_unlock;
+> > >         }
+> > > -       if ((in && !ep->ep->caps.dir_in) || (!in && ep->ep->caps.dir_in)) {
+> > > +       if (in != usb_endpoint_dir_in(ep->ep->desc)) {
+> > >                 dev_dbg(&dev->gadget->dev, "fail, wrong direction\n");
+> > >                 ret = -EINVAL;
+> > >                 goto out_unlock;
+> > >
+> > > base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+> > > --
+> > > 2.35.0.rc0.227.g00780c9af4-goog
+> > >
+> >
+> > Awesome! Thanks for finding this!
+> >
+> > What do you think about using
+> >
+> > if ((in && !ep->ep->caps.dir_in) || (!in && !ep->ep->caps.dir_out))
+> >
+> > instead?
+> >
+> > It looks less cryptic: if (in and no in caps) or (out and no out caps) => fail.
+>
+> That's also semantically different, right?
+> As I understand it, what we should be checking here is whether the
+> direction of the request matches the direction previously specified in
+> USB_RAW_IOCTL_EP_ENABLE, not whether the hardware would be capable of
+> using the endpoint in the requested direction if it had been
+> configured for that direction?
+> But I might also be misunderstanding what's going on - it's not like
+> I've looked at a spec for this or anything like that, I'm just kinda
+> guessing...
 
-fwiw I'm fine with adding new fbdev drivers to staging, that really
-doesn't hurt anyone. Adding drm drivers to staging tends to be pain,
-least because if we need to do any changes to helpers there's a
-cross-tree cordination problem usually, and the benefit of staging
-hasn't in the past really outweighted that. Plus I try for us to land
-new drivers when they're good enough directly into drivers/gpu, and
-not aim for perfect.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Ah, yes, you are right. We already checked caps via
+usb_gadget_ep_match_desc() in EP_ENABLE. So here it makes sense to
+check that the request direction matches the one in the descriptor.
+
+Your original patch makes sense.
+
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Tested-by: Andrey Konovalov <andreyknvl@gmail.com>
+
+Thanks!

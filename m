@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D935F49D40A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A0149D40C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbiAZVE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        id S231795AbiAZVFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiAZVE4 (ORCPT
+        with ESMTP id S231751AbiAZVE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Jan 2022 16:04:56 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A628C061755
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:04:55 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso4590317wmj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:04:55 -0800 (PST)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56860C061757
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:04:56 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso4568973wmj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:04:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ktDMlL8iZ2/3sijREuAuM+dmCDydSQ7poFBUP0oLczo=;
-        b=Bcf1/J/JmjcL2kH4RMGo+wEKEkU7RNdbp/dUD/SMq9d16A9F3ZxfzpBe/WGhw5LKwS
-         B6I6jCDxKuAFG7oNxPtidy5p6ovVXSM+zTRcs04Hexy+8sp8jnmz8Df85wRVf2nXlkNh
-         I8NZhayNkaYAQLU9bI221UwNcKkcHWEinCsaaaAWls1eNTeepzoqs4/OcGce/YUURmpD
-         qLAq+9Sq8rNNEvOToeVcmutc25KNOe5KXw0nwVWPkBylM4+pQeVvX0hYKBhWeB/ED1zf
-         IDmVhmC0q4hdu7usPsN/FX5ds8q5c2IvJWhfoNoc4pE4ame8maYzvc47+fmkBUB2EdQ9
-         +lJg==
+        bh=buaazu1WrMDzlwPQHqm8IQrYu7KI8/m+gyfaMuk4eCE=;
+        b=1A4bnZJMdAQkBvC7PZ9mskNXQQhnZE6VRNKHHrWqzWuGTS1Z16M0qFlCtl/SufBbX6
+         ju7zpaQvvPl6/6yYxzVAG0qOGzlZEII7AF3FnhhTi8gxB2bibYzmW8UAoccwQyy+q2tQ
+         nk3Y4gy280Pf5xsbL9gjfo7lTPTwpKmR3lYhx3vr2TS5qr61thhOlWKFDo4Nx4rbZQ4C
+         mW8yQ9Hi+dQ6D8GfzdecOb6Dj2uvVs2GVkILNRnWPDyo2JaeDSd8sF+fP/NVnpwKGGUC
+         vrEG0Hrce98hI4JJCkrSa3eKAmWNBmBsu70WuYFLzr7bX/qaa8EBe3iAGVn/Uc6wQ0OE
+         H07Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ktDMlL8iZ2/3sijREuAuM+dmCDydSQ7poFBUP0oLczo=;
-        b=UmepFrX6llshV4UemvT2E9FKQfSwkcfXeQ/kMaNAqUZWBruac0jTd0l5dCbOaovClM
-         hepqCExuD7kLgxG6VRW0uJSqU9ER5P4gkyB8vSo1IhP5Mx7G+CLYBSX+9J8gkXmpuQra
-         2ZZHS4gsQygb8cgQ7j2ZZr9M7HF8JwEdguq4jxtAzXUlNddH+dvh630rP6ezZ0HMisUI
-         ttj/NU4P1sC4zUXff9LcKu+K5/q+UZ4Zz+f2Y5TpmU63r7xt5PRWkojED7Ay/dyGH9zA
-         7E4H6zFotYSkTaaAH0vxtWuILiknUTxZHzTONeJWOByuabNeNTmLaBb60G+KrHKVFWqB
-         VkJQ==
-X-Gm-Message-State: AOAM531J5sLIowd52eDHlizuK6J2uqhVvyFx56sFZHrTlHpwIT37vI/T
-        CWEPH8Xt6XfangUc00z815E7og==
-X-Google-Smtp-Source: ABdhPJxiNZGsixA/dP4HPSBuINQsxbgvdDaaxpjkQ5Ww1hZP2upy4QOmEl+72jz0ry9zZys6s8Wb5Q==
-X-Received: by 2002:a7b:cb8c:: with SMTP id m12mr459302wmi.154.1643231093676;
-        Wed, 26 Jan 2022 13:04:53 -0800 (PST)
+        bh=buaazu1WrMDzlwPQHqm8IQrYu7KI8/m+gyfaMuk4eCE=;
+        b=WTyKSemPHu/3yoRynDgyxfgCQh0yaqHRWa9fLrgR9vsbMmOP7UfyFssHEsq91lPBOQ
+         ryvQR5OwkLEmaNHDx1iZqKyAcQlqeXOb5wpVAr477LVYeAm7dkxM6Bf5+v8eACRFVmOQ
+         hnaQ2A90Q9pCWroWrgAg8mpmwByG0OfwSHBnhSMA00CczVk7q5yTqVLY9dI+TtC1rdhh
+         BArQJeZ0bj6v55crWxh/40B+iNY58DfCUcGQ2qfgZbk5AmVDYg9dnGU9v8GUb0QP23Xe
+         vrAQcg8LNwcAL1Jn3L/cOud8wl9aPRgZOm+mA4YVjQiKfOpqjdsLk65ojORTD/L/oQo9
+         aQNA==
+X-Gm-Message-State: AOAM532OZYHnjBRSJylDvi2FtsqZAAm9K7MjIcN/O6xI528yyzG6aAXD
+        3MtuaAgjNyvrAeEMVZ6nYZ8QvA==
+X-Google-Smtp-Source: ABdhPJwjF2ajoGSl2zYfi3anBFhjjlzUNBMG2st7gOW9X9MaMsEN3LPB/dFbwfDv5lsPqcizGI2x+w==
+X-Received: by 2002:a05:600c:1e86:: with SMTP id be6mr8890155wmb.79.1643231094782;
+        Wed, 26 Jan 2022 13:04:54 -0800 (PST)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id j19sm4948611wmq.17.2022.01.26.13.04.52
+        by smtp.googlemail.com with ESMTPSA id j19sm4948611wmq.17.2022.01.26.13.04.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 13:04:52 -0800 (PST)
+        Wed, 26 Jan 2022 13:04:54 -0800 (PST)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     davem@davemloft.net, herbert@gondor.apana.org.au,
         jernej.skrabec@gmail.com, mripard@kernel.org, wens@csie.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
         linux-sunxi@googlegroups.com, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH 4/8] crypto: sun8i-ss: do not allocate memory when handling hash requests
-Date:   Wed, 26 Jan 2022 21:04:37 +0000
-Message-Id: <20220126210441.3661782-5-clabbe@baylibre.com>
+Subject: [PATCH 5/8] crypto: sun8i-ss: do not zeroize all pad
+Date:   Wed, 26 Jan 2022 21:04:38 +0000
+Message-Id: <20220126210441.3661782-6-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220126210441.3661782-1-clabbe@baylibre.com>
 References: <20220126210441.3661782-1-clabbe@baylibre.com>
@@ -66,93 +66,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of allocate memory on each requests, it is easier to
-pre-allocate buffers.
-This made error path easier.
+Instead of memset all pad buffer, it is faster to only put 0 where
+needed.
 
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c | 10 ++++++++++
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c | 15 +++------------
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h      |  4 ++++
- 3 files changed, 17 insertions(+), 12 deletions(-)
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-index 319fe3279a71..084261d7899c 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-@@ -474,6 +474,16 @@ static int allocate_flows(struct sun8i_ss_dev *ss)
- 	for (i = 0; i < MAXFLOW; i++) {
- 		init_completion(&ss->flows[i].complete);
- 
-+		/* the padding could be up to two block. */
-+		ss->flows[i].pad = devm_kmalloc(ss->dev, SHA256_BLOCK_SIZE * 2,
-+						GFP_KERNEL | GFP_DMA);
-+		if (!ss->flows[i].pad)
-+			goto error_engine;
-+		ss->flows[i].result = devm_kmalloc(ss->dev, SHA256_DIGEST_SIZE,
-+						   GFP_KERNEL | GFP_DMA);
-+		if (!ss->flows[i].result)
-+			goto error_engine;
-+
- 		ss->flows[i].engine = crypto_engine_alloc_init(ss->dev, true);
- 		if (!ss->flows[i].engine) {
- 			dev_err(ss->dev, "Cannot allocate engine\n");
 diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-index 2557bb3fe7aa..f7a9578e87f7 100644
+index f7a9578e87f7..ef3020bc9547 100644
 --- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
 +++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-@@ -341,18 +341,11 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
- 	if (digestsize == SHA224_DIGEST_SIZE)
- 		digestsize = SHA256_DIGEST_SIZE;
+@@ -328,7 +328,7 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
+ 	unsigned int len;
+ 	u64 fill, min_fill, byte_count;
+ 	void *pad, *result;
+-	int j, i, todo;
++	int j, i, k, todo;
+ 	__be64 *bebits;
+ 	__le64 *lebits;
+ 	dma_addr_t addr_res, addr_pad;
+@@ -343,7 +343,6 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
  
--	/* the padding could be up to two block. */
--	pad = kzalloc(algt->alg.hash.halg.base.cra_blocksize * 2, GFP_KERNEL | GFP_DMA);
--	if (!pad)
--		return -ENOMEM;
-+	result = ss->flows[rctx->flow].result;
-+	pad = ss->flows[rctx->flow].pad;
-+	memset(pad, 0, algt->alg.hash.halg.base.cra_blocksize * 2);
+ 	result = ss->flows[rctx->flow].result;
+ 	pad = ss->flows[rctx->flow].pad;
+-	memset(pad, 0, algt->alg.hash.halg.base.cra_blocksize * 2);
  	bf = (__le32 *)pad;
  
--	result = kzalloc(digestsize, GFP_KERNEL | GFP_DMA);
--	if (!result) {
--		kfree(pad);
--		return -ENOMEM;
--	}
--
  	for (i = 0; i < MAX_SG; i++) {
- 		rctx->t_dst[i].addr = 0;
- 		rctx->t_dst[i].len = 0;
-@@ -448,8 +441,6 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
+@@ -404,7 +403,10 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
+ 	if (fill < min_fill)
+ 		fill += 64;
  
- 	memcpy(areq->result, result, algt->alg.hash.halg.digestsize);
- theend:
--	kfree(pad);
--	kfree(result);
- 	crypto_finalize_hash_request(engine, breq, err);
- 	return 0;
- }
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h
-index 28188685b910..f9f089ede934 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h
-@@ -121,11 +121,15 @@ struct sginfo {
-  * @complete:	completion for the current task on this flow
-  * @status:	set to 1 by interrupt if task is done
-  * @stat_req:	number of request done by this flow
-+ * @pad:	padding buffer for hash operations
-+ * @result:	buffer for storing the result of hash operations
-  */
- struct sun8i_ss_flow {
- 	struct crypto_engine *engine;
- 	struct completion complete;
- 	int status;
-+	void *pad;
-+	void *result;
- #ifdef CONFIG_CRYPTO_DEV_SUN8I_SS_DEBUG
- 	unsigned long stat_req;
- #endif
++	k = j;
+ 	j += (fill - min_fill) / sizeof(u32);
++	for (; k < j; k++)
++		bf[k] = 0;
+ 
+ 	switch (algt->ss_algo_id) {
+ 	case SS_ID_HASH_MD5:
 -- 
 2.34.1
 

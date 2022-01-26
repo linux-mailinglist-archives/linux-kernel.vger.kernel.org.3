@@ -2,123 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D9049CEF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF72649CF07
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiAZPy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiAZPy0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:54:26 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A984C06161C;
-        Wed, 26 Jan 2022 07:54:26 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id b22so4820199qkk.12;
-        Wed, 26 Jan 2022 07:54:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d2hfJnq7WFG6jJbY1jQ64KsykK+O3FA7XQ9vdxvBn90=;
-        b=fxrbuXDps7bOVDI3Pn+WxxehZMZBBY1HydEO72ENhhutcwBCI+hmGQ+wJgoWASvsgz
-         cjhBQX1tKM9lDW6Zaj6ubROCjBk3rXIHp2R+GTeTBgO11RTbNF7BFgVBUtKgsML1Wp+2
-         Sw6EZHJNwLfuZumruwVCnPDLIMWCUf3EmLXHCzhXzKpAwc4acw3fAUXRe4lSfG5Y4rBy
-         ffITB/xAhu1rp926aEEHwRaf3FVxINsrX9DdfQu4OyhIbfzpV5SuzqbVTZmhZikxn+8j
-         hGQ2lCR8QvMDeUyH/vCJqjdbNdHTHQM/ajihgBqfMBRE2o7v3Q3tUul1PjQ8vWfNp7GR
-         UlxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d2hfJnq7WFG6jJbY1jQ64KsykK+O3FA7XQ9vdxvBn90=;
-        b=Cj0zKpzavFoYf7jZzY7AhcVsVLLyhD+dLaRO+jPB1Nu6r2mp0OFkydPEzgoBgL0miN
-         zBpK5/aTQoBPMOAYmMon3yEThJpOLDFkuqSyk1BEe46AKHGA25ZVUiPEkzFFBdpzFT51
-         I8n0R/mwFFqj/GpQcr/RW7nZTc7zIe+JlmM3ff1s6k+u7okbj5VzoP2PWElS0qNpmK13
-         ywJg5WBB8obFOoA6rbXY+LEYQelainCmznoTSrh8Knd/d/xsIh9FulLj2LvuQIzfX+or
-         w8E9QntuAKMsYjj3nSSQbMOp8PyDp6FhspW3GzoVNelHrqEGV63kjTZHaqH5wxzxPSYu
-         ZkVw==
-X-Gm-Message-State: AOAM5334zTX6/D0BIpWdvGur5v7Evv/ZgFvlE0Mfbb/SRgyivDvJHAxl
-        LYVNSWjU6rz2dx5xYf7VDII=
-X-Google-Smtp-Source: ABdhPJz6xJBj7tZ4ymoR1vfWqzCoELsEIantQdyGfyRGT3CSIbDxgepmXmUiaHMksimv4ZaJorKDfw==
-X-Received: by 2002:a05:620a:2915:: with SMTP id m21mr8359108qkp.374.1643212465186;
-        Wed, 26 Jan 2022 07:54:25 -0800 (PST)
-Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id b4sm10815876qkf.61.2022.01.26.07.54.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 07:54:24 -0800 (PST)
-Date:   Wed, 26 Jan 2022 10:54:22 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v2 5/5] iio: afe: iio-rescale: Re-use generic struct
- s32_fract
-Message-ID: <YfFurqdAmPpZ8PJ1@shaak>
-References: <20220110193104.75225-1-andriy.shevchenko@linux.intel.com>
- <20220110193104.75225-5-andriy.shevchenko@linux.intel.com>
- <20220115185203.567780e8@jic23-huawei>
- <Ye7DSAN4gdhXfEUs@smile.fi.intel.com>
- <Ye8Z6dS5cCji9LNQ@shaak>
- <Ye/4eJ/RhlWF7q70@smile.fi.intel.com>
- <b25932d7-91bc-27b4-ada9-8d5da1ef2ddf@axentia.se>
- <YfA+xFR0oh2ztDKv@smile.fi.intel.com>
- <34c121fa-2a3b-fb6b-f6d5-fc2be2a5c6b7@axentia.se>
- <YfE45cImAQpOeziT@smile.fi.intel.com>
+        id S233418AbiAZP4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:56:22 -0500
+Received: from mout.gmx.net ([212.227.15.15]:53185 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233161AbiAZP4U (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 10:56:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643212548;
+        bh=E7ISE7GQD0/qoufruRmrS+ak1BLXOdtSXna02CfJuqE=;
+        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=Cror795FglamWfFgkSa+Z07laV66Fm+edlkcYlRiOJAYHlObebVw3UN20jJvzujlj
+         RbWvksoKzHnfTdndb7GMRXreo5Bx+6bQhUUzg4lVBU0zZ8wL60fX5aH+TJcGEcyxtp
+         Z4uwxeHeFkSvegc9qtizTzZyRioE6AL+90jMiRT4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.143.57]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRCOE-1mrnUG2sdQ-00NE5d; Wed, 26
+ Jan 2022 16:55:48 +0100
+Message-ID: <ac4e7277-d18d-fe2a-6bc8-9a003b21d5d0@gmx.de>
+Date:   Wed, 26 Jan 2022 16:54:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfE45cImAQpOeziT@smile.fi.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+ <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+ <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
+ <75a10e6f-ade7-01d9-9523-9a1936f8a2cc@suse.de>
+ <YfFNhsPr4kS2/LXa@smile.fi.intel.com>
+ <df377b35-8913-a8c6-760b-073f462780cc@suse.de>
+From:   Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+In-Reply-To: <df377b35-8913-a8c6-760b-073f462780cc@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:wLeX3lW85cf04BQA7+bhtz676rHQMTVZ4yZFry1X8quEdLDGNDN
+ 80kzr00Fs9Gk7oyOQx3m49TbT83qHKm9jCXlRejPx8sqILNasEeWRYrzBAg04s0HXuNdLAu
+ SqK7z87HbjY0Sh6ddxF+xL/xhDTK1x335kBGwuVj2SyzCnDOqua9W8PXmG4yLG21n8ruotj
+ AYP/XvyPGa6/7cJsOdViQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lrySdbHoy2s=:fa2jRWfRaC0uf7ZMaZzVFT
+ xlqbQBSc7+Eerzi9kGXMhWjtJyxQ17EO63VknZkTGaB+j4SWSxJfVDBuDefsIl0d/xwjZOqtO
+ Nc6DoM7Im4XpjDd+FPDyqJwm006y3WkPqbPqJLhHc9S55QaWL78/sTNuNvYbWKo99sRw1HuCq
+ APb+oyT10QK3w5cpEnOGXjEzV3RdnlNmAtqz1zC5Y4RTTsZqmrN732uo8u5KpSn6mjRiMR7NV
+ XTasq+WI8fx0g9ip/TuDsOboemx6H8dgh2kzLy8IcANGXijoCWrFo75exsuq/VC2OI4OqwB9z
+ ajjgcf5+Ddj+85MttPofixjdpCC8Dme2YVBk1RP4HHSx4mzojM81gsNwgPxglNYqgWKMQcKTP
+ FIN2Ei9P6KyM3BPL0V29XTq6JfUFg0B/C1i5JlmfvfG2E0U5SYnMpd7kzYu0OLElvZ5g6fenG
+ p8HCDAA+TlKAOqAd5crJdFfV2W+DJ/AbH5oxD3aRhfRqwG/W8L3W79qiiIHNTZczV4hg+Qt2+
+ h5kSrHKr+O0lg2pbTDTVRImQ1JNjKP3FV/ew+/sKQhMUpcD8kBvKAhXhGYoiZsiOtPYM5RkOb
+ e+m7q7idd7ciOP20QNl2xuvWhifohWTLN3TICeeF2xL0myw8JfA8g+o+ANg20uveTs9x0Oo9k
+ N2galMyIMPUzlrWWepiKOXw2d3nGZt3PAy49/hpwVpya3aehtp8m2E6vIbPHlirTN2WtIKQuD
+ ApeSOQzY7fnCNWNthnHaBjZc8dczGXSBXyzleh/Ie60a9WnJhU620pzW1QmQJKO669U1AocgU
+ JZAdVLN0rcrkh0lJFLFOHVLvkzBCC3I2kEM8N+/ZImfMIwODAmdlkOgdkdQCJJatzG2GZOtU/
+ TGNm1j87iWiDVfRL29ohBSiahVpWrd6zVF/I/NCOQA7ZkHVbPCNuhZ6EuaBfALmuTfiFHNlfx
+ VRdJUWNFzhyEkENP58ilTZXLIGtSTZL3aOAJs/O60ADzGXoQ2Y+aEiBLqEnXfTmgJnkZnISqP
+ 79TnNQEsmlXMMTHFM2xlfAYZSEMk0ni38bEEc+19fYKt00kfqkIzWn7Geb/cqE0qiSW1mnbIn
+ D1UQB+8wjWo/EA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-On Wed, Jan 26, 2022 at 02:04:53PM +0200, Andy Shevchenko wrote:
-> On Wed, Jan 26, 2022 at 11:26:50AM +0100, Peter Rosin wrote:
-> > On 2022-01-25 19:17, Andy Shevchenko wrote:
-> > > On Tue, Jan 25, 2022 at 03:54:07PM +0100, Peter Rosin wrote:
-> > >> On 2022-01-25 14:17, Andy Shevchenko wrote:
-> > >>> On Mon, Jan 24, 2022 at 04:28:09PM -0500, Liam Beguin wrote:
-> > >>>> On Mon, Jan 24, 2022 at 05:18:32PM +0200, Andy Shevchenko wrote:
-> > >>>>> On Sat, Jan 15, 2022 at 06:52:03PM +0000, Jonathan Cameron wrote:
-> > >>>>>> On Mon, 10 Jan 2022 21:31:04 +0200
-> > >>>>>> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> ...
+On 1/26/22 16:02, Thomas Zimmermann wrote:
+> Hi
+>
+> Am 26.01.22 um 14:32 schrieb Andy Shevchenko:
+>> On Wed, Jan 26, 2022 at 12:41:41PM +0100, Thomas Zimmermann wrote:
+>>> Am 26.01.22 um 11:59 schrieb Helge Deller:
+>>
+>> ...
+>>
+>>
+>>> It's always for the same reason: the hw is old and devs have moved on.
+>>
+>> It's pity to have a working system with an old hardware that no one in
+>> the kernel community gives a shit about because simply they are not in
+>> the same boat. Try to be on the people's position...
+>
+> Yes, I do care about old hardware.
 
-...
+Yes, I know. I saw various articles about it.
 
-> The problem here is that every driver would like to do this differently
-> and since it's related to the calculation we will have all possible error
-> prone implementations which do miscalculations (yes, one may not notice
-> traditional off-by-one until it becomes a huge issue by using additional
-> conversion formulas or so).
-> 
-> > But sure, feel free to suggest something. But please hold until the
-> > current work from Liam is merged.
-> > That series is clearly more
-> > important, and I'm not really interested in neither adding more work for
-> > him nor a cleanup of the current code without those pending changes.
-> 
-> I'm very well fine with that. As I mentioned from the beginning, I may rebase
-> this on top of the Liam's work.
+> I made helpers for converting fbdev drivers to DRM. I even made the
+> initial commits for those drivers where I could find the HW on Ebay. [1]=
+> [1] https://gitlab.freedesktop.org/tzimmermann/linux/-/tree/fbconv-plus-=
+drivers
 
-I appreciate that! I'll make time to wrap things up so I don't hold you
-up.
+Just out of curiosity, does the tgui driver you patched there
+is now supported by DRM? I couldn't find it (just the tridentfb fbdev driv=
+er),
+so I assume it's somehow handled by simpledrm instead?
 
-Cheers,
-Liam
+> I made sure that every single of them at least gets fbcon onto the
+> screen. So interested devs could start immediately. Yet, no one ever
+> showed up to convert even a single driver.
+Both Geert wrote about that he was trying to convert a driver. The same
+is true for Sven where he came up with a prelimarary visualizefx driver...
+Both had issues which currently prevent that those drivers get finished.
 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+> As it stands, 90s PCI hardware is currently supported by DRM's
+> simpledrm as long as the device has VESA.
+
+Good. Some of the drivers in fbdev are for non-x86 architectures
+and don't have a VESA BIOS. Is is possible that simpledrm could (theoretic=
+ally)
+support those too?
+
+> The performance is at least usable on AthlonXP-era computers. Now the
+> owners of these devices at least have a chance of using modern
+> graphics userspace.
+Yes.
+
+> That userspace is important: graphics drivers don't live in a vacuum.
+> There's no point in having one if it requires extra support from all
+> other components. And there's more:
+>
+> =C2=A0* Occasionally, fbdev gets in the way of DRM. Just this week, we f=
+ixed a related bug. [2]
+>
+> =C2=A0* Fbdev's mmap semantics is the reason why it's hard to do fast in=
+ DRM.
+>
+> =C2=A0* Maintaining both stacks, DRM and fbdev, adds work to kernel, use=
+rspace and distro devs.
+>
+> Therefore, anything we do that keeps fbdev alive is a step backwards and=
+ a burden on the overall Linux graphics community.
+
+That's understood and I don't disagree.
+The earlier drivers are converted to DRM the better.
+I probably don't even have any issues with dropping fbdev & drivers for th=
+e
+x86, ARM64, s390x & ppc64 platforms - I think many older cards aren't used=
+ either
+used (anymore),
+or your simpledrm may cover the most common cards.
+I think the patches we currently jointly develop to disable fbcon accelera=
+tion
+is exactly going into this direction.
+
+The problems I see are mostly on non-x86 architectures or corner-case usag=
+es
+like embedded devices or special machines. They may be oldish, but still b=
+eing used.
+Those machines would completely loose their console without fbdev.
+
+> Please excuse my ranting, but fbdev proponents seem to be ignorant to
+> all these points. It's apparently all about 'my console is slow'.
+
+Your ranting is fair, but I wouldn't say I'm ignorant to your arguments.
+Of course performance is relevant, or would you exchange your car which
+today is capable to drive 100 mph with another car which only
+drives a maximum 10 mph?  (Yes, that's around the factor of speed decrease=
+ I see).
+Or even worse: suddenly not being allowed/able to drive your car at all?
+
+Helge

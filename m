@@ -2,111 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B0E49C828
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 642EA49C82C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240378AbiAZK65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S240390AbiAZK7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240351AbiAZK64 (ORCPT
+        with ESMTP id S240381AbiAZK7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:58:56 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93620C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:58:55 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id b14so14069147ljb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:58:55 -0800 (PST)
+        Wed, 26 Jan 2022 05:59:08 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0087C061744
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:59:08 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id 71so11934000qkf.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:59:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1LeqebZU7zO4zLSZoctAnk7wyNMl3wrQ0G0u2lAdEIE=;
-        b=QAnj/Dypm31c4y4zxJDpUoK5Lj4T7DxxJu1M8ciX88f4ABcyGjADkFyDfSltgU20r6
-         jyy2p8yHku3UkdssU1ixjb9Y+kBwnFJXum325aigZSo2FwysrAmQsXJssYOJN3Kz9jBN
-         Xbif0kHCxBirvHwGAa9rSBxJAJgNq2GAnIOzYyFQKoH4aPRDtGWZlst2eUeQ0EfpRO1g
-         eUDq5Xbp7J+ZPryFS+WzdZChj5sE/DcQQl2sWxMFoLUaDoISM55hC1J3Od/kImOomb0D
-         jv8xiTd4Gmyd3HdMobPCcvkmsJYp4iGigZVJ6mQlb+Cn3nydXAu6hzBax8wxqtWHSewy
-         +uNw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NPx10yE8yULTQ2I1GWpvbI+9jFGXWf+l/TyyfhdSi2s=;
+        b=DcKJgjZo5MjwZhR1BP8rm+BYvknvqznCY9tfc++zczXRYrENWh/CmheKNnm7njeYxQ
+         JtG06XqoPV3iDFbEj5xILlHIeXxrwXEmgmLtRmH4lyQ0LTkBY+z9+ycGOcCkNXzS7tDq
+         uBxZzyCUzDg34fMSX7vFq+Yxm/iOXaPup4rqvxMubW4hSJrTbneNZwu1l4Ne7YGW/xMp
+         MkZaz/rCe004RJEK7y8FN0PGeMa9vrGWzv+gz/GfsE6Gwz9e1196sTOMVDoy/4vkaHq6
+         DX2mZ7rdR8sBeaIQBI0yK4oP//EL4ekOwCV2uPzYg+FOX9FvD80PUiKX6eCFYqQltRMC
+         /ZUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1LeqebZU7zO4zLSZoctAnk7wyNMl3wrQ0G0u2lAdEIE=;
-        b=k25USTunFW2bF4MULXtdlaB96Y+EEndsRHIwXJ4EvOsISJZdO8Px36atj1JMKHnWg7
-         YWEnfp/cnxZYibPkAmmYfSUI4KsU/Gzfwc6z20o3UUbpUjfYrihy/+A4S6kU8nVE8cbH
-         hVzNdDIbHGuQCNl4eNOj4TR7fYweLBYH5x1Rdmj3NToC82y9UDGHg7CiAWSqX26uJcdY
-         +wXO04BMT13BgmWtY1KuSL7inFw6kLDI5XwZGsvbfv+L/awvzFej1ia21zeh5G60Sbuu
-         WQVRHqU4HvGCeguh3FbGyzcffA/PcnHqXae2vbXJPbrl3q36b/JICQVzTzYJaVipTZbo
-         A8Bw==
-X-Gm-Message-State: AOAM531r/TpNkuciiJ7WvGgX6/dwKXDwbPzr40qpLRFcKalEijoprZOa
-        /0fyDxNTQTequ6vxDemjFeAE0eo2mv0=
-X-Google-Smtp-Source: ABdhPJyMTAs8GAKP5D3ETY+f1IKIgihQgJmZLxSKX9MnjRVH5IrXBGMXeaRTzei+yLv662cHawRIcg==
-X-Received: by 2002:a2e:9e87:: with SMTP id f7mr18184273ljk.353.1643194733881;
-        Wed, 26 Jan 2022 02:58:53 -0800 (PST)
-Received: from [192.168.1.11] ([94.103.227.208])
-        by smtp.gmail.com with ESMTPSA id y23sm1421921lfb.2.2022.01.26.02.58.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 02:58:53 -0800 (PST)
-Message-ID: <b6da2cde-b489-0b9d-819f-c36cd64f9531@gmail.com>
-Date:   Wed, 26 Jan 2022 13:58:52 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NPx10yE8yULTQ2I1GWpvbI+9jFGXWf+l/TyyfhdSi2s=;
+        b=qFzM3upYXSdd7fzr1NoHSvVHgU0lHbSZqeU0hLyasucLIZkSzQjuJlmzedTyrumf1H
+         DLgncUbr3HbpzhjOZCfpbFPQ8lJPJ7IAmD2CU8Sk7XqYrAUnaPUdmjQdUuIWG3lVOvkG
+         G0vsFL2YkgQCHWuqMiIWNA2g1vNKKL+I8OkWe3CGK3IRFT5RnumrCpS99iFwnhUkaYzI
+         Cz7Ycy05NKcI+4Yknwlq53ZbTDuUUMF6QKeH/rZi1baW7gy7Ze99YEg7/u7gr5LztI3t
+         3pV5rn7tsbxGiwnuNSyX7zhfluEF77j5N4wrxUMu5Zr3wNZ4hdGW+P0BaJP2hdA7gbQu
+         1dog==
+X-Gm-Message-State: AOAM530J+9DdmM+2hj7c0MPOIxr2VNH2RXz8pVYBUDAS+kZH4DEpnAc+
+        4IXi126rX891v6Ri3LaM/nEbKeATGO1VHpJmR1DxuA==
+X-Google-Smtp-Source: ABdhPJxjvuXkYK5Oyx78s5S22uQf0bXFzDeEdF5A3RuUkZEEMGL+lFFyurB31lgTk9CuURIUfP+K9DbMGn+uVKEvtjo=
+X-Received: by 2002:a37:ac08:: with SMTP id e8mr1636406qkm.30.1643194747895;
+ Wed, 26 Jan 2022 02:59:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 06/10] staging: r8188eu: remove DBG_88E calls from
- os_dep/ioctl_linux.c
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Phillip Potter <phil@philpotter.co.uk>, dan.carpenter@oracle.com,
-        Larry.Finger@lwfinger.net, straube.linux@gmail.com,
-        martin@kaiser.cx, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220124224415.831-1-phil@philpotter.co.uk>
- <20220124224415.831-7-phil@philpotter.co.uk>
- <a681a562-eb41-9dc8-703a-5b235c15a3a1@gmail.com> <YfCgQbFxfVZXw9Fg@equinox>
- <b5bbe488-ac43-fd89-7c65-36bfa9c903a6@gmail.com> <YfEm4t+fhO4I2uDW@kroah.com>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <YfEm4t+fhO4I2uDW@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <1643064292-6965-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n505fYR1zpgZnC=J7WSxp_gpn6mnda9TuVjmJD8vMRn2Rg@mail.gmail.com> <7155e3ab-daf1-4104-6712-1c4e3a328b56@quicinc.com>
+In-Reply-To: <7155e3ab-daf1-4104-6712-1c4e3a328b56@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 26 Jan 2022 13:58:56 +0300
+Message-ID: <CAA8EJpp-DB9+zWZnszkyxNGd+kO5Bko+mw7T_KoeFVTQPmxvDw@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/dp: add connector type to enhance debug messages
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org,
+        quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, 25 Jan 2022 at 21:26, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+>
+> On 1/24/2022 5:50 PM, Stephen Boyd wrote:
+> > Quoting Kuogee Hsieh (2022-01-24 14:44:52)
+> >> DP driver is a generic driver which supports both eDP and DP.
+> >> For debugging purpose it is required to have capabilities to
+> >> differentiate message are generated from eDP or DP. This patch
+> >> add connector type into debug messages for this purpose.
+> >>
+> >> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> >> ---
+> >>   drivers/gpu/drm/msm/dp/dp_ctrl.c    | 20 +++++------
+> >>   drivers/gpu/drm/msm/dp/dp_display.c | 71 ++++++++++++++++++++++++++-----------
+> >>   2 files changed, 60 insertions(+), 31 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> >> index 245e1b9..dcd0126 100644
+> >> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> >> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> >> @@ -1396,6 +1396,8 @@ void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
+> >>
+> >>          dp_catalog_ctrl_phy_reset(ctrl->catalog);
+> >>          phy_init(phy);
+> >> +       DRM_DEBUG_DP("phy=%p init=%d power_on=%d\n",
+> >> +                       phy, phy->init_count, phy->power_count);
+> >>   }
+> >>
+> >>   void dp_ctrl_phy_exit(struct dp_ctrl *dp_ctrl)
+> >> @@ -1410,6 +1412,8 @@ void dp_ctrl_phy_exit(struct dp_ctrl *dp_ctrl)
+> >>
+> >>          dp_catalog_ctrl_phy_reset(ctrl->catalog);
+> >>          phy_exit(phy);
+> >> +       DRM_DEBUG_DP("phy=%p init=%d power_on=%d\n",
+> >> +                       phy, phy->init_count, phy->power_count);
+> >>   }
+> >>
+> >>   static bool dp_ctrl_use_fixed_nvid(struct dp_ctrl_private *ctrl)
+> >> @@ -1484,6 +1488,8 @@ static int dp_ctrl_deinitialize_mainlink(struct dp_ctrl_private *ctrl)
+> >>          phy_exit(phy);
+> >>          phy_init(phy);
+> >>
+> >> +       DRM_DEBUG_DP("phy=%p init=%d power_on=%d\n",
+> >> +                       phy, phy->init_count, phy->power_count);
+> >>          return 0;
+> >>   }
+> >>
+> > These are entirely new messages. Adding messages isn't mentioned in the
+> > commit text. Please either split this out or indicate in the commit text
+> > what's going on here.
+> >
+> >> @@ -1895,14 +1901,12 @@ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl)
+> >>
+> >>          phy_power_off(phy);
+> >>
+> >> -       DRM_DEBUG_DP("After, phy=%x init_count=%d power_on=%d\n",
+> >> -               (u32)(uintptr_t)phy, phy->init_count, phy->power_count);
+> >> -
+> >>          /* aux channel down, reinit phy */
+> >>          phy_exit(phy);
+> >>          phy_init(phy);
+> >>
+> >> -       DRM_DEBUG_DP("DP off link/stream done\n");
+> >> +       DRM_DEBUG_DP("phy=%p init=%d power_on=%d\n",
+> > The DRM_DEBUG_DP macro says it's deprecated now and we should use
+> > drm_dbg_dp() instead. Can you use that macro instead? Then it looks like
+> > drm->dev can actually be any old struct device, so I guess we're allowed
+> > to pass in the particular instance of dp device this is for. Allowing us
+> > to figure out which DP device is actually printing messages.
+> where it say "deprecated"?
 
-On 1/26/22 13:48, Greg KH wrote:
->> IMHO the best thing you can do is to leave these reads and leave a comment
->> like "hey, please remove me and test". One day useless reads should be
->> anyway removed, since ideally rtw_read family must get __must_check
->> annotation + normal error handling.
-> 
-> No, if these were never getting called in normal operation, there's no
-> need to add them back.
-> 
+Quoting drm_print.h:
 
-I guess, I was not clear, sorry. I mean leave reads that were called 
-during normal operations, but used only for printing debug info. (As 
-Phillip has already done in v1)
+/* NOTE: this is deprecated in favor of drm_dbg_dp(NULL, ...). */
+#define DRM_DEBUG_DP(fmt, ...)                                          \
+        __drm_dbg(DRM_UT_DP, fmt, ## __VA_ARGS__)
 
-Reads inside R88_DBG() and other debug macros of course should be 
-removed, but other places seems dangerous without good testing. There is 
-al least one place with following comment:
 
-> 			/* Although lenc is only used in a debug statement,
-> 			 * do not remove it as the rtw_read16() call consumes
-> 			 * 2 bytes from the EEPROM source.
-> 			 */
-> 			u16 lenc = rtw_read16(adapter, REG_PKTBUF_DBG_DATA_L);
-
-There is a chance that other places have same problem, but don't have a 
-comment above it. That's why I suggested to leave all these "debug" 
-reads and leave a comment for further work. It will help to easily spot 
-them in future and remove or leave them with explanations why.
+> >> +                       phy, phy->init_count, phy->power_count);
+> >>          return ret;
+> >>   }
+> >>
 
 
 
-
-With regards,
-Pavel Skripkin
+-- 
+With best wishes
+Dmitry

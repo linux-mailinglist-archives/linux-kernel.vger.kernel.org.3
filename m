@@ -2,254 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEFB49C5AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7861B49C5AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbiAZI75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 03:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238665AbiAZI74 (ORCPT
+        id S238667AbiAZI7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 03:59:54 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41962 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S238653AbiAZI7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:59:56 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791EBC061747
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 00:59:56 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id g14so69234248ybs.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 00:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=T0O2RYBvXI413kf/Ld0KJM8o1ANZb53hZiPPSa3Eb3Q=;
-        b=iNXv+RaDW65wfKxheW2D7b9IfGYHuJxTwB2B68bkmet85Xb1MEEZxyT/ptI0c7wxAL
-         26aZrMDR1GirnHV1w+fTM8PicEFanPRkb2Nw2a0PBYnRj3dtZf/iMHl4csCYjFT3qYHo
-         t3YV8JjPYVwxJkfiWY1CHs/+vBxZVUt/7mVVzlItrGRyhLpF/K75qlrpsTMudDEqMGlz
-         BeCQMtx5dStL0HWGYQXy1gnG2W433GD2PWDunz34j1Fo7Ti4p3MZY/2IEjwPQox5JLcP
-         GOd9YOa56T5SoOWPSZF+9HD7izdiQWf4ULQY5psyTCGIqWHfqRTDWfwLvZCkyQGOst4n
-         M7ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=T0O2RYBvXI413kf/Ld0KJM8o1ANZb53hZiPPSa3Eb3Q=;
-        b=FAXBqfVlr3d+PPcCyxvvIqErp+TU3jB36SRl9fYq5GxKc9AroP5E5o+zIE/jrepeXR
-         wG1/26febIdYdi6Mx1D4sSWpRdlZWwU7qMx2QYdwoyQmjGaP4lLFRLRUXBLtSB3SDrAK
-         G2qYDd6n+9Y9wHHSaWjJd596JnIxbOl9FN+MQbKzsXAg480u5fXUNHvaKCecQq2qFfp6
-         ZJAlfYTg/M8CL2OhcPEQk+tBlwXETAzj5Amh5b/WAB8pRBQt8wEnJuzAA7jLPOBclXuZ
-         RkaUy6qZvxjMoKORm+lUIyvnzLqvw8NGq5zZE8yiBuxnEnHYT676Lr8yQ8KmVoUt3HMA
-         0Xmg==
-X-Gm-Message-State: AOAM530CQHTUyBy19dK27qlD6Uj8qlSukt2zWSsST2+zzC4MVwQfLTGu
-        90tLI3qltOZ9jndmx9v8gZ6rzpuYxjBp4oBOp9u6vg==
-X-Google-Smtp-Source: ABdhPJx++/1jA2g2gynru6Ctuaw26a/eB5z81sieyhm5ETtWQOf3hqbae5rGoRyaEdc4eOFPDSXX4nZS4w4nkl+KCHg=
-X-Received: by 2002:a25:838b:: with SMTP id t11mr33546069ybk.146.1643187595464;
- Wed, 26 Jan 2022 00:59:55 -0800 (PST)
+        Wed, 26 Jan 2022 03:59:53 -0500
+X-UUID: 49444759154247c9bd22bfdb75bf04ad-20220126
+X-UUID: 49444759154247c9bd22bfdb75bf04ad-20220126
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 649423601; Wed, 26 Jan 2022 16:59:48 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 26 Jan 2022 16:59:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 26 Jan 2022 16:59:47 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <wenst@chromium.org>
+CC:     <chun-jie.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>
+Subject: Re: [PATCH 31/31] clk: mediatek: Warn if clk IDs are duplicated
+Date:   Wed, 26 Jan 2022 16:59:47 +0800
+Message-ID: <20220126085947.31507-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220122091731.283592-32-wenst@chromium.org>
+References: <20220122091731.283592-32-wenst@chromium.org>
 MIME-Version: 1.0
-References: <20220125155423.959812122@linuxfoundation.org>
-In-Reply-To: <20220125155423.959812122@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 26 Jan 2022 14:29:43 +0530
-Message-ID: <CA+G9fYscJ1-KUg-XAaykXNY4-7X7MgUFKgdZWWFB5hD3+SHu+A@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/841] 5.15.17-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 22:02, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+>The Mediatek clk driver library handles duplicate clock IDs in two
+>different ways: either ignoring the duplicate entry, or overwriting
+>the old clk. Either way may cause unexpected behavior, and the latter
+>also causes an orphan clk that cannot be cleaned up.
 >
-> This is the start of the stable review cycle for the 5.15.17 release.
-> There are 841 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>Align the behavior so that later duplicate entries are ignored, and
+>a warning printed. The warning will also aid in making the issue
+>noticeable.
 >
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
+>Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+>---
+> drivers/clk/mediatek/clk-cpumux.c |  6 ++++++
+> drivers/clk/mediatek/clk-gate.c   |  5 ++++-
+> drivers/clk/mediatek/clk-mtk.c    | 18 ++++++++++++++----
+> drivers/clk/mediatek/clk-mux.c    |  5 ++++-
+> drivers/clk/mediatek/clk-pll.c    |  6 ++++++
+> 5 files changed, 34 insertions(+), 6 deletions(-)
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.17-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
+>diff --git a/drivers/clk/mediatek/clk-cpumux.c b/drivers/clk/mediatek/clk-cpumux.c
+>index 499c60432280..c11b3fae622e 100644
+>--- a/drivers/clk/mediatek/clk-cpumux.c
+>+++ b/drivers/clk/mediatek/clk-cpumux.c
+>@@ -120,6 +120,12 @@ int mtk_clk_register_cpumuxes(struct device_node *node,
+> 	for (i = 0; i < num; i++) {
+> 		const struct mtk_composite *mux = &clks[i];
+> 
+>+		if (!IS_ERR_OR_NULL(clk_data->clks[mux->id])) {
+>+			pr_warn("%pOF: Trying to register duplicate clock ID: %d\n",
+>+				node, mux->id);
+>+			continue;
+
+%pOF is an useful information when this happens.
+
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+
+>+		}
+>+
+> 		clk = mtk_clk_register_cpumux(mux, regmap);
+> 		if (IS_ERR(clk)) {
+> 			pr_err("Failed to register clk %s: %pe\n", mux->name, clk);
+>diff --git a/drivers/clk/mediatek/clk-gate.c b/drivers/clk/mediatek/clk-gate.c
+>index 631ff170b7b9..da52023f8455 100644
+>--- a/drivers/clk/mediatek/clk-gate.c
+>+++ b/drivers/clk/mediatek/clk-gate.c
+>@@ -224,8 +224,11 @@ int mtk_clk_register_gates_with_dev(struct device_node *node,
+> 	for (i = 0; i < num; i++) {
+> 		const struct mtk_gate *gate = &clks[i];
+> 
+>-		if (!IS_ERR_OR_NULL(clk_data->clks[gate->id]))
+>+		if (!IS_ERR_OR_NULL(clk_data->clks[gate->id])) {
+>+			pr_warn("%pOF: Trying to register duplicate clock ID: %d\n",
+>+				node, gate->id);
+> 			continue;
+>+		}
+> 
+> 		clk = mtk_clk_register_gate(gate->name, gate->parent_name,
+> 					    regmap,
+>diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
+>index 6d0b8842971b..b2a3568922b2 100644
+>--- a/drivers/clk/mediatek/clk-mtk.c
+>+++ b/drivers/clk/mediatek/clk-mtk.c
+>@@ -65,8 +65,10 @@ int mtk_clk_register_fixed_clks(const struct mtk_fixed_clk *clks, int num,
+> 	for (i = 0; i < num; i++) {
+> 		const struct mtk_fixed_clk *rc = &clks[i];
+> 
+>-		if (!IS_ERR_OR_NULL(clk_data->clks[rc->id]))
+>+		if (!IS_ERR_OR_NULL(clk_data->clks[rc->id])) {
+>+			pr_warn("Trying to register duplicate clock ID: %d\n", rc->id);
+> 			continue;
+>+		}
+> 
+> 		clk = clk_register_fixed_rate(NULL, rc->name, rc->parent, 0,
+> 					      rc->rate);
+>@@ -128,8 +130,10 @@ int mtk_clk_register_factors(const struct mtk_fixed_factor *clks, int num,
+> 	for (i = 0; i < num; i++) {
+> 		const struct mtk_fixed_factor *ff = &clks[i];
+> 
+>-		if (!IS_ERR_OR_NULL(clk_data->clks[ff->id]))
+>+		if (!IS_ERR_OR_NULL(clk_data->clks[ff->id])) {
+>+			pr_warn("Trying to register duplicate clock ID: %d\n", ff->id);
+> 			continue;
+>+		}
+> 
+> 		clk = clk_register_fixed_factor(NULL, ff->name, ff->parent_name,
+> 				CLK_SET_RATE_PARENT, ff->mult, ff->div);
+>@@ -300,8 +304,11 @@ int mtk_clk_register_composites(const struct mtk_composite *mcs, int num,
+> 	for (i = 0; i < num; i++) {
+> 		const struct mtk_composite *mc = &mcs[i];
+> 
+>-		if (clk_data && !IS_ERR_OR_NULL(clk_data->clks[mc->id]))
+>+		if (!IS_ERR_OR_NULL(clk_data->clks[mc->id])) {
+>+			pr_warn("Trying to register duplicate clock ID: %d\n",
+>+				mc->id);
+> 			continue;
+>+		}
+> 
+> 		clk = mtk_clk_register_composite(mc, base, lock);
+> 
+>@@ -363,8 +370,11 @@ int mtk_clk_register_dividers(const struct mtk_clk_divider *mcds, int num,
+> 	for (i = 0; i <  num; i++) {
+> 		const struct mtk_clk_divider *mcd = &mcds[i];
+> 
+>-		if (!IS_ERR_OR_NULL(clk_data->clks[mcd->id]))
+>+		if (!IS_ERR_OR_NULL(clk_data->clks[mcd->id])) {
+>+			pr_warn("Trying to register duplicate clock ID: %d\n",
+>+				mcd->id);
+> 			continue;
+>+		}
+> 
+> 		clk = clk_register_divider(NULL, mcd->name, mcd->parent_name,
+> 			mcd->flags, base +  mcd->div_reg, mcd->div_shift,
+>diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
+>index f51e67650f03..21ad5a4afd65 100644
+>--- a/drivers/clk/mediatek/clk-mux.c
+>+++ b/drivers/clk/mediatek/clk-mux.c
+>@@ -208,8 +208,11 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
+> 	for (i = 0; i < num; i++) {
+> 		const struct mtk_mux *mux = &muxes[i];
+> 
+>-		if (!IS_ERR_OR_NULL(clk_data->clks[mux->id]))
+>+		if (!IS_ERR_OR_NULL(clk_data->clks[mux->id])) {
+>+			pr_warn("%pOF: Trying to register duplicate clock ID: %d\n",
+>+				node, mux->id);
+> 			continue;
+>+		}
+> 
+> 		clk = mtk_clk_register_mux(mux, regmap, lock);
+> 
+>diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
+>index 1dd15f560659..e5e9c188be99 100644
+>--- a/drivers/clk/mediatek/clk-pll.c
+>+++ b/drivers/clk/mediatek/clk-pll.c
+>@@ -386,6 +386,12 @@ int mtk_clk_register_plls(struct device_node *node,
+> 	for (i = 0; i < num_plls; i++) {
+> 		const struct mtk_pll_data *pll = &plls[i];
+> 
+>+		if (!IS_ERR_OR_NULL(clk_data->clks[pll->id])) {
+>+			pr_warn("%pOF: Trying to register duplicate clock ID: %d\n",
+>+				node, pll->id);
+>+			continue;
+>+		}
+>+
+> 		clk = mtk_clk_register_pll(pll, base);
+> 
+> 		if (IS_ERR(clk)) {
+>-- 
+>2.35.0.rc0.227.g00780c9af4-goog
 >
-> thanks,
 >
-> greg k-h
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.15.17-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 384933ffef76e18b9783e4777881d7aca33c32d1
-* git describe: v5.15.16-842-g384933ffef76
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.16-842-g384933ffef76
-
-## Test Regressions (compared to v5.15.16-847-g86228f6e03f0)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.16-847-g86228f6e03f0)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.16-847-g86228f6e03f0)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.16-847-g86228f6e03f0)
-No metric fixes found.
-
-## Test result summary
-total: 105489, pass: 90245, fail: 743, skip: 13539, xfail: 962
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 263 total, 261 passed, 2 failed
-* arm64: 42 total, 42 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 37 passed, 3 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 31 passed, 6 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 56 total, 50 passed, 6 failed
-* riscv: 28 total, 24 passed, 4 failed
-* s390: 22 total, 20 passed, 2 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 42 total, 42 passed, 0 failed
-
-## Test suites summary
-* build/gcc-11-https://github.com/raspberrypi/linux/raw/rpi-5.15.y/arch/arm=
-/configs
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

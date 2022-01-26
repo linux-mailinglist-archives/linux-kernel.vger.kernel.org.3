@@ -2,84 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C855349D2F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8362B49D2FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiAZUAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 15:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiAZUAQ (ORCPT
+        id S229601AbiAZUB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 15:01:28 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:44873 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229584AbiAZUB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:00:16 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35098C061747
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:00:16 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id j16so564495plx.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7vGJI4nloykuytCh04yZHKOOnvQenKvjTpFkLxyvvX8=;
-        b=AoFPUGOiiE0SjS7R3CRyfLhPaDGYufx1Fy0VCOIbCb04/Tm97Ppd8ZwCIQJahqtDHY
-         ePOcJk/Wt6uTcWuQ6ctyg73kHY6+7HegV1Slu4nFsy3KopjP3V34nmIy5GjSVp0wgrvM
-         lXlq6alNgLxuQtJbH5AonrGSs7qRW3roz5pbQ=
+        Wed, 26 Jan 2022 15:01:27 -0500
+Received: by mail-il1-f200.google.com with SMTP id i16-20020a056e021d1000b002b8bb2c077cso561160ila.11
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:01:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7vGJI4nloykuytCh04yZHKOOnvQenKvjTpFkLxyvvX8=;
-        b=Izhqb0vMjOWP8xIfJPoDSxxoZKRYCeqDwhoHS3QhWKOGBiLhL+Zti8+PZBLStUOxIP
-         hgx9AiaW41ja5lKeC1bomCaB2YEbjLJhHmnFQ8CyWw5E/Pgd81fI0ssPtA/K9HxLOM2M
-         Y5sB3eOugCJgVrx41vrFwJLN2PzfYbw/zan/7iOT9L6b4WD+Apm1EdSIvgPViJNrQAJF
-         cDSBPhoqbaFz6MQEyEMHtzplRL/D34zo9SNlD7d0S5SzAA8mx9wqPl9F2PQSPPDv01Ls
-         G/eGmfqXSQJGaRo7BO5Uz0wqu98ZGT3aRU6d0lpQhZtZDpngu4qmRM66QKITgkcmbzSq
-         zxtg==
-X-Gm-Message-State: AOAM532GH/APU35S3TfVyzUmap/MX2e0vbhnGvZ+QtnbdQcTRDvREjTC
-        lHq1oqzGSpW9LZEnd7XJIk3WKA==
-X-Google-Smtp-Source: ABdhPJy0/ctpfNKTbk08+sJLyTKqJbn2bDi5F7J+5b2L1+WbtU1+Qm9HlWh5xiDBkUIec/TfZOzcaw==
-X-Received: by 2002:a17:90a:fe1:: with SMTP id 88mr10457332pjz.150.1643227215699;
-        Wed, 26 Jan 2022 12:00:15 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y8sm17803158pgs.31.2022.01.26.12.00.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 12:00:15 -0800 (PST)
-Date:   Wed, 26 Jan 2022 12:00:14 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Ralph Siemsen <ralph.siemsen@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jiri Prchal <jiri.prchal@aksignal.cz>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH -next] eeprom: at25: Replace strncpy() with strscpy()
-Message-ID: <202201261200.615E6BEB07@keescook>
-References: <20220118182047.3385295-1-keescook@chromium.org>
- <20220126194839.GA3763384@maple.netwinder.org>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=cLW8LI7/XqtiFj9yd0tHprkCjsn8/AVoa/nyBCUb7oc=;
+        b=hMFg5S8Fdkk6/eZXAowqBRLDOrTUL9ADVRcL40O69IroTWfUeO6zsuuJN+g7cGRg7Q
+         6Ex+1HN3+KoG9QGHEinDKuJhSSxc1ra/RTnWRvixAtyfhzolw7T1lg5dYSYSyOMtjASS
+         rRVeloAcOM6jpWr/d6Glkk7WEQqfZTxH5tZHidIb96ZUztq8HLk/0Xm0wHMEn4ElsHU+
+         SIrehjLbOO0QcffB2cqX0WX7PfVhDOVZefHlkT4MUP8d/kVuKh5pOkNB/rTWuJG+x01v
+         VOMpWHXXTY5/mLCqSGCbNDyZiqhTeINI6wZuzcWuxFMi2vBtLVFzQguODxT3iguLNy+u
+         Zzxg==
+X-Gm-Message-State: AOAM533D0jf6QymrxEjbxo5mDBU9eZ8lfegnytTWRIjkWtjaSgrwJaIE
+        MbMJImDFedN9sBqrkqt7TxNTpSthqgN0AmiamXuNibiI+1D6
+X-Google-Smtp-Source: ABdhPJxK+FPfqJHgz9j/jX/ITPK4Sulzl9Qkw1XWG390K84oD1Sq9GxH+8V1Sv1ZdgU80iett2IV3EnKh9COq6LNds5MetrvFsc/
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126194839.GA3763384@maple.netwinder.org>
+X-Received: by 2002:a05:6e02:1686:: with SMTP id f6mr484033ila.300.1643227287269;
+ Wed, 26 Jan 2022 12:01:27 -0800 (PST)
+Date:   Wed, 26 Jan 2022 12:01:27 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000be3e4505d681aa17@google.com>
+Subject: [syzbot] memory leak in kvm_vcpu_ioctl_set_cpuid2
+From:   syzbot <syzbot+ead0473557070d5432cd@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jarkko@kernel.org, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-sgx@vger.kernel.org, mingo@redhat.com, pbonzini@redhat.com,
+        seanjc@google.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 02:48:39PM -0500, Ralph Siemsen wrote:
-> Hi Kees,
-> 
-> On Tue, Jan 18, 2022 at 10:20:47AM -0800, Kees Cook wrote:
-> > Use strscpy() instead of strncpy(), since its use has been deprecated[1].
-> > 
-> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings
-> 
-> Along with your other fix to restore the missing kzalloc(), I tested this
-> change on 32-bit arm system, and it worked as expected.
-> 
-> Tested-by: Ralph Siemsen <ralph.siemsen@linaro.org>
+Hello,
 
-Thanks!
+syzbot found the following issue on:
 
--- 
-Kees Cook
+HEAD commit:    0809edbae347 Merge tag 'devicetree-fixes-for-5.17-1' of gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17982967b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cc8d6c95ce1d56de
+dashboard link: https://syzkaller.appspot.com/bug?extid=ead0473557070d5432cd
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1402f91fb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ba591fb00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ead0473557070d5432cd@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810963a800 (size 2048):
+  comm "syz-executor025", pid 3610, jiffies 4294944928 (age 8.080s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 0d 00 00 00  ................
+    47 65 6e 75 6e 74 65 6c 69 6e 65 49 00 00 00 00  GenuntelineI....
+  backtrace:
+    [<ffffffff814948ee>] kmalloc_node include/linux/slab.h:604 [inline]
+    [<ffffffff814948ee>] kvmalloc_node+0x3e/0x100 mm/util.c:580
+    [<ffffffff814950f2>] kvmalloc include/linux/slab.h:732 [inline]
+    [<ffffffff814950f2>] vmemdup_user+0x22/0x100 mm/util.c:199
+    [<ffffffff8109f5ff>] kvm_vcpu_ioctl_set_cpuid2+0x8f/0xf0 arch/x86/kvm/cpuid.c:423
+    [<ffffffff810711b9>] kvm_arch_vcpu_ioctl+0xb99/0x1e60 arch/x86/kvm/x86.c:5251
+    [<ffffffff8103e92d>] kvm_vcpu_ioctl+0x4ad/0x950 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4066
+    [<ffffffff815afacc>] vfs_ioctl fs/ioctl.c:51 [inline]
+    [<ffffffff815afacc>] __do_sys_ioctl fs/ioctl.c:874 [inline]
+    [<ffffffff815afacc>] __se_sys_ioctl fs/ioctl.c:860 [inline]
+    [<ffffffff815afacc>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:860
+    [<ffffffff844a3335>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff844a3335>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

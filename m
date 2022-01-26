@@ -2,89 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D44F49C1FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E780B49C1F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237047AbiAZDSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:18:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S236957AbiAZDRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:17:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237229AbiAZDSF (ORCPT
+        with ESMTP id S230339AbiAZDRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:18:05 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A078C06161C;
-        Tue, 25 Jan 2022 19:18:04 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id a18so66626814edj.7;
-        Tue, 25 Jan 2022 19:18:04 -0800 (PST)
+        Tue, 25 Jan 2022 22:17:09 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3892C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 19:17:08 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id c23so7620114wrb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 19:17:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nGwKJWYONIElZDTFR99HkZ3dGKG6mpKfNsXZp31Ut3E=;
-        b=f4maGwavYSH1ugNaxseEKuv79y5ex54drx/p9lD2G9Fiu9K5ajRXEp+R72M5HBA1at
-         o24cZVNmk6eoK81cgRXNpfkMoij7I29Hz0Y24PhySUZqqVPHUv1VAqAyLTEIW1aiBikc
-         DTrbjaoxwFbUMcJ9PKNWB6xpjBY83hkzGSVmd2e2Jt/VRGuePq0AV2U9RZtZD4BuIM82
-         XSo30ca8XkyC2nzmKGWjoZwlYaR3PWB77GLMtVaj8L5/J/XF32RTVZ89FqtJfN2k60mB
-         g8paoeDwpM92zXB/yd2gG4E1OdIdOAnMnrkokNudxg2Lwn71qNH5+50ur2+18QDFtbZw
-         jrAQ==
+        bh=pBMdlXBwnvmmPNUewfDMh0H5M/2d+zAT6/3Iwl0rMhQ=;
+        b=2hkCjLJXNAlhQ1LUkJt6pNjDvtjs2OnmxqENbtatgOTh31p8z+9Mqv0niYVwX/l8pk
+         ClUB570vDbOr8k+Hx/Wv50Q3w8GihVLYUXdu+K/erHBbDgrId+MwHePcdsI5oxQelBYk
+         f3QyqP/p8SIgane+7W7yUZJB5V5R28ZWAhfXrR5CihS0gmQIaBEZguge6Rb9RNaQpxbK
+         eS8k3FKGThIhtR0JXPdSDOPVmHz6h+XMI8NOQQ5bhcn4hJBRxbTQOMTN/P0aGOFl500p
+         3hEq88NaviARy1N5+PY122QI+rKZ+PVwRH/cospStOzCn0Itee/z7g6P6Emn2HpJbfR+
+         fkcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nGwKJWYONIElZDTFR99HkZ3dGKG6mpKfNsXZp31Ut3E=;
-        b=4OwPkzWamfdLFXMK8C/pwm3TmPOI7lpc/fi8UMdz/iZ8AEK24EAzA3wI+Tdlh/8uuz
-         5YtA79bodNjIsCBKBacXQ7wHWHWI6to9Q4+FgwCFS34Zs6knef7JSzQ1w9ehxFYHxCKc
-         5gLNowh43LtPvy2kO9R7DzwL2K/+wQld5iuk5L8tZcVMUA2rD0d+orPJ1IGK6X5PoZp/
-         ry/9iFZn6cqOIZHSEU+gNvyb2YGQJphvJq5JCkbuLHwP1ZUJ/E6a3rr53jdoNUWCXr1h
-         azOwYwuX2kQbmnVwE7V6UJKiD7vQmQM6cJtFT2i7X4DobNWwcExaz3NbQisQGVYyOiuQ
-         PZcw==
-X-Gm-Message-State: AOAM530F9OhkO8oZD1Nxu6lc0ivWpVess6FFeLquOg7Vax6A+KAbhRGj
-        RHYQjkgTe33KsSJH3LZBLBqvcGS+xDhD9hHXHv4=
-X-Google-Smtp-Source: ABdhPJxgFkyj1zvsBe7fIwyDUghW8HcgNWcznQZiYp3Hf5SBqM5nN32i8nIqMCR/bBLgT5HK+hmKayduOmwYrB3+sBs=
-X-Received: by 2002:aa7:d949:: with SMTP id l9mr10167058eds.137.1643167083224;
- Tue, 25 Jan 2022 19:18:03 -0800 (PST)
+        bh=pBMdlXBwnvmmPNUewfDMh0H5M/2d+zAT6/3Iwl0rMhQ=;
+        b=mBsQom3HLdXRpDtZov0XZ66CERwvPCgSrIxk6YmZjNxltuJSDD/3oY3kbmgxILO1Qw
+         XxC0sFB+StKAPlLLgsDB1S4ONEq2PNlArtmOmr2Q2EUiDjujje0d4bJuOmUc/rZqKYW5
+         VySVetUrC66Z48kSTOdom9FS8G7Ovbgwm3aPqJVhLhRLmN9BqAOVMM+7nIF+v1xuffOs
+         aZGmv+OlVLnNTPh619c+vmSiXDbwe64NSpLuC8XKunZc4An1WhfXgSDu2eBip14rqoLM
+         DxkXEgRzVCqd+4hZI98nQmM3EhdCdicYo8HKD9Fh14uaXj9fVS8rY06AOHfcpmgfJzjK
+         UW4w==
+X-Gm-Message-State: AOAM530QApDDUdsPcEZ8kw1Hlnvaqwqghj/7yRqYf1KeCMCt+eqPYNyP
+        DJ29DIgSvMz/gclHH9hfKx3PMfbzrB8Fq8YiHM14mQ==
+X-Google-Smtp-Source: ABdhPJxdxO1ha84zyG2XFtqED0Da/EibQF9M6ja/rcn0/bthKWmiRfAlC1qUAPC1GknjblLeVACVRH+7+qe5Q7KXvVE=
+X-Received: by 2002:a5d:584e:: with SMTP id i14mr20897127wrf.690.1643167027245;
+ Tue, 25 Jan 2022 19:17:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20220124131538.1453657-1-imagedong@tencent.com>
- <20220124131538.1453657-4-imagedong@tencent.com> <5201dd8b-e84c-89a0-568f-47a2211b88cb@gmail.com>
- <CADxym3YpyWh59cjtUqxGXxpb2+2Ywb-n4Jpz1KJG3AYRf5cenA@mail.gmail.com> <926e3d3d-1af0-7155-e0ac-aee7d804a645@gmail.com>
-In-Reply-To: <926e3d3d-1af0-7155-e0ac-aee7d804a645@gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 26 Jan 2022 11:13:35 +0800
-Message-ID: <CADxym3Y5Ld-BcM4-Y=vJZiwsCEfRZpBqd1oj6ct+Xeu8F=wXew@mail.gmail.com>
-Subject: Re: [PATCH net-next 3/6] net: ipv4: use kfree_skb_reason() in ip_rcv_finish_core()
-To:     David Ahern <dsahern@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, pablo@netfilter.org,
-        kadlec@netfilter.org, Florian Westphal <fw@strlen.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>, alobakin@pm.me,
-        paulb@nvidia.com, Paolo Abeni <pabeni@redhat.com>,
-        talalahmad@google.com, haokexin@gmail.com,
-        Kees Cook <keescook@chromium.org>, memxor@gmail.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Cong Wang <cong.wang@bytedance.com>
+References: <20220125054217.383482-1-apatel@ventanamicro.com>
+ <20220125054217.383482-3-apatel@ventanamicro.com> <87lez37k8h.wl-maz@kernel.org>
+In-Reply-To: <87lez37k8h.wl-maz@kernel.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 26 Jan 2022 08:46:55 +0530
+Message-ID: <CAAhSdy0NrB4Q-mYtMH_HCtbfm5OXi-cxXhiu1AxKdCkTv4cskQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] irqchip/riscv-intc: Set intc domain as the default host
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 10:57 AM David Ahern <dsahern@gmail.com> wrote:
+On Tue, Jan 25, 2022 at 11:47 PM Marc Zyngier <maz@kernel.org> wrote:
 >
-> On 1/25/22 7:36 PM, Menglong Dong wrote:
-> > Is't it meaningful? I name it from the meaning of 'ip route lookup or validate
-> > failed in input path', can't it express this information?
+> On Tue, 25 Jan 2022 05:42:13 +0000,
+> Anup Patel <apatel@ventanamicro.com> wrote:
+> >
+> > We have quite a few RISC-V drivers (such as RISC-V SBI IPI driver,
+> > RISC-V timer driver, RISC-V PMU driver, etc) which do not have a
+> > dedicated DT/ACPI fwnode. This patch makes intc domain as the default
+> > host so that these drivers can directly create local interrupt mapping
+> > using standardized local interrupt numbers
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  drivers/clocksource/timer-riscv.c | 17 +----------------
+> >  drivers/irqchip/irq-riscv-intc.c  |  9 +++++++++
+> >  2 files changed, 10 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+> > index 1767f8bf2013..dd6916ae6365 100644
+> > --- a/drivers/clocksource/timer-riscv.c
+> > +++ b/drivers/clocksource/timer-riscv.c
+> > @@ -102,8 +102,6 @@ static irqreturn_t riscv_timer_interrupt(int irq, void *dev_id)
+> >  static int __init riscv_timer_init_dt(struct device_node *n)
+> >  {
+> >       int cpuid, hartid, error;
+> > -     struct device_node *child;
+> > -     struct irq_domain *domain;
+> >
+> >       hartid = riscv_of_processor_hartid(n);
+> >       if (hartid < 0) {
+> > @@ -121,20 +119,7 @@ static int __init riscv_timer_init_dt(struct device_node *n)
+> >       if (cpuid != smp_processor_id())
+> >               return 0;
+> >
+> > -     domain = NULL;
+> > -     child = of_get_compatible_child(n, "riscv,cpu-intc");
+> > -     if (!child) {
+> > -             pr_err("Failed to find INTC node [%pOF]\n", n);
+> > -             return -ENODEV;
+> > -     }
+> > -     domain = irq_find_host(child);
+> > -     of_node_put(child);
+> > -     if (!domain) {
+> > -             pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+> > -             return -ENODEV;
+> > -     }
+> > -
+> > -     riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
+> > +     riscv_clock_event_irq = irq_create_mapping(NULL, RV_IRQ_TIMER);
+> >       if (!riscv_clock_event_irq) {
+> >               pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+> >               return -ENODEV;
+> > diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> > index b65bd8878d4f..9f0a7a8a5c4d 100644
+> > --- a/drivers/irqchip/irq-riscv-intc.c
+> > +++ b/drivers/irqchip/irq-riscv-intc.c
+> > @@ -125,6 +125,15 @@ static int __init riscv_intc_init(struct device_node *node,
+> >               return rc;
+> >       }
+> >
+> > +     /*
+> > +      * Make INTC as the default domain which will allow drivers
+> > +      * not having dedicated DT/ACPI fwnode (such as RISC-V SBI IPI
+> > +      * driver, RISC-V timer driver, RISC-V PMU driver, etc) can
+> > +      * directly create local interrupt mapping using standardized
+> > +      * local interrupt numbers.
+> > +      */
+> > +     irq_set_default_host(intc_domain);
 >
+> No, please. This really is a bad idea. This sort of catch-all have
+> constantly proven to be a nuisance, because they discard all the
+> topology information. Eventually, you realise that you need to know
+> where this is coming from, but it really is too late.
 >
-> ip_route_input_noref has many failures and not all of them are FIB
-> lookups. ip_route_input_slow has a bunch of EINVAL cases for example.
->
-> Returning a 'reason' as the code function name has no meaning to a user
-> and could actually be misleading in some cases. I would skip this one
-> for now.
+> I'd rather you *synthesise* a fwnode (like ACPI does) rather then do
+> this.
 
-Yeah, the real reason can be complex. I'll skip this case for now.
+In absence of INTC as the default domain, currently we have various
+drivers looking up INTC irq_domain from DT (or ACPI). This is quite a
+bit of duplicate code across various drivers.
+
+How about having a irq_domain lookup routine (riscv_intc_find_irq_domain())
+exported by the RISC-V INTC driver or arch/riscv ?
+OR
+Do you have an alternative suggestion ?
+
+Regards,
+Anup
+
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.

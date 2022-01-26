@@ -2,107 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F8949C7A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3810649C7A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240053AbiAZKd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:33:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43336 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbiAZKdY (ORCPT
+        id S240064AbiAZKdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240044AbiAZKdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:33:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B4A7617FB;
-        Wed, 26 Jan 2022 10:33:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4450C340E3;
-        Wed, 26 Jan 2022 10:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643193203;
-        bh=GW9FAjNDweW7gvrSISPpSMwP4D6Zp0v9U2IcNkF/a98=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WSGWZwN3RgRguwe1RsQAA+ygJ9W8xUAECNarOlDFAkDIdTLn6Zyy+NdPo+v8oLCDL
-         ldJSusLrsnKmtCRHli2QeGVdkgELF79xXeKO3g7wC+UPD8qvsHyYNI+8oUrtL0UYKj
-         /lEMaOW8GZ5Nk8XP4zYcmThDONWmJne26YnZmu+t5ETC5wp8JIe2KoLEZGY0ft3bJ2
-         rClIV9RqdI6UeL3E41BB99vdlxd4/gxKKSTHC/pEr+Qz/X8GM5DRS9BbhCDj725UB5
-         FrL/TyBkGw5lExUkXBiUp6y+R+acg9N3GIULoSLfacsFklkrTSxZVQJUW8oHe+yOJf
-         Rs+MuluXEcVZg==
-Date:   Wed, 26 Jan 2022 16:03:16 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
-        sricharan@codeaurora.org
-Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
- on READID
-Message-ID: <20220126103316.GA212068@thinkpad>
-References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
- <20220114082718.32a2fc83@xps13>
- <20220126111613.3ab0021e@xps13>
+        Wed, 26 Jan 2022 05:33:49 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F712C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:33:49 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id h7so38016921ejf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:33:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JDPOR1SRUbDqEoavr/5bPQmBuHYS8fhwHW77mQ3ZGIQ=;
+        b=iVhjPTjyX1JLwhUov1+kpQmjOcqNeo60P/B9i4czSsEFFcFL0RTFaaAVUmPccPfoP6
+         wlZmE9eW4a83a5qfueIMh/fsw/430FAnGAwYDVoGRo0dx2TUqNcbZm5nZn9m0UpzWKv9
+         p6hO8IXIIcXdUTYkPTy9gO3NZCoq7Q91U1A670mry1HBZpcBFiR7GRf9KzcT/DpvBwfs
+         ZogjwgCDp0xU50gLZAv4jCmQq1+UmsIynDXawjH1VrXBHhMeYXzE6m8iEh3wv9CUDXlo
+         YhBZUCGSeDUHq7Bp/04vIiJxyj+otTlV//NRxl56HovRDh46pVHsW2Bw8EYuATMOk0tb
+         fFJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JDPOR1SRUbDqEoavr/5bPQmBuHYS8fhwHW77mQ3ZGIQ=;
+        b=XNtXyAqp5sW9TUQolzrrhttXnxmM7lbHo+02dfWetHrV2wcGzBcSnc9Ez2IVocvsgA
+         NBDKhO6L75m7w9YISuefizC/68TdMkaRiK283pUq9S1MwH2Hpr/WV885tlqR41nlA1k5
+         dW2Z+Ffw777uG6nTC/uqkTVNEX0SY/CBUrNUORWBIc9BXfuRKy2TSCJLDiwOyWrsnye/
+         bdk1eTAi/L15Frls9ko5MLMaQ+bFddx6FWVjGyD+4eAOs9dySy2U8nKTbnfKuS2mxfN4
+         ujDUw3EnJIhEHMtZVLTp5JtFBDOyZI24N6gLdSS0vmWfNP/EOHOaJ8jqcbf1vaO0bE6B
+         sRtA==
+X-Gm-Message-State: AOAM533sx/NidEZpeKv/wfxiDQhREONNmg3jPpKCBUTmdddB8GLyz9Tb
+        7UbJx7yBrGScW2H1h9zMfVbJRcNP8ls=
+X-Google-Smtp-Source: ABdhPJxU68uu1/4I14xkb/CI7GcckQjc7FUMaRH+HGlgiwwWWqF2iVqo9FGo4eYYGCWr2hAVAzu8Aw==
+X-Received: by 2002:a17:907:3f87:: with SMTP id hr7mr1722123ejc.64.1643193227843;
+        Wed, 26 Jan 2022 02:33:47 -0800 (PST)
+Received: from [192.168.0.253] (ip5f5abb86.dynamic.kabel-deutschland.de. [95.90.187.134])
+        by smtp.gmail.com with ESMTPSA id bv2sm7220228ejb.155.2022.01.26.02.33.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 02:33:47 -0800 (PST)
+Message-ID: <e63e7a5c-68a8-8160-bc84-b5ecbca6e5cc@gmail.com>
+Date:   Wed, 26 Jan 2022 11:33:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220126111613.3ab0021e@xps13>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 10/10] staging: r8188eu: remove GlobalDebugLevel flag
+Content-Language: en-US
+To:     Phillip Potter <phil@philpotter.co.uk>, gregkh@linuxfoundation.org
+Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
+        martin@kaiser.cx, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, paskripkin@gmail.com
+References: <20220124225032.860-1-phil@philpotter.co.uk>
+ <20220124225950.784-1-phil@philpotter.co.uk>
+ <20220124225950.784-3-phil@philpotter.co.uk>
+From:   Michael Straube <straube.linux@gmail.com>
+In-Reply-To: <20220124225950.784-3-phil@philpotter.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 11:16:13AM +0100, Miquel Raynal wrote:
-> Hello,
+On 1/24/22 23:59, Phillip Potter wrote:
+> Remove hal/odm_debug.c, to get rid of the GlobalDebugLevel flag,
+> and remove the two other lines that reference GlobalDebugLevel, as
+> the last remaining user (DBG_88E) is now gone. Also modify Makefile
+> to no longer build hal/odm_debug.c.
 > 
-> miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 +0100:
+> Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+> ---
+>   drivers/staging/r8188eu/Makefile            | 1 -
+>   drivers/staging/r8188eu/hal/odm_debug.c     | 6 ------
+>   drivers/staging/r8188eu/include/rtw_debug.h | 2 --
+>   drivers/staging/r8188eu/os_dep/os_intfs.c   | 1 -
+>   4 files changed, 10 deletions(-)
+>   delete mode 100644 drivers/staging/r8188eu/hal/odm_debug.c
 > 
-> > Hi Konrad,
-> > 
-> > konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 19:44:26 +0100:
-> > 
-> > > While I have absolutely 0 idea why and how, running clear_bam_transaction
-> > > when READID is issued makes the DMA totally clog up and refuse to function
-> > > at all on mdm9607. In fact, it is so bad that all the data gets garbled
-> > > and after a short while in the nand probe flow, the CPU decides that
-> > > sepuku is the only option.
-> > > 
-> > > Removing _READID from the if condition makes it work like a charm, I can
-> > > read data and mount partitions without a problem.
-> > > 
-> > > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> > > ---
-> > > This is totally just an observation which took me an inhumane amount of
-> > > debug prints to find.. perhaps there's a better reason behind this, but
-> > > I can't seem to find any answers.. Therefore, this is a BIG RFC!  
-> > 
-> > I'm adding two people from codeaurora who worked a lot on this driver.
-> > Hopefully they will have an idea :)
-> 
-> Sadre, I've spent a significant amount of time reviewing your patches,
-> now it's your turn to not take a month to answer to your peers
-> proposals.
-> 
-> Please help reviewing this patch.
-> 
+> diff --git a/drivers/staging/r8188eu/Makefile b/drivers/staging/r8188eu/Makefile
+> index a7a486cc16dd..ecd6fe5bd94c 100644
+> --- a/drivers/staging/r8188eu/Makefile
+> +++ b/drivers/staging/r8188eu/Makefile
+> @@ -10,7 +10,6 @@ r8188eu-y = \
+>   		hal/hal_intf.o \
+>   		hal/hal_com.o \
+>   		hal/odm.o \
+> -		hal/odm_debug.o \
+>   		hal/odm_HWConfig.o \
+>   		hal/odm_RegConfig8188E.o \
+>   		hal/odm_RTL8188E.o \
+> diff --git a/drivers/staging/r8188eu/hal/odm_debug.c b/drivers/staging/r8188eu/hal/odm_debug.c
+> deleted file mode 100644
+> index 7a134229fe39..000000000000
+> --- a/drivers/staging/r8188eu/hal/odm_debug.c
+> +++ /dev/null
+> @@ -1,6 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/* Copyright(c) 2007 - 2011 Realtek Corporation. */
+> -
+> -#include "../include/rtw_debug.h"
+> -
+> -u32 GlobalDebugLevel;
+> diff --git a/drivers/staging/r8188eu/include/rtw_debug.h b/drivers/staging/r8188eu/include/rtw_debug.h
+> index 959fb6bd25ca..01a7d987d6cc 100644
+> --- a/drivers/staging/r8188eu/include/rtw_debug.h
+> +++ b/drivers/staging/r8188eu/include/rtw_debug.h
+> @@ -52,6 +52,4 @@
+>   
+>   #define DRIVER_PREFIX	"R8188EU: "
+>   
+> -extern u32 GlobalDebugLevel;
+> -
+>   #endif	/* __RTW_DEBUG_H__ */
+> diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+> index 17249b4fb7ad..8589de487289 100644
+> --- a/drivers/staging/r8188eu/os_dep/os_intfs.c
+> +++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
+> @@ -155,7 +155,6 @@ static uint loadparam(struct adapter *padapter)
+>   {
+>   	struct registry_priv  *registry_par = &padapter->registrypriv;
+>   
+> -	GlobalDebugLevel = rtw_debug;
+>   	registry_par->chip_version = (u8)rtw_chip_version;
+>   	registry_par->rfintfs = (u8)rtw_rfintfs;
+>   	registry_par->lbkmode = (u8)rtw_lbkmode;
 
-Sorry. I was hoping that Qcom folks would chime in as I don't have any idea
-about the mdm9607 platform. It could be that the mail server migration from
-codeaurora to quicinc put a barrier here.
+Hi Phillip,
 
-Let me ping them internally.
+so rtw_debug is unused now. Should we remove the 'debug' module
+parameter and rtw_debug as well?
 
-> BTW why is this driver still using cmdfund? It should have been
-> migrated to ->exec_op() a long time ago.
-
-I'll look into it.
-
-Thanks,
-Mani
-> 
-> Thanks,
-> Miquèl
+Regards,
+Michael

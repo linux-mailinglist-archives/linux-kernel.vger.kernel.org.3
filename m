@@ -2,262 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8531A49D0B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E442749D0B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:29:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243708AbiAZR1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:27:24 -0500
-Received: from foss.arm.com ([217.140.110.172]:55128 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237164AbiAZR1X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:27:23 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0DB1D6E;
-        Wed, 26 Jan 2022 09:27:22 -0800 (PST)
-Received: from [10.32.33.50] (e121896.warwick.arm.com [10.32.33.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2119B3F7D8;
-        Wed, 26 Jan 2022 09:27:21 -0800 (PST)
-Subject: Re: [RFC V1 11/11] perf: Capture branch privilege information
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Rob Herring <rob.herring@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
- <1642998653-21377-12-git-send-email-anshuman.khandual@arm.com>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <b85da904-50cb-b7e3-1429-6f5ef244567b@arm.com>
-Date:   Wed, 26 Jan 2022 17:27:19 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S243717AbiAZR33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236899AbiAZR31 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 12:29:27 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE90C06161C;
+        Wed, 26 Jan 2022 09:29:27 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so335196pja.2;
+        Wed, 26 Jan 2022 09:29:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=o7yVQ6gsvTTab9fYp8q+lCU+rLwohNUxOjiCLgJGdGM=;
+        b=O6zfBzmd+BywBFqXzIfiy3ycqMOwjnMfDYKV8Xlu61A5NUaAdxjhLjXRk91Zxmp379
+         0Zfjblp8ROfH7rGfRhEtsP/JWG6yw+G/qBGkEN722dXIW53FMFuWEu01agN9bdHb9we0
+         XOfCUvJMOBV/VWzq7SmjsTPdvjJ7m8E7DPaqPCR2KdqEhdKUcN20ZgDnwHGrUrZ6+I3h
+         8R/tO/SPoduJvlIslRZbhDKzQDuMNWYkbGxVq/ggvEDK6IeFnDzjVzrDuCHhUptS6yE3
+         zTZNooS0kFSqw6KKe8jJQpHWqMqYs1PMrHkCKAl3tpRiDJB4Eimn0LqYUPgEWvGJZSkJ
+         kK4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=o7yVQ6gsvTTab9fYp8q+lCU+rLwohNUxOjiCLgJGdGM=;
+        b=l2cEOGO1p2/3I7N4HQz0BC9A0nojRP7a/1rdpe1Hx1e2CjpOr8TGNa0HLg6xByehIM
+         sG15LnT3sLLOideTEXk0rx8m5JS8uTT+XXy43uzLaE6azSMH2/IedWJthyDgGlCvHvNm
+         yD9dV/B07Q16NcSz4fTllrqn4KQ5f0fhQFxXV7gQpUJq9Fi8OPB33CMeXnjy4KVTVVUb
+         zVKvopY+PWUj0yxLotUJgodtB9dDGs5vbKG5PQ1RFkAIicx5asFwo9Erv0c7t/Kpgs9v
+         KEnHS640zBcZXmoyuJ1t7zWaMk7GEyIWapf8p/eZRFrsLlOYXiKOxkjPOetnOqzKr+QD
+         /C2Q==
+X-Gm-Message-State: AOAM532k/FQrp4pi9uHL10HPwqMUuUWrsqUnvggE/14umfFIAAdCklF8
+        FcOpQUs4uICAqK9VNr/qJoEjouEWLRZ3mw==
+X-Google-Smtp-Source: ABdhPJxyUHtO42sVayvKd1TwY8fWw8c2ZGvly5R/fAkkk2S/qM6qTyEIqTSco7v2TNmyUpldFs4JGQ==
+X-Received: by 2002:a17:903:1212:: with SMTP id l18mr10132plh.45.1643218166669;
+        Wed, 26 Jan 2022 09:29:26 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id h18sm2699799pfv.216.2022.01.26.09.29.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 09:29:26 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 26 Jan 2022 07:29:24 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next] blk-throttle: enable io throttle for root in
+ cgroup v2
+Message-ID: <YfGE9L4i7DtNTo08@slm.duckdns.org>
+References: <20220114093000.3323470-1-yukuai3@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <1642998653-21377-12-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220114093000.3323470-1-yukuai3@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 24/01/2022 04:30, Anshuman Khandual wrote:
-> Platforms like arm64 could capture privilege level information for all the
-> branch records. Hence this adds a new element in the struct branch_entry to
-> record the privilege level information, which could be requested through a
-> new event.attr.branch_sample_type flag PERF_SAMPLE_BRANCH_PRIV_SAVE. While
-> here, update the BRBE driver as required.
+On Fri, Jan 14, 2022 at 05:30:00PM +0800, Yu Kuai wrote:
+> RFC patch: https://lkml.org/lkml/2021/9/9/1432
 > 
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Jiri Olsa <jolsa@redhat.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  drivers/perf/arm_pmu_brbe.c              | 28 ++++++++++++++++++++++++
->  include/linux/perf_event.h               |  5 +++++
->  include/uapi/linux/perf_event.h          | 13 ++++++++++-
->  tools/include/uapi/linux/perf_event.h    | 13 ++++++++++-
->  tools/perf/Documentation/perf-record.txt |  1 +
->  tools/perf/util/parse-branch-options.c   |  1 +
->  6 files changed, 59 insertions(+), 2 deletions(-)
+> There is a proformance problem in our environment:
 > 
-> diff --git a/drivers/perf/arm_pmu_brbe.c b/drivers/perf/arm_pmu_brbe.c
-> index 7cd1208c6c58..d4cbea74c148 100644
-> --- a/drivers/perf/arm_pmu_brbe.c
-> +++ b/drivers/perf/arm_pmu_brbe.c
-> @@ -270,6 +270,25 @@ static int brbe_fetch_perf_type(u64 brbinf)
->  	}
->  }
->  
-> +static int brbe_fetch_perf_priv(u64 brbinf)
-> +{
-> +	int brbe_el = brbe_fetch_el(brbinf);
-> +
-> +	switch (brbe_el) {
-> +	case BRBINF_EL_EL0:
-> +		return PERF_BR_USER;
-> +	case BRBINF_EL_EL1:
-> +		return PERF_BR_KERNEL;
-> +	case BRBINF_EL_EL2:
-> +		if (is_kernel_in_hyp_mode())
-> +			return PERF_BR_KERNEL;
-> +		return PERF_BR_HV;
-> +	default:
-> +		pr_warn("unknown branch privilege captured\n");
-> +		return -1;
-> +	}
-> +}
-> +
->  static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *event,
->  			       u64 brbinf, int idx)
->  {
-> @@ -302,6 +321,15 @@ static void capture_brbe_flags(struct pmu_hw_events *cpuc, struct perf_event *ev
->  			cpuc->brbe_entries[idx].in_tx = brbinf & BRBINF_TX;
->  		}
->  	}
-> +
-> +	if (branch_sample_priv(event)) {
-> +		/*
-> +		 * All these information (i.e branch privilege level) are not
-> +		 * available for source only branch records.
-> +		 */
-> +		if (type != BRBINF_VALID_SOURCE)
-> +			cpuc->brbe_entries[idx].priv = brbe_fetch_perf_priv(brbinf);
-> +	}
->  }
->  
->  /*
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 916ce5102b33..8021b6a30d86 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -1688,4 +1688,9 @@ static inline bool branch_sample_hw_index(const struct perf_event *event)
->  {
->  	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
->  }
-> +
-> +static inline bool branch_sample_priv(const struct perf_event *event)
-> +{
-> +	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_PRIV_SAVE;
-> +}
->  #endif /* _LINUX_PERF_EVENT_H */
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index 361fdc6b87a0..4d77710f7a4e 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -204,6 +204,8 @@ enum perf_branch_sample_type_shift {
->  
->  	PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT	= 17, /* save low level index of raw branch records */
->  
-> +	PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT	= 18, /* save privillege mode */
-> +
->  	PERF_SAMPLE_BRANCH_MAX_SHIFT		/* non-ABI */
->  };
->  
-> @@ -233,6 +235,8 @@ enum perf_branch_sample_type {
->  
->  	PERF_SAMPLE_BRANCH_HW_INDEX	= 1U << PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT,
->  
-> +	PERF_SAMPLE_BRANCH_PRIV_SAVE	= 1U << PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT,
-> +
->  	PERF_SAMPLE_BRANCH_MAX		= 1U << PERF_SAMPLE_BRANCH_MAX_SHIFT,
->  };
->  
-> @@ -265,6 +269,12 @@ enum {
->  	PERF_BR_MAX,
->  };
->  
-> +enum {
-> +	PERF_BR_USER	= 0,
-> +	PERF_BR_KERNEL	= 1,
-> +	PERF_BR_HV	= 2,
-> +};
-> +
-
-Can we have 0 as "UNKNOWN". It's going to be difficult to parse files when privilege information
-isn't saved and get accurate results without that. For example if it's not set then presumably
-the field would be 0 (PERF_BR_USER), but that doesn't mean the samples are user in that case.
-
-I know you might be able to go backwards and look at what arguments were passed to the kernel but
-it's not guaranteed that the kernel honored the request anyway. There are also other platforms
-to think about etc.
-
-If you look at the branch type definitions above they start at 0 (PERF_BR_UNKNOWN) which I think
-works out quite nicely in the userspace code.
-
->  #define PERF_SAMPLE_BRANCH_PLM_ALL \
->  	(PERF_SAMPLE_BRANCH_USER|\
->  	 PERF_SAMPLE_BRANCH_KERNEL|\
-> @@ -1377,7 +1387,8 @@ struct perf_branch_entry {
->  		abort:1,    /* transaction abort */
->  		cycles:16,  /* cycle count to last branch */
->  		type:6,     /* branch type */
-> -		reserved:38;
-> +		priv:2,     /* privilege level */> +		reserved:36;
->  };
->  
->  union perf_sample_weight {
-> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-> index 9a82b8aaed93..a2208400b0b9 100644
-> --- a/tools/include/uapi/linux/perf_event.h
-> +++ b/tools/include/uapi/linux/perf_event.h
-> @@ -204,6 +204,8 @@ enum perf_branch_sample_type_shift {
->  
->  	PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT	= 17, /* save low level index of raw branch records */
->  
-> +	PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT	= 18, /* save privillege mode */
-> +
->  	PERF_SAMPLE_BRANCH_MAX_SHIFT		/* non-ABI */
->  };
->  
-> @@ -233,6 +235,8 @@ enum perf_branch_sample_type {
->  
->  	PERF_SAMPLE_BRANCH_HW_INDEX	= 1U << PERF_SAMPLE_BRANCH_HW_INDEX_SHIFT,
->  
-> +	PERF_SAMPLE_BRANCH_PRIV_SAVE	= 1U << PERF_SAMPLE_BRANCH_PRIV_SAVE_SHIFT,
-> +
->  	PERF_SAMPLE_BRANCH_MAX		= 1U << PERF_SAMPLE_BRANCH_MAX_SHIFT,
->  };
->  
-> @@ -265,6 +269,12 @@ enum {
->  	PERF_BR_MAX,
->  };
->  
-> +enum {
-> +	PERF_BR_USER    = 0,
-> +	PERF_BR_KERNEL  = 1,
-> +	PERF_BR_HV      = 2,
-> +};
-> +
->  #define PERF_SAMPLE_BRANCH_PLM_ALL \
->  	(PERF_SAMPLE_BRANCH_USER|\
->  	 PERF_SAMPLE_BRANCH_KERNEL|\
-> @@ -1377,7 +1387,8 @@ struct perf_branch_entry {
->  		abort:1,    /* transaction abort */
->  		cycles:16,  /* cycle count to last branch */
->  		type:6,     /* branch type */
-> -		reserved:38;
-> +		priv:2,     /* privilege level */
-> +		reserved:36;
->  };
->  
->  union perf_sample_weight {
-> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-> index 9ccc75935bc5..3e33686977a1 100644
-> --- a/tools/perf/Documentation/perf-record.txt
-> +++ b/tools/perf/Documentation/perf-record.txt
-> @@ -387,6 +387,7 @@ following filters are defined:
->  	- abort_tx: only when the target is a hardware transaction abort
->  	- cond: conditional branches
->  	- save_type: save branch type during sampling in case binary is not available later
-> +	- priv: save privilege state during sampling in case binary is not available later
->  
->  +
->  The option requires at least one branch type among any, any_call, any_ret, ind_call, cond.
-> diff --git a/tools/perf/util/parse-branch-options.c b/tools/perf/util/parse-branch-options.c
-> index bb4aa88c50a8..00588b9db474 100644
-> --- a/tools/perf/util/parse-branch-options.c
-> +++ b/tools/perf/util/parse-branch-options.c
-> @@ -32,6 +32,7 @@ static const struct branch_mode branch_modes[] = {
->  	BRANCH_OPT("call", PERF_SAMPLE_BRANCH_CALL),
->  	BRANCH_OPT("save_type", PERF_SAMPLE_BRANCH_TYPE_SAVE),
->  	BRANCH_OPT("stack", PERF_SAMPLE_BRANCH_CALL_STACK),
-> +	BRANCH_OPT("priv", PERF_SAMPLE_BRANCH_PRIV_SAVE),
->  	BRANCH_END
->  };
->  
+> A host can provide a remote device to difierent client. If one client is
+> under high io pressure, other clients might be affected.
 > 
+> Limit the overall iops/bps(io.max) from the client can fix the problem,
+> however, config files do not exist in root cgroup currently, which makes
+> it impossible.
+> 
+> This patch enables io throttle for root cgroup:
+>  - enable "io.max" and "io.low" in root
+>  - don't skip root group in tg_iops_limit() and tg_bps_limit()
+>  - don't skip root group in tg_conf_updated()
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+
+Yeah, I'm kinda split. It's a simple change with some utility, but it's also
+something which doesn't fit with the cgroup feature or interface. It's
+regulating the whole system behavior. There's no reason for any of the
+control "groups" to be involved here and semantically the interface would
+fit a lot better under /proc, /sys or some other system-wide location. Here
+are some points to consider:
+
+* As a comparison, it'd be rather absurd to enable memory.max at system root
+  in terms of interface and most likely break whole lot of mm operations.
+
+* Resource control knobs of a cgroup belong to the parent as the parent is
+  responsible for divvying up the available resources to its children. Here
+  too, the knobs are making sense because there's a higher level parent
+  (whether that's hypervisor or some network server).
+
+Is your use case VMs or network attached storage?
+
+Thanks.
+
+-- 
+tejun

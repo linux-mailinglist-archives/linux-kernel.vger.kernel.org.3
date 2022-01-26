@@ -2,83 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA9349C34F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AFB49C352
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbiAZFfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 00:35:09 -0500
-Received: from mx.msync.work ([95.217.65.204]:49842 "EHLO mx.msync.work"
+        id S233735AbiAZFhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 00:37:37 -0500
+Received: from mga18.intel.com ([134.134.136.126]:50917 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233609AbiAZFfH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 00:35:07 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 11BDE282CAF;
-        Wed, 26 Jan 2022 05:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
-        t=1643175304; h=from:subject:date:message-id:to:mime-version:content-type:
-         content-transfer-encoding:content-language:in-reply-to:references:
-         disposition-notification-to; bh=NAfBCWgItakVlmgvOLevvnbl8A251km2XBgrPyvmaoo=;
-        b=IzKgGGegy8oHHSLfLehfYpxDbseHD1HFTsIxaHd3pkLMi2ouayV+kV6Te8WmLxWw5FbukC
-        JlMQluF9rg+x2GtkXCbane3cP71dr2NjNP/ISfGHRKfr8G82BFl2H7/t1qy5zyR1l5GBSN
-        AVEsy7PC83B0OEhKbTTxeRtdsxTsrn1zDLh+25EIak975kYT/uMw9u8C+YXuh9lsQs7lJ+
-        vw3Z9BaBuD7NySEkmAQxSC8bxDxkkm7WDS27EixglgpHG1S1EpgccmCMhFJe/b1R9LSjbj
-        hjbMGF9NwFADcjk30Kyz0wub6Q7boKYmFU5ep1ffeyrYo01HESw4toyzETFBjw==
-Subject: Re: [PATCH 1/3] arm64: dts: meson-gx: add ATF BL32 reserved-memory
- region
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220126044954.19069-1-christianshewitt@gmail.com>
- <20220126044954.19069-2-christianshewitt@gmail.com>
-From:   Vyacheslav <adeep@lexina.in>
-Message-ID: <a279c365-0615-1c7f-5596-dec9ad1c8229@lexina.in>
-Date:   Wed, 26 Jan 2022 08:35:00 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S229585AbiAZFhg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 00:37:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643175456; x=1674711456;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K1Ia3evHQmhGL125iZLbYE8s2eqmLUKbbbZVVzu9Ptg=;
+  b=Iwh6QFI/mA1zWKDlhyvK2cabjQkqN1exntXA9CbCDGLKsMywTFEwfh4F
+   U5pRHMMLt4jF+iCqIbMaQ3r2Z8uICtpbL1wZr1BrwFUVtWablJorVPG1a
+   54csn7I3VCFZLSrpvwNfOL2lQTOImoRAhtqsCSrwPf7NGLNw5qCKGGyUT
+   HUklu0fqCAwiLK4mxO5MSKUn5PtuW6DlCZ58W0sui1PTA591NiiCYFWyr
+   XQugdVHUxCKJhGbVWdd+UhdJA/lgGzSzYcUj6OBQR+GbBSS6FupWMzQJ5
+   iyVN9cnn5PbkZyESp50KMe4dzMwTPedwQN3YHAVxz9TpOT1cNcGNzljap
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="230058823"
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="230058823"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 21:37:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="477375590"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jan 2022 21:37:34 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCazu-000KpY-2U; Wed, 26 Jan 2022 05:37:34 +0000
+Date:   Wed, 26 Jan 2022 13:37:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     James Morse <james.morse@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [morse:mpam/snapshot/v5.16 70/137]
+ include/linux/irqchip/arm-vgic-info.h:13:15: error: unexpected token in
+ argument list
+Message-ID: <202201261305.sZ3Y7MUD-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220126044954.19069-2-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
+head:   364c1c42b229912132e1615c2ce15be7154e2156
+commit: faf6ce00f9b35ca0a0389a2d66d90214d3c62f34 [70/137] irqchip/gic: Collect GIC_IRQ_TYPE definitions into one place
+config: arm-omap1_defconfig (https://download.01.org/0day-ci/archive/20220126/202201261305.sZ3Y7MUD-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=faf6ce00f9b35ca0a0389a2d66d90214d3c62f34
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v5.16
+        git checkout faf6ce00f9b35ca0a0389a2d66d90214d3c62f34
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-26.01.2022 07:49, Christian Hewitt wrote:
-> Add an additional reserved memory region for the BL32 trusted firmware
-> present in many devices that boot from Amlogic vendor u-boot.
-> 
-> Suggested-by: Mateusz Krzak <kszaquitto@gmail.com>
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
->   arch/arm64/boot/dts/amlogic/meson-gx.dtsi | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-> index 6b457b2c30a4..aa14ea017a61 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-> @@ -49,6 +49,12 @@
->   			no-map;
->   		};
->   
-> +		/* 32 MiB reserved for ARM Trusted Firmware (BL32) */
-> +		secmon_reserved_bl32: secmon@5300000 {
-> +			reg = <0x0 0x05300000 0x0 0x2000000>;
-> +			no-map;
-> +		};
-> +
-How do I check if we need a similar patch for axg boards?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> include/linux/irqchip/arm-vgic-info.h:13:15: error: unexpected token in argument list
+   enum gic_type {
+                 ^
+>> include/linux/irqchip/arm-vgic-info.h:15:8: error: unexpected token in operand
+    GIC_V2,
+          ^
+   include/linux/irqchip/arm-vgic-info.h:17:8: error: unexpected token in operand
+    GIC_V3,
+          ^
+>> include/linux/irqchip/arm-vgic-info.h:18:1: error: invalid instruction, did you mean: b?
+   };
+   ^
+   include/linux/irqchip/arm-vgic-info.h:20:21: error: unexpected token in argument list
+   struct gic_kvm_info {
+                       ^
+   include/linux/irqchip/arm-vgic-info.h:22:16: error: unexpected token in argument list
+    enum gic_type type;
+                  ^
+   include/linux/irqchip/arm-vgic-info.h:24:18: error: unexpected token in argument list
+    struct resource vcpu;
+                    ^
+   include/linux/irqchip/arm-vgic-info.h:26:15: error: unexpected token in argument list
+    unsigned int maint_irq;
+                 ^
+>> include/linux/irqchip/arm-vgic-info.h:28:2: error: invalid instruction, did you mean: bl?
+    bool no_maint_irq_mask;
+    ^
+   include/linux/irqchip/arm-vgic-info.h:30:18: error: unexpected token in argument list
+    struct resource vctrl;
+                    ^
+   include/linux/irqchip/arm-vgic-info.h:32:2: error: invalid instruction, did you mean: bl?
+    bool has_v4;
+    ^
+   include/linux/irqchip/arm-vgic-info.h:34:2: error: invalid instruction, did you mean: bl?
+    bool has_v4_1;
+    ^
+   include/linux/irqchip/arm-vgic-info.h:36:2: error: invalid instruction, did you mean: bl?
+    bool no_hw_deactivation;
+    ^
+   include/linux/irqchip/arm-vgic-info.h:37:1: error: invalid instruction, did you mean: b?
+   };
+   ^
+   include/linux/irqchip/arm-vgic-info.h:42:15: error: unexpected token in argument list
+   static inline void vgic_set_kvm_info(const struct gic_kvm_info *info) {}
+                 ^
+>> include/linux/irqchip/arm-gic-common.h:25:1: error: invalid instruction, did you mean: strt?
+   struct irq_domain;
+   ^
+   include/linux/irqchip/arm-gic-common.h:26:1: error: invalid instruction, did you mean: strt?
+   struct fwnode_handle;
+   ^
+>> include/linux/irqchip/arm-gic-common.h:27:24: error: unexpected token in variant, expected ')'
+   int gicv2m_init(struct fwnode_handle *parent_handle,
+                          ^
+>> include/linux/irqchip/arm-gic-common.h:28:28: error: unexpected token in argument list
+     struct irq_domain *parent);
+                              ^
 
 
->   		linux,cma {
->   			compatible = "shared-dma-pool";
->   			reusable;
-> 
+vim +13 include/linux/irqchip/arm-vgic-info.h
 
+0e5cb7770684b4 Marc Zyngier 2021-02-27  12  
+0e5cb7770684b4 Marc Zyngier 2021-02-27 @13  enum gic_type {
+0e5cb7770684b4 Marc Zyngier 2021-02-27  14  	/* Full GICv2 */
+0e5cb7770684b4 Marc Zyngier 2021-02-27 @15  	GIC_V2,
+0e5cb7770684b4 Marc Zyngier 2021-02-27  16  	/* Full GICv3, optionally with v2 compat */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  17  	GIC_V3,
+0e5cb7770684b4 Marc Zyngier 2021-02-27 @18  };
+0e5cb7770684b4 Marc Zyngier 2021-02-27  19  
+0e5cb7770684b4 Marc Zyngier 2021-02-27  20  struct gic_kvm_info {
+0e5cb7770684b4 Marc Zyngier 2021-02-27  21  	/* GIC type */
+0e5cb7770684b4 Marc Zyngier 2021-02-27 @22  	enum gic_type	type;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  23  	/* Virtual CPU interface */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  24  	struct resource vcpu;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  25  	/* Interrupt number */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  26  	unsigned int	maint_irq;
+669062d2a1aa36 Marc Zyngier 2021-02-28  27  	/* No interrupt mask, no need to use the above field */
+669062d2a1aa36 Marc Zyngier 2021-02-28 @28  	bool		no_maint_irq_mask;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  29  	/* Virtual control interface */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  30  	struct resource vctrl;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  31  	/* vlpi support */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  32  	bool		has_v4;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  33  	/* rvpeid support */
+0e5cb7770684b4 Marc Zyngier 2021-02-27  34  	bool		has_v4_1;
+f6c3e24fb721dd Marc Zyngier 2021-03-15  35  	/* Deactivation impared, subpar stuff */
+f6c3e24fb721dd Marc Zyngier 2021-03-15  36  	bool		no_hw_deactivation;
+0e5cb7770684b4 Marc Zyngier 2021-02-27  37  };
+0e5cb7770684b4 Marc Zyngier 2021-02-27  38  
+
+:::::: The code at line 13 was first introduced by commit
+:::::: 0e5cb7770684b4c81bcc63f4675e488f9a0e31eb irqchip/gic: Split vGIC probing information from the GIC code
+
+:::::: TO: Marc Zyngier <maz@kernel.org>
+:::::: CC: Marc Zyngier <maz@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

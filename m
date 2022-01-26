@@ -2,153 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 642EA49C82C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6247949C82F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240390AbiAZK7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240381AbiAZK7I (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:59:08 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0087C061744
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:59:08 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id 71so11934000qkf.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:59:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NPx10yE8yULTQ2I1GWpvbI+9jFGXWf+l/TyyfhdSi2s=;
-        b=DcKJgjZo5MjwZhR1BP8rm+BYvknvqznCY9tfc++zczXRYrENWh/CmheKNnm7njeYxQ
-         JtG06XqoPV3iDFbEj5xILlHIeXxrwXEmgmLtRmH4lyQ0LTkBY+z9+ycGOcCkNXzS7tDq
-         uBxZzyCUzDg34fMSX7vFq+Yxm/iOXaPup4rqvxMubW4hSJrTbneNZwu1l4Ne7YGW/xMp
-         MkZaz/rCe004RJEK7y8FN0PGeMa9vrGWzv+gz/GfsE6Gwz9e1196sTOMVDoy/4vkaHq6
-         DX2mZ7rdR8sBeaIQBI0yK4oP//EL4ekOwCV2uPzYg+FOX9FvD80PUiKX6eCFYqQltRMC
-         /ZUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NPx10yE8yULTQ2I1GWpvbI+9jFGXWf+l/TyyfhdSi2s=;
-        b=qFzM3upYXSdd7fzr1NoHSvVHgU0lHbSZqeU0hLyasucLIZkSzQjuJlmzedTyrumf1H
-         DLgncUbr3HbpzhjOZCfpbFPQ8lJPJ7IAmD2CU8Sk7XqYrAUnaPUdmjQdUuIWG3lVOvkG
-         G0vsFL2YkgQCHWuqMiIWNA2g1vNKKL+I8OkWe3CGK3IRFT5RnumrCpS99iFwnhUkaYzI
-         Cz7Ycy05NKcI+4Yknwlq53ZbTDuUUMF6QKeH/rZi1baW7gy7Ze99YEg7/u7gr5LztI3t
-         3pV5rn7tsbxGiwnuNSyX7zhfluEF77j5N4wrxUMu5Zr3wNZ4hdGW+P0BaJP2hdA7gbQu
-         1dog==
-X-Gm-Message-State: AOAM530J+9DdmM+2hj7c0MPOIxr2VNH2RXz8pVYBUDAS+kZH4DEpnAc+
-        4IXi126rX891v6Ri3LaM/nEbKeATGO1VHpJmR1DxuA==
-X-Google-Smtp-Source: ABdhPJxjvuXkYK5Oyx78s5S22uQf0bXFzDeEdF5A3RuUkZEEMGL+lFFyurB31lgTk9CuURIUfP+K9DbMGn+uVKEvtjo=
-X-Received: by 2002:a37:ac08:: with SMTP id e8mr1636406qkm.30.1643194747895;
- Wed, 26 Jan 2022 02:59:07 -0800 (PST)
+        id S240400AbiAZLAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:00:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:59794 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240388AbiAZLAA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 06:00:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1447C113E;
+        Wed, 26 Jan 2022 03:00:00 -0800 (PST)
+Received: from e127744.arm.com (unknown [10.57.88.59])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DE67D3F766;
+        Wed, 26 Jan 2022 02:59:57 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [PATCH] perf tools: apply correct label to user/kernel symbols in branch mode
+Date:   Wed, 26 Jan 2022 10:59:26 +0000
+Message-Id: <20220126105927.3411216-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1643064292-6965-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n505fYR1zpgZnC=J7WSxp_gpn6mnda9TuVjmJD8vMRn2Rg@mail.gmail.com> <7155e3ab-daf1-4104-6712-1c4e3a328b56@quicinc.com>
-In-Reply-To: <7155e3ab-daf1-4104-6712-1c4e3a328b56@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 26 Jan 2022 13:58:56 +0300
-Message-ID: <CAA8EJpp-DB9+zWZnszkyxNGd+kO5Bko+mw7T_KoeFVTQPmxvDw@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: add connector type to enhance debug messages
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org,
-        quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 21:26, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->
->
-> On 1/24/2022 5:50 PM, Stephen Boyd wrote:
-> > Quoting Kuogee Hsieh (2022-01-24 14:44:52)
-> >> DP driver is a generic driver which supports both eDP and DP.
-> >> For debugging purpose it is required to have capabilities to
-> >> differentiate message are generated from eDP or DP. This patch
-> >> add connector type into debug messages for this purpose.
-> >>
-> >> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> >> ---
-> >>   drivers/gpu/drm/msm/dp/dp_ctrl.c    | 20 +++++------
-> >>   drivers/gpu/drm/msm/dp/dp_display.c | 71 ++++++++++++++++++++++++++-----------
-> >>   2 files changed, 60 insertions(+), 31 deletions(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> >> index 245e1b9..dcd0126 100644
-> >> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> >> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> >> @@ -1396,6 +1396,8 @@ void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
-> >>
-> >>          dp_catalog_ctrl_phy_reset(ctrl->catalog);
-> >>          phy_init(phy);
-> >> +       DRM_DEBUG_DP("phy=%p init=%d power_on=%d\n",
-> >> +                       phy, phy->init_count, phy->power_count);
-> >>   }
-> >>
-> >>   void dp_ctrl_phy_exit(struct dp_ctrl *dp_ctrl)
-> >> @@ -1410,6 +1412,8 @@ void dp_ctrl_phy_exit(struct dp_ctrl *dp_ctrl)
-> >>
-> >>          dp_catalog_ctrl_phy_reset(ctrl->catalog);
-> >>          phy_exit(phy);
-> >> +       DRM_DEBUG_DP("phy=%p init=%d power_on=%d\n",
-> >> +                       phy, phy->init_count, phy->power_count);
-> >>   }
-> >>
-> >>   static bool dp_ctrl_use_fixed_nvid(struct dp_ctrl_private *ctrl)
-> >> @@ -1484,6 +1488,8 @@ static int dp_ctrl_deinitialize_mainlink(struct dp_ctrl_private *ctrl)
-> >>          phy_exit(phy);
-> >>          phy_init(phy);
-> >>
-> >> +       DRM_DEBUG_DP("phy=%p init=%d power_on=%d\n",
-> >> +                       phy, phy->init_count, phy->power_count);
-> >>          return 0;
-> >>   }
-> >>
-> > These are entirely new messages. Adding messages isn't mentioned in the
-> > commit text. Please either split this out or indicate in the commit text
-> > what's going on here.
-> >
-> >> @@ -1895,14 +1901,12 @@ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl)
-> >>
-> >>          phy_power_off(phy);
-> >>
-> >> -       DRM_DEBUG_DP("After, phy=%x init_count=%d power_on=%d\n",
-> >> -               (u32)(uintptr_t)phy, phy->init_count, phy->power_count);
-> >> -
-> >>          /* aux channel down, reinit phy */
-> >>          phy_exit(phy);
-> >>          phy_init(phy);
-> >>
-> >> -       DRM_DEBUG_DP("DP off link/stream done\n");
-> >> +       DRM_DEBUG_DP("phy=%p init=%d power_on=%d\n",
-> > The DRM_DEBUG_DP macro says it's deprecated now and we should use
-> > drm_dbg_dp() instead. Can you use that macro instead? Then it looks like
-> > drm->dev can actually be any old struct device, so I guess we're allowed
-> > to pass in the particular instance of dp device this is for. Allowing us
-> > to figure out which DP device is actually printing messages.
-> where it say "deprecated"?
+In branch mode, the branch symbols were being displayed with incorrect
+cpumode labels. So fix this.
 
-Quoting drm_print.h:
+For example, before:
+  # perf record -b -a -- sleep 1
+  # perf report -b
 
-/* NOTE: this is deprecated in favor of drm_dbg_dp(NULL, ...). */
-#define DRM_DEBUG_DP(fmt, ...)                                          \
-        __drm_dbg(DRM_UT_DP, fmt, ## __VA_ARGS__)
+  Overhead  Command  Source Shared Object  Source Symbol               Target Symbol
+     0.08%  swapper  [kernel.kallsyms]     [k] rcu_idle_enter          [k] cpuidle_enter_state
+ ==> 0.08%  cmd0     [kernel.kallsyms]     [.] psi_group_change        [.] psi_group_change
+     0.08%  cmd1     [kernel.kallsyms]     [k] psi_group_change        [k] psi_group_change
 
+After:
+  # perf report -b
 
-> >> +                       phy, phy->init_count, phy->power_count);
-> >>          return ret;
-> >>   }
-> >>
+  Overhead  Command  Source Shared Object  Source Symbol               Target Symbol
+     0.08%  swapper  [kernel.kallsyms]     [k] rcu_idle_enter          [k] cpuidle_enter_state
+     0.08%  cmd0     [kernel.kallsyms]     [k] psi_group_change        [k] pei_group_change
+     0.08%  cmd1     [kernel.kallsyms]     [k] psi_group_change        [k] psi_group_change
 
+Signed-off-by: German Gomez <german.gomez@arm.com>
+---
+ tools/perf/util/machine.c    | 2 ++
+ tools/perf/util/map_symbol.h | 1 +
+ tools/perf/util/sort.c       | 4 ++--
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index 3901440ae..ef564a5cf 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -2072,6 +2072,7 @@ static void ip__resolve_ams(struct thread *thread,
+ 
+ 	ams->addr = ip;
+ 	ams->al_addr = al.addr;
++	ams->al_level = al.level;
+ 	ams->ms.maps = al.maps;
+ 	ams->ms.sym = al.sym;
+ 	ams->ms.map = al.map;
+@@ -2091,6 +2092,7 @@ static void ip__resolve_data(struct thread *thread,
+ 
+ 	ams->addr = addr;
+ 	ams->al_addr = al.addr;
++	ams->al_level = al.level;
+ 	ams->ms.maps = al.maps;
+ 	ams->ms.sym = al.sym;
+ 	ams->ms.map = al.map;
+diff --git a/tools/perf/util/map_symbol.h b/tools/perf/util/map_symbol.h
+index 7d22ade08..e08817b0c 100644
+--- a/tools/perf/util/map_symbol.h
++++ b/tools/perf/util/map_symbol.h
+@@ -18,6 +18,7 @@ struct addr_map_symbol {
+ 	struct map_symbol ms;
+ 	u64	      addr;
+ 	u64	      al_addr;
++	char	      al_level;
+ 	u64	      phys_addr;
+ 	u64	      data_page_size;
+ };
+diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+index cfba8c337..2da081ef5 100644
+--- a/tools/perf/util/sort.c
++++ b/tools/perf/util/sort.c
+@@ -915,7 +915,7 @@ static int hist_entry__sym_from_snprintf(struct hist_entry *he, char *bf,
+ 		struct addr_map_symbol *from = &he->branch_info->from;
+ 
+ 		return _hist_entry__sym_snprintf(&from->ms, from->al_addr,
+-						 he->level, bf, size, width);
++						 from->al_level, bf, size, width);
+ 	}
+ 
+ 	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
+@@ -928,7 +928,7 @@ static int hist_entry__sym_to_snprintf(struct hist_entry *he, char *bf,
+ 		struct addr_map_symbol *to = &he->branch_info->to;
+ 
+ 		return _hist_entry__sym_snprintf(&to->ms, to->al_addr,
+-						 he->level, bf, size, width);
++						 to->al_level, bf, size, width);
+ 	}
+ 
+ 	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
 -- 
-With best wishes
-Dmitry
+2.25.1
+

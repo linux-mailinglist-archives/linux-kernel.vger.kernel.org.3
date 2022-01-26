@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7255349C872
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 195FE49C874
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240576AbiAZLRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240567AbiAZLRk (ORCPT
+        id S240580AbiAZLSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:18:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40629 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233442AbiAZLSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:17:40 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66080C06161C;
-        Wed, 26 Jan 2022 03:17:40 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id r7so2355843wmq.5;
-        Wed, 26 Jan 2022 03:17:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=t47oAXxusbQX268+jco67eiS/8CQ1VFbXiv59jxtU3c=;
-        b=hvR9Sai7emFri6uqLYucqxnjJ0o4n0f9Gki8GXzqyR+lz0/iHxMctd0Z+Ozdsd93iQ
-         lfBg6ihc1FDM0/4JzN+K83SjXdzmsLYHxmLCCPeO4TbFnO78SEPAxhu7TvIxcszPylTJ
-         Jt7SiQLUGfjsuaBjBnbt1pU0/tkv721H9qkI/JArFa4LAh6AXBFZv67IaisadSYbYd89
-         NlpvJS/E1ZlsNeMXukS96Dthulz1EyyYAJHRa6W8t30TM53T0Oxcn3jlUKaQU3KCJHfl
-         ijENNjuoKQNVCzrB7XK6+yPQ5hDiGSGc1PrCnFMIFP5SRU4x2UDdGX3BQtpazZw55H8j
-         I3BQ==
+        Wed, 26 Jan 2022 06:18:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643195917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=srD1l04gPQ84q1XF/RWjCuwwGgitsqKSn4fv06ciBhg=;
+        b=KRZkCB6lUGM3lT4GWR5ZL/vHnBoJ5E95MYTA49kBaglKL+IkSwDyMyKizunrVddbgVEPcy
+        3lhjoCg+LbUW+khQfRg02IbCEnlG8vLA54n4KWgt8WFrzxEy1ruMFnObOT7DTrM4kUXIFR
+        xUjQCIArYCTW3F/A8k6jquzH2jI1uSI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-21-wpn-_CXVOy6cEEuIoJOa1A-1; Wed, 26 Jan 2022 06:18:33 -0500
+X-MC-Unique: wpn-_CXVOy6cEEuIoJOa1A-1
+Received: by mail-wr1-f71.google.com with SMTP id c10-20020adfa30a000000b001d79c73b64bso4169801wrb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:18:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=t47oAXxusbQX268+jco67eiS/8CQ1VFbXiv59jxtU3c=;
-        b=ZCtWO9R6YHoh5F1NVupqwEjM4tosgx4lEpVx2XspD1qHv1ncOKnXesehYEJcnAh1ze
-         ZXQ0sYfQ+GnZFoXiIyL11K2vRREn3X7DsT1fjBGS+2Gc3KTexPFKl9KxFXFJxoujuN+B
-         tSQGbVmucsDwaYgftMPA2gXZ8AzhwJPVwRfQwUOpHEbupQNdCepBiFjCDCc0CecuVda2
-         Ozt4HXBM1FLj2jd7QOWSImgY9Uhh8U13UGmDuHvIYJ3bvDL0+ne/1RYBOmKRuNrTTEvu
-         gOdE9UdAvQDIpBuWvedYTO1/UASMMVF1sjubrmDJz63ODXoS/QbXbZzSUYWHI38x2e9n
-         UVMw==
-X-Gm-Message-State: AOAM530jw3W/o9OB91iriRCO/poFffiQumh7Efc/i6Hwlj8ctWDD7en2
-        Dy5jmQmjCJj3r+fpktE8c98=
-X-Google-Smtp-Source: ABdhPJwNaVgBlxy+T7qq2LDiVY9pADohFo112yD5ywo7B9/erVjLE1yiLuoW+uwJdVclvWJ6R3yhpg==
-X-Received: by 2002:a05:600c:4112:: with SMTP id j18mr7074144wmi.72.1643195858909;
-        Wed, 26 Jan 2022 03:17:38 -0800 (PST)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id p15sm19110387wrq.66.2022.01.26.03.17.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 03:17:38 -0800 (PST)
-Date:   Wed, 26 Jan 2022 11:17:36 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 000/560] 5.10.94-rc2 review
-Message-ID: <YfEt0KfqZ0cKD9m7@debian>
-References: <20220125155348.141138434@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=srD1l04gPQ84q1XF/RWjCuwwGgitsqKSn4fv06ciBhg=;
+        b=ohOd1xgfmt9ovILfihNIgcls2ApUFJccuMjlYijPzrBJvbdpAS38Jlm4wxE35+1Hy6
+         aJ3zFty84QcHLpnqZbncQbMz6nKnr3+aIBaUTDr3g4W0qRlndxGZ3MAZAFZCIFLydbx2
+         bTcs7nvpo9dglTCDKbuXf9S4bnOgnioEoJmsGHBHxic+kq4QpMqO0dGmBYYS6CdQ9GXY
+         XEfdt1gMLuVSKqqcb7R+1EhUmyM05ES0KCAr33TMiSjNbnTWPab+6/YZPMXNq5Z5UdEY
+         ZyvHFAvWBG7hvYpn8iIF+shSBj4XolzAOb1Ml2cDoylCCEsWppPbQGKmfEgOoB1PbsMN
+         UE6g==
+X-Gm-Message-State: AOAM532MlKtExX/utU5fciLZciWdCRbzaUB1J4OSmAcTo79ghEnziTGd
+        0XHsK94gSOL1AgsnArBy/oM02sTlvSyUOViy8scgZDqhnR7vuewzwlw/VVFoL40ybPCpzmckxqt
+        T5mXdPdav4EgNctQiiONH/o/W
+X-Received: by 2002:a05:6000:156d:: with SMTP id 13mr1586783wrz.66.1643195912596;
+        Wed, 26 Jan 2022 03:18:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyvCzW4Jn73KJItw350M3F/f6JTN+7T8OA7kDxsaF2hqvwBivMpTbBXPxCTm3unY1Mql6OAYg==
+X-Received: by 2002:a05:6000:156d:: with SMTP id 13mr1586760wrz.66.1643195912374;
+        Wed, 26 Jan 2022 03:18:32 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id i17sm19005103wru.107.2022.01.26.03.18.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 03:18:32 -0800 (PST)
+Message-ID: <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
+Date:   Wed, 26 Jan 2022 12:18:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125155348.141138434@linuxfoundation.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+ <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+ <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On 1/26/22 11:59, Helge Deller wrote:
+> On 1/26/22 11:02, Andy Shevchenko wrote:
 
-On Tue, Jan 25, 2022 at 05:32:31PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.94 release.
-> There are 560 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+[snip]
+
+>> P.S. For the record, I will personally NAK any attempts to remove that
+>> driver from the kernel. And this is another point why it's better not
+>> to be under the staging.
 > 
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
+> I agree. Same as for me to NAK the disabling of fbcon's acceleration
+> features or even attempting to remove fbdev altogether (unless all
+> relevant drivers are ported to DRM).
+> 
 
-Build test:
-mips (gcc version 11.2.1 20220121): 63 configs -> no new failure
-arm (gcc version 11.2.1 20220121): 105 configs -> no new failure
-arm64 (gcc version 11.2.1 20220121): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+But that will never happen if we keep moving the goal post.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+At some point new fbdev drivers should not be added anymore, otherwise
+the number of existing drivers that need conversion will keep growing.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/657
-[2]. https://openqa.qa.codethink.co.uk/tests/659
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

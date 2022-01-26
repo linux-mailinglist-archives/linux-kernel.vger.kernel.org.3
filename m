@@ -2,188 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79ED049D029
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E72749D030
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243384AbiAZQ7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:59:47 -0500
-Received: from mail-ot1-f52.google.com ([209.85.210.52]:34369 "EHLO
-        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236746AbiAZQ7q (ORCPT
+        id S243387AbiAZRA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:00:29 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:50160 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243314AbiAZRA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:59:46 -0500
-Received: by mail-ot1-f52.google.com with SMTP id b17-20020a9d4791000000b005a17fc2dfc1so2477426otf.1;
-        Wed, 26 Jan 2022 08:59:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YQ5BAI7S/KVmQ/LV/p1EHUUf4M859iY+jX0AOgHG8QE=;
-        b=DZ5KPyNa33M/dN2bVqZwSTD1ZVWYAYP7owdtxNXZBIcKpDfurnxYbjgRTgbzDtXF58
-         DEH1CGw37ARgPcsrt8r4SCvdJSnCUSG97xEGdND/Zj/yq+RQhzi3+P1kghGpHH3B4nQm
-         eofKmoA0/fsboaHbBAs8Arz6j+oMUXGAVqAxCUFMQ3LXECR+tT0aGjKUV9NI2upUPbHf
-         3me7XSWtMSLx34BwWmoWninDZY1WsBRJ9LcQL5NAN3ukAzv+9ZCwU23S4salI4byRNfS
-         XWAWLBnQDb9Vh9zuSNmKaYvcbLN6UJ8OBaGF++ncDnFk+6xCSJ/UpJF7p8QmhNXhvDLl
-         yBog==
-X-Gm-Message-State: AOAM532nkqxdBMqjjt/Y1LZY03312eQBOjd+yp+k7YFn8OuVw+jsQwop
-        pc3TgyFLtBk9c1hN447WN52baSnUKA==
-X-Google-Smtp-Source: ABdhPJwMUHlaE6s6swqJbVgEUfJw9eAQzgx+aBQaduDIHooIsdoIcZWSjGo489GbmMtxKCkfy9zBSA==
-X-Received: by 2002:a05:6830:1508:: with SMTP id k8mr4401551otp.382.1643216385703;
-        Wed, 26 Jan 2022 08:59:45 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 59sm5170318oti.74.2022.01.26.08.59.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 08:59:45 -0800 (PST)
-Received: (nullmailer pid 968366 invoked by uid 1000);
-        Wed, 26 Jan 2022 16:59:44 -0000
-Date:   Wed, 26 Jan 2022 10:59:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        Wed, 26 Jan 2022 12:00:28 -0500
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QFokUl029689;
+        Wed, 26 Jan 2022 16:59:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=A19W1vuORAZ93ZSR7PF7TxCHOT+Q/BWXsxNdrbHjhmA=;
+ b=NNsGB64SctTTKEToshBPdHuI/c+Snf1ryv4BmLUavnKrJzKNDICy1gVg03LwJ2BhuUhk
+ 9dRF5YsKiB0ivJmbejWg614e2ULBOxKy3Au1auQB7dwH6LW98aZxs//KXIcUeV16J8gv
+ rxeuPQIieUQK3j68/fZB0u36YtTBT+Kedjmgh8qM81rlWDuqjkihO42ym5iE9E1Xs4aC
+ ogf/dAht9ewT3IYxsPp6j9Sog3DXv+sYR0SN7b4ALCeotAXJroxtYRfnksCC2h45bF2b
+ phmRoENiVbwftrvtWkSPsJfaOcmRWmfGC7WPWLRR6Zsr6gJx8B0PPLZDSa0ggtCNuhEo UA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dsxvfpfsq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 16:59:50 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20QGuVjJ126637;
+        Wed, 26 Jan 2022 16:59:49 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
+        by userp3020.oracle.com with ESMTP id 3drbcrhab4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 16:59:48 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R05taGQjZlP1CSn4EpSSa1mWudgy6Go/WnuIS7fJLPOZgD+UhSWlLD+E13kSgxjLifHISxN87xq1xgz6GpPYPHk+d3HDks1dnyUUPtlLsHsvXcBh/jvBwgVHUFJ29kr5tEyGH0lMxqUE/igsTnbf448mn+wHJ/dDIaeJ0UoA0tL89V9Dmx2hyxbLjVRSR4UIYGjyycEuTfH1bV/2fZV4Ltq+KGpgN5Pnp+Y7FYC/yJlO2A7s53RO2I5nFl5fjfCNwhRvvqtg1lN4JaH+R9bug/EkW82uhLzsMLJyd0ABjW64ESL3zWn0AplGUVodzXBdU3lazf/3AKRLE8pUqEa4Sg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A19W1vuORAZ93ZSR7PF7TxCHOT+Q/BWXsxNdrbHjhmA=;
+ b=OoLRHhpViPL552a8CytN3c2sVoBZT58dNfBpQYsxNcI7vkXdwclvBMwGx+NA94wV4fYvPYk58U0ha5FS0d+SSJ6YbzDn44knRBd10U3fb6UJh4lpa2kMLRUYdRjCzIq3bXZh2qcSbM4hizqdU2wyK9TA/qmhq1S4Lw+cTUeHeEPaAygAaU54/ip4rV4nTczXoE6erfHE0eNCWtFhRKN95UOri70X2T+V215rTUlebEWkWzPaGsDz7OUigpHaj1kjyw3iN5V2BsntLwOYIRdW2qGA5TzqJTqZd53p/3sz2FbHKb51dKFfsJXIF6gv38hE/orXHVnZAQleLl2dY7DaJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A19W1vuORAZ93ZSR7PF7TxCHOT+Q/BWXsxNdrbHjhmA=;
+ b=ktnFcxY+SKk2adkQFEk39XxS0NeZTdqGhENJs21AU/yuSpFkZ0JH9Hh45qlObnWqt3Lbj+LvxT6cce/sQ86ZLC0O9fE/zEydwvXW5KtMHYsCg3w5yxkF4X0jncZdIuxu4g56UCLFZmi1eHkPrbR3TPZlCbfhFwoK06zgfDpWV6U=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by DM5PR1001MB2058.namprd10.prod.outlook.com (2603:10b6:4:2b::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12; Wed, 26 Jan
+ 2022 16:59:46 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3857:3a25:3444:fdd3]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3857:3a25:3444:fdd3%5]) with mapi id 15.20.4930.017; Wed, 26 Jan 2022
+ 16:59:46 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [RFC V1 03/11] arm64/perf: Update struct arm_pmu for BRBE
-Message-ID: <YfF+APV2vew5AloE@robh.at.kernel.org>
-References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
- <1642998653-21377-4-git-send-email-anshuman.khandual@arm.com>
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+Subject: Re: [PATCH v4 58/66] mm/mremap: Use vma_find() instead of vma linked
+ list
+Thread-Topic: [PATCH v4 58/66] mm/mremap: Use vma_find() instead of vma linked
+ list
+Thread-Index: AQHX5r/1hd39GhVMG0ubXF1xkkrhJ6xsJL0AgAm5+IA=
+Date:   Wed, 26 Jan 2022 16:59:46 +0000
+Message-ID: <20220126165939.reu2pu6wztmr274f@revolver>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-59-Liam.Howlett@oracle.com>
+ <60a15c8b-c70b-0fd5-287e-d37d2107bf04@suse.cz>
+In-Reply-To: <60a15c8b-c70b-0fd5-287e-d37d2107bf04@suse.cz>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 09862263-0445-42de-03c7-08d9e0ed41cd
+x-ms-traffictypediagnostic: DM5PR1001MB2058:EE_
+x-microsoft-antispam-prvs: <DM5PR1001MB2058D85D33B8A87ECA911246FD209@DM5PR1001MB2058.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1079;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pOAyTvMoSZZCv9zXtIuXfH125gU2Qa+NzMXVhraSSLVvLuVlgUZCA/FRfOki+kfBU6ElFcMlFkhgGvp/59HySdpw1OwB88yxonwRW8wNoWSHdUUeKrRwtDG/50V4Wg30aOWt5pCUjGOw3T/BoGxb5PcIQO5ijDkAoH/eyOA+4a14UW8+qXPxu2jYEUoEk1K0Z412lDuBAdVBLYx6ezo//pxLYxpekN4zyPaAiC1bdV9IrUWUIdGlsUCZ7yAs1htBTh10HqRNdBTs7JmrP1O2ZuNUsM2ckLj3DNq8DY0+frCjBn0sEBt/7AbRdInoPTz4Gt2PskbH7bHtducOzsq1bU5cIJKfYq7hGvarWsO5zmUm7uFBpzpSPogELihpuSVtGUGxYf6Jeol0T8DCxPMj97t1GGFybHFej6usrdM1o5NfoIUU3DKGfXwtsdrUpiUk+lw3im48KuVdZjoXUjyAI+uC44o5T3bHLr5b+Q8rtFMCpsCY8FFW7mJbTCgDy5G6vWAijJacBENLtViM/sFkTcBvblnZ7JZYzqLPr++lIn4Tn8nWoLnZVF7LkIfu6kumA/byV54F+8E0RZjfMWhKITbAD1OeppdhSy9dsRawlIc3dQTgWA3Ajq66ttGzp2UppODS2dJsgLkH4Yi+bZLpAvt/Ny5YTkuk9/YjmzRcm74fSQ7y2kkGsVxCDyEaQDY5F5klQ0yff19H4MWFtN2DPg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(66476007)(66446008)(64756008)(83380400001)(8936002)(2906002)(4326008)(44832011)(76116006)(6486002)(316002)(38100700002)(91956017)(1076003)(6506007)(508600001)(66556008)(54906003)(71200400001)(8676002)(122000001)(186003)(9686003)(86362001)(53546011)(6916009)(26005)(33716001)(7416002)(38070700005)(5660300002)(66946007)(6512007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+Sg15ZlG25iSOLgi9eLb6HVWI2zPwrgRzsIpiad3y0BZ4dwP1DjBlJx2pGJC?=
+ =?us-ascii?Q?Vph8AeZqynq2enAJyINxw6sdNUvqQeXGxSJHl18jhbBURluz+ptUSIJGr61a?=
+ =?us-ascii?Q?bt1eTf7t57AXEimnaE397m4otxv+4LBzOP/h1vtxEiW+QNTokyGHVk0Po8tq?=
+ =?us-ascii?Q?MMMNvz1xJiX1qqPo6KoxwN2fhseVDPB6TaliY4LVEIkTEmbm2IS1eGB6nX3L?=
+ =?us-ascii?Q?VpXgLblTPqXIUIk8133FV8EOiDC5MhpFXvkmZOSaOnoabhR+yV4xiqZDYhNM?=
+ =?us-ascii?Q?nf+184c1NFlPmDzxchlUxL7srD3XRrYAZ7ok/7ww3u/EdoqdF6yzkk/VN8ne?=
+ =?us-ascii?Q?UXgbJ+nuGJfqDXGLEdvWfxY1NNw7K/Q2dpV8ps/rSQ+mGh8mDl9lagkz7/JW?=
+ =?us-ascii?Q?EcqcvuVg2aEh80PGM+XprW18Yqd3MeXmkIlxz2FR44cUv693v27J0H4qLBjC?=
+ =?us-ascii?Q?+vaNlqWzD72Tm96mCFJqkrVRnfRpFBubM7opMVjTlKNTxQV1WuG9Qa/b8WQc?=
+ =?us-ascii?Q?KFEWFcyClgT97Epkz15tvWoUjCnAFaGK50lkInlPvTFOfm1W5O3DklGVs9KB?=
+ =?us-ascii?Q?wxbjINrlVlLeFzaKwXYnjnqUOX7DfOoOJyJoJKDyIfAETMKZD0jGb+kYKqw2?=
+ =?us-ascii?Q?iuIdRl3y4NXGJki8AMWDVHYpNXGo8o3UyVDghm9x3a8LMKULnHCitGNsKqIA?=
+ =?us-ascii?Q?BbYfBp6ZZFEs3tgqB4rT2Ny3FtKTfS/XYPNP92/sBL8d4wfjv1fSIaFHLCC0?=
+ =?us-ascii?Q?aKR0dd7JJBM/8He4oOQJhlCztYPqOIb4mfLqUDLVulahIF9fq0uCqrbmyei6?=
+ =?us-ascii?Q?qSrkSlRnIObEO4WoCbwAPvYaDdXO2NttHoW6Fkcl5D4aBuBWopKjdXSavNN9?=
+ =?us-ascii?Q?nRKGjLYBXYQiTzy4XmxuctBNJ8wylV1GoTrWKz1YCdQ5IzpAuU5eNjQVu7i6?=
+ =?us-ascii?Q?gWS+vGZgHspluLlx5neRHOE1vyF2W7vSrpoimqCRwOXO873APWg/O5hUEygQ?=
+ =?us-ascii?Q?2CUIct4hrbYLlkGE7T4q5g8JdlmriwocLvIyD7EY7X9V9c+bp4xqlS4+jK/H?=
+ =?us-ascii?Q?8EBQM4E03q7heth246/kdNkE98XeeHDE/VO9M8A50poowvhjAXXrQFnWmhQZ?=
+ =?us-ascii?Q?BsNurCLmYCLX2t/ceRgWiO1WwpCkzyJhi2E5DNuLIUnYUAgHlDcs73FAcA6w?=
+ =?us-ascii?Q?hk14ibUt4uCBAAQjUQqPk+iJkLeSnmbgZJnPQdWjRr/LCUDDH5XZvpYGErb4?=
+ =?us-ascii?Q?alC12USNLBE0fUFAKDmnKlWTzJvVXW+C/zQdGKplRaXrxJ5EvXCzzx8ewomp?=
+ =?us-ascii?Q?MHiBWSwBl4OoQpTsTKU0kCnKdILJogoGR9nvhFx2M9CXeS2YgQ4R0Y8yAwEG?=
+ =?us-ascii?Q?mc4O7RIYSFV9M8SIkRfZ+8quySBSql2408MPYmsk8Mz+anxhhQaiRIA5eM1H?=
+ =?us-ascii?Q?H+UJhFv0/sehZ2AWj9/KMOX+ELw9J5wvnW50/Sl7QP1ufxhhfMkLBYuUaLEb?=
+ =?us-ascii?Q?3g5gKQm+fjnz7Vp21mSnTu//XjBmXy9CfRsSfwu2RuE2yxGv62IpnCS3fRj6?=
+ =?us-ascii?Q?7ZupFY7QkFIkrnsVdate4FsHREwBlpl6UYRpi3UP7qQQ96VV6GvqhMhK78iP?=
+ =?us-ascii?Q?M5gGXBuiCE7BmlnNQy0oW1k=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7502B6525530084785B1CDA72C0EE083@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1642998653-21377-4-git-send-email-anshuman.khandual@arm.com>
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09862263-0445-42de-03c7-08d9e0ed41cd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2022 16:59:46.4211
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4fO8JVv97RWkng/2hwvdSadB/03I8YC8/mHaS8el2eA/xmhrBEFUO7KXNUn8/x+K2Z2JgMc6m/0S7bUeers70w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1001MB2058
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10239 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 malwarescore=0
+ spamscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201260104
+X-Proofpoint-GUID: Sk8y94pvDDin90-yKYqs9NgilSU97ZsP
+X-Proofpoint-ORIG-GUID: Sk8y94pvDDin90-yKYqs9NgilSU97ZsP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 10:00:45AM +0530, Anshuman Khandual wrote:
-> This updates struct arm_pmu to include all required helpers that will drive
+* Vlastimil Babka <vbabka@suse.cz> [220120 07:27]:
+> On 12/1/21 15:30, Liam Howlett wrote:
+> > From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> >=20
+> > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>=20
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+>=20
+> > ---
+> >  mm/mremap.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/mm/mremap.c b/mm/mremap.c
+> > index b09e107cd18b..4ad39c985d04 100644
+> > --- a/mm/mremap.c
+> > +++ b/mm/mremap.c
+> > @@ -713,7 +713,7 @@ static unsigned long move_vma(struct vm_area_struct=
+ *vma,
+> >  	if (excess) {
+> >  		vma->vm_flags |=3D VM_ACCOUNT;
+> >  		if (split)
+> > -			vma->vm_next->vm_flags |=3D VM_ACCOUNT;
+> > +			find_vma(mm, vma->vm_end)->vm_flags |=3D VM_ACCOUNT;
+> >  	}
+> > =20
+> >  	return new_addr;
+> > @@ -869,9 +869,11 @@ static unsigned long mremap_to(unsigned long addr,=
+ unsigned long old_len,
+> >  static int vma_expandable(struct vm_area_struct *vma, unsigned long de=
+lta)
+> >  {
+> >  	unsigned long end =3D vma->vm_end + delta;
+> > +	struct vm_area_struct *next;
+> >  	if (end < vma->vm_end) /* overflow */
+> >  		return 0;
+> > -	if (vma->vm_next && vma->vm_next->vm_start < end) /* intersection */
+> > +	next =3D find_vma(vma->vm_mm, vma->vm_end);
+> > +	if (next && next->vm_start < end) /* intersection */
+>=20
+> Could just use find_vma_intersection()?
 
-From submitting-patches.rst:
+Yes!  Then next is not needed.  That will be nice.
 
-Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-to do frotz", as if you are giving orders to the codebase to change
-its behaviour.
-
-> BRBE functionality for a given PMU implementation. These are the following.
-
-Don't describe what the change is, one can read the diff for that. 
-Answer why it is needed.
-
-One thing to answer in the commit msg is why we need the hooks here.  
-Have we concluded that adding BRBE hooks to struct arm_pmu for what is 
-an armv8 specific feature is the right approach? I don't recall 
-reaching that conclusion.
-
-> 
-> - brbe_filter	: Convert perf event filters into BRBE HW filters
-> - brbe_probe	: Probe BRBE HW and capture its attributes
-> - brbe_enable	: Enable BRBE HW with a given config
-> - brbe_disable	: Disable BRBE HW
-> - brbe_read	: Read BRBE buffer for captured branch records
-> - brbe_reset	: Reset BRBE buffer
-> - brbe_supported: Whether BRBE is supported or not
-
-The function names seem pretty self-explanatory, but the text is needed, 
-shouldn't it be in the struct declaration.
-
-I'm not really a fan of patches adding dead code. That's not any less to 
-review. Restructuring with 'no functional change' OTOH is helpful in 
-reviewing.
-
-> A BRBE driver implementation needs to provide these functionalities.
-> 
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  arch/arm64/kernel/perf_event.c | 36 ++++++++++++++++++++++++++++++++++
->  include/linux/perf/arm_pmu.h   |  7 +++++++
->  2 files changed, 43 insertions(+)
-> 
-> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-> index cab678ed6618..f6a47036b0b4 100644
-> --- a/arch/arm64/kernel/perf_event.c
-> +++ b/arch/arm64/kernel/perf_event.c
-> @@ -1015,6 +1015,35 @@ static int armv8pmu_filter_match(struct perf_event *event)
->  	return evtype != ARMV8_PMUV3_PERFCTR_CHAIN;
->  }
->  
-> +static void armv8pmu_brbe_filter(struct pmu_hw_events *hw_event, struct perf_event *event)
-> +{
-> +}
-> +
-> +static void armv8pmu_brbe_enable(struct pmu_hw_events *hw_event)
-> +{
-> +}
-> +
-> +static void armv8pmu_brbe_disable(struct pmu_hw_events *hw_event)
-> +{
-> +}
-> +
-> +static void armv8pmu_brbe_read(struct pmu_hw_events *hw_event, struct perf_event *event)
-> +{
-> +}
-> +
-> +static void armv8pmu_brbe_probe(struct pmu_hw_events *hw_event)
-> +{
-> +}
-> +
-> +static void armv8pmu_brbe_reset(struct pmu_hw_events *hw_event)
-> +{
-> +}
-> +
-> +static bool armv8pmu_brbe_supported(struct perf_event *event)
-> +{
-> +	return false;
-> +}
-> +
->  static void armv8pmu_reset(void *info)
->  {
->  	struct arm_pmu *cpu_pmu = (struct arm_pmu *)info;
-> @@ -1247,6 +1276,13 @@ static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
->  
->  	cpu_pmu->pmu.event_idx		= armv8pmu_user_event_idx;
->  
-> +	cpu_pmu->brbe_filter		= armv8pmu_brbe_filter;
-> +	cpu_pmu->brbe_enable		= armv8pmu_brbe_enable;
-> +	cpu_pmu->brbe_disable		= armv8pmu_brbe_disable;
-> +	cpu_pmu->brbe_read		= armv8pmu_brbe_read;
-> +	cpu_pmu->brbe_probe		= armv8pmu_brbe_probe;
-> +	cpu_pmu->brbe_reset		= armv8pmu_brbe_reset;
-> +	cpu_pmu->brbe_supported		= armv8pmu_brbe_supported;
->  	cpu_pmu->name			= name;
->  	cpu_pmu->map_event		= map_event;
->  	cpu_pmu->attr_groups[ARMPMU_ATTR_GROUP_EVENTS] = events ?
-> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-> index 2512e2f9cd4e..c0dd0d6c5883 100644
-> --- a/include/linux/perf/arm_pmu.h
-> +++ b/include/linux/perf/arm_pmu.h
-> @@ -98,6 +98,13 @@ struct arm_pmu {
->  	void		(*reset)(void *);
->  	int		(*map_event)(struct perf_event *event);
->  	int		(*filter_match)(struct perf_event *event);
-> +	void		(*brbe_filter)(struct pmu_hw_events *hw_events, struct perf_event *event);
-> +	void		(*brbe_probe)(struct pmu_hw_events *hw_events);
-> +	void		(*brbe_enable)(struct pmu_hw_events *hw_events);
-> +	void		(*brbe_disable)(struct pmu_hw_events *hw_events);
-> +	void		(*brbe_read)(struct pmu_hw_events *hw_events, struct perf_event *event);
-> +	void		(*brbe_reset)(struct pmu_hw_events *hw_events);
-> +	bool		(*brbe_supported)(struct perf_event *event);
->  	int		num_events;
->  	bool		secure_access; /* 32-bit ARM only */
->  #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
-> -- 
-> 2.25.1
-> 
-> 
+>=20
+> >  		return 0;
+> >  	if (get_unmapped_area(NULL, vma->vm_start, end - vma->vm_start,
+> >  			      0, MAP_FIXED) & ~PAGE_MASK)
+> =

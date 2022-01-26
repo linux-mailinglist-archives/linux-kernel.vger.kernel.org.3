@@ -2,132 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0B249D1B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A52B49D1BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237606AbiAZScO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:32:14 -0500
-Received: from mga05.intel.com ([192.55.52.43]:50041 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231779AbiAZScM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:32:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643221932; x=1674757932;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yoWFEhmoyCoPBMrIzE6GTw1UkY7MQHpJHH53vqEvjVg=;
-  b=hyORT3yJm86gZdS+jZdV26fghIcVkJ4gxbRWVYxiuC4X77NgLN1YH/yd
-   dJ114OhIi/bq6O+ux5U/obndUyjrAx+RtgESDs/JWVC9NwPvy8Z5maC84
-   8rYWqFROf2NP9GTZRaUPFyjzfvoRt0Dm9Pn6PsbS4wtHfzMvr5ukhEEH4
-   D3c5ACj88vg6Cu2v/Pwkyvr/CA2HMGUikdX0z9pcsBKlAYzi5tZ4ZZ8rJ
-   DTXBC0hG9m80tdfSHq8R98wcVfOC0X1eGexdwcjgqtfbCR6N9SsuSIvgk
-   nmTsDKYkXJCJaf5o1QtpQKnKe+MG9guf8KLZxqwo0RjWfwvWQog9Occjd
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="332972414"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="332972414"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 10:32:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="696327795"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Jan 2022 10:32:10 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCn5V-000LVy-DA; Wed, 26 Jan 2022 18:32:09 +0000
-Date:   Thu, 27 Jan 2022 02:31:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:broonie/sound/for-5.17 180/185]
- sound/soc/soc-ops.c:431 snd_soc_put_volsw_sx() warn: unsigned 'val' is never
- less than zero.
-Message-ID: <202201270218.r8eL9ziw-lkp@intel.com>
+        id S239387AbiAZSef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:34:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231779AbiAZSed (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 13:34:33 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09745C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:34:33 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id g11so637975qvu.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:34:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4IovCRgH1RgHp4B3YVZ3j1Sxx63RD9XOtaeQVlJ6EjA=;
+        b=cgAboSEa2W3SDny9D7uPpojRwRaMozw8cHMX9fJDnnoYIt2ZF3kZgYqcM+UJ5kUXkc
+         Gb6s+Ho6OMevgVCAwfmvOvEFeHwQ/AwdBskRgB/cidmB8cWSA1HK9MwxqxCFiuOQbGob
+         icfvcRmSoXHFvXIKwOkQ22NN+lY0HcDy+0rTuKiUhFH7i1CGpENDtl+rRgXlfnm99wwg
+         sBnlcfCOKf3ZFzhOW4PSP5fo5TfOHkY2iUwFVWs6kCzJAJfmcNyb7jER3yTKHMAJf8qC
+         p5HCWtJ/rVWsBFyq9TMqBun1yR2U+WcTAYkjtqY6iHv+Nde5v7BO4pJszzR7Vi7pJYxI
+         8vXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4IovCRgH1RgHp4B3YVZ3j1Sxx63RD9XOtaeQVlJ6EjA=;
+        b=ICvm5XxWJ+YrmPwvU45wN1FayyRVtRE4Xczie3RrMoxpqFcUO1HzsoLyyvQZdAIwld
+         1Mx5wQiC2PUkkLpd8NNSUzRf38hR+IhMN+8wEGxMP2qSFoc7oF4npivMledM2bbfzggB
+         U30z98gNPcEakRk3JotcQ2Hfp0VBTItf44e3WStTPYZAdU/pZXiZh4tmtvIHraDKgZ6x
+         dAGzkgSDtDtNhCpql09p3Oak32lrj+A921XWuIqKlDvI1mARlKssuP4MyYrNrXLNZxx4
+         Dau6D2CQtM4vm8dfZr1uj/CqL2GvNYStsEFCKmDQof3G+lt8RI5KcAVk9MnRD7/5v2tB
+         d3Cw==
+X-Gm-Message-State: AOAM533I0XHvDuh3HOzU+HCEQc0Fvl2t251Na9/upxRBRcTRUupFngGi
+        V//dkVJwo6SkrNentL3OKrOhtg==
+X-Google-Smtp-Source: ABdhPJzpUIaLSRUPyh5LBumbcaXtMQrxMKylayajsZz55yXuQrU4tEv8317y9zTEIig6tVf5vHdguw==
+X-Received: by 2002:a05:6214:262d:: with SMTP id gv13mr25607644qvb.1.1643222072145;
+        Wed, 26 Jan 2022 10:34:32 -0800 (PST)
+Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
+        by smtp.gmail.com with ESMTPSA id u17sm35886qki.12.2022.01.26.10.34.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 10:34:31 -0800 (PST)
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
+        anshuman.khandual@arm.com, willy@infradead.org,
+        akpm@linux-foundation.org, william.kucharski@oracle.com,
+        mike.kravetz@oracle.com, vbabka@suse.cz, geert@linux-m68k.org,
+        schmitzmic@gmail.com, rostedt@goodmis.org, mingo@redhat.com,
+        hannes@cmpxchg.org, guro@fb.com, songmuchun@bytedance.com,
+        weixugc@google.com, gthelen@google.com, rientjes@google.com,
+        pjt@google.com, hughd@google.com
+Subject: [PATCH v3 0/9] Hardening page _refcount
+Date:   Wed, 26 Jan 2022 18:34:20 +0000
+Message-Id: <20220126183429.1840447-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block broonie/sound/for-5.17
-head:   8f2e5c65ec7534cce6d315fccf2c3aef023f68f0
-commit: 4f1e50d6a9cf9c1b8c859d449b5031cacfa8404e [180/185] ASoC: ops: Reject out of bounds values in snd_soc_put_volsw_sx()
-config: openrisc-randconfig-m031-20220124 (https://download.01.org/0day-ci/archive/20220127/202201270218.r8eL9ziw-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.2.0
+Changelog:
+v3:
+- Sync with the latest linux-next
+v2:
+- As suggested by Matthew Wilcox removed "mm: page_ref_add_unless()
+  does not trace 'u' argument" patch as page_ref_add_unless is going
+  away.
+v1:
+- sync with the latest linux-next
+  RFCv2:
+- use the "fetch" variant instead of "return" of atomic instructions
+- allow negative values, as we are using all 32-bits of _refcount.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-New smatch warnings:
-sound/soc/soc-ops.c:431 snd_soc_put_volsw_sx() warn: unsigned 'val' is never less than zero.
+It is hard to root cause _refcount problems, because they usually
+manifest after the damage has occurred.  Yet, they can lead to
+catastrophic failures such memory corruptions. There were a number
+of refcount related issues discovered recently [1], [2], [3].
 
-Old smatch warnings:
-sound/soc/soc-ops.c:324 snd_soc_put_volsw() warn: unsigned 'val' is never less than zero.
-sound/soc/soc-ops.c:337 snd_soc_put_volsw() warn: unsigned 'val2' is never less than zero.
+Improve debugability by adding more checks that ensure that
+page->_refcount never turns negative (i.e. double free does not
+happen, or free after freeze etc).
 
-vim +/val +431 sound/soc/soc-ops.c
+- Check for overflow and underflow right from the functions that
+  modify _refcount
+- Remove set_page_count(), so we do not unconditionally overwrite
+  _refcount with an unrestrained value
+- Trace return values in all functions that modify _refcount
 
-   399	
-   400	/**
-   401	 * snd_soc_put_volsw_sx - double mixer set callback
-   402	 * @kcontrol: mixer control
-   403	 * @ucontrol: control element information
-   404	 *
-   405	 * Callback to set the value of a double mixer control that spans 2 registers.
-   406	 *
-   407	 * Returns 0 for success.
-   408	 */
-   409	int snd_soc_put_volsw_sx(struct snd_kcontrol *kcontrol,
-   410				 struct snd_ctl_elem_value *ucontrol)
-   411	{
-   412		struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
-   413		struct soc_mixer_control *mc =
-   414		    (struct soc_mixer_control *)kcontrol->private_value;
-   415	
-   416		unsigned int reg = mc->reg;
-   417		unsigned int reg2 = mc->rreg;
-   418		unsigned int shift = mc->shift;
-   419		unsigned int rshift = mc->rshift;
-   420		int max = mc->max;
-   421		int min = mc->min;
-   422		unsigned int mask = (1U << (fls(min + max) - 1)) - 1;
-   423		int err = 0;
-   424		unsigned int val, val_mask;
-   425	
-   426		val = ucontrol->value.integer.value[0];
-   427		if (mc->platform_max && val > mc->platform_max)
-   428			return -EINVAL;
-   429		if (val > max - min)
-   430			return -EINVAL;
- > 431		if (val < 0)
-   432			return -EINVAL;
-   433		val_mask = mask << shift;
-   434		val = (val + min) & mask;
-   435		val = val << shift;
-   436	
-   437		err = snd_soc_component_update_bits(component, reg, val_mask, val);
-   438		if (err < 0)
-   439			return err;
-   440	
-   441		if (snd_soc_volsw_is_stereo(mc)) {
-   442			unsigned int val2;
-   443	
-   444			val_mask = mask << rshift;
-   445			val2 = (ucontrol->value.integer.value[1] + min) & mask;
-   446			val2 = val2 << rshift;
-   447	
-   448			err = snd_soc_component_update_bits(component, reg2, val_mask,
-   449				val2);
-   450		}
-   451		return err;
-   452	}
-   453	EXPORT_SYMBOL_GPL(snd_soc_put_volsw_sx);
-   454	
+Applies against next-20220125.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Previous verions:
+v2: https://lore.kernel.org/all/20211221150140.988298-1-pasha.tatashin@soleen.com
+v1: https://lore.kernel.org/all/20211208203544.2297121-1-pasha.tatashin@soleen.com
+RFCv2: https://lore.kernel.org/all/20211117012059.141450-1-pasha.tatashin@soleen.com
+RFCv1: https://lore.kernel.org/all/20211026173822.502506-1-pasha.tatashin@soleen.com
+
+[1] https://lore.kernel.org/all/xr9335nxwc5y.fsf@gthelen2.svl.corp.google.com
+[2] https://lore.kernel.org/all/1582661774-30925-2-git-send-email-akaher@vmware.com
+[3] https://lore.kernel.org/all/20210622021423.154662-3-mike.kravetz@oracle.com
+
+Pasha Tatashin (9):
+  mm: add overflow and underflow checks for page->_refcount
+  mm: Avoid using set_page_count() in set_page_recounted()
+  mm: remove set_page_count() from page_frag_alloc_align
+  mm: avoid using set_page_count() when pages are freed into allocator
+  mm: rename init_page_count() -> page_ref_init()
+  mm: remove set_page_count()
+  mm: simplify page_ref_* functions
+  mm: do not use atomic_set_release in page_ref_unfreeze()
+  mm: use atomic_cmpxchg_acquire in page_ref_freeze().
+
+ arch/m68k/mm/motorola.c         |   2 +-
+ include/linux/mm.h              |   2 +-
+ include/linux/page_ref.h        | 149 +++++++++++++++-----------------
+ include/trace/events/page_ref.h |  58 ++++++++-----
+ mm/debug_page_ref.c             |  22 +----
+ mm/internal.h                   |   6 +-
+ mm/page_alloc.c                 |  19 ++--
+ 7 files changed, 132 insertions(+), 126 deletions(-)
+
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
+

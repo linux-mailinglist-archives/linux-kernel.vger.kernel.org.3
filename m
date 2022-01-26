@@ -2,329 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B37249D2D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCC249D2DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbiAZTyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 14:54:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S244587AbiAZTy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 14:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbiAZTyO (ORCPT
+        with ESMTP id S244558AbiAZTy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 14:54:14 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4125C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:54:13 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id o30-20020a05600c511e00b0034f4c3186f4so4447090wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:54:13 -0800 (PST)
+        Wed, 26 Jan 2022 14:54:56 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EF0C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:54:55 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id o9so787537qvy.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:54:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :content-transfer-encoding;
-        bh=SM+cytAbuZ2zSJOkGpSMAp1kXekYMyxm2duzuL6HnO4=;
-        b=douxuwY2sSfRQCWJc9QrhpoPDg7wL1utZI2Of56JxJ6L/9S4fednjSPhdz3WSUYemG
-         4zeig2eNV4keVPmHSADyexp7heXbGO3ux1/wV4igcdyUuK0aPdTE5FY5LQ1pVCjSiuFm
-         Lt/7M3VqZUonCRivHG48Qxy4HhxE5wSkhr4ZqZ4Z0vrE7fAAObDG0sBK6g0Brb3i9neK
-         ANH34Y6GBGjTdFiGYb9NnzdVPSxHOFEuoTAT06EpaJZgre2xfRgOHTHfa+SJYkoHwZtU
-         yK1Q5dd3gK+p77EHWT5m51m03Yk5fMpOLtIwf/4PaaSMChapCrZp5ltMn0KzOxpdbmoT
-         iviw==
+        bh=/b9yrYylsR3IXw2MBkgKmnslMTaks1EUQq+pWFo3vMU=;
+        b=jIM+Tc+JfN7AxN6yCV944hevmEwbziOmVrsSDKFKhxcK5czEdfwuGa1+JKEm5p153D
+         slLmda6m/yCZO8ZIHlLZl6IqweIwHdlxDpwmS9sacFA2fhuXmFY8LEFoX+85O/+Bx4OE
+         iGciw+hNYyVKtUVlJOaV2lZ+sKD0MAsMcI/LQl+lQZdZ70jf6CnR8vIw7OtQFvUwfrZJ
+         lhlzFUgt9mOyvy8aEn4Oyx65EgV/2T/N1fYGTTkn2R2iHkCpwr0QXQR7i6xi6krzpt4Q
+         B7QgV0Cbl2yPbyxMuyZmyWX6EsCRk/5btemPGasR9kB/RKqdVkmYF45VVp+Q7EiGvBjs
+         T3MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SM+cytAbuZ2zSJOkGpSMAp1kXekYMyxm2duzuL6HnO4=;
-        b=AleVmCYWaXcyiQlvbOzFR1DLKParhm0VHv7Nr4LDeVLjqLS6cxK4Bpm0RAZPlA9J4w
-         rcMiQk/ECDCNXs5KuhYnALJPoUJm+Vy0PBJbXXPKMA88zY9nzDvJ8mq5KOAkKiWYj41M
-         7lOCcSlDEVA1YnHrySiwao184uwPHJ+He+yysaM9RrzoaWTMPF3EUgjLJOg9UT8m3TV9
-         YdwzfsxPPZS3cbtEGelDpqZA3OAE/1p+P4rT8HiK7pRIXqrShaVhBZF58hyct4/QkJtz
-         9r9i0d4cpO5/piw92CksBzfT0DZtQ0O3ILIm3bV1cZIFPTH8iiTsQmOda6CpFpDEPzb5
-         J6dA==
-X-Gm-Message-State: AOAM531xYumtGKkLId6CleketvKHuDDGjWnelQ3TApT9kTPm+fJpsO6d
-        HoGNyNoYiayYS5MsY0Wza4eSoGGZcMFJ/RDJ
-X-Google-Smtp-Source: ABdhPJy3ms2DUCy4sHP64GKK/kWYW6+kkv3sas8Yg6ZNhA+ktBeS8jdacJ/I1/2G2e4KNpuhkruVlw==
-X-Received: by 2002:a05:600c:1d85:: with SMTP id p5mr271220wms.36.1643226852074;
-        Wed, 26 Jan 2022 11:54:12 -0800 (PST)
-Received: from localhost (cable-89-216-134-246.dynamic.sbb.rs. [89.216.134.246])
-        by smtp.gmail.com with ESMTPSA id r2sm256064wrz.99.2022.01.26.11.54.11
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=/b9yrYylsR3IXw2MBkgKmnslMTaks1EUQq+pWFo3vMU=;
+        b=L1mQJUb92rZ8A0zkqXmsWpSqP0W+Wk5Wn1FUY7NlbR5uBEkAvbk+iaTU/y7fhj+3QW
+         5gYIk2eNumL85G/G5y7FbP2nZEAMw2UxO9C74OMIqk3/kNRen9lp2d+RW2QmyzcKiMGp
+         mrzbbjUVEbs86qFl1ZeduV6dtC/cvn4d4ET4PkTt+ChDSD3HpFsk4z54lkWFS3gsOd4/
+         sYgSadWNuztjUEBbAtob81WB87lhkbRJXLBIu8COCndrVHHcdwjL1tlk2cccUoIqZ1Ef
+         xuScKScVXet/mBwGzbcHl5RcKqq8sceEqa/kXOl9U6JTJHb5BsYS2t+1edzM8XGyXAA5
+         Oj1w==
+X-Gm-Message-State: AOAM531Yiioc+THdErGdX5biUoHHnJ+uUkFc/H+cEBqZM2xVsb8chtoB
+        ZGbyEbuHhuQPN6R+fGGPC8mWWA==
+X-Google-Smtp-Source: ABdhPJzDiy8lWJPalTqmHodK4vLPsn5OI+iOGQeHou4Hn9uAp27KEpv7ql8yuu4Af0KUxh9Hg0NE3g==
+X-Received: by 2002:a05:6214:e45:: with SMTP id o5mr364368qvc.10.1643226894754;
+        Wed, 26 Jan 2022 11:54:54 -0800 (PST)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id bs33sm148633qkb.103.2022.01.26.11.54.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 11:54:11 -0800 (PST)
-From:   =?UTF-8?q?Aleksa=20Vu=C4=8Dkovi=C4=87?= <aleksav013@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     salah.triki@gmail.com, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Aleksa=20Vu=C4=8Dkovi=C4=87?= <aleksav013@gmail.com>
-Subject: [PATCH] drivers: dio: Fixed coding style issues
-Date:   Wed, 26 Jan 2022 20:53:41 +0100
-Message-Id: <20220126195341.5154-1-aleksav013@gmail.com>
-X-Mailer: git-send-email 2.35.0
+        Wed, 26 Jan 2022 11:54:54 -0800 (PST)
+Date:   Wed, 26 Jan 2022 14:54:53 -0500
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     lsf-pc@lists.linuxfoundation.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvme@lists.infradead.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: LSF/MM/BPF: 2022: Call for Proposals
+Message-ID: <YfGnDRM/Pe4jzbSr@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Converting tabs to spaces, placing braces on the appropriate lines.
-Deleting unwanted spaces at the end of the lines.
+The annual Linux Storage, Filesystem, Memory Management, and BPF
+(LSF/MM/BPF) Summit for 2022 will be held from May 2 to May 4 at The
+Margaritaville Resort Palm Springs in Palm Springs, California.
+LSF/MM/BPF is an invitation-only technical workshop to map out
+improvements to the Linux storage, filesystem, BPF, and memory
+management subsystems that will make their way into the mainline kernel
+within the coming years.
 
-Signed-off-by: Aleksa Vuƒçkoviƒá <aleksav013@gmail.com>
----
- drivers/dio/dio.c | 137 +++++++++++++++++++++++-----------------------
- 1 file changed, 67 insertions(+), 70 deletions(-)
+COVID is at the front of our minds as we attempt to put together the
+best and safest conference we can arrange.  The logistics of how to hold
+an in person event will change and evolve as we get closer to the actual
+date, but rest assured we will do everything recommended by public
+health officials.
 
-diff --git a/drivers/dio/dio.c b/drivers/dio/dio.c
-index 4c06c93c93d3..e693612b305c 100644
---- a/drivers/dio/dio.c
-+++ b/drivers/dio/dio.c
-@@ -2,27 +2,27 @@
- /* Code to support devices on the DIO and DIO-II bus
-  * Copyright (C) 05/1998 Peter Maydell <pmaydell@chiark.greenend.org.uk>
-  * Copyright (C) 2004 Jochen Friedrich <jochen@scram.de>
-- * 
-+ *
-  * This code has basically these routines at the moment:
-  * int dio_find(u_int deviceid)
-  *    Search the list of DIO devices and return the select code
-  *    of the next unconfigured device found that matches the given device ID.
-  *    Note that the deviceid parameter should be the encoded ID.
-- *    This means that framebuffers should pass it as 
-+ *    This means that framebuffers should pass it as
-  *    DIO_ENCODE_ID(DIO_ID_FBUFFER,DIO_ID2_TOPCAT)
-  *    (or whatever); everybody else just uses DIO_ID_FOOBAR.
-  * unsigned long dio_scodetophysaddr(int scode)
-  *    Return the physical address corresponding to the given select code.
-  * int dio_scodetoipl(int scode)
-- *    Every DIO card has a fixed interrupt priority level. This function 
-+ *    Every DIO card has a fixed interrupt priority level. This function
-  *    returns it, whatever it is.
-  * const char *dio_scodetoname(int scode)
-- *    Return a character string describing this board [might be "" if 
-+ *    Return a character string describing this board [might be "" if
-  *    not CONFIG_DIO_CONSTANTS]
-  * void dio_config_board(int scode)     mark board as configured in the list
-  * void dio_unconfig_board(int scode)   mark board as no longer configured
-  *
-- * This file is based on the way the Amiga port handles Zorro II cards, 
-+ * This file is based on the way the Amiga port handles Zorro II cards,
-  * although we aren't so complicated...
-  */
- #include <linux/module.h>
-@@ -52,38 +52,36 @@ struct dio_bus dio_bus = {
- /* We associate each numeric ID with an appropriate descriptive string
-  * using a constant array of these structs.
-  * FIXME: we should be able to arrange to throw away most of the strings
-- * using the initdata stuff. Then we wouldn't need to worry about 
-+ * using the initdata stuff. Then we wouldn't need to worry about
-  * carrying them around...
-- * I think we do this by copying them into newly kmalloc()ed memory and 
-+ * I think we do this by copying them into newly kmalloc()ed memory and
-  * marking the names[] array as .initdata ?
-  */
--struct dioname
--{
--        int id;
--        const char *name;
-+struct dioname {
-+	int id;
-+	const char *name;
- };
- 
- /* useful macro */
- #define DIONAME(x) { DIO_ID_##x, DIO_DESC_##x }
--#define DIOFBNAME(x) { DIO_ENCODE_ID( DIO_ID_FBUFFER, DIO_ID2_##x), DIO_DESC2_##x }
--
--static struct dioname names[] = 
--{
--        DIONAME(DCA0), DIONAME(DCA0REM), DIONAME(DCA1), DIONAME(DCA1REM),
--        DIONAME(DCM), DIONAME(DCMREM),
--        DIONAME(LAN),
--        DIONAME(FHPIB), DIONAME(NHPIB),
--        DIONAME(SCSI0), DIONAME(SCSI1), DIONAME(SCSI2), DIONAME(SCSI3),
--        DIONAME(FBUFFER),
--        DIONAME(PARALLEL), DIONAME(VME), DIONAME(DCL), DIONAME(DCLREM),
--        DIONAME(MISC0), DIONAME(MISC1), DIONAME(MISC2), DIONAME(MISC3),
--        DIONAME(MISC4), DIONAME(MISC5), DIONAME(MISC6), DIONAME(MISC7),
--        DIONAME(MISC8), DIONAME(MISC9), DIONAME(MISC10), DIONAME(MISC11), 
--        DIONAME(MISC12), DIONAME(MISC13),
--        DIOFBNAME(GATORBOX), DIOFBNAME(TOPCAT), DIOFBNAME(RENAISSANCE),
--        DIOFBNAME(LRCATSEYE), DIOFBNAME(HRCCATSEYE), DIOFBNAME(HRMCATSEYE),
--        DIOFBNAME(DAVINCI), DIOFBNAME(XXXCATSEYE), DIOFBNAME(HYPERION),
--        DIOFBNAME(XGENESIS), DIOFBNAME(TIGER), DIOFBNAME(YGENESIS)   
-+#define DIOFBNAME(x) { DIO_ENCODE_ID(DIO_ID_FBUFFER, DIO_ID2_##x), DIO_DESC2_##x }
-+
-+static struct dioname names[] = {
-+	DIONAME(DCA0), DIONAME(DCA0REM), DIONAME(DCA1), DIONAME(DCA1REM),
-+	DIONAME(DCM), DIONAME(DCMREM),
-+	DIONAME(LAN),
-+	DIONAME(FHPIB), DIONAME(NHPIB),
-+	DIONAME(SCSI0), DIONAME(SCSI1), DIONAME(SCSI2), DIONAME(SCSI3),
-+	DIONAME(FBUFFER),
-+	DIONAME(PARALLEL), DIONAME(VME), DIONAME(DCL), DIONAME(DCLREM),
-+	DIONAME(MISC0), DIONAME(MISC1), DIONAME(MISC2), DIONAME(MISC3),
-+	DIONAME(MISC4), DIONAME(MISC5), DIONAME(MISC6), DIONAME(MISC7),
-+	DIONAME(MISC8), DIONAME(MISC9), DIONAME(MISC10), DIONAME(MISC11),
-+	DIONAME(MISC12), DIONAME(MISC13),
-+	DIOFBNAME(GATORBOX), DIOFBNAME(TOPCAT), DIOFBNAME(RENAISSANCE),
-+	DIOFBNAME(LRCATSEYE), DIOFBNAME(HRCCATSEYE), DIOFBNAME(HRMCATSEYE),
-+	DIOFBNAME(DAVINCI), DIOFBNAME(XXXCATSEYE), DIOFBNAME(HYPERION),
-+	DIOFBNAME(XGENESIS), DIOFBNAME(TIGER), DIOFBNAME(YGENESIS)
- };
- 
- #undef DIONAME
-@@ -94,13 +92,13 @@ static const char unknowndioname[]
- 
- static const char *dio_getname(int id)
- {
--        /* return pointer to a constant string describing the board with given ID */
-+	/* return pointer to a constant string describing the board with given ID */
- 	unsigned int i;
- 	for (i = 0; i < ARRAY_SIZE(names); i++)
--                if (names[i].id == id) 
--                        return names[i].name;
-+		if (names[i].id == id)
-+			return names[i].name;
- 
--        return unknowndioname;
-+	return unknowndioname;
- }
- 
- #else
-@@ -122,10 +120,10 @@ int __init dio_find(int deviceid)
- 		void *va;
- 		unsigned long pa;
- 
--                if (DIO_SCINHOLE(scode))
--                        continue;
-+		if (DIO_SCINHOLE(scode))
-+			continue;
- 
--                pa = dio_scodetophysaddr(scode);
-+		pa = dio_scodetophysaddr(scode);
- 
- 		if (!pa)
- 			continue;
-@@ -139,15 +137,15 @@ int __init dio_find(int deviceid)
- 				(unsigned char *)va + DIO_IDOFF, 1)) {
- 			if (scode >= DIOII_SCBASE)
- 				iounmap(va);
--                        continue;             /* no board present at that select code */
-+			continue;	     /* no board present at that select code */
- 		}
- 
- 		prid = DIO_ID(va);
- 
--                if (DIO_NEEDSSECID(prid)) {
--                        secid = DIO_SECID(va);
--                        id = DIO_ENCODE_ID(prid, secid);
--                } else
-+		if (DIO_NEEDSSECID(prid)) {
-+			secid = DIO_SECID(va);
-+			id = DIO_ENCODE_ID(prid, secid);
-+		} else
- 			id = prid;
- 
- 		if (id == deviceid) {
-@@ -175,7 +173,7 @@ static int __init dio_init(void)
- 
-         printk(KERN_INFO "Scanning for DIO devices...\n");
- 
--	/* Initialize the DIO bus */ 
-+	/* Initialize the DIO bus */
- 	INIT_LIST_HEAD(&dio_bus.devices);
- 	dev_set_name(&dio_bus.dev, "dio");
- 	error = device_register(&dio_bus.dev);
-@@ -190,14 +188,13 @@ static int __init dio_init(void)
- 		request_resource(&iomem_resource, &dio_bus.resources[i]);
- 
- 	/* Register all devices */
--        for (scode = 0; scode < DIO_SCMAX; ++scode)
--        {
--                u_char prid, secid = 0;        /* primary, secondary ID bytes */
--                u_char *va;
-+	for (scode = 0; scode < DIO_SCMAX; ++scode) {
-+		u_char prid, secid = 0;	/* primary, secondary ID bytes */
-+		u_char *va;
- 		unsigned long pa;
--                
--                if (DIO_SCINHOLE(scode))
--                        continue;
-+
-+		if (DIO_SCINHOLE(scode))
-+			continue;
- 
- 		pa = dio_scodetophysaddr(scode);
- 
-@@ -213,10 +210,10 @@ static int __init dio_init(void)
- 				(unsigned char *)va + DIO_IDOFF, 1)) {
- 			if (scode >= DIOII_SCBASE)
- 				iounmap(va);
--                        continue;              /* no board present at that select code */
-+			continue;	      /* no board present at that select code */
- 		}
- 
--                /* Found a board, allocate it an entry in the list */
-+		/* Found a board, allocate it an entry in the list */
- 		dev = kzalloc(sizeof(struct dio_dev), GFP_KERNEL);
- 		if (!dev)
- 			return -ENOMEM;
-@@ -229,19 +226,19 @@ static int __init dio_init(void)
- 		dev->resource.end = pa + DIO_SIZE(scode, va);
- 		dev_set_name(&dev->dev, "%02x", scode);
- 
--                /* read the ID byte(s) and encode if necessary. */
-+		/* read the ID byte(s) and encode if necessary. */
- 		prid = DIO_ID(va);
- 
--                if (DIO_NEEDSSECID(prid)) {
--                        secid = DIO_SECID(va);
--                        dev->id = DIO_ENCODE_ID(prid, secid);
--                } else
--                        dev->id = prid;
-+		if (DIO_NEEDSSECID(prid)) {
-+			secid = DIO_SECID(va);
-+			dev->id = DIO_ENCODE_ID(prid, secid);
-+		} else
-+			dev->id = prid;
- 
--                dev->ipl = DIO_IPL(va);
--                strcpy(dev->name,dio_getname(dev->id));
-+		dev->ipl = DIO_IPL(va);
-+		strcpy(dev->name, dio_getname(dev->id));
-                 printk(KERN_INFO "select code %3d: ipl %d: ID %02X", dev->scode, dev->ipl, prid);
--                if (DIO_NEEDSSECID(prid))
-+		if (DIO_NEEDSSECID(prid))
-                         printk(":%02X", secid);
-                 printk(": %s\n", dev->name);
- 
-@@ -256,7 +253,7 @@ static int __init dio_init(void)
- 		error = dio_create_sysfs_dev_files(dev);
- 		if (error)
- 			dev_err(&dev->dev, "Error creating sysfs files\n");
--        }
-+	}
- 	return 0;
- }
- 
-@@ -267,12 +264,12 @@ subsys_initcall(dio_init);
-  */
- unsigned long dio_scodetophysaddr(int scode)
- {
--        if (scode >= DIOII_SCBASE) {
--                return (DIOII_BASE + (scode - 132) * DIOII_DEVSIZE);
--        } else if (scode > DIO_SCMAX || scode < 0)
--                return 0;
--        else if (DIO_SCINHOLE(scode))
--                return 0;
--
--        return (DIO_BASE + scode * DIO_DEVSIZE);
-+	if (scode >= DIOII_SCBASE)
-+		return (DIOII_BASE + (scode - 132) * DIOII_DEVSIZE);
-+	else if (scode > DIO_SCMAX || scode < 0)
-+		return 0;
-+	else if (DIO_SCINHOLE(scode))
-+		return 0;
-+
-+	return (DIO_BASE + scode * DIO_DEVSIZE);
- }
--- 
-2.35.0
+LSF/MM/BPF 2022 will be a three day, stand-alone conference with four
+subsystem-specific tracks, cross-track discussions, as well as BoF and
+hacking sessions.
 
+On behalf of the committee I am issuing a call for agenda proposals
+that are suitable for cross-track discussion as well as technical
+subjects for the breakout sessions.
+
+If advance notice is required for visa applications then please point
+that out in your proposal or request to attend, and submit the topic as
+soon as possible.
+
+This years instructions are similar to our previous attempts.  We're
+asking that you please let us know you want to be invited by March 1,
+2022.  We realize that travel is an ever changing target, but it helps
+us get an idea of possible attendance numbers.  Clearly things can and
+will change, so consider the request to attend deadline more about
+planning and less about concrete plans.
+
+1) Fill out the following Google form to request attendance and
+suggest any topics
+
+	https://forms.gle/uD5tbZYGpaRXPnE19
+
+In previous years we have accidentally missed people's attendance
+requests because they either didn't cc lsf-pc@ or we simply missed them
+in the flurry of emails we get.† Our community is large and our
+volunteers are busy, filling this out will help us make sure we don't
+miss anybody.
+
+2) Proposals for agenda topics should still be sent to the following
+lists to allow for discussion among your peers.† This will help us
+figure out which topics are important for the agenda.
+
+† † † ††lsf-pc@lists.linux-foundation.org
+
+and CC the mailing lists that are relevant for the topic in question:
+
+† † † † FS:† † †linux-fsdevel@vger.kernel.org
+† † † † MM:† † †linux-mm@kvack.org
+† † † † Block:††linux-block@vger.kernel.org
+† † † † ATA:† ††linux-ide@vger.kernel.org
+† † † † SCSI:† †linux-scsi@vger.kernel.org
+† † † † NVMe:† †linux-nvme@lists.infradead.org
+† † † † BPF:† ††bpf@vger.kernel.org
+
+Please tag your proposal with [LSF/MM/BPF TOPIC] to make it easier to
+track. In addition, please make sure to start a new thread for each
+topic rather than following up to an existing one. Agenda topics and
+attendees will be selected by the program committee, but the final
+agenda will be formed by consensus of the attendees on the day.
+
+We will try to cap attendance at around 25-30 per track to facilitate
+discussions although the final numbers will depend on the room sizes
+at the venue.
+
+For discussion leaders, slides and visualizations are encouraged to
+outline the subject matter and focus the discussions. Please refrain
+from lengthy presentations and talks; the sessions are supposed to be
+interactive, inclusive discussions.
+
+There will be no recording or audio bridge. However, we expect that
+written minutes will be published as we did in previous years:
+
+2019:†https://lwn.net/Articles/lsfmm2019/
+
+2018:†https://lwn.net/Articles/lsfmm2018/
+
+2017:†https://lwn.net/Articles/lsfmm2017/
+
+2016:†https://lwn.net/Articles/lsfmm2016/
+
+2015:†https://lwn.net/Articles/lsfmm2015/
+
+2014:†http://lwn.net/Articles/LSFMM2014/
+
+3) If you have feedback on last year's meeting that we can use to
+improve this year's, please also send that to:
+
+† † † ††lsf-pc@lists.linux-foundation.org
+
+Thank you on behalf of the program committee:
+
+† † † † Josef Bacik (Filesystems)
+† † † † Amir Goldstein (Filesystems)
+† † † † Martin K. Petersen (Storage)
+† † † † Omar Sandoval (Storage)
+† † † † Michal Hocko (MM)
+† † † † Dan Williams (MM)
+† † † † Alexei Starovoitov (BPF)
+† † † † Daniel Borkmann (BPF)

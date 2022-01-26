@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA9949C7E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3208E49C7E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240204AbiAZKsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:48:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37682 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240183AbiAZKsI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:48:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B457B81C10
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:48:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1862BC340E3;
-        Wed, 26 Jan 2022 10:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643194085;
-        bh=NDYIA12Lp80m8mzBikJjKfoIdYohJwIilWBj4Myci9E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iKj0u4TmCD5cyALouDUEs+XdggPems82wyll1Tljp52x4txPWifZie2Rv4G0vC6uy
-         F2M2yIECM8vjyzjAl3+kxOfFWGAojjMK5qpkCWV7lHrVNqihRF5S0xo9zrsu+64PdS
-         9oOwnT8g6asrqJSjT1MQeOtNM/JaHBGuEduqrV7o=
-Date:   Wed, 26 Jan 2022 11:48:02 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Phillip Potter <phil@philpotter.co.uk>, dan.carpenter@oracle.com,
-        Larry.Finger@lwfinger.net, straube.linux@gmail.com,
-        martin@kaiser.cx, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/10] staging: r8188eu: remove DBG_88E calls from
- os_dep/ioctl_linux.c
-Message-ID: <YfEm4t+fhO4I2uDW@kroah.com>
-References: <20220124224415.831-1-phil@philpotter.co.uk>
- <20220124224415.831-7-phil@philpotter.co.uk>
- <a681a562-eb41-9dc8-703a-5b235c15a3a1@gmail.com>
- <YfCgQbFxfVZXw9Fg@equinox>
- <b5bbe488-ac43-fd89-7c65-36bfa9c903a6@gmail.com>
+        id S240208AbiAZKsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:48:20 -0500
+Received: from mga05.intel.com ([192.55.52.43]:10953 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240212AbiAZKsU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 05:48:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643194100; x=1674730100;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vv57DJifcsENs5tGulRi3mJmeUn2LUXarXjXGXywB80=;
+  b=DOqdc+Dtdgj8kNLuIhvBV4jdSreiKc4gko7RLaAnol3wfV5GVGOxizTD
+   ACSpl3IgcCl/Br0pfU1W5BYEGt7fqU52WGN1EELUuq8WvihRnmOn0XdXe
+   v7qz0IK/mfiZJ0YiOobLxoSM5UjDZJm/iLdpzXzBnHkkkNRTKzgV4BZ/J
+   kAo2FYWvgwlwhp9FxuxHIGExux3Ed+EcOsLLoT/5b2Cf1yQOdvPhcPdmY
+   JuDFgFLnR8VbSG6dDI772vspMpNJkuEEGOwpedEKlMOyNnYyjDHHCvMb/
+   bITCyl9RVqPU0CmmmXZf7QmzLkNnVC12OX6OsBCg0LZr/oR7sFOR0oAOp
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="332878453"
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="332878453"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 02:48:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="674323258"
+Received: from ahunter-desktop.fi.intel.com ([10.237.72.92])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Jan 2022 02:48:16 -0800
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        H Peter Anvin <hpa@zytor.com>
+Subject: [PATCH V2 0/2] perf/x86/intel/pt: Add support for event tracing and TNT disabling
+Date:   Wed, 26 Jan 2022 12:48:13 +0200
+Message-Id: <20220126104815.2807416-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b5bbe488-ac43-fd89-7c65-36bfa9c903a6@gmail.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 01:26:08PM +0300, Pavel Skripkin wrote:
-> Hi Phillip,
-> 
-> On 1/26/22 04:13, Phillip Potter wrote:
-> 
-> [snip]
-> 
-> }
-> > > 
-> > > And here you also removes the reads. I guess, some kind of magic pattern is
-> > > used
-> > > 
-> > 
-> > So these calls are macro arguments, they would never be executed under
-> > normal circumstances anyway, unless the rtw_debug kernel module was
-> > passed in as 5 or more - it is 1 by default. The DBG_88E macro would
-> > expand during preprocessing phase to (for example):
-> > 
-> > do {
-> > 	if (5 <= GlobalDebugLevel)
-> > 		pr_info("R8188EU: " "dbg(0x450) = 0x%x\n", rtw_read32(padapter, 0x450));
-> > } while (0)
-> > 
-> > As this is never executed under normal circumstances anyway, I would say
-> > calls like these are therefore safe to remove. Happy to be convinced
-> > though :-) Many thanks.
-> > 
-> 
-> I see your point, thanks for explanation.
-> 
-> Well, in this case, you may left all reads, that are executed during normal
-> lifetime of a driver. We know, that there is at least 1 place, where read()
-> call removal can break things. Might be there are couple of other places we
-> don't know about.
-> 
-> IMHO the best thing you can do is to leave these reads and leave a comment
-> like "hey, please remove me and test". One day useless reads should be
-> anyway removed, since ideally rtw_read family must get __must_check
-> annotation + normal error handling.
+Hi
 
-No, if these were never getting called in normal operation, there's no
-need to add them back.
+As of Intel SDM (https://www.intel.com/sdm) version 076, there are 2 new
+Intel PT features called Event Trace and TNT-Disable.
 
-thanks,
+Event Trace exposes details about asynchronous events such as interrupts
+and VM-Entry/Exit.
 
-greg k-h
+TNT-Disable disables TNT packets to reduce the tracing overhead, but with
+the result that exact control flow information is lost.
+
+Tools patches are being sent in a separate patch set, but can be found
+here:
+
+	https://github.com/ahunter6/linux/tree/event-trace
+
+
+Changes in V2:
+
+	Add my SOB
+
+
+Alexander Shishkin (2):
+      perf/x86/intel/pt: Add a capability and config bit for event tracing
+      perf/x86/intel/pt: Add a capability and config bit for disabling TNTs
+
+ arch/x86/events/intel/pt.c       | 16 ++++++++++++++++
+ arch/x86/include/asm/intel_pt.h  |  2 ++
+ arch/x86/include/asm/msr-index.h |  2 ++
+ 3 files changed, 20 insertions(+)
+
+
+Regards
+Adrian 

@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A684C49C7F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBDE49C7F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:50:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240196AbiAZKtz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Jan 2022 05:49:55 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:46175 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbiAZKty (ORCPT
+        id S240223AbiAZKu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240215AbiAZKu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:49:54 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 534D160005;
-        Wed, 26 Jan 2022 10:49:50 +0000 (UTC)
-Date:   Wed, 26 Jan 2022 11:49:48 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [mtd:spi-mem-ecc 14/16] drivers/mtd/nand/ecc-mxic.c:395
- mxic_ecc_data_xfer_wait_for_completion() error: uninitialized symbol 'val'.
-Message-ID: <20220126114948.1dd9e6b9@xps13>
-In-Reply-To: <202112271621.cNxEVvN6-lkp@intel.com>
-References: <202112271621.cNxEVvN6-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 26 Jan 2022 05:50:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AAEC06161C;
+        Wed, 26 Jan 2022 02:50:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5358BB81CA0;
+        Wed, 26 Jan 2022 10:50:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 721E6C340E5;
+        Wed, 26 Jan 2022 10:50:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643194224;
+        bh=cX3+eyj+6fm+/y5+YWeWLiQ5NWkVyiYkjMkXX08ExYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gTjk03rFKokIWZR1ZM2+rn5lX7QKxtSLvceIMIpcluMNn4q+to7hfk2//E9BKLI2C
+         MSJJmOe8NrUN+Xir7siYqcPeDw+WmeKNUMsX6zMA4dKuh/jondY+DoiFuwC3kwqCWb
+         4Vsvxqxa3tfPeuE7hOpOwcCzMLBDQgB3dB7lijDk=
+Date:   Wed, 26 Jan 2022 11:50:21 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?6LCi5rOT5a6H?= <xiehongyu1@kylinos.cn>
+Cc:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        125707942@qq.com, stable@vger.kernel.org
+Subject: Re: [PATCH -next] xhci: fix two places when dealing with return
+ value of function xhci_check_args
+Message-ID: <YfEnbRW3oU0ouGqH@kroah.com>
+References: <20220126094126.923798-1-xy521521@gmail.com>
+ <YfEZFtf9K8pFC8Mw@kroah.com>
+ <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-dan.carpenter@oracle.com wrote on Thu, 6 Jan 2022 11:54:51 +0300:
+A: No.
+Q: Should I include quotations after my reply?
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-mem-ecc
-> head:   5966bd4f59edbbe5873b1b4637ed50f258ced0b2
-> commit: b78baf1891f0b7c3f0e2e3e6022eab38ee6c871f [14/16] mtd: nand: mxic-ecc: Add Macronix external ECC engine support
-> config: i386-randconfig-m021-20211227 (https://download.01.org/0day-ci/archive/20211227/202112271621.cNxEVvN6-lkp@intel.com/config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> smatch warnings:
-> drivers/mtd/nand/ecc-mxic.c:395 mxic_ecc_data_xfer_wait_for_completion() error: uninitialized symbol 'val'.
-> drivers/mtd/nand/ecc-mxic.c:548 mxic_ecc_prepare_io_req_external() error: uninitialized symbol 'ret'.
-> 
-> vim +/val +395 drivers/mtd/nand/ecc-mxic.c
-> 
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  377  static int mxic_ecc_data_xfer_wait_for_completion(struct mxic_ecc_engine *mxic)
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  378  {
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  379  	u32 val;
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  380  	int ret;
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  381  
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  382  	if (mxic->irq) {
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  383  		reinit_completion(&mxic->complete);
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  384  		mxic_ecc_enable_int(mxic);
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  385  		ret = wait_for_completion_timeout(&mxic->complete,
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  386  						  msecs_to_jiffies(1000));
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  387  		mxic_ecc_disable_int(mxic);
-> 
-> "val" not set on this path.
+http://daringfireball.net/2007/07/on_top
 
-Thanks for the report, I've fixed that inline.
+On Wed, Jan 26, 2022 at 06:22:45PM +0800, 谢泓宇 wrote:
+> 1."What problem?
+> r8152_submit_rx needs to detach netdev if -ENODEV happened, but -ENODEV will
+> never happen
+> because xhci_urb_enqueue only returns -EINVAL if the return value of
+> xhci_check_args <= 0. So
+> r8152_submit_rx will will call napi_schedule to re-submit that urb, and this
+> will cause infinite urb
+> submission.
 
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  388  	} else {
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  389  		ret = readl_poll_timeout(mxic->regs + INTRPT_STS, val,
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  390  					 val & TRANS_CMPLT, 10, USEC_PER_SEC);
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  391  		writel(val, mxic->regs + INTRPT_STS);
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  392  	}
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  393  
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  394  	if (ret) {
-> b78baf1891f0b7 Miquel Raynal 2021-12-16 @395  		dev_err(mxic->dev, "Timeout on data xfer completion (sts 0x%08x)\n", val);
->                                                                                                                              ^^^
-> 
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  396  		return -ETIMEDOUT;
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  397  	}
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  398  
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  399  	return 0;
-> b78baf1891f0b7 Miquel Raynal 2021-12-16  400  }
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+Odd line-wrapping...
 
+Anyway, why is this unique to this one driver?  Why does it not show up
+for any other driver?
 
-Thanks,
-Miquèl
+> The whole point is, if xhci_check_args returns value A, xhci_urb_enqueque
+> shouldn't return any
+> other value, because that will change some driver's behavior(like r8152.c).
+
+But you are changing how the code currently works.  Are you sure you
+want to have this "succeed" if this is on a root hub?
+
+> 2."So if 0 is returned, you will now return that here, is that ok?
+> That is a change in functionality.
+> But this can only ever be the case for a root hub, is that ok?"
+> 
+> It's the same logic, but now xhci_urb_enqueue can return -ENODEV if xHC is
+> halted.
+> If it happens on a root hub,  xhci_urb_enqueue won't be called.
+> 
+> 3."Again, this means all is good?  Why is this being called for a root hub?"
+> 
+> It is the same logic with the old one, but now xhci_check_streams_endpoint
+> can return -ENODEV if xHC is halted.
+
+This still feels wrong to me, but I'll let the maintainer decide, as I
+don't understand why a root hub is special here.
+
+thanks,
+
+greg k-h

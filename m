@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B179549D1C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6A849D1D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244200AbiAZSfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
+        id S244189AbiAZSgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244223AbiAZSfO (ORCPT
+        with ESMTP id S230424AbiAZSgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:35:14 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1738C06173B;
-        Wed, 26 Jan 2022 10:35:13 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E87731EC0523;
-        Wed, 26 Jan 2022 19:35:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643222108;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=96A3476Qu+7SjsWY2hSBFw1C0Xznd/Zn6tLR1Pkup4Q=;
-        b=jmiefYcsIsHCM6x1nXxo3vEUg7F1AGEwOS9cHwytrWbNL/9AD1ypRH2QAD6Tl6zikwBu0d
-        aQKA2K0jhIfsl4e3eBUV8VyXS1d6ygLtnULQpASCWSDAmLARaktXvbZlmc1Sv9Cr64YOiX
-        J1apVcrQoag5o9EvKUnS6zi8V7qwRGo=
-Date:   Wed, 26 Jan 2022 19:35:04 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v8 35/40] x86/sev: use firmware-validated CPUID for
- SEV-SNP guests
-Message-ID: <YfGUWLmg82G+l4jU@zn.tnic>
-References: <20211210154332.11526-1-brijesh.singh@amd.com>
- <20211210154332.11526-36-brijesh.singh@amd.com>
+        Wed, 26 Jan 2022 13:36:12 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDDBC06161C;
+        Wed, 26 Jan 2022 10:36:12 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id a18so415861edj.7;
+        Wed, 26 Jan 2022 10:36:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yIv2lBySDQKuLdPHpVEfN5DTmOKpNIBBtz27Np5pjBs=;
+        b=YEIlpKJ98MWEUJYL4CbgZhaiOFeTWJ3MJeooSJ4MIVj4L7eOFGHB2ukyAiGsaz47FX
+         z7UvaoDQgwl0jkr/w9d+Lj5TNCHiAovaQWvH5hs0t4iYxygwLdbhT4vuug94xEvdsldk
+         y+gJzkGt9Fz6yN1e1wkgNc9ZSbwkYuafvifedVVjwOSpK5fczlexTSrQjDSGWVC20gGM
+         RmWk/2DXB+1Q3ygO+YoO2U/MuBiLG9bIBMfcmiv91702xVr4q9oI2rFZB4eTB6ZsWN7L
+         0O5EEBiqYqnqdIc4N94/I+uoo32WKwicF9xKG5xxxwmwpTuhqwiwGE7paSAeFy2oOpxG
+         JJeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yIv2lBySDQKuLdPHpVEfN5DTmOKpNIBBtz27Np5pjBs=;
+        b=NyqOefL8DN1kCbs/y75sY+SYql0FT0tkwDOip9rgaHxOD08gqq9mVpG+HFMCe8nibL
+         VfJ3noNdICuPKuPg4ga0kPX37PVkYKe4rPKPr4zemxbQgrjp5z+41O/x2nw0B06AwffV
+         SS137cTayFsNSby9FUnOtv5x3kI9778gXslmubjsX/CI3I1egNrf0GfTi1tiLI7JsbKJ
+         cJuGVmGRoP+B8y1GfuXy+Q2ZJfVZQQEj29wPjXDvdLEmpMetSQFn2p/GlBcOivWaGpF7
+         0+KEv0Hp1BQI7A+Ehzq7zIz6meLqHKbFSFYa8S38YbBv9dgTnhkT+TF9silh/YTlNhBg
+         wS+g==
+X-Gm-Message-State: AOAM533tY67ED7OkBaO29CN6HpTuUQWalNOIbbYe0zc/EpBbUqeyzosL
+        OeUkmZ6qbbJTKmWlvRHV/qvHzIJr6vqQWqJjowVpsHg2
+X-Google-Smtp-Source: ABdhPJxcPb3yuO2kg71BJe3/VCzS/xRUBoWsgeZAKM8JtpENt1sJrIw1A34rRk5qSmiuJ5u4b4YHY0ycl1/bpMbRM44=
+X-Received: by 2002:a05:6402:12cf:: with SMTP id k15mr260420edx.299.1643222170905;
+ Wed, 26 Jan 2022 10:36:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211210154332.11526-36-brijesh.singh@amd.com>
+References: <20220125203548.352278-1-shy828301@gmail.com> <YfEEn06IEPjdGzHc@infradead.org>
+In-Reply-To: <YfEEn06IEPjdGzHc@infradead.org>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 26 Jan 2022 10:35:59 -0800
+Message-ID: <CAHbLzkoaM=e7EXpKQkxP+BRi-1gSjfJ=9GHM+s=5Lyh2ksZ+Kw@mail.gmail.com>
+Subject: Re: [v4 PATCH] block: introduce block_rq_error tracepoint
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Steven Rostedt <rostedt@goodmis.org>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 09:43:27AM -0600, Brijesh Singh wrote:
-> From: Michael Roth <michael.roth@amd.com>
-> 
-> SEV-SNP guests will be provided the location of special 'secrets' and
-> 'CPUID' pages via the Confidential Computing blob. This blob is
-> provided to the run-time kernel either through bootparams field that
-						^
-						a
+On Wed, Jan 26, 2022 at 12:21 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Tue, Jan 25, 2022 at 12:35:48PM -0800, Yang Shi wrote:
+> > Currently, rasdaemon uses the existing tracepoint block_rq_complete
+> > and filters out non-error cases in order to capture block disk errors.
+> >
+> > But there are a few problems with this approach:
+> >
+> > 1. Even kernel trace filter could do the filtering work, there is
+> >    still some overhead after we enable this tracepoint.
+> >
+> > 2. The filter is merely based on errno, which does not align with kernel
+> >    logic to check the errors for print_req_error().
+> >
+> > 3. block_rq_complete only provides dev major and minor to identify
+> >    the block device, it is not convenient to use in user-space.
+> >
+> > So introduce a new tracepoint block_rq_error just for the error case
+> > and provides the device name for convenience too. With this patch,
+> > rasdaemon could switch to block_rq_error.
+> >
+> > Cc: Jens Axboe <axboe@kernel.dk>
+> > Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+> > Signed-off-by: Cong Wang <xiyou.wangcong@gmail.com>
+> > Signed-off-by: Yang Shi <shy828301@gmail.com>
+> > ---
+> > The v3 patch was submitted in Feb 2020, and Steven reviewed the patch, but
+> > it was not merged to upstream. See
+> > https://lore.kernel.org/lkml/20200203053650.8923-1-xiyou.wangcong@gmail.com/.
+> >
+> > The problems fixed by that patch still exist and we do need it to make
+> > disk error handling in rasdaemon easier. So this resurrected it and
+> > continued the version number.
+> >
+> > v3 --> v4:
+> >  * Rebased to v5.17-rc1.
+> >  * Collected reviewed-by tag from Steven.
+> >
+> >  block/blk-mq.c               |  4 +++-
+> >  include/trace/events/block.h | 41 ++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 44 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/block/blk-mq.c b/block/blk-mq.c
+> > index f3bf3358a3bb..bb0593f93675 100644
+> > --- a/block/blk-mq.c
+> > +++ b/block/blk-mq.c
+> > @@ -789,8 +789,10 @@ bool blk_update_request(struct request *req, blk_status_t error,
+> >  #endif
+> >
+> >       if (unlikely(error && !blk_rq_is_passthrough(req) &&
+> > -                  !(req->rq_flags & RQF_QUIET)))
+> > +                  !(req->rq_flags & RQF_QUIET))) {
+> > +             trace_block_rq_error(req, blk_status_to_errno(error), nr_bytes);
+>
+> Please report the atual block layer status code instead of the errno
+> mapping here.
 
-
-> was initialized by the boot/compressed kernel, or via a setup_data
-> structure as defined by the Linux Boot Protocol.
-> 
-> Locate the Confidential Computing from these sources and, if found,
-				   ^
-				   blob
-
-> use the provided CPUID page/table address to create a copy that the
-> run-time kernel will use when servicing cpuid instructions via a #VC
-					  ^^^^^
-
-Please capitalize all instruction mnemonics in text.
-
-> +/*
-> + * It is useful from an auditing/testing perspective to provide an easy way
-> + * for the guest owner to know that the CPUID table has been initialized as
-> + * expected, but that initialization happens too early in boot to print any
-> + * sort of indicator, and there's not really any other good place to do it. So
-> + * do it here, and while at it, go ahead and re-verify that nothing strange has
-> + * happened between early boot and now.
-> + */
-> +static int __init snp_cpuid_check_status(void)
-
-That function's redundant now, I believe, since we terminate the guest
-if there's something wrong with the CPUID page.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Sure, thanks.

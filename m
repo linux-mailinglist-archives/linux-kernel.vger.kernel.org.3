@@ -2,176 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 330E149CA2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A228549CA2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241569AbiAZM52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234510AbiAZM5Y (ORCPT
+        id S241583AbiAZM6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:58:10 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:36196 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241575AbiAZM6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:57:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43805C06161C;
-        Wed, 26 Jan 2022 04:57:24 -0800 (PST)
+        Wed, 26 Jan 2022 07:58:08 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10E43B81D05;
-        Wed, 26 Jan 2022 12:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6A8C340E3;
-        Wed, 26 Jan 2022 12:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643201841;
-        bh=WjSXJJLFgn///WXgXrWaxq0fyKyJj+v3auEVSwOjjsE=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B558B81D05
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:58:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F57DC340E8;
+        Wed, 26 Jan 2022 12:58:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643201885;
+        bh=wwU+tnK1eUMgwaHuPMF+WVqKYm6bBk9k4K2YQcP3bjI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jorod1QGnXM7vSthuCy+/TApHtZgb8F+R/HZUUNCIf0joFXIqav099INEcgMDOEZP
-         ovxvtlkkiy7oR3WbIjN0HDKAW5Ak3tIfNiGnu/yQGztZCLMFRbsghKnwC4ITpdkdjZ
-         fPd3I3BN2Smrt32hvdHN5bTVR/cGwZFAa9gJ9YWM=
-Date:   Wed, 26 Jan 2022 13:57:19 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jack Wang <jack.wang.usish@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
-        Guoqing Jiang <jiangguoqing@kylinos.cn>,
-        Song Liu <song@kernel.org>,
-        Guillaume Morin <guillaume@morinfr.org>
-Subject: Re: [PATCH 5.10 01/25] md: revert io stats accounting
-Message-ID: <YfFFL8U4usnhd18s@kroah.com>
-References: <20220114081542.698002137@linuxfoundation.org>
- <20220114081542.746291845@linuxfoundation.org>
- <CA+res+S1GcDzM6hnmar+s1k3ggswURZ+_8BqweifShCTjVJ2aQ@mail.gmail.com>
- <YfEztOTIhGjm3Hvs@kroah.com>
- <CA+res+RpQuedYu3hhRo5kBcs3tQrKc+7eyiFbVUAVG2h68cYkg@mail.gmail.com>
+        b=F8GAxMNUriS6oQyq9vKrcrtTrp/dW/3M66NWvd7HkQc94AGS3d8JeBDz/xEz6Yoi8
+         Uw2Qbwjbfl4czkluzZXEZl8yrgYLYbNOtyRObL9qwjX7mR83Sqf64Dn/YrvGhqeMt0
+         ecu0wpmXEQ7fJg9f6u2M4WrlLxIQVrltbgSDQxIb7dfGy+JSebNDe4u+sF+2k/2h5N
+         EQAYUMya973vEi4HDML7m9G4ceZeMTFnN0CAK3BxmeWfFI7YULrScjRPQ1KPs3kdTw
+         3myYN7YI7b26LgkUAL/P0DmUkop+wF04eQADykCqWeQNWyMd9kuE7hnmEVMsK4YWC6
+         XK7w6GFjYxupw==
+Date:   Wed, 26 Jan 2022 12:58:01 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Eric Millbrandt <emillbrandt@dekaresearch.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: fsl: Add missing error handling in
+ pcm030_fabric_probe
+Message-ID: <YfFFWSVgnbL6ETxo@sirena.org.uk>
+References: <20220126113307.1673-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NmCm27cBeyhb9V5C"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+res+RpQuedYu3hhRo5kBcs3tQrKc+7eyiFbVUAVG2h68cYkg@mail.gmail.com>
+In-Reply-To: <20220126113307.1673-1-linmq006@gmail.com>
+X-Cookie: Use only in a well-ventilated area.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 01:37:12PM +0100, Jack Wang wrote:
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> 于2022年1月26日周三 12:42写道：
-> >
-> > On Wed, Jan 26, 2022 at 11:09:46AM +0100, Jack Wang wrote:
-> > > Hi,
-> > >
-> > > Greg Kroah-Hartman <gregkh@linuxfoundation.org> 于2022年1月14日周五 19:57写道：
-> > > >
-> > > > From: Guoqing Jiang <jgq516@gmail.com>
-> > > >
-> > > > commit ad3fc798800fb7ca04c1dfc439dba946818048d8 upstream.
-> > > >
-> > > > The commit 41d2d848e5c0 ("md: improve io stats accounting") could cause
-> > > > double fault problem per the report [1], and also it is not correct to
-> > > > change ->bi_end_io if md don't own it, so let's revert it.
-> > > >
-> > > > And io stats accounting will be replemented in later commits.
-> > > >
-> > > > [1]. https://lore.kernel.org/linux-raid/3bf04253-3fad-434a-63a7-20214e38cf26@gmail.com/T/#t
-> > > >
-> > > > Fixes: 41d2d848e5c0 ("md: improve io stats accounting")
-> > > > Signed-off-by: Guoqing Jiang <jiangguoqing@kylinos.cn>
-> > > > Signed-off-by: Song Liu <song@kernel.org>
-> > > > [GM: backport to 5.10-stable]
-> > > > Signed-off-by: Guillaume Morin <guillaume@morinfr.org>
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > ---
-> > > >  drivers/md/md.c |   57 +++++++++++---------------------------------------------
-> > > >  drivers/md/md.h |    1
-> > > >  2 files changed, 12 insertions(+), 46 deletions(-)
-> > > >
-> > > > --- a/drivers/md/md.c
-> > > > +++ b/drivers/md/md.c
-> > > > @@ -459,34 +459,12 @@ check_suspended:
-> > > >  }
-> > > >  EXPORT_SYMBOL(md_handle_request);
-> > > >
-> > > > -struct md_io {
-> > > > -       struct mddev *mddev;
-> > > > -       bio_end_io_t *orig_bi_end_io;
-> > > > -       void *orig_bi_private;
-> > > > -       unsigned long start_time;
-> > > > -       struct hd_struct *part;
-> > > > -};
-> > > > -
-> > > > -static void md_end_io(struct bio *bio)
-> > > > -{
-> > > > -       struct md_io *md_io = bio->bi_private;
-> > > > -       struct mddev *mddev = md_io->mddev;
-> > > > -
-> > > > -       part_end_io_acct(md_io->part, bio, md_io->start_time);
-> > > > -
-> > > > -       bio->bi_end_io = md_io->orig_bi_end_io;
-> > > > -       bio->bi_private = md_io->orig_bi_private;
-> > > > -
-> > > > -       mempool_free(md_io, &mddev->md_io_pool);
-> > > > -
-> > > > -       if (bio->bi_end_io)
-> > > > -               bio->bi_end_io(bio);
-> > > > -}
-> > > > -
-> > > >  static blk_qc_t md_submit_bio(struct bio *bio)
-> > > >  {
-> > > >         const int rw = bio_data_dir(bio);
-> > > > +       const int sgrp = op_stat_group(bio_op(bio));
-> > > >         struct mddev *mddev = bio->bi_disk->private_data;
-> > > > +       unsigned int sectors;
-> > > >
-> > > >         if (mddev == NULL || mddev->pers == NULL) {
-> > > >                 bio_io_error(bio);
-> > > > @@ -507,26 +485,21 @@ static blk_qc_t md_submit_bio(struct bio
-> > > >                 return BLK_QC_T_NONE;
-> > > >         }
-> > > >
-> > > > -       if (bio->bi_end_io != md_end_io) {
-> > > > -               struct md_io *md_io;
-> > > > -
-> > > > -               md_io = mempool_alloc(&mddev->md_io_pool, GFP_NOIO);
-> > > > -               md_io->mddev = mddev;
-> > > > -               md_io->orig_bi_end_io = bio->bi_end_io;
-> > > > -               md_io->orig_bi_private = bio->bi_private;
-> > > > -
-> > > > -               bio->bi_end_io = md_end_io;
-> > > > -               bio->bi_private = md_io;
-> > > > -
-> > > > -               md_io->start_time = part_start_io_acct(mddev->gendisk,
-> > > > -                                                      &md_io->part, bio);
-> > > > -       }
-> > > > -
-> > > > +       /*
-> > > > +        * save the sectors now since our bio can
-> > > > +        * go away inside make_request
-> > > > +        */
-> > > > +       sectors = bio_sectors(bio);
-> > > This code snip is not inside the original patch, and it's not in
-> > > latest upstream too.
-> > > >         /* bio could be mergeable after passing to underlayer */
-> > > >         bio->bi_opf &= ~REQ_NOMERGE;
-> > > >
-> > > >         md_handle_request(mddev, bio);
-> > > >
-> > > > +       part_stat_lock();
-> > > > +       part_stat_inc(&mddev->gendisk->part0, ios[sgrp]);
-> > > > +       part_stat_add(&mddev->gendisk->part0, sectors[sgrp], sectors);
-> > > > +       part_stat_unlock();
-> > > > +
-> > > same here, this code snip is not inside the original patch, and it's
-> > > not in latest upstream too.
-> >
-> > Is it a problem?
-> Not sure, might cause some confusion regarding io stats.
-> >
-> > > I think would be good keep it as the upstream version.
-> >
-> > Can you send a revert of this commit (it is in 5.10.92), and a backport
-> > of the correct fix?
-> >
-> sure, I just sent an incremental fix for the backport itself.
-> is it ok?
 
-That works, I'll queue it up after this next round of releases, thanks!
+--NmCm27cBeyhb9V5C
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-greg k-h
+On Wed, Jan 26, 2022 at 11:33:04AM +0000, Miaoqian Lin wrote:
+> Add the missing platform_device_put() and platform_device_del()
+> before return from pcm030_fabric_probe in the error handling case.
+
+>  	ret =3D platform_device_add(pdata->codec_device);
+> -	if (ret)
+> +	if (ret) {
+>  		dev_err(&op->dev, "platform_device_add() failed: %d\n", ret);
+> +		goto exit_device_put;
+> +	}
+> =20
+>  	ret =3D snd_soc_register_card(card);
+>  	if (ret)
+>  		dev_err(&op->dev, "snd_soc_register_card() failed: %d\n", ret);
+> =20
+>  	platform_set_drvdata(op, pdata);
+> +	return ret;
+
+This means we'll skip the cleanup of the platform device that you just
+added if card creation fails:
+
+> +exit_release_dev:
+> +	platform_device_del(pdata->codec_device);
+> +exit_device_put:
+> +	platform_device_put(pdata->codec_device);
+>  	return ret;
+
+It needs to return early only if the card registration failed.
+
+--NmCm27cBeyhb9V5C
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHxRVgACgkQJNaLcl1U
+h9A7WAf+JZkt/zEa/dvgMZU5Q/VVk/9sewHPs0PgMWrUdfeW8UimVO//E3AAX9UK
+ht2lweYpZ86PFZBtz5nsNO08huPNbN6qD5TcNN4f1dIZXUaqwV88pQPPS7yAsVQD
+LIOhBTfYasGQXEBjClW54BzHLZ/6EjPijoBcYNyc65+ys2AJxeScoiUUpNWFdqsH
+FTm8URWPkzMYEbNCw7+bb+E/ZdCXE4z2Eo8gu1ENnW/AJsowB6U/qtphM5qvlgHo
+70F9alVxTYCYjHthrQEryGzGpuUAfrgB6O4lti7xXbdl6HFcROCLPa0VWhw3EQvu
+L8CTKGLtwn1HN5kEU9kaW1eHTqFvIg==
+=Cy4u
+-----END PGP SIGNATURE-----
+
+--NmCm27cBeyhb9V5C--

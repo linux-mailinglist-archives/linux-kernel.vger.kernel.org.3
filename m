@@ -2,282 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9AD49C140
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D316849C142
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236309AbiAZCZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 21:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        id S236310AbiAZCZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 21:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236302AbiAZCZW (ORCPT
+        with ESMTP id S236302AbiAZCZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 21:25:22 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EE1C06161C;
-        Tue, 25 Jan 2022 18:25:22 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id y4so40907161uad.1;
-        Tue, 25 Jan 2022 18:25:22 -0800 (PST)
+        Tue, 25 Jan 2022 21:25:29 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC152C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:25:28 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id u129so8784105oib.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:25:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Nsd0iFumaY43f2QkfXEIN5y4w31w3uWjtzxOZaSzScA=;
-        b=ajC5QCSvrV8ckjekoyQ030W1UTCPdashc35ExAL7hW6yRDZ3s80VedN+GEg3E1Koq4
-         596R04YIbjK/maAFGmkmt/4WM7w7oT78VG7U6wSysTvwqBGTTTbF7erIac+yZ3xp7Ivy
-         VTWAktor5HaIGKvQVmOidtZgnTyarGoPoStZWXZNMOqzuB5JA9fWMARTa2JOe/s+fcFH
-         7rbulBWYC15d4DMGaqpozwAVAhg7MVtbx3wkxLnHkGoExpbUF0kpBNBk1OXDknzFwfab
-         wVQlFGe0M+Nc3HYDIpRr9YusCexe1NUaCjRa9x1iyAbXx0OoDdM4oTDsu7h3rDV64+U0
-         mxiw==
+        d=linuxtx.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4MNxPjIBj2vsU8NN0yvlsN3XepTPMoCqynbtc/TK8wo=;
+        b=DAE/etF3znTFSUXzBN/ldKhbyqYhldmUTvcZEAXJZbABmcvdEOEIyfFwSku5jKd2bp
+         jdp43SxnP3k1RUR2y+7g6V6Za5TFkV6oEX6HgW0n7f6Gb7EqJMlyNQXcHhdzX19cBJhf
+         zFCzGpgz2NUxsV7s8F5Nrc3i2yDXgXBABVrVE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Nsd0iFumaY43f2QkfXEIN5y4w31w3uWjtzxOZaSzScA=;
-        b=zfDJrs5DMO+rqzw3RNn4vg5MY0TyV1A8ZpxfwrTxpoezwSI3wdaZrm6jPX8wBcNiyx
-         /24ytEZh7v9LX7G07NXBPa9KTy+y+yPs86o7fL1x2hA+Lf++sC81HzmQxBNyZYHuJ7cL
-         8KsjtXHlt6yoyhRHrgOmB1pFWiAZj1JR89y+8RzrRAKNkNwe5jnTp/Q93DxcPNFA0ind
-         JIkki8ykBzGwaF7et2m9AT2CrALiN0sJicZEmgmgNqrvzX/4F8fCPLCu2HQP4KkvJ8UK
-         FPYj/NuaROn/9u+oMmW22hKIpo/4gWuKgSOx9NhXsle3pneQNwigzL9jz5BVd3d/Ue/N
-         lnEQ==
-X-Gm-Message-State: AOAM531CTGpbZBt8A0S+3Vc435Ps7yKQBEp75eIRCpoI3lsOUSnrnKdH
-        6PUpqRfwuSszU/WO3A/ayS8IkuO8RcunHfo8t5M=
-X-Google-Smtp-Source: ABdhPJyY7LLuloLJXgVNQFlfS9HdwIfDEPgFULArGUc1ChbKVaz1LF+I9iUuRXbeA9Rj/EyA4UmIXr9rTve272ID36o=
-X-Received: by 2002:a67:c094:: with SMTP id x20mr8612340vsi.53.1643163920689;
- Tue, 25 Jan 2022 18:25:20 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4MNxPjIBj2vsU8NN0yvlsN3XepTPMoCqynbtc/TK8wo=;
+        b=kTKywLEqEkaliUUKGOccWbYF26iJf8SMDXY3W4HO/NQSBXlC4EieDsc6ntBybLxArz
+         dMChWXO3RIWY0LLsaZ19juiBj9o5g/gl/EO+xbON8lc+Yc/F4quEH+Vb/ZxviPV8Wa1h
+         vIBqG9XH2bWDXfoHe4gjfAki07cP16PZKfp85cw1H6UsgtWsOE6kp6OUuQb1hDOLpSVx
+         tbAHdPWTSC8lsW9txaF6l+ubvzJWWwsdzzzm6EgsfuNQ4FDsSmHLbrtYMF1oK6/FQ3aA
+         AKJMjgdsesSpIJ2AHaMSm8mrWLRruwlQlT/r/X6ykJqNPu1y/Q+EmB7DxWa7NlSboHn3
+         rnGg==
+X-Gm-Message-State: AOAM532kg4dpsIgth654SzofZHOPgxMWJPQjazSSfx7lXAr2fPHSKmXQ
+        8aIbu8ivQ35HZjFCoNaaczWXLKYQ1h5pfot4
+X-Google-Smtp-Source: ABdhPJxsNVsuhsMqSbYzbdGGhv6nOX1vcyEyH0rkET4bUISHTHLSaaZOd5/k/DKvWyiKPDCq2gjB5g==
+X-Received: by 2002:a05:6808:3025:: with SMTP id ay37mr2368587oib.19.1643163928118;
+        Tue, 25 Jan 2022 18:25:28 -0800 (PST)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id e5sm5988629oti.59.2022.01.25.18.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 18:25:27 -0800 (PST)
+Date:   Tue, 25 Jan 2022 20:25:25 -0600
+From:   Justin Forbes <jmforbes@linuxtx.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 000/841] 5.15.17-rc2 review
+Message-ID: <YfCxFbKNko/gj/Js@fedora64.linuxtx.org>
+References: <20220125155423.959812122@linuxfoundation.org>
 MIME-Version: 1.0
-References: <CAAhV-H4GAgKh4HBeWQ+LGf2x_uKy_T5MaMv0dNcYXFKVGAZEzw@mail.gmail.com>
- <20220125153858.GA1609157@bhelgaas>
-In-Reply-To: <20220125153858.GA1609157@bhelgaas>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Wed, 26 Jan 2022 10:25:14 +0800
-Message-ID: <CAAhV-H43CnYAR_QW1fduioD3O430zzRGRfpXW168LdhRAh97jA@mail.gmail.com>
-Subject: Re: [PATCH v8 04/10] vgaarb: Move framebuffer detection to ADD_DEVICE path
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     David Airlie <airlied@linux.ie>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?Q?Bruno_Pr=C3=A9mont?= <bonbons@linux-vserver.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125155423.959812122@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 11:39 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> [+cc Maarten, Maxime, Thomas; beginning of thread:
-> https://lore.kernel.org/r/20220106000658.243509-1-helgaas@kernel.org]
->
-> On Tue, Jan 25, 2022 at 10:51:15AM +0800, Huacai Chen wrote:
-> > Hi, Bjorn,
-> >
-> > Why this series still missing in 5.17-rc1? :(
->
-> 1) It was posted late in the cycle (Jan 6, when the merge window
-> opened Jan 9), so it was too late to expect a significant change like
-> this to be merged for v5.17.  Right now is a good time to consider it
-> again so it would some time in -next.
->
-> 2) As of now, this code is still in drivers/gpu, and I don't maintain
-> that area.  It's up to the DRM folks, who are all cc'd here.
->
-> I would like to move this from drivers/gpu to drivers/pci, but that
-> requires a little more work to resolve the initcall ordering problem
-> with respect to vga_arb_device_init() and misc_init() [1].
-Hmm, to me, keep it in drivers/gpu is just OK.
+On Tue, Jan 25, 2022 at 05:32:41PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.17 release.
+> There are 841 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.17-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Huacai
+Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
->
-> Bjorn
->
-> [1] https://lore.kernel.org/linux-pci/CAAhV-H7FhAjM-Ha42Z1dLrE4PvC9frfyeU=
-27KHWcyWKkMftEsA@mail.gmail.com/
->
-> > On Fri, Jan 7, 2022 at 12:21 AM Bjorn Helgaas <helgaas@kernel.org> wrot=
-e:
-> > >
-> > > On Thu, Jan 06, 2022 at 02:44:42PM +0800, Huacai Chen wrote:
-> > > > On Thu, Jan 6, 2022 at 8:07 AM Bjorn Helgaas <helgaas@kernel.org> w=
-rote:
-> > > > > Previously we selected a device that owns the boot framebuffer as=
- the
-> > > > > default device in vga_arb_select_default_device().  This was only=
- done in
-> > > > > the vga_arb_device_init() subsys_initcall, so devices enumerated =
-later,
-> > > > > e.g., by pcibios_init(), were not eligible.
-> > > > >
-> > > > > Fix this by moving the framebuffer device selection from
-> > > > > vga_arb_select_default_device() to vga_arbiter_add_pci_device(), =
-which is
-> > > > > called after every PCI device is enumerated, either by the
-> > > > > vga_arb_device_init() subsys_initcall or as an ADD_DEVICE notifie=
-r.
-> > > > >
-> > > > > Note that if vga_arb_select_default_device() found a device ownin=
-g the boot
-> > > > > framebuffer, it unconditionally set it to be the default VGA devi=
-ce, and no
-> > > > > subsequent device could replace it.
-> > > > >
-> > > > > Link: https://lore.kernel.org/r/20211015061512.2941859-7-chenhuac=
-ai@loongson.cn
-> > > > > Based-on-patch-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > > > > Cc: Bruno Pr=C3=A9mont <bonbons@linux-vserver.org>
-> > > > > ---
-> > > > >  drivers/gpu/vga/vgaarb.c | 37 +++++++++++++++++-----------------=
----
-> > > > >  1 file changed, 17 insertions(+), 20 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/gpu/vga/vgaarb.c b/drivers/gpu/vga/vgaarb.c
-> > > > > index b0ae0f177c6f..aefa4f406f7d 100644
-> > > > > --- a/drivers/gpu/vga/vgaarb.c
-> > > > > +++ b/drivers/gpu/vga/vgaarb.c
-> > > > > @@ -72,6 +72,7 @@ struct vga_device {
-> > > > >         unsigned int io_norm_cnt;       /* normal IO count */
-> > > > >         unsigned int mem_norm_cnt;      /* normal MEM count */
-> > > > >         bool bridge_has_one_vga;
-> > > > > +       bool is_framebuffer;    /* BAR covers firmware framebuffe=
-r */
-> > > > >         unsigned int (*set_decode)(struct pci_dev *pdev, bool dec=
-ode);
-> > > > >  };
-> > > > >
-> > > > > @@ -565,10 +566,9 @@ void vga_put(struct pci_dev *pdev, unsigned =
-int rsrc)
-> > > > >  }
-> > > > >  EXPORT_SYMBOL(vga_put);
-> > > > >
-> > > > > -static void __init vga_select_framebuffer_device(struct pci_dev =
-*pdev)
-> > > > > +static bool vga_is_framebuffer_device(struct pci_dev *pdev)
-> > > > >  {
-> > > > >  #if defined(CONFIG_X86) || defined(CONFIG_IA64)
-> > > > > -       struct device *dev =3D &pdev->dev;
-> > > > >         u64 base =3D screen_info.lfb_base;
-> > > > >         u64 size =3D screen_info.lfb_size;
-> > > > >         u64 limit;
-> > > > > @@ -583,15 +583,6 @@ static void __init vga_select_framebuffer_de=
-vice(struct pci_dev *pdev)
-> > > > >
-> > > > >         limit =3D base + size;
-> > > > >
-> > > > > -       /*
-> > > > > -        * Override vga_arbiter_add_pci_device()'s I/O based dete=
-ction
-> > > > > -        * as it may take the wrong device (e.g. on Apple system =
-under
-> > > > > -        * EFI).
-> > > > > -        *
-> > > > > -        * Select the device owning the boot framebuffer if there=
- is
-> > > > > -        * one.
-> > > > > -        */
-> > > > > -
-> > > > >         /* Does firmware framebuffer belong to us? */
-> > > > >         for (i =3D 0; i < DEVICE_COUNT_RESOURCE; i++) {
-> > > > >                 flags =3D pci_resource_flags(pdev, i);
-> > > > > @@ -608,13 +599,10 @@ static void __init vga_select_framebuffer_d=
-evice(struct pci_dev *pdev)
-> > > > >                 if (base < start || limit >=3D end)
-> > > > >                         continue;
-> > > > >
-> > > > > -               if (!vga_default_device())
-> > > > > -                       vgaarb_info(dev, "setting as boot device\=
-n");
-> > > > > -               else if (pdev !=3D vga_default_device())
-> > > > > -                       vgaarb_info(dev, "overriding boot device\=
-n");
-> > > > > -               vga_set_default_device(pdev);
-> > > > > +               return true;
-> > > > >         }
-> > > > >  #endif
-> > > > > +       return false;
-> > > > >  }
-> > > > >
-> > > > >  static bool vga_arb_integrated_gpu(struct device *dev)
-> > > > > @@ -635,6 +623,7 @@ static bool vga_arb_integrated_gpu(struct dev=
-ice *dev)
-> > > > >  static bool vga_is_boot_device(struct vga_device *vgadev)
-> > > > >  {
-> > > > >         struct vga_device *boot_vga =3D vgadev_find(vga_default_d=
-evice());
-> > > > > +       struct pci_dev *pdev =3D vgadev->pdev;
-> > > > >
-> > > > >         /*
-> > > > >          * We select the default VGA device in this order:
-> > > > > @@ -645,6 +634,18 @@ static bool vga_is_boot_device(struct vga_de=
-vice *vgadev)
-> > > > >          *   Other device (see vga_arb_select_default_device())
-> > > > >          */
-> > > > >
-> > > > > +       /*
-> > > > > +        * We always prefer a firmware framebuffer, so if we've a=
-lready
-> > > > > +        * found one, there's no need to consider vgadev.
-> > > > > +        */
-> > > > > +       if (boot_vga && boot_vga->is_framebuffer)
-> > > > > +               return false;
-> > > > > +
-> > > > > +       if (vga_is_framebuffer_device(pdev)) {
-> > > > > +               vgadev->is_framebuffer =3D true;
-> > > > > +               return true;
-> > > > > +       }
-> > > > Maybe it is better to rename vga_is_framebuffer_device() to
-> > > > vga_is_firmware_device() and rename is_framebuffer to
-> > > > is_fw_framebuffer?
-> > >
-> > > That's a great point, thanks!
-> > >
-> > > The "framebuffer" term is way too generic.  *All* VGA devices have a
-> > > framebuffer, so it adds no information.  This is really about finding
-> > > the device that was used by firmware.
-> > >
-> > > I renamed:
-> > >
-> > >   vga_is_framebuffer_device() -> vga_is_firmware_default()
-> > >   vga_device.is_framebuffer   -> vga_device.is_firmware_default
-> > >
-> > > I updated my local branch and pushed it to:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?=
-h=3Dpci/vga
-> > > with head 0f4caffa1297 ("vgaarb: Replace full MIT license text with
-> > > SPDX identifier").
-> > >
-> > > I don't maintain drivers/gpu/vga/vgaarb.c, so this branch is just for
-> > > reference.  It'll ultimately be up to the DRM folks to handle this.
-> > >
-> > > I'll wait for any other comments or testing reports before reposting.
-> > >
-> > > > >         /*
-> > > > >          * A legacy VGA device has MEM and IO enabled and any bri=
-dges
-> > > > >          * leading to it have PCI_BRIDGE_CTL_VGA enabled so the l=
-egacy
-> > > > > @@ -1531,10 +1532,6 @@ static void __init vga_arb_select_default_=
-device(void)
-> > > > >         struct pci_dev *pdev, *found =3D NULL;
-> > > > >         struct vga_device *vgadev;
-> > > > >
-> > > > > -       list_for_each_entry(vgadev, &vga_list, list) {
-> > > > > -               vga_select_framebuffer_device(vgadev->pdev);
-> > > > > -       }
-> > > > > -
-> > > > >         if (!vga_default_device()) {
-> > > > >                 list_for_each_entry_reverse(vgadev, &vga_list, li=
-st) {
-> > > > >                         struct device *dev =3D &vgadev->pdev->dev=
-;
-> > > > > --
-> > > > > 2.25.1
-> > > > >
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+

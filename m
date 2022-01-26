@@ -2,98 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8362B49D2FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B43449D2FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiAZUB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 15:01:28 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:44873 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiAZUB1 (ORCPT
+        id S229633AbiAZUDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 15:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229534AbiAZUDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:01:27 -0500
-Received: by mail-il1-f200.google.com with SMTP id i16-20020a056e021d1000b002b8bb2c077cso561160ila.11
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:01:27 -0800 (PST)
+        Wed, 26 Jan 2022 15:03:31 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843DAC06161C;
+        Wed, 26 Jan 2022 12:03:31 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id n12-20020a05600c3b8c00b0034eb13edb8eso2389582wms.0;
+        Wed, 26 Jan 2022 12:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mY3ysCNj443GJifLQmlNddA04KgyJaSyoL9/oKRXsTM=;
+        b=pDcaBROWSVIDle6By0jiJSiVP0Hu76DXRnUxeAG0T5nKk4QJ8IhhyUwIuEpEMvny9g
+         3DXcsm7g+qBzy4g263s0CEH5Q0buBZTaQgrFmFy40OBybi5OJ0jWuhlyjEfidxkhyPJw
+         fm08fQpPqgHgWuxiluTqkQp27i9B/6qkTfEUZ+IDc7wvuu4rY0pv0+Yw4nzYZ/pSOfRn
+         oPMR0uaXGLqOXN97wTE1d6NWh/wKy9dzqPEpWQCQWSN6zUoSoag8uS4UyTSsB7pGsljy
+         jfw8Hnq9IRW9Lad37EpCihHmwZAUzt3Tp3vWjoX9AmN7ysggXIrqTLyqSN8D3cQDzPLA
+         XLBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=cLW8LI7/XqtiFj9yd0tHprkCjsn8/AVoa/nyBCUb7oc=;
-        b=hMFg5S8Fdkk6/eZXAowqBRLDOrTUL9ADVRcL40O69IroTWfUeO6zsuuJN+g7cGRg7Q
-         6Ex+1HN3+KoG9QGHEinDKuJhSSxc1ra/RTnWRvixAtyfhzolw7T1lg5dYSYSyOMtjASS
-         rRVeloAcOM6jpWr/d6Glkk7WEQqfZTxH5tZHidIb96ZUztq8HLk/0Xm0wHMEn4ElsHU+
-         SIrehjLbOO0QcffB2cqX0WX7PfVhDOVZefHlkT4MUP8d/kVuKh5pOkNB/rTWuJG+x01v
-         VOMpWHXXTY5/mLCqSGCbNDyZiqhTeINI6wZuzcWuxFMi2vBtLVFzQguODxT3iguLNy+u
-         Zzxg==
-X-Gm-Message-State: AOAM533D0jf6QymrxEjbxo5mDBU9eZ8lfegnytTWRIjkWtjaSgrwJaIE
-        MbMJImDFedN9sBqrkqt7TxNTpSthqgN0AmiamXuNibiI+1D6
-X-Google-Smtp-Source: ABdhPJxK+FPfqJHgz9j/jX/ITPK4Sulzl9Qkw1XWG390K84oD1Sq9GxH+8V1Sv1ZdgU80iett2IV3EnKh9COq6LNds5MetrvFsc/
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mY3ysCNj443GJifLQmlNddA04KgyJaSyoL9/oKRXsTM=;
+        b=3mnHWfKBvGhRjbN0i2qQWZLCh/QJry/YAIOseykXZ9mghWSHFkDOi2rr/IyY2E+CdB
+         qKg6flBg3OrLr78XqfBn/4gBQscLIMQZaSKQbJUdZkeKRGh5Irj+b/v8/LSZp6s7YM4D
+         zu3VkQC9GhWvAMror4xnNAO+WXFjeUdWqXXg2rKa4mCQ0xerCM9PnEeeJcBnUFdyXvDy
+         1n/yqky/SydrHGfBT2BKSCTy9rX2YRDlmMvO4Jy7EggWstxwDZalZ0vFmM8B57tql9BA
+         9t8Sx7OltGe2HX0ORuC2YNHN4k5LRHC46lb2hLMc61flUMAtXIZY5TGA2DBMRHRtnpPC
+         zgxQ==
+X-Gm-Message-State: AOAM530Sicye1vdXFawMp9sDnOZgBcY2kQwnRFw0CnkRwbC+NmpL0VvV
+        90BnMWSKQhP2Pf7L9jXSYX6QxFjtkHU=
+X-Google-Smtp-Source: ABdhPJyBYVzNvDvnIEGTTcEu80/SNLaRvE97m/MIm3v/ho93Wi2e3320PFQnfJmwJQ2sU5po7phLYQ==
+X-Received: by 2002:a7b:c44e:: with SMTP id l14mr257155wmi.185.1643227409993;
+        Wed, 26 Jan 2022 12:03:29 -0800 (PST)
+Received: from [10.18.0.12] ([194.126.177.12])
+        by smtp.gmail.com with ESMTPSA id k25sm2266436wms.23.2022.01.26.12.03.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 12:03:29 -0800 (PST)
+Message-ID: <0e1b25f6-d64f-a391-eca8-01b686377df0@gmail.com>
+Date:   Wed, 26 Jan 2022 21:03:27 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1686:: with SMTP id f6mr484033ila.300.1643227287269;
- Wed, 26 Jan 2022 12:01:27 -0800 (PST)
-Date:   Wed, 26 Jan 2022 12:01:27 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000be3e4505d681aa17@google.com>
-Subject: [syzbot] memory leak in kvm_vcpu_ioctl_set_cpuid2
-From:   syzbot <syzbot+ead0473557070d5432cd@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jarkko@kernel.org, jmattson@google.com, joro@8bytes.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sgx@vger.kernel.org, mingo@redhat.com, pbonzini@redhat.com,
-        seanjc@google.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] platform: surface: Replace acpi_bus_get_device()
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+References: <5805278.lOV4Wx5bFT@kreacher>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <5805278.lOV4Wx5bFT@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 1/26/22 20:41, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-syzbot found the following issue on:
+Looks good to me.
 
-HEAD commit:    0809edbae347 Merge tag 'devicetree-fixes-for-5.17-1' of gi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17982967b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cc8d6c95ce1d56de
-dashboard link: https://syzkaller.appspot.com/bug?extid=ead0473557070d5432cd
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1402f91fb00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ba591fb00000
+Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ead0473557070d5432cd@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88810963a800 (size 2048):
-  comm "syz-executor025", pid 3610, jiffies 4294944928 (age 8.080s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 0d 00 00 00  ................
-    47 65 6e 75 6e 74 65 6c 69 6e 65 49 00 00 00 00  GenuntelineI....
-  backtrace:
-    [<ffffffff814948ee>] kmalloc_node include/linux/slab.h:604 [inline]
-    [<ffffffff814948ee>] kvmalloc_node+0x3e/0x100 mm/util.c:580
-    [<ffffffff814950f2>] kvmalloc include/linux/slab.h:732 [inline]
-    [<ffffffff814950f2>] vmemdup_user+0x22/0x100 mm/util.c:199
-    [<ffffffff8109f5ff>] kvm_vcpu_ioctl_set_cpuid2+0x8f/0xf0 arch/x86/kvm/cpuid.c:423
-    [<ffffffff810711b9>] kvm_arch_vcpu_ioctl+0xb99/0x1e60 arch/x86/kvm/x86.c:5251
-    [<ffffffff8103e92d>] kvm_vcpu_ioctl+0x4ad/0x950 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4066
-    [<ffffffff815afacc>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff815afacc>] __do_sys_ioctl fs/ioctl.c:874 [inline]
-    [<ffffffff815afacc>] __se_sys_ioctl fs/ioctl.c:860 [inline]
-    [<ffffffff815afacc>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:860
-    [<ffffffff844a3335>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff844a3335>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> ---
+>   drivers/platform/surface/surface3-wmi.c        |   12 ++++--------
+>   drivers/platform/surface/surface_acpi_notify.c |    3 ++-
+>   2 files changed, 6 insertions(+), 9 deletions(-)
+> 
+> Index: linux-pm/drivers/platform/surface/surface3-wmi.c
+> ===================================================================
+> --- linux-pm.orig/drivers/platform/surface/surface3-wmi.c
+> +++ linux-pm/drivers/platform/surface/surface3-wmi.c
+> @@ -116,15 +116,11 @@ static acpi_status s3_wmi_attach_spi_dev
+>   					    void *data,
+>   					    void **return_value)
+>   {
+> -	struct acpi_device *adev, **ts_adev;
+> +	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+> +	struct acpi_device **ts_adev = data;
+>   
+> -	if (acpi_bus_get_device(handle, &adev))
+> -		return AE_OK;
+> -
+> -	ts_adev = data;
+> -
+> -	if (strncmp(acpi_device_bid(adev), SPI_TS_OBJ_NAME,
+> -	    strlen(SPI_TS_OBJ_NAME)))
+> +	if (!adev || strncmp(acpi_device_bid(adev), SPI_TS_OBJ_NAME,
+> +			     strlen(SPI_TS_OBJ_NAME)))
+>   		return AE_OK;
+>   
+>   	if (*ts_adev) {
+> Index: linux-pm/drivers/platform/surface/surface_acpi_notify.c
+> ===================================================================
+> --- linux-pm.orig/drivers/platform/surface/surface_acpi_notify.c
+> +++ linux-pm/drivers/platform/surface/surface_acpi_notify.c
+> @@ -770,7 +770,8 @@ static acpi_status san_consumer_setup(ac
+>   		return AE_OK;
+>   
+>   	/* Ignore ACPI devices that are not present. */
+> -	if (acpi_bus_get_device(handle, &adev) != 0)
+> +	adev = acpi_fetch_acpi_dev(handle);
+> +	if (!adev)
+>   		return AE_OK;
+>   
+>   	san_consumer_dbg(&pdev->dev, handle, "creating device link\n");
+> 
+> 
+> 

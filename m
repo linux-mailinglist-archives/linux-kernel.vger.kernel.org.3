@@ -2,228 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0217C49C5F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F41B49C5F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238884AbiAZJNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:13:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57607 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230488AbiAZJNP (ORCPT
+        id S238861AbiAZJNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:13:24 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:34416 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238854AbiAZJNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:13:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643188394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TbF5nBuKPMmTArNpLGRbqMvSQSqoxoYLQ8/fNj7LKlI=;
-        b=BYV9CC5CKx4FARw5o1GZPBW3XyBlCYkmnChNfHQIyorQ7rqxPbkxrS738H/+2rYq+Qq4JX
-        CeEKPME7VyDQexG3ZQQEFmHREnAM0RYAdCjawryz4ztzmHPthp5ht3IbfLJpwkrxBrDiTn
-        p3CaWDvtHh217hn4zISqxtj5Dz87QS4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-304-BJqPuhZBMwKpSQv1453c-A-1; Wed, 26 Jan 2022 04:13:09 -0500
-X-MC-Unique: BJqPuhZBMwKpSQv1453c-A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4424C8144E1;
-        Wed, 26 Jan 2022 09:13:07 +0000 (UTC)
-Received: from localhost (ovpn-12-215.pek2.redhat.com [10.72.12.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EFD6B60C45;
-        Wed, 26 Jan 2022 09:12:46 +0000 (UTC)
-Date:   Wed, 26 Jan 2022 17:12:43 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v3 6/6] crash hp: Add x86 crash hotplug support
-Message-ID: <20220126091243.GB6588@MiWiFi-R3L-srv>
-References: <20220110195727.1682-1-eric.devolder@oracle.com>
- <20220110195727.1682-7-eric.devolder@oracle.com>
- <20220119102323.GB6349@MiWiFi-R3L-srv>
- <280485c9-4612-892c-0e3e-9e8b09e60cf9@oracle.com>
+        Wed, 26 Jan 2022 04:13:14 -0500
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220126091313euoutp019d8de05bc2a3a78af1d810d1fdf0ab4d~NxyM1XGxN2358523585euoutp01c
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:13:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220126091313euoutp019d8de05bc2a3a78af1d810d1fdf0ab4d~NxyM1XGxN2358523585euoutp01c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1643188393;
+        bh=N6EjNpd4RS6otX4ZoriNjspVYcOA9fzQSMu12oRThKU=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=nv5wq2ZRJRxPwK6ZENFoTx4g/YhP/rVSQqdUVMGM81f3xOsjllNcHZ7tXE/l1JFz9
+         SnDBpLE6bThyd6I4qMHd6fB9TLz4FjpYhZ6QWqVmOWmkwuuI9l627Fpn5r1HpDVLwL
+         dWNObpaHIj8x3B2cNJ4sD3A2feGGwbIyIVbbbuj0=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220126091312eucas1p15e35bb5d6abfd636b99cc68b1109823b~NxyMThcZM1184711847eucas1p1b;
+        Wed, 26 Jan 2022 09:13:12 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 28.CC.10260.8A011F16; Wed, 26
+        Jan 2022 09:13:12 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220126091311eucas1p230005f8755b49f0bdd49fae823e7940d~NxyLxh1962838328383eucas1p27;
+        Wed, 26 Jan 2022 09:13:11 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220126091311eusmtrp294c00826d20a2ed8b68a3314816d21ce~NxyLwh9Wu2904829048eusmtrp2Y;
+        Wed, 26 Jan 2022 09:13:11 +0000 (GMT)
+X-AuditID: cbfec7f5-bf3ff70000002814-1d-61f110a8d0ea
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id AE.C1.09404.7A011F16; Wed, 26
+        Jan 2022 09:13:11 +0000 (GMT)
+Received: from [106.210.134.141] (unknown [106.210.134.141]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220126091310eusmtip246bdf4a8a04880344e958fabe39d74df~NxyKxj_GW2005120051eusmtip2i;
+        Wed, 26 Jan 2022 09:13:10 +0000 (GMT)
+Message-ID: <a611a070-4932-1691-1f20-7cfa8bb96cc1@samsung.com>
+Date:   Wed, 26 Jan 2022 10:13:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <280485c9-4612-892c-0e3e-9e8b09e60cf9@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH v5 03/16] dt-bindings: clock: Document FSD CMU bindings
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        sboyd@kernel.org, linux-fsd@tesla.com
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+In-Reply-To: <20220124141644.71052-4-alim.akhtar@samsung.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrIKsWRmVeSWpSXmKPExsWy7djP87orBD4mGuz6LWjxYN42Nou/k46x
+        W7xf1sNoMf/IOVaLjW9/MFlM+bOcyWLT42usFh977rFaPHwVbnF51xw2ixnn9zFZnLr+mc1i
+        0dYv7Bate4+wW/y7tpHF4vH1P2wOAh5r5q1h9Pj9axKjx6yGXjaPTas62TzuXNvD5rF5Sb3H
+        lRNNrB59W1Yxevxrmsvu8XmTXABXFJdNSmpOZllqkb5dAlfGiRf72Qo+MlXc3viYvYFxP1MX
+        IweHhICJxOF7nl2MXBxCAisYJfad62aDcL4wSjztecIE4XxmlFj2bhZjFyMnWMfWw12sEInl
+        jBKLLlxmgXA+MkocvryOBaSKV8BO4tbifnYQm0VAVeLft1vMEHFBiZMzn7CA7BYVSJLoaXEG
+        CQsLeEvs/9jOBGIzC4hL3HoyH8wWEciX+PlvJ9h8ZoF9TBJbLxwDS7AJGEr0Hu0Du4hTwFZi
+        6s9tbBDN8hLb385hBmmQEDjMKbHi8kRmiEddJNY+roP4QFji1fEt7BC2jMT/nfOZIOqbGSV6
+        dt9mh3AmMErcP74A6mdriTvnfrGBDGIW0JRYv0sfIuwo8aHhGwvEfD6JG28FIW7gk5i0bTrU
+        Wl6JjjYhiGoVid+rpjNB2FIS3U/+s0xgVJqFFCqzkLw/C8k3sxD2LmBkWcUonlpanJueWmyc
+        l1quV5yYW1yal66XnJ+7iRGYCk//O/51B+OKVx/1DjEycTAeYpTgYFYS4f3v/T5RiDclsbIq
+        tSg/vqg0J7X4EKM0B4uSOG9y5oZEIYH0xJLU7NTUgtQimCwTB6dUA5Ouqb3ugbvHpiTVJbly
+        cVyvEHrNcON7/e64s2dYxSqSD/AZtE1aynlI82Y+dx5XjEi+8dV1Vgt/eJpuuh4oXKJvOG/h
+        G0Gt9Z8WxzKUabDcWauXpCnVrmlllOhwjPWh6sx9ma+kjoWtuf9UOGsaY+txSRGRZ2XhLbMP
+        Mv+ca9pwSYX5cEOrUtp0fkm9bfLtJf1sMUdKjUOaz51NWCtW0qvMvexAEeu9sHm/P333UcoO
+        VTe5x3VD/OT1CJUss5lJj/9vXdd33lp3+T6xnO4IvnN3r4Vc/X4xVzm96Xj+QT1bqSDbavHO
+        lexRqnPDnhlMOz09Iv28vPcHnRPtD6vj3O4d4uURqZK6rKG0qmeeEktxRqKhFnNRcSIAYPn1
+        0PQDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEIsWRmVeSWpSXmKPExsVy+t/xe7rLBT4mGvz4pWXxYN42Nou/k46x
+        W7xf1sNoMf/IOVaLjW9/MFlM+bOcyWLT42usFh977rFaPHwVbnF51xw2ixnn9zFZnLr+mc1i
+        0dYv7Bate4+wW/y7tpHF4vH1P2wOAh5r5q1h9Pj9axKjx6yGXjaPTas62TzuXNvD5rF5Sb3H
+        lRNNrB59W1Yxevxrmsvu8XmTXABXlJ5NUX5pSapCRn5xia1StKGFkZ6hpYWekYmlnqGxeayV
+        kamSvp1NSmpOZllqkb5dgl7GiRf72Qo+MlXc3viYvYFxP1MXIyeHhICJxNbDXaxdjFwcQgJL
+        GSVWHjzC1sXIAZSQkpjfogRRIyzx51oXG0TNe0aJN/Nus4AkeAXsJG4t7mcHsVkEVCX+fbvF
+        DBEXlDg58wlYjahAkkTDsW42EFtYwFti/8d2sMXMAuISt57MB7NFBPIl/vR/BDuCWWAfk8T+
+        p5fAhgoJHGaUeDsRzGYTMJToPdrHCGJzCthKTP25DexQZgF1ifXzhCBmyktsfzuHeQKj0Cwk
+        Z8xCsm4WQscsJB0LGFlWMYqklhbnpucWG+kVJ+YWl+al6yXn525iBEb+tmM/t+xgXPnqo94h
+        RiYOxkOMEhzMSiK8/73fJwrxpiRWVqUW5ccXleakFh9iNAUGxURmKdHkfGDqySuJNzQzMDU0
+        MbM0MLU0M1YS5/Us6EgUEkhPLEnNTk0tSC2C6WPi4JRqYNo8WaGCsyo5guuO/M3puwNV406w
+        rUxV9DHw5uzc9zpK4NZ8sz/iHAI+8sbcU659l3/i8qyWi4V937LpUZ2WyvLfoq8tF9p38dHf
+        jjsW77ec/Ltg488a4TTjCOPfPB6vBVffLHWxLmFWmP8wPd27ernXE99q69sc6w+XO8z6b/eW
+        Le3SB53SmGUmHe3XvxS/+2p7NdTk2juD1UdVY9ccaTseMP+y2UFBldpHVWs/ZP/bsFzLQIyp
+        1i+27rtJaHJ0y1/3mBMm35enfrbxbVSf+nN+mEPdmZllMw6sENqXJySwIKB+2aRg91qH+kQR
+        gw4d/QVa52cIer0tMXRRLSth/jnRi+lAhlqj9X4RptapSizFGYmGWsxFxYkA3HQ9WoUDAAA=
+X-CMS-MailID: 20220126091311eucas1p230005f8755b49f0bdd49fae823e7940d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220124142905epcas5p33a863799819fb904932d2e88c682940a
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220124142905epcas5p33a863799819fb904932d2e88c682940a
+References: <20220124141644.71052-1-alim.akhtar@samsung.com>
+        <CGME20220124142905epcas5p33a863799819fb904932d2e88c682940a@epcas5p3.samsung.com>
+        <20220124141644.71052-4-alim.akhtar@samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/21/22 at 08:06am, Eric DeVolder wrote:
-......
-> > >   arch/x86/kernel/crash.c | 138 +++++++++++++++++++++++++++++++++++++++-
-> > >   1 file changed, 137 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> > > index 9730c88530fc..d185137b33d4 100644
-> > > --- a/arch/x86/kernel/crash.c
-> > > +++ b/arch/x86/kernel/crash.c
-> > > @@ -25,6 +25,7 @@
-> > >   #include <linux/slab.h>
-> > >   #include <linux/vmalloc.h>
-> > >   #include <linux/memblock.h>
-> > > +#include <linux/highmem.h>
-> > >   #include <asm/processor.h>
-> > >   #include <asm/hardirq.h>
-> > > @@ -265,7 +266,8 @@ static int prepare_elf_headers(struct kimage *image, void **addr,
-> > >   		goto out;
-> > >   	/* By default prepare 64bit headers */
-> > > -	ret =  crash_prepare_elf64_headers(cmem, IS_ENABLED(CONFIG_X86_64), addr, sz);
-> > > +	ret =  crash_prepare_elf64_headers(image, cmem,
-> > > +				IS_ENABLED(CONFIG_X86_64), addr, sz);
-> > >   out:
-> > >   	vfree(cmem);
-> > > @@ -397,7 +399,17 @@ int crash_load_segments(struct kimage *image)
-> > >   	image->elf_headers = kbuf.buffer;
-> > >   	image->elf_headers_sz = kbuf.bufsz;
-> > > +#ifdef CONFIG_CRASH_HOTPLUG
-> > > +	/* Ensure elfcorehdr segment large enough for hotplug changes */
-> > > +	kbuf.memsz = CONFIG_CRASH_HOTPLUG_ELFCOREHDR_SZ;
-> > 
-> > I would define a default value for the size, meantime provide a Kconfig
-> > option to allow user to customize.
+On 24.01.2022 15:16, Alim Akhtar wrote:
+> Add dt-schema documentation for Tesla FSD SoC clock controller.
 > 
-> In patch 2/6 of this series, "crash hp: Introduce CRASH_HOTPLUG
-> configuration options", I provide the following:
-> 
-> +config CRASH_HOTPLUG_ELFCOREHDR_SZ
-> +   depends on CRASH_HOTPLUG
-> +   int
-> +   default 131072
-> +   help
-> +     Specify the maximum size of the elfcorehdr buffer/segment.
-> 
-> which defines a default value of 128KiB, and can be overriden at configure time.
-> 
-> Are you asking for a different technique?
+> Cc: linux-fsd@tesla.com
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-I thought to define a global variable, like
-
-/* Defaults to ahve 128K elfcorehdr buffer which contains 2048 entries.*/
-unsigned long crash_hotplug_elfcorehdr_size = 0x20000;
-
-Then initialize it in crash_hotplug_init() if CONFIG_CRASH_HOTPLUG_ELFCOREHDR_SZ
-is enabled.
-
-Seems using the config directly is also OK. Let's keep it and see if
-other people have comment.
-
-> 
-> > 
-> > > +	/* For marking as usable to crash kernel */
-> > > +	image->elf_headers_sz = kbuf.memsz;
-> > > +	/* Record the index of the elfcorehdr segment */
-> > > +	image->elf_index = image->nr_segments;
-> > > +	image->elf_index_valid = true;
-> > > +#else
-> > >   	kbuf.memsz = kbuf.bufsz;
-> > > +#endif
-> > >   	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
-> > >   	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
-> > >   	ret = kexec_add_buffer(&kbuf);
-> > > @@ -412,3 +424,127 @@ int crash_load_segments(struct kimage *image)
-> > >   	return ret;
-> > >   }
-> > >   #endif /* CONFIG_KEXEC_FILE */
-> > > +
-> > > +#ifdef CONFIG_CRASH_HOTPLUG
-> > 
-> > These two helper function should be carved out into a separate patch as
-> > a preparatory one. I am considering how to rearrange and split the
-> > patches, will reply to cover letter.
-> 
-> OK, I look forward to that insight!
-> 
-> > 
-> > > +void *map_crash_pages(unsigned long paddr, unsigned long size)
-> > > +{
-> > > +	/*
-> > > +	 * NOTE: The addresses and sizes passed to this routine have
-> > > +	 * already been fully aligned on page boundaries. There is no
-> > > +	 * need for massaging the address or size.
-> > > +	 */
-> > > +	void *ptr = NULL;
-> > > +
-> > > +	/* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
-> > > +	if (size > 0) {
-> > > +		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-> > > +
-> > > +		ptr = kmap(page);
-> > > +	}
-> > > +
-> > > +	return ptr;
-> > > +}
-> > > +
-> > > +void unmap_crash_pages(void **ptr)
-> > > +{
-> > > +	if (ptr) {
-> > > +		if (*ptr)
-> > > +			kunmap(*ptr);
-> > > +		*ptr = NULL;
-> > > +	}
-> > > +}
-> > > +
-> > > +void arch_crash_hotplug_handler(struct kimage *image,
-> > > +	unsigned int hp_action, unsigned long a, unsigned long b)
-> > > +{
-> > > +	/*
-> > > +	 * To accurately reflect hot un/plug changes, the elfcorehdr (which
-> > > +	 * is passed to the crash kernel via the elfcorehdr= parameter)
-> > > +	 * must be updated with the new list of CPUs and memories. The new
-> > > +	 * elfcorehdr is prepared in a kernel buffer, and if no errors,
-> > > +	 * then it is written on top of the existing/old elfcorehdr.
-> > > +	 *
-> > > +	 * Due to the change to the elfcorehdr, purgatory must explicitly
-> > > +	 * exclude the elfcorehdr from the list of segments it checks.
-> > > +	 */
-> > 
-> > Please move this code comment to above function as kernel-doc if you
-> > this it benefits the entire function. Otherwise should move them above
-> > the code block they are explaining. For this place, I think moving them
-> > to above arch_crash_hotplug_handler() is better.
-> 
-> ok, I will do that!
-> 
-> > 
-> > > +	struct kexec_segment *ksegment;
-> > > +	unsigned char *ptr = NULL;
-> > > +	unsigned long elfsz = 0;
-> > > +	void *elfbuf = NULL;
-> > > +	unsigned long mem, memsz;
-> > > +	unsigned int n;
-> > > +
-> > > +	/*
-> > > +	 * When the struct kimage is alloced, it is wiped to zero, so
-> > > +	 * the elf_index_valid defaults to false. It is set on the
-> > > +	 * kexec_file_load path, or here for kexec_load.
-> > > +	 */
-> > 
-> > I think this kexec loading part should be taken out and post after this
-> > whole patchset being accepted. At least, it's worth to put them in a
-> > separate patch.
-> 
-> This little bit of code that identifies the incoming elfcorehdr is all that
-> is needed to support kexec_load (and the userspace changes of course). I'm
-> happy to split as a separate patch, but I would think that be maintaining it
-> with this series, then when it is accepted, both the kexec_load and
-> kexec_file_load paths would be supported? Your call.
-
-Hmm, at first, let's split it out from this patch since it's an
-independent action to kdump. I would suggest we don't carry it in this
-series. After this series is done, you can post another patchset
-including this part as kernel patch, and also the code change in
-kexec_tools as user space patch.
-
-......
-
+Acked-by: Sylwester Nawrocki <s.nawrocki@samsung.com>

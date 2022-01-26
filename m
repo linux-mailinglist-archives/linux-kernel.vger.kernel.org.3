@@ -2,110 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8594449D65E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDFF49D656
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiAZXth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 18:49:37 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:40549 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiAZXtg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 18:49:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643240616;
-    s=strato-dkim-0002; d=ko-hh.de;
-    h=Message-ID:Subject:Cc:To:From:Date:Cc:Date:From:Subject:Sender;
-    bh=rUwf4V6VfjCh/Tz0lFpBY98CSKOMaoI/ZlA6KjECeLc=;
-    b=Gyt0I8d1vrwyVdd9BPP+goGYbnc0j8x6TKG1RRT1FSae8MCKMpCgt4ICPViamIWx/B
-    7fZhlz4/uQNBD1Ie+9+lI2PukTlQi2N7DTJ4HnICI6qHOKYPBzRn5AcBMm1qG88JIR+p
-    63bmhAVtc8Hzh6HO7MYnaOWsTYeG6VZzrvKtGnzOW05cpFQL6daAuuem8sw4SeFCNIXe
-    J+SJBxChlaIWe+1fZVd6uoEcn+87gOIvBk5Bgd4RsxYhcThTRluy78O2obNSuwBbP6pu
-    UjFRkT1GM061AqCOa05TpL+Kd9NFkLrFLE15C7/G9OYsEbWeqrzaP7WstXNFbWzJ7fNn
-    1EWg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":OGQBeUWjaN+znm36YqWmJEx4lU5vgP4am+jDJsl40KLIzDO7mhvQTIqpxZoDGXXc/Nut"
-X-RZG-CLASS-ID: mo00
-Received: from odroid-VirtualBox
-    by smtp.strato.de (RZmta 47.38.0 DYNA|AUTH)
-    with ESMTPSA id L5f488y0QNhZk0e
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 27 Jan 2022 00:43:35 +0100 (CET)
-Date:   Thu, 27 Jan 2022 00:43:25 +0100
-From:   Lutz Koschorreck <theleks@ko-hh.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: meson-sm1-odroid: use correct enable-gpio pin
- for tf-io regulator
-Message-ID: <20220126234325.GA7363@odroid-VirtualBox>
+        id S230376AbiAZXp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 18:45:26 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:56538 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229451AbiAZXpT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 18:45:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=KtETfU1+wqNMppMn4Ma2jeShcVH64evaxx2kWzZVGG8=; b=GUCG7xO1z7VQ6MisHEWzT+utQp
+        +DXEPSm1F4TbRCBm2yeQVrAIxBghnENx689AWvbxjbF1eMG6OcFzPZd298SnTDAdWavU4iLSQgZ1v
+        V7DHmd8R+cpZAs7mEIOO7ZC5JuPH2Q5lmby54uPTLzMMUDXXn5BzSxYHqDgps4V9LTRI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nCryS-002sOg-8K; Thu, 27 Jan 2022 00:45:12 +0100
+Date:   Thu, 27 Jan 2022 00:45:12 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] net: dsa: mv88e6xxx: Improve performance of
+ busy bit polling
+Message-ID: <YfHdCDIUvpaYpDSF@lunn.ch>
+References: <20220126231239.1443128-1-tobias@waldekranz.com>
+ <20220126231239.1443128-2-tobias@waldekranz.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220126231239.1443128-2-tobias@waldekranz.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interrupt pin of the external ethernet phy is used, instead of the
-enable-gpio pin of the tf-io regulator. The GPIOE_2 pin is located in
-the gpio_ao bank.
-Using open drain prevents reboot issues.
+> @@ -86,12 +86,12 @@ int mv88e6xxx_write(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val)
+>  int mv88e6xxx_wait_mask(struct mv88e6xxx_chip *chip, int addr, int reg,
+>  			u16 mask, u16 val)
+>  {
+> +	const unsigned long timeout = jiffies + msecs_to_jiffies(50);
+>  	u16 data;
+>  	int err;
+> -	int i;
+>  
+>  	/* There's no bus specific operation to wait for a mask */
+> -	for (i = 0; i < 16; i++) {
+> +	do {
+>  		err = mv88e6xxx_read(chip, addr, reg, &data);
+>  		if (err)
+>  			return err;
+> @@ -99,8 +99,8 @@ int mv88e6xxx_wait_mask(struct mv88e6xxx_chip *chip, int addr, int reg,
+>  		if ((data & mask) == val)
+>  			return 0;
+>  
+> -		usleep_range(1000, 2000);
+> -	}
+> +		cpu_relax();
+> +	} while (time_before(jiffies, timeout));
 
-This causes phy interrupt problems at system startup.
-[   76.645190] irq 36: nobody cared (try booting with the "irqpoll" option)
-[   76.649617] CPU: 0 PID: 1416 Comm: irq/36-0.0:00 Not tainted 5.16.0 #2
-[   76.649629] Hardware name: Hardkernel ODROID-HC4 (DT)
-[   76.649635] Call trace:
-[   76.649638]  dump_backtrace+0x0/0x1c8
-[   76.649658]  show_stack+0x14/0x60
-[   76.649667]  dump_stack_lvl+0x64/0x7c
-[   76.649676]  dump_stack+0x14/0x2c
-[   76.649683]  __report_bad_irq+0x38/0xe8
-[   76.649695]  note_interrupt+0x220/0x3a0
-[   76.649704]  handle_irq_event_percpu+0x58/0x88
-[   76.649713]  handle_irq_event+0x44/0xd8
-[   76.649721]  handle_fasteoi_irq+0xa8/0x130
-[   76.649730]  generic_handle_domain_irq+0x38/0x58
-[   76.649738]  gic_handle_irq+0x9c/0xb8
-[   76.649747]  call_on_irq_stack+0x28/0x38
-[   76.649755]  do_interrupt_handler+0x7c/0x80
-[   76.649763]  el1_interrupt+0x34/0x80
-[   76.649772]  el1h_64_irq_handler+0x14/0x20
-[   76.649781]  el1h_64_irq+0x74/0x78
-[   76.649788]  irq_finalize_oneshot.part.56+0x68/0xf8
-[   76.649796]  irq_thread_fn+0x5c/0x98
-[   76.649804]  irq_thread+0x13c/0x260
-[   76.649812]  kthread+0x144/0x178
-[   76.649822]  ret_from_fork+0x10/0x20
-[   76.649830] handlers:
-[   76.653170] [<0000000025a6cd31>] irq_default_primary_handler threaded [<0000000093580eb7>] phy_interrupt
-[   76.661256] Disabling IRQ #36
+I don't know if this is an issue or not...
 
-Fixes: 1f80a5cf74a6 ("arm64: dts: meson-sm1-odroid: add missing enable gpio and supply for tf_io regulator")
+There are a few bit-banging systems out there. For those, i wonder if
+50ms is too short? With the old code, they had 16 chances, no matter
+how slow they were. With the new code, if they take 50ms for one
+transaction, they don't get a second chance.
 
-Signed-off-by: Lutz Koschorreck <theleks@ko-hh.de>
----
- arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But if they have taken 50ms, around 37ms has been spent with the
+preamble, start, op, phy address, and register address. I assume at
+that point the switch actually looks at the register, and given your
+timings, it really should be ready, so a second loop is probably not
+required?
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-index 0bd1e98a0eef..ddb1b345397f 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-@@ -48,7 +48,7 @@ tf_io: gpio-regulator-tf_io {
- 		regulator-max-microvolt = <3300000>;
- 		vin-supply = <&vcc_5v>;
- 
--		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
-+		enable-gpio = <&gpio_ao GPIOE_2 GPIO_OPEN_DRAIN>;
- 		enable-active-high;
- 		regulator-always-on;
- 
--- 
-2.25.1
+O.K, so this seems safe.
 
+     Andrew

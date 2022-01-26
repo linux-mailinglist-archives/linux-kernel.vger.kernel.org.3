@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C4C49C3AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FA649C3B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236835AbiAZGdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 01:33:11 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:27721 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236389AbiAZGc4 (ORCPT
+        id S236211AbiAZGdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 01:33:14 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:48572 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236524AbiAZGdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 01:32:56 -0500
+        Wed, 26 Jan 2022 01:33:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643178776; x=1674714776;
+  t=1643178780; x=1674714780;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=C/nKcvGohh66HEoXJpfjN/wkXoY3VldhRoiyN4/ZYtg=;
-  b=xmRX+7hgMWdfHhlEK/YUNJuIxNhYx+rco3rbFt4E+rKKOKQ2DSxQ/BYC
-   zAPgmcHvtbGZV5Zc9l2DV90oF48MdWRF0/KKzV60RPkbCTW0ASBjxn3A2
-   Ys+BFfnOnXNkBLwX8kT7PbM+pbWRXsjqRsZ59cu19Z7+BCxjwtViDwXE8
-   Y=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 25 Jan 2022 22:32:56 -0800
+  bh=JGow5gSyCVGGIvARjpIWCWieeUWr8i3gh6AHITcaPMM=;
+  b=zo9rHKCD9ljSyLjKJ06lspVNTYL7jueHwdhvmg4qAfikwckvKxztDJJc
+   QIKV345UG1co1TTJrro6qeHohTi/ccIBqRriMFytY+VxmtFcTJRfHwK4N
+   Oj15x6Dv09/PWoASpFE8DXC/t7iWKQc/8ZBCoFuVSod1exv6V9KMopEgr
+   U=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Jan 2022 22:33:00 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 22:32:56 -0800
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 22:32:59 -0800
 Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 22:32:56 -0800
+ 15.2.922.19; Tue, 25 Jan 2022 22:32:59 -0800
 Received: from fenglinw-gv.qualcomm.com (10.80.80.8) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 22:32:53 -0800
+ 15.2.922.19; Tue, 25 Jan 2022 22:32:56 -0800
 From:   Fenglin Wu <quic_fenglinw@quicinc.com>
 To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sboyd@kernel.org>
+        <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
 CC:     <collinsd@codeaurora.org>, <subbaram@codeaurora.org>,
         <quic_fenglinw@quicinc.com>, <tglx@linutronix.de>, <maz@kernel.org>
-Subject: [PATCH v5 07/10] spmi: pmic-arb: block access for invalid PMIC arbiter v5 SPMI writes
-Date:   Wed, 26 Jan 2022 14:31:49 +0800
-Message-ID: <1643178713-17178-8-git-send-email-quic_fenglinw@quicinc.com>
+Subject: [PATCH v5 08/10] bindings: spmi: spmi-pmic-arb: mark interrupt properties as optional
+Date:   Wed, 26 Jan 2022 14:31:50 +0800
+Message-ID: <1643178713-17178-9-git-send-email-quic_fenglinw@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1643178713-17178-1-git-send-email-quic_fenglinw@quicinc.com>
 References: <1643178713-17178-1-git-send-email-quic_fenglinw@quicinc.com>
@@ -57,34 +59,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Collins <collinsd@codeaurora.org>
 
-The system crashes due to an access permission violation when
-writing to a PMIC peripheral which is not owned by the current
-ee.  Add a check for PMIC arbiter version 5 for such invalid
-write requests and return an error instead of crashing the
-system.
+Mark all interrupt related properties as optional instead of
+required.  Some boards do not required PMIC IRQ support and it
+isn't needed to handle SPMI bus transactions, so specify it as
+optional.
 
 Signed-off-by: David Collins <collinsd@codeaurora.org>
 Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
 ---
- drivers/spmi/spmi-pmic-arb.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
-index cf92abc..39f25bc 100644
---- a/drivers/spmi/spmi-pmic-arb.c
-+++ b/drivers/spmi/spmi-pmic-arb.c
-@@ -1133,6 +1133,11 @@ static int pmic_arb_offset_v5(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
- 		offset = 0x10000 * pmic_arb->ee + 0x80 * apid;
- 		break;
- 	case PMIC_ARB_CHANNEL_RW:
-+		if (pmic_arb->apid_data[apid].write_ee != pmic_arb->ee) {
-+			dev_err(&pmic_arb->spmic->dev, "disallowed SPMI write to sid=%u, addr=0x%04X\n",
-+				sid, addr);
-+			return -EPERM;
-+		}
- 		offset = 0x10000 * apid;
- 		break;
- 	}
+diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
+index ca645e2..6332507 100644
+--- a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
++++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
+@@ -29,6 +29,8 @@ Required properties:
+ - #size-cells : must be set to 0
+ - qcom,ee : indicates the active Execution Environment identifier (0-5)
+ - qcom,channel : which of the PMIC Arb provided channels to use for accesses (0-5)
++
++Optional properties:
+ - interrupts : interrupt list for the PMIC Arb controller, must contain a
+                single interrupt entry for the peripheral interrupt
+ - interrupt-names : corresponding interrupt names for the interrupts
 -- 
 2.7.4
 

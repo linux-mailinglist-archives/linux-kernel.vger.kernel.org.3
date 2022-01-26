@@ -2,159 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6454649CFDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC94149CFE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243230AbiAZQjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:39:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51088 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243213AbiAZQjE (ORCPT
+        id S243231AbiAZQkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236669AbiAZQkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:39:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27948B81D54
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:39:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78731C340E6;
-        Wed, 26 Jan 2022 16:39:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643215142;
-        bh=XxbcKZbcM8QxtlzSo1DZMk0LZUuyDy0wc7VbuEr2m8A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VJeSu0auBkYgiXXSmSpZH1MBB0nTZCb7fNWufFf8iZ6Y0pC2Tun62Xffn0oQr/t6M
-         W1GgANWgna7dsFDf2JVo/rpuNoiiY25jhyOJzh+d2sFoiut7ROO2KQxVIGVZGEy2ys
-         XzulNmY6CC6nnAnV4JuhNCYjxTwA4p6f01IHf8GyK9lKZ+1sO492obj7Uh2yWCHx68
-         b7MvcjodjuHn0RYUt9GApS2vPvzWAUYX5iUfORkodr1RHPrxnwWnkbNCFSVBlkefh+
-         rIDLC7wlA0iz1A96CmHqnXcIveenbJtwU/4svDtwk5BeHp1jWihfl6qCj5+0GBSdqs
-         5m7tqgzHXDPYw==
-Message-ID: <34fa3a27-d9b8-a898-82f5-b1452006a7b9@kernel.org>
-Date:   Wed, 26 Jan 2022 10:38:56 -0600
+        Wed, 26 Jan 2022 11:40:51 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5398CC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:40:51 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id v74so240067pfc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:40:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xlvtukPzO3AbDCendFmDfyQYe8h/PUQ59az8EWEzUIM=;
+        b=Tme9WIGcNwKUvBZLe5uBmYfLFGOUWTb7ZOBDb6YzaqQHeVFLZ/Kf02fTmy5XUTXhtz
+         Vdrs7J4JICea53k0jExmgiNaqeAXDYYh60NDrFiruQpSe0jHriYTNcGGwpr73CM3WH0Y
+         aYLHRNmqdcXvH5ys19iNwkqCZFu86lMdSOkgw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xlvtukPzO3AbDCendFmDfyQYe8h/PUQ59az8EWEzUIM=;
+        b=qnDLGjSp4fthX80NE6VGP5tunisNB9V6A/7LThHkerSyce07HY48TswoGYpp8v5yR8
+         rbS6l+aPkEg31CEK2uuQDV4dJGP2iBeGFCtybqtRjzkr0ZwbRQ3f57zKl+NEhDkjgEWC
+         uTcs0TqtNsmizu/z8JRkaMCU8LwNVc0aHLFEwJ6xeQq38XSM5Wf7F8W8+IH5fyG6WHs1
+         KzopBQtGJgxf07+iXWkMdqjuqftKI1lYGydiRV0pM5FnI3xYDGm1SYM9U29TaDw0oBEA
+         A2CMZeaC7zaRVUeCx6n+Pxk3J4POTgOyJRl8BW/6S4NT7obvP+/IaduiR3Hq4CVpdm4U
+         LvJw==
+X-Gm-Message-State: AOAM530rGJ8wPWmOvZzl9678o1XB1Dum4LduBI+dWqSoZ7vxgjrBN/RJ
+        oJ0BoT5BibDMDLmOXM/ApU6oOg==
+X-Google-Smtp-Source: ABdhPJyazfih2Ue5JGMq/Tmv4ifP9hOFAC5jiPtgcSiXBdga/ZIDhLSQyaX3VcP8OzF1HUiV9tIBJg==
+X-Received: by 2002:a63:2023:: with SMTP id g35mr19834474pgg.432.1643215250805;
+        Wed, 26 Jan 2022 08:40:50 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id mn2sm3393097pjb.38.2022.01.26.08.40.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 08:40:50 -0800 (PST)
+Date:   Wed, 26 Jan 2022 08:40:49 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Ariadne Conill <ariadne@dereferenced.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
+ do_execveat_common()
+Message-ID: <202201260832.CCC8BB9@keescook>
+References: <20220126114447.25776-1-ariadne@dereferenced.org>
+ <YfFh6O2JS6MybamT@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC V1 25/31] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
-        akpm@linux-foundation.org
-References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
- <1643029028-12710-26-git-send-email-anshuman.khandual@arm.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <1643029028-12710-26-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfFh6O2JS6MybamT@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/24/22 06:57, Anshuman Khandual wrote:
-> This defines and exports a platform specific custom vm_get_page_prot() via
-> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> macros can be dropped which are no longer needed.
+On Wed, Jan 26, 2022 at 02:59:52PM +0000, Matthew Wilcox wrote:
+> On Wed, Jan 26, 2022 at 11:44:47AM +0000, Ariadne Conill wrote:
+> > Interestingly, Michael Kerrisk opened an issue about this in 2008[1],
+> > but there was no consensus to support fixing this issue then.
+> > Hopefully now that CVE-2021-4034 shows practical exploitative use
+> > of this bug in a shellcode, we can reconsider.
+> > 
+> > [0]: https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+> > [1]: https://bugzilla.kernel.org/show_bug.cgi?id=8408
 > 
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->   arch/nios2/Kconfig               |  1 +
->   arch/nios2/include/asm/pgtable.h | 16 -------------
->   arch/nios2/mm/init.c             | 41 ++++++++++++++++++++++++++++++++
->   3 files changed, 42 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-> index 33fd06f5fa41..85a58a357a3b 100644
-> --- a/arch/nios2/Kconfig
-> +++ b/arch/nios2/Kconfig
-> @@ -6,6 +6,7 @@ config NIOS2
->   	select ARCH_HAS_SYNC_DMA_FOR_CPU
->   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->   	select ARCH_HAS_DMA_SET_UNCACHED
-> +	select ARCH_HAS_VM_GET_PAGE_PROT
->   	select ARCH_NO_SWAP
->   	select COMMON_CLK
->   	select TIMER_OF
-> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-> index 4a995fa628ee..2678dad58a63 100644
-> --- a/arch/nios2/include/asm/pgtable.h
-> +++ b/arch/nios2/include/asm/pgtable.h
-> @@ -40,24 +40,8 @@ struct mm_struct;
->    */
->   
->   /* Remove W bit on private pages for COW support */
-> -#define __P000	MKP(0, 0, 0)
-> -#define __P001	MKP(0, 0, 1)
-> -#define __P010	MKP(0, 0, 0)	/* COW */
-> -#define __P011	MKP(0, 0, 1)	/* COW */
-> -#define __P100	MKP(1, 0, 0)
-> -#define __P101	MKP(1, 0, 1)
-> -#define __P110	MKP(1, 0, 0)	/* COW */
-> -#define __P111	MKP(1, 0, 1)	/* COW */
->   
->   /* Shared pages can have exact HW mapping */
-> -#define __S000	MKP(0, 0, 0)
-> -#define __S001	MKP(0, 0, 1)
-> -#define __S010	MKP(0, 1, 0)
-> -#define __S011	MKP(0, 1, 1)
-> -#define __S100	MKP(1, 0, 0)
-> -#define __S101	MKP(1, 0, 1)
-> -#define __S110	MKP(1, 1, 0)
-> -#define __S111	MKP(1, 1, 1)
->   
->   /* Used all over the kernel */
->   #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
-> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
-> index 613fcaa5988a..4f8251e62f31 100644
-> --- a/arch/nios2/mm/init.c
-> +++ b/arch/nios2/mm/init.c
-> @@ -124,3 +124,44 @@ const char *arch_vma_name(struct vm_area_struct *vma)
->   {
->   	return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->   }
-> +
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> +{
-> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +	case VM_NONE:
-> +		return MKP(0, 0, 0);
-> +	case VM_READ:
-> +		return MKP(0, 0, 1);
-> +	case VM_WRITE:
-> +		return MKP(0, 0, 0);
-> +	case VM_READ | VM_WRITE:
-> +		return MKP(0, 0, 1);
-> +	case VM_EXEC:
-> +		return MKP(1, 0, 0);
-> +	case VM_EXEC | VM_READ:
-> +		return MKP(1, 0, 1);
-> +	case VM_EXEC | VM_WRITE:
-> +		return MKP(1, 0, 0);
-> +	case VM_EXEC | VM_READ | VM_WRITE:
-> +		return MKP(1, 0, 1);
-> +	case VM_SHARED:
-> +		return MKP(0, 0, 0);
-> +	case VM_SHARED | VM_READ:
-> +		return MKP(0, 0, 1);
-> +	case VM_SHARED | VM_WRITE:
-> +		return MKP(0, 1, 0);
-> +	case VM_SHARED | VM_READ | VM_WRITE:
-> +		return MKP(0, 1, 1);
-> +	case VM_SHARED | VM_EXEC:
-> +		return MKP(1, 0, 0);
-> +	case VM_SHARED | VM_EXEC | VM_READ:
-> +		return MKP(1, 0, 1);
-> +	case VM_SHARED | VM_EXEC | VM_WRITE:
-> +		return MKP(1, 1, 0);
-> +	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
-> +		return MKP(1, 1, 1);
-> +	default:
-> +		BUILD_BUG();
-> +	}
-> +}
-> +EXPORT_SYMBOL(vm_get_page_prot);
+> Having now read 8408 ... if ABI change is a concern (and I really doubt
+> it is), we could treat calling execve() with a NULL argv as if the
+> caller had passed an array of length 1 with the first element set to
+> NULL.  Just like we reopen fds 0,1,2 for suid execs if they were closed.
 
+I was having similar thoughts this morning. We can't actually change the
+argc, though, because of the various tests (see the debian code search
+links) that explicitly tests for argc == 0 in the child. But, the flaw
+is not the count, but rather that argv == argp in the argc == 0 case.
+(Or that argv NULL-checking iteration begins at argv[1].)
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+But that would could fix easily by just adding an extra NULL. e.g.:
+
+Currently:
+
+argc = 1
+argv = "foo", NULL
+envp = "bar=baz", ..., NULL
+
+argc = 0
+argv = NULL
+envp = "bar=baz", ..., NULL
+
+We could just make the argc = 0 case be:
+
+argc = 0
+argv = NULL, NULL
+envp = "bar=baz", ..., NULL
+
+We need to be careful with the stack utilization counts, though, so I'm
+thinking we could actually make this completely unconditional and just
+pad envp by 1 NULL on the user stack:
+
+argv = "what", "ever", NULL
+       NULL
+envp = "bar=baz", ..., NULL
+
+My only concern there is that there may be some code out there that
+depends on envp immediately following the trailing argv NULL, so I think
+my preference would be to pad only in the argc == 0 case and correctly
+manage the stack utilization.
+
+-- 
+Kees Cook

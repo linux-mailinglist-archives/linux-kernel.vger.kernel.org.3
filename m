@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 933A749CBDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0510649CBDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241833AbiAZOJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:09:45 -0500
-Received: from mga07.intel.com ([134.134.136.100]:46235 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233834AbiAZOJn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:09:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643206183; x=1674742183;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+bpZlvDIlAqOTrKi8qQY7oqDaN358NSulwLrW+ejnTU=;
-  b=cN4OVl5BU86577/2bbBE5xvGU4lRlgfc+4wCdkAN2CNpoYbqFlIzCFxe
-   AC8KzvBty3GAbRdtEXkXHYTQBV5rgY6m0pCpCM7fufwrOL1r5un7hhgRW
-   rHCqNwolv25gxPTN67jWSWQaMF4auoZYwEI4F4uID58A0pH9oIDXgY+H5
-   36vr5gmADE+X5oBikmxpzQAECb7oEKkblvn2sXH5z3bjP4Klq61oW8DTL
-   3/vayOwfFG4Ocz94gTxjixZqx56qopkied73kpVQwG2XlLcFphZ4EG0q6
-   AZpSr5FYGTiRee/dkYm0Df7WeRTZEIv0W6d46qkHuLSsTTZYDBjYSltG/
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309869018"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="309869018"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 06:09:42 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="581113085"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 06:09:39 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nCiyO-00EcSP-TH;
-        Wed, 26 Jan 2022 16:08:32 +0200
-Date:   Wed, 26 Jan 2022 16:08:32 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
-Message-ID: <YfFV4EJosayH+e6C@smile.fi.intel.com>
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
- <YfEG2qVO9K9G+g1d@kroah.com>
- <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
- <f671a112-880d-1526-a395-360947b40c5a@gmx.de>
- <YfEv7OQs98O9wJdJ@kroah.com>
- <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
- <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
+        id S241712AbiAZOJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:09:23 -0500
+Received: from gproxy4-pub.mail.unifiedlayer.com ([69.89.23.142]:44993 "EHLO
+        gproxy4-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235353AbiAZOJW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 09:09:22 -0500
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 72F171003FE8A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:09:21 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id CizAn4bcgikTnCizBnhGgO; Wed, 26 Jan 2022 14:09:21 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=CeHNWJnl c=1 sm=1 tr=0 ts=61f15611
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=DghFqjY3_ZEA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=rYn84FZTEHGl0_Et6-UA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=j4/yqS9m09j2Fw34xarTxmCcAG5W/wLKlEmZ3gHV85U=; b=hyAxCiCKtZSPnHFxQEOALSIk9T
+        9rZ9A6W+owcaYp/BLjcF24ubdMDS6Hmf53OxdQPUpxK0VMGVrnAxJ5rVLORpZ8wssDw/zwxuA69I2
+        RVq1wdIKlC5kThoNwPPZbO6Yb;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:51698 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nCizA-002xFH-KO; Wed, 26 Jan 2022 07:09:20 -0700
+Message-ID: <02b07593-6719-5309-08fe-77f3539d90fb@w6rz.net>
+Date:   Wed, 26 Jan 2022 06:09:19 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20220125155447.179130255@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220125155447.179130255@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nCizA-002xFH-KO
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:51698
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 02:46:08PM +0100, Javier Martinez Canillas wrote:
-> On 1/26/22 14:12, Andy Shevchenko wrote:
-> > On Wed, Jan 26, 2022 at 12:26:36PM +0100, Greg Kroah-Hartman wrote:
-> >> On Wed, Jan 26, 2022 at 12:17:08PM +0100, Helge Deller wrote:
-> >>> On 1/26/22 11:31, Daniel Vetter wrote:
-> > 
-> > ...
-> > 
-> >>> You are describing a transitioning over to DRM - which is Ok.
-> >>> But on that way there is no need to ignore, deny or even kill usage scenarios
-> >>> which are different compared to your usage scenarios (e.g. embedded devices,
-> >>> old platforms, slow devices, slow busses, no 3D hardware features,
-> >>> low-color devices, ...).
-> >>
-> >> All of those should be handled by the drm layer, as Daniel keeps
-> >> pointing out.  If not, then the tinydrm layer needs to be enhanced to do
-> >> so.
-> >>
-> >> Anyone have a pointer to hardware I can buy that is one of these fbtft
-> >> drivers that I could do a port to drm to see just how much work is
-> >> really needed here?
-> > 
-> > I have bought myself (for other purposes, I mean not to convert the driver(s))
-> > SSD1306 based display (SPI), SSD1331 (SPI), HX88347d (parallel).
-> >
-> 
-> I've just bought a SSD1306 (I2C) based one and will attempt to write a DRM
-> driver using drivers/staging/fbtft/fb_ssd1306.c as a reference.
+On 1/25/22 08:33, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.3 release.
+> There are 1033 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-You should take ssd1307fb.c instead. And basically create a MIPI based driver
-for I2C. Then we won't go same road again for other similar devices.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> I didn't find one with a SPI interface but we can later add a transport for
-> that if I succeed.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Tested-by: <re@w6rz.net>
 

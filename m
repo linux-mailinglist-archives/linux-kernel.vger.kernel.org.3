@@ -2,115 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB4D49C64C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A3249C64F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239147AbiAZJ1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
+        id S239156AbiAZJ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239117AbiAZJ1u (ORCPT
+        with ESMTP id S231742AbiAZJ3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:27:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5D1C06161C;
-        Wed, 26 Jan 2022 01:27:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9250B81C25;
-        Wed, 26 Jan 2022 09:27:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D99C340E3;
-        Wed, 26 Jan 2022 09:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643189267;
-        bh=vhq9IzfZY0Kkx/iKL/tX8aAEwobUSIlwyapbLm1SG0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u6aW7MD6w+srRDr2esmBrnP+5wgDjCkAElIkKryBN6VkGdyagIqHWsVDi8TghiJnl
-         LyAmq1M0bueEVSPpk7iU49oakTEfv2kWppLeOc3loLvMi8ZVJdPiFNO92LIN5H+1oq
-         zc4JDaHdpMdxMLJTnZdokPj7NY7TUiLzKLic8LIOXh9vaIrkq0AHwC/uGuUfDksPeP
-         DjkxGzYwPwx+L3ppbJiEwY+TNYSKoAV/Y66Na+EGkneAUCqDQ1Kdd8FMo5DSVhqYwU
-         403Ho+S1GaU4hQnsatw9WBphT6xR6nhmn2QR+xtR7iGaU5Eq+P4rzQe377L4Ru5SWH
-         Ew9n3rsZZt0gA==
-Date:   Wed, 26 Jan 2022 17:27:42 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Andrej Picej <andrej.picej@norik.com>
-Cc:     robh+dt@kernel.org, s.hauer@pengutronix.de,
-        devicetree@vger.kernel.org, festevam@gmail.com,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        y.bas@phytec.com
-Subject: Re: [PATCH RESEND 2/2] ARM: dts: imx6qdl: Handle unneeded
- MFD-subdevices correctly
-Message-ID: <20220126092741.GK4686@dragon>
-References: <20211216115529.2331475-1-andrej.picej@norik.com>
- <20211216115529.2331475-2-andrej.picej@norik.com>
+        Wed, 26 Jan 2022 04:29:55 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEE7C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:29:55 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id c10so69677539ybb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:29:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=IK4lJqQoYGpBp8uHlZ97YK53DvH9QrpYWwjau2wBtXo=;
+        b=CwLnPKZHrJk/LgCWJCKRatOtkm023gLX6OMvkRDKqNe+iwX//eiXem3v+1168TCPon
+         lsuxS27tXgP8K16fr4jyIRDtBMVCqD30Jn/uIVeXPo3EYHnm4yWSa7wZahjDKfazaqyj
+         Om/XQe7IDL/Xr70LFXCbpgkuKkFV6EgcVFCZ2wtvCgP53yooQ35QJBzttIDwsyEZ7vSJ
+         u75DmgAwIfF8pHZcs+jAiGOE63F6twpBUIr34S/f90iKzxHsrW7ywEVYP2MyTtPXitFW
+         GWfCFmE9FexxfAhv81e6ry1GPfTPfiucK2+kmzIueAOTTZRxDUOP3JFQ5XH3bZ9QS7C1
+         uzTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=IK4lJqQoYGpBp8uHlZ97YK53DvH9QrpYWwjau2wBtXo=;
+        b=OgPyMQItp14qeh2bdpOKgggkvba3DnYM4/cRzLAJb3u3luQPPvUcTZyy9LSEV1SUdK
+         29rzjWQI03bgQEtp8C3stID35Y9UtrK4tPZRNY1EmlPYIzRmJAG7bp8t7d+GFd/zv4T/
+         HR8brMBE2ZGBc43ASzgeTliGc1CHRq3VaROop7vH0UFNvHzi9LD6wRFD2nbcNZiOzsbr
+         WJNFT8Fk0r0EgpcOhFqa1KF6D5qsCCFpjcSotcjuYtfKoUjfw8MdTeNxEpUy1ljvkEAW
+         BzhWHqY4PQTMdozV2BUeVIUyfc/eCDL3q0zi08FU+Oeeb0Y369l4R5m1GAA+aS1zP8+x
+         vsJQ==
+X-Gm-Message-State: AOAM530IqimjYH9z6W1q8FdJslktwWh0DUPOInXcbEXBp1QpmHVjeuNy
+        X0G5AUy3GUgreZkb/pxFBVjO+dsETqATQQxbawU=
+X-Google-Smtp-Source: ABdhPJymHqInisdzQX82RbxjQ3Auii/LFBKv9EZ9tojZO1w62yUoXVY6UVPQqWvgI7UQ0q16c3DQO6OssA0PeGlHcY8=
+X-Received: by 2002:a5b:14a:: with SMTP id c10mr34050983ybp.586.1643189394485;
+ Wed, 26 Jan 2022 01:29:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216115529.2331475-2-andrej.picej@norik.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Reply-To: mrselodieantonie778@yahoo.com
+Sender: mrselodieantoine74@gmail.com
+Received: by 2002:a81:340e:0:0:0:0:0 with HTTP; Wed, 26 Jan 2022 01:29:53
+ -0800 (PST)
+From:   Mrs Elodie Antoine <mrselodieatonie32@gmail.com>
+Date:   Wed, 26 Jan 2022 01:29:53 -0800
+X-Google-Sender-Auth: 4YIyM6J02fp3Q4dSWCdOP3SS0cs
+Message-ID: <CABsoprEJNDBrinCbQRoiYNwM+QfEOdTyG=WV5cV_mDLviQGcGg@mail.gmail.com>
+Subject: With due respect
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 12:55:29PM +0100, Andrej Picej wrote:
-> From: Yunus Bas <y.bas@phytec.de>
-> 
-> The proper way to handle partly used MFD devices are to describe all MFD
-> subdevices in the devicetree and disable the not used ones. This
-> suppresses any warnings that may arise as a result.
-> 
-> Signed-off-by: Yunus Bas <y.bas@phytec.de>
-> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+Dear Friend,
 
-Use subject prefix like
+I Am Mrs Elodie Antoine. from west Africa i have a business deal to
+share with You the sum of 4.2 Million USD dollars that is been held
+in our Bank here in (B.O.A) bank of Africa the fund mentioned rightful
+belong to one of
+our late client who deposited the money in our bank here ever since he
+Died nobody have Been able to apply to claim the fund so I wish that
+you will come and Assume as his foreign business partner also note
+this business is risk Free not to be sacred or doubt is real please my
+dearest one also noted.
 
-  ARM: dts: imx6qdl-phytec: ...
+This once we succeed in Transferring this fund to your wish provided
+account in your country it Will shared among us in agreement of 60%40
+i believe that after this Deal joy and happiness will be on or face's
+and family's please reply to me with your details so we can move on
+with this great plan.
 
-Shawn
+Kindly reply me
 
-> ---
->  arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi      |  5 +++++
->  arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi | 10 ++++++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-> index 2ec154756bbc..3590f439adf5 100644
-> --- a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-> +++ b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
-> @@ -213,6 +213,11 @@ pmic_rtc: rtc {
->  		da9063_wdog: wdt {
->  			compatible = "dlg,da9063-watchdog";
->  		};
-> +
-> +		onkey {
-> +			compatible = "dlg,da9063-onkey";
-> +			status = "disabled";
-> +		};
->  	};
->  };
->  
-> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
-> index 94b254bfd054..28a805384668 100644
-> --- a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
-> +++ b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
-> @@ -116,6 +116,16 @@ watchdog {
->  			dlg,use-sw-pm;
->  		};
->  
-> +		thermal {
-> +			compatible = "dlg,da9062-thermal";
-> +			status = "disabled";
-> +		};
-> +
-> +		gpio {
-> +			compatible = "dlg,da9062-gpio";
-> +			status = "disabled";
-> +		};
-> +
->  		regulators {
->  			vdd_arm: buck1 {
->  				regulator-name = "vdd_arm";
-> -- 
-> 2.25.1
-> 
+Thanks and God bless you,
+
+Mrs Elodie Antoine

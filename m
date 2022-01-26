@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA6E49CA44
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B9549CA4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbiAZNCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:02:46 -0500
-Received: from mga17.intel.com ([192.55.52.151]:50538 "EHLO mga17.intel.com"
+        id S232570AbiAZNDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:03:52 -0500
+Received: from mga09.intel.com ([134.134.136.24]:42709 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229739AbiAZNCo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:02:44 -0500
+        id S231904AbiAZNDv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 08:03:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643202164; x=1674738164;
+  t=1643202231; x=1674738231;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=7nK+CH4q5BpWQZsxJYj303+HmKOMjePVbYNz5G/Rv2c=;
-  b=h7/kkKrPnGBWH+bsAI5ap86rjpg4ApP5cFOFqVTMg9Ct6lN+NonRRbgh
-   S0SBJAAERBdyqFQvBRMH5UGiqL4cFTWKMLedverV/agfyfhKxyil7rKTh
-   jO5bCROLlthFg/w+uGk9rXrGxz2kPj1PfKel3aMEfkv68aFj839M13Xf+
-   MxV7Zfd9g73eb30faLCcbGtYLl6r30LCUyaIglsRxNnMdnmNCZTdhiBBE
-   gLLVzCBsd1N3KDXTQStluJmujmd/Lti4ntnUBgLcwsOrxySCqZ+UixQ4k
-   f8XConSzKODoDu/2xR0xAdzT3lCCtYvPl/Y907p5d2BVGc1dSeJUayV/f
+  bh=mSnFOYWb2NTAiZJ6gl/F22Fq/rOFI1cKTn49lNqjzw4=;
+  b=SOoxsq2mC+ryPptauJSMGHYP81Tt1KfoTTiDalzjDodfpxrl+Jg0F4eM
+   mAuCcOcb0KLCsY/8CdkgUmbrhOMTH6cQPePOeWqATOUmb1Dm+Ynt7KMUB
+   su1CtRxgk2xzd8v55A34UQM9lHxfp0fm17NMcAlV1Vlpbxz8fzc2jVE4X
+   gNi6EK0KqcZrKDuQJsHAxrwCFHuQR3tEzfgSYyp9dgtNPJgAkS2Xt3WhE
+   R3E/fhsswUAW7mruWSkzICKkaVp3VmFj/m1UL+vxn0k1L+DQInQdkb1rO
+   Wo+BhZy40XzmPs8KHc5QdvmFtf4sKt81PUcxsDPTQFMsNpOPnBuKpM3fI
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="227215803"
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246322107"
 X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="227215803"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:02:44 -0800
+   d="scan'208";a="246322107"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:03:50 -0800
 X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="628297036"
+   d="scan'208";a="617957353"
 Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:02:40 -0800
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:03:47 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.95)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nChva-00EbO6-MU;
-        Wed, 26 Jan 2022 15:01:34 +0200
-Date:   Wed, 26 Jan 2022 15:01:34 +0200
+        id 1nChwe-00EbPb-NL;
+        Wed, 26 Jan 2022 15:02:40 +0200
+Date:   Wed, 26 Jan 2022 15:02:40 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Liam Beguin <liambeguin@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v2 5/5] iio: afe: iio-rescale: Re-use generic struct
- s32_fract
-Message-ID: <YfFGLjeAEWfAAUWc@smile.fi.intel.com>
-References: <20220110193104.75225-5-andriy.shevchenko@linux.intel.com>
- <20220115185203.567780e8@jic23-huawei>
- <Ye7DSAN4gdhXfEUs@smile.fi.intel.com>
- <Ye8Z6dS5cCji9LNQ@shaak>
- <Ye/4eJ/RhlWF7q70@smile.fi.intel.com>
- <b25932d7-91bc-27b4-ada9-8d5da1ef2ddf@axentia.se>
- <YfA+xFR0oh2ztDKv@smile.fi.intel.com>
- <34c121fa-2a3b-fb6b-f6d5-fc2be2a5c6b7@axentia.se>
- <YfE45cImAQpOeziT@smile.fi.intel.com>
- <7ed2cdb9-0719-3535-9e0a-fd9d393f1cd8@axentia.se>
+To:     Joe Perches <joe@perches.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Carlis <zhangxuezhi1@yulong.com>, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Helge Deller <deller@gmx.de>, Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 4/4] fbtft: Replace 'depends on FB_TFT' by 'if FB_TFT
+ ... endif'
+Message-ID: <YfFGcEDnQwdDSwOx@smile.fi.intel.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <20220125202118.63362-5-andriy.shevchenko@linux.intel.com>
+ <e12b11d20e22123736e5d8728286947e971c489f.camel@perches.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7ed2cdb9-0719-3535-9e0a-fd9d393f1cd8@axentia.se>
+In-Reply-To: <e12b11d20e22123736e5d8728286947e971c489f.camel@perches.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 01:35:09PM +0100, Peter Rosin wrote:
-> On 2022-01-26 13:04, Andy Shevchenko wrote:
-> > On Wed, Jan 26, 2022 at 11:26:50AM +0100, Peter Rosin wrote:
-> >> It's easy to both remove and to add back "the bigger object". I just
-> >> don't see the point of the churn. Technically you can probably rearrange
-> >> stuff in probe and remove the 2nd argument to ->props() altogether and
-> >> chase pointers from the dev object instead. I don't see the point of
-> >> that either. It doesn't really make things simpler, it doesn't really
-> >> make things easier to read. To me, it's just pointless churn.
-> > 
-> > Since you still haven't got a point the conclusions are wrong.
-> > The point is (I dunno how more clear to make it) is to have proper
-> > layering from the (current) design perspective.
+On Wed, Jan 26, 2022 at 12:54:13AM -0800, Joe Perches wrote:
+> On Tue, 2022-01-25 at 22:21 +0200, Andy Shevchenko wrote:
+> > Replace 'depends on FB_TFT' by 'if FB_TFT ... endif'
+> > for the sake of deduplication.
+> []
+> > diff --git a/drivers/video/fbtft/Kconfig b/drivers/video/fbtft/Kconfig
+> []
+> > @@ -10,87 +10,75 @@ menuconfig FB_TFT
+> >  	select FB_DEFERRED_IO
+> >  	select FB_BACKLIGHT
+> >  
+> > +if FB_TFT
+> > +
+> []
+> >  config FB_TFT_PCD8544
+> >  	tristate "FB driver for the PCD8544 LCD Controller"
+> > -	depends on FB_TFT
+> >  	help
+> >  	  Generic Framebuffer support for PCD8544
+> >  
+> > @@ -108,62 +96,52 @@ config FB_TFT_S6D02A1
 > 
-> I think got the gist of it. I simply do not agree with your conclusion
-> about what the "proper layering" should be.
+> Looks like you missed a couple.
 
-And I see no real argument against it. With the patch applied I see
-a better structure of the code and exactly necessary data to be passed
-to the method. Which makes me think that current implementation is
-either a leftover or was something like "let's take a bigger object
-_just in case_", which I can't take as a proper layering.
+Thanks! I'll incorporate it, if the series has a continuation.
 
 -- 
 With Best Regards,

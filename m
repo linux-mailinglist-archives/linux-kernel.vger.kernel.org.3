@@ -2,486 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C0249CB71
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B32B49CB9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241696AbiAZNxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:53:50 -0500
-Received: from mga06.intel.com ([134.134.136.31]:28318 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241661AbiAZNxo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:53:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643205224; x=1674741224;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GFyyKkKVpoAgFMlzlLyAXwAJPt9Lj+amaXAuWLt9Lzo=;
-  b=P7onHNfQstLlm8QYnq4JdA9sec+nNJTf6XQNZRdto3MfKBfteN6R7Nat
-   PiXnkSGWm3ReTHpjdsicKup5DZLioO/bgHnLM0e22r/AC2m7WQo1gniCS
-   hNUN91arhSArjc0RF+owZk0O7MajWMXgOi5PA4LaPwz+srgwuDMdMf9br
-   tvK3urYaZcAPBkP04RV+rxAmSwGd8wa3hCVGj+yJKZ0mVCE7dB3iO6OEM
-   SAee2KJsuqXQyopDouSABgFMgCXi125Dk6Z/J4Wvs3ovLGLiQS7Du26g1
-   LDCRWU6UKQZbD15AOS8G6sz3wu+9RXBsIKEEBrjMBStR6ekesgbAhQM6M
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="307266165"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="307266165"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:53:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="479886592"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 26 Jan 2022 05:53:41 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CACAB668; Wed, 26 Jan 2022 15:53:54 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v4 4/4] iio: adc: qcom-vadc-common: Re-use generic struct u32_fract
-Date:   Wed, 26 Jan 2022 15:53:53 +0200
-Message-Id: <20220126135353.24007-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220126135353.24007-1-andriy.shevchenko@linux.intel.com>
-References: <20220126135353.24007-1-andriy.shevchenko@linux.intel.com>
+        id S241840AbiAZNz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:55:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50052 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241826AbiAZNzP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 08:55:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643205314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CEOtowb71/wW18nMRaLR4DhB2JeMdoSeUkA2PCB2rX0=;
+        b=Inktj+hNivx4tC6cRfeP4Tu/3eXf16+Qxn6pu+jg5q/bKtUO0naGswRbdlwLdn5qGP6JPA
+        iAvXjJL8tEy3nfrfDIfKTwEezAGQYyQrf7q9Jb6eJvVWYdxdJtAZ7H81Jp2GNREsMKbjBb
+        FBqyYZCQpsXzEIY7MVIsTAuTSF27vUQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-353-wc6-xaLKP7-hu9KIBAwU5A-1; Wed, 26 Jan 2022 08:55:13 -0500
+X-MC-Unique: wc6-xaLKP7-hu9KIBAwU5A-1
+Received: by mail-wr1-f71.google.com with SMTP id v28-20020adfa1dc000000b001dd1cb24081so1903121wrv.10
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:55:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=CEOtowb71/wW18nMRaLR4DhB2JeMdoSeUkA2PCB2rX0=;
+        b=x13maNHGFOvU7w9MYqjic3q4zWS4QNOMUqLWRvwvoJHClj8ntDx3R+qeB1VwFbiyb2
+         q5+mk74PKH4THZl6vM2QSo1oWYkBuaKqL68e9PbnHXOddOSSNrxLhctUCPaZCJ6Ly/Jr
+         2pQLqRJ+M5CIz88vo/FnPBT9+ixQOiBgQGNulwUvDhit6H18x7+Fka3+xANVkWaN+NSB
+         8Bs388zL44fMbIFVHg3mBUQnZoPpaavJ8CdFagry3xHDTRdDFWVO62rDBbfzzOtibmms
+         oKZ+cbwg7cVf97oRuq8HpFtWs+p4uIR431IqwVw7VIHWAFbrMwCjYV6rnxcgUvQ4ELAF
+         LCjg==
+X-Gm-Message-State: AOAM5313RVYDaEimKz9JT9KAmLxStEhNFhyBYo9BrFasRcObfnt8KT0q
+        kztsA3qBgGQf5Oq6KN3lbjFMLylTGdi6uP4Ars0+Td8YT3zumivxy4mMqvbz2E3UfpUw50KGVcs
+        +40UjpvdSIt7NP8Qa0bO1MpDR
+X-Received: by 2002:a5d:4a07:: with SMTP id m7mr22391321wrq.535.1643205311888;
+        Wed, 26 Jan 2022 05:55:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwRzW2PVEeSrabafFjjCUdlMm9xvAZuThHjt+FAiFVYNPbOd6/wn65zNkmJd9+Sj9WLoHbMqw==
+X-Received: by 2002:a5d:4a07:: with SMTP id m7mr22391298wrq.535.1643205311613;
+        Wed, 26 Jan 2022 05:55:11 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
+        by smtp.gmail.com with ESMTPSA id n13sm15598929wrv.94.2022.01.26.05.55.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 05:55:11 -0800 (PST)
+Message-ID: <2190b8e2-74f2-0e31-0a40-0401fbd9966e@redhat.com>
+Date:   Wed, 26 Jan 2022 14:55:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        akpm@linux-foundation.org, longpeng2@huawei.com, arnd@arndb.de,
+        dave.hansen@linux.intel.com, rppt@kernel.org, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Peter Xu <peterx@redhat.com>
+References: <cover.1642526745.git.khalid.aziz@oracle.com>
+ <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
+ <Ye/5yUyEqO0ws0G5@casper.infradead.org>
+ <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
+ <YfAEqzTeBJSIOKcA@casper.infradead.org>
+ <20220125185705.wf7p2l77vggipfry@box.shutemov.name>
+ <YfBIpmxvc0+mFByf@casper.infradead.org>
+ <YfDIYKygRHX4RIri@casper.infradead.org>
+ <e164d7f4-406e-eed8-37d7-753f790b7560@redhat.com>
+ <YfFO6VyMTrW1bWuu@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YfFO6VyMTrW1bWuu@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of custom data type re-use generic struct u32_fract.
-No changes intended.
+On 26.01.22 14:38, Matthew Wilcox wrote:
+> On Wed, Jan 26, 2022 at 11:16:42AM +0100, David Hildenbrand wrote:
+>> A while ago I talked with Peter about an extended uffd (here: WP)
+>> mechanism that would work on fds instead of the process address space.
+> 
+> As far as I can tell, uffd is a grotesque hack that exists to work around
+> the poor choice to use anonymous memory instead of file-backed memory
+> in kvm.  Every time I see somebody mention it, I feel pain.
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
+I might be missing something important, because KVM can deal with
+file-back memory just fine and uffd is used heavily outside of hypervisors.
 
-v4: no changes
-v3: no changes
-v2: comile-tested, i.o.w. fixed compilation errors
+I'd love to learn how to handle what ordinary uffd (handle
+missing/unpopulated pages) and uffd-wp (handle write access to pages)
+can do with files instead. Because if something like that already
+exists, it would be precisely what I am talking about.
 
- drivers/iio/adc/qcom-pm8xxx-xoadc.c      | 15 ++--
- drivers/iio/adc/qcom-spmi-vadc.c         | 24 +++----
- drivers/iio/adc/qcom-vadc-common.c       | 92 ++++++++++++------------
- include/linux/iio/adc/qcom-vadc-common.h | 15 +---
- 4 files changed, 69 insertions(+), 77 deletions(-)
+Maybe mentioning uffd was a bad choice ;)
 
-diff --git a/drivers/iio/adc/qcom-pm8xxx-xoadc.c b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
-index 21d7eff645c3..5e9e56821075 100644
---- a/drivers/iio/adc/qcom-pm8xxx-xoadc.c
-+++ b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
-@@ -175,7 +175,7 @@ struct xoadc_channel {
- 	const char *datasheet_name;
- 	u8 pre_scale_mux:2;
- 	u8 amux_channel:4;
--	const struct vadc_prescale_ratio prescale;
-+	const struct u32_fract prescale;
- 	enum iio_chan_type type;
- 	enum vadc_scale_fn_type scale_fn_type;
- 	u8 amux_ip_rsv:3;
-@@ -218,7 +218,9 @@ struct xoadc_variant {
- 		.datasheet_name = __stringify(_dname),			\
- 		.pre_scale_mux = _presmux,				\
- 		.amux_channel = _amux,					\
--		.prescale = { .num = _prenum, .den = _preden },		\
-+		.prescale = {						\
-+			.numerator = _prenum, .denominator = _preden,	\
-+		},							\
- 		.type = _type,						\
- 		.scale_fn_type = _scale,				\
- 		.amux_ip_rsv = _amip,					\
-@@ -809,12 +811,11 @@ static int pm8xxx_xoadc_parse_channel(struct device *dev,
- 		BIT(IIO_CHAN_INFO_PROCESSED);
- 	iio_chan->indexed = 1;
- 
--	dev_dbg(dev, "channel [PRESCALE/MUX: %02x AMUX: %02x] \"%s\" "
--		"ref voltage: %d, decimation %d "
--		"prescale %d/%d, scale function %d\n",
-+	dev_dbg(dev,
-+		"channel [PRESCALE/MUX: %02x AMUX: %02x] \"%s\" ref voltage: %d, decimation %d prescale %d/%d, scale function %d\n",
- 		hwchan->pre_scale_mux, hwchan->amux_channel, ch->name,
--		ch->amux_ip_rsv, ch->decimation, hwchan->prescale.num,
--		hwchan->prescale.den, hwchan->scale_fn_type);
-+		ch->amux_ip_rsv, ch->decimation, hwchan->prescale.numerator,
-+		hwchan->prescale.denominator, hwchan->scale_fn_type);
- 
- 	return 0;
- }
-diff --git a/drivers/iio/adc/qcom-spmi-vadc.c b/drivers/iio/adc/qcom-spmi-vadc.c
-index 07b1a99381d9..34202ba52469 100644
---- a/drivers/iio/adc/qcom-spmi-vadc.c
-+++ b/drivers/iio/adc/qcom-spmi-vadc.c
-@@ -122,15 +122,15 @@ struct vadc_priv {
- 	struct mutex		 lock;
- };
- 
--static const struct vadc_prescale_ratio vadc_prescale_ratios[] = {
--	{.num =  1, .den =  1},
--	{.num =  1, .den =  3},
--	{.num =  1, .den =  4},
--	{.num =  1, .den =  6},
--	{.num =  1, .den = 20},
--	{.num =  1, .den =  8},
--	{.num = 10, .den = 81},
--	{.num =  1, .den = 10}
-+static const struct u32_fract vadc_prescale_ratios[] = {
-+	{ .numerator =  1, .denominator =  1 },
-+	{ .numerator =  1, .denominator =  3 },
-+	{ .numerator =  1, .denominator =  4 },
-+	{ .numerator =  1, .denominator =  6 },
-+	{ .numerator =  1, .denominator = 20 },
-+	{ .numerator =  1, .denominator =  8 },
-+	{ .numerator = 10, .denominator = 81 },
-+	{ .numerator =  1, .denominator = 10 },
- };
- 
- static int vadc_read(struct vadc_priv *vadc, u16 offset, u8 *data)
-@@ -404,13 +404,13 @@ static int vadc_measure_ref_points(struct vadc_priv *vadc)
- 	return ret;
- }
- 
--static int vadc_prescaling_from_dt(u32 num, u32 den)
-+static int vadc_prescaling_from_dt(u32 numerator, u32 denominator)
- {
- 	unsigned int pre;
- 
- 	for (pre = 0; pre < ARRAY_SIZE(vadc_prescale_ratios); pre++)
--		if (vadc_prescale_ratios[pre].num == num &&
--		    vadc_prescale_ratios[pre].den == den)
-+		if (vadc_prescale_ratios[pre].numerator == numerator &&
-+		    vadc_prescale_ratios[pre].denominator == denominator)
- 			break;
- 
- 	if (pre == ARRAY_SIZE(vadc_prescale_ratios))
-diff --git a/drivers/iio/adc/qcom-vadc-common.c b/drivers/iio/adc/qcom-vadc-common.c
-index 14723896aab2..6c6aec848f98 100644
---- a/drivers/iio/adc/qcom-vadc-common.c
-+++ b/drivers/iio/adc/qcom-vadc-common.c
-@@ -289,44 +289,44 @@ static const struct vadc_map_pt adcmap7_100k[] = {
- 	{ 2420, 130048 }
- };
- 
--static const struct vadc_prescale_ratio adc5_prescale_ratios[] = {
--	{.num =  1, .den =  1},
--	{.num =  1, .den =  3},
--	{.num =  1, .den =  4},
--	{.num =  1, .den =  6},
--	{.num =  1, .den = 20},
--	{.num =  1, .den =  8},
--	{.num = 10, .den = 81},
--	{.num =  1, .den = 10},
--	{.num =  1, .den = 16}
-+static const struct u32_fract adc5_prescale_ratios[] = {
-+	{ .numerator =  1, .denominator =  1 },
-+	{ .numerator =  1, .denominator =  3 },
-+	{ .numerator =  1, .denominator =  4 },
-+	{ .numerator =  1, .denominator =  6 },
-+	{ .numerator =  1, .denominator = 20 },
-+	{ .numerator =  1, .denominator =  8 },
-+	{ .numerator = 10, .denominator = 81 },
-+	{ .numerator =  1, .denominator = 10 },
-+	{ .numerator =  1, .denominator = 16 },
- };
- 
- static int qcom_vadc_scale_hw_calib_volt(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_uv);
- static int qcom_vadc_scale_hw_calib_therm(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
- static int qcom_vadc7_scale_hw_calib_therm(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
- static int qcom_vadc_scale_hw_smb_temp(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
- static int qcom_vadc_scale_hw_chg5_temp(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
- static int qcom_vadc_scale_hw_calib_die_temp(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
- static int qcom_vadc7_scale_hw_calib_die_temp(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec);
- 
-@@ -406,7 +406,7 @@ static void qcom_vadc_scale_calib(const struct vadc_linear_graph *calib_graph,
- }
- 
- static int qcom_vadc_scale_volt(const struct vadc_linear_graph *calib_graph,
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				bool absolute, u16 adc_code,
- 				int *result_uv)
- {
-@@ -414,15 +414,15 @@ static int qcom_vadc_scale_volt(const struct vadc_linear_graph *calib_graph,
- 
- 	qcom_vadc_scale_calib(calib_graph, adc_code, absolute, &voltage);
- 
--	voltage = voltage * prescale->den;
--	result = div64_s64(voltage, prescale->num);
-+	voltage *= prescale->denominator;
-+	result = div64_s64(voltage, prescale->numerator);
- 	*result_uv = result;
- 
- 	return 0;
- }
- 
- static int qcom_vadc_scale_therm(const struct vadc_linear_graph *calib_graph,
--				 const struct vadc_prescale_ratio *prescale,
-+				 const struct u32_fract *prescale,
- 				 bool absolute, u16 adc_code,
- 				 int *result_mdec)
- {
-@@ -444,7 +444,7 @@ static int qcom_vadc_scale_therm(const struct vadc_linear_graph *calib_graph,
- }
- 
- static int qcom_vadc_scale_die_temp(const struct vadc_linear_graph *calib_graph,
--				    const struct vadc_prescale_ratio *prescale,
-+				    const struct u32_fract *prescale,
- 				    bool absolute,
- 				    u16 adc_code, int *result_mdec)
- {
-@@ -454,8 +454,8 @@ static int qcom_vadc_scale_die_temp(const struct vadc_linear_graph *calib_graph,
- 	qcom_vadc_scale_calib(calib_graph, adc_code, absolute, &voltage);
- 
- 	if (voltage > 0) {
--		temp = voltage * prescale->den;
--		do_div(temp, prescale->num * 2);
-+		temp = voltage * prescale->denominator;
-+		do_div(temp, prescale->numerator * 2);
- 		voltage = temp;
- 	} else {
- 		voltage = 0;
-@@ -467,7 +467,7 @@ static int qcom_vadc_scale_die_temp(const struct vadc_linear_graph *calib_graph,
- }
- 
- static int qcom_vadc_scale_chg_temp(const struct vadc_linear_graph *calib_graph,
--				    const struct vadc_prescale_ratio *prescale,
-+				    const struct u32_fract *prescale,
- 				    bool absolute,
- 				    u16 adc_code, int *result_mdec)
- {
-@@ -475,8 +475,8 @@ static int qcom_vadc_scale_chg_temp(const struct vadc_linear_graph *calib_graph,
- 
- 	qcom_vadc_scale_calib(calib_graph, adc_code, absolute, &voltage);
- 
--	voltage = voltage * prescale->den;
--	voltage = div64_s64(voltage, prescale->num);
-+	voltage *= prescale->denominator;
-+	voltage = div64_s64(voltage, prescale->numerator);
- 	voltage = ((PMI_CHG_SCALE_1) * (voltage * 2));
- 	voltage = (voltage + PMI_CHG_SCALE_2);
- 	result =  div64_s64(voltage, 1000000);
-@@ -487,21 +487,21 @@ static int qcom_vadc_scale_chg_temp(const struct vadc_linear_graph *calib_graph,
- 
- /* convert voltage to ADC code, using 1.875V reference */
- static u16 qcom_vadc_scale_voltage_code(s32 voltage,
--					const struct vadc_prescale_ratio *prescale,
-+					const struct u32_fract *prescale,
- 					const u32 full_scale_code_volt,
- 					unsigned int factor)
- {
- 	s64 volt = voltage;
- 	s64 adc_vdd_ref_mv = 1875; /* reference voltage */
- 
--	volt *= prescale->num * factor * full_scale_code_volt;
--	volt = div64_s64(volt, (s64)prescale->den * adc_vdd_ref_mv * 1000);
-+	volt *= prescale->numerator * factor * full_scale_code_volt;
-+	volt = div64_s64(volt, (s64)prescale->denominator * adc_vdd_ref_mv * 1000);
- 
- 	return volt;
- }
- 
- static int qcom_vadc_scale_code_voltage_factor(u16 adc_code,
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				unsigned int factor)
- {
-@@ -520,8 +520,8 @@ static int qcom_vadc_scale_code_voltage_factor(u16 adc_code,
- 	voltage = (s64) adc_code * adc_vdd_ref_mv * 1000;
- 	voltage = div64_s64(voltage, data->full_scale_code_volt);
- 	if (voltage > 0) {
--		voltage *= prescale->den;
--		temp = prescale->num * factor;
-+		voltage *= prescale->denominator;
-+		temp = prescale->numerator * factor;
- 		voltage = div64_s64(voltage, temp);
- 	} else {
- 		voltage = 0;
-@@ -531,7 +531,7 @@ static int qcom_vadc_scale_code_voltage_factor(u16 adc_code,
- }
- 
- static int qcom_vadc7_scale_hw_calib_therm(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec)
- {
-@@ -557,7 +557,7 @@ static int qcom_vadc7_scale_hw_calib_therm(
- }
- 
- static int qcom_vadc_scale_hw_calib_volt(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_uv)
- {
-@@ -568,7 +568,7 @@ static int qcom_vadc_scale_hw_calib_volt(
- }
- 
- static int qcom_vadc_scale_hw_calib_therm(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec)
- {
-@@ -584,7 +584,7 @@ static int qcom_vadc_scale_hw_calib_therm(
- }
- 
- static int qcom_vadc_scale_hw_calib_die_temp(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec)
- {
-@@ -596,7 +596,7 @@ static int qcom_vadc_scale_hw_calib_die_temp(
- }
- 
- static int qcom_vadc7_scale_hw_calib_die_temp(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec)
- {
-@@ -611,7 +611,7 @@ static int qcom_vadc7_scale_hw_calib_die_temp(
- }
- 
- static int qcom_vadc_scale_hw_smb_temp(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec)
- {
-@@ -623,7 +623,7 @@ static int qcom_vadc_scale_hw_smb_temp(
- }
- 
- static int qcom_vadc_scale_hw_chg5_temp(
--				const struct vadc_prescale_ratio *prescale,
-+				const struct u32_fract *prescale,
- 				const struct adc5_data *data,
- 				u16 adc_code, int *result_mdec)
- {
-@@ -636,7 +636,7 @@ static int qcom_vadc_scale_hw_chg5_temp(
- 
- int qcom_vadc_scale(enum vadc_scale_fn_type scaletype,
- 		    const struct vadc_linear_graph *calib_graph,
--		    const struct vadc_prescale_ratio *prescale,
-+		    const struct u32_fract *prescale,
- 		    bool absolute,
- 		    u16 adc_code, int *result)
- {
-@@ -667,7 +667,7 @@ EXPORT_SYMBOL(qcom_vadc_scale);
- u16 qcom_adc_tm5_temp_volt_scale(unsigned int prescale_ratio,
- 				 u32 full_scale_code_volt, int temp)
- {
--	const struct vadc_prescale_ratio *prescale = &adc5_prescale_ratios[prescale_ratio];
-+	const struct u32_fract *prescale = &adc5_prescale_ratios[prescale_ratio];
- 	s32 voltage;
- 
- 	voltage = qcom_vadc_map_temp_voltage(adcmap_100k_104ef_104fb_1875_vref,
-@@ -682,7 +682,7 @@ int qcom_adc5_hw_scale(enum vadc_scale_fn_type scaletype,
- 		    const struct adc5_data *data,
- 		    u16 adc_code, int *result)
- {
--	const struct vadc_prescale_ratio *prescale = &adc5_prescale_ratios[prescale_ratio];
-+	const struct u32_fract *prescale = &adc5_prescale_ratios[prescale_ratio];
- 
- 	if (!(scaletype >= SCALE_HW_CALIB_DEFAULT &&
- 		scaletype < SCALE_HW_CALIB_INVALID)) {
-@@ -695,13 +695,13 @@ int qcom_adc5_hw_scale(enum vadc_scale_fn_type scaletype,
- }
- EXPORT_SYMBOL(qcom_adc5_hw_scale);
- 
--int qcom_adc5_prescaling_from_dt(u32 num, u32 den)
-+int qcom_adc5_prescaling_from_dt(u32 numerator, u32 denominator)
- {
- 	unsigned int pre;
- 
- 	for (pre = 0; pre < ARRAY_SIZE(adc5_prescale_ratios); pre++)
--		if (adc5_prescale_ratios[pre].num == num &&
--		    adc5_prescale_ratios[pre].den == den)
-+		if (adc5_prescale_ratios[pre].numerator == numerator &&
-+		    adc5_prescale_ratios[pre].denominator == denominator)
- 			break;
- 
- 	if (pre == ARRAY_SIZE(adc5_prescale_ratios))
-diff --git a/include/linux/iio/adc/qcom-vadc-common.h b/include/linux/iio/adc/qcom-vadc-common.h
-index 33f60f43e1aa..ce78d4804994 100644
---- a/include/linux/iio/adc/qcom-vadc-common.h
-+++ b/include/linux/iio/adc/qcom-vadc-common.h
-@@ -6,6 +6,7 @@
- #ifndef QCOM_VADC_COMMON_H
- #define QCOM_VADC_COMMON_H
- 
-+#include <linux/math.h>
- #include <linux/types.h>
- 
- #define VADC_CONV_TIME_MIN_US			2000
-@@ -79,16 +80,6 @@ struct vadc_linear_graph {
- 	s32 gnd;
- };
- 
--/**
-- * struct vadc_prescale_ratio - Represent scaling ratio for ADC input.
-- * @num: the inverse numerator of the gain applied to the input channel.
-- * @den: the inverse denominator of the gain applied to the input channel.
-- */
--struct vadc_prescale_ratio {
--	u32 num;
--	u32 den;
--};
--
- /**
-  * enum vadc_scale_fn_type - Scaling function to convert ADC code to
-  *				physical scaled units for the channel.
-@@ -144,12 +135,12 @@ struct adc5_data {
- 
- int qcom_vadc_scale(enum vadc_scale_fn_type scaletype,
- 		    const struct vadc_linear_graph *calib_graph,
--		    const struct vadc_prescale_ratio *prescale,
-+		    const struct u32_fract *prescale,
- 		    bool absolute,
- 		    u16 adc_code, int *result_mdec);
- 
- struct qcom_adc5_scale_type {
--	int (*scale_fn)(const struct vadc_prescale_ratio *prescale,
-+	int (*scale_fn)(const struct u32_fract *prescale,
- 		const struct adc5_data *data, u16 adc_code, int *result);
- };
- 
 -- 
-2.34.1
+Thanks,
+
+David / dhildenb
 

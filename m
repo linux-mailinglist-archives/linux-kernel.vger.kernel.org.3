@@ -2,134 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D62B349CA7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A65649CA87
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237855AbiAZNOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:14:11 -0500
-Received: from mail-ej1-f47.google.com ([209.85.218.47]:43771 "EHLO
-        mail-ej1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234991AbiAZNOH (ORCPT
+        id S238225AbiAZNPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:15:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238176AbiAZNPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:14:07 -0500
-Received: by mail-ej1-f47.google.com with SMTP id d10so38964127eje.10;
-        Wed, 26 Jan 2022 05:14:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NBdQ/uQ+VlQz/s6B9TiQ8bFThsL41hKw9IyHdeDpgD4=;
-        b=2hYzm/xSvzF4cZOyfidmevTlaJwCMzYAmhPHeJKxRWOZY9OoYkIUoQMcQDyGExYsi7
-         6qhMk0EYqeAB663Ig3hCiBN/4APqBzq9hi2LPVPS49dPWeg7oCNfyx7XD/M9sptBeMjW
-         iwMMBVTJZihy1kRaOiIwXEMwqYLiY0uZs8u4peIXhbAG9E/6Z5TQLyTqh/cPaddJK5Wu
-         z9a/xz2k0tBkm8th1VZLn6dKcJL7oILRAJVOYZWdJJt4rTZy58o7waQcFlb9nrW3eRoF
-         z+zlvqEZldUpk3UyNDO1QcgBEAvLN83YjdSN6luhKDoTHvJ8aYTyzdI7hBf+CVHxN3QY
-         XzdA==
-X-Gm-Message-State: AOAM531Kn7qvumPZ8NQS37G4IJJjASaMyj5/BsafxJhXvNK4dn8Loglc
-        jwSj36/wzTukh+OquqGZeKw=
-X-Google-Smtp-Source: ABdhPJypN0UAeeiGOnmKd5k24fcLAzTBl8OwGasQRAAEB8fDWDUT4TXWF6NG0KGGepXClKmL7B4w/A==
-X-Received: by 2002:a17:906:e0ca:: with SMTP id gl10mr20482575ejb.108.1643202846140;
-        Wed, 26 Jan 2022 05:14:06 -0800 (PST)
-Received: from [192.168.0.60] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.googlemail.com with ESMTPSA id l2sm9700990eds.28.2022.01.26.05.14.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 05:14:04 -0800 (PST)
-Message-ID: <48350476-605c-0775-7d18-2601d3360241@kernel.org>
-Date:   Wed, 26 Jan 2022 14:14:03 +0100
+        Wed, 26 Jan 2022 08:15:38 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0773C06161C;
+        Wed, 26 Jan 2022 05:15:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        Subject:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+IAzmFFliQBWK1jxk5QRuab/DHt3yG8sbu9RtQ8KG3U=; b=WKCmxyu3faFRsMWLIvU0J7bgYR
+        Y8Bo94NeFTAglGptabYLcDXOI5CW9WelY7qQNOUHdUWnLJH4XXp48USKv5U0/lfbJTlz/F8PiBo9F
+        8q4sW7kQnqmqr/BUBPPBqJMT3zbzv4M3q6W2DErSRDGws4vXWtsXept5mkLKq7ctKfzh7AZsrBZsU
+        EzgXPd6k2/fWvVct7ssNbbiao34Hia+0s+i/qDxoEro3VXDEVzfaZQMG37We/HSkNI/kmA74gwh6i
+        gjLRptuEoAV6q4cILBtBPRGrdTOCx+Qgs9A92xeKg0Xy9SNqoTr1po8sCCzot45/SOHTtBu8VPJ5a
+        h9U0dWAA==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:56599 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1nCi98-0000PP-D8; Wed, 26 Jan 2022 14:15:34 +0100
+Message-ID: <dc392272-80ae-dbbd-df26-c7ffa6239cf0@tronnes.org>
+Date:   Wed, 26 Jan 2022 14:15:29 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: pwm: Document clk based PWM
- controller
-Content-Language: en-US
-To:     Nikita Travkin <nikita@trvn.ru>, thierry.reding@gmail.com,
-        lee.jones@linaro.org
-Cc:     u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
-        sboyd@kernel.org, linus.walleij@linaro.org, masneyb@onstation.org,
-        sean.anderson@seco.com, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20220126125849.75572-1-nikita@trvn.ru>
- <20220126125849.75572-2-nikita@trvn.ru>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220126125849.75572-2-nikita@trvn.ru>
+To:     andriy.shevchenko@linux.intel.com
+Cc:     andy@kernel.org, deller@gmx.de, dri-devel@lists.freedesktop.org,
+        gregkh@linuxfoundation.org, hkallweit1@gmail.com,
+        lee.jones@linaro.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        michael.hennerich@analog.com, phil@philpotter.co.uk,
+        zhangxuezhi1@yulong.com
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2022 13:58, Nikita Travkin wrote:
-> Add YAML devicetree binding for clk based PWM controller
-> 
-> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> --
-> Changes in v2:
->  - fix the file name.
-> Changes in v4:
->  - Use generic node name in the dt bindings example.
-> ---
->  .../devicetree/bindings/pwm/clk-pwm.yaml      | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/clk-pwm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pwm/clk-pwm.yaml b/Documentation/devicetree/bindings/pwm/clk-pwm.yaml
-> new file mode 100644
-> index 000000000000..d3416ba549b5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pwm/clk-pwm.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pwm/clk-pwm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Clock based PWM controller
-> +
-> +maintainers:
-> +  - Nikita Travkin <nikita@trvn.ru>
-> +
-> +description: |
-> +  Some systems have clocks that can be exposed to external devices.
-> +  (e.g. by muxing them to GPIO pins)
-> +  It's often possible to control duty-cycle of such clocks which makes them
-> +  suitable for generating PWM signal.
-> +
-> +allOf:
-> +  - $ref: pwm.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: clk-pwm
-> +
-> +  clocks:
-> +    description: Clock used to generate the signal.
-> +    maxItems: 1
-> +
-> +  "#pwm-cells":
-> +    const: 2
-> +
-> +unevaluatedProperties: false
-> +
-> +required:
+>
+> Since we got a maintainer for fbdev, I would like to
+> unorphan fbtft (with the idea of sending PRs to Helge)
+> and move it out of staging since there is no more clean
+> up work expected and no more drivers either.
+>
+> Thoughts?
 
-You need a compatible. pwm-cells can be skipped as pwm.yaml will require
-them.
+Here's a driver I have been working on:
 
-> +  - clocks
-> +
-> +examples:
-> +  - |
-> +    pwm {
-> +      compatible = "clk-pwm";
-> +      #pwm-cells = <2>;
-> +      clocks = <&gcc 0>;
-> +      pinctrl-names = "default";
-> +      pinctrl-0 = <&pwm_clk_flash_default>;
-> +    };
+drm/panel: Add MIPI DBI compatible SPI driver
+https://lore.kernel.org/dri-devel/20220125175700.37408-1-noralf@tronnes.org/
 
+It should replace the SPI part of these fbtft drivers if accepted:
 
-Best regards,
-Krzysztof
+$ grep -lr MIPI_DCS drivers/staging/fbtft/ | grep -v "-" | uniq | sort
+drivers/staging/fbtft/fb_hx8340bn.c
+drivers/staging/fbtft/fb_hx8353d.c
+drivers/staging/fbtft/fb_hx8357d.c
+drivers/staging/fbtft/fb_ili9163.c
+drivers/staging/fbtft/fb_ili9340.c
+drivers/staging/fbtft/fb_ili9341.c
+drivers/staging/fbtft/fb_ili9481.c
+drivers/staging/fbtft/fb_ili9486.c
+drivers/staging/fbtft/fb_s6d02a1.c
+drivers/staging/fbtft/fb_st7735r.c
+drivers/staging/fbtft/fb_st7789v.c
+drivers/staging/fbtft/fb_tinylcd.c
+
+There's no support for the parallel interface on these controllers in
+drm. Support could be added to drivers/gpu/drm/drm_mipi_dbi.c.
+
+Here's a status report I wrote 2 years ago:
+
+fbtft: 5 years in staging
+https://lore.kernel.org/dri-devel/a6cef26c-0f4b-47f0-d249-71f53891526b@tronnes.org/
+
+Noralf.

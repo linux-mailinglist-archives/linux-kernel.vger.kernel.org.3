@@ -2,105 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8702E49D553
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B979149D527
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbiAZWSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:18:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233444AbiAZWSx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:18:53 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58760C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:18:53 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id e16so593822pgn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:18:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FZouSr9TAlelZRwtS6TKOdeYH1dxDyHrivrG4UWi6aY=;
-        b=pCw1JaoBI87xZyASQ2zBq0kUaHQkbXAeg3PzhyvorB8ky9/UyZB0QtGrUmx1Z0pqgd
-         AGh8SVZOQqMOAaVdWo7urIWGh3MNWA5u/wQ4IIiEDYDnpSAxXs8PI349uL4A3hqL5KSO
-         e1celx5uilrES4T0WlxSRy5giPrlHehRV4NEk780iX+myM/MPzfZXg9+d3wLF5HZTI+0
-         xIHPWDQ/JdjbcHqYIJOGGUufDLrvMRxUSQ1idA1U14MqVGVK7EGMM5A85+gpBalsP2nn
-         yk7mQ99Isi0W0oyjPWNTIXdoZj9kfVb0raeK1DqC9xtRcVwFzBJK3u/R5KefvcEpcFjJ
-         +tSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FZouSr9TAlelZRwtS6TKOdeYH1dxDyHrivrG4UWi6aY=;
-        b=oy06BOtFK841u0gzSzsxgSZPAzkQlH2cXo7wB7axjsLbKwB3TwRbo7yqNWLmdEF3dp
-         rmmRK3t/yUgiI2uKzZAcIuxadDKCYB51GaD99OB2C7HXS98pPmB1DfVtk6i8WSpJQBOK
-         aSVf9QM2MiqgED8gsIejFBCDP/qDl8nQX272VDstCjW2WUZWky6z+iKKM2rGhbESZY+n
-         kbJLIL68Qr2fjQhWs0QRHbmrOa16ge5zfmcmj5LydnbSl6hSD5ScOkheHOiroZ/fgSuf
-         DHCuqUE7tD62KsMZqMdpSGLnpQgXIUpkDYwOlrfI9xMFDVlSRSwX1jFXYRR9DXVLdhVw
-         k23Q==
-X-Gm-Message-State: AOAM532E6roz23tpSjIi29iQSIIl36Yp0xKY9HLnI/XkOFUEdETdpFjz
-        TBvCriD51b4YJk82XLJwfuyZnQ==
-X-Google-Smtp-Source: ABdhPJwBdBPkz8G0TIYzxSkkmqHgn6ds8XO8ZxbMCK49rP+RL4F0T2bMG7KCVBpwABoxWWoJIJRAUQ==
-X-Received: by 2002:a05:6a00:1956:: with SMTP id s22mr397112pfk.48.1643235532791;
-        Wed, 26 Jan 2022 14:18:52 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:1f3a:4e9b:8fa7:36dc:a805:c73f])
-        by smtp.gmail.com with ESMTPSA id t17sm4233742pgm.69.2022.01.26.14.18.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:18:52 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
-        tdas@codeaurora.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, bjorn.andersson@linaro.org,
-        davem@davemloft.net, netdev@vger.kernel.org
-Subject: [PATCH 8/8] clk: qcom: gcc-sm8150: Use PWRSTS_ON (only) as a workaround for emac gdsc
-Date:   Thu, 27 Jan 2022 03:47:25 +0530
-Message-Id: <20220126221725.710167-9-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
-References: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
+        id S233080AbiAZWR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:17:57 -0500
+Received: from foss.arm.com ([217.140.110.172]:43020 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229490AbiAZWR4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 17:17:56 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 719E4D6E;
+        Wed, 26 Jan 2022 14:17:55 -0800 (PST)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.196.44])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFEB43F793;
+        Wed, 26 Jan 2022 14:17:54 -0800 (PST)
+Date:   Wed, 26 Jan 2022 22:17:52 +0000
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [peterz-queue:sched/core 5/8] kernel/sched/sched.h:3006:32:
+ warning: passing argument 1 of 'cpu_util_cfs' makes integer from pointer
+ without a cast
+Message-ID: <20220126221752.5yaftiwk32jrifll@e107158-lin.cambridge.arm.com>
+References: <202201270319.tmnG6ICK-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202201270319.tmnG6ICK-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-EMAC GDSC currently has issues (seen on SA8155p-ADP) when its
-turn'ed ON, once its already in OFF state. So, use PWRSTS_ON
-state (only) as a workaround for now.
+On 01/27/22 03:53, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+> head:   dbaafd0f1651b35e07c20e33f8c3f133fc65705e
+> commit: 6dd3d475cf576edd705885c66b6f1d638a6818f4 [5/8] sched/sugov: Ignore 'busy' filter when rq is capped by uclamp_max
+> config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220127/202201270319.tmnG6ICK-lkp@intel.com/config)
+> compiler: ia64-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=6dd3d475cf576edd705885c66b6f1d638a6818f4
+>         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+>         git fetch --no-tags peterz-queue sched/core
+>         git checkout 6dd3d475cf576edd705885c66b6f1d638a6818f4
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash kernel/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from kernel/sched/core.c:13:
+>    kernel/sched/sched.h: In function 'uclamp_rq_is_capped':
+> >> kernel/sched/sched.h:3006:32: warning: passing argument 1 of 'cpu_util_cfs' makes integer from pointer without a cast [-Wint-conversion]
+>     3006 |         rq_util = cpu_util_cfs(rq) + cpu_util_rt(rq);
+>          |                                ^~
+>          |                                |
+>          |                                struct rq *
+>    kernel/sched/sched.h:2919:46: note: expected 'int' but argument is of type 'struct rq *'
+>     2919 | static inline unsigned long cpu_util_cfs(int cpu)
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- drivers/clk/qcom/gcc-sm8150.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Seems cpu_utils_cfs() definition has changed since I posted my patch. Below
+ought to fix it.
 
-diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
-index 2e71afed81fd..fd7e931d3c09 100644
---- a/drivers/clk/qcom/gcc-sm8150.c
-+++ b/drivers/clk/qcom/gcc-sm8150.c
-@@ -3449,12 +3449,16 @@ static struct clk_branch gcc_video_xo_clk = {
- 	},
- };
- 
-+/* To Do: EMAC GDSC currently has issues when its turn'ed ON, once
-+ * its already in OFF state. So use PWRSTS_ON state (only) as a
-+ * workaround for now.
-+ */
- static struct gdsc emac_gdsc = {
- 	.gdscr = 0x6004,
- 	.pd = {
- 		.name = "emac_gdsc",
- 	},
--	.pwrsts = PWRSTS_OFF_ON,
-+	.pwrsts = PWRSTS_ON,
- 	.flags = POLL_CFG_GDSCR,
- };
- 
--- 
-2.34.1
+Thanks!
 
+--
+Qais Yousef
+
+--->8---
+
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index c7bf5309c162..9b33ba9c3c42 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -3003,7 +3003,7 @@ static inline bool uclamp_rq_is_capped(struct rq *rq)
+        if (!static_branch_likely(&sched_uclamp_used))
+                return false;
+
+-       rq_util = cpu_util_cfs(rq) + cpu_util_rt(rq);
++       rq_util = cpu_util_cfs(cpu_of(rq)) + cpu_util_rt(rq);
+        max_util = READ_ONCE(rq->uclamp[UCLAMP_MAX].value);
+
+        return max_util != SCHED_CAPACITY_SCALE && rq_util >= max_util;

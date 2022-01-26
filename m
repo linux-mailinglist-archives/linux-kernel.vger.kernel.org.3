@@ -2,104 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F0B49C5E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1888549C5E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238820AbiAZJLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:11:47 -0500
-Received: from mga07.intel.com ([134.134.136.100]:40662 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230488AbiAZJLp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:11:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643188305; x=1674724305;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PvvtYfl2HUF46D+WyYOGZGq53eSaKPGzv5SscntUonM=;
-  b=Oxninn7GC9R/XgYXxB8+SyHrr+JRJ7yo/7h4iwEsr6WXniv5tSm4c9JX
-   /PIRyvolZglOyPs2oq8ExXg8b4OsgmQksjMys9H+YeJbiVbGlr+WZ0c9R
-   sgTHkYTKRBWh5GxRHlruaVznWIccCKm/GVtHlvbOkTLBUcWtbOm1wUDx6
-   1iTkSTb3q2CdzkShJQdn/JxsZ/4uYUH2tfaTOlFTnp2EwKDS1tyE2+zej
-   hL1mPyMEfzwURTOfDzhA/DDDZCY3eWuwq+inORvmpDIzFLIAwrqWQJCFy
-   Br+UxkUJWPw+B8O1WieKz+flFjp7z+oKsMIxjpuQ5x8KJ4LOTOPzgvn9l
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309826862"
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="309826862"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 01:11:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="535112572"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 26 Jan 2022 01:11:44 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCeL9-000L1f-SF; Wed, 26 Jan 2022 09:11:43 +0000
-Date:   Wed, 26 Jan 2022 17:11:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.16 84/137] drivers/acpi/arm64/mpam.c:244:12:
- warning: no previous prototype for 'acpi_mpam_parse'
-Message-ID: <202201261729.TYtOlqcK-lkp@intel.com>
+        id S238810AbiAZJLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:11:21 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53018 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231248AbiAZJLO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 04:11:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FC346135B;
+        Wed, 26 Jan 2022 09:11:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4186C340E3;
+        Wed, 26 Jan 2022 09:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643188272;
+        bh=81J6WPzY+ci50rtR2WWy0x8FAKIC8UJUQHIK59zO96I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=McAkAp5dZD7GpxrB2gHhx7l+taB5JCn8xsMZY5FJp3JIY3Vv1nqeAjaZn5HJMlbkW
+         tNbttNjiPfRD0fA0yDHJVGwjq3Cy7M+4DNTqL5EgbvOIo9iBerzAbvgjAwX5Gf+R0X
+         b+GqTvhVUM8j2N0nIPZt9S6oIAuq2BujY+p9wJGbyjdxhCBxng14pAsQk9P/wA2uGv
+         Ns3AWK1vdEfh3MalW6AGWael9UeWyu58w0YGInd50x/Uipb8k7Z+UytQd4xS94TjIW
+         myM1bGpxvsZgDKlsyn6IBZTOa5jAvNtIEveWUR7fOIlkUUWbUpFORHWD4tdF17nDbR
+         pUBBh3uXHj/Lw==
+Date:   Wed, 26 Jan 2022 10:11:04 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v9 06/23] ima: Move arch_policy_entry into ima_namespace
+Message-ID: <20220126091104.jbedxrewojcmvy3u@wittgenstein>
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+ <20220125224645.79319-7-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220125224645.79319-7-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
-head:   364c1c42b229912132e1615c2ce15be7154e2156
-commit: b841feb1820b7008977aa2684994b5debe450b18 [84/137] ACPI / MPAM: Parse the MPAM table
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220126/202201261729.TYtOlqcK-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=b841feb1820b7008977aa2684994b5debe450b18
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.16
-        git checkout b841feb1820b7008977aa2684994b5debe450b18
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/acpi/arm64/ drivers/platform/
+On Tue, Jan 25, 2022 at 05:46:28PM -0500, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> Move the arch_policy_entry pointer into ima_namespace.
+> 
+> When freeing the memory set the pointer to NULL.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Only relevant for the initial imans (for now) since it is derived from a
+boot parameter. Maybe mention this in the commit message.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/acpi/arm64/mpam.c:244:12: warning: no previous prototype for 'acpi_mpam_parse' [-Wmissing-prototypes]
-     244 | int __init acpi_mpam_parse(void)
-         |            ^~~~~~~~~~~~~~~
-
-
-vim +/acpi_mpam_parse +244 drivers/acpi/arm64/mpam.c
-
-   243	
- > 244	int __init acpi_mpam_parse(void)
-   245	{
-   246		struct acpi_table_header *mpam;
-   247		acpi_status status;
-   248		int err;
-   249	
-   250		if (acpi_disabled || !mpam_cpus_have_feature())
-   251			return 0;
-   252	
-   253		status = acpi_get_table(ACPI_SIG_MPAM, 0, &mpam);
-   254		if (ACPI_FAILURE(status))
-   255			return -ENOENT;
-   256	
-   257		err = _parse_table(mpam);
-   258		acpi_put_table(mpam);
-   259	
-   260		return err;
-   261	}
-   262	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Move into struct ima_namespace looks good,
+Acked-by: Christian Brauner <brauner@kernel.org>

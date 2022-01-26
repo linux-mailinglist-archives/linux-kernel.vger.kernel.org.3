@@ -2,175 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FF649C913
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 804F749C914
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234333AbiAZLvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:51:23 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:36054 "EHLO
+        id S234337AbiAZLvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:51:48 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:36150 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbiAZLvT (ORCPT
+        with ESMTP id S232111AbiAZLvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:51:19 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 52EA91F397;
-        Wed, 26 Jan 2022 11:51:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643197878; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        Wed, 26 Jan 2022 06:51:46 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id ABB531F3AE;
+        Wed, 26 Jan 2022 11:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1643197905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=WN9Ip30kqBy/bRxKBj0xyrG8FuTGNu7NnI2/hJlTwnY=;
-        b=EfyPi7E9kJqmrz2D9rNvEMRSyaNqTyXDtGF1W0Att0Z7nhlO53nGs/bzkYS5Nc10x1KC1/
-        h8sBSz4aBayW5MxKA26Trcy8Mz3AsGUHqDUUg2TNro/5NQlxxl9jt7g28GgdkyOPaWZ+MO
-        AJF3zPEOVzhkAqf9caQ1Y8ltba3C814=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643197878;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WN9Ip30kqBy/bRxKBj0xyrG8FuTGNu7NnI2/hJlTwnY=;
-        b=Q8sIf3Am0KlC+t8XLq/8cEGxXJe+6ynUqoRPLDKTKm6eiCa2x5iK/zGlSOR6hKNc2TRhgj
-        vnAOZgtLGyWzCIAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=iC+9fZFMgNXQrXNkpV3kwAOp8sXbJjtcXHN+8ofoBuA=;
+        b=hQwYelznxpBhZdQP2EnHM50XZ7M8r/yRLTGTF4hUOfLJM/wBp78R2FaDw8RlHD8SF331xw
+        OsxEPgm2kgoZh5zfKqDLsORbwcue/aR+fW1613Lk46bO2OUTDFA4ioT6mJaNC1fiNX+3Ah
+        AitO49dA6NT+UfSd95uobQdZocBwjgg=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E9BC513BA2;
-        Wed, 26 Jan 2022 11:51:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jI8UOLU18WGPHwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 26 Jan 2022 11:51:17 +0000
-Message-ID: <fa673f9c-2654-755e-450d-d29b95c1ce9d@suse.de>
-Date:   Wed, 26 Jan 2022 12:51:17 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 37C49A3B81;
+        Wed, 26 Jan 2022 11:51:45 +0000 (UTC)
+Date:   Wed, 26 Jan 2022 12:51:42 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Baoquan He <bhe@redhat.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "anton@enomsg.org" <anton@enomsg.org>,
+        "ccross@android.com" <ccross@android.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>
+Subject: Re: [PATCH V3] panic: Move panic_print before kmsg dumpers
+Message-ID: <YfE1zuhB2Qz73wqF@alley>
+References: <20220114183046.428796-1-gpiccoli@igalia.com>
+ <20220119071318.GA4977@MiWiFi-R3L-srv>
+ <YegytkfED+QI56Y8@alley>
+ <20220120085115.GB18398@MiWiFi-R3L-srv>
+ <63621138-2a41-26c2-524e-d889068f157a@igalia.com>
+ <20220121023119.GB4579@MiWiFi-R3L-srv>
+ <MWHPR21MB1593A32A3433F5F262796FCFD75B9@MWHPR21MB1593.namprd21.prod.outlook.com>
+ <20220122043351.GA2596@MiWiFi-R3L-srv>
+ <MWHPR21MB15933573F5C81C5250BF6A1CD75E9@MWHPR21MB1593.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
- <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
- <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
- <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
- <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------JnRflBn1QA502eLVkMeWa1Ta"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MWHPR21MB15933573F5C81C5250BF6A1CD75E9@MWHPR21MB1593.namprd21.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------JnRflBn1QA502eLVkMeWa1Ta
-Content-Type: multipart/mixed; boundary="------------c3aHYJxo0ZbpFtAhYu9krT2V";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Helge Deller <deller@gmx.de>,
- Javier Martinez Canillas <javierm@redhat.com>,
- Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
- Michael Hennerich <michael.hennerich@analog.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Phillip Potter <phil@philpotter.co.uk>,
- Carlis <zhangxuezhi1@yulong.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Lee Jones <lee.jones@linaro.org>, Heiner Kallweit <hkallweit1@gmail.com>
-Message-ID: <fa673f9c-2654-755e-450d-d29b95c1ce9d@suse.de>
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
- <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
- <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
- <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
- <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
-In-Reply-To: <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
+On Mon 2022-01-24 16:57:17, Michael Kelley (LINUX) wrote:
+> From: Baoquan He <bhe@redhat.com> Sent: Friday, January 21, 2022 8:34 PM
+> > 
+> > On 01/21/22 at 03:00pm, Michael Kelley (LINUX) wrote:
+> > > From: Baoquan He <bhe@redhat.com> Sent: Thursday, January 20, 2022 6:31 PM
+> > > >
+> > > > On 01/20/22 at 06:36pm, Guilherme G. Piccoli wrote:
+> > > > > Hi Baoquan, some comments inline below:
+> > > > >
+> > > > > On 20/01/2022 05:51, Baoquan He wrote:
+> 
+> [snip]
+> 
+> > > > > Do you think it should be necessary?
+> > > > > How about if we allow users to just "panic_print" with or without the
+> > > > > "crash_kexec_post_notifiers", then we pursue Petr suggestion of
+> > > > > refactoring the panic notifiers? So, after this future refactor, we
+> > > > > might have a much clear code.
+> > > >
+> > > > I haven't read Petr's reply in another panic notifier filter thread. For
+> > > > panic notifier, it's only enforced to use on HyperV platform, excepto of
+> > > > that, users need to explicitly add "crash_kexec_post_notifiers=1" to enable
+> > > > it. And we got bug report on the HyperV issue. In our internal discussion,
+> > > > we strongly suggest HyperV dev to change the default enablement, instead
+> > > > leave it to user to decide.
+> > > >
+> > >
+> > > Regarding Hyper-V:   Invoking the Hyper-V notifier prior to running the
+> > > kdump kernel is necessary for correctness.  During initial boot of the
+> > > main kernel, the Hyper-V and VMbus code in Linux sets up several guest
+> > > physical memory pages that are shared with Hyper-V, and that Hyper-V
+> > > may write to.   A VMbus connection is also established. Before kexec'ing
+> > > into the kdump kernel, the sharing of these pages must be rescinded
+> > > and the VMbus connection must be terminated.   If this isn't done, the
+> > > kdump kernel will see strange memory overwrites if these shared guest
+> > > physical memory pages get used for something else.
+> 
+> In the Azure cloud, collecting data before crash dumps is a motivation
+> as well for setting crash_kexec_post_notifiers to true.   That way as
+> cloud operator we can see broad failure trends, and in specific cases
+> customers often expect the cloud operator to be able to provide info
+> about a problem even if they have taken a kdump.  Where did you
+> envision adding a comment in the code to help clarify these intentions?
+> 
+> I looked at the code again, and should revise my previous comments
+> somewhat.   The Hyper-V resets that I described indeed must be done
+> prior to kexec'ing the kdump kernel.   Most such resets are actually
+> done via __crash_kexec() -> machine_crash_shutdown(), not via the
+> panic notifier. However, the Hyper-V panic notifier must terminate the
+> VMbus connection, because that must be done even if kdump is not
+> being invoked.  See commit 74347a99e73.
+>
+> Most of the hangs seen in getting into the kdump kernel on Hyper-V/Azure 
+> were probably due to the machine_crash_shutdown() path, and not due
+> to running the panic notifiers prior to kexec'ing the kdump kernel.  The
+> exception is terminating the VMbus connection, which had problems that
+> are hopefully now fixed because of adding a timeout.
 
---------------c3aHYJxo0ZbpFtAhYu9krT2V
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+My undestanding is that we could split the actions into three groups:
 
-SGkNCg0KQW0gMjYuMDEuMjIgdW0gMTI6MzEgc2NocmllYiBIZWxnZSBEZWxsZXI6DQo+IE9u
-IDEvMjYvMjIgMTI6MTgsIEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyB3cm90ZToNCj4+IE9u
-IDEvMjYvMjIgMTE6NTksIEhlbGdlIERlbGxlciB3cm90ZToNCj4+PiBPbiAxLzI2LzIyIDEx
-OjAyLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6DQo+Pg0KPj4gW3NuaXBdDQo+Pg0KPj4+PiBQ
-LlMuIEZvciB0aGUgcmVjb3JkLCBJIHdpbGwgcGVyc29uYWxseSBOQUsgYW55IGF0dGVtcHRz
-IHRvIHJlbW92ZSB0aGF0DQo+Pj4+IGRyaXZlciBmcm9tIHRoZSBrZXJuZWwuIEFuZCB0aGlz
-IGlzIGFub3RoZXIgcG9pbnQgd2h5IGl0J3MgYmV0dGVyIG5vdA0KPj4+PiB0byBiZSB1bmRl
-ciB0aGUgc3RhZ2luZy4NCj4+Pg0KPj4+IEkgYWdyZWUuIFNhbWUgYXMgZm9yIG1lIHRvIE5B
-SyB0aGUgZGlzYWJsaW5nIG9mIGZiY29uJ3MgYWNjZWxlcmF0aW9uDQo+Pj4gZmVhdHVyZXMg
-b3IgZXZlbiBhdHRlbXB0aW5nIHRvIHJlbW92ZSBmYmRldiBhbHRvZ2V0aGVyICh1bmxlc3Mg
-YWxsDQo+Pj4gcmVsZXZhbnQgZHJpdmVycyBhcmUgcG9ydGVkIHRvIERSTSkuDQo+Pj4NCj4+
-DQo+PiBCdXQgdGhhdCB3aWxsIG5ldmVyIGhhcHBlbiBpZiB3ZSBrZWVwIG1vdmluZyB0aGUg
-Z29hbCBwb3N0Lg0KPj4NCj4+IEF0IHNvbWUgcG9pbnQgbmV3IGZiZGV2IGRyaXZlcnMgc2hv
-dWxkIG5vdCBiZSBhZGRlZCBhbnltb3JlLCBvdGhlcndpc2UNCj4+IHRoZSBudW1iZXIgb2Yg
-ZXhpc3RpbmcgZHJpdmVycyB0aGF0IG5lZWQgY29udmVyc2lvbiB3aWxsIGtlZXAgZ3Jvd2lu
-Zy4NCj4gDQo+IEdvb2QgcG9pbnQsIGFuZCB5ZXMgeW91IGFyZSByaWdodCENCj4gDQo+IEkg
-dGhpbmsgdGhlIHJ1bGUgc2hvdWxkIGJlIHNvbWV0aGluZyBsaWtlOg0KPiANCj4gTmV3IGdy
-YXBoaWNzIGRldmljZXMgKGUuZy4gbWF4LiAzIHllYXJzIG9sZCBmcm9tIG5vdykgdXN1YWxs
-eSBhcmUNCj4gY2FwYWJsZSB0byBiZSBwb3J0ZWQgdG8gRFJNLg0KPiBGb3IgdGhvc2UgZ3Jh
-cGhpY3MgY2FyZHMgd2Ugc2hvdWxkIHB1dCBhIGhhcmQgc3RvcCBhbmQgbm90IGluY2x1ZGUg
-dGhlbQ0KPiBhcyBuZXcgZHJpdmVyIGludG8gdGhlIGZiZGV2IGZyYW1ld29yay4gSW5jbHVz
-aW9uIGZvciB0aG9zZSB3aWxsIG9ubHkNCj4gaGFwcGVuIGFzIERSTSBkcml2ZXIuDQo+IA0K
-PiBJbiB0aGUgc2FtZSBtYW5uZXIgdGhlcmUgYXJlIG9sZCBncmFwaGljIGNhcmRzIG9yIHZl
-cnkgc3BlY2lmaWMgZGV2aWNlcw0KPiAoZS5nLiBtb3JlIHRoYW4gMyB5ZWFycyBvbGQgb3Ig
-b25seSB1c2VkIGluIG5pY2hlLXVzZSBjYXNlcykNCj4gd2hpY2ggaGF2ZSBsaW1pdGF0aW9u
-cyBhbmQgdGh1cyBjYW4ndCBlYXNpbHkgYmUgcG9ydGVkIHRvIERSTS4NCj4gRm9yIHRob3Nl
-IGl0J3Mgc3RpbGwgYWNjZXB0YWJsZSB0byBpbmNsdWRlIHRoZW0gYXMgbGVnYWN5IGZiZGV2
-IGRyaXZlciwNCj4gYmVjYXVzZSB0aGUgd29yayBuZWVkZWQgaW4gRFJNIHRvIHN1cHBvcnQg
-c3VjaCBjYXJkcyBvciB0byBiZSBhYmxlIHRoYXQNCj4gdGhleSBydW4gZmFzdCBlbm91Z2gg
-d2l0aCBEUk0ganVzdCBkb2Vzbid0IHBheSBvZmYgdGhlIGVmZm9ydHMgd2hpY2ggYXJlDQo+
-IG5lZWRlZCB0byBrZWVwIHRoZW0gYXMgRFJNIGRyaXZlci4NCj4gDQo+IFdvdWxkIHRoYXQg
-YmUgYWNjZXB0YWJsZT8NCg0KTm8uIEFzIHdlJ3ZlIHNhaWQgc2V2ZXJhbCB0aW1lcywgdGhl
-cmUncyBub3RoaW5nIHN0b3BwaW5nIGFueSBkZXZpY2UgDQpmcm9tIGJlaW5nIHN1cHBvcnRl
-ZCBieSBEUk0uIElmIHNvbWV0aGluZydzIG1pc3Npbmcgb3Igc2xvdywgaXQncyANCmJlY2F1
-c2Ugbm8gb25lIGhhcyBoYWQgdGhhdCBpc3N1ZSBzbyBmYXIuIFdlIHdlbGNvbWUgcGF0Y2hl
-cyBwYXRjaGVzIHRvIA0KZml4IHN1Y2ggcHJvYmxlbXMuDQoNCkJlc3QgcmVnYXJkcw0KVGhv
-bWFzDQoNCj4gDQo+IEhlbGdlDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNz
-IERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21i
-SA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5
-LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+  1. Actions that has to be before kexec'ing kdump kernel, like
+     resetting physicall memory shared with Hyper-V.
 
---------------c3aHYJxo0ZbpFtAhYu9krT2V--
+     These operation(s) are needed only for kexec and can be done
+     in kexec.
 
---------------JnRflBn1QA502eLVkMeWa1Ta
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
 
------BEGIN PGP SIGNATURE-----
+   2. Notify Hyper-V so that, for example, Azure cloud, could collect
+      data before crash dump.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHxNbUFAwAAAAAACgkQlh/E3EQov+Dp
-VxAAuXLl/kj8IPfH8Z6ARB+5uZZHI85kwITqFyp7bRLN27fNx0Q9JRqmsrq6i1rlM1q7p25D644A
-tZCEf6rCOZIFspPc0mVzTAHwSTBWYrZN67BONdq4yaotg4xbkVh2RBcC5D0ya0tsubdgnASJ4IQ7
-xkJ+thq4rMlyjKfQ+XOEUIG37CkZeVXRUTRQHhX86V8Ww5FB1CEUyv7mSDn1r9GIOVCmom70jcPN
-xZRqeCpa7p1iRhmRpktrWBMRul6FVwUbGqsSI7t4YYerfWG/+gugO8VLdX4+MTXTIPqrnx86ZcRc
-rmpjKhYWA8OmOMVzPgiEt8apMK3K7HJLvjym1Dl3tcMI+pypz2U1WDdyDddNUyDs5Ns9eX4wk8t7
-1xSf+Aniqe7dOUdHi47LwWtfOmJHykAUVkbithcFVUj3yR3d4bIeRHymKX1gob3q48oUuDK0KkmJ
-in3RtxcnQmhFGXVE2jqz+7bkG77bsu2L592wi3wFzo2QrCarcCWwEvxoo67sH7q97N/5KD6gr8hw
-jz9jiWrqTxSA3FJHGIqZY3yQKv85Ll/60rMd61Lbz60o0iqVy9pej34lkjSQzVNtLEp26uoodeLw
-ZYqlCQAPQsPinV4W2BTvwpa+VadgBF+0UpfoilVDYIpuSvaAyXX+KihIzP5cvdM+y913cpNFQBgC
-hw0=
-=rbTd
------END PGP SIGNATURE-----
+      It is nice to have.
 
---------------JnRflBn1QA502eLVkMeWa1Ta--
+      It should be configurable if it is not completely safe. I mean
+      that there should be a way to disable it when it might increase
+      the risk that kexec'ing kdump kernel might fail.
+
+
+   3. Some actions are needed only when panic() ends up in the
+      infinite loop.
+
+      For example, unloading vmbus channel. At least the commit
+      74347a99e73ae00b8385f ("x86/Hyper-V: Unload vmbus channel in
+      hv panic callback") says that it is done in kdump path
+      out of box.
+
+All these operations are needed and used only when the kernel is
+running under Hyper-V.
+
+My mine intention is to understand if we need 2 or 3 notifier lists
+or the current one is enough.
+
+The 3 notifier lists would be:
+
+   + always do (even before kdump)
+   + optionally do before or after kdump
+   + needed only when kdump is not called
+
+Thanks a lot for the very valuable input.
+
+Best Regards,
+Petr

@@ -2,111 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD7F49CFA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 921BB49CFA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243110AbiAZQ0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:26:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51233 "EHLO
+        id S243127AbiAZQ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:27:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55764 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236907AbiAZQ0E (ORCPT
+        by vger.kernel.org with ESMTP id S236514AbiAZQ1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:26:04 -0500
+        Wed, 26 Jan 2022 11:27:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643214364;
+        s=mimecast20190719; t=1643214432;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JZP7rMmgyeJ3Qoh7yXeapZfkZgz+JP+eRsAiK+6Ga24=;
-        b=aQhuB6gtuwOItH3q5oOWBeFXFT9LBHh60k7I/9Gw11d178HSQHxjZP4+eM5tp1j25vtlKk
-        f/ydZqbUJRPkyVLK87VuIZs+trsOLU096r35PvBwlInAWR4MB/NSY+bm5BUgh+5eLzI0lY
-        DncQ+HNPVslIefpXDEoZX0gWtrSEz0k=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=efzC2IwqGzejEAIdbekALVZEUqxrdpopAyww58idfp8=;
+        b=SA+donqYp+rAoMJ4gISW//JCe04SN8W3z750NY052iDabqcaZtR+DdZf0EhqhkAUZgWf2q
+        FpVNITOfcb6PtCi2sh+QrhHHTTr/go5iKBLSaLzQpdxZhopYgPh77jywCsxh8XKCxbZHAI
+        sTRFSWhci189IqwoCDCnI0qjU0bjXcA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-345-W2R8kv7jOlqjOYYfiqMgSg-1; Wed, 26 Jan 2022 11:26:02 -0500
-X-MC-Unique: W2R8kv7jOlqjOYYfiqMgSg-1
-Received: by mail-wm1-f70.google.com with SMTP id l20-20020a05600c1d1400b0035153bf34c3so3460wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:26:02 -0800 (PST)
+ us-mta-340-BoJLihVLPmqdv4crEgUq8g-1; Wed, 26 Jan 2022 11:27:11 -0500
+X-MC-Unique: BoJLihVLPmqdv4crEgUq8g-1
+Received: by mail-wm1-f71.google.com with SMTP id q125-20020a1c4383000000b003503e10c027so841wma.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:27:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=JZP7rMmgyeJ3Qoh7yXeapZfkZgz+JP+eRsAiK+6Ga24=;
-        b=j/o+CTH3vO4nit8ecOOVHxn7uK0Ln5iSE8KXo8WEQ7zdZCNVKeCOJUoTEZD25yjxn8
-         sJYRXOqBc9fAsOrkJQiU8Ijv1O2j3C+q2CecH2MZ9nyh9BlAYiYwsuYU6jjFe67wW+8g
-         iShsVKvB/Cb5WiM58SR834K14yOmCQ/F9JjTSJ99OxyoJbESnAgpdqOobvbZH6Edlab1
-         Fw+LHexIJN33lMfsN/bENglxr9M68np0K2WU4aqDbMMqQZQjNsQHPgYzIT/5VabWYyoM
-         Poin5azQrzpn5lK378rvQeIUnNFb8GsyFq7dxISxZfXbpNZRw1GzDoyHTzNmyByB2pq0
-         4QqQ==
-X-Gm-Message-State: AOAM5300yDXS7QriQ4nZQ8g0cVc515R6w6b/ulLM4WTFhIkXNAXu9rW7
-        DBiLrc+OYXt+ey4k3gaFqQHReKPc9fnlNrt09RefjSgibXSYGAUwqme/+xqx4ioKQquEII0IzRe
-        0Y4rphbPCvXD0y5G7a0KsSRn+
-X-Received: by 2002:a5d:5044:: with SMTP id h4mr20824817wrt.681.1643214361467;
-        Wed, 26 Jan 2022 08:26:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzAPjkU/T3WFos1KJxEHSc/1+U+j1V1UGcEseQncQ0Py8Ob2nIbLAswePEr99lXr5H7pkZjbA==
-X-Received: by 2002:a5d:5044:: with SMTP id h4mr20824803wrt.681.1643214361290;
-        Wed, 26 Jan 2022 08:26:01 -0800 (PST)
+        bh=efzC2IwqGzejEAIdbekALVZEUqxrdpopAyww58idfp8=;
+        b=XDs0i4boubk7GkSHRnlEUpdYPbN5pxYT/r3uMKYa2UtEpVIl6L+4sKZmO0P90ljPDU
+         2DenpX3GGrRRH+Un8uAzaXzNbsNC2oMOowMt817MWXO7I3PPlnD/OMWTD9KJIIIqaOH4
+         nob2ceA0j/ZPzVN8rmUHqC166bHqLpqK2W/HlA58OI4qbTTYEBQ/v8qiXcGCQUuXywD0
+         663UUw7ICyymJiY/J66zf7neOIGDxIA5o16g5lPX5JDCz30e28Mq2jx+Pwg0fH9HFG6W
+         /KAKPCKEUKCFLrBE/tObpip5hueDoqPnylljFXJu9egD+IwiD+Mbha94ZMbRS/v2S9LU
+         +XLw==
+X-Gm-Message-State: AOAM532gG3L6wHJNTL0SkBeKa7WIePYe85gfJmQNuke837XizugZg4CO
+        A3TrLolvVcQLgqHRQAOvR8j9lHsNEAJOrrxjiEnNivoZVA2P0eyiVhm1cc/GNjutZC/S/qAaKYT
+        8fwo4yFz1+eAP/j2CeqAQkWNJtoaOney8JfRv8uruJXatTscgNlHqGqK5a2ce8cWqEFJ5t++6cK
+        wQ
+X-Received: by 2002:a7b:c08b:: with SMTP id r11mr8062085wmh.111.1643214429942;
+        Wed, 26 Jan 2022 08:27:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzat5xFG+n6X0ZtwIT2WzJvrNYAslBIVDm2zn1aj/rH3RM3gfE4afk84ck3WLdB4s/rkdFzNA==
+X-Received: by 2002:a7b:c08b:: with SMTP id r11mr8062061wmh.111.1643214429639;
+        Wed, 26 Jan 2022 08:27:09 -0800 (PST)
 Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id p17sm19478544wrf.112.2022.01.26.08.26.00
+        by smtp.gmail.com with ESMTPSA id a14sm21852909wri.25.2022.01.26.08.27.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 08:26:00 -0800 (PST)
+        Wed, 26 Jan 2022 08:27:09 -0800 (PST)
 From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Joe Perches <joe@perches.com>, Wanpeng Li <wanpengli@tencent.com>,
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 2/2] KVM: x86: Use memcmp in kvm_cpuid_check_equal()
-In-Reply-To: <YfFwnm3Vp0eOPElp@google.com>
-References: <20220124103606.2630588-1-vkuznets@redhat.com>
- <20220124103606.2630588-3-vkuznets@redhat.com>
- <864dfbfdc44e288e99cf7baa3aa8f7c8568db507.camel@perches.com>
- <878rv2izjp.fsf@redhat.com> <YfFwnm3Vp0eOPElp@google.com>
-Date:   Wed, 26 Jan 2022 17:25:59 +0100
-Message-ID: <87mtjih3ag.fsf@redhat.com>
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: nVMX: WARN on any attempt to allocate shadow VMCS
+ for vmcs02
+In-Reply-To: <053bb241-ea71-abf8-262b-7b452dc49d37@redhat.com>
+References: <20220125220527.2093146-1-seanjc@google.com>
+ <87r18uh4of.fsf@redhat.com>
+ <053bb241-ea71-abf8-262b-7b452dc49d37@redhat.com>
+Date:   Wed, 26 Jan 2022 17:27:08 +0100
+Message-ID: <87k0emh38j.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Paolo Bonzini <pbonzini@redhat.com> writes:
 
-> On Wed, Jan 26, 2022, Vitaly Kuznetsov wrote:
->> Joe Perches <joe@perches.com> writes:
+> On 1/26/22 16:56, Vitaly Kuznetsov wrote:
+>>> -	WARN_ON(loaded_vmcs == &vmx->vmcs01 && loaded_vmcs->shadow_vmcs);
+>>> +	if (WARN_ON(loaded_vmcs != &vmx->vmcs01 || loaded_vmcs->shadow_vmcs))
+>>> +		return loaded_vmcs->shadow_vmcs;
+>> Stupid question: why do we want to care about 'loaded_vmcs' at all,
+>> i.e. why can't we hardcode 'vmx->vmcs01' in alloc_shadow_vmcs()? The
+>> only caller is enter_vmx_operation() and AFAIU 'loaded_vmcs' will always
+>> be pointing to 'vmx->vmcs01' (as enter_vmx_operation() allocates
+>> &vmx->nested.vmcs02 so 'loaded_vmcs' can't point there!).
 >> 
->> > On Mon, 2022-01-24 at 11:36 +0100, Vitaly Kuznetsov wrote:
->> >> kvm_cpuid_check_equal() should also check .flags equality but instead
->> >> of adding it to the existing check, just switch to using memcmp() for
->> >> the whole 'struct kvm_cpuid_entry2'.
->> >
->> > Is the struct padding guaranteed to be identical ?
->> >
->> 
->> Well, yes (or we're all doomeed):
->> - 'struct kvm_cpuid_entry2' is part of KVM userspace ABI, it is supposed
->> to be stable.
->> - Here we compare structs which come from the same userspace during one
->> session (vCPU fd stays open), I can't imagine how structure layout can
->> change on-the-fly.
 >
-> I'm pretty sure Joe was asking if the contents of the padding field would be
-> identical, i.e. if KVM can guarnatee there won't be false positives on
-> mismatches,
+> Well, that's why the WARN never happens.  The idea is that if shadow 
+> VMCS _virtualization_ (not emulation, i.e. running L2 VMREAD/VMWRITE 
+> without even a vmexit to L0) was supported, then you would need a 
+> non-NULL shadow_vmcs in vmx->vmcs02.
+>
+> Regarding the patch, the old WARN was messy but it was also trying to 
+> avoid a NULL pointer dereference in the caller.
+>
+> What about:
+>
+> 	if (WARN_ON(loaded_vmcs->shadow_vmcs))
+> 		return loaded_vmcs->shadow_vmcs;
+>
+> 	/* Go ahead anyway.  */
+> 	WARN_ON(loaded_vmcs != &vmx->vmcs01);
+>
+> ?
+>
 
-Ah, sorry, I thought about structure layout. Generally, there's no
-guarantee the content of the padding will be the same in the
-KVM_SET_CPUID2 case as we vmemdup_user() what userspace VMM gives us.
-
-> which is the same reason Paolo passed on this patch.  Though I still think we
-> should roll the dice :-)
-
-Well, so far we've only identified CPU (re-)hotplug by reusing an
-existing vCPU fd as a broken use-case and it may happen that QEMU is the
-only VMM which does that (and memcmp() approach works for it) ... but
-who know what's out there)
+FWIW, this looks better [to my personal taste].
 
 -- 
 Vitaly

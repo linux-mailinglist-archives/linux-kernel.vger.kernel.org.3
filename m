@@ -2,101 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD02649D21C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F77E49D21F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237503AbiAZS5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S244330AbiAZS5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:57:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiAZS5J (ORCPT
+        with ESMTP id S244315AbiAZS5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:57:09 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1E4C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:57:08 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id k31so1623226ybj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:57:08 -0800 (PST)
+        Wed, 26 Jan 2022 13:57:14 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F30C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:57:14 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id nn16-20020a17090b38d000b001b56b2bce31so519449pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:57:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OI//2/YDsPncsQcF4ZJwL9Ncxnx2PuFuGkTk1XFTyY0=;
-        b=eUZJwqDtEMS1SLfHgHDSdSdDGh69drRy6edRXHgj2IOZ4O1pDGzkqSOVguZ0BhB4P+
-         dIDljXOtCGovo1gyJQWSOyWCX1rpIA08j5uGUpsfvl5/WPctfj7gjgZJ+0NtsH+5G+Qr
-         rDdb7goZkYAGupvxymqh01F/+O2qOslpAltXI=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=0YXbOqZCsc8uF1b0Zx5GyaapQWG+DhSG9kbL2Nvau8w=;
+        b=Ncar0u/nCD3QOPWjMEpiZC+nS8dL6KPw+LXBV3hT830C2ZuPO31OelF66gzYGeH6Zc
+         np7imoQBUzeHT9/i8BkHDVWTVlV/EYcxhWRCcinjdcCRdR7YiBdRyer3HrKVtbxzvPZH
+         QPIjz+EQlfUPCgKYD5kBrehuqjJ7OE+Mbz7WmGHMdYVj+MMjTJ8buUztU6v5i+WgRAMm
+         s9/m3VIDZAPPZ0xtQlRRhfJZ2epEHxlB9KXJYUosX4LaeW7Adle+mjRc3AhhtcKYIVQx
+         aYwSRnM+aGnObCYe9lPX4h5AXkPOUS2fq04L/HSeKtNcC9ipQboB+H5prEg4v0s2Bo2y
+         cN2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OI//2/YDsPncsQcF4ZJwL9Ncxnx2PuFuGkTk1XFTyY0=;
-        b=cZhFqHomsPcjVv09bAkG5awCJZMET7WMIz8nJmoEb46CgzI8fv0cg98ygqajAY2MiF
-         GaEsFP7rAV/Dn6iTGqVnmiBtJODNF8Bui6iAgURw3d480DNqekelFy9/vnXw+KPYVJ8I
-         d6bY4edR1xFLeRAnlHcWg95zGSll5tWk9ACLx/8PL1QSOTdM2BlHhzBvRJ/CLnoc7Gwx
-         /j/z+jDsxKOHomo2FPaSx4LVsD3Dg8CuEG0V/J6JczZvewzFHkxt6hLJEFCdW2S6AKds
-         XI1B0EJIqacjkfINTaHh069WbvvgvYPHHrIUJ1lW7EFpQ5xhLRa49WSWuFdSwAxBkzAG
-         Dvmw==
-X-Gm-Message-State: AOAM533EPhuGqdZyQVHKDFat8Ku8q+0vN3iMGb4wbRXx8RCJ+RBaOFR0
-        DGJAc2t/AjNdQpnRWc8a7jGkRUfNFVoXLWdg1tJVIA==
-X-Google-Smtp-Source: ABdhPJxGfFNM0avof/HDQxdJacpsdRmpZGczH4ph3KfkeAMBRioe+XmK0oN7AT9BQqo0Ch69Kbpw0vsdl2THfhJPedM=
-X-Received: by 2002:a25:24d:: with SMTP id 74mr369914ybc.449.1643223427987;
- Wed, 26 Jan 2022 10:57:07 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=0YXbOqZCsc8uF1b0Zx5GyaapQWG+DhSG9kbL2Nvau8w=;
+        b=HO2EeYX5Qyu0Wu0d/ns8G1E6gvM0h3J8/sPaPLkiVf1W0hSuXsxg6NuWoLJbw51AjW
+         jUQMnJOEL9DXKoDxJAfpf2SRZDnuvnAo0jDVG02OEU6jXWabyaTfEHWeZDGXZp9S5/OA
+         fRCw9pWDbrhaEyl5DFga9/P7cT+r5URnWuMtlP3C47f8x+Gm6a0Xd+nfcvIsPgRKVY+3
+         sHV3vfeprpc4rGoaTkR3sls8AKOj2/LcdHmJxU4HQXnIySzt36vXNQwqAbTnIQYKktaC
+         FfGtojYBnLQTWIKOMLC0tDETTH+8HyVoo2+SFQC/smuGlkxQNlm2F0ZGKVnb/Q80FSj9
+         wyJA==
+X-Gm-Message-State: AOAM532TNqqtoab9HwBnM7/nWPGrVbv/57KA4olJXhuMyQ4HOPjB4YB9
+        6ukYLRbkbxUKXCAv6MrEXjLMuA==
+X-Google-Smtp-Source: ABdhPJw1ZvbPGuzvUcLhU5wrEXvWSy+j0FWUp5hFY52/DHlJEXTVXCMy/jSjlubXgGGYh8KVBshO5A==
+X-Received: by 2002:a17:90a:d203:: with SMTP id o3mr10075663pju.122.1643223433598;
+        Wed, 26 Jan 2022 10:57:13 -0800 (PST)
+Received: from [2620:15c:29:204:925c:a455:6d75:1ac8] ([2620:15c:29:204:925c:a455:6d75:1ac8])
+        by smtp.gmail.com with ESMTPSA id g1sm2898783pfj.58.2022.01.26.10.57.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 10:57:13 -0800 (PST)
+Date:   Wed, 26 Jan 2022 10:57:12 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        thomas.lendacky@amd.com, lkp@intel.com, ak@linux.intel.com,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, tony.luck@intel.com
+Subject: Re: [PATCH] x86/mm: Fix warning on build with X86_MEM_ENCRYPT=y
+In-Reply-To: <20220126115919.7691-1-kirill.shutemov@linux.intel.com>
+Message-ID: <e58354f2-d978-2449-67cb-cae63d2b6dd7@google.com>
+References: <202201261113.3P3URW2n-lkp@intel.com> <20220126115919.7691-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-References: <20220126012203.2979709-1-pmalani@chromium.org>
- <YfDEHoYkLc6zjSxj@google.com> <CACeCKafqQmb7jjzweaRq2ETBbPk_2HE8FbFLMdfcCD8PrdckoQ@mail.gmail.com>
- <CABXOdTemE9TOhOXy27beoEvj_6eTcwUj_A6=DMhEmMgCsqXRnQ@mail.gmail.com>
-In-Reply-To: <CABXOdTemE9TOhOXy27beoEvj_6eTcwUj_A6=DMhEmMgCsqXRnQ@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 26 Jan 2022 10:56:58 -0800
-Message-ID: <CACeCKadMZrFkjmyrO4Spb0Psd5-PZO8fTN6NdMgmsTEsLnT7Qg@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC device
-To:     Guenter Roeck <groeck@google.com>
-Cc:     Tzung-Bi Shih <tzungbi@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Alyssa Ross <hi@alyssa.is>, Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Guenter,
+On Wed, 26 Jan 2022, Kirill A. Shutemov wrote:
 
-On Wed, Jan 26, 2022 at 7:33 AM Guenter Roeck <groeck@google.com> wrote:
->
-> On Tue, Jan 25, 2022 at 8:05 PM Prashant Malani <pmalani@chromium.org> wrote:
-> >
-> > Hi Tzung-Bi,
-> >
-> > Thanks for your review.
-> >
-> > On Tue, Jan 25, 2022 at 7:46 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
-> > >
-> > > On Wed, Jan 26, 2022 at 01:22:03AM +0000, Prashant Malani wrote:
-> > > > Fixes: fdc6b21e2444 ("platform/chrome: Add Type C connector class driver")
-> > > > Reported-by: Alyssa Ross <hi@alyssa.is>
-> > > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > >
-> > > With a minor comment,
-> > > Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-> > >
-> > > > @@ -1076,6 +1076,12 @@ static int cros_typec_probe(struct platform_device *pdev)
-> > > >
-> > > >       typec->dev = dev;
-> > > >       typec->ec = dev_get_drvdata(pdev->dev.parent);
-> > > > +
-> > >
-> > > I would prefer to remove the blank line to make it look like an integrated block.
-> >
-> > I actually prefer it as it is. typec->dev is not really part of this
-> > "integrated block", and I don't want to add another space there.
->
-> But on the other side the check is part of the "integrated block".
-> Maybe add an empty line between the two assignments if you want a
-> separation.
+> So far, AMD_MEM_ENCRYPT is the only user of X86_MEM_ENCRYPT. TDX will be
+> the second. It will make mem_encrypt.c build without AMD_MEM_ENCRYPT,
+> which triggers a warning:
+> 
+> arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for
+> 	function 'mem_encrypt_init' [-Wmissing-prototypes]
+> 
+> Fix it by moving mem_encrypt_init() declaration outside of #ifdef
+> CONFIG_AMD_MEM_ENCRYPT.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Fixes: 20f07a044a76 ("x86/sev: Move common memory encryption code to mem_encrypt.c")
 
-OK. I'll add the space before it.
-
-Thanks,
+Acked-by: David Rientjes <rientjes@google.com>

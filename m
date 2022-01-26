@@ -2,121 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1A249CEFB
+	by mail.lfdr.de (Postfix) with ESMTP id 8F26249CEFC
 	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbiAZPy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:54:57 -0500
-Received: from mail-yb1-f169.google.com ([209.85.219.169]:43952 "EHLO
-        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiAZPyy (ORCPT
+        id S232288AbiAZPy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:54:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231177AbiAZPyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Jan 2022 10:54:54 -0500
-Received: by mail-yb1-f169.google.com with SMTP id i10so53712ybt.10;
-        Wed, 26 Jan 2022 07:54:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ucO1sywroR8yC1kKoTBiQwAGK1EFu2UMuTi0r7LNQIo=;
-        b=fziYqRGxe2mG1ZQBaIrI4dqvqu2xaZcqoozdXk1EuSKGzLj/qG5NWyhXrKd4HE4TWP
-         MdlwYrTVlp4ARgLbEkXef5Nr2VClr9jKCc5rq4docxUjFXlD3Fdnny6Z38bewzCeihyP
-         njM6lo7JZpKKEKC7DKL5uy09xBLTY+7aqpFLpB3YhswjOjSV8Enzw2e0EWHtLLeqaMeQ
-         zcRD4eAjHuP0his1DiotkNnZkgk9qjmQy9RMrvVJTYyUpqVjylOC29/s4DwCTLXcGeN6
-         gjZMy9Sq+dOGYbf+jrXfqqMc+sAQeJTCWOiYxq0fKshTlPKK+z1kLb1Dvt5VP1IoCdaL
-         SJKA==
-X-Gm-Message-State: AOAM530rASM3sd1KM/4adU6LpLBYFManprB7QJUICNWEL1kmyR6yTbJq
-        3dhHyWSqaMRtrI2Q+6WfVqsMyfjL6Ut3iUsvtD0=
-X-Google-Smtp-Source: ABdhPJymVLAX8wg62RwdJAXxUEjDxYZbfFYeCSGaFYiOUyaot4fh9pGEqFr1JLabhRbIJtmemdXujcnWT0rb+wSx+UM=
-X-Received: by 2002:a25:3793:: with SMTP id e141mr36739114yba.624.1643212494095;
- Wed, 26 Jan 2022 07:54:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20220123091004.763775-1-ztong0001@gmail.com> <6a0233cd-d931-8a36-3b9e-08b774cec7b0@redhat.com>
-In-Reply-To: <6a0233cd-d931-8a36-3b9e-08b774cec7b0@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 26 Jan 2022 16:54:43 +0100
-Message-ID: <CAJZ5v0h51v9fFrJRuaFpSn7J2UEHndEj0f3zpmw=RvgsvAhtvw@mail.gmail.com>
-Subject: Re: acpi_get_devices() crash when acpi_disabled==true (was [PATCH v2]
- drm/privacy-screen: honor acpi=off in detect_thinkpad_privacy_screen)
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Tong Zhang <ztong0001@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD238C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:54:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C7C6B81EFD
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:54:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E80C340E3;
+        Wed, 26 Jan 2022 15:54:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643212492;
+        bh=IIHhUmLrk+ly/tOHaZfanJN3Jp4qrbBjymc58Is+O+0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ioVG4xKbhhEryA671lyFldKC1d7fBSzw12HShHDRfoQgKTGLt9H3CiRTzHuzJwKqS
+         btHkF2EY/JvZhJd2qpGTtjFe5T3sRlVLWdlmHdrYUD1A962oEz82GC9OK3iI3mbnfA
+         7LdzLpF+1NJJGLxg+DZIaJHbmhVaI2+Y4qM6eKh3UOqWfJRY0+4/vD+wxmKh9pbVZu
+         +j8mranfOUKpHdO6nHYuLWQY69v+jh62aAS84KI7vwVRzMz/F2nTtbxEmEeKItm9zn
+         1T2OdVWnRBq+vYaYMdY7DiY2Y8PuoDvYIAAPrqf+RtnSLI43xnA2yoimw1cbz7TzXi
+         dVTTcRD1GbDIw==
+Date:   Thu, 27 Jan 2022 00:54:47 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/4] trace: Introduce objtrace trigger to trace the
+ kernel object
+Message-Id: <20220127005447.143a840e9b0f67d894b8c54a@kernel.org>
+In-Reply-To: <CAEr6+EB+ENLJM1vU1pPgQ4ZcYe6FDSRWwdSpY_dLq0tGqr+tnQ@mail.gmail.com>
+References: <20220113013835.503285-1-xiehuan09@gmail.com>
+        <20220118232448.891fbf550b50193e0155b59c@kernel.org>
+        <CAEr6+EB+ENLJM1vU1pPgQ4ZcYe6FDSRWwdSpY_dLq0tGqr+tnQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 2:47 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi All,
->
-> On 1/23/22 10:10, Tong Zhang wrote:
-> > when acpi=off is provided in bootarg, kernel crash with
-> >
-> > [    1.252739] BUG: kernel NULL pointer dereference, address: 0000000000000018
-> > [    1.258308] Call Trace:
-> > [    1.258490]  ? acpi_walk_namespace+0x147/0x147
-> > [    1.258770]  acpi_get_devices+0xe4/0x137
-> > [    1.258921]  ? drm_core_init+0xc0/0xc0 [drm]
-> > [    1.259108]  detect_thinkpad_privacy_screen+0x5e/0xa8 [drm]
-> > [    1.259337]  drm_privacy_screen_lookup_init+0xe/0xe85 [drm]
-> >
-> > The reason is that acpi_walk_namespace expects acpi related stuff
-> > initialized but in fact it wouldn't when acpi is set to off. In this case
-> > we should honor acpi=off in detect_thinkpad_privacy_screen().
-> >
-> > Signed-off-by: Tong Zhang <ztong0001@gmail.com>
->
-> Thank you for catching this and thank you for your patch. I was about to merge
-> this, but then I realized that this might not be the best way to fix this.
->
-> A quick grep shows 10 acpi_get_devices() calls outside of drivers/acpi,
-> and at a first glance about half of those are missing an acpi_disabled
-> check. IMHO it would be better to simply add an acpi_disabled check to
-> acpi_get_devices() itself.
->
-> Rafael, do you agree ?
+Hi Jeff,
 
-Yes, I do.
+On Wed, 19 Jan 2022 10:32:49 +0800
+Jeff Xie <xiehuan09@gmail.com> wrote:
 
-> Note the just added chrome privacy-screen check uses
-> acpi_dev_present(), this is also used in about 10 places outside
-> of drivers/acpi and AFAIK none of those do an acpi_disabled check.
->
-> acpi_dev_present() uses bus_find_device(&acpi_bus_type, ...)
-> but the acpi_bus_type does not get registered when acpi_disabled
-> is set. In the end this is fine though since bus_find_device
-> checks for the bus not being registered and then just returns
-> NULL.
+> > > Note: when change to use the ftrace_test_recursion_trylock, all the functions
+> > > will call the copy_from_kernel_nofault, I don't know where this is the problem now,
+> > > maybe should fall back to the usage in v6.
+> > >
+> > > for example:
+> > >
+> > > cat-118     [000] ...1.     1.458998: __bio_add_page <-bio_add_page object:0xffff88811a12e9e8 value:0x0
+> > > cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault <-trace_object_events_call object:0xffff88811a12e9e8 value:0x1000
+> > > cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault_allowed <-copy_from_kernel_nofault object:0xffff88811a12e9e8 value:0x1000
+> > > cat-118     [000] ...1.     1.458998: __rcu_read_lock <-xa_load object:0xffff88811a12e9e8 value:0x1000
+> > > cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault <-trace_object_events_call object:0xffff88811a12e9e8 value:0x1000
+> > > cat-118     [000] ...2.     1.458998: copy_from_kernel_nofault_allowed <-copy_from_kernel_nofault object:0xffff88811a12e9e8 value:0x1000
+> > > cat-118     [000] ...1.     1.458998: __rcu_read_unlock <-xa_load object:0xffff88811a12e9e8 value:0x1000
+> > > cat-118     [000] ...3.     1.458998: copy_from_kernel_nofault <-trace_object_events_call object:0xffff88811a12e9e8 value:0x1000
+> > > cat-118     [000] ...3.     1.458998: copy_from_kernel_nofault_allowed <-copy_from_kernel_nofault object:0xffff88811a12e9e8 value:0x1000
+> > > ....
+> >
+> > Hmm, this is strange, but I got it is the expected behavior, since the
+> > ftrace_test_recursion_trylock() accepts one stage recursion for the
+> > first event in the interrupt as transition event.
 
-Right.
+I think you should revert that change and back to your own per-cpu recursion
+flag instead of using ftrace_test_recursion_trylock().
 
-> > ---
-> > v2: fix typo in previous commit -- my keyboard is eating letters
-> >
-> >  drivers/gpu/drm/drm_privacy_screen_x86.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/drm_privacy_screen_x86.c b/drivers/gpu/drm/drm_privacy_screen_x86.c
-> > index a2cafb294ca6..e7aa74ad0b24 100644
-> > --- a/drivers/gpu/drm/drm_privacy_screen_x86.c
-> > +++ b/drivers/gpu/drm/drm_privacy_screen_x86.c
-> > @@ -33,6 +33,9 @@ static bool __init detect_thinkpad_privacy_screen(void)
-> >       unsigned long long output;
-> >       acpi_status status;
-> >
-> > +     if (acpi_disabled)
-> > +             return false;
-> > +
-> >       /* Get embedded-controller handle */
-> >       status = acpi_get_devices("PNP0C09", acpi_set_handle, NULL, &ec_handle);
-> >       if (ACPI_FAILURE(status) || !ec_handle)
->
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D1949C2E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BB449C2E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiAZFEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 00:04:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
+        id S231599AbiAZFEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 00:04:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiAZFEo (ORCPT
+        with ESMTP id S230410AbiAZFEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 00:04:44 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A454C061744
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 21:04:44 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id z5so7490673plg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 21:04:44 -0800 (PST)
+        Wed, 26 Jan 2022 00:04:47 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF534C061747
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 21:04:46 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso3702832pjv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 21:04:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LymW6PUOvmHHk0t/aZG7OwTx34gGDOgM/8aOiJBjMoY=;
-        b=bCNMubob4uLUgkxduJa6dIISrtOZ9XCo5RHxWYcZMNmh9pQo8A6uQxpVV3R4o+drU9
-         JxYbJEbmewq86YNgOJho3goihYXnv1gQQEOy80l1ECYHbgg60gU+zr7FoqJqhNw4N4hV
-         6Eanz0hNrYke+w+ea28Rg/X3qiKD5TdtStq7S3Wv96MPycCk+YzD9P2wUx0hXuMH53z9
-         E4kubKpoVBlneakaLfX7JqFChA7PN64aSMwc55HRaS91vuAtnBgY9h3uKmnOeut0YQeu
-         JU4pwvPFjSe31pkC47oSrDQFpnr78TYr7rkGzB+WhvdYFDsIorbKQqienIuE3RgFCpnl
-         pNng==
+        bh=Jf1uLBjki4K7jOvn/YnWyQnOsAzyavSVcBTDjzhWZVk=;
+        b=s7zMJJFXWLUbfFvY366952O0Q+8AFj8b7golOj4f4DUT2Ig3S/Ux7+A/xPSsSayUK3
+         s/ClbYRwLtCtL61JcvR+QDFmmYqqKMnfjAW6eKUrgerAzsRMNxqqJmQlX78Yz+UsrjTf
+         SuCxCxb3zsywUvXYpmYrai+fOh9GnBqo8MRY7o+5p4x8p7qyF/FrtAxlnr/leRgymrlV
+         /pcn9Y+bBBoP8Ma39k9fXyYMNPWYxLnDUjhnI7TD3qKagJ8bhT/3vBNPWhPvVcvcl4tA
+         vlEilOw8pkcnnpkWEsoVIB0wCi9SrL5mWCUv0JV7DybEm+ikDSbXAdDMxXEYJiCBebIr
+         PjtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LymW6PUOvmHHk0t/aZG7OwTx34gGDOgM/8aOiJBjMoY=;
-        b=Nz6SRGQHQYb0ZT/d521XIwGf6KkG8EM8q9mAhS8C8yqMwCYJc/XWPLfxGCn3D5BcxO
-         YPO8u3Y8Vu/rtFvic7qx11db8czL9IZqN6HgonaV/u61zZZG1VT+9+o+gp48MujQThc/
-         pspHBg047JVcahti22RpKBwbMCE9vPwSOYSs1bIqz8Zw7biQ+YisTTfwf+pDakOQelAK
-         eCTkOgCLbwpa5fWUEi2I+bvoMoUxB9IQYBkm8BpiyPO0XaxIuuZN22x8WdbpGATMF0Aq
-         Ed/6kFWBggXQmvruSdf85wU7A8e3dDM6OPVbgDSUBmlx0ePJhnqWbMfUEDLWz/vMDy0D
-         jPxQ==
-X-Gm-Message-State: AOAM531RNXnJFyJ7RBgAN6JchU8qtxjZShfVhKUJaJU3W7uRxYLsUm2H
-        j6SYKu0nsJxmkBCoxqazM7ej3A==
-X-Google-Smtp-Source: ABdhPJwJmbw+cC52lHR4HHf99/ag6oVQGs3up2giyXNZXQAanzfb+0gwg2JhZ2zXwgsfpBZqorwobg==
-X-Received: by 2002:a17:90b:3ec4:: with SMTP id rm4mr7011825pjb.120.1643173483499;
-        Tue, 25 Jan 2022 21:04:43 -0800 (PST)
+        bh=Jf1uLBjki4K7jOvn/YnWyQnOsAzyavSVcBTDjzhWZVk=;
+        b=JX5xkoSTZCgb1KxFkmNFxfcAXFHfaxp/+XjnsPnSi6Jzedr8BSuENvKynVwrMo+7he
+         8Y6+/sSMZBcYsKaZ4DXwKyBezY8K4Avp1HOnb6bBhZ4usQSfSFYstflLGkIfyoXHq4Do
+         l36WjzVaO3VWZwPV2dlBVPBu+Qh2Orm7v/m+TBtHPbua/xRMS9gqFyTwsjDggzOZHgIM
+         2J+jk+M4HcTf+xGuOML321ht51b+zX0lwIZ3RTQa+UZncC1jNj643IdZQS1/RhYDnHu6
+         A9xugAPf74eijo1r2/Q2ggloInfDJ1qJtpWkUfwVO2oByu65PDy6Wprx5Xcythf48Qoz
+         FYTA==
+X-Gm-Message-State: AOAM53348fwzCcbKh3HNuSE7JUQBCoVXXecLHmJNddZfhocIKlTxs3hp
+        fnidbTfmRSJ2R9D35KOm14pumw==
+X-Google-Smtp-Source: ABdhPJwOVq35me3v2iCUelV0LLrjYA8ON0acuAtFss/NFZas9ZGWW4ak4OsMA0sStDAr/pWhdhWgtA==
+X-Received: by 2002:a17:90b:1108:: with SMTP id gi8mr7106811pjb.222.1643173486376;
+        Tue, 25 Jan 2022 21:04:46 -0800 (PST)
 Received: from localhost ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id a13sm665441pfv.97.2022.01.25.21.04.42
+        by smtp.gmail.com with ESMTPSA id nm14sm1894531pjb.32.2022.01.25.21.04.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 21:04:43 -0800 (PST)
+        Tue, 25 Jan 2022 21:04:45 -0800 (PST)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -55,10 +55,10 @@ To:     "David S. Miller" <davem@davemloft.net>,
         Leon Romanovsky <leon@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>, Leon Romanovsky <leonro@nvidia.com>
-Subject: [PATCH net v3 1/2] pid: Introduce helper task_is_in_init_pid_ns()
-Date:   Wed, 26 Jan 2022 13:04:26 +0800
-Message-Id: <20220126050427.605628-2-leo.yan@linaro.org>
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH net v3 2/2] connector/cn_proc: Use task_is_in_init_pid_ns()
+Date:   Wed, 26 Jan 2022 13:04:27 +0800
+Message-Id: <20220126050427.605628-3-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220126050427.605628-1-leo.yan@linaro.org>
 References: <20220126050427.605628-1-leo.yan@linaro.org>
@@ -68,39 +68,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the kernel uses open code in multiple places to check if a
-task is in the root PID namespace with the kind of format:
+This patch replaces open code with task_is_in_init_pid_ns() to check if
+a task is in root PID namespace.
 
-  if (task_active_pid_ns(current) == &init_pid_ns)
-      do_something();
-
-This patch creates a new helper function, task_is_in_init_pid_ns(), it
-returns true if a passed task is in the root PID namespace, otherwise
-returns false.  So it will be used to replace open codes.
-
-Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 Acked-by: Balbir Singh <bsingharora@gmail.com>
 ---
- include/linux/pid_namespace.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/connector/cn_proc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/pid_namespace.h b/include/linux/pid_namespace.h
-index 7c7e627503d2..07481bb87d4e 100644
---- a/include/linux/pid_namespace.h
-+++ b/include/linux/pid_namespace.h
-@@ -86,4 +86,9 @@ extern struct pid_namespace *task_active_pid_ns(struct task_struct *tsk);
- void pidhash_init(void);
- void pid_idr_init(void);
+diff --git a/drivers/connector/cn_proc.c b/drivers/connector/cn_proc.c
+index 646ad385e490..ccac1c453080 100644
+--- a/drivers/connector/cn_proc.c
++++ b/drivers/connector/cn_proc.c
+@@ -358,7 +358,7 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
+ 	 * other namespaces.
+ 	 */
+ 	if ((current_user_ns() != &init_user_ns) ||
+-	    (task_active_pid_ns(current) != &init_pid_ns))
++	    !task_is_in_init_pid_ns(current))
+ 		return;
  
-+static inline bool task_is_in_init_pid_ns(struct task_struct *tsk)
-+{
-+	return task_active_pid_ns(tsk) == &init_pid_ns;
-+}
-+
- #endif /* _LINUX_PID_NS_H */
+ 	/* Can only change if privileged. */
 -- 
 2.25.1
 

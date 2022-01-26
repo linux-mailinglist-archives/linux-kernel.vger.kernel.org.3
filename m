@@ -2,86 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B91E249CFED
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 383ED49CFEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243260AbiAZQoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236669AbiAZQoW (ORCPT
+        id S243263AbiAZQp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:45:56 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:58102 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236669AbiAZQp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:44:22 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708FCC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:44:22 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id p5so419585ybd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:44:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Hn+3XwLtFaaXewwNrqnpZ08MIqd56MgA4Nzvpzw2Rck=;
-        b=loX2o69cxQhfTbzaEheoHgyXMWaVN9Fl0oxkMMeaymKtyfb/tRiCv15dLMUFO5R39a
-         dNhnFqAWDCbIX+sE7BR0FjCwkUB30+XKHMpTd9eZC30WYqQMKlheE+d7ofFQVLQUPMTR
-         s6KPtRFoUFG+FMLGvY6pIGHj8wQHUQ+2MprOCGocfP+vWo1X5i/plCUlJPz6IhQCidis
-         8/IlzQItYwp2BZ4jhbVFSHGQCijxmFl5PtNn8evTImkHAcsgwUernq90pBSLiHh/cx4C
-         Rjx3BaQ8VtJbDcDvlfRJU/HiHoLFMoBbQJP473y8eCIoYbSjQYYWu2iTcxf2nkv8Phx6
-         Ajgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Hn+3XwLtFaaXewwNrqnpZ08MIqd56MgA4Nzvpzw2Rck=;
-        b=crzoEwrKWcI0mAMqxZ0jfrP8cYR2LHxk8na7ZWtPcTJOCfRNmW9qcG0ay1nhJ4/FaV
-         8KR/trjfZnJp4lBwwTVfxvbqiREaEdl8v52R/Iu9KbcojrA5VMm3dWzXu9BhFtAAOlHB
-         BIiDGPu3l81I8JDEjLChh89nN8aIe0phYEQ9PACmbh/WM0UYz3oiX+uGRtQt94HfuY9N
-         cm6bZm5Ccqc3gWVEZNotxphXVdjcdXuTlNLmjgJgQ3ZwRWEG6nhvfo6Ink6xcwtAGoPu
-         Yrn5EuAvaRvBnSLPnvub73WdrPmQMqpuTTYQyOlkdYnYC3GliE1M/dRlKolL21JjCF+Q
-         qdRg==
-X-Gm-Message-State: AOAM532O4lXI2CoogQwEKKWFMp7fmbFjj2Leh2FVZc7YkCYUfkJRswSL
-        1zJxvlTDQUVn/zC45bRVew9vFVhGrqD8ZRRYrIg9ag==
-X-Google-Smtp-Source: ABdhPJw2JTKWqJxocNIGE7jMUaTewzym6lIQKL0wJPFFdukwj6rNoiUYD9bjMcCFI3+js7uX8oXUgDWYPJ/ajAl0bdM=
-X-Received: by 2002:a25:d7cf:: with SMTP id o198mr36466764ybg.602.1643215461475;
- Wed, 26 Jan 2022 08:44:21 -0800 (PST)
+        Wed, 26 Jan 2022 11:45:56 -0500
+Date:   Wed, 26 Jan 2022 17:45:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643215554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=UHFa8oEIdaXaWC3dUGqBtpDOM8h2/+7Inl6Y4pck+Fo=;
+        b=UgzCg0GKDpNqohbospaim02YX4E4djchMgYY4c5vdkARzQfb10Gl5RgMvNiXX7Y0cEfehy
+        KOgNOfGTYoyxt4MkKsFGMdrszUMJ9vytskgemDCyke+MrH7ztpQhF9+ad+ZMji7E+yK9QR
+        r3PIk5/H1DljzHK4acR/FpvPyg+B6xBg56LPT9kYkF5942lvKUFLo00HXknD4Ph+ragXXd
+        on/vYVIRu94BuosR33gqXxKhH6W8ED4eev8TkJBCOyF2krG0uSbWXsZ5vwHnoQNRLEo2u3
+        6SUjQoaURaJuH4xycTq8HovbTMyaxu787xRxYfYgV9x/318mFzxSOI19G5Hagg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643215554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=UHFa8oEIdaXaWC3dUGqBtpDOM8h2/+7Inl6Y4pck+Fo=;
+        b=HXrF2nr/Vh3cp4SErauXSdtOhz62Pg3QNDSKMaU95hUkQe+Zs6om84nl4RZqC1PqdgF3o5
+        C5AGQWm7i+f56QBg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v5.17-rc1-rt1
+Message-ID: <YfF6wTyztdJtRmNw@linutronix.de>
 MIME-Version: 1.0
-References: <1643093818-19835-1-git-send-email-huangzhaoyang@gmail.com> <YfAL55Xydar/jKrl@cmpxchg.org>
-In-Reply-To: <YfAL55Xydar/jKrl@cmpxchg.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 26 Jan 2022 08:44:10 -0800
-Message-ID: <CAJuCfpEGUH0SDwP9EJ-uA52R7j3pcVXa+gJX3=QtEhJQ5ig6KA@mail.gmail.com>
-Subject: Re: [PATCHv4] psi: fix possible trigger missing in the window
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Huangzhaoyang <huangzhaoyang@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Ingo Molnar <mingo@redhat.com>, linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 6:40 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> On Tue, Jan 25, 2022 at 02:56:58PM +0800, Huangzhaoyang wrote:
-> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> >
-> > When a new threshold breaching stall happens after a psi event was
-> > generated and within the window duration, the new event is not
-> > generated because the events are rate-limited to one per window. If
-> > after that no new stall is recorded then the event will not be
-> > generated even after rate-limiting duration has passed. This is
-> > happening because with no new stall, window_update will not be called
-> > even though threshold was previously breached. To fix this, record
-> > threshold breaching occurrence and generate the event once window
-> > duration is passed.
-> >
-> > Suggested-by: Suren Baghdasaryan <surenb@google.com>
-> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
->
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Dear RT folks!
 
-Looks good. Thanks!
+I'm pleased to announce the v5.17-rc1-rt1 patch set. 
 
-Acked-by: Suren Baghdasaryan <surenb@google.com>
+Changes since v5.16.2-rt19:
+
+  - Rebase to v5.17-rc1.
+
+Known issues
+     - netconsole triggers WARN.
+
+     - Valentin Schneider reported a few splats on ARM64, see
+          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.17-rc1-rt1
+
+The RT patch against v5.17-rc1 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.17/older/patch-5.17-rc1-rt1.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.17/older/patches-5.17-rc1-rt1.tar.xz
+
+Sebastian

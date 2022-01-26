@@ -2,98 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A57F649C4E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE9449C4F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238159AbiAZIJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 03:09:52 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:42894 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230220AbiAZIJv (ORCPT
+        id S238195AbiAZILK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 03:11:10 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:32059 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238181AbiAZILH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:09:51 -0500
-X-UUID: cb8c71d7f21b49d5a170c1b7167e5c0e-20220126
-X-UUID: cb8c71d7f21b49d5a170c1b7167e5c0e-20220126
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 853508631; Wed, 26 Jan 2022 16:09:47 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 26 Jan 2022 16:09:46 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 Jan 2022 16:09:45 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <wenst@chromium.org>
-CC:     <chun-jie.chen@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>
-Subject: Re: [PATCH 24/31] clk: mediatek: mux: Implement error handling in register API
+        Wed, 26 Jan 2022 03:11:07 -0500
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JkGXb2x9hz1FD6R;
+        Wed, 26 Jan 2022 16:07:11 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 26 Jan 2022 16:11:05 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <yangyicong@hisilicon.com>,
+        <jonathan.cameron@huawei.com>, <ego@linux.vnet.ibm.com>,
+        <srikar@linux.vnet.ibm.com>, <linuxarm@huawei.com>,
+        <21cnbao@gmail.com>, <song.bao.hua@hisilicon.com>,
+        <guodong.xu@linaro.org>
+Subject: [PATCH v2 0/2] sched/fair: Wake task within the cluster when possible
 Date:   Wed, 26 Jan 2022 16:09:45 +0800
-Message-ID: <20220126080946.1836-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220122091731.283592-25-wenst@chromium.org>
-References: <20220122091731.283592-25-wenst@chromium.org>
+Message-ID: <20220126080947.4529-1-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The mux clk type registration function does not stop or return errors
-> if any clk failed to be registered, nor does it implement an error
-> handling path. This may result in a partially working device if any
-> step failed.
-> 
-> Make the register function return proper error codes, and bail out if
-> errors occur. Proper cleanup, i.e. unregister any clks that were
-> successfully registered, is done in the new error path.
-> 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+This is the follow-up work to support cluster scheduler. Previously
+we have added cluster level in the scheduler for both ARM64[1] and
+X86[2] to support load balance between clusters to bring more memory
+bandwidth and decrease cache contention. This patchset, on the other
+hand, takes care of wake-up path by giving CPUs within the same cluster
+a try before scanning the whole LLC to benefit those tasks communicating
+with each other.
 
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-> ---
->  drivers/clk/mediatek/clk-mux.c | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
-> index 70aa42144632..f51e67650f03 100644
-> --- a/drivers/clk/mediatek/clk-mux.c
-> +++ b/drivers/clk/mediatek/clk-mux.c
-> @@ -215,13 +215,26 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
->  
->  		if (IS_ERR(clk)) {
->  			pr_err("Failed to register clk %s: %pe\n", mux->name, clk);
-> -			continue;
-> +			goto err;
->  		}
->  
->  		clk_data->clks[mux->id] = clk;
->  	}
->  
->  	return 0;
-> +
-> +err:
-> +	while (--i >= 0) {
-> +		const struct mtk_mux *mux = &muxes[i];
-> +
-> +		if (IS_ERR_OR_NULL(clk_data->clks[mux->id]))
-> +			continue;
-> +
-> +		mtk_clk_unregister_mux(clk_data->clks[mux->id]);
-> +		clk_data->clks[mux->id] = ERR_PTR(-ENOENT);
-> +	}
-> +
-> +	return PTR_ERR(clk);
->  }
->  EXPORT_SYMBOL_GPL(mtk_clk_register_muxes);
->  
-> -- 
-> 2.35.0.rc0.227.g00780c9af4-goog
-> 
-> 
+[1] 778c558f49a2 ("sched: Add cluster scheduler level in core and related Kconfig for ARM64")
+[2] 66558b730f25 ("sched: Add cluster scheduler level for x86")
+
+Change since v1:
+- regain the performance data based on v5.17-rc1
+- rename cpus_share_cluster to cpus_share_resources per Vincent and Gautham, thanks!
+
+Barry Song (2):
+  sched: Add per_cpu cluster domain info and cpus_share_resources API
+  sched/fair: Scan cluster before scanning LLC in wake-up path
+
+ include/linux/sched/sd_flags.h |  7 ++++++
+ include/linux/sched/topology.h |  8 +++++-
+ kernel/sched/core.c            | 12 +++++++++
+ kernel/sched/fair.c            | 46 +++++++++++++++++++++++++++++++---
+ kernel/sched/sched.h           |  2 ++
+ kernel/sched/topology.c        | 15 +++++++++++
+ 6 files changed, 85 insertions(+), 5 deletions(-)
+
+-- 
+2.24.0
+

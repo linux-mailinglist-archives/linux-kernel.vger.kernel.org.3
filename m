@@ -2,95 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F2149D1DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1D749D1E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbiAZSi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiAZSi7 (ORCPT
+        id S232046AbiAZSjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:39:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31345 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229478AbiAZSjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:38:59 -0500
-Received: from mx1.mailbun.net (unknown [IPv6:2602:fd37:1::100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF1DC06161C;
-        Wed, 26 Jan 2022 10:38:58 -0800 (PST)
-Received: from [2607:fb90:d98b:8818:5079:94eb:24d5:e5c3] (unknown [172.58.104.31])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ariadne@dereferenced.org)
-        by mx1.mailbun.net (Postfix) with ESMTPSA id EF06C11A7C8;
-        Wed, 26 Jan 2022 18:38:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dereferenced.org;
-        s=mailbun; t=1643222338;
-        bh=RXsSVCy4v5MpoLZDK+6HWpdTcWfXR+/KqheWg5ZsQs0=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References;
-        b=TCqU+V5Uqr5xiwFc2j/zUn99Kj9DK8LK7Uqv3rNZU12sYl3PzAkFqTzgGpFJbHLbq
-         Z9GUIPBIK8WI1xJyHpxC0FPNlIzw4nz18mO3lexnDCnRKMddZJBUye+a4ogwtUEUyT
-         qx6o/Q1Ctay+ao7NxxDskvIX3rKerJiHku9wZ9M69pBk6HwcdaSk+aKJHGZ5Jkl8TN
-         /A5BHD0AG7qtB+B5qoS2p9EVUFVKrezIOZwpPf8QKq6yseo5WJsHBfqEJepPxCGqSh
-         ZICrbYsWIzdZCb6VWx9GaRl0l8qJPUB6NtC8PjTaESVml+TwN3Kckja56Ld17MMT+9
-         vrW7cr0OLOK1Q==
-Date:   Wed, 26 Jan 2022 12:38:50 -0600 (CST)
-From:   Ariadne Conill <ariadne@dereferenced.org>
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
- do_execveat_common()
-In-Reply-To: <YfGNBz0gigWwNnHn@casper.infradead.org>
-Message-ID: <cd808fc1-ec7a-31d-217e-fbc55f7912a3@dereferenced.org>
-References: <20220126114447.25776-1-ariadne@dereferenced.org> <YfFh6O2JS6MybamT@casper.infradead.org> <877damwi2u.fsf@email.froward.int.ebiederm.org> <YfGNBz0gigWwNnHn@casper.infradead.org>
+        Wed, 26 Jan 2022 13:39:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643222381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b9o6V+tZDb8Yj7qyJiHKfvxGFT9XTISplnHY/OXHxgs=;
+        b=V2QVTKjALlnLej2OnsL2xiu1qwzFCxJsT9mZ2lJ9nErBKBI8oZcwBj3bi87e22W+1OPJU6
+        BUWVviQZUH4zeBEBgFs4JNqjCEWuD20PW51KQMeIGDaYKcSBCcbITqXXPc/mOp0t7nFezg
+        49VgLZJJmDIbp0+qudOSmmTcI5TGrvE=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-zNZ-CJWmMVWqPb7Xab5qAg-1; Wed, 26 Jan 2022 13:39:40 -0500
+X-MC-Unique: zNZ-CJWmMVWqPb7Xab5qAg-1
+Received: by mail-wr1-f71.google.com with SMTP id m17-20020adfa3d1000000b001dd66c10c0cso97555wrb.19
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:39:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=b9o6V+tZDb8Yj7qyJiHKfvxGFT9XTISplnHY/OXHxgs=;
+        b=TrWCMnPqtmfbxYxCupdtX2VqvBhRlxATNNGNVIVreCvXgInx1uLuPFBo8rjN2xWixc
+         ubCWDnBxpmF/RJeGfg5uVPgEPURhId4E0xeroqdM9R1w1m0gvcd+zd3LKVqyNtusnmcN
+         BahCFg+wB74z3WzKVLwqNFDWdPfzTrD1s0AsZjRtHDCqSrcygWXvQaFbUaK0mfo0i8nC
+         DVc2Yyo9U5G74ZHP//eHiHgoBJCno5wLwV7PTX8WQ1ro+Bb2Pdt8NoBFMmTKLFTlg/fP
+         HfujZtK5rylaRFLurGwasagZGMS7dxO4FnM/On1FfpX6m7/Q81q3HiAr/+BAa6uDyiYG
+         pn1Q==
+X-Gm-Message-State: AOAM5316BzvVKB4ea0TzRQvwP8C+SjSieJGxO8DV8HOUjHimgF5kxrtI
+        kqqFPOIdUTjJ6tKWs7nx35TYwCIiA+Nwru6+uYTVBDgu/coP+KfTeNAlxlo/YjyLVHoL4fvLpIX
+        uY8vuEQzeBy2P7Ia7mlMR56O9
+X-Received: by 2002:adf:e444:: with SMTP id t4mr23469309wrm.325.1643222379359;
+        Wed, 26 Jan 2022 10:39:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyfhiPSDyIK6O2Jg9WJbv10h2Cyepp5IX7xwVzNUp99cfzHpUU5mkcoEnDViPa0ONyKdePCaw==
+X-Received: by 2002:adf:e444:: with SMTP id t4mr23469299wrm.325.1643222379187;
+        Wed, 26 Jan 2022 10:39:39 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id f6sm47352wrj.26.2022.01.26.10.39.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 10:39:38 -0800 (PST)
+Date:   Wed, 26 Jan 2022 19:39:37 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 2/9] fprobe: Add ftrace based probe APIs
+Message-ID: <YfGVab8kNW1AkYXk@krava>
+References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
+ <164311271777.1933078.9066058105807126444.stgit@devnote2>
+ <YfAoMW6i4gqw2Na0@krava>
+ <YfA9aC5quQNc89Hc@krava>
+ <20220126115022.fda21a3face4e97684f5bab9@kernel.org>
+ <20220127005952.42dd07ff5f275e61be638283@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127005952.42dd07ff5f275e61be638283@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Jan 27, 2022 at 12:59:52AM +0900, Masami Hiramatsu wrote:
+> On Wed, 26 Jan 2022 11:50:22 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > > one more question..
+> > > 
+> > > I'm adding support for user to pass function symbols to bpf fprobe link
+> > > and I thought I'd pass symbols array to register_fprobe, but I'd need to
+> > > copy the whole array of strings from user space first, which could take
+> > > lot of memory considering attachment of 10k+ functions
+> > > 
+> > > so I'm thinking better way is to resolve symbols already in bpf fprobe
+> > > link code and pass just addresses to register_fprobe
+> > 
+> > That is OK. Fprobe accepts either ::syms or ::addrs.
+> > 
+> > > 
+> > > I assume you want to keep symbol interface, right? could we have some
+> > > flag ensuring the conversion code is skipped, so we don't go through
+> > > it twice?
+> > 
+> > Yeah, we still have many unused bits in fprobe::flags. :)
+> 
+> Instead of that, according to Steve's comment, I would like to introduce
+> 3 registration APIs.
+> 
+> int register_fprobe(struct fprobe *fp, const char *filter, const char *notrace);
+> int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num);
+> int register_fprobe_syms(struct fprobe *fp, const char **syms, int num);
+> 
+> The register_fprobe_ips() will not touch the @addrs. You have to set the
+> correct ftrace location address in the @addrs.
 
-On Wed, 26 Jan 2022, Matthew Wilcox wrote:
+ok, sounds good
 
-> On Wed, Jan 26, 2022 at 10:57:29AM -0600, Eric W. Biederman wrote:
->> Matthew Wilcox <willy@infradead.org> writes:
->>
->>> On Wed, Jan 26, 2022 at 11:44:47AM +0000, Ariadne Conill wrote:
->>>> Interestingly, Michael Kerrisk opened an issue about this in 2008[1],
->>>> but there was no consensus to support fixing this issue then.
->>>> Hopefully now that CVE-2021-4034 shows practical exploitative use
->>>> of this bug in a shellcode, we can reconsider.
->>>>
->>>> [0]: https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
->>>> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=8408
->>>
->>> Having now read 8408 ... if ABI change is a concern (and I really doubt
->>> it is), we could treat calling execve() with a NULL argv as if the
->>> caller had passed an array of length 1 with the first element set to
->>> NULL.  Just like we reopen fds 0,1,2 for suid execs if they were
->>> closed.
->>
->> Where do we reopen fds 0,1,2 for suid execs?  I feel silly but I looked
->> through the code fs/exec.c quickly and I could not see it.
->
-> I'm wondering if I misremembered and it's being done in ld.so
-> rather than in the kernel?  That might be the right place to put
-> this fix too.
->
->> I am attracted to the notion of converting an empty argv array passed
->> to the kernel into something we can safely pass to userspace.
->>
->> I think it would need to be having the first entry point to "" instead
->> of the first entry being NULL.  That would maintain the invariant that you
->> can always dereference a pointer in the argv array.
->
-> Yes, I like that better than NULL.
+thanks,
+jirka
 
-If we are doing {"", NULL}, then I think it makes sense that we could just 
-say argc == 1 at that point, which probably sidesteps the concern Jann 
-raised with the {NULL, NULL} patch, no?
-
-Ariadne

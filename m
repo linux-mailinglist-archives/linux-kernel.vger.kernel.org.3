@@ -2,102 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C76749CED0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1EB49CED2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243061AbiAZPos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:44:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48960 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236060AbiAZPor (ORCPT
+        id S243072AbiAZPpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:45:38 -0500
+Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:44624 "EHLO
+        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236060AbiAZPpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:44:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643211886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OE2o1EX3RpFpjJ9IFNscD0lnVIpsfwDRSieBpWxhAkg=;
-        b=QM9wyOnYpp+O4nm4XvOGm5QyEgEMVc2gHCJZbmsYvKd/TsqnamqXu86Ezh/ceT62qDqmo3
-        rTJYzG/oum1FuLlyn/rbz2UFJR6uIHJE3WLSMr7xnzSHhwpj+VnutvHJYhR5a3nsz+/UQC
-        aMxtUnT79R+UV3k+KXW5oTVXxvXEvQs=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-171-7y-QrJCqMdKZ2EqXapT0lw-1; Wed, 26 Jan 2022 10:44:45 -0500
-X-MC-Unique: 7y-QrJCqMdKZ2EqXapT0lw-1
-Received: by mail-ed1-f70.google.com with SMTP id h21-20020aa7c955000000b0040390b2bfc5so16850109edt.15
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:44:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OE2o1EX3RpFpjJ9IFNscD0lnVIpsfwDRSieBpWxhAkg=;
-        b=zY2F4K4KSnWy9vZf1hZk+P0+eLqiExjuytvmISuPXwRx+qXnn/Sl7yHfnxwMrOW77J
-         CTH/GKqagnXvZJjNJnHt029OlflFkTNEYkiMijl+FDliiKsbjXd0L5QBi8L5LCZK3ffD
-         d8piF9ObZmEAVdZON2/FC7iuGfmmH1xfyUsi+hr5mBcGRt212P50in5vziyOfUZ7qcVZ
-         bxxwrwn+ZoXfUVHvKADze0VrP37GfSzkDX59xLq0ymPQUzML9PRQ/2HjG8pq4K2DB9at
-         gLMgWTm1XXRLzfuSRpE7sBdI9L1Gtpycqrfq/IMRp2hUO7sMEYBpfPn51xWmoQBLWf6G
-         YSyg==
-X-Gm-Message-State: AOAM5334kNcAjGvPygp2j8JpG3osHWKhUH9QyDMBdUoW06iz9Pl4j31z
-        79LYZsXP0Gb2sowi4ToraSxTEjeWV5oyF/T9wCtlPSrKoofYmnCuFOiu90lg7azQmgX6ygiW6O3
-        IXZUvmnYE1WTkvIb706SHkODO
-X-Received: by 2002:a05:6402:1e94:: with SMTP id f20mr14266193edf.58.1643211883904;
-        Wed, 26 Jan 2022 07:44:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy7uQ0EN1LS78KOt+2SzSj8bnbPTHkmly9oJVJGISCGWR7A4V/TczlXQmSzFDjFNSc5l/4G9w==
-X-Received: by 2002:a05:6402:1e94:: with SMTP id f20mr14266172edf.58.1643211883676;
-        Wed, 26 Jan 2022 07:44:43 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id bx18sm6707218edb.93.2022.01.26.07.44.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 07:44:43 -0800 (PST)
-Message-ID: <718ac952-e9ec-a211-9a43-d4b4a1ea001a@redhat.com>
-Date:   Wed, 26 Jan 2022 16:44:42 +0100
+        Wed, 26 Jan 2022 10:45:36 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 0D4B83F606;
+        Wed, 26 Jan 2022 16:45:35 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Flag: NO
+X-Spam-Score: -2.1
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 tagged_above=-999 required=6.31
+        tests=[BAYES_00=-1.9, DKIM_SIGNED=0.1, DKIM_VALID=-0.1,
+        DKIM_VALID_AU=-0.1, DKIM_VALID_EF=-0.1, NICE_REPLY_A=-0.001,
+        URIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no
+Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
+        dkim=pass (1024-bit key) header.d=shipmail.org
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pkcjr9YNR3c6; Wed, 26 Jan 2022 16:45:33 +0100 (CET)
+Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id B2F6E3F480;
+        Wed, 26 Jan 2022 16:45:31 +0100 (CET)
+Received: from [192.168.0.209] (unknown [192.55.55.54])
+        by mail1.shipmail.org (Postfix) with ESMTPSA id 855513626AA;
+        Wed, 26 Jan 2022 16:45:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
+        t=1643211931; bh=OAVs3hYBXF9umhJz4d5fI5nR0JlCGZSrkHnQDPk4XIE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Uri7ihhQXMgDT8l7FQq3wMoLcvY8yvVWeSjh7sIYdW5/I5XXmYPXSvdSQklJJgmP+
+         BHRIjKzxohhl/4jMv86ba+YRbmzWzmllpGG0zG3GKmLP10UDBXUyLsC2UFeW2Fm/xI
+         WsOi19IAAFEtUE88Fegq268OdrazKWPfE8EKO34g=
+Message-ID: <9f011e69-2d6d-d6a1-db78-d4a061b4ef2c@shipmail.org>
+Date:   Wed, 26 Jan 2022 16:45:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] KVM: x86: Check .flags in kvm_cpuid_check_equal() too
+ Thunderbird/91.3.0
+Subject: Re: [Intel-gfx] [PATCH v5 2/5] drm/i915: enforce min GTT alignment
+ for discrete cards
 Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-References: <20220126131804.2839410-1-vkuznets@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220126131804.2839410-1-vkuznets@redhat.com>
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Matthew Auld <matthew.auld@intel.com>
+References: <20220125193530.3272386-1-bob.beckett@collabora.com>
+ <20220125193530.3272386-3-bob.beckett@collabora.com>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+In-Reply-To: <20220125193530.3272386-3-bob.beckett@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/22 14:18, Vitaly Kuznetsov wrote:
-> kvm_cpuid_check_equal() checks for the (full) equality of the supplied
-> CPUID data so .flags need to be checked too.
-> 
-> Reported-by: Sean Christopherson <seanjc@google.com>
-> Fixes: c6617c61e8fe ("KVM: x86: Partially allow KVM_SET_CPUID{,2} after KVM_RUN")
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+
+On 1/25/22 20:35, Robert Beckett wrote:
+> From: Matthew Auld <matthew.auld@intel.com>
+>
+> For local-memory objects we need to align the GTT addresses
+> to 64K, both for the ppgtt and ggtt.
+>
+> We need to support vm->min_alignment > 4K, depending
+> on the vm itself and the type of object we are inserting.
+> With this in mind update the GTT selftests to take this
+> into account.
+>
+> For compact-pt we further align and pad lmem object GTT addresses
+> to 2MB to ensure PDEs contain consistent page sizes as
+> required by the HW.
+>
+> v3:
+> 	* use needs_compact_pt flag to discriminate between
+> 	  64K and 64K with compact-pt
+> 	* add i915_vm_obj_min_alignment
+> 	* use i915_vm_obj_min_alignment to round up vma reservation
+> 	  if compact-pt instead of hard coding
+> v5:
+> 	* fix i915_vm_obj_min_alignment for internal objects which
+> 	  have no memory region
+>
+> Signed-off-by: Matthew Auld <matthew.auld@intel.com>
+> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
 > ---
->   arch/x86/kvm/cpuid.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 89d7822a8f5b..ddfd97f62ba8 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -133,6 +133,7 @@ static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2
->   		orig = &vcpu->arch.cpuid_entries[i];
->   		if (e2[i].function != orig->function ||
->   		    e2[i].index != orig->index ||
-> +		    e2[i].flags != orig->flags ||
->   		    e2[i].eax != orig->eax || e2[i].ebx != orig->ebx ||
->   		    e2[i].ecx != orig->ecx || e2[i].edx != orig->edx)
->   			return -EINVAL;
+>   .../i915/gem/selftests/i915_gem_client_blt.c  | 23 +++--
+>   drivers/gpu/drm/i915/gt/intel_gtt.c           | 12 +++
+>   drivers/gpu/drm/i915/gt/intel_gtt.h           | 18 ++++
+>   drivers/gpu/drm/i915/i915_vma.c               |  9 ++
+>   drivers/gpu/drm/i915/selftests/i915_gem_gtt.c | 96 ++++++++++++-------
+>   5 files changed, 117 insertions(+), 41 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_client_blt.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_client_blt.c
+> index c8ff8bf0986d..f0bfce53258f 100644
+> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_client_blt.c
+> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_client_blt.c
+> @@ -39,6 +39,7 @@ struct tiled_blits {
+>   	struct blit_buffer scratch;
+>   	struct i915_vma *batch;
+>   	u64 hole;
+> +	u64 align;
+>   	u32 width;
+>   	u32 height;
+>   };
+> @@ -410,14 +411,21 @@ tiled_blits_create(struct intel_engine_cs *engine, struct rnd_state *prng)
+>   		goto err_free;
+>   	}
+>   
+> -	hole_size = 2 * PAGE_ALIGN(WIDTH * HEIGHT * 4);
+> +	t->align = I915_GTT_PAGE_SIZE_2M; /* XXX worst case, derive from vm! */
+> +	t->align = max(t->align,
+> +		       i915_vm_min_alignment(t->ce->vm, INTEL_MEMORY_LOCAL));
+> +	t->align = max(t->align,
+> +		       i915_vm_min_alignment(t->ce->vm, INTEL_MEMORY_SYSTEM));
 
-Queued, with Cc to stable.
+Don't we always end up with 2M here, regardless of the vm restrictions?
 
-Paolo
 

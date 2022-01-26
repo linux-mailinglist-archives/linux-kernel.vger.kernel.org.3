@@ -2,132 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E28B749D644
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F338949D64F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbiAZXkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 18:40:22 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:55394 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiAZXkW (ORCPT
+        id S229954AbiAZXmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 18:42:55 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:37413 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233082AbiAZXmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 18:40:22 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id ddc9921eef41d176; Thu, 27 Jan 2022 00:40:20 +0100
-Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
+        Wed, 26 Jan 2022 18:42:54 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id A1FC666B35E;
-        Thu, 27 Jan 2022 00:40:19 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] PCI: ACPI: Replace acpi_bus_get_device()
-Date:   Thu, 27 Jan 2022 00:40:13 +0100
-Message-ID: <11930209.O9o76ZdvQC@kreacher>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JkgJD3XN7z4xjx;
+        Thu, 27 Jan 2022 10:42:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643240572;
+        bh=Yu6++roH7LHBMllyG+A8ccQ16RNfz/JX1ppO+BpEPBA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VAwEbcG+yH5zjzSDtBYlscoWJ4Vroy9PRqCvJjjHetc5z+hBH2l8gPjL4FDXvfoFm
+         cTQZXKbuhGkBpyGecaS37hwOy8YllvZmxch3/JuEnLNPhidSGyRkDyhLP7UaCIy2gs
+         Au6w8ySi+v2DPTe7kIZNxKK9h21C239m8s/bP2C/cH0l0XjE7NEfSYDygeon/E6oQs
+         PkKghtKyZBeo2TXL6d6xUzJK2Kg52vZWrNMgCB5s/o5SPQummlbfTeklsl1W/T6sJl
+         XCoSI4T+aySydtZiMWcRnwSV2uY9fmrB4JwdvA3IDGL1grJZHxW4wi+dL5sImvtcFM
+         9wrwl8/XsVxIA==
+Date:   Thu, 27 Jan 2022 10:42:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Tim Huang <tim.huang@amd.com>, Tim Huang <xiaohu.huang@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220127104251.5a63a107@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 89.77.51.84
-X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrfedvgdduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppeekledrjeejrdehuddrkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrdejjedrhedurdekgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhk
- vghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+Content-Type: multipart/signed; boundary="Sig_/EkqJh6pAIPv4xV.DxrL7kUt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+--Sig_/EkqJh6pAIPv4xV.DxrL7kUt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Replace acpi_bus_get_device() that is going to be dropped with
-acpi_fetch_acpi_dev().
+Hi all,
 
-No intentional functional impact.
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'd=
+m_dmub_hw_init':
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:1030:20: error:=
+ unused variable 'dc' [-Werror=3Dunused-variable]
+ 1030 |         struct dc *dc =3D adev->dm.dc;
+      |                    ^~
 
--> v2: Fix typo (superfluous paren) in acpiphp_ibm.c.
+Caused by commit
 
----
- drivers/pci/hotplug/acpiphp_glue.c |    7 ++++---
- drivers/pci/hotplug/acpiphp_ibm.c  |    5 +++--
- drivers/pci/pci-acpi.c             |    6 +++---
- 3 files changed, 10 insertions(+), 8 deletions(-)
+  3b36f50d3a69 ("drm/amd/display: convert to DCE IP version checking")
 
-Index: linux-pm/drivers/pci/hotplug/acpiphp_glue.c
-===================================================================
---- linux-pm.orig/drivers/pci/hotplug/acpiphp_glue.c
-+++ linux-pm/drivers/pci/hotplug/acpiphp_glue.c
-@@ -226,9 +226,9 @@ static void acpiphp_post_dock_fixup(stru
- static acpi_status acpiphp_add_context(acpi_handle handle, u32 lvl, void *data,
- 				       void **rv)
- {
-+	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
- 	struct acpiphp_bridge *bridge = data;
- 	struct acpiphp_context *context;
--	struct acpi_device *adev;
- 	struct acpiphp_slot *slot;
- 	struct acpiphp_func *newfunc;
- 	acpi_status status = AE_OK;
-@@ -238,6 +238,9 @@ static acpi_status acpiphp_add_context(a
- 	struct pci_dev *pdev = bridge->pci_dev;
- 	u32 val;
- 
-+	if (!adev)
-+		return AE_OK;
-+
- 	status = acpi_evaluate_integer(handle, "_ADR", NULL, &adr);
- 	if (ACPI_FAILURE(status)) {
- 		if (status != AE_NOT_FOUND)
-@@ -245,8 +248,6 @@ static acpi_status acpiphp_add_context(a
- 				"can't evaluate _ADR (%#x)\n", status);
- 		return AE_OK;
- 	}
--	if (acpi_bus_get_device(handle, &adev))
--		return AE_OK;
- 
- 	device = (adr >> 16) & 0xffff;
- 	function = adr & 0xffff;
-Index: linux-pm/drivers/pci/hotplug/acpiphp_ibm.c
-===================================================================
---- linux-pm.orig/drivers/pci/hotplug/acpiphp_ibm.c
-+++ linux-pm/drivers/pci/hotplug/acpiphp_ibm.c
-@@ -433,8 +433,9 @@ static int __init ibm_acpiphp_init(void)
- 		goto init_return;
- 	}
- 	pr_debug("%s: found IBM aPCI device\n", __func__);
--	if (acpi_bus_get_device(ibm_acpi_handle, &device)) {
--		pr_err("%s: acpi_bus_get_device failed\n", __func__);
-+	device = acpi_fetch_acpi_dev(ibm_acpi_handle);
-+	if (!device) {
-+		pr_err("%s: acpi_fetch_acpi_dev failed\n", __func__);
- 		retval = -ENODEV;
- 		goto init_return;
- 	}
-Index: linux-pm/drivers/pci/pci-acpi.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-acpi.c
-+++ linux-pm/drivers/pci/pci-acpi.c
-@@ -89,9 +89,9 @@ int acpi_get_rc_resources(struct device
- 		return -ENODEV;
- 	}
- 
--	ret = acpi_bus_get_device(handle, &adev);
--	if (ret)
--		return ret;
-+	adev = acpi_fetch_acpi_dev(handle);
-+	if (!adev)
-+		return -ENODEV;
- 
- 	ret = acpi_get_rc_addr(adev, res);
- 	if (ret) {
+I have used the amdgu tree from next-20220125 for today.
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/EkqJh6pAIPv4xV.DxrL7kUt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHx3HsACgkQAVBC80lX
+0GxQ2Qf/XhXciA8O2LnpDA5c2hxFam7ETz4FYPyJ3MFd4exkd4QZrx9gfExd1J3z
+5YbbMSbrgbl2r6Nu+saDMj1f3KsV1ONS60Wgxh+SpKMYNx/0CWSOobnl/7cDVLqd
+r+LvGbFK+0szHoAk+xM3NF5RlDc3Mp1M59KwwGKbrWxzNOcizSGBlUomSEHw651y
+sUOS0i34pyTaOnc8z9RIJ1bzEFrTHrQ/HdRc42F/QoxEM/Lt0hPDej8idcdBlEcY
+035xs3fqrhzcmNJyex7qXCT+xkPg8zliUQjX6/oW0bCcJ/36m5w3utOXBHurPDqn
+vTZlO5RJ/KcYNpswyUhLkWOGWWPD8g==
+=N+cv
+-----END PGP SIGNATURE-----
+
+--Sig_/EkqJh6pAIPv4xV.DxrL7kUt--

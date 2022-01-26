@@ -2,160 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FDC49CC4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E757949CC4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242113AbiAZO0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:26:12 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:34450 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiAZO0F (ORCPT
+        id S242117AbiAZO2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:28:35 -0500
+Received: from mail-ua1-f52.google.com ([209.85.222.52]:36761 "EHLO
+        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235227AbiAZO2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:26:05 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3E8002113B;
-        Wed, 26 Jan 2022 14:26:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643207164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WLyKhfXHS44+Znkmdw5Wkn13IOJ7HmCc2bqdYmRAEVg=;
-        b=oxNzeR3EjZyJqfzhIUshnheJ0INLWf66MfyocLgT8F2bMmX9rDhOpeOucc8uVnXkZnlwrL
-        N6DmoMYW3MhH5LkEKjNETbnhojlh6h7S2PMJeLFWEUdQHmfizHlU7tRzGWjzCoobQEbKJf
-        Ig3Kn6r6NxAW9MfIjTmTj8hdFAJj694=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643207164;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WLyKhfXHS44+Znkmdw5Wkn13IOJ7HmCc2bqdYmRAEVg=;
-        b=Zf9Zim80aCa4MDEXnNy318W3kpCJ/XdcZx5iwGuSF2NMAz3RXI1cSFR9dyB9uSO5TpCLIW
-        +YTW2Lzh1DdMS1CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5A9AA13E1A;
-        Wed, 26 Jan 2022 14:26:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id oZl4FPtZ8WHxegAAMHmgww
-        (envelope-from <jroedel@suse.de>); Wed, 26 Jan 2022 14:26:03 +0000
-Date:   Wed, 26 Jan 2022 15:26:01 +0100
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, hpa@zytor.com,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        David Rientjes <rientjes@google.com>,
-        Cfir Cohen <cfir@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mike Stunes <mstunes@vmware.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Martin Radev <martin.b.radev@gmail.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 07/12] x86/sev: Setup code to park APs in the AP Jump
- Table
-Message-ID: <YfFZ+SRutJhDoAkz@suse.de>
-References: <20210913155603.28383-1-joro@8bytes.org>
- <20210913155603.28383-8-joro@8bytes.org>
- <YYv1TPawuorQv1PR@zn.tnic>
+        Wed, 26 Jan 2022 09:28:33 -0500
+Received: by mail-ua1-f52.google.com with SMTP id u76so997889uau.3;
+        Wed, 26 Jan 2022 06:28:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fHOCyGn2OpYXHR2TSZ46or0oGciq1pUeUpvpqS2jqZ4=;
+        b=UYHpym5bUkuaL5ajYIN4b8oqcDtSlIiCZON6fyH/cFdovh45eLS6+97IL5An9SIi70
+         cJ7dZBoaN4QxryNm195m5cB+GIxWbYr/1Oi5fUaq4mYSzIt4LfM4BezLslhFmPE9arSk
+         O0CVZFKHka1R2iTgXdN8llQ/7ZKEIdWVeodIFoUfaJ1qOhhEDrvTm6yP39IEtKlH+V05
+         hHHEQEx40pAvLcXBnxRzwsSDi3RLkDJse66u9n7YRgZfHLp0lCfOnDd9cN+t14Og37w4
+         5nTDdVgzfe+YHpr1SVMjikj1DzpvfuVWjYlh1kB3Ueyk6toli4h39qAZxtjDw6Dxw2Df
+         OyZg==
+X-Gm-Message-State: AOAM531rNpAJA6DsxeeBaVi6nZYuUltj9Ty0Uf+T+E6+RASSJ7f8Dbpv
+        d+68Z7r5Bo4NmL5i3jPfwgI7K/5FmSII3jla
+X-Google-Smtp-Source: ABdhPJyH+wwZTJYgXdyeQ8sNOGfFahsRS1Qi8pJVSdepkUTEGLhbpsqkuFVwp376gj7HyGFsUkthNw==
+X-Received: by 2002:a9f:21ef:: with SMTP id 102mr9066965uac.53.1643207312631;
+        Wed, 26 Jan 2022 06:28:32 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id x18sm2514886vsj.20.2022.01.26.06.28.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 06:28:32 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id m90so43277206uam.2;
+        Wed, 26 Jan 2022 06:28:32 -0800 (PST)
+X-Received: by 2002:a05:6102:34e:: with SMTP id e14mr2620287vsa.68.1643207311974;
+ Wed, 26 Jan 2022 06:28:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YYv1TPawuorQv1PR@zn.tnic>
+References: <cover.1643110442.git.linux@leemhuis.info> <f97738d6250050bc982bf2947587f1c73f37446f.1643110442.git.linux@leemhuis.info>
+In-Reply-To: <f97738d6250050bc982bf2947587f1c73f37446f.1643110442.git.linux@leemhuis.info>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 26 Jan 2022 15:28:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXRoVt_zRBNvugJjYhJnyYbABeCWv9fFRM0r_=s7FYvJQ@mail.gmail.com>
+Message-ID: <CAMuHMdXRoVt_zRBNvugJjYhJnyYbABeCWv9fFRM0r_=s7FYvJQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] docs: add a document about regression handling
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        regressions@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 05:37:32PM +0100, Borislav Petkov wrote:
-> On Mon, Sep 13, 2021 at 05:55:58PM +0200, Joerg Roedel wrote:
-> >  extern unsigned char real_mode_blob[];
-> > diff --git a/arch/x86/include/asm/sev-ap-jumptable.h b/arch/x86/include/asm/sev-ap-jumptable.h
-> > new file mode 100644
-> > index 000000000000..1c8b2ce779e2
-> > --- /dev/null
-> > +++ b/arch/x86/include/asm/sev-ap-jumptable.h
-> 
-> Why a separate header? arch/x86/include/asm/sev.h looks small enough.
+Hi Thorsten,
 
-The header is included in assembly, so I made a separate one.
+On Tue, Jan 25, 2022 at 5:45 PM Thorsten Leemhuis <linux@leemhuis.info> wrote:
+> +How to create a configuration similar to the one of an older kernel?
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Start a known-good kernel and configure the newer Linux version with ``make
+> +olddefconfig``. This makes the kernel's build scripts pick up the configuration
+> +file (the `.config` file) from the running kernel as base for the new one you
+> +are about to compile; afterwards they set all new configuration options to their
+> +default value, which should disable new features that might cause regressions.
 
-> > +void __init sev_es_setup_ap_jump_table_data(void *base, u32 pa)
-> 
-> Why is this a separate function?
-> 
-> It is all part of the jump table setup.
+Doing so may actually cause mutations to appear in your .config
+when going back and forth (i.e. when bisecting), interfering with
+the bisection process.
 
-Right, but the sev_es_setup_ap_jump_table_blob() function is already
-pretty big and I wanted to keep things readable.
+To avoid that, I usually start bisecting with
+"cp .config <src>/arch/<arch>/configs/bisect_defconfig", and use
+"make bisect_defconfig" in every bisection step. That way all steps
+are reproducible, and unaffected by config mutations.
 
-> 
-> > +		return 0;
-> 
-> Why are you returning 0 here and below?
+Gr{oetje,eeting}s,
 
-This is in an initcall and it returns just 0 when the environment is not
-ready to setup the ap jump table. Returning non-zero would create a
-warning message in the caller for something that is not a bug in the
-kernel.
+                        Geert
 
-> > + * This file contains the source code for the binary blob which gets copied to
-> > + * the SEV-ES AP Jumptable to park APs while offlining CPUs or booting a new
-> 
-> I've seen "Jumptable", "Jump Table" and "jump table" at least. I'd say, do
-> the last one everywhere pls.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Fair, sorry for my english being too german :) I changed everything to
-'jump table'.
-
-> > +	/* Reset remaining registers */
-> > +	movl	$0, %esp
-> > +	movl	$0, %eax
-> > +	movl	$0, %ebx
-> > +	movl	$0, %edx
-> 
-> All 4: use xor
-
-XOR changes EFLAGS, can not use them here.
-
-> > +
-> > +	/* Reset CR0 to get out of protected mode */
-> > +	movl	$0x60000010, %ecx
-> 
-> Another magic naked number.
-
-This is the CR0 reset value. I have updated the comment to make this
-more clear.
-
-Thanks,
-
--- 
-Jörg Rödel
-jroedel@suse.de
-
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5
-90409 Nürnberg
-Germany
- 
-(HRB 36809, AG Nürnberg)
-Geschäftsführer: Ivo Totev
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

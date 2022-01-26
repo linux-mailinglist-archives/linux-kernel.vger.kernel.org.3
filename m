@@ -2,63 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7B549C14A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD16A49C158
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236347AbiAZC0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 21:26:10 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36544 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236319AbiAZC0B (ORCPT
+        id S236430AbiAZCac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 21:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236420AbiAZCab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 21:26:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00F9FB81BDF;
-        Wed, 26 Jan 2022 02:26:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02A8C340E0;
-        Wed, 26 Jan 2022 02:25:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643163958;
-        bh=RmgzmvNM3U88+c1923i7TOMfJnQBr8QzL2GLg1H5+ug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=In4Rrh/bYyNC6EHa3YVOy+PmmZTzXzW2TtCDuW6jazHo1cQCGBFoZcl6d2e0oY/3b
-         QXTvHSnTmxQni9PZRkEf3+ZANu+mdl/lNPOgFfUYAwXgvp3Rhaoiek47BriA5JHhel
-         AxmA6wf8Fn++WP2v+37pA0GvRPFx9I5IVEs+1YELa4QVi+dnvkSEAjMhKttk+5zHvH
-         1xF+ZT8HTVOUz46u0k201ipNnjZ8pgaa/dCn7w3cL4xzp7kYTYCqAknfvFjv+qtbr7
-         XE7pQ3K73xd3qPsXARmznPqD+Kk53Z5KkMmQKBuDYe5cWA1QNDyliI9V4DbC2Unuia
-         H3s2YRwobxuxA==
-Date:   Wed, 26 Jan 2022 10:25:52 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, marcel.ziswiler@toradex.com,
-        tharvey@gateworks.com, kishon@ti.com, vkoul@kernel.org,
-        robh@kernel.org, galak@kernel.crashing.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: Re: [PATCH v7 6/8] arm64: dts: imx8mm: Add the pcie support
-Message-ID: <20220126022552.GC4686@dragon>
-References: <1638432158-4119-1-git-send-email-hongxing.zhu@nxp.com>
- <1638432158-4119-7-git-send-email-hongxing.zhu@nxp.com>
+        Tue, 25 Jan 2022 21:30:31 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CE8C06161C;
+        Tue, 25 Jan 2022 18:30:30 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id s5so35167443ejx.2;
+        Tue, 25 Jan 2022 18:30:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x79rzXXTHBgOsXBjkeB1wHbZQHGb1pLifmwYG6i89Z4=;
+        b=eOJzseNBdufi6hmKCoAY2brormzMtk1Dh5va9jpTk82VBmCbSQZO60H7e9r8UYMogA
+         2XNoGTxKxRQug+NObU1SenjgwP0CJ6ZkIuVLc7Zng2mCPMsuk9gv4o+nqG9qNY31oOrW
+         JTZviKuI5vCDbCqCiW5JQGpYWuZFrRqhkoT4CIhMoh3ZoMUZpOSygkV0G1CLv22nWjKu
+         tMnaps4LrWqUrkXHuxbKsbXG4f6BCgXBmkjzW5SfpHkkQ5xHg9c+UmhMNSdtTkAY6UHm
+         2TPXlolrgcm4SrjrL7y5as5t+On76F8xk2Yv1JmQcYZOg3+36qVcVUBRjyEHuhtnICy+
+         zepA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x79rzXXTHBgOsXBjkeB1wHbZQHGb1pLifmwYG6i89Z4=;
+        b=AwZ9m0zShd1jIPWuXylyl0q5wNcIom2evfcwWxl+dfV+1qorE5NG/nvktI22bHv3o9
+         pSqmCmnIkpDJGTqAtw4W7TjwfhxkWdkH1nQUayj85iWPBJ6P8os4lGodeUsua0jbvYwI
+         aHy/dvrqpZvqhK52ixRWGm8/wdwzshz6Eu25EfF88A81TNSCMaXdzwZz5jBMJImVUl8H
+         4+wBEqNG2OATzUr/egxfCGPRXNqxj17SzQkT3yjzvp4qkdFY7uL+k2yYNIxBmotk2If7
+         v3OjmYNtfqiVxKJRqHLQ4OoHUrIXJwBEKTtACONuoIM2jo8NnonG+tJ1qxFFGC3bDgSU
+         XEqQ==
+X-Gm-Message-State: AOAM532UBvBYJe9xELD0oHsOJbS/0XgtYmPtjaSiLCrU9ZGNy4GLCgb4
+        Y8wEJhmfsQIIMaE3exiVp1i4xu4JkYdtrrd3e1Q=
+X-Google-Smtp-Source: ABdhPJzyWMrREgA3Nehm1ZII8CnRmp+4+hFgOb83EIvL2/ceDuCiG0gk5lRaWuwD4CwDXyBzPqVCflbheWZSkPYHpmw=
+X-Received: by 2002:a17:907:3f24:: with SMTP id hq36mr15796903ejc.439.1643164229255;
+ Tue, 25 Jan 2022 18:30:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638432158-4119-7-git-send-email-hongxing.zhu@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20220124131538.1453657-1-imagedong@tencent.com>
+ <20220124131538.1453657-3-imagedong@tencent.com> <b7834377-eb0f-f5df-f3b6-10525de7afca@gmail.com>
+In-Reply-To: <b7834377-eb0f-f5df-f3b6-10525de7afca@gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Wed, 26 Jan 2022 10:26:00 +0800
+Message-ID: <CADxym3ZYPmNCf=bpgZCxU2Hnj37VgqR6fdf_S9yiTcY3Od2O7A@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/6] net: ipv4: use kfree_skb_reason() in ip_rcv_core()
+To:     David Ahern <dsahern@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, pablo@netfilter.org,
+        kadlec@netfilter.org, Florian Westphal <fw@strlen.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Eric Dumazet <edumazet@google.com>, alobakin@pm.me,
+        paulb@nvidia.com, Paolo Abeni <pabeni@redhat.com>,
+        talalahmad@google.com, haokexin@gmail.com,
+        Kees Cook <keescook@chromium.org>, memxor@gmail.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, Cong Wang <cong.wang@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 04:02:36PM +0800, Richard Zhu wrote:
-> Add the PCIe support on i.MX8MM platforms.
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> Tested-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> Reviewed-by: Tim Harvey <tharvey@gateworks.com>
-> Tested-by: Tim Harvey <tharvey@gateworks.com>
+On Wed, Jan 26, 2022 at 10:10 AM David Ahern <dsahern@gmail.com> wrote:
+>
+> On 1/24/22 6:15 AM, menglong8.dong@gmail.com wrote:
+> > @@ -478,7 +483,7 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
+> >                      IPSTATS_MIB_NOECTPKTS + (iph->tos & INET_ECN_MASK),
+> >                      max_t(unsigned short, 1, skb_shinfo(skb)->gso_segs));
+> >
+> > -     if (!pskb_may_pull(skb, iph->ihl*4))
+> > +     if (!pskb_may_pull(skb, iph->ihl * 4))
+>
+> unrelated cleanup
+>
 
-Applied, thanks!
+Haha, you got me :/
+
+> >               goto inhdr_error;
+> >
+> >       iph = ip_hdr(skb);
+> > @@ -490,7 +495,7 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
+> >       if (skb->len < len) {
+> >               __IP_INC_STATS(net, IPSTATS_MIB_INTRUNCATEDPKTS);
+> >               goto drop;
+> > -     } else if (len < (iph->ihl*4))
+> > +     } else if (len < (iph->ihl * 4))
+>
+> ditto
+>
+> >               goto inhdr_error;
+> >
+> >       /* Our transport medium may have padded the buffer out. Now we know it
+>

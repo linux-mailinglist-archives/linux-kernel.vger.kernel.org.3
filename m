@@ -2,75 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A0249D0DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE63449D0DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243806AbiAZReY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:34:24 -0500
-Received: from mga04.intel.com ([192.55.52.120]:31882 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243769AbiAZReW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:34:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643218462; x=1674754462;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=K129hl5RytW5ura24/yx7HTDJHZL++ViTWK4Ed5BQCk=;
-  b=NrxADOJzzBssggdR/hkBY8P7s1z2d6nq6xu571XAoMcfz+yvPCXJKE7F
-   CsD1mn46zIuFy7pcX324McLQCmZD22zGmgE0kNCK3nzmyj0SZyUJkBd6u
-   O86OvCZgtMLNssMd/aFMcuxthgBxi0FLnQe5BMUthNZslw8ypy8q5C4CW
-   32yTGIHYBGdMpWv9fst6v2XUZVRhczbqoBpcKr7Zx+3MMHTG++Sd0C8qC
-   5AaNuD6Nsf3C/iKmHQcMXpgDto0j+W15srt29+9ZlT8BhQGJLRLnIstgh
-   LwTCj1+cKeKdU2dEJlnmwozSTWE7YB5FfUNRhofkRzdg55vs3h7y2sDgk
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="245438929"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="245438929"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 09:34:21 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="624901254"
-Received: from nbasu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.16.197])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 09:34:16 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
-In-Reply-To: <YfFV4EJosayH+e6C@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
- <YfEG2qVO9K9G+g1d@kroah.com>
- <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
- <f671a112-880d-1526-a395-360947b40c5a@gmx.de> <YfEv7OQs98O9wJdJ@kroah.com>
- <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
- <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
- <YfFV4EJosayH+e6C@smile.fi.intel.com>
-Date:   Wed, 26 Jan 2022 19:34:13 +0200
-Message-ID: <87v8y6xuy2.fsf@intel.com>
+        id S243794AbiAZRfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237113AbiAZRfe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 12:35:34 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B04EC06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:35:34 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id 9so466732iou.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:35:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZIc0fSllSEZH1gk3JGk22AP5NW4tb6II2GdmBEkjev0=;
+        b=LnfjBxx8+MlxwefUxtOVRjjQeNugF5BLhAaiOjLOUI05XgLF/0FvOpyr9lunVuSSM/
+         GWLE3mpgl31ce08kr2pVl/LjYH7sLAuCh9YurtESr4S0oR7i+wttHvXJnqYFmpETT3Lq
+         /WYOeCzK1O7PAZZ8K2ES1Ck4JpmB4RtuQkLIg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZIc0fSllSEZH1gk3JGk22AP5NW4tb6II2GdmBEkjev0=;
+        b=pXga1M4wGBlBgtBAQDoRlVOeY01Aj2w+wB407b3YQyGzifDFosmUajEcRaw+Qebu8r
+         1fflhUv16Pt6C5dgbZ2QP+3OBr8bK0Ouf8BHtADnNKmO6NhbAxUMzgm+pWrdH3uYFLeA
+         ocBg1Rk+fiZrxVyf1T44qop10FxJGCqyjUYDt8wdZ3JA9tBGnB4mGuaULi5OVTRiR/AA
+         ix7SKGUNRaNY1fDydnoLKWKKy95newbaJhJHOHuGvH5uAVOpHazjLLAEvau5IBS/te3j
+         FQ9ccFQodAjFTQrsbJWt1twzKHxcsp2pq2b0EqomK7Dh+zOuUuKIQYkFEq/hl3rPxMvW
+         N1lQ==
+X-Gm-Message-State: AOAM530dQN73RlJwpvO+D2RgJt4FxipNlTQDYLskB7XtOiFlUk1E2pn7
+        MMIRJ0A50iTIdWYuyiJOMERniw==
+X-Google-Smtp-Source: ABdhPJwBBSYp7lhFZ6a63yjqa1UiVsse+h9o1ohr4kLC1ezejkIkL5BQXXZZ5oix6wchCHW+SEfYOg==
+X-Received: by 2002:a05:6638:2ba:: with SMTP id d26mr428556jaq.250.1643218533820;
+        Wed, 26 Jan 2022 09:35:33 -0800 (PST)
+Received: from ?IPv6:2601:282:8200:4c:f2e:a7f7:d853:1e3? ([2601:282:8200:4c:f2e:a7f7:d853:1e3])
+        by smtp.gmail.com with ESMTPSA id x6sm11128452ill.78.2022.01.26.09.35.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 09:35:33 -0800 (PST)
+Subject: Re: [PATCH 1/3] selftests/zram: Remove obsolete max_comp_streams
+ interface
+To:     Petr Vorel <pvorel@suse.cz>,
+        "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>
+Cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "naresh.kamboju@linaro.org" <naresh.kamboju@linaro.org>,
+        "aleksei.kodanev@bell-sw.com" <aleksei.kodanev@bell-sw.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <1639562171-4434-1-git-send-email-xuyang2018.jy@fujitsu.com>
+ <1146337d-718e-a369-1012-224f06bc9c2f@linuxfoundation.org>
+ <61F0D9F7.1080200@fujitsu.com> <YfD0hiUSf40jX82d@pevik>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <590c1f1c-2da1-583a-d055-83c15969cf80@linuxfoundation.org>
+Date:   Wed, 26 Jan 2022 10:35:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <YfD0hiUSf40jX82d@pevik>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> And basically create a MIPI based driver for I2C.
+On 1/26/22 12:13 AM, Petr Vorel wrote:
+> Hi all,
+> 
+>> on 2022/1/26 4:33, Shuah Khan wrote :
+>>> On 12/15/21 2:56 AM, Yang Xu wrote:
+>>>> Since kernel commit 43209ea2d17a ("zram: remove max_comp_streams
+>>>> internals"), zram has
+>>>> switched to per-cpu streams. Even kernel still keep this interface for
+>>>> some reasons, but
+>>>> writing to max_comp_stream doesn't take any effect. So remove it.
+> 
+>>> I get that max_comp_stream doesn't do anything since this referenced
+>>> commit. Don't we need this test on older kernels since older kernels
+>>> still support max_comp_stream?
+> 
+>> I read the following info from kernel selftest documentation
+>> https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
+> 
+>> "The kernel contains a set of “self tests” under the
+>> tools/testing/selftests/ directory. These are intended to be small tests
+>> to exercise individual code paths in the kernel. Tests are intended to
+>> be run after building, installing and booting a kernel."
+> 
+>> So, we can build older kernel(use older kernel source) if we want to
+>> test older kernel.
+> 
+>> IMO, kernel selftest is different from other testsuit(ie ltp, this
+>> shuould think about api changes because ltp may test on different kernel).
+> Yes, that's how I understand the difference with approach of in kselftest - the
+> kernel tree testsuite and LTP - the out-of-tree testsuite.
+> 
 
-What does that even mean?
+Removing max_comp_stream test appears to be motivated by the fact it isn't
+needed on newer kernels.
 
-BR,
-Jani.
+Kselftest from mainline can be run on older stable kernels. This is a use-case
+for a lot test rings. The idea is that when a new test gets added for older
+code to regression test a bug, we should be able to run that test on an older
+kernel. This is the reason why we don't remove code that can still test an older
+kernel and make sure it skips gracefully.
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Hence, I won't be taking this patch.
+
+thanks,
+-- Shuah

@@ -2,458 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A1D49C376
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C577649C378
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiAZGG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 01:06:27 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:40626 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229484AbiAZGG1 (ORCPT
+        id S231552AbiAZGIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 01:08:25 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:58620 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229484AbiAZGIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 01:06:27 -0500
-X-UUID: 31dc0f218e4e4853bbd7d060185972bd-20220126
-X-UUID: 31dc0f218e4e4853bbd7d060185972bd-20220126
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 869002916; Wed, 26 Jan 2022 14:06:22 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 26 Jan 2022 14:06:20 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 Jan 2022 14:06:20 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <wenst@chromium.org>
-CC:     <chun-jie.chen@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>
-Subject: Re: [PATCH 12/31] clk: mediatek: pll: Split definitions into separate header file
-Date:   Wed, 26 Jan 2022 14:06:20 +0800
-Message-ID: <20220126060620.25823-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220122091731.283592-13-wenst@chromium.org>
-References: <20220122091731.283592-13-wenst@chromium.org>
+        Wed, 26 Jan 2022 01:08:24 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E35251F393;
+        Wed, 26 Jan 2022 06:08:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1643177302; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kUNJhijNcEYthlOB/CcCLZFMtwOnTh+E0qjf9uFivCk=;
+        b=LU7IKnIQnNf2gb4vTJfu1rdu0GPB2WZyeCptK0xEOb0BJUrYBbHKskMGnT7i+a1S8PMmPv
+        7+XXtvuuSymvoRiVNLEPbDl5V6S2bAgQ8cjRwgWWgMvtjgN1070kE4RbZauVK06U1f+hgH
+        koAxsjzqvM3jFNAcMFRtqlGkr51DhFA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B4CBB13519;
+        Wed, 26 Jan 2022 06:08:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 92o8Klbl8GEybQAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 26 Jan 2022 06:08:22 +0000
+Message-ID: <4609fe56-7d88-8176-a378-0f465670b37d@suse.com>
+Date:   Wed, 26 Jan 2022 07:08:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Content-Language: en-US
+To:     minyard@acm.org, Ingo Molnar <mingo@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <20220125182737.GO34919@minyard.net>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: Possible reproduction of CSD locking issue
+In-Reply-To: <20220125182737.GO34919@minyard.net>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------vDPoAOl0BlYPEQCGFURt3BTK"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> When the PLL type clk was implemented in the MediaTek clk driver
-> library, the data structure definitions and function declaration
-> were put in the common header file.
-> 
-> Since it is its own type of clk, and not all platform clk drivers
-> utilize it, having the definitions in the common header results
-> in wasted cycles during compilation.
-> 
-> Split out the related definitions and declarations into its own
-> header file, and include that only in the platform clk drivers that
-> need it.
-> 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
->
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-> ---
->  drivers/clk/mediatek/clk-mt2701.c            |  5 +-
->  drivers/clk/mediatek/clk-mt2712.c            |  3 +-
->  drivers/clk/mediatek/clk-mt6765.c            |  3 +-
->  drivers/clk/mediatek/clk-mt6779.c            |  3 +-
->  drivers/clk/mediatek/clk-mt6797.c            |  3 +-
->  drivers/clk/mediatek/clk-mt7622.c            |  5 +-
->  drivers/clk/mediatek/clk-mt7629.c            |  5 +-
->  drivers/clk/mediatek/clk-mt7986-apmixed.c    |  4 +-
->  drivers/clk/mediatek/clk-mt8135.c            |  3 +-
->  drivers/clk/mediatek/clk-mt8167.c            |  3 +-
->  drivers/clk/mediatek/clk-mt8173.c            |  5 +-
->  drivers/clk/mediatek/clk-mt8183.c            |  3 +-
->  drivers/clk/mediatek/clk-mt8192.c            |  3 +-
->  drivers/clk/mediatek/clk-mt8195-apmixedsys.c |  1 +
->  drivers/clk/mediatek/clk-mt8195-apusys_pll.c |  1 +
->  drivers/clk/mediatek/clk-mt8516.c            |  3 +-
->  drivers/clk/mediatek/clk-mtk.h               | 39 --------------
->  drivers/clk/mediatek/clk-pll.c               |  1 +
->  drivers/clk/mediatek/clk-pll.h               | 55 ++++++++++++++++++++
->  19 files changed, 91 insertions(+), 57 deletions(-)
->  create mode 100644 drivers/clk/mediatek/clk-pll.h
-> 
-> diff --git a/drivers/clk/mediatek/clk-mt2701.c b/drivers/clk/mediatek/clk-mt2701.c
-> index 695be0f77427..1eb3e4563c3f 100644
-> --- a/drivers/clk/mediatek/clk-mt2701.c
-> +++ b/drivers/clk/mediatek/clk-mt2701.c
-> @@ -10,9 +10,10 @@
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  
-> -#include "clk-mtk.h"
-> -#include "clk-gate.h"
->  #include "clk-cpumux.h"
-> +#include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt2701-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt2712.c b/drivers/clk/mediatek/clk-mt2712.c
-> index a3bd9a107209..ff72b9ab945b 100644
-> --- a/drivers/clk/mediatek/clk-mt2712.c
-> +++ b/drivers/clk/mediatek/clk-mt2712.c
-> @@ -13,8 +13,9 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  
-> -#include "clk-mtk.h"
->  #include "clk-gate.h"
-> +#include "clk-pll.h"
-> +#include "clk-mtk.h"
->  
->  #include <dt-bindings/clock/mt2712-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt6765.c b/drivers/clk/mediatek/clk-mt6765.c
-> index d77ea5aff292..24829ca3bd1f 100644
-> --- a/drivers/clk/mediatek/clk-mt6765.c
-> +++ b/drivers/clk/mediatek/clk-mt6765.c
-> @@ -12,9 +12,10 @@
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  
-> -#include "clk-mtk.h"
->  #include "clk-gate.h"
-> +#include "clk-mtk.h"
->  #include "clk-mux.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt6765-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt6779.c b/drivers/clk/mediatek/clk-mt6779.c
-> index 9825385c9f94..7b61664da18f 100644
-> --- a/drivers/clk/mediatek/clk-mt6779.c
-> +++ b/drivers/clk/mediatek/clk-mt6779.c
-> @@ -10,9 +10,10 @@
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  
-> +#include "clk-gate.h"
->  #include "clk-mtk.h"
->  #include "clk-mux.h"
-> -#include "clk-gate.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt6779-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt6797.c b/drivers/clk/mediatek/clk-mt6797.c
-> index 428eb24ffec5..02259e81625a 100644
-> --- a/drivers/clk/mediatek/clk-mt6797.c
-> +++ b/drivers/clk/mediatek/clk-mt6797.c
-> @@ -9,8 +9,9 @@
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  
-> -#include "clk-mtk.h"
->  #include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt6797-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt7622.c b/drivers/clk/mediatek/clk-mt7622.c
-> index ef5947e15c75..0e1fb30a1e98 100644
-> --- a/drivers/clk/mediatek/clk-mt7622.c
-> +++ b/drivers/clk/mediatek/clk-mt7622.c
-> @@ -11,9 +11,10 @@
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  
-> -#include "clk-mtk.h"
-> -#include "clk-gate.h"
->  #include "clk-cpumux.h"
-> +#include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt7622-clk.h>
->  #include <linux/clk.h> /* for consumer */
-> diff --git a/drivers/clk/mediatek/clk-mt7629.c b/drivers/clk/mediatek/clk-mt7629.c
-> index a0ee079670c7..c0e023bf31eb 100644
-> --- a/drivers/clk/mediatek/clk-mt7629.c
-> +++ b/drivers/clk/mediatek/clk-mt7629.c
-> @@ -12,9 +12,10 @@
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  
-> -#include "clk-mtk.h"
-> -#include "clk-gate.h"
->  #include "clk-cpumux.h"
-> +#include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt7629-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt7986-apmixed.c b/drivers/clk/mediatek/clk-mt7986-apmixed.c
-> index 98ec3887585f..21d4c82e782a 100644
-> --- a/drivers/clk/mediatek/clk-mt7986-apmixed.c
-> +++ b/drivers/clk/mediatek/clk-mt7986-apmixed.c
-> @@ -10,9 +10,11 @@
->  #include <linux/of_address.h>
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
-> -#include "clk-mtk.h"
-> +
->  #include "clk-gate.h"
-> +#include "clk-mtk.h"
->  #include "clk-mux.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt7986-clk.h>
->  #include <linux/clk.h>
-> diff --git a/drivers/clk/mediatek/clk-mt8135.c b/drivers/clk/mediatek/clk-mt8135.c
-> index 9b4b645aea99..09ad272d51f1 100644
-> --- a/drivers/clk/mediatek/clk-mt8135.c
-> +++ b/drivers/clk/mediatek/clk-mt8135.c
-> @@ -11,8 +11,9 @@
->  #include <linux/mfd/syscon.h>
->  #include <dt-bindings/clock/mt8135-clk.h>
->  
-> -#include "clk-mtk.h"
->  #include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  static DEFINE_SPINLOCK(mt8135_clk_lock);
->  
-> diff --git a/drivers/clk/mediatek/clk-mt8167.c b/drivers/clk/mediatek/clk-mt8167.c
-> index e5ea10e31799..812b33a57530 100644
-> --- a/drivers/clk/mediatek/clk-mt8167.c
-> +++ b/drivers/clk/mediatek/clk-mt8167.c
-> @@ -12,8 +12,9 @@
->  #include <linux/slab.h>
->  #include <linux/mfd/syscon.h>
->  
-> -#include "clk-mtk.h"
->  #include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt8167-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt8173.c b/drivers/clk/mediatek/clk-mt8173.c
-> index 8f898ac476c0..46b7655feeaa 100644
-> --- a/drivers/clk/mediatek/clk-mt8173.c
-> +++ b/drivers/clk/mediatek/clk-mt8173.c
-> @@ -8,9 +8,10 @@
->  #include <linux/of.h>
->  #include <linux/of_address.h>
->  
-> -#include "clk-mtk.h"
-> -#include "clk-gate.h"
->  #include "clk-cpumux.h"
-> +#include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt8173-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
-> index 5046852eb0fd..68496554dd3d 100644
-> --- a/drivers/clk/mediatek/clk-mt8183.c
-> +++ b/drivers/clk/mediatek/clk-mt8183.c
-> @@ -11,9 +11,10 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  
-> +#include "clk-gate.h"
->  #include "clk-mtk.h"
->  #include "clk-mux.h"
-> -#include "clk-gate.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt8183-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt8192.c b/drivers/clk/mediatek/clk-mt8192.c
-> index cbc7c6dbe0f4..5f998aab3bfd 100644
-> --- a/drivers/clk/mediatek/clk-mt8192.c
-> +++ b/drivers/clk/mediatek/clk-mt8192.c
-> @@ -12,9 +12,10 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  
-> +#include "clk-gate.h"
->  #include "clk-mtk.h"
->  #include "clk-mux.h"
-> -#include "clk-gate.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt8192-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> index 6156ceeed71e..5b1b7dc447eb 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> @@ -5,6 +5,7 @@
->  
->  #include "clk-gate.h"
->  #include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt8195-clk.h>
->  #include <linux/of_device.h>
-> diff --git a/drivers/clk/mediatek/clk-mt8195-apusys_pll.c b/drivers/clk/mediatek/clk-mt8195-apusys_pll.c
-> index f1c84186346e..db449ff877d7 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-apusys_pll.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-apusys_pll.c
-> @@ -4,6 +4,7 @@
->  // Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
->  
->  #include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt8195-clk.h>
->  #include <linux/clk-provider.h>
-> diff --git a/drivers/clk/mediatek/clk-mt8516.c b/drivers/clk/mediatek/clk-mt8516.c
-> index 9d4261ecc760..a37143f920ce 100644
-> --- a/drivers/clk/mediatek/clk-mt8516.c
-> +++ b/drivers/clk/mediatek/clk-mt8516.c
-> @@ -11,8 +11,9 @@
->  #include <linux/slab.h>
->  #include <linux/mfd/syscon.h>
->  
-> -#include "clk-mtk.h"
->  #include "clk-gate.h"
-> +#include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #include <dt-bindings/clock/mt8516-clk.h>
->  
-> diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
-> index bdec7dc5e07a..168220f85489 100644
-> --- a/drivers/clk/mediatek/clk-mtk.h
-> +++ b/drivers/clk/mediatek/clk-mtk.h
-> @@ -179,45 +179,6 @@ void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds,
->  struct clk_onecell_data *mtk_alloc_clk_data(unsigned int clk_num);
->  void mtk_free_clk_data(struct clk_onecell_data *clk_data);
->  
-> -#define HAVE_RST_BAR	BIT(0)
-> -#define PLL_AO		BIT(1)
-> -
-> -struct mtk_pll_div_table {
-> -	u32 div;
-> -	unsigned long freq;
-> -};
-> -
-> -struct mtk_pll_data {
-> -	int id;
-> -	const char *name;
-> -	u32 reg;
-> -	u32 pwr_reg;
-> -	u32 en_mask;
-> -	u32 pd_reg;
-> -	u32 tuner_reg;
-> -	u32 tuner_en_reg;
-> -	u8 tuner_en_bit;
-> -	int pd_shift;
-> -	unsigned int flags;
-> -	const struct clk_ops *ops;
-> -	u32 rst_bar_mask;
-> -	unsigned long fmin;
-> -	unsigned long fmax;
-> -	int pcwbits;
-> -	int pcwibits;
-> -	u32 pcw_reg;
-> -	int pcw_shift;
-> -	u32 pcw_chg_reg;
-> -	const struct mtk_pll_div_table *div_table;
-> -	const char *parent_name;
-> -	u32 en_reg;
-> -	u8 pll_en_bit; /* Assume 0, indicates BIT(0) by default */
-> -};
-> -
-> -void mtk_clk_register_plls(struct device_node *node,
-> -		const struct mtk_pll_data *plls, int num_plls,
-> -		struct clk_onecell_data *clk_data);
-> -
->  struct clk *mtk_clk_register_ref2usb_tx(const char *name,
->  			const char *parent_name, void __iomem *reg);
->  
-> diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
-> index f04f724e12e5..64f59554bc9b 100644
-> --- a/drivers/clk/mediatek/clk-pll.c
-> +++ b/drivers/clk/mediatek/clk-pll.c
-> @@ -13,6 +13,7 @@
->  #include <linux/delay.h>
->  
->  #include "clk-mtk.h"
-> +#include "clk-pll.h"
->  
->  #define REG_CON0		0
->  #define REG_CON1		4
-> diff --git a/drivers/clk/mediatek/clk-pll.h b/drivers/clk/mediatek/clk-pll.h
-> new file mode 100644
-> index 000000000000..d01b0c38311d
-> --- /dev/null
-> +++ b/drivers/clk/mediatek/clk-pll.h
-> @@ -0,0 +1,55 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2014 MediaTek Inc.
-> + * Author: James Liao <jamesjj.liao@mediatek.com>
-> + */
-> +
-> +#ifndef __DRV_CLK_MTK_PLL_H
-> +#define __DRV_CLK_MTK_PLL_H
-> +
-> +#include <linux/types.h>
-> +
-> +struct clk_ops;
-> +struct clk_onecell_data;
-> +struct device_node;
-> +
-> +struct mtk_pll_div_table {
-> +	u32 div;
-> +	unsigned long freq;
-> +};
-> +
-> +#define HAVE_RST_BAR	BIT(0)
-> +#define PLL_AO		BIT(1)
-> +
-> +struct mtk_pll_data {
-> +	int id;
-> +	const char *name;
-> +	u32 reg;
-> +	u32 pwr_reg;
-> +	u32 en_mask;
-> +	u32 pd_reg;
-> +	u32 tuner_reg;
-> +	u32 tuner_en_reg;
-> +	u8 tuner_en_bit;
-> +	int pd_shift;
-> +	unsigned int flags;
-> +	const struct clk_ops *ops;
-> +	u32 rst_bar_mask;
-> +	unsigned long fmin;
-> +	unsigned long fmax;
-> +	int pcwbits;
-> +	int pcwibits;
-> +	u32 pcw_reg;
-> +	int pcw_shift;
-> +	u32 pcw_chg_reg;
-> +	const struct mtk_pll_div_table *div_table;
-> +	const char *parent_name;
-> +	u32 en_reg;
-> +	u8 pll_en_bit; /* Assume 0, indicates BIT(0) by default */
-> +};
-> +
-> +void mtk_clk_register_plls(struct device_node *node,
-> +			   const struct mtk_pll_data *plls, int num_plls,
-> +			   struct clk_onecell_data *clk_data);
-> +
-> +#endif /* __DRV_CLK_MTK_PLL_H */
-> -- 
-> 2.35.0.rc0.227.g00780c9af4-goog
-> 
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------vDPoAOl0BlYPEQCGFURt3BTK
+Content-Type: multipart/mixed; boundary="------------YzwsB1r2jUauKja6nwlBvAlh";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: minyard@acm.org, Ingo Molnar <mingo@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+Message-ID: <4609fe56-7d88-8176-a378-0f465670b37d@suse.com>
+Subject: Re: Possible reproduction of CSD locking issue
+References: <20220125182737.GO34919@minyard.net>
+In-Reply-To: <20220125182737.GO34919@minyard.net>
+
+--------------YzwsB1r2jUauKja6nwlBvAlh
+Content-Type: multipart/mixed; boundary="------------fneyco3OGV12CLL4HxR4TLMM"
+
+--------------fneyco3OGV12CLL4HxR4TLMM
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+T24gMjUuMDEuMjIgMTk6MjcsIENvcmV5IE1pbnlhcmQgd3JvdGU6DQo+IFdlIGhhdmUgYSBj
+dXN0b21lciB0aGF0IGhhZCBiZWVuIHNlZWluZyBDU0QgbG9jayBpc3N1ZXMgb24gYSBDZW50
+b3MgNw0KPiBrZXJuZWwgKHVuZm9ydHVuYXRlbHkpLiAgSSBjb3VsZG4ndCBmaW5kIGFueXRo
+aW5nIG9yIGFueSBrZXJuZWwgY2hhbmdlcw0KPiB0aGF0IG1pZ2h0IGZpeCBpdCwgc28gSSB3
+YXMgY29uc2RlcmluZyBpdCB3YXMgdGhlIENTRCBsb2NraW5nIGlzc3VlIHlvdQ0KPiBoYXZl
+IGJlZW4gY2hhc2luZyBmb3IgYSB3aGlsZS4NCg0KSXMgdGhpcyBvbiBiYXJlIG1ldGFsIG9y
+IGluIGEgdmlydHVhbGl6ZWQgZW52aXJvbm1lbnQ/DQoNClRoZSBidWcgSSB3YXMgaHVudGlu
+ZyBvY2N1cnJlZCB3aGVuIHJ1bm5pbmcgdW5kZXIgWGVuLCBhbmQgaW4gdGhlIGVuZCBJDQpm
+b3VuZCBhIHNjaGVkdWxpbmcgcHJvYmxlbSBpbiB0aGUgWGVuIGh5cGVydmlzb3IuDQoNCj4g
+DQo+IFNvIEkgYmFja3BvcnRlZCB0aGUgZGVidWcgcGF0Y2hlcy4gIEFuZCBvZiBjb3Vyc2Us
+IHRoZXkgc3RvcHBlZCBzZWVpbmcNCj4gdGhlIGlzc3VlLCBhdCBsZWFzdCBhcyBtdWNoLCBh
+bmQgdGhleSBoYWQgdHJvdWJsZSB3aXRoIHRoZSBleHRyYSBDUFUNCj4gdGltZSB0aGUgZGVi
+dWcgY29kZSB0b29rLiAgQnV0IHRoZXkganVzdCByZXByb2R1Y2VkIGl0LiAgSGVyZSBhcmUg
+dGhlDQo+IGxvZ3M6DQo+IA0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsy
+ODU3MzcuNTIyNzQzXSBjc2Q6IERldGVjdGVkIG5vbi1yZXNwb25zaXZlIENTRCBsb2NrICgj
+MSkgb24gQ1BVIzMsIHdhaXRpbmcgNTAwMDAwMDA0MiBucyBmb3IgQ1BVIzU1IGZsdXNoX3Rs
+Yl9mdW5jKzB4MC8weGIwKDB4ZmZmZjhlMGIzZTJhZmJlOCkuDQo+IEphbiAyMyAyMzozOTo0
+MyB3b3JrZXIwIGtlcm5lbDogWzI4NTczNy41MjI3NDRdICBjc2Q6IENTRCBsb2NrICgjMSkg
+dW5yZXNwb25zaXZlLg0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3
+MzcuNTIyNzQ3XSAgY3NkOiBjbnQoMDAwMDAwMCk6IDAwMDAtPjAwMDAgcXVldWUNCj4gSmFu
+IDIzIDIzOjM5OjQzIHdvcmtlcjAga2VybmVsOiBbMjg1NzM3LjUyMjc0OF0gIGNzZDogY250
+KDAwMDAwMDEpOiBmZmZmLT4wMDM3IGlkbGUNCj4gSmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAg
+a2VybmVsOiBbMjg1NzM3LjUyMjc0OV0gIGNzZDogY250KDYzZDhkZDgpOiAwMDAzLT4wMDM3
+IGlwaQ0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3MzcuNTIyNzUw
+XSAgY3NkOiBjbnQoNjNkOGRkOSk6IDAwMDMtPjAwMzcgcGluZw0KPiBKYW4gMjMgMjM6Mzk6
+NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3MzcuNTIyNzUwXSAgY3NkOiBjbnQoNjNkOGRkYSk6
+IDAwMDMtPmZmZmYgcGluZ2VkDQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDog
+WzI4NTczNy41MjI3NTFdICBjc2Q6IGNudCg2M2Q4ZGVhKTogMDAzNS0+MDAzNyBwaW5nZWQN
+Cj4gSmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAga2VybmVsOiBbMjg1NzM3LjUyMjc1Ml0gIGNz
+ZDogY250KDYzZDhkZWIpOiBmZmZmLT4wMDM3IGdvdGlwaQ0KPiBKYW4gMjMgMjM6Mzk6NDMg
+d29ya2VyMCBrZXJuZWw6IFsyODU3MzcuNTIyNzUyXSAgY3NkOiBjbnQoNjNkOGRlYyk6IGZm
+ZmYtPjAwMzcgaGFuZGxlDQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDogWzI4
+NTczNy41MjI3NTNdICBjc2Q6IGNudCg2M2Q4ZGVkKTogZmZmZi0+MDAzNyBkZXF1ZXVlIChz
+cmMgQ1BVIDAgPT0gZW1wdHkpDQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDog
+WzI4NTczNy41MjI3NTRdICBjc2Q6IGNudCg2M2Q4ZGVlKTogZmZmZi0+MDAzNyBoZGxlbmQg
+KHNyYyBDUFUgMCA9PSBlYXJseSkNCj4gSmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAga2VybmVs
+OiBbMjg1NzM3LjUyMjc1NF0gIGNzZDogY250KDYzZDhlMWYpOiAwMDAzLT4wMDM3IHF1ZXVl
+DQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDogWzI4NTczNy41MjI3NTVdICBj
+c2Q6IGNudCg2M2Q4ZTIwKTogMDAwMy0+MDAzNyBpcGkNCj4gSmFuIDIzIDIzOjM5OjQzIHdv
+cmtlcjAga2VybmVsOiBbMjg1NzM3LjUyMjc1Nl0gIGNzZDogY250KDYzZDhlMjEpOiAwMDAz
+LT4wMDM3IHBpbmcNCj4gSmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAga2VybmVsOiBbMjg1NzM3
+LjUyMjc1Nl0gIGNzZDogY250KDYzZDhlMjIpOiAwMDAzLT4wMDM3IHF1ZXVlDQo+IEphbiAy
+MyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDogWzI4NTczNy41MjI3NTddICBjc2Q6IGNudCg2
+M2Q4ZTIzKTogMDAwMy0+MDAzNyBub2lwaQ0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBr
+ZXJuZWw6IFsyODU3MzcuNTIyNzU3XSAgY3NkOiBjbnQgbm93OiA2M2ZlNGNkDQo+IEphbiAy
+MyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDogWzI4NTczNy41MjI3NThdIFRhc2sgZHVtcCBm
+b3IgQ1BVIDU1Og0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3Mzcu
+NTIyNzYxXSBrdWJlbGV0ICAgICAgICAgUiAgcnVubmluZyB0YXNrICAgICAgICAwIDI3NzY5
+NSAgICAgIDEgMHgwMDA4MDAwMA0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6
+IFsyODU3MzcuNTIyNzYxXSBDYWxsIFRyYWNlOg0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2Vy
+MCBrZXJuZWw6IFsyODU3MzcuNTIyNzY5XSAgWzxmZmZmZmZmZjg0Mzc2YjZhPl0gPyBfX3Nj
+aGVkdWxlKzB4NDZhLzB4OTkwDQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDog
+WzI4NTczNy41MjI3NzRdICBbPGZmZmZmZmZmODNkYjYzNTM+XSA/IGNvbnRleHRfdHJhY2tp
+bmdfdXNlcl9lbnRlcisweDEzLzB4MjANCj4gSmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAga2Vy
+bmVsOiBbMjg1NzM3LjUyMjc3Nl0gIFs8ZmZmZmZmZmY4NDM3NzViNT5dID8gc2NoZWR1bGVf
+dXNlcisweDQ1LzB4NTANCj4gSmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAga2VybmVsOiBbMjg1
+NzM3LjUyMjc3OV0gIFs8ZmZmZmZmZmY4NDM3YjUxOD5dID8gcmV0aW50X2NhcmVmdWwrMHgx
+Ni8weDM0DQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDogWzI4NTczNy41MjI3
+ODBdIGNzZDogUmUtc2VuZGluZyBDU0QgbG9jayAoIzEpIElQSSBmcm9tIENQVSMwMyB0byBD
+UFUjNTUNCj4gSmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAga2VybmVsOiBbMjg1NzM3LjUyMjc4
+OF0gQ1BVOiAzIFBJRDogNTQ2NzEgQ29tbTogcnVuYzpbMjpJTklUXSBLZHVtcDogbG9hZGVk
+IFRhaW50ZWQ6IEcgICAgICAgICAgIE9FICAtLS0tLS0tLS0tLS0gVCAzLjEwLjAtMTA2Mi4x
+Mi4xLnJ0NTYuMTA0Mi5tdmlzdGEudGVzdC4xNC5lbDcueDg2XzY0ICMxDQo+IEphbiAyMyAy
+MzozOTo0MyB3b3JrZXIwIGtlcm5lbDogWzI4NTczNy41MjI3ODldIEhhcmR3YXJlIG5hbWU6
+IERlbGwgSW5jLiBQb3dlckVkZ2UgUjc0MC8wWVdSN0QsIEJJT1MgMi45LjQgMTEvMDYvMjAy
+MA0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3MzcuNTIyNzg5XSBD
+YWxsIFRyYWNlOg0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3Mzcu
+NTIyNzkzXSAgWzxmZmZmZmZmZjg0MzcxOGJhPl0gZHVtcF9zdGFjaysweDE5LzB4MWINCj4g
+SmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAga2VybmVsOiBbMjg1NzM3LjUyMjc5OF0gIFs8ZmZm
+ZmZmZmY4M2QwYmNkOD5dIF9fY3NkX2xvY2tfd2FpdCsweDFhOC8weDJhMA0KPiBKYW4gMjMg
+MjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3MzcuNTIyODAwXSAgWzxmZmZmZmZmZjgz
+YzZkODcwPl0gPyBsZWF2ZV9tbSsweDEyMC8weDEyMA0KPiBKYW4gMjMgMjM6Mzk6NDMgd29y
+a2VyMCBrZXJuZWw6IFsyODU3MzcuNTIyODAyXSAgWzxmZmZmZmZmZjgzZDBiZmE0Pl0gc21w
+X2NhbGxfZnVuY3Rpb25fc2luZ2xlKzB4YzQvMHgxYjANCj4gSmFuIDIzIDIzOjM5OjQzIHdv
+cmtlcjAga2VybmVsOiBbMjg1NzM3LjUyMjgwNF0gIFs8ZmZmZmZmZmY4M2M2ZDg3MD5dID8g
+bGVhdmVfbW0rMHgxMjAvMHgxMjANCj4gSmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAga2VybmVs
+OiBbMjg1NzM3LjUyMjgwOV0gIFs8ZmZmZmZmZmY4M2UyNjg0Yj5dID8gcGFnZV9jb3VudGVy
+X3VuY2hhcmdlKzB4M2IvMHg3MA0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6
+IFsyODU3MzcuNTIyODExXSAgWzxmZmZmZmZmZjgzZDBjNjE0Pl0gc21wX2NhbGxfZnVuY3Rp
+b25fbWFueSsweDM0NC8weDM4MA0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6
+IFsyODU3MzcuNTIyODEzXSAgWzxmZmZmZmZmZjgzYzZkODcwPl0gPyBsZWF2ZV9tbSsweDEy
+MC8weDEyMA0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3MzcuNTIy
+ODE2XSAgWzxmZmZmZmZmZjgzYzZkYTM4Pl0gbmF0aXZlX2ZsdXNoX3RsYl9vdGhlcnMrMHhi
+OC8weGMwDQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDogWzI4NTczNy41MjI4
+MThdICBbPGZmZmZmZmZmODNjNmRjMjU+XSBmbHVzaF90bGJfcGFnZSsweDY1LzB4ZjANCj4g
+SmFuIDIzIDIzOjM5OjQzIHdvcmtlcjAga2VybmVsOiBbMjg1NzM3LjUyMjgyMV0gIFs8ZmZm
+ZmZmZmY4M2RmZGY5OD5dIHB0ZXBfY2xlYXJfZmx1c2grMHg2OC8weGEwDQo+IEphbiAyMyAy
+MzozOTo0MyB3b3JrZXIwIGtlcm5lbDogWzI4NTczNy41MjI4MjVdICBbPGZmZmZmZmZmODNk
+ZTY4MDY+XSB3cF9wYWdlX2NvcHkuaXNyYS44MysweDNkNi8weDY1MA0KPiBKYW4gMjMgMjM6
+Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3MzcuNTIyODI4XSAgWzxmZmZmZmZmZjgzZGU4
+Y2I0Pl0gZG9fd3BfcGFnZSsweGI0LzB4NzEwDQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIw
+IGtlcm5lbDogWzI4NTczNy41MjI4MzJdICBbPGZmZmZmZmZmODNkZWNiYjQ+XSBoYW5kbGVf
+bW1fZmF1bHQrMHg4ODQvMHgxMzQwDQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIwIGtlcm5l
+bDogWzI4NTczNy41MjI4MzVdICBbPGZmZmZmZmZmODNjZDc3OTk+XSA/IHVwZGF0ZV9jZnNf
+c2hhcmVzKzB4YTkvMHhmMA0KPiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsy
+ODU3MzcuNTIyODM5XSAgWzxmZmZmZmZmZjg0MzdlZmMzPl0gX19kb19wYWdlX2ZhdWx0KzB4
+MjEzLzB4NWEwDQo+IEphbiAyMyAyMzozOTo0MyB3b3JrZXIwIGtlcm5lbDogWzI4NTczNy41
+MjI4NDFdICBbPGZmZmZmZmZmODQzN2YzODU+XSBkb19wYWdlX2ZhdWx0KzB4MzUvMHg5MA0K
+PiBKYW4gMjMgMjM6Mzk6NDMgd29ya2VyMCBrZXJuZWw6IFsyODU3MzcuNTIyODQyXSAgWzxm
+ZmZmZmZmZjg0MzdiNzI4Pl0gcGFnZV9mYXVsdCsweDI4LzB4MzANCj4gSmFuIDIzIDIzOjM5
+OjQzIHdvcmtlcjAga2VybmVsOiBbMjg1NzM3LjUyMjg0NV0gY3NkOiBDU0QgbG9jayAoIzEp
+IGdvdCB1bnN0dWNrIG9uIENQVSMwMywgQ1BVIzU1IHJlbGVhc2VkIHRoZSBsb2NrLg0KPiAN
+Cj4gSG9wZWZ1bGx5IHRoaXMgaXMgdGhlIGlzc3VlIHlvdSBhcmUgY2hhc2luZyBhbmQgbm90
+IHNvbWV0aGluZyBlbHNlLg0KPiBJJ3ZlIGJlZW4gc3R1ZHlpbmcgdGhlbSB0byBzZWUgd2hh
+dCB0aGV5IG1lYW4sIGJ1dCBJIHRob3VnaHQgeW91IG1pZ2h0DQo+IGJlIGludGVyZXN0ZWQg
+dG8gZ2V0IHRoZW0gYXNhcC4NCg0KQXMgc2FpZCBiZWZvcmU6IEkndmUgc29sdmVkIG15IHBy
+b2JsZW0uDQoNCkJ1dCBJIGNhbiBzaGFyZSBzb21lIG1vcmUgaW5zaWdodCBmcm9tIG15IGV4
+cGVyaWVuY2U6DQoNCkRvbid0IGJlIHNvIHN1cmUgdGhhdCByZXNlbmRpbmcgdGhlIElQSSB3
+b2tlIHVwIHRoZSBjcHUgYWdhaW4uIEl0IG1pZ2h0DQpoYXZlIGJlZW4gdGhlIE5NSSBmb3Ig
+Z2V0dGluZyB0aGUgdGFyZ2V0IGNwdSdzIHN0YWNrdHJhY2Ugd2hpY2ggcmVzdWx0ZWQNCmlu
+IGxldHRpbmcgaXQgcnVuIGFnYWluLiBJIG1pc3NlZCB0aGlzIHBvc3NpYmlsaXR5IGluIHRo
+ZSBiZWdpbm5pbmcgYW5kDQp0aGlzIHdhcyB0aGUgcmVhc29uIEkgZGlzbWlzc2VkIHRoZSBY
+ZW4gc2NoZWR1bGluZyBpc3N1ZSB0b28gZWFybHkuDQoNCg0KSnVlcmdlbg0K
+--------------fneyco3OGV12CLL4HxR4TLMM
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------fneyco3OGV12CLL4HxR4TLMM--
+
+--------------YzwsB1r2jUauKja6nwlBvAlh--
+
+--------------vDPoAOl0BlYPEQCGFURt3BTK
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmHw5VYFAwAAAAAACgkQsN6d1ii/Ey98
+FAf9GG+HaN5mI3w30y7Sd1yamCAHpmHskPSHlGBWVQIbjtMljQwnr4PHorDeyKnNsBLwvWVTEyFQ
+sLCfDKU9rSyu9BcIw/vXG3Z1eo5RdbJl24AVjEYPXfzFairtHj2JQqHnIq75PSvG1Ycx6CHEfcV5
+wfpqO++d4tO/K+fbQ1Sd2/fYDS0HOHgpDAPE4rU44kKsUvAGy/rAd9271YWeHvYHlUI7OtOXPHWz
+Z4SOAlW8LiDee05UT/juFlzIm9S9yFbZKgXvxF873/6lDBM3gylqjghPlK/dTfHJkDIyhfOYTwpN
+mo4aJd10QoJLr3zzdOeB6bZDdXy11Fvd97LsgJDiDQ==
+=HB6W
+-----END PGP SIGNATURE-----
+
+--------------vDPoAOl0BlYPEQCGFURt3BTK--

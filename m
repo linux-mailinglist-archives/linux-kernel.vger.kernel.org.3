@@ -2,130 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA34249D5A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B11B249D5AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiAZWtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:49:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S230463AbiAZWuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiAZWtP (ORCPT
+        with ESMTP id S229904AbiAZWuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:49:15 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDA2C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:49:15 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id d5so990727pjk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:49:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QeowK8R255Us+nKjz4BPqDxIP7O3Rv/Tsw0L3glrT4Q=;
-        b=E3FWDUveRxI1hYgPJa1ZNUBSk3AJ5jItt9POskqPuQxFr1D1qDPioM9fYOVMkyazoV
-         GHfnkSEGdTIWr8kQPPnyH1Btpm0xLkbqJLpqGhC7n3g49m/IHaTy1I38xtJ9NHZ6qijP
-         0tmwDrgf26AoClhLLknd95bm/cYZ9qDwvxKAE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QeowK8R255Us+nKjz4BPqDxIP7O3Rv/Tsw0L3glrT4Q=;
-        b=wp9LOblENepwh4JB5IVrbLz4JP7cpN/LJrpdx4lGOF5eeK2+g/RIk3EByCHTomPVeA
-         izxfMS7N7v6Jw14ZEJZ3L3l7GQpwUo9640mEM1sifNEQSFlXT32WDmPKiT/afuvKhm4J
-         VIQgfuSQ2GQ6Ml5O9f0K9FXD1FezjpTE6776dL/F2QcxewkqQjZyGfCm2QzEIQu7Vdcc
-         bkQd/LXrbTBKRyfyYH7mpEFbSl/rcY/NwVoq7JrtjI8AXUidVN87JKfApfOcrQhue2eo
-         Yw/o1Yd6vKDqXxrDCfMICh7j37QBSTaFewE8lcTx4LM51XJdsjkhV7bIFbjw3HgOL/Md
-         OT3A==
-X-Gm-Message-State: AOAM533aYGm03KjXuaAi62z8nRTgYN6saGVOnH/fMQbOQNkEv+1VkQVP
-        /VmkjJljiVPrnbrmevUcWnhGFQ==
-X-Google-Smtp-Source: ABdhPJx5pVg6o3rc7yEuKI/WbUq70Htq1e33E1Lf1zMoqVH2u7MbFdL+lpdosl0Yn3AehkYFwKRnrQ==
-X-Received: by 2002:a17:90b:3850:: with SMTP id nl16mr10929856pjb.131.1643237354638;
-        Wed, 26 Jan 2022 14:49:14 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u17sm17431673pgi.14.2022.01.26.14.49.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:49:14 -0800 (PST)
-Date:   Wed, 26 Jan 2022 14:49:13 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Ariadne Conill <ariadne@dereferenced.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
- do_execveat_common()
-Message-ID: <202201261440.0C13601104@keescook>
-References: <20220126114447.25776-1-ariadne@dereferenced.org>
- <202201261202.EC027EB@keescook>
- <a8fef39-27bf-b25f-7cfe-21782a8d3132@dereferenced.org>
- <202201261239.CB5D7C991A@keescook>
- <5e963fab-88d4-2039-1cf4-6661e9bd16b@dereferenced.org>
- <202201261323.9499FA51@keescook>
- <64e91dc2-7f5c-6e8-308e-414c82a8ae6b@dereferenced.org>
+        Wed, 26 Jan 2022 17:50:16 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51445C06161C;
+        Wed, 26 Jan 2022 14:50:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=bsJ43rsX9/xKUt0cosEyzB1KK8mU+O0sfDNz58+hwX4=; b=U7LrV54n5uf4VALn9huJ+bso/e
+        KRX3bpf47wOmGOEb3C62aFOaU0Jp1FgZMZKb69n033moM9KSAq6srSHKgeJS/gk9Dsq5KbZYAMeRo
+        LITrsuZoGuMhl1QvjNO8cw4ZVbMRSlO6QalvGYQfc/ZYT1BQET2fm3X14iobtG8UePiNkdWYMqhA/
+        x0soNUKMEIfazHPHjHfEwYiWCwCj8zJL0ZNgl40CNy10weUbdmP3YJtZ+bQxH3RFum3UCGPv13O+F
+        QHNc0V8pdhJpr2xRcyrS/w6Zl4ha/IlWpegmugxaKUdGz0UVzyjnffz36l4zInvmBl/QQ1faxVzL6
+        pjdK0iWw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56894)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nCr7E-0003sT-2V; Wed, 26 Jan 2022 22:50:12 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nCr7B-0004qk-8t; Wed, 26 Jan 2022 22:50:09 +0000
+Date:   Wed, 26 Jan 2022 22:50:09 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commits in the net-next
+ tree
+Message-ID: <YfHQIZ07stBQTNqm@shell.armlinux.org.uk>
+References: <20220127075702.1b0b73c2@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <64e91dc2-7f5c-6e8-308e-414c82a8ae6b@dereferenced.org>
+In-Reply-To: <20220127075702.1b0b73c2@canb.auug.org.au>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 03:30:13PM -0600, Ariadne Conill wrote:
-> Hi,
+On Thu, Jan 27, 2022 at 07:57:02AM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On Wed, 26 Jan 2022, Kees Cook wrote:
+> Commits
 > 
-> > On Wed, Jan 26, 2022 at 03:13:10PM -0600, Ariadne Conill wrote:
-> > > Looks good to me, but I wonder if we shouldn't set an argv of
-> > > {bprm->filename, NULL} instead of {"", NULL}.  Discussion in IRC led to the
-> > > realization that multicall programs will try to use argv[0] and might crash
-> > > in this scenario.  If we're going to fake an argv, I guess we should try to
-> > > do it right.
-> > 
-> > They're crashing currently, though, yes? I think the goal is to move
-> > toward making execve(..., NULL, NULL) just not work at all. Using the
-> > {"", NULL} injection just gets us closer to protecting a bad userspace
-> > program. I think things _should_ crash if they try to start depending
-> > on this work-around.
+>   04a0683f7db4 ("net: stmmac: convert to phylink_generic_validate()")
+>   f4c296c90976 ("net: stmmac: remove phylink_config.pcs_poll usage")
+>   d194923d51c9 ("net: stmmac: fill in supported_interfaces")
+>   92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
+>   be6ec5b70266 ("net: xpcs: add support for retrieving supported interface modes")
 > 
-> Is there a reason to spawn a program, just to have it crash, rather than
-> just denying it to begin with, though?
+> are missing a Signed-off-by from their author.
 
-I think the correct behavior here is to unconditionally reject a NULL
-argv -- and I wish this had gotten fixed in 2008. :P Given the code we've
-found that depends on NULL argv, I think we likely can't make the change
-outright, so we're down this weird rabbit hole of trying to reject what we
-can and create work-around behaviors for the cases that currently exist.
-I think new users of the new work-around shouldn't be considered. We'd
-prefer they get a rejection, etc.
+Hi Stephen,
 
-> I mean, it all seems fine enough, and perhaps I'm just a bit picky on the
-> colors and flavors of my bikesheds, so if you want to go with this patch,
-> I'll be glad to carry it in the Alpine security update I am doing to make
-> sure the *other* GLib-using SUID programs people find don't get exploited in
-> the same way.
+Sigh, this is more vim stupidity. The commits _look_ fine in vim and
+look fine in git log on an 80 column display, but that is because the
+"Tested-by" line somehow ended up with the perfect amount of space
+characters to make it so.
 
-They "don't break userspace" guideline is really "don't break userspace
-if someone notices". :P Since this is a mitigation (not strictly a
-security flaw fix), changes to userspace behavior tend to be very
-conservatively viewed by Linus. ;)
-
-My preference is the earlier very simple version to fix this:
-
-diff --git a/fs/exec.c b/fs/exec.c
-index 79f2c9483302..aabadcf4a525 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1897,6 +1897,8 @@ static int do_execveat_common(int fd, struct filename *filename,
- 	}
- 
- 	retval = count(argv, MAX_ARG_STRINGS);
-+	if (reval == 0)
-+		retval = -EINVAL;
- 	if (retval < 0)
- 		goto out_free;
- 	bprm->argc = retval;
-
-So, I guess we should start there and send a patch to valgrind?
+This is not the first time this has happened - it keeps happening, and
+I've no clue why it keeps happening, other than rediculous vi behaviour.
+I'm sorry, but I don't see any solution to it at the moment. Maybe
+someone can suggest something that (a) prevents it happening when I
+paste in the Tested-by line, and (b) makes vim show when lines in a
+commit message are longer than 80 characters?
 
 -- 
-Kees Cook
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,148 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF7949CB40
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E0349CB46
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241506AbiAZNr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:47:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53173 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241433AbiAZNr2 (ORCPT
+        id S241634AbiAZNri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241568AbiAZNrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:47:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643204848;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AOuHAS2KZDNxBEGucf0g1XwANeun6eXjr1QhmgpheTs=;
-        b=NRr4V7Vbkf3hpiPQlaTieGhzxscQfMzMykemKOXX5mx6LNcWYMFediw52Vm/v7nNiiZb5i
-        Vvffv4Rp/XKz/Y6Pwc8ePOQqgQ5hCnbckDZQj7LNik3qO+5dbYrc2vgqKy7xFHfmQ0SCui
-        FHeAW5ArAZHSJ8jVm61Hck1Vn7bbwnc=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-Mu5g1bJEOZyqKA9ek1qpig-1; Wed, 26 Jan 2022 08:47:26 -0500
-X-MC-Unique: Mu5g1bJEOZyqKA9ek1qpig-1
-Received: by mail-ej1-f69.google.com with SMTP id i21-20020a1709063c5500b006b4c7308c19so4898481ejg.14
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:47:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AOuHAS2KZDNxBEGucf0g1XwANeun6eXjr1QhmgpheTs=;
-        b=bKzOnZzG/+3hhoGqVPhTrn20//Fy26EEqb9QHSQ0jSuILpl6oCmnM2spwZ3V4Wj0wQ
-         6JAaj5wZZvVm3RlgHz5uAafWQnDc7Cu6Io90mM9qbeIEoAneIg4xijRQLhTiJN8C4wNB
-         sHZ1RI+uARcJ9Ox2n1wQZH1Lc6G3sDCAMbYJjazLj1U2G1eg9lilfLmE+MQMHV2zTg65
-         iNWYEQURTByGUMUAoiko4Mk3ptRnXCuD1759gmtdMejDMARB5pfelEmi4K3JBmB0ESrv
-         +tRNX8E8JNGKKf11L4nfc+rS9ZxNb2N9h6c7x3L/OGEIEa6J0EE5JQZGmbgHuoiWwvHl
-         4nXg==
-X-Gm-Message-State: AOAM531rMfhnxxmftFIFF918uqdzPkCaO1uoB90EMAf+GzKzK1NjlCQV
-        O9/BPyzWZZUvT9AO3khwOscxBf0+EXQgs7gSjgb5cH4lsHdRWPmB+wS2ydjrWJ3IiodS2wURlGz
-        5J3htITRqEy4PbMAi+e6R8dHk
-X-Received: by 2002:a05:6402:3547:: with SMTP id f7mr837177edd.403.1643204845462;
-        Wed, 26 Jan 2022 05:47:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwwiC+8nYkmxkRX7YvOpqEsKxrQ+HcLdg6EBEkSZhdjfTXFWMgS245DlLrrqIfPrj0acVqH+Q==
-X-Received: by 2002:a05:6402:3547:: with SMTP id f7mr837151edd.403.1643204845256;
-        Wed, 26 Jan 2022 05:47:25 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id oz3sm7428569ejb.219.2022.01.26.05.47.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 05:47:24 -0800 (PST)
-Message-ID: <6a0233cd-d931-8a36-3b9e-08b774cec7b0@redhat.com>
-Date:   Wed, 26 Jan 2022 14:47:24 +0100
+        Wed, 26 Jan 2022 08:47:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D6FC06173B;
+        Wed, 26 Jan 2022 05:47:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B62CB81E10;
+        Wed, 26 Jan 2022 13:47:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8163EC340E3;
+        Wed, 26 Jan 2022 13:47:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643204849;
+        bh=J59HSbb1CYUQf2jadvuiVJSAI50FKAJ/JDdZfSRUuYE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=09AwusFHeokv+yKQNoSyPCUsa7T2m1PUFUtbdUDQmzfxUU3qWx1Hcwnw3eczazLse
+         x87m78Eoy1SiFlZ/HPRvOjBryNfg8cWGjh8pBhhpGfArFmEwUJO8HZnBQyaryU1HqG
+         4rBtkfvNLaC0xXZo3j/EYWMnNdBKa0rlQPvtR3ls=
+Date:   Wed, 26 Jan 2022 14:47:26 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     hammer hsieh <hammerh0314@gmail.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        wells.lu@sunplus.com, "hammer.hsieh" <hammer.hsieh@sunplus.com>
+Subject: Re: [PATCH v6 2/2] serial:sunplus-uart:Add Sunplus SoC UART Driver
+Message-ID: <YfFQ7v4dXPMV7ypw@kroah.com>
+References: <1641979444-11661-1-git-send-email-hammerh0314@gmail.com>
+ <1641979444-11661-3-git-send-email-hammerh0314@gmail.com>
+ <fcd43c65-6201-9e44-061c-f04e39cef726@kernel.org>
+ <CAOX-t54oA9V94d3901w2xKSagSzmXc9r=TDTtbgaSLfL1DxNbw@mail.gmail.com>
+ <d6d3aa07-7bf1-2b6d-356f-ae13c7b9d6cd@kernel.org>
+ <CAOX-t57KZb0hNDuhPsabkmkf_qOOLqyH3yuvkHP6UNwhLodWDg@mail.gmail.com>
+ <2cde3ff0-5180-7c1e-82fd-7b58e41d462a@kernel.org>
+ <CAOX-t573QkixRC7xa1KUOYXfL12Q+Ltxph9rX7V8tm2BMoqxgA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: acpi_get_devices() crash when acpi_disabled==true (was [PATCH v2]
- drm/privacy-screen: honor acpi=off in detect_thinkpad_privacy_screen)
-Content-Language: en-US
-To:     Tong Zhang <ztong0001@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi <linux-acpi@vger.kernel.org>
-References: <20220123091004.763775-1-ztong0001@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220123091004.763775-1-ztong0001@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOX-t573QkixRC7xa1KUOYXfL12Q+Ltxph9rX7V8tm2BMoqxgA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
-
-On 1/23/22 10:10, Tong Zhang wrote:
-> when acpi=off is provided in bootarg, kernel crash with
+On Fri, Jan 14, 2022 at 10:22:56AM +0800, hammer hsieh wrote:
+> Jiri Slaby <jirislaby@kernel.org> 於 2022年1月13日 週四 下午7:12寫道：
+> >
+> > On 13. 01. 22, 11:56, hammer hsieh wrote:
+> > >> Could you explain me what posted write is and how does it not matter in
+> > >> this case?
+> > >>
+> > >
+> > > Each UART ISC register contains
+> >
+> > No, you still don't follow what I write. Use your favorite web search
+> > for "posted write" and/or consult with your HW team.
+> >
 > 
-> [    1.252739] BUG: kernel NULL pointer dereference, address: 0000000000000018
-> [    1.258308] Call Trace:
-> [    1.258490]  ? acpi_walk_namespace+0x147/0x147
-> [    1.258770]  acpi_get_devices+0xe4/0x137
-> [    1.258921]  ? drm_core_init+0xc0/0xc0 [drm]
-> [    1.259108]  detect_thinkpad_privacy_screen+0x5e/0xa8 [drm]
-> [    1.259337]  drm_privacy_screen_lookup_init+0xe/0xe85 [drm]
+> Maybe this time, we are on the same page.
+> Our SP7021 chipset is designed on ARM Cortex-A7 Quad core.
+> Register Access through AMBA(AXI bus), and it is non-cached.
 > 
-> The reason is that acpi_walk_namespace expects acpi related stuff
-> initialized but in fact it wouldn't when acpi is set to off. In this case
-> we should honor acpi=off in detect_thinkpad_privacy_screen().
+> Did you mean
+> case1 have concern about "posted write", and you want to know why it not matter?
+> case2 will be safer?
 > 
-> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+> Case1 :
+> spin_lock_irq_save()
+> writel(0, target register)
+> spin_unlock_irqrestore()
 
-Thank you for catching this and thank you for your patch. I was about to merge
-this, but then I realized that this might not be the best way to fix this.
+A lock does not mean that your write made it to the device.  Please talk
+to the hardware designers to properly determine how to correctly write
+to the hardware and "know" that the write succeeded or not.  This driver
+does not seem to take that into consideration at all.
 
-A quick grep shows 10 acpi_get_devices() calls outside of drivers/acpi,
-and at a first glance about half of those are missing an acpi_disabled
-check. IMHO it would be better to simply add an acpi_disabled check to
-acpi_get_devices() itself.
+thanks,
 
-Rafael, do you agree ?
-
-
-Note the just added chrome privacy-screen check uses
-acpi_dev_present(), this is also used in about 10 places outside
-of drivers/acpi and AFAIK none of those do an acpi_disabled check.
-
-acpi_dev_present() uses bus_find_device(&acpi_bus_type, ...)
-but the acpi_bus_type does not get registered when acpi_disabled
-is set. In the end this is fine though since bus_find_device
-checks for the bus not being registered and then just returns
-NULL.
-
-Regards,
-
-Hans
-
-
-
-
-> ---
-> v2: fix typo in previous commit -- my keyboard is eating letters 
-> 
->  drivers/gpu/drm/drm_privacy_screen_x86.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_privacy_screen_x86.c b/drivers/gpu/drm/drm_privacy_screen_x86.c
-> index a2cafb294ca6..e7aa74ad0b24 100644
-> --- a/drivers/gpu/drm/drm_privacy_screen_x86.c
-> +++ b/drivers/gpu/drm/drm_privacy_screen_x86.c
-> @@ -33,6 +33,9 @@ static bool __init detect_thinkpad_privacy_screen(void)
->  	unsigned long long output;
->  	acpi_status status;
->  
-> +	if (acpi_disabled)
-> +		return false;
-> +
->  	/* Get embedded-controller handle */
->  	status = acpi_get_devices("PNP0C09", acpi_set_handle, NULL, &ec_handle);
->  	if (ACPI_FAILURE(status) || !ec_handle)
-
+greg k-h

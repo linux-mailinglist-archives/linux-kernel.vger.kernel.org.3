@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F15F49CF7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A825E49CF7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243157AbiAZQTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:19:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:29721 "EHLO
+        id S243184AbiAZQTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:19:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26551 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243155AbiAZQTT (ORCPT
+        by vger.kernel.org with ESMTP id S243182AbiAZQT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:19:19 -0500
+        Wed, 26 Jan 2022 11:19:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643213959;
+        s=mimecast20190719; t=1643213966;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KuQ1p07r0IQfw/KWLAzhGpK1OCHWGg7jMGOt+HexzfE=;
-        b=ZpuJttUK5Nwv9WPUITw1FLJfz56YQPj84OXFWnzF1QRlOseegRKuEj/mFVQShxCEs3X/pl
-        woJKobZKDnSm/draceP2hU3Bu1MfbuUdb8PCRIWLol65aybVIeAWmHBQI8QXIWCXVdJ1CB
-        c6OnZJBMUCYhRzvp0MMbiAkETP/FQLQ=
+        bh=cQX+ESVixVAHP2ho36JM65uYfZBHHlV7m7c7wR0KxPY=;
+        b=M1j/9M7imrVfRBNjoUMcZV2S2R7bkS1z6xNihoOyt7tKYBebz5ZTBWnlAzbMk5oDG9MVCr
+        BP5EKoUKaN5vk0+CdQEg1HkFQH5L4xY/Dpoy/Ijpew/iQ/SG/9n1uHCZf3ybQT8SzXyPb6
+        XAZ90ozs2Cj6K1Ah67We6B7i1Jeqggg=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-3GYuTuBqOZirOhX2SkOuUA-1; Wed, 26 Jan 2022 11:19:15 -0500
-X-MC-Unique: 3GYuTuBqOZirOhX2SkOuUA-1
+ us-mta-501-hOOiM9VpNyOZmPzpiWG45A-1; Wed, 26 Jan 2022 11:19:22 -0500
+X-MC-Unique: hOOiM9VpNyOZmPzpiWG45A-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DD03E46865;
-        Wed, 26 Jan 2022 16:19:13 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CFCD183DD20;
+        Wed, 26 Jan 2022 16:19:20 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.193.93])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4BB9B798DD;
-        Wed, 26 Jan 2022 16:19:11 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DEEF79A22;
+        Wed, 26 Jan 2022 16:19:14 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -48,9 +48,9 @@ To:     Jiri Kosina <jikos@kernel.org>,
 Cc:     linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 10/12] HID: input: remove the need for HID_QUIRK_INVERT
-Date:   Wed, 26 Jan 2022 17:18:30 +0100
-Message-Id: <20220126161832.3193805-11-benjamin.tissoires@redhat.com>
+Subject: [PATCH 11/12] HID: input: accommodate priorities for slotted devices
+Date:   Wed, 26 Jan 2022 17:18:31 +0100
+Message-Id: <20220126161832.3193805-12-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220126161832.3193805-1-benjamin.tissoires@redhat.com>
 References: <20220126161832.3193805-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -60,155 +60,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HID_QUIRK_INVERT is kind of complex to deal with and was bogus.
-
-Furthermore, it didn't make sense to use a global per struct hid_device
-quirk for something dynamic as the current state.
-
-Store the current tool information in the report itself, and re-order
-the processing of the fields to enforce having all the tablet "state"
-fields before getting to In Range and other input fields.
-
-This way, we now have all the information whether a tool is present
-or not while processing In Range.
-
-This new behavior enforces that only one tool gets forwarded to userspace
-at the same time, and that if either eraser or invert is set, we enforce
-BTN_TOOL_RUBBER.
+Multitouch devices in hybrid mode are reporting multiple times the
+same collection. We should accommodate for this in our handling
+of priorities by defining the slots they belong to.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 ---
- drivers/hid/hid-input.c | 66 +++++++++++++++++++++++++++++++++++------
- include/linux/hid.h     |  6 +++-
- 2 files changed, 62 insertions(+), 10 deletions(-)
+ drivers/hid/hid-input.c | 103 ++++++++++++++++++++++++++++++++++++----
+ include/linux/hid.h     |   1 +
+ 2 files changed, 96 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 61d91117f4ae..2d13d3ad9d3c 100644
+index 2d13d3ad9d3c..1b00fa363668 100644
 --- a/drivers/hid/hid-input.c
 +++ b/drivers/hid/hid-input.c
-@@ -63,8 +63,11 @@ static const struct {
+@@ -48,6 +48,16 @@ static const struct {
+ 	__s32 y;
+ }  hid_hat_to_axis[] = {{ 0, 0}, { 0,-1}, { 1,-1}, { 1, 0}, { 1, 1}, { 0, 1}, {-1, 1}, {-1, 0}, {-1,-1}};
+ 
++struct usage_priority {
++	__u32 usage;			/* the HID usage associated */
++	bool global;			/* we assume all usages to be slotted,
++					 * unless global
++					 */
++	unsigned int slot_overwrite;	/* for globals: allows to set the usage
++					 * before or after the slots
++					 */
++};
++
+ /*
+  * hid-input will convert this list into priorities:
+  * the first element will have the highest priority
+@@ -57,17 +67,30 @@ static const struct {
+  * hid-input will then shift the priority by 8 bits to leave some space
+  * in case drivers want to interleave other fields.
+  *
++ * To accommodate slotted devices, the slot priority is
++ * defined in the next 8 bits (defined by 0xff - slot).
++ *
+  * If drivers want to add fields before those, hid-input will
+  * leave out the first 8 bits of the priority value.
+  *
   * This still leaves us 65535 individual priority values.
   */
- static const __u32 hidinput_usages_priorities[] = {
-+	HID_DG_ERASER,		/* Eraser (eraser touching) must always come before tipswitch */
- 	HID_DG_INVERT,		/* Invert must always come before In Range */
--	HID_DG_INRANGE,
-+	HID_DG_TIPSWITCH,	/* Is the tip of the tool touching? */
-+	HID_DG_TIPPRESSURE,	/* Tip Pressure might emulate tip switch */
-+	HID_DG_INRANGE,		/* In Range needs to come after the other tool states */
+-static const __u32 hidinput_usages_priorities[] = {
+-	HID_DG_ERASER,		/* Eraser (eraser touching) must always come before tipswitch */
+-	HID_DG_INVERT,		/* Invert must always come before In Range */
+-	HID_DG_TIPSWITCH,	/* Is the tip of the tool touching? */
+-	HID_DG_TIPPRESSURE,	/* Tip Pressure might emulate tip switch */
+-	HID_DG_INRANGE,		/* In Range needs to come after the other tool states */
++static const struct usage_priority hidinput_usages_priorities[] = {
++	{ /* Eraser (eraser touching) must always come before tipswitch */
++	  .usage = HID_DG_ERASER,
++	},
++	{ /* Invert must always come before In Range */
++	  .usage = HID_DG_INVERT,
++	},
++	{ /* Is the tip of the tool touching? */
++	  .usage = HID_DG_TIPSWITCH,
++	},
++	{ /* Tip Pressure might emulate tip switch */
++	  .usage = HID_DG_TIPPRESSURE,
++	},
++	{ /* In Range needs to come after the other tool states */
++	  .usage = HID_DG_INRANGE,
++	},
  };
  
  #define map_abs(c)	hid_map_usage(hidinput, usage, &bit, &max, EV_ABS, (c))
-@@ -1368,6 +1371,7 @@ static void hidinput_handle_scroll(struct hid_usage *usage,
- void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct hid_usage *usage, __s32 value)
+@@ -612,6 +635,7 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
  {
- 	struct input_dev *input;
-+	struct hid_report *report = field->report;
- 	unsigned *quirks = &hid->quirks;
+ 	struct input_dev *input = hidinput->input;
+ 	struct hid_device *device = input_get_drvdata(input);
++	const struct usage_priority *usage_priority = NULL;
+ 	int max = 0, code;
+ 	unsigned int i = 0;
+ 	unsigned long *bit = NULL;
+@@ -633,13 +657,26 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
  
- 	if (!usage->type)
-@@ -1418,25 +1422,69 @@ void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct
+ 	/* assign a priority based on the static list declared here */
+ 	for (i = 0; i < ARRAY_SIZE(hidinput_usages_priorities); i++) {
+-		if (usage->hid == hidinput_usages_priorities[i]) {
++		if (usage->hid == hidinput_usages_priorities[i].usage) {
++			usage_priority = &hidinput_usages_priorities[i];
++
+ 			field->usages_priorities[usage_index] =
+ 				(ARRAY_SIZE(hidinput_usages_priorities) - i) << 8;
+ 			break;
+ 		}
  	}
  
- 	switch (usage->hid) {
-+	case HID_DG_ERASER:
-+		report->tool_active |= !!value;
++	/*
++	 * For slotted devices, we need to also add the slot index
++	 * in the priority.
++	 */
++	if (usage_priority && usage_priority->global)
++		field->usages_priorities[usage_index] |=
++			usage_priority->slot_overwrite;
++	else
++		field->usages_priorities[usage_index] |=
++			(0xff - field->slot_idx) << 16;
++
+ 	if (device->driver->input_mapping) {
+ 		int ret = device->driver->input_mapping(device, hidinput, field,
+ 				usage, &bit, &max);
+@@ -2034,7 +2071,57 @@ static struct hid_input *hidinput_match_application(struct hid_report *report)
+ static inline void hidinput_configure_usages(struct hid_input *hidinput,
+ 					     struct hid_report *report)
+ {
+-	int i, j;
++	int i, j, k;
++	int first_field_index = 0;
++	int slot_collection_index = -1;
++	int prev_collection_index = -1;
++	unsigned int slot_idx = 0;
++	struct hid_field *field;
++
++	/*
++	 * First tag all the fields that are part of a slot,
++	 * a slot needs to have one Contact ID in the collection
++	 */
++	for (i = 0; i < report->maxfield; i++) {
++		field = report->field[i];
++
++		/* ignore fields without usage */
++		if (field->maxusage < 1)
++			continue;
 +
 +		/*
-+		 * if eraser is set, we must enforce BTN_TOOL_RUBBER
-+		 * to accommodate for devices not following the spec.
++		 * janitoring when collection_index changes
 +		 */
-+		if (value)
-+			report->tool = BTN_TOOL_RUBBER;
-+
-+		/* let hid-input set BTN_TOUCH */
-+		break;
-+
- 	case HID_DG_INVERT:
--		*quirks = value ? (*quirks | HID_QUIRK_INVERT) : (*quirks & ~HID_QUIRK_INVERT);
-+		report->tool_active |= !!value;
++		if (prev_collection_index != field->usage->collection_index) {
++			prev_collection_index = field->usage->collection_index;
++			first_field_index = i;
++		}
 +
 +		/*
-+		 * If invert is set, we store BTN_TOOL_RUBBER.
++		 * if we already found a Contact ID in the collection,
++		 * tag and continue to the next.
 +		 */
-+		if (value)
-+			report->tool = BTN_TOOL_RUBBER;
++		if (slot_collection_index == field->usage->collection_index) {
++			field->slot_idx = slot_idx;
++			continue;
++		}
 +
-+		/* no further processing */
- 		return;
- 
- 	case HID_DG_INRANGE:
--		if (value) {
--			input_event(input, usage->type, (*quirks & HID_QUIRK_INVERT) ? BTN_TOOL_RUBBER : usage->code, 1);
--			return;
--		}
--		input_event(input, usage->type, usage->code, 0);
--		input_event(input, usage->type, BTN_TOOL_RUBBER, 0);
-+		report->tool_active |= !!value;
++		/* check if the current field has Contact ID */
++		for (j = 0; j < field->maxusage; j++) {
++			if (field->usage[j].hid == HID_DG_CONTACTID) {
++				slot_collection_index = field->usage->collection_index;
++				slot_idx++;
 +
-+		/*
-+		 * If the tool is in used (any of TipSwitch, Erase, Invert,
-+		 * InRange), and if tool is not set, store our mapping
-+		 */
-+		if (report->tool_active && !report->tool)
-+			report->tool = usage->code;
-+
-+		input_event(input, EV_KEY, usage->code, report->tool == usage->code);
-+		input_event(input, EV_KEY, BTN_TOOL_RUBBER, report->tool == BTN_TOOL_RUBBER);
-+
-+		/* reset tool and tool_active for the next event */
-+		report->tool = 0;
-+		report->tool_active = false;
-+
-+		/* no further processing */
- 		return;
- 
-+	case HID_DG_TIPSWITCH:
-+		report->tool_active |= !!value;
-+
-+		/* if tool is set we should ignore the current value */
-+		if (report->tool)
-+			return;
-+
-+		break;
-+
- 	case HID_DG_TIPPRESSURE:
- 		if (*quirks & HID_QUIRK_NOTOUCH) {
- 			int a = field->logical_minimum;
- 			int b = field->logical_maximum;
- 
--			input_event(input, EV_KEY, BTN_TOUCH, value > a + ((b - a) >> 3));
-+			if (value > a + ((b - a) >> 3)) {
-+				input_event(input, EV_KEY, BTN_TOUCH, 1);
-+				report->tool_active = true;
++				/*
++				 * mark all previous fields and this one in the
++				 * current collection to be slotted.
++				 */
++				for (k = first_field_index; k <= i; k++)
++					report->field[k]->slot_idx = slot_idx;
++				break;
 +			}
- 		}
- 		break;
++		}
++	}
  
+ 	for (i = 0; i < report->maxfield; i++)
+ 		for (j = 0; j < report->field[i]->maxusage; j++)
 diff --git a/include/linux/hid.h b/include/linux/hid.h
-index eaad0655b05c..feb8df61168f 100644
+index feb8df61168f..4363a63b9775 100644
 --- a/include/linux/hid.h
 +++ b/include/linux/hid.h
-@@ -347,7 +347,7 @@ struct hid_item {
-  */
- #define MAX_USBHID_BOOT_QUIRKS 4
- 
--#define HID_QUIRK_INVERT			BIT(0)
-+/* BIT(0) reserved for backward compatibility, was HID_QUIRK_INVERT */
- #define HID_QUIRK_NOTOUCH			BIT(1)
- #define HID_QUIRK_IGNORE			BIT(2)
- #define HID_QUIRK_NOGET				BIT(3)
-@@ -515,6 +515,10 @@ struct hid_report {
- 	unsigned maxfield;				/* maximum valid field index */
- 	unsigned size;					/* size of the report (bits) */
- 	struct hid_device *device;			/* associated device */
-+
-+	/* tool related state */
-+	bool tool_active;				/* whether the current tool is active */
-+	unsigned int tool;				/* BTN_TOOL_* */
+@@ -492,6 +492,7 @@ struct hid_field {
+ 	/* hidinput data */
+ 	struct hid_input *hidinput;	/* associated input structure */
+ 	__u16 dpad;			/* dpad input code */
++	unsigned int slot_idx;		/* slot index in a report */
  };
  
- #define HID_MAX_IDS 256
+ #define HID_MAX_FIELDS 256
 -- 
 2.33.1
 

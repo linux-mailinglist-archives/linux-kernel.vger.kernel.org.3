@@ -2,87 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F30149D50D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD06249D51C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233004AbiAZWLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:11:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
+        id S232997AbiAZWMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiAZWK6 (ORCPT
+        with ESMTP id S229591AbiAZWMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:10:58 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272C2C06173B;
-        Wed, 26 Jan 2022 14:10:58 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id v67so2307474oie.9;
-        Wed, 26 Jan 2022 14:10:58 -0800 (PST)
+        Wed, 26 Jan 2022 17:12:53 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2639C06161C;
+        Wed, 26 Jan 2022 14:12:52 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id z199so1319568iof.10;
+        Wed, 26 Jan 2022 14:12:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=21ZfAX7z//yYX98NOI1emY/4VG55lyxDMWDLG9aXmHM=;
-        b=NURkmVW1jvd6P6HsGBe4RRlTS3L8VK4hukdmV9d7DGEWEZt0L84SHI8atfpPRjCNms
-         lkXlEGJ/S8fjcILXMEwhR8yDQuIuOwMF8OzWTOrmk8uNPILDKB+iCg3zML93LXrG+WQY
-         OtZjI3iBUSk2Iends2M3PBZ8dW8x6doZwdojDc7eTbgTfEUQcjbk9m3M45k1QgrAiNS8
-         pGTXyw2qfmvcIQHtompgxTTUsLwDwi5wPB2SLIgGHnXYbh530YA2JU9e9TZvnzHS2Gor
-         h0G4hfsUdZ39iEcYlMDso4/rS6hk1WQmSGaCOVh7J7yzfuOKxmkG9BJS5cxVqpPXyZi9
-         wOTA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rhXHrSPTLOS4pRVESabVF3pQQP/mJ2JTnR9miTNwFf4=;
+        b=VzXocjntTph7UWrJ1xKum5qjVkrdp2soC0a+SXb5VKfiPnPi3lGU3f1Bu3rromCSW7
+         OxnWAkPwNeEbw/Kb9TBF9mTImyJ6g+LrriUC4/HFH+jeYCwYpjJNjeqB8iFrQj9MxDey
+         ZQVC11TqXw2fta1LTPfCFi+81IOvaLR52dO4lW+GlDOL7QupkTv5QKvREYUaf4r8TFLR
+         gmiT2fiWI2+fYuSIr45Qo5mRTMbcbFiuhgh2vvTRRlGjT897LzkYDbSH0N6NVE/Eh0MV
+         QqIESGjv+IzcUuUTj1c5e5tnP9ZR/P97/+T+gwvj7Xm3ldFVPms+nmapc+ZdnT5qETdR
+         ty5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=21ZfAX7z//yYX98NOI1emY/4VG55lyxDMWDLG9aXmHM=;
-        b=j5BKp/jQFflddJrjDj2kMYOkurXS0TUgUnPVFjnB9aPDODG0GO3gByAnFK1bybXtOT
-         EOCtutkuSv/71L6Rs+z1/NrM9jYAR7ZsE0Kpw7joYltBqRWWPxWILIWHcU+x5dZqdAuX
-         lTSVmj4Mc+/BNVCjgeyprt1qFdj+CwWlJH4cdWvMOzwKEjkXmJJkPC9tl/kfFGPnsSGa
-         5CKbd7JdZ4ymH+tbzoa2CI2OkFGrj57TMz4kNVEjcX5yGVJSYIAAk65Wh3T1gYOZ8Dlx
-         JUEiY4dfHt6PttTvhNgB3F6CC7pLHJ95YQxXNWjjaTDPfe6Fwr+yUKB3AtpP66oI+6ha
-         4OCw==
-X-Gm-Message-State: AOAM533y8M4UkE0rrD81RIWgpEdBIhL96/Wwtbpdvk2BBbshQVTvZuSP
-        5Xxang9xQNBah/4cjqg+oBg=
-X-Google-Smtp-Source: ABdhPJxgaSc8/eVC4azfcz1wopvdNHvVvd0s28sQXB/F90K2yk6hRZ/zEF97bOXEODITtiTH5EmqEg==
-X-Received: by 2002:a05:6808:ec6:: with SMTP id q6mr438206oiv.244.1643235057548;
-        Wed, 26 Jan 2022 14:10:57 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p5sm2940740oou.39.2022.01.26.14.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:10:56 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 26 Jan 2022 14:10:55 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 4.9 000/155] 4.9.298-rc2 review
-Message-ID: <20220126221055.GB3650606@roeck-us.net>
-References: <20220125155253.051565866@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rhXHrSPTLOS4pRVESabVF3pQQP/mJ2JTnR9miTNwFf4=;
+        b=VNobSp5JVXSnC+4/K+31dgVgRRmo3b5LKMGEJZVD6YQ7H409sBLPPEjLxzP8sf/7qQ
+         1SdZ1AQoeXVSdlUoOuGYS/GjrlceQYxk/UM27o6BnAR5glBgkJGXItsrVjCza6AGAY7T
+         65EiIYe9z4wwiH2eTgqiIdxmjKvOepiOq8Vd33LL+IFGZdAVLv2lAKRPaO2WYuI29JDE
+         P3Lr52bzYnyBt9NzCaDOJiGd8P0T+uFsopcH1OoOfnjeOR/NgI5KTqph0dtihvRBmifn
+         ++yhQNl7f9ZJoO+6ijaK6Lnvfwm0FUA942933JK7zB/0MsiuJIBSu07hl5qRLpRDx4fx
+         l9jQ==
+X-Gm-Message-State: AOAM530Txdsi+KwByt020m1MIARiI6VQz4wR4EZuMHldfpa078I0xEcI
+        4TWSWK5CHnX51apiK7UC1w3SMVnRiPek/xpGuzY=
+X-Google-Smtp-Source: ABdhPJwrr3Hq8ZddbuK7p5tL6bFDcjE2tqdDKLW9pRG65b27MoTJTSf/Eyj+GHkDBsEjzAmfR74d9HdwxSw4F2Ddgak=
+X-Received: by 2002:a05:6638:516:: with SMTP id i22mr417959jar.71.1643235172226;
+ Wed, 26 Jan 2022 14:12:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125155253.051565866@linuxfoundation.org>
+References: <20220126205214.2149936-1-jannh@google.com>
+In-Reply-To: <20220126205214.2149936-1-jannh@google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Wed, 26 Jan 2022 23:12:41 +0100
+Message-ID: <CA+fCnZe_p+JwUWwumgGm185vWSdAK_z-UFDp7-HWKANB4YjA=g@mail.gmail.com>
+Subject: Re: [PATCH] usb: raw-gadget: fix handling of dual-direction-capable endpoints
+To:     Jann Horn <jannh@google.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:31:50PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.298 release.
-> There are 155 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
-> 
+On Wed, Jan 26, 2022 at 9:52 PM Jann Horn <jannh@google.com> wrote:
+>
+> Under dummy_hcd, every available endpoint is *either* IN or OUT capable.
+> But with some real hardware, there are endpoints that support both IN and
+> OUT. In particular, the PLX 2380 has four available endpoints that each
+> support both IN and OUT.
+>
+> raw-gadget currently gets confused and thinks that any endpoint that is
+> usable as an IN endpoint can never be used as an OUT endpoint.
+>
+> Fix it by looking at the direction in the configured endpoint descriptor
+> instead of looking at the hardware capabilities.
+>
+> With this change, I can use the PLX 2380 with raw-gadget.
+>
+> Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
+>  drivers/usb/gadget/legacy/raw_gadget.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index c5a2c734234a..d86c3a36441e 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -1004,7 +1004,7 @@ static int raw_process_ep_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+>                 ret = -EBUSY;
+>                 goto out_unlock;
+>         }
+> -       if ((in && !ep->ep->caps.dir_in) || (!in && ep->ep->caps.dir_in)) {
+> +       if (in != usb_endpoint_dir_in(ep->ep->desc)) {
+>                 dev_dbg(&dev->gadget->dev, "fail, wrong direction\n");
+>                 ret = -EINVAL;
+>                 goto out_unlock;
+>
+> base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+> --
+> 2.35.0.rc0.227.g00780c9af4-goog
+>
 
-Build results:
-	total: 163 pass: 163 fail: 0
-Qemu test results:
-	total: 397 pass: 397 fail: 0
+Awesome! Thanks for finding this!
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+What do you think about using
 
-Guenter
+if ((in && !ep->ep->caps.dir_in) || (!in && !ep->ep->caps.dir_out))
+
+instead?
+
+It looks less cryptic: if (in and no in caps) or (out and no out caps) => fail.
+
+FTR, I tested both changes with the net2280 hardware that I have, and
+they work. At least gadget.c from the test suite enumerates properly.
+Most of the tests still fail. But with g_zero, even more of them fail.
+
+P.S. I wonder why everyone suddenly got interested in Raw Gadget lately? :)

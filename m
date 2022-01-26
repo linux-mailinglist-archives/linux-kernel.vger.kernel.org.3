@@ -2,158 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C26349C9DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E154549C9DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241412AbiAZMhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:37:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36457 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241397AbiAZMhH (ORCPT
+        id S241408AbiAZMh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241407AbiAZMhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:37:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643200626;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4TS0TGM1vcAom1pyqONn2J8siKmdxKUcGnkktOHArQk=;
-        b=XKOwwz3+sNKqmCC5SClYZNKcwne/bZHudnHehEmh8OVjJ71fZ8ilTGhIiSpm4gyDMGawGk
-        lWeyXTRfRqVP1RfN81LJW5zA0UFzxWG7xiv2Gti5V93y5D0WJQpHh6gzaqFSMjOXDr7Hvb
-        MkXwA6NgPgabCNVIGLeblgS4ka9ZrEs=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-135--E5HbzBFOBC9HM_uLaBtJw-1; Wed, 26 Jan 2022 07:37:04 -0500
-X-MC-Unique: -E5HbzBFOBC9HM_uLaBtJw-1
-Received: by mail-wr1-f72.google.com with SMTP id h12-20020adfa4cc000000b001d474912698so4223370wrb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:37:03 -0800 (PST)
+        Wed, 26 Jan 2022 07:37:24 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D559C06161C;
+        Wed, 26 Jan 2022 04:37:24 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id i62so24552305ybg.5;
+        Wed, 26 Jan 2022 04:37:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mGkdpjPQS3p/r4eKPClAoEvWiNhDgwz+9Z76WPB1ajA=;
+        b=FL8AJJEIxFATfAFusMZosYP9jZz4IKpVENfsuiTrrsZKS8MCFkjQkPGV/tz7aCoj6+
+         qCwB5WAqsaKOLpXueWt4Xsbac4Sst/JgdLt9xsqKvd3zyMY7AFaO/KBiUTfSD6kctzeK
+         Lggt3N5m7JuMoDA3bft3krbzkyphkF3ZzCJaLbaR+vcmjMM+4hMnSfJyIiHHHM/TMrRC
+         CMC1Jo3k7qLZQ/UCxu3LyfiBeqeoxq8PWIMRvczcid0KSSx4WQ5AUNX8LeZQ4lVkeabU
+         PBv3cl7eRIF07Bo1NgBahRSsYhpZxq4tF0YziUDUFHxU76p7clMdZAIB34r+Z7yHgeHb
+         9k/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4TS0TGM1vcAom1pyqONn2J8siKmdxKUcGnkktOHArQk=;
-        b=wG1CW7S5Hq8mhCupjB9Tzbk8grRAxP9u9vEfj+jyVMsduEmw9iQdpLIaKJwEeTwIoV
-         JKYk9+s+w4A0Zo74coq2hjresbNUIi4ZSwhWcefXZcA//LS0uyToUJQhuBipwZWCsV8F
-         jGBUEu+LTPAfEmjFotmtqR2lKFRdkPZNBvfz1fzJtKS0SSCakK71Ap279X7dXBgwXVx7
-         YgR93Ft8tzLjE4g7n5N346L1CIEN55FcGsxXk4b23Hh22Qs7sLrFsFskp0lUSkjV1AV1
-         24/IRIo0nDUaPxr3ek6HU4sRTs/Nn/g8zwV/f5En7U02HLzpvLScDd0uagMeEfwRhxE+
-         fApg==
-X-Gm-Message-State: AOAM5333fNon8nK2HyAelzCUDCi67MPAJiHvyYBcxNhgBjLH4VXcf2hT
-        za2VQXibVjFgPSrov9ej6sWpDoxjQ6zaVuJAPVmsvJ2SpLnoQAcD1oft6dXFOLyyAaxjj9oS4B3
-        ppdnFPTcKQpVjRE4O5VZ3yV2Z
-X-Received: by 2002:a05:600c:298:: with SMTP id 24mr7129445wmk.100.1643200622754;
-        Wed, 26 Jan 2022 04:37:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyFeRqcMR4sp5TihDa0aCwBpHf/6PAChPHR3bf/s902hBLlOchViJcHCwGI8NoHTi6Uqd/TdQ==
-X-Received: by 2002:a05:600c:298:: with SMTP id 24mr7129411wmk.100.1643200622473;
-        Wed, 26 Jan 2022 04:37:02 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id i6sm3207248wma.22.2022.01.26.04.37.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 04:37:01 -0800 (PST)
-Message-ID: <1b665bb8-7acb-519b-0a02-ef0f2dd4b524@redhat.com>
-Date:   Wed, 26 Jan 2022 13:37:00 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mGkdpjPQS3p/r4eKPClAoEvWiNhDgwz+9Z76WPB1ajA=;
+        b=FqK/7/X61+yksivV5Y+b/maJ7ehOXGYNIDT4XGbIRmMVbt7CEuJSRCDS6TMpyw0OFC
+         mCYm45Gy0XzDY+df7KcKlwfQxpmxPlfNAHU9eCZQmUZFbKFSBya4S/XVlCRNpf7LaC9S
+         EOmvh7z6WioEPlqUXQuulaptkQD4DQig8TKufZbb6dcbEXOSghD4mgAsGiMFLj+xXY+q
+         A1kYWed/jr1MLwpD980oUVtHyjbCeNZ8YXtOyMZO17xaptPZ3LNqKlkl/jd9fmI+imb/
+         tn158mAnGDCyH6Anc/6PhlxWAPyc6533bt23+UgDOq4Vl1IWk6QHiHv6+5A6PG/gn6qO
+         rIKw==
+X-Gm-Message-State: AOAM532gZZDlCyAmZngLGQ9/ydhcHu0LAMIp25mjtuaXNjbVI9v5GhJ0
+        5FOjC4eA9rU1dZE6rHe5SFYn5Mh5GyRjeafYAhZzYEkc9zQ=
+X-Google-Smtp-Source: ABdhPJy1+l94JaxBT0T+J5dhXnhrBCXP0cmboOh2bUx+JpzxFYUt4ETjIvYyD0/SAbmgznfdtAzYHjRdTB4chMOkt6k=
+X-Received: by 2002:a5b:982:: with SMTP id c2mr35553308ybq.103.1643200643623;
+ Wed, 26 Jan 2022 04:37:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
- <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
- <CAHp75Vd7oaYPKx6bxjCqNnm6fieeQFrtq5K4YYrxYbXoXFy=+Q@mail.gmail.com>
- <20220126102858.GX1951@kadam>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220126102858.GX1951@kadam>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220114081542.698002137@linuxfoundation.org> <20220114081542.746291845@linuxfoundation.org>
+ <CA+res+S1GcDzM6hnmar+s1k3ggswURZ+_8BqweifShCTjVJ2aQ@mail.gmail.com> <YfEztOTIhGjm3Hvs@kroah.com>
+In-Reply-To: <YfEztOTIhGjm3Hvs@kroah.com>
+From:   Jack Wang <jack.wang.usish@gmail.com>
+Date:   Wed, 26 Jan 2022 13:37:12 +0100
+Message-ID: <CA+res+RpQuedYu3hhRo5kBcs3tQrKc+7eyiFbVUAVG2h68cYkg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 01/25] md: revert io stats accounting
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
+        Guoqing Jiang <jiangguoqing@kylinos.cn>,
+        Song Liu <song@kernel.org>,
+        Guillaume Morin <guillaume@morinfr.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/22 11:28, Dan Carpenter wrote:
-> On Wed, Jan 26, 2022 at 12:04:26PM +0200, Andy Shevchenko wrote:
->> On Wed, Jan 26, 2022 at 12:02 PM Andy Shevchenko
->> <andy.shevchenko@gmail.com> wrote:
->>> On Wed, Jan 26, 2022 at 10:52 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
->>>> Am 25.01.22 um 21:21 schrieb Andy Shevchenko:
->>
->> ...
->>
->>>> But why? We already have DRM drivers for some of these devices.
->>>
->>> No, we do not (only a few are available).
->>
->> Sorry, I missed your word 'some'. Some == almost none from the list (I
->> don't remember exact numbers but something like 2 out of 10 are
->> supported by tiny DRM and see about interfaces).
-> 
-> Could we get an exact list?
-> 
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B41=E6=
+=9C=8826=E6=97=A5=E5=91=A8=E4=B8=89 12:42=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, Jan 26, 2022 at 11:09:46AM +0100, Jack Wang wrote:
+> > Hi,
+> >
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B41=
+=E6=9C=8814=E6=97=A5=E5=91=A8=E4=BA=94 19:57=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > From: Guoqing Jiang <jgq516@gmail.com>
+> > >
+> > > commit ad3fc798800fb7ca04c1dfc439dba946818048d8 upstream.
+> > >
+> > > The commit 41d2d848e5c0 ("md: improve io stats accounting") could cau=
+se
+> > > double fault problem per the report [1], and also it is not correct t=
+o
+> > > change ->bi_end_io if md don't own it, so let's revert it.
+> > >
+> > > And io stats accounting will be replemented in later commits.
+> > >
+> > > [1]. https://lore.kernel.org/linux-raid/3bf04253-3fad-434a-63a7-20214=
+e38cf26@gmail.com/T/#t
+> > >
+> > > Fixes: 41d2d848e5c0 ("md: improve io stats accounting")
+> > > Signed-off-by: Guoqing Jiang <jiangguoqing@kylinos.cn>
+> > > Signed-off-by: Song Liu <song@kernel.org>
+> > > [GM: backport to 5.10-stable]
+> > > Signed-off-by: Guillaume Morin <guillaume@morinfr.org>
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >  drivers/md/md.c |   57 +++++++++++----------------------------------=
+-----------
+> > >  drivers/md/md.h |    1
+> > >  2 files changed, 12 insertions(+), 46 deletions(-)
+> > >
+> > > --- a/drivers/md/md.c
+> > > +++ b/drivers/md/md.c
+> > > @@ -459,34 +459,12 @@ check_suspended:
+> > >  }
+> > >  EXPORT_SYMBOL(md_handle_request);
+> > >
+> > > -struct md_io {
+> > > -       struct mddev *mddev;
+> > > -       bio_end_io_t *orig_bi_end_io;
+> > > -       void *orig_bi_private;
+> > > -       unsigned long start_time;
+> > > -       struct hd_struct *part;
+> > > -};
+> > > -
+> > > -static void md_end_io(struct bio *bio)
+> > > -{
+> > > -       struct md_io *md_io =3D bio->bi_private;
+> > > -       struct mddev *mddev =3D md_io->mddev;
+> > > -
+> > > -       part_end_io_acct(md_io->part, bio, md_io->start_time);
+> > > -
+> > > -       bio->bi_end_io =3D md_io->orig_bi_end_io;
+> > > -       bio->bi_private =3D md_io->orig_bi_private;
+> > > -
+> > > -       mempool_free(md_io, &mddev->md_io_pool);
+> > > -
+> > > -       if (bio->bi_end_io)
+> > > -               bio->bi_end_io(bio);
+> > > -}
+> > > -
+> > >  static blk_qc_t md_submit_bio(struct bio *bio)
+> > >  {
+> > >         const int rw =3D bio_data_dir(bio);
+> > > +       const int sgrp =3D op_stat_group(bio_op(bio));
+> > >         struct mddev *mddev =3D bio->bi_disk->private_data;
+> > > +       unsigned int sectors;
+> > >
+> > >         if (mddev =3D=3D NULL || mddev->pers =3D=3D NULL) {
+> > >                 bio_io_error(bio);
+> > > @@ -507,26 +485,21 @@ static blk_qc_t md_submit_bio(struct bio
+> > >                 return BLK_QC_T_NONE;
+> > >         }
+> > >
+> > > -       if (bio->bi_end_io !=3D md_end_io) {
+> > > -               struct md_io *md_io;
+> > > -
+> > > -               md_io =3D mempool_alloc(&mddev->md_io_pool, GFP_NOIO)=
+;
+> > > -               md_io->mddev =3D mddev;
+> > > -               md_io->orig_bi_end_io =3D bio->bi_end_io;
+> > > -               md_io->orig_bi_private =3D bio->bi_private;
+> > > -
+> > > -               bio->bi_end_io =3D md_end_io;
+> > > -               bio->bi_private =3D md_io;
+> > > -
+> > > -               md_io->start_time =3D part_start_io_acct(mddev->gendi=
+sk,
+> > > -                                                      &md_io->part, =
+bio);
+> > > -       }
+> > > -
+> > > +       /*
+> > > +        * save the sectors now since our bio can
+> > > +        * go away inside make_request
+> > > +        */
+> > > +       sectors =3D bio_sectors(bio);
+> > This code snip is not inside the original patch, and it's not in
+> > latest upstream too.
+> > >         /* bio could be mergeable after passing to underlayer */
+> > >         bio->bi_opf &=3D ~REQ_NOMERGE;
+> > >
+> > >         md_handle_request(mddev, bio);
+> > >
+> > > +       part_stat_lock();
+> > > +       part_stat_inc(&mddev->gendisk->part0, ios[sgrp]);
+> > > +       part_stat_add(&mddev->gendisk->part0, sectors[sgrp], sectors)=
+;
+> > > +       part_stat_unlock();
+> > > +
+> > same here, this code snip is not inside the original patch, and it's
+> > not in latest upstream too.
+>
+> Is it a problem?
+Not sure, might cause some confusion regarding io stats.
+>
+> > I think would be good keep it as the upstream version.
+>
+> Can you send a revert of this commit (it is in 5.10.92), and a backport
+> of the correct fix?
+>
+sure, I just sent an incremental fix for the backport itself.
+is it ok?
 
-The list AFAICT is the following. I'm not familiar with these so please
-feel free to correct anything I got wrong here.
-
-I've marked with '?' if found references to the device supported by the
-fbdev driver in a DRM driver, but it's not clear if support the same HW.
-
-Drivers in drivers/staging/fbtft:
-
-   fb_agm1264k-fl.c
-   fb_bd663474.c
-   fb_hx8340bn.c
-   fb_hx8347d.c (DRM driver in drivers/gpu/drm/tiny/hx8357d.c)
-   fb_hx8353d.c
-   fb_hx8357d.c (DRM driver in drivers/gpu/drm/tiny/hx8357d.c)
-   fb_ili9163.c (DRM driver in drivers/gpu/drm/tiny/ili9163.c)
-   fb_ili9320.c
-   fb_ili9325.c
-   fb_ili9340.c (DRM driver in drivers/gpu/drm/tiny/mi0283qt.c ?)
-   fb_ili9341.c (DRM driver in drivers/gpu/drm/tiny/mi0283qt.c ?)
-   fb_ili9481.c
-   fb_ili9486.c (DRM driver in drivers/gpu/drm/tiny/ili9486.c)
-   fb_pcd8544.c
-   fb_ra8875.c
-   fb_s6d02a1.c
-   fb_s6d1121.c
-   fb_seps525.c
-   fb_sh1106.c
-   fb_ssd1289.c
-   fb_ssd1305.c
-   fb_ssd1306.c
-   fb_ssd1325.c
-   fb_ssd1331.c
-   fb_ssd1351.c
-   fb_st7735r.c (DRM driver in drivers/gpu/drm/tiny/st7735r.c)
-   fb_st7789v.c (DRM driver in drivers/gpu/drm/panel/panel-sitronix-st7789v.c)
-   fb_tinylcd.c
-   fb_tls8204.c
-   fb_uc1611.c
-   fb_uc1701.c
-   fb_upd161704.c
-   fb_watterott.c
+Thanks!
 
 
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+> thanks,
+>
+> greg k-h

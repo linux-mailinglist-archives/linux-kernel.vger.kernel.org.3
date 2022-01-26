@@ -2,173 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C0B49C021
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372A749C026
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235271AbiAZA2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 19:28:09 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:46698 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235260AbiAZA2C (ORCPT
+        id S235287AbiAZA3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 19:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235278AbiAZA3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 19:28:02 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22E7E61488;
-        Wed, 26 Jan 2022 00:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99494C340E0;
-        Wed, 26 Jan 2022 00:27:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643156880;
-        bh=ksVjsac8pbiJiN9Quz36d8M4Pzg1QwigCdaIkcPJcwE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vBj0DhvU5ltRgnu7K8EeAnXUI9PFQwkcs3bFsL4jky4oz4ayDq5IsjRlLyCrZIHaL
-         tY4DbmFk3HPotyWwXAV9YiSuEMxgr4HWW9z9GmNwNvYG9E34BToS8gy6UjNzXfVtpV
-         Vb+InQ7tzz+WXbnEeZ3fTP35YehN/J/FnuCajoA7Z+TfbFMSFftoSWWmd63h8B/doo
-         OzaC52ZAiAMI9lX08p3i/zLDZQFM/opDzWRXmIPPukGmbyA4oFIfkzKwXuvNl17kuL
-         D0ZKkYtAs7WQkvCuE+n5p8x2idOWJYI6gSJXpCmrK5pF7fdxACELmU0m5dDOH1KvxR
-         F0oMrObYuU1rw==
-Date:   Tue, 25 Jan 2022 17:27:55 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v1 0/9] drivers: hv: dxgkrnl: Driver overview
-Message-ID: <YfCVi/TGD9Dnf9CG@dev-arch.archlinux-ax161>
-References: <cover.1641937419.git.iourit@linux.microsoft.com>
- <Yd9SQxTznfHGjuDD@archlinux-ax161>
- <bd36b131-be23-6f4d-16cf-a549a6533f34@linux.microsoft.com>
+        Tue, 25 Jan 2022 19:29:02 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761A2C061744
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:29:02 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id c15so13062030qtv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:29:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/OclBSSviCWldlmnDUDK3gAMkjNp0A9O+u9/XCIBFLM=;
+        b=J4PlJj2uNR+uD4L30MoMfvZHGmd7aj+QdlaXUodF6C6MQxIlD9E7XCF9eGh3IN+xkY
+         oyD3LEG8/ZhK96mhTaZdaiXKgYqMBqS1SXXO0K92YThUidaArb8F3TDcZqZd0pPBPOY3
+         6YI2T87GdSWnC+UIkzri1ov2un2TzWQswlbdcNOX8xsFF6TBqQHFsUo+wk1JqXDsxpTz
+         ge2w2/0SiiSPwi8Lu1jc8XK9Us8moFczSLnTxAOPK+fHV1qL47V6Lqv+XQJtLw1GL5MI
+         jBYujsg25TyfOa+KMC7donbDUw0T94dVTVLEdP9Nqt9m+WwLXIVPkrwiqyo0DcE8N/hq
+         8mjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/OclBSSviCWldlmnDUDK3gAMkjNp0A9O+u9/XCIBFLM=;
+        b=FiLyrr2TjLg41hSe6PskcGHHaHCrPrqMFwRQfTVy7QzNTv6TGRE2pBIrLc4h4fQRTE
+         KrV11UCsUQwiEh/1cuMLTZyS3yv11NXLEhos99d2DuTDfOUARK5K5ThFS13X6JQQKRa8
+         ymj2NAPWnkUrVwnuwL5hKMB1ZQ7vJwj49zJxAADD8gd6bEWFhjeR+FqVZeMmXGFHiJw4
+         jYw9baFNSqbR8767AirVD9tZJjLb3fydcNNrV9G5UuRxvsWWX8goYS37g8L6CBJTMhj/
+         eEDxyoORsFUoiuobO3cKyLSEK0T3bGBOTBBRYh/526ITDXicqCChULZozZNj7bAHuedf
+         Ip1Q==
+X-Gm-Message-State: AOAM532XijOd6jrEveBXDgxi+rYeKg2hhwxpA5TOdiTDnj07znwzwa6o
+        j4cIvmczbfHOAsDFrwBXfiVBWAMRXYpOTfdVZFnoPo+RJPe1sA==
+X-Google-Smtp-Source: ABdhPJzDoS7OQTcGtYudltrCgWCbYNGqL+dVhKCUdeEPp02Bbsi4hfIyZqXCRWgRVTiIBHPIlIWxkxK9/FiqfpLiQDE=
+X-Received: by 2002:ac8:5c4d:: with SMTP id j13mr18773640qtj.375.1643156941173;
+ Tue, 25 Jan 2022 16:29:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bd36b131-be23-6f4d-16cf-a549a6533f34@linux.microsoft.com>
+References: <94e36de3cc2b579e45f95c189a6f5378bf1480ac.1643156174.git.asml.silence@gmail.com>
+In-Reply-To: <94e36de3cc2b579e45f95c189a6f5378bf1480ac.1643156174.git.asml.silence@gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 25 Jan 2022 16:28:50 -0800
+Message-ID: <CAKH8qBt3uVBzj3rW-9afuBz6R09ARnkv8ocvV4unn4ji9Eh9Rg@mail.gmail.com>
+Subject: Re: [PATCH for-next v4] cgroup/bpf: fast path skb BPF filtering
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Iouri,
+On Tue, Jan 25, 2022 at 4:22 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>
+> Even though there is a static key protecting from overhead from
+> cgroup-bpf skb filtering when there is nothing attached, in many cases
+> it's not enough as registering a filter for one type will ruin the fast
+> path for all others. It's observed in production servers I've looked
+> at but also in laptops, where registration is done during init by
+> systemd or something else.
+>
+> Add a per-socket fast path check guarding from such overhead. This
+> affects both receive and transmit paths of TCP, UDP and other
+> protocols. It showed ~1% tx/s improvement in small payload UDP
+> send benchmarks using a real NIC and in a server environment and the
+> number jumps to 2-3% for preemtible kernels.
+>
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>
+> v2: replace bitmask appoach with empty_prog_array
+> v3: add "bpf_" prefix to empty_prog_array
+> v4: replace macros with inline functions
+>     use cgroup_bpf_sock_enabled for set/getsockopt() filters
 
-On Wed, Jan 12, 2022 at 03:39:13PM -0800, Iouri Tarassov wrote:
-> 
-> On 1/12/2022 2:12 PM, Nathan Chancellor wrote:
-> > Hi Iouri,
-> > 
-> > > We're looking forward additional feedback.
-> > 
-> > I have been including this patch set into my downstream WSL2 kernel that
-> > I build with clang and I noticed an instance of -Wenum-conversion that
-> > is still present in this revision:Please consider cleaning this up in a future revision so that clang
-> > builds stay clean :)
-> > ...
-> > I happened to notice there was another function that looks very similar
-> > to command_vgpu_to_host_init0(), command_vm_to_host_init0(), which is
-> > also unused.  This was hidden because it is marked as "static inline" in
-> > a .c file, which should generally be avoided; I would recommend
-> > replacing all instances of "static inline" with just "static". The
-> > compiler will still inline it if it feels it is worthwhile. Doing this
-> > reveals one other unused function, is_empty():
-> > 
-> > $ sed -i 's/static inline /static /g' drivers/hv/dxgkrnl/*.c
-> > 
-> > $ make -skj"$(nproc)" LLVM=1 drivers/hv/dxgkrnl/
-> > drivers/hv/dxgkrnl/hmgr.c:167:13: warning: unused function 'is_empty' [-Wunused-function]
-> > static bool is_empty(struct hmgrtable *table)
-> >              ^
-> > 1 warning generated.
-> > drivers/hv/dxgkrnl/dxgvmbus.c:234:13: warning: unused function 'command_vm_to_host_init0' [-Wunused-function]
-> > static void command_vm_to_host_init0(struct dxgkvmb_command_vm_to_host
-> >              ^
-> > 1 warning generated.
-> 
-> Thanks a lot! We will get this fixed
+LGTM, thank you for following up!
 
-In addition to the warnings that I mentioned above, when I apply this
-patchset on top of next-20220125, which enables -Warray-bounds, I see
-the following warnings with GCC 11.2.1:
+Reviewed-by: Stanislav Fomichev <sdf@google.com>
 
-drivers/hv/dxgkrnl/ioctl.c: In function ‘init_ioctls’:
-drivers/hv/dxgkrnl/ioctl.c:5315:15: warning: array subscript 69 is above array bounds of ‘struct ioctl_desc[69]’ [-Warray-bounds]
- 5315 |         ioctls[_IOC_NR(v)].ioctl_callback = callback;   \
-      |         ~~~~~~^~~~~~~~~~~~
-drivers/hv/dxgkrnl/ioctl.c:5456:9: note: in expansion of macro ‘SET_IOCTL’
- 5456 |         SET_IOCTL(/*0x45 */ dxgk_create_sync_file,
-      |         ^~~~~~~~~
-drivers/hv/dxgkrnl/ioctl.c:34:26: note: while referencing ‘ioctls’
-   34 | static struct ioctl_desc ioctls[LX_IO_MAX + 1];
-      |                          ^~~~~~
-drivers/hv/dxgkrnl/ioctl.c:5316:15: warning: array subscript 69 is above array bounds of ‘struct ioctl_desc[69]’ [-Warray-bounds]
- 5316 |         ioctls[_IOC_NR(v)].ioctl = v
-      |         ~~~~~~^~~~~~~~~~~~
-drivers/hv/dxgkrnl/ioctl.c:5456:9: note: in expansion of macro ‘SET_IOCTL’
- 5456 |         SET_IOCTL(/*0x45 */ dxgk_create_sync_file,
-      |         ^~~~~~~~~
-drivers/hv/dxgkrnl/ioctl.c:34:26: note: while referencing ‘ioctls’
-   34 | static struct ioctl_desc ioctls[LX_IO_MAX + 1];
-      |                          ^~~~~~
-drivers/hv/dxgkrnl/dxgvmbus.c: In function ‘dxgvmb_send_query_alloc_residency’:
-drivers/hv/dxgkrnl/dxgvmbus.c:147:16: warning: array subscript ‘struct dxgvmbusmsg[0]’ is partly outside array bounds of ‘struct dxgvmbusmsgres[1]’ [-Warray-bounds]
-  147 |         if (msg->hdr && (char *)msg->hdr != msg->msg_on_stack)
-      |             ~~~^~~~~
-drivers/hv/dxgkrnl/dxgvmbus.c:1882:31: note: while referencing ‘msg’
- 1882 |         struct dxgvmbusmsgres msg = {.hdr = NULL};
-      |                               ^~~
-drivers/hv/dxgkrnl/dxgvmbus.c: In function ‘dxgvmb_send_open_resource’:
-drivers/hv/dxgkrnl/dxgvmbus.c:147:16: warning: array subscript ‘struct dxgvmbusmsg[0]’ is partly outside array bounds of ‘struct dxgvmbusmsgres[1]’ [-Warray-bounds]
-  147 |         if (msg->hdr && (char *)msg->hdr != msg->msg_on_stack)
-      |             ~~~^~~~~
-drivers/hv/dxgkrnl/dxgvmbus.c:2132:31: note: while referencing ‘msg’
- 2132 |         struct dxgvmbusmsgres msg = {.hdr = NULL};
-      |                               ^~~
-drivers/hv/dxgkrnl/dxgvmbus.c: In function ‘dxgvmb_send_get_stdalloc_data’:
-drivers/hv/dxgkrnl/dxgvmbus.c:147:16: warning: array subscript ‘struct dxgvmbusmsg[0]’ is partly outside array bounds of ‘struct dxgvmbusmsgres[1]’ [-Warray-bounds]
-  147 |         if (msg->hdr && (char *)msg->hdr != msg->msg_on_stack)
-      |             ~~~^~~~~
-drivers/hv/dxgkrnl/dxgvmbus.c:2183:31: note: while referencing ‘msg’
- 2183 |         struct dxgvmbusmsgres msg = {.hdr = NULL};
-      |                               ^~~
-drivers/hv/dxgkrnl/dxgvmbus.c: In function ‘dxgvmb_send_get_allocation_priority’:
-drivers/hv/dxgkrnl/dxgvmbus.c:147:16: warning: array subscript ‘struct dxgvmbusmsg[0]’ is partly outside array bounds of ‘struct dxgvmbusmsgres[1]’ [-Warray-bounds]
-  147 |         if (msg->hdr && (char *)msg->hdr != msg->msg_on_stack)
-      |             ~~~^~~~~
-drivers/hv/dxgkrnl/dxgvmbus.c:3106:31: note: while referencing ‘msg’
- 3106 |         struct dxgvmbusmsgres msg = {.hdr = NULL};
-      |                               ^~~
-drivers/hv/dxgkrnl/dxgvmbus.c: In function ‘dxgvmb_send_reclaim_allocations’:
-drivers/hv/dxgkrnl/dxgvmbus.c:147:16: warning: array subscript ‘struct dxgvmbusmsg[0]’ is partly outside array bounds of ‘struct dxgvmbusmsgres[1]’ [-Warray-bounds]
-  147 |         if (msg->hdr && (char *)msg->hdr != msg->msg_on_stack)
-      |             ~~~^~~~~
-drivers/hv/dxgkrnl/dxgvmbus.c:3298:31: note: while referencing ‘msg’
- 3298 |         struct dxgvmbusmsgres msg = {.hdr = NULL};
-      |                               ^~~
-drivers/hv/dxgkrnl/dxgvmbus.c: In function ‘dxgvmb_send_query_statistics’:
-drivers/hv/dxgkrnl/dxgvmbus.c:147:16: warning: array subscript ‘struct dxgvmbusmsg[0]’ is partly outside array bounds of ‘struct dxgvmbusmsgres[1]’ [-Warray-bounds]
-  147 |         if (msg->hdr && (char *)msg->hdr != msg->msg_on_stack)
-      |             ~~~^~~~~
-drivers/hv/dxgkrnl/dxgvmbus.c:3698:31: note: while referencing ‘msg’
- 3698 |         struct dxgvmbusmsgres msg = {.hdr = NULL};
-      |                               ^~~
-
-The warning in ioctl.c is resolved with the following diff, which
-appears to be a forward port problem, since the WSL2 tree is fine. I
-don't see the warning in dxgvmbus.c with clang so I did not look into
-it.
-
-Cheers,
-Nathan
-
-diff --git a/include/uapi/misc/d3dkmthk.h b/include/uapi/misc/d3dkmthk.h
-index a7c9fdd95e2e..a32431e3df56 100644
---- a/include/uapi/misc/d3dkmthk.h
-+++ b/include/uapi/misc/d3dkmthk.h
-@@ -1949,6 +1949,6 @@ struct d3dkmt_createsyncfile {
- #define LX_DXCREATESYNCFILE	\
- 	_IOWR(0x47, 0x45, struct d3dkmt_createsyncfile)
- 
--#define LX_IO_MAX 0x44
-+#define LX_IO_MAX 0x45
- 
- #endif /* _D3DKMTHK_H */
+>  include/linux/bpf-cgroup.h | 26 +++++++++++++++++++++-----
+>  include/linux/bpf.h        | 13 +++++++++++++
+>  kernel/bpf/cgroup.c        | 30 ------------------------------
+>  kernel/bpf/core.c          | 16 ++++------------
+>  4 files changed, 38 insertions(+), 47 deletions(-)
+>
+> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+> index b525d8cdc25b..165b0ba3d6c3 100644
+> --- a/include/linux/bpf-cgroup.h
+> +++ b/include/linux/bpf-cgroup.h
+> @@ -8,6 +8,7 @@
+>  #include <linux/jump_label.h>
+>  #include <linux/percpu.h>
+>  #include <linux/rbtree.h>
+> +#include <net/sock.h>
+>  #include <uapi/linux/bpf.h>
+>
+>  struct sock;
+> @@ -165,11 +166,23 @@ int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
+>  int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+>                                      void *value, u64 flags);
+>
+> +/* Opportunistic check to see whether we have any BPF program attached*/
+> +static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
+> +                                          enum cgroup_bpf_attach_type type)
+> +{
+> +       struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+> +       struct bpf_prog_array *array;
+> +
+> +       array = rcu_access_pointer(cgrp->bpf.effective[type]);
+> +       return array != &bpf_empty_prog_array.hdr;
+> +}
+> +
+>  /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
+>  #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)                            \
+>  ({                                                                           \
+>         int __ret = 0;                                                        \
+> -       if (cgroup_bpf_enabled(CGROUP_INET_INGRESS))                  \
+> +       if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) && sk &&                  \
+> +           cgroup_bpf_sock_enabled(sk, CGROUP_INET_INGRESS))         \
+>                 __ret = __cgroup_bpf_run_filter_skb(sk, skb,                  \
+>                                                     CGROUP_INET_INGRESS); \
+>                                                                               \
+> @@ -181,9 +194,10 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+>         int __ret = 0;                                                         \
+>         if (cgroup_bpf_enabled(CGROUP_INET_EGRESS) && sk && sk == skb->sk) { \
+>                 typeof(sk) __sk = sk_to_full_sk(sk);                           \
+> -               if (sk_fullsock(__sk))                                         \
+> +               if (sk_fullsock(__sk) &&                                       \
+> +                   cgroup_bpf_sock_enabled(__sk, CGROUP_INET_EGRESS))         \
+>                         __ret = __cgroup_bpf_run_filter_skb(__sk, skb,         \
+> -                                                     CGROUP_INET_EGRESS); \
+> +                                                     CGROUP_INET_EGRESS);     \
+>         }                                                                      \
+>         __ret;                                                                 \
+>  })
+> @@ -347,7 +361,8 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+>                                        kernel_optval)                          \
+>  ({                                                                            \
+>         int __ret = 0;                                                         \
+> -       if (cgroup_bpf_enabled(CGROUP_SETSOCKOPT))                             \
+> +       if (cgroup_bpf_enabled(CGROUP_SETSOCKOPT) &&                           \
+> +           cgroup_bpf_sock_enabled(sock, CGROUP_SETSOCKOPT))                  \
+>                 __ret = __cgroup_bpf_run_filter_setsockopt(sock, level,        \
+>                                                            optname, optval,    \
+>                                                            optlen,             \
+> @@ -367,7 +382,8 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+>                                        max_optlen, retval)                     \
+>  ({                                                                            \
+>         int __ret = retval;                                                    \
+> -       if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT))                             \
+> +       if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT) &&                           \
+> +           cgroup_bpf_sock_enabled(sock, CGROUP_GETSOCKOPT))                  \
+>                 if (!(sock)->sk_prot->bpf_bypass_getsockopt ||                 \
+>                     !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass_getsockopt, \
+>                                         tcp_bpf_bypass_getsockopt,             \
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 394305a5e02f..dcfe2de59b59 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1233,6 +1233,19 @@ struct bpf_prog_array {
+>         struct bpf_prog_array_item items[];
+>  };
+>
+> +struct bpf_empty_prog_array {
+> +       struct bpf_prog_array hdr;
+> +       struct bpf_prog *null_prog;
+> +};
+> +
+> +/* to avoid allocating empty bpf_prog_array for cgroups that
+> + * don't have bpf program attached use one global 'bpf_empty_prog_array'
+> + * It will not be modified the caller of bpf_prog_array_alloc()
+> + * (since caller requested prog_cnt == 0)
+> + * that pointer should be 'freed' by bpf_prog_array_free()
+> + */
+> +extern struct bpf_empty_prog_array bpf_empty_prog_array;
+> +
+>  struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags);
+>  void bpf_prog_array_free(struct bpf_prog_array *progs);
+>  int bpf_prog_array_length(struct bpf_prog_array *progs);
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 279ebbed75a5..098632fdbc45 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -1384,20 +1384,6 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
+>  }
+>
+>  #ifdef CONFIG_NET
+> -static bool __cgroup_bpf_prog_array_is_empty(struct cgroup *cgrp,
+> -                                            enum cgroup_bpf_attach_type attach_type)
+> -{
+> -       struct bpf_prog_array *prog_array;
+> -       bool empty;
+> -
+> -       rcu_read_lock();
+> -       prog_array = rcu_dereference(cgrp->bpf.effective[attach_type]);
+> -       empty = bpf_prog_array_is_empty(prog_array);
+> -       rcu_read_unlock();
+> -
+> -       return empty;
+> -}
+> -
+>  static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen,
+>                              struct bpf_sockopt_buf *buf)
+>  {
+> @@ -1456,19 +1442,11 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+>         };
+>         int ret, max_optlen;
+>
+> -       /* Opportunistic check to see whether we have any BPF program
+> -        * attached to the hook so we don't waste time allocating
+> -        * memory and locking the socket.
+> -        */
+> -       if (__cgroup_bpf_prog_array_is_empty(cgrp, CGROUP_SETSOCKOPT))
+> -               return 0;
+> -
+>         /* Allocate a bit more than the initial user buffer for
+>          * BPF program. The canonical use case is overriding
+>          * TCP_CONGESTION(nv) to TCP_CONGESTION(cubic).
+>          */
+>         max_optlen = max_t(int, 16, *optlen);
+> -
+>         max_optlen = sockopt_alloc_buf(&ctx, max_optlen, &buf);
+>         if (max_optlen < 0)
+>                 return max_optlen;
+> @@ -1550,15 +1528,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+>         };
+>         int ret;
+>
+> -       /* Opportunistic check to see whether we have any BPF program
+> -        * attached to the hook so we don't waste time allocating
+> -        * memory and locking the socket.
+> -        */
+> -       if (__cgroup_bpf_prog_array_is_empty(cgrp, CGROUP_GETSOCKOPT))
+> -               return retval;
+> -
+>         ctx.optlen = max_optlen;
+> -
+>         max_optlen = sockopt_alloc_buf(&ctx, max_optlen, &buf);
+>         if (max_optlen < 0)
+>                 return max_optlen;
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 0a1cfd8544b9..04a8d5bea552 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1968,18 +1968,10 @@ static struct bpf_prog_dummy {
+>         },
+>  };
+>
+> -/* to avoid allocating empty bpf_prog_array for cgroups that
+> - * don't have bpf program attached use one global 'empty_prog_array'
+> - * It will not be modified the caller of bpf_prog_array_alloc()
+> - * (since caller requested prog_cnt == 0)
+> - * that pointer should be 'freed' by bpf_prog_array_free()
+> - */
+> -static struct {
+> -       struct bpf_prog_array hdr;
+> -       struct bpf_prog *null_prog;
+> -} empty_prog_array = {
+> +struct bpf_empty_prog_array bpf_empty_prog_array = {
+>         .null_prog = NULL,
+>  };
+> +EXPORT_SYMBOL(bpf_empty_prog_array);
+>
+>  struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
+>  {
+> @@ -1989,12 +1981,12 @@ struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
+>                                (prog_cnt + 1),
+>                                flags);
+>
+> -       return &empty_prog_array.hdr;
+> +       return &bpf_empty_prog_array.hdr;
+>  }
+>
+>  void bpf_prog_array_free(struct bpf_prog_array *progs)
+>  {
+> -       if (!progs || progs == &empty_prog_array.hdr)
+> +       if (!progs || progs == &bpf_empty_prog_array.hdr)
+>                 return;
+>         kfree_rcu(progs, rcu);
+>  }
+> --
+> 2.34.1
+>

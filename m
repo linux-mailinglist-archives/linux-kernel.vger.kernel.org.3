@@ -2,114 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9987749C22D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722B849C22C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiAZDfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:35:36 -0500
-Received: from mga09.intel.com ([134.134.136.24]:14240 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229989AbiAZDff (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:35:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643168135; x=1674704135;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mYwI8bDS9yfrx46xlY20lLzXkU2HBYLSGC1UflU8rKk=;
-  b=U3QJS6ZGoxQsWisz3y0gch1bvqNUPHg69Dse25tmSp6WihHSVr5/ys4f
-   JTGZzv/6GFHehLGxivFB8DshEc7+rDjST+AgEHaO0CtdQCG3BMTGHKR2R
-   McOkZxf40oTq4D5vWHsT1Tnu2zI2+WgOSUoWn0OGmYX4PR7CrYhA5SrDa
-   6DYOjvH2BWD42nfLKdVB/BCawWFoiQvxlytTskGClULIvgHKjDMFVpjcM
-   SIJOWErGdf6GyJrauXmIoOU06pXPtAK6nOgujc4FBgjmWXIjwur1oTzG4
-   g0GHRnn3bMosn526zRTHO+TDFgnpd0gORweAnzPfx/QrtGqTCWapu/9ng
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246253850"
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="246253850"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 19:35:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="479753515"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 25 Jan 2022 19:35:33 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCZ5n-000KkE-Az; Wed, 26 Jan 2022 03:35:31 +0000
-Date:   Wed, 26 Jan 2022 11:34:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [intel-tdx:guest-upstream 24/33] arch/x86/mm/mem_encrypt.c:69:13:
- warning: no previous prototype for function 'mem_encrypt_init'
-Message-ID: <202201261113.3P3URW2n-lkp@intel.com>
+        id S232115AbiAZDe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229989AbiAZDey (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 22:34:54 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C610C06173B;
+        Tue, 25 Jan 2022 19:34:54 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id k17so3713937plk.0;
+        Tue, 25 Jan 2022 19:34:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=ov9OGHY82q9euRbCDxFngRVc4SYGjlQJ03V4ACD/UVQ=;
+        b=KVxVTYqzn88rX/bJ8qTdJ4CrJTYcz7XTgBu68PJ9ywJ3C43jWiF1pnmNAxgxdGI81M
+         I4TdCBpJGKrb80HMWO3svtHyHP+P4Y/bWnPMMRWRoGYhQDSxlZUlCB9F17cdyGzsfedG
+         bQOp1BftFiTGERILt4bjA2+fy7YxzOW+YkbY8rab9FTU1a8RUFhtaFw++a12IHAayGK5
+         zZnT/Ne9Jjwukr/9nantF2azTUKSXzPBbq6dYRdLIaSg12XbJtrasJtwvqmqe6s8BN7Y
+         +9HbPOvCctnK24vr7WdfQv1FCnFrGmFK8fvVlPNTGONL2+fR2RO4CfPbLISjcMNMpESt
+         OvAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ov9OGHY82q9euRbCDxFngRVc4SYGjlQJ03V4ACD/UVQ=;
+        b=rCk4f4i+PWCMjGfUGaiiTit/M6GiBwAZNU6P50auFuTTFBhfwu87wtmdIt3fIOFRMR
+         iNaRweu0s2RFJZDkDxU5FaWXPASlkgp/54/83Ldn9swW/da4Y9FD9BIj26ep9Q+tmsb5
+         NUp6pP1U7Qe5XUiHjAcmIiWX9S/cH5U8UO4I1Hj/nVsYPtLxRY9bfhF6NO6Ip1TXdS5W
+         pUkFSkGS1z7mEufpccBUgLLEwkK9X8Si9RRkTE+zzeYn7ayhD52+rkGwMbEkcY+Ky5N4
+         Y0BK3N47dwD8X7+2MCuPz9pDsXb5pJaErHDT0vnArSypzAxCDOnxTIeBhBpxpWMGf6yq
+         3B9Q==
+X-Gm-Message-State: AOAM531sZKFnVFh7G8iTcsnT1SuvIQHPZOHQ6XOhis8b3b3viUomszyk
+        ySPFgGaFeAIc718an1A4GsI=
+X-Google-Smtp-Source: ABdhPJwewhqOhGT0zeZnC1LHq5V1AV+DMXZVC9xLTwky6g3lfW2BwDHOux4zwhY883eszSTU+6/Njg==
+X-Received: by 2002:a17:902:8f8a:b0:149:8d21:9f44 with SMTP id z10-20020a1709028f8a00b001498d219f44mr21394197plo.15.1643168093835;
+        Tue, 25 Jan 2022 19:34:53 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id q21sm419792pfj.94.2022.01.25.19.34.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 19:34:53 -0800 (PST)
+Message-ID: <4a4f8880-9ea9-1aca-a202-18d5c50abd82@gmail.com>
+Date:   Tue, 25 Jan 2022 19:34:52 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v7 08/16] net: dsa: tag_qca: add support for handling
+ mgmt and MIB Ethernet packet
+Content-Language: en-US
+To:     Ansuel Smith <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20220123013337.20945-1-ansuelsmth@gmail.com>
+ <20220123013337.20945-9-ansuelsmth@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220123013337.20945-9-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git guest-upstream
-head:   5891b2d3ab5941ec7f5fefaa09fdd84a46ec82f5
-commit: 0484e85cb3942b81e2b07162a363bda055c762a0 [24/33] x86/mm/cpa: Add support for TDX shared memory
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220126/202201261113.3P3URW2n-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/0484e85cb3942b81e2b07162a363bda055c762a0
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx guest-upstream
-        git checkout 0484e85cb3942b81e2b07162a363bda055c762a0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/mm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
-   void __init mem_encrypt_init(void)
-               ^
-   arch/x86/mm/mem_encrypt.c:69:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init mem_encrypt_init(void)
-   ^
-   static 
-   1 warning generated.
 
 
-vim +/mem_encrypt_init +69 arch/x86/mm/mem_encrypt.c
+On 1/22/2022 5:33 PM, Ansuel Smith wrote:
+> Add connect/disconnect helper to assign private struct to the dsa switch.
+> Add support for Ethernet mgm and MIB if the dsa driver provide an handler
+> to correctly parse and elaborate the data.
 
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  67  
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  68  /* Architecture __weak replacement functions */
-20f07a044a76ae Kirill A. Shutemov 2021-12-06 @69  void __init mem_encrypt_init(void)
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  70  {
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  71  	if (!cc_platform_has(CC_ATTR_MEM_ENCRYPT))
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  72  		return;
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  73  
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  74  	/* Call into SWIOTLB to update the SWIOTLB DMA buffers */
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  75  	swiotlb_update_mem_attributes();
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  76  
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  77  	print_mem_encrypt_feature_info();
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  78  }
-20f07a044a76ae Kirill A. Shutemov 2021-12-06  79  
+s/mgm/mgmt/
+s/dsa/DSA/
 
-:::::: The code at line 69 was first introduced by commit
-:::::: 20f07a044a76aebaaa0603038857229b5c460d69 x86/sev: Move common memory encryption code to mem_encrypt.c
 
-:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-:::::: CC: Borislav Petkov <bp@suse.de>
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>   include/linux/dsa/tag_qca.h |  7 +++++++
+>   net/dsa/tag_qca.c           | 39 ++++++++++++++++++++++++++++++++++---
+>   2 files changed, 43 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/dsa/tag_qca.h b/include/linux/dsa/tag_qca.h
+> index 87dd84e31304..de5a45f5b398 100644
+> --- a/include/linux/dsa/tag_qca.h
+> +++ b/include/linux/dsa/tag_qca.h
+> @@ -72,4 +72,11 @@ struct mib_ethhdr {
+>   	__be16 hdr;		/* qca hdr */
+>   } __packed;
+>   
+> +struct qca_tagger_data {
+> +	void (*rw_reg_ack_handler)(struct dsa_switch *ds,
+> +				   struct sk_buff *skb);
+> +	void (*mib_autocast_handler)(struct dsa_switch *ds,
+> +				     struct sk_buff *skb);
+> +};
+> +
+>   #endif /* __TAG_QCA_H */
+> diff --git a/net/dsa/tag_qca.c b/net/dsa/tag_qca.c
+> index fdaa1b322d25..dc81c72133eb 100644
+> --- a/net/dsa/tag_qca.c
+> +++ b/net/dsa/tag_qca.c
+> @@ -5,6 +5,7 @@
+>   
+>   #include <linux/etherdevice.h>
+>   #include <linux/bitfield.h>
+> +#include <net/dsa.h>
+>   #include <linux/dsa/tag_qca.h>
+>   
+>   #include "dsa_priv.h"
+> @@ -32,11 +33,16 @@ static struct sk_buff *qca_tag_xmit(struct sk_buff *skb, struct net_device *dev)
+>   
+>   static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
+>   {
+> +	struct qca_tagger_data *tagger_data;
+> +	struct dsa_port *dp = dev->dsa_ptr;
+> +	struct dsa_switch *ds = dp->ds;
+>   	u16 hdr, pk_type;
+>   	__be16 *phdr;
+>   	int port;
+>   	u8 ver;
+>   
+> +	tagger_data = ds->tagger_data;
+> +
+>   	if (unlikely(!pskb_may_pull(skb, QCA_HDR_LEN)))
+>   		return NULL;
+>   
+> @@ -51,13 +57,19 @@ static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
+>   	/* Get pk type */
+>   	pk_type = FIELD_GET(QCA_HDR_RECV_TYPE, hdr);
+>   
+> -	/* Ethernet MDIO read/write packet */
+> -	if (pk_type == QCA_HDR_RECV_TYPE_RW_REG_ACK)
+> +	/* Ethernet mgmt read/write packet */
+> +	if (pk_type == QCA_HDR_RECV_TYPE_RW_REG_ACK) {
+> +		if (tagger_data->rw_reg_ack_handler)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+if (likely()) in case that happens to make a difference?
+
+> +			tagger_data->rw_reg_ack_handler(ds, skb);
+>   		return NULL;
+> +	}
+>   
+>   	/* Ethernet MIB counter packet */
+> -	if (pk_type == QCA_HDR_RECV_TYPE_MIB)
+> +	if (pk_type == QCA_HDR_RECV_TYPE_MIB) {
+> +		if (tagger_data->mib_autocast_handler)
+
+Likewise
+
+In any case, this looks good to me:
+
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

@@ -2,140 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7333C49CA93
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE43749CA8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238492AbiAZNSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:18:41 -0500
-Received: from mga06.intel.com ([134.134.136.31]:26123 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238386AbiAZNSi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:18:38 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="307261092"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="307261092"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:18:38 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="581101464"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:18:34 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1nCiAx-00Ebfj-Q9;
-        Wed, 26 Jan 2022 15:17:27 +0200
-Date:   Wed, 26 Jan 2022 15:17:27 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-Message-ID: <YfFJ5ykgMi+wBc2f@smile.fi.intel.com>
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
- <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
- <CAHp75Vd7oaYPKx6bxjCqNnm6fieeQFrtq5K4YYrxYbXoXFy=+Q@mail.gmail.com>
- <20220126102858.GX1951@kadam>
- <1b665bb8-7acb-519b-0a02-ef0f2dd4b524@redhat.com>
+        id S238021AbiAZNSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:18:06 -0500
+Received: from mail-ej1-f50.google.com ([209.85.218.50]:38651 "EHLO
+        mail-ej1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229759AbiAZNSF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 08:18:05 -0500
+Received: by mail-ej1-f50.google.com with SMTP id k25so38732177ejp.5;
+        Wed, 26 Jan 2022 05:18:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5a56Q3xrktFSBfArPwuTW7EIlQ6o8Gi3WpON/C2HkWU=;
+        b=H2x1iz1Mz4cFSMr82Wab2jr6QJZcNvxSKr6jFFXEg+r+2HjcyjMERinDyhLmqLUim2
+         UN5eQ9zWzg5nCfu6rwUj1cB4K6+/vpQ3cMfkr2WXsAIsj+qJEfslyzu0+uW5pRgGv+RH
+         9MzjrT+cE/Nwt/5rIORID1DXdaTlV6yccrhH4SKKx01lwqW6h4h4BiJbprCdM5hppwum
+         n/iEUakMGfOsDK8p9SuVm9jWpHAVTLT2rbghrwqr2NZrCUdU/5NLw2eowBu7AcBd6u6N
+         2SMqjR6sZ7985J5Av+qx0lnaG1bHE4B+Yz8rGAbOTKcSTb4eADUGuWXOqcCf+IZ02A4i
+         5bZQ==
+X-Gm-Message-State: AOAM531vnVjvTEHhu2erodDcC3CvgQpziwPIIibEza4tdn8nqzGlXC8R
+        kWKDyVI8fk/vigdfcoBPgbA=
+X-Google-Smtp-Source: ABdhPJyUdWRKUQgcEPFQ5pgnLjvWK0FJCel3yrZqr4kf1I+V6Cg6MEsyD7T9PmGE474WOkgKFf+VVQ==
+X-Received: by 2002:a17:907:6093:: with SMTP id ht19mr7751043ejc.741.1643203084115;
+        Wed, 26 Jan 2022 05:18:04 -0800 (PST)
+Received: from [192.168.0.60] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.googlemail.com with ESMTPSA id v10sm9810908edx.36.2022.01.26.05.18.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 05:18:03 -0800 (PST)
+Message-ID: <2c65c342-5c04-bcf4-fd75-5c11d26f0b33@kernel.org>
+Date:   Wed, 26 Jan 2022 14:18:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b665bb8-7acb-519b-0a02-ef0f2dd4b524@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 2/2] pwm: Add clock based PWM output driver
+Content-Language: en-US
+To:     Nikita Travkin <nikita@trvn.ru>, thierry.reding@gmail.com,
+        lee.jones@linaro.org
+Cc:     u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
+        sboyd@kernel.org, linus.walleij@linaro.org, masneyb@onstation.org,
+        sean.anderson@seco.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20220126125849.75572-1-nikita@trvn.ru>
+ <20220126125849.75572-3-nikita@trvn.ru>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220126125849.75572-3-nikita@trvn.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 01:37:00PM +0100, Javier Martinez Canillas wrote:
-> On 1/26/22 11:28, Dan Carpenter wrote:
-> > On Wed, Jan 26, 2022 at 12:04:26PM +0200, Andy Shevchenko wrote:
-> >> On Wed, Jan 26, 2022 at 12:02 PM Andy Shevchenko
-> >> <andy.shevchenko@gmail.com> wrote:
-> >>> On Wed, Jan 26, 2022 at 10:52 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >>>> Am 25.01.22 um 21:21 schrieb Andy Shevchenko:
-> >>
-> >> ...
-> >>
-> >>>> But why? We already have DRM drivers for some of these devices.
-> >>>
-> >>> No, we do not (only a few are available).
-> >>
-> >> Sorry, I missed your word 'some'. Some == almost none from the list (I
-> >> don't remember exact numbers but something like 2 out of 10 are
-> >> supported by tiny DRM and see about interfaces).
-> > 
-> > Could we get an exact list?
-> > 
+On 26/01/2022 13:58, Nikita Travkin wrote:
+> Some systems have clocks exposed to external devices. If the clock
+> controller supports duty-cycle configuration, such clocks can be used as
+> pwm outputs. In fact PWM and CLK subsystems are interfaced with in a
+> similar way and an "opposite" driver already exists (clk-pwm). Add a
+> driver that would enable pwm devices to be used via clk subsystem.
 > 
-> The list AFAICT is the following. I'm not familiar with these so please
-> feel free to correct anything I got wrong here.
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> --
 > 
-> I've marked with '?' if found references to the device supported by the
-> fbdev driver in a DRM driver, but it's not clear if support the same HW.
+> Changes in v2:
+>  - Address Uwe's review comments:
+>    - Round set clk rate up
+>    - Add a description with limitations of the driver
+>    - Disable and unprepare clock before removing pwmchip
+> Changes in v3:
+>  - Use 64bit version of div round up
+>  - Address Uwe's review comments:
+>    - Reword the limitations to avoid incorrect claims
+>    - Move the clk_enabled flag assignment
+>    - Drop unnecessary statements
+> ---
+>  drivers/pwm/Kconfig   |  10 +++
+>  drivers/pwm/Makefile  |   1 +
+>  drivers/pwm/pwm-clk.c | 139 ++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 150 insertions(+)
+>  create mode 100644 drivers/pwm/pwm-clk.c
 > 
-> Drivers in drivers/staging/fbtft:
+> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> index 21e3b05a5153..daa2491a4054 100644
+> --- a/drivers/pwm/Kconfig
+> +++ b/drivers/pwm/Kconfig
+> @@ -140,6 +140,16 @@ config PWM_BRCMSTB
+>  	  To compile this driver as a module, choose M Here: the module
+>  	  will be called pwm-brcmstb.c.
+>  
+> +config PWM_CLK
+> +	tristate "Clock based PWM support"
+> +	depends on HAVE_CLK || COMPILE_TEST
+> +	help
+> +	  Generic PWM framework driver for outputs that can be
+> +	  muxed to clocks.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called pwm-clk.
+> +
+>  config PWM_CLPS711X
+>  	tristate "CLPS711X PWM support"
+>  	depends on ARCH_CLPS711X || COMPILE_TEST
+> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
+> index 708840b7fba8..4a860103c470 100644
+> --- a/drivers/pwm/Makefile
+> +++ b/drivers/pwm/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_PWM_BCM_KONA)	+= pwm-bcm-kona.o
+>  obj-$(CONFIG_PWM_BCM2835)	+= pwm-bcm2835.o
+>  obj-$(CONFIG_PWM_BERLIN)	+= pwm-berlin.o
+>  obj-$(CONFIG_PWM_BRCMSTB)	+= pwm-brcmstb.o
+> +obj-$(CONFIG_PWM_CLK)		+= pwm-clk.o
+>  obj-$(CONFIG_PWM_CLPS711X)	+= pwm-clps711x.o
+>  obj-$(CONFIG_PWM_CRC)		+= pwm-crc.o
+>  obj-$(CONFIG_PWM_CROS_EC)	+= pwm-cros-ec.o
+> diff --git a/drivers/pwm/pwm-clk.c b/drivers/pwm/pwm-clk.c
+> new file mode 100644
+> index 000000000000..b3bfa12a0e73
+> --- /dev/null
+> +++ b/drivers/pwm/pwm-clk.c
+> @@ -0,0 +1,139 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Clock based PWM controller
+> + *
+> + * Copyright (c) 2021 Nikita Travkin <nikita@trvn.ru>
+> + *
+> + * This is an "adapter" driver that allows PWM consumers to use
+> + * system clocks with duty cycle control as PWM outputs.
+> + *
+> + * Limitations:
+> + * - Glitches are possible when new pwm state is applied.
+> + * - Due to the fact that exact behavior depends on the underlying
+> + *   clock driver, various limitations are possible.
+> + * - Period depends on the clock and, in general, not guaranteed.
+> + * - Underlying clock may not be able to give 0% or 100% duty cycle
+> + *   (constant off or on), exact behavior will depend on the clock.
+> + * - When the PWM is disabled, the clock will be disabled as well,
+> + *   line state will depend on the clock.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/math64.h>
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/clk.h>
+> +#include <linux/pwm.h>
+> +
+> +struct pwm_clk_chip {
+> +	struct pwm_chip chip;
+> +	struct clk *clk;
+> +	bool clk_enabled;
+> +};
+> +
+> +#define to_pwm_clk_chip(_chip) container_of(_chip, struct pwm_clk_chip, chip)
+> +
+> +static int pwm_clk_apply(struct pwm_chip *pwm_chip, struct pwm_device *pwm,
+> +			 const struct pwm_state *state)
+> +{
+> +	struct pwm_clk_chip *chip = to_pwm_clk_chip(pwm_chip);
+> +	int ret;
+> +	u32 rate;
+> +	u64 period = state->period;
+> +	u64 duty_cycle = state->duty_cycle;
+> +
+> +	if (!state->enabled) {
+> +		if (pwm->state.enabled) {
+> +			clk_disable(chip->clk);
+> +			chip->clk_enabled = false;
+> +		}
+> +		return 0;
+> +	} else if (!pwm->state.enabled) {
+> +		ret = clk_enable(chip->clk);
+> +		if (ret)
+> +			return ret;
+> +		chip->clk_enabled = true;
+> +	}
+> +
+> +	rate = DIV64_U64_ROUND_UP(NSEC_PER_SEC, period);
+> +	ret = clk_set_rate(chip->clk, rate);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (state->polarity == PWM_POLARITY_INVERSED)
+> +		duty_cycle = period - duty_cycle;
+> +
+> +	return clk_set_duty_cycle(chip->clk, duty_cycle, period);
+> +}
+> +
+> +static const struct pwm_ops pwm_clk_ops = {
+> +	.apply = pwm_clk_apply,
+> +	.owner = THIS_MODULE,
+> +};
+> +
+> +static int pwm_clk_probe(struct platform_device *pdev)
+> +{
+> +	struct pwm_clk_chip *chip;
+> +	int ret;
+> +
+> +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+> +	if (!chip)
+> +		return -ENOMEM;
+> +
+> +	chip->clk = devm_clk_get(&pdev->dev, NULL);
+> +	if (IS_ERR(chip->clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(chip->clk),
+> +				     "Failed to get clock\n");
+> +
+> +	chip->chip.dev = &pdev->dev;
+> +	chip->chip.ops = &pwm_clk_ops;
+> +	chip->chip.npwm = 1;
+> +
+> +	ret = clk_prepare(chip->clk);
+> +	if (ret < 0)
+> +		dev_err_probe(&pdev->dev, ret, "Failed to prepare clock\n");
+> +
+> +	ret = pwmchip_add(&chip->chip);
+> +	if (ret < 0)
+> +		dev_err_probe(&pdev->dev, ret, "Failed to add pwm chip\n");
+> +
 
-Thanks!
+What is the point of probing the driver if pwmchip_add() fails? This
+should be rather fatal error.
 
-Note, there is no support for the devices with parallel interface in the DRM.
-So, basically we can't kill even a single one from fbtft if there is a user
-for it.
+The same with clock. If preparing clock fails, there is little point in
+enabling/disabling it later.
 
->    fb_agm1264k-fl.c
->    fb_bd663474.c
->    fb_hx8340bn.c
->    fb_hx8347d.c (DRM driver in drivers/gpu/drm/tiny/hx8357d.c)
->    fb_hx8353d.c
->    fb_hx8357d.c (DRM driver in drivers/gpu/drm/tiny/hx8357d.c)
->    fb_ili9163.c (DRM driver in drivers/gpu/drm/tiny/ili9163.c)
->    fb_ili9320.c
->    fb_ili9325.c
-
->    fb_ili9340.c (DRM driver in drivers/gpu/drm/tiny/mi0283qt.c ?)
-
-Not sure.
-
->    fb_ili9341.c (DRM driver in drivers/gpu/drm/tiny/mi0283qt.c ?)
-
-Yes and for the fact there are two drivers for the same chip in the DRM.
-Overall there are three different drivers for Ilitek 9341.
-
->    fb_ili9481.c
->    fb_ili9486.c (DRM driver in drivers/gpu/drm/tiny/ili9486.c)
->    fb_pcd8544.c
->    fb_ra8875.c
->    fb_s6d02a1.c
->    fb_s6d1121.c
->    fb_seps525.c
->    fb_sh1106.c
->    fb_ssd1289.c
->    fb_ssd1305.c
->    fb_ssd1306.c
->    fb_ssd1325.c
->    fb_ssd1331.c
->    fb_ssd1351.c
->    fb_st7735r.c (DRM driver in drivers/gpu/drm/tiny/st7735r.c)
->    fb_st7789v.c (DRM driver in drivers/gpu/drm/panel/panel-sitronix-st7789v.c)
->    fb_tinylcd.c
->    fb_tls8204.c
->    fb_uc1611.c
->    fb_uc1701.c
->    fb_upd161704.c
->    fb_watterott.c
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best regards,
+Krzysztof

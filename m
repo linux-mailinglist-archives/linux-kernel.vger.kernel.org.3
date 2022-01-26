@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0554049CBF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9215949CBF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241970AbiAZONu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:13:50 -0500
-Received: from mga12.intel.com ([192.55.52.136]:19421 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235281AbiAZONu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:13:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643206430; x=1674742430;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=69IwR4MRt1UJaVt9klo3HOzfBpM8++sjavE1VkWUzjw=;
-  b=V+Bvr9sUHxpULOJ6E59FbhEoxfXp1jzHS/lGMkd/sAmG/l1W08Hxfc03
-   C9lMZTzNd6k+1pybQJ7q6LhF7EJUikbkAusvKzeOMM2FfQHQ7aujK8o1a
-   L+ozDqEvWZSuF0VwkgXO6dKAuOyJ0sR+gzHiwsaocVzPcuKzzAEn7Gl9y
-   RbcN6Z8et8g31aRLnxLaZLgCm7u5VfdinpYXRCSDFtgfj0ALk7YVTU8zQ
-   sL+CxTFUHZoZ2MWi7ptM7cC6kb4tUWCm8gYu4v0E/BL0l/JG6p6Pi9V1W
-   1mxhxQLAyb/9mpzKdH1WxktJovZEbdbORyuYk9S+NmvK0Z2kZ4fjCVeLo
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="226533468"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="226533468"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 06:13:49 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="597472761"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 06:13:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nCj2P-00EcWv-Rl;
-        Wed, 26 Jan 2022 16:12:41 +0200
-Date:   Wed, 26 Jan 2022 16:12:41 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andreas Kemnade <andreas@kemnade.info>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v4 1/4] math.h: Introduce data types for fractional
- numbers
-Message-ID: <YfFW2ejWZQnQuivs@smile.fi.intel.com>
-References: <20220126135353.24007-1-andriy.shevchenko@linux.intel.com>
+        id S241954AbiAZONL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232541AbiAZONJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 09:13:09 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5134C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 06:13:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vqA7CRwSHoOR/tJOQAe06dY8ic7ejbAv2r4e+k8PLFc=; b=tZQcPh5gvqStAJ6jA0YK2t01Sw
+        GehlWy5GlMlaFzXz0gV3+mTxYwQyZX1lWoTkRSjXVXi8IJkQS56IY0nKcTEi1Lha3CW6ziroThbE5
+        fz8ZwPPj3d8iTtCawn1tdgkrtZubbb6QICbvfBoxwVjag1JYveRZ8Hk3HRbbfG1gWsM/IHvD6mtKf
+        R/r44YROsqckqzmHGMQ/cybYNNdboamluoJtS7g84BqZ/IkQM3S81AHaS8QRSKKaC5erwk7J1dKYt
+        FvB9p2rvqG/+Y/fkR8DjGN+3zRqo9I2kFhds9syMmemMoy6cWlpv0XI22QJ5Kegg/zjpnaRzWfL5s
+        wx1AlItw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCj2Z-0046kL-Ax; Wed, 26 Jan 2022 14:12:51 +0000
+Date:   Wed, 26 Jan 2022 14:12:51 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        akpm@linux-foundation.org, longpeng2@huawei.com, arnd@arndb.de,
+        dave.hansen@linux.intel.com, rppt@kernel.org, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Peter Xu <peterx@redhat.com>
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
+Message-ID: <YfFW43PT5hwPHnOz@casper.infradead.org>
+References: <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
+ <Ye/5yUyEqO0ws0G5@casper.infradead.org>
+ <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
+ <YfAEqzTeBJSIOKcA@casper.infradead.org>
+ <20220125185705.wf7p2l77vggipfry@box.shutemov.name>
+ <YfBIpmxvc0+mFByf@casper.infradead.org>
+ <YfDIYKygRHX4RIri@casper.infradead.org>
+ <e164d7f4-406e-eed8-37d7-753f790b7560@redhat.com>
+ <YfFO6VyMTrW1bWuu@casper.infradead.org>
+ <2190b8e2-74f2-0e31-0a40-0401fbd9966e@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126135353.24007-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <2190b8e2-74f2-0e31-0a40-0401fbd9966e@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 03:53:50PM +0200, Andy Shevchenko wrote:
-> Introduce a macro to produce data types like
+On Wed, Jan 26, 2022 at 02:55:10PM +0100, David Hildenbrand wrote:
+> On 26.01.22 14:38, Matthew Wilcox wrote:
+> > On Wed, Jan 26, 2022 at 11:16:42AM +0100, David Hildenbrand wrote:
+> >> A while ago I talked with Peter about an extended uffd (here: WP)
+> >> mechanism that would work on fds instead of the process address space.
+> > 
+> > As far as I can tell, uffd is a grotesque hack that exists to work around
+> > the poor choice to use anonymous memory instead of file-backed memory
+> > in kvm.  Every time I see somebody mention it, I feel pain.
+> > 
 > 
-> 	struct TYPE_fract {
-> 		__TYPE numerator;
-> 		__TYPE denominator;
-> 	};
+> I might be missing something important, because KVM can deal with
+> file-back memory just fine and uffd is used heavily outside of hypervisors.
 > 
-> to be used in the code wherever it's needed.
-> 
-> In the following changes convert some users to it.
+> I'd love to learn how to handle what ordinary uffd (handle
+> missing/unpopulated pages) and uffd-wp (handle write access to pages)
+> can do with files instead. Because if something like that already
+> exists, it would be precisely what I am talking about.
 
-The context of v4 is the dropped AFE patches.
+Every notification that uffd wants already exists as a notification to
+the underlying filesystem.  Something like a uffdfs [1] would be able
+to do everything that uffd does without adding extra crap all over the MM.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+[1] acronyms are bad, mmmkay?

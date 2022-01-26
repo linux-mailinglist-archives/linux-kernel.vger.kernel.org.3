@@ -2,99 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 401D149C5B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F9F49C5B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238700AbiAZJBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbiAZJBj (ORCPT
+        id S238708AbiAZJBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:01:44 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47202 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238710AbiAZJBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:01:39 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C520BC06161C;
-        Wed, 26 Jan 2022 01:01:38 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id me13so37507596ejb.12;
-        Wed, 26 Jan 2022 01:01:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=RdwXEu1MmztLKU47ICnLL8SgBU/757WIk4pxla2J/ik=;
-        b=YHc0sRTz05ilJCKIaZRtpdWg34iSw3Lm/r+U5Ew6FeIwqVE2cW++4sUu1im21RpvDg
-         znYRBMg8HaYQafLOp5aRQQoso7uaKNJbMLDGx96kg/C2bRrjZ3DYPrHrAJEqkq20ubII
-         3nH6Wwk+zMBUZzk5JjmNupEF3iPJiFdO7qWwmLoMUlu5CpvtHL/iajjSnvzVTX+9Ohj1
-         894xblkbcJGfd/4Ue2QhFqDohuV3POuaKUz5HO11bFEUBNKmvh32E3JkxxF1AgruwSpC
-         yS1eDRyv5dW7e4e4uqDPA/X8PlE9TVAO4tBvJt7/3Po59OeyMgpyKVw2YAYlzzRrHuTW
-         ehaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RdwXEu1MmztLKU47ICnLL8SgBU/757WIk4pxla2J/ik=;
-        b=h7oyXTg1IlNr7K81p7DQ/p4RDyVv/LxxhWhCMZJsIXoBE2DCj6RswLafx+mldfrlJI
-         thg/9yERUQ2sIfm9HCUb7/02JQDyGTAtmFnH19AjzaqIb4KNvCviGMuin9Y2gAZq2nVV
-         fWT1utbnXvR8Es0hpQ8yZMqQPhyPgPDLvRv8RTaGMy4SDr82lvq7+Tje4f+KZxbuTZxn
-         +D/fdVffNt2dwPt8vN23Ymq0d9EPiR58Q7oDcxKt9QrqJ1PAEiGgrRals1w3trIRLRl5
-         Rp37I5umS4upXi9khp9fr0CRz6xR7LM/WniUdwue5OwIvLpDyvAOfqXW/6hXMsTUY3RU
-         CqDg==
-X-Gm-Message-State: AOAM533/sfjaUvVPr3kUUbF8x6mWJVxBD0Kg8aFRHe/v5j9LAe6iiw/t
-        fhuWhs2eAFe+UOBR1yUfvWY=
-X-Google-Smtp-Source: ABdhPJw9c3/oKvaFb3OmJ2XQN0L+If20W7iI+mp94NCR14nmxXGKuGPePKVDU4CPoJ1b7HPn+pg3+w==
-X-Received: by 2002:a17:907:c1f:: with SMTP id ga31mr7326520ejc.529.1643187697302;
-        Wed, 26 Jan 2022 01:01:37 -0800 (PST)
-Received: from [192.168.0.108] ([77.126.86.139])
-        by smtp.gmail.com with ESMTPSA id l3sm7121170ejg.44.2022.01.26.01.01.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 01:01:36 -0800 (PST)
-Message-ID: <ee1f1fe5-c8b7-be85-9029-40e441ae4d31@gmail.com>
-Date:   Wed, 26 Jan 2022 11:01:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 04/54] net: mellanox: fix open-coded for_each_set_bit()
-Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-References: <20220123183925.1052919-1-yury.norov@gmail.com>
- <20220123183925.1052919-5-yury.norov@gmail.com>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20220123183925.1052919-5-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Wed, 26 Jan 2022 04:01:43 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C527661541
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:01:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30610C340EC;
+        Wed, 26 Jan 2022 09:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643187702;
+        bh=1z+1nTNWTzxdLh3sYkb3VzieZACw6Ijdq+drZqM9Kfk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z8WpOnVuq3hsT03HgqRHCWMCoegslNGr9SiE3XqeMi4dHxj+sJoVSzUViphwkGq92
+         RVGq+FlPY4CQ3gbRTkrtRV5prh+i0gpYTDKJd/VF+DU2HDFHOZcXUUhyoppn7GczyM
+         z6cRTMJwg+54E6spsYGECnltk/5nv3NGjm/mWHBddo8Zrq4JGR1e6f/Opsogf8ikIv
+         cSGOVlE/H9XJ4tsy1gdShb3Q4ZULmv78AVgfI9/LQtuFw0g3cHyd5fKrjjLCLwDtI6
+         Mg2qD3QZEI+D3numz8DrnhWGrKdzyG6g4ElvXPMjt/rsIHO58kvnZ+Zq/LZ2y347+l
+         wRXiwxN0xCV4w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nCeBP-0039bT-Se; Wed, 26 Jan 2022 09:01:40 +0000
+Date:   Wed, 26 Jan 2022 09:01:39 +0000
+Message-ID: <87ilu67tvw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/6] irqchip/riscv-intc: Set intc domain as the default host
+In-Reply-To: <CAAhSdy0NrB4Q-mYtMH_HCtbfm5OXi-cxXhiu1AxKdCkTv4cskQ@mail.gmail.com>
+References: <20220125054217.383482-1-apatel@ventanamicro.com>
+        <20220125054217.383482-3-apatel@ventanamicro.com>
+        <87lez37k8h.wl-maz@kernel.org>
+        <CAAhSdy0NrB4Q-mYtMH_HCtbfm5OXi-cxXhiu1AxKdCkTv4cskQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: anup@brainfault.org, apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, robh+dt@kernel.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/23/2022 8:38 PM, Yury Norov wrote:
-> Mellanox driver has an open-coded for_each_set_bit(). Fix it.
+On Wed, 26 Jan 2022 03:16:55 +0000,
+Anup Patel <anup@brainfault.org> wrote:
 > 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->   drivers/net/ethernet/mellanox/mlx4/cmd.c | 23 ++++++-----------------
->   1 file changed, 6 insertions(+), 17 deletions(-)
+> On Tue, Jan 25, 2022 at 11:47 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Tue, 25 Jan 2022 05:42:13 +0000,
+> > Anup Patel <apatel@ventanamicro.com> wrote:
+> > >
+> > > We have quite a few RISC-V drivers (such as RISC-V SBI IPI driver,
+> > > RISC-V timer driver, RISC-V PMU driver, etc) which do not have a
+> > > dedicated DT/ACPI fwnode. This patch makes intc domain as the default
+> > > host so that these drivers can directly create local interrupt mapping
+> > > using standardized local interrupt numbers
+> > >
+> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > ---
+> > >  drivers/clocksource/timer-riscv.c | 17 +----------------
+> > >  drivers/irqchip/irq-riscv-intc.c  |  9 +++++++++
+> > >  2 files changed, 10 insertions(+), 16 deletions(-)
+> > >
+> > > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+> > > index 1767f8bf2013..dd6916ae6365 100644
+> > > --- a/drivers/clocksource/timer-riscv.c
+> > > +++ b/drivers/clocksource/timer-riscv.c
+> > > @@ -102,8 +102,6 @@ static irqreturn_t riscv_timer_interrupt(int irq, void *dev_id)
+> > >  static int __init riscv_timer_init_dt(struct device_node *n)
+> > >  {
+> > >       int cpuid, hartid, error;
+> > > -     struct device_node *child;
+> > > -     struct irq_domain *domain;
+> > >
+> > >       hartid = riscv_of_processor_hartid(n);
+> > >       if (hartid < 0) {
+> > > @@ -121,20 +119,7 @@ static int __init riscv_timer_init_dt(struct device_node *n)
+> > >       if (cpuid != smp_processor_id())
+> > >               return 0;
+> > >
+> > > -     domain = NULL;
+> > > -     child = of_get_compatible_child(n, "riscv,cpu-intc");
+> > > -     if (!child) {
+> > > -             pr_err("Failed to find INTC node [%pOF]\n", n);
+> > > -             return -ENODEV;
+> > > -     }
+> > > -     domain = irq_find_host(child);
+> > > -     of_node_put(child);
+> > > -     if (!domain) {
+> > > -             pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+> > > -             return -ENODEV;
+> > > -     }
+> > > -
+> > > -     riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
+> > > +     riscv_clock_event_irq = irq_create_mapping(NULL, RV_IRQ_TIMER);
+> > >       if (!riscv_clock_event_irq) {
+> > >               pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+> > >               return -ENODEV;
+> > > diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> > > index b65bd8878d4f..9f0a7a8a5c4d 100644
+> > > --- a/drivers/irqchip/irq-riscv-intc.c
+> > > +++ b/drivers/irqchip/irq-riscv-intc.c
+> > > @@ -125,6 +125,15 @@ static int __init riscv_intc_init(struct device_node *node,
+> > >               return rc;
+> > >       }
+> > >
+> > > +     /*
+> > > +      * Make INTC as the default domain which will allow drivers
+> > > +      * not having dedicated DT/ACPI fwnode (such as RISC-V SBI IPI
+> > > +      * driver, RISC-V timer driver, RISC-V PMU driver, etc) can
+> > > +      * directly create local interrupt mapping using standardized
+> > > +      * local interrupt numbers.
+> > > +      */
+> > > +     irq_set_default_host(intc_domain);
+> >
+> > No, please. This really is a bad idea. This sort of catch-all have
+> > constantly proven to be a nuisance, because they discard all the
+> > topology information. Eventually, you realise that you need to know
+> > where this is coming from, but it really is too late.
+> >
+> > I'd rather you *synthesise* a fwnode (like ACPI does) rather then do
+> > this.
 > 
+> In absence of INTC as the default domain, currently we have various
+> drivers looking up INTC irq_domain from DT (or ACPI). This is quite a
+> bit of duplicate code across various drivers.
+>
+> How about having a irq_domain lookup routine (riscv_intc_find_irq_domain())
+> exported by the RISC-V INTC driver or arch/riscv ?
+> OR
+> Do you have an alternative suggestion ?
 
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+But *why* don't you provide an interrupt controller node for DT? I
+really don't think that's outlandish to require.
 
-Thanks,
-Tariq
+For ACPI, we already have an interface that allows a fwnode to be
+registered (acpi_set_irq_model) and interrupts mapped
+(acpi_register_gsi).
+
+You should already have all the required tools you need.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

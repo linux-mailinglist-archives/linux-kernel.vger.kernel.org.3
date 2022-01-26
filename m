@@ -2,248 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4502649C56E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0006149C571
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238529AbiAZIkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 03:40:39 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:40768 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230519AbiAZIki (ORCPT
+        id S238537AbiAZIl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 03:41:26 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:46368
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230519AbiAZIlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:40:38 -0500
-X-UUID: 29c83b0b7f444af6a02331b618126f4d-20220126
-X-UUID: 29c83b0b7f444af6a02331b618126f4d-20220126
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1909331291; Wed, 26 Jan 2022 16:40:35 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 26 Jan 2022 16:40:33 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 Jan 2022 16:40:33 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <wenst@chromium.org>
-CC:     <chun-jie.chen@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>
-Subject: Re: [PATCH 30/31] clk: mediatek: mt8195: Implement remove functions
-Date:   Wed, 26 Jan 2022 16:40:33 +0800
-Message-ID: <20220126084033.20234-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220122091731.283592-31-wenst@chromium.org>
-References: <20220122091731.283592-31-wenst@chromium.org>
+        Wed, 26 Jan 2022 03:41:25 -0500
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 77EAA3F197
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:41:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643186484;
+        bh=MvhbiN5MMNYU7hqMrRzTsXC+uHqIqDEC2OOeXTzdnqc=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=W6vjqZyM1SbNOF95DszPyLhvIzTyB9nn2r1dlowaBMkEIV9C1nwFksVChoJ1V/Rqt
+         5TjKj+Zg7Y2sRejchOnirGL9vuCO57/2mOYxnV2wKndwsNdmV+etfPyEuVo7aL74w0
+         pBJwjJaqf+o2vHP1f8tO8hiK5gBOt1+7O+TzKRGvbnQYbt6DRItGxqjcc7hP9pWfbT
+         HJ3mJ3adtPaDSPiOCWP5JGQAXRuN4NTnu/kHD/LOocNOAm8t6lDKcglZeMCbI8XRVh
+         kW8oNZiu1x+qCJs3Qow4hEg9j0DWbtl67Luk+SzWWQxDCxje01tv2Xgpsf4onno2X+
+         IwV2T5ZA3ismg==
+Received: by mail-wr1-f70.google.com with SMTP id r26-20020adfab5a000000b001d67d50a45cso3968782wrc.18
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 00:41:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MvhbiN5MMNYU7hqMrRzTsXC+uHqIqDEC2OOeXTzdnqc=;
+        b=QFduxCSd3EutAn+U5oqhDwfByNMEqvttMIJ6o2yRaPRwA/4S5yVEgi3OF00wb7jjzk
+         kkQIeqJMQpfavPpPK3XRjmin4qJvEkjbzRnOOzTXU0DOR/pFnSDil1FdLX2NAJRsvDN8
+         5KfNPTCVY3XOcR2+TwQHk+9DVLQdFoQd+Tnm3U2h9cToHVsUWhWLMnlY2erPgxDozHGt
+         yHmsBBwVkCyVMU4vatIy7/7ZiscLYmPd1lERJVJDffJztAatbEd9tf4CHTXorXgVAdsN
+         SQLdS0udCIVZ80bkIV1vjwK8ioxLDvYqFCEgWmPLUeOZfYHUHhEEgvzhYGlvxq3E9bKg
+         Qryg==
+X-Gm-Message-State: AOAM533wdm263OWJFM0dGXei+nZf4gn9Sg2uVSgoKTMX61gnvtcutRac
+        zN0p7CNtgRqUr/dRhI6eybL9UTtj3wiyEEVxV1isl/SrwoOMNFX272ry+J25GmAXkcI5RBiSXMw
+        MkFiCf58tQOcZqCH3eEE0/jwAkZvo2pYFmNtL19urdA==
+X-Received: by 2002:adf:e806:: with SMTP id o6mr22473395wrm.331.1643186480502;
+        Wed, 26 Jan 2022 00:41:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyXoHj/4QvKRm5T7/Y0OI0y/w1oCu75F3OpZukCWWW0CNuv4ZALkAKZdf7YGevstvuatonoDA==
+X-Received: by 2002:adf:e806:: with SMTP id o6mr22473374wrm.331.1643186480309;
+        Wed, 26 Jan 2022 00:41:20 -0800 (PST)
+Received: from [192.168.0.60] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id v124sm2588509wme.30.2022.01.26.00.41.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 00:41:19 -0800 (PST)
+Message-ID: <2f4dd91a-e4ad-2559-f65e-914561de4047@canonical.com>
+Date:   Wed, 26 Jan 2022 09:41:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] Adding architectural support for HPE's GXP BMC. This is
+ the first of a series of patches to support HPE's BMC with Linux Kernel.
+Content-Language: en-US
+To:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hao Fang <fanghao11@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <nick.hawkins@hpe.com>
+ <20220125194609.32314-1-nick.hawkins@hpe.com>
+ <CAK8P3a0ccoH_sNE9eWxQnWHEWNBPFL6k4k6mku=cHs_fRfnL-w@mail.gmail.com>
+ <CA8148A1-578E-4621-9714-45AB391C353A@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CA8148A1-578E-4621-9714-45AB391C353A@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Until now the mediatek clk driver library did not have any way to
-> unregister clks, and so none of the drivers implemented remove
-> functions.
+On 26/01/2022 02:49, Verdun, Jean-Marie wrote:
+> Hello Arnd,
 > 
-> Now that the library does have APIs to unregister clks, use them
-> to implement remove functions for the mt8195 clk drivers.
+> I work with Nick on upstreaming the initial code for our GXP asic. Many thanks for your feedbacks.
 > 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> We will update accordingly. I must admit that I am a little bit lost regarding the process we shall follow to introduce a new SoC. We took the path to send first the DT side and then the drivers through a set of patch per driver. Andrew, seems to guide us into a direction where we shall have a very small DT initially and we will expand it in a step by step manner when we will get drivers approved, this might lead us into a process which might be very sequential. What is the best recommendation to follow ? Either way is ok on our side, I am just looking at the easiest solution for the code Maintainers.
 
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+The current DTS patch won't pass checkpatch because you have around 30
+undocumented compatibles. The process does not have to be sequential -
+quite contrary - rather parallel with several submission happening the
+same time. The point is that we need to see the bindings and check
+whether your DTS complies with them. Actually the check should be done
+by you with dtbs_check, but let's say we also look at it.
 
-> ---
->  drivers/clk/mediatek/clk-mt8195-apmixedsys.c | 16 ++++++++++++++++
->  drivers/clk/mediatek/clk-mt8195-apusys_pll.c | 13 +++++++++++++
->  drivers/clk/mediatek/clk-mt8195-topckgen.c   | 20 ++++++++++++++++++++
->  drivers/clk/mediatek/clk-mt8195-vdo0.c       | 16 ++++++++++++++++
->  drivers/clk/mediatek/clk-mt8195-vdo1.c       | 16 ++++++++++++++++
->  5 files changed, 81 insertions(+)
+Your patch with full-blown DTS and drivers is also good approach, except
+there are no drivers sent. For example:
+https://lore.kernel.org/?q=hpe%2Cgxp-i2c
+https://lore.kernel.org/?q=hpe%2Cgxp-wdt
+If you want to avoid building DTS sequentially, no problem, just send
+the bindings and DTS.
+
+Andrew's approach is much more flexible because it allows you to discuss
+the bindings while not postponing the core part of DTS.
+
+
 > 
-> diff --git a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> index af8d80f25f30..29cac3cf5f53 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> @@ -132,6 +132,8 @@ static int clk_mt8195_apmixed_probe(struct platform_device *pdev)
->  	if (r)
->  		goto unregister_gates;
->  
-> +	platform_set_drvdata(pdev, clk_data);
-> +
->  	return r;
->  
->  unregister_gates:
-> @@ -143,8 +145,22 @@ static int clk_mt8195_apmixed_probe(struct platform_device *pdev)
->  	return r;
->  }
->  
-> +static int clk_mt8195_apmixed_remove(struct platform_device *pdev)
-> +{
-> +	struct device_node *node = pdev->dev.of_node;
-> +	struct clk_onecell_data *clk_data = platform_get_drvdata(pdev);
-> +
-> +	of_clk_del_provider(node);
-> +	mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
-> +	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-> +	mtk_free_clk_data(clk_data);
-> +
-> +	return 0;
-> +}
-> +
->  static struct platform_driver clk_mt8195_apmixed_drv = {
->  	.probe = clk_mt8195_apmixed_probe,
-> +	.remove = clk_mt8195_apmixed_remove,
->  	.driver = {
->  		.name = "clk-mt8195-apmixed",
->  		.of_match_table = of_match_clk_mt8195_apmixed,
-> diff --git a/drivers/clk/mediatek/clk-mt8195-apusys_pll.c b/drivers/clk/mediatek/clk-mt8195-apusys_pll.c
-> index 1fff6f3d2dc7..8cd88dfc3283 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-apusys_pll.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-apusys_pll.c
-> @@ -85,6 +85,18 @@ static int clk_mt8195_apusys_pll_probe(struct platform_device *pdev)
->  	return r;
->  }
->  
-> +static int clk_mt8195_apusys_pll_remove(struct platform_device *pdev)
-> +{
-> +	struct clk_onecell_data *clk_data = platform_get_drvdata(pdev);
-> +	struct device_node *node = pdev->dev.of_node;
-> +
-> +	of_clk_del_provider(node);
-> +	mtk_clk_unregister_plls(apusys_plls, ARRAY_SIZE(apusys_plls), clk_data);
-> +	mtk_free_clk_data(clk_data);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct of_device_id of_match_clk_mt8195_apusys_pll[] = {
->  	{ .compatible = "mediatek,mt8195-apusys_pll", },
->  	{}
-> @@ -92,6 +104,7 @@ static const struct of_device_id of_match_clk_mt8195_apusys_pll[] = {
->  
->  static struct platform_driver clk_mt8195_apusys_pll_drv = {
->  	.probe = clk_mt8195_apusys_pll_probe,
-> +	.remove = clk_mt8195_apusys_pll_remove,
->  	.driver = {
->  		.name = "clk-mt8195-apusys_pll",
->  		.of_match_table = of_match_clk_mt8195_apusys_pll,
-> diff --git a/drivers/clk/mediatek/clk-mt8195-topckgen.c b/drivers/clk/mediatek/clk-mt8195-topckgen.c
-> index 3631f49a5e5a..b602fcd7f1d1 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-topckgen.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-topckgen.c
-> @@ -1271,6 +1271,8 @@ static int clk_mt8195_topck_probe(struct platform_device *pdev)
->  	if (r)
->  		goto unregister_gates;
->  
-> +	platform_set_drvdata(pdev, top_clk_data);
-> +
->  	return r;
->  
->  unregister_gates:
-> @@ -1290,8 +1292,26 @@ static int clk_mt8195_topck_probe(struct platform_device *pdev)
->  	return r;
->  }
->  
-> +static int clk_mt8195_topck_remove(struct platform_device *pdev)
-> +{
-> +	struct clk_onecell_data *top_clk_data = platform_get_drvdata(pdev);
-> +	struct device_node *node = pdev->dev.of_node;
-> +
-> +	of_clk_del_provider(node);
-> +	mtk_clk_unregister_gates(top_clks, ARRAY_SIZE(top_clks), top_clk_data);
-> +	mtk_clk_unregister_composites(top_adj_divs, ARRAY_SIZE(top_adj_divs), top_clk_data);
-> +	mtk_clk_unregister_composites(top_muxes, ARRAY_SIZE(top_muxes), top_clk_data);
-> +	mtk_clk_unregister_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), top_clk_data);
-> +	mtk_clk_unregister_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
-> +	mtk_clk_unregister_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks), top_clk_data);
-> +	mtk_free_clk_data(top_clk_data);
-> +
-> +	return 0;
-> +}
-> +
->  static struct platform_driver clk_mt8195_topck_drv = {
->  	.probe = clk_mt8195_topck_probe,
-> +	.remove = clk_mt8195_topck_remove,
->  	.driver = {
->  		.name = "clk-mt8195-topck",
->  		.of_match_table = of_match_clk_mt8195_topck,
-> diff --git a/drivers/clk/mediatek/clk-mt8195-vdo0.c b/drivers/clk/mediatek/clk-mt8195-vdo0.c
-> index af34eb564b1d..3bc7ed19d550 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-vdo0.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-vdo0.c
-> @@ -107,6 +107,8 @@ static int clk_mt8195_vdo0_probe(struct platform_device *pdev)
->  	if (r)
->  		goto unregister_gates;
->  
-> +	platform_set_drvdata(pdev, clk_data);
-> +
->  	return r;
->  
->  unregister_gates:
-> @@ -116,8 +118,22 @@ static int clk_mt8195_vdo0_probe(struct platform_device *pdev)
->  	return r;
->  }
->  
-> +static int clk_mt8195_vdo0_remove(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *node = dev->parent->of_node;
-> +	struct clk_onecell_data *clk_data = platform_get_drvdata(pdev);
-> +
-> +	of_clk_del_provider(node);
-> +	mtk_clk_unregister_gates(vdo0_clks, ARRAY_SIZE(vdo0_clks), clk_data);
-> +	mtk_free_clk_data(clk_data);
-> +
-> +	return 0;
-> +}
-> +
->  static struct platform_driver clk_mt8195_vdo0_drv = {
->  	.probe = clk_mt8195_vdo0_probe,
-> +	.remove = clk_mt8195_vdo0_remove,
->  	.driver = {
->  		.name = "clk-mt8195-vdo0",
->  	},
-> diff --git a/drivers/clk/mediatek/clk-mt8195-vdo1.c b/drivers/clk/mediatek/clk-mt8195-vdo1.c
-> index 6b502bbc730c..90c738a85ff1 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-vdo1.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-vdo1.c
-> @@ -124,6 +124,8 @@ static int clk_mt8195_vdo1_probe(struct platform_device *pdev)
->  	if (r)
->  		goto unregister_gates;
->  
-> +	platform_set_drvdata(pdev, clk_data);
-> +
->  	return r;
->  
->  unregister_gates:
-> @@ -133,8 +135,22 @@ static int clk_mt8195_vdo1_probe(struct platform_device *pdev)
->  	return r;
->  }
->  
-> +static int clk_mt8195_vdo1_remove(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *node = dev->parent->of_node;
-> +	struct clk_onecell_data *clk_data = platform_get_drvdata(pdev);
-> +
-> +	of_clk_del_provider(node);
-> +	mtk_clk_unregister_gates(vdo1_clks, ARRAY_SIZE(vdo1_clks), clk_data);
-> +	mtk_free_clk_data(clk_data);
-> +
-> +	return 0;
-> +}
-> +
->  static struct platform_driver clk_mt8195_vdo1_drv = {
->  	.probe = clk_mt8195_vdo1_probe,
-> +	.remove = clk_mt8195_vdo1_remove,
->  	.driver = {
->  		.name = "clk-mt8195-vdo1",
->  	},
-> -- 
-> 2.35.0.rc0.227.g00780c9af4-goog
+> Most of this code is intended to be used with OpenBMC and u-boot. We didn't have yet upstream anything into the bootloader, and wanted to follow a step by step approach by initially publishing into the kernel (that explain why some init also are still hardcoded in the case the bootloader doesn't provide the data, that is still work in progress, but we can have end user testing the infrastructure). We have a very small user space environment to validate that the kernel boot properly by using u-root, before getting OpenBMC fully loaded. Last but not least, as this is a BMC code, which is new to our end users, it would be just great to have default fall back if the u-boot environment is not properly setup (roughly we could code the MAC address into the umac driver, or the DT to address such cases). We plan to update uboot in the next couple of days by the way. 
 > 
-> 
+> We do not use dtsi at all for the moment, as we are generating a dtb out of the dts file and load it into our SPI image. Probably not the best approach, but this is the way it is implemented currently. The dtb is compiled outside the kernel tree for the moment using dtc compiler. We will add that step into the dts boot Makefile, it make sense. Does the dtsi is mandatory for every SoC ? I can build one if needed. But as this SoC is a BMC, the current dts is an example of what shall be configured. Many other datas related to the hardware target platform are defined into OpenBMC layers while we build for various ProLiant servers. We wanted our kernel code being readily testable that is why we have that generic dts. (GPIOS mapping is machine dependent)
+
+The commit misses description, so I actually don't know how the
+architecture looks like. For most of SoC, there is a DTSI because the
+SoC is being put on different boards/products. It allows clear
+separation between SoC (which could be reused) and board. If you have
+only a DTS, then:
+1. Where is the SoC here? How it can be re-used by different board?
+2. Is it only one DTS per entire sub-architecture? No more boards? Only
+one product? No even revisions or improved versions?
+
+Best regards,
+Krzysztof

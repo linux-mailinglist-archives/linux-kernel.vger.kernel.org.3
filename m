@@ -2,142 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3F849C702
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F19B49C6EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239569AbiAZKBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:01:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38391 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239545AbiAZKBR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:01:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643191276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WDmpWapjP9Wkuqng2NIRJk/6UxFibcIxNF2eScAVq98=;
-        b=MBHl5fsjl8hdT8EsqBKz9X0XDBVir4mTVYQbpAXp5u931yyyOVZQSVvgpqkWMC/DgZBwIh
-        yvHpYbzBHHjFewFj62OqPyMzetTMNyy7XaM5fjz7VA1osg1tzlP+vG6W6XzaF9uoYKCtTo
-        btTZ9mQUJq7UTtbnsqx+oChGs/aPS7g=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-458-Vz9PWdCbMzKfu4dycLa_hQ-1; Wed, 26 Jan 2022 05:01:13 -0500
-X-MC-Unique: Vz9PWdCbMzKfu4dycLa_hQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A63A9190B2AE;
-        Wed, 26 Jan 2022 10:01:10 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.241])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7BF5D1F2F3;
-        Wed, 26 Jan 2022 10:01:04 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH RFC v2 9/9] mm/huge_memory: remove stale locking logic from __split_huge_pmd()
-Date:   Wed, 26 Jan 2022 10:55:57 +0100
-Message-Id: <20220126095557.32392-10-david@redhat.com>
-In-Reply-To: <20220126095557.32392-1-david@redhat.com>
-References: <20220126095557.32392-1-david@redhat.com>
+        id S239439AbiAZJ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:57:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:56138 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232086AbiAZJ5d (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 04:57:33 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B8531FB;
+        Wed, 26 Jan 2022 01:57:33 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F66A3F766;
+        Wed, 26 Jan 2022 01:57:32 -0800 (PST)
+Date:   Wed, 26 Jan 2022 09:57:26 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        kernel-team@android.com, Jay Chen <jkchen@linux.alibaba.com>
+Subject: Re: [PATCH v3] irqchip/gic-v3-its: Reset each ITS's BASERn register
+ before probe
+Message-ID: <20220126095726.GA23794@lpieralisi>
+References: <20220124133809.1291195-1-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124133809.1291195-1-maz@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's remove the stale logic that was required for reuse_swap_page().
+On Mon, Jan 24, 2022 at 01:38:09PM +0000, Marc Zyngier wrote:
+> A recent bug report outlined that the way GICv4.1 is handled across
+> kexec is pretty bad. We can end-up in a situation where ITSs share
+> memory (this is the case when SVPET==1) and reprogram the base
+> registers, creating a situation where ITSs that are part of a given
+> affinity group see different pointers. Which is illegal. Boo.
+> 
+> In order to restore some sanity, reset the BASERn registers to 0
+> *before* probing any ITS. Although this isn't optimised at all,
+> this is only a once-per-boot cost, which shouldn't show up on
+> anyone's radar.
+> 
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Jay Chen <jkchen@linux.alibaba.com>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Link: https://lore.kernel.org/r/20211216190315.GA14220@lpieralisi
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c | 114 +++++++++++++++++++++++++------
+>  1 file changed, 93 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index 7b8f1ec0ff78..c09d99d5b637 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -4856,6 +4856,38 @@ static struct syscore_ops its_syscore_ops = {
+>  	.resume = its_restore_enable,
+>  };
+>  
+> +static void __init __iomem *its_map_one(struct resource *res, int *err)
+> +{
+> +	void __iomem *its_base;
+> +	u32 val;
+> +
+> +	its_base = ioremap(res->start, SZ_64K);
+> +	if (!its_base) {
+> +		pr_warn("ITS@%pa: Unable to map ITS registers\n", &res->start);
+> +		*err = -ENOMEM;
+> +		return NULL;
+> +	}
+> +
+> +	val = readl_relaxed(its_base + GITS_PIDR2) & GIC_PIDR2_ARCH_MASK;
+> +	if (val != 0x30 && val != 0x40) {
+> +		pr_warn("ITS@%pa: No ITS detected, giving up\n", &res->start);
+> +		*err = -ENODEV;
+> +		goto out_unmap;
+> +	}
+> +
+> +	*err = its_force_quiescent(its_base);
+> +	if (*err) {
+> +		pr_warn("ITS@%pa: Failed to quiesce, giving up\n", &res->start);
+> +		goto out_unmap;
+> +	}
+> +
+> +	return its_base;
+> +
+> +out_unmap:
+> +	iounmap(its_base);
+> +	return NULL;
+> +}
+> +
+>  static int its_init_domain(struct fwnode_handle *handle, struct its_node *its)
+>  {
+>  	struct irq_domain *inner_domain;
+> @@ -4963,29 +4995,14 @@ static int __init its_probe_one(struct resource *res,
+>  {
+>  	struct its_node *its;
+>  	void __iomem *its_base;
+> -	u32 val, ctlr;
+>  	u64 baser, tmp, typer;
+>  	struct page *page;
+> +	u32 ctlr;
+>  	int err;
+>  
+> -	its_base = ioremap(res->start, SZ_64K);
+> -	if (!its_base) {
+> -		pr_warn("ITS@%pa: Unable to map ITS registers\n", &res->start);
+> -		return -ENOMEM;
+> -	}
+> -
+> -	val = readl_relaxed(its_base + GITS_PIDR2) & GIC_PIDR2_ARCH_MASK;
+> -	if (val != 0x30 && val != 0x40) {
+> -		pr_warn("ITS@%pa: No ITS detected, giving up\n", &res->start);
+> -		err = -ENODEV;
+> -		goto out_unmap;
+> -	}
+> -
+> -	err = its_force_quiescent(its_base);
+> -	if (err) {
+> -		pr_warn("ITS@%pa: Failed to quiesce, giving up\n", &res->start);
+> -		goto out_unmap;
+> -	}
+> +	its_base = its_map_one(res, &err);
+> +	if (!its_base)
+> +		return err;
+>  
+>  	pr_info("ITS %pR\n", res);
+>  
+> @@ -5249,6 +5266,23 @@ static int its_cpu_memreserve_lpi(unsigned int cpu)
+>  	return ret;
+>  }
+>  
+> +/* Mark all the BASER registers as invalid before they get reprogrammed */
+> +static int __init its_reset_one(struct resource *res)
+> +{
+> +	void __iomem *its_base;
+> +	int err, i;
+> +
+> +	its_base = its_map_one(res, &err);
+> +	if (!its_base)
+> +		return err;
+> +
+> +	for (i = 0; i < GITS_BASER_NR_REGS; i++)
+> +		gits_write_baser(0, its_base + GITS_BASER + (i << 3));
+> +
+> +	iounmap(its_base);
+> +	return 0;
+> +}
+> +
+>  static const struct of_device_id its_device_id[] = {
+>  	{	.compatible	= "arm,gic-v3-its",	},
+>  	{},
+> @@ -5259,6 +5293,26 @@ static int __init its_of_probe(struct device_node *node)
+>  	struct device_node *np;
+>  	struct resource res;
+>  
+> +	/*
+> +	 * Make sure *all* the ITS are reset before we probe any, as
+> +	 * they may be sharing memory. If any of the ITS fails to
+> +	 * reset, don't even try to go any further, as this could
+> +	 * result in something even worse.
+> +	 */
+> +	for (np = of_find_matching_node(node, its_device_id); np;
+> +	     np = of_find_matching_node(np, its_device_id)) {
+> +		int err;
+> +
+> +		if (!of_device_is_available(np) ||
+> +		    !of_property_read_bool(np, "msi-controller") ||
+> +		    of_address_to_resource(np, 0, &res))
+> +			continue;
+> +
+> +		err = its_reset_one(&res);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+>  	for (np = of_find_matching_node(node, its_device_id); np;
+>  	     np = of_find_matching_node(np, its_device_id)) {
+>  		if (!of_device_is_available(np))
+> @@ -5421,11 +5475,29 @@ static int __init gic_acpi_parse_madt_its(union acpi_subtable_headers *header,
+>  	return err;
+>  }
+>  
+> +static int __init its_acpi_reset(union acpi_subtable_headers *header,
+> +				 const unsigned long end)
+> +{
+> +	struct acpi_madt_generic_translator *its_entry;
+> +	struct resource res;
+> +
+> +	its_entry = (struct acpi_madt_generic_translator *)header;
+> +	res = (struct resource) {
+> +		.start	= its_entry->base_address,
+> +		.end	= its_entry->base_address + ACPI_GICV3_ITS_MEM_SIZE - 1,
+> +		.flags	= IORESOURCE_MEM,
+> +	};
+> +
+> +	return its_reset_one(&res);
+> +}
+> +
+>  static void __init its_acpi_probe(void)
+>  {
+>  	acpi_table_parse_srat_its();
+> -	acpi_table_parse_madt(ACPI_MADT_TYPE_GENERIC_TRANSLATOR,
+> -			      gic_acpi_parse_madt_its, 0);
+> +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_GENERIC_TRANSLATOR,
+> +				  its_acpi_reset, 0) > 0)
+> +		acpi_table_parse_madt(ACPI_MADT_TYPE_GENERIC_TRANSLATOR,
+> +				      gic_acpi_parse_madt_its, 0);
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/huge_memory.c | 32 +-------------------------------
- 1 file changed, 1 insertion(+), 31 deletions(-)
+Maybe it is worth adding a comment here as you did for DT if you
+can before merging it - to clarify the first acpi_table_parse_madt()
+call logic.
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 863c933b3b1e..5cc438f92548 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2158,8 +2158,6 @@ void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
- {
- 	spinlock_t *ptl;
- 	struct mmu_notifier_range range;
--	bool do_unlock_page = false;
--	pmd_t _pmd;
- 
- 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
- 				address & HPAGE_PMD_MASK,
-@@ -2178,35 +2176,9 @@ void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
- 			goto out;
- 	}
- 
--repeat:
- 	if (pmd_trans_huge(*pmd)) {
--		if (!page) {
-+		if (!page)
- 			page = pmd_page(*pmd);
--			/*
--			 * An anonymous page must be locked, to ensure that a
--			 * concurrent reuse_swap_page() sees stable mapcount;
--			 * but reuse_swap_page() is not used on shmem or file,
--			 * and page lock must not be taken when zap_pmd_range()
--			 * calls __split_huge_pmd() while i_mmap_lock is held.
--			 */
--			if (PageAnon(page)) {
--				if (unlikely(!trylock_page(page))) {
--					get_page(page);
--					_pmd = *pmd;
--					spin_unlock(ptl);
--					lock_page(page);
--					spin_lock(ptl);
--					if (unlikely(!pmd_same(*pmd, _pmd))) {
--						unlock_page(page);
--						put_page(page);
--						page = NULL;
--						goto repeat;
--					}
--					put_page(page);
--				}
--				do_unlock_page = true;
--			}
--		}
- 		if (PageMlocked(page))
- 			clear_page_mlock(page);
- 	} else if (!(pmd_devmap(*pmd) || is_pmd_migration_entry(*pmd)))
-@@ -2214,8 +2186,6 @@ void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
- 	__split_huge_pmd_locked(vma, pmd, range.start, freeze);
- out:
- 	spin_unlock(ptl);
--	if (do_unlock_page)
--		unlock_page(page);
- 	/*
- 	 * No need to double call mmu_notifier->invalidate_range() callback.
- 	 * They are 3 cases to consider inside __split_huge_pmd_locked():
--- 
-2.34.1
+Other than that:
 
+Reviewed-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+
+>  	acpi_its_srat_maps_free();
+>  }
+>  #else
+> -- 
+> 2.34.1
+> 

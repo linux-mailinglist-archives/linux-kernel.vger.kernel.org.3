@@ -2,132 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C5349C74A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA8D49C749
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239805AbiAZKQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:16:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59868 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232071AbiAZKQr (ORCPT
+        id S239791AbiAZKQs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Jan 2022 05:16:48 -0500
+Received: from lithops.sigma-star.at ([195.201.40.130]:52432 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239778AbiAZKQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Jan 2022 05:16:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643192207;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i+iYnOCszqZtWRIHCDiP4bSvj4+rWsxJQtP1TOvOfEg=;
-        b=h9huao2wPaaeqjPnpODf8ow11SeM3qHDM10+blDOcW5QThGD8fSWjrb7qzRtAOELQjn1l5
-        aWB7UjlcDaErnY1QbN6+T0cyXGNHL42yOv98Au5fiq3K/NrWv14UU82ZU29knFmsqVYseT
-        Sn44Rh23zhUEcCAXnIio8NarkCgl0ZA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-DIusorWnPLybADSk88XE1A-1; Wed, 26 Jan 2022 05:16:45 -0500
-X-MC-Unique: DIusorWnPLybADSk88XE1A-1
-Received: by mail-wm1-f69.google.com with SMTP id d184-20020a1c1dc1000000b00350769d4bcfso1182405wmd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:16:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=i+iYnOCszqZtWRIHCDiP4bSvj4+rWsxJQtP1TOvOfEg=;
-        b=syBClro7pXNLOAeJI0Rd+ukrjUzWwrvZEo0OSbDXsZ7HJFa6bqRVkXyIRewOxEC6fZ
-         vTlUoWzzQXGxIhK7A4YHV9qrwj7dvf02qObh55PdTX62nsTHGOjq5B3uCbrX+PzPYpjf
-         hGvPpxOjgUF76PdPuz/vrxrzIboqrsh19kwmD+Dj0TSDrPRny4KJ8/J2kF2bk47i3UJc
-         NbatOUhYfWbsWj80XzkNaFDPG2t2/22q6zb5I2RZD9SEC1q0I0DkaNaFyOBpZ7fezJVn
-         WKnMo0eYprgXO9nYYpsAlm/eXedYldPYH5db7n4iU7iIschuqbOa51B7rt1lK603JgBw
-         K3eQ==
-X-Gm-Message-State: AOAM532aQdztNVddwM/YrrlPfcETP1R3AoBcG72KPGbnP6kMCktEauuL
-        qEqx53oN0lA+v6Jc7EzLiQgZEl79LlYAqVVsZhz9YGRWY3gPkIXzqfhTSfSMSu8/b4A2s4bGEX/
-        6qI+c7RiXJkSO+zWwBLP/abZ9
-X-Received: by 2002:a1c:7416:: with SMTP id p22mr6891612wmc.30.1643192204647;
-        Wed, 26 Jan 2022 02:16:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwIeCJvuTiz2MYLx0qNnWNJytnSE3+PMInZFlSic+GGcCvaHzih6qz2BK6Wsm+IBAbf4DNl5w==
-X-Received: by 2002:a1c:7416:: with SMTP id p22mr6891585wmc.30.1643192204361;
-        Wed, 26 Jan 2022 02:16:44 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
-        by smtp.gmail.com with ESMTPSA id g6sm16786801wrq.97.2022.01.26.02.16.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 02:16:43 -0800 (PST)
-Message-ID: <e164d7f4-406e-eed8-37d7-753f790b7560@redhat.com>
-Date:   Wed, 26 Jan 2022 11:16:42 +0100
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 794E062DA5E8;
+        Wed, 26 Jan 2022 11:16:45 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Iodvaia3o8OL; Wed, 26 Jan 2022 11:16:44 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 97CE462DA600;
+        Wed, 26 Jan 2022 11:16:44 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id gV0eCLkHSCw4; Wed, 26 Jan 2022 11:16:44 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 7B57F62DA5E8;
+        Wed, 26 Jan 2022 11:16:44 +0100 (CET)
+Date:   Wed, 26 Jan 2022 11:16:44 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     David Decotigny <decot+git@google.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        David Decotigny <ddecotig@google.com>
+Message-ID: <1731069218.295954.1643192204437.JavaMail.zimbra@nod.at>
+In-Reply-To: <20220126101120.676021-1-decot+git@google.com>
+References: <20220126101120.676021-1-decot+git@google.com>
+Subject: Re: [PATCH RFC v3 1/1] mtd_blkdevs: avoid soft lockups with some
+ mtd/spi devices
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
-        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
-        rppt@kernel.org, surenb@google.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Peter Xu <peterx@redhat.com>
-References: <cover.1642526745.git.khalid.aziz@oracle.com>
- <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
- <Ye/5yUyEqO0ws0G5@casper.infradead.org>
- <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
- <YfAEqzTeBJSIOKcA@casper.infradead.org>
- <20220125185705.wf7p2l77vggipfry@box.shutemov.name>
- <YfBIpmxvc0+mFByf@casper.infradead.org>
- <YfDIYKygRHX4RIri@casper.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
-In-Reply-To: <YfDIYKygRHX4RIri@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF96 (Linux)/8.8.12_GA_3809)
+Thread-Topic: mtd_blkdevs: avoid soft lockups with some mtd/spi devices
+Thread-Index: Km7RZfifyzt40j+pYC4LhQrM53KEeg==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.01.22 05:04, Matthew Wilcox wrote:
-> On Tue, Jan 25, 2022 at 06:59:50PM +0000, Matthew Wilcox wrote:
->> On Tue, Jan 25, 2022 at 09:57:05PM +0300, Kirill A. Shutemov wrote:
->>> On Tue, Jan 25, 2022 at 02:09:47PM +0000, Matthew Wilcox wrote:
->>>>> I think zero-API approach (plus madvise() hints to tweak it) is worth
->>>>> considering.
->>>>
->>>> I think the zero-API approach actually misses out on a lot of
->>>> possibilities that the mshare() approach offers.  For example, mshare()
->>>> allows you to mmap() many small files in the shared region -- you
->>>> can't do that with zeroAPI.
->>>
->>> Do you consider a use-case for many small files to be common? I would
->>> think that the main consumer of the feature to be mmap of huge files.
->>> And in this case zero enabling burden on userspace side sounds like a
->>> sweet deal.
->>
->> mmap() of huge files is certainly the Oracle use-case.  With occasional
->> funny business like mprotect() of a single page in the middle of a 1GB
->> hugepage.
+----- Ursprüngliche Mail -----
+> Von: "David Decotigny" <decot+git@google.com>
+> An: "linux-kernel" <linux-kernel@vger.kernel.org>
+> CC: "Miquel Raynal" <miquel.raynal@bootlin.com>, "richard" <richard@nod.at>, "Vignesh Raghavendra" <vigneshr@ti.com>,
+> "linux-mtd" <linux-mtd@lists.infradead.org>, "David Decotigny" <ddecotig@google.com>
+> Gesendet: Mittwoch, 26. Januar 2022 11:11:20
+> Betreff: [PATCH RFC v3 1/1] mtd_blkdevs: avoid soft lockups with some mtd/spi devices
+
+> From: David Decotigny <ddecotig@google.com>
 > 
-> Bill and I were talking about this earlier and realised that this is
-> the key point.  There's a requirement that when one process mprotects
-> a page that it gets protected in all processes.  You can't do that
-> without *some* API because that's different behaviour than any existing
-> API would produce.
+> With some spi devices, the heavy cpu usage due to polling the spi
+> registers may lead to netdev timeouts, RCU complaints, etc. This can
+> be acute in the absence of CONFIG_PREEMPT. This patch allows to give
+> enough breathing room to avoid those incorrectly detected netdev
+> timeouts for example.
+> 
+> Example splat on 5.10.92:
+> [  828.399306] rcu: INFO: rcu_sched self-detected stall on CPU
+> ...
+> [  828.419245] Task dump for CPU 1:
+> [  828.422465] task:kworker/1:1H    state:R  running task on cpu   1   stack:
+> 0 pid:   76 ppid:     2 flags:0x0000002a
+> [  828.433132] Workqueue: kblockd blk_mq_run_work_fn
+> [  828.437820] Call trace:
+> ...
+> [  828.512267]  spi_mem_exec_op+0x4d0/0xde0
+> [  828.516184]  spi_mem_dirmap_read+0x180/0x39c
+> [  828.520443]  spi_nor_read_data+0x428/0x7e8
+> [  828.524523]  spi_nor_read+0x154/0x214
+> [  828.528172]  mtd_read_oob+0x440/0x714
+> [  828.531815]  mtd_read+0xac/0x120
+> [  828.535030]  mtdblock_readsect+0x178/0x230
+> [  828.539102]  mtd_blktrans_work+0x9fc/0xf28
+> [  828.543177]  mtd_queue_rq+0x1ac/0x2e4
+> [  828.546827]  blk_mq_dispatch_rq_list+0x2cc/0xa44
+> [  828.551419]  blk_mq_do_dispatch_sched+0xb0/0x7cc
+> [  828.556010]  __blk_mq_sched_dispatch_requests+0x350/0x494
+> [  828.561372]  blk_mq_sched_dispatch_requests+0xac/0xe4
+> [  828.566387]  __blk_mq_run_hw_queue+0x130/0x254
+> [  828.570806]  blk_mq_run_work_fn+0x50/0x60
+> [  828.574814]  process_one_work+0x578/0xf1c
+> [  828.578814]  worker_thread+0x5dc/0xea0
+> [  828.582547]  kthread+0x270/0x2d4
+> [  828.585765]  ret_from_fork+0x10/0x30
+> 
+> 
+> Signed-off-by: David Decotigny <ddecotig@google.com>
 
-A while ago I talked with Peter about an extended uffd (here: WP)
-mechanism that would work on fds instead of the process address space.
+Reviewed-by: Richard Weinberger <richard@nod.at>
 
-The rough idea would be to register the uffd (or however that would be
-called) handler on an fd instead of a virtual address space of a single
-process and write-protect pages in that fd. Once anybody would try
-writing to such a protected range (write, mmap, ...), the uffd handler
-would fire and user space could handle the event (-> unprotect). The
-page cache would have to remember the uffd information ("wp using
-uffd"). When (un)protecting pages using this mechanism, all page tables
-mapping the page would have to be updated accordingly using the rmap. At
-that point, we wouldn't care if it's a single page table (e.g., shared
-similar to hugetlb) or simply multiple page tables.
-
-It's a completely rough idea, I just wanted to mention it.
-
--- 
 Thanks,
-
-David / dhildenb
-
+//richard

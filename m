@@ -2,136 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC6349D051
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C29849D060
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243466AbiAZREz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:04:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47918 "EHLO
+        id S243524AbiAZRFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:05:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26254 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236906AbiAZREy (ORCPT
+        by vger.kernel.org with ESMTP id S243359AbiAZRFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:04:54 -0500
+        Wed, 26 Jan 2022 12:05:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643216694;
+        s=mimecast20190719; t=1643216743;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gwa98kLwm7nYqRC6cI7ESxbaB6AVzjv7cFEbXLzP3ak=;
-        b=KIh7+YJkDBEWlz9PyVNUdJOj7Z2iexOgvWybMyi+qO44ley8Fw8YuhdbcW5M4VVHzsxZol
-        L7QGMe6b9o0Z6IdM1UV5NOdM1e2j38wBtOmiwLFCbhHKq0T3ASmynDMYvhh5YJPyavSbE9
-        yi4PeaoaOM+uoeh7+zynY8HvLFL5A5o=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=v3ZjP6VeZe7Q/860UowGIN2PNeWTZEeU6WyQSGVUMls=;
+        b=i2udVVoCiGcHG7U/3F+5CwueIt2r30R2VZEpLHngxXHmCWBpT+FM9kOoCdylCnqSLLDRYs
+        F7hepdvuXzYhSIwUuuSJ8RKuUJz6B6QvkPyMuS2X2qFoaFgmE8kZfhAmckcq34SFfO1Svn
+        daCfhBDVQF+v/m7/gs8j41ChbcUi4x8=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-605-6cjBItxYP8qDuAUGM-wP6Q-1; Wed, 26 Jan 2022 12:04:52 -0500
-X-MC-Unique: 6cjBItxYP8qDuAUGM-wP6Q-1
-Received: by mail-wm1-f71.google.com with SMTP id bg16-20020a05600c3c9000b0034bea12c043so2789366wmb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:04:52 -0800 (PST)
+ us-mta-551-DPG9592oNAuIzBmtTlgY4Q-1; Wed, 26 Jan 2022 12:05:42 -0500
+X-MC-Unique: DPG9592oNAuIzBmtTlgY4Q-1
+Received: by mail-ej1-f70.google.com with SMTP id b12-20020a17090630cc00b006a7190bdfbaso5190035ejb.18
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:05:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=gwa98kLwm7nYqRC6cI7ESxbaB6AVzjv7cFEbXLzP3ak=;
-        b=2SEcBeNnWg1Mb2OMx6Pf1ckDVhACxxp6l0AvBb76OIkKVEgypMMdsTuxDTBQxUaaCq
-         l7d7eqyQCW07kCWYoYN6DXIqWSCBLMtG2O2ovjIrY4aDTDpconMzn4WsqTTdFZA2eQBQ
-         wapIGhr6kC68XmB7aeKqffzKFAy5TsM83pxl8ldt/xQiegPI+HtnI9eYMrVepkIwUfMp
-         6Q2NmuIQCNNdQSkUee5x/SAEeonGaWqHUAoBju4BGFKIhNSpaCEFh0TnpjS5qfHXFT1h
-         x+7zY4JFwwH53foKAA7IE6S9gzQFFzi2MuKerD2Rlq851J3XP2xdKDOMlQieyNhdQb3L
-         ijhw==
-X-Gm-Message-State: AOAM531WFVR3Z9r2nN+SRFn59g9lYjr4iCD4JvOixc2bDhJDq6gdh/1k
-        mK4YFOVWbtAZ/mY0kSCgoOwFS8D97xzb1v5mH6UT/eEIlJ986lJ3x2OP1o3Cd1Qw2ROaIuwe3Zl
-        cDUG4ewYEkHQloPT7oWTvu9i+
-X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr8239520wmq.44.1643216691630;
-        Wed, 26 Jan 2022 09:04:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyjYRe8qd4oL3XeIOjwZ0wQOG++PDBifi1p0jHOTEAgc1zZH/Pn7uUsMrNVjFv7dXnGTuRIdg==
-X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr8239502wmq.44.1643216691405;
-        Wed, 26 Jan 2022 09:04:51 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
-        by smtp.gmail.com with ESMTPSA id t4sm20135457wro.71.2022.01.26.09.04.50
+        bh=v3ZjP6VeZe7Q/860UowGIN2PNeWTZEeU6WyQSGVUMls=;
+        b=Lg7OnpJVZoMXLEBTE9OWikOeUkFo7NRP32PE+pl8y3hvdoodcVSUmzjklUrDw+wuWh
+         I40cQhUTtEm5LyWdAy+kd4iis50jlXCGWqXEYRsZm6OogTfjrvAZX7kiuHiYgSvvH2Qk
+         YoSn1ksTK888GOOM5i2Ynfnx6v5ozKE1txfb+9r+6nboBDu4UZ0WgDJsKVLBFQOaATCU
+         hccZAd4usQwG/DDUqVu2K5Uj0xj/EREXEvQnEbw4erpTK4bMRAW7bNPauIECsOqeXwHf
+         UGuKo/eGQ/B47IuwB+ZinrDI3OrwxT5HBoKiJHqcSmwHKv8pdmFYohSfkHke5KCGy+1Q
+         auHQ==
+X-Gm-Message-State: AOAM5303IzlckGo7X1jkGlj/+aoSZl3VvoVJ3Vkl6WitxSB6Rq7FSpmr
+        XOvbius/TJm0zHNJg3+sZgNWTaaLYRvuTLBEIy41cxdVhxaeOVu+jnXSJfU6IU9ef/BjuXFDeNj
+        m/0Hy2Vjpb/0ldBxN0N9QvNwT
+X-Received: by 2002:a17:906:589:: with SMTP id 9mr21630210ejn.721.1643216740643;
+        Wed, 26 Jan 2022 09:05:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxQll0mEg6+MLnV3bkmv7NaUphAuzY7ys699gfAchb37yFJ8kgpOBpXpBCU/k5yG8HQ0z2M2A==
+X-Received: by 2002:a17:906:589:: with SMTP id 9mr21630190ejn.721.1643216740408;
+        Wed, 26 Jan 2022 09:05:40 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id s20sm7617207ejc.189.2022.01.26.09.05.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 09:04:50 -0800 (PST)
-Message-ID: <5d02ea0e-aca6-a64b-23de-bc9307572d17@redhat.com>
-Date:   Wed, 26 Jan 2022 18:04:50 +0100
+        Wed, 26 Jan 2022 09:05:39 -0800 (PST)
+Message-ID: <a7afb949-4865-f668-b2f3-414c8c4a47b6@redhat.com>
+Date:   Wed, 26 Jan 2022 18:05:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.0
-Subject: Re: [PATCH 1/2] mm/memory_hotplug: Export shrink span functions for
- zone and node
+Subject: Re: [PATCH] KVM: nVMX: WARN on any attempt to allocate shadow VMCS
+ for vmcs02
 Content-Language: en-US
-To:     Jonghyeon Kim <tome01@ajou.ac.kr>, dan.j.williams@intel.com
-Cc:     vishal.l.verma@intel.com, dave.jiang@intel.com,
-        akpm@linux-foundation.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220126170002.19754-1-tome01@ajou.ac.kr>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220126170002.19754-1-tome01@ajou.ac.kr>
-Content-Type: text/plain; charset=UTF-8
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220125220527.2093146-1-seanjc@google.com>
+ <87r18uh4of.fsf@redhat.com> <053bb241-ea71-abf8-262b-7b452dc49d37@redhat.com>
+ <YfF1TQx/vsV5OepU@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YfF1TQx/vsV5OepU@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.01.22 18:00, Jonghyeon Kim wrote:
-> Export shrink_zone_span() and update_pgdat_span() functions to head
-> file. We need to update real number of spanned pages for NUMA nodes and
-> zones when we add memory device node such as device dax memory.
+On 1/26/22 17:22, Sean Christopherson wrote:
+> I don't like preceeding, because that will likely lead to a crash and/or WARNs if
+> KVM call the helper at the right time but with the wrong VMCS loaded, i.e. if
+> vmcs01.shadow_vmcs is left NULL, as many paths assumes vmcs01 is allocated if they
+> are reached with VMCS shadowing enabled.  At the very least, it will leak memory
+> because vmcs02.shadow_vmcs is never freed.
 > 
+> Maybe this to try and clarify things?  Compile tested only...
 
-Can you elaborate a bit more what you intend to fix?
-
-Memory onlining/offlining is reponsible for updating the node/zone span,
-and that's triggered when the dax/kmem mamory gets onlined/offlined.
-
-> Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
-> ---
->  include/linux/memory_hotplug.h | 3 +++
->  mm/memory_hotplug.c            | 6 ++++--
->  2 files changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> index be48e003a518..25c7f60c317e 100644
-> --- a/include/linux/memory_hotplug.h
-> +++ b/include/linux/memory_hotplug.h
-> @@ -337,6 +337,9 @@ extern void move_pfn_range_to_zone(struct zone *zone, unsigned long start_pfn,
->  extern void remove_pfn_range_from_zone(struct zone *zone,
->  				       unsigned long start_pfn,
->  				       unsigned long nr_pages);
-> +extern void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
-> +			     unsigned long end_pfn);
-> +extern void update_pgdat_span(struct pglist_data *pgdat);
->  extern bool is_memblock_offlined(struct memory_block *mem);
->  extern int sparse_add_section(int nid, unsigned long pfn,
->  		unsigned long nr_pages, struct vmem_altmap *altmap);
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 2a9627dc784c..38f46a9ef853 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -389,7 +389,7 @@ static unsigned long find_biggest_section_pfn(int nid, struct zone *zone,
->  	return 0;
->  }
->  
-> -static void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
-> +void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
->  			     unsigned long end_pfn)
->  {
->  	unsigned long pfn;
-> @@ -428,8 +428,9 @@ static void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
->  		}
->  	}
->  }
-> +EXPORT_SYMBOL_GPL(shrink_zone_span);
-
-Exporting both as symbols feels very wrong. This is memory
-onlining/offlining internal stuff.
+Your patch is okay, just with an extra paragraph in the commit message:
 
 
+The previous code WARNed but continued anyway with the allocation,
+presumably in an attempt to avoid NULL pointer dereference.
+However, alloc_vmcs (and hence alloc_shadow_vmcs) can fail, and
+indeed the sole caller does:
 
--- 
-Thanks,
+         if (enable_shadow_vmcs && !alloc_shadow_vmcs(vcpu))
+                 goto out_shadow_vmcs;
 
-David / dhildenb
+which makes it not a useful attempt.
+
+Paolo
 

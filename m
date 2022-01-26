@@ -2,88 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDAF49C5B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401D149C5B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238693AbiAZJB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:01:28 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:46263 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiAZJB1 (ORCPT
+        id S238700AbiAZJBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231352AbiAZJBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:01:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643187679;
-    s=strato-dkim-0002; d=chronox.de;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=bEkghuCjX1cE+0Md8pTK57v3o8W2gb012RZrKU1aDPg=;
-    b=Al2PI6CbIhniAgVw8riXxxpW31+Zpj2mtAgbMKXt6XSrnhkqj9YPubRBr7iXQjRDxV
-    HwCdhir+Kv5ODvUwkBHMZw/EBduUzd1s0TuIxZH8CUtheMwBK5U/QlduBw6HjNGsyvct
-    Z9ZOtTkhS5skymFyI16P0vTiJ2zGlzZpzxIXy9nO15u913K0Bgmb83M1J4JEk4OJBiRV
-    p6Cx1NHV6/qelCKl726YyVezrWrO8qTFfUjf7lhFg56E7GVLrT13nAv1/0qL860o3jsf
-    0O3jjjv1XTAJ+HbzMQiDGIvz1loZ4GStVMasQD6B2L1BOs84nlhsNSYOorAvknTseoVF
-    EOIg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2ERcEykfu11Y98lp/T7+hdri+uKZK8TKWEqNyiHySGSa9k9xmwdNnzGHXPaJvScdWrN"
-X-RZG-CLASS-ID: mo00
-Received: from tauon.chronox.de
-    by smtp.strato.de (RZmta 47.38.0 DYNA|AUTH)
-    with ESMTPSA id v5f65ay0Q91IjYG
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 26 Jan 2022 10:01:18 +0100 (CET)
-From:   Stephan Mueller <smueller@chronox.de>
-To:     Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
-        Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org, simo@redhat.com,
-        Eric Biggers <ebiggers@kernel.org>, Petr Vorel <pvorel@suse.cz>
-Subject: Re: [v2 PATCH] crypto: api - Disallow sha1 in FIPS-mode while allowing hmac(sha1)
-Date:   Wed, 26 Jan 2022 10:01:17 +0100
-Message-ID: <3615781.PPvlf9ziaL@tauon.chronox.de>
-In-Reply-To: <YeFWnscvXtv73KBl@gondor.apana.org.au>
-References: <20211209090358.28231-1-nstange@suse.de> <87k0f2hefl.fsf@suse.de> <YeFWnscvXtv73KBl@gondor.apana.org.au>
+        Wed, 26 Jan 2022 04:01:39 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C520BC06161C;
+        Wed, 26 Jan 2022 01:01:38 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id me13so37507596ejb.12;
+        Wed, 26 Jan 2022 01:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=RdwXEu1MmztLKU47ICnLL8SgBU/757WIk4pxla2J/ik=;
+        b=YHc0sRTz05ilJCKIaZRtpdWg34iSw3Lm/r+U5Ew6FeIwqVE2cW++4sUu1im21RpvDg
+         znYRBMg8HaYQafLOp5aRQQoso7uaKNJbMLDGx96kg/C2bRrjZ3DYPrHrAJEqkq20ubII
+         3nH6Wwk+zMBUZzk5JjmNupEF3iPJiFdO7qWwmLoMUlu5CpvtHL/iajjSnvzVTX+9Ohj1
+         894xblkbcJGfd/4Ue2QhFqDohuV3POuaKUz5HO11bFEUBNKmvh32E3JkxxF1AgruwSpC
+         yS1eDRyv5dW7e4e4uqDPA/X8PlE9TVAO4tBvJt7/3Po59OeyMgpyKVw2YAYlzzRrHuTW
+         ehaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RdwXEu1MmztLKU47ICnLL8SgBU/757WIk4pxla2J/ik=;
+        b=h7oyXTg1IlNr7K81p7DQ/p4RDyVv/LxxhWhCMZJsIXoBE2DCj6RswLafx+mldfrlJI
+         thg/9yERUQ2sIfm9HCUb7/02JQDyGTAtmFnH19AjzaqIb4KNvCviGMuin9Y2gAZq2nVV
+         fWT1utbnXvR8Es0hpQ8yZMqQPhyPgPDLvRv8RTaGMy4SDr82lvq7+Tje4f+KZxbuTZxn
+         +D/fdVffNt2dwPt8vN23Ymq0d9EPiR58Q7oDcxKt9QrqJ1PAEiGgrRals1w3trIRLRl5
+         Rp37I5umS4upXi9khp9fr0CRz6xR7LM/WniUdwue5OwIvLpDyvAOfqXW/6hXMsTUY3RU
+         CqDg==
+X-Gm-Message-State: AOAM533/sfjaUvVPr3kUUbF8x6mWJVxBD0Kg8aFRHe/v5j9LAe6iiw/t
+        fhuWhs2eAFe+UOBR1yUfvWY=
+X-Google-Smtp-Source: ABdhPJw9c3/oKvaFb3OmJ2XQN0L+If20W7iI+mp94NCR14nmxXGKuGPePKVDU4CPoJ1b7HPn+pg3+w==
+X-Received: by 2002:a17:907:c1f:: with SMTP id ga31mr7326520ejc.529.1643187697302;
+        Wed, 26 Jan 2022 01:01:37 -0800 (PST)
+Received: from [192.168.0.108] ([77.126.86.139])
+        by smtp.gmail.com with ESMTPSA id l3sm7121170ejg.44.2022.01.26.01.01.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 01:01:36 -0800 (PST)
+Message-ID: <ee1f1fe5-c8b7-be85-9029-40e441ae4d31@gmail.com>
+Date:   Wed, 26 Jan 2022 11:01:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 04/54] net: mellanox: fix open-coded for_each_set_bit()
+Content-Language: en-US
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+References: <20220123183925.1052919-1-yury.norov@gmail.com>
+ <20220123183925.1052919-5-yury.norov@gmail.com>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20220123183925.1052919-5-yury.norov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 14. Januar 2022, 11:55:26 CET schrieb Herbert Xu:
 
-Hi Herbert,
 
+On 1/23/2022 8:38 PM, Yury Norov wrote:
+> Mellanox driver has an open-coded for_each_set_bit(). Fix it.
 > 
-> > This looks all good to me, but as !->fips_allowed tests aren't skipped
-> > over anymore now, it would perhaps make sense to make their failure
-> > non-fatal in FIPS mode. Because in FIPS mode a failure could mean a
-> > panic and some of the existing TVs might not pass because of e.g. some
-> > key length checks or so active only for fips_enabled...
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>   drivers/net/ethernet/mellanox/mlx4/cmd.c | 23 ++++++-----------------
+>   1 file changed, 6 insertions(+), 17 deletions(-)
 > 
-> You mean a buggy non-FIPS algorithm that fails when tested in
-> FIPS mode?  I guess we could skip the panic in that case if
-> everyone is happy with that.  Stephan?
 
-As we consider FIPS 140-3, we can allow a "degrated mode of operation". A 
-degraded mode of operation disables only the algorithm that caused the 
-failure. With a failing self test and not having a panic(), the offending 
-algorithm implementation will not be available to the kernel crypto API and 
-thus to a user.
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
 
-In this case, we can replace the panic with a graceful error.
-
-If that change is applied, I would like to mention to anybody that wants to 
-backport the change: this change is not appropriate for FIPS 140-2.
-
-Ciao
-Stephan
-
-
+Thanks,
+Tariq

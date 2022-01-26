@@ -2,118 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4337249C1B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F87349C1E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236791AbiAZDEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:04:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiAZDEl (ORCPT
+        id S237064AbiAZDL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:11:27 -0500
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net ([162.243.164.74]:45761
+        "HELO zg8tmtyylji0my4xnjqunzqa.icoremail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with SMTP id S236856AbiAZDLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:04:41 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9A8C06161C;
-        Tue, 25 Jan 2022 19:04:41 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id i62so10418367ioa.1;
-        Tue, 25 Jan 2022 19:04:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=RJx93SIGFBDDn7EsRNuaC6WbM1HCYqgOCfc1oYCMVtc=;
-        b=nyHUH8z04QuJfVzLgFeE9NKHzUg16pG3vr1z50y0g67XKx7PIgJ4NNEayEWqMmkdDK
-         kMmy0p16K1fDBOnRSbsT6z1v7hQeSK36Xr580eimxR/Q0HWPvY0sAv5UmwfHmDKOUvyc
-         uIgAg7DEe+SRIm5tIi1GjNJKsorA6rp7VN94kUASEsjDE/Oop2VRUkP3w37zJFbr9Xp6
-         1mCFdjWNECZoZoJC25fGOfijrLXCtBRqMq7jrwuEjH5flMH1O9SZo/uPIeCz52vVCu0T
-         Tkziu8dSG2xyouog42mXZoiwJfY20drKxAPaISPHFo3l1WSwJXPmKvpMAMfT+0fAcV3s
-         VcNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RJx93SIGFBDDn7EsRNuaC6WbM1HCYqgOCfc1oYCMVtc=;
-        b=qfjQaZrqkc/IbuknBJ3bi4bBYlEtR4ZpuRyIe+yOvOWEY2lZVnMx9iAdBDicoEEie2
-         DhOBERq7zee3a5sza1kgDXrsCeJeH3taLbvIRTdV+6TLOxdgUTe2r8H9XpS/YKRpFgAS
-         NQm0VkY+8N5aGWs7n1IwazMRIz4FjwptOt867gQw1gmB7nVusc3aosbZUiKyJy9UARw4
-         yypOgQrm0e6lWs3b5KEeH0k1qdQDsPVzREp5fe8LomVNoip7OzRWxibeUbqY/RC9fCo0
-         zDTdugHxpFWT7h08j798TFLx1uvBtbhApX73H1Jf3x6wTYvk5qd7bjsHnGjcCO8ve9B8
-         +hng==
-X-Gm-Message-State: AOAM533Q5/czkcwGFjuHn6Q6DTeQ7Lth+l5flJSZSH8TX7bqvwLK105m
-        2mEUOk0CbHb1/bq7BEWrbxQ=
-X-Google-Smtp-Source: ABdhPJxMJvlv6Fmn4M3k6RfKRfRseGZVubQCz4bw/tFBurUfSLYMeRec5Y9LRKKWqfrRfAyAMyEnww==
-X-Received: by 2002:a02:2ac8:: with SMTP id w191mr9505237jaw.89.1643166280955;
-        Tue, 25 Jan 2022 19:04:40 -0800 (PST)
-Received: from ?IPV6:2601:282:800:dc80:1502:2fac:6dee:881? ([2601:282:800:dc80:1502:2fac:6dee:881])
-        by smtp.googlemail.com with ESMTPSA id y3sm9751056iov.29.2022.01.25.19.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 19:04:40 -0800 (PST)
-Message-ID: <00b8e410-7162-2386-4ce9-d6a619474c30@gmail.com>
-Date:   Tue, 25 Jan 2022 20:04:39 -0700
+        Tue, 25 Jan 2022 22:11:10 -0500
+X-Greylist: delayed 149902 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Jan 2022 22:11:10 EST
+Received: from localhost.localdomain (unknown [123.60.114.22])
+        by mail-app3 (Coremail) with SMTP id cC_KCgAnLRlSu_BhEcpFDA--.1414S2;
+        Wed, 26 Jan 2022 11:09:07 +0800 (CST)
+From:   lostway@zju.edu.cn
+To:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        bp@alien8.de, tony.luck@intel.com
+Subject: [PATCH v2] RAS: Report ARM processor information to userspace
+Date:   Wed, 26 Jan 2022 11:09:06 +0800
+Message-Id: <20220126030906.56765-1-lostway@zju.edu.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH net-next 5/6] net: udp: use kfree_skb_reason() in
- udp_queue_rcv_one_skb()
-Content-Language: en-US
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, pablo@netfilter.org,
-        kadlec@netfilter.org, Florian Westphal <fw@strlen.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>, alobakin@pm.me,
-        paulb@nvidia.com, Paolo Abeni <pabeni@redhat.com>,
-        talalahmad@google.com, haokexin@gmail.com,
-        Kees Cook <keescook@chromium.org>, memxor@gmail.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Cong Wang <cong.wang@bytedance.com>
-References: <20220124131538.1453657-1-imagedong@tencent.com>
- <20220124131538.1453657-6-imagedong@tencent.com>
- <308b88bf-7874-4b04-47f7-51203fef4128@gmail.com>
- <CADxym3aFJcsz=fckaFx9SJh8B7=0Xv-EPz79bbUFW1wG_zNYbw@mail.gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <CADxym3aFJcsz=fckaFx9SJh8B7=0Xv-EPz79bbUFW1wG_zNYbw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cC_KCgAnLRlSu_BhEcpFDA--.1414S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr4kuFWrKr18Kw47tr1xuFg_yoWxKrWDpF
+        n8CryYkr4rJFsxG3y3JFWF93y3Z34ruw1DK3sxXay7CFs5ur1qgFs0gr42kF93JF98J34a
+        q3Wqgry3Ca4DJrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcMmhUUUUU
+X-CM-SenderInfo: isrxjjaqquq6lmxovvfxof0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 7:43 PM, Menglong Dong wrote:
-> On Wed, Jan 26, 2022 at 10:25 AM David Ahern <dsahern@gmail.com> wrote:
->>
->> On 1/24/22 6:15 AM, menglong8.dong@gmail.com wrote:
->>> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
->>> index 603f77ef2170..dd64a4f2ff1d 100644
->>> --- a/include/linux/skbuff.h
->>> +++ b/include/linux/skbuff.h
->>> @@ -330,6 +330,7 @@ enum skb_drop_reason {
->>>       SKB_DROP_REASON_UNICAST_IN_L2_MULTICAST,
->>>       SKB_DROP_REASON_XFRM_POLICY,
->>>       SKB_DROP_REASON_IP_NOPROTO,
->>> +     SKB_DROP_REASON_UDP_FILTER,
->>
->> Is there really a need for a UDP and TCP version? why not just:
->>
->>         /* dropped due to bpf filter on socket */
->>         SKB_DROP_REASON_SOCKET_FILTER
->>
-> 
-> I realized it, but SKB_DROP_REASON_TCP_FILTER was already
-> introduced before. Besides, I think maybe
+From: Shengwei Luo <luoshengwei@huawei.com>
 
-SKB_DROP_REASON_TCP_FILTER is not in a released kernel yet. If
-Dave/Jakub are ok you can change SKB_DROP_REASON_TCP_FILTER to
-SKB_DROP_REASON_SOCKET_FILTER in 'net' repository to make it usable in
-both code paths.
+The ARM processor error section includes several ARM processor error
+information, several ARM processor context information and several
+vendor specific error information structures. In addition to these
+info, there are error severity and cpu logical index about the event.
+Report all of these information to userspace via perf i/f.
 
+Original-Author: Jason Tian <jason@os.amperecomputing.com>
+Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
+---
+v1->v2: Cleaned up ci warnings
+---
+ drivers/acpi/apei/ghes.c |  3 +--
+ drivers/ras/ras.c        | 46 ++++++++++++++++++++++++++++++++++++--
+ include/linux/ras.h      | 15 +++++++++++--
+ include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
+ 4 files changed, 101 insertions(+), 11 deletions(-)
 
-> a SKB_DROP_REASON_L4_CSUM is enough for UDP/TCP/ICMP
-> checksum error?
+diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+index 0c5c9acc6254..f824c26057b1 100644
+--- a/drivers/acpi/apei/ghes.c
++++ b/drivers/acpi/apei/ghes.c
+@@ -490,9 +490,8 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
+ 	int sec_sev, i;
+ 	char *p;
+ 
+-	log_arm_hw_error(err);
+-
+ 	sec_sev = ghes_severity(gdata->error_severity);
++	log_arm_hw_error(err, sec_sev);
+ 	if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
+ 		return false;
+ 
+diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
+index 95540ea8dd9d..2a7f424d59b9 100644
+--- a/drivers/ras/ras.c
++++ b/drivers/ras/ras.c
+@@ -21,9 +21,51 @@ void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
+ 	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
+ }
+ 
+-void log_arm_hw_error(struct cper_sec_proc_arm *err)
++void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
+ {
+-	trace_arm_event(err);
++	u32 pei_len;
++	u32 ctx_len = 0;
++	s32 vsei_len;
++	u8 *pei_err;
++	u8 *ctx_err;
++	u8 *ven_err_data;
++	struct cper_arm_err_info *err_info;
++	struct cper_arm_ctx_info *ctx_info;
++	int n, sz;
++	int cpu;
++
++	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
++	pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
++
++	err_info = (struct cper_arm_err_info *)(err + 1);
++	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
++	ctx_err = (u8 *)ctx_info;
++	for (n = 0; n < err->context_info_num; n++) {
++		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
++		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
++		ctx_len += sz;
++	}
++
++	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
++						pei_len + ctx_len);
++	if (vsei_len < 0) {
++		pr_warn(FW_BUG
++			"section length: %d\n", err->section_length);
++		pr_warn(FW_BUG
++			"section length is too small\n");
++		pr_warn(FW_BUG
++			"firmware-generated error record is incorrect\n");
++		vsei_len = 0;
++	}
++	ven_err_data = (u8 *)ctx_info;
++
++	cpu = GET_LOGICAL_INDEX(err->mpidr);
++	/* when return value is invalid, set cpu index to -1 */
++	if (cpu < 0)
++		cpu = -1;
++
++	trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
++			ven_err_data, (u32)vsei_len, sev, cpu);
+ }
+ 
+ static int __init ras_init(void)
+diff --git a/include/linux/ras.h b/include/linux/ras.h
+index 1f4048bf2674..4529775374d0 100644
+--- a/include/linux/ras.h
++++ b/include/linux/ras.h
+@@ -24,7 +24,7 @@ int __init parse_cec_param(char *str);
+ void log_non_standard_event(const guid_t *sec_type,
+ 			    const guid_t *fru_id, const char *fru_text,
+ 			    const u8 sev, const u8 *err, const u32 len);
+-void log_arm_hw_error(struct cper_sec_proc_arm *err);
++void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev);
+ #else
+ static inline void
+ log_non_standard_event(const guid_t *sec_type,
+@@ -32,7 +32,18 @@ log_non_standard_event(const guid_t *sec_type,
+ 		       const u8 sev, const u8 *err, const u32 len)
+ { return; }
+ static inline void
+-log_arm_hw_error(struct cper_sec_proc_arm *err) { return; }
++log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev) { return; }
+ #endif
+ 
++#if defined(CONFIG_ARM) || defined(CONFIG_ARM64)
++#include <asm/smp_plat.h>
++/*
++ * Include ARM specific SMP header which provides a function mapping mpidr to
++ * cpu logical index.
++ */
++#define GET_LOGICAL_INDEX(mpidr) get_logical_index(mpidr & MPIDR_HWID_BITMASK)
++#else
++#define GET_LOGICAL_INDEX(mpidr) -EINVAL
++#endif /* CONFIG_ARM || CONFIG_ARM64 */
++
+ #endif /* __RAS_H__ */
+diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
+index d0337a41141c..92cfb61bdb20 100644
+--- a/include/ras/ras_event.h
++++ b/include/ras/ras_event.h
+@@ -168,11 +168,24 @@ TRACE_EVENT(mc_event,
+  * This event is generated when hardware detects an ARM processor error
+  * has occurred. UEFI 2.6 spec section N.2.4.4.
+  */
++#define APEIL "ARM Processor Err Info data len"
++#define APEID "ARM Processor Err Info raw data"
++#define APECIL "ARM Processor Err Context Info data len"
++#define APECID "ARM Processor Err Context Info raw data"
++#define VSEIL "Vendor Specific Err Info data len"
++#define VSEID "Vendor Specific Err Info raw data"
+ TRACE_EVENT(arm_event,
+ 
+-	TP_PROTO(const struct cper_sec_proc_arm *proc),
++	TP_PROTO(const struct cper_sec_proc_arm *proc, const u8 *pei_err,
++			const u32 pei_len,
++			const u8 *ctx_err,
++			const u32 ctx_len,
++			const u8 *oem,
++			const u32 oem_len,
++			u8 sev,
++			int cpu),
+ 
+-	TP_ARGS(proc),
++	TP_ARGS(proc, pei_err, pei_len, ctx_err, ctx_len, oem, oem_len, sev, cpu),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(u64, mpidr)
+@@ -180,6 +193,14 @@ TRACE_EVENT(arm_event,
+ 		__field(u32, running_state)
+ 		__field(u32, psci_state)
+ 		__field(u8, affinity)
++		__field(u32, pei_len)
++		__dynamic_array(u8, buf, pei_len)
++		__field(u32, ctx_len)
++		__dynamic_array(u8, buf1, ctx_len)
++		__field(u32, oem_len)
++		__dynamic_array(u8, buf2, oem_len)
++		__field(u8, sev)
++		__field(int, cpu)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -199,12 +220,29 @@ TRACE_EVENT(arm_event,
+ 			__entry->running_state = ~0;
+ 			__entry->psci_state = ~0;
+ 		}
++		__entry->pei_len = pei_len;
++		memcpy(__get_dynamic_array(buf), pei_err, pei_len);
++		__entry->ctx_len = ctx_len;
++		memcpy(__get_dynamic_array(buf1), ctx_err, ctx_len);
++		__entry->oem_len = oem_len;
++		memcpy(__get_dynamic_array(buf2), oem, oem_len);
++		__entry->sev = sev;
++		__entry->cpu = cpu;
+ 	),
+ 
+-	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
+-		  "running state: %d; PSCI state: %d",
++	TP_printk("cpu: %d; error: %d; affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
++		  "running state: %d; PSCI state: %d; "
++		  "%s: %d; %s: %s; %s: %d; %s: %s; %s: %d; %s: %s",
++		  __entry->cpu,
++		  __entry->sev,
+ 		  __entry->affinity, __entry->mpidr, __entry->midr,
+-		  __entry->running_state, __entry->psci_state)
++		  __entry->running_state, __entry->psci_state,
++		  APEIL, __entry->pei_len, APEID,
++		  __print_hex(__get_dynamic_array(buf), __entry->pei_len),
++		  APECIL, __entry->ctx_len, APECID,
++		  __print_hex(__get_dynamic_array(buf1), __entry->ctx_len),
++		  VSEIL, __entry->oem_len, VSEID,
++		  __print_hex(__get_dynamic_array(buf2), __entry->oem_len))
+ );
+ 
+ /*
+-- 
+2.27.0
 
-Separating this one has value to me since they are separate protocols.

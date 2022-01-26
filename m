@@ -2,110 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD3D49D147
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E00949D14B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244053AbiAZR4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
+        id S243984AbiAZR5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244028AbiAZR4X (ORCPT
+        with ESMTP id S244063AbiAZR5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:56:23 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3468C061747;
-        Wed, 26 Jan 2022 09:56:22 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id s9so409598wrb.6;
-        Wed, 26 Jan 2022 09:56:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iD/CADMJmjE6Wqsta+zyCvYv9Ey28eqoIb5w5xoLVEA=;
-        b=flYDVQBDLjA81NHjPaYBppGWq5mETdHWxrDTn3Dbnwln9/TBEzkdnKZDe7RG6nPKOd
-         dHm3QNW2gGkyIwMoF8vs2rh40atl12yYEhFFUDnianqHAJUMceTYtMvgVLPRuNO5CRec
-         hKgzSLm/l07nkz05/TF82VbNTOvWiNSdQNjJl5j17UiPZRvKj0EqYvqxsispKvD5ztHF
-         1e4kP81VTp35dGpp+8iiVnOxitL9I3EUn9EeIInYr5yL6RvEEXPFJneJwlO6h+ci4VxG
-         zNaTTdqo46RePFXDCgZcmzELi3j6+sVk91frZNSRY0G9V0PhGTG2evKsCwmzgsaUpEmh
-         8rbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iD/CADMJmjE6Wqsta+zyCvYv9Ey28eqoIb5w5xoLVEA=;
-        b=IokXJ+Sd7zVJhW/NGvHvMgHEKRX89nevswGdxP0k8fBFGogYfAOmmiZxAPh85bfO4x
-         M5EInlTFiATnpQeMasTjFLSkVfdxIyC8QdKVg1gyfQttLoruT2rfmMIhbLWhQt0MqWBd
-         s7ohWyKePDINRm1u2fidsrh9ShdiAXB4oEgoSEEuDjODa6o3odajxuUI36e7iL5e+6fo
-         9ACJzWQk0JV6/JiL0XeO87qDB1lTlAL8fljYFJ7hzQAHLP3ltAgDazpHkjhvR8giiear
-         e3/lASxLcUPBuU4lEs+x72xvs259Xk4gtyXEQ7WB72d/S3nV8u5oM2k85ayzh3zA61KX
-         qtMg==
-X-Gm-Message-State: AOAM533dwjI8Bl/MlkpGvpEcs1MP/4WykL+wE4L2DN6RYgdrfpyiXh5V
-        opPwQTgZW/VqgRn601ZVuqH2gstaAApVQw==
-X-Google-Smtp-Source: ABdhPJw8fPH9A4/VhWfdDH8hu/O77mu+3yiNPKg2taaBwgHgn2QguKRql4XLNDPx64znUUkGamzang==
-X-Received: by 2002:a5d:4288:: with SMTP id k8mr23087912wrq.657.1643219781128;
-        Wed, 26 Jan 2022 09:56:21 -0800 (PST)
-Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
-        by smtp.gmail.com with ESMTPSA id d2sm19935638wru.40.2022.01.26.09.56.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 09:56:20 -0800 (PST)
-From:   Romain Perier <romain.perier@gmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
-        Romain Perier <romain.perier@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 8/8] ARM: mstar: Extend opp_table for infinity2m
-Date:   Wed, 26 Jan 2022 18:56:04 +0100
-Message-Id: <20220126175604.17919-9-romain.perier@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220126175604.17919-1-romain.perier@gmail.com>
-References: <20220126175604.17919-1-romain.perier@gmail.com>
+        Wed, 26 Jan 2022 12:57:17 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4572C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:57:16 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id BD0C392009C; Wed, 26 Jan 2022 18:57:13 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id B869E92009B;
+        Wed, 26 Jan 2022 17:57:13 +0000 (GMT)
+Date:   Wed, 26 Jan 2022 17:57:13 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Jiri Slaby <jslaby@suse.cz>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        johan@kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: Re: [PATCH 10/11] serial: make uart_console_write->putchar()'s
+ character a char
+In-Reply-To: <20220124071430.14907-11-jslaby@suse.cz>
+Message-ID: <alpine.DEB.2.21.2201261700460.58572@angie.orcam.me.uk>
+References: <20220124071430.14907-1-jslaby@suse.cz> <20220124071430.14907-11-jslaby@suse.cz>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-infinity2m are running up to 1.2Ghz, this extends opp_table with the
-corresponding frequencies and enable operating-points table for cpu1
+On Mon, 24 Jan 2022, Jiri Slaby wrote:
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
----
- arch/arm/boot/dts/mstar-infinity2m.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+> diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
+> index e9edabc5a211..3493e201d67f 100644
+> --- a/drivers/tty/serial/dz.c
+> +++ b/drivers/tty/serial/dz.c
+> @@ -802,7 +802,7 @@ static void __init dz_init_ports(void)
+>   * restored.  Welcome to the world of PDP-11!
+>   * -------------------------------------------------------------------
+>   */
+> -static void dz_console_putchar(struct uart_port *uport, int ch)
+> +static void dz_console_putchar(struct uart_port *uport, char ch)
+>  {
+>  	struct dz_port *dport = to_dport(uport);
+>  	unsigned long flags;
 
-diff --git a/arch/arm/boot/dts/mstar-infinity2m.dtsi b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-index dc339cd29778..1b485efd7156 100644
---- a/arch/arm/boot/dts/mstar-infinity2m.dtsi
-+++ b/arch/arm/boot/dts/mstar-infinity2m.dtsi
-@@ -6,10 +6,25 @@
- 
- #include "mstar-infinity.dtsi"
- 
-+&cpu0_opp_table {
-+		opp-1000000000 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-microvolt = <1000000>;
-+			clock-latency-ns = <300000>;
-+		};
-+
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt = <1000000>;
-+			clock-latency-ns = <300000>;
-+		};
-+};
-+
- &cpus {
- 	cpu1: cpu@1 {
- 		device_type = "cpu";
- 		compatible = "arm,cortex-a7";
-+		operating-points-v2 = <&cpu0_opp_table>;
- 		reg = <0x1>;
- 		clocks = <&cpupll>;
- 		clock-names = "cpuclk";
--- 
-2.34.1
+ Hmm, this is unsafe, because on the MIPS target the lone `char' type is 
+signed and therefore a call to `->putchar' will see `ch' sign-extended 
+from bit #7 to the width of the argument register used.  Which means that 
+if a character is sent to the console that has its bit #7 set, then the 
+call to:
 
+		dz_out(dport, DZ_TDR, ch);
+
+i.e.:
+
+static void dz_out(struct dz_port *dport, unsigned offset, u16 value)
+
+will send a value to DZ_TDR with bits #15:8 set to all-ones.  And bits 
+#11:8 there are the BREAK control bits, active high, for serial lines #3:0 
+respectively.
+
+ We could handle this with a preparatory change by calling:
+
+		dz_out(dport, DZ_TDR, ch & 0xffu);
+
+instead, but perhaps `->putchar' should simply take `unsigned char' or 
+maybe even `u8' as its third argument?
+
+> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+> index c58cc142d23f..68e62703eaa6 100644
+> --- a/include/linux/serial_core.h
+> +++ b/include/linux/serial_core.h
+> @@ -399,7 +399,7 @@ int uart_set_options(struct uart_port *port, struct console
+> *co, int baud,
+>  struct tty_driver *uart_console_device(struct console *co, int *index);
+>  void uart_console_write(struct uart_port *port, const char *s,
+>  			unsigned int count,
+> -			void (*putchar)(struct uart_port *, int));
+> +			void (*putchar)(struct uart_port *, char));
+>  
+>  /*
+>   * Port/driver registration/removal
+
+ I.e.:
+
+			void (*putchar)(struct uart_port *, unsigned char));
+
+I can see we get it right already with:
+
+	unsigned char		x_char;			/* xon/xoff char */
+
+and for `dz_transmit_chars' we have:
+
+	unsigned char tmp;
+[...]
+	tmp = xmit->buf[xmit->tail];
+	xmit->tail = (xmit->tail + 1) & (DZ_XMIT_SIZE - 1);
+	dz_out(dport, DZ_TDR, tmp);
+
+(because `struct circ_buf' is generic and not limited to unsigned buffer 
+contents interpretation; it's not clear to me if that has been intended 
+though).
+
+  Maciej

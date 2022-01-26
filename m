@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C67D49D110
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 778DA49D113
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237250AbiAZRmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:42:42 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:43202
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231546AbiAZRml (ORCPT
+        id S243865AbiAZRnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:43:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44996 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231546AbiAZRnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:42:41 -0500
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B943D3F1A4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:42:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643218955;
-        bh=gEM6VSiZGn9+riCesXh6Ndj0fTM5V3VNUzWbxDz0u7k=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=aXC5olx+rVtygbdF5epzgjgWV2OiV4C9pX6s400OoH0oZNd0B2R4h8D0pu9LVqnSi
-         PUMxLd2m7227/oh+uC0g39/xqVsigTGqm0HsEpOhF7xE9CW28++4SGRHpZ5wUvPmwn
-         K6O3nrcFfiEgF8AFZ1r+bhx0Qa4jEy0+7Xd7sQi6M80hjRLW90CDsX8qmnMb/f8V0A
-         PYeIgmqoXYjNAEHEr51w7azViY5ECFLEotmTeq7lq0RreGNXHBZoB/XbK0HtHvhIYM
-         15ESELGJoDriYvr2ciM/sQL7SPMd/a6MAebZlShTPP0LFQy/rwvW4cmIbFwMy+t8c/
-         6git/igr/CvOw==
-Received: by mail-wm1-f69.google.com with SMTP id s190-20020a1ca9c7000000b00347c6c39d9aso205851wme.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:42:35 -0800 (PST)
+        Wed, 26 Jan 2022 12:43:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643219020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7LmRcM3oOywyD4WcSEs68i+HAwbzXKDVMeR2HY4Bz8Q=;
+        b=OHZAPEF0YCKOGtuNzAPM95AMdB+rxrAxe5CIM/VspBavEb7RIQi1pxUh9eEB/7qL+tZdFv
+        HkuUqwmtrvAOOiP0uPIXIvWAHkSWyiAwRJN5IkTDRoX6oi8XwOZenPVVFYLVOu4F8pTrJg
+        of2cOdPOR67+5G6tWuL+ZABzxpzxwGc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-470-VkscbC-rOO2qJC8RlZ3Dng-1; Wed, 26 Jan 2022 12:43:39 -0500
+X-MC-Unique: VkscbC-rOO2qJC8RlZ3Dng-1
+Received: by mail-wr1-f72.google.com with SMTP id s25-20020adfa299000000b001d8d032255fso65372wra.14
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:43:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=gEM6VSiZGn9+riCesXh6Ndj0fTM5V3VNUzWbxDz0u7k=;
-        b=zk30jznLi53Y1VfwdPa2lk1qcJoezQnuIjgjpm3PUwhoMvoTBu2SHMur0dw/dOuprT
-         TRYcR+Q+ozyVwGlCSIF71vD8qkzKfC+JXWzlGS45LbSS9dVa2owevWNokhC+h33mk3Ju
-         2ERu9tvYgbgAdUB2eFnmir+h7anOi40AjVQXeZkCHL1cosSAiBo0gZyIYujRZ2IT1/ql
-         5+rfc6M4YSFYr8xuuSUJJPWVojfxBkYfM4cE4XmbTsMmkGZdiHUZZhv/U/tndBqhtjC6
-         1j9nlxSr554KiZ7LXvZtD6mMjt9esufWNcO5+3wXxdfQ5GDKB9EdrXbieDZCpWGtnWNA
-         K/4w==
-X-Gm-Message-State: AOAM533NAyIWyniyJ1bZHYc9eWH9gjK9lEwKiT5g+oY14L9rtp353DfQ
-        5PLf6cVhX4nqVZtx4p6PD2uTJyM3QjsXmsOiMIBLeyL0CPhG2V43AlrTg3kIQIMWkWB3fa1M0fk
-        QqykHN8rrBwbe8vrwormPyz/COfryvXtwEHSEuD3Ttw==
-X-Received: by 2002:a7b:c182:: with SMTP id y2mr8635253wmi.139.1643218954807;
-        Wed, 26 Jan 2022 09:42:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy6kdysdMCq3VW5eb4T595OgQuQT6Z+gTtfvxQP+Z6YAumo97c6qlaVhjpPpKKj/OOAmgJgwQ==
-X-Received: by 2002:a7b:c182:: with SMTP id y2mr8635243wmi.139.1643218954548;
-        Wed, 26 Jan 2022 09:42:34 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id f8sm21074368wry.46.2022.01.26.09.42.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 09:42:33 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RESEND, third time][PATCH] arm64: dts: intel: socfpga_agilex_socdk: align LED node names with dtschema
-Date:   Wed, 26 Jan 2022 18:41:57 +0100
-Message-Id: <20220126174157.288111-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        bh=7LmRcM3oOywyD4WcSEs68i+HAwbzXKDVMeR2HY4Bz8Q=;
+        b=Cd0MgzP4Z/HiXy9+iZhRgS/eaAGRPBNONRaGIskmAH028/XHOx6Si9/Yrgq56SwsKX
+         8Ra1MI8vaUSpDUDmScgvlfioIAaO0qYa9EGZzVxcfDXtng7GS+3I+eBSH7P70NBeqtm+
+         Kft1Ghg81g6KrwjvKkDaXlVR7qJqSC79IuC9MBB1+hiG+G91C4mCw9RFXX2b01JfuzCd
+         /Z7PahHMDVUvx9fcJvRlEhXQkeL+POqco3oth9pwyKOobs1sxrp/4JB6BthPN8MGlLvJ
+         FzVQe4kFJqTHNFgxa2RL2qgZUHFfH6UOdlgcE0pmpMc8qnSDUQ6RsTNzz9+nFhNYwGoy
+         P1cA==
+X-Gm-Message-State: AOAM531cauAgyOo0EVZ8FULDJPY7eE8Q0+LQl71T5ghUw/K3eGlA5OJ0
+        98PM1xFMaX5pdRmU/lEuj/3ICBNVqzDPNq4d1aADxzjiyy/YMZrjJFUzNqbDE6o6qNBmJTeOYw+
+        5zTKgcQGs8VAfTVfVht9h+Gp/
+X-Received: by 2002:a1c:256:: with SMTP id 83mr8502296wmc.89.1643219017168;
+        Wed, 26 Jan 2022 09:43:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxkX6l8iYrRkIpopYI00Hyq6o9wmikSAL4sFrhwF12Qem5QO771vGwWeuh+9gQvmxZHFciyhA==
+X-Received: by 2002:a1c:256:: with SMTP id 83mr8502274wmc.89.1643219016890;
+        Wed, 26 Jan 2022 09:43:36 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id f6sm19859506wrj.26.2022.01.26.09.43.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 09:43:36 -0800 (PST)
+Message-ID: <3e978189-4c9a-53c3-31e7-c8ac1c51af31@redhat.com>
+Date:   Wed, 26 Jan 2022 18:43:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 0/3] KVM: x86: XSS and XCR0 fixes
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
+        Like Xu <likexu@tencent.com>
+References: <20220126172226.2298529-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220126172226.2298529-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzk@kernel.org>
+On 1/26/22 18:22, Sean Christopherson wrote:
+> For convenience, Like's patch split up and applied on top of Xiaoyao.
+> Tagged all for @stable, probably want to (retroactively?) get Xiaoyao's
+> patch tagged too?
+>   
+> Like Xu (2):
+>    KVM: x86: Update vCPU's runtime CPUID on write to MSR_IA32_XSS
+>    KVM: x86: Sync the states size with the XCR0/IA32_XSS at, any time
+> 
+> Xiaoyao Li (1):
+>    KVM: x86: Keep MSR_IA32_XSS unchanged for INIT
+> 
+>   arch/x86/kvm/x86.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> 
+> base-commit: e2e83a73d7ce66f62c7830a85619542ef59c90e4
 
-Align the LED node names with dtschema to silence dtbs_check warnings
-like:
+Queued, though I'll note that I kinda disagree with the stable@ marking 
+of patch 1 (and therefore with the patch order) as it has no effect in 
+practice.
 
-    leds: 'hps0', 'hps1', 'hps2' do not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
-
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
----
-
-This patch waits for a year. Dinh, you previously acked it but can you
-apply it?
-diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-index ea37ba7ccff9..26cd3c121757 100644
---- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-+++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
-@@ -21,17 +21,17 @@ chosen {
- 
- 	leds {
- 		compatible = "gpio-leds";
--		hps0 {
-+		led0 {
- 			label = "hps_led0";
- 			gpios = <&portb 20 GPIO_ACTIVE_HIGH>;
- 		};
- 
--		hps1 {
-+		led1 {
- 			label = "hps_led1";
- 			gpios = <&portb 19 GPIO_ACTIVE_HIGH>;
- 		};
- 
--		hps2 {
-+		led2 {
- 			label = "hps_led2";
- 			gpios = <&portb 21 GPIO_ACTIVE_HIGH>;
- 		};
--- 
-2.32.0
+Paolo
 

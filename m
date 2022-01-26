@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E42F149CA98
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE6149CA9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238469AbiAZNTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:19:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45626 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238176AbiAZNTS (ORCPT
+        id S238518AbiAZNTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:19:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43957 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234798AbiAZNTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:19:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E804B80CB1;
-        Wed, 26 Jan 2022 13:19:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3ECDC340E3;
-        Wed, 26 Jan 2022 13:19:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643203155;
-        bh=lKH8YDY04maTeVFEgXG3vRNVow0n8FFojBX2uObASL4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eyIJyOY4AwdCrefrN53yw5S60cWw5bG6H46HrMjDBuUfr9pDvdXYIEJlCI52QIOaN
-         CePfyKY59M+eyz4Vz/dJPQW/QmBoYe4qVAMtHjesWsBgua1I0ES+j8KS/Mfi3tZxC/
-         X4w0C9wvjmpTmwNHwSFCS59FXqN/i7BL0rtL5z3uFJ+h0ZA5hgZJf4JIMiXDNeIpPl
-         RXw9MFHi5N0V43qS5A3ZR9dACrhH+MhBa+ks6zuz+li1ZRxsG4sVKutRv71Jv/WWcl
-         AGwGSPF+qutru6BJto/Uh9VJHnLC3I0S6FhV+OBREKbmsOY3nuyI9CpGHu3ZZdKMV4
-         kLHRFn3VU6/ow==
-Date:   Wed, 26 Jan 2022 14:19:07 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v9 00/23] ima: Namespace IMA with audit support in IMA-ns
-Message-ID: <20220126131907.5fauajyjfbcnienp@wittgenstein>
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+        Wed, 26 Jan 2022 08:19:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643203184;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kYqBTg039yG6KmQki1vnfW07McLgJNXZp1LNPPbwRyU=;
+        b=Bx1w4kZR+iKJNWETIqCDa8Mp9Ggy0TyD7B+zKtMf5Pke19ZXATBhxA76fCpF+Y43c14kPK
+        VodSzDG3BgKswEFRGjZg1g2+OA7Q9HMgfMj8ph+rZrhsOCNlDSJa4hdaH8IAyavv5BdjkY
+        qDICc8GIP0xpEBS1MGNEt4MgtfBIZ8o=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-zli9mA92MAOwM22u1pdsfg-1; Wed, 26 Jan 2022 08:19:40 -0500
+X-MC-Unique: zli9mA92MAOwM22u1pdsfg-1
+Received: by mail-wr1-f69.google.com with SMTP id a11-20020adffb8b000000b001a0b0f4afe9so4297864wrr.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:19:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kYqBTg039yG6KmQki1vnfW07McLgJNXZp1LNPPbwRyU=;
+        b=fv3PWF+qYVVAfrewu94+vrK7y5VTqjZ1EFx/3AjJg1sI7bOO0/YI15U4koAGQ91D1P
+         xnVR0yFYBerkjZTUP6NFkMzdL5gfXfufG8bABAFTWzwR6oyQ0EW4oH/VtqwotD0FuqHn
+         kq3OsGBc2svJoTcns7A6BUDwZBELu6vehr4amr74w/sG99r2a5S/7+Xdti4/4vbSI8b5
+         1gQLF8QTuKhI22SeuFTf2fF4bL3xiuTULAnETlLPbi14Q2XWWA2VmfqCEAwkr3jkvRT/
+         6tSUTeeknijWde1ibb0JiRu1kjBgmKIXVuMIKB0Upp5FV2G5BfGDg2MuRtoG1JhtpUOZ
+         +bpQ==
+X-Gm-Message-State: AOAM530D9C5XjXtrSnffcffMe6jBgD1V01Gk3zMobWf4zyPLI3n7z1Lk
+        73r0SoXs1bfJIg5MWiSJv1uMRnBl/8LUHFk3qX39NbC4/A/kpj2Nw6+kxvu5ivlg7rf7jLNsTo3
+        iYNTu6k5tnNg5/OFXJTRWafU6
+X-Received: by 2002:a05:600c:2906:: with SMTP id i6mr7383999wmd.14.1643203179716;
+        Wed, 26 Jan 2022 05:19:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyhzLOqHtQwaIpauLzMMgIbq+NXnLWl8IbD9oWCl1awOJ7DEu7sTaSS8Umh6aandrR9my5u6A==
+X-Received: by 2002:a05:600c:2906:: with SMTP id i6mr7383980wmd.14.1643203179526;
+        Wed, 26 Jan 2022 05:19:39 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id n8sm3264381wmk.18.2022.01.26.05.19.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 05:19:39 -0800 (PST)
+Message-ID: <afb68b5c-8d1a-17c4-a62b-be985c5bc613@redhat.com>
+Date:   Wed, 26 Jan 2022 14:19:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+ <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+ <CAHp75Vd7oaYPKx6bxjCqNnm6fieeQFrtq5K4YYrxYbXoXFy=+Q@mail.gmail.com>
+ <20220126102858.GX1951@kadam>
+ <1b665bb8-7acb-519b-0a02-ef0f2dd4b524@redhat.com>
+ <YfFE61IQus3SMQRZ@kroah.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YfFE61IQus3SMQRZ@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:46:22PM -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> The goal of this series of patches is to start with the namespacing of
-> IMA and support auditing within an IMA namespace (IMA-ns) as the first
-> step.
-> 
-> In this series the IMA namespace is piggy backing on the user namespace
-> and therefore an IMA namespace is created when a user namespace is
-> created, although this is done late when SecurityFS is mounted inside
-> a user namespace. The advantage of piggy backing on the user namespace
-> is that the user namespace can provide the keys infrastructure that IMA
-> appraisal support will need later on.
-> 
-> We chose the goal of supporting auditing within an IMA namespace since it
-> requires the least changes to IMA. Following this series, auditing within
-> an IMA namespace can be activated by a user running the following lines
-> that rely on a statically linked busybox to be installed on the host for
-> execution within the minimal container environment:
-> 
-> mkdir -p rootfs/{bin,mnt,proc}
-> cp /sbin/busybox rootfs/bin
-> cp /sbin/busybox rootfs/bin/busybox2
-> echo >> rootfs/bin/busybox2
-> PATH=/bin unshare --user --map-root-user --mount-proc --pid --fork \
->   --root rootfs busybox sh -c \
->  "busybox mount -t securityfs /mnt /mnt; \
->   busybox echo 1 > /mnt/ima/active; \
->   busybox echo 'audit func=BPRM_CHECK mask=MAY_EXEC' > /mnt/ima/policy; \
+On 1/26/22 13:56, Greg Kroah-Hartman wrote:
 
-I think we need to limit the number of rules that can be added to an ima
-namespace to prevent DOS attacks. The current implementation allows
-users to write as many ima rules as they want.
+[snip]
 
-My suggestion would be that you look at real-world data to figure out
-what a fairly common number of rules is that people write. Then use this
-as the hard-coded limit for a first implementation. If the use-case
-arises you can later make this limit configurable by introducing a
-ucount for ima rules via /proc/sys/user/max_ima_rules.
+>>    fb_ili9341.c (DRM driver in drivers/gpu/drm/tiny/mi0283qt.c ?)
 
-Additionally, you should probably switch a lot of ima allocations from
-GFP_KERNEL to GFP_KERNEL_ACCOUNT as allocations triggerable from userns
-should be treated as untrusted.
+This was a copy and paste error. It should had been:
+
+                   (DRM driver in drivers/gpu/drm/tiny/ili9341.c)
+
+>>    fb_ili9481.c
+>>    fb_ili9486.c (DRM driver in drivers/gpu/drm/tiny/ili9486.c)
+>>    fb_pcd8544.c
+>>    fb_ra8875.c
+>>    fb_s6d02a1.c
+>>    fb_s6d1121.c
+>>    fb_seps525.c
+>>    fb_sh1106.c
+>>    fb_ssd1289.c
+>>    fb_ssd1305.c
+>>    fb_ssd1306.c
+>>    fb_ssd1325.c
+>>    fb_ssd1331.c
+>>    fb_ssd1351.c
+>>    fb_st7735r.c (DRM driver in drivers/gpu/drm/tiny/st7735r.c)
+>>    fb_st7789v.c (DRM driver in drivers/gpu/drm/panel/panel-sitronix-st7789v.c)
+> 
+> I'll gladly take a patch that deletes the fb_* files that are already
+> handled by a DRM driver like you list here.
+>
+
+Sure, I'll post a patch later today. If there's something missing in
+the DRM driver, anyone can get the needed bits from the git history.
+ 
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

@@ -2,181 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C86DE49D231
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C64E49D232
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiAZS77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:59:59 -0500
-Received: from mail.efficios.com ([167.114.26.124]:52750 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiAZS76 (ORCPT
+        id S238644AbiAZTCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 14:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229451AbiAZTCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:59:58 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 94D1C360747;
-        Wed, 26 Jan 2022 13:59:57 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id JRH9cUaMSB7f; Wed, 26 Jan 2022 13:59:56 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id C518036099B;
-        Wed, 26 Jan 2022 13:59:56 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C518036099B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1643223596;
-        bh=eICVUmQzw3l/x0zzUTePtqPtDmFZX5u3Ntxlnfacxd4=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=sJJ9BIbNfPUQAYN4BQ7bO/SrcDKFM5m0qDZbfswYA1jLFKsCzOqzwIPoyVntAI7ld
-         SRGV0U2uVIcFda6/I8d5N6B+NQ4pY/4kjVk8q75vp/7qCnh6+B1j1jBcjmeW66KZQT
-         RoyHefximyQv79nvmWTh4cCNpcXMqhJI5oKtIA0wd8wZ/DhuCRmCL/yGNsOW/gaMiX
-         LtEmS8/kq/oDQ85atWxHbjmGhGIF2A+5mXvU+0Y2IL8m8oxURv2QC2AYJsI4CJ0/4O
-         cNf8GVz5DH5M8iqsbSkQ7Brm4OdzZ4v72njwxK3KAVuavJ6Ar7GIe1NGkk76e3uiOq
-         mqyTIZYMIyXJQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4kzbJ7_h7Bql; Wed, 26 Jan 2022 13:59:56 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id A117A3606E5;
-        Wed, 26 Jan 2022 13:59:56 -0500 (EST)
-Date:   Wed, 26 Jan 2022 13:59:56 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>, shuah <shuah@kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dave Watson <davejwatson@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Andi Kleen <andi@firstfloor.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Ben Maurer <bmaurer@fb.com>, rostedt <rostedt@goodmis.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Joel Fernandes <joelaf@google.com>
-Message-ID: <1116876795.2062.1643223596536.JavaMail.zimbra@efficios.com>
-In-Reply-To: <fc04219fc3414bbb968adb844052ecb7@AcuMS.aculab.com>
-References: <20220124171253.22072-1-mathieu.desnoyers@efficios.com> <20220124171253.22072-3-mathieu.desnoyers@efficios.com> <20220125122156.v2f5anzcs35i3rii@wittgenstein> <1234069751.70438.1643121673355.JavaMail.zimbra@efficios.com> <1445357149.71067.1643137248305.JavaMail.zimbra@efficios.com> <fc04219fc3414bbb968adb844052ecb7@AcuMS.aculab.com>
-Subject: Re: [RFC PATCH 02/15] rseq: Remove broken uapi field layout on
- 32-bit little endian
+        Wed, 26 Jan 2022 14:02:39 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA50C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:02:38 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso5226580pjv.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:02:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fSWaa136uNPsj+g5us2/d5ZsueLesJ/JipX1ew8npy4=;
+        b=houkxmz5jw2oKJfEMxk0xeHsYc+3Vbw9wZ9JESaux1d7Ub5Duj47FaJcgJ2wwS0ZmH
+         WbN3jhtT2VfQIse5dxVWpz3r4YDuxJZxxv3Xri33vrXETR3Ffxg6RRsCBsk1tn2VCxcv
+         YXjNiFUPT4yI+AjQPwO3yUUEKxNMA4xw5N0gs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fSWaa136uNPsj+g5us2/d5ZsueLesJ/JipX1ew8npy4=;
+        b=uJ1r1bFtPFDSKY4mJpUGfoaSFylpIEWDlFsxpA6IiU9ATTbMQhuv8NFRuU7xhbJipV
+         0LnbFSXQLcLmALjW1Z/QNfa9Z3Uai3JlfFjllbn7rdhrBfG8WZ6MKCTGnpC1kjg/H4kR
+         fF6u9C41hh682atR1Rd7b+r8n54BS7YTW/gdhE/dOFNHZH70zwLFY/Ij0TQ4x8k78l16
+         bKJhLpNqSGn0AnwNEDBozkxXm22VjraR/5CcQ8ly6V/0YN0WZQ4ffhs5fzKHAOjFOeRH
+         HMGYEaLW6nVRkoXq/By/KkHZClMojdE6DmRJY8rh1TH7A7HjC6GnZ4xSIUnJ0uzyr//v
+         zcgw==
+X-Gm-Message-State: AOAM531U1AVeibDYvBEpJUJ6h1pugSSz70/Dz7EVSXJFPZI9XP4jt091
+        HviCz5IQpV1KYvdDQphvEqa5q7jaKR+12w==
+X-Google-Smtp-Source: ABdhPJzLNrEvSsE09REExB0nFTbttHQ+U0crBTyhi5axNQKOsGg95lYKmaTVAI5oP7qBiB/Ey/nHEg==
+X-Received: by 2002:a17:90a:e7d1:: with SMTP id kb17mr307930pjb.1.1643223758090;
+        Wed, 26 Jan 2022 11:02:38 -0800 (PST)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s15sm3030998pfg.145.2022.01.26.11.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 11:02:37 -0800 (PST)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Prashant Malani <pmalani@chromium.org>, Alyssa Ross <hi@alyssa.is>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: [PATCH v2] platform/chrome: cros_ec_typec: Check for EC device
+Date:   Wed, 26 Jan 2022 19:02:20 +0000
+Message-Id: <20220126190219.3095419-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
-Thread-Topic: rseq: Remove broken uapi field layout on 32-bit little endian
-Thread-Index: AdgS2G4EeBx+7+jyRfijfhRZbWR//oaEEpo8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Jan 26, 2022, at 12:16 PM, David Laight David.Laight@ACULAB.COM wrote:
+The Type C ACPI device on older Chromebooks is not generated correctly
+(since their EC firmware doesn't support the new commands required). In
+such cases, the crafted ACPI device doesn't have an EC parent, and it is
+therefore not useful (it shouldn't be generated in the first place since
+the EC firmware doesn't support any of the Type C commands).
 
-> From: Mathieu Desnoyers
->> Sent: 25 January 2022 19:01
->> 
->> ----- On Jan 25, 2022, at 9:41 AM, Mathieu Desnoyers
->> mathieu.desnoyers@efficios.com wrote:
->> 
->> > ----- On Jan 25, 2022, at 7:21 AM, Christian Brauner brauner@kernel.org wrote:
->> [...]
->> >>>  include/uapi/linux/rseq.h | 17 ++++-------------
->> [...]
->> >>>  	union {
->> >>
->> >> A bit unfortunate we seem to have to keep the union around even though
->> >> it's just one field now.
->> >
->> > Well, as far as the user-space projects that I know of which use rseq
->> > are concerned (glibc, librseq, tcmalloc), those end up with their own
->> > copy of the uapi header anyway to deal with the big/little endian field
->> > on 32-bit. So I'm very much open to remove the union if we accept that
->> > this uapi header is really just meant to express the ABI and is not
->> > expected to be used as an API by user-space.
->> >
->> > That would mean we also bring a uapi header copy into the kernel
->> > rseq selftests as well to minimize the gap between librseq and
->> > the kernel sefltests (the kernel sefltests pretty much include a
->> > copy of librseq for convenience. librseq is maintained out of tree).
->> >
->> > Thoughts ?
->> 
->> Actually, if we go ahead and remove the union, and replace:
->> 
->> struct rseq {
->>   union {
->>     __u64 ptr64;
->>   } rseq_cs;
->> [...]
->> } v;
->> 
->> by:
->> 
->> struct rseq {
->>   __u64 rseq_cs;
->> } v;
->> 
->> expressions such as these are unchanged:
->> 
->> - sizeof(v.rseq_cs),
->> - &v.rseq_cs,
->> - __alignof__(v.rseq_cs),
->> - offsetof(struct rseq, rseq_cs).
->> 
->> So users of the uapi rseq.h (as an API) can still use rseq_abi->rseq_cs before
->> and after the change.
-> 
-> But:
->	v.rseq_cs.ptr_64 = (uintptr_t)&foo;
-> is broken.
+To handle devices which use these older firmware revisions, check for
+the parent EC device handle, and fail the probe if it's not found.
 
-True. But v.rseq_cs.ptr (on 64-bit) and v.rseq_cs.ptr.ptr32 (on 32-bit) are also
-broken with the planned field removal. So how is the v.rseq_cs_ptr64 situation
-different ?
+Fixes: fdc6b21e2444 ("platform/chrome: Add Type C connector class driver")
+Reported-by: Alyssa Ross <hi@alyssa.is>
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
+Hi Alyssa, could you kindly test this with your existing setup? Thanks!
 
-My thinking here is that it does not matter if we break compilation for some
-users of the uapi as an API as long as the ABI stays the same, especially
-considering that all known users implement their own copy of the header.
+Changes in v2:
+- Added newlines as suggested by reviewers.
+- Added Reviewed-by tag from Tzung-Bi.
 
-I suspect that as far as the API is concerned, it is nice that we have at least
-one way to access the field which works both before and after the change.
-Simply using "v.rseq_cs" works both before/after for all use-cases that seem
-to matter here.
+ drivers/platform/chrome/cros_ec_typec.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> 
->> Based on this, I am inclined to remove the union, and just make the rseq_cs
->> field
->> a __u64.
-> 
-> It really is a shame that you can't do:
->	void   *rseq_cs __attribute__((size(8)));
-> and have the compiler just DTRT on 32bit systems.
-
-Indeed, the "size" directive appears to be ignored by the compiler.
-
-Thanks,
-
-Mathieu
-
-> 
->	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT,
-> UK
-> Registration No: 1397386 (Wales)
-
+diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+index 5de0bfb0bc4d..952c1756f59e 100644
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -1075,7 +1075,13 @@ static int cros_typec_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	typec->dev = dev;
++
+ 	typec->ec = dev_get_drvdata(pdev->dev.parent);
++	if (!typec->ec) {
++		dev_err(dev, "couldn't find parent EC device\n");
++		return -ENODEV;
++	}
++
+ 	platform_set_drvdata(pdev, typec);
+ 
+ 	ret = cros_typec_get_cmd_version(typec);
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.35.0.rc0.227.g00780c9af4-goog
+

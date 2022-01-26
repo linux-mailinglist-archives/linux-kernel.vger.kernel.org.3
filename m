@@ -2,73 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6B749C7AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1053649C7AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240078AbiAZKic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:38:32 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:37924 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232441AbiAZKia (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:38:30 -0500
-Received: from [127.0.0.1] (dynamic-002-247-255-194.2.247.pool.telefonica.de [2.247.255.194])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 539241EC032C;
-        Wed, 26 Jan 2022 11:38:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643193505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hUF5MXDkS5s86gTz8iswnR0nRof+hvmKQAqLsKqNNVw=;
-        b=QBseN54oMY9gNAZbAQG0Aw0RHrt1FBcLEaXB8e7ErvZNfJUbiEf4XEQVRqpOy2YkHNXfOF
-        jsaUdRI9do/XYSe7QifwComFo8PSwA5YZpBJfEQv05vo5d8foElSR+c68jEreup8lzunOA
-        Mbu8yrZbQ4p1SlwywCh1bnwtizojyAE=
-Date:   Wed, 26 Jan 2022 10:38:22 +0000
-From:   Boris Petkov <bp@alien8.de>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-CC:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Jiri Olsa <jolsa@redhat.com>, x86@kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_1/2=5D_perf/x86/intel/pt=3A_Add_a_c?= =?US-ASCII?Q?apability_and_config_bit_for_event_tracing?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220124080651.2699107-2-adrian.hunter@intel.com>
-References: <20220124080651.2699107-1-adrian.hunter@intel.com> <20220124080651.2699107-2-adrian.hunter@intel.com>
-Message-ID: <579106E0-687D-4731-8B70-1997DE9A76D9@alien8.de>
+        id S240086AbiAZKjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240080AbiAZKj3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 05:39:29 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B65DC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:39:29 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id w11so12782518wra.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:39:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3PKx+wgkHSWhWqOvoZTHz3Rmd0Wk1o8dzzj6Rm5kLe0=;
+        b=Fi3FeyqRQ1h7EDmh73+ZBbv8oTzQALZE+VjpOrPuiTszZ6WCai3jx08PtxmItxgz9v
+         I266zv2nOcIcaNai41IRwS8tSlitYKZIK5n7Oh3P9f1hNom6UrDLp76na/lHy5Rmt/db
+         XCQpR0zgCjDCDxQlks51nHNPP2vkIkVLMGSOxV6+LPZZ3Yeu0zQifI1vjbTjnZcYOj4e
+         HJ+7vEkZVHoFx9hJ6SLXeQr5+8VoEMQemIlSEfUvPuv1gvOKrq7VgxOxsigjt9ZEhtWn
+         94iTiqu0PURrOJJBIIh5pvQlGpkuoIV/wZwygG/9pyBjoTb1xyNfMGlCqa5+K9G7df86
+         bmyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3PKx+wgkHSWhWqOvoZTHz3Rmd0Wk1o8dzzj6Rm5kLe0=;
+        b=AJ1vcS5wLMoZW0Z+e+m8h5Ob+E0BFNYB8s/2km+9zlHk+qeceSRvQZNN2trJORVSjg
+         REGmZP4ip14eznicblh5V0EegvhUmDwC0CA/kc8x5riMjjgeL1KbgqHGZ0ix5rMNsGq9
+         WchYbZCFNpJVlR9FBGx61YubvH/yec+pgeHwXdK20Dg+0WYeSG1v0OkU+6UCxKGlJqaf
+         RAWAlAAgCk4a4Pz5CrLQvRP1JLTZvVUqMnUrnQBYS2bWwuSGEtHDO/ugpO5v3o65mbyV
+         KQfdNgB3yke/TFiWkuc7t7vss5gWUZo8jmLHUeP1dVfrRDVfbIInJGczWPoiZr7ozFme
+         uNEw==
+X-Gm-Message-State: AOAM533Xi0jxk+uCyCB2bS7iti6G6V46a7kgt3C+m/q7pyxBKWePb4w+
+        Qm8/E4CohScodIrG2mnm2tmBURDg1vchCQ==
+X-Google-Smtp-Source: ABdhPJzB/6vPoMYphNI7RndINT/0Bt0+E4vGR//EccEoWHSSkwRoQTSYXl+eVU+BUF2MXizZjeRUkQ==
+X-Received: by 2002:a05:6000:184f:: with SMTP id c15mr8533004wri.208.1643193567773;
+        Wed, 26 Jan 2022 02:39:27 -0800 (PST)
+Received: from google.com ([2a00:79e0:d:209:bd2e:4d3b:b065:fa46])
+        by smtp.gmail.com with ESMTPSA id j15sm3656384wmq.19.2022.01.26.02.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 02:39:26 -0800 (PST)
+Date:   Wed, 26 Jan 2022 10:39:22 +0000
+From:   David Brazdil <dbrazdil@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/2] Driver for Open Profile for DICE
+Message-ID: <YfEk2oPcDdjHKOnC@google.com>
+References: <20220104100645.1810028-1-dbrazdil@google.com>
+ <YfEOlN8Wshoa/aaB@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfEOlN8Wshoa/aaB@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On January 24, 2022 8:06:50 AM UTC, Adrian Hunter <adrian=2Ehunter@intel=2E=
-com> wrote:
->From: Alexander Shishkin <alexander=2Eshishkin@linux=2Eintel=2Ecom>
->
->As of Intel SDM (https://www=2Eintel=2Ecom/sdm) version 076, there is a n=
-ew
->Intel PT feature called Event Trace which is enabled config bit 31=2E
->
->Event Trace exposes details about asynchronous events such as interrupts
->and VM-Entry/Exit=2E
->
->Add a capability and config bit for Event Trace=2E
->
->Signed-off-by: Alexander Shishkin <alexander=2Eshishkin@linux=2Eintel=2Ec=
-om>
->Reviewed-by: Adrian Hunter <adrian=2Ehunter@intel=2Ecom>
+Hi Greg,
 
-These patches need your SOB to represent that you have handled them on the=
-ir way upstream=2E=20
+On Wed, Jan 26, 2022 at 10:04:20AM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Jan 04, 2022 at 10:06:43AM +0000, David Brazdil wrote:
+> > Open Profile for DICE is an open protocol for measured boot compatible
+> > with the Trusted Computing Group's Device Identifier Composition
+> > Engine (DICE) specification. The generated Compound Device Identifier
+> > (CDI) certificates represent the measured hardware/software combination
+> > and can be used by userspace for remote attestation and sealing.
+> > 
+> > This patchset adds DeviceTree bindings for the DICE device referencing
+> > a reserved memory region containing the CDIs, and a driver that exposes
+> > the memory region to userspace via a misc device.
+> > 
+> > See https://pigweed.googlesource.com/open-dice for more details.
+> > 
+> > The patches are based on top of v5.16-rc8 and can also be found here:
+> >   https://android-kvm.googlesource.com/linux topic/dice_v6
+> > 
+> > Changes since v5:
+> >   * replaced 'additionalProperties' with 'unevaluatedProperties' in DT YAML
+> 
+> I am going to drop this version from my review queue as I think you have
+> a new one instead, right?
 
---=20
-Sent from a small device: formatting sux and brevity is inevitable=2E 
+Sorry for the radio silence and yes, please drop from your queue. I need
+to post a new one and get back to Wedson. Hopefully today.
+
+David

@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E05D149CCC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6C749CCDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242390AbiAZOxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:53:09 -0500
-Received: from mga05.intel.com ([192.55.52.43]:27414 "EHLO mga05.intel.com"
+        id S242416AbiAZOzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:55:24 -0500
+Received: from mx1.riseup.net ([198.252.153.129]:47108 "EHLO mx1.riseup.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235644AbiAZOxF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:53:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643208785; x=1674744785;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=7n8kP29+3QJkGEyq+fGxF09Qxaj32zhHfyUa9OrAKE0=;
-  b=hRsjMEwxxl2F8Q07KpwvY/59y5XI86DOtvEj26l8s+djMq0CU+MeFxhG
-   VcOxmXV5DVFME2tUG8ZsnJEam5w9KqtNgcTB/nOOJGBczPQntVA32wAcT
-   GUrtwzJ726DWwzrrPn3eb5CXdMkeap4iip1hDp7SbqkSm+HRjJwSzvtam
-   Rvnmf6E11mO0NQh/qc/grUnMNGpqFaoRNejuyOy4I85irumjTYEdLsIiB
-   T7b9ZkwzRO415PjB+5E8aJXWskmg1/LIDXmNpRHVgz3hDoy/4y5fhaMXt
-   +hk2vtzkdMQPhzdrMidxpMGynCn0mC5cu1Z8bD1bHB78khy+KoYSdoEHw
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="332918084"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="332918084"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 06:53:04 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="520821374"
-Received: from nbasu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.16.197])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 06:52:53 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-security-module@vger.kernel.org,
-        nouveau@lists.freedesktop.org, netdev@vger.kernel.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "David S. Miller" <davem@davemloft.net>,
-        Emma Anholt <emma@anholt.net>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Leo Li <sunpeng.li@amd.com>, Petr Mladek <pmladek@suse.com>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Raju Rangoju <rajur@chelsio.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vishal Kulkarni <vishal@chelsio.com>
-Subject: Re: [PATCH v2 02/11] drm/i915: Fix trailing semicolon
-In-Reply-To: <20220126093951.1470898-3-lucas.demarchi@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220126093951.1470898-1-lucas.demarchi@intel.com>
- <20220126093951.1470898-3-lucas.demarchi@intel.com>
-Date:   Wed, 26 Jan 2022 16:52:50 +0200
-Message-ID: <874k5qzgzh.fsf@intel.com>
+        id S242415AbiAZOzT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 09:55:19 -0500
+Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4JkRbW3PjkzF4TX;
+        Wed, 26 Jan 2022 06:55:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1643208919; bh=FF68SLiqc8b5fH7Zc/D77KvbJQeyA0oyuLSsKGxo1l0=;
+        h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
+        b=ORnQiz/JkGZs0/0i3ikX/PDVzc/cmiPjbDpMdAAhhIbSaIhUX8QUqab2T1A1uNvl8
+         XFiclKMiCDX2HMBVKswwlTkPsMCZze3NKzuiTHed8J8zZJgwTJbYlwT3VoWHytNVIy
+         6b8kALNXvO10Q/un+PaAK8E0592XfcAdtBQxjbrk=
+X-Riseup-User-ID: 4C4FACAA98837759C447321967370CADB64E81B0CFA66B90AE86480C2FF5498C
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4JkRbT5vxqz5vkm;
+        Wed, 26 Jan 2022 06:55:17 -0800 (PST)
+Message-ID: <15ef80cc2ecdcc993043aa0c1d5ea88f41f9b67b.camel@riseup.net>
+Subject: Re: [PATCH] HID: logitech-dj: add new lightspeed receiver id
+From:   Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Lucas Zampieri <lzampier@redhat.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+In-Reply-To: <CAO-hwJ+KyV+Ks38DDF8EuT9kEc9jd9SvNn=nGyTwjkD3GOQ+RA@mail.gmail.com>
+References: <20220126144400.130797-1-lzampier@redhat.com>
+         <CAO-hwJ+KyV+Ks38DDF8EuT9kEc9jd9SvNn=nGyTwjkD3GOQ+RA@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-ZtH0jJT5Y0ZBG7kBkzTc"
+Date:   Wed, 26 Jan 2022 14:54:33 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022, Lucas De Marchi <lucas.demarchi@intel.com> wrote:
-> Remove the trailing semicolon, as correctly warned by checkpatch:
->
-> 	-:1189: WARNING:TRAILING_SEMICOLON: macros should not use a trailing semicolon
-> 	#1189: FILE: drivers/gpu/drm/i915/intel_device_info.c:119:
-> 	+#define PRINT_FLAG(name) drm_printf(p, "%s: %s\n", #name, yesno(info->display.name));
->
-> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+--=-ZtH0jJT5Y0ZBG7kBkzTc
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/gpu/drm/i915/intel_device_info.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/i915/intel_device_info.c b/drivers/gpu/drm/i915/intel_device_info.c
-> index 93b251b25aba..94da5aa37391 100644
-> --- a/drivers/gpu/drm/i915/intel_device_info.c
-> +++ b/drivers/gpu/drm/i915/intel_device_info.c
-> @@ -114,7 +114,7 @@ void intel_device_info_print_static(const struct intel_device_info *info,
->  	DEV_INFO_FOR_EACH_FLAG(PRINT_FLAG);
->  #undef PRINT_FLAG
->  
-> -#define PRINT_FLAG(name) drm_printf(p, "%s: %s\n", #name, yesno(info->display.name));
-> +#define PRINT_FLAG(name) drm_printf(p, "%s: %s\n", #name, yesno(info->display.name))
->  	DEV_INFO_DISPLAY_FOR_EACH_FLAG(PRINT_FLAG);
->  #undef PRINT_FLAG
->  }
+On Wed, 2022-01-26 at 15:47 +0100, Benjamin Tissoires wrote:
+> On Wed, Jan 26, 2022 at 3:44 PM Lucas Zampieri <lzampier@redhat.com> wrot=
+e:
+> >=20
+> > As of logitech lightspeed receiver fw version 04.02.B0009,
+> > HIDPP_PARAM_DEVICE_INFO is being reported as 0x11.
+> >=20
+> > With patch "HID: logitech-dj: add support for the new lightspeed receiv=
+er
+> > iteration", the mouse starts to error out with:
+> > =C2=A0 logitech-djreceiver: unusable device of type UNKNOWN (0x011) con=
+nected on
+> > =C2=A0 slot 1
+> > and becomes unusable.
+> >=20
+> > This has been noticed on a Logitech G Pro X Superlight fw MPM 25.01.B00=
+18.
+>=20
+> The patch looks good to me.
+>=20
+> Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>=20
+> Ideally, Nestor, can you confirm this is expected and that we won't
+> have any bad surprises there?
+>=20
+> I think we probably want this to be Cc-ed to stable once it gets
+> merged (we can add the tag as we merge it).
+>=20
+> Cheers,
+> Benjamin
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+This is likely a different connection type, so it should probably get its o=
+wn
+case statement, but let's let Nestor confirm :)
+
+Cheers,
+Filipe La=C3=ADns
+
+--=-ZtH0jJT5Y0ZBG7kBkzTc
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEE0jW0leqs33gyftiw+JPGdIFqqV0FAmHxYKkACgkQ+JPGdIFq
+qV38xhAAnjELLgF7c3FigXFEzvruKFTxNgNyxMnmFmuAp0baGSbK6BaPn0b6U00x
+0crpSY9q1/uxoIludufS5D1+f6r8GZnYwgghA72Y80HFOFIA1YqoZCmpKpPXMK0n
+YUu8HU+yqq1NGfSITFSR5rYq3lwnR2sVU6t5e0LYhW4q96sUrBP1udoE0BoEOxWv
+I6APDgGdvfy9BuC0+eJ+xUfDILc0wUuUgtYexUraKpIMxRldylYiwb9VQgTrshvU
+kwVfvv2+HOY4HBlIab0K9/aYIGkJUFQPlKnnxgUpE25nE9NKnrgI+ECDupzpAYRC
+87kf2JdrpqfVpXarHzSCGciQ861hSg7eQe+oDf9qwygTJu66UDqDAEE65DrA71g1
+3u9PBZtowsWwr6AJgt0MmEi3doBfqcdn8qZHGliRDLiWCUszw19h9x1835FRbXsJ
+iijr11o7BCs6dttmb3d2YkKIJZ1E/2p9V+WWmDBV+2OOOFMZ8S90GQXUgZAzaP0P
+87qzXgBkXoy855DSxOsAaeDcp4Q9riAeFcXs75fiJzkXpq/q+XVYxechOZ9mUM2M
+cHv+XmuTaSiPhZCt49RfIeFHOELnj1EOAS8TZavudoubo/HkgY9tRXvLBXNXhVFL
+u2tN19cNDtJpy866157RH5Sx0tD1MhA/1NxJQYUcwgBQxt4xYI8=
+=XWgf
+-----END PGP SIGNATURE-----
+
+--=-ZtH0jJT5Y0ZBG7kBkzTc--

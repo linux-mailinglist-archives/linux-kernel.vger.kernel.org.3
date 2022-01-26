@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 722B849C22C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:35:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB84349C233
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbiAZDe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S232167AbiAZDh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiAZDey (ORCPT
+        with ESMTP id S231830AbiAZDhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:34:54 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C610C06173B;
-        Tue, 25 Jan 2022 19:34:54 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id k17so3713937plk.0;
-        Tue, 25 Jan 2022 19:34:54 -0800 (PST)
+        Tue, 25 Jan 2022 22:37:55 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B10C06161C;
+        Tue, 25 Jan 2022 19:37:55 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id e28so17092645pfj.5;
+        Tue, 25 Jan 2022 19:37:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=ov9OGHY82q9euRbCDxFngRVc4SYGjlQJ03V4ACD/UVQ=;
-        b=KVxVTYqzn88rX/bJ8qTdJ4CrJTYcz7XTgBu68PJ9ywJ3C43jWiF1pnmNAxgxdGI81M
-         I4TdCBpJGKrb80HMWO3svtHyHP+P4Y/bWnPMMRWRoGYhQDSxlZUlCB9F17cdyGzsfedG
-         bQOp1BftFiTGERILt4bjA2+fy7YxzOW+YkbY8rab9FTU1a8RUFhtaFw++a12IHAayGK5
-         zZnT/Ne9Jjwukr/9nantF2azTUKSXzPBbq6dYRdLIaSg12XbJtrasJtwvqmqe6s8BN7Y
-         +9HbPOvCctnK24vr7WdfQv1FCnFrGmFK8fvVlPNTGONL2+fR2RO4CfPbLISjcMNMpESt
-         OvAw==
+        bh=R8sKbmelU/5Nq/hNaJjM9+nF8whK6mgWzXw+oSrXSRU=;
+        b=IQZKDu56KgfX5aXIzJb4UO3I7iRnMRKVFxvb7dT9+zCE5Scw0MysacW8ig9p5Jcp2L
+         6Dvb0laRVHwuXsqE660twfJWBibsfdDAVJpHGcO9IAVoucuaOGkKv3ErRI5/HlvHzeD3
+         zXPxzlQCfnZu0Ke+W729w7PY+4Y7aKHTEgssafgeLpFa2YlA7pGQf8OzJghReCT8LbYW
+         HYsid7KvITFWbmshD6ixm+zmDTPdLTu9VkULOEkXgbViQJsxKFabybbrDQxEL9HzeU36
+         JiaSk6uatfis0SY3Z3JbBglibkob022bOs1tPvoKqVFGoCceZy/oi5r/UKq56JOQpniu
+         bYSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ov9OGHY82q9euRbCDxFngRVc4SYGjlQJ03V4ACD/UVQ=;
-        b=rCk4f4i+PWCMjGfUGaiiTit/M6GiBwAZNU6P50auFuTTFBhfwu87wtmdIt3fIOFRMR
-         iNaRweu0s2RFJZDkDxU5FaWXPASlkgp/54/83Ldn9swW/da4Y9FD9BIj26ep9Q+tmsb5
-         NUp6pP1U7Qe5XUiHjAcmIiWX9S/cH5U8UO4I1Hj/nVsYPtLxRY9bfhF6NO6Ip1TXdS5W
-         pUkFSkGS1z7mEufpccBUgLLEwkK9X8Si9RRkTE+zzeYn7ayhD52+rkGwMbEkcY+Ky5N4
-         Y0BK3N47dwD8X7+2MCuPz9pDsXb5pJaErHDT0vnArSypzAxCDOnxTIeBhBpxpWMGf6yq
-         3B9Q==
-X-Gm-Message-State: AOAM531sZKFnVFh7G8iTcsnT1SuvIQHPZOHQ6XOhis8b3b3viUomszyk
-        ySPFgGaFeAIc718an1A4GsI=
-X-Google-Smtp-Source: ABdhPJwewhqOhGT0zeZnC1LHq5V1AV+DMXZVC9xLTwky6g3lfW2BwDHOux4zwhY883eszSTU+6/Njg==
-X-Received: by 2002:a17:902:8f8a:b0:149:8d21:9f44 with SMTP id z10-20020a1709028f8a00b001498d219f44mr21394197plo.15.1643168093835;
-        Tue, 25 Jan 2022 19:34:53 -0800 (PST)
+        bh=R8sKbmelU/5Nq/hNaJjM9+nF8whK6mgWzXw+oSrXSRU=;
+        b=mM+blMsiZObd4Ou9NXZXE+tprfrfUBKGZUiFfBcwOdy/CIR8IA1H7dbljG7Hbs26CG
+         UIID7EYhTtbSeK9pxLI9p6hGuylP9zOkXE3MJdL9S+vIFpqrbQJ/w3lge0oWKEGvTJxi
+         FD6h67CbiporlDws7VWxAU5q7HfOpCLzvuwwAjU1GKf5GBjqKFsVb9Z4q8NfODVJ5r8K
+         4gwD50ryn7LFnI8z597WNs5fG+pszrMHUTGzBJwXO4r1jmM0SkecWmkRF+cvO8v3rTI+
+         jEghqJHIVaP18uYuRI00R7DuTMBk39AsrC4Feh8Q6xfFvqNwI7bwtkhTnF8/p83D5YSR
+         Ta1g==
+X-Gm-Message-State: AOAM533D4vyaqNVhyh3ijHls9w5L9gvDLAWKT68Qj+fqtJI/U8mUCeYE
+        7T6cxporw7AmuNPSw/NUeFP7tmg2BhI=
+X-Google-Smtp-Source: ABdhPJxK+X9UChip1UawEyExUKiUx62ht18cjCVtTPCwDuYoCdpwBoFGvufp66BsJXs54AOG43w40w==
+X-Received: by 2002:a63:8f09:: with SMTP id n9mr17186985pgd.308.1643168274786;
+        Tue, 25 Jan 2022 19:37:54 -0800 (PST)
 Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id q21sm419792pfj.94.2022.01.25.19.34.52
+        by smtp.gmail.com with ESMTPSA id u21sm432224pfi.149.2022.01.25.19.37.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 19:34:53 -0800 (PST)
-Message-ID: <4a4f8880-9ea9-1aca-a202-18d5c50abd82@gmail.com>
-Date:   Tue, 25 Jan 2022 19:34:52 -0800
+        Tue, 25 Jan 2022 19:37:54 -0800 (PST)
+Message-ID: <dcb0c749-8535-d7ef-5921-6af479f4a432@gmail.com>
+Date:   Tue, 25 Jan 2022 19:37:52 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v7 08/16] net: dsa: tag_qca: add support for handling
- mgmt and MIB Ethernet packet
+Subject: Re: [RFC PATCH v7 09/16] net: dsa: qca8k: add tracking state of
+ master port
 Content-Language: en-US
 To:     Ansuel Smith <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -64,9 +64,9 @@ To:     Ansuel Smith <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
         Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org
 References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <20220123013337.20945-9-ansuelsmth@gmail.com>
+ <20220123013337.20945-10-ansuelsmth@gmail.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220123013337.20945-9-ansuelsmth@gmail.com>
+In-Reply-To: <20220123013337.20945-10-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -76,90 +76,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 1/22/2022 5:33 PM, Ansuel Smith wrote:
-> Add connect/disconnect helper to assign private struct to the dsa switch.
-> Add support for Ethernet mgm and MIB if the dsa driver provide an handler
-> to correctly parse and elaborate the data.
+> MDIO/MIB Ethernet require the master port and the tagger availabale to
+> correctly work. Use the new api master_state_change to track when master
+> is operational or not and set a bool in qca8k_priv.
+> We cache the first cached master available and we check if other cpu
+> port are operational when the cached one goes down.
+> This cached master will later be used by mdio read/write and mib request to
+> correctly use the working function.
+> 
+> qca8k implementation for MDIO/MIB Ethernet is bad. CPU port0 is the only
+> one that answers with the ack packet or sends MIB Ethernet packets. For
+> this reason the master_state_change ignore CPU port6 and checkes only
+> CPU port0 if it's operational and enables this mode.
 
-s/mgm/mgmt/
-s/dsa/DSA/
-
+s/checkes only/only checks/
 
 > 
 > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > ---
->   include/linux/dsa/tag_qca.h |  7 +++++++
->   net/dsa/tag_qca.c           | 39 ++++++++++++++++++++++++++++++++++---
->   2 files changed, 43 insertions(+), 3 deletions(-)
+>   drivers/net/dsa/qca8k.c | 18 ++++++++++++++++++
+>   drivers/net/dsa/qca8k.h |  1 +
+>   2 files changed, 19 insertions(+)
 > 
-> diff --git a/include/linux/dsa/tag_qca.h b/include/linux/dsa/tag_qca.h
-> index 87dd84e31304..de5a45f5b398 100644
-> --- a/include/linux/dsa/tag_qca.h
-> +++ b/include/linux/dsa/tag_qca.h
-> @@ -72,4 +72,11 @@ struct mib_ethhdr {
->   	__be16 hdr;		/* qca hdr */
->   } __packed;
+> diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
+> index 039694518788..4bc5064414b5 100644
+> --- a/drivers/net/dsa/qca8k.c
+> +++ b/drivers/net/dsa/qca8k.c
+> @@ -2383,6 +2383,23 @@ qca8k_port_lag_leave(struct dsa_switch *ds, int port,
+>   	return qca8k_lag_refresh_portmap(ds, port, lag, true);
+>   }
 >   
-> +struct qca_tagger_data {
-> +	void (*rw_reg_ack_handler)(struct dsa_switch *ds,
-> +				   struct sk_buff *skb);
-> +	void (*mib_autocast_handler)(struct dsa_switch *ds,
-> +				     struct sk_buff *skb);
-> +};
+> +static void
+> +qca8k_master_change(struct dsa_switch *ds, const struct net_device *master,
+> +		    bool operational)
+> +{
+> +	struct dsa_port *dp = master->dsa_ptr;
+> +	struct qca8k_priv *priv = ds->priv;
 > +
->   #endif /* __TAG_QCA_H */
-> diff --git a/net/dsa/tag_qca.c b/net/dsa/tag_qca.c
-> index fdaa1b322d25..dc81c72133eb 100644
-> --- a/net/dsa/tag_qca.c
-> +++ b/net/dsa/tag_qca.c
-> @@ -5,6 +5,7 @@
->   
->   #include <linux/etherdevice.h>
->   #include <linux/bitfield.h>
-> +#include <net/dsa.h>
->   #include <linux/dsa/tag_qca.h>
->   
->   #include "dsa_priv.h"
-> @@ -32,11 +33,16 @@ static struct sk_buff *qca_tag_xmit(struct sk_buff *skb, struct net_device *dev)
->   
->   static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
->   {
-> +	struct qca_tagger_data *tagger_data;
-> +	struct dsa_port *dp = dev->dsa_ptr;
-> +	struct dsa_switch *ds = dp->ds;
->   	u16 hdr, pk_type;
->   	__be16 *phdr;
->   	int port;
->   	u8 ver;
->   
-> +	tagger_data = ds->tagger_data;
+> +	/* Ethernet MIB/MDIO is only supported for CPU port 0 */
+> +	if (dp->index != 0)
+
+We sort of have a define for this: QCA8K_CPU_PORT0 even though that enum 
+definition might be more accidental than on purpose.
+
+> +		return;
 > +
->   	if (unlikely(!pskb_may_pull(skb, QCA_HDR_LEN)))
->   		return NULL;
->   
-> @@ -51,13 +57,19 @@ static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
->   	/* Get pk type */
->   	pk_type = FIELD_GET(QCA_HDR_RECV_TYPE, hdr);
->   
-> -	/* Ethernet MDIO read/write packet */
-> -	if (pk_type == QCA_HDR_RECV_TYPE_RW_REG_ACK)
-> +	/* Ethernet mgmt read/write packet */
-> +	if (pk_type == QCA_HDR_RECV_TYPE_RW_REG_ACK) {
-> +		if (tagger_data->rw_reg_ack_handler)
+> +	if (operational)
+> +		priv->mgmt_master = master;
+> +	else
+> +		priv->mgmt_master = NULL;
 
-if (likely()) in case that happens to make a difference?
+	priv->mgmt_master = operational ? master : NULL;
 
-> +			tagger_data->rw_reg_ack_handler(ds, skb);
->   		return NULL;
-> +	}
->   
->   	/* Ethernet MIB counter packet */
-> -	if (pk_type == QCA_HDR_RECV_TYPE_MIB)
-> +	if (pk_type == QCA_HDR_RECV_TYPE_MIB) {
-> +		if (tagger_data->mib_autocast_handler)
-
-Likewise
-
-In any case, this looks good to me:
+but this is really because the bike shed is blue. So in any case:
 
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 

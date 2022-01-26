@@ -2,96 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7869B49D122
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0D749D124
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243928AbiAZRsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
+        id S243823AbiAZRty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237368AbiAZRsN (ORCPT
+        with ESMTP id S237190AbiAZRtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:48:13 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C824C061747
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:48:13 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id i1so227533pla.9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:48:13 -0800 (PST)
+        Wed, 26 Jan 2022 12:49:53 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E40C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:49:52 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b9so423159lfq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:49:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cNfxPUvWvaI1vHO/jmsIjiSEzNXExUCiFtH31cxBIdo=;
-        b=LoqmHXH523JnCj+p+8Rc/S9F5Y06QO7Q0xw2slJ2Ei/D6SbNPbbHBQAMEnxOcutBHB
-         Ju0IJZE4f2IWVpl2YW5W0bRsCRXRv5ANtlQf28JmbFRXOV5kbZY/4yUwqxOWbNHqKf+l
-         lDbZZnOjZ08qpJVMISJiLzXgNjxUCG+yQhQ7K+aLI3qAWKv0i70R+zlADzFYVsICutYJ
-         r2iPLS0593bUYMoURAqZxpeVu+m1XvDfZECG6CC6ifVRRXXg+keDo3vfkqieMtuaGX8E
-         ifbtkzcQOeoVoQhzurv50K5samEA0tvwrl1DY5HO2RrhmkfavJJr0eB2WEHRl+BMVLzy
-         m4Ug==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WmqGKC4xQawqKboaNiLBn0or4cSkyVr5JGe27OnIXqE=;
+        b=f1lwMnsFln7jwIlKeNRMgWZPMKNtP0Jo/oZ3+o0dmsT4mbbG58Z3vrUxOVRIfpRKZb
+         IUlDgx0olo1pwkNhQ0LYYGvdES8EkuWgoQekAL+ZTIGywebhQ6lMi995unOcQOQOrHbu
+         TAKhciwaZT/Kvn+SwoXK4IsxnMvo/tuA+LGUPimURVZPI47xkMq/FYYue2FiddLWcOG8
+         8l4nDfpuPdg8IP+16WNdnWOr1iBN5+r7D11yWI5UQvLGY0hdYmSfRe4qAyxMWYMO1bEc
+         OjJ1yd25qS46TxqqbKmkIwaLBni4gRvodCECLApDTY3gKfHSyIr+fm1X4z3WtHhh405l
+         WRrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cNfxPUvWvaI1vHO/jmsIjiSEzNXExUCiFtH31cxBIdo=;
-        b=ZWdEX4pKAeNemMZ9/pjufaY4AY+kqwmkqzW7amgkG2ayRCzf16TZMcz7iVuC30hDdM
-         Oi4+SCoW4e1EJHyFbZ4MV7bpM256aVFwibSW2wP6HTi9J/aig9n5Bj8Qv86TLUZRl7ez
-         uI6Be7Cri+UYixQpIiesna0hnwFglIrGmYZKmQMfRefyrIy7N2LHI8lhF+L+nA8WzQ3n
-         oXerCFQ7G3ammftZamYr9Rq+5LfvlTRKWTRfcGAaGBcP6jsHHcYEiow9jrB7235u6lz1
-         Nd3gvMszKUUQsX88fl30aXtgd6XMsKt3VBKqNnsDLvSoom7FivDleuBrqCcV2E19qTFT
-         ZSMw==
-X-Gm-Message-State: AOAM533IggXzBRM+Y2Xj/0mwtwtw8IpXPcyiugVUJdidz36oF9BeAhlh
-        eBZrWbCSr7qACqjnaO8b92yPHw==
-X-Google-Smtp-Source: ABdhPJxwsiEqrNgJNlq8u/NfwI/GMmXVNl3SBs8rnKUQWQw1WWtgCuYRSuQeqhARV4DBKFuSYR7tNQ==
-X-Received: by 2002:a17:90a:ab91:: with SMTP id n17mr915pjq.238.1643219292505;
-        Wed, 26 Jan 2022 09:48:12 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k12sm2822797pfc.107.2022.01.26.09.48.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 09:48:11 -0800 (PST)
-Date:   Wed, 26 Jan 2022 17:48:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
-        Like Xu <likexu@tencent.com>
-Subject: Re: [PATCH 0/3] KVM: x86: XSS and XCR0 fixes
-Message-ID: <YfGJWNVuFYZ8kl2I@google.com>
-References: <20220126172226.2298529-1-seanjc@google.com>
- <3e978189-4c9a-53c3-31e7-c8ac1c51af31@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WmqGKC4xQawqKboaNiLBn0or4cSkyVr5JGe27OnIXqE=;
+        b=KxJnYFxcG9e0g8A3HOq6Z9MvIxJ4KBYcQS9wOonS8CFtPENxpPKqg3wbLCN2q8dSU+
+         oQYsPZ3dzD7NAmbczuDry2lDUWK7zd4UFiou0z89GIwOeuuiXSFDdr/0Xq6592hD/EV9
+         VrodSh6iUhwmgUuNUoWWEob38f5Q3g5A069CRjTcx+bsuILBLdLHMBX8/NkldVvP2TVD
+         ztDQnmpoabaKJwRsy5BMeLMWHPjn5qi2PBT3dfGwFntl7SC6OORAv209H4vAKA5E9HGa
+         iLWL1HoeUthpgntPqxSEck+wFUDbdWeVOtVCUNnoWEolEwKxEFnYZA766TdZGdxo8H8g
+         WQvQ==
+X-Gm-Message-State: AOAM5337Lo6aVJKwNJuuzTGb0Zu6ZVong8vJEEWbnEtHWPVRXUH1RGUF
+        NB00y5CxCTPdCZCWpnKg74ub4SGRlAaKHcaKIgNCyg==
+X-Google-Smtp-Source: ABdhPJyh1s08ERde5TjNYji88g4oR4j7/LzUI/PAKpMTs6IpknOwPL6wW6hnoMCoRCvwncLnEC0ti0uu3ea8HNxoMt8=
+X-Received: by 2002:ac2:5510:: with SMTP id j16mr44355lfk.240.1643219390726;
+ Wed, 26 Jan 2022 09:49:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e978189-4c9a-53c3-31e7-c8ac1c51af31@redhat.com>
+References: <20220126141917.75399-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220126141917.75399-1-andriy.shevchenko@linux.intel.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 26 Jan 2022 09:49:38 -0800
+Message-ID: <CAKwvOdkBAe4qMdFgDFWNLHMsJrW+PBwa7-hAL5T9fReQqNiF7g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] string: Make stpcpy() possible to use
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Francis Laniel <laniel_francis@privacyrequired.com>,
+        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        kernel test robot <lkp@intel.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022, Paolo Bonzini wrote:
-> On 1/26/22 18:22, Sean Christopherson wrote:
-> > For convenience, Like's patch split up and applied on top of Xiaoyao.
-> > Tagged all for @stable, probably want to (retroactively?) get Xiaoyao's
-> > patch tagged too?
-> > Like Xu (2):
-> >    KVM: x86: Update vCPU's runtime CPUID on write to MSR_IA32_XSS
-> >    KVM: x86: Sync the states size with the XCR0/IA32_XSS at, any time
-> > 
-> > Xiaoyao Li (1):
-> >    KVM: x86: Keep MSR_IA32_XSS unchanged for INIT
-> > 
-> >   arch/x86/kvm/x86.c | 6 +++---
-> >   1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > 
-> > base-commit: e2e83a73d7ce66f62c7830a85619542ef59c90e4
-> 
-> Queued, though I'll note that I kinda disagree with the stable@ marking of
-> patch 1 (and therefore with the patch order) as it has no effect in
-> practice.
+On Wed, Jan 26, 2022 at 6:19 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> It is a good rule to avoid submitting code without users.
+> Currently the stpcpy() is unusable due to missed declaration.
+> Any attempts to use it will bring something like:
+>
+>   error: implicit declaration of function =E2=80=98stpcpy=E2=80=99 [-Werr=
+or=3Dimplicit-function-declaration]
+>
+> Move declaration to the header and guard it as other string functions.
+>
+> Fixes: 1e1b6d63d634 ("lib/string.c: implement stpcpy")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <natechancellor@gmail.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Hmm, that's not a given, is it?  E.g. the guest can configure XSS early on and
-then expect the configured value to live across INIT-SIPI-SIPI.  I agree it's
-highly unlikely for any guest to actually do that, but I don't like assuming all
-guests will behave a certain way.
+Recall the discussion from Kees:
+https://lore.kernel.org/lkml/CAK7LNAQXo5-5W6hvNMEVPBPf3tRWaf-pQdSR-0OHyi4RC=
+GhjsQ@mail.gmail.com/
+and
+https://lore.kernel.org/lkml/202008150921.B70721A359@keescook/
+
+I'm guessing that the 0day bot report was on the third patch in this
+series, which looks to use stpcpy:
+https://lore.kernel.org/lkml/20220126141917.75399-3-andriy.shevchenko@linux=
+.intel.com/
+
+for patch 3, I'd s/"compress"/de-duplicate/ or s/"compress"/merge/.
+
+Kees, I'm curious if we can do something like require the string
+length to be known at compile time otherwise BUILD_BUG_ON?
+
+> ---
+> v3: new patch to fix reported issue
+>  include/linux/string.h | 3 +++
+>  lib/string.c           | 3 ++-
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index b6572aeca2f5..b1aeb3475396 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -31,6 +31,9 @@ size_t strlcpy(char *, const char *, size_t);
+>  #ifndef __HAVE_ARCH_STRSCPY
+>  ssize_t strscpy(char *, const char *, size_t);
+>  #endif
+> +#ifndef __HAVE_ARCH_STPCPY
+> +char *stpcpy(char *__restrict__ dest, const char *__restrict__ src);
+> +#endif
+>
+>  /* Wraps calls to strscpy()/memset(), no arch specific code required */
+>  ssize_t strscpy_pad(char *dest, const char *src, size_t count);
+> diff --git a/lib/string.c b/lib/string.c
+> index 485777c9da83..4ecb8ec1fdd1 100644
+> --- a/lib/string.c
+> +++ b/lib/string.c
+> @@ -233,6 +233,7 @@ ssize_t strscpy(char *dest, const char *src, size_t c=
+ount)
+>  EXPORT_SYMBOL(strscpy);
+>  #endif
+>
+> +#ifndef __HAVE_ARCH_STPCPY
+>  /**
+>   * stpcpy - copy a string from src to dest returning a pointer to the ne=
+w end
+>   *          of dest, including src's %NUL-terminator. May overrun dest.
+> @@ -248,7 +249,6 @@ EXPORT_SYMBOL(strscpy);
+>   * not recommended for usage. Instead, its definition is provided in cas=
+e
+>   * the compiler lowers other libcalls to stpcpy.
+>   */
+> -char *stpcpy(char *__restrict__ dest, const char *__restrict__ src);
+>  char *stpcpy(char *__restrict__ dest, const char *__restrict__ src)
+>  {
+>         while ((*dest++ =3D *src++) !=3D '\0')
+> @@ -256,6 +256,7 @@ char *stpcpy(char *__restrict__ dest, const char *__r=
+estrict__ src)
+>         return --dest;
+>  }
+>  EXPORT_SYMBOL(stpcpy);
+> +#endif
+>
+>  #ifndef __HAVE_ARCH_STRCAT
+>  /**
+> --
+> 2.34.1
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers

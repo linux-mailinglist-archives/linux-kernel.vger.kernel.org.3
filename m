@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA7D49C371
+	by mail.lfdr.de (Postfix) with ESMTP id E80F349C372
 	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbiAZGFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 01:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
+        id S234834AbiAZGFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 01:05:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234641AbiAZGFT (ORCPT
+        with ESMTP id S234685AbiAZGFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 01:05:19 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4056C061744
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:18 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id e20so19854030qvu.7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:18 -0800 (PST)
+        Wed, 26 Jan 2022 01:05:20 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E80C061747
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:19 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id c19so26335457qtx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=aWNRX9QsBPHLZOFVrwNXiWXc+ZQSkTRboCbVzmJISWM=;
-        b=LlMcMekRBawFA/p+rIOXAZAiAa1k3SdlK7Hkpzh6hMhMDHMLaRQKA8ML9fwHV6llAJ
-         Bdxeiz9HYmUpAchr0GfAWwJBjAWkCI7hp2dT6wD+ckNBhnwWq6ACHfH7aUSgQdr2rkI6
-         mpHA6t/nLQ+gI7EEx382Dl6maFaESiD2TqeWZhSl0Wp5MWF7QFaUj2Mq/Xv0SxWLoibg
-         4/IQbSGz3QzAafFPlJu6lx2YmPs8ClFWtFFBtMKmssnPMca5EWGQVPAvZhtySQ4pIdN/
-         28UuDSoc27Z6S7UpTlIDARr3keJuGWON+9QTLfGn8icD8SJS61b3RMeKZK/dfDT8mLNu
-         9KFQ==
+        bh=R7V05PwaNjZnBTJ0+d7ZFZvO5dL9q1xRZty8VkA9hmQ=;
+        b=bYJUNPpR1cZ5cpCeIRGCfDxZJpYmpPoh66ZJK77ukWwzsfKXMtKjFR0oyDl2PrVsRW
+         IjZbI251p7s2yxGbyhaCpLtUYBe6eQ/H9o9djosXMfNCEvGwGBN+R0lcfbPMC5Cksznp
+         HzEoAy39YDsLI/M5Ax6D0T9dXeKhcoYrDGg62jHcw+RFE+cRQEohFqYIRggXfbAR09jh
+         c2sbLnBREwPZM/oV0w9qlL4dm7bHOUr+bSxvw/pnn/B3Aa/Q5IwY6gYNswVBk4dgWm/4
+         tybcJbilgAp6um5hCw1b5mXjM2VS1BA4dZTRuLQV21VwHvpW96HOLQcJFswBr1TlyuL5
+         O08Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aWNRX9QsBPHLZOFVrwNXiWXc+ZQSkTRboCbVzmJISWM=;
-        b=sZ/qPIujAe/C3wXJ4knTb8z1DZYZpWQR/ozmBAzzBohks3vlHMjj9Nd1AIePFaGgCK
-         GRy9o/PFjti5vpa3aBPg2Zkd7+LI1s1S+g3XQ5w5cgmYU/tnl799E3xdNEyq5dXqwcFN
-         lcYktp+pbWpvsn+lgEv4adfRk44uqFIrbN0dytprSZs3OtDAyWTS/6YYAgTfOclw8jj2
-         /OE7yGNukrp18cnzylVnpi9M4HR4HwEC5o+Pv0bSjkEL/ab0ymjJVjM/vtj4Ua6Pizqy
-         mX0PsWjcVZZLCwPtSxOfL/bTtFhhvIVZ9Q18kTbsomekG5VrtD0GwY2OkcJm5oHE/Mbh
-         QJAg==
-X-Gm-Message-State: AOAM530V8+NvGbvojvB31UC3A8xUr6vE8gUz0pt/ty21TEoQ+26MbiZh
-        f113gIyHgdU61R/KxbsEpSFv8A==
-X-Google-Smtp-Source: ABdhPJwVByTrnm101Bf8YAmr4+nFjtChqbu8bu6/f6QCYcLdWej0+Cltb2+DvquGjJnoBQkLcKwHiA==
-X-Received: by 2002:a05:6214:1cca:: with SMTP id g10mr22397753qvd.36.1643177118106;
-        Tue, 25 Jan 2022 22:05:18 -0800 (PST)
+        bh=R7V05PwaNjZnBTJ0+d7ZFZvO5dL9q1xRZty8VkA9hmQ=;
+        b=xWltCoQN9CeLcrx7VTr/vftGbbyCYz1AoqDeEyj33Z1QY2WSQz0GPjog7MHPTV5Jn9
+         GLLXPQUMg1rC+0fJdqD+ILep55LCY2YR2MwfIP6mg9HQSwcJ4TiKuK+iykHPGluKsUas
+         qMBU0qASJkzaMUGsWP+o02Wv+z9HFE6oeCDgEb6YwIdOgvDpC44J1TAATKpcG2y26Gi0
+         VMzASSZTW6GQ/vAQ7JwYcKjPCiDos298r6DuMEwjKbOJbpE+RRzPMZpw+JPfoZloQYW7
+         Y3ZWcqoW2xgBQaEblIlo7pRy6KdPiSwkGAd+ibmoL43eP8YE21yn/b6jf1pcEp8TA0iN
+         0h1w==
+X-Gm-Message-State: AOAM5308XwjutAChUAmFKNUtZRZjVOqYvmSiY220YyDYkZRDZrp2Fgwo
+        ipdC6GAxCaOkOK4w3tXSotFdXQ==
+X-Google-Smtp-Source: ABdhPJyGJu1wLWlwWE4gJcN7imPL+nBoU18Asvh3ix2RWYM+mVME0JOpFCDhcqGNLxudLxhV3f6eqg==
+X-Received: by 2002:a05:622a:43:: with SMTP id y3mr19448205qtw.347.1643177119022;
+        Tue, 25 Jan 2022 22:05:19 -0800 (PST)
 Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
-        by smtp.gmail.com with ESMTPSA id o19sm9856699qta.40.2022.01.25.22.05.17
+        by smtp.gmail.com with ESMTPSA id o19sm9856699qta.40.2022.01.25.22.05.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 22:05:17 -0800 (PST)
+        Tue, 25 Jan 2022 22:05:18 -0800 (PST)
 From:   Pasha Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, rientjes@google.com,
@@ -57,9 +57,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
         songmuchun@bytedance.com, qydwhotmail@gmail.com, hughd@google.com,
         ziy@nvidia.com, anshuman.khandual@arm.com
-Subject: [PATCH v3 1/4] mm/debug_vm_pgtable: remove pte entry from the page table
-Date:   Wed, 26 Jan 2022 06:05:11 +0000
-Message-Id: <20220126060514.1574935-2-pasha.tatashin@soleen.com>
+Subject: [PATCH v3 2/4] mm/page_table_check: use unsigned long for page counters and cleanup
+Date:   Wed, 26 Jan 2022 06:05:12 +0000
+Message-Id: <20220126060514.1574935-3-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 In-Reply-To: <20220126060514.1574935-1-pasha.tatashin@soleen.com>
 References: <20220126060514.1574935-1-pasha.tatashin@soleen.com>
@@ -69,55 +69,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pte entry that is used in pte_advanced_tests() is never removed from
-the page table at the end of the test.
+For the consistency, use "unsigned long" for all page counters.
 
-The issue is detected by page_table_check, to repro compile kernel with
-the following configs:
-
-CONFIG_DEBUG_VM_PGTABLE=y
-CONFIG_PAGE_TABLE_CHECK=y
-CONFIG_PAGE_TABLE_CHECK_ENFORCED=y
-
-During the boot the following BUG is printed:
-
-[    2.262821] debug_vm_pgtable: [debug_vm_pgtable         ]: Validating
-               architecture page table helpers
-[    2.276826] ------------[ cut here ]------------
-[    2.280426] kernel BUG at mm/page_table_check.c:162!
-[    2.284118] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-[    2.287787] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-               5.16.0-11413-g2c271fe77d52 #3
-[    2.293226] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-               BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org
-               04/01/2014
-...
-
-The entry should be properly removed from the page table before the page
-is released to the free list.
-
-Fixes: a5c3b9ffb0f4 ("mm/debug_vm_pgtable: add tests validating advanced arch page table helpers")
+Also, reduce code duplication by calling
+__page_table_check_*_clear() from __page_table_check_*_set() functions.
 
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Zi Yan <ziy@nvidia.com>
-Tested-by: Zi Yan <ziy@nvidia.com>
+Reviewed-by: Wei Xu <weixugc@google.com>
 ---
- mm/debug_vm_pgtable.c | 2 ++
- 1 file changed, 2 insertions(+)
+ mm/page_table_check.c | 35 +++++++----------------------------
+ 1 file changed, 7 insertions(+), 28 deletions(-)
 
-diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-index a7ac97c76762..db2abd9e415b 100644
---- a/mm/debug_vm_pgtable.c
-+++ b/mm/debug_vm_pgtable.c
-@@ -171,6 +171,8 @@ static void __init pte_advanced_tests(struct pgtable_debug_args *args)
- 	ptep_test_and_clear_young(args->vma, args->vaddr, args->ptep);
- 	pte = ptep_get(args->ptep);
- 	WARN_ON(pte_young(pte));
-+
-+	ptep_get_and_clear_full(args->mm, args->vaddr, args->ptep, 1);
- }
+diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+index 7504e7caa2a1..c61d7ebe13b1 100644
+--- a/mm/page_table_check.c
++++ b/mm/page_table_check.c
+@@ -86,8 +86,8 @@ static void page_table_check_clear(struct mm_struct *mm, unsigned long addr,
+ {
+ 	struct page_ext *page_ext;
+ 	struct page *page;
++	unsigned long i;
+ 	bool anon;
+-	int i;
  
- static void __init pte_savedwrite_tests(struct pgtable_debug_args *args)
+ 	if (!pfn_valid(pfn))
+ 		return;
+@@ -121,8 +121,8 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
+ {
+ 	struct page_ext *page_ext;
+ 	struct page *page;
++	unsigned long i;
+ 	bool anon;
+-	int i;
+ 
+ 	if (!pfn_valid(pfn))
+ 		return;
+@@ -152,10 +152,10 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
+ void __page_table_check_zero(struct page *page, unsigned int order)
+ {
+ 	struct page_ext *page_ext = lookup_page_ext(page);
+-	int i;
++	unsigned long i;
+ 
+ 	BUG_ON(!page_ext);
+-	for (i = 0; i < (1 << order); i++) {
++	for (i = 0; i < (1ul << order); i++) {
+ 		struct page_table_check *ptc = get_page_table_check(page_ext);
+ 
+ 		BUG_ON(atomic_read(&ptc->anon_map_count));
+@@ -206,17 +206,10 @@ EXPORT_SYMBOL(__page_table_check_pud_clear);
+ void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
+ 				pte_t *ptep, pte_t pte)
+ {
+-	pte_t old_pte;
+-
+ 	if (&init_mm == mm)
+ 		return;
+ 
+-	old_pte = *ptep;
+-	if (pte_user_accessible_page(old_pte)) {
+-		page_table_check_clear(mm, addr, pte_pfn(old_pte),
+-				       PAGE_SIZE >> PAGE_SHIFT);
+-	}
+-
++	__page_table_check_pte_clear(mm, addr, *ptep);
+ 	if (pte_user_accessible_page(pte)) {
+ 		page_table_check_set(mm, addr, pte_pfn(pte),
+ 				     PAGE_SIZE >> PAGE_SHIFT,
+@@ -228,17 +221,10 @@ EXPORT_SYMBOL(__page_table_check_pte_set);
+ void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+ 				pmd_t *pmdp, pmd_t pmd)
+ {
+-	pmd_t old_pmd;
+-
+ 	if (&init_mm == mm)
+ 		return;
+ 
+-	old_pmd = *pmdp;
+-	if (pmd_user_accessible_page(old_pmd)) {
+-		page_table_check_clear(mm, addr, pmd_pfn(old_pmd),
+-				       PMD_PAGE_SIZE >> PAGE_SHIFT);
+-	}
+-
++	__page_table_check_pmd_clear(mm, addr, *pmdp);
+ 	if (pmd_user_accessible_page(pmd)) {
+ 		page_table_check_set(mm, addr, pmd_pfn(pmd),
+ 				     PMD_PAGE_SIZE >> PAGE_SHIFT,
+@@ -250,17 +236,10 @@ EXPORT_SYMBOL(__page_table_check_pmd_set);
+ void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+ 				pud_t *pudp, pud_t pud)
+ {
+-	pud_t old_pud;
+-
+ 	if (&init_mm == mm)
+ 		return;
+ 
+-	old_pud = *pudp;
+-	if (pud_user_accessible_page(old_pud)) {
+-		page_table_check_clear(mm, addr, pud_pfn(old_pud),
+-				       PUD_PAGE_SIZE >> PAGE_SHIFT);
+-	}
+-
++	__page_table_check_pud_clear(mm, addr, *pudp);
+ 	if (pud_user_accessible_page(pud)) {
+ 		page_table_check_set(mm, addr, pud_pfn(pud),
+ 				     PUD_PAGE_SIZE >> PAGE_SHIFT,
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

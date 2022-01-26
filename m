@@ -2,89 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F9B49D08B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BEA49D08F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243665AbiAZRQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:16:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:51494 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243650AbiAZRQY (ORCPT
+        id S243653AbiAZRRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:17:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231270AbiAZRQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:16:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20D1161923;
-        Wed, 26 Jan 2022 17:16:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F19C340E3;
-        Wed, 26 Jan 2022 17:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643217383;
-        bh=aR5TTg+yX2ncUu2adEk0kEJ2Fb368DAANpS08G5wYEo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kDm7Qz+623bPk2g1lVdMwhk4OwhthiEtOBCqN0ktL2R/nB4cLFCqs264tgN0jIsXN
-         Mq3SbKnntVhu6gVy2z76lqokQq80IL0JcQNAogisF4HDBhL92rEjPoxAitIc9uTlsZ
-         zOhdYKPSo4BXkm9rQa3byzo4nySvQ8OrO7xGMi5A3YXIMKNIBkggACXDeUmriYJN0x
-         WRqNmIXON0rl7DNEeX0JBhMGLw7eOF9s/x6d9ezZbL70RFxebKfBfiB27Nl0kQ+Q19
-         7g06pKPL9WDUnZ74EtKHiMDGrFc7xBx47SLM/tEB2hsj6nV3omkFzR/yBctHXzx5F6
-         A2aE9RbsZQgCw==
-Date:   Wed, 26 Jan 2022 17:16:17 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "nobuta.keiya@fujitsu.com" <nobuta.keiya@fujitsu.com>
-Cc:     "'madvenka@linux.microsoft.com'" <madvenka@linux.microsoft.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "sjitindarsingh@gmail.com" <sjitindarsingh@gmail.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v13 11/11] arm64: Select HAVE_RELIABLE_STACKTRACE
-Message-ID: <YfGB4RnMjl9W6iso@sirena.org.uk>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-12-madvenka@linux.microsoft.com>
- <TY2PR01MB5257518B8EB381E16D52B244855F9@TY2PR01MB5257.jpnprd01.prod.outlook.com>
+        Wed, 26 Jan 2022 12:16:56 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DBBC06161C;
+        Wed, 26 Jan 2022 09:16:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=PDDX1wKG5hFVTVEzfMRB1AeOYAj6/ey3grH/4rL5ik0=; b=sSbgNeYjQBj/LEhgZMY+qH+KfT
+        LFVskorPuMD84FiJUAYKagOUAU7ns0eQ0u2LEGiTHxckzt0SvzVZfdaOMtOPIDy92ItR1LAXsoTwi
+        clBZtmRILDvBP/Ys3ae8MiPZ7QNjMfEVG3/LcI0lYKLN8rAl0hphDYmw6zJfJ72eoZMV3K5+LYANd
+        DZJ7zb/Hv1Zyh2OEbaL7CdT/nhyLh5YmTIVLhrleSXwUr4xXF94Zj0oDq3cPbo4qqmyu8DFzLyQ4u
+        Od99gfIfh5RJOuGe8ivWfiUK48vnJtRX7eU4RfXA9eO51LBRWLxByVmh571Md/fYJG24BlImx0clf
+        sW4E9YDA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nClua-004Fb5-Ql; Wed, 26 Jan 2022 17:16:49 +0000
+Message-ID: <4b433d55-95de-963b-7351-6db79855824b@infradead.org>
+Date:   Wed, 26 Jan 2022 09:16:43 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v039aBggoL9WPPvU"
-Content-Disposition: inline
-In-Reply-To: <TY2PR01MB5257518B8EB381E16D52B244855F9@TY2PR01MB5257.jpnprd01.prod.outlook.com>
-X-Cookie: Use only in a well-ventilated area.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/2] docs: add a document about regression handling
+Content-Language: en-US
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <cover.1643110442.git.linux@leemhuis.info>
+ <f97738d6250050bc982bf2947587f1c73f37446f.1643110442.git.linux@leemhuis.info>
+ <87sftbwemg.fsf@meer.lwn.net>
+ <c8d7228a-2df5-df92-6d53-c3e940274dad@leemhuis.info>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <c8d7228a-2df5-df92-6d53-c3e940274dad@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---v039aBggoL9WPPvU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, Jan 25, 2022 at 05:21:27AM +0000, nobuta.keiya@fujitsu.com wrote:
+On 1/26/22 06:10, Thorsten Leemhuis wrote:
+>>> +The important bits for people affected by regressions
+>>> +=====================================================
+>>> +
+>>> +It's a regression if something running fine with one Linux kernel works worse or
+>>> +not at all with a newer version. Note, the newer kernel has to be compiled using
+>>> +a similar configuration -- for this and other fine print, check out below
+>>> +section "What is a 'regression' and what is the 'no regressions rule'?".
+>> Can we be consistent with either single or double quotes?  I'd suggest
+>> "double quotes" but won't make a fuss about that.
+> Changed to "double quotes" everywhere in the text. But just to make sure
+> I get things right: in this particular case this will result in
+> 
+> ...section "What is a "regression" and what is the "no regressions rule"?".
+> 
+> This looks a bit strange to me. Something in me really would like to
+> quote the section's header in single quotes, but I guess grammar rules
+> do not allow that, so whatever. :-D
+> 
 
-> I know that Julien Thierry published objtool support for arm64 [1], but I'm not
-> sure if it has been updated. Could you tell me other threads if you know?
+I think that it was correct with the mixed quotes. Using all double
+quotes here is confusing.
 
-I've not heard of anyone else picking that up.
-
---v039aBggoL9WPPvU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHxgeEACgkQJNaLcl1U
-h9AeZQgAhE1zfok88S69ExiVCwo4qLkMK0qP4cXtzuzVw5i8WAyR0aP0xtfIZg5J
-x+Qwu0HOFe2OazXVO+nY6ggC2WhT4Mhk2w3269rN6jnvlTifJqVBHNqseJBtjrWV
-ULmrweCzOb81LQJwfn69LXusz+aqXeAKHT17924Pd0zGbRhgpObSKCdTwbZBxoWI
-pc6kZNu/Sq3z8FP6Up66BOum8+l8wKhIEsdHQm1TZHud+P+9+no0t545XKJbddTQ
-ytQeVNOes799bzJAF/DKIUvJHDUr3GKx7Z/ZVLYfcPlimNpIk1H/FP/9YDxRHWsk
-yhkqb/PkS+UpJzyMismn+sLuvXPtRw==
-=sDH5
------END PGP SIGNATURE-----
-
---v039aBggoL9WPPvU--
+-- 
+~Randy

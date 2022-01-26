@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E97749CEB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B33D49CEB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242983AbiAZPg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S242990AbiAZPhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231380AbiAZPg4 (ORCPT
+        with ESMTP id S242989AbiAZPhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:36:56 -0500
+        Wed, 26 Jan 2022 10:37:02 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C71C06173B;
-        Wed, 26 Jan 2022 07:36:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA15AC06161C;
+        Wed, 26 Jan 2022 07:37:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5532CB81ECB;
-        Wed, 26 Jan 2022 15:36:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D3EC340EB;
-        Wed, 26 Jan 2022 15:36:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 830D1B81A00;
+        Wed, 26 Jan 2022 15:37:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD180C340E3;
+        Wed, 26 Jan 2022 15:36:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643211414;
-        bh=wWo760c3ezeEk09F3+obtM0z7sicJxM+6AeAwTTQAAE=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=Gl6FticAcyYgFSFBneq5eeEQEUJs3teNa8q8gz8tpexA77dZRw9TItqPGenVMzSkZ
-         LR4d3lj44bOsdLKIWYjAp16hM98kk47gYa9RG9LEQt332oJf3kpCFur0nb1aum+pt3
-         fCRG+AlQEKW/CnwvTHN8D9SWpIiDyA+Mjp2Hjp27JuDBnigGaEtWCAUVw9RVC56XWa
-         nEdXXQeBNwKS5LvoSjyC0ogeoiWXg/Q8ooF/5KKxHdRsQkNxeAEbEJcrbr/4ZfSE9P
-         Zrin/YdJhxz4gFjO6wum15o6CdkobA0IXGpPQBsLRXlgICh9YZ+oyB8vZmzURwKnH1
-         xrkjXfmysyW4A==
+        s=k20201202; t=1643211420;
+        bh=hNOKklvlwxJZmyMa/W1F50My2/RcSPvGhMZ8nBY8rXk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=a7LYtmTn1Ixx/Fo0nsIspm48/FpMqc7WLCEnRJXxEzbRRYn2ue6oY9XDL2hX0JdXk
+         nSeQ/GpeujgEgvuCBZz6B3AFD55nqN/gtfT/wEZpHt48k/SjwM+L0Cz84a6ghfoOEJ
+         XqAiGOS/2GXKvD2YyPSMczrUj8TPwZiFaMtX+qTLSGe+hC2rximJFNtaHouk1PG86Q
+         ozmUko7St0lfBCgs3AWLdO+qjlEJkIG0PJsYDJr3MNQemuy+nqesuUIpfTVKkORw8d
+         bu6HaY+ufA9gCIQzMgveg702W/kfs8O5Mm8TSaEEqG0zKWVqReyblQNqybl89vZv7t
+         nwJRjou4JUfrQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>
-In-Reply-To: <20220126110447.24549-1-linmq006@gmail.com>
-References: <20220126110447.24549-1-linmq006@gmail.com>
-Subject: Re: [PATCH] spi: meson-spicc: add IRQ check in meson_spicc_probe
-Message-Id: <164321141213.490397.12590014811818910927.b4-ty@kernel.org>
-Date:   Wed, 26 Jan 2022 15:36:52 +0000
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, guochun.mao@mediatek.com
+Cc:     srv_heupstream@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Bin Zhang <bin.zhang@mediatek.com>,
+        project_global_chrome_upstream_group@mediatek.com,
+        kernel test robot <lkp@intel.com>,
+        Bayi Cheng <bayi.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chuanhong Guo <gch981213@gmail.com>
+In-Reply-To: <20220126091159.27513-1-guochun.mao@mediatek.com>
+References: <20220126091159.27513-1-guochun.mao@mediatek.com>
+Subject: Re: [PATCH] spi: spi-mtk-nor: make some internal variables static
+Message-Id: <164321141754.490431.3020669404541003433.b4-ty@kernel.org>
+Date:   Wed, 26 Jan 2022 15:36:57 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,22 +55,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 11:04:47 +0000, Miaoqian Lin wrote:
-> This check misses checking for  platform_get_irq()'s call and may passes
-> the negative error codes to devm_request_irq(), which takes unsigned IRQ #,
-> causing it to fail with -EINVAL, overriding an original error code.
-> Stop calling devm_request_irq() with invalid IRQ #s.
+On Wed, 26 Jan 2022 17:11:59 +0800, guochun.mao@mediatek.com wrote:
+> From: Guochun Mao <guochun.mao@mediatek.com>
+> 
+> Variables mtk_nor_caps_mt8173, mtk_nor_caps_mt8186 and
+> mtk_nor_caps_mt8192 are not declared.
+> Make them static.
 > 
 > 
+> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] spi: meson-spicc: add IRQ check in meson_spicc_probe
-      commit: e937440f7fc444a3e3f1fb75ea65292d6f433a44
+[1/1] spi: spi-mtk-nor: make some internal variables static
+      commit: 474fc2e6395d62758e80b9ea65f61339296355fc
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

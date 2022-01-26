@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDEDF49C3AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C4C49C3AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236379AbiAZGdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 01:33:09 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:26860 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230400AbiAZGcz (ORCPT
+        id S236835AbiAZGdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 01:33:11 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:27721 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236389AbiAZGc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 01:32:55 -0500
+        Wed, 26 Jan 2022 01:32:56 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643178775; x=1674714775;
+  t=1643178776; x=1674714776;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=HlBrxxqz8GrpwuEBJfdNjgmehq5A3syFPfEQuqOMWpg=;
-  b=xPbRHdCz8OZCPJv3pm05MP4tonf12341eWXWENDHNgWGV3AJcfrt1bJb
-   6i+HLHgjqkdNwayEmK9++wlWshtlYoebJytiZzHemlyKQ+nrHX4wMy5qZ
-   wXaGe/FgCAow30jmE8WygM8JUQ2YdECgZKVboSvMmk5QxjKPKWhh6PDgn
-   M=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Jan 2022 22:32:54 -0800
+  bh=C/nKcvGohh66HEoXJpfjN/wkXoY3VldhRoiyN4/ZYtg=;
+  b=xmRX+7hgMWdfHhlEK/YUNJuIxNhYx+rco3rbFt4E+rKKOKQ2DSxQ/BYC
+   zAPgmcHvtbGZV5Zc9l2DV90oF48MdWRF0/KKzV60RPkbCTW0ASBjxn3A2
+   Ys+BFfnOnXNkBLwX8kT7PbM+pbWRXsjqRsZ59cu19Z7+BCxjwtViDwXE8
+   Y=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 25 Jan 2022 22:32:56 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 22:32:53 -0800
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 22:32:56 -0800
 Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 22:32:53 -0800
+ 15.2.922.19; Tue, 25 Jan 2022 22:32:56 -0800
 Received: from fenglinw-gv.qualcomm.com (10.80.80.8) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 22:32:50 -0800
+ 15.2.922.19; Tue, 25 Jan 2022 22:32:53 -0800
 From:   Fenglin Wu <quic_fenglinw@quicinc.com>
 To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sboyd@kernel.org>, Kiran Gunda <kgunda@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Collins <collinsd@codeaurora.org>
-CC:     <subbaram@codeaurora.org>, <quic_fenglinw@quicinc.com>,
-        <tglx@linutronix.de>, <maz@kernel.org>
-Subject: [PATCH v5 06/10] spmi: pmic-arb: correct duplicate APID to PPID mapping logic
-Date:   Wed, 26 Jan 2022 14:31:48 +0800
-Message-ID: <1643178713-17178-7-git-send-email-quic_fenglinw@quicinc.com>
+        <sboyd@kernel.org>
+CC:     <collinsd@codeaurora.org>, <subbaram@codeaurora.org>,
+        <quic_fenglinw@quicinc.com>, <tglx@linutronix.de>, <maz@kernel.org>
+Subject: [PATCH v5 07/10] spmi: pmic-arb: block access for invalid PMIC arbiter v5 SPMI writes
+Date:   Wed, 26 Jan 2022 14:31:49 +0800
+Message-ID: <1643178713-17178-8-git-send-email-quic_fenglinw@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1643178713-17178-1-git-send-email-quic_fenglinw@quicinc.com>
 References: <1643178713-17178-1-git-send-email-quic_fenglinw@quicinc.com>
@@ -59,54 +57,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Collins <collinsd@codeaurora.org>
 
-Correct the way that duplicate PPID mappings are handled for PMIC
-arbiter v5.  The final APID mapped to a given PPID should be the
-one which has write owner = APPS EE, if it exists, or if not
-that, then the first APID mapped to the PPID, if it exists.
+The system crashes due to an access permission violation when
+writing to a PMIC peripheral which is not owned by the current
+ee.  Add a check for PMIC arbiter version 5 for such invalid
+write requests and return an error instead of crashing the
+system.
 
-Fixes: 40f318f0ed67 ("spmi: pmic-arb: add support for HW version 5")
 Signed-off-by: David Collins <collinsd@codeaurora.org>
 Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
 ---
- drivers/spmi/spmi-pmic-arb.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/spmi/spmi-pmic-arb.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
-index 56f2294..cf92abc 100644
+index cf92abc..39f25bc 100644
 --- a/drivers/spmi/spmi-pmic-arb.c
 +++ b/drivers/spmi/spmi-pmic-arb.c
-@@ -1031,7 +1031,8 @@ static int pmic_arb_read_apid_map_v5(struct spmi_pmic_arb *pmic_arb)
- 	 * version 5, there is more than one APID mapped to each PPID.
- 	 * The owner field for each of these mappings specifies the EE which is
- 	 * allowed to write to the APID.  The owner of the last (highest) APID
--	 * for a given PPID will receive interrupts from the PPID.
-+	 * which has the IRQ owner bit set for a given PPID will receive
-+	 * interrupts from the PPID.
- 	 */
- 	for (i = 0; ; i++, apidd++) {
- 		offset = pmic_arb->ver_ops->apid_map_offset(i);
-@@ -1054,16 +1055,16 @@ static int pmic_arb_read_apid_map_v5(struct spmi_pmic_arb *pmic_arb)
- 		apid = pmic_arb->ppid_to_apid[ppid] & ~PMIC_ARB_APID_VALID;
- 		prev_apidd = &pmic_arb->apid_data[apid];
- 
--		if (valid && is_irq_ee &&
--				prev_apidd->write_ee == pmic_arb->ee) {
-+		if (!valid || apidd->write_ee == pmic_arb->ee) {
-+			/* First PPID mapping or one for this EE */
-+			pmic_arb->ppid_to_apid[ppid] = i | PMIC_ARB_APID_VALID;
-+		} else if (valid && is_irq_ee &&
-+			   prev_apidd->write_ee == pmic_arb->ee) {
- 			/*
- 			 * Duplicate PPID mapping after the one for this EE;
- 			 * override the irq owner
- 			 */
- 			prev_apidd->irq_ee = apidd->irq_ee;
--		} else if (!valid || is_irq_ee) {
--			/* First PPID mapping or duplicate for another EE */
--			pmic_arb->ppid_to_apid[ppid] = i | PMIC_ARB_APID_VALID;
- 		}
- 
- 		apidd->ppid = ppid;
+@@ -1133,6 +1133,11 @@ static int pmic_arb_offset_v5(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
+ 		offset = 0x10000 * pmic_arb->ee + 0x80 * apid;
+ 		break;
+ 	case PMIC_ARB_CHANNEL_RW:
++		if (pmic_arb->apid_data[apid].write_ee != pmic_arb->ee) {
++			dev_err(&pmic_arb->spmic->dev, "disallowed SPMI write to sid=%u, addr=0x%04X\n",
++				sid, addr);
++			return -EPERM;
++		}
+ 		offset = 0x10000 * apid;
+ 		break;
+ 	}
 -- 
 2.7.4
 

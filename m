@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD16A49C158
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D399E49C14B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236430AbiAZCac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 21:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
+        id S236359AbiAZC0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 21:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236420AbiAZCab (ORCPT
+        with ESMTP id S236337AbiAZC0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 21:30:31 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CE8C06161C;
-        Tue, 25 Jan 2022 18:30:30 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id s5so35167443ejx.2;
-        Tue, 25 Jan 2022 18:30:30 -0800 (PST)
+        Tue, 25 Jan 2022 21:26:05 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E897C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:26:05 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso1910086oop.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:26:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x79rzXXTHBgOsXBjkeB1wHbZQHGb1pLifmwYG6i89Z4=;
-        b=eOJzseNBdufi6hmKCoAY2brormzMtk1Dh5va9jpTk82VBmCbSQZO60H7e9r8UYMogA
-         2XNoGTxKxRQug+NObU1SenjgwP0CJ6ZkIuVLc7Zng2mCPMsuk9gv4o+nqG9qNY31oOrW
-         JTZviKuI5vCDbCqCiW5JQGpYWuZFrRqhkoT4CIhMoh3ZoMUZpOSygkV0G1CLv22nWjKu
-         tMnaps4LrWqUrkXHuxbKsbXG4f6BCgXBmkjzW5SfpHkkQ5xHg9c+UmhMNSdtTkAY6UHm
-         2TPXlolrgcm4SrjrL7y5as5t+On76F8xk2Yv1JmQcYZOg3+36qVcVUBRjyEHuhtnICy+
-         zepA==
+        d=linuxtx.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l4BdSQcYkI7Tg6m9Z/JRw5Xx2nGZP7Dqic5XeVsukdg=;
+        b=J1FFAFb7vBaVzRQ23VWBQWxT47F+6OcV2pTl6aUARYldxGriME6fiNscI5fFMa28IN
+         pyxFvIIToDnYSS+s78DW11HZxDxhkFLhHjM2JMFikfPlA2b12yLRFoSKIxQFqvhZ0vuw
+         d+7D8xE78U4f7M9t85Jbe7MQR86VHvEEF0wZE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x79rzXXTHBgOsXBjkeB1wHbZQHGb1pLifmwYG6i89Z4=;
-        b=AwZ9m0zShd1jIPWuXylyl0q5wNcIom2evfcwWxl+dfV+1qorE5NG/nvktI22bHv3o9
-         pSqmCmnIkpDJGTqAtw4W7TjwfhxkWdkH1nQUayj85iWPBJ6P8os4lGodeUsua0jbvYwI
-         aHy/dvrqpZvqhK52ixRWGm8/wdwzshz6Eu25EfF88A81TNSCMaXdzwZz5jBMJImVUl8H
-         4+wBEqNG2OATzUr/egxfCGPRXNqxj17SzQkT3yjzvp4qkdFY7uL+k2yYNIxBmotk2If7
-         v3OjmYNtfqiVxKJRqHLQ4OoHUrIXJwBEKTtACONuoIM2jo8NnonG+tJ1qxFFGC3bDgSU
-         XEqQ==
-X-Gm-Message-State: AOAM532UBvBYJe9xELD0oHsOJbS/0XgtYmPtjaSiLCrU9ZGNy4GLCgb4
-        Y8wEJhmfsQIIMaE3exiVp1i4xu4JkYdtrrd3e1Q=
-X-Google-Smtp-Source: ABdhPJzyWMrREgA3Nehm1ZII8CnRmp+4+hFgOb83EIvL2/ceDuCiG0gk5lRaWuwD4CwDXyBzPqVCflbheWZSkPYHpmw=
-X-Received: by 2002:a17:907:3f24:: with SMTP id hq36mr15796903ejc.439.1643164229255;
- Tue, 25 Jan 2022 18:30:29 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l4BdSQcYkI7Tg6m9Z/JRw5Xx2nGZP7Dqic5XeVsukdg=;
+        b=SUAmkx25L0XNbeIN0cz/18ZavAhdlGRshEa0CccnEQCgJMO+Y6c0SfsNt4YQMCP1pV
+         bOgUe0A5Qnck2nrQPx65B9WT1zV+BjhrbT9DnLGaKBX3sddx9zqZX2ILLwBncw6RuDQU
+         oi3sm1U10naa4KzEQJxnF0VZVhXxUYtxSFIbCdWIqtzGM79dPZURyEZe/Id5RnK4XI4e
+         WgN22qdcvkfrA3m1Q0SW8yZfXne51kWzs14a68ry6HaikU6ankhXK415Af7eA+SwAEkI
+         ggw+1J9N/X659QNlBW9a8S/3PSZMnQFnWQj2k/rXAafbjlJY8rV8L9+NSwC3INhTF6g3
+         UHgA==
+X-Gm-Message-State: AOAM531rvW2W76OzL55F5AngWNNMQAlkVqtszd5S8BB1El0NpG4hi1Im
+        Kicoi4776F2gzJsUShZ1JFzEZA==
+X-Google-Smtp-Source: ABdhPJw+nrU/qkapwjf3gFM4N0QgVLATa/twB7tT6hkq5TfgdIPM2W6n+AGTrmA4cDAHBJ1mStiy/g==
+X-Received: by 2002:a4a:dc16:: with SMTP id p22mr14546157oov.85.1643163964828;
+        Tue, 25 Jan 2022 18:26:04 -0800 (PST)
+Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
+        by smtp.gmail.com with ESMTPSA id g4sm7544923otl.1.2022.01.25.18.26.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 18:26:04 -0800 (PST)
+Date:   Tue, 25 Jan 2022 20:26:02 -0600
+From:   Justin Forbes <jmforbes@linuxtx.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
+Message-ID: <YfCxOpu4fTON5ded@fedora64.linuxtx.org>
+References: <20220125155447.179130255@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220124131538.1453657-1-imagedong@tencent.com>
- <20220124131538.1453657-3-imagedong@tencent.com> <b7834377-eb0f-f5df-f3b6-10525de7afca@gmail.com>
-In-Reply-To: <b7834377-eb0f-f5df-f3b6-10525de7afca@gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 26 Jan 2022 10:26:00 +0800
-Message-ID: <CADxym3ZYPmNCf=bpgZCxU2Hnj37VgqR6fdf_S9yiTcY3Od2O7A@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/6] net: ipv4: use kfree_skb_reason() in ip_rcv_core()
-To:     David Ahern <dsahern@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, pablo@netfilter.org,
-        kadlec@netfilter.org, Florian Westphal <fw@strlen.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>, alobakin@pm.me,
-        paulb@nvidia.com, Paolo Abeni <pabeni@redhat.com>,
-        talalahmad@google.com, haokexin@gmail.com,
-        Kees Cook <keescook@chromium.org>, memxor@gmail.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Cong Wang <cong.wang@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125155447.179130255@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 10:10 AM David Ahern <dsahern@gmail.com> wrote:
->
-> On 1/24/22 6:15 AM, menglong8.dong@gmail.com wrote:
-> > @@ -478,7 +483,7 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
-> >                      IPSTATS_MIB_NOECTPKTS + (iph->tos & INET_ECN_MASK),
-> >                      max_t(unsigned short, 1, skb_shinfo(skb)->gso_segs));
-> >
-> > -     if (!pskb_may_pull(skb, iph->ihl*4))
-> > +     if (!pskb_may_pull(skb, iph->ihl * 4))
->
-> unrelated cleanup
->
+On Tue, Jan 25, 2022 at 05:33:08PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.3 release.
+> There are 1033 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Haha, you got me :/
+Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-> >               goto inhdr_error;
-> >
-> >       iph = ip_hdr(skb);
-> > @@ -490,7 +495,7 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
-> >       if (skb->len < len) {
-> >               __IP_INC_STATS(net, IPSTATS_MIB_INTRUNCATEDPKTS);
-> >               goto drop;
-> > -     } else if (len < (iph->ihl*4))
-> > +     } else if (len < (iph->ihl * 4))
->
-> ditto
->
-> >               goto inhdr_error;
-> >
-> >       /* Our transport medium may have padded the buffer out. Now we know it
->
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

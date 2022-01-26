@@ -2,102 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D352949C302
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFC049C335
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbiAZFXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 00:23:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiAZFXz (ORCPT
+        id S232662AbiAZFZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 00:25:36 -0500
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:48753 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232517AbiAZFZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 00:23:55 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5390C06161C;
-        Tue, 25 Jan 2022 21:23:54 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id h14so68069983ybe.12;
-        Tue, 25 Jan 2022 21:23:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BmNhY6FQW/GrrzMUwo58dyScPyirrw0g3CZ9jNL4l2w=;
-        b=qms8N3moNDRD+/zKbUAk2ww2ayLOF0zLPPwvXzOUoQNW27ceiMM7w9iOK3v6so+gFv
-         NxdTlmmH8RVifgQL/YzfUl7HgFnwEoy/rnWgnnBc9El4tLvZ5Fwuh57Y2TQAhdIJS3Fr
-         V+L1yjLtS40JNVvlZYPnQn/OyhNsOcYJZIpzC8Tc3EQtb/UHPxQbiE4+fZ9EAbQaEALp
-         MxePubsggahRdW21qs9tuNKL7j6qJJi7vbMbHDN0ratudWKnO+tQPy1FFCECD7CNHvwN
-         eprmhh68BqZ+0JG9eazFzxIIKgLaIbxWoxcqUZMTRgZAlUPdPiEstJV/LDzh1w6M8Q6Z
-         vjsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BmNhY6FQW/GrrzMUwo58dyScPyirrw0g3CZ9jNL4l2w=;
-        b=QfJZDAja3w0RtQc9poMPKoP27q4BFy1x/OMRHZ0LpAfZmKPK/Q4Pjd35vHkVulr+nD
-         Hvd2RCrotsnxpepopSdMYHmoZCN3D5fFED8a3MfS5pkBNPQw4gP/Yo4Y2GL2tU/qk0fl
-         1OLBB0Nr8nyDgDuXkqLIyvUnQKaRh/iugM+zr8J4qRiOAwDtK2agbzuOA+eh7+seczX4
-         37OsaVxL/sqZJZzcDuHN2JrXiuWLF8IyCcQFoKGHBg+HC4kjWbmhkulHT9cUKoiF3muT
-         2DZGRI1ko5kjw2FE6MrTsiUqiu2XbgFu1bnSuFyBk1vGxNabjW+pDPyhHN5gXBwY36lG
-         sYtg==
-X-Gm-Message-State: AOAM5338N/QSBwtkqk5hoqCx0j+tCqOtz0UMUWivwdvaC0V1Mg1e98s9
-        lTowwb5nBqLu7+gafEZuzRX5ipSHJgdtJzJL4ZM=
-X-Google-Smtp-Source: ABdhPJwSAB5RAnuO1XryMa2zwDZqE9o0YmCGlcohJkr0T/0G49+lz8m3Wt8I/nqj9KzoPm/W9g5/SllzaZjqRNmuyPs=
-X-Received: by 2002:a25:42d7:: with SMTP id p206mr34188694yba.182.1643174634013;
- Tue, 25 Jan 2022 21:23:54 -0800 (PST)
+        Wed, 26 Jan 2022 00:25:35 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2u0NHN_1643174730;
+Received: from 30.240.122.215(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V2u0NHN_1643174730)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 26 Jan 2022 13:25:31 +0800
+Message-ID: <f1e3d27d-3fe1-68e1-7df0-641f2229ab29@linux.alibaba.com>
+Date:   Wed, 26 Jan 2022 13:25:30 +0800
 MIME-Version: 1.0
-References: <20220124003342.1457437-1-ztong0001@gmail.com> <202201241937.i9KSsyAj-lkp@intel.com>
- <20220124151611.30db4381d910c853fc0c9728@linux-foundation.org> <CADJHv_vh03bhn1FX2-jc6JoH3Hm6cRiWs+iXFO-coGy_yUY1Mw@mail.gmail.com>
-In-Reply-To: <CADJHv_vh03bhn1FX2-jc6JoH3Hm6cRiWs+iXFO-coGy_yUY1Mw@mail.gmail.com>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Tue, 25 Jan 2022 21:23:43 -0800
-Message-ID: <CAA5qM4Btrnp9Te2pm0s=OuDk0ASTE3-LyLt8nf0fXKxhehXUgA@mail.gmail.com>
-Subject: Re: [PATCH v1] binfmt_misc: fix crash when load/unload module
-To:     Murphy Zhou <jencce.kernel@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kernel test robot <lkp@intel.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH v4 1/2] efi/cper: add cper_mem_err_status_str to decode
+ error description
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220125024939.30635-2-xueshuai@linux.alibaba.com>
+ <YfBKxGFbRozNdJiD@zn.tnic>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <YfBKxGFbRozNdJiD@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 9:04 PM Murphy Zhou <jencce.kernel@gmail.com> wrote:
->
-> Still panic with this patch on Linux-next tree:
->
-> [ 1128.275515] LTP: starting binfmt_misc02 (binfmt_misc02.sh)
-> [ 1128.303975] CPU: 1 PID: 107182 Comm: modprobe Kdump: loaded
-> Tainted: G        W         5.17.0-rc1-next-20220125+ #1
-> [ 1128.305264] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-> [ 1128.305992] Call Trace:
-> [ 1128.306376]  <TASK>
-> [ 1128.306682]  dump_stack_lvl+0x34/0x44
-> [ 1128.307211]  __register_sysctl_table+0x2c7/0x4a0
-> [ 1128.307846]  ? load_module+0xb37/0xbb0
-> [ 1128.308339]  ? 0xffffffffc01b6000
-> [ 1128.308762]  init_misc_binfmt+0x32/0x1000 [binfmt_misc]
-> [ 1128.309402]  do_one_initcall+0x44/0x200
-> [ 1128.309937]  ? kmem_cache_alloc_trace+0x163/0x2c0
-> [ 1128.310535]  do_init_module+0x5c/0x260
-> [ 1128.311045]  __do_sys_finit_module+0xb4/0x120
-> [ 1128.311603]  do_syscall_64+0x3b/0x90
-> [ 1128.312088]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [ 1128.312755] RIP: 0033:0x7f929ab85fbd
->
-> Testing patch on Linus tree.
+Hi, Borislav,
 
-Hi Murphy,
-Did you apply this patch?
-Link: https://lkml.kernel.org/r/20220124181812.1869535-2-ztong0001@gmail.com
-I tested it on top of the current master branch and it works on my
-setup using the reproducer I mentioned.
-Could you share your test script?
-Thanks,
-- Tong
+Thank you for your comments.
+
+在 2022/1/26 AM3:08, Borislav Petkov 写道:
+> On Tue, Jan 25, 2022 at 10:49:38AM +0800, Shuai Xue wrote:
+>> Introduce a new helper function cper_mem_err_status_str() which is used to
+>> decode the description of error status, and the cper_print_mem() will call
+>> it and report the details of error status.
+>>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>> ---
+>>  drivers/firmware/efi/cper.c | 29 ++++++++++++++++++++++++++++-
+>>  include/linux/cper.h        |  1 +
+>>  2 files changed, 29 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+>> index 6ec8edec6329..7f08d4ea906e 100644
+>> --- a/drivers/firmware/efi/cper.c
+>> +++ b/drivers/firmware/efi/cper.c
+>> @@ -211,6 +211,31 @@ const char *cper_mem_err_type_str(unsigned int etype)
+>>  }
+>>  EXPORT_SYMBOL_GPL(cper_mem_err_type_str);
+>>  
+>> +const char *cper_mem_err_status_str(u64 status)
+>> +{
+>> +	switch ((status >> 8) & 0xff) {
+>> +	case  1:	return "Error detected internal to the component";
+>> +	case  4:	return "Storage error in DRAM memory";
+>> +	case  5:	return "Storage error in TLB";
+>> +	case  6:	return "Storage error in cache";
+>> +	case  7:	return "Error in one or more functional units";
+>> +	case  8:	return "component failed self test";
+> 
+> Well, at least start them all with capital letters: "Component... " And
+> yes, I know this is how it is in the spec but the spec has typos and
+> other problems - doesn't mean we have to copy them too.
+
+You are right, I will fix it in next version.
+
+>> +	case  9:	return "Overflow or undervalue of internal queue";
+>> +	case 16:	return "Error detected in the bus";
+>> +	case 17:	return "Virtual address not found on IO-TLB or IO-PDIR";
+>> +	case 18:	return "Improper access error";
+>> +	case 19:	return "Access to a memory address which is not mapped to any component";
+>> +	case 20:	return "Loss of Lockstep";
+>> +	case 21:	return "Response not associated with a request";
+>> +	case 22:	return "Bus parity error - must also set the A, C, or D Bits";
+>> +	case 23:	return "Detection of a PATH_ERROR ";
+> 
+> Trailing space here.
+
+Sorry, will delete it.
+
+> Also what is PATH_ERROR?
+> 
+> That "PATH_ERROR" is nowhere else explained in that big fat UEFI spec.
+> 2558 pages and they can't explain *that*. Geez.
+
+I don't know either. A related item I found is "iSCSI Device Path error".
+Section 10 defines the device path protocol, but I don't know if "PATH_ERROR"
+means the path of the device is not found, or something else.
+
+>> +	case 25:	return "Bus operation timeout";
+>> +	case 26:	return "A read was issued to data that has been poisoned";
+>> +	default:	return "reserved";
+>> +	}
+>> +}
+>> +EXPORT_SYMBOL_GPL(cper_mem_err_status_str);
+>> +
+>>  static int cper_mem_err_location(struct cper_mem_err_compact *mem, char *msg)
+>>  {
+>>  	u32 len, n;
+>> @@ -334,7 +359,9 @@ static void cper_print_mem(const char *pfx, const struct cper_sec_mem_err *mem,
+>>  		return;
+>>  	}
+>>  	if (mem->validation_bits & CPER_MEM_VALID_ERROR_STATUS)
+>> -		printk("%s""error_status: 0x%016llx\n", pfx, mem->error_status);
+>> +		printk("%s""error_status: %s (0x%016llx)\n",
+> 
+> Why do you insist on having two back-to-back strings instead of one
+> here?
+> 
+> (And don't tell me it is because the other function calls here do it
+> too.)
+> 
+> FWIW, even checkpatch complains here:
+> 
+> WARNING: Consecutive strings are generally better as a single string
+> #87: FILE: drivers/firmware/efi/cper.c:362:
+> +               printk("%s""error_status: %s (0x%016llx)\n",
+> 
+> Btw, please integrate scripts/checkpatch.pl into your patch creation
+> workflow. Some of the warnings/errors *actually* make sense.
+
+Sorry, I did integrate scripts/checkpatch.pl before sending patch. And as you see,
+other function calls here do the same, so I ignored the warnings. I will change as
+your comments in next version:
+
+-		printk("%s""error_status: 0x%016llx\n", pfx, mem->error_status);
++		printk("%s error_status: %s (0x%016llx)\n",
+
+
+Best regards,
+Shuai

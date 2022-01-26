@@ -2,228 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F19B49C6EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8C649C6EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239439AbiAZJ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:57:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:56138 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232086AbiAZJ5d (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:57:33 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B8531FB;
-        Wed, 26 Jan 2022 01:57:33 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F66A3F766;
-        Wed, 26 Jan 2022 01:57:32 -0800 (PST)
-Date:   Wed, 26 Jan 2022 09:57:26 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        kernel-team@android.com, Jay Chen <jkchen@linux.alibaba.com>
-Subject: Re: [PATCH v3] irqchip/gic-v3-its: Reset each ITS's BASERn register
- before probe
-Message-ID: <20220126095726.GA23794@lpieralisi>
-References: <20220124133809.1291195-1-maz@kernel.org>
+        id S239469AbiAZJ6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239459AbiAZJ6E (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 04:58:04 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485D1C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:58:04 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id c190-20020a1c9ac7000000b0035081bc722dso3641067wme.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:58:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ARleMNp44KlMl6F3BCFO3u+GyyJQUa6qimUwmZ0NEoE=;
+        b=RHuHyuSWNStBP0UIRFM9k2rxdN90Jmxxif+b+FZNwtvojfAR58aFrXsOvmBmkuZtY5
+         /0NS9Hcus1UFbb5MM2icQrPIirbRpArX2FozDCOkOYpzd1EX2kPynaRhoiUJCrevmRYz
+         yCUJa8NceZzBwt0q3gZWGzHrzCsg1oUJgoiQA3MrNS83GE018qhDX4TgX6moRDMU5Pja
+         /TmPKPv+J22/VCcKgTUUMH14nbA3gPWAaVUfrpBUcMsdGW5E7mhO26FimCCHAS/AJKIK
+         soJDSG+Ya+seyAn6OzMPcfRNe7eZ56QuDqxb/3DXMJW0Vb/EQKvSyHFR07F4VNFISl4v
+         AbJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ARleMNp44KlMl6F3BCFO3u+GyyJQUa6qimUwmZ0NEoE=;
+        b=moQk7G0lHsRQCpUbTFJ78uLbHagySkzcOgXIhwWNQZVdGZsXOgdbQm9HTHTwTOKc2w
+         ni/QPRwHRhmNcDQIfDK5kHQUu6DxuB7w3dG/WoLZRvzOotb5ippy0TPfwPpzZykIWjSN
+         EnWRULKkRXZQt4PcNCNd0qOBr5QVFjotNL4iKF4ORFKKhYL1ZiYwOrl8861vn97LZUf1
+         KX0HyGEPZc5dMKihTIHKB8lR2gcuTeVjrSYDxu5TudwRCLCWxxMYmdOKkMfTxB5N3Gym
+         CWxmXSi25Lp2sLYUvIsZyofPPN3FhTfyh+kOu+u0vHxIooS4jKeXFSzf5RDI7aVYGtpW
+         UwGg==
+X-Gm-Message-State: AOAM532B58Q/PUzV5ZczY9iV0XRM6z6XbOv5jb7PmYVskF6iMBlf/Zv7
+        D+kfQZHw6dH+qgUDFJTd13muiw==
+X-Google-Smtp-Source: ABdhPJxKsNc1gAQKS8O1k2JMAgG+xaSFr57soS4gyfXzq9Yn9kT1C+cKSY2BdeKQzRQc8MwfP227Fw==
+X-Received: by 2002:a05:600c:a47:: with SMTP id c7mr6709918wmq.23.1643191082783;
+        Wed, 26 Jan 2022 01:58:02 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e? ([2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e])
+        by smtp.googlemail.com with ESMTPSA id p2sm2706409wmc.33.2022.01.26.01.58.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 01:58:02 -0800 (PST)
+Subject: Re: [PATCH v7 5/5] rockchip/soc/drivers: Add DTPM description for
+ rk3399
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>, lukasz.luba@arm.com,
+        Heiko Stuebner <heiko@sntech.de>, arnd@linaro.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>
+References: <20220125171809.1273269-1-daniel.lezcano@linaro.org>
+ <20220125171809.1273269-6-daniel.lezcano@linaro.org>
+ <CAMuHMdXZEYNjFh2T4beWdfn8av_qXaPbg4yFk=9whESnLBaFAQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <31c6898b-e6f0-5118-119a-13e01e9fa507@linaro.org>
+Date:   Wed, 26 Jan 2022 10:58:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124133809.1291195-1-maz@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAMuHMdXZEYNjFh2T4beWdfn8av_qXaPbg4yFk=9whESnLBaFAQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 01:38:09PM +0000, Marc Zyngier wrote:
-> A recent bug report outlined that the way GICv4.1 is handled across
-> kexec is pretty bad. We can end-up in a situation where ITSs share
-> memory (this is the case when SVPET==1) and reprogram the base
-> registers, creating a situation where ITSs that are part of a given
-> affinity group see different pointers. Which is illegal. Boo.
+On 26/01/2022 10:40, Geert Uytterhoeven wrote:
+> Hi Daniel,
 > 
-> In order to restore some sanity, reset the BASERn registers to 0
-> *before* probing any ITS. Although this isn't optimised at all,
-> this is only a once-per-boot cost, which shouldn't show up on
-> anyone's radar.
+> On Tue, Jan 25, 2022 at 6:18 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>> The DTPM framework does support now the hierarchy description.
+>>
+>> The platform specific code can call the hierarchy creation function
+>> with an array of struct dtpm_node pointing to their parent.
+>>
+>> This patch provides a description of the big / Little CPUs and the
+>> GPU and tie them together under a virtual 'package' name. Only rk3399 is
+>> described now.
+>>
+>> The description could be extended in the future with the memory
+>> controller with devfreq.
+>>
+>> The description is always a module and it describes the soft
+>> dependencies. The userspace has to load the softdeps module in the
+>> right order.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > 
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Jay Chen <jkchen@linux.alibaba.com>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Link: https://lore.kernel.org/r/20211216190315.GA14220@lpieralisi
-> ---
->  drivers/irqchip/irq-gic-v3-its.c | 114 +++++++++++++++++++++++++------
->  1 file changed, 93 insertions(+), 21 deletions(-)
+> Thanks for your patch!
 > 
-> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-> index 7b8f1ec0ff78..c09d99d5b637 100644
-> --- a/drivers/irqchip/irq-gic-v3-its.c
-> +++ b/drivers/irqchip/irq-gic-v3-its.c
-> @@ -4856,6 +4856,38 @@ static struct syscore_ops its_syscore_ops = {
->  	.resume = its_restore_enable,
->  };
->  
-> +static void __init __iomem *its_map_one(struct resource *res, int *err)
-> +{
-> +	void __iomem *its_base;
-> +	u32 val;
-> +
-> +	its_base = ioremap(res->start, SZ_64K);
-> +	if (!its_base) {
-> +		pr_warn("ITS@%pa: Unable to map ITS registers\n", &res->start);
-> +		*err = -ENOMEM;
-> +		return NULL;
-> +	}
-> +
-> +	val = readl_relaxed(its_base + GITS_PIDR2) & GIC_PIDR2_ARCH_MASK;
-> +	if (val != 0x30 && val != 0x40) {
-> +		pr_warn("ITS@%pa: No ITS detected, giving up\n", &res->start);
-> +		*err = -ENODEV;
-> +		goto out_unmap;
-> +	}
-> +
-> +	*err = its_force_quiescent(its_base);
-> +	if (*err) {
-> +		pr_warn("ITS@%pa: Failed to quiesce, giving up\n", &res->start);
-> +		goto out_unmap;
-> +	}
-> +
-> +	return its_base;
-> +
-> +out_unmap:
-> +	iounmap(its_base);
-> +	return NULL;
-> +}
-> +
->  static int its_init_domain(struct fwnode_handle *handle, struct its_node *its)
->  {
->  	struct irq_domain *inner_domain;
-> @@ -4963,29 +4995,14 @@ static int __init its_probe_one(struct resource *res,
->  {
->  	struct its_node *its;
->  	void __iomem *its_base;
-> -	u32 val, ctlr;
->  	u64 baser, tmp, typer;
->  	struct page *page;
-> +	u32 ctlr;
->  	int err;
->  
-> -	its_base = ioremap(res->start, SZ_64K);
-> -	if (!its_base) {
-> -		pr_warn("ITS@%pa: Unable to map ITS registers\n", &res->start);
-> -		return -ENOMEM;
-> -	}
-> -
-> -	val = readl_relaxed(its_base + GITS_PIDR2) & GIC_PIDR2_ARCH_MASK;
-> -	if (val != 0x30 && val != 0x40) {
-> -		pr_warn("ITS@%pa: No ITS detected, giving up\n", &res->start);
-> -		err = -ENODEV;
-> -		goto out_unmap;
-> -	}
-> -
-> -	err = its_force_quiescent(its_base);
-> -	if (err) {
-> -		pr_warn("ITS@%pa: Failed to quiesce, giving up\n", &res->start);
-> -		goto out_unmap;
-> -	}
-> +	its_base = its_map_one(res, &err);
-> +	if (!its_base)
-> +		return err;
->  
->  	pr_info("ITS %pR\n", res);
->  
-> @@ -5249,6 +5266,23 @@ static int its_cpu_memreserve_lpi(unsigned int cpu)
->  	return ret;
->  }
->  
-> +/* Mark all the BASER registers as invalid before they get reprogrammed */
-> +static int __init its_reset_one(struct resource *res)
-> +{
-> +	void __iomem *its_base;
-> +	int err, i;
-> +
-> +	its_base = its_map_one(res, &err);
-> +	if (!its_base)
-> +		return err;
-> +
-> +	for (i = 0; i < GITS_BASER_NR_REGS; i++)
-> +		gits_write_baser(0, its_base + GITS_BASER + (i << 3));
-> +
-> +	iounmap(its_base);
-> +	return 0;
-> +}
-> +
->  static const struct of_device_id its_device_id[] = {
->  	{	.compatible	= "arm,gic-v3-its",	},
->  	{},
-> @@ -5259,6 +5293,26 @@ static int __init its_of_probe(struct device_node *node)
->  	struct device_node *np;
->  	struct resource res;
->  
-> +	/*
-> +	 * Make sure *all* the ITS are reset before we probe any, as
-> +	 * they may be sharing memory. If any of the ITS fails to
-> +	 * reset, don't even try to go any further, as this could
-> +	 * result in something even worse.
-> +	 */
-> +	for (np = of_find_matching_node(node, its_device_id); np;
-> +	     np = of_find_matching_node(np, its_device_id)) {
-> +		int err;
-> +
-> +		if (!of_device_is_available(np) ||
-> +		    !of_property_read_bool(np, "msi-controller") ||
-> +		    of_address_to_resource(np, 0, &res))
-> +			continue;
-> +
-> +		err = its_reset_one(&res);
-> +		if (err)
-> +			return err;
-> +	}
-> +
->  	for (np = of_find_matching_node(node, its_device_id); np;
->  	     np = of_find_matching_node(np, its_device_id)) {
->  		if (!of_device_is_available(np))
-> @@ -5421,11 +5475,29 @@ static int __init gic_acpi_parse_madt_its(union acpi_subtable_headers *header,
->  	return err;
->  }
->  
-> +static int __init its_acpi_reset(union acpi_subtable_headers *header,
-> +				 const unsigned long end)
-> +{
-> +	struct acpi_madt_generic_translator *its_entry;
-> +	struct resource res;
-> +
-> +	its_entry = (struct acpi_madt_generic_translator *)header;
-> +	res = (struct resource) {
-> +		.start	= its_entry->base_address,
-> +		.end	= its_entry->base_address + ACPI_GICV3_ITS_MEM_SIZE - 1,
-> +		.flags	= IORESOURCE_MEM,
-> +	};
-> +
-> +	return its_reset_one(&res);
-> +}
-> +
->  static void __init its_acpi_probe(void)
->  {
->  	acpi_table_parse_srat_its();
-> -	acpi_table_parse_madt(ACPI_MADT_TYPE_GENERIC_TRANSLATOR,
-> -			      gic_acpi_parse_madt_its, 0);
-> +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_GENERIC_TRANSLATOR,
-> +				  its_acpi_reset, 0) > 0)
-> +		acpi_table_parse_madt(ACPI_MADT_TYPE_GENERIC_TRANSLATOR,
-> +				      gic_acpi_parse_madt_its, 0);
-
-Maybe it is worth adding a comment here as you did for DT if you
-can before merging it - to clarify the first acpi_table_parse_madt()
-call logic.
-
-Other than that:
-
-Reviewed-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-
->  	acpi_its_srat_maps_free();
->  }
->  #else
-> -- 
-> 2.34.1
+>> ---
 > 
+> Can you please insert a changelog here, especially if you don't CC all
+> parties on the cover letter?
+
+Ah yes, will do in the future
+
+> Yes, I can get it from lore, but it's easier for the audience if it's included
+> here.
+
+Changelog:
+   V7:
+   - No changes
+
+   V6:
+   - Made rk3399 always as a module and added module softdeps
+
+   V5:
+   - Module creation
+
+
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

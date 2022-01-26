@@ -2,206 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5AE49CB9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FF449CB8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241756AbiAZNy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241821AbiAZNyl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:54:41 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CE1C06175F
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:54:40 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id n8so27733767wmk.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:54:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BnDmn/bGiXHzA/HR2vbnCnaA9xu9dPUN92kb7gNI0E8=;
-        b=RiTu8S4Ln7+O0WBUqkkUsl7/Y8RGgsnBr2QEGirlJGd5zv/J2sKYcCOIKi43UG0OIv
-         huxteankWCJT7bWllcRYrm7tlbM+644kIo9Gl2UfI3aj4ihrfuygcZnp8WYhX41Y6OK1
-         q69MJ9QVDRNA1v1eaGcQfOJrX9hqUKCjqwJFyr5W6b6ZaBUlhRweBkfU8XTq4AnE0AYx
-         2+qbazic7fNyaLMuzM4COM9Y7imeMx1cMQTmjHHno7X0fvDgpgtnWsSLQY8sTjjP9vif
-         6JVJ+tA9loPtnaHRAZ+8UnJ/uLRT1rzYOsQMCyr7eXO0Llk0BTRW171515gVHCvaE+vk
-         xSBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BnDmn/bGiXHzA/HR2vbnCnaA9xu9dPUN92kb7gNI0E8=;
-        b=QapaI5smvEo+xMyPldlCP2roJDHyaJ7/SN62WjkCpVGiJCZCQ5ZKkpSXk9SsdHGEle
-         GGVydREYcgXJo3PdtBb2qq2ySY5i4bfgowWPlgRaj6XSeQuNXGlcFa4oPhixMhRvhsJa
-         lMx00p49y83Dc6pdCt+zcvuQ+9ZirVti4p5CmLUajYxbL7awpOAE/LFWAU6WgjfvI+zf
-         zbQ81y72CAn9KhLWp2D74Sbve5K7kgATjDmIrdEe2uWUdq4baepBINbhQiYFHpmmHRWz
-         Y+AJMG+Mzdr1yxAygQ0pEMHU9Vdkgtd2LM9vIok9y/f5ZqiJAYiHQ9wMpa8bycOwhGFz
-         pRoA==
-X-Gm-Message-State: AOAM533t7yYeaHrS7506ce4UlG0pYLnUwvOftZelWPWG3D5h5C2a2qZY
-        y2VP3Ny9Pl6LJOVfJ2B8pSz1LQ==
-X-Google-Smtp-Source: ABdhPJyel63/sPQgccttrP2TI12+cJQazZbJYZemZWsjq8GWdGcvGhyZNBoQMvKbAPIMSpCJumUbPw==
-X-Received: by 2002:a7b:c401:: with SMTP id k1mr7506568wmi.67.1643205279377;
-        Wed, 26 Jan 2022 05:54:39 -0800 (PST)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id n15sm3356593wmr.26.2022.01.26.05.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 05:54:38 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     robh+dt@kernel.org, gregkh@linuxfoundation.org
-Cc:     devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
-        bkumar@qti.qualcomm.com, linux-kernel@vger.kernel.org,
-        srini@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, Jeya R <jeyr@codeaurora.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v3 12/12] arm64: dts: qcom: add non-secure domain property to fastrpc nodes
-Date:   Wed, 26 Jan 2022 13:53:04 +0000
-Message-Id: <20220126135304.16340-13-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20220126135304.16340-1-srinivas.kandagatla@linaro.org>
-References: <20220126135304.16340-1-srinivas.kandagatla@linaro.org>
+        id S241787AbiAZNyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:54:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:41392 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241745AbiAZNye (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 08:54:34 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F007C1FB;
+        Wed, 26 Jan 2022 05:54:32 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A06E23F793;
+        Wed, 26 Jan 2022 05:54:29 -0800 (PST)
+Subject: Re: [PATCH v3] sched/fair: Fix fault in reweight_entity
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>, peterz@infradead.org
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+References: <20220125193403.778497-1-tadeusz.struk@linaro.org>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <bb01425b-0f6a-e69f-c24b-567821c1472f@arm.com>
+Date:   Wed, 26 Jan 2022 14:53:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20220125193403.778497-1-tadeusz.struk@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeya R <jeyr@codeaurora.org>
+On 25/01/2022 20:34, Tadeusz Struk wrote:
+> Syzbot found a GPF in reweight_entity. This has been bisected to commit
+> 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+> 
+> There is a race between sched_post_fork() and setpriority(PRIO_PGRP)
+> within a thread group that causes a null-ptr-deref in reweight_entity()
+> in CFS. The scenario is that the main process spawns number of new
+> threads, which then call setpriority(PRIO_PGRP, 0, -20), wait, and exit.
+> For each of the new threads the copy_process() gets invoked, which adds
+> the new task_struct and calls sched_post_fork() for it.
+> 
+> In the above scenario there is a possibility that setpriority(PRIO_PGRP)
+> and set_one_prio() will be called for a thread in the group that is just
+> being created by copy_process(), and for which the sched_post_fork() has
+> not been executed yet. This will trigger a null pointer dereference in
+> reweight_entity(), as it will try to access the run queue pointer, which
+> hasn't been set. This results it a crash as shown below:
+> 
+> KASAN: null-ptr-deref in range [0x00000000000000a0-0x00000000000000a7]
+> CPU: 0 PID: 2392 Comm: reduced_repro Not tainted 5.16.0-11201-gb42c5a161ea3
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
+> RIP: 0010:reweight_entity+0x15d/0x440
+> RSP: 0018:ffffc900035dfcf8 EFLAGS: 00010006
+> Call Trace:
+> <TASK>
+> reweight_task+0xde/0x1c0
+> set_load_weight+0x21c/0x2b0
+> set_user_nice.part.0+0x2d1/0x519
+> set_user_nice.cold+0x8/0xd
+> set_one_prio+0x24f/0x263
+> __do_sys_setpriority+0x2d3/0x640
+> __x64_sys_setpriority+0x84/0x8b
+> do_syscall_64+0x35/0xb0
+> entry_SYSCALL_64_after_hwframe+0x44/0xae
+> </TASK>
+> ---[ end trace 9dc80a9d378ed00a ]---
+> 
+> Before the mentioned change the cfs_rq pointer for the task  has been
+> set in sched_fork(), which is called much earlier in copy_process(),
+> before the new task is added to the thread_group.
+> Now it is done in the sched_post_fork(), which is called after that.
+> To fix the issue the update_load condition passed to set_load_weight()
+> in set_user_nice() and __sched_setscheduler() has been changed from
+> always true to true if the task->state != TASK_NEW.
+> 
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Zhang Qiao <zhangqiao22@huawei.com>
+> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+> Cc: stable@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> 
+> Link: https://syzkaller.appspot.com/bug?id=9d9c27adc674e3a7932b22b61c79a02da82cbdc1
+> Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+> Reported-by: syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+> ---
+> Changes in v3:
+> - Removed the new check and changed the update_load condition from
+>   always true to true if p->state != TASK_NEW
+> 
+> Changes in v2:
+> - Added a check in set_user_nice(), and return from there if the task
+>   is not fully setup instead of returning from reweight_entity()
+> ---
+> ---
+>  kernel/sched/core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 848eaa0efe0e..3d7ede06b971 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -6921,7 +6921,7 @@ void set_user_nice(struct task_struct *p, long nice)
+>  		put_prev_task(rq, p);
+>  
+>  	p->static_prio = NICE_TO_PRIO(nice);
+> -	set_load_weight(p, true);
+> +	set_load_weight(p, !(READ_ONCE(p->__state) & TASK_NEW));
+>  	old_prio = p->prio;
+>  	p->prio = effective_prio(p);
+>  
+> @@ -7212,7 +7212,7 @@ static void __setscheduler_params(struct task_struct *p,
+>  	 */
+>  	p->rt_priority = attr->sched_priority;
+>  	p->normal_prio = normal_prio(p);
+> -	set_load_weight(p, true);
+> +	set_load_weight(p, !(READ_ONCE(p->__state) & TASK_NEW));
+>  }
 
-FastRPC DSP domain would be set as secure if non-secure dsp property is not
-added to the fastrpc DT node. Add this property to DT files of msm8916,
-sdm845, sm8150, sm8250 and sm8350 so that nothing is broken after secure
-domain patchset.
+Can we then not get rid of `bool update_load` parameter of
+set_load_weight() completely?
 
-This patch is purely for backward compatibility reasons.
+@@ -1214,8 +1214,9 @@ int tg_nop(struct task_group *tg, void *data)
+ }
+ #endif
+ 
+-static void set_load_weight(struct task_struct *p, bool update_load)
++static void set_load_weight(struct task_struct *p)
+ {
++       int task_new = READ_ONCE(p->__state) & TASK_NEW;
+        int prio = p->static_prio - MAX_RT_PRIO;
+        struct load_weight *load = &p->se.load;
+ 
+@@ -1232,7 +1233,7 @@ static void set_load_weight(struct task_struct *p, bool update_load)
+         * SCHED_OTHER tasks have to update their load when changing their
+         * weight
+         */
+-       if (update_load && p->sched_class == &fair_sched_class) {
++       if (!task_new && p->sched_class == &fair_sched_class) {
+                reweight_task(p, prio);
+        } else {
+                load->weight = scale_load(sched_prio_to_weight[prio]);
 
-Signed-off-by: Jeya R <jeyr@codeaurora.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8916.dtsi | 1 +
- arch/arm64/boot/dts/qcom/sdm845.dtsi  | 2 ++
- arch/arm64/boot/dts/qcom/sm8150.dtsi  | 3 +++
- arch/arm64/boot/dts/qcom/sm8250.dtsi  | 3 +++
- arch/arm64/boot/dts/qcom/sm8350.dtsi  | 3 +++
- 5 files changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-index 41897eb3736a..a1543012c4fa 100644
---- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-@@ -1370,6 +1370,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,smd-channels = "fastrpcsmd-apps-dsp";
- 					label = "adsp";
-+					qcom,non-secure-domain;
- 
- 					#address-cells = <1>;
- 					#size-cells = <0>;
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index cfdeaa81f1bb..c9d613063966 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -838,6 +838,7 @@
- 				compatible = "qcom,fastrpc";
- 				qcom,glink-channels = "fastrpcglink-apps-dsp";
- 				label = "adsp";
-+				qcom,non-secure-domain;
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 
-@@ -888,6 +889,7 @@
- 				compatible = "qcom,fastrpc";
- 				qcom,glink-channels = "fastrpcglink-apps-dsp";
- 				label = "cdsp";
-+				qcom,non-secure-domain;
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 9255982adb69..637c6a6d4054 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -1755,6 +1755,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "sdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -2997,6 +2998,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "cdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -3442,6 +3444,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "adsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index c97ea638f6aa..3be4e630c2fe 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2594,6 +2594,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "sdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -2659,6 +2660,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "cdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -4429,6 +4431,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "adsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 53b39e718fb6..a9a11c747a3a 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -1996,6 +1996,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "sdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -2065,6 +2066,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "cdsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
-@@ -2367,6 +2369,7 @@
- 					compatible = "qcom,fastrpc";
- 					qcom,glink-channels = "fastrpcglink-apps-dsp";
- 					label = "adsp";
-+					qcom,non-secure-domain;
- 					#address-cells = <1>;
- 					#size-cells = <0>;
- 
--- 
-2.21.0
-
+p in sched_fork() would have `p->__state = TASK_NEW` and in sched_init()
+`init_task->sched_class is NULL so != &fair_sched_class`.

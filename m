@@ -2,120 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9C149CF0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 592DF49CF11
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbiAZP62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:58:28 -0500
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:54999 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiAZP60 (ORCPT
+        id S234531AbiAZQAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234660AbiAZQAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:58:26 -0500
+        Wed, 26 Jan 2022 11:00:06 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07A0C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:00:06 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id m131so57087vkm.7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:00:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1643212706; x=1674748706;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ErYDq09UFT0S4fAZwr7R81XHAZgdbQsfSFczNPNGrlA=;
-  b=fILmKinJwKWmbt3xacuw5/do64O53ptqNGM9mwNxL67IVlJd+Ut7zJXE
-   61n/CCFSk417CabLiBfriuuW/c8J86/5f6I9wdg2Rr39V5hBv/a9r6uBS
-   UdhZDJUpxpPJXqtEs9Dazpood2HlTHOpVat+f8zfvAi7Jm+etZRQI/ncg
-   o=;
-X-IronPort-AV: E=Sophos;i="5.88,318,1635206400"; 
-   d="scan'208";a="190079288"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 26 Jan 2022 15:58:25 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-1f9d5b26.us-west-2.amazon.com (Postfix) with ESMTPS id 1764541AE9;
-        Wed, 26 Jan 2022 15:58:25 +0000 (UTC)
-Received: from EX13D02UWB002.ant.amazon.com (10.43.161.160) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Wed, 26 Jan 2022 15:58:24 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
- EX13D02UWB002.ant.amazon.com (10.43.161.160) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Wed, 26 Jan 2022 15:58:24 +0000
-Received: from dev-dsk-alisaidi-i31e-9f3421fe.us-east-1.amazon.com
- (10.200.138.153) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
- Server id 15.0.1497.28 via Frontend Transport; Wed, 26 Jan 2022 15:58:23
- +0000
-Received: by dev-dsk-alisaidi-i31e-9f3421fe.us-east-1.amazon.com (Postfix, from userid 5131138)
-        id D074721B6E; Wed, 26 Jan 2022 15:58:23 +0000 (UTC)
-From:   Ali Saidi <alisaidi@amazon.com>
-To:     <german.gomez@arm.com>
-CC:     <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <alisaidi@amazon.com>, <andrew.kilroy@arm.com>,
-        <benh@kernel.crashing.org>, <james.clark@arm.com>,
-        <john.garry@huawei.com>, <jolsa@redhat.com>, <leo.yan@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
-        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>
-Subject: Re: [PATCH 1/2] perf arm-spe: Add arm_spe_record to synthesized
-Date:   Wed, 26 Jan 2022 15:58:20 +0000
-Message-ID: <20220126155820.21929-1-alisaidi@amazon.com>
-X-Mailer: git-send-email 2.24.4.AMZN
-In-Reply-To: <5ca990a5-eedd-0edb-26d3-b5e16c36ac34@arm.com>
-References: <5ca990a5-eedd-0edb-26d3-b5e16c36ac34@arm.com>
+        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LHaP8QZUNOCjkmPNKPCf4d3+Z1dAMC/my/c1DAn1of0=;
+        b=ybq9EBHbWhdev8ZXcKZTiZ/INdzXZFvzoyB1/xLVff4cQTjbd14nSLmXVqJ76AqI+f
+         UuZDjGwEHcI1rLCEwsfl4KrhMV49Q1/Rr74Q3TSluTntGIxVRM8JUZe+IeknyXHvg2hf
+         g+fwQqJ0k0bG7t8/mjt6FvHsvoqOOFGNTGIfK5cx++bID8bz+pIPUjZf9LuOi97VtzAR
+         rDAnZAJx62JMwMx+ygDKWRwywEZnYtsZthzDvR+XTQCshs1CUzKQmRNu56tMTupjBJWl
+         VWvHeEtG+RRLWlXBm5O1v4YE12J880rD1juGvfQkjldyHpxJI1USDyChyzPpCcSMSkl3
+         J69A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LHaP8QZUNOCjkmPNKPCf4d3+Z1dAMC/my/c1DAn1of0=;
+        b=w+mAvWQlR13Dtx0FT9u5ct7O0gX5K6t3aG+4hK19oReZvrT3ap+WL9mJUpz26bf3Qp
+         WwaETB2/G7rXCTxPjZxqvE8BOXbxRoP4WzahrLeqxxgyPae+yRNsZ7kKAuHopR+9nDT0
+         oDryKKBUHkhFaN7RiUZOo4lwi/Uj++8AvjJAfInUVBeWcUqmGu6D2hELM3jMW//gf0q2
+         nxxE3mKt74E26dkJI/JHgY/1I2eSs2lGSk7Bxpl9iuzdMU4HJx95wHqR4E1o9tskwDBx
+         Mlt8jeJ5pIGHSCGcmlxWhIOqybY/WuctxtGsxhV4tvt7PNT/DLW1O3rWU9Hob0KKVuSx
+         6+eg==
+X-Gm-Message-State: AOAM532nlz7CApEj0wLMNNcqWtnn9l6PPaKVccX5ToxuvHgqQ80ss5A5
+        cs8LA8Q1jDsPttPnGl6vTXdnH2H0yT66PgAxW1Q02Q==
+X-Google-Smtp-Source: ABdhPJyQds8T0nBhNW3ATVRZZXvbEaXj0bT6cR2EpD03NOqGrTF03r2QT/LxlL3vII2Cb832ApVWiclaTBJKgwUulfY=
+X-Received: by 2002:a1f:a4d8:: with SMTP id n207mr8993217vke.10.1643212805666;
+ Wed, 26 Jan 2022 08:00:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20220125155447.179130255@linuxfoundation.org>
+In-Reply-To: <20220125155447.179130255@linuxfoundation.org>
+From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Date:   Wed, 26 Jan 2022 21:29:29 +0530
+Message-ID: <CAG=yYwmrqD+kb2_tLDY5zAzeD21gbLA+sEt2pU9eEiFbQ8kPpQ@mail.gmail.com>
+Subject: Re: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi German,
->Hi Ali,
+On Tue, Jan 25, 2022 at 10:16 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
->On 25/01/2022 19:20, Ali Saidi wrote:
->> Providing the arm_spe_record as raw data to the synthesized SPE samples
->> allows perf scripts to read and separately process the data in ways
->> existing perf tools don't support and mirrors functionality available
->> for PEBS.
->> Signed-off-by: Ali Saidi <alisaidi@amazon.com>
->> ---
->>  tools/perf/util/arm-spe.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
->> index d2b64e3f588b..a7499cde6fc0 100644
->> --- a/tools/perf/util/arm-spe.c
->> +++ b/tools/perf/util/arm-spe.c
->> @@ -336,6 +336,8 @@ static int arm_spe__synth_mem_sample(struct arm_spe_queue *speq,
->>  	sample.phys_addr = record->phys_addr;
->>  	sample.data_src = data_src;
->>  	sample.weight = record->latency;
->> +	sample.raw_size = sizeof(*record);
->> +	sample.raw_data = record;
+> This is the start of the stable review cycle for the 5.16.3 release.
+> There are 1033 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
->Have you tried this with perf-inject? I think it would need the PERF_SAMPLE_RAW bit in the sample_type,
-
-Yes I've tried the following and it worked as expected with the original
-perf.data or the perf.data.jitted after perf-inject. 
-
-perf record -e arm_spe_0/jitter=1/ -k 1 java ...
-perf  inject -f --jit -i perf.data -o perf.data.jitted
-perf script -i perf.data -s t1.py --itrace=i1i
-
+> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
+> Anything received after that time might be too late.
 >
->Although I quickly looked over the perf inject code and it looks like it's expecting some type of padding:
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
 >
->  // synthetic-events.c
->  if (type & PERF_SAMPLE_RAW) {
->    result += sizeof(u32);
->    result += sample->raw_size;
->  }
+> thanks,
 >
->I'm seeing some comments in utils/event.h related to this on the intel events.
+> greg k-h
+>
+  hello,
+Compiled and booted 5.16.3-rc2  on VivoBook 15_ASUS Laptop X507UAR  .
+NO regressions from dmesg.
 
-Yes i noticed this too,but looking at how the raw data is added to the same
-other places like intel-pt.c:1703 the perf_synth__raw*() functions are used to
-strip away the 4 bytes bytes before the data is added to the sample. The other
-places i can find the padding used is in builtin-script.c but given we have the
---dump-raw-trace option it's not clear to me that it's needed to wrap the
-arm_spe_event in another struct with padding like perf_synth_intel_ptwrite?
+Tested-by: Jeffrin Jose T  <jeffrin@rajagiritech.edu.in>
 
-Thanks,
-Ali
-
+--
+software engineer
+rajagiri school of engineering and technology -  autonomous

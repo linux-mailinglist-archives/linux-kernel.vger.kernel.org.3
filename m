@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD32449C17C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC93149C180
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236672AbiAZC41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 21:56:27 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:35871 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236514AbiAZC4Z (ORCPT
+        id S236689AbiAZC5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 21:57:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236678AbiAZC5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 21:56:25 -0500
-Received: from kwepemi100018.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jk7d13H6kzccJn;
-        Wed, 26 Jan 2022 10:55:33 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100018.china.huawei.com (7.221.188.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 26 Jan 2022 10:56:23 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 26 Jan 2022 10:56:22 +0800
-Subject: Re: [PATCH 4.19 000/239] 4.19.226-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <stable@vger.kernel.org>
-References: <20220124183943.102762895@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <7339e966-110f-368c-e9e1-8970fcca2676@huawei.com>
-Date:   Wed, 26 Jan 2022 10:56:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 25 Jan 2022 21:57:39 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A60DC06161C;
+        Tue, 25 Jan 2022 18:57:39 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id s18so9591220ioa.12;
+        Tue, 25 Jan 2022 18:57:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8Z9fTAosYWmdHhoiFaWzEwrQtgGbnjw3zgWYEIipPpM=;
+        b=g+KG/tzcCiREoxfWhlNdap7yWt7kyEvlOWbxRYwBRD/mdWlKmoz0aFUGPDYoZlf+8T
+         pWbvgLu5RabIfUcExNX5MlSpDwTtVX6rTg9+TChoEhrYqTPk67vWVPasTdzQoudJGZxc
+         01paz+U7c4TV2NaI5NNE8XDgXGHYqiO5SHHafYAvEs9RjHJkT49f0nKmePBaToHsnpUx
+         SlSXt+4hc1FXcAmYh75uZL0Bu7jBM2SwD8Vl7ms09oKB3bLmrd1uBiBnTZdmZqqHlxj8
+         Z1tUQn+mRDiTNLWM78JI/dRZ0GRmvaxolxVl8/NbPvgDossiAgd5uR/EFbky+bHy+J9s
+         ivkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8Z9fTAosYWmdHhoiFaWzEwrQtgGbnjw3zgWYEIipPpM=;
+        b=6pKnNQnm6elhdYMn+CAhZtgzbgJ+eJ9Uwmj6F+z6Ia52XdFaRLtUwAMgmEwR9gpVBT
+         6OxiiKskzo8tHdO+daw/CmleILLlkP0tThktmv35L5CExn4epVwvsJJM4VGY1SBo3nLd
+         UWVObSqRCkanQdv0ssf0rgOIde1sctyaX2BhCFDn05m/8Ds8rD7OGvYfB/Y/xiG3oVHe
+         um6vZhRvPI8HplhoLBPW7rcyXoqDwIHu07tvZKfQJB58CxnO70UgXJQxqvnLb4f4Q2fy
+         c8B97KHhQSGL57/IDwfRn3nIAc/mMzKTzYOFaMOSbOcmluikTAfuSWHBcUvANB4z6WBt
+         f5lw==
+X-Gm-Message-State: AOAM531E17ISzJaharnM5Z4iMAjLor8o5s/UnYi9h9DAWKGKSXXcO9JV
+        2/nUXh9QzTpIZWa8tkNRHrI=
+X-Google-Smtp-Source: ABdhPJwmiriTEgZcrc9mAcrn/yOdBKltldtNNKijBVqgtIlwb9HWeIHNnCMYT2DsK2Am0SUX4g00zw==
+X-Received: by 2002:a05:6638:388a:: with SMTP id b10mr4247334jav.55.1643165858141;
+        Tue, 25 Jan 2022 18:57:38 -0800 (PST)
+Received: from ?IPV6:2601:282:800:dc80:1502:2fac:6dee:881? ([2601:282:800:dc80:1502:2fac:6dee:881])
+        by smtp.googlemail.com with ESMTPSA id c3sm9982223iow.28.2022.01.25.18.57.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 18:57:37 -0800 (PST)
+Message-ID: <926e3d3d-1af0-7155-e0ac-aee7d804a645@gmail.com>
+Date:   Tue, 25 Jan 2022 19:57:36 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH net-next 3/6] net: ipv4: use kfree_skb_reason() in
+ ip_rcv_finish_core()
 Content-Language: en-US
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, pablo@netfilter.org,
+        kadlec@netfilter.org, Florian Westphal <fw@strlen.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Eric Dumazet <edumazet@google.com>, alobakin@pm.me,
+        paulb@nvidia.com, Paolo Abeni <pabeni@redhat.com>,
+        talalahmad@google.com, haokexin@gmail.com,
+        Kees Cook <keescook@chromium.org>, memxor@gmail.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, Cong Wang <cong.wang@bytedance.com>
+References: <20220124131538.1453657-1-imagedong@tencent.com>
+ <20220124131538.1453657-4-imagedong@tencent.com>
+ <5201dd8b-e84c-89a0-568f-47a2211b88cb@gmail.com>
+ <CADxym3YpyWh59cjtUqxGXxpb2+2Ywb-n4Jpz1KJG3AYRf5cenA@mail.gmail.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <CADxym3YpyWh59cjtUqxGXxpb2+2Ywb-n4Jpz1KJG3AYRf5cenA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/25/22 7:36 PM, Menglong Dong wrote:
+> Is't it meaningful? I name it from the meaning of 'ip route lookup or validate
+> failed in input path', can't it express this information?
 
 
-On 2022/1/25 2:40, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.226 release.
-> There are 239 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.226-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+ip_route_input_noref has many failures and not all of them are FIB
+lookups. ip_route_input_slow has a bunch of EINVAL cases for example.
 
-Tested on arm64 and x86 for 4.19.226-rc1,
-
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-4.19.y
-Version: 4.19.226-rc1
-Commit: ebabcfeda281e1c6226b219845d71930c729dae0
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 8941
-passed: 8941
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 8941
-passed: 8941
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
+Returning a 'reason' as the code function name has no meaning to a user
+and could actually be misleading in some cases. I would skip this one
+for now.

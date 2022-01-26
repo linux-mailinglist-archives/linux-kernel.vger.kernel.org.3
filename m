@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03AFA49C64A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB4D49C64C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiAZJ1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:27:33 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:50074 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239117AbiAZJ11 (ORCPT
+        id S239147AbiAZJ1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239117AbiAZJ1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:27:27 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 26 Jan 2022 04:27:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5D1C06161C;
+        Wed, 26 Jan 2022 01:27:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8BD54212BF;
-        Wed, 26 Jan 2022 09:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643189245; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KYpEiGK3ZZrbGlIMn1GiimLekwuOkP30FhRWgFzfNL4=;
-        b=KUrcZW+ZrP3PWs1LyFoOmANdJw2sANUUe/xOvO841e19zsRGMrBBr3/yXceRmChglTXu7K
-        j7EDr7CNbv3L4xOWSrU2DDR11kUZvuxMMLkJBLMso6kwFM9sNkL8XRHnawtahVhu0RNpFT
-        P+Aq7sNAD8s0hO0OtUuqsvHU4k0QIa8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643189245;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KYpEiGK3ZZrbGlIMn1GiimLekwuOkP30FhRWgFzfNL4=;
-        b=eYr7rT7lf9/jXwUJ98PIDo/BEVJVr14oyJxBGtdFFewNToNpRUVXbAWv+agYKUkvuwKGlY
-        VN7deTaKrjC3WpAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BBEBA13B2B;
-        Wed, 26 Jan 2022 09:27:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CNwsLPwT8WFmSQAAMHmgww
-        (envelope-from <jroedel@suse.de>); Wed, 26 Jan 2022 09:27:24 +0000
-Date:   Wed, 26 Jan 2022 10:27:23 +0100
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, hpa@zytor.com,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        David Rientjes <rientjes@google.com>,
-        Cfir Cohen <cfir@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mike Stunes <mstunes@vmware.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Martin Radev <martin.b.radev@gmail.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 03/12] x86/sev: Save and print negotiated GHCB
- protocol version
-Message-ID: <YfET+7amPSKLnZWu@suse.de>
-References: <20210913155603.28383-1-joro@8bytes.org>
- <20210913155603.28383-4-joro@8bytes.org>
- <YYKcS2OIzAV+MTzr@zn.tnic>
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9250B81C25;
+        Wed, 26 Jan 2022 09:27:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D99C340E3;
+        Wed, 26 Jan 2022 09:27:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643189267;
+        bh=vhq9IzfZY0Kkx/iKL/tX8aAEwobUSIlwyapbLm1SG0c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u6aW7MD6w+srRDr2esmBrnP+5wgDjCkAElIkKryBN6VkGdyagIqHWsVDi8TghiJnl
+         LyAmq1M0bueEVSPpk7iU49oakTEfv2kWppLeOc3loLvMi8ZVJdPiFNO92LIN5H+1oq
+         zc4JDaHdpMdxMLJTnZdokPj7NY7TUiLzKLic8LIOXh9vaIrkq0AHwC/uGuUfDksPeP
+         DjkxGzYwPwx+L3ppbJiEwY+TNYSKoAV/Y66Na+EGkneAUCqDQ1Kdd8FMo5DSVhqYwU
+         403Ho+S1GaU4hQnsatw9WBphT6xR6nhmn2QR+xtR7iGaU5Eq+P4rzQe377L4Ru5SWH
+         Ew9n3rsZZt0gA==
+Date:   Wed, 26 Jan 2022 17:27:42 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     robh+dt@kernel.org, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, festevam@gmail.com,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        y.bas@phytec.com
+Subject: Re: [PATCH RESEND 2/2] ARM: dts: imx6qdl: Handle unneeded
+ MFD-subdevices correctly
+Message-ID: <20220126092741.GK4686@dragon>
+References: <20211216115529.2331475-1-andrej.picej@norik.com>
+ <20211216115529.2331475-2-andrej.picej@norik.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YYKcS2OIzAV+MTzr@zn.tnic>
+In-Reply-To: <20211216115529.2331475-2-andrej.picej@norik.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 03, 2021 at 03:27:23PM +0100, Borislav Petkov wrote:
-> On Mon, Sep 13, 2021 at 05:55:54PM +0200, Joerg Roedel wrote:
-> > From: Joerg Roedel <jroedel@suse.de>
-> > 
-> > Save the results of the GHCB protocol negotiation into a data structure
-> > and print information about versions supported and used to the kernel
-> > log.
+On Thu, Dec 16, 2021 at 12:55:29PM +0100, Andrej Picej wrote:
+> From: Yunus Bas <y.bas@phytec.de>
 > 
-> Which is useful for?
-
-For easier debugging, I added a sentence about that to the changelog.
-
-> > +struct sev_ghcb_protocol_info {
+> The proper way to handle partly used MFD devices are to describe all MFD
+> subdevices in the devicetree and disable the not used ones. This
+> suppresses any warnings that may arise as a result.
 > 
-> Too long a name - ghcb_info is perfectly fine.
+> Signed-off-by: Yunus Bas <y.bas@phytec.de>
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 
-Changed, thanks.
+Use subject prefix like
 
--- 
-Jörg Rödel
-jroedel@suse.de
+  ARM: dts: imx6qdl-phytec: ...
 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5
-90409 Nürnberg
-Germany
- 
-(HRB 36809, AG Nürnberg)
-Geschäftsführer: Ivo Totev
+Shawn
 
+> ---
+>  arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi      |  5 +++++
+>  arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi | 10 ++++++++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+> index 2ec154756bbc..3590f439adf5 100644
+> --- a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+> +++ b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+> @@ -213,6 +213,11 @@ pmic_rtc: rtc {
+>  		da9063_wdog: wdt {
+>  			compatible = "dlg,da9063-watchdog";
+>  		};
+> +
+> +		onkey {
+> +			compatible = "dlg,da9063-onkey";
+> +			status = "disabled";
+> +		};
+>  	};
+>  };
+>  
+> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
+> index 94b254bfd054..28a805384668 100644
+> --- a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
+> +++ b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
+> @@ -116,6 +116,16 @@ watchdog {
+>  			dlg,use-sw-pm;
+>  		};
+>  
+> +		thermal {
+> +			compatible = "dlg,da9062-thermal";
+> +			status = "disabled";
+> +		};
+> +
+> +		gpio {
+> +			compatible = "dlg,da9062-gpio";
+> +			status = "disabled";
+> +		};
+> +
+>  		regulators {
+>  			vdd_arm: buck1 {
+>  				regulator-name = "vdd_arm";
+> -- 
+> 2.25.1
+> 

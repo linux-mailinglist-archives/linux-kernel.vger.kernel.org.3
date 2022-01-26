@@ -2,113 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B43BC49CED6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1570C49CEDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243082AbiAZPqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:46:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:53212 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236060AbiAZPqB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:46:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643211961;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=85xNqoR4ThIkZTm0ksRjdnAn/hdDPYPlrpJkOEBO+Gw=;
-        b=JTGWsYQpM5dbPo8z68CO+kDCdhUNr3ZE0QphQQSfnErwJFOKlPgzDh0pdWmnvvfwlp21Ya
-        vTfwPX+JOFNryHGSlAlRXYfXmBdJdVXiMKdromNdwvnnLNNTMKzCCe/eU+HMwuGWQMJeRZ
-        Hd95iOO723ip1ZmhnB8xRgrPXh5zwS4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-541-w8pKpwHhMzWX8V5kP8xW8w-1; Wed, 26 Jan 2022 10:45:59 -0500
-X-MC-Unique: w8pKpwHhMzWX8V5kP8xW8w-1
-Received: by mail-ed1-f71.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so16899063edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:45:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=85xNqoR4ThIkZTm0ksRjdnAn/hdDPYPlrpJkOEBO+Gw=;
-        b=Phsx/GOeIZyTvsAa9gj9zn/lYBkYtjK3BlO7cqkAxw19gFIwVVmf3r5u0HgATgrIBt
-         cA5xoLQcBPPY5JPjV/9oni8UW6xCzkpnamJBo8AD9WlyhsJ6h3/Jeu3VRlDy2PCOafrP
-         SGiT6rQsSSxmo+Op+XSrOB5B1yuYK456dYSgTbtOAeHkkIE3lT+1yAztbg1TLTyLuHJy
-         9BcXvbnZ4a480BYxJ2aSxmBCqoMSd5VM0bwk70KgMaRoO3IfVv3n1mhTGMcd7OyF9TUu
-         5zayX4fJilELVokY24n+WlWr1l3a9ijWuLxrd1jkL9IsMVpvbULMm8VyET9ucN3jn23N
-         axfA==
-X-Gm-Message-State: AOAM532o5j3wcbfKMQUnCm/Gvldn/zquYRefOChju7k1fHn1xS43m/QJ
-        Njh1juyZWz79fal2CY3YjLvsCcygYtE2QdOh4poxxp1x1B1STANuPLjud2fyIa3FiC0X0vVahau
-        tbaPQ63rgnENyiSfdhbO6Gx8J
-X-Received: by 2002:a17:907:608b:: with SMTP id ht11mr19968281ejc.644.1643211957978;
-        Wed, 26 Jan 2022 07:45:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxpEDNBOKy7dIjLhVKX4NyD/FEvAkY4wpp1H4YHhCLVbMYQN/BtgG/EAr7zu3rkoVxfQk9vLQ==
-X-Received: by 2002:a17:907:608b:: with SMTP id ht11mr19968273ejc.644.1643211957786;
-        Wed, 26 Jan 2022 07:45:57 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id l5sm7667966ejn.59.2022.01.26.07.45.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 07:45:57 -0800 (PST)
-Message-ID: <e570f7d2-03fc-1498-bd91-6fd7aabae766@redhat.com>
-Date:   Wed, 26 Jan 2022 16:45:56 +0100
+        id S243085AbiAZPtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:49:01 -0500
+Received: from mga07.intel.com ([134.134.136.100]:54866 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235555AbiAZPtB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 10:49:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643212141; x=1674748141;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+J63yfbsQbuQjnkNpkFhv6uxQDj/oTnzatWDWLCsMgU=;
+  b=XmesMcw2YCailfty3FSyhP6YEBWuDAC0r6Cq9sV9HN4rKo9L0ouw/kiO
+   cBRG0d6+p+q2m+S7LH52w32naaGPdOOa5hckGdwefz2vW00EbjyJeeO8J
+   MX2hcWl6MHv+heqTI47FcbI9Mdy13hRTttJ3SO9rmIfH94YViMGIyrth1
+   gXlTzeZyOu7rYJp00axWpWIr67BffSoHQct7kALp5mQJ1Oeu8XMMz8FMX
+   QOVLoXOsJathTBDVoDgktcaQTqEO3hoa0S28ana1fx7P3NpGT59FyFk0a
+   sVXYytvuFu7cTdZuG0SpLMu5KgWEdZKFtGngHldIVTVxaPNpTbexVuIvp
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309891077"
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="309891077"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 07:49:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="563442847"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 07:48:58 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCkXZ-000LLv-No; Wed, 26 Jan 2022 15:48:57 +0000
+Date:   Wed, 26 Jan 2022 23:48:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Subject: Re: [PATCH v4] drivers: thermal: clear all mitigation when thermal
+ zone is disabled
+Message-ID: <202201262251.KzdCvJYy-lkp@intel.com>
+References: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] KVM: selftests: Don't skip L2's VMCALL in SMM test for
- SVM guest
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>
-References: <20220125221725.2101126-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220125221725.2101126-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1643128565-22838-1-git-send-email-quic_manafm@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/22 23:17, Sean Christopherson wrote:
-> Don't skip the vmcall() in l2_guest_code() prior to re-entering L2, doing
-> so will result in L2 running to completion, popping '0' off the stack for
-> RET, jumping to address '0', and ultimately dying with a triple fault
-> shutdown.
-> 
-> It's not at all obvious why the test re-enters L2 and re-executes VMCALL,
-> but presumably it serves a purpose.  The VMX path doesn't skip vmcall(),
-> and the test can't possibly have passed on SVM, so just do what VMX does.
-> 
-> Fixes: d951b2210c1a ("KVM: selftests: smm_test: Test SMM enter from L2")
-> Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   tools/testing/selftests/kvm/x86_64/smm_test.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/smm_test.c b/tools/testing/selftests/kvm/x86_64/smm_test.c
-> index 2da8eb8e2d96..a626d40fdb48 100644
-> --- a/tools/testing/selftests/kvm/x86_64/smm_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/smm_test.c
-> @@ -105,7 +105,6 @@ static void guest_code(void *arg)
->   
->   		if (cpu_has_svm()) {
->   			run_guest(svm->vmcb, svm->vmcb_gpa);
-> -			svm->vmcb->save.rip += 3;
->   			run_guest(svm->vmcb, svm->vmcb_gpa);
->   		} else {
->   			vmlaunch();
-> 
-> base-commit: e2e83a73d7ce66f62c7830a85619542ef59c90e4
+Hi Manaf,
 
-Queued, thanks.
+Thank you for the patch! Perhaps something to improve:
 
-Paolo
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on v5.17-rc1 next-20220125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
+url:    https://github.com/0day-ci/linux/commits/Manaf-Meethalavalappu-Pallikunhi/drivers-thermal-clear-all-mitigation-when-thermal-zone-is-disabled/20220126-004720
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+config: nios2-randconfig-m031-20220124 (https://download.01.org/0day-ci/archive/20220126/202201262251.KzdCvJYy-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+smatch warnings:
+drivers/thermal/gov_step_wise.c:189 step_wise_unbind() warn: inconsistent indenting
+
+vim +189 drivers/thermal/gov_step_wise.c
+
+   169	
+   170	/**
+   171	 * step_wise_unbind() - unbind the step_wise governor to a thermal zone
+   172	 * @tz:	thermal zone to unbind it to
+   173	 *
+   174	 * Clear all previous throttling and reset passive counter.
+   175	 *
+   176	 */
+   177	static void step_wise_unbind(struct thermal_zone_device *tz)
+   178	{
+   179		struct thermal_instance *instance;
+   180	
+   181		dev_dbg(&tz->device, "Unbinding from thermal zone %d\n", tz->id);
+   182	
+   183		mutex_lock(&tz->lock);
+   184		tz->passive = 0;
+   185		list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+   186			instance->initialized = false;
+   187			instance->target = THERMAL_NO_TARGET;
+   188			mutex_lock(&instance->cdev->lock);
+ > 189			 __thermal_cdev_update(instance->cdev);
+   190			mutex_unlock(&instance->cdev->lock);
+   191		}
+   192		mutex_unlock(&tz->lock);
+   193	}
+   194	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

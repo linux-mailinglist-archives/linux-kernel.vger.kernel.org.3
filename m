@@ -2,74 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 956EA49CEF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D9049CEF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiAZPwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:52:23 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35384 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiAZPwW (ORCPT
+        id S230408AbiAZPy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229645AbiAZPy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:52:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F7D061927
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:52:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 072AEC340E3;
-        Wed, 26 Jan 2022 15:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643212341;
-        bh=pDJ1n2o3tA01FOf1seMcoBl990OFnzTSM1jb7kUBkmA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kHwxw5x54kqArq5LM7anF8uiy/fNXEnjfAb89CRrPUn6hJeoCu94e34Js1XjBmZw1
-         Zcr6ObjuOPHWuqO/nuFZd0IKde8MTHqv6uUgm1fsvU7s+tmTXZx8RcjGgEBfZ2ZIEz
-         Yk+IKeR2PbHBzU754oIf9qifEPI8x6MFOqrhDsR7HBPVScPLEL9IQgJbaV3wYC6iEG
-         5/6F8XDQ2J6vVTLRGU1u9Yj7zmG/tQ9VX/DMPuzObiQ7ftKu346cWX5+zPCYIDEOHF
-         LxQmrHRhQYOWpY6LC+entG4YjvbqUIzaIC4y05Xevc5y+m7ys7ltNciNOuFPdbn45a
-         Or76eHkBXm2RQ==
-Date:   Wed, 26 Jan 2022 07:52:20 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     jwiedmann.dev@gmail.com, Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sameeh Jubran <sameehj@amazon.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: ena: Do not waste napi skb cache
-Message-ID: <20220126075220.3d60981f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <YfFJuQQBLJRxIJR+@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220123115623.94843-1-42.hyeyoo@gmail.com>
-        <YfFJuQQBLJRxIJR+@ip-172-31-19-208.ap-northeast-1.compute.internal>
+        Wed, 26 Jan 2022 10:54:26 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A984C06161C;
+        Wed, 26 Jan 2022 07:54:26 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id b22so4820199qkk.12;
+        Wed, 26 Jan 2022 07:54:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=d2hfJnq7WFG6jJbY1jQ64KsykK+O3FA7XQ9vdxvBn90=;
+        b=fxrbuXDps7bOVDI3Pn+WxxehZMZBBY1HydEO72ENhhutcwBCI+hmGQ+wJgoWASvsgz
+         cjhBQX1tKM9lDW6Zaj6ubROCjBk3rXIHp2R+GTeTBgO11RTbNF7BFgVBUtKgsML1Wp+2
+         Sw6EZHJNwLfuZumruwVCnPDLIMWCUf3EmLXHCzhXzKpAwc4acw3fAUXRe4lSfG5Y4rBy
+         ffITB/xAhu1rp926aEEHwRaf3FVxINsrX9DdfQu4OyhIbfzpV5SuzqbVTZmhZikxn+8j
+         hGQ2lCR8QvMDeUyH/vCJqjdbNdHTHQM/ajihgBqfMBRE2o7v3Q3tUul1PjQ8vWfNp7GR
+         UlxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d2hfJnq7WFG6jJbY1jQ64KsykK+O3FA7XQ9vdxvBn90=;
+        b=Cj0zKpzavFoYf7jZzY7AhcVsVLLyhD+dLaRO+jPB1Nu6r2mp0OFkydPEzgoBgL0miN
+         zBpK5/aTQoBPMOAYmMon3yEThJpOLDFkuqSyk1BEe46AKHGA25ZVUiPEkzFFBdpzFT51
+         I8n0R/mwFFqj/GpQcr/RW7nZTc7zIe+JlmM3ff1s6k+u7okbj5VzoP2PWElS0qNpmK13
+         ywJg5WBB8obFOoA6rbXY+LEYQelainCmznoTSrh8Knd/d/xsIh9FulLj2LvuQIzfX+or
+         w8E9QntuAKMsYjj3nSSQbMOp8PyDp6FhspW3GzoVNelHrqEGV63kjTZHaqH5wxzxPSYu
+         ZkVw==
+X-Gm-Message-State: AOAM5334zTX6/D0BIpWdvGur5v7Evv/ZgFvlE0Mfbb/SRgyivDvJHAxl
+        LYVNSWjU6rz2dx5xYf7VDII=
+X-Google-Smtp-Source: ABdhPJz6xJBj7tZ4ymoR1vfWqzCoELsEIantQdyGfyRGT3CSIbDxgepmXmUiaHMksimv4ZaJorKDfw==
+X-Received: by 2002:a05:620a:2915:: with SMTP id m21mr8359108qkp.374.1643212465186;
+        Wed, 26 Jan 2022 07:54:25 -0800 (PST)
+Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
+        by smtp.gmail.com with ESMTPSA id b4sm10815876qkf.61.2022.01.26.07.54.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 07:54:24 -0800 (PST)
+Date:   Wed, 26 Jan 2022 10:54:22 -0500
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v2 5/5] iio: afe: iio-rescale: Re-use generic struct
+ s32_fract
+Message-ID: <YfFurqdAmPpZ8PJ1@shaak>
+References: <20220110193104.75225-1-andriy.shevchenko@linux.intel.com>
+ <20220110193104.75225-5-andriy.shevchenko@linux.intel.com>
+ <20220115185203.567780e8@jic23-huawei>
+ <Ye7DSAN4gdhXfEUs@smile.fi.intel.com>
+ <Ye8Z6dS5cCji9LNQ@shaak>
+ <Ye/4eJ/RhlWF7q70@smile.fi.intel.com>
+ <b25932d7-91bc-27b4-ada9-8d5da1ef2ddf@axentia.se>
+ <YfA+xFR0oh2ztDKv@smile.fi.intel.com>
+ <34c121fa-2a3b-fb6b-f6d5-fc2be2a5c6b7@axentia.se>
+ <YfE45cImAQpOeziT@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfE45cImAQpOeziT@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 13:16:41 +0000 Hyeonggon Yoo wrote:
-> By profiling, discovered that ena device driver allocates skb by
-> build_skb() and frees by napi_skb_cache_put(). Because the driver
-> does not use napi skb cache in allocation path, napi skb cache is
-> periodically filled and flushed. This is waste of napi skb cache.
+Hi Andy,
+On Wed, Jan 26, 2022 at 02:04:53PM +0200, Andy Shevchenko wrote:
+> On Wed, Jan 26, 2022 at 11:26:50AM +0100, Peter Rosin wrote:
+> > On 2022-01-25 19:17, Andy Shevchenko wrote:
+> > > On Tue, Jan 25, 2022 at 03:54:07PM +0100, Peter Rosin wrote:
+> > >> On 2022-01-25 14:17, Andy Shevchenko wrote:
+> > >>> On Mon, Jan 24, 2022 at 04:28:09PM -0500, Liam Beguin wrote:
+> > >>>> On Mon, Jan 24, 2022 at 05:18:32PM +0200, Andy Shevchenko wrote:
+> > >>>>> On Sat, Jan 15, 2022 at 06:52:03PM +0000, Jonathan Cameron wrote:
+> > >>>>>> On Mon, 10 Jan 2022 21:31:04 +0200
+> > >>>>>> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> As ena_alloc_skb() is called only in napi, Use napi_build_skb()
-> and napi_alloc_skb() when allocating skb.
-> 
-> This patch was tested on aws a1.metal instance.
-> 
-> [ jwiedmann.dev@gmail.com: Use napi_alloc_skb() instead of
->   netdev_alloc_skb_ip_align() to keep things consistent. ]
-> 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> ...
 
-It seems you missed CCing netdev@, you'll need to repost.
-You can keep the ack from Shay.
+...
+
+> The problem here is that every driver would like to do this differently
+> and since it's related to the calculation we will have all possible error
+> prone implementations which do miscalculations (yes, one may not notice
+> traditional off-by-one until it becomes a huge issue by using additional
+> conversion formulas or so).
+> 
+> > But sure, feel free to suggest something. But please hold until the
+> > current work from Liam is merged.
+> > That series is clearly more
+> > important, and I'm not really interested in neither adding more work for
+> > him nor a cleanup of the current code without those pending changes.
+> 
+> I'm very well fine with that. As I mentioned from the beginning, I may rebase
+> this on top of the Liam's work.
+
+I appreciate that! I'll make time to wrap things up so I don't hold you
+up.
+
+Cheers,
+Liam
+
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 

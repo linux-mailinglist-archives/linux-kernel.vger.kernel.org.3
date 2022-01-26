@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 976EC49D5E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B8C49D5E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbiAZXHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 18:07:53 -0500
-Received: from mx1.mailbun.net ([170.39.20.100]:42888 "EHLO mx1.mailbun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229852AbiAZXHw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 18:07:52 -0500
-Received: from [2607:fb90:d98b:8818:f877:8b4d:b8e:5ef5] (unknown [172.58.109.194])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ariadne@dereferenced.org)
-        by mx1.mailbun.net (Postfix) with ESMTPSA id 4098911A817;
-        Wed, 26 Jan 2022 23:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dereferenced.org;
-        s=mailbun; t=1643238472;
-        bh=4jbgQdEYB/Ogcs9D1+o31MmOrg2MwhNco7JGwQ6xy9w=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References;
-        b=QSPTUoomDAqer1KGHVfncm5b4qTeKVefbWYv/t88Dl6BoD1i4XrQJXAAKRv2WlBgw
-         kmAz63xLLfDyC3lz1qW9caCHtb42xZkZ/OEErIZJuHNOhCpY68SWBeGqQpbl/kb+Ir
-         0QG3VKzwSFeFoqgX4vr/ikJvc3Qw49mkbhOAKuGWbRRhDL/4df3sUuYP5uNME52Cbt
-         AhoFbMlCyyODAbcFbautiRTFpGKMyFo9Eb0zspWUDh4N1pFkjddkiSaEZfIRzwQNhV
-         WLzGsIGgC/aDYJ3Gx9I7utgNfzAQod5iL3eZIbDAZHnCf26yAzIKScsewXua4HzFuz
-         gD40nnVtDEbLg==
-Date:   Wed, 26 Jan 2022 17:07:45 -0600 (CST)
-From:   Ariadne Conill <ariadne@dereferenced.org>
-To:     Kees Cook <keescook@chromium.org>
-cc:     Ariadne Conill <ariadne@dereferenced.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
- do_execveat_common()
-In-Reply-To: <202201261440.0C13601104@keescook>
-Message-ID: <85834b6e-a0e-eefc-7cf6-2ca37798cdf@dereferenced.org>
-References: <20220126114447.25776-1-ariadne@dereferenced.org> <202201261202.EC027EB@keescook> <a8fef39-27bf-b25f-7cfe-21782a8d3132@dereferenced.org> <202201261239.CB5D7C991A@keescook> <5e963fab-88d4-2039-1cf4-6661e9bd16b@dereferenced.org> <202201261323.9499FA51@keescook>
- <64e91dc2-7f5c-6e8-308e-414c82a8ae6b@dereferenced.org> <202201261440.0C13601104@keescook>
+        id S231480AbiAZXIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 18:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231240AbiAZXIQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 18:08:16 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0F9C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:08:16 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id c9so899070plg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:08:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LhmiCV1/nM9D4gpfyVW54b2aVU9iaxsA/jDSOqByd6c=;
+        b=mF01vYXvOAIm8eYXKjcQ+xRocd5AaOMvSFzLDioyrOJ241l2bFLE4rW25ovbHQ98gF
+         m/q1of8fUYjdZheDSJAIUXq+mKUlMYGdF4ZmpVaDg7QtAWTwOdfgiJOZQKIErZ1p/45n
+         aCDqZGUPP3q/36Q2n1MMP6FbZOcGnbdhuXy+0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LhmiCV1/nM9D4gpfyVW54b2aVU9iaxsA/jDSOqByd6c=;
+        b=mCu8WeoXZnoVWSPq1SLCdF8Zp1ixo1lndz0KzUmedO6XjHgvKDGAwqd315UGEpRlOd
+         92MzrVa2mQ3gtlT7SuE8Yhnq1dCE4jXeiLgFe4wYYyr5bJFDEyPMLoBWHt9d9yvtiSl+
+         rEGEZR6frnXtsH4hBUI5eSYCxCR8GiNq1if1FbSHBONqm8FXgfdaP66okbTaP3VO6tzC
+         YzSLSHWq8Yfp9OxhYlyATkgUOwOjEXb8zU8oYbuE19adFgkGm6Q7j8GmtRC8jx2/P/sD
+         43hJFGtgvBh2ikcPmPfP9XMxgWyInriLBqxbbxfLiqKB+Cp430vTbmRtl2DeK+67qOJt
+         mNhg==
+X-Gm-Message-State: AOAM5326IieNxnXrM38DQutbzhxvkvRN/ONcTuV6lj/I9R62mgnwh37W
+        aIc9EQb+yakTfAZ6vNOLkV08Bg==
+X-Google-Smtp-Source: ABdhPJzs05hXyywazKC+HKYue2PywfenZJW+jT/k98U5hemfAiKCaoELDEqako88QP+FXfVJBffexA==
+X-Received: by 2002:a17:902:dad2:: with SMTP id q18mr683229plx.172.1643238496133;
+        Wed, 26 Jan 2022 15:08:16 -0800 (PST)
+Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k13sm3505959pfc.176.2022.01.26.15.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 15:08:15 -0800 (PST)
+Date:   Wed, 26 Jan 2022 23:08:14 +0000
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Alyssa Ross <hi@alyssa.is>
+Cc:     linux-kernel@vger.kernel.org, Tzung-Bi Shih <tzungbi@google.com>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v2] platform/chrome: cros_ec_typec: Check for EC device
+Message-ID: <YfHUXtJPU77wtCPb@chromium.org>
+References: <20220126190219.3095419-1-pmalani@chromium.org>
+ <20220126230411.nn2illij4wbpdm4q@eve>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126230411.nn2illij4wbpdm4q@eve>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Alyssa,
 
-On Wed, 26 Jan 2022, Kees Cook wrote:
+On Jan 26 23:04, Alyssa Ross wrote:
+> On Wed, Jan 26, 2022 at 07:02:20PM +0000, Prashant Malani wrote:
+> > The Type C ACPI device on older Chromebooks is not generated correctly
+> > (since their EC firmware doesn't support the new commands required). In
+> > such cases, the crafted ACPI device doesn't have an EC parent, and it is
+> > therefore not useful (it shouldn't be generated in the first place since
+> > the EC firmware doesn't support any of the Type C commands).
+> >
+> > To handle devices which use these older firmware revisions, check for
+> > the parent EC device handle, and fail the probe if it's not found.
+> >
+> > Fixes: fdc6b21e2444 ("platform/chrome: Add Type C connector class driver")
+> > Reported-by: Alyssa Ross <hi@alyssa.is>
+> > Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > ---
+> > Hi Alyssa, could you kindly test this with your existing setup? Thanks!
+> 
+> Hi Prashant, I'm happy to test, but I'm on vacation until the end of the
+> week so probably won't get a chance before Monday.
 
-> On Wed, Jan 26, 2022 at 03:30:13PM -0600, Ariadne Conill wrote:
->> Hi,
->>
->> On Wed, 26 Jan 2022, Kees Cook wrote:
->>
->>> On Wed, Jan 26, 2022 at 03:13:10PM -0600, Ariadne Conill wrote:
->>>> Looks good to me, but I wonder if we shouldn't set an argv of
->>>> {bprm->filename, NULL} instead of {"", NULL}.  Discussion in IRC led to the
->>>> realization that multicall programs will try to use argv[0] and might crash
->>>> in this scenario.  If we're going to fake an argv, I guess we should try to
->>>> do it right.
->>>
->>> They're crashing currently, though, yes? I think the goal is to move
->>> toward making execve(..., NULL, NULL) just not work at all. Using the
->>> {"", NULL} injection just gets us closer to protecting a bad userspace
->>> program. I think things _should_ crash if they try to start depending
->>> on this work-around.
->>
->> Is there a reason to spawn a program, just to have it crash, rather than
->> just denying it to begin with, though?
->
-> I think the correct behavior here is to unconditionally reject a NULL
-> argv -- and I wish this had gotten fixed in 2008. :P Given the code we've
-> found that depends on NULL argv, I think we likely can't make the change
-> outright, so we're down this weird rabbit hole of trying to reject what we
-> can and create work-around behaviors for the cases that currently exist.
-> I think new users of the new work-around shouldn't be considered. We'd
-> prefer they get a rejection, etc.
->
->> I mean, it all seems fine enough, and perhaps I'm just a bit picky on the
->> colors and flavors of my bikesheds, so if you want to go with this patch,
->> I'll be glad to carry it in the Alpine security update I am doing to make
->> sure the *other* GLib-using SUID programs people find don't get exploited in
->> the same way.
->
-> They "don't break userspace" guideline is really "don't break userspace
-> if someone notices". :P Since this is a mitigation (not strictly a
-> security flaw fix), changes to userspace behavior tend to be very
-> conservatively viewed by Linus. ;)
->
-> My preference is the earlier very simple version to fix this:
->
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 79f2c9483302..aabadcf4a525 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -1897,6 +1897,8 @@ static int do_execveat_common(int fd, struct filename *filename,
-> 	}
->
-> 	retval = count(argv, MAX_ARG_STRINGS);
-> +	if (reval == 0)
-> +		retval = -EINVAL;
-> 	if (retval < 0)
-> 		goto out_free;
-> 	bprm->argc = retval;
->
-> So, I guess we should start there and send a patch to valgrind?
+No worries, whenever you get the chance is fine.
 
-Yes, seems reasonable, though without the typo :)
+> 
+> I'm guessing I should be testing with latest upstream coreboot (now that
+> your fix there has been applied)?
 
-Since you've already written the patch, do you want to proceed with it?
-If so, I can work on the Valgrind tests.
+You should use the coreboot with which you discovered the crash, so the
+one which *doesn't* contain the fix.
 
-Ariadne
+Thanks again!
+
+-Prashant

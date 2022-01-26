@@ -2,370 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4132149C7DF
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE0E49C7E0
 	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240176AbiAZKrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:47:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43025 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240159AbiAZKrB (ORCPT
+        id S240184AbiAZKrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240177AbiAZKrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:47:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643194020;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=36m2kcjL54DLfTH9bRXrige/OiNdmZ5nBs2jhR2L36k=;
-        b=S62rvBCKBShAeqBIVTnDL06aKmxxAjUniIdPjKazBL0I+Kut0QKNa+OnIFU0s7NAcEECAv
-        sPyeTSbZRE9PuShnd7oLK5GBY0yVVqEtL8Tki32ehdxm3OPMnBnfqv2sPGWw5G15RizaZn
-        TUSa9bo6eJ+8lXpooFoX8hYLEF5cJec=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-MhbJhQnHNo-shHE-kpTz5Q-1; Wed, 26 Jan 2022 05:46:59 -0500
-X-MC-Unique: MhbJhQnHNo-shHE-kpTz5Q-1
-Received: by mail-wr1-f70.google.com with SMTP id a11-20020adffb8b000000b001a0b0f4afe9so4125158wrr.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:46:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=36m2kcjL54DLfTH9bRXrige/OiNdmZ5nBs2jhR2L36k=;
-        b=bs7jvHaCRUt84tPKcUMcQfSPY+v5GqT2zXVdXtWVngakmSxFzvwxrYyRoqJGOdOgSY
-         BlWP+8m0XYNQ7lC57uXlHrcTMzYObRzdzUbnZ/SuL1w2UGDvMeCe8fxEpIDL+XIoUPzv
-         nRz6kQnOYBT4fzkJeY/bTfXXu/KNZDh81acLzqjMNL3PERZcWAIJEPouaPHdvm3CiqQ4
-         SzkBLxuEc6Ql8SyahP2sFPDeB3gWUU2YZTsi+SoODl+1EseOHkcqJ94M9rckqsuNz2nu
-         ws4kXGEmaqeVlaE6QRP1MxENH4Y8zkw045CLy9IkcUoz0Bd21Xh4ko5OiKBkZE1FMW0p
-         hraA==
-X-Gm-Message-State: AOAM531nnZowXKXKyeTaVd+z0nhqLTeE5i34v+6ur9g6vcN1yl1ynokw
-        hJ2WeNuxGJFyTxZ60c1d3Au7DD9ky/ztYj94yPFu7zjWkVGNUMkiiJ0gFA+L9ecjqvJO/q7wgoi
-        oThoZPQzp/hdDTc2a0rP8IieR
-X-Received: by 2002:a7b:c4cd:: with SMTP id g13mr6974621wmk.95.1643194018346;
-        Wed, 26 Jan 2022 02:46:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzaHQcmSFSVpbpZ521wSTzYwwTEACCYq2kS6aCXWll4DP8KYaHcDHbF3bZBduSQO4Lu0S/ZmA==
-X-Received: by 2002:a7b:c4cd:: with SMTP id g13mr6974598wmk.95.1643194018083;
-        Wed, 26 Jan 2022 02:46:58 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
-        by smtp.gmail.com with ESMTPSA id f13sm1085039wry.77.2022.01.26.02.46.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 02:46:57 -0800 (PST)
-Message-ID: <99248ffb-2c7c-ba25-5d56-2c577e58da4c@redhat.com>
-Date:   Wed, 26 Jan 2022 11:46:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Nikunj A Dadhania <nikunj@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220118110621.62462-1-nikunj@amd.com>
- <20220118110621.62462-4-nikunj@amd.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
-In-Reply-To: <20220118110621.62462-4-nikunj@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Wed, 26 Jan 2022 05:47:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DF5C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:47:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C1C7B81C10
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B641C340E3;
+        Wed, 26 Jan 2022 10:47:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643194020;
+        bh=J5SBi4isD3eLyC9DrQ37B+AuK48/7awuYs3XRR1bZVg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VOQk1TeYp4o7RV06yBaNACg/ZLyYk5NBp2jUD993soo4AbAjtpkAO4sPgVBOEIE6d
+         YX1m9kokA7DFCJdBPCYNY0G3jMoflGjinASnp2nHZRqKSiWdGgQHQBN3wYBrsF2MyP
+         mURIJboc5HiSc3EgoIPEcf02Fr95E4hP7G6bOO3ZmjESu6iMsZ8mjZzyflBPz5V7bu
+         FOW8onN8HT2mSyTsklno/XRc+FHjHQG9Vm42+eUdR0iHiglfXJfZ/26mEmIKC+Cb60
+         MXm3pU0Bg/cGFlq1WTXrOTdTSgNNY0ug86AT6LgKjGP41tOY+KIU5TmEFWByNB+kpx
+         JUw4ZK61zvZXQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nCfpK-003BPe-2w; Wed, 26 Jan 2022 10:46:58 +0000
+Date:   Wed, 26 Jan 2022 10:46:57 +0000
+Message-ID: <87fspa7p0e.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/6] irqchip/riscv-intc: Set intc domain as the default host
+In-Reply-To: <CAK9=C2Xi60XqzPxTOO+gT3B+-1v4i0QT-9nkhN7hLFX9SchQng@mail.gmail.com>
+References: <20220125054217.383482-1-apatel@ventanamicro.com>
+        <20220125054217.383482-3-apatel@ventanamicro.com>
+        <87lez37k8h.wl-maz@kernel.org>
+        <CAAhSdy0NrB4Q-mYtMH_HCtbfm5OXi-cxXhiu1AxKdCkTv4cskQ@mail.gmail.com>
+        <87ilu67tvw.wl-maz@kernel.org>
+        <CAK9=C2Xi60XqzPxTOO+gT3B+-1v4i0QT-9nkhN7hLFX9SchQng@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, anup@brainfault.org, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, robh+dt@kernel.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.01.22 12:06, Nikunj A Dadhania wrote:
-> Use the memslot metadata to store the pinned data along with the pfns.
-> This improves the SEV guest startup time from O(n) to a constant by
-> deferring guest page pinning until the pages are used to satisfy nested
-> page faults. The page reference will be dropped in the memslot free
-> path.
+On Wed, 26 Jan 2022 10:12:25 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
 > 
-> Remove the enc_region structure definition and the code which did
-> upfront pinning, as they are no longer needed in view of the demand
-> pinning support.
+> On Wed, Jan 26, 2022 at 2:31 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Wed, 26 Jan 2022 03:16:55 +0000,
+> > Anup Patel <anup@brainfault.org> wrote:
+> > >
+> > > On Tue, Jan 25, 2022 at 11:47 PM Marc Zyngier <maz@kernel.org> wrote:
+> > > >
+> > > > On Tue, 25 Jan 2022 05:42:13 +0000,
+> > > > Anup Patel <apatel@ventanamicro.com> wrote:
+> > > > >
+> > > > > We have quite a few RISC-V drivers (such as RISC-V SBI IPI driver,
+> > > > > RISC-V timer driver, RISC-V PMU driver, etc) which do not have a
+> > > > > dedicated DT/ACPI fwnode. This patch makes intc domain as the default
+> > > > > host so that these drivers can directly create local interrupt mapping
+> > > > > using standardized local interrupt numbers
+> > > > >
+> > > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > > > ---
+> > > > >  drivers/clocksource/timer-riscv.c | 17 +----------------
+> > > > >  drivers/irqchip/irq-riscv-intc.c  |  9 +++++++++
+> > > > >  2 files changed, 10 insertions(+), 16 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+> > > > > index 1767f8bf2013..dd6916ae6365 100644
+> > > > > --- a/drivers/clocksource/timer-riscv.c
+> > > > > +++ b/drivers/clocksource/timer-riscv.c
+> > > > > @@ -102,8 +102,6 @@ static irqreturn_t riscv_timer_interrupt(int irq, void *dev_id)
+> > > > >  static int __init riscv_timer_init_dt(struct device_node *n)
+> > > > >  {
+> > > > >       int cpuid, hartid, error;
+> > > > > -     struct device_node *child;
+> > > > > -     struct irq_domain *domain;
+> > > > >
+> > > > >       hartid = riscv_of_processor_hartid(n);
+> > > > >       if (hartid < 0) {
+> > > > > @@ -121,20 +119,7 @@ static int __init riscv_timer_init_dt(struct device_node *n)
+> > > > >       if (cpuid != smp_processor_id())
+> > > > >               return 0;
+> > > > >
+> > > > > -     domain = NULL;
+> > > > > -     child = of_get_compatible_child(n, "riscv,cpu-intc");
+> > > > > -     if (!child) {
+> > > > > -             pr_err("Failed to find INTC node [%pOF]\n", n);
+> > > > > -             return -ENODEV;
+> > > > > -     }
+> > > > > -     domain = irq_find_host(child);
+> > > > > -     of_node_put(child);
+> > > > > -     if (!domain) {
+> > > > > -             pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+> > > > > -             return -ENODEV;
+> > > > > -     }
+> > > > > -
+> > > > > -     riscv_clock_event_irq = irq_create_mapping(domain, RV_IRQ_TIMER);
+> > > > > +     riscv_clock_event_irq = irq_create_mapping(NULL, RV_IRQ_TIMER);
+> > > > >       if (!riscv_clock_event_irq) {
+> > > > >               pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+> > > > >               return -ENODEV;
+> > > > > diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
+> > > > > index b65bd8878d4f..9f0a7a8a5c4d 100644
+> > > > > --- a/drivers/irqchip/irq-riscv-intc.c
+> > > > > +++ b/drivers/irqchip/irq-riscv-intc.c
+> > > > > @@ -125,6 +125,15 @@ static int __init riscv_intc_init(struct device_node *node,
+> > > > >               return rc;
+> > > > >       }
+> > > > >
+> > > > > +     /*
+> > > > > +      * Make INTC as the default domain which will allow drivers
+> > > > > +      * not having dedicated DT/ACPI fwnode (such as RISC-V SBI IPI
+> > > > > +      * driver, RISC-V timer driver, RISC-V PMU driver, etc) can
+> > > > > +      * directly create local interrupt mapping using standardized
+> > > > > +      * local interrupt numbers.
+> > > > > +      */
+> > > > > +     irq_set_default_host(intc_domain);
+> > > >
+> > > > No, please. This really is a bad idea. This sort of catch-all have
+> > > > constantly proven to be a nuisance, because they discard all the
+> > > > topology information. Eventually, you realise that you need to know
+> > > > where this is coming from, but it really is too late.
+> > > >
+> > > > I'd rather you *synthesise* a fwnode (like ACPI does) rather then do
+> > > > this.
+> > >
+> > > In absence of INTC as the default domain, currently we have various
+> > > drivers looking up INTC irq_domain from DT (or ACPI). This is quite a
+> > > bit of duplicate code across various drivers.
+> > >
+> > > How about having a irq_domain lookup routine (riscv_intc_find_irq_domain())
+> > > exported by the RISC-V INTC driver or arch/riscv ?
+> > > OR
+> > > Do you have an alternative suggestion ?
+> >
+> > But *why* don't you provide an interrupt controller node for DT? I
+> > really don't think that's outlandish to require.
 > 
-> Leave svm_register_enc_region() and svm_unregister_enc_region() as stubs
-> since qemu is dependent on this API.
+> Historically, all RISC-V SBI related drivers never had any DT/ACPI
+> node because we can always query/discover the SBI functionality
+> at runtime.
 > 
-> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
-> ---
->  arch/x86/kvm/svm/sev.c | 208 ++++++++++++++++-------------------------
->  arch/x86/kvm/svm/svm.c |   1 +
->  arch/x86/kvm/svm/svm.h |   3 +-
->  3 files changed, 81 insertions(+), 131 deletions(-)
+> The mechanism to query/discover SBI IPI, Timer and PMU is
+> through SBI base functions. Also, local interrupts used by these
+> drivers are specified by the RISC-V specification. This means having
+> a DT/ACPI node for these drivers doesn't provide any info.
 > 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index d972ab4956d4..a962bed97a0b 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -66,14 +66,6 @@ static unsigned int nr_asids;
->  static unsigned long *sev_asid_bitmap;
->  static unsigned long *sev_reclaim_asid_bitmap;
->  
-> -struct enc_region {
-> -	struct list_head list;
-> -	unsigned long npages;
-> -	struct page **pages;
-> -	unsigned long uaddr;
-> -	unsigned long size;
-> -};
-> -
->  /* Called with the sev_bitmap_lock held, or on shutdown  */
->  static int sev_flush_asids(int min_asid, int max_asid)
->  {
-> @@ -257,8 +249,6 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
->  	if (ret)
->  		goto e_free;
->  
-> -	INIT_LIST_HEAD(&sev->regions_list);
-> -
->  	return 0;
->  
->  e_free:
-> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
->  	src->handle = 0;
->  	src->pages_locked = 0;
->  	src->enc_context_owner = NULL;
-> -
-> -	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
->  }
->  
->  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
-> @@ -1861,115 +1849,13 @@ int svm_mem_enc_op(struct kvm *kvm, void __user *argp)
->  int svm_register_enc_region(struct kvm *kvm,
->  			    struct kvm_enc_region *range)
->  {
-> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> -	struct enc_region *region;
-> -	int ret = 0;
-> -
-> -	if (!sev_guest(kvm))
-> -		return -ENOTTY;
-> -
-> -	/* If kvm is mirroring encryption context it isn't responsible for it */
-> -	if (is_mirroring_enc_context(kvm))
-> -		return -EINVAL;
-> -
-> -	if (range->addr > ULONG_MAX || range->size > ULONG_MAX)
-> -		return -EINVAL;
-> -
-> -	region = kzalloc(sizeof(*region), GFP_KERNEL_ACCOUNT);
-> -	if (!region)
-> -		return -ENOMEM;
-> -
-> -	mutex_lock(&kvm->lock);
-> -	region->pages = sev_pin_memory(kvm, range->addr, range->size, &region->npages, 1);
-> -	if (IS_ERR(region->pages)) {
-> -		ret = PTR_ERR(region->pages);
-> -		mutex_unlock(&kvm->lock);
-> -		goto e_free;
-> -	}
-> -
-> -	region->uaddr = range->addr;
-> -	region->size = range->size;
-> -
-> -	list_add_tail(&region->list, &sev->regions_list);
-> -	mutex_unlock(&kvm->lock);
-> -
-> -	/*
-> -	 * The guest may change the memory encryption attribute from C=0 -> C=1
-> -	 * or vice versa for this memory range. Lets make sure caches are
-> -	 * flushed to ensure that guest data gets written into memory with
-> -	 * correct C-bit.
-> -	 */
-> -	sev_clflush_pages(region->pages, region->npages);
-> -
-> -	return ret;
-> -
-> -e_free:
-> -	kfree(region);
-> -	return ret;
-> -}
-> -
-> -static struct enc_region *
-> -find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
-> -{
-> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> -	struct list_head *head = &sev->regions_list;
-> -	struct enc_region *i;
-> -
-> -	list_for_each_entry(i, head, list) {
-> -		if (i->uaddr == range->addr &&
-> -		    i->size == range->size)
-> -			return i;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -
-> -static void __unregister_enc_region_locked(struct kvm *kvm,
-> -					   struct enc_region *region)
-> -{
-> -	sev_unpin_memory(kvm, region->pages, region->npages);
-> -	list_del(&region->list);
-> -	kfree(region);
-> +	return 0;
->  }
->  
->  int svm_unregister_enc_region(struct kvm *kvm,
->  			      struct kvm_enc_region *range)
->  {
-> -	struct enc_region *region;
-> -	int ret;
-> -
-> -	/* If kvm is mirroring encryption context it isn't responsible for it */
-> -	if (is_mirroring_enc_context(kvm))
-> -		return -EINVAL;
-> -
-> -	mutex_lock(&kvm->lock);
-> -
-> -	if (!sev_guest(kvm)) {
-> -		ret = -ENOTTY;
-> -		goto failed;
-> -	}
-> -
-> -	region = find_enc_region(kvm, range);
-> -	if (!region) {
-> -		ret = -EINVAL;
-> -		goto failed;
-> -	}
-> -
-> -	/*
-> -	 * Ensure that all guest tagged cache entries are flushed before
-> -	 * releasing the pages back to the system for use. CLFLUSH will
-> -	 * not do this, so issue a WBINVD.
-> -	 */
-> -	wbinvd_on_all_cpus();
-> -
-> -	__unregister_enc_region_locked(kvm, region);
-> -
-> -	mutex_unlock(&kvm->lock);
->  	return 0;
-> -
-> -failed:
-> -	mutex_unlock(&kvm->lock);
-> -	return ret;
->  }
->  
->  int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
-> @@ -2018,7 +1904,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
->  	mirror_sev->fd = source_sev->fd;
->  	mirror_sev->es_active = source_sev->es_active;
->  	mirror_sev->handle = source_sev->handle;
-> -	INIT_LIST_HEAD(&mirror_sev->regions_list);
->  	ret = 0;
->  
->  	/*
-> @@ -2038,8 +1923,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
->  void sev_vm_destroy(struct kvm *kvm)
->  {
->  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> -	struct list_head *head = &sev->regions_list;
-> -	struct list_head *pos, *q;
->  
->  	WARN_ON(sev->num_mirrored_vms);
->  
-> @@ -2066,18 +1949,6 @@ void sev_vm_destroy(struct kvm *kvm)
->  	 */
->  	wbinvd_on_all_cpus();
->  
-> -	/*
-> -	 * if userspace was terminated before unregistering the memory regions
-> -	 * then lets unpin all the registered memory.
-> -	 */
-> -	if (!list_empty(head)) {
-> -		list_for_each_safe(pos, q, head) {
-> -			__unregister_enc_region_locked(kvm,
-> -				list_entry(pos, struct enc_region, list));
-> -			cond_resched();
-> -		}
-> -	}
-> -
->  	sev_unbind_asid(kvm, sev->handle);
->  	sev_asid_free(sev);
->  }
-> @@ -2946,13 +2817,90 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
->  	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, 1);
->  }
->  
-> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
-> +		  kvm_pfn_t pfn)
-> +{
-> +	struct kvm_arch_memory_slot *aslot;
-> +	struct kvm_memory_slot *slot;
-> +	gfn_t rel_gfn, pin_pfn;
-> +	unsigned long npages;
-> +	kvm_pfn_t old_pfn;
-> +	int i;
-> +
-> +	if (!sev_guest(kvm))
-> +		return;
-> +
-> +	if (WARN_ON_ONCE(is_error_noslot_pfn(pfn) || kvm_is_reserved_pfn(pfn)))
-> +		return;
-> +
-> +	/* Tested till 1GB pages */
-> +	if (KVM_BUG_ON(level > PG_LEVEL_1G, kvm))
-> +		return;
-> +
-> +	slot = gfn_to_memslot(kvm, gfn);
-> +	if (!slot || !slot->arch.pfns)
-> +		return;
-> +
-> +	/*
-> +	 * Use relative gfn index within the memslot for the bitmap as well as
-> +	 * the pfns array
-> +	 */
-> +	rel_gfn = gfn - slot->base_gfn;
-> +	aslot = &slot->arch;
-> +	pin_pfn = pfn;
-> +	npages = KVM_PAGES_PER_HPAGE(level);
-> +
-> +	/* Pin the page, KVM doesn't yet support page migration. */
-> +	for (i = 0; i < npages; i++, rel_gfn++, pin_pfn++) {
-> +		if (test_bit(rel_gfn, aslot->pinned_bitmap)) {
-> +			old_pfn = aslot->pfns[rel_gfn];
-> +			if (old_pfn == pin_pfn)
-> +				continue;
-> +
-> +			put_page(pfn_to_page(old_pfn));
-> +		}
-> +
-> +		set_bit(rel_gfn, aslot->pinned_bitmap);
-> +		aslot->pfns[rel_gfn] = pin_pfn;
-> +		get_page(pfn_to_page(pin_pfn));
+> We will be having KVM RISC-V AIA support in future which will not
+> have a DT/ACPI node as well because this can be discovered as a
+> CPU capability and the local interrupt to be used is specified by the
+> RISC-V hypervisor specification.
+> 
+> >
+> > For ACPI, we already have an interface that allows a fwnode to be
+> > registered (acpi_set_irq_model) and interrupts mapped
+> > (acpi_register_gsi).
+> 
+> The ACPI specification being proposed for RISC-V does not have
+> any details for SBI IPI, Timer, and PMU for the same reasons
+> mentioned above.
 
+Neither does it on the other architectures.
 
-I assume this is to replace KVM_MEMORY_ENCRYPT_REG_REGION, which ends up
-calling svm_register_enc_region()->sev_pin_memory(), correct?
+And yet we are able to synthesise fwnodes and use the whole of the
+infrastructure as intended without having to resort to this crap that
+was only introduced to cope with 20 year old PPC board files.
 
-sev_pin_memory() correctly checks the RLIMIT_MEMLOCK and uses
-pin_user_pages_fast().
+Only dead architectures are using irq_set_default_host().
 
-I have to strongly assume that sev_pin_memory() is *wrong* as is because
-it's supposed to supply FOLL_LONGTERM -- after all we're pinning these
-pages possibly forever.
+> 
+> >
+> > You should already have all the required tools you need.
+> 
+> Are you okay if arch/riscv exports riscv_intc_find_irq_domain() ?
+> OR
+> Maybe export riscv_intc_find_irq_domain() from INTC driver ?
 
+Neither. That's just papering over the core problem.
 
-I might be wrong but
+Either you start creating fwnodes out of thin air, which is what we do
+for both x86 and arm64 when using ACPI, or you add support for SBI (or
+whatever new spec the RISC-V people come up with) as a provider of
+fwnodes.
 
-1. You are missing the RLIMIT_MEMLOCK check
+Anything else looks like a pretty bad regression.
 
-2. get_page() is the wong way of long-term pinning a page. You would
-have to mimic what pin_user_pages_fast(FOLL_LONGTERM) does to eventually
-get it right (e.g., migrate the page off of MIGRATE_CMA or ZONE_MOVABLE).
-
--- 
 Thanks,
 
-David / dhildenb
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.

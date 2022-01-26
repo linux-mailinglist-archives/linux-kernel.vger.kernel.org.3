@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F39A849CA1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913D049CA1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241546AbiAZMyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:54:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34265 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241540AbiAZMyr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:54:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643201686;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=33HY34cD9z5vOB4yb8+O1ko0hzCxvVEJ/j6ux5soDhI=;
-        b=gfOX3LzzgSVcPV07cy1OXO9AFv5Sk3HLM4OtQQAbiJ+kumCu/C8QUIOHaX14D3k3o6W1By
-        IRN9Tk3AmzskNgYYWnGgzgIlA7v94qKtOEOnMPs+zDRq3n46JZp2fT0kZYJhM/ypk2VdfV
-        IBSQjbvmmBnahwSGNpAXEQfRBcU0xsM=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-56--I9YqabANU6EW731q_sABQ-1; Wed, 26 Jan 2022 07:54:45 -0500
-X-MC-Unique: -I9YqabANU6EW731q_sABQ-1
-Received: by mail-oi1-f199.google.com with SMTP id g4-20020acab604000000b002c8b24c3964so13261304oif.22
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:54:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=33HY34cD9z5vOB4yb8+O1ko0hzCxvVEJ/j6ux5soDhI=;
-        b=QANGGHZyqpujna6D75Iiiuirj+ueRabYcIQm+1xzIsF0kekRuv4EI1i6C4MkZSzep4
-         +eghenPh0V41cufTFm4NKBQg9abM0qigdRcdizcy5pcZu4kNj8Q7C/8jcE1Z6/7jdcYs
-         s6aUtaZF+v3uHBh5DezBLnBI08PM2UELLroNOGjba7kNKz/8NnQ75v5x0L4TRk+zFFpo
-         oYZsb49EJTsoGaY7FT50ejCn/c9gVEendXANE9vcVJ6LBCdXzIsEs+wv/3WrS2zJDnmg
-         Rj6UXuew6KtZTE45moifx/uRyKjW4dUaSkhdNks6MUfdzMdonaiQCQoiDVcqfqJzm5OY
-         8IJw==
-X-Gm-Message-State: AOAM532PnghVk7tgdQSX3g9cqDkB1xEYaPbiQCq2JKOrJ0cmpWvj2v35
-        8kF3mI2UKXfd+Lv+LSE6UQhkSuKzsXksbOy6BIi3U2iysJxPlf9tt96MOvp2+u5KD4GYGyg52UC
-        a5JWhRfnew+PI8EyC7jUCQux9
-X-Received: by 2002:a9d:2031:: with SMTP id n46mr12899732ota.190.1643201684459;
-        Wed, 26 Jan 2022 04:54:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy2crbAvizgEsJk/RGFNhDLfbjahYu89AEq2rjYxbM8xbYbGTnrtziTAXrmvwJCdrYqz2yExg==
-X-Received: by 2002:a9d:2031:: with SMTP id n46mr12899727ota.190.1643201684245;
-        Wed, 26 Jan 2022 04:54:44 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id w62sm1678846oie.4.2022.01.26.04.54.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 04:54:43 -0800 (PST)
-From:   trix@redhat.com
-To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com
-Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] seqlock: cleanup double word in comment
-Date:   Wed, 26 Jan 2022 04:54:37 -0800
-Message-Id: <20220126125437.1166862-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        id S241555AbiAZMz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:55:57 -0500
+Received: from mga11.intel.com ([192.55.52.93]:29530 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241540AbiAZMz5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:55:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643201757; x=1674737757;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ioIPdkfJ+i121L7EaKQPCg44/2govewCK0oAfQs1+KI=;
+  b=Rvupw7L7qPEghVBFbNDOHa2s9TXC9Fy5mKamR9qifjC4izdp3c3vSV2i
+   WZGL8iZYTCe+qpisGV/Dt10t6Dk+mqDc7s6IuQGPllNtUD1VeCRVMBKVi
+   NH2FmK6QsQaM6/t15inUjSVEBPlAwfi168RBWdyiFeT11QfeY74zdYBFC
+   qazZDAN+RmhDYo+2B/YCjnQrdsKjei31oMdnytqe/ueOO2FMNQ1LaStH9
+   23/8O1m9cLXOU4yNdn/xqo1ezpK6rTXZ0EUr70A31m393obX3/DP0RepV
+   Mlr/r/TbTI9cuXY4rDwq28cJzF3ORTnZ/8ysGE7BvmOkx3bv75Vhcofw5
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244141236"
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="244141236"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 04:55:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="479873098"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Jan 2022 04:55:55 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nChq6-000LEO-8z; Wed, 26 Jan 2022 12:55:54 +0000
+Date:   Wed, 26 Jan 2022 20:55:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jason Ekstrand <jason@jlekstrand.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Subject: [mlankhorst:xe 57/165] drivers/gpu/drm/xe/xe_ggtt.c:49:2: error:
+ implicit declaration of function 'writeq'; did you mean 'writel'?
+Message-ID: <202201262033.KJ6X5rbX-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+tree:   git://people.freedesktop.org/~mlankhorst/linux xe
+head:   4bc3039b4403c76a13d58f7ac1f7c07dca6f88d8
+commit: 0d5fc1553e186ef20954dcc179aab3f6a5bb2644 [57/165] Add support for the GGTT
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220126/202201262033.KJ6X5rbX-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        git remote add mlankhorst git://people.freedesktop.org/~mlankhorst/linux
+        git fetch --no-tags mlankhorst xe
+        git checkout 0d5fc1553e186ef20954dcc179aab3f6a5bb2644
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Remove the second 'the'.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/xe/xe_ggtt.c: In function 'xe_ggtt_set_pte':
+>> drivers/gpu/drm/xe/xe_ggtt.c:49:2: error: implicit declaration of function 'writeq'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+      49 |  writeq(pte, &ggtt->gsm[addr >> GEN8_PTE_SHIFT]);
+         |  ^~~~~~
+         |  writel
+   cc1: all warnings being treated as errors
+
+
+vim +49 drivers/gpu/drm/xe/xe_ggtt.c
+
+    43	
+    44	static void xe_ggtt_set_pte(struct xe_ggtt *ggtt, uint64_t addr, uint64_t pte)
+    45	{
+    46		XE_BUG_ON(addr & GEN8_PTE_MASK);
+    47		XE_BUG_ON(addr > ggtt->size);
+    48	
+  > 49		writeq(pte, &ggtt->gsm[addr >> GEN8_PTE_SHIFT]);
+    50	}
+    51	
+
 ---
- include/linux/seqlock.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-index 37ded6b8fee61..12156166c6365 100644
---- a/include/linux/seqlock.h
-+++ b/include/linux/seqlock.h
-@@ -867,7 +867,7 @@ static inline unsigned read_seqretry(const seqlock_t *sl, unsigned start)
- }
- 
- /*
-- * For all seqlock_t write side functions, use the the internal
-+ * For all seqlock_t write side functions, use the internal
-  * do_write_seqcount_begin() instead of generic write_seqcount_begin().
-  * This way, no redundant lockdep_assert_held() checks are added.
-  */
--- 
-2.26.3
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

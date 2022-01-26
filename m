@@ -2,121 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 137FD49C273
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D677049C277
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237479AbiAZEFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 23:05:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237464AbiAZEFl (ORCPT
+        id S237495AbiAZEGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 23:06:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55418 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237464AbiAZEGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 23:05:41 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EBEC061747;
-        Tue, 25 Jan 2022 20:05:40 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id k25so35508710ejp.5;
-        Tue, 25 Jan 2022 20:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lMvaUNa0epuWNVjB66ksvUi4IFQlW9eBOcK2Yd36MmQ=;
-        b=fwAoJX7uENLxSN7DTZ8PqBXvJvcMTediYsfnKAuesi62gHW5S0sMY3sRwYGYjOSSww
-         WZHn9IqZwvqcHn7q3eGzmXnz4rw+32/rHlbgx+AEQkY1LRlWft4XVEOPCO11jc8fo2uL
-         M4Qgz7ftiLcfTPFnTSO57whNdmKoZRInoRh9PQnrXAWPMiEj0ZppY0xSMK1qF6tp6x6o
-         gNVCHQfoHgInaF7/90STsrZDPuI0EZ2iIfv2umu8mpsYYPA9voAz7dH7g3z+SVRvwX2K
-         isdCFOGST6ABNIIupcYk5k6zsaukQ0pfsDMH54e0/06ZjwnBiagMrHGmXu2+rH7YmTkK
-         YPMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lMvaUNa0epuWNVjB66ksvUi4IFQlW9eBOcK2Yd36MmQ=;
-        b=WALpaEdCwWlOAUeA8chZbT3n/au+9Ou0jBs58nsp0hCCKJr864V5pVzEuFORm0cvsk
-         DtlDlVV7aKTJfPHwG2tT2P6VWj+C9hMmStNqnVT7WNW58hUGeU0/nVxRDaMnrBnvPWp3
-         5eJklxXDleikZieQHlbJb3PlQgFC/HgCdBW0Adop0E9QPfxnJyVyHAtDUL6TByzO+Aw+
-         zBmckxhJ2iSl3QhWnmQk4o+2Kbw22YkHSK9zXwQtdcq6VNeMPa+h0lhzMnhrqBSLHzUa
-         TdwbARFzzJkKFfNsQtvc1BLMw0YrAlCss5XXMMLigkQ1ibIpzde7Cymw6h5FDsRLgr3k
-         hUWg==
-X-Gm-Message-State: AOAM5330Wt6waJGc1tWToOqNOCkucMy/cv148vTi8ERS751wESb0R/xf
-        Q084MipEWwhhOKr86rCB+TQ=
-X-Google-Smtp-Source: ABdhPJzpr/NO+jpBXEqcyNQbAaZSVw3yPjSTlvG+QrzbR1t7pVcEnQLFJHmx4ngn3zl+oovsJFmmQQ==
-X-Received: by 2002:a17:906:9743:: with SMTP id o3mr18624064ejy.162.1643169939262;
-        Tue, 25 Jan 2022 20:05:39 -0800 (PST)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id gu2sm6823228ejb.221.2022.01.25.20.05.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 20:05:38 -0800 (PST)
-Date:   Wed, 26 Jan 2022 05:05:37 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v7 06/16] net: dsa: tag_qca: add define for handling
- mgmt Ethernet packet
-Message-ID: <YfDIkSpH7g+TPan0@Ansuel-xps.localdomain>
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <20220123013337.20945-7-ansuelsmth@gmail.com>
- <70a44baa-4a1c-9c9e-6781-b1b563c787bd@gmail.com>
- <YfDHmpLxqUGWatQC@Ansuel-xps.localdomain>
- <ffd2326c-5b66-87d8-ad42-6dea37e290d6@gmail.com>
+        Tue, 25 Jan 2022 23:06:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34820617AA;
+        Wed, 26 Jan 2022 04:06:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB322C340E3;
+        Wed, 26 Jan 2022 04:06:46 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 23:06:45 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220125230645.097dad3a@gandalf.local.home>
+In-Reply-To: <20220126125252.2ef18d786cfaf4a135a2d10f@kernel.org>
+References: <20220125145006.677e3709@canb.auug.org.au>
+        <202201242230.C54A6BCDFE@keescook>
+        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+        <202201251256.CCCBE9851E@keescook>
+        <20220125162326.3d1ca960@gandalf.local.home>
+        <20220125162859.2b3cc8a0@gandalf.local.home>
+        <202201251402.0FB08DB@keescook>
+        <20220125172114.6807ed8f@gandalf.local.home>
+        <20220126093538.893fb44a7cb0a7cd840c7fdb@kernel.org>
+        <20220125201634.698cc777@gandalf.local.home>
+        <20220126125252.2ef18d786cfaf4a135a2d10f@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ffd2326c-5b66-87d8-ad42-6dea37e290d6@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 08:02:53PM -0800, Florian Fainelli wrote:
-> 
-> 
-> On 1/25/2022 8:01 PM, Ansuel Smith wrote:
-> > On Tue, Jan 25, 2022 at 07:54:15PM -0800, Florian Fainelli wrote:
-> > > 
-> > > 
-> > > On 1/22/2022 5:33 PM, Ansuel Smith wrote:
-> > > > Add all the required define to prepare support for mgmt read/write in
-> > > > Ethernet packet. Any packet of this type has to be dropped as the only
-> > > > use of these special packet is receive ack for an mgmt write request or
-> > > > receive data for an mgmt read request.
-> > > > A struct is used that emulates the Ethernet header but is used for a
-> > > > different purpose.
-> > > > 
-> > > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > > ---
-> > > 
-> > > [snip]
-> > > 
-> > > > +/* Special struct emulating a Ethernet header */
-> > > > +struct mgmt_ethhdr {
-> > > > +	u32 command;		/* command bit 31:0 */
-> > > > +	u32 seq;		/* seq 63:32 */
-> > > > +	u32 mdio_data;		/* first 4byte mdio */
-> > > > +	__be16 hdr;		/* qca hdr */
-> > > > +} __packed;
-> > > 
-> > > Might be worth adding a BUILD_BUG_ON(sizeof(struct mgmt_ethhdr) !=
-> > > QCA_HDR_MGMT_PKG_LEN) when you start making use of that structure?
+On Wed, 26 Jan 2022 12:52:52 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
+
+> > On Wed, 26 Jan 2022 09:35:38 +0900
+> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >   
+> > > I think Kees' idea seems better. If you and Beau are good, I will update
+> > > the macros for __rel_loc. (This requires to change some user-space
+> > > application which Beau is making too.)  
 > > 
-> > Where should I put this check? Right after the struct definition,
-> > correct? (I just checked definition of the macro)
+> > If Beau is OK with it, I'm OK with it too. I need to release a new version
+> > of libtraceevent anyway, and I can make the update for that too.
+> > 
+> > Who's adding the patch (if Beau says it's OK), you or Kees?  
 > 
-> It would have to be in a call site where you use the structure, I have not
-> checked whether putting it in a static inline function in .h file actually
-> works if the inline function is not used at all.
+> This will update the __rel_loc spec, so I'll do it :)
 
-Think I can test that by just putting a wrong value in
-QCA_HDR_MGMT_PKG_LEN and check if the error is triggered.
-Will check if the macro will actually work. 
+As I replied to the other email, I don't think we want to do this.
 
-> -- 
-> Florian
+As "rel" means relative, I think it makes more sense to keep it as is, and
+not have it just be from the data section. That may be even more confusing.
 
--- 
-	Ansuel
+But I'll wait for Beau to answer.
+
+Note, I added both your and Kees patches to my queue and I'm currently
+testing it. You can see what I'm testing here:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git/log/?h=ftrace/core
+
+-- Steve

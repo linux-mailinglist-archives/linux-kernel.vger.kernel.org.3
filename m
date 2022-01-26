@@ -2,246 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4036849C25E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7260249C260
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237380AbiAZD6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S237417AbiAZD6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:58:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235579AbiAZD6A (ORCPT
+        with ESMTP id S237412AbiAZD6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:58:00 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB530C06161C;
-        Tue, 25 Jan 2022 19:57:59 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id p12so66973368edq.9;
-        Tue, 25 Jan 2022 19:57:59 -0800 (PST)
+        Tue, 25 Jan 2022 22:58:23 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CB3C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 19:58:23 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id u129so9119091oib.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 19:58:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=KP4uWq0QeOW5Ia4UP5ZJMtL4L9PQT08IZKjbYTw6HS4=;
-        b=a5nHgAbGuHdsDvalV3ulYVHh+F1AkBi7D4xvdgo8vjgBGDBNpMeEZ7Kh1rO27nGlJR
-         mb5ahifZdue9eehkIJvAlubM1bMvEvUK/VMW/5SfD4hKgA/+wM34ZxK0NPSvzt8cZMTs
-         Bgzh8y3w9SPZM07C+qImpZH0kTJQIS7GcFki1pSC7lGoNh2G2KzCpdpmgSLGACMmQADV
-         MB9OTWR+KPbx75eAlRzInn10FKzhjN1G7W0azz/anZcDTp0mjRT1mAMLdH53oDCPLzM8
-         El4G5GP1KHrjHOLi6yIBlQKPHgXZMp9jr+UBd5YtcEWHnOMRag/c9GYsR812NRm1BMlO
-         6c5w==
+        bh=/tnCcebPOvPrwQgbil6irE/V+y+y7OuGvQd7vSI/roE=;
+        b=fLzd9DH7F0C7ViAvSxISbp9jtxNdX8Nq87nItwzEl/wyfYXr6vp6k0ZXm8PLDPEVss
+         3pM4tqMPpTDiGOa5rea4fqSZWatb//ozCCOHuBbYrBkjrC1PXLD6Pl3tQGM9+loG96xX
+         mr1pgUMOtvg7L/6u4r3MtNJj8IQBgsxx0Ve5/enkqnlKcghSNQKXmx8gZAXFxJ24kCwg
+         BxsH8Phk/DLLBc8fNXN1kyPfOIxJWsZm5+7rolqfQ+XKcphXI/Ggvio3BjHtXOBxfV3s
+         VJdoUh+DJXInYaFl05+dDOKmkppIJfqYTGaDjWGys6/9rOB2LUKwuemg9wl5ZKmdhMEX
+         KOhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=KP4uWq0QeOW5Ia4UP5ZJMtL4L9PQT08IZKjbYTw6HS4=;
-        b=ii5kGNDq/9agV6ZlZHXbvypyJizDptPUGAXlzB5wa34XQuUhpgbAT+yBTjmwreRsFQ
-         xpIj6KzVDdzzEGQ+tmga9nvC8pd8lpHBMU5LZNjS7zeuJ6dgl1QQbfoyTnAYeTZLcgvO
-         eHoFRCL0gDW0zq3A3D8K2l8jc+dzORqMjHP33VotNcfCOterb8VQuSjCQRwy64gamW55
-         SHEChxPEAHjfvdSGsK29QwBklPSUWACKXBThKIts+h68ByFPMX7ehX3QJoPxl/i9HOZX
-         6BrOHHED9k74ABVMYYh1wJSQ56wAFQoWkzGZ1T2RnnkNrAJXov4rSPA2GB+o0HDADcQQ
-         LE2w==
-X-Gm-Message-State: AOAM531/StTOl547P3UdMxAF3qF6ewJGuV9HuyNsdp+dyGtViq+nIxF3
-        KBpajyblcC9yWdkFISsMVbE=
-X-Google-Smtp-Source: ABdhPJxhF1UcSBfLkC/26usZ4e4zApS3y0H2vFkMmUbqAL+fTo2jr7YLh5XCDnTbl+wbJr1DInQc4w==
-X-Received: by 2002:a05:6402:2294:: with SMTP id cw20mr23332046edb.178.1643169478148;
-        Tue, 25 Jan 2022 19:57:58 -0800 (PST)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id fh23sm6940036ejc.176.2022.01.25.19.57.57
+        bh=/tnCcebPOvPrwQgbil6irE/V+y+y7OuGvQd7vSI/roE=;
+        b=15gKF2H+4EW5MNMOk2OwTvEoNRK91hS06cDN8E5w5MRBVnZm90IHHA2Eclfv6yBdIO
+         w/Jo4URvCtwYQFZfwrFoqRFm+3el7Q/UHrSMrFJytthB5nw1OYQn4qe9QetKRn5bELq3
+         OmUimgJPNyR9xlvxi4i5wLE7j5NEly5noL6iNfO4KoTANPFFso4BoRdDjW39jDaZ7p9/
+         5ERuFs68z6t27b6PPetsikbQp8khhQV4YECBRTaK5nJ0lL4Wt3BmutuBLY7YOqbAjC84
+         /OaPhVOOeuu5ulQz4nc7T7y7SQzCkcvzeaj8+WVt+twH9bDNGCJyZnQJGIaTGR/oSOWb
+         eSnA==
+X-Gm-Message-State: AOAM533hKumzHJEF1l8i6jEMaSnTaRQvNwjq5F5Kq3tW0m4xA3uy+FV5
+        XuGPKZwEx83CAeXAjWfkW7udzw==
+X-Google-Smtp-Source: ABdhPJwNVdqu6BVIKfzkmj60M9FPR9ZIF414nFiZzY6EOXZqw6kfMfypK2pMzmasZQ7akB2RvZSlCw==
+X-Received: by 2002:a05:6808:bc8:: with SMTP id o8mr2617139oik.16.1643169502784;
+        Tue, 25 Jan 2022 19:58:22 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id q14sm8103396otg.77.2022.01.25.19.58.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 19:57:57 -0800 (PST)
-Date:   Wed, 26 Jan 2022 04:57:56 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v7 15/16] net: da: qca8k: add support for larger
- read/write size with mgmt Ethernet
-Message-ID: <YfDGxIKzvGlZnltP@Ansuel-xps.localdomain>
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <20220123013337.20945-16-ansuelsmth@gmail.com>
- <ce5891d1-d0ae-ba59-65ad-3ece92496c86@gmail.com>
+        Tue, 25 Jan 2022 19:58:22 -0800 (PST)
+Date:   Tue, 25 Jan 2022 21:58:20 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org,
+        herbert@gondor.apana.org.au, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Update email address
+Message-ID: <YfDG3AYkpb8+wICN@builder.lan>
+References: <20220107145154.458779-1-thara.gopinath@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ce5891d1-d0ae-ba59-65ad-3ece92496c86@gmail.com>
+In-Reply-To: <20220107145154.458779-1-thara.gopinath@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 07:48:27PM -0800, Florian Fainelli wrote:
-> 
-> 
-> On 1/22/2022 5:33 PM, Ansuel Smith wrote:
-> > mgmt Ethernet packet can read/write up to 16byte at times. The len reg
-> > is limited to 15 (0xf). The switch actually sends and accepts data in 4
-> > different steps of len values.
-> > Len steps:
-> > - 0: nothing
-> > - 1-4: first 4 byte
-> > - 5-6: first 12 byte
-> > - 7-15: all 16 byte
-> 
-> This is really odd, it almost felt like the length was a byte enable
-> bitmask, but it is not?
->
+On Fri 07 Jan 08:51 CST 2022, Thara Gopinath wrote:
 
-To me it seems like they match the size to the 3 different operation
-that is
-4: normal mdio / reg access
-12: acl table to directly write and read it
-16: offload table that is 16 byte long to directl write and read.
+> Update my email address in the MAINTAINERS file as  the current
+> one will stop functioning in a while.
+> 
 
-With this in mind, it does make sense why it bheave like that.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-> > 
-> > In the allock skb function we check if the len is 16 and we fix it to a
-> > len of 15.
+Regards,
+Bjorn
+
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+>  MAINTAINERS | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> s/allock/alloc/
-> 
-> > It the read/write function interest to extract the real asked
-> > data. The tagger handler will always copy the fully 16byte with a READ
-> > command. This is useful for some big regs like the fdb reg that are
-> > more than 4byte of data. This permits to introduce a bulk function that
-> > will send and request the entire entry in one go.
-> > Write function is changed and it does now require to pass the pointer to
-> > val to also handle array val.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >   drivers/net/dsa/qca8k.c | 56 ++++++++++++++++++++++++++++++-----------
-> >   1 file changed, 41 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-> > index 2a43fb9aeef2..0183ce2d5b74 100644
-> > --- a/drivers/net/dsa/qca8k.c
-> > +++ b/drivers/net/dsa/qca8k.c
-> > @@ -219,7 +219,9 @@ static void qca8k_rw_reg_ack_handler(struct dsa_switch *ds, struct sk_buff *skb)
-> >   	if (cmd == MDIO_READ) {
-> >   		mgmt_hdr_data->data[0] = mgmt_ethhdr->mdio_data;
-> > -		/* Get the rest of the 12 byte of data */
-> > +		/* Get the rest of the 12 byte of data.
-> > +		 * The read/write function will extract the requested data.
-> > +		 */
-> >   		if (len > QCA_HDR_MGMT_DATA1_LEN)
-> >   			memcpy(mgmt_hdr_data->data + 1, skb->data,
-> >   			       QCA_HDR_MGMT_DATA2_LEN);
-> > @@ -229,16 +231,30 @@ static void qca8k_rw_reg_ack_handler(struct dsa_switch *ds, struct sk_buff *skb)
-> >   }
-> >   static struct sk_buff *qca8k_alloc_mdio_header(enum mdio_cmd cmd, u32 reg, u32 *val,
-> > -					       int seq_num, int priority)
-> > +					       int seq_num, int priority, int len)
-> 
-> unsigned int len
-> 
-> >   {
-> >   	struct mgmt_ethhdr *mgmt_ethhdr;
-> >   	struct sk_buff *skb;
-> > +	int real_len;
-> 
-> Likewise.
-> 
-> > +	u32 *data2;
-> >   	u16 hdr;
-> >   	skb = dev_alloc_skb(QCA_HDR_MGMT_PKG_LEN);
-> >   	if (!skb)
-> >   		return NULL;
-> > +	/* Max value for len reg is 15 (0xf) but the switch actually return 16 byte
-> > +	 * Actually for some reason the steps are:
-> > +	 * 0: nothing
-> > +	 * 1-4: first 4 byte
-> > +	 * 5-6: first 12 byte
-> > +	 * 7-15: all 16 byte
-> > +	 */
-> > +	if (len == 16)
-> > +		real_len = 15;
-> > +	else
-> > +		real_len = len;
-> > +
-> >   	skb_reset_mac_header(skb);
-> >   	skb_set_network_header(skb, skb->len);
-> > @@ -253,7 +269,7 @@ static struct sk_buff *qca8k_alloc_mdio_header(enum mdio_cmd cmd, u32 reg, u32 *
-> >   	mgmt_ethhdr->seq = FIELD_PREP(QCA_HDR_MGMT_SEQ_NUM, seq_num);
-> >   	mgmt_ethhdr->command = FIELD_PREP(QCA_HDR_MGMT_ADDR, reg);
-> > -	mgmt_ethhdr->command |= FIELD_PREP(QCA_HDR_MGMT_LENGTH, 4);
-> > +	mgmt_ethhdr->command |= FIELD_PREP(QCA_HDR_MGMT_LENGTH, real_len);
-> >   	mgmt_ethhdr->command |= FIELD_PREP(QCA_HDR_MGMT_CMD, cmd);
-> >   	mgmt_ethhdr->command |= FIELD_PREP(QCA_HDR_MGMT_CHECK_CODE,
-> >   					   QCA_HDR_MGMT_CHECK_CODE_VAL);
-> > @@ -263,19 +279,22 @@ static struct sk_buff *qca8k_alloc_mdio_header(enum mdio_cmd cmd, u32 reg, u32 *
-> >   	mgmt_ethhdr->hdr = htons(hdr);
-> > -	skb_put_zero(skb, QCA_HDR_MGMT_DATA2_LEN + QCA_HDR_MGMT_PADDING_LEN);
-> > +	data2 = skb_put_zero(skb, QCA_HDR_MGMT_DATA2_LEN + QCA_HDR_MGMT_PADDING_LEN);
-> > +	if (cmd == MDIO_WRITE && len > QCA_HDR_MGMT_DATA1_LEN)
-> > +		memcpy(data2, val + 1, len - QCA_HDR_MGMT_DATA1_LEN);
-> >   	return skb;
-> >   }
-> > -static int qca8k_read_eth(struct qca8k_priv *priv, u32 reg, u32 *val)
-> > +static int qca8k_read_eth(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
-> >   {
-> >   	struct qca8k_mgmt_hdr_data *mgmt_hdr_data = &priv->mgmt_hdr_data;
-> >   	struct sk_buff *skb;
-> >   	bool ack;
-> >   	int ret;
-> > -	skb = qca8k_alloc_mdio_header(MDIO_READ, reg, NULL, 200, QCA8K_ETHERNET_MDIO_PRIORITY);
-> > +	skb = qca8k_alloc_mdio_header(MDIO_READ, reg, NULL, 200,
-> > +				      QCA8K_ETHERNET_MDIO_PRIORITY, len);
-> >   	if (!skb)
-> >   		return -ENOMEM;
-> > @@ -297,6 +316,9 @@ static int qca8k_read_eth(struct qca8k_priv *priv, u32 reg, u32 *val)
-> >   					  msecs_to_jiffies(QCA8K_ETHERNET_TIMEOUT));
-> >   	*val = mgmt_hdr_data->data[0];
-> > +	if (len > QCA_HDR_MGMT_DATA1_LEN)
-> > +		memcpy(val + 1, mgmt_hdr_data->data + 1, len - QCA_HDR_MGMT_DATA1_LEN);
-> > +
-> >   	ack = mgmt_hdr_data->ack;
-> >   	mutex_unlock(&mgmt_hdr_data->mutex);
-> > @@ -310,14 +332,15 @@ static int qca8k_read_eth(struct qca8k_priv *priv, u32 reg, u32 *val)
-> >   	return 0;
-> >   }
-> > -static int qca8k_write_eth(struct qca8k_priv *priv, u32 reg, u32 val)
-> > +static int qca8k_write_eth(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
-> >   {
-> >   	struct qca8k_mgmt_hdr_data *mgmt_hdr_data = &priv->mgmt_hdr_data;
-> >   	struct sk_buff *skb;
-> >   	bool ack;
-> >   	int ret;
-> > -	skb = qca8k_alloc_mdio_header(MDIO_WRITE, reg, &val, 200, QCA8K_ETHERNET_MDIO_PRIORITY);
-> > +	skb = qca8k_alloc_mdio_header(MDIO_WRITE, reg, val, 200,
-> > +				      QCA8K_ETHERNET_MDIO_PRIORITY, len);
-> >   	if (!skb)
-> >   		return -ENOMEM;
-> > @@ -357,14 +380,14 @@ qca8k_regmap_update_bits_eth(struct qca8k_priv *priv, u32 reg, u32 mask, u32 wri
-> >   	u32 val = 0;
-> >   	int ret;
-> > -	ret = qca8k_read_eth(priv, reg, &val);
-> > +	ret = qca8k_read_eth(priv, reg, &val, 4);
-> 
-> sizeof(val) instead of 4.
-> 
-> >   	if (ret)
-> >   		return ret;
-> >   	val &= ~mask;
-> >   	val |= write_val;
-> > -	return qca8k_write_eth(priv, reg, val);
-> > +	return qca8k_write_eth(priv, reg, &val, 4);
-> 
-> Likewise
-> 
-> >   }
-> >   static int
-> > @@ -376,7 +399,7 @@ qca8k_regmap_read(void *ctx, uint32_t reg, uint32_t *val)
-> >   	u16 r1, r2, page;
-> >   	int ret;
-> > -	if (priv->mgmt_master && !qca8k_read_eth(priv, reg, val))
-> > +	if (priv->mgmt_master && !qca8k_read_eth(priv, reg, val, 4))
-> 
-> Likewise and everywhere below as well.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fb18ce7168aa..afcdd7588822 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15751,7 +15751,7 @@ F:	Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+>  F:	drivers/cpufreq/qcom-cpufreq-nvmem.c
+>  
+>  QUALCOMM CRYPTO DRIVERS
+> -M:	Thara Gopinath <thara.gopinath@linaro.org>
+> +M:	Thara Gopinath <thara.gopinath@gmail.com>
+>  L:	linux-crypto@vger.kernel.org
+>  L:	linux-arm-msm@vger.kernel.org
+>  S:	Maintained
+> @@ -15868,7 +15868,7 @@ F:	include/linux/if_rmnet.h
+>  
+>  QUALCOMM TSENS THERMAL DRIVER
+>  M:	Amit Kucheria <amitk@kernel.org>
+> -M:	Thara Gopinath <thara.gopinath@linaro.org>
+> +M:	Thara Gopinath <thara.gopinath@gmail.com>
+>  L:	linux-pm@vger.kernel.org
+>  L:	linux-arm-msm@vger.kernel.org
+>  S:	Maintained
 > -- 
-> Florian
-
--- 
-	Ansuel
+> 2.25.1
+> 

@@ -2,85 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D399E49C14B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D348449C14F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236359AbiAZC0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 21:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S236379AbiAZC1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 21:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236337AbiAZC0F (ORCPT
+        with ESMTP id S236373AbiAZC1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 21:26:05 -0500
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E897C06173B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:26:05 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso1910086oop.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:26:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=l4BdSQcYkI7Tg6m9Z/JRw5Xx2nGZP7Dqic5XeVsukdg=;
-        b=J1FFAFb7vBaVzRQ23VWBQWxT47F+6OcV2pTl6aUARYldxGriME6fiNscI5fFMa28IN
-         pyxFvIIToDnYSS+s78DW11HZxDxhkFLhHjM2JMFikfPlA2b12yLRFoSKIxQFqvhZ0vuw
-         d+7D8xE78U4f7M9t85Jbe7MQR86VHvEEF0wZE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l4BdSQcYkI7Tg6m9Z/JRw5Xx2nGZP7Dqic5XeVsukdg=;
-        b=SUAmkx25L0XNbeIN0cz/18ZavAhdlGRshEa0CccnEQCgJMO+Y6c0SfsNt4YQMCP1pV
-         bOgUe0A5Qnck2nrQPx65B9WT1zV+BjhrbT9DnLGaKBX3sddx9zqZX2ILLwBncw6RuDQU
-         oi3sm1U10naa4KzEQJxnF0VZVhXxUYtxSFIbCdWIqtzGM79dPZURyEZe/Id5RnK4XI4e
-         WgN22qdcvkfrA3m1Q0SW8yZfXne51kWzs14a68ry6HaikU6ankhXK415Af7eA+SwAEkI
-         ggw+1J9N/X659QNlBW9a8S/3PSZMnQFnWQj2k/rXAafbjlJY8rV8L9+NSwC3INhTF6g3
-         UHgA==
-X-Gm-Message-State: AOAM531rvW2W76OzL55F5AngWNNMQAlkVqtszd5S8BB1El0NpG4hi1Im
-        Kicoi4776F2gzJsUShZ1JFzEZA==
-X-Google-Smtp-Source: ABdhPJw+nrU/qkapwjf3gFM4N0QgVLATa/twB7tT6hkq5TfgdIPM2W6n+AGTrmA4cDAHBJ1mStiy/g==
-X-Received: by 2002:a4a:dc16:: with SMTP id p22mr14546157oov.85.1643163964828;
-        Tue, 25 Jan 2022 18:26:04 -0800 (PST)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id g4sm7544923otl.1.2022.01.25.18.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 18:26:04 -0800 (PST)
-Date:   Tue, 25 Jan 2022 20:26:02 -0600
-From:   Justin Forbes <jmforbes@linuxtx.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
-Message-ID: <YfCxOpu4fTON5ded@fedora64.linuxtx.org>
-References: <20220125155447.179130255@linuxfoundation.org>
+        Tue, 25 Jan 2022 21:27:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C342FC06161C;
+        Tue, 25 Jan 2022 18:27:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B6CBB81B99;
+        Wed, 26 Jan 2022 02:27:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E9AC340E0;
+        Wed, 26 Jan 2022 02:26:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643164019;
+        bh=0EB6cP7OR7AmWV0MNJu9iQEAQNNivvS5YyjvxnTpexE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k8iR6TQxOFtjWVXILWWOYJkWJq9QPkdGUr9b/pvZEE6jPKltvYUMh6gJl3DLKxulg
+         hBo3jWAffJrb2QQCiv6FyAS1UuwQqVwwvyHZbSZUCheOlr0bdrqB+in/1nCWnrF336
+         /WsoK5hPvanUSFFC52rGKmB7HnJKnUoZsh4p56MdxlX0s5Sa4S5k5fvNY4jJd5PAt0
+         AI5fz9L3cqbxH9fT/V/XwuYScbrAEYKsavA3+ttbXFEmaJ28c7u9nU3wRcJVuOLiPe
+         LZT5ciovcTpmPoor1KnthJftPqiP1wVAjyAoMX63+xhlx/P4zhch0+GO4pS99Gv49x
+         BJQoxzinEC72w==
+Date:   Wed, 26 Jan 2022 10:26:52 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     l.stach@pengutronix.de, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, marcel.ziswiler@toradex.com,
+        tharvey@gateworks.com, kishon@ti.com, vkoul@kernel.org,
+        robh@kernel.org, galak@kernel.crashing.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: Re: [PATCH v7 7/8] arm64: dts: imx8mm-evk: Add the pcie support on
+ imx8mm evk board
+Message-ID: <20220126022651.GD4686@dragon>
+References: <1638432158-4119-1-git-send-email-hongxing.zhu@nxp.com>
+ <1638432158-4119-8-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220125155447.179130255@linuxfoundation.org>
+In-Reply-To: <1638432158-4119-8-git-send-email-hongxing.zhu@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:33:08PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.3 release.
-> There are 1033 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Dec 02, 2021 at 04:02:37PM +0800, Richard Zhu wrote:
+> Add the PCIe support on iMX8MM EVK boards.
+> And set the default reference clock mode.
 > 
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Tested-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> Reviewed-by: Tim Harvey <tharvey@gateworks.com>
+> Tested-by: Tim Harvey <tharvey@gateworks.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 55 +++++++++++++++++++
+>  1 file changed, 55 insertions(+)
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> index e033d0257b5a..87a30daf0b3c 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> @@ -5,6 +5,7 @@
+>  
+>  /dts-v1/;
+>  
+> +#include <dt-bindings/phy/phy-imx8-pcie.h>
+>  #include <dt-bindings/usb/pd.h>
+>  #include "imx8mm.dtsi"
+>  
+> @@ -30,6 +31,23 @@ status {
+>  		};
+>  	};
+>  
+> +	pcie0_refclk: pcie0-refclk {
+> +		compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <100000000>;
 
-Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Incorrect indent.  Fixed them up and applied.
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+Shawn
+
+> +	};
+> +
+> +	reg_pcie0: regulator-pcie {
+> +		compatible = "regulator-fixed";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_pcie0_reg>;
+> +		regulator-name = "MPCIE_3V3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		gpio = <&gpio1 5 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +
+>  	reg_usdhc2_vmmc: regulator-usdhc2 {
+>  		compatible = "regulator-fixed";
+>  		pinctrl-names = "default";
+> @@ -289,6 +307,30 @@ pca6416: gpio@20 {
+>  	};
+>  };
+>  
+> +&pcie_phy {
+> +	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
+> +	fsl,tx-deemph-gen1 = <0x2d>;
+> +	fsl,tx-deemph-gen2 = <0xf>;
+> +	clocks = <&pcie0_refclk>;
+> +	status = "okay";
+> +};
+> +
+> +&pcie0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pinctrl_pcie0>;
+> +	reset-gpio = <&gpio4 21 GPIO_ACTIVE_LOW>;
+> +	clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>, <&clk IMX8MM_CLK_PCIE1_AUX>,
+> +		 <&pcie0_refclk>;
+> +	clock-names = "pcie", "pcie_aux", "pcie_bus";
+> +	assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
+> +			  <&clk IMX8MM_CLK_PCIE1_CTRL>;
+> +	assigned-clock-rates = <10000000>, <250000000>;
+> +	assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_50M>,
+> +				 <&clk IMX8MM_SYS_PLL2_250M>;
+> +	vpcie-supply = <&reg_pcie0>;
+> +	status = "okay";
+> +};
+> +
+>  &sai3 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_sai3>;
+> @@ -406,6 +448,19 @@ MX8MM_IOMUXC_I2C3_SDA_I2C3_SDA			0x400001c3
+>  		>;
+>  	};
+>  
+> +	pinctrl_pcie0: pcie0grp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_I2C4_SCL_PCIE1_CLKREQ_B    0x61
+> +			MX8MM_IOMUXC_SAI2_RXFS_GPIO4_IO21       0x41
+> +		>;
+> +	};
+> +
+> +	pinctrl_pcie0_reg: pcie0reggrp {
+> +		fsl,pins = <
+> +			MX8MM_IOMUXC_GPIO1_IO05_GPIO1_IO5       0x41
+> +		>;
+> +	};
+> +
+>  	pinctrl_pmic: pmicirqgrp {
+>  		fsl,pins = <
+>  			MX8MM_IOMUXC_GPIO1_IO03_GPIO1_IO3		0x141
+> -- 
+> 2.25.1
+> 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC1249C373
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AE549C374
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235036AbiAZGFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 01:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
+        id S231185AbiAZGFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 01:05:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234569AbiAZGFU (ORCPT
+        with ESMTP id S234593AbiAZGFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 01:05:20 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDF6C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:20 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id c19so26335477qtx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:20 -0800 (PST)
+        Wed, 26 Jan 2022 01:05:22 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF9BC061749
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:21 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id e20so19854156qvu.7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=HOl6dnjRSlkzFWIwAEZQBaaOxfPRDLrxvpvmNPVil3I=;
-        b=jwFuMnHWqoNk8uXeaYsGmMgbTXTo5euHb6/esSzRi8Hx0i9wGtS6JDG3u8LGq6AmU4
-         eFdQHw+wFC2IAD7gAkutikIJJdEwF7jOdPz3HURvZDFMbhCd/ezSO9xcpJINsMjiXzM/
-         ux3ThHF0mwzLaaRsxHG+POu362xUihatB6ZiznsjtQ4fvhmMxxbd8YAbcJLjLQXGr+jW
-         KGJA/EIVl7kOjJRSIaFq3sieVyL0O4O64ErJ4CMN2OkScAJfguQeZMBZ0kmND05wNMNY
-         hqv9KmXfIvyrrebEnHTN4PTse2Py7UlyFStajrNbvPv+9NnRYJab498z0qxxx6Ztv/bY
-         Sltw==
+        bh=NVid4lwIGU/SbGxET47lcYa9PMp6oZkK6MJSbQCBUP8=;
+        b=VHecgKNFLp6+K8o+yvV6rnlGSNdQlBeJONWAcseLydDnJtbkgoNf0Rw/8Lz/nVAGfV
+         d+hM2tCC86PkP2UUDjdPUnhcUKD1ufG4VzYPbBCK0KNotR7lUwePnhxeYXoFEzh7mcQe
+         w0WJTijjWGUmQZAnUkLRrtcvcEqtQwWd18lPktYpYgcpP67/DcJrLIWRUZUfjeSlMG4Q
+         yx3YUewSwqiwIAjSNilaNWM274WwyWPNRzWFJdLX1tW6rvdv5XrCcv5yq+rBJ44oG2gV
+         VKkBDgU8utXoZDbGBLgYdEGpFCAlDm5eojRZ9+CCDFsXjMdvwtWKsvoy86o9aHx/FLn4
+         lt+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HOl6dnjRSlkzFWIwAEZQBaaOxfPRDLrxvpvmNPVil3I=;
-        b=McniQ7QGRGCreQwOOZ+35kc3DNb5u/vyCm2VUeJsre+R0yr9dorexnkNClRq+YQc/0
-         KvEdRuwQnq8LF6NpOrQuOjkRQlchIfyeO7dvX2xw3HQE/XPtL4q/80awl8X05bAN9bAP
-         dgQkLM3AL2WFh5MeG07XEW3083DL/0Rot6lJLJ5cQoFbplvNR74yLldgmRC5fJlRYoRo
-         pIod7SPWcysYXUNP7b6ApBoGYN2QJ9J3x9rxD1uPJEmlKm0DcC42rZfUxyP8A8nsxH7p
-         p/XLF4IHUVYRloDutZjxvqLoKafH3xlVodT/iHw7/urPlUFudRTBYpdB56Vi7nLJ7TPn
-         WLYQ==
-X-Gm-Message-State: AOAM530qfWiaLWWwJyflqYvgyxqejuSmHmRe+/uf9embAcbNnWhL/ep8
-        jQkEK3W4p/eYEpFW9zxRvKFtHA==
-X-Google-Smtp-Source: ABdhPJxawlYifreSuisEPDkI9IQt+vr1qpvjrerAOfVLQ1Jx0TsXCwSpoyobPIpCZnLAgMF70g7lVg==
-X-Received: by 2002:ac8:5b01:: with SMTP id m1mr19121273qtw.360.1643177119921;
-        Tue, 25 Jan 2022 22:05:19 -0800 (PST)
+        bh=NVid4lwIGU/SbGxET47lcYa9PMp6oZkK6MJSbQCBUP8=;
+        b=bo+ZpiD5WSr1m9t1On7txcgVzVXVZkwm2yfhwF7rNr7H+j6xOFe3PCx36TeeqWsQHz
+         fclQxVWPWozo+BUpqR15HIhjgDaWhFcT1rjLqEgzXCxAK6MSHIcCKGyIMWM5GNd7tYHy
+         83ZlsDOX42OjAdBT7KT5HTEnu4Ga2tYjIngBYtU6y4K9Sb8Sqq9b/x4DjAdj4xs0fWhC
+         QUNCwmzE5HRf045ZKGWKvZCahAzAR25Rku+ccZiTFK5RDMGmzS70OI/3oGQbq1MITqEa
+         cIcj5CwgIMVUSU0MUgHp0BdUxNFihYMnjezqcph9vJUSvwtnSUfMVteST6TMiGo5bY+L
+         0MQg==
+X-Gm-Message-State: AOAM531wU2nrPJv9t2YAEilje29nltgxEFLARyBTc/TuihCbJ0Z/MEQe
+        baVWLjb6Bns6S5Qm8OFnVj2f1A==
+X-Google-Smtp-Source: ABdhPJzd2K1nQEX6RdRaNxBEBXX9UK+PMvC+jASppza1eRowqKv+fF5BXklIge08ffTBviDpvDBTEg==
+X-Received: by 2002:a05:6214:2302:: with SMTP id gc2mr22470192qvb.126.1643177120814;
+        Tue, 25 Jan 2022 22:05:20 -0800 (PST)
 Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
         by smtp.gmail.com with ESMTPSA id o19sm9856699qta.40.2022.01.25.22.05.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 22:05:19 -0800 (PST)
+        Tue, 25 Jan 2022 22:05:20 -0800 (PST)
 From:   Pasha Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, rientjes@google.com,
@@ -57,9 +57,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
         songmuchun@bytedance.com, qydwhotmail@gmail.com, hughd@google.com,
         ziy@nvidia.com, anshuman.khandual@arm.com
-Subject: [PATCH v3 3/4] mm/khugepaged: unify collapse pmd clear, flush and free
-Date:   Wed, 26 Jan 2022 06:05:13 +0000
-Message-Id: <20220126060514.1574935-4-pasha.tatashin@soleen.com>
+Subject: [PATCH v3 4/4] mm/page_table_check: check entries at pmd levels
+Date:   Wed, 26 Jan 2022 06:05:14 +0000
+Message-Id: <20220126060514.1574935-5-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 In-Reply-To: <20220126060514.1574935-1-pasha.tatashin@soleen.com>
 References: <20220126060514.1574935-1-pasha.tatashin@soleen.com>
@@ -69,89 +69,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unify the code that flushes, clears pmd entry, and frees the PTE table
-level into a new function collapse_and_free_pmd().
+syzbot detected a case where the page table counters were not properly
+updated.
 
-This clean-up is useful as in the next patch we will add another call to
-this function to iterate through PTE prior to freeing the level for page
-table check.
+syzkaller login:  ------------[ cut here ]------------
+kernel BUG at mm/page_table_check.c:162!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3099 Comm: pasha Not tainted 5.16.0+ #48
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIO4
+RIP: 0010:__page_table_check_zero+0x159/0x1a0
+Code: 7d 3a b2 ff 45 39 f5 74 2a e8 43 38 b2 ff 4d 85 e4 01
+RSP: 0018:ffff888010667418 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000
+RDX: ffff88800cea8680 RSI: ffffffff81becaf9 RDI: 0000000003
+RBP: ffff888010667450 R08: 0000000000000001 R09: 0000000000
+R10: ffffffff81becaab R11: 0000000000000001 R12: ffff888008
+R13: 0000000000000001 R14: 0000000000000200 R15: dffffc0000
+FS:  0000000000000000(0000) GS:ffff888035e00000(0000) knlG0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffd875cad00 CR3: 00000000094ce000 CR4: 0000000000
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000
+Call Trace:
+ <TASK>
+ free_pcp_prepare+0x3be/0xaa0
+ free_unref_page+0x1c/0x650
+ ? trace_hardirqs_on+0x6a/0x1d0
+ free_compound_page+0xec/0x130
+ free_transhuge_page+0x1be/0x260
+ __put_compound_page+0x90/0xd0
+ release_pages+0x54c/0x1060
+ ? filemap_remove_folio+0x161/0x210
+ ? lock_downgrade+0x720/0x720
+ ? __put_page+0x150/0x150
+ ? filemap_free_folio+0x164/0x350
+ __pagevec_release+0x7c/0x110
+ shmem_undo_range+0x85e/0x1250
+...
+
+The repro involved having a huge page that is split due to uprobe event
+temporarily replacing one of the pages in the huge page. Later the huge
+page was combined again, but the counters were off, as the PTE level
+was not properly updated.
+
+Make sure that when PMD is cleared and prior to freeing the level the
+PTEs are updated.
+
+Fixes: df4e817b7108 ("mm: page table check")
 
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- mm/khugepaged.c | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ include/linux/page_table_check.h | 18 ++++++++++++++++++
+ mm/khugepaged.c                  |  2 ++
+ mm/page_table_check.c            | 21 +++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
 
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 35f14d0a00a6..440112355ffe 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -1416,6 +1416,17 @@ static int khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
- 	return 0;
+diff --git a/include/linux/page_table_check.h b/include/linux/page_table_check.h
+index 38cace1da7b6..e88bbe37727b 100644
+--- a/include/linux/page_table_check.h
++++ b/include/linux/page_table_check.h
+@@ -26,6 +26,8 @@ void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+ 				pmd_t *pmdp, pmd_t pmd);
+ void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+ 				pud_t *pudp, pud_t pud);
++void __page_table_check_pmd_clear_full(struct mm_struct *mm, unsigned long addr,
++				       pmd_t pmd);
+ 
+ static inline void page_table_check_alloc(struct page *page, unsigned int order)
+ {
+@@ -100,6 +102,16 @@ static inline void page_table_check_pud_set(struct mm_struct *mm,
+ 	__page_table_check_pud_set(mm, addr, pudp, pud);
  }
  
-+static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *vma,
-+				  unsigned long addr, pmd_t *pmdp)
++static inline void page_table_check_pmd_clear_full(struct mm_struct *mm,
++						   unsigned long addr,
++						   pmd_t pmd)
 +{
-+	spinlock_t *ptl = pmd_lock(vma->vm_mm, pmdp);
-+	pmd_t pmd = pmdp_collapse_flush(vma, addr, pmdp);
++	if (static_branch_likely(&page_table_check_disabled))
++		return;
 +
-+	spin_unlock(ptl);
-+	mm_dec_nr_ptes(mm);
-+	pte_free(mm, pmd_pgtable(pmd));
++	__page_table_check_pmd_clear_full(mm, addr, pmd);
 +}
 +
- /**
-  * collapse_pte_mapped_thp - Try to collapse a pte-mapped THP for mm at
-  * address haddr.
-@@ -1433,7 +1444,7 @@ void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
- 	struct vm_area_struct *vma = find_vma(mm, haddr);
- 	struct page *hpage;
- 	pte_t *start_pte, *pte;
--	pmd_t *pmd, _pmd;
-+	pmd_t *pmd;
- 	spinlock_t *ptl;
- 	int count = 0;
- 	int i;
-@@ -1509,12 +1520,7 @@ void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
+ #else
+ 
+ static inline void page_table_check_alloc(struct page *page, unsigned int order)
+@@ -143,5 +155,11 @@ static inline void page_table_check_pud_set(struct mm_struct *mm,
+ {
+ }
+ 
++static inline void page_table_check_pmd_clear_full(struct mm_struct *mm,
++						   unsigned long addr,
++						   pmd_t pmd)
++{
++}
++
+ #endif /* CONFIG_PAGE_TABLE_CHECK */
+ #endif /* __LINUX_PAGE_TABLE_CHECK_H */
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 440112355ffe..eefe3706f6c2 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -16,6 +16,7 @@
+ #include <linux/hashtable.h>
+ #include <linux/userfaultfd_k.h>
+ #include <linux/page_idle.h>
++#include <linux/page_table_check.h>
+ #include <linux/swapops.h>
+ #include <linux/shmem_fs.h>
+ 
+@@ -1424,6 +1425,7 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+ 
+ 	spin_unlock(ptl);
+ 	mm_dec_nr_ptes(mm);
++	page_table_check_pmd_clear_full(mm, addr, pmd);
+ 	pte_free(mm, pmd_pgtable(pmd));
+ }
+ 
+diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+index c61d7ebe13b1..251f95a808b4 100644
+--- a/mm/page_table_check.c
++++ b/mm/page_table_check.c
+@@ -247,3 +247,24 @@ void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
  	}
- 
- 	/* step 4: collapse pmd */
--	ptl = pmd_lock(vma->vm_mm, pmd);
--	_pmd = pmdp_collapse_flush(vma, haddr, pmd);
--	spin_unlock(ptl);
--	mm_dec_nr_ptes(mm);
--	pte_free(mm, pmd_pgtable(_pmd));
--
-+	collapse_and_free_pmd(mm, vma, haddr, pmd);
- drop_hpage:
- 	unlock_page(hpage);
- 	put_page(hpage);
-@@ -1552,7 +1558,7 @@ static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
- 	struct vm_area_struct *vma;
- 	struct mm_struct *mm;
- 	unsigned long addr;
--	pmd_t *pmd, _pmd;
-+	pmd_t *pmd;
- 
- 	i_mmap_lock_write(mapping);
- 	vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
-@@ -1591,14 +1597,8 @@ static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
- 		 * reverse order. Trylock is a way to avoid deadlock.
- 		 */
- 		if (mmap_write_trylock(mm)) {
--			if (!khugepaged_test_exit(mm)) {
--				spinlock_t *ptl = pmd_lock(mm, pmd);
--				/* assume page table is clear */
--				_pmd = pmdp_collapse_flush(vma, addr, pmd);
--				spin_unlock(ptl);
--				mm_dec_nr_ptes(mm);
--				pte_free(mm, pmd_pgtable(_pmd));
--			}
-+			if (!khugepaged_test_exit(mm))
-+				collapse_and_free_pmd(mm, vma, addr, pmd);
- 			mmap_write_unlock(mm);
- 		} else {
- 			/* Try again later */
+ }
+ EXPORT_SYMBOL(__page_table_check_pud_set);
++
++void __page_table_check_pmd_clear_full(struct mm_struct *mm, unsigned long addr,
++				       pmd_t pmd)
++{
++	if (&init_mm == mm)
++		return;
++
++	if (!pmd_bad(pmd) && !pmd_leaf(pmd)) {
++		pte_t *ptep = pte_offset_map(&pmd, addr);
++		unsigned long i;
++
++		pte_unmap(ptep);
++		for (i = 0; i < PTRS_PER_PTE; i++) {
++			__page_table_check_pte_clear(mm, addr, *ptep);
++			addr += PAGE_SIZE;
++			ptep++;
++		}
++	} else {
++		__page_table_check_pmd_clear(mm, addr, pmd);
++	}
++}
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

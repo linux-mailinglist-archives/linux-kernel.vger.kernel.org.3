@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A9149C20B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F22849C20D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237107AbiAZDZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S237119AbiAZD0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiAZDZT (ORCPT
+        with ESMTP id S237109AbiAZD0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:25:19 -0500
+        Tue, 25 Jan 2022 22:26:14 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170ECC06161C;
-        Tue, 25 Jan 2022 19:25:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591CDC06161C;
+        Tue, 25 Jan 2022 19:26:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 690776176A;
-        Wed, 26 Jan 2022 03:25:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E93C340E3;
-        Wed, 26 Jan 2022 03:25:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643167517;
-        bh=0BjzTHHKcILB1tEzLNRvq3NXKLbeWRgT3LE54UUOtzQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Sqe4iNZtHtdEiYd2+af8Zo1ZG9GQDBFUBXzubiErCxje8PuDKI5h7oMBYhZ7SubOX
-         THo6rz1h4uwKp8uCyqJ+TxG46veDQ13UlDQK+LNsZSmnNiBpACcOM8pi5SLlif6QUg
-         qK+A0qnYGS5FgzpRdWjipO1353QSIzyxUllv9FwtV4+M55zebpcN2eLS4WMO5Mto2C
-         29mJ7k3FddAlevDnNnQ8YI9fT8FZ+chBSt47JsWYUAG9P01ZKoDoIz1MVPwaUjtnSU
-         LB+j4yS4tCS2z8WCRhe1df0lny+hharuB8t++KOb/8E0RCn6tgUbiIKLLt/mkfnQbQ
-         HlIlDNsW7QVTw==
-Date:   Tue, 25 Jan 2022 19:25:15 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Ahern <dsahern@gmail.com>
-Cc:     Menglong Dong <menglong8.dong@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, pablo@netfilter.org,
-        kadlec@netfilter.org, Florian Westphal <fw@strlen.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>, alobakin@pm.me,
-        paulb@nvidia.com, Paolo Abeni <pabeni@redhat.com>,
-        talalahmad@google.com, haokexin@gmail.com,
-        Kees Cook <keescook@chromium.org>, memxor@gmail.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net-next 5/6] net: udp: use kfree_skb_reason() in
- udp_queue_rcv_one_skb()
-Message-ID: <20220125192515.627cdaa5@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <00b8e410-7162-2386-4ce9-d6a619474c30@gmail.com>
-References: <20220124131538.1453657-1-imagedong@tencent.com>
-        <20220124131538.1453657-6-imagedong@tencent.com>
-        <308b88bf-7874-4b04-47f7-51203fef4128@gmail.com>
-        <CADxym3aFJcsz=fckaFx9SJh8B7=0Xv-EPz79bbUFW1wG_zNYbw@mail.gmail.com>
-        <00b8e410-7162-2386-4ce9-d6a619474c30@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7C4461769;
+        Wed, 26 Jan 2022 03:26:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A30A7C340E3;
+        Wed, 26 Jan 2022 03:26:12 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 22:26:11 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>
+Subject: Re: linux-next: build failure after merge of the kspp tree
+Message-ID: <20220125222545.353fa400@gandalf.local.home>
+In-Reply-To: <202201251917.18361B4F6@keescook>
+References: <202201242230.C54A6BCDFE@keescook>
+        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
+        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
+        <202201251256.CCCBE9851E@keescook>
+        <20220125162326.3d1ca960@gandalf.local.home>
+        <20220125162859.2b3cc8a0@gandalf.local.home>
+        <202201251402.0FB08DB@keescook>
+        <20220125172114.6807ed8f@gandalf.local.home>
+        <20220126093538.893fb44a7cb0a7cd840c7fdb@kernel.org>
+        <20220125201634.698cc777@gandalf.local.home>
+        <202201251917.18361B4F6@keescook>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -65,16 +52,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 20:04:39 -0700 David Ahern wrote:
-> > I realized it, but SKB_DROP_REASON_TCP_FILTER was already
-> > introduced before. Besides, I think maybe  
+On Tue, 25 Jan 2022 19:18:53 -0800
+Kees Cook <keescook@chromium.org> wrote:
+
+> On Tue, Jan 25, 2022 at 08:16:34PM -0500, Steven Rostedt wrote:
+> > On Wed, 26 Jan 2022 09:35:38 +0900
+> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >   
+> > > I think Kees' idea seems better. If you and Beau are good, I will update
+> > > the macros for __rel_loc. (This requires to change some user-space
+> > > application which Beau is making too.)  
+> > 
+> > If Beau is OK with it, I'm OK with it too. I need to release a new version
+> > of libtraceevent anyway, and I can make the update for that too.
+> > 
+> > Who's adding the patch (if Beau says it's OK), you or Kees?  
 > 
-> SKB_DROP_REASON_TCP_FILTER is not in a released kernel yet. If
-> Dave/Jakub are ok you can change SKB_DROP_REASON_TCP_FILTER to
-> SKB_DROP_REASON_SOCKET_FILTER in 'net' repository to make it usable in
-> both code paths.
+> I don't know anything about libtraceevent, so hopefully not me! :) The
+> patches Masami and I already sent fix the warning, so I leave it you
+> y'all to decide if you want to make the internals a bit simpler.
+> 
 
-SGTM, FWIW. 
 
-What was the reason we went with separate CSUM values for TCP and UDP?
-Should we coalesce those as well?
+Thinking about this more. I may just take both your patches, and leave it
+as an offset from the location of the descriptor. It's closer to the
+meaning of "relative" than doing it as a fixed offset from data.
+
+And then no other patches or user space needs to be changed.
+
+Thanks,
+
+-- Steve

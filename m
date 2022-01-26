@@ -2,101 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B6649D397
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A7D49D3C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbiAZUgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 15:36:42 -0500
-Received: from mga01.intel.com ([192.55.52.88]:9982 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230527AbiAZUge (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:36:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643229394; x=1674765394;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IrlXjlrSWxXOy2UwGYcFGyJqa/q0NhSjnDXBLVc54aM=;
-  b=FqpofSRbgvaR6lMfozaw2Cl3YmTpyQoogo2Tjh4B2IIk0Q7jiUQS7CgT
-   BTiUBCIDogOC9z2N0VmjOwM/GzDRrpilbyVdV0orqlUrKZ8782oJE179V
-   uu1IovWSYNWYcMClPD7LEuHZWeRTWDwzkYO4FcPNq9vTPEqkAzAOG9P9H
-   1faxjSWQgiVk6wCWUAUQtoljkp/gvVlRDwuCVZ/StkMGvFh7oYCRvYJgp
-   3c9mb/rm3FdLGTAEzhyKveBPz8TMiUFeePuMRl4jtEtgS8Og78pgJXTWS
-   E2u8uDoIDprkByqGv/jTdS6Uamz9XG6kA7oIcT5kgXtIPGODgULJpr9NU
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="271098470"
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="271098470"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 12:36:26 -0800
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="581221519"
-Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 12:36:23 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     intel-gfx@lists.freedesktop.org
-Cc:     dri-devel@lists.freedesktop.org,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 09/19] dma-buf-map: Add wrapper over memset
-Date:   Wed, 26 Jan 2022 12:36:52 -0800
-Message-Id: <20220126203702.1784589-10-lucas.demarchi@intel.com>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220126203702.1784589-1-lucas.demarchi@intel.com>
-References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+        id S231197AbiAZUjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 15:39:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229657AbiAZUjr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 15:39:47 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6D8C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:39:47 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id w14so787833edd.10
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:39:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=l7DUOY04nkFG5go2AK7MEd/Kn3oqfvoF5znhY+cKRCI=;
+        b=Y4YS3nqxVI3qAI9hE231qFibOam+wQhPEQMglpNTCeicUI6uahT9M4ujieJxvh40wF
+         W3bX0huo14ja4NoM5IfWpfM93n7KDc7dn5OF4Uanjy7TLf0muY/bJW4hhpyoGMMEs6DN
+         QDykz47b7Sg8JcYAz9BhI+pasVDsOigYaU6fvSRqnMJOzGpFVz/zaL7U2iUusLFlCkI7
+         u0bYsbKPymr8JRieJceQEzo1oDDysT0y5Od5cKXSJowvZZE4U84kRq38ytPEF3CzS7+K
+         UoegJq+1SFxF//FuZCAKpwS59UayCF6AzRSPQ/mBXWdJt/eOdU32GlCQpETPX3LnoS4R
+         8ehQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=l7DUOY04nkFG5go2AK7MEd/Kn3oqfvoF5znhY+cKRCI=;
+        b=7JFTJx0wcQIyYpbUAhF3TL5wltQ/Lbkw6sUcfmRqDRPi7vKZRaAS+RPmYsRqufbfOC
+         rCEgUdhO1Fns1amL4AGOHsZF7AMiypCLUC2kibC2fhboZzhFH6jG4XxKYAWMpC/bLTdt
+         V2sjJm015ZtbB/hyE4r2UXH7w525SgXXGmWsgxR5zJgngKF8XzEayTFb5WS3bz6wgKeO
+         ciwhxM6qQG5n8fvPoJtMiMKeyGo8EftAJKNUAc9jeVqBc4+1K+5XQ+LoToCrMshF/sfL
+         No33QS3ZAZqpqWs5UjRnoqjud7QafFogB9kvF/RP4Iy+ONgR6VBTSTrk6na4/QJz/vrv
+         +cYw==
+X-Gm-Message-State: AOAM533sPTHAryd34czuCtk3221sTqdH4D3vzk+otWKk7NA57f+s661I
+        epN3GmOsvMCS2dvzeUd2QtKrXnPsI+/4U2Cy8TCQ
+X-Google-Smtp-Source: ABdhPJwyF7U+ek4Il56UU3sKDPPKNSjRF7qsyBRSDNyaokYCGGTsL7whQzihFmepsVtYfAS79Kbt7ZsVZaP4HqEqydw=
+X-Received: by 2002:aa7:c40a:: with SMTP id j10mr715995edq.232.1643229585969;
+ Wed, 26 Jan 2022 12:39:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-5-cgzones@googlemail.com>
+In-Reply-To: <20220125141422.32655-5-cgzones@googlemail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 26 Jan 2022 15:39:35 -0500
+Message-ID: <CAHC9VhSxd+D+33O9EEkm2h=Gv6EfByLMJx9dyj0DjcT9GhfKhQ@mail.gmail.com>
+Subject: Re: [PATCH 6/9] selinux: drop unused parameter of avtab_insert_node
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Jeff Vander Stoep <jeffv@google.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just like memcpy_toio(), there is also need to write a direct value to a
-memory block. Add dma_buf_map_memset() to abstract memset() vs memset_io()
+On Tue, Jan 25, 2022 at 9:14 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> The parameter cur is not used in avtab_insert_node().
+>
+> Reported by clang [-Wunused-parameter]
+>
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+>  security/selinux/ss/avtab.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Cc: Matt Roper <matthew.d.roper@intel.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Cc: Christian König <christian.koenig@amd.com>
-Cc: linux-media@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linaro-mm-sig@lists.linaro.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
----
- include/linux/dma-buf-map.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Merged, thanks.
 
-diff --git a/include/linux/dma-buf-map.h b/include/linux/dma-buf-map.h
-index 3514a859f628..c9fb04264cd0 100644
---- a/include/linux/dma-buf-map.h
-+++ b/include/linux/dma-buf-map.h
-@@ -317,6 +317,23 @@ static inline void dma_buf_map_memcpy_to(struct dma_buf_map *dst, const void *sr
- 		memcpy(dst->vaddr, src, len);
- }
- 
-+/**
-+ * dma_buf_map_memset - Memset into dma-buf mapping
-+ * @dst:	The dma-buf mapping structure
-+ * @value:	The value to set
-+ * @len:	The number of bytes to set in dst
-+ *
-+ * Set value in dma-buf mapping. Depending on the buffer's location, the helper
-+ * picks the correct method of accessing the memory.
-+ */
-+static inline void dma_buf_map_memset(struct dma_buf_map *dst, int value, size_t len)
-+{
-+	if (dst->is_iomem)
-+		memset_io(dst->vaddr_iomem, value, len);
-+	else
-+		memset(dst->vaddr, value, len);
-+}
-+
- /**
-  * dma_buf_map_incr - Increments the address stored in a dma-buf mapping
-  * @map:	The dma-buf mapping structure
--- 
-2.35.0
-
+--=20
+paul-moore.com

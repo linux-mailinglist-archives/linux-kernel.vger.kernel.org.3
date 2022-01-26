@@ -2,225 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A074449C5F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D6C49C624
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238875AbiAZJOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:14:55 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:2200 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238855AbiAZJOy (ORCPT
+        id S238973AbiAZJTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230127AbiAZJTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:14:54 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20Q4hWmt006719;
-        Wed, 26 Jan 2022 09:14:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
- bh=xCF+T+rK2nI+1di1wmwFv9Ycqg2CVTBhIq5c0fYg9oM=;
- b=x16YQU1aGI1rDahy5fwCPbFHib+qGk+d0u7aQ8TPfS1upHCo4JyHpoFmWegAS0RnOEpP
- eu0edPGXxDFW3O4a00UoulCi+hlJRUr/5EUKE4vkTUpVNgc2H+Ft20iz8HUvcPDkJ4XK
- QcgEG/RAbcuvAWThmVy+dcZELKSFbE2TuSS6uqB2xhzOBEQXS6waPiVL3kDQCE7ucvo6
- GgkvyQLsTl1SXAN7o5kVOhXvVYEJJP5sHzC0l2UEUK9BAhLpzRRHdaUxJleQdAF8797T
- 8+00/LD1UB6frqMZPsk4ffeSobclokut0qHkPDyyntL++7nLlqTburv1BRiHaexReRmI Fg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dsvmje5ky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jan 2022 09:14:46 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20Q95JUC122123;
-        Wed, 26 Jan 2022 09:14:45 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
-        by aserp3030.oracle.com with ESMTP id 3dr7yhbkk2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jan 2022 09:14:45 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SWGeg2UsqKoET5FTMxG5NK55KTb2wuvekzDjczT4omn/WS9vD6Eeh6nN0ygcq16UtxYLqrTbfwSC/qxX4eMpVUmx4lzXIeFx+/FEhF7z9OGYzVqWsQSRuXiREQFRuazwEWLgebVZsC0e/OcDKEgNybDKtSKPpJhMFnifLmdWES7O5uyHhXjlAHwbUkY3YGcbtpmpLVKIQHCu98trMsyy1vQLQGOmfi7pKFWxNUD7dvRvjZueHOSWFaQEPBycZFyM2nja9Mqw79xYVrLGYy2a/69/gB/8ZxNpIULIFqMFZxIrKU6BKcfOLQxBDLFTgxx69TAaVMaOenqLnQZ5KRThag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xCF+T+rK2nI+1di1wmwFv9Ycqg2CVTBhIq5c0fYg9oM=;
- b=hoAENDiFYabMDVHEjwXwnrAWAH5yFENiw8lsTx0uultIHnmRDZqhMmq9SAyFHoTSDaUBw0iBC/94iBmmLweyyrgPi/FZVmukbFDbeUWfDk2YZmwpT/sDtv5//viWmfQsqV9iu8bRvFaJIyP2a7ogXVnrlJxDeYfyRATvT1ZqTiKjFAprDkdH+YIfifH8Ek19F3nWlPgMonKZLSxIpf9Qj0F1rVBdYtDXPb30U1s6twURmAT5MrtC/xBy3Jn0D/+qakedoAFgsEBZVBdEwXi0klLDJjAP+LWmS6Y5R6K6YtBaCuI+1EoZ9GGvanANufkfs8ADlmwzGk1zKP4OjNLb2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        Wed, 26 Jan 2022 04:19:36 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815C4C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:19:36 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id a13so24563483wrh.9
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:19:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xCF+T+rK2nI+1di1wmwFv9Ycqg2CVTBhIq5c0fYg9oM=;
- b=Fe1H9/Ep9M6j3IOaU/UIqJ5cb0X6h0N9r2IL/Av05dhZHbd6avsEQGavW0Yc6VOV748m35WIm8LbWX+HzDMBjM8O4U/3HdzN4kxmNk0a0uS9C4/Evo1yZyV65L8gi9Jra/F1tb435pBx++khTpzL8X66CvLWSdvSSF9orMW8QkY=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by SN6PR10MB2928.namprd10.prod.outlook.com
- (2603:10b6:805:d2::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Wed, 26 Jan
- 2022 09:14:43 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::c13b:5812:a403:6d96]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::c13b:5812:a403:6d96%6]) with mapi id 15.20.4909.019; Wed, 26 Jan 2022
- 09:14:43 +0000
-Date:   Wed, 26 Jan 2022 12:14:22 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@lists.01.org, Mihail Chindris <mihail.chindris@analog.com>
-Cc:     lkp@intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: drivers/iio/dac/ad3552r.c:688 ad3552r_reset() warn: impossible
- condition '(val < 0) => (0-u16max < 0)'
-Message-ID: <202201242005.NNLuFLzZ-lkp@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNXP275CA0017.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::29)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=6W0uXYBUGimlgrjGSvj7ylLW7W4DYopOCTHsVfAmY4k=;
+        b=LTgwi81MnixOV81jpbU8WYduofSRLnxZ7CM0Zne4n+Wg/oyiGO3kvyOeLMnKM0S4XQ
+         /ZhTYdiZOlKLZPoVTHPWaD7Cqf+sBxvnaKx16wH1LRCuANSHrYlLfP891usJo+IWQAJx
+         tuMXr5msG9wWVUcBkssTOmwknn7N4js1l7enttugM55f+Yb698SB/qzRyV9IjIV9Dxiv
+         iQONJ/t3pZxbqvdPZjf0PXMPeVn+SYmvVFf8KlJGem9+ODyGxb4aJduyCHYiY88BQKhz
+         BVwZWWlwo488sLzlcBYrb60g5xvMYj+JrnUKS0W+tz3YYZbt+RDm3Cj347YWSao2WSSe
+         u64Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=6W0uXYBUGimlgrjGSvj7ylLW7W4DYopOCTHsVfAmY4k=;
+        b=s3vCQjNPfUn29n4re+9EVzn7fRGLH7IfmLLS0ODZlOlR4Y2hF1uGTHXM7nh5VDqOjz
+         qZjzmBa7to4GB2VNLLya74n6Fdvg2OpkjZud53mtstmaqSGnAB2It3d7hG0O1f42sQAQ
+         Ku7FIP3Nb9Jotm3kbbrR8QE0HFmV091DM2wLESsKA/NhOBSSmKyp45JSN7fVbOjMzrnk
+         J0sF3jkxyOrVFGki5mwcbqubjn2nRH6+rKkshf4Z6IEqFLwcPuszkelHb0eu9bn+ExZB
+         vzZ8TI9kJPohXo7eKuWIIysF0g58YVOzT7GXr0lcTwZz9y+R08f/CLGWY0RnroeSXW91
+         Tp7A==
+X-Gm-Message-State: AOAM531a8MhAje0Bmmmjsv5O+ithvMO9b68W9dYyF+IVXp8cHqR00VkV
+        QYgmrOrCylrvlKGJ3j3N1CXKyw==
+X-Google-Smtp-Source: ABdhPJxM9FCgJChPOLX+3by8PdBeL6nlJYirtMLagLsdYPC8uezejMxZoY5QLWL7xfWMTeMvyPRb3w==
+X-Received: by 2002:a5d:6da1:: with SMTP id u1mr1657242wrs.281.1643188775011;
+        Wed, 26 Jan 2022 01:19:35 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id h8sm2913872wmq.26.2022.01.26.01.19.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 01:19:34 -0800 (PST)
+References: <20220121074508.42168-1-liang.yang@amlogic.com>
+ <f5a429f2-ffbc-ea03-810a-45a0f90959a2@baylibre.com>
+ <6eb4f247-367b-d460-6314-fc94ccd00b89@amlogic.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v10 0/4] clk: meson: add a sub EMMC clock controller
+ support
+Date:   Wed, 26 Jan 2022 10:14:55 +0100
+In-reply-to: <6eb4f247-367b-d460-6314-fc94ccd00b89@amlogic.com>
+Message-ID: <1jy23226sa.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8fc9f68c-76a9-409c-d746-08d9e0ac4a00
-X-MS-TrafficTypeDiagnostic: SN6PR10MB2928:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR10MB29285C1D1323ABE1835046AC8E209@SN6PR10MB2928.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:63;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z9xnhNEbAYoh9ceQfXaVZi8/GEutz1p0wA/yArsczQRZE+/1p+AdEi5XJIaxu+echtGthpRES2fbkzM8Vq3zBaawwArbwU4/lBj0I7tIVBIzcua5ZO0rnsQZDvu6/S6fKFocLhBn93bQ1AK12bSlVn20mskwPbSEvo0VGRcgBWC/zTOx6nyRMDf4N9wZrAa+NOg3RphijzDbGSS/NI0lEH0737+asrEmYuQXp2LMaVuuzENcu0Ffvoj86z8tmWpH3KpOJ+/Tym88doLfbULCjAUulbDp6eLlWeH5iKq3L6rycI7r84nhgYnxZWQXjtqirC3dc+pniHOLTibTnz5oE/VpMekmNiCf4iZTS5TOwUNUijSjDEGZ1Mu1S5JGIM8SntEDWd0k0asKr2mpW0JZI3BepbJK/p6Ef55Q+WPJb+peVtBpCwsbNrZSvTQSYAFbyQ0zR3Q/vInS9AmMHUSCn6l0ouu+O3lyFxW4VYXbxLajHWwzjH6gYIDLPk7EMoXQHtkkgBIKJoDGsLgholmzcVSouCoDk5Wdb8JBH7LjO1mfwMw/fCO/oJOmYr8zqlSkDfevlMtCVcDT/j22E3jamfDb12ur1osUH91DF/AXn0qeozY5ja4C7Dy0nu2ff5rLqzMMVHQRXUDephpioL4gSizKaMfP/U7iAklWRRNzr6P0RuvSuuoCqtfKZwxqCCZFqbMI+k8P4OWk4Q760JJhMTwR7aNojMtlk952rv+r+6GQDz23KMeyfe1euZEfEd17VDfS+lDwb+B5+OgP3DaZZ6zoxsYrGvPr3WTpIOcAimwry28Yit0XpBfh85l83TZl4WAXMZk/hTxAjMt6BLkgiA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:ro;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(9686003)(86362001)(6512007)(8676002)(83380400001)(38100700002)(38350700002)(2906002)(1076003)(316002)(6486002)(508600001)(36756003)(26005)(4326008)(6506007)(4001150100001)(966005)(66946007)(52116002)(6666004)(44832011)(66556008)(66476007)(5660300002)(8936002)(6916009)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vWcgaZ/FcswgydnkLxofTp7T+LJq0T/vfpzDK1OBeao7ygPAoc31s6CHGrve?=
- =?us-ascii?Q?rBgyz7MFtS+/4jNd0G3IuCl5EqU6yKTFGbUAXq8CC2hVfI4ONfItx/sw9UGc?=
- =?us-ascii?Q?OEpjsfgR7u2jmaj9DApzNHnq5Sayx5Xd5/MUI0/8k9sTfzt4WN9QGZjT17Hd?=
- =?us-ascii?Q?ECAgEsFCOKlYDPKA1CyfaUsgT08kgExfsPDet0qq8/A9/OIQaXiyd41ZFS2M?=
- =?us-ascii?Q?XZFbU/u5QsyrqT1UpHoUErzCqG8oz/1OH7DJytZdYbWAthwzQWyY4bQc7q73?=
- =?us-ascii?Q?+D2LEJQfmLvx0Xp1aPnW3jrPVB8ILR7EOXDqPxrl7+Ueg9lQGcSNBLoPNrnF?=
- =?us-ascii?Q?a3cRiWzsBG9T4KDVFDaUjlFHPrqoCeZszFUEJMQ/ZNMqazk3UcI+4mrvzXOJ?=
- =?us-ascii?Q?85cFgEYlQppQt6N2Kux72gytANPMroUFLSFkqx84/n0C1fgb4ryIlnQunJQw?=
- =?us-ascii?Q?Vfmw7LD+8HCb+Ay3VXQh7FJ3pssZDV+X+bZLLGw+mvAbkYAs8vTKKOCtKgJu?=
- =?us-ascii?Q?z0cazILx25hEPqzcmKDZVqZVoDP/TGNadMKiY33ThSxrRaErWv9A3uX9me4I?=
- =?us-ascii?Q?0bU/fZsNbrCJ+U5P9BnaJMOkafpWQ5qR78oIJrd2ppjALxAU/E28FBOZoX9m?=
- =?us-ascii?Q?RG5ThBHizUb8f+eoyn796a26fDDzOPnaeuVRLIDPbcqB486ZCVpGayPJk2Na?=
- =?us-ascii?Q?6fks1SrljqJ2BHaYdikZ+hGmV1DUMBzqD9mGe2Jvk0bnrf9JNDXUyzdnPssa?=
- =?us-ascii?Q?1Ixsf7EkaKpLoldIJoVvaI1UkhcLuSiy+Qw5Jn+7iUhZohEEGxvt/o1cPGUr?=
- =?us-ascii?Q?rKgtrSR5lvyUGZmSBRkA3TxmJ0trEW0/8EysG7tOi+i/s/Ov6gVhLdb8/QQv?=
- =?us-ascii?Q?RO9PjIrJgprs5Dgqr0pGzW3VrjaXHvIpPk+RZHM0tHrrzh1kKI28l7+EG/xZ?=
- =?us-ascii?Q?7BIWlGTv3xnWhQ6anUn0r4isknbTfc+xmeA0DvFAmPnSbR2grU1In53/nnhs?=
- =?us-ascii?Q?eYaXQqiZD6QgjQgXDt7M1bylyPnFfDXe269Z6SBM9Q+rkLYxUyMx4NEafU8E?=
- =?us-ascii?Q?UtlxW0WDGOobeplisKYNI7L+4MEn4tm3ky+b4vITCD3GIGEzPpRDFmDBcECm?=
- =?us-ascii?Q?eUz7fjn9mQ3QTzui27t6o0Y3Kk7lOONTf/Rp8VRloKO6Gyg0amLMEF2DzZzQ?=
- =?us-ascii?Q?XnummT/sxRiy5uzNyA5AAE50joCBLWTQmbv5+wN28lNR2TyedIT7pG2lovCk?=
- =?us-ascii?Q?BYPpdC24tryhRYGpbGtndi7kG3cWXJMJ6qPIFmsvaqaia2xX+p4zHvHfozVD?=
- =?us-ascii?Q?VsrosgHKwucgfd3noJfrzzEYuzfq9l2RXmX8QEm0JTDM8/4Pk3DBa7pTUxSh?=
- =?us-ascii?Q?064HIT9vBcBJeh9Nd8rR8SrKhA3+fC+GMHQdLIBXI1L0Ck2eIwmTFCovxYxc?=
- =?us-ascii?Q?cqkb1reVdH4/DvYikGJWAQFyaYSk8wVK3fYcse/r4UC4FJEcSOcQ/t+xUSzM?=
- =?us-ascii?Q?9NwBDcYzkX4tnFsbRc7J1ZEzmwLInocNnMgMTiAw63JtYi5xEaIxpxSZpR8V?=
- =?us-ascii?Q?r7cyqMZfRGRgExG4ZtD9lxxhRISndDl7/W2IEp/5L61hV0NkkfYf8/btdaIB?=
- =?us-ascii?Q?f9jjGmIsP2GqvlRRR1VS1eujbrFvL77rhcAqdc17C5k8FZW7TxGtEPM2pO77?=
- =?us-ascii?Q?L+RC3ff92Z2LcWiIDDQhOXpuhzM=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8fc9f68c-76a9-409c-d746-08d9e0ac4a00
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2022 09:14:43.1764
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wuwZmLyZjNrykE3xiwoKpWyySVchlrNqyj6qlAWn4scCdTQdVlN1XSe4+UrS177QvvmNC+uK8pxS1dbH1G0OgvVa3ckNBXbLnTURrtoW2FQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2928
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10238 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 bulkscore=0
- suspectscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201260053
-X-Proofpoint-GUID: Jg2OFCJUF-LI732gK19zIgwY5usZoGow
-X-Proofpoint-ORIG-GUID: Jg2OFCJUF-LI732gK19zIgwY5usZoGow
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dd81e1c7d5fb126e5fbc5c9e334d7b3ec29a16a0
-commit: 8f2b54824b28ba8317c60947b5941d686e3df70d drivers:iio:dac: Add AD3552R driver support
-config: nios2-randconfig-m031-20220124 (https://download.01.org/0day-ci/archive/20220124/202201242005.NNLuFLzZ-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+On Wed 26 Jan 2022 at 17:08, Liang Yang <liang.yang@amlogic.com> wrote:
 
-New smatch warnings:
-drivers/iio/dac/ad3552r.c:688 ad3552r_reset() warn: impossible condition '(val < 0) => (0-u16max < 0)'
+> Hi Neil,
+>
+> On 2022/1/25 22:54, Neil Armstrong wrote:
+>> [ EXTERNAL EMAIL ]
+>> Hi Liang,
+>> On 21/01/2022 08:45, Liang Yang wrote:
+>>> This driver will add a MMC clock controller driver support.
+>>> The original idea about adding a clock controller is during the
+>>> discussion in the NAND driver mainline effort[1].
+>>>
+>>> This driver is tested in the S400 board (AXG platform) with NAND driver.
+>> Thanks a lot for providing a fixed and updated version of this serie.
+>> After some chat with Jerome and Kevin, it seems the way the eMMC clock
+>> reuse
+>> for NAND was designed nearly 4 years doesn't look accurate anymore.
+>> Having a separate clk driver designed to replace the eMMC node when NAND
+>> is
+>> used on the board seems over engineered.
+>> Actually having the clock code you add in this serie _but_ directly in
+>> the NAND looks far better, and more coherent since having Linux runtime
+>> detection of eMMC vs NAND will never happen and even this serie required
+>> some DT modification from the bootloader.
+>> I'll let Jerome or Kevin add more details if they want, but I think you
+>> should resurrect
+>> the work you pushed in [1] & [2] but:
+>> - passing the eMMC clk registers as a third "reg" cell
+> Does it just need to define a 'reg' resource in NFC node and not 'syscon'
+> here?
 
-Old smatch warnings:
-drivers/iio/dac/ad3552r.c:699 ad3552r_reset() warn: impossible condition '(val < 0) => (0-u16max < 0)'
+Yes
 
-vim +688 drivers/iio/dac/ad3552r.c
+>> - passing the same "clocks" phandle as the eMMC node
+>> - adding the eMMC clock code in the NAND driver directly
+>> I'm open to discussions if you consider the current approach is still
+>> superior.
+>
+> I don't have persuasive ideas, but really it shares the common clock
+> implementation for both NFC and EMMC. and we don't need to paste the 
+> same code in NFC and EMMC.
 
-8f2b54824b28ba Mihail Chindris 2021-12-13  655  static int ad3552r_reset(struct ad3552r_desc *dac)
-8f2b54824b28ba Mihail Chindris 2021-12-13  656  {
-8f2b54824b28ba Mihail Chindris 2021-12-13  657  	struct reg_addr_pool addr;
-8f2b54824b28ba Mihail Chindris 2021-12-13  658  	int ret;
-8f2b54824b28ba Mihail Chindris 2021-12-13  659  	u16 val;
-                                                        ^^^^^^^
+You don't need to copy everything. If I understood correctly, all the
+Rx/Tx should not be needed. Yes, there is some duplication as it stands but
+it allows to avoid coupling the MMC and NAND driver. We can still think
+about optimizing things later on. Let's get something simply working
+first.
 
-8f2b54824b28ba Mihail Chindris 2021-12-13  660  
-8f2b54824b28ba Mihail Chindris 2021-12-13  661  	dac->gpio_reset = devm_gpiod_get_optional(&dac->spi->dev, "reset",
-8f2b54824b28ba Mihail Chindris 2021-12-13  662  						  GPIOD_OUT_LOW);
-8f2b54824b28ba Mihail Chindris 2021-12-13  663  	if (IS_ERR(dac->gpio_reset))
-8f2b54824b28ba Mihail Chindris 2021-12-13  664  		return dev_err_probe(&dac->spi->dev, PTR_ERR(dac->gpio_reset),
-8f2b54824b28ba Mihail Chindris 2021-12-13  665  				     "Error while getting gpio reset");
-8f2b54824b28ba Mihail Chindris 2021-12-13  666  
-8f2b54824b28ba Mihail Chindris 2021-12-13  667  	if (dac->gpio_reset) {
-8f2b54824b28ba Mihail Chindris 2021-12-13  668  		/* Perform hardware reset */
-8f2b54824b28ba Mihail Chindris 2021-12-13  669  		usleep_range(10, 20);
-8f2b54824b28ba Mihail Chindris 2021-12-13  670  		gpiod_set_value_cansleep(dac->gpio_reset, 1);
-8f2b54824b28ba Mihail Chindris 2021-12-13  671  	} else {
-8f2b54824b28ba Mihail Chindris 2021-12-13  672  		/* Perform software reset if no GPIO provided */
-8f2b54824b28ba Mihail Chindris 2021-12-13  673  		ret = ad3552r_update_reg_field(dac,
-8f2b54824b28ba Mihail Chindris 2021-12-13  674  					       AD3552R_REG_ADDR_INTERFACE_CONFIG_A,
-8f2b54824b28ba Mihail Chindris 2021-12-13  675  					       AD3552R_MASK_SOFTWARE_RESET,
-8f2b54824b28ba Mihail Chindris 2021-12-13  676  					       AD3552R_MASK_SOFTWARE_RESET);
-8f2b54824b28ba Mihail Chindris 2021-12-13  677  		if (ret < 0)
-8f2b54824b28ba Mihail Chindris 2021-12-13  678  			return ret;
-8f2b54824b28ba Mihail Chindris 2021-12-13  679  
-8f2b54824b28ba Mihail Chindris 2021-12-13  680  	}
-8f2b54824b28ba Mihail Chindris 2021-12-13  681  
-8f2b54824b28ba Mihail Chindris 2021-12-13  682  	addr.dac = dac;
-8f2b54824b28ba Mihail Chindris 2021-12-13  683  	addr.addr = AD3552R_REG_ADDR_INTERFACE_CONFIG_B;
-8f2b54824b28ba Mihail Chindris 2021-12-13  684  	ret = readx_poll_timeout(ad3552r_read_reg_wrapper, &addr, val,
-8f2b54824b28ba Mihail Chindris 2021-12-13  685  				 val == AD3552R_DEFAULT_CONFIG_B_VALUE ||
-8f2b54824b28ba Mihail Chindris 2021-12-13  686  				 val < 0,
-                                                                                 ^^^^^^^
-
-8f2b54824b28ba Mihail Chindris 2021-12-13  687  				 5000, 50000);
-8f2b54824b28ba Mihail Chindris 2021-12-13 @688  	if (val < 0)
-                                                            ^^^^^^^
-
-8f2b54824b28ba Mihail Chindris 2021-12-13  689  		ret = val;
-8f2b54824b28ba Mihail Chindris 2021-12-13  690  	if (ret) {
-8f2b54824b28ba Mihail Chindris 2021-12-13  691  		dev_err(&dac->spi->dev, "Error while resetting");
-8f2b54824b28ba Mihail Chindris 2021-12-13  692  		return ret;
-8f2b54824b28ba Mihail Chindris 2021-12-13  693  	}
-8f2b54824b28ba Mihail Chindris 2021-12-13  694  
-8f2b54824b28ba Mihail Chindris 2021-12-13  695  	ret = readx_poll_timeout(ad3552r_read_reg_wrapper, &addr, val,
-8f2b54824b28ba Mihail Chindris 2021-12-13  696  				 !(val & AD3552R_MASK_INTERFACE_NOT_READY) ||
-8f2b54824b28ba Mihail Chindris 2021-12-13  697  				 val < 0,
-                                                                                 ^^^^^^^
-8f2b54824b28ba Mihail Chindris 2021-12-13  698  				 5000, 50000);
-8f2b54824b28ba Mihail Chindris 2021-12-13  699  	if (val < 0)
-                                                            ^^^^^^^
-
-Impossible
-
-8f2b54824b28ba Mihail Chindris 2021-12-13  700  		ret = val;
-8f2b54824b28ba Mihail Chindris 2021-12-13  701  	if (ret) {
-8f2b54824b28ba Mihail Chindris 2021-12-13  702  		dev_err(&dac->spi->dev, "Error while resetting");
-8f2b54824b28ba Mihail Chindris 2021-12-13  703  		return ret;
-8f2b54824b28ba Mihail Chindris 2021-12-13  704  	}
-8f2b54824b28ba Mihail Chindris 2021-12-13  705  
-8f2b54824b28ba Mihail Chindris 2021-12-13  706  	return ad3552r_update_reg_field(dac,
-8f2b54824b28ba Mihail Chindris 2021-12-13  707  					addr_mask_map[AD3552R_ADDR_ASCENSION][0],
-8f2b54824b28ba Mihail Chindris 2021-12-13  708  					addr_mask_map[AD3552R_ADDR_ASCENSION][1],
-8f2b54824b28ba Mihail Chindris 2021-12-13  709  					val);
-8f2b54824b28ba Mihail Chindris 2021-12-13  710  }
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+>> Thanks,
+>> Neil
+>> [1]
+>> https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
+>> [2] https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
+>> 
+>>>
+>>> Changes since v9 [10]
+>>>   - use clk_parent_data instead of parent_names
+>>>
+>>> Changes since v8 [9]
+>>>   - use MESON_SCLK_ONE_BASED instead of CLK_DIVIDER_ONE_BASED
+>>>   - use struct_size to caculate onecell_data
+>>>   - add clk-phase-delay.h
+>>>   - define CLK_DELAY_STEP_PS_GX and CLK_DELAY_STEP_PS_AXG
+>>>
+>>> Changes since v7 [8]
+>>>   - move meson_clk_get_phase_delay_data() from header to driver
+>>>   - CONFIG sclk-div with COMMON_CLK_AMLOGIC instead of COMMON_CLK_AMLOGIC_AUDIO
+>>>   - remove onecell date and ID for internal MUX clk
+>>>   - use helper for functions for ONE_BASED in sclk-div
+>>>   - add ONE_BASED support for duty cycle
+>>>
+>>> Changes since v6 [7]:
+>>>   - add one based support for sclk divier
+>>>   - alloc sclk in probe for multiple instance
+>>>   - fix coding styles
+>>>
+>>> Changes since v5 [6]:
+>>>   - remove divider ops with .init and use sclk_div instead
+>>>   - drop CLK_DIVIDER_ROUND_CLOSEST in mux and div
+>>>   - drop the useless type cast
+>>>
+>>> Changes since v4 [5]:
+>>>   - use struct parm in phase delay driver
+>>>   - remove 0 delay releted part in phase delay driver
+>>>   - don't rebuild the parent name once again
+>>>   - add divider ops with .init
+>>>
+>>> Changes since v3 [4]:
+>>>   - separate clk-phase-delay driver
+>>>   - replace clk_get_rate() with clk_hw_get_rate()
+>>>   - collect Rob's R-Y
+>>>   - drop 'meson-' prefix from compatible string
+>>>
+>>>   Changes since v2 [3]:
+>>>   - squash dt-binding clock-id patch
+>>>   - update license
+>>>   - fix alignment
+>>>   - construct a clk register helper() function
+>>>
+>>> Changes since v1 [2]:
+>>>   - implement phase clock
+>>>   - update compatible name
+>>>   - adjust file name
+>>>   - divider probe() into small functions, and re-use them
+>>>
+>>> [1] https://lkml.kernel.org/r/20180628090034.0637a062@xps13
+>>> [2] https://lkml.kernel.org/r/20180703145716.31860-1-yixun.lan@amlogic.com
+>>> [3] https://lkml.kernel.org/r/20180710163658.6175-1-yixun.lan@amlogic.com
+>>> [4] https://lkml.kernel.org/r/20180712211244.11428-1-yixun.lan@amlogic.com
+>>> [5] https://lkml.kernel.org/r/20180809070724.11935-4-yixun.lan@amlogic.com
+>>> [6] https://lkml.kernel.org/r/1539839245-13793-1-git-send-email-jianxin.pan@amlogic.com
+>>> [7] https://lkml.kernel.org/r/1541089855-19356-1-git-send-email-jianxin.pan@amlogic.com
+>>> [8] https://lkml.kernel.org/r/1544457877-51301-1-git-send-email-jianxin.pan@amlogic.com
+>>> [9] https://lkml.kernel.org/r/1545063850-21504-1-git-send-email-jianxin.pan@amlogic.com
+>>> [10] https://lore.kernel.org/all/20220113115745.45826-1-liang.yang@amlogic.com/
+>>> Liang Yang (4):
+>>>    clk: meson: add one based divider support for sclk
+>>>    clk: meson: add emmc sub clock phase delay driver
+>>>    clk: meson: add DT documentation for emmc clock controller
+>>>    clk: meson: add sub MMC clock controller driver
+>>>
+>>>   .../bindings/clock/amlogic,mmc-clkc.yaml      |  64 ++++
+>>>   drivers/clk/meson/Kconfig                     |  18 ++
+>>>   drivers/clk/meson/Makefile                    |   2 +
+>>>   drivers/clk/meson/clk-phase-delay.c           |  69 ++++
+>>>   drivers/clk/meson/clk-phase-delay.h           |  20 ++
+>>>   drivers/clk/meson/mmc-clkc.c                  | 302 ++++++++++++++++++
+>>>   drivers/clk/meson/sclk-div.c                  |  59 ++--
+>>>   drivers/clk/meson/sclk-div.h                  |   3 +
+>>>   include/dt-bindings/clock/amlogic,mmc-clkc.h  |  14 +
+>>>   9 files changed, 529 insertions(+), 22 deletions(-)
+>>>   create mode 100644 Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
+>>>   create mode 100644 drivers/clk/meson/clk-phase-delay.c
+>>>   create mode 100644 drivers/clk/meson/clk-phase-delay.h
+>>>   create mode 100644 drivers/clk/meson/mmc-clkc.c
+>>>   create mode 100644 include/dt-bindings/clock/amlogic,mmc-clkc.h
+>>>
+>> .
 

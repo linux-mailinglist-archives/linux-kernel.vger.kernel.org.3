@@ -2,321 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 034F849D429
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 543EC49D42E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbiAZVLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:11:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S232086AbiAZVMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbiAZVLh (ORCPT
+        with ESMTP id S232024AbiAZVL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:11:37 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319ECC061747
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:11:37 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id m14so937867wrg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:11:37 -0800 (PST)
+        Wed, 26 Jan 2022 16:11:57 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498C6C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:11:57 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id s127so2120225oig.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:11:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3FEiW1X94C/i5Fq6cjS066qKz7PGloLVknC6qoY6ptc=;
-        b=sIVUmRPSjRmA0WryHY9N3K0BzQiklgGLUixhH7/sCvIlLCPLNashx6S/yeqiyuCZkg
-         Fg5m8vpqfDxrWwC8dXeNW3RWuvXGVPh7ZFMEi7D4UVnVAnJB4JrZsHhTOqGKPQ7OJQgq
-         huXJ5AwSUqfVg4ULjzna/E5rtIugcX3OERTJbFbkUMYItCZyA/QoRmaZ3Dh61fVH2Mlp
-         w1gOYNHp8T2ypQBembErR33xuCIvuWOzLzwDwuTxQ7jS4yO9y9AKrWlNAdhkAY2mN2hC
-         KMHYH6PHxKSiBYZwGERCuiK9mFHm0BxbWA6dxhBAj6S9xJ+prmL8U2sFcFGLQSZ3AP5S
-         xc0g==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=slBq4NHY0ygv8QW43vJ34+YaiAj8G4SyoF0HzZkCQHc=;
+        b=YaD7LUIzV2ATPTv9SR3UQu+BkZ+pYRAYbI+veHC6Socrf7xUMvGRKtQPQkx/BLof2L
+         vaGQCXUVt5RdGdmBnedu/mQzs41AsJhsPP5Juxum3ktgAMIqYGdDYDkmO75V/bN5AfjP
+         lbOXG3Zt1UAu1rEfLhC+s2TsSHYqgGcYphNz0LHdMtvU7oR+gOqNJjcaIXQGBgvkPF8U
+         g5xexwalvuKZL7Sw0bVCcO3rlkdue4E4xwg+g/i3sNp2O3yerSdJFB1TM8hi9iK/P/16
+         9ODH1PFD3fY+BSBGIFIx6lXNoBW/BrMKYP+tmbILW7R2M8L8HCVUJfJFCERbRx8RZ4wV
+         LTfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3FEiW1X94C/i5Fq6cjS066qKz7PGloLVknC6qoY6ptc=;
-        b=8QTIcukNmugsK02yHqzvyXx8kZIfLqPG1M3TL12Hqs02RP4bf+J4KLIvfXeEEbukPG
-         /kTDnG2+gXIY8r6V7m32+IE1i82CB7wEtC7kiODfzxHXp6De2b1p5847eH+zVAes8vor
-         PSf/OqC0xv782NSKyPek3zNFAkEFBW1zao8YinTUUTN9aOUxcxNQqPPijQ8MbNH9R+/A
-         mrytLKNS7lgNFhThNwKpTwB8ggfY20BSGuG5//hWPSofprOwAbCd9/fqRWuYltLTXiM/
-         HMLcEA2+UTTWF+/gmObdWNb9moVmQeAp3kCLTWQq8WMUzltI5HkhUWvBGGaB3K2AJ7dK
-         xxdg==
-X-Gm-Message-State: AOAM532azTZNwacs0LrCQFyImlnHMgZb+7gaZVeMg0VhcQNNw3mly6wD
-        j08LRNnzCnDw7/FfjSQ2yKeKJg==
-X-Google-Smtp-Source: ABdhPJw97joQxHgaHu23aJL8beZot82hawRW4Lo7gEBLPS/ZOA9YnLR2SjZfiiKRrxwSMfvP91aD2A==
-X-Received: by 2002:a5d:59af:: with SMTP id p15mr368115wrr.488.1643231495636;
-        Wed, 26 Jan 2022 13:11:35 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id o12sm342178wmq.41.2022.01.26.13.11.34
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=slBq4NHY0ygv8QW43vJ34+YaiAj8G4SyoF0HzZkCQHc=;
+        b=QnRsp5RgeOQ3rpttmMTyyOTLNylJ7aee1F3hpc87iy3Tx2+t2sdFgzgRFpqSrfsUyH
+         JxQ6wJFEp4Mz5/QNPFlkInlEfkxvsPQ4tT0MG1N0nN2wRmZ4q4UoDP3QKWsn7JmXlBRH
+         0zXWCIOgZu/BdcC+pOOS5qj0WQaASfOEFNquTg/5qB+rs11IQoSz5Ah7p8ekv3oA/fx+
+         EQ082d4ViKGvn/d3tbDDTbha5kStLwqF2sTcOYpiyr3qZ4ainSNk6lnMK9JebZ5vqMil
+         uUYpn1ppbcODAMHMHmTZBHjJLmD/hH2HlW9lOrSM0Dq1IxWe3JulYmzE7rtbPI1j13ea
+         Pfhg==
+X-Gm-Message-State: AOAM530Bvt3TPi3qeG/TpUbT2A2rVOgMXtu2Zc/VINh06HfvXBOohyPO
+        tFXMlV3rGR00BdZkARNR+sRxB1pZ8d0=
+X-Google-Smtp-Source: ABdhPJwKfUKG9txRxsfQ+FzsJFtRrkqOmIVVEbdM1wXY1/zmmO9x4aBYV4sFVvSCUCm88ecZcTwyww==
+X-Received: by 2002:a05:6808:2003:: with SMTP id q3mr4830914oiw.254.1643231516493;
+        Wed, 26 Jan 2022 13:11:56 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p26sm5956722oth.14.2022.01.26.13.11.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 13:11:35 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     davem@davemloft.net, kuba@kernel.org, linus.walleij@linaro.org,
-        robh+dt@kernel.org, ulli.kroll@googlemail.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] dt-bindings: net: convert net/cortina,gemini-ethernet to yaml
-Date:   Wed, 26 Jan 2022 21:11:28 +0000
-Message-Id: <20220126211128.3663486-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 26 Jan 2022 13:11:55 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 26 Jan 2022 13:11:54 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Chen Wandun <chenwandun@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, guillaume.tucker@collabora.com
+Subject: Re: [PATCH] Revert "mm/page_isolation: unset migratetype directly
+ for non Buddy page"
+Message-ID: <20220126211154.GA3371726@roeck-us.net>
+References: <20220117142712.3967624-1-chenwandun@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117142712.3967624-1-chenwandun@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Converts net/cortina,gemini-ethernet.txt to yaml
-This permits to detect some missing properties like interrupts
+On Mon, Jan 17, 2022 at 10:27:12PM +0800, Chen Wandun wrote:
+> This reverts commit 075782149abff45ee22f27315eced44d02b96779.
+> 
+> commit 075782149abf ("mm/page_isolation: unset migratetype directly for
+> non Buddy page") will result memory that should in buddy disappear by
+> mistake. move_freepages_block move all pages in pageblock instead of
+> pages indicated by input parameter, so if input pages is not in buddy
+> but other pages in pageblock is in buddy, it will result in page out of
+> control.
+> 
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> Signed-off-by: Chen Wandun <chenwandun@huawei.com>
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- .../bindings/net/cortina,gemini-ethernet.txt  |  92 ------------
- .../bindings/net/cortina,gemini-ethernet.yaml | 138 ++++++++++++++++++
- 2 files changed, 138 insertions(+), 92 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/net/cortina,gemini-ethernet.txt
- create mode 100644 Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml
+I see a number of qemu emulations fail with memory allocation
+errors in v5.17-rc1. This revert fixes the problem.
 
-diff --git a/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.txt b/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.txt
-deleted file mode 100644
-index 6c559981d110..000000000000
---- a/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.txt
-+++ /dev/null
-@@ -1,92 +0,0 @@
--Cortina Systems Gemini Ethernet Controller
--==========================================
--
--This ethernet controller is found in the Gemini SoC family:
--StorLink SL3512 and SL3516, also known as Cortina Systems
--CS3512 and CS3516.
--
--Required properties:
--- compatible: must be "cortina,gemini-ethernet"
--- reg: must contain the global registers and the V-bit and A-bit
--  memory areas, in total three register sets.
--- syscon: a phandle to the system controller
--- #address-cells: must be specified, must be <1>
--- #size-cells: must be specified, must be <1>
--- ranges: should be state like this giving a 1:1 address translation
--  for the subnodes
--
--The subnodes represents the two ethernet ports in this device.
--They are not independent of each other since they share resources
--in the parent node, and are thus children.
--
--Required subnodes:
--- port0: contains the resources for ethernet port 0
--- port1: contains the resources for ethernet port 1
--
--Required subnode properties:
--- compatible: must be "cortina,gemini-ethernet-port"
--- reg: must contain two register areas: the DMA/TOE memory and
--  the GMAC memory area of the port
--- interrupts: should contain the interrupt line of the port.
--  this is nominally a level interrupt active high.
--- resets: this must provide an SoC-integrated reset line for
--  the port.
--- clocks: this should contain a handle to the PCLK clock for
--  clocking the silicon in this port
--- clock-names: must be "PCLK"
--
--Optional subnode properties:
--- phy-mode: see ethernet.txt
--- phy-handle: see ethernet.txt
--
--Example:
--
--mdio-bus {
--	(...)
--	phy0: ethernet-phy@1 {
--		reg = <1>;
--		device_type = "ethernet-phy";
--	};
--	phy1: ethernet-phy@3 {
--		reg = <3>;
--		device_type = "ethernet-phy";
--	};
--};
--
--
--ethernet@60000000 {
--	compatible = "cortina,gemini-ethernet";
--	reg = <0x60000000 0x4000>, /* Global registers, queue */
--	      <0x60004000 0x2000>, /* V-bit */
--	      <0x60006000 0x2000>; /* A-bit */
--	syscon = <&syscon>;
--	#address-cells = <1>;
--	#size-cells = <1>;
--	ranges;
--
--	gmac0: ethernet-port@0 {
--		compatible = "cortina,gemini-ethernet-port";
--		reg = <0x60008000 0x2000>, /* Port 0 DMA/TOE */
--		      <0x6000a000 0x2000>; /* Port 0 GMAC */
--		interrupt-parent = <&intcon>;
--		interrupts = <1 IRQ_TYPE_LEVEL_HIGH>;
--		resets = <&syscon GEMINI_RESET_GMAC0>;
--		clocks = <&syscon GEMINI_CLK_GATE_GMAC0>;
--		clock-names = "PCLK";
--		phy-mode = "rgmii";
--		phy-handle = <&phy0>;
--	};
--
--	gmac1: ethernet-port@1 {
--		compatible = "cortina,gemini-ethernet-port";
--		reg = <0x6000c000 0x2000>, /* Port 1 DMA/TOE */
--		      <0x6000e000 0x2000>; /* Port 1 GMAC */
--		interrupt-parent = <&intcon>;
--		interrupts = <2 IRQ_TYPE_LEVEL_HIGH>;
--		resets = <&syscon GEMINI_RESET_GMAC1>;
--		clocks = <&syscon GEMINI_CLK_GATE_GMAC1>;
--		clock-names = "PCLK";
--		phy-mode = "rgmii";
--		phy-handle = <&phy1>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml b/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml
-new file mode 100644
-index 000000000000..294977fd32f7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml
-@@ -0,0 +1,138 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/cortina,gemini-ethernet.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cortina Systems Gemini Ethernet Controller
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+description: |
-+  This ethernet controller is found in the Gemini SoC family:
-+  StorLink SL3512 and SL3516, also known as Cortina Systems
-+  CS3512 and CS3516.
-+
-+properties:
-+  compatible:
-+    const: cortina,gemini-ethernet
-+
-+  reg:
-+    minItems: 3
-+    description: must contain the global registers and the V-bit and A-bit
-+      memory areas, in total three register sets.
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+  ranges: true
-+
-+#The subnodes represents the two ethernet ports in this device.
-+#They are not independent of each other since they share resources
-+#in the parent node, and are thus children.
-+patternProperties:
-+  "^ethernet-port@[0-9]+$":
-+    type: object
-+    description: contains the resources for ethernet port
-+    allOf:
-+      - $ref: ethernet-controller.yaml#
-+    properties:
-+      compatible:
-+        const: cortina,gemini-ethernet-port
-+
-+      reg:
-+        minItems: 2
-+        items:
-+          - description: DMA/TOE memory
-+          - description: GMAC memory area of the port
-+
-+      interrupts:
-+        maxItems: 1
-+        description: should contain the interrupt line of the port.
-+                     this is nominally a level interrupt active high.
-+
-+      resets:
-+        maxItems: 1
-+        description: this must provide an SoC-integrated reset line for the port.
-+
-+      clocks:
-+        maxItems: 1
-+        description: this should contain a handle to the PCLK clock for
-+                     clocking the silicon in this port
-+
-+      clock-names:
-+        const: PCLK
-+
-+    required:
-+      - reg
-+      - compatible
-+      - interrupts
-+      - resets
-+      - clocks
-+      - clock-names
-+
-+required:
-+  - compatible
-+  - reg
-+  - ranges
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/clock/cortina,gemini-clock.h>
-+    #include <dt-bindings/reset/cortina,gemini-reset.h>
-+    mdio0: mdio {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      phy0: ethernet-phy@1 {
-+        reg = <1>;
-+        device_type = "ethernet-phy";
-+      };
-+      phy1: ethernet-phy@3 {
-+        reg = <3>;
-+        device_type = "ethernet-phy";
-+      };
-+    };
-+
-+
-+    ethernet@60000000 {
-+        compatible = "cortina,gemini-ethernet";
-+        reg = <0x60000000 0x4000>, /* Global registers, queue */
-+              <0x60004000 0x2000>, /* V-bit */
-+              <0x60006000 0x2000>; /* A-bit */
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges;
-+
-+        gmac0: ethernet-port@0 {
-+    		compatible = "cortina,gemini-ethernet-port";
-+    		reg = <0x60008000 0x2000>, /* Port 0 DMA/TOE */
-+    		      <0x6000a000 0x2000>; /* Port 0 GMAC */
-+    		interrupt-parent = <&intcon>;
-+    		interrupts = <1 IRQ_TYPE_LEVEL_HIGH>;
-+    		resets = <&syscon GEMINI_RESET_GMAC0>;
-+    		clocks = <&syscon GEMINI_CLK_GATE_GMAC0>;
-+    		clock-names = "PCLK";
-+    		phy-mode = "rgmii";
-+    		phy-handle = <&phy0>;
-+    	};
-+
-+    	gmac1: ethernet-port@1 {
-+    		compatible = "cortina,gemini-ethernet-port";
-+    		reg = <0x6000c000 0x2000>, /* Port 1 DMA/TOE */
-+    		      <0x6000e000 0x2000>; /* Port 1 GMAC */
-+    		interrupt-parent = <&intcon>;
-+    		interrupts = <2 IRQ_TYPE_LEVEL_HIGH>;
-+    		resets = <&syscon GEMINI_RESET_GMAC1>;
-+    		clocks = <&syscon GEMINI_CLK_GATE_GMAC1>;
-+    		clock-names = "PCLK";
-+    		phy-mode = "rgmii";
-+    		phy-handle = <&phy1>;
-+    	};
-+    };
--- 
-2.34.1
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
+Guenter
+
+> ---
+>  mm/page_isolation.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+> index 6a0ddda6b3c5..f67c4c70f17f 100644
+> --- a/mm/page_isolation.c
+> +++ b/mm/page_isolation.c
+> @@ -115,7 +115,7 @@ static void unset_migratetype_isolate(struct page *page, unsigned migratetype)
+>  	 * onlining - just onlined memory won't immediately be considered for
+>  	 * allocation.
+>  	 */
+> -	if (!isolated_page && PageBuddy(page)) {
+> +	if (!isolated_page) {
+>  		nr_pages = move_freepages_block(zone, page, migratetype, NULL);
+>  		__mod_zone_freepage_state(zone, nr_pages, migratetype);
+>  	}
+> -- 
+> 2.18.0.huawei.25
+> 
+> 

@@ -2,81 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E941149C398
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED9B49C39F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235633AbiAZG3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 01:29:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235591AbiAZG3s (ORCPT
+        id S235797AbiAZGcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 01:32:36 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:7996 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235779AbiAZGcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 01:29:48 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048C4C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:29:47 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id l24-20020a17090aec1800b001b55738f633so2566700pjy.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:29:47 -0800 (PST)
+        Wed, 26 Jan 2022 01:32:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=f8frVsVREroL3Vl0pIdy9j6ct69/Sw7kT8s/BIn1OP0=;
-        b=gy5tGnViW/Q6q8SpmvwPsZUbEzrCa2iw8BwV+Kr4swwgu1E6FOCgAuJmkdStBznndg
-         9cjW4qvwSkTsmGt0KtXmdyu1dCO04aWArje9PMSy/oq7zV2ucYXI9j68aM84xAvGCbTo
-         zcsRf1WDSZSv2shyzfX/GGDWkshjlW8hPBNBla4pRVRsz2IhqE8nQrdZnQ1ME5Ce0Jec
-         IHy6WYuQCKY3QEZpQMVBC8YfvDpGVxYeRIgK5K/Hih56TRQParsBGng7Lk5mzhpvD06p
-         xOpgMwAUDztxP5zUB1GOUNbaS47FqViQysx1Xohj7LbAuCa1xZdVsx2TBS2RcjvePdG8
-         hPWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=f8frVsVREroL3Vl0pIdy9j6ct69/Sw7kT8s/BIn1OP0=;
-        b=RTSwFhhMLQi3hhaRzJaGKg5rZtpfGjSC3jYGJfkZcRY4pTOHuVsTahbO5b3m+Vomf8
-         CdTArvEWBJNI3fMuLzGHMTm4AZNHpgVkfA3G9Kg3Y9RzpRfcL5HXv0REtj30FIQvUdC8
-         o7iHeJJXz2nRosjY5n3S0wJNAMlP6O16dFVLO33o5ag5I4MinJxJUFWZBCwG00Tpxvb0
-         uvJZC+nkXZmoOuAIybPz5GOl/dJ8ITvi905fkFe+WsC3uX82jpOTAI1JLo6gzWrrmzIF
-         M5s2ztcwQnHU1Ue6AauwK28Jik+OYFjoRhs69aA/6jWNdqA38nSoYuJv2bYo1muTffPJ
-         oqxg==
-X-Gm-Message-State: AOAM532xLqEctvjZRXL+ToZs/1ov2udKdHJeAkZZAyzKv6z8WnDwSh3E
-        Zy0AuMOMBpphmwFHXetddc1Ern03NG6jgw==
-X-Google-Smtp-Source: ABdhPJzY3OgX15h2i/8uaHpXMIoN0rhfEE21wgImuXokndNRSLyyzAsTE9pd6eFD/b/jNH0mn8hjRg==
-X-Received: by 2002:a17:902:be18:b0:14a:aef3:af2a with SMTP id r24-20020a170902be1800b0014aaef3af2amr21354312pls.25.1643178587225;
-        Tue, 25 Jan 2022 22:29:47 -0800 (PST)
-Received: from [2620:15c:29:204:6f7a:fc02:d37c:a8b0] ([2620:15c:29:204:6f7a:fc02:d37c:a8b0])
-        by smtp.gmail.com with ESMTPSA id t3sm929149pfg.28.2022.01.25.22.29.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 22:29:46 -0800 (PST)
-Date:   Tue, 25 Jan 2022 22:29:45 -0800 (PST)
-From:   David Rientjes <rientjes@google.com>
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, pjt@google.com, weixugc@google.com,
-        gthelen@google.com, mingo@redhat.com, will@kernel.org,
-        rppt@kernel.org, dave.hansen@linux.intel.com, hpa@zytor.com,
-        aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
-        songmuchun@bytedance.com, qydwhotmail@gmail.com, hughd@google.com,
-        ziy@nvidia.com, anshuman.khandual@arm.com
-Subject: Re: [PATCH v3 2/4] mm/page_table_check: use unsigned long for page
- counters and cleanup
-In-Reply-To: <20220126060514.1574935-3-pasha.tatashin@soleen.com>
-Message-ID: <3554d255-dc76-c4a1-e2a1-f110f1e2c7b5@google.com>
-References: <20220126060514.1574935-1-pasha.tatashin@soleen.com> <20220126060514.1574935-3-pasha.tatashin@soleen.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643178755; x=1674714755;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=CA/L4iq490CnFtokIeJ5JrWOXn3/MldoWR4UmXsDSuM=;
+  b=ERDKKhx0Xx9C/iWEfC88aXN66ZiylNP499rFBi+OxETcTYP+7IHo6V2g
+   LjIFnDpNjZeL3cxCKj8tpSEj7NL04gpelBHo26ral8+tlGGrzO3CetMEB
+   9YCt33yo76z7hNg9OplRDYGIKp+SJ7X05Y3bJvEYYGOgLQb+WzAfIwkr6
+   4=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 25 Jan 2022 22:32:34 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 22:32:34 -0800
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 25 Jan 2022 22:32:34 -0800
+Received: from fenglinw-gv.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 25 Jan 2022 22:32:31 -0800
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sboyd@kernel.org>
+CC:     <collinsd@codeaurora.org>, <subbaram@codeaurora.org>,
+        <quic_fenglinw@quicinc.com>, <tglx@linutronix.de>, <maz@kernel.org>
+Subject: [PATCH v5 00/10] A bunch of fix and optimization patches in spmi-pmic-arb.c
+Date:   Wed, 26 Jan 2022 14:31:42 +0800
+Message-ID: <1643178713-17178-1-git-send-email-quic_fenglinw@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022, Pasha Tatashin wrote:
+Changes in v5:
+  Drop [v4 11/11] because of a similar change is under review:
+    https://lore.kernel.org/linux-arm-msm/YdRJcv2kpp1vgUTb@robh.at.kernel.org/T/#t
 
-> For the consistency, use "unsigned long" for all page counters.
-> 
-> Also, reduce code duplication by calling
-> __page_table_check_*_clear() from __page_table_check_*_set() functions.
-> 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> Reviewed-by: Wei Xu <weixugc@google.com>
+Changes in v4:
+  In [v4 02/11], separated spurious interrupt handling.
+  In [v4 03/11], added Fixes tag for ("spmi: pmic-arb: do not ack and clear peripheral").
+  In [v4 11/11], updated the binding to address few warnings in "make dtbs_check"
 
-Acked-by: David Rientjes <rientjes@google.com>
+Changes in v3:
+  Drop [v2 07/10] as this is no longer needed after this change:
+		50fc4c8cd240 ("spmi: spmi-pmic-arb: fix irq_set_type race condition")
+  In [v3 07/10], updated the author email to match with Signed-off-by.
+  In [v3 10/10], added the binding change in this series, and addressed issues in "make dt_binding_check"
+
+Changes in v2:
+  In [v2 01/10], added code to handle spurious interrupt.
+  In [v2 03/10], adressed minor comments to update the code logic.
+  In [v2 04/10], minor update to detect spurious interrupt.
+  In [v2 05/10], added Fixes tag.
+  In [v2 07/10], added Fixes tag and updated commit text to explain the problem.
+  In [v2 08/10], added binding change to make interrupt properties as optional.
+  In [v2 09/10], updated to check presence of "interrupt-controller" property.
+
+Abhijeet Dharmapurikar (1):
+  spmi: pmic-arb: add a print in cleanup_irq
+
+Ashay Jaiswal (1):
+  spmi: pmic-arb: add support to dispatch interrupt based on IRQ status
+
+David Collins (6):
+  spmi: pmic-arb: check apid against limits before calling irq handler
+  spmi: pmic-arb: correct duplicate APID to PPID mapping logic
+  spmi: pmic-arb: block access for invalid PMIC arbiter v5 SPMI writes
+  bindings: spmi: spmi-pmic-arb: mark interrupt properties as optional
+  spmi: pmic-arb: make interrupt support optional
+  spmi: pmic-arb: increase SPMI transaction timeout delay
+
+Fenglin Wu (1):
+  spmi: pmic-arb: handle spurious interrupt
+
+Subbaraman Narayanamurthy (1):
+  spmi: pmic-arb: do not ack and clear peripheral interrupts in
+    cleanup_irq
+
+ .../bindings/spmi/qcom,spmi-pmic-arb.txt           |   2 +
+ drivers/spmi/spmi-pmic-arb.c                       | 136 +++++++++++++++------
+ 2 files changed, 98 insertions(+), 40 deletions(-)
+
+-- 
+2.7.4
+

@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E80D049C644
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A60C49C646
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239103AbiAZJ0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:26:08 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:51475 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239089AbiAZJ0G (ORCPT
+        id S231630AbiAZJ07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:26:59 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:16740 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239114AbiAZJ0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:26:06 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2ucTth_1643189162;
-Received: from 30.240.122.215(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V2ucTth_1643189162)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 26 Jan 2022 17:26:03 +0800
-Message-ID: <8d89ffe0-6e34-a82d-09f0-9dd803fc256f@linux.alibaba.com>
-Date:   Wed, 26 Jan 2022 17:26:01 +0800
+        Wed, 26 Jan 2022 04:26:45 -0500
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JkJCr5n5GzZfJv;
+        Wed, 26 Jan 2022 17:22:48 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 26 Jan
+ 2022 17:26:43 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] mm/memremap: avoid calling kasan_remove_zero_shadow() for device private memory
+Date:   Wed, 26 Jan 2022 17:26:02 +0800
+Message-ID: <20220126092602.1425-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH v5 0/2] EDAC/ghes: refactor memory error reporting to
- avoid code duplication
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
- <20220126081702.55167-1-xueshuai@linux.alibaba.com>
- <YfEEN0ATgS+TakLV@zn.tnic>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <YfEEN0ATgS+TakLV@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Borislav,
+For device private memory, we do not create a linear mapping for the memory
+because the device memory is un-accessible. Thus we do not add kasan zero
+shadow for it. So it's unnecessary to do kasan_remove_zero_shadow() for it.
 
-在 2022/1/26 PM4:20, Borislav Petkov 写道:
-> On Wed, Jan 26, 2022 at 04:17:00PM +0800, Shuai Xue wrote:
->> ghes_edac_report_mem_error() in ghes_edac.c is a Long Method and have
->> Duplicated Code with cper_mem_err_location(), cper_dimm_err_location(), and
->> cper_mem_err_type_str() in drivers/firmware/efi/cper.c. In addition, the
->> cper_print_mem() in drivers/firmware/efi/cper.c only reports the error
->> status and misses its description.
-> 
-> Dude, what about
-> 
-> 	wait for a week or until the patchset has been fully reviewed
-> 
-> don't you understand?!
-> 
-> Please let me know what about the review process is not clear to you so
-> that we can document it better.
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ mm/memremap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Emmm, when I received your replied email, I thought you had fully reviewed them. So
-I work to address your comments and reply as soon as possible. Sorry, I misunderstood.
+diff --git a/mm/memremap.c b/mm/memremap.c
+index d2a72cf2ff83..d9e05952fff6 100644
+--- a/mm/memremap.c
++++ b/mm/memremap.c
+@@ -302,7 +302,8 @@ static int pagemap_range(struct dev_pagemap *pgmap, struct mhp_params *params,
+ 	return 0;
+ 
+ err_add_memory:
+-	kasan_remove_zero_shadow(__va(range->start), range_len(range));
++	if (!is_private)
++		kasan_remove_zero_shadow(__va(range->start), range_len(range));
+ err_kasan:
+ 	untrack_pfn(NULL, PHYS_PFN(range->start), range_len(range));
+ err_pfn_remap:
+-- 
+2.23.0
 
-Of course, I can wait. As I said before, take your time.
-
-By the way, I have a question about review process: after waiting for a period
-of time, how can I tell whether you have no comments or are still in review process?
-
-Best Regards,
-Shuai

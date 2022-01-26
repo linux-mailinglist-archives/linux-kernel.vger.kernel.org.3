@@ -2,266 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA4D49C78E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DCC49C79A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239965AbiAZKa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:30:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24813 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232627AbiAZKa5 (ORCPT
+        id S240027AbiAZKb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:31:59 -0500
+Received: from de-smtp-delivery-102.mimecast.com ([194.104.111.102]:58864 "EHLO
+        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239993AbiAZKbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:30:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643193056;
+        Wed, 26 Jan 2022 05:31:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
+        t=1643193111;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UubSK79H70oFANpnvDvcn6CpXD+L3h0EOu8ydy44qyw=;
-        b=SBsETc6+oFRp8zdr92MPCVx+41oTWEimCIb2Ciim9SJl7cE/WooNe+tf2mXU1zHeqF5vxd
-        Yi0OO5GCaKNiAwb6nBZHDCokuvdRU3DGjNT18lgax4t+9RuSbWVTrUbI17k734qqyXDHHQ
-        +HLCc8wgCALNTpwRI6/OD/UDUtCmfm8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-344-6QofVZW6NXixS948BAQxqw-1; Wed, 26 Jan 2022 05:30:55 -0500
-X-MC-Unique: 6QofVZW6NXixS948BAQxqw-1
-Received: by mail-wr1-f72.google.com with SMTP id t13-20020adfa2cd000000b001d09443ee4fso4107284wra.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:30:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=UubSK79H70oFANpnvDvcn6CpXD+L3h0EOu8ydy44qyw=;
-        b=05+RGm/qmnG5QQgEzsOI6QtBKI7FXICE4TC1Ut/k/dyyjPMGRG10HQf9JJZnb/EKwF
-         asr/rbX9Hz7k+vcOLupfukDPT7xaEP3DnURYHtsU7Dwr4TYUsuHBQIzSxK+sypEZJG9+
-         L2r6ZVuo8vAw1NbPWRDR2AK8ggG6Q0H5XaQT8rXEMAuMfqj3hLsCdHLy4WndsPIuQq09
-         bCd16PywR8cRfX0MAxo+VFGALhyROU+TazfG9JM/LSfpx7VBYJDz8jvP+F4/hci5vUJQ
-         rdtZAbMm6nzgGN6izZMywJ3mZ/TLVAPes+ZKXnnjwAzLtRXi9mczJzLGD5292EjZ7L1c
-         UBSA==
-X-Gm-Message-State: AOAM531WxXmc8jurWS48nuMn5D91TFk+Wy3NbpzE9Z3JwIVjx9gjTxl9
-        TYZAu+QBSPjoVEv4EnjCnLiCLFW15VOSBcfDApxDk5yPXUklv1yx2KoxiR/pi4FYfhPqkYtTlZK
-        yOY//ABmgHu469ok+7HVvRTwX
-X-Received: by 2002:a05:600c:1d95:: with SMTP id p21mr6908489wms.22.1643193054597;
-        Wed, 26 Jan 2022 02:30:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxfedV9iNOgbZIGoHJjzRip7P1/4Su/b92NZuu4SdlqPQ8lkKHWSM7/N7R40iy386f1/fX2Uw==
-X-Received: by 2002:a05:600c:1d95:: with SMTP id p21mr6908470wms.22.1643193054396;
-        Wed, 26 Jan 2022 02:30:54 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
-        by smtp.gmail.com with ESMTPSA id f8sm19875802wry.46.2022.01.26.02.30.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 02:30:53 -0800 (PST)
-Message-ID: <65fdd873-1f93-56e3-c7a5-98d621c5dbd8@redhat.com>
-Date:   Wed, 26 Jan 2022 11:30:52 +0100
-MIME-Version: 1.0
+        bh=/zfh8QnBZQM2x2CENrZagbM9/XHpgDzvm6oNWm1HMP8=;
+        b=Z8AEF99NnC5rA0gvyTJJRb+Gr4N1C8NVyMof9M6gwyD8Y5Pk62bvF930FbmHcqESE0O9pm
+        qriUjeUKCJJYIiOpcZDZrTaRb9DCZ7J56IVJsLOqoBJ/n/kJQ+VxLrGnOfECF+/LhLH9S6
+        R44QlTjzVSqqCtrCFlJYUGR3cilAtOI=
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com
+ (mail-he1eur04lp2056.outbound.protection.outlook.com [104.47.13.56]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-32-4FAWycyGPr-X_dD6JmObkw-3; Wed, 26 Jan 2022 11:31:50 +0100
+X-MC-Unique: 4FAWycyGPr-X_dD6JmObkw-3
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gSpq6eWww6l9LCg9hf/LZJEeHZicFWzHNyZ7OwHKBRfaOtB7AhETtEnmz8G4xKGIFySVeWRccNHaKnlUveu2uiRh3ZYyxr6a/FIcsRNMTolouqnd2o/mdDdOLiYqcC2Uv+m8aiYXvUIVGZ/DiGhx8DZerUXITAo6zAXR8dDCoZlTtCqmf3Xl1I8DkSBwxIm34nWv3ZwHhzQ9IQ1sgHXwfXiTM5BB6ZAbAVKMQaSeSCLdnVDm+5mfRVJDya/zgHBwjKC00gpe/4L6vjAPul3laGTMHfIfKwjnF7PI2E7J5Ee2HIy/Phug1TdqmBaZ6bSEQzQIGIewXBKdX3CicWh5NA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/zfh8QnBZQM2x2CENrZagbM9/XHpgDzvm6oNWm1HMP8=;
+ b=VFWouOn2tFzPuTgdloLL9BVm1W+Id3r90Pk0fxl8OYeSuNh5P7QgwBtyZcU6iJXvGBTQoUbrrGLNTXduvIfZIwseXicrXUseLpCqpYztYQ7aKe7p3rSk3WIMdDCpw3hkZDvKrKR9ZENo+bnN3HzM0ZoKM2CQ56c7H3jsJdCLlF9yDqdjAfgj7ccN1aWSkYONRjdywXk90QQr3MBjJFQVEf/xYM52cmSUC/TtD4bagqKgy8uy8QLt/aaG/rfoUnEzahnq5d6D5FwUzsPJfkDsmCQg97SeQpTWoCsktjJnhReBirWf8Ck8T4aeemZ3T2HKQ5QkAFsiVhyYSLqQFmcnCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM7PR04MB7013.eurprd04.prod.outlook.com (2603:10a6:20b:116::18)
+ by VI1PR04MB7006.eurprd04.prod.outlook.com (2603:10a6:803:137::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Wed, 26 Jan
+ 2022 10:31:46 +0000
+Received: from AM7PR04MB7013.eurprd04.prod.outlook.com
+ ([fe80::dd9f:243e:b87b:d4f5]) by AM7PR04MB7013.eurprd04.prod.outlook.com
+ ([fe80::dd9f:243e:b87b:d4f5%5]) with mapi id 15.20.4930.015; Wed, 26 Jan 2022
+ 10:31:45 +0000
+Message-ID: <1076a789-76f5-b451-ede3-d0fc283d8616@suse.com>
+Date:   Wed, 26 Jan 2022 10:31:43 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
- mapping
+ Thunderbird/91.5.0
+Subject: Re: [kdave-btrfs-devel:misc-next 149/153] fs/btrfs/tree-log.c:6755:
+ warning: This comment starts with '/**', but isn't a kernel-doc comment.
+ Refer Documentation/doc-guide/kernel-doc.rst
 Content-Language: en-US
-To:     Jianyong Wu <Jianyong.Wu@arm.com>, Ard Biesheuvel <ardb@kernel.org>
-Cc:     Justin He <Justin.He@arm.com>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "quic_qiancai@quicinc.com" <quic_qiancai@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "gshan@redhat.com" <gshan@redhat.com>, nd <nd@arm.com>
-References: <20211216082812.165387-1-jianyong.wu@arm.com>
- <YdXdjcJ7jbnkFsqp@arm.com>
- <AM9PR08MB7276E0DE6B4224C22B20A89CF44C9@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YdcRLohx777jzWah@arm.com>
- <AM9PR08MB7276B412F02CA0431E30E06CF44D9@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YdgZJ/mBG+BCxmEv@arm.com>
- <DB7PR08MB3737631DEE8D6625D3A9E393F7209@DB7PR08MB3737.eurprd08.prod.outlook.com>
- <CAMj1kXF7DJ5UeMn=9gw_Hs3Fa525OFEPsriO=ZprT3rN83=qtQ@mail.gmail.com>
- <AM9PR08MB72763D5DA0C5F22D2126ABF4F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <CAMj1kXGjAxd2xb0u1PLSLGAe8jJdhJm3wR+y=7qB4C1J6Ebgcw@mail.gmail.com>
- <3e6513f9-77ca-79e5-d185-7e9a11ec7689@redhat.com>
- <AM9PR08MB72764111B775352448D75CD9F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <AM9PR08MB72764111B775352448D75CD9F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        David Sterba <dsterba@suse.com>, linux-doc@vger.kernel.org
+References: <202201260759.edlA9lHT-lkp@intel.com>
+From:   Filipe Manana <fdmanana@suse.com>
+In-Reply-To: <202201260759.edlA9lHT-lkp@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PR0P264CA0068.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:100:1d::32) To AM7PR04MB7013.eurprd04.prod.outlook.com
+ (2603:10a6:20b:116::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8ba8183b-840d-4519-7340-08d9e0b70d37
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7006:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-Microsoft-Antispam-PRVS: <VI1PR04MB7006E26D959AA9316D752338AB209@VI1PR04MB7006.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Qeq6Kx3HoqOmgnxCcTdiueCaIAvAAAyhdzyDHxEFR8jZEc4mKtckGGD4nJJJDhEi1jxYVtA874ooxZ1B+Gq57C2w3Rdr5VVV2/NG9w/kGHcpjWnt2AsQnR8dietzN28xb7Kx9FEywa3/PXK3RcTL6iDvvi+GnKbzHhhiz/lmsn2qHNUn5SnsGtu3q3ed+sv3oFjSwvovMRotLcDdqKV2Z+AtWXnluPQHA3vZXZJWiqMytsHdevIawSL8Q0nRr/W99Bz8cVWfPAOvtfbi1qzq0IaoDuOj9SnKVWsishPZAF2uo3XPz7DnlyegTaaoHM1sJo3bff7F5bNhOSeizOJBmy8Qt7Mc1ugnVXIwDRvLtLV16L/3vgFosrr+2CZGHCU9XZ1fw2AlzITc8eqYCAoSOYSuM/MmxIk+TYTEAoTCOSQniYH+BRuIeiY5yhhfFtLsv+Ogw79WJa403llRJLrJj+eXli9K/VNkvGnqdmoPYEZJlCGBgqvpGX2mwL4HhcUSVK4UYkkyfZ6OhYpfCRFHJjYfPKli0ZGlAajhpWBDjxwXDnsaJ1f0cUgFatlYqw8KInligrD/p+0/EEPvpezH/g/vQPtgTcnT52f+SI39qsqD3baM198Hubx+KBrUORdXy5jTXoK1YKDDMeb36nrFZoY3R0V271TLqxQRaop1JLchGZxlExqzyXh9zy86hmV757ymIujN8gBTphCWTxaxyWvGlMl0RLxmhDZrFpI7guhNHpA5VMbuAYpHcfAAtvIumH4BONOC7iqU28ku45q8pPkD9NLVu5AaCHf07+gycvZmZR+ZD9znGt416xEMb2CJqQEX4neTfyzUnAnUg9nYhw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7013.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4326008)(66476007)(38100700002)(36756003)(66946007)(5660300002)(66556008)(6916009)(316002)(8936002)(31686004)(8676002)(6506007)(6486002)(966005)(83380400001)(31696002)(6512007)(508600001)(53546011)(86362001)(186003)(2616005)(2906002)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djVCcEZZOWJQdEVOc1FWdjFJckVoUERFU1J1UDEyLzNhU1RlODF0VE04RVJK?=
+ =?utf-8?B?UWxNQVRSbURtQTg4Q2VkUHNsYTRCdHFpa1ZjM3AyQlVvYVA1WXBXUkQ0b2lI?=
+ =?utf-8?B?NXhtM0pXa0lSN09PMG5icEZMNkF2UGp5UDExSVlxZjM5SGI4WDRmR3JNd1BZ?=
+ =?utf-8?B?TTJhRi9JYjJXV3NSL3NpWE1IRWNpYzFqaC82UTNqNmxmR0Ezc2lMc1AwS0pD?=
+ =?utf-8?B?eFB1NmhzMWtWQjYySGpkdkx1QTF0dytUY1pXS1FLTi9sa2dMUVk2MlNkbksr?=
+ =?utf-8?B?UEF0d3pWa2lTQU04Q1JkQURWZEVQbmQvZlBxak13Q0FuRFlMc1d2d1lTUjM5?=
+ =?utf-8?B?Z1hjRHk1NEw4NzdkTDhwMDZROXlmUnQrTWd5ZjVjT3JzTFRiQ0JOMU5DVitG?=
+ =?utf-8?B?UkVnaEpPQ3lXbW0rRnJTdHFXZWc3LzdKOXQvbWRwTFNIS05EbjFJRk1nZlgy?=
+ =?utf-8?B?MzN4SHNCNHh3VzFlMUMwcVRhWTRuNkhyOU5DR2E5czFETDc3Z3ZRQlJtUHJW?=
+ =?utf-8?B?VitxcW5PdUpLK2FsNm5yeUNMYWxXRURpeW1nZ01CbXFod25QWXJPVnd1TGZR?=
+ =?utf-8?B?b0JaaS85U1JqaFYyNjNsOVgyL3hQWmhua2VFNGh6VzdtVS84eEMrK1dYRkQy?=
+ =?utf-8?B?SVhIQ1grSXdWUXZmUjZ3Ujl2dWVwWGpqRmRZOHYzQXNJQmtjTTlMTHc4RENN?=
+ =?utf-8?B?NU1QZmZTOFNISi9UclFSWnFUQnFJZ3dMaHJ2am9LRk5uSDlVMkUyNTZDdkk0?=
+ =?utf-8?B?OVpnSTVWSHpIRkxTdXJHVkJyWTNrakxEbHprNUFDLzNab2FhODVVaG12TGx2?=
+ =?utf-8?B?MXNDdnZDUEZTR1kwODNRN01zR09HSllwRDFVbWVJeFRKcW1yMCtpZHplSFlY?=
+ =?utf-8?B?QVYvQ3BpT0lMZ2RrcFhVZm1BMzlpZTBjVUlhd0oycFVVdGlzQk5UdldJVy80?=
+ =?utf-8?B?dU1WMWtoMEdJRnluWkNOd1FnZjFKOTRNK3pJME5BcVQ1N0NKUlg1MjRIa1JL?=
+ =?utf-8?B?TFo0RmczVEcyMmwxTWErb0JIL1p6azN0VktUREM3RTVLUXREL3dKVUNHSjhu?=
+ =?utf-8?B?U1ZsSENnOFpBWUtEVS9EMmdCZDZJdlZtd0E0Q2dvM2VXZGFaclR5MjZZTjA3?=
+ =?utf-8?B?dmsxaXp3THJsRHh0UzZGVlYxZktoQlk5MjlhY0svQW92Z29DbXQ0TUthRlVi?=
+ =?utf-8?B?NmxaYnB1UnQ1R2xHUDlRNnJUVkYrbTQvaTFhT1NNRDVYMXp4ZHBuclF3Q0hs?=
+ =?utf-8?B?QmlxWEpIYXVZR2JHN3RnMExlUE5qYldob2RTcXBNL1kyc1NwZVpDa3B2TUY0?=
+ =?utf-8?B?b0tlaGlibW1FcmNtNXR4Z3ZXS3M3MXkvTWVnNm1OeEpYb0hvZ1F6R0t2LzRV?=
+ =?utf-8?B?QjVqNUgxZktNVldBcnJLaHI0Ym1Za2g5VWMwRTY2WThwTjgzU042WUZldzl1?=
+ =?utf-8?B?bjFaWFRncm03T09BRU1RMXU0T1VoZ1JxWW85VlVTUmFNV00vWHN0VjdhQXhT?=
+ =?utf-8?B?RTFKdlNucXZVdzJIazg0cWVxU2R0SklhM0dFZlUvNXpEK1laZFg0T056MXpF?=
+ =?utf-8?B?UVJWMGJKbUkzQVJYOHFwMjZSLytjVVZ1TE1lS1NwZmVqQVhybzVESWJrS1c1?=
+ =?utf-8?B?MC9Dd2gveWQwYmVJRTlpZnJFc1JFT1FTQithUDQyQjRsY0h5cWppeVlvYVRX?=
+ =?utf-8?B?dmZ2b1F2SWlVdEQvNzdURlh3WDk2cnYxNHRrV3R3MmQyeThBYWxYMjJCNXRw?=
+ =?utf-8?B?aEFMMDV0ZDVDcWZjNUlEQk1NZmFLUWdCejM4R29Ra0ZpeVZTSm5vSkFGQmZq?=
+ =?utf-8?B?UThtMWczNUdkM1oyWWhTaTZQUzhyT3VvS1hEQ1JMRGduY2I1Qk1ncTJHT3JO?=
+ =?utf-8?B?cmEzdlBzMVE2M1lvQTJqN29GWGN3K0IyZzlRYmlOeThRWEI0WnJsbEtnU1Jo?=
+ =?utf-8?B?VTM5TDEreFUwaTN3V2xhSTJVMHIvcXR6RGdQblV6RzNoZU4xRTVTWUJSYWlE?=
+ =?utf-8?B?V3NJS0kzVlVYRDJFMWtXaHN4SHVEY01KNXVOY1c0a2pRWC9xd3JQYzBaVzdY?=
+ =?utf-8?B?M1hvK2pEcVl0UFFwWUZQWmcrK3Q4TVl2VlFmbmlGWE1XODJXTWFYTEROS1lu?=
+ =?utf-8?B?THJyaVJFVEVZV3F5MEJPcXFzZ0VFNHJIUklnK3JtYXUvSHpKZU1XMEs5d0VH?=
+ =?utf-8?B?MzVkNDFVaFpTVGpmTnJhMEMzTFR4RS9qejlzNVNiNFZiOVdIenRXK1h3aTNi?=
+ =?utf-8?Q?JwFM2/X3Lo8UgFbK/0jX5jNAeUvCNObz/r/yrCbeOQ=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ba8183b-840d-4519-7340-08d9e0b70d37
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7013.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2022 10:31:45.7834
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8vsvylT6p/QcwbiuvNo5BnUwdrMB/Sn+pr2d56e7WdmSZ/rIFTl7cGYrlc2BeAjVqJXnSoPZDy7xV6PEfEvXkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7006
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.01.22 11:28, Jianyong Wu wrote:
-> Hi David,
+
+
+On 25/01/22 23:12, kernel test robot wrote:
+> tree:   https://github.com/kdave/btrfs-devel.git misc-next
+> head:   8e5d6a5c062f370d4d0b2dace7e95ab40c6ce3dd
+> commit: 6bfc5d45946acd8286fb026137f20ee8747a50f1 [149/153] btrfs: pass the dentry to btrfs_log_new_name() instead of the inode
+> config: nds32-allyesconfig (https://download.01.org/0day-ci/archive/20220126/202201260759.edlA9lHT-lkp@intel.com/config)
+> compiler: nds32le-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/kdave/btrfs-devel/commit/6bfc5d45946acd8286fb026137f20ee8747a50f1
+>         git remote add kdave-btrfs-devel https://github.com/kdave/btrfs-devel.git
+>         git fetch --no-tags kdave-btrfs-devel misc-next
+>         git checkout 6bfc5d45946acd8286fb026137f20ee8747a50f1
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash fs/btrfs/
 > 
->> -----Original Message-----
->> From: David Hildenbrand <david@redhat.com>
->> Sent: Wednesday, January 26, 2022 6:18 PM
->> To: Ard Biesheuvel <ardb@kernel.org>; Jianyong Wu
->> <Jianyong.Wu@arm.com>
->> Cc: Justin He <Justin.He@arm.com>; Catalin Marinas
->> <Catalin.Marinas@arm.com>; will@kernel.org; Anshuman Khandual
->> <Anshuman.Khandual@arm.com>; akpm@linux-foundation.org;
->> quic_qiancai@quicinc.com; linux-kernel@vger.kernel.org; linux-arm-
->> kernel@lists.infradead.org; gshan@redhat.com; nd <nd@arm.com>
->> Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create
->> pud mapping
->>
->> On 26.01.22 11:12, Ard Biesheuvel wrote:
->>> On Wed, 26 Jan 2022 at 11:09, Jianyong Wu <Jianyong.Wu@arm.com>
->> wrote:
->>>>
->>>> Hi Ard,
->>>>
->>>>> -----Original Message-----
->>>>> From: Ard Biesheuvel <ardb@kernel.org>
->>>>> Sent: Wednesday, January 26, 2022 4:37 PM
->>>>> To: Justin He <Justin.He@arm.com>
->>>>> Cc: Catalin Marinas <Catalin.Marinas@arm.com>; Jianyong Wu
->>>>> <Jianyong.Wu@arm.com>; will@kernel.org; Anshuman Khandual
->>>>> <Anshuman.Khandual@arm.com>; akpm@linux-foundation.org;
->>>>> david@redhat.com; quic_qiancai@quicinc.com; linux-
->>>>> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
->>>>> gshan@redhat.com; nd <nd@arm.com>
->>>>> Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when
->>>>> create pud mapping
->>>>>
->>>>> On Wed, 26 Jan 2022 at 05:21, Justin He <Justin.He@arm.com> wrote:
->>>>>>
->>>>>> Hi Catalin
->>>>>>
->>>>>>> -----Original Message-----
->>>>>>> From: Catalin Marinas <catalin.marinas@arm.com>
->>>>>>> Sent: Friday, January 7, 2022 6:43 PM
->>>>>>> To: Jianyong Wu <Jianyong.Wu@arm.com>
->>>>>>> Cc: will@kernel.org; Anshuman Khandual
->>>>> <Anshuman.Khandual@arm.com>;
->>>>>>> akpm@linux-foundation.org; david@redhat.com;
->>>>>>> quic_qiancai@quicinc.com; ardb@kernel.org;
->>>>>>> linux-kernel@vger.kernel.org; linux-arm-
->>>>>>> kernel@lists.infradead.org; gshan@redhat.com; Justin He
->>>>>>> <Justin.He@arm.com>; nd <nd@arm.com>
->>>>>>> Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when
->>>>>>> create pud mapping
->>>>>>>
->>>>>>> On Fri, Jan 07, 2022 at 09:10:57AM +0000, Jianyong Wu wrote:
->>>>>>>> Hi Catalin,
->>>>>>>>
->>>>>>>> I roughly find the root cause.
->>>>>>>>  alloc_init_pud will be called at the very beginning of kernel
->>>>>>>> boot in
->>>>>>> create_mapping_noalloc where no memory allocator is initialized.
->>>>>>> But lockdep check may need allocate memory. So, kernel take
->>>>>>> exception when acquire lock.(I have not found the exact code that
->>>>>>> cause this
->>>>>>> issue) that's say we may not be able to use a lock so early.
->>>>>>>>
->>>>>>>> I come up with 2 methods to address it.
->>>>>>>> 1) skip dead lock check at the very beginning of kernel boot in
->>>>>>>> lockdep
->>>>>>> code.
->>>>>>>> 2) provided 2 two versions of __create_pgd_mapping, one with lock
->>>>>>>> in it and the other without. There may be no possible of race for
->>>>>>>> memory mapping at the very beginning time of kernel boot, thus we
->>>>>>>> can use the no lock version of __create_pgd_mapping safely.
->>>>>>>> In my test, this issue is gone if there is no lock held in
->>>>>>>> create_mapping_noalloc. I think create_mapping_noalloc is called
->>>>>>>> early enough to avoid the race conditions of memory mapping,
->>>>>>>> however, I have not proved it.
->>>>>>>
->>>>>>> I think method 2 would work better but rather than implementing
->>>>>>> new nolock functions I'd add a NO_LOCK flag and check it in
->>>>>>> alloc_init_pud() before mutex_lock/unlock. Also add a comment
->> when
->>>>>>> passing the NO_LOCK flag on why it's needed and why there wouldn't
->>>>>>> be any races at that stage (early boot etc.)
->>>>>>>
->>>>>> The problematic code path is:
->>>>>> __primary_switched
->>>>>>         early_fdt_map->fixmap_remap_fdt
->>>>>>                 create_mapping_noalloc->alloc_init_pud
->>>>>>                         mutex_lock (with Jianyong's patch)
->>>>>>
->>>>>> The problem seems to be that we will clear BSS segment twice if
->>>>>> kaslr is enabled. Hence, some of the static variables in lockdep
->>>>>> init process were messed up. That is to said, with kaslr enabled we
->>>>>> might initialize lockdep twice if we add mutex_lock/unlock in
->> alloc_init_pud().
->>>>>>
->>>>>
->>>>> Thanks for tracking that down.
->>>>>
->>>>> Note that clearing the BSS twice is not the root problem here. The
->>>>> root problem is that we set global state while the kernel runs at
->>>>> the default link time address, and then refer to it again after the
->>>>> entire kernel has been shifted in the kernel VA space. Such global
->>>>> state could consist of mutable pointers to statically allocated data
->>>>> (which would be reset to their default values after the relocation code
->> runs again), or global pointer variables in BSS.
->>>>> In either case, relying on such a global variable after the second
->>>>> relocation performed by KASLR would be risky, and so we should avoid
->>>>> manipulating global state at all if it might involve pointer to
->>>>> statically allocated data structures.
->>>>>
->>>>>> In other ways, if we invoke mutex_lock/unlock in such a early booting
->> stage.
->>>>>> It might be unsafe because lockdep inserts lock_acquire/release as
->>>>>> the complex hooks.
->>>>>>
->>>>>> In summary, would it better if Jianyong splits these early boot and
->>>>>> late boot case? e.g. introduce a nolock version for
->>>>> create_mapping_noalloc().
->>>>>>
->>>>>> What do you think of it?
->>>>>>
->>>>>
->>>>> The pre-KASLR case definitely doesn't need a lock. But given that
->>>>> create_mapping_noalloc() is only used to map the FDT, which happens
->>>>> very early one way or the other, wouldn't it be better to move the
->>>>> lock/unlock into other callers of __create_pgd_mapping()? (and make
->>>>> sure no other users of the fixmap slots exist)
->>>>
->>>> There are server callers of __create_pgd_mapping. I think some of them
->> need no fixmap lock as they are called so early. I figure out all of them here:
->>>> create_mapping_noalloc:   no lock
->>>> create_pgd_mapping:   no lock
->>>> __map_memblock:    no lock
->>>> map_kernel_segment:  no lock
->>>> map_entry_trampoline: no lock
->>>> update_mapping_prot:    need lock
->>>> arch_add_memory:  need lock
->>>>
->>>> WDYT?
->>>>
->>>
->>> That seems reasonable, but it needs to be documented clearly in the code.
->>>
->>
->> Just a random thought, could we rely on system_state to do the locking
->> conditionally?
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> I can't see the point. At the early stages of kernel boot, we definitely need no lock. Also, I think we should keep it simple.
+> All warnings (new ones prefixed by >>):
 > 
+>>> fs/btrfs/tree-log.c:6755: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>     * Update the log after adding a new name for an inode.
+> 
+> 
+> vim +6755 fs/btrfs/tree-log.c
+> 
+>   6753	
+>   6754	/**
+>> 6755	 * Update the log after adding a new name for an inode.
 
-Is e.g.,
+The patch I submitted did not add the "/**":
 
-if (system_state < SYSTEM_RUNNING)
-	/* lock */
+https://lore.kernel.org/linux-btrfs/1f0d5aaf498afa64ef3582cb9d9d24bc5f888ab2.1642676248.git.fdmanana@suse.com/T/#u
 
-if (system_state < SYSTEM_RUNNING)
-	/* unlock */
+However I see that David's misc-next branch, the patch adds that:
 
-more complicated than checking individual users and eventually getting
-it wrong?
+https://github.com/kdave/btrfs-devel/commit/6bfc5d45946acd8286fb026137f20ee8747a50f1
 
-> Thanks
-> Jianyong
+David, did you edit the patch? Why?
 
+thanks
 
--- 
-Thanks,
-
-David / dhildenb
+>   6756	 *
+>   6757	 * @trans:              Transaction handle.
+>   6758	 * @old_dentry:         The dentry associated with the old name and the old
+>   6759	 *                      parent directory.
+>   6760	 * @old_dir:            The inode of the previous parent directory for the case
+>   6761	 *                      of a rename. For a link operation, it must be NULL.
+>   6762	 * @parent:             The dentry associated with the directory under which the
+>   6763	 *                      new name is located.
+>   6764	 *
+>   6765	 * Call this after adding a new name for an inode, as a result of a link or
+>   6766	 * rename operation, and it will properly update the log to reflect the new name.
+>   6767	 */
+>   6768	void btrfs_log_new_name(struct btrfs_trans_handle *trans,
+>   6769				struct dentry *old_dentry, struct btrfs_inode *old_dir,
+>   6770				struct dentry *parent)
+>   6771	{
+>   6772		struct btrfs_inode *inode = BTRFS_I(d_inode(old_dentry));
+>   6773		struct btrfs_log_ctx ctx;
+>   6774	
+>   6775		/*
+>   6776		 * this will force the logging code to walk the dentry chain
+>   6777		 * up for the file
+>   6778		 */
+>   6779		if (!S_ISDIR(inode->vfs_inode.i_mode))
+>   6780			inode->last_unlink_trans = trans->transid;
+>   6781	
+>   6782		/*
+>   6783		 * if this inode hasn't been logged and directory we're renaming it
+>   6784		 * from hasn't been logged, we don't need to log it
+>   6785		 */
+>   6786		if (!inode_logged(trans, inode) &&
+>   6787		    (!old_dir || !inode_logged(trans, old_dir)))
+>   6788			return;
+>   6789	
+>   6790		/*
+>   6791		 * If we are doing a rename (old_dir is not NULL) from a directory that
+>   6792		 * was previously logged, make sure the next log attempt on the directory
+>   6793		 * is not skipped and logs the inode again. This is because the log may
+>   6794		 * not currently be authoritative for a range including the old
+>   6795		 * BTRFS_DIR_INDEX_KEY key, so we want to make sure after a log replay we
+>   6796		 * do not end up with both the new and old dentries around (in case the
+>   6797		 * inode is a directory we would have a directory with two hard links and
+>   6798		 * 2 inode references for different parents). The next log attempt of
+>   6799		 * old_dir will happen at btrfs_log_all_parents(), called through
+>   6800		 * btrfs_log_inode_parent() below, because we have previously set
+>   6801		 * inode->last_unlink_trans to the current transaction ID, either here or
+>   6802		 * at btrfs_record_unlink_dir() in case the inode is a directory.
+>   6803		 */
+>   6804		if (old_dir)
+>   6805			old_dir->logged_trans = 0;
+>   6806	
+>   6807		btrfs_init_log_ctx(&ctx, &inode->vfs_inode);
+>   6808		ctx.logging_new_name = true;
+>   6809		/*
+>   6810		 * We don't care about the return value. If we fail to log the new name
+>   6811		 * then we know the next attempt to sync the log will fallback to a full
+>   6812		 * transaction commit (due to a call to btrfs_set_log_full_commit()), so
+>   6813		 * we don't need to worry about getting a log committed that has an
+>   6814		 * inconsistent state after a rename operation.
+>   6815		 */
+>   6816		btrfs_log_inode_parent(trans, inode, parent, LOG_INODE_EXISTS, &ctx);
+>   6817	}
+>   6818	
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
 

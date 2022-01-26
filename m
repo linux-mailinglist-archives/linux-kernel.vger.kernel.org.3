@@ -2,145 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 827AC49CC45
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4C549CC46
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242012AbiAZOZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:25:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44940 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235227AbiAZOZW (ORCPT
+        id S242102AbiAZOZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235227AbiAZOZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:25:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643207121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ky8vEonCzy59ChEvPze7eMC2KWb2sPsqeiyNVeL7FTo=;
-        b=VmweHd0C527hLFQ8ngq1DwsLRMTKXLnlAOwwYq6d4GMj/HhZmOh/wHe4H4Zy7QFx1+hnSI
-        o1QlWkTZJOHqe3xrp75+3McQ0L3pYMgO/ezUwu+Nj7JVNM9vmE5qDrnuyj9R91JZStDf4Q
-        puB2roiuNLtgjOVN9EtSXoXx1ON5nX8=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-BhjypEVeN06i57YQK1jiRA-1; Wed, 26 Jan 2022 09:25:20 -0500
-X-MC-Unique: BhjypEVeN06i57YQK1jiRA-1
-Received: by mail-ej1-f69.google.com with SMTP id la22-20020a170907781600b006a7884de505so4954985ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 06:25:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:references:in-reply-to
-         :content-transfer-encoding;
-        bh=Ky8vEonCzy59ChEvPze7eMC2KWb2sPsqeiyNVeL7FTo=;
-        b=pih99vvoDleScSPmFL0htMR7S/5Jcn4jFQxENtdrBugIN9QD6pRHy54FG7gnNqFkBh
-         divLemvzuaqAnOHHXHK7EFI8ltxL9I8E7DRQ1wkMqdHMplib1MErHl/6KawFSDQSudJO
-         FAXvlA4+SJ4XBquirS6mlFLTn+wGdDhsQY8pmQImpNG3EtjQd2e9Z+90p8xlVwx7tDDm
-         jSi2nusHORytuvV8wJnFSRnbxmMomXgCGCcGEy0bu6Axj6N66G0NjKnUlUf7usk0XIoE
-         4aq9YdZb6dfzAyNc56p2GnTKWsc05J4uQ5SDG8JJUOIfGpXHAfKgV8u86BuIMc5qV3n/
-         I+JQ==
-X-Gm-Message-State: AOAM532NyaAhDLC1WuUmy2JQLeuV6KBrDsK+Z+YDczKuDnDoOW8cROIv
-        oj7iBiGZoHT06DJq3zPtpJqylpPVtv86HozulDiZZNHtyHvk0vU8Xj1grg7Vj3ErYaPTUCqu8sU
-        CuuCrRKbA+sFjKqlQ1m0EXeT3
-X-Received: by 2002:a17:906:2a0c:: with SMTP id j12mr19869843eje.698.1643207118873;
-        Wed, 26 Jan 2022 06:25:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwMUS00fgoM+sQ7aylyugJWpU3ODkJTGoVcDRj4PWJcfLzReiK1FTAo+L0EYzAGI2DFmUZn2A==
-X-Received: by 2002:a17:906:2a0c:: with SMTP id j12mr19869832eje.698.1643207118696;
-        Wed, 26 Jan 2022 06:25:18 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id v3sm9195954edy.21.2022.01.26.06.25.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 06:25:18 -0800 (PST)
-Message-ID: <7926e4b4-f443-4601-2fbf-80af82363d12@redhat.com>
-Date:   Wed, 26 Jan 2022 15:25:17 +0100
+        Wed, 26 Jan 2022 09:25:33 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BAEC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 06:25:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LiOUw0BmLOCV5aXkbkiAQ3Ht3cRjDO/swK3bGS2AZxs=; b=oItQVVFfHwr0aOvBCsF7zp4OOi
+        RFvfZJkzhP/JdBpwYViRO401Z2hBTt55jxtY0F2cslTDw6q2mG0oyGyu7iOM1jx1/WEQ0Xgh7jdA4
+        rWMMGVggmGVjGDX9Aua0BQqGKZZnJlhHs+kmhvPXV98ap+1Rrmo3/5MwrSiJjsMDjx19u3l4RoKcn
+        2MRT+3t6Sp5FeFR6X+O4aPj9y0eekKjlz5KV9uauRg3/ubAMubGjDzEZzESs0oZUAg9zadZvAqhME
+        FPh6YqRM3qqH6QFsA+Ebb8xNtA5oaRmpcOSELzy4WV7bX+BFwI3C9ULl58xtmhnk7EXPzBoTuRzeo
+        aBgzAS0g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCjEj-0047J8-Qd; Wed, 26 Jan 2022 14:25:25 +0000
+Date:   Wed, 26 Jan 2022 14:25:25 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH RFC v2 1/9] mm: optimize do_wp_page() for exclusive pages
+ in the swapcache
+Message-ID: <YfFZ1SruNMubhJLo@casper.infradead.org>
+References: <20220126095557.32392-1-david@redhat.com>
+ <20220126095557.32392-2-david@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: acpi_get_devices() crash when acpi_disabled==true (was [PATCH v2]
- drm/privacy-screen: honor acpi=off in detect_thinkpad_privacy_screen)
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Tong Zhang <ztong0001@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi <linux-acpi@vger.kernel.org>
-References: <20220123091004.763775-1-ztong0001@gmail.com>
- <6a0233cd-d931-8a36-3b9e-08b774cec7b0@redhat.com>
-In-Reply-To: <6a0233cd-d931-8a36-3b9e-08b774cec7b0@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126095557.32392-2-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 1/26/22 14:47, Hans de Goede wrote:
-> Hi All,
+On Wed, Jan 26, 2022 at 10:55:49AM +0100, David Hildenbrand wrote:
+> Liang Zhang reported [1] that the current COW logic in do_wp_page() is
+> sub-optimal when it comes to swap+read fault+write fault of anonymous
+> pages that have a single user, visible via a performance degradation in
+> the redis benchmark. Something similar was previously reported [2] by
+> Nadav with a simple reproducer.
 > 
-> On 1/23/22 10:10, Tong Zhang wrote:
->> when acpi=off is provided in bootarg, kernel crash with
->>
->> [    1.252739] BUG: kernel NULL pointer dereference, address: 0000000000000018
->> [    1.258308] Call Trace:
->> [    1.258490]  ? acpi_walk_namespace+0x147/0x147
->> [    1.258770]  acpi_get_devices+0xe4/0x137
->> [    1.258921]  ? drm_core_init+0xc0/0xc0 [drm]
->> [    1.259108]  detect_thinkpad_privacy_screen+0x5e/0xa8 [drm]
->> [    1.259337]  drm_privacy_screen_lookup_init+0xe/0xe85 [drm]
->>
->> The reason is that acpi_walk_namespace expects acpi related stuff
->> initialized but in fact it wouldn't when acpi is set to off. In this case
->> we should honor acpi=off in detect_thinkpad_privacy_screen().
->>
->> Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+> Let's optimize for pages that have been added to the swapcache but only
+> have an exclusive owner. Try removing the swapcache reference if there is
+> hope that we're the exclusive user.
 > 
-> Thank you for catching this and thank you for your patch. I was about to merge
-> this, but then I realized that this might not be the best way to fix this.
+> We will fail removing the swapcache reference in two scenarios:
+> (1) There are additional swap entries referencing the page: copying
+>     instead of reusing is the right thing to do.
+> (2) The page is under writeback: theoretically we might be able to reuse
+>     in some cases, however, we cannot remove the additional reference
+>     and will have to copy.
 > 
-> A quick grep shows 10 acpi_get_devices() calls outside of drivers/acpi,
-> and at a first glance about half of those are missing an acpi_disabled
-> check. IMHO it would be better to simply add an acpi_disabled check to
-> acpi_get_devices() itself.
+> Further, we might have additional references from the LRU pagevecs,
+> which will force us to copy instead of being able to reuse. We'll try
+> handling such references for some scenarios next. Concurrent writeback
+> cannot be handled easily and we'll always have to copy.
 > 
-> Rafael, do you agree ?
+> While at it, remove the superfluous page_mapcount() check: it's
+> implicitly covered by the page_count() for ordinary anon pages.
+> 
+> [1] https://lkml.kernel.org/r/20220113140318.11117-1-zhangliang5@huawei.com
+> [2] https://lkml.kernel.org/r/0480D692-D9B2-429A-9A88-9BBA1331AC3A@gmail.com
+> 
+> Reported-by: Liang Zhang <zhangliang5@huawei.com>
+> Reported-by: Nadav Amit <nadav.amit@gmail.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Never mind I just saw that acpi_get_devices() is part of acpica, where
-as the acpi_disabled flag is not. So callers need to check acpi_disabled
-before calling acpi_get_devices().
-
-I'll go and push this patch to drm-misc-fixes now.
-
-Regards,
-
-Hans
-
-
->> ---
->> v2: fix typo in previous commit -- my keyboard is eating letters 
->>
->>  drivers/gpu/drm/drm_privacy_screen_x86.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/drm_privacy_screen_x86.c b/drivers/gpu/drm/drm_privacy_screen_x86.c
->> index a2cafb294ca6..e7aa74ad0b24 100644
->> --- a/drivers/gpu/drm/drm_privacy_screen_x86.c
->> +++ b/drivers/gpu/drm/drm_privacy_screen_x86.c
->> @@ -33,6 +33,9 @@ static bool __init detect_thinkpad_privacy_screen(void)
->>  	unsigned long long output;
->>  	acpi_status status;
->>  
->> +	if (acpi_disabled)
->> +		return false;
->> +
->>  	/* Get embedded-controller handle */
->>  	status = acpi_get_devices("PNP0C09", acpi_set_handle, NULL, &ec_handle);
->>  	if (ACPI_FAILURE(status) || !ec_handle)
-
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>

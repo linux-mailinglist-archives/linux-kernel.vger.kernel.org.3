@@ -2,87 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CD149C9E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9651D49C9C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241433AbiAZMkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:40:37 -0500
-Received: from selene.zem.fi ([178.62.79.47]:43204 "EHLO selene.zem.fi"
+        id S241357AbiAZMe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:34:27 -0500
+Received: from foss.arm.com ([217.140.110.172]:36820 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234178AbiAZMkf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:40:35 -0500
-X-Greylist: delayed 385 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jan 2022 07:40:35 EST
-Received: by selene.zem.fi (Postfix, from userid 1000)
-        id F22BF4DC4C; Wed, 26 Jan 2022 12:33:39 +0000 (GMT)
-Date:   Wed, 26 Jan 2022 12:33:39 +0000
-From:   Heikki Kallasjoki <heikki.kallasjoki@iki.fi>
-To:     Ariadne Conill <ariadne@dereferenced.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] fs/exec: require argv[0] presence in do_execveat_common()
-Message-ID: <YfE/owUY+gVnn2b/@selene.zem.fi>
-References: <20220126043947.10058-1-ariadne@dereferenced.org>
- <202201252241.7309AE568F@keescook>
- <39480927-B17F-4573-B335-7FCFD81AB997@chromium.org>
- <44b4472d-1d50-c43f-dbb1-953532339fb4@dereferenced.org>
+        id S241330AbiAZMe0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:34:26 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 008D8D6E;
+        Wed, 26 Jan 2022 04:34:26 -0800 (PST)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 41B1A3F793;
+        Wed, 26 Jan 2022 04:34:25 -0800 (PST)
+Date:   Wed, 26 Jan 2022 12:34:18 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah@kernel.org
+Subject: Re: [PATCH 2/5] kselftest: Fix vdso_test_time to pass on skips
+Message-ID: <20220126123418.GH6113@e120937-lin>
+References: <20220126102723.23300-1-cristian.marussi@arm.com>
+ <20220126102723.23300-3-cristian.marussi@arm.com>
+ <8d513be7-a99d-2b7f-6767-a378742ef3fa@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <44b4472d-1d50-c43f-dbb1-953532339fb4@dereferenced.org>
+In-Reply-To: <8d513be7-a99d-2b7f-6767-a378742ef3fa@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 05:18:58AM -0600, Ariadne Conill wrote:
-> On Tue, 25 Jan 2022, Kees Cook wrote:
-> > Lots of stuff likes to do:
-> > execve(path, NULL, NULL);
+On Wed, Jan 26, 2022 at 12:22:45PM +0000, Vincenzo Frascino wrote:
+> Hi Cristian,
 > 
-> I looked at these, and these seem to basically be lazily-written test cases
-> which should be fixed.  I didn't see any example of real-world applications
-> doing this.  As noted in some of the test cases, there are comments like
-> "Solaris doesn't support this," etc.
 
-See also the (small) handful of instances of `execlp(cmd, NULL);` out
-there, which I imagine would start to fail:
-https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
+Hi Vincenzo,
 
-Two of the hits (ispell, nauty) would seem to be non-test use cases.
+thanks for the feedback.
 
-As an aside, saying POSIX "disallows" argc == 0 might be overstating it
-a little. As far as I can tell (quotes below), while a Strictly
-Conforming POSIX Application must provide argc >= 1 to a program it
-executes, the argc == 0 case isn't entirely disallowed.
+> On 1/26/22 10:27 AM, Cristian Marussi wrote:
+> > When a vDSO symbol is not found, all the testcases in vdso_test_abi usually
+> > report a SKIP, which, in turn, is reported back to Kselftest as a PASS.
+> > 
+> > Testcase vdso_test_time, instead, reporting a SKIP, causes the whole set of
+> > tests within vdso_test_abi to be considered FAIL when symbol is not found.
+> > 
+> > Fix it reporting a PASS when vdso_test_time cannot find the vdso symbol.
+> > 
+> > Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
+> > Seen as a failure on both a JUNO and a Dragonboard on both recent and old
+> > kernels/testruns:
+> > 
+> > root@deb-buster-arm64:~# /opt/ksft/vDSO/vdso_test_abi
+> > [vDSO kselftest] VDSO_VERSION: LINUX_2.6.39
+> > The time is 1637922136.675304
+> > The time is 1637922136.675361000
+> > The resolution is 0 1
+> > clock_id: CLOCK_REALTIME [PASS]
+> > The time is 1927.760604900
+> > The resolution is 0 1
+> > clock_id: CLOCK_BOOTTIME [PASS]
+> > The time is 1637922136.675649700
+> > The resolution is 0 1
+> > clock_id: CLOCK_TAI [PASS]
+> > The time is 1637922136.672000000
+> > The resolution is 0 4000000
+> > clock_id: CLOCK_REALTIME_COARSE [PASS]
+> > The time is 1927.761005600
+> > The resolution is 0 1
+> > clock_id: CLOCK_MONOTONIC [PASS]
+> > The time is 1927.761132780
+> > The resolution is 0 1
+> > clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> > The time is 1927.757093740
+> > The resolution is 0 4000000
+> > clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+> > Could not find __kernel_time              <<< This caused a FAIL as a whole
+> > root@deb-buster-arm64:~# echo $?
+> > 1
+> > 
+> > e.g.: https://lkft.validation.linaro.org/scheduler/job/2192570#L27778
+> > ---
+> >  tools/testing/selftests/vDSO/vdso_test_abi.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> > index 3d603f1394af..7dcc66d1cecf 100644
+> > --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
+> > +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> > @@ -90,8 +90,9 @@ static int vdso_test_time(void)
+> >  		(vdso_time_t)vdso_sym(version, name[2]);
+> >  
+> >  	if (!vdso_time) {
+> > +		/* Skip if symbol not found: consider skipped tests as passed */
+> >  		printf("Could not find %s\n", name[2]);
+> > -		return KSFT_SKIP;
+> > +		return KSFT_PASS;
+> 
+> My preference would be to keep "KSFT_SKIP" here and verify separately the return
+> status of each test. This would maintain compliance with the kselftest API.
+> Could you please test the patch in-reply-to this one (will be sent shortly) and
+> let me know if it works for you?
+> 
+Sure, I was indeed not sure my solution was what you wanted.
 
-https://pubs.opengroup.org/onlinepubs/9699919799.2018edition/basedefs/V1_chap01.html
+> If it does feel free to fold it in the next version of your series with your
+> "Tested-by:" otherwise let me know.
 
-"should -- describes a feature or behavior that is recommended but not
-mandatory. An application should not rely on the existence of the
-feature or behavior."
+Sure, I'll do and keep you on CC.
 
-https://pubs.opengroup.org/onlinepubs/9699919799.2018edition/functions/execve.html
+Thanks,
+Cristian
 
-"The value in argv[0] *should* point to a filename string that is
-associated with the process --" (emphasis added)
-
-"Early proposals required that the value of argc passed to main() be
-"one or greater". This was driven by the same requirement in drafts of
-the ISO C standard. In fact, historical implementations have passed a
-value of zero when no arguments are supplied to the caller of the exec
-functions. This requirement was removed from the ISO C standard and
-subsequently removed from this volume of POSIX.1-2017 as well. The
-wording, in particular the use of the word should, requires a Strictly
-Conforming POSIX Application to pass at least one argument to the exec
-function, thus guaranteeing that argc be one or greater when invoked by
-such an application. In fact, this is good practice, since many existing
-applications reference argv[0] without first checking the value of
-argc."
-
-Just to be clear, not disputing the part that disallowing `argc == 0`
-would be a reasonable idea, or claiming that there's a valid use case.
-Just the part where POSIX would *require* the system to disallow this.
-
--- 
-Heikki Kallasjoki

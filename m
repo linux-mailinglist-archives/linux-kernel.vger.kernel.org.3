@@ -2,83 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A3249C64F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC49049C653
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239156AbiAZJ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbiAZJ3z (ORCPT
+        id S239176AbiAZJaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:30:16 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:40161 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231742AbiAZJaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:29:55 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEE7C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:29:55 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id c10so69677539ybb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=IK4lJqQoYGpBp8uHlZ97YK53DvH9QrpYWwjau2wBtXo=;
-        b=CwLnPKZHrJk/LgCWJCKRatOtkm023gLX6OMvkRDKqNe+iwX//eiXem3v+1168TCPon
-         lsuxS27tXgP8K16fr4jyIRDtBMVCqD30Jn/uIVeXPo3EYHnm4yWSa7wZahjDKfazaqyj
-         Om/XQe7IDL/Xr70LFXCbpgkuKkFV6EgcVFCZ2wtvCgP53yooQ35QJBzttIDwsyEZ7vSJ
-         u75DmgAwIfF8pHZcs+jAiGOE63F6twpBUIr34S/f90iKzxHsrW7ywEVYP2MyTtPXitFW
-         GWfCFmE9FexxfAhv81e6ry1GPfTPfiucK2+kmzIueAOTTZRxDUOP3JFQ5XH3bZ9QS7C1
-         uzTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=IK4lJqQoYGpBp8uHlZ97YK53DvH9QrpYWwjau2wBtXo=;
-        b=OgPyMQItp14qeh2bdpOKgggkvba3DnYM4/cRzLAJb3u3luQPPvUcTZyy9LSEV1SUdK
-         29rzjWQI03bgQEtp8C3stID35Y9UtrK4tPZRNY1EmlPYIzRmJAG7bp8t7d+GFd/zv4T/
-         HR8brMBE2ZGBc43ASzgeTliGc1CHRq3VaROop7vH0UFNvHzi9LD6wRFD2nbcNZiOzsbr
-         WJNFT8Fk0r0EgpcOhFqa1KF6D5qsCCFpjcSotcjuYtfKoUjfw8MdTeNxEpUy1ljvkEAW
-         BzhWHqY4PQTMdozV2BUeVIUyfc/eCDL3q0zi08FU+Oeeb0Y369l4R5m1GAA+aS1zP8+x
-         vsJQ==
-X-Gm-Message-State: AOAM530IqimjYH9z6W1q8FdJslktwWh0DUPOInXcbEXBp1QpmHVjeuNy
-        X0G5AUy3GUgreZkb/pxFBVjO+dsETqATQQxbawU=
-X-Google-Smtp-Source: ABdhPJymHqInisdzQX82RbxjQ3Auii/LFBKv9EZ9tojZO1w62yUoXVY6UVPQqWvgI7UQ0q16c3DQO6OssA0PeGlHcY8=
-X-Received: by 2002:a5b:14a:: with SMTP id c10mr34050983ybp.586.1643189394485;
- Wed, 26 Jan 2022 01:29:54 -0800 (PST)
+        Wed, 26 Jan 2022 04:30:13 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id EEF6058044A;
+        Wed, 26 Jan 2022 04:30:12 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 26 Jan 2022 04:30:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=zmX5h2jV3EHx3yzNE12hU7F6WuB4iwZH2e1xCG
+        J9lzs=; b=XzCwmHYomZaj4oeGGDLIa5U9L4jNa4gHNnQze5oUFWo4p1T6gZoRBv
+        f0GTimCbIcNENLLJrWnzEhKr2q0tlR9XlXG/+vBA+mlvpKKPgqJ5FELbWuxM8L9p
+        7OG+mNvk34ScZ4RvGWzpXoOPWBDvd/0r6hOiCZjRGFycvLdxxvkO3NBEr122w/tk
+        I9hPL392fiPRPl0BCfwMi3CJy4iKyxn0ryyvOgLw0MzJGwEEjqpiXviEExKBuuaZ
+        oh7soEv74bhGF/H0+OJh6eVHmsmLQ/UPMChXra+6YKyf3RPq57uSg0Wnha6y1HiB
+        Mfb2I4YPyJouL390ZgV/j5SKhgovc2oA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=zmX5h2jV3EHx3yzNE
+        12hU7F6WuB4iwZH2e1xCGJ9lzs=; b=PG8tgOisD2oLuFl/GOdEAQv9cSlxtsGbn
+        qsy3UyDqykILHXZsMmBGTsSH7Y9SOsdYUjm1k2fITRdZ3l34QZjYTZ6y5WwbBGO9
+        2ot5b46otnvVGFvGJWXScvAh1Q6IZkzz93wl/pDJgwDkWZYfyWiCFUTw3tSLGrPO
+        GfgGYEBanxwZ/PnPpWkzFL5P691cWJcDJd/Fj3gTKrwAK9VukU0fbouwWUxb4y9d
+        IJ6kCpxX7ObSDXN4dfprBNhiWRfpGJWJGiqsyinaPXzw/7EPcD3wTGS+QGvxTQtx
+        x9+QCBxEfbvapaRuvMYVI2UmFp9x3vSEBEpUWOy8kC+QUE4cGG8nA==
+X-ME-Sender: <xms:oxTxYRzZwawrAUjoPg_qIwd37LDc53-NANfS3zcqqW3seesLcbCwlg>
+    <xme:oxTxYRS1Xm2WdQifiJJa-_2ac_YNz76T6spL4NwOUi4DWfBGCX9y-JyIi8uEynwsD
+    dBvFKIDDYITvg>
+X-ME-Received: <xmr:oxTxYbVp0-URbNATHgMFwMz10bTCN1BcoKsxUhzTu1-rEEjLcf9LrfUxMU6tyDj4rzJznSJiEuf6_Za0a7_J2v4Ov_6a7vYh>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfedugddtgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvffukfhfgggtuggjsehttdertd
+    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
+    ucggtffrrghtthgvrhhnpeevueehjefgfffgiedvudekvdektdelleelgefhleejieeuge
+    egveeuuddukedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:oxTxYTgMvHlsz3Nna5o3Te1JC5vmOWlXnVny60ws5sKN2NXhhjEfUA>
+    <xmx:oxTxYTBI79cBfAaK14fD4YI_KEblxua0qBwKgIrqoytGCiTgauiw6Q>
+    <xmx:oxTxYcJ445hJ8Kw2ejgG0O9xae5rYybhJUwiUvl2z0iYuTOF0U9l1A>
+    <xmx:pBTxYUtBQqC4XDTe8D-dzXYEdzEW1SCGwRTJT3lCr_bGo4Qu05lRkg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 26 Jan 2022 04:30:10 -0500 (EST)
+Date:   Wed, 26 Jan 2022 10:30:02 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, pure.logic@nexus-software.ie,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
+        quic_psodagud@quicinc.com, quic_satyap@quicinc.com,
+        quic_pheragu@quicinc.com, quic_rjendra@quicinc.com,
+        quic_sibis@quicinc.com, quic_saipraka@quicinc.com
+Subject: Re: [PATCH V4 3/6] soc: qcom: eud: Add driver support for Embedded
+ USB Debugger(EUD)
+Message-ID: <YfEUmuglZluWwsg2@kroah.com>
+References: <cover.1642768837.git.quic_schowdhu@quicinc.com>
+ <7ccee5ae484e6917f5838c8abde368680ec63d05.1642768837.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
-Reply-To: mrselodieantonie778@yahoo.com
-Sender: mrselodieantoine74@gmail.com
-Received: by 2002:a81:340e:0:0:0:0:0 with HTTP; Wed, 26 Jan 2022 01:29:53
- -0800 (PST)
-From:   Mrs Elodie Antoine <mrselodieatonie32@gmail.com>
-Date:   Wed, 26 Jan 2022 01:29:53 -0800
-X-Google-Sender-Auth: 4YIyM6J02fp3Q4dSWCdOP3SS0cs
-Message-ID: <CABsoprEJNDBrinCbQRoiYNwM+QfEOdTyG=WV5cV_mDLviQGcGg@mail.gmail.com>
-Subject: With due respect
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ccee5ae484e6917f5838c8abde368680ec63d05.1642768837.git.quic_schowdhu@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+On Fri, Jan 21, 2022 at 07:23:48PM +0530, Souradeep Chowdhury wrote:
+> Add support for control peripheral of EUD (Embedded USB Debugger) to
+> listen to events such as USB attach/detach, pet EUD to indicate software
+> is functional.Reusing the platform device kobj, sysfs entry 'enable' is
+> created to enable or disable EUD.
+> 
+> To enable the eud the following needs to be done
+> echo 1 > /sys/bus/platform/.../enable
+> 
+> To disable eud, following is the command
+> echo 0 > /sys/bus/platform/.../enable
+> 
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> ---
+>  Documentation/ABI/testing/sysfs-driver-eud |   9 ++
+>  drivers/soc/qcom/Kconfig                   |  10 ++
+>  drivers/soc/qcom/Makefile                  |   1 +
+>  drivers/soc/qcom/qcom_eud.c                | 250 +++++++++++++++++++++++++++++
 
-I Am Mrs Elodie Antoine. from west Africa i have a business deal to
-share with You the sum of 4.2 Million USD dollars that is been held
-in our Bank here in (B.O.A) bank of Africa the fund mentioned rightful
-belong to one of
-our late client who deposited the money in our bank here ever since he
-Died nobody have Been able to apply to claim the fund so I wish that
-you will come and Assume as his foreign business partner also note
-this business is risk Free not to be sacred or doubt is real please my
-dearest one also noted.
+This should go under drivers/usb/ as it's creating a USB generic
+user/kernel api that all future devices of this type must follow.
 
-This once we succeed in Transferring this fund to your wish provided
-account in your country it Will shared among us in agreement of 60%40
-i believe that after this Deal joy and happiness will be on or face's
-and family's please reply to me with your details so we can move on
-with this great plan.
+thanks,
 
-Kindly reply me
-
-Thanks and God bless you,
-
-Mrs Elodie Antoine
+greg k-h

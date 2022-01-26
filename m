@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 105BD49C45A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3C049C45B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237843AbiAZHcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 02:32:39 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:49127 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229609AbiAZHci (ORCPT
+        id S237855AbiAZHdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 02:33:20 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:5690 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229609AbiAZHdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 02:32:38 -0500
+        Wed, 26 Jan 2022 02:33:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643182358; x=1674718358;
+  t=1643182399; x=1674718399;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
   bh=nAIJndd1vdiivn4zJyhkEZRewXOP4fmLSOIajZEbyQs=;
-  b=iBehJWELZME5I0lyCvjdYKzsrgY5/vWU/RlOzvy5YC1u7rzgt3kFeppw
-   bdF8a+cE9RcNaRX+p3gqhzzcsXk+TvGwqHGEcxGBR1I/x2RLtKRvTEkn9
-   Z3n7azJHDengbkrzpN+kn+uIw33DM8IV+UEPJhMdFf3L5buz5cyruovRX
-   M=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 25 Jan 2022 23:32:38 -0800
+  b=GFKBMd7Z21wSrl/+gYO+TdnYD0gNsxJzqA1NlvvQjh+uTYHCTTMqxMU/
+   o4wik4duQpkf+2hJrX6/IqYwChoQtq6hNJNY1WD0APstB7dVw2KMzruzQ
+   MY+70KGBHVfmZytvGZSIX3g2H3wR8RaB1zZ7KdHNyKK3qSE4tpMHepCmf
+   I=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 25 Jan 2022 23:33:18 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 23:32:37 -0800
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 23:33:18 -0800
 Received: from [10.216.16.118] (10.80.80.8) by nasanex01c.na.qualcomm.com
  (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 25 Jan
- 2022 23:32:35 -0800
-Message-ID: <d130d56b-0560-af61-04dd-28e6f2081001@quicinc.com>
-Date:   Wed, 26 Jan 2022 13:02:32 +0530
+ 2022 23:33:16 -0800
+Message-ID: <278e7121-198d-2885-4b80-a33e9056f910@quicinc.com>
+Date:   Wed, 26 Jan 2022 13:03:13 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -54,7 +54,7 @@ In-Reply-To: <20220125202138.GS4285@paulmck-ThinkPad-P17-Gen-1>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01c.na.qualcomm.com (10.47.97.222)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E80F349C372
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC1249C373
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234834AbiAZGFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 01:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
+        id S235036AbiAZGFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 01:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbiAZGFU (ORCPT
+        with ESMTP id S234569AbiAZGFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Jan 2022 01:05:20 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E80C061747
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:19 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id c19so26335457qtx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:19 -0800 (PST)
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDF6C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:20 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id c19so26335477qtx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:05:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=R7V05PwaNjZnBTJ0+d7ZFZvO5dL9q1xRZty8VkA9hmQ=;
-        b=bYJUNPpR1cZ5cpCeIRGCfDxZJpYmpPoh66ZJK77ukWwzsfKXMtKjFR0oyDl2PrVsRW
-         IjZbI251p7s2yxGbyhaCpLtUYBe6eQ/H9o9djosXMfNCEvGwGBN+R0lcfbPMC5Cksznp
-         HzEoAy39YDsLI/M5Ax6D0T9dXeKhcoYrDGg62jHcw+RFE+cRQEohFqYIRggXfbAR09jh
-         c2sbLnBREwPZM/oV0w9qlL4dm7bHOUr+bSxvw/pnn/B3Aa/Q5IwY6gYNswVBk4dgWm/4
-         tybcJbilgAp6um5hCw1b5mXjM2VS1BA4dZTRuLQV21VwHvpW96HOLQcJFswBr1TlyuL5
-         O08Q==
+        bh=HOl6dnjRSlkzFWIwAEZQBaaOxfPRDLrxvpvmNPVil3I=;
+        b=jwFuMnHWqoNk8uXeaYsGmMgbTXTo5euHb6/esSzRi8Hx0i9wGtS6JDG3u8LGq6AmU4
+         eFdQHw+wFC2IAD7gAkutikIJJdEwF7jOdPz3HURvZDFMbhCd/ezSO9xcpJINsMjiXzM/
+         ux3ThHF0mwzLaaRsxHG+POu362xUihatB6ZiznsjtQ4fvhmMxxbd8YAbcJLjLQXGr+jW
+         KGJA/EIVl7kOjJRSIaFq3sieVyL0O4O64ErJ4CMN2OkScAJfguQeZMBZ0kmND05wNMNY
+         hqv9KmXfIvyrrebEnHTN4PTse2Py7UlyFStajrNbvPv+9NnRYJab498z0qxxx6Ztv/bY
+         Sltw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=R7V05PwaNjZnBTJ0+d7ZFZvO5dL9q1xRZty8VkA9hmQ=;
-        b=xWltCoQN9CeLcrx7VTr/vftGbbyCYz1AoqDeEyj33Z1QY2WSQz0GPjog7MHPTV5Jn9
-         GLLXPQUMg1rC+0fJdqD+ILep55LCY2YR2MwfIP6mg9HQSwcJ4TiKuK+iykHPGluKsUas
-         qMBU0qASJkzaMUGsWP+o02Wv+z9HFE6oeCDgEb6YwIdOgvDpC44J1TAATKpcG2y26Gi0
-         VMzASSZTW6GQ/vAQ7JwYcKjPCiDos298r6DuMEwjKbOJbpE+RRzPMZpw+JPfoZloQYW7
-         Y3ZWcqoW2xgBQaEblIlo7pRy6KdPiSwkGAd+ibmoL43eP8YE21yn/b6jf1pcEp8TA0iN
-         0h1w==
-X-Gm-Message-State: AOAM5308XwjutAChUAmFKNUtZRZjVOqYvmSiY220YyDYkZRDZrp2Fgwo
-        ipdC6GAxCaOkOK4w3tXSotFdXQ==
-X-Google-Smtp-Source: ABdhPJyGJu1wLWlwWE4gJcN7imPL+nBoU18Asvh3ix2RWYM+mVME0JOpFCDhcqGNLxudLxhV3f6eqg==
-X-Received: by 2002:a05:622a:43:: with SMTP id y3mr19448205qtw.347.1643177119022;
+        bh=HOl6dnjRSlkzFWIwAEZQBaaOxfPRDLrxvpvmNPVil3I=;
+        b=McniQ7QGRGCreQwOOZ+35kc3DNb5u/vyCm2VUeJsre+R0yr9dorexnkNClRq+YQc/0
+         KvEdRuwQnq8LF6NpOrQuOjkRQlchIfyeO7dvX2xw3HQE/XPtL4q/80awl8X05bAN9bAP
+         dgQkLM3AL2WFh5MeG07XEW3083DL/0Rot6lJLJ5cQoFbplvNR74yLldgmRC5fJlRYoRo
+         pIod7SPWcysYXUNP7b6ApBoGYN2QJ9J3x9rxD1uPJEmlKm0DcC42rZfUxyP8A8nsxH7p
+         p/XLF4IHUVYRloDutZjxvqLoKafH3xlVodT/iHw7/urPlUFudRTBYpdB56Vi7nLJ7TPn
+         WLYQ==
+X-Gm-Message-State: AOAM530qfWiaLWWwJyflqYvgyxqejuSmHmRe+/uf9embAcbNnWhL/ep8
+        jQkEK3W4p/eYEpFW9zxRvKFtHA==
+X-Google-Smtp-Source: ABdhPJxawlYifreSuisEPDkI9IQt+vr1qpvjrerAOfVLQ1Jx0TsXCwSpoyobPIpCZnLAgMF70g7lVg==
+X-Received: by 2002:ac8:5b01:: with SMTP id m1mr19121273qtw.360.1643177119921;
         Tue, 25 Jan 2022 22:05:19 -0800 (PST)
 Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
-        by smtp.gmail.com with ESMTPSA id o19sm9856699qta.40.2022.01.25.22.05.18
+        by smtp.gmail.com with ESMTPSA id o19sm9856699qta.40.2022.01.25.22.05.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 22:05:18 -0800 (PST)
+        Tue, 25 Jan 2022 22:05:19 -0800 (PST)
 From:   Pasha Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, rientjes@google.com,
@@ -57,9 +57,9 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
         songmuchun@bytedance.com, qydwhotmail@gmail.com, hughd@google.com,
         ziy@nvidia.com, anshuman.khandual@arm.com
-Subject: [PATCH v3 2/4] mm/page_table_check: use unsigned long for page counters and cleanup
-Date:   Wed, 26 Jan 2022 06:05:12 +0000
-Message-Id: <20220126060514.1574935-3-pasha.tatashin@soleen.com>
+Subject: [PATCH v3 3/4] mm/khugepaged: unify collapse pmd clear, flush and free
+Date:   Wed, 26 Jan 2022 06:05:13 +0000
+Message-Id: <20220126060514.1574935-4-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 In-Reply-To: <20220126060514.1574935-1-pasha.tatashin@soleen.com>
 References: <20220126060514.1574935-1-pasha.tatashin@soleen.com>
@@ -69,111 +69,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the consistency, use "unsigned long" for all page counters.
+Unify the code that flushes, clears pmd entry, and frees the PTE table
+level into a new function collapse_and_free_pmd().
 
-Also, reduce code duplication by calling
-__page_table_check_*_clear() from __page_table_check_*_set() functions.
+This clean-up is useful as in the next patch we will add another call to
+this function to iterate through PTE prior to freeing the level for page
+table check.
 
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Reviewed-by: Wei Xu <weixugc@google.com>
 ---
- mm/page_table_check.c | 35 +++++++----------------------------
- 1 file changed, 7 insertions(+), 28 deletions(-)
+ mm/khugepaged.c | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-index 7504e7caa2a1..c61d7ebe13b1 100644
---- a/mm/page_table_check.c
-+++ b/mm/page_table_check.c
-@@ -86,8 +86,8 @@ static void page_table_check_clear(struct mm_struct *mm, unsigned long addr,
- {
- 	struct page_ext *page_ext;
- 	struct page *page;
-+	unsigned long i;
- 	bool anon;
--	int i;
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 35f14d0a00a6..440112355ffe 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1416,6 +1416,17 @@ static int khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
+ 	return 0;
+ }
  
- 	if (!pfn_valid(pfn))
- 		return;
-@@ -121,8 +121,8 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
- {
- 	struct page_ext *page_ext;
- 	struct page *page;
-+	unsigned long i;
- 	bool anon;
--	int i;
++static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *vma,
++				  unsigned long addr, pmd_t *pmdp)
++{
++	spinlock_t *ptl = pmd_lock(vma->vm_mm, pmdp);
++	pmd_t pmd = pmdp_collapse_flush(vma, addr, pmdp);
++
++	spin_unlock(ptl);
++	mm_dec_nr_ptes(mm);
++	pte_free(mm, pmd_pgtable(pmd));
++}
++
+ /**
+  * collapse_pte_mapped_thp - Try to collapse a pte-mapped THP for mm at
+  * address haddr.
+@@ -1433,7 +1444,7 @@ void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
+ 	struct vm_area_struct *vma = find_vma(mm, haddr);
+ 	struct page *hpage;
+ 	pte_t *start_pte, *pte;
+-	pmd_t *pmd, _pmd;
++	pmd_t *pmd;
+ 	spinlock_t *ptl;
+ 	int count = 0;
+ 	int i;
+@@ -1509,12 +1520,7 @@ void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
+ 	}
  
- 	if (!pfn_valid(pfn))
- 		return;
-@@ -152,10 +152,10 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
- void __page_table_check_zero(struct page *page, unsigned int order)
- {
- 	struct page_ext *page_ext = lookup_page_ext(page);
--	int i;
-+	unsigned long i;
- 
- 	BUG_ON(!page_ext);
--	for (i = 0; i < (1 << order); i++) {
-+	for (i = 0; i < (1ul << order); i++) {
- 		struct page_table_check *ptc = get_page_table_check(page_ext);
- 
- 		BUG_ON(atomic_read(&ptc->anon_map_count));
-@@ -206,17 +206,10 @@ EXPORT_SYMBOL(__page_table_check_pud_clear);
- void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
- 				pte_t *ptep, pte_t pte)
- {
--	pte_t old_pte;
+ 	/* step 4: collapse pmd */
+-	ptl = pmd_lock(vma->vm_mm, pmd);
+-	_pmd = pmdp_collapse_flush(vma, haddr, pmd);
+-	spin_unlock(ptl);
+-	mm_dec_nr_ptes(mm);
+-	pte_free(mm, pmd_pgtable(_pmd));
 -
- 	if (&init_mm == mm)
- 		return;
++	collapse_and_free_pmd(mm, vma, haddr, pmd);
+ drop_hpage:
+ 	unlock_page(hpage);
+ 	put_page(hpage);
+@@ -1552,7 +1558,7 @@ static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
+ 	struct vm_area_struct *vma;
+ 	struct mm_struct *mm;
+ 	unsigned long addr;
+-	pmd_t *pmd, _pmd;
++	pmd_t *pmd;
  
--	old_pte = *ptep;
--	if (pte_user_accessible_page(old_pte)) {
--		page_table_check_clear(mm, addr, pte_pfn(old_pte),
--				       PAGE_SIZE >> PAGE_SHIFT);
--	}
--
-+	__page_table_check_pte_clear(mm, addr, *ptep);
- 	if (pte_user_accessible_page(pte)) {
- 		page_table_check_set(mm, addr, pte_pfn(pte),
- 				     PAGE_SIZE >> PAGE_SHIFT,
-@@ -228,17 +221,10 @@ EXPORT_SYMBOL(__page_table_check_pte_set);
- void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
- 				pmd_t *pmdp, pmd_t pmd)
- {
--	pmd_t old_pmd;
--
- 	if (&init_mm == mm)
- 		return;
- 
--	old_pmd = *pmdp;
--	if (pmd_user_accessible_page(old_pmd)) {
--		page_table_check_clear(mm, addr, pmd_pfn(old_pmd),
--				       PMD_PAGE_SIZE >> PAGE_SHIFT);
--	}
--
-+	__page_table_check_pmd_clear(mm, addr, *pmdp);
- 	if (pmd_user_accessible_page(pmd)) {
- 		page_table_check_set(mm, addr, pmd_pfn(pmd),
- 				     PMD_PAGE_SIZE >> PAGE_SHIFT,
-@@ -250,17 +236,10 @@ EXPORT_SYMBOL(__page_table_check_pmd_set);
- void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
- 				pud_t *pudp, pud_t pud)
- {
--	pud_t old_pud;
--
- 	if (&init_mm == mm)
- 		return;
- 
--	old_pud = *pudp;
--	if (pud_user_accessible_page(old_pud)) {
--		page_table_check_clear(mm, addr, pud_pfn(old_pud),
--				       PUD_PAGE_SIZE >> PAGE_SHIFT);
--	}
--
-+	__page_table_check_pud_clear(mm, addr, *pudp);
- 	if (pud_user_accessible_page(pud)) {
- 		page_table_check_set(mm, addr, pud_pfn(pud),
- 				     PUD_PAGE_SIZE >> PAGE_SHIFT,
+ 	i_mmap_lock_write(mapping);
+ 	vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
+@@ -1591,14 +1597,8 @@ static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
+ 		 * reverse order. Trylock is a way to avoid deadlock.
+ 		 */
+ 		if (mmap_write_trylock(mm)) {
+-			if (!khugepaged_test_exit(mm)) {
+-				spinlock_t *ptl = pmd_lock(mm, pmd);
+-				/* assume page table is clear */
+-				_pmd = pmdp_collapse_flush(vma, addr, pmd);
+-				spin_unlock(ptl);
+-				mm_dec_nr_ptes(mm);
+-				pte_free(mm, pmd_pgtable(_pmd));
+-			}
++			if (!khugepaged_test_exit(mm))
++				collapse_and_free_pmd(mm, vma, addr, pmd);
+ 			mmap_write_unlock(mm);
+ 		} else {
+ 			/* Try again later */
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

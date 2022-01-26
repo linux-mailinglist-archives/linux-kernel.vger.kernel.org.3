@@ -2,93 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B33D49CEB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C0749CEBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242990AbiAZPhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
+        id S243004AbiAZPiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242989AbiAZPhC (ORCPT
+        with ESMTP id S236156AbiAZPiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:37:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA15AC06161C;
-        Wed, 26 Jan 2022 07:37:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 830D1B81A00;
-        Wed, 26 Jan 2022 15:37:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD180C340E3;
-        Wed, 26 Jan 2022 15:36:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643211420;
-        bh=hNOKklvlwxJZmyMa/W1F50My2/RcSPvGhMZ8nBY8rXk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=a7LYtmTn1Ixx/Fo0nsIspm48/FpMqc7WLCEnRJXxEzbRRYn2ue6oY9XDL2hX0JdXk
-         nSeQ/GpeujgEgvuCBZz6B3AFD55nqN/gtfT/wEZpHt48k/SjwM+L0Cz84a6ghfoOEJ
-         XqAiGOS/2GXKvD2YyPSMczrUj8TPwZiFaMtX+qTLSGe+hC2rximJFNtaHouk1PG86Q
-         ozmUko7St0lfBCgs3AWLdO+qjlEJkIG0PJsYDJr3MNQemuy+nqesuUIpfTVKkORw8d
-         bu6HaY+ufA9gCIQzMgveg702W/kfs8O5Mm8TSaEEqG0zKWVqReyblQNqybl89vZv7t
-         nwJRjou4JUfrQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, guochun.mao@mediatek.com
-Cc:     srv_heupstream@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Bin Zhang <bin.zhang@mediatek.com>,
-        project_global_chrome_upstream_group@mediatek.com,
-        kernel test robot <lkp@intel.com>,
-        Bayi Cheng <bayi.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chuanhong Guo <gch981213@gmail.com>
-In-Reply-To: <20220126091159.27513-1-guochun.mao@mediatek.com>
-References: <20220126091159.27513-1-guochun.mao@mediatek.com>
-Subject: Re: [PATCH] spi: spi-mtk-nor: make some internal variables static
-Message-Id: <164321141754.490431.3020669404541003433.b4-ty@kernel.org>
-Date:   Wed, 26 Jan 2022 15:36:57 +0000
+        Wed, 26 Jan 2022 10:38:16 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3ECC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:38:15 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id d18so10071228plg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:38:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ro5pH9vIpkOFLnJg2Q47tpqXtWuHwH7MahTsVAJomkE=;
+        b=de752mf3ztrZpRPGpoGMqFHIHfB/wtWnXWQ1WtrL9Cl1Up+oyieGhM3VGkdRlq8gZx
+         UzBgn77zr17htZUyaRQeUwbRi3E7oV6zCn5+H1sa1541iRFTEKnXzSREKHwaL57vzGlg
+         /MKTestN1mecRyIevbXMI9wFnwGyM3qFQHTSF0so51mUqX7Gi9k7XWCAqmAjSmt/wxTj
+         YQqqfuN5RdoiVmT7QhEoG9zB043tqm0ytaCPbBvFGt4LQ96DYp2OK1icVqIepv3F3oLL
+         UvzSa/78WNhVMY9WoHTklxcgXtJGYe6o82DhNZB2JcOWThITmEdtzj66PcWo+7+Vi7fp
+         QcEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ro5pH9vIpkOFLnJg2Q47tpqXtWuHwH7MahTsVAJomkE=;
+        b=PGGqfGzyiSV1NQ92OewnNT/rNyehYI9ZY6aUTvpilriCwtL01CwQl286uSzcN91R4D
+         BKGlCM1BDDgJEeGUFD609Q2SRBukTMgMHx5Xv77p/MHyKmCnZqH/gLfNf/aeG6ccN3xp
+         MQAzKIoTq1a+qhbZq7WxcKxgT0NmxSjFaTpRVvXuIlUJCNyCfqXyHJjHOMZw3K6dr5UN
+         qY6ZdG3XCy4PkCj6erCwARYFSMt1RQFPk2Cyl1i9wNmhX1hpiuDj53TlAy226BFbZPFw
+         ImFPIjhN6p1QV+jbGbaytWm9utlkE6ACW634Mz+6sWNlUg0Kf4uqQLC+kqLO7tw8Y5FU
+         oPAg==
+X-Gm-Message-State: AOAM531hntzmJGUGOyNZaDLCvF+KTr5EqYyfkSSFuw5uOUyCZj0vLHZQ
+        //cfsOSSVgeXDVIh5NNUrS6SQzbBAMLGku64lza5Bg==
+X-Google-Smtp-Source: ABdhPJzEEGeg4rGOdkO9X2q18hUxteEKmNYUi6ccIY2PKHTbND7OSVYkwmld6Ar5fLOaA9UOMpwyHscEZH2AEQXL9VA=
+X-Received: by 2002:a17:90a:640e:: with SMTP id g14mr9266859pjj.8.1643211495352;
+ Wed, 26 Jan 2022 07:38:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <202201250055.R82EBqL1-lkp@intel.com>
+In-Reply-To: <202201250055.R82EBqL1-lkp@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 26 Jan 2022 07:38:04 -0800
+Message-ID: <CAPcyv4iRMYx4kQci2Um=NvsizqVhHTNZiCVbfL18U=ZMX5xm3w@mail.gmail.com>
+Subject: Re: [cxl:preview 30/54] drivers/cxl/core/port.c:527
+ decoder_populate_targets() warn: inconsistent returns '&cxld->target_lock.lock'.
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, kbuild test robot <lkp@intel.com>,
+        kbuild-all@lists.01.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 17:11:59 +0800, guochun.mao@mediatek.com wrote:
-> From: Guochun Mao <guochun.mao@mediatek.com>
-> 
-> Variables mtk_nor_caps_mt8173, mtk_nor_caps_mt8186 and
-> mtk_nor_caps_mt8192 are not declared.
-> Make them static.
-> 
-> 
-> [...]
+On Wed, Jan 26, 2022 at 2:09 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
+> head:   d0687472d5b56e2018b833723082c2717e96c074
+> commit: a5d24e660f35f16cfe30031dcbd7356f7a002398 [30/54] cxl/core/port: Use dedicated lock for decoder target list
+> config: s390-randconfig-m031-20220120 (https://download.01.org/0day-ci/archive/20220125/202201250055.R82EBqL1-lkp@intel.com/config)
+> compiler: s390-linux-gcc (GCC) 11.2.0
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>
+> smatch warnings:
+> drivers/cxl/core/port.c:527 decoder_populate_targets() warn: inconsistent returns '&cxld->target_lock.lock'.
 
-Applied to
+This report is too late. The branch was posted on the 22nd. The bug
+was already found and fixed manually:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: spi-mtk-nor: make some internal variables static
-      commit: 474fc2e6395d62758e80b9ea65f61339296355fc
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+https://lore.kernel.org/r/164316562430.3437160.122223070771602475.stgit@dwillia2-desk3.amr.corp.intel.com

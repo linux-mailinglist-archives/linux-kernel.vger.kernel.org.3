@@ -2,237 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5594549CB0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AFE49CB0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240643AbiAZNlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:41:39 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:39293 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231417AbiAZNlh (ORCPT
+        id S240555AbiAZNmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:42:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231417AbiAZNmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:41:37 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3C9B95801EE;
-        Wed, 26 Jan 2022 08:41:36 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 26 Jan 2022 08:41:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=b6iL1K2h3uSTLekyPz1hyUnMBJ7XuWG/MXCQRm
-        uRNRs=; b=cyZF1hviFaVMW4qEhSwLp14iyu5HsnnGTS1iAcaLLDynWllB1UpZJi
-        LZnt1vAITfvEpQJd+pdnnfaGRQB1dJhdL15yReqOtorz+bmN1toG5rqhVBzQUFxn
-        ZEogl4LAma/5RBq3+uePt+/MtDjKfH4llzblbInHmGXQtLpRlc048UMiNVjXw+/y
-        8w+JI3dr0OTIKYwAIZSlpNrXXTGsTYmP0uglLCmZysBodAIhVQHhvLUIAcNnFMfV
-        Zhycj2k/q4TcD9Alc4WoI/XqmUZOBgnyildkzajLHqsmhtUZHUI6OhVf84VbJmVr
-        V9NbMHTHqv2f9HOg/zNQRmc0ePmPNJfA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=b6iL1K2h3uSTLekyP
-        z1hyUnMBJ7XuWG/MXCQRmuRNRs=; b=eyZKEwhOfQexbdKq0S+1jzcaP8UPpzYJ5
-        oTqtBccbwFg8hIQA3K6IacbE0FJbw0DnU3as1JlFxnB08ED0vAyhgnm/GwWgvZC5
-        o0f+JyqZ91Gs9cJ9UoqYxzQ0o47/ziTRtsw7Yao/qQItuzwP0MKG9zGCiST4FYc7
-        z00iOt+uPh8hgyG5qDiKPgj9hliLA6loFUMFNlCZ8s7cNU7CaVz6CL+Be/bP9dVo
-        qqUI/N/l+3FGM6Q1qH8YzLYJS7Uh7eiTHSfW8vIv0gCyZIawLtASNfQy0Q2mAadI
-        lWdU5fKqBV9s29aMWsP5+sgA+lDMBxeBwgdv6pGwvEiC9CdtOM1hA==
-X-ME-Sender: <xms:j0_xYZ0xsUPL2QNymUGxBwzJq_iH-ASdBLceETpcPBlciGtB9n_RRg>
-    <xme:j0_xYQFKty-knV0hLhykpTlm3-CRydrs4jJmV9hz4s06wbF92VXkV-49akykLP6Pw
-    vFHvuhkeTYDzQ>
-X-ME-Received: <xmr:j0_xYZ7A0wvgM04yorZuZiDQ_KvB5c8YsnAq7OSHDH_qJ7Ck5BGgL1aeJJkFzncHWpWu9UBgO2f9CQ7vLc2VZS1oU18mpr4p>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfedugdehhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuheejgf
-    ffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
-    gtohhm
-X-ME-Proxy: <xmx:j0_xYW1jwiK94xxT3b5wSQK6QLJyFdwFFYGNrQT01kYMHF9IF6JacQ>
-    <xmx:j0_xYcEH2Nyg0mskg_ERQUrW_FQFAHQNXNKpavlfdtNxUvR1tOKCDA>
-    <xmx:j0_xYX9PxSMkWKR1j3jN9QgSJooQCYTX_20T8InWHYawiNpXe9AUxQ>
-    <xmx:kE_xYfZfkzLFgNgwReF6SuGyXYf6oHer-Cx77zoPpUR2rC_MCY6lLQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 26 Jan 2022 08:41:35 -0500 (EST)
-Date:   Wed, 26 Jan 2022 14:41:32 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        John Stultz <john.stultz@linaro.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v12 2/5] tty: goldfish: introduce
- gf_ioread32()/gf_iowrite32()
-Message-ID: <YfFPjOEELiTWr2uj@kroah.com>
-References: <20220121200738.2577697-1-laurent@vivier.eu>
- <20220121200738.2577697-3-laurent@vivier.eu>
+        Wed, 26 Jan 2022 08:42:17 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE08C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:42:16 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id a28so32973229lfl.7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:42:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Alc8oEV5YDVD8wUXku55TL6Eo0GDfRno/HSGsO5a5G0=;
+        b=ccIXkZTbmVbS5oHJZvDnte715BIEU630afKo6hLkstHyy76syUo+6c1PKybn7G0wgS
+         8nTdLVy596xTsQurfMO3Cp1LqlQMuKeQYlWjaviNG3yhDmO/NjmKXSNl1lzKJ112cz0a
+         114c5gNmTDhdvKNNfxPaZFh2An5EbGroo6Oay6AEL2BZKFzjI9wetSY7tCdBPrG+DC2g
+         ntGdAiE6WJGZEI8tKaAXaNlFBEfKPIGxjX8TsV0e9PfSovYTObcHihO4pmlo0jDfJeBZ
+         8N3lvagsb8RrTX+IHC/XO34LdBLqUMET3mgtxNCSNNtJvLuO1PcPOuerJfniBLkjebx9
+         YRDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Alc8oEV5YDVD8wUXku55TL6Eo0GDfRno/HSGsO5a5G0=;
+        b=SBv3CSR3LZS0aTpDk1ytf4GLLDYUXf+mbNrRUxX8rIOl6qPsapyzRfWeX2u8a8Yt6t
+         F4mkyRwX0J5A1T9yXiqcaDSv86n1W6+QRyk+tCJcL9xF//N8/gbYUJAZrW8tKpPnKQa1
+         wpD2brnDZks7v0eU8SOfrt94MRxSoapBmboxLmrN/62bLs6gjqd0MH/5L7cxl+PDZxeR
+         EfPztEoHzuO0QCpvloZQYRtFC3Sk9iMraNkYklXiytWfbCfF4cMUgnLiRFl2UDJlTgT3
+         +DtvRbQdd0rSo/1+DFO7FrPSVVxPSErlCyq+OiXEyteHU9xrEt1DYQuN34UTtJqKKra0
+         76WQ==
+X-Gm-Message-State: AOAM532cw8XYF1o4+/hpz2Uf52orCZE+c+E5NKegJi5EcOiKE7rPNRIs
+        bZLHFoWFvvo4vv9/zcfPc/G2oA==
+X-Google-Smtp-Source: ABdhPJytZbSzXvdmITmfj9YLbyBXILQ/6yBAYZJlxO9L46JVZHO0xyL3H2Xktijp9xq98vZzaUD5+Q==
+X-Received: by 2002:a05:6512:1116:: with SMTP id l22mr10659161lfg.229.1643204535314;
+        Wed, 26 Jan 2022 05:42:15 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id y22sm608299lji.129.2022.01.26.05.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 05:42:14 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 42AE1104818; Wed, 26 Jan 2022 16:42:47 +0300 (+03)
+Date:   Wed, 26 Jan 2022 16:42:47 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
+        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
+        david@redhat.com, rppt@kernel.org, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
+Message-ID: <20220126134247.fadtwbvyknh3ejpe@box.shutemov.name>
+References: <cover.1642526745.git.khalid.aziz@oracle.com>
+ <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
+ <Ye/5yUyEqO0ws0G5@casper.infradead.org>
+ <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
+ <YfAEqzTeBJSIOKcA@casper.infradead.org>
+ <20220125185705.wf7p2l77vggipfry@box.shutemov.name>
+ <YfBIpmxvc0+mFByf@casper.infradead.org>
+ <YfDIYKygRHX4RIri@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121200738.2577697-3-laurent@vivier.eu>
+In-Reply-To: <YfDIYKygRHX4RIri@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 09:07:35PM +0100, Laurent Vivier wrote:
-> Revert
-> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
-
-Why?
-
-> and define gf_ioread32()/gf_iowrite32() to be able to use accessors
-> defined by the architecture.
-
-What does this do?
-
+On Wed, Jan 26, 2022 at 04:04:48AM +0000, Matthew Wilcox wrote:
+> On Tue, Jan 25, 2022 at 06:59:50PM +0000, Matthew Wilcox wrote:
+> > On Tue, Jan 25, 2022 at 09:57:05PM +0300, Kirill A. Shutemov wrote:
+> > > On Tue, Jan 25, 2022 at 02:09:47PM +0000, Matthew Wilcox wrote:
+> > > > > I think zero-API approach (plus madvise() hints to tweak it) is worth
+> > > > > considering.
+> > > > 
+> > > > I think the zero-API approach actually misses out on a lot of
+> > > > possibilities that the mshare() approach offers.  For example, mshare()
+> > > > allows you to mmap() many small files in the shared region -- you
+> > > > can't do that with zeroAPI.
+> > > 
+> > > Do you consider a use-case for many small files to be common? I would
+> > > think that the main consumer of the feature to be mmap of huge files.
+> > > And in this case zero enabling burden on userspace side sounds like a
+> > > sweet deal.
+> > 
+> > mmap() of huge files is certainly the Oracle use-case.  With occasional
+> > funny business like mprotect() of a single page in the middle of a 1GB
+> > hugepage.
 > 
-> Cc: stable@vger.kernel.org # v5.11+
-> Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
-> ---
->  drivers/tty/goldfish.c   | 20 ++++++++++----------
->  include/linux/goldfish.h | 15 +++++++++++----
->  2 files changed, 21 insertions(+), 14 deletions(-)
+> Bill and I were talking about this earlier and realised that this is
+> the key point.  There's a requirement that when one process mprotects
+> a page that it gets protected in all processes.  You can't do that
+> without *some* API because that's different behaviour than any existing
+> API would produce.
+
+"hurr, durr, we are Oracle" :P
+
+Sounds like a very niche requirement. I doubt there will more than single
+digit user count for the feature. Maybe only the DB.
+
+> So how about something like this ...
 > 
-> diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
-> index 5ed19a9857ad..10c13b93ed52 100644
-> --- a/drivers/tty/goldfish.c
-> +++ b/drivers/tty/goldfish.c
-> @@ -61,13 +61,13 @@ static void do_rw_io(struct goldfish_tty *qtty,
->  	spin_lock_irqsave(&qtty->lock, irq_flags);
->  	gf_write_ptr((void *)address, base + GOLDFISH_TTY_REG_DATA_PTR,
->  		     base + GOLDFISH_TTY_REG_DATA_PTR_HIGH);
-> -	__raw_writel(count, base + GOLDFISH_TTY_REG_DATA_LEN);
-> +	gf_iowrite32(count, base + GOLDFISH_TTY_REG_DATA_LEN);
->  
->  	if (is_write)
-> -		__raw_writel(GOLDFISH_TTY_CMD_WRITE_BUFFER,
-> +		gf_iowrite32(GOLDFISH_TTY_CMD_WRITE_BUFFER,
->  		       base + GOLDFISH_TTY_REG_CMD);
->  	else
-> -		__raw_writel(GOLDFISH_TTY_CMD_READ_BUFFER,
-> +		gf_iowrite32(GOLDFISH_TTY_CMD_READ_BUFFER,
->  		       base + GOLDFISH_TTY_REG_CMD);
->  
->  	spin_unlock_irqrestore(&qtty->lock, irq_flags);
-> @@ -142,7 +142,7 @@ static irqreturn_t goldfish_tty_interrupt(int irq, void *dev_id)
->  	unsigned char *buf;
->  	u32 count;
->  
-> -	count = __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
-> +	count = gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
->  	if (count == 0)
->  		return IRQ_NONE;
->  
-> @@ -159,7 +159,7 @@ static int goldfish_tty_activate(struct tty_port *port, struct tty_struct *tty)
->  {
->  	struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
->  									port);
-> -	__raw_writel(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
-> +	gf_iowrite32(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
->  	return 0;
->  }
->  
-> @@ -167,7 +167,7 @@ static void goldfish_tty_shutdown(struct tty_port *port)
->  {
->  	struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
->  									port);
-> -	__raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
-> +	gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
->  }
->  
->  static int goldfish_tty_open(struct tty_struct *tty, struct file *filp)
-> @@ -202,7 +202,7 @@ static unsigned int goldfish_tty_chars_in_buffer(struct tty_struct *tty)
->  {
->  	struct goldfish_tty *qtty = &goldfish_ttys[tty->index];
->  	void __iomem *base = qtty->base;
-> -	return __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
-> +	return gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
->  }
->  
->  static void goldfish_tty_console_write(struct console *co, const char *b,
-> @@ -355,7 +355,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
->  	 * on Ranchu emulator (qemu2) returns 1 here and
->  	 * driver will use physical addresses.
->  	 */
-> -	qtty->version = __raw_readl(base + GOLDFISH_TTY_REG_VERSION);
-> +	qtty->version = gf_ioread32(base + GOLDFISH_TTY_REG_VERSION);
->  
->  	/*
->  	 * Goldfish TTY device on Ranchu emulator (qemu2)
-> @@ -374,7 +374,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> -	__raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
-> +	gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
->  
->  	ret = request_irq(irq, goldfish_tty_interrupt, IRQF_SHARED,
->  			  "goldfish_tty", qtty);
-> @@ -436,7 +436,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
->  #ifdef CONFIG_GOLDFISH_TTY_EARLY_CONSOLE
->  static void gf_early_console_putchar(struct uart_port *port, int ch)
->  {
-> -	__raw_writel(ch, port->membase);
-> +	gf_iowrite32(ch, port->membase);
->  }
->  
->  static void gf_early_write(struct console *con, const char *s, unsigned int n)
-> diff --git a/include/linux/goldfish.h b/include/linux/goldfish.h
-> index 12be1601fd84..bcc17f95b906 100644
-> --- a/include/linux/goldfish.h
-> +++ b/include/linux/goldfish.h
-> @@ -8,14 +8,21 @@
->  
->  /* Helpers for Goldfish virtual platform */
->  
-> +#ifndef gf_ioread32
-> +#define gf_ioread32 ioread32
-> +#endif
-> +#ifndef gf_iowrite32
-> +#define gf_iowrite32 iowrite32
-> +#endif
-> +
->  static inline void gf_write_ptr(const void *ptr, void __iomem *portl,
->  				void __iomem *porth)
->  {
->  	const unsigned long addr = (unsigned long)ptr;
->  
-> -	__raw_writel(lower_32_bits(addr), portl);
-> +	gf_iowrite32(lower_32_bits(addr), portl);
->  #ifdef CONFIG_64BIT
-> -	__raw_writel(upper_32_bits(addr), porth);
-> +	gf_iowrite32(upper_32_bits(addr), porth);
->  #endif
->  }
->  
-> @@ -23,9 +30,9 @@ static inline void gf_write_dma_addr(const dma_addr_t addr,
->  				     void __iomem *portl,
->  				     void __iomem *porth)
->  {
-> -	__raw_writel(lower_32_bits(addr), portl);
-> +	gf_iowrite32(lower_32_bits(addr), portl);
->  #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-> -	__raw_writel(upper_32_bits(addr), porth);
-> +	gf_iowrite32(upper_32_bits(addr), porth);
->  #endif
->  }
->  
-> -- 
-> 2.34.1
+> int mcreate(const char *name, int flags, mode_t mode);
 > 
+> creates a new mm_struct with a refcount of 2.  returns an fd (one
+> of the two refcounts) and creates a name for it (inside msharefs,
+> holds the other refcount).
+> 
+> You can then mmap() that fd to attach it to a chunk of your address
+> space.  Once attached, you can start to populate it by calling
+> mmap() and specifying an address inside the attached mm as the first
+> argument to mmap().
 
-This feels like a step backwards.  Why keep this level of indirection
-for no good reason?
+That is not what mmap() would normally do to an existing mapping. So it
+requires special treatment.
 
-thanks,
+In general mmap() of a mm_struct scares me. I can't wrap my head around
+implications.
 
-greg k-h
+Like how does it work on fork()?
+
+How accounting works? What happens on OOM?
+
+What prevents creating loops, like mapping a mm_struct inside itself?
+
+What mremap()/munmap() do to such mapping? Will it affect mapping of
+mm_struct or will it target mapping inside the mm_sturct?
+
+Maybe it just didn't clicked for me, I donno.
+
+> Maybe mcreate() is just a library call, and it's really a thin wrapper
+> around open() that happens to know where msharefs is mounted.
+
+-- 
+ Kirill A. Shutemov

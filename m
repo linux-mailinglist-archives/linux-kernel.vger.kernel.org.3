@@ -2,205 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 774B349D455
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5DE49D45A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbiAZVNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:13:21 -0500
-Received: from mx1.mailbun.net ([170.39.20.100]:42884 "EHLO mx1.mailbun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231972AbiAZVNU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:13:20 -0500
-Received: from [2607:fb90:d98b:8818:5079:94eb:24d5:e5c3] (unknown [172.58.104.31])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S232191AbiAZVPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:15:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33396 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231972AbiAZVPm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 16:15:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: ariadne@dereferenced.org)
-        by mx1.mailbun.net (Postfix) with ESMTPSA id D9D0A1029F2;
-        Wed, 26 Jan 2022 21:13:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dereferenced.org;
-        s=mailbun; t=1643231597;
-        bh=GAOjAJ3c30htNr0VwlzMoqZwg5WqFiJEH15Vi5OoL+Q=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References;
-        b=UNQIecEH29ceagkeWm6bKihu3Lpy/5kLi990DINx2gyiOSiZbQkIhzYmgNKDmVhY7
-         miG8KgMN1LXxMUyOPBpLYhWjzzvm23JLXpavmBmtfm8oQQU/x/xCC8B0hrTz/IaqGB
-         LvldT20qUgrU+uxRTPljXjoI6uoE5HHv0Ujx37FgaYe1WKk7dAkj5e68/13FbDdwi8
-         XAOX+zwkipY2h107RtBOe33EON66RGQzx+BxUdyPSGCk6CQXKLdhkT8EiyFzj3TUb8
-         ow2wxnj6B5sXPs2cIDgd53j3/QG6jkIWfh3LxvKYg7BCXrbZyPH5Fc2IQkpp4nU0dd
-         koD5bIfIexd/Q==
-Date:   Wed, 26 Jan 2022 15:13:10 -0600 (CST)
-From:   Ariadne Conill <ariadne@dereferenced.org>
-To:     Kees Cook <keescook@chromium.org>
-cc:     Ariadne Conill <ariadne@dereferenced.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
- do_execveat_common()
-In-Reply-To: <202201261239.CB5D7C991A@keescook>
-Message-ID: <5e963fab-88d4-2039-1cf4-6661e9bd16b@dereferenced.org>
-References: <20220126114447.25776-1-ariadne@dereferenced.org> <202201261202.EC027EB@keescook> <a8fef39-27bf-b25f-7cfe-21782a8d3132@dereferenced.org> <202201261239.CB5D7C991A@keescook>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3C6D618F7;
+        Wed, 26 Jan 2022 21:15:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735EFC340E3;
+        Wed, 26 Jan 2022 21:15:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643231741;
+        bh=+oLnZtSI8dddOBQjaBwc8Q/h+jSV2Nk8fuLnk0XsSTI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=nPL2z4riCty70L9CcXtXNPiwRqzMIbiTtaqCqVvQRb5vgfrmnHizwzZiGBq679OqV
+         Dhy391sF8irk9+TH1CJVbNM2FfgFLD9kQYRT4U8TAQOl6hYegoohzYk8FNYUoB7Gs+
+         hGKWy89kXTV5SgERhTer0cqieKLGvfZMddoFEr21N9kikGVk/JayEcmMyDcXrcXRk0
+         DLM6y0/iepOTa5CQH8a1bGS55HVpALNhGLCuF/MCzbncH3dEfRlGmVk5ieeNhG5nZg
+         /BOVem9bUtJBRe8PCPnQaT7aVFOu7TlCgZPem+DXhQZeN4kV5e7JAQkqRyxINQV/s3
+         kaDuw4EP3SNXA==
+Message-ID: <a75a4ece0cf5be7fc8000943f43eb82613c98b6e.camel@kernel.org>
+Subject: Re: [PATCH] security, lsm: dentry_init_security() Handle multi LSM
+ registration
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Vivek Goyal <vgoyal@redhat.com>,
+        linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org, ceph-devel@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Stephen Muth <smuth4@gmail.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Date:   Wed, 26 Jan 2022 16:15:39 -0500
+In-Reply-To: <YfGwggaTu8imJ0uc@redhat.com>
+References: <YfGwggaTu8imJ0uc@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, 26 Jan 2022, Kees Cook wrote:
-
-> On Wed, Jan 26, 2022 at 02:23:59PM -0600, Ariadne Conill wrote:
->> Hi,
->>
->> On Wed, 26 Jan 2022, Kees Cook wrote:
->>
->>> On Wed, Jan 26, 2022 at 11:44:47AM +0000, Ariadne Conill wrote:
->>>> In several other operating systems, it is a hard requirement that the
->>>> first argument to execve(2) be the name of a program, thus prohibiting
->>>> a scenario where argc < 1.  POSIX 2017 also recommends this behaviour,
->>>> but it is not an explicit requirement[0]:
->>>>
->>>>     The argument arg0 should point to a filename string that is
->>>>     associated with the process being started by one of the exec
->>>>     functions.
->>>>
->>>> To ensure that execve(2) with argc < 1 is not a useful gadget for
->>>> shellcode to use, we can validate this in do_execveat_common() and
->>>> fail for this scenario, effectively blocking successful exploitation
->>>> of CVE-2021-4034 and similar bugs which depend on this gadget.
->>>>
->>>> The use of -EFAULT for this case is similar to other systems, such
->>>> as FreeBSD, OpenBSD and Solaris.  QNX uses -EINVAL for this case.
->>>>
->>>> Interestingly, Michael Kerrisk opened an issue about this in 2008[1],
->>>> but there was no consensus to support fixing this issue then.
->>>> Hopefully now that CVE-2021-4034 shows practical exploitative use
->>>> of this bug in a shellcode, we can reconsider.
->>>>
->>>> [0]: https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
->>>> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=8408
->>>>
->>>> Changes from v1:
->>>> - Rework commit message significantly.
->>>> - Make the argv[0] check explicit rather than hijacking the error-check
->>>>   for count().
->>>>
->>>> Signed-off-by: Ariadne Conill <ariadne@dereferenced.org>
->>>> ---
->>>>  fs/exec.c | 4 ++++
->>>>  1 file changed, 4 insertions(+)
->>>>
->>>> diff --git a/fs/exec.c b/fs/exec.c
->>>> index 79f2c9483302..e52c41991aab 100644
->>>> --- a/fs/exec.c
->>>> +++ b/fs/exec.c
->>>> @@ -1899,6 +1899,10 @@ static int do_execveat_common(int fd, struct filename *filename,
->>>>  	retval = count(argv, MAX_ARG_STRINGS);
->>>>  	if (retval < 0)
->>>>  		goto out_free;
->>>> +	if (retval == 0) {
->>>> +		retval = -EFAULT;
->>>> +		goto out_free;
->>>> +	}
->>>>  	bprm->argc = retval;
->>>>
->>>>  	retval = count(envp, MAX_ARG_STRINGS);
->>>> --
->>>> 2.34.1
->>>
->>> Okay, so, the dangerous condition is userspace iterating through envp
->>> when it thinks it's iterating argv.
->>>
->>> Assuming it is not okay to break valgrind's test suite:
->>> https://sources.debian.org/src/valgrind/1:3.18.1-1/none/tests/execve.c/?hl=22#L22
->>> we cannot reject a NULL argv (test will fail), and we cannot mutate
->>> argc=0 into argc=1 (test will enter infinite loop).
->>>
->>> Perhaps we need to reject argv=NULL when envp!=NULL, and add a
->>> pr_warn_once() about using a NULL argv?
->>
->> Sure, I can rework the patch to do it for only the envp != NULL case.
->>
->> I think we should combine it with the {NULL, NULL} padding patch in this
->> case though, since it appears to work, that way the execve(..., NULL, NULL)
->> case gets some protection.
->
-> I don't think the padding will actually work correctly, for the reason
-> Jann pointed out. My testing shows that suddenly my envp becomes NULL,
-> but libc is just counting argc to find envp to pass into main.
->
->>> I note that glibc already warns about NULL argv:
->>> argc0.c:7:3: warning: null argument where non-null required (argument 2)
->>> [-Wnonnull]
->>>    7 |   execve(argv[0], NULL, envp);
->>>      |   ^~~~~~
->>>
->>> in the future we could expand this to only looking at argv=NULL?
->>
->> I don't think musl's headers generate a diagnostic for this, but main(0,
->> {NULL}) is not a supported use-case at least as far as Alpine is concerned.
->> I am sure it is the same with the other musl distributions.
->>
->> Will send a v3 patch with this logic change and move to EINVAL shortly.
->
-> I took a spin too. Refuses execve(..., NULL, !NULL), injects "" argv[0]
-> for execve(..., NULL, NULL):
->
->
-> diff --git a/fs/exec.c b/fs/exec.c
-> index a098c133d8d7..0565089d5f9e 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -1917,9 +1917,40 @@ static int do_execveat_common(int fd, struct filename *filename,
-> 	if (retval < 0)
-> 		goto out_free;
->
-> -	retval = copy_strings(bprm->argc, argv, bprm);
-> -	if (retval < 0)
-> -		goto out_free;
-> +	if (likely(bprm->argc > 0)) {
-> +		retval = copy_strings(bprm->argc, argv, bprm);
-> +		if (retval < 0)
-> +			goto out_free;
-> +	} else {
-> +		const char * const argv0 = "";
+On Wed, 2022-01-26 at 15:35 -0500, Vivek Goyal wrote:
+> A ceph user has reported that ceph is crashing with kernel NULL pointer
+> dereference. Following is the backtrace.
+> 
+> /proc/version: Linux version 5.16.2-arch1-1 (linux@archlinux) (gcc (GCC)
+> 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Thu, 20 Jan 2022
+> 16:18:29 +0000
+> distro / arch: Arch Linux / x86_64
+> SELinux is not enabled
+> ceph cluster version: 16.2.7 (dd0603118f56ab514f133c8d2e3adfc983942503)
+> 
+> relevant dmesg output:
+> [   30.947129] BUG: kernel NULL pointer dereference, address:
+> 0000000000000000
+> [   30.947206] #PF: supervisor read access in kernel mode
+> [   30.947258] #PF: error_code(0x0000) - not-present page
+> [   30.947310] PGD 0 P4D 0
+> [   30.947342] Oops: 0000 [#1] PREEMPT SMP PTI
+> [   30.947388] CPU: 5 PID: 778 Comm: touch Not tainted 5.16.2-arch1-1 #1
+> 86fbf2c313cc37a553d65deb81d98e9dcc2a3659
+> [   30.947486] Hardware name: Gigabyte Technology Co., Ltd. B365M
+> DS3H/B365M DS3H, BIOS F5 08/13/2019
+> [   30.947569] RIP: 0010:strlen+0x0/0x20
+> [   30.947616] Code: b6 07 38 d0 74 16 48 83 c7 01 84 c0 74 05 48 39 f7 75
+> ec 31 c0 31 d2 89 d6 89 d7 c3 48 89 f8 31 d2 89 d6 89 d7 c3 0
+> f 1f 40 00 <80> 3f 00 74 12 48 89 f8 48 83 c0 01 80 38 00 75 f7 48 29 f8 31
+> ff
+> [   30.947782] RSP: 0018:ffffa4ed80ffbbb8 EFLAGS: 00010246
+> [   30.947836] RAX: 0000000000000000 RBX: ffffa4ed80ffbc60 RCX:
+> 0000000000000000
+> [   30.947904] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+> 0000000000000000
+> [   30.947971] RBP: ffff94b0d15c0ae0 R08: 0000000000000000 R09:
+> 0000000000000000
+> [   30.948040] R10: 0000000000000000 R11: 0000000000000000 R12:
+> 0000000000000000
+> [   30.948106] R13: 0000000000000001 R14: ffffa4ed80ffbc60 R15:
+> 0000000000000000
+> [   30.948174] FS:  00007fc7520f0740(0000) GS:ffff94b7ced40000(0000)
+> knlGS:0000000000000000
+> [   30.948252] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   30.948308] CR2: 0000000000000000 CR3: 0000000104a40001 CR4:
+> 00000000003706e0
+> [   30.948376] Call Trace:
+> [   30.948404]  <TASK>
+> [   30.948431]  ceph_security_init_secctx+0x7b/0x240 [ceph
+> 49f9c4b9bf5be8760f19f1747e26da33920bce4b]
+> [   30.948582]  ceph_atomic_open+0x51e/0x8a0 [ceph
+> 49f9c4b9bf5be8760f19f1747e26da33920bce4b]
+> [   30.948708]  ? get_cached_acl+0x4d/0xa0
+> [   30.948759]  path_openat+0x60d/0x1030
+> [   30.948809]  do_filp_open+0xa5/0x150
+> [   30.948859]  do_sys_openat2+0xc4/0x190
+> [   30.948904]  __x64_sys_openat+0x53/0xa0
+> [   30.948948]  do_syscall_64+0x5c/0x90
+> [   30.948989]  ? exc_page_fault+0x72/0x180
+> [   30.949034]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [   30.949091] RIP: 0033:0x7fc7521e25bb
+> [   30.950849] Code: 25 00 00 41 00 3d 00 00 41 00 74 4b 64 8b 04 25 18 00
+> 00 00 85 c0 75 67 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 0
+> 0 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 91 00 00 00 48 8b 54 24 28 64 48 2b 14
+> 25
+> 
+> Core of the problem is that ceph checks for return code from
+> security_dentry_init_security() and if return code is 0, it assumes
+> everything is fine and continues to call strlen(name), which crashes.
+> 
+> Typically SELinux LSM returns 0 and sets name to "security.selinux" and
+> it is not a problem. Or if selinux is not compiled in or disabled, it
+> returns -EOPNOTSUP and ceph deals with it.
+> 
+> But somehow in this configuration, 0 is being returned and "name" is
+> not being initialized and that's creating the problem.
+> 
+> Our suspicion is that BPF LSM is registering a hook for
+> dentry_init_security() and returns hook default of 0.
+> 
+> LSM_HOOK(int, 0, dentry_init_security, struct dentry *dentry,...)
+> 
+> I have not been able to reproduce it just by doing CONFIG_BPF_LSM=y.
+> Stephen has tested the patch though and confirms it solves the problem
+> for him.
+> 
+> dentry_init_security() is written in such a way that it expects only one
+> LSM to register the hook. Atleast that's the expectation with current code.
+> 
+> If another LSM returns a hook and returns default, it will simply return
+> 0 as of now and that will break ceph. 
+> 
+> Hence, suggestion is that change semantics of this hook a bit. If there
+> are no LSMs or no LSM is taking ownership and initializing security context,
+> then return -EOPNOTSUP. Also allow at max one LSM to initialize security
+> context. This hook can't deal with multiple LSMs trying to init security
+> context. This patch implements this new behavior.
+> 
+> Reported-by: Stephen Muth <smuth4@gmail.com>
+> Tested-by: Stephen Muth <smuth4@gmail.com>
+> Suggested-by: Casey Schaufler <casey@schaufler-ca.com>
+> Acked-by: Casey Schaufler <casey@schaufler-ca.com>
+> Reviewed-by: Serge Hallyn <serge@hallyn.com>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: <stable@vger.kernel.org> # 5.16.0
+> Signed-off-by: Vivek Goyal <vgoyal@redhat.com>
+> ---
+>  include/linux/lsm_hook_defs.h |    2 +-
+>  security/security.c           |   15 +++++++++++++--
+>  2 files changed, 14 insertions(+), 3 deletions(-)
+> 
+> Index: redhat-linux/include/linux/lsm_hook_defs.h
+> ===================================================================
+> --- redhat-linux.orig/include/linux/lsm_hook_defs.h	2022-01-24 14:56:14.338030140 -0500
+> +++ redhat-linux/include/linux/lsm_hook_defs.h	2022-01-25 18:48:46.917496696 -0500
+> @@ -80,7 +80,7 @@ LSM_HOOK(int, 0, sb_clone_mnt_opts, cons
+>  	 unsigned long *set_kern_flags)
+>  LSM_HOOK(int, 0, move_mount, const struct path *from_path,
+>  	 const struct path *to_path)
+> -LSM_HOOK(int, 0, dentry_init_security, struct dentry *dentry,
+> +LSM_HOOK(int, -EOPNOTSUPP, dentry_init_security, struct dentry *dentry,
+>  	 int mode, const struct qstr *name, const char **xattr_name,
+>  	 void **ctx, u32 *ctxlen)
+>  LSM_HOOK(int, 0, dentry_create_files_as, struct dentry *dentry, int mode,
+> Index: redhat-linux/security/security.c
+> ===================================================================
+> --- redhat-linux.orig/security/security.c	2022-01-25 18:46:59.166496696 -0500
+> +++ redhat-linux/security/security.c	2022-01-26 14:31:43.454568468 -0500
+> @@ -1048,8 +1048,19 @@ int security_dentry_init_security(struct
+>  				  const char **xattr_name, void **ctx,
+>  				  u32 *ctxlen)
+>  {
+> -	return call_int_hook(dentry_init_security, -EOPNOTSUPP, dentry, mode,
+> -				name, xattr_name, ctx, ctxlen);
+> +	struct security_hook_list *hp;
+> +	int rc;
 > +
-> +		/*
-> +		 * Start making some noise about the argc == NULL case that
-> +		 * POSIX doesn't like and other Unix-like systems refuse.
-> +		 */
-> +		pr_warn_once("process '%s' used a NULL argv\n", bprm->filename);
-> +
-> +		/*
-> +		 * Refuse to execute when argc == 0 and envc > 0, since this
-> +		 * can lead to userspace iterating envp if it fails to check
-> +		 * for argc == 0.
-> +		 *
-> +		 * i.e. continue to allow: execve(path, NULL, NULL);
-> +		 */
-> +		if (bprm->envc > 0) {
-> +			retval = -EINVAL;
-> +			goto out_free;
-> +		}
-> +
-> +		/*
-> +		 * Force an argv of {"", NULL} if argc == 0 so that broken
-> +		 * userspace that assumes argc != 0 will not be surprised.
-> +		 */
-> +		bprm->argc = 1;
-> +		retval = copy_strings_kernel(bprm->argc, &argv0, bprm);
-> +		if (retval < 0)
-> +			goto out_free;
+> +	/*
+> +	 * Only one module will provide a security context.
+> +	 */
+> +	hlist_for_each_entry(hp, &security_hook_heads.dentry_init_security, list) {
+> +		rc = hp->hook.dentry_init_security(dentry, mode, name,
+> +						   xattr_name, ctx, ctxlen);
+> +		if (rc != LSM_RET_DEFAULT(dentry_init_security))
+> +			return rc;
 > +	}
->
-> 	retval = bprm_execve(bprm, fd, filename, flags);
-> out_free:
+> +	return LSM_RET_DEFAULT(dentry_init_security);
+>  }
+>  EXPORT_SYMBOL(security_dentry_init_security);
+>  
+> 
 
-Looks good to me, but I wonder if we shouldn't set an argv of 
-{bprm->filename, NULL} instead of {"", NULL}.  Discussion in IRC led to 
-the realization that multicall programs will try to use argv[0] and might 
-crash in this scenario.  If we're going to fake an argv, I guess we should 
-try to do it right.
-
-Ariadne
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

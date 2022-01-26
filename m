@@ -2,161 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E87149D601
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3B149D603
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbiAZXNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 18:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233416AbiAZXM5 (ORCPT
+        id S233594AbiAZXNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 18:13:13 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:47018 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233498AbiAZXNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 18:12:57 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FC0C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:12:57 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id c7so1185493ljr.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=i2aQuRxQanU334DgDb3mt+uf8YbW8laWJVhEOzT9D7U=;
-        b=dPO+BoyqpMxD2b8neCq+HOEnFu087569cqxrYQ5wXOoVRCTvklBqJ9VSfhc8+klYjF
-         yQm93n3jYx42JgH0vKyxjWP8BCeKpmAic5IEe4AuuAooDYzplcRWDyD/3WViDr5lobx2
-         mz0HdwM+9r/poN4pqlo0zg74RbqV9rYCNkcLxLv0ZJIg7dlm3UVUSfA8v9cdFS3lVLv1
-         zKJGypK/N/XkkIIhDfgtXqEiwSIMIZT8N6M0fAoOvILzPsMZkM6aHtLoC/q9ZXx6/HGA
-         aGRk3z06rqPe+PvRS3ssl15kS8T4ooSnmY/nsw3JMm0/zF6q8dg43TL6xvbDVlIF7IBd
-         XrUQ==
+        Wed, 26 Jan 2022 18:13:01 -0500
+Received: by mail-ot1-f51.google.com with SMTP id 10-20020a9d030a000000b0059f164f4a86so784746otv.13;
+        Wed, 26 Jan 2022 15:13:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=i2aQuRxQanU334DgDb3mt+uf8YbW8laWJVhEOzT9D7U=;
-        b=lOOzZ7JmwFnT+GQqE/F/I4XJzVcNKd+kRpXgewCHs4jALSWCxQV+1A1e+BbSCgW4DU
-         Vx1ldMZ0JcjE5ygsFSZ3bH/3YGMJH3cC10DscCX14GxeGjkrVepXbyx5uO5fLwAKYM/j
-         VwfHspeBt/SjI91yBgGd+t5X5Z3cYcZ0ZGOhHxfWlJUmCcWdG0SWR3+walFjjv36sxjF
-         mo1OmVl1zxSpF1dVbXhnKRS7aKohcypHg9lQBE2Bjb/wtoChKFgjtTXM5QfJJfP4YENy
-         Qv8sLaGF/FDRIkcNp8/qImo0c3II2LFmBD/5PAVzIhvcy4C+kaXYrYmjiF0/2UqW9Bcx
-         CLTA==
-X-Gm-Message-State: AOAM531/wZSRNOlHYIcGYcN+GeoRizzzkwR0gcjqspI9voDwqOUpEj7j
-        ZZZ5LVEdPZYf9pxIwWU1F6bBCQ==
-X-Google-Smtp-Source: ABdhPJw1huaemcEPtHkuy71ODp6RIuR5de3Z7hh/TSY9xpnGCY67kIY6aMTsiVGH7MbHRPiCt9AHcA==
-X-Received: by 2002:a05:651c:1781:: with SMTP id bn1mr1024129ljb.78.1643238775475;
-        Wed, 26 Jan 2022 15:12:55 -0800 (PST)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id p28sm1529335lfo.79.2022.01.26.15.12.54
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W3p0DCKZpOVWZSmNX3sbE+ojVVTWAiXUYNmg5RsLNew=;
+        b=gF9pfhqZdxhKzORp95m/k9B+9kSvmAmLEkxChHrRMvBMmpc3Xgkm/DkfWiGjGniv66
+         1Pr1YBXro2nfBRAFBn7p/E++G290Kwhx811oqcni9PW0oTz62DYHGdtqDEcV8qlOypmN
+         dwrdcSK1D5B/73CJbVzhEKtY0ZLxyYBWVzVTgOwFJ8trCc7MrzbvqabksGKuCW0s7FSj
+         O2tCn3xXaSOWoXfvR262jlLnQF2Z4KpEZG6PgB7I4ryf45auZNjjvn+2EjP8caPNqyUI
+         BWpWEJ7CLuWmZ+W1EhJawBAkv8+F1qEBG5PSKCr5K6QOSxaEIQitatvWdw0+EO1o880x
+         SPeg==
+X-Gm-Message-State: AOAM530CoOElIqSp4pO8ghYGPT4lYaa/+jnqvVS/yb6s+ALztNyhWwxb
+        qDsPzlBMq/rFeh83VN2JDg==
+X-Google-Smtp-Source: ABdhPJwUxe7qYMLH4IuC6/ftnBuE0VaSqCoenhc/lm5+z0BKCeJMDxL+ZRx3VXlEbM6ssJblSjHK8w==
+X-Received: by 2002:a9d:7c97:: with SMTP id q23mr639926otn.165.1643238781109;
+        Wed, 26 Jan 2022 15:13:01 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id u25sm9629588oth.56.2022.01.26.15.13.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 15:12:54 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/2] net: dsa: mv88e6xxx: Improve indirect addressing performance
-Date:   Thu, 27 Jan 2022 00:12:39 +0100
-Message-Id: <20220126231239.1443128-3-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220126231239.1443128-1-tobias@waldekranz.com>
-References: <20220126231239.1443128-1-tobias@waldekranz.com>
+        Wed, 26 Jan 2022 15:13:00 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH] dt-bindings: regulator: maxim,max8973: Drop Tegra specifics from example
+Date:   Wed, 26 Jan 2022 17:12:50 -0600
+Message-Id: <20220126231250.1635021-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Organization: Westermo
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before this change, both the read and write callback would start out
-by asserting that the chip's busy flag was cleared. However, both
-callbacks also made sure to wait for the clearing of the busy bit
-before returning - making the initial check superfluous. The only
-time that would ever have an effect was if the busy bit was initially
-set for some reason.
+There's no need to complicate examples with a platform specific macro.
+It also complicates example parsing to figure out the number of interrupt
+cells in examples (based on the bracketing).
 
-With that in mind, make sure to perform an initial check of the busy
-bit, after which both read and write can rely the previous operation
-to have waited for the bit to clear.
-
-This cuts the number of operations on the underlying MDIO bus by 25%
-
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/net/dsa/mv88e6xxx/chip.h |  1 +
- drivers/net/dsa/mv88e6xxx/smi.c  | 24 ++++++++++++++----------
- 2 files changed, 15 insertions(+), 10 deletions(-)
+ .../devicetree/bindings/regulator/maxim,max8973.yaml         | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index 8271b8aa7b71..438cee853d07 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -392,6 +392,7 @@ struct mv88e6xxx_chip {
- struct mv88e6xxx_bus_ops {
- 	int (*read)(struct mv88e6xxx_chip *chip, int addr, int reg, u16 *val);
- 	int (*write)(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val);
-+	int (*init)(struct mv88e6xxx_chip *chip);
- };
+diff --git a/Documentation/devicetree/bindings/regulator/maxim,max8973.yaml b/Documentation/devicetree/bindings/regulator/maxim,max8973.yaml
+index 35c53e27f78c..5898dcf10f06 100644
+--- a/Documentation/devicetree/bindings/regulator/maxim,max8973.yaml
++++ b/Documentation/devicetree/bindings/regulator/maxim,max8973.yaml
+@@ -113,7 +113,7 @@ examples:
+     };
  
- struct mv88e6xxx_mdio_bus {
-diff --git a/drivers/net/dsa/mv88e6xxx/smi.c b/drivers/net/dsa/mv88e6xxx/smi.c
-index a59f32243e08..1ebdaa55e710 100644
---- a/drivers/net/dsa/mv88e6xxx/smi.c
-+++ b/drivers/net/dsa/mv88e6xxx/smi.c
-@@ -104,11 +104,6 @@ static int mv88e6xxx_smi_indirect_read(struct mv88e6xxx_chip *chip,
- {
- 	int err;
+   - |
+-    #include <dt-bindings/gpio/tegra-gpio.h>
++    #include <dt-bindings/gpio/gpio.h>
+     #include <dt-bindings/interrupt-controller/irq.h>
  
--	err = mv88e6xxx_smi_direct_wait(chip, chip->sw_addr,
--					MV88E6XXX_SMI_CMD, 15, 0);
--	if (err)
--		return err;
--
- 	err = mv88e6xxx_smi_direct_write(chip, chip->sw_addr,
- 					 MV88E6XXX_SMI_CMD,
- 					 MV88E6XXX_SMI_CMD_BUSY |
-@@ -132,11 +127,6 @@ static int mv88e6xxx_smi_indirect_write(struct mv88e6xxx_chip *chip,
- {
- 	int err;
+     i2c {
+@@ -123,8 +123,7 @@ examples:
+         regulator@1b {
+             compatible = "maxim,max77621";
+             reg = <0x1b>;
+-            interrupt-parent = <&gpio>;
+-            interrupts = <TEGRA_GPIO(Y, 1) IRQ_TYPE_LEVEL_LOW>;
++            interrupts = <1 IRQ_TYPE_LEVEL_LOW>;
  
--	err = mv88e6xxx_smi_direct_wait(chip, chip->sw_addr,
--					MV88E6XXX_SMI_CMD, 15, 0);
--	if (err)
--		return err;
--
- 	err = mv88e6xxx_smi_direct_write(chip, chip->sw_addr,
- 					 MV88E6XXX_SMI_DATA, data);
- 	if (err)
-@@ -155,9 +145,20 @@ static int mv88e6xxx_smi_indirect_write(struct mv88e6xxx_chip *chip,
- 					 MV88E6XXX_SMI_CMD, 15, 0);
- }
- 
-+static int mv88e6xxx_smi_indirect_init(struct mv88e6xxx_chip *chip)
-+{
-+	/* Ensure that the chip starts out in the ready state. As both
-+	 * reads and writes always ensure this on return, they can
-+	 * safely depend on the chip not being busy on entry.
-+	 */
-+	return mv88e6xxx_smi_direct_wait(chip, chip->sw_addr,
-+					 MV88E6XXX_SMI_CMD, 15, 0);
-+}
-+
- static const struct mv88e6xxx_bus_ops mv88e6xxx_smi_indirect_ops = {
- 	.read = mv88e6xxx_smi_indirect_read,
- 	.write = mv88e6xxx_smi_indirect_write,
-+	.init = mv88e6xxx_smi_indirect_init,
- };
- 
- int mv88e6xxx_smi_init(struct mv88e6xxx_chip *chip,
-@@ -175,5 +176,8 @@ int mv88e6xxx_smi_init(struct mv88e6xxx_chip *chip,
- 	chip->bus = bus;
- 	chip->sw_addr = sw_addr;
- 
-+	if (chip->smi_ops->init)
-+		return chip->smi_ops->init(chip);
-+
- 	return 0;
- }
+             regulator-always-on;
+             regulator-boot-on;
 -- 
-2.25.1
+2.32.0
 

@@ -2,291 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FC449C33D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F3549C340
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiAZF3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 00:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
+        id S233055AbiAZF3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 00:29:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiAZF3N (ORCPT
+        with ESMTP id S232705AbiAZF3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 00:29:13 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9324DC061744;
-        Tue, 25 Jan 2022 21:29:13 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id j23so62077465edp.5;
-        Tue, 25 Jan 2022 21:29:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4PDdpxJRSa9UjiKgrk6TgyjF82dXoOGQZ1P6ZtEXjA8=;
-        b=nHjo7L8Jh50vZ/kfcUkLlOiGHLl5EcW8v2dxLfCuByJLDkpoJwGbV5Pg2x/lG4ys/r
-         4fbehsQkVZ1IRNFMnvErMvh6toF5nwbPW0Ff3ag82xXKU+cNHeXI64PZuPDf4KS1RqFI
-         u7+mX7OwCHI7nfMU+A/fVFbcw81ieY/poVAbrjjZThh0o2TkHhpr1h7MXlSxbypOdfUh
-         1yWRshYq+Ho1/YrQJ0QoC4nHFQhRKr03MlCBsAS8Yh7JgKveg+JP13SV3xwDgzLUnAQI
-         GppaHODCRrA0DIovHxtVmoLAg3LI0IeOu+xcazzCSDba3o/F3pEee2zC6LLbmfjzONlv
-         ROaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4PDdpxJRSa9UjiKgrk6TgyjF82dXoOGQZ1P6ZtEXjA8=;
-        b=jShjjnFgVWL2vK9t7DTBB32H5RXitq26SIgsZnxYz4IN26lKh3TLhtVJTCjbr7RQWX
-         s1hbnlm9zx3bcH393qLCCi/Sx0FICD07KghRIwN7w0S7bHsPaAzlJfk2RE8in/KsYL8M
-         9PCpKng3Xbi3F59bgTf4vLq3LcoOn1Mbo7maUrde61eRYn6SRW8ZHeovVSwEaGe3tGe2
-         PNX317TmDrkfQl63T1QPpKmXzcnj3rKnUc1mrX9fMQ0esAOEsKTRjfCPRU8AxTfrcdiT
-         FsDWDUrRxxHoiceqLXeo2fJYJTC4GpY0T5uc9nH7IZdU2rTsDYGEArj3QmwcMePTGs08
-         jKaQ==
-X-Gm-Message-State: AOAM5319XSRnBFLYjRZYcPfozWtbw9/cft4kmVjhkGW1p8Kl2gGGE0S3
-        CzJ+HqwemPZ4e1YKwMdn51xhqEDbpSz0xrO0TP8=
-X-Google-Smtp-Source: ABdhPJzNKB74HAnXwYwW9pgAXKjSKdOAdu5HGEb+K9iclcF4wwab6A0jW0r7EX3QD0vKy/JUnZKZfTk9dSwX7g2KINo=
-X-Received: by 2002:a05:6402:270f:: with SMTP id y15mr1528219edd.329.1643174951510;
- Tue, 25 Jan 2022 21:29:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20220119044649.GL947480@paulmck-ThinkPad-P17-Gen-1>
- <20220119182143.GA2183703@paulmck-ThinkPad-P17-Gen-1> <CAABZP2x-esy+9R4iiMZR5UV7YnYQxikAgsAQM+PU-o9+m9WMpw@mail.gmail.com>
- <20220120210636.GR947480@paulmck-ThinkPad-P17-Gen-1> <CAABZP2zCWJ1S3We1f6UNVW=Q6h7cz8uMbR7PTzt9UWH9CjSZuw@mail.gmail.com>
- <CAABZP2z=ESWA1EYf1LGS40ipJxcVOAUkvJHA-rdDP6_0Oqjgsg@mail.gmail.com>
- <20220125180907.GN4285@paulmck-ThinkPad-P17-Gen-1> <CAABZP2xGZ__8MZWL0kGAdYJ9ZNq2omw9-VTACmrG8wR8RswG2A@mail.gmail.com>
- <CAABZP2wt03juddoKfxO0m=+kn407267jLJn+gPRzU-w3nUBkAQ@mail.gmail.com>
- <20220126045022.GW4285@paulmck-ThinkPad-P17-Gen-1> <20220126051427.GA3240075@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220126051427.GA3240075@paulmck-ThinkPad-P17-Gen-1>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed, 26 Jan 2022 13:28:59 +0800
-Message-ID: <CAABZP2wsR+nXWK1mdZxJ3FjSfgQ+Dx3HTa6gaEZPCysABrrY2g@mail.gmail.com>
-Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other failures
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 26 Jan 2022 00:29:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6734C06161C;
+        Tue, 25 Jan 2022 21:29:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81D39B81B87;
+        Wed, 26 Jan 2022 05:29:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D142C340E3;
+        Wed, 26 Jan 2022 05:29:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643174974;
+        bh=YqoPDtkI3W4wcHz6EuTeKxDkKjg3vXsCEfTPwtuMcVo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KOPvbwet643U+XiYa6ne58RYlIrZiFIe9PHqdoixKsT9nO5i9sCJWCWHHFKLBnj+9
+         EMN30IS8oNK2i57U2YypVUtCLBMYCYMAJfAJHxOTDY386TSX7YTQYpqonKx2lOMz8N
+         iDiUtgolWuf1/6q/WGSPVGsQQ3jXOa4kzQyZV5wHctCg2UDJ8YlabKO46+bH9J7WBA
+         xzbNxOPF04Ir2yYCQRiJVLcZZ0f+C8AA5CQRojV2LQjF+C3+jiQxjcxGTqnErQoGN5
+         RPmEd1tyrhtvHn+QLT7sQNURMXRveTftafBpQ2QGE/Z0XqexNNiqVpoCCEOO+ulPVl
+         2GuSPdulq8dnw==
+Date:   Wed, 26 Jan 2022 14:29:29 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 3/9] rethook: Add a generic return hook
+Message-Id: <20220126142929.625200a7aed435d7e83638e1@kernel.org>
+In-Reply-To: <20220125114615.0533446c@gandalf.local.home>
+References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
+        <164311272945.1933078.2077074421506087620.stgit@devnote2>
+        <20220125114615.0533446c@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Paul for fixing it
+Hi Steve,
 
-I will perform the tests now, since
-"tools/testing/selftests/rcutorture/bin/torture.sh --duration 10"  may
-last for some hours, I guess I will send the test results late at
-night (Pacific Time) ;-)
-
-Thanks again
-Cheers
-Zhouyi
+Thanks for the review. 
+I'll fix the typos.
 
 
-On Wed, Jan 26, 2022 at 1:14 PM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Tue, Jan 25, 2022 at 08:50:22PM -0800, Paul E. McKenney wrote:
-> > On Wed, Jan 26, 2022 at 12:09:12PM +0800, Zhouyi Zhou wrote:
-> > > Great Discovery !!
-> > > Hi Paul,
-> > > I track the log
-> > > make[2]: *** No rule to make target
-> > > 'arch/x86/kvm//home/zzy/Program/linux-next/linux-next/tools/testing/selftests/rcutorture/kvm_main.o',
-> >
-> > That does look like a very odd pathname, now that you mention it.
-> >
-> > > needed by 'arch/x86/kvm/kvm.o
-> > > into the file virt/kvm/Makefile.kvm:
-> > > 1# SPDX-License-Identifier: GPL-2.0
-> > >  2#
-> > >  3# Makefile for Kernel-based Virtual Machine module
-> > >  4#
-> > >  5
-> > >  6KVM ?= ../../../virt/kvm
-> > >  7
-> > >  8kvm-y := $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o
-> > >  9kvm-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
-> > > 10kvm-$(CONFIG_KVM_MMIO) += $(KVM)/coalesced_mmio.o
-> > > 11kvm-$(CONFIG_KVM_ASYNC_PF) += $(KVM)/async_pf.o
-> > > 12kvm-$(CONFIG_HAVE_KVM_IRQ_ROUTING) += $(KVM)/irqchip.o
-> > > 13kvm-$(CONFIG_HAVE_KVM_DIRTY_RING) += $(KVM)/dirty_ring.o
-> > > 14kvm-$(CONFIG_HAVE_KVM_PFNCACHE) += $(KVM)/pfncache.o
-> > > line 6's ?= indicates to set the KDIR variable only if it's not
-> > > set/doesn't have a value.
-> > >
-> > > I guess we have set the variable KVM somewhere before make, I will
-> > > continue tracking it.
-> >
-> > But if you build an allmodconfig kernel by hand afterwards, it works?
-> >
-> > I wonder if I need to use a different environment variable in my scripts.
-> > For example, from tools/testing/selftests/rcutorture/bin/kvm.sh:
-> >
-> > KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> > PATH=${KVM}/bin:$PATH; export PATH
-> >
-> > Maybe like the (untested) patch shown below.
->
-> A somewhat more official version below.  Thank you for following up
-> on this!
->
->                                                         Thanx, Paul
->
-> ------------------------------------------------------------------------
->
-> commit 6b5cdbe80b01ce604fdf0f3ef6717a6466aca041
-> Author: Paul E. McKenney <paulmck@kernel.org>
-> Date:   Tue Jan 25 21:08:55 2022 -0800
->
->     torture: Change KVM environment variable to RCUTORTURE
->
->     The torture-test scripting's long-standing use of KVM as the environment
->     variable tracking the pathname of the rcutorture directory now conflicts
->     with allmodconfig builds due to the virt/kvm/Makefile.kvm file's use
->     of this as a makefile variable.  This commit therefore changes the
->     torture-test scripting from KVM to RCUTORTURE, avoiding the name conflict.
->
->     Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
->     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-again.sh b/tools/testing/selftests/rcutorture/bin/kvm-again.sh
-> index 5a0023d183dac..0941f1ddab658 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm-again.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm-again.sh
-> @@ -47,8 +47,8 @@ else
->         exit 1
->  fi
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->
->  dryrun=
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-> index 370406bbfeedc..f17000a2ccf1f 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
-> @@ -49,8 +49,8 @@ fi
->  mkdir $resdir/$ds
->  echo Results directory: $resdir/$ds
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->  echo Using all `identify_qemu_vcpus` CPUs.
->
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh b/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh
-> index e4a00779b8c69..ee886b40a5d2c 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh
-> @@ -22,8 +22,8 @@ T=${TMPDIR-/tmp}/kvm-end-run-stats.sh.$$
->  trap 'rm -rf $T' 0
->  mkdir $T
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->  default_starttime="`get_starttime`"
->  starttime="${2-default_starttime}"
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-remote.sh b/tools/testing/selftests/rcutorture/bin/kvm-remote.sh
-> index 29b068a55b466..8c4c1e4792d02 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm-remote.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm-remote.sh
-> @@ -19,8 +19,8 @@ then
->         exit 1
->  fi
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->
->  starttime="`get_starttime`"
-> @@ -108,8 +108,8 @@ else
->                 cat $T/kvm-again.sh.out | tee -a "$oldrun/remote-log"
->                 exit 2
->         fi
-> -       cp -a "$rundir" "$KVM/res/"
-> -       oldrun="$KVM/res/$ds"
-> +       cp -a "$rundir" "$RCUTORTURE/res/"
-> +       oldrun="$RCUTORTURE/res/$ds"
->  fi
->  echo | tee -a "$oldrun/remote-log"
->  echo " ----" kvm-again.sh output: "(`date`)" | tee -a "$oldrun/remote-log"
-> diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
-> index 348ad177a5acc..55b2c15332827 100755
-> --- a/tools/testing/selftests/rcutorture/bin/kvm.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
-> @@ -25,15 +25,15 @@ LANG=en_US.UTF-8; export LANG
->
->  dur=$((30*60))
->  dryrun=""
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->
->  TORTURE_ALLOTED_CPUS="`identify_qemu_vcpus`"
->  TORTURE_DEFCONFIG=defconfig
->  TORTURE_BOOT_IMAGE=""
->  TORTURE_BUILDONLY=
-> -TORTURE_INITRD="$KVM/initrd"; export TORTURE_INITRD
-> +TORTURE_INITRD="$RCUTORTURE/initrd"; export TORTURE_INITRD
->  TORTURE_KCONFIG_ARG=""
->  TORTURE_KCONFIG_GDB_ARG=""
->  TORTURE_BOOT_GDB_ARG=""
-> @@ -262,7 +262,7 @@ else
->         exit 1
->  fi
->
-> -CONFIGFRAG=${KVM}/configs/${TORTURE_SUITE}; export CONFIGFRAG
-> +CONFIGFRAG=${RCUTORTURE}/configs/${TORTURE_SUITE}; export CONFIGFRAG
->
->  defaultconfigs="`tr '\012' ' ' < $CONFIGFRAG/CFLIST`"
->  if test -z "$configs"
-> @@ -272,7 +272,7 @@ fi
->
->  if test -z "$resdir"
->  then
-> -       resdir=$KVM/res
-> +       resdir=$RCUTORTURE/res
->  fi
->
->  # Create a file of test-name/#cpus pairs, sorted by decreasing #cpus.
-> @@ -386,7 +386,7 @@ END {
->  # Generate a script to execute the tests in appropriate batches.
->  cat << ___EOF___ > $T/script
->  CONFIGFRAG="$CONFIGFRAG"; export CONFIGFRAG
-> -KVM="$KVM"; export KVM
-> +RCUTORTURE="$RCUTORTURE"; export RCUTORTURE
->  PATH="$PATH"; export PATH
->  TORTURE_ALLOTED_CPUS="$TORTURE_ALLOTED_CPUS"; export TORTURE_ALLOTED_CPUS
->  TORTURE_BOOT_IMAGE="$TORTURE_BOOT_IMAGE"; export TORTURE_BOOT_IMAGE
-> @@ -569,7 +569,7 @@ ___EOF___
->  awk < $T/cfgcpu.pack \
->         -v TORTURE_BUILDONLY="$TORTURE_BUILDONLY" \
->         -v CONFIGDIR="$CONFIGFRAG/" \
-> -       -v KVM="$KVM" \
-> +       -v RCUTORTURE="$RCUTORTURE" \
->         -v ncpus=$cpus \
->         -v jitter="$jitter" \
->         -v rd=$resdir/$ds/ \
-> diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
-> index d1cb60085d8f2..e00e60efb2310 100755
-> --- a/tools/testing/selftests/rcutorture/bin/torture.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/torture.sh
-> @@ -13,8 +13,8 @@
->  scriptname=$0
->  args="$*"
->
-> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
-> -PATH=${KVM}/bin:$PATH; export PATH
-> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
-> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
->  . functions.sh
->
->  TORTURE_ALLOTED_CPUS="`identify_qemu_vcpus`"
+On Tue, 25 Jan 2022 11:46:15 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> > + */
+> > +static inline bool is_rethook_trampoline(unsigned long addr)
+> > +{
+> > +	return addr == (unsigned long)arch_rethook_trampoline;
+> 
+> Will this work on architectures like PPC that have strange ways of holding
+> the function addresses? Or is that what the below fixup handles?
+
+Yes, I'll use dereference_symbol_descriptor().
+
+> > +}
+> > +
+> > +/* If the architecture needs a fixup the return address, implement it. */
+> 
+> 	"needs to fixup the"
+> 
+> > +void arch_rethook_fixup_return(struct pt_regs *regs,
+> > +			       unsigned long correct_ret_addr);
+> > +
+> > +/* Generic trampoline handler, arch code must prepare asm stub */
+> > +unsigned long rethook_trampoline_handler(struct pt_regs *regs,
+> > +					 unsigned long frame);
+> > +
+> > +#ifdef CONFIG_RETHOOK
+> > +void rethook_flush_task(struct task_struct *tk);
+> > +#else
+> > +#define rethook_flush_task(tsk)	do { } while (0)
+> > +#endif
+> > +
+> > +#endif
+> > +
+> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > index 78c351e35fec..2bfabf5355b7 100644
+> > --- a/include/linux/sched.h
+> > +++ b/include/linux/sched.h
+> > @@ -1473,6 +1473,9 @@ struct task_struct {
+> >  #ifdef CONFIG_KRETPROBES
+> >  	struct llist_head               kretprobe_instances;
+> >  #endif
+> > +#ifdef CONFIG_RETHOOK
+> > +	struct llist_head               rethooks;
+> > +#endif
+> >  
+> >  #ifdef CONFIG_ARCH_HAS_PARANOID_L1D_FLUSH
+> >  	/*
+> > diff --git a/kernel/exit.c b/kernel/exit.c
+> > index f702a6a63686..a39a321c1f37 100644
+> > --- a/kernel/exit.c
+> > +++ b/kernel/exit.c
+> > @@ -64,6 +64,7 @@
+> >  #include <linux/compat.h>
+> >  #include <linux/io_uring.h>
+> >  #include <linux/kprobes.h>
+> > +#include <linux/rethook.h>
+> >  
+> >  #include <linux/uaccess.h>
+> >  #include <asm/unistd.h>
+> > @@ -169,6 +170,7 @@ static void delayed_put_task_struct(struct rcu_head *rhp)
+> >  	struct task_struct *tsk = container_of(rhp, struct task_struct, rcu);
+> >  
+> >  	kprobe_flush_task(tsk);
+> > +	rethook_flush_task(tsk);
+> >  	perf_event_delayed_put(tsk);
+> >  	trace_sched_process_free(tsk);
+> >  	put_task_struct(tsk);
+> > diff --git a/kernel/fork.c b/kernel/fork.c
+> > index 3244cc56b697..ffae38be64c4 100644
+> > --- a/kernel/fork.c
+> > +++ b/kernel/fork.c
+> > @@ -2282,6 +2282,9 @@ static __latent_entropy struct task_struct *copy_process(
+> >  #ifdef CONFIG_KRETPROBES
+> >  	p->kretprobe_instances.first = NULL;
+> >  #endif
+> > +#ifdef CONFIG_RETHOOK
+> > +	p->rethooks.first = NULL;
+> > +#endif
+> >  
+> >  	/*
+> >  	 * Ensure that the cgroup subsystem policies allow the new process to be
+> > diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> > index 23483dd474b0..4d27e56c6e76 100644
+> > --- a/kernel/trace/Kconfig
+> > +++ b/kernel/trace/Kconfig
+> > @@ -10,6 +10,17 @@ config USER_STACKTRACE_SUPPORT
+> >  config NOP_TRACER
+> >  	bool
+> >  
+> > +config HAVE_RETHOOK
+> > +	bool
+> > +
+> > +config RETHOOK
+> > +	bool
+> > +	depends on HAVE_RETHOOK
+> > +	help
+> > +	  Enable generic return hooking feature. This is an internal
+> > +	  API, which will be used by other function-entry hooking
+> > +	  feature like fprobe and kprobes.
+> 
+> 	"features"
+> 
+> > +
+> >  config HAVE_FUNCTION_TRACER
+> >  	bool
+> >  	help
+> > diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
+> > index 79255f9de9a4..c6f11a139eac 100644
+> > --- a/kernel/trace/Makefile
+> > +++ b/kernel/trace/Makefile
+> > @@ -98,6 +98,7 @@ obj-$(CONFIG_UPROBE_EVENTS) += trace_uprobe.o
+> >  obj-$(CONFIG_BOOTTIME_TRACING) += trace_boot.o
+> >  obj-$(CONFIG_FTRACE_RECORD_RECURSION) += trace_recursion_record.o
+> >  obj-$(CONFIG_FPROBE) += fprobe.o
+> > +obj-$(CONFIG_RETHOOK) += rethook.o
+> >  
+> >  obj-$(CONFIG_TRACEPOINT_BENCHMARK) += trace_benchmark.o
+> >  
+> > diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+> > new file mode 100644
+> > index 000000000000..76c9848b44a9
+> > --- /dev/null
+> > +++ b/kernel/trace/rethook.c
+> > @@ -0,0 +1,311 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +
+> > +#define pr_fmt(fmt) "rethook: " fmt
+> > +
+> > +#include <linux/bug.h>
+> > +#include <linux/kallsyms.h>
+> > +#include <linux/kprobes.h>
+> > +#include <linux/preempt.h>
+> > +#include <linux/rethook.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/sort.h>
+> > +
+> > +/* Return hook list (shadow stack by list) */
+> > +
+> > +/*
+> > + * This function is called from delayed_put_task_struct() when a task is
+> > + * dead and cleaned up to recycle any kretprobe instances associated with
+> > + * this task. These left over instances represent probed functions that
+> > + * have been called but will never return.
+> > + */
+> > +void rethook_flush_task(struct task_struct *tk)
+> > +{
+> > +	struct rethook_node *rhn;
+> > +	struct llist_node *node;
+> > +
+> > +	preempt_disable();
+> > +
+> > +	node = __llist_del_all(&tk->rethooks);
+> 
+> Hmm, this keeps preemption disabled for the entire walk of the list.
+> Can we enable it here, and then just disable it when calling
+> rethook_recycle()?
+
+Yes, it is possible.
+
+> > +	while (node) {
+> > +		rhn = container_of(node, struct rethook_node, llist);
+> > +		node = node->next;
+> 
+> 		preempt_disable();
+> > +		rethook_recycle(rhn);
+> 		preempt_enable();
+> 
+> ? I'm concerned about the latency that this can add on RT tasks.
+
+OK, actually I just followed what the kretprobe does.
+
+[SNIP]
+> > +/* This assumes the 'tsk' is the current task or the is not running. */
+> 
+> 	"or the is not running" ?
+
+Oops, "a task which is not running"
+
+> > +/**
+> > + * rethook_find_ret_addr -- Find correct return address modified by rethook
+> > + * @tsk: Target task
+> > + * @frame: A frame pointer
+> > + * @cur: a storage of the loop cursor llist_node pointer for next call
+> > + *
+> > + * Find the correct return address modified by a rethook on @tsk in unsigned
+> > + * long type. If it finds the return address, this returns that address value,
+> > + * or this returns 0.
+> 
+> space
+> 
+> > + * The @tsk must be 'current' or a task which is not running. @frame is a hint
+> 
+> How do you know a tsk is not running? How can that be guaranteed?
+
+There is no check yet (I expected to caller ensure it).
+I'll add task_is_running() check.
+
+> > + * to get the currect return address - which is compared with the
+> > + * rethook::frame field. The @cur is a loop cursor for searching the
+> > + * kretprobe return addresses on the @tsk. The '*@cur' should be NULL at the
+> > + * first call, but '@cur' itself must NOT NULL.
+> 
+> I know you state what the return value is above, but it should be stated
+> (again) here. As kernel-doc should have a separate section for return
+> values:
+> 
+>  * Returns found address value or zero if not found.
+
+OK.
+
+> 
+> > + */
+> > +unsigned long rethook_find_ret_addr(struct task_struct *tsk, unsigned long frame,
+> > +				    struct llist_node **cur)
+> > +{
+> > +	struct rethook_node *rhn = NULL;
+> > +	unsigned long ret;
+> > +
+> > +	if (WARN_ON_ONCE(!cur))
+> > +		return 0;
+> > +
+> > +	do {
+> > +		ret = __rethook_find_ret_addr(tsk, cur);
+> > +		if (!ret)
+> > +			break;
+> > +		rhn = container_of(*cur, struct rethook_node, llist);
+> > +	} while (rhn->frame != frame);
+> > +
+> > +	return ret;
+> > +}
+> 
+
+Thank you!
+
+> -- Steve
+> 
+> 
+> > +NOKPROBE_SYMBOL(rethook_find_ret_addr);
+> > +
+> > +void __weak arch_rethook_fixup_return(struct pt_regs *regs,
+> > +				      unsigned long correct_ret_addr)
+> > +{
+> > +	/*
+> > +	 * Do nothing by default. If the architecture which uses a
+> > +	 * frame pointer to record real return address on the stack,
+> > +	 * it should fill this function to fixup the return address
+> > +	 * so that stacktrace works from the rethook handler.
+> > +	 */
+> > +}
+> > +
+> > +/* This function will be called from each arch-defined trampoline. */
+> > +unsigned long rethook_trampoline_handler(struct pt_regs *regs,
+> > +					 unsigned long frame)
+> > +{
+> > +	struct llist_node *first, *node = NULL;
+> > +	unsigned long correct_ret_addr;
+> > +	rethook_handler_t handler;
+> > +	struct rethook_node *rhn;
+> > +
+> > +	correct_ret_addr = __rethook_find_ret_addr(current, &node);
+> > +	if (!correct_ret_addr) {
+> > +		pr_err("rethook: Return address not found! Maybe there is a bug in the kernel\n");
+> > +		BUG_ON(1);
+> > +	}
+> > +
+> > +	instruction_pointer_set(regs, correct_ret_addr);
+> > +
+> > +	/*
+> > +	 * These loops must be protected from rethook_free_rcu() because those
+> > +	 * are accessing 'rhn->rethook'.
+> > +	 */
+> > +	preempt_disable();
+> > +
+> > +	/*
+> > +	 * Run the handler on the shadow stack. Do not unlink the list here because
+> > +	 * stackdump inside the handlers needs to decode it.
+> > +	 */
+> > +	first = current->rethooks.first;
+> > +	while (first) {
+> > +		rhn = container_of(first, struct rethook_node, llist);
+> > +		if (WARN_ON_ONCE(rhn->frame != frame))
+> > +			break;
+> > +		handler = READ_ONCE(rhn->rethook->handler);
+> > +		if (handler)
+> > +			handler(rhn, rhn->rethook->data, regs);
+> > +
+> > +		if (first == node)
+> > +			break;
+> > +		first = first->next;
+> > +	}
+> > +
+> > +	/* Fixup registers for returning to correct address. */
+> > +	arch_rethook_fixup_return(regs, correct_ret_addr);
+> > +
+> > +	/* Unlink used shadow stack */
+> > +	first = current->rethooks.first;
+> > +	current->rethooks.first = node->next;
+> > +	node->next = NULL;
+> > +
+> > +	while (first) {
+> > +		rhn = container_of(first, struct rethook_node, llist);
+> > +		first = first->next;
+> > +		rethook_recycle(rhn);
+> > +	}
+> > +	preempt_enable();
+> > +
+> > +	return correct_ret_addr;
+> > +}
+> > +NOKPROBE_SYMBOL(rethook_trampoline_handler);
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,87 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1193C49D095
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9EA49D099
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238675AbiAZRVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiAZRV1 (ORCPT
+        id S242785AbiAZRWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:22:00 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:41852 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231168AbiAZRVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:21:27 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF72BC06161C;
-        Wed, 26 Jan 2022 09:21:26 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id c3so183124pls.5;
-        Wed, 26 Jan 2022 09:21:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=CU635gyEcGUfu9rrYkgOvJLpCDM+lhOsMSeDOwBn7MM=;
-        b=KSFqGNiuh/TLdDei34uKTlnM81BLbvQxXfVKYXWvQZsH31cLBKLmtXQTvkBVUBr9Xo
-         ODp0hbzupm1lz23IXCXOm9bicl7lBhNgjxf3HXY55EiJoK6wKuJ8YPTgfuL4VlVZK8oX
-         VHpJAvyWJ40p3x8vwgetPDJgm5Pq9Eh0UVxTyEIINoWlZ1ysGnmO3nV4CAiYkRzF4IVS
-         ADH6YJQyB6i7b276i6rRggyCEb6bjb3XdUla0+ryRrGj3qe/2GdMkn6lsYyObWQ4YjFq
-         AXSSfICIFARCb90TmhUVy76dVVhFL8/SRZ0UsJLzmAON+kyQ/lAfxK7pCPs7DphDSeu1
-         xuMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=CU635gyEcGUfu9rrYkgOvJLpCDM+lhOsMSeDOwBn7MM=;
-        b=vSjFvO8TpZ3XvXWl7cUAnNnAsVgDrWTgSUTUrpGah/MBP17KYbQ1WR+0JDvoSI1vPl
-         xi2bG4dirzdh3/AYAnuFQUmt5yPg+KDNNqutDjheQH0WAAFkhYDxRtsFIRNbjlK18VK0
-         J3V3sn056oDMzmu2ESYyzSpsLEJDZ8DZUzOd9z6bnfombStK5zMpKBJIiNh+qDJNKQ5D
-         UjZJAxTol3fK7PaT6KJ7RrT1EUVn3OzyQdfx4K+ypAnE1kmb3FAJ2+GmDLwKO5Ah8gx1
-         H6Yv/0+KrBrw3STSlOiEXrcPctNTxY5XlYu5QPcYJD+5algQBRPvK8SM2QWvKC7Vk1hA
-         jDog==
-X-Gm-Message-State: AOAM532JQfOJjnAX/oknFavAFI7tvsmSIqmdV+Byh/h1uFau8+kRBfUI
-        vjwJb2gZ0VgZutrUivv4Y2cNjktDh+Sb2x3H/dA=
-X-Google-Smtp-Source: ABdhPJx2FFNzmZHhB6RjAqL19W+AmJtdHKn9hhOlueGxXA2t/Qk/5E7TeoMGljFFycDLj0PLwWXL8A==
-X-Received: by 2002:a17:90b:4d8a:: with SMTP id oj10mr9650947pjb.201.1643217685522;
-        Wed, 26 Jan 2022 09:21:25 -0800 (PST)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id q21sm2823250pfj.94.2022.01.26.09.21.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 09:21:24 -0800 (PST)
-Message-ID: <61f18314.1c69fb81.95468.804c@mx.google.com>
-Date:   Wed, 26 Jan 2022 09:21:24 -0800 (PST)
-X-Google-Original-Date: Wed, 26 Jan 2022 17:21:23 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220125155447.179130255@linuxfoundation.org>
-Subject: RE: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
+        Wed, 26 Jan 2022 12:21:54 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id 73D001F44B34
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643217713;
+        bh=a2EttWk/EvkJEucz64EmoVP3sbrDjOfns3KUuviWjqI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Obr630MxwR+xpy71rvzSSru0IhT0L1X7Iom/BKuDfl3xPpvFzRwIBKdhnLf1iyNCh
+         rJ+AAP36C61mR3MJnzRPkbW+4X3Npnau6Wwd6juH42uUBddMIZFXVEfvr/q+hRSv8t
+         z94rXeh78bR+Bh+ftU/ZAOw19rtvZQpIi7ucwGBO/6JYHsBQ+keOtD6TM1P9enGVec
+         Qe2EWANtBdxH2CpjAGVKQR+H1veHXhJl2XxgiQcJtYMo9dPHNkgBrdjANaXDOGFccL
+         gQKt++7cO1vU7KzmcWKIeDb2ljkLzQVbDASOThjPbtzXiYTXrIuY2ep9OEavTkDTCc
+         EscTw9O3y2Ieg==
+Message-ID: <b49d0645-9df0-55d7-3fdb-630befec7656@collabora.com>
+Date:   Wed, 26 Jan 2022 17:21:51 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Intel-gfx] [PATCH v5 2/5] drm/i915: enforce min GTT alignment
+ for discrete cards
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Matthew Auld <matthew.auld@intel.com>
+References: <20220125193530.3272386-1-bob.beckett@collabora.com>
+ <20220125193530.3272386-3-bob.beckett@collabora.com>
+ <9f011e69-2d6d-d6a1-db78-d4a061b4ef2c@shipmail.org>
+From:   Robert Beckett <bob.beckett@collabora.com>
+In-Reply-To: <9f011e69-2d6d-d6a1-db78-d4a061b4ef2c@shipmail.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 17:33:08 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.16.3 release.
-> There are 1033 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
 
-5.16.3-rc2 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
 
+On 26/01/2022 15:45, Thomas Hellström (Intel) wrote:
+> 
+> On 1/25/22 20:35, Robert Beckett wrote:
+>> From: Matthew Auld <matthew.auld@intel.com>
+>>
+>> For local-memory objects we need to align the GTT addresses
+>> to 64K, both for the ppgtt and ggtt.
+>>
+>> We need to support vm->min_alignment > 4K, depending
+>> on the vm itself and the type of object we are inserting.
+>> With this in mind update the GTT selftests to take this
+>> into account.
+>>
+>> For compact-pt we further align and pad lmem object GTT addresses
+>> to 2MB to ensure PDEs contain consistent page sizes as
+>> required by the HW.
+>>
+>> v3:
+>>     * use needs_compact_pt flag to discriminate between
+>>       64K and 64K with compact-pt
+>>     * add i915_vm_obj_min_alignment
+>>     * use i915_vm_obj_min_alignment to round up vma reservation
+>>       if compact-pt instead of hard coding
+>> v5:
+>>     * fix i915_vm_obj_min_alignment for internal objects which
+>>       have no memory region
+>>
+>> Signed-off-by: Matthew Auld <matthew.auld@intel.com>
+>> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+>> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+>> ---
+>>   .../i915/gem/selftests/i915_gem_client_blt.c  | 23 +++--
+>>   drivers/gpu/drm/i915/gt/intel_gtt.c           | 12 +++
+>>   drivers/gpu/drm/i915/gt/intel_gtt.h           | 18 ++++
+>>   drivers/gpu/drm/i915/i915_vma.c               |  9 ++
+>>   drivers/gpu/drm/i915/selftests/i915_gem_gtt.c | 96 ++++++++++++-------
+>>   5 files changed, 117 insertions(+), 41 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_client_blt.c 
+>> b/drivers/gpu/drm/i915/gem/selftests/i915_gem_client_blt.c
+>> index c8ff8bf0986d..f0bfce53258f 100644
+>> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_client_blt.c
+>> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_client_blt.c
+>> @@ -39,6 +39,7 @@ struct tiled_blits {
+>>       struct blit_buffer scratch;
+>>       struct i915_vma *batch;
+>>       u64 hole;
+>> +    u64 align;
+>>       u32 width;
+>>       u32 height;
+>>   };
+>> @@ -410,14 +411,21 @@ tiled_blits_create(struct intel_engine_cs 
+>> *engine, struct rnd_state *prng)
+>>           goto err_free;
+>>       }
+>> -    hole_size = 2 * PAGE_ALIGN(WIDTH * HEIGHT * 4);
+>> +    t->align = I915_GTT_PAGE_SIZE_2M; /* XXX worst case, derive from 
+>> vm! */
+>> +    t->align = max(t->align,
+>> +               i915_vm_min_alignment(t->ce->vm, INTEL_MEMORY_LOCAL));
+>> +    t->align = max(t->align,
+>> +               i915_vm_min_alignment(t->ce->vm, INTEL_MEMORY_SYSTEM));
+> 
+> Don't we always end up with 2M here, regardless of the vm restrictions?
+agreed. I will drop the 2M worst case.
+> 
+> 

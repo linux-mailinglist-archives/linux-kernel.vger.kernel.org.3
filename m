@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEE849C207
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47B049C208
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237082AbiAZDW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiAZDWy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:22:54 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABCBC06161C;
-        Tue, 25 Jan 2022 19:22:54 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id n16-20020a17090a091000b001b46196d572so4863078pjn.5;
-        Tue, 25 Jan 2022 19:22:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xWzUyrN0AQfg7IVrbfad7N0sE35bu6ZFef1Mu1uuBPY=;
-        b=cI1+UB+46MTZG9VOm9EGxOHVIMXGh3h+OztfulizsLROlIKpZtjIfcZmjEJPYhRCyM
-         VLbPm/W2/ItheXCJGwSkOvDbnRhreUSf9t9+PAI49aj49f9zC0z8KW+41sB9CSZYEGQ/
-         HF3Mq48c5SFifyXOL4JDnMHsmz2nczfXIqF2a5fBZDruEGKm9SSzTygNF2wJLYfntekX
-         YlMM6X0Ps9721wZVoGgiNW9nAdF4x6jplTkOFaMERDdGtiPStUo9dydyST2Q0p9uTo+F
-         EaG9UHlHh2zHwrHNM6j9hCpqBZiteJup2Nyw7nICY8KlnMk55UuYVs9+wSQJFJ5vKtSy
-         8f0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xWzUyrN0AQfg7IVrbfad7N0sE35bu6ZFef1Mu1uuBPY=;
-        b=HE0hzo6nas0XQXF/7LppFG4gFqTqDFj194kSOHo0wdrvHGR3AAXYHiXQIb7qjye03U
-         sRWpu/CYIXZAPZnBbOlgS07ySYp+n/0MbqdQK+CsfYQt2J4pmn8nIvSTWb3Tp7EuN5tK
-         +Wh2Q1Qu7QEe+COX/IP0T+VK7Ecd3e9llxYFeLpVukEvLUtPp4Igp4poEYOKI9/kLVVE
-         Ko7U1fhtHggvYQAcoWBWVIYthoxZ2KEldGulBlbtbAkr1c2HxGZYKmDreuAf/E2/CIF+
-         X7coWOF04OtdN3Zn5ipXl4RIQ5nwa8u37EVJT51AooTDji4sqeTFYyOuQpwFczTOo07G
-         4R4Q==
-X-Gm-Message-State: AOAM5325VUWpDJ+T3nAVFPLtxmKieXkTEUKpEAjXlWkM6x3Jp95aTFJz
-        fu6uM7r2OV3Su+FDm/RLuLQ=
-X-Google-Smtp-Source: ABdhPJwzZmWLdn/iSxMI2E2VGJ+4ueBZdwhhtvUm0T8mPt4YWWSF4u0FyQrVHYCzwYIARNFgF+hjRg==
-X-Received: by 2002:a17:903:1210:b0:149:8d21:3e43 with SMTP id l16-20020a170903121000b001498d213e43mr21199964plh.83.1643167374017;
-        Tue, 25 Jan 2022 19:22:54 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:4a48:4804:6add:baaf:69d5? ([2600:8802:b00:4a48:4804:6add:baaf:69d5])
-        by smtp.gmail.com with ESMTPSA id q140sm16255303pgq.7.2022.01.25.19.22.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jan 2022 19:22:53 -0800 (PST)
-Message-ID: <f1547841-2210-ec68-3111-333bb7468b34@gmail.com>
-Date:   Tue, 25 Jan 2022 19:22:51 -0800
+        id S237090AbiAZDYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:24:34 -0500
+Received: from mga17.intel.com ([192.55.52.151]:22002 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229468AbiAZDYd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 22:24:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643167473; x=1674703473;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7GsL5XJhtGNW/LXU8XAp6ySgVoNVcmklsGFkoTfafyE=;
+  b=QVTJrc6gCKvieQCCRzsUZrbYTaSnBEx/QAHIXhBeQb72/WanK/Bbt843
+   r7TCUfBeytuR7N8WNhG0eZWwzhpcda6NddLdj4M7V1lyNoUUs22tCpV1z
+   WVPl/gEmMir1p1KjfUOoy0+JYWs2BM3lFywpdh7wbtaEAXpDKx8lxFM5N
+   UXwpW0Cc4Xp4HfArR03tSwha0wtOrJTwlTL5xtwkdjHDLYIyho80+8HXC
+   A+IgdCzPu/LObqi20bd10psQiNwvV+/TaOXNsIr9rWhHSNfCm/NMp3CH2
+   pKwaFd9Psr/N/ck6GGz/39F1HR9AUCCbFlCN50OnOf/1THtN9QbczX98Q
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="227146779"
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="227146779"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 19:24:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="617842798"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 25 Jan 2022 19:24:31 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCYv9-000Kjl-4v; Wed, 26 Jan 2022 03:24:31 +0000
+Date:   Wed, 26 Jan 2022 11:24:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     James Morse <james.morse@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [morse:mpam/snapshot/v5.16 9/137]
+ arch/x86/kernel/cpu/resctrl/core.c:400:6: warning: no previous prototype for
+ function 'setup_default_ctrlval'
+Message-ID: <202201261106.qSo1MG6L-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v7 01/16] net: dsa: provide switch operations for
- tracking the master state
-Content-Language: en-US
-To:     Ansuel Smith <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <20220123013337.20945-2-ansuelsmth@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220123013337.20945-2-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
+head:   364c1c42b229912132e1615c2ce15be7154e2156
+commit: 1763d5f108c2b9e4fd2e055884b8e290b75fa5f0 [9/137] x86/resctrl: Remove architecture copy of mbps_val
+config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261106.qSo1MG6L-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=1763d5f108c2b9e4fd2e055884b8e290b75fa5f0
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v5.16
+        git checkout 1763d5f108c2b9e4fd2e055884b8e290b75fa5f0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/cpu/resctrl/core.c:400:6: warning: no previous prototype for function 'setup_default_ctrlval' [-Wmissing-prototypes]
+   void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
+        ^
+   arch/x86/kernel/cpu/resctrl/core.c:400:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
+   ^
+   static 
+   arch/x86/kernel/cpu/resctrl/core.c:414:6: warning: no previous prototype for function 'domain_free' [-Wmissing-prototypes]
+   void domain_free(struct rdt_hw_domain *hw_dom)
+        ^
+   arch/x86/kernel/cpu/resctrl/core.c:414:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void domain_free(struct rdt_hw_domain *hw_dom)
+   ^
+   static 
+   2 warnings generated.
 
 
-On 1/22/2022 5:33 PM, Ansuel Smith wrote:
-> From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> 
-> Certain drivers may need to send management traffic to the switch for
-> things like register access, FDB dump, etc, to accelerate what their
-> slow bus (SPI, I2C, MDIO) can already do.
-> 
-> Ethernet is faster (especially in bulk transactions) but is also more
-> unreliable, since the user may decide to bring the DSA master down (or
-> not bring it up), therefore severing the link between the host and the
-> attached switch.
-> 
-> Drivers needing Ethernet-based register access already should have
-> fallback logic to the slow bus if the Ethernet method fails, but that
-> fallback may be based on a timeout, and the I/O to the switch may slow
-> down to a halt if the master is down, because every Ethernet packet will
-> have to time out. The driver also doesn't have the option to turn off
-> Ethernet-based I/O momentarily, because it wouldn't know when to turn it
-> back on.
-> 
-> Which is where this change comes in. By tracking NETDEV_CHANGE,
-> NETDEV_UP and NETDEV_GOING_DOWN events on the DSA master, we should know
-> the exact interval of time during which this interface is reliably
-> available for traffic. Provide this information to switches so they can
-> use it as they wish.
-> 
-> An helper is added dsa_port_master_is_operational() to check if a master
-> port is operational.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+vim +/setup_default_ctrlval +400 arch/x86/kernel/cpu/resctrl/core.c
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+   399	
+ > 400	void setup_default_ctrlval(struct rdt_resource *r, u32 *dc)
+   401	{
+   402		struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+   403		int i;
+   404	
+   405		/*
+   406		 * Initialize the Control MSRs to having no control.
+   407		 * For Cache Allocation: Set all bits in cbm
+   408		 * For Memory Allocation: Set b/w requested to 100%
+   409		 */
+   410		for (i = 0; i < hw_res->num_closid; i++, dc++)
+   411			*dc = r->default_ctrl;
+   412	}
+   413	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

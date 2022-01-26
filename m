@@ -2,124 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E8349D25E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B531E49D277
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244376AbiAZTL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 14:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
+        id S244445AbiAZTXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 14:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244362AbiAZTLx (ORCPT
+        with ESMTP id S244438AbiAZTXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 14:11:53 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D376C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:11:53 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so5249571pju.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:11:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=g6MK/TK9V/JsMbg6KA7Vzzf+vJx0UYLxOdyiVInOIu4=;
-        b=PeG5RBqWvbBw2kchCn8oJAvldZRvSWRqZnC5dB2eq9VsnnGRH1pNI3XxFY2z9WaZNl
-         EkUFqCXuEOvMFwIz5I9UmReFRI7rNAanKhVvWsithEswW8ykd1ZWlh3uPkhKC05LmolH
-         Qtwz5OXU8q0BKiaEWs/Cz/H4Ycpa86rOBklLA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=g6MK/TK9V/JsMbg6KA7Vzzf+vJx0UYLxOdyiVInOIu4=;
-        b=Ivk2X7tmShQQA1Xv+swKAMNPN+dC2epYWcVMWT+gcDROK2w/LbJ31zUVJ0WOE3KMqd
-         kkK4MqtNKAiPLkKM2XQ27U0BvFo3IQ6tmSCkz7CuMsBdUf5TEDsUdtY1H7TmBHvnlL81
-         GPC1jwQtpUhvQq7vs96gPBJyJKKC4GGSzNpzHoTo40m0iJjRnI9LpiGJfgFr8p/ya9dW
-         s8jLb0CAVijDSovy6mD9lamlTl5KRZD1vJ3ico1SRq8oiXaed8lxwqYm2qJkp5zCZOFS
-         NikP7wnJstZV9EcxS8ihhlYC0G9h/6yJYnOQasOINis+Rvox76qe3GG6nPL8a8P1JAoO
-         /+aw==
-X-Gm-Message-State: AOAM533ITBcoxbZ3kNhPTmzrhbPQrQre2W12W+5INdQQmniORtdRFL2W
-        WmdUMVDYET3TKZrjWsDk+ak4Fw==
-X-Google-Smtp-Source: ABdhPJxZTidgdyVUPylsT3nAMV/NyqldqZzImpWbx0MEYsIs8Yea4EX35ZGWJmKRc1zggq03kP34ww==
-X-Received: by 2002:a17:90a:c901:: with SMTP id v1mr10067555pjt.203.1643224313056;
-        Wed, 26 Jan 2022 11:11:53 -0800 (PST)
-Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 10sm2791338pfm.56.2022.01.26.11.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 11:11:52 -0800 (PST)
-Date:   Wed, 26 Jan 2022 19:11:51 +0000
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Alyssa Ross <hi@alyssa.is>
-Cc:     "Mr. Chromebox" <mrchromebox@gmail.com>,
-        Benson Leung <bleung@google.com>,
-        Benson Leung <bleung@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Tim Wawrzynczak <twawrzynczak@chromium.org>
-Subject: Re: Null pointer dereference in cros-ec-typec
-Message-ID: <YfGc97nQfRQT+EOL@chromium.org>
-References: <CACeCKac0BctZae4n2CiAnpD4J-Dn+h2ROkx7CEVA9EmnobbNUw@mail.gmail.com>
- <CAFTm+6APx0PkRgp+7LLEOi=2E-7ZSgYdQ824U1XB+q1wMPNg3g@mail.gmail.com>
- <CACeCKaeAaS3QcLwvcPNYVtkKxaBViij53TBjOXvwcpKQk+NDbA@mail.gmail.com>
- <CAFTm+6BC--tNjbez_f_A_ckK7gjkbBMWHYSExxQcp9+u60Z2WQ@mail.gmail.com>
- <CACeCKaeAUy8JCO9hv7XjeQA_P_At9SN_Cuw2v=YD01gfwvGXFQ@mail.gmail.com>
- <20220119023752.ad34u6hgjpkpk4dw@eve>
- <CACeCKafA4eDNgEbACjorCHBdrLaG6YviRS+gA=Xr-XD+GVaxZw@mail.gmail.com>
- <CAFTm+6DMuxx_qiPEU4VwweZVvuFhReWTogYMychH1gXnn47xHw@mail.gmail.com>
- <20220119203243.3zh6mcb2fauczn5k@eve>
- <Yen1gP6XB6bRo7OW@chromium.org>
+        Wed, 26 Jan 2022 14:23:16 -0500
+X-Greylist: delayed 485 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Jan 2022 11:23:15 PST
+Received: from forward102o.mail.yandex.net (forward102o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::602])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6FCC061747;
+        Wed, 26 Jan 2022 11:23:15 -0800 (PST)
+Received: from sas1-bdc74852af75.qloud-c.yandex.net (sas1-bdc74852af75.qloud-c.yandex.net [IPv6:2a02:6b8:c14:49b:0:640:bdc7:4852])
+        by forward102o.mail.yandex.net (Yandex) with ESMTP id 642256FF805C;
+        Wed, 26 Jan 2022 22:15:05 +0300 (MSK)
+Received: from sas1-1f4a002bb12a.qloud-c.yandex.net (sas1-1f4a002bb12a.qloud-c.yandex.net [2a02:6b8:c14:3908:0:640:1f4a:2b])
+        by sas1-bdc74852af75.qloud-c.yandex.net (mxback/Yandex) with ESMTP id JlJu1nJfOU-F4cOTLG1;
+        Wed, 26 Jan 2022 22:15:05 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1643224505;
+        bh=O+b5CapC7L3M523CZMVUm6J5g7pUFdehbp9UOnOr/xk=;
+        h=Date:Subject:To:From:Message-Id:Cc;
+        b=E9n8Iml8+ZHxoa+BXBTJos6Ccp1DizV9JZ8zcd2KXVUdGL2hvYFvhQksyriGFd/X6
+         4KM8cyqY4/v95sEXDrc5DXUinnWKZDewTaXIaD+Wfjjf2K4UbXsBmkYh4e1h5N/xz3
+         dr5PYAQbgeDtQyRXrgnXCx8TPtIzwZjIR9nVxCqo=
+Authentication-Results: sas1-bdc74852af75.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by sas1-1f4a002bb12a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id vdrU00sr04-F3IGAhXh;
+        Wed, 26 Jan 2022 22:15:03 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+From:   Stas Sergeev <stsp2@yandex.ru>
+Cc:     Stas Sergeev <stsp2@yandex.ru>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marco Elver <elver@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Gladkov <legion@kernel.org>,
+        Andrew Lutomirski <luto@mit.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Borislav Petkov <bp@suse.de>, Len Brown <len.brown@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] sigaltstack: return only one flag
+Date:   Wed, 26 Jan 2022 22:14:39 +0300
+Message-Id: <20220126191441.3380389-1-stsp2@yandex.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yen1gP6XB6bRo7OW@chromium.org>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Currently sigaltstack() can return multiple flags, for example
+SS_DISABLE|SS_AUTODISARM. This confuses libraries (including asan
+runtime) and contradicts the man page.
 
-On Jan 20 23:51, Prashant Malani wrote:
-> Hey Alyssa,
-> 
-> On Jan 19 20:32, Alyssa Ross wrote:
-> > On Wed, Jan 19, 2022 at 12:44:06PM -0600, Mr. Chromebox wrote:
-> > > On Wed, Jan 19, 2022 at 12:24 PM Prashant Malani <pmalani@chromium.org> wrote:
-> > > >
-> > > > Thanks Alyssa,
-> > > >
-> > > > It looks like the right fix here should go in coreboot.
-> > > >
-> > > > I'll wait for a response from Matt regarding whether those EC commands
-> > > > are supported on the eve EC firmware image Mr.Chromebox releases.
-> > >
-> > > looking at Chrome-EC branch firmware-eve-9584.B,
-> > >
-> > > EC_CMD_GET_PD_PORT_CAPS is *not* supported
-> > > EC_CMD_USB_PD_PORTS is supported
-> > >
-> > > no difference in this regard between my updated EC firmware and the
-> > > latest stock EC firmware provided by Google for EVE
-> > >
-> > > > I have a fix but I can't test it since :
-> > > > - I am not sure how the Mr.Chromebox eve BIOS is compiled.
-> > >
-> > > same build system as upstream coreboot
-> > >
-> > > > - I don't have an eve.
-> > >
-> > > me neither :)
-> > 
-> > I'd be more than happy to test Coreboot patches on my eve and report
-> > back on anything that needs to be checked, if that helps?  I've built
-> > and installed it from source before.
-> 
-> Yes, this would be very helpful! Here is the link:
-> https://review.coreboot.org/c/coreboot/+/61262
+Patch 1 fixes this problem by ignoring any flag passed with SS_DISABLE.
+Patch 2 adds a test-case for that scenario.
 
-To close the loop here, the above patch has been submitted successfully.
+Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+CC: "Eric W. Biederman" <ebiederm@xmission.com>
+CC: Kees Cook <keescook@chromium.org>
+CC: Jens Axboe <axboe@kernel.dk>
+CC: Peter Zijlstra <peterz@infradead.org>
+CC: Marco Elver <elver@google.com>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Alexey Gladkov <legion@kernel.org>
+CC: Andrew Lutomirski <luto@mit.edu>
+CC: Shuah Khan <shuah@kernel.org>
+CC: "Chang S. Bae" <chang.seok.bae@intel.com>
+CC: Borislav Petkov <bp@suse.de>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Len Brown <len.brown@intel.com>
+CC: linux-kselftest@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
 
-Additionally, I've also pushed another patch to the kernel driver [1]
-which checks for the null pointer (for folks using older firmware).
+Stas Sergeev (2):
+  sigaltstack: ignore flags if SS_DISABLE is set
+  selftests: sigaltstack: add new SS_DISABLE test
 
-Thanks all,
+ kernel/signal.c                           |  1 +
+ tools/testing/selftests/sigaltstack/sas.c | 48 ++++++++++++-----------
+ 2 files changed, 26 insertions(+), 23 deletions(-)
 
--Prashant
+-- 
+2.34.1
 
-[1] https://lore.kernel.org/lkml/20220126190219.3095419-1-pmalani@chromium.org/

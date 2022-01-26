@@ -2,143 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD9149CBC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255EE49CBF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241918AbiAZOFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235083AbiAZOFD (ORCPT
+        id S241980AbiAZONv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:13:51 -0500
+Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:31022 "EHLO
+        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232541AbiAZONu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:05:03 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AB9C06161C;
-        Wed, 26 Jan 2022 06:05:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LDOLYM2UfrQAiWJ+eM2UXKMwCeFJxxfa8YNvPPKmDCc=; b=ELrBa3qC7jTSTLpOImhQz3dzEz
-        K5WpZ/YZNRUQTA5GRRhG6YiSdHMRVkodurb0Am0X6SmfvxxM4e30HzzO0Bq+Eya4Z4YKZsqyZnHRq
-        WUbgL69McwYa9JEsI5oTYalj84FVvlFriG5wyGGcjvvUqF3QFnjgJERnCaHSyuuX1VWvdDmH9ubgF
-        fJKVKswc9GsTI7CfyMfotquwNpIzpjlt+9i2tvGaowEnY0/GTHW4z87fV/3J6mP9njzNubFGlAfz7
-        fq2jpcbaKAgrY6uR1AMaqLdZfQnwioMKBvnr6oeatrRB6eM1WA2W2FyfS5VrAE1X84P7KWS611JLB
-        HGQIVHaA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCiuj-003os7-UP; Wed, 26 Jan 2022 14:04:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 501733002C5;
-        Wed, 26 Jan 2022 15:04:44 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E9FC72B36E787; Wed, 26 Jan 2022 15:04:43 +0100 (CET)
-Date:   Wed, 26 Jan 2022 15:04:43 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Kyle Huey <me@kylehuey.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Robert O'Callahan <rocallahan@gmail.com>,
-        Keno Fischer <keno@juliacomputing.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH] x86/perf: Default freeze_on_smi on for Comet Lake and
- later.
-Message-ID: <YfFU+2nMjEC1Mo3m@hirez.programming.kicks-ass.net>
-References: <20220122072644.92292-1-khuey@kylehuey.com>
- <Ye6Z31keWVPrsNWU@hirez.programming.kicks-ass.net>
- <3c35dc76-c187-8d3f-7fc9-75de32e7cbf6@linux.intel.com>
- <CAP045ArbX7cYKyv0H4X2SxUJWycB1VoLZWLME=_RXttBFBfP3A@mail.gmail.com>
- <7ef1bf66-4184-7f5b-c0bd-351ec743d4e9@linux.intel.com>
+        Wed, 26 Jan 2022 09:13:50 -0500
+X-Greylist: delayed 471 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jan 2022 09:13:50 EST
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id E2CB73F689;
+        Wed, 26 Jan 2022 15:05:56 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Flag: NO
+X-Spam-Score: -2.1
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 tagged_above=-999 required=6.31
+        tests=[BAYES_00=-1.9, DKIM_SIGNED=0.1, DKIM_VALID=-0.1,
+        DKIM_VALID_AU=-0.1, DKIM_VALID_EF=-0.1, NICE_REPLY_A=-0.001,
+        URIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no
+Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
+        dkim=pass (1024-bit key) header.d=shipmail.org
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hMX6J1oMPg-X; Wed, 26 Jan 2022 15:05:56 +0100 (CET)
+Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 293F03F66F;
+        Wed, 26 Jan 2022 15:05:53 +0100 (CET)
+Received: from [192.168.0.209] (unknown [192.55.55.54])
+        by mail1.shipmail.org (Postfix) with ESMTPSA id 2B3B33626AA;
+        Wed, 26 Jan 2022 15:05:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
+        t=1643205953; bh=0MTfgcCysP/q4eVXnuzFoCi2k0Jnuri0D10FI7Hd3AM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RsLQLxnyua74FxEE2/64ThYR5+k3uN1bMz9T9qsxrPQ1BBbccs1J23+KBzWmVyycK
+         fpvxv6rm07BNAZdm2ViUlwSDsmVVJQAtVlSH4bjf5Q7Hx6dKWMn3UeKr4FAXKxk811
+         oaT7tYG4JF1jHX1nFr7EF/NUCkPQpW/pox9SPkCE=
+Message-ID: <b6e9a900-435f-148c-826f-a8f6c188df94@shipmail.org>
+Date:   Wed, 26 Jan 2022 15:05:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ef1bf66-4184-7f5b-c0bd-351ec743d4e9@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [Intel-gfx] [PATCH v5 4/5] drm/i915: add gtt misalignment test
+Content-Language: en-US
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220125193530.3272386-1-bob.beckett@collabora.com>
+ <20220125193530.3272386-5-bob.beckett@collabora.com>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+In-Reply-To: <20220125193530.3272386-5-bob.beckett@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 08:57:09AM -0500, Liang, Kan wrote:
-> I see. I was thought the unprivileged user can observe the SMM code on the
-> previous platforms. The CML+ change only makes part of the SMM code CPL0.
-> Seems I'm wrong. The change looks like changing the previous CPL0 code to
-> CPL3 code. If so, yes, I think we should prevent the information leaks for
-> the unprivileged user.
 
-Right.
+On 1/25/22 20:35, Robert Beckett wrote:
+> add test to check handling of misaligned offsets and sizes
+>
+> v4:
+> 	* remove spurious blank lines
+> 	* explicitly cast intel_region_id to intel_memory_type in misaligned_pin
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> ---
+>   drivers/gpu/drm/i915/selftests/i915_gem_gtt.c | 128 ++++++++++++++++++
+>   1 file changed, 128 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+> index b80788a2b7f9..f082b5ff3b5e 100644
+> --- a/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+> +++ b/drivers/gpu/drm/i915/selftests/i915_gem_gtt.c
+> @@ -22,10 +22,12 @@
+>    *
+>    */
+>   
+> +#include "gt/intel_gtt.h"
+>   #include <linux/list_sort.h>
+>   #include <linux/prime_numbers.h>
+>   
+>   #include "gem/i915_gem_context.h"
+> +#include "gem/i915_gem_region.h"
+>   #include "gem/selftests/mock_context.h"
+>   #include "gt/intel_context.h"
+>   #include "gt/intel_gpu_commands.h"
+> @@ -1067,6 +1069,120 @@ static int shrink_boom(struct i915_address_space *vm,
+>   	return err;
+>   }
+>   
+> +static int misaligned_case(struct i915_address_space *vm, struct intel_memory_region *mr,
+> +			   u64 addr, u64 size, unsigned long flags)
+> +{
+> +	struct drm_i915_gem_object *obj;
+> +	struct i915_vma *vma;
+> +	int err = 0;
+> +	u64 expected_vma_size, expected_node_size;
+> +
+> +	obj = i915_gem_object_create_region(mr, size, 0, 0);
+> +	if (IS_ERR(obj))
+> +		return PTR_ERR(obj);
+> +
+> +	vma = i915_vma_instance(obj, vm, NULL);
+> +	if (IS_ERR(vma)) {
+> +		err = PTR_ERR(vma);
+> +		goto err_put;
+> +	}
+> +
+> +	err = i915_vma_pin(vma, 0, 0, addr | flags);
+> +	if (err)
+> +		goto err_put;
+> +	i915_vma_unpin(vma);
+> +
+> +	if (!drm_mm_node_allocated(&vma->node)) {
+> +		err = -EINVAL;
+> +		goto err_put;
+> +	}
+> +
+> +	if (i915_vma_misplaced(vma, 0, 0, addr | flags)) {
+> +		err = -EINVAL;
+> +		goto err_put;
+> +	}
+> +
+> +	expected_vma_size = round_up(size, 1 << (ffs(vma->resource->page_sizes_gtt) - 1));
+> +	expected_node_size = expected_vma_size;
+> +
+> +	if (IS_DG2(vm->i915) && i915_gem_object_is_lmem(obj)) {
+> +		/* dg2 should expand lmem node to 2MB */
 
-> Changing it to all platforms seems a too big hammer. I agree we should limit
-> it to the impacted platforms.
-> 
-> I've contacted the author of the white paper. I was told that the change is
-> for the client vPro platforms. They are not sure whether it impacts Server
-> platform or Atom platforms. I'm still working on it. I will let you and
-> Peter know once I get more information.
+Should this test be NEEDS_COMPACT_PT()?
 
-For now I've updated the patch as per the below. I'm tempted to simply
-apply it as is and let it be.
+Otherwise LGTM. Reviewed-by: Thomas Hellström 
+<thomas.hellstrom@linux.intel.com>
 
-Having different defaults for vPro vs !vPro chips seems more confusing
-than not.
 
-We should also very much get this change reverted for future chips.
-
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -6094,6 +6094,16 @@ __init int intel_pmu_init(void)
- 			x86_pmu.commit_scheduling = intel_tfa_commit_scheduling;
- 		}
- 
-+		if (boot_cpu_data.x86_model == INTEL_FAM6_COMETLAKE_L ||
-+		    boot_cpu_data.x86_model == INTEL_FAM6_COMETLAKE) {
-+			/*
-+			 * For some idiotic reason SMM is visible to USR
-+			 * counters. Since this is a privilege issue, default
-+			 * disable counters in SMM for these chips.
-+			 */
-+			x86_pmu.attr_freeze_on_smi = 1;
-+		}
-+
- 		pr_cont("Skylake events, ");
- 		name = "skylake";
- 		break;
-@@ -6135,6 +6145,8 @@ __init int intel_pmu_init(void)
- 		x86_pmu.num_topdown_events = 4;
- 		x86_pmu.update_topdown_event = icl_update_topdown_event;
- 		x86_pmu.set_topdown_event_period = icl_set_topdown_event_period;
-+		/* SMM visible in USR, see above */
-+		x86_pmu.attr_freeze_on_smi = 1;
- 		pr_cont("Icelake events, ");
- 		name = "icelake";
- 		break;
-@@ -6172,6 +6184,8 @@ __init int intel_pmu_init(void)
- 		x86_pmu.num_topdown_events = 8;
- 		x86_pmu.update_topdown_event = icl_update_topdown_event;
- 		x86_pmu.set_topdown_event_period = icl_set_topdown_event_period;
-+		/* SMM visible in USR, see above */
-+		x86_pmu.attr_freeze_on_smi = 1;
- 		pr_cont("Sapphire Rapids events, ");
- 		name = "sapphire_rapids";
- 		break;
-@@ -6217,6 +6231,8 @@ __init int intel_pmu_init(void)
- 		 * x86_pmu.rtm_abort_event.
- 		 */
- 		x86_pmu.rtm_abort_event = X86_CONFIG(.event=0xc9, .umask=0x04);
-+		/* SMM visible in USR, see above */
-+		x86_pmu.attr_freeze_on_smi = 1;
- 
- 		td_attr = adl_hybrid_events_attrs;
- 		mem_attr = adl_hybrid_mem_attrs;

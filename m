@@ -2,83 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E880E49C404
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0CB49C40A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237567AbiAZHHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 02:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S237604AbiAZHH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 02:07:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237568AbiAZHHo (ORCPT
+        with ESMTP id S237575AbiAZHHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 02:07:44 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3B0C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 23:07:44 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id g20so2279499pgn.10
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 23:07:44 -0800 (PST)
+        Wed, 26 Jan 2022 02:07:55 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F36C061744;
+        Tue, 25 Jan 2022 23:07:54 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id e9so7896360ljq.1;
+        Tue, 25 Jan 2022 23:07:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kzqLcwMXNPYKykjkG+NrQ8t0BTtuiWwC+Wlb+U4kWnM=;
-        b=XMp8A2Xxco7GN/AU5vRgAmxNxk0v1sAI4kLUqq+K1XeOCGPvbcTbIC9/pW5/RtlSnK
-         YoTIgEu0aQ99jrGlozhapMa125mSWTbw54EN6coGqhdut2fJOM/Gv7XE8pOJQaS0Iax0
-         2+65QH73240ljNDTzoKOlpTVnddqGVNlvUwDXZ4/RyQEKb/4NSIO0/iaEigixyznDTsV
-         xOgnHYLPmAHWU3FAmBlAgSMgQNCV3tAL/mw6ml+fu8gy+Qdo+XCMThwa/y5Mqw7OhCAY
-         MI57eag5dqdlw4I33TSjCtVfRhAxXoMbvcmj7HxFZoWugalQJpZlAyW7UVPfNdr4TICH
-         Bg8Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5PfYCVcr1In8W9+MgZIF3icYx9fo+vY33A1S1gqsP34=;
+        b=n42hCN/HYREN+SnwV2Pnhw036LJMATzNeFmmCSTpPlPLVZP+xX/SiBljHM+4/HQLCX
+         cg5nyQZ+DfVwXaOwyZD305PfQyWsPViZiXvJ0RsA3VfNkS2P9VPkRVV1RUQIHfNxxIjJ
+         t1Bl+NcHbBo8vSFaNrZlqzPW849DR+X5smwiKgGq6G6Xw18osN5AkH9XXaKvdtB8MToj
+         njnhh9sJ3mfRxa/0tPC6AsKUfEBpm6yilKDaIMG0JAjlEsoQ0d683oOeNMQAr7uxssWa
+         xiLj0LLPA2OkGot+jljqWodIyT3vjuWoY04DUrx47em876KalbN8JbQV0IKLz6GZfPlc
+         oPWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kzqLcwMXNPYKykjkG+NrQ8t0BTtuiWwC+Wlb+U4kWnM=;
-        b=vlYY0RUfV5PGTV5qJrlSQCpxbokxngMGErpQ+ZJu+FJx5D7h5dDhKqDe2Boinira1u
-         QcaCXBo6/pWNwe+E4IUVbwY8kZ9/JFp8VKTlillmeflRPkBfsPUAqqNwMg//GKZmfe19
-         wIFw7NG8CVS3Hl4qFT/mqHexaYP0pjCd6IDI1T1x+FQ1bftve9akewtNxHfivAOrS6CI
-         Tr/PFOMrH318NEcBfPnClDeVCqBg35P8t0klZvupCFMhGBAyh96EoC53Zuu69hprLTl7
-         hFNuJ6tIOCXVX042PszBCRQGIBWxpzWALRIM0A0tEOARp5qnsyT5rJjSNR2fiuofXnnu
-         GzuQ==
-X-Gm-Message-State: AOAM532OsvzFn2/8zsKiBnAQ/DbbCSxIknBDTChSjVIgnC2Xdw5zoX2B
-        OHrnRJmSk3iTaSMWDhyHNi80e198AHm80nS500s=
-X-Google-Smtp-Source: ABdhPJwJxi5fm1+IiqDeOZum4FSyjet2i5IfwHuTWStQgv68X2ucMv7UspwF4WRDTh9AIwQgbsl9uEEYUdW6FczGHvw=
-X-Received: by 2002:a63:710c:: with SMTP id m12mr17925537pgc.334.1643180864014;
- Tue, 25 Jan 2022 23:07:44 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5PfYCVcr1In8W9+MgZIF3icYx9fo+vY33A1S1gqsP34=;
+        b=4EtiHywJHh4IA3oZ8b9XPFmJmMHeb7jo23hJcu/4XoH+ShntkiNnXce1EiVHUlHlmE
+         G2QvWbgzZdSScIAqE2dTaCkszJA6Fx6tyQvLm+YthcxVzDTH34DVIHjsns8WHYTq+DEz
+         pzm3jT81sYtJi7bpnsjxvt8yjJUIpGONnqgFg9tfrNIsGDBKUMEjYN2WZVKF3RkAtf3k
+         1/FXT4xzNf6zObK4LVuk6StITrWGmQUa5i14PkcImAU7MnROEM/5K48NXh1nDAGLLN8C
+         FSlNVU16wKFqlbQ/8VQOBmDjL8YdvpyHrcdOKNy+EXLHev8SKgrQMfuRIXYXS3yDNU8w
+         5etQ==
+X-Gm-Message-State: AOAM530IORawBtWsmXI6PjMPoFS5msWNUVh2h30OkCw/brcdMrVry7ch
+        +tbzFUErRn4+gZLtY2/Y/Vg=
+X-Google-Smtp-Source: ABdhPJz/pMWKdr30TUV8F5L8mcYQkfbr49L33tXc0XYI5XxtaBk2w0Bnf6pcTZlX0EVFBGP1mrPOBQ==
+X-Received: by 2002:a05:651c:93:: with SMTP id 19mr5357663ljq.175.1643180873008;
+        Tue, 25 Jan 2022 23:07:53 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id b39sm1465764ljr.88.2022.01.25.23.07.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 23:07:52 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Michael Walle <michael@walle.cc>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH REBASED 1/2] dt-bindings: nvmem: extract NVMEM cell to separated file
+Date:   Wed, 26 Jan 2022 08:07:44 +0100
+Message-Id: <20220126070745.32305-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220125180114.12286-1-zajec5@gmail.com>
+References: <20220125180114.12286-1-zajec5@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:cacb:0:0:0:0 with HTTP; Tue, 25 Jan 2022 23:07:43
- -0800 (PST)
-Reply-To: fulhammartins8@gmail.com
-From:   Fulham Martins <whoknowsladyjay@gmail.com>
-Date:   Wed, 26 Jan 2022 08:07:43 +0100
-Message-ID: <CAMhEkO6ym=vegO6nHJCkFqhogkT5ji0b1NdyN6ERwckZVNsDkQ@mail.gmail.com>
-Subject: INVESTMENT PARTNERSHIP
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Partner,
+From: Rafał Miłecki <rafal@milecki.pl>
 
-My Name is Mr. Fulham Martins. I am from the United Kingdom.
-It is my resolve to contact you for an investment plan in your
-country. It is no more a secret that investments are thriving fast in
-your country.
-Therefore, I want to invest in your country and want you to be my
-business partner.
-I am ready to invest in any sector such as Manufacturing, Agriculture,
-Real Estate, Hoteling, etc. or any other business that has good return
-on investment/profitable.
+This will allow adding binding for more specific cells and reusing
+(sharing) common code.
 
-If you choose to be of assistance, I am ready to send the consignment
-box to your country regarding the investment
-partnership or do a direct bank transfer to your account based on
-whatever modalities the investment will entail.
-Like I mentioned earlier, I am presently based in the United Kingdom
-and would like to know whether you are ready to partner with me on
-this. Kindly indicate your interest to enable us to proceed.
-Thank you in anticipation as I look forward to reading your reply.
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../devicetree/bindings/nvmem/cells/cell.yaml | 34 +++++++++++++++++++
+ .../devicetree/bindings/nvmem/nvmem.yaml      | 22 +-----------
+ 2 files changed, 35 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/cells/cell.yaml
 
+diff --git a/Documentation/devicetree/bindings/nvmem/cells/cell.yaml b/Documentation/devicetree/bindings/nvmem/cells/cell.yaml
+new file mode 100644
+index 000000000000..adfc2e639f43
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/cells/cell.yaml
+@@ -0,0 +1,34 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/cells/cell.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NVMEM cell
++
++maintainers:
++  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
++
++description: NVMEM cell is a data entry of NVMEM device.
++
++properties:
++  reg:
++    maxItems: 1
++    description:
++      Offset and size in bytes within the storage device.
++
++  bits:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    items:
++      - minimum: 0
++        maximum: 7
++        description:
++          Offset in bit within the address range specified by reg.
++      - minimum: 1
++        description:
++          Size in bit within the address range specified by reg.
++
++required:
++  - reg
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+index 43ed7e32e5ac..b79b51e98ee8 100644
+--- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+@@ -41,27 +41,7 @@ properties:
+ 
+ patternProperties:
+   "@[0-9a-f]+(,[0-7])?$":
+-    type: object
+-
+-    properties:
+-      reg:
+-        maxItems: 1
+-        description:
+-          Offset and size in bytes within the storage device.
+-
+-      bits:
+-        $ref: /schemas/types.yaml#/definitions/uint32-array
+-        items:
+-          - minimum: 0
+-            maximum: 7
+-            description:
+-              Offset in bit within the address range specified by reg.
+-          - minimum: 1
+-            description:
+-              Size in bit within the address range specified by reg.
+-
+-    required:
+-      - reg
++    $ref: cells/cell.yaml#
+ 
+ additionalProperties: true
+ 
+-- 
+2.31.1
 
-Best regards.
-
-Mr.Fulham Martins.

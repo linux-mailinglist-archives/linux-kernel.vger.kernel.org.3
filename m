@@ -2,149 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF01D49C300
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D352949C302
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 06:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbiAZFXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 00:23:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:21592 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229691AbiAZFXD (ORCPT
+        id S232492AbiAZFXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 00:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229691AbiAZFXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 00:23:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643174582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ynnc6+wbtkYwrJ+1sA+Eb18h6IaclkgRD462jbpTKd0=;
-        b=iqIZzUjOi8pkKLDBjQS0vSr0ZBTVmcbhNn3ZM6EMQzwvtdgxK7AjpfkdYfEAcZs5H71NJo
-        glVh0vrkP6hzhfkPDBBnnFG2b1TN0etinGpsdSUviOoZj7ZBSwSnFzIWe33B/b9d8fOoIO
-        eCT1zI1IndGm55valoD0HfEVHQR0mUE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-13-KokxABPsPz-amuS6yQRGXg-1; Wed, 26 Jan 2022 00:22:58 -0500
-X-MC-Unique: KokxABPsPz-amuS6yQRGXg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A1F14835B47;
-        Wed, 26 Jan 2022 05:22:56 +0000 (UTC)
-Received: from localhost (ovpn-12-215.pek2.redhat.com [10.72.12.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B5C075ED33;
-        Wed, 26 Jan 2022 05:22:52 +0000 (UTC)
-Date:   Wed, 26 Jan 2022 13:22:46 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel@vger.kernel.org, pmladek@suse.com,
-        akpm@linux-foundation.org, anton@enomsg.org, ccross@android.com,
-        dyoung@redhat.com, feng.tang@intel.com, john.ogness@linutronix.de,
-        keescook@chromium.org, kernel@gpiccoli.net,
-        kexec@lists.infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, tony.luck@intel.com, vgoyal@redhat.com
-Subject: Re: [PATCH V4] panic: Move panic_print before kmsg dumpers
-Message-ID: <20220126052246.GC2086@MiWiFi-R3L-srv>
-References: <20220124203101.216051-1-gpiccoli@igalia.com>
+        Wed, 26 Jan 2022 00:23:55 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5390C06161C;
+        Tue, 25 Jan 2022 21:23:54 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id h14so68069983ybe.12;
+        Tue, 25 Jan 2022 21:23:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BmNhY6FQW/GrrzMUwo58dyScPyirrw0g3CZ9jNL4l2w=;
+        b=qms8N3moNDRD+/zKbUAk2ww2ayLOF0zLPPwvXzOUoQNW27ceiMM7w9iOK3v6so+gFv
+         NxdTlmmH8RVifgQL/YzfUl7HgFnwEoy/rnWgnnBc9El4tLvZ5Fwuh57Y2TQAhdIJS3Fr
+         V+L1yjLtS40JNVvlZYPnQn/OyhNsOcYJZIpzC8Tc3EQtb/UHPxQbiE4+fZ9EAbQaEALp
+         MxePubsggahRdW21qs9tuNKL7j6qJJi7vbMbHDN0ratudWKnO+tQPy1FFCECD7CNHvwN
+         eprmhh68BqZ+0JG9eazFzxIIKgLaIbxWoxcqUZMTRgZAlUPdPiEstJV/LDzh1w6M8Q6Z
+         vjsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BmNhY6FQW/GrrzMUwo58dyScPyirrw0g3CZ9jNL4l2w=;
+        b=QfJZDAja3w0RtQc9poMPKoP27q4BFy1x/OMRHZ0LpAfZmKPK/Q4Pjd35vHkVulr+nD
+         Hvd2RCrotsnxpepopSdMYHmoZCN3D5fFED8a3MfS5pkBNPQw4gP/Yo4Y2GL2tU/qk0fl
+         1OLBB0Nr8nyDgDuXkqLIyvUnQKaRh/iugM+zr8J4qRiOAwDtK2agbzuOA+eh7+seczX4
+         37OsaVxL/sqZJZzcDuHN2JrXiuWLF8IyCcQFoKGHBg+HC4kjWbmhkulHT9cUKoiF3muT
+         2DZGRI1ko5kjw2FE6MrTsiUqiu2XbgFu1bnSuFyBk1vGxNabjW+pDPyhHN5gXBwY36lG
+         sYtg==
+X-Gm-Message-State: AOAM5338N/QSBwtkqk5hoqCx0j+tCqOtz0UMUWivwdvaC0V1Mg1e98s9
+        lTowwb5nBqLu7+gafEZuzRX5ipSHJgdtJzJL4ZM=
+X-Google-Smtp-Source: ABdhPJwSAB5RAnuO1XryMa2zwDZqE9o0YmCGlcohJkr0T/0G49+lz8m3Wt8I/nqj9KzoPm/W9g5/SllzaZjqRNmuyPs=
+X-Received: by 2002:a25:42d7:: with SMTP id p206mr34188694yba.182.1643174634013;
+ Tue, 25 Jan 2022 21:23:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124203101.216051-1-gpiccoli@igalia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+References: <20220124003342.1457437-1-ztong0001@gmail.com> <202201241937.i9KSsyAj-lkp@intel.com>
+ <20220124151611.30db4381d910c853fc0c9728@linux-foundation.org> <CADJHv_vh03bhn1FX2-jc6JoH3Hm6cRiWs+iXFO-coGy_yUY1Mw@mail.gmail.com>
+In-Reply-To: <CADJHv_vh03bhn1FX2-jc6JoH3Hm6cRiWs+iXFO-coGy_yUY1Mw@mail.gmail.com>
+From:   Tong Zhang <ztong0001@gmail.com>
+Date:   Tue, 25 Jan 2022 21:23:43 -0800
+Message-ID: <CAA5qM4Btrnp9Te2pm0s=OuDk0ASTE3-LyLt8nf0fXKxhehXUgA@mail.gmail.com>
+Subject: Re: [PATCH v1] binfmt_misc: fix crash when load/unload module
+To:     Murphy Zhou <jencce.kernel@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kernel test robot <lkp@intel.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/24/22 at 05:31pm, Guilherme G. Piccoli wrote:
-  			Format: <hex>[,nousertaint]
-...snip...
+On Tue, Jan 25, 2022 at 9:04 PM Murphy Zhou <jencce.kernel@gmail.com> wrote:
+>
+> Still panic with this patch on Linux-next tree:
+>
+> [ 1128.275515] LTP: starting binfmt_misc02 (binfmt_misc02.sh)
+> [ 1128.303975] CPU: 1 PID: 107182 Comm: modprobe Kdump: loaded
+> Tainted: G        W         5.17.0-rc1-next-20220125+ #1
+> [ 1128.305264] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+> [ 1128.305992] Call Trace:
+> [ 1128.306376]  <TASK>
+> [ 1128.306682]  dump_stack_lvl+0x34/0x44
+> [ 1128.307211]  __register_sysctl_table+0x2c7/0x4a0
+> [ 1128.307846]  ? load_module+0xb37/0xbb0
+> [ 1128.308339]  ? 0xffffffffc01b6000
+> [ 1128.308762]  init_misc_binfmt+0x32/0x1000 [binfmt_misc]
+> [ 1128.309402]  do_one_initcall+0x44/0x200
+> [ 1128.309937]  ? kmem_cache_alloc_trace+0x163/0x2c0
+> [ 1128.310535]  do_init_module+0x5c/0x260
+> [ 1128.311045]  __do_sys_finit_module+0xb4/0x120
+> [ 1128.311603]  do_syscall_64+0x3b/0x90
+> [ 1128.312088]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [ 1128.312755] RIP: 0033:0x7f929ab85fbd
+>
+> Testing patch on Linus tree.
 
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index 41ecf9ab824a..b274e6c241d9 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -148,10 +148,13 @@ void nmi_panic(struct pt_regs *regs, const char *msg)
->  }
->  EXPORT_SYMBOL(nmi_panic);
->  
-> -static void panic_print_sys_info(void)
-> +static void panic_print_sys_info(bool console_flush)
->  {
-> -	if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
-> -		console_flush_on_panic(CONSOLE_REPLAY_ALL);
-> +	if (console_flush) {
-> +		if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
-> +			console_flush_on_panic(CONSOLE_REPLAY_ALL);
-> +		return;
-> +	}
->  
->  	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
->  		trigger_all_cpu_backtrace();
-> @@ -244,22 +247,20 @@ void panic(const char *fmt, ...)
->  	 */
->  	kgdb_panic(buf);
->  
-> -	/*
-> -	 * If we have a kdump kernel loaded, give a chance to panic_print
-> -	 * show some extra information on kernel log if it was set...
-> -	 */
-> -	if (kexec_crash_loaded())
-> -		panic_print_sys_info();
-> -
->  	/*
->  	 * If we have crashed and we have a crash kernel loaded let it handle
-> -	 * everything else.
-> +	 * everything else. Also, give a chance to panic_print show some extra
-> +	 * information on kernel log if it was set...
-> +	 *
->  	 * If we want to run this after calling panic_notifiers, pass
->  	 * the "crash_kexec_post_notifiers" option to the kernel.
->  	 *
->  	 * Bypass the panic_cpu check and call __crash_kexec directly.
->  	 */
->  	if (!_crash_kexec_post_notifiers) {
-> +		if (kexec_crash_loaded())
-> +			panic_print_sys_info(false);
-> +
-
-Please reconsider this change. As I said in another thread, it's not
-suggested when adding any action before kdump switching and the action
-doesn't benefit kdump switching.
-
-We don't oppose execute handling before kdump switching as long as
-it's executed conditionally. For those conditional extra handling and
-the followoing crash dumping's stability, it's not under kdump's care.
-
->  		__crash_kexec(NULL);
->  
->  		/*
-> @@ -283,6 +284,15 @@ void panic(const char *fmt, ...)
->  	 */
->  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
->  
-> +	/*
-> +	 * If a crash kernel is not loaded (or if it's loaded but we still
-> +	 * want to allow the panic notifiers), then we dump panic_print after
-> +	 * the notifiers - some notifiers disable watchdogs, for example, so
-> +	 * we reduce the risk of lockups/hangs or garbled output this way.
-> +	 */
-> +	if (_crash_kexec_post_notifiers || !kexec_crash_loaded())
-> +		panic_print_sys_info(false);
-> +
->  	kmsg_dump(KMSG_DUMP_PANIC);
->  
->  	/*
-> @@ -313,7 +323,7 @@ void panic(const char *fmt, ...)
->  	debug_locks_off();
->  	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
->  
-> -	panic_print_sys_info();
-> +	panic_print_sys_info(true);
->  
->  	if (!panic_blink)
->  		panic_blink = no_blink;
-> -- 
-> 2.34.1
-> 
-
+Hi Murphy,
+Did you apply this patch?
+Link: https://lkml.kernel.org/r/20220124181812.1869535-2-ztong0001@gmail.com
+I tested it on top of the current master branch and it works on my
+setup using the reproducer I mentioned.
+Could you share your test script?
+Thanks,
+- Tong

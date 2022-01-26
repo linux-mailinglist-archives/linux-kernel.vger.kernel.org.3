@@ -2,84 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D9149D158
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722D649D175
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244043AbiAZSCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:02:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57404 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiAZSCb (ORCPT
+        id S243632AbiAZSJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:09:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42388 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236949AbiAZSJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:02:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 26 Jan 2022 13:09:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643220585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vuZuCSoJ7IOU5R0KlMC3hriY2wg4jAss4q/D4xsgQ7E=;
+        b=drm60M67+H1Oe25A0auAuaHLmjmBy/1Td/b1kTHJrCT//FHEHZEC3jAxdcw3qNS+Nr4R35
+        Us841PNqQbSijciijhBMIL9Hx+OlN/NxexPUgVX0tlAG+XgAGxgsViXxMbjULiXEtSSxr3
+        4mi303m2Z11OWqLRCjPz4/snCcQ/Lew=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-166-pHznS-IqPpWydbDGSn3rSw-1; Wed, 26 Jan 2022 13:09:42 -0500
+X-MC-Unique: pHznS-IqPpWydbDGSn3rSw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56C5DB81EA3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 18:02:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7589EC340E7;
-        Wed, 26 Jan 2022 18:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643220149;
-        bh=AiX+hvOYWgbA+Mt9TrYxXVNB/AScaEEn/BB/TGNZJxE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EPtsvkuV4I8ipT4ElE71TA+29vkdME9gmXphrDb2U7PNTtBciaMSZ9s+53FLm4fQZ
-         DZ4aohz5dI20tAVXgPWfLEISUVmR590umadFM/ymmeqmDLthdwI9QTKY6UCfNl7ZL1
-         7tJrmb4ZduQV7iGXM1UMAenJr9FPhpFY6rk5pj64=
-Date:   Wed, 26 Jan 2022 19:02:26 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alfasys <alfred@alfasys.se>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Damian Hobson-Garcia <dhobsong@igel.co.jp>
-Subject: Re: [PATCH 001/001] UIO: allow binding uio_dmem_genirq to devices
- using command line options
-Message-ID: <YfGMsujnTxIxlXp4@kroah.com>
-References: <qFul607Amxy21SnrHljzWlk1zF1aanKgSpEIH0--hvj9t9wRzQR5xx80eFgl_2I6pppi8NNFp0TTHwkQw0uQD0Xl-8vth8-KOsbfwrLIHNg=@alfasys.se>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A33486A8B3;
+        Wed, 26 Jan 2022 18:09:41 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9710A74E8D;
+        Wed, 26 Jan 2022 18:09:40 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id C71E2416D8BE; Wed, 26 Jan 2022 15:03:45 -0300 (-03)
+Date:   Wed, 26 Jan 2022 15:03:45 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [patch v8 01/10] add basic task isolation prctl interface
+Message-ID: <YfGNAXOpwTfKH01L@fuller.cnet>
+References: <20211208161000.654492429@fuller.cnet>
+ <20220120174301.GA213170@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <qFul607Amxy21SnrHljzWlk1zF1aanKgSpEIH0--hvj9t9wRzQR5xx80eFgl_2I6pppi8NNFp0TTHwkQw0uQD0Xl-8vth8-KOsbfwrLIHNg=@alfasys.se>
+In-Reply-To: <20220120174301.GA213170@lothringen>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 04:42:02PM +0000, Alfasys wrote:
-> Add an option to bind the uio_dmem_genirq driver to a given device
-> using command line options.
-> Make uio_dmem_genirq match uio_pdrv_genirq functionality added in
-> commit 05c3e0bb5629 ("UIO: allow binding uio_pdrv_genirq.c to devices 
+On Thu, Jan 20, 2022 at 06:43:01PM +0100, Frederic Weisbecker wrote:
+> On Wed, Dec 08, 2021 at 01:09:07PM -0300, Marcelo Tosatti wrote:
+> > +int __copy_task_isolation(struct task_struct *tsk)
+> > +{
+> > +	struct isol_info *info, *new_info;
+> > +
+> > +	info = current->isol_info;
+> > +	if (!(info->inherit_mask & (ISOL_INHERIT_CONF|ISOL_INHERIT_ACTIVE)))
+> > +		return 0;
+> > +
+> > +	new_info = tsk_isol_alloc_context();
+> > +	if (IS_ERR(new_info))
+> > +		return PTR_ERR(new_info);
+> > +
+> > +	new_info->inherit_mask = info->inherit_mask;
 > 
-> using command line option")
-> 
-> CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> CC: Damian Hobson-Garcia <dhobsong@igel.co.jp>
-> Signed-off-by: Alfred Patriksson <alfred@alfasys.se>
-> 
-> ---
-> 
-> git diff c9e6606c7fe92 #(tag: v5.16-rc8)
-> diff --git a/drivers/uio/uio_dmem_genirq.c b/drivers/uio/uio_dmem_genirq.c
-> index 6b5cfa5b0673..7f6c9b594dd4 100644
-> --- a/drivers/uio/uio_dmem_genirq.c
-> +++ b/drivers/uio/uio_dmem_genirq.c
-> @@ -317,10 +317,13 @@ static const struct dev_pm_ops uio_dmem_genirq_dev_pm_ops = {
->  };
->  
-> 
->  #ifdef CONFIG_OF
-> -static const struct of_device_id uio_of_genirq_match[] = {
-> -       { /* empty for now */ },
-> +static struct of_device_id uio_of_genirq_match[] = {
-> +       { /* This is filled with module_parm */ },
-> +       { /* Sentinel */ },
->  };
->  MODULE_DEVICE_TABLE(of, uio_of_genirq_match);
-> +module_param_string(of_id, uio_of_genirq_match[0].compatible, 128, 0);
-> +MODULE_PARM_DESC(of_id, "Openfirmware id of the device to be handled by uio");
+> Ok then it might be worth mentioning in the docs that the inheritance
+> propagates to all the descendants and not just the immediate children,
+> unless the inheritance is explicitly reconfigured by some children of course.
 
-I do not want to add new module parameters, this is not the 1990's
-anymore.
+v9 has:
 
-thanks,
+**PR_ISOL_CFG_SET**:
 
-greg k-h
+        Set task isolation configuration.
+        The general format is::
+
+                prctl(PR_ISOL_CFG_SET, what, arg3, arg4, arg5);		
+
+	...
+
+                - Bit ISOL_INHERIT_ACTIVE: Inherit task isolation activation
+                  (requires ISOL_INHERIT_CONF to be set). The new task
+                  should behave, after fork/clone, in the same manner
+                  as the parent task after it executed:
+
+                        prctl(PR_ISOL_ACTIVATE_SET, &mask, ...);
+
+                Note: the inheritance propagates to all the descendants and not
+                just the immediate children, unless the inheritance is explicitly
+                reconfigured by some children.
+
+> 
+> > +
+> > +	if (info->inherit_mask & ISOL_INHERIT_CONF) {
+> > +		new_info->quiesce_mask = info->quiesce_mask;
+> 
+> Looks like if the parent has oneshot quiesce features configured, those
+> will be inherited as non-oneshot.
+
+Good catch. v9 has:
+
++       if (info->inherit_mask & ISOL_INHERIT_CONF) {
++               new_info->quiesce_mask = info->quiesce_mask;
++               new_info->conf_mask = info->conf_mask;
++               new_info->oneshot_mask = info->oneshot_mask;
++       }
+
+> 
+> > +		new_info->conf_mask = info->conf_mask;
+> > +	}
+> > +
+> > +	if (info->inherit_mask & ISOL_INHERIT_ACTIVE)
+> > +		new_info->active_mask = info->active_mask;
+> > +
+> > +	tsk->isol_info = new_info;
+> > +
+> > +	return 0;
+> > +}
+> 
+> Other than that:
+> 
+> Acked-by: Frederic Weisbecker <frederic@kernel.org>
+
+OK, with the fixes above, i'll add your Acked-by to patches 1 and 2.
+Let me know otherwise.
+

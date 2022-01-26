@@ -2,136 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5BD49C3A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FAE49C39B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236058AbiAZGcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 01:32:51 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:58122 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236133AbiAZGco (ORCPT
+        id S235728AbiAZGcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 01:32:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235591AbiAZGcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 01:32:44 -0500
+        Wed, 26 Jan 2022 01:32:11 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F015C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:32:11 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id i8so20279372pgt.13
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 22:32:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643178764; x=1674714764;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=OhR72xqFkzDx/cOjDRLsolT9JZibeLMb3xt2MB4DjB8=;
-  b=oQgELEbJGUze6ZGwODX+s3cvV6GofdiARP5Cr14bHD4eE/peP6MyChjc
-   WPTUXamME4I5X+nbapSjxv7whJNIMXdDTCBDCiyQpXfZg4+/kUrGbfuG0
-   b42TSYNqXoxRJjguDX21IPttoMx0r05/MMlbqPNBDF4dLSqduqljxbJgX
-   8=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 25 Jan 2022 22:32:44 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 22:32:44 -0800
-Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 22:32:43 -0800
-Received: from fenglinw-gv.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 25 Jan 2022 22:32:41 -0800
-From:   Fenglin Wu <quic_fenglinw@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sboyd@kernel.org>, Kiran Gunda <kgunda@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Abhijeet Dharmapurikar <adharmap@codeaurora.org>
-CC:     <collinsd@codeaurora.org>, <subbaram@codeaurora.org>,
-        <quic_fenglinw@quicinc.com>, <tglx@linutronix.de>, <maz@kernel.org>
-Subject: [PATCH v5 03/10] spmi: pmic-arb: do not ack and clear peripheral interrupts in cleanup_irq
-Date:   Wed, 26 Jan 2022 14:31:45 +0800
-Message-ID: <1643178713-17178-4-git-send-email-quic_fenglinw@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643178713-17178-1-git-send-email-quic_fenglinw@quicinc.com>
-References: <1643178713-17178-1-git-send-email-quic_fenglinw@quicinc.com>
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UFV9HljKMoO/Gv/RBQllZfNyG/7KSwU8sqdiwmqzVPg=;
+        b=rHHIfCeFr9lMxN2MhwVdmuYo0GW95Tx9RS6YGi7T29U43aewRhpZKl0dwvZl3g+1Kq
+         MpznLmqvsUUEgwFfhPZ7zVEsRWX4OTdyf6LH8b9L2usPAyWpIkr3Sy/A+5uQnEih3ZRt
+         vyAdWk1Ua+fnKlO9EM3Ez6IGjo/HaJyRoz3lDOa4qDrI9pMjXfD87xDnxn7xKxA06sNa
+         opACS2Ffdr8fJCNQ5Llwq/dg3lc7Mgnd/1Q7kECcpf5D1Xru9KGi9c6s41nRFucyXzTM
+         u1KFrWsI6P/i0pNS4Rjn5eHX8jpXbLELki4LVGuOvMfw8wXoOro1JFU9tlzQOAn8i4LL
+         KqrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UFV9HljKMoO/Gv/RBQllZfNyG/7KSwU8sqdiwmqzVPg=;
+        b=dpUDH1WHObBHRD4j/Tjqxv3OGpcWljuw8HcbsvD9Dr1HSPkgdLEsTbBzni8zjIzkb7
+         V6ofty+dq80fOPluWRef0JMGyncXrCtMk1+HPv/RwM4zJXtv+FF3z2Wuo3H9eZw1j5PS
+         g+xsmD+Nln1+6hWUa8IICR5HcoSHGiGTcWlaTY2F3bxR66oD0lW+uQI57AxEMYjEJg7f
+         2lwRPvwtLhZka74/OZzhZuwtogJGkiqhKyAB1AQLsTme63AQYHkx1P8MDTouFhae98k3
+         GS1QtLX/tpQJXxCJECT+Bh5uRkTMc856lCITqyQ7LA6r6MFIJX9TJbe31T2wqgtEiFbC
+         h3Lw==
+X-Gm-Message-State: AOAM533E1M/ME0Au+9tUKXmvyr+hOWfLgijY60wwmYgObyx85atgN0ue
+        nuEikvhCvkrmKSLLABwnXws6pw==
+X-Google-Smtp-Source: ABdhPJwMrKHaj3UkQOIGN91HZ1jmNkH4XivVRyJXnwGPTwata5DNZ4rKGUGsq0dUjtpeBYEuPj4Lng==
+X-Received: by 2002:a63:f201:: with SMTP id v1mr9352021pgh.250.1643178730748;
+        Tue, 25 Jan 2022 22:32:10 -0800 (PST)
+Received: from yinxin.bytedance.net ([139.177.225.244])
+        by smtp.gmail.com with ESMTPSA id p20sm16349824pgm.88.2022.01.25.22.32.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 22:32:10 -0800 (PST)
+From:   Xin Yin <yinxin.x@bytedance.com>
+To:     harshadshirwadkar@gmail.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xin Yin <yinxin.x@bytedance.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] ext4: fix incorrect type issue during replay_del_range
+Date:   Wed, 26 Jan 2022 14:31:46 +0800
+Message-Id: <20220126063146.2302-1-yinxin.x@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Subbaraman Narayanamurthy <subbaram@codeaurora.org>
+should not use fast commit log data directly, add le32_to_cpu().
 
-Currently, cleanup_irq() is invoked when a peripheral's interrupt
-fires and there is no mapping present in the interrupt domain of
-spmi interrupt controller.
-
-The cleanup_irq clears the arbiter bit, clears the pmic interrupt
-and disables it at the pmic in that order. The last disable in
-cleanup_irq races with request_irq() in that it stomps over the
-enable issued by request_irq. Fix this by not writing to the pmic
-in cleanup_irq. The latched bit will be left set in the pmic,
-which will not send us more interrupts even if the enable bit
-stays enabled.
-
-When a client wants to request an interrupt, use the activate
-callback on the irq_domain to clear latched bit. This ensures
-that the latched, if set due to the above changes in cleanup_irq
-or when the bootloader leaves it set, gets cleaned up, paving way
-for upcoming interrupts to trigger.
-
-With this, there is a possibility of unwanted triggering of
-interrupt right after the latched bit is cleared - the interrupt
-may be left enabled too. To avoid that, clear the enable first
-followed by clearing the latched bit in the activate callback.
-
-Fixes: 6bc546e71e50 ("spmi: pmic-arb: cleanup unrequested irqs")
-Fixes: 02abec3616c1 ("spmi: pmic-arb: rename pa_xx to pmic_arb_xx and other cleanup")
-Signed-off-by: Subbaraman Narayanamurthy <subbaram@codeaurora.org>
-[collinsd@codeaurora.org: fix merge conflict]
-Signed-off-by: David Collins <collinsd@codeaurora.org>
-Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 0b5b5a62b945 ("ext4: use ext4_ext_remove_space() for fast commit replay delete range")
+Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
 ---
- drivers/spmi/spmi-pmic-arb.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ fs/ext4/fast_commit.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
-index 719bd73..2bc3b88 100644
---- a/drivers/spmi/spmi-pmic-arb.c
-+++ b/drivers/spmi/spmi-pmic-arb.c
-@@ -593,16 +593,6 @@ static void cleanup_irq(struct spmi_pmic_arb *pmic_arb, u16 apid, int id)
- 	dev_err_ratelimited(&pmic_arb->spmic->dev, "%s apid=%d sid=0x%x per=0x%x irq=%d\n",
- 			__func__, apid, sid, per, id);
- 	writel_relaxed(irq_mask, pmic_arb->ver_ops->irq_clear(pmic_arb, apid));
--
--	if (pmic_arb_write_cmd(pmic_arb->spmic, SPMI_CMD_EXT_WRITEL, sid,
--			(per << 8) + QPNPINT_REG_LATCHED_CLR, &irq_mask, 1))
--		dev_err_ratelimited(&pmic_arb->spmic->dev, "failed to ack irq_mask = 0x%x for ppid = %x\n",
--				irq_mask, ppid);
--
--	if (pmic_arb_write_cmd(pmic_arb->spmic, SPMI_CMD_EXT_WRITEL, sid,
--			       (per << 8) + QPNPINT_REG_EN_CLR, &irq_mask, 1))
--		dev_err_ratelimited(&pmic_arb->spmic->dev, "failed to ack irq_mask = 0x%x for ppid = %x\n",
--				irq_mask, ppid);
- }
- 
- static int periph_interrupt(struct spmi_pmic_arb *pmic_arb, u16 apid)
-@@ -780,6 +770,7 @@ static int qpnpint_irq_domain_activate(struct irq_domain *domain,
- 	u16 apid = hwirq_to_apid(d->hwirq);
- 	u16 sid = hwirq_to_sid(d->hwirq);
- 	u16 irq = hwirq_to_irq(d->hwirq);
-+	u8 buf;
- 
- 	if (pmic_arb->apid_data[apid].irq_ee != pmic_arb->ee) {
- 		dev_err(&pmic_arb->spmic->dev, "failed to xlate sid = %#x, periph = %#x, irq = %u: ee=%u but owner=%u\n",
-@@ -788,6 +779,10 @@ static int qpnpint_irq_domain_activate(struct irq_domain *domain,
- 		return -ENODEV;
+diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+index ccd2b216d6ba..488347b4c8b0 100644
+--- a/fs/ext4/fast_commit.c
++++ b/fs/ext4/fast_commit.c
+@@ -1798,8 +1798,9 @@ ext4_fc_replay_del_range(struct super_block *sb, struct ext4_fc_tl *tl,
  	}
  
-+	buf = BIT(irq);
-+	qpnpint_spmi_write(d, QPNPINT_REG_EN_CLR, &buf, 1);
-+	qpnpint_spmi_write(d, QPNPINT_REG_LATCHED_CLR, &buf, 1);
-+
- 	return 0;
- }
- 
+ 	down_write(&EXT4_I(inode)->i_data_sem);
+-	ret = ext4_ext_remove_space(inode, lrange.fc_lblk,
+-				lrange.fc_lblk + lrange.fc_len - 1);
++	ret = ext4_ext_remove_space(inode, le32_to_cpu(lrange.fc_lblk),
++				le32_to_cpu(lrange.fc_lblk) +
++				le32_to_cpu(lrange.fc_len) - 1);
+ 	up_write(&EXT4_I(inode)->i_data_sem);
+ 	if (ret) {
+ 		iput(inode);
 -- 
-2.7.4
+2.25.1
 

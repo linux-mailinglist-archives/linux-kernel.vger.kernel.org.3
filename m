@@ -2,100 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0766C49CF4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F73949CF50
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239682AbiAZQLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:11:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
+        id S239497AbiAZQOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239497AbiAZQLK (ORCPT
+        with ESMTP id S235987AbiAZQOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:11:10 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ED0C06161C;
-        Wed, 26 Jan 2022 08:11:10 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id n32so143415pfv.11;
-        Wed, 26 Jan 2022 08:11:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0tQ228U3nQXaWjV8cViOybTVc9dWTMhKsSPLFqG1IfY=;
-        b=Y9o46Wo42zMqCSbsyBcmqzXIZi9mLVHoOLEBmOmxftVHauCdwprtlA5oNTyoEhv/lM
-         BsJnJKmPK3FuDm9q7GcNTbfGuPI2gyypzpSXLStZAh4BYV/m12jF/hKI610tpFW96CXj
-         nylvUtFW+7fRDveRi2PMMgXXpfdUS7DgSkmPCf2ipPm89TKUc4qkpVVQqTNmp57P2GhD
-         j61gN7wG/Y+8tpV+/PRPug6pEJnQDVliKLf/zT5yAlL1Oj7VYBkMrh07OuWUA2wd/KvB
-         1bvLa4ltZCktXMwhskOQlbGqOkNQSmYoSK62NCi4LjKMlFdWdGNMPLM9m5sCM8z+Nyy9
-         7lRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0tQ228U3nQXaWjV8cViOybTVc9dWTMhKsSPLFqG1IfY=;
-        b=z3HvPfzkPWwx7+Y5PopL785oQMbpckasXm0xrQF1mm6Xeb3DCE3rKtgsxBFtBI1kFF
-         pR5PnS1MQAAnfOo7hj43i8mDuafvl/zfW563pN3cWTfxaN1TkjWTh6KzYc7UAoejoUL+
-         NUL3XQ/6JJ73T7zQgA3J3MF6nxAa4Vx4XNO3LFkSU0Yx7GAd24WzpWfoqMJW0VVHo0jY
-         dlGgzbgjBzk+svrEQQtwn7qN+udhW5m1CpWRod+pUlKqlvp7P1tZPGNo+cmTH2efxqMh
-         lJfA61T253abx1lJmVRDVPepMk8CJHCfuVC4hUboBqQRwSWFTEFlTGae7aj+hVGfHNag
-         xV/g==
-X-Gm-Message-State: AOAM533ZmxVIlIufXiDEtVYLoYHXJJKULRDlon6nawfH6tZcJaHkwhsv
-        0gXLvZZ5flZuPVDN2BjUiR8=
-X-Google-Smtp-Source: ABdhPJx/62+0JV4W7kaGThLI9clYp04X79pUIPK2kep5k3Cto21975tua1EyydW+0edNiUOUJmpZdg==
-X-Received: by 2002:a63:7549:: with SMTP id f9mr19021304pgn.259.1643213470086;
-        Wed, 26 Jan 2022 08:11:10 -0800 (PST)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:35:cf50:7507:71bb:9b04])
-        by smtp.gmail.com with ESMTPSA id b9sm2555534pfm.154.2022.01.26.08.11.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 08:11:09 -0800 (PST)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, hch@infradead.org,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        michael.h.kelley@microsoft.com
-Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
-        brijesh.singh@amd.com, konrad.wilk@oracle.com, hch@lst.de,
-        parri.andrea@gmail.com, thomas.lendacky@amd.com
-Subject: [PATCH 2/2] x86/hyperv: Set swiotlb_alloc_from_low_pages to false
-Date:   Wed, 26 Jan 2022 11:10:53 -0500
-Message-Id: <20220126161053.297386-3-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220126161053.297386-1-ltykernel@gmail.com>
-References: <20220126161053.297386-1-ltykernel@gmail.com>
+        Wed, 26 Jan 2022 11:14:41 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6291AC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:14:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=a3C1Ia2fPQvJ2jHdpSYVkre4n72E08491jrojoCfRv0=; b=HzCZRpXCjLUewJaUCBYp1L8pV/
+        Snig69IDDHtCgAO4hD+Lg1HztsEj5IA1ovNdYMmdHGllqMSTxuSDxSRx80c69JglDeoav3uwlNrmC
+        +aAA1fctZWymYIlX7ajOQJTNHa4La5dsC95Iig74oV6B1uTvIAIafJ4vYBbFAwEQHQLWTbsX623Fk
+        ZKg4yzTWhIumm7RC+fMQh6FsNpJW0xldaO8EEe1stHnWtJQNuThzD8UKcFyudfszTJvPihSj63x4n
+        GT8GB65OdZUbJF2yYy+XDCFcOfdYvbvb5/g3xav33okm1HF4C4j/UO57WsArFEmfJXDK7fOCpmkK3
+        BWt0PZKA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCkwO-00CZ37-Hf; Wed, 26 Jan 2022 16:14:36 +0000
+Date:   Wed, 26 Jan 2022 08:14:36 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Qinghua Jin <qhjin.dev@gmail.com>
+Cc:     qhjin_dev@163.com, James Smart <james.smart@broadcom.com>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nvme-fc: fix typo
+Message-ID: <YfFzbKAc/jQosCWa@infradead.org>
+References: <20220107022258.396058-1-qhjin.dev@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220107022258.396058-1-qhjin.dev@gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+Thanks,
 
-In Hyper-V Isolation VM, swiotlb bnounce buffer size maybe 1G at most
-and there maybe no enough memory from 0 to 4G according to memory layout.
-Devices in Isolation VM can use memory above 4G as DMA memory. Set swiotlb_
-alloc_from_low_pages to false in Isolation VM.
-
-Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
----
- arch/x86/kernel/cpu/mshyperv.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 5a99f993e639..80a0423ac75d 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -343,6 +343,7 @@ static void __init ms_hyperv_init_platform(void)
- 		 * use swiotlb bounce buffer for dma transaction.
- 		 */
- 		swiotlb_force = SWIOTLB_FORCE;
-+		swiotlb_alloc_from_low_pages = false;
- #endif
- 	}
- 
--- 
-2.25.1
-
+applied to nvme-5.17.

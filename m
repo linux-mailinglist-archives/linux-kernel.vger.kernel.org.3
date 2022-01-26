@@ -2,213 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3FE49D38A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B97B49D396
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbiAZUgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 15:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiAZUgR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:36:17 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD2FC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:36:17 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id c24so821819edy.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:36:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wHSZGcqASjvkDHfsWnxtZXfgdyFpTFjH+EicTP6DUw0=;
-        b=A1glERp8hCYBWE0s6Te6kySPMXGfZTwbtiiz/dCOcPbUse+bVmCxGmO4uUTeZd8knA
-         H2yxCCBdKS3zQpXpvS/87lgCI+WV/PNj8cBYIwQwrkgBHtMOd5M148yu51TuuHBzZ/Vg
-         VIFu5s+0RUbBhbQDZHU4DwQe9XC9QU6NnKugmw2mV+R+Fnl+9Q+668FpCFjnGilMYEAz
-         kPl384LKwJmW/sVXQDzzJftBLxl30IEzGCYMsPCHQv02Cql+xoXrQ3KMtroJu79sqUGt
-         8kS96HN66s/g/Dl3IgrFaMw2GoKwflqumvPjALvV54g2jcpLLVPH1F+Jj7razSbPCqkQ
-         80Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wHSZGcqASjvkDHfsWnxtZXfgdyFpTFjH+EicTP6DUw0=;
-        b=ZTd9XHoUpD3UNvM5hqkjbn+VVKF5342Vs8SeJfklnGrXy/jiBIif5b8qmi6Tjz3APJ
-         CC/kkZXjIREdTFCPUpq/z8BHuGfYFgvgL/1ukm44M9B0i7Nxr40D0H1EivWATL4VjGIV
-         r6Apyi9ctU+UwbqkSc5HLNE+cwJ7PtVmprju4H5w9ceUobywaRarA4dgh2VDcoc8Omp5
-         zkX3W+B1QZKoMIYP5No/d62RsdWEVB5c9VH9NwQsPI+OJL1IXVZiYv3xq6Yuez+sI5y9
-         2S95MAlCUHUC3rAvf0lV6q3xw/r+PB33b5i1mUfwaNy8mWcUe3g6NwZtxlkK9R9OAQ4D
-         gMuQ==
-X-Gm-Message-State: AOAM533lXbQDfVwOkEYgq6EAOVsC5xxNomyvl9+e+hNs/5D2DdORqyHy
-        tZ9/IqszIGoDBWYUxcoJXwUukT7MB01NIJCf7H8=
-X-Google-Smtp-Source: ABdhPJymQFRnl1th966BHdwXeL7L1vz9+yol/C1udrCqwHSfpfpXGUAZ6980aKl2ej25WDZZ5uBbh89MkQ1nnNVaJnw=
-X-Received: by 2002:aa7:df16:: with SMTP id c22mr658273edy.177.1643229375413;
- Wed, 26 Jan 2022 12:36:15 -0800 (PST)
+        id S231239AbiAZUgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 15:36:41 -0500
+Received: from mga01.intel.com ([192.55.52.88]:9982 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230489AbiAZUgd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 15:36:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643229393; x=1674765393;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m6a7ksHqrFBRFuzuDvYBCJL8gq6YspyfPiiCWbUNdnw=;
+  b=FeGoxmCIwdbQsyjBovX/jVsnADXq5WgfQzRF9f3Lkg9f/FWbh7xDTBZQ
+   HcXbWqQd3GqzhV3hff32BZ2nWblMsYcvHjppj4Krdxtrk8ou97h8d5Azi
+   o18MAMEp92qmjQ/9dKUogBvavkMN9pK6d75l431oC83sRgI4dWC4cTFhx
+   6SpKVto/chapLcEYFEX2zRdsJaqkg09XZHj8A96ZDKkGTMZzZ1HW9t5ze
+   0Jalp/E1OpC8jAT6HUQMLnoeKrzEpSIuE3aM2wP0Sa7sdbrv46A6dzR+m
+   c/HTf68LCUUgmu/bYzd/CAaGAvJC9FerREWnXTAA460aLegYZqhPClXd1
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="271098460"
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="271098460"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 12:36:22 -0800
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="581221487"
+Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 12:36:21 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     intel-gfx@lists.freedesktop.org
+Cc:     dri-devel@lists.freedesktop.org,
+        Matt Roper <matthew.d.roper@intel.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Subject: [PATCH 00/19] drm/i915/guc: Refactor ADS access to use dma_buf_map
+Date:   Wed, 26 Jan 2022 12:36:43 -0800
+Message-Id: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-References: <20220126095557.32392-1-david@redhat.com> <20220126095557.32392-6-david@redhat.com>
-In-Reply-To: <20220126095557.32392-6-david@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 26 Jan 2022 12:36:03 -0800
-Message-ID: <CAHbLzkqmxSTkh4WOQr8xzzMO94Gr8GuqH8Vn4T5q8rW7gkabYQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 5/9] mm/huge_memory: streamline COW logic in do_huge_pmd_wp_page()
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Linux MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 2:00 AM David Hildenbrand <david@redhat.com> wrote:
->
-> We currently have a different COW logic for anon THP than we have for
-> ordinary anon pages in do_wp_page(): the effect is that the issue reported
-> in CVE-2020-29374 is currently still possible for anon THP: an unintended
-> information leak from the parent to the child.
->
-> Let's apply the same logic (page_count() == 1), with similar
-> optimizations to remove additional references first as we really want to
-> avoid PTE-mapping the THP and copying individual pages best we can.
->
-> If we end up with a page that has page_count() != 1, we'll have to PTE-map
-> the THP and fallback to do_wp_page(), which will always copy the page.
->
-> Note that KSM does not apply to THP.
->
-> I. Interaction with the swapcache and writeback
->
-> While a THP is in the swapcache, the swapcache holds one reference on each
-> subpage of the THP. So with PageSwapCache() set, we expect as many
-> additional references as we have subpages. If we manage to remove the
-> THP from the swapcache, all these references will be gone.
->
-> Usually, a THP is not split when entered into the swapcache and stays a
-> compound page. However, try_to_unmap() will PTE-map the THP and use PTE
-> swap entries. There are no PMD swap entries for that purpose, consequently,
-> we always only swapin subpages into PTEs.
->
-> Removing a page from the swapcache can fail either when there are remaining
-> swap entries (in which case COW is the right thing to do) or if the page is
-> currently under writeback.
->
-> Having a locked, R/O PMD-mapped THP that is in the swapcache seems to be
-> possible only in corner cases, for example, if try_to_unmap() failed
-> after adding the page to the swapcache. However, it's comparatively easy to
-> handle.
->
-> As we have to fully unmap a THP before starting writeback, and swapin is
-> always done on the PTE level, we shouldn't find a R/O PMD-mapped THP in the
-> swapcache that is under writeback. This should at least leave writeback
-> out of the picture.
->
-> II. Interaction with GUP references
->
-> Having a R/O PMD-mapped THP with GUP references (i.e., R/O references)
-> will result in PTE-mapping the THP on a write fault. Similar to ordinary
-> anon pages, do_wp_page() will have to copy sub-pages and result in a
-> disconnect between the GUP references and the pages actually mapped into
-> the page tables. To improve the situation in the future, we'll need
-> additional handling to mark anonymous pages as definitely exclusive to a
-> single process, only allow GUP pins on exclusive anon pages, and
-> disallow sharing of exclusive anon pages with GUP pins e.g., during
-> fork().
->
-> III. Interaction with references from LRU pagevecs
->
-> Similar to ordinary anon pages, we can have LRU pagevecs referencing our
-> THP. Reliably removing such references requires draining LRU pagevecs on
-> all CPUs -- lru_add_drain_all() -- a possibly expensive operation that can
-> sleep. For now, similar do do_wp_page(), let's conditionally drain the
-> local LRU pagevecs only if we detect !PageLRU().
->
-> IV. Interaction with speculative/temporary references
->
-> Similar to ordinary anon pages, other speculative/temporary references on
-> the THP, for example, from the pagecache or page migration code, will
-> disallow exclusive reuse of the page. We'll have to PTE-map the THP.
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  mm/huge_memory.c | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 406a3c28c026..b6ba88a98266 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -1286,6 +1286,7 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
->         struct page *page;
->         unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
->         pmd_t orig_pmd = vmf->orig_pmd;
-> +       int swapcache_refs = 0;
->
->         vmf->ptl = pmd_lockptr(vma->vm_mm, vmf->pmd);
->         VM_BUG_ON_VMA(!vma->anon_vma, vma);
-> @@ -1303,7 +1304,6 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
->         page = pmd_page(orig_pmd);
->         VM_BUG_ON_PAGE(!PageHead(page), page);
->
-> -       /* Lock page for reuse_swap_page() */
->         if (!trylock_page(page)) {
->                 get_page(page);
->                 spin_unlock(vmf->ptl);
-> @@ -1319,10 +1319,20 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
->         }
->
->         /*
-> -        * We can only reuse the page if nobody else maps the huge page or it's
-> -        * part.
-> +        * See do_wp_page(): we can only map the page writable if there are
-> +        * no additional references.
->          */
-> -       if (reuse_swap_page(page)) {
-> +       if (PageSwapCache(page))
-> +               swapcache_refs = thp_nr_pages(page);
-> +       if (page_count(page) > 1 + swapcache_refs + !PageLRU(page))
-> +               goto unlock_fallback;
-> +       if (!PageLRU(page))
-> +               lru_add_drain();
+While porting i915 to arm64 we noticed some issues accessing lmem.
+Some writes were getting corrupted and the final state of the buffer
+didn't have exactly what we wrote. This became evident when enabling
+GuC submission: depending on the number of engines the ADS struct was
+being corrupted and GuC would reject it, refusin to initialize.
 
-IMHO, draining lru doesn't help out too much for THP since THP will be
-drained to LRU immediately once it is added into pagevec.
+From Documentation/core-api/bus-virt-phys-mapping.rst:
 
-> +       if (page_count(page) > 1 + swapcache_refs)
-> +               goto unlock_fallback;
-> +       if (swapcache_refs)
-> +               try_to_free_swap(page);
-> +       if (page_count(page) == 1) {
->                 pmd_t entry;
->                 entry = pmd_mkyoung(orig_pmd);
->                 entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
-> @@ -1333,6 +1343,7 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
->                 return VM_FAULT_WRITE;
->         }
->
-> +unlock_fallback:
->         unlock_page(page);
->         spin_unlock(vmf->ptl);
->  fallback:
-> --
-> 2.34.1
->
+	This memory is called "PCI memory" or "shared memory" or "IO memory" or
+	whatever, and there is only one way to access it: the readb/writeb and
+	related functions. You should never take the address of such memory, because
+	there is really nothing you can do with such an address: it's not
+	conceptually in the same memory space as "real memory" at all, so you cannot
+	just dereference a pointer. (Sadly, on x86 it **is** in the same memory space,
+	so on x86 it actually works to just deference a pointer, but it's not
+	portable).
+
+When reading or writing words directly to IO memory, in order to be portable
+the Linux kernel provides the abstraction detailed in section "Differences
+between I/O access functions" of Documentation/driver-api/device-io.rst.
+
+This limits our ability to simply overlay our structs on top a buffer
+and directly access it since that buffer may come from IO memory rather than
+system memory. Hence the approach taken in intel_guc_ads.c needs to be
+refactored. This is not the only place in i915 that neeed to be changed, but
+the one causing the most problems, with a real reproducer. This first set of
+patch focuses on fixing the gem object to pass the ADS
+
+After the addition of a few helpers in the dma_buf_map API, most of
+intel_guc_ads.c can be converted to use it. The exception is the regset
+initialization: we'd incur into a lot of extra indirection when
+reading/writting each register. So the regset is converted to use a
+temporary buffer allocated on probe, which is then copied to its
+final location when finishing the initialization or on gt reset.
+
+Testing on some discrete cards, after this change we can correctly pass the
+ADS struct to GuC and have it initialized correctly.
+
+thanks
+Lucas De Marchi
+
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Christian König <christian.koenig@amd.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: John Harrison <John.C.Harrison@Intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Matt Roper <matthew.d.roper@intel.com>
+Cc: Matthew Auld <matthew.auld@intel.com>
+Cc: Matthew Brost <matthew.brost@intel.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+
+Lucas De Marchi (19):
+  dma-buf-map: Add read/write helpers
+  dma-buf-map: Add helper to initialize second map
+  drm/i915/gt: Add helper for shmem copy to dma_buf_map
+  drm/i915/guc: Keep dma_buf_map of ads_blob around
+  drm/i915/guc: Add read/write helpers for ADS blob
+  drm/i915/guc: Convert golden context init to dma_buf_map
+  drm/i915/guc: Convert policies update to dma_buf_map
+  drm/i915/guc: Convert engine record to dma_buf_map
+  dma-buf-map: Add wrapper over memset
+  drm/i915/guc: Convert guc_ads_private_data_reset to dma_buf_map
+  drm/i915/guc: Convert golden context prep to dma_buf_map
+  drm/i915/guc: Replace check for golden context size
+  drm/i915/guc: Convert mapping table to dma_buf_map
+  drm/i915/guc: Convert capture list to dma_buf_map
+  drm/i915/guc: Prepare for error propagation
+  drm/i915/guc: Use a single pass to calculate regset
+  drm/i915/guc: Convert guc_mmio_reg_state_init to dma_buf_map
+  drm/i915/guc: Convert __guc_ads_init to dma_buf_map
+  drm/i915/guc: Remove plain ads_blob pointer
+
+ drivers/gpu/drm/i915/gt/shmem_utils.c         |  32 ++
+ drivers/gpu/drm/i915/gt/shmem_utils.h         |   3 +
+ drivers/gpu/drm/i915/gt/uc/intel_guc.h        |  14 +-
+ drivers/gpu/drm/i915/gt/uc/intel_guc_ads.c    | 374 +++++++++++-------
+ drivers/gpu/drm/i915/gt/uc/intel_guc_ads.h    |   3 +-
+ .../gpu/drm/i915/gt/uc/intel_guc_submission.c |  11 +-
+ include/linux/dma-buf-map.h                   | 127 ++++++
+ 7 files changed, 405 insertions(+), 159 deletions(-)
+
+-- 
+2.35.0
+

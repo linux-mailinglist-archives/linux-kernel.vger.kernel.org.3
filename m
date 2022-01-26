@@ -2,123 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E47B749C8A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D492849C8A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240698AbiAZL0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbiAZL0m (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:26:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A32FC06161C;
-        Wed, 26 Jan 2022 03:26:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBF0EB81CA9;
-        Wed, 26 Jan 2022 11:26:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B96D4C340E3;
-        Wed, 26 Jan 2022 11:26:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643196399;
-        bh=W4uxImZLdrohuxm9pLlvYSNpJJ+YoX/JL5nvs5LsGGU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pvsrKDU1u3Sren1+ay3QGc5gg9cbn4i8dEZFwaquE5nJuqgl51YDKDxlDmfo+bRhI
-         mpW50d2iH//5w5Tu8FwvqTax6yYT5TkuFHePsFIhqnuTNgb+4fV7ksLlqznS3rBBce
-         7o5vpCCOH3s1iPJmPw0ZSS7Z+mxjIY34MBWr5Xok=
-Date:   Wed, 26 Jan 2022 12:26:36 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
-Message-ID: <YfEv7OQs98O9wJdJ@kroah.com>
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
- <YfEG2qVO9K9G+g1d@kroah.com>
- <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
- <f671a112-880d-1526-a395-360947b40c5a@gmx.de>
+        id S240705AbiAZL1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:27:23 -0500
+Received: from foss.arm.com ([217.140.110.172]:33074 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233549AbiAZL1T (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 06:27:19 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25B7ED6E;
+        Wed, 26 Jan 2022 03:27:19 -0800 (PST)
+Received: from [10.32.33.50] (e121896.warwick.arm.com [10.32.33.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 149AD3F766;
+        Wed, 26 Jan 2022 03:27:17 -0800 (PST)
+Subject: Re: [PATCH] perf tools: apply correct label to user/kernel symbols in
+ branch mode
+To:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+References: <20220126105927.3411216-1-german.gomez@arm.com>
+From:   James Clark <james.clark@arm.com>
+Message-ID: <7474e11b-6bd5-515d-0ebf-883d0656a359@arm.com>
+Date:   Wed, 26 Jan 2022 11:27:16 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f671a112-880d-1526-a395-360947b40c5a@gmx.de>
+In-Reply-To: <20220126105927.3411216-1-german.gomez@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:17:08PM +0100, Helge Deller wrote:
-> On 1/26/22 11:31, Daniel Vetter wrote:
-> > On Wed, Jan 26, 2022 at 9:31 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> >>
-> >> On Tue, Jan 25, 2022 at 10:21:14PM +0200, Andy Shevchenko wrote:
-> >>> Let's maintain occasional fixes to the fbtft driver.
-> >>>
-> >>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> >>> ---
-> >>>  MAINTAINERS | 4 +++-
-> >>>  1 file changed, 3 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/MAINTAINERS b/MAINTAINERS
-> >>> index ea3e6c914384..16e614606ac1 100644
-> >>> --- a/MAINTAINERS
-> >>> +++ b/MAINTAINERS
-> >>> @@ -7372,9 +7372,11 @@ F:     Documentation/fault-injection/
-> >>>  F:   lib/fault-inject.c
-> >>>
-> >>>  FBTFT Framebuffer drivers
-> >>> +M:   Andy Shevchenko <andy@kernel.org>
-> >>>  L:   dri-devel@lists.freedesktop.org
-> >>>  L:   linux-fbdev@vger.kernel.org
-> >>> -S:   Orphan
-> >>> +S:   Maintained
-> >>> +T:   git git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-fbtft.git
-> >>
-> >> I'm ok with the files moving if the dri developers agree with it.  It's
-> >> up to them, not me.
-> >
-> > On one hand I'm happy anytime someone volunteers to help out.
-> >
-> > On the other hand ... why does it have to be resurrecting fbdev?
-> > There's an entire community of people who really know graphics and
-> > display and spent considerable amount of effort on creating useful and
-> > documented helpers for pretty much anything you might ever want to do.
-> > And somehow we have to go back to typing out things the hard way, with
-> > full verbosity, for an uapi that distros are abandoning (e.g. even for
-> > sdl the direction is to run it on top of drm with a compat layer,
-> > afaiui fedora is completely ditching any userspace that still even
-> > uses /dev/fb/0). And yes I know there's still some gaps in drm,
-> > largely for display features which were really en vogue about 20 years
-> > ago. And we're happy to add that support, if someone who still has
-> > such hardware can put in the little bit of work needed ...
-> >
-> > I don't get this.
+
+
+On 26/01/2022 10:59, German Gomez wrote:
+> In branch mode, the branch symbols were being displayed with incorrect
+> cpumode labels. So fix this.
 > 
-> You are describing a transitioning over to DRM - which is Ok.
-> But on that way there is no need to ignore, deny or even kill usage scenarios
-> which are different compared to your usage scenarios (e.g. embedded devices,
-> old platforms, slow devices, slow busses, no 3D hardware features,
-> low-color devices, ...).
+> For example, before:
+>   # perf record -b -a -- sleep 1
+>   # perf report -b
+> 
+>   Overhead  Command  Source Shared Object  Source Symbol               Target Symbol
+>      0.08%  swapper  [kernel.kallsyms]     [k] rcu_idle_enter          [k] cpuidle_enter_state
+>  ==> 0.08%  cmd0     [kernel.kallsyms]     [.] psi_group_change        [.] psi_group_change
+>      0.08%  cmd1     [kernel.kallsyms]     [k] psi_group_change        [k] psi_group_change
+> 
+> After:
+>   # perf report -b
+> 
+>   Overhead  Command  Source Shared Object  Source Symbol               Target Symbol
+>      0.08%  swapper  [kernel.kallsyms]     [k] rcu_idle_enter          [k] cpuidle_enter_state
+>      0.08%  cmd0     [kernel.kallsyms]     [k] psi_group_change        [k] pei_group_change
+>      0.08%  cmd1     [kernel.kallsyms]     [k] psi_group_change        [k] psi_group_change
+> 
+> Signed-off-by: German Gomez <german.gomez@arm.com>
+> ---
+>  tools/perf/util/machine.c    | 2 ++
+>  tools/perf/util/map_symbol.h | 1 +
+>  tools/perf/util/sort.c       | 4 ++--
+>  3 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> index 3901440ae..ef564a5cf 100644
+> --- a/tools/perf/util/machine.c
+> +++ b/tools/perf/util/machine.c
+> @@ -2072,6 +2072,7 @@ static void ip__resolve_ams(struct thread *thread,
+>  
+>  	ams->addr = ip;
+>  	ams->al_addr = al.addr;
+> +	ams->al_level = al.level;
+>  	ams->ms.maps = al.maps;
+>  	ams->ms.sym = al.sym;
+>  	ams->ms.map = al.map;
+> @@ -2091,6 +2092,7 @@ static void ip__resolve_data(struct thread *thread,
+>  
+>  	ams->addr = addr;
+>  	ams->al_addr = al.addr;
+> +	ams->al_level = al.level;
+>  	ams->ms.maps = al.maps;
+>  	ams->ms.sym = al.sym;
+>  	ams->ms.map = al.map;
+> diff --git a/tools/perf/util/map_symbol.h b/tools/perf/util/map_symbol.h
+> index 7d22ade08..e08817b0c 100644
+> --- a/tools/perf/util/map_symbol.h
+> +++ b/tools/perf/util/map_symbol.h
+> @@ -18,6 +18,7 @@ struct addr_map_symbol {
+>  	struct map_symbol ms;
+>  	u64	      addr;
+>  	u64	      al_addr;
+> +	char	      al_level;
+>  	u64	      phys_addr;
+>  	u64	      data_page_size;
+>  };
+> diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
+> index cfba8c337..2da081ef5 100644
+> --- a/tools/perf/util/sort.c
+> +++ b/tools/perf/util/sort.c
+> @@ -915,7 +915,7 @@ static int hist_entry__sym_from_snprintf(struct hist_entry *he, char *bf,
+>  		struct addr_map_symbol *from = &he->branch_info->from;
+>  
+>  		return _hist_entry__sym_snprintf(&from->ms, from->al_addr,
+> -						 he->level, bf, size, width);
+> +						 from->al_level, bf, size, width);
+>  	}
+>  
+>  	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
+> @@ -928,7 +928,7 @@ static int hist_entry__sym_to_snprintf(struct hist_entry *he, char *bf,
+>  		struct addr_map_symbol *to = &he->branch_info->to;
+>  
+>  		return _hist_entry__sym_snprintf(&to->ms, to->al_addr,
+> -						 he->level, bf, size, width);
+> +						 to->al_level, bf, size, width);
+>  	}
+>  
+>  	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
+> 
 
-All of those should be handled by the drm layer, as Daniel keeps
-pointing out.  If not, then the tinydrm layer needs to be enhanced to do
-so.
+Looks good to me, I didn't see any other usages where it could be broken.
 
-Anyone have a pointer to hardware I can buy that is one of these fbtft
-drivers that I could do a port to drm to see just how much work is
-really needed here?
-
-thanks,
-
-greg k-h
+Reviewed-by: James Clark <james.clark@arm.com>

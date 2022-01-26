@@ -2,106 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF1B49C83A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985BB49C83B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240425AbiAZLDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:03:09 -0500
-Received: from mga09.intel.com ([134.134.136.24]:23299 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233170AbiAZLDI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:03:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643194988; x=1674730988;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8Q3gBcQGz/pjxvxeA6YutlHYOEjH1VZ/sW0EYV1FVls=;
-  b=XeGkmbtDKP3G1PdfHmBXm2537aF6sXuxHc2Yujz2OLT6ZahlcVyqmq5Q
-   wV1UVlxvK+PcFh3gi7R8wdXWlSa4CyYmCfI5kZk2arW3PSyZ7UxI4hb+X
-   rkqxb9ynK6xVN8AnllMJoBnkrX9Zw2D067EAcViCr7RxRQ5AmQVcX7U25
-   JuKxbO2ky8gRJ020Ye/RBFGZYl3Ts5ipVfzXR1MMr4duQwHp8vadHKunz
-   9bWbohBudL5tzOFNgexNygIz73yTXjAf/9/al6cuZ3vQdjN5X91EH3T4g
-   HXLCn0eBeUYhW1pxbcUNyu+Dcg1YCJsv52Agzn1wRxSGiYBwSCn1iP4A1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246305773"
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="246305773"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 03:03:07 -0800
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="563378278"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 03:03:03 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 26 Jan 2022 13:03:00 +0200
-Date:   Wed, 26 Jan 2022 13:03:00 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     bhelgaas@google.com, koba.ko@canonical.com,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Lalithambika Krishnakumar <lalithambika.krishnakumar@intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] PCI/AER: Disable AER when link is in L2/L3 ready, L2
- and L3 state
-Message-ID: <YfEqZMUS9jyiErmF@lahna>
-References: <20220126071853.1940111-1-kai.heng.feng@canonical.com>
+        id S240436AbiAZLDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:03:11 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.168]:52635 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240422AbiAZLDK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 06:03:10 -0500
+X-KPN-MessageId: 8b98a59c-7e97-11ec-8f5a-005056aba152
+Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 8b98a59c-7e97-11ec-8f5a-005056aba152;
+        Wed, 26 Jan 2022 12:03:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:to:from:subject:mime-version:date:message-id;
+        bh=hpRXVYQAeLF7Lzo7fENLhR+NrCXnkhg6vrFNrU9sDzQ=;
+        b=lPF2MKr43JmTbMmOoxI2HRZKq5NhW7XaLhGLt+Jqdn1RrWVV4s77+65+ZD3i9Bw/C/xeFY0YHg7wQ
+         H0y2noosmHOeMhG5sAxReoxMzDUgTD5/cNanfhjLe7pBJTQgt9hoLicdZkmWfsFJe7lrAE0a9OlS6N
+         O2JFmFos6jvPtGK7YWao37ysGRmDB++ufsNpQgdJdXNNfidwJB0ZY2YXCnYZpbGnKJH5eXu/rp+Nbs
+         HyJfKelp9Frw6DPx/O/5L+S6qNHkr3zMTxj1Q5td/1r4PP3/wvtV9Kh6nnwPV9DDetM/BA0Dh6kTjB
+         qpj+ilkSAJkozm2I/jJVe03xdWyMc6g==
+X-KPN-VerifiedSender: No
+X-CMASSUN: 33|/C7XuEzgB9S8L3t+I4MsWICp/jGohKOA2pwymdZ5uESaHf3NzAUuYLgF9I8xf7/
+ xPkgeAeLQPSfzogGGyB5cUQ==
+X-Originating-IP: 80.101.105.217
+Received: from [192.168.1.10] (marune.xs4all.nl [80.101.105.217])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 8af0249c-7e97-11ec-a3ee-005056abf0db;
+        Wed, 26 Jan 2022 12:03:08 +0100 (CET)
+Message-ID: <ef2317a5-d9a7-a663-2477-b435b777d4e0@xs4all.nl>
+Date:   Wed, 26 Jan 2022 12:03:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126071853.1940111-1-kai.heng.feng@canonical.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [BUG] pinctrl: reg-fixed-voltage usb0-vbus: error -EINVAL: can't
+ get GPIO
+Content-Language: en-US
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        linus.walleij@linaro.org, mripard@kernel.org, wens@csie.org,
+        jernej.skrabec@gmail.com
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        zhangn1985@gmail.com
+References: <Yea3rBmY+MO4AhhV@Red>
+ <2f82dbe8-50d6-d905-9065-d3869948aa06@xs4all.nl>
+In-Reply-To: <2f82dbe8-50d6-d905-9065-d3869948aa06@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 18/01/2022 15:13, Hans Verkuil wrote:
+> On 1/18/22 13:50, Corentin Labbe wrote:
+>> Hello
+>>
+>> As reported on old googlegroup sunxi mainling list, on linux-next-20220118, USB storage fail to bring up on orangepiPC.
+>> We can see some error logs in dmesg:
+>> reg-fixed-voltage usb0-vbus: error -EINVAL: can't get GPIO
+>> reg-fixed-voltage: probe of usb0-vbus failed with error -22
+>>
+>> This is bisected to: 8df89a7cbc63c7598c00611ad17b67e8d5b4fad3 pinctrl-sunxi: don't call pinctrl_gpio_direction()
+>>
+>> Reverting this commit lead to a working USB storage being setuped.
 
-On Wed, Jan 26, 2022 at 03:18:51PM +0800, Kai-Heng Feng wrote:
-> Commit 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in
-> hint") enables ACS, and some platforms lose its NVMe after resume from
-> S3:
-> [   50.947816] pcieport 0000:00:1b.0: DPC: containment event, status:0x1f01 source:0x0000
-> [   50.947817] pcieport 0000:00:1b.0: DPC: unmasked uncorrectable error detected
-> [   50.947829] pcieport 0000:00:1b.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Receiver ID)
-> [   50.947830] pcieport 0000:00:1b.0:   device [8086:06ac] error status/mask=00200000/00010000
-> [   50.947831] pcieport 0000:00:1b.0:    [21] ACSViol                (First)
-> [   50.947841] pcieport 0000:00:1b.0: AER: broadcast error_detected message
-> [   50.947843] nvme nvme0: frozen state error detected, reset controller
+Hopefully this is resolved by this patch:
+
+https://patchwork.linuxtv.org/project/linux-media/patch/0f536cd8-01db-5d16-2cec-ec6d19409a49@xs4all.nl/
+
+Please test!
+
+Regards,
+
+	Hans
+
 > 
-> It happens right after ACS gets enabled during resume.
-
-Is this really because of the above commit of due the fact that AER
-"service" never implemented the PM hooks in the first place ;-)
+> Hmm, I'll bet it's EPROBE_DEFER related.
 > 
-> There's another case, when Thunderbolt reaches D3cold:
-> [   30.100211] pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
-> [   30.100251] pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   30.100256] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
-> [   30.100262] pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-> [   30.100267] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
-> [   30.100372] thunderbolt 0000:0a:00.0: AER: can't recover (no error_detected callback)
-> [   30.100401] xhci_hcd 0000:3e:00.0: AER: can't recover (no error_detected callback)
-> [   30.100427] pcieport 0000:00:1d.0: AER: device recovery failed
+> The original call (pre that commit) of pinctrl_gpio_direction_output() checks
+> if the pin controller could find the pin (pinctrl_get_device_gpio_range()).
 > 
-> Since PCIe spec "5.2 Link State Power Management" states that TLP and DLLP
-> transmission is disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold with aux
-> power) and L3 (D3cold), so disable AER to avoid the noises from turning power
-> rails on/off.
+> That doesn't happen in the new code.
+> 
+> The sunxi appears to have two pincontrollers in the device tree (&pio and &r_pio),
+> that might be part of the reason this is an issue here.
+> 
+> Linus, should there be a check somewhere for a missing pincontroller in
+> gpiod_get_index()? I suspect that before my commit it was the gpiod_configure_flags
+> call in that function that returned -EPROBE_DEFER, but I'm not completely certain.
+> 
+> If someone can give me a hint about what should be done, then I can make a patch.
+> 
+> The alternative is to revert this sunxi patch, but perhaps this is a deeper
+> problem with these pincontroller drivers that set the direction directly
+> instead of going through pinctrl_gpio_direction_output().
+> 
+> Corentin, it would help me if you can figure out where the EPROBE_DEFER is
+> returned (pre-commit) in drivers/pinctrl/core.c. Probably pinctrl_get_device_gpio_range().
+> 
+> And I'd love to have the WARN_ON(1) output from just before the 'return -EPROBE_DEFER'.
+> 
+> Regards,
+> 
+> 	Hans
+> 
+>>
+>> Regards
 
-I think more accurate here is to say when the topology behind the root
-port enters low power states. Reason here is that you can't really tell
-from the OS standpoint whether the link went into L1 or L2/3 before the
-ACPI power resource is turned off.
-
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=209149
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
-> Fixes: 50310600ebda ("iommu/vt-d: Enable PCI ACS for platform opt in hint")
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-
-Thanks for fixing this!
-
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>

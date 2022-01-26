@@ -2,121 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD93349C7A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD6A49C7A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240022AbiAZKcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:32:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:58250 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240029AbiAZKco (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:32:44 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 251C91FB;
-        Wed, 26 Jan 2022 02:32:44 -0800 (PST)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 02A9D3F766;
-        Wed, 26 Jan 2022 02:32:42 -0800 (PST)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shuah@kernel.org, Cristian Marussi <cristian.marussi@arm.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH v4] selftests/kselftest/runner.sh: Pass optional command parameters in environment
-Date:   Wed, 26 Jan 2022 10:32:30 +0000
-Message-Id: <20220126103230.35285-1-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.17.1
+        id S240017AbiAZKc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:32:58 -0500
+Received: from gateway24.websitewelcome.com ([192.185.50.66]:26449 "EHLO
+        gateway24.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240029AbiAZKc4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 05:32:56 -0500
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway24.websitewelcome.com (Postfix) with ESMTP id 640772BFE8
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:32:55 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id CfbjnyTNJb6UBCfbjnIwPX; Wed, 26 Jan 2022 04:32:55 -0600
+X-Authority-Reason: nr=8
+Received: from host-79-47-126-144.retail.telecomitalia.it ([79.47.126.144]:46580 helo=[10.0.0.238])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1nCfbi-001LvI-TU; Wed, 26 Jan 2022 04:32:55 -0600
+Message-ID: <cbcfff61-0b5d-01e9-f3e1-2b80144576ff@kernel.org>
+Date:   Wed, 26 Jan 2022 11:32:53 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] tools/tracing: Update Makefile to build rtla
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>, rostedt@goodmis.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220126002234.79337-1-skhan@linuxfoundation.org>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20220126002234.79337-1-skhan@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 79.47.126.144
+X-Source-L: No
+X-Exim-ID: 1nCfbi-001LvI-TU
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-79-47-126-144.retail.telecomitalia.it ([10.0.0.238]) [79.47.126.144]:46580
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 4
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some testcases allow for optional commandline parameters but as of now
-there is now way to provide such arguments to the runner script.
+On 1/26/22 01:22, Shuah Khan wrote:
+> Update tracing Makefile to build/install/clean rtla tragets.
+> 
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Add support to retrieve such optional command parameters fron environment
-variables named so as to include the all-uppercase test executable name,
-sanitized substituting any non-acceptable varname characters with "_",
-following the pattern:
+Reviewed-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-	KSELFTEST_<UPPERCASE_SANITIZED_TEST_NAME>_ARGS="options"
-
-Optional command parameters support is not available if 'tr' is not
-installed on the test system.
-
-Cc: Kees Cook <keescook@chromium.org>
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-v3 --> v4
-- rebased on v5.17-rc1
-v2 --> v3
-- improved varname sanitation
-v1 --> v2
-- using env vars instead of settings file
-- added missing varname sanitation
-
-Usage examples:
-
-	KSELFTEST_RTCTEST_ARGS="/dev/rtc1" /opt/ksft_fixes/run_kselftest.sh -c rtc
-
-	KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10" /opt/ksft_fixes/run_kselftest.sh -c cpu-hotplug
----
- tools/testing/selftests/kselftest/runner.sh | 30 ++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index a9ba782d8ca0..294619ade49f 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -18,6 +18,8 @@ if [ -z "$BASE_DIR" ]; then
- 	exit 1
- fi
- 
-+TR_CMD=$(command -v tr)
-+
- # If Perl is unavailable, we must fall back to line-at-a-time prefixing
- # with sed instead of unbuffered output.
- tap_prefix()
-@@ -49,6 +51,31 @@ run_one()
- 
- 	# Reset any "settings"-file variables.
- 	export kselftest_timeout="$kselftest_default_timeout"
-+
-+	# Safe default if tr not available
-+	kselftest_cmd_args_ref="KSELFTEST_ARGS"
-+
-+	# Optional arguments for this command, possibly defined as an
-+	# environment variable built using the test executable in all
-+	# uppercase and sanitized substituting non acceptable shell
-+	# variable name characters with "_" as in:
-+	#
-+	# 	KSELFTEST_<UPPERCASE_SANITIZED_TESTNAME>_ARGS="<options>"
-+	#
-+	# e.g.
-+	#
-+	# 	rtctest --> KSELFTEST_RTCTEST_ARGS="/dev/rtc1"
-+	#
-+	# 	cpu-on-off-test.sh --> KSELFTEST_CPU_ON_OFF_TEST_SH_ARGS="-a -p 10"
-+	#
-+	if [ -n "$TR_CMD" ]; then
-+		BASENAME_SANITIZED=$(echo "$BASENAME_TEST" | \
-+					$TR_CMD -d "[:blank:][:cntrl:]" | \
-+					$TR_CMD -c "[:alnum:]_" "_" | \
-+					$TR_CMD [:lower:] [:upper:])
-+		kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
-+	fi
-+
- 	# Load per-test-directory kselftest "settings" file.
- 	settings="$BASE_DIR/$DIR/settings"
- 	if [ -r "$settings" ] ; then
-@@ -69,7 +96,8 @@ run_one()
- 		echo "# Warning: file $TEST is missing!"
- 		echo "not ok $test_num $TEST_HDR_MSG"
- 	else
--		cmd="./$BASENAME_TEST"
-+		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
-+		cmd="./$BASENAME_TEST $kselftest_cmd_args"
- 		if [ ! -x "$TEST" ]; then
- 			echo "# Warning: file $TEST is not executable"
- 
--- 
-2.17.1
+Thanks, Shuah!
+-- Daniel
+> ---
+>  tools/tracing/Makefile | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/tracing/Makefile b/tools/tracing/Makefile
+> index 87e0ec48e2e7..95e485f12d97 100644
+> --- a/tools/tracing/Makefile
+> +++ b/tools/tracing/Makefile
+> @@ -1,11 +1,11 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  include ../scripts/Makefile.include
+>  
+> -all: latency
+> +all: latency rtla
+>  
+> -clean: latency_clean
+> +clean: latency_clean rtla_clean
+>  
+> -install: latency_install
+> +install: latency_install rtla_install
+>  
+>  latency:
+>  	$(call descend,latency)
+> @@ -16,4 +16,14 @@ latency_install:
+>  latency_clean:
+>  	$(call descend,latency,clean)
+>  
+> -.PHONY: all install clean latency latency_install latency_clean
+> +rtla:
+> +	$(call descend,rtla)
+> +
+> +rtla_install:
+> +	$(call descend,rtla,install)
+> +
+> +rtla_clean:
+> +	$(call descend,rtla,clean)
+> +
+> +.PHONY: all install clean latency latency_install latency_clean \
+> +	rtla rtla_install rtla_clean
 

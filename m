@@ -2,120 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C086B49C90E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FF649C913
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiAZLtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbiAZLs7 (ORCPT
+        id S234333AbiAZLvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:51:23 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:36054 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232111AbiAZLvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:48:59 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F49C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:48:58 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id z19so25841718lfq.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:48:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8ZZvVwoKjlAsaqSxtK4fQe4yK7eYFTBEgmc8sINCg78=;
-        b=X6aKr0fMqQPTsLVZwB/htoJ9UO/IbyIRUdV/qXdYpLy0MU2rm5LgmNuRIXGDnLc284
-         N2KNzz9uaXR446/RX3vbnM2v8mAbnKG17fPesrLsSJIOYY7Sm7JljX7Mly7kI7fbQ1nU
-         w8Y3F5keHKCzciOhwm9YabBt0S06kRim5XzikIaZ+rPPFt7YOQLzuhXecmdZXYS2tUUM
-         ZFMNtRDuaAdtKiLI+UXAP/FTYsSLci4egde7rRUle8+xxSB7uoJ3xIYsXZb+gv7hEOmE
-         mbPTBmk6lQhoGYP+W/9G5i73WLJy8+K6Qy601L0MJJNsS2qnooiaWyGv9UaQbe6ol8D0
-         lfWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8ZZvVwoKjlAsaqSxtK4fQe4yK7eYFTBEgmc8sINCg78=;
-        b=3Gv2JXjXF6gyfN8OCGEi7M2sxRVOQSA55vgqgRuwvEN4W5Q7+48APbpcXCN3oM+l16
-         Qz9Z7k43Fq4KCEoVucqG2q9R/HlZKBZDt2pNUo6UtrAP2uUhrvS2I1i5diBV6Zz2qodI
-         axHebl2KfYthg/6SZph6sbIRjKgLTRkJHMd4Q1TN7k5X8z7vqJyPZSnS6IpLA+Mb4MJC
-         9asi8i36YWdHEh6Z3qKD434DlYtbMi2CShTCUGD0s/bDs6dcwgy9YXz6w3sPSpRQyu1e
-         p6AAtIBthJqBmhGtYaQMG9APNT/ezOUlgi+sHnjBLqOtNlzYvUnT/Bpq2exfRtNMHmPP
-         5qcQ==
-X-Gm-Message-State: AOAM532os484DvJi8ytMhIxWzKaYsDhL7QAQjvUOOOe0CQCrqbSis3um
-        f1fSPGP98ZTcjD9WQ6Ha9eC4bIBejR2anDmv0CAuFA==
-X-Google-Smtp-Source: ABdhPJziD07+eMnW4rLwOuYDFVWZHuCUdhswCuRCWSHJWbdITLdwopbQOQ/llqE1eiGY374+vaHv5tuFoZPkxX6LTJA=
-X-Received: by 2002:a05:6512:3d12:: with SMTP id d18mr20141777lfv.213.1643197736980;
- Wed, 26 Jan 2022 03:48:56 -0800 (PST)
+        Wed, 26 Jan 2022 06:51:19 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 52EA91F397;
+        Wed, 26 Jan 2022 11:51:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643197878; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WN9Ip30kqBy/bRxKBj0xyrG8FuTGNu7NnI2/hJlTwnY=;
+        b=EfyPi7E9kJqmrz2D9rNvEMRSyaNqTyXDtGF1W0Att0Z7nhlO53nGs/bzkYS5Nc10x1KC1/
+        h8sBSz4aBayW5MxKA26Trcy8Mz3AsGUHqDUUg2TNro/5NQlxxl9jt7g28GgdkyOPaWZ+MO
+        AJF3zPEOVzhkAqf9caQ1Y8ltba3C814=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643197878;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WN9Ip30kqBy/bRxKBj0xyrG8FuTGNu7NnI2/hJlTwnY=;
+        b=Q8sIf3Am0KlC+t8XLq/8cEGxXJe+6ynUqoRPLDKTKm6eiCa2x5iK/zGlSOR6hKNc2TRhgj
+        vnAOZgtLGyWzCIAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E9BC513BA2;
+        Wed, 26 Jan 2022 11:51:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jI8UOLU18WGPHwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 26 Jan 2022 11:51:17 +0000
+Message-ID: <fa673f9c-2654-755e-450d-d29b95c1ce9d@suse.de>
+Date:   Wed, 26 Jan 2022 12:51:17 +0100
 MIME-Version: 1.0
-References: <20220120202805.3369-1-shy828301@gmail.com> <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
- <CAG48ez1xuZdELb=5ed1i0ruoFu5kAaWsf0LgRXEGhrDAcHz8fw@mail.gmail.com> <f7f82234-7599-9e39-1108-f8fbe2c1efc9@redhat.com>
-In-Reply-To: <f7f82234-7599-9e39-1108-f8fbe2c1efc9@redhat.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 26 Jan 2022 12:48:29 +0100
-Message-ID: <CAG48ez17d3p53tSfuDTNCaANyes8RNNU-2i+eFMqkMwuAbRT4Q@mail.gmail.com>
-Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Yang Shi <shy828301@gmail.com>, kirill.shutemov@linux.intel.com,
-        willy@infradead.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+ <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+ <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
+ <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
+ <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------JnRflBn1QA502eLVkMeWa1Ta"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:38 PM David Hildenbrand <david@redhat.com> wrote:
-> On 26.01.22 12:29, Jann Horn wrote:
-> > On Wed, Jan 26, 2022 at 11:51 AM David Hildenbrand <david@redhat.com> wrote:
-> >> On 20.01.22 21:28, Yang Shi wrote:
-> >>> The syzbot reported the below BUG:
-> >>>
-> >>> kernel BUG at include/linux/page-flags.h:785!
-[...]
-> >>> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
-> >>> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
-[...]
-> >> Does this point at the bigger issue that reading the mapcount without
-> >> having the page locked is completely unstable?
-> >
-> > (See also https://lore.kernel.org/all/CAG48ez0M=iwJu=Q8yUQHD-+eZDg6ZF8QCF86Sb=CN1petP=Y0Q@mail.gmail.com/
-> > for context.)
->
-> Thanks for the pointer.
->
-> >
-> > I'm not sure what you mean by "unstable". Do you mean "the result is
-> > not guaranteed to still be valid when the call returns", "the result
-> > might not have ever been valid", or "the call might crash because the
-> > page's state as a compound page is unstable"?
->
-> A little bit of everything :)
-[...]
-> > In case you mean "the result might not have ever been valid":
-> > Yes, even with this patch applied, in theory concurrent THP splits
-> > could cause us to count some page mappings twice. Arguably that's not
-> > entirely correct.
->
-> Yes, the snapshot is not atomic and, thereby, unreliable. That what I
-> mostly meant as "unstable".
->
-> >
-> > In case you mean "the call might crash because the page's state as a
-> > compound page could concurrently change":
->
-> I think that's just a side-product of the snapshot not being "correct",
-> right?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------JnRflBn1QA502eLVkMeWa1Ta
+Content-Type: multipart/mixed; boundary="------------c3aHYJxo0ZbpFtAhYu9krT2V";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Helge Deller <deller@gmx.de>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Phillip Potter <phil@philpotter.co.uk>,
+ Carlis <zhangxuezhi1@yulong.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Lee Jones <lee.jones@linaro.org>, Heiner Kallweit <hkallweit1@gmail.com>
+Message-ID: <fa673f9c-2654-755e-450d-d29b95c1ce9d@suse.de>
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+ <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+ <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
+ <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
+ <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
+In-Reply-To: <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
 
-I guess you could see it that way? The way I look at it is that
-page_mapcount() is designed to return a number that's at least as high
-as the number of mappings (rarely higher due to races), and using
-page_mapcount() on an unlocked page is legitimate if you're fine with
-the rare double-counting of references. In my view, the problem here
-is:
+--------------c3aHYJxo0ZbpFtAhYu9krT2V
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-There are different types of references to "struct page" - some of
-them allow you to call page_mapcount(), some don't. And in particular,
-get_page() doesn't give you a reference that can be used with
-page_mapcount(), but locking a (real, non-migration) PTE pointing to
-the page does give you such a reference.
+SGkNCg0KQW0gMjYuMDEuMjIgdW0gMTI6MzEgc2NocmllYiBIZWxnZSBEZWxsZXI6DQo+IE9u
+IDEvMjYvMjIgMTI6MTgsIEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyB3cm90ZToNCj4+IE9u
+IDEvMjYvMjIgMTE6NTksIEhlbGdlIERlbGxlciB3cm90ZToNCj4+PiBPbiAxLzI2LzIyIDEx
+OjAyLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6DQo+Pg0KPj4gW3NuaXBdDQo+Pg0KPj4+PiBQ
+LlMuIEZvciB0aGUgcmVjb3JkLCBJIHdpbGwgcGVyc29uYWxseSBOQUsgYW55IGF0dGVtcHRz
+IHRvIHJlbW92ZSB0aGF0DQo+Pj4+IGRyaXZlciBmcm9tIHRoZSBrZXJuZWwuIEFuZCB0aGlz
+IGlzIGFub3RoZXIgcG9pbnQgd2h5IGl0J3MgYmV0dGVyIG5vdA0KPj4+PiB0byBiZSB1bmRl
+ciB0aGUgc3RhZ2luZy4NCj4+Pg0KPj4+IEkgYWdyZWUuIFNhbWUgYXMgZm9yIG1lIHRvIE5B
+SyB0aGUgZGlzYWJsaW5nIG9mIGZiY29uJ3MgYWNjZWxlcmF0aW9uDQo+Pj4gZmVhdHVyZXMg
+b3IgZXZlbiBhdHRlbXB0aW5nIHRvIHJlbW92ZSBmYmRldiBhbHRvZ2V0aGVyICh1bmxlc3Mg
+YWxsDQo+Pj4gcmVsZXZhbnQgZHJpdmVycyBhcmUgcG9ydGVkIHRvIERSTSkuDQo+Pj4NCj4+
+DQo+PiBCdXQgdGhhdCB3aWxsIG5ldmVyIGhhcHBlbiBpZiB3ZSBrZWVwIG1vdmluZyB0aGUg
+Z29hbCBwb3N0Lg0KPj4NCj4+IEF0IHNvbWUgcG9pbnQgbmV3IGZiZGV2IGRyaXZlcnMgc2hv
+dWxkIG5vdCBiZSBhZGRlZCBhbnltb3JlLCBvdGhlcndpc2UNCj4+IHRoZSBudW1iZXIgb2Yg
+ZXhpc3RpbmcgZHJpdmVycyB0aGF0IG5lZWQgY29udmVyc2lvbiB3aWxsIGtlZXAgZ3Jvd2lu
+Zy4NCj4gDQo+IEdvb2QgcG9pbnQsIGFuZCB5ZXMgeW91IGFyZSByaWdodCENCj4gDQo+IEkg
+dGhpbmsgdGhlIHJ1bGUgc2hvdWxkIGJlIHNvbWV0aGluZyBsaWtlOg0KPiANCj4gTmV3IGdy
+YXBoaWNzIGRldmljZXMgKGUuZy4gbWF4LiAzIHllYXJzIG9sZCBmcm9tIG5vdykgdXN1YWxs
+eSBhcmUNCj4gY2FwYWJsZSB0byBiZSBwb3J0ZWQgdG8gRFJNLg0KPiBGb3IgdGhvc2UgZ3Jh
+cGhpY3MgY2FyZHMgd2Ugc2hvdWxkIHB1dCBhIGhhcmQgc3RvcCBhbmQgbm90IGluY2x1ZGUg
+dGhlbQ0KPiBhcyBuZXcgZHJpdmVyIGludG8gdGhlIGZiZGV2IGZyYW1ld29yay4gSW5jbHVz
+aW9uIGZvciB0aG9zZSB3aWxsIG9ubHkNCj4gaGFwcGVuIGFzIERSTSBkcml2ZXIuDQo+IA0K
+PiBJbiB0aGUgc2FtZSBtYW5uZXIgdGhlcmUgYXJlIG9sZCBncmFwaGljIGNhcmRzIG9yIHZl
+cnkgc3BlY2lmaWMgZGV2aWNlcw0KPiAoZS5nLiBtb3JlIHRoYW4gMyB5ZWFycyBvbGQgb3Ig
+b25seSB1c2VkIGluIG5pY2hlLXVzZSBjYXNlcykNCj4gd2hpY2ggaGF2ZSBsaW1pdGF0aW9u
+cyBhbmQgdGh1cyBjYW4ndCBlYXNpbHkgYmUgcG9ydGVkIHRvIERSTS4NCj4gRm9yIHRob3Nl
+IGl0J3Mgc3RpbGwgYWNjZXB0YWJsZSB0byBpbmNsdWRlIHRoZW0gYXMgbGVnYWN5IGZiZGV2
+IGRyaXZlciwNCj4gYmVjYXVzZSB0aGUgd29yayBuZWVkZWQgaW4gRFJNIHRvIHN1cHBvcnQg
+c3VjaCBjYXJkcyBvciB0byBiZSBhYmxlIHRoYXQNCj4gdGhleSBydW4gZmFzdCBlbm91Z2gg
+d2l0aCBEUk0ganVzdCBkb2Vzbid0IHBheSBvZmYgdGhlIGVmZm9ydHMgd2hpY2ggYXJlDQo+
+IG5lZWRlZCB0byBrZWVwIHRoZW0gYXMgRFJNIGRyaXZlci4NCj4gDQo+IFdvdWxkIHRoYXQg
+YmUgYWNjZXB0YWJsZT8NCg0KTm8uIEFzIHdlJ3ZlIHNhaWQgc2V2ZXJhbCB0aW1lcywgdGhl
+cmUncyBub3RoaW5nIHN0b3BwaW5nIGFueSBkZXZpY2UgDQpmcm9tIGJlaW5nIHN1cHBvcnRl
+ZCBieSBEUk0uIElmIHNvbWV0aGluZydzIG1pc3Npbmcgb3Igc2xvdywgaXQncyANCmJlY2F1
+c2Ugbm8gb25lIGhhcyBoYWQgdGhhdCBpc3N1ZSBzbyBmYXIuIFdlIHdlbGNvbWUgcGF0Y2hl
+cyBwYXRjaGVzIHRvIA0KZml4IHN1Y2ggcHJvYmxlbXMuDQoNCkJlc3QgcmVnYXJkcw0KVGhv
+bWFzDQoNCj4gDQo+IEhlbGdlDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNz
+IERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21i
+SA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5
+LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-This concept of "different types of references" is the same as you
-e.g. get with mmgrab() vs mmget() - they both give references to the
-same object, but those references have different usage restrictions.
+--------------c3aHYJxo0ZbpFtAhYu9krT2V--
+
+--------------JnRflBn1QA502eLVkMeWa1Ta
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmHxNbUFAwAAAAAACgkQlh/E3EQov+Dp
+VxAAuXLl/kj8IPfH8Z6ARB+5uZZHI85kwITqFyp7bRLN27fNx0Q9JRqmsrq6i1rlM1q7p25D644A
+tZCEf6rCOZIFspPc0mVzTAHwSTBWYrZN67BONdq4yaotg4xbkVh2RBcC5D0ya0tsubdgnASJ4IQ7
+xkJ+thq4rMlyjKfQ+XOEUIG37CkZeVXRUTRQHhX86V8Ww5FB1CEUyv7mSDn1r9GIOVCmom70jcPN
+xZRqeCpa7p1iRhmRpktrWBMRul6FVwUbGqsSI7t4YYerfWG/+gugO8VLdX4+MTXTIPqrnx86ZcRc
+rmpjKhYWA8OmOMVzPgiEt8apMK3K7HJLvjym1Dl3tcMI+pypz2U1WDdyDddNUyDs5Ns9eX4wk8t7
+1xSf+Aniqe7dOUdHi47LwWtfOmJHykAUVkbithcFVUj3yR3d4bIeRHymKX1gob3q48oUuDK0KkmJ
+in3RtxcnQmhFGXVE2jqz+7bkG77bsu2L592wi3wFzo2QrCarcCWwEvxoo67sH7q97N/5KD6gr8hw
+jz9jiWrqTxSA3FJHGIqZY3yQKv85Ll/60rMd61Lbz60o0iqVy9pej34lkjSQzVNtLEp26uoodeLw
+ZYqlCQAPQsPinV4W2BTvwpa+VadgBF+0UpfoilVDYIpuSvaAyXX+KihIzP5cvdM+y913cpNFQBgC
+hw0=
+=rbTd
+-----END PGP SIGNATURE-----
+
+--------------JnRflBn1QA502eLVkMeWa1Ta--

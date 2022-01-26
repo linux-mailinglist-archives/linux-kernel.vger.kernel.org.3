@@ -2,159 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C06249D595
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD8349D597
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiAZWl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S229907AbiAZWmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiAZWl0 (ORCPT
+        with ESMTP id S229869AbiAZWl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:41:26 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36309C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:41:26 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id n10so1185081edv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:41:26 -0800 (PST)
+        Wed, 26 Jan 2022 17:41:57 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9A7C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:41:57 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id u18so1152942edt.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:41:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oPtlTy67Yq/R5pUJBh8Cj52Wrm9Q+Vs7xmfGLT5AbpA=;
-        b=SetlsjCWFNKYNBg+4fhvjOH1cu+KPd/Q3nNl2FWu5Rl3JA+3w/gqKotxQ4V2hIj2zY
-         vV6idOd5VQausx01qBw99aqtP3cAOzFFTrSUYfY1O336iqcRwDy+b1cSDAecK5MgVtOJ
-         kPXi3Fs51HjeCquzMFeyfJ196Z8G3Pc9c5bGfDMrn/HKhSzm6vst4bdlZoHQL7A6eV05
-         T0p/ZNN6X0t1lKamtBqWWrsmqJzIecVCuALFwnB2z+pblaUyTWjMER/9kc0YIhpDXEw7
-         CY2c9SBzgsvKlJz7jM4NGxiqljk6q/1kWYZJQqwPAwvmU03GC01lsUp/prt1bEeqlkKM
-         WQag==
+        bh=0kmlesg0I4LYJSjpNNLXT1MwRqqz07UkKMgwpQerJZI=;
+        b=l9vpOUZB8NcQgpvbNkpOEaeahCnYoHjUgOpPZAywPZfGYpyG0d9jz/Kt1pKMI84twO
+         NuOzY+JdgnvBZ7r10vSopglCYsgSKT9oWEBS5FQdK25SkR4NpgnSlqBI6/rh2VirvKh7
+         5I6cTxkLzn6QB2Agk++R+m56tpPtRt5DknK/gL66+niqa5azxbOhOw+Fs6WElUJNhzVK
+         2EkZv6+jYG2MdXTPjRR1Rf2t3ioib6J+qa1YUhjfYgcFGltmjT0hAU9W1HOVbHwesrwZ
+         EknPLiDwrej46VB2W/j7SRp1dWKinvVldzz7NzW1TAXcKs0fs+ykXY8WeUrQEedMPHvk
+         BYmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oPtlTy67Yq/R5pUJBh8Cj52Wrm9Q+Vs7xmfGLT5AbpA=;
-        b=LUjFS+pZ7fMZT/PJBwQYYBM929c5XWPOZRZVnYYP9+KnE6bUvkebVD31scRci/Ifge
-         7Nn384iQXqgfVNeOWETYgDh5Yz6wWW8h4NNNOSL4KLACvYCThnbIk7U5bQhuSTYXzDty
-         NniMb5i1iy6n2q9Dpd1YKEGW1N5dnNoRntS7Vh764xGq1SPze3UPo3SqtE/w/mANYJmj
-         B/It3iEPj3XKcBkoF8DBxBrGStegEgN0ODu2oTa+u/dW2VHHU7EknKHsj09uMaRm5gth
-         gw7oPa/dSlrBAw5Qa4ufwaTIDNDzIZLf206BhT1zLykryaAGztP0as4MBH5kq1HjvC//
-         w2dw==
-X-Gm-Message-State: AOAM5323vt98kSUqHfY/FCT2rcKNGV5bl03hdkUfLUtzSSI2shfSna45
-        iA2DgIskbNGbl3161j8h4k/fMwsmbx31IGDiqbiR7w==
-X-Google-Smtp-Source: ABdhPJw5o4z8TJT1hnIdh2XuXnqKEEYj45WboF/3FXlzBvnWx2lvxlXR9cXGB9QCVLsS8inljCwxV8MKMEAwR23dChU=
-X-Received: by 2002:a05:6402:11d2:: with SMTP id j18mr1016217edw.349.1643236884660;
- Wed, 26 Jan 2022 14:41:24 -0800 (PST)
+        bh=0kmlesg0I4LYJSjpNNLXT1MwRqqz07UkKMgwpQerJZI=;
+        b=377eGlfpeZeH3HRt4aZPJNLYzXGm7QuTHDAw+ZcuntGB+5ij84958/SpT7DJtWqCNk
+         cjR8ospk0cXZgyQWUwCOjHv2Dl98sfMRV0X5SijX43KHIFGs1NXVa9tptX430AT8i1Td
+         eedl75YlZ3sIZYR2brlr1dfSCBSjJYM8GHxX46Sfh7iaT3NZyWLwysbqhqUJDHKBj+ya
+         BdZMAkXK4pL2jVpZ40D0FQrzgu29oxjl+s6iEtFCc7WZGiEC8ghHkBjga5fRUcOrHKDH
+         WJTtRpIhxsACc/JC0xd38F4S0nnZLUpwV3sLGTtDsiNhN+AtieWjiqN0llcwS5Vz+CHc
+         GW7Q==
+X-Gm-Message-State: AOAM531zgIUvkCby70hrEZWZtiy51wWJXH7bXgavSDguT8As2Vo91uKP
+        EKfjtxV5ejzpdqScgKJQBAdtvusxBvIEWmIkFM+m
+X-Google-Smtp-Source: ABdhPJxGOZMMTCMbY+EL2mon3XorJs4hqbl4sUi6fTTvBfI9j+aAsvtN3RJnWVwHLlK16m+6E5M+wgLU1SCtu09d6TA=
+X-Received: by 2002:a05:6402:2793:: with SMTP id b19mr1052162ede.171.1643236915606;
+ Wed, 26 Jan 2022 14:41:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220126183429.1840447-1-pasha.tatashin@soleen.com>
- <20220126183429.1840447-2-pasha.tatashin@soleen.com> <YfGZ/0hhkqVeX04p@casper.infradead.org>
- <CA+CK2bDHkOQbTrK=GbsGbojAj_6gaAX_8w3cBCd_LWqXt--yZA@mail.gmail.com> <YfGkxtQd0KE8YNXt@casper.infradead.org>
-In-Reply-To: <YfGkxtQd0KE8YNXt@casper.infradead.org>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Wed, 26 Jan 2022 17:40:47 -0500
-Message-ID: <CA+CK2bAvGjieaXRcHqfhfPp0uogfLOmCtbE_9w3ULFbM+ZuHNg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/9] mm: add overflow and underflow checks for page->_refcount
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        william.kucharski@oracle.com,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        schmitzmic@gmail.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Paul Turner <pjt@google.com>, Hugh Dickins <hughd@google.com>
+References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
+ <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com> <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com>
+In-Reply-To: <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 26 Jan 2022 17:41:44 -0500
+Message-ID: <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
+Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
+To:     Demi Marie Obenour <demiobenour@gmail.com>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, selinux-refpolicy@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 2:45 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Wed, Jan 26, 2022 at 02:22:26PM -0500, Pasha Tatashin wrote:
-> > On Wed, Jan 26, 2022 at 1:59 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > >
-> > > On Wed, Jan 26, 2022 at 06:34:21PM +0000, Pasha Tatashin wrote:
-> > > > The problems with page->_refcount are hard to debug, because usually
-> > > > when they are detected, the damage has occurred a long time ago. Yet,
-> > > > the problems with invalid page refcount may be catastrophic and lead to
-> > > > memory corruptions.
-> > > >
-> > > > Reduce the scope of when the _refcount problems manifest themselves by
-> > > > adding checks for underflows and overflows into functions that modify
-> > > > _refcount.
-> > >
-> > > If you're chasing a bug like this, presumably you turn on page
-> > > tracepoints.  So could we reduce the cost of this by putting the
-> > > VM_BUG_ON_PAGE parts into __page_ref_mod() et al?  Yes, we'd need to
-> > > change the arguments to those functions to pass in old & new, but that
-> > > should be a cheap change compared to embedding the VM_BUG_ON_PAGE.
+On Tue, Jan 25, 2022 at 5:50 PM Demi Marie Obenour
+<demiobenour@gmail.com> wrote:
+> On 1/25/22 17:27, Paul Moore wrote:
+> > On Tue, Jan 25, 2022 at 4:34 PM Demi Marie Obenour
+> > <demiobenour@gmail.com> wrote:
+> >>
+> >> These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
+> >> always allows too.  Furthermore, a failed FIOCLEX could result in a file
+> >> descriptor being leaked to a process that should not have access to it.
+> >>
+> >> Signed-off-by: Demi Marie Obenour <demiobenour@gmail.com>
+> >> ---
+> >>  security/selinux/hooks.c | 5 +++++
+> >>  1 file changed, 5 insertions(+)
 > >
-> > This is not only about chasing a bug. This also about preventing
-> > memory corruption and information leaking that are caused by ref_count
-> > bugs from happening.
-> > Several months ago a memory corruption bug was discovered by accident:
-> > an engineer was studying a process core from a production system and
-> > noticed that some memory does not look like it belongs to the original
-> > process. We tried to manually reproduce that bug but failed. However,
-> > later analysis by our team, explained that the problem occured due to
-> > ref_count bug in Linux, and the bug itself was root caused and fixed
-> > (mentioned in the cover letter).  This work would have prevented
-> > similar ref_count bugs from yielding to the memory corruption
-> > situation.
+> > I'm not convinced that these two ioctls should be exempt from SELinux
+> > policy control, can you explain why allowing these ioctls with the
+> > file:ioctl permission is not sufficient for your use case?  Is it a
+> > matter of granularity?
 >
-> But the VM_BUG_ON_PAGE tells us next to nothing useful.  To take
-> your first example [1] as the kind of thing you say this is going to
-> help fix:
+> FIOCLEX and FIONCLEX are applicable to *all* file descriptors, not just
+> files.  If I want to allow them with SELinux policy, I have to grant
+> *:ioctl to all processes and use xperm rules to determine what ioctls
+> are actually allowed.  That is incompatible with existing policies and
+> needs frequent maintenance when new ioctls are added.
 >
-> 1. Page p is allocated by thread a (refcount 1)
-> 2. Thread b gets mistaken pointer to p
+> Furthermore, these ioctls do not allow one to do anything that cannot
+> already be done by fcntl(F_SETFD), and (unless I have missed something)
+> SELinux unconditionally allows that.  Therefore, blocking these ioctls
+> does not improve security, but does risk breaking userspace programs.
+> The risk is especially great because in the absence of SELinux, I
+> believe FIOCLEX and FIONCLEX *will* always succeed, and userspace
+> programs may rely on this.  Worse, if a failure of FIOCLEX is ignored,
+> a file descriptor can be leaked to a child process that should not have
+> access to it, but which SELinux allows access to.  Userspace
+> SELinux-naive sandboxes are one way this could happen.  Therefore,
+> blocking FIOCLEX may *create* a security issue, and it cannot solve one.
 
-Thread b gets a mistaken pointer to p because of a bug in the kernel.
-The different types of bugs can lead to such scenarios, and it is
-probably not feasible to prevent all of them. However, one of such
-scenarios is that we lost control of ref_count, and the page was then
-incorrectly remapped or even copied (perhaps migrated) into another
-address space.
+I can see you are frustrated with my initial take on this, but please
+understand that excluding an operation from the security policy is not
+something to take lightly and needs discussion.  I've added the
+SELinux refpolicy list to this thread as I believe their input would
+be helpful here.
 
-While studying the logs of the machine on which the double mapping
-occured, we noticed that ref_count was underflowed. This was the
-smoking gun for the problem, and that is why we concentrated our
-search for the root cause of memory leak around places where ref_count
-can be incorrectly modified.
-
-This patch series ensures that once we get to a situation where
-ref_count is for some reason becomes negative we panic immediately as
-there is a possibility that a  leak can occur.
-
-The second benefit of this series is that it makes the ref_count
-changes contiguous, with this series we never reset the value to 0,
-instead we only operate using offsets and add/sub operations. This
-helps with tracing the history of ref_count via tracepoints.
-
-> 3. Thread b calls put_page(), __put_page(), page goes to memory
->    allocator.
-> 4. Thread c calls alloc_page(), also gets page p (refcount 1 again).
-> 5. Thread a calls put_page(), __put_page()
-> 6. Thread c calls put_page() and gets a VM_BUG_ON_PAGE.
->
-> How do we find thread b's involvement?  I don't think we can even see
-> thread a's involvement in all of this!  All we know is a backtrace
-> pointing to thread c, who is a completely innocent bystander.  I think
-> you have to enable page tracepoints to have any shot at finding thread
-> b's involvement.
-
-You are right, we cannot get to see thread's involvement, we only get
-a panic closer to the damage and hopefully prior to leak occurs.
-Again, this is just one of the mitigation techniques. Another one is
-this page table check [2].
-
-[2] https://lore.kernel.org/all/20211221154650.1047963-1-pasha.tatashin@soleen.com
->
-> [1] https://lore.kernel.org/stable/20211122171825.1582436-1-gthelen@google.com/
+--
+paul-moore.com

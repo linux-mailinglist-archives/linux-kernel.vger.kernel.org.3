@@ -2,119 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE63449D0DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2A949D0E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243794AbiAZRfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237113AbiAZRfe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:35:34 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B04EC06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:35:34 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id 9so466732iou.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:35:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZIc0fSllSEZH1gk3JGk22AP5NW4tb6II2GdmBEkjev0=;
-        b=LnfjBxx8+MlxwefUxtOVRjjQeNugF5BLhAaiOjLOUI05XgLF/0FvOpyr9lunVuSSM/
-         GWLE3mpgl31ce08kr2pVl/LjYH7sLAuCh9YurtESr4S0oR7i+wttHvXJnqYFmpETT3Lq
-         /WYOeCzK1O7PAZZ8K2ES1Ck4JpmB4RtuQkLIg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZIc0fSllSEZH1gk3JGk22AP5NW4tb6II2GdmBEkjev0=;
-        b=pXga1M4wGBlBgtBAQDoRlVOeY01Aj2w+wB407b3YQyGzifDFosmUajEcRaw+Qebu8r
-         1fflhUv16Pt6C5dgbZ2QP+3OBr8bK0Ouf8BHtADnNKmO6NhbAxUMzgm+pWrdH3uYFLeA
-         ocBg1Rk+fiZrxVyf1T44qop10FxJGCqyjUYDt8wdZ3JA9tBGnB4mGuaULi5OVTRiR/AA
-         ix7SKGUNRaNY1fDydnoLKWKKy95newbaJhJHOHuGvH5uAVOpHazjLLAEvau5IBS/te3j
-         FQ9ccFQodAjFTQrsbJWt1twzKHxcsp2pq2b0EqomK7Dh+zOuUuKIQYkFEq/hl3rPxMvW
-         N1lQ==
-X-Gm-Message-State: AOAM530dQN73RlJwpvO+D2RgJt4FxipNlTQDYLskB7XtOiFlUk1E2pn7
-        MMIRJ0A50iTIdWYuyiJOMERniw==
-X-Google-Smtp-Source: ABdhPJwBBSYp7lhFZ6a63yjqa1UiVsse+h9o1ohr4kLC1ezejkIkL5BQXXZZ5oix6wchCHW+SEfYOg==
-X-Received: by 2002:a05:6638:2ba:: with SMTP id d26mr428556jaq.250.1643218533820;
-        Wed, 26 Jan 2022 09:35:33 -0800 (PST)
-Received: from ?IPv6:2601:282:8200:4c:f2e:a7f7:d853:1e3? ([2601:282:8200:4c:f2e:a7f7:d853:1e3])
-        by smtp.gmail.com with ESMTPSA id x6sm11128452ill.78.2022.01.26.09.35.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 09:35:33 -0800 (PST)
-Subject: Re: [PATCH 1/3] selftests/zram: Remove obsolete max_comp_streams
- interface
-To:     Petr Vorel <pvorel@suse.cz>,
-        "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>
-Cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "naresh.kamboju@linaro.org" <naresh.kamboju@linaro.org>,
-        "aleksei.kodanev@bell-sw.com" <aleksei.kodanev@bell-sw.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1639562171-4434-1-git-send-email-xuyang2018.jy@fujitsu.com>
- <1146337d-718e-a369-1012-224f06bc9c2f@linuxfoundation.org>
- <61F0D9F7.1080200@fujitsu.com> <YfD0hiUSf40jX82d@pevik>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <590c1f1c-2da1-583a-d055-83c15969cf80@linuxfoundation.org>
-Date:   Wed, 26 Jan 2022 10:35:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S243746AbiAZRga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:36:30 -0500
+Received: from mga11.intel.com ([192.55.52.93]:56209 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243795AbiAZRg0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 12:36:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643218586; x=1674754586;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YEq+VbUd0qvM6dYGJRXqCaF1eKzMqOSL9aGqV0Ee52U=;
+  b=HKEVRETqvy4/SWSn1id5gdlUKMmXMVHPFUHjJazNqBXq4dlSgkFDfH2q
+   zvEXnHq0hxVNnH5iqwiaLJAviyzM0oJIYMDRN0bdZ2GIRIr6HbGEzga7i
+   MIHh8Yb5IjbPT2yQqFbvSXMehYoOnaLvWb/nGgDlBS/cvDm4YpPQquoFU
+   kV4mYNqDoJlo3ndGj5oG6iIzaW+rxzDV2AosnlwSONH2dPZBaG38lNWEt
+   sv0D/qsnDRcpH06/4WsGv7MoNe3SJrsB8d7ztcm9e7SsEHhpJWT3dqyaN
+   l+4jnqJgfXMNaY1liseQulCBleszQ4Lhfprrh2hHVTTFOWoJrHq5IwRdt
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244204867"
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="244204867"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 09:36:25 -0800
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="535264237"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 09:36:24 -0800
+Date:   Wed, 26 Jan 2022 09:36:19 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <YfGGk7kWNc9q2YwV@otcwcpicx3.sc.intel.com>
+References: <20211217220136.2762116-1-fenghua.yu@intel.com>
+ <20211217220136.2762116-6-fenghua.yu@intel.com>
+ <87ee4w6g1n.ffs@tglx>
+ <87bl006fdb.ffs@tglx>
+ <Ye8RmmKpJT8brmDE@otcwcpicx3.sc.intel.com>
+ <878rv46eg3.ffs@tglx>
+ <YfAUutQhqS6ejUFU@otcwcpicx3.sc.intel.com>
+ <87k0em4lu9.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <YfD0hiUSf40jX82d@pevik>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87k0em4lu9.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/22 12:13 AM, Petr Vorel wrote:
-> Hi all,
-> 
->> on 2022/1/26 4:33, Shuah Khan wrote :
->>> On 12/15/21 2:56 AM, Yang Xu wrote:
->>>> Since kernel commit 43209ea2d17a ("zram: remove max_comp_streams
->>>> internals"), zram has
->>>> switched to per-cpu streams. Even kernel still keep this interface for
->>>> some reasons, but
->>>> writing to max_comp_stream doesn't take any effect. So remove it.
-> 
->>> I get that max_comp_stream doesn't do anything since this referenced
->>> commit. Don't we need this test on older kernels since older kernels
->>> still support max_comp_stream?
-> 
->> I read the following info from kernel selftest documentation
->> https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
-> 
->> "The kernel contains a set of “self tests” under the
->> tools/testing/selftests/ directory. These are intended to be small tests
->> to exercise individual code paths in the kernel. Tests are intended to
->> be run after building, installing and booting a kernel."
-> 
->> So, we can build older kernel(use older kernel source) if we want to
->> test older kernel.
-> 
->> IMO, kernel selftest is different from other testsuit(ie ltp, this
->> shuould think about api changes because ltp may test on different kernel).
-> Yes, that's how I understand the difference with approach of in kselftest - the
-> kernel tree testsuite and LTP - the out-of-tree testsuite.
-> 
+Hi, Thomas,
 
-Removing max_comp_stream test appears to be motivated by the fact it isn't
-needed on newer kernels.
+On Wed, Jan 26, 2022 at 03:23:42PM +0100, Thomas Gleixner wrote:
+> On Tue, Jan 25 2022 at 07:18, Fenghua Yu wrote:
+> > On Mon, Jan 24, 2022 at 09:55:56PM +0100, Thomas Gleixner wrote:
+> >  /**
+> >   * ioasid_put - Release a reference to an ioasid
+> >   * @ioasid: the ID to remove
+> 
+> which in turn makes ioasid_put() a misnomer and the whole refcounting of
+> the ioasid a pointless exercise.
+> 
+> While looking at ioasid_put() usage I tripped over the following UAF
+> issue:
+> 
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4817,8 +4817,10 @@ static int aux_domain_add_dev(struct dma
+>  	auxiliary_unlink_device(domain, dev);
+>  link_failed:
+>  	spin_unlock_irqrestore(&device_domain_lock, flags);
+> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
+>  		ioasid_put(domain->default_pasid);
+> +		domain->default_pasid = INVALID_IOASID;
+> +	}
+>  
+>  	return ret;
+>  }
+> @@ -4847,8 +4849,10 @@ static void aux_domain_remove_dev(struct
+>  
+>  	spin_unlock_irqrestore(&device_domain_lock, flags);
+>  
+> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
+>  		ioasid_put(domain->default_pasid);
+> +		domain->default_pasid = INVALID_IOASID;
+> +	}
+>  }
+>  
+>  static int prepare_domain_attach_device(struct iommu_domain *domain,
 
-Kselftest from mainline can be run on older stable kernels. This is a use-case
-for a lot test rings. The idea is that when a new test gets added for older
-code to regression test a bug, we should be able to run that test on an older
-kernel. This is the reason why we don't remove code that can still test an older
-kernel and make sure it skips gracefully.
+The above patch fixes an existing issue. I will put it in a separate patch,
+right?
 
-Hence, I won't be taking this patch.
+It cannot be applied cleanly to the upstream tree. Do you want me to base
+the above patch (and the whole patch set) to the upstream tree or a specific
+tip branch?
 
-thanks,
--- Shuah
+I will fold the following patch into patch #5. The patch #11 (the doc patch)
+also needs to remove one paragraph talking about refcount.
+
+So I will send the whole patch set with the following changes:
+1. One new bug fix patch (the above patch)
+2. Updated patch #5 (with the following patch folded)
+3. Updated patch #11 (removing refcount description)
+
+Are the changes OK to you?
+ 
+> 
+> Vs. ioasid_put() I think we should fold the following:
+> 
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4818,7 +4818,7 @@ static int aux_domain_add_dev(struct dma
+>  link_failed:
+>  	spin_unlock_irqrestore(&device_domain_lock, flags);
+>  	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
+> -		ioasid_put(domain->default_pasid);
+> +		ioasid_free(domain->default_pasid);
+>  		domain->default_pasid = INVALID_IOASID;
+>  	}
+>  
+> @@ -4850,7 +4850,7 @@ static void aux_domain_remove_dev(struct
+>  	spin_unlock_irqrestore(&device_domain_lock, flags);
+>  
+>  	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
+> -		ioasid_put(domain->default_pasid);
+> +		ioasid_free(domain->default_pasid);
+>  		domain->default_pasid = INVALID_IOASID;
+>  	}
+>  }
+> --- a/drivers/iommu/ioasid.c
+> +++ b/drivers/iommu/ioasid.c
+> @@ -2,7 +2,7 @@
+>  /*
+>   * I/O Address Space ID allocator. There is one global IOASID space, split into
+>   * subsets. Users create a subset with DECLARE_IOASID_SET, then allocate and
+> - * free IOASIDs with ioasid_alloc and ioasid_put.
+> + * free IOASIDs with ioasid_alloc() and ioasid_free().
+>   */
+>  #include <linux/ioasid.h>
+>  #include <linux/module.h>
+> @@ -15,7 +15,6 @@ struct ioasid_data {
+>  	struct ioasid_set *set;
+>  	void *private;
+>  	struct rcu_head rcu;
+> -	refcount_t refs;
+>  };
+>  
+>  /*
+> @@ -315,7 +314,6 @@ ioasid_t ioasid_alloc(struct ioasid_set
+>  
+>  	data->set = set;
+>  	data->private = private;
+> -	refcount_set(&data->refs, 1);
+>  
+>  	/*
+>  	 * Custom allocator needs allocator data to perform platform specific
+> @@ -348,17 +346,11 @@ ioasid_t ioasid_alloc(struct ioasid_set
+>  EXPORT_SYMBOL_GPL(ioasid_alloc);
+>  
+>  /**
+> - * ioasid_put - Release a reference to an ioasid
+> + * ioasid_free - Free an ioasid
+>   * @ioasid: the ID to remove
+> - *
+> - * Put a reference to the IOASID, free it when the number of references drops to
+> - * zero.
+> - *
+> - * Return: %true if the IOASID was freed, %false otherwise.
+>   */
+> -bool ioasid_put(ioasid_t ioasid)
+> +void ioasid_free(ioasid_t ioasid)
+>  {
+> -	bool free = false;
+>  	struct ioasid_data *ioasid_data;
+>  
+>  	spin_lock(&ioasid_allocator_lock);
+> @@ -368,10 +360,6 @@ bool ioasid_put(ioasid_t ioasid)
+>  		goto exit_unlock;
+>  	}
+>  
+> -	free = refcount_dec_and_test(&ioasid_data->refs);
+> -	if (!free)
+> -		goto exit_unlock;
+> -
+>  	active_allocator->ops->free(ioasid, active_allocator->ops->pdata);
+>  	/* Custom allocator needs additional steps to free the xa element */
+>  	if (active_allocator->flags & IOASID_ALLOCATOR_CUSTOM) {
+> @@ -381,9 +369,8 @@ bool ioasid_put(ioasid_t ioasid)
+>  
+>  exit_unlock:
+>  	spin_unlock(&ioasid_allocator_lock);
+> -	return free;
+>  }
+> -EXPORT_SYMBOL_GPL(ioasid_put);
+> +EXPORT_SYMBOL_GPL(ioasid_free);
+>  
+>  /**
+>   * ioasid_find - Find IOASID data
+> --- a/include/linux/ioasid.h
+> +++ b/include/linux/ioasid.h
+> @@ -34,7 +34,7 @@ struct ioasid_allocator_ops {
+>  #if IS_ENABLED(CONFIG_IOASID)
+>  ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min, ioasid_t max,
+>  		      void *private);
+> -bool ioasid_put(ioasid_t ioasid);
+> +void ioasid_free(ioasid_t ioasid);
+>  void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
+>  		  bool (*getter)(void *));
+>  int ioasid_register_allocator(struct ioasid_allocator_ops *allocator);
+> @@ -52,10 +52,7 @@ static inline ioasid_t ioasid_alloc(stru
+>  	return INVALID_IOASID;
+>  }
+>  
+> -static inline bool ioasid_put(ioasid_t ioasid)
+> -{
+> -	return false;
+> -}
+> +static inline void ioasid_free(ioasid_t ioasid) { }
+>  
+>  static inline void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
+>  				bool (*getter)(void *))
+> --- a/include/linux/sched/mm.h
+> +++ b/include/linux/sched/mm.h
+> @@ -423,7 +423,7 @@ static inline void mm_pasid_set(struct m
+>  static inline void mm_pasid_drop(struct mm_struct *mm)
+>  {
+>  	if (pasid_valid(mm->pasid)) {
+> -		ioasid_put(mm->pasid);
+> +		ioasid_free(mm->pasid);
+>  		mm->pasid = INVALID_IOASID;
+>  	}
+>  }
+
+Thank you very much for your review!
+
+-Fenghua

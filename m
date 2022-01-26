@@ -2,93 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAA349C26F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1D349C272
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237450AbiAZEFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 23:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        id S237469AbiAZEFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 23:05:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237443AbiAZEFM (ORCPT
+        with ESMTP id S237456AbiAZEFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 23:05:12 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57540C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:05:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EPZFnvZSWtUChiByJXbpNdnEgj2wHr/YrtyphezMlas=; b=BBI1rbHtRZSKR2sbOcH13dmoNT
-        y5yXJMal1+Uj54eCJG+FCI1ETERDdclBEcueKTbe4P0phjm0qh/sTnZISl/TDDVpMyVQyAgFtbM15
-        EmGXjM26rumanCA1V9JoY054wqvTc/c4RPHsoWDz2dPRkx/WJKbI1rVPIjH0JFZ3srGcF5K6P1aNG
-        Rhwmlsd4UqcLPDpHMJ5RMOhgHAhXCf+VVUZhb/4WMu82BWMdGUo/stCaJ6EPA7ElcLjLw632r5ktS
-        xrtIUvkEsPgRoJXx/QJA9LNoCTrf6XJVOSRPDC46UsgQQ9I97Jcr9e3CvUzqWEFNbyii7wiV9dbPf
-        6vaIM4xw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCZY8-003hFg-Gl; Wed, 26 Jan 2022 04:04:48 +0000
-Date:   Wed, 26 Jan 2022 04:04:48 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
-        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
-        david@redhat.com, rppt@kernel.org, surenb@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
-Message-ID: <YfDIYKygRHX4RIri@casper.infradead.org>
-References: <cover.1642526745.git.khalid.aziz@oracle.com>
- <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
- <Ye/5yUyEqO0ws0G5@casper.infradead.org>
- <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
- <YfAEqzTeBJSIOKcA@casper.infradead.org>
- <20220125185705.wf7p2l77vggipfry@box.shutemov.name>
- <YfBIpmxvc0+mFByf@casper.infradead.org>
+        Tue, 25 Jan 2022 23:05:48 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095C1C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:05:48 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id 23so67676507ybf.7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:05:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/p/L0DuUuVHknH8fGhtQHEJub+4n9C+9W04Ffm4OFeY=;
+        b=WXJ9d82Gn42UZlHVH9evCW6lxaIkMgv6rfjDv2QVSKXoLkfCEWDV8Za8GVLdA5nD//
+         tDI43EFhICjvwPM9Ck9XbnOe4rGAXb/RJ1jJVyKotBAznxc0YkhwiB6Wr9PkekeCEhlV
+         cVKM+yncek19fCUPqHiu8VysIm3J1J46N1+vg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/p/L0DuUuVHknH8fGhtQHEJub+4n9C+9W04Ffm4OFeY=;
+        b=7Cipk43gY69md5rpj56rGV4kCWpKCmsqE1TWP/gdrbpoYNIl1rFHa7/bSYGQmHqatc
+         XGlfI/cmamZth43jfhDilRRkfHXtwstwUpJTvqfjyXV2iJVCZYsaY43Of7/g/wt4f5oQ
+         o4ix4WOCooD0TrGJOwaSAaRCSlku7PTnzvbbRb6xzg39LgiCs2tyLij2ByyUVpbMxh7S
+         eKpD9R6s/so8maYGfQe0agZrkvEz2M3ldRzDXw+2eZ+7wj5pucQtUQ7wXKP7N/g9kwc7
+         XyJI7fQVXN+Fsym5sPqs0cfoRRqTFxGNYD6iZgyVHEOPfbyCvLkrhswrOjm7okzcWNcK
+         IN7A==
+X-Gm-Message-State: AOAM5320bWbXbx4LOpR4aPpGxChx8myBz2iz3WnkML8ZxFh4d65IcV/I
+        IlXm7g/6Pnd21ygtRsoX/Ldx+44GaSnKFJQqAcRUNA==
+X-Google-Smtp-Source: ABdhPJzkwL+15+kP9VV/u2MQM4VhezwDP2zw50P3YCt8RtHzZMchgScUL7NhFnFkT3iDxbpBTpc/EXkLHBNBOlyPK7E=
+X-Received: by 2002:a05:6902:724:: with SMTP id l4mr22285946ybt.656.1643169947334;
+ Tue, 25 Jan 2022 20:05:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfBIpmxvc0+mFByf@casper.infradead.org>
+References: <20220126012203.2979709-1-pmalani@chromium.org> <YfDEHoYkLc6zjSxj@google.com>
+In-Reply-To: <YfDEHoYkLc6zjSxj@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 25 Jan 2022 20:05:36 -0800
+Message-ID: <CACeCKafqQmb7jjzweaRq2ETBbPk_2HE8FbFLMdfcCD8PrdckoQ@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC device
+To:     Tzung-Bi Shih <tzungbi@google.com>
+Cc:     linux-kernel@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 06:59:50PM +0000, Matthew Wilcox wrote:
-> On Tue, Jan 25, 2022 at 09:57:05PM +0300, Kirill A. Shutemov wrote:
-> > On Tue, Jan 25, 2022 at 02:09:47PM +0000, Matthew Wilcox wrote:
-> > > > I think zero-API approach (plus madvise() hints to tweak it) is worth
-> > > > considering.
-> > > 
-> > > I think the zero-API approach actually misses out on a lot of
-> > > possibilities that the mshare() approach offers.  For example, mshare()
-> > > allows you to mmap() many small files in the shared region -- you
-> > > can't do that with zeroAPI.
-> > 
-> > Do you consider a use-case for many small files to be common? I would
-> > think that the main consumer of the feature to be mmap of huge files.
-> > And in this case zero enabling burden on userspace side sounds like a
-> > sweet deal.
-> 
-> mmap() of huge files is certainly the Oracle use-case.  With occasional
-> funny business like mprotect() of a single page in the middle of a 1GB
-> hugepage.
+Hi Tzung-Bi,
 
-Bill and I were talking about this earlier and realised that this is
-the key point.  There's a requirement that when one process mprotects
-a page that it gets protected in all processes.  You can't do that
-without *some* API because that's different behaviour than any existing
-API would produce.
+Thanks for your review.
 
-So how about something like this ...
+On Tue, Jan 25, 2022 at 7:46 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
+>
+> On Wed, Jan 26, 2022 at 01:22:03AM +0000, Prashant Malani wrote:
+> > Fixes: fdc6b21e2444 ("platform/chrome: Add Type C connector class driver")
+> > Reported-by: Alyssa Ross <hi@alyssa.is>
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+>
+> With a minor comment,
+> Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+>
+> > @@ -1076,6 +1076,12 @@ static int cros_typec_probe(struct platform_device *pdev)
+> >
+> >       typec->dev = dev;
+> >       typec->ec = dev_get_drvdata(pdev->dev.parent);
+> > +
+>
+> I would prefer to remove the blank line to make it look like an integrated block.
 
-int mcreate(const char *name, int flags, mode_t mode);
+I actually prefer it as it is. typec->dev is not really part of this
+"integrated block", and I don't want to add another space there.
+In any case, since this is a very minor style nit, I will address it
+in case there is another version required due to other comments.
 
-creates a new mm_struct with a refcount of 2.  returns an fd (one
-of the two refcounts) and creates a name for it (inside msharefs,
-holds the other refcount).
+>
+> > +     if (!typec->ec) {
+> > +             dev_err(dev, "couldn't find parent EC device\n");
+> > +             return -ENODEV;
+> > +     }
+> > +
 
-You can then mmap() that fd to attach it to a chunk of your address
-space.  Once attached, you can start to populate it by calling
-mmap() and specifying an address inside the attached mm as the first
-argument to mmap().
+Best,
 
-Maybe mcreate() is just a library call, and it's really a thin wrapper
-around open() that happens to know where msharefs is mounted.
+-Prashant

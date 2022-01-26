@@ -2,349 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 375BD49D034
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B72D49D041
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243447AbiAZRAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:00:40 -0500
-Received: from foss.arm.com ([217.140.110.172]:53396 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243410AbiAZRAa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:00:30 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F9ACD6E;
-        Wed, 26 Jan 2022 09:00:30 -0800 (PST)
-Received: from [10.57.68.47] (unknown [10.57.68.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1F033F7D8;
-        Wed, 26 Jan 2022 09:00:28 -0800 (PST)
-Message-ID: <ee4593b8-cdf6-935a-0eaf-48a8bfeae912@arm.com>
-Date:   Wed, 26 Jan 2022 17:00:23 +0000
+        id S243445AbiAZRDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:03:08 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:5362 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233367AbiAZRDD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 12:03:03 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QFolww011465;
+        Wed, 26 Jan 2022 17:02:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=BPrDkGTsqkwr0CA/zTRc4p5fOd3G5uQu9rD0vdyWH54=;
+ b=EPyhuvGfx3F2SeqU55XrpsFFepkUjwn6kzYMrVkbbNBnl/gCSIhcp59mmkftPHhBR4Dy
+ 4PRiUONTE6/ZaKBqMtVtROlv65zZI6uyNPkdFcsMppiqMlNny/Mpeil+vfs4zZboAaik
+ 1/egDDlXhr/EDlRN0GOCVC6YbCCfGQ57OoW3hEQ3r8cL9AakNbe1W7rrt0s6kl+srauC
+ Nil/Buneybk2E3IBGDFlmLaFveM+satenkaOfeTwgjAmxcss/Bq3dq9pVOEinnR4/LHE
+ IIZNT1saP0cMJESfjVCudtXvT7t3qYCkopAqcBXIHPe4ljIXAREej6KRkJ5fjQHn0nQG rA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dsy7axtx1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 17:02:38 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20QGtLIK193684;
+        Wed, 26 Jan 2022 17:02:36 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
+        by aserp3030.oracle.com with ESMTP id 3dr7yj4k6v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 17:02:36 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M4XlL9QXO55eA8L3inlTzpbKQdcYKtvkOcafpprOa/wtGTuI7W0PfuDY/+hKaMAPVe8++2S8lMDHXkQakSXVVtfFnZp5DVkubyqFZ9KPgKh209R9vQtXqOiMnr3dMcMygmtEWhSPSDGsLqDdWFNPPINbtR8mklgucx6K0SeFG/Ueeoim0IOF5EWHPNlikiGI/eLoIOCaKcVFEldC3H2HUQYbFe/AiG/TCudgP2yOj9NjF8dtF8YUbyiiYhmXi9Yl77cntJW84qnD/gURQX9ngJ3wS3SXpVloU+EmNkOYqE0HM0YRN25FzUt6c1764ctZq8ITfKYkJjVs0JErKwR3UQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BPrDkGTsqkwr0CA/zTRc4p5fOd3G5uQu9rD0vdyWH54=;
+ b=UL7RcBFOQqSE6JMNAW9yKX5indFwZg/A/XBHg8TnlJHkI6av0TOPL98p6lf6IKUj7RMBfUhOjHB7Dgfs3gd4KH1nyeuWFGQZ8QUpOu6U24w5SldZcV524GgwZa66vcan5gJWwGoXRGKjGB/NyhRaOP99PLIAR5KgXAsuwgALqn1Ss0nVe4idxWEstZ1ee2bvhHJbg4CN94hdbsMC3nYsLDjwCrVlCvG6lilun61G4VIo7u6IUNk5Z7osfQwY+JdA7BO5biULhvXyLcwIjQ6IkVgoDoSavPh3apmpaPQvu7t5iAKJgUWV1B3eACukWGRzkCmahov2pIM3qpDsJ0Z2DQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BPrDkGTsqkwr0CA/zTRc4p5fOd3G5uQu9rD0vdyWH54=;
+ b=Dw/aVUTcL8T9PB8FKmyC5kGT9pCQ8rKqOSa07MoubbvYSDpCmODM6zFtQW2By0XBRihdOeWWC8/0bXjFTK0xuRKKI4+iDrcVLWFNBndDwfQ9xpkOAvvJYQF2Y1FFLMajb2Q+fiWQTGTDRjsoist5ReqT1bFK2p6ARrDdZn9vtLU=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by SJ0PR10MB5630.namprd10.prod.outlook.com (2603:10b6:a03:3e2::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.7; Wed, 26 Jan
+ 2022 17:02:34 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3857:3a25:3444:fdd3]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3857:3a25:3444:fdd3%5]) with mapi id 15.20.4930.017; Wed, 26 Jan 2022
+ 17:02:33 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+Subject: Re: [PATCH v4 60/66] mm/oom_kill: Use maple tree iterators instead of
+ vma linked list
+Thread-Topic: [PATCH v4 60/66] mm/oom_kill: Use maple tree iterators instead
+ of vma linked list
+Thread-Index: AQHX5r/1JcpotnygX0WFLv6DsIVZ1KxsKSuAgAm2UQA=
+Date:   Wed, 26 Jan 2022 17:02:33 +0000
+Message-ID: <20220126170226.ict3brr4hhw6ajfi@revolver>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-61-Liam.Howlett@oracle.com>
+ <bd20144f-a443-9761-a50f-7d08ea922dac@suse.cz>
+In-Reply-To: <bd20144f-a443-9761-a50f-7d08ea922dac@suse.cz>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 99717fea-f8ca-477f-30c9-08d9e0eda598
+x-ms-traffictypediagnostic: SJ0PR10MB5630:EE_
+x-microsoft-antispam-prvs: <SJ0PR10MB563052364645CC8E41EF9BA1FD209@SJ0PR10MB5630.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:248;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +9M6+GX6B5s10HY2hzRbwR3DIgYTZc6MybukmFtWpKCLR6DllNGerfaL7fo9f/DKrDFhiNM7fuD+qKv/92Ew23dcuW9D8ho/GiSitD+tT1eg+IdvyyQfT+mj2l7t+dDzcTwWeeRuVq7NnY0xmZUBjAFgo71Vw11pqRJ6RajFr5tET3r6Ae3NRmF3kgW45Igmm8+o9KvTq/4k/L6tWb6FfAR/Zn1escPdHkd6jg+WIgrwhIlPJGc1u9K2HrkyZfK6pPo/W5gXdeluBXfv073KPLlag4yjTSzmUtRUk5NDwOb/khbA64gtlirImK8TYEcckYI7+bl0SnIvnmLG/MU7w7IQPBYxvNl0Yq5lztS0r8GKjhDqcXrZUrJ8uQ35a+DHmzf1q8FutAZEVZJmTCxBgpy2Vf3V4sk3/xPX8tv8bioKmMsYKQR7//LBB+IasHGJzmPXAjBLEomgdKKU6IVSZs32zgfSUf/pSC5CnIeuqCV16hkepwyWqHhyrBCCGDyI4NsRrlKR5PPLHSadDoUgJu1on3XFCqaeICZmAwmrIfclcYJKapfQBtzsS3hydNDXLGXomQfjpDh1Wdtr99BeGD3KsDoLCamyWGcxTTIj7vVjyy46WmE19SM9SGq/6+QBCZg3D3kN0BoXpW1vuSNhj/DMAi+JfBiVuK1Kr97/Y9FJc5zL9L9Yx+5xv8uj6wesgv1LH5b3qPQl726jdaVDEQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(122000001)(6506007)(26005)(186003)(9686003)(38100700002)(508600001)(86362001)(83380400001)(4326008)(91956017)(8936002)(66946007)(54906003)(6512007)(38070700005)(44832011)(5660300002)(8676002)(6916009)(6486002)(53546011)(76116006)(1076003)(2906002)(7416002)(66556008)(64756008)(4744005)(66476007)(33716001)(66446008)(316002)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vAi1Xeo9g50qiwCM2zQ2MD+qimtJIvyQjIOKXLjUz1ChhmmC/vpTH1ie4NJM?=
+ =?us-ascii?Q?iiyns/LfTgkbiyMeMnL5AyFOee5SneyHvvjphGmpWhLyolOjoR+bM+TB15aI?=
+ =?us-ascii?Q?PG463FFPsSKvmDijpaQ9P0vORLAWP4vPISRSFMbUt8h4wBvi4VoqPfe9/Z1i?=
+ =?us-ascii?Q?zOdQ8tOfo34BOadFDR5HmlQjGtgVAKBASK6jXg9v46PGCjH/EboUWKg//Pmw?=
+ =?us-ascii?Q?FVhWVBSKLLV30TNHWlGjHdSiZ22ErdX6Q38FOO24mhttEMi0QnfJpSYZ/7YW?=
+ =?us-ascii?Q?PwF/2XAZFFi3H08Qj3bfY269NaTrNddn2X9pBXiwkarIr0azRJMNkhwbRR2m?=
+ =?us-ascii?Q?ytr6Z9bNAkx26pQdYEv+Og21IW1T1TWTVEF54vDdD1/g4e1xnNP3l2ltRENL?=
+ =?us-ascii?Q?rqsctXH+CulEDzCyB06snNGDl6z4fqLhJR/GOpDfCqWqhpC9P1qr8h8DjTh0?=
+ =?us-ascii?Q?+zk/4U3GyGhHQcP1IEvGKJBdTR550mCnr8rxVc2yng0+/KbbzJR8mQvYIAqz?=
+ =?us-ascii?Q?bJILO76o2zvoSJDmObBFisF/1RiKGOptbKUSnS2LzXjEJPcbcRIXsMLDbN4I?=
+ =?us-ascii?Q?a0YIETGzGi2rEhDWYyDpODF8IyGxTJEiyz5UkAFSTHq2EHBCcD0LX46lmN2A?=
+ =?us-ascii?Q?qrxRvk/A8clgHGfYt8b2eK084btsvzbxHOXvudHVYMpX4m2+2z50XY9m/QgL?=
+ =?us-ascii?Q?EbfGzrpz1a9z9YwDZ2VCw3oCX2VmDE5dgsOa5Z6D0jxA5Fx19CaVcmO2PKtD?=
+ =?us-ascii?Q?qE/p5fs34CSSv29TmTFJwbWIeb9M6A8XAGAiI1HxPFZOn6ip5tvdp/NyApZR?=
+ =?us-ascii?Q?31oSRHB8ZJr6RjcQOZ3X9aH/4j11+LCweRe7rw2iks60Grvl20F5ee8hBr3F?=
+ =?us-ascii?Q?sWdjxzKpsUxQe/hPxar70LXTbHT9vLcTcPLDyugcK949x/ds6OkH1642IlO3?=
+ =?us-ascii?Q?5wF8YWOZQTCkHMexnsH8yRija+jZc2fE5h6moz3ysdrrM24VooEDmgjojyVc?=
+ =?us-ascii?Q?6bGzxfr92PDe4VOJWqAvlmZcw0ZMFGzs3G8Rxc877ItyVQXe4du1R+GH5Elc?=
+ =?us-ascii?Q?6YYgdiwNgp++29sDa3kE9hQ8ohFA7gMqiNPFMNAkvE5rDlcYK20bUmYe7+8q?=
+ =?us-ascii?Q?xqe9UGatK3sHigQn4wacEV2DLz6xdyrCglfFaakCcQR68A6uem+NnMfRNSws?=
+ =?us-ascii?Q?87jqBse8qPfNdIbD9cF6j7sDWHecFk+D6eakjRLJCFRaT/gqjfPXhki7kO+1?=
+ =?us-ascii?Q?qz0csAsDZXMeSM3vZfFr8VoE0PFwzd+2WqxEgSQVSLri0nRkiBjULRLTIyoi?=
+ =?us-ascii?Q?dYWCwHaRZEyaXpY96h4rL0wg0n62UCZsXKqzFWK9pAmJEGq4vHEA42N5c3s+?=
+ =?us-ascii?Q?NnZOCp6Fd+j3DnoxBQEPgFiJrLn8qzw1rGbKxQ+um19mLMTGYCd1hixTeW4h?=
+ =?us-ascii?Q?9BWA2mWHJVkfq7rgur4aS2/5v6Cpzur1mA3j485/5YDpjHxdz+86Z0VuLPge?=
+ =?us-ascii?Q?DvA/DTcvP14fub+1zZpVc7EHM0Mr99sxFmzpevOlbBUvBKybyjYxX+djQ1Pv?=
+ =?us-ascii?Q?Gogtrk0F0R5SeB7wcsx0Q0PADq3Hu620Mtp28MSefd8P5x+baJ9fOfefPy1M?=
+ =?us-ascii?Q?e6jtJ4w7S9s+jz7sgst+THE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <98F404D2D0EB6E4FB56C97988A334A82@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] iommu/iova: Separate out rcache init
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
-        will@kernel.org, mst@redhat.com, jasowang@redhat.com
-Cc:     xieyongji@bytedance.com, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linuxarm@huawei.com
-References: <1643205319-51669-1-git-send-email-john.garry@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <1643205319-51669-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99717fea-f8ca-477f-30c9-08d9e0eda598
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2022 17:02:33.8159
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: V8PSD+9n+6Fe4NZGH5RVm8LHL1AtNKK84X9n//soE23Y951FfXPfgubAxsGsZ5D0lTIfUSEJeYMP23uEiOtEPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5630
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10239 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201260104
+X-Proofpoint-GUID: BVB8eFFSOfjpo5BTrK2Aj9XTvyCLoSio
+X-Proofpoint-ORIG-GUID: BVB8eFFSOfjpo5BTrK2Aj9XTvyCLoSio
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-26 13:55, John Garry wrote:
-> Currently the rcache structures are allocated for all IOVA domains, even if
-> they do not use "fast" alloc+free interface. This is wasteful of memory.
-> 
-> In addition, fails in init_iova_rcaches() are not handled safely, which is
-> less than ideal.
-> 
-> Make "fast" users call a separate rcache init explicitly, which includes
-> error checking.
-> 
-> Signed-off-by: John Garry <john.garry@huawei.com>
+* Vlastimil Babka <vbabka@suse.cz> [220120 07:43]:
+> On 12/1/21 15:30, Liam Howlett wrote:
+> > From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> >=20
+> > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>=20
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+>=20
+> Could be VMA_ITERATOR?
 
-Mangled patch? (no "---" separator here)
+Indeed, I will do that.
 
-Overall this looks great, just a few comments further down...
-
-> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> index 3a46f2cc9e5d..dd066d990809 100644
-> --- a/drivers/iommu/dma-iommu.c
-> +++ b/drivers/iommu/dma-iommu.c
-> @@ -525,6 +525,7 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
->   	struct iommu_dma_cookie *cookie = domain->iova_cookie;
->   	unsigned long order, base_pfn;
->   	struct iova_domain *iovad;
-> +	int ret;
->   
->   	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
->   		return -EINVAL;
-> @@ -559,6 +560,9 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
->   	}
->   
->   	init_iova_domain(iovad, 1UL << order, base_pfn);
-> +	ret = iova_domain_init_rcaches(iovad);
-> +	if (ret)
-> +		return ret;
->   
->   	/* If the FQ fails we can simply fall back to strict mode */
->   	if (domain->type == IOMMU_DOMAIN_DMA_FQ && iommu_dma_init_fq(domain))
-> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-> index b28c9435b898..d3adc6ea5710 100644
-> --- a/drivers/iommu/iova.c
-> +++ b/drivers/iommu/iova.c
-> @@ -15,13 +15,14 @@
->   /* The anchor node sits above the top of the usable address space */
->   #define IOVA_ANCHOR	~0UL
->   
-> +#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
-> +
->   static bool iova_rcache_insert(struct iova_domain *iovad,
->   			       unsigned long pfn,
->   			       unsigned long size);
->   static unsigned long iova_rcache_get(struct iova_domain *iovad,
->   				     unsigned long size,
->   				     unsigned long limit_pfn);
-> -static void init_iova_rcaches(struct iova_domain *iovad);
->   static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad);
->   static void free_iova_rcaches(struct iova_domain *iovad);
->   
-> @@ -64,8 +65,6 @@ init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->   	iovad->anchor.pfn_lo = iovad->anchor.pfn_hi = IOVA_ANCHOR;
->   	rb_link_node(&iovad->anchor.node, NULL, &iovad->rbroot.rb_node);
->   	rb_insert_color(&iovad->anchor.node, &iovad->rbroot);
-> -	cpuhp_state_add_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD, &iovad->cpuhp_dead);
-> -	init_iova_rcaches(iovad);
->   }
->   EXPORT_SYMBOL_GPL(init_iova_domain);
->   
-> @@ -497,9 +496,9 @@ void put_iova_domain(struct iova_domain *iovad)
->   {
->   	struct iova *iova, *tmp;
->   
-> -	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
-> -					    &iovad->cpuhp_dead);
-> -	free_iova_rcaches(iovad);
-> +	if (iovad->rcaches)
-> +		iova_domain_free_rcaches(iovad);
-> +
->   	rbtree_postorder_for_each_entry_safe(iova, tmp, &iovad->rbroot, node)
->   		free_iova_mem(iova);
->   }
-> @@ -608,6 +607,7 @@ EXPORT_SYMBOL_GPL(reserve_iova);
->    */
->   
->   #define IOVA_MAG_SIZE 128
-> +#define MAX_GLOBAL_MAGS 32	/* magazines per bin */
->   
->   struct iova_magazine {
->   	unsigned long size;
-> @@ -620,6 +620,13 @@ struct iova_cpu_rcache {
->   	struct iova_magazine *prev;
->   };
->   
-> +struct iova_rcache {
-> +	spinlock_t lock;
-> +	unsigned long depot_size;
-> +	struct iova_magazine *depot[MAX_GLOBAL_MAGS];
-> +	struct iova_cpu_rcache __percpu *cpu_rcaches;
-> +};
-> +
->   static struct iova_magazine *iova_magazine_alloc(gfp_t flags)
->   {
->   	return kzalloc(sizeof(struct iova_magazine), flags);
-> @@ -693,28 +700,62 @@ static void iova_magazine_push(struct iova_magazine *mag, unsigned long pfn)
->   	mag->pfns[mag->size++] = pfn;
->   }
->   
-> -static void init_iova_rcaches(struct iova_domain *iovad)
-> +int iova_domain_init_rcaches(struct iova_domain *iovad)
->   {
-> -	struct iova_cpu_rcache *cpu_rcache;
-> -	struct iova_rcache *rcache;
->   	unsigned int cpu;
-> -	int i;
-> +	int i, ret;
-> +
-> +	iovad->rcaches = kcalloc(IOVA_RANGE_CACHE_MAX_SIZE,
-> +				 sizeof(struct iova_rcache),
-> +				 GFP_KERNEL);
-> +	if (!iovad->rcaches)
-> +		return -ENOMEM;
->   
->   	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
-> +		struct iova_cpu_rcache *cpu_rcache;
-> +		struct iova_rcache *rcache;
-> +
->   		rcache = &iovad->rcaches[i];
->   		spin_lock_init(&rcache->lock);
->   		rcache->depot_size = 0;
-> -		rcache->cpu_rcaches = __alloc_percpu(sizeof(*cpu_rcache), cache_line_size());
-> -		if (WARN_ON(!rcache->cpu_rcaches))
-> -			continue;
-> +		rcache->cpu_rcaches = __alloc_percpu(sizeof(*cpu_rcache),
-> +						     cache_line_size());
-> +		if (!rcache->cpu_rcaches) {
-> +			ret = -ENOMEM;
-> +			goto out_err;
-> +		}
->   		for_each_possible_cpu(cpu) {
->   			cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
-> +
->   			spin_lock_init(&cpu_rcache->lock);
->   			cpu_rcache->loaded = iova_magazine_alloc(GFP_KERNEL);
->   			cpu_rcache->prev = iova_magazine_alloc(GFP_KERNEL);
-> +			if (!cpu_rcache->loaded || !cpu_rcache->prev) {
-> +				ret = -ENOMEM;
-> +				goto out_err;
-> +			}
->   		}
->   	}
-> +
-> +	ret = cpuhp_state_add_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
-> +					       &iovad->cpuhp_dead);
-> +	if (ret)
-> +		goto out_err;
-> +	return 0;
-> +
-> +out_err:
-> +	free_iova_rcaches(iovad);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(iova_domain_init_rcaches);
-> +
-> +void iova_domain_free_rcaches(struct iova_domain *iovad)
-> +{
-> +	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
-> +					    &iovad->cpuhp_dead);
-> +	free_iova_rcaches(iovad);
->   }
-> +EXPORT_SYMBOL_GPL(iova_domain_free_rcaches);
-
-I think we should continue to expect external callers to clean up with 
-put_iova_domain(). If they aren't doing that already they have a bug 
-(albeit minor), and we don't want to give the impression that it's OK to 
-free the caches at any point *other* than tearing down the whole 
-iova_domain, since the implementation really wouldn't expect that.
-
->   /*
->    * Try inserting IOVA range starting with 'iova_pfn' into 'rcache', and
-> @@ -831,7 +872,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
->   {
->   	unsigned int log_size = order_base_2(size);
->   
-> -	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
-> +	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
->   		return 0;
->   
->   	return __iova_rcache_get(&iovad->rcaches[log_size], limit_pfn - size);
-> @@ -849,6 +890,8 @@ static void free_iova_rcaches(struct iova_domain *iovad)
->   
->   	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
->   		rcache = &iovad->rcaches[i];
-> +		if (!rcache->cpu_rcaches)
-> +			break;
->   		for_each_possible_cpu(cpu) {
->   			cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
->   			iova_magazine_free(cpu_rcache->loaded);
-> @@ -858,6 +901,9 @@ static void free_iova_rcaches(struct iova_domain *iovad)
->   		for (j = 0; j < rcache->depot_size; ++j)
->   			iova_magazine_free(rcache->depot[j]);
->   	}
-> +
-> +	kfree(iovad->rcaches);
-> +	iovad->rcaches = NULL;
->   }
->   
->   /*
-> diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
-> index 2b1143f11d8f..87ec9f8015f1 100644
-> --- a/drivers/vdpa/vdpa_user/iova_domain.c
-> +++ b/drivers/vdpa/vdpa_user/iova_domain.c
-> @@ -480,6 +480,7 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
->   	struct file *file;
->   	struct vduse_bounce_map *map;
->   	unsigned long pfn, bounce_pfns;
-> +	int ret;
->   
->   	bounce_pfns = PAGE_ALIGN(bounce_size) >> PAGE_SHIFT;
->   	if (iova_limit <= bounce_size)
-> @@ -513,10 +514,20 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
->   	spin_lock_init(&domain->iotlb_lock);
->   	init_iova_domain(&domain->stream_iovad,
->   			PAGE_SIZE, IOVA_START_PFN);
-> +	ret = iova_domain_init_rcaches(&domain->stream_iovad);
-> +	if (ret)
-> +		goto err_iovad_stream;
->   	init_iova_domain(&domain->consistent_iovad,
->   			PAGE_SIZE, bounce_pfns);
-> +	ret = iova_domain_init_rcaches(&domain->consistent_iovad);
-> +	if (ret)
-> +		goto err_iovad_consistent;
->   
->   	return domain;
-> +err_iovad_consistent:
-> +	iova_domain_free_rcaches(&domain->stream_iovad);
-> +err_iovad_stream:
-> +	fput(file);
->   err_file:
->   	vfree(domain->bounce_maps);
->   err_map:
-> diff --git a/include/linux/iova.h b/include/linux/iova.h
-> index cea79cb9f26c..f91679680ee4 100644
-> --- a/include/linux/iova.h
-> +++ b/include/linux/iova.h
-> @@ -21,18 +21,8 @@ struct iova {
->   	unsigned long	pfn_lo; /* Lowest allocated pfn */
->   };
->   
-> -struct iova_magazine;
-> -struct iova_cpu_rcache;
->   
-> -#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
-> -#define MAX_GLOBAL_MAGS 32	/* magazines per bin */
-> -
-> -struct iova_rcache {
-> -	spinlock_t lock;
-> -	unsigned long depot_size;
-> -	struct iova_magazine *depot[MAX_GLOBAL_MAGS];
-> -	struct iova_cpu_rcache __percpu *cpu_rcaches;
-> -};
-> +struct iova_rcache;
->   
->   /* holds all the iova translations for a domain */
->   struct iova_domain {
-> @@ -46,7 +36,7 @@ struct iova_domain {
->   	unsigned long	max32_alloc_size; /* Size of last failed allocation */
->   	struct iova	anchor;		/* rbtree lookup anchor */
->   
-> -	struct iova_rcache rcaches[IOVA_RANGE_CACHE_MAX_SIZE];	/* IOVA range caches */
-> +	struct iova_rcache	*rcaches;
->   	struct hlist_node	cpuhp_dead;
->   };
->   
-> @@ -102,6 +92,8 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
->   	unsigned long pfn_hi);
->   void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->   	unsigned long start_pfn);
-> +int iova_domain_init_rcaches(struct iova_domain *iovad);
-> +void iova_domain_free_rcaches(struct iova_domain *iovad);
-
-As above, I vote for just forward-declaring the free routine in iova.c 
-and keeping it entirely private.
-
->   struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
->   void put_iova_domain(struct iova_domain *iovad);
->   #else
-> @@ -157,6 +149,15 @@ static inline void init_iova_domain(struct iova_domain *iovad,
->   {
->   }
->   
-> +static inline int iova_domain_init_rcaches(struct iova_domain *iovad)
-> +{
-> +	return -ENOTSUPP;
-> +}
-> +
-> +static inline void iova_domain_free_rcaches(struct iova_domain *iovad)
-> +{
-> +}
-> +
-
-I'd be inclined not to add stubs at all - I think it's a reasonable 
-assumption that anyone involved enough to care about rcaches has a hard 
-dependency on IOMMU_IOVA already. It's certainly the case today, and I'd 
-hardly want to encourage more users anyway.
-
-Cheers,
-Robin.
-
->   static inline struct iova *find_iova(struct iova_domain *iovad,
->   				     unsigned long pfn)
->   {
+>=20
+> > ---
+> >  mm/oom_kill.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> > index 1ddabefcfb5a..1694b30eb46c 100644
+> > --- a/mm/oom_kill.c
+> > +++ b/mm/oom_kill.c
+> > @@ -516,6 +516,7 @@ bool __oom_reap_task_mm(struct mm_struct *mm)
+> >  {
+> >  	struct vm_area_struct *vma;
+> >  	bool ret =3D true;
+> > +	MA_STATE(mas, &mm->mm_mt, 0, 0);
+> > =20
+> >  	/*
+> >  	 * Tell all users of get_user/copy_from_user etc... that the content
+> > @@ -525,7 +526,7 @@ bool __oom_reap_task_mm(struct mm_struct *mm)
+> >  	 */
+> >  	set_bit(MMF_UNSTABLE, &mm->flags);
+> > =20
+> > -	for (vma =3D mm->mmap ; vma; vma =3D vma->vm_next) {
+> > +	mas_for_each(&mas, vma, ULONG_MAX) {
+> >  		if (!can_madv_lru_vma(vma))
+> >  			continue;
+> > =20
+> =

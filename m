@@ -2,68 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D93DF49C6FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EC449C705
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239520AbiAZKAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
+        id S233390AbiAZKDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239509AbiAZKAJ (ORCPT
+        with ESMTP id S233188AbiAZKDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:00:09 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32BCC061744
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:00:08 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id i62so23372438ybg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:00:08 -0800 (PST)
+        Wed, 26 Jan 2022 05:03:14 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D43C06161C;
+        Wed, 26 Jan 2022 02:03:14 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id a18so68006258edj.7;
+        Wed, 26 Jan 2022 02:03:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gK7bszl+FUXRrhnEheiDpnk/jqDd/Le7Dxn0utoVoj8=;
-        b=GhCTQRyPY7E3qzL0iF+8nQ5xk2TXL0XJ43s8X7lqCalrWDuHw7QbggUmvVmy5LBmkh
-         bnb4pRCOhq+iuJdPddnsqzmxKTODiHBjn7O3mPKyalPKi8d/YG6zQJpuyJpgaFOeMBGq
-         GfP+9AnmoUAtmS/F+g5ql9bRikmtbuwWHnSQsJI9wsGvlqWMo6VdFkNpopqonMsdIQVb
-         jz4u8yEiqJ1gcEbpNASsdqbSZWxYHBCUdkcbHu5k+oIDFuPfyjuzqg3LsJurZUGUUIzI
-         62PWxNzYHXMLKXaVge4nkC6hPlXtSFyfvIUBLENwR6caYw5cu9207LtotFw2r0SUmZlj
-         V0VQ==
+        bh=88bX5phc4QD5WEP/ZiuDpl6z06FPpsvQ8tmIbTmmvfM=;
+        b=JOOHPlvVkJI+l+SLmq8YHGPbVPhSP3jpctav1+zJyTBAuPq51FLOHTC6iu25uqbpk1
+         gZ8UPPYNfw73crMI36sEKutbnpdbV1g61rwjWNBVY9SZ5PRXhNz2IMQqIcUw4mOIaHCh
+         mwiQbl8mGpViRBfEgExjk48q+7kftZCnX5g4JrcCwTk4KwDkiv5ZN+RoSdz0xCCFTivp
+         WTxX/fc1xqEDI6EXkK8niYFj0CUFtj9xsSS0vYAWk7c7FC9FpOJ0g8e2ZVQWwnMO+80a
+         GC0uDztgNMPagLsCnlVtvAWVXh/fsxIS3JswqES6Y1jwWtcAc/HuwC7Iarha0ZnNGrKo
+         3mKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gK7bszl+FUXRrhnEheiDpnk/jqDd/Le7Dxn0utoVoj8=;
-        b=bJwmzdW4BEZhh95aXE0BAQXDr/CKy6SlGM1/NbPfNh2LPJLYDWQTaa3j/NpX6Xpitd
-         Mn/JkyWKpd/yaothRJTu/hahA6QdtuQSTlVmi49DNHsc8pSYMYYqPVLhKTGqMyy+ygVi
-         T657oKdCuFC+UAJOL3/iXm1B/Bi0RVETwknScqVtu6fUbAIBiSCrBvgeW7+blkNJu6+E
-         jjZVBqax/EnN3PQXEnYcCbzRTvLvzkf19qil1ShwuY2PqPfr+DQaWVWelt0J3CrUM7me
-         DwIuhT/1DOkK8RI0IIUrv48pEgteGtVHB5pOeRoFni/AAqlwYOxZa86/MPFQsVKG4tzF
-         lpGA==
-X-Gm-Message-State: AOAM5308XrBlYqMydPJKZAhHmDRjaRlyPft+8s38WrATBok9gaYyh+6c
-        kBBFv7l2OD6S/4u50ENz4pMD6dmoOIhWXOTNWfZM9w==
-X-Google-Smtp-Source: ABdhPJy8rw1zn0vMv+DMB8N+z1pB8uO0eqAMBVWVctba0N642+H7wxAZyEfghR/ChCdkI5wnC9IBc8lzEsiRxGHWuBg=
-X-Received: by 2002:a25:d107:: with SMTP id i7mr34234702ybg.495.1643191208184;
- Wed, 26 Jan 2022 02:00:08 -0800 (PST)
+        bh=88bX5phc4QD5WEP/ZiuDpl6z06FPpsvQ8tmIbTmmvfM=;
+        b=ZiqJ3T4sFtb3o4/ehgpLNnbNy9La/dfI5Sd+TiBlLLpfVEjQrIpBpazp2PaBXIlUPf
+         sWjy0R7fCtNNkox9gj3wwnyDx/Nt9cHvI+i8FhDS7pwS51Nt+wqL1AWcuXgVIEDuctUI
+         p/XRgcuPs0UXfTSl1CabnvzaG5ggaRzYT1zVOjS70ucCfjrcLlagiSquuRtWTau7fbN7
+         RIlj1rkGTUPdmo3kyJYMoZpnAEoG9dnqPyU2z5hg4FAWxgSeY4mayXJ0wf2OPqCyfXpI
+         NyRsLYdQqi34ygl/3H49x4OfQpb6j/HYn5c22jkzCQggg5Q06PbZjCsvhf9GlcwaK1WN
+         jzOA==
+X-Gm-Message-State: AOAM533n0wbLzisAZpI0vwagz4wm5UbR07saGMJVm4RjCldYlZMPIav9
+        M4WXZ/xFxCEMnzIiNu08fgGIvAYtLoW5g72QB7o=
+X-Google-Smtp-Source: ABdhPJw72+G5oWbFGdfMsLrwcGS/NyTH58SB7avPo0MWV7s1x0/JTHE5M0LGJ1I+tXGIVrnFSz5eE4YPZHT8G6BfGm0=
+X-Received: by 2002:aa7:cf0e:: with SMTP id a14mr24216028edy.296.1643191392761;
+ Wed, 26 Jan 2022 02:03:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20220126092542.64659-1-linmiaohe@huawei.com>
-In-Reply-To: <20220126092542.64659-1-linmiaohe@huawei.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 26 Jan 2022 17:59:32 +0800
-Message-ID: <CAMZfGtWYkA_vs1_p5ok0T3J4WWamPE5ZNd00wsOOUiUCPnkP8g@mail.gmail.com>
-Subject: Re: [PATCH] mm/highmem: remove unnecessary done label
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com> <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+In-Reply-To: <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 26 Jan 2022 12:02:36 +0200
+Message-ID: <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Carlis <zhangxuezhi1@yulong.com>, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Helge Deller <deller@gmx.de>, Andy Shevchenko <andy@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 5:26 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
+On Wed, Jan 26, 2022 at 10:52 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
 >
-> Remove unnecessary done label to simplify the code.
+> Hi
 >
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Am 25.01.22 um 21:21 schrieb Andy Shevchenko:
+> > Since we got a maintainer for fbdev, I would like to
+> > unorphan fbtft (with the idea of sending PRs to Helge)
+> > and move it out of staging since there is no more clean
+> > up work expected and no more drivers either.
+> >
+> > Thoughts?
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Thanks for sharing yours, my answers below.
+
+> But why? We already have DRM drivers for some of these devices.
+
+No, we do not (only a few are available).
+
+> Porting
+> the others to DRM is such a better long-term plan.  OTOH, as no one has
+> shown up and converted them, maybe they should be left dead or removed
+> entirely.
+
+As I mentioned above there are devices that nobody will take time to
+port to a way too complex DRM subsystem. But the devices are cheap and
+quite widespread in the embedded world. I'm in possession of 3 or 4
+different models and only 1 is supported by tiny DRM.
+
+On top of that the subtle fact people forgot about FBTFT is that it
+does support parallel interface (yes, I know that it's not performant,
+but one of the displays I have is with that type of interface).
+
+P.S. For the record, I will personally NAK any attempts to remove that
+driver from the kernel. And this is another point why it's better not
+to be under the staging.
+
+-- 
+With Best Regards,
+Andy Shevchenko

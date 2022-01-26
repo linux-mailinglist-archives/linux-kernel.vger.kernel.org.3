@@ -2,84 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F129149D3F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2F049D3F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiAZU7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 15:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        id S231570AbiAZVAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:00:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbiAZU7M (ORCPT
+        with ESMTP id S229726AbiAZVAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:59:12 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FA4C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:59:12 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id k25so1254533ejp.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:59:12 -0800 (PST)
+        Wed, 26 Jan 2022 16:00:04 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0966C06161C;
+        Wed, 26 Jan 2022 13:00:03 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id a8so1163149ejc.8;
+        Wed, 26 Jan 2022 13:00:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9eB3sinujdfOKjw1Rq4Yv5m0jvLygDYT+UfsakVwvFY=;
-        b=hWc0SIhSU692E7TeE3QERHKR5x+Uc2JnoSd39zct3wR6ZvZdOU20Q/bEetUWnZH2qv
-         k8Y87WwX4DNOZDY7hoIHLsc9RzoCzuP16c0Mu+JCrku3P3474tOJQ88YTSgwbgLVQOT+
-         p17Rn52sDgl4b9IJo4cMCYZa4M7HXtY7gejYzswVMJo7wrdHQ9ep16fmYu3RxZQdUzfZ
-         vbB9+epHe00IVsZhW5xqE5F+iIEAgrwaQry0tFSp3SRgrGpEemNiJ0xnUbptAQCNgexX
-         lKuc1tIxApWOC8mTKsWuY1RGL78bfxNndcg3XKtb+4eUvrpLhDstJvA1Ol1ZPla5q89D
-         6b6w==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lEkoIfpLwpN4qDKwjyAgXgxx9hZ83QdosrwUlDdKfoE=;
+        b=FatyzVxn8iwK6oF5QWSlw4gHgbM26lJJtdDThHmjips75V08YS8HIW0FNwTGKWyLyl
+         YCafkxaxDuJ6uM+lHR+ZU+HyLZnYdZeXuw04I1iUeSrgWoU6XKXfTmGPjrHnfK9zof7r
+         xKmaw3u7EYYwxXt5p4HccILZaknEuIkwN0ji/HogCS2rUtNni1ciZx4lzP9pAFMdOTez
+         51TqDGCS8bLXSXjvxZ16sC4yR9rDsloMeZgo/mGKP3BEs8UNvSzjF76j/HwWHydjMPlm
+         bkeiv7r38XrC78Kt3uIu6q+Qgv7wWHo1+OFaXq9c4ufQ3lP+YtucMbEKFq1baf2t9Z/v
+         kjjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9eB3sinujdfOKjw1Rq4Yv5m0jvLygDYT+UfsakVwvFY=;
-        b=HPsYgrlLMCVKn+ALru6l2C7PqAqZBw6w5xPC1Vq+AXowAksQ8skta0XaO1nSYTP7Mq
-         QRB4aSQ++ZYqGNePQ4SNgNbJmxEmcspcd1a8DV/b4qnA5GqZm1Q6zG7JxqDMg4zjXIH9
-         dk1R/Uw/owf6Z6bThYzl1uJGCLWwp/X4r3qap/Kxvmmx3woRsAH+i3ysZTidAmm/LK33
-         FC9ftX/QGER2NOl3CwHiEWsGaHQIDLplO+gyN2sywQhsZQnXv76q2fxpeKbp/ebgbCwv
-         Fpph5CfL0jpjKqbr6LrRybFMQshJNr5aC4PwqdicmpXCRgez25Sbc5y/a/4gstBR9Y8+
-         4JLA==
-X-Gm-Message-State: AOAM531rKsq5LLzcxw5+eqHjbB0rjPweSBSUiiqVbnxExWhjVfimhWNj
-        OjEErrmCqxpYBBcinPBCgOgLUM273/J9fUYMypnH
-X-Google-Smtp-Source: ABdhPJwbGFpX8vGoi0YEZndNed80nrB6pQPwjTtQxv2+KG/+YKLLOPVzvOVF4GemKeM4hVP+ZFNtczQgBVPkJvmYazE=
-X-Received: by 2002:a17:906:2ed0:: with SMTP id s16mr396367eji.327.1643230750765;
- Wed, 26 Jan 2022 12:59:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lEkoIfpLwpN4qDKwjyAgXgxx9hZ83QdosrwUlDdKfoE=;
+        b=R25MNVx42SPnDSoyRWNHaeKVomHhsscXnC2KSSp47tIso8lqyzxywCaDh8NBa7AEsq
+         X8oIZrcNKMl+PLEhlAUA8LR46J6Fqrs6ITNAsmP3ZcBeTCjAuFV6oPjJns73Yaqm0ddC
+         2IiAfu553crz4iOiCWh/ujuacw3fBHJ/uu1Bya2cnFAepxN1tX7oy1QURuDcbDfin/zZ
+         ZtNdY7enPvVYcJ+oggpHSHR1ek+MqcJ0BwRPLKSPeUlc0XvJlqNcRq/eHWu0BAw7+Dv9
+         yNIWhcTetwHfSWjbR3KD1cZbcjGtwvrJS7JEWoNaPqC7ExMZaZFIKqDfbx4dezhH0sI0
+         0XgQ==
+X-Gm-Message-State: AOAM533OjwElxxWyybVk9FVeOzEDjw2gZMFlQcyPYVH9FJl8wGvni7VD
+        a2hw8hqxe8BcnMibPRcPaJY=
+X-Google-Smtp-Source: ABdhPJyWcOaMaA6GtxM/Hfz7JzwQUmNhn6lmaq++H4vDoAn0iGlx32WV+ejhsiL+hdxIJVv7KEpWfg==
+X-Received: by 2002:a17:906:3b84:: with SMTP id u4mr364282ejf.689.1643230802265;
+        Wed, 26 Jan 2022 13:00:02 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id o14sm7872487eju.118.2022.01.26.13.00.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 13:00:01 -0800 (PST)
+Date:   Wed, 26 Jan 2022 23:00:00 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [RFC PATCH v7 01/16] net: dsa: provide switch operations for
+ tracking the master state
+Message-ID: <20220126210000.qx5hxwgogjwllem7@skbuf>
+References: <20220123013337.20945-1-ansuelsmth@gmail.com>
+ <20220123013337.20945-2-ansuelsmth@gmail.com>
+ <f1547841-2210-ec68-3111-333bb7468b34@gmail.com>
 MIME-Version: 1.0
-References: <20220125141422.32655-1-cgzones@googlemail.com> <20220125141422.32655-7-cgzones@googlemail.com>
-In-Reply-To: <20220125141422.32655-7-cgzones@googlemail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 26 Jan 2022 15:58:59 -0500
-Message-ID: <CAHC9VhTJpeb37sOkvKHO7REUJ4K3YMGK6ZY_ptLjVVAkEKdpfA@mail.gmail.com>
-Subject: Re: [PATCH 8/9] selinux: simplify cred_init_security
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jeff Vander Stoep <jeffv@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f1547841-2210-ec68-3111-333bb7468b34@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 9:15 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> The parameter of selinux_cred() is declared const, so an explicit cast
-> dropping the const qualifier is not necessary. Without the cast the
-> local variable cred serves no purpose.
->
-> Reported by clang [-Wcast-qual]
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> ---
->  security/selinux/hooks.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+On Tue, Jan 25, 2022 at 07:22:51PM -0800, Florian Fainelli wrote:
+> 
+> 
+> On 1/22/2022 5:33 PM, Ansuel Smith wrote:
+> > From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> > 
+> > Certain drivers may need to send management traffic to the switch for
+> > things like register access, FDB dump, etc, to accelerate what their
+> > slow bus (SPI, I2C, MDIO) can already do.
+> > 
+> > Ethernet is faster (especially in bulk transactions) but is also more
+> > unreliable, since the user may decide to bring the DSA master down (or
+> > not bring it up), therefore severing the link between the host and the
+> > attached switch.
+> > 
+> > Drivers needing Ethernet-based register access already should have
+> > fallback logic to the slow bus if the Ethernet method fails, but that
+> > fallback may be based on a timeout, and the I/O to the switch may slow
+> > down to a halt if the master is down, because every Ethernet packet will
+> > have to time out. The driver also doesn't have the option to turn off
+> > Ethernet-based I/O momentarily, because it wouldn't know when to turn it
+> > back on.
+> > 
+> > Which is where this change comes in. By tracking NETDEV_CHANGE,
+> > NETDEV_UP and NETDEV_GOING_DOWN events on the DSA master, we should know
+> > the exact interval of time during which this interface is reliably
+> > available for traffic. Provide this information to switches so they can
+> > use it as they wish.
+> > 
+> > An helper is added dsa_port_master_is_operational() to check if a master
+> > port is operational.
 
-Merged, thanks.
+"The DSA master is able to pass traffic when it was brought
+administratively up and is also operationally up. We introduce a helper
+function named dsa_port_master_is_operational() which checks for the
+proper conditions on a CPU port's DSA master."
 
---=20
-paul-moore.com
+> > 
+> > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> 
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> -- 
+> Florian

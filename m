@@ -2,117 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B271B49D497
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743FE49D49B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiAZVga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S232437AbiAZViK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiAZVg2 (ORCPT
+        with ESMTP id S230369AbiAZViI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:36:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0C9C06161C;
-        Wed, 26 Jan 2022 13:36:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C190DB82022;
-        Wed, 26 Jan 2022 21:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F23C340E8;
-        Wed, 26 Jan 2022 21:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643232984;
-        bh=qiDwOHAZZYgzMESTLY09sncGjaRqe3P7WUyD63U80QA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F5N5X4tFYnAPtsQXZdHMR/zZCc9G6WRuaXBfK+Ty5IM/QMwMOdyliX4LBQzikYCRA
-         EbxPUMzlBLq5kxn2Lp0cw6skBSXxq8XEgVuf6+lujnGG1XDj3L51N6//5M6Y3QrjOh
-         Qjjsvo6HAyuhIFv50e2OCI+NPAASzuQaMml82XCScDEM2tNfWJ8JjwQ0gEcih7/MNY
-         JNESyI5BmHohYobkVSEHNReqMQ9KBlDKprBjI8o+gcDWHjkFEduTZaWXpcnWDLvcXp
-         mXoALrN0E1bm7oyRxjSzeBe/lgpnyZM+LvvX9slVLLDeANjKEhkqhZJe9x6IunDd7F
-         UbXGnOxc8kq6g==
-Date:   Wed, 26 Jan 2022 23:36:13 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH 1/7] modules: Refactor within_module_core() and
- within_module_init()
-Message-ID: <YfG+zVl8aV+UszoE@kernel.org>
-References: <cover.1643015752.git.christophe.leroy@csgroup.eu>
- <e5e58875bd15551d0386552d3f9fa9ee8bc183a2.1643015752.git.christophe.leroy@csgroup.eu>
+        Wed, 26 Jan 2022 16:38:08 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA41C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:38:07 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643233085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f5fcoWwfmhzNvMjUp+pjH4hD1mIf2d1g2+i2SJzfS4Q=;
+        b=J5TRhWXL23NuwdM3hRs+FPxtZmSYLsb36kLeKRr3FWAhvN9lr8SBhLOI+zjjcbnluOWX0J
+        La6iQGteVfCwqPIhFSpnJiDFXFF3kAlFjpLmhduP3NkxTDN96Peda9Yc/TMTrVUQcsUiPx
+        pj1x0gvkj0KnKpRGFUZy/EzknDDLUbr83/0d3NiXGM4AwgvolreuNsxm8u6AhZy0R3fc/3
+        Mu+4iaWJIMSXp6nvn4F8GKRoGFcypVFJovKrtByV6iWptI2gDHd7YdWJCnl72d5j/ahW86
+        vxC36v6EePrfe5vdTvwcIpFrclV1jgl3yyAIfSm2HIsCtdaFyOe+vFrsWYPExw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643233085;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f5fcoWwfmhzNvMjUp+pjH4hD1mIf2d1g2+i2SJzfS4Q=;
+        b=JEka+zNZXXyLc6D1VvwfqDsXU24l1eYSpl3XbMvwJi7v+170sTD6Z+2Gh27xmdaOmydw/f
+        E7/StC2ZRyAae9CA==
+To:     Fenghua Yu <fenghua.yu@intel.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+In-Reply-To: <YfGGk7kWNc9q2YwV@otcwcpicx3.sc.intel.com>
+References: <20211217220136.2762116-1-fenghua.yu@intel.com>
+ <20211217220136.2762116-6-fenghua.yu@intel.com> <87ee4w6g1n.ffs@tglx>
+ <87bl006fdb.ffs@tglx> <Ye8RmmKpJT8brmDE@otcwcpicx3.sc.intel.com>
+ <878rv46eg3.ffs@tglx> <YfAUutQhqS6ejUFU@otcwcpicx3.sc.intel.com>
+ <87k0em4lu9.ffs@tglx> <YfGGk7kWNc9q2YwV@otcwcpicx3.sc.intel.com>
+Date:   Wed, 26 Jan 2022 22:38:04 +0100
+Message-ID: <8735la41qb.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5e58875bd15551d0386552d3f9fa9ee8bc183a2.1643015752.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 09:22:15AM +0000, Christophe Leroy wrote:
-> within_module_core() and within_module_init() are doing the exact same
-> test, one on core_layout, the second on init_layout.
-> 
-> In preparation of increasing the complexity of that verification,
-> refactor it into a single function called within_module_layout().
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  include/linux/module.h | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index c9f1200b2312..33b4db8f5ca5 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -565,18 +565,27 @@ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr);
->  bool is_module_percpu_address(unsigned long addr);
->  bool is_module_text_address(unsigned long addr);
->  
-> +static inline bool within_range(unsigned long addr, void *base, unsigned int size)
-> +{
-> +	return addr >= (unsigned long)base && addr < (unsigned long)base + size;
-> +}
+On Wed, Jan 26 2022 at 09:36, Fenghua Yu wrote:
+> On Wed, Jan 26, 2022 at 03:23:42PM +0100, Thomas Gleixner wrote:
+>> On Tue, Jan 25 2022 at 07:18, Fenghua Yu wrote:
+>> While looking at ioasid_put() usage I tripped over the following UAF
+>> issue:
+>> 
+>> --- a/drivers/iommu/intel/iommu.c
+>> +++ b/drivers/iommu/intel/iommu.c
+>> @@ -4817,8 +4817,10 @@ static int aux_domain_add_dev(struct dma
+>>  	auxiliary_unlink_device(domain, dev);
+>>  link_failed:
+>>  	spin_unlock_irqrestore(&device_domain_lock, flags);
+>> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+>> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
+>>  		ioasid_put(domain->default_pasid);
+>> +		domain->default_pasid = INVALID_IOASID;
+>> +	}
+>>  
+>>  	return ret;
+>>  }
+>> @@ -4847,8 +4849,10 @@ static void aux_domain_remove_dev(struct
+>>  
+>>  	spin_unlock_irqrestore(&device_domain_lock, flags);
+>>  
+>> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+>> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
+>>  		ioasid_put(domain->default_pasid);
+>> +		domain->default_pasid = INVALID_IOASID;
+>> +	}
+>>  }
+>>  
+>>  static int prepare_domain_attach_device(struct iommu_domain *domain,
+>
+> The above patch fixes an existing issue. I will put it in a separate patch,
+> right?
 
-There's also 'within' at least in arch/x86/mm/pat/set_memory.c and surely
-tons of open-coded "address within" code.
+Correct.
 
-Should it live in, say, include/linux/range.h?
+> It cannot be applied cleanly to the upstream tree. Do you want me to base
+> the above patch (and the whole patch set) to the upstream tree or a specific
+> tip branch?
 
-> +
-> +static inline bool within_module_layout(unsigned long addr,
-> +					const struct module_layout *layout)
-> +{
-> +	return within_range(addr, layout->base, layout->size);
-> +}
-> +
->  static inline bool within_module_core(unsigned long addr,
->  				      const struct module *mod)
->  {
-> -	return (unsigned long)mod->core_layout.base <= addr &&
-> -	       addr < (unsigned long)mod->core_layout.base + mod->core_layout.size;
-> +	return within_module_layout(addr, &mod->core_layout);
->  }
->  
->  static inline bool within_module_init(unsigned long addr,
->  				      const struct module *mod)
->  {
-> -	return (unsigned long)mod->init_layout.base <= addr &&
-> -	       addr < (unsigned long)mod->init_layout.base + mod->init_layout.size;
-> +	return within_module_layout(addr, &mod->init_layout);
->  }
->  
->  static inline bool within_module(unsigned long addr, const struct module *mod)
-> -- 
-> 2.33.1
-> 
+Against Linus tree please so that the bugfix applies.
 
--- 
-Sincerely yours,
-Mike.
+> I will fold the following patch into patch #5. The patch #11 (the doc patch)
+> also needs to remove one paragraph talking about refcount.
+>
+> So I will send the whole patch set with the following changes:
+> 1. One new bug fix patch (the above patch)
+> 2. Updated patch #5 (with the following patch folded)
+> 3. Updated patch #11 (removing refcount description)
+
+Looks good.
+
+Thanks,
+
+        tglx

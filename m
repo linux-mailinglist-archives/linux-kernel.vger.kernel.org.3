@@ -2,166 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AAA49D14E
+	by mail.lfdr.de (Postfix) with ESMTP id D17B949D14F
 	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233537AbiAZR5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244073AbiAZR5u (ORCPT
+        id S237412AbiAZR6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:58:43 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4519 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230002AbiAZR6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:57:50 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9A0C061747
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:57:50 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id i1so252283pla.9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:57:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bu8dpK8FOO82WqLK7bIdjtIRb6U6eKUm/fxnN5hhOLU=;
-        b=EoIiY8c1gw6Q0sWPnfH6bzTGeFRJpM8VgS/+dwNgxelKm0pW7P+qHLF5fkmPxGp+8A
-         sf1gOTfqdIBrGMeGHmkBytn0/MsT1cc3xrWC9fLzo1a6yD1YflUhO/Z3sCmA9w6+jX9P
-         RshDUfIKSaSJFspjZf/6VHnQxMQF7zijnW1Wo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bu8dpK8FOO82WqLK7bIdjtIRb6U6eKUm/fxnN5hhOLU=;
-        b=TgxtjdJ347erP/Ks5FH4l/HYepguKc1Dy5hKtJpbowoWsrlyXFj8mNlugwy+sQQkDo
-         a4X4xVbGCNUcwnLHrBSpwpMN/DAY7uBV38l5zEHm08G5TiCwjl6vHTP1QgJCsw5Kf50U
-         P+nJITb2Z0qWp31yMB/A9fnXaVuvT3OT7d3Tlqe+/nLK8cvZPwRo/xOlSsAwTppIk7ww
-         xj3nHJvakYEBcdljk4Ctunt+4b31TpnjTpsuP4UnXvvnyCTCWqQur1nmF0OYhq0Di4kK
-         Z5PLhxI2q/K+/yWWcbv2r02yRKkD/9fcF8imOID51lVhQC6ggZQKIsCrtcizXJUJWnYk
-         isNw==
-X-Gm-Message-State: AOAM531NuXTvvloJc0OQQ4NSFWBeg2v5AYYI3Wllv6HceA2o01F5iuea
-        0OsvdoKy1V4ZF7Ero2RkFXXgwA==
-X-Google-Smtp-Source: ABdhPJyMpShiL28dh9NYPZph22H9TXQaralr0gYIruVT7ZCW8+I5Bv0VI7CuFITmtS6ujmf8bYxlEA==
-X-Received: by 2002:a17:902:a404:: with SMTP id p4mr263780plq.2.1643219869683;
-        Wed, 26 Jan 2022 09:57:49 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k16sm8650124pgh.45.2022.01.26.09.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 09:57:49 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Ariadne Conill <ariadne@dereferenced.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] fs/binfmt_elf: Add padding NULL when argc == 0
-Date:   Wed, 26 Jan 2022 09:57:47 -0800
-Message-Id: <20220126175747.3270945-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 26 Jan 2022 12:58:40 -0500
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JkWZ23WBCz6FGPH;
+        Thu, 27 Jan 2022 01:54:18 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 26 Jan 2022 18:58:38 +0100
+Received: from [10.47.86.172] (10.47.86.172) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 26 Jan
+ 2022 17:58:37 +0000
+Subject: Re: [PATCH] iommu/iova: Separate out rcache init
+To:     Robin Murphy <robin.murphy@arm.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>
+CC:     "xieyongji@bytedance.com" <xieyongji@bytedance.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Linuxarm <linuxarm@huawei.com>
+References: <1643205319-51669-1-git-send-email-john.garry@huawei.com>
+ <ee4593b8-cdf6-935a-0eaf-48a8bfeae912@arm.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <0ec8829e-aef3-eee7-17cf-416b28db3c4c@huawei.com>
+Date:   Wed, 26 Jan 2022 17:58:04 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4170; h=from:subject; bh=nU8KNNO5tauigcRzAerwVslBvcoB9EWNWElP4nO/EqM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh8Yuajn59ZUtWtAgMEfYOk4zJmlQsPZ615MVcTp0A Nqyv3b6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfGLmgAKCRCJcvTf3G3AJg5VD/ 9dlYywEJpU2xSj/LVcgtU5Dkpx8YWd4fQXVbWDTWm7S4ztJs95C6xH2tlVsQoLxvKeEKh3BXLucA9f 2m1Ifm4Zf2a7svGhs2ML2/oYGJq9HZhPBPn7A/0JHu5QWObkDyxY25T2gcyrsJAum5fnlyHH/r6ehe 9F9PahwMJMUJUT5W9l/HpccDfHkGMPIOQ1RY0wyUpn0ZOcs5keZq3nDF+VPyCy0FuwewJiRAVC2TUL M7wpFdOSNdI6vrcJYyzp2WCBG0C36BsnI3ZzWFoy3mgvkkvU3OBvvB/AAUYaUdyPk5En9a7X2KyhBw pSbEpHB21PNaiATsUP0kx8j2XYXH4iOp02y3CsZU0KeO1vGN3qwqt8RaXY0qE57kzS/6mjqgVUDt9W ALy7qKtGrVmdFUtrQ2cc8YGbPBLZNrbO2sCNmvQfR5ebEDSFgsdEZmbsd4SXQi12FtSv3GHzTUe/5y sHgQbPTPj/h1Cj2l1EI5Bxc9fKSRjqQB/ghD3I5KrvYG0z/uRAur9G4iFCO5yYiGmDXV9a5yeOuggB Bv/xIgohqhPzReqrNTff5eJge810sOYMRZGPB8Oz5TwvQFBkeo5kWu0KVIz5AmxQSBf3jGvFBHaCbH sfPDfGebCDaOW6Jul032Hg7dKOzixcz2LBce4qeidtfmJ5TbNjG21MNcm+PQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <ee4593b8-cdf6-935a-0eaf-48a8bfeae912@arm.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.86.172]
+X-ClientProxiedBy: lhreml722-chm.china.huawei.com (10.201.108.73) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Ariadne Conill:
+Hi Robin,
 
-"In several other operating systems, it is a hard requirement that the
-first argument to execve(2) be the name of a program, thus prohibiting
-a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
-but it is not an explicit requirement[1]:
+>>
+>> Signed-off-by: John Garry<john.garry@huawei.com>
+> Mangled patch? (no "---" separator here)
 
-    The argument arg0 should point to a filename string that is
-    associated with the process being started by one of the exec
-    functions.
+hmm... not sure. As an experiment, I just downloaded this patch from 
+lore.kernel.org and it applies ok.
+
+> 
+> Overall this looks great, just a few comments further down...
+> 
+
 ...
-Interestingly, Michael Kerrisk opened an issue about this in 2008[2],
-but there was no consensus to support fixing this issue then.
-Hopefully now that CVE-2021-4034 shows practical exploitative use[3]
-of this bug in a shellcode, we can reconsider."
 
-An examination of existing[4] users of execve(..., NULL, NULL) shows
-mostly test code, or example rootkit code. While rejecting a NULL argv
-would be preferred, it looks like the main cause of userspace confusion
-is an assumption that argc >= 1, and buggy programs may skip argv[0]
-when iterating. To protect against userspace bugs of this nature, insert
-an extra NULL pointer in argv when argc == 0, so that argv[1] != envp[0].
+>> +}
+>> +EXPORT_SYMBOL_GPL(iova_domain_init_rcaches);
+>> +
+>> +void iova_domain_free_rcaches(struct iova_domain *iovad)
+>> +{
+>> +	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
+>> +					    &iovad->cpuhp_dead);
+>> +	free_iova_rcaches(iovad);
+>>    }
+>> +EXPORT_SYMBOL_GPL(iova_domain_free_rcaches);
+> I think we should continue to expect external callers to clean up with
+> put_iova_domain(). 
 
-Note that this is only done in the argc == 0 case because some userspace
-programs expect to find envp at exactly argv[argc]. The overlap of these
-two misguided assumptions is believed to be zero.
+ok, fine, makes sense
 
-[1] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
-[2] https://bugzilla.kernel.org/show_bug.cgi?id=8408
-[3] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
-[4] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
+> If they aren't doing that already they have a bug
+> (albeit minor), and we don't want to give the impression that it's OK to
+> free the caches at any point*other*  than tearing down the whole
+> iova_domain, since the implementation really wouldn't expect that.
+> 
+>>    /*
+>>     * Try inserting IOVA range starting with 'iova_pfn' into 'rcache', and
+>> @@ -831,7 +872,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
+>>    {
+>>    	unsigned int log_size = order_base_2(size);
+>>    
+>> -	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
+>> +	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
+>>    		return 0;
+>>    
 
-Reported-by: Ariadne Conill <ariadne@dereferenced.org>
-Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Rich Felker <dalias@libc.org>
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/binfmt_elf.c | 10 +++++++++-
- fs/exec.c       |  7 ++++++-
- 2 files changed, 15 insertions(+), 2 deletions(-)
+..
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 605017eb9349..e456c48658ad 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -297,7 +297,8 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
- 	ei_index = elf_info - (elf_addr_t *)mm->saved_auxv;
- 	sp = STACK_ADD(p, ei_index);
- 
--	items = (argc + 1) + (envc + 1) + 1;
-+	/* Make room for extra pointer when argc == 0. See below. */
-+	items = (min(argc, 1) + 1) + (envc + 1) + 1;
- 	bprm->p = STACK_ROUND(sp, items);
- 
- 	/* Point sp at the lowest address on the stack */
-@@ -326,6 +327,13 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
- 
- 	/* Populate list of argv pointers back to argv strings. */
- 	p = mm->arg_end = mm->arg_start;
-+	/*
-+	 * Include an extra NULL pointer in argv when argc == 0 so
-+	 * that argv[1] != envp[0] to help userspace programs from
-+	 * mishandling argc == 0. See fs/exec.c bprm_stack_limits().
-+	 */
-+	if (argc == 0 && put_user(0, sp++))
-+		return -EFAULT;
- 	while (argc-- > 0) {
- 		size_t len;
- 		if (put_user((elf_addr_t)p, sp++))
-diff --git a/fs/exec.c b/fs/exec.c
-index 79f2c9483302..0b36384e55b1 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -495,8 +495,13 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
- 	 * the stack. They aren't stored until much later when we can't
- 	 * signal to the parent that the child has run out of stack space.
- 	 * Instead, calculate it here so it's possible to fail gracefully.
-+	 *
-+	 * In the case of argc < 1, make sure there is a NULL pointer gap
-+	 * between argv and envp to ensure confused userspace programs don't
-+	 * start processing from argv[1], thinking argc can never be 0,
-+	 * to block them from walking envp by accident. See fs/binfmt_elf.c.
- 	 */
--	ptr_size = (bprm->argc + bprm->envc) * sizeof(void *);
-+	ptr_size = (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
- 	if (limit <= ptr_size)
- 		return -E2BIG;
- 	limit -= ptr_size;
--- 
-2.30.2
+>> @@ -102,6 +92,8 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
+>>    	unsigned long pfn_hi);
+>>    void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
+>>    	unsigned long start_pfn);
+>> +int iova_domain_init_rcaches(struct iova_domain *iovad);
+>> +void iova_domain_free_rcaches(struct iova_domain *iovad);
+> As above, I vote for just forward-declaring the free routine in iova.c
+> and keeping it entirely private.
+
+ok
+
+> 
+>>    struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
+>>    void put_iova_domain(struct iova_domain *iovad);
+>>    #else
+>> @@ -157,6 +149,15 @@ static inline void init_iova_domain(struct iova_domain *iovad,
+>>    {
+>>    }
+>>    
+>> +static inline int iova_domain_init_rcaches(struct iova_domain *iovad)
+>> +{
+>> +	return -ENOTSUPP;
+>> +}
+>> +
+>> +static inline void iova_domain_free_rcaches(struct iova_domain *iovad)
+>> +{
+>> +}
+>> +
+> I'd be inclined not to add stubs at all - I think it's a reasonable
+> assumption that anyone involved enough to care about rcaches has a hard
+> dependency on IOMMU_IOVA already.
+
+So iova_domain_free_rcaches() would disappear from here as a result of 
+the changes discussed above.
+
+As for iova_domain_init_rcaches(), I was just following the IOMMU/IOVA 
+coding practice - that is, always stub.
+
+> It's certainly the case today, and I'd
+> hardly want to encourage more users anyway.
+
+I think that stronger deterrents would be needed :)
+
+Anyway, I can remove it.
+
+Thanks,
+John
+
+
+
 

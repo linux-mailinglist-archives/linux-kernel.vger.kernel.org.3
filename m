@@ -2,88 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB98D49CBC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF5E49CBC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241891AbiAZODy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        id S241903AbiAZOEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:04:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241885AbiAZODw (ORCPT
+        with ESMTP id S241885AbiAZOEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:03:52 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2DDC06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 06:03:51 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id k31so70081650ybj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 06:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=KgAy15DDMAR2vjy8MiwG/RlJLyeMSxdmZmAbGV8zyZo=;
-        b=DuizcgPMiu9eosVBoNVF9GXmy/vOHlsyPY4EPNeMMFbDaxS4YbjLG2k3mZuPyZp6nf
-         mwFunqVxw0K+rEwzgUyTXfdvmL5BeLj26bqEJQ5veR0aakcJ78+I2l5VZqLFNLs9nCec
-         6ffY5vozp4KqeyHfj1dSwlC5t72zaZMoMUoLB7iKNaTa4LNVwHB8AfYmBB86NdbN2nsP
-         dv0UPQJzy5A02W0TAONv6Rn5Q9uyz/UWeKWfKPAu4n7G5yQPfYEZfMoE7+HRY/N/zpjU
-         qksxBQX2M7uHcfVpSH28kwZvNv2srrULTX2ONPPpjSyMqODUgLOOOEzpAeD8870RvkWs
-         W6rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=KgAy15DDMAR2vjy8MiwG/RlJLyeMSxdmZmAbGV8zyZo=;
-        b=jf2Cr6VunhLaShVOvRJ0ZhVcBu/G36sqIqLocBlHm8kFiC3vjtCadoYpDyJK7JTHnn
-         CUtjVEUi7sYwYSOyyCpHcDwAQByaUjzLhXDHAPVe1dKRYaoYkeI8HbKLFH8GgZLJvhwg
-         uo/fr+orD+M/X2t5FBsc33jtK7g5d2sRQC+DC+u+yYMQYtylEEUdd/zXn9xnhx1ANMgo
-         tuLU5+oc1u5gcnwH/dDgpGgaZ5A+fY3fR3Y8tvMRMULkNlqxGe7Nq3JJZlN4ufTuRIWA
-         ZW3CxCXW0MwA+8gIQrfVoA8HMZzBX8uAo+l7v6e0IinDB0EhIZMetVnzZS+b9fbWpiio
-         hVMw==
-X-Gm-Message-State: AOAM533WiQhcyawhX7fVFgNS29p/tghT9YuUc5seAKVYI4mdiB5MMnpx
-        yqgiaexmh9LpkvhnuYwkufQdd0jgUuTu0QJJoyDPWQ==
-X-Google-Smtp-Source: ABdhPJxG2AiuBT6jF9/C4OMbB5sFSeC1iGSmdOO8xUnGvYsnanamPg5zDFyS9LKTGkMtjjtvdQEY1gfURY0fRsUqNGc=
-X-Received: by 2002:a25:b305:: with SMTP id l5mr30998617ybj.393.1643205831097;
- Wed, 26 Jan 2022 06:03:51 -0800 (PST)
+        Wed, 26 Jan 2022 09:04:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4A4C06161C;
+        Wed, 26 Jan 2022 06:04:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C8A861647;
+        Wed, 26 Jan 2022 14:04:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDFCFC340E3;
+        Wed, 26 Jan 2022 14:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643205846;
+        bh=bGvEUJRI1bG7wfCOhDeIKF9pmrHbf4x38nwGcg1z7Ts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N2e27McvDhfrxhkO6oQTzyBprEZzQtNwKgJ8KuXiocCe2noWnmZOcGE4C+HV0o39v
+         1ec1O1E8xY/dOT83KAzkdrAvaG9A2c9hvqoDTkZWSmk8wCBnDcNhAaiVUEsgEvpphq
+         X0PzyM9BP531maaoLFXt1NE7i7J4HVw20AQrF/6Y1I7nU36rBzVhc87/4EfOqWWK9A
+         mJ+BFcLC+D2f9NeoSKcdgadYTu/HS+hU6bJ6POFpidaEiEC2NAUo7kOdsSB2fLqpxs
+         g4SmswDFkXpxTEJloNmFfURRu2gZz7PeyTau+Wfue/97v5vef0dphuzaV+X52wqVmM
+         Gjr5dy73SPYJw==
+Date:   Wed, 26 Jan 2022 15:03:54 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH v9 20/23] ima: Setup securityfs for IMA namespace
+Message-ID: <20220126140354.rhsr66kr3fpbff6t@wittgenstein>
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+ <20220125224645.79319-21-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Received: by 2002:a81:1756:0:0:0:0:0 with HTTP; Wed, 26 Jan 2022 06:03:50
- -0800 (PST)
-In-Reply-To: <CAKgze5Z7U0R+HJ8_GajUsspYw+52+i2MW75KBGVOmE8zmT_BDQ@mail.gmail.com>
-References: <20220113213027.457282-1-martin.fernandez@eclypsium.com>
- <20220113213027.457282-4-martin.fernandez@eclypsium.com> <eea2c529-b874-58e6-f0b2-1483cc7e30a6@intel.com>
- <CAKgze5Z7U0R+HJ8_GajUsspYw+52+i2MW75KBGVOmE8zmT_BDQ@mail.gmail.com>
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-Date:   Wed, 26 Jan 2022 11:03:50 -0300
-Message-ID: <CAKgze5ba429M=Aad9qBNL+CZLCVF09LQ6ZwXCT2jc86vDggp6g@mail.gmail.com>
-Subject: Re: [PATCH v5 3/5] x86/e820: Tag e820_entry with crypto capabilities
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220125224645.79319-21-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 1/14/22, Dave Hansen <dave.hansen@intel.com> wrote:
->> On 1/13/22 1:30 PM, Martin Fernandez wrote:
->>> +/*
->>> + * Update crypto capabilities in a range
->>> + */
->>> +static u64 __init __e820__range_update_crypto(struct e820_table *table,
->>> +					      u64 start, u64 size,
->>> +					      enum e820_crypto_capabilities crypto_capable)
->>
->> This looks like an almost pure copy-and-paste of a 70-line function.
->> That's not the end of the world, but it does seem like a place where
->> refactoring is in order.
+On Tue, Jan 25, 2022 at 05:46:42PM -0500, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
+> 
+> Setup securityfs with symlinks, directories, and files for IMA
+> namespacing support. The same directory structure that IMA uses on the
+> host is also created for the namespacing case.
+> 
+> The securityfs file and directory ownerships cannot be set when the
+> IMA namespace is initialized. Therefore, delay the setup of the file
+> system to a later point when securityfs is in securityfs_fill_super.
+> 
+> Introduce a variable ima_policy_removed in ima_namespace that is used to
+> remember whether the policy file has previously been removed and thus
+> should not be created again in case of unmounting and again mounting
+> securityfs inside an IMA namespace.
+> 
+> This filesystem can now be mounted as follows:
+> 
+> mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
+> 
+> The following directories, symlinks, and files are available
+> when IMA namespacing is enabled, otherwise it will be empty:
+> 
+> $ ls -l sys/kernel/security/
+> total 0
+> lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
+> drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
+> 
+> $ ls -l sys/kernel/security/ima/
+> total 0
+> -r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
+> -r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
+> -rw-------. 1 root root 0 Dec  2 00:18 policy
+> -r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
+> -r--r-----. 1 root root 0 Dec  2 00:18 violations
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> 
+> ---
 
-Introducing a for_each to iterate over the table is one of the
-improvements I'm thinking of. Do you think it's a good idea to
-introduce it in this patch (changing all the relevant for loops for
-this new for_each) or should I do it in a separate patch?
+Acked-by: Christian Brauner <brauner@kernel.org>

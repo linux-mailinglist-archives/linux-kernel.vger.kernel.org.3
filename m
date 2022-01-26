@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 288DC49C223
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3198949C226
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237214AbiAZDaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S237232AbiAZDan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbiAZDaO (ORCPT
+        with ESMTP id S229989AbiAZDam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:30:14 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D8DC06161C;
-        Tue, 25 Jan 2022 19:30:13 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id h2so27029254qkp.10;
-        Tue, 25 Jan 2022 19:30:13 -0800 (PST)
+        Tue, 25 Jan 2022 22:30:42 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC0BC06161C;
+        Tue, 25 Jan 2022 19:30:42 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id d8so6947025qvv.2;
+        Tue, 25 Jan 2022 19:30:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=E7anDpLimRE6bYis5gbdpa/RPki6eh1XfOHxrRk/P/4=;
-        b=SXRlHFjRWC2Mv38MUu2FfMqDEb49bJZfxYE559Kw+D0Pn2YltH77SpBW3HH0YW5AsE
-         m8kzbCMD9MZIkkdaMBt1JMXzZvL87DNz+apl6ePX/TZd6D1vEa2xLP9paVzPlpB014h9
-         6RZ8KymN/gMgkdABfFHWVpzVAjSf0rYQjS5yktG4rHR6VGF8OAEdq4nqpvvJE1pRreRm
-         qEtmS903LkbFXgqIFXymoOB30fFzO7Q+H8PFLqPdEYHjfqzuqV+Z7QsD3pCwq/2lJ9gm
-         h+TZI7RIh7QW5QG05fDEDYNnEhfg5DP4DhdGFoRo5ptPvIqzokYrOMe0xQ5f3KanUOae
-         L9AA==
+        bh=nR/2qASV68S+qbCb4NFTdiqEMN7v1LnkjxhCU3OugNo=;
+        b=alCXqezT8WzMVzmL21JOByzmt95cMtz8ztaUHZ/2eNk4I7uoorGsWSg4uvmKw11Hzo
+         pAuE68eST8fIJa/OWdWASTRZO8421UFkuiUhmZLTYiW/VTeGX6UTq4eJD173JLuBybHf
+         7F6JL6rzDdam/4EEAXXbNQacaPP/7IHUheB11w2pRO9L3ZYFdf3mzxPeY1FCjCEL1eyE
+         7ABqZW7wlxn7XiPe+fuguQ25XK5qetKbcCf7HJffI1tljyxOB4qfpf2fDsMVsZ4BJ372
+         He5C/hX81V2Ov8LykMhijqVCz0Kcl4L0a2TpVeK+y5Ef4v0NYYytgY6n3e9IY/HR0wnZ
+         qlBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=E7anDpLimRE6bYis5gbdpa/RPki6eh1XfOHxrRk/P/4=;
-        b=W9b3muUZtQSM6z1Db2YJp1EIHjTSbauHnZjLptqs+BluknAo4kUDTIPzlOiTLtCeWm
-         8cTroX5iLZ3ATLp2QsTtGn51RoIKLas4YOi+aF/10zugUO3zT8V3P1A4oyixYQghLrxW
-         P0tM15Nn6uvN0Q7JUch1g5YX0gLmhRPA4JH5hEA1k6M17wtCk09p5PL2L8zTTi6bt6VI
-         JrUd3YfDCsS0M64GFfBkHr+c07L847s+UtnDAi55CtjtiDi+qxsQZzq/ucyPtzOiogJ0
-         fulSrnXZBBLJqpk0t5IUYDIkSopWFDrACFXubbybP5Q8uX3NZFhcQ5xBycgkwAjN7KJd
-         AAdg==
-X-Gm-Message-State: AOAM5309rFMrcHmOlWomzrc3lGkVchFm7g8tpErzstf0uqz6za6qh55g
-        kILTOXUY5wo4+t4ZUVryu+iUpRXhORDNXqoITTI=
-X-Google-Smtp-Source: ABdhPJzOxLW8ANKOJuqP39xeWiTHWhbAJym/4GNx7fbso6asTpJBhG97tat7EMYA2eWqagLzlBUDXMJW3yhDFcy0HzY=
-X-Received: by 2002:a05:620a:d95:: with SMTP id q21mr16790410qkl.74.1643167812983;
- Tue, 25 Jan 2022 19:30:12 -0800 (PST)
+        bh=nR/2qASV68S+qbCb4NFTdiqEMN7v1LnkjxhCU3OugNo=;
+        b=1mVfZZ1b761lP64XcE4azVF0zQ8VGoUE3wZUsxM8V5NaFSkg5zoOkXcEBRA8GwdeBJ
+         LIKaNtPb+JDmMrrHUT0pr8V97f5xvSKVr1KNLr1q9+OTX7NCN/KM1pAsDqu+T2FbBPnj
+         SoWH9iTLr3I3HLLsLvmUUteUnvqGD4FcwgGSRuyknFgrqJ2spbkPFAdTi12qvFWTUqwi
+         CS/0IR7qtn/vz8JrEP14OZ1cvDv+usgym3yBBUMyhJFGjPBk/TKn3uHUrL8SGNgWdqvf
+         Tp1rBlUI9wT5gt4KWzOtEnBT4fOrQpjbmfYsQPh6aHnCkew4mQNPUl6vXlIm4dV+x70J
+         pmzQ==
+X-Gm-Message-State: AOAM532CsKnwYFzx+nm7KZkHPc/Z7igGXgcojwFLHHsFMKzPcZEUXzeN
+        cayZ7qQyp2K44mp1ngYykl3WwaroRRwuxu5mmSg=
+X-Google-Smtp-Source: ABdhPJz9KH+uAz3QUjXErjdEt7bV+Hvjv8J8ogL1YLXpBzgKl96Ikh9TISpKxbrnviOUH9Tdn7YDvEWXkyO9+SpLLP8=
+X-Received: by 2002:ad4:5fcd:: with SMTP id jq13mr22674064qvb.60.1643167841312;
+ Tue, 25 Jan 2022 19:30:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20220125021353.GA29777@embeddedor>
-In-Reply-To: <20220125021353.GA29777@embeddedor>
+References: <20220125225723.GA78256@embeddedor>
+In-Reply-To: <20220125225723.GA78256@embeddedor>
 From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Wed, 26 Jan 2022 11:30:55 +0800
-Message-ID: <CADBw62opvW1kdZbjxc0SBidjn0teYLsrfxTqfKoua6x9O84Neg@mail.gmail.com>
-Subject: Re: [PATCH][next] hwspinlock: stm32: Use struct_size() helper in devm_kzalloc()
+Date:   Wed, 26 Jan 2022 11:31:23 +0800
+Message-ID: <CADBw62qd45fuER5oXKoDPwKbOOvwba9ek0Oz+AxtGrF0OL_64A@mail.gmail.com>
+Subject: Re: [PATCH][next] hwspinlock: sprd: Use struct_size() helper in devm_kzalloc()
 To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
         linux-remoteproc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
         LKML <linux-kernel@vger.kernel.org>,
         linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -66,7 +64,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:07 AM Gustavo A. R. Silva
+On Wed, Jan 26, 2022 at 6:50 AM Gustavo A. R. Silva
 <gustavoars@kernel.org> wrote:
 >
 > Make use of the struct_size() helper instead of an open-coded version,
@@ -74,7 +72,7 @@ On Tue, Jan 25, 2022 at 10:07 AM Gustavo A. R. Silva
 > in the worst scenario, could lead to heap overflows.
 >
 > Also, address the following sparse warnings:
-> drivers/hwspinlock/stm32_hwspinlock.c:84:32: warning: using sizeof on a flexible structure
+> drivers/hwspinlock/sprd_hwspinlock.c:96:36: warning: using sizeof on a flexible structure
 >
 > Link: https://github.com/KSPP/linux/issues/174
 > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
@@ -83,31 +81,23 @@ LGTM.
 Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
 
 > ---
->  drivers/hwspinlock/stm32_hwspinlock.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  drivers/hwspinlock/sprd_hwspinlock.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 >
-> diff --git a/drivers/hwspinlock/stm32_hwspinlock.c b/drivers/hwspinlock/stm32_hwspinlock.c
-> index 5bd11a7fab65..716ad4401249 100644
-> --- a/drivers/hwspinlock/stm32_hwspinlock.c
-> +++ b/drivers/hwspinlock/stm32_hwspinlock.c
-> @@ -73,15 +73,14 @@ static int stm32_hwspinlock_probe(struct platform_device *pdev)
->         struct device *dev = &pdev->dev;
->         struct stm32_hwspinlock *hw;
->         void __iomem *io_base;
-> -       size_t array_size;
->         int i, ret;
+> diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
+> index d221fc9d756d..22e2ffb91743 100644
+> --- a/drivers/hwspinlock/sprd_hwspinlock.c
+> +++ b/drivers/hwspinlock/sprd_hwspinlock.c
+> @@ -93,8 +93,7 @@ static int sprd_hwspinlock_probe(struct platform_device *pdev)
+>                 return -ENODEV;
 >
->         io_base = devm_platform_ioremap_resource(pdev, 0);
->         if (IS_ERR(io_base))
->                 return PTR_ERR(io_base);
->
-> -       array_size = STM32_MUTEX_NUM_LOCKS * sizeof(struct hwspinlock);
-> -       hw = devm_kzalloc(dev, sizeof(*hw) + array_size, GFP_KERNEL);
-> +       hw = devm_kzalloc(dev, struct_size(hw, bank.lock, STM32_MUTEX_NUM_LOCKS),
-> +                         GFP_KERNEL);
->         if (!hw)
+>         sprd_hwlock = devm_kzalloc(&pdev->dev,
+> -                                  sizeof(struct sprd_hwspinlock_dev) +
+> -                                  SPRD_HWLOCKS_NUM * sizeof(*lock),
+> +                                  struct_size(sprd_hwlock, bank.lock, SPRD_HWLOCKS_NUM),
+>                                    GFP_KERNEL);
+>         if (!sprd_hwlock)
 >                 return -ENOMEM;
->
 > --
 > 2.27.0
 >

@@ -2,104 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC8049D3DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8AAD49D3DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbiAZUwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 15:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiAZUwh (ORCPT
+        id S231416AbiAZUwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 15:52:50 -0500
+Received: from brightrain.aerifal.cx ([216.12.86.13]:54198 "EHLO
+        brightrain.aerifal.cx" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231388AbiAZUwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:52:37 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA87C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:52:36 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so627535wme.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:52:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SF6zhPcKhoxZqHi04jVkuhfpQWVNnuWvLbbIWpA1cBQ=;
-        b=hw7p096T9NWcTMJSEK0D97o0OaQoXCaqSpXno1bl1HUEe8gD2l5yTsACgk/VCdWNLG
-         DhymikxrqjvALk1J4LJDlc/YIcrIfz8KvEuIDSImTTQs4nuzogXU9I//OdZ1LH1GTifv
-         SJ2JYN+LOMCx49727pRQ+AgN+N+X4BoQETge/Rx+BMAiztskyX7v1oARz3+ZX9C2528t
-         SOdUvRFeG+uwh5wmvPKLsrwyeltdDNY1n9EKS3sjwSYMzX9C9fFoV3gEsUGK+C5iJ184
-         xiDErAFlWgxBJtUQA7YgzisU+m58F3vypimGj5bwzKHhD0h9TTRAMjnF5Ef9TxprXDLY
-         3Kfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SF6zhPcKhoxZqHi04jVkuhfpQWVNnuWvLbbIWpA1cBQ=;
-        b=cafcWV0wMviKCxiA2uj1+0kbUoOcisvhfNn3nDMgazce8v7szejjO9H1hw4DqNrDLX
-         2r4XspMs0kLCpCBTjFb6YcxaF10NBjLNLOITUbJDZJh9HA/nd7PAIlS5TMKSZLfzuQ73
-         dl0Q+PAKKrKmgY13DzeX/+WOSsSZnCKI9/bZdAYKnj3SeNYhxpKhps+DmqBzHDSP7HK2
-         5O+xU4hVKpamTWm/He1paHhhlftoxUoEYbdi2Uc+rj3f2kU+IIXSfm0ROpxuW/7dzSxo
-         WFn4XZ1Wy/3d80dHogH0HU3th1+O/TL/5pK9oNDrVTSJi1Mkt7aV95nmFKEN9rnFSiTs
-         rnoQ==
-X-Gm-Message-State: AOAM533N4kkiEPX5NH/UI7s3+a0Am9B1g6JpyGli563oyFvj/SXMntfh
-        zk6+O+nQBIOWnRf3hlY/DHiwxA==
-X-Google-Smtp-Source: ABdhPJxOXWnr6Mzv4CRIP70qHZcdPEftwXA8x7moIaCkf7j2PHz/IKF3Q49EntNuj0r9L6TLIIHTVg==
-X-Received: by 2002:a05:600c:2dd7:: with SMTP id e23mr422644wmh.65.1643230355068;
-        Wed, 26 Jan 2022 12:52:35 -0800 (PST)
-Received: from localhost ([2a02:168:96c5:1:55ed:514f:6ad7:5bcc])
-        by smtp.gmail.com with ESMTPSA id j15sm339830wmq.19.2022.01.26.12.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 12:52:34 -0800 (PST)
-From:   Jann Horn <jannh@google.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jann Horn <jannh@google.com>
-Subject: [PATCH] usb: raw-gadget: fix handling of dual-direction-capable endpoints
-Date:   Wed, 26 Jan 2022 21:52:14 +0100
-Message-Id: <20220126205214.2149936-1-jannh@google.com>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+        Wed, 26 Jan 2022 15:52:49 -0500
+Date:   Wed, 26 Jan 2022 15:52:48 -0500
+From:   Rich Felker <dalias@libc.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] fs/binfmt_elf: Add padding NULL when argc == 0
+Message-ID: <20220126205247.GA9263@brightrain.aerifal.cx>
+References: <20220126175747.3270945-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126175747.3270945-1-keescook@chromium.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under dummy_hcd, every available endpoint is *either* IN or OUT capable.
-But with some real hardware, there are endpoints that support both IN and
-OUT. In particular, the PLX 2380 has four available endpoints that each
-support both IN and OUT.
+On Wed, Jan 26, 2022 at 09:57:47AM -0800, Kees Cook wrote:
+> Quoting Ariadne Conill:
+> 
+> "In several other operating systems, it is a hard requirement that the
+> first argument to execve(2) be the name of a program, thus prohibiting
+> a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
+> but it is not an explicit requirement[1]:
+> 
+>     The argument arg0 should point to a filename string that is
+>     associated with the process being started by one of the exec
+>     functions.
+> ...
+> Interestingly, Michael Kerrisk opened an issue about this in 2008[2],
+> but there was no consensus to support fixing this issue then.
+> Hopefully now that CVE-2021-4034 shows practical exploitative use[3]
+> of this bug in a shellcode, we can reconsider."
+> 
+> An examination of existing[4] users of execve(..., NULL, NULL) shows
+> mostly test code, or example rootkit code. While rejecting a NULL argv
+> would be preferred, it looks like the main cause of userspace confusion
+> is an assumption that argc >= 1, and buggy programs may skip argv[0]
+> when iterating. To protect against userspace bugs of this nature, insert
+> an extra NULL pointer in argv when argc == 0, so that argv[1] != envp[0].
+> 
+> Note that this is only done in the argc == 0 case because some userspace
+> programs expect to find envp at exactly argv[argc]. The overlap of these
+> two misguided assumptions is believed to be zero.
+> 
+> [1] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+> [2] https://bugzilla.kernel.org/show_bug.cgi?id=8408
+> [3] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+> [4] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
+> 
+> Reported-by: Ariadne Conill <ariadne@dereferenced.org>
+> Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  fs/binfmt_elf.c | 10 +++++++++-
+>  fs/exec.c       |  7 ++++++-
+>  2 files changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> index 605017eb9349..e456c48658ad 100644
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
+> @@ -297,7 +297,8 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+>  	ei_index = elf_info - (elf_addr_t *)mm->saved_auxv;
+>  	sp = STACK_ADD(p, ei_index);
+>  
+> -	items = (argc + 1) + (envc + 1) + 1;
+> +	/* Make room for extra pointer when argc == 0. See below. */
+> +	items = (min(argc, 1) + 1) + (envc + 1) + 1;
+>  	bprm->p = STACK_ROUND(sp, items);
+>  
+>  	/* Point sp at the lowest address on the stack */
+> @@ -326,6 +327,13 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+>  
+>  	/* Populate list of argv pointers back to argv strings. */
+>  	p = mm->arg_end = mm->arg_start;
+> +	/*
+> +	 * Include an extra NULL pointer in argv when argc == 0 so
+> +	 * that argv[1] != envp[0] to help userspace programs from
+> +	 * mishandling argc == 0. See fs/exec.c bprm_stack_limits().
+> +	 */
+> +	if (argc == 0 && put_user(0, sp++))
+> +		return -EFAULT;
+>  	while (argc-- > 0) {
+>  		size_t len;
+>  		if (put_user((elf_addr_t)p, sp++))
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 79f2c9483302..0b36384e55b1 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -495,8 +495,13 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
+>  	 * the stack. They aren't stored until much later when we can't
+>  	 * signal to the parent that the child has run out of stack space.
+>  	 * Instead, calculate it here so it's possible to fail gracefully.
+> +	 *
+> +	 * In the case of argc < 1, make sure there is a NULL pointer gap
+> +	 * between argv and envp to ensure confused userspace programs don't
+> +	 * start processing from argv[1], thinking argc can never be 0,
+> +	 * to block them from walking envp by accident. See fs/binfmt_elf.c.
+>  	 */
+> -	ptr_size = (bprm->argc + bprm->envc) * sizeof(void *);
+> +	ptr_size = (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
+>  	if (limit <= ptr_size)
+>  		return -E2BIG;
+>  	limit -= ptr_size;
+> -- 
+> 2.30.2
+> 
 
-raw-gadget currently gets confused and thinks that any endpoint that is
-usable as an IN endpoint can never be used as an OUT endpoint.
+This patch is not just wrong, but extremely dangerously wrong, to the
+point that it may make all suid-root binaries exploitable (at least
+dynamic linked ones).
 
-Fix it by looking at the direction in the configured endpoint descriptor
-instead of looking at the hardware capabilities.
+The ELF entry point contract is that argv+argc+1==envp, and in fact
+this is the "preferred" way of computing envp so as to avoid linear
+search over argv. In musl's dynamic linker we do exactly that; I'm not
+sure about glibc's. See:
 
-With this change, I can use the PLX 2380 with raw-gadget.
+https://git.musl-libc.org/cgit/musl/tree/ldso/dynlink.c?id=v1.2.2#n1740
 
-Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
-Signed-off-by: Jann Horn <jannh@google.com>
----
- drivers/usb/gadget/legacy/raw_gadget.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If argv[argc+1] wrongly contains a null pointer, semantically, that
+means the environment is empty and auxv starts at the next stack slot.
+It's an exercise for the reader to populate the environment in a way
+that this memory wrongly gets interpreted as a meaningful auxv. I'm
+not sure this is possible, but I wouldn't automatically rule it out.
 
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/le=
-gacy/raw_gadget.c
-index c5a2c734234a..d86c3a36441e 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -1004,7 +1004,7 @@ static int raw_process_ep_io(struct raw_dev *dev, str=
-uct usb_raw_ep_io *io,
- 		ret =3D -EBUSY;
- 		goto out_unlock;
- 	}
--	if ((in && !ep->ep->caps.dir_in) || (!in && ep->ep->caps.dir_in)) {
-+	if (in !=3D usb_endpoint_dir_in(ep->ep->desc)) {
- 		dev_dbg(&dev->gadget->dev, "fail, wrong direction\n");
- 		ret =3D -EINVAL;
- 		goto out_unlock;
+In short: YOU CANNOT CHANGE/BREAK CONTRACTS TO MITIGATE A VULN. Doing
+so just makes new vulns in the programs that were correct before.
 
-base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
---=20
-2.35.0.rc0.227.g00780c9af4-goog
+Silently replacing argc==0 with argc==1 and argv[0]=="" would be a
+safe variant of this, but I'm really in favor of just erroring out,
+but *only doing it when the exec is a privilege boundary* (suid/etc.)
+to minimize the chance of breaking software dependent on allowing
+argc==0.
 
+Rich

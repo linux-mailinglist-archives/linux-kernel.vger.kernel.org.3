@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9356349D5FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E87149D601
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbiAZXNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 18:13:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
+        id S233574AbiAZXNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 18:13:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbiAZXM4 (ORCPT
+        with ESMTP id S233416AbiAZXM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 18:12:56 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938A7C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:12:55 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id z20so1710182ljo.6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:12:55 -0800 (PST)
+        Wed, 26 Jan 2022 18:12:57 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FC0C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:12:57 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id c7so1185493ljr.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:12:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:organization:content-transfer-encoding;
-        bh=G9Hu+JeymXvWuatFDwPB/oJw84mqyQsQKnr50lHjCVs=;
-        b=ZylTsiYlkM5bSFlaXvMfbJ2nPRWztPZCRUYR66IzkY1yBZig/210jDM8waw+fJrPmn
-         P3icxCvofFj258zwjgD9ZqgVYYo8xSsbD62lT7GPfWN23gkpO8zFlK0njmv0btVh0SGh
-         WfAf6TN3eEtrVgqhGbphOmmY3KdVtMzyrMpg1dta/RLAlJG3p/51xLGgCzQDWH79cSyF
-         jsG6TDz1gnp2kdw0heMaMIxBZopmwHpX5Yp51g7vJ0N5jLAjjYT+3/yGroTjQXgoJHN0
-         Wz+tDplZxqoZBxmMjMPu8xWHrR8520GYkv3m1yVLdrNH6mCdcezz7XPCcczTYlf76V+Z
-         V24A==
+        bh=i2aQuRxQanU334DgDb3mt+uf8YbW8laWJVhEOzT9D7U=;
+        b=dPO+BoyqpMxD2b8neCq+HOEnFu087569cqxrYQ5wXOoVRCTvklBqJ9VSfhc8+klYjF
+         yQm93n3jYx42JgH0vKyxjWP8BCeKpmAic5IEe4AuuAooDYzplcRWDyD/3WViDr5lobx2
+         mz0HdwM+9r/poN4pqlo0zg74RbqV9rYCNkcLxLv0ZJIg7dlm3UVUSfA8v9cdFS3lVLv1
+         zKJGypK/N/XkkIIhDfgtXqEiwSIMIZT8N6M0fAoOvILzPsMZkM6aHtLoC/q9ZXx6/HGA
+         aGRk3z06rqPe+PvRS3ssl15kS8T4ooSnmY/nsw3JMm0/zF6q8dg43TL6xvbDVlIF7IBd
+         XrUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:organization:content-transfer-encoding;
-        bh=G9Hu+JeymXvWuatFDwPB/oJw84mqyQsQKnr50lHjCVs=;
-        b=bzCWk2yPpTffdyLoP9I2waAs2ILTjISVVII5CnnKqFv42RswD3O/Dg1y4+430E2KqU
-         CqE5zC956dsuX5C/dyWh7c1aSiJ6VluA8cQEgVu3/6Jg2eHELChpZfWKtDVIwTS/VRaZ
-         fm2eJr8xL060esxY6A9YpuleaE2XFpqcPO8l7rViUfJJPgrY1ifIgd02fUE7fZzDuW++
-         sR3+K/MOtAV7xRT18N6LbHmtq4Sh+Qvg5aBnxFhpjqZsCqqAtGo9u3nvnfrCAfQlWBX1
-         Pm78CKOxeFD31gq1eTWmflh+QJnNLFrby5cxG5UOjH1P3jsRv59TzZRxG34N6s260non
-         hJAQ==
-X-Gm-Message-State: AOAM531UB76MpF4cwnWhAkr3664em65rYKNouqCobnkzHej2coYXNZ6D
-        wXT5uCByJpfobYKR4quRJK9V8w==
-X-Google-Smtp-Source: ABdhPJxfwFAn/ctQGGBzoRN89vhxvau3FkI7yFI8xwhLLRtSVdrKkafz/Q0jM7lgr+1rrfDCOLqZAw==
-X-Received: by 2002:a2e:bf15:: with SMTP id c21mr971797ljr.396.1643238773890;
-        Wed, 26 Jan 2022 15:12:53 -0800 (PST)
+        bh=i2aQuRxQanU334DgDb3mt+uf8YbW8laWJVhEOzT9D7U=;
+        b=lOOzZ7JmwFnT+GQqE/F/I4XJzVcNKd+kRpXgewCHs4jALSWCxQV+1A1e+BbSCgW4DU
+         Vx1ldMZ0JcjE5ygsFSZ3bH/3YGMJH3cC10DscCX14GxeGjkrVepXbyx5uO5fLwAKYM/j
+         VwfHspeBt/SjI91yBgGd+t5X5Z3cYcZ0ZGOhHxfWlJUmCcWdG0SWR3+walFjjv36sxjF
+         mo1OmVl1zxSpF1dVbXhnKRS7aKohcypHg9lQBE2Bjb/wtoChKFgjtTXM5QfJJfP4YENy
+         Qv8sLaGF/FDRIkcNp8/qImo0c3II2LFmBD/5PAVzIhvcy4C+kaXYrYmjiF0/2UqW9Bcx
+         CLTA==
+X-Gm-Message-State: AOAM531/wZSRNOlHYIcGYcN+GeoRizzzkwR0gcjqspI9voDwqOUpEj7j
+        ZZZ5LVEdPZYf9pxIwWU1F6bBCQ==
+X-Google-Smtp-Source: ABdhPJw1huaemcEPtHkuy71ODp6RIuR5de3Z7hh/TSY9xpnGCY67kIY6aMTsiVGH7MbHRPiCt9AHcA==
+X-Received: by 2002:a05:651c:1781:: with SMTP id bn1mr1024129ljb.78.1643238775475;
+        Wed, 26 Jan 2022 15:12:55 -0800 (PST)
 Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id p28sm1529335lfo.79.2022.01.26.15.12.51
+        by smtp.gmail.com with ESMTPSA id p28sm1529335lfo.79.2022.01.26.15.12.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 15:12:52 -0800 (PST)
+        Wed, 26 Jan 2022 15:12:54 -0800 (PST)
 From:   Tobias Waldekranz <tobias@waldekranz.com>
 To:     davem@davemloft.net, kuba@kernel.org
 Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
@@ -55,9 +55,9 @@ Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Vladimir Oltean <olteanv@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 1/2] net: dsa: mv88e6xxx: Improve performance of busy bit polling
-Date:   Thu, 27 Jan 2022 00:12:38 +0100
-Message-Id: <20220126231239.1443128-2-tobias@waldekranz.com>
+Subject: [PATCH net-next 2/2] net: dsa: mv88e6xxx: Improve indirect addressing performance
+Date:   Thu, 27 Jan 2022 00:12:39 +0100
+Message-Id: <20220126231239.1443128-3-tobias@waldekranz.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220126231239.1443128-1-tobias@waldekranz.com>
 References: <20220126231239.1443128-1-tobias@waldekranz.com>
@@ -68,105 +68,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid a long delay when a busy bit is still set and has to be polled
-again.
+Before this change, both the read and write callback would start out
+by asserting that the chip's busy flag was cleared. However, both
+callbacks also made sure to wait for the clearing of the busy bit
+before returning - making the initial check superfluous. The only
+time that would ever have an effect was if the busy bit was initially
+set for some reason.
 
-Measurements on a system with 2 Opals (6097F) and one Agate (6352)
-show that even with this much tighter loop, we have about a 50% chance
-of the bit being cleared on the first poll, all other accesses see the
-bit being cleared on the second poll.
+With that in mind, make sure to perform an initial check of the busy
+bit, after which both read and write can rely the previous operation
+to have waited for the bit to clear.
 
-On a standard MDIO bus running MDC at 2.5MHz, a single access with 32
-bits of preamble plus 32 bits of data takes 64*(1/2.5MHz) = 25.6us.
-
-This means that mv88e6xxx_smi_direct_wait took 26us + CPU overhead in
-the fast scenario, but 26us + 1500us + 26us + CPU overhead in the slow
-case - bringing the average close to 1ms.
-
-With this change in place, the slow case is closer to 2*26us + CPU
-overhead, with the average well below 100us - a 10x improvement.
-
-This translates to real-world winnings. On a 3-chip 20-port system,
-the modprobe time drops by 88%:
-
-Before:
-
-root@coronet:~# time modprobe mv88e6xxx
-real    0m 15.99s
-user    0m 0.00s
-sys     0m 1.52s
-
-After:
-
-root@coronet:~# time modprobe mv88e6xxx
-real    0m 2.21s
-user    0m 0.00s
-sys     0m 1.54s
+This cuts the number of operations on the underlying MDIO bus by 25%
 
 Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 8 ++++----
- drivers/net/dsa/mv88e6xxx/smi.c  | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/net/dsa/mv88e6xxx/chip.h |  1 +
+ drivers/net/dsa/mv88e6xxx/smi.c  | 24 ++++++++++++++----------
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 58ca684d73f7..3566617143cf 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -86,12 +86,12 @@ int mv88e6xxx_write(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val)
- int mv88e6xxx_wait_mask(struct mv88e6xxx_chip *chip, int addr, int reg,
- 			u16 mask, u16 val)
- {
-+	const unsigned long timeout = jiffies + msecs_to_jiffies(50);
- 	u16 data;
- 	int err;
--	int i;
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
+index 8271b8aa7b71..438cee853d07 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.h
++++ b/drivers/net/dsa/mv88e6xxx/chip.h
+@@ -392,6 +392,7 @@ struct mv88e6xxx_chip {
+ struct mv88e6xxx_bus_ops {
+ 	int (*read)(struct mv88e6xxx_chip *chip, int addr, int reg, u16 *val);
+ 	int (*write)(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val);
++	int (*init)(struct mv88e6xxx_chip *chip);
+ };
  
- 	/* There's no bus specific operation to wait for a mask */
--	for (i = 0; i < 16; i++) {
-+	do {
- 		err = mv88e6xxx_read(chip, addr, reg, &data);
- 		if (err)
- 			return err;
-@@ -99,8 +99,8 @@ int mv88e6xxx_wait_mask(struct mv88e6xxx_chip *chip, int addr, int reg,
- 		if ((data & mask) == val)
- 			return 0;
- 
--		usleep_range(1000, 2000);
--	}
-+		cpu_relax();
-+	} while (time_before(jiffies, timeout));
- 
- 	dev_err(chip->dev, "Timeout while waiting for switch\n");
- 	return -ETIMEDOUT;
+ struct mv88e6xxx_mdio_bus {
 diff --git a/drivers/net/dsa/mv88e6xxx/smi.c b/drivers/net/dsa/mv88e6xxx/smi.c
-index 282fe08db050..a59f32243e08 100644
+index a59f32243e08..1ebdaa55e710 100644
 --- a/drivers/net/dsa/mv88e6xxx/smi.c
 +++ b/drivers/net/dsa/mv88e6xxx/smi.c
-@@ -55,11 +55,11 @@ static int mv88e6xxx_smi_direct_write(struct mv88e6xxx_chip *chip,
- static int mv88e6xxx_smi_direct_wait(struct mv88e6xxx_chip *chip,
- 				     int dev, int reg, int bit, int val)
+@@ -104,11 +104,6 @@ static int mv88e6xxx_smi_indirect_read(struct mv88e6xxx_chip *chip,
  {
-+	const unsigned long timeout = jiffies + msecs_to_jiffies(50);
- 	u16 data;
  	int err;
--	int i;
  
--	for (i = 0; i < 16; i++) {
-+	do {
- 		err = mv88e6xxx_smi_direct_read(chip, dev, reg, &data);
- 		if (err)
- 			return err;
-@@ -67,8 +67,8 @@ static int mv88e6xxx_smi_direct_wait(struct mv88e6xxx_chip *chip,
- 		if (!!(data & BIT(bit)) == !!val)
- 			return 0;
+-	err = mv88e6xxx_smi_direct_wait(chip, chip->sw_addr,
+-					MV88E6XXX_SMI_CMD, 15, 0);
+-	if (err)
+-		return err;
+-
+ 	err = mv88e6xxx_smi_direct_write(chip, chip->sw_addr,
+ 					 MV88E6XXX_SMI_CMD,
+ 					 MV88E6XXX_SMI_CMD_BUSY |
+@@ -132,11 +127,6 @@ static int mv88e6xxx_smi_indirect_write(struct mv88e6xxx_chip *chip,
+ {
+ 	int err;
  
--		usleep_range(1000, 2000);
--	}
-+		cpu_relax();
-+	} while (time_before(jiffies, timeout));
+-	err = mv88e6xxx_smi_direct_wait(chip, chip->sw_addr,
+-					MV88E6XXX_SMI_CMD, 15, 0);
+-	if (err)
+-		return err;
+-
+ 	err = mv88e6xxx_smi_direct_write(chip, chip->sw_addr,
+ 					 MV88E6XXX_SMI_DATA, data);
+ 	if (err)
+@@ -155,9 +145,20 @@ static int mv88e6xxx_smi_indirect_write(struct mv88e6xxx_chip *chip,
+ 					 MV88E6XXX_SMI_CMD, 15, 0);
+ }
  
- 	return -ETIMEDOUT;
++static int mv88e6xxx_smi_indirect_init(struct mv88e6xxx_chip *chip)
++{
++	/* Ensure that the chip starts out in the ready state. As both
++	 * reads and writes always ensure this on return, they can
++	 * safely depend on the chip not being busy on entry.
++	 */
++	return mv88e6xxx_smi_direct_wait(chip, chip->sw_addr,
++					 MV88E6XXX_SMI_CMD, 15, 0);
++}
++
+ static const struct mv88e6xxx_bus_ops mv88e6xxx_smi_indirect_ops = {
+ 	.read = mv88e6xxx_smi_indirect_read,
+ 	.write = mv88e6xxx_smi_indirect_write,
++	.init = mv88e6xxx_smi_indirect_init,
+ };
+ 
+ int mv88e6xxx_smi_init(struct mv88e6xxx_chip *chip,
+@@ -175,5 +176,8 @@ int mv88e6xxx_smi_init(struct mv88e6xxx_chip *chip,
+ 	chip->bus = bus;
+ 	chip->sw_addr = sw_addr;
+ 
++	if (chip->smi_ops->init)
++		return chip->smi_ops->init(chip);
++
+ 	return 0;
  }
 -- 
 2.25.1

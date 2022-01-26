@@ -2,93 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6DD49D00C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F8249D02E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243308AbiAZQwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:52:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37556 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236507AbiAZQwS (ORCPT
+        id S243401AbiAZQ77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243390AbiAZQ75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:52:18 -0500
+        Wed, 26 Jan 2022 11:59:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA659C06161C;
+        Wed, 26 Jan 2022 08:59:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A19EC6193B;
-        Wed, 26 Jan 2022 16:52:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E20C340E3;
-        Wed, 26 Jan 2022 16:52:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59D976091A;
+        Wed, 26 Jan 2022 16:59:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06852C340E7;
+        Wed, 26 Jan 2022 16:59:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643215937;
-        bh=NX4Hlz3e3ASOAcsOzjd8Irwr9rnJ14JnxiTx/r4AofM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mNrcBhHhPbrxWEvOmXY+ZOy1754JLA/j+krUWiDKJEyt0GlUtdKUqT2IHEWzUt8ic
-         UTUy/4GOz4QQT9eeMY5s5wDYi5mCddNWpV2DraqitYfX1TKsI4jpTX6mHDI+kTf15l
-         z797R1DCSshahywdXqa4wKxatf6ji+IQTzWsHppnt7VbmlUJUwEA3eYaaeroU85dsL
-         GfTbETtIygJL0Ez9B3lX/ordSuHCPotbHCh2DMqGxoUSVnzTnDHA+C7QDcmd6Pq2Me
-         LgpxyhslMdpa7FdxrXVU3tubSMTDrUNITUVZRc1RYcJryzkagjLIHmaF8I1VZAS4QN
-         5SlQqlM/rwHLQ==
-Date:   Wed, 26 Jan 2022 08:52:14 -0800
-From:   Keith Busch <kbusch@kernel.org>
-To:     Klaus Jensen <its@irrelevant.dk>
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
-        martin.petersen@oracle.com, colyli@suse.de, arnd@arndb.de
-Subject: Re: [RFC 0/7] 64-bit data integrity field support
-Message-ID: <20220126165214.GA1782352@dhcp-10-100-145-180.wdc.com>
-References: <20220124160107.1683901-1-kbusch@kernel.org>
- <YfFc1f2MoSQzyxZ4@apples>
+        s=k20201202; t=1643216396;
+        bh=erkUnUzFbvhJS7cgGj2rH0FT37mFoWDGUog4NFCmXCE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pVLd3kzSw24G5WC1fXL8IGWEgBYtT4RK9RHXc3ACLHOg+GTYqYIEdwASpHzx+nbnZ
+         feyq9SmGeKn544CDJGgqLQzl9iQg1g7iTfXsYXgXB3+U+hP42I/1QAewIlkmrWsV+O
+         ORPEpsqqx/MW1t7bZZ07vswxRvwXb55f/sAUFTTmuVJmnBGx3oHeAyaQJgRMkSJwhz
+         0tuOBjrHUqiVnTvtETNvRlsX/o29ZqPzw265GU22G4CpMS1LtwCnxLxvlngI9706XJ
+         RseHThzC5PWpPQgAZoPt3g06ndEpSw36CiY26jwPhp21ANvW94zTECwLhheRlqxv2n
+         UadygWUuR1Gbw==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: stmmac: dwmac-sun8i: use return val of readl_poll_timeout()
+Date:   Thu, 27 Jan 2022 00:52:15 +0800
+Message-Id: <20220126165215.1921-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfFc1f2MoSQzyxZ4@apples>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 03:38:13PM +0100, Klaus Jensen wrote:
-> On Jan 24 08:01, Keith Busch wrote:
-> > The NVM Express protocol added enhancements to the data integrity field
-> > formats beyond the T10 defined protection information. A detailed
-> > description of the new formats can be found in the NVMe's NVM Command
-> > Set Specification, section 5.2, available at:
-> > 
-> >   https://nvmexpress.org/wp-content/uploads/NVM-Command-Set-Specification-1.0b-2021.12.18-Ratified.pdf
-> > 
-> > This series implements one possible new format: the CRC64 guard with
-> > 48-bit reference tags. This does not add support for the variable
-> > "storage tag" field.
-> > 
-> > The NVMe CRC64 parameters (from Rocksoft) were not implemented in the
-> > kernel, so a software implementation is included in this series based on
-> > the generated table. This series does not include any possible hardware
-> > excelleration (ex: x86's pclmulqdq), so it's not very high performant
-> > right now.
-> > 
-> 
-> Hi Keith,
-> 
-> Tested this on QEMU and (assuming we didnt implement the same bugs) it
-> looks good functionally for separate metadata. However, it should also
-> be able to support PRACT (i.e. pi strip/insert device-side) if
-> nvme_ns_has_pi() is updated to also match on the 16 byte pi tuple. I
-> made it work by just hitting it with a hammer and changing the
-> comparison to hard-coded 16 bytes, but it should of course handle both
-> cases.
+When readl_poll_timeout() timeout, we'd better directly use its return
+value.
 
-Thanks for checking with the qemu device!
+Before this patch:
+[    2.145528] dwmac-sun8i: probe of 4500000.ethernet failed with error -14
 
-I'll add the PRACT support for the next version, but will wait till next
-week to post it in case there's more feedback to consider.
+After this patch:
+[    2.138520] dwmac-sun8i: probe of 4500000.ethernet failed with error -110
 
-> Naveen and I will post the emulated implementation (that certainly isnt
-> very high performant either) on qemu-block ASAP if others are interested
-> in giving this a spin without having hardware available.
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-There are more features with this TP than are implemented here. I'm just
-enabling a product that only supports the 64-bit CRC with 0 STS, but I'm
-assuming your QEMU implementation may be more feature complete. If
-anyone is interested in 32-bit CRC or >0 STS, there's more work to
-follow on from here, but I currently don't have such a target to test
-against.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
+index 617d0e4c6495..09644ab0d87a 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
+@@ -756,7 +756,7 @@ static int sun8i_dwmac_reset(struct stmmac_priv *priv)
+ 
+ 	if (err) {
+ 		dev_err(priv->device, "EMAC reset timeout\n");
+-		return -EFAULT;
++		return err;
+ 	}
+ 	return 0;
+ }
+-- 
+2.34.1
+

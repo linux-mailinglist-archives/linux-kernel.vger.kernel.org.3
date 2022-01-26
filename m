@@ -2,83 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADBF49D526
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D384A49D52E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbiAZWRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:17:51 -0500
-Received: from mga06.intel.com ([134.134.136.31]:8826 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229490AbiAZWRv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:17:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643235470; x=1674771470;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xooQbuHivbMOOs9OpcyfoNfdN4za7A4ATPcdg05Z0lw=;
-  b=KgRcHRtNIcVaPRavsJBtjigjXKXJ9q/YvA2AZwJVoedUZ6uj4GSguGc7
-   Y4M2ogFkHStyaOpUTcQkX0dea7B/lEx4JTDUui4XKJ0a7qvV8b9mhbR60
-   /tSpjhrd+0BnC3qhSsvINFbZ7GSG9lbH0UNB19KEmj9l+EW58bOYXiz/8
-   j+VaBW42mVLzSZlRcwBTGQbDt8jwU1CBgSnTa8RB/utTkpOnRCsCG9fRK
-   B91awRWPeIJEZEw7CvXZLMJifPDT9RrEZxuKWRMV1a32VMDKjyQzQfDGW
-   EQGwIYu16U2OiGpXorfDy4Vi/WyhM1oDrHjdN9+ByQTkLPSqoi8logzw7
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="307379875"
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="307379875"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 14:17:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
-   d="scan'208";a="480040840"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 26 Jan 2022 14:17:22 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCqbR-000LiT-W6; Wed, 26 Jan 2022 22:17:21 +0000
-Date:   Thu, 27 Jan 2022 06:16:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [hverkuil-media-tree:extron 101/103]
- ./usr/include/linux/cec.h:150:19: error: unknown type name 'bool'
-Message-ID: <202201270613.3EEZBJH4-lkp@intel.com>
+        id S233101AbiAZWSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233122AbiAZWSL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 17:18:11 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438E0C061747
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:18:11 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id n16-20020a17090a091000b001b46196d572so948301pjn.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:18:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dIYkVQemKDQ2y3bmpym5ZYoIUxFabj5sPwnUV0EmyK0=;
+        b=twxr89mbaTAnP8dq8YFVOzjDl7dJbJgmeoThgAobqg2LYDWbxuYX1Linn83YeirfD3
+         SgXCZUUjDWEjMBoQwH45P7YFcRIvE4Ym8KF39ctqj+El6c8fRQoN+tYmovajyFRt9o/h
+         75dOn2d82d4KD8DPDy9Y9UxfywfXGbawIjI8Hp1H/J0IjOz2fipmcgHOT0p2ehYUpqUS
+         gU0Bx5G9E19T9uIKnIlQW6rEamiB9WvR31BzpPDkJ5iNSLQPTYyOcYZ2EexA6sLGXfD6
+         YWxx5Vn1ibXLhWxuEPooaJTm/YjlG9y4AeRdnjClO6U0ZC4NQYJ8tOD89/6Ti9YOZevk
+         foLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dIYkVQemKDQ2y3bmpym5ZYoIUxFabj5sPwnUV0EmyK0=;
+        b=ZwRzhCA+REuo33TLApxM9UiJnkTQxY0Hypc+ctZP+gl2t/kL2MCDacdXrdrCgrRvCc
+         1OvL+yj9ila/SfouxPR64ChHFoKiPXNaN1S7kYnJxzaGDesRocEX8fykULUREjU7R615
+         HE+u4i0SxBCyAN+5dq8C6WSD7mrdrpSrTwbdjthio2zqV+toeIMALo6AYike5Xye7wdh
+         XbC+nxPwmz1f8ndUetTIzOCeSfAyVjDeTS69FV+qj06n+AujQGvBDuAlO52TLvpYIaOc
+         MbCKDOcr6oipvKVJtmdUmgYOZv4/sscJoJk9a4KkCwnT6OxTjZgd4KSFEHhwUt2Zkz2v
+         lYWg==
+X-Gm-Message-State: AOAM533qRSQGGeB0HeX8wSNV838DaUIZXBJCjIuo/QZ8JNHGnO93OeNM
+        qkxKfYcP9Dbx83TJQtA3+O/3Gg==
+X-Google-Smtp-Source: ABdhPJwj9zXQUjLBroliCIG3Eo6PSOIGzmIbNf/ymx9psMbfp47HmhIkDtHe9fZysk1LRnZyL3Z++w==
+X-Received: by 2002:a17:90b:4c8e:: with SMTP id my14mr10841049pjb.243.1643235490641;
+        Wed, 26 Jan 2022 14:18:10 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:1f3a:4e9b:8fa7:36dc:a805:c73f])
+        by smtp.gmail.com with ESMTPSA id t17sm4233742pgm.69.2022.01.26.14.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 14:18:10 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
+        tdas@codeaurora.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, bjorn.andersson@linaro.org,
+        davem@davemloft.net, netdev@vger.kernel.org
+Subject: [PATCH 0/8] Add ethernet support for Qualcomm SA8155p-ADP board
+Date:   Thu, 27 Jan 2022 03:47:17 +0530
+Message-Id: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git extron
-head:   54377f21d8b2084a9f5993230bdab8e8cd55bb22
-commit: d679f6adf24b7fef91e8a3b3584b48587e9cf0a2 [101/103] cec.h: add cec_msg_recv_is_tx_result() helper
-config: i386-randconfig-a012-20220124 (https://download.01.org/0day-ci/archive/20220127/202201270613.3EEZBJH4-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree extron
-        git checkout d679f6adf24b7fef91e8a3b3584b48587e9cf0a2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+The SA8155p-ADP board supports on-board ethernet (Gibabit Interface),
+with support for both RGMII and RMII buses.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This patchset adds the support for the same.
 
-All errors (new ones prefixed by >>):
+Note that this patchset is based on an earlier sent patchset
+for adding PDC controller support on SM8150 (see [1]).
 
-   In file included from <built-in>:1:
-   In file included from ./usr/include/linux/cec-funcs.h:11:
->> ./usr/include/linux/cec.h:150:19: error: unknown type name 'bool'
-   static __inline__ bool cec_msg_recv_is_tx_result(const struct cec_msg *msg)
-                     ^
-   1 error generated.
+[1]. https://lore.kernel.org/linux-arm-msm/20220119203133.467264-1-bhupesh.sharma@linaro.org/T
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Bhupesh Sharma (3):
+  clk: qcom: gcc: Add PCIe, EMAC and UFS GDSCs for SM8150
+  clk: qcom: gcc-sm8150: use runtime PM for the clock controller
+  clk: qcom: gcc-sm8150: Use PWRSTS_ON (only) as a workaround for emac
+    gdsc
+
+Bjorn Andersson (1):
+  net: stmmac: dwmac-qcom-ethqos: Adjust rgmii loopback_en per platform
+
+Vinod Koul (4):
+  dt-bindings: net: qcom,ethqos: Document SM8150 SoC compatible
+  net: stmmac: Add support for SM8150
+  arm64: dts: qcom: sm8150: add ethernet node
+  arm64: dts: qcom: sa8155p-adp: Enable ethernet node
+
+ .../devicetree/bindings/net/qcom,ethqos.txt   |   4 +-
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts      | 144 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |  27 ++++
+ drivers/clk/qcom/gcc-sm8150.c                 | 105 +++++++++++--
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c        |  37 ++++-
+ include/dt-bindings/clock/qcom,gcc-sm8150.h   |   9 +-
+ 6 files changed, 305 insertions(+), 21 deletions(-)
+
+-- 
+2.34.1
+

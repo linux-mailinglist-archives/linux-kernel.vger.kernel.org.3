@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5770D49D5BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F95249D5BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbiAZWwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        id S232208AbiAZWxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbiAZWwE (ORCPT
+        with ESMTP id S231213AbiAZWxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:52:04 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFA4C061748;
-        Wed, 26 Jan 2022 14:52:04 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id e8so955900ilm.13;
-        Wed, 26 Jan 2022 14:52:04 -0800 (PST)
+        Wed, 26 Jan 2022 17:53:32 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF48BC061748
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:53:32 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id d15-20020a17090a110f00b001b4e7d27474so1043885pja.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:53:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SbX/CA9rx3VdoijI1jnik093tt/YSMZq2p12OY56GJE=;
-        b=FDvaV/SVpssUS1kX5dDZFCvk8MRpwyvPx0Z+IIgr78SYs83UY/9cNwv7wxVU1y71zf
-         YFn/8hqfrl1wpKm+qrMwLTtYLgFwIHRyIQvqaO8hmWCF3/DT0nR2VJbNPIhsV+2792di
-         Ndq/uKMuB8daKf19+dT1VHwKgYjzr9DN4aHQKfqjtxDYXvNa4EFjA5GxA22vTDUcn4JF
-         6jMRF8eZyCPe0ilfZBvCGqBHNsU8fABVwF6U63Hq6deKhB72TpkZyGtaZvdCyfVw8icq
-         cbAnBwyH1JDD81+4HRRQ5b+NL34bUnHL/pxfxb1FCI+VZh3/OMe0W+NyRVlJWZqseDyF
-         +ZYQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jmylYnPW0itqk7X3kALZZJzsAaqdNt+3di958skR0YI=;
+        b=PHqUwsaNVoleX6lM8/jK8bmNbOWlq2er+xvJuFqzw6iPanil4hooAU8qxSxIqs3gnx
+         yD9wnS+rsC5aOFii+X674igUsl6mXFK8bCd/0xiCKcYur8FlJGVHBVZctdKSCdJgYe1x
+         5UnYTJIOx7UZVbzQCFMMs6OhpI24L0xOF/rR4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SbX/CA9rx3VdoijI1jnik093tt/YSMZq2p12OY56GJE=;
-        b=MzHU2+FiqXoXktfOO9hrCVfkAEoFrTQCtLWWd3YAj3o9u2ZgPekMZSlvlqQi2J9C8t
-         Y4khvDno/bslm94o6kMw8XqmQTxDLDE4HpRTa49oRlMp6nLKxJP9tdTA3X4CDIw4nCe3
-         FZf7Xqc+IJePYU2mPPxski9+X1VnwpF8aO94zkXPy93qDQz4pOthW7Ucx4BHtKP4Ji3r
-         O8ZsOV/3AO+NiK0MNUAv4mU5+18wUaYwQxzjEW9bfIaDm4ZFCGZ5HHF345nQaWF+MFOt
-         llWbIyY90wy66nYOB7JwFUdXXXcuitarwWxh7EyPA6dyjk135JF2MaR9FzX+VQW0khYX
-         X/fg==
-X-Gm-Message-State: AOAM531ynjfs7XUBHx07MvqJyVa7b8DgE4PEmQ+sxJhwYtOH7mE3hLQY
-        FCYbgmcf527StMvN5AFRf4dKZjBoe2fJz/XewUs=
-X-Google-Smtp-Source: ABdhPJz7GBY/JMkN6SYLj8sxtQBg5EJtrS4PlUVpZ/JYCUtK5E7iqpZDgUjlCM2KZJxqGEF7BOK/ADklNvpBSQT7mZ4=
-X-Received: by 2002:a05:6e02:158a:: with SMTP id m10mr925657ilu.59.1643237523612;
- Wed, 26 Jan 2022 14:52:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jmylYnPW0itqk7X3kALZZJzsAaqdNt+3di958skR0YI=;
+        b=HW76pQXzhk7SWaG8kqq5IrdeDa+9v5JVD0IA6eWQ0sTiA9r5jXHtID/VIj+BMcoJtg
+         1uId3KNPNt4lgVAkRPeAMTpgZAEaZpr0K6Iaj9vxFF9iK6R8gVuG5AZSDWapBAOQB/Dw
+         Dvw3cudz58GQjCOjvlBO3zztZO8hut1HpzQQcneEzN+cepp+LBuFeJf2q6FloAbnKAtB
+         Zlj6LkpOf+IFNqC7rq9jE4sdMN+chDgl5j0o0c/IFN6t4ehElnKwXK8f6QCmwKhxFuBR
+         E56XWQ4igZWUOClO0eewlRQ7uh1g3rTlxB/+nrjUjkTsggpkL02YEtAF2Fe35+7W6P2p
+         0VIg==
+X-Gm-Message-State: AOAM530t7cGWF9fU/bw/Hw/hR/+TQioay6H0NJrJzJqkX1R20205P4A0
+        kLKP3Qw2ts1RefUGcP22oY6kVA==
+X-Google-Smtp-Source: ABdhPJz0naa97lzLP+/kLQLkxJiIfooOGk727zm3c6gKvGHG1g4Up7tKbetD2ZS99Jox6VBbC04MAw==
+X-Received: by 2002:a17:90b:3852:: with SMTP id nl18mr10993180pjb.228.1643237612205;
+        Wed, 26 Jan 2022 14:53:32 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b14sm3246409pfm.17.2022.01.26.14.53.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 14:53:31 -0800 (PST)
+Date:   Wed, 26 Jan 2022 14:53:31 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Saeed Mahameed <saeedm@nvidia.com>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH RESEND] net/mlx5e: Use struct_group() for memcpy() region
+Message-ID: <202201261452.97A809BE9C@keescook>
+References: <20220124172242.2410996-1-keescook@chromium.org>
+ <20220126212854.6gxffia7vj6cbtbh@sx1>
 MIME-Version: 1.0
-References: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
- <20220119135450.564115-1-Jason@zx2c4.com>
-In-Reply-To: <20220119135450.564115-1-Jason@zx2c4.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 26 Jan 2022 14:51:52 -0800
-Message-ID: <CANcMJZABKTdwU8455pLfBjMjgsDO7BNjNWTvwx0sP+3TcJw_XA@mail.gmail.com>
-Subject: Re: [PATCH] lib/crypto: blake2s: avoid indirect calls to compression
- function for Clang CFI
-To:     "Jason A. Donenfeld" <jason@zx2c4.com>
-Cc:     Miles Chen <miles.chen@mediatek.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        YongQin Liu <yongqin.liu@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126212854.6gxffia7vj6cbtbh@sx1>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 11:17 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> blake2s_compress_generic is weakly aliased to blake2s_generic. The
-> current harness for function selection uses a function pointer, which is
-> ordinarily inlined and resolved at compile time. But when Clang's CFI is
-> enabled, CFI still triggers when making an indirect call via a weak
-> symbol. This seems like a bug in Clang's CFI, as though it's bucketing
-> weak symbols and strong symbols differently. It also only seems to
-> trigger when "full LTO" mode is used, rather than "thin LTO".
->
-> [    0.000000][    T0] Kernel panic - not syncing: CFI failure (target: blake2s_compress_generic+0x0/0x1444)
-> [    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-mainline-06981-g076c855b846e #1
-> [    0.000000][    T0] Hardware name: MT6873 (DT)
-> [    0.000000][    T0] Call trace:
-> [    0.000000][    T0]  dump_backtrace+0xfc/0x1dc
-> [    0.000000][    T0]  dump_stack_lvl+0xa8/0x11c
-> [    0.000000][    T0]  panic+0x194/0x464
-> [    0.000000][    T0]  __cfi_check_fail+0x54/0x58
-> [    0.000000][    T0]  __cfi_slowpath_diag+0x354/0x4b0
-> [    0.000000][    T0]  blake2s_update+0x14c/0x178
-> [    0.000000][    T0]  _extract_entropy+0xf4/0x29c
-> [    0.000000][    T0]  crng_initialize_primary+0x24/0x94
-> [    0.000000][    T0]  rand_initialize+0x2c/0x6c
-> [    0.000000][    T0]  start_kernel+0x2f8/0x65c
-> [    0.000000][    T0]  __primary_switched+0xc4/0x7be4
-> [    0.000000][    T0] Rebooting in 5 seconds..
+On Wed, Jan 26, 2022 at 01:28:54PM -0800, Saeed Mahameed wrote:
+> On 24 Jan 09:22, Kees Cook wrote:
+> > In preparation for FORTIFY_SOURCE performing compile-time and run-time
+> > field bounds checking for memcpy(), memmove(), and memset(), avoid
+> > intentionally writing across neighboring fields.
+> > 
+> > Use struct_group() in struct vlan_ethhdr around members h_dest and
+> > h_source, so they can be referenced together. This will allow memcpy()
+> > and sizeof() to more easily reason about sizes, improve readability,
+> > and avoid future warnings about writing beyond the end of h_dest.
+> > 
+> > "pahole" shows no size nor member offset changes to struct vlan_ethhdr.
+> > "objdump -d" shows no object code changes.
+> > 
+> > Cc: Saeed Mahameed <saeedm@nvidia.com>
+> > Cc: Leon Romanovsky <leon@kernel.org>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: netdev@vger.kernel.org
+> > Cc: linux-rdma@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > Since this results in no binary differences, I will carry this in my tree
+> > unless someone else wants to pick it up. It's one of the last remaining
+> > clean-ups needed for the next step in memcpy() hardening.
+> > ---
+> 
+> applied to net-next-mlx5
 
-YongQin also reported hitting this issue(also, only in the LTO=full
-case) on the db845c dev board. Sami pointed me to this patch and I
-just wanted to confirm it gets things booting again.
+Thanks! How often does net-next-mlx5 flush into net-next?
 
-Reported-by: YongQin Liu <yongqin.liu@linaro.org>
-Tested-by: John Stultz <john.stultz@linaro.org>
-
-Thanks so much for the quick analysis and fix!
--john
+-- 
+Kees Cook

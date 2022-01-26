@@ -2,129 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B877F49CE18
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3383149CE21
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:25:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242744AbiAZPXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:23:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34657 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236135AbiAZPXH (ORCPT
+        id S242774AbiAZPYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:24:37 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:37366 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236079AbiAZPYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:23:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643210586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 26 Jan 2022 10:24:37 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 343C01F3B0;
+        Wed, 26 Jan 2022 15:24:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643210676; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4a54KaRYc7nXHLtavTkK/qlCZX6HnlHMPvKgqmWcUio=;
-        b=MZsyvij8h0uJgb/KkN0tv1nMUtBhMUnza8eFhMyg6G6PR+sU5Y23EOWOpJyhaHsdYGlgyx
-        FwOuiF7+AkSA1HM/BBwlU2HsB/YFcC+fum6WNojPHpuC8HTpnAkrT0f7wMZALWLMQA+Kx6
-        MNEZOOUicqNErX9a0iF+KfytHyWl3J0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-294-RNTbOyNiOS-x0r_cgmhOWw-1; Wed, 26 Jan 2022 10:23:05 -0500
-X-MC-Unique: RNTbOyNiOS-x0r_cgmhOWw-1
-Received: by mail-wm1-f72.google.com with SMTP id z2-20020a05600c220200b0034d2eb95f27so40424wml.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:23:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=4a54KaRYc7nXHLtavTkK/qlCZX6HnlHMPvKgqmWcUio=;
-        b=AKwLvxVEMQ1GjlKvJucwagnAOfyVUrvf/gPaleUaHM6ZB1dTE4DN7reHarbdfS5te2
-         dduc4Wi5VFmmbKDCGmj1z/WiPzYHZf+S4JZwDWIVAYov/gHNjcm5vqvCjnNpqarnq71g
-         kDe0r4tRPi3a3mV/xdEd/e0pkWAK/KaA5I71IHHQsi5Hcnu7dVbhHKiF319tjWzNLeYJ
-         vDyLKthXp2aJKZjYy375QyP6CzPna/+0Izxvn0lrdH5rynjyIfQYH+GPnm7iRTvl1gn3
-         BrVRGh70zkuzYSBBfQFwKoC8F0qjvMCGxFfnh6MMt9b3GJyu1SxiQfx0RnL0NPCXbxn7
-         LN2g==
-X-Gm-Message-State: AOAM531nqxPoaEkbg7SYY/ADmWSF5u5NxR2VEesjGKbn8gfzy938v8Fr
-        fU1cdnfe4G2c8Z+lopJEueDfbUJwAglp0nW4iog7kE9CoIWCZKIYNxZuzM6DJd5V8Soa5nnRaX8
-        WI2HR8Vvrv/r8qlD0EFi3lsSD
-X-Received: by 2002:a7b:cb18:: with SMTP id u24mr8034884wmj.15.1643210584096;
-        Wed, 26 Jan 2022 07:23:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw82k25wkMbrJVhNhjzzuRNIDR0IA7s/6PDVDf+0JaO6ZAgOVzYAYjs7DyqM0oyeoso8SH7Fw==
-X-Received: by 2002:a7b:cb18:: with SMTP id u24mr8034859wmj.15.1643210583850;
-        Wed, 26 Jan 2022 07:23:03 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id i11sm6080210wry.102.2022.01.26.07.23.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 07:23:03 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH] KVM: selftests: Don't skip L2's VMCALL in SMM test for
- SVM guest
-In-Reply-To: <20220125221725.2101126-1-seanjc@google.com>
-References: <20220125221725.2101126-1-seanjc@google.com>
-Date:   Wed, 26 Jan 2022 16:23:02 +0100
-Message-ID: <87tudqh67d.fsf@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        bh=9CXY7MFbJ1saOKK9+Yf3pb9u+zx6DrRm92wfkukypJU=;
+        b=j9C4LuPOb5XoFVk6uxHIO8WC5JbJfuf9jmV9L6Kx2lRSXZEqcFPNULeh0IL+8Klm088Mhv
+        VVABBZSIxItC72DaJhTo4TIEe8RAPpl51T+Jup4gOlFOoA78p9Rg2std/7tu5wRVElYPkj
+        5rM1DiS2T2ol6/t79eDHWxsAlWOJRfA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643210676;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9CXY7MFbJ1saOKK9+Yf3pb9u+zx6DrRm92wfkukypJU=;
+        b=Zcv47eTlQd7aDCA72boLRhzkKoNf/ZcDAsLb7bnW2iDfHVLc2QbqnzOKDYdAl7axDb5SQH
+        b6sfpqO/K/rKaIBA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 1D799A3B81;
+        Wed, 26 Jan 2022 15:24:36 +0000 (UTC)
+Date:   Wed, 26 Jan 2022 16:24:36 +0100
+Message-ID: <s5ho83yldu3.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Alexander Sergeyev <sergeev917@gmail.com>
+Cc:     Jeremy Szu <jeremy.szu@canonical.com>, tiwai@suse.com,
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>,
+        Kailang Yang <kailang@realtek.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jian-Hong Pan <jhp@endlessos.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        PeiSen Hou <pshou@realtek.com>
+Subject: Re: [PATCH 1/4] ALSA: hda/realtek: fix mute/micmute LEDs for HP 855 G8
+In-Reply-To: <20220122205637.7gzurdu7xl4sthxw@localhost.localdomain>
+References: <20220112201824.qmphnz2hx4frda6e@localhost.localdomain>
+        <s5h8rvk85uy.wl-tiwai@suse.de>
+        <20220113183141.kla37mbqmo4x6wxp@localhost.localdomain>
+        <s5ha6fy46jt.wl-tiwai@suse.de>
+        <20220114183720.n46wealclg6spxkp@localhost.localdomain>
+        <s5hsftp3027.wl-tiwai@suse.de>
+        <20220115152215.kprws5nja2i43qax@localhost.localdomain>
+        <s5hilugw0l0.wl-tiwai@suse.de>
+        <20220119093249.eaxem33bjqjxcher@localhost.localdomain>
+        <20220122190522.ycaygrqcen7d3hj2@localhost.localdomain>
+        <20220122205637.7gzurdu7xl4sthxw@localhost.localdomain>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Sat, 22 Jan 2022 21:56:37 +0100,
+Alexander Sergeyev wrote:
+> 
+> On Sat, Jan 22, 2022 at 10:05:24PM +0300, Alexander Sergeyev wrote:
+> > I'm not sure about kernel log buffering or maybe the device support for 
+> > pipelining, but is it okay that alc_update_coefex_idx() seem to overlap?
+> 
+> Given that the CPU number is the same in alc_update_coefex_idx(), it seems 
+> these calls execution is interrupted and interleaved on the same core.
+> 
+> And, actually, there are two LEDs to set (mute and micmute). Am I onto 
+> something here?
 
-> Don't skip the vmcall() in l2_guest_code() prior to re-entering L2, doing
-> so will result in L2 running to completion, popping '0' off the stack for
-> RET, jumping to address '0', and ultimately dying with a triple fault
-> shutdown.
->
-> It's not at all obvious why the test re-enters L2 and re-executes VMCALL,
-> but presumably it serves a purpose.  
+That's an interesting finding, and yes, such a race is quite
+possible.  Below is a quick fix as an attempt to cover it.
+Could you give it a try?
 
-I managed to forget everything but it seems my intentions were to test
-two things:
+BTW, the fix for the unbind problem was submitted.  It's a slightly
+more simplified version than what I posted here beforehand.
 
-- "Enter SMM during L2 execution and check that we correctly return from
-  it."
-- "Perform save/restore while the guest is in SMM triggered during L2
-  execution" 
 
-the later could've been complemented with "and try running L2 after".
+thanks,
 
-> The VMX path doesn't skip vmcall(), and the test can't possibly have
-> passed on SVM
+Takashi
 
-Well, it kind of works for me (pre-patch) :-) I do see #DF in the trace
-but not #TF.
+-- 8< --
+From: Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH] ALSA: hda: realtek: Fix race at concurrent COEF updates
 
->, so just do what VMX does.
->
+The COEF access is done with two steps: setting the index then read or
+write the data.  When multiple COEF accesses are performed
+concurrently, the index and data might be paired unexpectedly.
+In most cases, this isn't a big problem as the COEF setup is done at
+the initialization, but some dynamic changes like the mute LED may hit
+such a race.
 
-Makes sense. I can't recall how "+= 3" appeared.
+For avoiding the racy COEF accesses, this patch introduces a new
+mutex coef_mutex to alc_spec, and wrap the COEF accessing functions
+with it.
 
-> Fixes: d951b2210c1a ("KVM: selftests: smm_test: Test SMM enter from L2")
-> Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  tools/testing/selftests/kvm/x86_64/smm_test.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86_64/smm_test.c b/tools/testing/selftests/kvm/x86_64/smm_test.c
-> index 2da8eb8e2d96..a626d40fdb48 100644
-> --- a/tools/testing/selftests/kvm/x86_64/smm_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/smm_test.c
-> @@ -105,7 +105,6 @@ static void guest_code(void *arg)
->  
->  		if (cpu_has_svm()) {
->  			run_guest(svm->vmcb, svm->vmcb_gpa);
-> -			svm->vmcb->save.rip += 3;
->  			run_guest(svm->vmcb, svm->vmcb_gpa);
->  		} else {
->  			vmlaunch();
->
-> base-commit: e2e83a73d7ce66f62c7830a85619542ef59c90e4
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ sound/pci/hda/patch_realtek.c | 61 ++++++++++++++++++++++++++++-------
+ 1 file changed, 50 insertions(+), 11 deletions(-)
 
-Reviewed-and-tested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 668274e52674..a5677be0a405 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -98,6 +98,7 @@ struct alc_spec {
+ 	unsigned int gpio_mic_led_mask;
+ 	struct alc_coef_led mute_led_coef;
+ 	struct alc_coef_led mic_led_coef;
++	struct mutex coef_mutex;
+ 
+ 	hda_nid_t headset_mic_pin;
+ 	hda_nid_t headphone_mic_pin;
+@@ -137,8 +138,8 @@ struct alc_spec {
+  * COEF access helper functions
+  */
+ 
+-static int alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+-			       unsigned int coef_idx)
++static int __alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
++				 unsigned int coef_idx)
+ {
+ 	unsigned int val;
+ 
+@@ -147,28 +148,61 @@ static int alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+ 	return val;
+ }
+ 
++static int alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
++			       unsigned int coef_idx)
++{
++	struct alc_spec *spec = codec->spec;
++	unsigned int val;
++
++	mutex_lock(&spec->coef_mutex);
++	val = __alc_read_coefex_idx(codec, nid, coef_idx);
++	mutex_unlock(&spec->coef_mutex);
++	return val;
++}
++
+ #define alc_read_coef_idx(codec, coef_idx) \
+ 	alc_read_coefex_idx(codec, 0x20, coef_idx)
+ 
+-static void alc_write_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+-				 unsigned int coef_idx, unsigned int coef_val)
++static void __alc_write_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
++				   unsigned int coef_idx, unsigned int coef_val)
+ {
+ 	snd_hda_codec_write(codec, nid, 0, AC_VERB_SET_COEF_INDEX, coef_idx);
+ 	snd_hda_codec_write(codec, nid, 0, AC_VERB_SET_PROC_COEF, coef_val);
+ }
+ 
++static void alc_write_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
++				 unsigned int coef_idx, unsigned int coef_val)
++{
++	struct alc_spec *spec = codec->spec;
++
++	mutex_lock(&spec->coef_mutex);
++	__alc_write_coefex_idx(codec, nid, coef_idx, coef_val);
++	mutex_unlock(&spec->coef_mutex);
++}
++
+ #define alc_write_coef_idx(codec, coef_idx, coef_val) \
+ 	alc_write_coefex_idx(codec, 0x20, coef_idx, coef_val)
+ 
++static void __alc_update_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
++				    unsigned int coef_idx, unsigned int mask,
++				    unsigned int bits_set)
++{
++	unsigned int val = __alc_read_coefex_idx(codec, nid, coef_idx);
++
++	if (val != -1)
++		__alc_write_coefex_idx(codec, nid, coef_idx,
++				       (val & ~mask) | bits_set);
++}
++
+ static void alc_update_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
+ 				  unsigned int coef_idx, unsigned int mask,
+ 				  unsigned int bits_set)
+ {
+-	unsigned int val = alc_read_coefex_idx(codec, nid, coef_idx);
++	struct alc_spec *spec = codec->spec;
+ 
+-	if (val != -1)
+-		alc_write_coefex_idx(codec, nid, coef_idx,
+-				     (val & ~mask) | bits_set);
++	mutex_lock(&spec->coef_mutex);
++	__alc_update_coefex_idx(codec, nid, coef_idx, mask, bits_set);
++	mutex_unlock(&spec->coef_mutex);
+ }
+ 
+ #define alc_update_coef_idx(codec, coef_idx, mask, bits_set)	\
+@@ -201,13 +235,17 @@ struct coef_fw {
+ static void alc_process_coef_fw(struct hda_codec *codec,
+ 				const struct coef_fw *fw)
+ {
++	struct alc_spec *spec = codec->spec;
++
++	mutex_lock(&spec->coef_mutex);
+ 	for (; fw->nid; fw++) {
+ 		if (fw->mask == (unsigned short)-1)
+-			alc_write_coefex_idx(codec, fw->nid, fw->idx, fw->val);
++			__alc_write_coefex_idx(codec, fw->nid, fw->idx, fw->val);
+ 		else
+-			alc_update_coefex_idx(codec, fw->nid, fw->idx,
+-					      fw->mask, fw->val);
++			__alc_update_coefex_idx(codec, fw->nid, fw->idx,
++						fw->mask, fw->val);
+ 	}
++	mutex_unlock(&spec->coef_mutex);
+ }
+ 
+ /*
+@@ -1153,6 +1191,7 @@ static int alc_alloc_spec(struct hda_codec *codec, hda_nid_t mixer_nid)
+ 	codec->spdif_status_reset = 1;
+ 	codec->forced_resume = 1;
+ 	codec->patch_ops = alc_patch_ops;
++	mutex_init(&spec->coef_mutex);
+ 
+ 	err = alc_codec_rename_from_preset(codec);
+ 	if (err < 0) {
 -- 
-Vitaly
+2.31.1
 

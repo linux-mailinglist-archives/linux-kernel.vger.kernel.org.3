@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A2249D1D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C36E49D1D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbiAZSgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
+        id S244226AbiAZSgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbiAZSgk (ORCPT
+        with ESMTP id S229848AbiAZSgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:36:40 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC40C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:36:40 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id i19so597497qvx.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:36:40 -0800 (PST)
+        Wed, 26 Jan 2022 13:36:41 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681BBC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:36:41 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id k9so612958qvv.9
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:36:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=soleen.com; s=google;
-        h=from:to:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=a4jxpLDSedySyiIRtZviJmX3NEbTJyD67N5MQRypTW4=;
-        b=h4xkZoFvH7iJDfUXQm8znpFEc6PC4s+tPROBi0jwbzFdezVF74R3DKaPnWdHLdOtoc
-         vlMKDt3P48E110Jh7Anz+LurpmyWB0G52b6QQ1EaRtDaL1nhcqg04hES0HdEtmqvBxSJ
-         2c799pa2UtMjpZlRATILhE8KJyjmZVH7VQ05PDArfwetmSwAPYO7mXnQwony0pjCCny0
-         tu9U2t0OfPWoqAaMSdCnCUm9uVOrJUVtaqVD+7Wk3buw+IBNSO+FAr7Zq8CukabBp7+w
-         hEC4Mf98vxoxOlZNSig54sbYNmpaKk1uEfetnfov5Ttpc29zRvWDY1Q5Wuv8bWglzYHb
-         EMKg==
+        bh=gwQJ38KtV0HXsmYJc+K1cECJTZ3g+2Vx7ehA2fokXc0=;
+        b=QcWdQlJI68RhXl0oTXAQOXqwPV7EOeuJVrY/beLTxsFBpQZ/nyKXBBMIIRIxp3UZb6
+         RE0qIRmmDPvKHGdBBPccD0mrIgW7zATHPRADWCTEb7XaEUGVnBm9GJfhl8LYGahP8bRU
+         habISB7anoDtdxvsn9BMFWlNI/HO3zm4p1rtKlge3r3TqmSlDKaEnx/0D1getJ3c1I80
+         z0cbTvjVWolLQAkLRBL3tcgH38g6KeNmYOxgMgSytQ4Hklca1ZLKBTHYgpWiWTLjQKh2
+         lz0Hk2/F2AzAgIWChOtEJStlib6W2XqYpPkdHK/penKyAh12R+x6E1iZ8reMOKdyS5NP
+         BhHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=a4jxpLDSedySyiIRtZviJmX3NEbTJyD67N5MQRypTW4=;
-        b=wzVDIIEBTSu/akbojzLIh21TxsXLfO69eX/xxPtsbJjeyYZvJyb4GdDEVJyhjR793M
-         l2fL09lbnB3hWy/lqx69NEcWn6eRvb9jG2luCQndTjTGMeUGig46Y+BeWbdWseayVjCo
-         Ww20EI54t3FuIvnkWTmbefZ72MiFcY4RPIexI9Qu0jLfNdYUSKrHj6Bav+hQC1n3IycC
-         S9t48reAPWEltzHvfWYN6xEXKEVsxymYLS5bsa/MvFzgVAFSm+iaHkQfN6xllm9P7bjE
-         v/JfAvRX1jZzNHeS1KEUP400QVeJ5Z/OOyZuE71ShhheXMBRH6c39c+UzHZpvMHlcmxb
-         aaeQ==
-X-Gm-Message-State: AOAM533rYy1JHmfQBHW5xeYwpTPqFhaJlXva+0Hvb0bkljJ2zEQIUjzb
-        2p9emKSF7EA4N78fvgMS5VshXA==
-X-Google-Smtp-Source: ABdhPJz5AdoQSF76RU52VZ6gwOZf8Oqw8CGR3SV0rJAznxxoLsdi7kYebbkAsr0hK4EkKj/v6JtwEQ==
-X-Received: by 2002:a05:6214:4014:: with SMTP id kd20mr12158585qvb.84.1643222199674;
-        Wed, 26 Jan 2022 10:36:39 -0800 (PST)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gwQJ38KtV0HXsmYJc+K1cECJTZ3g+2Vx7ehA2fokXc0=;
+        b=XMJGImYSlD/xULzUiGI5B7qv7KEl7nI9v+ZzajKvIT6dtDZZ7CMWisajnO9gMUVT2T
+         /h/Eskl8k/ZlF1CJtsOac6phnTsPVnkm3GSoA62xFZ0VdtazUr7vrBch632wxBmuOZa6
+         tmY9xZ3S4e3IVd62UXElRHzqTagnoJyN25ARLLDEAf3AJTjT7NRSDpGmyy3DOttG0Afh
+         O7TbmkOSf/U6ink4hXTn67xnIeMepRJNGurzJI5e6cmeQh9sOnAeVYFZOgjNYy8F+Ej6
+         03KlekXYcMnnsmI8x7fWbYgF8b1cUhM6z5KbpUhIT66EjgTvVWMSz2sCk1UxS1SBQfff
+         /rtA==
+X-Gm-Message-State: AOAM530HXeiXi5rf7t8cQLeLcCBwflQOaxJEkNjPS08VK0hnfORdcFjK
+        QSBlmtKLipItKhpIs8hEG2423A==
+X-Google-Smtp-Source: ABdhPJzHYYWtkn3tMOAcHosHOkT8eLk8rK3linsKwbJSVMvq/WP3ZiLoTcazMadoRkZvSZnoFSFZPQ==
+X-Received: by 2002:a05:6214:2a83:: with SMTP id jr3mr32858qvb.68.1643222200531;
+        Wed, 26 Jan 2022 10:36:40 -0800 (PST)
 Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
-        by smtp.gmail.com with ESMTPSA id h9sm26226qkp.75.2022.01.26.10.36.38
+        by smtp.gmail.com with ESMTPSA id h9sm26226qkp.75.2022.01.26.10.36.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 10:36:39 -0800 (PST)
+        Wed, 26 Jan 2022 10:36:40 -0800 (PST)
 From:   Pasha Tatashin <pasha.tatashin@soleen.com>
 To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, akpm@linux-foundation.org, rientjes@google.com,
@@ -57,64 +57,69 @@ To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
         aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
         songmuchun@bytedance.com, qydwhotmail@gmail.com, hughd@google.com,
         ziy@nvidia.com, anshuman.khandual@arm.com
-Subject: [PATCH v4 0/4] page table check fixes and cleanups
-Date:   Wed, 26 Jan 2022 18:36:33 +0000
-Message-Id: <20220126183637.1840960-1-pasha.tatashin@soleen.com>
+Subject: [PATCH v4 1/4] mm/debug_vm_pgtable: remove pte entry from the page table
+Date:   Wed, 26 Jan 2022 18:36:34 +0000
+Message-Id: <20220126183637.1840960-2-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+In-Reply-To: <20220126183637.1840960-1-pasha.tatashin@soleen.com>
+References: <20220126183637.1840960-1-pasha.tatashin@soleen.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changelog:
-v4:	- Addressed review comments from David Rientjes
-	- Added Acks.
-v3:	- Resolved a regression introduced in previous version, where
-	  page collapse in khugepaged would cause crash on boot.
-	- Addressed comments from Anshuman Khandual regarding commit
-	  log.
-v2:	- Addressed simplification comments from Wei Xu
-	- Added Review-by/Tested-by's from Zi Yan and Wei Xu
+The pte entry that is used in pte_advanced_tests() is never removed from
+the page table at the end of the test.
 
+The issue is detected by page_table_check, to repro compile kernel with
+the following configs:
 
-Two fixes:
+CONFIG_DEBUG_VM_PGTABLE=y
+CONFIG_PAGE_TABLE_CHECK=y
+CONFIG_PAGE_TABLE_CHECK_ENFORCED=y
 
-  mm/debug_vm_pgtable: remove pte entry from the page table
-	- remove a pte entry from the page table at the end of
-	  debug_vm_pgtable pte test
+During the boot the following BUG is printed:
 
-  mm/khugepaged: unify collapse pmd clear, flush and free
-  mm/page_table_check: check entries at pmd levels
-	- check pmd level in page_table_check for PTE regular entries
-	  prior to freeing.
-	  repro.c: https://gist.github.com/soleen/fdcd501d5df103976245fe84e9535087
-	  config: https://gist.github.com/soleen/8a56f923c2fea9ce9c75b4e2517d4162
-	  qemu_script: https://gist.github.com/soleen/f4be4795826b7ab1a51ae659582e179c
-	  base image:
-	  https://storage.googleapis.com/syzkaller/wheezy.img
-	  https://storage.googleapis.com/syzkaller/wheezy.img.key
+[    2.262821] debug_vm_pgtable: [debug_vm_pgtable         ]: Validating
+               architecture page table helpers
+[    2.276826] ------------[ cut here ]------------
+[    2.280426] kernel BUG at mm/page_table_check.c:162!
+[    2.284118] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+[    2.287787] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
+               5.16.0-11413-g2c271fe77d52 #3
+[    2.293226] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+               BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org
+               04/01/2014
+...
 
-Small cleanup:
-  mm/page_table_check: use unsigned long for page counters and cleanup
+The entry should be properly removed from the page table before the page
+is released to the free list.
 
-Previous versions:
-v1: https://lore.kernel.org/all/20220120042513.1648831-1-pasha.tatashin@soleen.com
-v2: https://lore.kernel.org/all/20220120191250.2671557-1-pasha.tatashin@soleen.com
-v3: https://lore.kernel.org/all/20220126060514.1574935-1-pasha.tatashin@soleen.com
+Fixes: a5c3b9ffb0f4 ("mm/debug_vm_pgtable: add tests validating advanced arch page table helpers")
+Cc: stable@vger.kernel.org # 5.9+
 
-Pasha Tatashin (4):
-  mm/debug_vm_pgtable: remove pte entry from the page table
-  mm/page_table_check: use unsigned long for page counters and cleanup
-  mm/khugepaged: unify collapse pmd clear, flush and free
-  mm/page_table_check: check entries at pmd levels
+Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+Tested-by: Zi Yan <ziy@nvidia.com>
+Acked-by: David Rientjes <rientjes@google.com>
+---
+ mm/debug_vm_pgtable.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- include/linux/page_table_check.h | 18 ++++++++++
- mm/debug_vm_pgtable.c            |  2 ++
- mm/khugepaged.c                  | 37 ++++++++++++---------
- mm/page_table_check.c            | 56 ++++++++++++++++----------------
- 4 files changed, 69 insertions(+), 44 deletions(-)
-
+diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+index a7ac97c76762..db2abd9e415b 100644
+--- a/mm/debug_vm_pgtable.c
++++ b/mm/debug_vm_pgtable.c
+@@ -171,6 +171,8 @@ static void __init pte_advanced_tests(struct pgtable_debug_args *args)
+ 	ptep_test_and_clear_young(args->vma, args->vaddr, args->ptep);
+ 	pte = ptep_get(args->ptep);
+ 	WARN_ON(pte_young(pte));
++
++	ptep_get_and_clear_full(args->mm, args->vaddr, args->ptep, 1);
+ }
+ 
+ static void __init pte_savedwrite_tests(struct pgtable_debug_args *args)
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

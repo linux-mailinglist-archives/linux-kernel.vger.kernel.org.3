@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1C349C245
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA4149C247
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237292AbiAZDqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237281AbiAZDql (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:46:41 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCF5C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 19:46:41 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso4917993pjm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 19:46:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pI42JEyzuhM9XP9S2B0qht3sN8ahR7m3AOT5MMQP4FQ=;
-        b=D6kT0sP/t1E3PbdkyvGmKM6apVV9zZpYhxNU1dIXDhsy3fYvpDfBP1PNMJVzmvjqng
-         DwTg6FO+MAuKkmSj8Op7sWZFo49YVdGZNHu0eceL2w1bpalQwEJ1B3x09FI7XTUtunx+
-         qpXrgsQzkaNDJZSwTTsOtXSeDg3sA72Ijv8UAaPCoPXHFPeTJGuR0ds+rucjAC8z1kc4
-         Vztdf2ihgdfx5ANU8Uh+vJm5Yox9DrLTyMk6rAOG1eXIGeqG/CvVhgF1U/rDiM1gop9+
-         alVr4o78r2Be4keKyUkwOO5yuSYd/3mPGsUQaMHmQyxNkMh88JNo+rNjDJ0YM8mMGydR
-         D7QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pI42JEyzuhM9XP9S2B0qht3sN8ahR7m3AOT5MMQP4FQ=;
-        b=4cUzF96EsXeR6Y/ShnYpA2TrYPA0NFlxmOvlZkIdPCNZBEIhrf/pHktLajDkt+udN/
-         ykUd8cDh2GyupwvDoejC2sWEdrFVJxInhz1YL9wUeJXwBvzj97NTeQdC7q4aa5rb2Dep
-         BYaLEBRNqtrvytSPoMgWd8oij58+b3uhoScwFtwgnlO+qEQyI2EQ8gtYq7XR9RwQl84k
-         esrrhbpIwiRpa8EIVt39BwkHx4YAHZNqzyfxBn7vd3lCfwkyLsStwWrIBpwf+D1v1e7g
-         rTonAgWMWA/wrYZAuUwglju44zgGVNkNZk/lUOf9UzzBaUloG0h8FC/HhM764ul2jfbq
-         Bzvw==
-X-Gm-Message-State: AOAM533yPO41W8h/HN8ozsT6/lNWocSImS7B2xWo3uASHOchOjZ0wW2V
-        SCJBN3WPCjv656UwlHml8Cf/tg==
-X-Google-Smtp-Source: ABdhPJyWyj2aq6Rt9HOz4rbheeewVvi27szFsChfclVNFfScINlb/JGt2ooBV0UBGVcm+23MbbMmkQ==
-X-Received: by 2002:a17:902:db0b:b0:14b:28f9:cb92 with SMTP id m11-20020a170902db0b00b0014b28f9cb92mr17961252plx.65.1643168801099;
-        Tue, 25 Jan 2022 19:46:41 -0800 (PST)
-Received: from google.com ([2401:fa00:1:10:69af:7f25:2010:2c85])
-        by smtp.gmail.com with ESMTPSA id 20sm15310319pgz.59.2022.01.25.19.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 19:46:40 -0800 (PST)
-Date:   Wed, 26 Jan 2022 11:46:38 +0800
-From:   Tzung-Bi Shih <tzungbi@google.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC device
-Message-ID: <YfDEHoYkLc6zjSxj@google.com>
-References: <20220126012203.2979709-1-pmalani@chromium.org>
+        id S237299AbiAZDrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:47:55 -0500
+Received: from mga14.intel.com ([192.55.52.115]:26333 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233406AbiAZDrx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 22:47:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643168873; x=1674704873;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YJvfPZ+Ryyuw8LzQBKnmgNZUzpx/Ro+K1QSwSjRhuHo=;
+  b=Py5+8wwPQf4TBj3Hd4huH2pdYhP7Bcu8P19nCho4+8zkF3Emq8YCV4eq
+   hfpVpJr9V/2tUzkkNJtrJCj3PY/YYZNjpNJ0RCTMCji6n74ayWDkLhd7U
+   cg4mYTHhieu1ARE0U/jNXOaVAyiN2qSbE8bDP9mLRDkeN8p539FORSDds
+   fAVYprfbMY+F25Yxff9jwjE5N7IJYfXPlcE8IkJwPYCagndh8v19yfu5P
+   M2KAPzjAQeVSnKJeos8xxCc07onQg59JxASZmu5ME79xXw365NauX2SZz
+   Bc2G9EgGP6KdSRr1jGaksfae9bgbQnbIM7aBY1Pxjvd24n85o0PN9gjov
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246693222"
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="246693222"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 19:47:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
+   d="scan'208";a="520653248"
+Received: from lxy-dell.sh.intel.com ([10.239.159.55])
+  by orsmga007.jf.intel.com with ESMTP; 25 Jan 2022 19:47:51 -0800
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiaoyao.li@intel.com
+Subject: [PATCH] KVM: x86: Keep MSR_IA32_XSS unchanged for INIT
+Date:   Wed, 26 Jan 2022 11:47:50 +0800
+Message-Id: <20220126034750.2495371-1-xiaoyao.li@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126012203.2979709-1-pmalani@chromium.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 01:22:03AM +0000, Prashant Malani wrote:
-> Fixes: fdc6b21e2444 ("platform/chrome: Add Type C connector class driver")
-> Reported-by: Alyssa Ross <hi@alyssa.is>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+It has been corrected from SDM version 075 that MSR_IA32_XSS is reset to
+zero on Power up and Reset but keeps unchanged on INIT.
 
-With a minor comment,
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+Fixes: a554d207dc46 ("KVM: X86: Processor States following Reset or INIT")
+Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
+---
+ arch/x86/kvm/x86.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> @@ -1076,6 +1076,12 @@ static int cros_typec_probe(struct platform_device *pdev)
->  
->  	typec->dev = dev;
->  	typec->ec = dev_get_drvdata(pdev->dev.parent);
-> +
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 55518b7d3b96..c0727939684e 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -11257,6 +11257,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+ 		vcpu->arch.msr_misc_features_enables = 0;
+ 
+ 		vcpu->arch.xcr0 = XFEATURE_MASK_FP;
++		vcpu->arch.ia32_xss = 0;
+ 	}
+ 
+ 	/* All GPRs except RDX (handled below) are zeroed on RESET/INIT. */
+@@ -11273,8 +11274,6 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+ 	cpuid_0x1 = kvm_find_cpuid_entry(vcpu, 1, 0);
+ 	kvm_rdx_write(vcpu, cpuid_0x1 ? cpuid_0x1->eax : 0x600);
+ 
+-	vcpu->arch.ia32_xss = 0;
+-
+ 	static_call(kvm_x86_vcpu_reset)(vcpu, init_event);
+ 
+ 	kvm_set_rflags(vcpu, X86_EFLAGS_FIXED);
+-- 
+2.27.0
 
-I would prefer to remove the blank line to make it look like an integrated block.
-
-> +	if (!typec->ec) {
-> +		dev_err(dev, "couldn't find parent EC device\n");
-> +		return -ENODEV;
-> +	}
-> +

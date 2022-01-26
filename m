@@ -2,117 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEE849C6C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB2549C6D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbiAZJrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbiAZJrW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:47:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A863C06161C;
-        Wed, 26 Jan 2022 01:47:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06E68B81C10;
-        Wed, 26 Jan 2022 09:47:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3FBFC340E3;
-        Wed, 26 Jan 2022 09:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643190439;
-        bh=qO3B4gK7GA2y/Bvlgz0H7y6fmCCHCCV6zEgHDWBX64o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AQo8TtyMVTeigBO1kDBOr8Gxu46gN0OjpckZSef7vAdbpNAZjXmWWrCF0w8o3kRC2
-         OcVb87aw5oA+Bw9jAagO8yqj/Fi9Uh7pQBcsewyMBO9FmxtzxQb2e2qNdomDNpdvCs
-         ETcJfbPNToqtw9lOXrStl4KFLvjd/KEpNKA5PfyQbbYHJmp2ew+eYgNKTmGbc+K3bS
-         BWVmZiUpNeniNGVShxOU/c1ThcW5KlHz0+YyhBj9dOXolK3Wz4Bn6asOCcBIQh/mhe
-         kLQnK+3iIxwq8ELZ+Ur+OvY3bLiL3fdAmcWDq9VI4MDqV5WiRl7rS4eXTBDLJvhjPo
-         n0Bs1tOcOx3Hw==
-Date:   Wed, 26 Jan 2022 11:47:15 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Upinder Malhi <umalhi@cisco.com>,
-        Roland Dreier <roland@purestorage.com>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] IB/usnic: Fix memory leak in usnic_ib_sysfs_qpn_add
-Message-ID: <YfEYo2jDo2Y8P1dL@unreal>
-References: <20220126060425.11124-1-linmq006@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220126060425.11124-1-linmq006@gmail.com>
+        id S239226AbiAZJsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:48:18 -0500
+Received: from mga18.intel.com ([134.134.136.126]:4595 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232255AbiAZJsO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 04:48:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643190494; x=1674726494;
+  h=from:to:cc:subject:date:message-id;
+  bh=JDgk8tdiajGeraEL32XBZT7Uhv8Nx78Co1o96ic4M6o=;
+  b=fgp6mHeKFisG7b4zAnqSij4OeZmuHwKT5oZL/Iib26ZoyYFPY6KYvXWG
+   4q0EmCnCv3fv7mAzZKbXbEX4uf4wVgJiEpJ7wim3vjr1OphbX68lEEEoz
+   s4tGZnQMzFvdZ+aRAV0eCOMb4xZwVtsSr2nYOo5V4XPfPWh98+wtBRXbs
+   6cF1yrw742tN6gPuCJwJKSTEhHNX0L3RNqHRwP5rbW7MQIQH2BTnmPVgi
+   hORsO7N1+7raH7lAGOQQEDsyYVGRo6JdsHgJw8l3N3Z4TzzWHsyJpAopT
+   HL3WVc8S1tjG+567XSDmiUaKuVcCM1G4Y2uo1uWoy540NPvYc+VuANtxe
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="230090777"
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="230090777"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 01:48:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="617918575"
+Received: from mismail5-ilbpg0.png.intel.com ([10.88.229.13])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Jan 2022 01:48:08 -0800
+From:   Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, mohammad.athari.ismail@intel.com
+Subject: [PATCH net 0/2] Fix PTP issue in stmmac
+Date:   Wed, 26 Jan 2022 17:47:21 +0800
+Message-Id: <20220126094723.11849-1-mohammad.athari.ismail@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 06:04:25AM +0000, Miaoqian Lin wrote:
-> kobject_init_and_add() takes reference even when it fails.
-> According to the doc of kobject_init_and_add()：
-> 
->    If this function returns an error, kobject_put() must be called to
->    properly clean up the memory associated with the object.
-> 
-> Fix memory leak by calling kobject_put().
+This patch series to fix PTP issue in stmmac related to:
+1/ PTP clock source configuration during initialization.
+2/ PTP initialization during resume from suspend.
 
-There is no real memory leak here, this kobject will be released in
-usnic_ib_sysfs_qpn_remove(). Another possible solution is to delete
-"if (err)" completely.
+Mohammad Athari Bin Ismail (2):
+  net: stmmac: configure PTP clock source prior to PTP initialization
+  net: stmmac: skip only stmmac_ptp_register when resume from suspend
 
-diff --git a/drivers/infiniband/hw/usnic/usnic_ib_sysfs.c b/drivers/infiniband/hw/usnic/usnic_ib_sysfs.c
-index fdb63a8fb997..11723f54e200 100644
---- a/drivers/infiniband/hw/usnic/usnic_ib_sysfs.c
-+++ b/drivers/infiniband/hw/usnic/usnic_ib_sysfs.c
-@@ -271,17 +271,15 @@ void usnic_ib_sysfs_unregister_usdev(struct usnic_ib_dev *us_ibdev)
- void usnic_ib_sysfs_qpn_add(struct usnic_ib_qp_grp *qp_grp)
- {
-        struct usnic_ib_dev *us_ibdev;
--       int err;
- 
-        us_ibdev = qp_grp->vf->pf;
- 
--       err = kobject_init_and_add(&qp_grp->kobj, &usnic_ib_qpn_type,
-+       kobject_init_and_add(&qp_grp->kobj, &usnic_ib_qpn_type,
-                        kobject_get(us_ibdev->qpn_kobj),
-                        "%d", qp_grp->grp_id);
--       if (err) {
--               kobject_put(us_ibdev->qpn_kobj);
--               return;
--       }
-+       /* We don't care about failure here, the release will be performed in
-+        * usnic_ib_sysfs_qpn_remove() anyway.
-+        */
- }
- 
- void usnic_ib_sysfs_qpn_remove(struct usnic_ib_qp_grp *qp_grp)
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 23 ++++++++++---------
+ .../net/ethernet/stmicro/stmmac/stmmac_ptp.c  |  3 ---
+ 2 files changed, 12 insertions(+), 14 deletions(-)
 
+-- 
+2.17.1
 
-> 
-> Fixes: e3cf00d0a87f ("IB/usnic: Add Cisco VIC low-level hardware driver")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/infiniband/hw/usnic/usnic_ib_sysfs.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/infiniband/hw/usnic/usnic_ib_sysfs.c b/drivers/infiniband/hw/usnic/usnic_ib_sysfs.c
-> index 7d868f033bbf..69c5854deebc 100644
-> --- a/drivers/infiniband/hw/usnic/usnic_ib_sysfs.c
-> +++ b/drivers/infiniband/hw/usnic/usnic_ib_sysfs.c
-> @@ -280,6 +280,7 @@ void usnic_ib_sysfs_qpn_add(struct usnic_ib_qp_grp *qp_grp)
->  			kobject_get(us_ibdev->qpn_kobj),
->  			"%d", qp_grp->grp_id);
->  	if (err) {
-> +		kobject_put(&qp_grp->kobj);
->  		kobject_put(us_ibdev->qpn_kobj);
->  		return;
->  	}
-> -- 
-> 2.17.1
-> 

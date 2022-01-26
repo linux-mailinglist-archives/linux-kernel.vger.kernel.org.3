@@ -2,116 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7702D49C72B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8795749C734
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239704AbiAZKMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:12:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37088 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239709AbiAZKMy (ORCPT
+        id S239728AbiAZKNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239718AbiAZKN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:12:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643191973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YLLMjXe8Y984uSaV8UIQRt4tj6QyBzicSXco+B26HtQ=;
-        b=EAYP7y7yZlTtJfNuH70wNDlDjmhlme+zJJIyPZyg8o9nlDdZp20CxZ6pOa3Sb/plX6cej7
-        FYeewcr7ss3Tknnov3Fr5Ce7nw9saNhSoDlhrjsF00doED4YnQve4CQhL2Y3L/1NbpMQZu
-        9nttRVDRAf2g1bFLR6wJzUI6Wn0lRXI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-397-5d4ldEoyM6aXB6gy3S0T5Q-1; Wed, 26 Jan 2022 05:12:50 -0500
-X-MC-Unique: 5d4ldEoyM6aXB6gy3S0T5Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 945018519E2;
-        Wed, 26 Jan 2022 10:12:48 +0000 (UTC)
-Received: from starship (unknown [10.40.192.15])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A950078DE9;
-        Wed, 26 Jan 2022 10:12:45 +0000 (UTC)
-Message-ID: <6cf58a4cd925726ef10481d38f9f4e8090f5023d.camel@redhat.com>
-Subject: Re: [PATCH 0/5] iommu/amd: fixes for suspend/resume
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Mike Lothian <mike@fireburn.co.uk>
-Cc:     dwmw@amazon.co.uk, iommu@lists.linux-foundation.org,
-        joro@8bytes.org, linux-kernel@vger.kernel.org,
-        suravee.suthikulpanit@amd.com, tglx@linutronix.de, will@kernel.org
-Date:   Wed, 26 Jan 2022 12:12:44 +0200
-In-Reply-To: <CAHbf0-F8Uemcu8FVcZvY0CPOf4kFXOcaCzWF1ZCwkpa3tyut3A@mail.gmail.com>
-References: <20211123161038.48009-1-mlevitsk@redhat.com>
-         <20220125150832.1570-1-mike@fireburn.co.uk>
-         <6f0d9b07073ca6d3657500ec076edc1ad2a3e40a.camel@redhat.com>
-         <CAHbf0-FJ0c1yAumKCnXLKKFN=tzeJxSd3HyP=dUOBgBTxVG5fw@mail.gmail.com>
-         <7809c3253a997330102b9d779206312d6b3bcaf1.camel@redhat.com>
-         <CAHbf0-F8Uemcu8FVcZvY0CPOf4kFXOcaCzWF1ZCwkpa3tyut3A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 26 Jan 2022 05:13:28 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46738C06161C;
+        Wed, 26 Jan 2022 02:13:28 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id m11so68147256edi.13;
+        Wed, 26 Jan 2022 02:13:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7of4j6tXJsQTj96IqMsKqWsSKbGVqn3ZKiSJTHPl75E=;
+        b=QHZGNvAuvGw7dVgE+zNRdndvuugGnChjIbsMvjjz/ITotAgWGyNwZuN48EXCo8az5D
+         RWQMdAopz5nv/RRobC4VoRcuLtfo/RrKWSAUysAnG5W/5/9h/OvMXETCBuAkEbn4m9Vh
+         ZRKNjulT52tFSx8jl00TJVZCKzHeKwvhagWm2XuDHHRI67mQUHyXyGjJwC3tgnpudBHK
+         CUPg3gPeW91RE8SwaJcaX/cvKSHU6keIf7UPLJbzDiBXtJyAMK7gupAvOKDHHEKJh+F3
+         9WpCas3I2OiV7CjbJWwV6SnsGTJS7yhn6+3ULU7z0WtzzLGHTl8R51wyt+Vu1KuStZpj
+         M64Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7of4j6tXJsQTj96IqMsKqWsSKbGVqn3ZKiSJTHPl75E=;
+        b=q1t0IviRPdFarPCBKA6U2xj6mBJiT6/hkdmgmCzxQKFsawbX/M0vG0rjTq5HD+I2W+
+         ia3c+IpAySABXPFubpGx+oRXKZ7oJwu8t6nDNNeUl2SQDUN3SPVS4hQ0sRJDeENsoMN3
+         K0iLU32WBYSU0CJ3rkrUFFZ+F5QD1OOAtn7cFdtRHUxQ4dhYJfWVJIn6i6av178vpWxo
+         yfzchJEsO8ykrCFMF37LTtfFY8NVyVjicfBZ18oAniEwf7hoASBlG6jYtzK22Liqa6Yk
+         nv0BCb+by6r3zrD5QCEBRxXl9G+IqIuOghodF32XToMubmldX5p41Q85KouMbdHaUKkU
+         yeyA==
+X-Gm-Message-State: AOAM531yvUun8sq+fjOqHIVTWroyMwgHzkm38qVeJCJ0zbcAnyVUARI4
+        AiZR8LwIuRlYeFrdPq2J9HQOwRkm/RTSDHbhaNI=
+X-Google-Smtp-Source: ABdhPJynLKvQGv/H0FG+uuXI+OlMGiphzh5iPLeSuydUEWE4P8tlRcmMs/osAZq4tj+XuWR5dY63TLHMcK+DIJhiiao=
+X-Received: by 2002:a05:6402:35d5:: with SMTP id z21mr17032960edc.29.1643192006805;
+ Wed, 26 Jan 2022 02:13:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+References: <20220126093951.1470898-1-lucas.demarchi@intel.com> <20220126093951.1470898-10-lucas.demarchi@intel.com>
+In-Reply-To: <20220126093951.1470898-10-lucas.demarchi@intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 26 Jan 2022 12:12:50 +0200
+Message-ID: <CAHp75Vd+TmShx==d_JHZUu0Q-9X7CmZEOFdKnSrcRKs81Gxn3g@mail.gmail.com>
+Subject: Re: [PATCH v2 09/11] drm: Convert open-coded yes/no strings to yesno()
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-security-module@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "David S. Miller" <davem@davemloft.net>,
+        Emma Anholt <emma@anholt.net>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Leo Li <sunpeng.li@amd.com>, Petr Mladek <pmladek@suse.com>,
+        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vishal Kulkarni <vishal@chelsio.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-26 at 09:54 +0000, Mike Lothian wrote:
-> On Wed, 26 Jan 2022 at 07:34, Maxim Levitsky <mlevitsk@redhat.com> wrote:
-> > Could you post the whole dmesg, or at least:
-> > 
-> > dmesg | grep AMD-Vi
-> > 
-> > 
-> > What CPU does your system have?
-> > 
-> > I suspect that your system doesn't GA log feature enabled in the IOMMU, and the code never checks
-> > for that, and here it fails enabling it, which  before my patches was just
-> > ignoring it silently.
-> > 
-> > 
-> > Best regards,
-> >         Maxim Levitsky
-> > > Hope that helps
-> > > 
-> > > Mike
-> > > 
-> 
-> Hi
-> 
-> It's an AMD Ryzen 9 5900HX
-> 
-> [    0.186350] AMD-Vi: ivrs, add hid:AMDI0020, uid:\_SB.FUR0, rdevid:160
-> [    0.186353] AMD-Vi: ivrs, add hid:AMDI0020, uid:\_SB.FUR1, rdevid:160
-> [    0.186354] AMD-Vi: ivrs, add hid:AMDI0020, uid:\_SB.FUR2, rdevid:160
-> [    0.186355] AMD-Vi: ivrs, add hid:AMDI0020, uid:\_SB.FUR3, rdevid:160
-> [    0.355628] pci 0000:00:00.2: AMD-Vi: IOMMU performance counters supported
-> [    0.356134] pci 0000:00:00.2: AMD-Vi: Found IOMMU cap 0x40
-> [    0.356136] AMD-Vi: Extended features (0x206d73ef22254ade): PPR
-> X2APIC NX GT IA GA PC GA_vAPIC
-> [    0.356140] AMD-Vi: Interrupt remapping enabled
-> [    0.356141] AMD-Vi: Virtual APIC enabled
-> [    0.356142] AMD-Vi: X2APIC enabled
-> [    0.431377] AMD-Vi: AMD IOMMUv2 loaded and initialized
-> 
-> I've attached the dmesg, I notice that some boots it doesn't happen
-> 
-> Cheers
-> 
-> Mike
+On Wed, Jan 26, 2022 at 11:39 AM Lucas De Marchi
+<lucas.demarchi@intel.com> wrote:
+>
+> linux/string_helpers.h provides a helper to return "yes"/"no" strings.
+> Replace the open coded versions with str_yes_no(). The places were
+> identified with the following semantic patch:
+>
+>         @@
+>         expression b;
+>         @@
+>
+>         - b ? "yes" : "no"
+>         + str_yes_no(b)
+>
+> Then the includes were added, so we include-what-we-use, and parenthesis
+> adjusted in drivers/gpu/drm/v3d/v3d_debugfs.c. After the conversion we
+> still see the same binary sizes:
+>
+>    text    data     bss     dec     hex filename
+>   51149    3295     212   54656    d580 virtio/virtio-gpu.ko.old
+>   51149    3295     212   54656    d580 virtio/virtio-gpu.ko
+> 1441491   60340     800 1502631  16eda7 radeon/radeon.ko.old
+> 1441491   60340     800 1502631  16eda7 radeon/radeon.ko
+> 6125369  328538   34000 6487907  62ff63 amd/amdgpu/amdgpu.ko.old
+> 6125369  328538   34000 6487907  62ff63 amd/amdgpu/amdgpu.ko
+>  411986   10490    6176  428652   68a6c drm.ko.old
+>  411986   10490    6176  428652   68a6c drm.ko
+>   98129    1636     264  100029   186bd dp/drm_dp_helper.ko.old
+>   98129    1636     264  100029   186bd dp/drm_dp_helper.ko
+> 1973432  109640    2352 2085424  1fd230 nouveau/nouveau.ko.old
+> 1973432  109640    2352 2085424  1fd230 nouveau/nouveau.ko
 
-Great, your system does seem to support GA log 
-(but a patch to check if, other that assume blindly that it is supported is 
-something that should be done).
+This probably won't change for modules, but if you compile in the
+linker may try to optimize it. Would be nice to see the old-new for
+`make allyesconfig` or equivalent.
 
-So could you bump the LOOP_TIMEOUT like by 10x or so and see if the problem goes away?
+...
 
-(that code should be rewritten to time based wait and not just blindly loop like that,
-I also can prepare a patch for that as well).
+>         seq_printf(m, "\tDP branch device present: %s\n",
+> -                  branch_device ? "yes" : "no");
+> +                  str_yes_no(branch_device));
 
-Best regards,
-	Maxim Levitsky
+Can it be now on one line? Same Q for all similar cases in the entire series.
 
+-- 
+With Best Regards,
+Andy Shevchenko

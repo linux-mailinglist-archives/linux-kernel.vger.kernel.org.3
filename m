@@ -2,98 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 921B949C37D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE8349C37F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 07:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235025AbiAZGKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 01:10:35 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:63091 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234959AbiAZGKe (ORCPT
+        id S235167AbiAZGLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 01:11:01 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:47915 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229772AbiAZGK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 01:10:34 -0500
-Received: from droid01-cd.amlogic.com (10.98.11.200) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2176.14; Wed, 26 Jan 2022
- 14:10:31 +0800
-From:   Shunzhou Jiang <shunzhou.jiang@amlogic.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     <narmstrong@baylibre.com>, <khilman@baylibre.com>,
-        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <jianxin.pan@amlogic.com>, <shunzhou.jiang@amlogic.com>
-Subject: [PATCH 2/2] soc: s4: Add support for power domains controller
-Date:   Wed, 26 Jan 2022 14:10:18 +0800
-Message-ID: <20220126061018.705338-3-shunzhou.jiang@amlogic.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220126061018.705338-1-shunzhou.jiang@amlogic.com>
-References: <20220126061018.705338-1-shunzhou.jiang@amlogic.com>
+        Wed, 26 Jan 2022 01:10:57 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R821e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0V2uAg.f_1643177453;
+Received: from 30.225.24.77(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0V2uAg.f_1643177453)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 26 Jan 2022 14:10:55 +0800
+Message-ID: <8f88459a-97e0-8b8d-3ec9-260d482a0d38@linux.alibaba.com>
+Date:   Wed, 26 Jan 2022 14:10:53 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.98.11.200]
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH v2 00/20] fscache,erofs: fscache-based demand-read
+ semantics
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org
+References: <20220118131216.85338-1-jefflexu@linux.alibaba.com>
+ <2815558.1643127330@warthog.procyon.org.uk>
+From:   JeffleXu <jefflexu@linux.alibaba.com>
+In-Reply-To: <2815558.1643127330@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support s4 Power controller. In s4, power control
-registers are in secure domain, and should be accessed by smc.
 
-Signed-off-by: Shunzhou Jiang <shunzhou.jiang@amlogic.com>
----
- drivers/soc/amlogic/meson-secure-pwrc.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
 
-diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/soc/amlogic/meson-secure-pwrc.c
-index 59bd195fa9c9..8fee01aabab6 100644
---- a/drivers/soc/amlogic/meson-secure-pwrc.c
-+++ b/drivers/soc/amlogic/meson-secure-pwrc.c
-@@ -11,6 +11,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
- #include <dt-bindings/power/meson-a1-power.h>
-+#include <dt-bindings/power/meson-s4-power.h>
- #include <linux/arm-smccc.h>
- #include <linux/firmware/meson/meson_sm.h>
- #include <linux/module.h>
-@@ -119,6 +120,17 @@ static struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
- 	SEC_PD(RSA,	0),
- };
- 
-+static struct meson_secure_pwrc_domain_desc s4_pwrc_domains[] = {
-+	SEC_PD(S4_DOS_HEVC,	0),
-+	SEC_PD(S4_DOS_VDEC,	0),
-+	SEC_PD(S4_VPU_HDMI,	GENPD_FLAG_ALWAYS_ON),
-+	SEC_PD(S4_USB_COMB,	GENPD_FLAG_ALWAYS_ON),
-+	SEC_PD(S4_GE2D,		0),
-+	SEC_PD(S4_ETH,		GENPD_FLAG_ALWAYS_ON),
-+	SEC_PD(S4_DEMOD,	0),
-+	SEC_PD(S4_AUDIO,	0),
-+};
-+
- static int meson_secure_pwrc_probe(struct platform_device *pdev)
- {
- 	int i;
-@@ -187,11 +199,20 @@ static struct meson_secure_pwrc_domain_data meson_secure_a1_pwrc_data = {
- 	.count = ARRAY_SIZE(a1_pwrc_domains),
- };
- 
-+static struct meson_secure_pwrc_domain_data meson_secure_s4_pwrc_data = {
-+	.domains = s4_pwrc_domains,
-+	.count = ARRAY_SIZE(s4_pwrc_domains),
-+};
-+
- static const struct of_device_id meson_secure_pwrc_match_table[] = {
- 	{
- 		.compatible = "amlogic,meson-a1-pwrc",
- 		.data = &meson_secure_a1_pwrc_data,
- 	},
-+	{
-+		.compatible = "amlogic,meson-s4-pwrc",
-+		.data = &meson_secure_s4_pwrc_data,
-+	},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, meson_secure_pwrc_match_table);
+On 1/26/22 12:15 AM, David Howells wrote:
+> Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+> 
+>> The following issues still need further discussion. Thanks for your time
+>> and patience.
+>>
+>> 1. I noticed that there's refactoring of netfs library[1],
+>> ...
+>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=netfs-lib
+> 
+> Yes.  I'm working towards getting netfslib to do handling writes and dio as
+> well as reads, along with content crypto/compression, and the idea I'm aiming
+> towards is that you just point your address_space_ops at netfs directly if
+> possible - but it's going to require its own context now to manage pending
+> writes.
+> 
+> See my netfs-experimental branch for more of that - it's still a work in
+> progress, though.
+
+Got it.
+
+> 
+> Btw, you could set rreq->netfs_priv in ->init_rreq() rather than passing it in
+> to netfs_readpage().
+> 
+>> 2. The current implementation will severely conflict with the
+>> refactoring of netfs library[1][2]. The assumption of 'struct
+>> netfs_i_context' [2] is that, every file in the upper netfs will
+>> correspond to only one backing file. While in our scenario, one file in
+>> erofs can correspond to multiple backing files. That is, the content of
+>> one file can be divided into multiple chunks, and are distrubuted over
+>> multiple blob files, i.e. multiple backing files. Currently I have no
+>> good idea solving this conflic.
+> 
+> I can think of a couple of options to explore:
+> 
+>  (1) Duplicate the cachefiles backend.  You can discard a lot of it, since a
+>      much of it is concerned with managing local modifications - which you're
+>      not going to do since you have a R/O filesystem and you're looking at
+>      importing files into the cache externally to the kernel.
+> 
+
+
+>      I would suggest looking to see if you can do the blob mapping in the
+>      backend rather than passing the offset down.  Maybe make the cookie index
+>      key hold the index too, e.g. "/path/to/file+offset".
+
+Have been discussed in [1].
+
+[1]
+https://lore.kernel.org/lkml/Yeeye2AUZITDsdh8@B-P7TQMD6M-0146.local/T/#m25b1229f96bf24929fb73746a07e9996e8222ac6
+
+
+"/path/to/file+offset"
+		^
+
+Besides, what does the 'offset' mean?
+
+
+> 
+>      Btw, do you still need cachefilesd for its culling duties?
+
+Yes we still need cache management in this on-demand scenario, in case
+of backing files exhausting the available blocks. (Though these backing
+files are prepared by daemon in advance, these files can all be sparse
+files.) And similarly the actual culling work should be done under
+protection of S_KERNEL_FILE, so that the culled backing file can't be
+picked back up.
+
+> 
+>  (2) Do you actually need to go through netfslib?  Might it be easier to call
+>      fscache_read() directly?  Have a look at fs/nfs/fscache.c
+
+It would be great if we can use fscache_read() directly.
+
+
+> 
+>> Besides there are still two quetions:
+>> - What's the plan of [1]? When is it planned to be merged?
+> 
+> Hopefully next merge window, but that's going to depend on a number of things.
+> 
+>> - It seems that all upper fs using fscache is going to use netfs API,
+>>   while the APIs like fscache_read_or_alloc_page() are deprecated. Is
+>>   that true?
+> 
+> fscache_read_or_alloc_page() is gone completely.
+> 
+> You don't have to use the netfs API.  You can talk to fscache directly,
+> doing DIO from the cache to an xarray-class iov_iter constructed from your
+> inode's pagecache.
+> 
+> netfslib provides/will provide a number of services, such as multipage
+> folios, transparent caching, crypto, compression and hiding the existence of
+> pages/folios from the filesystem as entirely as possible.  However, you
+> already have some of these implemented on top of iomap for the blockdev
+> interface, it would appear.
+> 
+
+Got it.
+
+
+In summary,
+
+1) I prefer option 2, i.e. calling fscache_read() directly, as the one
+at hand. In this case, the conflict with the netfs lib refactoring can
+be avoided. Besides, there will be less modification needed to
+cachefiles/netfs. Patch 1~3 are no longer required, while patch 4~6 are
+still needed, which mainly introduce the new devnode.
+
+2) Later we can change to option 1, i.e. calling netfs lib and also a
+potential new R/O backend, if the issues in [1] can be clarified or solved.
+
+[1]
+https://lore.kernel.org/lkml/Yeeye2AUZITDsdh8@B-P7TQMD6M-0146.local/T/#m25b1229f96bf24929fb73746a07e9996e8222ac6
+
 -- 
-2.34.1
-
+Thanks,
+Jeffle

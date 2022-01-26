@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F257849CA90
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F5949CA91
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238300AbiAZNSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:18:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38213 "EHLO
+        id S238367AbiAZNSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:18:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33893 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238336AbiAZNSN (ORCPT
+        by vger.kernel.org with ESMTP id S238267AbiAZNSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:18:13 -0500
+        Wed, 26 Jan 2022 08:18:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643203093;
+        s=mimecast20190719; t=1643203112;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=utFAR93ugTdxvdfcY+avXvlaf0GmpnMgBzRTz2+S36I=;
-        b=FMiiOljmfmy/OaluSUPMMeSn+SB+IPNqRGUn0eUjTIYo8ygV+Pf6TBfcWp9qRNEtuDakHt
-        kxmpsNS2KiT985sXbH8un6twaBHuwTvbMvkz9qhH0uSE5kmIsNWqJH74Mun+KoCXKCGiia
-        4Y5IcBf7T/DMZlIOiE0IVHnbe6yYMFM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=tCn89VNP4QPt8s8WQRVWyuC2AryW74LBEzVPDP/rwUc=;
+        b=LfOwxr2iwfQLAyBdQ68c21pg/QqHA95vJSNyIMvNQQW8WFU6kPVhE9ada8/ZgfUapGjSeG
+        hpUN9ae/OvveFn7/cnjkPs/0rRijpd0+lBEDR1KL9S+McegsuDQsGTM4AeIBAGhk5hj8N9
+        4RiNz8V2o5VWZqyAj8iQaf+DWcsvcF8=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-249-KeciOn9cOsasd1ir2TxtVg-1; Wed, 26 Jan 2022 08:18:09 -0500
-X-MC-Unique: KeciOn9cOsasd1ir2TxtVg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3F8F883DD28;
-        Wed, 26 Jan 2022 13:18:08 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.235])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D6EAE21ECB;
-        Wed, 26 Jan 2022 13:18:05 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86: Check .flags in kvm_cpuid_check_equal() too
-Date:   Wed, 26 Jan 2022 14:18:04 +0100
-Message-Id: <20220126131804.2839410-1-vkuznets@redhat.com>
+ us-mta-255-_WcXg0iQMQev7w3YVH9M5A-1; Wed, 26 Jan 2022 08:18:31 -0500
+X-MC-Unique: _WcXg0iQMQev7w3YVH9M5A-1
+Received: by mail-oo1-f70.google.com with SMTP id s10-20020a4ab54a000000b002ea051bad32so2307633ooo.14
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:18:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tCn89VNP4QPt8s8WQRVWyuC2AryW74LBEzVPDP/rwUc=;
+        b=oviEO+nEG/VxrnHj4TeUVtxwrD+dj2qWAEW1GGtiIRKLBIPtaTYWmBo+lEMqN/Eirg
+         nKBdeWNLSoalI2GboTbF1TrXq0X34icJsBP4xrRJs0+aiYXapRuCWFhJCYx2hQPbcum2
+         c+yJgvr0m7mc/jEwpP0x9I5QgmSyeiqSk2wTBo/7Vsz49zkMHidVkHXq9j/dke7G/FdS
+         AcKM7NHHfBiBmV4aJDboQ2omkkYYYnZ8sm3/aAlz0pCTCwqGIzFlfhM+FereDy+zmfCh
+         H64mutj3M0Aruh8yc4sFgf70K6I6vkiNgjLciRwXRr+cwH+jakyosI46mweh4di+kOto
+         Ef6Q==
+X-Gm-Message-State: AOAM531KZG3KzLn1Y+x+cCuoHaXUgCWka+1vi1tAbCg6+jzhLRDTG4Yr
+        0PgW3fdeKx+H4+HlkvsRQAxGhZ/ot9XAS3iUvC5FediVGNnkIzGZb2M43NkHGYiOYMAy2Sbo+6v
+        WW7XGcBs6Hoqcn8a/M6Dq+z10
+X-Received: by 2002:a05:6808:bcc:: with SMTP id o12mr3557182oik.66.1643203110750;
+        Wed, 26 Jan 2022 05:18:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzqzuvTIeKOL1AFkX6tuoLQmOhK8vCGo5KkDw6PARCkBSCzwu1jaDTH+ZCt1VS+OT/gClKTUw==
+X-Received: by 2002:a05:6808:bcc:: with SMTP id o12mr3557169oik.66.1643203110577;
+        Wed, 26 Jan 2022 05:18:30 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id z186sm6603449oiz.20.2022.01.26.05.18.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 05:18:30 -0800 (PST)
+From:   trix@redhat.com
+To:     agk@redhat.com, snitzer@redhat.com
+Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] dm: cleanup double word in comment
+Date:   Wed, 26 Jan 2022 05:18:26 -0800
+Message-Id: <20220126131826.1168355-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_cpuid_check_equal() checks for the (full) equality of the supplied
-CPUID data so .flags need to be checked too.
+From: Tom Rix <trix@redhat.com>
 
-Reported-by: Sean Christopherson <seanjc@google.com>
-Fixes: c6617c61e8fe ("KVM: x86: Partially allow KVM_SET_CPUID{,2} after KVM_RUN")
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Remove the second 'a'.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- arch/x86/kvm/cpuid.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/device-mapper.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 89d7822a8f5b..ddfd97f62ba8 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -133,6 +133,7 @@ static int kvm_cpuid_check_equal(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2
- 		orig = &vcpu->arch.cpuid_entries[i];
- 		if (e2[i].function != orig->function ||
- 		    e2[i].index != orig->index ||
-+		    e2[i].flags != orig->flags ||
- 		    e2[i].eax != orig->eax || e2[i].ebx != orig->ebx ||
- 		    e2[i].ecx != orig->ecx || e2[i].edx != orig->edx)
- 			return -EINVAL;
+diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
+index b26fecf6c8e87..4c621e35dd5c0 100644
+--- a/include/linux/device-mapper.h
++++ b/include/linux/device-mapper.h
+@@ -358,7 +358,7 @@ struct dm_target {
+ 	bool limit_swap_bios:1;
+ 
+ 	/*
+-	 * Set if this target implements a a zoned device and needs emulation of
++	 * Set if this target implements a zoned device and needs emulation of
+ 	 * zone append operations using regular writes.
+ 	 */
+ 	bool emulate_zone_append:1;
 -- 
-2.34.1
+2.26.3
 

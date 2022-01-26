@@ -2,217 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B20449C52C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F8249C533
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238367AbiAZIW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 03:22:59 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:14662 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238350AbiAZIWz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:22:55 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20Q7khuc013832;
-        Wed, 26 Jan 2022 08:22:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=0HKj4vuGbcinAe1GzLh6aNEB1u8mvxh6oyXEwscZzS8=;
- b=je5oIOzCOR06K6HGBsLxjCBNMVMM8fm9Y8qPd+JibJiJ1gd1UDMm7gOhuLeQrGCtF/2d
- zJUeU5CWvObIohgb6Vll3EwdToUcgG4LAgWRaa2pXljuuo79qkyZ9jdtQTQWX4IidPzg
- QBClpp/KVsTJEM/UMXKo6GtTrUA85MspG9jNfZ1LFo5RefAPz+p/9mcilV1pbsq7A7zE
- xCi1QHrUjW+qux0rNjLpaKOvg5tOhPFnB7Lv+YTfZp7VPF6yO2wuKflyArMrcMwHsDoM
- f6m8YGzz5rMMZH3hOXKlUj+/0EdhiC2R69aMwaHFFl45TsPCsSdnDorzA2QWvjbSAEvG ng== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3du2758kyc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 08:22:54 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20Q8FT5c014780;
-        Wed, 26 Jan 2022 08:22:54 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3du2758ky0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 08:22:54 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20Q8L289025199;
-        Wed, 26 Jan 2022 08:22:52 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3dr9j9jhbp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 08:22:52 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20Q8MmHp47186372
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jan 2022 08:22:49 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DCE13AE045;
-        Wed, 26 Jan 2022 08:22:48 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A156DAE05A;
-        Wed, 26 Jan 2022 08:22:47 +0000 (GMT)
-Received: from [9.171.51.88] (unknown [9.171.51.88])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 26 Jan 2022 08:22:47 +0000 (GMT)
-Message-ID: <479f0342-f6f8-9bb5-6ee5-6d788dc25631@linux.ibm.com>
-Date:   Wed, 26 Jan 2022 09:24:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 26/30] vfio-pci/zdev: wire up zPCI adapter interrupt
- forwarding support
+        id S238403AbiAZIYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 03:24:50 -0500
+Received: from mail-eopbgr70072.outbound.protection.outlook.com ([40.107.7.72]:13441
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S238378AbiAZIYt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 03:24:49 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bl3A6OECZEf+YH28UnhtIN1JI9sdNATFJzSBGda/qImDYoU5FEMdDqEmoItCI2C6BP/Po9+vhFfEVYM6NT1sIaaAVrazJ1aXk3gmyrnQz3i59jjbcXeSfr2/D0mUSac+bY9PaYGh4HQiH7uLQc6XiuC85OPv/jq4a1IYH3sqo8J2FcAaEynoDj7wgHbt5v77mE3O3lxyOY6rFG1zcweSuSqTPthyHCNgNHjsoLpsSisjLlcVF5KScDmejBPY323QZcTvuJC0XY37pEfw/kwQrAAgVRFFkeWgJyUmAO9yQ95qNF4LOzzW95VFz6HHJzqsQGJrAfUfzvcR/lqJLjZCGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4RQ6XND5UQez1fDnvKWnWYwTfu9V+PzAyetvjjWwqdo=;
+ b=fSqiI+2Eh9aAZ+tNdXfRDwcBDHML6Ic5VJyNNCuqr0rq0ojxB869nIKqkpTp3rVMXTGhG/6x38QeXWTpTGTOS3WUaECx71q4LoqzjQ25b38M11TfI8XCSZQV6+5dIH0xsItZkSxNGfsdqFFIT54UJNHppEn8/Gv9B5SZ5+byiMMUE9gQ3td0fI8s6tKyJBzpZZGBqFjENVgoHkX0YO0IXKZQBYdPcrGpJXq3kC0BC1Ju7QmPaJPB70eoeX49ICNYVIjcUystXAcd20OO/XhyroXNORfZB9wRsZhVLD00u4XlEwRlWq4JoXnUoFq19aOu5G1pPHmDFM+YbTTVA4FJaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4RQ6XND5UQez1fDnvKWnWYwTfu9V+PzAyetvjjWwqdo=;
+ b=A2QsmLDYa34+4Ml8UjWx+hkMn5qnW/2eSGDqBrDo0bqBXgA8Qs/9sSH0AwX3wvPpTqDmJga09fcnsIzUtx0V0x7HwPk2kqxDCfiTalZwyVwEYIaVghLPiVSsZXmV3TgaqBO7ioS8rndkia6NEzuYDVB+xGN2VeyoJ7IrjC772zs=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM6PR04MB5526.eurprd04.prod.outlook.com (2603:10a6:20b:9b::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Wed, 26 Jan
+ 2022 08:24:47 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d4dc:8c9a:55d0:81d8]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::d4dc:8c9a:55d0:81d8%3]) with mapi id 15.20.4930.015; Wed, 26 Jan 2022
+ 08:24:47 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH 0/5] clocksource/drivers/imx: several updates
+Thread-Topic: [PATCH 0/5] clocksource/drivers/imx: several updates
+Thread-Index: AQHX8ONNsTFmjnGsD0WJi9r2hmyxN6xdV8+ggBfiokA=
+Date:   Wed, 26 Jan 2022 08:24:47 +0000
+Message-ID: <DU0PR04MB9417BA24DB13CD6C98BE47CF88209@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20211214120737.1611955-1-peng.fan@oss.nxp.com>
+ <DU0PR04MB94177F777E854B92C665303488519@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <DU0PR04MB94177F777E854B92C665303488519@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
- <20220114203145.242984-27-mjrosato@linux.ibm.com>
- <75c74f80-0a74-40dc-6797-473522ef2803@linux.ibm.com>
- <5f3797f7-e127-7de0-dc96-4b04e5ff839a@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <5f3797f7-e127-7de0-dc96-4b04e5ff839a@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0-qreF1s6gmw-5k7SUT5vQn5Mbw0U93G
-X-Proofpoint-ORIG-GUID: kgeb6-9OH2SG9V8RsnCbafHxUt7-rDjT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-26_02,2022-01-25_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 mlxscore=0
- phishscore=0 mlxlogscore=999 clxscore=1015 adultscore=0 impostorscore=0
- bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201260044
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3ade7557-568c-4568-1587-08d9e0a55062
+x-ms-traffictypediagnostic: AM6PR04MB5526:EE_
+x-microsoft-antispam-prvs: <AM6PR04MB552695C8897E63E05ED554CF88209@AM6PR04MB5526.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1227;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dvqEgZ77b5xHse+OcdW4Mg06SN7ZKBMQOK1ciplcdvrMWkE8kTEjwBkWy+jcG3+rM5MMf9o6tOyP+QARbcbCBoQ4sdQQIKsuKNOIVmF86A54WzA4b0SL5GagHjgjtSz0dVoEQYRF8gMF+r/CFzsC+WlYYZA1Qz5lQHEr5mby+60OWuCbYesbzkcVHPt0+J1kVmSh6kzthFFboQ2fnXeXzp3sBL0/mnpzD5r43e9k/qqeLSojDxQ6W7ZWENxsc7hrxXwaZ3uC7q4TlGj7NMY764Y50MAyhdKL1wr61QLH74eiyv9vGUmAWYoqJRPfxftN3Gw2W3tPaXcYuI9bYHgZcOHmkikJqYIqPHZoKng5Pjx0ffXPKnotciELJVKXQsdSqxgw40DQ16K5A2nyOr2fYXDbxUci45GSkP/+70DZryz1MA5LHjjweGUin4LhnVkf2XHnmqJnb8cy5eP7cFBbgLmLWwTT/aItlVTorvccqWmXhkPyb02XwsZrLx3ViH15QSb1PRptdUriknnT+EdP6ngRrH7sxOSDbMXSSMny7zHm7wAyl4pAKfQYCkKReYdpLXXpH4W3Aorl9FuIKMSuICC6HWHVs9HqQCRQHeBmEGTIM4vvAWkwogcjhCWsCjVQPxqnlDlAUrXg1/ej6CL17soTbELJyRNvlYbfwi8hxh7y4A5uM/zfPMvwOO4KqEDSz+e7iETF+VsX+tM7x0vwhw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(38100700002)(66476007)(66556008)(66946007)(2906002)(8676002)(64756008)(76116006)(4744005)(33656002)(66446008)(52536014)(15650500001)(8936002)(26005)(5660300002)(4326008)(55016003)(44832011)(71200400001)(316002)(9686003)(110136005)(86362001)(7696005)(38070700005)(6506007)(54906003)(508600001)(83380400001)(122000001)(20210929001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pgoCZBOFnEaNPhqgyGNpVNagfcEKEwXgsJtIzv36ZL3/aamzQKalXGMdBquR?=
+ =?us-ascii?Q?vk3HRAPf9hof5rva4C8ZdGHRCYTxPcm6arFbFYIE5N4N8u0WY0NvSkMxa2Ju?=
+ =?us-ascii?Q?eyUSy+4hHaoOl3cFNJQAMZqYL3+i1EJagnn2s2pC7X++l2wVDg4MrPfnIz96?=
+ =?us-ascii?Q?ALi0HuSqqj2F1ml3kyV6Eiu5hUEmKSVlDNrB3zxe839rVZGbiYxpMKXHRPUD?=
+ =?us-ascii?Q?E4W+UhjdqQjiAxLpxwGns0f8rcic3jjh5TrCiC3zqC+VUTQwztDoFDtOeA17?=
+ =?us-ascii?Q?2biHsz8JmlzKnzjCj5Oe97qtFjApPcBqwniozvn958QySWf03RU8HLHy3gRO?=
+ =?us-ascii?Q?crMNESxBJ8eYgO7O9TaZxLH+JCe57HTbAYFOcympmgwkSLSi1yO7AH/t8fdD?=
+ =?us-ascii?Q?Eyl6QOUnFamcv48utEIB3tPhZFndPNr9q5FcETVr/YNK560okcfyCC0ksPk/?=
+ =?us-ascii?Q?B7ZHiqowHOdB7df4BPsMCYrlE6rJpTBlTok8cD4kIyV7L0SeQ4kBn+kkgwsA?=
+ =?us-ascii?Q?v4nfYNNYRP/12sEqNGXWu/R/sPyrKJt/vhESjHpXsBIUCP/9uQKCBCNphOYm?=
+ =?us-ascii?Q?Y6ijqI0a3wMyYhAQrV9YDFzApDYOOkNJ+2lww0hMgKApd3wMb3F+Qm/1I04n?=
+ =?us-ascii?Q?BDBbEqjj6pLxJxF1DHbqwxB8+qH20JeQZVS6pR6q1zKpHVEFDR5mIzFuLLlE?=
+ =?us-ascii?Q?u93+ThT86vSF3dkzFq++iuvUn39BhA7ZBseOuJ0L8Wb+j3hcTIspXCpQx75R?=
+ =?us-ascii?Q?wDmcZEn6hVq3UnAdo6MSc+sQk3wGosHpnvuuSiFbZInNxzHWezRHZ2+6emSO?=
+ =?us-ascii?Q?B4OkLqB4Lk/gHbHbaeOdl3K5GtZ8pVNf20nYgZV0EijXBfgnbxk/FtrPPrmN?=
+ =?us-ascii?Q?aATGCovm3RbC+sLfk4RR5VHYkR9rP7NDEnApTq2O6pjN5vmFPmx4PuWmUpOj?=
+ =?us-ascii?Q?OD9sP9sxRxf3Fxt/FVkFrT7TQpPeZmVoWoJppete6NHltf2dpm99zE1aCcOG?=
+ =?us-ascii?Q?g9AYrDoUWBA2YvieXX6T8YCU6pCAKHHCmPsPz09dGzrFSSByisa+rParyn1V?=
+ =?us-ascii?Q?ikN0WubFHFh0J5g1HNPTvfnLh7vGzXXSeGBSgqBX9ygxLVTAl42QXI2RpFHk?=
+ =?us-ascii?Q?Ly5hbEseC3wo0+uaCw9+s77aP1Fh6KSKAqpuo8zbBEC8siOKJFmfVAge9K04?=
+ =?us-ascii?Q?gRYrJyXKbz4JihYsqblexk7Z7UGhWxM/yJZKSiWbXKxFqziN0TBwxQckxSXQ?=
+ =?us-ascii?Q?iRG2aHsIVVr/E2IXrPOFZE5IWZqoE9vnabwRHFHuOH7gbQ6x9JiNV67VdA9g?=
+ =?us-ascii?Q?5I0n/oQjhzJm/oirHOXb3+iYA5XeVhgIzyj6+Fqmj8u20RBD96//b0tQitYf?=
+ =?us-ascii?Q?eVRrQs7IWHsbe9kAmTcqbFA+YdBJ/ngLS3azRXGsY4sG20muoGiuTYP1goCm?=
+ =?us-ascii?Q?R82Z7vjJb8YQXbBHSev+cxLn+SWwLoMeQXdi1tJNJZy34eQAVUVCd4eZlh34?=
+ =?us-ascii?Q?OwQ40URdE9ljuP5W6NndWqLqGlX4ob1UKxWkrYfIQWMKur2rZLFhwiZfmCO3?=
+ =?us-ascii?Q?ep8bJfxuk7ugrib0iEM0wMdYHbEFAeOJ04hRWytdBy7W51TNsEXDcsI40E9f?=
+ =?us-ascii?Q?tw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ade7557-568c-4568-1587-08d9e0a55062
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2022 08:24:47.1217
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xTv/4Pjd1LS2j1CnBXNqS/WDeMQEADYBih+oRuLlNCb1aIyLHv4ii0u7C0XqKqbZmgueAdVIuZfw3DmsmB/9pw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5526
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Daniel,
 
+> Subject: RE: [PATCH 0/5] clocksource/drivers/imx: several updates
 
-On 1/25/22 15:16, Matthew Rosato wrote:
-> On 1/25/22 7:36 AM, Pierre Morel wrote:
->>
->>
->> On 1/14/22 21:31, Matthew Rosato wrote:
->>> Introduce support for VFIO_DEVICE_FEATURE_ZPCI_AIF, which is a new
->>> VFIO_DEVICE_FEATURE ioctl.  This interface is used to indicate that an
->>> s390x vfio-pci device wishes to enable/disable zPCI adapter interrupt
->>> forwarding, which allows underlying firmware to deliver interrupts
->>> directly to the associated kvm guest.
->>>
->>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
->>> ---
->>>   arch/s390/include/asm/kvm_pci.h  |  2 +
->>>   drivers/vfio/pci/vfio_pci_core.c |  2 +
->>>   drivers/vfio/pci/vfio_pci_zdev.c | 98 +++++++++++++++++++++++++++++++-
->>>   include/linux/vfio_pci_core.h    | 10 ++++
->>>   include/uapi/linux/vfio.h        |  7 +++
->>>   include/uapi/linux/vfio_zdev.h   | 20 +++++++
->>>   6 files changed, 138 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/s390/include/asm/kvm_pci.h 
->>> b/arch/s390/include/asm/kvm_pci.h
->>> index dc00c3f27a00..dbab349a4a75 100644
->>> --- a/arch/s390/include/asm/kvm_pci.h
->>> +++ b/arch/s390/include/asm/kvm_pci.h
->>> @@ -36,6 +36,8 @@ struct kvm_zdev {
->>>       struct zpci_fib fib;
->>>       struct notifier_block nb;
->>>       bool interp;
->>> +    bool aif;
->>> +    bool fhost;
->>
->> Can we please have a comment on these booleans? > Can we have explicit 
->> naming to be able to follow their usage more easily?
->> May be aif_float and aif_host to match with the VFIO feature?
-> 
-> Sure, rename would be fine.
-> 
-> As for a comment, maybe something like
-> 
-> bool aif_float; /* Enabled for floating interrupt assist */
-> bool aif_host;  /* Require host delivery */
+Do you have time to give a look?
 
-good for me.
+Thanks,
+Peng.
 
+>=20
+> > Subject: [PATCH 0/5] clocksource/drivers/imx: several updates
+> >
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > This patchset includes several update of i.MX sysctr and tpm driver.
+>=20
+> Ping..
+>=20
+> Thanks,
+> Peng.
+>=20
+> >
+> > Peng Fan (5):
+> >   clocksource/drivers/imx-sysctr: drop IRQF_IRQPOLL
+> >   clocksource/drivers/imx-tpm: drop IRQF_IRQPOLL
+> >   clocksource/drivers/imx-tpm: mark two variable with __ro_after_init
+> >   clocksource/drivers/imx-tpm: add CLOCK_EVT_FEAT_DYNIRQ
+> >   clocksource/drivers/imx-tpm: update name of clkevt
+> >
+> >  drivers/clocksource/timer-imx-sysctr.c |  2 +-
+> >  drivers/clocksource/timer-imx-tpm.c    | 10 +++++-----
+> >  2 files changed, 6 insertions(+), 6 deletions(-)
+> >
+> > --
+> > 2.25.1
 
-> 
-> ...
-> 
->>> diff --git a/include/uapi/linux/vfio_zdev.h 
->>> b/include/uapi/linux/vfio_zdev.h
->>> index 575f0410dc66..c574e23f9385 100644
->>> --- a/include/uapi/linux/vfio_zdev.h
->>> +++ b/include/uapi/linux/vfio_zdev.h
->>> @@ -90,4 +90,24 @@ struct vfio_device_zpci_interp {
->>>       __u32 fh;        /* Host device function handle */
->>>   };
->>> +/**
->>> + * VFIO_DEVICE_FEATURE_ZPCI_AIF
->>> + *
->>> + * This feature is used for enabling forwarding of adapter 
->>> interrupts directly
->>> + * from firmware to the guest.  When setting this feature, the flags 
->>> indicate
->>> + * whether to enable/disable the feature and the structure defined 
->>> below is
->>> + * used to setup the forwarding structures.  When getting this 
->>> feature, only
->>> + * the flags are used to indicate the current state.
->>> + */
->>> +struct vfio_device_zpci_aif {
->>> +    __u64 flags;
->>> +#define VFIO_DEVICE_ZPCI_FLAG_AIF_FLOAT 1
->>> +#define VFIO_DEVICE_ZPCI_FLAG_AIF_HOST 2
->>
->> I think we need more information on these flags.
->> What does AIF_FLOAT and what does AIF_HOST ?
->>
-> 
-> You actually asked for this already on Jan 19 :), here's a copy of that 
-> response inline here:
-
-:) I forgot
-
-> 
-> I can add a small line comment for each, like:
-> 
->   AIF_FLOAT 1 /* Floating interrupts enabled */
->   AIF_HOST 2  /* Host delivery forced */
-> 
-> But here's a bit more detail:
-> 
-> On SET:
-> AIF_FLOAT = 1 means enable the interrupt forwarding assist for floating 
-> interrupt delivery
-> AIF_FLOAT = 0 means to disable it.
-> AIF_HOST = 1 means the assist will always deliver the interrupt to the 
-> host and let the host inject it
-> AIF_HOST = 0 host only gets interrupts when firmware can't deliver
-> 
-> on GET, we just indicate the current settings from the most recent SET, 
-> meaning:
-> AIF_FLOAT = 1 interrupt forwarding assist is currently active
-> AIF_FLOAT = 0 interrupt forwarding assist is not currently active
-> AIF_HOST = 1 interrupt forwarding will always go through host
-> AIF_HOST = 0 interrupt forwarding will only go through the host when 
-> necessary
-> 
-> My thought would be add the line comments in this patch and then the 
-> additional detail in a follow-on patch that adds vfio zPCI to 
-> Documentation/S390
-> 
-
-good for me.
-
--- 
-Pierre Morel
-IBM Lab Boeblingen

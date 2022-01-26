@@ -2,167 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0036D49C845
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E49C49C84C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240458AbiAZLGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:06:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240462AbiAZLGd (ORCPT
+        id S240486AbiAZLJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:09:11 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48518 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S240482AbiAZLJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:06:33 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED499C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:06:32 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id e16so11516290pgn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:06:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YKOxeAFs8Emmc3fhmzQkKbSXzeM4KV2nj8OXlHcTbRc=;
-        b=Qs/qsEDDuKtEoofAiibv7eMKY8JF2iTOALoGwBLBm6gTRvPztMZOI/oV09l3bECE8S
-         HbbIzy2bkijESpND9yJcLDqsqolSdFiF1hs1ZBPi13J603abakFE0qPy8gNJIHwfvsiK
-         SD/GoLAZfU+COhAKph8wK9wbP6JXUfEoYqg+9GHhBnEfjo+0naD1VmUf8xo0BP+mqijJ
-         tmpBm+qAg1CJE/n2T1kyoGCVy0K/I6yH3u4s7yxh04kEZRrZp0hgoeNY/7Qz6XS8rPTA
-         Et5wcAMS/ZxXwK31nlkDjx6Xh2UnI8nXTuMQSN6xJyrYRCcK7gooOkt/nowwXctIXhZn
-         eBAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YKOxeAFs8Emmc3fhmzQkKbSXzeM4KV2nj8OXlHcTbRc=;
-        b=tWowl17m95IHfanV07043jjoAIZ40IrDxaUusP6S7t8oiYaWOcyrCcabcVzTsG9+Pu
-         WOGq+61G6s1+g4+0JoKOhDvxJDULkv6kVmA9Se57Sg7WKW59s9ZmD7crxwMKLpdg5CeE
-         xK0FkJpj8Tl9JCp/LcIfN6URkLB9zRSLuxADAmf/J6VihDAZDtTLsgDF564NirCoSNZe
-         yEEk/m5wpBRqGSA6hBnkf8mBmV9g8ydsOSVSAMoD45ca+OvDL6Xuw2ZeHulOU+Ws4GgK
-         EP7gMKswTyjFZF96wCMlJBZehEc5iK93NX8fBOE9hFgczxtPX8jg0ZsmibIP4LDINzFE
-         B5RA==
-X-Gm-Message-State: AOAM531FqE2V8NWUmUvuV4PVYm8dz0kWDyEKZTBaZnBl9lGiL2vUkP0U
-        /vS9a4j9EV9iIsD0hbWzpfMu1Q==
-X-Google-Smtp-Source: ABdhPJyrozMJzK7uXJz7QXVrc55G1XxvDHKRrhDehcrXchiGbxAxGQWWo8T0lVPkuVswCE/5A1+B5w==
-X-Received: by 2002:a05:6a00:cc2:b0:4c9:f07d:6abe with SMTP id b2-20020a056a000cc200b004c9f07d6abemr10317842pfv.17.1643195192179;
-        Wed, 26 Jan 2022 03:06:32 -0800 (PST)
-Received: from sunil-ThinkPad-T490.dc1.ventanamicro.com ([49.206.3.187])
-        by smtp.gmail.com with ESMTPSA id r11sm1811792pff.81.2022.01.26.03.06.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 03:06:31 -0800 (PST)
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Heinrich Schuchardt <xypron.glpk@gmx.de>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Abner Chang <abner.chang@hpe.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Sunil V L <sunilvl@ventanamicro.com>
-Subject: [RFC PATCH 1/1] riscv/efi_stub: Add support for RISCV_EFI_BOOT_PROTOCOL
-Date:   Wed, 26 Jan 2022 16:36:15 +0530
-Message-Id: <20220126110615.33371-2-sunilvl@ventanamicro.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220126110615.33371-1-sunilvl@ventanamicro.com>
-References: <20220126110615.33371-1-sunilvl@ventanamicro.com>
+        Wed, 26 Jan 2022 06:09:10 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20Q9nERc012928;
+        Wed, 26 Jan 2022 12:08:41 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=QFR2dN8dkibpF8B0/9wAubqoFJzjHR76hN1qSB1UNQc=;
+ b=CJQz9enHEakzEJDRo8gWXXxkHkaYq1wEEHzQA2WpFfqlt5TKNpSdTQAsGdNvYswfkbP6
+ o+X6HLUvphRs6/HC+gmlqmPtPHJosL6IG3z+EOuBzhB2pBfiXhQnMpACtRT2RM2oyuND
+ jVuawcLFB6TgxcImxKZxSNhdOBY4IlxQgP+kXyko9UGyHJ7vRNxKlM8vMQYqw3jR+ss+
+ Wo9pfAlGzYNVja5DSfZNyGfoibXeHlhYIYL2bhBODXaM341XCHHQmJPMBgiUGe3zbg+d
+ tntyCPb9aE9taxvPJe7Sw+fRR5h3DaIS1WrTpUd0C74I3dfrbC6lUkggL7QwCDlbw5yx jg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3du40ngeb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 12:08:41 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CCA4410002A;
+        Wed, 26 Jan 2022 12:08:39 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B5D70216EE0;
+        Wed, 26 Jan 2022 12:08:39 +0100 (CET)
+Received: from [10.48.0.175] (10.75.127.46) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 26 Jan
+ 2022 12:08:39 +0100
+Message-ID: <9662651a-12d9-4893-95c2-aa1a3a10302d@foss.st.com>
+Date:   Wed, 26 Jan 2022 12:08:38 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/3] nvmem: core: Fix a conflict between MTD and NVMEM on
+ wp-gpios property
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <robh+dt@kernel.org>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>, <chenshumin86@sina.com>
+References: <20220105135734.271313-1-christophe.kerello@foss.st.com>
+ <20220105135734.271313-4-christophe.kerello@foss.st.com>
+ <3f9a9731-c096-bc9b-63df-bd1dff032737@linaro.org>
+From:   Christophe Kerello <christophe.kerello@foss.st.com>
+In-Reply-To: <3f9a9731-c096-bc9b-63df-bd1dff032737@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-26_02,2022-01-26_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the support for getting the boot hart ID in
-Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL.
+Hi Srinivas, Miquel,
 
-Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
----
- drivers/firmware/efi/libstub/efistub.h    | 15 ++++++++++++
- drivers/firmware/efi/libstub/riscv-stub.c | 28 ++++++++++++++++++++---
- include/linux/efi.h                       |  1 +
- 3 files changed, 41 insertions(+), 3 deletions(-)
+On 1/25/22 11:44, Srinivas Kandagatla wrote:
+> 
+> 
+> On 05/01/2022 13:57, Christophe Kerello wrote:
+>> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+>> index e765d3d0542e..e11c74db64f9 100644
+>> --- a/drivers/nvmem/core.c
+>> +++ b/drivers/nvmem/core.c
+>> @@ -769,7 +769,7 @@ struct nvmem_device *nvmem_register(const struct 
+>> nvmem_config *config)
+>>       if (config->wp_gpio)
+>>           nvmem->wp_gpio = config->wp_gpio;
+>> -    else
+>> +    else if (config->reg_write)
+> This is clearly not going to work for everyone.
+> 
+> A flag in nvmem_config to indicate that wp gpio is managed by provider 
+> driver would be the right thing to do here.
 
-diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-index edb77b0621ea..0428f8816942 100644
---- a/drivers/firmware/efi/libstub/efistub.h
-+++ b/drivers/firmware/efi/libstub/efistub.h
-@@ -720,6 +720,21 @@ union efi_tcg2_protocol {
- 	} mixed_mode;
- };
- 
-+typedef union riscv_efi_boot_protocol riscv_efi_boot_protocol_t;
-+
-+union riscv_efi_boot_protocol {
-+	struct {
-+		u64 revision;
-+		efi_status_t (__efiapi *get_boot_hartid)(
-+							 riscv_efi_boot_protocol_t *,
-+							 size_t *);
-+	};
-+	struct {
-+		u32 revision;
-+		u32 get_boot_hartid;
-+	} mixed_mode;
-+};
-+
- typedef union efi_load_file_protocol efi_load_file_protocol_t;
- typedef union efi_load_file_protocol efi_load_file2_protocol_t;
- 
-diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-index 380e4e251399..c7add4eb5453 100644
---- a/drivers/firmware/efi/libstub/riscv-stub.c
-+++ b/drivers/firmware/efi/libstub/riscv-stub.c
-@@ -46,12 +46,34 @@ static u32 get_boot_hartid_from_fdt(void)
- 	return fdt32_to_cpu(*prop);
- }
- 
-+static u32 get_boot_hartid_from_efi(void)
-+{
-+	efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
-+	efi_status_t status;
-+	riscv_efi_boot_protocol_t *boot_protocol;
-+	size_t boot_hart_id;
-+
-+	status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
-+			     (void **)&boot_protocol);
-+	if (status == EFI_SUCCESS) {
-+		status = efi_call_proto(boot_protocol,
-+					get_boot_hartid, &boot_hart_id);
-+		if (status == EFI_SUCCESS) {
-+			return (u32)boot_hart_id;
-+		}
-+	}
-+	return U32_MAX;
-+}
-+
- efi_status_t check_platform_features(void)
- {
--	hartid = get_boot_hartid_from_fdt();
-+	hartid = get_boot_hartid_from_efi();
- 	if (hartid == U32_MAX) {
--		efi_err("/chosen/boot-hartid missing or invalid!\n");
--		return EFI_UNSUPPORTED;
-+		hartid = get_boot_hartid_from_fdt();
-+		if (hartid == U32_MAX) {
-+			efi_err("/chosen/boot-hartid missing or invalid!\n");
-+			return EFI_UNSUPPORTED;
-+		}
- 	}
- 	return EFI_SUCCESS;
- }
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index ccd4d3f91c98..9822c730207c 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
- #define EFI_CONSOLE_OUT_DEVICE_GUID		EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
- #define APPLE_PROPERTIES_PROTOCOL_GUID		EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
- #define EFI_TCG2_PROTOCOL_GUID			EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
-+#define RISCV_EFI_BOOT_PROTOCOL_GUID		EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
- #define EFI_LOAD_FILE_PROTOCOL_GUID		EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
- #define EFI_LOAD_FILE2_PROTOCOL_GUID		EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
- #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
--- 
-2.25.1
+Based on your inputs, I will add a new boolean flag in nvmen_config 
+(proposal name: skip_wp_gpio) and I will set it to true in mtdcore.c 
+when nvmen_config structure is initialized. It will be part of the V2.
 
+Regards,
+Christophe Kerello.
+
+>>           nvmem->wp_gpio = gpiod_get_optional(config->dev, "wp",
+>>                               GPIOD_OUT_HIGH);
+> 
+> --srini
+> 

@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD6649D168
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBFF49D16E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244107AbiAZSGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:06:45 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49498 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiAZSGo (ORCPT
+        id S244124AbiAZSHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:07:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244144AbiAZSHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:06:44 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58EEE61B9D
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 18:06:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F773C340E3;
-        Wed, 26 Jan 2022 18:06:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643220403;
-        bh=QLWf46ZJBe3A6s/1uQlaavv/GLlnGitzbdxjYBqG184=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2lm6c0Nrx/v4Zqt61okemGVxrYTkyV+60Ki+OaVumqWNML/3L4nkZm3P63a8+TP5r
-         U07x7Dn8FR42wsrasLD6au6IX0deMML7Z2grbCHUYWaBa3zyXo3I2MSulRaAw/1KU0
-         bDn1O9uFgqjHVyZRzmooNszhSq6q7bxI60kUMm4M=
-Date:   Wed, 26 Jan 2022 19:06:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Usyskin <alexander.usyskin@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] mei: gsc: add runtime pm handlers
-Message-ID: <YfGNsSuRGAxYLfCG@kroah.com>
-References: <20220119155807.222657-1-alexander.usyskin@intel.com>
- <20220119155807.222657-5-alexander.usyskin@intel.com>
+        Wed, 26 Jan 2022 13:07:49 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6207C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:07:48 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id z7so774003ljj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:07:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e6GlIwf2gQF3ITti5q/SlwCwbOwNxQ4Vmm6ghQbKw6g=;
+        b=Ua1tzA6BRz4Kicy3wWXE4baxIRed4b9N+oLT8SW2I9QdF1CllcC4jq2nAn5zWd10IO
+         NRGiqajhZhjSigz6UU0a1JEOJou2zOPJ12aECIZ9bjc8mfmO0BauwNMsuq04vVIodApe
+         IHoHDZhgNwNhnqgs3I9PsX7XKNZH1bfLcGbAjDEEmBsdWnRJLrk392k4up2kfQWxGBGK
+         ZE4p0xGXNI2SGwMhgAwQMHa42mmsoHGdVIudHFz4d01ODNhzl2n8r9F9WWgY8V6Vrxgp
+         HvvR2P09koQ/4fm1aRPs7B8PGp9XZEqJKfuuPaWHYVph0twQVUqPMaLvRxCGSEexEdlU
+         tOWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e6GlIwf2gQF3ITti5q/SlwCwbOwNxQ4Vmm6ghQbKw6g=;
+        b=FjJDEuITRT5gWQKDGLqecXorYCXSshjY95pmdemab4b/adXbzo8WL4nMsVaySzS1hs
+         raaSzvmZncUdgHVPlr2A4tjgHgDzGT1QHu1qcgRcmgUuESBDaM6SVK29AmPF+6cfpfgA
+         pra2H1VvXzP3MRQZyfiTrcbs+iEaWiKQM0txXeYvv+Ix+nCrsPacPiltaur+tGPsXDgw
+         V+fSedyioKp7BBmsmN3tMMUhd3OvbH+PrO5U+bPxIlFHF/Kz5MjdatKtzxDqRbUN2BzW
+         0/+mJbYi0D4IKJpRvMLO6rUf9t442Y8Cib9rw0mQUzbwOkoVg/UQLfREw39a1csUtIsy
+         Zf3Q==
+X-Gm-Message-State: AOAM531Qf47yp0OO2OcKIBeFuVwrsr2P2QrXlArynqQGG2SnkqnL9jvD
+        cn/ITVWQ0OL+OV7218RMjO9IpU7dKXUXFSbUPhNc5CQsxIs=
+X-Google-Smtp-Source: ABdhPJzaM9QfYFgak03rWnAuv3xprmvfFYLw+Tw36FXo3pPPNnx5IxgcrSkUkrR/bJPmAwTO2cPPsNjs7CeXngEv/vg=
+X-Received: by 2002:a05:651c:984:: with SMTP id b4mr153763ljq.235.1643220466896;
+ Wed, 26 Jan 2022 10:07:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119155807.222657-5-alexander.usyskin@intel.com>
+References: <20220126175747.3270945-1-keescook@chromium.org>
+In-Reply-To: <20220126175747.3270945-1-keescook@chromium.org>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 26 Jan 2022 19:07:20 +0100
+Message-ID: <CAG48ez3hN8+zNCmLVP0yU0A5op6BAS+A-rs05aiLm4RQvzzBpg@mail.gmail.com>
+Subject: Re: [PATCH] fs/binfmt_elf: Add padding NULL when argc == 0
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 05:58:06PM +0200, Alexander Usyskin wrote:
-> From: Tomas Winkler <tomas.winkler@intel.com>
-> 
-> Implement runtime handlers for mei-gsc, to track
-> idle state of the device properly.
-> 
-> CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-> ---
->  drivers/misc/mei/gsc-me.c | 80 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 79 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/misc/mei/gsc-me.c b/drivers/misc/mei/gsc-me.c
-> index f58e54d2c1fc..fddae8009b62 100644
-> --- a/drivers/misc/mei/gsc-me.c
-> +++ b/drivers/misc/mei/gsc-me.c
-> @@ -158,7 +158,85 @@ static int __maybe_unused mei_gsc_pm_resume(struct device *device)
->  	return 0;
->  }
->  
-> -static SIMPLE_DEV_PM_OPS(mei_gsc_pm_ops, mei_gsc_pm_suspend, mei_gsc_pm_resume);
-> +static int __maybe_unused mei_gsc_pm_runtime_idle(struct device *device)
-> +{
-> +	struct mei_device *dev;
-> +
-> +	dev_dbg(device, "rpm: me: runtime_idle\n");
-> +
-> +	dev = dev_get_drvdata(device);
-> +	if (!dev)
-> +		return -ENODEV;
-> +	if (mei_write_is_idle(dev))
-> +		pm_runtime_autosuspend(device);
-> +
-> +	return -EBUSY;
-> +}
-> +
-> +static int  __maybe_unused mei_gsc_pm_runtime_suspend(struct device *device)
-> +{
-> +	struct mei_device *dev;
-> +	struct mei_me_hw *hw;
-> +	int ret;
-> +
-> +	dev_dbg(device, "rpm: me: runtime suspend\n");
+On Wed, Jan 26, 2022 at 6:58 PM Kees Cook <keescook@chromium.org> wrote:
+> Quoting Ariadne Conill:
+>
+> "In several other operating systems, it is a hard requirement that the
+> first argument to execve(2) be the name of a program, thus prohibiting
+> a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
+> but it is not an explicit requirement[1]:
+>
+>     The argument arg0 should point to a filename string that is
+>     associated with the process being started by one of the exec
+>     functions.
+> ...
+> Interestingly, Michael Kerrisk opened an issue about this in 2008[2],
+> but there was no consensus to support fixing this issue then.
+> Hopefully now that CVE-2021-4034 shows practical exploitative use[3]
+> of this bug in a shellcode, we can reconsider."
+>
+> An examination of existing[4] users of execve(..., NULL, NULL) shows
+> mostly test code, or example rootkit code. While rejecting a NULL argv
+> would be preferred, it looks like the main cause of userspace confusion
+> is an assumption that argc >= 1, and buggy programs may skip argv[0]
+> when iterating. To protect against userspace bugs of this nature, insert
+> an extra NULL pointer in argv when argc == 0, so that argv[1] != envp[0].
+>
+> Note that this is only done in the argc == 0 case because some userspace
+> programs expect to find envp at exactly argv[argc]. The overlap of these
+> two misguided assumptions is believed to be zero.
 
-No need for debugging code to remain, use ftrace if you really need it.
+Will this result in the executed program being told that argc==0 but
+having an extra NULL pointer on the stack?
+If so, I believe this breaks the x86-64 ABI documented at
+https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf - page 29,
+figure 3.9 describes the layout of the initial process stack.
 
-Same for other dev_dbg() calls in this patch, they can all be removed.
-
-thanks,
-
-greg k-h
+Actually, does this even work? Can a program still properly access its
+environment variables when invoked with argc==0 with this patch
+applied? AFAIU the way userspace locates envv on x86-64 is by
+calculating 8*(argc+1)?

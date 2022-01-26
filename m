@@ -2,73 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4D949C71A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 206C749C717
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239620AbiAZKHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239600AbiAZKHg (ORCPT
+        id S239605AbiAZKHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:07:09 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:49734
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239600AbiAZKHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:07:36 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52353C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:07:36 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id i62so23428469ybg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:07:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ED6xZ1aoXJLSNfOfycmDD/UZTD6F5UIAxuxHbpSpO6Q=;
-        b=29I8vvPUfluAh9iwV5m8myx1+C7m9ajFGFE19XAriSAkpfiJG8aOONviW2Tq9FoVsg
-         rdPVJrXJvs4VW8a2NYmumWTuO50FcQNS8cW5Pm+drWEbG1vrrBtd7UAh8ln01y/cola9
-         F4hNMSc1/MZuc/RP509LmeT0mohQDqePglw7fRILTJiJzSzan6IaxJDH7gwikhjB491n
-         T9/2C3ITf75ql0AN8yQnZjJFho4FC0UV5IK5uMxTLTaTFue7R+Fas3JGvDBF3VvRQVY7
-         sJWs4+zaKmJi2BRrJcG0diL7jZoecNSQ/5jLLHAtgUAz4KQEMBcjzUVQPv+GB9PyecaC
-         q0Fw==
+        Wed, 26 Jan 2022 05:07:05 -0500
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4AD733FFFC
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:07:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643191624;
+        bh=oThQwKFK6XtH78HFKeqJt+QV8RxriJyyesSRLsPqsDo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=X6VInlb9equJdSVZo/rLFFxsxpesnnkmZgsN7jIF4D/pAz7SDZccFwL9/otbb7R09
+         BgL4/EyzU0SWgLMaFD2iJ1DPzvaka4h3yGCRu6kILu7Hoj3XyAmLGeABZbAPsckkBh
+         5Vy7wRLlhSFduMiYu2AZiQVTz2Y20+0mxDIWWLnztkBnbolxVLXfi/cYtMPJqcwjyh
+         SnPX+A9NU3hAaf/2aiKTPTqIyUj67Am7SE+jJfowQmS7sP7aFCXBB6tO3/8ENnmGlR
+         52onQDIzoiarrCRpkT1g+F201JaX2qB4cM0kMQYuZ8UIdPeSA6hvVPpctUFT6iwB79
+         2fwP3GejNVSzw==
+Received: by mail-wm1-f72.google.com with SMTP id c7-20020a1c3507000000b0034a0dfc86aaso179758wma.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:07:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ED6xZ1aoXJLSNfOfycmDD/UZTD6F5UIAxuxHbpSpO6Q=;
-        b=cmyvmhLjoN11qJTcTaWCrsWP/QCatGbz/ezBlwTk22b5KqRJj9SR7/mTnmoE6j9x9k
-         jOwHwLwwqn1bcHgcMHm3gMFwFZWSiwdumTCzazFYrmXdlblxL/sOgoHUgL2Dklu+aJAY
-         tivnMzJ6TeTI1OnX1+oufHz1eEB1NtivlMOEhv+PAAhkomWHRCAnMr/5qz0Lo5iGAZ4b
-         ykZxnG9tpPG3RQXJalTZnJODZ3/YPuO6GXb+lwsoL6kbyMEV4ceT/VI6t6JCeJl7CLhy
-         yTURBpizD8D7oWk9leT5g6kfUUBY0oliOa7k18WfnOEpB26Jy5oCboQ2TFHL4qz6e1O/
-         QEnw==
-X-Gm-Message-State: AOAM5339b+JQDcxBjZMK/fgcIbNNzmSSy0w5P/hgMPVtPpLFvnwve4S+
-        1qaFNH4ZNuEoqJe0M2/n9c6owEEPC/rRZqcGbmzJ8WLlwVotYw==
-X-Google-Smtp-Source: ABdhPJyfMVEZZMn31mQKRhAO/W9jLqL75cv+COKEH+X2Yy1NeA/UZ0HSfnCkyye8kkUiZLgfDHl70Tb4BAnAuStHKmg=
-X-Received: by 2002:a05:6902:100c:: with SMTP id w12mr20989024ybt.317.1643191655612;
- Wed, 26 Jan 2022 02:07:35 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oThQwKFK6XtH78HFKeqJt+QV8RxriJyyesSRLsPqsDo=;
+        b=5Grt2hA5WaemnAlqxCF2kLYhLoubSi56LsjpNzTQAVezpDRA7jTVSGkur5/kEeeMw1
+         0CJc2nhWmJ1H/O9qi+FbmxGNqFEVC7t9MLoHTguIwi4M/JSlLmYNJVCe8E9JU1dwTvrm
+         O5JpNHa4i0jW6sLESmqznl6lDjKb7raAnv/wPJh+7mZjw4oW6Pi0BO/ue0blaOFM/rOU
+         Fdr5UX6D7UVXXAsLqdQmyHFgw0P6H2DryGkUlElZJhefnXcknTYjOr4/qZIENT0+A5zD
+         D9KxsX/EgIqnUUOoIBdZI/Ag17gwp4Hk5Bm43JUOqUIRU9j2DsP1f7mBUBzflZv/8zah
+         ecaQ==
+X-Gm-Message-State: AOAM533p2T6YIf2KRJK8SDv8Onc7AQ86WFKEiGkMjMRAZB0SnrmSsjLs
+        QoYZjjns8Uh5TO97sWo+Im84NyHjsauTy9AED7yeZtw9Dp2hR5HbO0e+1JWheoWLiTPLuoguAw/
+        +5X/V9xE2hrvrdPUUdO4O+CCR6QsD59maVU6SiXY5qA==
+X-Received: by 2002:adf:9dc1:: with SMTP id q1mr21173673wre.18.1643191623867;
+        Wed, 26 Jan 2022 02:07:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxV0sFlu+SrQTxQBE2KhEDN+8zL3JXHMXbU1Ir6hw/UdQcRSePD5dTyyFBY+EHUljlB23+Ibw==
+X-Received: by 2002:adf:9dc1:: with SMTP id q1mr21173645wre.18.1643191623674;
+        Wed, 26 Jan 2022 02:07:03 -0800 (PST)
+Received: from [192.168.0.60] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id m4sm2765984wmc.1.2022.01.26.02.07.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 02:07:03 -0800 (PST)
+Message-ID: <c1ad0ec0-74c2-08fa-ecb8-ea652cd96849@canonical.com>
+Date:   Wed, 26 Jan 2022 11:07:01 +0100
 MIME-Version: 1.0
-References: <20220126092602.1425-1-linmiaohe@huawei.com>
-In-Reply-To: <20220126092602.1425-1-linmiaohe@huawei.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 26 Jan 2022 18:06:59 +0800
-Message-ID: <CAMZfGtUNeQfgV_Fv9OTiUAMWfhY-FFLTWrObcw2x+cYbp+4xsQ@mail.gmail.com>
-Subject: Re: [PATCH] mm/memremap: avoid calling kasan_remove_zero_shadow() for
- device private memory
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 03/16] dt-bindings: clock: Document FSD CMU bindings
+Content-Language: en-US
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, linux-samsung-soc@vger.kernel.org,
+        pankaj.dubey@samsung.com, sboyd@kernel.org, linux-fsd@tesla.com
+References: <20220124141644.71052-1-alim.akhtar@samsung.com>
+ <CGME20220124142905epcas5p33a863799819fb904932d2e88c682940a@epcas5p3.samsung.com>
+ <20220124141644.71052-4-alim.akhtar@samsung.com>
+ <a611a070-4932-1691-1f20-7cfa8bb96cc1@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <a611a070-4932-1691-1f20-7cfa8bb96cc1@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 5:27 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> For device private memory, we do not create a linear mapping for the memory
-> because the device memory is un-accessible. Thus we do not add kasan zero
-> shadow for it. So it's unnecessary to do kasan_remove_zero_shadow() for it.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+On 26/01/2022 10:13, Sylwester Nawrocki wrote:
+> On 24.01.2022 15:16, Alim Akhtar wrote:
+>> Add dt-schema documentation for Tesla FSD SoC clock controller.
+>>
+>> Cc: linux-fsd@tesla.com
+>> Acked-by: Stephen Boyd <sboyd@kernel.org>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> 
+> Acked-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 
-Good catch.
+Thanks, applied with all other clock driver changes.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Sylwester,
+They are on separate branch, so I could send you pull if needed for
+conflict resolution. Just let me know.
+
+Best regards,
+Krzysztof

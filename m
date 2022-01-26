@@ -2,138 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 722D649D175
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DBD49D15E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243632AbiAZSJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:09:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42388 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236949AbiAZSJq (ORCPT
+        id S244067AbiAZSEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:04:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229491AbiAZSEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:09:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643220585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vuZuCSoJ7IOU5R0KlMC3hriY2wg4jAss4q/D4xsgQ7E=;
-        b=drm60M67+H1Oe25A0auAuaHLmjmBy/1Td/b1kTHJrCT//FHEHZEC3jAxdcw3qNS+Nr4R35
-        Us841PNqQbSijciijhBMIL9Hx+OlN/NxexPUgVX0tlAG+XgAGxgsViXxMbjULiXEtSSxr3
-        4mi303m2Z11OWqLRCjPz4/snCcQ/Lew=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-166-pHznS-IqPpWydbDGSn3rSw-1; Wed, 26 Jan 2022 13:09:42 -0500
-X-MC-Unique: pHznS-IqPpWydbDGSn3rSw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A33486A8B3;
-        Wed, 26 Jan 2022 18:09:41 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-4.gru2.redhat.com [10.97.112.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9710A74E8D;
-        Wed, 26 Jan 2022 18:09:40 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id C71E2416D8BE; Wed, 26 Jan 2022 15:03:45 -0300 (-03)
-Date:   Wed, 26 Jan 2022 15:03:45 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [patch v8 01/10] add basic task isolation prctl interface
-Message-ID: <YfGNAXOpwTfKH01L@fuller.cnet>
-References: <20211208161000.654492429@fuller.cnet>
- <20220120174301.GA213170@lothringen>
+        Wed, 26 Jan 2022 13:04:00 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F823C06161C;
+        Wed, 26 Jan 2022 10:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=91pY7WHsiZcMLE/SeJIJM6HsjUa7+6H46gg9u/uUPng=; b=vKVRrchafi1klVzAPWTWhsPIdw
+        eQaps9a3g35CEMfkAzjbuKVO7wNtD7O7qlI4DwYoCoi68KaJV3iNgRz3IE6ofLFz3EZsVAFatN7kS
+        wClec6snlHX4x6lzsaNJ3Do3U7ZJnP7rtQcWSsJ82aMPa1FGc6t59vtsAKA6BlWHHMUyTFk8nLXkb
+        rN49WRzlPpfpgSrmJ3MGHI4dq1Y5+UvtINcGhjTepm9ukdME037+3dkmiidKwOgDIebzgsnFWGWuc
+        VJhTvlv8xJdwMonSPezB0mznSndiUftphLgS671GSF9S5lvpNhJSkI/H/vDMv0v1aaks+x6v3uINu
+        51FDZWwQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCme7-004Hx7-44; Wed, 26 Jan 2022 18:03:51 +0000
+Date:   Wed, 26 Jan 2022 18:03:51 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Ariadne Conill <ariadne@dereferenced.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
+ do_execveat_common()
+Message-ID: <YfGNBz0gigWwNnHn@casper.infradead.org>
+References: <20220126114447.25776-1-ariadne@dereferenced.org>
+ <YfFh6O2JS6MybamT@casper.infradead.org>
+ <877damwi2u.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220120174301.GA213170@lothringen>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <877damwi2u.fsf@email.froward.int.ebiederm.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 06:43:01PM +0100, Frederic Weisbecker wrote:
-> On Wed, Dec 08, 2021 at 01:09:07PM -0300, Marcelo Tosatti wrote:
-> > +int __copy_task_isolation(struct task_struct *tsk)
-> > +{
-> > +	struct isol_info *info, *new_info;
-> > +
-> > +	info = current->isol_info;
-> > +	if (!(info->inherit_mask & (ISOL_INHERIT_CONF|ISOL_INHERIT_ACTIVE)))
-> > +		return 0;
-> > +
-> > +	new_info = tsk_isol_alloc_context();
-> > +	if (IS_ERR(new_info))
-> > +		return PTR_ERR(new_info);
-> > +
-> > +	new_info->inherit_mask = info->inherit_mask;
+On Wed, Jan 26, 2022 at 10:57:29AM -0600, Eric W. Biederman wrote:
+> Matthew Wilcox <willy@infradead.org> writes:
 > 
-> Ok then it might be worth mentioning in the docs that the inheritance
-> propagates to all the descendants and not just the immediate children,
-> unless the inheritance is explicitly reconfigured by some children of course.
-
-v9 has:
-
-**PR_ISOL_CFG_SET**:
-
-        Set task isolation configuration.
-        The general format is::
-
-                prctl(PR_ISOL_CFG_SET, what, arg3, arg4, arg5);		
-
-	...
-
-                - Bit ISOL_INHERIT_ACTIVE: Inherit task isolation activation
-                  (requires ISOL_INHERIT_CONF to be set). The new task
-                  should behave, after fork/clone, in the same manner
-                  as the parent task after it executed:
-
-                        prctl(PR_ISOL_ACTIVATE_SET, &mask, ...);
-
-                Note: the inheritance propagates to all the descendants and not
-                just the immediate children, unless the inheritance is explicitly
-                reconfigured by some children.
-
+> > On Wed, Jan 26, 2022 at 11:44:47AM +0000, Ariadne Conill wrote:
+> >> Interestingly, Michael Kerrisk opened an issue about this in 2008[1],
+> >> but there was no consensus to support fixing this issue then.
+> >> Hopefully now that CVE-2021-4034 shows practical exploitative use
+> >> of this bug in a shellcode, we can reconsider.
+> >> 
+> >> [0]: https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+> >> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=8408
+> >
+> > Having now read 8408 ... if ABI change is a concern (and I really doubt
+> > it is), we could treat calling execve() with a NULL argv as if the
+> > caller had passed an array of length 1 with the first element set to
+> > NULL.  Just like we reopen fds 0,1,2 for suid execs if they were
+> > closed.
 > 
-> > +
-> > +	if (info->inherit_mask & ISOL_INHERIT_CONF) {
-> > +		new_info->quiesce_mask = info->quiesce_mask;
+> Where do we reopen fds 0,1,2 for suid execs?  I feel silly but I looked
+> through the code fs/exec.c quickly and I could not see it.
+
+I'm wondering if I misremembered and it's being done in ld.so
+rather than in the kernel?  That might be the right place to put
+this fix too.
+
+> I am attracted to the notion of converting an empty argv array passed
+> to the kernel into something we can safely pass to userspace.
 > 
-> Looks like if the parent has oneshot quiesce features configured, those
-> will be inherited as non-oneshot.
+> I think it would need to be having the first entry point to "" instead
+> of the first entry being NULL.  That would maintain the invariant that you
+> can always dereference a pointer in the argv array.
 
-Good catch. v9 has:
-
-+       if (info->inherit_mask & ISOL_INHERIT_CONF) {
-+               new_info->quiesce_mask = info->quiesce_mask;
-+               new_info->conf_mask = info->conf_mask;
-+               new_info->oneshot_mask = info->oneshot_mask;
-+       }
-
-> 
-> > +		new_info->conf_mask = info->conf_mask;
-> > +	}
-> > +
-> > +	if (info->inherit_mask & ISOL_INHERIT_ACTIVE)
-> > +		new_info->active_mask = info->active_mask;
-> > +
-> > +	tsk->isol_info = new_info;
-> > +
-> > +	return 0;
-> > +}
-> 
-> Other than that:
-> 
-> Acked-by: Frederic Weisbecker <frederic@kernel.org>
-
-OK, with the fixes above, i'll add your Acked-by to patches 1 and 2.
-Let me know otherwise.
-
+Yes, I like that better than NULL.

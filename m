@@ -2,96 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E22B149D529
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C49F49D560
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbiAZWSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:18:05 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:33339 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiAZWSD (ORCPT
+        id S233451AbiAZWWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:22:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229637AbiAZWWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:18:03 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JkdQK4c5nz4y4h;
-        Thu, 27 Jan 2022 09:18:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643235482;
-        bh=pqKmV1+sA3ysIMqwWvsV/2bshz9rBVkAJxRMcw0Ep7A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rhyflr3TRldBrcKcVF/IPAlxOT9tW+SQKtr0NPr6TcpzAKVrN/JznW+pyP9m4Vk/B
-         nIQNL7NyQU6FnHKiftZwACZEabc5e1ecIkcayNSSfavVlIQF/A0JylKHCMbRMSisCb
-         IdHFT0jub43WAwmL0GN6kQBa0LEQTHaoM12M5JpzhmOGdmsgSulwiidHzbSR36MI6t
-         2tAVoxTzHtH/YZ5YgW2AASc+wM2MZDp0bKb06vviOMRvuhZCdU5XP7uAvxms87YPR/
-         754TH1ewQcT5xYXS4MbZ0fCQeHfU4hhRJwQPJ76qVxK6bg7zM+RDFXCnEaK5AzyO3Y
-         UlxKd2NuXImgA==
-Date:   Thu, 27 Jan 2022 09:18:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     "Maciej W. Rozycki" <macro@embecosm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the tty.current tree
-Message-ID: <20220127091800.1e8f333b@canb.auug.org.au>
+        Wed, 26 Jan 2022 17:22:41 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BE5C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:22:40 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 133so645060pgb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:22:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bRwhL1NPkbRdnv8DYdCIqNEvEwK08/NeYumLy6TnqFI=;
+        b=GejB6uj8tAaqSUfWeYhJQ+YhhcQNMDVdWsrOd2KteNyszjDIibMmICgjVI0tdBPxHz
+         W4319Cq/TmYyRMjmyFBDFy8GN+9fEUgRxp8ajlWuiyP6fbZXz0LXqfFb5IBJq0MBvUbG
+         8sn4/8QYotyzcMZ1n/fJpCUXayvrrwsnEwnOs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bRwhL1NPkbRdnv8DYdCIqNEvEwK08/NeYumLy6TnqFI=;
+        b=V3Fs2QRn7eBHmZkimiLM0pDBO9PLJ8pZcsAS1k6apLE0SjtFUqlJHWySu2qqsjx9Ix
+         Na0eBldmPAM8DOVFpmkkA7/dYWVPaIM356pR4I9sxporJj81tiDeCjuONqwwjtM55+jk
+         BenQr/8Njyue4O5zxvXpGORJlsDenrSedi5O5ULBUjXaeEyGCi4WX+X0jpVH89q4qkM7
+         ODd33m+ye3AxGqUmg5O1UwzzIxopq1ez/CF5r0+qEBL6TVvYwS6LT6VWy+g5gVilY5d6
+         hf1RtuV9AyQB4zJvQJgPP4rbaeUgsdoh8dbOEicNuAg4P3qPMOBVO8/oQV88DZH4p1MO
+         erRQ==
+X-Gm-Message-State: AOAM5337OMehiYqDuOl6aSsdewjVepHRywfEnHsvoLe2PowDXKYX/5ir
+        fC6he6f3WUAm1RpMRDTmkEcZnw==
+X-Google-Smtp-Source: ABdhPJwW4gtXLi7FUbmqmsJLyKkC4nxO8knlYkooSPKifiMgPCNpALVd5g3uaIeh6lNY73omJA+5ow==
+X-Received: by 2002:a63:8bc4:: with SMTP id j187mr683449pge.536.1643235760574;
+        Wed, 26 Jan 2022 14:22:40 -0800 (PST)
+Received: from bleung.mtv.corp.google.com ([2620:15c:202:201:7499:b258:18ee:819f])
+        by smtp.gmail.com with ESMTPSA id q16sm3020769pfu.194.2022.01.26.14.22.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 14:22:40 -0800 (PST)
+From:   Benson Leung <bleung@chromium.org>
+To:     chrome-platform@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, bleung@google.com,
+        bleung@chromium.org, pmalani@chromium.org
+Subject: [PATCH] MAINTAINERS: platform-chrome: Add new chrome-platform@lists.linux.dev list
+Date:   Wed, 26 Jan 2022 14:22:33 -0800
+Message-Id: <20220126222233.2852280-1-bleung@chromium.org>
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/v=2uYWWNVzpOwakz1k7_3mM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/v=2uYWWNVzpOwakz1k7_3mM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Benson Leung <bleung@chromium.org>
+---
+ MAINTAINERS | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Hi all,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ea3e6c914384..cad7b0fff9f4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4537,6 +4537,7 @@ F:	drivers/input/touchscreen/chipone_icn8505.c
+ 
+ CHROME HARDWARE PLATFORM SUPPORT
+ M:	Benson Leung <bleung@chromium.org>
++L:	chrome-platform@lists.linux.dev
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
+ F:	drivers/platform/chrome/
+@@ -4544,6 +4545,7 @@ F:	drivers/platform/chrome/
+ CHROMEOS EC CODEC DRIVER
+ M:	Cheng-Yi Chiang <cychiang@chromium.org>
+ R:	Guenter Roeck <groeck@chromium.org>
++L:	chrome-platform@lists.linux.dev
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
+ F:	sound/soc/codecs/cros_ec_codec.*
+@@ -4551,6 +4553,7 @@ F:	sound/soc/codecs/cros_ec_codec.*
+ CHROMEOS EC SUBDRIVERS
+ M:	Benson Leung <bleung@chromium.org>
+ R:	Guenter Roeck <groeck@chromium.org>
++L:	chrome-platform@lists.linux.dev
+ S:	Maintained
+ F:	drivers/power/supply/cros_usbpd-charger.c
+ N:	cros_ec
+@@ -4558,11 +4561,13 @@ N:	cros-ec
+ 
+ CHROMEOS EC USB TYPE-C DRIVER
+ M:	Prashant Malani <pmalani@chromium.org>
++L:	chrome-platform@lists.linux.dev
+ S:	Maintained
+ F:	drivers/platform/chrome/cros_ec_typec.c
+ 
+ CHROMEOS EC USB PD NOTIFY DRIVER
+ M:	Prashant Malani <pmalani@chromium.org>
++L:	chrome-platform@lists.linux.dev
+ S:	Maintained
+ F:	drivers/platform/chrome/cros_usbpd_notify.c
+ F:	include/linux/platform_data/cros_usbpd_notify.h
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
 
-After merging the tty.current tree, today's linux-next build (x86_64
-allmodconfig) produced these warnings:
-
-In file included from <command-line>:
-./usr/include/linux/cyclades.h:6:2: warning: #warning "Support for features=
- provided by this header has been removed" [-Wcpp]
-    6 | #warning "Support for features provided by this header has been rem=
-oved"
-      |  ^~~~~~~
-./usr/include/linux/cyclades.h:7:2: warning: #warning "Please consider upda=
-ting your code" [-Wcpp]
-    7 | #warning "Please consider updating your code"
-      |  ^~~~~~~
-
-
-Introduced by commit
-
-  f23653fe6447 ("tty: Partially revert the removal of the Cyclades public A=
-PI")
-
-This is a bit annoying :-(
-
-Can we exclude include/uapi/linux/cyclades.h from the headers checking,
-please?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/v=2uYWWNVzpOwakz1k7_3mM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHxyJgACgkQAVBC80lX
-0Gz03Af7B8GI4oPRwLbhNgw+eRGOyKrn/WyMDq70A1kJTPi07ZZrUXXSi4K2kKci
-6LVCg6TUQU7D+d2T6FbSfqwgpyg2mWsrGpwWGxRyoIfLyWdSKzbn9Y+7YHY32t0H
-WLNkvD2P55NdqC0wu9f12Pl7plC9LkrX2ZZPXtW+9nCuxndAcZ093bfqYBeYw1T0
-Ij4bc8U7ME8g9ZCOA+RWAk0u8SsUeqm9IZTL/ZziSUXWVIZHtcRZkAPQ/PRqdZk0
-qB2ZvMQqMd10CPq/Bch30/Yiqv4sQnf4Zb92UnX6Ky4kpo2TMPerxgvFIwpsK25E
-V9gPEx6h/NRIuJGajdF/MruKOsfsMQ==
-=Iusj
------END PGP SIGNATURE-----
-
---Sig_/v=2uYWWNVzpOwakz1k7_3mM--

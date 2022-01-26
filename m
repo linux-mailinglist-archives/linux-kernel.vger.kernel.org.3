@@ -2,91 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B2D49CAEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A2349CAE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240233AbiAZNfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:35:52 -0500
-Received: from mga06.intel.com ([134.134.136.31]:27196 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235061AbiAZNfv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:35:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643204151; x=1674740151;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cXGNTr5J5iMmzg+/ShSMdmmAjgQmyI/sGWK0ORhpF3k=;
-  b=FXimzd0aKattG8fitN7WHaDaAYQzlKj1tBGpuxLh4IUqGP+ecAPPw0oL
-   /ToFS6cYGZ8x0iwQIbm5WJqd67DSvxD8svttwcOupD8vQY2PYE6HoLhcy
-   daZppcFFUpnHZscQTTmHPX7PcDg7ydV7Rv1jaapABRTIkqM1qiSlW6QUU
-   PoL2CvNOnji/G8FUbaA+QZ10z7XrVtv9YL6xqN7Ou5+jNFuQaD6OTiPXt
-   YH59ujHlARYkMFDWMgP3zAOReei6qFyxC99VY0o8TP/R7T4953Umjy8Vu
-   LKqURb95pTdxHoInOzDBd2MAmPkyi4GuHsGdpplyd7k6gb1ias0/7ve/D
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="307263605"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="307263605"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:35:50 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="628303941"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:35:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nCiRd-00Ebvw-G8;
-        Wed, 26 Jan 2022 15:34:41 +0200
-Date:   Wed, 26 Jan 2022 15:34:41 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wander Costa <wcosta@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wander Lairson Costa <wander@redhat.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH] tty: serial: Use fifo in 8250 console driver
-Message-ID: <YfFN8Q0o2RxXcE7y@smile.fi.intel.com>
-References: <8e57400f-d6a8-bd42-6214-fca1fe37a972@kernel.org>
- <11ec4350-b890-4949-cf8f-bc62d530d64f@nvidia.com>
- <CAAq0SU=9R3Y_SAdM+HaqavzWBRd1Li-b5bnZZLd5Opfgd0vnkQ@mail.gmail.com>
- <fa42a60c-954a-acc0-3962-f00427153f78@nvidia.com>
- <YfArHDfrVHw7ApDx@smile.fi.intel.com>
- <YfArWaKJ13+OC/7w@smile.fi.intel.com>
- <CAAq0SU=U3UY+DUdd1fjj25Yt_QZriShZTSFTsq5B4tPnOYhQvQ@mail.gmail.com>
- <YfELyq5AmxiZxjme@kroah.com>
- <YfE6AiIgXrd+5qvk@smile.fi.intel.com>
- <CAAq0SU=ivwiGPZoD=BsD67A4A4pvuh0S02L2Udhg8vmjnmCAAw@mail.gmail.com>
+        id S240078AbiAZNe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235061AbiAZNe4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 08:34:56 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61202C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:34:56 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id y17so8340833ilm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:34:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=/ycwdxXl7xzlVcgZpMTQusl4xKyijfRRHTUAN+QxTEE=;
+        b=FKQPqYyQV4gUD8tCmpE3qC9ZiTKhLgDxer8fEHHPqZTpYefsVvvGFNefA/FnssIM63
+         EaLiJfNVUOfBHVOrxkmfzQL49q/d/5pN1ZUU+LKQBzI598d2wwNERrpeh1Ex6kPzyiFb
+         JZTWeKXf8b70jcKMwDZy9/YO8nTDW0APYt+yJvhJiwzryilyz/ZZVHAUhzZdnK1sWg4k
+         ywmCT668+bdItqD8CNFdJOjUeMrxDk5wGGgh4+hv+1F7whIXtq4hGqU/JcaP+ZrYoU3c
+         8lsuSBN0dz2w2QuiV3kN+YZgs90jZh2Pb41G51L41stEtx9VN3x/tJGdLtkp0T497OU4
+         xY0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=/ycwdxXl7xzlVcgZpMTQusl4xKyijfRRHTUAN+QxTEE=;
+        b=MdOXeVccqGCV7Qj5e7OlVK1R6zaTIlQfk1LiUrM7dQdU2IjCA4ys25Ojh95Efg93Ml
+         VkvPaqwkCshVutVlGfoWZLqQANZtRZcaRnKUsRT1tJhF9TTxHWvqNRxbif5sqRLi8dCa
+         ly9s5jo3QnQ8tpAOGwArWhpua6n2I9d4ZPsgPkj0kgbzOjYxGVjetnx1zydKiY/A4eCQ
+         qknIReBmpUOAxI98iFK65uYdhMMvhyFx+tsMCplrCRpzffYtV0b/IXNtEZdWooq/puEm
+         4rolOvVSbT0JlvnA+P95uCC1qqXoZ8D5wVy96P1mDMhjxW2TmMsZIHs4/c/khhRNa16n
+         I04w==
+X-Gm-Message-State: AOAM532/uH5g/9kSR9OLWlJ923H3BmS08XG5d4rN4qx7IpxMP1wjoWva
+        tdCI0voaaumev7mKBcg2y5SENd81rC0cQA==
+X-Google-Smtp-Source: ABdhPJxzuTGcfsYFU99TT4WD+eEaJROO/7MGhikZS0SWzpSAI4623/dh2z8rsy9wTzniruCxAOGyLQ==
+X-Received: by 2002:a92:d2d1:: with SMTP id w17mr14293198ilg.170.1643204095401;
+        Wed, 26 Jan 2022 05:34:55 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id q16sm9375312ion.27.2022.01.26.05.34.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 05:34:54 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        yi.zhang@huawei.com
+In-Reply-To: <20220126012132.3111551-1-yukuai3@huawei.com>
+References: <20220126012132.3111551-1-yukuai3@huawei.com>
+Subject: Re: [PATCH v2] blk-mq: fix missing blk_account_io_done() in error path
+Message-Id: <164320409207.123597.5205274330613779469.b4-ty@kernel.dk>
+Date:   Wed, 26 Jan 2022 06:34:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAq0SU=ivwiGPZoD=BsD67A4A4pvuh0S02L2Udhg8vmjnmCAAw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 10:23:57AM -0300, Wander Costa wrote:
-> On Wed, Jan 26, 2022 at 9:10 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Wed, Jan 26, 2022 at 09:52:26AM +0100, Greg Kroah-Hartman wrote:
-
-...
-
-> > Wander, if you need a test for something new, I may help to perform on
-> > our (sub)set of x86 machines.
+On Wed, 26 Jan 2022 09:21:32 +0800, Yu Kuai wrote:
+> If blk_mq_request_issue_directly() failed from
+> blk_insert_cloned_request(), the request will be accounted start.
+> Currently, blk_insert_cloned_request() is only called by dm, and such
+> request won't be accounted done by dm.
 > 
-> Thanks, Andy. I will let you know when I have new patches.
+> In normal path, io will be accounted start from blk_mq_bio_to_request(),
+> when the request is allocated, and such io will be accounted done from
+> __blk_mq_end_request_acct() whether it succeeded or failed. Thus add
+> blk_account_io_done() to fix the problem.
+> 
+> [...]
 
-Just Cc me that time.
+Applied, thanks!
 
+[1/1] blk-mq: fix missing blk_account_io_done() in error path
+      commit: 592ee1197f78b30bd60c87db9b6c8c045c8d8314
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
+Jens Axboe
 
 

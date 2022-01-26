@@ -2,103 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C3E49D4D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA4149D4D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbiAZWFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbiAZWFJ (ORCPT
+        id S232885AbiAZWF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:05:27 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29334 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232435AbiAZWF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:05:09 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEF5C06161C;
-        Wed, 26 Jan 2022 14:05:08 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id h7so1620514ejf.1;
-        Wed, 26 Jan 2022 14:05:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OxILoILCkoMLSMTN/6RX7BA5Ckr169OhivC4CXZZE/Y=;
-        b=FwSQklzT+27SbdvfgyJEAr62I92RVD7qL22jZex/Lfr6miGFBfr9CYhEfYQsAiDyXm
-         ZEMdeWiFkmVPIsFifqZAviKg7QUJDCq6A6kpqnj5/Sc+cGfRSP51Cv58XwAdDd0/nvW/
-         BnT02AyRMp3zQPQWscAsH+ZgWd5p+wBUuEzCR7/Bf4kyh4IALjujm8adqAdr7tHAOHqZ
-         WqbNDLmWPQqp2cMCUglrdb7iEqhKLrjuHcCPB1d0osjnbKhjsjuF62BZ3cDd1YcBOUA2
-         X/vLWcfl9/7nnSK09eC1smKOYUPK0DS/iSVjqefvLxSXtZ8OHMUe4zFYIX4mSibnXWqw
-         7+fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OxILoILCkoMLSMTN/6RX7BA5Ckr169OhivC4CXZZE/Y=;
-        b=lXYHU/8+ovfqMUWzEREaTBNWUF5WwCpvLNrCSDTX6qwLnN0v/9wcw6N71pZP3VoNd2
-         x/IRGGC2bNIQiz24Fg3WR+hPYGXUDhRU1aNSJePP6a3aUWx18wDqrT+yV+8zMqJFKl0m
-         o95kp5YQFPTtfQl/9eylK5o0nsxVJeIsYg55fPSnqgLGSiFA1dUrZ6iKiBpfj+BSfG27
-         zqnYmyl+SUQ3eKRK5N4bHAmk1ox2iaDeAMWQjzkONt3bApzG585Owz/nMe49JPvd/dWf
-         hU2Y/KkGSzun4+AT7ACwEbsIIr/PRWncBn2S1OHcPe4y2caD0zZWqpcVSpMozh4UCNNY
-         kCfQ==
-X-Gm-Message-State: AOAM5302+esNOnlOXSdZvs/s/1C5iHEWsxLbDRhVBR8mrDaE/Px7/csw
-        M8wITqrx6hRUSTvx7xdoIqs=
-X-Google-Smtp-Source: ABdhPJwyAikVZPjvY7HXg/VKNXDTJVt3BL1FZuLJzBQo5C7iQuIaEYfJldDJ5VTGN6fAFmuH1MTg+g==
-X-Received: by 2002:a17:907:7b87:: with SMTP id ne7mr631722ejc.556.1643234707061;
-        Wed, 26 Jan 2022 14:05:07 -0800 (PST)
-Received: from skbuf ([188.27.184.105])
-        by smtp.gmail.com with ESMTPSA id by22sm7939933ejb.5.2022.01.26.14.05.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:05:06 -0800 (PST)
-Date:   Thu, 27 Jan 2022 00:05:05 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v7 12/16] net: dsa: qca8k: add support for phy
- read/write with mgmt Ethernet
-Message-ID: <20220126220505.iccabgu3olbaxhbi@skbuf>
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <20220123013337.20945-13-ansuelsmth@gmail.com>
- <20220125150355.5ywi4fe3puxaphq3@skbuf>
- <61f08471.1c69fb81.a3d6.4d94@mx.google.com>
- <20220126014854.opnyrd56nsrk7udp@skbuf>
- <YfCqb/qHn0XR8ONV@Ansuel-xps.localdomain>
+        Wed, 26 Jan 2022 17:05:26 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QM3dGK014328;
+        Wed, 26 Jan 2022 22:05:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=RxTuE6rmxVpW/vdK1r884JjG3O3+YWBscTGJnKvckXI=;
+ b=HUAXz694ayH5nVsmPluXJaOjnzJz2ZpRwoFXpQmOSxpvATbk5QqBnw9xw9hczoQt7N7w
+ on80wtOqKSxc287ZJTvoG9SZ7XPjr8ri1eNeg1uZJyRLCab2nIuwPuSt6Hg1AfSzheMS
+ 3KjRkeY+y9BaHFrC1rHuWEHTMPVJ2sIKDMibQ5hvzDMttS4n8Yv+dv7ga91Hc2ACpOHD
+ Puuxjj92iayC+zF3Ly9CQe2sV4euwfqmxhjTlnrL66qyr6T4vPW/O2f5iDx/BT4GQ1Xw
+ NYEPqAav5Fa/1y8tID5OTO/CLyoihlqBVa8Op67REeqHz1VHJESultgkXYwrAJCauvY8 9w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du89mja8h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 22:05:14 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20QM4C7L016478;
+        Wed, 26 Jan 2022 22:05:13 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du89mja82-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 22:05:13 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QM27Xe024020;
+        Wed, 26 Jan 2022 22:05:12 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01dal.us.ibm.com with ESMTP id 3dr9jc12sp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 22:05:12 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QM5AxF32244212
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 22:05:10 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B8856E050;
+        Wed, 26 Jan 2022 22:05:10 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1F436E06D;
+        Wed, 26 Jan 2022 22:05:07 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jan 2022 22:05:07 +0000 (GMT)
+Message-ID: <d64ba364-e3fa-729a-2761-b386326ee276@linux.ibm.com>
+Date:   Wed, 26 Jan 2022 17:05:05 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfCqb/qHn0XR8ONV@Ansuel-xps.localdomain>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 15/23] ima: Implement hierarchical processing of file
+ accesses
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+ <20220125224645.79319-16-stefanb@linux.vnet.ibm.com>
+ <20220126123908.q65wgvr2v52lmxpw@wittgenstein>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220126123908.q65wgvr2v52lmxpw@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GXavbc1DSLqYJR2d4JpfnIWijqqJ4DxH
+X-Proofpoint-ORIG-GUID: PcRyTm2VOWigvWeJjq8oPa4d08HxmAGl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-26_08,2022-01-26_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=907
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0
+ priorityscore=1501 spamscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201260128
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 02:57:03AM +0100, Ansuel Smith wrote:
-> > > > Shouldn't qca8k_master_change() also take phy_hdr_data->mutex?
-> > > > 
-> > > 
-> > > Is actually the normal mgmg_hdr_data. 
-> > > 
-> > > phy_hdr_data = &priv->mgmt_hdr_data;
-> > > 
-> > > Should I remove this and use mgmt_hdr_data directly to remove any
-> > > confusion? 
-> > 
-> > I am not thrilled by the naming of this data structure anyway
-> > (why "hdr"?), but yes, I also got tricked by inconsistent naming.
-> > Please choose a consistent name and stick with it.
-> 
-> Hdr as header stuff since all this stuff is put in the hdr. Should I
-> just drop hdr and use mgmt_data directly? Or mgmt_eth?
 
-I don't have a strong preference because I can't find a good name.
-Consistency in naming this feature is the most important part.
-Maybe it is just me who is reading it this way, but I associate a
-structure whose name contains "hdr" with something that pertains to data
-from an skb (such as "mgmt_ethhdr" which is exactly that), hence the
-earlier comment. I opened the manual and the phrasing that the vendor
-uses is that "[ the switch ] supports the read/write register (sic)
-through the Atheros header". So it makes more sense now and it's in line
-with that, at least to some degree. I understand if you prefer not to
-change it, but "mgmt_data" sounds less confusing to me.
+On 1/26/22 07:39, Christian Brauner wrote:
+>
+> That'll break compilation as youre checking:
+>
+> ns == &init_ima_ns below.
+>
+> security/integrity/ima/ima_main.c: In function ‘ima_post_read_file’:
+> security/integrity/ima/ima_main.c:798:7: error: ‘ns’ undeclared (first use in this function); did you mean ‘insl’?
+>    798 |   if (ns == &init_ima_ns &&
+>        |       ^~
+>        |       insl
+> security/integrity/ima/ima_main.c:798:7: note: each undeclared identifier is reported only once for each function it appears in
+>
+> it's fixed later in the series but you might want to fix this up here as
+> well.
+
+Argh. Fixed.
+
+>
+> Fwiw, a good strategy is to:
+>
+> git rebase -i -x "make LOCALVERSION=-imans" v5.16-rc2
+
+I did test it but maybe something distracted me....
+
+while :; do make -j$(nproc) security kernel || break ; git rebase 
+--continue || break; done
+
+

@@ -2,158 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 571D249C423
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC91A49C438
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237713AbiAZHTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 02:19:15 -0500
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:46850
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237685AbiAZHTM (ORCPT
+        id S237722AbiAZHXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 02:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229641AbiAZHXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 02:19:12 -0500
-Received: from HP-EliteBook-840-G7.. (36-229-235-192.dynamic-ip.hinet.net [36.229.235.192])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id D5A2A4198F;
-        Wed, 26 Jan 2022 07:19:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643181549;
-        bh=v0HBY9QuURUB5f1ClOwDSwh7i2HZDyxqJs55MspAO5M=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=at6gkeRE6nzZB4khhXUX9gevAhB41zEY3pgGk7aMkjn4vmmnVOj5uHkd0Lge+TsiO
-         IGnJGSSTdzwf52QcJwPqYW8C0S/sl1QDHREyATwS1R/CxgLHpSwdMLoMB9dst8yFcq
-         Qd2RCzd5ZaTOt+6QeNg1V6QiaS4o1N6v4Rr97sM8z7dQ9WEflWUbmv9uTjzD0yN/MY
-         R8PcPgfLlz20owCh6JRilk1VeCh0+rRL/PhVa4AFpP+TpWEf6yn0lbFHfQb4h6E/no
-         YdFslQF5+W3AKDwiKEr3lyvveD5mdpYGCcP+bTFxvCgxUB5Zu6v8CWqZuSu733Sttq
-         t49VQhwSnVSAw==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     bhelgaas@google.com
-Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Russell Currey <ruscur@russell.cc>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] PCI/DPC: Disable DPC when link is in L2/L3 ready, L2 and L3 state
-Date:   Wed, 26 Jan 2022 15:18:52 +0800
-Message-Id: <20220126071853.1940111-2-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220126071853.1940111-1-kai.heng.feng@canonical.com>
-References: <20220126071853.1940111-1-kai.heng.feng@canonical.com>
+        Wed, 26 Jan 2022 02:23:21 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0856DC06161C;
+        Tue, 25 Jan 2022 23:23:20 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id h12so22458685pjq.3;
+        Tue, 25 Jan 2022 23:23:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8z8QaPzSpYleEBkb/3BW1hePTgzB2h/wRA/Ef7uJuSQ=;
+        b=MAFclsnfDcCr0FlzF9arMxcarozNUtuK2GFdTbelSb7Wkrit6g+KTuDNq9rdY9yCn/
+         8++JLr87o3SKB3jPC/s/Gyj7e8RAy3SMFa+ukm78x5gsUs+SS5trFyNK5LwcIcWarjzD
+         tboNUACtPRZMaKtJ6UdX1jVmkLi/Kae5MKoa6FZ0RYmsOwTo3W8h+lMyVnYXwMyH2y4a
+         BZII28i7KghfPYhZMy2lenrGsNGYzZhKBa4g1QkWY4fVPF38nx7mq3uXuYTrYsx+gKhK
+         IUxfNwf+xusB9uGIxEteT61p3ZCDBbVIOfU0MZ8yNGjbw1STde1z9932YW6+i3rTSTbz
+         JWQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8z8QaPzSpYleEBkb/3BW1hePTgzB2h/wRA/Ef7uJuSQ=;
+        b=ig9GD6yJ8GdfrfKVGcC9aWpASHDmG0LZQdUyPbS68zXZ9mJEmAf624YFxKIvPvUNEV
+         MYl0xKGeLwrq7arZrKe2TJf2jG/BvvDszjSqQsDkUa5YExW/2rfjPI5/tcf+dNlXUkdN
+         y8EnhhQI0Y1RP/0snxw8kGFYkwkKIk8kFKdD4Lxf9qR8nGfvQtnHa/OXu3sSPBvkGnkE
+         wZUUFe0Q+ompv5cgscKbm5ByDZGnAfEJOvlS+VotfbxMdIfT2HQiT/ybeBr41TpfsVz8
+         m3a7aT8JnWCM6g8c9wMV6C3qujQ1iWJS2TMthfQXmUFNNfhTeTa7c7szI92LIq9hEn+1
+         T8Zg==
+X-Gm-Message-State: AOAM531rEUpRBZrSxVwEJmO2JYqgJJLo2WdVJA9LtgUF26mhks8eQUKs
+        ppE1SvS3UxgZFu6+Q6/OU11Ob7MszSk=
+X-Google-Smtp-Source: ABdhPJxmdCDH1bkuwdkyi7FVRgTPEkNEGS4N9qOcrJAkIwBH3ql00NGu2M455/W+Rx/9K6Kdx2El4A==
+X-Received: by 2002:a17:902:e552:b0:149:b7bf:9b42 with SMTP id n18-20020a170902e55200b00149b7bf9b42mr21223022plf.70.1643181800405;
+        Tue, 25 Jan 2022 23:23:20 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id l21sm1061884pfu.120.2022.01.25.23.23.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 23:23:19 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     nhorman@tuxdriver.com, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dsahern@kernel.org,
+        rostedt@goodmis.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH v2 net-next] net: drop_monitor: support drop reason
+Date:   Wed, 26 Jan 2022 15:23:06 +0800
+Message-Id: <20220126072306.3218272-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since TLP and DLLP transmission is disabled for a Link in L2/L3 Ready,
-L2 and L3, and DPC depends on AER, so also disable DPC here.
+From: Menglong Dong <imagedong@tencent.com>
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
+drop reason is introduced to the tracepoint of kfree_skb. Therefore,
+drop_monitor is able to report the drop reason to users by netlink.
+
+For now, the number of drop reason is passed to users ( seems it's
+a little troublesome to pass the drop reason as string ). Therefore,
+users can do some customized description of the reason.
+
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
 ---
- drivers/pci/pcie/dpc.c | 61 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 45 insertions(+), 16 deletions(-)
+v2:
+- get a pointer to struct net_dm_skb_cb instead of local var for
+  each field
+---
+ include/uapi/linux/net_dropmon.h |  1 +
+ net/core/drop_monitor.c          | 16 ++++++++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-index 3e9afee02e8d1..9585c10b7c577 100644
---- a/drivers/pci/pcie/dpc.c
-+++ b/drivers/pci/pcie/dpc.c
-@@ -343,13 +343,34 @@ void pci_dpc_init(struct pci_dev *pdev)
- 	}
- }
+diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
+index 66048cc5d7b3..b2815166dbc2 100644
+--- a/include/uapi/linux/net_dropmon.h
++++ b/include/uapi/linux/net_dropmon.h
+@@ -93,6 +93,7 @@ enum net_dm_attr {
+ 	NET_DM_ATTR_SW_DROPS,			/* flag */
+ 	NET_DM_ATTR_HW_DROPS,			/* flag */
+ 	NET_DM_ATTR_FLOW_ACTION_COOKIE,		/* binary */
++	NET_DM_ATTR_REASON,			/* u32 */
  
-+static void dpc_enable(struct pcie_device *dev)
-+{
-+	struct pci_dev *pdev = dev->port;
-+	u16 ctl;
-+
-+	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-+
-+	ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
-+	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+}
-+
-+static void dpc_disable(struct pcie_device *dev)
-+{
-+	struct pci_dev *pdev = dev->port;
-+	u16 ctl;
-+
-+	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-+	ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
-+	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+}
-+
- #define FLAG(x, y) (((x) & (y)) ? '+' : '-')
- static int dpc_probe(struct pcie_device *dev)
- {
- 	struct pci_dev *pdev = dev->port;
- 	struct device *device = &dev->device;
- 	int status;
--	u16 ctl, cap;
-+	u16 cap;
- 
- 	if (!pcie_aer_is_native(pdev) && !pcie_ports_dpc_native)
- 		return -ENOTSUPP;
-@@ -364,10 +385,7 @@ static int dpc_probe(struct pcie_device *dev)
- 	}
- 
- 	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CAP, &cap);
--	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
--
--	ctl = (ctl & 0xfff4) | PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN;
--	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+	dpc_enable(dev);
- 	pci_info(pdev, "enabled with IRQ %d\n", dev->irq);
- 
- 	pci_info(pdev, "error containment capabilities: Int Msg #%d, RPExt%c PoisonedTLP%c SwTrigger%c RP PIO Log %d, DL_ActiveErr%c\n",
-@@ -380,22 +398,33 @@ static int dpc_probe(struct pcie_device *dev)
- 	return status;
- }
- 
--static void dpc_remove(struct pcie_device *dev)
-+static int dpc_suspend(struct pcie_device *dev)
- {
--	struct pci_dev *pdev = dev->port;
--	u16 ctl;
-+	dpc_disable(dev);
-+	return 0;
-+}
- 
--	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
--	ctl &= ~(PCI_EXP_DPC_CTL_EN_FATAL | PCI_EXP_DPC_CTL_INT_EN);
--	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+static int dpc_resume(struct pcie_device *dev)
-+{
-+	dpc_enable(dev);
-+	return 0;
-+}
-+
-+static void dpc_remove(struct pcie_device *dev)
-+{
-+	dpc_disable(dev);
- }
- 
- static struct pcie_port_service_driver dpcdriver = {
--	.name		= "dpc",
--	.port_type	= PCIE_ANY_PORT,
--	.service	= PCIE_PORT_SERVICE_DPC,
--	.probe		= dpc_probe,
--	.remove		= dpc_remove,
-+	.name			= "dpc",
-+	.port_type		= PCIE_ANY_PORT,
-+	.service		= PCIE_PORT_SERVICE_DPC,
-+	.probe			= dpc_probe,
-+	.suspend		= dpc_suspend,
-+	.resume			= dpc_resume,
-+	.runtime_suspend	= dpc_suspend,
-+	.runtime_resume		= dpc_resume,
-+	.remove			= dpc_remove,
+ 	__NET_DM_ATTR_MAX,
+ 	NET_DM_ATTR_MAX = __NET_DM_ATTR_MAX - 1
+diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
+index 7b288a121a41..b5d8e19ccc1d 100644
+--- a/net/core/drop_monitor.c
++++ b/net/core/drop_monitor.c
+@@ -126,6 +126,7 @@ struct net_dm_skb_cb {
+ 		struct devlink_trap_metadata *hw_metadata;
+ 		void *pc;
+ 	};
++	enum skb_drop_reason reason;
  };
  
- int __init pcie_dpc_init(void)
+ #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
+@@ -498,6 +499,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+ {
+ 	ktime_t tstamp = ktime_get_real();
+ 	struct per_cpu_dm_data *data;
++	struct net_dm_skb_cb *cb;
+ 	struct sk_buff *nskb;
+ 	unsigned long flags;
+ 
+@@ -508,7 +510,9 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+ 	if (!nskb)
+ 		return;
+ 
+-	NET_DM_SKB_CB(nskb)->pc = location;
++	cb = NET_DM_SKB_CB(nskb);
++	cb->reason = reason;
++	cb->pc = location;
+ 	/* Override the timestamp because we care about the time when the
+ 	 * packet was dropped.
+ 	 */
+@@ -606,12 +610,17 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
+ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+ 				     size_t payload_len)
+ {
+-	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
++	struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
+ 	char buf[NET_DM_MAX_SYMBOL_LEN];
++	enum skb_drop_reason reason;
+ 	struct nlattr *attr;
+ 	void *hdr;
++	u64 pc;
+ 	int rc;
+ 
++	pc = (u64)(uintptr_t)cb->pc;
++	reason = cb->reason;
++
+ 	hdr = genlmsg_put(msg, 0, 0, &net_drop_monitor_family, 0,
+ 			  NET_DM_CMD_PACKET_ALERT);
+ 	if (!hdr)
+@@ -623,6 +632,9 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+ 	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
+ 		goto nla_put_failure;
+ 
++	if (nla_put_u32(msg, NET_DM_ATTR_REASON, reason))
++		goto nla_put_failure;
++
+ 	snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
+ 	if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
+ 		goto nla_put_failure;
 -- 
-2.33.1
+2.34.1
 

@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFB449CEAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B4F49CEB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242939AbiAZPgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:36:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53990 "EHLO
+        id S242974AbiAZPgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:36:53 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53998 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235900AbiAZPgv (ORCPT
+        with ESMTP id S235900AbiAZPgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:36:51 -0500
+        Wed, 26 Jan 2022 10:36:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9DD56145F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 878ED61900;
+        Wed, 26 Jan 2022 15:36:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CF3C340E6;
         Wed, 26 Jan 2022 15:36:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC57C340E3;
-        Wed, 26 Jan 2022 15:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643211410;
-        bh=ETf0rJxbftTA/jiqhFbDahtNpchbae/ooNKqObBqa/0=;
+        s=k20201202; t=1643211412;
+        bh=ET0k10DsnVM5FmCnwUkZOPhrA755rJdBFIyVpMWTFKI=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=oIAHtKbdEAe1uPjUtl4s+b35uf7zk6JlrxqzinelpgnpeTp0OC0UMWgKMcJ+c6j9c
-         fnSQKTk/cMS3x6RLwzJrjzeXms2Kuab7iHwVmNPu3e5J0BQPoOppU6wOF2EN+5jSPc
-         BFSzC6j2ONieVRw78fvwlVBZhlJgAMrlzl4zLzUik+wL8IyIr4qJKsg5LOfY3CtD1I
-         REdurVtCyFWqaGnpLCsJjaCLx9xZS3lpevWrUkAf5EnWXxgRgL7U5WRjT9E8F+jgAs
-         0YmqdfG4WM8TFKVi8pgIIDN1NwP4YiZFdsmQvTe2L348oj1HghNeRb7FXxwH7yX1px
-         Zox0Cs3CyN7Aw==
+        b=B3LiQeo3ymMdhFiayR2cDkSYoitYx/Z2Pwfl9O99uBFb+o66Fj9vSJiMcKIzww+fG
+         kirHhqubbdRdFoaVvorzAqjFlP0iAJ8qXl1Tdp2q41o0UJbBgGUJ0Mruz6FfRgnhkR
+         R8BcCNyr37rDvxin2sowx4dq41mc7jDgyIatZNskm2k+rXsdxr7wNWPWcbVJnIZokp
+         qiAJX8mrAoBr/vERWbLKlgtqVmkG2FX6TW1sXY6SXFNe1HeVvMEp3++KQ9IQo/QEIm
+         ztqh/yEszmgfUpv9p8NF7ts4CRMRCt8mvZRSjsjwVbZbP70LzubM7mvprodM26jUql
+         sQ2+Je1YsbMwQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Romain Perier <romain.perier@free-electrons.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20211206101931.2816597-1-mudongliangabcd@gmail.com>
-References: <20211206101931.2816597-1-mudongliangabcd@gmail.com>
-Subject: Re: [PATCH] driver:spi: change clk_disable_unprepare to clk_unprepare
-Message-Id: <164321140894.490397.924789471812651456.b4-ty@kernel.org>
-Date:   Wed, 26 Jan 2022 15:36:48 +0000
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     linux-spi@vger.kernel.org,
+        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
+        linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
+In-Reply-To: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
+References: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
+Subject: Re: [PATCH] spi: uniphier: Fix a bug that doesn't point to private data correctly
+Message-Id: <164321141026.490397.11451995975683431974.b4-ty@kernel.org>
+Date:   Wed, 26 Jan 2022 15:36:50 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -45,13 +48,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 18:19:31 +0800, Dongliang Mu wrote:
-> The corresponding API for clk_prepare is clk_unprepare, other than
-> clk_disable_unprepare.
+On Wed, 22 Dec 2021 13:48:12 +0900, Kunihiko Hayashi wrote:
+> In uniphier_spi_remove(), there is a wrong code to get private data from
+> the platform device, so the driver can't be removed properly.
 > 
-> Fix this by changing clk_disable_unprepare to clk_unprepare.
+> The driver should get spi_master from the platform device and retrieve
+> the private data from it.
 > 
 > 
+> [...]
 
 Applied to
 
@@ -59,8 +64,8 @@ Applied to
 
 Thanks!
 
-[1/1] driver:spi: change clk_disable_unprepare to clk_unprepare
-      commit: 90cafce461de108bfb07c06148395dc86c3fcd23
+[1/1] spi: uniphier: Fix a bug that doesn't point to private data correctly
+      commit: 23e3404de1aecc62c14ac96d4b63403c3e0f52d5
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

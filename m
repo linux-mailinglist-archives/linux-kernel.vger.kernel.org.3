@@ -2,153 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CA749C92B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FACB49C931
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241013AbiAZL5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:57:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55198 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241014AbiAZL50 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:57:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643198246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w6RnHqBRXKKY9foSrt7oGpZU3YcqPco8hnhwfG4iwHA=;
-        b=i4G4WZ0tirLMAHvFJriEFdW6HM+JgVi0y//VVEaYaDrCO3UfeZ0NbkT1BKGn5voFL0j5UA
-        lcv9VIEGcApAKREO4KhqQub4zjO8RWavIparQcd6EOXjHh5xE1AZ+RHoiAXvNwobgq1XlR
-        Ss+ggWc4Ev+4cQoZOpvYFOul5n5zPlg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-546-hulahPkiM0STAVb1TWOgrw-1; Wed, 26 Jan 2022 06:57:25 -0500
-X-MC-Unique: hulahPkiM0STAVb1TWOgrw-1
-Received: by mail-wm1-f71.google.com with SMTP id f7-20020a1cc907000000b0034b63f314ccso3168106wmb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:57:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=w6RnHqBRXKKY9foSrt7oGpZU3YcqPco8hnhwfG4iwHA=;
-        b=ZA4i5M0gK1JwBeB0+kmQNcYwLoN5i818zWnd91obfkv/TBE4T2TD/I1zoR2m1LV7vf
-         usHysmCOpfh4ud6aoSN2o6R62jE8YtvGIR9e22qFSGksJZZWbMAEE2ykHa+Cs4HAQyZB
-         sGGhl3U5mC/gg8bwi7f97EH0huOoiB3jI3XlKTk2qmv5pvKb1lhxPPIerUpHj/CIG63Y
-         rzQJ8Edy3u+/Cw5Mm5SMKEENXwnfFGPQWDrudZ/WuGVgHuJLGC34HvTQiIYPsk9kQRWA
-         /A1dXDHfo0qe3oYzD1/73BkZSyRyoOLwjofcOW7hxgnZ4jOReSF3o9WZgdJKg/sJGVdp
-         Tg2w==
-X-Gm-Message-State: AOAM531z0dUOj5NueX5r5Vshy1APWr+rccxBj6Xl9mav/PvmK2JAJ3ZU
-        Q+YRbqk/3X8M5jIAPD8/BI05yDT+Vw+KDlaUcbZl2LfTp0iQxQGAB4mM9naNLXhvmvCuxIMRPlW
-        3q1VrN4PS9d7teRqA5AWkNUcr
-X-Received: by 2002:a1c:4d1a:: with SMTP id o26mr6951708wmh.147.1643198243813;
-        Wed, 26 Jan 2022 03:57:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxFqWDLyjsg3RrLRRoSoX6kG2G3W4KJXWCYT79Oj2x6eCRVWsW/D6F8N8lsymC4hoPPnF9nLw==
-X-Received: by 2002:a1c:4d1a:: with SMTP id o26mr6951692wmh.147.1643198243564;
-        Wed, 26 Jan 2022 03:57:23 -0800 (PST)
-Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
-        by smtp.gmail.com with ESMTPSA id g7sm3923134wmq.28.2022.01.26.03.57.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 03:57:23 -0800 (PST)
-Message-ID: <5b4e2c29-8f1a-5a68-d243-a30467cc02d4@redhat.com>
-Date:   Wed, 26 Jan 2022 12:57:22 +0100
+        id S241027AbiAZL7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:59:18 -0500
+Received: from mga07.intel.com ([134.134.136.100]:38161 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241021AbiAZL7R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 06:59:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643198357; x=1674734357;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Lzcd9mEtBpXKathMy3g71SKlsqfPyQg5ZNTfE2LVMKM=;
+  b=IhdY+cCiVqsEr7SXAg6OarVbZTMmacPw7D829we6Bt+YS5E0XQ1RJLMf
+   eCIBAvxVESY6nrtm2qkWWtYrZOUBhP5vCPFjeBvJRwRlRaF/W7N8jQPTf
+   t8U+fqw4xm72hpONOP3ZD8rbVYK3iStwTuZaYRCqYzXHjWhurwR0o++80
+   gDgX/a39Iq/PGz8WumNpHu6rie9Yra8qWhP8dpjwRsRLk0khcwHNDU74z
+   NbzQufPGWcgSOuDxQPfO8SOzduptoegcf1+HrIR1CkjyscvRY3l9BsLCV
+   /RS9ITc6ItQbxZIZ/dpyL1Blins4pvBzgoBiL1uv80bVW0V4rULRHDf4h
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309849135"
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="309849135"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 03:59:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="628284145"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 26 Jan 2022 03:59:14 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 7DAE4167; Wed, 26 Jan 2022 13:59:27 +0200 (EET)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com
+Cc:     x86@kernel.org, thomas.lendacky@amd.com, lkp@intel.com,
+        ak@linux.intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, tony.luck@intel.com,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH] x86/mm: Fix warning on build with X86_MEM_ENCRYPT=y
+Date:   Wed, 26 Jan 2022 14:59:19 +0300
+Message-Id: <20220126115919.7691-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <202201261113.3P3URW2n-lkp@intel.com>
+References: <202201261113.3P3URW2n-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Jann Horn <jannh@google.com>
-Cc:     Yang Shi <shy828301@gmail.com>, kirill.shutemov@linux.intel.com,
-        willy@infradead.org, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20220120202805.3369-1-shy828301@gmail.com>
- <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
- <CAG48ez1xuZdELb=5ed1i0ruoFu5kAaWsf0LgRXEGhrDAcHz8fw@mail.gmail.com>
- <f7f82234-7599-9e39-1108-f8fbe2c1efc9@redhat.com>
- <CAG48ez17d3p53tSfuDTNCaANyes8RNNU-2i+eFMqkMwuAbRT4Q@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration
- entry
-In-Reply-To: <CAG48ez17d3p53tSfuDTNCaANyes8RNNU-2i+eFMqkMwuAbRT4Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.01.22 12:48, Jann Horn wrote:
-> On Wed, Jan 26, 2022 at 12:38 PM David Hildenbrand <david@redhat.com> wrote:
->> On 26.01.22 12:29, Jann Horn wrote:
->>> On Wed, Jan 26, 2022 at 11:51 AM David Hildenbrand <david@redhat.com> wrote:
->>>> On 20.01.22 21:28, Yang Shi wrote:
->>>>> The syzbot reported the below BUG:
->>>>>
->>>>> kernel BUG at include/linux/page-flags.h:785!
-> [...]
->>>>> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
->>>>> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
-> [...]
->>>> Does this point at the bigger issue that reading the mapcount without
->>>> having the page locked is completely unstable?
->>>
->>> (See also https://lore.kernel.org/all/CAG48ez0M=iwJu=Q8yUQHD-+eZDg6ZF8QCF86Sb=CN1petP=Y0Q@mail.gmail.com/
->>> for context.)
->>
->> Thanks for the pointer.
->>
->>>
->>> I'm not sure what you mean by "unstable". Do you mean "the result is
->>> not guaranteed to still be valid when the call returns", "the result
->>> might not have ever been valid", or "the call might crash because the
->>> page's state as a compound page is unstable"?
->>
->> A little bit of everything :)
-> [...]
->>> In case you mean "the result might not have ever been valid":
->>> Yes, even with this patch applied, in theory concurrent THP splits
->>> could cause us to count some page mappings twice. Arguably that's not
->>> entirely correct.
->>
->> Yes, the snapshot is not atomic and, thereby, unreliable. That what I
->> mostly meant as "unstable".
->>
->>>
->>> In case you mean "the call might crash because the page's state as a
->>> compound page could concurrently change":
->>
->> I think that's just a side-product of the snapshot not being "correct",
->> right?
-> 
-> I guess you could see it that way? The way I look at it is that
-> page_mapcount() is designed to return a number that's at least as high
-> as the number of mappings (rarely higher due to races), and using
-> page_mapcount() on an unlocked page is legitimate if you're fine with
-> the rare double-counting of references. In my view, the problem here
-> is:
-> 
-> There are different types of references to "struct page" - some of
-> them allow you to call page_mapcount(), some don't. And in particular,
-> get_page() doesn't give you a reference that can be used with
-> page_mapcount(), but locking a (real, non-migration) PTE pointing to
-> the page does give you such a reference.
+So far, AMD_MEM_ENCRYPT is the only user of X86_MEM_ENCRYPT. TDX will be
+the second. It will make mem_encrypt.c build without AMD_MEM_ENCRYPT,
+which triggers a warning:
 
-I assume the point is that as long as the page cannot be unmapped
-because you block it from getting unmapped (PT lock), the compound page
-cannot get split. As long as the page cannot get unmapped from that page
-table you should have at least a mapcount of 1.
+arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for
+	function 'mem_encrypt_init' [-Wmissing-prototypes]
 
-But yeah, using the mapcount of a page that is not even mapped
-(migration entry) is clearly wrong.
+Fix it by moving mem_encrypt_init() declaration outside of #ifdef
+CONFIG_AMD_MEM_ENCRYPT.
 
-To summarize: reading the mapcount on an unlocked page will easily
-return a wrong result and the result should not be relied upon. reading
-the mapcount of a migration entry is dangerous and certainly wrong.
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Fixes: 20f07a044a76 ("x86/sev: Move common memory encryption code to mem_encrypt.c")
+---
+ arch/x86/include/asm/mem_encrypt.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
+index e2c6f433ed10..88ceaf3648b3 100644
+--- a/arch/x86/include/asm/mem_encrypt.h
++++ b/arch/x86/include/asm/mem_encrypt.h
+@@ -49,9 +49,6 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages,
+ 
+ void __init mem_encrypt_free_decrypted_mem(void);
+ 
+-/* Architecture __weak replacement functions */
+-void __init mem_encrypt_init(void);
+-
+ void __init sev_es_init_vc_handling(void);
+ 
+ #define __bss_decrypted __section(".bss..decrypted")
+@@ -89,6 +86,9 @@ static inline void mem_encrypt_free_decrypted_mem(void) { }
+ 
+ #endif	/* CONFIG_AMD_MEM_ENCRYPT */
+ 
++/* Architecture __weak replacement functions */
++void __init mem_encrypt_init(void);
++
+ /*
+  * The __sme_pa() and __sme_pa_nodebug() macros are meant for use when
+  * writing to or comparing values from the cr3 register.  Having the
 -- 
-Thanks,
-
-David / dhildenb
+2.34.1
 

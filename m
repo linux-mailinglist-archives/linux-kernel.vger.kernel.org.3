@@ -2,100 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 033CE49C966
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D74449C960
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241149AbiAZMQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:16:27 -0500
-Received: from mga01.intel.com ([192.55.52.88]:24474 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233973AbiAZMQ0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:16:26 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="270988224"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="270988224"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 04:16:26 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="674341619"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 04:16:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1nChCh-00Eaiw-DB;
-        Wed, 26 Jan 2022 14:15:11 +0200
-Date:   Wed, 26 Jan 2022 14:15:11 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@linux.ie>,
-        nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        id S241139AbiAZMPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:15:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38034 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233973AbiAZMPj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:15:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69EF161989;
+        Wed, 26 Jan 2022 12:15:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433BDC340E3;
+        Wed, 26 Jan 2022 12:15:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643199338;
+        bh=k2ewSndsyBIgZJ6eLaddDfa250SVBzbubObog428BE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L8jvOoREbkz5NVYi1vbvjeByfuYPjOa2rBsvZAjg66476X0N2nIcmKDA/O/mGzpxK
+         ha99pkKD1GFt+nHv4zecqWnDERjaPCfix26qlittgmHXvzxRoRPORO8XMaRICv8BYL
+         d9TFYB/z6rBR6iIPN8QcudEuOHJ7q8JfkDHCD9nQ=
+Date:   Wed, 26 Jan 2022 13:15:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        amd-gfx@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Leo Li <sunpeng.li@amd.com>, intel-gfx@lists.freedesktop.org,
-        Raju Rangoju <rajur@chelsio.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [Intel-gfx] [PATCH v2 09/11] drm: Convert open-coded yes/no
- strings to yesno()
-Message-ID: <YfE7T7gl+0GrlFt/@smile.fi.intel.com>
-References: <20220126093951.1470898-1-lucas.demarchi@intel.com>
- <20220126093951.1470898-10-lucas.demarchi@intel.com>
- <CAHp75Vd+TmShx==d_JHZUu0Q-9X7CmZEOFdKnSrcRKs81Gxn3g@mail.gmail.com>
- <20220126104345.r6libof7z7tqjqxi@ldmartin-desk2>
+        Phillip Potter <phil@philpotter.co.uk>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+Message-ID: <YfE7aBXqDmJRKEuy@kroah.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+ <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+ <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
+ <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
+ <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
+ <YfEyo2xxfFyl2ADI@kroah.com>
+ <1d00ed48-0606-823c-58c4-e45948383c42@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126104345.r6libof7z7tqjqxi@ldmartin-desk2>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <1d00ed48-0606-823c-58c4-e45948383c42@gmx.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 02:43:45AM -0800, Lucas De Marchi wrote:
-> On Wed, Jan 26, 2022 at 12:12:50PM +0200, Andy Shevchenko wrote:
-> > On Wed, Jan 26, 2022 at 11:39 AM Lucas De Marchi
-> > <lucas.demarchi@intel.com> wrote:
-
-...
-
-> > >  411986   10490    6176  428652   68a6c drm.ko.old
-> > >  411986   10490    6176  428652   68a6c drm.ko
-> > >   98129    1636     264  100029   186bd dp/drm_dp_helper.ko.old
-> > >   98129    1636     264  100029   186bd dp/drm_dp_helper.ko
-> > > 1973432  109640    2352 2085424  1fd230 nouveau/nouveau.ko.old
-> > > 1973432  109640    2352 2085424  1fd230 nouveau/nouveau.ko
-> > 
-> > This probably won't change for modules, but if you compile in the
-> > linker may try to optimize it. Would be nice to see the old-new for
-> > `make allyesconfig` or equivalent.
+On Wed, Jan 26, 2022 at 12:51:46PM +0100, Helge Deller wrote:
+> On 1/26/22 12:38, Greg Kroah-Hartman wrote:
+> > On Wed, Jan 26, 2022 at 12:31:21PM +0100, Helge Deller wrote:
+> >> On 1/26/22 12:18, Javier Martinez Canillas wrote:
+> >>> On 1/26/22 11:59, Helge Deller wrote:
+> >>>> On 1/26/22 11:02, Andy Shevchenko wrote:
+> >>>
+> >>> [snip]
+> >>>
+> >>>>> P.S. For the record, I will personally NAK any attempts to remove that
+> >>>>> driver from the kernel. And this is another point why it's better not
+> >>>>> to be under the staging.
+> >>>>
+> >>>> I agree. Same as for me to NAK the disabling of fbcon's acceleration
+> >>>> features or even attempting to remove fbdev altogether (unless all
+> >>>> relevant drivers are ported to DRM).
+> >>>>
+> >>>
+> >>> But that will never happen if we keep moving the goal post.
+> >>>
+> >>> At some point new fbdev drivers should not be added anymore, otherwise
+> >>> the number of existing drivers that need conversion will keep growing.
+> >>
+> >> Good point, and yes you are right!
+> >>
+> >> I think the rule should be something like:
+> >>
+> >> New graphics devices (e.g. max. 3 years old from now) usually are
+> >> capable to be ported to DRM.
+> >> For those graphics cards we should put a hard stop and not include them
+> >> as new driver into the fbdev framework. Inclusion for those will only
+> >> happen as DRM driver.
+> >
+> > We made this rule 6 years ago already.
 > 
-> just like it would already do, no? I can try and see what happens, but
-> my feeling is that we won't have any change.
+> Very good.
+> 
+> Was there any decision how to handle drivers which can't use DRM,
+> or for which DRM doesn't make sense?
 
-Maybe not or maybe a small win. Depends how compiler puts / linker sees
-that in two cases. (Yeah, likely it should be no differences if all
-instances are already caught by linker)
+We fix up DRM to handle such devices.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> So the best way forward regarding those fbtft drivers is probably what
+> you suggested: Split them and move those DRM-capable drivers to DRM,
+> the others to fbdev, right?
 
+No, port those that work to DRM and just delete the rest as no one is
+using them.
 
+thanks,
+
+greg k-h

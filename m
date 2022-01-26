@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D564649CAF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6708649CAFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240280AbiAZNg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:36:57 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:55466 "EHLO vps0.lunn.ch"
+        id S235150AbiAZNiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:38:14 -0500
+Received: from mga01.intel.com ([192.55.52.88]:35732 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233208AbiAZNg4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:36:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=/5ue71kmL2h4LWcj6pXkYjWtIJCP5T9x8ay3aCSwqhM=; b=mHueb7dI9SdXd/Oaw8DN23GYUI
-        Ycf5aktSYPmd3r6tdSdJragw4sKlk9rLDgZVU0oIW/Pw2DgAGTeLZ6tOgAQlD6V6wK2ud5tF9/vGG
-        8gJOY7iBfYVJ3HCZI9ETTpDxMOWpMsFvs/D2+QmT+wGm7hh6Xxt9dCvF70gRp7GOsIfw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nCiTk-002oTB-U5; Wed, 26 Jan 2022 14:36:52 +0100
-Date:   Wed, 26 Jan 2022 14:36:52 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 5/5] dt-bindings: net: xgmac_mdio: Add
- "clock-frequency" and "suppress-preamble"
-Message-ID: <YfFOdGa7iVFQK7EZ@lunn.ch>
-References: <20220126101432.822818-1-tobias@waldekranz.com>
- <20220126101432.822818-6-tobias@waldekranz.com>
+        id S240390AbiAZNiM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 08:38:12 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="271000586"
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="271000586"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:38:07 -0800
+X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
+   d="scan'208";a="767133033"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:38:03 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1nCiTo-00Ebxc-Qb;
+        Wed, 26 Jan 2022 15:36:56 +0200
+Date:   Wed, 26 Jan 2022 15:36:56 +0200
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+Message-ID: <YfFOeLKfJ3oGXtyK@smile.fi.intel.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+ <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+ <CAHp75Vd7oaYPKx6bxjCqNnm6fieeQFrtq5K4YYrxYbXoXFy=+Q@mail.gmail.com>
+ <20220126102858.GX1951@kadam>
+ <1b665bb8-7acb-519b-0a02-ef0f2dd4b524@redhat.com>
+ <YfFE61IQus3SMQRZ@kroah.com>
+ <afb68b5c-8d1a-17c4-a62b-be985c5bc613@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126101432.822818-6-tobias@waldekranz.com>
+In-Reply-To: <afb68b5c-8d1a-17c4-a62b-be985c5bc613@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 11:14:32AM +0100, Tobias Waldekranz wrote:
-> The driver now supports the standard "clock-frequency" and
-> "suppress-preamble" properties, do document them in the binding
-> description.
+On Wed, Jan 26, 2022 at 02:19:37PM +0100, Javier Martinez Canillas wrote:
+> On 1/26/22 13:56, Greg Kroah-Hartman wrote:
+
+> >>    fb_ili9341.c (DRM driver in drivers/gpu/drm/tiny/mi0283qt.c ?)
 > 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> This was a copy and paste error. It should had been:
+> 
+>                    (DRM driver in drivers/gpu/drm/tiny/ili9341.c)
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+They both fit.
 
-However, you could convert to yaml as well, if you wanted.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> +- clocks
-> +		Usage: optional
-> +		Value type: <phandle>
-> +		Definition: A reference to the input clock of the controller
-> +		from which the MDC frequency is derived.
 
-That answers my question. However, in the presence of a
-'clock-frequency' property it cannot be optional, so -ENODEV seems
-reasonable if it is missing. Potentially you also need to handle
--EPROBE_DEFER, although it seems quiet unlikely for an internal SoC
-clock.
-
-	Andrew

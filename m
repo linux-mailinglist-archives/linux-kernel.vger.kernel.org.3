@@ -2,141 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEC249C7C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD5749C7CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240137AbiAZKoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:44:00 -0500
-Received: from mga18.intel.com ([134.134.136.126]:8052 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232745AbiAZKnw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:43:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643193832; x=1674729832;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Vtg1dgMFp7p9GgxTmw0mrktziInoebLsnCNjJeItTWc=;
-  b=iIdSmBlgfe6azUNDmzVOK3xp8rEb15h6JBAwVSfR4fxuSdZU9T0NXNqE
-   An5UpTaqMRTz15Ls8Q7kQXzvlaVJB5/dFIKrgZ1/ldLj1XsAVuAVZVS47
-   xkjcUaJGTbOSrBdYAgh23Sppu3svjph/TsU2VQDZsjZVqnmslNLJLmHp4
-   WVL1pxeCjm3Ql2RZV1n8LwzB+TUOEH71gA5YltAgBLmH6m8fD8UQH3WWN
-   Jp9YId36ELAdrJydcrgx1PRIhBfwcnU0Vgb0sz1CWlVS69f2Z40TBT4Hn
-   GSPrP+UCzS6rwUItRg/+/ryksE0KS6fY/Jcri3DdeIBQBhZ4AmHrrPaHt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="230098001"
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="230098001"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 02:43:51 -0800
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="624796941"
-Received: from richardt-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.143.219])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 02:43:48 -0800
-Date:   Wed, 26 Jan 2022 02:43:45 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Emma Anholt <emma@anholt.net>, David Airlie <airlied@linux.ie>,
-        nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        amd-gfx@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Leo Li <sunpeng.li@amd.com>, intel-gfx@lists.freedesktop.org,
-        Raju Rangoju <rajur@chelsio.com>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [Intel-gfx] [PATCH v2 09/11] drm: Convert open-coded yes/no
- strings to yesno()
-Message-ID: <20220126104345.r6libof7z7tqjqxi@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220126093951.1470898-1-lucas.demarchi@intel.com>
- <20220126093951.1470898-10-lucas.demarchi@intel.com>
- <CAHp75Vd+TmShx==d_JHZUu0Q-9X7CmZEOFdKnSrcRKs81Gxn3g@mail.gmail.com>
+        id S240149AbiAZKpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:45:17 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53884 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240130AbiAZKpP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 05:45:15 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QAcId8017126;
+        Wed, 26 Jan 2022 10:45:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HkVQhLkmcAz7k13SGgX8Mt6SupqEPODJLOPwinkri+o=;
+ b=YT3WtydV9/aKPSS7MN4UdqBVBQH/fBmGjtlpxQ/aAGZ1PU0YA7OhuySoOa0kHt1teqfv
+ I5zWKe6GvVqiwSr5/P0oO9CwvbP4qvV0MBuw6S2FfOo4cq7WDwRbikZRp1B618GQ/VYW
+ L057XkE5LDOt6GoUvtI9XqpwEbBBcBVlTkZR4mW7maRV5fcNyo7SSf7JvyuHOCSU7kxr
+ Mwlun6r3rKaNph3QzOzct53gdmTaJBGHwPI+fv+9YhADwqYoev/Ufrrt5zKyu5SWKnEp
+ K1z6Z1lUI2eoHw2TOCtuQ6buz/3JLJgVBSyg2wzVq1iFzOWcdMr9npcnR6i0UHLWUu7b DA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du30ua250-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 10:45:13 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20QAerCv026744;
+        Wed, 26 Jan 2022 10:45:13 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du30ua23x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 10:45:13 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QAhrUO011359;
+        Wed, 26 Jan 2022 10:45:11 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3dr9j9d6k3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 10:45:10 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QAZWhr48562494
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 10:35:32 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6A3EA4059;
+        Wed, 26 Jan 2022 10:45:07 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E360A404D;
+        Wed, 26 Jan 2022 10:45:06 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.145.7.24])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jan 2022 10:45:06 +0000 (GMT)
+Date:   Wed, 26 Jan 2022 11:45:05 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
+        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 13/30] s390/pci: return status from
+ zpci_refresh_trans
+Message-ID: <20220126114505.6ddc8400@p-imbrenda>
+In-Reply-To: <20220114203145.242984-14-mjrosato@linux.ibm.com>
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+        <20220114203145.242984-14-mjrosato@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vd+TmShx==d_JHZUu0Q-9X7CmZEOFdKnSrcRKs81Gxn3g@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FbsVsx1_cwoeZZiphaOrPv88uLJAFvad
+X-Proofpoint-ORIG-GUID: d_RUrB2UlVup9FKpjoYvV5f0c1GHCdV8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-26_02,2022-01-26_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 adultscore=0
+ malwarescore=0 suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ phishscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2201260061
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:12:50PM +0200, Andy Shevchenko wrote:
->On Wed, Jan 26, 2022 at 11:39 AM Lucas De Marchi
-><lucas.demarchi@intel.com> wrote:
->>
->> linux/string_helpers.h provides a helper to return "yes"/"no" strings.
->> Replace the open coded versions with str_yes_no(). The places were
+On Fri, 14 Jan 2022 15:31:28 -0500
+Matthew Rosato <mjrosato@linux.ibm.com> wrote:
 
-oops, I replaced yesno() here but forgot to do so in the title
+> Current callers of zpci_refresh_trans don't need to interrogate the status
+> returned from the underlying instructions.  However, a subsequent patch
+> will add a KVM caller that needs this information.  Add a new argument to
+> zpci_refresh_trans to pass the address of a status byte and update
+> existing call sites to provide it.
+> 
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
->> identified with the following semantic patch:
->>
->>         @@
->>         expression b;
->>         @@
->>
->>         - b ? "yes" : "no"
->>         + str_yes_no(b)
->>
->> Then the includes were added, so we include-what-we-use, and parenthesis
->> adjusted in drivers/gpu/drm/v3d/v3d_debugfs.c. After the conversion we
->> still see the same binary sizes:
->>
->>    text    data     bss     dec     hex filename
->>   51149    3295     212   54656    d580 virtio/virtio-gpu.ko.old
->>   51149    3295     212   54656    d580 virtio/virtio-gpu.ko
->> 1441491   60340     800 1502631  16eda7 radeon/radeon.ko.old
->> 1441491   60340     800 1502631  16eda7 radeon/radeon.ko
->> 6125369  328538   34000 6487907  62ff63 amd/amdgpu/amdgpu.ko.old
->> 6125369  328538   34000 6487907  62ff63 amd/amdgpu/amdgpu.ko
->>  411986   10490    6176  428652   68a6c drm.ko.old
->>  411986   10490    6176  428652   68a6c drm.ko
->>   98129    1636     264  100029   186bd dp/drm_dp_helper.ko.old
->>   98129    1636     264  100029   186bd dp/drm_dp_helper.ko
->> 1973432  109640    2352 2085424  1fd230 nouveau/nouveau.ko.old
->> 1973432  109640    2352 2085424  1fd230 nouveau/nouveau.ko
->
->This probably won't change for modules, but if you compile in the
->linker may try to optimize it. Would be nice to see the old-new for
->`make allyesconfig` or equivalent.
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-just like it would already do, no? I can try and see what happens, but
-my feeling is that we won't have any change.
+> ---
+>  arch/s390/include/asm/pci_insn.h |  2 +-
+>  arch/s390/pci/pci_dma.c          |  6 ++++--
+>  arch/s390/pci/pci_insn.c         | 10 +++++-----
+>  drivers/iommu/s390-iommu.c       |  4 +++-
+>  4 files changed, 13 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/pci_insn.h b/arch/s390/include/asm/pci_insn.h
+> index 5331082fa516..32759c407b8f 100644
+> --- a/arch/s390/include/asm/pci_insn.h
+> +++ b/arch/s390/include/asm/pci_insn.h
+> @@ -135,7 +135,7 @@ union zpci_sic_iib {
+>  DECLARE_STATIC_KEY_FALSE(have_mio);
+>  
+>  u8 zpci_mod_fc(u64 req, struct zpci_fib *fib, u8 *status);
+> -int zpci_refresh_trans(u64 fn, u64 addr, u64 range);
+> +int zpci_refresh_trans(u64 fn, u64 addr, u64 range, u8 *status);
+>  int __zpci_load(u64 *data, u64 req, u64 offset);
+>  int zpci_load(u64 *data, const volatile void __iomem *addr, unsigned long len);
+>  int __zpci_store(u64 data, u64 req, u64 offset);
+> diff --git a/arch/s390/pci/pci_dma.c b/arch/s390/pci/pci_dma.c
+> index a81de48d5ea7..b0a2380bcad8 100644
+> --- a/arch/s390/pci/pci_dma.c
+> +++ b/arch/s390/pci/pci_dma.c
+> @@ -23,8 +23,9 @@ static u32 s390_iommu_aperture_factor = 1;
+>  
+>  static int zpci_refresh_global(struct zpci_dev *zdev)
+>  {
+> +	u8 status;
+>  	return zpci_refresh_trans((u64) zdev->fh << 32, zdev->start_dma,
+> -				  zdev->iommu_pages * PAGE_SIZE);
+> +				  zdev->iommu_pages * PAGE_SIZE, &status);
+>  }
+>  
+>  unsigned long *dma_alloc_cpu_table(void)
+> @@ -183,6 +184,7 @@ static int __dma_purge_tlb(struct zpci_dev *zdev, dma_addr_t dma_addr,
+>  			   size_t size, int flags)
+>  {
+>  	unsigned long irqflags;
+> +	u8 status;
+>  	int ret;
+>  
+>  	/*
+> @@ -201,7 +203,7 @@ static int __dma_purge_tlb(struct zpci_dev *zdev, dma_addr_t dma_addr,
+>  	}
+>  
+>  	ret = zpci_refresh_trans((u64) zdev->fh << 32, dma_addr,
+> -				 PAGE_ALIGN(size));
+> +				 PAGE_ALIGN(size), &status);
+>  	if (ret == -ENOMEM && !s390_iommu_strict) {
+>  		/* enable the hypervisor to free some resources */
+>  		if (zpci_refresh_global(zdev))
+> diff --git a/arch/s390/pci/pci_insn.c b/arch/s390/pci/pci_insn.c
+> index 0509554301c7..ca6399d52767 100644
+> --- a/arch/s390/pci/pci_insn.c
+> +++ b/arch/s390/pci/pci_insn.c
+> @@ -77,20 +77,20 @@ static inline u8 __rpcit(u64 fn, u64 addr, u64 range, u8 *status)
+>  	return cc;
+>  }
+>  
+> -int zpci_refresh_trans(u64 fn, u64 addr, u64 range)
+> +int zpci_refresh_trans(u64 fn, u64 addr, u64 range, u8 *status)
+>  {
+> -	u8 cc, status;
+> +	u8 cc;
+>  
+>  	do {
+> -		cc = __rpcit(fn, addr, range, &status);
+> +		cc = __rpcit(fn, addr, range, status);
+>  		if (cc == 2)
+>  			udelay(ZPCI_INSN_BUSY_DELAY);
+>  	} while (cc == 2);
+>  
+>  	if (cc)
+> -		zpci_err_insn(cc, status, addr, range);
+> +		zpci_err_insn(cc, *status, addr, range);
+>  
+> -	if (cc == 1 && (status == 4 || status == 16))
+> +	if (cc == 1 && (*status == 4 || *status == 16))
+>  		return -ENOMEM;
+>  
+>  	return (cc) ? -EIO : 0;
+> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+> index 50860ebdd087..845bb99c183e 100644
+> --- a/drivers/iommu/s390-iommu.c
+> +++ b/drivers/iommu/s390-iommu.c
+> @@ -214,6 +214,7 @@ static int s390_iommu_update_trans(struct s390_domain *s390_domain,
+>  	unsigned long irq_flags, nr_pages, i;
+>  	unsigned long *entry;
+>  	int rc = 0;
+> +	u8 status;
+>  
+>  	if (dma_addr < s390_domain->domain.geometry.aperture_start ||
+>  	    dma_addr + size > s390_domain->domain.geometry.aperture_end)
+> @@ -238,7 +239,8 @@ static int s390_iommu_update_trans(struct s390_domain *s390_domain,
+>  	spin_lock(&s390_domain->list_lock);
+>  	list_for_each_entry(domain_device, &s390_domain->devices, list) {
+>  		rc = zpci_refresh_trans((u64) domain_device->zdev->fh << 32,
+> -					start_dma_addr, nr_pages * PAGE_SIZE);
+> +					start_dma_addr, nr_pages * PAGE_SIZE,
+> +					&status);
+>  		if (rc)
+>  			break;
+>  	}
 
->
->...
->
->>         seq_printf(m, "\tDP branch device present: %s\n",
->> -                  branch_device ? "yes" : "no");
->> +                  str_yes_no(branch_device));
->
->Can it be now on one line? Same Q for all similar cases in the entire series.
-
-I saw that question in the previous version. I think those are very
-subjective is they all go a little bit over 80 chars. Some maintainers
-may prefer one way or the other.
-
-Here we are reducing just 3 chars so I assumed that is the preferred
-style here.  Also keeping it as is helps with the mass conversion since
-it's easily repeatable if another iteration is needed.
-
-thanks
-Lucas De Marchi

@@ -2,222 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D6C49C624
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F5749C5FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238973AbiAZJTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiAZJTg (ORCPT
+        id S238897AbiAZJPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:15:12 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:35928 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238889AbiAZJPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:19:36 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815C4C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:19:36 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id a13so24563483wrh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:19:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=6W0uXYBUGimlgrjGSvj7ylLW7W4DYopOCTHsVfAmY4k=;
-        b=LTgwi81MnixOV81jpbU8WYduofSRLnxZ7CM0Zne4n+Wg/oyiGO3kvyOeLMnKM0S4XQ
-         /ZhTYdiZOlKLZPoVTHPWaD7Cqf+sBxvnaKx16wH1LRCuANSHrYlLfP891usJo+IWQAJx
-         tuMXr5msG9wWVUcBkssTOmwknn7N4js1l7enttugM55f+Yb698SB/qzRyV9IjIV9Dxiv
-         iQONJ/t3pZxbqvdPZjf0PXMPeVn+SYmvVFf8KlJGem9+ODyGxb4aJduyCHYiY88BQKhz
-         BVwZWWlwo488sLzlcBYrb60g5xvMYj+JrnUKS0W+tz3YYZbt+RDm3Cj347YWSao2WSSe
-         u64Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=6W0uXYBUGimlgrjGSvj7ylLW7W4DYopOCTHsVfAmY4k=;
-        b=s3vCQjNPfUn29n4re+9EVzn7fRGLH7IfmLLS0ODZlOlR4Y2hF1uGTHXM7nh5VDqOjz
-         qZjzmBa7to4GB2VNLLya74n6Fdvg2OpkjZud53mtstmaqSGnAB2It3d7hG0O1f42sQAQ
-         Ku7FIP3Nb9Jotm3kbbrR8QE0HFmV091DM2wLESsKA/NhOBSSmKyp45JSN7fVbOjMzrnk
-         J0sF3jkxyOrVFGki5mwcbqubjn2nRH6+rKkshf4Z6IEqFLwcPuszkelHb0eu9bn+ExZB
-         vzZ8TI9kJPohXo7eKuWIIysF0g58YVOzT7GXr0lcTwZz9y+R08f/CLGWY0RnroeSXW91
-         Tp7A==
-X-Gm-Message-State: AOAM531a8MhAje0Bmmmjsv5O+ithvMO9b68W9dYyF+IVXp8cHqR00VkV
-        QYgmrOrCylrvlKGJ3j3N1CXKyw==
-X-Google-Smtp-Source: ABdhPJxM9FCgJChPOLX+3by8PdBeL6nlJYirtMLagLsdYPC8uezejMxZoY5QLWL7xfWMTeMvyPRb3w==
-X-Received: by 2002:a5d:6da1:: with SMTP id u1mr1657242wrs.281.1643188775011;
-        Wed, 26 Jan 2022 01:19:35 -0800 (PST)
-Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.gmail.com with ESMTPSA id h8sm2913872wmq.26.2022.01.26.01.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 01:19:34 -0800 (PST)
-References: <20220121074508.42168-1-liang.yang@amlogic.com>
- <f5a429f2-ffbc-ea03-810a-45a0f90959a2@baylibre.com>
- <6eb4f247-367b-d460-6314-fc94ccd00b89@amlogic.com>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v10 0/4] clk: meson: add a sub EMMC clock controller
- support
-Date:   Wed, 26 Jan 2022 10:14:55 +0100
-In-reply-to: <6eb4f247-367b-d460-6314-fc94ccd00b89@amlogic.com>
-Message-ID: <1jy23226sa.fsf@starbuckisacylon.baylibre.com>
+        Wed, 26 Jan 2022 04:15:01 -0500
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220126091500euoutp01a60c5b7d786e34d7d3af6361622fde03~Nxzw_uwsE2826428264euoutp01P
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:15:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220126091500euoutp01a60c5b7d786e34d7d3af6361622fde03~Nxzw_uwsE2826428264euoutp01P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1643188500;
+        bh=2kxgqbUOSiR/HAQwrNWg/JhY0i5DL9Kj/WNddeqRUWU=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=vbyqmrDXjK6XaXoSvvGwx03VDY8U9OGD9oIFp790xD+1EDkzyxO+669Fqv7DU5FDj
+         5QaLnsJsjRvRO29ichr+Xl/3yhyAsASdTFZ+xDKGuZkpz+nhcOwU8Jjfl4AeWt1RBD
+         EEPSY7eYM01xGKTSIJWo4EC5kQBPLZOxLc4xGNsY=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220126091500eucas1p12eb9da9afb0fa34960e3a087615b5fa4~NxzwjkJ250450004500eucas1p1E;
+        Wed, 26 Jan 2022 09:15:00 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 21.AE.10009.31111F16; Wed, 26
+        Jan 2022 09:14:59 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220126091459eucas1p1881b40812beda47dbf94ada05a1f51b9~NxzwH2qkg0450004500eucas1p1D;
+        Wed, 26 Jan 2022 09:14:59 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220126091459eusmtrp19386a2364ee656566c8fe8c8aeedf0dd~NxzwG6UYZ1373813738eusmtrp1a;
+        Wed, 26 Jan 2022 09:14:59 +0000 (GMT)
+X-AuditID: cbfec7f2-e7fff70000002719-cb-61f11113f71a
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id E0.D2.09522.31111F16; Wed, 26
+        Jan 2022 09:14:59 +0000 (GMT)
+Received: from [106.210.134.141] (unknown [106.210.134.141]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220126091458eusmtip1dcde91b01251d358331599f1db9a4bca~Nxzu7C3c31968719687eusmtip1v;
+        Wed, 26 Jan 2022 09:14:58 +0000 (GMT)
+Message-ID: <6457f0c3-4f2a-a784-aadf-b3cbe563db74@samsung.com>
+Date:   Wed, 26 Jan 2022 10:14:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH v5 04/16] clk: samsung: fsd: Add initial clock support
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
+        linus.walleij@linaro.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
+        sboyd@kernel.org, linux-fsd@tesla.com,
+        Jayati Sahu <jayati.sahu@samsung.com>,
+        Ajay Kumar <ajaykumar.rs@samsung.com>
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+In-Reply-To: <20220124141644.71052-5-alim.akhtar@samsung.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDKsWRmVeSWpSXmKPExsWy7djPc7rCgh8TDX4ftbA48P4gi8WDedvY
+        LP5OOsZu8X5ZD6PF/CPnWC2OnFrCZLHx7Q8miyl/ljNZbHp8jdXiY889VouHr8ItLu+aw2Yx
+        4/w+JotT1z+zWSza+oXdonXvEXaLf9c2slg8vv6HzUHIY828NYwev39NYvSY1dDL5rFpVSeb
+        x51re9g8Ni+p97hyoonVo2/LKkaPf01z2T0+b5IL4IrisklJzcksSy3St0vgyni9/ixzwS2W
+        itu3njM3MP5m7mLk5JAQMJH4tPYOkM3FISSwglHiX/ccdgjnC6PEl8srWCGcz4wSLVNOM8K0
+        HLq/B6pqOaNEW9MrKOcjo8TvzqdMIFW8AnYSs//PBFvCIqAqsfHuazaIuKDEyZlPWLoYOThE
+        BZIkelqcQcLCAl4S+3ftA1vALCAucevJfLAxIgL5Ej//7WQBmc8s0McssXt/K1gRm4ChRO/R
+        PkaQOZwCthL3jgdD9MpLbH87B+wfCYFbnBLPDmxigrjaRaL1dysrhC0s8er4FnYIW0bi9OQe
+        FoiGZkaJnt232SGcCYwS948vgPrZWuLOuV9sINuYBTQl1u/Shwg7SnxfvJ4VJCwhwCdx460g
+        xBF8EpO2TWeGCPNKdLQJQVSrSPxeNR3qHCmJ7if/WSYwKs1CCpVZSN6fheSdWQh7FzCyrGIU
+        Ty0tzk1PLTbMSy3XK07MLS7NS9dLzs/dxAhMkKf/Hf+0g3Huq496hxiZOBgPMUpwMCuJ8P73
+        fp8oxJuSWFmVWpQfX1Sak1p8iFGag0VJnDc5c0OikEB6YklqdmpqQWoRTJaJg1Oqgcls/yRm
+        f5+FbDEOj18tXpy1pjl+/7GF9qIfHsnUnOk6tnZaqO151TLxXdNCo3g+PBLtdu1jeP5Nd/6D
+        yd8aHk7aw3Nw7u87roek8r4fnH6t7UMop7p+yoLgpTM3zaw/HpSaKunkljjD4t3mG3a7VD38
+        Y78Hhx2v7lDbvfqeUNW66jaNtdOfTjm30Ulr+qWCQx/qCvnT5p/IFH4qPWPORtFFM5y3K1Y+
+        Ez7W8W/+xK0ptzvsdx+7c+Pd9JPlx3NCKxurriaUOSw8MPnj8mvZXGf3rao8US3MUuG4wi/4
+        Tnj/f5HPgStEl+woz9P+7/J3v1NToozzv093unUPOvP4r01qmHyHZdX3y24HUu5+DE0WUWIp
+        zkg01GIuKk4EAF7nZQn/AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDIsWRmVeSWpSXmKPExsVy+t/xu7rCgh8TDU7slrE48P4gi8WDedvY
+        LP5OOsZu8X5ZD6PF/CPnWC2OnFrCZLHx7Q8miyl/ljNZbHp8jdXiY889VouHr8ItLu+aw2Yx
+        4/w+JotT1z+zWSza+oXdonXvEXaLf9c2slg8vv6HzUHIY828NYwev39NYvSY1dDL5rFpVSeb
+        x51re9g8Ni+p97hyoonVo2/LKkaPf01z2T0+b5IL4IrSsynKLy1JVcjILy6xVYo2tDDSM7S0
+        0DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy3i9/ixzwS2Witu3njM3MP5m7mLk5JAQMJE4
+        dH8PexcjF4eQwFJGiRd397N0MXIAJaQk5rcoQdQIS/y51sUGUfOeUWLClG0sIAleATuJ2f9n
+        gg1iEVCV2Hj3NRtEXFDi5MwnYDWiAkkSDce6weLCAl4S+3ftYwSxmQXEJW49mc8EYosI5Ev8
+        6f/ICrKAWaCPWeL4pG9QFx1mlNhyey0rSBWbgKFE79E+RpDrOAVsJe4dDwYxmQXUJdbPE4KY
+        KS+x/e0c5gmMQrOQnDELybpZCB2zkHQsYGRZxSiSWlqcm55bbKhXnJhbXJqXrpecn7uJEZgM
+        th37uXkH47xXH/UOMTJxMB5ilOBgVhLh/e/9PlGINyWxsiq1KD++qDQntfgQoykwKCYyS4km
+        5wPTUV5JvKGZgamhiZmlgamlmbGSOK9nQUeikEB6YklqdmpqQWoRTB8TB6dUA1Oa0UvOwBpV
+        b67pentf/LV7o6i+tk/tV9BBx63Btx2vTWQ49+yMivKa3/wLAtW4Ds+eMMk/O6wz4n/smjcy
+        9rFvwrctSQre9m2q5QO/Y72HTxw6KX6VIX6G4IwrZ+4+shMzO93BfeyjSzl76skfx7jqLxvo
+        LTmw+9vpJxO/mZrcflwX9tezjO1db1Mgu07NRM8DWf868pTfsWtcOOy9T/7FV40kL147jhiL
+        P74KCz+nBTKvunx4yuG0BwZzrZJ0jMUE7181sBH+2pgcqSte7rScZfN1xbaFr3bufCWz8ABX
+        uu51m+7Nh86XKIiel2J64F43oYdn/9kie93C9pyLmhqdVem2ZQJNSroec7c+DlRiKc5INNRi
+        LipOBABV5GmfjwMAAA==
+X-CMS-MailID: 20220126091459eucas1p1881b40812beda47dbf94ada05a1f51b9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220124142911epcas5p2e68f16158121a34e42e1763354ba8a4f
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220124142911epcas5p2e68f16158121a34e42e1763354ba8a4f
+References: <20220124141644.71052-1-alim.akhtar@samsung.com>
+        <CGME20220124142911epcas5p2e68f16158121a34e42e1763354ba8a4f@epcas5p2.samsung.com>
+        <20220124141644.71052-5-alim.akhtar@samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 24.01.2022 15:16, Alim Akhtar wrote:
+> Add initial clock support for FSD (Full Self-Driving) SoC
+> which is required to bring-up platforms based on this SoC.
+> 
+> Also, fix the build error reported by the kernel test robot [1]. 
+ 
+> Cc: linux-fsd@tesla.com
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Jayati Sahu <jayati.sahu@samsung.com>
+> Signed-off-by: Ajay Kumar <ajaykumar.rs@samsung.com>
+> Signed-off-by: Pankaj Dubey <pankaj.dubey@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-On Wed 26 Jan 2022 at 17:08, Liang Yang <liang.yang@amlogic.com> wrote:
-
-> Hi Neil,
->
-> On 2022/1/25 22:54, Neil Armstrong wrote:
->> [ EXTERNAL EMAIL ]
->> Hi Liang,
->> On 21/01/2022 08:45, Liang Yang wrote:
->>> This driver will add a MMC clock controller driver support.
->>> The original idea about adding a clock controller is during the
->>> discussion in the NAND driver mainline effort[1].
->>>
->>> This driver is tested in the S400 board (AXG platform) with NAND driver.
->> Thanks a lot for providing a fixed and updated version of this serie.
->> After some chat with Jerome and Kevin, it seems the way the eMMC clock
->> reuse
->> for NAND was designed nearly 4 years doesn't look accurate anymore.
->> Having a separate clk driver designed to replace the eMMC node when NAND
->> is
->> used on the board seems over engineered.
->> Actually having the clock code you add in this serie _but_ directly in
->> the NAND looks far better, and more coherent since having Linux runtime
->> detection of eMMC vs NAND will never happen and even this serie required
->> some DT modification from the bootloader.
->> I'll let Jerome or Kevin add more details if they want, but I think you
->> should resurrect
->> the work you pushed in [1] & [2] but:
->> - passing the eMMC clk registers as a third "reg" cell
-> Does it just need to define a 'reg' resource in NFC node and not 'syscon'
-> here?
-
-Yes
-
->> - passing the same "clocks" phandle as the eMMC node
->> - adding the eMMC clock code in the NAND driver directly
->> I'm open to discussions if you consider the current approach is still
->> superior.
->
-> I don't have persuasive ideas, but really it shares the common clock
-> implementation for both NFC and EMMC. and we don't need to paste the 
-> same code in NFC and EMMC.
-
-You don't need to copy everything. If I understood correctly, all the
-Rx/Tx should not be needed. Yes, there is some duplication as it stands but
-it allows to avoid coupling the MMC and NAND driver. We can still think
-about optimizing things later on. Let's get something simply working
-first.
-
->
->> Thanks,
->> Neil
->> [1]
->> https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
->> [2] https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
->> 
->>>
->>> Changes since v9 [10]
->>>   - use clk_parent_data instead of parent_names
->>>
->>> Changes since v8 [9]
->>>   - use MESON_SCLK_ONE_BASED instead of CLK_DIVIDER_ONE_BASED
->>>   - use struct_size to caculate onecell_data
->>>   - add clk-phase-delay.h
->>>   - define CLK_DELAY_STEP_PS_GX and CLK_DELAY_STEP_PS_AXG
->>>
->>> Changes since v7 [8]
->>>   - move meson_clk_get_phase_delay_data() from header to driver
->>>   - CONFIG sclk-div with COMMON_CLK_AMLOGIC instead of COMMON_CLK_AMLOGIC_AUDIO
->>>   - remove onecell date and ID for internal MUX clk
->>>   - use helper for functions for ONE_BASED in sclk-div
->>>   - add ONE_BASED support for duty cycle
->>>
->>> Changes since v6 [7]:
->>>   - add one based support for sclk divier
->>>   - alloc sclk in probe for multiple instance
->>>   - fix coding styles
->>>
->>> Changes since v5 [6]:
->>>   - remove divider ops with .init and use sclk_div instead
->>>   - drop CLK_DIVIDER_ROUND_CLOSEST in mux and div
->>>   - drop the useless type cast
->>>
->>> Changes since v4 [5]:
->>>   - use struct parm in phase delay driver
->>>   - remove 0 delay releted part in phase delay driver
->>>   - don't rebuild the parent name once again
->>>   - add divider ops with .init
->>>
->>> Changes since v3 [4]:
->>>   - separate clk-phase-delay driver
->>>   - replace clk_get_rate() with clk_hw_get_rate()
->>>   - collect Rob's R-Y
->>>   - drop 'meson-' prefix from compatible string
->>>
->>>   Changes since v2 [3]:
->>>   - squash dt-binding clock-id patch
->>>   - update license
->>>   - fix alignment
->>>   - construct a clk register helper() function
->>>
->>> Changes since v1 [2]:
->>>   - implement phase clock
->>>   - update compatible name
->>>   - adjust file name
->>>   - divider probe() into small functions, and re-use them
->>>
->>> [1] https://lkml.kernel.org/r/20180628090034.0637a062@xps13
->>> [2] https://lkml.kernel.org/r/20180703145716.31860-1-yixun.lan@amlogic.com
->>> [3] https://lkml.kernel.org/r/20180710163658.6175-1-yixun.lan@amlogic.com
->>> [4] https://lkml.kernel.org/r/20180712211244.11428-1-yixun.lan@amlogic.com
->>> [5] https://lkml.kernel.org/r/20180809070724.11935-4-yixun.lan@amlogic.com
->>> [6] https://lkml.kernel.org/r/1539839245-13793-1-git-send-email-jianxin.pan@amlogic.com
->>> [7] https://lkml.kernel.org/r/1541089855-19356-1-git-send-email-jianxin.pan@amlogic.com
->>> [8] https://lkml.kernel.org/r/1544457877-51301-1-git-send-email-jianxin.pan@amlogic.com
->>> [9] https://lkml.kernel.org/r/1545063850-21504-1-git-send-email-jianxin.pan@amlogic.com
->>> [10] https://lore.kernel.org/all/20220113115745.45826-1-liang.yang@amlogic.com/
->>> Liang Yang (4):
->>>    clk: meson: add one based divider support for sclk
->>>    clk: meson: add emmc sub clock phase delay driver
->>>    clk: meson: add DT documentation for emmc clock controller
->>>    clk: meson: add sub MMC clock controller driver
->>>
->>>   .../bindings/clock/amlogic,mmc-clkc.yaml      |  64 ++++
->>>   drivers/clk/meson/Kconfig                     |  18 ++
->>>   drivers/clk/meson/Makefile                    |   2 +
->>>   drivers/clk/meson/clk-phase-delay.c           |  69 ++++
->>>   drivers/clk/meson/clk-phase-delay.h           |  20 ++
->>>   drivers/clk/meson/mmc-clkc.c                  | 302 ++++++++++++++++++
->>>   drivers/clk/meson/sclk-div.c                  |  59 ++--
->>>   drivers/clk/meson/sclk-div.h                  |   3 +
->>>   include/dt-bindings/clock/amlogic,mmc-clkc.h  |  14 +
->>>   9 files changed, 529 insertions(+), 22 deletions(-)
->>>   create mode 100644 Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
->>>   create mode 100644 drivers/clk/meson/clk-phase-delay.c
->>>   create mode 100644 drivers/clk/meson/clk-phase-delay.h
->>>   create mode 100644 drivers/clk/meson/mmc-clkc.c
->>>   create mode 100644 include/dt-bindings/clock/amlogic,mmc-clkc.h
->>>
->> .
+Acked-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 

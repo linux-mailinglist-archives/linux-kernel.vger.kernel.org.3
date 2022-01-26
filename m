@@ -2,159 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF71749D074
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497AD49D076
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243598AbiAZRLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:11:49 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:41766 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243594AbiAZRLq (ORCPT
+        id S243594AbiAZRNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:13:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236965AbiAZRNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:11:46 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: bbeckett)
-        with ESMTPSA id CD96B1F44B2D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643217104;
-        bh=RO++SZG6FjnkZBIG0jzGrluJ5I0kiY9znyoXgcB7fqk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AqkB0Dod17M21vPmHrIrzGXxjhqvbd6OV30vgiDjorsk3ivrJtn5M/iFxZrxbBkGo
-         wYjnVxO3Sdg6J4K9nwsjjX/Mq2P/VQMRJlz2OK/QS8Zd6eDY9JyvVHz07rIo2E/vTp
-         keZFV+v97/Pv/MlpzULngzqnVL3No56B0e2ooaPfihD+w8pgb3kbTqAfqWnGZTKl+W
-         slrfBKhA7yO81dVI2ng44VnE1AFvkLUlmMj+9CvA8YaqETh2ixz+Y09hc/TuST7N2C
-         ISo5p74M48l+WeqmX60tJxRpJbMhtL7Z4H79xQW5Jq8DT/xDse2M0477c7iZ0BhCdR
-         RsCklmcRszlPw==
-Message-ID: <19bf8290-9308-b5c6-eb73-4020fa81aa66@collabora.com>
-Date:   Wed, 26 Jan 2022 17:11:41 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [Intel-gfx] [PATCH v5 1/5] drm/i915: add needs_compact_pt flag
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
-        <thomas_os@shipmail.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Matthew Auld <matthew.auld@intel.com>
-References: <20220125193530.3272386-1-bob.beckett@collabora.com>
- <20220125193530.3272386-2-bob.beckett@collabora.com>
- <6d0a57e7-daf7-6436-e806-7cc8794c2d50@shipmail.org>
-From:   Robert Beckett <bob.beckett@collabora.com>
-In-Reply-To: <6d0a57e7-daf7-6436-e806-7cc8794c2d50@shipmail.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Wed, 26 Jan 2022 12:13:04 -0500
+Received: from mail-lf1-x14a.google.com (mail-lf1-x14a.google.com [IPv6:2a00:1450:4864:20::14a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CFCC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:13:04 -0800 (PST)
+Received: by mail-lf1-x14a.google.com with SMTP id d14-20020a196b0e000000b0043a9be72315so13153lfa.22
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:13:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=pbBLINmGHzM6V42XBweXNxOpKFgkK8jWD+m3tGBDCwM=;
+        b=PckkjWov+GONxQRSta3gcImVIQuyXgOD+nBDZhVM54Xja/BYGSjGS1IozDACEdOCNp
+         sEnEVmyFbYIrlliZxHkzOmVvE3FFM9fAjufGozGOb2aIYarCGrp7YbeYCanzN1n6e0tl
+         0KYSe4J/3KX9x7/cQkdLqHZkT3ZzRWSyrRWkgcpBm84uvulk34Nd14+W54FBw9P5qu32
+         oQa9yay1tvSQTdOXlfrBB2BnEpb94hZtZe2AZJLDXp3qifwPRafiaZVRmKeZKhifnux4
+         yErt2Kfj0SvO4LFV8lKZebmh/etEvFbo9qQXfqCPFiqeI7urWWX3QpyEnTPM7uq7NCsJ
+         3C1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=pbBLINmGHzM6V42XBweXNxOpKFgkK8jWD+m3tGBDCwM=;
+        b=E1u10jplI6RDyIQSEYe6ZOoToo+IshJAUFa3P0PUpmJRu6kawZg5ARXFVxKjZiRU97
+         OdBnx/flAGVqjQOB1tUcdRgaNGNr18TFIf21h9p354qU7n99xu0NYA5GUUXhusSQA/Hj
+         2TiahP35Li8UUxhUqtjYXhCKOutQ25yS9X+T2PX6CXNdrKaC/jLXuaKO44BrbznKR6Xv
+         v7MYhe9nQpcvdZEaFmH79ZgQRSfNPKVSVBmswBf5aiuwkYu7qspHvmPkuLQWZmiMdY0Q
+         4X3ePIaSfPOt9KYvdKgIH2f8qlGpFzfSgcZsv09NQGBChZX4X4tXuve7dQBOvGxu1u06
+         R3ug==
+X-Gm-Message-State: AOAM532qRXfDn+G4MQX14uAA53ZhT4V6+HDrrzosCwRxP7t8LGZ4k2tf
+        bPEDgvCkwew4ripMkwokliI/8I2eKw==
+X-Google-Smtp-Source: ABdhPJxtrW12j9LiTaZif+Ya2Fslvy8R9PaaQLSbeG7bct9LwCnyjhVkg0eKaYb8ZGcoeG0uslG4H8CcWw==
+X-Received: from jannh2.zrh.corp.google.com ([2a00:79e0:9d:4:e695:855e:ae74:d6f])
+ (user=jannh job=sendgmr) by 2002:ac2:5fad:: with SMTP id s13mr19320668lfe.41.1643217182081;
+ Wed, 26 Jan 2022 09:13:02 -0800 (PST)
+Date:   Wed, 26 Jan 2022 18:12:32 +0100
+Message-Id: <20220126171232.2599547-1-jannh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+Subject: [PATCH] x86/csum: Add KASAN/KCSAN instrumentation
+From:   Jann Horn <jannh@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the optimized X86 version of the copy-with-checksum helpers, use
+instrument_*() before accessing buffers from assembly code so that KASAN
+and KCSAN don't have blind spots there.
 
+Signed-off-by: Jann Horn <jannh@google.com>
+---
+ arch/x86/lib/csum-partial_64.c  | 3 +++
+ arch/x86/lib/csum-wrappers_64.c | 9 +++++++++
+ 2 files changed, 12 insertions(+)
 
-On 26/01/2022 13:49, Thomas Hellström (Intel) wrote:
-> 
-> On 1/25/22 20:35, Robert Beckett wrote:
->> From: Ramalingam C <ramalingam.c@intel.com>
->>
->> Add a new platform flag, needs_compact_pt, to mark the requirement of
->> compact pt layout support for the ppGTT when using 64K GTT pages.
->>
->> With this flag has_64k_pages will only indicate requirement of 64K
->> GTT page sizes or larger for device local memory access.
->>
->> Suggested-by: Matthew Auld <matthew.auld@intel.com>
->> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
->> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->> ---
->>   drivers/gpu/drm/i915/i915_drv.h          | 10 +++++++---
->>   drivers/gpu/drm/i915/i915_pci.c          |  2 ++
->>   drivers/gpu/drm/i915/intel_device_info.h |  1 +
->>   3 files changed, 10 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/i915/i915_drv.h 
->> b/drivers/gpu/drm/i915/i915_drv.h
->> index 44c1f98144b4..1258b7779705 100644
->> --- a/drivers/gpu/drm/i915/i915_drv.h
->> +++ b/drivers/gpu/drm/i915/i915_drv.h
->> @@ -1512,12 +1512,16 @@ IS_SUBPLATFORM(const struct drm_i915_private 
->> *i915,
->>   /*
->>    * Set this flag, when platform requires 64K GTT page sizes or 
->> larger for
->> - * device local memory access. Also this flag implies that we require or
->> - * at least support the compact PT layout for the ppGTT when using 
->> the 64K
->> - * GTT pages.
-> 
-> Why do we remove these comment lines?
-Because HAS_64K_PAGES now means just 64K page, it no longer means also 
-requires compact pt.
-This is to support other products that will have 64K but not have the 
-PDE non-sharing restriction in future.
+diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
+index 1f8a8f895173..8b0c353cd212 100644
+--- a/arch/x86/lib/csum-partial_64.c
++++ b/arch/x86/lib/csum-partial_64.c
+@@ -8,6 +8,7 @@
+  
+ #include <linux/compiler.h>
+ #include <linux/export.h>
++#include <linux/instrumented.h>
+ #include <asm/checksum.h>
+ #include <asm/word-at-a-time.h>
+ 
+@@ -37,6 +38,8 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ 	u64 temp64 = (__force u64)sum;
+ 	unsigned odd, result;
+ 
++	instrument_read(buff, len);
++
+ 	odd = 1 & (unsigned long) buff;
+ 	if (unlikely(odd)) {
+ 		if (unlikely(len == 0))
+diff --git a/arch/x86/lib/csum-wrappers_64.c b/arch/x86/lib/csum-wrappers_64.c
+index 189344924a2b..087f3c4cb89f 100644
+--- a/arch/x86/lib/csum-wrappers_64.c
++++ b/arch/x86/lib/csum-wrappers_64.c
+@@ -6,6 +6,8 @@
+  */
+ #include <asm/checksum.h>
+ #include <linux/export.h>
++#include <linux/in6.h>
++#include <linux/instrumented.h>
+ #include <linux/uaccess.h>
+ #include <asm/smap.h>
+ 
+@@ -26,6 +28,7 @@ csum_and_copy_from_user(const void __user *src, void *dst, int len)
+ 	__wsum sum;
+ 
+ 	might_sleep();
++	instrument_write(dst, len);
+ 	if (!user_access_begin(src, len))
+ 		return 0;
+ 	sum = csum_partial_copy_generic((__force const void *)src, dst, len);
+@@ -51,6 +54,7 @@ csum_and_copy_to_user(const void *src, void __user *dst, int len)
+ 	__wsum sum;
+ 
+ 	might_sleep();
++	instrument_read(src, len);
+ 	if (!user_access_begin(dst, len))
+ 		return 0;
+ 	sum = csum_partial_copy_generic(src, (void __force *)dst, len);
+@@ -71,6 +75,8 @@ EXPORT_SYMBOL(csum_and_copy_to_user);
+ __wsum
+ csum_partial_copy_nocheck(const void *src, void *dst, int len)
+ {
++	instrument_write(dst, len);
++	instrument_read(src, len);
+ 	return csum_partial_copy_generic(src, dst, len);
+ }
+ EXPORT_SYMBOL(csum_partial_copy_nocheck);
+@@ -81,6 +87,9 @@ __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
+ {
+ 	__u64 rest, sum64;
+ 
++	instrument_read(saddr, sizeof(*saddr));
++	instrument_read(daddr, sizeof(*daddr));
++
+ 	rest = (__force __u64)htonl(len) + (__force __u64)htons(proto) +
+ 		(__force __u64)sum;
+ 
 
-Those lines moved to the next change NEEDS_COMPACT_PT, which is now 
-separate.
+base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
 
-> 
-> 
->> + * device local memory access.
->>    */
->>   #define HAS_64K_PAGES(dev_priv) (INTEL_INFO(dev_priv)->has_64k_pages)
->> +/* Set this flag when platform doesn't allow both 64k pages and 4k 
->> pages in
-> 
-> First line of multi-line comments should be empty.
-thanks. I'm surprised checkpatch didnt spot that.
-
-> 
-> 
->> + * the same PT. this flag means we need to support compact PT layout 
->> for the
->> + * ppGTT when using the 64K GTT pages.
->> + */
->> +#define NEEDS_COMPACT_PT(dev_priv) 
->> (INTEL_INFO(dev_priv)->needs_compact_pt)
->> +
->>   #define HAS_IPC(dev_priv)         
->> (INTEL_INFO(dev_priv)->display.has_ipc)
->>   #define HAS_REGION(i915, i) (INTEL_INFO(i915)->memory_regions & (i))
->> diff --git a/drivers/gpu/drm/i915/i915_pci.c 
->> b/drivers/gpu/drm/i915/i915_pci.c
->> index 4081fd50ba9d..799b56569ef5 100644
->> --- a/drivers/gpu/drm/i915/i915_pci.c
->> +++ b/drivers/gpu/drm/i915/i915_pci.c
->> @@ -1028,6 +1028,7 @@ static const struct intel_device_info 
->> xehpsdv_info = {
->>       PLATFORM(INTEL_XEHPSDV),
->>       .display = { },
->>       .has_64k_pages = 1,
->> +    .needs_compact_pt = 1,
->>       .platform_engine_mask =
->>           BIT(RCS0) | BIT(BCS0) |
->>           BIT(VECS0) | BIT(VECS1) | BIT(VECS2) | BIT(VECS3) |
->> @@ -1045,6 +1046,7 @@ static const struct intel_device_info dg2_info = {
->>       .media.rel = 55,
->>       PLATFORM(INTEL_DG2),
->>       .has_64k_pages = 1,
->> +    .needs_compact_pt = 1,
->>       .platform_engine_mask =
->>           BIT(RCS0) | BIT(BCS0) |
->>           BIT(VECS0) | BIT(VECS1) |
->> diff --git a/drivers/gpu/drm/i915/intel_device_info.h 
->> b/drivers/gpu/drm/i915/intel_device_info.h
->> index 3699b1c539ea..c8aaf646430c 100644
->> --- a/drivers/gpu/drm/i915/intel_device_info.h
->> +++ b/drivers/gpu/drm/i915/intel_device_info.h
->> @@ -130,6 +130,7 @@ enum intel_ppgtt_type {
->>       /* Keep has_* in alphabetical order */ \
->>       func(has_64bit_reloc); \
->>       func(has_64k_pages); \
->> +    func(needs_compact_pt); \
->>       func(gpu_reset_clobbers_display); \
->>       func(has_reset_engine); \
->>       func(has_global_mocs); \

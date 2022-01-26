@@ -2,205 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6E849C4F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B052349C4EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238214AbiAZILO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 03:11:14 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17813 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238182AbiAZILI (ORCPT
+        id S238170AbiAZIKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 03:10:19 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45476
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238164AbiAZIKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:11:08 -0500
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JkGbZ3D4gz9sJq;
-        Wed, 26 Jan 2022 16:09:46 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 26 Jan 2022 16:11:06 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <tim.c.chen@linux.intel.com>, <gautham.shenoy@amd.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <yangyicong@hisilicon.com>,
-        <jonathan.cameron@huawei.com>, <ego@linux.vnet.ibm.com>,
-        <srikar@linux.vnet.ibm.com>, <linuxarm@huawei.com>,
-        <21cnbao@gmail.com>, <song.bao.hua@hisilicon.com>,
-        <guodong.xu@linaro.org>
-Subject: [PATCH v2 2/2] sched/fair: Scan cluster before scanning LLC in wake-up path
-Date:   Wed, 26 Jan 2022 16:09:47 +0800
-Message-ID: <20220126080947.4529-3-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220126080947.4529-1-yangyicong@hisilicon.com>
-References: <20220126080947.4529-1-yangyicong@hisilicon.com>
+        Wed, 26 Jan 2022 03:10:18 -0500
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7BE4A3F32C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643184615;
+        bh=DMOBbhpbxVYSRvBEVGGF1WPtdp5VA2Nvoeep49GDD7g=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=dFDmyZiXNv5aCkXI4MaLT3gY7kfN531g2c7Nt8+2YxkWQ8SHBu+1mLK0K8N0PMbzc
+         9Psf4MI7bO5fuyt6LelejIkWBqXucb4+STQb/NPYdX0K6vtX4PNCqHI4iWeJPAxJQR
+         qxZaZm4VW+6SZcLeHVepUxsjmP0IBlx1WPVT+HWgSPfygFZ8NE/rGvE2d0wZFuFKUh
+         4ozZVPY4zVCCfA09KyJ+/Uu4miQYH18dVTVCSA/AugLF/c+nw9Ft5aAVlIGuOrspCZ
+         CTp+66AtM7n8g3ka2DQs1OTNflvpdfwxl7zikInLpTbvLac29dtB7gF59coWADmqHH
+         Y26f4mHefsktg==
+Received: by mail-wm1-f70.google.com with SMTP id l20-20020a05600c1d1400b0034c29cad547so2232514wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 00:10:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DMOBbhpbxVYSRvBEVGGF1WPtdp5VA2Nvoeep49GDD7g=;
+        b=bHzWskar+fsVN9aSITVzpy+q9HEhTswxazSKaslOyWtkZji5+4nqek6LDYpY7Vqx0M
+         tEgQBbpRl2VmuJj8CEPHkaHZObURcQHfgeFybcCz6JNytpSgSHT+h7dRD4o6vujm4vpb
+         WsRMPsOSVJDGmP5vkEOXugGGjfQxI43661pIVceU45iLTFZAefneRQ/tb2PTAHwyLSxy
+         8HDku5MOGWLjqBPIx6ypnMirhDrt1QCWXusyv/YV4AWdoEQMRZtl8v2viGd8dpm22scT
+         kybv/dmPW+1GzFooO54g5NzAYMXS3GjI26MqltNDDwHr8r4qTN9mruSk+kj/IZo7yP9/
+         leRw==
+X-Gm-Message-State: AOAM533b1bf4SGVeedvMR7aDnKNeY9+6YfO2C1p2dXtUU6ehSqobOHOL
+        flpt/YJ8b0coILZxqghEdrF8DrjsS/aFEPV580C1KqDNNRaJEamSuU+d9MNLwU0AOxE1HEz0h5i
+        /86aj8S58u3kawdVHeOi1UL56mYvV3YgXTeqzV5ekwg==
+X-Received: by 2002:a5d:6210:: with SMTP id y16mr20242691wru.454.1643184615048;
+        Wed, 26 Jan 2022 00:10:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwnmI3G5A8EfcELI9u37UH1MZ8E80quDMGGBUUeCgGrHC65UI2ErBUkKdMwTg9U3hbsGtCuGw==
+X-Received: by 2002:a5d:6210:: with SMTP id y16mr20242663wru.454.1643184614770;
+        Wed, 26 Jan 2022 00:10:14 -0800 (PST)
+Received: from [192.168.0.60] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id o5sm17575019wrc.30.2022.01.26.00.10.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 00:10:14 -0800 (PST)
+Message-ID: <cabc3a91-807c-856b-5b74-03788781e2a0@canonical.com>
+Date:   Wed, 26 Jan 2022 09:10:13 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 01/12] arm64: dts: exynos: add USB DWC3 supplies to
+ Espresso board
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220123111644.25540-1-krzysztof.kozlowski@canonical.com>
+ <20220123111644.25540-2-krzysztof.kozlowski@canonical.com>
+ <CAGOxZ51zavNVpvUv0C17Cit+pdkERC70m5Ez3ELGpFh8tGDozQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAGOxZ51zavNVpvUv0C17Cit+pdkERC70m5Ez3ELGpFh8tGDozQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Barry Song <song.bao.hua@hisilicon.com>
+On 26/01/2022 07:58, Alim Akhtar wrote:
+> Hi Krzysztof
+> 
+> On Mon, Jan 24, 2022 at 1:34 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> Add required voltage regulators for USB DWC3 block on Exynos7 Espresso
+>> board.  Due to lack of schematics of Espresso board, the choice of
+>> regulators is approximate.  What bindings call VDD10, for Exynos7 should
+>> be actually called VDD09 (0.9 V).  Use regulators with a matching
+>> voltage range based on vendor sources for Meizu Pro 5 M576 handset (also
+>> with Exynos7420).
+>>
+> 
+> I checked Espresso board schematic, it is 0.9V for the USB and supplied by LDO4
+> 
 
-For platforms having clusters like Kunpeng920, CPUs within the same
-cluster have lower latency when synchronizing and accessing shared
-resources like cache. Thus, this patch tries to find an idle cpu
-within the cluster of the target CPU before scanning the whole LLC
-to gain lower latency.
+Thanks for checking!
 
-Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this
-patch doesn't consider SMT for this moment.
 
-Testing has been done on Kunpeng920 by pinning tasks to one numa
-and two numa. On Kunpeng920, Each numa has 8 clusters and each
-cluster has 4 CPUs.
-
-With this patch, We noticed enhancement on tbench within one
-numa or cross two numa.
-
-On numa 0:
-                            5.17-rc1                patched
-Hmean     1        324.73 (   0.00%)      378.01 *  16.41%*
-Hmean     2        645.36 (   0.00%)      754.63 *  16.93%*
-Hmean     4       1302.09 (   0.00%)     1507.54 *  15.78%*
-Hmean     8       2612.03 (   0.00%)     2982.57 *  14.19%*
-Hmean     16      5307.12 (   0.00%)     5886.66 *  10.92%*
-Hmean     32      9354.22 (   0.00%)     9908.13 *   5.92%*
-Hmean     64      7240.35 (   0.00%)     7278.78 *   0.53%*
-Hmean     128     6186.40 (   0.00%)     6187.85 (   0.02%)
-
-On numa 0-1:
-                            5.17-rc1                patched
-Hmean     1        320.01 (   0.00%)      378.44 *  18.26%*
-Hmean     2        643.85 (   0.00%)      752.52 *  16.88%*
-Hmean     4       1287.36 (   0.00%)     1505.62 *  16.95%*
-Hmean     8       2564.60 (   0.00%)     2955.29 *  15.23%*
-Hmean     16      5195.69 (   0.00%)     5814.74 *  11.91%*
-Hmean     32      9769.16 (   0.00%)    10872.63 *  11.30%*
-Hmean     64     15952.50 (   0.00%)    17281.98 *   8.33%*
-Hmean     128    13113.77 (   0.00%)    13895.20 *   5.96%*
-Hmean     256    10997.59 (   0.00%)    11244.69 *   2.25%*
-Hmean     512    14623.60 (   0.00%)    15526.25 *   6.17%*
-
-This will also help to improve the MySQL. With MySQL server
-running on numa 0 and client running on numa 1, both QPS and
-latency is imporved on read-write case:
-                        5.17-rc1        patched
-QPS-16threads        143333.2633    145077.4033(+1.22%)
-QPS-24threads        195085.9367    202719.6133(+3.91%)
-QPS-32threads        241165.6867      249020.74(+3.26%)
-QPS-64threads        244586.8433    253387.7567(+3.60%)
-avg-lat-16threads           2.23           2.19(+1.19%)
-avg-lat-24threads           2.46           2.36(+3.79%)
-avg-lat-36threads           2.66           2.57(+3.26%)
-avg-lat-64threads           5.23           5.05(+3.44%)
-
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- kernel/sched/fair.c | 46 +++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 42 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 5146163bfabb..2f84a933aedd 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6262,12 +6262,46 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
- 
- #endif /* CONFIG_SCHED_SMT */
- 
-+#ifdef CONFIG_SCHED_CLUSTER
-+/*
-+ * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
-+ */
-+static inline int scan_cluster(struct task_struct *p, int prev_cpu, int target)
-+{
-+	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-+	struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
-+	int cpu, idle_cpu;
-+
-+	/* TODO: Support SMT case while a machine with both cluster and SMT born */
-+	if (!sched_smt_active() && sd) {
-+		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
-+			idle_cpu = __select_idle_cpu(cpu, p);
-+			if ((unsigned int)idle_cpu < nr_cpumask_bits)
-+				return idle_cpu;
-+		}
-+
-+		/* Don't ping-pong tasks in and out cluster frequently */
-+		if (cpus_share_resources(target, prev_cpu))
-+			return target;
-+
-+		cpumask_andnot(cpus, cpus, sched_domain_span(sd));
-+	}
-+
-+	return -1;
-+}
-+#else
-+static inline int scan_cluster(struct task_struct *p, int prev_cpu, int target)
-+{
-+	return -1;
-+}
-+#endif
-+
- /*
-  * Scan the LLC domain for idle CPUs; this is dynamically regulated by
-  * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
-  * average idle time for this rq (as found in rq->avg_idle).
-  */
--static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
-+static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int prev_cpu, int target)
- {
- 	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
- 	int i, cpu, idle_cpu = -1, nr = INT_MAX;
-@@ -6282,6 +6316,10 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
- 
- 	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
- 
-+	idle_cpu = scan_cluster(p, prev_cpu, target);
-+	if ((unsigned int)idle_cpu < nr_cpumask_bits)
-+		return idle_cpu;
-+
- 	if (sched_feat(SIS_PROP) && !has_idle_core) {
- 		u64 avg_cost, avg_idle, span_avg;
- 		unsigned long now = jiffies;
-@@ -6416,7 +6454,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	/*
- 	 * If the previous CPU is cache affine and idle, don't be stupid:
- 	 */
--	if (prev != target && cpus_share_cache(prev, target) &&
-+	if (prev != target && cpus_share_resources(prev, target) &&
- 	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
- 	    asym_fits_capacity(task_util, prev))
- 		return prev;
-@@ -6442,7 +6480,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	p->recent_used_cpu = prev;
- 	if (recent_used_cpu != prev &&
- 	    recent_used_cpu != target &&
--	    cpus_share_cache(recent_used_cpu, target) &&
-+	    cpus_share_resources(recent_used_cpu, target) &&
- 	    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
- 	    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
- 	    asym_fits_capacity(task_util, recent_used_cpu)) {
-@@ -6483,7 +6521,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 		}
- 	}
- 
--	i = select_idle_cpu(p, sd, has_idle_core, target);
-+	i = select_idle_cpu(p, sd, has_idle_core, prev, target);
- 	if ((unsigned)i < nr_cpumask_bits)
- 		return i;
- 
--- 
-2.24.0
-
+Best regards,
+Krzysztof

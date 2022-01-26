@@ -2,112 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 796AE49D0A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539C149D0AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243673AbiAZRXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S243691AbiAZRZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiAZRXc (ORCPT
+        with ESMTP id S237164AbiAZRZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:23:32 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F8AC06161C;
-        Wed, 26 Jan 2022 09:23:32 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id k18so206185wrg.11;
-        Wed, 26 Jan 2022 09:23:32 -0800 (PST)
+        Wed, 26 Jan 2022 12:25:56 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8A8C061747
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:25:55 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id l35-20020a05600c1d2300b0034d477271c1so273097wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:25:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=V0Tp1GHHecUi/P4l2E9yO+GMXfgnTyE6j4Sd+guldZs=;
-        b=b3BDIRCil9T9ZDhSv45ih/ZPe1l6qgT2LuWBqoLTgaOUBz4yEfEXvR3ubcvBZelIz1
-         ubY3XJVpkUXsrnLgqj0a27BnBOFsu9osesEptKM6a16oMZpMSP8jMO3ik0h9SLI5cBPi
-         OWkZr9mlnifMg2H0npgLaVf1FGwwQI7yNTKKb2Ib8k/kVBTtJLXUiI4XwjL5pMB8yAb9
-         xcJgigsdZbZB+2qDgQqZ5vftMBdQaGe3T+xMH+NGU094Rwn1WtYFUwzE71L/B5+OZtZV
-         ZvS3ycz81BmzAi4lmhT8NR01dZdyd5tcHtBzkOWau81sdLXQbCboxuHponxTrglCplb+
-         sHLA==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=f9guB0sh0Lurj0RNnTyzS57ErgkX/og0Be/WymIsHIU=;
+        b=Vd6XBkJ2xBnOY4rllJwDqCtX4iFdHLeUoHVxdYK44CHjLa6/1qbYoPPlWQcYat9zVh
+         cHxJt+bUdPn6g2G1beKoRj/Mt7MAhCCRQurRmi5l4LUXeaCdyrrNqmLXNL4XoIXCzjo5
+         Y4lx3f68pUYiBnmVCOyg6qkRMDyO0549bVYFZv4AfH6244p8ouwS+2jXf8SzSKh9mnm+
+         Kd2aJy6zWHAmt+wOvfU8CGyQvOuD+0wlyAhsH+k0VZ+RlXIbcAssfSm7U50dsCFkbBds
+         y8XZnmlsCJcSSYPyRkTdHF+dZ3mlsZPEvF4jsOTx/UTz2azYg2bB93x8386UJEVs3YA/
+         bv6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=V0Tp1GHHecUi/P4l2E9yO+GMXfgnTyE6j4Sd+guldZs=;
-        b=uLePghoA/ZZAG9NSX9NW2HkCOA4OQBGoc2rPmo4WzeJm5VNTKCLPQMvERYmlFhupT+
-         oVKiZ0tNWlJUB84p5r55ZxdrfokXwBNcuro6rM8VFRfgiUPQcycbcbAqnBlXjxkKH2ro
-         wEqFEc4VEGMTbndEO8ccBfUVjj/ZwjPgzPqr73qFlpwYXiQvOeFwGy8K0n+b5g+yE5Op
-         WV+SCl4T0sOJ2wKGarWAWf+3fBXeYtWFapTqlkPhKOd3qoAFFuvai+IVtNL7wc58sKRb
-         uMOaMUJBymV+4VU8nVXZZDniwCsgiuKSuvbOnkrlK9J/oVZvkSFuEibT4b/WRvMOhdRf
-         XrSw==
-X-Gm-Message-State: AOAM532GOUK70qqvo3+rGBB9AnF8UJO1Ux4nPxU8s+dHoBgZJYOxyTpw
-        2ER10gK+fIndikf6nhmLbIE=
-X-Google-Smtp-Source: ABdhPJyUGT6cmmBLvD2d7e1C35Ip1UeTxiYVLX4XhgDDbLr7mgXII1Y8s38ffNbkAuVdFqaJYU3wtw==
-X-Received: by 2002:adf:f249:: with SMTP id b9mr22627050wrp.623.1643217810791;
-        Wed, 26 Jan 2022 09:23:30 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id t1sm7826436wre.45.2022.01.26.09.23.29
+        bh=f9guB0sh0Lurj0RNnTyzS57ErgkX/og0Be/WymIsHIU=;
+        b=LqlxcPbyDiOBBDLQ3LcNHo/FzQe+NkzMK7iOaKhrZddCniv+JnUBUaNnf1+38OYgG0
+         QCZ20FY8uzH+4rqtzIs76/oJCb1jFtsRljj2Hvja73TJvsO2FeFc0qGfyV9FLCnVGPc1
+         2be9plPOZcBgIgbXcMDOedaCJ6WSP/sWx+vpZlYdWvMexLWFI2P8aEmlcFcTPPf4UjqP
+         Wp6mn9fJPHnzjbhCdLjPRT6Jnfsibyt1ighgcXwDtEImAHfTuPpNN6XAfdVm24XgqExq
+         pv/q1QiMHNIZkKXg8KtHslr3oLCeH3s2wPOT8fkPK+OOoDg7yzjVE8ixgjQMBau3GNIk
+         UtIQ==
+X-Gm-Message-State: AOAM531EvjZqQOmU+AsDG4fzT9wg+G17P18y/Ibmx7/oRnpm0jbHBz5m
+        PmV1YzhJ6hRtB6xBiwnK5yX7AA==
+X-Google-Smtp-Source: ABdhPJzSJ02J7ErW+HrQMpYIV6UUT670RliLEK4anwQ99Ei3XZgr3e8nTi4aWuWI4MpjshjqGnwCjA==
+X-Received: by 2002:a05:600c:1e15:: with SMTP id ay21mr8352061wmb.111.1643217954348;
+        Wed, 26 Jan 2022 09:25:54 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:e5b7:c642:b8ef:60cb? ([2a01:e34:ed2f:f020:e5b7:c642:b8ef:60cb])
+        by smtp.googlemail.com with ESMTPSA id t17sm20458505wrs.10.2022.01.26.09.25.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 09:23:30 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <40d65efe-69dc-f1d6-b26c-a5cd243002a6@redhat.com>
-Date:   Wed, 26 Jan 2022 18:23:28 +0100
+        Wed, 26 Jan 2022 09:25:49 -0800 (PST)
+Subject: Re: [PATCH v12 4/5] clocksource/drivers: Add a goldfish-timer
+ clocksource
+To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        John Stultz <john.stultz@linaro.org>
+References: <20220121200738.2577697-1-laurent@vivier.eu>
+ <20220121200738.2577697-5-laurent@vivier.eu>
+ <2dc495b0-b9a1-e493-ddeb-d966afd624c0@linaro.org>
+ <1bc0bf2d-49c6-3f68-bc35-919b2a1e4cfc@vivier.eu>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <f9119e2f-51e7-e87c-10d9-bc76d6108676@linaro.org>
+Date:   Wed, 26 Jan 2022 18:25:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] KVM: x86: skip host CPUID call for hypervisor leaves
+In-Reply-To: <1bc0bf2d-49c6-3f68-bc35-919b2a1e4cfc@vivier.eu>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220120175015.1747392-1-pbonzini@redhat.com>
- <87r191jqh9.fsf@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <87r191jqh9.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/21/22 12:08, Vitaly Kuznetsov wrote:
-> Paolo Bonzini <pbonzini@redhat.com> writes:
+On 26/01/2022 18:14, Laurent Vivier wrote:
+> Le 26/01/2022 à 12:55, Daniel Lezcano a écrit :
+>>
+>> Hi Laurent,
+>>
 > 
->> Hypervisor leaves are always synthesized by __do_cpuid_func.  Just return
->> zeroes and do not ask the host, it would return a bogus value anyway if
->> it were used.
+> Hi Daniel,
 > 
-> Why always bogus? Nested virtualization is a thing, isn't it? :-) It
-> is, however, true that __do_cpuid_func() will throw the result away.
-
-Well, bogus because all hypercalls and MSRs would go through us so it 
-makes little if any sense (given the current hypercall and MSR code) for 
-the host values to be used in KVM_GET_SUPPORTED_CPUID.
-
-> FWIW, 0x40000XXX leaves are not the only ones where we don't use
-> do_host_cpuid() result at all, e.g. I can see that we also return
-> constant values for 0x3, 0x5, 0x6, 0xC0000002 - 0xC0000004.
+>> On 21/01/2022 21:07, Laurent Vivier wrote:
+>>> Add a clocksource based on the goldfish-rtc device.
+>>
+>> As a first submission, please provide a more detailed description of the
+>> timer.
 > 
-> Out of pure curiosity, what's the motivation for the patch? We seem to
-> only use __do_cpuid_func() to serve KVM_GET_SUPPORTED_CPUID/KVM_GET_EMULATED_CPUID,
-> not for kvm_emulate_cpuid() so these few CPUID calls we save here should
-> not give us any performace gain..
-
-I just have it in queue because of another change that I have not 
-submitted yet.
-
-Paolo
-
->> +
->> +	default:
->> +		break;
->> +	}
->>   
->>   	cpuid_count(entry->function, entry->index,
->>   		    &entry->eax, &entry->ebx, &entry->ecx, &entry->edx);
+> ok.
 > 
-> The patch seems to be correct, so
-> 
-> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> 
+> The timer uses in fact the goldifsh RTC clock so I supposed refering to
+> drivers/rtc/rtc-goldfish.c could give the missing pieces of information
 
+[ ... ]
+
+> I agree for irq, but res is passed to request_resource() and I think it
+> is added to a linked tree, so I'm not sure it can be local to the function.
+> 
+> Do you mean a "static" declaration in the function?
+
+I missed request_resource() was adding the resource in a list, thus the
+parameter must not be freed. So discard the comment for 'res'.
+
+[ ... ]
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

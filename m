@@ -2,151 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFFC49CC6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5B649CC71
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242187AbiAZOfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:35:12 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38294 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235539AbiAZOfK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:35:10 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QE60PS015989;
-        Wed, 26 Jan 2022 14:35:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=+GObsJxIW/3TliXx0z3KPe4N/3vn48rMKUn+yBtYzE8=;
- b=Pm9QBvpnxwowgyL8B2KVq/pkxNIM1T0IAEt++lm1U7PzZWczHHqdAWxhRQUORs/k7c0F
- SWV0aZBnU6CuIRdJjg5hUejAb+Vna117n2G155jdY/+8lgx+VgMSuvWf58lcz+gHPBVz
- f3rcP6zdlkJQ4wmwSDAoRnNCQgOkSAz4i0F3AEg5v54azb5HAAZs78jqsQHHL/zJIwi9
- XqhbNZs/j5VC1OJ10+QqgrEe13IpzoWbHtKAnfzg4R4rJPfiRYQVwADQIAKd/B8p8ADb
- 1p+pNOvUbNncSyH+l/CVfeRQ0P9Zmz5NasL4Ylw5Zy0cK616h23/xyRccEkesYhTYypi vw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3du6hf295g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 14:35:03 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QEVwaG029857;
-        Wed, 26 Jan 2022 14:35:01 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3dr9j9esyu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 14:35:01 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QEYxqA41615680
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jan 2022 14:34:59 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D1B211C04A;
-        Wed, 26 Jan 2022 14:34:59 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2246111C05B;
-        Wed, 26 Jan 2022 14:34:58 +0000 (GMT)
-Received: from sig-9-65-92-33.ibm.com (unknown [9.65.92.33])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 26 Jan 2022 14:34:58 +0000 (GMT)
-Message-ID: <6f0890f135b61c41d81b03bf084ebab1b3e551e1.camel@linux.ibm.com>
-Subject: Re: [RESEND][PATCH] Documentation: added order requirement for
- ima_hash=
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "Guozihua (Scott)" <guozihua@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        wangweiyang <wangweiyang2@huawei.com>,
-        Xiujianfeng <xiujianfeng@huawei.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Date:   Wed, 26 Jan 2022 09:34:57 -0500
-In-Reply-To: <173fffb6cde54ae4ac7676d18a84c79f@huawei.com>
-References: <20220125090237.120357-1-guozihua@huawei.com>
-         <36b6058f2cdf6bead917c06ecc6e8769bb88130c.camel@linux.ibm.com>
-         <3933adf5-4e9d-6b22-2e46-55643c504f52@huawei.com>
-         <71508a72b042da330d07a624cf499561c46195f0.camel@linux.ibm.com>
-         <97142483-d7e7-e310-0cb0-30a81414cb57@huawei.com>
-         <c1bfe53abaf24feacb676ce940edcb8899924ffc.camel@linux.ibm.com>
-         <173fffb6cde54ae4ac7676d18a84c79f@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Cx__iswed3ggtw-NR834h7GMmk2w5f-M
-X-Proofpoint-GUID: Cx__iswed3ggtw-NR834h7GMmk2w5f-M
+        id S242203AbiAZOgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:36:16 -0500
+Received: from mail-bn7nam10on2046.outbound.protection.outlook.com ([40.107.92.46]:54049
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235539AbiAZOgL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 09:36:11 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KCA13Z8FYLgaLvHLDJc+gZ57BjIgTmPzenl7EJ9y+VKtaiDWtucYIjjwC37fNilLhw84V2s4oL5sO0R2CyrZu5FzLUE1LUbP/NVyUwBgIMgCHcv8qeGo3Zp+9ku5XGaxmz7QXKAiR9C9IZNXUeFCWLtFvkxZVnDPB1upIc0pSbj0ynKTfxqwWF7RLCYNFkSpSQWmjAIHKc8fXwYQlI5eAoxoFW8SAPRDj7eRZjqM881iSM1UX8SgrvaI77+aeqnGoBG2/ZCpDrOe/ZYDVuRP/jPmU4ZrzEFSq7cNZcjbaM9eDDV5jhcwfE29V1PRypfP576jh4DKyL6NQ/e4abv3kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rroqk15qS0UHYcunOAdvKXc2JT2slnormnLDOeBEdiQ=;
+ b=iLMOkptiDAboPjxGPRcUl/dsm6zhToznCi6cAEC5HYNMCm+Vuk0QtlfZ9JOGfCG6WsOrr77YsKSBEXMgmFAezmrIoDNf33IE7rv4XJAEfurixeYJPI+z01Z9ZLAyEaWufT734vqfMkHxYygMCEmmHscoJw7PFMo6lnVWGgeJkwLkUq3MqpsJX83ixQz5vOntBpm0yOBd0IOed2/NBLb4jQPJ5hSQBlHuynPBvrCH0WWi4pYwSWzJNCgyofn7oV8Tjkno16Xw9MbD8U6jTmiMMTm1oj5PG3bpCVyYtnqTajsrw+ELWzGNLJucLYdhOfAJSoEOkJ3H174nR/Ht8/lcFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rroqk15qS0UHYcunOAdvKXc2JT2slnormnLDOeBEdiQ=;
+ b=N56n94oUCoXb1jmKT0vEO9ILVnxStFhm5j/HHA4W4GF4CPr4/qUFcGt5O2lcnsDnP92RSGY0DRjIqePEOg2bolLLEhYTUVees7n3tFpCZuJzuLyRNFtkI9iLXgwFQEfeLn0ITTgaqLr5vwmWPNzAosRfAwJNx5XecFaEHqnU/B4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by BYAPR12MB4709.namprd12.prod.outlook.com (2603:10b6:a03:98::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.12; Wed, 26 Jan
+ 2022 14:36:08 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::dd4b:b67b:1688:b52]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::dd4b:b67b:1688:b52%9]) with mapi id 15.20.4930.017; Wed, 26 Jan 2022
+ 14:36:07 +0000
+Message-ID: <a0d2a954-45ea-9b51-678d-0e501d7e2bdd@amd.com>
+Date:   Wed, 26 Jan 2022 09:35:59 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 07/11] drm/amd/display: Use str_yes_no()
+Content-Language: en-US
+To:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-security-module@vger.kernel.org,
+        nouveau@lists.freedesktop.org, netdev@vger.kernel.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "David S. Miller" <davem@davemloft.net>,
+        Emma Anholt <emma@anholt.net>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Leo Li <sunpeng.li@amd.com>, Petr Mladek <pmladek@suse.com>,
+        Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vishal Kulkarni <vishal@chelsio.com>
+References: <20220126093951.1470898-1-lucas.demarchi@intel.com>
+ <20220126093951.1470898-8-lucas.demarchi@intel.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20220126093951.1470898-8-lucas.demarchi@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+X-ClientProxiedBy: YT3PR01CA0117.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:85::35) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-26_04,2022-01-26_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
- bulkscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 malwarescore=0 adultscore=0 mlxscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201260089
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4e80176b-7ab1-40c9-68b7-08d9e0d93059
+X-MS-TrafficTypeDiagnostic: BYAPR12MB4709:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB4709516AD1B219AA681FCEB88C209@BYAPR12MB4709.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:612;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iLrZlAlk/lf2aVe+T5P07EojtUQkZgn1kJQIoP6CohrDRyNwjjwAEdB0MwGBEVNTYqHzaG8s5EECXa3n4wuaH8hAinS+icN3stSPbjgZ0/e3qXe82A/iJJAnPl9EehSYlvQDW9phKLWISbEiNYg8DcKfYA+iuK2zx20ecGH+H8IBd4SgtvshLSHhOF72J/LefxyvB6bBFF3aKt+fLSU9bkpdtV9T83HCZiTDKqgyamPtlyUMT8ZwjIDluKWdUacTFUsyyKDSm2iXbWC6DRiz4ZpTz6u0rsujucSqOhSw40xkrY53rl1M66MxZa+b4iH/a+Sa3XsPVPXMyfYYg+MzZmqeZVQ/TAZ9sDjEi+UI/VOtnRNuavJlkEKECd6eul+MqhjItndSeD+DEyOK21LSIn4nfpQ05H1rDMcqPDMvP8puGUD/sE/6cS+udz7Q7bPXsKaMJrZ49wNZHy1jP400PB+29gsGnPYF5sDhDxcJx8F9Vxp08pmrPRdhBikexm+CVTi/k/iqHwD8w0kbp7ioBEOjFbON4didMcP+neyNt4a5yOvffcEQzF1E9OCPI9dZMJCGc4SfJFCRe/SRHZik1yGdVph54q2ACT7uk4QBPXwz8bJKHob16mFq8+o/T3J5JoILtvZP7iUMm94j3cOSeir6aYFrOM2DTP0eUEjavQRIlYiVcg/XCHM7nGoUDPNjyQuYkIE8vMgUMXe9ni0DsoQLEwlOs6qxxtCRjzHQbUU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(7406005)(38100700002)(186003)(26005)(6666004)(8936002)(316002)(6506007)(54906003)(53546011)(86362001)(2906002)(31696002)(8676002)(44832011)(66476007)(508600001)(66556008)(83380400001)(4326008)(7416002)(5660300002)(36756003)(6486002)(66946007)(2616005)(6512007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWRNUTBwNFdOTU4xRk00cXROSHp4aThiekZYWEZpaUxuR0QxekxzczNpbWVL?=
+ =?utf-8?B?Z1Jrd29aUC93Y1hwenpReDkvQXV2NnI5cDJPTEpsT1BDS3dOanluUTA0ODZt?=
+ =?utf-8?B?S1hBYkdRVW9NRDRLek5WVjhUTXpDZ1IvZTJ6Mzk4YUdmdWFzM09YTWZlT0hK?=
+ =?utf-8?B?bDZsc1QxL1VBc3BKZ0p5ZzAwcysxdXpmclRxSXoweDB4ZmtCRUdScy91em8v?=
+ =?utf-8?B?Y2luNnFSREt4M0VmRHpBUjRHekZIWUpsWEgrT3dnY00rTENXNDJBMDl3UmZ5?=
+ =?utf-8?B?dElxK3dkd1d4R0xSSlp4ZldxckxMSUVEUE1BQnBDUkltUkIrRTc0ejdBUDNW?=
+ =?utf-8?B?dFhXQVRSM29yWDk5Qm1HVXI5UUtuWFIyNk0reDlPd2pZN20zTnI1N1BNOFlG?=
+ =?utf-8?B?Qm9qTzlqTy82dVJwQ1FGaVBrekw1MzY4VFdJY2c0bGVVUzhpK3JZTDl6M3Y4?=
+ =?utf-8?B?U2dkQS83ZmphMW5vVnVJeFA3RTRtR0xuZ2RtVWdTL25hN2FrUDNFbUVCVllq?=
+ =?utf-8?B?akhtdjhrYU41S3dPeVF4ckJkRXY0bHYwdlgxTnh5cXNnTmxTZ0szTEhZdWNh?=
+ =?utf-8?B?ckF0OG0vNkxETWk4QnpTRy9uZElNYUhjOEI5dzNhVXpmTWVGUFhqNHc4bkVh?=
+ =?utf-8?B?bXdJVU5SRVowN3RxTVpNYTJMZ0syRkE4ZDQyZk5SWG1seUpiSEFKQ0tnS0RB?=
+ =?utf-8?B?azB4RzRMUktkT2kxMm05NC80SWhyRFdJWU5qaE5RTHpEcHVwK3U5ejFoQXR1?=
+ =?utf-8?B?c3NqL1ZkZW5IZFlteUQvZEN0T1pwOURQNVVTdkp6bU95OVJXMFRWU3lrNG45?=
+ =?utf-8?B?WUV2SkZyQW1mUzRNVCtWTDV0d1Jsd05YajJ2QWdvZEcxek1QTElzRTl6SkNK?=
+ =?utf-8?B?d0ZDL2VIdmtSMjhxYjZUSXJzTXhHRUhmRDNTVGJrcE9URE15QTlibXBwL1VM?=
+ =?utf-8?B?WVF2eGh0Z1BTL1dLTmVwTDhEai9jTVdPSE80VDhJZHJaa3ZDSFpKUGZSQi9B?=
+ =?utf-8?B?Uko3SVFHa2JyKzBoR3ZoNkN3dU5DazlMdFFldTZ6TERaZ0xxdlc1SkFJVkNr?=
+ =?utf-8?B?V0w0L2crRS9pV0JlNlZVVUhxWkFRdDZOaWEwZUVPd3BGcUg4T1ZLMmp2Z0tm?=
+ =?utf-8?B?QWhWMG1aYnNsOFR5bE9Zd2tMM05Xcmo0M2FSdG1TeHZ4Mmt6MmlyOHhOdzRJ?=
+ =?utf-8?B?WThScUpVTDhCdnh2UG1ub2dvR1Q2Mi9xVyt0L2lLQUwwVlVoNjA1Wnl2N0pH?=
+ =?utf-8?B?Nk5QZXFxVTBqOVdkc1BiZER0ckNaQTkrOEg4bC9LT3NQRnVDSSt3aVBvVWpQ?=
+ =?utf-8?B?RjVQaGdnVVBhS3FyTERUZDl4cEQrdzNvSTlLWmpIMDJXbnFBSlNDS0k3Mks4?=
+ =?utf-8?B?V2pDWmlITGFtbTZ4TFppdUZHTFBFZ3U5dklsSlpNc0xUUTgxYUZGU3JScVVH?=
+ =?utf-8?B?SlpIbDQ1MG44SjlzYTYxZEpHR1Y1VmVKNUZoaXFqbkxmQTdoL1g0bEVTUkNr?=
+ =?utf-8?B?Uzk2RDZraXVyV0VJNXppbnQ1ZVVTRjVDSmx0aEw3Wjhib1ErdFcwN3hRMzRJ?=
+ =?utf-8?B?RWEyUzFPZmNpZm90Z084eDlaeDJBcmswTUtZUTlmVDEvcTA1WDdvYWc4RlRo?=
+ =?utf-8?B?TkhxZjJzUVUzVTR6d2dJTjVuQWtEOXI1WHFiSTNyOFgzeGNzWWdxMnhWcFlu?=
+ =?utf-8?B?UDlST1VDbnVDOUh2QVVVaU5JMENBSjl6S0I3b0p5TEtHY2MweVFKS0l5RStZ?=
+ =?utf-8?B?Z01IZnAzYkN2WVJ6bG1Qa1FoUnRkWDlYRk4zMzlPMG55R29DQUl2VEVyMEFt?=
+ =?utf-8?B?RlIyWC9KOG83Z1ljN3lIVm5RZUpaUFIxZXJVUGhqWXM2YmE2a1RTUGZ3Rnc5?=
+ =?utf-8?B?Vzlmd1ZXaHc2TmphSmVFdWtUblE0NUpwUkxCZ1pzK2Qvell3KzBBOVVqQWNz?=
+ =?utf-8?B?K0x6aUtHME8wbE44Q0UyM2RVcFVaaFIwMHFEanlXV1hab2RiNVp6alBsenNI?=
+ =?utf-8?B?bEt1bTQxb3hxTVFRb0k1NG9BNkZ6S2J4dzgrYk9XQjg1ZDZMSWtBeUQyeWFw?=
+ =?utf-8?B?b29HOU9Nd3BTUEVwZmxwQTlNamZteWtYTE80QXNveXJEQXJOWGFVcUtGWXAy?=
+ =?utf-8?B?TEM4V0piVUtES0pYOEkxWlVMeW1TVHR5KzJPOHIvWm5PejFJaDNXUzJHWXBh?=
+ =?utf-8?Q?dEtvXorhJXR7hgKLBT6avCY=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e80176b-7ab1-40c9-68b7-08d9e0d93059
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2022 14:36:07.6607
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AL2DQBVlQw8soauM8w3I6BFgcgUz+ev1Obsu+XhIu9qzd7pIzmTj+EgbNhovxSg4nNUf/Ye/GJgr5QVaES3Xrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4709
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-26 at 13:24 +0000, Roberto Sassu wrote:
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Wednesday, January 26, 2022 1:48 PM
-> > On Wed, 2022-01-26 at 15:41 +0800, Guozihua (Scott) wrote:
-> > >
-> > >
-> > > The main issue lies in ima_template_desc_current called by hash_setup,
-> > > which does not just read ima_template global variable, but also tries to
-> > > set it if that hasn't been done already. Causing ima_template_setup to quit.
-> > 
-> > Right, which calls ima_init_template_list().  So part of the solution
-> > could be to conditionally call ima_init_template_list()
-> > in ima_template_setup().
-> > 
-> > -       if (ima_template)
-> > -               return 1;
-> > -
-> > -       ima_init_template_list();
-> > +       if (!ima_template
-> > +               ima_init_template_list();
-> > 
-> > Roberto, what do you think?
+On 2022-01-26 04:39, Lucas De Marchi wrote:
+> Remove the local yesno() implementation and adopt the str_yes_no() from
+> linux/string_helpers.h.
 > 
-> Hi Mimi
-> 
-> I think we wanted to prevent to set a digest algorithm
-> incompatible with the chosen template.
-> 
-> If we have in the kernel command line:
-> 
-> ima_template=ima ima_hash=sha256
-> 
-> ima_hash_algo would be set to HASH_ALGO_SHA1 despite
-> the user choice and the template would be set to 'ima'.
-> 
-> In the opposite case:	
-> 
-> ima_hash=sha256 ima_template=ima
-> 
-> if the default template is 'ima', then ima_hash_algo would be
-> set to HASH_ALGO_SHA1. Otherwise, it would be
-> HASH_ALGO_SHA256. If we allow the template to be set after
-> the digest algorithm is evaluated, the template selection will
-> be rejected if the algorithm is incompatible with the template.
+> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-The only time that would occur is in the unlikely case that the
-template is being set to "ima".   That sounds reasonable.  In fact we
-should consider preventing the template format being set to "ima".
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
+Harry
+
+> ---
+>  .../drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c  | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
 > 
-> I'm trying to remember why we still have the digest recalculation
-> in ima_eventdigest_init(). Maybe the only possibility is if we
-> set the template from the policy?
-
-The recalculation was relatively recently added in commit 6cc7c266e5b4
-("ima: Call ima_calc_boot_aggregate() in ima_eventdigest_init()").
-
-thanks,
-
-Mimi
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
+> index 26719efa5396..5ff1076b9130 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
+> @@ -23,6 +23,7 @@
+>   *
+>   */
+>  
+> +#include <linux/string_helpers.h>
+>  #include <linux/uaccess.h>
+>  
+>  #include "dc.h"
+> @@ -49,11 +50,6 @@ struct dmub_debugfs_trace_entry {
+>  	uint32_t param1;
+>  };
+>  
+> -static inline const char *yesno(bool v)
+> -{
+> -	return v ? "yes" : "no";
+> -}
+> -
+>  /* parse_write_buffer_into_params - Helper function to parse debugfs write buffer into an array
+>   *
+>   * Function takes in attributes passed to debugfs write entry
+> @@ -853,12 +849,12 @@ static int psr_capability_show(struct seq_file *m, void *data)
+>  	if (!(link->connector_signal & SIGNAL_TYPE_EDP))
+>  		return -ENODEV;
+>  
+> -	seq_printf(m, "Sink support: %s", yesno(link->dpcd_caps.psr_caps.psr_version != 0));
+> +	seq_printf(m, "Sink support: %s", str_yes_no(link->dpcd_caps.psr_caps.psr_version != 0));
+>  	if (link->dpcd_caps.psr_caps.psr_version)
+>  		seq_printf(m, " [0x%02x]", link->dpcd_caps.psr_caps.psr_version);
+>  	seq_puts(m, "\n");
+>  
+> -	seq_printf(m, "Driver support: %s", yesno(link->psr_settings.psr_feature_enabled));
+> +	seq_printf(m, "Driver support: %s", str_yes_no(link->psr_settings.psr_feature_enabled));
+>  	if (link->psr_settings.psr_version)
+>  		seq_printf(m, " [0x%02x]", link->psr_settings.psr_version);
+>  	seq_puts(m, "\n");
+> @@ -1207,8 +1203,8 @@ static int dp_dsc_fec_support_show(struct seq_file *m, void *data)
+>  	drm_modeset_drop_locks(&ctx);
+>  	drm_modeset_acquire_fini(&ctx);
+>  
+> -	seq_printf(m, "FEC_Sink_Support: %s\n", yesno(is_fec_supported));
+> -	seq_printf(m, "DSC_Sink_Support: %s\n", yesno(is_dsc_supported));
+> +	seq_printf(m, "FEC_Sink_Support: %s\n", str_yes_no(is_fec_supported));
+> +	seq_printf(m, "DSC_Sink_Support: %s\n", str_yes_no(is_dsc_supported));
+>  
+>  	return ret;
+>  }
 

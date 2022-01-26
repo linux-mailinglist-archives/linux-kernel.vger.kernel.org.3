@@ -2,72 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D676E49C5AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBAA49C5B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbiAZJAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238678AbiAZJAQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:00:16 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A04AC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:00:15 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id j2so67731207edj.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:00:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=x8DKtll5nks+haGFzGIpCeMVxgE1S6bnWQRw4HZtYG8=;
-        b=oNnrjpyCIO3AVinhmFpsgh0osjNykDjcw7wsEczjVRolH0v2dfWWP1RGJYemJz5pYx
-         ZsqNcK7gveoIm1lMaGCqLnofA8g06q3P53gf3ogATF5oAYCHszxsPXkE21NNoa48eNch
-         YA0ig/54O20IAWaZ/ikpLHEwGZI+E5O/ak/+pp0jAcDqT3VAAYWGV1Cing7P5BD0HYcx
-         1/lUpgvDfHo790KnZs71DYYPrZ7haHM/RYV2bPujt5RJ5LRjEl1yrYBR6rdx1fP/X5h0
-         5yXY/ikbKpa85pCCLI6iIhJ94HJo7EoPy2hpoYhAafLS6A+1Aip7DK9JCwTsHFhN1+vG
-         4MvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=x8DKtll5nks+haGFzGIpCeMVxgE1S6bnWQRw4HZtYG8=;
-        b=lLpHgVU5kb1SybFfA/jGx8bPE22IZxlA3IRVDLhIdcmzLarZZMlE4Clrfr9PPdvjDW
-         HoIUrQKe3O5Dz027Vi7Wfn50Ii5/fp2YZWUxwqth9rTZpdIQpoA3x2I/7MdVmc7LWKID
-         QGIOHdY6JbI59mEf6aW9RQaL8uwNS2tIwaoAamwyIuOrbUZ22TGTcZ1Y2KllAQJqZoPg
-         XTvmFZTtmHW3ivUSYF+CDJWrY1yY3vTFbk2MBl8S5WTUKLkyN3Oxdg5hYbTp4fF8TZo8
-         A8m6Eek38dj21797/5hZ4pimnJmL4kbo+6LI3E+FeCfX2wtnrkzO7OCQ27QTqyqTglCj
-         guww==
-X-Gm-Message-State: AOAM5324N2lB2oMgceGAvPzWqN7rn42s3XZp3Jkv7UtRb7ow9SkxJrgI
-        3uGdkvcYWY+lzTt7/KaI+Fy7Louqx8b+g/axTHo=
-X-Google-Smtp-Source: ABdhPJxh4mWebSYHwaZs4WZrjuJcpsejuyncXDxh4+xMW4TJB0b4VDGsPJucjBqFTfFwa6VWMpJTO8h35hbdkjiWFRU=
-X-Received: by 2002:aa7:c757:: with SMTP id c23mr12162356eds.133.1643187613910;
- Wed, 26 Jan 2022 01:00:13 -0800 (PST)
+        id S238726AbiAZJBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:01:49 -0500
+Received: from mga18.intel.com ([134.134.136.126]:1367 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238714AbiAZJBq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 04:01:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643187706; x=1674723706;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G8B6a0BvOHAuJNowulUgiq63eIiXFyJCb8LdkRoTpgw=;
+  b=Bcuj2wKqWagHCvWenqqsJvaU4Je6Y6/NCrgdu+m2OuSwvxSR4lZuhx5i
+   OvjmNnaak3LVkYLUBmYhMuMYaU1e84aTVJtMS+3/ODR7Q5PZUWFWBqOxU
+   B6k2hiyNcTG5nUJmw7Km6z28gneSRgaxnWbVqgswe6AnStuhTccekSpo9
+   Pz/wsP4nfPjMpJogsuUmPGagnv1dTUKzdxjLa49L4hqbSyuAM2eigVJvk
+   lFsFGujhx1I736rn5Krw923IX//sv3VMaFXWUMXiqCLdknyKi46XCtZnT
+   1Wiydcz7Z4yIG0zwkQFQuaEbiMxUxAGYABiOUkWGu9nqx/LhhYjJfvIb6
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="230084743"
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="230084743"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 01:01:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="563351436"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 01:01:44 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCeBT-000L14-J8; Wed, 26 Jan 2022 09:01:43 +0000
+Date:   Wed, 26 Jan 2022 17:00:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/mediatek/mtk_star_emac.c:1559:34: warning:
+ unused variable 'mtk_star_of_match'
+Message-ID: <202201261608.BLH8XrDI-lkp@intel.com>
 MIME-Version: 1.0
-Reply-To: nniomr76@gmail.com
-Sender: sjrbns77@gmail.com
-Received: by 2002:a54:2943:0:0:0:0:0 with HTTP; Wed, 26 Jan 2022 01:00:13
- -0800 (PST)
-From:   "Grigson J." <jydpmgs9@gmail.com>
-Date:   Wed, 26 Jan 2022 09:00:13 +0000
-X-Google-Sender-Auth: k33jmPJ01gWximUZ5YGbWpWJ104
-Message-ID: <CA+mTZVe397K-J4LnBa65A+1k5V396HitNAh-_91U7USMo7HBvA@mail.gmail.com>
-Subject: KINDLY READ, PROFITABLE PROPOSAL
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Greetings,
+Hi Lorenzo,
 
-Are you looking for an investment to invest in and earn a monthly or weekly
-income?
-Are you interested in getting a loan and don't know what to do?
-Are you looking for a job?
+First bad commit (maybe != root cause):
 
-Contact me today for more information only if serious.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+commit: a3c62a042237d1adeb0290dcb768e17edd6dcd25 net: mtk_eth: add COMPILE_TEST support
+date:   6 weeks ago
+config: s390-buildonly-randconfig-r005-20220126 (https://download.01.org/0day-ci/archive/20220126/202201261608.BLH8XrDI-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a3c62a042237d1adeb0290dcb768e17edd6dcd25
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a3c62a042237d1adeb0290dcb768e17edd6dcd25
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/net/ethernet/mediatek/
 
-Regards,
-Grigson Johnson
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/net/ethernet/mediatek/mtk_star_emac.c:12:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/net/ethernet/mediatek/mtk_star_emac.c:12:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/net/ethernet/mediatek/mtk_star_emac.c:12:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/net/ethernet/mediatek/mtk_star_emac.c:1559:34: warning: unused variable 'mtk_star_of_match' [-Wunused-const-variable]
+   static const struct of_device_id mtk_star_of_match[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/mtk_star_of_match +1559 drivers/net/ethernet/mediatek/mtk_star_emac.c
+
+8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1558  
+8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22 @1559  static const struct of_device_id mtk_star_of_match[] = {
+8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1560  	{ .compatible = "mediatek,mt8516-eth", },
+8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1561  	{ .compatible = "mediatek,mt8518-eth", },
+8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1562  	{ .compatible = "mediatek,mt8175-eth", },
+8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1563  	{ }
+8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1564  };
+8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1565  MODULE_DEVICE_TABLE(of, mtk_star_of_match);
+8c7bd5a454ffc2 Bartosz Golaszewski 2020-05-22  1566  
+
+:::::: The code at line 1559 was first introduced by commit
+:::::: 8c7bd5a454ffc2b0518d1499c4af95f00291d2af net: ethernet: mtk-star-emac: new driver
+
+:::::: TO: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

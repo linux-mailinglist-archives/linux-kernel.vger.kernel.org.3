@@ -2,97 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC7B49D216
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C61249D218
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244308AbiAZSyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:54:46 -0500
-Received: from mga12.intel.com ([192.55.52.136]:46710 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244301AbiAZSyp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:54:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643223285; x=1674759285;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1p0cblke1yExFuE7116c1ku2DF+OVoMFfwOVJEjFF1M=;
-  b=Gc183lltCn5Fpq3exV2Jnf3WSnKnoFdSDx8Uf5D+ghEQqtAPKHKHgqY2
-   g3j81Ykuf8vPYdc43JwKI93qi8fC7kqxddEZwwHL6L/ElmgsxBfm8XLW4
-   pXKudVM9kd0EnsRP8HxQJgRrapSQRHO9y27qOrw0C81ifzMvh8UGuW/8f
-   FOhvuwtDSCPz2MibUPImcTPD3GPt6m0thnDY6vkIgftGp2W8/jUUN+5nf
-   rBwvHuE+n26Wfx+JNE6Ia8u4GbotGAfwfg0P4GHXq7f8qAkr1j60Wx2mM
-   9ezPa9NvyY3YMtvGVjD1gEWHBmXS/BSE6cT54xuDJd9im+1qysLlRwTK1
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="226600323"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="226600323"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 10:53:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="628397799"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 26 Jan 2022 10:53:10 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCnPp-000LWg-NG; Wed, 26 Jan 2022 18:53:09 +0000
-Date:   Thu, 27 Jan 2022 02:52:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [intel-tdx:host-upstream 7/18] arch/x86/kernel/cpu/tdx/tdx.c:148:30:
- warning: variable 'err' is uninitialized when used within its own
- initialization
-Message-ID: <202201270252.bK9LlDe7-lkp@intel.com>
+        id S244313AbiAZSzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:55:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56662 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234543AbiAZSzA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 13:55:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643223298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hhj664AgQt2KQtf7ayYCvSA5RqB+++2Rhwj5UZ7qWsg=;
+        b=LbNbY/etdVE3pfl8mWPsWcOfqdoDZG4mMmE98xHVXkE6JDNpKLE5o6XtbH1DbW9G4O4Onc
+        ygtHC88Y7ttVyhSUlejI7i+XrBfWoVFy2wgSqJe0iA6vmj+NVzmW+BB4+FsOV3fskr1/we
+        BfA9N+tlcokxoSagUHe7Z42WX5YMMx4=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-194-FDwNMbACNKmy0JVXM12bTA-1; Wed, 26 Jan 2022 13:54:57 -0500
+X-MC-Unique: FDwNMbACNKmy0JVXM12bTA-1
+Received: by mail-ej1-f71.google.com with SMTP id q19-20020a1709064c9300b006b39291ff3eso132696eju.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:54:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=hhj664AgQt2KQtf7ayYCvSA5RqB+++2Rhwj5UZ7qWsg=;
+        b=rbmlFGQlf3FySXfarOpI7FBuDV4mjjgyb87BOE2CdK1SpU9aBX+o1Tukd1QqBf6ucO
+         Mzoe2pRvc0M5XadLhEIf8mXep+u7mxSilget/ZDItDleu0RfUbvJ9Es80ztuMKGiNtfN
+         Q5xylP43XL0uhjpsGEBXsWXMPemVps3yOgovN7R+z3fyUs7wD2yBbKOcuTd0QiLIHVKq
+         FHoLzeAOiqIGRsTtoZKOZHtSYuUe2A99EFF9YJ+BVPRM/Cw25WQ7Z1EneVDWcvjkxy9L
+         4/Tsr6fL6Su3S3C1q0Yu1pk46Td+Xkc78j7h0BkLn9wo05UzBSoXEvJJb4s3obxE16Mj
+         2Z1g==
+X-Gm-Message-State: AOAM533B2NBSE0KaxBXDXzm83C8OHNxFeVlj3VvWBiNUbE6n5KDAqy6T
+        3DZzrckB9DezQM/fUJolMaF5Q7dbt8nKXaZAYe2kmSjUzMRRcSe8XoTO6Jme6zVawENwylkT8wD
+        teRKyBtdSVZTgARsmz5DqBL+d
+X-Received: by 2002:a50:9fc6:: with SMTP id c64mr373303edf.5.1643223295981;
+        Wed, 26 Jan 2022 10:54:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwNVlUS4gG6iKHrXL4vEtlyLwR50PsiO1uMeg6vr7kFp887V1xsTCa2ukZkyA57E8IaC8YFEQ==
+X-Received: by 2002:a50:9fc6:: with SMTP id c64mr373279edf.5.1643223295724;
+        Wed, 26 Jan 2022 10:54:55 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
+        by smtp.gmail.com with ESMTPSA id h3sm10210165edq.83.2022.01.26.10.54.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 10:54:55 -0800 (PST)
+Message-ID: <2a1c5bd2-cb8c-b93b-68af-de620438d19a@redhat.com>
+Date:   Wed, 26 Jan 2022 19:54:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Jann Horn <jannh@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+References: <20220120202805.3369-1-shy828301@gmail.com>
+ <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
+ <CAG48ez1xuZdELb=5ed1i0ruoFu5kAaWsf0LgRXEGhrDAcHz8fw@mail.gmail.com>
+ <f7f82234-7599-9e39-1108-f8fbe2c1efc9@redhat.com>
+ <CAG48ez17d3p53tSfuDTNCaANyes8RNNU-2i+eFMqkMwuAbRT4Q@mail.gmail.com>
+ <5b4e2c29-8f1a-5a68-d243-a30467cc02d4@redhat.com>
+ <CAHbLzkqLTkVJk+z8wpa03ponf7k30=Sx6qULwsGsvr5cq5d1aw@mail.gmail.com>
+ <5a565d5a-0540-4041-ce63-a8fd5d1bb340@redhat.com>
+ <CAHbLzkqXy-W9sD5HFOK_rm_TR8uSP29b+RjKjA5zOZ+0dkqMbQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration
+ entry
+In-Reply-To: <CAHbLzkqXy-W9sD5HFOK_rm_TR8uSP29b+RjKjA5zOZ+0dkqMbQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git host-upstream
-head:   6806a9874cdac7e51e15c056986098bf94a062aa
-commit: b9feae73d1b45e81a7d573531ee2e594ccea51b5 [7/18] x86/cpu: Do logical cpu level TDX module initialization
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220127/202201270252.bK9LlDe7-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/tdx/commit/b9feae73d1b45e81a7d573531ee2e594ccea51b5
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx host-upstream
-        git checkout b9feae73d1b45e81a7d573531ee2e594ccea51b5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/cpu/tdx/
+>>> Just page lock or elevated page refcount could serialize against THP
+>>> split AFAIK.
+>>>
+>>>>
+>>>> But yeah, using the mapcount of a page that is not even mapped
+>>>> (migration entry) is clearly wrong.
+>>>>
+>>>> To summarize: reading the mapcount on an unlocked page will easily
+>>>> return a wrong result and the result should not be relied upon. reading
+>>>> the mapcount of a migration entry is dangerous and certainly wrong.
+>>>
+>>> Depends on your usecase. Some just want to get a snapshot, just like
+>>> smaps, they don't care.
+>>
+>> Right, but as discussed, even the snapshot might be slightly wrong. That
+>> might be just fine for smaps (and I would have enjoyed a comment in the
+>> code stating that :) ).
+> 
+> I think that is documented already, see Documentation/filesystems/proc.rst:
+> 
+> Note: reading /proc/PID/maps or /proc/PID/smaps is inherently racy (consistent
+> output can be achieved only in the single read call).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Right, but I think there is a difference between
 
-All warnings (new ones prefixed by >>):
+* Atomic values that change immediately afterwards ("this value used to
+  be true at one point in time")
+* Values that are unstable because we cannot read them atomically ("this
+  value never used to be true")
 
->> arch/x86/kernel/cpu/tdx/tdx.c:148:30: warning: variable 'err' is uninitialized when used within its own initialization [-Wuninitialized]
-           atomic_t *err = (atomic_t *)err;
-                     ~~~               ^~~
-   1 warning generated.
+I'd assume with the documented race we actually talk about the first
+point, but I might be just wrong.
 
+> 
+> Of course, if the extra note is preferred in the code, I could try to
+> add some in a separate patch.
 
-vim +/err +148 arch/x86/kernel/cpu/tdx/tdx.c
+When staring at the (original) code I would have hoped to find something
+like:
 
-   144	
-   145	/* SMP call function to run TDH.SYS.LP.INIT */
-   146	static void smp_call_tdx_cpu_init(void *data)
-   147	{
- > 148		atomic_t *err = (atomic_t *)err;
-   149	
-   150		if (tdh_sys_lp_init())
-   151			atomic_set(err, -1);
-   152	}
-   153	
+/*
+ * We use page_mapcount() to get a snapshot of the mapcount. Without
+ * holding the page lock this snapshot can be slightly wrong as we
+ * cannot always read the mapcount atomically. As long we hold the PT
+ * lock, the page cannot get unmapped and it's at safe to call
+ * page_mapcount().
+ */
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+With the addition of
+
+"... For unmapped pages (e.g., migration entries) we cannot guarantee
+that, so treat the mapcount as being 1."
+
+But this is just my personal preference ... :) I do think the patch does
+the right thing in regard to migration entries.
+
+-- 
+Thanks,
+
+David / dhildenb
+

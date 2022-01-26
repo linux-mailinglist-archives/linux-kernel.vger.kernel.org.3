@@ -2,63 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9CF49C177
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD32449C17C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236655AbiAZCvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 21:51:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236514AbiAZCvI (ORCPT
+        id S236672AbiAZC41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 21:56:27 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:35871 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236514AbiAZC4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 21:51:08 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64015C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 18:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=86XwsEqiHWcpAKS+1w66D4BvB/zNvs89vkaCBpH8v1A=; b=WVIaPz8PNke5qT2GHlggxTERIt
-        1gByfyYpDfCQf3V4cJwM8jJX1yZjxR7A5zbsBQgSgJA5GOtlRgQpLiqkAG87yRkPSdMt/Hb7X+biu
-        1CNLDxWXRd/rkXeiZrkTquDHB6Z7vn7QwjiQ8TVckrWw8oSvmtZ+P7f2pT+9il3b010BOL9pXMyGN
-        cfsxfsq2hvoFGT2KOkRv4FYjhfEUHyyg5YX2WbTtVHY197jxgs77IvBxmpZds6dst8x7n+OEa6sG4
-        Leb1KP/pny3DOZid1GUF9FEp+yFHOcXK9hyuGMVBjp7dDDtC2QvNL3403LwMcbxSdBqhtIpvrukkd
-        ocKpgIkA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCYOZ-003di7-Ho; Wed, 26 Jan 2022 02:50:51 +0000
-Date:   Wed, 26 Jan 2022 02:50:51 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ding Tianhong <dingtianhong@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] vmap(): don't allow invalid pages
-Message-ID: <YfC3C5MiyKzSX4Sg@casper.infradead.org>
-References: <20220118235244.540103-1-yury.norov@gmail.com>
- <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
+        Tue, 25 Jan 2022 21:56:25 -0500
+Received: from kwepemi100018.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Jk7d13H6kzccJn;
+        Wed, 26 Jan 2022 10:55:33 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi100018.china.huawei.com (7.221.188.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 26 Jan 2022 10:56:23 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 26 Jan 2022 10:56:22 +0800
+Subject: Re: [PATCH 4.19 000/239] 4.19.226-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <stable@vger.kernel.org>
+References: <20220124183943.102762895@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <7339e966-110f-368c-e9e1-8970fcca2676@huawei.com>
+Date:   Wed, 26 Jan 2022 10:56:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f85b3cac-29e7-4179-e078-fd859040c294@arm.com>
+In-Reply-To: <20220124183943.102762895@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 01:28:14PM +0000, Robin Murphy wrote:
-> Is it page_to_pfn() guaranteed to work without blowing up if page is invalid
-> in the first place? Looking at the CONFIG_SPARSEMEM case I'm not sure that's
-> true...
 
-Something that all the ARM people weighing in on this don't understand
-is that basically nobody uses SPARSEMEM without SPARSEMEM_VMEMMAP.
-So all this complicated code to do page_to_pfn() is never tested.
-Real users all do a simple subtraction and so the simple pfn_valid()
-works fine.
+
+On 2022/1/25 2:40, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.226 release.
+> There are 239 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.226-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+Tested on arm64 and x86 for 4.19.226-rc1,
+
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-4.19.y
+Version: 4.19.226-rc1
+Commit: ebabcfeda281e1c6226b219845d71930c729dae0
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8941
+passed: 8941
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 8941
+passed: 8941
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

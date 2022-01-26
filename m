@@ -2,119 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5428649D5B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5770D49D5BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiAZWvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:51:50 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:42266 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiAZWvt (ORCPT
+        id S231664AbiAZWwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232046AbiAZWwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:51:49 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 49CB321136;
-        Wed, 26 Jan 2022 22:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643237508; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UrpK9gFVFFc3QEQ0Z3ktR9+zqmiOMW06uKnM7Gq/rtU=;
-        b=pAyw+3sw1FfhAD1ZWWHHuEeStuC30D7GteS6mR1nWLYRZ64TTpPAphVnQOaLSJqyyxPaIH
-        O72QLqPlvAxrwC4B02VEC/Cha98JW9DMqBNKT3e0UXQaoV5YsnvDbgV6sLpuxkuBXKVzaa
-        +2jaoKmu038KUFc/OApkq5FBZFhW+44=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643237508;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UrpK9gFVFFc3QEQ0Z3ktR9+zqmiOMW06uKnM7Gq/rtU=;
-        b=g6oTCe+TW9F8H+pLJP+hn85cjDcYsDtLn7iJPBKjmCxLVTb/PrZ/k4QHNmgMH+7RBJLcoD
-        Cm5Et4QDp6ahfCDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 242ED13E40;
-        Wed, 26 Jan 2022 22:51:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Btj7NIDQ8WG/WgAAMHmgww
-        (envelope-from <neilb@suse.de>); Wed, 26 Jan 2022 22:51:44 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 26 Jan 2022 17:52:04 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFA4C061748;
+        Wed, 26 Jan 2022 14:52:04 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id e8so955900ilm.13;
+        Wed, 26 Jan 2022 14:52:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SbX/CA9rx3VdoijI1jnik093tt/YSMZq2p12OY56GJE=;
+        b=FDvaV/SVpssUS1kX5dDZFCvk8MRpwyvPx0Z+IIgr78SYs83UY/9cNwv7wxVU1y71zf
+         YFn/8hqfrl1wpKm+qrMwLTtYLgFwIHRyIQvqaO8hmWCF3/DT0nR2VJbNPIhsV+2792di
+         Ndq/uKMuB8daKf19+dT1VHwKgYjzr9DN4aHQKfqjtxDYXvNa4EFjA5GxA22vTDUcn4JF
+         6jMRF8eZyCPe0ilfZBvCGqBHNsU8fABVwF6U63Hq6deKhB72TpkZyGtaZvdCyfVw8icq
+         cbAnBwyH1JDD81+4HRRQ5b+NL34bUnHL/pxfxb1FCI+VZh3/OMe0W+NyRVlJWZqseDyF
+         +ZYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SbX/CA9rx3VdoijI1jnik093tt/YSMZq2p12OY56GJE=;
+        b=MzHU2+FiqXoXktfOO9hrCVfkAEoFrTQCtLWWd3YAj3o9u2ZgPekMZSlvlqQi2J9C8t
+         Y4khvDno/bslm94o6kMw8XqmQTxDLDE4HpRTa49oRlMp6nLKxJP9tdTA3X4CDIw4nCe3
+         FZf7Xqc+IJePYU2mPPxski9+X1VnwpF8aO94zkXPy93qDQz4pOthW7Ucx4BHtKP4Ji3r
+         O8ZsOV/3AO+NiK0MNUAv4mU5+18wUaYwQxzjEW9bfIaDm4ZFCGZ5HHF345nQaWF+MFOt
+         llWbIyY90wy66nYOB7JwFUdXXXcuitarwWxh7EyPA6dyjk135JF2MaR9FzX+VQW0khYX
+         X/fg==
+X-Gm-Message-State: AOAM531ynjfs7XUBHx07MvqJyVa7b8DgE4PEmQ+sxJhwYtOH7mE3hLQY
+        FCYbgmcf527StMvN5AFRf4dKZjBoe2fJz/XewUs=
+X-Google-Smtp-Source: ABdhPJz7GBY/JMkN6SYLj8sxtQBg5EJtrS4PlUVpZ/JYCUtK5E7iqpZDgUjlCM2KZJxqGEF7BOK/ADklNvpBSQT7mZ4=
+X-Received: by 2002:a05:6e02:158a:: with SMTP id m10mr925657ilu.59.1643237523612;
+ Wed, 26 Jan 2022 14:52:03 -0800 (PST)
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Mark Hemment" <markhemm@googlemail.com>
-Cc:     "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Anna Schumaker" <anna.schumaker@netapp.com>,
-        "Chuck Lever" <chuck.lever@oracle.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Mel Gorman" <mgorman@suse.de>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "David Howells" <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/23] NFS: swap IO handling is slightly different for O_DIRECT IO
-In-reply-to: <CANe_+UgUNS81Jho8gLc956LArQk9SzGETusRpzRW-_uPF-fqbg@mail.gmail.com>
-References: <164299573337.26253.7538614611220034049.stgit@noble.brown>,
- <164299611281.26253.15560926531007295753.stgit@noble.brown>,
- <CANe_+UgUNS81Jho8gLc956LArQk9SzGETusRpzRW-_uPF-fqbg@mail.gmail.com>
-Date:   Thu, 27 Jan 2022 09:51:41 +1100
-Message-id: <164323750168.5493.12090358551960276049@noble.neil.brown.name>
+References: <CAHmME9qVMomgb53rABKsucCoEhwsk+=KzDdEcGKtecOXuahTZw@mail.gmail.com>
+ <20220119135450.564115-1-Jason@zx2c4.com>
+In-Reply-To: <20220119135450.564115-1-Jason@zx2c4.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 26 Jan 2022 14:51:52 -0800
+Message-ID: <CANcMJZABKTdwU8455pLfBjMjgsDO7BNjNWTvwx0sP+3TcJw_XA@mail.gmail.com>
+Subject: Re: [PATCH] lib/crypto: blake2s: avoid indirect calls to compression
+ function for Clang CFI
+To:     "Jason A. Donenfeld" <jason@zx2c4.com>
+Cc:     Miles Chen <miles.chen@mediatek.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        YongQin Liu <yongqin.liu@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022, Mark Hemment wrote:
-> On Mon, 24 Jan 2022 at 03:53, NeilBrown <neilb@suse.de> wrote:
-> >
-> > 1/ Taking the i_rwsem for swap IO triggers lockdep warnings regarding
-> >    possible deadlocks with "fs_reclaim".  These deadlocks could, I believ=
-e,
-> >    eventuate if a buffered read on the swapfile was attempted.
-> >
-> >    We don't need coherence with the page cache for a swap file, and
-> >    buffered writes are forbidden anyway.  There is no other need for
-> >    i_rwsem during direct IO.  So never take it for swap_rw()
-> >
-> > 2/ generic_write_checks() explicitly forbids writes to swap, and
-> >    performs checks that are not needed for swap.  So bypass it
-> >    for swap_rw().
-> >
-> > Signed-off-by: NeilBrown <neilb@suse.de>
-> > ---
-> >  fs/nfs/direct.c        |   30 +++++++++++++++++++++---------
-> >  fs/nfs/file.c          |    4 ++--
-> >  include/linux/nfs_fs.h |    4 ++--
-> >  3 files changed, 25 insertions(+), 13 deletions(-)
-> >
-> ...
-> > @@ -943,7 +954,8 @@ ssize_t nfs_file_direct_write(struct kiocb *iocb, str=
-uct iov_iter *iter)
-> >                                               pos >> PAGE_SHIFT, end);
-> >         }
-> >
-> > -       nfs_end_io_direct(inode);
-> > +       if (!swap)
-> > +               nfs_end_io_direct(inode);
->=20
-> Just above this code diff, there is;
->     if (mapping->nrpages) {
->         invalidate_inode_pages2_range(mapping,
->              pos >> PAGE_SHIFT, end);
->     }
->=20
-> This invalidation looks strange/wrong for a NFS swap write.  Should it
-> be disabled for the swap case?
+On Fri, Jan 21, 2022 at 11:17 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> blake2s_compress_generic is weakly aliased to blake2s_generic. The
+> current harness for function selection uses a function pointer, which is
+> ordinarily inlined and resolved at compile time. But when Clang's CFI is
+> enabled, CFI still triggers when making an indirect call via a weak
+> symbol. This seems like a bug in Clang's CFI, as though it's bucketing
+> weak symbols and strong symbols differently. It also only seems to
+> trigger when "full LTO" mode is used, rather than "thin LTO".
+>
+> [    0.000000][    T0] Kernel panic - not syncing: CFI failure (target: blake2s_compress_generic+0x0/0x1444)
+> [    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-mainline-06981-g076c855b846e #1
+> [    0.000000][    T0] Hardware name: MT6873 (DT)
+> [    0.000000][    T0] Call trace:
+> [    0.000000][    T0]  dump_backtrace+0xfc/0x1dc
+> [    0.000000][    T0]  dump_stack_lvl+0xa8/0x11c
+> [    0.000000][    T0]  panic+0x194/0x464
+> [    0.000000][    T0]  __cfi_check_fail+0x54/0x58
+> [    0.000000][    T0]  __cfi_slowpath_diag+0x354/0x4b0
+> [    0.000000][    T0]  blake2s_update+0x14c/0x178
+> [    0.000000][    T0]  _extract_entropy+0xf4/0x29c
+> [    0.000000][    T0]  crng_initialize_primary+0x24/0x94
+> [    0.000000][    T0]  rand_initialize+0x2c/0x6c
+> [    0.000000][    T0]  start_kernel+0x2f8/0x65c
+> [    0.000000][    T0]  __primary_switched+0xc4/0x7be4
+> [    0.000000][    T0] Rebooting in 5 seconds..
 
-Yes, I think it should - particularly as we don't take the mutex in the
-swap case.  Thanks!
-This change improves the look of the code too :-)
+YongQin also reported hitting this issue(also, only in the LTO=full
+case) on the db845c dev board. Sami pointed me to this patch and I
+just wanted to confirm it gets things booting again.
 
-Thanks,
-NeilBrown
+Reported-by: YongQin Liu <yongqin.liu@linaro.org>
+Tested-by: John Stultz <john.stultz@linaro.org>
+
+Thanks so much for the quick analysis and fix!
+-john

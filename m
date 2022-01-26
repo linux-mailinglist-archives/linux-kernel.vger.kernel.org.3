@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D8749D10B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C67D49D110
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiAZRlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243976AbiAZRlT (ORCPT
+        id S237250AbiAZRmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:42:42 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:43202
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231546AbiAZRml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:41:19 -0500
-Received: from mx1.mailbun.net (unknown [IPv6:2602:fd37:1::100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F501C061757;
-        Wed, 26 Jan 2022 09:41:12 -0800 (PST)
-Received: from [2607:fb90:d98b:8818:5079:94eb:24d5:e5c3] (unknown [172.58.104.31])
+        Wed, 26 Jan 2022 12:42:41 -0500
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: ariadne@dereferenced.org)
-        by mx1.mailbun.net (Postfix) with ESMTPSA id EDAB011A595;
-        Wed, 26 Jan 2022 17:41:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dereferenced.org;
-        s=mailbun; t=1643218872;
-        bh=XYekf48ntM/kh4vSP+nndPBCo9zhvgRhtN0lPYqJVco=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References;
-        b=hc1mVR1qLyvqQdekWLJd3uyW6lKB6L94CBUFeTp64s3yuNZx9aSf45GnIXKOHQTVH
-         C4KIgU73JSDWhVIZcT9Uxtg4OooT39J2WvdtL3i0FbJ7+63o87cPucAGyBkn1PvLky
-         Ui/ePTHHAc+tfxILvtJtQ2rTty/tJRPeXWMGzyIjf/Tdw20LXwm2qEYIi2m65vxNfZ
-         Gf9kO8ZE0czEM5i62LwIxG4IlJ7PMiPaec2UeNrazMV5Rl9YFQ/jSf2kMZe+pdiAZ8
-         Uj13HpWGlGh0wKxFblVCEoJICnB/k3hkNgslnOzdaGgCb52HdQbue2CY2K14Q2fAHL
-         40Vtsq+FOOixg==
-Date:   Wed, 26 Jan 2022 11:41:05 -0600 (CST)
-From:   Ariadne Conill <ariadne@dereferenced.org>
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     Ariadne Conill <ariadne@dereferenced.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
- do_execveat_common()
-In-Reply-To: <YfFddcQyHHofTwgg@casper.infradead.org>
-Message-ID: <15915be5-49c-77ba-d9f9-cf612f8211cb@dereferenced.org>
-References: <20220126114447.25776-1-ariadne@dereferenced.org> <YfFddcQyHHofTwgg@casper.infradead.org>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B943D3F1A4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:42:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643218955;
+        bh=gEM6VSiZGn9+riCesXh6Ndj0fTM5V3VNUzWbxDz0u7k=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=aXC5olx+rVtygbdF5epzgjgWV2OiV4C9pX6s400OoH0oZNd0B2R4h8D0pu9LVqnSi
+         PUMxLd2m7227/oh+uC0g39/xqVsigTGqm0HsEpOhF7xE9CW28++4SGRHpZ5wUvPmwn
+         K6O3nrcFfiEgF8AFZ1r+bhx0Qa4jEy0+7Xd7sQi6M80hjRLW90CDsX8qmnMb/f8V0A
+         PYeIgmqoXYjNAEHEr51w7azViY5ECFLEotmTeq7lq0RreGNXHBZoB/XbK0HtHvhIYM
+         15ESELGJoDriYvr2ciM/sQL7SPMd/a6MAebZlShTPP0LFQy/rwvW4cmIbFwMy+t8c/
+         6git/igr/CvOw==
+Received: by mail-wm1-f69.google.com with SMTP id s190-20020a1ca9c7000000b00347c6c39d9aso205851wme.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:42:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gEM6VSiZGn9+riCesXh6Ndj0fTM5V3VNUzWbxDz0u7k=;
+        b=zk30jznLi53Y1VfwdPa2lk1qcJoezQnuIjgjpm3PUwhoMvoTBu2SHMur0dw/dOuprT
+         TRYcR+Q+ozyVwGlCSIF71vD8qkzKfC+JXWzlGS45LbSS9dVa2owevWNokhC+h33mk3Ju
+         2ERu9tvYgbgAdUB2eFnmir+h7anOi40AjVQXeZkCHL1cosSAiBo0gZyIYujRZ2IT1/ql
+         5+rfc6M4YSFYr8xuuSUJJPWVojfxBkYfM4cE4XmbTsMmkGZdiHUZZhv/U/tndBqhtjC6
+         1j9nlxSr554KiZ7LXvZtD6mMjt9esufWNcO5+3wXxdfQ5GDKB9EdrXbieDZCpWGtnWNA
+         K/4w==
+X-Gm-Message-State: AOAM533NAyIWyniyJ1bZHYc9eWH9gjK9lEwKiT5g+oY14L9rtp353DfQ
+        5PLf6cVhX4nqVZtx4p6PD2uTJyM3QjsXmsOiMIBLeyL0CPhG2V43AlrTg3kIQIMWkWB3fa1M0fk
+        QqykHN8rrBwbe8vrwormPyz/COfryvXtwEHSEuD3Ttw==
+X-Received: by 2002:a7b:c182:: with SMTP id y2mr8635253wmi.139.1643218954807;
+        Wed, 26 Jan 2022 09:42:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy6kdysdMCq3VW5eb4T595OgQuQT6Z+gTtfvxQP+Z6YAumo97c6qlaVhjpPpKKj/OOAmgJgwQ==
+X-Received: by 2002:a7b:c182:: with SMTP id y2mr8635243wmi.139.1643218954548;
+        Wed, 26 Jan 2022 09:42:34 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id f8sm21074368wry.46.2022.01.26.09.42.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 09:42:33 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [RESEND, third time][PATCH] arm64: dts: intel: socfpga_agilex_socdk: align LED node names with dtschema
+Date:   Wed, 26 Jan 2022 18:41:57 +0100
+Message-Id: <20220126174157.288111-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Krzysztof Kozlowski <krzk@kernel.org>
 
-On Wed, 26 Jan 2022, Matthew Wilcox wrote:
+Align the LED node names with dtschema to silence dtbs_check warnings
+like:
 
-> On Wed, Jan 26, 2022 at 11:44:47AM +0000, Ariadne Conill wrote:
->> In several other operating systems, it is a hard requirement that the
->> first argument to execve(2) be the name of a program, thus prohibiting
->> a scenario where argc < 1.  POSIX 2017 also recommends this behaviour,
->> but it is not an explicit requirement[0]:
->>
->>     The argument arg0 should point to a filename string that is
->>     associated with the process being started by one of the exec
->>     functions.
->>
->> To ensure that execve(2) with argc < 1 is not a useful gadget for
->> shellcode to use, we can validate this in do_execveat_common() and
->> fail for this scenario, effectively blocking successful exploitation
->> of CVE-2021-4034 and similar bugs which depend on this gadget.
->>
->> The use of -EFAULT for this case is similar to other systems, such
->> as FreeBSD, OpenBSD and Solaris.  QNX uses -EINVAL for this case.
->>
->> Interestingly, Michael Kerrisk opened an issue about this in 2008[1],
->> but there was no consensus to support fixing this issue then.
->> Hopefully now that CVE-2021-4034 shows practical exploitative use
->> of this bug in a shellcode, we can reconsider.
->>
->> [0]: https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
->> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=8408
->>
->> Changes from v1:
->> - Rework commit message significantly.
->> - Make the argv[0] check explicit rather than hijacking the error-check
->>   for count().
->>
->> Signed-off-by: Ariadne Conill <ariadne@dereferenced.org>
->> ---
->>  fs/exec.c | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/fs/exec.c b/fs/exec.c
->> index 79f2c9483302..e52c41991aab 100644
->> --- a/fs/exec.c
->> +++ b/fs/exec.c
->> @@ -1899,6 +1899,10 @@ static int do_execveat_common(int fd, struct filename *filename,
->>  	retval = count(argv, MAX_ARG_STRINGS);
->>  	if (retval < 0)
->>  		goto out_free;
->> +	if (retval == 0) {
->> +		retval = -EFAULT;
->> +		goto out_free;
->> +	}
->
-> I don't object to the concept, but it's a more common pattern in Linux
-> to do this:
->
-> 	retval = count(argv, MAX_ARG_STRINGS);
-> +	if (retval == 0)
-> +		retval = -EFAULT;
-> 	if (retval < 0)
-> 		goto out_free;
+    leds: 'hps0', 'hps1', 'hps2' do not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
 
-Yeah, that seems fine.  We can of course do it that way, which I will 
-revise the patch to do if we decide to stick with denial over making a 
-"safe" argv instead.
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> (aka I like my bikesheds painted in Toasty Eggshell)
+---
 
-Toasty Eggshell is a nice color for a bikeshed :)
+This patch waits for a year. Dinh, you previously acked it but can you
+apply it?
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+index ea37ba7ccff9..26cd3c121757 100644
+--- a/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts
+@@ -21,17 +21,17 @@ chosen {
+ 
+ 	leds {
+ 		compatible = "gpio-leds";
+-		hps0 {
++		led0 {
+ 			label = "hps_led0";
+ 			gpios = <&portb 20 GPIO_ACTIVE_HIGH>;
+ 		};
+ 
+-		hps1 {
++		led1 {
+ 			label = "hps_led1";
+ 			gpios = <&portb 19 GPIO_ACTIVE_HIGH>;
+ 		};
+ 
+-		hps2 {
++		led2 {
+ 			label = "hps_led2";
+ 			gpios = <&portb 21 GPIO_ACTIVE_HIGH>;
+ 		};
+-- 
+2.32.0
 
-Ariadne

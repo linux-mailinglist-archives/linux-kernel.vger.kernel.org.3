@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3357C49C745
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D5F49C748
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbiAZKQZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Jan 2022 05:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
+        id S239792AbiAZKQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbiAZKQY (ORCPT
+        with ESMTP id S239767AbiAZKQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:16:24 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4425DC06161C;
-        Wed, 26 Jan 2022 02:16:21 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B4238100009;
-        Wed, 26 Jan 2022 10:16:15 +0000 (UTC)
-Date:   Wed, 26 Jan 2022 11:16:13 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
-        sricharan@codeaurora.org
-Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
- on READID
-Message-ID: <20220126111613.3ab0021e@xps13>
-In-Reply-To: <20220114082718.32a2fc83@xps13>
-References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
-        <20220114082718.32a2fc83@xps13>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 26 Jan 2022 05:16:37 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADAEC06161C;
+        Wed, 26 Jan 2022 02:16:37 -0800 (PST)
+Received: from [127.0.0.1] (dynamic-002-247-255-194.2.247.pool.telefonica.de [2.247.255.194])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1C5B21EC032C;
+        Wed, 26 Jan 2022 11:16:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643192192;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UVNkPXJP5m0LMBfgOcZbjMUKVGxtfPneUogvPQS5O+w=;
+        b=GpqWSu7QeOyI8EWRRGsXT0XakZxdYvV4fz6wZh4HieAsvAf1sIYG3m7wkMGEX5HIbRP3Nu
+        r9tRU1vSVAaTwyB7OFbWkypoP1QcFheajPazM4YrS4MDwtHySt25M+ftKVcDXHyIl1ThRF
+        07uz4Xj91dtz6hKIGWt7VWte4FEDYnY=
+Date:   Wed, 26 Jan 2022 10:16:28 +0000
+From:   Boris Petkov <bp@alien8.de>
+To:     Shuai Xue <xueshuai@linux.alibaba.com>
+CC:     rric@kernel.org, mchehab@kernel.org,
+        zhangliguang@linux.alibaba.com, tony.luck@intel.com,
+        james.morse@arm.com, linux-edac@vger.kernel.org,
+        linux-efi@vger.kernel.org, ardb@kernel.org,
+        linux-kernel@vger.kernel.org, zhuo.song@linux.alibaba.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_0/2=5D_EDAC/ghes=3A_refactor_memo?= =?US-ASCII?Q?ry_error_reporting_to_avoid_code_duplication?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <8d89ffe0-6e34-a82d-09f0-9dd803fc256f@linux.alibaba.com>
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com> <20220126081702.55167-1-xueshuai@linux.alibaba.com> <YfEEN0ATgS+TakLV@zn.tnic> <8d89ffe0-6e34-a82d-09f0-9dd803fc256f@linux.alibaba.com>
+Message-ID: <5D5735C8-3922-49D9-9DD0-605746B5CCE4@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On January 26, 2022 9:26:01 AM UTC, Shuai Xue <xueshuai@linux=2Ealibaba=2Ec=
+om> wrote:
+>By the way, I have a question about review process: after waiting for a p=
+eriod
+>of time, how can I tell whether you have no comments or are still in revi=
+ew process?
+>
 
-miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 +0100:
+A good sign for when review is done is to wait to see replies to every pat=
+ch=2E
 
-> Hi Konrad,
-> 
-> konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 19:44:26 +0100:
-> 
-> > While I have absolutely 0 idea why and how, running clear_bam_transaction
-> > when READID is issued makes the DMA totally clog up and refuse to function
-> > at all on mdm9607. In fact, it is so bad that all the data gets garbled
-> > and after a short while in the nand probe flow, the CPU decides that
-> > sepuku is the only option.
-> > 
-> > Removing _READID from the if condition makes it work like a charm, I can
-> > read data and mount partitions without a problem.
-> > 
-> > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> > ---
-> > This is totally just an observation which took me an inhumane amount of
-> > debug prints to find.. perhaps there's a better reason behind this, but
-> > I can't seem to find any answers.. Therefore, this is a BIG RFC!  
-> 
-> I'm adding two people from codeaurora who worked a lot on this driver.
-> Hopefully they will have an idea :)
+BUT, there are other people on CC too so they would need to get a chance t=
+o have a look too=2E
 
-Sadre, I've spent a significant amount of time reviewing your patches,
-now it's your turn to not take a month to answer to your peers
-proposals.
+Regardless, you wait for a week and then you incorporate all review commen=
+ts and resend - not before=2E
 
-Please help reviewing this patch.
+This constant spamming with the patchset is not productive=2E You're not t=
+he only one who sends patches and wants review - you should consider that t=
+here are others who would need to get reviewed too=2E
 
-BTW why is this driver still using cmdfund? It should have been
-migrated to ->exec_op() a long time ago.
-
-Thanks,
-Miquèl
+--=20
+Sent from a small device: formatting sux and brevity is inevitable=2E 

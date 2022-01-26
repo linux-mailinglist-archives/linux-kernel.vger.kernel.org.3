@@ -2,120 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6A849D1D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A2249D1D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244189AbiAZSgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S232349AbiAZSgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbiAZSgM (ORCPT
+        with ESMTP id S230424AbiAZSgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:36:12 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDDBC06161C;
-        Wed, 26 Jan 2022 10:36:12 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id a18so415861edj.7;
-        Wed, 26 Jan 2022 10:36:12 -0800 (PST)
+        Wed, 26 Jan 2022 13:36:40 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC40C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:36:40 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id i19so597497qvx.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:36:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yIv2lBySDQKuLdPHpVEfN5DTmOKpNIBBtz27Np5pjBs=;
-        b=YEIlpKJ98MWEUJYL4CbgZhaiOFeTWJ3MJeooSJ4MIVj4L7eOFGHB2ukyAiGsaz47FX
-         z7UvaoDQgwl0jkr/w9d+Lj5TNCHiAovaQWvH5hs0t4iYxygwLdbhT4vuug94xEvdsldk
-         y+gJzkGt9Fz6yN1e1wkgNc9ZSbwkYuafvifedVVjwOSpK5fczlexTSrQjDSGWVC20gGM
-         RmWk/2DXB+1Q3ygO+YoO2U/MuBiLG9bIBMfcmiv91702xVr4q9oI2rFZB4eTB6ZsWN7L
-         0O5EEBiqYqnqdIc4N94/I+uoo32WKwicF9xKG5xxxwmwpTuhqwiwGE7paSAeFy2oOpxG
-         JJeg==
+        d=soleen.com; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a4jxpLDSedySyiIRtZviJmX3NEbTJyD67N5MQRypTW4=;
+        b=h4xkZoFvH7iJDfUXQm8znpFEc6PC4s+tPROBi0jwbzFdezVF74R3DKaPnWdHLdOtoc
+         vlMKDt3P48E110Jh7Anz+LurpmyWB0G52b6QQ1EaRtDaL1nhcqg04hES0HdEtmqvBxSJ
+         2c799pa2UtMjpZlRATILhE8KJyjmZVH7VQ05PDArfwetmSwAPYO7mXnQwony0pjCCny0
+         tu9U2t0OfPWoqAaMSdCnCUm9uVOrJUVtaqVD+7Wk3buw+IBNSO+FAr7Zq8CukabBp7+w
+         hEC4Mf98vxoxOlZNSig54sbYNmpaKk1uEfetnfov5Ttpc29zRvWDY1Q5Wuv8bWglzYHb
+         EMKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yIv2lBySDQKuLdPHpVEfN5DTmOKpNIBBtz27Np5pjBs=;
-        b=NyqOefL8DN1kCbs/y75sY+SYql0FT0tkwDOip9rgaHxOD08gqq9mVpG+HFMCe8nibL
-         VfJ3noNdICuPKuPg4ga0kPX37PVkYKe4rPKPr4zemxbQgrjp5z+41O/x2nw0B06AwffV
-         SS137cTayFsNSby9FUnOtv5x3kI9778gXslmubjsX/CI3I1egNrf0GfTi1tiLI7JsbKJ
-         cJuGVmGRoP+B8y1GfuXy+Q2ZJfVZQQEj29wPjXDvdLEmpMetSQFn2p/GlBcOivWaGpF7
-         0+KEv0Hp1BQI7A+Ehzq7zIz6meLqHKbFSFYa8S38YbBv9dgTnhkT+TF9silh/YTlNhBg
-         wS+g==
-X-Gm-Message-State: AOAM533tY67ED7OkBaO29CN6HpTuUQWalNOIbbYe0zc/EpBbUqeyzosL
-        OeUkmZ6qbbJTKmWlvRHV/qvHzIJr6vqQWqJjowVpsHg2
-X-Google-Smtp-Source: ABdhPJxcPb3yuO2kg71BJe3/VCzS/xRUBoWsgeZAKM8JtpENt1sJrIw1A34rRk5qSmiuJ5u4b4YHY0ycl1/bpMbRM44=
-X-Received: by 2002:a05:6402:12cf:: with SMTP id k15mr260420edx.299.1643222170905;
- Wed, 26 Jan 2022 10:36:10 -0800 (PST)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=a4jxpLDSedySyiIRtZviJmX3NEbTJyD67N5MQRypTW4=;
+        b=wzVDIIEBTSu/akbojzLIh21TxsXLfO69eX/xxPtsbJjeyYZvJyb4GdDEVJyhjR793M
+         l2fL09lbnB3hWy/lqx69NEcWn6eRvb9jG2luCQndTjTGMeUGig46Y+BeWbdWseayVjCo
+         Ww20EI54t3FuIvnkWTmbefZ72MiFcY4RPIexI9Qu0jLfNdYUSKrHj6Bav+hQC1n3IycC
+         S9t48reAPWEltzHvfWYN6xEXKEVsxymYLS5bsa/MvFzgVAFSm+iaHkQfN6xllm9P7bjE
+         v/JfAvRX1jZzNHeS1KEUP400QVeJ5Z/OOyZuE71ShhheXMBRH6c39c+UzHZpvMHlcmxb
+         aaeQ==
+X-Gm-Message-State: AOAM533rYy1JHmfQBHW5xeYwpTPqFhaJlXva+0Hvb0bkljJ2zEQIUjzb
+        2p9emKSF7EA4N78fvgMS5VshXA==
+X-Google-Smtp-Source: ABdhPJz5AdoQSF76RU52VZ6gwOZf8Oqw8CGR3SV0rJAznxxoLsdi7kYebbkAsr0hK4EkKj/v6JtwEQ==
+X-Received: by 2002:a05:6214:4014:: with SMTP id kd20mr12158585qvb.84.1643222199674;
+        Wed, 26 Jan 2022 10:36:39 -0800 (PST)
+Received: from soleen.c.googlers.com.com (189.216.85.34.bc.googleusercontent.com. [34.85.216.189])
+        by smtp.gmail.com with ESMTPSA id h9sm26226qkp.75.2022.01.26.10.36.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 10:36:39 -0800 (PST)
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+To:     pasha.tatashin@soleen.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, rientjes@google.com,
+        pjt@google.com, weixugc@google.com, gthelen@google.com,
+        mingo@redhat.com, will@kernel.org, rppt@kernel.org,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        aneesh.kumar@linux.ibm.com, jirislaby@kernel.org,
+        songmuchun@bytedance.com, qydwhotmail@gmail.com, hughd@google.com,
+        ziy@nvidia.com, anshuman.khandual@arm.com
+Subject: [PATCH v4 0/4] page table check fixes and cleanups
+Date:   Wed, 26 Jan 2022 18:36:33 +0000
+Message-Id: <20220126183637.1840960-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
 MIME-Version: 1.0
-References: <20220125203548.352278-1-shy828301@gmail.com> <YfEEn06IEPjdGzHc@infradead.org>
-In-Reply-To: <YfEEn06IEPjdGzHc@infradead.org>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 26 Jan 2022 10:35:59 -0800
-Message-ID: <CAHbLzkoaM=e7EXpKQkxP+BRi-1gSjfJ=9GHM+s=5Lyh2ksZ+Kw@mail.gmail.com>
-Subject: Re: [v4 PATCH] block: introduce block_rq_error tracepoint
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Steven Rostedt <rostedt@goodmis.org>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        linux-block@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:21 AM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Tue, Jan 25, 2022 at 12:35:48PM -0800, Yang Shi wrote:
-> > Currently, rasdaemon uses the existing tracepoint block_rq_complete
-> > and filters out non-error cases in order to capture block disk errors.
-> >
-> > But there are a few problems with this approach:
-> >
-> > 1. Even kernel trace filter could do the filtering work, there is
-> >    still some overhead after we enable this tracepoint.
-> >
-> > 2. The filter is merely based on errno, which does not align with kernel
-> >    logic to check the errors for print_req_error().
-> >
-> > 3. block_rq_complete only provides dev major and minor to identify
-> >    the block device, it is not convenient to use in user-space.
-> >
-> > So introduce a new tracepoint block_rq_error just for the error case
-> > and provides the device name for convenience too. With this patch,
-> > rasdaemon could switch to block_rq_error.
-> >
-> > Cc: Jens Axboe <axboe@kernel.dk>
-> > Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-> > Signed-off-by: Cong Wang <xiyou.wangcong@gmail.com>
-> > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > ---
-> > The v3 patch was submitted in Feb 2020, and Steven reviewed the patch, but
-> > it was not merged to upstream. See
-> > https://lore.kernel.org/lkml/20200203053650.8923-1-xiyou.wangcong@gmail.com/.
-> >
-> > The problems fixed by that patch still exist and we do need it to make
-> > disk error handling in rasdaemon easier. So this resurrected it and
-> > continued the version number.
-> >
-> > v3 --> v4:
-> >  * Rebased to v5.17-rc1.
-> >  * Collected reviewed-by tag from Steven.
-> >
-> >  block/blk-mq.c               |  4 +++-
-> >  include/trace/events/block.h | 41 ++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 44 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/block/blk-mq.c b/block/blk-mq.c
-> > index f3bf3358a3bb..bb0593f93675 100644
-> > --- a/block/blk-mq.c
-> > +++ b/block/blk-mq.c
-> > @@ -789,8 +789,10 @@ bool blk_update_request(struct request *req, blk_status_t error,
-> >  #endif
-> >
-> >       if (unlikely(error && !blk_rq_is_passthrough(req) &&
-> > -                  !(req->rq_flags & RQF_QUIET)))
-> > +                  !(req->rq_flags & RQF_QUIET))) {
-> > +             trace_block_rq_error(req, blk_status_to_errno(error), nr_bytes);
->
-> Please report the atual block layer status code instead of the errno
-> mapping here.
+Changelog:
+v4:	- Addressed review comments from David Rientjes
+	- Added Acks.
+v3:	- Resolved a regression introduced in previous version, where
+	  page collapse in khugepaged would cause crash on boot.
+	- Addressed comments from Anshuman Khandual regarding commit
+	  log.
+v2:	- Addressed simplification comments from Wei Xu
+	- Added Review-by/Tested-by's from Zi Yan and Wei Xu
 
-Sure, thanks.
+
+Two fixes:
+
+  mm/debug_vm_pgtable: remove pte entry from the page table
+	- remove a pte entry from the page table at the end of
+	  debug_vm_pgtable pte test
+
+  mm/khugepaged: unify collapse pmd clear, flush and free
+  mm/page_table_check: check entries at pmd levels
+	- check pmd level in page_table_check for PTE regular entries
+	  prior to freeing.
+	  repro.c: https://gist.github.com/soleen/fdcd501d5df103976245fe84e9535087
+	  config: https://gist.github.com/soleen/8a56f923c2fea9ce9c75b4e2517d4162
+	  qemu_script: https://gist.github.com/soleen/f4be4795826b7ab1a51ae659582e179c
+	  base image:
+	  https://storage.googleapis.com/syzkaller/wheezy.img
+	  https://storage.googleapis.com/syzkaller/wheezy.img.key
+
+Small cleanup:
+  mm/page_table_check: use unsigned long for page counters and cleanup
+
+Previous versions:
+v1: https://lore.kernel.org/all/20220120042513.1648831-1-pasha.tatashin@soleen.com
+v2: https://lore.kernel.org/all/20220120191250.2671557-1-pasha.tatashin@soleen.com
+v3: https://lore.kernel.org/all/20220126060514.1574935-1-pasha.tatashin@soleen.com
+
+Pasha Tatashin (4):
+  mm/debug_vm_pgtable: remove pte entry from the page table
+  mm/page_table_check: use unsigned long for page counters and cleanup
+  mm/khugepaged: unify collapse pmd clear, flush and free
+  mm/page_table_check: check entries at pmd levels
+
+ include/linux/page_table_check.h | 18 ++++++++++
+ mm/debug_vm_pgtable.c            |  2 ++
+ mm/khugepaged.c                  | 37 ++++++++++++---------
+ mm/page_table_check.c            | 56 ++++++++++++++++----------------
+ 4 files changed, 69 insertions(+), 44 deletions(-)
+
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
+

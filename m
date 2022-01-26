@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EFE49C4A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566FD49C4A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238002AbiAZHjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 02:39:21 -0500
-Received: from mx.msync.work ([95.217.65.204]:52780 "EHLO mx.msync.work"
+        id S237978AbiAZHjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 02:39:44 -0500
+Received: from mga01.intel.com ([192.55.52.88]:6615 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229676AbiAZHjS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 02:39:18 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2EDF02832C1;
-        Wed, 26 Jan 2022 07:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
-        t=1643182757; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding:in-reply-to:references;
-        bh=gNondfYloya5eVokEo9OWDbeyWm4oRwSK5gz16WAuwY=;
-        b=n9109b9nvfihvFC5I3TfE9rCQZWQIqe76Etm10sNl9Kaa6fbFfKJ7YA6rPEJDlt1KokCwX
-        VoYAAFcOEke4pIhdDC6cuhq06tMoExpx9UrJF6M1Py8SO6Xb1Bhzw02O7pMfLwJmCa0tMk
-        QfUN42uc0gk3HEBADYgqGLxk2T58DIA0eu6MctYQuhC0KQ/I+ksa4ycwowkKVb19/CBp1g
-        yPi8pcRQisSP9Mn/+EZ+cKyz74OvL01CGeafr0V42GavAlTQl2ZVmD/TsoNEj9wgsQqAZX
-        7xDqb8ZLgGQj21W/GcJp7Cj5K0BTu8pXZF57zUk8f0gN2H7CL2LVatLY5FfIoQ==
-From:   Vyacheslav Bocharov <adeep@lexina.in>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rudi Heitbaum <rudi@heitbaum.com>
-Subject: [PATCH v7 2/2] Bluetooth: hci_h5: Add power reset via gpio in h5_btrtl_open
-Date:   Wed, 26 Jan 2022 10:39:05 +0300
-Message-Id: <20220126073905.3637841-3-adeep@lexina.in>
-In-Reply-To: <20220126073905.3637841-1-adeep@lexina.in>
-References: <20220126073905.3637841-1-adeep@lexina.in>
+        id S237937AbiAZHjj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 02:39:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643182779; x=1674718779;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qpwkq/tfgyuDWo8286GPA9d2hhEfNOjp5kDGgAGyq0I=;
+  b=mpJ1luKPp/L/ROaEysd+ZiLpmLBQTUgnG1ORby9M1DisWpU4hFn8UPyK
+   GF7f00YWEket1O/b1c7ppS0RQIhF0kZvllHVzdieyvi/Mygzzf/b1ooYJ
+   OfOp15pgFjFLnH69mzmWQz1juJ8O29SXCC/jkDJMGHsYmwqPHmi3KIvcn
+   5cX/uH/FMpe/Mf92s42CP/IVrOvG4icc7G3EYxTmQyt6cjRqqdDVJJU8S
+   evoNyMoDdrm+BzTXIOnyNA72BkBH7JW3RwGptJBLdg9XmhyB76ggCZgUS
+   H/AjEdQ2pqJXXkF4xhsXhRDhi4NAKEe6EgeEd/HBU88veeI5JbUhe/pxV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="270949581"
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="270949581"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 23:39:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
+   d="scan'208";a="696135344"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2022 23:39:38 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCcu1-000KwV-Ba; Wed, 26 Jan 2022 07:39:37 +0000
+Date:   Wed, 26 Jan 2022 15:39:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     James Morse <james.morse@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [morse:mpam/snapshot/v5.16 60/137] WARNING: modpost:
+ vmlinux.o(.text+0x48087): Section mismatch in reference from the function
+ resctrl_init() to the function .init.text:thread_throttle_mode_init()
+Message-ID: <202201261528.jKedbVna-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add power reset for bluetooth via enable-gpios in h5_btrtl_open function.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
+head:   364c1c42b229912132e1615c2ce15be7154e2156
+commit: 5d118e3da1ad725c2ea8da30eda516096e550289 [60/137] x86/resctrl: Drop __init/__exit on assorted symbols
+config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261528.jKedbVna-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=5d118e3da1ad725c2ea8da30eda516096e550289
+        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
+        git fetch --no-tags morse mpam/snapshot/v5.16
+        git checkout 5d118e3da1ad725c2ea8da30eda516096e550289
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-While testing the RTL8822CS SDIO WiFi/BT adapter, it was found that in
-some cases the kernel could not initialize BT firmware. However,
-manually resetting the adapter via gpio (off/on sequence) allows it to
-start correctly.
-Apparently, when the system starts, the adapter is in an undefined state
-(including unknown gpio state after starting uboot). A forced reset helps
-to initialize the adapter in most cases. It has been found experimentally
-that 100 ms is sufficient for a reset.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.text+0x48087): Section mismatch in reference from the function resctrl_init() to the function .init.text:thread_throttle_mode_init()
+The function resctrl_init() references
+the function __init thread_throttle_mode_init().
+This is often because resctrl_init lacks a __init
+annotation or the annotation of thread_throttle_mode_init is wrong.
+
 ---
- drivers/bluetooth/hci_h5.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/bluetooth/hci_h5.c b/drivers/bluetooth/hci_h5.c
-index 34286ffe0568..fdf504b0d265 100644
---- a/drivers/bluetooth/hci_h5.c
-+++ b/drivers/bluetooth/hci_h5.c
-@@ -966,6 +966,11 @@ static void h5_btrtl_open(struct h5 *h5)
- 		pm_runtime_enable(&h5->hu->serdev->dev);
- 	}
- 
-+	/* The controller needs reset to startup */
-+	gpiod_set_value_cansleep(h5->enable_gpio, 0);
-+	gpiod_set_value_cansleep(h5->device_wake_gpio, 0);
-+	msleep(100);
-+
- 	/* The controller needs up to 500ms to wakeup */
- 	gpiod_set_value_cansleep(h5->enable_gpio, 1);
- 	gpiod_set_value_cansleep(h5->device_wake_gpio, 1);
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,101 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A1549C887
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DB449C889
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240627AbiAZLWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S240643AbiAZLW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbiAZLWG (ORCPT
+        with ESMTP id S233637AbiAZLWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:22:06 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEAEC06161C;
-        Wed, 26 Jan 2022 03:22:06 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id c192so2117788wma.4;
-        Wed, 26 Jan 2022 03:22:06 -0800 (PST)
+        Wed, 26 Jan 2022 06:22:24 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFF4C06161C;
+        Wed, 26 Jan 2022 03:22:24 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id o11so5698192pjf.0;
+        Wed, 26 Jan 2022 03:22:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=htc3FEW6U45e7eGmBICjLPQtBJO885eqDPGUS1h2BH8=;
-        b=ftYYUMqx2/3aVFnBOQKnfdDOqjj7peBH2uqWnfO9sxwuTbLAvBPJED7R2NdvTQFFLp
-         r+Cc0EkSlyoSMlrJtw4EvGeNEv8DMoJ8k/5r8gw6d0PdEoU153WKLPShvLN7SpQ+6OsF
-         BqI5mOxr1SpWOH/p/GEcaQ1RT0DFFtlvHBu6jp1cb5SG4ELJpVji+LGNkWGOzVJVDw6c
-         MnxG9Xgxlq7MxfPh46RMGbvPcr3YVbdncpV47mNmMnXPZ9jG34fmhmDbhbaRCQi+Dyjm
-         08MznjucVNWNsvG7V1O5Zq7IcDl1YsBfdnb024P9omQ6fXw2RNlSYB/6nOhTEpiSOGsa
-         iKFw==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=DcnfjljfiqT/xzEtLh/gjs1otCHVMxLp1a++I/N+BGI=;
+        b=d1p3iRYPM8vmqp3/IVyo6DDwd3kc8DiV6zqmaaoP4XAIol010Nr/mu5uAldEZ2fMpC
+         gyb+bIyvbGtdcToddIWr9wTAv2bH+lOCMJRjUqj5a7VfvE5xTZBxfJEw/bv78wX23jyx
+         gMknGBoAxKOY8LUsSW0xgLt0Z2JaFOaQ3WZgCEXA8mfvpTmyJFpvOMuN9hDlz8ZXaqOh
+         SpDIekpqadb2pS/NijyOqc4Pk0szBMqGSAMVQ06HPmHyW2gveW4o8Npejwgu9y9oik4r
+         4XAremChBh+pdn03CHnCk3IuHOUd+z7/BEwU6w2RZ6lT6/1eXIaBZeX68icfVrpP2QMl
+         2bpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=htc3FEW6U45e7eGmBICjLPQtBJO885eqDPGUS1h2BH8=;
-        b=gKASktb5Jf9tGBX8HC0FHJAWotMCBV6JA4LDLmzhYjOWzLsdhqUgENBB5zEpKQ6RUg
-         xHg6t2o/E+LgdUvnI1Z3GiN8RHtpKmT949TnDcOPZF+1tlLF9NGEJwgRH/bmI9mnrjk2
-         dl4o91TGJVJi9PbamImGSC1IEjbx+I6izFm9ufivzMzPBWiBVemqGVy3S9/tPgnosp8c
-         bnbvaP6sgs8uWQweebGVP2g3BX5+dCblWrNbfULmXusiYMrp0LCW8SgHpQny4oicfQ0N
-         nv9R8qmKHRGLxPyfiheCJyHCYG2KdIQPXIwpfJuGmtTbRUqpwrg+JJGW0/G7WPuvmcy1
-         m0nA==
-X-Gm-Message-State: AOAM530va7l7+K1VgT79jActRdXRzuHAAbz4XTT7iwg0sqUuUkI/DT7C
-        nEcP28QbSyAKUKIE+uq6+qA=
-X-Google-Smtp-Source: ABdhPJzWbESM74NMiobRCtslHqMsmdmqXpDQHza60W3VPZMlbAFKNAi/3a2apDHj+ZjwGF6E6T6ZZg==
-X-Received: by 2002:a1c:721a:: with SMTP id n26mr7108624wmc.118.1643196124779;
-        Wed, 26 Jan 2022 03:22:04 -0800 (PST)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id y14sm14903309wrd.91.2022.01.26.03.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 03:22:04 -0800 (PST)
-Date:   Wed, 26 Jan 2022 11:22:02 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 000/841] 5.15.17-rc2 review
-Message-ID: <YfEu2mLqNZmyMUBA@debian>
-References: <20220125155423.959812122@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=DcnfjljfiqT/xzEtLh/gjs1otCHVMxLp1a++I/N+BGI=;
+        b=7kQYMKVwTEBCZF1mqaneKHSoMigHODVdPFF/1OgDU9bNwGkMGhCRGB9AsS+bv24NaB
+         hASjPC778lAwP5mpZ3YT6xyjQo2m7Zkpxun7QIGrb7M3cNdlX+7ME1la10ZdmJWb65Ad
+         zt4xz+y6AVGg+oez+iViAXmo2hTnk76AtH2DUtkvpVcLPICCA3k5JnR1WrkehilEZBlr
+         fhPlZAfBvGi7lZL5F9gaH0mkVBzIer3HcZvE0mU5U8LBN6ztGBSV8PTId8niGXFHYQGL
+         NFk50a1FXK7WsgsA+/yf6N1cwPW1yc7sTU92btSgnhm4/7GElEDDUh1sKU1lfl3kVLPK
+         6l3w==
+X-Gm-Message-State: AOAM531LZtU/+DGPBQhn5JC10MroUTl7KLBSKOtXO7ewissTAiFdAPtF
+        dc/mBTB7vG+iEEwTWmsnL2s=
+X-Google-Smtp-Source: ABdhPJzO0xi5Fk/D7ECNT7Uv+s752bPTXGgAggKIRT1wW4tBC74c9lplekS9gVrRb8TqQY21Uc+czQ==
+X-Received: by 2002:a17:902:7c82:b0:14a:e210:f2d6 with SMTP id y2-20020a1709027c8200b0014ae210f2d6mr22844433pll.74.1643196143651;
+        Wed, 26 Jan 2022 03:22:23 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id h9sm1903196pfi.54.2022.01.26.03.22.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 03:22:23 -0800 (PST)
+Message-ID: <626806ff-7cd0-a6b4-c2f1-933d0a1924a2@gmail.com>
+Date:   Wed, 26 Jan 2022 19:22:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125155423.959812122@linuxfoundation.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH kvm/queue v2 0/3] KVM: x86/pmu: Fix out-of-date AMD
+ amd_event_mapping[]
+Content-Language: en-US
+From:   Like Xu <like.xu.linux@gmail.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Bangoria, Ravikumar" <ravi.bangoria@amd.com>,
+        Ananth Narayan <ananth.narayan@amd.com>,
+        Jim Mattson <jmattson@google.com>
+References: <20220117085307.93030-1-likexu@tencent.com>
+Organization: Tencent
+In-Reply-To: <20220117085307.93030-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+cc AMD folks and ping for any comments.
 
-On Tue, Jan 25, 2022 at 05:32:41PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.17 release.
-> There are 841 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 17/1/2022 4:53 pm, Like Xu wrote:
+> The current amd_event_mapping[] named "amd_perfmon_event_map" is only
+> valid for "K7 and later, up to and including Family 16h" but for AMD
+> "Family 17h and later", it needs amd_f17h_perfmon_event_mapp[] .
 > 
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
-
-Build test:
-mips (gcc version 11.2.1 20220121): 61 configs -> no new failure
-arm (gcc version 11.2.1 20220121): 99 configs -> no new failure
-arm64 (gcc version 11.2.1 20220121): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/660
-[2]. https://openqa.qa.codethink.co.uk/tests/661
-[3]. https://openqa.qa.codethink.co.uk/tests/653
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+> It's proposed to fix it in a more generic approach:
+> - decouple the available_event_types from the CPUID 0x0A.EBX bit vector;
+> - alway get the right perfmon_event_map[] form the hoser perf interface;
+> - dynamically populate {inte|amd}_event_mapping[] during hardware setup;
+> 
+> v1 -> v2 Changelog:
+> - Drop some merged patches and one misunderstood patch;
+> - Rename bitmap name from "avail_cpuid_events" to "avail_perf_hw_ids";
+> - Fix kernel test robot() compiler warning;
+> 
+> Previous:
+> https://lore.kernel.org/kvm/20211112095139.21775-1-likexu@tencent.com/
+> 
+> Like Xu (3):
+>    KVM: x86/pmu: Replace pmu->available_event_types with a new BITMAP
+>    perf: x86/core: Add interface to query perfmon_event_map[] directly
+>    KVM: x86/pmu: Setup the {inte|amd}_event_mapping[] when hardware_setup
+> 
+>   arch/x86/events/core.c            |  9 ++++
+>   arch/x86/include/asm/kvm_host.h   |  2 +-
+>   arch/x86/include/asm/perf_event.h |  2 +
+>   arch/x86/kvm/pmu.c                | 25 ++++++++++-
+>   arch/x86/kvm/pmu.h                |  2 +
+>   arch/x86/kvm/svm/pmu.c            | 23 ++--------
+>   arch/x86/kvm/vmx/pmu_intel.c      | 72 ++++++++++++++++++++-----------
+>   arch/x86/kvm/x86.c                |  1 +
+>   8 files changed, 89 insertions(+), 47 deletions(-)
+> 

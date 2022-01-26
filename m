@@ -2,128 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE0649CAD6
+	by mail.lfdr.de (Postfix) with ESMTP id A83E849CAD7
 	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240086AbiAZNao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S240145AbiAZNap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239571AbiAZNac (ORCPT
+        with ESMTP id S239585AbiAZNac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Jan 2022 08:30:32 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0F9C061748
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:30:32 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id u6so31324625lfm.10
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:30:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=41gfOK3SwjHN5QGLkwbAzzyj+KqK0hiE/9CoXJsNy30=;
-        b=fazgTc8LYb2smVQ9HIHKZum2qBRuwRdewGBr6Nb1DMBW7ikf8wauel84++vEdeQflr
-         910HrL8zmfvJ34plx+JbFRO2MUVzAMhPlsh5idqEO2AN+YjiJcCD6N4JyZ+uuYbCm8lv
-         dcJdy10hsa+Dxi1v3OT3/5/psct8K1aayjkbfXnxU8qJGeqh4m2/RGAOlILJUhJnx7cj
-         IMBVK8R2Lnp4n2cyWKQP6sELFsL06YYcRUrExNy88Elk957U/rHV7rX+CUeme6gV/T2O
-         cykUT7d+OEQd4znkAKG0fLbVLexvgelbgxbyG0pmgEG4FUUH101nYKZG+p11GjuS26X3
-         bRQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=41gfOK3SwjHN5QGLkwbAzzyj+KqK0hiE/9CoXJsNy30=;
-        b=sD+VksGe6IcfdAnVDs5gq1OTgV/hpDOC1Y/E+hjgQk57H0/wPo0562mkclmevyHLe7
-         P+Zky8Gu0poq7JxXWhT0u8peRZXS0EJ5FXwdv8/M2B7Dq1rxDhDRSKdJAO+qwxd2YtLi
-         /hs8dEvx7bU4hPyqOoQ4Y+9xDZwRipdQKZD33VWUicuXngOTSc6buMUgVFjOHF0w1gFR
-         BslpLchNx3QJBMi/kUMjMhhneE8i0K035hyEu9I9NBsZnw3I+TDH4AqCcHvlXcPe6v8A
-         UK6iSjTvLgJOwYbJ3c2icgG+bRel+qtw3m7jIn3IwgdvDeeR8IY6NJAhooY0uiVrXQpf
-         gtcw==
-X-Gm-Message-State: AOAM530U3F2751/pUUBiUr0/OuCUoouqcHVxepEIJfQoLHht9xrcby6z
-        9iSBc7r/+dsKD8Ja9g13H3+pCbEKfbySoQ==
-X-Google-Smtp-Source: ABdhPJwgZnK1VTV9czEZu8TldMygF0tKYTolQG20/RIdfWmw9JA0z6P14IouH5OT+t781NWHyRuirg==
-X-Received: by 2002:a19:431e:: with SMTP id q30mr8353511lfa.285.1643203829807;
-        Wed, 26 Jan 2022 05:30:29 -0800 (PST)
-Received: from wkz-x280 (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id p15sm1828709lfc.307.2022.01.26.05.30.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 05:30:29 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Marcin Wojtas <mw@semihalf.com>,
-        Calvin Johnson <calvin.johnson@oss.nxp.com>,
-        Markus Koch <markus@notsyncing.net>,
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C30CC061749;
+        Wed, 26 Jan 2022 05:30:32 -0800 (PST)
+Date:   Wed, 26 Jan 2022 13:30:29 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643203830;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3I4ChLYHGk093NXNmLne78ptnuGfPC6K8VKoX3iLCws=;
+        b=1+QGhL8uyD8Owf1iU2s9QrNIQkeknAntZfAZDdVQX2j0Nnjj8ENXb/93Rmtl1VOPFknlUH
+        EwyTXUQGwOianBgm9fFhJOzBxl/kdNgZAdNPVsPJG/40Xa2Hvo0VWLo6i/tWmTT0BkXpc8
+        G9B1+7LJ3P/wDWF3fBgqracGJHEkezdbrpuNlHPvKIpQrokIz5vpouPL/z+SNJ9gfTd+Sw
+        0dp+080v9Cu0GvF0tIYV35alycXVDTWI5Iazcr0pHdgNXruYH+v/6hjTQSQbhckzY8Wo/Y
+        DnKsd/YPr/Dx8+T/hdVZg3cTC6nhgqqqbW34+0s+DITYX/+/OBPF6/jkEDx5iw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643203830;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3I4ChLYHGk093NXNmLne78ptnuGfPC6K8VKoX3iLCws=;
+        b=CT4f5htCUHBtN8X4h6jvEvdraU9laUqugPhKYOYrOl2b7YpdbEPjspWR6X/3qzx7cPQvKf
+        gqSDk+5OOS+DSyDg==
+From:   "tip-bot2 for Xiu Jianfeng" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: locking/core] lockdep: Use memset_startat() helper in reinit_class()
+Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 4/5] net/fsl: xgmac_mdio: Support setting the
- MDC frequency
-In-Reply-To: <YfFHmkFXtlVus9IW@lunn.ch>
-References: <20220126101432.822818-1-tobias@waldekranz.com>
- <20220126101432.822818-5-tobias@waldekranz.com> <YfFHmkFXtlVus9IW@lunn.ch>
-Date:   Wed, 26 Jan 2022 14:30:28 +0100
-Message-ID: <87r18ubp57.fsf@waldekranz.com>
+In-Reply-To: <20211213132618.105737-1-xiujianfeng@huawei.com>
+References: <20211213132618.105737-1-xiujianfeng@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Message-ID: <164320382983.16921.16443534509567100814.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 14:07, Andrew Lunn <andrew@lunn.ch> wrote:
-> Hi Tobias
->
->>  struct mdio_fsl_priv {
->>  	struct	tgec_mdio_controller __iomem *mdio_base;
->> +	struct clk *enet_clk;
->
-> It looks like there is a whitespace issue here?
->
+The following commit has been merged into the locking/core branch of tip:
 
-Ahh, sorry about that!
+Commit-ID:     e204193b138af347fbbbe026e68cb3385112f387
+Gitweb:        https://git.kernel.org/tip/e204193b138af347fbbbe026e68cb3385112f387
+Author:        Xiu Jianfeng <xiujianfeng@huawei.com>
+AuthorDate:    Mon, 13 Dec 2021 21:26:18 +08:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 25 Jan 2022 22:30:27 +01:00
 
->> +	u32	mdc_freq;
->>  	bool	is_little_endian;
->>  	bool	has_a009885;
->>  	bool	has_a011043;
->> @@ -255,6 +258,34 @@ static int xgmac_mdio_read(struct mii_bus *bus, int phy_id, int regnum)
->>  	return ret;
->>  }
->>  
->> +static void xgmac_mdio_set_mdc_freq(struct mii_bus *bus)
->> +{
->> +	struct mdio_fsl_priv *priv = (struct mdio_fsl_priv *)bus->priv;
->> +	struct tgec_mdio_controller __iomem *regs = priv->mdio_base;
->> +	struct device *dev = bus->parent;
->> +	u32 mdio_stat, div;
->> +
->> +	if (device_property_read_u32(dev, "clock-frequency", &priv->mdc_freq))
->> +		return;
->> +
->> +	priv->enet_clk = devm_clk_get(dev, NULL);
->> +	if (IS_ERR(priv->enet_clk)) {
->> +		dev_err(dev, "Input clock unknown, not changing MDC frequency");
->
-> Is the clock optional or mandatory?
+lockdep: Use memset_startat() helper in reinit_class()
 
-As the code is now, it is mandatory. I could add some default frequency,
-but I fear that could do more harm than good?
+use memset_startat() helper to simplify the code, there is no functional
+change in this patch.
 
-> If mandatory, then i would prefer -ENODEV and fail the probe.
->
->> +		return;
->> +	}
->> +
->> +	div = ((clk_get_rate(priv->enet_clk) / priv->mdc_freq) - 1) / 2;
->> +	if (div < 5 || div > 0x1ff) {
->> +		dev_err(dev, "Requested MDC frequecy is out of range, ignoring");
->
-> and here return -EINVAL.
->
-> I always think it is best to make it obvious something is broken. One
-> additional line on the console can be missed for a while. All the
-> Ethernet devices missing because the PHYs are missing, because the
-> MDIO bus is missing is going to get noticed very quickly.
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20211213132618.105737-1-xiujianfeng@huawei.com
+---
+ kernel/locking/lockdep.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Darn, the last thing I did was to change this from a hard to a soft
-error :)
-
-Ok, no worries about regressions for deployed stuff already out there?
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 4a882f8..89b3df5 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -6011,13 +6011,10 @@ static void zap_class(struct pending_free *pf, struct lock_class *class)
+ 
+ static void reinit_class(struct lock_class *class)
+ {
+-	void *const p = class;
+-	const unsigned int offset = offsetof(struct lock_class, key);
+-
+ 	WARN_ON_ONCE(!class->lock_entry.next);
+ 	WARN_ON_ONCE(!list_empty(&class->locks_after));
+ 	WARN_ON_ONCE(!list_empty(&class->locks_before));
+-	memset(p + offset, 0, sizeof(*class) - offset);
++	memset_startat(class, 0, key);
+ 	WARN_ON_ONCE(!class->lock_entry.next);
+ 	WARN_ON_ONCE(!list_empty(&class->locks_after));
+ 	WARN_ON_ONCE(!list_empty(&class->locks_before));

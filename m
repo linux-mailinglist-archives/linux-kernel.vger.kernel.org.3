@@ -2,121 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99EE049C6B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A702B49C6B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239285AbiAZJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S231947AbiAZJl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239305AbiAZJlj (ORCPT
+        with ESMTP id S230306AbiAZJlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:41:39 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35962C061749
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:41:39 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso3806345wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:41:39 -0800 (PST)
+        Wed, 26 Jan 2022 04:41:42 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4D2C06175F;
+        Wed, 26 Jan 2022 01:41:42 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso5635294pjm.4;
+        Wed, 26 Jan 2022 01:41:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DgC3fBf+JMernk9UtJYHLs3WXUQ4WF2uVpf9z50+mN4=;
-        b=KSl6lTYmsVi33WHBN3QnElkvHgGznKo+f/d/ZSM8+9YhM6kZn6ta1q4C0eEBpR7H7H
-         q2pHOPd4qHOfapjgox1untAEzse5dCyt6yyT3CefQZZRFK8z0sNVUWu4xyM9qaQ/lCmz
-         +UfOOiLYGJw99mue93gUeV/HldhzX3TQrtN5o5o/ka41LY2jN0+yuckYPwxVyrDXvIKN
-         D7y6CqTsUwSdza5+t0tNt8p0zDQi9zhZNVyhiANXZjPp2NifE/JOmirFKQeBVO8hTTiq
-         2PmDXc+706mQQ+8M4xyBRdTU9kB6hy0N6wsGZXqd3kgdyQb7qUDcIchacnRsxDTVOvjt
-         Faog==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4S4SnCn9eD0g7xG9Mm2dDQNDBGBOG83eXlCYQPAFPMo=;
+        b=MJMGW9hF6VHtArxCjhSKgW45DdofOq1qTJGtTPsntenbylZgbJ9MDkY73vHVwcpsj2
+         d9gOYmHbM4Nf4t2tMbBMhYzS2GkDsHC4RPncMHuwQKkohVCAcGl+7LUSOtPIM1nUulYB
+         zh2MHHVOGxfD9Rn6Wg5sxFcPd2D7M7Usbw1s+OJKF7J1hWjXOcjoqYUW2aiIg1abfGGy
+         OtWtWov1SnneYODvSF126kTGxGoZIut2I/dRgd7jGQZbE+5fq4nznV7iBzB8WuUH0zXk
+         K9TywWeRaTN08K4z1/gqopRLMy14/Mmsn/jBk1QXv1ESSC5OD6EzeJzaHNxkGMOHMctB
+         HrOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DgC3fBf+JMernk9UtJYHLs3WXUQ4WF2uVpf9z50+mN4=;
-        b=gKQt/nEHR7owe7wMcGGSmHZH+TFDl+ck4lNewnvgZkG8FOvaCiE+dkkcQSRjkMO/aU
-         E10AZGG/DmzAbpCWmokECvBjszL7HE6v3J9WjxTt6SwAZgzAKfkTE0ZKd8R2qNfvtU56
-         B/0HEY3FDboarwa9naAcjbtWYKKTvdrvlX7lPSDWHhe2W3BdIHHlH+DuSdXiyaBZ+KCo
-         q7Ek7lblL73aBYMScWvXXV/lLvr+Tocenutw+KxAQgR6a1eSyEBQAyrbeFYxd51dj38U
-         HVP5X+bBrZHp6z4nIqHFkn8fEf1qjHP99y6fGXlfI24lGsATkpQquq+Jyvdvp8EXi1Aj
-         oVug==
-X-Gm-Message-State: AOAM533EHTskJ4pSBQVeHGuB2Q9+5kdeRnAFPsHxwd84xVZH9HmNx19m
-        amo0Fowq+gKO0Nyfsp9gIjiTXg==
-X-Google-Smtp-Source: ABdhPJyX5OAK0KhXelGAEpKETNqy81bEQDZkxHDK+f3lOrdKefGHj06CmnX/XERSYPKAu/YjnUtCJg==
-X-Received: by 2002:a05:600c:4a09:: with SMTP id c9mr6475785wmp.83.1643190097727;
-        Wed, 26 Jan 2022 01:41:37 -0800 (PST)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id m4sm2710543wmc.1.2022.01.26.01.41.35
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4S4SnCn9eD0g7xG9Mm2dDQNDBGBOG83eXlCYQPAFPMo=;
+        b=BHhUHsbB7BnjpAGmUDRJ2oFQqq+6AA5Vi5blXWO5m6xUiV1tiCagVRh84Mr7vMIEMd
+         Lb+w7dNzfUCBtyxsTICwdU4+riXYhCjHezo+tF6pw1eLccz2pXWsaVIeYbLdDjE1xw7d
+         aBWJlzuIUqqpinMcg1ra9OZ1wxpxE5G3016iOcPX2HBp1em2tdeTijX6ZTx/18Y/d/VW
+         YMHqlijp2XRNcpikEbp82AkbcZI4J0KrUMouXQ52LDqS3i/4RZmeAZaLjz7Zzc13o712
+         dH/4CYwKyev+qCi10s7145MixG56iAz4zd17mXi8/v85lmwFnoTM9LOWyUSblaPwq0h3
+         XS6w==
+X-Gm-Message-State: AOAM5304zf0wVGEbEJrZ582YqXJYSOtzhb3TOIjTUNGZzhlLSGwOqGq0
+        lP955YHGgmd6aXs4TPfYlXo=
+X-Google-Smtp-Source: ABdhPJykoXtEX3wyHZ0RmV9fSH+ZRSOkMagr1QNuEmJEdTWS5+QBdhrSAOLHvAlgBqpV1cLn3Hb9kw==
+X-Received: by 2002:a17:902:6b87:b0:149:7d3c:124d with SMTP id p7-20020a1709026b8700b001497d3c124dmr22345578plk.57.1643190101978;
+        Wed, 26 Jan 2022 01:41:41 -0800 (PST)
+Received: from jason-ThinkPad-T14-Gen-1.lan ([66.187.5.142])
+        by smtp.gmail.com with ESMTPSA id r9sm16547576pga.2.2022.01.26.01.41.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 01:41:36 -0800 (PST)
-Date:   Wed, 26 Jan 2022 09:41:13 +0000
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        David Airlie <airlied@linux.ie>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH 7/7] iommu: Add iommu_domain::domain_ops
-Message-ID: <YfEXOegPuG846NEb@myrica>
-References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
- <20220124071103.2097118-8-baolu.lu@linux.intel.com>
- <BN9PR11MB5276BE30652988271878E78C8C5E9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Ye58Zxi+F9TQszgQ@myrica>
- <20220124163302.GC966497@nvidia.com>
+        Wed, 26 Jan 2022 01:41:41 -0800 (PST)
+From:   Hongyu Xie <xy521521@gmail.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        125707942@qq.com, Hongyu Xie <xiehongyu1@kylinos.cn>,
+        stable@vger.kernel.org
+Subject: [PATCH -next] xhci: fix two places when dealing with return value of function xhci_check_args
+Date:   Wed, 26 Jan 2022 17:41:26 +0800
+Message-Id: <20220126094126.923798-1-xy521521@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124163302.GC966497@nvidia.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 12:33:02PM -0400, Jason Gunthorpe wrote:
-> On Mon, Jan 24, 2022 at 10:16:07AM +0000, Jean-Philippe Brucker wrote:
-> > On Mon, Jan 24, 2022 at 09:58:18AM +0000, Tian, Kevin wrote:
-> > > > From: Lu Baolu <baolu.lu@linux.intel.com>
-> > > > Sent: Monday, January 24, 2022 3:11 PM
-> > > > +/**
-> > > > + * struct domain_ops - per-domain ops
-> > > > + * @attach_dev: attach an iommu domain to a device
-> > > > + * @detach_dev: detach an iommu domain from a device
-> > > 
-> > > What is the criteria about whether an op should be iommu_ops or domain_ops
-> > > when it requires both domain and device pointers like above two (and future
-> > > PASID-based attach)?
-> > > 
-> > > Other examples include:
-> > > 	@apply_resv_region
-> > > 	@is_attach_deferred
-> > 
-> > Could attach_dev() be an IOMMU op?  So a driver could set the domain ops
-> > in attach_dev() rather than domain_alloc(). That would allow to install
-> > map()/unmap() ops that are tailored for the device's IOMMU, which we don't
-> > know at domain_alloc() time. 
-> 
-> I think we should be moving toward 'domain_alloc' returning the
-> correct domain and the way the driver implements the domain shouldn't
-> change after that.
-> 
-> > I'm thinking about a guest that has both physical and virtual
-> > endpoints, which would ideally use different kinds of domain ops to
-> > support both efficiently (caching mode vs page tables)
-> 
-> In this case shouldn't domain_alloc() reached from the struct device
-> already do the correct thing?
+From: Hongyu Xie <xiehongyu1@kylinos.cn>
 
-Sure, if we can finalise the domains before attach that could also clean
-up the drivers a bit.
+xhci_check_args returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
+xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
+the return value of xhci_check_args <= 0.
+This will cause a problem.
+For example, r8152_submit_rx calling usb_submit_urb in
+drivers/net/usb/r8152.c.
+r8152_submit_rx will never get -ENODEV after submiting an urb
+when xHC is halted,
+because xhci_urb_enqueue returns -EINVAL in the very beginning.
 
-Thanks,
-Jean
+Fixes: 203a86613fb3 ("xhci: Avoid NULL pointer deref when host dies.")
+Cc: stable@vger.kernel.org
+Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+---
+ drivers/usb/host/xhci.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dc357cabb265..a7a55dd206fe 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1604,9 +1604,12 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 	struct urb_priv	*urb_priv;
+ 	int num_tds;
+ 
+-	if (!urb || xhci_check_args(hcd, urb->dev, urb->ep,
+-					true, true, __func__) <= 0)
++	if (!urb)
+ 		return -EINVAL;
++	ret = xhci_check_args(hcd, urb->dev, urb->ep,
++					true, true, __func__);
++	if (ret <= 0)
++		return ret;
+ 
+ 	slot_id = urb->dev->slot_id;
+ 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
+@@ -3323,7 +3326,7 @@ static int xhci_check_streams_endpoint(struct xhci_hcd *xhci,
+ 		return -EINVAL;
+ 	ret = xhci_check_args(xhci_to_hcd(xhci), udev, ep, 1, true, __func__);
+ 	if (ret <= 0)
+-		return -EINVAL;
++		return ret;
+ 	if (usb_ss_max_streams(&ep->ss_ep_comp) == 0) {
+ 		xhci_warn(xhci, "WARN: SuperSpeed Endpoint Companion"
+ 				" descriptor for ep 0x%x does not support streams\n",
+-- 
+2.25.1
+

@@ -2,101 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4C549CC46
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FDC49CC4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242102AbiAZOZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiAZOZd (ORCPT
+        id S242113AbiAZO0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:26:12 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:34450 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235227AbiAZO0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:25:33 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BAEC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 06:25:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LiOUw0BmLOCV5aXkbkiAQ3Ht3cRjDO/swK3bGS2AZxs=; b=oItQVVFfHwr0aOvBCsF7zp4OOi
-        RFvfZJkzhP/JdBpwYViRO401Z2hBTt55jxtY0F2cslTDw6q2mG0oyGyu7iOM1jx1/WEQ0Xgh7jdA4
-        rWMMGVggmGVjGDX9Aua0BQqGKZZnJlhHs+kmhvPXV98ap+1Rrmo3/5MwrSiJjsMDjx19u3l4RoKcn
-        2MRT+3t6Sp5FeFR6X+O4aPj9y0eekKjlz5KV9uauRg3/ubAMubGjDzEZzESs0oZUAg9zadZvAqhME
-        FPh6YqRM3qqH6QFsA+Ebb8xNtA5oaRmpcOSELzy4WV7bX+BFwI3C9ULl58xtmhnk7EXPzBoTuRzeo
-        aBgzAS0g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nCjEj-0047J8-Qd; Wed, 26 Jan 2022 14:25:25 +0000
-Date:   Wed, 26 Jan 2022 14:25:25 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Wed, 26 Jan 2022 09:26:05 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3E8002113B;
+        Wed, 26 Jan 2022 14:26:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643207164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WLyKhfXHS44+Znkmdw5Wkn13IOJ7HmCc2bqdYmRAEVg=;
+        b=oxNzeR3EjZyJqfzhIUshnheJ0INLWf66MfyocLgT8F2bMmX9rDhOpeOucc8uVnXkZnlwrL
+        N6DmoMYW3MhH5LkEKjNETbnhojlh6h7S2PMJeLFWEUdQHmfizHlU7tRzGWjzCoobQEbKJf
+        Ig3Kn6r6NxAW9MfIjTmTj8hdFAJj694=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643207164;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WLyKhfXHS44+Znkmdw5Wkn13IOJ7HmCc2bqdYmRAEVg=;
+        b=Zf9Zim80aCa4MDEXnNy318W3kpCJ/XdcZx5iwGuSF2NMAz3RXI1cSFR9dyB9uSO5TpCLIW
+        +YTW2Lzh1DdMS1CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5A9AA13E1A;
+        Wed, 26 Jan 2022 14:26:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oZl4FPtZ8WHxegAAMHmgww
+        (envelope-from <jroedel@suse.de>); Wed, 26 Jan 2022 14:26:03 +0000
+Date:   Wed, 26 Jan 2022 15:26:01 +0100
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, hpa@zytor.com,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
         David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH RFC v2 1/9] mm: optimize do_wp_page() for exclusive pages
- in the swapcache
-Message-ID: <YfFZ1SruNMubhJLo@casper.infradead.org>
-References: <20220126095557.32392-1-david@redhat.com>
- <20220126095557.32392-2-david@redhat.com>
+        Cfir Cohen <cfir@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mike Stunes <mstunes@vmware.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Martin Radev <martin.b.radev@gmail.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 07/12] x86/sev: Setup code to park APs in the AP Jump
+ Table
+Message-ID: <YfFZ+SRutJhDoAkz@suse.de>
+References: <20210913155603.28383-1-joro@8bytes.org>
+ <20210913155603.28383-8-joro@8bytes.org>
+ <YYv1TPawuorQv1PR@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220126095557.32392-2-david@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YYv1TPawuorQv1PR@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 10:55:49AM +0100, David Hildenbrand wrote:
-> Liang Zhang reported [1] that the current COW logic in do_wp_page() is
-> sub-optimal when it comes to swap+read fault+write fault of anonymous
-> pages that have a single user, visible via a performance degradation in
-> the redis benchmark. Something similar was previously reported [2] by
-> Nadav with a simple reproducer.
+On Wed, Nov 10, 2021 at 05:37:32PM +0100, Borislav Petkov wrote:
+> On Mon, Sep 13, 2021 at 05:55:58PM +0200, Joerg Roedel wrote:
+> >  extern unsigned char real_mode_blob[];
+> > diff --git a/arch/x86/include/asm/sev-ap-jumptable.h b/arch/x86/include/asm/sev-ap-jumptable.h
+> > new file mode 100644
+> > index 000000000000..1c8b2ce779e2
+> > --- /dev/null
+> > +++ b/arch/x86/include/asm/sev-ap-jumptable.h
 > 
-> Let's optimize for pages that have been added to the swapcache but only
-> have an exclusive owner. Try removing the swapcache reference if there is
-> hope that we're the exclusive user.
-> 
-> We will fail removing the swapcache reference in two scenarios:
-> (1) There are additional swap entries referencing the page: copying
->     instead of reusing is the right thing to do.
-> (2) The page is under writeback: theoretically we might be able to reuse
->     in some cases, however, we cannot remove the additional reference
->     and will have to copy.
-> 
-> Further, we might have additional references from the LRU pagevecs,
-> which will force us to copy instead of being able to reuse. We'll try
-> handling such references for some scenarios next. Concurrent writeback
-> cannot be handled easily and we'll always have to copy.
-> 
-> While at it, remove the superfluous page_mapcount() check: it's
-> implicitly covered by the page_count() for ordinary anon pages.
-> 
-> [1] https://lkml.kernel.org/r/20220113140318.11117-1-zhangliang5@huawei.com
-> [2] https://lkml.kernel.org/r/0480D692-D9B2-429A-9A88-9BBA1331AC3A@gmail.com
-> 
-> Reported-by: Liang Zhang <zhangliang5@huawei.com>
-> Reported-by: Nadav Amit <nadav.amit@gmail.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> Why a separate header? arch/x86/include/asm/sev.h looks small enough.
 
-Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+The header is included in assembly, so I made a separate one.
+
+> > +void __init sev_es_setup_ap_jump_table_data(void *base, u32 pa)
+> 
+> Why is this a separate function?
+> 
+> It is all part of the jump table setup.
+
+Right, but the sev_es_setup_ap_jump_table_blob() function is already
+pretty big and I wanted to keep things readable.
+
+> 
+> > +		return 0;
+> 
+> Why are you returning 0 here and below?
+
+This is in an initcall and it returns just 0 when the environment is not
+ready to setup the ap jump table. Returning non-zero would create a
+warning message in the caller for something that is not a bug in the
+kernel.
+
+> > + * This file contains the source code for the binary blob which gets copied to
+> > + * the SEV-ES AP Jumptable to park APs while offlining CPUs or booting a new
+> 
+> I've seen "Jumptable", "Jump Table" and "jump table" at least. I'd say, do
+> the last one everywhere pls.
+
+Fair, sorry for my english being too german :) I changed everything to
+'jump table'.
+
+> > +	/* Reset remaining registers */
+> > +	movl	$0, %esp
+> > +	movl	$0, %eax
+> > +	movl	$0, %ebx
+> > +	movl	$0, %edx
+> 
+> All 4: use xor
+
+XOR changes EFLAGS, can not use them here.
+
+> > +
+> > +	/* Reset CR0 to get out of protected mode */
+> > +	movl	$0x60000010, %ecx
+> 
+> Another magic naked number.
+
+This is the CR0 reset value. I have updated the comment to make this
+more clear.
+
+Thanks,
+
+-- 
+Jörg Rödel
+jroedel@suse.de
+
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5
+90409 Nürnberg
+Germany
+ 
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev
+

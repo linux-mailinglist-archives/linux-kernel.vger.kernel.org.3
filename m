@@ -2,108 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC7549CA06
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6836549CA09
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241506AbiAZMsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:48:09 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48732 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241501AbiAZMsG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:48:06 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QBgWqM011847;
-        Wed, 26 Jan 2022 12:47:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=bOqn32E7OwyoHqZX2dW1RM3mqBL4R4QeMtbk/M2u9uA=;
- b=D7epEC9YhNxPVWLWz4MXbD3AxHLxpKVbY1flAAtmtZRSqlXQ5SbD6uRa2/04MPtk6H4S
- DGh9MHFoZjwHBbJ+55TqqwBql2INnIrxhJ4W9B1tuyTUp2tEdmY3WSrEzYipBlJZT5j8
- 2jAFS+YzxGXP5gZPWXWw6Mc67czW9MpmFWw+lBAHlwNKfsZ4dBZFAZKPLHqPpUNEUIVf
- BY5fSa/x6WFNA5FEuSurOMjgpsfQX9A6diDXbxQx5e2HTmX9/vegh0acpCFR/oCe7Elx
- 4yeUQ0av8kyXFkC8BJmr924+uoqzFDJGOJRcFMu7e7iQe4378hb+ZrlCodFuyWRZdmMU Ew== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3du5ns13wy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 12:47:57 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QCluQf010811;
-        Wed, 26 Jan 2022 12:47:56 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dr9j9e0y8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 12:47:56 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QClrSR18743672
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jan 2022 12:47:53 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C2AC64C050;
-        Wed, 26 Jan 2022 12:47:53 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 453834C05A;
-        Wed, 26 Jan 2022 12:47:52 +0000 (GMT)
-Received: from sig-9-65-92-33.ibm.com (unknown [9.65.92.33])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 26 Jan 2022 12:47:52 +0000 (GMT)
-Message-ID: <c1bfe53abaf24feacb676ce940edcb8899924ffc.camel@linux.ibm.com>
-Subject: Re: [RESEND][PATCH] Documentation: added order requirement for
- ima_hash=
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     "Guozihua (Scott)" <guozihua@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        roberto.sassu@huawei.com, wangweiyang2@huawei.com,
-        xiujianfeng@huawei.com, linux-integrity@vger.kernel.org
-Date:   Wed, 26 Jan 2022 07:47:51 -0500
-In-Reply-To: <97142483-d7e7-e310-0cb0-30a81414cb57@huawei.com>
-References: <20220125090237.120357-1-guozihua@huawei.com>
-         <36b6058f2cdf6bead917c06ecc6e8769bb88130c.camel@linux.ibm.com>
-         <3933adf5-4e9d-6b22-2e46-55643c504f52@huawei.com>
-         <71508a72b042da330d07a624cf499561c46195f0.camel@linux.ibm.com>
-         <97142483-d7e7-e310-0cb0-30a81414cb57@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: BxUT5QFYw52e_HYlRcgyC0fyfvAtKGfS
-X-Proofpoint-GUID: BxUT5QFYw52e_HYlRcgyC0fyfvAtKGfS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-26_03,2022-01-26_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 clxscore=1015 phishscore=0 malwarescore=0 suspectscore=0
- impostorscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201260076
+        id S241515AbiAZMt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:49:28 -0500
+Received: from mailgw.kylinos.cn ([123.150.8.42]:24530 "EHLO nksmu.kylinos.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229551AbiAZMt1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:49:27 -0500
+X-UUID: b0221adf955c438ab4957d8a102d3e6d-20220126
+X-CPASD-INFO: 17d2329a9048481a95955493be5e55a2@eoeeUmBkZ5FlUHaEg3t8m1lmaWVlYFm
+        CpJ9VlWNljVKVhH5xTWVlZl5UfYBqVWVbZV9ZenRqUmFeaFxTi3akdmpQYIRkXW10d4ambFNiZ5E=
+X-CPASD-FEATURE: 0.0
+X-CLOUD-ID: 17d2329a9048481a95955493be5e55a2
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:0.5,
+        TVAL:141.0,ESV:0.0,ECOM:0.0,ML:0.0,FD:0.0,CUTS:188.0,IP:-2.0,MAL:0.0,ATTNUM:0
+        .0,PHF:1.0,PHC:0.0,SPF:4.0,EDMS:-3,IPLABEL:-2.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0
+        .0,SPC:0.0,SIG:-5,AUF:12,DUF:31857,ACD:176,DCD:278,SL:0,AG:0,CFC:0.266,CFSR:0
+        .205,UAT:0,RAF:2,VERSION:2.3.4
+X-CPASD-ID: b0221adf955c438ab4957d8a102d3e6d-20220126
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1, 1
+X-UUID: b0221adf955c438ab4957d8a102d3e6d-20220126
+X-User: xiehongyu1@kylinos.cn
+Received: from [192.168.0.106] [(120.227.33.40)] by nksmu.kylinos.cn
+        (envelope-from <xiehongyu1@kylinos.cn>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
+        with ESMTP id 293382729; Wed, 26 Jan 2022 21:02:02 +0800
+Message-ID: <e86972d3-e4a0-ad81-45ea-21137e3bfcb6@kylinos.cn>
+Date:   Wed, 26 Jan 2022 20:49:18 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH -next] xhci: fix two places when dealing with return value
+ of function xhci_check_args
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Hongyu Xie <xy521521@gmail.com>, mathias.nyman@intel.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        125707942@qq.com, stable@vger.kernel.org
+References: <20220126094126.923798-1-xy521521@gmail.com>
+ <YfEZFtf9K8pFC8Mw@kroah.com>
+ <c7f6a8bb-76b6-cd2d-7551-b599a8276f5c@kylinos.cn>
+ <YfEnbRW3oU0ouGqH@kroah.com>
+From:   Hongyu Xie <xiehongyu1@kylinos.cn>
+In-Reply-To: <YfEnbRW3oU0ouGqH@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-26 at 15:41 +0800, Guozihua (Scott) wrote:
-> 
-> 
-> The main issue lies in ima_template_desc_current called by hash_setup, 
-> which does not just read ima_template global variable, but also tries to 
-> set it if that hasn't been done already. Causing ima_template_setup to quit.
+Hi Greg,
 
-Right, which calls ima_init_template_list().  So part of the solution
-could be to conditionally call ima_init_template_list()
-in ima_template_setup().
+On 2022/1/26 18:50, Greg KH wrote:
+> A: http://en.wikipedia.org/wiki/Top_post
+> Q: Were do I find info about this thing called top-posting?
+> A: Because it messes up the order in which people normally read text.
+> Q: Why is top-posting such a bad thing?
+> A: Top-posting.
+> Q: What is the most annoying thing in e-mail?
+>
+> A: No.
+> Q: Should I include quotations after my reply?
+>
+> http://daringfireball.net/2007/07/on_top
+>
+> On Wed, Jan 26, 2022 at 06:22:45PM +0800, 谢泓宇 wrote:
+>> 1."What problem?
+>> r8152_submit_rx needs to detach netdev if -ENODEV happened, but -ENODEV will
+>> never happen
+>> because xhci_urb_enqueue only returns -EINVAL if the return value of
+>> xhci_check_args <= 0. So
+>> r8152_submit_rx will will call napi_schedule to re-submit that urb, and this
+>> will cause infinite urb
+>> submission.
+> Odd line-wrapping...
+Sorry about my last reply.
+>
+> Anyway, why is this unique to this one driver?  Why does it not show up
+> for any other driver?
+The whole thing is not about a particular driver. The thing is 
+xhci_urb_enqueue shouldn't change the return value of xhci_check_args 
+from -ENODEV to -EINVAL. Many other drivers only check if the return 
+value of xchi_check_args is <= 0.
+>
+>> The whole point is, if xhci_check_args returns value A, xhci_urb_enqueque
+>> shouldn't return any
+>> other value, because that will change some driver's behavior(like r8152.c).
+> But you are changing how the code currently works.  Are you sure you
+> want to have this "succeed" if this is on a root hub?
+Yes, I'm changing how the code currently works but not on a root hub.
+>
+>> 2."So if 0 is returned, you will now return that here, is that ok?
+>> That is a change in functionality.
+>> But this can only ever be the case for a root hub, is that ok?"
+>>
+>> It's the same logic, but now xhci_urb_enqueue can return -ENODEV if xHC is
+>> halted.
+>> If it happens on a root hub,  xhci_urb_enqueue won't be called.
+>>
+>> 3."Again, this means all is good?  Why is this being called for a root hub?"
+>>
+>> It is the same logic with the old one, but now xhci_check_streams_endpoint
+>> can return -ENODEV if xHC is halted.
+> This still feels wrong to me, but I'll let the maintainer decide, as I
+> don't understand why a root hub is special here.
 
--       if (ima_template)
--               return 1;
--
--       ima_init_template_list();
-+       if (!ima_template
-+               ima_init_template_list();
+Thanks please. usb_submit_urb will call usb_hcd_submit_urb. And 
+usb_hcd_submit_urb will call rh_urb_enqueue if it's on a root hub 
+instead of calling hcd->driver->urb_enqueue(which is xhci_urb_enqueue in 
+this case).
 
-Roberto, what do you think?
+>
+> thanks,
+>
+> greg k-h
 
 thanks,
 
-Mimi
+Hongyu Xie
 

@@ -2,130 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A02C49C5A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEFB49C5AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238642AbiAZI7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 03:59:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
+        id S238674AbiAZI75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 03:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiAZI7a (ORCPT
+        with ESMTP id S238665AbiAZI74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:59:30 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F557C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 00:59:30 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id s18so24435963wrv.7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 00:59:30 -0800 (PST)
+        Wed, 26 Jan 2022 03:59:56 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791EBC061747
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 00:59:56 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id g14so69234248ybs.8
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 00:59:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zQvPFjLLRa6HRJk2BgAUClUH4j39/b6WfUyuXMyTxSI=;
-        b=cfsCz7sXyWW5krNSpKoaHoTX5s0nujhme9eVeP1qfPdFmBBsGRmMkhaTmRUPUnH8qO
-         2JX4jfT+KFRCK8dAT2AnaWQ1yp4fWgXEn7aQHMuQP71ZLbzHEao8RwmV9jzE7bGgAXd7
-         jKNRKEsqlxwoM6a3l0nTwxDksjV4+NRmy0We5YsSn32XwgH/wCEUEVUFbODxqJD8mcVp
-         mBejbDKNmLfqZn8NVf0JSC5bcYr/2Sj9wLhAO6r3Q451QWeS7EXGonSdhPXTCQgbI68g
-         rncB9ey5yu/zIBA3kPbLiF/IEZ+EM7WCHRvjSj9QNBRop4QybU5Wq93zQDGi3JuJ+lYk
-         kKmQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=T0O2RYBvXI413kf/Ld0KJM8o1ANZb53hZiPPSa3Eb3Q=;
+        b=iNXv+RaDW65wfKxheW2D7b9IfGYHuJxTwB2B68bkmet85Xb1MEEZxyT/ptI0c7wxAL
+         26aZrMDR1GirnHV1w+fTM8PicEFanPRkb2Nw2a0PBYnRj3dtZf/iMHl4csCYjFT3qYHo
+         t3YV8JjPYVwxJkfiWY1CHs/+vBxZVUt/7mVVzlItrGRyhLpF/K75qlrpsTMudDEqMGlz
+         BeCQMtx5dStL0HWGYQXy1gnG2W433GD2PWDunz34j1Fo7Ti4p3MZY/2IEjwPQox5JLcP
+         GOd9YOa56T5SoOWPSZF+9HD7izdiQWf4ULQY5psyTCGIqWHfqRTDWfwLvZCkyQGOst4n
+         M7ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zQvPFjLLRa6HRJk2BgAUClUH4j39/b6WfUyuXMyTxSI=;
-        b=RyeeLpGS0d/yn9cgzSBEEUAxVcAFtpfFAegjR9zhPXVHuyI9ktL1EvPCV9SodbmCmr
-         xK0z3JU+9Ot/nFkwoPhmvnzHjOJ7hcoWw8GEES+KcWaBXu6vYtcTPJgQFs/P2YSNWbQX
-         dLCKx9ueCMzs1nzEh3OvPvW08R7LdwawXQcHeXd0yYnQrPMwx3veF/NVRTMWeJBqh2A/
-         Rq1rPwzla51NB+7kR1veCvX0CslSW/YbtBhix5R2DDfItpkUb//r3+Mc39B0oofklt4v
-         Ay9IjHkaxMnH/GZCFrvIlVHGjUqpyAFGjFHHGFbh0ehPNjnwlOhxveOpB/23SB4DkRdJ
-         UGiw==
-X-Gm-Message-State: AOAM533kbW/GJeCZYsOxgrXrCKnF0zF6lezmE6M1TTkK8ev0IaUdfVhg
-        2OEovcH7xbfvggvRxRBg+FxhMw==
-X-Google-Smtp-Source: ABdhPJxSgbRAoHwRBT6vs3teem1jRvlCGwMFxR+ltfzIVOEkF7dCgOl8o3YAVd87qh729pqmb7sdDQ==
-X-Received: by 2002:a5d:4050:: with SMTP id w16mr5335831wrp.662.1643187568636;
-        Wed, 26 Jan 2022 00:59:28 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e? ([2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e])
-        by smtp.googlemail.com with ESMTPSA id m14sm12466672wrp.4.2022.01.26.00.59.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 00:59:28 -0800 (PST)
-Subject: Re: [PATCH 0/5] clocksource/drivers/imx: several updates
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211214120737.1611955-1-peng.fan@oss.nxp.com>
- <DU0PR04MB94177F777E854B92C665303488519@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <DU0PR04MB9417BA24DB13CD6C98BE47CF88209@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <c7584787-838f-97b8-5e2a-c7f271d8a406@linaro.org>
-Date:   Wed, 26 Jan 2022 09:59:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=T0O2RYBvXI413kf/Ld0KJM8o1ANZb53hZiPPSa3Eb3Q=;
+        b=FAXBqfVlr3d+PPcCyxvvIqErp+TU3jB36SRl9fYq5GxKc9AroP5E5o+zIE/jrepeXR
+         wG1/26febIdYdi6Mx1D4sSWpRdlZWwU7qMx2QYdwoyQmjGaP4lLFRLRUXBLtSB3SDrAK
+         G2qYDd6n+9Y9wHHSaWjJd596JnIxbOl9FN+MQbKzsXAg480u5fXUNHvaKCecQq2qFfp6
+         ZJAlfYTg/M8CL2OhcPEQk+tBlwXETAzj5Amh5b/WAB8pRBQt8wEnJuzAA7jLPOBclXuZ
+         RkaUy6qZvxjMoKORm+lUIyvnzLqvw8NGq5zZE8yiBuxnEnHYT676Lr8yQ8KmVoUt3HMA
+         0Xmg==
+X-Gm-Message-State: AOAM530CQHTUyBy19dK27qlD6Uj8qlSukt2zWSsST2+zzC4MVwQfLTGu
+        90tLI3qltOZ9jndmx9v8gZ6rzpuYxjBp4oBOp9u6vg==
+X-Google-Smtp-Source: ABdhPJx++/1jA2g2gynru6Ctuaw26a/eB5z81sieyhm5ETtWQOf3hqbae5rGoRyaEdc4eOFPDSXX4nZS4w4nkl+KCHg=
+X-Received: by 2002:a25:838b:: with SMTP id t11mr33546069ybk.146.1643187595464;
+ Wed, 26 Jan 2022 00:59:55 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <DU0PR04MB9417BA24DB13CD6C98BE47CF88209@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20220125155423.959812122@linuxfoundation.org>
+In-Reply-To: <20220125155423.959812122@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 26 Jan 2022 14:29:43 +0530
+Message-ID: <CA+G9fYscJ1-KUg-XAaykXNY4-7X7MgUFKgdZWWFB5hD3+SHu+A@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/841] 5.15.17-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 25 Jan 2022 at 22:02, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.17 release.
+> There are 841 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.17-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On 26/01/2022 09:24, Peng Fan wrote:
-> Daniel,
-> 
->> Subject: RE: [PATCH 0/5] clocksource/drivers/imx: several updates
-> 
-> Do you have time to give a look?
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Yeah, sorry for the delay
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-They sounds good, I'll pick them up
+## Build
+* kernel: 5.15.17-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 384933ffef76e18b9783e4777881d7aca33c32d1
+* git describe: v5.15.16-842-g384933ffef76
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.16-842-g384933ffef76
 
-Thanks
+## Test Regressions (compared to v5.15.16-847-g86228f6e03f0)
+No test regressions found.
 
-  -- Daniel
+## Metric Regressions (compared to v5.15.16-847-g86228f6e03f0)
+No metric regressions found.
 
+## Test Fixes (compared to v5.15.16-847-g86228f6e03f0)
+No test fixes found.
 
->>> Subject: [PATCH 0/5] clocksource/drivers/imx: several updates
->>>
->>> From: Peng Fan <peng.fan@nxp.com>
->>>
->>> This patchset includes several update of i.MX sysctr and tpm driver.
->>
->> Ping..
->>
->> Thanks,
->> Peng.
->>
->>>
->>> Peng Fan (5):
->>>   clocksource/drivers/imx-sysctr: drop IRQF_IRQPOLL
->>>   clocksource/drivers/imx-tpm: drop IRQF_IRQPOLL
->>>   clocksource/drivers/imx-tpm: mark two variable with __ro_after_init
->>>   clocksource/drivers/imx-tpm: add CLOCK_EVT_FEAT_DYNIRQ
->>>   clocksource/drivers/imx-tpm: update name of clkevt
->>>
->>>  drivers/clocksource/timer-imx-sysctr.c |  2 +-
->>>  drivers/clocksource/timer-imx-tpm.c    | 10 +++++-----
->>>  2 files changed, 6 insertions(+), 6 deletions(-)
->>>
->>> --
->>> 2.25.1
-> 
+## Metric Fixes (compared to v5.15.16-847-g86228f6e03f0)
+No metric fixes found.
 
+## Test result summary
+total: 105489, pass: 90245, fail: 743, skip: 13539, xfail: 962
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 263 total, 261 passed, 2 failed
+* arm64: 42 total, 42 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 37 passed, 3 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 31 passed, 6 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 56 total, 50 passed, 6 failed
+* riscv: 28 total, 24 passed, 4 failed
+* s390: 22 total, 20 passed, 2 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 42 total, 42 passed, 0 failed
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+## Test suites summary
+* build/gcc-11-https://github.com/raspberrypi/linux/raw/rpi-5.15.y/arch/arm=
+/configs
+* fwts
+* igt-gpu-tools
+* kselftest-
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1053649C7AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB95249C7B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240086AbiAZKjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240080AbiAZKj3 (ORCPT
+        id S240098AbiAZKmG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Jan 2022 05:42:06 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:49519 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240080AbiAZKmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:39:29 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B65DC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:39:29 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id w11so12782518wra.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:39:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3PKx+wgkHSWhWqOvoZTHz3Rmd0Wk1o8dzzj6Rm5kLe0=;
-        b=Fi3FeyqRQ1h7EDmh73+ZBbv8oTzQALZE+VjpOrPuiTszZ6WCai3jx08PtxmItxgz9v
-         I266zv2nOcIcaNai41IRwS8tSlitYKZIK5n7Oh3P9f1hNom6UrDLp76na/lHy5Rmt/db
-         XCQpR0zgCjDCDxQlks51nHNPP2vkIkVLMGSOxV6+LPZZ3Yeu0zQifI1vjbTjnZcYOj4e
-         HJ+7vEkZVHoFx9hJ6SLXeQr5+8VoEMQemIlSEfUvPuv1gvOKrq7VgxOxsigjt9ZEhtWn
-         94iTiqu0PURrOJJBIIh5pvQlGpkuoIV/wZwygG/9pyBjoTb1xyNfMGlCqa5+K9G7df86
-         bmyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3PKx+wgkHSWhWqOvoZTHz3Rmd0Wk1o8dzzj6Rm5kLe0=;
-        b=AJ1vcS5wLMoZW0Z+e+m8h5Ob+E0BFNYB8s/2km+9zlHk+qeceSRvQZNN2trJORVSjg
-         REGmZP4ip14eznicblh5V0EegvhUmDwC0CA/kc8x5riMjjgeL1KbgqHGZ0ix5rMNsGq9
-         WchYbZCFNpJVlR9FBGx61YubvH/yec+pgeHwXdK20Dg+0WYeSG1v0OkU+6UCxKGlJqaf
-         RAWAlAAgCk4a4Pz5CrLQvRP1JLTZvVUqMnUrnQBYS2bWwuSGEtHDO/ugpO5v3o65mbyV
-         KQfdNgB3yke/TFiWkuc7t7vss5gWUZo8jmLHUeP1dVfrRDVfbIInJGczWPoiZr7ozFme
-         uNEw==
-X-Gm-Message-State: AOAM533Xi0jxk+uCyCB2bS7iti6G6V46a7kgt3C+m/q7pyxBKWePb4w+
-        Qm8/E4CohScodIrG2mnm2tmBURDg1vchCQ==
-X-Google-Smtp-Source: ABdhPJzB/6vPoMYphNI7RndINT/0Bt0+E4vGR//EccEoWHSSkwRoQTSYXl+eVU+BUF2MXizZjeRUkQ==
-X-Received: by 2002:a05:6000:184f:: with SMTP id c15mr8533004wri.208.1643193567773;
-        Wed, 26 Jan 2022 02:39:27 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:209:bd2e:4d3b:b065:fa46])
-        by smtp.gmail.com with ESMTPSA id j15sm3656384wmq.19.2022.01.26.02.39.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 02:39:26 -0800 (PST)
-Date:   Wed, 26 Jan 2022 10:39:22 +0000
-From:   David Brazdil <dbrazdil@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Scull <ascull@google.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/2] Driver for Open Profile for DICE
-Message-ID: <YfEk2oPcDdjHKOnC@google.com>
-References: <20220104100645.1810028-1-dbrazdil@google.com>
- <YfEOlN8Wshoa/aaB@kroah.com>
+        Wed, 26 Jan 2022 05:42:05 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 41EA1FF80C;
+        Wed, 26 Jan 2022 10:42:01 +0000 (UTC)
+Date:   Wed, 26 Jan 2022 11:42:00 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
+        sricharan@codeaurora.org
+Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
+ on READID
+Message-ID: <20220126114200.4cc3c21b@xps13>
+In-Reply-To: <20220126103316.GA212068@thinkpad>
+References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
+        <20220114082718.32a2fc83@xps13>
+        <20220126111613.3ab0021e@xps13>
+        <20220126103316.GA212068@thinkpad>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfEOlN8Wshoa/aaB@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hi Mani,
 
-On Wed, Jan 26, 2022 at 10:04:20AM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Jan 04, 2022 at 10:06:43AM +0000, David Brazdil wrote:
-> > Open Profile for DICE is an open protocol for measured boot compatible
-> > with the Trusted Computing Group's Device Identifier Composition
-> > Engine (DICE) specification. The generated Compound Device Identifier
-> > (CDI) certificates represent the measured hardware/software combination
-> > and can be used by userspace for remote attestation and sealing.
+mani@kernel.org wrote on Wed, 26 Jan 2022 16:03:16 +0530:
+
+> On Wed, Jan 26, 2022 at 11:16:13AM +0100, Miquel Raynal wrote:
+> > Hello,
 > > 
-> > This patchset adds DeviceTree bindings for the DICE device referencing
-> > a reserved memory region containing the CDIs, and a driver that exposes
-> > the memory region to userspace via a misc device.
+> > miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 +0100:
+> >   
+> > > Hi Konrad,
+> > > 
+> > > konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 19:44:26 +0100:
+> > >   
+> > > > While I have absolutely 0 idea why and how, running clear_bam_transaction
+> > > > when READID is issued makes the DMA totally clog up and refuse to function
+> > > > at all on mdm9607. In fact, it is so bad that all the data gets garbled
+> > > > and after a short while in the nand probe flow, the CPU decides that
+> > > > sepuku is the only option.
+> > > > 
+> > > > Removing _READID from the if condition makes it work like a charm, I can
+> > > > read data and mount partitions without a problem.
+> > > > 
+> > > > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > > > ---
+> > > > This is totally just an observation which took me an inhumane amount of
+> > > > debug prints to find.. perhaps there's a better reason behind this, but
+> > > > I can't seem to find any answers.. Therefore, this is a BIG RFC!    
+> > > 
+> > > I'm adding two people from codeaurora who worked a lot on this driver.
+> > > Hopefully they will have an idea :)  
 > > 
-> > See https://pigweed.googlesource.com/open-dice for more details.
+> > Sadre, I've spent a significant amount of time reviewing your patches,
+> > now it's your turn to not take a month to answer to your peers
+> > proposals.
 > > 
-> > The patches are based on top of v5.16-rc8 and can also be found here:
-> >   https://android-kvm.googlesource.com/linux topic/dice_v6
-> > 
-> > Changes since v5:
-> >   * replaced 'additionalProperties' with 'unevaluatedProperties' in DT YAML
+> > Please help reviewing this patch.
+> >   
 > 
-> I am going to drop this version from my review queue as I think you have
-> a new one instead, right?
+> Sorry. I was hoping that Qcom folks would chime in as I don't have any idea
+> about the mdm9607 platform. It could be that the mail server migration from
+> codeaurora to quicinc put a barrier here.
+> 
+> Let me ping them internally.
 
-Sorry for the radio silence and yes, please drop from your queue. I need
-to post a new one and get back to Wedson. Hopefully today.
+Oh, ok, I didn't know. Thanks!
 
-David
+> > BTW why is this driver still using cmdfund? It should have been
+> > migrated to ->exec_op() a long time ago.  
+> 
+> I'll look into it.
+
+That would be great, given the number of updates this driver has
+received, it would be nice to tackle the legacy bits there.
+
+Thanks,
+Miquèl

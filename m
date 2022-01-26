@@ -2,78 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE14C49CB5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A074A49CB78
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241653AbiAZNwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:52:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:32884 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241646AbiAZNwU (ORCPT
+        id S241699AbiAZNy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:54:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235015AbiAZNy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:52:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73D4CB80AAD;
-        Wed, 26 Jan 2022 13:52:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE873C340E3;
-        Wed, 26 Jan 2022 13:52:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643205138;
-        bh=uSJ0ZOYPJyZVA9tbsTEE513frvV72L1M7icrS+I9sCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jUnY4yyhJOcYsw/W5FB8+xAOimFoR4ygkcucYYqX49TyQUAHBvSUPzjuoiXk+LHt+
-         gBUc3ZdfFA1Ex40FmjJP8sGfgHuIgAIzFeLr6N0r/YKD7InsK/DkDuV12rH8hyWj/G
-         B+YL6RMbt2a3de9S8nFQtuIdQe7LZ4t2j2WB0whY=
-Date:   Wed, 26 Jan 2022 14:52:15 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     daniel.starke@siemens.com
-Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] tty: n_gsm: fix SW flow control encoding/handling
-Message-ID: <YfFSD8WZiXs3yMmo@kroah.com>
-References: <20220120101857.2509-1-daniel.starke@siemens.com>
+        Wed, 26 Jan 2022 08:54:26 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E019C061747
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:54:26 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id h21so8379869wrb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:54:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/8ZmsjYApuSKFdTLmkU7aSaEGaEf3DeSxo6fmL1z97I=;
+        b=owEAHyrdHX91H7nPN4ig7gWV2Pym+Ykf/GtdDHYnWoIJGOghqCM1OT9/Rp/rkfPsze
+         utt2fUiG20EUJQ1gqJEBQURSBbnE9bczBSamHGAJa36SCw6YMjVQZpNgxX1PfJ9nCCt/
+         hPPmzocXa2tk3UilFoftgXroLUkRn1QkW5Cb+ZidhIdNqG7tyHbP9NkIUuLOLunfB5X2
+         qIb7/pvLpA0/e2NldsDOg7gXYaoLvGSHYVVMxZAAbjIww7sAVZHurRdErmcspaPS+RsA
+         R6UX0WN8bpWKZ2phyJDFsn2gfPlNCrDSvp95b4XWxID5N91f73Z0wZIajDkytrBhUg2O
+         Z+KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/8ZmsjYApuSKFdTLmkU7aSaEGaEf3DeSxo6fmL1z97I=;
+        b=2uu35puOfirtR46zKpjM1PcNqVR+DbUgwM/C2Pj3nf1hep02x92lXebnGc8kmMAr/N
+         2MHAxZm3ymLcxyqODKkU4XyA/sLIVhCBqjrF9CmNQ1N2uK0aPTd/VU2IVICfcHVDRPMl
+         idt8fFS0q5RUipEgr4IMoht+roNgAb45peusod8AfQhhCB3zq/ofu0LJExn4A/zwfSkp
+         d5Zv2UEfPNvpfl+ZBoLwgfW6ogOQA5VtscUmoHwiMaU+HWOA9UAupT1A/msZrOk0DPej
+         RUoiT8zNweeyJjNa53zxhgdDMpsyJy5Dirj2+aNpf5a8b3LmZdOu1MIPsYtMZU3IK3nu
+         CoCg==
+X-Gm-Message-State: AOAM533Z/drpvjxwmJXUhGkRf4+ATXSDw2NY7GeYoJSQ8jV/3tbpzGO1
+        YJj9TXCYPN/kvq9u85Mek6m+xA==
+X-Google-Smtp-Source: ABdhPJwKbgzXJDYRaAjYdbk+40Tkyl2cUzPjXkjpJbspisPadqP0ZfG2Phn0bdiMbk+gg5yq960HRA==
+X-Received: by 2002:adf:d1e3:: with SMTP id g3mr14505979wrd.407.1643205265050;
+        Wed, 26 Jan 2022 05:54:25 -0800 (PST)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id n15sm3356593wmr.26.2022.01.26.05.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 05:54:24 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     robh+dt@kernel.org, gregkh@linuxfoundation.org
+Cc:     devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
+        bkumar@qti.qualcomm.com, linux-kernel@vger.kernel.org,
+        srini@kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v3 00/12] misc: fastrpc: Add missing DSP FastRPC features
+Date:   Wed, 26 Jan 2022 13:52:52 +0000
+Message-Id: <20220126135304.16340-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220120101857.2509-1-daniel.starke@siemens.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 02:18:57AM -0800, daniel.starke@siemens.com wrote:
-> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-> the newer 27.010 here. Chapter 5.2.7.3 states that DC1 (XON) and DC3 (XOFF)
-> are the control characters defined in ISO/IEC 646. These shall be quoted if
-> seen in the data stream to avoid interpretation as flow control characters.
-> 
-> ISO/IEC 646 refers to the set of ISO standards described as the ISO
-> 7-bit coded character set for information interchange. Its final version
-> is also known as ITU T.50.
-> See https://www.itu.int/rec/T-REC-T.50-199209-I/en
-> 
-> To abide the standard it is needed to quote DC1 and DC3 correctly if these
-> are seen as data bytes and not as control characters. The current
-> implementation already tries to enforce this but fails to catch all
-> defined cases. 3GPP 27.010 chapter 5.2.7.3 clearly states that the most
-> significant bit shall be ignored for DC1 and DC3 handling. The current
-> implementation handles only the case with the most significant bit set 0.
-> Cases in which DC1 and DC3 have the most significant bit set 1 are left
-> unhandled.
-> 
-> This patch fixes this by masking the data bytes with ISO_IEC_646_MASK (only
-> the 7 least significant bits set 1) before comparing them with XON
-> (a.k.a. DC1) and XOFF (a.k.a. DC3) when testing which byte values need
-> quotation via byte stuffing.
-> 
-> Fixes: e1eaea46bb40 (tty: n_gsm line discipline, 2010-03-26)
+This patchset adds below DSP FastRPC features that have been missing in
+upstream fastrpc driver and also cleans up channel context structure with kref.
 
-Nit, no need for a date here, our tools get mad about stuff like this.
-Look at the proper format for "Fixes:" line in the documentation.
+- Add ablity to reflect if the DSP domain is secure/unsecure by creating
+ seperate device nodes for secured domain, this would used by SE policy
+ to restrict applications loading process on the DSP.
+- Add new IOCTL to get DSP capabilites
+- Add IOCTL to support mapping memory on the DSP.
+- Add support for allocating secure memory for DSP
+- Handle fdlist in put args
+- Handle dma fds in invoke request.
 
-thanks,
+Tested this series on DragonBoard 845c with TensoFlowLite.
 
-greg k-h
+Changes since v2:
+- Add support for Secure Memory allocations.
+- added handling fdlist and dmalist in and after invoke.
+- removed unnecessary debug log
+- removed dependency on yaml bindings and added new bindings to .txt
+
+
+Jeya R (5):
+  misc: fastrpc: add support for FASTRPC_IOCTL_MEM_MAP/UNMAP
+  misc: fastrpc: Add support to get DSP capabilities
+  dt-bindings: misc: add property to support non-secure DSP
+  misc: fastrpc: check before loading process to the DSP
+  arm64: dts: qcom: add non-secure domain property to fastrpc nodes
+
+Srinivas Kandagatla (2):
+  misc: fastrpc: separate fastrpc device from channel context
+  misc: fastrpc: add secure domain support
+
+Vamsi Krishna Gattupalli (5):
+  dt-bindings: misc: add fastrpc domain vmid property
+  misc: fastrpc: Add support to secure memory map
+  misc: fastrpc: Add helper function to get list and page
+  misc: fastrpc: Add fdlist implementation
+  misc: fastrpc: Add dma handle implementation
+
+ .../devicetree/bindings/misc/qcom,fastrpc.txt |  10 +
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |   1 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   2 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |   3 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   3 +
+ arch/arm64/boot/dts/qcom/sm8350.dtsi          |   3 +
+ drivers/misc/fastrpc.c                        | 552 ++++++++++++++++--
+ include/uapi/misc/fastrpc.h                   |  81 ++-
+ 8 files changed, 607 insertions(+), 48 deletions(-)
+
+-- 
+2.21.0
+

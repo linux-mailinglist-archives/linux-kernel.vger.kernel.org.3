@@ -2,122 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9EB49CD4A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E619949CD4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242556AbiAZPFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:05:09 -0500
-Received: from mail-ua1-f54.google.com ([209.85.222.54]:35398 "EHLO
-        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235639AbiAZPFH (ORCPT
+        id S242567AbiAZPG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:06:28 -0500
+Received: from cloud48395.mywhc.ca ([173.209.37.211]:60350 "EHLO
+        cloud48395.mywhc.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235639AbiAZPG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:05:07 -0500
-Received: by mail-ua1-f54.google.com with SMTP id m90so43478024uam.2;
-        Wed, 26 Jan 2022 07:05:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3mDTecA4t0paCjRyo/FBzGJVQh+lQjw7qkADmkkdfcA=;
-        b=MgVlOXZEWwRZ8Z10NAnONx+zWwfe82Ird75iIAFYnrmV2wvegK0tAOHu6zm/aBeSrr
-         CiAM/OBqKdtXKgfXqMFWSlisnB+WtnlQyPGphPrgqSWXkXcTyttWymLItekZOjyH/ACH
-         JNCDtOphIjXjsIHLgcugmImIMo2QkeW2a/8r7kQ5Do/ApJL31BXETgptl6BrFPsssOkr
-         gvRYDpyRTHZKRsxtjWoe9Z609wvB6+gwGJMAtyzzak+vZRN3KJRbDJIVzqH7MVd4HmOx
-         83Sjy0u3pqoJofMxOHDC0Gny01ZijEG4odzi0hE4ZnhIQal5xzKFIQZ+YDe/vn+7u632
-         U/RQ==
-X-Gm-Message-State: AOAM531jCVkJyIhWvoUd/KXylRkpxtxxv7lFKQQfUQXAosVuYCE1W4v6
-        FmU+yO5lYAh0pHTy2v7SM3Ww0veE9rmZHX7e
-X-Google-Smtp-Source: ABdhPJwK5fuFPCVtlVLyqTLjpMzkku4JKTn+9/3jNmNNtmIhLl0sgYRPUoVC9r6ol8JQfGnhOKyTrA==
-X-Received: by 2002:a67:d590:: with SMTP id m16mr5884132vsj.5.1643209506590;
-        Wed, 26 Jan 2022 07:05:06 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id r11sm542949uaw.7.2022.01.26.07.05.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 07:05:05 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id u6so43473745uaq.0;
-        Wed, 26 Jan 2022 07:05:05 -0800 (PST)
-X-Received: by 2002:a05:6102:34e:: with SMTP id e14mr2690352vsa.68.1643209505159;
- Wed, 26 Jan 2022 07:05:05 -0800 (PST)
+        Wed, 26 Jan 2022 10:06:27 -0500
+Received: from [45.44.224.220] (port=43668 helo=[192.168.1.179])
+        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <olivier@trillion01.com>)
+        id 1nCjsO-0004Xu-Ld; Wed, 26 Jan 2022 10:06:24 -0500
+Message-ID: <719907481ee811fb7556deec1469a20edf0b5cdd.camel@trillion01.com>
+Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
+ special case
+From:   Olivier Langlois <olivier@trillion01.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "<linux-arch@vger.kernel.org>" <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Date:   Wed, 26 Jan 2022 10:06:23 -0500
+In-Reply-To: <87ee56e43r.fsf@email.froward.int.ebiederm.org>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+         <20211213225350.27481-1-ebiederm@xmission.com>
+         <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
+         <87sfu3b7wm.fsf@email.froward.int.ebiederm.org> <YdniQob7w5hTwB1v@osiris>
+         <87ilurwjju.fsf@email.froward.int.ebiederm.org>
+         <87o84juwhg.fsf@email.froward.int.ebiederm.org>
+         <57dfc87c7dd5a2f9f9841bba1185336016595ef7.camel@trillion01.com>
+         <87lezmrxlq.fsf@email.froward.int.ebiederm.org>
+         <87mtk2qf5s.fsf@email.froward.int.ebiederm.org>
+         <CAHk-=wjZ=aFzFb0BkxVEbN3o6a53R8Gq4hHnEZVCmpDKs3_FCw@mail.gmail.com>
+         <87h7a5kgan.fsf@email.froward.int.ebiederm.org>
+         <991211d94c6dc0ad3501cd9f830cdee916b982b3.camel@trillion01.com>
+         <87ee56e43r.fsf@email.froward.int.ebiederm.org>
+Organization: Trillion01 Inc
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
-References: <20220112205205.4082026-1-nikita.yoush@cogentembedded.com>
-In-Reply-To: <20220112205205.4082026-1-nikita.yoush@cogentembedded.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 26 Jan 2022 16:04:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVidg7fQkq2gFE+cvxkvBOXYRRvj-yCGmsJfjANBny=4w@mail.gmail.com>
-Message-ID: <CAMuHMdVidg7fQkq2gFE+cvxkvBOXYRRvj-yCGmsJfjANBny=4w@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: ulcb-kf: add 9-asix sensor device
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikita,
+On Mon, 2022-01-17 at 10:09 -0600, Eric W. Biederman wrote:
+> Olivier Langlois <olivier@trillion01.com> writes:
+> From my perspective I am not at all convinced that io_uring is the
+> only
+> culprit.
+> 
+> Beyond that the purpose of a coredump is to snapshot the process as
+> it
+> is, before anything is shutdown so that someone can examine the
+> coredump
+> and figure out what failed.  Running around changing the state of the
+> process has a very real chance of hiding what is going wrong.
+> 
+> Further your change requires that there be a place for io_uring to
+> clean
+> things up.  Given that fundamentally that seems like the wrong thing
+> to
+> me I am not interested in making it easy to what looks like the wrong
+> thing.
+> 
+> All of this may be perfection being the enemy of the good (especially
+> as
+> your io_uring magic happens as a special case in do_coredump).  My
+> work
+> in this area is to remove hacks so I can be convinced the code works
+> 100% of the time so unfortunately I am not interested in pick up a
+> change that is only good enough.  Someone else like Andrew Morton
+> might
+> be.
+> 
+> 
+Fair enough.
 
-On Wed, Jan 12, 2022 at 9:52 PM Nikita Yushchenko
-<nikita.yoush@cogentembedded.com> wrote:
-> This adds nodes for lsm9ds0 sensor installed on the KF board.
->
-> With this patch, the sensor data becomes available over iio sysfs
-> interface.
->
-> Interrupt definition is not added yet, because the interrupt lines of
-> lsm9ds0 are pulled to VCC on the board, which implies need for
-> active-low configuration. But st_sensors drivers currently can't work
-> with active-low interrupts on this chip.
->
-> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+You do bring good points but I am not so sure about the second one
+considering that the coredump is meant to be a snapshot and if io_uring
+still runs, the state may change as the dump is generated anyway.
 
-Forgot something...
+I'll follow with interest what you finally come up with but my mindset
+when I wrote the patch was that there does not seem to be any benefit
+keeping io_uring active while coredumping and it has the potential to
+create nasty issues.
 
-> --- a/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/ulcb-kf.dtsi
-> @@ -66,6 +66,13 @@ hdmi_3v3: regulator-hdmi-3v3 {
->                 regulator-max-microvolt = <3300000>;
->         };
->
-> +       accel_3v3: regulator-acc-3v3 {
+I did stumble into core file truncation problem.
 
-Please move up, to preserve sort order.
+Pavel got that when modifying io_uring code:
+https://lore.kernel.org/all/1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com/
 
-> +               compatible = "regulator-fixed";
-> +               regulator-name = "accel-3v3";
-> +               regulator-min-microvolt = <3300000>;
-> +               regulator-max-microvolt = <3300000>;
-> +       };
-> +
->         hdmi1-out {
->                 compatible = "hdmi-connector";
->                 type = "a";
-> @@ -208,6 +215,22 @@ pcm3168a_endpoint_c: endpoint {
->                                         };
->                                 };
->                         };
-> +
-> +                       lsm9ds0_acc_mag@1d {
+and I find very likely that keeping io_uring active while coredumping
+might create new nasty but subtle issues down the road...
 
-Please move up, to preserve sort order.
+Greetings,
+Olivier
 
-> +                               compatible = "st,lsm9ds0-imu";
-> +                               reg = <0x1d>;
-> +
-> +                               vdd-supply = <&accel_3v3>;
-> +                               vddio-supply = <&accel_3v3>;
-> +                       };
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

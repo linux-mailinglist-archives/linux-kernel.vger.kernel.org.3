@@ -2,70 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1888549C5E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:11:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F2349C5EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238810AbiAZJLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:11:21 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53018 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiAZJLO (ORCPT
+        id S238842AbiAZJMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:12:43 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:37706 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230488AbiAZJMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:11:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FC346135B;
-        Wed, 26 Jan 2022 09:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4186C340E3;
-        Wed, 26 Jan 2022 09:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643188272;
-        bh=81J6WPzY+ci50rtR2WWy0x8FAKIC8UJUQHIK59zO96I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=McAkAp5dZD7GpxrB2gHhx7l+taB5JCn8xsMZY5FJp3JIY3Vv1nqeAjaZn5HJMlbkW
-         tNbttNjiPfRD0fA0yDHJVGwjq3Cy7M+4DNTqL5EgbvOIo9iBerzAbvgjAwX5Gf+R0X
-         b+GqTvhVUM8j2N0nIPZt9S6oIAuq2BujY+p9wJGbyjdxhCBxng14pAsQk9P/wA2uGv
-         Ns3AWK1vdEfh3MalW6AGWael9UeWyu58w0YGInd50x/Uipb8k7Z+UytQd4xS94TjIW
-         myM1bGpxvsZgDKlsyn6IBZTOa5jAvNtIEveWUR7fOIlkUUWbUpFORHWD4tdF17nDbR
-         pUBBh3uXHj/Lw==
-Date:   Wed, 26 Jan 2022 10:11:04 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v9 06/23] ima: Move arch_policy_entry into ima_namespace
-Message-ID: <20220126091104.jbedxrewojcmvy3u@wittgenstein>
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220125224645.79319-7-stefanb@linux.vnet.ibm.com>
+        Wed, 26 Jan 2022 04:12:41 -0500
+X-UUID: c8df4e01a67146da9e049773fb53051c-20220126
+X-UUID: c8df4e01a67146da9e049773fb53051c-20220126
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <guochun.mao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1566007041; Wed, 26 Jan 2022 17:12:37 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 26 Jan 2022 17:12:36 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 26 Jan 2022 17:12:35 +0800
+From:   <guochun.mao@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Bayi Cheng <bayi.cheng@mediatek.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Bin Zhang <bin.zhang@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <project_global_chrome_upstream_group@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        Guochun Mao <guochun.mao@mediatek.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] spi: spi-mtk-nor: make some internal variables static
+Date:   Wed, 26 Jan 2022 17:11:59 +0800
+Message-ID: <20220126091159.27513-1-guochun.mao@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220125224645.79319-7-stefanb@linux.vnet.ibm.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:46:28PM -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> Move the arch_policy_entry pointer into ima_namespace.
-> 
-> When freeing the memory set the pointer to NULL.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
+From: Guochun Mao <guochun.mao@mediatek.com>
 
-Only relevant for the initial imans (for now) since it is derived from a
-boot parameter. Maybe mention this in the commit message.
+Variables mtk_nor_caps_mt8173, mtk_nor_caps_mt8186 and
+mtk_nor_caps_mt8192 are not declared.
+Make them static.
 
-Move into struct ima_namespace looks good,
-Acked-by: Christian Brauner <brauner@kernel.org>
+Fixes: 5b177234e9fd ("spi: spi-mtk-nor: improve device table for adding more capabilities")
+Signed-off-by: Guochun Mao <guochun.mao@mediatek.com>
+Reported-by: kernel test robot <lkp@intel.com>
+---
+ drivers/spi/spi-mtk-nor.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
+index 455b4dcb26e9..94fb09696677 100644
+--- a/drivers/spi/spi-mtk-nor.c
++++ b/drivers/spi/spi-mtk-nor.c
+@@ -770,17 +770,17 @@ static const struct spi_controller_mem_ops mtk_nor_mem_ops = {
+ 	.exec_op = mtk_nor_exec_op
+ };
+ 
+-const struct mtk_nor_caps mtk_nor_caps_mt8173 = {
++static const struct mtk_nor_caps mtk_nor_caps_mt8173 = {
+ 	.dma_bits = 32,
+ 	.extra_dummy_bit = 0,
+ };
+ 
+-const struct mtk_nor_caps mtk_nor_caps_mt8186 = {
++static const struct mtk_nor_caps mtk_nor_caps_mt8186 = {
+ 	.dma_bits = 32,
+ 	.extra_dummy_bit = 1,
+ };
+ 
+-const struct mtk_nor_caps mtk_nor_caps_mt8192 = {
++static const struct mtk_nor_caps mtk_nor_caps_mt8192 = {
+ 	.dma_bits = 36,
+ 	.extra_dummy_bit = 0,
+ };
+-- 
+2.25.1
+

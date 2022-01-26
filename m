@@ -2,136 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88A249D589
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8351149D58D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiAZWhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
+        id S229710AbiAZWh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiAZWhn (ORCPT
+        with ESMTP id S229642AbiAZWhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:37:43 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C17EC06161C;
-        Wed, 26 Jan 2022 14:37:43 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id p63so543538iod.11;
-        Wed, 26 Jan 2022 14:37:43 -0800 (PST)
+        Wed, 26 Jan 2022 17:37:54 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CB5C06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:37:53 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id k25so1714004ejp.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:37:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1Gr+VjFFLhz7S6VXwMqEIihZJ584fho7AEDsoOCYiI0=;
-        b=U0mnARbKSH7vnAwcMrBYC5RtAm7VrIUN42wZLa5SWUbXGUxMmCvRo6gD6AnRGzfEBe
-         QeZdfBlSy/yMuqUtRS61e8VOHemccXUPCYOmzWdvjiqds17/YVDk8Gp1QvKblRe82Uwv
-         4LSdHBGAe3t0k11Fkad+X56S/JyjSLFx/J3V7SBbPE10sULYee5gTZuMQZc0C8dbw3D+
-         rIunNFJ1z39YoFcW28VDVebaefiKjOtsLFwRleXDXKBSn5SnEqmY2HVgh+XReZ0kvvwH
-         w6P7ef94/Wf2X4SDaZfywEyLUs+qTyyUzGCwDM2XFIdSE3NLFvZz32Z9uGb9Ndc4HAhW
-         DK6A==
+        bh=V1aVCQX9KOZPo5u/xsRU/PTSxGn2oEoP0AX8hOOQy5k=;
+        b=PUexGqcIVlaj1EtFvEn2PSWA9vQAteWtUkZ+SBG5roU+D7QWy3SizXM4RLxmiJb4y+
+         21mBOEtVAyRn8nb9C4lDXvde8VLxHnfQnZ0on+zhj929ODZS2xaTEugtb5I1SNZ79be5
+         8ljRT/rUToeF+GpC+L/8IqXWiHtkcWEEh7ol95oLbGIk8WMtqlVeVFrWEPfAAQoHE/IB
+         e5NMOscmd8hztmFpDP6mVt5uWMfQqlmUDFVvZqpggisNdFMHs9yBDlmWWnPV9jU76suv
+         Ls0/JoEwllWu9cP+w1FEEyV5Qg/PPmKNA4Y/O8pIlMtBA3LqRX9kVPQhN0mOQmqi42If
+         Ss8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1Gr+VjFFLhz7S6VXwMqEIihZJ584fho7AEDsoOCYiI0=;
-        b=5feHn2gK6reOjB1Kaexj/65t6zevtUay58Js6kgkqu24qSaF7WzfkHUMI+06+paLvM
-         NcPlx7aACrAtrVJQb7piLwko4Z7mq3M/tV9LW4RkJh1kkjU4l6r7uN8PlxHSWNHYeUnz
-         W1JXGrkqAEQqcPJdOkyWpMABd+UsDZcYxaKiprKW9ngURUlubDuBDRFWETCt3hbHfaH+
-         IBCc41/Vo/DEtCb8ZGATTt7EoteSch0KFGla9T0g5QFU7UJEvLNK4inS/4mEMXBM6e9j
-         BWKvKVdBSCYrvUR3WHxURLcuLsPLbdDqiHVSaBIJ/J4XDPcaMv0NK0Gp/QsMUFO+G6mn
-         GCMQ==
-X-Gm-Message-State: AOAM532nzY86mfEG/8xwIKMQWrVbAxsh6YdZZRKiUbgGx4fTQKf4Iysk
-        8TVux7o/Am8sKSbiroAYPJARVgWbsfUYy6Ef7e8=
-X-Google-Smtp-Source: ABdhPJzGCPKmUKac8oqOoS6GtvYoUTDDesEjikIlkXwKxeU9U35wfUUCY0XJ6wfatw2r58N4ahfTV+u1SnMJno56n28=
-X-Received: by 2002:a02:c496:: with SMTP id t22mr453240jam.117.1643236662760;
- Wed, 26 Jan 2022 14:37:42 -0800 (PST)
+        bh=V1aVCQX9KOZPo5u/xsRU/PTSxGn2oEoP0AX8hOOQy5k=;
+        b=jFTbJ8Dr2vx0dW0RhJ2qrHbCLjEGPqvtHzVT3LwTUx0yuLCwFX0jF11cuxHusZLJAS
+         eErnkuh/AJeVtSJLH21hrlKurWkcjdxnIMHgR+AG+R45fJvR7q9fecK+bNY/RWgemVzh
+         tBf9HsZu1sXZyppv8ol5yCkb4xeYkaHIC97hoXK/VhLAxaNFXORwkbxU37RSRcZCwd7E
+         yaEatJkoQuOZgWlxlmFghR565+a254B2G3K6ghh4GyOkOlSX982ZgWvxAohHy0fSOq+v
+         vC4H7S4nTMad223FA8m9jjUeONQByix36C5lnZnGAPu0nR/jAocNPFM9k9CeQjPTkdeS
+         OiNQ==
+X-Gm-Message-State: AOAM533IXQznpXdtmYTk2xO7qLG27Wf628QMbgVQ3Fwlmr8ItmtxHZ2C
+        Sf3GCtH014Y7ufjGBU+XHZnKMPuQE4D3gM+3qAyi
+X-Google-Smtp-Source: ABdhPJz7JLCXZXW6bWn+3igBvUCPp+jJroJkHIyDQb/GW3U8GVaEAHFqw3UaonR9mBekrO2084/k8MAzQj1Z8rint7Y=
+X-Received: by 2002:a17:906:2ed0:: with SMTP id s16mr676611eji.327.1643236672195;
+ Wed, 26 Jan 2022 14:37:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20220126205214.2149936-1-jannh@google.com> <CA+fCnZe_p+JwUWwumgGm185vWSdAK_z-UFDp7-HWKANB4YjA=g@mail.gmail.com>
- <CAG48ez0pke5fqEuWGecMAKLpsdVoW3JM3M-SkajHcq_dsrQ_4A@mail.gmail.com>
-In-Reply-To: <CAG48ez0pke5fqEuWGecMAKLpsdVoW3JM3M-SkajHcq_dsrQ_4A@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 26 Jan 2022 23:37:32 +0100
-Message-ID: <CA+fCnZdXpBHFN3u5exkbLkUsPaFVsbFi=evsPd3uMMfV=tKAeg@mail.gmail.com>
-Subject: Re: [PATCH] usb: raw-gadget: fix handling of dual-direction-capable endpoints
-To:     Jann Horn <jannh@google.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <018a9bb4-accb-c19a-5b0a-fde22f4bc822.ref@schaufler-ca.com>
+ <018a9bb4-accb-c19a-5b0a-fde22f4bc822@schaufler-ca.com> <20211012103243.xumzerhvhklqrovj@wittgenstein>
+ <d15f9647-f67e-2d61-d7bd-c364f4288287@schaufler-ca.com> <CAHC9VhT=dZbWzhst0hMLo0n7=UzWC5OYTMY=0x=LZ97HwG0UsA@mail.gmail.com>
+ <20220126072442.he4fjegfqnh72kzp@wittgenstein>
+In-Reply-To: <20220126072442.he4fjegfqnh72kzp@wittgenstein>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 26 Jan 2022 17:37:41 -0500
+Message-ID: <CAHC9VhRyAxbJKBLXbW-Zj9voC2TMs3ee6jkcbS8gnNo3E0=WDg@mail.gmail.com>
+Subject: Re: [PATCH] LSM: general protection fault in legacy_parse_param
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Brauner <christian@brauner.io>,
+        James Morris <jmorris@namei.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzbot <syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        selinux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 11:31 PM Jann Horn <jannh@google.com> wrote:
+On Wed, Jan 26, 2022 at 2:24 AM Christian Brauner <brauner@kernel.org> wrote:
 >
-> On Wed, Jan 26, 2022 at 11:12 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
-> > On Wed, Jan 26, 2022 at 9:52 PM Jann Horn <jannh@google.com> wrote:
+> On Tue, Jan 25, 2022 at 05:18:02PM -0500, Paul Moore wrote:
+> > On Tue, Oct 12, 2021 at 10:27 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> > > On 10/12/2021 3:32 AM, Christian Brauner wrote:
+> > > > On Mon, Oct 11, 2021 at 03:40:22PM -0700, Casey Schaufler wrote:
+> > > >> The usual LSM hook "bail on fail" scheme doesn't work for cases where
+> > > >> a security module may return an error code indicating that it does not
+> > > >> recognize an input.  In this particular case Smack sees a mount option
+> > > >> that it recognizes, and returns 0. A call to a BPF hook follows, which
+> > > >> returns -ENOPARAM, which confuses the caller because Smack has processed
+> > > >> its data.
+> > > >>
+> > > >> Reported-by: syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com
+> > > >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> > > >> ---
+> > > > Thanks!
+> > > > Note, I think that we still have the SELinux issue we discussed in the
+> > > > other thread:
+> > > >
+> > > >       rc = selinux_add_opt(opt, param->string, &fc->security);
+> > > >       if (!rc) {
+> > > >               param->string = NULL;
+> > > >               rc = 1;
+> > > >       }
+> > > >
+> > > > SELinux returns 1 not the expected 0. Not sure if that got fixed or is
+> > > > queued-up for -next. In any case, this here seems correct independent of
+> > > > that:
 > > >
-> > > Under dummy_hcd, every available endpoint is *either* IN or OUT capable.
-> > > But with some real hardware, there are endpoints that support both IN and
-> > > OUT. In particular, the PLX 2380 has four available endpoints that each
-> > > support both IN and OUT.
+> > > The aforementioned SELinux change depends on this patch. As the SELinux
+> > > code is today it blocks the problem seen with Smack, but introduces a
+> > > different issue. It prevents the BPF hook from being called.
 > > >
-> > > raw-gadget currently gets confused and thinks that any endpoint that is
-> > > usable as an IN endpoint can never be used as an OUT endpoint.
-> > >
-> > > Fix it by looking at the direction in the configured endpoint descriptor
-> > > instead of looking at the hardware capabilities.
-> > >
-> > > With this change, I can use the PLX 2380 with raw-gadget.
-> > >
-> > > Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
-> > > Signed-off-by: Jann Horn <jannh@google.com>
-> > > ---
-> > >  drivers/usb/gadget/legacy/raw_gadget.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-> > > index c5a2c734234a..d86c3a36441e 100644
-> > > --- a/drivers/usb/gadget/legacy/raw_gadget.c
-> > > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> > > @@ -1004,7 +1004,7 @@ static int raw_process_ep_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
-> > >                 ret = -EBUSY;
-> > >                 goto out_unlock;
-> > >         }
-> > > -       if ((in && !ep->ep->caps.dir_in) || (!in && ep->ep->caps.dir_in)) {
-> > > +       if (in != usb_endpoint_dir_in(ep->ep->desc)) {
-> > >                 dev_dbg(&dev->gadget->dev, "fail, wrong direction\n");
-> > >                 ret = -EINVAL;
-> > >                 goto out_unlock;
-> > >
-> > > base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
-> > > --
-> > > 2.35.0.rc0.227.g00780c9af4-goog
-> > >
+> > > So the question becomes whether the SELinux change should be included
+> > > here, or done separately. Without the security_fs_context_parse_param()
+> > > change the selinux_fs_context_parse_param() change results in messy
+> > > failures for SELinux mounts.
 > >
-> > Awesome! Thanks for finding this!
+> > FWIW, this patch looks good to me, so:
 > >
-> > What do you think about using
+> > Acked-by: Paul Moore <paul@paul-moore.com>
 > >
-> > if ((in && !ep->ep->caps.dir_in) || (!in && !ep->ep->caps.dir_out))
-> >
-> > instead?
-> >
-> > It looks less cryptic: if (in and no in caps) or (out and no out caps) => fail.
+> > ... and with respect to the SELinux hook implementation returning 1 on
+> > success, I don't have a good answer and looking through my inbox I see
+> > David Howells hasn't responded either.  I see nothing in the original
+> > commit explaining why, so I'm going to say let's just change it to
+> > zero and be done with it; the good news is that if we do it now we've
 >
-> That's also semantically different, right?
-> As I understand it, what we should be checking here is whether the
-> direction of the request matches the direction previously specified in
-> USB_RAW_IOCTL_EP_ENABLE, not whether the hardware would be capable of
-> using the endpoint in the requested direction if it had been
-> configured for that direction?
-> But I might also be misunderstanding what's going on - it's not like
-> I've looked at a spec for this or anything like that, I'm just kinda
-> guessing...
+>
+> It was originally supposed to return 1 but then this got changed but - a
+> classic - the documentation wasn't.
 
-Ah, yes, you are right. We already checked caps via
-usb_gadget_ep_match_desc() in EP_ENABLE. So here it makes sense to
-check that the request direction matches the one in the descriptor.
+I'm shocked! :)
 
-Your original patch makes sense.
+Thanks Christian.
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Tested-by: Andrey Konovalov <andreyknvl@gmail.com>
-
-Thanks!
+-- 
+paul-moore.com

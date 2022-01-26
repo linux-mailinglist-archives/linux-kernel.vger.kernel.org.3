@@ -2,214 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A1349C726
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC0F49C728
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239680AbiAZKJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S239673AbiAZKL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239673AbiAZKJ6 (ORCPT
+        with ESMTP id S232330AbiAZKLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:09:58 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06199C06161C;
-        Wed, 26 Jan 2022 02:09:58 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 23so69759962ybf.7;
-        Wed, 26 Jan 2022 02:09:57 -0800 (PST)
+        Wed, 26 Jan 2022 05:11:25 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94741C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:11:25 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id c7-20020a25a2c7000000b00613e4dbaf97so43235355ybn.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:11:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7LJmkqx4m9I9FZkfX+gZzMXkM3z5C8Pv8aqIIJbEzT8=;
-        b=V5G4qbF22+1Fs9Q4Zo9geljkHy+RC8EdMa9bGqSGcpzdt3shqQn3grGCj7/zszDogK
-         KN2agWCoIbSjZSIqxAavbEj3zPuFgGcz3qgEV8TpKJKV9ZuUiB85+5v0lDVU/J0uxfUs
-         ysiFi41DjqxhpCVxJTXo517RsnZ34xHN5PDAU3kYCObvoYPN7ZGADVBwa/fibDyiFgfb
-         2T+ryINYmqIKBs6dv0MZWC1nan46+BWEqCpneixkj43c7ydQEzYKl/N2y9NO/f4oA2Ep
-         vFf8I7A5uuumJraT++tbiJZDKAStdFu2ZmXm6pshppw44C2aYmmgI8ZzwdqdCWPCE0Vm
-         erWQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=3ao5SEtR1nv4TevYgqWzJAQJIpCFZnovOjTeqxptCiI=;
+        b=nKL1RLKrnPjz1hKxYNDPT4GEvheUHYDOMS4Ahn8hJr/RRulI2CLOl4pQHpxk9QJbuV
+         pz9Wtp/FOvzRMoSp/gToPLGg8/HMaV2EwtALymbQtn+pSfknLohXS1rMMHqof84eLR6I
+         47dlK5Cqhgf0MxMtAgMyPc5XV4R9ubV7JI4LVK1+xCK9lNMX6FBK+BC7sP43ARSvl4Os
+         cvDCrwvm2XHB/rkRNsvCh/xvCe1Xr0bg7nTyIcXU65u6iLeKH0b86u9kMge2VMkd6tPf
+         lVmbeer4PtbjbY4qYDa3TvHjw71uSHDh96d3W4Iq5sKqKFeI2dRe8c8qjh5s+WPQSdAu
+         Op3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7LJmkqx4m9I9FZkfX+gZzMXkM3z5C8Pv8aqIIJbEzT8=;
-        b=jSeBqX5YmGTcSR5pFvRT1lUFA0g7ENZubqnwYjv12H03iztKk870MN5l7DIMOr8ePs
-         26AkfWycTUeDqXAF3MZTzpbhUrw/nPT25ctW2wqi8u/RQdR20In3f1PtJw6yglVa2ZhI
-         inADEXWOFjDORMBuyIeV8OI2aSbidGqYrU4n8iHR4FHMxuJYoY1Ih5/eRvqIa+ijxqe5
-         5wcWyDef8G968fk+SmqV042uAUzV7h0ymZjkntnKBvazBaQHzyMGR+rnkOzqoFYXTts2
-         itnf8PcG2sejcfPmKlp+jQxEhungjUpxVc+rAd79eCOck5H/2yblGaI5rcxONkBiNdja
-         /SXA==
-X-Gm-Message-State: AOAM533Ad73RKa4HZ5m/nDBGCVVnBULAABb+uYDvy4ncqv/r4tqdc7h8
-        22x+qN4UKBidlNzRNRfmC1BLVCeQdUnMN5rM+7A=
-X-Google-Smtp-Source: ABdhPJxnrt2ZUwS5L+/eQtWvS1BXqQqmM14zcLHtVSAVJiSqXvkUNUhxSaWuNQiCgCi+NUDmPIyimFxLEKFXNx8k70o=
-X-Received: by 2002:a25:90a:: with SMTP id 10mr33159024ybj.407.1643191797143;
- Wed, 26 Jan 2022 02:09:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20220114081542.698002137@linuxfoundation.org> <20220114081542.746291845@linuxfoundation.org>
-In-Reply-To: <20220114081542.746291845@linuxfoundation.org>
-From:   Jack Wang <jack.wang.usish@gmail.com>
-Date:   Wed, 26 Jan 2022 11:09:46 +0100
-Message-ID: <CA+res+S1GcDzM6hnmar+s1k3ggswURZ+_8BqweifShCTjVJ2aQ@mail.gmail.com>
-Subject: Re: [PATCH 5.10 01/25] md: revert io stats accounting
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
-        Guoqing Jiang <jiangguoqing@kylinos.cn>,
-        Song Liu <song@kernel.org>,
-        Guillaume Morin <guillaume@morinfr.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=3ao5SEtR1nv4TevYgqWzJAQJIpCFZnovOjTeqxptCiI=;
+        b=BiBv1vvn47EhiF3XjoLros28UzTJz5dQ3KqfO/d3Q6imRpqIuyALj3FMPFTAbA+IbG
+         ysYDG1RG07dBEw2qHNrosEZwz/xAd1whN3IWPZhUBgcKyY5+xTt3tRSxHiY9Fa++cavT
+         nHdPh9gOd3M5g1Z72DtnexVT3l2D/SRFQty/xwM2pB5ls8ZgFtERJZ3b+cdcbSL/38x8
+         vf/dlqFQDYM8HrdkEQGqsKCH/vP8WAWhrEtiuEILticfN8OauaZJPxpIOdL938EkQcBZ
+         nkmjItjsgE0tcO5D7aMmrl4Zorln0UNMrrauUaJs3DzlvAxbOhhTd/iU4ndbQ507SxD8
+         tX5A==
+X-Gm-Message-State: AOAM532guXCDEkV236a88hv9Evh+0LVdTBv2640sDgQAoEejHSpbNG+k
+        YRuhRyepKzGQsWGu3LNzC3mUi6uOoKcl0GNgX/98xkhjl7kSKO5AzT2yuId7nyld2tepK969iot
+        pJHnfP1n2GqdqVMSup1GHiozdVza5fxoDB6/6QGI9YceIMF0YJpUMFmA2aC3Z3qn7EYw=
+X-Google-Smtp-Source: ABdhPJx/OhZsWBnrnLmzhxFoSP4v+P1+pbJI5xfhrlpcyaNLSw3ysYxS8h2sCo6IFHReSSR/gpDE5pToEw==
+X-Received: from decot.svl.corp.google.com ([2620:15c:2c5:11:bb79:635d:80b2:3c02])
+ (user=decot job=sendgmr) by 2002:a81:db08:0:b0:2ca:287c:6c28 with SMTP id
+ 00721157ae682-2ca287c6e78mr6888267b3.205.1643191884223; Wed, 26 Jan 2022
+ 02:11:24 -0800 (PST)
+Date:   Wed, 26 Jan 2022 02:11:20 -0800
+Message-Id: <20220126101120.676021-1-decot+git@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+Subject: [PATCH RFC v3 1/1] mtd_blkdevs: avoid soft lockups with some mtd/spi devices
+From:   David Decotigny <decot+git@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org,
+        David Decotigny <ddecotig@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: David Decotigny <ddecotig@google.com>
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B41=E6=
-=9C=8814=E6=97=A5=E5=91=A8=E4=BA=94 19:57=E5=86=99=E9=81=93=EF=BC=9A
->
-> From: Guoqing Jiang <jgq516@gmail.com>
->
-> commit ad3fc798800fb7ca04c1dfc439dba946818048d8 upstream.
->
-> The commit 41d2d848e5c0 ("md: improve io stats accounting") could cause
-> double fault problem per the report [1], and also it is not correct to
-> change ->bi_end_io if md don't own it, so let's revert it.
->
-> And io stats accounting will be replemented in later commits.
->
-> [1]. https://lore.kernel.org/linux-raid/3bf04253-3fad-434a-63a7-20214e38c=
-f26@gmail.com/T/#t
->
-> Fixes: 41d2d848e5c0 ("md: improve io stats accounting")
-> Signed-off-by: Guoqing Jiang <jiangguoqing@kylinos.cn>
-> Signed-off-by: Song Liu <song@kernel.org>
-> [GM: backport to 5.10-stable]
-> Signed-off-by: Guillaume Morin <guillaume@morinfr.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/md/md.c |   57 +++++++++++--------------------------------------=
--------
->  drivers/md/md.h |    1
->  2 files changed, 12 insertions(+), 46 deletions(-)
->
-> --- a/drivers/md/md.c
-> +++ b/drivers/md/md.c
-> @@ -459,34 +459,12 @@ check_suspended:
->  }
->  EXPORT_SYMBOL(md_handle_request);
->
-> -struct md_io {
-> -       struct mddev *mddev;
-> -       bio_end_io_t *orig_bi_end_io;
-> -       void *orig_bi_private;
-> -       unsigned long start_time;
-> -       struct hd_struct *part;
-> -};
-> -
-> -static void md_end_io(struct bio *bio)
-> -{
-> -       struct md_io *md_io =3D bio->bi_private;
-> -       struct mddev *mddev =3D md_io->mddev;
-> -
-> -       part_end_io_acct(md_io->part, bio, md_io->start_time);
-> -
-> -       bio->bi_end_io =3D md_io->orig_bi_end_io;
-> -       bio->bi_private =3D md_io->orig_bi_private;
-> -
-> -       mempool_free(md_io, &mddev->md_io_pool);
-> -
-> -       if (bio->bi_end_io)
-> -               bio->bi_end_io(bio);
-> -}
-> -
->  static blk_qc_t md_submit_bio(struct bio *bio)
->  {
->         const int rw =3D bio_data_dir(bio);
-> +       const int sgrp =3D op_stat_group(bio_op(bio));
->         struct mddev *mddev =3D bio->bi_disk->private_data;
-> +       unsigned int sectors;
->
->         if (mddev =3D=3D NULL || mddev->pers =3D=3D NULL) {
->                 bio_io_error(bio);
-> @@ -507,26 +485,21 @@ static blk_qc_t md_submit_bio(struct bio
->                 return BLK_QC_T_NONE;
->         }
->
-> -       if (bio->bi_end_io !=3D md_end_io) {
-> -               struct md_io *md_io;
-> -
-> -               md_io =3D mempool_alloc(&mddev->md_io_pool, GFP_NOIO);
-> -               md_io->mddev =3D mddev;
-> -               md_io->orig_bi_end_io =3D bio->bi_end_io;
-> -               md_io->orig_bi_private =3D bio->bi_private;
-> -
-> -               bio->bi_end_io =3D md_end_io;
-> -               bio->bi_private =3D md_io;
-> -
-> -               md_io->start_time =3D part_start_io_acct(mddev->gendisk,
-> -                                                      &md_io->part, bio)=
-;
-> -       }
-> -
-> +       /*
-> +        * save the sectors now since our bio can
-> +        * go away inside make_request
-> +        */
-> +       sectors =3D bio_sectors(bio);
-This code snip is not inside the original patch, and it's not in
-latest upstream too.
->         /* bio could be mergeable after passing to underlayer */
->         bio->bi_opf &=3D ~REQ_NOMERGE;
->
->         md_handle_request(mddev, bio);
->
-> +       part_stat_lock();
-> +       part_stat_inc(&mddev->gendisk->part0, ios[sgrp]);
-> +       part_stat_add(&mddev->gendisk->part0, sectors[sgrp], sectors);
-> +       part_stat_unlock();
-> +
-same here, this code snip is not inside the original patch, and it's
-not in latest upstream too.
+With some spi devices, the heavy cpu usage due to polling the spi
+registers may lead to netdev timeouts, RCU complaints, etc. This can
+be acute in the absence of CONFIG_PREEMPT. This patch allows to give
+enough breathing room to avoid those incorrectly detected netdev
+timeouts for example.
 
-I think would be good keep it as the upstream version.
+Example splat on 5.10.92:
+[  828.399306] rcu: INFO: rcu_sched self-detected stall on CPU
+...
+[  828.419245] Task dump for CPU 1:
+[  828.422465] task:kworker/1:1H    state:R  running task on cpu   1   stack:    0 pid:   76 ppid:     2 flags:0x0000002a
+[  828.433132] Workqueue: kblockd blk_mq_run_work_fn
+[  828.437820] Call trace:
+...
+[  828.512267]  spi_mem_exec_op+0x4d0/0xde0
+[  828.516184]  spi_mem_dirmap_read+0x180/0x39c
+[  828.520443]  spi_nor_read_data+0x428/0x7e8
+[  828.524523]  spi_nor_read+0x154/0x214
+[  828.528172]  mtd_read_oob+0x440/0x714
+[  828.531815]  mtd_read+0xac/0x120
+[  828.535030]  mtdblock_readsect+0x178/0x230
+[  828.539102]  mtd_blktrans_work+0x9fc/0xf28
+[  828.543177]  mtd_queue_rq+0x1ac/0x2e4
+[  828.546827]  blk_mq_dispatch_rq_list+0x2cc/0xa44
+[  828.551419]  blk_mq_do_dispatch_sched+0xb0/0x7cc
+[  828.556010]  __blk_mq_sched_dispatch_requests+0x350/0x494
+[  828.561372]  blk_mq_sched_dispatch_requests+0xac/0xe4
+[  828.566387]  __blk_mq_run_hw_queue+0x130/0x254
+[  828.570806]  blk_mq_run_work_fn+0x50/0x60
+[  828.574814]  process_one_work+0x578/0xf1c
+[  828.578814]  worker_thread+0x5dc/0xea0
+[  828.582547]  kthread+0x270/0x2d4
+[  828.585765]  ret_from_fork+0x10/0x30
 
-Best!
-Jinpu Wang @ IONOS
->         return BLK_QC_T_NONE;
->  }
->
-> @@ -5636,7 +5609,6 @@ static void md_free(struct kobject *ko)
->
->         bioset_exit(&mddev->bio_set);
->         bioset_exit(&mddev->sync_set);
-> -       mempool_exit(&mddev->md_io_pool);
->         kfree(mddev);
->  }
->
-> @@ -5732,11 +5704,6 @@ static int md_alloc(dev_t dev, char *nam
->                  */
->                 mddev->hold_active =3D UNTIL_STOP;
->
-> -       error =3D mempool_init_kmalloc_pool(&mddev->md_io_pool, BIO_POOL_=
-SIZE,
-> -                                         sizeof(struct md_io));
-> -       if (error)
-> -               goto abort;
-> -
->         error =3D -ENOMEM;
->         mddev->queue =3D blk_alloc_queue(NUMA_NO_NODE);
->         if (!mddev->queue)
-> --- a/drivers/md/md.h
-> +++ b/drivers/md/md.h
-> @@ -487,7 +487,6 @@ struct mddev {
->         struct bio_set                  sync_set; /* for sync operations =
-like
->                                                    * metadata and bitmap =
-writes
->                                                    */
-> -       mempool_t                       md_io_pool;
->
->         /* Generic flush handling.
->          * The last to finish preflush schedules a worker to submit
->
->
+
+Signed-off-by: David Decotigny <ddecotig@google.com>
+---
+ drivers/mtd/mtd_blkdevs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/mtd/mtd_blkdevs.c b/drivers/mtd/mtd_blkdevs.c
+index 243f28a3206b4..64d2b093f114b 100644
+--- a/drivers/mtd/mtd_blkdevs.c
++++ b/drivers/mtd/mtd_blkdevs.c
+@@ -158,6 +158,7 @@ static void mtd_blktrans_work(struct mtd_blktrans_dev *dev)
+ 		}
+ 
+ 		background_done = 0;
++		cond_resched();
+ 		spin_lock_irq(&dev->queue_lock);
+ 	}
+ }
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
+

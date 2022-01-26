@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E48AC49D469
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8430D49D46B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbiAZVWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:22:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        id S232137AbiAZVWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiAZVWe (ORCPT
+        with ESMTP id S232086AbiAZVWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:22:34 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2E2C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:22:34 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id o11so864011pjf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:22:34 -0800 (PST)
+        Wed, 26 Jan 2022 16:22:48 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E0CC06161C;
+        Wed, 26 Jan 2022 13:22:48 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id l68so2808551ybl.0;
+        Wed, 26 Jan 2022 13:22:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WwF77iiskBi0tVOR9grcbM66YdixrtGONmO8eGaXJuM=;
-        b=V1i1qj1oiJh62NhKr9M7Fyd5gODgYFX4zN1hQPxtYWlMzEXVMC85/I1+X2NgQD+LRC
-         0me7e11svC4wFCcWBEAGe3akZh8FmFEanhKJw44KLS3bM7/fvz2gn5TF9DpiHIZhEzCQ
-         NUd6Y9ikCnkixs3SjmCCVGnumh3odJE8CIpVE=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SY0GeizykbQp0sWmEDcL6vm+zpq2S6X1Nj2tMV7OyfA=;
+        b=Faee7/lninHeofHlJRvsrUsWmAtXQkCIGpwWNq4cVdhnIKH/FoVqnwe1fO1V5z02Qe
+         WMQgPoD9toT1d/NmeS4OjmvdUQpFCaZU4zPLnjyLnmcbeHLcseelRmcRWD5IARKKgxz0
+         nY3T7iltCyWeJFnPYqBXor1Z3Z88xkWnBaE+bNHu5h6bKvfrC3zFIyOOm++VM4OM1KVT
+         QkuIowu5SRYlYH7kNwJOPJTVOEgRpu3a4bg6EtolRKvTRhm9s34JFRg3RjgYfEts27+j
+         PYcmRzgimnsNpFkuc/MDfiFN4XqhPHG0ajzFXjsJOVvT9n2dUCbTGeobRbHzQu/A7qDD
+         2JXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WwF77iiskBi0tVOR9grcbM66YdixrtGONmO8eGaXJuM=;
-        b=kejsOK/J2OkLcnJX3a1hAKHYVgYEcJtRS6hvg2M0ArdZDRvWpR6MUocpuuL9VqroQ8
-         HsXhzQotRuAOI6L7ydyvz4j4L+qFNkCDHqf5zbFRb80RqeWolnmqa0vHoeImNSx7DyoK
-         FaSbLOii8pRWxS8qPBReJWcrGIy39lJkR2nt2xRUUPnHH9FuKSLevLEhsBIv6mTgrQZm
-         i3CO/O8Avob1j16XPDexnfT3qaodV2WC88GMSCJxW8Td/ZeF8N129rPx0f7WBnoCDgY2
-         A3/0INX/5EsQZungwZRyOB/QFLpFTX4csLa1sd7cUy9YvVeqr5eCk34JaIZB9z4o+H57
-         JIiA==
-X-Gm-Message-State: AOAM531r6Esjs78qzCVWqfKr/Co5PzvvigjpPw2Ut/SjS98s7qjMRu8V
-        1+wyUGZ8Vwj0/V6k63vEMOtQ4A==
-X-Google-Smtp-Source: ABdhPJzL9z4Pxpeqav6p9g9loj8DvsVgb6O3b+CmJ+Ds8EuMGEvhjepebp+uewcyGUBCsYwcuErZ9A==
-X-Received: by 2002:a17:902:ce8f:: with SMTP id f15mr518312plg.3.1643232153633;
-        Wed, 26 Jan 2022 13:22:33 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y13sm3009620pfi.2.2022.01.26.13.22.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 13:22:33 -0800 (PST)
-Date:   Wed, 26 Jan 2022 13:22:32 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Francis Laniel <laniel_francis@privacyrequired.com>,
-        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v3 3/3] vsprintf: Move space out of string literals in
- fourcc_string()
-Message-ID: <202201261321.34794CCF3@keescook>
-References: <20220126141917.75399-1-andriy.shevchenko@linux.intel.com>
- <20220126141917.75399-3-andriy.shevchenko@linux.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SY0GeizykbQp0sWmEDcL6vm+zpq2S6X1Nj2tMV7OyfA=;
+        b=hfvBe0vT5fwDt8Hu65Oqng0zZ1jimLUceIOl/L27q3KnTScVUCHBUi5GeWDhu9+47K
+         VO58iSO+/iqXI7Q2E6cbQhMLau5EJSAg5xe/FBs6rj1EPP6EXDNIdB2dYEdJnd7cqw8g
+         c/ctXzjVRAl5BrazUU+MQMoDd0+s8WSsSZTao29JvjWMVRlsmqc9gIXifWNX+1m9Ctd4
+         +xb5Y+4ZlKV9umuW0IoE7GSUjdQV4UZ8p8UmL22nINq7qNm3GUCVHC+9KNxWS/FXOl3U
+         PK1xZVbQkm3j4UuY01CLWyrPgmvPHANiMnvurhiUsiBepr0DzOtnBmoEvJWOecADEV7l
+         OGLA==
+X-Gm-Message-State: AOAM531QgCcovWpeHWwjXaMuxZ1Xdr8t62Dm43uxxAvxsG+idnK6KvEY
+        sB5lKqP+fQRYq43xlemsDBb8/VP7Br5ptuU5CZ8=
+X-Google-Smtp-Source: ABdhPJyafzx7vAkOAqjKeOVASDon0U7hIxbUz+s78QV5FhaIbQpwrW1X3zniNfMPAAt4DT7C7ZzSSnMsXoMlOcedHAk=
+X-Received: by 2002:a25:d4c9:: with SMTP id m192mr1158031ybf.526.1643232167745;
+ Wed, 26 Jan 2022 13:22:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126141917.75399-3-andriy.shevchenko@linux.intel.com>
+References: <20220114081542.698002137@linuxfoundation.org> <20220114081542.746291845@linuxfoundation.org>
+ <CA+res+S1GcDzM6hnmar+s1k3ggswURZ+_8BqweifShCTjVJ2aQ@mail.gmail.com> <YfFk7guenfgvrDlD@bender.morinfr.org>
+In-Reply-To: <YfFk7guenfgvrDlD@bender.morinfr.org>
+From:   Jack Wang <jack.wang.usish@gmail.com>
+Date:   Wed, 26 Jan 2022 22:22:36 +0100
+Message-ID: <CA+res+SmjdYYsvJO5t4BQ6ZXxdJibDbV_gU0Q_fNb0jzw+H3-Q@mail.gmail.com>
+Subject: Re: [PATCH 5.10 01/25] md: revert io stats accounting
+To:     Guillaume Morin <guillaume@morinfr.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
+        Guoqing Jiang <jiangguoqing@kylinos.cn>,
+        Song Liu <song@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 04:19:17PM +0200, Andy Shevchenko wrote:
-> The literals "big-endian" and "little-endian" may be potentially
-> occurred in other places. Dropping space allows linker to
-> "compress" them by using only a single copy.
-> 
-> Rasmus suggested, while at it, replacing strcpy() + strlen() by
-> p = stpcpy(), which is done here as well.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
-> v3: no changes
->  lib/vsprintf.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index 4e8f3e9acb99..e2a1d89f1a5c 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -1781,8 +1781,8 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
->  		*p++ = isascii(c) && isprint(c) ? c : '.';
->  	}
->  
-> -	strcpy(p, orig & BIT(31) ? " big-endian" : " little-endian");
-> -	p += strlen(p);
-> +	*p++ = ' ';
-> +	p = stpcpy(p, orig & BIT(31) ? "big-endian" : "little-endian");
->  
->  	*p++ = ' ';
->  	*p++ = '(';
+Guillaume Morin <guillaume@morinfr.org> =E4=BA=8E2022=E5=B9=B41=E6=9C=8826=
+=E6=97=A5=E5=91=A8=E4=B8=89 16:12=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 26 Jan 11:09, Jack Wang wrote:
+> > >
+> > > -       if (bio->bi_end_io !=3D md_end_io) {
+> > > -               struct md_io *md_io;
+> > > -
+> > > -               md_io =3D mempool_alloc(&mddev->md_io_pool, GFP_NOIO)=
+;
+> > > -               md_io->mddev =3D mddev;
+> > > -               md_io->orig_bi_end_io =3D bio->bi_end_io;
+> > > -               md_io->orig_bi_private =3D bio->bi_private;
+> > > -
+> > > -               bio->bi_end_io =3D md_end_io;
+> > > -               bio->bi_private =3D md_io;
+> > > -
+> > > -               md_io->start_time =3D part_start_io_acct(mddev->gendi=
+sk,
+> > > -                                                      &md_io->part, =
+bio);
+> > > -       }
+> > > -
+> > > +       /*
+> > > +        * save the sectors now since our bio can
+> > > +        * go away inside make_request
+> > > +        */
+> > > +       sectors =3D bio_sectors(bio);
+> > This code snip is not inside the original patch, and it's not in
+> > latest upstream too.
+> > >         /* bio could be mergeable after passing to underlayer */
+> > >         bio->bi_opf &=3D ~REQ_NOMERGE;
+> > >
+> > >         md_handle_request(mddev, bio);
+> > >
+> > > +       part_stat_lock();
+> > > +       part_stat_inc(&mddev->gendisk->part0, ios[sgrp]);
+> > > +       part_stat_add(&mddev->gendisk->part0, sectors[sgrp], sectors)=
+;
+> > > +       part_stat_unlock();
+> > > +
+> > same here, this code snip is not inside the original patch, and it's
+> > not in latest upstream too.
+>
+> Both snippets came from the code before 41d2d848e5c0 that the patch is
+> being reverted here.  As I explained in my original message, upstream is
+> different because of 99dfc43ecbf6 which is not in 5.10.
+oh, I missed it, you are right.
+>
+> > I think would be good keep it as the upstream version.
+>
+> If you don't include these lines, isn't this worse as it's not calling
+> either part_start_io_acct or bio_start_io_acct (in 99dfc43ecbf6)?
 
-No need for any of the manual construction nor stpcpy():
+Your patch is correct.
+Sorry for the noise.
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index d7ad44f2c8f5..aef8bd2789a9 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1788,14 +1788,9 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
- 		*p++ = isascii(c) && isprint(c) ? c : '.';
- 	}
- 
--	strcpy(p, *fourcc & BIT(31) ? " big-endian" : " little-endian");
--	p += strlen(p);
--
--	*p++ = ' ';
--	*p++ = '(';
--	p = special_hex_number(p, output + sizeof(output) - 2, *fourcc, sizeof(u32));
--	*p++ = ')';
--	*p = '\0';
-+	snprintf(p, sizeof(output) - sizeof(*fourcc), " %s (0x%x)",
-+		*fourcc & BIT(31) ? "big-endian" : " little-endian",
-+		*fourcc);
- 
- 	return string(buf, end, output, spec);
- }
-
-
-(untested)
-
--- 
-Kees Cook
+>
+> --
+> Guillaume Morin <guillaume@morinfr.org>

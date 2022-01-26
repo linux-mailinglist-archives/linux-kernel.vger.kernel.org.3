@@ -2,192 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41ABD49D129
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 469FA49D131
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243953AbiAZRxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S243964AbiAZR4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243948AbiAZRxX (ORCPT
+        with ESMTP id S230353AbiAZR4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:53:23 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13870C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:53:23 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id i62so549739ioa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:53:23 -0800 (PST)
+        Wed, 26 Jan 2022 12:56:14 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BD4C06161C;
+        Wed, 26 Jan 2022 09:56:14 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id e2so448276wra.2;
+        Wed, 26 Jan 2022 09:56:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dtNWMQ6fpndr+gNiN9rmzbRxHIN+CmzsS5NgAG+zOwA=;
-        b=i9L6HTFH0RzfL1MnEtWCmlZgz8GFemI7ANzKOhYuyL0PplBZMoW2+uaNffMIMLlltn
-         y74aRoiBZRwVCVMYe+ImOOD5aQ71vPznZDqYH+fzXvJvrtRESpGW/5sws2Uj3ne+x3vo
-         UuHhdgSh4xipWa89YtS4my+NYZfD9K2PUBnXMEi8Ye99cUeLN8jcuowgZo/clJ7jy265
-         n1FblY13Mne/s+Xzw4wgKOL1KJiREIiOAZFAuo3qGqN6sL0aoEkys5t2z2JQBin47oBq
-         +/radoLZwH43RjnllUnzsNoLruruy8e1lHWcAGFLW/N3MxjFx9oz5LbRAiug6rfvALh8
-         K3VQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5baoSdfR6Wb5YhH5TY8BNXC9G0PE57DX3KVy6O/p69w=;
+        b=Y8k+nfZQK49z42LeGxxvDz7K+E4+f0h3KxARmxK71A5rQTMtCdK0msenByUwTqkRg4
+         8rHxRx+qv6kTZqWvk1+U9KmtAWRMmkFusYTz/UR54Mwa7nU2DwgodWREyHGRUUnJUTfC
+         hLYEoCQqk0HKNNQrZIinorlZ3HE3jKytpoQJNkVdSmhoR2ee3Pk/A0Xjg6XK1ObYjQAo
+         TK29hi7xxrvcT+B4Gune4Mgb6WtPkBy8YrM5uklIEqjF/CLczrMQMEOnq+yOXZq/1hFp
+         Mnvrn45rCeviX8e+kH0WDpndMpnJRvZQk4IotOhO8yZ5z6rUG08a7ECn9xq5oM0wR2e+
+         JOhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dtNWMQ6fpndr+gNiN9rmzbRxHIN+CmzsS5NgAG+zOwA=;
-        b=woR6KzobkxbfemJYLO3mFk8HEVnXjisLSuAytJgabGWohqCE/VWyEnXROFaDVFZs69
-         qreaVlHdUoL8oZ+gH/fZiGQpOgbvpB/rbZdd6jlbQ+ewDq1mZsw82cD5RwqK5kNX/i4k
-         kdUlbialbFBcZj783iZMU0x9OVkTdHiet04CM0JUaXPEch3y7zmlsnGUnDxr1N1k1Ct1
-         eOWEZEkfsL3kBh8JivC8/iFz4zfHp9RX5cSHGDFYqXz/SKeZnkFXeAuqZ+bKCCH1CfP2
-         HELOxyce8dNRRxldUPE2ZX9s/sa0hvaFnySGU2Mpq2rqaBVO34YOG6frhf1Siyxn7ZZ+
-         B2Uw==
-X-Gm-Message-State: AOAM533/ZP1MZJAvWE5JxEhI1MylL8ojyjUS5X/D3bH9fCMi9AaC6uyY
-        2RSnYadGAKryPZg60GL4kOZF3hAcboO829NnjmV+nZluXfPJBw==
-X-Google-Smtp-Source: ABdhPJy6VWZhSvfgTuDchM38QgtUK0Sc6Gk/b8+Nk/fi7Y989zS5zwkairWLyjBOayWnvCAn0iKvg9KXuP7ro1Nyts0=
-X-Received: by 2002:a02:9427:: with SMTP id a36mr11213152jai.259.1643219602187;
- Wed, 26 Jan 2022 09:53:22 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5baoSdfR6Wb5YhH5TY8BNXC9G0PE57DX3KVy6O/p69w=;
+        b=C8oQ8m776UWQRiNC+UEz5Nw89vYkejrg2Emm2tH2C0kIKx5J3JUUPa86KMyARltOIL
+         BNdg39V2JhamoFwafki1CJPs9ILGHA6R2pz7Ylk2H0cC43WyRiyd1jMhikLKS+VZVHIh
+         zVO3gnyLwGSN7yCeb8yXC0EaDntwmwQL34YDIFrt1rcRGfEkqI1jIC9zqP2xqecJ2LXC
+         Ij5onc8YC3fNr6iHf5KoNSMOnqnRp9Xujut6XVWmYe1NS+xq1zxY5Q6XETpxi/ObWz33
+         2RvI4Ht6R11fvciHbWlfqztnlqSiNCk1yRz4a9hrGSk3VMsTNlC45iQK33HovpEaDcQd
+         ncXQ==
+X-Gm-Message-State: AOAM532qIyYvvUNAy9tGRCNj38Hiqhy7+wIEjeqPeYlgFz0Fdd6Zebe0
+        1lLr4HaD6WRMkbEbwFl9bWNjbsTrH8uH6Q==
+X-Google-Smtp-Source: ABdhPJzPFbDjAAEwAau+zswAEibaH6WRbhH01ffoJcxpYb6CahmoWm8iI5+83v8YWYyKgFYR0Vyvig==
+X-Received: by 2002:a5d:6309:: with SMTP id i9mr23224155wru.515.1643219772291;
+        Wed, 26 Jan 2022 09:56:12 -0800 (PST)
+Received: from debby ([2a01:e0a:a6d:a8d0:7ff4:8f61:5574:9f95])
+        by smtp.gmail.com with ESMTPSA id l4sm8853917wrs.6.2022.01.26.09.56.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 09:56:11 -0800 (PST)
+From:   Romain Perier <romain.perier@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/8] ARM: mstar: cpupll
+Date:   Wed, 26 Jan 2022 18:55:56 +0100
+Message-Id: <20220126175604.17919-1-romain.perier@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220117153634.150357-1-nogikh@google.com> <20220117153634.150357-3-nogikh@google.com>
- <CA+fCnZdUJS=qcTKews9XEgZi8=u5=iHPkDh1MaZryKL45vOKDQ@mail.gmail.com>
-In-Reply-To: <CA+fCnZdUJS=qcTKews9XEgZi8=u5=iHPkDh1MaZryKL45vOKDQ@mail.gmail.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Wed, 26 Jan 2022 18:53:11 +0100
-Message-ID: <CANp29Y63K326mhX8AVQ+w2PeccUsy9V8uvKO5iR-N6PqaaDUJg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] kcov: properly handle subsequent mmap calls
-To:     Andrey Konovalov <andreyknvl@gmail.com>
-Cc:     kasan-dev <kasan-dev@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for reviewing the code!
+This series adds a basic driver for the PLL that generates
+the cpu clock on MStar/SigmaStar ARMv7 SoCs.
 
-Yes, it is safe to access kcov->area without a lock.
-1) kcov->area is set only once since KCOV_INIT_TRACE will succeed only
-once. Reason
-for that is that kcov->mode is only set to KCOV_MODE_DISABLED during
-kcov_open().
-2) kcov->area won't be freed because an ongoing mmap operation for the
-kcov fd won't let
-the kernel invoke release() on that same fd, while that release() is
-necessary to finally
-decrement kcov->refcount.
+Unfortunately there isn't much documentation for this thing
+so there are few magic values and guesses.
 
+This needs to come after the MPLL DT changes.
 
-On Mon, Jan 24, 2022 at 11:33 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
->
-> On Mon, Jan 17, 2022 at 4:37 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> >
-> > Allocate the kcov buffer during KCOV_MODE_INIT in order to untie mmapping
-> > of a kcov instance and the actual coverage collection process. Modify
-> > kcov_mmap, so that it can be reliably used any number of times once
-> > KCOV_MODE_INIT has succeeded.
-> >
-> > These changes to the user-facing interface of the tool only weaken the
-> > preconditions, so all existing user space code should remain compatible
-> > with the new version.
-> >
-> > Signed-off-by: Aleksandr Nogikh <nogikh@google.com>
-> > ---
-> >  kernel/kcov.c | 34 +++++++++++++++-------------------
-> >  1 file changed, 15 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/kernel/kcov.c b/kernel/kcov.c
-> > index e1be7301500b..475524bd900a 100644
-> > --- a/kernel/kcov.c
-> > +++ b/kernel/kcov.c
-> > @@ -459,37 +459,28 @@ void kcov_task_exit(struct task_struct *t)
-> >  static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
-> >  {
-> >         int res = 0;
-> > -       void *area;
-> >         struct kcov *kcov = vma->vm_file->private_data;
-> >         unsigned long size, off;
-> >         struct page *page;
-> >         unsigned long flags;
-> >
-> > -       area = vmalloc_user(vma->vm_end - vma->vm_start);
-> > -       if (!area)
-> > -               return -ENOMEM;
-> > -
-> >         spin_lock_irqsave(&kcov->lock, flags);
-> >         size = kcov->size * sizeof(unsigned long);
-> > -       if (kcov->mode != KCOV_MODE_INIT || vma->vm_pgoff != 0 ||
-> > +       if (kcov->area == NULL || vma->vm_pgoff != 0 ||
-> >             vma->vm_end - vma->vm_start != size) {
-> >                 res = -EINVAL;
-> >                 goto exit;
-> >         }
-> > -       if (!kcov->area) {
-> > -               kcov->area = area;
-> > -               vma->vm_flags |= VM_DONTEXPAND;
-> > -               spin_unlock_irqrestore(&kcov->lock, flags);
-> > -               for (off = 0; off < size; off += PAGE_SIZE) {
-> > -                       page = vmalloc_to_page(kcov->area + off);
-> > -                       if (vm_insert_page(vma, vma->vm_start + off, page))
-> > -                               WARN_ONCE(1, "vm_insert_page() failed");
-> > -               }
-> > -               return 0;
-> > +       spin_unlock_irqrestore(&kcov->lock, flags);
-> > +       vma->vm_flags |= VM_DONTEXPAND;
-> > +       for (off = 0; off < size; off += PAGE_SIZE) {
-> > +               page = vmalloc_to_page(kcov->area + off);
->
-> Hm, you're accessing kcov->area without the lock here. Although, the
-> old code does this as well. This is probably OK, as kcov->area can't
-> be changed nor freed while this handler is executing.
->
->
-> > +               if (vm_insert_page(vma, vma->vm_start + off, page))
-> > +                       WARN_ONCE(1, "vm_insert_page() failed");
-> >         }
-> > +       return 0;
-> >  exit:
-> >         spin_unlock_irqrestore(&kcov->lock, flags);
-> > -       vfree(area);
-> >         return res;
-> >  }
-> >
-> > @@ -674,6 +665,7 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
-> >         unsigned int remote_num_handles;
-> >         unsigned long remote_arg_size;
-> >         unsigned long size, flags;
-> > +       void *area;
-> >
-> >         kcov = filep->private_data;
-> >         switch (cmd) {
-> > @@ -683,17 +675,21 @@ static long kcov_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
-> >                  * Must happen before anything else.
-> >                  *
-> >                  * First check the size argument - it must be at least 2
-> > -                * to hold the current position and one PC. Later we allocate
-> > -                * size * sizeof(unsigned long) memory, that must not overflow.
-> > +                * to hold the current position and one PC.
-> >                  */
-> >                 size = arg;
-> >                 if (size < 2 || size > INT_MAX / sizeof(unsigned long))
-> >                         return -EINVAL;
-> > +               area = vmalloc_user(size * sizeof(unsigned long));
-> > +               if (area == NULL)
-> > +                       return -ENOMEM;
-> >                 spin_lock_irqsave(&kcov->lock, flags);
-> >                 if (kcov->mode != KCOV_MODE_DISABLED) {
-> >                         spin_unlock_irqrestore(&kcov->lock, flags);
-> > +                       vfree(area);
-> >                         return -EBUSY;
-> >                 }
-> > +               kcov->area = area;
-> >                 kcov->size = size;
-> >                 kcov->mode = KCOV_MODE_INIT;
-> >                 spin_unlock_irqrestore(&kcov->lock, flags);
-> > --
-> > 2.34.1.703.g22d0c6ccf7-goog
-> >
->
-> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Changes since v3:
+- Added Reviewed-by on Daniel's patches
+- Removed "[PATCH v3 8/9] ARM: mstar: Add OPP table for mercury5"
+
+Changes since v2:
+- Re-ordered Kconfig by name
+- Re-ordered includes alphabetically and removed useless ones
+- Used timeout for cpu_relax
+- Returned DIV_ROUND_DOWN_ULL() directly in
+  msc313_cpupll_frequencyforreg()
+- Returned DIV_ROUND_DOWN_ULL() directly in
+  msc313_cpupll_regforfrequecy()
+- Reduced the number of lines for msc313_cpupll_of_match
+- Removed CLK_IS_CRITICAL
+
+Changes since v1:
+- Re-worked the series and ensure that 'make dt_binding_check' passes.
+  The required commit is merged now, so it is okay.
+- Fixed coding style issues in the driver and makes check_patch.pl happy
+- Added one more commit for extending the opp_table for infinity2m.
+
+Daniel Palmer (7):
+  dt-bindings: clk: mstar msc313 cpupll binding description
+  clk: mstar: msc313 cpupll clk driver
+  ARM: mstar: Add cpupll to base dtsi
+  ARM: mstar: Link cpupll to cpu
+  ARM: mstar: Link cpupll to second core
+  ARM: mstar: Add OPP table for infinity
+  ARM: mstar: Add OPP table for infinity3
+
+Romain Perier (1):
+  ARM: mstar: Extend opp_table for infinity2m
+
+ .../bindings/clock/mstar,msc313-cpupll.yaml   |  45 ++++
+ arch/arm/boot/dts/mstar-infinity.dtsi         |  34 +++
+ arch/arm/boot/dts/mstar-infinity2m.dtsi       |  17 ++
+ arch/arm/boot/dts/mstar-infinity3.dtsi        |  58 +++++
+ arch/arm/boot/dts/mstar-v7.dtsi               |   9 +
+ drivers/clk/mstar/Kconfig                     |   8 +
+ drivers/clk/mstar/Makefile                    |   2 +-
+ drivers/clk/mstar/clk-msc313-cpupll.c         | 221 ++++++++++++++++++
+ 8 files changed, 393 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mstar,msc313-cpupll.yaml
+ create mode 100644 drivers/clk/mstar/clk-msc313-cpupll.c
+
+-- 
+2.34.1
+

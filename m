@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF56849C6FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:00:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6750949C6FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbiAZKAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:00:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22092 "EHLO
+        id S239534AbiAZKA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:00:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20522 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233121AbiAZKAt (ORCPT
+        by vger.kernel.org with ESMTP id S233121AbiAZKA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:00:49 -0500
+        Wed, 26 Jan 2022 05:00:56 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643191249;
+        s=mimecast20190719; t=1643191256;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZADr9hVxfhKENIr/VRsnRFwtDwaPlig2N4uKOY4hLWc=;
-        b=Ao5saezab47NldOsG1OkzQ9dQzNbdlM4Y6LFfWGKE96ZuG39cuOCMS7UOMUrNg1OpKxzaS
-        4+x+1Spn7ZRGBoj33XRDx3ASRE6K8e8PqZ6hrJUWwrrTxZb5GmSgzFVkeYq+XmVfmzQXdk
-        waoUtxaunqLu1MnYta5oM0hRRlfyjcA=
+        bh=uz7WrEefhkRzVFGmcsfP6Zp/Ap9shXYEfGhZft5IAs0=;
+        b=YqvlLzUfQHsqzFehari2wAbKLXh9PLhDQPwTNpJ6ZQTdMhYcVPBUiAy4ek+qYzE33mdBZJ
+        PjjeXqtAhUjcp9Lsb0TT57ICNWxf7O0dg1wQhlERCx6LtZKzNvrFY4daqSVKk2hnhw38Wm
+        DtaEoJf1OoCyuTvBKkvSP8WC7K9WHTU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-doMA_xzJMmKguE09hrMqCQ-1; Wed, 26 Jan 2022 05:00:45 -0500
-X-MC-Unique: doMA_xzJMmKguE09hrMqCQ-1
+ us-mta-455-Z5P5QTJXMmC-UmZSLEVHQg-1; Wed, 26 Jan 2022 05:00:52 -0500
+X-MC-Unique: Z5P5QTJXMmC-UmZSLEVHQg-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9B87486A060;
-        Wed, 26 Jan 2022 10:00:42 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 914831006AA6;
+        Wed, 26 Jan 2022 10:00:49 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.241])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5324D1F2E8;
-        Wed, 26 Jan 2022 10:00:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 199521F2F3;
+        Wed, 26 Jan 2022 10:00:42 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -60,9 +60,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
         Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH RFC v2 5/9] mm/huge_memory: streamline COW logic in do_huge_pmd_wp_page()
-Date:   Wed, 26 Jan 2022 10:55:53 +0100
-Message-Id: <20220126095557.32392-6-david@redhat.com>
+Subject: [PATCH RFC v2 6/9] mm/khugepaged: remove reuse_swap_page() usage
+Date:   Wed, 26 Jan 2022 10:55:54 +0100
+Message-Id: <20220126095557.32392-7-david@redhat.com>
 In-Reply-To: <20220126095557.32392-1-david@redhat.com>
 References: <20220126095557.32392-1-david@redhat.com>
 MIME-Version: 1.0
@@ -72,129 +72,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We currently have a different COW logic for anon THP than we have for
-ordinary anon pages in do_wp_page(): the effect is that the issue reported
-in CVE-2020-29374 is currently still possible for anon THP: an unintended
-information leak from the parent to the child.
+reuse_swap_page() currently indicates if we can write to an anon page
+without COW. A COW is required if the page is shared by multiple
+processes (either already mapped or via swap entries) or if there is
+concurrent writeback that cannot tolerate concurrent page modifications.
 
-Let's apply the same logic (page_count() == 1), with similar
-optimizations to remove additional references first as we really want to
-avoid PTE-mapping the THP and copying individual pages best we can.
+reuse_swap_page() doesn't check for pending references from other
+processes that already unmapped the page, however,
+is_refcount_suitable() essentially does the same thing in the context of
+khugepaged. khugepaged is the last remaining user of reuse_swap_page() and
+we want to remove that function.
 
-If we end up with a page that has page_count() != 1, we'll have to PTE-map
-the THP and fallback to do_wp_page(), which will always copy the page.
+In the context of khugepaged, we are not actually going to write to the
+page and we don't really care about other processes mapping the page:
+for example, without swap, we don't care about shared pages at all.
 
-Note that KSM does not apply to THP.
+The current logic seems to be:
+* Writable: -> Not shared, but might be in the swapcache. Nobody can
+  fault it in from the swapcache as there are no other swap entries.
+* Readable and not in the swapcache: Might be shared (but nobody can
+  fault it in from the swapcache).
+* Readable and in the swapcache: Might be shared and someone might be
+  able to fault it in from the swapcache. Make sure we're the exclusive
+  owner via reuse_swap_page().
 
-I. Interaction with the swapcache and writeback
+Having to guess due to lack of comments and documentation, the current
+logic really only wants to make sure that a page that might be shared
+cannot be faulted in from the swapcache while khugepaged is active.
+It's hard to guess why that is that case and if it's really still required,
+but let's try keeping that logic unmodified.
 
-While a THP is in the swapcache, the swapcache holds one reference on each
-subpage of the THP. So with PageSwapCache() set, we expect as many
-additional references as we have subpages. If we manage to remove the
-THP from the swapcache, all these references will be gone.
+Instead of relying on reuse_swap_page(), let's unconditionally
+try_to_free_swap(), special casing PageKsm(). try_to_free_swap() will fail
+if there are still swap entries targeting the page or if the page is under
+writeback.
 
-Usually, a THP is not split when entered into the swapcache and stays a
-compound page. However, try_to_unmap() will PTE-map the THP and use PTE
-swap entries. There are no PMD swap entries for that purpose, consequently,
-we always only swapin subpages into PTEs.
-
-Removing a page from the swapcache can fail either when there are remaining
-swap entries (in which case COW is the right thing to do) or if the page is
-currently under writeback.
-
-Having a locked, R/O PMD-mapped THP that is in the swapcache seems to be
-possible only in corner cases, for example, if try_to_unmap() failed
-after adding the page to the swapcache. However, it's comparatively easy to
-handle.
-
-As we have to fully unmap a THP before starting writeback, and swapin is
-always done on the PTE level, we shouldn't find a R/O PMD-mapped THP in the
-swapcache that is under writeback. This should at least leave writeback
-out of the picture.
-
-II. Interaction with GUP references
-
-Having a R/O PMD-mapped THP with GUP references (i.e., R/O references)
-will result in PTE-mapping the THP on a write fault. Similar to ordinary
-anon pages, do_wp_page() will have to copy sub-pages and result in a
-disconnect between the GUP references and the pages actually mapped into
-the page tables. To improve the situation in the future, we'll need
-additional handling to mark anonymous pages as definitely exclusive to a
-single process, only allow GUP pins on exclusive anon pages, and
-disallow sharing of exclusive anon pages with GUP pins e.g., during
-fork().
-
-III. Interaction with references from LRU pagevecs
-
-Similar to ordinary anon pages, we can have LRU pagevecs referencing our
-THP. Reliably removing such references requires draining LRU pagevecs on
-all CPUs -- lru_add_drain_all() -- a possibly expensive operation that can
-sleep. For now, similar do do_wp_page(), let's conditionally drain the
-local LRU pagevecs only if we detect !PageLRU().
-
-IV. Interaction with speculative/temporary references
-
-Similar to ordinary anon pages, other speculative/temporary references on
-the THP, for example, from the pagecache or page migration code, will
-disallow exclusive reuse of the page. We'll have to PTE-map the THP.
+After a successful try_to_free_swap() that page cannot be readded to the
+swapcache because we're keeping the page locked and removed from the LRU
+until we actually perform the copy. So once we succeeded removing a page
+from the swapcache, it cannot be re-added until we're done copying. Add a
+comment stating that.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/huge_memory.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+ mm/khugepaged.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 406a3c28c026..b6ba88a98266 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1286,6 +1286,7 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
- 	struct page *page;
- 	unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
- 	pmd_t orig_pmd = vmf->orig_pmd;
-+	int swapcache_refs = 0;
- 
- 	vmf->ptl = pmd_lockptr(vma->vm_mm, vmf->pmd);
- 	VM_BUG_ON_VMA(!vma->anon_vma, vma);
-@@ -1303,7 +1304,6 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
- 	page = pmd_page(orig_pmd);
- 	VM_BUG_ON_PAGE(!PageHead(page), page);
- 
--	/* Lock page for reuse_swap_page() */
- 	if (!trylock_page(page)) {
- 		get_page(page);
- 		spin_unlock(vmf->ptl);
-@@ -1319,10 +1319,20 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
- 	}
- 
- 	/*
--	 * We can only reuse the page if nobody else maps the huge page or it's
--	 * part.
-+	 * See do_wp_page(): we can only map the page writable if there are
-+	 * no additional references.
- 	 */
--	if (reuse_swap_page(page)) {
-+	if (PageSwapCache(page))
-+		swapcache_refs = thp_nr_pages(page);
-+	if (page_count(page) > 1 + swapcache_refs + !PageLRU(page))
-+		goto unlock_fallback;
-+	if (!PageLRU(page))
-+		lru_add_drain();
-+	if (page_count(page) > 1 + swapcache_refs)
-+		goto unlock_fallback;
-+	if (swapcache_refs)
-+		try_to_free_swap(page);
-+	if (page_count(page) == 1) {
- 		pmd_t entry;
- 		entry = pmd_mkyoung(orig_pmd);
- 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
-@@ -1333,6 +1343,7 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
- 		return VM_FAULT_WRITE;
- 	}
- 
-+unlock_fallback:
- 	unlock_page(page);
- 	spin_unlock(vmf->ptl);
- fallback:
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 35f14d0a00a6..bc0ff598e98f 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -683,10 +683,10 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
+ 			goto out;
+ 		}
+ 		if (!pte_write(pteval) && PageSwapCache(page) &&
+-				!reuse_swap_page(page)) {
++		    (PageKsm(page) || !try_to_free_swap(page))) {
+ 			/*
+-			 * Page is in the swap cache and cannot be re-used.
+-			 * It cannot be collapsed into a THP.
++			 * Possibly shared page cannot be removed from the
++			 * swapache. It cannot be collapsed into a THP.
+ 			 */
+ 			unlock_page(page);
+ 			result = SCAN_SWAP_CACHE_PAGE;
+@@ -702,6 +702,16 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
+ 			result = SCAN_DEL_PAGE_LRU;
+ 			goto out;
+ 		}
++
++		/*
++		 * We're holding the page lock and removed the page from the
++		 * LRU. Once done copying, we'll unlock and readd to the
++		 * LRU via release_pte_page(). If the page is still in the
++		 * swapcache, we're the exclusive owner. Due to the page lock
++		 * the page cannot be added to the swapcache until we're done
++		 * and consequently it cannot be faulted in from the swapcache
++		 * into another process.
++		 */
+ 		mod_node_page_state(page_pgdat(page),
+ 				NR_ISOLATED_ANON + page_is_file_lru(page),
+ 				compound_nr(page));
 -- 
 2.34.1
 

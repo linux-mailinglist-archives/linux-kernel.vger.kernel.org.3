@@ -2,86 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A172F49D3ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6750949D3F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiAZU5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 15:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbiAZU5G (ORCPT
+        id S231573AbiAZU5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 15:57:49 -0500
+Received: from fanzine2.igalia.com ([213.97.179.56]:47192 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231445AbiAZU5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:57:06 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B725C06161C;
-        Wed, 26 Jan 2022 12:57:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jkbcw0LRfz4xmx;
-        Thu, 27 Jan 2022 07:57:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643230625;
-        bh=cjuTzKhDkCsuuyLW9b96xzPl6QhdHMRo44uq08vCYms=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EIgIIWetf8yFVGQHZc+zkqlkKeY6ufzzGm4FO39lFqtr292YNV696BmrRJb5mAOjV
-         wiH/mcWFZxlxjSjtcIXffHrC6xIzTCbVP8W7bvsPLh/ciXrOPBORmGIhCPNczqZ15c
-         fJFUIjG/U5i9hw5lP8HDt59GKiqC5Q62b2szkr74nU/G6akJZVWzt6A3h8lCcD3MOO
-         TGwIlnpzbgJkjblkjoZtAccs/nx3uh/WqcJgQ/NP5xy8JLEpAtSUlqvC+UfewhoBTr
-         6cjq8qaKPZDiM7bqKKHgXc0JZQ1tczD95+shzMGhfcQRUEnWj7MaxnNn5mIXWPRrGs
-         U16mqkg80ntUw==
-Date:   Thu, 27 Jan 2022 07:57:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the net-next tree
-Message-ID: <20220127075702.1b0b73c2@canb.auug.org.au>
+        Wed, 26 Jan 2022 15:57:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=0R+6+w1NT8PmkQCoUkTSCylJ5Er3/ZSDMCsR3sthdDw=; b=HNObPwBWW+5TWd+ZeSkeU2UFip
+        ovHIiUWIWKBrBvTCe7xJmRB3KFN607+UP6kavrMEYreWDlIxnlaTJU16vjFY6X9kVeXIWQo5fI60Z
+        qMhgs1DU3iiQXlCoaPF0NaJ/ii0DxGbJb6+meVreAv1kwCf/iptuctcv3KRTiR3cN0s3V1QuREeKu
+        oHFkeCleZs010nBRSYkFhGmz+PuNI4VRejq1FGv98ayXHdMP738s1mDZl51yFEz74jj4dadvo32LY
+        9a/pwisPC529Dn2D1R2j7F2n9eWZy7NgqpAopYupjklRe9jkFzMqrIylri7VxCiO3RhM2KfD7bSSN
+        L0RvRE9w==;
+Received: from [165.90.113.117] (helo=mail.igalia.com)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1nCpML-0003Mr-TD; Wed, 26 Jan 2022 21:57:42 +0100
+Date:   Wed, 26 Jan 2022 19:57:26 -0100
+From:   Melissa Wen <mwen@igalia.com>
+To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
+Cc:     emma@anholt.net, airlied@linux.ie, daniel@ffwll.ch,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/v3d: Add missing unlock
+Message-ID: <20220126205726.phfikh7kn3lks5ib@mail.igalia.com>
+References: <1642868787-61384-1-git-send-email-lyz_cs@pku.edu.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ho3yJJm664Ov7YLS+Zw88gM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qjusil2tsea5ma46"
+Content-Disposition: inline
+In-Reply-To: <1642868787-61384-1-git-send-email-lyz_cs@pku.edu.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ho3yJJm664Ov7YLS+Zw88gM
-Content-Type: text/plain; charset=US-ASCII
+
+--qjusil2tsea5ma46
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 01/22, Yongzhi Liu wrote:
+> [why]
+> Unlock is needed on the error handling path to prevent dead lock.
+>=20
+> [how]
+> Fix this by adding drm_gem_unlock_reservations on the error handling path.
+>=20
+> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+> ---
+>  drivers/gpu/drm/v3d/v3d_gem.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
+> index c7ed2e1..0c989dc 100644
+> --- a/drivers/gpu/drm/v3d/v3d_gem.c
+> +++ b/drivers/gpu/drm/v3d/v3d_gem.c
+> @@ -798,6 +798,8 @@ v3d_submit_cl_ioctl(struct drm_device *dev, void *dat=
+a,
+> =20
+>  		if (!render->base.perfmon) {
+>  			ret =3D -ENOENT;
+> +			drm_gem_unlock_reservations(last_job->bo,
+> +				    last_job->bo_count, &acquire_ctx);
+>  			goto fail;
+Hi,
 
-Commits
+Nice catch!
 
-  04a0683f7db4 ("net: stmmac: convert to phylink_generic_validate()")
-  f4c296c90976 ("net: stmmac: remove phylink_config.pcs_poll usage")
-  d194923d51c9 ("net: stmmac: fill in supported_interfaces")
-  92c3807b9ac3 ("net: stmmac: convert to phylink_get_linkmodes()")
-  be6ec5b70266 ("net: xpcs: add support for retrieving supported interface =
-modes")
+As unlock is handle in fail_unreserve, I would suggest you to keep the
+failures handling around there. In that case, the goto will target a
+place between `fail_unreserve:` and `fail:`, i.e. calls
+drm_gem_unlock_reservations (and the following cleanings) but don't call
+mutex_unlock.
 
-are missing a Signed-off-by from their author.
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
+Melissa
 
---Sig_/ho3yJJm664Ov7YLS+Zw88gM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+>  		}
+>  	}
+> @@ -1027,6 +1029,8 @@ v3d_submit_csd_ioctl(struct drm_device *dev, void *=
+data,
+>  						     args->perfmon_id);
+>  		if (!job->base.perfmon) {
+>  			ret =3D -ENOENT;
+> +			drm_gem_unlock_reservations(clean_job->bo, clean_job->bo_count,
+> +						    &acquire_ctx);
+>  			goto fail;
+>  		}
+>  	}
+> --=20
+> 2.7.4
+>=20
+
+--qjusil2tsea5ma46
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHxtZ4ACgkQAVBC80lX
-0Gw4sAf9FhJRCPchnhM+UlW0VC/k89qoLcm6DAiZolMvGa2RVHkBIbKRJtjir0BH
-pmE/nQzOmFB+FvPSMST0TOk1CIoYglqz6gvZFkGx8vcQAU0iR+V3oT6zHBDwa5tu
-tqhMfNjoOe4ITQfEN8TXs2gg9f82DJ74+1XBkD9bWwjAKn+FBTiaICmXDsKf6Y+g
-jjNjt843AIegCaP1uwDBHZmDF0MdBI6dR80EMZctXpBN4DEr9rQdV6fDRb+lwCqy
-c3bsMjKJiztc3QvC8lD50DOy8PdYOTvN+exhDOI38nagSkTvpEbUl4XQlJaCPtvY
-kGW9Z38kYTrfxnJwWuLxMM3yXVKUSw==
-=SxhN
+iQIzBAABCgAdFiEEd8WOo/JViG+Tu+XIwqF3j0dLehwFAmHxtbIACgkQwqF3j0dL
+ehxmmhAAls6eo7gT76XvCoDqs3iMlPsv655BIOg65UFxTFirde5AiItWnvNwT3e5
+Iyf3a1LnRPjvCB+YM793XU14YbVxgGgwQcRjlo00j93bBPAtTGK9ko+nyZnNn4ns
+OMr+GZpXL9DNFaY9evlgKXlplbOotkDlQbf0TwHjuxyfuyKdLxtwaSs3/EXGsgjP
+WKAtOBoP5Cdk112rvQg3u4IunKETNcm7a9tzbJU5u7SnwGKBsqPBqB0P+jtkD5ww
+MZDtxCpoGJAHG8w9sgWainPn7qDtLpPnNUbQVhYtnTeJpyGrCzj/V+mt9lj5WCt+
++f4JkdUhDZrxmTwbwDifM3boUN4tHE89ab5QiQ8xzB+kG1Ui64RvokZT2S6Xk+Yw
+J+hrYTsd9Ta+kieSVVKuka65qGxsuPcZ2hWFA8sEb4WbCjn6yuke5MVhsouH0SlF
++9LjIHLSuAvY5Z/mGY9WnMCYJn71hQoSyKJS8aAkyeE2uGi/hTYyyTMdtUtBSnuQ
+lWKP8r/TuJFoUudVpzEVJZfStg4vDOO5M1lFnXqvaOUKzqTESfIWhbm2urHqwZnI
+rPS+Fq8d1w7gcDI28l1EA5cR+P7bf7A536bXb4aP10JL8ZLWEW87hyYAUA/hbcI4
+5DPNmTwDzGLhV2gnxGoUI8tMPCLwCcVsPl7nULC5IVY0D3/f7Zc=
+=1pGY
 -----END PGP SIGNATURE-----
 
---Sig_/ho3yJJm664Ov7YLS+Zw88gM--
+--qjusil2tsea5ma46--

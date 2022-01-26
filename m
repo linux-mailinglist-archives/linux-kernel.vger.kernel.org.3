@@ -2,99 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4783949C28D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D7249C292
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbiAZENf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 23:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiAZENa (ORCPT
+        id S229916AbiAZESD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 23:18:03 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:49682 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229671AbiAZESB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 23:13:30 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E75C061744
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:13:29 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id w133so8430462oie.7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:13:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=arlsOb01jlapXGYkUDdz2+HVDdsCdZVHayoQG3dctsA=;
-        b=aRw558Bs+cD7R+EE0gKoDAtx5fJCW/0eUBB3Eb9xqOjGKCurtCz8BNg019D4D2LQEE
-         64sMWUQoYJ2WxspIU/aTCLPh8JisbrmEtJxVDw5GihQR+VTJBuMrwj1Fa7JH08DPLjyj
-         k7RUHgNYf1Uy14xWUQAWAJMbF3TRYtutPsP5L+8vUZBsGp6MRaHckNo7bResbmdUu2ab
-         J/PVjvXQIRUxN8qrRrQm3AxcOvrL+lFhhfR3O3RYXJtbdvdrrAGwMNoFl1utu5X2mhxy
-         hlIfMkMe2rAuRD2PZYhE4D4GFMmSEjZFOyn5uxe1vMk4ritPS5jLhGp31uowjG/DAem1
-         hBRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=arlsOb01jlapXGYkUDdz2+HVDdsCdZVHayoQG3dctsA=;
-        b=7Oik5cSdI0Za9V+a8FliMAgtpfMxs8JVtyAVUtGTK1OAyS9B8ihOsJMMBJiKCq1xXh
-         Z9mFAOyWxIUWSjlqlCd8WFtOZhYgfk1acw4NK/NB27DyU5mIGC4rTaZ7cgMi11b1MKJa
-         qYRo++Ny+b9xlK9r6a6YxCpiGnhfjmZffGtLyYc/6Q2q377yGIB6wBMB667BL4XNkjlI
-         MycXt3F94E1/aA+Tvt/Mu19fF9Hi2w+FN93x0TF+spP9KBjNozNqWL1Vu68C6hXVV77t
-         W/Tk6UOrtjPQufGTcMH6GVt/bbfDJQtoSLBJNTB4Us+OdNGbodkxuAtAEpIuD7BmuEN7
-         cZnQ==
-X-Gm-Message-State: AOAM5313l8cge4ro/hZ/aj4DkkdueuID/fGl0Nf1lS93sBD4tejvC4EU
-        BvuH7ketU4jQftQH1xJoXruNLg==
-X-Google-Smtp-Source: ABdhPJwIJPX03WhOM4Ospo3ClShjQf2IYkb6IpRHWm2I1wBOP49Jm24472UAfLlXwku/XJXVauXlrw==
-X-Received: by 2002:a05:6808:f11:: with SMTP id m17mr2632520oiw.77.1643170409349;
-        Tue, 25 Jan 2022 20:13:29 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id w62sm1254229oie.4.2022.01.25.20.13.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 20:13:28 -0800 (PST)
-Date:   Tue, 25 Jan 2022 22:13:27 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ben Wolsieffer <benwolsieffer@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Stephen Boyd <sboyd@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/3] dt-bindings: arm: qcom: document HP TouchPad
-Message-ID: <YfDKZxciezuDXL54@builder.lan>
-References: <cover.1643075547.git.benwolsieffer@gmail.com>
- <aa59002aeae45a95097300213fc34490aa8db250.1643075547.git.benwolsieffer@gmail.com>
+        Tue, 25 Jan 2022 23:18:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CBE00CE1BBF;
+        Wed, 26 Jan 2022 04:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B32C340E3;
+        Wed, 26 Jan 2022 04:17:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643170678;
+        bh=MaAuNjsFO8On+BGpUOJ4aK1T9MBVNUh+44P2Z4qFPYQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cwQgwPJRdJ0WHqCqAeWadgK+l1IyR8R05fdGOpE3f90v/9Ocq2lw1LDrenpG8/++/
+         0bly1h4lIoY1v8CpsT7bVS4nLTaX4DPGQ6lnpLJKg3G0n0gqM9af7BGFVW94y75Y8n
+         ZuJ7zuNkG5DK7zmOMxT2VCLsxahb9u6jfrgzLybhiWvhxkFjgx2weWPdnrD6i+6Anj
+         d3Zzl0xzlwM0kjCF7uKvK+K6++Rn0uiiivlAX6fVtCZ7nhrdJRU0EsRolboOcSag92
+         NJ8fq7P66AT8IjK0TVB21pjKjmAsa1QskuKMIpB+4MwlFPbwaYYSMRiW+g1pezaYWm
+         vV9d8AgmG3u4Q==
+Date:   Tue, 25 Jan 2022 20:17:56 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Wong Vee Khee <vee.khee.wong@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH net v2 2/2] net: stmmac: skip only stmmac_ptp_register
+ when resume from suspend
+Message-ID: <20220125201756.1606e1c4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220125032324.4055-3-mohammad.athari.ismail@intel.com>
+References: <20220125032324.4055-1-mohammad.athari.ismail@intel.com>
+        <20220125032324.4055-3-mohammad.athari.ismail@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa59002aeae45a95097300213fc34490aa8db250.1643075547.git.benwolsieffer@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 24 Jan 20:07 CST 2022, Ben Wolsieffer wrote:
-
-> Add binding documentation for the HP TouchPad.
-> 
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 370aab274cd1..f7418a8a49fc 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -119,6 +119,7 @@ properties:
->        - items:
->            - enum:
->                - qcom,apq8060-dragonboard
-> +              - qcom,apq8060-tenderloin
->                - qcom,msm8660-surf
->            - const: qcom,msm8660
+On Tue, 25 Jan 2022 11:23:24 +0800 Mohammad Athari Bin Ismail wrote:
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index d7e261768f73..b8e5e19e6f7b 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -880,11 +880,12 @@ EXPORT_SYMBOL_GPL(stmmac_init_tstamp_counter);
+>  /**
+>   * stmmac_init_ptp - init PTP
+>   * @priv: driver private structure
+> + * @ptp_register: register PTP if set
+>   * Description: this is to verify if the HW supports the PTPv1 or PTPv2.
+>   * This is done by looking at the HW cap. register.
+>   * This function also registers the ptp driver.
+>   */
+> -static int stmmac_init_ptp(struct stmmac_priv *priv)
+> +static int stmmac_init_ptp(struct stmmac_priv *priv, bool ptp_register)
+>  {
+>  	bool xmac = priv->plat->has_gmac4 || priv->plat->has_xgmac;
+>  	int ret;
+> @@ -914,7 +915,8 @@ static int stmmac_init_ptp(struct stmmac_priv *priv)
+>  	priv->hwts_tx_en = 0;
+>  	priv->hwts_rx_en = 0;
 >  
-> -- 
-> 2.34.1
-> 
+> -	stmmac_ptp_register(priv);
+> +	if (ptp_register)
+> +		stmmac_ptp_register(priv);
+
+stmmac_init_ptp() only has one caller, and the registration step is last.
+Wouldn't it be better to move the stmmac_ptp_register() call out to
+stmmac_hw_setup()? That way we don't need to pass extra arguments to init.
+
+>  	return 0;
+>  }
+> @@ -3241,7 +3243,7 @@ static int stmmac_fpe_start_wq(struct stmmac_priv *priv)
+>  /**
+>   * stmmac_hw_setup - setup mac in a usable state.
+>   *  @dev : pointer to the device structure.
+> - *  @init_ptp: initialize PTP if set
+> + *  @ptp_register: register PTP if set
+>   *  Description:
+>   *  this is the main function to setup the HW in a usable state because the
+>   *  dma engine is reset, the core registers are configured (e.g. AXI,
+> @@ -3251,7 +3253,7 @@ static int stmmac_fpe_start_wq(struct stmmac_priv *priv)
+>   *  0 on success and an appropriate (-)ve integer as defined in errno.h
+>   *  file on failure.
+>   */
+> -static int stmmac_hw_setup(struct net_device *dev, bool init_ptp)
+> +static int stmmac_hw_setup(struct net_device *dev, bool ptp_register)
+>  {
+>  	struct stmmac_priv *priv = netdev_priv(dev);
+>  	u32 rx_cnt = priv->plat->rx_queues_to_use;
+> @@ -3308,13 +3310,11 @@ static int stmmac_hw_setup(struct net_device *dev, bool init_ptp)
+>  
+>  	stmmac_mmc_setup(priv);
+>  
+> -	if (init_ptp) {
+> -		ret = stmmac_init_ptp(priv);
+> -		if (ret == -EOPNOTSUPP)
+> -			netdev_warn(priv->dev, "PTP not supported by HW\n");
+> -		else if (ret)
+> -			netdev_warn(priv->dev, "PTP init failed\n");
+> -	}
+> +	ret = stmmac_init_ptp(priv, ptp_register);
+> +	if (ret == -EOPNOTSUPP)
+> +		netdev_warn(priv->dev, "PTP not supported by HW\n");
+> +	else if (ret)
+> +		netdev_warn(priv->dev, "PTP init failed\n");

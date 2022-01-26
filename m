@@ -2,88 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADAA49C0EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 02:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1719549C0F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 02:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236045AbiAZByD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 20:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
+        id S236058AbiAZB5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 20:57:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236019AbiAZByD (ORCPT
+        with ESMTP id S236019AbiAZB5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 20:54:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BCFC06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 17:54:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5598615FF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:54:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06723C340E0;
-        Wed, 26 Jan 2022 01:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1643162041;
-        bh=HmDtfxHw0TkZKeuMjg1E/+s3cS8wl9HTxKT4JJin/A4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=n5W4MYLNrHSAzrkjeTunr7ROvRwu84tUqYlWmglWNH4T//dtLXIn3XAJsu5oOdaoH
-         hhxJKASSMVAc5InifAJPSkFHODUBamnR4xjouMwwZkOj3UzrHg03LPUaphyCqFmig0
-         4GWA/ydOhy/CdALNzAxvUlCuplk6C1kKEtRdi8hk=
-Date:   Tue, 25 Jan 2022 17:53:59 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Andy Whitcroft <apw@canonical.com>
-Cc:     Joe Perches <joe@perches.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND][PATCH] checkpatch: make sure fix-up patches have Fixes
- tag
-Message-Id: <20220125175359.9571d0cb36844ebe69583298@linux-foundation.org>
-In-Reply-To: <CAO=4fJPTiNKvru=+qAasMZYUmsGQe+OBH4A2Dd1v-NFdQ8f-Qw@mail.gmail.com>
-References: <20220119074609.4162747-1-senozhatsky@chromium.org>
-        <a70570a10026203b544e930eb6dbcf6ad0abb2ad.camel@perches.com>
-        <CAO=4fJPTiNKvru=+qAasMZYUmsGQe+OBH4A2Dd1v-NFdQ8f-Qw@mail.gmail.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Tue, 25 Jan 2022 20:57:24 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99828C06161C;
+        Tue, 25 Jan 2022 17:57:23 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id s5so34999682ejx.2;
+        Tue, 25 Jan 2022 17:57:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ber9czAFymKJK5Nu9iiNkdrLf5dXe2HxggUhTVl2qPs=;
+        b=g6yHp30iuMyCGV/f57l1JQCfLpNILbuuubyvEfqfMSVZYMB8epYXbCXl1PIaKLxn9M
+         AxTOnks+EjvjPMpognpUskzE3pmYqnbZUQCEI6hVCBosEi20FfsoSqX7N2ADkFSm56wa
+         EU3FS8tZTAn92ZoDZfnOAh/6klKCJVMdEq8OF3OvPVOQE70WjzRn0dVpHY8wmzLvcMw/
+         w/A+XaYQtOHR8X2DBO8S0ktGYHTs3+4qMy6cXyF62vXhvKbvM0EQJcafT3GLVELp86EZ
+         YDHOBA98S29FXgV1GN74PbfLRipoFpsl4hNenuyIrJreQp4l+jlfDFRExzeOswwokb7U
+         MCEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ber9czAFymKJK5Nu9iiNkdrLf5dXe2HxggUhTVl2qPs=;
+        b=P0cmEMf/cwVlFxQVIxoSCuWR/k4AuL1mRZHbLUKsrNj1nYQmX6+me+iYBScUV72utd
+         EOIJ4GnwHoQaX2NbBR5SnPaUfgGz40qq8tzMVsj1PmIrZlZeJNsYn2xosEay4BMa3bZ0
+         wj1qqXo0L63Ou7S9eLwQjmWHlinpI5e2iDSY9ylE9/4Fwc7aDAWQmSHaS7fWHhWTOmOa
+         pwaVPjwOYP0BQUel6g44U8bNeCbtr5IlvoP8uf1UYyubCgYwgfDiYjJzdHbn7tukZyMR
+         geZyr5e3HLpvczVH1C9DP+Pxz83UwndPGtOGSWvuebSSMEmCj3IKTCw8l3wiJjqM76Gq
+         dZBQ==
+X-Gm-Message-State: AOAM533sAWP3t+klXjA5kX0JREVR7bZgSKXTWtLQ6Q6luZYbtU7KPK3b
+        p49vGu7ywmSN1iJo6XjkS5Q=
+X-Google-Smtp-Source: ABdhPJzns8HqDuDMWwv9qnqwTso18n3dyT7nM4kBIXMS/UJjPKM+sGBLxm8LhCxudbAxQ3bNtXbbHQ==
+X-Received: by 2002:a17:906:148d:: with SMTP id x13mr7432802ejc.225.1643162241609;
+        Tue, 25 Jan 2022 17:57:21 -0800 (PST)
+Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.gmail.com with ESMTPSA id z24sm5644523ejn.101.2022.01.25.17.57.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jan 2022 17:57:21 -0800 (PST)
+Date:   Wed, 26 Jan 2022 02:57:03 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [RFC PATCH v7 12/16] net: dsa: qca8k: add support for phy
+ read/write with mgmt Ethernet
+Message-ID: <YfCqb/qHn0XR8ONV@Ansuel-xps.localdomain>
+References: <20220123013337.20945-1-ansuelsmth@gmail.com>
+ <20220123013337.20945-13-ansuelsmth@gmail.com>
+ <20220125150355.5ywi4fe3puxaphq3@skbuf>
+ <61f08471.1c69fb81.a3d6.4d94@mx.google.com>
+ <20220126014854.opnyrd56nsrk7udp@skbuf>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126014854.opnyrd56nsrk7udp@skbuf>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 09:48:32 +0000 Andy Whitcroft <apw@canonical.com> wrote:
+On Wed, Jan 26, 2022 at 03:48:54AM +0200, Vladimir Oltean wrote:
+> On Wed, Jan 26, 2022 at 12:14:55AM +0100, Ansuel Smith wrote:
+> > > At some point, you'll have to do something about those sequence numbers.
+> > > Hardcoding 200 and 400 isn't going to get you very far, it's prone to
+> > > errors. How about dealing with it now? If treating them as actual
+> > > sequence numbers isn't useful because you can't have multiple packets in
+> > > flight due to reordering concerns, at least create a macro for each
+> > > sequence number used by the driver for packet identification.
+> > 
+> > Is documenting define and adding some inline function acceptable? That
+> > should make the separation more clear and also prepare for a future
+> > implementation. The way I see an use for the seq number is something
+> > like a global workqueue that would handle all this stuff and be the one
+> > that handle the seq number.
+> > I mean another way would be just use a counter that will overflow and
+> > remove all this garbage with hardcoded seq number.
+> > (think will follow this path and just implement a correct seq number...)
+>
+> Cleanest would be, I think, to just treat the sequence number as a
+> rolling counter and use it to match the request to the response.
+> But I didn't object to your use of fixed numbers per packet type, just
+> to the lack of a #define behind those numbers.
+>
 
-> On Wed, Jan 19, 2022 at 9:42 AM Joe Perches <joe@perches.com> wrote:
-> >
-> > On Wed, 2022-01-19 at 16:46 +0900, Sergey Senozhatsky wrote:
-> > > If a patch contains "commit hash (commit name)", in other words
-> > > if the patch fixes some particular commit, then require "Fixes:"
-> > > tag.
-> >
-> > I do not like this patch as many commits merely reference a
-> > previous patch and do not actually fix anything.
+I'm just implementing this. (rolling counter)
+
+> > > > +	mutex_lock(&phy_hdr_data->mutex);
+> > > 
+> > > Shouldn't qca8k_master_change() also take phy_hdr_data->mutex?
+> > > 
+> > 
+> > Is actually the normal mgmg_hdr_data. 
+> > 
+> > phy_hdr_data = &priv->mgmt_hdr_data;
+> > 
+> > Should I remove this and use mgmt_hdr_data directly to remove any
+> > confusion? 
 > 
-> Agree.  It would need to be a tighter form of language to be safe to
-> automatically suggest a Fixes tag.  The point of a Fixes tag is to be
-> a semantically safe indicator of this relationship not relying on the
-> vagaries of English for that connection.
-> 
-> You might be ok with something which is a tighter match on like
-> "fixes <hash> (<name>)" and only suggesting a Fixes.
+> I am not thrilled by the naming of this data structure anyway
+> (why "hdr"?), but yes, I also got tricked by inconsistent naming.
+> Please choose a consistent name and stick with it.
 
-Also.
+Hdr as header stuff since all this stuff is put in the hdr. Should I
+just drop hdr and use mgmt_data directly? Or mgmt_eth?
 
-stable tree maintainers appear to have the habit of taking anything
-which has Fixes and cheerfully backporting it.  Sometimes undesirably. 
-This patch will encourage people to worsen this problem.
-
-I wish this would simply stop, kernel-wide.  Make developers and
-tree-owners actually *think* about the backport desirability.
-
-If that were the global approach then checkpatch could
-
-a) ask developers if they should have added "Fixes:" (this patch) then
-
-b) if it has "Fixes:", ask developers if they should have added cc:stable.
-
-
+-- 
+	Ansuel

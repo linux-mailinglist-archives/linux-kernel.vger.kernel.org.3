@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF68949CB31
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D41A49CB36
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241267AbiAZNpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:45:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58226 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235305AbiAZNpe (ORCPT
+        id S235353AbiAZNqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:46:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30875 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234226AbiAZNqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:45:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CE77B81E0F;
-        Wed, 26 Jan 2022 13:45:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9195C340E3;
-        Wed, 26 Jan 2022 13:45:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643204731;
-        bh=aXQde9wq7cWvdCRLRrI1FIQr3++bEQ4exG2q/lhqD3E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=v+g8gUQjIt/c0ktBUQcit03sTj8G5mLw8FT+LXQqudlxh2iXfgafDrgsKIgJcd+6A
-         KW7BP0Pf7wtiKC9gzDKJw1Q0VKMx5apmABXH/60JK3d2VK/Sw93FHWeCcfYpb1QPrC
-         cxProUa3b1FFVLRT4j2tOajkb4EpxDNqSymszfjw=
-Date:   Wed, 26 Jan 2022 14:45:28 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Walt Drummond <walt@drummond.us>
-Cc:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
-        borntraeger@linux.ibm.com, chris@zankel.net, davem@davemloft.net,
-        hca@linux.ibm.com, deller@gmx.de, ink@jurassic.park.msu.ru,
-        James.Bottomley@hansenpartnership.com, jirislaby@kernel.org,
-        mattst88@gmail.com, jcmvbkbc@gmail.com, mpe@ellerman.id.au,
-        paulus@samba.org, rth@twiddle.net, dalias@libc.org,
-        tsbogend@alpha.franken.de, gor@linux.ibm.com, ysato@users.osdn.me,
-        linux-kernel@vger.kernel.org, ar@cs.msu.ru,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH 0/3] status: TTY status message request
-Message-ID: <YfFQeC1cUVFmISMK@kroah.com>
-References: <20220118044259.764945-1-walt@drummond.us>
+        Wed, 26 Jan 2022 08:46:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643204772;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nMApqNt1ZgI6jKrx8919Fwq96Y3BR80tJUMXs42hsh8=;
+        b=B6HgCI8nroL78duOOFi7iAlArldQR3QdXZEKPcZTehvEeGzWp5J9McfxIYK/t6VxAnW+9T
+        c3Sv6FEFR77RfWKN3KnKx1DI14sRgr5JxNCDcRmEYUz+kD+U+UyhW+W82G6TL4svTtTTtO
+        fE/AwyaT2AU1qRdCOOJeeANipeRWcAc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-ua9qt_imPB2bztNGbTslRQ-1; Wed, 26 Jan 2022 08:46:10 -0500
+X-MC-Unique: ua9qt_imPB2bztNGbTslRQ-1
+Received: by mail-wm1-f70.google.com with SMTP id j18-20020a05600c1c1200b0034aeea95dacso2577519wms.8
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:46:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nMApqNt1ZgI6jKrx8919Fwq96Y3BR80tJUMXs42hsh8=;
+        b=XGNx/k8AkQ01uzsYFXo+IfsvgwYJ5CSDV5OJYnp7ji3ipuvjj6+D4HK2AnwzjIk/D7
+         a8W0uwbEUNbIgwQZz1GLnLROQzbFFJPQfXX5eC0u4biaHhAHuUmndiVIlSboPMAscAPp
+         psXy5pvffmvOa3Rs00oEi9cpwpmmr+FVQb57CPGz/POn0YGR899j7SmMuz1/2BixM2Dz
+         vUN5Fv6M3amNxvhQ/u3ZVpon548pKG22N+r9dvm7uEqc5WBSQNwJ1UIvWfqlKkV/NsXa
+         4VwRHQwnwfDZZXdMEHrQVKBgL8GytMBkzSbykYhxBthACcbJHAk9yeqlcpJWZdIfWJ4r
+         TQwg==
+X-Gm-Message-State: AOAM533vZE/sEAyA5rFBBwLresiRUAn1cEDCBTr5TzPztWJ1twkmYDh9
+        Pwp33yb99FTZXoco7hp/RNrEzbuFK84YNMcidzqYvX/RIxdykJbKM6CXwSqTY10HT3wALQfgyYX
+        sBtxHSdklzN+h19mEpb9z/9PB
+X-Received: by 2002:a7b:cb58:: with SMTP id v24mr7603328wmj.135.1643204769696;
+        Wed, 26 Jan 2022 05:46:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzD39jP25QuHyT/d3Ps5v4zM6D8JIYamRlR6NsTAlxrtt8yJfueUZCTKAbWmscHo0FL1EDqYg==
+X-Received: by 2002:a7b:cb58:: with SMTP id v24mr7603318wmj.135.1643204769510;
+        Wed, 26 Jan 2022 05:46:09 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f13sm1652132wry.77.2022.01.26.05.46.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 05:46:09 -0800 (PST)
+Message-ID: <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
+Date:   Wed, 26 Jan 2022 14:46:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220118044259.764945-1-walt@drummond.us>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
+ <YfEG2qVO9K9G+g1d@kroah.com>
+ <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
+ <f671a112-880d-1526-a395-360947b40c5a@gmx.de> <YfEv7OQs98O9wJdJ@kroah.com>
+ <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YfFIpBb7lL4ukWjm@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 08:42:57PM -0800, Walt Drummond wrote:
-> This patchset adds TTY status message request feature to the n_tty
-> line dicipline.  This feature prints a brief message containing basic
-> system and process group information to a user's TTY in response to a
-> new control character in the line dicipline (default Ctrl-T) or the
-> TIOCSTAT ioctl.  The message contains the current system load, the
-> name and PID of an interesting process in the forground process group,
-> it's run time, percent CPU usage and RSS.  An example of this message
-> is:
+On 1/26/22 14:12, Andy Shevchenko wrote:
+> On Wed, Jan 26, 2022 at 12:26:36PM +0100, Greg Kroah-Hartman wrote:
+>> On Wed, Jan 26, 2022 at 12:17:08PM +0100, Helge Deller wrote:
+>>> On 1/26/22 11:31, Daniel Vetter wrote:
 > 
->   load: 0.31  cmd: sleep 3616843 [sleeping] 0.36r 0.00u 0.00s 0% 696k
+> ...
 > 
-> User API visible changes are limited to:
->  - The addition of VSTATUS in termios.c_cc[]
->  - The addition of NOKERNINFO bit in termios.l_cflags
->  - The addition of the TIOCSTAT ioctl number
+>>> You are describing a transitioning over to DRM - which is Ok.
+>>> But on that way there is no need to ignore, deny or even kill usage scenarios
+>>> which are different compared to your usage scenarios (e.g. embedded devices,
+>>> old platforms, slow devices, slow busses, no 3D hardware features,
+>>> low-color devices, ...).
+>>
+>> All of those should be handled by the drm layer, as Daniel keeps
+>> pointing out.  If not, then the tinydrm layer needs to be enhanced to do
+>> so.
+>>
+>> Anyone have a pointer to hardware I can buy that is one of these fbtft
+>> drivers that I could do a port to drm to see just how much work is
+>> really needed here?
 > 
-> None of these changes break the existing kernel api as the termios
-> structure on all architectures has enough space in the control
-> character array (.c_cc) for the new character, and the other changes
-> are space agnostic.
-> 
-> This feature is in many other Unix-like systems, both current and
-> historical.  In other implementations, this feature would also send
-> SIGINFO to the process group; this implementation does not.
-> 
-> Walt Drummond (3):
->   vstatus: Allow the n_tty line dicipline to write to a user tty
->   vstatus: Add user space API definitions for VSTATUS, NOKERNINFO and
->     TIOCSTAT
->   status: Display an informational message when the VSTATUS character is
->     pressed or TIOCSTAT ioctl is called.
-> 
->  arch/alpha/include/asm/termios.h         |   4 +-
->  arch/alpha/include/uapi/asm/ioctls.h     |   1 +
->  arch/alpha/include/uapi/asm/termbits.h   |  34 ++---
->  arch/ia64/include/asm/termios.h          |   4 +-
->  arch/ia64/include/uapi/asm/termbits.h    |  34 ++---
->  arch/mips/include/asm/termios.h          |   4 +-
->  arch/mips/include/uapi/asm/ioctls.h      |   1 +
->  arch/mips/include/uapi/asm/termbits.h    |  36 ++---
->  arch/parisc/include/asm/termios.h        |   4 +-
->  arch/parisc/include/uapi/asm/ioctls.h    |   1 +
->  arch/parisc/include/uapi/asm/termbits.h  |  34 ++---
->  arch/powerpc/include/asm/termios.h       |   4 +-
->  arch/powerpc/include/uapi/asm/ioctls.h   |   2 +
->  arch/powerpc/include/uapi/asm/termbits.h |  34 ++---
->  arch/s390/include/asm/termios.h          |   4 +-
->  arch/sh/include/uapi/asm/ioctls.h        |   1 +
->  arch/sparc/include/uapi/asm/ioctls.h     |   1 +
->  arch/sparc/include/uapi/asm/termbits.h   |  38 +++---
->  arch/xtensa/include/uapi/asm/ioctls.h    |   1 +
->  drivers/tty/Makefile                     |   2 +-
->  drivers/tty/n_tty.c                      | 113 +++++++++++-----
->  drivers/tty/n_tty_status.c               | 162 +++++++++++++++++++++++
->  drivers/tty/tty_io.c                     |   2 +-
->  include/asm-generic/termios.h            |   4 +-
->  include/linux/tty.h                      | 123 ++++++++---------
->  include/uapi/asm-generic/ioctls.h        |   1 +
->  include/uapi/asm-generic/termbits.h      |  34 ++---
->  27 files changed, 461 insertions(+), 222 deletions(-)
->  create mode 100644 drivers/tty/n_tty_status.c
-> 
-> -- 
-> 2.30.2
-> 
+> I have bought myself (for other purposes, I mean not to convert the driver(s))
+> SSD1306 based display (SPI), SSD1331 (SPI), HX88347d (parallel).
+>
 
-You forgot to cc: me on patch 2/3, which would be needed if I was to
-take them all.
+I've just bought a SSD1306 (I2C) based one and will attempt to write a DRM
+driver using drivers/staging/fbtft/fb_ssd1306.c as a reference.
 
-Please fix up patch 2 and resend the whole series.
+I didn't find one with a SPI interface but we can later add a transport for
+that if I succeed.
 
-thanks,
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-greg k-h

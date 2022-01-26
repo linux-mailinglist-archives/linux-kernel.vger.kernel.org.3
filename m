@@ -2,101 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A775449D41A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 247A249D421
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiAZVFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
+        id S231777AbiAZVKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiAZVFt (ORCPT
+        with ESMTP id S230384AbiAZVKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:05:49 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D598C06161C;
-        Wed, 26 Jan 2022 13:05:49 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id p203so2003445oih.10;
-        Wed, 26 Jan 2022 13:05:49 -0800 (PST)
+        Wed, 26 Jan 2022 16:10:00 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F45C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:10:00 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so826087pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:10:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gNQC12hn9F8dVuK4M0QfVja0uPmD/mvPu7aoFuquqys=;
-        b=dQLGqTCj3pHnUzAT6aNm+nbShXkH9hvS96P2BFWxjVznEoqriOCX/e45/awpNgrbuH
-         Cpb7aERrREbi+6D696PcO5qa8J2WCAYVEQp90HbzzKEceHH2VvExQsYc9CceUnQdO1NP
-         WxjwJzNC7NfXLmKtbeskKK5E16vtj2jbpoCm4JhlmzXWYS/srHdPD7rFCXiX17Gn1lzF
-         XJWZfIonLM5x84yfb5F6Nr3vRl/hkGEpDTG71qolp7xDQf5AuhS040uoPUnhmqhFxWe3
-         n3uHhPJfkI/1Ccm4aL41wU/NjtIdcglOz4vVU9rbR9ncZ8DIVQFFrPhovxAHuRxXGbmS
-         2qig==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=tYDHNpCyJMrhlfLdWcTGq0aLjyHZFNie0hu9GypnFpw=;
+        b=BtHh2bZJz8WOmIVHiyJ4B5iNLx/r0TuQgmOzh2mcoKAKVaNvuyu3yGT+LgdgSpLTbb
+         6JOwzNRRBrpzkHESupujsKm6C1mnseEGZ4elW7r4Fp+95Zs7Fj8xcncOrIQUDL2d8uEW
+         MTh+vB2bp1ejZFiJzEyPPa/dhQj+pgJTjQ38Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=gNQC12hn9F8dVuK4M0QfVja0uPmD/mvPu7aoFuquqys=;
-        b=lyRqt872GGDncV7ELPvln6F8rpBnf9LHt/JJndAObE+l6k9XLLBtziOC0MXrOG7YQ4
-         MkZ0ZQFVILSajcn5IshrhWHAx0yb64UYhCsOiktBHWnDUQ+bSO75dAPC5mt5uKwZiips
-         o0Cm0TsMFrCN31HwEyV2mH4sFRf8g2mS2Dijp2ym0zF6SCb/IVLoD5hjX27eNmK7gCMQ
-         HmD0WP4F6EIrMie3qv6w1TVxXEUylyeBF/ajyp13ndlMb5R2ag8Cr7Ajc5EUK8AYn17z
-         GY1cCovT1/FNo+gVkC6hqYBPdl/nzU+PxePA0AIws0icLGlc8k8XVsEqLXcNWAM2U0Js
-         nl3A==
-X-Gm-Message-State: AOAM531wr/iTvXKwdtVcCBhuGpqihua2dM0sZREwGBzXDXGUIMe2ky23
-        qmnB06Y46YaPnQIsV35gYnnZcPVzBPM=
-X-Google-Smtp-Source: ABdhPJxd2XmlmTYvu3V+cerEFa8gxtuZv3N4vthizhbsO5aLxLiyVjKv4O9WbDIHcpka8maTWKCZ9Q==
-X-Received: by 2002:a05:6808:2128:: with SMTP id r40mr34898oiw.96.1643231148628;
-        Wed, 26 Jan 2022 13:05:48 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b7sm8012217ooq.30.2022.01.26.13.05.47
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=tYDHNpCyJMrhlfLdWcTGq0aLjyHZFNie0hu9GypnFpw=;
+        b=j0IkbbMMSSGTCBQXvKMk+LYXn/OYxsHQF4BI7+WNMkVn8u/p6ElJjltYD2VxNneSY5
+         TeWlfNqa+F9KPwiLVvjiTQViZvCOITEOWMvUVLf5roi/O4nct1s3adLpIqtZNv1bv7v5
+         91jCu6PoIzo1G6CUcmUC8yakVW/1rg0yX9LDc3+uQTGcnB0zYVbAzo3gds18jwMpG5FB
+         5xmPNBdyqCAJWtFJR8/PU08bsx18BiMlrqfnhwG3I3PJ+ES9Fztq6sLozAT+bSO3wDX4
+         IB1RwMBzV1fYdkU4IoqzaviVBTdiO70nqNKwv5BGhdywdK0JYmz3BUQ9pYmAs03t2+et
+         EtBw==
+X-Gm-Message-State: AOAM532iN50XUhhiiNaAh5sy8BWeCnajkWtKI/d1WB5LLMNSNfZIML3U
+        w2+UOlu+xf4OPw0DNYA/rqCBAQ==
+X-Google-Smtp-Source: ABdhPJwV+LWCbalaSeDtSG6cRcoMExxaDxPvqOoOUDNClgjTjPvpVSpB7loAIxkMN9m/f5HlsPk9cg==
+X-Received: by 2002:a17:902:bc4c:: with SMTP id t12mr907572plz.76.1643231399224;
+        Wed, 26 Jan 2022 13:09:59 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j33sm2559458pgl.90.2022.01.26.13.09.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 13:05:47 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 26 Jan 2022 13:05:46 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
-Message-ID: <20220126210546.GA3265892@roeck-us.net>
-References: <20220125155447.179130255@linuxfoundation.org>
+        Wed, 26 Jan 2022 13:09:58 -0800 (PST)
+Date:   Wed, 26 Jan 2022 13:09:58 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        kernel test robot <lkp@intel.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: Re: [PATCH v3 1/3] string: Make stpcpy() possible to use
+Message-ID: <202201261300.68D0EEB8@keescook>
+References: <20220126141917.75399-1-andriy.shevchenko@linux.intel.com>
+ <CAKwvOdkBAe4qMdFgDFWNLHMsJrW+PBwa7-hAL5T9fReQqNiF7g@mail.gmail.com>
+ <YfGPBi2VWlRHqxXe@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220125155447.179130255@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YfGPBi2VWlRHqxXe@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:33:08PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.3 release.
-> There are 1033 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Jan 26, 2022 at 08:12:22PM +0200, Andy Shevchenko wrote:
+> On Wed, Jan 26, 2022 at 09:49:38AM -0800, Nick Desaulniers wrote:
+> > On Wed, Jan 26, 2022 at 6:19 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > It is a good rule to avoid submitting code without users.
+> > > Currently the stpcpy() is unusable due to missed declaration.
+> > > Any attempts to use it will bring something like:
+> > >
+> > >   error: implicit declaration of function ‘stpcpy’ [-Werror=implicit-function-declaration]
+> > >
+> > > Move declaration to the header and guard it as other string functions.
 > 
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
+> ...
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
+> > Recall the discussion from Kees:
+> > https://lore.kernel.org/lkml/CAK7LNAQXo5-5W6hvNMEVPBPf3tRWaf-pQdSR-0OHyi4RCGhjsQ@mail.gmail.com/
+> > and
+> > https://lore.kernel.org/lkml/202008150921.B70721A359@keescook/
 > 
-> thanks,
-> 
-> greg k-h
-> 
-> -------------
-> Pseudo-Shortlog of commits:
-> 
-> 
-[ ... ]
-> 
-> Chen Wandun <chenwandun@huawei.com>
->     mm/page_isolation: unset migratetype directly for non Buddy page
-> 
+> For the record :-)
+> https://lore.kernel.org/lkml/CAHp75VfniSw3AFTyyDk2OoAChGx7S6wF7sZKpJXNHmk97BoRXA@mail.gmail.com/
+> [...
+> strcpy() is not a bad API for the cases when you know what you are
+> doing. A problem that most of the developers do not know what they are
+> doing.
+> No need to split everything to bad and good by its name or semantics,
+> each API has its own pros and cons and programmers must use their
+> brains.
+> ...]
 
-This patch causes some of my qemu emulations to crash due to lack of memory.
-This is seen both in v5.16.3-rc2 and in the mainline kernel. A request to
-revert this patch is here:
+Developers should not need to remember to avoid foot-guns; the toolchain
+should be doing all of that. The trouble is that C (and its standard
+libs) are filled with foot-guns.
 
-https://lore.kernel.org/linux-mm/20220124084151.GA95197@francesco-nb.int.toradex.com/t/
+I do not want to add another foot-gun API to the kernel; we've been
+working very hard to _remove_ them. :) If the kernel's stpcpy() _only_
+worked on all known-size strings, etc, so that memory safety could be
+determined at compile-time, then I'd have no objection.
 
-Guenter
+What's not clear to me is if such macro versions would be workable for
+the reason stpcpy() was added in the first place, which was the compiler
+transforming other calls stuff into library calls it thinks are defined.
+
+Totally untested:
+
+#define stpcpy(dst, src) ({					\
+	size_t _stp__dst = __builtin_object_size(dst, 1);	\
+	size_t _stp__src = __builtin_object_size(src, 1);	\
+								\
+	BUILD_BUG_ON(_stp__dst == -1 || _stp__src == -1);	\
+	BUILD_BUG_ON(_stp__src > _stp__dst);			\
+								\
+	__builtin_stpcpy(dst, src);				\
+})
+
+(Is there even a __builtin_stpcpy()?)
+
+-- 
+Kees Cook

@@ -2,112 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B68CD49C05E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFD349C063
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235460AbiAZA6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 19:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S235481AbiAZA73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 19:59:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234910AbiAZA6S (ORCPT
+        with ESMTP id S235472AbiAZA71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 19:58:18 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB7CC06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:58:18 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id v123so26577098wme.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:58:18 -0800 (PST)
+        Tue, 25 Jan 2022 19:59:27 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A92C06173B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:59:26 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id x7so59990711lfu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 16:59:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=F1ajyeCYIjo/oOGZ58msEWT7W8A+h5mfhGo1MjpnYCc=;
-        b=tEQdphlxe+odqnIzx6L/54adIDb7Y88J3cFAPyU4CBb6Mn2JbQLTRU8X2AZphdzgXa
-         O3WRyH5vc9hXD26sW4ciwRuy4LGKg+od+MHkWbNnR/ArxQiz9pNX4+/448mPIOtP4cpN
-         Y/xHpuuQ9jSgkIoV79kUb2oIoXRn+IaZIXYiCFY40CRt+bhQYl1Cwqwc34B2tHOhuPsH
-         /PDzikeC4QLWmD1kIb612oOppfKhGz0a5qvBKsaitoJxyiK4bqAkr7suPUc2f/6MDJJh
-         BKLtzcSEIUUouJ+CvXOa7Frymd5xD0/yNUx0Ut4qWzkm4sYwqGOwnoUNiqrYvx77EhoT
-         XbDQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z71P7Xp5dv6WjZqQ3zBgUE6e/dyCl8Gv6LZSgzhmEF0=;
+        b=YxkcuAon8bS+2bQjPPNAgxM2rDMFd6aoPVQ/fcKh0AkzpcJfXxuJ4rLkJlfnjnRB8f
+         jeHfmu0k5gmyMY/n9jdN0eW2fAudKR/84WqEBH2x69Bzcicm6s3a6JsQMK6w8lHb1Lps
+         ZxHzEpYXnARrogT72+tdrulFexJ0VbmbUZZJrSH10PQQ+t0/rka4hI0pksA5MwDYyDgj
+         /hzjVQmpPB+HbOh4PC+WQdi+1bMfs8etFyRfSdt6hag3sGL8Ls1pIETUseevlo0mMyNb
+         7MM7CcMS9skmdB687IiPvJNhetJiCiKab2IxnqwgGL9/qONMIm8qYYbGKF5r3ZO1fZgq
+         QiQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=F1ajyeCYIjo/oOGZ58msEWT7W8A+h5mfhGo1MjpnYCc=;
-        b=8FwfQqnkVAwP1Hes1UNSqkZgULsVl5LyJpsZga33wXGRI7Ny7sunu5JSVOxI4tCVWQ
-         CqN3hZ+gsY8LUgMaAuQx0qzjWMbEeQK4edh52NLQBjAJFCLVtAAbOhyrjQzzujQ5w/BV
-         ezcm5pdx0GUrDFJJB/Gqc0eu2Mu1iTsdKLxFlnh5jMIlGPE/UPDyaVafRRhoqnm0WTw/
-         x8ly9qh0kJYqr96EsRiKmGYNlB0gCaaC+yAw6nfxbLs1hRoJzxuuTKFVjIROalvgJ92/
-         ETSChvDPUKf5/Jl7Ze7qRvxP0xnt95aGBBS101OBEAWSrXtz7maI50l6rTICZ+cbdN8w
-         FCRA==
-X-Gm-Message-State: AOAM532rw/dSfQrHd4N7rr7ZadprwlGkgERaluyBGpFT7YmA3AiM5VE0
-        ysHdVisf5YsO7GfEDmvp0a5aumZwtTHSxA==
-X-Google-Smtp-Source: ABdhPJyM8U8iNqmQorj9ATdc/xVqC/YmwCvm7jdqJHdvBtXdXBQEFydhD/ABDzpLONM88tAmhdTabA==
-X-Received: by 2002:a05:600c:1f15:: with SMTP id bd21mr5001978wmb.145.1643158697122;
-        Tue, 25 Jan 2022 16:58:17 -0800 (PST)
-Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id k12sm17847963wrd.98.2022.01.25.16.58.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 16:58:14 -0800 (PST)
-Date:   Wed, 26 Jan 2022 00:58:12 +0000
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     dan.carpenter@oracle.com, Larry.Finger@lwfinger.net,
-        straube.linux@gmail.com, martin@kaiser.cx,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/10] staging: r8188eu: remove smaller sets of DBG_88E
- calls from os_dep dir
-Message-ID: <YfCcpHJlER2tLQ1o@equinox>
-References: <20220124224415.831-1-phil@philpotter.co.uk>
- <20220124224415.831-6-phil@philpotter.co.uk>
- <67ddc4d7-e19f-7c9d-a4b7-4eb555830ea1@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z71P7Xp5dv6WjZqQ3zBgUE6e/dyCl8Gv6LZSgzhmEF0=;
+        b=HaEt3lXQgjCXmUXO5NuBJ35hRFkBfjDTTjH66E4zCRSoO0elUg4VdpVLRCyP9DJvfY
+         BuMEKUUFG38Wva1Kh0dCglkKwBQYm2n1uREP9Q0f5OhhXTv6StGgX1QMd5gOEUehA1WM
+         IG4SYqh5DubuzsZJZk0SCakKV/H+zTjxLjVR9dq8kSgSVj67giLw5x6OFkcJEFXvEiWg
+         mTwui1KTw0Bg00zFrEiytUJa1pPhpu5baPOj2lhG/ByG/3+t6XCnTJb7G95uDOnfZb+5
+         yOeT21wMPooNua2bOUTqHMoUF43P3Wl/e7JKRopG5P7SsgCqNMivx1aSc08Pdpsu04dW
+         SI9w==
+X-Gm-Message-State: AOAM531D+tO8Mdkw7NrgxfyrlGp66cN6I2tvrGh+RCTxQ2n7Mh6OQ8N3
+        kIREqOAQQn4tt5ksy/oVP4MocKbcH7IAH3rK48s7DA==
+X-Google-Smtp-Source: ABdhPJwy4V88GdNrO9tRchz5OfI8p/bCHIpaK5dAlNpQA1JPyiTKreaA0cOPcwZEMFUN2L3ofZuzU/IpAj8pZtAGgN0=
+X-Received: by 2002:a05:6512:b0d:: with SMTP id w13mr18623372lfu.240.1643158765067;
+ Tue, 25 Jan 2022 16:59:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67ddc4d7-e19f-7c9d-a4b7-4eb555830ea1@gmail.com>
+References: <20220114010526.1776605-1-ndesaulniers@google.com>
+ <YeQei0xNzMq7bFdg@zn.tnic> <20220118192256.jzk5dnceeusq7x7u@treble>
+ <20220118230120.pivvson7qekfiqic@treble> <CAKwvOdmLzwz=02ypt0_1324_5-7i3Az7HizFaDMqZv__-D99uA@mail.gmail.com>
+ <20220125233128.GT614@gate.crashing.org>
+In-Reply-To: <20220125233128.GT614@gate.crashing.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 25 Jan 2022 16:59:12 -0800
+Message-ID: <CAKwvOd=P0VAFrrUXV0z5dES9hYP2b8-KwTzyG5=ezeUve=K3QA@mail.gmail.com>
+Subject: Re: [PATCH] objtool: prefer memory clobber & %= to volatile & __COUNTER__
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        x86@kernel.org, llvm@lists.linux.dev, linux-sparse@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 03:48:32PM +0300, Pavel Skripkin wrote:
-> Hi Phillip,
-> 
-> On 1/25/22 01:44, Phillip Potter wrote:
-> > Remove all DBG_88E calls from the os_dep directory, other than those in
-> > os_dep/ioctl_linux.c, as this contains almost 200 on its own so will be
-> > done in a separate patch for ease of review. These calls do not conform
-> > to kernel coding standards and are superfluous. Also restructure where
-> > appropriate to remove no longer needed code left behind by removal of
-> > these calls. This will allow the eventual removal of the DBG_88E macro
-> > itself.
-> > 
-> > Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
-> > ---
-> 
-> [code snip]
-> 
-> > -	/* 2012-07-11 Move here to prevent the 8723AS-VAU BT auto
-> > -	 * suspend influence */
-> > -	if (usb_autopm_get_interface(pusb_intf) < 0)
-> > -			DBG_88E("can't get autopm:\n");
-> > -
-> 
-> Didn't you make a function change here? I didn't test and also didn't find
-> any mentions of tests in cover letter.
-> 
-> I am asking just to be sure you done it not by accident :)
-> 
-> 
-> 
-> 
-> 
-> With regards,
-> Pavel Skripkin
+On Tue, Jan 25, 2022 at 3:34 PM Segher Boessenkool
+<segher@kernel.crashing.org> wrote:
+>
+> Hi!
+>
+> On Mon, Jan 24, 2022 at 03:26:36PM -0800, Nick Desaulniers wrote:
+>
+> > If this is fixed in gcc-10, then we can probably add a comment with a
+> > FIXME link to the issue or commit to replace __COUNTER__ with %= one
+> > day.  If not, then we can probably come up with a reduced test case
+> > for the GCC devs to take a look at, then add the FIXME comment to
+> > kernel sources.
+>
+> Please open a PR?
 
-Hi Pavel,
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104236
 
-Thank you for this and your other feedback, really appreciate it :-) So
-I mistakenly took this out, you're quite right - will fix in next
-series.
+> > I'm more confident that we can remove the `volatile` keyword (I was
+> > thinking about adding a new diagnostic to clang to warn that volatile
+> > is redundate+implied for asm goto or inline asm that doesn't have
+> > outputs) though that's not the problem here and will probably generate
+> > some kernel wide cleanup before we could enable such a flag.
+>
+> Its main value is that it would discourage users from thinking volatile
+> is magic.  Seriously worth some pain!
 
-Regards,
-Phil
+Yeah, SGTM.
+
+>
+> > Perhaps
+> > there are known compiler versions that still require the keyword for
+> > those cases for some reason.
+>
+> It was removed from compiler-gcc.h in 3347acc6fcd4 (which changed the
+> minimum required GCC version to GCC 5).
+
+```
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index e512f5505dad..b8fe0c23cfff 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -80,11 +80,25 @@ void ftrace_likely_update(struct
+ftrace_likely_data *f, int val,
+
+ /* Optimization barrier */
+ #ifndef barrier
+-# define barrier() __memory_barrier()
++/* The "volatile" is due to gcc bugs */
++# define barrier() __asm__ __volatile__("": : :"memory")
+```
+
+I definitely wish there was a comment with a link to what "gcc bugs"
+they were referring to; otherwise who knows if it's been fixed...if
+they have been...
+-- 
+Thanks,
+~Nick Desaulniers

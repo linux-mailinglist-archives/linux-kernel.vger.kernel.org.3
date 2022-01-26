@@ -2,122 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D69FC49CF2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2648349CF36
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238620AbiAZQGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:06:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:41918 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239660AbiAZQGS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:06:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB9DB6198D;
-        Wed, 26 Jan 2022 16:06:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C78E3C340E3;
-        Wed, 26 Jan 2022 16:06:16 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Qcfx9C2M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1643213175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jmse18xcLhz3SCOMgvJU4F5qqQvTw8luGTUoUmHjGcI=;
-        b=Qcfx9C2MeBbs1ALfSZQWchlnLgN6+0V9o36Go9hB0hud3LSBkld3SdIkpP0qPtvqs5AKct
-        CIClV1Fn7z1mTapfL6fm2oG+3obgPNfyUbQNty+7Epzf/qdh05yvO1+GBMwVfCrb5J8oUD
-        nRDWF8JfAL64kJSBV3LlBrbzb6GAZFQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e5af9bf0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 26 Jan 2022 16:06:14 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id p5so101060ybd.13;
-        Wed, 26 Jan 2022 08:06:14 -0800 (PST)
-X-Gm-Message-State: AOAM532pPOIt0dxVu1zq7iJ4DZm1AAaAdceC8c2CnNVOgmq1HPmGtGcT
-        b2s5TSccoZ/q5VB6LYCyolVuYw4h6D/vB05zu4g=
-X-Google-Smtp-Source: ABdhPJxz/i/g3wR2x3AgUNVGqW0cVEBKEphs3Qy+Orkeeuhs9ANKTPTnbVTPetntoMwMkGruzFyXWdKY5sO99mNs/Pc=
-X-Received: by 2002:a25:244b:: with SMTP id k72mr39212179ybk.638.1643213174162;
- Wed, 26 Jan 2022 08:06:14 -0800 (PST)
+        id S237334AbiAZQHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:07:36 -0500
+Received: from foss.arm.com ([217.140.110.172]:50036 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236823AbiAZQHe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 11:07:34 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CED85D6E;
+        Wed, 26 Jan 2022 08:07:33 -0800 (PST)
+Received: from ip-10-252-15-108.eu-west-1.compute.internal (unknown [10.252.15.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8151C3F766;
+        Wed, 26 Jan 2022 08:07:31 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH] perf test: Add perf_event_attr tests for the arm_spe event
+Date:   Wed, 26 Jan 2022 16:07:09 +0000
+Message-Id: <20220126160710.32983-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220125201457.77292-1-linux@dominikbrodowski.net>
-In-Reply-To: <20220125201457.77292-1-linux@dominikbrodowski.net>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 26 Jan 2022 17:06:02 +0100
-X-Gmail-Original-Message-ID: <CAHmME9r9G5p+E3-kG5eKvr-DYNSkS7E9PNCsjQFNFSuH_FRnWQ@mail.gmail.com>
-Message-ID: <CAHmME9r9G5p+E3-kG5eKvr-DYNSkS7E9PNCsjQFNFSuH_FRnWQ@mail.gmail.com>
-Subject: Re: [PATCH] random: continually use hwgenerator randomness
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dominik,
+Adds a couple of perf_event_attr tests for the fix introduced in [1].
+The tests check that the correct sample_period value is set in the
+struct perf_event_attr of the arm_spe events.
 
-On Tue, Jan 25, 2022 at 9:19 PM Dominik Brodowski
-<linux@dominikbrodowski.net> wrote:
-> The rngd kernel thread may sleep indefinitely if the entropy count is
-> kept above random_write_wakeup_bits by other entropy sources. To make
-> best use of multiple sources of randomness, mix entropy from hardware
-> RNGs into the pool at least once within CRNG_RESEED_INTERVAL.
+[1]: https://lore.kernel.org/all/20220118144054.2541-1-german.gomez@arm.com/
 
-Thanks for this patch. It exposes the result of an interesting set of
-changes that have occurred over time.
+Signed-off-by: German Gomez <german.gomez@arm.com>
+---
+ tools/perf/tests/attr/README                  |  2 +
+ tools/perf/tests/attr/base-record-spe         | 40 +++++++++++++++++++
+ tools/perf/tests/attr/test-record-spe-period  | 12 ++++++
+ .../tests/attr/test-record-spe-period-term    | 12 ++++++
+ 4 files changed, 66 insertions(+)
+ create mode 100644 tools/perf/tests/attr/base-record-spe
+ create mode 100644 tools/perf/tests/attr/test-record-spe-period
+ create mode 100644 tools/perf/tests/attr/test-record-spe-period-term
 
-When does POOL_ENTROPY_BITS() decrease? There are two direct mutators:
+diff --git a/tools/perf/tests/attr/README b/tools/perf/tests/attr/README
+index 1116fc6bf2ac..454505d343fa 100644
+--- a/tools/perf/tests/attr/README
++++ b/tools/perf/tests/attr/README
+@@ -58,6 +58,8 @@ Following tests are defined (with perf commands):
+   perf record -c 100 -P kill                    (test-record-period)
+   perf record -c 1 --pfm-events=cycles:period=2 (test-record-pfm-period)
+   perf record -R kill                           (test-record-raw)
++  perf record -c 2 -e arm_spe_0// -- kill       (test-record-spe-period)
++  perf record -e arm_spe_0/period=3/ -- kill    (test-record-spe-period-term)
+   perf stat -e cycles kill                      (test-stat-basic)
+   perf stat kill                                (test-stat-default)
+   perf stat -d kill                             (test-stat-detailed-1)
+diff --git a/tools/perf/tests/attr/base-record-spe b/tools/perf/tests/attr/base-record-spe
+new file mode 100644
+index 000000000000..08fa96b59240
+--- /dev/null
++++ b/tools/perf/tests/attr/base-record-spe
+@@ -0,0 +1,40 @@
++[event]
++fd=*
++group_fd=-1
++flags=*
++cpu=*
++type=*
++size=*
++config=*
++sample_period=*
++sample_type=*
++read_format=*
++disabled=*
++inherit=*
++pinned=*
++exclusive=*
++exclude_user=*
++exclude_kernel=*
++exclude_hv=*
++exclude_idle=*
++mmap=*
++comm=*
++freq=*
++inherit_stat=*
++enable_on_exec=*
++task=*
++watermark=*
++precise_ip=*
++mmap_data=*
++sample_id_all=*
++exclude_host=*
++exclude_guest=*
++exclude_callchain_kernel=*
++exclude_callchain_user=*
++wakeup_events=*
++bp_type=*
++config1=*
++config2=*
++branch_sample_type=*
++sample_regs_user=*
++sample_stack_user=*
+diff --git a/tools/perf/tests/attr/test-record-spe-period b/tools/perf/tests/attr/test-record-spe-period
+new file mode 100644
+index 000000000000..75f8c9cd8e3f
+--- /dev/null
++++ b/tools/perf/tests/attr/test-record-spe-period
+@@ -0,0 +1,12 @@
++[config]
++command = record
++args    = --no-bpf-event -c 2 -e arm_spe_0// -- kill >/dev/null 2>&1
++ret     = 1
++arch    = aarch64
++
++[event-10:base-record-spe]
++sample_period=2
++freq=0
++
++# dummy event
++[event-1:base-record-spe]
+diff --git a/tools/perf/tests/attr/test-record-spe-period-term b/tools/perf/tests/attr/test-record-spe-period-term
+new file mode 100644
+index 000000000000..8f60a4fec657
+--- /dev/null
++++ b/tools/perf/tests/attr/test-record-spe-period-term
+@@ -0,0 +1,12 @@
++[config]
++command = record
++args    = --no-bpf-event -e arm_spe_0/period=3/ -- kill >/dev/null 2>&1
++ret     = 1
++arch    = aarch64
++
++[event-10:base-record-spe]
++sample_period=3
++freq=0
++
++# dummy event
++[event-1:base-record-spe]
+-- 
+2.25.1
 
-- Calls to account(> 0, ..)
-- RNDCLEARPOOL/RNDZAPENTCNT (though this fails to do the
-wake_up_interruptible/kill_fasync dance that account() does. bug?)
-
-The latter is a userspace decision. The former has one callsite:
-extract_entropy(.., > 0, ..).
-
-The underscore-less extract_entropy function in turn has one caller:
-crng_reseed(.., true). This in turn gets called from three places:
-
-- From credit_entropy_bits, once, when the entropy pool initializes
-for the first time.
-- From extract_crng after 5 minutes or after crng_global_init_time is set.
-- From RNDRESEEDCRNG (which is also the only non-init mutator of
-crng_global_init_time).
-
-The first is an init time thing, so not really relevant. The middle is
-already at our 5 minute interval. And the last is a userspace
-decision.
-
-Therefore, with the code as it currently exists, if there are no calls
-to the ioctls, that wait will unblock a minimum of every 5 minutes
-times random_write_wakeup_bits / 256 rounded up, and assuming a low no
-new entropy from interrupts or elsewhere (unlikely), so in the best
-case, that seems like 20 minutes? And if you want to make it happen
-more than every 20 minutes, you must call call RNDCLEARPOOL followed
-by a RNDRESEEDCRNG (due to the maybe-bug I mentioned earlier), or call
-RNDRESEEDCRNG a bunch in a loop from userspace.
-
-That certainly seems pretty weird and not nearly as automatic as it
-ought to be. Even though we don't _need_ more hw-backed entropy once
-the RNG is up, I don't see it as a bad thing to periodically stir some
-in. In fact, it's probably a reasonable thing to do.
-
-I mentioned at the beginning that this is an interesting thing
-resulting from changes over time. Specifically, the reason we're in
-this situation is because /dev/random no longer debits from the
-entropy pool (aside from the 5 minute interval calls to
-extract_entropy). And thank goodness for that. But some of the
-assumptions made in that era of random.c might be a little out of date
-now.
-
-So on first analysis of this, I think your patch is correct and I'll
-apply it. However, I'd like to wait a little bit to give others a
-chance to chime in, particularly those who maintain the actual
-hw-random driver (which is separate from random.c) and might have a
-better picture of potential hardware constraints or something along
-those lines.
-
-Regards,
-Jason

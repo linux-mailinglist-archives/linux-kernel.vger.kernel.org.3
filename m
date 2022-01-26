@@ -2,84 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F22849C20D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D1F49C210
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 04:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237119AbiAZD0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 22:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
+        id S237124AbiAZD1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 22:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237109AbiAZD0O (ORCPT
+        with ESMTP id S237131AbiAZD1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 22:26:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591CDC06161C;
-        Tue, 25 Jan 2022 19:26:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7C4461769;
-        Wed, 26 Jan 2022 03:26:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A30A7C340E3;
-        Wed, 26 Jan 2022 03:26:12 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 22:26:11 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <20220125222545.353fa400@gandalf.local.home>
-In-Reply-To: <202201251917.18361B4F6@keescook>
-References: <202201242230.C54A6BCDFE@keescook>
-        <20220125222732.98ce2e445726e773f40e122e@kernel.org>
-        <20220125233154.dac280ed36944c0c2fe6f3ac@kernel.org>
-        <202201251256.CCCBE9851E@keescook>
-        <20220125162326.3d1ca960@gandalf.local.home>
-        <20220125162859.2b3cc8a0@gandalf.local.home>
-        <202201251402.0FB08DB@keescook>
-        <20220125172114.6807ed8f@gandalf.local.home>
-        <20220126093538.893fb44a7cb0a7cd840c7fdb@kernel.org>
-        <20220125201634.698cc777@gandalf.local.home>
-        <202201251917.18361B4F6@keescook>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 25 Jan 2022 22:27:38 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24835C06161C;
+        Tue, 25 Jan 2022 19:27:38 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id q63so17370266pja.1;
+        Tue, 25 Jan 2022 19:27:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=V0UVDCg60iNlU3TXYumhUCU+eIfgZKaQYAacKYvjuTA=;
+        b=URPGAF1+eebmy5yheslwAMSi5NlPFd6ImLfIKDXEHBcYg1D8/qsNA3o/MN1KPRpvfG
+         xcS/Yqa1h7WbVvvxVXWAPsg3mKEujoKVsHQmD6nK3KP+h899TCQo/irNvXz7s/sXkvi+
+         erj8N4IZEC01ArcrgcTTBoFmTJFU+YkHSWx8NwBet60vp+j6K7FrlQRH4GgIhw7gWZaN
+         LJyw1uDRVnatWlPEN98nCY3tBHCC//71CQX5PCdjuSxbFSNuWpyZYhmynmGU0aExT7C1
+         UsUp9TuDl7sBHnHcVJTlVIB2hx/l1MMJavEpQVlgoo/a1XD0Mv8K3f3ZMF2CG+87nUAD
+         19lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=V0UVDCg60iNlU3TXYumhUCU+eIfgZKaQYAacKYvjuTA=;
+        b=E8Tg1zFVWywmZkFYf1I+RIXTC4FpA1Vq9iDPIS4C24WkRoYoLDD+nvRVGjmTUv7lcb
+         VS+fj2chyLEakJQih6UubKIl+ePOt553A1/tl5avLBgXWEEC71PxenpcbXiG7ISc2CwQ
+         Gw7K7Kjm+IZmZMB968hNd5Gl4lKhWwqRQPjWMxxXlVj79AZUL1DRHNBAzIcSLqB4BDQc
+         TUXnlk6wVPFI3ScWOVNjKpGwBzAgE6VXbVSl+VobtiQBYruaDGSeuituhOY980VyawwS
+         0Aw/J2VT+eRLdPWyrNLZPT82kdMVAlua+T1xYDsEf80QVVxUnnFhWeCUaIHY39Qppocn
+         LAwg==
+X-Gm-Message-State: AOAM530YKnxaew3/NfMKEE3w3P5cE+/PbgGmSWATGJQxPlegGlD3D7rl
+        KgTrZKXu3NbmyfhQHTd/SPs=
+X-Google-Smtp-Source: ABdhPJwS7HD+choTy2WvuofXSADGNgsJZVcIfmHdI0NgrDZAPR7P6TOA/cc2SpDc3b+pugS25KVrdw==
+X-Received: by 2002:a17:902:e843:b0:14b:339c:f427 with SMTP id t3-20020a170902e84300b0014b339cf427mr16115095plg.108.1643167657671;
+        Tue, 25 Jan 2022 19:27:37 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id l10sm396846pff.44.2022.01.25.19.27.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Jan 2022 19:27:37 -0800 (PST)
+Message-ID: <cba946ff-5ba4-b2af-118c-b1d0a7669450@gmail.com>
+Date:   Tue, 25 Jan 2022 19:27:35 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v7 02/16] net: dsa: replay master state events in
+ dsa_tree_{setup,teardown}_master
+Content-Language: en-US
+To:     Ansuel Smith <ansuelsmth@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>
+References: <20220123013337.20945-1-ansuelsmth@gmail.com>
+ <20220123013337.20945-3-ansuelsmth@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220123013337.20945-3-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 19:18:53 -0800
-Kees Cook <keescook@chromium.org> wrote:
 
-> On Tue, Jan 25, 2022 at 08:16:34PM -0500, Steven Rostedt wrote:
-> > On Wed, 26 Jan 2022 09:35:38 +0900
-> > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >   
-> > > I think Kees' idea seems better. If you and Beau are good, I will update
-> > > the macros for __rel_loc. (This requires to change some user-space
-> > > application which Beau is making too.)  
-> > 
-> > If Beau is OK with it, I'm OK with it too. I need to release a new version
-> > of libtraceevent anyway, and I can make the update for that too.
-> > 
-> > Who's adding the patch (if Beau says it's OK), you or Kees?  
+
+On 1/22/2022 5:33 PM, Ansuel Smith wrote:
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
 > 
-> I don't know anything about libtraceevent, so hopefully not me! :) The
-> patches Masami and I already sent fix the warning, so I leave it you
-> y'all to decide if you want to make the internals a bit simpler.
+> In order for switch driver to be able to make simple and reliable use of
+> the master tracking operations, they must also be notified of the
+> initial state of the DSA master, not just of the changes. This is
+> because they might enable certain features only during the time when
+> they know that the DSA master is up and running.
 > 
+> Therefore, this change explicitly checks the state of the DSA master
+> under the same rtnl_mutex as we were holding during the
+> dsa_master_setup() and dsa_master_teardown() call. The idea being that
+> if the DSA master became operational in between the moment in which it
+> became a DSA master (dsa_master_setup set dev->dsa_ptr) and the moment
+> when we checked for the master being up, there is a chance that we
+> would emit a ->master_state_change() call with no actual state change.
+> We need to avoid that by serializing the concurrent netdevice event with
+> us. If the netdevice event started before, we force it to finish before
+> we begin, because we take rtnl_lock before making netdev_uses_dsa()
+> return true. So we also handle that early event and do nothing on it.
+> Similarly, if the dev_open() attempt is concurrent with us, it will
+> attempt to take the rtnl_mutex, but we're holding it. We'll see that
+> the master flag IFF_UP isn't set, then when we release the rtnl_mutex
+> we'll process the NETDEV_UP notifier.
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 
-
-Thinking about this more. I may just take both your patches, and leave it
-as an offset from the location of the descriptor. It's closer to the
-meaning of "relative" than doing it as a fixed offset from data.
-
-And then no other patches or user space needs to be changed.
-
-Thanks,
-
--- Steve
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

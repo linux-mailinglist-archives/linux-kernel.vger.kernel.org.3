@@ -2,104 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 516E649C6B3
+	by mail.lfdr.de (Postfix) with ESMTP id 99EE049C6B4
 	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239277AbiAZJlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
+        id S239285AbiAZJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239427AbiAZJlb (ORCPT
+        with ESMTP id S239305AbiAZJlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:41:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD841C061757;
-        Wed, 26 Jan 2022 01:40:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C6FB61298;
-        Wed, 26 Jan 2022 09:40:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 505F4C340E3;
-        Wed, 26 Jan 2022 09:40:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643190049;
-        bh=4RofhmTZ+8k/nyDn6l0Cd7Ymlr906kzNpitjPOoG3RU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KNO4oT/J+dboOWZ78qUwkpLivm11cGo/G/+reuEfj8EkGrSqFwh5fbSFccUP7x5dr
-         a2MKOiHw4LAkXHijsK0IWNPRgGQv+OirukyIqJX85OCHmaVAiTP9vN3U0plquDpObb
-         HFUqXfgpZuI8k/cjrv8U3ohGEG5hWFXLxum6UCVXDKzBbSCT7hOadq3CJXpDMfSCl0
-         AKuvfZBivwci7aPtDNVlrgvtFLjxAWxZ0XCfwSmHfw8ysHn102vvEgF50pc6heViv5
-         hKi7lm2natgIpvYZlGqAyzQlsIonZbCzVRNAF72XOW3O8QNd/pnJQUNN7wGus7I5LJ
-         n0a32KUFA90LQ==
-Date:   Wed, 26 Jan 2022 10:40:42 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v9 10/23] ima: Move IMA securityfs files into
- ima_namespace or onto stack
-Message-ID: <20220126094042.l6jqu5swwsyhlt7v@wittgenstein>
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220125224645.79319-11-stefanb@linux.vnet.ibm.com>
+        Wed, 26 Jan 2022 04:41:39 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35962C061749
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:41:39 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso3806345wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:41:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DgC3fBf+JMernk9UtJYHLs3WXUQ4WF2uVpf9z50+mN4=;
+        b=KSl6lTYmsVi33WHBN3QnElkvHgGznKo+f/d/ZSM8+9YhM6kZn6ta1q4C0eEBpR7H7H
+         q2pHOPd4qHOfapjgox1untAEzse5dCyt6yyT3CefQZZRFK8z0sNVUWu4xyM9qaQ/lCmz
+         +UfOOiLYGJw99mue93gUeV/HldhzX3TQrtN5o5o/ka41LY2jN0+yuckYPwxVyrDXvIKN
+         D7y6CqTsUwSdza5+t0tNt8p0zDQi9zhZNVyhiANXZjPp2NifE/JOmirFKQeBVO8hTTiq
+         2PmDXc+706mQQ+8M4xyBRdTU9kB6hy0N6wsGZXqd3kgdyQb7qUDcIchacnRsxDTVOvjt
+         Faog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DgC3fBf+JMernk9UtJYHLs3WXUQ4WF2uVpf9z50+mN4=;
+        b=gKQt/nEHR7owe7wMcGGSmHZH+TFDl+ck4lNewnvgZkG8FOvaCiE+dkkcQSRjkMO/aU
+         E10AZGG/DmzAbpCWmokECvBjszL7HE6v3J9WjxTt6SwAZgzAKfkTE0ZKd8R2qNfvtU56
+         B/0HEY3FDboarwa9naAcjbtWYKKTvdrvlX7lPSDWHhe2W3BdIHHlH+DuSdXiyaBZ+KCo
+         q7Ek7lblL73aBYMScWvXXV/lLvr+Tocenutw+KxAQgR6a1eSyEBQAyrbeFYxd51dj38U
+         HVP5X+bBrZHp6z4nIqHFkn8fEf1qjHP99y6fGXlfI24lGsATkpQquq+Jyvdvp8EXi1Aj
+         oVug==
+X-Gm-Message-State: AOAM533EHTskJ4pSBQVeHGuB2Q9+5kdeRnAFPsHxwd84xVZH9HmNx19m
+        amo0Fowq+gKO0Nyfsp9gIjiTXg==
+X-Google-Smtp-Source: ABdhPJyX5OAK0KhXelGAEpKETNqy81bEQDZkxHDK+f3lOrdKefGHj06CmnX/XERSYPKAu/YjnUtCJg==
+X-Received: by 2002:a05:600c:4a09:: with SMTP id c9mr6475785wmp.83.1643190097727;
+        Wed, 26 Jan 2022 01:41:37 -0800 (PST)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id m4sm2710543wmc.1.2022.01.26.01.41.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 01:41:36 -0800 (PST)
+Date:   Wed, 26 Jan 2022 09:41:13 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Airlie <airlied@linux.ie>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH 7/7] iommu: Add iommu_domain::domain_ops
+Message-ID: <YfEXOegPuG846NEb@myrica>
+References: <20220124071103.2097118-1-baolu.lu@linux.intel.com>
+ <20220124071103.2097118-8-baolu.lu@linux.intel.com>
+ <BN9PR11MB5276BE30652988271878E78C8C5E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Ye58Zxi+F9TQszgQ@myrica>
+ <20220124163302.GC966497@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220125224645.79319-11-stefanb@linux.vnet.ibm.com>
+In-Reply-To: <20220124163302.GC966497@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:46:32PM -0500, Stefan Berger wrote:
-> From: Stefan Berger <stefanb@linux.ibm.com>
+On Mon, Jan 24, 2022 at 12:33:02PM -0400, Jason Gunthorpe wrote:
+> On Mon, Jan 24, 2022 at 10:16:07AM +0000, Jean-Philippe Brucker wrote:
+> > On Mon, Jan 24, 2022 at 09:58:18AM +0000, Tian, Kevin wrote:
+> > > > From: Lu Baolu <baolu.lu@linux.intel.com>
+> > > > Sent: Monday, January 24, 2022 3:11 PM
+> > > > +/**
+> > > > + * struct domain_ops - per-domain ops
+> > > > + * @attach_dev: attach an iommu domain to a device
+> > > > + * @detach_dev: detach an iommu domain from a device
+> > > 
+> > > What is the criteria about whether an op should be iommu_ops or domain_ops
+> > > when it requires both domain and device pointers like above two (and future
+> > > PASID-based attach)?
+> > > 
+> > > Other examples include:
+> > > 	@apply_resv_region
+> > > 	@is_attach_deferred
+> > 
+> > Could attach_dev() be an IOMMU op?  So a driver could set the domain ops
+> > in attach_dev() rather than domain_alloc(). That would allow to install
+> > map()/unmap() ops that are tailored for the device's IOMMU, which we don't
+> > know at domain_alloc() time. 
 > 
-> Only the securityfs IMA policy file is ever removed based on Kconfig
-> options. For this reason, move the IMA securityfs policy file variable
-> 'ima_policy' into the ima_namespace.
+> I think we should be moving toward 'domain_alloc' returning the
+> correct domain and the way the driver implements the domain shouldn't
+> change after that.
 > 
-> Move the other IMA securityfs files onto the stack since they are not
-> needed outside the function where they are created in. Also, their cleanup
-> is automatically handled by the filesystem upon umount of a virtualized
-> securityfs instance, so they don't need to be explicitly freed.
-
-I'd reverse the explantion in the commit and mention the securityfs
-change that makes this move possible which is patch 3 in this version of
-the series ("securityfs: rework dentry creation"); something like:
-
-	Earlier we simplified how dentry creation and deletion is manged in
-	securityfs. This allows us to move IMA securityfs files from global
-	variables directly into ima_fs_ns_init() itself. We can now rely on
-	those dentries to be cleaned up when the securityfs instance is cleaned
-	when the last reference to it is dropped.
-	
-	Things are slightly different for the initial ima namespace. In contrast
-	to non-initial ima namespaces it has pinning logic binding the lifetime
-	of the securityfs superblock to created dentries. We need to keep this
-	behavior to not regress userspace. Since ima never removes most of the
-	securityfs files the initial securityfs instance stays pinned. This also
-	means even for the initial ima namespace we don't need to keep
-	references to these dentries anywhere.
-	
-	The ima_policy file is the exception since ima can end up removing it if
-	a non-default policy is written at some point.
-
-Last sentence should be checked for sensibility by ima folks.
-
+> > I'm thinking about a guest that has both physical and virtual
+> > endpoints, which would ideally use different kinds of domain ops to
+> > support both efficiently (caching mode vs page tables)
 > 
-> In the failure cleanup path clean up the ima_policy dentry before
-> cleaning up the directories.
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> ---
+> In this case shouldn't domain_alloc() reached from the struct device
+> already do the correct thing?
 
-Moving into imans looks good,
-Acked-by: Christian Brauner <brauner@kernel.org>
+Sure, if we can finalise the domains before attach that could also clean
+up the drivers a bit.
+
+Thanks,
+Jean

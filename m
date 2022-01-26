@@ -2,155 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D17B949D14F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910FA49D150
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237412AbiAZR6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:58:43 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4519 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiAZR6k (ORCPT
+        id S237391AbiAZSAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230002AbiAZSAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:58:40 -0500
-Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JkWZ23WBCz6FGPH;
-        Thu, 27 Jan 2022 01:54:18 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 26 Jan 2022 18:58:38 +0100
-Received: from [10.47.86.172] (10.47.86.172) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 26 Jan
- 2022 17:58:37 +0000
-Subject: Re: [PATCH] iommu/iova: Separate out rcache init
-To:     Robin Murphy <robin.murphy@arm.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>
-CC:     "xieyongji@bytedance.com" <xieyongji@bytedance.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Linuxarm <linuxarm@huawei.com>
-References: <1643205319-51669-1-git-send-email-john.garry@huawei.com>
- <ee4593b8-cdf6-935a-0eaf-48a8bfeae912@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <0ec8829e-aef3-eee7-17cf-416b28db3c4c@huawei.com>
-Date:   Wed, 26 Jan 2022 17:58:04 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Wed, 26 Jan 2022 13:00:24 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FAFC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:00:23 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id 13so256305qkd.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:00:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=howett-net.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P31D85rdtDB0qHadL+nmEne5kdwdptEf/d+s5l0GN1Y=;
+        b=Fhb9L5QRXsWNpq6eFN9x0ZgLiR7qPDGoILRomACP3dXUZTBrdp7ZX/mZU/TyErD956
+         xnV+DBaMzrRcqBUaM+nj85nkcf8RkwX92Z7wmg+ttgG29t1CQe2wCLyLHyC2jJ6QKCh5
+         6LsFrUpmqcCBZO20G2OMtE65eU7VnrYXYxVCg1MsIh9BE0vasfbXEK4LorwH/DAVi2bF
+         iJw/0vlrMdh3uCKNGHC282AdRbA9g+e5cYfB7wWhzjbvuv2FbPGCIXiXZVvs14CQYAl8
+         vOqm4NMpEZ+hMDqGBqs+2Jvb7zYo3V5azELqOhqotmzEz+9Dz7Xql0YVFtbvkUlwSWL3
+         e4Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P31D85rdtDB0qHadL+nmEne5kdwdptEf/d+s5l0GN1Y=;
+        b=MEACz01pHApNsVNu00BLOrrBkYCruOAH14IaTm94+L1kR8NFnkJu9HYNRYjY/4SQpv
+         PViP1blH+2dHqKMfPOF23EmQ4idMjkBGxVvxcCkFKvJ8vyoxqGym03bXiYmR80LGmHI0
+         A0WdD+n9vnRcHg92XjX5S8YBKEEuz3jDyIb6d131YpAXWwhJs1Pwz3HPJoelCzr8Kl7S
+         PwXJEWoanMAmDgtnAC1npiSLhGOmF6FyWizTS5xoYDGG7WPd+bS+8p3RsLYHXiRVKrEt
+         8rlKbik5L+/XEKkOruH3iqGrUzKfjAnGekhVrXAr+HYf8e6mO1CYmbfKCVSQ+ig0N0le
+         N8Rg==
+X-Gm-Message-State: AOAM531wgKNaPrkOkm2YAHMphN8F4ZAMHvV7WzfZqUXwU6crMtbnlDVm
+        JshKXSaM30uk93A+8MV+3OPbHGs4kfWISidy
+X-Google-Smtp-Source: ABdhPJxWXxweoCpXeRCqZP5tsHtKF6yap0wZoeDv9vRtclYLV5PZUmm5AyIWlbXM0A/yt/WjxhdANg==
+X-Received: by 2002:a05:620a:2986:: with SMTP id r6mr11604955qkp.744.1643220022657;
+        Wed, 26 Jan 2022 10:00:22 -0800 (PST)
+Received: from rigel.delfino.n.howett.net ([2600:1700:df50:a7cf::725])
+        by smtp.googlemail.com with ESMTPSA id 2sm5702342qtf.9.2022.01.26.10.00.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 10:00:21 -0800 (PST)
+From:   "Dustin L. Howett" <dustin@howett.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Michael Niksa <michael.niksa@live.com>,
+        "Dustin L. Howett" <dustin@howett.net>
+Subject: [PATCH v2 0/2] platform/chrome: add support for the Framework Laptop
+Date:   Wed, 26 Jan 2022 12:00:18 -0600
+Message-Id: <20220126180020.15873-1-dustin@howett.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <ee4593b8-cdf6-935a-0eaf-48a8bfeae912@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.86.172]
-X-ClientProxiedBy: lhreml722-chm.china.huawei.com (10.201.108.73) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+This patch series adds support for the Framework Laptop to the cros_ec
+LPC driver.
 
->>
->> Signed-off-by: John Garry<john.garry@huawei.com>
-> Mangled patch? (no "---" separator here)
+The Framework Laptop is a non-Chromebook laptop that uses the ChromeOS
+Embedded Controller. Since the machine was designed to present a more
+normal device profile, it does not report all 512 I/O ports that are
+typically used by cros_ec_lpcs. Because of this, changes to the driver's
+port reservation scheme were required.
 
-hmm... not sure. As an experiment, I just downloaded this patch from 
-lore.kernel.org and it applies ok.
+Since this EC driver probes the MEC range first, and uses only the MEC
+range if that probe succeeds[^1], we can get by without requesting the
+entire port range required by non-MEC embedded controllers until
+absolutely necessary.
 
-> 
-> Overall this looks great, just a few comments further down...
-> 
+[^1]: this includes "memory mapped" read - where the traditional LPC EC
+requires I/O ports 0x900-0x9FF, the MEC EC multiplexes reads/writes
+over the same eight ports, 0x800-0x807.
 
-...
+Changelog in v2:
+  Cleaned up the commit subjects per request.
 
->> +}
->> +EXPORT_SYMBOL_GPL(iova_domain_init_rcaches);
->> +
->> +void iova_domain_free_rcaches(struct iova_domain *iovad)
->> +{
->> +	cpuhp_state_remove_instance_nocalls(CPUHP_IOMMU_IOVA_DEAD,
->> +					    &iovad->cpuhp_dead);
->> +	free_iova_rcaches(iovad);
->>    }
->> +EXPORT_SYMBOL_GPL(iova_domain_free_rcaches);
-> I think we should continue to expect external callers to clean up with
-> put_iova_domain(). 
+Dustin L. Howett (2):
+  platform/chrome: cros_ec_lpcs: detect the Framework Laptop
+  platform/chrome: cros_ec_lpcs: reserve the MEC LPC I/O ports first
 
-ok, fine, makes sense
+ drivers/platform/chrome/cros_ec_lpc.c          |   47 ++++++++++-----
+ include/linux/platform_data/cros_ec_commands.h |    4 +
+ 2 files changed, 38 insertions(+), 13 deletions(-)
 
-> If they aren't doing that already they have a bug
-> (albeit minor), and we don't want to give the impression that it's OK to
-> free the caches at any point*other*  than tearing down the whole
-> iova_domain, since the implementation really wouldn't expect that.
-> 
->>    /*
->>     * Try inserting IOVA range starting with 'iova_pfn' into 'rcache', and
->> @@ -831,7 +872,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
->>    {
->>    	unsigned int log_size = order_base_2(size);
->>    
->> -	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
->> +	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
->>    		return 0;
->>    
-
-..
-
->> @@ -102,6 +92,8 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
->>    	unsigned long pfn_hi);
->>    void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
->>    	unsigned long start_pfn);
->> +int iova_domain_init_rcaches(struct iova_domain *iovad);
->> +void iova_domain_free_rcaches(struct iova_domain *iovad);
-> As above, I vote for just forward-declaring the free routine in iova.c
-> and keeping it entirely private.
-
-ok
-
-> 
->>    struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
->>    void put_iova_domain(struct iova_domain *iovad);
->>    #else
->> @@ -157,6 +149,15 @@ static inline void init_iova_domain(struct iova_domain *iovad,
->>    {
->>    }
->>    
->> +static inline int iova_domain_init_rcaches(struct iova_domain *iovad)
->> +{
->> +	return -ENOTSUPP;
->> +}
->> +
->> +static inline void iova_domain_free_rcaches(struct iova_domain *iovad)
->> +{
->> +}
->> +
-> I'd be inclined not to add stubs at all - I think it's a reasonable
-> assumption that anyone involved enough to care about rcaches has a hard
-> dependency on IOMMU_IOVA already.
-
-So iova_domain_free_rcaches() would disappear from here as a result of 
-the changes discussed above.
-
-As for iova_domain_init_rcaches(), I was just following the IOMMU/IOVA 
-coding practice - that is, always stub.
-
-> It's certainly the case today, and I'd
-> hardly want to encourage more users anyway.
-
-I think that stronger deterrents would be needed :)
-
-Anyway, I can remove it.
-
-Thanks,
-John
-
-
-
+-- 
+2.34.1
 

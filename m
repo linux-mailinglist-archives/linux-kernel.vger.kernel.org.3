@@ -2,191 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B87B349C7D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4132149C7DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240164AbiAZKqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:46:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbiAZKqB (ORCPT
+        id S240176AbiAZKrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:47:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43025 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240159AbiAZKrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:46:01 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47E9C06161C;
-        Wed, 26 Jan 2022 02:46:00 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id c192so2041955wma.4;
-        Wed, 26 Jan 2022 02:46:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yRqdOKllno2WTAMKVZS14yrHhw5Xe+r37FBeeO98mgQ=;
-        b=F0BmIlv/Au9mK3wEWC6nrbIc7SzbHgrzGwoIPl5txafX0sGFIqScJvdF5CIU3Kj7VW
-         qF5+HW0iSMKGBPmfFwzMOxa2Isn+mmE0lBQxIOgMdUmXgWcDuGF9OSvC7N61QMUEYAhh
-         c97kjgaaZaaoXexoSsCnJZgFsiHb8iqzGsiLbFep89jZdoa0+GzFOSnxE13abWd9FGt5
-         SpdkCcWb1gF6jYBjwsjneYcY4nakrOprmYF7SSCeUKOdEGfMxOYUoMvN/0p7ZF/mq56T
-         0XAVt+UyttcHfqgLG7NQWq56pHifKtHqvt2dSVG6rNl1/Yz0NcI7cT9TGuOYA1BquIe8
-         UQkw==
+        Wed, 26 Jan 2022 05:47:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643194020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=36m2kcjL54DLfTH9bRXrige/OiNdmZ5nBs2jhR2L36k=;
+        b=S62rvBCKBShAeqBIVTnDL06aKmxxAjUniIdPjKazBL0I+Kut0QKNa+OnIFU0s7NAcEECAv
+        sPyeTSbZRE9PuShnd7oLK5GBY0yVVqEtL8Tki32ehdxm3OPMnBnfqv2sPGWw5G15RizaZn
+        TUSa9bo6eJ+8lXpooFoX8hYLEF5cJec=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-408-MhbJhQnHNo-shHE-kpTz5Q-1; Wed, 26 Jan 2022 05:46:59 -0500
+X-MC-Unique: MhbJhQnHNo-shHE-kpTz5Q-1
+Received: by mail-wr1-f70.google.com with SMTP id a11-20020adffb8b000000b001a0b0f4afe9so4125158wrr.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:46:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=yRqdOKllno2WTAMKVZS14yrHhw5Xe+r37FBeeO98mgQ=;
-        b=xFGNUWAQjCCK7l+SqZIUeFYGqsHAQpU+eyablMw+q4bncEfJUAAhg66dM9kP2O6HcF
-         CDyxpWTFSsGhYs7z3BsvJoDzRI6/1UmgC3QlMkT4dy7CiDxyd2LiGkxfzSnxC3zO0MwQ
-         UXYWcwfuB21/5JRMOxXRcav6ZmohIDOt0Rri594I4bI9mbNt+VUTrePhVtEC/g1ybRMQ
-         jTYsNgQkcmG42xchKxZh2N/Q9GMkYlc+jqQz6OTL1YtLQuLO06OvMbk73A/e6RE+CHmw
-         ifCuuPHW3+mhh2q0BX7AXTNDaoQRv/CZ2YyRxJV3LUmvn5GamGp+Twjl5XageCVmjchJ
-         Gvkg==
-X-Gm-Message-State: AOAM530rJSJdEyAucARkdjIWWSUTm0AidUiX9nvIGugkzIS3ER8zUo6q
-        PNflGmOBJVwtQfwNyyOJEs2uqLO4xxq1fA==
-X-Google-Smtp-Source: ABdhPJxtjBHMbtcCtEI1vey0tvuiH8R5Oty/VyEI84awcw8AODNabeOkHG7+8IJ3GNOCZjxqqG1Erg==
-X-Received: by 2002:a1c:6a14:: with SMTP id f20mr6629539wmc.123.1643193959406;
-        Wed, 26 Jan 2022 02:45:59 -0800 (PST)
-Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
-        by smtp.gmail.com with ESMTPSA id m14sm12800014wrp.4.2022.01.26.02.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 02:45:58 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Wed, 26 Jan 2022 11:45:58 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: review for 5.16.3-rc2
-Message-ID: <YfEmZiwkdZlQ3DVb@eldamar.lan>
-References: <0af17d6952b3677dcd413fefa74b086d5ffb474b.camel@rajagiritech.edu.in>
- <YfAKYWOMdGJ0NxjE@kroah.com>
- <CAG=yYwksvQmEsfRyFiQTbSxUL39WGf7ryHaywtAxgdL1Nt67OQ@mail.gmail.com>
- <YfAk90OPjlpjruV5@kroah.com>
- <CAG=yYw=BK1gU0UV8g5_ZT5gOe5P2W2rKHWdFyPi4ZHSy4CGMFw@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=36m2kcjL54DLfTH9bRXrige/OiNdmZ5nBs2jhR2L36k=;
+        b=bs7jvHaCRUt84tPKcUMcQfSPY+v5GqT2zXVdXtWVngakmSxFzvwxrYyRoqJGOdOgSY
+         BlWP+8m0XYNQ7lC57uXlHrcTMzYObRzdzUbnZ/SuL1w2UGDvMeCe8fxEpIDL+XIoUPzv
+         nRz6kQnOYBT4fzkJeY/bTfXXu/KNZDh81acLzqjMNL3PERZcWAIJEPouaPHdvm3CiqQ4
+         SzkBLxuEc6Ql8SyahP2sFPDeB3gWUU2YZTsi+SoODl+1EseOHkcqJ94M9rckqsuNz2nu
+         ws4kXGEmaqeVlaE6QRP1MxENH4Y8zkw045CLy9IkcUoz0Bd21Xh4ko5OiKBkZE1FMW0p
+         hraA==
+X-Gm-Message-State: AOAM531nnZowXKXKyeTaVd+z0nhqLTeE5i34v+6ur9g6vcN1yl1ynokw
+        hJ2WeNuxGJFyTxZ60c1d3Au7DD9ky/ztYj94yPFu7zjWkVGNUMkiiJ0gFA+L9ecjqvJO/q7wgoi
+        oThoZPQzp/hdDTc2a0rP8IieR
+X-Received: by 2002:a7b:c4cd:: with SMTP id g13mr6974621wmk.95.1643194018346;
+        Wed, 26 Jan 2022 02:46:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzaHQcmSFSVpbpZ521wSTzYwwTEACCYq2kS6aCXWll4DP8KYaHcDHbF3bZBduSQO4Lu0S/ZmA==
+X-Received: by 2002:a7b:c4cd:: with SMTP id g13mr6974598wmk.95.1643194018083;
+        Wed, 26 Jan 2022 02:46:58 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
+        by smtp.gmail.com with ESMTPSA id f13sm1085039wry.77.2022.01.26.02.46.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 02:46:57 -0800 (PST)
+Message-ID: <99248ffb-2c7c-ba25-5d56-2c577e58da4c@redhat.com>
+Date:   Wed, 26 Jan 2022 11:46:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG=yYw=BK1gU0UV8g5_ZT5gOe5P2W2rKHWdFyPi4ZHSy4CGMFw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Nikunj A Dadhania <nikunj@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220118110621.62462-1-nikunj@amd.com>
+ <20220118110621.62462-4-nikunj@amd.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
+In-Reply-To: <20220118110621.62462-4-nikunj@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 18.01.22 12:06, Nikunj A Dadhania wrote:
+> Use the memslot metadata to store the pinned data along with the pfns.
+> This improves the SEV guest startup time from O(n) to a constant by
+> deferring guest page pinning until the pages are used to satisfy nested
+> page faults. The page reference will be dropped in the memslot free
+> path.
+> 
+> Remove the enc_region structure definition and the code which did
+> upfront pinning, as they are no longer needed in view of the demand
+> pinning support.
+> 
+> Leave svm_register_enc_region() and svm_unregister_enc_region() as stubs
+> since qemu is dependent on this API.
+> 
+> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 208 ++++++++++++++++-------------------------
+>  arch/x86/kvm/svm/svm.c |   1 +
+>  arch/x86/kvm/svm/svm.h |   3 +-
+>  3 files changed, 81 insertions(+), 131 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index d972ab4956d4..a962bed97a0b 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -66,14 +66,6 @@ static unsigned int nr_asids;
+>  static unsigned long *sev_asid_bitmap;
+>  static unsigned long *sev_reclaim_asid_bitmap;
+>  
+> -struct enc_region {
+> -	struct list_head list;
+> -	unsigned long npages;
+> -	struct page **pages;
+> -	unsigned long uaddr;
+> -	unsigned long size;
+> -};
+> -
+>  /* Called with the sev_bitmap_lock held, or on shutdown  */
+>  static int sev_flush_asids(int min_asid, int max_asid)
+>  {
+> @@ -257,8 +249,6 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>  	if (ret)
+>  		goto e_free;
+>  
+> -	INIT_LIST_HEAD(&sev->regions_list);
+> -
+>  	return 0;
+>  
+>  e_free:
+> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
+>  	src->handle = 0;
+>  	src->pages_locked = 0;
+>  	src->enc_context_owner = NULL;
+> -
+> -	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
+>  }
+>  
+>  static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+> @@ -1861,115 +1849,13 @@ int svm_mem_enc_op(struct kvm *kvm, void __user *argp)
+>  int svm_register_enc_region(struct kvm *kvm,
+>  			    struct kvm_enc_region *range)
+>  {
+> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> -	struct enc_region *region;
+> -	int ret = 0;
+> -
+> -	if (!sev_guest(kvm))
+> -		return -ENOTTY;
+> -
+> -	/* If kvm is mirroring encryption context it isn't responsible for it */
+> -	if (is_mirroring_enc_context(kvm))
+> -		return -EINVAL;
+> -
+> -	if (range->addr > ULONG_MAX || range->size > ULONG_MAX)
+> -		return -EINVAL;
+> -
+> -	region = kzalloc(sizeof(*region), GFP_KERNEL_ACCOUNT);
+> -	if (!region)
+> -		return -ENOMEM;
+> -
+> -	mutex_lock(&kvm->lock);
+> -	region->pages = sev_pin_memory(kvm, range->addr, range->size, &region->npages, 1);
+> -	if (IS_ERR(region->pages)) {
+> -		ret = PTR_ERR(region->pages);
+> -		mutex_unlock(&kvm->lock);
+> -		goto e_free;
+> -	}
+> -
+> -	region->uaddr = range->addr;
+> -	region->size = range->size;
+> -
+> -	list_add_tail(&region->list, &sev->regions_list);
+> -	mutex_unlock(&kvm->lock);
+> -
+> -	/*
+> -	 * The guest may change the memory encryption attribute from C=0 -> C=1
+> -	 * or vice versa for this memory range. Lets make sure caches are
+> -	 * flushed to ensure that guest data gets written into memory with
+> -	 * correct C-bit.
+> -	 */
+> -	sev_clflush_pages(region->pages, region->npages);
+> -
+> -	return ret;
+> -
+> -e_free:
+> -	kfree(region);
+> -	return ret;
+> -}
+> -
+> -static struct enc_region *
+> -find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
+> -{
+> -	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> -	struct list_head *head = &sev->regions_list;
+> -	struct enc_region *i;
+> -
+> -	list_for_each_entry(i, head, list) {
+> -		if (i->uaddr == range->addr &&
+> -		    i->size == range->size)
+> -			return i;
+> -	}
+> -
+> -	return NULL;
+> -}
+> -
+> -static void __unregister_enc_region_locked(struct kvm *kvm,
+> -					   struct enc_region *region)
+> -{
+> -	sev_unpin_memory(kvm, region->pages, region->npages);
+> -	list_del(&region->list);
+> -	kfree(region);
+> +	return 0;
+>  }
+>  
+>  int svm_unregister_enc_region(struct kvm *kvm,
+>  			      struct kvm_enc_region *range)
+>  {
+> -	struct enc_region *region;
+> -	int ret;
+> -
+> -	/* If kvm is mirroring encryption context it isn't responsible for it */
+> -	if (is_mirroring_enc_context(kvm))
+> -		return -EINVAL;
+> -
+> -	mutex_lock(&kvm->lock);
+> -
+> -	if (!sev_guest(kvm)) {
+> -		ret = -ENOTTY;
+> -		goto failed;
+> -	}
+> -
+> -	region = find_enc_region(kvm, range);
+> -	if (!region) {
+> -		ret = -EINVAL;
+> -		goto failed;
+> -	}
+> -
+> -	/*
+> -	 * Ensure that all guest tagged cache entries are flushed before
+> -	 * releasing the pages back to the system for use. CLFLUSH will
+> -	 * not do this, so issue a WBINVD.
+> -	 */
+> -	wbinvd_on_all_cpus();
+> -
+> -	__unregister_enc_region_locked(kvm, region);
+> -
+> -	mutex_unlock(&kvm->lock);
+>  	return 0;
+> -
+> -failed:
+> -	mutex_unlock(&kvm->lock);
+> -	return ret;
+>  }
+>  
+>  int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+> @@ -2018,7 +1904,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>  	mirror_sev->fd = source_sev->fd;
+>  	mirror_sev->es_active = source_sev->es_active;
+>  	mirror_sev->handle = source_sev->handle;
+> -	INIT_LIST_HEAD(&mirror_sev->regions_list);
+>  	ret = 0;
+>  
+>  	/*
+> @@ -2038,8 +1923,6 @@ int svm_vm_copy_asid_from(struct kvm *kvm, unsigned int source_fd)
+>  void sev_vm_destroy(struct kvm *kvm)
+>  {
+>  	struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> -	struct list_head *head = &sev->regions_list;
+> -	struct list_head *pos, *q;
+>  
+>  	WARN_ON(sev->num_mirrored_vms);
+>  
+> @@ -2066,18 +1949,6 @@ void sev_vm_destroy(struct kvm *kvm)
+>  	 */
+>  	wbinvd_on_all_cpus();
+>  
+> -	/*
+> -	 * if userspace was terminated before unregistering the memory regions
+> -	 * then lets unpin all the registered memory.
+> -	 */
+> -	if (!list_empty(head)) {
+> -		list_for_each_safe(pos, q, head) {
+> -			__unregister_enc_region_locked(kvm,
+> -				list_entry(pos, struct enc_region, list));
+> -			cond_resched();
+> -		}
+> -	}
+> -
+>  	sev_unbind_asid(kvm, sev->handle);
+>  	sev_asid_free(sev);
+>  }
+> @@ -2946,13 +2817,90 @@ void sev_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector)
+>  	ghcb_set_sw_exit_info_2(svm->sev_es.ghcb, 1);
+>  }
+>  
+> +void sev_pin_spte(struct kvm *kvm, gfn_t gfn, enum pg_level level,
+> +		  kvm_pfn_t pfn)
+> +{
+> +	struct kvm_arch_memory_slot *aslot;
+> +	struct kvm_memory_slot *slot;
+> +	gfn_t rel_gfn, pin_pfn;
+> +	unsigned long npages;
+> +	kvm_pfn_t old_pfn;
+> +	int i;
+> +
+> +	if (!sev_guest(kvm))
+> +		return;
+> +
+> +	if (WARN_ON_ONCE(is_error_noslot_pfn(pfn) || kvm_is_reserved_pfn(pfn)))
+> +		return;
+> +
+> +	/* Tested till 1GB pages */
+> +	if (KVM_BUG_ON(level > PG_LEVEL_1G, kvm))
+> +		return;
+> +
+> +	slot = gfn_to_memslot(kvm, gfn);
+> +	if (!slot || !slot->arch.pfns)
+> +		return;
+> +
+> +	/*
+> +	 * Use relative gfn index within the memslot for the bitmap as well as
+> +	 * the pfns array
+> +	 */
+> +	rel_gfn = gfn - slot->base_gfn;
+> +	aslot = &slot->arch;
+> +	pin_pfn = pfn;
+> +	npages = KVM_PAGES_PER_HPAGE(level);
+> +
+> +	/* Pin the page, KVM doesn't yet support page migration. */
+> +	for (i = 0; i < npages; i++, rel_gfn++, pin_pfn++) {
+> +		if (test_bit(rel_gfn, aslot->pinned_bitmap)) {
+> +			old_pfn = aslot->pfns[rel_gfn];
+> +			if (old_pfn == pin_pfn)
+> +				continue;
+> +
+> +			put_page(pfn_to_page(old_pfn));
+> +		}
+> +
+> +		set_bit(rel_gfn, aslot->pinned_bitmap);
+> +		aslot->pfns[rel_gfn] = pin_pfn;
+> +		get_page(pfn_to_page(pin_pfn));
 
-On Tue, Jan 25, 2022 at 10:32:26PM +0530, Jeffrin Thalakkottoor wrote:
-> On Tue, Jan 25, 2022 at 9:57 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Jan 25, 2022 at 09:49:00PM +0530, Jeffrin Thalakkottoor wrote:
-> > > On Tue, Jan 25, 2022 at 8:04 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Tue, Jan 25, 2022 at 06:15:46PM +0530, Jeffrin Jose T wrote:
-> > > > > hello greg,
-> > > > >
-> > > > > compile failed for  5.16.3-rc2 related.
-> > > > > a relevent file attached.
-> > > > >
-> > > > > Tested-by : Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
-> > > >
-> > > > But it failed for you, how did you test it?
-> > >
-> > > i compiled  5.16.3-rc2  related to "make localmodconfig" and  "make  -j4"
-> >
-> > So it somehow failed?
-> 
-> Yes i think so
-> 
-> >
-> > > >
-> > > > >
-> > > > >
-> > > >
-> > > > >       char *                     typetab;              /*    24     8 */
-> > > > >
-> > > > >       /* size: 32, cachelines: 1, members: 4 */
-> > > > >       /* sum members: 28, holes: 1, sum holes: 4 */
-> > > > >       /* last cacheline: 32 bytes */
-> > > > > };
-> > > > > struct klp_modinfo {
-> > > > >       Elf64_Ehdr                 hdr;                  /*     0    64 */
-> > > > >       /* --- cacheline 1 boundary (64 bytes) --- */
-> > > > >       Elf64_Shdr *               sechdrs;              /*    64     8 */
-> > > > >       char *                     secstrings;           /*    72     8 */
-> > > > >       unsigned int               symndx;               /*    80     4 */
-> > > > >
-> > > > >       /* size: 88, cachelines: 2, members: 4 */
-> > > > >       /* padding: 4 */
-> > > > >       /* last cacheline: 24 bytes */
-> > > > > };
-> > > > > Segmentation fault
-> > > >
-> > > > What "faulted"?  Look higher up in the log please.
-> > >
-> > > a top view...
-> > >
-> > >   CALL    scripts/atomic/check-atomics.sh
-> > >   CALL    scripts/checksyscalls.sh
-> > >   CHK     include/generated/compile.h
-> > >   GEN     .version
-> > >   CHK     include/generated/compile.h
-> > >   UPD     include/generated/compile.h
-> > >   CC      init/version.o
-> > >   AR      init/built-in.a
-> > >   LD      vmlinux.o
-> > >   MODPOST vmlinux.symvers
-> > >   MODINFO modules.builtin.modinfo
-> > >   GEN     modules.builtin
-> > >   LD      .tmp_vmlinux.btf
-> > >   BTF     .btf.vmlinux.bin.o
-> > > struct list_head {
-> > >     struct list_head *         next;                 /*     0     8 */
-> > >     struct list_head *         prev;                 /*     8     8 */
-> > >
-> > >     /* size: 16, cachelines: 1, members: 2 */
-> > >     /* last cacheline: 16 bytes */
-> > > };
-> > > struct hlist_head {
-> > >     struct hlist_node *        first;                /*     0     8 */
-> > >
-> > >     /* size: 8, cachelines: 1, members: 1 */
-> > >     /* last cacheline: 8 bytes */
-> > > };
-> > > struct hlist_node {
-> > >     struct hlist_node *        next;                 /*     0     8 */
-> > >     struct hlist_node * *      pprev;                /*     8     8 */
-> > >
-> > >     /* size: 16, cachelines: 1, members: 2 */
-> > >     /* last cacheline: 16 bytes */
-> > > };
-> > > struct callback_head {
-> > >     struct callback_head *     next;                 /*     0     8 */
-> > >     void                       (*func)(struct callback_head *); /*
-> > > 8     8 */
-> > > .
-> > > .
-> > > .
-> > > .
-> > > .
-> > > .
-> >
-> > I do not know what is failing, there is no error message here.  Does
-> > 5.16.2 build properly for you?
-> 
-> stderr has  captured  the  following...
-> 
-> 
-> -------------x-----------------x--------------x---
-> FAILED: load BTF from vmlinux: No such file or directory
-> make: *** [Makefile:1161: vmlinux] Error 255
-> make: *** Deleting file 'vmlinux'
-> ------------x----------------x------------x--
-> 5.16.2-rc1 builds for me.
-> 
-> Will the following link help...
-> 
-> https://unix.stackexchange.com/questions/616392/failed-load-btf-from-vmlinux-unknown-error-2make-makefile1162-vmlinu
 
-What version of pahole are you using? Are you using Debian
-downstream's 1.22-2? If so please check if it's just the same issue as
-reported in https://bugs.debian.org/1004311
+I assume this is to replace KVM_MEMORY_ENCRYPT_REG_REGION, which ends up
+calling svm_register_enc_region()->sev_pin_memory(), correct?
 
-Regards,
-Salvatore
+sev_pin_memory() correctly checks the RLIMIT_MEMLOCK and uses
+pin_user_pages_fast().
+
+I have to strongly assume that sev_pin_memory() is *wrong* as is because
+it's supposed to supply FOLL_LONGTERM -- after all we're pinning these
+pages possibly forever.
+
+
+I might be wrong but
+
+1. You are missing the RLIMIT_MEMLOCK check
+
+2. get_page() is the wong way of long-term pinning a page. You would
+have to mimic what pin_user_pages_fast(FOLL_LONGTERM) does to eventually
+get it right (e.g., migrate the page off of MIGRATE_CMA or ZONE_MOVABLE).
+
+-- 
+Thanks,
+
+David / dhildenb
+

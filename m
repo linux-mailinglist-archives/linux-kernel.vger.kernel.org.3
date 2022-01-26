@@ -2,93 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E02D49C708
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BDA49C70B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239571AbiAZKEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:04:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51379 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233384AbiAZKD7 (ORCPT
+        id S233451AbiAZKF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:05:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232925AbiAZKF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:03:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643191439;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XrFLYJ9cry+WM5T0ZEL1s3Cr9YcXnG7PMN9SDbX6/ww=;
-        b=OOK0kTTiqqPmQM2ACobTrTs3ejLh1gCFFy0tTBMNssqoDQEh7g/ig4mXcQcM7SH0OyXTl1
-        q7p4e86VzU4wVIvz9yWwKrsWEND/R7uBQ8jytmngBEfT5tT44/kfjobrMDQodJscFZUfOB
-        1vIRdp7Pbxwv+I2rXz7eHVVLUkR4CeI=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-570-x5CTQOX0PHWkT9o4X0egsw-1; Wed, 26 Jan 2022 05:03:57 -0500
-X-MC-Unique: x5CTQOX0PHWkT9o4X0egsw-1
-Received: by mail-ed1-f69.google.com with SMTP id w15-20020a056402268f00b00408234dc1dfso5860495edd.16
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:03:57 -0800 (PST)
+        Wed, 26 Jan 2022 05:05:26 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2E3C06161C;
+        Wed, 26 Jan 2022 02:05:26 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id k25so37562920ejp.5;
+        Wed, 26 Jan 2022 02:05:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZIBPG5KdggrxdxTcsYEqUFW4Fhlz+KszjlvwSs+5dP8=;
+        b=GM+KII2Zv2mUcviteB7pgK0Y9FBFJP2nO//R8vEVHLFufcw/LNeiZV4JarZZlqsYkZ
+         typFLgdqp25CkKGspN+0DHGeN5GNkW+3DjPd4XTCHNHBY/e/I6gkmEN3GhUWqlSyGSGj
+         Z8B5WazAgU42xBefblCAiNrg3WVNpF3jLD+DvUzBktRcVvkcg6eC9RdHkCs5+8edRKum
+         Zrw2I70CN9r2Xef0xxX81h5fp4hrMHnprwD6oxttKhgbvmAZP3/2lGv1TWeIGgPTqozd
+         pUsR807hVsRKG2taCPOQU2lv7WJ33Gld6uqElywbeadjRO+VmwV+MOYBV3CETS9ESn/r
+         oLaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=XrFLYJ9cry+WM5T0ZEL1s3Cr9YcXnG7PMN9SDbX6/ww=;
-        b=dOMPMOoMYqK8bKClES0bodb9vFg+gJU1rkO0h/19MIRdK7TVTeLq2FLNgkx9r8a6gr
-         dia0/WQRWFmLqCdmVMlSu7RiPfjkq33lOjeNJdawhd4LmEcn0OvESu0zyN+wRa3f7WVG
-         eRRN+ECm7DLjzmTl5uu4z1lLcGZx3MuDcsXitnm9ols2ziCJ9rVz+vDDbGtMOiI93h8h
-         xGzrY5H8g7bdyxj1Dx9npvV0sTuQ00ph6vGAe0yD6Xq5Ol1eiiRpeDPBI1+FKkiEAcux
-         ClnvToQ/KnXBHXdBiW5nq6dbP6QPXys3fNmLyCKXSYqKeBh5ftaNRBzKXny/Y5lic8PF
-         1Jhg==
-X-Gm-Message-State: AOAM531OCZBHIgOlSfEeZ7AC9AnE+qa0gBk4B4dONPGMgmzAJt4pJ3SY
-        no9Z+aFgkWVUOA7Hm9dLy2SRCwhJ7XMK+QnvdobZoDpxb9pHxzIyH9grdvvUnzl9PBQybYdzvI0
-        aEDV4w/zxNKT83fogLz2M5qph
-X-Received: by 2002:a17:906:cc84:: with SMTP id oq4mr20750935ejb.736.1643191436680;
-        Wed, 26 Jan 2022 02:03:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyRQ+0XLF4POUmxWH8EJJr77JEz8GW0+2DZNmA1meDp2yb7dCZHSIEtz1s7LpmPIel02UXIsg==
-X-Received: by 2002:a17:906:cc84:: with SMTP id oq4mr20750919ejb.736.1643191436473;
-        Wed, 26 Jan 2022 02:03:56 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id rv9sm7151085ejb.216.2022.01.26.02.03.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 02:03:55 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Igor Mammedov <imammedo@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 2/2] KVM: x86: Use memcmp in kvm_cpuid_check_equal()
-In-Reply-To: <864dfbfdc44e288e99cf7baa3aa8f7c8568db507.camel@perches.com>
-References: <20220124103606.2630588-1-vkuznets@redhat.com>
- <20220124103606.2630588-3-vkuznets@redhat.com>
- <864dfbfdc44e288e99cf7baa3aa8f7c8568db507.camel@perches.com>
-Date:   Wed, 26 Jan 2022 11:03:54 +0100
-Message-ID: <878rv2izjp.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZIBPG5KdggrxdxTcsYEqUFW4Fhlz+KszjlvwSs+5dP8=;
+        b=gva6oZagseaODRd1Ln3ndje9TFKBHSUByqckvpzWYIEDTOfJ1LAssLUJNRJcC5Tz+2
+         wbbq/lrDG10cmgKbxas7iaA9hSQk2JiLXYUU75CnecPHUNyhZw2tA5wBxNczz67klj5w
+         XGdZc1JvTrB3yNAL+DQMpxq/ptC9FHnfWV4ijbHA4i6xesH9FeXX9HhNooCiO9RUdPsP
+         jYiu2ltQwWma9behbOGCVBeGrj6NfqWNkNM3nTbcbegOCY3eCi8dS5dhVEZYwrihXq+f
+         lUfRcGhEooKHbGgvCZ3tMuz3SxLNubUaMy2n3aMDybAz8C6MZKHyz4+3Vei9WN8Rzqoo
+         ZiZQ==
+X-Gm-Message-State: AOAM533LDGOXdvTBshgf7HZSG97kT0w7t1LrR7JZU2WwCYtin4TlOlHk
+        biVJG7u2c+4RQf0WBYlOfmboYXJumDNcyd6buH8=
+X-Google-Smtp-Source: ABdhPJxLTWUKmHtcOeib3twEwVqJGJ4TxCtjycPib6a85lcs7VMVl7shvXiH79nfAsy8Iir3ilNC+ATyz+6Lrri68Ok=
+X-Received: by 2002:a17:907:60d6:: with SMTP id hv22mr3480319ejc.132.1643191525022;
+ Wed, 26 Jan 2022 02:05:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de> <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+In-Reply-To: <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 26 Jan 2022 12:04:26 +0200
+Message-ID: <CAHp75Vd7oaYPKx6bxjCqNnm6fieeQFrtq5K4YYrxYbXoXFy=+Q@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Helge Deller <deller@gmx.de>, Andy Shevchenko <andy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joe Perches <joe@perches.com> writes:
+On Wed, Jan 26, 2022 at 12:02 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Wed, Jan 26, 2022 at 10:52 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> > Am 25.01.22 um 21:21 schrieb Andy Shevchenko:
 
-> On Mon, 2022-01-24 at 11:36 +0100, Vitaly Kuznetsov wrote:
->> kvm_cpuid_check_equal() should also check .flags equality but instead
->> of adding it to the existing check, just switch to using memcmp() for
->> the whole 'struct kvm_cpuid_entry2'.
->
-> Is the struct padding guaranteed to be identical ?
->
+...
 
-Well, yes (or we're all doomeed):
-- 'struct kvm_cpuid_entry2' is part of KVM userspace ABI, it is supposed
-to be stable.
-- Here we compare structs which come from the same userspace during one
-session (vCPU fd stays open), I can't imagine how structure layout can
-change on-the-fly.
+> > But why? We already have DRM drivers for some of these devices.
+>
+> No, we do not (only a few are available).
+
+Sorry, I missed your word 'some'. Some == almost none from the list (I
+don't remember exact numbers but something like 2 out of 10 are
+supported by tiny DRM and see about interfaces).
 
 -- 
-Vitaly
-
+With Best Regards,
+Andy Shevchenko

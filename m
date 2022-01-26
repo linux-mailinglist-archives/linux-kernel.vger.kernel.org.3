@@ -2,98 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5601B49D520
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADBF49D526
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbiAZWOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:14:50 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:41022 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiAZWOt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:14:49 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8FDB121115;
-        Wed, 26 Jan 2022 22:14:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643235288; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XAxGUgZjMfRYcheCAvGcdbuwhS+6jxtGJ++NzQbXLbs=;
-        b=mff66aUsTySR80NmIG6DFMDZ8GOSZWBzAb6QezcCyekTKeq0vaL4p57+me2lhVr9SxNgDq
-        5PrkZNO/w2zB5kgRuauSKoDUKN1aObBFWp1LheRHzZACgfpO+VXiiCtPEZKhuzochTgn4x
-        dQuDMpHgMQMZt9xRtxBxbL4VkOHvKaw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643235288;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XAxGUgZjMfRYcheCAvGcdbuwhS+6jxtGJ++NzQbXLbs=;
-        b=qZsxwnV2bCYEJrrqd0i6b3VKdv+EWpeCYEtnRvGhfI7zYjGmVoQzl23i75fR7TVdDKLmGa
-        4wqjwIkIgmIH2aAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7C2361330C;
-        Wed, 26 Jan 2022 22:14:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rMG3DdXH8WH4TQAAMHmgww
-        (envelope-from <neilb@suse.de>); Wed, 26 Jan 2022 22:14:45 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        id S233051AbiAZWRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:17:51 -0500
+Received: from mga06.intel.com ([134.134.136.31]:8826 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229490AbiAZWRv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 17:17:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643235470; x=1674771470;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xooQbuHivbMOOs9OpcyfoNfdN4za7A4ATPcdg05Z0lw=;
+  b=KgRcHRtNIcVaPRavsJBtjigjXKXJ9q/YvA2AZwJVoedUZ6uj4GSguGc7
+   Y4M2ogFkHStyaOpUTcQkX0dea7B/lEx4JTDUui4XKJ0a7qvV8b9mhbR60
+   /tSpjhrd+0BnC3qhSsvINFbZ7GSG9lbH0UNB19KEmj9l+EW58bOYXiz/8
+   j+VaBW42mVLzSZlRcwBTGQbDt8jwU1CBgSnTa8RB/utTkpOnRCsCG9fRK
+   B91awRWPeIJEZEw7CvXZLMJifPDT9RrEZxuKWRMV1a32VMDKjyQzQfDGW
+   EQGwIYu16U2OiGpXorfDy4Vi/WyhM1oDrHjdN9+ByQTkLPSqoi8logzw7
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="307379875"
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="307379875"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 14:17:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="480040840"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Jan 2022 14:17:22 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCqbR-000LiT-W6; Wed, 26 Jan 2022 22:17:21 +0000
+Date:   Thu, 27 Jan 2022 06:16:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [hverkuil-media-tree:extron 101/103]
+ ./usr/include/linux/cec.h:150:19: error: unknown type name 'bool'
+Message-ID: <202201270613.3EEZBJH4-lkp@intel.com>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Christoph Hellwig" <hch@infradead.org>
-Cc:     "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Anna Schumaker" <anna.schumaker@netapp.com>,
-        "Chuck Lever" <chuck.lever@oracle.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Mel Gorman" <mgorman@suse.de>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "David Howells" <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/23] VFS: Add FMODE_CAN_ODIRECT file flag
-In-reply-to: <Ye5puPat8w9/nQ6R@infradead.org>
-References: <164299573337.26253.7538614611220034049.stgit@noble.brown>,
- <164299611280.26253.2845018521780218144.stgit@noble.brown>,
- <Ye5puPat8w9/nQ6R@infradead.org>
-Date:   Thu, 27 Jan 2022 09:14:41 +1100
-Message-id: <164323528189.5493.7196087998245554506@noble.neil.brown.name>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Jan 2022, Christoph Hellwig wrote:
-> On Mon, Jan 24, 2022 at 02:48:32PM +1100, NeilBrown wrote:
-> > Currently various places test if direct IO is possible on a file by
-> > checking for the existence of the direct_IO address space operation.
-> > This is a poor choice, as the direct_IO operation may not be used - it is
-> > only used if the generic_file_*_iter functions are called for direct IO
-> > and some filesystems - particularly NFS - don't do this.
-> > 
-> > Instead, introduce a new f_mode flag: FMODE_CAN_ODIRECT and change the
-> > various places to check this (avoiding pointer dereferences).
-> > do_dentry_open() will set this flag if ->direct_IO is present, so
-> > filesystems do not need to be changed.
-> > 
-> > NFS *is* changed, to set the flag explicitly and discard the direct_IO
-> > entry in the address_space_operations for files.
-> 
-> Looks good:
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> 
-> It would be nice to throw in a cleanup to remove noop_direct_IO as well.
+tree:   git://linuxtv.org/hverkuil/media_tree.git extron
+head:   54377f21d8b2084a9f5993230bdab8e8cd55bb22
+commit: d679f6adf24b7fef91e8a3b3584b48587e9cf0a2 [101/103] cec.h: add cec_msg_recv_is_tx_result() helper
+config: i386-randconfig-a012-20220124 (https://download.01.org/0day-ci/archive/20220127/202201270613.3EEZBJH4-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree extron
+        git checkout d679f6adf24b7fef91e8a3b3584b48587e9cf0a2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-I don't want to add this to the present series.  When it lands I'll send
-patches to the various filesystems to switch to using FMODE_CAN_ODIRECT.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-NeilBrown
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+   In file included from ./usr/include/linux/cec-funcs.h:11:
+>> ./usr/include/linux/cec.h:150:19: error: unknown type name 'bool'
+   static __inline__ bool cec_msg_recv_is_tx_result(const struct cec_msg *msg)
+                     ^
+   1 error generated.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

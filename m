@@ -2,114 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A702B49C6B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F73449C6BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbiAZJl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiAZJlm (ORCPT
+        id S231904AbiAZJm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:42:26 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:35074 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230306AbiAZJmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:41:42 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4D2C06175F;
-        Wed, 26 Jan 2022 01:41:42 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso5635294pjm.4;
-        Wed, 26 Jan 2022 01:41:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4S4SnCn9eD0g7xG9Mm2dDQNDBGBOG83eXlCYQPAFPMo=;
-        b=MJMGW9hF6VHtArxCjhSKgW45DdofOq1qTJGtTPsntenbylZgbJ9MDkY73vHVwcpsj2
-         d9gOYmHbM4Nf4t2tMbBMhYzS2GkDsHC4RPncMHuwQKkohVCAcGl+7LUSOtPIM1nUulYB
-         zh2MHHVOGxfD9Rn6Wg5sxFcPd2D7M7Usbw1s+OJKF7J1hWjXOcjoqYUW2aiIg1abfGGy
-         OtWtWov1SnneYODvSF126kTGxGoZIut2I/dRgd7jGQZbE+5fq4nznV7iBzB8WuUH0zXk
-         K9TywWeRaTN08K4z1/gqopRLMy14/Mmsn/jBk1QXv1ESSC5OD6EzeJzaHNxkGMOHMctB
-         HrOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4S4SnCn9eD0g7xG9Mm2dDQNDBGBOG83eXlCYQPAFPMo=;
-        b=BHhUHsbB7BnjpAGmUDRJ2oFQqq+6AA5Vi5blXWO5m6xUiV1tiCagVRh84Mr7vMIEMd
-         Lb+w7dNzfUCBtyxsTICwdU4+riXYhCjHezo+tF6pw1eLccz2pXWsaVIeYbLdDjE1xw7d
-         aBWJlzuIUqqpinMcg1ra9OZ1wxpxE5G3016iOcPX2HBp1em2tdeTijX6ZTx/18Y/d/VW
-         YMHqlijp2XRNcpikEbp82AkbcZI4J0KrUMouXQ52LDqS3i/4RZmeAZaLjz7Zzc13o712
-         dH/4CYwKyev+qCi10s7145MixG56iAz4zd17mXi8/v85lmwFnoTM9LOWyUSblaPwq0h3
-         XS6w==
-X-Gm-Message-State: AOAM5304zf0wVGEbEJrZ582YqXJYSOtzhb3TOIjTUNGZzhlLSGwOqGq0
-        lP955YHGgmd6aXs4TPfYlXo=
-X-Google-Smtp-Source: ABdhPJykoXtEX3wyHZ0RmV9fSH+ZRSOkMagr1QNuEmJEdTWS5+QBdhrSAOLHvAlgBqpV1cLn3Hb9kw==
-X-Received: by 2002:a17:902:6b87:b0:149:7d3c:124d with SMTP id p7-20020a1709026b8700b001497d3c124dmr22345578plk.57.1643190101978;
-        Wed, 26 Jan 2022 01:41:41 -0800 (PST)
-Received: from jason-ThinkPad-T14-Gen-1.lan ([66.187.5.142])
-        by smtp.gmail.com with ESMTPSA id r9sm16547576pga.2.2022.01.26.01.41.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 01:41:41 -0800 (PST)
-From:   Hongyu Xie <xy521521@gmail.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        125707942@qq.com, Hongyu Xie <xiehongyu1@kylinos.cn>,
-        stable@vger.kernel.org
-Subject: [PATCH -next] xhci: fix two places when dealing with return value of function xhci_check_args
-Date:   Wed, 26 Jan 2022 17:41:26 +0800
-Message-Id: <20220126094126.923798-1-xy521521@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 26 Jan 2022 04:42:19 -0500
+Received: from [10.28.39.106] (10.28.39.106) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 26 Jan
+ 2022 17:42:17 +0800
+Message-ID: <27bf78f7-23b9-d759-28eb-0594006a30c6@amlogic.com>
+Date:   Wed, 26 Jan 2022 17:42:17 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v10 0/4] clk: meson: add a sub EMMC clock controller
+ support
+Content-Language: en-US
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <linux-clk@vger.kernel.org>
+CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20220121074508.42168-1-liang.yang@amlogic.com>
+ <f5a429f2-ffbc-ea03-810a-45a0f90959a2@baylibre.com>
+ <6eb4f247-367b-d460-6314-fc94ccd00b89@amlogic.com>
+ <1jy23226sa.fsf@starbuckisacylon.baylibre.com>
+From:   Liang Yang <liang.yang@amlogic.com>
+In-Reply-To: <1jy23226sa.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.28.39.106]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+Hi Jerome,
 
-xhci_check_args returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
-xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
-the return value of xhci_check_args <= 0.
-This will cause a problem.
-For example, r8152_submit_rx calling usb_submit_urb in
-drivers/net/usb/r8152.c.
-r8152_submit_rx will never get -ENODEV after submiting an urb
-when xHC is halted,
-because xhci_urb_enqueue returns -EINVAL in the very beginning.
-
-Fixes: 203a86613fb3 ("xhci: Avoid NULL pointer deref when host dies.")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
----
- drivers/usb/host/xhci.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dc357cabb265..a7a55dd206fe 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1604,9 +1604,12 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
- 	struct urb_priv	*urb_priv;
- 	int num_tds;
- 
--	if (!urb || xhci_check_args(hcd, urb->dev, urb->ep,
--					true, true, __func__) <= 0)
-+	if (!urb)
- 		return -EINVAL;
-+	ret = xhci_check_args(hcd, urb->dev, urb->ep,
-+					true, true, __func__);
-+	if (ret <= 0)
-+		return ret;
- 
- 	slot_id = urb->dev->slot_id;
- 	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
-@@ -3323,7 +3326,7 @@ static int xhci_check_streams_endpoint(struct xhci_hcd *xhci,
- 		return -EINVAL;
- 	ret = xhci_check_args(xhci_to_hcd(xhci), udev, ep, 1, true, __func__);
- 	if (ret <= 0)
--		return -EINVAL;
-+		return ret;
- 	if (usb_ss_max_streams(&ep->ss_ep_comp) == 0) {
- 		xhci_warn(xhci, "WARN: SuperSpeed Endpoint Companion"
- 				" descriptor for ep 0x%x does not support streams\n",
--- 
-2.25.1
-
+On 2022/1/26 17:14, Jerome Brunet wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> 
+> On Wed 26 Jan 2022 at 17:08, Liang Yang <liang.yang@amlogic.com> wrote:
+> 
+>> Hi Neil,
+>>
+>> On 2022/1/25 22:54, Neil Armstrong wrote:
+>>> [ EXTERNAL EMAIL ]
+>>> Hi Liang,
+>>> On 21/01/2022 08:45, Liang Yang wrote:
+>>>> This driver will add a MMC clock controller driver support.
+>>>> The original idea about adding a clock controller is during the
+>>>> discussion in the NAND driver mainline effort[1].
+>>>>
+>>>> This driver is tested in the S400 board (AXG platform) with NAND driver.
+>>> Thanks a lot for providing a fixed and updated version of this serie.
+>>> After some chat with Jerome and Kevin, it seems the way the eMMC clock
+>>> reuse
+>>> for NAND was designed nearly 4 years doesn't look accurate anymore.
+>>> Having a separate clk driver designed to replace the eMMC node when NAND
+>>> is
+>>> used on the board seems over engineered.
+>>> Actually having the clock code you add in this serie _but_ directly in
+>>> the NAND looks far better, and more coherent since having Linux runtime
+>>> detection of eMMC vs NAND will never happen and even this serie required
+>>> some DT modification from the bootloader.
+>>> I'll let Jerome or Kevin add more details if they want, but I think you
+>>> should resurrect
+>>> the work you pushed in [1] & [2] but:
+>>> - passing the eMMC clk registers as a third "reg" cell
+>> Does it just need to define a 'reg' resource in NFC node and not 'syscon'
+>> here?
+> 
+> Yes
+> 
+>>> - passing the same "clocks" phandle as the eMMC node
+>>> - adding the eMMC clock code in the NAND driver directly
+>>> I'm open to discussions if you consider the current approach is still
+>>> superior.
+>>
+>> I don't have persuasive ideas, but really it shares the common clock
+>> implementation for both NFC and EMMC. and we don't need to paste the
+>> same code in NFC and EMMC.
+> 
+> You don't need to copy everything. If I understood correctly, all the
+> Rx/Tx should not be needed. Yes, there is some duplication as it stands but
+> it allows to avoid coupling the MMC and NAND driver. We can still think
+> about optimizing things later on. Let's get something simply working
+> first.
+ok. i will do it. thank you.
+> 
+>>
+>>> Thanks,
+>>> Neil
+>>> [1]
+>>> https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
+>>> [2] https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
+>>>
+>>>>
+>>>> Changes since v9 [10]
+>>>>    - use clk_parent_data instead of parent_names
+>>>>
+>>>> Changes since v8 [9]
+>>>>    - use MESON_SCLK_ONE_BASED instead of CLK_DIVIDER_ONE_BASED
+>>>>    - use struct_size to caculate onecell_data
+>>>>    - add clk-phase-delay.h
+>>>>    - define CLK_DELAY_STEP_PS_GX and CLK_DELAY_STEP_PS_AXG
+>>>>
+>>>> Changes since v7 [8]
+>>>>    - move meson_clk_get_phase_delay_data() from header to driver
+>>>>    - CONFIG sclk-div with COMMON_CLK_AMLOGIC instead of COMMON_CLK_AMLOGIC_AUDIO
+>>>>    - remove onecell date and ID for internal MUX clk
+>>>>    - use helper for functions for ONE_BASED in sclk-div
+>>>>    - add ONE_BASED support for duty cycle
+>>>>
+>>>> Changes since v6 [7]:
+>>>>    - add one based support for sclk divier
+>>>>    - alloc sclk in probe for multiple instance
+>>>>    - fix coding styles
+>>>>
+>>>> Changes since v5 [6]:
+>>>>    - remove divider ops with .init and use sclk_div instead
+>>>>    - drop CLK_DIVIDER_ROUND_CLOSEST in mux and div
+>>>>    - drop the useless type cast
+>>>>
+>>>> Changes since v4 [5]:
+>>>>    - use struct parm in phase delay driver
+>>>>    - remove 0 delay releted part in phase delay driver
+>>>>    - don't rebuild the parent name once again
+>>>>    - add divider ops with .init
+>>>>
+>>>> Changes since v3 [4]:
+>>>>    - separate clk-phase-delay driver
+>>>>    - replace clk_get_rate() with clk_hw_get_rate()
+>>>>    - collect Rob's R-Y
+>>>>    - drop 'meson-' prefix from compatible string
+>>>>
+>>>>    Changes since v2 [3]:
+>>>>    - squash dt-binding clock-id patch
+>>>>    - update license
+>>>>    - fix alignment
+>>>>    - construct a clk register helper() function
+>>>>
+>>>> Changes since v1 [2]:
+>>>>    - implement phase clock
+>>>>    - update compatible name
+>>>>    - adjust file name
+>>>>    - divider probe() into small functions, and re-use them
+>>>>
+>>>> [1] https://lkml.kernel.org/r/20180628090034.0637a062@xps13
+>>>> [2] https://lkml.kernel.org/r/20180703145716.31860-1-yixun.lan@amlogic.com
+>>>> [3] https://lkml.kernel.org/r/20180710163658.6175-1-yixun.lan@amlogic.com
+>>>> [4] https://lkml.kernel.org/r/20180712211244.11428-1-yixun.lan@amlogic.com
+>>>> [5] https://lkml.kernel.org/r/20180809070724.11935-4-yixun.lan@amlogic.com
+>>>> [6] https://lkml.kernel.org/r/1539839245-13793-1-git-send-email-jianxin.pan@amlogic.com
+>>>> [7] https://lkml.kernel.org/r/1541089855-19356-1-git-send-email-jianxin.pan@amlogic.com
+>>>> [8] https://lkml.kernel.org/r/1544457877-51301-1-git-send-email-jianxin.pan@amlogic.com
+>>>> [9] https://lkml.kernel.org/r/1545063850-21504-1-git-send-email-jianxin.pan@amlogic.com
+>>>> [10] https://lore.kernel.org/all/20220113115745.45826-1-liang.yang@amlogic.com/
+>>>> Liang Yang (4):
+>>>>     clk: meson: add one based divider support for sclk
+>>>>     clk: meson: add emmc sub clock phase delay driver
+>>>>     clk: meson: add DT documentation for emmc clock controller
+>>>>     clk: meson: add sub MMC clock controller driver
+>>>>
+>>>>    .../bindings/clock/amlogic,mmc-clkc.yaml      |  64 ++++
+>>>>    drivers/clk/meson/Kconfig                     |  18 ++
+>>>>    drivers/clk/meson/Makefile                    |   2 +
+>>>>    drivers/clk/meson/clk-phase-delay.c           |  69 ++++
+>>>>    drivers/clk/meson/clk-phase-delay.h           |  20 ++
+>>>>    drivers/clk/meson/mmc-clkc.c                  | 302 ++++++++++++++++++
+>>>>    drivers/clk/meson/sclk-div.c                  |  59 ++--
+>>>>    drivers/clk/meson/sclk-div.h                  |   3 +
+>>>>    include/dt-bindings/clock/amlogic,mmc-clkc.h  |  14 +
+>>>>    9 files changed, 529 insertions(+), 22 deletions(-)
+>>>>    create mode 100644 Documentation/devicetree/bindings/clock/amlogic,mmc-clkc.yaml
+>>>>    create mode 100644 drivers/clk/meson/clk-phase-delay.c
+>>>>    create mode 100644 drivers/clk/meson/clk-phase-delay.h
+>>>>    create mode 100644 drivers/clk/meson/mmc-clkc.c
+>>>>    create mode 100644 include/dt-bindings/clock/amlogic,mmc-clkc.h
+>>>>
+>>> .
+> 
+> .

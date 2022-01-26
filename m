@@ -2,118 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C76249C26E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFAA349C26F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 05:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237444AbiAZEE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 23:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
+        id S237450AbiAZEFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 23:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237443AbiAZEEz (ORCPT
+        with ESMTP id S237443AbiAZEFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 23:04:55 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32394C06161C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:04:55 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id g7-20020a25bdc7000000b00611c616bc76so45793763ybk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:04:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=zGpZZqA59lqSjncOCUawbzrH4HoG3Or+e1TiGHQxkQc=;
-        b=Iwo2PQAnRuvpnA8d+vAOQ+gIHT4EAKob+ueQr407aKW0mDbIbw2bVnb5cTAymh1/N8
-         djckblVAT9v4WCSGgzGir7Q0xquNsn6gZaOXLLtn7bV2/jUjmPA8H9UPk9nsPa0Os+dn
-         8BRhFpy25P6AHYJRLiEyIxiAD/cuaq6O9PqlJLAy0sDn8M726cwerB7TqTXA/50FHpa8
-         UpMeCE6ZNTQGo0RUCyr3wa16OisDJ9jdSlrCw36nJzVOycbPq7KuPtVbDKBKTjWmIT13
-         2Q1O2NN56Jzh6knC/YdAmYo7B/7S+ILZC9UaWNcQqOxvVM1B+zoaitS84vglwGepyWLe
-         F76g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=zGpZZqA59lqSjncOCUawbzrH4HoG3Or+e1TiGHQxkQc=;
-        b=b2ux132Q5JyvdkSbMTUpPrIcmKfbMUTGiS1erQXHcsMtvE+NneGkY25q1tkN50okhR
-         KCyxzd+cnvINxm2kxqFZtFzNziVpuSgSe1h1ZTPnb/YSZ+dhXOpV/LAjTEAQRgmiIVsI
-         NnqPHl3Q6lhzD6gKjZ79hAo+e13bsd+fUkRf3b+5UpbbABFghI/Td6LoYZIFnxJN+MRx
-         xiGcHMh3CUJyczttxaxGM204pc4eMXk7++GU8qgcO8VrbFC1qU/RxkYSkdHhOJdmwPHc
-         jhQvu7fZms2VkIg/BM/Z6r8BxbKTLLhRrlbSodGUkORAWHxDSru4UtabZxn/Cu+elZi6
-         kPzA==
-X-Gm-Message-State: AOAM533Xc8r/jtePSpYid8SB27WzArDv+3wquWyyaXiBqkp3B6OsEMkB
-        YPup5QTas2uMPNQQzaSI6nyvR8umQiw=
-X-Google-Smtp-Source: ABdhPJz71lD3YVAeXHyQ9Wjx7IfVwseXh5k7ip5PRnaw73GHBvxrwC/ROS7a5J0XL3Z96bpibFXgvyN6y8U=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:f4a7:8e16:f301:160])
- (user=badhri job=sendgmr) by 2002:a81:23ce:0:b0:2ca:287c:6c3d with SMTP id
- 00721157ae682-2ca33e99465mr6881017b3.226.1643169893957; Tue, 25 Jan 2022
- 20:04:53 -0800 (PST)
-Date:   Tue, 25 Jan 2022 20:04:47 -0800
-In-Reply-To: <20220126040447.3186233-1-badhri@google.com>
-Message-Id: <20220126040447.3186233-2-badhri@google.com>
-Mime-Version: 1.0
-References: <20220126040447.3186233-1-badhri@google.com>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH v2 2/2] usb: typec: tcpm: Do not disconnect when receiving VSAFE0V
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 25 Jan 2022 23:05:12 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57540C06161C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Jan 2022 20:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EPZFnvZSWtUChiByJXbpNdnEgj2wHr/YrtyphezMlas=; b=BBI1rbHtRZSKR2sbOcH13dmoNT
+        y5yXJMal1+Uj54eCJG+FCI1ETERDdclBEcueKTbe4P0phjm0qh/sTnZISl/TDDVpMyVQyAgFtbM15
+        EmGXjM26rumanCA1V9JoY054wqvTc/c4RPHsoWDz2dPRkx/WJKbI1rVPIjH0JFZ3srGcF5K6P1aNG
+        Rhwmlsd4UqcLPDpHMJ5RMOhgHAhXCf+VVUZhb/4WMu82BWMdGUo/stCaJ6EPA7ElcLjLw632r5ktS
+        xrtIUvkEsPgRoJXx/QJA9LNoCTrf6XJVOSRPDC46UsgQQ9I97Jcr9e3CvUzqWEFNbyii7wiV9dbPf
+        6vaIM4xw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCZY8-003hFg-Gl; Wed, 26 Jan 2022 04:04:48 +0000
+Date:   Wed, 26 Jan 2022 04:04:48 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
+        longpeng2@huawei.com, arnd@arndb.de, dave.hansen@linux.intel.com,
+        david@redhat.com, rppt@kernel.org, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
+Message-ID: <YfDIYKygRHX4RIri@casper.infradead.org>
+References: <cover.1642526745.git.khalid.aziz@oracle.com>
+ <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
+ <Ye/5yUyEqO0ws0G5@casper.infradead.org>
+ <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
+ <YfAEqzTeBJSIOKcA@casper.infradead.org>
+ <20220125185705.wf7p2l77vggipfry@box.shutemov.name>
+ <YfBIpmxvc0+mFByf@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfBIpmxvc0+mFByf@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With some chargers, vbus might momentarily raise above VSAFE5V and fall
-back to 0V causing VSAFE0V to be triggered. This will report a VBUS off
-event causing TCPM to transition to SNK_UNATTACHED state where it
-should be waiting in either SNK_ATTACH_WAIT or SNK_DEBOUNCED state.
-This patch makes TCPM avoid VSAFE0V events while in SNK_ATTACH_WAIT
-or SNK_DEBOUNCED state.
+On Tue, Jan 25, 2022 at 06:59:50PM +0000, Matthew Wilcox wrote:
+> On Tue, Jan 25, 2022 at 09:57:05PM +0300, Kirill A. Shutemov wrote:
+> > On Tue, Jan 25, 2022 at 02:09:47PM +0000, Matthew Wilcox wrote:
+> > > > I think zero-API approach (plus madvise() hints to tweak it) is worth
+> > > > considering.
+> > > 
+> > > I think the zero-API approach actually misses out on a lot of
+> > > possibilities that the mshare() approach offers.  For example, mshare()
+> > > allows you to mmap() many small files in the shared region -- you
+> > > can't do that with zeroAPI.
+> > 
+> > Do you consider a use-case for many small files to be common? I would
+> > think that the main consumer of the feature to be mmap of huge files.
+> > And in this case zero enabling burden on userspace side sounds like a
+> > sweet deal.
+> 
+> mmap() of huge files is certainly the Oracle use-case.  With occasional
+> funny business like mprotect() of a single page in the middle of a 1GB
+> hugepage.
 
-Stub from the spec:
-    "4.5.2.2.4.2 Exiting from AttachWait.SNK State
-    A Sink shall transition to Unattached.SNK when the state of both
-    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
-    A DRP shall transition to Unattached.SRC when the state of both
-    the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+Bill and I were talking about this earlier and realised that this is
+the key point.  There's a requirement that when one process mprotects
+a page that it gets protected in all processes.  You can't do that
+without *some* API because that's different behaviour than any existing
+API would produce.
 
-[23.194131] CC1: 0 -> 0, CC2: 0 -> 5 [state SNK_UNATTACHED, polarity 0, connected]
-[23.201777] state change SNK_UNATTACHED -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
-[23.209949] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
-[23.300579] VBUS off
-[23.300668] state change SNK_ATTACH_WAIT -> SNK_UNATTACHED [rev3 NONE_AMS]
-[23.301014] VBUS VSAFE0V
-[23.301111] Start toggling
+So how about something like this ...
 
-Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
-Cc: stable@vger.kernel.org
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
-Changes since v1:
-- Fix typos stated by Guenter Roeck.
----
- drivers/usb/typec/tcpm/tcpm.c | 4 ++++
- 1 file changed, 4 insertions(+)
+int mcreate(const char *name, int flags, mode_t mode);
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 3bf79f52bd34..0e0985355a14 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -5264,6 +5264,10 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
- 	case PR_SWAP_SNK_SRC_SOURCE_ON:
- 		/* Do nothing, vsafe0v is expected during transition */
- 		break;
-+	case SNK_ATTACH_WAIT:
-+	case SNK_DEBOUNCED:
-+		/* Do nothing, still waiting for VSAFE5V to connect */
-+		break;
- 	default:
- 		if (port->pwr_role == TYPEC_SINK && port->auto_vbus_discharge_enabled)
- 			tcpm_set_state(port, SNK_UNATTACHED, 0);
--- 
-2.35.0.rc0.227.g00780c9af4-goog
+creates a new mm_struct with a refcount of 2.  returns an fd (one
+of the two refcounts) and creates a name for it (inside msharefs,
+holds the other refcount).
 
+You can then mmap() that fd to attach it to a chunk of your address
+space.  Once attached, you can start to populate it by calling
+mmap() and specifying an address inside the attached mm as the first
+argument to mmap().
+
+Maybe mcreate() is just a library call, and it's really a thin wrapper
+around open() that happens to know where msharefs is mounted.

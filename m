@@ -2,98 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8DD49D4CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB80049D4CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbiAZWEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbiAZWET (ORCPT
+        id S232849AbiAZWEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:04:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:39494 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232435AbiAZWEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:04:19 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958D2C06161C;
-        Wed, 26 Jan 2022 14:04:19 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id p203so2267775oih.10;
-        Wed, 26 Jan 2022 14:04:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nCLt4Lp0eE2sf4ea3rGtIJIHPXsmFpZsxbjnyrthQAw=;
-        b=ea7wJ1Kf5wwGECDiTVsJrUXJyHDseZ6N163ra/SjSwHss7yx3OC8c8C7SPJ9vwbxBh
-         TkunKXnKo9B/gkXZKz6i6YRkpvHeSAajThQFQjW1L08HP1ZY4h3mk6So6CaBOCRM0L9i
-         NM1F+D6J8w1PjQj/OFxudvhP6Td9SmzTx44QJ/9OKzXg2rhHm13UAMIOKtuj2P5o4kG2
-         Lx27Cu/bo1mOOgArTYucLU6gKXZUxHZkK+UOwuW3WsAIMYnoFzxuqEUAfmTP19OeWdFY
-         t4CRs+nd5nmrFm097A7HozHzV21xJAUrPjyGzslHg3xr/qk56+3mRCYd4D3Oh8MoT+nH
-         GqYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=nCLt4Lp0eE2sf4ea3rGtIJIHPXsmFpZsxbjnyrthQAw=;
-        b=6drgUYK94SUj793vAWckd0MhRXvlmObJq3SxMLwQSC6NkE7DasRhBPA+W2rP7viD13
-         s6vwAw/9bOToIaOz8mW3smr+z+1E1eM6kI0pGKTglMHQOCHZKwvqEeeQ/x1+HEVcJHi3
-         qO1ZJsOwYt0ZJkehvxd5zF47nOeVBhG4yHIBmuhgBLCZLamrTpRzHVqx1hAz4JRiFvdK
-         iHh3x9nzxTG0oOCCntWTxbE6+gpiaRw6pjvNmTr0PtP2FYFsM3UqC4QTRY2vSluTgOcM
-         /gv3YCAsd/PdevsOb345b7gb6vKYvGeh9NUOxRhFqwQem5HW+F/H7cnm5TArjqZIYKNY
-         86rg==
-X-Gm-Message-State: AOAM533L6Mn5Uljai8hotKVQpDc1Rd4C5vItRVLZBHuv4jVDPciSzESC
-        4DglfPG2W277iSG+kARPAsM=
-X-Google-Smtp-Source: ABdhPJyYn8OgR64Gy5a2Tnm/YsQT5Hpq97lsC0b7pi0JMzP+ARSoD5d3Y78/IDBDU2Je28jU050jXw==
-X-Received: by 2002:a05:6808:11c6:: with SMTP id p6mr445269oiv.50.1643234659022;
-        Wed, 26 Jan 2022 14:04:19 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x16sm7427877otk.0.2022.01.26.14.04.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:04:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 26 Jan 2022 14:04:16 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Chen Wandun <chenwandun@huawei.com>
-Subject: Re: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
-Message-ID: <20220126220416.GA3650172@roeck-us.net>
-References: <20220125155447.179130255@linuxfoundation.org>
+        Wed, 26 Jan 2022 17:04:35 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6B51B1F37C;
+        Wed, 26 Jan 2022 22:04:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643234674; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IQbpJm/4YcrM7846Lj5mc4Lilmm6Oo33cVYJ6Jnz2NE=;
+        b=kKYSn/j05P7uOembzdhs2DLfQ+JclBWNfYe/3GAiUAUe3qfPOBn62eXAj8p6RTDh6sWWce
+        1dBHl8GJWP42YBVqHFjmoDJV5Ou2rpTGNxyctz4XJbCP6wZpdz68fbXsfQYZOftAcXu+kn
+        own0h4R9Rcsr+eygyUUwsUEwWPaMGAw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643234674;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IQbpJm/4YcrM7846Lj5mc4Lilmm6Oo33cVYJ6Jnz2NE=;
+        b=cJTivAh/KsF+/5h2VR05WJzv+LAsUuIKmdroeSJCCVC+FXcL3OBPmF27p+BV+igQSIJDpH
+        g4nKlaDEQKGdEZCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0BD7F13E37;
+        Wed, 26 Jan 2022 22:04:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gZ0OLm7F8WFhSgAAMHmgww
+        (envelope-from <neilb@suse.de>); Wed, 26 Jan 2022 22:04:30 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125155447.179130255@linuxfoundation.org>
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Mark Hemment" <markhemm@googlemail.com>
+Cc:     "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Anna Schumaker" <anna.schumaker@netapp.com>,
+        "Chuck Lever" <chuck.lever@oracle.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Mel Gorman" <mgorman@suse.de>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "David Howells" <dhowells@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/23] MM: submit multipage reads for SWP_FS_OPS swap-space
+In-reply-to: <CANe_+UjJOZJwfFLMgenBttssB8G5ZW5fqw7Vi_tohF_HOW5wWg@mail.gmail.com>
+References: <164299573337.26253.7538614611220034049.stgit@noble.brown>,
+ <164299611278.26253.14950274629759580371.stgit@noble.brown>,
+ <CANe_+UjJOZJwfFLMgenBttssB8G5ZW5fqw7Vi_tohF_HOW5wWg@mail.gmail.com>
+Date:   Thu, 27 Jan 2022 09:04:27 +1100
+Message-id: <164323466702.5493.9146602034937551582@noble.neil.brown.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:33:08PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.3 release.
-> There are 1033 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
-> 
+On Tue, 25 Jan 2022, Mark Hemment wrote:
+> On Mon, 24 Jan 2022 at 03:52, NeilBrown <neilb@suse.de> wrote:
+> >
+> > swap_readpage() is given one page at a time, but maybe called repeatedly
+> > in succession.
+> > For block-device swapspace, the blk_plug functionality allows the
+> > multiple pages to be combined together at lower layers.
+> > That cannot be used for SWP_FS_OPS as blk_plug may not exist - it is
+> > only active when CONFIG_BLOCK=3Dy.  Consequently all swap reads over NFS
+> > are single page reads.
+> >
+> > With this patch we pass in a pointer-to-pointer when swap_readpage can
+> > store state between calls - much like the effect of blk_plug.  After
+> > calling swap_readpage() some number of times, the state will be passed
+> > to swap_read_unplug() which can submit the combined request.
+> >
+> > Some caller currently call blk_finish_plug() *before* the final call to
+> > swap_readpage(), so the last page cannot be included.  This patch moves
+> > blk_finish_plug() to after the last call, and calls swap_read_unplug()
+> > there too.
+> >
+> > Signed-off-by: NeilBrown <neilb@suse.de>
+> > ---
+> >  mm/madvise.c    |    8 +++-
+> >  mm/memory.c     |    2 +
+> >  mm/page_io.c    |  102 +++++++++++++++++++++++++++++++++++--------------=
+------
+> >  mm/swap.h       |   16 +++++++--
+> >  mm/swap_state.c |   19 +++++++---
+> >  5 files changed, 98 insertions(+), 49 deletions(-)
+> >
+> ...
+> > diff --git a/mm/page_io.c b/mm/page_io.c
+> > index 6e32ca35d9b6..bcf655d650c8 100644
+> > --- a/mm/page_io.c
+> > +++ b/mm/page_io.c
+> > @@ -390,46 +391,60 @@ int __swap_writepage(struct page *page, struct writ=
+eback_control *wbc,
+> >  static void sio_read_complete(struct kiocb *iocb, long ret)
+> >  {
+> >         struct swap_iocb *sio =3D container_of(iocb, struct swap_iocb, io=
+cb);
+> > -       struct page *page =3D sio->bvec.bv_page;
+> > -
+> > -       if (ret !=3D 0 && ret !=3D PAGE_SIZE) {
+> > -               SetPageError(page);
+> > -               ClearPageUptodate(page);
+> > -               pr_alert_ratelimited("Read-error on swap-device\n");
+> > -       } else {
+> > -               SetPageUptodate(page);
+> > -               count_vm_event(PSWPIN);
+> > +       int p;
+> > +
+> > +       for (p =3D 0; p < sio->pages; p++) {
+> > +               struct page *page =3D sio->bvec[p].bv_page;
+> > +               if (ret !=3D 0 && ret !=3D PAGE_SIZE * sio->pages) {
+> > +                       SetPageError(page);
+> > +                       ClearPageUptodate(page);
+> > +                       pr_alert_ratelimited("Read-error on swap-device\n=
+");
+> > +               } else {
+> > +                       SetPageUptodate(page);
+> > +                       count_vm_event(PSWPIN);
+> > +               }
+> > +               unlock_page(page);
+> >         }
+> > -       unlock_page(page);
+> >         mempool_free(sio, sio_pool);
+> >  }
+>=20
+> Trivial: on success, could be single call to count_vm_events(PSWPIN,
+> sio->pages).
+> Similar comment for PSWPOUT in sio_write_complete()
+>=20
+> >
+> > -static int swap_readpage_fs(struct page *page)
+> > +static void swap_readpage_fs(struct page *page,
+> > +                            struct swap_iocb **plug)
+> >  {
+> >         struct swap_info_struct *sis =3D page_swap_info(page);
+> > -       struct file *swap_file =3D sis->swap_file;
+> > -       struct address_space *mapping =3D swap_file->f_mapping;
+> > -       struct iov_iter from;
+> > -       struct swap_iocb *sio;
+> > +       struct swap_iocb *sio =3D NULL;
+> >         loff_t pos =3D page_file_offset(page);
+> > -       int ret;
+> > -
+> > -       sio =3D mempool_alloc(sio_pool, GFP_KERNEL);
+> > -       init_sync_kiocb(&sio->iocb, swap_file);
+> > -       sio->iocb.ki_pos =3D pos;
+> > -       sio->iocb.ki_complete =3D sio_read_complete;
+> > -       sio->bvec.bv_page =3D page;
+> > -       sio->bvec.bv_len =3D PAGE_SIZE;
+> > -       sio->bvec.bv_offset =3D 0;
+> >
+> > -       iov_iter_bvec(&from, READ, &sio->bvec, 1, PAGE_SIZE);
+> > -       ret =3D mapping->a_ops->swap_rw(&sio->iocb, &from);
+> > -       if (ret !=3D -EIOCBQUEUED)
+> > -               sio_read_complete(&sio->iocb, ret);
+> > -       return ret;
+> > +       if (*plug)
+> > +               sio =3D *plug;
+>=20
+> 'plug' can be NULL when called from do_swap_page();
+>         if (plug && *plug)
 
-Build results:
-	total: 153 pass: 153 fail: 0
-Qemu test results:
-	total: 488 pass: 481 fail: 7
-Failed tests:
-	arm:mcimx6ul-evk:imx_v6_v7_defconfig:nodrm:mem256:net,nic:net,nic:imx6ul-14x14-evk:initrd
-	arm:mcimx6ul-evk:imx_v6_v7_defconfig:nodrm:sd:mem256:net,nic:net,nic:imx6ul-14x14-evk:rootfs
-	arm:mcimx6ul-evk:imx_v6_v7_defconfig:nodrm:usb0:mem256:net,nic:net,nic:imx6ul-14x14-evk:rootfs
-	arm:mcimx6ul-evk:imx_v6_v7_defconfig:nodrm:usb1:mem256:net,nic:net,nic:imx6ul-14x14-evk:rootfs
-	arm:mcimx7d-sabre:imx_v6_v7_defconfig:nodrm:mem256:net,nic:imx7d-sdb:initrd
-	arm:mcimx7d-sabre:imx_v6_v7_defconfig:nodrm:usb1:mem256:net,nic:imx7d-sdb:rootfs
-	arm:mcimx7d-sabre:imx_v6_v7_defconfig:nodrm:sd:mem256:net,nic:imx7d-sdb:rootfs
+Thanks for catching that!  I actually want it to be
+   if (plug)
+       sio =3D *plug;
 
-As reported separately, the failures are due to
+which nicely balances the
+   if (plug)
+       *plug =3D sio;
+at the end of the function.
 
-Chen Wandun <chenwandun@huawei.com>
-    mm/page_isolation: unset migratetype directly for non Buddy page
-
-and reverting this patch fixes the problem. The problem is also seen
-in the mainline kernel.
-
-Guenter
+Thanks,
+NeilBrown

@@ -2,230 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A173A49CD82
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2531949CD41
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242602AbiAZPMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:12:47 -0500
-Received: from smtpout2.mo529.mail-out.ovh.net ([79.137.123.220]:60287 "EHLO
-        smtpout2.mo529.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242621AbiAZPMn (ORCPT
+        id S242543AbiAZPD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:03:57 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:56793 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242510AbiAZPD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:12:43 -0500
-Received: from mxplan5.mail.ovh.net (unknown [10.109.156.217])
-        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 100C2DA2FBA9;
-        Wed, 26 Jan 2022 16:03:53 +0100 (CET)
-Received: from kaod.org (37.59.142.98) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 26 Jan
- 2022 16:03:52 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-98R002b3672a58-b76e-4071-81b6-fd5eea322dc7,
-                    98CE5217A5203725B09B15E66DA88D7242EF3032) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <cf6ac499-4190-cbe5-255c-f9edf07a4786@kaod.org>
-Date:   Wed, 26 Jan 2022 16:03:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: ppc: hard lockup / hang in v5.17-rc1 under QEMU
+        Wed, 26 Jan 2022 10:03:57 -0500
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20QF3rfiE025202, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20QF3rfiE025202
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 26 Jan 2022 23:03:53 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 26 Jan 2022 23:03:53 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 26 Jan 2022 07:03:52 -0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
+ RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
+ 15.01.2308.020; Wed, 26 Jan 2022 23:03:52 +0800
+From:   Hau <hau@realtek.com>
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net-next 1/1] r8169: enable RTL8125 ASPM L1.2
+Thread-Topic: [PATCH net-next 1/1] r8169: enable RTL8125 ASPM L1.2
+Thread-Index: AQHYEU71utwpaLacm0G/vN72YItAmaxzwzyAgAF/8qD//4piAIAAlGzg
+Date:   Wed, 26 Jan 2022 15:03:52 +0000
+Message-ID: <0a281169bb114b69a49f91be80bbdf45@realtek.com>
+References: <20220124181937.6331-1-hau@realtek.com>
+ <5ec25f20-8acf-544d-30f6-f0eeecd9b2f1@gmail.com>
+ <439ba7073446410da75509a5add95e03@realtek.com>
+ <daa376b3-d756-b85d-d256-49012ebe928b@gmail.com>
+In-Reply-To: <daa376b3-d756-b85d-d256-49012ebe928b@gmail.com>
+Accept-Language: zh-TW, en-US
 Content-Language: en-US
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-References: <CANiq72n_FmDx=r-o9J8gYc6LpwRL5EGmhM6Xzwv27Xc7h1TNDw@mail.gmail.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <CANiq72n_FmDx=r-o9J8gYc6LpwRL5EGmhM6Xzwv27Xc7h1TNDw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [37.59.142.98]
-X-ClientProxiedBy: DAG3EX2.mxp5.local (172.16.2.22) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 1b7176c1-4070-4d1e-8970-656bb3e91524
-X-Ovh-Tracer-Id: 7122442813882403808
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrfedugdejudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthejredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpedtjeeffedvvedtffevjeeitdejgeeiueejhfffkeffgeeghedvleffuedvjeeftdenucffohhmrghinhepghhithhlrggsrdgtohhmnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehnphhighhgihhnsehgmhgrihhlrdgtohhm
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.129]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMjYg5LiL5Y2IIDAyOjAwOjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/22 15:16, Miguel Ojeda wrote:
-> Hi PPC folks,
-> 
-> Our ppc64le CI deterministically triggers a hard lockup / hang under
-> QEMU since v5.17-rc1 (upgrading from v5.16).
-> 
-> Bisecting points to 0faf20a1ad16 ("powerpc/64s/interrupt: Don't enable
-> MSR[EE] in irq handlers unless perf is in use").
-
-Indeed. I could reproduce.
-
-Could you please send the QEMU command line and the full dmesg ? and
-possibly open an issue on :
-
-   https://gitlab.com/qemu-project/qemu/-/issues/
-
-I guess it's a QEMU modeling issue.
-
-Thanks,
-
-C.
-
-
-> 
-> Cheers,
-> Miguel
-> 
-> [   16.328310] watchdog: CPU 1 detected hard LOCKUP on other CPUs 0
-> [   16.328955] watchdog: CPU 1 TB:16743325700, last SMP heartbeat
-> TB:8453096925 (16191ms ago)
-> [   16.330786] watchdog: CPU 0 Hard LOCKUP
-> [   16.331078] watchdog: CPU 0 TB:16744720354, last heartbeat
-> TB:8453109168 (16194ms ago)
-> [   16.331295] Kernel panic - not syncing: Hard LOCKUP
-> [   16.331312] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-rc2+ #28
-> [   16.331729] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.16.0-rc2+ #28
-> [   16.332294] NIP:  c000000000009784 LR: c00000000034ee60 CTR: c0000000000096e0
-> [   16.332339] REGS: c00000001ff87d60 TRAP: 0100   Not tainted  (5.16.0-rc2+)
-> [   16.332410] MSR:  8000000000001031 <SF
-> [   16.332520] Call Trace:
-> [   16.334429] ,ME,IR,DR,LE>  CR: 24000088  XER: 20040000
-> [   16.334770] CFAR: c00000000000977c IRQMASK: 3
-> [   16.334770] GPR00: c00000000034ee60 c00000000111f590
-> c00000000111f400 0000000000008002
-> [   16.334770] GPR04: 0000000000000001 c00000000113f400
-> c00000000106f400 c00000000110f400
-> [   16.334770] GPR08: c0000000003af400 0000000024000088
-> c00000000111f8a0 c000000000011d00
-> [   16.334770] GPR12: 8000000000009033 c0000000011d0000
-> 0000000000000000 0000000000000000
-> [   16.334770] GPR16: c00000000110ab90 c0000000010722f0
-> c000000001142100 0000000000000001
-> [   16.334770] GPR20: 0000000000000000 000000000000000a
-> ffffffff00049233 c0000000010722a8
-> [   16.334770] GPR24: 0000000000000282 c000000001076580
-> c000000001143a00 0000000004200002
-> [   16.334770] GPR28: c0000000010b0480 c0000000010722a8
-> c0000000003b6cfa 00000000015e0000
-> [   16.334464] [c0000000062675c0] [c0000000003283e0] dump_stack_lvl+0x78/0xb8
-> [   16.335274] NIP [c000000000009784] decrementer_common_virt+0xa4/0x210
-> [   16.336451]  (unreliable)
-> [   16.335629] LR [c00000000034ee60] __do_softirq+0xe0/0x2c4
-> [   16.336658] [c000000006267600] [c00000000009378c] panic+0x150/0x3a4
-> [   16.336797] Call Trace:
-> [   16.337294]
-> [   16.336809] [c00000000111f590] [c00000000000c6d8]
-> interrupt_return_srr_kernel+0x8/0xec (unreliable)
-> [   16.337615] [c00000000111f8a0] [c0000000000d2b24]
-> trigger_load_balance+0x94/0x480
-> [   16.337863] [c00000000111f8d0] [c00000000034ee60] __do_softirq+0xe0/0x2c4
-> [   16.338079] [c00000000111f9c0] [c00000000009b018] irq_exit+0xa8/0x130
-> [   16.338225] [c00000000111fa00] [c00000000001b590] timer_interrupt+0x1b0/0x200
-> [   16.338496] [c00000000111fa60] [c0000000000098e8]
-> decrementer_common_virt+0x208/0x210
-> [   16.338803] --- interrupt: 900 at plpar_hcall_norets_notrace+0x18/0x2c
-> [   16.339089] NIP:  c000000000072a48 LR: c000000000074d04 CTR: c000000000074c60
-> [   16.339103] REGS: c00000000111fad0 TRAP: 0900   Not tainted  (5.16.0-rc2+)
-> [   16.339117] MSR:  8000000002009033 <SF,VEC,EE,ME
-> [   16.337355] [c0000000062676b0] [c000000000092d78] nmi_panic+0x78/0x90
-> [   16.339231] ,IR,DR,RI,LE>  CR: 22000888  XER: 00000000
-> [   16.339354] CFAR: c000000000074d00 IRQMASK: 0
-> [   16.339354] GPR00: 0000000022000888
-> [   16.340017]
-> [   16.340120] [c000000006267710] [c000000000027650]
-> watchdog_smp_panic+0x420/0x4e0
-> [   16.340441] [c000000006267800] [c00000000002717c]
-> watchdog_timer_fn+0xac/0x160
-> [   16.340804] c00000000111fd70 c00000000111f400
-> [   16.340715] [c000000006267840] [c0000000001202d8] __run_hrtimer+0xc8/0x190
-> [   16.341234] 0000000000000000
-> [   16.341234] GPR04: 0000000000000001 c00000000106f400
-> 0000000000000000 0000000001f40000
-> [   16.341234] GPR08: 001908b100000000 00000000000002ea
-> 0000000000000000 000000000000006b
-> [   16.341234] GPR12: c000000000074c60 c0000000011d0000
-> 0000000000000000 0000000000000000
-> [   16.341234] GPR16: 0000000000000000 0000000000000000
-> 0000000000000000 0000000000000000
-> [   16.341234] GPR20: 0000000000000000 0000000000000000
-> 0000000000000000 0000000000000000
-> [   16.341234] GPR24:
-> [   16.341779]
-> [   16.342182] c00000000113f400 0000000000000001 c000000001145928
-> 0000000000000001
-> [   16.342182] GPR28: c0000000010717a0 c000000001071798
-> c0000000010b0480 00000000015e0000
-> [   16.342160] [c000000006267890] [c00000000011f300]
-> hrtimer_run_queues+0x150/0x1c0
-> [   16.342276] NIP [c000000000072a48] plpar_hcall_norets_notrace+0x18/0x2c
-> [   16.342783]
-> [   16.342820] [c000000006267910] [c00000000011cf58]
-> update_process_times+0x88/0x110
-> [   16.343127] [c000000006267960] [c00000000012dbc8]
-> tick_nohz_handler+0xd8/0x150
-> [   16.344080] [c0000000062679a0] [c00000000001b570] timer_interrupt+0x190/0x200
-> [   16.344439] [c000000006267a00] [c0000000000098e8]
-> decrementer_common_virt+0x208/0x210
-> [   16.342542] LR [c000000000074d04] pseries_lpar_idle+0xa4/0x160
-> [   16.347000] --- interrupt: 900 at plpar_hcall_norets_notrace+0x18/0x2c
-> [   16.347224] --- interrupt: 900
-> [   16.347525] NIP:  c000000000072a48 LR: c000000000074d04 CTR: c000000000074c60
-> [   16.347637] REGS: c000000006267a70 TRAP: 0900   Not tainted  (5.16.0-rc2+)
-> [   16.347716] MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE
-> [   16.347269] [c00000000111fd70] [c00000000111fdc0] .TOC.+0x9c0/0xc00
-> [   16.347871] >  CR: 22000048  XER: 00000000
-> [   16.347910] CFAR: c000000000074d00 IRQMASK: 0
-> [   16.347910] GPR00: 0000000022000048 c000000006267d10
-> c00000000111f400 0000000000000000
-> [   16.347910] GPR04: 0000000000000001
-> [   16.348004]  (unreliable)
-> [   16.348331] c00000000106f400 0000000000000800 0000000000007b26
-> [   16.348331] GPR08: 0005204180000000 0000000000000000
-> 0000000000000000 000000000000002c
-> [   16.348331] GPR12: c000000000074c60 c00000001ffe4d00
-> [   16.348347] [c00000000111fdf0] [c0000000000179a4] arch_cpu_idle+0x74/0x110
-> [   16.348453] c000000001145a28 c00000000118f400
-> [   16.348453] GPR16: c000000001070488 c0000000011458d0
-> c0000000011458d8 0000000000000001
-> [   16.348453] GPR20: c00000000118f400 0000000000000000
-> 0000000000000000 0000000000000002
-> [   16.348749]
-> [   16.349107]
-> [   16.349107] GPR24: c00000000113f400 0000000000000002
-> c000000001145928 0000000000000001
-> [   16.349107] GPR28: c0000000010717a0 c000000001071798
-> c0000000061aa200 c00000000003d350
-> [   16.349137] [c00000000111fe30] [c00000000034e28c] default_idle_call+0x4c/0x90
-> [   16.349398] NIP [c000000000072a48] plpar_hcall_norets_notrace+0x18/0x2c
-> [   16.349562]
-> [   16.349771] [c00000000111fe50] [c0000000000d0b40] do_idle+0x110/0x1d0
-> [   16.349946] [c00000000111feb0] [c0000000000d0c34] cpu_startup_entry+0x34/0x50
-> [   16.350175] [c00000000111fee0] [c000000000011180] rest_init+0xe0/0x110
-> [   16.350307] [c00000000111ff10] [c0000000010046e8] start_kernel+0x3ac/0x424
-> [   16.350910] [c00000000111ff90] [c00000000000d560] start_here_common+0x1c/0x3c
-> [   16.351302] Instruction dump:
-> [   16.351659] 4182000c 39400001 48000008 894d0932 714a0001 39400008
-> 408223b4 718a4000
-> [   16.351782] 7c2a0b78 3821fcf0 41c20008 e82d0910 <0981fcf0> f92101a0
-> f9610170 f9810178
-> [   16.350674] LR [c000000000074d04] pseries_lpar_idle+0xa4/0x160
-> [   16.352526] Oops: Unrecoverable System Reset, sig: 6 [#1]
-> [   16.353142] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2 pSeries
-> [   16.353575] --- interrupt: 900
-> [   16.353629] [c000000006267d10] [c0000000000159fc]
-> __switch_to+0x1cc/0x290 (unreliable)
-> [   16.353954] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.16.0-rc2+ #28
-> [   16.353890] [c000000006267d90] [c0000000000179a4] arch_cpu_idle+0x74/0x110
-> [   16.354193] NIP:  c000000000009784 LR: c00000000034ee60 CTR: c0000000000096e0
-> [   16.354350] REGS: c00000001ff87d60 TRAP: 0100   Not tainted  (5.16.0-rc2+)
-> [   16.354497] MSR:  8000000000001031 <SF,ME,IR
-> [   16.354351] [c000000006267dd0] [c00000000034e28c] default_idle_call+0x4c/0x90
-> [   16.354774] [c000000006267df0] [c0000000000d0b40] do_idle+0x110/0x1d0
-> [   16.355001] [c000000006267e50] [c0000000000d0c34] cpu_startup_entry+0x34/0x50
-> [   16.355318] [c000000006267e80] [c00000000003e6d0]
-> start_secondary+0xc30/0x1060
-> [   16.355597] [c000000006267f90] [c00000000000ce54]
-> start_secondary_prolog+0x10/0x14
-> 
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSGVpbmVyIEthbGx3ZWl0
+IFttYWlsdG86aGthbGx3ZWl0MUBnbWFpbC5jb21dDQo+IFNlbnQ6IFdlZG5lc2RheSwgSmFudWFy
+eSAyNiwgMjAyMiA5OjQ3IFBNDQo+IFRvOiBIYXUgPGhhdUByZWFsdGVrLmNvbT47IG5ldGRldkB2
+Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IG5pY19zd3NkIDxuaWNfc3dzZEByZWFsdGVrLmNvbT47IGxp
+bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCBuZXQtbmV4
+dCAxLzFdIHI4MTY5OiBlbmFibGUgUlRMODEyNSBBU1BNIEwxLjINCj4gDQo+IE9uIDI2LjAxLjIw
+MjIgMTQ6MDAsIEhhdSB3cm90ZToNCj4gPj4gT24gMjQuMDEuMjAyMiAxOToxOSwgQ2h1bmhhbyBM
+aW4gd3JvdGU6DQo+ID4+PiBUaGlzIHBhdGNoIHdpbGwgZW5hYmxlIFJUTDgxMjUgQVNQTSBMMS4y
+IG9uIHRoZSBwbGF0Zm9ybXMgdGhhdCBoYXZlDQo+ID4+PiB0ZXN0ZWQgUlRMODEyNSB3aXRoIEFT
+UE0gTDEuMiBlbmFibGVkLg0KPiA+Pj4gUmVnaXN0ZXIgbWFjIG9jcCAweGMwYjIgd2lsbCBoZWxw
+IHRvIGlkZW50aWZ5IGlmIFJUTDgxMjUgaGFzIGJlZW4NCj4gPj4+IHRlc3RlZCBvbiBMMS4yIGVu
+YWJsZWQgcGxhdGZvcm0uIElmIGl0IGlzLCB0aGlzIHJlZ2lzdGVyIHdpbGwgYmUgc2V0IHRvIDB4
+Zi4NCj4gPj4+IElmIG5vdCwgdGhpcyByZWdpc3RlciB3aWxsIGJlIGRlZmF1bHQgdmFsdWUgMC4N
+Cj4gPj4+DQo+ID4+PiBTaWduZWQtb2ZmLWJ5OiBDaHVuaGFvIExpbiA8aGF1QHJlYWx0ZWsuY29t
+Pg0KPiA+Pj4gLS0tDQo+ID4+PiAgZHJpdmVycy9uZXQvZXRoZXJuZXQvcmVhbHRlay9yODE2OV9t
+YWluLmMgfCA5OQ0KPiA+Pj4gKysrKysrKysrKysrKysrKysrLS0tLS0NCj4gPj4+ICAxIGZpbGUg
+Y2hhbmdlZCwgNzkgaW5zZXJ0aW9ucygrKSwgMjAgZGVsZXRpb25zKC0pDQo+ID4+Pg0KPiA+Pj4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L3JlYWx0ZWsvcjgxNjlfbWFpbi5jDQo+
+ID4+PiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L3JlYWx0ZWsvcjgxNjlfbWFpbi5jDQo+ID4+PiBp
+bmRleCAxOWUyNjIxZTA2NDUuLmIxZTAxMzk2OWQ0YyAxMDA2NDQNCj4gPj4+IC0tLSBhL2RyaXZl
+cnMvbmV0L2V0aGVybmV0L3JlYWx0ZWsvcjgxNjlfbWFpbi5jDQo+ID4+PiArKysgYi9kcml2ZXJz
+L25ldC9ldGhlcm5ldC9yZWFsdGVrL3I4MTY5X21haW4uYw0KPiA+Pj4gQEAgLTIyMzgsMjEgKzIy
+MzgsNiBAQCBzdGF0aWMgdm9pZCBydGxfd29sX2VuYWJsZV9yeChzdHJ1Y3QNCj4gPj4gcnRsODE2
+OV9wcml2YXRlICp0cCkNCj4gPj4+ICAJCQlBY2NlcHRCcm9hZGNhc3QgfCBBY2NlcHRNdWx0aWNh
+c3QgfA0KPiA+PiBBY2NlcHRNeVBoeXMpOyAgfQ0KPiA+Pj4NCj4gPj4+IC1zdGF0aWMgdm9pZCBy
+dGxfcHJlcGFyZV9wb3dlcl9kb3duKHN0cnVjdCBydGw4MTY5X3ByaXZhdGUgKnRwKSAtew0KPiA+
+Pj4gLQlpZiAodHAtPmRhc2hfdHlwZSAhPSBSVExfREFTSF9OT05FKQ0KPiA+Pj4gLQkJcmV0dXJu
+Ow0KPiA+Pj4gLQ0KPiA+Pj4gLQlpZiAodHAtPm1hY192ZXJzaW9uID09IFJUTF9HSUdBX01BQ19W
+RVJfMzIgfHwNCj4gPj4+IC0JICAgIHRwLT5tYWNfdmVyc2lvbiA9PSBSVExfR0lHQV9NQUNfVkVS
+XzMzKQ0KPiA+Pj4gLQkJcnRsX2VwaHlfd3JpdGUodHAsIDB4MTksIDB4ZmY2NCk7DQo+ID4+PiAt
+DQo+ID4+PiAtCWlmIChkZXZpY2VfbWF5X3dha2V1cCh0cF90b19kZXYodHApKSkgew0KPiA+Pj4g
+LQkJcGh5X3NwZWVkX2Rvd24odHAtPnBoeWRldiwgZmFsc2UpOw0KPiA+Pj4gLQkJcnRsX3dvbF9l
+bmFibGVfcngodHApOw0KPiA+Pj4gLQl9DQo+ID4+PiAtfQ0KPiA+Pj4gLQ0KPiA+Pj4gIHN0YXRp
+YyB2b2lkIHJ0bF9pbml0X3J4Y2ZnKHN0cnVjdCBydGw4MTY5X3ByaXZhdGUgKnRwKSAgew0KPiA+
+Pj4gIAlzd2l0Y2ggKHRwLT5tYWNfdmVyc2lvbikgew0KPiA+Pj4gQEAgLTI2NTAsNiArMjYzNSwz
+NCBAQCBzdGF0aWMgdm9pZA0KPiA+Pj4gcnRsX3BjaWVfc3RhdGVfbDJsM19kaXNhYmxlKHN0cnVj
+dA0KPiA+PiBydGw4MTY5X3ByaXZhdGUgKnRwKQ0KPiA+Pj4gIAlSVExfVzgodHAsIENvbmZpZzMs
+IFJUTF9SOCh0cCwgQ29uZmlnMykgJiB+UmR5X3RvX0wyMyk7ICB9DQo+ID4+Pg0KPiA+Pj4gK3N0
+YXRpYyB2b2lkIHJ0bF9kaXNhYmxlX2V4aXRfbDEoc3RydWN0IHJ0bDgxNjlfcHJpdmF0ZSAqdHAp
+IHsNCj4gPj4+ICsJLyogQml0cyBjb250cm9sIHdoaWNoIGV2ZW50cyB0cmlnZ2VyIEFTUE0gTDEg
+ZXhpdDoNCj4gPj4+ICsJICogQml0IDEyOiByeGR2DQo+ID4+PiArCSAqIEJpdCAxMTogbHRyX21z
+Zw0KPiA+Pj4gKwkgKiBCaXQgMTA6IHR4ZG1hX3BvbGwNCj4gPj4+ICsJICogQml0ICA5OiB4YWRt
+DQo+ID4+PiArCSAqIEJpdCAgODogcGt0YXZpDQo+ID4+PiArCSAqIEJpdCAgNzogdHhwbGENCj4g
+Pj4+ICsJICovDQo+ID4+PiArCXN3aXRjaCAodHAtPm1hY192ZXJzaW9uKSB7DQo+ID4+PiArCWNh
+c2UgUlRMX0dJR0FfTUFDX1ZFUl8zNCAuLi4gUlRMX0dJR0FfTUFDX1ZFUl8zNjoNCj4gPj4+ICsJ
+CXJ0bF9lcmlfY2xlYXJfYml0cyh0cCwgMHhkNCwgMHgxZjAwKTsNCj4gPj4+ICsJCWJyZWFrOw0K
+PiA+Pj4gKwljYXNlIFJUTF9HSUdBX01BQ19WRVJfMzcgLi4uIFJUTF9HSUdBX01BQ19WRVJfMzg6
+DQo+ID4+PiArCQlydGxfZXJpX2NsZWFyX2JpdHModHAsIDB4ZDQsIDB4MGMwMCk7DQo+ID4+PiAr
+CQlicmVhazsNCj4gPj4+ICsJY2FzZSBSVExfR0lHQV9NQUNfVkVSXzQwIC4uLiBSVExfR0lHQV9N
+QUNfVkVSXzUzOg0KPiA+Pj4gKwkJcnRsX2VyaV9jbGVhcl9iaXRzKHRwLCAweGQ0LCAweDFmODAp
+Ow0KPiA+Pj4gKwkJYnJlYWs7DQo+ID4+PiArCWNhc2UgUlRMX0dJR0FfTUFDX1ZFUl82MCAuLi4g
+UlRMX0dJR0FfTUFDX1ZFUl82MzoNCj4gPj4+ICsJCXI4MTY4X21hY19vY3BfbW9kaWZ5KHRwLCAw
+eGMwYWMsIDB4MWY4MCwgMCk7DQo+ID4+PiArCQlicmVhazsNCj4gPj4+ICsJZGVmYXVsdDoNCj4g
+Pj4+ICsJCWJyZWFrOw0KPiA+Pj4gKwl9DQo+ID4+PiArfQ0KPiA+Pj4gKw0KPiA+Pj4gIHN0YXRp
+YyB2b2lkIHJ0bF9lbmFibGVfZXhpdF9sMShzdHJ1Y3QgcnRsODE2OV9wcml2YXRlICp0cCkgIHsN
+Cj4gPj4+ICAJLyogQml0cyBjb250cm9sIHdoaWNoIGV2ZW50cyB0cmlnZ2VyIEFTUE0gTDEgZXhp
+dDoNCj4gPj4+IEBAIC0yNjkyLDYgKzI3MDUsMzMgQEAgc3RhdGljIHZvaWQgcnRsX2h3X2FzcG1f
+Y2xrcmVxX2VuYWJsZShzdHJ1Y3QNCj4gPj4gcnRsODE2OV9wcml2YXRlICp0cCwgYm9vbCBlbmFi
+bGUpDQo+ID4+PiAgCXVkZWxheSgxMCk7DQo+ID4+PiAgfQ0KPiA+Pj4NCj4gPj4+ICtzdGF0aWMg
+dm9pZCBydGxfaHdfYXNwbV9sMTJfZW5hYmxlKHN0cnVjdCBydGw4MTY5X3ByaXZhdGUgKnRwLCBi
+b29sDQo+ID4+PiArZW5hYmxlKSB7DQo+ID4+PiArCS8qIERvbid0IGVuYWJsZSBMMS4yIGluIHRo
+ZSBjaGlwIGlmIE9TIGNhbid0IGNvbnRyb2wgQVNQTSAqLw0KPiA+Pj4gKwlpZiAoZW5hYmxlICYm
+IHRwLT5hc3BtX21hbmFnZWFibGUpIHsNCj4gPj4+ICsJCXI4MTY4X21hY19vY3BfbW9kaWZ5KHRw
+LCAweGUwOTQsIDB4ZmYwMCwgMCk7DQo+ID4+PiArCQlyODE2OF9tYWNfb2NwX21vZGlmeSh0cCwg
+MHhlMDkyLCAweDAwZmYsIEJJVCgyKSk7DQo+ID4+PiArCX0gZWxzZSB7DQo+ID4+PiArCQlyODE2
+OF9tYWNfb2NwX21vZGlmeSh0cCwgMHhlMDkyLCAweDAwZmYsIDApOw0KPiA+Pj4gKwl9DQo+ID4+
+PiArfQ0KPiA+Pj4gKw0KPiA+Pj4gK3N0YXRpYyB2b2lkIHJ0bF9wcmVwYXJlX3Bvd2VyX2Rvd24o
+c3RydWN0IHJ0bDgxNjlfcHJpdmF0ZSAqdHApIHsNCj4gPj4+ICsJaWYgKHRwLT5kYXNoX3R5cGUg
+IT0gUlRMX0RBU0hfTk9ORSkNCj4gPj4+ICsJCXJldHVybjsNCj4gPj4+ICsNCj4gPj4+ICsJaWYg
+KHRwLT5tYWNfdmVyc2lvbiA9PSBSVExfR0lHQV9NQUNfVkVSXzMyIHx8DQo+ID4+PiArCSAgICB0
+cC0+bWFjX3ZlcnNpb24gPT0gUlRMX0dJR0FfTUFDX1ZFUl8zMykNCj4gPj4+ICsJCXJ0bF9lcGh5
+X3dyaXRlKHRwLCAweDE5LCAweGZmNjQpOw0KPiA+Pj4gKw0KPiA+Pj4gKwlpZiAoZGV2aWNlX21h
+eV93YWtldXAodHBfdG9fZGV2KHRwKSkpIHsNCj4gPj4+ICsJCXJ0bF9kaXNhYmxlX2V4aXRfbDEo
+dHApOw0KPiA+Pj4gKwkJcGh5X3NwZWVkX2Rvd24odHAtPnBoeWRldiwgZmFsc2UpOw0KPiA+Pj4g
+KwkJcnRsX3dvbF9lbmFibGVfcngodHApOw0KPiA+Pj4gKwl9DQo+ID4+PiArfQ0KPiA+Pj4gKw0K
+PiA+Pj4gIHN0YXRpYyB2b2lkIHJ0bF9zZXRfZmlmb19zaXplKHN0cnVjdCBydGw4MTY5X3ByaXZh
+dGUgKnRwLCB1MTYgcnhfc3RhdCwNCj4gPj4+ICAJCQkgICAgICB1MTYgdHhfc3RhdCwgdTE2IHJ4
+X2R5biwgdTE2IHR4X2R5bikgIHsgQEAgLQ0KPiA+PiAzNjc1LDYgKzM3MTUsNw0KPiA+Pj4gQEAg
+c3RhdGljIHZvaWQgcnRsX2h3X3N0YXJ0XzgxMjViKHN0cnVjdCBydGw4MTY5X3ByaXZhdGUgKnRw
+KQ0KPiA+Pj4gIAlydGxfZXBoeV9pbml0KHRwLCBlX2luZm9fODEyNWIpOw0KPiA+Pj4gIAlydGxf
+aHdfc3RhcnRfODEyNV9jb21tb24odHApOw0KPiA+Pj4NCj4gPj4+ICsJcnRsX2h3X2FzcG1fbDEy
+X2VuYWJsZSh0cCwgdHJ1ZSk7DQo+ID4+PiAgCXJ0bF9od19hc3BtX2Nsa3JlcV9lbmFibGUodHAs
+IHRydWUpOyAgfQ0KPiA+Pj4NCj4gPj4+IEBAIC01MjU1LDYgKzUyOTYsMjAgQEAgc3RhdGljIHZv
+aWQgcnRsX2luaXRfbWFjX2FkZHJlc3Moc3RydWN0DQo+ID4+IHJ0bDgxNjlfcHJpdmF0ZSAqdHAp
+DQo+ID4+PiAgCXJ0bF9yYXJfc2V0KHRwLCBtYWNfYWRkcik7DQo+ID4+PiAgfQ0KPiA+Pj4NCj4g
+Pj4+ICsvKiBtYWMgb2NwIDB4YzBiMiB3aWxsIGhlbHAgdG8gaWRlbnRpZnkgaWYgUlRMODEyNSBo
+YXMgYmVlbiB0ZXN0ZWQNCj4gPj4+ICsgKiBvbiBMMS4yIGVuYWJsZWQgcGxhdGZvcm0uIElmIGl0
+IGlzLCB0aGlzIHJlZ2lzdGVyIHdpbGwgYmUgc2V0IHRvIDB4Zi4NCj4gPj4+ICsgKiBJZiBub3Qs
+IHRoaXMgcmVnaXN0ZXIgd2lsbCBiZSBkZWZhdWx0IHZhbHVlIDAuDQo+ID4+PiArICovDQo+ID4+
+PiArc3RhdGljIGJvb2wgcnRsX3BsYXRmb3JtX2wxMl9lbmFibGVkKHN0cnVjdCBydGw4MTY5X3By
+aXZhdGUgKnRwKSB7DQo+ID4+PiArCXN3aXRjaCAodHAtPm1hY192ZXJzaW9uKSB7DQo+ID4+PiAr
+CWNhc2UgUlRMX0dJR0FfTUFDX1ZFUl82MCAuLi4gUlRMX0dJR0FfTUFDX1ZFUl82MzoNCj4gPj4+
+ICsJCXJldHVybiAocjgxNjhfbWFjX29jcF9yZWFkKHRwLCAweGMwYjIpICYgMHhmKSA/IHRydWUg
+OiBmYWxzZTsNCj4gPj4+ICsJZGVmYXVsdDoNCj4gPj4+ICsJCXJldHVybiBmYWxzZTsNCj4gPj4+
+ICsJfQ0KPiA+Pj4gK30NCj4gPj4+ICsNCj4gPj4+ICBzdGF0aWMgaW50IHJ0bF9pbml0X29uZShz
+dHJ1Y3QgcGNpX2RldiAqcGRldiwgY29uc3Qgc3RydWN0DQo+ID4+PiBwY2lfZGV2aWNlX2lkICpl
+bnQpICB7DQo+ID4+PiAgCXN0cnVjdCBydGw4MTY5X3ByaXZhdGUgKnRwOw0KPiA+Pj4gQEAgLTUz
+MzMsMTEgKzUzODgsMTUgQEAgc3RhdGljIGludCBydGxfaW5pdF9vbmUoc3RydWN0IHBjaV9kZXYN
+Cj4gPj4+ICpwZGV2LA0KPiA+PiBjb25zdCBzdHJ1Y3QgcGNpX2RldmljZV9pZCAqZW50KQ0KPiA+
+Pj4gIAkgKiBDaGlwcyBmcm9tIFJUTDgxNjhoIHBhcnRpYWxseSBoYXZlIGlzc3VlcyB3aXRoIEwx
+LjIsIGJ1dCBzZWVtDQo+ID4+PiAgCSAqIHRvIHdvcmsgZmluZSB3aXRoIEwxIGFuZCBMMS4xLg0K
+PiA+Pj4gIAkgKi8NCj4gPj4+IC0JaWYgKHRwLT5tYWNfdmVyc2lvbiA+PSBSVExfR0lHQV9NQUNf
+VkVSXzQ1KQ0KPiA+Pj4gLQkJcmMgPSBwY2lfZGlzYWJsZV9saW5rX3N0YXRlKHBkZXYsIFBDSUVf
+TElOS19TVEFURV9MMV8yKTsNCj4gPj4+IC0JZWxzZQ0KPiA+Pj4gLQkJcmMgPSBwY2lfZGlzYWJs
+ZV9saW5rX3N0YXRlKHBkZXYsIFBDSUVfTElOS19TVEFURV9MMSk7DQo+ID4+PiAtCXRwLT5hc3Bt
+X21hbmFnZWFibGUgPSAhcmM7DQo+ID4+PiArCWlmICghcnRsX3BsYXRmb3JtX2wxMl9lbmFibGVk
+KHRwKSkgew0KPiA+Pj4gKwkJaWYgKHRwLT5tYWNfdmVyc2lvbiA+PSBSVExfR0lHQV9NQUNfVkVS
+XzQ1KQ0KPiA+Pj4gKwkJCXJjID0gcGNpX2Rpc2FibGVfbGlua19zdGF0ZShwZGV2LA0KPiA+PiBQ
+Q0lFX0xJTktfU1RBVEVfTDFfMik7DQo+ID4+PiArCQllbHNlDQo+ID4+PiArCQkJcmMgPSBwY2lf
+ZGlzYWJsZV9saW5rX3N0YXRlKHBkZXYsDQo+ID4+IFBDSUVfTElOS19TVEFURV9MMSk7DQo+ID4+
+PiArCQl0cC0+YXNwbV9tYW5hZ2VhYmxlID0gIXJjOw0KPiA+Pj4gKwl9IGVsc2Ugew0KPiA+Pj4g
+KwkJdHAtPmFzcG1fbWFuYWdlYWJsZSA9IHBjaWVfYXNwbV9lbmFibGVkKHBkZXYpOw0KPiA+Pj4g
+Kwl9DQo+ID4+Pg0KPiA+Pj4gIAl0cC0+ZGFzaF90eXBlID0gcnRsX2NoZWNrX2Rhc2godHApOw0K
+PiA+Pj4NCj4gPj4NCj4gPj4gSGkgSGF1LA0KPiA+Pg0KPiA+PiB0aGUgZm9sbG93aW5nIGlzIGEg
+c3RyaXBwZWQtZG93biB2ZXJzaW9uIG9mIHRoZSBwYXRjaC4gQ291bGQgeW91DQo+ID4+IHBsZWFz
+ZSBjaGVjay90ZXN0Pw0KPiA+IFRoaXMgcGF0Y2ggaXMgb2suDQo+ID4gTDEgc3Vic3RhdGUgbG9j
+ayBjYW4gYXBwbHkgZm9yIGJvdGggcnRsODEyNWEucnRsODEyNWIuDQo+ID4gaWYgKGVuYWJsZSAm
+JiB0cC0+YXNwbV9tYW5hZ2VhYmxlKSB7DQo+ID4gCVJUTF9XOCh0cCwgQ29uZmlnNSwgUlRMX1I4
+KHRwLCBDb25maWc1KSB8IEFTUE1fZW4pOw0KPiA+IAlSVExfVzgodHAsIENvbmZpZzIsIFJUTF9S
+OCh0cCwgQ29uZmlnMikgfCBDbGtSZXFFbik7DQo+ID4NCj4gPiAJaWYgKHRwLT5tYWNfdmVyc2lv
+biA+PSBSVExfR0lHQV9NQUNfVkVSXzYwKSB7DQo+ID4gCQlyODE2OF9tYWNfb2NwX21vZGlmeSh0
+cCwgMHhlMDk0LCAweGZmMDAsIDApOw0KPiA+IAkJcjgxNjhfbWFjX29jcF9tb2RpZnkodHAsIDB4
+ZTA5MiwgMHgwMGZmLCBCSVQoMikpOw0KPiA+IAl9DQo+ID4gfSBlbHNlIHsNCj4gPiAJaWYgKHRw
+LT5tYWNfdmVyc2lvbiA+PSBSVExfR0lHQV9NQUNfVkVSXzYwKQ0KPiA+IAkJcjgxNjhfbWFjX29j
+cF9tb2RpZnkodHAsIDB4ZTA5MiwgMHgwMGZmLCAwKTsNCj4gPg0KPiA+IAlSVExfVzgodHAsIENv
+bmZpZzIsIFJUTF9SOCh0cCwgQ29uZmlnMikgJiB+Q2xrUmVxRW4pOw0KPiA+IAlSVExfVzgodHAs
+IENvbmZpZzUsIFJUTF9SOCh0cCwgQ29uZmlnNSkgJiB+QVNQTV9lbik7IH0NCj4gPg0KPiA+PiBJ
+ZiBmdW5jdGlvbiBydGxfZGlzYWJsZV9leGl0X2wxKCkgaXMgYWN0dWFsbHkgbmVlZGVkLCBJJ2Qg
+cHJlZmVyIHRvDQo+ID4+IGFkZCBpdCBpbiBhIHNlcGFyYXRlIHBhdGNoICh0byBmYWNpbGl0YXRl
+IGJpc2VjdGluZykuDQo+ID4+DQo+ID4gSWYgZXhpdCBsMSBtYXNrIGlzIGVuYWJsZWQsIGhhcmR3
+YXJlIHdpbGwgcHJvbmUgdG8gZXhpdCBsMS4gVGhhdCB3aWxsDQo+ID4gcHJldmVudCBoYXJkd2Fy
+ZSBmcm9tIGVudGVyaW5nIGwxIHN1YnN0YXRlLiBTbyBJdCBuZWVkcyB0byBkaXNhYmxlIGwxDQo+
+ID4gZXhpc3QgbWFzayB3aGVuIGRldmljZSBnbyB0byBkMyBzdGF0ZSBmb3IgZW50ZXJpbmcgbDEg
+c3Vic3RhdGUuLg0KPiA+DQo+IE15IHVuZGVyc3RhbmRpbmcgb2YgUENJIHBvd2VyIG1hbmFnZW1l
+bnQgbWF5IGJlIGluY29tcGxldGUsIGJ1dDoNCj4gSWYgYSBkZXZpY2UgZ29lcyB0byBEMywgdGhl
+biBkb2Vzbid0IHRoZSBidXMgZ28gdG8gTDIvTDM/DQo+IEwxIGV4aXQgY3JpdGVyaWEgd291bGQg
+YmUgaXJyZWxldmFudCB0aGVuLg0KWW91ciB1bmRlcnN0YW5kaW5nIGlzIGNvcnJlY3QuDQpEMyBp
+cyBkaXZpZGVkIHRvIHR3byBzdWJzdGF0ZSwgRDNob3QgYW5kIEQzY29sZC4gRDNjb2xkIHdpbGwg
+ZW50ZXIgTDIvTDMuDQpEM2hvdCBtYXkgZW50ZXIgTDEgb3IgTDIvTDMgcmVhZHkuICBJbiBEM2hv
+dCBjYXNlLCBlbmFibGUgZXhpdCBsMSBtYXNrIHdpbGwNCnByZXZlbnQgaGFyZHdhcmUgZnJvbSBl
+bnRlcmluZyBQTSBMMS4gVGhhdCBpcyBvdXIgaGFyZHdhcmUgaXNzdWUuDQpTbyB3ZSBkaXNhYmxl
+IGV4aXQgbDEgbWFzayBiZWZvcmUgaGFyZHdhcmUgZW50ZXIgRDMuDQoNCg0KDQo+IC0tLS0tLVBs
+ZWFzZSBjb25zaWRlciB0aGUgZW52aXJvbm1lbnQgYmVmb3JlIHByaW50aW5nIHRoaXMgZS1tYWls
+Lg0K

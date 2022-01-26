@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B4F49CEB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E97749CEB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242974AbiAZPgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:36:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53998 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235900AbiAZPgw (ORCPT
+        id S242983AbiAZPg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:36:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231380AbiAZPg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:36:52 -0500
+        Wed, 26 Jan 2022 10:36:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C71C06173B;
+        Wed, 26 Jan 2022 07:36:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 878ED61900;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5532CB81ECB;
+        Wed, 26 Jan 2022 15:36:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D3EC340EB;
         Wed, 26 Jan 2022 15:36:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CF3C340E6;
-        Wed, 26 Jan 2022 15:36:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643211412;
-        bh=ET0k10DsnVM5FmCnwUkZOPhrA755rJdBFIyVpMWTFKI=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=B3LiQeo3ymMdhFiayR2cDkSYoitYx/Z2Pwfl9O99uBFb+o66Fj9vSJiMcKIzww+fG
-         kirHhqubbdRdFoaVvorzAqjFlP0iAJ8qXl1Tdp2q41o0UJbBgGUJ0Mruz6FfRgnhkR
-         R8BcCNyr37rDvxin2sowx4dq41mc7jDgyIatZNskm2k+rXsdxr7wNWPWcbVJnIZokp
-         qiAJX8mrAoBr/vERWbLKlgtqVmkG2FX6TW1sXY6SXFNe1HeVvMEp3++KQ9IQo/QEIm
-         ztqh/yEszmgfUpv9p8NF7ts4CRMRCt8mvZRSjsjwVbZbP70LzubM7mvprodM26jUql
-         sQ2+Je1YsbMwQ==
+        s=k20201202; t=1643211414;
+        bh=wWo760c3ezeEk09F3+obtM0z7sicJxM+6AeAwTTQAAE=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=Gl6FticAcyYgFSFBneq5eeEQEUJs3teNa8q8gz8tpexA77dZRw9TItqPGenVMzSkZ
+         LR4d3lj44bOsdLKIWYjAp16hM98kk47gYa9RG9LEQt332oJf3kpCFur0nb1aum+pt3
+         fCRG+AlQEKW/CnwvTHN8D9SWpIiDyA+Mjp2Hjp27JuDBnigGaEtWCAUVw9RVC56XWa
+         nEdXXQeBNwKS5LvoSjyC0ogeoiWXg/Q8ooF/5KKxHdRsQkNxeAEbEJcrbr/4ZfSE9P
+         Zrin/YdJhxz4gFjO6wum15o6CdkobA0IXGpPQBsLRXlgICh9YZ+oyB8vZmzURwKnH1
+         xrkjXfmysyW4A==
 From:   Mark Brown <broonie@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     linux-spi@vger.kernel.org,
-        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
-        linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
-In-Reply-To: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1640148492-32178-1-git-send-email-hayashi.kunihiko@socionext.com>
-Subject: Re: [PATCH] spi: uniphier: Fix a bug that doesn't point to private data correctly
-Message-Id: <164321141026.490397.11451995975683431974.b4-ty@kernel.org>
-Date:   Wed, 26 Jan 2022 15:36:50 +0000
+To:     linux-spi@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Jerome Brunet <jbrunet@baylibre.com>
+In-Reply-To: <20220126110447.24549-1-linmq006@gmail.com>
+References: <20220126110447.24549-1-linmq006@gmail.com>
+Subject: Re: [PATCH] spi: meson-spicc: add IRQ check in meson_spicc_probe
+Message-Id: <164321141213.490397.12590014811818910927.b4-ty@kernel.org>
+Date:   Wed, 26 Jan 2022 15:36:52 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -48,15 +53,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Dec 2021 13:48:12 +0900, Kunihiko Hayashi wrote:
-> In uniphier_spi_remove(), there is a wrong code to get private data from
-> the platform device, so the driver can't be removed properly.
+On Wed, 26 Jan 2022 11:04:47 +0000, Miaoqian Lin wrote:
+> This check misses checking for  platform_get_irq()'s call and may passes
+> the negative error codes to devm_request_irq(), which takes unsigned IRQ #,
+> causing it to fail with -EINVAL, overriding an original error code.
+> Stop calling devm_request_irq() with invalid IRQ #s.
 > 
-> The driver should get spi_master from the platform device and retrieve
-> the private data from it.
 > 
-> 
-> [...]
 
 Applied to
 
@@ -64,8 +67,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: uniphier: Fix a bug that doesn't point to private data correctly
-      commit: 23e3404de1aecc62c14ac96d4b63403c3e0f52d5
+[1/1] spi: meson-spicc: add IRQ check in meson_spicc_probe
+      commit: e937440f7fc444a3e3f1fb75ea65292d6f433a44
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

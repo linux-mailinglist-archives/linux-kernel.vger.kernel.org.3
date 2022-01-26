@@ -2,205 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5DE49D45A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E5749D464
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbiAZVPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:15:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:33396 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbiAZVPm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:15:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3C6D618F7;
-        Wed, 26 Jan 2022 21:15:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735EFC340E3;
-        Wed, 26 Jan 2022 21:15:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643231741;
-        bh=+oLnZtSI8dddOBQjaBwc8Q/h+jSV2Nk8fuLnk0XsSTI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=nPL2z4riCty70L9CcXtXNPiwRqzMIbiTtaqCqVvQRb5vgfrmnHizwzZiGBq679OqV
-         Dhy391sF8irk9+TH1CJVbNM2FfgFLD9kQYRT4U8TAQOl6hYegoohzYk8FNYUoB7Gs+
-         hGKWy89kXTV5SgERhTer0cqieKLGvfZMddoFEr21N9kikGVk/JayEcmMyDcXrcXRk0
-         DLM6y0/iepOTa5CQH8a1bGS55HVpALNhGLCuF/MCzbncH3dEfRlGmVk5ieeNhG5nZg
-         /BOVem9bUtJBRe8PCPnQaT7aVFOu7TlCgZPem+DXhQZeN4kV5e7JAQkqRyxINQV/s3
-         kaDuw4EP3SNXA==
-Message-ID: <a75a4ece0cf5be7fc8000943f43eb82613c98b6e.camel@kernel.org>
-Subject: Re: [PATCH] security, lsm: dentry_init_security() Handle multi LSM
- registration
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Vivek Goyal <vgoyal@redhat.com>,
-        linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org, ceph-devel@vger.kernel.org
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Stephen Muth <smuth4@gmail.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Date:   Wed, 26 Jan 2022 16:15:39 -0500
-In-Reply-To: <YfGwggaTu8imJ0uc@redhat.com>
-References: <YfGwggaTu8imJ0uc@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        id S231691AbiAZVUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:20:03 -0500
+Received: from mail-eus2azon11020025.outbound.protection.outlook.com ([52.101.56.25]:36834
+        "EHLO na01-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229569AbiAZVUC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 16:20:02 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XuS4SzWqb4Md5XnwzokHKWK3QsUFHxMYYEMERwe+hbvX2njiDIgWMsgrwylWbY10xZqBjAHrcY8DucWM8yPv08N2G9CH46LlpbB0Rh7Ap3FhGdCjlkG2FfvWOrW9OEKFGYyxQIhW9vJ2wq27WJgGAKr9TEjv4E/uhcEatSYKX0INEQ1YBQkm2+Y371yGtuUWER/gTlHpkwxJ2TPJnE70tNCYsSTNfZBdlZEz5v2AIwtk9ESJWMpbC8YKf1bO8FhqU0TM5DSI2jhPKOPJIp5+Lk6M+PKbP1kI/nkx15Lq6FTcS04q1d7ULJX6IyOP34jsEaFVMO7A1nmmZvsR2CcuEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4X4KtK+MYk8kIdSfQzuhtMdXNzJHMWWZmSEVnpjJ7mE=;
+ b=nR87II1QJ6r7j4V8jpsD/XhPAHh8ICBL/rPw1GklQnjD4z0swfY7XfIOBYAdElqMPxCbX+8GNleaXWQsZja+tdCjj6OsannJ5StDzps6kH7TMuAUYyvGpilWWsQNCRKaDORTIW/+7MGmMKYSFTJjAfy/ndEtAJfe35vzcgDlmLJ5JJWjIw2EktH7y6KFHgmMOa+3aRXRPxSYbd41P+JpKMSGbP0zwmwEORCOkOfFGZoqMYd6/Dl+HDyDYyX5tqVdsliHqkX8RRXC+PcFOMfi/LayFCRUFmftuBv55Ugmaw755FRXCRQmiCEDbaOadl6BV/k0dPDxsu+WFqeYCtLI6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4X4KtK+MYk8kIdSfQzuhtMdXNzJHMWWZmSEVnpjJ7mE=;
+ b=C+CFbeC+okhvnw1rpQRAJ2oqxmfmmEZy3dCUGb6bKQ0uy34fcO8Q/42Eq1JRPToOAmpIwZh9JSu3S4iSFUmVo0XSTuHd5J0Tw5tPP5Q680FcPUgoGkFxQTeYt50CRAX5Q+tCqLxwGBxJ9v3QYwE2pdEBWEPsl3VcL+cSDnrpTPY=
+Received: from SJ0PR21MB1311.namprd21.prod.outlook.com (2603:10b6:a03:3fa::17)
+ by PH0PR21MB2047.namprd21.prod.outlook.com (2603:10b6:510:ab::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.5; Wed, 26 Jan
+ 2022 21:19:58 +0000
+Received: from SJ0PR21MB1311.namprd21.prod.outlook.com
+ ([fe80::89a7:a51b:31bc:347f]) by SJ0PR21MB1311.namprd21.prod.outlook.com
+ ([fe80::89a7:a51b:31bc:347f%6]) with mapi id 15.20.4951.003; Wed, 26 Jan 2022
+ 21:19:58 +0000
+From:   Bill Messmer <wmessmer@microsoft.com>
+To:     Jann Horn <jannh@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [EXTERNAL] [PATCH] coredump: Also dump first pages of
+ non-executable ELF libraries
+Thread-Topic: [EXTERNAL] [PATCH] coredump: Also dump first pages of
+ non-executable ELF libraries
+Thread-Index: AQHYEmCGZdqQqhvRCECocD6ykp0hLqx1zIug
+Date:   Wed, 26 Jan 2022 21:19:58 +0000
+Message-ID: <SJ0PR21MB13116C182E5900BF40AC2327C4209@SJ0PR21MB1311.namprd21.prod.outlook.com>
+References: <20220126025739.2014888-1-jannh@google.com>
+In-Reply-To: <20220126025739.2014888-1-jannh@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=6fcac323-92e4-4bb8-b673-64556a7034d3;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-01-26T21:06:55Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a670d3df-779c-4d0d-fdde-08d9e1119b24
+x-ms-traffictypediagnostic: PH0PR21MB2047:EE_
+x-ms-exchange-atpmessageproperties: SA|SL
+x-microsoft-antispam-prvs: <PH0PR21MB20471853144AA05C77A6C6E9C4209@PH0PR21MB2047.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: X0c9oL5NBnp/yfo+OlRnZ1bn94ke/1D6Su2mWkDsmHqv3BQa/GKMUXbzXAnEzy84YjEB0Rf2DKg0qRcAzAInNbsARgFGclrPtKyshfl7GEsX/AL+urX3rMnOgckL3Wq8FKJmygnRP0fmvBTM5SbyXaRfz3jLWZeXsJ1lDM/cljUaXzKIi5bkfV77AhAHKFTidKN9nACpKILeASbiCwrJey3OML0SBNyaJXJooTRfYzfbqYNMT3PTOqWJHJtN/sy0bmmpiZc8BQTDaPYA5snGKFqC21BYn/AResc6qC+WEmFXD3p7LA7+sMFxmuD1bE0M96vyG6o/tWMZjcfbo3XB5sOuMgfE3Cz3NTFkS1CYiimLnWH1jdY+aOubYazBkWaAPd8bXCr1UBvIi9rA112NwhNQPM0+8udwqUdAzvnNI6ub0N1tppgxJxD2bXmnX/a3VkzhIAkxJYRU+CVoYjNXLsVcRZ+YvQL4Z//xn12t8r51fGs9dgXkyDcdCmiwu6z14pxQuWKwl5G3PWIX3keiTeooobkX3IywfjoQatBFdpVw47z1HFzeKD8RR0fUHXOY8MomM8FRcQ/uZzapZda+T6AVxQeCPXBm8ob+HM+1/BxplEjnOCgtKKHPOD9QlES7PFoolj3D8lBAo6GfxLtq0S3sYueu6UvwUgu9a1XLEyjxn//kg2EyyPIMf9yWbqYlk3dRMX7bduzIvS2s4e2SpNolvaibuQdXHcH7sA5CghK5ITRWQdBTFtWL3zKllEldD8Ho4Mte9oglt89z3n5hgrVv2gmJtIS1iDjVpp/mJZg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR21MB1311.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(38070700005)(122000001)(33656002)(508600001)(10290500003)(5660300002)(966005)(82950400001)(71200400001)(52536014)(110136005)(2906002)(316002)(82960400001)(76116006)(38100700002)(86362001)(8990500004)(4326008)(8676002)(55016003)(83380400001)(8936002)(54906003)(66446008)(7696005)(9686003)(66476007)(66946007)(53546011)(64756008)(6506007)(66556008)(10090945008)(20210929001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ro2YzfIRMsO79dAslH2KLp2YGZepmOGzQJL96PlbSPxc6sojLLJ/XQRANwj0?=
+ =?us-ascii?Q?DdJ66Kmv9WumHFpCeOZfnIS1Pkmr7EysnSgh9fda+aE8ZujHADLZHGoYNZUS?=
+ =?us-ascii?Q?EDMGezicWSYWU3fDhNU1VmZJuPyxbtiV195ITtZio72FtbTEN3/KjKucsIcx?=
+ =?us-ascii?Q?1/ZyUjNsgI4oPHBsg0BWgwISkc3g1DCOTlX9Qn9tJT/aqVn30oTw07OYkQ0c?=
+ =?us-ascii?Q?b7gNj4VqhGoZO1XSzCBNsAUhU1sWNOUhdB2i/KIc4bm6iQqENYSra5V9u69d?=
+ =?us-ascii?Q?q+udqJ8pnOXfgqnZtfQrg+wkCXk+xdPCnK9zI8Xx15gnuAC7MFvpIPYq+HKU?=
+ =?us-ascii?Q?+RE7lqwxHsgyF5j+XTWY+7sz9tqU+nBagfuU1Pfx2UYVZZHoV4p0C7mzwrwX?=
+ =?us-ascii?Q?BDVenqAuZD/vtCghoip1/nM6efJnBLqmJR521OXm03CQzO0yutJGy0+N0kNV?=
+ =?us-ascii?Q?ACp4+kgsVKRZnZYIyaYKCkGUehHRZa4e6GR7VsmIrECqqPNjZZ4RzoqcchZT?=
+ =?us-ascii?Q?anMyadNSrJVaFubm2pz97OFvfbq9Ep0PzK6l3YlCm8qYB8Nw7DOmOPbxhTrk?=
+ =?us-ascii?Q?0jpUua/fIPi+rQoIipzSySc03NnXHhNaOkdqwtMkc0IqVjGyP8WqVAR6AfK/?=
+ =?us-ascii?Q?1rCbh6PHdJ6s8yn/GdaYqhLRxKzf3JbG+MEUhXo5gaFxamtCMTaQRk6RV0en?=
+ =?us-ascii?Q?ttp+J+ruSV6aTmJmxbbagpeFKNC0hbkuUg1XZFj0Zz5jd/sUBDEim66Agei/?=
+ =?us-ascii?Q?o7m5e8CXn+hWaWYiUKgOJZYSLQOGWQIS/qqY6LBGlomqyp+q1fQQa9h8CjEG?=
+ =?us-ascii?Q?ZNwaBcl6WnF2N4DuM5P4p34rpEQDqAGwog4wzjNiy6xaY16Fn/fjuIJWwt98?=
+ =?us-ascii?Q?N9Rwj7HIH+LWTrLn2BO7de6OvzbqXG0tpjX5qjWVtI/fb4dj28ubXS7x7/h9?=
+ =?us-ascii?Q?3Eb+6PcagvrhXPl8Mq1ijx3ZiNHfk8C7Ur+wQGA//INX64aXGvR9nR33UJOU?=
+ =?us-ascii?Q?+qX0yfwO5rm9WvSKkrVQxyGz0JfsA8XEJd9c1mtp8i7o51oCOfWUTxTythc1?=
+ =?us-ascii?Q?73eG8LRZ+rVm80hgs+c2fndZsehZfkn1iTP7BgkPHmRZtRAZu3utCTHg91CD?=
+ =?us-ascii?Q?sMS5F8f5KuTlyIh18XjXrVJfaPXtDsNMfhP84to7QGNdpRs6KeUy/Ozh6Uis?=
+ =?us-ascii?Q?Nxy+te7aUpw2AcOObL6OJFps+cFN3k26YCLUuY/lh9u6jsucGkCO2lO4v5s6?=
+ =?us-ascii?Q?d/9euGodeCQiL/0MT38fLL2VtrY9uhSXozQECxzfRJgrhbTGg+uurN9Y378o?=
+ =?us-ascii?Q?jimP9ta7YAfWMeSwhdbLba2vYQl3Wdrj7yBi/A7go/4qvlvetkezA/CQfRre?=
+ =?us-ascii?Q?jWV2ppT2MOP1Kv3EsyPowVVeBO9v+lcVwv3cP/MvZpWbJv+9wFlA3hCsHxdb?=
+ =?us-ascii?Q?LAYFb1dchbhPn60NqE7nFQpwxTFW8E7LEXUaBYgpi1O2LAjnLwKhZCA/GyTl?=
+ =?us-ascii?Q?6zGZCNVMMWt/k3iTwq4ooRhNbFh0Ojk+PYoe4Phrx0wfLV79C6HIlGeq0mTZ?=
+ =?us-ascii?Q?0tc3P5Efv+pE/KKlAEXIyQhVHsqGUYHXtUVLiZojk/H9R0DLDXbCcFdRLW/5?=
+ =?us-ascii?Q?4FU4o1tPw6aBurcMbf39IPn9p2wTMoF5ImwdFDVkuDEe/uwFjptQwyggHksa?=
+ =?us-ascii?Q?rfhgIg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR21MB1311.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a670d3df-779c-4d0d-fdde-08d9e1119b24
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2022 21:19:58.1622
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Q4J44kRWaEoSxe2sZTyP83XGWcPQjAfDCesXCsELSTk5vdB4agNMqe6E9Wa5a9fVYL8+XlxKoSX1doLv2q7zvg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB2047
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-01-26 at 15:35 -0500, Vivek Goyal wrote:
-> A ceph user has reported that ceph is crashing with kernel NULL pointer
-> dereference. Following is the backtrace.
-> 
-> /proc/version: Linux version 5.16.2-arch1-1 (linux@archlinux) (gcc (GCC)
-> 11.1.0, GNU ld (GNU Binutils) 2.36.1) #1 SMP PREEMPT Thu, 20 Jan 2022
-> 16:18:29 +0000
-> distro / arch: Arch Linux / x86_64
-> SELinux is not enabled
-> ceph cluster version: 16.2.7 (dd0603118f56ab514f133c8d2e3adfc983942503)
-> 
-> relevant dmesg output:
-> [   30.947129] BUG: kernel NULL pointer dereference, address:
-> 0000000000000000
-> [   30.947206] #PF: supervisor read access in kernel mode
-> [   30.947258] #PF: error_code(0x0000) - not-present page
-> [   30.947310] PGD 0 P4D 0
-> [   30.947342] Oops: 0000 [#1] PREEMPT SMP PTI
-> [   30.947388] CPU: 5 PID: 778 Comm: touch Not tainted 5.16.2-arch1-1 #1
-> 86fbf2c313cc37a553d65deb81d98e9dcc2a3659
-> [   30.947486] Hardware name: Gigabyte Technology Co., Ltd. B365M
-> DS3H/B365M DS3H, BIOS F5 08/13/2019
-> [   30.947569] RIP: 0010:strlen+0x0/0x20
-> [   30.947616] Code: b6 07 38 d0 74 16 48 83 c7 01 84 c0 74 05 48 39 f7 75
-> ec 31 c0 31 d2 89 d6 89 d7 c3 48 89 f8 31 d2 89 d6 89 d7 c3 0
-> f 1f 40 00 <80> 3f 00 74 12 48 89 f8 48 83 c0 01 80 38 00 75 f7 48 29 f8 31
-> ff
-> [   30.947782] RSP: 0018:ffffa4ed80ffbbb8 EFLAGS: 00010246
-> [   30.947836] RAX: 0000000000000000 RBX: ffffa4ed80ffbc60 RCX:
-> 0000000000000000
-> [   30.947904] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
-> 0000000000000000
-> [   30.947971] RBP: ffff94b0d15c0ae0 R08: 0000000000000000 R09:
-> 0000000000000000
-> [   30.948040] R10: 0000000000000000 R11: 0000000000000000 R12:
-> 0000000000000000
-> [   30.948106] R13: 0000000000000001 R14: ffffa4ed80ffbc60 R15:
-> 0000000000000000
-> [   30.948174] FS:  00007fc7520f0740(0000) GS:ffff94b7ced40000(0000)
-> knlGS:0000000000000000
-> [   30.948252] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   30.948308] CR2: 0000000000000000 CR3: 0000000104a40001 CR4:
-> 00000000003706e0
-> [   30.948376] Call Trace:
-> [   30.948404]  <TASK>
-> [   30.948431]  ceph_security_init_secctx+0x7b/0x240 [ceph
-> 49f9c4b9bf5be8760f19f1747e26da33920bce4b]
-> [   30.948582]  ceph_atomic_open+0x51e/0x8a0 [ceph
-> 49f9c4b9bf5be8760f19f1747e26da33920bce4b]
-> [   30.948708]  ? get_cached_acl+0x4d/0xa0
-> [   30.948759]  path_openat+0x60d/0x1030
-> [   30.948809]  do_filp_open+0xa5/0x150
-> [   30.948859]  do_sys_openat2+0xc4/0x190
-> [   30.948904]  __x64_sys_openat+0x53/0xa0
-> [   30.948948]  do_syscall_64+0x5c/0x90
-> [   30.948989]  ? exc_page_fault+0x72/0x180
-> [   30.949034]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [   30.949091] RIP: 0033:0x7fc7521e25bb
-> [   30.950849] Code: 25 00 00 41 00 3d 00 00 41 00 74 4b 64 8b 04 25 18 00
-> 00 00 85 c0 75 67 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 0
-> 0 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 91 00 00 00 48 8b 54 24 28 64 48 2b 14
-> 25
-> 
-> Core of the problem is that ceph checks for return code from
-> security_dentry_init_security() and if return code is 0, it assumes
-> everything is fine and continues to call strlen(name), which crashes.
-> 
-> Typically SELinux LSM returns 0 and sets name to "security.selinux" and
-> it is not a problem. Or if selinux is not compiled in or disabled, it
-> returns -EOPNOTSUP and ceph deals with it.
-> 
-> But somehow in this configuration, 0 is being returned and "name" is
-> not being initialized and that's creating the problem.
-> 
-> Our suspicion is that BPF LSM is registering a hook for
-> dentry_init_security() and returns hook default of 0.
-> 
-> LSM_HOOK(int, 0, dentry_init_security, struct dentry *dentry,...)
-> 
-> I have not been able to reproduce it just by doing CONFIG_BPF_LSM=y.
-> Stephen has tested the patch though and confirms it solves the problem
-> for him.
-> 
-> dentry_init_security() is written in such a way that it expects only one
-> LSM to register the hook. Atleast that's the expectation with current code.
-> 
-> If another LSM returns a hook and returns default, it will simply return
-> 0 as of now and that will break ceph. 
-> 
-> Hence, suggestion is that change semantics of this hook a bit. If there
-> are no LSMs or no LSM is taking ownership and initializing security context,
-> then return -EOPNOTSUP. Also allow at max one LSM to initialize security
-> context. This hook can't deal with multiple LSMs trying to init security
-> context. This patch implements this new behavior.
-> 
-> Reported-by: Stephen Muth <smuth4@gmail.com>
-> Tested-by: Stephen Muth <smuth4@gmail.com>
-> Suggested-by: Casey Schaufler <casey@schaufler-ca.com>
-> Acked-by: Casey Schaufler <casey@schaufler-ca.com>
-> Reviewed-by: Serge Hallyn <serge@hallyn.com>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: <stable@vger.kernel.org> # 5.16.0
-> Signed-off-by: Vivek Goyal <vgoyal@redhat.com>
-> ---
->  include/linux/lsm_hook_defs.h |    2 +-
->  security/security.c           |   15 +++++++++++++--
->  2 files changed, 14 insertions(+), 3 deletions(-)
-> 
-> Index: redhat-linux/include/linux/lsm_hook_defs.h
-> ===================================================================
-> --- redhat-linux.orig/include/linux/lsm_hook_defs.h	2022-01-24 14:56:14.338030140 -0500
-> +++ redhat-linux/include/linux/lsm_hook_defs.h	2022-01-25 18:48:46.917496696 -0500
-> @@ -80,7 +80,7 @@ LSM_HOOK(int, 0, sb_clone_mnt_opts, cons
->  	 unsigned long *set_kern_flags)
->  LSM_HOOK(int, 0, move_mount, const struct path *from_path,
->  	 const struct path *to_path)
-> -LSM_HOOK(int, 0, dentry_init_security, struct dentry *dentry,
-> +LSM_HOOK(int, -EOPNOTSUPP, dentry_init_security, struct dentry *dentry,
->  	 int mode, const struct qstr *name, const char **xattr_name,
->  	 void **ctx, u32 *ctxlen)
->  LSM_HOOK(int, 0, dentry_create_files_as, struct dentry *dentry, int mode,
-> Index: redhat-linux/security/security.c
-> ===================================================================
-> --- redhat-linux.orig/security/security.c	2022-01-25 18:46:59.166496696 -0500
-> +++ redhat-linux/security/security.c	2022-01-26 14:31:43.454568468 -0500
-> @@ -1048,8 +1048,19 @@ int security_dentry_init_security(struct
->  				  const char **xattr_name, void **ctx,
->  				  u32 *ctxlen)
->  {
-> -	return call_int_hook(dentry_init_security, -EOPNOTSUPP, dentry, mode,
-> -				name, xattr_name, ctx, ctxlen);
-> +	struct security_hook_list *hp;
-> +	int rc;
-> +
-> +	/*
-> +	 * Only one module will provide a security context.
-> +	 */
-> +	hlist_for_each_entry(hp, &security_hook_heads.dentry_init_security, list) {
-> +		rc = hp->hook.dentry_init_security(dentry, mode, name,
-> +						   xattr_name, ctx, ctxlen);
-> +		if (rc != LSM_RET_DEFAULT(dentry_init_security))
-> +			return rc;
-> +	}
-> +	return LSM_RET_DEFAULT(dentry_init_security);
->  }
->  EXPORT_SYMBOL(security_dentry_init_security);
->  
-> 
+Jann,
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Apologies on the delay...  I think it's probably been 20+ years since I've =
+built and installed a Linux kernel.  In any case, I cloned the current kern=
+el git tree, applied your patch, rebuilt the kernel, and installed it in an=
+ Ubuntu 21.10 VM.  After forcing a few process core dumps, it does indeed l=
+ook like the problem is fixed.  Just to triple check, I took one of those c=
+ore dumps over to the Windows side and opened it with a recent windbg.  It =
+finds the build-ids of all the relevant images & SO's just fine:
+
+	0:000> dx @$curprocess.Modules.Select(mod =3D> mod.Contents.BuildID)
+	@$curprocess.Modules.Select(mod =3D> mod.Contents.BuildID)               =
+=20
+	    [0x0]            : Unable to read target memory at '0x7f5766631000' in=
+ method 'readMemoryValues' [at ImageInfo (line 1275 col 5)]
+	    [0x1]            : EF650611451904165E9CAF6080ECBAAD50B84D3F
+	    [0x2]            : 674ACF7BFECD6B8F382FE8D0D95F229087761289
+	    [0x3]            : C087D7951738C9EA3DFC7D15A7B31A7D7F862AE1
+	    [0x4]            : B8037B6260865346802321DD2256B8AD1D857E63
+	    [0x5]            : DB6AFCCC2EC0090045BBE5DDD68722A1434235E5
+	    [0x6]            : 3B4B1D0BA98C1B4081A6C5748A593D42C163F125
+	    [0x7]            : 4501188BC2E25791E446F7C110F8BC9282C98CD4
+	    [0x8]            : AE398331C90E9C84AE01A640DF017803BB775F63
+	    [0x9]            : 4E8C3A67A9606B9B33EDF9A24ED999E3C885E5BB
+	    [0xa]            : 6511403115C9BC3DF0DCD7167D8766B7FCC2AEE1
+	    [0xb]            : 14ACB10BBDAEFC6A64890C96417426CA820C0FAA
+	    [0xc]            : 2792043473EB7D1661942BC13DB9272918D2A790
+
+And it is able to match the images/debug information to what I have for my =
+Ubuntu VM as well.
+
+Thank you for the fix!
+
+Sincerely,
+
+Bill Messmer
+wmessmer@microsoft.com
+
+-----Original Message-----
+From: Jann Horn <jannh@google.com>=20
+Sent: Tuesday, January 25, 2022 6:58 PM
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org; Bill Messmer <wmessmer@microsoft.com>; Er=
+ic W . Biederman <ebiederm@xmission.com>; Al Viro <viro@zeniv.linux.org.uk>=
+; Randy Dunlap <rdunlap@infradead.org>; Jann Horn <jannh@google.com>; stabl=
+e@vger.kernel.org
+Subject: [EXTERNAL] [PATCH] coredump: Also dump first pages of non-executab=
+le ELF libraries
+
+[You don't often get email from jannh@google.com. Learn why this is importa=
+nt at http://aka.ms/LearnAboutSenderIdentification.]
+
+When I rewrote the VMA dumping logic for coredumps, I changed it to recogni=
+ze ELF library mappings based on the file being executable instead of the m=
+apping having an ELF header. But turns out, distros ship many ELF libraries=
+ as non-executable, so the heuristic goes wrong...
+
+Restore the old behavior where FILTER(ELF_HEADERS) dumps the first page of =
+any offset-0 readable mapping that starts with the ELF magic.
+
+This fix is technically layer-breaking a bit, because it checks for somethi=
+ng ELF-specific in fs/coredump.c; but since we probably want to share this =
+between standard ELF and FDPIC ELF anyway, I guess it's fine?
+And this also keeps the change small for backporting.
+
+Cc: stable@vger.kernel.org
+Fixes: 429a22e776a2 ("coredump: rework elf/elf_fdpic vma_dump_size() into c=
+ommon helper")
+Reported-by: Bill Messmer <wmessmer@microsoft.com>
+Signed-off-by: Jann Horn <jannh@google.com>
+---
+
+@Bill: If you happen to have a kernel tree lying around, you could give thi=
+s a try and report back whether this solves your issues?
+But if not, it's also fine, I've tested myself that with this patch applied=
+, the first 0x1000 bytes of non-executable libraries are dumped into the co=
+redump according to "readelf".
+
+ fs/coredump.c | 39 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 5 deletions(-)
+
+diff --git a/fs/coredump.c b/fs/coredump.c index 1c060c0a2d72..b73817712dd2=
+ 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -42,6 +42,7 @@
+ #include <linux/path.h>
+ #include <linux/timekeeping.h>
+ #include <linux/sysctl.h>
++#include <linux/elf.h>
+
+ #include <linux/uaccess.h>
+ #include <asm/mmu_context.h>
+@@ -980,6 +981,8 @@ static bool always_dump_vma(struct vm_area_struct *vma)
+        return false;
+ }
+
++#define DUMP_SIZE_MAYBE_ELFHDR_PLACEHOLDER 1
++
+ /*
+  * Decide how much of @vma's contents should be included in a core dump.
+  */
+@@ -1039,9 +1042,20 @@ static unsigned long vma_dump_size(struct vm_area_st=
+ruct *vma,
+         * dump the first page to aid in determining what was mapped here.
+         */
+        if (FILTER(ELF_HEADERS) &&
+-           vma->vm_pgoff =3D=3D 0 && (vma->vm_flags & VM_READ) &&
+-           (READ_ONCE(file_inode(vma->vm_file)->i_mode) & 0111) !=3D 0)
+-               return PAGE_SIZE;
++           vma->vm_pgoff =3D=3D 0 && (vma->vm_flags & VM_READ)) {
++               if ((READ_ONCE(file_inode(vma->vm_file)->i_mode) & 0111) !=
+=3D 0)
++                       return PAGE_SIZE;
++
++               /*
++                * ELF libraries aren't always executable.
++                * We'll want to check whether the mapping starts with the =
+ELF
++                * magic, but not now - we're holding the mmap lock,
++                * so copy_from_user() doesn't work here.
++                * Use a placeholder instead, and fix it up later in
++                * dump_vma_snapshot().
++                */
++               return DUMP_SIZE_MAYBE_ELFHDR_PLACEHOLDER;
++       }
+
+ #undef FILTER
+
+@@ -1116,8 +1130,6 @@ int dump_vma_snapshot(struct coredump_params *cprm, i=
+nt *vma_count,
+                m->end =3D vma->vm_end;
+                m->flags =3D vma->vm_flags;
+                m->dump_size =3D vma_dump_size(vma, cprm->mm_flags);
+-
+-               vma_data_size +=3D m->dump_size;
+        }
+
+        mmap_write_unlock(mm);
+@@ -1127,6 +1139,23 @@ int dump_vma_snapshot(struct coredump_params *cprm, =
+int *vma_count,
+                return -EFAULT;
+        }
+
++       for (i =3D 0; i < *vma_count; i++) {
++               struct core_vma_metadata *m =3D (*vma_meta) + i;
++
++               if (m->dump_size =3D=3D DUMP_SIZE_MAYBE_ELFHDR_PLACEHOLDER)=
+ {
++                       char elfmag[SELFMAG];
++
++                       if (copy_from_user(elfmag, (void __user *)m->start,=
+ SELFMAG) ||
++                                       memcmp(elfmag, ELFMAG, SELFMAG) !=
+=3D 0) {
++                               m->dump_size =3D 0;
++                       } else {
++                               m->dump_size =3D PAGE_SIZE;
++                       }
++               }
++
++               vma_data_size +=3D m->dump_size;
++       }
++
+        *vma_data_size_ptr =3D vma_data_size;
+        return 0;
+ }
+
+base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+--
+2.35.0.rc0.227.g00780c9af4-goog
+

@@ -2,197 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD62649C7B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5D049C7BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240110AbiAZKmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 05:42:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
+        id S240127AbiAZKnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240103AbiAZKmp (ORCPT
+        with ESMTP id S240113AbiAZKne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 05:42:45 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3398C061747;
-        Wed, 26 Jan 2022 02:42:44 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id r7so2281394wmq.5;
-        Wed, 26 Jan 2022 02:42:44 -0800 (PST)
+        Wed, 26 Jan 2022 05:43:34 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA50C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:43:33 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id d18-20020a9d51d2000000b005a09728a8c2so4739031oth.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:43:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=29rxiBb7qaHrc9qjiiUIG9lGAiUNl897VESW+1cq9rk=;
-        b=UxIzOXy1A6Lvi61saMtNbVcaUU6R2hz9Km3HhDbY4tCTJREAtoP9nmdYcArIFmJ3RH
-         wPHMu6+CEjCnVdBhbRSA6QKnqRh4IfUJr/qbVYhijp0maQA7KSmsrbRvWZgmH1Uhd8WF
-         dq/gY7hzhztX2PUIQEdU0vYQCMHxoRlOWHJqFtM0JzrddgdJqoBbbSExSRZpYzG/xFqY
-         t9B6ZqYnMgr0XgYK4p607dsTo2Ni1AQNGkCzLG3PO0yWlwOYkJfhsJPq1KKZRmEBbBbq
-         tJvefmrDExiMIRnODRGmCiTI07VUV5SQGh07JICVsnnF4O4QmE6qGWHP/RB4i2y0HAEP
-         qewg==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rK+78XaAQPCLB0cX0TSDW4GUNb2Fr1WFpEws/EiYsHo=;
+        b=H5Mpc3SICXdb/tu7QNJsAZJY9cx8gxyADjsjYqFs2OGzikcrQv9d6aUFd4nu2DR/uM
+         pg7r7egDc5hJX7SpJWHXbqu8eN/zn6I3n9JfcARrYRnMh14um9Nuf3hnkZUyptzEzpMD
+         xu/W8FcZqPRJYWljwQmeV3Ea1kT+hmVGT0+Js=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=29rxiBb7qaHrc9qjiiUIG9lGAiUNl897VESW+1cq9rk=;
-        b=XWnydZcSEASTKTSKF0HhsSPBkzapCJJGj+UJ5c/GnkzaQ4CPNYgtiU2hnlO0yh/4b8
-         KEOC+G4XeRvQ0qp8z6LlbOU/z+EVpJHXV7rMGiSBjw0Mqfa4uvNb51/5N6o500Dw29U1
-         5n5mzt+HpaUigOF/S1/39BPIMpRQpkva3SWJeudOsO6EuPKq3DYR4Gwjlui8vppVApcF
-         JDB0J+i1LIr7pcQFEIiLr5hX/c2g/SnFYLHh8w8fRlhhXWDOsoAK91CNFbi3txSD3Q3T
-         HQaliI1bsw+xNYpM2H0PtPAOoosoEYcx7ET0YdDRtloCIpqCSnt8sbTwrBfBDVOMx+Ox
-         MXHA==
-X-Gm-Message-State: AOAM530c84en4mKLNqxBXGbwuR0dwGimsZMvO493IZzfDdt02VmgeUiQ
-        WYVu/pHX0imJRjvxx8MKxk//4itTXdY=
-X-Google-Smtp-Source: ABdhPJzmze24zqLoaEHD8r0Fk+vV8MCc1Zs7GZIcIMz/JbrG53+SAyVXEijhfshkLsp/TR/1LfB6oQ==
-X-Received: by 2002:a7b:c928:: with SMTP id h8mr6538555wml.168.1643193763201;
-        Wed, 26 Jan 2022 02:42:43 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f4d:2b00:bd02:e288:550c:1ac4? (p200300ea8f4d2b00bd02e288550c1ac4.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:bd02:e288:550c:1ac4])
-        by smtp.googlemail.com with ESMTPSA id n15sm19070751wrf.37.2022.01.26.02.42.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 02:42:42 -0800 (PST)
-Message-ID: <c8df96c7-79b2-8b5b-9036-12bd8bfd5582@gmail.com>
-Date:   Wed, 26 Jan 2022 11:42:35 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rK+78XaAQPCLB0cX0TSDW4GUNb2Fr1WFpEws/EiYsHo=;
+        b=ruG1xqi4zTiaSq8MAGYfvefsaG3bwBZIEPgr02ksIMvlvnOK7l6G0Kd1uNndv8Ceej
+         Z+9PUGyWCL1c1BaRRoNrI2Icy3N7jp0zmPFGLB1GtD6WJQURP0sQpTAqycCt7n9gmTi6
+         A+UqtnZLWkUU5DHLNPsGPTa1S4MrUJVJsHolULenXZQ0CeVuCRKMUW4p8aLZLyU/0uEy
+         AdODCcLwvw2EVFa1XbddReUm6rZClz9rxTy3bMPPJuJPglvI2oiaiXr5PDtxap7yFMmh
+         EEONOv4KZ5qP8NRbj7poOIiPs2SADr06NKPF/daFvJU4aBM7h6fKjRLwMfNEAHFlxemQ
+         mquA==
+X-Gm-Message-State: AOAM5330AWZyXnlOPPDOSiCLjRqFs6llc8/sU/Rf79IG74IJTKoWPo54
+        20AWyLErEK5kSZyEZV4Kg+21yKD8CxBT9c+5Kdhi6Q==
+X-Google-Smtp-Source: ABdhPJypyU3SWjtazA+dR1jy9183rhmFmvhtPfxYhBvLEhFBxk3eEbVjurEEmBVicGmboHD3dxP03AD+st+JrZGg+yE=
+X-Received: by 2002:a05:6830:2704:: with SMTP id j4mr17390007otu.323.1643193812904;
+ Wed, 26 Jan 2022 02:43:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH net-next 1/1] r8169: enable RTL8125 ASPM L1.2
-Content-Language: en-US
-To:     Hau <hau@realtek.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Cc:     nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220124181937.6331-1-hau@realtek.com>
- <23d3e690-da16-df03-4c75-dc92625b2c96@gmail.com>
- <052d2be6e8f445f3a4890e259bdee8ce@realtek.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <052d2be6e8f445f3a4890e259bdee8ce@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de> <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+In-Reply-To: <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Wed, 26 Jan 2022 11:43:21 +0100
+Message-ID: <CAKMK7uEQUxDUg6yFgcc5gee=fqS6ehuVV_ZouwvTeq7kLreqNQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.01.2022 10:02, Hau wrote:
-> 
-> 
->> On 24.01.2022 19:19, Chunhao Lin wrote:
->>> This patch will enable RTL8125 ASPM L1.2 on the platforms that have
->>> tested RTL8125 with ASPM L1.2 enabled.
->>> Register mac ocp 0xc0b2 will help to identify if RTL8125 has been
->>> tested on L1.2 enabled platform. If it is, this register will be set to 0xf.
->>> If not, this register will be default value 0.
->>>
->>> Signed-off-by: Chunhao Lin <hau@realtek.com>
->>> ---
->>>  drivers/net/ethernet/realtek/r8169_main.c | 99
->>> ++++++++++++++++++-----
->>>  1 file changed, 79 insertions(+), 20 deletions(-)
->>>
->>> diff --git a/drivers/net/ethernet/realtek/r8169_main.c
->>> b/drivers/net/ethernet/realtek/r8169_main.c
->>> index 19e2621e0645..b1e013969d4c 100644
->>> --- a/drivers/net/ethernet/realtek/r8169_main.c
->>> +++ b/drivers/net/ethernet/realtek/r8169_main.c
->>> @@ -2238,21 +2238,6 @@ static void rtl_wol_enable_rx(struct
->> rtl8169_private *tp)
->>>  			AcceptBroadcast | AcceptMulticast |
->> AcceptMyPhys);  }
->>>
->>> -static void rtl_prepare_power_down(struct rtl8169_private *tp) -{
->>> -	if (tp->dash_type != RTL_DASH_NONE)
->>> -		return;
->>> -
->>> -	if (tp->mac_version == RTL_GIGA_MAC_VER_32 ||
->>> -	    tp->mac_version == RTL_GIGA_MAC_VER_33)
->>> -		rtl_ephy_write(tp, 0x19, 0xff64);
->>> -
->>> -	if (device_may_wakeup(tp_to_dev(tp))) {
->>> -		phy_speed_down(tp->phydev, false);
->>> -		rtl_wol_enable_rx(tp);
->>> -	}
->>> -}
->>> -
->>>  static void rtl_init_rxcfg(struct rtl8169_private *tp)  {
->>>  	switch (tp->mac_version) {
->>> @@ -2650,6 +2635,34 @@ static void rtl_pcie_state_l2l3_disable(struct
->> rtl8169_private *tp)
->>>  	RTL_W8(tp, Config3, RTL_R8(tp, Config3) & ~Rdy_to_L23);  }
->>>
->>> +static void rtl_disable_exit_l1(struct rtl8169_private *tp) {
->>> +	/* Bits control which events trigger ASPM L1 exit:
->>> +	 * Bit 12: rxdv
->>> +	 * Bit 11: ltr_msg
->>> +	 * Bit 10: txdma_poll
->>> +	 * Bit  9: xadm
->>> +	 * Bit  8: pktavi
->>> +	 * Bit  7: txpla
->>> +	 */
->>> +	switch (tp->mac_version) {
->>> +	case RTL_GIGA_MAC_VER_34 ... RTL_GIGA_MAC_VER_36:
->>> +		rtl_eri_clear_bits(tp, 0xd4, 0x1f00);
->>> +		break;
->>> +	case RTL_GIGA_MAC_VER_37 ... RTL_GIGA_MAC_VER_38:
->>> +		rtl_eri_clear_bits(tp, 0xd4, 0x0c00);
->>> +		break;
->>> +	case RTL_GIGA_MAC_VER_40 ... RTL_GIGA_MAC_VER_53:
->>> +		rtl_eri_clear_bits(tp, 0xd4, 0x1f80);
->>> +		break;
->>> +	case RTL_GIGA_MAC_VER_60 ... RTL_GIGA_MAC_VER_63:
->>> +		r8168_mac_ocp_modify(tp, 0xc0ac, 0x1f80, 0);
->>> +		break;
->>> +	default:
->>> +		break;
->>> +	}
->>> +}
->>> +
->>>  static void rtl_enable_exit_l1(struct rtl8169_private *tp)  {
->>>  	/* Bits control which events trigger ASPM L1 exit:
->>> @@ -2692,6 +2705,33 @@ static void rtl_hw_aspm_clkreq_enable(struct
->> rtl8169_private *tp, bool enable)
->>>  	udelay(10);
->>>  }
->>>
->>> +static void rtl_hw_aspm_l12_enable(struct rtl8169_private *tp, bool
->>> +enable) {
->>> +	/* Don't enable L1.2 in the chip if OS can't control ASPM */
->>> +	if (enable && tp->aspm_manageable) {
->>> +		r8168_mac_ocp_modify(tp, 0xe094, 0xff00, 0);
->>> +		r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, BIT(2));
->>> +	} else {
->>> +		r8168_mac_ocp_modify(tp, 0xe092, 0x00ff, 0);
->>> +	}
->>> +}
->>> +
->>
->> Register E094 bits 0..15 are cleared when enabling, but not touched on
->> disabling. I this correct?
->    Register E094 bits 8...15 is a timer counter that is used to control when to disable ephy tx/rx.
->    Set it to 0 means disable ephy tx/rx immediately when certain condition meet. 
->    It has no meaning when register E092 bit 2 is set to 0.
-> 
-Thanks for the explanation.
+On Wed, Jan 26, 2022 at 11:03 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Wed, Jan 26, 2022 at 10:52 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> >
+> > Hi
+> >
+> > Am 25.01.22 um 21:21 schrieb Andy Shevchenko:
+> > > Since we got a maintainer for fbdev, I would like to
+> > > unorphan fbtft (with the idea of sending PRs to Helge)
+> > > and move it out of staging since there is no more clean
+> > > up work expected and no more drivers either.
+> > >
+> > > Thoughts?
+>
+> Thanks for sharing yours, my answers below.
+>
+> > But why? We already have DRM drivers for some of these devices.
+>
+> No, we do not (only a few are available).
+>
+> > Porting
+> > the others to DRM is such a better long-term plan.  OTOH, as no one has
+> > shown up and converted them, maybe they should be left dead or removed
+> > entirely.
+>
+> As I mentioned above there are devices that nobody will take time to
+> port to a way too complex DRM subsystem. But the devices are cheap and
+> quite widespread in the embedded world. I'm in possession of 3 or 4
+> different models and only 1 is supported by tiny DRM.
 
->> And for basically the same purpose we have the following function.
->> "don't enable L1.2 in the chip" is not covered by ASPM_en in Config5?
->    Register E092 is like  ASPM_en in Config5. But it controls L1 substate (L1.1/L1.2) enable status.
-> 
-How is this handled for the RTL8168 chip versions supporting L1 sub-states (RTL8168h)?
-Is there a similar register or does Config5 ASPM_en control also the L1 substates
-on these chip versions?
+If we go with "way too complex" no one should try writing good linux
+drivers in general, because with the bazillion of helpers, different
+subsystems and specific solution for pretty much any possible problem
+you might ever have, the linux kernel overall is "way too complex".
 
->>
->> static void rtl_hw_aspm_clkreq_enable(struct rtl8169_private *tp, bool
->> enable) {
->> 	/* Don't enable ASPM in the chip if OS can't control ASPM */
->> 	if (enable && tp->aspm_manageable) {
->> 		RTL_W8(tp, Config5, RTL_R8(tp, Config5) | ASPM_en);
->> 		RTL_W8(tp, Config2, RTL_R8(tp, Config2) | ClkReqEn);
->> 	} else {
->> 		RTL_W8(tp, Config2, RTL_R8(tp, Config2) & ~ClkReqEn);
->> 		RTL_W8(tp, Config5, RTL_R8(tp, Config5) & ~ASPM_en);
->> 	}
->>
->> 	udelay(10);
->> }
->>
->>
-...
+Yes it's overwhelming and also dri-devel is a chaotic firehose, but
+let's try to address these issues instead of creating tiny little
+corners where nothing happens, but at least things are simple.
+
+Maybe Greg needs to expand his "I'll help you upstream your drivers"
+project to drm? We're trying to do that but sometimes it's a bit too
+much chaos, and also no one is actually paid in drm to do that kind of
+work even part time (except contracting for specific customers, but
+that's not the problem here I think).
+-Daniel
+
+> On top of that the subtle fact people forgot about FBTFT is that it
+> does support parallel interface (yes, I know that it's not performant,
+> but one of the displays I have is with that type of interface).
+>
+> P.S. For the record, I will personally NAK any attempts to remove that
+> driver from the kernel. And this is another point why it's better not
+> to be under the staging.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+
+
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

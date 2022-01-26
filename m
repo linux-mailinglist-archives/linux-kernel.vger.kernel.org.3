@@ -2,87 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F338949D64F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8594449D65E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiAZXmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 18:42:55 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:37413 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbiAZXmy (ORCPT
+        id S231923AbiAZXth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 18:49:37 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:40549 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229451AbiAZXtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 18:42:54 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JkgJD3XN7z4xjx;
-        Thu, 27 Jan 2022 10:42:52 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643240572;
-        bh=Yu6++roH7LHBMllyG+A8ccQ16RNfz/JX1ppO+BpEPBA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VAwEbcG+yH5zjzSDtBYlscoWJ4Vroy9PRqCvJjjHetc5z+hBH2l8gPjL4FDXvfoFm
-         cTQZXKbuhGkBpyGecaS37hwOy8YllvZmxch3/JuEnLNPhidSGyRkDyhLP7UaCIy2gs
-         Au6w8ySi+v2DPTe7kIZNxKK9h21C239m8s/bP2C/cH0l0XjE7NEfSYDygeon/E6oQs
-         PkKghtKyZBeo2TXL6d6xUzJK2Kg52vZWrNMgCB5s/o5SPQummlbfTeklsl1W/T6sJl
-         XCoSI4T+aySydtZiMWcRnwSV2uY9fmrB4JwdvA3IDGL1grJZHxW4wi+dL5sImvtcFM
-         9wrwl8/XsVxIA==
-Date:   Thu, 27 Jan 2022 10:42:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Tim Huang <tim.huang@amd.com>, Tim Huang <xiaohu.huang@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220127104251.5a63a107@canb.auug.org.au>
+        Wed, 26 Jan 2022 18:49:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643240616;
+    s=strato-dkim-0002; d=ko-hh.de;
+    h=Message-ID:Subject:Cc:To:From:Date:Cc:Date:From:Subject:Sender;
+    bh=rUwf4V6VfjCh/Tz0lFpBY98CSKOMaoI/ZlA6KjECeLc=;
+    b=Gyt0I8d1vrwyVdd9BPP+goGYbnc0j8x6TKG1RRT1FSae8MCKMpCgt4ICPViamIWx/B
+    7fZhlz4/uQNBD1Ie+9+lI2PukTlQi2N7DTJ4HnICI6qHOKYPBzRn5AcBMm1qG88JIR+p
+    63bmhAVtc8Hzh6HO7MYnaOWsTYeG6VZzrvKtGnzOW05cpFQL6daAuuem8sw4SeFCNIXe
+    J+SJBxChlaIWe+1fZVd6uoEcn+87gOIvBk5Bgd4RsxYhcThTRluy78O2obNSuwBbP6pu
+    UjFRkT1GM061AqCOa05TpL+Kd9NFkLrFLE15C7/G9OYsEbWeqrzaP7WstXNFbWzJ7fNn
+    1EWg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":OGQBeUWjaN+znm36YqWmJEx4lU5vgP4am+jDJsl40KLIzDO7mhvQTIqpxZoDGXXc/Nut"
+X-RZG-CLASS-ID: mo00
+Received: from odroid-VirtualBox
+    by smtp.strato.de (RZmta 47.38.0 DYNA|AUTH)
+    with ESMTPSA id L5f488y0QNhZk0e
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 27 Jan 2022 00:43:35 +0100 (CET)
+Date:   Thu, 27 Jan 2022 00:43:25 +0100
+From:   Lutz Koschorreck <theleks@ko-hh.de>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: meson-sm1-odroid: use correct enable-gpio pin
+ for tf-io regulator
+Message-ID: <20220126234325.GA7363@odroid-VirtualBox>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EkqJh6pAIPv4xV.DxrL7kUt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/EkqJh6pAIPv4xV.DxrL7kUt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The interrupt pin of the external ethernet phy is used, instead of the
+enable-gpio pin of the tf-io regulator. The GPIOE_2 pin is located in
+the gpio_ao bank.
+Using open drain prevents reboot issues.
 
-Hi all,
+This causes phy interrupt problems at system startup.
+[   76.645190] irq 36: nobody cared (try booting with the "irqpoll" option)
+[   76.649617] CPU: 0 PID: 1416 Comm: irq/36-0.0:00 Not tainted 5.16.0 #2
+[   76.649629] Hardware name: Hardkernel ODROID-HC4 (DT)
+[   76.649635] Call trace:
+[   76.649638]  dump_backtrace+0x0/0x1c8
+[   76.649658]  show_stack+0x14/0x60
+[   76.649667]  dump_stack_lvl+0x64/0x7c
+[   76.649676]  dump_stack+0x14/0x2c
+[   76.649683]  __report_bad_irq+0x38/0xe8
+[   76.649695]  note_interrupt+0x220/0x3a0
+[   76.649704]  handle_irq_event_percpu+0x58/0x88
+[   76.649713]  handle_irq_event+0x44/0xd8
+[   76.649721]  handle_fasteoi_irq+0xa8/0x130
+[   76.649730]  generic_handle_domain_irq+0x38/0x58
+[   76.649738]  gic_handle_irq+0x9c/0xb8
+[   76.649747]  call_on_irq_stack+0x28/0x38
+[   76.649755]  do_interrupt_handler+0x7c/0x80
+[   76.649763]  el1_interrupt+0x34/0x80
+[   76.649772]  el1h_64_irq_handler+0x14/0x20
+[   76.649781]  el1h_64_irq+0x74/0x78
+[   76.649788]  irq_finalize_oneshot.part.56+0x68/0xf8
+[   76.649796]  irq_thread_fn+0x5c/0x98
+[   76.649804]  irq_thread+0x13c/0x260
+[   76.649812]  kthread+0x144/0x178
+[   76.649822]  ret_from_fork+0x10/0x20
+[   76.649830] handlers:
+[   76.653170] [<0000000025a6cd31>] irq_default_primary_handler threaded [<0000000093580eb7>] phy_interrupt
+[   76.661256] Disabling IRQ #36
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Fixes: 1f80a5cf74a6 ("arm64: dts: meson-sm1-odroid: add missing enable gpio and supply for tf_io regulator")
 
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'd=
-m_dmub_hw_init':
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:1030:20: error:=
- unused variable 'dc' [-Werror=3Dunused-variable]
- 1030 |         struct dc *dc =3D adev->dm.dc;
-      |                    ^~
+Signed-off-by: Lutz Koschorreck <theleks@ko-hh.de>
+---
+ arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Caused by commit
+diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+index 0bd1e98a0eef..ddb1b345397f 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+@@ -48,7 +48,7 @@ tf_io: gpio-regulator-tf_io {
+ 		regulator-max-microvolt = <3300000>;
+ 		vin-supply = <&vcc_5v>;
+ 
+-		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
++		enable-gpio = <&gpio_ao GPIOE_2 GPIO_OPEN_DRAIN>;
+ 		enable-active-high;
+ 		regulator-always-on;
+ 
+-- 
+2.25.1
 
-  3b36f50d3a69 ("drm/amd/display: convert to DCE IP version checking")
-
-I have used the amdgu tree from next-20220125 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/EkqJh6pAIPv4xV.DxrL7kUt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHx3HsACgkQAVBC80lX
-0GxQ2Qf/XhXciA8O2LnpDA5c2hxFam7ETz4FYPyJ3MFd4exkd4QZrx9gfExd1J3z
-5YbbMSbrgbl2r6Nu+saDMj1f3KsV1ONS60Wgxh+SpKMYNx/0CWSOobnl/7cDVLqd
-r+LvGbFK+0szHoAk+xM3NF5RlDc3Mp1M59KwwGKbrWxzNOcizSGBlUomSEHw651y
-sUOS0i34pyTaOnc8z9RIJ1bzEFrTHrQ/HdRc42F/QoxEM/Lt0hPDej8idcdBlEcY
-035xs3fqrhzcmNJyex7qXCT+xkPg8zliUQjX6/oW0bCcJ/36m5w3utOXBHurPDqn
-vTZlO5RJ/KcYNpswyUhLkWOGWWPD8g==
-=N+cv
------END PGP SIGNATURE-----
-
---Sig_/EkqJh6pAIPv4xV.DxrL7kUt--

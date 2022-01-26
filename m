@@ -2,110 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C49F49D560
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAEB49D567
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbiAZWWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiAZWWl (ORCPT
+        id S233101AbiAZWYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:24:32 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:59550 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229637AbiAZWYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:22:41 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BE5C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:22:40 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 133so645060pgb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:22:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bRwhL1NPkbRdnv8DYdCIqNEvEwK08/NeYumLy6TnqFI=;
-        b=GejB6uj8tAaqSUfWeYhJQ+YhhcQNMDVdWsrOd2KteNyszjDIibMmICgjVI0tdBPxHz
-         W4319Cq/TmYyRMjmyFBDFy8GN+9fEUgRxp8ajlWuiyP6fbZXz0LXqfFb5IBJq0MBvUbG
-         8sn4/8QYotyzcMZ1n/fJpCUXayvrrwsnEwnOs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bRwhL1NPkbRdnv8DYdCIqNEvEwK08/NeYumLy6TnqFI=;
-        b=V3Fs2QRn7eBHmZkimiLM0pDBO9PLJ8pZcsAS1k6apLE0SjtFUqlJHWySu2qqsjx9Ix
-         Na0eBldmPAM8DOVFpmkkA7/dYWVPaIM356pR4I9sxporJj81tiDeCjuONqwwjtM55+jk
-         BenQr/8Njyue4O5zxvXpGORJlsDenrSedi5O5ULBUjXaeEyGCi4WX+X0jpVH89q4qkM7
-         ODd33m+ye3AxGqUmg5O1UwzzIxopq1ez/CF5r0+qEBL6TVvYwS6LT6VWy+g5gVilY5d6
-         hf1RtuV9AyQB4zJvQJgPP4rbaeUgsdoh8dbOEicNuAg4P3qPMOBVO8/oQV88DZH4p1MO
-         erRQ==
-X-Gm-Message-State: AOAM5337OMehiYqDuOl6aSsdewjVepHRywfEnHsvoLe2PowDXKYX/5ir
-        fC6he6f3WUAm1RpMRDTmkEcZnw==
-X-Google-Smtp-Source: ABdhPJwW4gtXLi7FUbmqmsJLyKkC4nxO8knlYkooSPKifiMgPCNpALVd5g3uaIeh6lNY73omJA+5ow==
-X-Received: by 2002:a63:8bc4:: with SMTP id j187mr683449pge.536.1643235760574;
-        Wed, 26 Jan 2022 14:22:40 -0800 (PST)
-Received: from bleung.mtv.corp.google.com ([2620:15c:202:201:7499:b258:18ee:819f])
-        by smtp.gmail.com with ESMTPSA id q16sm3020769pfu.194.2022.01.26.14.22.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 14:22:40 -0800 (PST)
-From:   Benson Leung <bleung@chromium.org>
-To:     chrome-platform@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, bleung@google.com,
-        bleung@chromium.org, pmalani@chromium.org
-Subject: [PATCH] MAINTAINERS: platform-chrome: Add new chrome-platform@lists.linux.dev list
-Date:   Wed, 26 Jan 2022 14:22:33 -0800
-Message-Id: <20220126222233.2852280-1-bleung@chromium.org>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+        Wed, 26 Jan 2022 17:24:30 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QMOIcH001282;
+        Wed, 26 Jan 2022 22:24:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=AqLDb7oC344gTow/uDRwc6F7y7gWhyphzkM/OBMcx78=;
+ b=QItk+nQx3lsn47mp5QDUGPPgTj16HMGTOJxl5QFsKiqGR7/NY6W0q1dxYEtOGLC58pUo
+ Nv36Z9++oO99zdCXDmnyheypEm0UwZKuXj/bXDteuzg5StZsCDkvE6OVV8s33opS7pgx
+ owkfkbFP+DJq7pVEByxEDtVi94grNotiqI1O9FU3SGhDvKpceiWOGtReG1fkCvYU3gzk
+ LuRttgap2jicYG31hd1NGstyxnG8+8JcxNE0qEn/HjQQ2x2hch9GnopsWmcC8kJ14DGN
+ 9xTFh58nSwIDE5dqm5no7ppBWPo7HLYV1p7T70KIkKMbD/Xq3AdRhQ6UiIY/QtcIV8RK ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3duet70bge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 22:24:18 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20QMNnLN031399;
+        Wed, 26 Jan 2022 22:24:00 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3duet70bfq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 22:24:00 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QMDAK3007199;
+        Wed, 26 Jan 2022 22:23:59 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma02dal.us.ibm.com with ESMTP id 3dt1xakmts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 22:23:59 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QMNqrX29819320
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 22:23:52 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 38F646A047;
+        Wed, 26 Jan 2022 22:23:52 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B81D16A04F;
+        Wed, 26 Jan 2022 22:23:49 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jan 2022 22:23:49 +0000 (GMT)
+Message-ID: <9ca21852-17ee-fc99-4764-300cd5199810@linux.ibm.com>
+Date:   Wed, 26 Jan 2022 17:23:49 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 08/23] ima: Move measurement list related variables
+ into ima_namespace
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        serge@hallyn.com, christian.brauner@ubuntu.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+ <20220125224645.79319-9-stefanb@linux.vnet.ibm.com>
+ <20220126092159.4rgclr5s3jli7aqy@wittgenstein>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220126092159.4rgclr5s3jli7aqy@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6d07J6qR1P1xp3FrOFIPPdlzD9hXsE1y
+X-Proofpoint-ORIG-GUID: JdVJZpC1BlMcH50MZWAEpLy_SOIE4NbH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-26_08,2022-01-26_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ mlxscore=0 spamscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201260128
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Benson Leung <bleung@chromium.org>
----
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ea3e6c914384..cad7b0fff9f4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4537,6 +4537,7 @@ F:	drivers/input/touchscreen/chipone_icn8505.c
- 
- CHROME HARDWARE PLATFORM SUPPORT
- M:	Benson Leung <bleung@chromium.org>
-+L:	chrome-platform@lists.linux.dev
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
- F:	drivers/platform/chrome/
-@@ -4544,6 +4545,7 @@ F:	drivers/platform/chrome/
- CHROMEOS EC CODEC DRIVER
- M:	Cheng-Yi Chiang <cychiang@chromium.org>
- R:	Guenter Roeck <groeck@chromium.org>
-+L:	chrome-platform@lists.linux.dev
- S:	Maintained
- F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
- F:	sound/soc/codecs/cros_ec_codec.*
-@@ -4551,6 +4553,7 @@ F:	sound/soc/codecs/cros_ec_codec.*
- CHROMEOS EC SUBDRIVERS
- M:	Benson Leung <bleung@chromium.org>
- R:	Guenter Roeck <groeck@chromium.org>
-+L:	chrome-platform@lists.linux.dev
- S:	Maintained
- F:	drivers/power/supply/cros_usbpd-charger.c
- N:	cros_ec
-@@ -4558,11 +4561,13 @@ N:	cros-ec
- 
- CHROMEOS EC USB TYPE-C DRIVER
- M:	Prashant Malani <pmalani@chromium.org>
-+L:	chrome-platform@lists.linux.dev
- S:	Maintained
- F:	drivers/platform/chrome/cros_ec_typec.c
- 
- CHROMEOS EC USB PD NOTIFY DRIVER
- M:	Prashant Malani <pmalani@chromium.org>
-+L:	chrome-platform@lists.linux.dev
- S:	Maintained
- F:	drivers/platform/chrome/cros_usbpd_notify.c
- F:	include/linux/platform_data/cros_usbpd_notify.h
--- 
-2.35.0.rc0.227.g00780c9af4-goog
+On 1/26/22 04:21, Christian Brauner wrote:
+> On Tue, Jan 25, 2022 at 05:46:30PM -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Move measurement list related variables into the ima_namespace. This way
+>> a front-end like securityfs can show the measurement list inside an IMA
+>> namespace.
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   security/integrity/ima/ima.h             |  5 +++--
+>>   security/integrity/ima/ima_fs.c          |  6 ++++--
+>>   security/integrity/ima/ima_init_ima_ns.c |  5 +++++
+>>   security/integrity/ima/ima_kexec.c       | 12 ++++++-----
+>>   security/integrity/ima/ima_queue.c       | 27 +++++++++++-------------
+>>   5 files changed, 31 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+>> index 340a59174670..45706836a77b 100644
+>> --- a/security/integrity/ima/ima.h
+>> +++ b/security/integrity/ima/ima.h
+>> @@ -106,7 +106,6 @@ struct ima_queue_entry {
+>>   	struct list_head later;		/* place in ima_measurements list */
+>>   	struct ima_template_entry *entry;
+>>   };
+>> -extern struct list_head ima_measurements;	/* list of all measurements */
+>>   
+>>   /* Some details preceding the binary serialized measurement list */
+>>   struct ima_kexec_hdr {
+>> @@ -136,6 +135,8 @@ struct ima_namespace {
+>>   	struct ima_rule_entry *arch_policy_entry;
+>>   
+>>   	struct ima_h_table ima_htable;
+>> +	struct list_head ima_measurements;	/* list of all measurements */
+>> +	unsigned long binary_runtime_size;	/* used by init_ima_ns */
+>>   } __randomize_layout;
+> Moving this into struct imans seems sane to me but I'm not going to ack
+> it because I don't have enough knowledge to guarantee that this code
+> will only run for init_ima_ns. I'll leave that to Mimi.
+
+The code modifying binary_runtime_size may do this for all IMA 
+namespaces but the resulting value of binary_runtime_size may only 
+matter in init_ima_ns (not 100% sure, but Mimi seems to say so). Moving 
+it into ima_namespace rather than special-casing the code keeps the code 
+readable.
+
+There are also some case in the code that may do something like this:
+
+if (ns == &init_ima_ns)
+
+     foo = xyz;
+
+Those will go away when foo is moved into the namespace and then it 
+becomes ns->foo = xyz, which is much saner for readability but 
+unavoidable for some variables at this stage.
+
 

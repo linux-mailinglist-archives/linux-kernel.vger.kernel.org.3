@@ -2,107 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC68549D4A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 396B249D49E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbiAZViq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiAZVin (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232642AbiAZVin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 26 Jan 2022 16:38:43 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FAAC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:38:43 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id s16so429480pgs.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:38:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lD+IeXw2g3SnEFxxFA4tPs2Gg+BBC68wNzC39s+tbCM=;
-        b=g0V6+9+eAxLohg+otzC6p3X+pNpL0yR/rmt8gVDtaGXP6CRU88RuMCvIIzAUGX7DPr
-         /yOr+771CdzmvistWwFyguhIoaIJH+AC1ufY5Vd1IEjfjpxwRAA08P+kjWBGUF4VsNis
-         TVMhLX9wF+TzBkTnFpFIZ0RtPK1qWEhWgfzW2agGJlpBR5cRhuPVRJBQxuaUzN7u6VZh
-         qXZl+9wP/xYb4dQYwnySO/CCGuMfBPzijp4KgJXjatUVKkGsEVtrInoswg0MG74iOxxc
-         e55fcHJmaEQCiGS0B876dh8n0K2oQYkDCfRSVp2xDsAZmIiaesqmAWcHyqGwZL8tsKI4
-         0RoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lD+IeXw2g3SnEFxxFA4tPs2Gg+BBC68wNzC39s+tbCM=;
-        b=cv1Nz4zkjR7pxG70ydgMdmjXGohxj23/5d4O1CSVzU741xO3i7WUUw3ZNzYpZeyDgX
-         VNpfKx2OpvRhq0sTfLfx+YYlt6FFUDgdK9LjPBP5WoPJ/u2UsrVJB2GNucdnPg70QhWO
-         Q6j0tsn620d5NjVOq0Nac9yIkAX9WNoniBiUBrT+5hFWSdLyz7gQEgDfZKl8huRMtqtj
-         IJwQeZM+Qbl/uWep2xR9/LM04akMfWwWcoIXiGhfMrJEkYgMop8oq0dTKAowxcAv1AYv
-         jCKXwGsEIYZx2cJ2GJpPJyFVIQal2eBE4TFOWCxojwEUSgWnxN8bywJLzDCORvxafLGa
-         u+8A==
-X-Gm-Message-State: AOAM5303qxMSkr1hksgV0Z6LDdrnYaJJ/7gHFo51rI46dXGHXWu8FPIy
-        fJVBwsOYplGBhapLFXjVW4H33S0srZP4NAfKiOTZ3A==
-X-Google-Smtp-Source: ABdhPJxhUyY6fvWRkImec6LsPebj7DYp9opvIlGnXwWGuUtCS+f1D8i0ONWseFOnAO+6CvzSBcTgPcZuIPIGIG0g8gE=
-X-Received: by 2002:a05:6a00:1508:: with SMTP id q8mr261428pfu.3.1643233122805;
- Wed, 26 Jan 2022 13:38:42 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230369AbiAZVim (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 16:38:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DB3C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:38:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D8156191A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 21:38:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D55C340E3;
+        Wed, 26 Jan 2022 21:38:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643233121;
+        bh=0ecxNlw62WJvra/OF+IRNXwztuf5U1ZovPthVp24nSQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AX1hK+TSKreuoWTxwy2SoEkBiJd1PLC9xxTxgcTgf8s5jCGEpFNcr/AthESmPOqt3
+         WNHsU4mcilnm3W5VjoUTXmCCiwnafW065aC3ka4y8u/rWxkujFIqW4M4yx0mQCIyYu
+         nt7wvOYqbtoyuovOa45rehHDPuqesR2T2Q3+uaVcksDoCTmWZnq7EiO9xIDfJdCDkt
+         YNBtXE0R/DqQkw+zmQaTY1k1I0Dp4NGtDEzsWmpgNhSniynL47+GUm1T65fkvT3J3H
+         i0kdyulnLLWgZ5PQTSIfhu365pTqyZbv71PureX78iRmo4pXP4fyUJsLQYQSJIhGm5
+         JtahrOxRQ+kVA==
+Date:   Wed, 26 Jan 2022 23:38:34 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: make 'highmem' symbol ro_after_init
+Message-ID: <YfG/Wi5OBHeDRPdg@kernel.org>
+References: <20220124170555.1054480-1-ardb@kernel.org>
 MIME-Version: 1.0
-References: <20220118190922.1557074-1-dlatypov@google.com> <CABVgOSnY8Ctc9vuVX+Fjmmd3L5kpXnzMXJQ0LPXAgmjCKsrYYw@mail.gmail.com>
- <CAGS_qxqx+wcruc7DAD9TQjk27OF+VDo1n9S6atRx+dDG5cr=6g@mail.gmail.com> <CAGS_qxpRqOAoBbkkFttZgB_Zm+KM=pwprgZ0wzDROh21mO0r8Q@mail.gmail.com>
-In-Reply-To: <CAGS_qxpRqOAoBbkkFttZgB_Zm+KM=pwprgZ0wzDROh21mO0r8Q@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 26 Jan 2022 16:38:31 -0500
-Message-ID: <CAFd5g44B3aUY1k7n7c9066-McW0Rm=48H4ArUK2VbXB798e=BA@mail.gmail.com>
-Subject: Re: [PATCH 1/5] kunit: tool: drop mostly unused KunitResult.result field
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124170555.1054480-1-ardb@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 2:55 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Thu, Jan 20, 2022 at 9:19 AM Daniel Latypov <dlatypov@google.com> wrote:
-> > > That being said, I can live with the current solution, but'd ideally
-> > > like a comment or something to make the return value Tuple a bit more
-> > > obvious.
-> >
-> > A comment to explain that Tuple == multiple return values from a func?
-> > Or something else?
->
-> Friendly ping.
-> Do we want a comment like this?
->
-> # Note: Python uses tuples internally for multiple return values
-> def foo() -> Tuple[int, int]
->    return 0, 1
+On Mon, Jan 24, 2022 at 06:05:55PM +0100, Ard Biesheuvel wrote:
+> The 'highmem' variable is only set at boot, so we can make it
+> ro_after_init and prevent it from being corrupted inadvertently, or from
+> ending up in a contended cacheline.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 
-I don't feel that's necessary. I think the use of tuple return types
-in Python is fairly common and don't require a comment, but I don't
-feel strongly about it either way.
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 
-> I can go ahead and add that and send a v2 out.
->
-> FYI,  if you do this in a REPL
-> >>> a = foo()
-> >>> type(a)
-> <class 'tuple'>
->
-> The syntax for `a, b = foo()` is just using Python's unpacking feature, i.e.
-> b, c = (1, 2)
->
-> So it's all just syntactic sugar around tuples.
->
-> >
-> > Also ah, I thought we had more instances of multiple return in kunit.py.
-> > Looks like the only other is get_source_tree_ops_from_qemu_config().
-> > isolate_ktap_output() technically shows this off as well, but via yields.
-> >
-> > >
-> > > Thoughts?
+> ---
+>  mm/memory.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index c125c4969913..50e82cb94ccc 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -106,7 +106,7 @@ EXPORT_SYMBOL(mem_map);
+>   * highstart_pfn must be the same; there must be no gap between ZONE_NORMAL
+>   * and ZONE_HIGHMEM.
+>   */
+> -void *high_memory;
+> +void *high_memory __ro_after_init;
+>  EXPORT_SYMBOL(high_memory);
+>  
+>  /*
+> -- 
+> 2.30.2
+> 
+> 
 
-Personally, I think the change as is.
+-- 
+Sincerely yours,
+Mike.

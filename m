@@ -2,123 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 743FE49D49B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC68549D4A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiAZViK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
+        id S232672AbiAZViq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiAZViI (ORCPT
+        with ESMTP id S232586AbiAZVin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:38:08 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA41C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:38:07 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643233085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f5fcoWwfmhzNvMjUp+pjH4hD1mIf2d1g2+i2SJzfS4Q=;
-        b=J5TRhWXL23NuwdM3hRs+FPxtZmSYLsb36kLeKRr3FWAhvN9lr8SBhLOI+zjjcbnluOWX0J
-        La6iQGteVfCwqPIhFSpnJiDFXFF3kAlFjpLmhduP3NkxTDN96Peda9Yc/TMTrVUQcsUiPx
-        pj1x0gvkj0KnKpRGFUZy/EzknDDLUbr83/0d3NiXGM4AwgvolreuNsxm8u6AhZy0R3fc/3
-        Mu+4iaWJIMSXp6nvn4F8GKRoGFcypVFJovKrtByV6iWptI2gDHd7YdWJCnl72d5j/ahW86
-        vxC36v6EePrfe5vdTvwcIpFrclV1jgl3yyAIfSm2HIsCtdaFyOe+vFrsWYPExw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643233085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f5fcoWwfmhzNvMjUp+pjH4hD1mIf2d1g2+i2SJzfS4Q=;
-        b=JEka+zNZXXyLc6D1VvwfqDsXU24l1eYSpl3XbMvwJi7v+170sTD6Z+2Gh27xmdaOmydw/f
-        E7/StC2ZRyAae9CA==
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-In-Reply-To: <YfGGk7kWNc9q2YwV@otcwcpicx3.sc.intel.com>
-References: <20211217220136.2762116-1-fenghua.yu@intel.com>
- <20211217220136.2762116-6-fenghua.yu@intel.com> <87ee4w6g1n.ffs@tglx>
- <87bl006fdb.ffs@tglx> <Ye8RmmKpJT8brmDE@otcwcpicx3.sc.intel.com>
- <878rv46eg3.ffs@tglx> <YfAUutQhqS6ejUFU@otcwcpicx3.sc.intel.com>
- <87k0em4lu9.ffs@tglx> <YfGGk7kWNc9q2YwV@otcwcpicx3.sc.intel.com>
-Date:   Wed, 26 Jan 2022 22:38:04 +0100
-Message-ID: <8735la41qb.ffs@tglx>
+        Wed, 26 Jan 2022 16:38:43 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FAAC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:38:43 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id s16so429480pgs.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lD+IeXw2g3SnEFxxFA4tPs2Gg+BBC68wNzC39s+tbCM=;
+        b=g0V6+9+eAxLohg+otzC6p3X+pNpL0yR/rmt8gVDtaGXP6CRU88RuMCvIIzAUGX7DPr
+         /yOr+771CdzmvistWwFyguhIoaIJH+AC1ufY5Vd1IEjfjpxwRAA08P+kjWBGUF4VsNis
+         TVMhLX9wF+TzBkTnFpFIZ0RtPK1qWEhWgfzW2agGJlpBR5cRhuPVRJBQxuaUzN7u6VZh
+         qXZl+9wP/xYb4dQYwnySO/CCGuMfBPzijp4KgJXjatUVKkGsEVtrInoswg0MG74iOxxc
+         e55fcHJmaEQCiGS0B876dh8n0K2oQYkDCfRSVp2xDsAZmIiaesqmAWcHyqGwZL8tsKI4
+         0RoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lD+IeXw2g3SnEFxxFA4tPs2Gg+BBC68wNzC39s+tbCM=;
+        b=cv1Nz4zkjR7pxG70ydgMdmjXGohxj23/5d4O1CSVzU741xO3i7WUUw3ZNzYpZeyDgX
+         VNpfKx2OpvRhq0sTfLfx+YYlt6FFUDgdK9LjPBP5WoPJ/u2UsrVJB2GNucdnPg70QhWO
+         Q6j0tsn620d5NjVOq0Nac9yIkAX9WNoniBiUBrT+5hFWSdLyz7gQEgDfZKl8huRMtqtj
+         IJwQeZM+Qbl/uWep2xR9/LM04akMfWwWcoIXiGhfMrJEkYgMop8oq0dTKAowxcAv1AYv
+         jCKXwGsEIYZx2cJ2GJpPJyFVIQal2eBE4TFOWCxojwEUSgWnxN8bywJLzDCORvxafLGa
+         u+8A==
+X-Gm-Message-State: AOAM5303qxMSkr1hksgV0Z6LDdrnYaJJ/7gHFo51rI46dXGHXWu8FPIy
+        fJVBwsOYplGBhapLFXjVW4H33S0srZP4NAfKiOTZ3A==
+X-Google-Smtp-Source: ABdhPJxhUyY6fvWRkImec6LsPebj7DYp9opvIlGnXwWGuUtCS+f1D8i0ONWseFOnAO+6CvzSBcTgPcZuIPIGIG0g8gE=
+X-Received: by 2002:a05:6a00:1508:: with SMTP id q8mr261428pfu.3.1643233122805;
+ Wed, 26 Jan 2022 13:38:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220118190922.1557074-1-dlatypov@google.com> <CABVgOSnY8Ctc9vuVX+Fjmmd3L5kpXnzMXJQ0LPXAgmjCKsrYYw@mail.gmail.com>
+ <CAGS_qxqx+wcruc7DAD9TQjk27OF+VDo1n9S6atRx+dDG5cr=6g@mail.gmail.com> <CAGS_qxpRqOAoBbkkFttZgB_Zm+KM=pwprgZ0wzDROh21mO0r8Q@mail.gmail.com>
+In-Reply-To: <CAGS_qxpRqOAoBbkkFttZgB_Zm+KM=pwprgZ0wzDROh21mO0r8Q@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 26 Jan 2022 16:38:31 -0500
+Message-ID: <CAFd5g44B3aUY1k7n7c9066-McW0Rm=48H4ArUK2VbXB798e=BA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] kunit: tool: drop mostly unused KunitResult.result field
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26 2022 at 09:36, Fenghua Yu wrote:
-> On Wed, Jan 26, 2022 at 03:23:42PM +0100, Thomas Gleixner wrote:
->> On Tue, Jan 25 2022 at 07:18, Fenghua Yu wrote:
->> While looking at ioasid_put() usage I tripped over the following UAF
->> issue:
->> 
->> --- a/drivers/iommu/intel/iommu.c
->> +++ b/drivers/iommu/intel/iommu.c
->> @@ -4817,8 +4817,10 @@ static int aux_domain_add_dev(struct dma
->>  	auxiliary_unlink_device(domain, dev);
->>  link_failed:
->>  	spin_unlock_irqrestore(&device_domain_lock, flags);
->> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
->> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
->>  		ioasid_put(domain->default_pasid);
->> +		domain->default_pasid = INVALID_IOASID;
->> +	}
->>  
->>  	return ret;
->>  }
->> @@ -4847,8 +4849,10 @@ static void aux_domain_remove_dev(struct
->>  
->>  	spin_unlock_irqrestore(&device_domain_lock, flags);
->>  
->> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
->> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
->>  		ioasid_put(domain->default_pasid);
->> +		domain->default_pasid = INVALID_IOASID;
->> +	}
->>  }
->>  
->>  static int prepare_domain_attach_device(struct iommu_domain *domain,
+On Wed, Jan 26, 2022 at 2:55 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> The above patch fixes an existing issue. I will put it in a separate patch,
-> right?
-
-Correct.
-
-> It cannot be applied cleanly to the upstream tree. Do you want me to base
-> the above patch (and the whole patch set) to the upstream tree or a specific
-> tip branch?
-
-Against Linus tree please so that the bugfix applies.
-
-> I will fold the following patch into patch #5. The patch #11 (the doc patch)
-> also needs to remove one paragraph talking about refcount.
+> On Thu, Jan 20, 2022 at 9:19 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > > That being said, I can live with the current solution, but'd ideally
+> > > like a comment or something to make the return value Tuple a bit more
+> > > obvious.
+> >
+> > A comment to explain that Tuple == multiple return values from a func?
+> > Or something else?
 >
-> So I will send the whole patch set with the following changes:
-> 1. One new bug fix patch (the above patch)
-> 2. Updated patch #5 (with the following patch folded)
-> 3. Updated patch #11 (removing refcount description)
+> Friendly ping.
+> Do we want a comment like this?
+>
+> # Note: Python uses tuples internally for multiple return values
+> def foo() -> Tuple[int, int]
+>    return 0, 1
 
-Looks good.
+I don't feel that's necessary. I think the use of tuple return types
+in Python is fairly common and don't require a comment, but I don't
+feel strongly about it either way.
 
-Thanks,
+> I can go ahead and add that and send a v2 out.
+>
+> FYI,  if you do this in a REPL
+> >>> a = foo()
+> >>> type(a)
+> <class 'tuple'>
+>
+> The syntax for `a, b = foo()` is just using Python's unpacking feature, i.e.
+> b, c = (1, 2)
+>
+> So it's all just syntactic sugar around tuples.
+>
+> >
+> > Also ah, I thought we had more instances of multiple return in kunit.py.
+> > Looks like the only other is get_source_tree_ops_from_qemu_config().
+> > isolate_ktap_output() technically shows this off as well, but via yields.
+> >
+> > >
+> > > Thoughts?
 
-        tglx
+Personally, I think the change as is.

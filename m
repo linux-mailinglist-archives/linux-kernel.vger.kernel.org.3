@@ -2,72 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EF249CF00
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E747849CF04
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:56:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbiAZPzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiAZPzJ (ORCPT
+        id S233018AbiAZP4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:56:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46189 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231444AbiAZP4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:55:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86D8C06161C;
-        Wed, 26 Jan 2022 07:55:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C6C7B81EFB;
-        Wed, 26 Jan 2022 15:55:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB77AC340E3;
-        Wed, 26 Jan 2022 15:55:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643212507;
-        bh=X5P7SypHxAAfJ47P91nn/OKaN+5VlziSqogExTqXlTg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J54nB+BdimL640xPgpt9D+WXeL1/7axgnjfCVyoLTbv5dw5nCraemz2kTli0+Rxv3
-         TfXuNs/KozWx3J4uFI/t3RCu7mXARI195wwzc2/hWILG2348nJAMqsfsPp8GtyloHi
-         DvRIRMZ7LT1xhDGKrtvYnpPgOSSQnDOqiy+AjTFE7s/uSr1S8d9GNGL3T6PutoM/MP
-         e8nS2LoLCTjayBdDl0/f3pqNnXD4NtbQE3m48oE4R7lvm+RCPYRiWuaqwKyswLK7h9
-         COxhLA+bf0Nrghs8qgoLNeITA1BZMbDXgqcsx/pEIJMAaGZNdluC+b951WdTU9NZQQ
-         sdQpnB1qVwafA==
-Date:   Wed, 26 Jan 2022 07:55:06 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "huangguangbin (A)" <huangguangbin2@huawei.com>
-Cc:     <davem@davemloft.net>, <wangjie125@huawei.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <chenhao288@hisilicon.com>
-Subject: Re: [RESEND PATCH net-next 1/2] net: hns3: add support for TX push
- mode
-Message-ID: <20220126075506.0d36076b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <83c5ef91-59c0-aa54-b698-9f069a8d8280@huawei.com>
-References: <20220125072149.56604-1-huangguangbin2@huawei.com>
-        <20220125072149.56604-2-huangguangbin2@huawei.com>
-        <20220125195038.6a07b3c4@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-        <83c5ef91-59c0-aa54-b698-9f069a8d8280@huawei.com>
+        Wed, 26 Jan 2022 10:56:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643212565;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FJWfgd90wDJ2caykgoOLYgRtS2Ouj0kY/I7mDEGleaM=;
+        b=PFsO1Nw9B3Y7WPti18QPRwchp+u2QqgBxCZ+jQgYvBJzBSSQhtlHRiDN4pEDq548ysySbz
+        bkBf+vcGG7zckPPeVIz4Lc8SaVeF5Ugbl8wleG/3GYN8qlvGXeltv5ZaqNKZllvNPxPAul
+        JvapjCz+KKCFLuKpYpl7CrE5Yvop+/0=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-MvTSPmT-OcWeLw1xVDMh0g-1; Wed, 26 Jan 2022 10:56:03 -0500
+X-MC-Unique: MvTSPmT-OcWeLw1xVDMh0g-1
+Received: by mail-wr1-f72.google.com with SMTP id s25-20020adfa299000000b001d8d032255fso4461211wra.14
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:56:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=FJWfgd90wDJ2caykgoOLYgRtS2Ouj0kY/I7mDEGleaM=;
+        b=h5/Dm7RNnbfPf44WvRtLZka16IzCIumeqVPWlJNCRE3juXdkR5FbPkeAWM/yg9iWQB
+         vaujmFfkTtqCu7rilRPv2e9t6atytXUwN6Cf5eDZKeVheHvT2ma275wIOMCY0dYmwNSV
+         iRfMVd1FDZq2alSwJRCUyLsLK5JyI8lQmUug6RsgFtROZeLrX66JfrcSlF2V7aMp0tzq
+         VE7Qnj3W0/ixO5JC1JsLcUu/kXyy9D6DSMHhpx5h40UkqDsL+FqfMLBw1P4z/dJm4mhA
+         Dj0BN8QbB0oyrKGYoHkytpmdjSZUc8Am4Y+BOqjrzdsO587YlLsXZWn5se4SNwvTUJRL
+         SezQ==
+X-Gm-Message-State: AOAM533o0MvPYkbxmFUIVYXB6/YvGhf5ofIa2mPqOrXGyvkoJV6Ur1SV
+        rGh1Eg5QwKXRofkYRVpahtizwbRNONhSENO7SZ2P+BN/EP/Wan1ogMiF32RWEj5wRcADE/pJ2Cj
+        XfN51VLCQ8yGnHdLmnInfqJ/iHKiG3s10Lgy3mNXZQwq2GTxE0n0Vf7RGA3NZ5iQiXX6peTUYPD
+        Qo
+X-Received: by 2002:a05:600c:3551:: with SMTP id i17mr7941102wmq.21.1643212562531;
+        Wed, 26 Jan 2022 07:56:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwRQ8DNnI8KrRxxFt7FdCM/y7wG2icqG9UafMU81NHIVWpIdY0LeJq8CZHEpbDd1boleaNUkA==
+X-Received: by 2002:a05:600c:3551:: with SMTP id i17mr7941071wmq.21.1643212562161;
+        Wed, 26 Jan 2022 07:56:02 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id l15sm3328294wmh.6.2022.01.26.07.56.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 07:56:01 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: nVMX: WARN on any attempt to allocate shadow VMCS
+ for vmcs02
+In-Reply-To: <20220125220527.2093146-1-seanjc@google.com>
+References: <20220125220527.2093146-1-seanjc@google.com>
+Date:   Wed, 26 Jan 2022 16:56:00 +0100
+Message-ID: <87r18uh4of.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 14:48:30 +0800 huangguangbin (A) wrote:
-> On 2022/1/26 11:50, Jakub Kicinski wrote:
-> > On Tue, 25 Jan 2022 15:21:48 +0800 Guangbin Huang wrote:  
-> >> +	__iowrite64_copy(ring->tqp->mem_base, desc,
-> >> +			 (sizeof(struct hns3_desc) * HNS3_MAX_PUSH_BD_NUM) /
-> >> +			 HNS3_BYTES_PER_64BIT);  
-> > 
-> > Doesn't build, missing closing bracket?
-> > .
-> >   
-> Hi Jakub,
-> Sorry, I didn't notice that net-next has not been merged patch
-> "asm-generic: Add missing brackets for io_stop_wc macro" at
-> https://git.kernel.org/arm64/c/440323b6cf5b.
-> 
-> When that patch can be merged in net-next?
+Sean Christopherson <seanjc@google.com> writes:
 
-Likely by the end of the week.
+> WARN if KVM attempts to allocate a shadow VMCS for vmcs02.  KVM emulates
+> VMCS shadowing but doesn't virtualize it, i.e. KVM should never allocate
+> a "real" shadow VMCS for L2.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/nested.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index f235f77cbc03..92ee0d821a06 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -4851,18 +4851,20 @@ static struct vmcs *alloc_shadow_vmcs(struct kvm_vcpu *vcpu)
+>  	struct loaded_vmcs *loaded_vmcs = vmx->loaded_vmcs;
+>  
+>  	/*
+> -	 * We should allocate a shadow vmcs for vmcs01 only when L1
+> -	 * executes VMXON and free it when L1 executes VMXOFF.
+> -	 * As it is invalid to execute VMXON twice, we shouldn't reach
+> -	 * here when vmcs01 already have an allocated shadow vmcs.
+> +	 * KVM allocates a shadow VMCS only when L1 executes VMXON and frees it
+> +	 * when L1 executes VMXOFF or the vCPU is forced out of nested
+> +	 * operation.  VMXON faults if the CPU is already post-VMXON, so it
+> +	 * should be impossible to already have an allocated shadow VMCS.  KVM
+> +	 * doesn't support virtualization of VMCS shadowing, so vmcs01 should
+> +	 * always be the loaded VMCS.
+>  	 */
+> -	WARN_ON(loaded_vmcs == &vmx->vmcs01 && loaded_vmcs->shadow_vmcs);
+> +	if (WARN_ON(loaded_vmcs != &vmx->vmcs01 || loaded_vmcs->shadow_vmcs))
+> +		return loaded_vmcs->shadow_vmcs;
+
+Stupid question: why do we want to care about 'loaded_vmcs' at all,
+i.e. why can't we hardcode 'vmx->vmcs01' in alloc_shadow_vmcs()? The
+only caller is enter_vmx_operation() and AFAIU 'loaded_vmcs' will always
+be pointing to 'vmx->vmcs01' (as enter_vmx_operation() allocates
+&vmx->nested.vmcs02 so 'loaded_vmcs' can't point there!).
+
+> +
+> +	loaded_vmcs->shadow_vmcs = alloc_vmcs(true);
+> +	if (loaded_vmcs->shadow_vmcs)
+> +		vmcs_clear(loaded_vmcs->shadow_vmcs);
+>  
+> -	if (!loaded_vmcs->shadow_vmcs) {
+> -		loaded_vmcs->shadow_vmcs = alloc_vmcs(true);
+> -		if (loaded_vmcs->shadow_vmcs)
+> -			vmcs_clear(loaded_vmcs->shadow_vmcs);
+> -	}
+>  	return loaded_vmcs->shadow_vmcs;
+>  }
+>  
+>
+> base-commit: edb9e50dbe18394d0fc9d0494f5b6046fc912d33
+
+-- 
+Vitaly
+

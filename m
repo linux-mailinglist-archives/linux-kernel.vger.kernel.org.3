@@ -2,99 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6729149D31C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5222749D31F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiAZUG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 15:06:57 -0500
-Received: from mail-ua1-f47.google.com ([209.85.222.47]:41920 "EHLO
-        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiAZUG4 (ORCPT
+        id S229896AbiAZUHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 15:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229853AbiAZUHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:06:56 -0500
-Received: by mail-ua1-f47.google.com with SMTP id l1so783516uap.8;
-        Wed, 26 Jan 2022 12:06:56 -0800 (PST)
+        Wed, 26 Jan 2022 15:07:38 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F90C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:07:38 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id s16so268420pgs.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:07:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DFPbCzFKgxQWuOxXDy4LqnA2tAk83/d+qYRfzdS9NDo=;
+        b=TP7ylFU44strBzOztNYqY0AiAUjmiqBhnHSVWaVt6Q97YGju/ko9HtELlc96RNzQmk
+         c5GRHSiwHCY2L3QnUZv3HpittI8Tv5XjZ1uwXje7ZZ3ioZcNjM2Wya4p7B3F6pPsGiTI
+         olHecr9ms1I9Ed80tJ6DQNuaU0DMsvwWSB8k1opAy7K+N5YxYNAfZhCHDYL1zjUReiin
+         gs0glcoIN0z1O/FuZTQKDcD5h3tjAfUdmsk99D+P8lW61cksG60aU5Hr6pjw8/5YwyFD
+         M9KacrqevRkUbNjiPhJXREJLJonwvyw38dBnvoajgs5Xi2jBI0gxf5Gfb6Ap9DV2/bGz
+         x/Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JOMO0KZ96VSwI3Fjhw3+4AOK+IYIb4PO2J4HKTLIIaQ=;
-        b=X0XYO/n1DupouvnpqOCFLU2v1pT18GA+bPgigahbiy31gp1FHyJHO51To4WpECZmXj
-         denJBKKYk+r6HNg2b3GmnmXDCPEe2+3dWfZ/Sw+VqqaYGNuhb5nFnjOi4mKDAOidRiIR
-         djlkdBsi0SbtYWYASk8NxrXJvpq+kDrb9DeP0s7V35OI7ubwauydk94c/AzHwT44/oIE
-         bVS2tj56wNjr90Z2gbDcWmzvjhEB+c9EmnNGwSMc+pfdDIB5rje+3h+K3IxcXUGEHT0A
-         p2nQStW8XUrtZbvw09YYr3mQBh1rcAhWeOC5LNq3W9sFWyDYYQwv5rlkRFrcXrZxfJF8
-         XBxw==
-X-Gm-Message-State: AOAM531ke0ZgZIvgpMrdstAGEQu4EDUWm6jnvVa8zexYydNAUxa4ZAQE
-        LFnsR+rKAoe4eZ6CCDSI7mur9MXm/35Cjnax
-X-Google-Smtp-Source: ABdhPJzb70/955t+BXZneTnoeiTOLdgG4GHjinhGygd6Kn7CFyXYeUIiDICYiHS64kuthSy5pCBdBA==
-X-Received: by 2002:a05:6102:510d:: with SMTP id bm13mr327492vsb.51.1643227616092;
-        Wed, 26 Jan 2022 12:06:56 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id b191sm60862vkb.32.2022.01.26.12.06.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 12:06:55 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id p7so803372uao.6;
-        Wed, 26 Jan 2022 12:06:55 -0800 (PST)
-X-Received: by 2002:a67:5f83:: with SMTP id t125mr263175vsb.68.1643227615416;
- Wed, 26 Jan 2022 12:06:55 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DFPbCzFKgxQWuOxXDy4LqnA2tAk83/d+qYRfzdS9NDo=;
+        b=FWoobkLX0B4QbmiL4LnLy+DjkLL16If2peXaMkAC/yR4GZU9z0Cw+UepsA6+OjSakk
+         B4NgAvDwpRZ2UiD1qQbdDjOH7mqDZR8nRo+FukAbm+OLKOypra8eD+wd9PJi/KT8o+vN
+         LxIIbNwFbIHyvzDgXxB5mrKZ5zKt02wq0tuZ95biCjPAsrfVUFb1f7EeqAbFA1EQTSC5
+         zpwLb8K+OA9YFS0j3uallt+oIvH9Uho1qaW6ukCKYlCGBwzhMtXDhljnv4cKo19IDrqo
+         ChTcUlowK7rZb71yAdkXOJQqEGtemZ6J+UwvCy7RVXyQEpWb0i8TFEZiaZWDeFwqQa1o
+         Bzhw==
+X-Gm-Message-State: AOAM533AVMUZlyJadGM5fm42A8vxJWcvDXwgnwn1MJkOeoqsNgDh+vlx
+        HbNP7BYluYdKPGYpUA9fEC2Srg==
+X-Google-Smtp-Source: ABdhPJw3PkdqBDJWONWWZfBkpDUrnMNOkcHKBvNPxcp8RFeoeqA9FCCpVA61RqaqORBl8dSzqaamHQ==
+X-Received: by 2002:a63:cc05:: with SMTP id x5mr378850pgf.163.1643227657367;
+        Wed, 26 Jan 2022 12:07:37 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f15sm2811295pfn.19.2022.01.26.12.07.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 12:07:36 -0800 (PST)
+Date:   Wed, 26 Jan 2022 20:07:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     syzbot <syzbot+ead0473557070d5432cd@syzkaller.appspotmail.com>
+Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jarkko@kernel.org, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-sgx@vger.kernel.org, mingo@redhat.com, pbonzini@redhat.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [syzbot] memory leak in kvm_vcpu_ioctl_set_cpuid2
+Message-ID: <YfGqBUYWj6nBxntP@google.com>
+References: <000000000000be3e4505d681aa17@google.com>
 MIME-Version: 1.0
-References: <cover.1639744468.git.geert@linux-m68k.org> <4f409ac939e260a4657a0e6e6518ef8736527822.1639744468.git.geert@linux-m68k.org>
- <CAAhSdy3g9WsBmQk7KOgdVNSw9qUouxF2i==q9M3WQq3iabXv7Q@mail.gmail.com> <CAL_Jsq++-Sp45vna5-WhPsnrxp1_J1krrBUPgd2y3xkp5=sTSw@mail.gmail.com>
-In-Reply-To: <CAL_Jsq++-Sp45vna5-WhPsnrxp1_J1krrBUPgd2y3xkp5=sTSw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 26 Jan 2022 21:06:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXuM4wJKC7TgNd7VbZJ1xM0xBgB4os6S0WXpJUdsmxK4A@mail.gmail.com>
-Message-ID: <CAMuHMdXuM4wJKC7TgNd7VbZJ1xM0xBgB4os6S0WXpJUdsmxK4A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: timer: sifive,clint: Fix number of interrupts
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Anup Patel <anup@brainfault.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000be3e4505d681aa17@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Wed, Jan 26, 2022, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    0809edbae347 Merge tag 'devicetree-fixes-for-5.17-1' of gi..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17982967b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=cc8d6c95ce1d56de
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ead0473557070d5432cd
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1402f91fb00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ba591fb00000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+ead0473557070d5432cd@syzkaller.appspotmail.com
 
-On Wed, Jan 26, 2022 at 8:37 PM Rob Herring <robh+dt@kernel.org> wrote:
-> On Fri, Dec 17, 2021 at 6:48 AM Anup Patel <anup@brainfault.org> wrote:
-> > On Fri, Dec 17, 2021 at 6:08 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > The number of interrupts lacks an upper bound, thus assuming one,
-> > > causing properly grouped "interrupts-extended" properties to be flagged
-> > > as an error by "make dtbs_check".
-> > >
-> > > Fix this by adding the missing "maxItems".  As the architectural maximum
-> > > is 4095 interrupts, using that as the limit would be unpractical.  Hence
-> > > limit it to 10 interrupts (two interrupts for a system management core,
-> > > and two interrupts per core for other cores).  This should be sufficient
-> > > for now, and the limit can always be increased when the need arises.
-> >
-> > Same comment as the PLIC DT binding patch.
-> >
-> > The "maxItems" should represent CLINT spec constraints so
-> > please don't add any synthetic value here.
->
-> I agree.
->
-> Geert, are you going to respin these?
-
-Sure, will do, now we have an agreement.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+#syz fix: KVM: x86: Free kvm_cpuid_entry2 array on post-KVM_RUN KVM_SET_CPUID{,2}

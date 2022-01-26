@@ -2,191 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFECD49D414
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E05E49D417
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiAZVFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbiAZVFC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:05:02 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1550FC061753
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:04:59 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id r7so503060wmq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:04:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7wnW9cjljKpRIDwPHBIabEh75SAX6Ok5P1VkPlwmXoE=;
-        b=TNqd45zsvDFw4xElwZBPy2f9it1IFu9BRfjwTsvfLFoaZXD9u+yRtoMV2UkKGWOoOv
-         E1Qny8J9CRjBw6Cr7IKPVs+8bKGAoARjBUGPBLrO4I8/NWz/9Vwcrp+g31DN7ivXkhX3
-         VmFE5VWzJJoWG/PzasdyB8JX5ivSIxzvHPBmrUKrFWPOAQ1e6FJWVK+RC2La47vVgfQo
-         F81ZQY6vO2sYi5XtdF/yttCK1TlEVY1R0qblahqZ+rBobIA8dW8bV1NwDgDv1BOFqbah
-         /NPcNpNeGS3DiPJCOBK9e1HTOPpKu3rCE5Nqam3arJuVSRp3rZk9qa0JV4veDLoWcdEu
-         wTaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7wnW9cjljKpRIDwPHBIabEh75SAX6Ok5P1VkPlwmXoE=;
-        b=LoyiMhXl3vviGCpYzu8zCkgsWsXRE+63Wpo6B3UmpTpZjWyGSYKFrcgb/wPT/NoOKE
-         75OeigagqM996LUTB71MwkrqNBx4KHpTvMc2v4hzROiE8CL9RAZi+Yz38dlJEw44JUWM
-         YdgKFTIofofU+S8zlxvLk9z5yqcA2H2E19Lf/JbajrE9fRJ+TInm+zzVOaUXSifA9afs
-         gi7nYNixpDOymbFI3IBqdRlPNDnB+hDgus0O0qJdHTICc6DG2NGUK3FqY8nczPJ5NLsT
-         3jOgCH1ysJ02C9H1wir1aRUE0C+woFP+MtoZyZnyZ8BC3SAuBH3YNVNTs0EbEtvSlixl
-         lTMQ==
-X-Gm-Message-State: AOAM531fSDpE2A1hDbBCXrEkQOHNobQCAHnXEFO+ph5vwESx1YvkP4r+
-        XTUExeqn8NIgxCXsWJ9rXMHrvw==
-X-Google-Smtp-Source: ABdhPJwBVnGfoDjyVtqqAIN/rwr6e1id+stGs09Zp6t39Zlb9GsJfHIPx9+9GrF60q+ST5Edgezktg==
-X-Received: by 2002:a7b:c4c5:: with SMTP id g5mr428047wmk.139.1643231097636;
-        Wed, 26 Jan 2022 13:04:57 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id j19sm4948611wmq.17.2022.01.26.13.04.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 13:04:57 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     davem@davemloft.net, herbert@gondor.apana.org.au,
-        jernej.skrabec@gmail.com, mripard@kernel.org, wens@csie.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-sunxi@googlegroups.com, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH 8/8] crypto: sun8i-ss: handle requests if last block is not modulo 64
-Date:   Wed, 26 Jan 2022 21:04:41 +0000
-Message-Id: <20220126210441.3661782-9-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220126210441.3661782-1-clabbe@baylibre.com>
-References: <20220126210441.3661782-1-clabbe@baylibre.com>
+        id S231835AbiAZVFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 16:05:32 -0500
+Received: from mga14.intel.com ([192.55.52.115]:27638 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231694AbiAZVFa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 16:05:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643231130; x=1674767130;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=10s7JCzkmDr5frcmvWxL9SK3VMQGPrm/FbqaqhQ5Y8E=;
+  b=FjivUBlNMk9lfXbOeCGLTLc8xCgY3QUQkMoPTi+HV0w+OZIiaeS1OS03
+   FPchhy/vGOpiBZohfW9DbC1u0ov+06Fj2BqmfdJ8LDSsK7oN5I4a3jNZy
+   zo+xZ9L5swhPYZJfMDI2LHIx3a6IJbumGixNMEZNTMn/Jbo8eaZ8zNhFg
+   ov7wBLkZwBbAkQ920NwldrzN+T6HDOnWWMECCoUT7hM/qc4lJIBNKBNa3
+   /oIx9FO75IqNv9vrxwwtJGUxX0gKRwWIRJM9IfvKWf+fKUxj90yD4Uq0F
+   IxUF2aaQIZCeHJtdIotA3JYEYNhYe9hQhtpjnTCirlauEcLoRthJC4JG2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246870366"
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="246870366"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 13:05:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="696371048"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 26 Jan 2022 13:05:17 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCpTg-000Lf3-Uc; Wed, 26 Jan 2022 21:05:16 +0000
+Date:   Thu, 27 Jan 2022 05:04:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        ekangupt@qti.qualcomm.com, bkumar@qti.qualcomm.com,
+        linux-kernel@vger.kernel.org, srini@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        Jeya R <jeyr@codeaurora.org>
+Subject: Re: [PATCH v3 03/12] misc: fastrpc: Add support to get DSP
+ capabilities
+Message-ID: <202201270435.PxFnOyYn-lkp@intel.com>
+References: <20220126135304.16340-4-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126135304.16340-4-srinivas.kandagatla@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current sun8i-ss handle only requests with all SG length being
-modulo 64.
-But the last SG could be always handled by copying it on the pad buffer.
+Hi Srinivas,
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on robh/for-next linux/master linus/master v5.17-rc1 next-20220125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Srinivas-Kandagatla/misc-fastrpc-Add-missing-DSP-FastRPC-features/20220126-215705
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 515a2f507491e7c3818e74ef4f4e088c1fecb190
+config: nds32-randconfig-r014-20220126 (https://download.01.org/0day-ci/archive/20220127/202201270435.PxFnOyYn-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/a22465bb4904facca8fe21d23f74410cf6cb1fd0
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Srinivas-Kandagatla/misc-fastrpc-Add-missing-DSP-FastRPC-features/20220126-215705
+        git checkout a22465bb4904facca8fe21d23f74410cf6cb1fd0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/misc/fastrpc.c: In function 'fastrpc_req_mem_unmap_impl':
+   drivers/misc/fastrpc.c:1646:23: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+    1646 |         args[0].ptr = (u64) &req_msg;
+         |                       ^
+   drivers/misc/fastrpc.c: In function 'fastrpc_req_mem_map':
+   drivers/misc/fastrpc.c:1696:19: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    1696 |         map->va = (void *) req.vaddrin;
+         |                   ^
+   drivers/misc/fastrpc.c:1701:23: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+    1701 |         args[0].ptr = (u64) &req_msg;
+         |                       ^
+   drivers/misc/fastrpc.c:1707:23: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+    1707 |         args[1].ptr = (u64) &pages;
+         |                       ^
+   drivers/misc/fastrpc.c:1710:23: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+    1710 |         args[2].ptr = (u64) &pages;
+         |                       ^
+   drivers/misc/fastrpc.c:1713:23: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+    1713 |         args[3].ptr = (u64) &rsp_msg;
+         |                       ^
+   drivers/misc/fastrpc.c: In function 'fastrpc_get_info_from_kernel.constprop':
+>> drivers/misc/fastrpc.c:1437:1: warning: the frame size of 1080 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+    1437 | }
+         | ^
+
+
+vim +1437 drivers/misc/fastrpc.c
+
+  1400	
+  1401	static int fastrpc_get_info_from_kernel(struct fastrpc_ioctl_capability *cap,
+  1402						struct fastrpc_user *fl)
+  1403	{
+  1404		struct fastrpc_channel_ctx *cctx = fl->cctx;
+  1405		uint32_t attribute_id = cap->attribute_id;
+  1406		uint32_t dsp_attributes[FASTRPC_MAX_DSP_ATTRIBUTES];
+  1407		unsigned long flags;
+  1408		uint32_t domain = cap->domain;
+  1409		int err;
+  1410	
+  1411		spin_lock_irqsave(&cctx->lock, flags);
+  1412		/* check if we already have queried dsp for attributes */
+  1413		if (cctx->valid_attributes) {
+  1414			spin_unlock_irqrestore(&cctx->lock, flags);
+  1415			goto done;
+  1416		}
+  1417		spin_unlock_irqrestore(&cctx->lock, flags);
+  1418	
+  1419		err = fastrpc_get_info_from_dsp(fl, &dsp_attributes[0], FASTRPC_MAX_DSP_ATTRIBUTES);
+  1420		if (err == DSP_UNSUPPORTED_API) {
+  1421			dev_info(&cctx->rpdev->dev,
+  1422				 "Warning: DSP capabilities not supported on domain: %d\n", domain);
+  1423			return -EOPNOTSUPP;
+  1424		} else if (err) {
+  1425			dev_err(&cctx->rpdev->dev, "Error: dsp information is incorrect err: %d\n", err);
+  1426			return err;
+  1427		}
+  1428	
+  1429		spin_lock_irqsave(&cctx->lock, flags);
+  1430		memcpy(cctx->dsp_attributes, dsp_attributes, sizeof(u32) * FASTRPC_MAX_DSP_ATTRIBUTES);
+  1431		cctx->valid_attributes = true;
+  1432		spin_unlock_irqrestore(&cctx->lock, flags);
+  1433	done:
+  1434		cap->capability = cctx->dsp_attributes[attribute_id];
+  1435	
+  1436		return 0;
+> 1437	}
+  1438	
+
 ---
- .../crypto/allwinner/sun8i-ss/sun8i-ss-core.c |  2 +-
- .../crypto/allwinner/sun8i-ss/sun8i-ss-hash.c | 35 ++++++++++++++-----
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h  |  2 ++
- 3 files changed, 29 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-index 084261d7899c..c8c079f3b466 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
-@@ -475,7 +475,7 @@ static int allocate_flows(struct sun8i_ss_dev *ss)
- 		init_completion(&ss->flows[i].complete);
- 
- 		/* the padding could be up to two block. */
--		ss->flows[i].pad = devm_kmalloc(ss->dev, SHA256_BLOCK_SIZE * 2,
-+		ss->flows[i].pad = devm_kmalloc(ss->dev, MAX_PAD_SIZE,
- 						GFP_KERNEL | GFP_DMA);
- 		if (!ss->flows[i].pad)
- 			goto error_engine;
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-index 1aae36d541d8..dd5e4f0fd5ab 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-@@ -13,6 +13,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/scatterlist.h>
- #include <crypto/internal/hash.h>
-+#include <crypto/scatterwalk.h>
- #include <crypto/sha1.h>
- #include <crypto/sha2.h>
- #include <crypto/md5.h>
-@@ -261,6 +262,9 @@ static bool sun8i_ss_hash_need_fallback(struct ahash_request *areq)
- 
- 	if (areq->nbytes == 0)
- 		return true;
-+	if (areq->nbytes >= MAX_PAD_SIZE - 64)
-+		return true;
-+
- 	/* we need to reserve one SG for the padding one */
- 	if (sg_nents(areq->src) > MAX_SG - 1)
- 		return true;
-@@ -269,10 +273,13 @@ static bool sun8i_ss_hash_need_fallback(struct ahash_request *areq)
- 		/* SS can operate hash only on full block size
- 		 * since SS support only MD5,sha1,sha224 and sha256, blocksize
- 		 * is always 64
--		 * TODO: handle request if last SG is not len%64
--		 * but this will need to copy data on a new SG of size=64
- 		 */
--		if (sg->length % 64 || !IS_ALIGNED(sg->offset, sizeof(u32)))
-+		/* Only the last block could be bounced to the pad buffer */
-+		if (sg->length % 64 && sg_next(sg))
-+			return true;
-+		if (!IS_ALIGNED(sg->offset, sizeof(u32)))
-+			return true;
-+		if (sg->length % 4)
- 			return true;
- 		sg = sg_next(sg);
- 	}
-@@ -360,6 +367,7 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
- 		goto theend;
- 	}
- 
-+	j = 0;
- 	len = areq->nbytes;
- 	sg = areq->src;
- 	i = 0;
-@@ -368,12 +376,19 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
- 			sg = sg_next(sg);
- 			continue;
- 		}
--		rctx->t_src[i].addr = sg_dma_address(sg);
- 		todo = min(len, sg_dma_len(sg));
--		rctx->t_src[i].len = todo / 4;
--		len -= todo;
--		rctx->t_dst[i].addr = addr_res;
--		rctx->t_dst[i].len = digestsize / 4;
-+		/* only the last SG could be with a size not modulo64 */
-+		if (todo % 64 == 0) {
-+			rctx->t_src[i].addr = sg_dma_address(sg);
-+			rctx->t_src[i].len = todo / 4;
-+			rctx->t_dst[i].addr = addr_res;
-+			rctx->t_dst[i].len = digestsize / 4;
-+			len -= todo;
-+		} else {
-+			scatterwalk_map_and_copy(bf, sg, 0, todo, 0);
-+			j += todo / 4;
-+			len -= todo;
-+		}
- 		sg = sg_next(sg);
- 		i++;
- 	}
-@@ -383,8 +398,10 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
- 		goto theend;
- 	}
- 
-+	if (j > 0)
-+		i--;
-+
- 	byte_count = areq->nbytes;
--	j = 0;
- 	bf[j++] = cpu_to_le32(0x80);
- 
- 	fill = 64 - (byte_count % 64);
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h
-index f9f089ede934..8c9649bab88c 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss.h
-@@ -82,6 +82,8 @@
- #define PRNG_DATA_SIZE (160 / 8)
- #define PRNG_SEED_SIZE DIV_ROUND_UP(175, 8)
- 
-+#define MAX_PAD_SIZE 4096
-+
- /*
-  * struct ss_clock - Describe clocks used by sun8i-ss
-  * @name:       Name of clock needed by this variant
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

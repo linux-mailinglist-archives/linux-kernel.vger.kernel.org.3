@@ -2,152 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 650F349CBA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DF549CB54
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbiAZNzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:55:47 -0500
-Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:57454 "EHLO
-        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235073AbiAZNzp (ORCPT
+        id S241639AbiAZNuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241631AbiAZNuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:55:45 -0500
-X-Greylist: delayed 362 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jan 2022 08:55:45 EST
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 6CE733F9BA;
-        Wed, 26 Jan 2022 14:49:41 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.1
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 tagged_above=-999 required=6.31
-        tests=[BAYES_00=-1.9, DKIM_SIGNED=0.1, DKIM_VALID=-0.1,
-        DKIM_VALID_AU=-0.1, DKIM_VALID_EF=-0.1, NICE_REPLY_A=-0.001,
-        URIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no
-Authentication-Results: pio-pvt-msa2.bahnhof.se (amavisd-new);
-        dkim=pass (1024-bit key) header.d=shipmail.org
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xgQk0su1ptZ1; Wed, 26 Jan 2022 14:49:40 +0100 (CET)
-Received: by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 86CE53F743;
-        Wed, 26 Jan 2022 14:49:36 +0100 (CET)
-Received: from [192.168.0.209] (unknown [192.55.55.54])
-        by mail1.shipmail.org (Postfix) with ESMTPSA id 20EF83626AA;
-        Wed, 26 Jan 2022 14:49:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
-        t=1643204975; bh=U0ae81JStUzv2mZfy6EFlonFGBJryB1hXGKCUVJCOBg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AZsNI8QVytHYz1kdPeNT7/oqZRZ0HxvQO2D9fLQarz2yybxXXIQSKi+WzGrJaAPxy
-         yxtheH590Ux0scAltsb9k2SGvpflevo8h6qGhH26yJtrkIWuklL/brYPzedJlGRlzY
-         e7w5OUMUp1ZA9ZOQLoCfRMbssoXsdIyGgeiAHgWc=
-Message-ID: <6d0a57e7-daf7-6436-e806-7cc8794c2d50@shipmail.org>
-Date:   Wed, 26 Jan 2022 14:49:26 +0100
+        Wed, 26 Jan 2022 08:50:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ADCC06161C;
+        Wed, 26 Jan 2022 05:50:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EB7F6135E;
+        Wed, 26 Jan 2022 13:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC05BC340E3;
+        Wed, 26 Jan 2022 13:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643205017;
+        bh=9mDXCoeqsja8rXJhe52fHHw9XzlnXG7asjLqfZfZcZ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=taWxoPenqHi5/N2FoZdUABm1Z1CwBtaxeHzAMMuZzVlUoFzlgWwpbCyllHoNeLtXC
+         hsemCiRRI1YHCsuV0C3WAk+ZvS2d3ZDCxxV63in9EWXAA7VjjXRn9Waa8MD0Wx7PxU
+         Qd2Vs0LaylFbY5N3hnuPcy9vI8SMpbgr5jnz49zc=
+Date:   Wed, 26 Jan 2022 14:50:13 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Maciej W. Rozycki" <macro@embecosm.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3] tty: Partially revert the removal of the Cyclades
+ public API
+Message-ID: <YfFRlbKw4cV+ISfk@kroah.com>
+References: <alpine.DEB.2.20.2201260733430.11348@tpp.orcam.me.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [Intel-gfx] [PATCH v5 1/5] drm/i915: add needs_compact_pt flag
-Content-Language: en-US
-To:     Robert Beckett <bob.beckett@collabora.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Matthew Auld <matthew.auld@intel.com>
-References: <20220125193530.3272386-1-bob.beckett@collabora.com>
- <20220125193530.3272386-2-bob.beckett@collabora.com>
-From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
-        <thomas_os@shipmail.org>
-In-Reply-To: <20220125193530.3272386-2-bob.beckett@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.20.2201260733430.11348@tpp.orcam.me.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 1/25/22 20:35, Robert Beckett wrote:
-> From: Ramalingam C <ramalingam.c@intel.com>
->
-> Add a new platform flag, needs_compact_pt, to mark the requirement of
-> compact pt layout support for the ppGTT when using 64K GTT pages.
->
-> With this flag has_64k_pages will only indicate requirement of 64K
-> GTT page sizes or larger for device local memory access.
->
-> Suggested-by: Matthew Auld <matthew.auld@intel.com>
-> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
-> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+On Wed, Jan 26, 2022 at 09:22:54AM +0000, Maciej W. Rozycki wrote:
+> Fix a user API regression introduced with commit f76edd8f7ce0 ("tty: 
+> cyclades, remove this orphan"), which removed a part of the API and 
+> caused compilation errors for user programs using said part, such as 
+> GCC 9 in its libsanitizer component[1]:
+> 
+> .../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:160:10: fatal error: linux/cyclades.h: No such file or directory
+>   160 | #include <linux/cyclades.h>
+>       |          ^~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> make[4]: *** [Makefile:664: sanitizer_platform_limits_posix.lo] Error 1
+> 
+> As the absolute minimum required bring `struct cyclades_monitor' and 
+> ioctl numbers back then so as to make the library build again.  Add a 
+> preprocessor warning as to the obsolescence of the features provided.
+> 
+> References:
+> 
+> [1] GCC PR sanitizer/100379, "cyclades.h is removed from linux kernel 
+>     header files", <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100379>
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@embecosm.com>
+> Fixes: f76edd8f7ce0 ("tty: cyclades, remove this orphan")
+> Cc: stable@vger.kernel.org # v5.13+
 > ---
->   drivers/gpu/drm/i915/i915_drv.h          | 10 +++++++---
->   drivers/gpu/drm/i915/i915_pci.c          |  2 ++
->   drivers/gpu/drm/i915/intel_device_info.h |  1 +
->   3 files changed, 10 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-> index 44c1f98144b4..1258b7779705 100644
-> --- a/drivers/gpu/drm/i915/i915_drv.h
-> +++ b/drivers/gpu/drm/i915/i915_drv.h
-> @@ -1512,12 +1512,16 @@ IS_SUBPLATFORM(const struct drm_i915_private *i915,
->   
->   /*
->    * Set this flag, when platform requires 64K GTT page sizes or larger for
-> - * device local memory access. Also this flag implies that we require or
-> - * at least support the compact PT layout for the ppGTT when using the 64K
-> - * GTT pages.
+> Changes from v2:
+> 
+> - Add #warning directives.
 
-Why do we remove these comment lines?
+Thanks, that looks good, now queued up.
 
-
-> + * device local memory access.
->    */
->   #define HAS_64K_PAGES(dev_priv) (INTEL_INFO(dev_priv)->has_64k_pages)
->   
-> +/* Set this flag when platform doesn't allow both 64k pages and 4k pages in
-
-First line of multi-line comments should be empty.
-
-
-> + * the same PT. this flag means we need to support compact PT layout for the
-> + * ppGTT when using the 64K GTT pages.
-> + */
-> +#define NEEDS_COMPACT_PT(dev_priv) (INTEL_INFO(dev_priv)->needs_compact_pt)
-> +
->   #define HAS_IPC(dev_priv)		 (INTEL_INFO(dev_priv)->display.has_ipc)
->   
->   #define HAS_REGION(i915, i) (INTEL_INFO(i915)->memory_regions & (i))
-> diff --git a/drivers/gpu/drm/i915/i915_pci.c b/drivers/gpu/drm/i915/i915_pci.c
-> index 4081fd50ba9d..799b56569ef5 100644
-> --- a/drivers/gpu/drm/i915/i915_pci.c
-> +++ b/drivers/gpu/drm/i915/i915_pci.c
-> @@ -1028,6 +1028,7 @@ static const struct intel_device_info xehpsdv_info = {
->   	PLATFORM(INTEL_XEHPSDV),
->   	.display = { },
->   	.has_64k_pages = 1,
-> +	.needs_compact_pt = 1,
->   	.platform_engine_mask =
->   		BIT(RCS0) | BIT(BCS0) |
->   		BIT(VECS0) | BIT(VECS1) | BIT(VECS2) | BIT(VECS3) |
-> @@ -1045,6 +1046,7 @@ static const struct intel_device_info dg2_info = {
->   	.media.rel = 55,
->   	PLATFORM(INTEL_DG2),
->   	.has_64k_pages = 1,
-> +	.needs_compact_pt = 1,
->   	.platform_engine_mask =
->   		BIT(RCS0) | BIT(BCS0) |
->   		BIT(VECS0) | BIT(VECS1) |
-> diff --git a/drivers/gpu/drm/i915/intel_device_info.h b/drivers/gpu/drm/i915/intel_device_info.h
-> index 3699b1c539ea..c8aaf646430c 100644
-> --- a/drivers/gpu/drm/i915/intel_device_info.h
-> +++ b/drivers/gpu/drm/i915/intel_device_info.h
-> @@ -130,6 +130,7 @@ enum intel_ppgtt_type {
->   	/* Keep has_* in alphabetical order */ \
->   	func(has_64bit_reloc); \
->   	func(has_64k_pages); \
-> +	func(needs_compact_pt); \
->   	func(gpu_reset_clobbers_display); \
->   	func(has_reset_engine); \
->   	func(has_global_mocs); \
+greg k-h

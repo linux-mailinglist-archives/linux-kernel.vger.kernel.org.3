@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA4649CEE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 956EA49CEF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242731AbiAZPuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:50:15 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57496 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbiAZPuO (ORCPT
+        id S229942AbiAZPwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:52:23 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:35384 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229645AbiAZPwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:50:14 -0500
+        Wed, 26 Jan 2022 10:52:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9871B81EE7;
-        Wed, 26 Jan 2022 15:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 947D5C340E9;
-        Wed, 26 Jan 2022 15:50:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F7D061927
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:52:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 072AEC340E3;
+        Wed, 26 Jan 2022 15:52:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643212211;
-        bh=Fpd60YgLZ5CrmUXnEPeEhJTefMoMXl7hPe50yHSyO6Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=P3Qwa8v9nv++xBg+67ybzPQUXUFEKODU8jTiLkmEbWKQrOVnVYMZ6o2oPcXsPQwbZ
-         sQwJTmosf0Vp9GXjBzA9tPPDLktARYJjsl/a8uKbzSv0nJjsgfwXMCUcCKfv0gNdER
-         zaNKwRlkmfUJR4fp/HJkpn3wPHWSOHMqAcYdvemWQE834t4aB9ZgqBPEiBuCNGRx5r
-         Q/U8Xgbe1Re0SjEYxni/2yM9HiCFiAXhq50RJQoXco7GOgodpCQoLgiw451oqcDhtH
-         4KKUWTcWoLlkonWtL6wjqpit1aw3ghKqqtdh9uVB6JT5Z/T3i862NzsBYjPFlkRP5P
-         PBKRkFXPa+7mA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 777C1E5D087;
-        Wed, 26 Jan 2022 15:50:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1643212341;
+        bh=pDJ1n2o3tA01FOf1seMcoBl990OFnzTSM1jb7kUBkmA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kHwxw5x54kqArq5LM7anF8uiy/fNXEnjfAb89CRrPUn6hJeoCu94e34Js1XjBmZw1
+         Zcr6ObjuOPHWuqO/nuFZd0IKde8MTHqv6uUgm1fsvU7s+tmTXZx8RcjGgEBfZ2ZIEz
+         Yk+IKeR2PbHBzU754oIf9qifEPI8x6MFOqrhDsR7HBPVScPLEL9IQgJbaV3wYC6iEG
+         5/6F8XDQ2J6vVTLRGU1u9Yj7zmG/tQ9VX/DMPuzObiQ7ftKu346cWX5+zPCYIDEOHF
+         LxQmrHRhQYOWpY6LC+entG4YjvbqUIzaIC4y05Xevc5y+m7ys7ltNciNOuFPdbn45a
+         Or76eHkBXm2RQ==
+Date:   Wed, 26 Jan 2022 07:52:20 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     jwiedmann.dev@gmail.com, Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sameeh Jubran <sameehj@amazon.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: ena: Do not waste napi skb cache
+Message-ID: <20220126075220.3d60981f@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <YfFJuQQBLJRxIJR+@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <20220123115623.94843-1-42.hyeyoo@gmail.com>
+        <YfFJuQQBLJRxIJR+@ip-172-31-19-208.ap-northeast-1.compute.internal>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 0/2] net: lan966x: Fixes for sleep in atomic context
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164321221148.12592.6841652619897496438.git-patchwork-notify@kernel.org>
-Date:   Wed, 26 Jan 2022 15:50:11 +0000
-References: <20220125114816.187124-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220125114816.187124-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
-        f.fainelli@gmail.com, vivien.didelot@gmail.com,
-        vladimir.oltean@nxp.com, andrew@lunn.ch
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue, 25 Jan 2022 12:48:14 +0100 you wrote:
-> This patch series contains 2 fixes for lan966x that is sleeping in atomic
-> context. The first patch fixes the injection of the frames while the second
-> one fixes the updating of the MAC table.
+On Wed, 26 Jan 2022 13:16:41 +0000 Hyeonggon Yoo wrote:
+> By profiling, discovered that ena device driver allocates skb by
+> build_skb() and frees by napi_skb_cache_put(). Because the driver
+> does not use napi skb cache in allocation path, napi skb cache is
+> periodically filled and flushed. This is waste of napi skb cache.
 > 
-> v1->v2:
->  - correct the fix tag in the second patch, it was using the wrong sha.
+> As ena_alloc_skb() is called only in napi, Use napi_build_skb()
+> and napi_alloc_skb() when allocating skb.
 > 
-> [...]
+> This patch was tested on aws a1.metal instance.
+> 
+> [ jwiedmann.dev@gmail.com: Use napi_alloc_skb() instead of
+>   netdev_alloc_skb_ip_align() to keep things consistent. ]
+> 
+> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Here is the summary with links:
-  - [net,v2,1/2] net: lan966x: Fix sleep in atomic context when injecting frames
-    https://git.kernel.org/netdev/net/c/b6ab149654ef
-  - [net,v2,2/2] net: lan966x: Fix sleep in atomic context when updating MAC table
-    https://git.kernel.org/netdev/net/c/77bdaf39f3c8
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+It seems you missed CCing netdev@, you'll need to repost.
+You can keep the ack from Shay.

@@ -2,164 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 843EA49C8E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0830F49C8EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240847AbiAZLm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:42:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58792 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240850AbiAZLmt (ORCPT
+        id S240873AbiAZLpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240867AbiAZLpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:42:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5DE05B81620;
-        Wed, 26 Jan 2022 11:42:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B71D1C340E3;
-        Wed, 26 Jan 2022 11:42:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643197367;
-        bh=t9+X/e4kJrfvP+h2PpV77QbmVxkh7QVcipQpoeJ2Kwg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JQRELume7i1k+Rq1xY8eBFiq0oCnOAccaKsOGV8BOMAfOofEsx5a+1g5FN6Pm9BYg
-         5hDOuB0YaIKpmdD5V4OlKeG+hc1M3bCslNuhFURpO9omiTMFzpF6Qsj0+jR2LZt+sC
-         aHNid9PV/ym0ZjrzYRCEnw1iIKJIOv26vUsVW+Ic=
-Date:   Wed, 26 Jan 2022 12:42:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jack Wang <jack.wang.usish@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
-        Guoqing Jiang <jiangguoqing@kylinos.cn>,
-        Song Liu <song@kernel.org>,
-        Guillaume Morin <guillaume@morinfr.org>
-Subject: Re: [PATCH 5.10 01/25] md: revert io stats accounting
-Message-ID: <YfEztOTIhGjm3Hvs@kroah.com>
-References: <20220114081542.698002137@linuxfoundation.org>
- <20220114081542.746291845@linuxfoundation.org>
- <CA+res+S1GcDzM6hnmar+s1k3ggswURZ+_8BqweifShCTjVJ2aQ@mail.gmail.com>
+        Wed, 26 Jan 2022 06:45:09 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D911C061747
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:45:08 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id x11so16365082plg.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:45:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cPhrS/FGf71tqZJf9nxannjEcaQ4fcOOpUidytEKIP4=;
+        b=h4/ofyTO4FVFqg6jJo130MG3UCm5nxdlXdw6QJnlIQv+p3OClTT0/HZJv6RTSRZg2T
+         WYy9bV9v5NbINmS4YAFvZFgjPDLOTYwljBGALf3qaybQ7JK7+u7iTQWpPT131TJYK3aj
+         qpJhUThqC8Yu+SqcNucRnUsW3F5UXVjX+fYu37/Bhl8te1rAedFq+5gbd+lNrMJ1cUT5
+         yeAndi+31m+WRqG6HuR7zpgO0lsXb3HIPXARTyQ6rdsSrls6V4l7bMSaGV8i6yFYrT9Y
+         RW8sWKxqcjV1vH8N8kise3/GF28L/+TWOSoJ8bz+FXrfwr0VBI1azEN1xS4YsSGJV59H
+         Z7QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cPhrS/FGf71tqZJf9nxannjEcaQ4fcOOpUidytEKIP4=;
+        b=DuGLSQRUAWDrw93R67xZS9QqP1Q0IOT8egFwPRcs3CGBhTd4ur7z1GQYk6wVXzYOzO
+         tROfPbQFgREovEjJh29QIIUcMhh67t1BsNWgv7z7vsvc0wUxVJJqqYa/EqBElyPhHfjh
+         pOifFkGlku8wQs06kk4i9FG23XgcwB8TjQE5ZCqyvnZTN++xgTykkLUIorG8mL4V2/dk
+         UjeOEJhOvvZJzG8TlwqZJLEVnCTJtbULej1v0gF34n07ec+KjBN/o2nwjb0XY9QoJPzH
+         +eE8XLSTUEi/MeDOME8+I5AJiL6JV5OYmu0UykvHBR4ZOlXOjZafBzbt0IaMSYRDaYI0
+         jhXA==
+X-Gm-Message-State: AOAM532qabVJwln07l9c2FpThtRNGYswnNs3iwRFsgj9iWAJCmTf6L9A
+        dCxKj4cPZnMv5Vk8MVP+5QkN7Q==
+X-Google-Smtp-Source: ABdhPJxRqh0aVOXEx6weXjAfHzoenGJ6LcMvV6v7JX2u2rArawi28fGIJCrSkz6WTpc3wAUUSxpeeQ==
+X-Received: by 2002:a17:902:8492:b0:149:7c77:7254 with SMTP id c18-20020a170902849200b001497c777254mr22866016plo.19.1643197507867;
+        Wed, 26 Jan 2022 03:45:07 -0800 (PST)
+Received: from localhost.localdomain ([122.167.221.23])
+        by smtp.gmail.com with ESMTPSA id nn2sm2994976pjb.35.2022.01.26.03.45.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 03:45:07 -0800 (PST)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>
+Cc:     Sandeep Tripathy <milun.tripathy@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Liush <liush@allwinnertech.com>,
+        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvm-riscv@lists.infradead.org
+Subject: [PATCH v10 0/8] RISC-V CPU Idle Support
+Date:   Wed, 26 Jan 2022 17:14:44 +0530
+Message-Id: <20220126114452.692512-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+res+S1GcDzM6hnmar+s1k3ggswURZ+_8BqweifShCTjVJ2aQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 11:09:46AM +0100, Jack Wang wrote:
-> Hi,
-> 
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> 于2022年1月14日周五 19:57写道：
-> >
-> > From: Guoqing Jiang <jgq516@gmail.com>
-> >
-> > commit ad3fc798800fb7ca04c1dfc439dba946818048d8 upstream.
-> >
-> > The commit 41d2d848e5c0 ("md: improve io stats accounting") could cause
-> > double fault problem per the report [1], and also it is not correct to
-> > change ->bi_end_io if md don't own it, so let's revert it.
-> >
-> > And io stats accounting will be replemented in later commits.
-> >
-> > [1]. https://lore.kernel.org/linux-raid/3bf04253-3fad-434a-63a7-20214e38cf26@gmail.com/T/#t
-> >
-> > Fixes: 41d2d848e5c0 ("md: improve io stats accounting")
-> > Signed-off-by: Guoqing Jiang <jiangguoqing@kylinos.cn>
-> > Signed-off-by: Song Liu <song@kernel.org>
-> > [GM: backport to 5.10-stable]
-> > Signed-off-by: Guillaume Morin <guillaume@morinfr.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  drivers/md/md.c |   57 +++++++++++---------------------------------------------
-> >  drivers/md/md.h |    1
-> >  2 files changed, 12 insertions(+), 46 deletions(-)
-> >
-> > --- a/drivers/md/md.c
-> > +++ b/drivers/md/md.c
-> > @@ -459,34 +459,12 @@ check_suspended:
-> >  }
-> >  EXPORT_SYMBOL(md_handle_request);
-> >
-> > -struct md_io {
-> > -       struct mddev *mddev;
-> > -       bio_end_io_t *orig_bi_end_io;
-> > -       void *orig_bi_private;
-> > -       unsigned long start_time;
-> > -       struct hd_struct *part;
-> > -};
-> > -
-> > -static void md_end_io(struct bio *bio)
-> > -{
-> > -       struct md_io *md_io = bio->bi_private;
-> > -       struct mddev *mddev = md_io->mddev;
-> > -
-> > -       part_end_io_acct(md_io->part, bio, md_io->start_time);
-> > -
-> > -       bio->bi_end_io = md_io->orig_bi_end_io;
-> > -       bio->bi_private = md_io->orig_bi_private;
-> > -
-> > -       mempool_free(md_io, &mddev->md_io_pool);
-> > -
-> > -       if (bio->bi_end_io)
-> > -               bio->bi_end_io(bio);
-> > -}
-> > -
-> >  static blk_qc_t md_submit_bio(struct bio *bio)
-> >  {
-> >         const int rw = bio_data_dir(bio);
-> > +       const int sgrp = op_stat_group(bio_op(bio));
-> >         struct mddev *mddev = bio->bi_disk->private_data;
-> > +       unsigned int sectors;
-> >
-> >         if (mddev == NULL || mddev->pers == NULL) {
-> >                 bio_io_error(bio);
-> > @@ -507,26 +485,21 @@ static blk_qc_t md_submit_bio(struct bio
-> >                 return BLK_QC_T_NONE;
-> >         }
-> >
-> > -       if (bio->bi_end_io != md_end_io) {
-> > -               struct md_io *md_io;
-> > -
-> > -               md_io = mempool_alloc(&mddev->md_io_pool, GFP_NOIO);
-> > -               md_io->mddev = mddev;
-> > -               md_io->orig_bi_end_io = bio->bi_end_io;
-> > -               md_io->orig_bi_private = bio->bi_private;
-> > -
-> > -               bio->bi_end_io = md_end_io;
-> > -               bio->bi_private = md_io;
-> > -
-> > -               md_io->start_time = part_start_io_acct(mddev->gendisk,
-> > -                                                      &md_io->part, bio);
-> > -       }
-> > -
-> > +       /*
-> > +        * save the sectors now since our bio can
-> > +        * go away inside make_request
-> > +        */
-> > +       sectors = bio_sectors(bio);
-> This code snip is not inside the original patch, and it's not in
-> latest upstream too.
-> >         /* bio could be mergeable after passing to underlayer */
-> >         bio->bi_opf &= ~REQ_NOMERGE;
-> >
-> >         md_handle_request(mddev, bio);
-> >
-> > +       part_stat_lock();
-> > +       part_stat_inc(&mddev->gendisk->part0, ios[sgrp]);
-> > +       part_stat_add(&mddev->gendisk->part0, sectors[sgrp], sectors);
-> > +       part_stat_unlock();
-> > +
-> same here, this code snip is not inside the original patch, and it's
-> not in latest upstream too.
+From: Anup Patel <anup.patel@wdc.com>
 
-Is it a problem?
+This series adds RISC-V CPU Idle support using SBI HSM suspend function.
+The RISC-V SBI CPU idle driver added by this series is highly inspired
+from the ARM PSCI CPU idle driver.
 
-> I think would be good keep it as the upstream version.
+At high-level, this series includes the following changes:
+1) Preparatory arch/riscv patches (Patches 1 to 3)
+2) Defines for RISC-V SBI HSM suspend (Patch 4)
+3) Preparatory patch to share code between RISC-V SBI CPU idle driver
+   and ARM PSCI CPU idle driver (Patch 5)
+4) RISC-V SBI CPU idle driver and related DT bindings (Patches 6 to 7)
 
-Can you send a revert of this commit (it is in 5.10.92), and a backport
-of the correct fix?
+These patches can be found in riscv_sbi_hsm_suspend_v10 branch of
+https://github.com/avpatel/linux.git
 
-thanks,
+Special thanks Sandeep Tripathy for providing early feeback on SBI HSM
+support in all above projects (RISC-V SBI specification, OpenSBI, and
+Linux RISC-V).
 
-greg k-h
+Changes since v9:
+ - Rebased on Linux-5.17-rc1
+
+Changes since v8:
+ - Rebased on Linux-5.15-rc5
+ - Fixed DT schema check errors in PATCH7
+
+Changes since v7:
+ - Rebased on Linux-5.15-rc3
+ - Renamed cpuidle-sbi.c to cpuidle-riscv-sbi.c in PATCH6
+
+Changes since v6:
+ - Fixed error reported by "make DT_CHECKER_FLAGS=-m dt_binding_check"
+
+Changes since v5:
+ - Rebased on Linux-5.13-rc5
+ - Removed unnecessary exports from PATCH5
+ - Removed stray ";" from PATCH5
+ - Moved sbi_cpuidle_pd_power_off() under "#ifdef CONFIG_DT_IDLE_GENPD"
+   in PATCH6
+
+Changes since v4:
+ - Rebased on Linux-5.13-rc2
+ - Renamed all dt_idle_genpd functions to have "dt_idle_" prefix
+ - Added MAINTAINERS file entry for dt_idle_genpd
+
+Changes since v3:
+ - Rebased on Linux-5.13-rc2
+ - Fixed __cpu_resume_enter() which was broken due to XIP kernel support
+ - Removed "struct dt_idle_genpd_ops" abstraction which simplifies code
+   sharing between ARM PSCI and RISC-V SBI drivers in PATCH5
+
+Changes since v2:
+ - Rebased on Linux-5.12-rc3
+ - Updated PATCH7 to add common DT bindings for both ARM and RISC-V
+   idle states
+ - Added "additionalProperties = false" for both idle-states node and
+   child nodes in PATCH7
+
+Changes since v1:
+ - Fixex minor typo in PATCH1
+ - Use just "idle-states" as DT node name for CPU idle states
+ - Added documentation for "cpu-idle-states" DT property in
+   devicetree/bindings/riscv/cpus.yaml
+ - Added documentation for "riscv,sbi-suspend-param" DT property in
+   devicetree/bindings/riscv/idle-states.yaml
+
+Anup Patel (8):
+  RISC-V: Enable CPU_IDLE drivers
+  RISC-V: Rename relocate() and make it global
+  RISC-V: Add arch functions for non-retentive suspend entry/exit
+  RISC-V: Add SBI HSM suspend related defines
+  cpuidle: Factor-out power domain related code from PSCI domain driver
+  cpuidle: Add RISC-V SBI CPU idle driver
+  dt-bindings: Add common bindings for ARM and RISC-V idle states
+  RISC-V: Enable RISC-V SBI CPU Idle driver for QEMU virt machine
+
+ .../bindings/arm/msm/qcom,idle-state.txt      |   2 +-
+ .../devicetree/bindings/arm/psci.yaml         |   2 +-
+ .../bindings/{arm => cpu}/idle-states.yaml    | 228 ++++++-
+ .../devicetree/bindings/riscv/cpus.yaml       |   6 +
+ MAINTAINERS                                   |  14 +
+ arch/riscv/Kconfig                            |   7 +
+ arch/riscv/Kconfig.socs                       |   3 +
+ arch/riscv/configs/defconfig                  |   2 +
+ arch/riscv/configs/rv32_defconfig             |   2 +
+ arch/riscv/include/asm/asm.h                  |  27 +
+ arch/riscv/include/asm/cpuidle.h              |  24 +
+ arch/riscv/include/asm/sbi.h                  |  27 +-
+ arch/riscv/include/asm/suspend.h              |  36 +
+ arch/riscv/kernel/Makefile                    |   2 +
+ arch/riscv/kernel/asm-offsets.c               |   3 +
+ arch/riscv/kernel/cpu_ops_sbi.c               |   2 +-
+ arch/riscv/kernel/head.S                      |  28 +-
+ arch/riscv/kernel/process.c                   |   3 +-
+ arch/riscv/kernel/suspend.c                   |  87 +++
+ arch/riscv/kernel/suspend_entry.S             | 124 ++++
+ arch/riscv/kvm/vcpu_sbi_hsm.c                 |   4 +-
+ drivers/cpuidle/Kconfig                       |   9 +
+ drivers/cpuidle/Kconfig.arm                   |   1 +
+ drivers/cpuidle/Kconfig.riscv                 |  15 +
+ drivers/cpuidle/Makefile                      |   5 +
+ drivers/cpuidle/cpuidle-psci-domain.c         | 138 +---
+ drivers/cpuidle/cpuidle-psci.h                |  15 +-
+ drivers/cpuidle/cpuidle-riscv-sbi.c           | 627 ++++++++++++++++++
+ drivers/cpuidle/dt_idle_genpd.c               | 178 +++++
+ drivers/cpuidle/dt_idle_genpd.h               |  50 ++
+ 30 files changed, 1484 insertions(+), 187 deletions(-)
+ rename Documentation/devicetree/bindings/{arm => cpu}/idle-states.yaml (74%)
+ create mode 100644 arch/riscv/include/asm/cpuidle.h
+ create mode 100644 arch/riscv/include/asm/suspend.h
+ create mode 100644 arch/riscv/kernel/suspend.c
+ create mode 100644 arch/riscv/kernel/suspend_entry.S
+ create mode 100644 drivers/cpuidle/Kconfig.riscv
+ create mode 100644 drivers/cpuidle/cpuidle-riscv-sbi.c
+ create mode 100644 drivers/cpuidle/dt_idle_genpd.c
+ create mode 100644 drivers/cpuidle/dt_idle_genpd.h
+
+-- 
+2.25.1
+

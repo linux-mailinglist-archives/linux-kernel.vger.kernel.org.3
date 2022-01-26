@@ -2,397 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1C249C0F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 02:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C57C49C0FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236075AbiAZB7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 20:59:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S236089AbiAZCAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 21:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236062AbiAZB7v (ORCPT
+        with ESMTP id S236062AbiAZCAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 20:59:51 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B5BC06161C;
-        Tue, 25 Jan 2022 17:59:51 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id u18so52231554edt.6;
-        Tue, 25 Jan 2022 17:59:51 -0800 (PST)
+        Tue, 25 Jan 2022 21:00:03 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC55C06161C;
+        Tue, 25 Jan 2022 18:00:02 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id ka4so35078863ejc.11;
+        Tue, 25 Jan 2022 18:00:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=w7hJjtvNASRFLxoeYOzZBp+osaqL3whhxo0R5dd+2Po=;
-        b=qWJ3dlraZZZZKWwdynj/Z8dMyQqrXGPccwct9B5ugsReSyhJDEF1R21LfyXKpzI1o8
-         59QYHThcQ6GkiXmak2RbaFozBF+W29b5LRNce0J83c87qIcfMvNl1fpH9iH7VJtLwVGb
-         7PwyW8QbtulcOtNmzHDjkuFhpaLoO/sZQhUjGfzykwHKjKrbPRSF92ZMWSIBq32w8S5y
-         Oh3qvDVoXRNDWJD+igEg+Gzj/XszV1Vk/Ed3R2JbwrQVZYosnjfvLt1gO/oRs1wem5FN
-         wsaOuIH3/Y+vaqexB4SceJtrOPXkl2+GC7eyLPZ/pd30eqQB3/d5zcxvwR7rwIZm+0ro
-         peLg==
+         :cc;
+        bh=OIxx3iQtjStWTge44Z0CRhAXHv5mHq+/z5LMRW7mWGg=;
+        b=Z7ndSk4tMON014Lxu6B99CfSgMRJIm7a/80te6pgHxocjJy8/Xe25+3E2lbYeRQb2A
+         bDFh3FKaoH6tKpBrZfZqlnk8l1yI0rRWj2z9IxV8t4nlIuICqPSUtpBvML+X0Zh7CvY0
+         AlklNhPc61rLf/H5S/D0LtiIzzmiBIP2VABakOKi5GvgNBvUI+gZAjqvvzxa50nc4GDA
+         PKqWKodhnfRlNY51Yz3itn1xA0SiNdzkQqXITr81EdhVx9cECw45/3pFg6EN50IYF64s
+         KDCM7CJyK5A3TqkaeJg9CRXocBhsDq9VXnQBUjMbdo5o+kfgWXOkMLL0hfwMT7lUW8m9
+         XFsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=w7hJjtvNASRFLxoeYOzZBp+osaqL3whhxo0R5dd+2Po=;
-        b=oUGwhxLsAuxVDp2tziv8RETAW8z2UdR8bMxxHXdiIkdRfIv45LHPsQw+rdHcpQVFir
-         Wjf4mhjIJuStu4kJvwCDZ9K4XKUkacCw7NDWQPtL8NF/6ZTzWPT8AiM2VNrGRytE2R80
-         1MVOhA6yzyiIwWkVvHO7w2/dqmYdzOaobEpFIPSD6utDcuPARB8/0gJxm+EDwGD/i6rt
-         z46le0mX/HMGabl4B8drrb4vsh3OOgi/84+OTZrRtGCyNzCz0xzPFOLOqxUbmrOKlqRc
-         u/IIXFJdQGP8zJU6tpeeawxbkDq6FMMx6wOKutxDMqSmAe/eVRXKcpwrVVlmZCDMsnvc
-         UBFQ==
-X-Gm-Message-State: AOAM533TpvemLGlDATVHuWnQvE5uUx+WOp19joGPUdbj2L4UC5aerPbu
-        YL7i9ojnGCL4zmgREqnlNpvgZyyL832nd7v6VvQm9Z3dv63EIA==
-X-Google-Smtp-Source: ABdhPJzT1rpmfKi6ut849uVmvRAwzqMtjP7wdhUzXMFbY/iMYnh2Tm3HDul7oV1XgNvAl9dQTh/3gftRqig8iT/wyX0=
-X-Received: by 2002:aa7:c989:: with SMTP id c9mr22618647edt.285.1643162389635;
- Tue, 25 Jan 2022 17:59:49 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=OIxx3iQtjStWTge44Z0CRhAXHv5mHq+/z5LMRW7mWGg=;
+        b=0dkfqDHM1qaZxKkDCYKSu21zimq9l7+pyyWMeZZ6DBL+02k8g5ZL7+uzFbI5qRNS9p
+         ALYqGypdf+SU2LbKKSiysmANQW+qh/NnaBbRcRxlX9K7BPRRl9zRPFSOF9VkH1A5CdUT
+         00ccfqSRlBENltWNGF3tf0yP0KKwtwIJHwG9GRwKXla+muWj988MWzzjWwAuHjz99jLw
+         hZ0U47ocOmVayCe6hB/bS9LgAgXauNjVMc9Mim6TfM4F/dYWgFJmAOihh35A+8w8fx86
+         2CMZ/BeD+WmXl0OJzSIenMSkFK8LXn9WIN3nb1c/MZE4EuFt4Azw4jCsvIA2o5hvvPw5
+         yZvg==
+X-Gm-Message-State: AOAM530IOHsBUbMNpQENZfYVjgDmpMuXCSFIXWUl7JaiSoLa3AleES3s
+        Ct+icUjhtIlJRO9/SGW+0yV5oUCVH3/dIlesKoM=
+X-Google-Smtp-Source: ABdhPJzIPsNTaPjuElYP/QP+Ncqs8AT2YKD8fjHgkaI4UCR9K7I6M5w+41IPfDGNlbTUNL0CIFxIccQPMpT1LYtptn8=
+X-Received: by 2002:a17:906:6015:: with SMTP id o21mr18763086ejj.637.1643162401047;
+ Tue, 25 Jan 2022 18:00:01 -0800 (PST)
 MIME-Version: 1.0
-References: <d744e653-5e8f-b874-6991-3005e6b8afd4@molgen.mpg.de>
- <20220118172904.GG947480@paulmck-ThinkPad-P17-Gen-1> <20220118234656.GA3120763@paulmck-ThinkPad-P17-Gen-1>
- <CAABZP2yffDyg31smcCyqENFBvQPfmFCT_YwDM_DJ=S-3rjxKuQ@mail.gmail.com>
- <20220119044649.GL947480@paulmck-ThinkPad-P17-Gen-1> <20220119182143.GA2183703@paulmck-ThinkPad-P17-Gen-1>
- <CAABZP2x-esy+9R4iiMZR5UV7YnYQxikAgsAQM+PU-o9+m9WMpw@mail.gmail.com>
- <20220120210636.GR947480@paulmck-ThinkPad-P17-Gen-1> <CAABZP2zCWJ1S3We1f6UNVW=Q6h7cz8uMbR7PTzt9UWH9CjSZuw@mail.gmail.com>
- <CAABZP2z=ESWA1EYf1LGS40ipJxcVOAUkvJHA-rdDP6_0Oqjgsg@mail.gmail.com> <20220125180907.GN4285@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220125180907.GN4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed, 26 Jan 2022 09:59:32 +0800
-Message-ID: <CAABZP2xGZ__8MZWL0kGAdYJ9ZNq2omw9-VTACmrG8wR8RswG2A@mail.gmail.com>
-Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other failures
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220120202805.3369-1-shy828301@gmail.com>
+In-Reply-To: <20220120202805.3369-1-shy828301@gmail.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 25 Jan 2022 17:59:48 -0800
+Message-ID: <CAHbLzkoY36htvh-+0qtFUM1yF2Jnq-wzXdHJJ82x28q=HK5njw@mail.gmail.com>
+Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jann Horn <jannh@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank Paul for your attention
+On Thu, Jan 20, 2022 at 12:28 PM Yang Shi <shy828301@gmail.com> wrote:
+>
+> The syzbot reported the below BUG:
+>
+> kernel BUG at include/linux/page-flags.h:785!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+> Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+> RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+> RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+> R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+> R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+> FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  page_mapcount include/linux/mm.h:837 [inline]
+>  smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
+>  smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
+>  smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
+>  walk_pmd_range mm/pagewalk.c:128 [inline]
+>  walk_pud_range mm/pagewalk.c:205 [inline]
+>  walk_p4d_range mm/pagewalk.c:240 [inline]
+>  walk_pgd_range mm/pagewalk.c:277 [inline]
+>  __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
+>  walk_page_vma+0x277/0x350 mm/pagewalk.c:530
+>  smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
+>  smap_gather_stats fs/proc/task_mmu.c:741 [inline]
+>  show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
+>  seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
+>  seq_read+0x3e0/0x5b0 fs/seq_file.c:162
+>  vfs_read+0x1b5/0x600 fs/read_write.c:479
+>  ksys_read+0x12d/0x250 fs/read_write.c:619
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7faa2af6c969
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
+> RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
+> RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
+> R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
+> R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 24ec93ff95e4ac3d ]---
+> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+> Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+> RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+> RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+> R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+> R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+> FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>
+> The reproducer was trying to reading /proc/$PID/smaps when calling
+> MADV_FREE at the mean time.  MADV_FREE may split THPs if it is called
+> for partial THP.  It may trigger the below race:
+>
+>          CPU A                         CPU B
+>          -----                         -----
+> smaps walk:                      MADV_FREE:
+> page_mapcount()
+>   PageCompound()
+>                                  split_huge_page()
+>   page = compound_head(page)
+>   PageDoubleMap(page)
+>
+> When calling PageDoubleMap() this page is not a tail page of THP anymore
+> so the BUG is triggered.
+>
+> This could be fixed by elevated refcount of the page before calling
+> mapcount, but it prevents from counting migration entries, and it seems
+> overkilling because the race just could happen when PMD is split so all
+> PTE entries of tail pages are actually migration entries, and
+> smaps_account() does treat migration entries as mapcount == 1 as Kirill
+> pointed out.
+>
+> Add a new parameter for smaps_account() to tell this entry is migration
+> entry then skip calling page_mapcount().  Don't skip getting mapcount for
+> device private entries since they do track references with mapcount.
+>
+> Fixes: b1d4d9e0cbd0 ("proc/smaps: carefully handle migration entries")
 
-On Wed, Jan 26, 2022 at 2:09 AM Paul E. McKenney <paulmck@kernel.org> wrote=
-:
->
-> On Wed, Jan 26, 2022 at 12:19:58AM +0800, Zhouyi Zhou wrote:
-> > Hi Paul
-> >
-> > On Fri, Jan 21, 2022 at 8:44 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrot=
-e:
-> > >
-> > > Thank Paul for your guidance!
-> > >
-> > > On Fri, Jan 21, 2022 at 5:06 AM Paul E. McKenney <paulmck@kernel.org>=
- wrote:
-> > > >
-> > > > On Thu, Jan 20, 2022 at 03:30:54AM +0800, Zhouyi Zhou wrote:
-> > > > > On Thu, Jan 20, 2022 at 2:21 AM Paul E. McKenney <paulmck@kernel.=
-org> wrote:
-> > > > > >
-> > > > > > On Tue, Jan 18, 2022 at 08:46:49PM -0800, Paul E. McKenney wrot=
-e:
-> > > > > > > On Wed, Jan 19, 2022 at 10:07:42AM +0800, Zhouyi Zhou wrote:
-> > > > > > > > Thanks Paul for looking into this
-> > > > > > > >
-> > > > > > > > On Wed, Jan 19, 2022 at 7:46 AM Paul E. McKenney <paulmck@k=
-ernel.org> wrote:
-> > > > > > > > >
-> > > > > > > > > On Tue, Jan 18, 2022 at 09:29:04AM -0800, Paul E. McKenne=
-y wrote:
-> > > > > > > > > > On Tue, Jan 18, 2022 at 08:56:24AM +0100, Paul Menzel w=
-rote:
-> > > > > > > > > > > Dear Zhouyi,
-> > > > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > Thank you for your quick response.
-> > > > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > Am 18.01.22 um 08:34 schrieb Zhouyi Zhou:
-> > > > > > > > > > >
-> > > > > > > > > > > > I have studied the rcu torture test recently. I am =
-also interested in
-> > > > > > > > > > > > this topic.
-> > > > > > > > > > > > But I can't open
-> > > > > > > > > > > > [1]: https://owww.molgen.mpg.de/~pmenzel/allmodconf=
--Make.out.txt
-> > > > > > > > > > > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture=
--log.txt
-> > > > > > > > > > >
-> > > > > > > > > > > Sorry, about that. I should have checked those. I had=
- put them into a
-> > > > > > > > > > > directory:
-> > > > > > > > > > >
-> > > > > > > > > > > [1]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/a=
-llmodconf-Make.out.txt
-> > > > > > > > > > > [2]: https://owww.molgen.mpg.de/~pmenzel/rcutorture/r=
-cutorture-log.txt
-> > > > > > > > > > >
-> > > > > > > > > > > I am going to try to test your suggestions at the end=
- of the day.
-> > > > > > > > > >
-> > > > > > > > > > On x86 rcutorture builds successfully.  However, allmod=
-config
-> > > > > > > > > > on semi-recent -next got me "Can't open perl script
-> > > > > > > > > > "./usr/include/headers_check.pl": No such file or direc=
-tory".
-> > > > > > > > > > Which might well be a local problem or might well be fi=
-xed by now.
-> > > > > > > > >
-> > > > > > > > > Not fixed as of next-20220118.  Chasing it down...  ;-)
-> > > > > > > > I can do allmodconfig on -next,
-> > > > > > > > $git describe
-> > > > > > > > next-20220118
-> > > > > > > > $tools/testing/selftests/rcutorture/bin/torture.sh --durati=
-on 10
-> > > > > > > >  ---  tools/testing/selftests/rcutorture/bin/torture.sh --d=
-uration 10
-> > > > > > > >  --- Results directory:  2022.01.19-09.14.39-torture
-> > > > > > > > $ ps -aux|grep qemu-system
-> > > > > > > > zzy       470309  773  0.3 1876544 153936 pts/0  Sl+  09:55=
-  31:27
-> > > > > > > > qemu-system-x86_64 -enable-kvm -nographic -smp 16 -net none=
- -machine
-> > > > > > > > q35,accel=3Dkvm -cpu kvm64 -serial
-> > > > > > > > file:/tmp/linux-next/tools/testing/selftests/rcutorture/res=
-/2022.01.19-09.14.39-torture/results-rcutorture/TREE03/console.log
-> > > > > > > > -m 512 -kernel /tmp/linux-next/tools/testing/selftests/rcut=
-orture/res/2022.01.19-09.14.39-torture/results-rcutorture/TREE03/bzImage
-> > > > > > > > -append debug_boot_weak_hash panic=3D-1 selinux=3D0 initcal=
-l_debug debug
-> > > > > > > > console=3DttyS0 rcupdate.rcu_cpu_stall_suppress_at_boot=3D1
-> > > > > > > > torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeo=
-ut=3D30000
-> > > > > > > > rcutorture.onoff_interval=3D200 rcutorture.onoff_holdoff=3D=
-30
-> > > > > > > > rcutree.gp_preinit_delay=3D12 rcutree.gp_init_delay=3D3
-> > > > > > > > rcutree.gp_cleanup_delay=3D3 rcutree.kthread_prio=3D2 threa=
-dirqs
-> > > > > > > > tree.use_softirq=3D0 rcutorture.n_barrier_cbs=3D4
-> > > > > > > > rcutorture.stat_interval=3D15 rcutorture.shutdown_secs=3D42=
-0
-> > > > > > > > rcutorture.test_no_idle_hz=3D1 rcutorture.verbose=3D1
-> > > > > > > > zzy       755865  0.0  0.0  17676  2876 pts/2    S+   09:59=
-   0:00
-> > > > > > > > grep --color=3Dauto qemu-system
-> > > > > > > > $ ls -l vmlinux
-> > > > > > > > -rwxrwxr-x 1 zzy zzy 69349872 1=E6=9C=88  19 09:55 vmlinux
-> > > > > > > >
-> > > > > > > > Could you please try the following command ?
-> > > > > > > > linux-next$ perl ./usr/include/headers_check.pl usr/include=
- x86
-> > > > > > > > usr/include/rdma/hfi/hfi1_user.h
-> > > > > > > > linux-next$ echo $?
-> > > > > > > > 0
-> > > > > > > > The headers_check.pl in linux-next
-> > > > > > > > (https://git.kernel.org/pub/scm/linux/kernel/git/next/linux=
--next.git/tree/usr/include/headers_check.pl)
-> > > > > > > > is used to check the validity of head files in ./usr/includ=
-e
-> > > > > > >
-> > > > > > > I am currently bisecting, but once that finishes I will give =
-this a
-> > > > > > > try, thank you!
-> > > > > >
-> > > > > > And the bisection converged badly due to there being more than =
-one build
-> > > > > > failure.
-> > > > > Sorry to hear the bisection is not successful.
-> > > > > >
-> > > > > > So I ran the command above and then the build succeeded.
-> > > > > I'm very happy that the command works.
-> > > > > >
-> > > > > > Though it would be good if the build worked from "make distclea=
-n"...
-> > > > > I would be very honored if I could join the efforts to make the -=
-next better.linux-next/tools/testing/selftests/rcutorture/res/2022.01.25-23=
-.10.36-torture/allmodconfig
-> > > >
-> > > > One approach would be to download the -next kernels as they appear =
-and
-> > > > run tests on them.  Reporting bugs is good, and of course fixing th=
-em
-> > > > even better.
-> > > This provides a nice way of participating the efforts to make -next
-> > > better, and provides me a good way to learn new knowledge in -next!
-> > >
-> > > >
-> > > > You can clone -next from here:
-> > > >
-> > > >         git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-ne=
-xt.git
-> > > >
-> > > > Individual -next releases are tagged, for example, "next-20220118".
-> > > I will clone -next from the tree, and will download the -next release=
-s from
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > I cloned -next, and try to test rcu:
-> > $git clone https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git=
-/next/linux-next.git
-> > (kernel.source.codeaurora.cn is Chinese mirror of  git.kernel.org)
-> > $cd linux-next
-> > $git describe
-> > next-20220125
-> > $tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
-> > $cd linux-next/tools/testing/selftests/rcutorture/res/2022.01.25-23.10.=
-36-torture/allmodconfig
-> > $cat Make.exitcode
-> > 2
-> > $grep Stop Make.out
-> > make[2]: *** No rule to make target
-> > 'arch/x86/kvm//home/zzy/Program/linux-next/linux-next/tools/testing/sel=
-ftests/rcutorture/kvm_main.o',
-> > needed by 'arch/x86/kvm/kvm.o'.  Stop.
-> > I tried the above two times in two different machines today, they all f=
-ailed.
-> >
-> >
-> > Meanwhile I can config and build the kernel successfully by invoking
-> > the build commands by hand:
-> > $git clone https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git=
-/next/linux-next.git
-> > $cd linux-next
-> > $git describe
-> > next-20220125
->
-> Huh.  What happens if you do a "make clean" betweentimes?
-do a "make clean" between times also fails, sorry
->
-> Alternatively, what happens if you change these two lines from torture.sh=
-:
->
->         echo " --- make clean" > "$amcdir/Make.out" 2>&1
->         make -j$MAKE_ALLOTED_CPUS clean >> "$amcdir/Make.out" 2>&1
->
-> To this:
->
->         echo " --- make distclean" > "$amcdir/Make.out" 2>&1
->         make -j$MAKE_ALLOTED_CPUS distclean >> "$amcdir/Make.out" 2>&1
->
-> And then run torture.sh in the same way that got you the error?
-I do above, and also fails:
-$git diff
-diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh
-b/tools/testing/selftests/rcutorture/bin/torture.sh
-index d1cb60085d8f..8ece2f0a51c7 100755
---- a/tools/testing/selftests/rcutorture/bin/torture.sh
-+++ b/tools/testing/selftests/rcutorture/bin/torture.sh
-@@ -319,8 +319,8 @@ then
-        echo " --- allmodconfig:" Start `date` | tee -a $T/log
-        amcdir=3D"tools/testing/selftests/rcutorture/res/$ds/allmodconfig"
-        mkdir -p "$amcdir"
--       echo " --- make clean" > "$amcdir/Make.out" 2>&1
--       make -j$MAKE_ALLOTED_CPUS clean >> "$amcdir/Make.out" 2>&1
-+       echo " --- make distclean" > "$amcdir/Make.out" 2>&1
-+       make -j$MAKE_ALLOTED_CPUS distclean >> "$amcdir/Make.out" 2>&1
-        echo " --- make allmodconfig" >> "$amcdir/Make.out" 2>&1
-        make -j$MAKE_ALLOTED_CPUS allmodconfig >> "$amcdir/Make.out" 2>&1
-        echo " --- make " >> "$amcdir/Make.out" 2>&1
-$tools/testing/selftests/rcutorture/bin/torture.sh --duration 10
-$grep kvm.o ./tools/testing/selftests/rcutorture/res/2022.01.26-09.08.53-to=
-rture/allmodconfig/Make.out
-make[2]: *** No rule to make target
-'arch/x86/kvm//home/zzy/Program/linux-next/linux-next/tools/testing/selftes=
-ts/rcutorture/kvm_main.o',
-needed by 'arch/x86/kvm/kvm.o'.  Stop.
+I just thought that this commit should not incur this race condition
+since THP split didn't use migration entry at that time at all. Using
+migration entry for THP split was introduced during v4.5 release by
+commit ba98828088ad ("thp: add option to setup migration entries
+during PMD split") and e9b61f19858a ("thp: reintroduce
+split_huge_page()"). And PageDoubleMap was introduced by commit
+53f9263baba6 ("mm: rework mapcount accounting to enable 4k mapping of
+THPs") right before those two commits.
+The commit e9b61f19858a ("thp: reintroduce split_huge_page()")
+converted THP split to use migration entry finally. So this race
+condition seems possible after it.
 
-I am very interested in this problem, and am willing to track this
-problem with other developers in the coming days ;-)
+The proper fixes tag should be:
+Fixes: e9b61f19858a ("thp: reintroduce split_huge_page()").
 
-Thanks
-Zhouyi
+Andrew, could you please update this in -mm tree? Thanks.
+
+> Reported-by: syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com
+> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Yang Shi <shy828301@gmail.com>
+> ---
+> v2: * Added proper fix tag per Jann Horn
+>     * Rebased to the latest linus's tree
 >
->                                                         Thanx, Paul
+>  fs/proc/task_mmu.c | 27 +++++++++++++++++++++------
+>  1 file changed, 21 insertions(+), 6 deletions(-)
 >
-> > $make allmodconfig
-> > $make -j 16
-> > Kernel: arch/x86/boot/bzImage is ready  (#2)
-> >   GEN     Module.symvers
-> > $echo $?
-> > 0
-> >
-> > I am very interested in this problem and I am eager to try to dig out
-> > what happened and fix it before this Sunday. And it is more delightful
-> > to me that other developers can solve this problem because they are
-> > more mature than me ;-)
-> >
-> > Many thanks
-> > Zhouyi
-> > > >
-> > > > Me, I run torture.sh on them from time to time, depending on how mu=
-ch
-> > > > other testing I am doing.  So maybe once or twice a week.  ;-)
-> > > You are the example worth learning in my life, to be honest , I will
-> > > do the same way as you do!
-> > >
-> > > Sincerely
-> > > Zhouyi
-> > > >
-> > > >                                                 Thanx, Paul
-> > > >
-> > > > > Many thanks
-> > > > > Zhouyi
-> > > > > >
-> > > > > >                                                         Thanx, =
-Paul
-> > > > > >
-> > > > > > > > > > Either way, it looks like I need to upgrade the torture=
-.sh script's
-> > > > > > > > > > checks for failed builds.  Thank you for reporting this=
-!
-> > > > > > > > >
-> > > > > > > > > Does this make torture.sh more reliably report build fail=
-ures?
-> > > > > > > > I studied this commit line by line several times and benefi=
-ted a lot. Thank you!
-> > > > > > > > >
-> > > > > > > > >                                                 Thanx, Pa=
-ul
-> > > > > > > > >
-> > > > > > > > > ---------------------------------------------------------=
----------------
-> > > > > > > > >
-> > > > > > > > > commit 0d302830515307ceb58e89d5fb91e81b6d22e0bf
-> > > > > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > > > Date:   Tue Jan 18 15:40:49 2022 -0800
-> > > > > > > > >
-> > > > > > > > >     torture: Make kvm-find-errors.sh notice missing vmlin=
-ux file
-> > > > > > > > >
-> > > > > > > > >     Currently, an obtuse compiler diagnostic can fool kvm=
--find-errors.sh
-> > > > > > > > >     into believing that the build was successful.  This c=
-ommit therefore
-> > > > > > > > >     adds a check for a missing vmlinux file.
-> > > > > > > > >
-> > > > > > > > >     Link: https://lore.kernel.org/lkml/36bd91e4-8eda-5677=
--7fde-40295932a640@molgen.mpg.de/
-> > > > > > > > >     Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> > > > > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > > >
-> > > > > > > > > diff --git a/tools/testing/selftests/rcutorture/bin/kvm-f=
-ind-errors.sh b/tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh
-> > > > > > > > > index 2e9e9e2eedb69..7d3e11a6b8290 100755
-> > > > > > > > > --- a/tools/testing/selftests/rcutorture/bin/kvm-find-err=
-ors.sh
-> > > > > > > > > +++ b/tools/testing/selftests/rcutorture/bin/kvm-find-err=
-ors.sh
-> > > > > > > > > @@ -30,10 +30,15 @@ editor=3D${EDITOR-vi}
-> > > > > > > > >  files=3D
-> > > > > > > > >  for i in ${rundir}/*/Make.out
-> > > > > > > > >  do
-> > > > > > > > > +       scenariodir=3D"`dirname $i`"
-> > > > > > > > >         if egrep -q "error:|warning:|^ld: .*undefined ref=
-erence to" < $i
-> > > > > > > > >         then
-> > > > > > > > >                 egrep "error:|warning:|^ld: .*undefined r=
-eference to" < $i > $i.diags
-> > > > > > > > >                 files=3D"$files $i.diags $i"
-> > > > > > > > > +       elif ! test -f ${scenariodir}/vmlinux
-> > > > > > > > > +       then
-> > > > > > > > > +               echo No ${scenariodir}/vmlinux file > $i.=
-diags
-> > > > > > > > > +               files=3D"$files $i.diags $i"
-> > > > > > > > >         fi
-> > > > > > > > >  done
-> > > > > > > > >  if test -n "$files"
-> > > > > > > > Thanks
-> > > > > > > > Zhouyi
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 18f8c3acbb85..2bb567014d77 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -440,7 +440,8 @@ static void smaps_page_accumulate(struct mem_size_stats *mss,
+>  }
+>
+>  static void smaps_account(struct mem_size_stats *mss, struct page *page,
+> -               bool compound, bool young, bool dirty, bool locked)
+> +               bool compound, bool young, bool dirty, bool locked,
+> +               bool migration)
+>  {
+>         int i, nr = compound ? compound_nr(page) : 1;
+>         unsigned long size = nr * PAGE_SIZE;
+> @@ -467,8 +468,12 @@ static void smaps_account(struct mem_size_stats *mss, struct page *page,
+>          * page_count(page) == 1 guarantees the page is mapped exactly once.
+>          * If any subpage of the compound page mapped with PTE it would elevate
+>          * page_count().
+> +        *
+> +        * Treated regular migration entries as mapcount == 1 without reading
+> +        * mapcount since calling page_mapcount() for migration entries is
+> +        * racy against THP splitting.
+>          */
+> -       if (page_count(page) == 1) {
+> +       if ((page_count(page) == 1) || migration) {
+>                 smaps_page_accumulate(mss, page, size, size << PSS_SHIFT, dirty,
+>                         locked, true);
+>                 return;
+> @@ -517,6 +522,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+>         struct vm_area_struct *vma = walk->vma;
+>         bool locked = !!(vma->vm_flags & VM_LOCKED);
+>         struct page *page = NULL;
+> +       bool migration = false;
+>
+>         if (pte_present(*pte)) {
+>                 page = vm_normal_page(vma, addr, *pte);
+> @@ -536,8 +542,11 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+>                         } else {
+>                                 mss->swap_pss += (u64)PAGE_SIZE << PSS_SHIFT;
+>                         }
+> -               } else if (is_pfn_swap_entry(swpent))
+> +               } else if (is_pfn_swap_entry(swpent)) {
+> +                       if (is_migration_entry(swpent))
+> +                               migration = true;
+>                         page = pfn_swap_entry_to_page(swpent);
+> +               }
+>         } else {
+>                 smaps_pte_hole_lookup(addr, walk);
+>                 return;
+> @@ -546,7 +555,8 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+>         if (!page)
+>                 return;
+>
+> -       smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte), locked);
+> +       smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
+> +                     locked, migration);
+>  }
+>
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> @@ -557,6 +567,7 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+>         struct vm_area_struct *vma = walk->vma;
+>         bool locked = !!(vma->vm_flags & VM_LOCKED);
+>         struct page *page = NULL;
+> +       bool migration = false;
+>
+>         if (pmd_present(*pmd)) {
+>                 /* FOLL_DUMP will return -EFAULT on huge zero page */
+> @@ -564,8 +575,10 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+>         } else if (unlikely(thp_migration_supported() && is_swap_pmd(*pmd))) {
+>                 swp_entry_t entry = pmd_to_swp_entry(*pmd);
+>
+> -               if (is_migration_entry(entry))
+> +               if (is_migration_entry(entry)) {
+> +                       migration = true;
+>                         page = pfn_swap_entry_to_page(entry);
+> +               }
+>         }
+>         if (IS_ERR_OR_NULL(page))
+>                 return;
+> @@ -577,7 +590,9 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+>                 /* pass */;
+>         else
+>                 mss->file_thp += HPAGE_PMD_SIZE;
+> -       smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd), locked);
+> +
+> +       smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd),
+> +                     locked, migration);
+>  }
+>  #else
+>  static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+> --
+> 2.26.3
+>

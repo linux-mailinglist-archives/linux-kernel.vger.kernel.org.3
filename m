@@ -2,132 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 185C149C8A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F71B49C8AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240712AbiAZL1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:27:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S240732AbiAZL36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbiAZL1b (ORCPT
+        with ESMTP id S233661AbiAZL35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:27:31 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D8C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:27:31 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so13519584otr.11
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:27:31 -0800 (PST)
+        Wed, 26 Jan 2022 06:29:57 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE68C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:29:57 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id e17so7790673ljk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:29:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=u5fcmue9JGNrEVQdtBVNPmwhwIAf9whpXHVpHXm1fCU=;
-        b=SHtAmyZuexHqrBpkdQYeSiAPX3PE0nXKd+pvvyI8W89oj62lBtQlmtZoxceAaa6Dv+
-         7kLLvdsuuoluD7C1zZw4yX0wbdmq9Ua3QwPKtHkcZVIm8J1QgQmeReb06gB50ellmHRw
-         lse6y/lSQaLbcTyfPFfWw6P5QvC9HZkjVobUs=
+        bh=1H4TX89ja5S3N5cue2AVcwFf2OWJSThV+YouY9Q38K8=;
+        b=r80jr47FEo4Z/0ygMN7drqnf+UdyJMPl8SG3HAeDzUrdKD6dy1wfBMnugdWaTWwmmJ
+         u3TWqlpKcFeKKGb3XnRrmUbay5NY8DNLkTgdslIR+h116lrvcHr6DJ6+nZfrR0VUU96X
+         fz6wl0ekX6P80ym6TB81BE0gLMNLB4Mquly+KZGGRfYRaYLND74O1YowypO9AyQwgP83
+         mVjiyWGJdkeCZzFnR2O6tPaCQxccJzh1rajWdeg3wO53kZ1H+dWP0Hp/acWhlZDQN1Zs
+         oXULKG/Rd5hCnYSSODH4hK0IjzYxCQAsO0Emo4siMdAEG4Wz1WB90ZH0HQTmTWnGSxMY
+         5IyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=u5fcmue9JGNrEVQdtBVNPmwhwIAf9whpXHVpHXm1fCU=;
-        b=BsUpOX5Ur92/+DBW1Nr/Bn9vvhUGL7A0N99Tk4Xr1D2oeLdVclPLAswEBwoo2jARvY
-         B+3DB0bHmFFhAFagOl0uXiabIs0qHvpoT3yWhYvrdQWU+33migNDNiQZcpwxCtePjw7D
-         DFWhNQsWBLlFRDk74gwq1jUa77qbZ2Ou+hCYDaefZEIsFpCMI97+j/dEHYf6td6k2mQv
-         PLrNotXOCGeqUqdhVK/TXVAFuDO3uvOAPM2p0aMlN9T5XURbETflYrdGpc3IiwNLI5mV
-         NTjLP1s72GntMuUKdzJx0ZD/9m/Vjm5qunjm/1KVwTeH4oENb/89Toq6nlXkCsflFPDP
-         tjBQ==
-X-Gm-Message-State: AOAM531oX8aVb6z12buykKCgv73XbU3dso4XwCYTxOdv68oE2h2ooREg
-        hz3bt4EgxcqyK7X1ygWXIIkE8lQv7KJvwP+gOppwNA==
-X-Google-Smtp-Source: ABdhPJzxBwXr2/Lo6sUntBiprCyVHs6MlzSJluy1t2ZYT92MpqbH6loH8t5dyGrpDiZ9+sIH4Ever+tG43xhIM66Auk=
-X-Received: by 2002:a05:6830:1e76:: with SMTP id m22mr12004649otr.75.1643196450752;
- Wed, 26 Jan 2022 03:27:30 -0800 (PST)
+        bh=1H4TX89ja5S3N5cue2AVcwFf2OWJSThV+YouY9Q38K8=;
+        b=5GorPPrI4bSP4Y2U1aQYFVXRwOn4Z4q4sfmaDWl0qLMzBYKu3nKqOqOgR5U9yM8C/J
+         qrOyc+7s8F7PZhklsl+wwqM2AdqBDDi+7W/WcAxE/6ZClrnYBXPds5G3uNjyVmpEkZ5h
+         SXTJOIbtGwUDWGP1e2HZ3r8yvhQaJvMTr9jhj/Dx3RijPEEgUGCGxYvdUtgH/aEus/oO
+         uYOGTE4KX7LjuRt3l8ptg4zfpjiOcc52dVUNi/JYt0a3x4IF3Ai/xAhKWLH9xNFedaJp
+         ymMponmwEIer2Ak9IBPRsed3Aph0LhSMJolKYaTezd8txTJU4VQD44+ojqWXlRi94wOA
+         6nPw==
+X-Gm-Message-State: AOAM533DUwodyDzd1VnEkI9c5Ykdwajw77oAa3erAsZdJOH98wyTNiG7
+        Iz3MHOXRw+/GZcoBGi36ow1l7DGg6qAqyqufIxoqlQ==
+X-Google-Smtp-Source: ABdhPJxjkndNpVASW0t22x5z1Tbj0oqh/6XRERVOQiF6tUtRYGL1mJ1ymX2XrixkxLew4L+OQ+i3arF061hRndVK2oI=
+X-Received: by 2002:a2e:9d8b:: with SMTP id c11mr10212542ljj.47.1643196595278;
+ Wed, 26 Jan 2022 03:29:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
- <YfEG2qVO9K9G+g1d@kroah.com> <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
- <f671a112-880d-1526-a395-360947b40c5a@gmx.de>
-In-Reply-To: <f671a112-880d-1526-a395-360947b40c5a@gmx.de>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Wed, 26 Jan 2022 12:27:19 +0100
-Message-ID: <CAKMK7uFhJPpiHqL-040ozbCM=QxiWNrFHp1gOEUvpEUjxbwAQQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
-To:     Helge Deller <deller@gmx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220120202805.3369-1-shy828301@gmail.com> <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
+In-Reply-To: <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 26 Jan 2022 12:29:27 +0100
+Message-ID: <CAG48ez1xuZdELb=5ed1i0ruoFu5kAaWsf0LgRXEGhrDAcHz8fw@mail.gmail.com>
+Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Yang Shi <shy828301@gmail.com>, kirill.shutemov@linux.intel.com,
+        willy@infradead.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:18 PM Helge Deller <deller@gmx.de> wrote:
+On Wed, Jan 26, 2022 at 11:51 AM David Hildenbrand <david@redhat.com> wrote:
+> On 20.01.22 21:28, Yang Shi wrote:
+> > The syzbot reported the below BUG:
+> >
+> > kernel BUG at include/linux/page-flags.h:785!
+> > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> > CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+> > RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+> > Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+> > RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+> > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> > RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+> > RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+> > R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+> > R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+> > FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  <TASK>
+> >  page_mapcount include/linux/mm.h:837 [inline]
+> >  smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
+> >  smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
+> >  smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
+> >  walk_pmd_range mm/pagewalk.c:128 [inline]
+> >  walk_pud_range mm/pagewalk.c:205 [inline]
+> >  walk_p4d_range mm/pagewalk.c:240 [inline]
+> >  walk_pgd_range mm/pagewalk.c:277 [inline]
+> >  __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
+> >  walk_page_vma+0x277/0x350 mm/pagewalk.c:530
+> >  smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
+> >  smap_gather_stats fs/proc/task_mmu.c:741 [inline]
+> >  show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
+> >  seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
+> >  seq_read+0x3e0/0x5b0 fs/seq_file.c:162
+> >  vfs_read+0x1b5/0x600 fs/read_write.c:479
+> >  ksys_read+0x12d/0x250 fs/read_write.c:619
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > RIP: 0033:0x7faa2af6c969
+> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> > RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
+> > RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
+> > RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
+> > R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
+> > R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
+> >  </TASK>
+> > Modules linked in:
+> > ---[ end trace 24ec93ff95e4ac3d ]---
+> > RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+> > RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+> > Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+> > RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+> > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> > RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+> > RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+> > R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+> > R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+> > FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >
 >
-> On 1/26/22 11:31, Daniel Vetter wrote:
-> > On Wed, Jan 26, 2022 at 9:31 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> >>
-> >> On Tue, Jan 25, 2022 at 10:21:14PM +0200, Andy Shevchenko wrote:
-> >>> Let's maintain occasional fixes to the fbtft driver.
-> >>>
-> >>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> >>> ---
-> >>>  MAINTAINERS | 4 +++-
-> >>>  1 file changed, 3 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/MAINTAINERS b/MAINTAINERS
-> >>> index ea3e6c914384..16e614606ac1 100644
-> >>> --- a/MAINTAINERS
-> >>> +++ b/MAINTAINERS
-> >>> @@ -7372,9 +7372,11 @@ F:     Documentation/fault-injection/
-> >>>  F:   lib/fault-inject.c
-> >>>
-> >>>  FBTFT Framebuffer drivers
-> >>> +M:   Andy Shevchenko <andy@kernel.org>
-> >>>  L:   dri-devel@lists.freedesktop.org
-> >>>  L:   linux-fbdev@vger.kernel.org
-> >>> -S:   Orphan
-> >>> +S:   Maintained
-> >>> +T:   git git://git.kernel.org/pub/scm/linux/kernel/git/andy/linux-fbtft.git
-> >>
-> >> I'm ok with the files moving if the dri developers agree with it.  It's
-> >> up to them, not me.
-> >
-> > On one hand I'm happy anytime someone volunteers to help out.
-> >
-> > On the other hand ... why does it have to be resurrecting fbdev?
-> > There's an entire community of people who really know graphics and
-> > display and spent considerable amount of effort on creating useful and
-> > documented helpers for pretty much anything you might ever want to do.
-> > And somehow we have to go back to typing out things the hard way, with
-> > full verbosity, for an uapi that distros are abandoning (e.g. even for
-> > sdl the direction is to run it on top of drm with a compat layer,
-> > afaiui fedora is completely ditching any userspace that still even
-> > uses /dev/fb/0). And yes I know there's still some gaps in drm,
-> > largely for display features which were really en vogue about 20 years
-> > ago. And we're happy to add that support, if someone who still has
-> > such hardware can put in the little bit of work needed ...
-> >
-> > I don't get this.
->
-> You are describing a transitioning over to DRM - which is Ok.
-> But on that way there is no need to ignore, deny or even kill usage scenarios
-> which are different compared to your usage scenarios (e.g. embedded devices,
-> old platforms, slow devices, slow busses, no 3D hardware features,
-> low-color devices, ...).
+> Does this point at the bigger issue that reading the mapcount without
+> having the page locked is completely unstable?
 
-This patchset isn't about killing existing support.
+(See also https://lore.kernel.org/all/CAG48ez0M=iwJu=Q8yUQHD-+eZDg6ZF8QCF86Sb=CN1petP=Y0Q@mail.gmail.com/
+for context.)
 
-This is about adding new drivers to a subsystem where consensus the
-past 6 years or so was that it's closed for new drivers.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+I'm not sure what you mean by "unstable". Do you mean "the result is
+not guaranteed to still be valid when the call returns", "the result
+might not have ever been valid", or "the call might crash because the
+page's state as a compound page is unstable"?
+
+In case you mean "the result is not guaranteed to still be valid when
+the call returns":
+We're just collecting stats for userspace, and by the time we return
+to userspace, the numbers will be outdated anyway, so that doesn't
+matter.
+
+In case you mean "the result might not have ever been valid":
+Yes, even with this patch applied, in theory concurrent THP splits
+could cause us to count some page mappings twice. Arguably that's not
+entirely correct.
+
+In case you mean "the call might crash because the page's state as a
+compound page could concurrently change":
+As long as we have our own mapping of the page, the page can't be
+split, so this patch fixes that problem.

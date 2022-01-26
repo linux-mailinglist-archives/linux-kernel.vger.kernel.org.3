@@ -2,258 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2A949D0E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6472D49D0E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243746AbiAZRga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:36:30 -0500
-Received: from mga11.intel.com ([192.55.52.93]:56209 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243795AbiAZRg0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:36:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643218586; x=1674754586;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YEq+VbUd0qvM6dYGJRXqCaF1eKzMqOSL9aGqV0Ee52U=;
-  b=HKEVRETqvy4/SWSn1id5gdlUKMmXMVHPFUHjJazNqBXq4dlSgkFDfH2q
-   zvEXnHq0hxVNnH5iqwiaLJAviyzM0oJIYMDRN0bdZ2GIRIr6HbGEzga7i
-   MIHh8Yb5IjbPT2yQqFbvSXMehYoOnaLvWb/nGgDlBS/cvDm4YpPQquoFU
-   kV4mYNqDoJlo3ndGj5oG6iIzaW+rxzDV2AosnlwSONH2dPZBaG38lNWEt
-   sv0D/qsnDRcpH06/4WsGv7MoNe3SJrsB8d7ztcm9e7SsEHhpJWT3dqyaN
-   l+4jnqJgfXMNaY1liseQulCBleszQ4Lhfprrh2hHVTTFOWoJrHq5IwRdt
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="244204867"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="244204867"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 09:36:25 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="535264237"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 09:36:24 -0800
-Date:   Wed, 26 Jan 2022 09:36:19 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <YfGGk7kWNc9q2YwV@otcwcpicx3.sc.intel.com>
-References: <20211217220136.2762116-1-fenghua.yu@intel.com>
- <20211217220136.2762116-6-fenghua.yu@intel.com>
- <87ee4w6g1n.ffs@tglx>
- <87bl006fdb.ffs@tglx>
- <Ye8RmmKpJT8brmDE@otcwcpicx3.sc.intel.com>
- <878rv46eg3.ffs@tglx>
- <YfAUutQhqS6ejUFU@otcwcpicx3.sc.intel.com>
- <87k0em4lu9.ffs@tglx>
+        id S243815AbiAZRiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:38:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237187AbiAZRh7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 12:37:59 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0096C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:37:59 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id p203so933725oih.10
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:37:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iIrTw8i7dKztJOX/sYlGyAZ9lt8KfEmb4oiF+8tim90=;
+        b=GXosuorlsbZSTIoLqTJ4aqraR5B8WtUPyB5p87RdoBP61dZzQKC0zJr3OMeiK5szNj
+         lXN9+e5GHcxYywns2WP460nGiiedXxfwSVbhPBBN0eRpMUaEa1BOJY5wEfMLLp34Cu4h
+         Dr50+YRbX5x1caRr39l1cBDuwN5MZ7y3mXEPfdErU0NALB6zakq+WFlF5IHr6aOk2ZhE
+         l9ywokSaDxf28UoytCSXCV8+VK0P9YI/a+6XLMWJR9jot31ZYtlDuC8H+agXxYTaVE8t
+         1QNSvrG7uYWzMaTLnsjPjOhXX5TwO6/vS+daX9fc+ONDxzGsgJvan+Kgq7OrmCRWODzb
+         Slaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iIrTw8i7dKztJOX/sYlGyAZ9lt8KfEmb4oiF+8tim90=;
+        b=AyKd5UcnqTL5XsWYdng+cz7wVjt+RTJcJ5uvhzt7CyuJTpVS5u7xuemAyw3xp7nsdv
+         hPynUQopJ+IhRl9xkcJNufje/Ou56buKsEuzOM1Hvs23PuWFXmJVOvZ5bsCEY3t47V0O
+         SNtsL3GqNGQx1b+t23eXJR3C0egS2EG5wUGgASH7T53jfDtWJ2xn+iBo7DL5UDS+7k8B
+         gSHvCOrkqEDnL1IKO8PWfwwtMhONHZ0UK4J/C80nw5t8j8Zmr48ccT1o0YRBaDZVPIxa
+         lyC4mfCrtnSe1umg8rMj9kKgzHwwO7xxm2dxDhlXEAM7czGhU//gM8TJ3uOVLcJgaqYD
+         mZ2g==
+X-Gm-Message-State: AOAM530JtMaj4stLod5xD8rirn6uI4KC/uc4/ZQzaMUQ0DqIjLftVHTb
+        jQtiQDmksjMENXdXyf/p+cXYZGOZq8s7aSOMy4WN7A==
+X-Google-Smtp-Source: ABdhPJxL+s8xP2UB0OAaXblsCrk/yP27ckjHdQwsZR2/KTe5QuygQoesjEJtKZVX544PWYOZPkucv33XqgqlhO63lFY=
+X-Received: by 2002:a05:6808:152b:: with SMTP id u43mr4233444oiw.307.1643218678694;
+ Wed, 26 Jan 2022 09:37:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k0em4lu9.ffs@tglx>
+References: <20220126171232.2599547-1-jannh@google.com>
+In-Reply-To: <20220126171232.2599547-1-jannh@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 26 Jan 2022 18:37:47 +0100
+Message-ID: <CACT4Y+b8ty07hAANzktksbbe5HdDM=jm6TSYLKawctpBmPfatw@mail.gmail.com>
+Subject: Re: [PATCH] x86/csum: Add KASAN/KCSAN instrumentation
+To:     Jann Horn <jannh@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        kasan-dev@googlegroups.com, Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas,
-
-On Wed, Jan 26, 2022 at 03:23:42PM +0100, Thomas Gleixner wrote:
-> On Tue, Jan 25 2022 at 07:18, Fenghua Yu wrote:
-> > On Mon, Jan 24, 2022 at 09:55:56PM +0100, Thomas Gleixner wrote:
-> >  /**
-> >   * ioasid_put - Release a reference to an ioasid
-> >   * @ioasid: the ID to remove
-> 
-> which in turn makes ioasid_put() a misnomer and the whole refcounting of
-> the ioasid a pointless exercise.
-> 
-> While looking at ioasid_put() usage I tripped over the following UAF
-> issue:
-> 
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -4817,8 +4817,10 @@ static int aux_domain_add_dev(struct dma
->  	auxiliary_unlink_device(domain, dev);
->  link_failed:
->  	spin_unlock_irqrestore(&device_domain_lock, flags);
-> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
-> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
->  		ioasid_put(domain->default_pasid);
-> +		domain->default_pasid = INVALID_IOASID;
-> +	}
->  
->  	return ret;
->  }
-> @@ -4847,8 +4849,10 @@ static void aux_domain_remove_dev(struct
->  
->  	spin_unlock_irqrestore(&device_domain_lock, flags);
->  
-> -	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
-> +	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
->  		ioasid_put(domain->default_pasid);
-> +		domain->default_pasid = INVALID_IOASID;
-> +	}
->  }
->  
->  static int prepare_domain_attach_device(struct iommu_domain *domain,
-
-The above patch fixes an existing issue. I will put it in a separate patch,
-right?
-
-It cannot be applied cleanly to the upstream tree. Do you want me to base
-the above patch (and the whole patch set) to the upstream tree or a specific
-tip branch?
-
-I will fold the following patch into patch #5. The patch #11 (the doc patch)
-also needs to remove one paragraph talking about refcount.
-
-So I will send the whole patch set with the following changes:
-1. One new bug fix patch (the above patch)
-2. Updated patch #5 (with the following patch folded)
-3. Updated patch #11 (removing refcount description)
-
-Are the changes OK to you?
- 
-> 
-> Vs. ioasid_put() I think we should fold the following:
-> 
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -4818,7 +4818,7 @@ static int aux_domain_add_dev(struct dma
->  link_failed:
->  	spin_unlock_irqrestore(&device_domain_lock, flags);
->  	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
-> -		ioasid_put(domain->default_pasid);
-> +		ioasid_free(domain->default_pasid);
->  		domain->default_pasid = INVALID_IOASID;
->  	}
->  
-> @@ -4850,7 +4850,7 @@ static void aux_domain_remove_dev(struct
->  	spin_unlock_irqrestore(&device_domain_lock, flags);
->  
->  	if (list_empty(&domain->subdevices) && domain->default_pasid > 0) {
-> -		ioasid_put(domain->default_pasid);
-> +		ioasid_free(domain->default_pasid);
->  		domain->default_pasid = INVALID_IOASID;
->  	}
->  }
-> --- a/drivers/iommu/ioasid.c
-> +++ b/drivers/iommu/ioasid.c
-> @@ -2,7 +2,7 @@
->  /*
->   * I/O Address Space ID allocator. There is one global IOASID space, split into
->   * subsets. Users create a subset with DECLARE_IOASID_SET, then allocate and
-> - * free IOASIDs with ioasid_alloc and ioasid_put.
-> + * free IOASIDs with ioasid_alloc() and ioasid_free().
+On Wed, 26 Jan 2022 at 18:13, Jann Horn <jannh@google.com> wrote:
+>
+> In the optimized X86 version of the copy-with-checksum helpers, use
+> instrument_*() before accessing buffers from assembly code so that KASAN
+> and KCSAN don't have blind spots there.
+>
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
+>  arch/x86/lib/csum-partial_64.c  | 3 +++
+>  arch/x86/lib/csum-wrappers_64.c | 9 +++++++++
+>  2 files changed, 12 insertions(+)
+>
+> diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
+> index 1f8a8f895173..8b0c353cd212 100644
+> --- a/arch/x86/lib/csum-partial_64.c
+> +++ b/arch/x86/lib/csum-partial_64.c
+> @@ -8,6 +8,7 @@
+>
+>  #include <linux/compiler.h>
+>  #include <linux/export.h>
+> +#include <linux/instrumented.h>
+>  #include <asm/checksum.h>
+>  #include <asm/word-at-a-time.h>
+>
+> @@ -37,6 +38,8 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+>         u64 temp64 = (__force u64)sum;
+>         unsigned odd, result;
+>
+> +       instrument_read(buff, len);
+> +
+>         odd = 1 & (unsigned long) buff;
+>         if (unlikely(odd)) {
+>                 if (unlikely(len == 0))
+> diff --git a/arch/x86/lib/csum-wrappers_64.c b/arch/x86/lib/csum-wrappers_64.c
+> index 189344924a2b..087f3c4cb89f 100644
+> --- a/arch/x86/lib/csum-wrappers_64.c
+> +++ b/arch/x86/lib/csum-wrappers_64.c
+> @@ -6,6 +6,8 @@
 >   */
->  #include <linux/ioasid.h>
->  #include <linux/module.h>
-> @@ -15,7 +15,6 @@ struct ioasid_data {
->  	struct ioasid_set *set;
->  	void *private;
->  	struct rcu_head rcu;
-> -	refcount_t refs;
->  };
->  
->  /*
-> @@ -315,7 +314,6 @@ ioasid_t ioasid_alloc(struct ioasid_set
->  
->  	data->set = set;
->  	data->private = private;
-> -	refcount_set(&data->refs, 1);
->  
->  	/*
->  	 * Custom allocator needs allocator data to perform platform specific
-> @@ -348,17 +346,11 @@ ioasid_t ioasid_alloc(struct ioasid_set
->  EXPORT_SYMBOL_GPL(ioasid_alloc);
->  
->  /**
-> - * ioasid_put - Release a reference to an ioasid
-> + * ioasid_free - Free an ioasid
->   * @ioasid: the ID to remove
-> - *
-> - * Put a reference to the IOASID, free it when the number of references drops to
-> - * zero.
-> - *
-> - * Return: %true if the IOASID was freed, %false otherwise.
->   */
-> -bool ioasid_put(ioasid_t ioasid)
-> +void ioasid_free(ioasid_t ioasid)
->  {
-> -	bool free = false;
->  	struct ioasid_data *ioasid_data;
->  
->  	spin_lock(&ioasid_allocator_lock);
-> @@ -368,10 +360,6 @@ bool ioasid_put(ioasid_t ioasid)
->  		goto exit_unlock;
->  	}
->  
-> -	free = refcount_dec_and_test(&ioasid_data->refs);
-> -	if (!free)
-> -		goto exit_unlock;
-> -
->  	active_allocator->ops->free(ioasid, active_allocator->ops->pdata);
->  	/* Custom allocator needs additional steps to free the xa element */
->  	if (active_allocator->flags & IOASID_ALLOCATOR_CUSTOM) {
-> @@ -381,9 +369,8 @@ bool ioasid_put(ioasid_t ioasid)
->  
->  exit_unlock:
->  	spin_unlock(&ioasid_allocator_lock);
-> -	return free;
->  }
-> -EXPORT_SYMBOL_GPL(ioasid_put);
-> +EXPORT_SYMBOL_GPL(ioasid_free);
->  
->  /**
->   * ioasid_find - Find IOASID data
-> --- a/include/linux/ioasid.h
-> +++ b/include/linux/ioasid.h
-> @@ -34,7 +34,7 @@ struct ioasid_allocator_ops {
->  #if IS_ENABLED(CONFIG_IOASID)
->  ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min, ioasid_t max,
->  		      void *private);
-> -bool ioasid_put(ioasid_t ioasid);
-> +void ioasid_free(ioasid_t ioasid);
->  void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
->  		  bool (*getter)(void *));
->  int ioasid_register_allocator(struct ioasid_allocator_ops *allocator);
-> @@ -52,10 +52,7 @@ static inline ioasid_t ioasid_alloc(stru
->  	return INVALID_IOASID;
->  }
->  
-> -static inline bool ioasid_put(ioasid_t ioasid)
-> -{
-> -	return false;
-> -}
-> +static inline void ioasid_free(ioasid_t ioasid) { }
->  
->  static inline void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
->  				bool (*getter)(void *))
-> --- a/include/linux/sched/mm.h
-> +++ b/include/linux/sched/mm.h
-> @@ -423,7 +423,7 @@ static inline void mm_pasid_set(struct m
->  static inline void mm_pasid_drop(struct mm_struct *mm)
->  {
->  	if (pasid_valid(mm->pasid)) {
-> -		ioasid_put(mm->pasid);
-> +		ioasid_free(mm->pasid);
->  		mm->pasid = INVALID_IOASID;
->  	}
->  }
+>  #include <asm/checksum.h>
+>  #include <linux/export.h>
+> +#include <linux/in6.h>
+> +#include <linux/instrumented.h>
+>  #include <linux/uaccess.h>
+>  #include <asm/smap.h>
+>
+> @@ -26,6 +28,7 @@ csum_and_copy_from_user(const void __user *src, void *dst, int len)
+>         __wsum sum;
+>
+>         might_sleep();
+> +       instrument_write(dst, len);
+>         if (!user_access_begin(src, len))
+>                 return 0;
+>         sum = csum_partial_copy_generic((__force const void *)src, dst, len);
+> @@ -51,6 +54,7 @@ csum_and_copy_to_user(const void *src, void __user *dst, int len)
+>         __wsum sum;
+>
+>         might_sleep();
+> +       instrument_read(src, len);
 
-Thank you very much for your review!
+Nice!
 
--Fenghua
+Can these potentially be called with KERNEL_DS as in some compat
+syscalls? If so it's better to use instrument_copy_to/from_user.
+Or probably it's better to use them anyway b/c we also want to know
+about user accesses for uaccess logging and maybe other things.
+
+
+
+>         if (!user_access_begin(dst, len))
+>                 return 0;
+>         sum = csum_partial_copy_generic(src, (void __force *)dst, len);
+> @@ -71,6 +75,8 @@ EXPORT_SYMBOL(csum_and_copy_to_user);
+>  __wsum
+>  csum_partial_copy_nocheck(const void *src, void *dst, int len)
+>  {
+> +       instrument_write(dst, len);
+> +       instrument_read(src, len);
+>         return csum_partial_copy_generic(src, dst, len);
+>  }
+>  EXPORT_SYMBOL(csum_partial_copy_nocheck);
+> @@ -81,6 +87,9 @@ __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
+>  {
+>         __u64 rest, sum64;
+>
+> +       instrument_read(saddr, sizeof(*saddr));
+> +       instrument_read(daddr, sizeof(*daddr));
+> +
+>         rest = (__force __u64)htonl(len) + (__force __u64)htons(proto) +
+>                 (__force __u64)sum;
+>
+>
+> base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+> --
+> 2.35.0.rc0.227.g00780c9af4-goog
+>

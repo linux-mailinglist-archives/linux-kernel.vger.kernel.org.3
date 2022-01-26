@@ -2,131 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FD749CC54
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52A649CC55
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242132AbiAZO3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiAZO3f (ORCPT
+        id S242147AbiAZOaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:30:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38302 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235227AbiAZOaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:29:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B4CC06161C;
-        Wed, 26 Jan 2022 06:29:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A163B81E66;
-        Wed, 26 Jan 2022 14:29:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EDBFC340E3;
-        Wed, 26 Jan 2022 14:29:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643207372;
-        bh=pWEEutZGmoLYplYAkdgznvxnwOPUR3rQhhgjKa18Waw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rN73OAcpkdhzmwGpRyhbVsfs0wx0G+AEvN+N2+ahYZTUceIo3Zj5x7crC1Xt4mXKq
-         gbxaZ/nRoJvOsWG+wleKubMpi13rwBRKlPvZteTwOssL+Qu44e+60NaO46fgH+thw6
-         4Hi1EZ9GJKLPrtFKOGFl0U7bXdSicOJY/Te4rBOb7Cl4Y1SonDYQLEKcsui2JpN5Ux
-         7t9bYMlBNdN4FGhMU88CrvJHt04WijzMI932IXS5YLTF+aadROyglqf0gddCLr6ISQ
-         gkjD30wO0I4oUDxmc7QjRDsIrFDTO8bpuAs21In7uacXdDke1aNctkBhDCuWzNbEvd
-         Vo+H5VFTO9/RA==
-Date:   Wed, 26 Jan 2022 16:29:12 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] x86/sgx: Silence softlockup detection when releasing
- large enclaves
-Message-ID: <YfFauJSPU5TNetSe@iki.fi>
-References: <1aa037705e5aa209d8b7a075873c6b4190327436.1642530802.git.reinette.chatre@intel.com>
- <e4e8fbe757860cd24e2f66b25be60d76663935d8.camel@kernel.org>
- <71032a38-e1ab-ac73-09f7-9eefffd53674@intel.com>
+        Wed, 26 Jan 2022 09:30:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643207413;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=150fjVbAwE7w6KLDZgSC6nZJBEmTmA9CuvCHqdto7BQ=;
+        b=fPyS68kW/cKKvFCC5Uj0XxW+A27aSQXFcEuV2GB3LvExNHhXpgEFmI7YoZ/jhbTcdEGZ/u
+        A3xT9nvpuuJhr4u8qtVpeck1bN/DWtj6XyGpaMTvKSBCmdK8UYaSHRZYtyTn2YF35ZLCpb
+        gSjB0fOq9gkz+ybcZzFKY9Af3qQfCoA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-187-ypBMWtaHNvqdm4hUD5ZMMw-1; Wed, 26 Jan 2022 09:30:11 -0500
+X-MC-Unique: ypBMWtaHNvqdm4hUD5ZMMw-1
+Received: by mail-wm1-f69.google.com with SMTP id bg16-20020a05600c3c9000b0034bea12c043so2613540wmb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 06:30:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=150fjVbAwE7w6KLDZgSC6nZJBEmTmA9CuvCHqdto7BQ=;
+        b=2OdMPcmOHP+IMv1q8g2jLJjjP/U8GygnqoH7IBxCLKJvcctx+2XNDJI6YDoa6Qapr5
+         TojeygLIDn1m1cx4Coc6azjR57hCWrBtWOo4aZQ/oGhn9NS+x5s3BXXZ+j4J0hTxWhzV
+         JBtkufowTQ/xhzJfhNLEHzb26ITlGmjnGu1FAbyLJfAIzBCiFNc5qXFHrISuc7nvRjj3
+         mIvyki8f9MxBRQMYmnQP71wAsIm/lhWzdQvcbPBg2aSQ4kK6Hkh0lIoQCc4du4cVGPO7
+         J5pNM4j1Zmxuv+Hgb+WKd2cAjamQNAp1fkiNKMC1GelbdTavUphj6y/bhwGI2QwdYet1
+         GQ3A==
+X-Gm-Message-State: AOAM5310ZcteEt6a4gPCx0bUm0ewyZewzEofKZnk+ejBL6vfRIrXyEIe
+        UvLeko1EbKITUDgF7+pPDgs5/WL+mL4L/d30ERMV3jY/L+bt811EmrXNxiQwwhkwroWdaT8LmYk
+        G8YFlwEQFwK4cYWvq7hgtC1Dz
+X-Received: by 2002:a05:6000:50b:: with SMTP id a11mr21795286wrf.387.1643207410674;
+        Wed, 26 Jan 2022 06:30:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwc7scJK8kzvq+kw8xhyBTNOK9A0YqpOZbYNVnvSQ4zvC3C9EcQz4YQaKEfIScHQ6NWRTikNw==
+X-Received: by 2002:a05:6000:50b:: with SMTP id a11mr21795278wrf.387.1643207410449;
+        Wed, 26 Jan 2022 06:30:10 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
+        by smtp.gmail.com with ESMTPSA id m187sm3201648wme.25.2022.01.26.06.30.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 06:30:09 -0800 (PST)
+Message-ID: <b493ba2a-6bf8-89d5-f6a2-4d96efc7256c@redhat.com>
+Date:   Wed, 26 Jan 2022 15:30:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <71032a38-e1ab-ac73-09f7-9eefffd53674@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC PATCH 0/6] Add support for shared PTEs across processes
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        akpm@linux-foundation.org, longpeng2@huawei.com, arnd@arndb.de,
+        dave.hansen@linux.intel.com, rppt@kernel.org, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Peter Xu <peterx@redhat.com>
+References: <20220125114212.ks2qtncaahi6foan@box.shutemov.name>
+ <Ye/5yUyEqO0ws0G5@casper.infradead.org>
+ <20220125135917.ezi6itozrchsdcxg@box.shutemov.name>
+ <YfAEqzTeBJSIOKcA@casper.infradead.org>
+ <20220125185705.wf7p2l77vggipfry@box.shutemov.name>
+ <YfBIpmxvc0+mFByf@casper.infradead.org>
+ <YfDIYKygRHX4RIri@casper.infradead.org>
+ <e164d7f4-406e-eed8-37d7-753f790b7560@redhat.com>
+ <YfFO6VyMTrW1bWuu@casper.infradead.org>
+ <2190b8e2-74f2-0e31-0a40-0401fbd9966e@redhat.com>
+ <YfFW43PT5hwPHnOz@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YfFW43PT5hwPHnOz@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 08:28:36AM -0800, Reinette Chatre wrote:
-> Hi Jarkko,
+On 26.01.22 15:12, Matthew Wilcox wrote:
+> On Wed, Jan 26, 2022 at 02:55:10PM +0100, David Hildenbrand wrote:
+>> On 26.01.22 14:38, Matthew Wilcox wrote:
+>>> On Wed, Jan 26, 2022 at 11:16:42AM +0100, David Hildenbrand wrote:
+>>>> A while ago I talked with Peter about an extended uffd (here: WP)
+>>>> mechanism that would work on fds instead of the process address space.
+>>>
+>>> As far as I can tell, uffd is a grotesque hack that exists to work around
+>>> the poor choice to use anonymous memory instead of file-backed memory
+>>> in kvm.  Every time I see somebody mention it, I feel pain.
+>>>
+>>
+>> I might be missing something important, because KVM can deal with
+>> file-back memory just fine and uffd is used heavily outside of hypervisors.
+>>
+>> I'd love to learn how to handle what ordinary uffd (handle
+>> missing/unpopulated pages) and uffd-wp (handle write access to pages)
+>> can do with files instead. Because if something like that already
+>> exists, it would be precisely what I am talking about.
 > 
-> On 1/20/2022 5:01 AM, Jarkko Sakkinen wrote:
-> > On Tue, 2022-01-18 at 11:14 -0800, Reinette Chatre wrote:
-> >> Vijay reported that the "unclobbered_vdso_oversubscribed" selftest
-> >> triggers the softlockup detector.
-> >>
-> >> Actual SGX systems have 128GB of enclave memory or more.  The
-> >> "unclobbered_vdso_oversubscribed" selftest creates one enclave which
-> >> consumes all of the enclave memory on the system. Tearing down such a
-> >> large enclave takes around a minute, most of it in the loop where
-> >> the EREMOVE instruction is applied to each individual 4k enclave
-> >> page.
-> >>
-> >> Spending one minute in a loop triggers the softlockup detector.
-> >>
-> >> Add a cond_resched() to give other tasks a chance to run and placate
-> >> the softlockup detector.
-> >>
-> >> Cc: stable@vger.kernel.org
-> >> Fixes: 1728ab54b4be ("x86/sgx: Add a page reclaimer")
-> >> Reported-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> >> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-> >> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> >> ---
-> >> Softlockup message:
-> >> watchdog: BUG: soft lockup - CPU#7 stuck for 22s! [test_sgx:11502]
-> >> Kernel panic - not syncing: softlockup: hung tasks
-> >> <snip>
-> >> sgx_encl_release+0x86/0x1c0
-> >> sgx_release+0x11c/0x130
-> >> __fput+0xb0/0x280
-> >> ____fput+0xe/0x10
-> >> task_work_run+0x6c/0xc0
-> >> exit_to_user_mode_prepare+0x1eb/0x1f0
-> >> syscall_exit_to_user_mode+0x1d/0x50
-> >> do_syscall_64+0x46/0xb0
-> >> entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >>
-> >>  arch/x86/kernel/cpu/sgx/encl.c | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/arch/x86/kernel/cpu/sgx/encl.c
-> >> b/arch/x86/kernel/cpu/sgx/encl.c
-> >> index 001808e3901c..ab2b79327a8a 100644
-> >> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> >> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> >> @@ -410,6 +410,7 @@ void sgx_encl_release(struct kref *ref)
-> >>                 }
-> >>  
-> >>                 kfree(entry);
-> >> +               cond_resched();
-> >>         }
-> >>  
-> >>         xa_destroy(&encl->page_array);
-> > 
-> > I'd add a comment, e.g.
-> > 
-> > /* Invoke scheduler to prevent soft lockups. */
-> 
-> I could do that. I would like to point out though that there are already
-> six other usages of cond_resched() in the driver and it does indeed
-> seem to be the common pattern. When adding this comment to the now
-> seventh usage it would be the first comment documenting the usage of
-> cond_resched() in the driver.
-> 
-> > 
-> > Other than that makes sense.
-> 
-> Thank you very much for taking a look.
+> Every notification that uffd wants already exists as a notification to
+> the underlying filesystem.  Something like a uffdfs [1] would be able
+> to do everything that uffd does without adding extra crap all over the MM.
 
-Well, I believe in inline comments to evolution. As in here it was missing,
-a reminder makes sense.
+I don't speak "filesystem" fluently, but I assume that could be an
+overlay over other fs?
 
-/Jarkko
+Peter is currently upstreaming uffd-wp for shmem. How could that look
+like when doing it the fs-way?
+
+-- 
+Thanks,
+
+David / dhildenb
+

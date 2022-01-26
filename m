@@ -2,120 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DAA49D3FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 22:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB3149D5A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbiAZVBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 16:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbiAZVBo (ORCPT
+        id S230222AbiAZWsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:48:04 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:57609 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229672AbiAZWsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:01:44 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE809C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:01:43 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id b22so745392qkk.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 13:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oCWuC818kxptSSDVBuEBTaU6eMFMBR0V0DEYlw49JmI=;
-        b=WBd1S9ReDJVLCy600I/GwQ4fkCVbs4o8jCYoLM5Ga8rFrYobPBN3cVRi5KPUyVHAvX
-         PAbMzcDUWZ86T1lShRkuJd+mg/440U77DNFBvFtwVXMMKRYpMs8FC9OvkTBznQagWYFK
-         2Ys+mv4AsBola0xY8ohxKl61FA/3rCnzhp/9WU3Ypf02mSf3cvMaDDpKidl5tMp0XqDF
-         yRr3lum6LzSkfpnVKWZgskut+D+gSMO0aVEkg+IluapNtRWrbabSAPg89TPRnH9xv7DC
-         bcj9sb2wMRYBtOmmNbY63A1R0wEYudJMKK1ZpzNHRbrJN3DTRVWOj1pDKk+wX+QMddu8
-         fmvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oCWuC818kxptSSDVBuEBTaU6eMFMBR0V0DEYlw49JmI=;
-        b=rFDzuv9avzSGJdAA/juo4ckeVMPtwyhYG+KI0N/3CdaqQmgtFUbQXofu3b0ElrtU4/
-         MmHFjuSfqW0YiluRVs3Dwkfn68Q9FXOySnJw5Uyv9MokMERvZmyclpoBPCgX2vpCHXZs
-         wkeHaTlNHpHKPfbY5qjw4fw5p1C/fMdZRKt2JLgvmugNPXnL37BzgIDJqpcSxKKkNlib
-         C/7PFhWC0iEgDP6pZ/CF14pDBWQzGqjxEeo+rHkBWUmMuLeZvdqStze1sllubjf5dns2
-         HnA3wruPz8ud51Sse3wmzTICGYvUlGbrE5TaI0F0cSk8a1FIkxSAnSyMBKxiw8I6U0AK
-         QzNQ==
-X-Gm-Message-State: AOAM531HySGE+Bo76tM4vC1gsItL6+Xbln6W7KRXpZtu01IYpYSzyiiP
-        7ZsANhNVA7ZahJex9hCAsCE=
-X-Google-Smtp-Source: ABdhPJzQwVBWVM0Of40I6QipLyaGCsyPdlGpui0r8AIQ5RKUGPZM8lcMOC7JoZi5KtQ7luELeGDmhA==
-X-Received: by 2002:a37:9d42:: with SMTP id g63mr459670qke.83.1643230903092;
-        Wed, 26 Jan 2022 13:01:43 -0800 (PST)
-Received: from master-x64.sparksnet (c-98-233-193-225.hsd1.dc.comcast.net. [98.233.193.225])
-        by smtp.gmail.com with ESMTPSA id m4sm237427qkp.117.2022.01.26.13.01.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 13:01:42 -0800 (PST)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Archit Taneja <architt@codeaurora.org>,
-        Pierre-Hugues Husson <phh@phh.me>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-rockchip@lists.infradead.org,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/bridge: synopsys/dw-hdmi: set cec clock rate
-Date:   Wed, 26 Jan 2022 16:01:37 -0500
-Message-Id: <20220126210137.3065508-1-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 26 Jan 2022 17:48:03 -0500
+Received: from epcas3p3.samsung.com (unknown [182.195.41.21])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220126224802epoutp03424607a00217378837004c504e451c7e~N85ofOCPO1241512415epoutp03O
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 22:48:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220126224802epoutp03424607a00217378837004c504e451c7e~N85ofOCPO1241512415epoutp03O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1643237282;
+        bh=cAy0eaNlYkL9KOyKZ0ePr7Lr3HmKsDoqPXCM/xP8opE=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=rBfFGnFYHHv8QiQ4F76oTRD0u8zMn1AvQdZ8+06E4xvitUBeDFVKFVI7pgqRCevBW
+         spUER6tmAaQuk4IWq2Kj2HPfwcL/rwO9jHLFSwbISKJOXGLKFVPUYoYuWGmrAckj09
+         jnNTzZEHnx46K/ImYgjH5FBN5PlOlQszzqt4IEeQ=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas3p3.samsung.com (KnoxPortal) with ESMTP id
+        20220126224801epcas3p381da17853a0da81b4fe6d5f410a484d9~N85oFYTyv0942709427epcas3p3s;
+        Wed, 26 Jan 2022 22:48:01 +0000 (GMT)
+Received: from epcpadp4 (unknown [182.195.40.18]) by epsnrtp1.localdomain
+        (Postfix) with ESMTP id 4Jkf4x67z0z4x9QB; Wed, 26 Jan 2022 22:48:01 +0000
+        (GMT)
+Mime-Version: 1.0
+Subject: [PATCH] scsi: ufs: Add checking lifetime attribute for WriteBooster
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <1891546521.01643237281916.JavaMail.epsvc@epcpadp4>
+Date:   Wed, 26 Jan 2022 20:25:55 +0900
+X-CMS-MailID: 20220126112555epcms2p6eebb1afe9566747ca4aeb23fc3ef033e
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20220126104125epcms2p50afb250190ffc3f2dc7b16df31757c94
+References: <CGME20220126104125epcms2p50afb250190ffc3f2dc7b16df31757c94@epcms2p6>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hdmi-cec clock must be 32khz in order for cec to work correctly.
-Ensure before enabling the clock we set it in order for the hardware to
-work as expected.
-Fixes hdmi-cec support on Rockchip devices.
+Because WB performs write in SLC mode, it is difficult to use WB
+infinitely.
 
-Fixes: ebe32c3e282a ("drm/bridge: synopsys/dw-hdmi: Enable cec clock")
+Vendors can set the Lifetime limit value to the device.
+If Lifetime exceeds the limit value, the device itself can disable the
+WB feature.
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+WB feature supports "bWriteBoosterBufferLifeTimeEst (IDN = 1E)" attribute.
+
+With Lifetime exceeding the limit value,
+the current driver continuously performs the following query.
+
+	- Write Flag: WB_ENABLE / DISABLE
+	- Read attr: Available Buffer Size
+	- Read attr: Current Buffer Size
+
+This patch recognizes that WriteBooster is no longer supported by the device,
+and prevent unnecessary query issues.
+
+Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
 ---
-Changelog:
-v2:
-- Set the clock rate before enabling the clock
----
- drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/scsi/ufs/ufs.h    |  6 +++++
+ drivers/scsi/ufs/ufshcd.c | 52 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-index 54d8fdad395f..65c16455b76a 100644
---- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-+++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-@@ -48,6 +48,9 @@
+diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
+index 0bfdca3e648e..4a00c24a3209 100644
+--- a/drivers/scsi/ufs/ufs.h
++++ b/drivers/scsi/ufs/ufs.h
+@@ -43,6 +43,12 @@
+ /* WriteBooster buffer is available only for the logical unit from 0 to 7 */
+ #define UFS_UPIU_MAX_WB_LUN_ID	8
  
- #define HDMI14_MAX_TMDSCLK	340000000
++/*
++ * WriteBooster buffer lifetime has a limit setted by vendor.
++ * If it is over the limit, WriteBooster feature will be disabled.
++ */
++#define UFS_WB_EXCEED_LIFETIME		0x0B
++
+ /* Well known logical unit id in LUN field of UPIU */
+ enum {
+ 	UFS_UPIU_REPORT_LUNS_WLUN	= 0x81,
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 460d2b440d2e..6088af45633b 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -5778,6 +5778,47 @@ static bool ufshcd_wb_presrv_usrspc_keep_vcc_on(struct ufs_hba *hba,
+ 	return false;
+ }
  
-+/* HDMI CEC needs a clock rate of 32khz */
-+#define HDMI_CEC_CLK_RATE	32768
++static void ufshcd_wb_force_disable(struct ufs_hba *hba)
++{
++	if (!(hba->quirks & UFSHCI_QUIRK_SKIP_MANUAL_WB_FLUSH_CTRL))
++		ufshcd_wb_toggle_flush(hba, false);
 +
- enum hdmi_datamap {
- 	RGB444_8B = 0x01,
- 	RGB444_10B = 0x03,
-@@ -3341,6 +3344,10 @@ struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
- 		hdmi->cec_clk = NULL;
- 		goto err_iahb;
- 	} else {
-+		ret = clk_set_rate(hdmi->cec_clk, HDMI_CEC_CLK_RATE);
-+		if (ret)
-+			dev_warn(hdmi->dev, "Cannot set HDMI cec clock rate: %d\n", ret);
++	ufshcd_wb_toggle_flush_during_h8(hba, false);
++	ufshcd_wb_toggle(hba, false);
++	hba->caps &= ~UFSHCD_CAP_WB_EN;
 +
- 		ret = clk_prepare_enable(hdmi->cec_clk);
- 		if (ret) {
- 			dev_err(hdmi->dev, "Cannot enable HDMI cec clock: %d\n",
++	dev_info(hba->dev, "%s: WB force disabled\n", __func__);
++}
++
++static bool ufshcd_is_wb_buf_lifetime_available(struct ufs_hba *hba)
++{
++	u32 lifetime;
++	int ret;
++	u8 index;
++
++	index = ufshcd_wb_get_query_index(hba);
++	ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_READ_ATTR,
++				      QUERY_ATTR_IDN_WB_BUFF_LIFE_TIME_EST,
++				      index, 0, &lifetime);
++	if (ret) {
++		dev_err(hba->dev,
++			"%s: bWriteBoosterBufferLifeTimeEst read failed %d\n",
++			__func__, ret);
++		return false;
++	}
++
++	if (lifetime == UFS_WB_EXCEED_LIFETIME) {
++		dev_err(hba->dev, "%s: WB buf lifetime is exhausted 0x%0.2X\n",
++			__func__, lifetime);
++		return false;
++	}
++
++	dev_dbg(hba->dev, "%s: WB buf lifetime is 0x%0.2X\n",
++		__func__, lifetime);
++
++	return true;
++}
++
+ static bool ufshcd_wb_need_flush(struct ufs_hba *hba)
+ {
+ 	int ret;
+@@ -5786,6 +5827,12 @@ static bool ufshcd_wb_need_flush(struct ufs_hba *hba)
+ 
+ 	if (!ufshcd_is_wb_allowed(hba))
+ 		return false;
++
++	if (!ufshcd_is_wb_buf_lifetime_available(hba)) {
++		ufshcd_wb_force_disable(hba);
++		return false;
++	}
++
+ 	/*
+ 	 * The ufs device needs the vcc to be ON to flush.
+ 	 * With user-space reduction enabled, it's enough to enable flush
+@@ -7486,6 +7533,7 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
+ 
+ 	if (!ufshcd_is_wb_allowed(hba))
+ 		return;
++
+ 	/*
+ 	 * Probe WB only for UFS-2.2 and UFS-3.1 (and later) devices or
+ 	 * UFS devices with quirk UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES
+@@ -7537,6 +7585,10 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, u8 *desc_buf)
+ 		if (!d_lu_wb_buf_alloc)
+ 			goto wb_disabled;
+ 	}
++
++	if (!ufshcd_is_wb_buf_lifetime_available(hba))
++		goto wb_disabled;
++
+ 	return;
+ 
+ wb_disabled:
 -- 
 2.25.1
-

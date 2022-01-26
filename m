@@ -2,145 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1059749CAA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646D449CAA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbiAZNUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:20:17 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:45488 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238596AbiAZNUQ (ORCPT
+        id S238700AbiAZNVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:21:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238021AbiAZNVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:20:16 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id D37AD1F397;
-        Wed, 26 Jan 2022 13:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643203214; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oJL4Adj+H6C1XkGFJGLoj0TBC596419DIcULA/qs6RA=;
-        b=c7g4DAAdYkWL4aUuiDJ1skfsjqgtSvGuAgQKrVZkC/XsKu8yV9BMFqQG4Rf7B8jKSv2Wgf
-        IbG/yTrhYYLTmO64rTBxrkFfNz1YLywAptmVUOIcsCpUKN813hD/SxAJD4wrOvBaVagtDm
-        1CbK0CfmDIt5+Nnjx35Dqrjc+woFIuo=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 23D67A3B83;
-        Wed, 26 Jan 2022 13:20:14 +0000 (UTC)
-Date:   Wed, 26 Jan 2022 14:20:10 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        HATAYAMA Daisuke <d.hatayama@jp.fujitsu.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dyoung@redhat.com, linux-doc@vger.kernel.org, vgoyal@redhat.com,
-        stern@rowland.harvard.edu, akpm@linux-foundation.org,
-        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
-        halves@canonical.com, kernel@gpiccoli.net,
-        Will Deacon <will@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>, mikelley@microsoft.com
-Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
-Message-ID: <YfFKiscTVckEy2E8@alley>
-References: <20220108153451.195121-1-gpiccoli@igalia.com>
- <Yel8WQiBn/HNQN83@alley>
- <ccd9332e-2917-3020-3590-447fa660ff56@igalia.com>
- <20220122105514.GA18258@MiWiFi-R3L-srv>
- <20220123220711.44f1484c9b510eea8cda9c47@kernel.org>
- <20220124135902.GB8305@MiWiFi-R3L-srv>
- <ff3bc2cf-80bf-3bb0-0dcd-7f9cacdae45a@igalia.com>
- <20220126031039.GA26064@MiWiFi-R3L-srv>
+        Wed, 26 Jan 2022 08:21:09 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B7FC06173B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:21:09 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id v186so71395843ybg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 05:21:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/DQCsSrclDcPgukdfJmqMYc2FHF+ucTlOk9l5yysxdo=;
+        b=s/jNuDnMoMgSiVhZkZ2izZzEkXx+xTvq1CGAgAOdccZ9h1zOsDzPux/wbckvVcYY+O
+         7f4AOQFo+YegtmW4+Bo33iAq8KooWngaos9FL3vX2g2OqCRWliwwCK2jd5qtptjL8IJ+
+         tjlnPfhzAq7+/FvqmxOzOu0yVfhXsPvwIU+1QU/HIztSSZDdxxF9FMCXzDVfJm0t2lID
+         r8Jv2gMtqwZcYZmpv2wM5+KqIOwwxsV4dgxZ4OR+r89dWkJUckqs4NNwGWZ2vycOt/vd
+         Sk94qu/U71fMfRRWCECXXURDaF73lu+9stAoLx//Sje56Imxr2z1dtN8galGEPselGs0
+         S6Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/DQCsSrclDcPgukdfJmqMYc2FHF+ucTlOk9l5yysxdo=;
+        b=Rd480jNY2YHw8E+bA3iwZRhASx3EU73SSZhqXK5ZSDaH9ZOsaIx7whUZF8OA3QYJn7
+         8+Ln1h0XojXjZWLV3mxLZcRAVVaAgUTgG7gW0oe2TAsHFQVx24WVD/dlKTiQX1cksT0j
+         htdwVNToKlVuT3ZLe+mGn6Y2gNORSgwglh00A2cUFWnci8FTGPCMxIj6r+J0mmUAXkiI
+         /zOZU8w5Le0ig84f6JRvyID5aSWigHaD6zqvbyxnsKJXvmnClwNF4xsg1l+tDh7squQB
+         0FepcqRgj+KfE4Z2+iS2D4p17uCKnzr99khq+o2DG+2UBMguwYgABRZzM4cssGklsiwf
+         0mTg==
+X-Gm-Message-State: AOAM5332aGzGGToeTwzF5wUUCB9JCH5IZ1IaLGmF1QYsZZuYMHhWKrjc
+        XiEnaGsCZt4F++1IIv0C9QTHeNTBcEvEfSbkuxuFfA==
+X-Google-Smtp-Source: ABdhPJwMQReQbTv7H6IYr5LH1GhV4zrLlHg3ltxaW2/ufgMc90M52sUEXvLAR6I+OPDn4yP3qDpB16Rwdq+bVCbLDSc=
+X-Received: by 2002:a25:4284:: with SMTP id p126mr38031991yba.108.1643203268445;
+ Wed, 26 Jan 2022 05:21:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126031039.GA26064@MiWiFi-R3L-srv>
+References: <20220125155253.051565866@linuxfoundation.org>
+In-Reply-To: <20220125155253.051565866@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 26 Jan 2022 18:50:57 +0530
+Message-ID: <CA+G9fYtuVwJDP00JH7Yk_8FepzAqZCbDsDqfRMya-RFsLLq7-w@mail.gmail.com>
+Subject: Re: [PATCH 4.9 000/155] 4.9.298-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-01-26 11:10:39, Baoquan He wrote:
-> On 01/24/22 at 11:48am, Guilherme G. Piccoli wrote:
-> > On 24/01/2022 10:59, Baoquan He wrote:
-> > > [...]
-> > > About pre_dump, if the dump is crash dump, hope those pre_dump notifiers
-> > > will be executed under conditional check, e.g only if 'crash_kexec_post_notifiers'
-> > > is specified in kernel cmdline. 
-> > 
-> > Hi Baoquan, based on Petr's suggestion, I think pre_dump would be
-> > responsible for really *non-intrusive/non-risky* tasks and should be
-> > always executed in the panic path (before kdump), regardless of
-> > "crash_kexec_post_notifiers".
-> > 
-> > The idea is that the majority of the notifiers would be executed in the
-> > post_dump portion, and for that, we have the
-> > "crash_kexec_post_notifiers" conditional. I also suggest we have
-> > blacklist options (based on function names) for both notifiers, in order
-> > to make kdump issues debug easier.
-> > 
-> > Do you agree with that? Feel free to comment with suggestions!
-> > Cheers,
-> 
-> I would say "please NO" cautiously.
-> 
-> As Petr said, kdump mostly works only if people configure it correctly.
-> That's because we try best to switch to kdump kernel from the fragile
-> panicked kernel immediately. When we try to add anthing before the switching,
-> please consider carefully and ask if that adding is mandatory, otherwise
-> switching into kdump kernel may fail. If the answer is yes, the adding
-> is needed and welcomed. Othewise, any unnecessary action, including any
-> "non-intrusive/non-risky" tasks, would be unwelcomed.
+On Tue, 25 Jan 2022 at 22:01, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.298 release.
+> There are 155 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.298-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I still do not have the complete picture. But it seems that some
-actions make always sense even for kdump:
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-    + Super safe operations that might disable churn from broken
-      system. For examle, disabling watchdogs by setting a single
-      variable, see rcu_panic() notifier
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-    + Actions needed that allow to kexec the crash kernel a safe
-      way under some hypervisor, see
-      https://lore.kernel.org/r/MWHPR21MB15933573F5C81C5250BF6A1CD75E9@MWHPR21MB1593.namprd21.prod.outlook.com
+## Build
+* kernel: 4.9.298-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.9.y
+* git commit: e1c2457686e464dfae1bf551bfdd70d6862ce2d6
+* git describe: v4.9.297-156-ge1c2457686e4
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.2=
+97-156-ge1c2457686e4
 
+## Test Regressions (compared to v4.9.297-158-g12144c253dc9)
+No test regressions found.
 
-> Surely, we don't oppose the "non-intrusive/non-risky" or completely
-> "intrusive/risky" action adding before kdump kernel switching, with a
-> conditional limitation. When we handle customers' kdump support, we
-> explicitly declare we only support normal and default kdump operation.
-> If any action which is done before switching into kdump kernel is specified,
-> e.g panic_notifier, panic_print, they need take care of their own kdump
-> failure.
+## Metric Regressions (compared to v4.9.297-158-g12144c253dc9)
+No metric regressions found.
 
-All this actually started because of kmsg_dump. It might make sense to
-allow both kmsg_dump and kdump together. The messages stored by
-kmsg_dump might be better than nothing when kdump fails.
+## Test Fixes (compared to v4.9.297-158-g12144c253dc9)
+No test fixes found.
 
-It actually seems to be the main motivation to introduce
-"crash_kexec_post_notifier" parameter, see the commit
-f06e5153f4ae2e2f3b03 ("kernel/panic.c: add "crash_kexec_post_notifiers"
-option for kdump after panic_notifers").
+## Metric Fixes (compared to v4.9.297-158-g12144c253dc9)
+No metric fixes found.
 
-And this patch introduces panic_notifier_filter that tries to select
-notifiers that are helpful and harmful. IMHO, it is almost unusable.
-It seems that even kernel developers do not understand what exactly
-some notifiers do and why they are needed. Usually only the author
-and people familiar with the subsystem have some idea. It makes
-it pretty hard for anyone to create a reasonable filter.
+## Test result summary
+total: 68582, pass: 54953, fail: 476, skip: 11264, xfail: 1889
 
-I am pretty sure that we could do better. I propose to add more
-notifier lists that will be called at various places with reasonable
-rules and restrictions. Then the susbsystem maintainers could decide
-where exactly a given action must be done.
+## Build Summary
+* arm: 254 total, 226 passed, 28 failed
+* arm64: 32 total, 32 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
 
-The result might be that we will need only few options that will
-enable/disable some well defined optional features.
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* ssuite
+* v4l2-compliance
 
-Best Regards,
-Petr
+--
+Linaro LKFT
+https://lkft.linaro.org

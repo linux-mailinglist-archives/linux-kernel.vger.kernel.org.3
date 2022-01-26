@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A340549D01C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A19DC49D022
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243359AbiAZQ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:56:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243356AbiAZQ4Q (ORCPT
+        id S243366AbiAZQ6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:58:00 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:53120 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243345AbiAZQ56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:56:16 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF101C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:56:15 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id g9-20020a17090a67c900b001b4f1d71e4fso240708pjm.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:56:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uN7NEj5/raErdh8LaUTfPYj1Ec1u+VdFcqJ9xn+nQIU=;
-        b=mhYqHQZZB39aySo2/+3XRE7jLNheFRdkwkBL/R3OcdOWaRRMYqG2KQGz+wopMjOhu4
-         3CnokKklrApleKwXbbKjtdViOJBpAx/oV1RFjD7ONv02Uc7zDL1ide5RumzgKWLAJoHP
-         Zqiin07JHO2vhkKfWB6JDaqYBsI7X1AtCqIm7xJY+2nifZ50IIVj3dQDNaKqSOjopNop
-         3wtK3OuNutK6LrIq7e8BMZT9gXbU5Kv5TX77KC6mPanqNZCvm9oxe+0lQ1arUH2HGvvh
-         Jf6ayoObu1t6TE54wxY1cN/NGrvacrIU091Bz0waxrg9Dc81grFV0e0bhSo2ZOwP9sBe
-         I1rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=uN7NEj5/raErdh8LaUTfPYj1Ec1u+VdFcqJ9xn+nQIU=;
-        b=ZKP+BNlhU59ERLzldJb46D8RC0n5cnnIvzklqJpFcoBqMimttxj7OPKxqPB19NYR+N
-         6PE4oYGOcT5xcnVZrtAJSygNnBau6iJ1b7MA2yii6VYspWDTlG5bHyllrln7uD+y/kLE
-         RB+kE+5QVQtGDalkwimvzCNpTEUvBUJCo3X/6ti7qeBBKU+1kxsNpzQ+714IDF096XPl
-         /jGlvuYrLwCYaqVRLSEeeksLI07TilU2nQ2rBL/H+iJMlgdp6+ILdLIS4MV0T4yEhSHg
-         Y1U5EZ7cF48N+sAJTuoswM3ogOjbv1NeshDer1U8i9cKuCn1MqJv0EA//x83hztuiAgh
-         VUpQ==
-X-Gm-Message-State: AOAM530306euZhcc7p4CZmSz/kX/CaJK90d6KEQr1ZKotJfiBTnEFBaa
-        5ps9QXPnp5gZa+wnkoeA8oI=
-X-Google-Smtp-Source: ABdhPJyntRcmrfpDezmn9Tc1wWkgZxfdXhHUdtfQm1k6VfUxTsnl2ByqHNq4Lu1KvtZxUcNQz2B24Q==
-X-Received: by 2002:a17:902:aa49:b0:14a:c390:a44b with SMTP id c9-20020a170902aa4900b0014ac390a44bmr24727719plr.11.1643216175325;
-        Wed, 26 Jan 2022 08:56:15 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id nu7sm3834358pjb.30.2022.01.26.08.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 08:56:14 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 26 Jan 2022 06:56:13 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Balbir Singh <sblbir@amazon.com>, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [resend RFC 1/3] pid: introduce task_by_pid()
-Message-ID: <YfF9LdvBsC/lkdWL@slm.duckdns.org>
-References: <20220124105247.2118990-1-brauner@kernel.org>
- <20220124105247.2118990-2-brauner@kernel.org>
+        Wed, 26 Jan 2022 11:57:58 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:54328)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nClcK-004q9Y-Rl; Wed, 26 Jan 2022 09:57:56 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:37556 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nClcJ-004Xqo-M4; Wed, 26 Jan 2022 09:57:56 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Ariadne Conill <ariadne@dereferenced.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+References: <20220126114447.25776-1-ariadne@dereferenced.org>
+        <YfFh6O2JS6MybamT@casper.infradead.org>
+Date:   Wed, 26 Jan 2022 10:57:29 -0600
+In-Reply-To: <YfFh6O2JS6MybamT@casper.infradead.org> (Matthew Wilcox's message
+        of "Wed, 26 Jan 2022 14:59:52 +0000")
+Message-ID: <877damwi2u.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124105247.2118990-2-brauner@kernel.org>
+Content-Type: text/plain
+X-XM-SPF: eid=1nClcJ-004Xqo-M4;;;mid=<877damwi2u.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX199LLVbAXOZV45XrLVVWkp0iDR5ez5Z1fE=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
+        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,XMSubLong
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.5 TR_Symld_Words too many words that have symbols inside
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  0.0 T_TooManySym_03 6+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Matthew Wilcox <willy@infradead.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 412 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 11 (2.6%), b_tie_ro: 9 (2.3%), parse: 0.76 (0.2%),
+         extract_message_metadata: 15 (3.6%), get_uri_detail_list: 1.36 (0.3%),
+         tests_pri_-1000: 16 (4.0%), tests_pri_-950: 1.23 (0.3%),
+        tests_pri_-900: 0.98 (0.2%), tests_pri_-90: 157 (38.0%), check_bayes:
+        141 (34.3%), b_tokenize: 6 (1.4%), b_tok_get_all: 6 (1.5%),
+        b_comp_prob: 2.1 (0.5%), b_tok_touch_all: 124 (30.0%), b_finish: 0.95
+        (0.2%), tests_pri_0: 194 (47.1%), check_dkim_signature: 0.49 (0.1%),
+        check_dkim_adsp: 3.2 (0.8%), poll_dns_idle: 0.50 (0.1%), tests_pri_10:
+        3.0 (0.7%), tests_pri_500: 11 (2.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
+ do_execveat_common()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:52:45AM +0100, Christian Brauner wrote:
-> We have a lot of places that open code
-> 
-> if (who)
->         p = find_task_by_vpid(who);
-> else
->         p = current;
-> 
-> Introduce a simpler helper which can be used instead.
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
+Matthew Wilcox <willy@infradead.org> writes:
 
-For cgroup part:
+> On Wed, Jan 26, 2022 at 11:44:47AM +0000, Ariadne Conill wrote:
+>> Interestingly, Michael Kerrisk opened an issue about this in 2008[1],
+>> but there was no consensus to support fixing this issue then.
+>> Hopefully now that CVE-2021-4034 shows practical exploitative use
+>> of this bug in a shellcode, we can reconsider.
+>> 
+>> [0]: https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+>> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=8408
+>
+> Having now read 8408 ... if ABI change is a concern (and I really doubt
+> it is), we could treat calling execve() with a NULL argv as if the
+> caller had passed an array of length 1 with the first element set to
+> NULL.  Just like we reopen fds 0,1,2 for suid execs if they were
+> closed.
 
-Acked-by: Tejun Heo <tj@kernel.org>
+Where do we reopen fds 0,1,2 for suid execs?  I feel silly but I looked
+through the code fs/exec.c quickly and I could not see it.
 
-Thanks.
 
--- 
-tejun
+I am attracted to the notion of converting an empty argv array passed
+to the kernel into something we can safely pass to userspace.
+
+I think it would need to be having the first entry point to "" instead
+of the first entry being NULL.  That would maintain the invariant that you
+can always dereference a pointer in the argv array.
+
+Eric
+
+
+
+

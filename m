@@ -2,63 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEC949D221
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D53FE49D225
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244315AbiAZS5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:57:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48890 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240700AbiAZS52 (ORCPT
+        id S240700AbiAZS6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244394AbiAZS6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:57:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B16E4B81FB3;
-        Wed, 26 Jan 2022 18:57:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D5AC340E3;
-        Wed, 26 Jan 2022 18:57:24 +0000 (UTC)
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Evgenii Stepanov <eugenis@google.com>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] arm64: extable: fix load_unaligned_zeropad() reg indices
-Date:   Wed, 26 Jan 2022 18:57:21 +0000
-Message-Id: <164322343553.819367.16239308759447224919.b4-ty@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220125182217.2605202-1-eugenis@google.com>
-References: <20220125182217.2605202-1-eugenis@google.com>
+        Wed, 26 Jan 2022 13:58:10 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57154C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:58:10 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id n17so766813iod.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:58:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wyngZyIrlUk01+iEOlsom8ih3d/SEkgg9mdbfxMjBKY=;
+        b=nSPmP24HtC8iu/VFrAUpvAwud6+rPMJ5yo6pAqXOvx8fFTj3qP8h2gt4oObElaUDxR
+         f3geinsOxRWyAkvxpMQMuC6w9f+VVqdUcLJZHjBFjS8O4FWjdtYWpO05/XfvZQ1jv+G6
+         A12hipy+TxNMvNjpcKjyouHTj0MU3iYbtGCgzgZnzq95SFX3ybqPxkLD3yKVBLiK2qEW
+         eVwkYkNemK6Lhy0uuo+/ByG56hxXfHg5XVTjDT2xeEb3pK9/lBCVknk3CHIW5uU/FGbj
+         3khZbEz1vNmkBKlYExdxxnYFNA4GZWHVxRLE1jHfl8bYfTr0FSOIopw44OxnNB3UpTC0
+         yajQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wyngZyIrlUk01+iEOlsom8ih3d/SEkgg9mdbfxMjBKY=;
+        b=z5oaukOodyPYZwmHInKfCIhn+UWY6wpB5BeVE7ZFUaONrZ4KPxeMEyvVwfb7QXzirA
+         S1rMNMimMYXBQnIzBySQ6Ar1heHbGTHEtPlsmdeFDVCI7uWhqrXv/509rGnyGRL72YUs
+         CFKeMtzmEB9tC6W2Qr+Nwg1ldTAVnM7ajic/579I+f3wqbvzlgbErVkw1wx2UeAVbEUC
+         52F9EfJQNZT2jlAiKZZiUV7WzAi0hnv8sM89H4fnGzvyrF9ksTr38r5Dr+2dBfAUp9Ys
+         9WL7WeGg5GPW+sWFB8pRX+sxRFQdDBEaC9A02y0rY4PNAJfDCBRIvrJ349RTwtcx3UYt
+         zqMw==
+X-Gm-Message-State: AOAM5331DxfN+EOz3XTRU+tNf7i26MFuQ5M5ZDSyxKXjQ+Ywq/Fq2ccS
+        7uycDMmc1lYaC9zO9AiB2MdqdayEaPqIMBpP8xVzlBAkxk4=
+X-Google-Smtp-Source: ABdhPJwtMLliBG3wT1Y/vWDYL0Er0UPdS0WQquBtClo6suuooJ1hlgFqLRErD+rAPDLXUnNKXmqNSNQM0vMBhinPeq0=
+X-Received: by 2002:a05:6602:2d49:: with SMTP id d9mr14348785iow.64.1643223489670;
+ Wed, 26 Jan 2022 10:58:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <CANiq72n_FmDx=r-o9J8gYc6LpwRL5EGmhM6Xzwv27Xc7h1TNDw@mail.gmail.com>
+ <cf6ac499-4190-cbe5-255c-f9edf07a4786@kaod.org>
+In-Reply-To: <cf6ac499-4190-cbe5-255c-f9edf07a4786@kaod.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 26 Jan 2022 19:57:58 +0100
+Message-ID: <CANiq72mV3AzmBDVJM+tQriEoDu_9LFBrK_vR6GC4qEmLw0UepQ@mail.gmail.com>
+Subject: Re: ppc: hard lockup / hang in v5.17-rc1 under QEMU
+To:     =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 10:22:17 -0800, Evgenii Stepanov wrote:
-> In ex_handler_load_unaligned_zeropad() we erroneously extract the data and
-> addr register indices from ex->type rather than ex->data. As ex->type will
-> contain EX_TYPE_LOAD_UNALIGNED_ZEROPAD (i.e. 4):
->  * We'll always treat X0 as the address register, since EX_DATA_REG_ADDR is
->    extracted from bits [9:5]. Thus, we may attempt to dereference an
->    arbitrary address as X0 may hold an arbitrary value.
->  * We'll always treat X4 as the data register, since EX_DATA_REG_DATA is
->    extracted from bits [4:0]. Thus we will corrupt X4 and cause arbitrary
->    behaviour within load_unaligned_zeropad() and its caller.
-> 
-> [...]
+On Wed, Jan 26, 2022 at 4:03 PM C=C3=A9dric Le Goater <clg@kaod.org> wrote:
+>
+> Indeed. I could reproduce.
 
-Applied to arm64 (for-next/fixes), thanks!
+Thanks for the quick confirmation!
 
-[1/1] arm64: extable: fix load_unaligned_zeropad() reg indices
-      https://git.kernel.org/arm64/c/afa1bf69aac3
+> Could you please send the QEMU command line and the full dmesg ? and
+> possibly open an issue on :
+>
+>    https://gitlab.com/qemu-project/qemu/-/issues/
+>
+> I guess it's a QEMU modeling issue.
 
--- 
-Catalin
+Of course -- done (details there):
 
+    https://gitlab.com/qemu-project/qemu/-/issues/842
+
+Cheers,
+Miguel

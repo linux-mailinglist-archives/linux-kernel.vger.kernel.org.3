@@ -2,113 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AD349CC63
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFFC49CC6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242177AbiAZOcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:32:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52546 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242194AbiAZOcs (ORCPT
+        id S242187AbiAZOfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:35:12 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:38294 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235539AbiAZOfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:32:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4248B81CEB;
-        Wed, 26 Jan 2022 14:32:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE455C340E3;
-        Wed, 26 Jan 2022 14:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643207565;
-        bh=gKf9zur6l6kv4MdYfaOpKzS4yNvRurcGXURYpzrdMG0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rBnUdQew3vXEXa9GuzBKy2mEi4MS7roxhvTzx/LreGnArMj2bvcSrO3/UDWV91nmK
-         zD7Gz+ooqVokYVDxcWuF63eh3BbIKBIj1td211gAC/P2ej+FOTmuzDmgG1eGI4IhJf
-         XDWZh88RH+3CdSgmCHtVodUNTZcDe6M+0lBFgQSFpKzSuXamoS1tQxcYdPhq+jtX9p
-         ayuldAQic/PPXsWHyDnfd7izDSU5Nrl5WkvMgYppZXRhHWmSxWGA4h1jgEp5yRkEsH
-         PY0cirScc9E3e3/99myFmM+77jaVB7BJ0JpEkuM2S2yuZ0WGlx0xMeuuzaES1MJOyz
-         Dvsc/EXAj0xCg==
-Date:   Wed, 26 Jan 2022 16:32:24 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, vijay.dhanraj@intel.com,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH V2] x86/sgx: Silence softlockup detection when releasing
- large enclaves
-Message-ID: <YfFbeNSuCeANF+UN@iki.fi>
-References: <b5e9f218064aa76e3026f778e1ad0a1d823e3db8.1643133224.git.reinette.chatre@intel.com>
+        Wed, 26 Jan 2022 09:35:10 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QE60PS015989;
+        Wed, 26 Jan 2022 14:35:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=+GObsJxIW/3TliXx0z3KPe4N/3vn48rMKUn+yBtYzE8=;
+ b=Pm9QBvpnxwowgyL8B2KVq/pkxNIM1T0IAEt++lm1U7PzZWczHHqdAWxhRQUORs/k7c0F
+ SWV0aZBnU6CuIRdJjg5hUejAb+Vna117n2G155jdY/+8lgx+VgMSuvWf58lcz+gHPBVz
+ f3rcP6zdlkJQ4wmwSDAoRnNCQgOkSAz4i0F3AEg5v54azb5HAAZs78jqsQHHL/zJIwi9
+ XqhbNZs/j5VC1OJ10+QqgrEe13IpzoWbHtKAnfzg4R4rJPfiRYQVwADQIAKd/B8p8ADb
+ 1p+pNOvUbNncSyH+l/CVfeRQ0P9Zmz5NasL4Ylw5Zy0cK616h23/xyRccEkesYhTYypi vw== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du6hf295g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 14:35:03 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QEVwaG029857;
+        Wed, 26 Jan 2022 14:35:01 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3dr9j9esyu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 14:35:01 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QEYxqA41615680
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 14:34:59 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D1B211C04A;
+        Wed, 26 Jan 2022 14:34:59 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2246111C05B;
+        Wed, 26 Jan 2022 14:34:58 +0000 (GMT)
+Received: from sig-9-65-92-33.ibm.com (unknown [9.65.92.33])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jan 2022 14:34:58 +0000 (GMT)
+Message-ID: <6f0890f135b61c41d81b03bf084ebab1b3e551e1.camel@linux.ibm.com>
+Subject: Re: [RESEND][PATCH] Documentation: added order requirement for
+ ima_hash=
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        "Guozihua (Scott)" <guozihua@huawei.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        wangweiyang <wangweiyang2@huawei.com>,
+        Xiujianfeng <xiujianfeng@huawei.com>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Date:   Wed, 26 Jan 2022 09:34:57 -0500
+In-Reply-To: <173fffb6cde54ae4ac7676d18a84c79f@huawei.com>
+References: <20220125090237.120357-1-guozihua@huawei.com>
+         <36b6058f2cdf6bead917c06ecc6e8769bb88130c.camel@linux.ibm.com>
+         <3933adf5-4e9d-6b22-2e46-55643c504f52@huawei.com>
+         <71508a72b042da330d07a624cf499561c46195f0.camel@linux.ibm.com>
+         <97142483-d7e7-e310-0cb0-30a81414cb57@huawei.com>
+         <c1bfe53abaf24feacb676ce940edcb8899924ffc.camel@linux.ibm.com>
+         <173fffb6cde54ae4ac7676d18a84c79f@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Cx__iswed3ggtw-NR834h7GMmk2w5f-M
+X-Proofpoint-GUID: Cx__iswed3ggtw-NR834h7GMmk2w5f-M
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b5e9f218064aa76e3026f778e1ad0a1d823e3db8.1643133224.git.reinette.chatre@intel.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-26_04,2022-01-26_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ bulkscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
+ lowpriorityscore=0 malwarescore=0 adultscore=0 mlxscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201260089
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:22:43AM -0800, Reinette Chatre wrote:
-> Vijay reported that the "unclobbered_vdso_oversubscribed" selftest
-> triggers the softlockup detector.
+On Wed, 2022-01-26 at 13:24 +0000, Roberto Sassu wrote:
+> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > Sent: Wednesday, January 26, 2022 1:48 PM
+> > On Wed, 2022-01-26 at 15:41 +0800, Guozihua (Scott) wrote:
+> > >
+> > >
+> > > The main issue lies in ima_template_desc_current called by hash_setup,
+> > > which does not just read ima_template global variable, but also tries to
+> > > set it if that hasn't been done already. Causing ima_template_setup to quit.
+> > 
+> > Right, which calls ima_init_template_list().  So part of the solution
+> > could be to conditionally call ima_init_template_list()
+> > in ima_template_setup().
+> > 
+> > -       if (ima_template)
+> > -               return 1;
+> > -
+> > -       ima_init_template_list();
+> > +       if (!ima_template
+> > +               ima_init_template_list();
+> > 
+> > Roberto, what do you think?
 > 
-> Actual SGX systems have 128GB of enclave memory or more.  The
-> "unclobbered_vdso_oversubscribed" selftest creates one enclave which
-> consumes all of the enclave memory on the system. Tearing down such a
-> large enclave takes around a minute, most of it in the loop where
-> the EREMOVE instruction is applied to each individual 4k enclave page.
+> Hi Mimi
 > 
-> Spending one minute in a loop triggers the softlockup detector.
+> I think we wanted to prevent to set a digest algorithm
+> incompatible with the chosen template.
 > 
-> Add a cond_resched() to give other tasks a chance to run and placate
-> the softlockup detector.
+> If we have in the kernel command line:
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 1728ab54b4be ("x86/sgx: Add a page reclaimer")
-> Reported-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
-> Softlockup message:
+> ima_template=ima ima_hash=sha256
 > 
-> watchdog: BUG: soft lockup - CPU#7 stuck for 22s! [test_sgx:11502]
-> Kernel panic - not syncing: softlockup: hung tasks
-> <snip>
-> sgx_encl_release+0x86/0x1c0
-> sgx_release+0x11c/0x130
-> __fput+0xb0/0x280
-> ____fput+0xe/0x10
-> task_work_run+0x6c/0xc0
-> exit_to_user_mode_prepare+0x1eb/0x1f0
-> syscall_exit_to_user_mode+0x1d/0x50
-> do_syscall_64+0x46/0xb0
-> entry_SYSCALL_64_after_hwframe+0x44/0xae
+> ima_hash_algo would be set to HASH_ALGO_SHA1 despite
+> the user choice and the template would be set to 'ima'.
 > 
-> Changes since V1:
-> - V1: https://lore.kernel.org/lkml/1aa037705e5aa209d8b7a075873c6b4190327436.1642530802.git.reinette.chatre@intel.com/
-> - Add comment provided by Jarkko.
+> In the opposite case:	
 > 
->  arch/x86/kernel/cpu/sgx/encl.c | 2 ++
->  1 file changed, 2 insertions(+)
+> ima_hash=sha256 ima_template=ima
 > 
-> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-> index 001808e3901c..48afe96ae0f0 100644
-> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> @@ -410,6 +410,8 @@ void sgx_encl_release(struct kref *ref)
->  		}
->  
->  		kfree(entry);
-> +		/* Invoke scheduler to prevent soft lockups. */
-> +		cond_resched();
->  	}
->  
->  	xa_destroy(&encl->page_array);
-> -- 
-> 2.25.1
-> 
+> if the default template is 'ima', then ima_hash_algo would be
+> set to HASH_ALGO_SHA1. Otherwise, it would be
+> HASH_ALGO_SHA256. If we allow the template to be set after
+> the digest algorithm is evaluated, the template selection will
+> be rejected if the algorithm is incompatible with the template.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>  (kselftest as sanity check)
+The only time that would occur is in the unlikely case that the
+template is being set to "ima".   That sounds reasonable.  In fact we
+should consider preventing the template format being set to "ima".
 
-BR, Jarkko
+> 
+> I'm trying to remember why we still have the digest recalculation
+> in ima_eventdigest_init(). Maybe the only possibility is if we
+> set the template from the policy?
+
+The recalculation was relatively recently added in commit 6cc7c266e5b4
+("ima: Call ima_calc_boot_aggregate() in ima_eventdigest_init()").
+
+thanks,
+
+Mimi
+

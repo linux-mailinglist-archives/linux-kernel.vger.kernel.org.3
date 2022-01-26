@@ -2,135 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5970249C6F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D93DF49C6FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 11:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239484AbiAZJ7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:59:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
+        id S239520AbiAZKAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 05:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233122AbiAZJ7E (ORCPT
+        with ESMTP id S239509AbiAZKAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:59:04 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75081C061744
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 01:59:04 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nCf4s-0000R5-C2; Wed, 26 Jan 2022 10:58:58 +0100
-Message-ID: <d5a15039255d13cf4321bf1c18f49a9cdb666607.camel@pengutronix.de>
-Subject: Re: [PATCH] arm64: dts: imx8mn-venice-gw7902: disable gpu
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Shawn Guo <shawnguo@kernel.org>, Tim Harvey <tharvey@gateworks.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Adam Ford <aford173@gmail.com>
-Date:   Wed, 26 Jan 2022 10:58:56 +0100
-In-Reply-To: <20220126093558.GL4686@dragon>
-References: <20211216161227.31960-1-tharvey@gateworks.com>
-         <20220126093558.GL4686@dragon>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Wed, 26 Jan 2022 05:00:09 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32BCC061744
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:00:08 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id i62so23372438ybg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 02:00:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gK7bszl+FUXRrhnEheiDpnk/jqDd/Le7Dxn0utoVoj8=;
+        b=GhCTQRyPY7E3qzL0iF+8nQ5xk2TXL0XJ43s8X7lqCalrWDuHw7QbggUmvVmy5LBmkh
+         bnb4pRCOhq+iuJdPddnsqzmxKTODiHBjn7O3mPKyalPKi8d/YG6zQJpuyJpgaFOeMBGq
+         GfP+9AnmoUAtmS/F+g5ql9bRikmtbuwWHnSQsJI9wsGvlqWMo6VdFkNpopqonMsdIQVb
+         jz4u8yEiqJ1gcEbpNASsdqbSZWxYHBCUdkcbHu5k+oIDFuPfyjuzqg3LsJurZUGUUIzI
+         62PWxNzYHXMLKXaVge4nkC6hPlXtSFyfvIUBLENwR6caYw5cu9207LtotFw2r0SUmZlj
+         V0VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gK7bszl+FUXRrhnEheiDpnk/jqDd/Le7Dxn0utoVoj8=;
+        b=bJwmzdW4BEZhh95aXE0BAQXDr/CKy6SlGM1/NbPfNh2LPJLYDWQTaa3j/NpX6Xpitd
+         Mn/JkyWKpd/yaothRJTu/hahA6QdtuQSTlVmi49DNHsc8pSYMYYqPVLhKTGqMyy+ygVi
+         T657oKdCuFC+UAJOL3/iXm1B/Bi0RVETwknScqVtu6fUbAIBiSCrBvgeW7+blkNJu6+E
+         jjZVBqax/EnN3PQXEnYcCbzRTvLvzkf19qil1ShwuY2PqPfr+DQaWVWelt0J3CrUM7me
+         DwIuhT/1DOkK8RI0IIUrv48pEgteGtVHB5pOeRoFni/AAqlwYOxZa86/MPFQsVKG4tzF
+         lpGA==
+X-Gm-Message-State: AOAM5308XrBlYqMydPJKZAhHmDRjaRlyPft+8s38WrATBok9gaYyh+6c
+        kBBFv7l2OD6S/4u50ENz4pMD6dmoOIhWXOTNWfZM9w==
+X-Google-Smtp-Source: ABdhPJy8rw1zn0vMv+DMB8N+z1pB8uO0eqAMBVWVctba0N642+H7wxAZyEfghR/ChCdkI5wnC9IBc8lzEsiRxGHWuBg=
+X-Received: by 2002:a25:d107:: with SMTP id i7mr34234702ybg.495.1643191208184;
+ Wed, 26 Jan 2022 02:00:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+References: <20220126092542.64659-1-linmiaohe@huawei.com>
+In-Reply-To: <20220126092542.64659-1-linmiaohe@huawei.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Wed, 26 Jan 2022 17:59:32 +0800
+Message-ID: <CAMZfGtWYkA_vs1_p5ok0T3J4WWamPE5ZNd00wsOOUiUCPnkP8g@mail.gmail.com>
+Subject: Re: [PATCH] mm/highmem: remove unnecessary done label
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 26.01.2022 um 17:35 +0800 schrieb Shawn Guo:
-> On Thu, Dec 16, 2021 at 08:12:27AM -0800, Tim Harvey wrote:
-> > Since commit 99aa29932271 ("arm64: dts: imx8mn: Enable GPU")
-> > imx8mn-venice-gw7902 will hang during kernel init because it uses
-> > a MIMX8MN5CVTI which does not have a GPU.
-> 
-> I do not quite follow on this.  i.MX8MN integrates a GPU, and
-> MIMX8MN5CVTI is built on i.MX8MN, correct?  If so, how comes
-> MIMX8MN5CVTI doesn't have a GPU?
-> 
-It's a fused-down variant of the i.MX8MN that has the GPU disabled by
-fuses.
+On Wed, Jan 26, 2022 at 5:26 PM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> Remove unnecessary done label to simplify the code.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-> > 
-> > Disable pgc_gpumix to work around this. We also disable the GPU devices
-> > that depend on the gpumix power domain and pgc_gpu to avoid them staying
-> > in a probe deferred state forever.
-> 
-> Is this an indication that GPU should be disabled in imx8mn.dtsi and
-> enabled board by board?
-> 
-There's a trade-off here: most boards will probably use the full
-variants that include the GPU, so probably less boards will need to
-disable the GPU, as done here, than boards that need to enable it when
-the base DT disables the GPU.
-
-Same story as with the i.MX6 where there are some SKUs that disable the
-VPU by fuses: we enable it in the base DT and if you happen to build a
-very low-cost board that uses the fused-down version you need to
-disable it in the board DT.
-
-Regards,
-Lucas
-
-> Shawn
-> 
-> > 
-> > Cc: Adam Ford <aford173@gmail.com>
-> > Cc: Lucas Stach <l.stach@pengutronix.de>
-> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> > ---
-> >  .../boot/dts/freescale/imx8mn-venice-gw7902.dts      | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-> > index 236f425e1570..2d58005d20e4 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mn-venice-gw7902.dts
-> > @@ -220,6 +220,10 @@
-> >  	};
-> >  };
-> >  
-> > +&disp_blk_ctrl {
-> > +	status = "disabled";
-> > +};
-> > +
-> >  /* off-board header */
-> >  &ecspi2 {
-> >  	pinctrl-names = "default";
-> > @@ -251,6 +255,10 @@
-> >  	};
-> >  };
-> >  
-> > +&gpu {
-> > +	status = "disabled";
-> > +};
-> > +
-> >  &i2c1 {
-> >  	clock-frequency = <100000>;
-> >  	pinctrl-names = "default";
-> > @@ -546,6 +554,10 @@
-> >  	status = "okay";
-> >  };
-> >  
-> > +&pgc_gpumix {
-> > +	status = "disabled";
-> > +};
-> > +
-> >  /* off-board header */
-> >  &sai3 {
-> >  	pinctrl-names = "default";
-> > -- 
-> > 2.17.1
-> > 
-
-
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>

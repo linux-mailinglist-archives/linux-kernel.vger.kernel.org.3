@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9651D49C9C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E9149C9C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241357AbiAZMe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:34:27 -0500
-Received: from foss.arm.com ([217.140.110.172]:36820 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241330AbiAZMe0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:34:26 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 008D8D6E;
-        Wed, 26 Jan 2022 04:34:26 -0800 (PST)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 41B1A3F793;
-        Wed, 26 Jan 2022 04:34:25 -0800 (PST)
-Date:   Wed, 26 Jan 2022 12:34:18 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah@kernel.org
-Subject: Re: [PATCH 2/5] kselftest: Fix vdso_test_time to pass on skips
-Message-ID: <20220126123418.GH6113@e120937-lin>
-References: <20220126102723.23300-1-cristian.marussi@arm.com>
- <20220126102723.23300-3-cristian.marussi@arm.com>
- <8d513be7-a99d-2b7f-6767-a378742ef3fa@arm.com>
+        id S241365AbiAZMe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241330AbiAZMe5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:34:57 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCECC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:34:57 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id h7so38744411ejf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:34:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A872bzMo6IlzyAAaWw5oHBWQXder2YytjfpeZ9XG+YI=;
+        b=dLcrTCHgZcoiBBrgo+IT+WWZcsahinvRFDXNidl+eV1OG12bGu7I6xaNL82s+EBKv2
+         IJjyrcfFhuwJZ1sA/nXSwuiWMJOCMjCS9lcu2VoKXklf9VT2M+F4Jpp1XqO2KtSWLTH7
+         iGImzI/53J51uWCaN80T3ayPBbQdrnx4TNm/O1tlhcYRIgkQgu/mKcQ1q/79rTvobqXO
+         gPuF2b2FHMtJqlo6/Te7Q/6c5KpP0TTrTSy2UGKP4eSupuilp3YrK07yKJmwQDnS97nQ
+         337HDYc8smOlARoDdWP5vb9i/MHr8SUJ0rgW9IcsGJbonEk08b6gIdGrvRrt4XZ0ae+f
+         atrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A872bzMo6IlzyAAaWw5oHBWQXder2YytjfpeZ9XG+YI=;
+        b=gaes7xCojweYu9U3p3/QiLwCyn96dmoOUmV5i8VRSKbVldVDDp5luMhKXJDu2fQyxK
+         iXt0esV3iochzbrqH3XH5uJfvJfLAPlW50LR9qh0OZtjBO3loEg/mTVZidB6zE3vaOl0
+         j1iILm/xxYEWnRq2O1Kfp8sxdc0CX5Nl03J+nN580x5iauNE1w6F/XnG/YFC+yFQyTem
+         Z1U84mMBfVZTp8RjIKxl4FdfdJbciwmetWHaf1zRRdWRDgbJJ/zi95XjUDFrdaBUXYtj
+         ULbhzkFAPPm3HZZUehbRMsag6I5D9aa17r2VlA2VhhB+PXCVTNToirQeGAuNJkRcJxbJ
+         Pn/Q==
+X-Gm-Message-State: AOAM533csh1YIjaL/iBDvLYjRCIvpv6tYegpaC7EpXXF/q1hZdacXx7w
+        oxHDRxX6WvJAqgPjC4OgsohXBCBWVAa5E8sLbmaP1Q==
+X-Google-Smtp-Source: ABdhPJzzm/M/KzGvTIlAYxOvQ2uo59zhnAsKB2J/FvNGDsr+MM678QTfLTc0An/w7tcT+GYa+/zH6vCyWLvjGDfg2kk=
+X-Received: by 2002:a17:907:7d8c:: with SMTP id oz12mr862732ejc.320.1643200495700;
+ Wed, 26 Jan 2022 04:34:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d513be7-a99d-2b7f-6767-a378742ef3fa@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20220126060514.1574935-1-pasha.tatashin@soleen.com>
+ <20220126060514.1574935-4-pasha.tatashin@soleen.com> <edd2d5d0-998a-633c-fc60-4f31ae768d3e@google.com>
+In-Reply-To: <edd2d5d0-998a-633c-fc60-4f31ae768d3e@google.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Wed, 26 Jan 2022 07:34:19 -0500
+Message-ID: <CA+CK2bB_DwxGCD0TOJ7B1gN4sgXg5Bptw2LQbuD7Q4gQFm3vCg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] mm/khugepaged: unify collapse pmd clear, flush and free
+To:     David Rientjes <rientjes@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Turner <pjt@google.com>, Wei Xu <weixugc@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Fusion Future <qydwhotmail@gmail.com>,
+        Hugh Dickins <hughd@google.com>, Zi Yan <ziy@nvidia.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:22:45PM +0000, Vincenzo Frascino wrote:
-> Hi Cristian,
-> 
+On Wed, Jan 26, 2022 at 1:34 AM David Rientjes <rientjes@google.com> wrote:
+>
+> On Wed, 26 Jan 2022, Pasha Tatashin wrote:
+>
+> > Unify the code that flushes, clears pmd entry, and frees the PTE table
+> > level into a new function collapse_and_free_pmd().
+> >
+> > This clean-up is useful as in the next patch we will add another call to
+> > this function to iterate through PTE prior to freeing the level for page
+> > table check.
+> >
+> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+>
+> Acked-by: David Rientjes <rientjes@google.com>
 
-Hi Vincenzo,
+Thank you, David.
 
-thanks for the feedback.
-
-> On 1/26/22 10:27 AM, Cristian Marussi wrote:
-> > When a vDSO symbol is not found, all the testcases in vdso_test_abi usually
-> > report a SKIP, which, in turn, is reported back to Kselftest as a PASS.
-> > 
-> > Testcase vdso_test_time, instead, reporting a SKIP, causes the whole set of
-> > tests within vdso_test_abi to be considered FAIL when symbol is not found.
-> > 
-> > Fix it reporting a PASS when vdso_test_time cannot find the vdso symbol.
-> > 
-> > Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+>
+> One nit below.
+>
 > > ---
-> > Seen as a failure on both a JUNO and a Dragonboard on both recent and old
-> > kernels/testruns:
-> > 
-> > root@deb-buster-arm64:~# /opt/ksft/vDSO/vdso_test_abi
-> > [vDSO kselftest] VDSO_VERSION: LINUX_2.6.39
-> > The time is 1637922136.675304
-> > The time is 1637922136.675361000
-> > The resolution is 0 1
-> > clock_id: CLOCK_REALTIME [PASS]
-> > The time is 1927.760604900
-> > The resolution is 0 1
-> > clock_id: CLOCK_BOOTTIME [PASS]
-> > The time is 1637922136.675649700
-> > The resolution is 0 1
-> > clock_id: CLOCK_TAI [PASS]
-> > The time is 1637922136.672000000
-> > The resolution is 0 4000000
-> > clock_id: CLOCK_REALTIME_COARSE [PASS]
-> > The time is 1927.761005600
-> > The resolution is 0 1
-> > clock_id: CLOCK_MONOTONIC [PASS]
-> > The time is 1927.761132780
-> > The resolution is 0 1
-> > clock_id: CLOCK_MONOTONIC_RAW [PASS]
-> > The time is 1927.757093740
-> > The resolution is 0 4000000
-> > clock_id: CLOCK_MONOTONIC_COARSE [PASS]
-> > Could not find __kernel_time              <<< This caused a FAIL as a whole
-> > root@deb-buster-arm64:~# echo $?
-> > 1
-> > 
-> > e.g.: https://lkft.validation.linaro.org/scheduler/job/2192570#L27778
-> > ---
-> >  tools/testing/selftests/vDSO/vdso_test_abi.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
-> > index 3d603f1394af..7dcc66d1cecf 100644
-> > --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
-> > +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
-> > @@ -90,8 +90,9 @@ static int vdso_test_time(void)
-> >  		(vdso_time_t)vdso_sym(version, name[2]);
-> >  
-> >  	if (!vdso_time) {
-> > +		/* Skip if symbol not found: consider skipped tests as passed */
-> >  		printf("Could not find %s\n", name[2]);
-> > -		return KSFT_SKIP;
-> > +		return KSFT_PASS;
-> 
-> My preference would be to keep "KSFT_SKIP" here and verify separately the return
-> status of each test. This would maintain compliance with the kselftest API.
-> Could you please test the patch in-reply-to this one (will be sent shortly) and
-> let me know if it works for you?
-> 
-Sure, I was indeed not sure my solution was what you wanted.
+> >  mm/khugepaged.c | 32 ++++++++++++++++----------------
+> >  1 file changed, 16 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 35f14d0a00a6..440112355ffe 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -1416,6 +1416,17 @@ static int khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
+> >       return 0;
+> >  }
+> >
+> > +static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *vma,
+> > +                               unsigned long addr, pmd_t *pmdp)
+> > +{
+> > +     spinlock_t *ptl = pmd_lock(vma->vm_mm, pmdp);
+> > +     pmd_t pmd = pmdp_collapse_flush(vma, addr, pmdp);
+> > +
+> > +     spin_unlock(ptl);
+>
+> No strong objection, but I think the typical style would be to declare the
+> local variables separately and avoid mixing the code, especially in cases
+> when taking locks (and not just initializing the local variables).
 
-> If it does feel free to fold it in the next version of your series with your
-> "Tested-by:" otherwise let me know.
+I will address this in the next revision.
 
-Sure, I'll do and keep you on CC.
-
-Thanks,
-Cristian
-
+Thank you,
+Pasha

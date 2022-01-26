@@ -2,116 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5B949D089
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F9B49D08B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243647AbiAZRQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:16:23 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:39694 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231270AbiAZRQV (ORCPT
+        id S243665AbiAZRQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:16:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51494 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243650AbiAZRQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:16:21 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-281-5jw7EpX6N4aq0oVh1z86_w-1; Wed, 26 Jan 2022 17:16:19 +0000
-X-MC-Unique: 5jw7EpX6N4aq0oVh1z86_w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 26 Jan 2022 17:16:16 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 26 Jan 2022 17:16:16 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Mathieu Desnoyers' <mathieu.desnoyers@efficios.com>,
-        Christian Brauner <brauner@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>, shuah <shuah@kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        "Andy Lutomirski" <luto@amacapital.net>,
-        Dave Watson <davejwatson@fb.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Andi Kleen <andi@firstfloor.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Ben Maurer <bmaurer@fb.com>, rostedt <rostedt@goodmis.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Joel Fernandes <joelaf@google.com>
-Subject: RE: [RFC PATCH 02/15] rseq: Remove broken uapi field layout on 32-bit
- little endian
-Thread-Topic: [RFC PATCH 02/15] rseq: Remove broken uapi field layout on
- 32-bit little endian
-Thread-Index: AdgS2G4EeBx+7+jyRfijfhRZbWR//g==
-Date:   Wed, 26 Jan 2022 17:16:16 +0000
-Message-ID: <fc04219fc3414bbb968adb844052ecb7@AcuMS.aculab.com>
-References: <20220124171253.22072-1-mathieu.desnoyers@efficios.com>
- <20220124171253.22072-3-mathieu.desnoyers@efficios.com>
- <20220125122156.v2f5anzcs35i3rii@wittgenstein>
- <1234069751.70438.1643121673355.JavaMail.zimbra@efficios.com>
- <1445357149.71067.1643137248305.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1445357149.71067.1643137248305.JavaMail.zimbra@efficios.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 26 Jan 2022 12:16:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20D1161923;
+        Wed, 26 Jan 2022 17:16:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F19C340E3;
+        Wed, 26 Jan 2022 17:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643217383;
+        bh=aR5TTg+yX2ncUu2adEk0kEJ2Fb368DAANpS08G5wYEo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kDm7Qz+623bPk2g1lVdMwhk4OwhthiEtOBCqN0ktL2R/nB4cLFCqs264tgN0jIsXN
+         Mq3SbKnntVhu6gVy2z76lqokQq80IL0JcQNAogisF4HDBhL92rEjPoxAitIc9uTlsZ
+         zOhdYKPSo4BXkm9rQa3byzo4nySvQ8OrO7xGMi5A3YXIMKNIBkggACXDeUmriYJN0x
+         WRqNmIXON0rl7DNEeX0JBhMGLw7eOF9s/x6d9ezZbL70RFxebKfBfiB27Nl0kQ+Q19
+         7g06pKPL9WDUnZ74EtKHiMDGrFc7xBx47SLM/tEB2hsj6nV3omkFzR/yBctHXzx5F6
+         A2aE9RbsZQgCw==
+Date:   Wed, 26 Jan 2022 17:16:17 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "nobuta.keiya@fujitsu.com" <nobuta.keiya@fujitsu.com>
+Cc:     "'madvenka@linux.microsoft.com'" <madvenka@linux.microsoft.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "sjitindarsingh@gmail.com" <sjitindarsingh@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v13 11/11] arm64: Select HAVE_RELIABLE_STACKTRACE
+Message-ID: <YfGB4RnMjl9W6iso@sirena.org.uk>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-12-madvenka@linux.microsoft.com>
+ <TY2PR01MB5257518B8EB381E16D52B244855F9@TY2PR01MB5257.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v039aBggoL9WPPvU"
+Content-Disposition: inline
+In-Reply-To: <TY2PR01MB5257518B8EB381E16D52B244855F9@TY2PR01MB5257.jpnprd01.prod.outlook.com>
+X-Cookie: Use only in a well-ventilated area.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWF0aGlldSBEZXNub3llcnMNCj4gU2VudDogMjUgSmFudWFyeSAyMDIyIDE5OjAxDQo+
-IA0KPiAtLS0tLSBPbiBKYW4gMjUsIDIwMjIsIGF0IDk6NDEgQU0sIE1hdGhpZXUgRGVzbm95ZXJz
-IG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbSB3cm90ZToNCj4gDQo+ID4gLS0tLS0gT24g
-SmFuIDI1LCAyMDIyLCBhdCA3OjIxIEFNLCBDaHJpc3RpYW4gQnJhdW5lciBicmF1bmVyQGtlcm5l
-bC5vcmcgd3JvdGU6DQo+IFsuLi5dDQo+ID4+PiAgaW5jbHVkZS91YXBpL2xpbnV4L3JzZXEuaCB8
-IDE3ICsrKystLS0tLS0tLS0tLS0tDQo+IFsuLi5dDQo+ID4+PiAgCXVuaW9uIHsNCj4gPj4NCj4g
-Pj4gQSBiaXQgdW5mb3J0dW5hdGUgd2Ugc2VlbSB0byBoYXZlIHRvIGtlZXAgdGhlIHVuaW9uIGFy
-b3VuZCBldmVuIHRob3VnaA0KPiA+PiBpdCdzIGp1c3Qgb25lIGZpZWxkIG5vdy4NCj4gPg0KPiA+
-IFdlbGwsIGFzIGZhciBhcyB0aGUgdXNlci1zcGFjZSBwcm9qZWN0cyB0aGF0IEkga25vdyBvZiB3
-aGljaCB1c2UgcnNlcQ0KPiA+IGFyZSBjb25jZXJuZWQgKGdsaWJjLCBsaWJyc2VxLCB0Y21hbGxv
-YyksIHRob3NlIGVuZCB1cCB3aXRoIHRoZWlyIG93bg0KPiA+IGNvcHkgb2YgdGhlIHVhcGkgaGVh
-ZGVyIGFueXdheSB0byBkZWFsIHdpdGggdGhlIGJpZy9saXR0bGUgZW5kaWFuIGZpZWxkDQo+ID4g
-b24gMzItYml0LiBTbyBJJ20gdmVyeSBtdWNoIG9wZW4gdG8gcmVtb3ZlIHRoZSB1bmlvbiBpZiB3
-ZSBhY2NlcHQgdGhhdA0KPiA+IHRoaXMgdWFwaSBoZWFkZXIgaXMgcmVhbGx5IGp1c3QgbWVhbnQg
-dG8gZXhwcmVzcyB0aGUgQUJJIGFuZCBpcyBub3QNCj4gPiBleHBlY3RlZCB0byBiZSB1c2VkIGFz
-IGFuIEFQSSBieSB1c2VyLXNwYWNlLg0KPiA+DQo+ID4gVGhhdCB3b3VsZCBtZWFuIHdlIGFsc28g
-YnJpbmcgYSB1YXBpIGhlYWRlciBjb3B5IGludG8gdGhlIGtlcm5lbA0KPiA+IHJzZXEgc2VsZnRl
-c3RzIGFzIHdlbGwgdG8gbWluaW1pemUgdGhlIGdhcCBiZXR3ZWVuIGxpYnJzZXEgYW5kDQo+ID4g
-dGhlIGtlcm5lbCBzZWZsdGVzdHMgKHRoZSBrZXJuZWwgc2VmbHRlc3RzIHByZXR0eSBtdWNoIGlu
-Y2x1ZGUgYQ0KPiA+IGNvcHkgb2YgbGlicnNlcSBmb3IgY29udmVuaWVuY2UuIGxpYnJzZXEgaXMg
-bWFpbnRhaW5lZCBvdXQgb2YgdHJlZSkuDQo+ID4NCj4gPiBUaG91Z2h0cyA/DQo+IA0KPiBBY3R1
-YWxseSwgaWYgd2UgZ28gYWhlYWQgYW5kIHJlbW92ZSB0aGUgdW5pb24sIGFuZCByZXBsYWNlOg0K
-PiANCj4gc3RydWN0IHJzZXEgew0KPiAgIHVuaW9uIHsNCj4gICAgIF9fdTY0IHB0cjY0Ow0KPiAg
-IH0gcnNlcV9jczsNCj4gWy4uLl0NCj4gfSB2Ow0KPiANCj4gYnk6DQo+IA0KPiBzdHJ1Y3QgcnNl
-cSB7DQo+ICAgX191NjQgcnNlcV9jczsNCj4gfSB2Ow0KPiANCj4gZXhwcmVzc2lvbnMgc3VjaCBh
-cyB0aGVzZSBhcmUgdW5jaGFuZ2VkOg0KPiANCj4gLSBzaXplb2Yodi5yc2VxX2NzKSwNCj4gLSAm
-di5yc2VxX2NzLA0KPiAtIF9fYWxpZ25vZl9fKHYucnNlcV9jcyksDQo+IC0gb2Zmc2V0b2Yoc3Ry
-dWN0IHJzZXEsIHJzZXFfY3MpLg0KPiANCj4gU28gdXNlcnMgb2YgdGhlIHVhcGkgcnNlcS5oIChh
-cyBhbiBBUEkpIGNhbiBzdGlsbCB1c2UgcnNlcV9hYmktPnJzZXFfY3MgYmVmb3JlDQo+IGFuZCBh
-ZnRlciB0aGUgY2hhbmdlLg0KDQpCdXQ6DQoJdi5yc2VxX2NzLnB0cl82NCA9ICh1aW50cHRyX3Qp
-JmZvbzsNCmlzIGJyb2tlbi4NCg0KPiBCYXNlZCBvbiB0aGlzLCBJIGFtIGluY2xpbmVkIHRvIHJl
-bW92ZSB0aGUgdW5pb24sIGFuZCBqdXN0IG1ha2UgdGhlIHJzZXFfY3MgZmllbGQNCj4gYSBfX3U2
-NC4NCg0KSXQgcmVhbGx5IGlzIGEgc2hhbWUgdGhhdCB5b3UgY2FuJ3QgZG86DQoJdm9pZCAgICpy
-c2VxX2NzIF9fYXR0cmlidXRlX18oKHNpemUoOCkpKTsNCmFuZCBoYXZlIHRoZSBjb21waWxlciBq
-dXN0IERUUlQgb24gMzJiaXQgc3lzdGVtcy4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRk
-cmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBN
-SzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
+--v039aBggoL9WPPvU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Jan 25, 2022 at 05:21:27AM +0000, nobuta.keiya@fujitsu.com wrote:
+
+> I know that Julien Thierry published objtool support for arm64 [1], but I'm not
+> sure if it has been updated. Could you tell me other threads if you know?
+
+I've not heard of anyone else picking that up.
+
+--v039aBggoL9WPPvU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHxgeEACgkQJNaLcl1U
+h9AeZQgAhE1zfok88S69ExiVCwo4qLkMK0qP4cXtzuzVw5i8WAyR0aP0xtfIZg5J
+x+Qwu0HOFe2OazXVO+nY6ggC2WhT4Mhk2w3269rN6jnvlTifJqVBHNqseJBtjrWV
+ULmrweCzOb81LQJwfn69LXusz+aqXeAKHT17924Pd0zGbRhgpObSKCdTwbZBxoWI
+pc6kZNu/Sq3z8FP6Up66BOum8+l8wKhIEsdHQm1TZHud+P+9+no0t545XKJbddTQ
+ytQeVNOes799bzJAF/DKIUvJHDUr3GKx7Z/ZVLYfcPlimNpIk1H/FP/9YDxRHWsk
+yhkqb/PkS+UpJzyMismn+sLuvXPtRw==
+=sDH5
+-----END PGP SIGNATURE-----
+
+--v039aBggoL9WPPvU--

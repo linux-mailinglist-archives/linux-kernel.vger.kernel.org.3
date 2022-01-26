@@ -2,131 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 612DA49C3F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16EC949C3F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237538AbiAZHBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 02:01:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60578 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiAZHBe (ORCPT
+        id S237552AbiAZHGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 02:06:15 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:54012 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229979AbiAZHGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 02:01:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A5BAB81C0C;
-        Wed, 26 Jan 2022 07:01:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB70C340E3;
-        Wed, 26 Jan 2022 07:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643180491;
-        bh=DnMOT2vlu2opZbnfCdapvRfBKqFGLQL1Y5Zbwh5314g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SE8ra/wvzUJDhk8ChNZk2kYH5wi9CXIf7KYV1Uw7XnNNJEqrL5Oetr1kfhbYIvxvw
-         3AFkP2fG6WYk8p52Kuq6z3cfAzvUaP4GXrkTcR4FR8iFnJttDl/B63UnLdex/TR+9B
-         HwpU+D5MjDB9Jw3ijrM2E+SyCyOMnngJuio3fdS3hB54xtXltggj67kAaNM7wj7+S+
-         qALdsuInsQAV3jRiqjS4tQV8bO54rfZPuuFqENyysCizjCFFD0JLJeAqSEJ9iFeRJ8
-         Tz0RnBtRM7+WdNrvAEEeJHegTUcFyfoIumaZ5pPWO7cVaWpz2nMNPZUqvDyCu/cVlD
-         jRWY/DGC5WlSw==
-Date:   Wed, 26 Jan 2022 16:01:27 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] perf: Avoid -Warray-bounds warning for __rel_loc macro
-Message-Id: <20220126160127.f3deb7f73e87066e94218a48@kernel.org>
-In-Reply-To: <20220125220037.2738923-1-keescook@chromium.org>
-References: <20220125220037.2738923-1-keescook@chromium.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Wed, 26 Jan 2022 02:06:13 -0500
+X-UUID: 9468cd6333a943dc9e1a583a4c7e165c-20220126
+X-UUID: 9468cd6333a943dc9e1a583a4c7e165c-20220126
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 24402797; Wed, 26 Jan 2022 15:06:10 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 26 Jan 2022 15:06:09 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 26 Jan 2022 15:06:09 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <wenst@chromium.org>
+CC:     <chun-jie.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>
+Subject: Re: [PATCH 18/31] clk: mediatek: Implement mtk_clk_unregister_composites() API
+Date:   Wed, 26 Jan 2022 15:06:09 +0800
+Message-ID: <20220126070609.28749-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220122091731.283592-19-wenst@chromium.org>
+References: <20220122091731.283592-19-wenst@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 14:00:37 -0800
-Kees Cook <keescook@chromium.org> wrote:
-
-> As done for trace_events.h, also fix the __rel_loc macro in perf.h,
-> which silences the -Warray-bounds warning:
+> mtk_clk_register_composites(), as the name suggests, is used to register
+> a given list of composite clks. However it is lacking a counterpart
+> unregister API.
 > 
-> In file included from ./include/linux/string.h:253,
->                  from ./include/linux/bitmap.h:11,
->                  from ./include/linux/cpumask.h:12,
->                  from ./include/linux/mm_types_task.h:14,
->                  from ./include/linux/mm_types.h:5,
->                  from ./include/linux/buildid.h:5,
->                  from ./include/linux/module.h:14,
->                  from samples/trace_events/trace-events-sample.c:2:
-> In function '__fortify_strcpy',
->     inlined from 'perf_trace_foo_rel_loc' at samples/trace_events/./trace-events-sample.h:519:1:
-> ./include/linux/fortify-string.h:47:33: warning: '__builtin_strcpy' offset 12 is out of the bounds [
-> 0, 4] [-Warray-bounds]
->    47 | #define __underlying_strcpy     __builtin_strcpy
->       |                                 ^
-> ./include/linux/fortify-string.h:445:24: note: in expansion of macro '__underlying_strcpy'
->   445 |                 return __underlying_strcpy(p, q);
->       |                        ^~~~~~~~~~~~~~~~~~~
+> Implement said unregister API so that the various clock platform drivers
+> can utilize it to do proper unregistration, cleanup and removal.
 > 
-> Also make __data struct member a proper flexible array to avoid future
-> problems.
+> In the header file, the register function's declaration is also
+> reformatted to fit code style guidelines.
 > 
-
-This looks good to me.
-
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-BTW, same macro is in the include/trace/bpf_probe.h.
-I'm not sure bpf using this macro, should we update it for
-consistency?
-
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 > ---
->  include/trace/perf.h         | 5 +++--
->  include/trace/trace_events.h | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
+>  drivers/clk/mediatek/clk-mtk.c | 41 ++++++++++++++++++++++++++++++++++
+>  drivers/clk/mediatek/clk-mtk.h |  2 ++
+>  2 files changed, 43 insertions(+)
 > 
-> diff --git a/include/trace/perf.h b/include/trace/perf.h
-> index b77d09c70a93..5800d13146c3 100644
-> --- a/include/trace/perf.h
-> +++ b/include/trace/perf.h
-> @@ -26,8 +26,9 @@
+> diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
+> index 3a6dfe445e63..2150ed8678e0 100644
+> --- a/drivers/clk/mediatek/clk-mtk.c
+> +++ b/drivers/clk/mediatek/clk-mtk.c
+> @@ -233,6 +233,27 @@ struct clk *mtk_clk_register_composite(const struct mtk_composite *mc,
+>  	return ERR_PTR(ret);
+>  }
 >  
->  #undef __get_rel_dynamic_array
->  #define __get_rel_dynamic_array(field)	\
-> -		((void *)(&__entry->__rel_loc_##field) +	\
-> -		 sizeof(__entry->__rel_loc_##field) +		\
-> +		((void *)__entry +					\
-> +		 offsetof(typeof(*__entry), __rel_loc_##field) +	\
-> +		 sizeof(__entry->__rel_loc_##field) +			\
->  		 (__entry->__rel_loc_##field & 0xffff))
+> +static void mtk_clk_unregister_composite(struct clk *clk)
+> +{
+> +	struct clk_hw *hw = __clk_get_hw(clk);
+> +	struct clk_composite *composite = to_clk_composite(hw);
+> +	struct clk_mux *mux = NULL;
+> +	struct clk_gate *gate = NULL;
+> +	struct clk_divider *div = NULL;
+
+Like mtk_clk_unregister_pll(clk), let's check !hw for consistency
+of clk unregister functions.
+
+thanks,
+Miles
+> +
+> +	if (composite->mux_hw)
+> +		mux = to_clk_mux(composite->mux_hw);
+> +	if (composite->gate_hw)
+> +		gate = to_clk_gate(composite->gate_hw);
+> +	if (composite->rate_hw)
+> +		div = to_clk_divider(composite->rate_hw);
+> +
+> +	clk_unregister_composite(clk);
+> +	kfree(div);
+> +	kfree(gate);
+> +	kfree(mux);
+> +}
+> +
+>  void mtk_clk_register_composites(const struct mtk_composite *mcs,
+>  		int num, void __iomem *base, spinlock_t *lock,
+>  		struct clk_onecell_data *clk_data)
+> @@ -259,6 +280,26 @@ void mtk_clk_register_composites(const struct mtk_composite *mcs,
+>  }
+>  EXPORT_SYMBOL_GPL(mtk_clk_register_composites);
 >  
->  #undef __get_rel_dynamic_array_len
-> diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-> index cefefed18e85..7c86cc541c7a 100644
-> --- a/include/trace/trace_events.h
-> +++ b/include/trace/trace_events.h
-> @@ -134,7 +134,7 @@ TRACE_MAKE_SYSTEM_STR();
->  	struct trace_event_raw_##name {					\
->  		struct trace_entry	ent;				\
->  		tstruct							\
-> -		char			__data[0];			\
-> +		char			__data[];			\
->  	};								\
->  									\
->  	static struct trace_event_class event_class_##name;
+> +void mtk_clk_unregister_composites(const struct mtk_composite *mcs, int num,
+> +				   struct clk_onecell_data *clk_data)
+> +{
+> +	int i;
+> +
+> +	if (!clk_data)
+> +		return;
+> +
+> +	for (i = num; i > 0; i--) {
+> +		const struct mtk_composite *mc = &mcs[i - 1];
+> +
+> +		if (IS_ERR_OR_NULL(clk_data->clks[mc->id]))
+> +			continue;
+> +
+> +		mtk_clk_unregister_composite(clk_data->clks[mc->id]);
+> +		clk_data->clks[mc->id] = ERR_PTR(-ENOENT);
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_clk_unregister_composites);
+> +
+>  void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds,
+>  			int num, void __iomem *base, spinlock_t *lock,
+>  				struct clk_onecell_data *clk_data)
+> diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
+> index e3ae22fb0334..3c3a934f53cd 100644
+> --- a/drivers/clk/mediatek/clk-mtk.h
+> +++ b/drivers/clk/mediatek/clk-mtk.h
+> @@ -153,6 +153,8 @@ struct clk *mtk_clk_register_composite(const struct mtk_composite *mc,
+>  void mtk_clk_register_composites(const struct mtk_composite *mcs,
+>  		int num, void __iomem *base, spinlock_t *lock,
+>  		struct clk_onecell_data *clk_data);
+> +void mtk_clk_unregister_composites(const struct mtk_composite *mcs, int num,
+> +				   struct clk_onecell_data *clk_data);
+>  
+>  struct mtk_clk_divider {
+>  	int id;
 > -- 
-> 2.30.2
-> 
+> 2.35.0.rc0.227.g00780c9af4-goog
 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

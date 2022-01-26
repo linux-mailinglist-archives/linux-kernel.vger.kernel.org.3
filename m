@@ -2,87 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5433B49CE92
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D633449CE8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 16:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242895AbiAZPeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 10:34:36 -0500
-Received: from mga03.intel.com ([134.134.136.65]:12322 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229493AbiAZPef (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 10:34:35 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="246519377"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="246519377"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 07:34:35 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="581135528"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 07:34:31 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1nCkIW-00EeDr-KP;
-        Wed, 26 Jan 2022 17:33:24 +0200
-Date:   Wed, 26 Jan 2022 17:33:24 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
-Message-ID: <YfFpxEJ6L18DJQil@smile.fi.intel.com>
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
- <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
- <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
- <75a10e6f-ade7-01d9-9523-9a1936f8a2cc@suse.de>
- <YfFNhsPr4kS2/LXa@smile.fi.intel.com>
- <df377b35-8913-a8c6-760b-073f462780cc@suse.de>
+        id S242887AbiAZPdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 10:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235928AbiAZPdw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 10:33:52 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCD3C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:33:51 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id l5so52341944edv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 07:33:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4LpTLyJliuJxLgvINcGGHTCssFGhu4/tQZLGf4U7OIY=;
+        b=BotwPb2J1pDMG00td4zlmVziK8SurJLBoDP9KCc2/h75hLOacZO5PoEKTPbilUMSmL
+         EZo4B8StUCOfOrx2cOccCZ/aenv0GEAjVA6CfSPY4OPK4yMG4WSveKHKi4T+owCUgjeA
+         9RbKdsp+oYh+e8z8nBsBTQlp76OEwpTlPvfbF21msZNcxNzG8DEwavhlIINEk3Qm3CxC
+         H40XcVao5UtXv28Iwvw2NTlQ5jkrR7UOqz1Ym2bCbxywPiZrFVvlDwr7u33Pp6KutwP7
+         8q1J5Ur4v5GTefeJjTezDHYG4uqFw4siH+jWmlZPT67mHi6sEOOufoNIzLzI/YRucR8+
+         6kiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4LpTLyJliuJxLgvINcGGHTCssFGhu4/tQZLGf4U7OIY=;
+        b=WF0sURW1/j+X/4YhpsHlmXxhKvXqKz0F05AR6Nj+4Ul+SKu7WerRpCtbeWZt1iG13T
+         rn9X3Zm85xolhJdFtJ3mpg7nyRgguDxN45kQz4ixeCkIFpjOfGo63UtvTGodnHE7u/CL
+         JlQhpdOBsLnJoUfN4n0eY/nLrpQc6GDwJVFsvYWRaUYbbngO/qigWsuE/6aRTLtZ3BGp
+         4RH5rUPUyAbc/evW1nglUMpXCmMraFNdieXyyF3kcpXMc/fqXwAU0ibNFmTSgMwPIpUP
+         qcakTAdG2qh+H8d5tvXMxdG6oLz4mWDPhzzN0JsOx/6bkau/1pZabSUf4TIDrHV01HRa
+         ymEA==
+X-Gm-Message-State: AOAM530o/fthz7Z3c6qrEzNQYNXG1rOLl7QdAfOh+i16T7bD4Dsj+P/j
+        USUc+lWcx7v4xQ/tXNvUBM+unVKf1tvRPeM3mQW9pQ==
+X-Google-Smtp-Source: ABdhPJyAtGLzI4bJ46dyj8zSkOfANb/MxA9wx82BBd5Hv8lxryFlBg5LoNbHaFnAiyXng97hpyIiezDab6867WeDZgc=
+X-Received: by 2002:a50:cc03:: with SMTP id m3mr25234890edi.356.1643211230186;
+ Wed, 26 Jan 2022 07:33:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <df377b35-8913-a8c6-760b-073f462780cc@suse.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220126012203.2979709-1-pmalani@chromium.org>
+ <YfDEHoYkLc6zjSxj@google.com> <CACeCKafqQmb7jjzweaRq2ETBbPk_2HE8FbFLMdfcCD8PrdckoQ@mail.gmail.com>
+In-Reply-To: <CACeCKafqQmb7jjzweaRq2ETBbPk_2HE8FbFLMdfcCD8PrdckoQ@mail.gmail.com>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Wed, 26 Jan 2022 07:33:38 -0800
+Message-ID: <CABXOdTemE9TOhOXy27beoEvj_6eTcwUj_A6=DMhEmMgCsqXRnQ@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Check for EC device
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Tzung-Bi Shih <tzungbi@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alyssa Ross <hi@alyssa.is>, Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 04:02:23PM +0100, Thomas Zimmermann wrote:
-> Am 26.01.22 um 14:32 schrieb Andy Shevchenko:
-> > On Wed, Jan 26, 2022 at 12:41:41PM +0100, Thomas Zimmermann wrote:
-> > > Am 26.01.22 um 11:59 schrieb Helge Deller:
+On Tue, Jan 25, 2022 at 8:05 PM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> Hi Tzung-Bi,
+>
+> Thanks for your review.
+>
+> On Tue, Jan 25, 2022 at 7:46 PM Tzung-Bi Shih <tzungbi@google.com> wrote:
+> >
+> > On Wed, Jan 26, 2022 at 01:22:03AM +0000, Prashant Malani wrote:
+> > > Fixes: fdc6b21e2444 ("platform/chrome: Add Type C connector class driver")
+> > > Reported-by: Alyssa Ross <hi@alyssa.is>
+> > > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> >
+> > With a minor comment,
+> > Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+> >
+> > > @@ -1076,6 +1076,12 @@ static int cros_typec_probe(struct platform_device *pdev)
+> > >
+> > >       typec->dev = dev;
+> > >       typec->ec = dev_get_drvdata(pdev->dev.parent);
+> > > +
+> >
+> > I would prefer to remove the blank line to make it look like an integrated block.
+>
+> I actually prefer it as it is. typec->dev is not really part of this
+> "integrated block", and I don't want to add another space there.
 
-> > > It's always for the same reason: the hw is old and devs have moved on.
-> > 
-> > It's pity to have a working system with an old hardware that no one in
-> > the kernel community gives a shit about because simply they are not in
-> > the same boat. Try to be on the people's position...
-> 
-> Yes, I do care about old hardware. I made helpers for converting fbdev
-> drivers to DRM. I even made the initial commits for those drivers where I
-> could find the HW on Ebay. [1] I made sure that every single of them at
-> least gets fbcon onto the screen. So interested devs could start
-> immediately.
+But on the other side the check is part of the "integrated block".
+Maybe add an empty line between the two assignments if you want a
+separation.
 
-Thanks for doing that, I at least appreciate it.
-
-> Yet, no one ever showed up to convert even a single driver.
-
-I have helper in a limited way to test / enable drivers on some platforms
-where it wasn't possible before (you can easily see what I have done by running
-`git log --oneline --author="Andy Shevchenko" -- drivers/video drivers/gpu/drm
-drivers/staging/fbtft`), but DRM is completely new subsystem to me if we talk
-about driver conversion or so.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> In any case, since this is a very minor style nit, I will address it
+> in case there is another version required due to other comments.
+>
+> >
+> > > +     if (!typec->ec) {
+> > > +             dev_err(dev, "couldn't find parent EC device\n");
+> > > +             return -ENODEV;
+> > > +     }
+> > > +
+>
+> Best,
+>
+> -Prashant

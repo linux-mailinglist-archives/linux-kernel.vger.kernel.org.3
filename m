@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C22749D337
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC3B49D33D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 21:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiAZUNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 15:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
+        id S230133AbiAZUNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 15:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbiAZUNS (ORCPT
+        with ESMTP id S230116AbiAZUNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 15:13:18 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032FDC061748
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:13:18 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d1so561328plh.10
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:13:17 -0800 (PST)
+        Wed, 26 Jan 2022 15:13:48 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2666DC06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:13:48 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id q19-20020a056830441300b0059a54d66106so474726otv.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 12:13:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Wj7KZuqwaOnmEdiVWVR69LpJrxWukw8SVQkUC4MLo7s=;
-        b=JIYMQZEueLmr/Bcu+0hn3GJkYnsMrkdWIxCMlEUBwg4HvJdd/pwwuuoFtclMne7x5f
-         mBVWpQjR6YOrZexhCa/idsq6RSWlTK3VUS8Gft1RQQprU/wPVUmHmVKlGriHabfjGlyZ
-         RSlRONtD2MuECMp9iPdBrJw00YjCmXqbC1UPc=
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pzbj8zCgavNPOsqdAJKfKx15yXUuBarV4g88BfwJ5Uw=;
+        b=EiCjf/dXx6PcwQfYyD5Mtu4jSLNd5zEa47wWx2U5haMMbtJEQhSPeTaHqEOzI96wE+
+         2RGa+InuUKeD//habRPfunHmUIU05w2nCr0vL/0LA71m8HO9bM2k0p26IOaae29ZCfw6
+         3LkAnT/jvGR05sDRNIQR+dYLOxsdW7rR1X7Rg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Wj7KZuqwaOnmEdiVWVR69LpJrxWukw8SVQkUC4MLo7s=;
-        b=6ZEOV77ZhZJOfFOiq35EGUosM0oiY3rbdMs1GTekLvXY9CMQ+N1axgglxzSWxFr5kk
-         Qqo9+4WGaHcs6S1aytZIaAVSIkCKeibwKHjjtOKqi2W1DrUGwUCJVNq5k2WfzoCbvdnB
-         03+W/319nBiobpotkLAHjuvF0Oww0i8xMGtVS67FGGKlKPV9DQ89Dvbb4255vJtJTv8x
-         H4dHh095cPoeTJ4ZS1kSViE1rdfqyIZzdi4TgxSIY+RgCjeA4YCSPmrPlrLBdDTWU5qA
-         VKRc7+cEbwaorgcPUbSQJjGkoHyqN+vqgdd3Vq/suJM/Fhheg6f7fi9HtCetOPpX5pA7
-         uUUw==
-X-Gm-Message-State: AOAM533WeNCU5yOyqTj1QOPnfoCdI3bGrGRhhPJfTBISqWBKR0MKYlrg
-        2mRKAF938taceGM6u9nyuQlJvP5FxqzF6Q==
-X-Google-Smtp-Source: ABdhPJxiY1aw0y3NlidY2z5Lk8fjvBuxzocWaDNhHTsZhuIhROUDos217Gqqbv4yyE8RnXJs6shjzQ==
-X-Received: by 2002:a17:902:8f8a:: with SMTP id z10mr618939plo.59.1643227997497;
-        Wed, 26 Jan 2022 12:13:17 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d8sm3195141pfv.64.2022.01.26.12.13.17
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pzbj8zCgavNPOsqdAJKfKx15yXUuBarV4g88BfwJ5Uw=;
+        b=woDgjQ6G4j+a0B0jDreyti0YvRjmCZQdOPeKoXSxLzox/u6jfe+0I7OHLtrgdu7ZRu
+         2EMBFN+vJKz240jAyPyB4im/X9Aym/6z4Bu9li4synnaGMYASpmk4YK6wipGlgLA5FdD
+         XMpB1EhFzjWjp27RDuhG1dkoXYdimjLu9DCLEs6Lx6HxRZscYsP6ohlzaXEP3/EjFtg5
+         FKxH6BwbQJeVvmJb/kLYGuMdSVK4hdQ5sfo/YfI6bb5HA827cA5YXOzZG3a7tG5JwOx2
+         5kdoViRZBE3h+GLgFCvFZX3ku/6tKrVOmktuCJQLRrANNvEyfTcCENZKx8CDkteUnNKl
+         3How==
+X-Gm-Message-State: AOAM533ANtd6S5uP7AIzW5/T5lrlxmUuhlDOeajkSO02/uI78J5XFqyR
+        leYAd27aqJpYoRUiuLRlFPcPqA==
+X-Google-Smtp-Source: ABdhPJwOLiJkefCmcpRy9PRna8y1Dkefx1bROzrpi2irVbbFBq3filLVRABU/M8eHV6GzXHir5v5Og==
+X-Received: by 2002:a05:6830:4491:: with SMTP id r17mr319589otv.112.1643228027463;
+        Wed, 26 Jan 2022 12:13:47 -0800 (PST)
+Received: from shuah-tx13.internal ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id a128sm5993573oob.17.2022.01.26.12.13.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 12:13:17 -0800 (PST)
-Date:   Wed, 26 Jan 2022 12:13:16 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jann Horn <jannh@google.com>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] fs/binfmt_elf: Add padding NULL when argc == 0
-Message-ID: <202201261210.E0E7EB83@keescook>
-References: <20220126175747.3270945-1-keescook@chromium.org>
- <CAG48ez3hN8+zNCmLVP0yU0A5op6BAS+A-rs05aiLm4RQvzzBpg@mail.gmail.com>
- <a89bb47f-677f-4ce7-fd-d3893fe0abbd@dereferenced.org>
- <CAG48ez3iEUDbM03axYSjWOSW+zt-khgzf8CfX1DHmf_6QZap6Q@mail.gmail.com>
- <202201261157.9C3D3C36@keescook>
- <YfGqLnE9wNieTsAg@casper.infradead.org>
+        Wed, 26 Jan 2022 12:13:47 -0800 (PST)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, corbet@lwn.net
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] docs/kselftest: clarify running mainline tests on stables
+Date:   Wed, 26 Jan 2022 13:13:41 -0700
+Message-Id: <20220126201341.55771-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfGqLnE9wNieTsAg@casper.infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 08:08:14PM +0000, Matthew Wilcox wrote:
-> On Wed, Jan 26, 2022 at 11:58:39AM -0800, Kees Cook wrote:
-> > We can't mutate argc; it'll turn at least some userspace into an
-> > infinite loop:
-> > https://sources.debian.org/src/valgrind/1:3.18.1-1/none/tests/execve.c/?hl=22#L22
-> 
-> How does that become an infinite loop?  We obviously wouldn't mutate
-> argc in the caller, just the callee.
+Update the document to clarifiy support for running mainline
+kselftest on stable releases and the reasons for not removing
+test code that can test older kernels.
 
-Oh, sorry, I misread. It's using /bin/true, not argv[0] (another bit of
-code I found was using argv[0]). Yeah, {"", NULL} could work.
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ Documentation/dev-tools/kselftest.rst | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> Also, there's a version of this where we only mutate argc if we're
-> executing a setuid program, which would remove the privilege
-> escalation part of things.
-
-True; though I'd like to keep the logic as non-specialized as possible.
-I don't like making stuff conditional on privilege boundaries if we can
-make it always happen.
-
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index dcefee707ccd..a833ecf12fbc 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -7,6 +7,14 @@ directory. These are intended to be small tests to exercise individual code
+ paths in the kernel. Tests are intended to be run after building, installing
+ and booting a kernel.
+ 
++Kselftest from mainline can be run on older stable kernels. Running tests
++from mainline offers the best coverage. Several test rings run mainline
++kselftest suite on stable releases. The reason is that when a new test
++gets added to test existing code to regression test a bug, we should be
++able to run that test on an older kernel. Hence, it is important to keep
++code that can still test an older kernel and make sure it skips the test
++gracefully on newer releases.
++
+ You can find additional information on Kselftest framework, how to
+ write new tests using the framework on Kselftest wiki:
+ 
 -- 
-Kees Cook
+2.32.0
+

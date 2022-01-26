@@ -2,157 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A344849D1F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2560749D1F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbiAZSnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:43:06 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59600 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232675AbiAZSnF (ORCPT
+        id S244272AbiAZSoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229478AbiAZSoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:43:05 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 98174478;
-        Wed, 26 Jan 2022 19:43:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643222583;
-        bh=OQdRRRosc11uNWOuLj5jqmGwXoA/tFPMxlELYBf15x8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lPr6nQhbEN9FuSAD0Bq21gKEl98hBluP29CjVbcvdVRKHFOkfj3sqD339dSvZi0Wz
-         K95X6egke6JgCKxKpD5njaIi+vLbYftJ99b07XYd8oJ90yr85HoTcHlJHKJcGThvdd
-         wuB4zJPLLzWemgGZRaubns85RRYuA08eOHvW9mYI=
-Date:   Wed, 26 Jan 2022 20:42:44 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
-        devicetree@vger.kernel.org, kernel-list@raspberrypi.com,
-        linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Naushir Patuck <naush@raspberrypi.com>, robh@kernel.org,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [RFC PATCH v2 5/7] ARM: dts: bcm2711: Add unicam CSI nodes
-Message-ID: <YfGWJCReevd752++@pendragon.ideasonboard.com>
-References: <20220121081810.155500-1-jeanmichel.hautbois@ideasonboard.com>
- <20220121081810.155500-6-jeanmichel.hautbois@ideasonboard.com>
- <Yes3c1v+V1hMlWfW@pendragon.ideasonboard.com>
- <CAPY8ntDR5AsxGE5fh_KHMonoZait9evxQkpidu10F7EY9CPxZA@mail.gmail.com>
+        Wed, 26 Jan 2022 13:44:01 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6ABC06161C;
+        Wed, 26 Jan 2022 10:44:00 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id j2so523465ejk.6;
+        Wed, 26 Jan 2022 10:44:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xhMYYbSJZTw22nCa/vVztqO0cHAPZe/cx7Ub7sfyKHM=;
+        b=OypkHNl/QZB3tAuPAy71GYYwokVZsZhgIQhWbQa4MyKDx9k8grUA4ckm+Ii68YAsMJ
+         exTVYHl8HptKpwEDgkd6z+ULRg2sJFi2d7zy5hcfheW+ypaBk4rMxtunIvjZ5MipeX2J
+         QJkIIgSZeq1v5vXlTY8z7sJ9LSvW5tfTYyd6cgVs1WAPFeuARaTD8eUy5zGk1tZYgotY
+         PiIousOzS3Cj/ppcG9eClwrMwN76JsC2/eRkKNAowO65t/FYzOrRST5mUb8R2U5/LCcI
+         e88gEsJC9+5DYo7s8KHhHncEFexu3Xy0tFqcoq8qFQKMtz7JtOoOhAzNu2e7jiFhBKUf
+         XZMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xhMYYbSJZTw22nCa/vVztqO0cHAPZe/cx7Ub7sfyKHM=;
+        b=IbyelXgE3dYVJz7SaIWSiEdzotPAhcgWleg9GpRCqH4hlti+8qlWSDwrTFgrKACotw
+         3UvkkkqvM6z8E0t64KS6ub3mRA3BawHddeaUF8WOnoKhoq3OUFVOA6+5GO4qKuXIYEPF
+         LLm+0PVZJEZ6kkDziAkH6NHj2zQ4Ymk2hpmw5WAo+gqI6Sg/GVuk8JCL7MRDt2P+v2yx
+         VEBys8n6b9A8zcSKLPsniwqTeIX2/rKEpTHzBJJJmwevGgjbYu0XwLDLXGASiD8W4VlD
+         JDr28nd+Qfbi5whm0nxcJBm0PiR2kja/RftW+3Pn1slZXv4aEi9Zq/4P+KY+NnQVr7a5
+         hGbQ==
+X-Gm-Message-State: AOAM532tDJZhsxtEAVjKbRhFkQyoAkXW64Nl38L0fb7QUmijUOKQ4aHd
+        Vj144JGLMSi6uIF7vfSRCMsGoG8ghHbaPdLNzkU=
+X-Google-Smtp-Source: ABdhPJwjkwANIA7P2TAchz64JmzTOs7F9nutdH7UV5Cr94JxsU8lvCDSv3GQMoEe801HHkLVoT/aWn+tS2QpPzm9Ebo=
+X-Received: by 2002:a17:907:6089:: with SMTP id ht9mr63061ejc.612.1643222639502;
+ Wed, 26 Jan 2022 10:43:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPY8ntDR5AsxGE5fh_KHMonoZait9evxQkpidu10F7EY9CPxZA@mail.gmail.com>
+References: <20220120202805.3369-1-shy828301@gmail.com> <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
+ <CAG48ez1xuZdELb=5ed1i0ruoFu5kAaWsf0LgRXEGhrDAcHz8fw@mail.gmail.com>
+ <f7f82234-7599-9e39-1108-f8fbe2c1efc9@redhat.com> <CAG48ez17d3p53tSfuDTNCaANyes8RNNU-2i+eFMqkMwuAbRT4Q@mail.gmail.com>
+ <5b4e2c29-8f1a-5a68-d243-a30467cc02d4@redhat.com> <CAHbLzkqLTkVJk+z8wpa03ponf7k30=Sx6qULwsGsvr5cq5d1aw@mail.gmail.com>
+ <5a565d5a-0540-4041-ce63-a8fd5d1bb340@redhat.com>
+In-Reply-To: <5a565d5a-0540-4041-ce63-a8fd5d1bb340@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 26 Jan 2022 10:43:47 -0800
+Message-ID: <CAHbLzkqXy-W9sD5HFOK_rm_TR8uSP29b+RjKjA5zOZ+0dkqMbQ@mail.gmail.com>
+Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jann Horn <jannh@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
-
-On Mon, Jan 24, 2022 at 12:31:34PM +0000, Dave Stevenson wrote:
-> On Fri, 21 Jan 2022 at 22:45, Laurent Pinchart wrote:
-> > On Fri, Jan 21, 2022 at 09:18:08AM +0100, Jean-Michel Hautbois wrote:
-> > > Add both MIPI CSI-2 nodes in the core bcm2711 tree. Use the 3-cells
-> > > interrupt declaration, corresponding clocks and default as disabled.
-> > >
-> > > Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-> > > ---
-> > >  arch/arm/boot/dts/bcm2711.dtsi | 31 +++++++++++++++++++++++++++++++
-> > >  1 file changed, 31 insertions(+)
-> > >
-> > > diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-> > > index dff18fc9a906..077141df7024 100644
-> > > --- a/arch/arm/boot/dts/bcm2711.dtsi
-> > > +++ b/arch/arm/boot/dts/bcm2711.dtsi
-> > > @@ -3,6 +3,7 @@
-> > >
-> > >  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > >  #include <dt-bindings/soc/bcm2835-pm.h>
-> > > +#include <dt-bindings/power/raspberrypi-power.h>
-> > >
-> > >  / {
-> > >       compatible = "brcm,bcm2711";
-> > > @@ -293,6 +294,36 @@ hvs: hvs@7e400000 {
-> > >                       interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
-> > >               };
-> > >
-> > > +             csi0: csi1@7e800000 {
+On Wed, Jan 26, 2022 at 8:58 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 26.01.22 17:53, Yang Shi wrote:
+> > On Wed, Jan 26, 2022 at 3:57 AM David Hildenbrand <david@redhat.com> wrote:
+> >>
+> >> On 26.01.22 12:48, Jann Horn wrote:
+> >>> On Wed, Jan 26, 2022 at 12:38 PM David Hildenbrand <david@redhat.com> wrote:
+> >>>> On 26.01.22 12:29, Jann Horn wrote:
+> >>>>> On Wed, Jan 26, 2022 at 11:51 AM David Hildenbrand <david@redhat.com> wrote:
+> >>>>>> On 20.01.22 21:28, Yang Shi wrote:
+> >>>>>>> The syzbot reported the below BUG:
+> >>>>>>>
+> >>>>>>> kernel BUG at include/linux/page-flags.h:785!
+> >>> [...]
+> >>>>>>> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+> >>>>>>> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+> >>> [...]
+> >>>>>> Does this point at the bigger issue that reading the mapcount without
+> >>>>>> having the page locked is completely unstable?
+> >>>>>
+> >>>>> (See also https://lore.kernel.org/all/CAG48ez0M=iwJu=Q8yUQHD-+eZDg6ZF8QCF86Sb=CN1petP=Y0Q@mail.gmail.com/
+> >>>>> for context.)
+> >>>>
+> >>>> Thanks for the pointer.
+> >>>>
+> >>>>>
+> >>>>> I'm not sure what you mean by "unstable". Do you mean "the result is
+> >>>>> not guaranteed to still be valid when the call returns", "the result
+> >>>>> might not have ever been valid", or "the call might crash because the
+> >>>>> page's state as a compound page is unstable"?
+> >>>>
+> >>>> A little bit of everything :)
+> >>> [...]
+> >>>>> In case you mean "the result might not have ever been valid":
+> >>>>> Yes, even with this patch applied, in theory concurrent THP splits
+> >>>>> could cause us to count some page mappings twice. Arguably that's not
+> >>>>> entirely correct.
+> >>>>
+> >>>> Yes, the snapshot is not atomic and, thereby, unreliable. That what I
+> >>>> mostly meant as "unstable".
+> >>>>
+> >>>>>
+> >>>>> In case you mean "the call might crash because the page's state as a
+> >>>>> compound page could concurrently change":
+> >>>>
+> >>>> I think that's just a side-product of the snapshot not being "correct",
+> >>>> right?
+> >>>
+> >>> I guess you could see it that way? The way I look at it is that
+> >>> page_mapcount() is designed to return a number that's at least as high
+> >>> as the number of mappings (rarely higher due to races), and using
+> >>> page_mapcount() on an unlocked page is legitimate if you're fine with
+> >>> the rare double-counting of references. In my view, the problem here
+> >>> is:
+> >>>
+> >>> There are different types of references to "struct page" - some of
+> >>> them allow you to call page_mapcount(), some don't. And in particular,
+> >>> get_page() doesn't give you a reference that can be used with
+> >>> page_mapcount(), but locking a (real, non-migration) PTE pointing to
+> >>> the page does give you such a reference.
+> >>
+> >> I assume the point is that as long as the page cannot be unmapped
+> >> because you block it from getting unmapped (PT lock), the compound page
+> >> cannot get split. As long as the page cannot get unmapped from that page
+> >> table you should have at least a mapcount of 1.
 > >
-> > The node name should be csi@7e800000, not csi1@7e800000. Now, this will
-> > probably cause issues with the firmware that looks for csi1 (and csi0 ?)
-> > to hand over control of the Unicam CSI-2 receiver to the kernel. I
-> > wonder if this is something that could be handled by a firmware update,
-> > to also recognize nodes named "csi" ?
-> 
-> It already looks for any node starting "csi". If you check the
-> downstream DT [1], then the nodes are "csi0: csi@7e800000" and "csi1:
-> csi@7e801000".
+> > If you mean holding ptl could prevent THP from splitting, then it is
+> > not true since you may be in the middle of THP split just exactly like
+> > the race condition solved by this patch.
+>
+> While you hold the PT lock and discover a mapped page, unmap_page()
+> cannot continue and unmap the page. That's what I meant "as long as the
+> page cannot be unmapped".
+>
+> What doesn't work is if you hold the PT lock and discover a migration
+> entry, because then you're already past unmap_page(). That's the issue
+> you're fixing.
 
-Oops, indeed. I think I was misled by
-https://github.com/raspberrypi/linux/blob/rpi-5.10.y/Documentation/devicetree/bindings/media/bcm2835-unicam.txt
-that mentions "csi0" and "csi1".
+Yeah, it means you lose the race :-(
 
-It's all good then. Jean-Michel, can you update the DT bindings in the
-next iteration of the series to correct the DT node naming ?
+>
+> >
+> > Just page lock or elevated page refcount could serialize against THP
+> > split AFAIK.
+> >
+> >>
+> >> But yeah, using the mapcount of a page that is not even mapped
+> >> (migration entry) is clearly wrong.
+> >>
+> >> To summarize: reading the mapcount on an unlocked page will easily
+> >> return a wrong result and the result should not be relied upon. reading
+> >> the mapcount of a migration entry is dangerous and certainly wrong.
+> >
+> > Depends on your usecase. Some just want to get a snapshot, just like
+> > smaps, they don't care.
+>
+> Right, but as discussed, even the snapshot might be slightly wrong. That
+> might be just fine for smaps (and I would have enjoyed a comment in the
+> code stating that :) ).
 
-> There is no actual action required to hand the peripheral over to the
-> kernel, it just prevents the firmware from using it and causing
-> problems (it masks out the interrupt, and that's checked as part of
-> the firmware initialising the peripheral).
-> 
-> If using imx219 or one of the other sensors supported by the firmware,
-> "vcgencmd get_camera" should report that the sensor isn't detected,
-> and "sudo vcdbg log msg" should have a line similar to
-> "020174.613: camsubs: Ignoring camera 0 as unicam device not available"
-> 
->   Dave
-> 
-> [1] https://github.com/raspberrypi/linux/blob/rpi-5.10.y/arch/arm/boot/dts/bcm270x.dtsi#L88
-> 
-> > > +                     compatible = "brcm,bcm2835-unicam";
-> > > +                     reg = <0x7e800000 0x800>,
-> > > +                           <0x7e802000 0x4>;
-> > > +                     interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
-> > > +                     clocks = <&clocks BCM2835_CLOCK_CAM0>,
-> > > +                              <&firmware_clocks 4>;
-> > > +                     clock-names = "lp", "vpu";
-> > > +                     power-domains = <&power RPI_POWER_DOMAIN_UNICAM0>;
-> > > +                     #address-cells = <1>;
-> > > +                     #size-cells = <0>;
-> > > +                     #clock-cells = <1>;
-> >
-> > Why do you need #address-cells, #size-cells and #clock-cells ? They're
-> > not mentioned in the binding.
-> >
-> > > +                     status="disabled";
-> >
-> > Missing spaces around the =.
-> >
-> > Same comment for the next node.
-> >
-> > > +             };
-> > > +
-> > > +             csi1: csi1@7e801000 {
-> > > +                     compatible = "brcm,bcm2835-unicam";
-> > > +                     reg = <0x7e801000 0x800>,
-> > > +                           <0x7e802004 0x4>;
-> > > +                     interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-> > > +                     clocks = <&clocks BCM2835_CLOCK_CAM1>,
-> > > +                              <&firmware_clocks 4>;
-> > > +                     clock-names = "lp", "vpu";
-> > > +                     power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
-> > > +                     #address-cells = <1>;
-> > > +                     #size-cells = <0>;
-> > > +                     #clock-cells = <1>;
-> > > +                     status="disabled";
-> > > +             };
-> > > +
-> > >               pixelvalve3: pixelvalve@7ec12000 {
-> > >                       compatible = "brcm,bcm2711-pixelvalve3";
-> > >                       reg = <0x7ec12000 0x100>;
+I think that is documented already, see Documentation/filesystems/proc.rst:
 
--- 
-Regards,
+Note: reading /proc/PID/maps or /proc/PID/smaps is inherently racy (consistent
+output can be achieved only in the single read call).
 
-Laurent Pinchart
+Of course, if the extra note is preferred in the code, I could try to
+add some in a separate patch.
+
+>
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>

@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8244649BFCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B53849BFD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 01:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbiAZAB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 19:01:29 -0500
-Received: from mga12.intel.com ([192.55.52.136]:37165 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235042AbiAZAB1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 19:01:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643155287; x=1674691287;
-  h=cc:subject:to:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=SpDhNbUZcRauXonP/+d7u6so8MOKDyCHLSxBXrM0t8M=;
-  b=BR6WRvdV0xpX1wwmkHhMSWj9Ea5Sl9tt5qgJh7ElWeSCCX/6okDVTw1J
-   55hIQSiND32+wJVPqa6kQGoQkIRZallTWr7Abb2OF/OHsKadSOv0smhSr
-   VeAqmOU2OmIX4rcvFkNjnQu+LGiR5C+J6QnWO21pilFnfNuBmI2hs7Tpt
-   GNHXE7EJch0jPeVOy1dcErcfbD6jJCUDmICyH4wKFhLdjhUErgQltSY3K
-   WA/mOcDtyrdGbcYjKblhEO0o6Hh06SP3XgFiJPS13zxAwydizTmbKPslb
-   IXW/NvpUxEPP14209w4Y0jTIahL1xcm7D/E3mnRp0PThKUJBD9GBfJmNs
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="226421475"
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="226421475"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 16:01:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,316,1635231600"; 
-   d="scan'208";a="534956436"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jan 2022 16:01:25 -0800
-Cc:     baolu.lu@linux.intel.com,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>
-Subject: Re: [PATCH v2] iommu/vt-d: Fix PCI bus rescan device hot add
-To:     Jacob Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>
-References: <1642148470-11949-1-git-send-email-jacob.jun.pan@linux.intel.com>
- <20220125105704.2375daed@jacob-builder>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Message-ID: <e83922c1-59af-6e65-abc5-802400ecb4e3@linux.intel.com>
-Date:   Wed, 26 Jan 2022 08:00:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S235089AbiAZAE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 19:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235042AbiAZAE5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 25 Jan 2022 19:04:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECB6C06161C;
+        Tue, 25 Jan 2022 16:04:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80A3361408;
+        Wed, 26 Jan 2022 00:04:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A35D4C340E0;
+        Wed, 26 Jan 2022 00:04:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643155495;
+        bh=ONKxHIna6x1c4GG3NGBELWyQ/RRfJ0L7jkAgGIOMdJE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=F7RJO/4awgh6eAQ3bnqqXsNHuH8qd11iBV02S9ldj/L3XZlexHK/s3dYrdI+8dBQ1
+         EI22V8yTAp7PcBEJ9BA17yoZ9tQDVR05qCXKvkUPojexcpEfDP+uZTNh0Zj3V/P6Qu
+         D8E+BbXEimmOSk+lqfvwsO46aoIgamY1zSXW/KHcpzm0lSPVN6GovNFYJyWSA2288i
+         9v67lO+2Fvw7paffVED9LPo6GZzxA21y0oIfME2HpwAFUcQ2xtKBIBrrd58PkUN2l4
+         2Q8hLv0b/jFfpwM7W5UDRV95Aar93OJDelA2wclMzeNh9OoF5nJ7nHthmVMsdS4lNe
+         kmYkSsxUh5bpg==
+Date:   Tue, 25 Jan 2022 18:04:54 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-pci@vger.kernel.org, lorenzo.pieralisi@arm.com,
+        bhelgaas@google.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] PCI: mt7621: address some kernel test robot reported
+ warnings
+Message-ID: <20220126000454.GA1651403@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <20220125105704.2375daed@jacob-builder>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124113003.406224-1-sergio.paracuellos@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacob,
-
-On 1/26/22 2:57 AM, Jacob Pan wrote:
-> Hi all,
+On Mon, Jan 24, 2022 at 12:30:01PM +0100, Sergio Paracuellos wrote:
+> Kernel test robot complains about two things here[0]:
+> - pcie_rmw() [-Wunused-function]
+> - 'mt7621_pcie_ids' [-Wunused-const-variable]
 > 
-> Just wondering if there are any other comments? This fixes a
-> regression that can cause system hang.
+> Address this two warnings in this small two patches.
+> 
+> Best regards,
+>     Sergio Paracuellos
+> 
+> [0]: https://lkml.org/lkml/2022/1/24/264
+> 
+> Sergio Paracuellos (2):
+>   PCI: mt7621: drop 'of_match_ptr' to fix -Wunused-const-variable
+>   PCI: mt7621: remove unused function pcie_rmw()
+> 
+>  drivers/pci/controller/pcie-mt7621.c | 11 +----------
+>  1 file changed, 1 insertion(+), 10 deletions(-)
 
-This looks fine to me. I will queue it for v5.17 if there's no further
-comments.
-
-Best regards,
-baolu
+Both applied to for-linus for v5.17, thank you!

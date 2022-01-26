@@ -2,131 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8351149D58D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45DE49D58E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiAZWh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiAZWhy (ORCPT
+        id S229750AbiAZWiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:38:25 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:41649 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229519AbiAZWiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:37:54 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CB5C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:37:53 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id k25so1714004ejp.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 14:37:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V1aVCQX9KOZPo5u/xsRU/PTSxGn2oEoP0AX8hOOQy5k=;
-        b=PUexGqcIVlaj1EtFvEn2PSWA9vQAteWtUkZ+SBG5roU+D7QWy3SizXM4RLxmiJb4y+
-         21mBOEtVAyRn8nb9C4lDXvde8VLxHnfQnZ0on+zhj929ODZS2xaTEugtb5I1SNZ79be5
-         8ljRT/rUToeF+GpC+L/8IqXWiHtkcWEEh7ol95oLbGIk8WMtqlVeVFrWEPfAAQoHE/IB
-         e5NMOscmd8hztmFpDP6mVt5uWMfQqlmUDFVvZqpggisNdFMHs9yBDlmWWnPV9jU76suv
-         Ls0/JoEwllWu9cP+w1FEEyV5Qg/PPmKNA4Y/O8pIlMtBA3LqRX9kVPQhN0mOQmqi42If
-         Ss8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V1aVCQX9KOZPo5u/xsRU/PTSxGn2oEoP0AX8hOOQy5k=;
-        b=jFTbJ8Dr2vx0dW0RhJ2qrHbCLjEGPqvtHzVT3LwTUx0yuLCwFX0jF11cuxHusZLJAS
-         eErnkuh/AJeVtSJLH21hrlKurWkcjdxnIMHgR+AG+R45fJvR7q9fecK+bNY/RWgemVzh
-         tBf9HsZu1sXZyppv8ol5yCkb4xeYkaHIC97hoXK/VhLAxaNFXORwkbxU37RSRcZCwd7E
-         yaEatJkoQuOZgWlxlmFghR565+a254B2G3K6ghh4GyOkOlSX982ZgWvxAohHy0fSOq+v
-         vC4H7S4nTMad223FA8m9jjUeONQByix36C5lnZnGAPu0nR/jAocNPFM9k9CeQjPTkdeS
-         OiNQ==
-X-Gm-Message-State: AOAM533IXQznpXdtmYTk2xO7qLG27Wf628QMbgVQ3Fwlmr8ItmtxHZ2C
-        Sf3GCtH014Y7ufjGBU+XHZnKMPuQE4D3gM+3qAyi
-X-Google-Smtp-Source: ABdhPJz7JLCXZXW6bWn+3igBvUCPp+jJroJkHIyDQb/GW3U8GVaEAHFqw3UaonR9mBekrO2084/k8MAzQj1Z8rint7Y=
-X-Received: by 2002:a17:906:2ed0:: with SMTP id s16mr676611eji.327.1643236672195;
- Wed, 26 Jan 2022 14:37:52 -0800 (PST)
+        Wed, 26 Jan 2022 17:38:24 -0500
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 711522223E;
+        Wed, 26 Jan 2022 23:38:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1643236702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PecoamdTzvINOalik00tsBphSo/Nm52UmAwdXu2OT3E=;
+        b=QubxIKLzKoONoLg4yY+sG1eA2aGPHTCdm5ZK8lEsbOucMXtxYmTLqmGesVqZZbU9QyrgTF
+        0+kATZip0nlCwg1FFgPw9o/jM8UNXcCeK6XW20jbN3Bd9mTcA3sNiOkdVU1/sEIRuQs/pJ
+        TeKl3f/ddguGkm/wodobh5K37BiW74o=
 MIME-Version: 1.0
-References: <018a9bb4-accb-c19a-5b0a-fde22f4bc822.ref@schaufler-ca.com>
- <018a9bb4-accb-c19a-5b0a-fde22f4bc822@schaufler-ca.com> <20211012103243.xumzerhvhklqrovj@wittgenstein>
- <d15f9647-f67e-2d61-d7bd-c364f4288287@schaufler-ca.com> <CAHC9VhT=dZbWzhst0hMLo0n7=UzWC5OYTMY=0x=LZ97HwG0UsA@mail.gmail.com>
- <20220126072442.he4fjegfqnh72kzp@wittgenstein>
-In-Reply-To: <20220126072442.he4fjegfqnh72kzp@wittgenstein>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 26 Jan 2022 17:37:41 -0500
-Message-ID: <CAHC9VhRyAxbJKBLXbW-Zj9voC2TMs3ee6jkcbS8gnNo3E0=WDg@mail.gmail.com>
-Subject: Re: [PATCH] LSM: general protection fault in legacy_parse_param
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Brauner <christian@brauner.io>,
-        James Morris <jmorris@namei.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzbot <syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com>,
-        David Howells <dhowells@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 26 Jan 2022 23:38:21 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Chen-Tsung Hsieh <chentsung@chromium.org>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: Re: [RESEND PATCH] mtd: spi-nor: core: Check written SR value in
+ spi_nor_write_16bit_sr_and_check()
+In-Reply-To: <20220126073227.3401275-1-chentsung@chromium.org>
+References: <20220126073227.3401275-1-chentsung@chromium.org>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <8625876c695685fc5409997403130194@walle.cc>
+X-Sender: michael@walle.cc
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 2:24 AM Christian Brauner <brauner@kernel.org> wrote:
->
-> On Tue, Jan 25, 2022 at 05:18:02PM -0500, Paul Moore wrote:
-> > On Tue, Oct 12, 2021 at 10:27 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> > > On 10/12/2021 3:32 AM, Christian Brauner wrote:
-> > > > On Mon, Oct 11, 2021 at 03:40:22PM -0700, Casey Schaufler wrote:
-> > > >> The usual LSM hook "bail on fail" scheme doesn't work for cases where
-> > > >> a security module may return an error code indicating that it does not
-> > > >> recognize an input.  In this particular case Smack sees a mount option
-> > > >> that it recognizes, and returns 0. A call to a BPF hook follows, which
-> > > >> returns -ENOPARAM, which confuses the caller because Smack has processed
-> > > >> its data.
-> > > >>
-> > > >> Reported-by: syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com
-> > > >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> > > >> ---
-> > > > Thanks!
-> > > > Note, I think that we still have the SELinux issue we discussed in the
-> > > > other thread:
-> > > >
-> > > >       rc = selinux_add_opt(opt, param->string, &fc->security);
-> > > >       if (!rc) {
-> > > >               param->string = NULL;
-> > > >               rc = 1;
-> > > >       }
-> > > >
-> > > > SELinux returns 1 not the expected 0. Not sure if that got fixed or is
-> > > > queued-up for -next. In any case, this here seems correct independent of
-> > > > that:
-> > >
-> > > The aforementioned SELinux change depends on this patch. As the SELinux
-> > > code is today it blocks the problem seen with Smack, but introduces a
-> > > different issue. It prevents the BPF hook from being called.
-> > >
-> > > So the question becomes whether the SELinux change should be included
-> > > here, or done separately. Without the security_fs_context_parse_param()
-> > > change the selinux_fs_context_parse_param() change results in messy
-> > > failures for SELinux mounts.
-> >
-> > FWIW, this patch looks good to me, so:
-> >
-> > Acked-by: Paul Moore <paul@paul-moore.com>
-> >
-> > ... and with respect to the SELinux hook implementation returning 1 on
-> > success, I don't have a good answer and looking through my inbox I see
-> > David Howells hasn't responded either.  I see nothing in the original
-> > commit explaining why, so I'm going to say let's just change it to
-> > zero and be done with it; the good news is that if we do it now we've
->
->
-> It was originally supposed to return 1 but then this got changed but - a
-> classic - the documentation wasn't.
+Am 2022-01-26 08:32, schrieb Chen-Tsung Hsieh:
+> Read back Status Register 1 to ensure that the written byte match the
+> received value and return -EIO if read back test failed.
+> 
+> Without this patch, spi_nor_write_16bit_sr_and_check() only check the
+> second half of the 16bit. It causes errors like spi_nor_sr_unlock()
+> return success incorrectly when spi_nor_write_16bit_sr_and_check()
+> doesn't write SR successfully.
+> 
+> Fixes: 39d1e3340c73 ("mtd: spi-nor: Fix clearing of QE bit on 
+> lock()/unlock()")
+> Signed-off-by: Chen-Tsung Hsieh <chentsung@chromium.org>
 
-I'm shocked! :)
+Looks good to me. spi_nor_write_16bit_cr_and_check() also checks
+the SR1 and the function doc also mentions it will check it - although
+it doesn't.
 
-Thanks Christian.
+Reviewed-by: Michael Walle <michael@walle.cc>
 
--- 
-paul-moore.com
+Out of curiosity, on what flash did you discover this?
+
+-michael

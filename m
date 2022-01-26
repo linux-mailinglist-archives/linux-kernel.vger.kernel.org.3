@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC8949C982
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838D149C985
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241207AbiAZMVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241194AbiAZMVh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:21:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC71C06161C;
-        Wed, 26 Jan 2022 04:21:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62381B81CBB;
-        Wed, 26 Jan 2022 12:21:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84CCBC340E6;
-        Wed, 26 Jan 2022 12:21:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643199694;
-        bh=EVVNFMBmRDZrmd8r75px+PJ5SYyURniMHufo4K/7jfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yhbbSDyHm6glrzoBDNTPUrFwriA2sJXg8gNGYLm+2xfigHsfOLVdcBC9/NGnxXtxS
-         238VXm/GIWTCt6z1fnvw7loVpIFzFI10Ss/YSVtQ1dcYZcesIBx/HiWfqYZ0fJgymj
-         FnN3AbPi735t1kZLZX2xe/W6ywu5qr4mJc2bhSYA=
-Date:   Wed, 26 Jan 2022 13:21:31 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?utf-8?B?6Zmz5YGJ6YqY?= <jj251510319013@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        balbi@kernel.org,
-        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>
-Subject: Re: [PATCH] usb: gadget: function: Fix returning incorrect PNP string
-Message-ID: <YfE8y8xpJIwC8Ojo@kroah.com>
-References: <20220105040439.3182-1-jj251510319013@gmail.com>
- <Ydb+L+wXfKzXyma9@kroah.com>
- <CAJwFiG+caDOp48R+EMATi9W_hCt-SBoEeeeEK8XGuRWai=bYug@mail.gmail.com>
+        id S241213AbiAZMWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:22:37 -0500
+Received: from foss.arm.com ([217.140.110.172]:36110 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234079AbiAZMWg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:22:36 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69FA6D6E;
+        Wed, 26 Jan 2022 04:22:36 -0800 (PST)
+Received: from [10.57.5.122] (unknown [10.57.5.122])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BEC863F793;
+        Wed, 26 Jan 2022 04:22:35 -0800 (PST)
+Subject: Re: [PATCH 2/5] kselftest: Fix vdso_test_time to pass on skips
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shuah@kernel.org
+References: <20220126102723.23300-1-cristian.marussi@arm.com>
+ <20220126102723.23300-3-cristian.marussi@arm.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <8d513be7-a99d-2b7f-6767-a378742ef3fa@arm.com>
+Date:   Wed, 26 Jan 2022 12:22:45 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20220126102723.23300-3-cristian.marussi@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJwFiG+caDOp48R+EMATi9W_hCt-SBoEeeeEK8XGuRWai=bYug@mail.gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 07, 2022 at 10:37:19AM +0800, 陳偉銘 wrote:
-> Greg KH <gregkh@linuxfoundation.org> 於 2022年1月6日 週四 下午10:35寫道：
-> >
-> > On Wed, Jan 05, 2022 at 12:04:39PM +0800, Wei Ming Chen wrote:
-> > > There will be 2 leading bytes indicating the total length of
-> > > the PNP string, so I think we should add value by 2, otherwise
-> > > the PNP string copied to user will not contain the last 2 bytes
-> > >
-> > > Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
-> > > ---
-> > >  drivers/usb/gadget/function/f_printer.c | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-> > > index abec5c58f525..3fb00fd0b5ee 100644
-> > > --- a/drivers/usb/gadget/function/f_printer.c
-> > > +++ b/drivers/usb/gadget/function/f_printer.c
-> > > @@ -1005,9 +1005,11 @@ static int printer_func_setup(struct usb_function *f,
-> > >                               break;
-> > >                       }
-> > >                       value = strlen(dev->pnp_string);
-> > > +                     memcpy(buf + 2, dev->pnp_string, value);
-> > > +
-> > > +                     value += 2;
-> > >                       buf[0] = (value >> 8) & 0xFF;
-> > >                       buf[1] = value & 0xFF;
-> > > -                     memcpy(buf + 2, dev->pnp_string, value);
-> > >                       DBG(dev, "1284 PNP String: %x %s\n", value,
-> > >                           dev->pnp_string);
-> > >                       break;
-> > > --
-> > > 2.25.1
-> > >
-> >
-> > Are you sure this is correct?
-> >
-> > How is this related to this recent thread:
-> >         https://lore.kernel.org/all/CAKjGFBUdjXcZoVV4jdrgTz4rKThTfZAK4CqreKmBZ4KHE+K1GA@mail.gmail.com/#t
-> >
-> > your change is different from what is proposed there, why?
+Hi Cristian,
+
+On 1/26/22 10:27 AM, Cristian Marussi wrote:
+> When a vDSO symbol is not found, all the testcases in vdso_test_abi usually
+> report a SKIP, which, in turn, is reported back to Kselftest as a PASS.
 > 
-> I didn’t notice this thread before I send this patch, I think the
-> concept of my change is similar to Volodymyr Lisivka’s change, he/she
-> introduced a separate variable for the PNP string length, I think it
-> may be clearer and more readable than just “value += 2”
+> Testcase vdso_test_time, instead, reporting a SKIP, causes the whole set of
+> tests within vdso_test_abi to be considered FAIL when symbol is not found.
 > 
+> Fix it reporting a PASS when vdso_test_time cannot find the vdso symbol.
 > 
-> Another thing that I am not too sure whether I am correct is this line of code
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> Seen as a failure on both a JUNO and a Dragonboard on both recent and old
+> kernels/testruns:
 > 
-> DBG(dev, "1284 PNP String: %x %s\n", value,
->                              dev->pnp_string);
+> root@deb-buster-arm64:~# /opt/ksft/vDSO/vdso_test_abi
+> [vDSO kselftest] VDSO_VERSION: LINUX_2.6.39
+> The time is 1637922136.675304
+> The time is 1637922136.675361000
+> The resolution is 0 1
+> clock_id: CLOCK_REALTIME [PASS]
+> The time is 1927.760604900
+> The resolution is 0 1
+> clock_id: CLOCK_BOOTTIME [PASS]
+> The time is 1637922136.675649700
+> The resolution is 0 1
+> clock_id: CLOCK_TAI [PASS]
+> The time is 1637922136.672000000
+> The resolution is 0 4000000
+> clock_id: CLOCK_REALTIME_COARSE [PASS]
+> The time is 1927.761005600
+> The resolution is 0 1
+> clock_id: CLOCK_MONOTONIC [PASS]
+> The time is 1927.761132780
+> The resolution is 0 1
+> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> The time is 1927.757093740
+> The resolution is 0 4000000
+> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+> Could not find __kernel_time              <<< This caused a FAIL as a whole
+> root@deb-buster-arm64:~# echo $?
+> 1
 > 
-> What Volodymyr Lisivka changed is like this
+> e.g.: https://lkft.validation.linaro.org/scheduler/job/2192570#L27778
+> ---
+>  tools/testing/selftests/vDSO/vdso_test_abi.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> DBG(dev, "1284 PNP String: %x %s\n", pnp_length,
->                              dev->pnp_string);
-> 
-> In my change, “value” equals to “pnp_length + 2” in Volodymyr
-> Lisivka’s change, and I think we should print “the PNP string length +
-> 2” instead of “the PNP string length”?
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> index 3d603f1394af..7dcc66d1cecf 100644
+> --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
+> +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> @@ -90,8 +90,9 @@ static int vdso_test_time(void)
+>  		(vdso_time_t)vdso_sym(version, name[2]);
+>  
+>  	if (!vdso_time) {
+> +		/* Skip if symbol not found: consider skipped tests as passed */
+>  		printf("Could not find %s\n", name[2]);
+> -		return KSFT_SKIP;
+> +		return KSFT_PASS;
+
+My preference would be to keep "KSFT_SKIP" here and verify separately the return
+status of each test. This would maintain compliance with the kselftest API.
+Could you please test the patch in-reply-to this one (will be sent shortly) and
+let me know if it works for you?
+
+If it does feel free to fold it in the next version of your series with your
+"Tested-by:" otherwise let me know.
+
+Thanks!
+
+>  	}
+>  
+>  	long ret = vdso_time(NULL);
 > 
 
-I do not know, I suggest you two work together to get the correct fix
-submitted.
-
-thanks,
-
-greg k-h
+-- 
+Regards,
+Vincenzo

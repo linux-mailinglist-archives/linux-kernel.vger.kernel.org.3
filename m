@@ -2,80 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB48249D045
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC6349D051
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243505AbiAZRDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243466AbiAZRDJ (ORCPT
+        id S243466AbiAZREz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:04:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47918 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236906AbiAZREy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:03:09 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE28C06161C;
-        Wed, 26 Jan 2022 09:03:08 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id q63so267780pja.1;
-        Wed, 26 Jan 2022 09:03:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AwYHKz1GfwyPBAeaDvfhIvi+S5N70d9KsK6NMZPpRu0=;
-        b=G43+bA1dTI/pzs7p8eykDJ6DRBvA00FoYTGWOy8LNRG+HKOJndQBXGBO0TJvffG7rB
-         t2X5cteQXJTkmavc0204qAqPFBZi0Q8Ki8to+HmHZlNc7BEPiZw+LS+dd3lwrys7tjF1
-         ZkwqkPS1xpGGj3fr9hCnkQrefH038dMHVFlSGd7LL0HNcLN0j+vTifguCFW1BwBlhJ1x
-         HZCRCeJGKa0D5k0TRNUV5Ws1eB7T8JLVe3k4t87kJJmeq9yikZVeTi1+eIwlYOk3FFWg
-         hYug8J9JYnWru2MIomZE/ucY+Vi/dK8dMqVNVxgSvruDnFRBZUN0kfmluLWJ52LTdJq/
-         q9iQ==
+        Wed, 26 Jan 2022 12:04:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643216694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gwa98kLwm7nYqRC6cI7ESxbaB6AVzjv7cFEbXLzP3ak=;
+        b=KIh7+YJkDBEWlz9PyVNUdJOj7Z2iexOgvWybMyi+qO44ley8Fw8YuhdbcW5M4VVHzsxZol
+        L7QGMe6b9o0Z6IdM1UV5NOdM1e2j38wBtOmiwLFCbhHKq0T3ASmynDMYvhh5YJPyavSbE9
+        yi4PeaoaOM+uoeh7+zynY8HvLFL5A5o=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-605-6cjBItxYP8qDuAUGM-wP6Q-1; Wed, 26 Jan 2022 12:04:52 -0500
+X-MC-Unique: 6cjBItxYP8qDuAUGM-wP6Q-1
+Received: by mail-wm1-f71.google.com with SMTP id bg16-20020a05600c3c9000b0034bea12c043so2789366wmb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:04:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=AwYHKz1GfwyPBAeaDvfhIvi+S5N70d9KsK6NMZPpRu0=;
-        b=s+AqZKWhkaX0ahZdXtdt+fsh0fnoU8Qz4/RKleCx05ksW40hSVFwAjNoio0gr924UN
-         gDOnQ6Xp+mJ3odZgqq1Jn2b6op/AqdxNAMLGEDz4s0qx77Vy5hssixotmWV/86mHbWkd
-         qRFaFcNp8pEeedZ2LbpleWKyvLwNiEqqqR4BDiaMDfOOP2wTOrKSoXpJ12nx/KPrNysE
-         RDzbUpGvlEBzzqDZtZ2KbjHVp3Uj77JcFL/rIQLOWIOT5QLMleFVAjJoka5qF+swRIZZ
-         UXkWmBxOMbqbfPJPcwX5U+JngXsY3Jt0F8DLHCHRRMN0+Y7B4dS0yCWu3VQ4pKIdNesU
-         drwQ==
-X-Gm-Message-State: AOAM531SnefFQaROOlmf9lEKLCKxu50o6QbXuFu6Yu5e4pyXFi6BVDFD
-        kxhTaBw/gmUK1bMrMqZEnXpk2i4rP9H06g==
-X-Google-Smtp-Source: ABdhPJzvh9mx3WdIHhtTFJLWTT6rReaznN96IPnxqWS/fXHUnoItf130BP6IhM6Q4HUOTQ8Uo3M00w==
-X-Received: by 2002:a17:90a:2b85:: with SMTP id u5mr9468410pjd.197.1643216588136;
-        Wed, 26 Jan 2022 09:03:08 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id 17sm1824699pjk.51.2022.01.26.09.03.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 09:03:07 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 26 Jan 2022 07:03:06 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     Ming Lei <ming.lei@redhat.com>, mkoutny@suse.com,
-        paulmck@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v6 2/2] block: cancel all throttled bios in del_gendisk()
-Message-ID: <YfF+yukISfkuc9IK@slm.duckdns.org>
-References: <20220110134758.2233758-1-yukuai3@huawei.com>
- <20220110134758.2233758-3-yukuai3@huawei.com>
- <Yd5FkuhYX9YcgQkZ@T590>
- <b416e6a6-f2c9-caf3-dacd-f937746207da@huawei.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=gwa98kLwm7nYqRC6cI7ESxbaB6AVzjv7cFEbXLzP3ak=;
+        b=2SEcBeNnWg1Mb2OMx6Pf1ckDVhACxxp6l0AvBb76OIkKVEgypMMdsTuxDTBQxUaaCq
+         l7d7eqyQCW07kCWYoYN6DXIqWSCBLMtG2O2ovjIrY4aDTDpconMzn4WsqTTdFZA2eQBQ
+         wapIGhr6kC68XmB7aeKqffzKFAy5TsM83pxl8ldt/xQiegPI+HtnI9eYMrVepkIwUfMp
+         6Q2NmuIQCNNdQSkUee5x/SAEeonGaWqHUAoBju4BGFKIhNSpaCEFh0TnpjS5qfHXFT1h
+         x+7zY4JFwwH53foKAA7IE6S9gzQFFzi2MuKerD2Rlq851J3XP2xdKDOMlQieyNhdQb3L
+         ijhw==
+X-Gm-Message-State: AOAM531WFVR3Z9r2nN+SRFn59g9lYjr4iCD4JvOixc2bDhJDq6gdh/1k
+        mK4YFOVWbtAZ/mY0kSCgoOwFS8D97xzb1v5mH6UT/eEIlJ986lJ3x2OP1o3Cd1Qw2ROaIuwe3Zl
+        cDUG4ewYEkHQloPT7oWTvu9i+
+X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr8239520wmq.44.1643216691630;
+        Wed, 26 Jan 2022 09:04:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyjYRe8qd4oL3XeIOjwZ0wQOG++PDBifi1p0jHOTEAgc1zZH/Pn7uUsMrNVjFv7dXnGTuRIdg==
+X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr8239502wmq.44.1643216691405;
+        Wed, 26 Jan 2022 09:04:51 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
+        by smtp.gmail.com with ESMTPSA id t4sm20135457wro.71.2022.01.26.09.04.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 09:04:50 -0800 (PST)
+Message-ID: <5d02ea0e-aca6-a64b-23de-bc9307572d17@redhat.com>
+Date:   Wed, 26 Jan 2022 18:04:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b416e6a6-f2c9-caf3-dacd-f937746207da@huawei.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/2] mm/memory_hotplug: Export shrink span functions for
+ zone and node
+Content-Language: en-US
+To:     Jonghyeon Kim <tome01@ajou.ac.kr>, dan.j.williams@intel.com
+Cc:     vishal.l.verma@intel.com, dave.jiang@intel.com,
+        akpm@linux-foundation.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20220126170002.19754-1-tome01@ajou.ac.kr>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220126170002.19754-1-tome01@ajou.ac.kr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:50:11AM +0800, yukuai (C) wrote:
-> Both ways can fix the problem, which way do you prefer?
+On 26.01.22 18:00, Jonghyeon Kim wrote:
+> Export shrink_zone_span() and update_pgdat_span() functions to head
+> file. We need to update real number of spanned pages for NUMA nodes and
+> zones when we add memory device node such as device dax memory.
+> 
 
-Ming's suggested change seems simpler, no?
+Can you elaborate a bit more what you intend to fix?
 
-Thanks.
+Memory onlining/offlining is reponsible for updating the node/zone span,
+and that's triggered when the dax/kmem mamory gets onlined/offlined.
+
+> Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
+> ---
+>  include/linux/memory_hotplug.h | 3 +++
+>  mm/memory_hotplug.c            | 6 ++++--
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
+> index be48e003a518..25c7f60c317e 100644
+> --- a/include/linux/memory_hotplug.h
+> +++ b/include/linux/memory_hotplug.h
+> @@ -337,6 +337,9 @@ extern void move_pfn_range_to_zone(struct zone *zone, unsigned long start_pfn,
+>  extern void remove_pfn_range_from_zone(struct zone *zone,
+>  				       unsigned long start_pfn,
+>  				       unsigned long nr_pages);
+> +extern void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
+> +			     unsigned long end_pfn);
+> +extern void update_pgdat_span(struct pglist_data *pgdat);
+>  extern bool is_memblock_offlined(struct memory_block *mem);
+>  extern int sparse_add_section(int nid, unsigned long pfn,
+>  		unsigned long nr_pages, struct vmem_altmap *altmap);
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 2a9627dc784c..38f46a9ef853 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -389,7 +389,7 @@ static unsigned long find_biggest_section_pfn(int nid, struct zone *zone,
+>  	return 0;
+>  }
+>  
+> -static void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
+> +void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
+>  			     unsigned long end_pfn)
+>  {
+>  	unsigned long pfn;
+> @@ -428,8 +428,9 @@ static void shrink_zone_span(struct zone *zone, unsigned long start_pfn,
+>  		}
+>  	}
+>  }
+> +EXPORT_SYMBOL_GPL(shrink_zone_span);
+
+Exporting both as symbols feels very wrong. This is memory
+onlining/offlining internal stuff.
+
+
 
 -- 
-tejun
+Thanks,
+
+David / dhildenb
+

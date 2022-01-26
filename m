@@ -2,127 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA4149D4D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F8549D4DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232885AbiAZWF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:05:27 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:29334 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232435AbiAZWF0 (ORCPT
+        id S232901AbiAZWGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:06:52 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45262 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232435AbiAZWGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:05:26 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QM3dGK014328;
-        Wed, 26 Jan 2022 22:05:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=RxTuE6rmxVpW/vdK1r884JjG3O3+YWBscTGJnKvckXI=;
- b=HUAXz694ayH5nVsmPluXJaOjnzJz2ZpRwoFXpQmOSxpvATbk5QqBnw9xw9hczoQt7N7w
- on80wtOqKSxc287ZJTvoG9SZ7XPjr8ri1eNeg1uZJyRLCab2nIuwPuSt6Hg1AfSzheMS
- 3KjRkeY+y9BaHFrC1rHuWEHTMPVJ2sIKDMibQ5hvzDMttS4n8Yv+dv7ga91Hc2ACpOHD
- Puuxjj92iayC+zF3Ly9CQe2sV4euwfqmxhjTlnrL66qyr6T4vPW/O2f5iDx/BT4GQ1Xw
- NYEPqAav5Fa/1y8tID5OTO/CLyoihlqBVa8Op67REeqHz1VHJESultgkXYwrAJCauvY8 9w== 
+        Wed, 26 Jan 2022 17:06:51 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QM5wDL009872;
+        Wed, 26 Jan 2022 22:06:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=gCtkiHzTbqSrH2u9etoNqX7uZpL/Whb949Lu+ka6atU=;
+ b=QeOgzOtJTEYSH10K7VyCVT1r7qJ0X0moELU4y5QcYjIzTZxaxa4yFD+pfxbHBRqhMvn7
+ VSBNFpjq3bmLIyIIXV0YsBtdHb7Q1pj6xHxefF4aDAyINbDweduB57jZwh91SHWpbf/U
+ FKviAGkgbdCGQ35e301xd02met3CTx4pFw08zB8DK10tpOH4CQl9IPTcGozuBQsL7nY6
+ JD/uOtc/JSeRxCPR57lOvjy+rouWlmbGAdE5bjh4K+8CxARBaq7iAHgVzpslCiVETfw7
+ f+Wkrbq1ZWIs2Ljc0xIyhAX0MckEaS97BnaDscYURQfds9pBybvbKK/rI7CwobMLMXhn hg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3du89mja8h-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3duc883t2x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 22:05:14 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20QM4C7L016478;
-        Wed, 26 Jan 2022 22:05:13 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3du89mja82-1
+        Wed, 26 Jan 2022 22:06:18 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20QM6GHp011192;
+        Wed, 26 Jan 2022 22:06:18 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3duc883t1w-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 22:05:13 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QM27Xe024020;
-        Wed, 26 Jan 2022 22:05:12 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01dal.us.ibm.com with ESMTP id 3dr9jc12sp-1
+        Wed, 26 Jan 2022 22:06:17 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QM3qb4010794;
+        Wed, 26 Jan 2022 22:06:15 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3dr9j9g9h4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 22:05:12 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QM5AxF32244212
+        Wed, 26 Jan 2022 22:06:15 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QM6Cx520709734
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jan 2022 22:05:10 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B8856E050;
-        Wed, 26 Jan 2022 22:05:10 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1F436E06D;
-        Wed, 26 Jan 2022 22:05:07 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 26 Jan 2022 22:05:07 +0000 (GMT)
-Message-ID: <d64ba364-e3fa-729a-2761-b386326ee276@linux.ibm.com>
-Date:   Wed, 26 Jan 2022 17:05:05 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 15/23] ima: Implement hierarchical processing of file
- accesses
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220125224645.79319-16-stefanb@linux.vnet.ibm.com>
- <20220126123908.q65wgvr2v52lmxpw@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220126123908.q65wgvr2v52lmxpw@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Wed, 26 Jan 2022 22:06:13 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC6A1A404D;
+        Wed, 26 Jan 2022 22:06:12 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7509FA4051;
+        Wed, 26 Jan 2022 22:06:10 +0000 (GMT)
+Received: from sig-9-65-92-33.ibm.com (unknown [9.65.92.33])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jan 2022 22:06:10 +0000 (GMT)
+Message-ID: <78d2c13ad60b5f845cb841d257d1b41290f575c6.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 0/8] Enroll kernel keys thru MOK
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org, ardb@kernel.org,
+        jmorris@namei.org, serge@hallyn.com, nayna@linux.ibm.com,
+        keescook@chromium.org, torvalds@linux-foundation.org,
+        weiyongjun1@huawei.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Date:   Wed, 26 Jan 2022 17:06:09 -0500
+In-Reply-To: <YfFTf6vIpNMIrwH0@iki.fi>
+References: <20220126025834.255493-1-eric.snowberg@oracle.com>
+         <YfFP6OHqBVNWKL2C@iki.fi> <YfFTf6vIpNMIrwH0@iki.fi>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GXavbc1DSLqYJR2d4JpfnIWijqqJ4DxH
-X-Proofpoint-ORIG-GUID: PcRyTm2VOWigvWeJjq8oPa4d08HxmAGl
+X-Proofpoint-GUID: etmyN5YAXvGtQh0yQw-jIA-9NN3fVEju
+X-Proofpoint-ORIG-GUID: lthRogrj7NlEDFdckfcoVisT7sVxmNnF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-26_08,2022-01-26_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=907
- impostorscore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0
- priorityscore=1501 spamscore=0 bulkscore=0 malwarescore=0 phishscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201260128
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 impostorscore=0 mlxlogscore=999 clxscore=1015
+ malwarescore=0 phishscore=0 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201260128
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jarkko,
 
-On 1/26/22 07:39, Christian Brauner wrote:
->
-> That'll break compilation as youre checking:
->
-> ns == &init_ima_ns below.
->
-> security/integrity/ima/ima_main.c: In function ‘ima_post_read_file’:
-> security/integrity/ima/ima_main.c:798:7: error: ‘ns’ undeclared (first use in this function); did you mean ‘insl’?
->    798 |   if (ns == &init_ima_ns &&
->        |       ^~
->        |       insl
-> security/integrity/ima/ima_main.c:798:7: note: each undeclared identifier is reported only once for each function it appears in
->
-> it's fixed later in the series but you might want to fix this up here as
-> well.
+> > Thank you. I'll pick these soon. Is there any objections?
 
-Argh. Fixed.
+No objections.
+> 
+> Mimi brought up that we need a MAINTAINERS update for this and also
+> .platform.
+> 
+> We have these:
+> 
+> - KEYS/KEYRINGS
+> - CERTIFICATE HANDLING
+> 
+> I would put them under KEYRINGS for now and would not consider further
+> subdivision for the moment.
 
->
-> Fwiw, a good strategy is to:
->
-> git rebase -i -x "make LOCALVERSION=-imans" v5.16-rc2
+IMA has dependencies on the platform_certs/ and now on the new .machine
+keyring.  Just adding "F: security/integrity/platform_certs/" to the
+KEYS/KEYRINGS record, ignores that dependency.  The discussion wouldn't
+even be on the linux-integrity mailing list.
 
-I did test it but maybe something distracted me....
+Existing requirement:
+- The keys on the .platform keyring are limited to verifying the kexec
+image.
 
-while :; do make -j$(nproc) security kernel || break ; git rebase 
---continue || break; done
+New requirements based on Eric Snowbergs' patch set:
+- When IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY is enabled,
+the MOK keys will not be loaded directly onto the .machine keyring or
+indirectly onto the .secondary_trusted_keys keyring.
 
+- Only when a new IMA Kconfig explicitly allows the keys on the
+.machine keyrings, will the CA keys stored in MOK be loaded onto the
+.machine keyring.
+
+Unfortunately I don't think there is any choice, but to define a new
+MAINTAINERS entry.  Perhaps something along the lines of:
+
+KEYS/KEYRINGS_INTEGRITY
+M:     Jarkko Sakkinen <jarkko@kernel.org>
+M:     Mimi Zohar <zohar@linux.ibm.com>
+L:      keyrings@vger.kernel.org
+L:      linux-integrity@vger.kernel.org
+F:      security/integrity/platform_certs
+
+thanks,
+
+Mimi
 

@@ -2,100 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FACB49C931
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5A349C936
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241027AbiAZL7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:59:18 -0500
-Received: from mga07.intel.com ([134.134.136.100]:38161 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241021AbiAZL7R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:59:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643198357; x=1674734357;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Lzcd9mEtBpXKathMy3g71SKlsqfPyQg5ZNTfE2LVMKM=;
-  b=IhdY+cCiVqsEr7SXAg6OarVbZTMmacPw7D829we6Bt+YS5E0XQ1RJLMf
-   eCIBAvxVESY6nrtm2qkWWtYrZOUBhP5vCPFjeBvJRwRlRaF/W7N8jQPTf
-   t8U+fqw4xm72hpONOP3ZD8rbVYK3iStwTuZaYRCqYzXHjWhurwR0o++80
-   gDgX/a39Iq/PGz8WumNpHu6rie9Yra8qWhP8dpjwRsRLk0khcwHNDU74z
-   NbzQufPGWcgSOuDxQPfO8SOzduptoegcf1+HrIR1CkjyscvRY3l9BsLCV
-   /RS9ITc6ItQbxZIZ/dpyL1Blins4pvBzgoBiL1uv80bVW0V4rULRHDf4h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="309849135"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="309849135"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 03:59:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="628284145"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 26 Jan 2022 03:59:14 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 7DAE4167; Wed, 26 Jan 2022 13:59:27 +0200 (EET)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com
-Cc:     x86@kernel.org, thomas.lendacky@amd.com, lkp@intel.com,
-        ak@linux.intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, tony.luck@intel.com,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH] x86/mm: Fix warning on build with X86_MEM_ENCRYPT=y
-Date:   Wed, 26 Jan 2022 14:59:19 +0300
-Message-Id: <20220126115919.7691-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <202201261113.3P3URW2n-lkp@intel.com>
-References: <202201261113.3P3URW2n-lkp@intel.com>
+        id S241039AbiAZMAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241031AbiAZMAe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:00:34 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D57C061744
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:00:33 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id s61-20020a17090a69c300b001b4d0427ea2so4361319pjj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 04:00:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=8FlV/YHHKzs1EGyGFYr2IIA2jSZG4sumY01yYjIfAXQ=;
+        b=NSDMnM9ZAtjtpE/6vJ9R7JCcPIPlpyEIGaJGPeHMxKjJ3iLmz5EBmhVt7GpBBFS/e5
+         dN2NYlc3AOVp0/lpyRrs0glV7LcnVR2z6RIvx3+muZkOs28I5+p2sm1rvaHgo+EFP3WD
+         XjN2+P2fgg9Ju/2iuVfarT/dZzBuAe0FDnB2Obwa6a2SAKX9N7IbhFS+7eqqoCzH8kp5
+         nglbXxgu8rNBar36lsWgLFdZ+yPQMHQ1FEa3L/zmJSSP0v3RxX3b1dadEqHQBydE/kO2
+         iLmzNgR0NH6fehi9GHD0UkqNcC/3YK/0/DqlrshaPbrpaC0OBlEgjtfFZcvVdvsfgXM3
+         f2lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=8FlV/YHHKzs1EGyGFYr2IIA2jSZG4sumY01yYjIfAXQ=;
+        b=1zrlCtDI/FUyBe3DK5aTup66dq6aTyx6lMbQS0Gm7QzVxDcdarxsVyQrniquePrX/r
+         V1SxEuoDIcyY4QeegXPgTNCV5v4UPrjKNAriEo/gPMSQRe3CP/m2HFFJxgKyh7lDIo0x
+         7w5BEq6yieeN1ZavnqWvOI/D94h0nsgwiVbenp/SOh3cAz8boc2Qy8xXQXg2Koq26HMk
+         KwDC7Cp5EEkm31h0SEVDnsCuy/ybCIRM9CvfU3OC4zMtSiiYFnC8C2LUSi6fML/y/q7U
+         YicuWRQNpGCy5QARVILhjGu45r6Z4iCFm4GX8bSdHlqF8I7TwU7Vai4Vcvu28bB7fng6
+         3fjA==
+X-Gm-Message-State: AOAM533uQKbTBVRQt1TlJG/VWwbajOL4BBC+KCSxlndWSTFrZgHt87Bv
+        Ono9K2lB9ygHcgIldVAT5GS48i6pl1rQJt/+130=
+X-Google-Smtp-Source: ABdhPJyCYVTwRo7oLDEiVVSKqqbZ6GF+BB38XujH4MJLE8ItbEk0QxXbPmiwjGAp/m7bJDKTPpqlKzSLhC3gpGx2eto=
+X-Received: by 2002:a17:90a:f982:: with SMTP id cq2mr8434185pjb.36.1643198432824;
+ Wed, 26 Jan 2022 04:00:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:4744:0:0:0:0 with HTTP; Wed, 26 Jan 2022 04:00:32
+ -0800 (PST)
+Reply-To: jenniferatuma23@gmail.com
+From:   Jennifer Atuma <christvianney222@gmail.com>
+Date:   Wed, 26 Jan 2022 13:00:32 +0100
+Message-ID: <CAKVPjxLY0g3n4Z8rAxvvL2an3yg-XwmvRA8MCRUuZ8LH9AfwPw@mail.gmail.com>
+Subject: Guten Tag, Liebe.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So far, AMD_MEM_ENCRYPT is the only user of X86_MEM_ENCRYPT. TDX will be
-the second. It will make mem_encrypt.c build without AMD_MEM_ENCRYPT,
-which triggers a warning:
+Guten Tag, Liebe.
+Ich wei=C3=9F, dass wir uns noch nie zuvor getroffen haben, aber ich bin
+von Herzen =C3=BCberzeugt, Sie zu kontaktieren, um Sie um Ihre bescheidene
+Unterst=C3=BCtzung zu bitten, um zu helfen, das Geld zu investieren, das
+ich von meinem verstorbenen Vater geerbt habe.
+Ich habe die Summe von 5.500.000 Euro von meinem verstorbenen Vater,
+Herrn Fredrick Atuma, vor seinem pl=C3=B6tzlichen Tod geerbt.
 
-arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for
-	function 'mem_encrypt_init' [-Wmissing-prototypes]
+Ich flehe Sie an, mir zu helfen, dieses Geld auf Ihr Bankkonto dort
+dr=C3=BCben in Ihrem Land zu =C3=BCberweisen und zu erhalten, wo ich Zugang=
+ zu
+dem Geld f=C3=BCr Investitionen haben kann.
 
-Fix it by moving mem_encrypt_init() declaration outside of #ifdef
-CONFIG_AMD_MEM_ENCRYPT.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Fixes: 20f07a044a76 ("x86/sev: Move common memory encryption code to mem_encrypt.c")
----
- arch/x86/include/asm/mem_encrypt.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-index e2c6f433ed10..88ceaf3648b3 100644
---- a/arch/x86/include/asm/mem_encrypt.h
-+++ b/arch/x86/include/asm/mem_encrypt.h
-@@ -49,9 +49,6 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages,
- 
- void __init mem_encrypt_free_decrypted_mem(void);
- 
--/* Architecture __weak replacement functions */
--void __init mem_encrypt_init(void);
--
- void __init sev_es_init_vc_handling(void);
- 
- #define __bss_decrypted __section(".bss..decrypted")
-@@ -89,6 +86,9 @@ static inline void mem_encrypt_free_decrypted_mem(void) { }
- 
- #endif	/* CONFIG_AMD_MEM_ENCRYPT */
- 
-+/* Architecture __weak replacement functions */
-+void __init mem_encrypt_init(void);
-+
- /*
-  * The __sme_pa() and __sme_pa_nodebug() macros are meant for use when
-  * writing to or comparing values from the cr3 register.  Having the
--- 
-2.34.1
-
+Nach der =C3=9Cberweisung treffe ich Sie in Ihrem Land, wo wir das Geld zum
+gegenseitigen Nutzen anlegen.
+Ich freue mich auf Ihre Annahmebest=C3=A4tigung, damit ich Ihnen weitere
+Informationen geben kann.
+Jennifer Atoma

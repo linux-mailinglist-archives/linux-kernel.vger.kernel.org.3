@@ -2,155 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAEB49D567
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE7B49D568
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 23:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbiAZWYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 17:24:32 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:59550 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229637AbiAZWYa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 17:24:30 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QMOIcH001282;
-        Wed, 26 Jan 2022 22:24:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=AqLDb7oC344gTow/uDRwc6F7y7gWhyphzkM/OBMcx78=;
- b=QItk+nQx3lsn47mp5QDUGPPgTj16HMGTOJxl5QFsKiqGR7/NY6W0q1dxYEtOGLC58pUo
- Nv36Z9++oO99zdCXDmnyheypEm0UwZKuXj/bXDteuzg5StZsCDkvE6OVV8s33opS7pgx
- owkfkbFP+DJq7pVEByxEDtVi94grNotiqI1O9FU3SGhDvKpceiWOGtReG1fkCvYU3gzk
- LuRttgap2jicYG31hd1NGstyxnG8+8JcxNE0qEn/HjQQ2x2hch9GnopsWmcC8kJ14DGN
- 9xTFh58nSwIDE5dqm5no7ppBWPo7HLYV1p7T70KIkKMbD/Xq3AdRhQ6UiIY/QtcIV8RK ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3duet70bge-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 22:24:18 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20QMNnLN031399;
-        Wed, 26 Jan 2022 22:24:00 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3duet70bfq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 22:24:00 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20QMDAK3007199;
-        Wed, 26 Jan 2022 22:23:59 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma02dal.us.ibm.com with ESMTP id 3dt1xakmts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 22:23:59 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20QMNqrX29819320
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jan 2022 22:23:52 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 38F646A047;
-        Wed, 26 Jan 2022 22:23:52 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B81D16A04F;
-        Wed, 26 Jan 2022 22:23:49 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 26 Jan 2022 22:23:49 +0000 (GMT)
-Message-ID: <9ca21852-17ee-fc99-4764-300cd5199810@linux.ibm.com>
-Date:   Wed, 26 Jan 2022 17:23:49 -0500
+        id S231830AbiAZW11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 17:27:27 -0500
+Received: from mga04.intel.com ([192.55.52.120]:55651 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229637AbiAZW1Z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 17:27:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643236045; x=1674772045;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FiUdITY5Eu5ZGdXWjoskPBCnS9kcaGk9t5jjocwL+nc=;
+  b=Z7hxhhkMPclGjhCu5Rdt48eUd/WhjnreCR6Dxpn4/g6VzdgNM5pVwwC9
+   H+eqAv2QEqM+RCAjpi6mG6AhQ53RBYoNKPzNe7nuTx1r8PBPJx5PHodEg
+   le1FJ3O1zdOuKAc0cRlA1SWM10P3DM1FeJUYIHEWqAK7G71m19tGiIMsk
+   1e6RNfEYGOxg/rIlGHXK7kH/mFVvRBAmZNgcDJtDCsOJ963h8Zp+HuCLk
+   +TKeECzNeEBgpWAuiiTOddIk7OZB/TjTyrrDo0ujpiLXL+dhyicKRKFgK
+   oug8CjchNm+GR1iiLjfRRhQ01y3yf01BUklFFeZ+OYCSiPZ+hJ2Wou0dR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245503598"
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="245503598"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 14:27:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="696391770"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 26 Jan 2022 14:27:23 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCql8-000Lj7-BJ; Wed, 26 Jan 2022 22:27:22 +0000
+Date:   Thu, 27 Jan 2022 06:26:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Will Deacon <willdeacon@google.com>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 4728/5866] arch/arm64/kvm/fpsimd.c:129:5: error: implicit declaration of
+ function 'sve_cond_update_zcr_vq'
+Message-ID: <202201270637.CwoQKBGC-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 08/23] ima: Move measurement list related variables
- into ima_namespace
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220125224645.79319-9-stefanb@linux.vnet.ibm.com>
- <20220126092159.4rgclr5s3jli7aqy@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220126092159.4rgclr5s3jli7aqy@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6d07J6qR1P1xp3FrOFIPPdlzD9hXsE1y
-X-Proofpoint-ORIG-GUID: JdVJZpC1BlMcH50MZWAEpLy_SOIE4NbH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-26_08,2022-01-26_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- mlxscore=0 spamscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2201260128
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Marc,
 
-On 1/26/22 04:21, Christian Brauner wrote:
-> On Tue, Jan 25, 2022 at 05:46:30PM -0500, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> Move measurement list related variables into the ima_namespace. This way
->> a front-end like securityfs can show the measurement list inside an IMA
->> namespace.
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> ---
->>   security/integrity/ima/ima.h             |  5 +++--
->>   security/integrity/ima/ima_fs.c          |  6 ++++--
->>   security/integrity/ima/ima_init_ima_ns.c |  5 +++++
->>   security/integrity/ima/ima_kexec.c       | 12 ++++++-----
->>   security/integrity/ima/ima_queue.c       | 27 +++++++++++-------------
->>   5 files changed, 31 insertions(+), 24 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
->> index 340a59174670..45706836a77b 100644
->> --- a/security/integrity/ima/ima.h
->> +++ b/security/integrity/ima/ima.h
->> @@ -106,7 +106,6 @@ struct ima_queue_entry {
->>   	struct list_head later;		/* place in ima_measurements list */
->>   	struct ima_template_entry *entry;
->>   };
->> -extern struct list_head ima_measurements;	/* list of all measurements */
->>   
->>   /* Some details preceding the binary serialized measurement list */
->>   struct ima_kexec_hdr {
->> @@ -136,6 +135,8 @@ struct ima_namespace {
->>   	struct ima_rule_entry *arch_policy_entry;
->>   
->>   	struct ima_h_table ima_htable;
->> +	struct list_head ima_measurements;	/* list of all measurements */
->> +	unsigned long binary_runtime_size;	/* used by init_ima_ns */
->>   } __randomize_layout;
-> Moving this into struct imans seems sane to me but I'm not going to ack
-> it because I don't have enough knowledge to guarantee that this code
-> will only run for init_ima_ns. I'll leave that to Mimi.
+FYI, the error/warning still remains.
 
-The code modifying binary_runtime_size may do this for all IMA 
-namespaces but the resulting value of binary_runtime_size may only 
-matter in init_ima_ns (not 100% sure, but Mimi seems to say so). Moving 
-it into ima_namespace rather than special-casing the code keeps the code 
-readable.
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   52cdd137fae0b001197a51646289e3cbdda921d5
+commit: b0e15c8c44275afef4aacfb1560e38b974b02ac8 [4728/5866] FROMGIT: KVM: arm64: Save/restore SVE state for nVHE
+config: arm64-randconfig-r022-20220124 (https://download.01.org/0day-ci/archive/20220127/202201270637.CwoQKBGC-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 2a1b7aa016c0f4b5598806205bdfbab1ea2d92c4)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/b0e15c8c44275afef4aacfb1560e38b974b02ac8
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout b0e15c8c44275afef4aacfb1560e38b974b02ac8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-There are also some case in the code that may do something like this:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-if (ns == &init_ima_ns)
+All errors (new ones prefixed by >>):
 
-     foo = xyz;
-
-Those will go away when foo is moved into the namespace and then it 
-becomes ns->foo = xyz, which is much saner for readability but 
-unavoidable for some variables at this stage.
+>> arch/arm64/kvm/fpsimd.c:129:5: error: implicit declaration of function 'sve_cond_update_zcr_vq' [-Werror,-Wimplicit-function-declaration]
+                                   sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1,
+                                   ^
+   1 error generated.
 
 
+vim +/sve_cond_update_zcr_vq +129 arch/arm64/kvm/fpsimd.c
+
+   108	
+   109	/*
+   110	 * Write back the vcpu FPSIMD regs if they are dirty, and invalidate the
+   111	 * cpu FPSIMD regs so that they can't be spuriously reused if this vcpu
+   112	 * disappears and another task or vcpu appears that recycles the same
+   113	 * struct fpsimd_state.
+   114	 */
+   115	void kvm_arch_vcpu_put_fp(struct kvm_vcpu *vcpu)
+   116	{
+   117		unsigned long flags;
+   118		bool host_has_sve = system_supports_sve();
+   119		bool guest_has_sve = vcpu_has_sve(vcpu);
+   120	
+   121		local_irq_save(flags);
+   122	
+   123		if (vcpu->arch.flags & KVM_ARM64_FP_ENABLED) {
+   124			if (guest_has_sve) {
+   125				__vcpu_sys_reg(vcpu, ZCR_EL1) = read_sysreg_el1(SYS_ZCR);
+   126	
+   127				/* Restore the VL that was saved when bound to the CPU */
+   128				if (!has_vhe())
+ > 129					sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1,
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

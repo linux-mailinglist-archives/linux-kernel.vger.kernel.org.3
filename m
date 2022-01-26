@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 592DF49CF11
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B5549CF0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234531AbiAZQAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        id S233983AbiAZQAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbiAZQAG (ORCPT
+        with ESMTP id S229764AbiAZQAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:00:06 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07A0C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:00:06 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id m131so57087vkm.7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:00:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LHaP8QZUNOCjkmPNKPCf4d3+Z1dAMC/my/c1DAn1of0=;
-        b=ybq9EBHbWhdev8ZXcKZTiZ/INdzXZFvzoyB1/xLVff4cQTjbd14nSLmXVqJ76AqI+f
-         UuZDjGwEHcI1rLCEwsfl4KrhMV49Q1/Rr74Q3TSluTntGIxVRM8JUZe+IeknyXHvg2hf
-         g+fwQqJ0k0bG7t8/mjt6FvHsvoqOOFGNTGIfK5cx++bID8bz+pIPUjZf9LuOi97VtzAR
-         rDAnZAJx62JMwMx+ygDKWRwywEZnYtsZthzDvR+XTQCshs1CUzKQmRNu56tMTupjBJWl
-         VWvHeEtG+RRLWlXBm5O1v4YE12J880rD1juGvfQkjldyHpxJI1USDyChyzPpCcSMSkl3
-         J69A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LHaP8QZUNOCjkmPNKPCf4d3+Z1dAMC/my/c1DAn1of0=;
-        b=w+mAvWQlR13Dtx0FT9u5ct7O0gX5K6t3aG+4hK19oReZvrT3ap+WL9mJUpz26bf3Qp
-         WwaETB2/G7rXCTxPjZxqvE8BOXbxRoP4WzahrLeqxxgyPae+yRNsZ7kKAuHopR+9nDT0
-         oDryKKBUHkhFaN7RiUZOo4lwi/Uj++8AvjJAfInUVBeWcUqmGu6D2hELM3jMW//gf0q2
-         nxxE3mKt74E26dkJI/JHgY/1I2eSs2lGSk7Bxpl9iuzdMU4HJx95wHqR4E1o9tskwDBx
-         Mlt8jeJ5pIGHSCGcmlxWhIOqybY/WuctxtGsxhV4tvt7PNT/DLW1O3rWU9Hob0KKVuSx
-         6+eg==
-X-Gm-Message-State: AOAM532nlz7CApEj0wLMNNcqWtnn9l6PPaKVccX5ToxuvHgqQ80ss5A5
-        cs8LA8Q1jDsPttPnGl6vTXdnH2H0yT66PgAxW1Q02Q==
-X-Google-Smtp-Source: ABdhPJyQds8T0nBhNW3ATVRZZXvbEaXj0bT6cR2EpD03NOqGrTF03r2QT/LxlL3vII2Cb832ApVWiclaTBJKgwUulfY=
-X-Received: by 2002:a1f:a4d8:: with SMTP id n207mr8993217vke.10.1643212805666;
- Wed, 26 Jan 2022 08:00:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20220125155447.179130255@linuxfoundation.org>
-In-Reply-To: <20220125155447.179130255@linuxfoundation.org>
-From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date:   Wed, 26 Jan 2022 21:29:29 +0530
-Message-ID: <CAG=yYwmrqD+kb2_tLDY5zAzeD21gbLA+sEt2pU9eEiFbQ8kPpQ@mail.gmail.com>
-Subject: Re: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Salvatore Bonaccorso <carnil@debian.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 26 Jan 2022 11:00:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E162C06161C;
+        Wed, 26 Jan 2022 08:00:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C079CB81F03;
+        Wed, 26 Jan 2022 15:59:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E9CC340E6;
+        Wed, 26 Jan 2022 15:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643212798;
+        bh=X+RmX5LveR/DElha+H9g+z55A6Rjf/XcNDFPYxv/WHk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nWldkKNrXR+KFVYNGhlWGOo0277tEiT3oaCIKp3KoD/Ux7kulKTIzau9dhz3Dgx+r
+         jmS8Y9zjmJpEFfJduRqsoZg0jqGJ96f7XXfaKMUo8e+v4PLuY6fm7QbSLg5siQ6gHk
+         n6cwv99n7eNy45xPNXt5FubG7ffOczJ+2y68v57Bacorf3/ajYTWeD5l4I6Dplf/yd
+         QfhbDhcnS0TGGtcihwq+gYRO1tVi6TAvpo8jOufEVsGAuY6WRV3HvQUj6j+FTZtwDw
+         /o+G1tckj1rPi0u9tpI7OunrCnDmc3rNVKoR+aynKTd0J38NDy+TlVa3rqNpUZ2its
+         yCGHK5c0jVe4w==
+Date:   Thu, 27 Jan 2022 00:59:52 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 2/9] fprobe: Add ftrace based probe APIs
+Message-Id: <20220127005952.42dd07ff5f275e61be638283@kernel.org>
+In-Reply-To: <20220126115022.fda21a3face4e97684f5bab9@kernel.org>
+References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
+        <164311271777.1933078.9066058105807126444.stgit@devnote2>
+        <YfAoMW6i4gqw2Na0@krava>
+        <YfA9aC5quQNc89Hc@krava>
+        <20220126115022.fda21a3face4e97684f5bab9@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 10:16 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.3 release.
-> There are 1033 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
-  hello,
-Compiled and booted 5.16.3-rc2  on VivoBook 15_ASUS Laptop X507UAR  .
-NO regressions from dmesg.
+On Wed, 26 Jan 2022 11:50:22 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Tested-by: Jeffrin Jose T  <jeffrin@rajagiritech.edu.in>
+> > one more question..
+> > 
+> > I'm adding support for user to pass function symbols to bpf fprobe link
+> > and I thought I'd pass symbols array to register_fprobe, but I'd need to
+> > copy the whole array of strings from user space first, which could take
+> > lot of memory considering attachment of 10k+ functions
+> > 
+> > so I'm thinking better way is to resolve symbols already in bpf fprobe
+> > link code and pass just addresses to register_fprobe
+> 
+> That is OK. Fprobe accepts either ::syms or ::addrs.
+> 
+> > 
+> > I assume you want to keep symbol interface, right? could we have some
+> > flag ensuring the conversion code is skipped, so we don't go through
+> > it twice?
+> 
+> Yeah, we still have many unused bits in fprobe::flags. :)
 
---
-software engineer
-rajagiri school of engineering and technology -  autonomous
+Instead of that, according to Steve's comment, I would like to introduce
+3 registration APIs.
+
+int register_fprobe(struct fprobe *fp, const char *filter, const char *notrace);
+int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num);
+int register_fprobe_syms(struct fprobe *fp, const char **syms, int num);
+
+The register_fprobe_ips() will not touch the @addrs. You have to set the
+correct ftrace location address in the @addrs.
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

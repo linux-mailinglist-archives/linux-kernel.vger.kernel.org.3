@@ -2,155 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFE449C8FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AFE49C907
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240960AbiAZLpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:45:53 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:35727 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240945AbiAZLpt (ORCPT
+        id S234069AbiAZLqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240984AbiAZLqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:45:49 -0500
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 20QBjjLjB022732, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 20QBjjLjB022732
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 26 Jan 2022 19:45:45 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 26 Jan 2022 19:45:45 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 26 Jan 2022 19:45:43 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e]) by
- RTEXMBS04.realtek.com.tw ([fe80::35e4:d9d1:102d:605e%5]) with mapi id
- 15.01.2308.020; Wed, 26 Jan 2022 19:45:43 +0800
-From:   Hau <hau@realtek.com>
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH net-next 1/1] r8169: enable RTL8125 ASPM L1.2
-Thread-Topic: [PATCH net-next 1/1] r8169: enable RTL8125 ASPM L1.2
-Thread-Index: AQHYEU71utwpaLacm0G/vN72YItAmaxzrMwAgAFTwtD//5mTgIAAltJA
-Date:   Wed, 26 Jan 2022 11:45:43 +0000
-Message-ID: <660659d112434614b5b4c0dd0aeecf40@realtek.com>
-References: <20220124181937.6331-1-hau@realtek.com>
- <23d3e690-da16-df03-4c75-dc92625b2c96@gmail.com>
- <052d2be6e8f445f3a4890e259bdee8ce@realtek.com>
- <c8df96c7-79b2-8b5b-9036-12bd8bfd5582@gmail.com>
-In-Reply-To: <c8df96c7-79b2-8b5b-9036-12bd8bfd5582@gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.129]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzEvMjYg5LiK5Y2IIDA5OjM0OjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 26 Jan 2022 06:46:03 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF04C061757
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:45:59 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id e28so17966828pfj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:45:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=b2YyWOge0M5kIT2ntqlrnr8NQs2OgZVVCHIbAnzaaKE=;
+        b=WWfym4P+R3+IwpIxkHRmeB3tynZEscCZnnZFQ1YzNukA01mkuDYl6d6i0ahPydblHO
+         AtQpFKqiEmopvLkUdF8SPT3UCWN2zo2PkJlketuHAyWOJs1Egydvx1C7wfNtGJK3pGsx
+         DIv2rwUpj/l6XDgrxw6d+aHzeeIJY8aBeKMyjw4HWN5NOIWWRTfyS4FCNE9ccyWlkGdb
+         Zf1j5vo2fJosqpjNgc7nwLvJaGWi9wGl1DB3ZFhfTbcFI9HvS1pX3SnT2qLvg3fnH0Ey
+         NWyuC6ckMkdcCBYNd2PTyVoqfPtqgAPpS6Lg/cUpo1nJY6xGWBu6z+Fnegr/1N7X2+1M
+         Hzhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=b2YyWOge0M5kIT2ntqlrnr8NQs2OgZVVCHIbAnzaaKE=;
+        b=HmfHFirpYGMcgIoee+/caAqLVClmXYaTr7wGyJQTuKEzBHpqthrjDOB6JI/2Cf2qXP
+         1uHYHKSvtHtPjDfwtofIjw15MV6nRo2uJKvgbHNv9WJbv6CrohqMkxsP5iAHRVdzGATW
+         HgLQBiwgk6kk7hy9Krnn4ZopkGGxYOKNcBddR73SG2XEu5+ogGbNF4x4Ck6Rnn1+5/Bx
+         8Gh4PgnMhAtofEmPhya0kC+uCi0Nj4KuAT9qstZOeJxco5AehyLaOtbPpya31A9lDtaZ
+         BgTTzyouLqunyFnSByuQez6ee1kBxNur8rp3r+CuJ0hffV8jQ/iJIUkw+6++1zWHirRm
+         NZPg==
+X-Gm-Message-State: AOAM532LMtEDEeMLB4Gof0WbYFxlkQ3ycMoHmFc8KqiZjzo/DmNm1OJU
+        erI9x1nRbdVsJJB++pLQVH9ZDA==
+X-Google-Smtp-Source: ABdhPJyzaxql9iVXuLykTnyDGM1rb4BxxzxCMBfHaQkTumc+35DPn7h/HgwDnFeQSyGT+oLQfq6hHQ==
+X-Received: by 2002:a63:6f07:: with SMTP id k7mr18454510pgc.574.1643197558636;
+        Wed, 26 Jan 2022 03:45:58 -0800 (PST)
+Received: from sunil-ThinkPad-T490 ([49.206.3.187])
+        by smtp.gmail.com with ESMTPSA id na7sm3055210pjb.23.2022.01.26.03.45.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 03:45:58 -0800 (PST)
+Date:   Wed, 26 Jan 2022 17:15:49 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Abner Chang <abner.chang@hpe.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>
+Subject: Re: [RFC PATCH 1/1] riscv/efi_stub: Add support for
+ RISCV_EFI_BOOT_PROTOCOL
+Message-ID: <20220126114549.GA35654@sunil-ThinkPad-T490>
+References: <20220126110615.33371-1-sunilvl@ventanamicro.com>
+ <20220126110615.33371-2-sunilvl@ventanamicro.com>
+ <CAMj1kXGaBJX9qVXQXiFHPySfDz7SWYQ6+cbHvV5v3sw3tEv0Ow@mail.gmail.com>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGaBJX9qVXQXiFHPySfDz7SWYQ6+cbHvV5v3sw3tEv0Ow@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiAyNi4wMS4yMDIyIDEwOjAyLCBIYXUgd3JvdGU6DQo+ID4NCj4gPg0KPiA+PiBPbiAyNC4w
-MS4yMDIyIDE5OjE5LCBDaHVuaGFvIExpbiB3cm90ZToNCj4gPj4+IFRoaXMgcGF0Y2ggd2lsbCBl
-bmFibGUgUlRMODEyNSBBU1BNIEwxLjIgb24gdGhlIHBsYXRmb3JtcyB0aGF0IGhhdmUNCj4gPj4+
-IHRlc3RlZCBSVEw4MTI1IHdpdGggQVNQTSBMMS4yIGVuYWJsZWQuDQo+ID4+PiBSZWdpc3RlciBt
-YWMgb2NwIDB4YzBiMiB3aWxsIGhlbHAgdG8gaWRlbnRpZnkgaWYgUlRMODEyNSBoYXMgYmVlbg0K
-PiA+Pj4gdGVzdGVkIG9uIEwxLjIgZW5hYmxlZCBwbGF0Zm9ybS4gSWYgaXQgaXMsIHRoaXMgcmVn
-aXN0ZXIgd2lsbCBiZSBzZXQgdG8gMHhmLg0KPiA+Pj4gSWYgbm90LCB0aGlzIHJlZ2lzdGVyIHdp
-bGwgYmUgZGVmYXVsdCB2YWx1ZSAwLg0KPiA+Pj4NCj4gPj4+IFNpZ25lZC1vZmYtYnk6IENodW5o
-YW8gTGluIDxoYXVAcmVhbHRlay5jb20+DQo+ID4+PiAtLS0NCj4gPj4+ICBkcml2ZXJzL25ldC9l
-dGhlcm5ldC9yZWFsdGVrL3I4MTY5X21haW4uYyB8IDk5DQo+ID4+PiArKysrKysrKysrKysrKysr
-KystLS0tLQ0KPiA+Pj4gIDEgZmlsZSBjaGFuZ2VkLCA3OSBpbnNlcnRpb25zKCspLCAyMCBkZWxl
-dGlvbnMoLSkNCj4gPj4+DQo+ID4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvZXRoZXJuZXQv
-cmVhbHRlay9yODE2OV9tYWluLmMNCj4gPj4+IGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvcmVhbHRl
-ay9yODE2OV9tYWluLmMNCj4gPj4+IGluZGV4IDE5ZTI2MjFlMDY0NS4uYjFlMDEzOTY5ZDRjIDEw
-MDY0NA0KPiA+Pj4gLS0tIGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvcmVhbHRlay9yODE2OV9tYWlu
-LmMNCj4gPj4+ICsrKyBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L3JlYWx0ZWsvcjgxNjlfbWFpbi5j
-DQo+ID4+PiBAQCAtMjIzOCwyMSArMjIzOCw2IEBAIHN0YXRpYyB2b2lkIHJ0bF93b2xfZW5hYmxl
-X3J4KHN0cnVjdA0KPiA+PiBydGw4MTY5X3ByaXZhdGUgKnRwKQ0KPiA+Pj4gIAkJCUFjY2VwdEJy
-b2FkY2FzdCB8IEFjY2VwdE11bHRpY2FzdCB8DQo+ID4+IEFjY2VwdE15UGh5cyk7ICB9DQo+ID4+
-Pg0KPiA+Pj4gLXN0YXRpYyB2b2lkIHJ0bF9wcmVwYXJlX3Bvd2VyX2Rvd24oc3RydWN0IHJ0bDgx
-NjlfcHJpdmF0ZSAqdHApIC17DQo+ID4+PiAtCWlmICh0cC0+ZGFzaF90eXBlICE9IFJUTF9EQVNI
-X05PTkUpDQo+ID4+PiAtCQlyZXR1cm47DQo+ID4+PiAtDQo+ID4+PiAtCWlmICh0cC0+bWFjX3Zl
-cnNpb24gPT0gUlRMX0dJR0FfTUFDX1ZFUl8zMiB8fA0KPiA+Pj4gLQkgICAgdHAtPm1hY192ZXJz
-aW9uID09IFJUTF9HSUdBX01BQ19WRVJfMzMpDQo+ID4+PiAtCQlydGxfZXBoeV93cml0ZSh0cCwg
-MHgxOSwgMHhmZjY0KTsNCj4gPj4+IC0NCj4gPj4+IC0JaWYgKGRldmljZV9tYXlfd2FrZXVwKHRw
-X3RvX2Rldih0cCkpKSB7DQo+ID4+PiAtCQlwaHlfc3BlZWRfZG93bih0cC0+cGh5ZGV2LCBmYWxz
-ZSk7DQo+ID4+PiAtCQlydGxfd29sX2VuYWJsZV9yeCh0cCk7DQo+ID4+PiAtCX0NCj4gPj4+IC19
-DQo+ID4+PiAtDQo+ID4+PiAgc3RhdGljIHZvaWQgcnRsX2luaXRfcnhjZmcoc3RydWN0IHJ0bDgx
-NjlfcHJpdmF0ZSAqdHApICB7DQo+ID4+PiAgCXN3aXRjaCAodHAtPm1hY192ZXJzaW9uKSB7DQo+
-ID4+PiBAQCAtMjY1MCw2ICsyNjM1LDM0IEBAIHN0YXRpYyB2b2lkDQo+ID4+PiBydGxfcGNpZV9z
-dGF0ZV9sMmwzX2Rpc2FibGUoc3RydWN0DQo+ID4+IHJ0bDgxNjlfcHJpdmF0ZSAqdHApDQo+ID4+
-PiAgCVJUTF9XOCh0cCwgQ29uZmlnMywgUlRMX1I4KHRwLCBDb25maWczKSAmIH5SZHlfdG9fTDIz
-KTsgIH0NCj4gPj4+DQo+ID4+PiArc3RhdGljIHZvaWQgcnRsX2Rpc2FibGVfZXhpdF9sMShzdHJ1
-Y3QgcnRsODE2OV9wcml2YXRlICp0cCkgew0KPiA+Pj4gKwkvKiBCaXRzIGNvbnRyb2wgd2hpY2gg
-ZXZlbnRzIHRyaWdnZXIgQVNQTSBMMSBleGl0Og0KPiA+Pj4gKwkgKiBCaXQgMTI6IHJ4ZHYNCj4g
-Pj4+ICsJICogQml0IDExOiBsdHJfbXNnDQo+ID4+PiArCSAqIEJpdCAxMDogdHhkbWFfcG9sbA0K
-PiA+Pj4gKwkgKiBCaXQgIDk6IHhhZG0NCj4gPj4+ICsJICogQml0ICA4OiBwa3RhdmkNCj4gPj4+
-ICsJICogQml0ICA3OiB0eHBsYQ0KPiA+Pj4gKwkgKi8NCj4gPj4+ICsJc3dpdGNoICh0cC0+bWFj
-X3ZlcnNpb24pIHsNCj4gPj4+ICsJY2FzZSBSVExfR0lHQV9NQUNfVkVSXzM0IC4uLiBSVExfR0lH
-QV9NQUNfVkVSXzM2Og0KPiA+Pj4gKwkJcnRsX2VyaV9jbGVhcl9iaXRzKHRwLCAweGQ0LCAweDFm
-MDApOw0KPiA+Pj4gKwkJYnJlYWs7DQo+ID4+PiArCWNhc2UgUlRMX0dJR0FfTUFDX1ZFUl8zNyAu
-Li4gUlRMX0dJR0FfTUFDX1ZFUl8zODoNCj4gPj4+ICsJCXJ0bF9lcmlfY2xlYXJfYml0cyh0cCwg
-MHhkNCwgMHgwYzAwKTsNCj4gPj4+ICsJCWJyZWFrOw0KPiA+Pj4gKwljYXNlIFJUTF9HSUdBX01B
-Q19WRVJfNDAgLi4uIFJUTF9HSUdBX01BQ19WRVJfNTM6DQo+ID4+PiArCQlydGxfZXJpX2NsZWFy
-X2JpdHModHAsIDB4ZDQsIDB4MWY4MCk7DQo+ID4+PiArCQlicmVhazsNCj4gPj4+ICsJY2FzZSBS
-VExfR0lHQV9NQUNfVkVSXzYwIC4uLiBSVExfR0lHQV9NQUNfVkVSXzYzOg0KPiA+Pj4gKwkJcjgx
-NjhfbWFjX29jcF9tb2RpZnkodHAsIDB4YzBhYywgMHgxZjgwLCAwKTsNCj4gPj4+ICsJCWJyZWFr
-Ow0KPiA+Pj4gKwlkZWZhdWx0Og0KPiA+Pj4gKwkJYnJlYWs7DQo+ID4+PiArCX0NCj4gPj4+ICt9
-DQo+ID4+PiArDQo+ID4+PiAgc3RhdGljIHZvaWQgcnRsX2VuYWJsZV9leGl0X2wxKHN0cnVjdCBy
-dGw4MTY5X3ByaXZhdGUgKnRwKSAgew0KPiA+Pj4gIAkvKiBCaXRzIGNvbnRyb2wgd2hpY2ggZXZl
-bnRzIHRyaWdnZXIgQVNQTSBMMSBleGl0Og0KPiA+Pj4gQEAgLTI2OTIsNiArMjcwNSwzMyBAQCBz
-dGF0aWMgdm9pZCBydGxfaHdfYXNwbV9jbGtyZXFfZW5hYmxlKHN0cnVjdA0KPiA+PiBydGw4MTY5
-X3ByaXZhdGUgKnRwLCBib29sIGVuYWJsZSkNCj4gPj4+ICAJdWRlbGF5KDEwKTsNCj4gPj4+ICB9
-DQo+ID4+Pg0KPiA+Pj4gK3N0YXRpYyB2b2lkIHJ0bF9od19hc3BtX2wxMl9lbmFibGUoc3RydWN0
-IHJ0bDgxNjlfcHJpdmF0ZSAqdHAsIGJvb2wNCj4gPj4+ICtlbmFibGUpIHsNCj4gPj4+ICsJLyog
-RG9uJ3QgZW5hYmxlIEwxLjIgaW4gdGhlIGNoaXAgaWYgT1MgY2FuJ3QgY29udHJvbCBBU1BNICov
-DQo+ID4+PiArCWlmIChlbmFibGUgJiYgdHAtPmFzcG1fbWFuYWdlYWJsZSkgew0KPiA+Pj4gKwkJ
-cjgxNjhfbWFjX29jcF9tb2RpZnkodHAsIDB4ZTA5NCwgMHhmZjAwLCAwKTsNCj4gPj4+ICsJCXI4
-MTY4X21hY19vY3BfbW9kaWZ5KHRwLCAweGUwOTIsIDB4MDBmZiwgQklUKDIpKTsNCj4gPj4+ICsJ
-fSBlbHNlIHsNCj4gPj4+ICsJCXI4MTY4X21hY19vY3BfbW9kaWZ5KHRwLCAweGUwOTIsIDB4MDBm
-ZiwgMCk7DQo+ID4+PiArCX0NCj4gPj4+ICt9DQo+ID4+PiArDQo+ID4+DQo+ID4+IFJlZ2lzdGVy
-IEUwOTQgYml0cyAwLi4xNSBhcmUgY2xlYXJlZCB3aGVuIGVuYWJsaW5nLCBidXQgbm90IHRvdWNo
-ZWQNCj4gPj4gb24gZGlzYWJsaW5nLiBJIHRoaXMgY29ycmVjdD8NCj4gPiAgICBSZWdpc3RlciBF
-MDk0IGJpdHMgOC4uLjE1IGlzIGEgdGltZXIgY291bnRlciB0aGF0IGlzIHVzZWQgdG8gY29udHJv
-bCB3aGVuIHRvDQo+IGRpc2FibGUgZXBoeSB0eC9yeC4NCj4gPiAgICBTZXQgaXQgdG8gMCBtZWFu
-cyBkaXNhYmxlIGVwaHkgdHgvcnggaW1tZWRpYXRlbHkgd2hlbiBjZXJ0YWluIGNvbmRpdGlvbg0K
-PiBtZWV0Lg0KPiA+ICAgIEl0IGhhcyBubyBtZWFuaW5nIHdoZW4gcmVnaXN0ZXIgRTA5MiBiaXQg
-MiBpcyBzZXQgdG8gMC4NCj4gPg0KPiBUaGFua3MgZm9yIHRoZSBleHBsYW5hdGlvbi4NCj4gDQo+
-ID4+IEFuZCBmb3IgYmFzaWNhbGx5IHRoZSBzYW1lIHB1cnBvc2Ugd2UgaGF2ZSB0aGUgZm9sbG93
-aW5nIGZ1bmN0aW9uLg0KPiA+PiAiZG9uJ3QgZW5hYmxlIEwxLjIgaW4gdGhlIGNoaXAiIGlzIG5v
-dCBjb3ZlcmVkIGJ5IEFTUE1fZW4gaW4gQ29uZmlnNT8NCj4gPiAgICBSZWdpc3RlciBFMDkyIGlz
-IGxpa2UgIEFTUE1fZW4gaW4gQ29uZmlnNS4gQnV0IGl0IGNvbnRyb2xzIEwxIHN1YnN0YXRlDQo+
-IChMMS4xL0wxLjIpIGVuYWJsZSBzdGF0dXMuDQo+ID4NCj4gSG93IGlzIHRoaXMgaGFuZGxlZCBm
-b3IgdGhlIFJUTDgxNjggY2hpcCB2ZXJzaW9ucyBzdXBwb3J0aW5nIEwxIHN1Yi1zdGF0ZXMNCj4g
-KFJUTDgxNjhoKT8NCj4gSXMgdGhlcmUgYSBzaW1pbGFyIHJlZ2lzdGVyIG9yIGRvZXMgQ29uZmln
-NSBBU1BNX2VuIGNvbnRyb2wgYWxzbyB0aGUgTDENCj4gc3Vic3RhdGVzIG9uIHRoZXNlIGNoaXAg
-dmVyc2lvbnM/DQo+IA0KWW91IGNvdWxkIGFwcGx5IHRoZSBzYW1lIHNldHRpbmcgb24gUlRMODE2
-OEguDQoNCj4gPj4NCj4gPj4gc3RhdGljIHZvaWQgcnRsX2h3X2FzcG1fY2xrcmVxX2VuYWJsZShz
-dHJ1Y3QgcnRsODE2OV9wcml2YXRlICp0cCwNCj4gPj4gYm9vbA0KPiA+PiBlbmFibGUpIHsNCj4g
-Pj4gCS8qIERvbid0IGVuYWJsZSBBU1BNIGluIHRoZSBjaGlwIGlmIE9TIGNhbid0IGNvbnRyb2wg
-QVNQTSAqLw0KPiA+PiAJaWYgKGVuYWJsZSAmJiB0cC0+YXNwbV9tYW5hZ2VhYmxlKSB7DQo+ID4+
-IAkJUlRMX1c4KHRwLCBDb25maWc1LCBSVExfUjgodHAsIENvbmZpZzUpIHwgQVNQTV9lbik7DQo+
-ID4+IAkJUlRMX1c4KHRwLCBDb25maWcyLCBSVExfUjgodHAsIENvbmZpZzIpIHwgQ2xrUmVxRW4p
-Ow0KPiA+PiAJfSBlbHNlIHsNCj4gPj4gCQlSVExfVzgodHAsIENvbmZpZzIsIFJUTF9SOCh0cCwg
-Q29uZmlnMikgJiB+Q2xrUmVxRW4pOw0KPiA+PiAJCVJUTF9XOCh0cCwgQ29uZmlnNSwgUlRMX1I4
-KHRwLCBDb25maWc1KSAmIH5BU1BNX2VuKTsNCj4gPj4gCX0NCj4gPj4NCj4gPj4gCXVkZWxheSgx
-MCk7DQo+ID4+IH0NCj4gPj4NCj4gPj4NCj4gLi4uDQo+IC0tLS0tLVBsZWFzZSBjb25zaWRlciB0
-aGUgZW52aXJvbm1lbnQgYmVmb3JlIHByaW50aW5nIHRoaXMgZS1tYWlsLg0K
+On Wed, Jan 26, 2022 at 12:13:42PM +0100, Ard Biesheuvel wrote:
+> Hello Sunil,
+> 
+> On Wed, 26 Jan 2022 at 12:06, Sunil V L <sunilvl@ventanamicro.com> wrote:
+> >
+> > This patch adds the support for getting the boot hart ID in
+> > Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL.
+> >
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > ---
+> >  drivers/firmware/efi/libstub/efistub.h    | 15 ++++++++++++
+> >  drivers/firmware/efi/libstub/riscv-stub.c | 28 ++++++++++++++++++++---
+> >  include/linux/efi.h                       |  1 +
+> >  3 files changed, 41 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+> > index edb77b0621ea..0428f8816942 100644
+> > --- a/drivers/firmware/efi/libstub/efistub.h
+> > +++ b/drivers/firmware/efi/libstub/efistub.h
+> > @@ -720,6 +720,21 @@ union efi_tcg2_protocol {
+> >         } mixed_mode;
+> >  };
+> >
+> > +typedef union riscv_efi_boot_protocol riscv_efi_boot_protocol_t;
+> > +
+> > +union riscv_efi_boot_protocol {
+> > +       struct {
+> > +               u64 revision;
+> > +               efi_status_t (__efiapi *get_boot_hartid)(
+> > +                                                        riscv_efi_boot_protocol_t *,
+> > +                                                        size_t *);
+> > +       };
+> > +       struct {
+> > +               u32 revision;
+> > +               u32 get_boot_hartid;
+> > +       } mixed_mode;
+> > +};
+> > +
+> 
+> You don't the mixed mode member here - this is for X64 kernels on IA32
+> firmware only.
+
+Ah OK. Thanks for the feedback, Ard. Will remove it in next version.
+
+Thanks
+Sunil
+> 
+> >  typedef union efi_load_file_protocol efi_load_file_protocol_t;
+> >  typedef union efi_load_file_protocol efi_load_file2_protocol_t;
+> >
+> > diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
+> > index 380e4e251399..c7add4eb5453 100644
+> > --- a/drivers/firmware/efi/libstub/riscv-stub.c
+> > +++ b/drivers/firmware/efi/libstub/riscv-stub.c
+> > @@ -46,12 +46,34 @@ static u32 get_boot_hartid_from_fdt(void)
+> >         return fdt32_to_cpu(*prop);
+> >  }
+> >
+> > +static u32 get_boot_hartid_from_efi(void)
+> > +{
+> > +       efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
+> > +       efi_status_t status;
+> > +       riscv_efi_boot_protocol_t *boot_protocol;
+> > +       size_t boot_hart_id;
+> > +
+> > +       status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
+> > +                            (void **)&boot_protocol);
+> > +       if (status == EFI_SUCCESS) {
+> > +               status = efi_call_proto(boot_protocol,
+> > +                                       get_boot_hartid, &boot_hart_id);
+> > +               if (status == EFI_SUCCESS) {
+> > +                       return (u32)boot_hart_id;
+> > +               }
+> > +       }
+> > +       return U32_MAX;
+> > +}
+> > +
+> >  efi_status_t check_platform_features(void)
+> >  {
+> > -       hartid = get_boot_hartid_from_fdt();
+> > +       hartid = get_boot_hartid_from_efi();
+> >         if (hartid == U32_MAX) {
+> > -               efi_err("/chosen/boot-hartid missing or invalid!\n");
+> > -               return EFI_UNSUPPORTED;
+> > +               hartid = get_boot_hartid_from_fdt();
+> > +               if (hartid == U32_MAX) {
+> > +                       efi_err("/chosen/boot-hartid missing or invalid!\n");
+> > +                       return EFI_UNSUPPORTED;
+> > +               }
+> >         }
+> >         return EFI_SUCCESS;
+> >  }
+> > diff --git a/include/linux/efi.h b/include/linux/efi.h
+> > index ccd4d3f91c98..9822c730207c 100644
+> > --- a/include/linux/efi.h
+> > +++ b/include/linux/efi.h
+> > @@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
+> >  #define EFI_CONSOLE_OUT_DEVICE_GUID            EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
+> >  #define APPLE_PROPERTIES_PROTOCOL_GUID         EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
+> >  #define EFI_TCG2_PROTOCOL_GUID                 EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
+> > +#define RISCV_EFI_BOOT_PROTOCOL_GUID           EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
+> >  #define EFI_LOAD_FILE_PROTOCOL_GUID            EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
+> >  #define EFI_LOAD_FILE2_PROTOCOL_GUID           EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
+> >  #define EFI_RT_PROPERTIES_TABLE_GUID           EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
+> > --
+> > 2.25.1
+> >

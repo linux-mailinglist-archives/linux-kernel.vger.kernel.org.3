@@ -2,133 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D46F49CC59
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1552C49CC5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 15:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242151AbiAZObG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 09:31:06 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51808 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiAZObE (ORCPT
+        id S242159AbiAZOb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 09:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235227AbiAZOb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:31:04 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5098B81E71;
-        Wed, 26 Jan 2022 14:31:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245ECC340E3;
-        Wed, 26 Jan 2022 14:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643207461;
-        bh=+ZcOBP4gSDqRyHURZxSEAOeJhrvKQsJlVC7k9KKTdpE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WqlHZ0Hd0JjNp/3YqPQCi33cZfCT04Xu9acFdbanAAY21ATZ8savAbDkHAJV8DH9b
-         AGGqY164luOorcSRnKn7n4dWP/ukOwKjlT6E7OKuBgHF2L5nKnmyvf2uo5bibwOsSF
-         o9toVGk87HRPfOY9IAlAdCPQbFqYnD6Pe2CblJVD9P7KOehM2INWAzglKXKtxuUg4N
-         ws3pUYPSjpszT4PGCZOIs9O9fWU4KQK5oMnxa5sIMAK09tIEqLwrROyZaxWEbUDMJm
-         Rzs4qGBGJdS89itI8HJXbe2kK2o4ZC6idvfDjsWVZJyEq2Vs0aW7SMg8CSiGtaNCwu
-         rQyYDwP0tUcXw==
-Date:   Wed, 26 Jan 2022 16:30:41 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] x86/sgx: Silence softlockup detection when releasing
- large enclaves
-Message-ID: <YfFbEaMhqae/jFiM@iki.fi>
-References: <1aa037705e5aa209d8b7a075873c6b4190327436.1642530802.git.reinette.chatre@intel.com>
- <e4e8fbe757860cd24e2f66b25be60d76663935d8.camel@kernel.org>
- <71032a38-e1ab-ac73-09f7-9eefffd53674@intel.com>
- <YfFauJSPU5TNetSe@iki.fi>
+        Wed, 26 Jan 2022 09:31:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68183C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 06:31:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=A0lR3wn3wIyf0krDuzNxicTwLPZDa2yhYaQ9xwjMXyQ=; b=RB2/M2k61CUNlQY4YP/wdUIkAc
+        q2UGv/x3EB7O1u2GOU12SiCDcGhA3HqsJRjGRDfYNMAdrvzQjJLTOuHrkNLiKNAYdrzI3hLFdeQSX
+        +IESe3EvM55hHxkeD/DhWuafALQpPsgHqKjWALqGBOVsFsds6zXguSmIXB9ozNCnYuzrTQJC/vy2A
+        pmp7Ida06WBGQjjEhLzZOJ6wXfhnpXPSPm3/IWxCYPrgjF1IqxFlAQFGXGhTM6Cs+KFN8tPNhgw3w
+        SuF0+aCKJe3Qic7b7MMgQ0mxiIO+yRnDS2dWKMH1vlWvHQwIG59Q2mUKErELjDjnpjP/xSYMLocL5
+        5Sy7y4/g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCjKV-0047hn-Az; Wed, 26 Jan 2022 14:31:23 +0000
+Date:   Wed, 26 Jan 2022 14:31:23 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org
+Subject: Re: [PATCH RFC v2 2/9] mm: optimize do_wp_page() for fresh pages in
+ local LRU pagevecs
+Message-ID: <YfFbOypqMjkeNA3q@casper.infradead.org>
+References: <20220126095557.32392-1-david@redhat.com>
+ <20220126095557.32392-3-david@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfFauJSPU5TNetSe@iki.fi>
+In-Reply-To: <20220126095557.32392-3-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 04:29:12PM +0200, Jarkko Sakkinen wrote:
-> On Thu, Jan 20, 2022 at 08:28:36AM -0800, Reinette Chatre wrote:
-> > Hi Jarkko,
-> > 
-> > On 1/20/2022 5:01 AM, Jarkko Sakkinen wrote:
-> > > On Tue, 2022-01-18 at 11:14 -0800, Reinette Chatre wrote:
-> > >> Vijay reported that the "unclobbered_vdso_oversubscribed" selftest
-> > >> triggers the softlockup detector.
-> > >>
-> > >> Actual SGX systems have 128GB of enclave memory or more.  The
-> > >> "unclobbered_vdso_oversubscribed" selftest creates one enclave which
-> > >> consumes all of the enclave memory on the system. Tearing down such a
-> > >> large enclave takes around a minute, most of it in the loop where
-> > >> the EREMOVE instruction is applied to each individual 4k enclave
-> > >> page.
-> > >>
-> > >> Spending one minute in a loop triggers the softlockup detector.
-> > >>
-> > >> Add a cond_resched() to give other tasks a chance to run and placate
-> > >> the softlockup detector.
-> > >>
-> > >> Cc: stable@vger.kernel.org
-> > >> Fixes: 1728ab54b4be ("x86/sgx: Add a page reclaimer")
-> > >> Reported-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> > >> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-> > >> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> > >> ---
-> > >> Softlockup message:
-> > >> watchdog: BUG: soft lockup - CPU#7 stuck for 22s! [test_sgx:11502]
-> > >> Kernel panic - not syncing: softlockup: hung tasks
-> > >> <snip>
-> > >> sgx_encl_release+0x86/0x1c0
-> > >> sgx_release+0x11c/0x130
-> > >> __fput+0xb0/0x280
-> > >> ____fput+0xe/0x10
-> > >> task_work_run+0x6c/0xc0
-> > >> exit_to_user_mode_prepare+0x1eb/0x1f0
-> > >> syscall_exit_to_user_mode+0x1d/0x50
-> > >> do_syscall_64+0x46/0xb0
-> > >> entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > >>
-> > >>  arch/x86/kernel/cpu/sgx/encl.c | 1 +
-> > >>  1 file changed, 1 insertion(+)
-> > >>
-> > >> diff --git a/arch/x86/kernel/cpu/sgx/encl.c
-> > >> b/arch/x86/kernel/cpu/sgx/encl.c
-> > >> index 001808e3901c..ab2b79327a8a 100644
-> > >> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> > >> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> > >> @@ -410,6 +410,7 @@ void sgx_encl_release(struct kref *ref)
-> > >>                 }
-> > >>  
-> > >>                 kfree(entry);
-> > >> +               cond_resched();
-> > >>         }
-> > >>  
-> > >>         xa_destroy(&encl->page_array);
-> > > 
-> > > I'd add a comment, e.g.
-> > > 
-> > > /* Invoke scheduler to prevent soft lockups. */
-> > 
-> > I could do that. I would like to point out though that there are already
-> > six other usages of cond_resched() in the driver and it does indeed
-> > seem to be the common pattern. When adding this comment to the now
-> > seventh usage it would be the first comment documenting the usage of
-> > cond_resched() in the driver.
-> > 
-> > > 
-> > > Other than that makes sense.
-> > 
-> > Thank you very much for taking a look.
+On Wed, Jan 26, 2022 at 10:55:50AM +0100, David Hildenbrand wrote:
+> diff --git a/mm/memory.c b/mm/memory.c
+> index bcd3b7c50891..61d67ceef734 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3298,7 +3298,17 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+>  		 *
+>  		 * PageKsm() doesn't necessarily raise the page refcount.
+>  		 */
+> -		if (PageKsm(page) || page_count(page) > 1 + PageSwapCache(page))
+> +		if (PageKsm(page))
+> +			goto copy;
+> +		if (page_count(page) > 1 + PageSwapCache(page) + !PageLRU(page))
+> +			goto copy;
+> +		if (!PageLRU(page))
+> +			/*
+> +			 * Note: We cannot easily detect+handle references from
+> +			 * remote LRU pagevecs or references to PageLRU() pages.
+> +			 */
+> +			lru_add_drain();
+> +		if (page_count(page) > 1 + PageSwapCache(page))
+>  			goto copy;
+
+I worry we're starting to get too accurate here.  How about:
+
+		if (PageKsm(page) || page_count(page) > 3)
+			goto copy;
+		if (!PageLRU(page))
+			lru_add_drain();
+		if (!trylock_page(page))
+			goto copy;
+...
+
+>  		if (!trylock_page(page))
+>  			goto copy;
+> -- 
+> 2.34.1
 > 
-> Well, I believe in inline comments to evolution. As in here it was missing,
-> a reminder makes sense.
-
-E.g. there gazillion uses of kmalloc() in kernel but still not all of them
-have a comment bound to them...
-
-BR, Jarkko

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B1A49D630
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501AC49D631
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbiAZXfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 18:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S233672AbiAZXfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 18:35:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbiAZXfR (ORCPT
+        with ESMTP id S233637AbiAZXfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 18:35:17 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07949C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:35:17 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id a4-20020a5b0ec4000000b00615dc8c1623so2403982ybs.17
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:35:16 -0800 (PST)
+        Wed, 26 Jan 2022 18:35:19 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0478C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:35:19 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 2-20020a251302000000b006118f867dadso2435760ybt.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:35:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=cl/TZdY40/pws0twfq148T3oVCl6pd4IFhrlCHTA5xU=;
-        b=FAaCU2Oss7ebYS6551P+5D4+zL7j0tdLfe4FUcGPTiIcBv/JDNbllz/1HPQpKBAY8p
-         HLeve8Ysvxd0IjfjxWSj08CWMscAGQkhS9OhE8EtLlRkTojlKytxrQ59cH/XRfKSzSlG
-         yQf1pQVyjAtiwtzvalfomcpYIk5gCW1z1M5hLm1MRA48USGaKbubT1bZxogK0EgovXt3
-         cHDrAcnW7WSfTSrAu+CkvDvBPlG8pgbBGP/W7Xpd+/o4hdrb7lLN6XXl49D5VvyxhOrM
-         DSq/qdcEejge3N17QBDfYNQyTYNVpjHmoHZDEhgzs6Z4mhN8juQWeDp2iBPvfcb6XKgo
-         HUcg==
+        bh=S9alxEZ7Ku5WvZcthXQSXTBt/vNp2zW2Loz41ChaQ14=;
+        b=ksZpQHt1SIZhp5arp7HKPrgUPNVrjEAuxs3fcebtEeqTDoWMYkhHPwAqzxca+dOAkM
+         CSRWd8vQ+A49d18OBdfNs4o5t0Esws1+/0hHNUkTB+/5rdd0LR1zTZseh8+VylfJSGvT
+         bZNq1twTF7Qihr2wKsc1aH6O54AXvZagxG3ragiUQtGn068aHpDNTuJMcS2zkzyoGRd4
+         szj+m45YU3lwXWweSHuLnH/hYPkSu6day0n6GSrAFp/Iqw5UyUXJW496ndDQCTPPjtdy
+         idGf0rHGRMQlPUiCRvMVEzr4IeK12T29SUI+ZUqn4zJDSEmN9YpEZX2cNcYiGElU3ZpV
+         VD4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=cl/TZdY40/pws0twfq148T3oVCl6pd4IFhrlCHTA5xU=;
-        b=WcgaQhQyDYzbPTs1Osh1HF/Ypg8mgNK/kk6rGzGBPvnNvk0/9eS4zBRhfTePvAzWEh
-         +N3D4TSXczwh+9RTSojzk44abUduXdR3FQtP3mA2CwIaxuqAZBocaXg+47T9EIuK1qCY
-         JKtRenE0rFjH6HuciZWwbTtgm2OJODPzxR+LnbKSTPTCbYDt5NjIx6oqVTjtAaRfstXw
-         p3BeXOftuFaGB8PShSUZQ7/d6/gMAneOmyHyCx0pJzwFo4OZvygGIFmavRiH9n0YiY3f
-         d2yBYpip/xbHK6IVthw1v9YcJjtS+yKlfwh+hSVUhOh+0ZfZVJkA1HBlOl+WoLCDIaae
-         i1fw==
-X-Gm-Message-State: AOAM5318jTNMqP+V+u90rEShqJKfCY7X2sUxA2ITIEqJNWv6DbE8JX7p
-        MKeTT67uyupl8zLYZgqTdgIOMP5CLljpk11u6nKQ8qPnzwnHNXzWMp4KMtJWI0C7EsfxRqhfef6
-        4eAiUBVkIewO/PR/7w9nfJjraRtU8m1s9Jg4l1rQOcWqzT1h4dntqx4xcvk7964jGARGN7rqi
-X-Google-Smtp-Source: ABdhPJwEGiEwIA9iFqZS50PRKzQ1JHl52/fvzmhkImUvzGR1i9o0gH2gxGi+ccgldSVteFeHc9bSFXt2LbAz
+        bh=S9alxEZ7Ku5WvZcthXQSXTBt/vNp2zW2Loz41ChaQ14=;
+        b=5VmEn63rm5schW4l3mQN6ePVZLaeuw3hwQ7sIq4Dwt9iZUVNUYr3iv+g2uxGpDhx+/
+         JbSJIDzMNjKQVrBmrYTQ9mWVd6uQGYMTy34WuNS2aOoPB3aOW4NWrJqmOrDQ4mHRvNTm
+         CI/W9inzrlFep4hiBKGqDRTFmTtXyQgJU0aZhbwnvDW6sTbsT7ou05MZW1vKpu4Fyg4r
+         RGMjiH9dd931NPJIz1iEx78ml76nHllfCLp3NxHnI7lwi1FBogeXrRq3WSuYHmGQeuxr
+         +r8ItBa6sCaSV/EaMNi+lBrnFSYvZWy9LDhCWQb0P9XpW67vhSaCDwI2HRDgsocGBqlG
+         D87Q==
+X-Gm-Message-State: AOAM530N11tffqN0O5rYxbAyHeqBZxltpEmAce3kbi3FCYgSDVCcjYh3
+        NCePDMxn6J+JEq6BZqjQ/kSHC94T+69Q2YydM4PcngjNtLoB3+aQxSsWfI/1zKmTTDPfF3ZaAYs
+        O9WiGSsnwFflY7/hM4peAZ4pYVZ2LNj2ous1VaHb/Wg5zpVClumRtdoBPOmKez5o7V2fBE9ZB
+X-Google-Smtp-Source: ABdhPJyXRWbuw0sjrI1Toj+7DReZzwokVfJ63YpHU0bc7T31V4u9N91y16DMW0D27foduCNCcbwe3WYhnI/Y
 X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:9ce0:6f20:c145:eac])
- (user=eranian job=sendgmr) by 2002:a81:5a43:: with SMTP id
- o64mr1ywb.185.1643240115589; Wed, 26 Jan 2022 15:35:15 -0800 (PST)
-Date:   Wed, 26 Jan 2022 15:34:42 -0800
+ (user=eranian job=sendgmr) by 2002:a0d:db0b:: with SMTP id
+ d11mr0ywe.483.1643240118330; Wed, 26 Jan 2022 15:35:18 -0800 (PST)
+Date:   Wed, 26 Jan 2022 15:34:43 -0800
 In-Reply-To: <20220126233454.3362047-1-eranian@google.com>
-Message-Id: <20220126233454.3362047-2-eranian@google.com>
+Message-Id: <20220126233454.3362047-3-eranian@google.com>
 Mime-Version: 1.0
 References: <20220126233454.3362047-1-eranian@google.com>
 X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH v5 01/13] perf/core: add perf_clear_branch_entry_bitfields() helper
+Subject: [PATCH v5 02/13] x86/cpufeatures: add AMD Fam19h Branch Sampling feature
 From:   Stephane Eranian <eranian@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     peterz@infradead.org, kim.phillips@amd.com, acme@redhat.com,
@@ -62,126 +62,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To make it simpler to reset all the info fields on the
-perf_branch_entry, this patch adds a helper inline function.
-The goal is to centralize the initialization to avoid missing
-a field in case more are added.
+This patch adds a cpu feature for AMD Fam19h Branch Sampling feature as bit
+31 of EBX on CPUID leaf function 0x80000008.
 
 Signed-off-by: Stephane Eranian <eranian@google.com>
 ---
- arch/x86/events/intel/lbr.c | 36 +++++++++++++++++-------------------
- include/linux/perf_event.h  | 16 ++++++++++++++++
- 2 files changed, 33 insertions(+), 19 deletions(-)
+ arch/x86/include/asm/cpufeatures.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index 669c2be14784..6a903113d3a6 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -769,6 +769,7 @@ void intel_pmu_lbr_disable_all(void)
- void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc)
- {
- 	unsigned long mask = x86_pmu.lbr_nr - 1;
-+	struct perf_branch_entry *br = cpuc->lbr_entries;
- 	u64 tos = intel_pmu_lbr_tos();
- 	int i;
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 6db4e2932b3d..1533b3204a6c 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -318,6 +318,7 @@
+ #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
+ #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
+ #define X86_FEATURE_CPPC		(13*32+27) /* Collaborative Processor Performance Control */
++#define X86_FEATURE_BRS			(13*32+31) /* Branch Sampling available */
  
-@@ -784,15 +785,11 @@ void intel_pmu_lbr_read_32(struct cpu_hw_events *cpuc)
- 
- 		rdmsrl(x86_pmu.lbr_from + lbr_idx, msr_lastbranch.lbr);
- 
--		cpuc->lbr_entries[i].from	= msr_lastbranch.from;
--		cpuc->lbr_entries[i].to		= msr_lastbranch.to;
--		cpuc->lbr_entries[i].mispred	= 0;
--		cpuc->lbr_entries[i].predicted	= 0;
--		cpuc->lbr_entries[i].in_tx	= 0;
--		cpuc->lbr_entries[i].abort	= 0;
--		cpuc->lbr_entries[i].cycles	= 0;
--		cpuc->lbr_entries[i].type	= 0;
--		cpuc->lbr_entries[i].reserved	= 0;
-+		perf_clear_branch_entry_bitfields(br);
-+
-+		br->from	= msr_lastbranch.from;
-+		br->to		= msr_lastbranch.to;
-+		br++;
- 	}
- 	cpuc->lbr_stack.nr = i;
- 	cpuc->lbr_stack.hw_idx = tos;
-@@ -807,6 +804,7 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc)
- {
- 	bool need_info = false, call_stack = false;
- 	unsigned long mask = x86_pmu.lbr_nr - 1;
-+	struct perf_branch_entry *br = cpuc->lbr_entries;
- 	u64 tos = intel_pmu_lbr_tos();
- 	int i;
- 	int out = 0;
-@@ -878,15 +876,14 @@ void intel_pmu_lbr_read_64(struct cpu_hw_events *cpuc)
- 		if (abort && x86_pmu.lbr_double_abort && out > 0)
- 			out--;
- 
--		cpuc->lbr_entries[out].from	 = from;
--		cpuc->lbr_entries[out].to	 = to;
--		cpuc->lbr_entries[out].mispred	 = mis;
--		cpuc->lbr_entries[out].predicted = pred;
--		cpuc->lbr_entries[out].in_tx	 = in_tx;
--		cpuc->lbr_entries[out].abort	 = abort;
--		cpuc->lbr_entries[out].cycles	 = cycles;
--		cpuc->lbr_entries[out].type	 = 0;
--		cpuc->lbr_entries[out].reserved	 = 0;
-+		perf_clear_branch_entry_bitfields(br+out);
-+		br[out].from	 = from;
-+		br[out].to	 = to;
-+		br[out].mispred	 = mis;
-+		br[out].predicted = pred;
-+		br[out].in_tx	 = in_tx;
-+		br[out].abort	 = abort;
-+		br[out].cycles	 = cycles;
- 		out++;
- 	}
- 	cpuc->lbr_stack.nr = out;
-@@ -951,6 +948,8 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
- 		to = rdlbr_to(i, lbr);
- 		info = rdlbr_info(i, lbr);
- 
-+		perf_clear_branch_entry_bitfields(e);
-+
- 		e->from		= from;
- 		e->to		= to;
- 		e->mispred	= get_lbr_mispred(info);
-@@ -959,7 +958,6 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
- 		e->abort	= !!(info & LBR_INFO_ABORT);
- 		e->cycles	= get_lbr_cycles(info);
- 		e->type		= get_lbr_br_type(info);
--		e->reserved	= 0;
- 	}
- 
- 	cpuc->lbr_stack.nr = i;
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 733649184b27..496eb6aa6e54 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1063,6 +1063,22 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
- 	data->txn = 0;
- }
- 
-+/*
-+ * Clear all bitfields in the perf_branch_entry.
-+ * The to and from fields are not cleared because they are
-+ * systematically modified by caller.
-+ */
-+static inline void perf_clear_branch_entry_bitfields(struct perf_branch_entry *br)
-+{
-+	br->mispred = 0;
-+	br->predicted = 0;
-+	br->in_tx = 0;
-+	br->abort = 0;
-+	br->cycles = 0;
-+	br->type = 0;
-+	br->reserved = 0;
-+}
-+
- extern void perf_output_sample(struct perf_output_handle *handle,
- 			       struct perf_event_header *header,
- 			       struct perf_sample_data *data,
+ /* Thermal and Power Management Leaf, CPUID level 0x00000006 (EAX), word 14 */
+ #define X86_FEATURE_DTHERM		(14*32+ 0) /* Digital Thermal Sensor */
 -- 
 2.35.0.rc0.227.g00780c9af4-goog
 

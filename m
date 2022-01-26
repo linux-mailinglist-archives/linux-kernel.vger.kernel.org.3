@@ -2,102 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E49C49C84C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC8149C849
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240486AbiAZLJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:09:11 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48518 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S240482AbiAZLJK (ORCPT
+        id S240479AbiAZLJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:09:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58407 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240462AbiAZLJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:09:10 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20Q9nERc012928;
-        Wed, 26 Jan 2022 12:08:41 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=QFR2dN8dkibpF8B0/9wAubqoFJzjHR76hN1qSB1UNQc=;
- b=CJQz9enHEakzEJDRo8gWXXxkHkaYq1wEEHzQA2WpFfqlt5TKNpSdTQAsGdNvYswfkbP6
- o+X6HLUvphRs6/HC+gmlqmPtPHJosL6IG3z+EOuBzhB2pBfiXhQnMpACtRT2RM2oyuND
- jVuawcLFB6TgxcImxKZxSNhdOBY4IlxQgP+kXyko9UGyHJ7vRNxKlM8vMQYqw3jR+ss+
- Wo9pfAlGzYNVja5DSfZNyGfoibXeHlhYIYL2bhBODXaM341XCHHQmJPMBgiUGe3zbg+d
- tntyCPb9aE9taxvPJe7Sw+fRR5h3DaIS1WrTpUd0C74I3dfrbC6lUkggL7QwCDlbw5yx jg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3du40ngeb2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Jan 2022 12:08:41 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CCA4410002A;
-        Wed, 26 Jan 2022 12:08:39 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B5D70216EE0;
-        Wed, 26 Jan 2022 12:08:39 +0100 (CET)
-Received: from [10.48.0.175] (10.75.127.46) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 26 Jan
- 2022 12:08:39 +0100
-Message-ID: <9662651a-12d9-4893-95c2-aa1a3a10302d@foss.st.com>
-Date:   Wed, 26 Jan 2022 12:08:38 +0100
+        Wed, 26 Jan 2022 06:09:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643195339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hPtwTDwHghQtVyxWRc+Fq5g+xzmJLLojUxCSBluBiYo=;
+        b=VmXvMu6uli0+sYiiCxIur/HSuspf+qdY38HyEjeBOFnKU4D9+gunA7UGZq/y6wiKdDJU3p
+        LPsPLYtGjTBlcP6HM/tWM3iPUIgS0wpQvpJRacN9TIg/5e0RNuiUnBaXy8zeIqb1nwfsAj
+        1N49nX/5HAVyhpAGMNraA2yuwvxFlwg=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-278-l2sYW9rKN6q9lzoLsmHlsg-1; Wed, 26 Jan 2022 06:08:58 -0500
+X-MC-Unique: l2sYW9rKN6q9lzoLsmHlsg-1
+Received: by mail-ed1-f70.google.com with SMTP id bc24-20020a056402205800b00407cf07b2e0so6036398edb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:08:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=hPtwTDwHghQtVyxWRc+Fq5g+xzmJLLojUxCSBluBiYo=;
+        b=o4GOR618LVqQDM4Sjx3I9Hr8lkF6RbrD+p6KQLcP++drOzsyX/GL/K82kM/OciGvdn
+         3uRyTbrNT9aPQ2IxVDFNTOMwRJ8PnoV6f6CxryfGQ17Se3LBZOeyt5ZjU+Y/AbS9Vc87
+         cqLniV4bEQsID1SDwiG7WuMhSgbHOT/HD7G2Jokyd6xiTtPKK370zwmgjjZSgYYa9M6E
+         ECv2cE0FTCj9wg8dPNFw4+B4yyQ0+hp5S1XKiWiw08P2j/kV4dylCMYchtvgIRlVC4TS
+         3FVNzzzMAnA24FCUx+wLY9bH+i+ELvUt5ADCeQVFp0WxoKtcyNmTac5u6Mlxj3xbcWjE
+         AZaA==
+X-Gm-Message-State: AOAM533giUkD3P2aPjibpWh5gP2FLz6ZG/I0GxepWmkatf9QQJK9jhDl
+        QTQAdz3YvGixHLU00WnzClA2S2Fd0qOk8PZVQy0nZbqrfuJ/RXcn+om11jbSA/vvYHW0G3Qa8Yd
+        Jp9JTwYCh0nzdlNu+oFHfoFTH
+X-Received: by 2002:a17:907:7ea8:: with SMTP id qb40mr12708724ejc.541.1643195337424;
+        Wed, 26 Jan 2022 03:08:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwdUKeSXIU4o2kPWVGr2pmhV25aDoIatAXpL9c40+cFEd5lpNFyesBxrQl6LE484+Sgc9ijKA==
+X-Received: by 2002:a17:907:7ea8:: with SMTP id qb40mr12708697ejc.541.1643195337159;
+        Wed, 26 Jan 2022 03:08:57 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id dc24sm7251220ejb.201.2022.01.26.03.08.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 03:08:56 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+be576ad7655690586eec@syzkaller.appspotmail.com
+Subject: Re: [PATCH] KVM: x86: Free kvm_cpuid_entry2 array on post-KVM_RUN
+ KVM_SET_CPUID{,2}
+In-Reply-To: <20220125210445.2053429-1-seanjc@google.com>
+References: <20220125210445.2053429-1-seanjc@google.com>
+Date:   Wed, 26 Jan 2022 12:08:55 +0100
+Message-ID: <875yq6iwjc.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/3] nvmem: core: Fix a conflict between MTD and NVMEM on
- wp-gpios property
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <robh+dt@kernel.org>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>, <chenshumin86@sina.com>
-References: <20220105135734.271313-1-christophe.kerello@foss.st.com>
- <20220105135734.271313-4-christophe.kerello@foss.st.com>
- <3f9a9731-c096-bc9b-63df-bd1dff032737@linaro.org>
-From:   Christophe Kerello <christophe.kerello@foss.st.com>
-In-Reply-To: <3f9a9731-c096-bc9b-63df-bd1dff032737@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-26_02,2022-01-26_01,2021-12-02_01
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srinivas, Miquel,
+Sean Christopherson <seanjc@google.com> writes:
 
-On 1/25/22 11:44, Srinivas Kandagatla wrote:
-> 
-> 
-> On 05/01/2022 13:57, Christophe Kerello wrote:
->> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
->> index e765d3d0542e..e11c74db64f9 100644
->> --- a/drivers/nvmem/core.c
->> +++ b/drivers/nvmem/core.c
->> @@ -769,7 +769,7 @@ struct nvmem_device *nvmem_register(const struct 
->> nvmem_config *config)
->>       if (config->wp_gpio)
->>           nvmem->wp_gpio = config->wp_gpio;
->> -    else
->> +    else if (config->reg_write)
-> This is clearly not going to work for everyone.
-> 
-> A flag in nvmem_config to indicate that wp gpio is managed by provider 
-> driver would be the right thing to do here.
+> Free the "struct kvm_cpuid_entry2" array on successful post-KVM_RUN
+> KVM_SET_CPUID{,2} to fix a memory leak, the callers of kvm_set_cpuid()
+> free the array only on failure.
+>
+>  BUG: memory leak
+>  unreferenced object 0xffff88810963a800 (size 2048):
+>   comm "syz-executor025", pid 3610, jiffies 4294944928 (age 8.080s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 0d 00 00 00  ................
+>     47 65 6e 75 6e 74 65 6c 69 6e 65 49 00 00 00 00  GenuntelineI....
+>   backtrace:
+>     [<ffffffff814948ee>] kmalloc_node include/linux/slab.h:604 [inline]
+>     [<ffffffff814948ee>] kvmalloc_node+0x3e/0x100 mm/util.c:580
+>     [<ffffffff814950f2>] kvmalloc include/linux/slab.h:732 [inline]
+>     [<ffffffff814950f2>] vmemdup_user+0x22/0x100 mm/util.c:199
+>     [<ffffffff8109f5ff>] kvm_vcpu_ioctl_set_cpuid2+0x8f/0xf0 arch/x86/kvm/cpuid.c:423
+>     [<ffffffff810711b9>] kvm_arch_vcpu_ioctl+0xb99/0x1e60 arch/x86/kvm/x86.c:5251
+>     [<ffffffff8103e92d>] kvm_vcpu_ioctl+0x4ad/0x950 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4066
+>     [<ffffffff815afacc>] vfs_ioctl fs/ioctl.c:51 [inline]
+>     [<ffffffff815afacc>] __do_sys_ioctl fs/ioctl.c:874 [inline]
+>     [<ffffffff815afacc>] __se_sys_ioctl fs/ioctl.c:860 [inline]
+>     [<ffffffff815afacc>] __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:860
+>     [<ffffffff844a3335>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff844a3335>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+>
+> Fixes: c6617c61e8fe ("KVM: x86: Partially allow KVM_SET_CPUID{,2} after KVM_RUN")
+> Cc: stable@vger.kernel.org
+> Reported-by: syzbot+be576ad7655690586eec@syzkaller.appspotmail.com
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/cpuid.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 3902c28fb6cb..0a08db384fb9 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -346,8 +346,14 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+>  	 * KVM_SET_CPUID{,2} again. To support this legacy behavior, check
+>  	 * whether the supplied CPUID data is equal to what's already set.
+>  	 */
+> -	if (vcpu->arch.last_vmentry_cpu != -1)
+> -		return kvm_cpuid_check_equal(vcpu, e2, nent);
+> +	if (vcpu->arch.last_vmentry_cpu != -1) {
+> +		r = kvm_cpuid_check_equal(vcpu, e2, nent);
+> +		if (r)
+> +			return r;
+> +
+> +		kvfree(e2);
+> +		return 0;
+> +	}
+>  
+>  	r = kvm_check_cpuid(vcpu, e2, nent);
+>  	if (r)
+>
+> base-commit: e2e83a73d7ce66f62c7830a85619542ef59c90e4
 
-Based on your inputs, I will add a new boolean flag in nvmen_config 
-(proposal name: skip_wp_gpio) and I will set it to true in mtdcore.c 
-when nvmen_config structure is initialized. It will be part of the V2.
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-Regards,
-Christophe Kerello.
+Thanks!
 
->>           nvmem->wp_gpio = gpiod_get_optional(config->dev, "wp",
->>                               GPIOD_OUT_HIGH);
-> 
-> --srini
-> 
+-- 
+Vitaly
+

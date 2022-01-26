@@ -2,333 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBDC49D63C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4AB49D62E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 00:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233955AbiAZXgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 18:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233720AbiAZXfu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 18:35:50 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B23C061759
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:35:47 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id i10-20020a25540a000000b0061391789216so2506080ybb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 15:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=fn4L0HGNN2ju0/r+GryclIat0kxPJWjrVW3RRH7cvn8=;
-        b=TlLuM7bPykpXZnnqtxK2SkLWz2tyv2/MrWnL2kQM+Z+MOgPtD/nQJMm9IIdyd8+Gb7
-         IvhhyRm8C3QYkprL+PMTWRXyaPiFwJJINLbHZMvBtI01u5WPATgD/sm1kh76LK03Snew
-         YjVW4O0z0hhfKyuwCe4VciOIZ+H1NpOMcS70XLlFCY7e/Qg86Ljja58l0RHC54cacgvt
-         1VdLVzwRV0kdxbTwqtbobcvf3H72Lafoc0uIR5FUpgqHXNYg+KSLDJEDRjb/AMExzQJ/
-         Nd1vQmxehAWsrrylYHi3HzpwFda2l7i0xVuVHz8EKb5QoGOIiJTWcDAJakYgUbyXMsDc
-         LTmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=fn4L0HGNN2ju0/r+GryclIat0kxPJWjrVW3RRH7cvn8=;
-        b=oPBiTAiCjCs1ktVt6h6Kj5+mia7GiXWw7xIln9+mQUnLZKunzUxyj8D/m7l7QC94kF
-         mtsy8vZ9H6LJmNhHNWHKepj+ADnLbY55qx4gbW+dorMQ6sqrQBf/VM7ZPxeKjdL6Vurk
-         cH66ZqEep+ONaa5bHsdeTZU3GaAIQt6GP2lCHJwi/t7gkGFPSXpbRM68VQ0fSdpVJGye
-         cJTN5l/Ilq9NpHkNfbOt/l4mVS95TykVqD5igIjOLyUhJFsyhNHnZvTky/MN9zraPwFd
-         6b0hf+D0kEdzO5XBVApzKUE3osUVCb2iGDFggPNuqn0MhGIGeI3lUZ3wbnHkLle8Dk5M
-         qKMQ==
-X-Gm-Message-State: AOAM533cif8aojFSR+z1VPeV3uWA2ufnLwZgDfsJBWAOxkaO8+aF/OzO
-        eaxES3rNg8M6amuPHw0GmvPa3Cfp6FdTM5HlPAzTZfUnzSLswbcSmTTUJEgM1T5N356iGNOovlG
-        MmmBp2JPssRNpUq3HxXznn7i9tPSzRFp+bd36zfP8Kswr1Nc4SsBTOKCZHW3sOhRMeuxOvWa5
-X-Google-Smtp-Source: ABdhPJxd84cv/MqGT1AOmYsenBtRL6SzEpZENZUgkuQkfQRvOejXY5AoxrxgtLPXKmFilbhWd0lX0EokArmE
-X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:9ce0:6f20:c145:eac])
- (user=eranian job=sendgmr) by 2002:a81:6605:: with SMTP id
- a5mr0ywc.510.1643240146076; Wed, 26 Jan 2022 15:35:46 -0800 (PST)
-Date:   Wed, 26 Jan 2022 15:34:54 -0800
-In-Reply-To: <20220126233454.3362047-1-eranian@google.com>
-Message-Id: <20220126233454.3362047-14-eranian@google.com>
-Mime-Version: 1.0
-References: <20220126233454.3362047-1-eranian@google.com>
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH v5 13/13] perf report: add addr_from/addr_to sort dimensions
-From:   Stephane Eranian <eranian@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, kim.phillips@amd.com, acme@redhat.com,
-        jolsa@redhat.com, songliubraving@fb.com
-Content-Type: text/plain; charset="UTF-8"
+        id S229786AbiAZXfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 18:35:06 -0500
+Received: from mail-os0jpn01on2074.outbound.protection.outlook.com ([40.107.113.74]:53984
+        "EHLO JPN01-OS0-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229725AbiAZXfE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 18:35:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bB3cVSw1Blx9UIoL6C1akdkbx5mT0rOV9ZRDP21eQhAhuYPnoUXBEd3ZGlVX/xBClTkT+JQDNUat6hFja2rczVV1k1/MIpA2hinye8gpGou/7aTYU40A1c41UodSAj2qc8u54G3X7r3Lr7ovseH1RSNkVUVPkS8iUALxKfpMC4H1IX/cJG2akrf6TMHMEoTnqK5sZwbXnouwiRJfAK1ktg/T4jKu39X6XIxgWHl6iQkvAIdhEg2hKmXfODsjlSUwbsvFTVxwfRu5B5bBmGNsLxaqWAhmFdzye/e3S12z5XFiS+4Iy3XdlNDx4er9oawiWurNoLh3yYk7300e4Ql6fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HM0OJSGBh6bIdaf88V3w2zbMBnmTiCb/Le1Bxoh337w=;
+ b=JtX68lE/RO2YZacRfXb6XhYo3by2C+EV/SUVX8cX6Lzf2AI89NYpkdh8EvdYC3UDM+f3kuEh+wJoagarFboViioSwJYk2lb/GxgMnuX660e0jrF0p1WqWXtvMRKd55o4RewEW+9TnvLEG6b/JxxwT/RtqNvBD36tHu6DN+XVslerUz/jOpzgi267zevX9M0Run2bSdCKfsUsF5vPA0P870TRCO81pWUKYMvTQ3e/XC12SYDSOkj+BffKK7/mosAQbi3g9IVTnOFSKFVzs44IzI6hqXiaahQo/Tq6xidREzDQalTpUjPsRcjtkKuQpdoDtLyU+tyfmJRVclbq9/E7Hg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HM0OJSGBh6bIdaf88V3w2zbMBnmTiCb/Le1Bxoh337w=;
+ b=mQkzble5pcoinH0i6J9wFgEXFL1lINUhDAHjOXBe5akd1TkyNU1cYbrSloKm5zOFgPkHoAf8TY7l/+oP+vH2lH5ola0ch/vZRzth/0jFjDaP4reNQWXWgcc6OwN0fmrDQdUUqJF4SkNejc92nbcC/8WdyUhTdDpYNcXW1n3kDKk=
+Received: from TYCPR01MB8190.jpnprd01.prod.outlook.com (2603:1096:400:103::9)
+ by TY2PR01MB3691.jpnprd01.prod.outlook.com (2603:1096:404:dc::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.11; Wed, 26 Jan
+ 2022 23:35:02 +0000
+Received: from TYCPR01MB8190.jpnprd01.prod.outlook.com
+ ([fe80::81f9:7ce5:226b:6237]) by TYCPR01MB8190.jpnprd01.prod.outlook.com
+ ([fe80::81f9:7ce5:226b:6237%7]) with mapi id 15.20.4909.017; Wed, 26 Jan 2022
+ 23:35:02 +0000
+From:   =?iso-2022-jp?B?VEFUU1VLQVdBIEtPU1VLRSgbJEJOKUBuISE5PjJwGyhCKQ==?= 
+        <tatsu-ab1@nec.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] n_tty: wake up poll(POLLRDNORM) on receiving data
+Thread-Topic: [PATCH v2] n_tty: wake up poll(POLLRDNORM) on receiving data
+Thread-Index: AQHYEw1Xw7tuGFtGzkGN0Ezm5vc7sg==
+Date:   Wed, 26 Jan 2022 23:35:02 +0000
+Message-ID: <TYCPR01MB81901C0F932203D30E452B3EA5209@TYCPR01MB8190.jpnprd01.prod.outlook.com>
+Accept-Language: ja-JP, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nec.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3f1f9c19-162c-4b72-fc9a-08d9e12479cc
+x-ms-traffictypediagnostic: TY2PR01MB3691:EE_
+x-microsoft-antispam-prvs: <TY2PR01MB369180D1F2C91234EA7D5513A5209@TY2PR01MB3691.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:972;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GcuZNJ6Rq5+BRS9XnO7BLzxn6wpR212siojdKsF5ZweCOqP+M+JHyQTPmBXppr3vm14R4YobI6K4vW07/MBQud51tTvTRuSyTd9mPMiQ+TzDBiXYiV6oPfkZZoxnPXKxqvET4SJji7pyYEGZjAOFAbxFRWC3RX6drJggJp8UylbELCeldqEw0497ysOv99+DhRRCaNa7nwgut+HORWL4+WzdVsKWrb95RI5e5D5r3NE67yoM/YtZkyxcZl0DyKkuEvc8EGel1N68Y1WB/UKgzm5i15WgNt1bdrwTt131Uxbk/+ds5Xoe02GkjkUNunqVszJgj7GGxeh5Xf7vkkKzs7UtpMuRqJDSykDDdrUHz0bd2U0qhBO93AbP2HAEoJz5bubUa798yBzrU0oK/n6gJd/A4XZ88SQAlp2H/bMbipw3Z0Hb2C/7xUH8+yLc1qxgK1mbKAB/dZh87NiaevhVRMH4jC5/k3qZkOPsef++u15CfsQSwR9EvVf4L1J2A5M8shJ4wGC5ArBe64gALYCf3N8seJwQOCMRZARAJOqpEEuvV/7vj6Cfab5iT+Bm3YWsUbsVVgSlLuaQMKfoDRQ0S232ottJfZIiEhDK2yVubtCT6HN96sVIlPDSLX9DJU6VObphT5+q5BVYQ5eyTXoXfUMdAvvNWC8u8yaHvT1UqKh913TAQBvwGyqCTWaH0l6lRsvfAMjAD2GGohn6Z442Uw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB8190.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(52536014)(64756008)(71200400001)(38070700005)(66556008)(66476007)(66446008)(66946007)(5660300002)(7696005)(82960400001)(122000001)(316002)(2906002)(55016003)(38100700002)(110136005)(85182001)(76116006)(83380400001)(8676002)(9686003)(186003)(6506007)(86362001)(8936002)(55236004)(4326008)(33656002)(26005)(508600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?OURZRytqeHh3UGNtRzlxN3ptMUg4ckw4QnZKTE9XRmtBRndSVmJKWHdm?=
+ =?iso-2022-jp?B?OVFqM3RQMktFVzRSdExsTWRNa3puWDNsbjlDRnQyaDRvdk5kNm5zYkFK?=
+ =?iso-2022-jp?B?NzZ1T3VHR00xcXAxQlZIMC8zSDhMUEtCa3hHVTMvb1dMSnhwYjQzWGEv?=
+ =?iso-2022-jp?B?akg1RC96c3J5ekxDYjJJMWRDWnU3clBkSjZ4STNBQkNQdWFDNnM2emxh?=
+ =?iso-2022-jp?B?enM4ZUN6WGJmUW1NYkRMSjhDTUs1U01NdUptamF3SDZtWUFIRmpqRmg0?=
+ =?iso-2022-jp?B?anRIYmM1MlV6MGpxOTFMc1U5OFBNRE0rWWViNUc1WHUzR0tzZ3lKU2M5?=
+ =?iso-2022-jp?B?dTAybnhCNTRrTEprbGNjRG15MXo2QlZNTzZray92Mmx6UUREK2xyVmlI?=
+ =?iso-2022-jp?B?Qi96WE5GYTNIV3JkWnBIUnJLMUxCWXpCd01UeTlHVGNINXhTOVIzaDNN?=
+ =?iso-2022-jp?B?cSsrOHZkQ3M1KzNCRm13R21ER2JsM3gzNkdlb0V6aVRITU9vVkhwVXE3?=
+ =?iso-2022-jp?B?cWY3Qzl5dGNjdDVBOVhmQyttL3NOWGFxdEtXWEFMbEJtWHZxTVNCcXFX?=
+ =?iso-2022-jp?B?eUgweWJVWmtpSlNLOGVmOXBsOEpWQlJmWDBRUy9JREhydzZaYm0xMy9z?=
+ =?iso-2022-jp?B?ZHlBbmpmNVE0MVNYaEx6ellwK2ZSV0FzcWhjWm51Uk9EL2sxdkMydjBM?=
+ =?iso-2022-jp?B?ZThNaUQzNHcvMlhTNHgrYWNGSUMzTlZHVElxZ0VnMkpqaytOOGsrMWtT?=
+ =?iso-2022-jp?B?TjlXMngyNDh1STQwY05hSTJtR3lhTExIWnkvOVFWYUphNjEwUUNHZlpW?=
+ =?iso-2022-jp?B?NFIwTHRPVGFVazIxRDJ6TkMvQWhKRVBaOVV1cXlISmgzWU83TjFaMUlm?=
+ =?iso-2022-jp?B?NVBoaEdqM2JEaWl6Z21LWkx4bGxWMlYwT09nRGVHZG9zQTBxM2s0Z0pC?=
+ =?iso-2022-jp?B?NVFXN1hZSTdFb3VxalhEeFlQYmE4a3MwaTVTc0tMV2lwaGYwTDN3K1RF?=
+ =?iso-2022-jp?B?ZC9VOGpscVIwdFllTUNlR0VKS2RtMVFQeVVwemZsdmZXMWFkM1RGRnla?=
+ =?iso-2022-jp?B?YjNNMnR5ZXpvVGVWczRRc1BVU29vYWtLNWdmVm1uc0ZFMXQ3dnR3dDIv?=
+ =?iso-2022-jp?B?c0N3cC82V3RQZ0F4OEIwNWpFUTNKMk9iVlVGM1FlemhjbDJkWkJIVGtk?=
+ =?iso-2022-jp?B?cnRDcUFXUVE4TmFCSEUzamJlbE9jcEhmVFZ6NENBZFA5VEUrNU5pMzI3?=
+ =?iso-2022-jp?B?eXAxN0IvMEtJaXR0MW12b0U0VWdwbElnWXNhRHZtZUZyRnVia2NkQjFt?=
+ =?iso-2022-jp?B?UkRtT1VEU2tjRUh1ekN4QnFnQnpqQTYvTEYzN3d0RzdhdWVoWHQwUkxZ?=
+ =?iso-2022-jp?B?U2sxNlgxcU5sblhiZ2VuVDgxT3FhMkVLcFUxdEJUdks0WnJVNTRMbCth?=
+ =?iso-2022-jp?B?YkJyS0lJWWF2VkpXeU9ZeEluU2ViN3JtYTZITk1YcU02d3FPMUluZFZW?=
+ =?iso-2022-jp?B?TEE0MDFEMjdPRUdoK29WSlJBUXhQcVFuVklwUkpPcDB6MVVXRlNRdkpl?=
+ =?iso-2022-jp?B?TWN1bkJBWUs0VVpLcXRvOXVjb2IyTENhVFM3dlZyazdLR0U0NERBTmVT?=
+ =?iso-2022-jp?B?N0ZsZTZDUU5YT2NVenFnRi9FNFBVMGl5TkxESEZxUHBIKzc2V1R1aXo4?=
+ =?iso-2022-jp?B?MDN6aUFkT1E3S1N4VUpEK1pLMUFtTDVWUGtYeUNLVm5NYnlQQkZINHl2?=
+ =?iso-2022-jp?B?NW5PV0RKdjlWWE5meEU1QjNWZlFNYkxkbHpKNm8zNTFxY2h0S0JWYkVn?=
+ =?iso-2022-jp?B?QkJhUVFnVXArcW9HakFveG05aXRxdXYyS3VvODV0MHQ1WDBkbStqUFdj?=
+ =?iso-2022-jp?B?WmxLUGZBeGc2azBHeUxoS2tyQlJURmYvb2pGYUV1OUNDTS9FTm4wNnJK?=
+ =?iso-2022-jp?B?MmdwWDlzbW55aVhaWGRpUWNTeVlTNEhFdTJvNFVTWkZXRlVwRldSOFdx?=
+ =?iso-2022-jp?B?RDJaY2FMOE5xV3hqWGhKekR2cW95bzFvMy9pT2JyS1poWVZ6MkdRWDNo?=
+ =?iso-2022-jp?B?Q3RmU1k1MENHTzNtcHBiUFFNRlBDeGZkRXBTRFVraHNBUTJjcEx5RjBa?=
+ =?iso-2022-jp?B?Z2RTWnVsTDBaRnNPc3VlNmFmdzFtL0JZZGMwNHg2NUlIYVpEaXk2bFlS?=
+ =?iso-2022-jp?B?K0pCZmtYaDVsdkFrQzhtZVJIYmthVm9hUTFXeGRpYjZ1MWlHUDZmb0F0?=
+ =?iso-2022-jp?B?WGhkckU1QW9OdlN1M2dYV2dVaGZlQllKREEzaEZvTWMzam5RYXprY0w2?=
+ =?iso-2022-jp?B?UVQ0U3VITGcyOWZabldCeUNISU9MM1J1RW9VMXVYZ0dKaE92eEcvWHNU?=
+ =?iso-2022-jp?B?THFYYVBLaEF2YzA3RWpWdjRWcm85djk2Yno=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-ID: <07AC1A20DE1AD94DBF294104D9497A41@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB8190.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f1f9c19-162c-4b72-fc9a-08d9e12479cc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2022 23:35:02.7538
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yTDzlxwzvtfYju+oR6n5AGM4S6G2AlaNxxkxmD1v/S9s1GvW3VFdYqkaoseKOOsFtc3zyG5g5Po8xKm2jVhpjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB3691
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a new pair of sorting dimensions used with branch sampling.
-With the existing symbol_from/symbol_to, branches captured in the same
-function would be collapsed into a single function if the latency (cycles)
-was all the same.  That is the case on Intel Broadwell for instance. Since
-Intel Skylake, the latency is captured by hardware and therefore is used to
-disambiguate branches.
+The poll man page says POLLRDNORM is equivalent to POLLIN when used as
+an event.
+$ man poll
+<snip>
+              POLLRDNORM
+                     Equivalent to POLLIN.
 
-This patch adds addr_from/addr_to sort dimensions that will sort branches
-based on their addresses and not the function there are in. The output is
-still the function name but the offset within the function is provided to
-uniquely identify each branch.  These new sort dimensions also help with
-annotate because they create different entries in the histogram which, in
-turn, generates proper branch annotation.
+However, in n_tty driver, POLLRDNORM does not return until timeout even
+if there is terminal input, whereas POLLIN returns.
 
-Here is an example using AMD's branch sampling:
+The following test program works until kernel-3.17, but the test stops
+in poll() after commit 57087d515441 ("tty: Fix spurious poll() wakeups").
 
-$ perf record -a -b -c 1000037 -e cpu/branch-brs/ test_prg
+[Steps to run test program]
+  $ cc -o test-pollrdnorm test-pollrdnorm.c
+  $ ./test-pollrdnorm
+  foo          <-- Type in something from the terminal followed by [RET].
+                   The string should be echoed back.
 
-$ perf report
-Samples: 6M of event 'cpu/branch-brs/', Event count (approx.): 6901276
-Overhead  Command          Source Shared Object  Source Symbol                                   Target Symbol                                   Basic Block Cycle
-  99.65%  test_prg	   test_prg              [.] test_thread                                 [.] test_thread                                 -
-   0.02%  test_prg         [kernel.vmlinux]      [k] asm_sysvec_apic_timer_interrupt             [k] error_entry                                 -
+  ------------------------< test-pollrdnorm.c >------------------------
+  #include <stdio.h>
+  #include <errno.h>
+  #include <poll.h>
+  #include <unistd.h>
 
-$ perf report -F overhead,comm,dso,addr_from,addr_to
-Samples: 6M of event 'cpu/branch-brs/', Event count (approx.): 6901276
-Overhead  Command          Shared Object     Source Address          Target Address
-   4.22%  test_prg         test_prg          [.] test_thread+0x3c    [.] test_thread+0x4
-   4.13%  test_prg         test_prg          [.] test_thread+0x4     [.] test_thread+0x3a
-   4.09%  test_prg         test_prg          [.] test_thread+0x3a    [.] test_thread+0x6
-   4.08%  test_prg         test_prg          [.] test_thread+0x2     [.] test_thread+0x3c
-   4.06%  test_prg         test_prg          [.] test_thread+0x3e    [.] test_thread+0x2
-   3.87%  test_prg         test_prg          [.] test_thread+0x6     [.] test_thread+0x38
-   3.84%  test_prg         test_prg          [.] test_thread         [.] test_thread+0x3e
-   3.76%  test_prg         test_prg          [.] test_thread+0x1e    [.] test_thread
-   3.76%  test_prg         test_prg          [.] test_thread+0x38    [.] test_thread+0x8
-   3.56%  test_prg         test_prg          [.] test_thread+0x22    [.] test_thread+0x1e
-   3.54%  test_prg         test_prg          [.] test_thread+0x8     [.] test_thread+0x36
-   3.47%  test_prg         test_prg          [.] test_thread+0x1c    [.] test_thread+0x22
-   3.45%  test_prg         test_prg          [.] test_thread+0x36    [.] test_thread+0xa
-   3.28%  test_prg         test_prg          [.] test_thread+0x24    [.] test_thread+0x1c
-   3.25%  test_prg         test_prg          [.] test_thread+0xa     [.] test_thread+0x34
-   3.24%  test_prg         test_prg          [.] test_thread+0x1a    [.] test_thread+0x24
-   3.20%  test_prg         test_prg          [.] test_thread+0x34    [.] test_thread+0xc
-   3.04%  test_prg         test_prg          [.] test_thread+0x26    [.] test_thread+0x1a
-   3.01%  test_prg         test_prg          [.] test_thread+0xc     [.] test_thread+0x32
-   2.98%  test_prg         test_prg          [.] test_thread+0x18    [.] test_thread+0x26
-   2.94%  test_prg         test_prg          [.] test_thread+0x32    [.] test_thread+0xe
-   2.76%  test_prg         test_prg          [.] test_thread+0x28    [.] test_thread+0x18
-   2.73%  test_prg         test_prg          [.] test_thread+0xe     [.] test_thread+0x30
-   2.67%  test_prg         test_prg          [.] test_thread+0x30    [.] test_thread+0x10
-   2.67%  test_prg         test_prg          [.] test_thread+0x16    [.] test_thread+0x28
-   2.46%  test_prg         test_prg          [.] test_thread+0x10    [.] test_thread+0x2e
-   2.44%  test_prg         test_prg          [.] test_thread+0x2a    [.] test_thread+0x16
-   2.38%  test_prg         test_prg          [.] test_thread+0x14    [.] test_thread+0x2a
-   2.32%  test_prg         test_prg          [.] test_thread+0x2e    [.] test_thread+0x12
-   2.28%  test_prg         test_prg          [.] test_thread+0x12    [.] test_thread+0x2c
-   2.16%  test_prg         test_prg          [.] test_thread+0x2c    [.] test_thread+0x14
-   0.02%  test_prg         [kernel.vmlinux]  [k] asm_sysvec_apic_ti+0x5  [k] error_entry
+  void main(void)
+  {
+	int		n;
+	unsigned char	buf[8];
+	struct pollfd	fds[1] =3D {{ 0, POLLRDNORM, 0 }};
 
-Signed-off-by: Stephane Eranian <eranian@google.com>
+	n =3D poll(fds, 1, -1);
+	if (n < 0)
+		perror("poll");
+	n =3D read(0, buf, 8);
+	if (n < 0)
+		perror("read");
+	if (n > 0)
+		write(1, buf, n);
+  }
+  ------------------------------------------------------------------------
+
+The attached patch fixes this problem.  Many calls to
+wake_up_interruptible_poll() in the kernel source code already specify
+"POLLIN | POLLRDNORM".
+
+Signed-off-by: Kosuke Tatsukawa <tatsu-ab1@nec.com>
+Fixes: 57087d515441 ("tty: Fix spurious poll() wakeups")
+Cc: stable@vger.kernel.org
 ---
- tools/perf/util/hist.c |   2 +
- tools/perf/util/hist.h |   2 +
- tools/perf/util/sort.c | 128 +++++++++++++++++++++++++++++++++++++++++
- tools/perf/util/sort.h |   2 +
- 4 files changed, 134 insertions(+)
+ drivers/tty/n_tty.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-index 0a8033b09e28..1c085ab56534 100644
---- a/tools/perf/util/hist.c
-+++ b/tools/perf/util/hist.c
-@@ -124,6 +124,7 @@ void hists__calc_col_len(struct hists *hists, struct hist_entry *h)
- 		} else {
- 			symlen = unresolved_col_width + 4 + 2;
- 			hists__new_col_len(hists, HISTC_SYMBOL_FROM, symlen);
-+			hists__new_col_len(hists, HISTC_ADDR_FROM, symlen);
- 			hists__set_unres_dso_col_len(hists, HISTC_DSO_FROM);
+diff --git a/drivers/tty/n_tty.c b/drivers/tty/n_tty.c
+index 5be6d02..b2b98fe 100644
+--- a/drivers/tty/n_tty.c
++++ b/drivers/tty/n_tty.c
+@@ -1369,7 +1369,7 @@ static void n_tty_receive_char_special(struct tty_str=
+uct *tty, unsigned char c)
+ 			put_tty_queue(c, ldata);
+ 			smp_store_release(&ldata->canon_head, ldata->read_head);
+ 			kill_fasync(&tty->fasync, SIGIO, POLL_IN);
+-			wake_up_interruptible_poll(&tty->read_wait, EPOLLIN);
++			wake_up_interruptible_poll(&tty->read_wait, EPOLLIN | EPOLLRDNORM);
+ 			return;
  		}
- 
-@@ -138,6 +139,7 @@ void hists__calc_col_len(struct hists *hists, struct hist_entry *h)
- 		} else {
- 			symlen = unresolved_col_width + 4 + 2;
- 			hists__new_col_len(hists, HISTC_SYMBOL_TO, symlen);
-+			hists__new_col_len(hists, HISTC_ADDR_TO, symlen);
- 			hists__set_unres_dso_col_len(hists, HISTC_DSO_TO);
- 		}
- 
-diff --git a/tools/perf/util/hist.h b/tools/perf/util/hist.h
-index 2a15e22fb89c..7ed4648d2fc2 100644
---- a/tools/perf/util/hist.h
-+++ b/tools/perf/util/hist.h
-@@ -77,6 +77,8 @@ enum hist_column {
- 	HISTC_GLOBAL_INS_LAT,
- 	HISTC_LOCAL_P_STAGE_CYC,
- 	HISTC_GLOBAL_P_STAGE_CYC,
-+	HISTC_ADDR_FROM,
-+	HISTC_ADDR_TO,
- 	HISTC_NR_COLS, /* Last entry */
- };
- 
-diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index cfba8c337783..cd119897dc2b 100644
---- a/tools/perf/util/sort.c
-+++ b/tools/perf/util/sort.c
-@@ -990,6 +990,128 @@ struct sort_entry sort_sym_to = {
- 	.se_width_idx	= HISTC_SYMBOL_TO,
- };
- 
-+static int _hist_entry__addr_snprintf(struct map_symbol *ms,
-+				     u64 ip, char level, char *bf, size_t size,
-+				     unsigned int width)
-+{
-+	struct symbol *sym = ms->sym;
-+	struct map *map = ms->map;
-+	size_t ret = 0, offs;
-+
-+	ret += repsep_snprintf(bf + ret, size - ret, "[%c] ", level);
-+	if (sym && map) {
-+		if (sym->type == STT_OBJECT) {
-+			ret += repsep_snprintf(bf + ret, size - ret, "%s", sym->name);
-+			ret += repsep_snprintf(bf + ret, size - ret, "+0x%llx",
-+					ip - map->unmap_ip(map, sym->start));
-+		} else {
-+			ret += repsep_snprintf(bf + ret, size - ret, "%.*s",
-+					       width - ret,
-+					       sym->name);
-+			offs = ip - sym->start;
-+			if (offs)
-+				ret += repsep_snprintf(bf + ret, size - ret, "+0x%llx", offs);
-+		}
-+	} else {
-+		size_t len = BITS_PER_LONG / 4;
-+		ret += repsep_snprintf(bf + ret, size - ret, "%-#.*llx",
-+				       len, ip);
-+	}
-+
-+	return ret;
-+}
-+
-+static int hist_entry__addr_from_snprintf(struct hist_entry *he, char *bf,
-+					 size_t size, unsigned int width)
-+{
-+	if (he->branch_info) {
-+		struct addr_map_symbol *from = &he->branch_info->from;
-+
-+		return _hist_entry__addr_snprintf(&from->ms, from->al_addr,
-+						 he->level, bf, size, width);
-+	}
-+
-+	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
-+}
-+
-+static int hist_entry__addr_to_snprintf(struct hist_entry *he, char *bf,
-+				       size_t size, unsigned int width)
-+{
-+	if (he->branch_info) {
-+		struct addr_map_symbol *to = &he->branch_info->to;
-+
-+		return _hist_entry__addr_snprintf(&to->ms, to->al_addr,
-+						 he->level, bf, size, width);
-+	}
-+
-+	return repsep_snprintf(bf, size, "%-*.*s", width, width, "N/A");
-+}
-+
-+static int64_t
-+sort__addr_from_cmp(struct hist_entry *left, struct hist_entry *right)
-+{
-+	struct addr_map_symbol *from_l;
-+	struct addr_map_symbol *from_r;
-+	int64_t ret;
-+
-+	if (!left->branch_info || !right->branch_info)
-+		return cmp_null(left->branch_info, right->branch_info);
-+
-+	from_l = &left->branch_info->from;
-+	from_r = &right->branch_info->from;
-+
-+	/*
-+	 * comparing symbol address alone is not enough since it's a
-+	 * relative address within a dso.
-+	 */
-+	ret = _sort__dso_cmp(from_l->ms.map, from_r->ms.map);
-+	if (ret != 0)
-+		return ret;
-+
-+	return _sort__addr_cmp(from_l->addr, from_r->addr);
-+}
-+
-+static int64_t
-+sort__addr_to_cmp(struct hist_entry *left, struct hist_entry *right)
-+{
-+	struct addr_map_symbol *to_l;
-+	struct addr_map_symbol *to_r;
-+	int64_t ret;
-+
-+	if (!left->branch_info || !right->branch_info)
-+		return cmp_null(left->branch_info, right->branch_info);
-+
-+	to_l = &left->branch_info->to;
-+	to_r = &right->branch_info->to;
-+
-+	/*
-+	 * comparing symbol address alone is not enough since it's a
-+	 * relative address within a dso.
-+	 */
-+	ret = _sort__dso_cmp(to_l->ms.map, to_r->ms.map);
-+	if (ret != 0)
-+		return ret;
-+
-+	return _sort__addr_cmp(to_l->addr, to_r->addr);
-+}
-+
-+struct sort_entry sort_addr_from = {
-+	.se_header	= "Source Address",
-+	.se_cmp		= sort__addr_from_cmp,
-+	.se_snprintf	= hist_entry__addr_from_snprintf,
-+	.se_filter	= hist_entry__sym_from_filter, /* shared with sym_from */
-+	.se_width_idx	= HISTC_ADDR_FROM,
-+};
-+
-+struct sort_entry sort_addr_to = {
-+	.se_header	= "Target Address",
-+	.se_cmp		= sort__addr_to_cmp,
-+	.se_snprintf	= hist_entry__addr_to_snprintf,
-+	.se_filter	= hist_entry__sym_to_filter, /* shared with sym_to */
-+	.se_width_idx	= HISTC_ADDR_TO,
-+};
-+
-+
- static int64_t
- sort__mispredict_cmp(struct hist_entry *left, struct hist_entry *right)
- {
-@@ -1893,6 +2015,8 @@ static struct sort_dimension bstack_sort_dimensions[] = {
- 	DIM(SORT_SRCLINE_FROM, "srcline_from", sort_srcline_from),
- 	DIM(SORT_SRCLINE_TO, "srcline_to", sort_srcline_to),
- 	DIM(SORT_SYM_IPC, "ipc_lbr", sort_sym_ipc),
-+	DIM(SORT_ADDR_FROM, "addr_from", sort_addr_from),
-+	DIM(SORT_ADDR_TO, "addr_to", sort_addr_to),
- };
- 
- #undef DIM
-@@ -3126,6 +3250,10 @@ static bool get_elide(int idx, FILE *output)
- 		return __get_elide(symbol_conf.dso_from_list, "dso_from", output);
- 	case HISTC_DSO_TO:
- 		return __get_elide(symbol_conf.dso_to_list, "dso_to", output);
-+	case HISTC_ADDR_FROM:
-+		return __get_elide(symbol_conf.sym_from_list, "addr_from", output);
-+	case HISTC_ADDR_TO:
-+		return __get_elide(symbol_conf.sym_to_list, "addr_to", output);
- 	default:
- 		break;
  	}
-diff --git a/tools/perf/util/sort.h b/tools/perf/util/sort.h
-index f994261888e1..2ddc00d1c464 100644
---- a/tools/perf/util/sort.h
-+++ b/tools/perf/util/sort.h
-@@ -251,6 +251,8 @@ enum sort_type {
- 	SORT_SRCLINE_FROM,
- 	SORT_SRCLINE_TO,
- 	SORT_SYM_IPC,
-+	SORT_ADDR_FROM,
-+	SORT_ADDR_TO,
- 
- 	/* memory mode specific sort keys */
- 	__SORT_MEMORY_MODE,
--- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+@@ -1589,7 +1589,7 @@ static void __receive_buf(struct tty_struct *tty, con=
+st unsigned char *cp,
+=20
+ 	if (read_cnt(ldata)) {
+ 		kill_fasync(&tty->fasync, SIGIO, POLL_IN);
+-		wake_up_interruptible_poll(&tty->read_wait, EPOLLIN);
++		wake_up_interruptible_poll(&tty->read_wait, EPOLLIN | EPOLLRDNORM);
+ 	}
+ }
+ =

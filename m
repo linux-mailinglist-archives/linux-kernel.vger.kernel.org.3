@@ -2,83 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0E549C880
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A1549C887
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240613AbiAZLTx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Jan 2022 06:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
+        id S240627AbiAZLWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233567AbiAZLTw (ORCPT
+        with ESMTP id S233637AbiAZLWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:19:52 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B03C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:19:51 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DC356100002;
-        Wed, 26 Jan 2022 11:19:48 +0000 (UTC)
-Date:   Wed, 26 Jan 2022 12:19:47 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Christophe Kerello <christophe.kerello@foss.st.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        <richard@nod.at>, <vigneshr@ti.com>, <robh+dt@kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>, <chenshumin86@sina.com>
-Subject: Re: [PATCH 3/3] nvmem: core: Fix a conflict between MTD and NVMEM
- on wp-gpios property
-Message-ID: <20220126121947.79890a47@xps13>
-In-Reply-To: <9662651a-12d9-4893-95c2-aa1a3a10302d@foss.st.com>
-References: <20220105135734.271313-1-christophe.kerello@foss.st.com>
-        <20220105135734.271313-4-christophe.kerello@foss.st.com>
-        <3f9a9731-c096-bc9b-63df-bd1dff032737@linaro.org>
-        <9662651a-12d9-4893-95c2-aa1a3a10302d@foss.st.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 26 Jan 2022 06:22:06 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEAEC06161C;
+        Wed, 26 Jan 2022 03:22:06 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id c192so2117788wma.4;
+        Wed, 26 Jan 2022 03:22:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=htc3FEW6U45e7eGmBICjLPQtBJO885eqDPGUS1h2BH8=;
+        b=ftYYUMqx2/3aVFnBOQKnfdDOqjj7peBH2uqWnfO9sxwuTbLAvBPJED7R2NdvTQFFLp
+         r+Cc0EkSlyoSMlrJtw4EvGeNEv8DMoJ8k/5r8gw6d0PdEoU153WKLPShvLN7SpQ+6OsF
+         BqI5mOxr1SpWOH/p/GEcaQ1RT0DFFtlvHBu6jp1cb5SG4ELJpVji+LGNkWGOzVJVDw6c
+         MnxG9Xgxlq7MxfPh46RMGbvPcr3YVbdncpV47mNmMnXPZ9jG34fmhmDbhbaRCQi+Dyjm
+         08MznjucVNWNsvG7V1O5Zq7IcDl1YsBfdnb024P9omQ6fXw2RNlSYB/6nOhTEpiSOGsa
+         iKFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=htc3FEW6U45e7eGmBICjLPQtBJO885eqDPGUS1h2BH8=;
+        b=gKASktb5Jf9tGBX8HC0FHJAWotMCBV6JA4LDLmzhYjOWzLsdhqUgENBB5zEpKQ6RUg
+         xHg6t2o/E+LgdUvnI1Z3GiN8RHtpKmT949TnDcOPZF+1tlLF9NGEJwgRH/bmI9mnrjk2
+         dl4o91TGJVJi9PbamImGSC1IEjbx+I6izFm9ufivzMzPBWiBVemqGVy3S9/tPgnosp8c
+         bnbvaP6sgs8uWQweebGVP2g3BX5+dCblWrNbfULmXusiYMrp0LCW8SgHpQny4oicfQ0N
+         nv9R8qmKHRGLxPyfiheCJyHCYG2KdIQPXIwpfJuGmtTbRUqpwrg+JJGW0/G7WPuvmcy1
+         m0nA==
+X-Gm-Message-State: AOAM530va7l7+K1VgT79jActRdXRzuHAAbz4XTT7iwg0sqUuUkI/DT7C
+        nEcP28QbSyAKUKIE+uq6+qA=
+X-Google-Smtp-Source: ABdhPJzWbESM74NMiobRCtslHqMsmdmqXpDQHza60W3VPZMlbAFKNAi/3a2apDHj+ZjwGF6E6T6ZZg==
+X-Received: by 2002:a1c:721a:: with SMTP id n26mr7108624wmc.118.1643196124779;
+        Wed, 26 Jan 2022 03:22:04 -0800 (PST)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id y14sm14903309wrd.91.2022.01.26.03.22.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 03:22:04 -0800 (PST)
+Date:   Wed, 26 Jan 2022 11:22:02 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.15 000/841] 5.15.17-rc2 review
+Message-ID: <YfEu2mLqNZmyMUBA@debian>
+References: <20220125155423.959812122@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220125155423.959812122@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+Hi Greg,
 
-christophe.kerello@foss.st.com wrote on Wed, 26 Jan 2022 12:08:38 +0100:
-
-> Hi Srinivas, Miquel,
+On Tue, Jan 25, 2022 at 05:32:41PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.17 release.
+> There are 841 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On 1/25/22 11:44, Srinivas Kandagatla wrote:
-> > 
-> > 
-> > On 05/01/2022 13:57, Christophe Kerello wrote:  
-> >> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> >> index e765d3d0542e..e11c74db64f9 100644
-> >> --- a/drivers/nvmem/core.c
-> >> +++ b/drivers/nvmem/core.c
-> >> @@ -769,7 +769,7 @@ struct nvmem_device *nvmem_register(const struct >> nvmem_config *config)
-> >>       if (config->wp_gpio)
-> >>           nvmem->wp_gpio = config->wp_gpio;
-> >> -    else
-> >> +    else if (config->reg_write)  
-> > This is clearly not going to work for everyone.
-> > 
-> > A flag in nvmem_config to indicate that wp gpio is managed by provider > driver would be the right thing to do here.  
-> 
-> Based on your inputs, I will add a new boolean flag in nvmen_config (proposal name: skip_wp_gpio) and I will set it to true in mtdcore.c when nvmen_config structure is initialized. It will be part of the V2.
+> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
+> Anything received after that time might be too late.
 
-Fine by me. Thanks for your work on this.
+Build test:
+mips (gcc version 11.2.1 20220121): 61 configs -> no new failure
+arm (gcc version 11.2.1 20220121): 99 configs -> no new failure
+arm64 (gcc version 11.2.1 20220121): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
 
-> 
-> Regards,
-> Christophe Kerello.
-> 
-> >>           nvmem->wp_gpio = gpiod_get_optional(config->dev, "wp",
-> >>                               GPIOD_OUT_HIGH);  
-> > 
-> > --srini
-> >   
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
 
-Cheers,
-Miquèl
+[1]. https://openqa.qa.codethink.co.uk/tests/660
+[2]. https://openqa.qa.codethink.co.uk/tests/661
+[3]. https://openqa.qa.codethink.co.uk/tests/653
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+

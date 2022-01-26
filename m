@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F77049C925
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7821249C929
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241000AbiAZL47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:56:59 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57282 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233693AbiAZL4z (ORCPT
+        id S241010AbiAZL5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233879AbiAZL5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:56:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89EB261857;
-        Wed, 26 Jan 2022 11:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCE0AC340E3;
-        Wed, 26 Jan 2022 11:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643198214;
-        bh=AIril9v7tE8y6x77I8YDt8M9H1P7L5vpXmUl0SfJWNc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d17fmk1LEayEdOGlbjpvNGW8dTzgKTltoBiSIHiCPJw2leW5RvAIzT9KTm8SUGmMg
-         WBUe4wT8JO8yVEn4a1l6cdX9cAeuaiGOtqJ4BgH/u8LdPdMX9S2SoCqPRCbfjAAg4t
-         ksR/HhJEMfU6doKKyXcB20fIXWc8Xts8zhTOgoZry1bxJImoXwF7AtvGKpKnQ9Gipv
-         hCq3dsZE8qHpuQs16a0evjdXXS7wAhO8fk7j77FR4gyBzh9FSOnPQL0LrEqCE0W0no
-         XxAMNjP61mx4egkzzuedrxnv55psqDY3rDw/KE8pCp7igHf5Nmx2L3sIZHPfSOud2g
-         mg8puBSqwBxGQ==
-Date:   Wed, 26 Jan 2022 19:56:47 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     Tim Harvey <tharvey@gateworks.com>,
+        Wed, 26 Jan 2022 06:57:10 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD3FC061747
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:57:09 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id h21so7793285wrb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:57:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=+sDiqoAJOrfRogurdk0Dhb2t5N6DFNFBvxVjM1SRD9c=;
+        b=BLZ2z3i/uG0fFoNgk9obov7QqIMqTbuOtNpD733i1x5E5ynRFrWMD7MV+zAkhAdh2G
+         Tn8Swt3wZOsV5mrTe61xN+NAlX9v78/r2D91GLkbPL0l+QGSdciUWd0/62Uf4rOkvDCO
+         +KvyCNIDl3joOvlg9+PJ0V0lGjMfDi5yurz+FUEC5xzV7SIYPPEQyFL7MFxhAVQy2wIN
+         ELdlpTsyFCKUscHzcRdrynZpmaF/xUFnAD1iwWCRQ5CmdchphCJyIMkZYG3+X4N8LT8K
+         Ek2RkEwqw5GE1v+EgAbvSisWPjrA/kSru/bhlyyIL8pi8y7Ou363KFinH97lx8/EfYGr
+         vU3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+sDiqoAJOrfRogurdk0Dhb2t5N6DFNFBvxVjM1SRD9c=;
+        b=hnDDtR0T3qq5EsYlUrkEKhHW2dkVV2cllSAGDknVUsCoCsgo+KycouLNPXu+mFuECJ
+         lnj2XIhDEX1jvvXSBAO4fRwAP04MLD+C/MGT0h+K8+Ho/LYkVd1tUVgaFER50diGVO5u
+         OEdzXdFmbT7IOwzxr5To2SVq4Ls9iYVhYfYrepwaZui/FW2eltvU/5zVyETqbGas0f3E
+         XWhi/wvbuYISHpmGuYgd4n8oEJQaq9pTDfjOXtQpFsGL62rKEOOyYiPvw13U2klAMdN/
+         Dw83BRlNi7b7wmGSIwmaGw29aPWFFbTTuNZpep/LJFpbtoYTOBUd6x/70U7S2Z8t32ct
+         A4Fg==
+X-Gm-Message-State: AOAM531Ebxkx8sR0Odu7dGxsum4Fj8Jsk2CqWdaj1twEdTq43Ui8/nik
+        8LX+akVui0blTZqVNXQzfx4pMQ==
+X-Google-Smtp-Source: ABdhPJwvFiWQmnLxmbLCubDFaS53TCJwcofdqT+kHyjit5OJpNOW52yfgJxIOmUzSM0XMynmEK6F4w==
+X-Received: by 2002:adf:fb0b:: with SMTP id c11mr12509098wrr.699.1643198227874;
+        Wed, 26 Jan 2022 03:57:07 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e? ([2a01:e34:ed2f:f020:f589:cf7d:b2ee:bb5e])
+        by smtp.googlemail.com with ESMTPSA id i2sm3403595wmq.23.2022.01.26.03.57.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 03:57:07 -0800 (PST)
+Subject: Re: (subset) [PATCH 1/3] ARM: dts: exynos: drop old thermal
+ properties from Exynos4210
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Adam Ford <aford173@gmail.com>
-Subject: Re: [PATCH] arm64: dts: imx8mn-venice-gw7902: disable gpu
-Message-ID: <20220126115646.GM4686@dragon>
-References: <20211216161227.31960-1-tharvey@gateworks.com>
- <20220126093558.GL4686@dragon>
- <d5a15039255d13cf4321bf1c18f49a9cdb666607.camel@pengutronix.de>
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20220122132554.65192-1-krzysztof.kozlowski@canonical.com>
+ <164313029072.79782.14492454091056440886.b4-ty@canonical.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <c4a6d5a4-647a-f80c-e487-a5434e744bae@linaro.org>
+Date:   Wed, 26 Jan 2022 12:57:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5a15039255d13cf4321bf1c18f49a9cdb666607.camel@pengutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <164313029072.79782.14492454091056440886.b4-ty@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 10:58:56AM +0100, Lucas Stach wrote:
-> Am Mittwoch, dem 26.01.2022 um 17:35 +0800 schrieb Shawn Guo:
-> > On Thu, Dec 16, 2021 at 08:12:27AM -0800, Tim Harvey wrote:
-> > > Since commit 99aa29932271 ("arm64: dts: imx8mn: Enable GPU")
-> > > imx8mn-venice-gw7902 will hang during kernel init because it uses
-> > > a MIMX8MN5CVTI which does not have a GPU.
-> > 
-> > I do not quite follow on this.  i.MX8MN integrates a GPU, and
-> > MIMX8MN5CVTI is built on i.MX8MN, correct?  If so, how comes
-> > MIMX8MN5CVTI doesn't have a GPU?
-> > 
-> It's a fused-down variant of the i.MX8MN that has the GPU disabled by
-> fuses.
+On 25/01/2022 18:04, Krzysztof Kozlowski wrote:
+> On Sat, 22 Jan 2022 14:25:52 +0100, Krzysztof Kozlowski wrote:
+>> The samsung,tmu_gain and samsung,tmu_reference_voltage properties of
+>> Exynos Thermal Management Unit driver are not used since April 2018.
+>> They were removed with commit fccfe0993b5d ("thermal: exynos: remove
+>> parsing of samsung,tmu_gain property") and commit 61020d189dbc
+>> ("thermal: exynos: remove parsing of samsung, tmu_reference_voltage
+>> property"), so drop them also from Exynos4210 DTS.
+>>
+>> [...]
 > 
-> > > 
-> > > Disable pgc_gpumix to work around this. We also disable the GPU devices
-> > > that depend on the gpumix power domain and pgc_gpu to avoid them staying
-> > > in a probe deferred state forever.
-> > 
-> > Is this an indication that GPU should be disabled in imx8mn.dtsi and
-> > enabled board by board?
-> > 
-> There's a trade-off here: most boards will probably use the full
-> variants that include the GPU, so probably less boards will need to
-> disable the GPU, as done here, than boards that need to enable it when
-> the base DT disables the GPU.
+> Applied, thanks!
 > 
-> Same story as with the i.MX6 where there are some SKUs that disable the
-> VPU by fuses: we enable it in the base DT and if you happen to build a
-> very low-cost board that uses the fused-down version you need to
-> disable it in the board DT.
+> [1/3] ARM: dts: exynos: drop old thermal properties from Exynos4210
+>       commit: e20bd06fc421fba4099be51d3f56b9b1741b499b
+> 
 
-Thanks, Lucas!
+I guess up to me to pick 2 and 3
 
-Patch applied!
 
-Shawn
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,83 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BEA49D08F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1EA49D090
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243653AbiAZRRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbiAZRQ4 (ORCPT
+        id S236277AbiAZRTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:19:03 -0500
+Received: from mail-oo1-f51.google.com ([209.85.161.51]:39718 "EHLO
+        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231168AbiAZRTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:16:56 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DBBC06161C;
-        Wed, 26 Jan 2022 09:16:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=PDDX1wKG5hFVTVEzfMRB1AeOYAj6/ey3grH/4rL5ik0=; b=sSbgNeYjQBj/LEhgZMY+qH+KfT
-        LFVskorPuMD84FiJUAYKagOUAU7ns0eQ0u2LEGiTHxckzt0SvzVZfdaOMtOPIDy92ItR1LAXsoTwi
-        clBZtmRILDvBP/Ys3ae8MiPZ7QNjMfEVG3/LcI0lYKLN8rAl0hphDYmw6zJfJ72eoZMV3K5+LYANd
-        DZJ7zb/Hv1Zyh2OEbaL7CdT/nhyLh5YmTIVLhrleSXwUr4xXF94Zj0oDq3cPbo4qqmyu8DFzLyQ4u
-        Od99gfIfh5RJOuGe8ivWfiUK48vnJtRX7eU4RfXA9eO51LBRWLxByVmh571Md/fYJG24BlImx0clf
-        sW4E9YDA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nClua-004Fb5-Ql; Wed, 26 Jan 2022 17:16:49 +0000
-Message-ID: <4b433d55-95de-963b-7351-6db79855824b@infradead.org>
-Date:   Wed, 26 Jan 2022 09:16:43 -0800
+        Wed, 26 Jan 2022 12:19:02 -0500
+Received: by mail-oo1-f51.google.com with SMTP id c7-20020a4ad207000000b002e7ab4185d2so68946oos.6;
+        Wed, 26 Jan 2022 09:19:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6Mpzlir6SdqG4dmvTdqzzIWhZy40hzNNvzFlysAcgEo=;
+        b=cTZa7OBRRbnpcBPHyGqLWCNhGLldOA3yZVWhYdv1uT70PIH1YgO6ZZLnnxmXmtXaX7
+         N6RAznD+Hk+qjSvyWy++PdCAswnC+Pg1kZufbr9/WRlHYwG3eK4WFBmrq7cdgO7Abqkh
+         N8GKNcQzyKRUsRqzuqd6k/pG6ToGhEk3rBsFDEvP9lZv4Aqi67vaIvNZ7Ns/n6FzIkaY
+         TlrHHdCFo9cySRWyIcA44ZYrW96/vc47s4vC5v2zu/OyFelBVg8IdRNGAkMZewMIn2ug
+         EP9MFhaKNzimrGZ0O8agc5ZZ6dkP06GVgwqljvYfSeH+4oJunp/W+zIG0o1YK6X5hbH6
+         7GPQ==
+X-Gm-Message-State: AOAM533Gg15FDBy6bdTjdjAJ4g3vOuU/2XvoRwV0QoYj5finXbiZRPWY
+        mRQphFmHuvMViVwGh+9oAp7L+n4eug==
+X-Google-Smtp-Source: ABdhPJyG2I4hTLw+49PdCXukWfcyYMXxvipT317bX9TkHxSH1ngsOdYI+seGe7/TEKrCnlLtNRkF6w==
+X-Received: by 2002:a4a:9866:: with SMTP id z35mr6372ooi.61.1643217541497;
+        Wed, 26 Jan 2022 09:19:01 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id p26sm5677731oth.14.2022.01.26.09.19.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 09:19:00 -0800 (PST)
+Received: (nullmailer pid 994404 invoked by uid 1000);
+        Wed, 26 Jan 2022 17:18:59 -0000
+Date:   Wed, 26 Jan 2022 11:18:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [RFC V1 05/11] arm64/perf: Detect support for BRBE
+Message-ID: <YfGCgwlk6wHS/OYe@robh.at.kernel.org>
+References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
+ <1642998653-21377-6-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/2] docs: add a document about regression handling
-Content-Language: en-US
-To:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     workflows@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-References: <cover.1643110442.git.linux@leemhuis.info>
- <f97738d6250050bc982bf2947587f1c73f37446f.1643110442.git.linux@leemhuis.info>
- <87sftbwemg.fsf@meer.lwn.net>
- <c8d7228a-2df5-df92-6d53-c3e940274dad@leemhuis.info>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <c8d7228a-2df5-df92-6d53-c3e940274dad@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1642998653-21377-6-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 24, 2022 at 10:00:47AM +0530, Anshuman Khandual wrote:
+> CPU specific BRBE entries, cycle count, format support gets detected during
+> PMU init. This information gets saved in per-cpu struct pmu_hw_events which
+> later helps in operating BRBE during a perf event context.
 
+Another NOP commit. The subject says 'arm64' and that we detect BRBE 
+support. This patch neither touches arm64 code nor detects anything.
 
-On 1/26/22 06:10, Thorsten Leemhuis wrote:
->>> +The important bits for people affected by regressions
->>> +=====================================================
->>> +
->>> +It's a regression if something running fine with one Linux kernel works worse or
->>> +not at all with a newer version. Note, the newer kernel has to be compiled using
->>> +a similar configuration -- for this and other fine print, check out below
->>> +section "What is a 'regression' and what is the 'no regressions rule'?".
->> Can we be consistent with either single or double quotes?  I'd suggest
->> "double quotes" but won't make a fuss about that.
-> Changed to "double quotes" everywhere in the text. But just to make sure
-> I get things right: in this particular case this will result in
 > 
-> ...section "What is a "regression" and what is the "no regressions rule"?".
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  drivers/perf/arm_pmu_platform.c | 34 +++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
 > 
-> This looks a bit strange to me. Something in me really would like to
-> quote the section's header in single quotes, but I guess grammar rules
-> do not allow that, so whatever. :-D
+> diff --git a/drivers/perf/arm_pmu_platform.c b/drivers/perf/arm_pmu_platform.c
+> index 513de1f54e2d..800e4a6e8bc3 100644
+> --- a/drivers/perf/arm_pmu_platform.c
+> +++ b/drivers/perf/arm_pmu_platform.c
+> @@ -172,6 +172,36 @@ static int armpmu_request_irqs(struct arm_pmu *armpmu)
+>  	return err;
+>  }
+>  
+> +static void arm_brbe_probe_cpu(void *info)
+> +{
+> +	struct pmu_hw_events *hw_events;
+> +	struct arm_pmu *armpmu = info;
+> +
+> +	/*
+> +	 * Return from here, if BRBE driver has not been
+> +	 * implemented for this PMU. This helps prevent
+> +	 * kernel crash later when brbe_probe() will be
+> +	 * called on the PMU.
+> +	 */
+> +	if (!armpmu->brbe_probe)
+> +		return;
+> +
+> +	hw_events = per_cpu_ptr(armpmu->hw_events, smp_processor_id());
+> +	armpmu->brbe_probe(hw_events);
+> +}
+> +
+> +static int armpmu_request_brbe(struct arm_pmu *armpmu)
+> +{
+> +	int cpu, err = 0;
+> +
+> +	for_each_cpu(cpu, &armpmu->supported_cpus) {
+> +		err = smp_call_function_single(cpu, arm_brbe_probe_cpu, armpmu, 1);
+> +		if (err)
+> +			return err;
+> +	}
+> +	return err;
+> +}
+> +
+>  static void armpmu_free_irqs(struct arm_pmu *armpmu)
+>  {
+>  	int cpu;
+> @@ -229,6 +259,10 @@ int arm_pmu_device_probe(struct platform_device *pdev,
+>  	if (ret)
+>  		goto out_free_irqs;
+>  
+> +	ret = armpmu_request_brbe(pmu);
+> +	if (ret)
+> +		goto out_free_irqs;
+> +
+>  	ret = armpmu_register(pmu);
+>  	if (ret) {
+>  		dev_err(dev, "failed to register PMU devices!\n");
+> -- 
+> 2.25.1
 > 
-
-I think that it was correct with the mixed quotes. Using all double
-quotes here is confusing.
-
--- 
-~Randy
+> 

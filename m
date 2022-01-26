@@ -2,108 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E0449D246
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E8349D25E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 20:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244341AbiAZTIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 14:08:22 -0500
-Received: from foss.arm.com ([217.140.110.172]:32800 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231167AbiAZTIV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 14:08:21 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DFB21FB;
-        Wed, 26 Jan 2022 11:08:21 -0800 (PST)
-Received: from [10.57.88.59] (unknown [10.57.88.59])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D87C3F7D8;
-        Wed, 26 Jan 2022 11:08:17 -0800 (PST)
-Subject: Re: [PATCH 1/2] perf arm-spe: Add arm_spe_record to synthesized
-To:     Ali Saidi <alisaidi@amazon.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        andrew.kilroy@arm.com, benh@kernel.crashing.org,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@redhat.com,
-        leo.yan@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        mark.rutland@arm.com, mathieu.poirier@linaro.org, mingo@redhat.com,
-        namhyung@kernel.org, peterz@infradead.org, will@kernel.org
-References: <5ca990a5-eedd-0edb-26d3-b5e16c36ac34@arm.com>
- <20220126155820.21929-1-alisaidi@amazon.com>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <c4a96839-1b4b-ac4d-38aa-26c1f4c8645a@arm.com>
-Date:   Wed, 26 Jan 2022 19:07:51 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S244376AbiAZTL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 14:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244362AbiAZTLx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 14:11:53 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D376C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:11:53 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so5249571pju.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 11:11:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g6MK/TK9V/JsMbg6KA7Vzzf+vJx0UYLxOdyiVInOIu4=;
+        b=PeG5RBqWvbBw2kchCn8oJAvldZRvSWRqZnC5dB2eq9VsnnGRH1pNI3XxFY2z9WaZNl
+         EkUFqCXuEOvMFwIz5I9UmReFRI7rNAanKhVvWsithEswW8ykd1ZWlh3uPkhKC05LmolH
+         Qtwz5OXU8q0BKiaEWs/Cz/H4Ycpa86rOBklLA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g6MK/TK9V/JsMbg6KA7Vzzf+vJx0UYLxOdyiVInOIu4=;
+        b=Ivk2X7tmShQQA1Xv+swKAMNPN+dC2epYWcVMWT+gcDROK2w/LbJ31zUVJ0WOE3KMqd
+         kkK4MqtNKAiPLkKM2XQ27U0BvFo3IQ6tmSCkz7CuMsBdUf5TEDsUdtY1H7TmBHvnlL81
+         GPC1jwQtpUhvQq7vs96gPBJyJKKC4GGSzNpzHoTo40m0iJjRnI9LpiGJfgFr8p/ya9dW
+         s8jLb0CAVijDSovy6mD9lamlTl5KRZD1vJ3ico1SRq8oiXaed8lxwqYm2qJkp5zCZOFS
+         NikP7wnJstZV9EcxS8ihhlYC0G9h/6yJYnOQasOINis+Rvox76qe3GG6nPL8a8P1JAoO
+         /+aw==
+X-Gm-Message-State: AOAM533ITBcoxbZ3kNhPTmzrhbPQrQre2W12W+5INdQQmniORtdRFL2W
+        WmdUMVDYET3TKZrjWsDk+ak4Fw==
+X-Google-Smtp-Source: ABdhPJxZTidgdyVUPylsT3nAMV/NyqldqZzImpWbx0MEYsIs8Yea4EX35ZGWJmKRc1zggq03kP34ww==
+X-Received: by 2002:a17:90a:c901:: with SMTP id v1mr10067555pjt.203.1643224313056;
+        Wed, 26 Jan 2022 11:11:53 -0800 (PST)
+Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 10sm2791338pfm.56.2022.01.26.11.11.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 11:11:52 -0800 (PST)
+Date:   Wed, 26 Jan 2022 19:11:51 +0000
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Alyssa Ross <hi@alyssa.is>
+Cc:     "Mr. Chromebox" <mrchromebox@gmail.com>,
+        Benson Leung <bleung@google.com>,
+        Benson Leung <bleung@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Tim Wawrzynczak <twawrzynczak@chromium.org>
+Subject: Re: Null pointer dereference in cros-ec-typec
+Message-ID: <YfGc97nQfRQT+EOL@chromium.org>
+References: <CACeCKac0BctZae4n2CiAnpD4J-Dn+h2ROkx7CEVA9EmnobbNUw@mail.gmail.com>
+ <CAFTm+6APx0PkRgp+7LLEOi=2E-7ZSgYdQ824U1XB+q1wMPNg3g@mail.gmail.com>
+ <CACeCKaeAaS3QcLwvcPNYVtkKxaBViij53TBjOXvwcpKQk+NDbA@mail.gmail.com>
+ <CAFTm+6BC--tNjbez_f_A_ckK7gjkbBMWHYSExxQcp9+u60Z2WQ@mail.gmail.com>
+ <CACeCKaeAUy8JCO9hv7XjeQA_P_At9SN_Cuw2v=YD01gfwvGXFQ@mail.gmail.com>
+ <20220119023752.ad34u6hgjpkpk4dw@eve>
+ <CACeCKafA4eDNgEbACjorCHBdrLaG6YviRS+gA=Xr-XD+GVaxZw@mail.gmail.com>
+ <CAFTm+6DMuxx_qiPEU4VwweZVvuFhReWTogYMychH1gXnn47xHw@mail.gmail.com>
+ <20220119203243.3zh6mcb2fauczn5k@eve>
+ <Yen1gP6XB6bRo7OW@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <20220126155820.21929-1-alisaidi@amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yen1gP6XB6bRo7OW@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 26/01/2022 15:58, Ali Saidi wrote:
-> Hi German,
->> Hi Ali,
->>
->> On 25/01/2022 19:20, Ali Saidi wrote:
->>> [...]
->>>
->>> +	sample.raw_size = sizeof(*record);
->>> +	sample.raw_data = record;
->> Have you tried this with perf-inject? I think it would need the PERF_SAMPLE_RAW bit in the sample_type,
-> Yes I've tried the following and it worked as expected with the original
-> perf.data or the perf.data.jitted after perf-inject. 
->
-> perf record -e arm_spe_0/jitter=1/ -k 1 java ...
-> perf  inject -f --jit -i perf.data -o perf.data.jitted
+On Jan 20 23:51, Prashant Malani wrote:
+> Hey Alyssa,
+> 
+> On Jan 19 20:32, Alyssa Ross wrote:
+> > On Wed, Jan 19, 2022 at 12:44:06PM -0600, Mr. Chromebox wrote:
+> > > On Wed, Jan 19, 2022 at 12:24 PM Prashant Malani <pmalani@chromium.org> wrote:
+> > > >
+> > > > Thanks Alyssa,
+> > > >
+> > > > It looks like the right fix here should go in coreboot.
+> > > >
+> > > > I'll wait for a response from Matt regarding whether those EC commands
+> > > > are supported on the eve EC firmware image Mr.Chromebox releases.
+> > >
+> > > looking at Chrome-EC branch firmware-eve-9584.B,
+> > >
+> > > EC_CMD_GET_PD_PORT_CAPS is *not* supported
+> > > EC_CMD_USB_PD_PORTS is supported
+> > >
+> > > no difference in this regard between my updated EC firmware and the
+> > > latest stock EC firmware provided by Google for EVE
+> > >
+> > > > I have a fix but I can't test it since :
+> > > > - I am not sure how the Mr.Chromebox eve BIOS is compiled.
+> > >
+> > > same build system as upstream coreboot
+> > >
+> > > > - I don't have an eve.
+> > >
+> > > me neither :)
+> > 
+> > I'd be more than happy to test Coreboot patches on my eve and report
+> > back on anything that needs to be checked, if that helps?  I've built
+> > and installed it from source before.
+> 
+> Yes, this would be very helpful! Here is the link:
+> https://review.coreboot.org/c/coreboot/+/61262
 
-This is not injecting the synthesized samples. I think it is still    
-processing from the aux trace. Try adding "--itrace=i1i --strip" to the
-inject command to remove the AUXTRACE events. Judging by the raw
-samples, the data is missing:
+To close the loop here, the above patch has been submitted successfully.
 
-11 20005239445831 0x3510 [0x94]: PERF_RECORD_SAMPLE(IP, 0x1): 47670/47670: 0xffffab6e02d1b320 period: 1 addr: 0
+Additionally, I've also pushed another patch to the kernel driver [1]
+which checks for the null pointer (for folks using older firmware).
 
-. ... raw event: size 64 bytes
-.  0000:  09 00 00 00 01 00 40 00 f3 10 9b 3b 00 00 00 00  ......@....;....
-.  0010:  98 c5 e3 02 6e ab ff ff 36 ba 00 00 36 ba 00 00  ....n...6...6...
-.  0020:  35 da 30 d5 31 12 00 00 0b 00 00 00 00 00 00 00  5.0.1...........
-.  0030:  01 00 00 00 00 00 00 00 82 01 00 88 00 00 00 00  ................
+Thanks all,
 
-vs when adding PERF_SAMPLE_RAW to attr.sample_type:      
+-Prashant
 
-. ... raw event: size 148 bytes
-.  0000:  09 00 00 00 01 00 94 00 f3 10 9b 3b 00 00 00 00  ...........;....
-.  0010:  98 c5 e3 02 6e ab ff ff 36 ba 00 00 36 ba 00 00  ....n...6...6...
-[...]
-.  0080:  00 00 00 00 2a 00 00 00 00 00 00 00 82 01 00 88  ....*...........
-.  0090:  00 00 00 00
-
-> perf script -i perf.data -s t1.py --itrace=i1i
->
->> Although I quickly looked over the perf inject code and it looks like it's expecting some type of padding:
->>
->> [...]
->>
->> I'm seeing some comments in utils/event.h related to this on the intel events.
-> Yes i noticed this too,but looking at how the raw data is added to the same
-> other places like intel-pt.c:1703 the perf_synth__raw*() functions are used to
-> strip away the 4 bytes bytes before the data is added to the sample. The other
-> places i can find the padding used is in builtin-script.c but given we have the
-> --dump-raw-trace option it's not clear to me that it's needed to wrap the
-> arm_spe_event in another struct with padding like perf_synth_intel_ptwrite?
-
-I think the intel use case makes sense because the layout of the data
-is fixed and documented. If we modify the struct arm_spe_record later it
-may not be obvious how to match it to the raw data of an older perf.data
-file. And we're generating bigger files with redundant information.
-
-Thanks,
-German
-
->
-> Thanks,
-> Ali
->
+[1] https://lore.kernel.org/lkml/20220126190219.3095419-1-pmalani@chromium.org/

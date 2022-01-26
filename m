@@ -2,84 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 566FD49C4A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:39:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E58849C4AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237978AbiAZHjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 02:39:44 -0500
-Received: from mga01.intel.com ([192.55.52.88]:6615 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237937AbiAZHjj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 02:39:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643182779; x=1674718779;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qpwkq/tfgyuDWo8286GPA9d2hhEfNOjp5kDGgAGyq0I=;
-  b=mpJ1luKPp/L/ROaEysd+ZiLpmLBQTUgnG1ORby9M1DisWpU4hFn8UPyK
-   GF7f00YWEket1O/b1c7ppS0RQIhF0kZvllHVzdieyvi/Mygzzf/b1ooYJ
-   OfOp15pgFjFLnH69mzmWQz1juJ8O29SXCC/jkDJMGHsYmwqPHmi3KIvcn
-   5cX/uH/FMpe/Mf92s42CP/IVrOvG4icc7G3EYxTmQyt6cjRqqdDVJJU8S
-   evoNyMoDdrm+BzTXIOnyNA72BkBH7JW3RwGptJBLdg9XmhyB76ggCZgUS
-   H/AjEdQ2pqJXXkF4xhsXhRDhi4NAKEe6EgeEd/HBU88veeI5JbUhe/pxV
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="270949581"
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="270949581"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 23:39:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,317,1635231600"; 
-   d="scan'208";a="696135344"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 25 Jan 2022 23:39:38 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nCcu1-000KwV-Ba; Wed, 26 Jan 2022 07:39:37 +0000
-Date:   Wed, 26 Jan 2022 15:39:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.16 60/137] WARNING: modpost:
- vmlinux.o(.text+0x48087): Section mismatch in reference from the function
- resctrl_init() to the function .init.text:thread_throttle_mode_init()
-Message-ID: <202201261528.jKedbVna-lkp@intel.com>
+        id S237981AbiAZHlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 02:41:49 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:32121 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229676AbiAZHls (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 02:41:48 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JkFvs29zrz8wdR;
+        Wed, 26 Jan 2022 15:38:49 +0800 (CST)
+Received: from [10.67.110.173] (10.67.110.173) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 26 Jan 2022 15:41:46 +0800
+Message-ID: <97142483-d7e7-e310-0cb0-30a81414cb57@huawei.com>
+Date:   Wed, 26 Jan 2022 15:41:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RESEND][PATCH] Documentation: added order requirement for
+ ima_hash=
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, <corbet@lwn.net>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <roberto.sassu@huawei.com>, <wangweiyang2@huawei.com>,
+        <xiujianfeng@huawei.com>, <linux-integrity@vger.kernel.org>
+References: <20220125090237.120357-1-guozihua@huawei.com>
+ <36b6058f2cdf6bead917c06ecc6e8769bb88130c.camel@linux.ibm.com>
+ <3933adf5-4e9d-6b22-2e46-55643c504f52@huawei.com>
+ <71508a72b042da330d07a624cf499561c46195f0.camel@linux.ibm.com>
+From:   "Guozihua (Scott)" <guozihua@huawei.com>
+In-Reply-To: <71508a72b042da330d07a624cf499561c46195f0.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.173]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500024.china.huawei.com (7.185.36.203)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.16
-head:   364c1c42b229912132e1615c2ce15be7154e2156
-commit: 5d118e3da1ad725c2ea8da30eda516096e550289 [60/137] x86/resctrl: Drop __init/__exit on assorted symbols
-config: i386-randconfig-a011-20220124 (https://download.01.org/0day-ci/archive/20220126/202201261528.jKedbVna-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 997e128e2a78f5a5434fc75997441ae1ee76f8a4)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?id=5d118e3da1ad725c2ea8da30eda516096e550289
-        git remote add morse https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git
-        git fetch --no-tags morse mpam/snapshot/v5.16
-        git checkout 5d118e3da1ad725c2ea8da30eda516096e550289
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+On 2022/1/26 12:37, Mimi Zohar wrote:
+> On Wed, 2022-01-26 at 10:28 +0800, Guozihua (Scott) wrote:
+>>
+>> On 2022/1/26 9:07, Mimi Zohar wrote:
+>>> On Tue, 2022-01-25 at 17:02 +0800, GUO Zihua wrote:
+>>>> From: Guo Zihua <guozihua@huawei.com>
+>>>>
+>>>> Commandline parameter ima_hash= and ima_template= has order requirement
+>>>> for them to work correctly together. Namely ima_hash= must be
+>>>> specified after ima_template=, otherwise ima_template= will be ignored.
+>>>>
+>>>> The reason is that when handling ima_hash=, ima template would be set to
+>>>> the default value if it has not been initialized already, and that value
+>>>> cannot be changed afterwards by ima_template=.
+>>>>
+>>>> This patch adds this limitation to the documentation.
+>>>>
+>>>> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+>>>> Signed-off-by: Guo Zihua <guozihua@huawei.com>
+>>>
+>>> This issue should be limited to the original "ima" template format,
+>>> which only supports hash algorithms of 20 bytes or less.  The "ima_ng"
+>>> template has been the default since larger digests and templates were
+>>> upstreamed back in Linux 3.13[1]. Do you really still have kernels
+>>> built with the original "ima" template?
+>>>
+>>> [1] Refer to commit 4286587dccd4 ("ima: add Kconfig default measurement
+>>> list template").
+>>
+>> Hi Mimi,
+>>
+>> The issue is that if ima_hash is specified before ima_template,
+>> ima_template will not work. Built-in default only affects which template
+>> will be loaded eventually.
+>>
+>> For example, if the built-in default template is ima-ng and user would
+>> like to change it to ima-sig with sha512 by specifying "ima_hash=sha512
+>> ima_template=ima-sig" in command line, the result will be ima-ng with
+>> sha512, not ima-sig with sha512.
+> 
+> Ok.  Once the template name is set, ima_template_setup() doesn't allow
+> it to be reset.  This was probably done to set the template name to the
+> first occurance of "ima_template=" on the boot command line.  This
+> concern could be addressed by defining a static local variable in
+> ima_template_setup().
+> 
+> So either documenting the ordering requirement, as you've done, or
+> allowing the template_name to be reset are fine.
+> 
+> thanks,
+> 
+> Mimi
+> 
+> .
 
->> WARNING: modpost: vmlinux.o(.text+0x48087): Section mismatch in reference from the function resctrl_init() to the function .init.text:thread_throttle_mode_init()
-The function resctrl_init() references
-the function __init thread_throttle_mode_init().
-This is often because resctrl_init lacks a __init
-annotation or the annotation of thread_throttle_mode_init is wrong.
+The main issue lies in ima_template_desc_current called by hash_setup, 
+which does not just read ima_template global variable, but also tries to 
+set it if that hasn't been done already. Causing ima_template_setup to quit.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Best
+GUO Zihua

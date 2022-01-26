@@ -2,250 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAFE49C841
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B9349C843
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240448AbiAZLFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:05:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S240454AbiAZLG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240440AbiAZLFP (ORCPT
+        with ESMTP id S240440AbiAZLG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:05:15 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A368C061744
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:05:15 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id g14so70117564ybs.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:05:15 -0800 (PST)
+        Wed, 26 Jan 2022 06:06:26 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC55C061744
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:06:26 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id h23so20796238pgk.11
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:06:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UImJRfhvqAzf1Dt1yTwW4tv7UXuP3UpAdmLGwD1ulh8=;
-        b=O+ngrIx40MwPukAJqc17VwT5ioFLl/rdwUMT0KxlhuYCPe4gXjjG/inxGzKzvhzjUS
-         TFBJmvEv/pQldqM55LUpTjcxpqQD3WfhpS6WAdacBU5rdteotJBcRm83YHuMHGj7Ica5
-         3hDHwZKMVuYx8xyA8nesYse5JOMcQmJvuM9lIN/HPn7g1aXo9vrNNlOO5HHGgW+38hq0
-         A1aywNsuDXGwJTF5BZkBdEnCzXSBX4KoyFjVOx6ArAqbfZfALjL//VW+6tLchIDwur0j
-         +LDOb1I3mz3pWJdwYP7cIb+iQM/yy58hOWoxhA8aJBr6vfVQ7iVDjbO3i7XENZrR/zvB
-         A9wA==
+        d=ventanamicro.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wVeAFMlelYX7tOY5dDydv687Sysfy98XLePUPfp3n+4=;
+        b=iqV0Y1Oo4ZVC/LRdBxUVY+DWQCtN9EwZe16EDDI+ah7IN4Vu4+QJvHYkwMwMS9rPRj
+         zksepFiZKbXjUahiuPE4mzkZZ41qSeF94mgFF2PXpn4F/PtAxL70JEoe5xpd78FyK4ib
+         O0XWJVhx74oMvbVjpMS9ly9CjBGi3VEue3JeXxRilv28DYl2vlb9miSaS3UB4Wf/iiJO
+         6P/dqKECxZyzsemWHECF4KdY3FAKPCBC4GQ4Feww6ZDAmFekb1xVADAoCu8cyDzat0EK
+         TWeIU/+djGuIuY0kxB48NdAskmC/TEY+BV3D9VwF4RoccwOu/k9BP6Wofw4ZSc+cwbgi
+         LCTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UImJRfhvqAzf1Dt1yTwW4tv7UXuP3UpAdmLGwD1ulh8=;
-        b=MoyAVcrab5YW7hM7GBmKOmA3ckiXVvv2LHH18TqKHoZxInV/QIgPbILd5bMiiCmiV/
-         6sVRPFu1ArCE6+nmRKLq3q0U8OjAXDbjx/jIZUygX+pSRN3pL3Hj2fbI7W6gOXYPB7dJ
-         xXfutGm366GNy0xaPY39NpYxDu6w0UU4jmxtrOm6u8XmJdHHVL7bn2CdQfHuAbTUeU8x
-         eqNtbPGwpTGJYRsQDOHbFVsfge1qYYlicctSv8PdvTmk6fSntkCYo8LoYQtbCWvxoGwP
-         EPkK9vYE4OBzDQR7D+v2pdM4Qf2rieJVHcgtc1VTLp019veEMg0a63iLF4d2mNPk9pU1
-         d0/w==
-X-Gm-Message-State: AOAM531b88QVrZ0VsuI2+EfxcBsqk+iWTgE7xPVVo0WwGs0n0vp6HcHG
-        d/L4quhF6xllBZ2Yry9LPfFD8EmbAKECRix/Hu7XFA==
-X-Google-Smtp-Source: ABdhPJw0PQ/y392CnugHvY3ZFSGzOw9puRyRMDyTT6E2ZH1vbr7ChoNZPsKjwap1b6dTFMPkniv0A6Ej0qzauw3DC/U=
-X-Received: by 2002:a5b:346:: with SMTP id q6mr36352306ybp.704.1643195114350;
- Wed, 26 Jan 2022 03:05:14 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wVeAFMlelYX7tOY5dDydv687Sysfy98XLePUPfp3n+4=;
+        b=uaLhvm+t8k84RiykcoTOkJyrwB8e/J+UliHvRW9hyS3iZqmFpfL+qZWNCwq3MXZsdC
+         AdLUxxcCl3hRXnfd/8s9ojrwOYl6MD4C+3ieAzC8UpQPoLdUbHCIoXa/UqU05v2mFrvp
+         KRjB0s2C1YllGMcbwDt8+ESaLWP3b3+dTL7+8YB9V6ZeR2nTeetXvCGDFlAdO8MeB6dB
+         q0IH8uRGeNAcJjOPZcGeswcRaa+nqH13bW+sqjctnnJDrXnsxyrCy+7a8GOr8xy/sbfq
+         dO82KPZvoxtACOMYid5qgiQF76v4/RGiijGgMiOGVi2Ba+585Ov2UMsOoneS/ccgG149
+         ILvQ==
+X-Gm-Message-State: AOAM53241qsIo66FzafGt8Ymyu1hz9JZKTXd3mHztJENwD0NwYrzKGMl
+        qhbpYPw8OVdmuzZCDVoXNuhsGg==
+X-Google-Smtp-Source: ABdhPJzTN8jP0iLPGAsGM1I8G+Bpd70Ujns36T3AIMX2axXRe9kLrfxOT2tnD1+4nMMN15p2XefwNg==
+X-Received: by 2002:a63:8949:: with SMTP id v70mr13202922pgd.380.1643195185796;
+        Wed, 26 Jan 2022 03:06:25 -0800 (PST)
+Received: from sunil-ThinkPad-T490.dc1.ventanamicro.com ([49.206.3.187])
+        by smtp.gmail.com with ESMTPSA id r11sm1811792pff.81.2022.01.26.03.06.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 03:06:25 -0800 (PST)
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Abner Chang <abner.chang@hpe.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Sunil V L <sunilvl@ventanamicro.com>
+Subject: [RFC PATCH 0/1] RISCV_EFI_BOOT_PROTOCOL support in linux
+Date:   Wed, 26 Jan 2022 16:36:14 +0530
+Message-Id: <20220126110615.33371-1-sunilvl@ventanamicro.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220125155348.141138434@linuxfoundation.org>
-In-Reply-To: <20220125155348.141138434@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 26 Jan 2022 16:35:02 +0530
-Message-ID: <CA+G9fYs-DqzMKpPHkO5xATRdBw30_XSUhsVV3US00RcPTgVMWA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/560] 5.10.94-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 22:02, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.94 release.
-> There are 560 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.94-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+This patch adds support for getting the boot hart ID using new
+RISCV_EFI_BOOT_PROTOCOL in linux efi stub. While there is an existing solution
+of passing the boot hart ID through Device Tree, it doesn't work for ACPI. Hence
+an EFI protocol protocol is recommended which works for both DT and ACPI based
+platforms.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+The latest draft spec of this new protocol is available at
+https://github.com/riscv-non-isa/riscv-uefi/releases/download/1.0-rc2/RISCV_UEFI_PROTOCOL-spec.pdf
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+This linux ptach can be found in:
+riscv_boot_protocol_rfc_v1 branch at https://github.com/vlsunil/linux.git
 
-## Build
-* kernel: 5.10.94-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: f32eb088b1394f3a0df66e84e55ebdb8132dbe7b
-* git describe: v5.10.93-561-gf32eb088b139
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.93-561-gf32eb088b139
+This is tested in qemu with both u-boot and edk2 firmware changes. To test this
+patch with u-boot, we need u-boot to support this new protocol which can be
+found in:
+riscv_boot_protocol_rfc_v1 branch at https://github.com/vlsunil/u-boot.git
 
-## Test Regressions (compared to v5.10.93-564-g822f7d03ddf1)
-No test regressions found.
+Sunil V L (1):
+  riscv/efi_stub: Add support for RISCV_EFI_BOOT_PROTOCOL
 
-## Metric Regressions (compared to v5.10.93-564-g822f7d03ddf1)
-No metric regressions found.
+ drivers/firmware/efi/libstub/efistub.h    | 15 ++++++++++++
+ drivers/firmware/efi/libstub/riscv-stub.c | 28 ++++++++++++++++++++---
+ include/linux/efi.h                       |  1 +
+ 3 files changed, 41 insertions(+), 3 deletions(-)
 
-## Test Fixes (compared to v5.10.93-564-g822f7d03ddf1)
-No test fixes found.
+-- 
+2.25.1
 
-## Metric Fixes (compared to v5.10.93-564-g822f7d03ddf1)
-No metric fixes found.
-
-## Test result summary
-total: 97073, pass: 82752, fail: 623, skip: 12779, xfail: 919
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 259 passed, 0 failed
-* arm64: 37 total, 37 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 30 passed, 4 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 46 passed, 6 failed
-* riscv: 24 total, 22 passed, 2 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

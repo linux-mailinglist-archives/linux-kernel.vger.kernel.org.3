@@ -2,92 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 070F149CA82
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62B349CA7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 14:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238084AbiAZNPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 08:15:15 -0500
-Received: from mga06.intel.com ([134.134.136.31]:25921 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234520AbiAZNPN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 08:15:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643202913; x=1674738913;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jvn1DT8hkIC9aHCBN88BfzW6xWKdrEbGQoRpjkz2lt4=;
-  b=jodYnQlA0gn+YmW3inc+Gbg3xO/VpLOOx57Fe9doyytS6VeT6CV3hhGA
-   GIykQJtXYtr5RWYWT5XBPyqJMHjpR1PRVn4C2fSVPTL3h8T/g8mS9ohhd
-   Rae6EgSlLsWwQmF/fyBk2xKnASA9arZlp/qG8BC6QtcHycTi2Or8nCGRy
-   XSOGLwoq/WMphOOzF3kSh+K/M1FuyQpfI/n9DYxfM4bXdePRq4FZUmMLq
-   mbNrwVyJk9x2QIOlKl321CD/Gd1N+mJDGBHlFs/avL0CXUK/iSTRrkrhY
-   WXjP882sRjZuTqF0r1SYhKTJjkmT4jkuxRa/mDqkisCk5UuSlN8XMwh81
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="307260494"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="307260494"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:15:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="597459201"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 05:15:09 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nCi7f-00EbZf-0w;
-        Wed, 26 Jan 2022 15:14:03 +0200
-Date:   Wed, 26 Jan 2022 15:14:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Carlis <zhangxuezhi1@yulong.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
-Message-ID: <YfFJGrfMi0E1ySmH@smile.fi.intel.com>
-References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
- <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
- <YfEG2qVO9K9G+g1d@kroah.com>
- <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
- <f671a112-880d-1526-a395-360947b40c5a@gmx.de>
- <CAKMK7uFhJPpiHqL-040ozbCM=QxiWNrFHp1gOEUvpEUjxbwAQQ@mail.gmail.com>
+        id S237855AbiAZNOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 08:14:11 -0500
+Received: from mail-ej1-f47.google.com ([209.85.218.47]:43771 "EHLO
+        mail-ej1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234991AbiAZNOH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 08:14:07 -0500
+Received: by mail-ej1-f47.google.com with SMTP id d10so38964127eje.10;
+        Wed, 26 Jan 2022 05:14:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NBdQ/uQ+VlQz/s6B9TiQ8bFThsL41hKw9IyHdeDpgD4=;
+        b=2hYzm/xSvzF4cZOyfidmevTlaJwCMzYAmhPHeJKxRWOZY9OoYkIUoQMcQDyGExYsi7
+         6qhMk0EYqeAB663Ig3hCiBN/4APqBzq9hi2LPVPS49dPWeg7oCNfyx7XD/M9sptBeMjW
+         iwMMBVTJZihy1kRaOiIwXEMwqYLiY0uZs8u4peIXhbAG9E/6Z5TQLyTqh/cPaddJK5Wu
+         z9a/xz2k0tBkm8th1VZLn6dKcJL7oILRAJVOYZWdJJt4rTZy58o7waQcFlb9nrW3eRoF
+         z+zlvqEZldUpk3UyNDO1QcgBEAvLN83YjdSN6luhKDoTHvJ8aYTyzdI7hBf+CVHxN3QY
+         XzdA==
+X-Gm-Message-State: AOAM531Kn7qvumPZ8NQS37G4IJJjASaMyj5/BsafxJhXvNK4dn8Loglc
+        jwSj36/wzTukh+OquqGZeKw=
+X-Google-Smtp-Source: ABdhPJypN0UAeeiGOnmKd5k24fcLAzTBl8OwGasQRAAEB8fDWDUT4TXWF6NG0KGGepXClKmL7B4w/A==
+X-Received: by 2002:a17:906:e0ca:: with SMTP id gl10mr20482575ejb.108.1643202846140;
+        Wed, 26 Jan 2022 05:14:06 -0800 (PST)
+Received: from [192.168.0.60] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.googlemail.com with ESMTPSA id l2sm9700990eds.28.2022.01.26.05.14.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 05:14:04 -0800 (PST)
+Message-ID: <48350476-605c-0775-7d18-2601d3360241@kernel.org>
+Date:   Wed, 26 Jan 2022 14:14:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKMK7uFhJPpiHqL-040ozbCM=QxiWNrFHp1gOEUvpEUjxbwAQQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 1/2] dt-bindings: pwm: Document clk based PWM
+ controller
+Content-Language: en-US
+To:     Nikita Travkin <nikita@trvn.ru>, thierry.reding@gmail.com,
+        lee.jones@linaro.org
+Cc:     u.kleine-koenig@pengutronix.de, robh+dt@kernel.org,
+        sboyd@kernel.org, linus.walleij@linaro.org, masneyb@onstation.org,
+        sean.anderson@seco.com, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20220126125849.75572-1-nikita@trvn.ru>
+ <20220126125849.75572-2-nikita@trvn.ru>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220126125849.75572-2-nikita@trvn.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:27:19PM +0100, Daniel Vetter wrote:
-> On Wed, Jan 26, 2022 at 12:18 PM Helge Deller <deller@gmx.de> wrote:
-> > On 1/26/22 11:31, Daniel Vetter wrote:
-
-...
-
-> > You are describing a transitioning over to DRM - which is Ok.
-> > But on that way there is no need to ignore, deny or even kill usage scenarios
-> > which are different compared to your usage scenarios (e.g. embedded devices,
-> > old platforms, slow devices, slow busses, no 3D hardware features,
-> > low-color devices, ...).
+On 26/01/2022 13:58, Nikita Travkin wrote:
+> Add YAML devicetree binding for clk based PWM controller
 > 
-> This patchset isn't about killing existing support.
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> --
+> Changes in v2:
+>  - fix the file name.
+> Changes in v4:
+>  - Use generic node name in the dt bindings example.
+> ---
+>  .../devicetree/bindings/pwm/clk-pwm.yaml      | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pwm/clk-pwm.yaml
 > 
-> This is about adding new drivers to a subsystem where consensus the
-> past 6 years or so was that it's closed for new drivers.
+> diff --git a/Documentation/devicetree/bindings/pwm/clk-pwm.yaml b/Documentation/devicetree/bindings/pwm/clk-pwm.yaml
+> new file mode 100644
+> index 000000000000..d3416ba549b5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pwm/clk-pwm.yaml
+> @@ -0,0 +1,45 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pwm/clk-pwm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Clock based PWM controller
+> +
+> +maintainers:
+> +  - Nikita Travkin <nikita@trvn.ru>
+> +
+> +description: |
+> +  Some systems have clocks that can be exposed to external devices.
+> +  (e.g. by muxing them to GPIO pins)
+> +  It's often possible to control duty-cycle of such clocks which makes them
+> +  suitable for generating PWM signal.
+> +
+> +allOf:
+> +  - $ref: pwm.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: clk-pwm
+> +
+> +  clocks:
+> +    description: Clock used to generate the signal.
+> +    maxItems: 1
+> +
+> +  "#pwm-cells":
+> +    const: 2
+> +
+> +unevaluatedProperties: false
+> +
+> +required:
 
-You mean fbdev?
+You need a compatible. pwm-cells can be skipped as pwm.yaml will require
+them.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> +  - clocks
+> +
+> +examples:
+> +  - |
+> +    pwm {
+> +      compatible = "clk-pwm";
+> +      #pwm-cells = <2>;
+> +      clocks = <&gcc 0>;
+> +      pinctrl-names = "default";
+> +      pinctrl-0 = <&pwm_clk_flash_default>;
+> +    };
 
 
+Best regards,
+Krzysztof

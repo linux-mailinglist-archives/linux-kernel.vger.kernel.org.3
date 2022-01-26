@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCDB49D07D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238D249D082
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243622AbiAZROb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        id S243638AbiAZRPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243620AbiAZRO2 (ORCPT
+        with ESMTP id S233073AbiAZRPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:14:28 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0259CC06161C;
-        Wed, 26 Jan 2022 09:14:28 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id f17so266768wrx.1;
-        Wed, 26 Jan 2022 09:14:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gXtdrW27fCZ/wJUPBVbcRIlDfwjyibpVlA/v0Qe0N+A=;
-        b=ShEI2vtBBOEzdM8KBa2+C+sra9rF3eUL8rq9LzYJlSnCdzLTrR9bprTUNRFKfPviWE
-         9LxSGdHftoFFaEfs5hs4wlUS92fvaNMhsVvPgTvT2ilBpLXxDvPOF61ztFbDBhyABL1T
-         NeAJUgNQN40uFADgvWGHHvtXEXm6/Ml8nuddZ7Oji2LkhqqcjoyLsgnsrnl+kd6/i1iI
-         yQRqPJInXft4GD+ohxuxSx1AAny0JGtYF1WIsfY27wSah06MVOWb4YXlTQSzlElHgJAI
-         dMjR619JNdTUz0aIjR8ixqhJOIRS0C31q6OhH3D1GxGbZ8jz/18gsCQB3V33I37fzdsc
-         T8Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gXtdrW27fCZ/wJUPBVbcRIlDfwjyibpVlA/v0Qe0N+A=;
-        b=e2WKTQgXDEHI6E6SlX6GoQVq6M6AcRB3Ok0wB8gqdSGCT+OgVvz7/GUF9YabliLVFb
-         6xnAv8uLpcxn2s1QPriyNg77jzcy21TpXPm53dqRAOpnYN9lfg9qDygZjFHrADRJ+acZ
-         O5b8RdD+ldDgNy5tcfnobpFUtZ/pOl9eCnWrRIsx/u/AQMuW/CoPanFYwvbP2kiD6b6B
-         hOV0Lg6KL6XJSAXHN9zeYNwCImSuopKEC8UjLrLeZVcv5ASgXvanEiXXCOKPbIu95yU/
-         pb66rTEUqIpyWAfe+pgT2/38rYUDLa+XzTi6MiLWbYit5q0K+dcpqTXug6FE3UAm1UQO
-         sRug==
-X-Gm-Message-State: AOAM533naaXgCqSku43pMez2k9Grw14gu8W5drmOMyujSiXGAmqgdDb8
-        IuphwoRghFAOgqlMQgKlW0M=
-X-Google-Smtp-Source: ABdhPJwj+3itbOp8dJx8AHey5VYTt5YOotHUNr1kojxGb+QydODRJny0bAdqTKmSHnhQdy6BUYrH6g==
-X-Received: by 2002:a05:6000:81:: with SMTP id m1mr18100420wrx.385.1643217266591;
-        Wed, 26 Jan 2022 09:14:26 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id c8sm4800962wmq.34.2022.01.26.09.14.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 09:14:26 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jisheng Zhang <jszhang@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: stmmac: dwmac-sun8i: use return val of readl_poll_timeout()
-Date:   Wed, 26 Jan 2022 18:14:25 +0100
-Message-ID: <5533854.DvuYhMxLoT@kista>
-In-Reply-To: <20220126165215.1921-1-jszhang@kernel.org>
-References: <20220126165215.1921-1-jszhang@kernel.org>
+        Wed, 26 Jan 2022 12:15:12 -0500
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B66C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:15:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:From:Reply-To:Subject:Content-ID:
+        Content-Description:In-Reply-To:References:X-Debbugs-Cc;
+        bh=JcMDygQ3jwximp20F0L2sMP6dOWvpxTtwX9dpTRf13o=; b=FgHcbTeJt+uvUQR6oh7qwpxdYX
+        1mpfNXVC0gmKsHHP2B1yg368NoThRObuLXqxuTsbPF4W+OKfIMecSSYu/RJYBBk2TzT8ibhWgybsA
+        NsKhDbpRmmL7KvxDQ7A7qlOfeGEKTdp0X0JNyGswv3KgbWdbLDl0P7xzzfj2aRCcG3dYYGtn59DDV
+        c7WxPdrkOJWgoFEkyfqNdxgh2GC6W9vg00PNC6MCfjCdMDjDcT9rbGg7HyOA7g7DnebDsi4vr6JGn
+        sqmPBPmpRrEa2twe0/A+fUU4UuXWAOyeKrT1IZDSLk5Bm00r7aSRLg48AI1OWKfK1HkNWZiX1Kqw7
+        fThuM5Hg==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1nClsx-00Gm2K-NS; Wed, 26 Jan 2022 18:15:07 +0100
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.95)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1nClsx-005cI1-6x;
+        Wed, 26 Jan 2022 18:15:07 +0100
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Aurelien Jarno <aurelien@aurel32.net>, stable@vger.kernel.org,
+        Kito Cheng <kito.cheng@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE)
+Subject: [PATCH] riscv: fix build with binutils 2.38
+Date:   Wed, 26 Jan 2022 18:14:42 +0100
+Message-Id: <20220126171442.1338740-1-aurelien@aurel32.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+From version 2.38, binutils default to ISA spec version 20191213. This
+means that the csr read/write (csrr*/csrw*) instructions and fence.i
+instruction has separated from the `I` extension, become two standalone
+extensions: Zicsr and Zifencei. As the kernel uses those instruction,
+this causes the following build failure:
 
-Dne sreda, 26. januar 2022 ob 17:52:15 CET je Jisheng Zhang napisal(a):
-> When readl_poll_timeout() timeout, we'd better directly use its return
-> value.
-> 
-> Before this patch:
-> [    2.145528] dwmac-sun8i: probe of 4500000.ethernet failed with error -14
-> 
-> After this patch:
-> [    2.138520] dwmac-sun8i: probe of 4500000.ethernet failed with error -110
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+  CC      arch/riscv/kernel/vdso/vgettimeofday.o
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
+  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+The fix is to specify those extensions explicitely in -march. However as
+older binutils version do not support this, we first need to detect
+that.
 
-Best regards,
-Jernej
+Cc: stable@vger.kernel.org # 4.15+
+Cc: Kito Cheng <kito.cheng@gmail.com>
+Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+---
+ arch/riscv/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> ---
->  drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/
-ethernet/stmicro/stmmac/dwmac-sun8i.c
-> index 617d0e4c6495..09644ab0d87a 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
-> @@ -756,7 +756,7 @@ static int sun8i_dwmac_reset(struct stmmac_priv *priv)
->  
->  	if (err) {
->  		dev_err(priv->device, "EMAC reset timeout\n");
-> -		return -EFAULT;
-> +		return err;
->  	}
->  	return 0;
->  }
-> -- 
-> 2.34.1
-> 
-> 
-
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 8a107ed18b0d..7d81102cffd4 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -50,6 +50,12 @@ riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
+ riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
+ riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
+ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
++
++# Newer binutils versions default to ISA spec version 20191213 which moves some
++# instructions from the I extension to the Zicsr and Zifencei extensions.
++toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
++riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
++
+ KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
+ KBUILD_AFLAGS += -march=$(riscv-march-y)
+ 
+-- 
+2.34.1
 

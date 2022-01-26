@@ -2,126 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5B849D1DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F2149D1DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 19:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244209AbiAZShY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 13:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S232915AbiAZSi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 13:38:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiAZShX (ORCPT
+        with ESMTP id S229745AbiAZSi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 13:37:23 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFC7C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:37:23 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id z199so644258iof.10
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 10:37:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TR6UGBsD6mZqSpy2OctJC0zY4UM/MRElTKB7h5irR9k=;
-        b=e92ituru0/YRtRP0mrQjeZXgaq1Lsye1MNE2Wy6UZs/QPU/ZO53qD9Zo374/WcdHU9
-         d4/rmHBAgTo/+pfGico+jxFEwgNxJGTXUkGkS8Fus0OAIiVdskj/JfrpaxhuS2DpVQhS
-         DiiPVZrLMwwdRgGO0lztBkHKdQSqSA1knX+D8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TR6UGBsD6mZqSpy2OctJC0zY4UM/MRElTKB7h5irR9k=;
-        b=03YQRJNY5wipR4cUNMTgRIbmydlUxnHTifasmHXasoghOriXJE81n3Jglo/IJxRFA/
-         MCqf1lnCLLveI3T925CJRZ5nM1m6vIVUclAmDt2Jfmrt4asCk0nQw1aY0GDIl1fIralc
-         IHoU1eoDTUFqvmRnOtujp52Nk25QZgl8FFC8Xo1dcnzvXJIkGp5PTlQlFJPLZOezB/3f
-         gZDrSA57/D35xDXg7MHU71VR94iX1Mi3fk54w9MLeGyzd9qbhOzTWECBrbPq5slXO4oz
-         otvs4q/HBT211gO0mbLakJxa4y/dMyzk8Tqs2Roq0wF8q4K/K5Q0mJV+n7t4c7PwoKo2
-         S27w==
-X-Gm-Message-State: AOAM532H0IlurgOQX1/FvaQcb/hP17uhpRvr+HNIDqJ9+OAC8iiLGJF1
-        GqS7tsaEE2zCHmFUC9aCL+TecA==
-X-Google-Smtp-Source: ABdhPJwmnJbruWZjQGV10qzT5AZHzBBPFqlhooBLiMGSnM8yC/ySZqz7Sw7iaJSJal/XANPtnRcRfA==
-X-Received: by 2002:a05:6602:2c0d:: with SMTP id w13mr14373413iov.158.1643222242361;
-        Wed, 26 Jan 2022 10:37:22 -0800 (PST)
-Received: from ?IPv6:2601:282:8200:4c:f2e:a7f7:d853:1e3? ([2601:282:8200:4c:f2e:a7f7:d853:1e3])
-        by smtp.gmail.com with ESMTPSA id a10sm12034794ilv.44.2022.01.26.10.37.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 10:37:22 -0800 (PST)
-Subject: Re: [PATCH 1/3] selftests/zram: Remove obsolete max_comp_streams
- interface
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     "xuyang2018.jy@fujitsu.com" <xuyang2018.jy@fujitsu.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "naresh.kamboju@linaro.org" <naresh.kamboju@linaro.org>,
-        "aleksei.kodanev@bell-sw.com" <aleksei.kodanev@bell-sw.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1639562171-4434-1-git-send-email-xuyang2018.jy@fujitsu.com>
- <1146337d-718e-a369-1012-224f06bc9c2f@linuxfoundation.org>
- <61F0D9F7.1080200@fujitsu.com> <YfD0hiUSf40jX82d@pevik>
- <590c1f1c-2da1-583a-d055-83c15969cf80@linuxfoundation.org>
- <YfGR9xZ2EuMXyAzb@pevik>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e495f173-4e4d-8233-b7a7-2d0707f28df0@linuxfoundation.org>
-Date:   Wed, 26 Jan 2022 11:37:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 26 Jan 2022 13:38:59 -0500
+Received: from mx1.mailbun.net (unknown [IPv6:2602:fd37:1::100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF1DC06161C;
+        Wed, 26 Jan 2022 10:38:58 -0800 (PST)
+Received: from [2607:fb90:d98b:8818:5079:94eb:24d5:e5c3] (unknown [172.58.104.31])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: ariadne@dereferenced.org)
+        by mx1.mailbun.net (Postfix) with ESMTPSA id EF06C11A7C8;
+        Wed, 26 Jan 2022 18:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dereferenced.org;
+        s=mailbun; t=1643222338;
+        bh=RXsSVCy4v5MpoLZDK+6HWpdTcWfXR+/KqheWg5ZsQs0=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References;
+        b=TCqU+V5Uqr5xiwFc2j/zUn99Kj9DK8LK7Uqv3rNZU12sYl3PzAkFqTzgGpFJbHLbq
+         Z9GUIPBIK8WI1xJyHpxC0FPNlIzw4nz18mO3lexnDCnRKMddZJBUye+a4ogwtUEUyT
+         qx6o/Q1Ctay+ao7NxxDskvIX3rKerJiHku9wZ9M69pBk6HwcdaSk+aKJHGZ5Jkl8TN
+         /A5BHD0AG7qtB+B5qoS2p9EVUFVKrezIOZwpPf8QKq6yseo5WJsHBfqEJepPxCGqSh
+         ZICrbYsWIzdZCb6VWx9GaRl0l8qJPUB6NtC8PjTaESVml+TwN3Kckja56Ld17MMT+9
+         vrW7cr0OLOK1Q==
+Date:   Wed, 26 Jan 2022 12:38:50 -0600 (CST)
+From:   Ariadne Conill <ariadne@dereferenced.org>
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Ariadne Conill <ariadne@dereferenced.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
+ do_execveat_common()
+In-Reply-To: <YfGNBz0gigWwNnHn@casper.infradead.org>
+Message-ID: <cd808fc1-ec7a-31d-217e-fbc55f7912a3@dereferenced.org>
+References: <20220126114447.25776-1-ariadne@dereferenced.org> <YfFh6O2JS6MybamT@casper.infradead.org> <877damwi2u.fsf@email.froward.int.ebiederm.org> <YfGNBz0gigWwNnHn@casper.infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <YfGR9xZ2EuMXyAzb@pevik>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/22 11:24 AM, Petr Vorel wrote:
->> On 1/26/22 12:13 AM, Petr Vorel wrote:
->>> Hi all,
-> 
->>>> on 2022/1/26 4:33, Shuah Khan wrote :
->>>>> On 12/15/21 2:56 AM, Yang Xu wrote:
->>>>>> Since kernel commit 43209ea2d17a ("zram: remove max_comp_streams
->>>>>> internals"), zram has
->>>>>> switched to per-cpu streams. Even kernel still keep this interface for
->>>>>> some reasons, but
->>>>>> writing to max_comp_stream doesn't take any effect. So remove it.
-> 
->>>>> I get that max_comp_stream doesn't do anything since this referenced
->>>>> commit. Don't we need this test on older kernels since older kernels
->>>>> still support max_comp_stream?
-> 
->>>> I read the following info from kernel selftest documentation
->>>> https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
-> 
->>>> "The kernel contains a set of “self tests” under the
->>>> tools/testing/selftests/ directory. These are intended to be small tests
->>>> to exercise individual code paths in the kernel. Tests are intended to
->>>> be run after building, installing and booting a kernel."
-> 
->>>> So, we can build older kernel(use older kernel source) if we want to
->>>> test older kernel.
-> 
->>>> IMO, kernel selftest is different from other testsuit(ie ltp, this
->>>> shuould think about api changes because ltp may test on different kernel).
->>> Yes, that's how I understand the difference with approach of in kselftest - the
->>> kernel tree testsuite and LTP - the out-of-tree testsuite.
-> 
-> 
->> Removing max_comp_stream test appears to be motivated by the fact it isn't
->> needed on newer kernels.
-> 
->> Kselftest from mainline can be run on older stable kernels. This is a use-case
->> for a lot test rings. The idea is that when a new test gets added for older
->> code to regression test a bug, we should be able to run that test on an older
->> kernel. This is the reason why we don't remove code that can still test an older
->> kernel and make sure it skips gracefully.
-> 
-> Thanks for clarifying this approach. It might be worth of documenting it in
-> dev-tools/kselftest.rst.
-> 
+Hi,
 
-I will send out a patch clarifying this.
+On Wed, 26 Jan 2022, Matthew Wilcox wrote:
 
-thanks,
--- Shuah
+> On Wed, Jan 26, 2022 at 10:57:29AM -0600, Eric W. Biederman wrote:
+>> Matthew Wilcox <willy@infradead.org> writes:
+>>
+>>> On Wed, Jan 26, 2022 at 11:44:47AM +0000, Ariadne Conill wrote:
+>>>> Interestingly, Michael Kerrisk opened an issue about this in 2008[1],
+>>>> but there was no consensus to support fixing this issue then.
+>>>> Hopefully now that CVE-2021-4034 shows practical exploitative use
+>>>> of this bug in a shellcode, we can reconsider.
+>>>>
+>>>> [0]: https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+>>>> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=8408
+>>>
+>>> Having now read 8408 ... if ABI change is a concern (and I really doubt
+>>> it is), we could treat calling execve() with a NULL argv as if the
+>>> caller had passed an array of length 1 with the first element set to
+>>> NULL.  Just like we reopen fds 0,1,2 for suid execs if they were
+>>> closed.
+>>
+>> Where do we reopen fds 0,1,2 for suid execs?  I feel silly but I looked
+>> through the code fs/exec.c quickly and I could not see it.
+>
+> I'm wondering if I misremembered and it's being done in ld.so
+> rather than in the kernel?  That might be the right place to put
+> this fix too.
+>
+>> I am attracted to the notion of converting an empty argv array passed
+>> to the kernel into something we can safely pass to userspace.
+>>
+>> I think it would need to be having the first entry point to "" instead
+>> of the first entry being NULL.  That would maintain the invariant that you
+>> can always dereference a pointer in the argv array.
+>
+> Yes, I like that better than NULL.
+
+If we are doing {"", NULL}, then I think it makes sense that we could just 
+say argc == 1 at that point, which probably sidesteps the concern Jann 
+raised with the {NULL, NULL} patch, no?
+
+Ariadne

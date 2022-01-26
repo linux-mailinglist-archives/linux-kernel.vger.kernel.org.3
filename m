@@ -2,161 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E00949D14B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AAA49D14E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 18:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243984AbiAZR5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 12:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
+        id S233537AbiAZR5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 12:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244063AbiAZR5R (ORCPT
+        with ESMTP id S244073AbiAZR5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 12:57:17 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4572C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:57:16 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id BD0C392009C; Wed, 26 Jan 2022 18:57:13 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B869E92009B;
-        Wed, 26 Jan 2022 17:57:13 +0000 (GMT)
-Date:   Wed, 26 Jan 2022 17:57:13 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        johan@kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: Re: [PATCH 10/11] serial: make uart_console_write->putchar()'s
- character a char
-In-Reply-To: <20220124071430.14907-11-jslaby@suse.cz>
-Message-ID: <alpine.DEB.2.21.2201261700460.58572@angie.orcam.me.uk>
-References: <20220124071430.14907-1-jslaby@suse.cz> <20220124071430.14907-11-jslaby@suse.cz>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Wed, 26 Jan 2022 12:57:50 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9A0C061747
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:57:50 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id i1so252283pla.9
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 09:57:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bu8dpK8FOO82WqLK7bIdjtIRb6U6eKUm/fxnN5hhOLU=;
+        b=EoIiY8c1gw6Q0sWPnfH6bzTGeFRJpM8VgS/+dwNgxelKm0pW7P+qHLF5fkmPxGp+8A
+         sf1gOTfqdIBrGMeGHmkBytn0/MsT1cc3xrWC9fLzo1a6yD1YflUhO/Z3sCmA9w6+jX9P
+         RshDUfIKSaSJFspjZf/6VHnQxMQF7zijnW1Wo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bu8dpK8FOO82WqLK7bIdjtIRb6U6eKUm/fxnN5hhOLU=;
+        b=TgxtjdJ347erP/Ks5FH4l/HYepguKc1Dy5hKtJpbowoWsrlyXFj8mNlugwy+sQQkDo
+         a4X4xVbGCNUcwnLHrBSpwpMN/DAY7uBV38l5zEHm08G5TiCwjl6vHTP1QgJCsw5Kf50U
+         P+nJITb2Z0qWp31yMB/A9fnXaVuvT3OT7d3Tlqe+/nLK8cvZPwRo/xOlSsAwTppIk7ww
+         xj3nHJvakYEBcdljk4Ctunt+4b31TpnjTpsuP4UnXvvnyCTCWqQur1nmF0OYhq0Di4kK
+         Z5PLhxI2q/K+/yWWcbv2r02yRKkD/9fcF8imOID51lVhQC6ggZQKIsCrtcizXJUJWnYk
+         isNw==
+X-Gm-Message-State: AOAM531NuXTvvloJc0OQQ4NSFWBeg2v5AYYI3Wllv6HceA2o01F5iuea
+        0OsvdoKy1V4ZF7Ero2RkFXXgwA==
+X-Google-Smtp-Source: ABdhPJyMpShiL28dh9NYPZph22H9TXQaralr0gYIruVT7ZCW8+I5Bv0VI7CuFITmtS6ujmf8bYxlEA==
+X-Received: by 2002:a17:902:a404:: with SMTP id p4mr263780plq.2.1643219869683;
+        Wed, 26 Jan 2022 09:57:49 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k16sm8650124pgh.45.2022.01.26.09.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 09:57:49 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Ariadne Conill <ariadne@dereferenced.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] fs/binfmt_elf: Add padding NULL when argc == 0
+Date:   Wed, 26 Jan 2022 09:57:47 -0800
+Message-Id: <20220126175747.3270945-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4170; h=from:subject; bh=nU8KNNO5tauigcRzAerwVslBvcoB9EWNWElP4nO/EqM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh8Yuajn59ZUtWtAgMEfYOk4zJmlQsPZ615MVcTp0A Nqyv3b6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfGLmgAKCRCJcvTf3G3AJg5VD/ 9dlYywEJpU2xSj/LVcgtU5Dkpx8YWd4fQXVbWDTWm7S4ztJs95C6xH2tlVsQoLxvKeEKh3BXLucA9f 2m1Ifm4Zf2a7svGhs2ML2/oYGJq9HZhPBPn7A/0JHu5QWObkDyxY25T2gcyrsJAum5fnlyHH/r6ehe 9F9PahwMJMUJUT5W9l/HpccDfHkGMPIOQ1RY0wyUpn0ZOcs5keZq3nDF+VPyCy0FuwewJiRAVC2TUL M7wpFdOSNdI6vrcJYyzp2WCBG0C36BsnI3ZzWFoy3mgvkkvU3OBvvB/AAUYaUdyPk5En9a7X2KyhBw pSbEpHB21PNaiATsUP0kx8j2XYXH4iOp02y3CsZU0KeO1vGN3qwqt8RaXY0qE57kzS/6mjqgVUDt9W ALy7qKtGrVmdFUtrQ2cc8YGbPBLZNrbO2sCNmvQfR5ebEDSFgsdEZmbsd4SXQi12FtSv3GHzTUe/5y sHgQbPTPj/h1Cj2l1EI5Bxc9fKSRjqQB/ghD3I5KrvYG0z/uRAur9G4iFCO5yYiGmDXV9a5yeOuggB Bv/xIgohqhPzReqrNTff5eJge810sOYMRZGPB8Oz5TwvQFBkeo5kWu0KVIz5AmxQSBf3jGvFBHaCbH sfPDfGebCDaOW6Jul032Hg7dKOzixcz2LBce4qeidtfmJ5TbNjG21MNcm+PQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Jan 2022, Jiri Slaby wrote:
+Quoting Ariadne Conill:
 
-> diff --git a/drivers/tty/serial/dz.c b/drivers/tty/serial/dz.c
-> index e9edabc5a211..3493e201d67f 100644
-> --- a/drivers/tty/serial/dz.c
-> +++ b/drivers/tty/serial/dz.c
-> @@ -802,7 +802,7 @@ static void __init dz_init_ports(void)
->   * restored.  Welcome to the world of PDP-11!
->   * -------------------------------------------------------------------
->   */
-> -static void dz_console_putchar(struct uart_port *uport, int ch)
-> +static void dz_console_putchar(struct uart_port *uport, char ch)
->  {
->  	struct dz_port *dport = to_dport(uport);
->  	unsigned long flags;
+"In several other operating systems, it is a hard requirement that the
+first argument to execve(2) be the name of a program, thus prohibiting
+a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
+but it is not an explicit requirement[1]:
 
- Hmm, this is unsafe, because on the MIPS target the lone `char' type is 
-signed and therefore a call to `->putchar' will see `ch' sign-extended 
-from bit #7 to the width of the argument register used.  Which means that 
-if a character is sent to the console that has its bit #7 set, then the 
-call to:
+    The argument arg0 should point to a filename string that is
+    associated with the process being started by one of the exec
+    functions.
+...
+Interestingly, Michael Kerrisk opened an issue about this in 2008[2],
+but there was no consensus to support fixing this issue then.
+Hopefully now that CVE-2021-4034 shows practical exploitative use[3]
+of this bug in a shellcode, we can reconsider."
 
-		dz_out(dport, DZ_TDR, ch);
+An examination of existing[4] users of execve(..., NULL, NULL) shows
+mostly test code, or example rootkit code. While rejecting a NULL argv
+would be preferred, it looks like the main cause of userspace confusion
+is an assumption that argc >= 1, and buggy programs may skip argv[0]
+when iterating. To protect against userspace bugs of this nature, insert
+an extra NULL pointer in argv when argc == 0, so that argv[1] != envp[0].
 
-i.e.:
+Note that this is only done in the argc == 0 case because some userspace
+programs expect to find envp at exactly argv[argc]. The overlap of these
+two misguided assumptions is believed to be zero.
 
-static void dz_out(struct dz_port *dport, unsigned offset, u16 value)
+[1] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+[2] https://bugzilla.kernel.org/show_bug.cgi?id=8408
+[3] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+[4] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
 
-will send a value to DZ_TDR with bits #15:8 set to all-ones.  And bits 
-#11:8 there are the BREAK control bits, active high, for serial lines #3:0 
-respectively.
+Reported-by: Ariadne Conill <ariadne@dereferenced.org>
+Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Rich Felker <dalias@libc.org>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ fs/binfmt_elf.c | 10 +++++++++-
+ fs/exec.c       |  7 ++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
- We could handle this with a preparatory change by calling:
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 605017eb9349..e456c48658ad 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -297,7 +297,8 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+ 	ei_index = elf_info - (elf_addr_t *)mm->saved_auxv;
+ 	sp = STACK_ADD(p, ei_index);
+ 
+-	items = (argc + 1) + (envc + 1) + 1;
++	/* Make room for extra pointer when argc == 0. See below. */
++	items = (min(argc, 1) + 1) + (envc + 1) + 1;
+ 	bprm->p = STACK_ROUND(sp, items);
+ 
+ 	/* Point sp at the lowest address on the stack */
+@@ -326,6 +327,13 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+ 
+ 	/* Populate list of argv pointers back to argv strings. */
+ 	p = mm->arg_end = mm->arg_start;
++	/*
++	 * Include an extra NULL pointer in argv when argc == 0 so
++	 * that argv[1] != envp[0] to help userspace programs from
++	 * mishandling argc == 0. See fs/exec.c bprm_stack_limits().
++	 */
++	if (argc == 0 && put_user(0, sp++))
++		return -EFAULT;
+ 	while (argc-- > 0) {
+ 		size_t len;
+ 		if (put_user((elf_addr_t)p, sp++))
+diff --git a/fs/exec.c b/fs/exec.c
+index 79f2c9483302..0b36384e55b1 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -495,8 +495,13 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
+ 	 * the stack. They aren't stored until much later when we can't
+ 	 * signal to the parent that the child has run out of stack space.
+ 	 * Instead, calculate it here so it's possible to fail gracefully.
++	 *
++	 * In the case of argc < 1, make sure there is a NULL pointer gap
++	 * between argv and envp to ensure confused userspace programs don't
++	 * start processing from argv[1], thinking argc can never be 0,
++	 * to block them from walking envp by accident. See fs/binfmt_elf.c.
+ 	 */
+-	ptr_size = (bprm->argc + bprm->envc) * sizeof(void *);
++	ptr_size = (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
+ 	if (limit <= ptr_size)
+ 		return -E2BIG;
+ 	limit -= ptr_size;
+-- 
+2.30.2
 
-		dz_out(dport, DZ_TDR, ch & 0xffu);
-
-instead, but perhaps `->putchar' should simply take `unsigned char' or 
-maybe even `u8' as its third argument?
-
-> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-> index c58cc142d23f..68e62703eaa6 100644
-> --- a/include/linux/serial_core.h
-> +++ b/include/linux/serial_core.h
-> @@ -399,7 +399,7 @@ int uart_set_options(struct uart_port *port, struct console
-> *co, int baud,
->  struct tty_driver *uart_console_device(struct console *co, int *index);
->  void uart_console_write(struct uart_port *port, const char *s,
->  			unsigned int count,
-> -			void (*putchar)(struct uart_port *, int));
-> +			void (*putchar)(struct uart_port *, char));
->  
->  /*
->   * Port/driver registration/removal
-
- I.e.:
-
-			void (*putchar)(struct uart_port *, unsigned char));
-
-I can see we get it right already with:
-
-	unsigned char		x_char;			/* xon/xoff char */
-
-and for `dz_transmit_chars' we have:
-
-	unsigned char tmp;
-[...]
-	tmp = xmit->buf[xmit->tail];
-	xmit->tail = (xmit->tail + 1) & (DZ_XMIT_SIZE - 1);
-	dz_out(dport, DZ_TDR, tmp);
-
-(because `struct circ_buf' is generic and not limited to unsigned buffer 
-contents interpretation; it's not clear to me if that has been intended 
-though).
-
-  Maciej

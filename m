@@ -2,115 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 985BB49C83B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F7549C83E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240436AbiAZLDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:03:11 -0500
-Received: from ewsoutbound.kpnmail.nl ([195.121.94.168]:52635 "EHLO
-        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240422AbiAZLDK (ORCPT
+        id S240435AbiAZLE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233215AbiAZLEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:03:10 -0500
-X-KPN-MessageId: 8b98a59c-7e97-11ec-8f5a-005056aba152
-Received: from smtp.kpnmail.nl (unknown [10.31.155.38])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 8b98a59c-7e97-11ec-8f5a-005056aba152;
-        Wed, 26 Jan 2022 12:03:08 +0100 (CET)
+        Wed, 26 Jan 2022 06:04:55 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E228C06161C;
+        Wed, 26 Jan 2022 03:04:55 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id c9so22058851plg.11;
+        Wed, 26 Jan 2022 03:04:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:to:from:subject:mime-version:date:message-id;
-        bh=hpRXVYQAeLF7Lzo7fENLhR+NrCXnkhg6vrFNrU9sDzQ=;
-        b=lPF2MKr43JmTbMmOoxI2HRZKq5NhW7XaLhGLt+Jqdn1RrWVV4s77+65+ZD3i9Bw/C/xeFY0YHg7wQ
-         H0y2noosmHOeMhG5sAxReoxMzDUgTD5/cNanfhjLe7pBJTQgt9hoLicdZkmWfsFJe7lrAE0a9OlS6N
-         O2JFmFos6jvPtGK7YWao37ysGRmDB++ufsNpQgdJdXNNfidwJB0ZY2YXCnYZpbGnKJH5eXu/rp+Nbs
-         HyJfKelp9Frw6DPx/O/5L+S6qNHkr3zMTxj1Q5td/1r4PP3/wvtV9Kh6nnwPV9DDetM/BA0Dh6kTjB
-         qpj+ilkSAJkozm2I/jJVe03xdWyMc6g==
-X-KPN-VerifiedSender: No
-X-CMASSUN: 33|/C7XuEzgB9S8L3t+I4MsWICp/jGohKOA2pwymdZ5uESaHf3NzAUuYLgF9I8xf7/
- xPkgeAeLQPSfzogGGyB5cUQ==
-X-Originating-IP: 80.101.105.217
-Received: from [192.168.1.10] (marune.xs4all.nl [80.101.105.217])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id 8af0249c-7e97-11ec-a3ee-005056abf0db;
-        Wed, 26 Jan 2022 12:03:08 +0100 (CET)
-Message-ID: <ef2317a5-d9a7-a663-2477-b435b777d4e0@xs4all.nl>
-Date:   Wed, 26 Jan 2022 12:03:07 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [BUG] pinctrl: reg-fixed-voltage usb0-vbus: error -EINVAL: can't
- get GPIO
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
-        linus.walleij@linaro.org, mripard@kernel.org, wens@csie.org,
-        jernej.skrabec@gmail.com
-Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        zhangn1985@gmail.com
-References: <Yea3rBmY+MO4AhhV@Red>
- <2f82dbe8-50d6-d905-9065-d3869948aa06@xs4all.nl>
-In-Reply-To: <2f82dbe8-50d6-d905-9065-d3869948aa06@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=RR4ouPM813OFDy+c0edjOK1JRioWIwLVRFDpfla460c=;
+        b=HP+tuwnNz6Y8+d3OMO5kJD2QNVUOgiTLtaVUi8wf1JlUByCQWmDWDbDr/kNgfWoBhb
+         7QYoWHRB9esF44iy+btd+d6ZfWligwEPii61Qclc4Vpjnhjo8wWqsLmwToWWi/Z7KaBl
+         jfKTrU0vecIWJesPNgZBvHRaU+dKM3DgjbfDg7eFmkWUxizbfMcFH9eJRjSbBBMJzsDN
+         WLLuq3MBzCD1SGEJvpT+pawxdNmNOF52nPcZbinDLvNtEnwTF3Jf9hUaV0V60PzZ05dZ
+         ZjfHms8JFXWTiwo7GZTFH4MmCGHkh3HxYxokd2jZRZe2JJ2bxdrWsvXHbqFWgepKJTAa
+         /Eqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=RR4ouPM813OFDy+c0edjOK1JRioWIwLVRFDpfla460c=;
+        b=h7lkzufyQx8eY1BtAcJUHdUbQ5F0XPj3qPuv6zHgqrSHjrBoS7flOhDNHttmPPMOdH
+         OU0paSXJp9I9nn84Lt4/kF7L3j1EmT2PWl347++qsyhTr1TO3weg/9qqcowGqygGkPDK
+         +gqTeQddAD7+KTjWYqKW8orcJbTjGchPvPSoZDSt4DjQPXZWvlwNU0A0nuEgA7O9DAob
+         L67kcHzya5o4yIK57EtYOfllw59AiNVCw5e7jmghwvOYDmhxmmSYav7ci5fmDd+TEmcj
+         6/C+ZdJcvPCeBjaCFqcwCTZ4j4K6vkgOtClSTtdbRbnynMRKTBnSiqTC1irl9gvjyKPV
+         OcOA==
+X-Gm-Message-State: AOAM530whIcYHrdunW2UfnAt5Y9vZn1n4nombAf9mpX4eNyLem+6G+Lm
+        otBCXhCuyKlAR2WknNF6iuc=
+X-Google-Smtp-Source: ABdhPJx2FwKdI5cKtqHUQdZWmt2+i2FAlaBuvr89STNb/9Amb3meY+F5YYosOYWzHq/p02vC+1Ny/w==
+X-Received: by 2002:a17:90b:3106:: with SMTP id gc6mr8081129pjb.77.1643195094691;
+        Wed, 26 Jan 2022 03:04:54 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id s12sm1706080pfd.112.2022.01.26.03.04.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 03:04:54 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] spi: meson-spicc: add IRQ check in meson_spicc_probe
+Date:   Wed, 26 Jan 2022 11:04:47 +0000
+Message-Id: <20220126110447.24549-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/01/2022 15:13, Hans Verkuil wrote:
-> On 1/18/22 13:50, Corentin Labbe wrote:
->> Hello
->>
->> As reported on old googlegroup sunxi mainling list, on linux-next-20220118, USB storage fail to bring up on orangepiPC.
->> We can see some error logs in dmesg:
->> reg-fixed-voltage usb0-vbus: error -EINVAL: can't get GPIO
->> reg-fixed-voltage: probe of usb0-vbus failed with error -22
->>
->> This is bisected to: 8df89a7cbc63c7598c00611ad17b67e8d5b4fad3 pinctrl-sunxi: don't call pinctrl_gpio_direction()
->>
->> Reverting this commit lead to a working USB storage being setuped.
+This check misses checking for  platform_get_irq()'s call and may passes
+the negative error codes to devm_request_irq(), which takes unsigned IRQ #,
+causing it to fail with -EINVAL, overriding an original error code.
+Stop calling devm_request_irq() with invalid IRQ #s.
 
-Hopefully this is resolved by this patch:
+Fixes: 454fa271bc4e ("spi: Add Meson SPICC driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/spi/spi-meson-spicc.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-https://patchwork.linuxtv.org/project/linux-media/patch/0f536cd8-01db-5d16-2cec-ec6d19409a49@xs4all.nl/
-
-Please test!
-
-Regards,
-
-	Hans
-
-> 
-> Hmm, I'll bet it's EPROBE_DEFER related.
-> 
-> The original call (pre that commit) of pinctrl_gpio_direction_output() checks
-> if the pin controller could find the pin (pinctrl_get_device_gpio_range()).
-> 
-> That doesn't happen in the new code.
-> 
-> The sunxi appears to have two pincontrollers in the device tree (&pio and &r_pio),
-> that might be part of the reason this is an issue here.
-> 
-> Linus, should there be a check somewhere for a missing pincontroller in
-> gpiod_get_index()? I suspect that before my commit it was the gpiod_configure_flags
-> call in that function that returned -EPROBE_DEFER, but I'm not completely certain.
-> 
-> If someone can give me a hint about what should be done, then I can make a patch.
-> 
-> The alternative is to revert this sunxi patch, but perhaps this is a deeper
-> problem with these pincontroller drivers that set the direction directly
-> instead of going through pinctrl_gpio_direction_output().
-> 
-> Corentin, it would help me if you can figure out where the EPROBE_DEFER is
-> returned (pre-commit) in drivers/pinctrl/core.c. Probably pinctrl_get_device_gpio_range().
-> 
-> And I'd love to have the WARN_ON(1) output from just before the 'return -EPROBE_DEFER'.
-> 
-> Regards,
-> 
-> 	Hans
-> 
->>
->> Regards
+diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
+index c208efeadd18..0bc7daa7afc8 100644
+--- a/drivers/spi/spi-meson-spicc.c
++++ b/drivers/spi/spi-meson-spicc.c
+@@ -693,6 +693,11 @@ static int meson_spicc_probe(struct platform_device *pdev)
+ 	writel_relaxed(0, spicc->base + SPICC_INTREG);
+ 
+ 	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		ret = irq;
++		goto out_master;
++	}
++
+ 	ret = devm_request_irq(&pdev->dev, irq, meson_spicc_irq,
+ 			       0, NULL, spicc);
+ 	if (ret) {
+-- 
+2.17.1
 

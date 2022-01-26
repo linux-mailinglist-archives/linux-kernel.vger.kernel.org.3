@@ -2,113 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A19DC49D022
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B191F49D027
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 17:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243366AbiAZQ6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 11:58:00 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:53120 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243345AbiAZQ56 (ORCPT
+        id S243371AbiAZQ6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 11:58:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25807 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236746AbiAZQ6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 11:57:58 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52]:54328)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nClcK-004q9Y-Rl; Wed, 26 Jan 2022 09:57:56 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:37556 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nClcJ-004Xqo-M4; Wed, 26 Jan 2022 09:57:56 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Ariadne Conill <ariadne@dereferenced.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-References: <20220126114447.25776-1-ariadne@dereferenced.org>
-        <YfFh6O2JS6MybamT@casper.infradead.org>
-Date:   Wed, 26 Jan 2022 10:57:29 -0600
-In-Reply-To: <YfFh6O2JS6MybamT@casper.infradead.org> (Matthew Wilcox's message
-        of "Wed, 26 Jan 2022 14:59:52 +0000")
-Message-ID: <877damwi2u.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 26 Jan 2022 11:58:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643216325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iwK+6dlb+joz6FreBSpGR4qwGRjjJX0iS2ErICzu918=;
+        b=feaNRKpDopc8OlXZCiyCY/Pla2tQIeEktvHvfWABJ4fYVF2KIFuxN4zAoqgCHknVCSjBF3
+        sTPaUebYFEHB4it/HQ16T1cEqm0gH63T6yD23I2BJdirB3ZFPYafSKQUJoglDrCNnQDquN
+        9AaIJcIOFO2yy8wO5ZmF11XRTjQjHSU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-279-XekiaZAHMzOr1aKLJI_HRA-1; Wed, 26 Jan 2022 11:58:43 -0500
+X-MC-Unique: XekiaZAHMzOr1aKLJI_HRA-1
+Received: by mail-wm1-f71.google.com with SMTP id d140-20020a1c1d92000000b0034edefd55caso2786216wmd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 08:58:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=iwK+6dlb+joz6FreBSpGR4qwGRjjJX0iS2ErICzu918=;
+        b=wggk/CvVBaJ61dcFTAkXtt8IRH2DnqZ+HR1+aqD3QnrGZP7sARnHqRYsG83KcnTbU6
+         qN84nvFtqZa5CICXnx7nFzGs2HMcQZgXnHRVGyAgOcZIkg192m39sofZNEfyuFvjcVeR
+         FcVpJRcqcZKLVAvhDQrilye6jOS670vf0anFE1yKqHwzWGE/T2ZKBU2khCQ53L7TGHMp
+         aZyrS+cM5cMtqIO6KUpBweZD6vYEMQOtGIJGvT5+MlTwoGbJZVNo1cGxYl1I8afPB6VC
+         WsFtxtWmfYHAEI7KNFK0YhoPORRTnAXsV0GtKvIA9HQaiSwUnNV+A12h9+ngxeftUjW0
+         nhXQ==
+X-Gm-Message-State: AOAM532gTXGuVaAnhD8gzRCUdOrSd06hEA5+bcd+R7RaajsuTodKRJJo
+        5WIueZAzs2ur6tuWHBnG7QhcnfZjEsP8HHASNtTb57BZ+uJRk7sS4gOmg4UnLrpBj3fUAfiXx/c
+        bDv4YYNddJyGL7fIKirrcAPON
+X-Received: by 2002:adf:e48c:: with SMTP id i12mr22533548wrm.43.1643216322629;
+        Wed, 26 Jan 2022 08:58:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyzE5Cse7NdwemLeauGToLxmGqUbxzhBHAuDgDEL3m6H11ecldT3oNelWmLpcvXYbUmZZoLrQ==
+X-Received: by 2002:adf:e48c:: with SMTP id i12mr22533533wrm.43.1643216322381;
+        Wed, 26 Jan 2022 08:58:42 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:2700:cdd8:dcb0:2a69:8783? (p200300cbc7092700cdd8dcb02a698783.dip0.t-ipconnect.de. [2003:cb:c709:2700:cdd8:dcb0:2a69:8783])
+        by smtp.gmail.com with ESMTPSA id a9sm4002911wmm.32.2022.01.26.08.58.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 08:58:41 -0800 (PST)
+Message-ID: <5a565d5a-0540-4041-ce63-a8fd5d1bb340@redhat.com>
+Date:   Wed, 26 Jan 2022 17:58:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nClcJ-004Xqo-M4;;;mid=<877damwi2u.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX199LLVbAXOZV45XrLVVWkp0iDR5ez5Z1fE=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.0 T_TooManySym_03 6+ unique symbols in subject
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Matthew Wilcox <willy@infradead.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 412 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 11 (2.6%), b_tie_ro: 9 (2.3%), parse: 0.76 (0.2%),
-         extract_message_metadata: 15 (3.6%), get_uri_detail_list: 1.36 (0.3%),
-         tests_pri_-1000: 16 (4.0%), tests_pri_-950: 1.23 (0.3%),
-        tests_pri_-900: 0.98 (0.2%), tests_pri_-90: 157 (38.0%), check_bayes:
-        141 (34.3%), b_tokenize: 6 (1.4%), b_tok_get_all: 6 (1.5%),
-        b_comp_prob: 2.1 (0.5%), b_tok_touch_all: 124 (30.0%), b_finish: 0.95
-        (0.2%), tests_pri_0: 194 (47.1%), check_dkim_signature: 0.49 (0.1%),
-        check_dkim_adsp: 3.2 (0.8%), poll_dns_idle: 0.50 (0.1%), tests_pri_10:
-        3.0 (0.7%), tests_pri_500: 11 (2.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2] fs/exec: require argv[0] presence in
- do_execveat_common()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration
+ entry
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Jann Horn <jannh@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+References: <20220120202805.3369-1-shy828301@gmail.com>
+ <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
+ <CAG48ez1xuZdELb=5ed1i0ruoFu5kAaWsf0LgRXEGhrDAcHz8fw@mail.gmail.com>
+ <f7f82234-7599-9e39-1108-f8fbe2c1efc9@redhat.com>
+ <CAG48ez17d3p53tSfuDTNCaANyes8RNNU-2i+eFMqkMwuAbRT4Q@mail.gmail.com>
+ <5b4e2c29-8f1a-5a68-d243-a30467cc02d4@redhat.com>
+ <CAHbLzkqLTkVJk+z8wpa03ponf7k30=Sx6qULwsGsvr5cq5d1aw@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHbLzkqLTkVJk+z8wpa03ponf7k30=Sx6qULwsGsvr5cq5d1aw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> writes:
+On 26.01.22 17:53, Yang Shi wrote:
+> On Wed, Jan 26, 2022 at 3:57 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 26.01.22 12:48, Jann Horn wrote:
+>>> On Wed, Jan 26, 2022 at 12:38 PM David Hildenbrand <david@redhat.com> wrote:
+>>>> On 26.01.22 12:29, Jann Horn wrote:
+>>>>> On Wed, Jan 26, 2022 at 11:51 AM David Hildenbrand <david@redhat.com> wrote:
+>>>>>> On 20.01.22 21:28, Yang Shi wrote:
+>>>>>>> The syzbot reported the below BUG:
+>>>>>>>
+>>>>>>> kernel BUG at include/linux/page-flags.h:785!
+>>> [...]
+>>>>>>> RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+>>>>>>> RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+>>> [...]
+>>>>>> Does this point at the bigger issue that reading the mapcount without
+>>>>>> having the page locked is completely unstable?
+>>>>>
+>>>>> (See also https://lore.kernel.org/all/CAG48ez0M=iwJu=Q8yUQHD-+eZDg6ZF8QCF86Sb=CN1petP=Y0Q@mail.gmail.com/
+>>>>> for context.)
+>>>>
+>>>> Thanks for the pointer.
+>>>>
+>>>>>
+>>>>> I'm not sure what you mean by "unstable". Do you mean "the result is
+>>>>> not guaranteed to still be valid when the call returns", "the result
+>>>>> might not have ever been valid", or "the call might crash because the
+>>>>> page's state as a compound page is unstable"?
+>>>>
+>>>> A little bit of everything :)
+>>> [...]
+>>>>> In case you mean "the result might not have ever been valid":
+>>>>> Yes, even with this patch applied, in theory concurrent THP splits
+>>>>> could cause us to count some page mappings twice. Arguably that's not
+>>>>> entirely correct.
+>>>>
+>>>> Yes, the snapshot is not atomic and, thereby, unreliable. That what I
+>>>> mostly meant as "unstable".
+>>>>
+>>>>>
+>>>>> In case you mean "the call might crash because the page's state as a
+>>>>> compound page could concurrently change":
+>>>>
+>>>> I think that's just a side-product of the snapshot not being "correct",
+>>>> right?
+>>>
+>>> I guess you could see it that way? The way I look at it is that
+>>> page_mapcount() is designed to return a number that's at least as high
+>>> as the number of mappings (rarely higher due to races), and using
+>>> page_mapcount() on an unlocked page is legitimate if you're fine with
+>>> the rare double-counting of references. In my view, the problem here
+>>> is:
+>>>
+>>> There are different types of references to "struct page" - some of
+>>> them allow you to call page_mapcount(), some don't. And in particular,
+>>> get_page() doesn't give you a reference that can be used with
+>>> page_mapcount(), but locking a (real, non-migration) PTE pointing to
+>>> the page does give you such a reference.
+>>
+>> I assume the point is that as long as the page cannot be unmapped
+>> because you block it from getting unmapped (PT lock), the compound page
+>> cannot get split. As long as the page cannot get unmapped from that page
+>> table you should have at least a mapcount of 1.
+> 
+> If you mean holding ptl could prevent THP from splitting, then it is
+> not true since you may be in the middle of THP split just exactly like
+> the race condition solved by this patch.
 
-> On Wed, Jan 26, 2022 at 11:44:47AM +0000, Ariadne Conill wrote:
->> Interestingly, Michael Kerrisk opened an issue about this in 2008[1],
->> but there was no consensus to support fixing this issue then.
->> Hopefully now that CVE-2021-4034 shows practical exploitative use
->> of this bug in a shellcode, we can reconsider.
->> 
->> [0]: https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
->> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=8408
->
-> Having now read 8408 ... if ABI change is a concern (and I really doubt
-> it is), we could treat calling execve() with a NULL argv as if the
-> caller had passed an array of length 1 with the first element set to
-> NULL.  Just like we reopen fds 0,1,2 for suid execs if they were
-> closed.
+While you hold the PT lock and discover a mapped page, unmap_page()
+cannot continue and unmap the page. That's what I meant "as long as the
+page cannot be unmapped".
 
-Where do we reopen fds 0,1,2 for suid execs?  I feel silly but I looked
-through the code fs/exec.c quickly and I could not see it.
+What doesn't work is if you hold the PT lock and discover a migration
+entry, because then you're already past unmap_page(). That's the issue
+you're fixing.
 
+> 
+> Just page lock or elevated page refcount could serialize against THP
+> split AFAIK.
+> 
+>>
+>> But yeah, using the mapcount of a page that is not even mapped
+>> (migration entry) is clearly wrong.
+>>
+>> To summarize: reading the mapcount on an unlocked page will easily
+>> return a wrong result and the result should not be relied upon. reading
+>> the mapcount of a migration entry is dangerous and certainly wrong.
+> 
+> Depends on your usecase. Some just want to get a snapshot, just like
+> smaps, they don't care.
 
-I am attracted to the notion of converting an empty argv array passed
-to the kernel into something we can safely pass to userspace.
-
-I think it would need to be having the first entry point to "" instead
-of the first entry being NULL.  That would maintain the invariant that you
-can always dereference a pointer in the argv array.
-
-Eric
-
+Right, but as discussed, even the snapshot might be slightly wrong. That
+might be just fine for smaps (and I would have enjoyed a comment in the
+code stating that :) ).
 
 
+-- 
+Thanks,
+
+David / dhildenb
 

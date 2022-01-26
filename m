@@ -2,85 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0495F49C647
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AFA49C64A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 10:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239114AbiAZJ1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 04:27:00 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:56120 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239116AbiAZJ0z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:26:55 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C01C21A145B;
-        Wed, 26 Jan 2022 10:26:53 +0100 (CET)
-Received: from smtp.na-rdc02.nxp.com (usphx01srsp001v.us-phx01.nxp.com [134.27.49.11])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 836271A06BA;
-        Wed, 26 Jan 2022 10:26:53 +0100 (CET)
-Received: from right.am.freescale.net (right.am.freescale.net [10.81.116.142])
-        by usphx01srsp001v.us-phx01.nxp.com (Postfix) with ESMTP id 6F2B140050;
-        Wed, 26 Jan 2022 02:26:52 -0700 (MST)
-From:   Li Yang <leoyang.li@nxp.com>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Li Yang <leoyang.li@nxp.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>
-Subject: [PATCH] arm64: dts: ls1028a-qds: define mdio slots for networking options
-Date:   Wed, 26 Jan 2022 03:26:50 -0600
-Message-Id: <20220126092650.19962-1-leoyang.li@nxp.com>
-X-Mailer: git-send-email 2.25.1.377.g2d2118b
+        id S239145AbiAZJ1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 04:27:33 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:50074 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239117AbiAZJ11 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 04:27:27 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8BD54212BF;
+        Wed, 26 Jan 2022 09:27:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643189245; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KYpEiGK3ZZrbGlIMn1GiimLekwuOkP30FhRWgFzfNL4=;
+        b=KUrcZW+ZrP3PWs1LyFoOmANdJw2sANUUe/xOvO841e19zsRGMrBBr3/yXceRmChglTXu7K
+        j7EDr7CNbv3L4xOWSrU2DDR11kUZvuxMMLkJBLMso6kwFM9sNkL8XRHnawtahVhu0RNpFT
+        P+Aq7sNAD8s0hO0OtUuqsvHU4k0QIa8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643189245;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KYpEiGK3ZZrbGlIMn1GiimLekwuOkP30FhRWgFzfNL4=;
+        b=eYr7rT7lf9/jXwUJ98PIDo/BEVJVr14oyJxBGtdFFewNToNpRUVXbAWv+agYKUkvuwKGlY
+        VN7deTaKrjC3WpAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BBEBA13B2B;
+        Wed, 26 Jan 2022 09:27:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CNwsLPwT8WFmSQAAMHmgww
+        (envelope-from <jroedel@suse.de>); Wed, 26 Jan 2022 09:27:24 +0000
+Date:   Wed, 26 Jan 2022 10:27:23 +0100
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, hpa@zytor.com,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        David Rientjes <rientjes@google.com>,
+        Cfir Cohen <cfir@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mike Stunes <mstunes@vmware.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Martin Radev <martin.b.radev@gmail.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 03/12] x86/sev: Save and print negotiated GHCB
+ protocol version
+Message-ID: <YfET+7amPSKLnZWu@suse.de>
+References: <20210913155603.28383-1-joro@8bytes.org>
+ <20210913155603.28383-4-joro@8bytes.org>
+ <YYKcS2OIzAV+MTzr@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+In-Reply-To: <YYKcS2OIzAV+MTzr@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ls1028a QDS board support different pluggable PHY cards.  Define the
-nodes for these slots to be updated at boot time with overlay according
-to board setup.
+On Wed, Nov 03, 2021 at 03:27:23PM +0100, Borislav Petkov wrote:
+> On Mon, Sep 13, 2021 at 05:55:54PM +0200, Joerg Roedel wrote:
+> > From: Joerg Roedel <jroedel@suse.de>
+> > 
+> > Save the results of the GHCB protocol negotiation into a data structure
+> > and print information about versions supported and used to the kernel
+> > log.
+> 
+> Which is useful for?
 
-Signed-off-by: Alex Marginean <alexandru.marginean@nxp.com>
-Signed-off-by: Li Yang <leoyang.li@nxp.com>
----
- .../boot/dts/freescale/fsl-ls1028a-qds.dts    | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+For easier debugging, I added a sentence about that to the changelog.
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-index 177bc1405f0f..19d3952dbffe 100644
---- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-+++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
-@@ -107,6 +107,30 @@ qds_phy1: ethernet-phy@5 {
- 				reg = <5>;
- 			};
- 		};
-+
-+		mdio_slot1: mdio@4 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <4>;
-+		};
-+
-+		mdio_slot2: mdio@5 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <5>;
-+		};
-+
-+		mdio_slot3: mdio@6 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <6>;
-+		};
-+
-+		mdio_slot4: mdio@7 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <7>;
-+		};
- 	};
- };
- 
+> > +struct sev_ghcb_protocol_info {
+> 
+> Too long a name - ghcb_info is perfectly fine.
+
+Changed, thanks.
+
 -- 
-2.25.1
+Jörg Rödel
+jroedel@suse.de
+
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5
+90409 Nürnberg
+Germany
+ 
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev
 

@@ -2,144 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 663AE49C532
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B20449C52C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 09:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238350AbiAZIYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 03:24:14 -0500
-Received: from mail-dm6nam12on2137.outbound.protection.outlook.com ([40.107.243.137]:27361
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238378AbiAZIYN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 03:24:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y8rEUjSrjLZhUGAdWNgDfwhIJt9oiJ6+u9XMZaROyM87aqec/su0uxFmoqaBm5kVJa7BaNZrHkdlB2QorfjkPtx+6col0x80KKpNhdSHjirklmP62zDtiWHIaFZCfLKlaKf21ZTN5KegzYymgNzVOt/+a371+JfEmHL3voJJqOK1DBpTWYF3DjDMm12j50N0MIXYss7SD2jFGiByX6deQu+s4Fpbc2x4dUBb3UozRxXLQbONnmPrj20kDC9OPUhXOW5Qi/+NlorS7uMkrSOvG+8/Sd+TXu7Kt1+TAU6S3Fnj2uHiv6/fssJHgJEDJa3cPA38KDu8ynLJJPPH4vPmRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GX0N6vbMZQdrhYZw+HpqCmqFIdiSjLTHQS4EjxOg22c=;
- b=Wfi5R9ZH/uzoyGebsqjMs8e9DToAEo0qweuF5jkGOzGv3tepJy0ZxW1Fu+HGSgjoTc6HqBOkk27K+UPDl2lxgffrJMpSCcx5EjFfv/cc+dk+xHrhK1AwEXuvKBsxN5HvE1gQOQnQZf65Vbm+UsVbkTOeFwSa1Qep6K/kGJcNSCxQ00Kvx6CSg1tCWBW3W+MH3DdSFrbQ7gjb6JULr3mVrSSWzwrL3w3MedZQSqzqBljq8NIi3D+7vYqj1/EKazkyK/oPMIqwO3BD8eXV6J92Eoh03rnOmlD0aUK9IfS/bbGHxDQbwjOUr5zo7cc/rXkZJqOKn8xonrZMgKmEERO79g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GX0N6vbMZQdrhYZw+HpqCmqFIdiSjLTHQS4EjxOg22c=;
- b=t25INnG/O1pbJxXl/EMH8x2oOFubZdtCtq/B+73eBez4TP5vrx/N0ViVOsg8phWXq3QG9plpUj+646IjVrvHEroP/Jg/6qdE3aOYqA4kMfXCMRnbNpWiBDacVlR147eIPAqaDDiYFSyniK/AtOhn1VCxVKWxBDhikoJd2YcSqJU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MW4PR13MB5937.namprd13.prod.outlook.com (2603:10b6:303:1b5::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.10; Wed, 26 Jan
- 2022 08:24:10 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f486:da6a:1232:9008]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f486:da6a:1232:9008%3]) with mapi id 15.20.4930.015; Wed, 26 Jan 2022
- 08:24:10 +0000
-Date:   Wed, 26 Jan 2022 09:24:03 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, oss-drivers@corigine.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] nfp: flower: Use struct_size() helper in kmalloc()
-Message-ID: <20220126082402.GA29381@corigine.com>
-References: <20220125193319.GA73108@embeddedor>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220125193319.GA73108@embeddedor>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: AM4PR05CA0010.eurprd05.prod.outlook.com (2603:10a6:205::23)
- To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+        id S238367AbiAZIW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 03:22:59 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:14662 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238350AbiAZIWz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 03:22:55 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20Q7khuc013832;
+        Wed, 26 Jan 2022 08:22:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=0HKj4vuGbcinAe1GzLh6aNEB1u8mvxh6oyXEwscZzS8=;
+ b=je5oIOzCOR06K6HGBsLxjCBNMVMM8fm9Y8qPd+JibJiJ1gd1UDMm7gOhuLeQrGCtF/2d
+ zJUeU5CWvObIohgb6Vll3EwdToUcgG4LAgWRaa2pXljuuo79qkyZ9jdtQTQWX4IidPzg
+ QBClpp/KVsTJEM/UMXKo6GtTrUA85MspG9jNfZ1LFo5RefAPz+p/9mcilV1pbsq7A7zE
+ xCi1QHrUjW+qux0rNjLpaKOvg5tOhPFnB7Lv+YTfZp7VPF6yO2wuKflyArMrcMwHsDoM
+ f6m8YGzz5rMMZH3hOXKlUj+/0EdhiC2R69aMwaHFFl45TsPCsSdnDorzA2QWvjbSAEvG ng== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du2758kyc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 08:22:54 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20Q8FT5c014780;
+        Wed, 26 Jan 2022 08:22:54 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3du2758ky0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 08:22:54 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20Q8L289025199;
+        Wed, 26 Jan 2022 08:22:52 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3dr9j9jhbp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jan 2022 08:22:52 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20Q8MmHp47186372
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 08:22:49 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DCE13AE045;
+        Wed, 26 Jan 2022 08:22:48 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A156DAE05A;
+        Wed, 26 Jan 2022 08:22:47 +0000 (GMT)
+Received: from [9.171.51.88] (unknown [9.171.51.88])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jan 2022 08:22:47 +0000 (GMT)
+Message-ID: <479f0342-f6f8-9bb5-6ee5-6d788dc25631@linux.ibm.com>
+Date:   Wed, 26 Jan 2022 09:24:39 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0b0199ac-085c-4356-b885-08d9e0a53a66
-X-MS-TrafficTypeDiagnostic: MW4PR13MB5937:EE_
-X-Microsoft-Antispam-PRVS: <MW4PR13MB5937A3699A2FD43F937DF471E8209@MW4PR13MB5937.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /1nS7fd4lAb4XMnG1c7cP24bdNpiPm/3JxjzKITxExUirQxRfWABCinmxE4pv8cHiZnXwTMJ7d0abDjXnzPPTyW+aj0Car8IFgzliTnwF5n3eiS761O/yTEH5yvPeTplA648UdqCWTGMH0vwgVkxs0WVMzReW4ahUeYXsilR4ncrj3GNzFBL4zCLhELXPeHZ8fUpvstNcMKciLpETvl8iuz3Cdtmd8+5yzZi8RYrEqn2UWLNi2GZl7VeSibVpwjg5sUGyqbwDNI2bZVBB70VymbZiNTdwK/aGmrm9OpH3fdDPvaUOlsNO7wbRVfmN9IAilhnC7ETDWAesBdg+wMvEIGqBVfJH1iiqytwDbXTU5l1zRiFpNHgf0Lm+iW+7VeNjf1RMTjI5NQP0DrQqejnwOWfmKLLh7m2+b05e9gosLTDzG5h3yf/t3hy2yM/jvqMWlx6edgVZCwECBix+hcIi9TD3bcM9eGRByZVWeZVeJohCY7M2Or3G2EMdpFQmrmbePIfY+IdeI9JcQ8WsaxQhY4xyxVmUMYYgSDbc2Q8LVtOouqUNSr5g493CDInQsguRisNrFpl8KevLcHDhwr94F0LDVYkebmcoDhvplEq7lDNi8KGsCIGekauH1AJArMXr5Ga4RrpaqTV+Gb3jztsSaG1nm6LwEEcobImtDFxp/OtJjjPz86600FVNiY6INciz+WBm+VbWUdJkB/Ivx2e3klUNDI1HzlGjCMEs5e/GFTFvQvq1/cHk6VYY1v92VtCIKFR+a1seiGLuhQDXsB0LQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(39830400003)(136003)(396003)(376002)(366004)(346002)(1076003)(2906002)(66556008)(8676002)(66946007)(36756003)(8936002)(66476007)(2616005)(44832011)(5660300002)(4326008)(38100700002)(186003)(83380400001)(6486002)(54906003)(966005)(6916009)(86362001)(316002)(6666004)(33656002)(6512007)(6506007)(508600001)(52116002)(20210929001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0WATtZaRK0TpbS4quDs5oQOsOVMlffN3ZsFSXEybQS0EHtqChLxIvNcg4X6Y?=
- =?us-ascii?Q?K+zDJ3cDAvgm1w5PZIjBr/hu80jCim637V/6AHNW/voW6ricNKbR3d/GlzAg?=
- =?us-ascii?Q?Tkl7soWTe07faHqm92fwcO6Ko0NTsZXN0ZjlbvQg0Bz9kcn5KLN4LY3XNkgF?=
- =?us-ascii?Q?ytWYzhyDeyYG8eAK+KTjlt3A3gDlyPGb2Ofa5Gngd/IzD+0TWDMyd9sgEETx?=
- =?us-ascii?Q?uLjfo8gi9I3G/SdbKx87htcXoN07s3RF2fGB2VbhPQxJtPdD9RoXQGwPuDDr?=
- =?us-ascii?Q?CsPTHcVaf3c/4IPTtN8WU4dDsjv18crMPXFe+14a7Web6fP7ZKV18cn4EqVq?=
- =?us-ascii?Q?JzkINxeRCNmDFpDQ1zrHw9znWqxsi/rQdCQWKU+JGH2H2Aq9MjmFyIoT7sd7?=
- =?us-ascii?Q?RTnH7CHBptsFwtWUOqz9OkFTAVU0Y+lHLgk4qL1x8TF7tRI0asaY8tP7BcCI?=
- =?us-ascii?Q?IbWLfwbzdEHXqrsZMFOJ/pMHmjMA783Y17jkfc54hAWzfdxbOKgDXpFWF7LX?=
- =?us-ascii?Q?Yk/4lVnql97o/1MqaVIB3E7PNxT6klQB1ntP+Y7VJC6Wp39SXSzCiRPdZK2A?=
- =?us-ascii?Q?cyf3U85EEGLRXC1Q5egL0Ah3YsWvRhCpb+LzDHi8fewrPd1/EPM8TzrJrwZy?=
- =?us-ascii?Q?iorgzgOBhs1V8jXfRl9SAHfJiuwNQubVz8fAI+OsCh6vY7zFNVbkCBvfjm7H?=
- =?us-ascii?Q?mIPR67Ucmavh7U+83Pm06w6DwZeSPiDZb9AHx9cRZs/0bJ+79gr8jnz/3B31?=
- =?us-ascii?Q?gd3fqIX9wOp09oLi/isEio7+8vXYu/uEmEYGAAKXIZYv+U3lIYWuh31cADC6?=
- =?us-ascii?Q?QkeGrOSc9bKs1O62jpGppyADdGLDYBbtgpoUkl/IkjwMonyZixppShIRB/oa?=
- =?us-ascii?Q?NqYbhyVDWAY7ebELCwrQIRRsptAiDkxz+bTwhn62uc7BGW7kzk3thcY6Tpf/?=
- =?us-ascii?Q?jWxDSNFsWkIxagME2tOube7Sap0B9MYEIvpgGlrdysO+y3Ukc/EJbXMzXvhd?=
- =?us-ascii?Q?ObWO36vRiwSaLwy6BctwexRwznjEctkOzwhtBhFoAgj5k0HEZihR4bH/QHug?=
- =?us-ascii?Q?HOBnqIpJGrYVtDKSuxcdbGZajRAO1NTThxfn07j7IyNDe7dnMD/kLdrH31bC?=
- =?us-ascii?Q?6Qt1GTM9/Q2FYkFdSP+74dOC5S11ZzV0mZdgEGvqGuOkaqKVSpYiE1EcdmSY?=
- =?us-ascii?Q?iAJfNIc2WEPTxU4tfFGVXm9ONf7DAKoxbucqLA7Cs16W09LJrNu1AnfRH16D?=
- =?us-ascii?Q?c+r5KhXXCjDG3I5q3B5fChCoIDjTCKdMJoIk3FDTzd9WLd4eaG5LQnk9/ToL?=
- =?us-ascii?Q?GVu9GNmkm+pJFdvo5+xi42Dkc6WBEg3XcwRCyCegiZRrCE1nyyVy0z0bv7zu?=
- =?us-ascii?Q?8XwUtiyCoOCT8um+kgBhkqinRKw0RV52/nQXeYL+mOBS3exg5k2PmPpjBA4i?=
- =?us-ascii?Q?2NvjVe6XQRRDXYpH3neV6qjYtZBKp42UhgAJ8OAbk4pDk7nhNaftiRgA/zK9?=
- =?us-ascii?Q?6lYBEZ4hniqSUQMIbhwH4d9QzOhN5Xxaf+705mGjF5isDXxatFSg+IHz/BUJ?=
- =?us-ascii?Q?776wRKAVve3gJTnGllfxFp7YvlKc7TUAUl9X9RCsOOXsvnc/0DMTqhDGquIS?=
- =?us-ascii?Q?NANg8JCGpfivrjAOBaABSyQDoggb2+nVqnJ0FjwhzqRlRktmLI9BE3G05jO1?=
- =?us-ascii?Q?8KlBG0Obzj7/CnaHmKgZh9I8UAMTGW7NFgpDACF24jlPhsAYOt354/5fj7WT?=
- =?us-ascii?Q?8MrOeSr82Q=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b0199ac-085c-4356-b885-08d9e0a53a66
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2022 08:24:10.5234
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jw114JF7EZXrQakAbKU6Bj/4K/idjZxKYTxE7mi5KpSceAd9iMV4Ylkxjavbc7df7yYMdHEIV3JHq6k4M97Yn+mnnIDkqvbAc2xZlJERNmY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR13MB5937
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 26/30] vfio-pci/zdev: wire up zPCI adapter interrupt
+ forwarding support
+Content-Language: en-US
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220114203145.242984-1-mjrosato@linux.ibm.com>
+ <20220114203145.242984-27-mjrosato@linux.ibm.com>
+ <75c74f80-0a74-40dc-6797-473522ef2803@linux.ibm.com>
+ <5f3797f7-e127-7de0-dc96-4b04e5ff839a@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <5f3797f7-e127-7de0-dc96-4b04e5ff839a@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0-qreF1s6gmw-5k7SUT5vQn5Mbw0U93G
+X-Proofpoint-ORIG-GUID: kgeb6-9OH2SG9V8RsnCbafHxUt7-rDjT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-26_02,2022-01-25_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 mlxscore=0
+ phishscore=0 mlxlogscore=999 clxscore=1015 adultscore=0 impostorscore=0
+ bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201260044
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 01:33:19PM -0600, Gustavo A. R. Silva wrote:
-> Make use of the struct_size() helper instead of an open-coded version,
-> in order to avoid any potential type mistakes or integer overflows that,
-> in the worst scenario, could lead to heap overflows.
-> 
-> Also, address the following sparse warnings:
-> drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c:359:25: warning: using sizeof on a flexible structure
-> 
-> Link: https://github.com/KSPP/linux/issues/174
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Acked-by: Simon Horman <simon.horman@corigine.com>
 
-> ---
->  drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 1/25/22 15:16, Matthew Rosato wrote:
+> On 1/25/22 7:36 AM, Pierre Morel wrote:
+>>
+>>
+>> On 1/14/22 21:31, Matthew Rosato wrote:
+>>> Introduce support for VFIO_DEVICE_FEATURE_ZPCI_AIF, which is a new
+>>> VFIO_DEVICE_FEATURE ioctl.  This interface is used to indicate that an
+>>> s390x vfio-pci device wishes to enable/disable zPCI adapter interrupt
+>>> forwarding, which allows underlying firmware to deliver interrupts
+>>> directly to the associated kvm guest.
+>>>
+>>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>>> ---
+>>>   arch/s390/include/asm/kvm_pci.h  |  2 +
+>>>   drivers/vfio/pci/vfio_pci_core.c |  2 +
+>>>   drivers/vfio/pci/vfio_pci_zdev.c | 98 +++++++++++++++++++++++++++++++-
+>>>   include/linux/vfio_pci_core.h    | 10 ++++
+>>>   include/uapi/linux/vfio.h        |  7 +++
+>>>   include/uapi/linux/vfio_zdev.h   | 20 +++++++
+>>>   6 files changed, 138 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/s390/include/asm/kvm_pci.h 
+>>> b/arch/s390/include/asm/kvm_pci.h
+>>> index dc00c3f27a00..dbab349a4a75 100644
+>>> --- a/arch/s390/include/asm/kvm_pci.h
+>>> +++ b/arch/s390/include/asm/kvm_pci.h
+>>> @@ -36,6 +36,8 @@ struct kvm_zdev {
+>>>       struct zpci_fib fib;
+>>>       struct notifier_block nb;
+>>>       bool interp;
+>>> +    bool aif;
+>>> +    bool fhost;
+>>
+>> Can we please have a comment on these booleans? > Can we have explicit 
+>> naming to be able to follow their usage more easily?
+>> May be aif_float and aif_host to match with the VFIO feature?
 > 
-> diff --git a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-> index dfb4468fe287..ce865e619568 100644
-> --- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-> +++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-> @@ -356,7 +356,7 @@ __nfp_tun_add_route_to_cache(struct list_head *route_list,
->  			return 0;
->  		}
->  
-> -	entry = kmalloc(sizeof(*entry) + add_len, GFP_ATOMIC);
-> +	entry = kmalloc(struct_size(entry, ip_add, add_len), GFP_ATOMIC);
->  	if (!entry) {
->  		spin_unlock_bh(list_lock);
->  		return -ENOMEM;
-> -- 
-> 2.27.0
+> Sure, rename would be fine.
 > 
+> As for a comment, maybe something like
+> 
+> bool aif_float; /* Enabled for floating interrupt assist */
+> bool aif_host;  /* Require host delivery */
+
+good for me.
+
+
+> 
+> ...
+> 
+>>> diff --git a/include/uapi/linux/vfio_zdev.h 
+>>> b/include/uapi/linux/vfio_zdev.h
+>>> index 575f0410dc66..c574e23f9385 100644
+>>> --- a/include/uapi/linux/vfio_zdev.h
+>>> +++ b/include/uapi/linux/vfio_zdev.h
+>>> @@ -90,4 +90,24 @@ struct vfio_device_zpci_interp {
+>>>       __u32 fh;        /* Host device function handle */
+>>>   };
+>>> +/**
+>>> + * VFIO_DEVICE_FEATURE_ZPCI_AIF
+>>> + *
+>>> + * This feature is used for enabling forwarding of adapter 
+>>> interrupts directly
+>>> + * from firmware to the guest.  When setting this feature, the flags 
+>>> indicate
+>>> + * whether to enable/disable the feature and the structure defined 
+>>> below is
+>>> + * used to setup the forwarding structures.  When getting this 
+>>> feature, only
+>>> + * the flags are used to indicate the current state.
+>>> + */
+>>> +struct vfio_device_zpci_aif {
+>>> +    __u64 flags;
+>>> +#define VFIO_DEVICE_ZPCI_FLAG_AIF_FLOAT 1
+>>> +#define VFIO_DEVICE_ZPCI_FLAG_AIF_HOST 2
+>>
+>> I think we need more information on these flags.
+>> What does AIF_FLOAT and what does AIF_HOST ?
+>>
+> 
+> You actually asked for this already on Jan 19 :), here's a copy of that 
+> response inline here:
+
+:) I forgot
+
+> 
+> I can add a small line comment for each, like:
+> 
+>   AIF_FLOAT 1 /* Floating interrupts enabled */
+>   AIF_HOST 2  /* Host delivery forced */
+> 
+> But here's a bit more detail:
+> 
+> On SET:
+> AIF_FLOAT = 1 means enable the interrupt forwarding assist for floating 
+> interrupt delivery
+> AIF_FLOAT = 0 means to disable it.
+> AIF_HOST = 1 means the assist will always deliver the interrupt to the 
+> host and let the host inject it
+> AIF_HOST = 0 host only gets interrupts when firmware can't deliver
+> 
+> on GET, we just indicate the current settings from the most recent SET, 
+> meaning:
+> AIF_FLOAT = 1 interrupt forwarding assist is currently active
+> AIF_FLOAT = 0 interrupt forwarding assist is not currently active
+> AIF_HOST = 1 interrupt forwarding will always go through host
+> AIF_HOST = 0 interrupt forwarding will only go through the host when 
+> necessary
+> 
+> My thought would be add the line comments in this patch and then the 
+> additional detail in a follow-on patch that adds vfio zPCI to 
+> Documentation/S390
+> 
+
+good for me.
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

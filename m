@@ -2,113 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B1F49C443
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0C849C445
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 08:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237755AbiAZHYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 02:24:51 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:48678 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiAZHYu (ORCPT
+        id S237764AbiAZH0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 02:26:50 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:59284 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229611AbiAZH0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 02:24:50 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B050D618EC;
-        Wed, 26 Jan 2022 07:24:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC69C340E3;
-        Wed, 26 Jan 2022 07:24:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643181889;
-        bh=Vf6yvt5tfs9pOCWrqF30qR+zwo8sK361Ab/pKrnWcIo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nrFcV7OhfKHj/5wtwMBw+AJY/lib6EKHC7GkUOf/tcuMaXqMVpznxiA0y9vfbD131
-         Kc2vg4dXukbWlbFTWNEUra0K7m1MFo4OzCba9rVAi+O9IyT1atRYSykYjtTzMWKKou
-         x9fByzOKEJvnloBZw2S1HdcYrYvZAD3mcc1TAnd7fHx43Ab5ZwapLexFFl1kboILbY
-         CAIty4T5uKqMccrxwN6I3o5pCS6L7+s/ct4QY/PqEI5+oT9uZ6k6iiXupttUnFCVC6
-         xGtkjmtm5cHCgsava+eHnDFfeyeFbRCrPfXGOXk8GP7QwK7zdvbJGYtWdza+BLXO7t
-         wVzs4ANmPh0dQ==
-Date:   Wed, 26 Jan 2022 08:24:42 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Brauner <christian@brauner.io>,
-        James Morris <jmorris@namei.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzbot <syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com>,
-        David Howells <dhowells@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        selinux@vger.kernel.org
-Subject: Re: [PATCH] LSM: general protection fault in legacy_parse_param
-Message-ID: <20220126072442.he4fjegfqnh72kzp@wittgenstein>
-References: <018a9bb4-accb-c19a-5b0a-fde22f4bc822.ref@schaufler-ca.com>
- <018a9bb4-accb-c19a-5b0a-fde22f4bc822@schaufler-ca.com>
- <20211012103243.xumzerhvhklqrovj@wittgenstein>
- <d15f9647-f67e-2d61-d7bd-c364f4288287@schaufler-ca.com>
- <CAHC9VhT=dZbWzhst0hMLo0n7=UzWC5OYTMY=0x=LZ97HwG0UsA@mail.gmail.com>
+        Wed, 26 Jan 2022 02:26:49 -0500
+X-UUID: 574cc1b3af99408e9e28e990f9345e1a-20220126
+X-UUID: 574cc1b3af99408e9e28e990f9345e1a-20220126
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1880652506; Wed, 26 Jan 2022 15:26:48 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 26 Jan 2022 15:26:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 26 Jan 2022 15:26:47 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <wenst@chromium.org>
+CC:     <chun-jie.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>
+Subject: Re: [PATCH 20/31] clk: mediatek: mtk: Clean up included headers
+Date:   Wed, 26 Jan 2022 15:26:47 +0800
+Message-ID: <20220126072647.8794-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220122091731.283592-21-wenst@chromium.org>
+References: <20220122091731.283592-21-wenst@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhT=dZbWzhst0hMLo0n7=UzWC5OYTMY=0x=LZ97HwG0UsA@mail.gmail.com>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 05:18:02PM -0500, Paul Moore wrote:
-> On Tue, Oct 12, 2021 at 10:27 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> > On 10/12/2021 3:32 AM, Christian Brauner wrote:
-> > > On Mon, Oct 11, 2021 at 03:40:22PM -0700, Casey Schaufler wrote:
-> > >> The usual LSM hook "bail on fail" scheme doesn't work for cases where
-> > >> a security module may return an error code indicating that it does not
-> > >> recognize an input.  In this particular case Smack sees a mount option
-> > >> that it recognizes, and returns 0. A call to a BPF hook follows, which
-> > >> returns -ENOPARAM, which confuses the caller because Smack has processed
-> > >> its data.
-> > >>
-> > >> Reported-by: syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com
-> > >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> > >> ---
-> > > Thanks!
-> > > Note, I think that we still have the SELinux issue we discussed in the
-> > > other thread:
-> > >
-> > >       rc = selinux_add_opt(opt, param->string, &fc->security);
-> > >       if (!rc) {
-> > >               param->string = NULL;
-> > >               rc = 1;
-> > >       }
-> > >
-> > > SELinux returns 1 not the expected 0. Not sure if that got fixed or is
-> > > queued-up for -next. In any case, this here seems correct independent of
-> > > that:
-> >
-> > The aforementioned SELinux change depends on this patch. As the SELinux
-> > code is today it blocks the problem seen with Smack, but introduces a
-> > different issue. It prevents the BPF hook from being called.
-> >
-> > So the question becomes whether the SELinux change should be included
-> > here, or done separately. Without the security_fs_context_parse_param()
-> > change the selinux_fs_context_parse_param() change results in messy
-> > failures for SELinux mounts.
+> Some included headers aren't actually used anywhere, while other headers
+> with the declaration of functions and structures aren't directly
+> included.
 > 
-> FWIW, this patch looks good to me, so:
+> Get rid of the unused ones, and add the ones that should be included
+> directly.
 > 
-> Acked-by: Paul Moore <paul@paul-moore.com>
+> On the header side, replace headers that are included purely for data
+> structure definitions with forward declarations. This decreases the
+> amount of preprocessing and compilation effort required for each
+> inclusion.
 > 
-> ... and with respect to the SELinux hook implementation returning 1 on
-> success, I don't have a good answer and looking through my inbox I see
-> David Howells hasn't responded either.  I see nothing in the original
-> commit explaining why, so I'm going to say let's just change it to
-> zero and be done with it; the good news is that if we do it now we've
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+> ---
+>  drivers/clk/mediatek/clk-mtk.c | 13 ++++++-------
+>  drivers/clk/mediatek/clk-mtk.h | 12 ++++++------
+>  2 files changed, 12 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
+> index cd76e1d80242..d2c50186cceb 100644
+> --- a/drivers/clk/mediatek/clk-mtk.c
+> +++ b/drivers/clk/mediatek/clk-mtk.c
+> @@ -4,17 +4,16 @@
+>   * Author: James Liao <jamesjj.liao@mediatek.com>
+>   */
+>  
+> -#include <linux/of.h>
+> -#include <linux/of_address.h>
+> +#include <linux/bitops.h>
+> +#include <linux/clk-provider.h>
+>  #include <linux/err.h>
+>  #include <linux/io.h>
+> -#include <linux/slab.h>
+> -#include <linux/delay.h>
+> -#include <linux/clkdev.h>
+> -#include <linux/module.h>
+>  #include <linux/mfd/syscon.h>
+> -#include <linux/device.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+>  
+>  #include "clk-mtk.h"
+>  #include "clk-gate.h"
+> diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
+> index 4fa658f5d934..7f902581a115 100644
+> --- a/drivers/clk/mediatek/clk-mtk.h
+> +++ b/drivers/clk/mediatek/clk-mtk.h
+> @@ -7,19 +7,19 @@
+>  #ifndef __DRV_CLK_MTK_H
+>  #define __DRV_CLK_MTK_H
+>  
+> -#include <linux/regmap.h>
+> -#include <linux/bitops.h>
+>  #include <linux/clk-provider.h>
+> -#include <linux/platform_device.h>
+> -
+> -struct clk;
+> -struct clk_onecell_data;
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/types.h>
+>  
+>  #define MAX_MUX_GATE_BIT	31
+>  #define INVALID_MUX_GATE_BIT	(MAX_MUX_GATE_BIT + 1)
+>  
+>  #define MHZ (1000 * 1000)
+>  
+> +struct platform_device;
+> +
+>  struct mtk_fixed_clk {
+>  	int id;
+>  	const char *name;
+> -- 
+> 2.35.0.rc0.227.g00780c9af4-goog
 
 
-It was originally supposed to return 1 but then this got changed but - a
-classic - the documentation wasn't.
-
-> got almost a full cycle in linux-next to see what falls apart.  As far
-
-Sweet!

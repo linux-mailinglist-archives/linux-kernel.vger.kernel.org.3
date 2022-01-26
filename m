@@ -2,119 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 838D149C985
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F038349C995
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 13:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241213AbiAZMWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 07:22:37 -0500
-Received: from foss.arm.com ([217.140.110.172]:36110 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234079AbiAZMWg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:22:36 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69FA6D6E;
-        Wed, 26 Jan 2022 04:22:36 -0800 (PST)
-Received: from [10.57.5.122] (unknown [10.57.5.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BEC863F793;
-        Wed, 26 Jan 2022 04:22:35 -0800 (PST)
-Subject: Re: [PATCH 2/5] kselftest: Fix vdso_test_time to pass on skips
-To:     Cristian Marussi <cristian.marussi@arm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shuah@kernel.org
-References: <20220126102723.23300-1-cristian.marussi@arm.com>
- <20220126102723.23300-3-cristian.marussi@arm.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <8d513be7-a99d-2b7f-6767-a378742ef3fa@arm.com>
-Date:   Wed, 26 Jan 2022 12:22:45 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S241235AbiAZMZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 07:25:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49754 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241220AbiAZMZ3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:25:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1984DB81CBB;
+        Wed, 26 Jan 2022 12:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 240A7C340E3;
+        Wed, 26 Jan 2022 12:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643199926;
+        bh=LEmuz0iDH1iogcBanvIn+OqS5lY1EbahPHRPxL6nifk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vO4veg9JTHiSb2719N6wyiIBx+hK1D8lPbRNAOKHBFLF6Wpp/gKp1ToGQWCmlkxMA
+         lsoiMdEIfelcUzmtXBZ/oLns4zx2CF2Qk7w99xvLY9iqYql+VvqyDwWqUbMvOwKcdA
+         96k8/k+VnZ8t1Y61Cp9VFOP9V8aOdDR+2Mg3tbeo=
+Date:   Wed, 26 Jan 2022 13:25:23 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
+Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk
+ for DWC3 controller
+Message-ID: <YfE9s06CIv1P3bA/@kroah.com>
+References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
+ <Ydb79/twbxLDJB8/@kroah.com>
+ <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <20220126102723.23300-3-cristian.marussi@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Cristian,
+On Fri, Jan 07, 2022 at 10:27:59AM +0530, Sandeep Maheswaram wrote:
+> 
+> On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
+> > On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram wrote:
+> > > Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+> > > Runtime suspend of phy drivers was failing from DWC3 driver as runtime
+> > > usage value is 2 because the phy is initialized from DWC3 and HCD core.
+> > > DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+> > > initialization in HCD core.
+> > > 
+> > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > ---
+> > > v5:
+> > > Added comment to explain the change done.
+> > > v4:
+> > > Changed pdev->dev.parent->of_node to sysdev->of_node
+> > > 
+> > >   drivers/usb/host/xhci-plat.c | 8 ++++++++
+> > >   1 file changed, 8 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> > > index c1edcc9..e6014d4 100644
+> > > --- a/drivers/usb/host/xhci-plat.c
+> > > +++ b/drivers/usb/host/xhci-plat.c
+> > > @@ -327,6 +327,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
+> > >   					 &xhci->imod_interval);
+> > >   	}
+> > > +	/*
+> > > +	 * Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+> > > +	 * DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+> > > +	 * initialization in HCD core.
+> > > +	 */
+> > > +	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
+> > > +		xhci->quirks |= XHCI_SKIP_PHY_INIT;
+> > > +
+> > Why is this function caring about dwc3 stuff?  Shoudn't this be a
+> > "generic" device property instead of this device-specific one?
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> This quirk is set only if required for some controllers (eg: dwc3 & cdns3).
+> 
+> Please check below commit.
+> 
+> https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/
 
-On 1/26/22 10:27 AM, Cristian Marussi wrote:
-> When a vDSO symbol is not found, all the testcases in vdso_test_abi usually
-> report a SKIP, which, in turn, is reported back to Kselftest as a PASS.
-> 
-> Testcase vdso_test_time, instead, reporting a SKIP, causes the whole set of
-> tests within vdso_test_abi to be considered FAIL when symbol is not found.
-> 
-> Fix it reporting a PASS when vdso_test_time cannot find the vdso symbol.
-> 
-> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
-> Seen as a failure on both a JUNO and a Dragonboard on both recent and old
-> kernels/testruns:
-> 
-> root@deb-buster-arm64:~# /opt/ksft/vDSO/vdso_test_abi
-> [vDSO kselftest] VDSO_VERSION: LINUX_2.6.39
-> The time is 1637922136.675304
-> The time is 1637922136.675361000
-> The resolution is 0 1
-> clock_id: CLOCK_REALTIME [PASS]
-> The time is 1927.760604900
-> The resolution is 0 1
-> clock_id: CLOCK_BOOTTIME [PASS]
-> The time is 1637922136.675649700
-> The resolution is 0 1
-> clock_id: CLOCK_TAI [PASS]
-> The time is 1637922136.672000000
-> The resolution is 0 4000000
-> clock_id: CLOCK_REALTIME_COARSE [PASS]
-> The time is 1927.761005600
-> The resolution is 0 1
-> clock_id: CLOCK_MONOTONIC [PASS]
-> The time is 1927.761132780
-> The resolution is 0 1
-> clock_id: CLOCK_MONOTONIC_RAW [PASS]
-> The time is 1927.757093740
-> The resolution is 0 4000000
-> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
-> Could not find __kernel_time              <<< This caused a FAIL as a whole
-> root@deb-buster-arm64:~# echo $?
-> 1
-> 
-> e.g.: https://lkft.validation.linaro.org/scheduler/job/2192570#L27778
-> ---
->  tools/testing/selftests/vDSO/vdso_test_abi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
-> index 3d603f1394af..7dcc66d1cecf 100644
-> --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
-> +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
-> @@ -90,8 +90,9 @@ static int vdso_test_time(void)
->  		(vdso_time_t)vdso_sym(version, name[2]);
->  
->  	if (!vdso_time) {
-> +		/* Skip if symbol not found: consider skipped tests as passed */
->  		printf("Could not find %s\n", name[2]);
-> -		return KSFT_SKIP;
-> +		return KSFT_PASS;
+That commit has nothing to do with a specific "dwc3" quirk anywhere.
+Why not set this flag in the specific platform xhci driver instead where
+it belongs?
 
-My preference would be to keep "KSFT_SKIP" here and verify separately the return
-status of each test. This would maintain compliance with the kselftest API.
-Could you please test the patch in-reply-to this one (will be sent shortly) and
-let me know if it works for you?
+thanks,
 
-If it does feel free to fold it in the next version of your series with your
-"Tested-by:" otherwise let me know.
-
-Thanks!
-
->  	}
->  
->  	long ret = vdso_time(NULL);
-> 
-
--- 
-Regards,
-Vincenzo
+greg k-h

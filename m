@@ -2,250 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7860049C8A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF7549C8B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 12:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240720AbiAZL3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 06:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233661AbiAZL3p (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 06:29:45 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52162C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:29:45 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id p5so70303893ybd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 03:29:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+Va33nfeAzMZW/tMs1IXvtrj8MnxTpme5rJKE5VcjMc=;
-        b=hlRzkGHlU47aLEzQ8Bf+yh3l5z3TpOuA5U6Vh7t79b3Qlv+Ugi8ev05yns+U4kDwpp
-         DJSAmAY9aPNgJc8AVotBxG1N5ts9ZJBux7fov8pkKxG8pGGlFvahBbMb0FjbkDb7qD6e
-         zIGuIPaRiYbFjKBMVuwICmp++ZTZGlxaTZIEl38MlRi4fJ2v3zOvmanEdS1MZhzozrO1
-         nr2tafXPvebP4PuzHqieFrOwsSj9/arzTM/jq/hp/lu8qrw1f53Pl7I7OKoHJsAdIj+8
-         0IPyUGpCqOp0yCebTPGlYKQegZW4DdkNBgmUv4j6e50RUMjS9XGCG1r4JpnlNbnvndle
-         DUJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+Va33nfeAzMZW/tMs1IXvtrj8MnxTpme5rJKE5VcjMc=;
-        b=kcY1W2elfWsIWln7qCizswjpMQyr0ZgtsH7H9o+tWBrXrWUOwS/a0syetS35ZGF+8B
-         I/Mker2yExUBI6UF4DypM2JUwZGuMsZM9alNvh3e0RlRqq5bnJOAlMk2RiO5NYfoc3b3
-         rY767TOhfIm4oTiYOCE3lFhYv25kXB67og14wt4IJQCqO4HTutr0OvQ/ZNaUEfOsI1VU
-         ZKCiSRHYGlp9uAODSZt7FZAX072Ud66j+j5T8Y4Lr1aVTwRUGn5zX2iKNfhcsjSP8lQZ
-         iq9+/O0Q01xuSrOKh9FCXxecro9kwIZ7Z0U6+1E4ts2+s9XbxkCvjvOXGAzbInx8faQ1
-         shdQ==
-X-Gm-Message-State: AOAM531uVHr625JPTkdUlBoKPObGHLj39yccsB+ZVv41l9Em1r7cDGwF
-        r0QuZqyNnDKOjOr188CN+sWxmLwKtqs61Jf1bgS/fQ==
-X-Google-Smtp-Source: ABdhPJzgkoKuI0ewWUqJ3CsdEdfeOZrEQHxW+vpJlgG1WP2xpaQNj7AjJFxkN/acYRM3y0v8NShZYZO3JzaFK74TyEw=
-X-Received: by 2002:a25:ada2:: with SMTP id z34mr28377228ybi.684.1643196584374;
- Wed, 26 Jan 2022 03:29:44 -0800 (PST)
+        id S240754AbiAZLdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 06:33:09 -0500
+Received: from mout.gmx.net ([212.227.17.20]:56729 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233650AbiAZLdH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 06:33:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643196752;
+        bh=ueVSIcxpI4wb87mye8wIz8iKVZJedVj2OTFb34Zb6YY=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=iDR5QdDImtHs4b+EWGN4Zlac4jhNsWxQW2CHzY244RoHnNlw1Kfnvtr355ihZwCkO
+         D1Pk2jxF20/VBlvONGeoKlzInC9SXwQHJxGM2yJurYSTFMPVuVN9jgxUOXB+7mwBz+
+         3DvzE9/k23CnCZtWBzSX2zV6BUeH4X1807J+4pcc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.143.57]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRmfi-1mp57i2cag-00TGEp; Wed, 26
+ Jan 2022 12:32:32 +0100
+Message-ID: <6f508ff0-1807-7665-6c93-7f3eea4a1bdd@gmx.de>
+Date:   Wed, 26 Jan 2022 12:31:21 +0100
 MIME-Version: 1.0
-References: <20220125155315.237374794@linuxfoundation.org>
-In-Reply-To: <20220125155315.237374794@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 26 Jan 2022 16:59:32 +0530
-Message-ID: <CA+G9fYsAgQV6JjA8+SnrkWOK-e8p1+51-CP_L2nS7o8ktRHybA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 000/316] 5.4.174-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v1 0/4] fbtft: Unorphan the driver for maintenance
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Andy Shevchenko <andy@kernel.org>, linux-fbdev@vger.kernel.org,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <991e988b-7225-881b-a59a-33c3eae044be@suse.de>
+ <CAHp75Vc2cjHkJwNSiJ-HSWBG=DYy68uvD7QQzNdRp3mQxoY1nw@mail.gmail.com>
+ <3877516e-3db3-f732-b44f-7fe12b175226@gmx.de>
+ <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <b13c0634-e766-74db-ab1f-672f5d0c04d6@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:4HZA8Qd20gmrmhW2cpUf8m+vF9K5egFJXwowyq7nggCgVsSvkVX
+ tPf8ABG1TX7j0jk6Ed7SW/E9sDrSMdvJUwy62XuqffmOcS9Vlgi96RiwbEIGs7zq3v0KabM
+ Khfh4zMbE+MPXnKyCRBqnEwaPoRxSJN3Fin1OQU4D5C2JmA6cgw/CMquGJwW5c5KxMseV6Y
+ vnG0xxDTiukhiSyrKNzwg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Dpvrygk+4eI=:fJrjPI5s8+iZM9bBt9xy71
+ RkTAg+MmJ/clyv2eDy/O5ilyfJD7lhdTeMmV/YqDaAvE2qCQCQ8J7hDqOuQfHt9cw9P13V177
+ HXDQym0myRQptV3yXW06Ggyl2t6W58ecl9jyxPgL5Zy8xXfJU2dZp+XAAcbY7jyMDapSAnnKK
+ 2Jz0JUdjHS1I1TwkpWxZVUbIT6AgNc6C1OGN7wejb4rot/CtAjZLBWVr+55gyNQfVk0fE5r7E
+ auBYm3ronpYAs7LmyWl00bUVLFn3xnHrpeI1r55HVnYUUcfS08xv0kEoDWSevlXg1ZdTHbBYW
+ AQlIkQLBV3vIdACrPt80JQI73+mxD9tkWt7+TlBqHdgW8LQohHGlwqte+/FNTUfY2vdZ/eqiv
+ hvFV0FvSyBmc44ZzSKDHLCeUax3i/MLrvu6t74+xSl/gbowszAQGjsocY+SrOqZDdo5bTh5Un
+ PGtIqDjvYBm4YJKqGRFotv5M/OtLwJ7jOVxhczyy/j2EEs/WoOu9on923QehNJY2waeZKkGVT
+ EXuH+cSvT5jSNTLbNx7ILxvZ2W6rKJWT9KNeVGY5OmF4sgI0rbvEsfdOOmnnNew42zGCU8t+I
+ Uql8KEQUOqJmRHX98KanolZzF7JcuGTLZOt0C41wPkMyk11GbobIMyg7b1R4TDDC69PIoyM0C
+ P2u22f+nh0Bruq0ij5jwmcyvpQ0iOkTJJJv2q2yg40mkXXVM8M+T2a3JFkUD2vEdsIMxzAT4T
+ IMzbu7dl7yNBbncfiYHc9XvAWqHC9U4fNtmVzECGap5rG1y2e7NV7X1JHrfsGU92+/YRCHvy3
+ d9uE37ZPIegM8pQKYLvpT+TTGVhb9HiNEIgUi+GxW4X1nGS39+1vzjl0UBepYnrgsKEkgu6RJ
+ DQ5GhNrIYKFxUynvCkZf/Co3ItER4DnoeE+wRw17PLKN2UGWunq0J1wB5Hd0P1tiOA862SMQx
+ qbbPTxfAqEtkgFjoFr/OEVbbhVc1ahDNQ7RqPtIR917k2biWwl8T3pAWTONDhBJUW9yBVAdTf
+ O1xZXT8RPaqy/MtUwux8QMyunc4OTUisOTsDDRFTmHlhVYJMTo3p1WpHXKdreNqJk1W/GXXNR
+ NKdyWyFoZRbM8E=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 22:02, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On 1/26/22 12:18, Javier Martinez Canillas wrote:
+> On 1/26/22 11:59, Helge Deller wrote:
+>> On 1/26/22 11:02, Andy Shevchenko wrote:
 >
-> This is the start of the stable review cycle for the 5.4.174 release.
-> There are 316 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> [snip]
 >
-> Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> Anything received after that time might be too late.
+>>> P.S. For the record, I will personally NAK any attempts to remove that
+>>> driver from the kernel. And this is another point why it's better not
+>>> to be under the staging.
+>>
+>> I agree. Same as for me to NAK the disabling of fbcon's acceleration
+>> features or even attempting to remove fbdev altogether (unless all
+>> relevant drivers are ported to DRM).
+>>
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.174-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
+> But that will never happen if we keep moving the goal post.
 >
-> thanks,
->
-> greg k-h
+> At some point new fbdev drivers should not be added anymore, otherwise
+> the number of existing drivers that need conversion will keep growing.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Good point, and yes you are right!
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+I think the rule should be something like:
 
-## Build
-* kernel: 5.4.174-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.4.y
-* git commit: b9fb58c8fa638249487dbb2e90ffed66f1d742bc
-* git describe: v5.4.173-317-gb9fb58c8fa63
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-73-317-gb9fb58c8fa63
+New graphics devices (e.g. max. 3 years old from now) usually are
+capable to be ported to DRM.
+For those graphics cards we should put a hard stop and not include them
+as new driver into the fbdev framework. Inclusion for those will only
+happen as DRM driver.
 
-## Test Regressions (compared to v5.4.173-321-g34a12dd3db7f)
-No test regressions found.
+In the same manner there are old graphic cards or very specific devices
+(e.g. more than 3 years old or only used in niche-use cases)
+which have limitations and thus can't easily be ported to DRM.
+For those it's still acceptable to include them as legacy fbdev driver,
+because the work needed in DRM to support such cards or to be able that
+they run fast enough with DRM just doesn't pay off the efforts which are
+needed to keep them as DRM driver.
 
-## Metric Regressions (compared to v5.4.173-321-g34a12dd3db7f)
-No metric regressions found.
+Would that be acceptable?
 
-## Test Fixes (compared to v5.4.173-321-g34a12dd3db7f)
-No test fixes found.
-
-## Metric Fixes (compared to v5.4.173-321-g34a12dd3db7f)
-No metric fixes found.
-
-## Test result summary
-total: 93196, pass: 77436, fail: 828, skip: 13486, xfail: 1446
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 258 total, 258 passed, 0 failed
-* arm64: 36 total, 31 passed, 5 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 20 total, 20 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 36 total, 36 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Helge

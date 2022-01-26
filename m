@@ -2,359 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCB649C15E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F5C49C15F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Jan 2022 03:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236450AbiAZCeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Jan 2022 21:34:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30118 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236441AbiAZCeF (ORCPT
+        id S236458AbiAZCev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Jan 2022 21:34:51 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:53924 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232619AbiAZCet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Jan 2022 21:34:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643164444;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2lYZcdoMmNoVVOhgdbLqUSBCGCBawSokbUMPIdI5srg=;
-        b=C38Ekw8t9wYv56rpwzJoAgBTz1N3Sv79KBckuCIeCl+CTlOaEBJkOqjUtZ3ZyuI9ajFFdb
-        yhaEl7jpzzsr7jVP+G3stZ9G7+zS5yHEJqQHxkUdhAtTzB46qqCLs54jujcPMNN7xXEWHT
-        8AhXOgPWZjdLfB8l9wd7i8ekeWM5RGg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-171-Teu1OUp7Phin521DAM5dgQ-1; Tue, 25 Jan 2022 21:33:58 -0500
-X-MC-Unique: Teu1OUp7Phin521DAM5dgQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F16F183DD22;
-        Wed, 26 Jan 2022 02:33:56 +0000 (UTC)
-Received: from localhost (ovpn-12-215.pek2.redhat.com [10.72.12.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C55ABB18AE;
-        Wed, 26 Jan 2022 02:33:37 +0000 (UTC)
-Date:   Wed, 26 Jan 2022 10:33:34 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Tue, 25 Jan 2022 21:34:49 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20PMn6YP019615;
+        Wed, 26 Jan 2022 02:34:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=gTbIY7u+eMx2HHxWJQLUCR3u/gO2rulPImejZtl4ycU=;
+ b=xZJ5OLRSNtmDd+p8o85MytNvw4ul9/S6Apl/zGxM3mIXHYSa2OGZRvGzAkHAmYPhti0U
+ srdnoeF1ZfSdZYbm9qCSpQ5FyyZinMhigQU1XmaA2ABvQ8XyQYeJHPiVoX3dF1E5HFBM
+ 2o1s/FcpWkJPRAzUTwVuc9G+7+DqM1/dMecTllTgDY5Y0NNv6psdlQbq28fm5AsDGD3B
+ CyZkEcZTZS7c0D7YX2zjjbDd/1Yhrz/Emhce387UkrmLae3IyFrGodQpFe4j2atkZuur
+ 4BtKkUBmFkjUkQ7MNITBL00meeKeHBx4lVxjp4B/SsmmmGU5bDWG4R5eq9dhwfy9y+6k ow== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dsy7aw2cp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 02:34:27 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20Q2GRG5177688;
+        Wed, 26 Jan 2022 02:34:26 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2043.outbound.protection.outlook.com [104.47.73.43])
+        by userp3020.oracle.com with ESMTP id 3drbcq74m4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jan 2022 02:34:26 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TVx4FQ8EveXPhy3+xEnHKqNcL8+EUip7P0V1/ybDR3oEc2xggs5jGkS4Pkh8ioY8yehzMJRvyRlVMkePGim5h7K09jxaC9jDsJT8QaxuV/jUc7xELZ0SZ0/XHTyQk2Bc6luCJ0UoBPN0zRgvoQYlbMnQPsGCVTE5bhbswjvxhnSXqoSIJ3e44Pp5ofcvbwP4iMUxRG/PBkLEKLPzKQA1uq5FYsYQogbTDX9zKBGVZr2zrJ0q9cdQ/i8Fu0pBBhnltXSb8wz5tEOkPTbifn87XUUHFHZIMbgZe3lttSGHG+lgWenHa6x737x9hddeBEKY8JIRGmE3pQPgq+JGBexLyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gTbIY7u+eMx2HHxWJQLUCR3u/gO2rulPImejZtl4ycU=;
+ b=drk/xaBpaur5Y5IPmxPUB6ex03V3g/wVuMEDtgL4v8d0rQWxbf3BKOXbQBLKrvyXNY9QWwr+3uj5eSjUi8DduJz4TCkMqnUhZv2nQK7vWoNW5/XAobsOOpSWAw1c94qD7pP8X6PpFURBVQcuUyrjIkDs2jTbsh1u4HOKQRa1663hcB59JqzVbODrnqRjdvl889W646M5V7WgioIwLgY7VCwa36KYnr7tIH96C1gIDDYfD5SBjWmd34RhB74XRdYOZa18bhkQtlZ9XAcLk3FbFmCWelXZ3tCHnJwqe4103Q+3CaXrr2NUHGzkaIQybk0zmrjwk52GXNO84mbBoQEdtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gTbIY7u+eMx2HHxWJQLUCR3u/gO2rulPImejZtl4ycU=;
+ b=ua8EzzuJ5oeeV1a7deDywO3CeitnfAQblwwt9XZJJutIhta/odLhGh62SNJdjYl/kjfbdBLH0n9WPQZzvMAMAwIbQQ9vyjfiJfXZnAusqy1EXszl7HSSmIkjJlTJlyPdGpN0l9Agchfx67AVPxTvo1CLSzkK3jz3kFDthkS3IN8=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by PH0PR10MB4454.namprd10.prod.outlook.com (2603:10b6:510:3a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Wed, 26 Jan
+ 2022 02:34:24 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3857:3a25:3444:fdd3]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::3857:3a25:3444:fdd3%5]) with mapi id 15.20.4909.019; Wed, 26 Jan 2022
+ 02:34:24 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+CC:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
+        Song Liu <songliubraving@fb.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Rik van Riel <riel@surriel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH v2] proc/vmcore: fix possible deadlock on concurrent mmap
- and read
-Message-ID: <20220126023334.GA30295@MiWiFi-R3L-srv>
-References: <20220119193417.100385-1-david@redhat.com>
+        Michel Lespinasse <walken.cr@gmail.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Rom Lemarchand <romlem@google.com>
+Subject: Re: [PATCH v4 54/66] mm/memcontrol: Stop using mm->highest_vm_end
+Thread-Topic: [PATCH v4 54/66] mm/memcontrol: Stop using mm->highest_vm_end
+Thread-Index: AQHX5r/0O9Cuh4hAxUG/bXy3RaGp8KxsEj4AgAjasQA=
+Date:   Wed, 26 Jan 2022 02:34:24 +0000
+Message-ID: <20220126023418.p5m52qqqvhlek3nr@revolver>
+References: <20211201142918.921493-1-Liam.Howlett@oracle.com>
+ <20211201142918.921493-55-Liam.Howlett@oracle.com>
+ <3d5a348a-1c99-9cb5-3279-31a9419da032@suse.cz>
+In-Reply-To: <3d5a348a-1c99-9cb5-3279-31a9419da032@suse.cz>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5d6fa651-d777-4513-195d-08d9e0745db9
+x-ms-traffictypediagnostic: PH0PR10MB4454:EE_
+x-microsoft-antispam-prvs: <PH0PR10MB44545A7C62FEAE78353656D0FD209@PH0PR10MB4454.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4125;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 66xpv3EI7Q5LYcQ3OIaPuMfbm2i0LxvkYwkngsggwr40jgbb3MGBXEU00mu4F0a9wIK0b+cHBBe+aR8ZbkCoIk+ezMMbF+337cTv1DXyIIvARv7Jx4WUBNxvzsje7/RSB9AOk3E7JeqLhpNgT/Gqagx3IXFqZt0ms/N7zMU0EhYIIGnNiy1rebj9z9Hi2EYhlRuOxBMxwdQyBc29Ov8UJmc2sCo3CeYfAuhk3GyFnl0PXftj90ipdJkJxFVVjVf+tDcQAp4GbQQhv/qcICYzYJsFuSnelfImmBTK23+1NcZekbaUE1LGdxXEbC3YnghtxRYPdY1MTvl0QE1pCs29jpdpB71XpsT4Rhfc9WvobcwoXP/3Yr02CZnMwOXU9SrMoZv1LixCY0YBHIc3y95U2OGBr5ROfzMlZUTHviFSSyzd34vIDRsX3uttHKmlvbgyNCj28OOcddYwl6ruTNBr9OajAwVDuPP5CmSEoIOGZ4hJqKf/nC06Jjb9tZIOG5bAW+x5SSc1GbiHKY45mD5XbKD2oXxWdyW7PXGuh/kBnyxIfVGwPIbPqmm7l5OPF2fFdqO7e69onf/p9Wg3mKr2wLJxT3UxQeEcYdSx6CY745Jtjn4L2/+q7bz2j85RYP3Lcofw+O2tHVmQWy+j8YDmI3m0Bx0Azg7dxZ+fPDB04uTchERnGyjOwROedSUIi2bUFaYG9VnDuJpASEQljrrNyw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(366004)(9686003)(6486002)(186003)(38070700005)(44832011)(122000001)(1076003)(26005)(316002)(86362001)(6506007)(53546011)(71200400001)(2906002)(6512007)(54906003)(6916009)(66476007)(76116006)(8676002)(66556008)(64756008)(66446008)(66946007)(7416002)(91956017)(5660300002)(83380400001)(4326008)(33716001)(508600001)(8936002)(38100700002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SvtwqtEsRrgtN2bozGyrZ9ti2j0k/VoZG/y/B5YV7AnHfJtLIDBVqdrMmWLG?=
+ =?us-ascii?Q?MZCWs1tARRMuSE7+KU6UNNfaMZgsExMONjBqI/1oLKs1D1gbd6Z4q7HIf1Rc?=
+ =?us-ascii?Q?e6DotyCouFTQyVxFBXZe7PdirbhAch0I1fuz+MYKyEtZyx6QNd/1lq52ngup?=
+ =?us-ascii?Q?kuW/kgTQv+yiQYXrhoHUkOZOGpdxvpH8iaPyXVkTtzoMXBdb6mRQnhXhNvSL?=
+ =?us-ascii?Q?/YHavfNwWsYAdl1g2AmOkaed4iZOTHQLO84l/Ph/eKENNOQ4MOamuRdMGr0F?=
+ =?us-ascii?Q?NcpsWHi/acSY9HiwzSCSuuP1IrBuvXdx/cWJVtw51ZDsSfWwZAXmFJ08uARj?=
+ =?us-ascii?Q?1eemiBex0CkptnMsv7YxEMXkd0wm75BeoU773pPj4GGsSiIS85fKQ5fX9Wma?=
+ =?us-ascii?Q?62maDK27LdowW9lmKb8sI8ePnA4KIMixIh8dkD0PT0KkgobiJMgJB5qLwKsW?=
+ =?us-ascii?Q?6LVFbdrbMbFlD1lp8okTfGJ7ZKXCl3h95aUWpt8HdscZ2NIgzAlgZMy3DMBw?=
+ =?us-ascii?Q?foi5XGPmfHhESR4rwRGKRMh5kFTO8J40dUzGyD7eZaF+cVoJkeqhUHpTORPk?=
+ =?us-ascii?Q?hDDCK5TZ9Un3xh6I/tCXkmN+2C79XKBrHIgszPsKCFfMx+PvqVkqhkhPMGR2?=
+ =?us-ascii?Q?sJgapQWP7F6UdVnZ/a3FqsJXqyHhqVUyJ3FzleaA5gSGuuS8VIsmQBni6Ph1?=
+ =?us-ascii?Q?jlRQ21uMWL+CXrs+SpW6nCsfdZ0Odb8VB40qHS9z6QU8VY5+FNY0mrHH39Mr?=
+ =?us-ascii?Q?TWvA8AyUH+3HcN+M5YKVystqEZTXQGiO/p362yusfg/Jio+P63H7sy44Zv9G?=
+ =?us-ascii?Q?6xHsx962yJ/8cyZ0bTn0qYXFZV5OPu1PCCSWgA2E2SHCJiHsADlNR4rVLRJO?=
+ =?us-ascii?Q?ZbmABEySh4zMLA7XSQNaMbyp/VAxN/x/XAQ7Gs0eRHxmdtMZgODKtUvDhs6B?=
+ =?us-ascii?Q?fIyhGUN/8jFBNiMMJFGuookXC823kbFw41Ab6fqvKT/zD405McRQjlby+9+b?=
+ =?us-ascii?Q?dOOIXZqZ3f5Ui1FmsFcYr9XoifT4lS7KTQ9IXxj6/Vdm5Qkv5MHeX9giBz4i?=
+ =?us-ascii?Q?wnxW77emcCsmnRRUp6OSksv+4ry4gcAu8s37U0zBrmBMAlSo4feF2QLaswhI?=
+ =?us-ascii?Q?nrNCa4A+Lh1L8qlpXToG8f7LxkrQxYXHoYHk3+sspe8/3XE+cK/X3A4mLfsZ?=
+ =?us-ascii?Q?pyq54IjpwUPvAHmaC48ZDSMAofS9edshMrSzy2c/7GWOG7jQJuRTieqLzP3R?=
+ =?us-ascii?Q?dquTHzINRK7+LnFOtkG38lWaHx+lf7NJ+rqKgHkszVDZ/yRmQ4dl3ZfCTPFu?=
+ =?us-ascii?Q?WO3VIFPCsJei1AHu5MBfDYeIE4CQuj9esC6qFqNoFQXK1FOdlCiyOvTF68CK?=
+ =?us-ascii?Q?lMJ5kgfr1ngKEp6bsvOvSSRkjLA+bP37ySe2KJkIaMmIVdHQ3lWANQqjpYDP?=
+ =?us-ascii?Q?rqJsT3PTZ4K7cWcWOmvQY5Q0BdeAIbQnBJGeRR9ignE3NBbqM2cBFKSXBAsL?=
+ =?us-ascii?Q?bco/qkEgTBCX8+71eviucBSqu2wDfllZ8WLZOVuzKvZDAjcyhVJvJTk9CiOv?=
+ =?us-ascii?Q?BVzv/Xt1brTh7HGhyapwPn9naZjK9BdbpIFOlgh+eW6dAUapFPX0KxQRwJY6?=
+ =?us-ascii?Q?xeYZs1nbjr20ou0q1nDHvBo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <171D1A0D26EF4F48827920D9122320E8@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220119193417.100385-1-david@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d6fa651-d777-4513-195d-08d9e0745db9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2022 02:34:24.1782
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ae5PRiTqFON181wFbzqByN3mA13WT5WG2zb0BAIehLj214CM1K7qJnjdtMEBvuE5Sl9QNYOrZN15UX186EjBNQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4454
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10238 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 malwarescore=0
+ spamscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2201260008
+X-Proofpoint-GUID: fgxkf3PmpzIbz-uXbAYBLPPJtlMFUxkH
+X-Proofpoint-ORIG-GUID: fgxkf3PmpzIbz-uXbAYBLPPJtlMFUxkH
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/19/22 at 08:34pm, David Hildenbrand wrote:
-> Lockdep noticed that there is chance for a deadlock if we have
-> concurrent mmap, concurrent read, and the addition/removal of a
-> callback.
-> 
-> As nicely explained by Boqun:
-> 
-> "
-> Lockdep warned about the above sequences because rw_semaphore is a fair
-> read-write lock, and the following can cause a deadlock:
-> 
-> 	TASK 1			TASK 2		TASK 3
-> 	======			======		======
-> 	down_write(mmap_lock);
-> 				down_read(vmcore_cb_rwsem)
-> 						down_write(vmcore_cb_rwsem); // blocked
-> 	down_read(vmcore_cb_rwsem); // cannot get the lock because of the fairness
-> 				down_read(mmap_lock); // blocked
+* Vlastimil Babka <vbabka@suse.cz> [220120 06:21]:
+> On 12/1/21 15:30, Liam Howlett wrote:
+> > From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> >=20
+> > Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> > ---
+> >  mm/memcontrol.c | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index 781605e92015..ac95b3eca557 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -5808,7 +5808,7 @@ static unsigned long mem_cgroup_count_precharge(s=
+truct mm_struct *mm)
+> >  	unsigned long precharge;
+> > =20
+> >  	mmap_read_lock(mm);
+> > -	walk_page_range(mm, 0, mm->highest_vm_end, &precharge_walk_ops, NULL)=
+;
+> > +	walk_page_range(mm, 0, -1, &precharge_walk_ops, NULL);
+>=20
+> Wouldn't ULONG_MAX look better?
 
-It's almost impossible to have chance to register or unregister vmcore
-cb during vmcore dumping, so the deadlock can only exist theorictically.
-While muting the lockdep is still good. This patch looks good to me.
-Thanks for the fix.
+Sure, I'm happy enough to use ULONG_MAX.
 
-Acked-by: Baoquan He <bhe@redhat.com>
-
-> 
-> IOW, a reader can block another read if there is a writer queued by the
-> second reader and the lock is fair.
-> "
-> 
-> To fix, convert to srcu to make this deadlock impossible. We need srcu as
-> our callbacks can sleep. With this change, I cannot trigger any lockdep
-> warnings.
-> 
-> [    6.386519] ======================================================
-> [    6.387203] WARNING: possible circular locking dependency detected
-> [    6.387965] 5.17.0-0.rc0.20220117git0c947b893d69.68.test.fc36.x86_64 #1 Not tainted
-> [    6.388899] ------------------------------------------------------
-> [    6.389657] makedumpfile/542 is trying to acquire lock:
-> [    6.390308] ffffffff832d2eb8 (vmcore_cb_rwsem){.+.+}-{3:3}, at: mmap_vmcore+0x340/0x580
-> [    6.391290]
-> [    6.391290] but task is already holding lock:
-> [    6.391978] ffff8880af226438 (&mm->mmap_lock#2){++++}-{3:3}, at: vm_mmap_pgoff+0x84/0x150
-> [    6.392898]
-> [    6.392898] which lock already depends on the new lock.
-> [    6.392898]
-> [    6.393866]
-> [    6.393866] the existing dependency chain (in reverse order) is:
-> [    6.394762]
-> [    6.394762] -> #1 (&mm->mmap_lock#2){++++}-{3:3}:
-> [    6.395530]        lock_acquire+0xc3/0x1a0
-> [    6.396047]        __might_fault+0x4e/0x70
-> [    6.396562]        _copy_to_user+0x1f/0x90
-> [    6.397093]        __copy_oldmem_page+0x72/0xc0
-> [    6.397663]        read_from_oldmem+0x77/0x1e0
-> [    6.398229]        read_vmcore+0x2c2/0x310
-> [    6.398742]        proc_reg_read+0x47/0xa0
-> [    6.399265]        vfs_read+0x101/0x340
-> [    6.399751]        __x64_sys_pread64+0x5d/0xa0
-> [    6.400314]        do_syscall_64+0x43/0x90
-> [    6.400778]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [    6.401390]
-> [    6.401390] -> #0 (vmcore_cb_rwsem){.+.+}-{3:3}:
-> [    6.402063]        validate_chain+0x9f4/0x2670
-> [    6.402560]        __lock_acquire+0x8f7/0xbc0
-> [    6.403054]        lock_acquire+0xc3/0x1a0
-> [    6.403509]        down_read+0x4a/0x140
-> [    6.403948]        mmap_vmcore+0x340/0x580
-> [    6.404403]        proc_reg_mmap+0x3e/0x90
-> [    6.404866]        mmap_region+0x504/0x880
-> [    6.405322]        do_mmap+0x38a/0x520
-> [    6.405744]        vm_mmap_pgoff+0xc1/0x150
-> [    6.406258]        ksys_mmap_pgoff+0x178/0x200
-> [    6.406823]        do_syscall_64+0x43/0x90
-> [    6.407339]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [    6.407975]
-> [    6.407975] other info that might help us debug this:
-> [    6.407975]
-> [    6.408945]  Possible unsafe locking scenario:
-> [    6.408945]
-> [    6.409684]        CPU0                    CPU1
-> [    6.410196]        ----                    ----
-> [    6.410703]   lock(&mm->mmap_lock#2);
-> [    6.411121]                                lock(vmcore_cb_rwsem);
-> [    6.411792]                                lock(&mm->mmap_lock#2);
-> [    6.412465]   lock(vmcore_cb_rwsem);
-> [    6.412873]
-> [    6.412873]  *** DEADLOCK ***
-> [    6.412873]
-> [    6.413522] 1 lock held by makedumpfile/542:
-> [    6.414006]  #0: ffff8880af226438 (&mm->mmap_lock#2){++++}-{3:3}, at: vm_mmap_pgoff+0x84/0x150
-> [    6.414944]
-> [    6.414944] stack backtrace:
-> [    6.415432] CPU: 0 PID: 542 Comm: makedumpfile Not tainted 5.17.0-0.rc0.20220117git0c947b893d69.68.test.fc36.x86_64 #1
-> [    6.416581] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-> [    6.417272] Call Trace:
-> [    6.417593]  <TASK>
-> [    6.417882]  dump_stack_lvl+0x5d/0x78
-> [    6.418346]  print_circular_bug+0x5d7/0x5f0
-> [    6.418821]  ? stack_trace_save+0x3a/0x50
-> [    6.419273]  ? save_trace+0x3d/0x330
-> [    6.419681]  check_noncircular+0xd1/0xe0
-> [    6.420217]  validate_chain+0x9f4/0x2670
-> [    6.420715]  ? __lock_acquire+0x8f7/0xbc0
-> [    6.421234]  ? __lock_acquire+0x8f7/0xbc0
-> [    6.421685]  __lock_acquire+0x8f7/0xbc0
-> [    6.422127]  lock_acquire+0xc3/0x1a0
-> [    6.422535]  ? mmap_vmcore+0x340/0x580
-> [    6.422965]  ? lock_is_held_type+0xe2/0x140
-> [    6.423432]  ? mmap_vmcore+0x340/0x580
-> [    6.423893]  down_read+0x4a/0x140
-> [    6.424321]  ? mmap_vmcore+0x340/0x580
-> [    6.424800]  mmap_vmcore+0x340/0x580
-> [    6.425237]  ? vm_area_alloc+0x1c/0x60
-> [    6.425661]  ? trace_kmem_cache_alloc+0x30/0xe0
-> [    6.426174]  ? kmem_cache_alloc+0x1e0/0x2f0
-> [    6.426641]  proc_reg_mmap+0x3e/0x90
-> [    6.427052]  mmap_region+0x504/0x880
-> [    6.427462]  do_mmap+0x38a/0x520
-> [    6.427842]  vm_mmap_pgoff+0xc1/0x150
-> [    6.428260]  ksys_mmap_pgoff+0x178/0x200
-> [    6.428701]  do_syscall_64+0x43/0x90
-> [    6.429126]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [    6.429745] RIP: 0033:0x7fc7359b8fc7
-> [    6.430157] Code: 00 00 00 89 ef e8 69 b3 ff ff eb e4 e8 c2 64 01 00 66 90 f3 0f 1e fa 41 89 ca 41 f7 c1 ff 0f 00 00 75 10 b8 09 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 21 c3 48 8b 05 21 7e 0e 00 64 c7 00 16 00 00
-> [    6.432147] RSP: 002b:00007fff35b4c208 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
-> [    6.432970] RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fc7359b8fc7
-> [    6.433746] RDX: 0000000000000001 RSI: 0000000000400000 RDI: 0000000000000000
-> [    6.434529] RBP: 000055a1125ecf10 R08: 0000000000000003 R09: 0000000000002000
-> [    6.435310] R10: 0000000000000002 R11: 0000000000000246 R12: 0000000000002000
-> [    6.436093] R13: 0000000000400000 R14: 000055a1124269e2 R15: 0000000000000000
-> [    6.436887]  </TASK>
-> 
-> Reported-by: Baoquan He <bhe@redhat.com>
-> Fixes: cc5f2704c934 ("proc/vmcore: convert oldmem_pfn_is_ram callback to more generic vmcore callbacks")
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Baoquan He <bhe@redhat.com>
-> Cc: Vivek Goyal <vgoyal@redhat.com>
-> Cc: Dave Young <dyoung@redhat.com>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
-> 
-> Was: [PATCH v1] proc/vmcore: fix false positive lockdep warning
-> 
-> v1 -> v2:
-> - Adjust subject/description
-> - Add Fixes:
-> 
-> ---
->  fs/proc/vmcore.c | 41 ++++++++++++++++++++++-------------------
->  1 file changed, 22 insertions(+), 19 deletions(-)
-> 
-> diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-> index 702754dd1daf..edeb01dfe05d 100644
-> --- a/fs/proc/vmcore.c
-> +++ b/fs/proc/vmcore.c
-> @@ -62,7 +62,8 @@ core_param(novmcoredd, vmcoredd_disabled, bool, 0);
->  /* Device Dump Size */
->  static size_t vmcoredd_orig_sz;
->  
-> -static DECLARE_RWSEM(vmcore_cb_rwsem);
-> +static DEFINE_SPINLOCK(vmcore_cb_lock);
-> +DEFINE_STATIC_SRCU(vmcore_cb_srcu);
->  /* List of registered vmcore callbacks. */
->  static LIST_HEAD(vmcore_cb_list);
->  /* Whether the vmcore has been opened once. */
-> @@ -70,8 +71,8 @@ static bool vmcore_opened;
->  
->  void register_vmcore_cb(struct vmcore_cb *cb)
->  {
-> -	down_write(&vmcore_cb_rwsem);
->  	INIT_LIST_HEAD(&cb->next);
-> +	spin_lock(&vmcore_cb_lock);
->  	list_add_tail(&cb->next, &vmcore_cb_list);
->  	/*
->  	 * Registering a vmcore callback after the vmcore was opened is
-> @@ -79,14 +80,14 @@ void register_vmcore_cb(struct vmcore_cb *cb)
->  	 */
->  	if (vmcore_opened)
->  		pr_warn_once("Unexpected vmcore callback registration\n");
-> -	up_write(&vmcore_cb_rwsem);
-> +	spin_unlock(&vmcore_cb_lock);
->  }
->  EXPORT_SYMBOL_GPL(register_vmcore_cb);
->  
->  void unregister_vmcore_cb(struct vmcore_cb *cb)
->  {
-> -	down_write(&vmcore_cb_rwsem);
-> -	list_del(&cb->next);
-> +	spin_lock(&vmcore_cb_lock);
-> +	list_del_rcu(&cb->next);
->  	/*
->  	 * Unregistering a vmcore callback after the vmcore was opened is
->  	 * very unusual (e.g., forced driver removal), but we cannot stop
-> @@ -94,7 +95,9 @@ void unregister_vmcore_cb(struct vmcore_cb *cb)
->  	 */
->  	if (vmcore_opened)
->  		pr_warn_once("Unexpected vmcore callback unregistration\n");
-> -	up_write(&vmcore_cb_rwsem);
-> +	spin_unlock(&vmcore_cb_lock);
-> +
-> +	synchronize_srcu(&vmcore_cb_srcu);
->  }
->  EXPORT_SYMBOL_GPL(unregister_vmcore_cb);
->  
-> @@ -103,9 +106,8 @@ static bool pfn_is_ram(unsigned long pfn)
->  	struct vmcore_cb *cb;
->  	bool ret = true;
->  
-> -	lockdep_assert_held_read(&vmcore_cb_rwsem);
-> -
-> -	list_for_each_entry(cb, &vmcore_cb_list, next) {
-> +	list_for_each_entry_srcu(cb, &vmcore_cb_list, next,
-> +				 srcu_read_lock_held(&vmcore_cb_srcu)) {
->  		if (unlikely(!cb->pfn_is_ram))
->  			continue;
->  		ret = cb->pfn_is_ram(cb, pfn);
-> @@ -118,9 +120,9 @@ static bool pfn_is_ram(unsigned long pfn)
->  
->  static int open_vmcore(struct inode *inode, struct file *file)
->  {
-> -	down_read(&vmcore_cb_rwsem);
-> +	spin_lock(&vmcore_cb_lock);
->  	vmcore_opened = true;
-> -	up_read(&vmcore_cb_rwsem);
-> +	spin_unlock(&vmcore_cb_lock);
->  
->  	return 0;
->  }
-> @@ -133,6 +135,7 @@ ssize_t read_from_oldmem(char *buf, size_t count,
->  	unsigned long pfn, offset;
->  	size_t nr_bytes;
->  	ssize_t read = 0, tmp;
-> +	int idx;
->  
->  	if (!count)
->  		return 0;
-> @@ -140,7 +143,7 @@ ssize_t read_from_oldmem(char *buf, size_t count,
->  	offset = (unsigned long)(*ppos % PAGE_SIZE);
->  	pfn = (unsigned long)(*ppos / PAGE_SIZE);
->  
-> -	down_read(&vmcore_cb_rwsem);
-> +	idx = srcu_read_lock(&vmcore_cb_srcu);
->  	do {
->  		if (count > (PAGE_SIZE - offset))
->  			nr_bytes = PAGE_SIZE - offset;
-> @@ -165,7 +168,7 @@ ssize_t read_from_oldmem(char *buf, size_t count,
->  						       offset, userbuf);
->  		}
->  		if (tmp < 0) {
-> -			up_read(&vmcore_cb_rwsem);
-> +			srcu_read_unlock(&vmcore_cb_srcu, idx);
->  			return tmp;
->  		}
->  
-> @@ -176,8 +179,8 @@ ssize_t read_from_oldmem(char *buf, size_t count,
->  		++pfn;
->  		offset = 0;
->  	} while (count);
-> +	srcu_read_unlock(&vmcore_cb_srcu, idx);
->  
-> -	up_read(&vmcore_cb_rwsem);
->  	return read;
->  }
->  
-> @@ -568,18 +571,18 @@ static int vmcore_remap_oldmem_pfn(struct vm_area_struct *vma,
->  			    unsigned long from, unsigned long pfn,
->  			    unsigned long size, pgprot_t prot)
->  {
-> -	int ret;
-> +	int ret, idx;
->  
->  	/*
-> -	 * Check if oldmem_pfn_is_ram was registered to avoid
-> -	 * looping over all pages without a reason.
-> +	 * Check if a callback was registered to avoid looping over all
-> +	 * pages without a reason.
->  	 */
-> -	down_read(&vmcore_cb_rwsem);
-> +	idx = srcu_read_lock(&vmcore_cb_srcu);
->  	if (!list_empty(&vmcore_cb_list))
->  		ret = remap_oldmem_pfn_checked(vma, from, pfn, size, prot);
->  	else
->  		ret = remap_oldmem_pfn_range(vma, from, pfn, size, prot);
-> -	up_read(&vmcore_cb_rwsem);
-> +	srcu_read_unlock(&vmcore_cb_srcu, idx);
->  	return ret;
->  }
->  
-> -- 
-> 2.34.1
-> 
-
+>=20
+> >  	mmap_read_unlock(mm);
+> > =20
+> >  	precharge =3D mc.precharge;
+> > @@ -6106,9 +6106,7 @@ static void mem_cgroup_move_charge(void)
+> >  	 * When we have consumed all precharges and failed in doing
+> >  	 * additional charge, the page walk just aborts.
+> >  	 */
+> > -	walk_page_range(mc.mm, 0, mc.mm->highest_vm_end, &charge_walk_ops,
+> > -			NULL);
+> > -
+> > +	walk_page_range(mc.mm, 0, -1, &charge_walk_ops, NULL);
+> >  	mmap_read_unlock(mc.mm);
+> >  	atomic_dec(&mc.from->moving_account);
+> >  }
+> =

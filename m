@@ -2,155 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 620DC49DF40
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C029849DF3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235281AbiA0KXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 05:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239489AbiA0KW2 (ORCPT
+        id S239268AbiA0KXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 05:23:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36903 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239460AbiA0KWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 05:22:28 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FC2C061769
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:22:15 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 901F51EC053C;
-        Thu, 27 Jan 2022 11:22:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643278929;
+        Thu, 27 Jan 2022 05:22:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643278939;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oX1Ujj3Hq6Ixhsq/96M+Xpp/rbNY1TXsGRzT8a9NeUY=;
-        b=JdpXMGqVtmel7Gn7TfU9zyN0KQuq2M3e3EBUcJnG9tPoxmA8HTzKgG8Fd9HpRfNmcGNary
-        TcsoPTg1n/I7+D3OOODyw+44oYG3M7YJRsOSrjD4GyID/g2tK6acT81yxyRWNpj3fVSm//
-        GTApE7Cq5qDq+HHPHB9xPY8KcjY9+lI=
-Date:   Thu, 27 Jan 2022 11:22:03 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Smita Koralahalli Channabasappa 
-        <smita.koralahallichannabasappa@amd.com>,
-        Wei Huang <wei.huang2@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v2 2/6] x86/cpu: Merge Intel and AMD ppin_init() functions
-Message-ID: <YfJyS6/zXGIoasGO@zn.tnic>
-References: <20220107225442.1690165-1-tony.luck@intel.com>
- <20220121174743.1875294-1-tony.luck@intel.com>
- <20220121174743.1875294-3-tony.luck@intel.com>
+        bh=1PmCWGvE0rw+ZGEFxB1GG8/3CTt9oGBb3Q0WVUXx7pM=;
+        b=QowtFisz6gBMm6NSaGau11RYs943eW9gaC4uPhoF710gRD3uuSLub3T4/4qTPFEbLxr3tv
+        uvGbdKDW3efZMixaD8+P08cxFLVAIRsw2HGmIEDDfZTQNpjyKK3aZSgbOPDbmCnbn/9uyD
+        t3qK0zOuIcifhtypt/hygiuEQzr9Oqo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517--pHUm6U3P_uReOfqOdUVDw-1; Thu, 27 Jan 2022 05:22:16 -0500
+X-MC-Unique: -pHUm6U3P_uReOfqOdUVDw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 815F41F6B0;
+        Thu, 27 Jan 2022 10:22:14 +0000 (UTC)
+Received: from starship (unknown [10.40.192.15])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C50781059119;
+        Thu, 27 Jan 2022 10:22:11 +0000 (UTC)
+Message-ID: <495878a237748e3652619e692706b9352969f435.camel@redhat.com>
+Subject: Re: [PATCH 0/5] iommu/amd: fixes for suspend/resume
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Mike Lothian <mike@fireburn.co.uk>
+Cc:     dwmw@amazon.co.uk, iommu@lists.linux-foundation.org,
+        joro@8bytes.org, linux-kernel@vger.kernel.org,
+        suravee.suthikulpanit@amd.com, tglx@linutronix.de, will@kernel.org
+Date:   Thu, 27 Jan 2022 12:22:10 +0200
+In-Reply-To: <CAHbf0-EY9_27Tw3v-pfwXDaTuwpsuuFqrJDKZ8C_cW+-PwXwww@mail.gmail.com>
+References: <20211123161038.48009-1-mlevitsk@redhat.com>
+         <20220125150832.1570-1-mike@fireburn.co.uk>
+         <6f0d9b07073ca6d3657500ec076edc1ad2a3e40a.camel@redhat.com>
+         <CAHbf0-FJ0c1yAumKCnXLKKFN=tzeJxSd3HyP=dUOBgBTxVG5fw@mail.gmail.com>
+         <7809c3253a997330102b9d779206312d6b3bcaf1.camel@redhat.com>
+         <CAHbf0-F8Uemcu8FVcZvY0CPOf4kFXOcaCzWF1ZCwkpa3tyut3A@mail.gmail.com>
+         <6cf58a4cd925726ef10481d38f9f4e8090f5023d.camel@redhat.com>
+         <CAHbf0-EY9_27Tw3v-pfwXDaTuwpsuuFqrJDKZ8C_cW+-PwXwww@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220121174743.1875294-3-tony.luck@intel.com>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 09:47:39AM -0800, Tony Luck wrote:
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 7b8382c11788..b7700a47eadd 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -88,6 +88,80 @@ EXPORT_SYMBOL_GPL(get_llc_id);
->  /* L2 cache ID of each logical CPU */
->  DEFINE_PER_CPU_READ_MOSTLY(u16, cpu_l2c_id) = BAD_APICID;
->  
-> +static struct ppin_info {
-> +	int	feature;
-> +	int	msr_ppin_ctl;
-> +} ppin_info[] = {
-> +	[X86_VENDOR_INTEL] = {
-> +		.feature = X86_FEATURE_INTEL_PPIN,
-> +		.msr_ppin_ctl = MSR_PPIN_CTL,
-> +		.msr_ppin = MSR_PPIN
-> +	},
-> +	[X86_VENDOR_AMD] = {
-> +		.feature = X86_FEATURE_AMD_PPIN,
-> +		.msr_ppin_ctl = MSR_AMD_PPIN_CTL,
-> +		.msr_ppin = MSR_AMD_PPIN
-		^^^^^^^^^
+On Thu, 2022-01-27 at 00:39 +0000, Mike Lothian wrote:
+> On Wed, 26 Jan 2022 at 10:12, Maxim Levitsky <mlevitsk@redhat.com> wrote:
+> > Great, your system does seem to support GA log
+> > (but a patch to check if, other that assume blindly that it is supported is
+> > something that should be done).
+> > 
+> > So could you bump the LOOP_TIMEOUT like by 10x or so and see if the problem goes away?
+> > 
+> > (that code should be rewritten to time based wait and not just blindly loop like that,
+> > I also can prepare a patch for that as well).
+> > 
+> > Best regards,
+> >         Maxim Levitsky
+> > 
+> 
+> Hi
+> 
+> I've done quite a few restarts with the LOOP_TIMEOUT increased and
+> I've not seen the issue since
 
-You forgot to rebuild after removing that guy here in the struct
-definition. I'll fix it up now so that I can continue going through them
-but pls fix in the next submission so that all patches build separately.
+Great, so the problem is solved I guess. 
+Thanks for the help!
 
-Thx.
 
-arch/x86/kernel/cpu/common.c:98:4: error: ‘struct ppin_info’ has no member named ‘msr_ppin’; did you mean ‘msr_ppin_ctl’?
-   98 |   .msr_ppin = MSR_PPIN
-      |    ^~~~~~~~
-      |    msr_ppin_ctl
-In file included from ./arch/x86/include/asm/msr.h:5,
-                 from ./arch/x86/include/asm/processor.h:22,
-                 from ./arch/x86/include/asm/cpufeature.h:5,
-                 from ./arch/x86/include/asm/thread_info.h:53,
-                 from ./include/linux/thread_info.h:60,
-                 from ./arch/x86/include/asm/preempt.h:7,
-                 from ./include/linux/preempt.h:78,
-                 from ./include/linux/spinlock.h:55,
-                 from ./include/linux/mmzone.h:8,
-                 from ./include/linux/gfp.h:6,
-                 from ./include/linux/mm.h:10,
-                 from ./include/linux/memblock.h:12,
-                 from arch/x86/kernel/cpu/common.c:5:
-./arch/x86/include/asm/msr-index.h:59:20: warning: excess elements in struct initializer
-   59 | #define MSR_PPIN   0x0000004f
-      |                    ^~~~~~~~~~
-arch/x86/kernel/cpu/common.c:98:15: note: in expansion of macro ‘MSR_PPIN’
-   98 |   .msr_ppin = MSR_PPIN
-      |               ^~~~~~~~
-./arch/x86/include/asm/msr-index.h:59:20: note: (near initialization for ‘ppin_info[0]’)
-   59 | #define MSR_PPIN   0x0000004f
-      |                    ^~~~~~~~~~
-arch/x86/kernel/cpu/common.c:98:15: note: in expansion of macro ‘MSR_PPIN’
-   98 |   .msr_ppin = MSR_PPIN
-      |               ^~~~~~~~
-arch/x86/kernel/cpu/common.c:103:4: error: ‘struct ppin_info’ has no member named ‘msr_ppin’; did you mean ‘msr_ppin_ctl’?
-  103 |   .msr_ppin = MSR_AMD_PPIN
-      |    ^~~~~~~~
-      |    msr_ppin_ctl
-In file included from ./arch/x86/include/asm/msr.h:5,
-                 from ./arch/x86/include/asm/processor.h:22,
-                 from ./arch/x86/include/asm/cpufeature.h:5,
-                 from ./arch/x86/include/asm/thread_info.h:53,
-                 from ./include/linux/thread_info.h:60,
-                 from ./arch/x86/include/asm/preempt.h:7,
-                 from ./include/linux/preempt.h:78,
-                 from ./include/linux/spinlock.h:55,
-                 from ./include/linux/mmzone.h:8,
-                 from ./include/linux/gfp.h:6,
-                 from ./include/linux/mm.h:10,
-                 from ./include/linux/memblock.h:12,
-                 from arch/x86/kernel/cpu/common.c:5:
-./arch/x86/include/asm/msr-index.h:455:24: warning: excess elements in struct initializer
-  455 | #define MSR_AMD_PPIN   0xc00102f1
-      |                        ^~~~~~~~~~
-arch/x86/kernel/cpu/common.c:103:15: note: in expansion of macro ‘MSR_AMD_PPIN’
-  103 |   .msr_ppin = MSR_AMD_PPIN
-      |               ^~~~~~~~~~~~
-./arch/x86/include/asm/msr-index.h:455:24: note: (near initialization for ‘ppin_info[2]’)
-  455 | #define MSR_AMD_PPIN   0xc00102f1
-      |                        ^~~~~~~~~~
-arch/x86/kernel/cpu/common.c:103:15: note: in expansion of macro ‘MSR_AMD_PPIN’
-  103 |   .msr_ppin = MSR_AMD_PPIN
-      |               ^~~~~~~~~~~~
-make[3]: *** [scripts/Makefile.build:288: arch/x86/kernel/cpu/common.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [scripts/Makefile.build:550: arch/x86/kernel/cpu] Error 2
-make[1]: *** [scripts/Makefile.build:550: arch/x86/kernel] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1831: arch/x86] Error 2
-make: *** Waiting for unfinished jobs....
+I'll send a patch for this in few days to replace this and other similiar timeouts
+with a proper udelay() wait.
 
--- 
-Regards/Gruss,
-    Boris.
+Best regards,
+	Maxim Levitsky
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+> Cheers
+> 
+> Mike
+> 
+
+

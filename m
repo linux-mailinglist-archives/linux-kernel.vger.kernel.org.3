@@ -2,127 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C810549DBF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1F349DBFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237531AbiA0Hvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 02:51:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28688 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229949AbiA0Hvq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 02:51:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643269905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vKF0TdKO5aLrjOXdwkWmOrj4HOBqyJ5h5J0cv79n6sQ=;
-        b=TskWW7+P46ysF1NiJFRhsAu9lVvAkRZ4XgNB/N4+n3SlemgP5hFNMeNmTbgYho1ZvPCBOR
-        NUUpbbG14nFZAsk/TCoAtrOc9PXtS6K83DZt7TfUV6WoGJqSz1Pya0zFyFOWauZJi2rp0E
-        lWDdC11d4dEvFys2GHw3DjN4x5M3tCo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-ciO0PeyfMQSyefdsrr_BZQ-1; Thu, 27 Jan 2022 02:51:41 -0500
-X-MC-Unique: ciO0PeyfMQSyefdsrr_BZQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 75B1B8144E2;
-        Thu, 27 Jan 2022 07:51:39 +0000 (UTC)
-Received: from localhost (ovpn-13-51.pek2.redhat.com [10.72.13.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6FC1B1059103;
-        Thu, 27 Jan 2022 07:51:35 +0000 (UTC)
-Date:   Thu, 27 Jan 2022 15:51:32 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v3 6/6] crash hp: Add x86 crash hotplug support
-Message-ID: <20220127075132.GB13508@MiWiFi-R3L-srv>
-References: <20220110195727.1682-1-eric.devolder@oracle.com>
- <20220110195727.1682-7-eric.devolder@oracle.com>
- <20220119102323.GB6349@MiWiFi-R3L-srv>
- <280485c9-4612-892c-0e3e-9e8b09e60cf9@oracle.com>
- <20220126091243.GB6588@MiWiFi-R3L-srv>
- <cf834659-3d8c-7ab5-ccd4-c877b0b9a2f0@oracle.com>
+        id S237547AbiA0Hwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 02:52:53 -0500
+Received: from mga11.intel.com ([192.55.52.93]:41124 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237540AbiA0Hwu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 02:52:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643269970; x=1674805970;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rOSNyt8LwuutsvbkFAa3ddom53RdqKFV+3NFqkbPovw=;
+  b=OEaKfhQ5wV4ABBmE5ksY4wjuyk+2loAppeJnev0izd9NpepH2LFlvmW4
+   49y0n00XE/6b4a6IIpnuqxMoPIH9Kg/NaQi1XS5p03k/GDxQBXb4drO96
+   Aklx6D8twmqi0LeEiXninbJcPB8kcHgg+f3hysNKmVTuLMwhI7bVVqkY0
+   /JswudVNhNJC6+b9wu7ccPg/U1WJ156QyVF6nqjdZpJ03gf4P2+WWadTL
+   leBFNRn6xnrEzoVJylFaH+A4MdsiwgIHr8/braJLm6HrXIZFKtE9HSosG
+   EUWFv4HgGqm+u7zfbBU3jqaKm3L6VcYPayDhKMioakf0TwDVNUsZlRo0X
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="244378098"
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="244378098"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 23:52:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="521117404"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 26 Jan 2022 23:52:47 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCzaJ-000MK8-6l; Thu, 27 Jan 2022 07:52:47 +0000
+Date:   Thu, 27 Jan 2022 15:51:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ben Widawsky <ben.widawsky@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [cxl:preview 50/60] region.c:undefined reference to `__umoddi3'
+Message-ID: <202201271546.AxCMqNSX-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf834659-3d8c-7ab5-ccd4-c877b0b9a2f0@oracle.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/26/22 at 11:32am, Eric DeVolder wrote:
-..snip.... 
-> > > > > +void arch_crash_hotplug_handler(struct kimage *image,
-> > > > > +	unsigned int hp_action, unsigned long a, unsigned long b)
-> > > > > +{
-> > > > > +	/*
-> > > > > +	 * To accurately reflect hot un/plug changes, the elfcorehdr (which
-> > > > > +	 * is passed to the crash kernel via the elfcorehdr= parameter)
-> > > > > +	 * must be updated with the new list of CPUs and memories. The new
-> > > > > +	 * elfcorehdr is prepared in a kernel buffer, and if no errors,
-> > > > > +	 * then it is written on top of the existing/old elfcorehdr.
-> > > > > +	 *
-> > > > > +	 * Due to the change to the elfcorehdr, purgatory must explicitly
-> > > > > +	 * exclude the elfcorehdr from the list of segments it checks.
-> > > > > +	 */
-> > > > 
-> > > > Please move this code comment to above function as kernel-doc if you
-> > > > this it benefits the entire function. Otherwise should move them above
-> > > > the code block they are explaining. For this place, I think moving them
-> > > > to above arch_crash_hotplug_handler() is better.
-> > > 
-> > > ok, I will do that!
-> > > 
-> > > > 
-> > > > > +	struct kexec_segment *ksegment;
-> > > > > +	unsigned char *ptr = NULL;
-> > > > > +	unsigned long elfsz = 0;
-> > > > > +	void *elfbuf = NULL;
-> > > > > +	unsigned long mem, memsz;
-> > > > > +	unsigned int n;
-> > > > > +
-> > > > > +	/*
-> > > > > +	 * When the struct kimage is alloced, it is wiped to zero, so
-> > > > > +	 * the elf_index_valid defaults to false. It is set on the
-> > > > > +	 * kexec_file_load path, or here for kexec_load.
-> > > > > +	 */
-> > > > 
-> > > > I think this kexec loading part should be taken out and post after this
-> > > > whole patchset being accepted. At least, it's worth to put them in a
-> > > > separate patch.
-> > > 
-> > > This little bit of code that identifies the incoming elfcorehdr is all that
-> > > is needed to support kexec_load (and the userspace changes of course). I'm
-> > > happy to split as a separate patch, but I would think that be maintaining it
-> > > with this series, then when it is accepted, both the kexec_load and
-> > > kexec_file_load paths would be supported? Your call.
-> > 
-> > Hmm, at first, let's split it out from this patch since it's an
-> > independent action to kdump. I would suggest we don't carry it in this
-> > series. After this series is done, you can post another patchset
-> > including this part as kernel patch, and also the code change in
-> > kexec_tools as user space patch.
-> > 
-> > ......
-> > 
-> 
-> OK, I'll remove the bit of code that supports kexec_load, so it can be introduced
-> later coincident with the changes to kexec-tools.
-> 
-> In a previous message you mentioned making changes to the order of the patches,
-> was this it, or is there more to come?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
+head:   41c2d219a2c8e14de644f4e953e0c57402c3e884
+commit: 84dbaed92240cd65eb70045a3c61b6b4050822c2 [50/60] cxl/region: Introduce a cxl_region driver
+config: powerpc-randconfig-c004-20220124 (https://download.01.org/0day-ci/archive/20220127/202201271546.AxCMqNSX-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=84dbaed92240cd65eb70045a3c61b6b4050822c2
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl preview
+        git checkout 84dbaed92240cd65eb70045a3c61b6b4050822c2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Yeah, replied to cover letter, please check it there.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+   powerpc-linux-ld: drivers/cxl/region.o: in function `cxl_region_probe':
+>> region.c:(.text+0x168): undefined reference to `__umoddi3'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

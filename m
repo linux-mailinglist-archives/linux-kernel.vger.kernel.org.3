@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E4449EB1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB52949EB20
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245619AbiA0TdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:33:12 -0500
-Received: from mga07.intel.com ([134.134.136.100]:40723 "EHLO mga07.intel.com"
+        id S245735AbiA0TdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:33:22 -0500
+Received: from mga18.intel.com ([134.134.136.126]:40872 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245567AbiA0TdH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:33:07 -0500
+        id S245576AbiA0TdI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 14:33:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643311987; x=1674847987;
+  t=1643311988; x=1674847988;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=jIA/nct3NSQk5bRnz5t62ltNXNe7IX/xCP1azsFsYeQ=;
-  b=S+M67+6+MaNEJ9SI6NfksOo3LORvDSGFK7tOUSbMXDqRB5/MXFAIV8ni
-   oXArCIk89W0rk3GUOZYJeElAtR2HPq/JtKeywtUfeLFM2tBjPHKVx/XEi
-   pVwfsmca/cnhHOyntrxNV0Qpz8QvHPDxlSTGMUoBJ+5XX06YWH9OzQ0R2
-   TrJukFSt/pIAr6rrk5cFlO52Boyd1pBiTtxGZwX/F5wK1WBwL/1gvZrNZ
-   A1ysmhf/vcaxt88JYRbkzteA/dEZW1BBKyzs1Jqf2gc0qhLTZ/moNrt1f
-   VoxSOhOKrDkQ0+rstyWnkOdy5kmSvsbdm3nVAqWeUnzhgGLrlGGagRhiQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="310261203"
+  bh=xnRbqa6BTbe8guUhq0yIR4wviwt5NP1PbDC58oVK8CA=;
+  b=cPr6VT8tA0v/OUgCnPqcuWHS+ppv85kEljmLje9+7tV5K+p63pD3clXt
+   UepmducfWS4M2o+8+8Wdten/oiaUE2/HPQ4Zj0VpwCpmflRrXA9LSLrYv
+   TzjcFnzkBSTOwycYJsGUsBpQiMCudx7mZTvMgyX88tMFZY3beMBnFTUJQ
+   Kmv648Z24h3o3iFb4c2ZmpxVhVSidDU5v2Z3X9t9D4yYWzF66xA14T0cy
+   jsIJ/n3c5yTm2EBvYIVi17guNUjGHNCFH0XID1HGf/B/9gJqF7pKVQILY
+   3hPC0xkDKhw+MYZUJ1klGHHIdBQAcpN9ZuCUY90NvIwtR0OWNx4N00/ZQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="230522679"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="310261203"
+   d="scan'208";a="230522679"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 11:33:06 -0800
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 11:33:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="495844929"
+   d="scan'208";a="495844934"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga002.jf.intel.com with ESMTP; 27 Jan 2022 11:33:05 -0800
+  by orsmga002.jf.intel.com with ESMTP; 27 Jan 2022 11:33:06 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -49,9 +49,9 @@ Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
         "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
         Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 6/7] thermal: netlink: Add a new event to notify CPU capabilities change
-Date:   Thu, 27 Jan 2022 11:34:53 -0800
-Message-Id: <20220127193454.12814-7-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v5 7/7] thermal: intel: hfi: Notify user space for HFI events
+Date:   Thu, 27 Jan 2022 11:34:54 -0800
+Message-Id: <20220127193454.12814-8-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com>
 References: <20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com>
@@ -61,24 +61,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Add a new netlink event to notify change in CPU capabilities in terms of
-performance and efficiency.
+When the hardware issues an HFI event, relay a notification to user space.
+This allows user space to respond by reading performance and efficiency of
+each CPU and take appropriate action.
 
-Firmware may change CPU capabilities as a result of thermal events in the
-system or to account for changes in the TDP (thermal design power) level.
+For example, when the performance and efficiency of a CPU is 0, user space
+can either offline the CPU or inject idle. Also, if user space notices a
+downward trend in performance, it may proactively adjust power limits to
+avoid future situations in which performance drops to 0.
 
-This notification type will allow user space to avoid running workloads
-on certain CPUs or proactively adjust power limits to avoid future events.
+To avoid excessive notifications, the rate is limited by one HZ per event.
+To limit the netlink message size, send parameters for up to 16 CPUs in a
+single message. If there are more than 16 CPUs, issue as many messages as
+needed to notify the status of all CPUs.
 
-The netlink message consists of a nested attribute
-(THERMAL_GENL_ATTR_CPU_CAPABILITY) with three attributes:
-
- * THERMAL_GENL_ATTR_CPU_CAPABILITY_ID (type u32):
-   -- logical CPU number
- * THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE (type u32):
-   -- Scaled performance from 0-1023
- * THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY (type u32):
-   -- Scaled efficiency from 0-1023
+In the HFI specification, both performance and efficiency capabilities are
+defined in the [0, 255] range. The existing implementations of HFI hardware
+do not scale the maximum values to 255. Since userspace cares about
+capability values that are either 0 or show a downward/upward trend, this
+fact does not matter much. Relative changes in capabilities are enough. To
+comply with the thermal netlink ABI, scale both performance and efficiency
+capabilities to the [0, 1023] interval.
 
 Cc: Andi Kleen <ak@linux.intel.com>
 Cc: Aubrey Li <aubrey.li@linux.intel.com>
@@ -89,11 +92,10 @@ Reviewed-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
 Changes since v4:
-  * Renamed struct cpu_capability as struct thermal_genl_cpu_caps.
-    (Rafael)
-  * Removed automatic variable ret from
-    thermal_genl_event_cpu_capability_change() and instead always return
-    -EMSGSIZE on error. (Rafael)
+  * Reworked parsing of HFI capabilities into chunks of
+    HFI_MAX_THERM_NOTIFY_COUNT CPUs at a time to reduce the time
+    we spend with interrupts disabled. (Srinivas)
+  * Protected hfi_instance::cpus when iterating over them. (Rafael)
 
 Changes since v3:
   * None
@@ -102,169 +104,133 @@ Changes since v2:
   * None
 
 Changes since v1:
-  * Reworded commit message.
-  * Reworded the members of struct cpu_capacity for clarity. (Lukasz)
-  * Defined the CPU capability attributes to be scaled in the [0, 1023]
-    interval. (Lukasz)
+  * Made get_one_hfi_cap() return void. Removed unnecessary checks.
+    (Rafael)
+  * Replaced raw_spin_[un]lock_irq[restore|save]() with raw_spin_
+    [un]lock_irq() in get_one_hfi_cap(). This function is only called from
+    a workqueue and there is no need to save and restore irq flags.
+  * Scaled performance and energy efficiency values to a [0, 1023] interval
+    when reporting values to user space via thermal netlink notifications.
+    (Lucasz).
+  * Reworded commit message to comment on the scaling of HFI capabilities
+    to comply with the proposed thermal netlink ABI.
 ---
- drivers/thermal/thermal_netlink.c | 53 +++++++++++++++++++++++++++++++
- drivers/thermal/thermal_netlink.h | 14 ++++++++
- include/uapi/linux/thermal.h      |  6 +++-
- 3 files changed, 72 insertions(+), 1 deletion(-)
+ drivers/thermal/intel/Kconfig     |  1 +
+ drivers/thermal/intel/intel_hfi.c | 75 ++++++++++++++++++++++++++++++-
+ 2 files changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-index a16dd4d5d710..7c97a091680e 100644
---- a/drivers/thermal/thermal_netlink.c
-+++ b/drivers/thermal/thermal_netlink.c
-@@ -43,6 +43,11 @@ static const struct nla_policy thermal_genl_policy[THERMAL_GENL_ATTR_MAX + 1] =
- 	[THERMAL_GENL_ATTR_CDEV_MAX_STATE]	= { .type = NLA_U32 },
- 	[THERMAL_GENL_ATTR_CDEV_NAME]		= { .type = NLA_STRING,
- 						    .len = THERMAL_NAME_LENGTH },
-+	/* CPU capabilities */
-+	[THERMAL_GENL_ATTR_CPU_CAPABILITY]		= { .type = NLA_NESTED },
-+	[THERMAL_GENL_ATTR_CPU_CAPABILITY_ID]		= { .type = NLA_U32 },
-+	[THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE]	= { .type = NLA_U32 },
-+	[THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY]	= { .type = NLA_U32 },
- };
+diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+index e9d2925227d4..6cf3fe36a4ae 100644
+--- a/drivers/thermal/intel/Kconfig
++++ b/drivers/thermal/intel/Kconfig
+@@ -104,6 +104,7 @@ config INTEL_HFI_THERMAL
+ 	bool "Intel Hardware Feedback Interface"
+ 	depends on CPU_SUP_INTEL
+ 	depends on X86_THERMAL_VECTOR
++	select THERMAL_NETLINK
+ 	help
+ 	  Select this option to enable the Hardware Feedback Interface. If
+ 	  selected, hardware provides guidance to the operating system on
+diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+index 7a2b750eecc4..730fd121df6e 100644
+--- a/drivers/thermal/intel/intel_hfi.c
++++ b/drivers/thermal/intel/intel_hfi.c
+@@ -40,6 +40,7 @@
  
- struct param {
-@@ -58,6 +63,8 @@ struct param {
- 	int temp;
- 	int cdev_state;
- 	int cdev_max_state;
-+	struct thermal_genl_cpu_caps *cpu_capabilities;
-+	int cpu_capabilities_count;
- };
+ #include <asm/msr.h>
  
- typedef int (*cb_t)(struct param *);
-@@ -190,6 +197,42 @@ static int thermal_genl_event_gov_change(struct param *p)
- 	return 0;
- }
++#include "../thermal_core.h"
+ #include "intel_hfi.h"
  
-+static int thermal_genl_event_cpu_capability_change(struct param *p)
+ #define THERM_STATUS_CLEAR_PKG_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | \
+@@ -163,6 +164,78 @@ static DEFINE_MUTEX(hfi_instance_lock);
+ 
+ static struct workqueue_struct *hfi_updates_wq;
+ #define HFI_UPDATE_INTERVAL		HZ
++#define HFI_MAX_THERM_NOTIFY_COUNT	16
++
++static void get_hfi_caps(struct hfi_instance *hfi_instance,
++			 struct thermal_genl_cpu_caps *cpu_caps)
 +{
-+	struct thermal_genl_cpu_caps *cpu_cap = p->cpu_capabilities;
-+	struct sk_buff *msg = p->msg;
-+	struct nlattr *start_cap;
-+	int i;
++	int cpu, i = 0;
 +
-+	start_cap = nla_nest_start(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY);
-+	if (!start_cap)
-+		return -EMSGSIZE;
++	raw_spin_lock_irq(&hfi_instance->table_lock);
++	for_each_cpu(cpu, hfi_instance->cpus) {
++		struct hfi_cpu_data *caps;
++		s16 index;
 +
-+	for (i = 0; i < p->cpu_capabilities_count; ++i) {
-+		if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
-+				cpu_cap->cpu))
-+			goto out_cancel_nest;
++		index = per_cpu(hfi_cpu_info, cpu).index;
++		caps = hfi_instance->data + index * hfi_features.cpu_stride;
++		cpu_caps[i].cpu = cpu;
 +
-+		if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
-+				cpu_cap->performance))
-+			goto out_cancel_nest;
++		/*
++		 * Scale performance and energy efficiency to
++		 * the [0, 1023] interval that thermal netlink uses.
++		 */
++		cpu_caps[i].performance = caps->perf_cap << 2;
++		cpu_caps[i].efficiency = caps->ee_cap << 2;
 +
-+		if (nla_put_u32(msg, THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
-+				cpu_cap->efficiency))
-+			goto out_cancel_nest;
-+
-+		++cpu_cap;
++		++i;
 +	}
-+
-+	nla_nest_end(msg, start_cap);
-+
-+	return 0;
-+out_cancel_nest:
-+	nla_nest_cancel(msg, start_cap);
-+
-+	return -EMSGSIZE;
++	raw_spin_unlock_irq(&hfi_instance->table_lock);
 +}
 +
- int thermal_genl_event_tz_delete(struct param *p)
- 	__attribute__((alias("thermal_genl_event_tz")));
++/*
++ * Call update_capabilities() when there are changes in the HFI table.
++ */
++static void update_capabilities(struct hfi_instance *hfi_instance)
++{
++	struct thermal_genl_cpu_caps *cpu_caps;
++	int i = 0, cpu_count;
++
++	/* CPUs may come online/offline while processing an HFI update. */
++	mutex_lock(&hfi_instance_lock);
++
++	cpu_count = cpumask_weight(hfi_instance->cpus);
++
++	/* No CPUs to report in this hfi_instance. */
++	if (!cpu_count)
++		goto out;
++
++	cpu_caps = kcalloc(cpu_count, sizeof(*cpu_caps), GFP_KERNEL);
++	if (!cpu_caps)
++		goto out;
++
++	get_hfi_caps(hfi_instance, cpu_caps);
++
++	if (cpu_count < HFI_MAX_THERM_NOTIFY_COUNT)
++		goto last_cmd;
++
++	/* Process complete chunks of HFI_MAX_THERM_NOTIFY_COUNT capabilities. */
++	for (i = 0;
++	     (i + HFI_MAX_THERM_NOTIFY_COUNT) <= cpu_count;
++	     i += HFI_MAX_THERM_NOTIFY_COUNT)
++		thermal_genl_cpu_capability_event(HFI_MAX_THERM_NOTIFY_COUNT,
++						  &cpu_caps[i]);
++
++	cpu_count = cpu_count - i;
++
++last_cmd:
++	/* Process the remaining capabilities if any. */
++	if (cpu_count)
++		thermal_genl_cpu_capability_event(cpu_count, &cpu_caps[i]);
++
++	kfree(cpu_caps);
++out:
++	mutex_unlock(&hfi_instance_lock);
++}
  
-@@ -219,6 +262,7 @@ static cb_t event_cb[] = {
- 	[THERMAL_GENL_EVENT_CDEV_DELETE]	= thermal_genl_event_cdev_delete,
- 	[THERMAL_GENL_EVENT_CDEV_STATE_UPDATE]	= thermal_genl_event_cdev_state_update,
- 	[THERMAL_GENL_EVENT_TZ_GOV_CHANGE]	= thermal_genl_event_gov_change,
-+	[THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE] = thermal_genl_event_cpu_capability_change,
- };
+ static void hfi_update_work_fn(struct work_struct *work)
+ {
+@@ -173,7 +246,7 @@ static void hfi_update_work_fn(struct work_struct *work)
+ 	if (!hfi_instance)
+ 		return;
  
- /*
-@@ -356,6 +400,15 @@ int thermal_notify_tz_gov_change(int tz_id, const char *name)
- 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_GOV_CHANGE, &p);
+-	/* TODO: Consume update here. */
++	update_capabilities(hfi_instance);
  }
  
-+int thermal_genl_cpu_capability_event(int count,
-+				      struct thermal_genl_cpu_caps *caps)
-+{
-+	struct param p = { .cpu_capabilities_count = count, .cpu_capabilities = caps };
-+
-+	return thermal_genl_send_event(THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE, &p);
-+}
-+EXPORT_SYMBOL_GPL(thermal_genl_cpu_capability_event);
-+
- /*************************** Command encoding ********************************/
- 
- static int __thermal_genl_cmd_tz_get_id(struct thermal_zone_device *tz,
-diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
-index e554f76291f4..04d1adbbc012 100644
---- a/drivers/thermal/thermal_netlink.h
-+++ b/drivers/thermal/thermal_netlink.h
-@@ -4,6 +4,12 @@
-  *  Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-  */
- 
-+struct thermal_genl_cpu_caps {
-+	int cpu;
-+	int performance;
-+	int efficiency;
-+};
-+
- /* Netlink notification function */
- #ifdef CONFIG_THERMAL_NETLINK
- int __init thermal_netlink_init(void);
-@@ -23,6 +29,8 @@ int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
- int thermal_notify_cdev_delete(int cdev_id);
- int thermal_notify_tz_gov_change(int tz_id, const char *name);
- int thermal_genl_sampling_temp(int id, int temp);
-+int thermal_genl_cpu_capability_event(int count,
-+				      struct thermal_genl_cpu_caps *caps);
- #else
- static inline int thermal_netlink_init(void)
- {
-@@ -101,4 +109,10 @@ static inline int thermal_genl_sampling_temp(int id, int temp)
- {
- 	return 0;
- }
-+
-+static inline int thermal_genl_cpu_capability_event(int count, struct cpu_capability *caps)
-+{
-+	return 0;
-+}
-+
- #endif /* CONFIG_THERMAL_NETLINK */
-diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
-index 9aa2fedfa309..fc78bf3aead7 100644
---- a/include/uapi/linux/thermal.h
-+++ b/include/uapi/linux/thermal.h
-@@ -44,7 +44,10 @@ enum thermal_genl_attr {
- 	THERMAL_GENL_ATTR_CDEV_MAX_STATE,
- 	THERMAL_GENL_ATTR_CDEV_NAME,
- 	THERMAL_GENL_ATTR_GOV_NAME,
--
-+	THERMAL_GENL_ATTR_CPU_CAPABILITY,
-+	THERMAL_GENL_ATTR_CPU_CAPABILITY_ID,
-+	THERMAL_GENL_ATTR_CPU_CAPABILITY_PERFORMANCE,
-+	THERMAL_GENL_ATTR_CPU_CAPABILITY_EFFICIENCY,
- 	__THERMAL_GENL_ATTR_MAX,
- };
- #define THERMAL_GENL_ATTR_MAX (__THERMAL_GENL_ATTR_MAX - 1)
-@@ -71,6 +74,7 @@ enum thermal_genl_event {
- 	THERMAL_GENL_EVENT_CDEV_DELETE,		/* Cdev unbound */
- 	THERMAL_GENL_EVENT_CDEV_STATE_UPDATE,	/* Cdev state updated */
- 	THERMAL_GENL_EVENT_TZ_GOV_CHANGE,	/* Governor policy changed  */
-+	THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE,	/* CPU capability changed */
- 	__THERMAL_GENL_EVENT_MAX,
- };
- #define THERMAL_GENL_EVENT_MAX (__THERMAL_GENL_EVENT_MAX - 1)
+ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
 -- 
 2.17.1
 

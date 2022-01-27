@@ -2,57 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4E249E40C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3541B49E416
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242057AbiA0OCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 09:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiA0OCe (ORCPT
+        id S242146AbiA0ODN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 09:03:13 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:43989 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242061AbiA0ODK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 09:02:34 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C480DC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 06:02:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eDGpu6oRxFEs4jGSaR8KOXZHTUWDxE84eDvKxLfdLcY=; b=ZXrDA7bv5hhc5C+tDghAmlge4z
-        opP1Z90OWBxzgT63wY21IYjiiWmEWSU4K0cxxO3+PjHW+P9kSMW3Hm5XC7PehfhHtewWqEnOHfoa8
-        OdAM2AI2pF8gOoQnAkMe18b+uy8THmg8oTijJ/qkUkEi9YDMHfugAUmmYZnbdyJmMffZcs/7mEm9/
-        4ZxTJSUoCvrJ7C75YcYV2Sb3zh+RAIBk12qCdWUunI5Mop5iFcVMcDnz1Y2lnPnj0lCAxdW1oMhcZ
-        B296tmnFpBVHs+DOAUP6xasJ2HD34TNXkVxzS+o/jSgou9jfZKO8mz28K0nXqh3VHEiS0/6Diptdj
-        qWeRonFg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nD5M6-005INy-T8; Thu, 27 Jan 2022 14:02:31 +0000
-Date:   Thu, 27 Jan 2022 14:02:30 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Karolina Drobnik <karolinadrobnik@gmail.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        mike.rapoport@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/16] memblock tests: Add skeleton of the memblock
- simulator
-Message-ID: <YfKl9taKJ7Gc2i+8@casper.infradead.org>
-References: <cover.1643206612.git.karolinadrobnik@gmail.com>
- <92442409bbc72476509a2ceb2e182473ac69612b.1643206612.git.karolinadrobnik@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <92442409bbc72476509a2ceb2e182473ac69612b.1643206612.git.karolinadrobnik@gmail.com>
+        Thu, 27 Jan 2022 09:03:10 -0500
+Received: by mail-ot1-f46.google.com with SMTP id j38-20020a9d1926000000b0059fa6de6c71so2611800ota.10;
+        Thu, 27 Jan 2022 06:03:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=nGqKAVozOn7icaKYITMo1ImX9DZEs2FfFmM8RWbY00w=;
+        b=DmFPOiadNZ1ER9qAucpN+S7LczrQRUUPZ6V5Mco21VUPcOmkgUstcNu65aH8eWWaeO
+         PSC35uc7sBqIOk9yGpXWOK3Yq31YRoIKNv0pkHPFhJyksghS/vXK+QckMg2juwDa6wvc
+         5Fd+Mkf3SI5G6BloWtxWsO5cGFr1eIfE6s5eEgFeLJzQ5okD8wtjqM+EwbIgEp1U/h/E
+         +YGEVS4cokJCYse5iQlm1Z1ppSnwNDWStlgrV1+etvfOC3s7iGMyOzyNJ0vqpjl9WDo/
+         NlsRA4tQrk6pipa0RGtLJtXJHbeGh9vQ36ksNIcN1g/3UqJb03qFqq6q64EFZ0+2ZO62
+         KC/Q==
+X-Gm-Message-State: AOAM533MU7hQZsLgYNn9jeIEmhvRfqC0L1so8DWCOTUXjjc8DlPRDRhH
+        yG8jVFTWCyavVKW49JJX31sq3prewg==
+X-Google-Smtp-Source: ABdhPJxzUuTwBszF3Lg08WmG5YnfL6szBIhS8BUAQhafTGghz3Ge7GhLBQkPe6spEuXN3Zzy+6LlbA==
+X-Received: by 2002:a9d:24a1:: with SMTP id z30mr2186536ota.242.1643292190055;
+        Thu, 27 Jan 2022 06:03:10 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id g34sm4240519ooi.48.2022.01.27.06.03.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 06:03:08 -0800 (PST)
+Received: (nullmailer pid 3149361 invoked by uid 1000);
+        Thu, 27 Jan 2022 14:03:05 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220127085930.15637-1-chunfeng.yun@mediatek.com>
+References: <20220127085930.15637-1-chunfeng.yun@mediatek.com>
+Subject: Re: [PATCH v3] dt-bindings: nvmem: convert mtk-efuse.txt to YAML schema
+Date:   Thu, 27 Jan 2022 08:03:05 -0600
+Message-Id: <1643292185.232142.3149360.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 02:21:28PM +0100, Karolina Drobnik wrote:
-> +++ b/tools/testing/memblock/.gitignore
-> @@ -0,0 +1,6 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +main
-> +memblock.c
-> +linux/memblock.h
-> +asm/cmpxchg.h
+On Thu, 27 Jan 2022 16:59:30 +0800, Chunfeng Yun wrote:
+> Convert mtk-efuse.txt to YAML schema mediatek,efuse.yaml
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+> v3: add reviewed-by Rob
+> 
+> v2:
+>   1. remove description of subnodes which is covered by nvmem.yaml suggested by Rob
+>   2. change the example which is commoner than mt8173's
+> ---
+>  .../bindings/nvmem/mediatek,efuse.yaml        | 86 +++++++++++++++++++
+>  .../devicetree/bindings/nvmem/mtk-efuse.txt   | 43 ----------
+>  2 files changed, 86 insertions(+), 43 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/nvmem/mtk-efuse.txt
+> 
 
-Don't put SPDX information in a .gitignore file.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/nvmem/mediatek,efuse.example.dts:25.43-28.15: Warning (unique_unit_address_if_enabled): /example-0/efuse@11c10000/usb3-tx-imp@184: duplicate unit-address (also used in node /example-0/efuse@11c10000/usb3-rx-imp@184)
+Documentation/devicetree/bindings/nvmem/mediatek,efuse.example.dts:37.45-40.15: Warning (unique_unit_address_if_enabled): /example-0/efuse@11c10000/usb3-tx-imp@186: duplicate unit-address (also used in node /example-0/efuse@11c10000/usb3-rx-imp@186)
+Documentation/devicetree/bindings/nvmem/mediatek,efuse.example.dts:49.42-52.15: Warning (unique_unit_address_if_enabled): /example-0/efuse@11c10000/usb2-intr-p0@188: duplicate unit-address (also used in node /example-0/efuse@11c10000/usb2-intr-p1@188)
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1584864
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

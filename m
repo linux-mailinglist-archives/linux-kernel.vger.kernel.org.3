@@ -2,183 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E92A849E327
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B761449E329
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241595AbiA0NRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:17:05 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42204 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241585AbiA0NRE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:17:04 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20RDDSrU027765;
-        Thu, 27 Jan 2022 13:16:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=XeEMBEwWWG+dHaYo1yluoFv6fP/RuA+zAGBEUfwky5w=;
- b=pQIYfGL9is9OvvLkJuKSaZ5N96qrrmnAtSSbEvgitpPiPN15jIPMTwMY601MRnoEze4Z
- i9AOm9SKTu+yR6krbp4ErhzGOhIeus4uX/CNLQ9MWRZSUl9a135UfFeIfrf7xm9u4mfC
- y71IEH/neWzn4c0Gw+K5yDvTNtW549t1n99xqO8N2qEq5cpdnNVvuJwWKPzLv1LR+HQP
- tIDOS2SCz9VteNKwfk5qAX07w4icnObvoB5TfS4ktiXm7R3XalQtCiTYWkNANfjs0HUR
- /Hg+7b/Xb56zgfwCXUdZayru562ka5cqzL6HsdKTG10U8VqgLBWcfbXWapjhd4o+bPs+ tw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dupsuqqbx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 13:16:38 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20RDGb16008275;
-        Thu, 27 Jan 2022 13:16:38 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dupsuqqb2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 13:16:37 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20RDCRVC001264;
-        Thu, 27 Jan 2022 13:16:35 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06fra.de.ibm.com with ESMTP id 3dr96jx7ka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 13:16:35 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20RDGWaZ21496254
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Jan 2022 13:16:32 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 268F84C052;
-        Thu, 27 Jan 2022 13:16:32 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD5AD4C040;
-        Thu, 27 Jan 2022 13:16:31 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 27 Jan 2022 13:16:31 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Yinan Liu <yinan@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org, Sachin Sant <sachinp@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, ardb@kernel.org,
-        keescook@chromium.org, hca@linux.ibm.com
-Subject: Re: [powerpc] ftrace warning kernel/trace/ftrace.c:2068 with
- code-patching selftests
-References: <944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com>
-        <e9422643-a210-b77f-a037-da63a9d2e925@linux.alibaba.com>
-        <20220124114548.30241947@gandalf.local.home>
-        <0fa0daec-881a-314b-e28b-3828e80bbd90@linux.alibaba.com>
-        <YfFclROd+0/61q2d@FVFF77S0Q05N> <YfKGKWW5UfZ15kCW@FVFF77S0Q05N>
-        <yt9dy231gzae.fsf@linux.ibm.com> <YfKPmFJ2MGsem4VB@FVFF77S0Q05N>
-        <20220127074601.41a3773d@rorschach.local.home>
-        <YfKZXvB9vCN1bA1c@FVFF77S0Q05N>
-Date:   Thu, 27 Jan 2022 14:16:31 +0100
-In-Reply-To: <YfKZXvB9vCN1bA1c@FVFF77S0Q05N> (Mark Rutland's message of "Thu,
-        27 Jan 2022 13:08:46 +0000")
-Message-ID: <yt9dsft9gvyo.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        id S241614AbiA0NRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:17:13 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:54946 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241599AbiA0NRM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 08:17:12 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 5D54647488;
+        Thu, 27 Jan 2022 13:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-transfer-encoding:mime-version:user-agent:content-type
+        :content-type:organization:references:in-reply-to:date:date:from
+        :from:subject:subject:message-id:received:received:received; s=
+        mta-01; t=1643289429; x=1645103830; bh=yz721TDYQ962zWbABUm+tMaP3
+        8DnE0T4+JBq6o/c3Jg=; b=AKXdj9m/jZvUnHRJ+oyWde3btXPVpbmO9tr7IhoSv
+        +kaJpZHJlhA3sasIV980rpff7ZcPN6Z67SEM6+2B1FffxHCg7n6UisjFKT5duHE8
+        j0dioJRLYNHYh9QNNlQ5N3Xf1zhIyLoqfdDl4iRGck/aV2BYgZ6Oi2a+ocoRRQRo
+        Hg=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yef_zfYPRlTr; Thu, 27 Jan 2022 16:17:09 +0300 (MSK)
+Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 70BD846B36;
+        Thu, 27 Jan 2022 16:17:05 +0300 (MSK)
+Received: from [10.199.0.85] (10.199.0.85) by T-EXCH-04.corp.yadro.com
+ (172.17.100.104) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 27
+ Jan 2022 16:17:04 +0300
+Message-ID: <b5e8f3defc6715fbc0798a5c490d588e247335bc.camel@yadro.com>
+Subject: Re: [PATCH] ARM: dts: aspeed: remove unhandled fttmr010,pwm-outputs
+From:   Andrei Kartashev <a.kartashev@yadro.com>
+To:     Corentin Labbe <clabbe@baylibre.com>, <andrew@aj.id.au>,
+        <joel@jms.id.au>, <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Date:   Thu, 27 Jan 2022 16:17:04 +0300
+In-Reply-To: <20220127121952.3985981-1-clabbe@baylibre.com>
+References: <20220127121952.3985981-1-clabbe@baylibre.com>
+Organization: YADRO
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1HlEL2zE9lD4mxEQU6kQxS4U-kPK0-JT
-X-Proofpoint-ORIG-GUID: l8jXR6C3cwAQe74SA6titpwuHpkUaO0p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-27_03,2022-01-27_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- bulkscore=0 adultscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201270079
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.199.0.85]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-04.corp.yadro.com (172.17.100.104)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark Rutland <mark.rutland@arm.com> writes:
+Hello,
 
-> On Thu, Jan 27, 2022 at 07:46:01AM -0500, Steven Rostedt wrote:
->> On Thu, 27 Jan 2022 12:27:04 +0000
->> Mark Rutland <mark.rutland@arm.com> wrote:
->> 
->> > Ah, so those non-ELF relocations for the mcount_loc table just mean "apply the
->> > KASLR offset here", which is equivalent for all entries.
->> > 
->> > That makes sense, thanks!
->> 
->> And this is why we were having such a hard time understanding each other ;-)
->
-> ;)
->
-> With that in mind, I think that we understand that the build-time sort works
-> for:
->
-> * arch/x86, becuase the non-ELF relocations for mcount_loc happen to be
->   equivalent.
->  
-> * arch/arm, because there's no dynamic relocaiton and the mcount_loc entries
->   have been finalized prior to sorting.
->
-> ... but doesn't work for anyone else (including arm64) because the ELF
-> relocations are not equivalent, and need special care that is not yet
-> implemented.
+Good catch! I miss this on porting DTS from local tree, based on
+Intel's one. Since there is no such driver in upstream kernel
+(https://github.com/Intel-BMC/linux/blob/dev-5.15-intel/drivers/pwm/pwm-fttmr010.c
+), both this and beeper sections could be completely removed.
 
-For s390 my idea is to just skip the addresses between __start_mcount_loc
-and __stop_mcount_loc, because for these addresses we know that they are
-64 bits wide, so we just need to add the KASLR offset.
+I will send another patch with cleanup.
 
-I'm thinking about something like this:
+Thank you.
 
-diff --git a/arch/s390/boot/compressed/decompressor.h b/arch/s390/boot/compressed/decompressor.h
-index f75cc31a77dd..015d7e2e94ef 100644
---- a/arch/s390/boot/compressed/decompressor.h
-+++ b/arch/s390/boot/compressed/decompressor.h
-@@ -25,6 +25,8 @@ struct vmlinux_info {
- 	unsigned long rela_dyn_start;
- 	unsigned long rela_dyn_end;
- 	unsigned long amode31_size;
-+	unsigned long start_mcount_loc;
-+	unsigned long stop_mcount_loc;
- };
- 
- /* Symbols defined by linker scripts */
-diff --git a/arch/s390/boot/startup.c b/arch/s390/boot/startup.c
-index 1aa11a8f57dd..7bb0d88db5c6 100644
---- a/arch/s390/boot/startup.c
-+++ b/arch/s390/boot/startup.c
-@@ -88,6 +88,11 @@ static void handle_relocs(unsigned long offset)
- 	dynsym = (Elf64_Sym *) vmlinux.dynsym_start;
- 	for (rela = rela_start; rela < rela_end; rela++) {
- 		loc = rela->r_offset + offset;
-+		if ((loc >= vmlinux.start_mcount_loc) &&
-+		    (loc < vmlinux.stop_mcount_loc)) {
-+			(*(unsigned long *)loc) += offset;
-+			continue;
-+		}
- 		val = rela->r_addend;
- 		r_sym = ELF64_R_SYM(rela->r_info);
- 		if (r_sym) {
-@@ -232,6 +237,8 @@ static void offset_vmlinux_info(unsigned long offset)
- 	vmlinux.rela_dyn_start += offset;
- 	vmlinux.rela_dyn_end += offset;
- 	vmlinux.dynsym_start += offset;
-+	vmlinux.start_mcount_loc += offset;
-+	vmlinux.stop_mcount_loc += offset;
- }
- 
- static unsigned long reserve_amode31(unsigned long safe_addr)
-diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
-index 42c43521878f..51c773405608 100644
---- a/arch/s390/kernel/vmlinux.lds.S
-+++ b/arch/s390/kernel/vmlinux.lds.S
-@@ -213,6 +213,8 @@ SECTIONS
- 		QUAD(__rela_dyn_start)				/* rela_dyn_start */
- 		QUAD(__rela_dyn_end)				/* rela_dyn_end */
- 		QUAD(_eamode31 - _samode31)			/* amode31_size */
-+		QUAD(__start_mcount_loc)
-+		QUAD(__stop_mcount_loc)
- 	} :NONE
- 
- 	/* Debugging sections.	*/
+On Thu, 2022-01-27 at 12:19 +0000, Corentin Labbe wrote:
+> fttmr010,pwm-outputs is not handled by its timer driver, so this
+> property is useless.
+> Fixes: 67ac01d03862 ("ARM: dts: aspeed: add device tree for YADRO
+> VEGMAN BMC")
+> 
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+>  arch/arm/boot/dts/aspeed-bmc-vegman.dtsi | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/aspeed-bmc-vegman.dtsi
+> b/arch/arm/boot/dts/aspeed-bmc-vegman.dtsi
+> index 1a5b25b2ea29..43af63910571 100644
+> --- a/arch/arm/boot/dts/aspeed-bmc-vegman.dtsi
+> +++ b/arch/arm/boot/dts/aspeed-bmc-vegman.dtsi
+> @@ -166,7 +166,6 @@ &sdhci1 {
+>  };
+>  
+>  &timer {
+> -       fttmr010,pwm-outputs = <5>;
+>         pinctrl-names = "default";
+>         pinctrl-0 = <&pinctrl_timer5_default>;
+>         #pwm-cells = <3>;
 
-Not sure whether that would also work on power, and also not sure
-whether i missed something thinking about that. Maybe it doesn't even
-work. ;-)
+-- 
+Best regards,
+Andrei Kartashev
+
+

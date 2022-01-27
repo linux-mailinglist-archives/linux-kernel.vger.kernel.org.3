@@ -2,92 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F6249E182
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEC049E024
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240837AbiA0Lry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:47:54 -0500
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:58282 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240824AbiA0Lrv (ORCPT
+        id S239919AbiA0LDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:03:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239910AbiA0LDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:47:51 -0500
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20R6AqWo014646;
-        Thu, 27 Jan 2022 06:47:44 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3dtv6scvgc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 06:47:43 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 20RBlgDP054191
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 27 Jan 2022 06:47:42 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 27 Jan
- 2022 06:47:20 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 27 Jan 2022 06:47:20 -0500
-Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.119])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 20RBlUdn014283;
-        Thu, 27 Jan 2022 06:47:38 -0500
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: [PATCH v4 4/4] MAINTAINERS: add maintainer for ADMV1014 driver
-Date:   Thu, 27 Jan 2022 12:55:58 +0200
-Message-ID: <20220127105558.59567-4-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220127105558.59567-1-antoniu.miclaus@analog.com>
-References: <20220127105558.59567-1-antoniu.miclaus@analog.com>
+        Thu, 27 Jan 2022 06:03:00 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0148DC061714;
+        Thu, 27 Jan 2022 03:03:00 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B63611F41701
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643281378;
+        bh=oRWo0Veii/RC5thoeHrP2GZT3yztnRxOcV4vMVuDWrw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=DANWTO2FuWyYw+H4LLdsbFJmnTtEtz5IZacT9Oz68afHtrV7NRm06X0lo3vwg3UJm
+         V1LZuevKoqhzsir9cBe8plY1suyuFyV7sLFfOgxuc21r/uzgpd02jWnsCHqmLiHZCP
+         uR5XTKgXcOr1TL5PNucboFSqbHcRs9ABkmMQFjs8xQoHYsIPhgzhWT2maVE4l0K9s+
+         ef1iScK99eK4ivp0lZGLoB2GEqZXSBcPJV9/Wcf0/Y/reJ5LwpgIMHW0YMqbkj6K4t
+         R2mc4XPJiG5KMPSDuycY2bkNil4FYxSbh1VDKJgzorpeZBz3tYMsuAUK4IqQDu4/OY
+         u8zz6qVVTth6w==
+Subject: Re: [PATCH v4 07/35] iommu/mediatek: Add mutex for data in the
+ mtk_iommu_domain
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
+        yen-chang.chen@mediatek.com, mingyuan.ma@mediatek.com,
+        yf.wang@mediatek.com, libo.kang@mediatek.com,
+        chengci.xu@mediatek.com
+References: <20220125085634.17972-1-yong.wu@mediatek.com>
+ <20220125085634.17972-8-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Message-ID: <8576a0c5-aa69-aaed-be48-125ae2004f47@collabora.com>
+Date:   Thu, 27 Jan 2022 12:02:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: bHyL3pFxpDbcow8J-x-QErBupMX6u0GQ
-X-Proofpoint-ORIG-GUID: bHyL3pFxpDbcow8J-x-QErBupMX6u0GQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-27_03,2022-01-27_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0
- bulkscore=0 adultscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201270070
+In-Reply-To: <20220125085634.17972-8-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as maintainer for the ADMV1014 driver.
+Il 25/01/22 09:56, Yong Wu ha scritto:
+> Same with the previous patch, add a mutex for the "data" in the
+> mtk_iommu_domain. Just improve the safety for multi devices
+> enter attach_device at the same time. We don't get the real issue
+> for this.
+> 
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 170bbbeefc3f..b05148cfd4aa 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1119,6 +1119,14 @@ W:	http://ez.analog.com/community/linux-device-drivers
- F:	Documentation/devicetree/bindings/hwmon/adi,adm1177.yaml
- F:	drivers/hwmon/adm1177.c
- 
-+ANALOG DEVICES INC ADMV1014 DRIVER
-+M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Supported
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
-+F:	drivers/iio/frequency/admv1014.c
-+
- ANALOG DEVICES INC ADP5061 DRIVER
- M:	Michael Hennerich <Michael.Hennerich@analog.com>
- L:	linux-pm@vger.kernel.org
--- 
-2.35.0
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

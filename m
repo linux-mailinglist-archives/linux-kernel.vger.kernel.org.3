@@ -2,156 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C97449EC84
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDD449EC99
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241366AbiA0Uih convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Jan 2022 15:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236959AbiA0Uig (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:38:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7610FC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:38:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 197BC61904
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 20:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E89CC340E4;
-        Thu, 27 Jan 2022 20:38:34 +0000 (UTC)
-Date:   Thu, 27 Jan 2022 15:38:32 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Yinan Liu <yinan@linux.alibaba.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] ftrace: Have architectures opt-in for mcount build time
-  sorting
-Message-ID: <20220127153821.3bc1ac6e@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1344054AbiA0UlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 15:41:22 -0500
+Received: from mga04.intel.com ([192.55.52.120]:52771 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238714AbiA0UlS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 15:41:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643316078; x=1674852078;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PtXUQzPfEgkweEHkVOvRzld+rVCoXr9X4ootNwJo2Kc=;
+  b=lNb2EFg7WVbQrUPVHiVIkishjksT3edldzabFJMhtuO5Mt5nEDW194DI
+   aeQ+l+ltGtyPU5f1VsH7P/Av5azwkIcKw5s1OGjhzUIiTMEsBYV2Ipr3F
+   0lhznSMFXvAhpm2V4blsXKRat2S4OtWQbv6yG9Doq9S33oQaKUU12Y13j
+   7k3Luh5DuHycb9srhqNNnf9dL6IETwqLUQaf9IJhwdpco+wbK3IFd2pwm
+   ZE30W6d9U1r7GTKAuQt/hjSUJFFogEEU/UPu4QEglYP0Te4Y9YcAe1HAB
+   4RVup1f+WtVNCoSBklCM8NRrwNQXpwb4JDZPgO6KZz7qHIJXJhGAxia4d
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245800442"
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="245800442"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 12:41:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="597961775"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Jan 2022 12:41:17 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nDBa0-000N1Z-Dg; Thu, 27 Jan 2022 20:41:16 +0000
+Date:   Fri, 28 Jan 2022 04:40:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ramji Jiyani <ramjiyani@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android13-5.10
+ 9410/9999] kernel/gki_module.c:35:6: warning: no previous prototype for
+ function 'gki_is_module_protected_symbol'
+Message-ID: <202201280406.7Em0aA4W-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From f7d4ef4e77464e08af38789ea5d3a9cfb80a3d78 Mon Sep 17 00:00:00 2001
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Date: Tue, 25 Jan 2022 09:19:10 -0500
-Subject: [PATCH] ftrace: Have architectures opt-in for mcount build time
- sorting
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android13-5.10
+head:   7edc8bc69d7def26c4528360c9ec96dbeadcd0a1
+commit: 9ab6a242258a9ac17506b74c6ed7332703d536f4 [9410/9999] ANDROID: GKI: Add module load time protected symbol lookup
+config: arm-randconfig-r023-20220127 (https://download.01.org/0day-ci/archive/20220128/202201280406.7Em0aA4W-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f400a6012c668dfaa73462caf067ceb074e66c47)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/9ab6a242258a9ac17506b74c6ed7332703d536f4
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android13-5.10
+        git checkout 9ab6a242258a9ac17506b74c6ed7332703d536f4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-First S390 complained that the sorting of the mcount sections at build
-time caused the kernel to crash on their architecture. Now PowerPC is
-complaining about it too. And also ARM64 appears to be having issues.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It may be necessary to also update the relocation table for the values
-in the mcount table. Not only do we have to sort the table, but also
-update the relocations that may be applied to the items in the table.
+All warnings (new ones prefixed by >>):
 
-If the system is not relocatable, then it is fine to sort, but if it is,
-some architectures may have issues (although x86 does not as it shifts all
-addresses the same).
+>> kernel/gki_module.c:35:6: warning: no previous prototype for function 'gki_is_module_protected_symbol' [-Wmissing-prototypes]
+   bool gki_is_module_protected_symbol(const char *name)
+        ^
+   kernel/gki_module.c:35:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool gki_is_module_protected_symbol(const char *name)
+   ^
+   static 
+>> kernel/gki_module.c:46:6: warning: no previous prototype for function 'gki_is_module_exported_symbol' [-Wmissing-prototypes]
+   bool gki_is_module_exported_symbol(const char *name)
+        ^
+   kernel/gki_module.c:46:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool gki_is_module_exported_symbol(const char *name)
+   ^
+   static 
+   2 warnings generated.
 
-Add a HAVE_BUILDTIME_MCOUNT_SORT that an architecture can set to say it is
-safe to do the sorting at build time.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for PHYLINK
+   Depends on NETDEVICES
+   Selected by
+   - GKI_HIDDEN_ETHERNET_CONFIGS
+   WARNING: unmet direct dependencies detected for WEXT_SPY
+   Depends on NET && WIRELESS
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+   WARNING: unmet direct dependencies detected for WIRELESS_EXT
+   Depends on NET && WIRELESS
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+   WARNING: unmet direct dependencies detected for WEXT_CORE
+   Depends on NET && WIRELESS && (CFG80211_WEXT || WIRELESS_EXT
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+   WARNING: unmet direct dependencies detected for NET_PTP_CLASSIFY
+   Depends on NET
+   Selected by
+   - GKI_HIDDEN_NET_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_PCM_IEC958
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_SOC_CONFIGS
+   WARNING: unmet direct dependencies detected for HMM_MIRROR
+   Depends on MMU
+   Selected by
+   - GKI_HIDDEN_GPU_CONFIGS
+   WARNING: unmet direct dependencies detected for WEXT_PROC
+   Depends on NET && WIRELESS && PROC_FS && WEXT_CORE
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+   WARNING: unmet direct dependencies detected for WEXT_PRIV
+   Depends on NET && WIRELESS
+   Selected by
+   - GKI_LEGACY_WEXT_ALLCONFIG
+   WARNING: unmet direct dependencies detected for PAGE_POOL
+   Depends on NET
+   Selected by
+   - GKI_HIDDEN_NET_CONFIGS
 
-Also update the config to compile in build time sorting in the sorttable
-code in scripts/ to depend on CONFIG_BUILDTIME_MCOUNT_SORT.
 
-Link: https://lore.kernel.org/all/944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com/
+vim +/gki_is_module_protected_symbol +35 kernel/gki_module.c
 
-Cc: Yinan Liu <yinan@linux.alibaba.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Tested-by: Mark Rutland <mark.rutland@arm.com> [arm64]
-Tested-by: Sachin Sant <sachinp@linux.ibm.com>
-Fixes: 72b3942a173c ("scripts: ftrace - move the sort-processing in ftrace_init")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+    29	
+    30	/**
+    31	 * gki_is_module_protected_symbol - Is a symbol protected from unsigned module?
+    32	 *
+    33	 * @name:	Symbol being checked against protection from unsigned module
+    34	 */
+  > 35	bool gki_is_module_protected_symbol(const char *name)
+    36	{
+    37		return bsearch(name, gki_protected_symbols, NO_OF_PROTECTED_SYMBOLS,
+    38			       MAX_PROTECTED_NAME_LEN, cmp_name) != NULL;
+    39	}
+    40	
+    41	/**
+    42	 * gki_is_module_exported_symbol - Is a symbol exported from a GKI module?
+    43	 *
+    44	 * @name:	Symbol being checked against exported symbols from GKI modules
+    45	 */
+  > 46	bool gki_is_module_exported_symbol(const char *name)
+
 ---
-Changes since v1: https://lore.kernel.org/all/20220127114249.03b1b52b@gandalf.local.home/
- - Have CONFIG_BUILDTIME_MCOUNT_SORT depend on DYNAMIC_FTRACE
-   otherwise it fails to build when DYNAMIC_FTRACE is not set
-   because it can not find the mcount section in the sorttable code.
-
- arch/arm/Kconfig     | 1 +
- arch/x86/Kconfig     | 1 +
- kernel/trace/Kconfig | 8 +++++++-
- scripts/Makefile     | 2 +-
- 4 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index c2724d986fa0..5256ebe57451 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -82,6 +82,7 @@ config ARM
- 	select HAVE_EBPF_JIT if !CPU_ENDIAN_BE32
- 	select HAVE_CONTEXT_TRACKING
- 	select HAVE_C_RECORDMCOUNT
-+	select HAVE_BUILDTIME_MCOUNT_SORT
- 	select HAVE_DEBUG_KMEMLEAK if !XIP_KERNEL
- 	select HAVE_DMA_CONTIGUOUS if MMU
- 	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && !CPU_ENDIAN_BE32 && MMU
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 7399327d1eff..46080dea5dba 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -186,6 +186,7 @@ config X86
- 	select HAVE_CONTEXT_TRACKING_OFFSTACK	if HAVE_CONTEXT_TRACKING
- 	select HAVE_C_RECORDMCOUNT
- 	select HAVE_OBJTOOL_MCOUNT		if STACK_VALIDATION
-+	select HAVE_BUILDTIME_MCOUNT_SORT
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_DYNAMIC_FTRACE
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 752ed89a293b..a5eb5e7fd624 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -70,10 +70,16 @@ config HAVE_C_RECORDMCOUNT
- 	help
- 	  C version of recordmcount available?
- 
-+config HAVE_BUILDTIME_MCOUNT_SORT
-+       bool
-+       help
-+         An architecture selects this if it sorts the mcount_loc section
-+	 at build time.
-+
- config BUILDTIME_MCOUNT_SORT
-        bool
-        default y
--       depends on BUILDTIME_TABLE_SORT && !S390
-+       depends on HAVE_BUILDTIME_MCOUNT_SORT && DYNAMIC_FTRACE
-        help
-          Sort the mcount_loc section at build time.
- 
-diff --git a/scripts/Makefile b/scripts/Makefile
-index b082d2f93357..cedc1f0e21d8 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -32,7 +32,7 @@ HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
- HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
- endif
- 
--ifdef CONFIG_DYNAMIC_FTRACE
-+ifdef CONFIG_BUILDTIME_MCOUNT_SORT
- HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
- endif
- 
--- 
-2.33.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

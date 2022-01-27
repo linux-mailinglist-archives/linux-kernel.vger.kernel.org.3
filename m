@@ -2,148 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 485BF49E90F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52FA49E913
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244641AbiA0Rby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:31:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S244668AbiA0Rcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:32:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244622AbiA0Rbx (ORCPT
+        with ESMTP id S243660AbiA0Rcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:31:53 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB2EC061747
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:31:52 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id u6so6728754lfm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:31:52 -0800 (PST)
+        Thu, 27 Jan 2022 12:32:39 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58C7C061714;
+        Thu, 27 Jan 2022 09:32:38 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id ka4so7324335ejc.11;
+        Thu, 27 Jan 2022 09:32:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=Xawp1TwtSo/uo/1tbPqTEzWBuDJ4Y6t+ZX2/4mqpc+o=;
-        b=tvJb51SK9pl9ihres+CxFmedKvEw9bFtuhVR5WdFnCRdDOTuIEMwabJE1kAZ5hmw9k
-         TY28PIoWYpejGKA2zB6kDzlh6wFuzsVoFcRWRbXhVTVQpUv2RpezpOw6Qi8k28/x3LhM
-         1bZMx1x/Kw8Ieybgn5Lyl7NsR1ymit5pUoq6I=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2lCGLXs6YGQp3h15Eb0z7/QVdPNp8XuhGNbjNFCQzRA=;
+        b=FlQ1YC1txpdVN6jJbO/LQ//5Yf7GCMlDVlyOB2eJMDDTB1xyE8Vod5TaHr2SB9pAZQ
+         FeTyzJPEXEAtPVsE3hrAX+aFZFLndEUyxVHy/unSaGN6QXX/TDAXAGWoaQGdk9LU57r1
+         GjlS0R5tQtCqMhZ9bhHkGlbiI7f/AcL6uU0emMoXofbyAR2/Y8jHss5FWvN8oL/lIome
+         XmSRWJDmqm2qbR22vIXwtfHG9o1iuo3ox0g+ONEMlsAQSmM4mNFa2AiGxXnpUeh31XHs
+         hG9o/OuT70v4xSCa9Klx9VjcgP5chKi3FdRjedh/I/ZcPWB17562/OGi3vC/SJcFMkJC
+         nBrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=Xawp1TwtSo/uo/1tbPqTEzWBuDJ4Y6t+ZX2/4mqpc+o=;
-        b=IwpijtzdnFHD7jgIglFae0a3NRqqzS7ea0N+VC1OkdBPkRs01v/RfEYfTizLzeUxp3
-         +zW3Y8f67ur0E1tvA+NpzAwhuVyzqB2XcCn5vWUwbfB1Bvcqkwjyp75HfaX+JGEBcVFH
-         /nkSSiZskBbMNnWLAAc6E0HKq15YpUYVw/wLRRDOwEoYWvxCXJRpBANbdR00AqO8XkO/
-         t6daERN7lZ5LEF+wuKVkrDtcdwwsUwoHsfdLiyFvgxAATTmFWKtXCkz79LwU5IbhPdNe
-         184DydI7K9J6ACe6z/rZ2MBKCbTVY9cIIWxN3ku5MNIIKC6T5pALP90SBS017stgy8ux
-         6e3Q==
-X-Gm-Message-State: AOAM532+kaXv8jpu9UGY5T3fvshZLiJ4C1roikazxNd2A4mUkcsLNPDY
-        u/zj0gAu7rHwjaKsnDURSKJr2g==
-X-Google-Smtp-Source: ABdhPJwPFC+0A5GkkdbCXcsa0Ip2DOjbqTjkpo4pPeBBj03PC4LuT64RBW9Hc31DrO3FWxxzkR4DOw==
-X-Received: by 2002:a05:6512:3408:: with SMTP id i8mr3356039lfr.17.1643304710661;
-        Thu, 27 Jan 2022 09:31:50 -0800 (PST)
-Received: from cloudflare.com ([2a01:110f:4809:d800::e00])
-        by smtp.gmail.com with ESMTPSA id i1sm958936ljn.39.2022.01.27.09.31.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2lCGLXs6YGQp3h15Eb0z7/QVdPNp8XuhGNbjNFCQzRA=;
+        b=5nWmyFRYuEa9ldFPHKT1GffSbQUs/ai+c1NOgtg+9ayseOQuOPCIG/7aIN3Apk0GGE
+         Xgg5ieT+5MdXkYs/dopuGwxxCsqiEpKV34zMZUXoe0Vt/Bn1dNsrB6nNyywKzOlLm9AL
+         GNNdySgMlVKI/rMo03vsliXWJlOEt+HbZaSJgkkJnIoNRTI7gqAAnzhH8DxfpYF9UcUY
+         b2Id6nrvljfhlgzW0T2/a4duptWfiLI4D0FtMmQoPDSgVM3LfwTc02EZwHBx55JWTvIO
+         MPcWiAQepSb4w85g7CEK2veSl7y64XktExoGorE+j3F/mubJTwsci3ySkSxnrILf8vpn
+         LOSg==
+X-Gm-Message-State: AOAM5328/hyDFELNrlc3hqcagzRbtnXXFfA2BAf7AkwbAyJWTmbrDHmJ
+        HDZNWssQqnOPJV1gPYE7FtsJSE55QNCGZw==
+X-Google-Smtp-Source: ABdhPJwUN/Bq7wyaQglPGxU5Ss4bf2Iqr3zY+U9Rq85JCgnpexPqBxOMZIgtVqPrhdDTmDnc25rBrg==
+X-Received: by 2002:a17:907:1614:: with SMTP id hb20mr3662222ejc.255.1643304757253;
+        Thu, 27 Jan 2022 09:32:37 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id kw5sm1472188ejc.140.2022.01.27.09.32.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 09:31:49 -0800 (PST)
-References: <20220113070245.791577-1-imagedong@tencent.com>
- <87sftbobys.fsf@cloudflare.com>
- <20220125224524.fkodqvknsluihw74@kafai-mbp.dhcp.thefacebook.com>
- <CAADnVQKbYCCYjCMhEV7p1YzkAVSKvg-1VKfWVQYVL0TaESNxBQ@mail.gmail.com>
- <20220125235320.fx775qsdtqon272v@kafai-mbp.dhcp.thefacebook.com>
-User-agent: mu4e 1.1.0; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Menglong Dong <menglong8.dong@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "Network Development" <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Mengen Sun <mengensun@tencent.com>, flyingpeng@tencent.com,
-        mungerjiang@tencent.com, Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH bpf-next] bpf: Add document for 'dst_port' of 'struct
- bpf_sock'
-In-reply-to: <20220125235320.fx775qsdtqon272v@kafai-mbp.dhcp.thefacebook.com>
-Date:   Thu, 27 Jan 2022 18:31:48 +0100
-Message-ID: <8735l9rsor.fsf@cloudflare.com>
+        Thu, 27 Jan 2022 09:32:35 -0800 (PST)
+Date:   Thu, 27 Jan 2022 18:32:33 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Sameer Pujar <spujar@nvidia.com>, jonathanh@nvidia.com,
+        mperttunen@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] reset: tegra-bpmp: Restore Handle errors in BPMP response
+Message-ID: <YfLXMVXTgN9lZAA6@orome>
+References: <1641995806-15245-1-git-send-email-spujar@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lFSd7VNl4nEuksga"
+Content-Disposition: inline
+In-Reply-To: <1641995806-15245-1-git-send-email-spujar@nvidia.com>
+User-Agent: Mutt/2.1.5 (31b18ae9) (2021-12-30)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:53 AM CET, Martin KaFai Lau wrote:
-> On Tue, Jan 25, 2022 at 03:02:37PM -0800, Alexei Starovoitov wrote:
->> On Tue, Jan 25, 2022 at 2:45 PM Martin KaFai Lau <kafai@fb.com> wrote:
->> >
->> > On Tue, Jan 25, 2022 at 08:24:27PM +0100, Jakub Sitnicki wrote:
->> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> > > > index b0383d371b9a..891a182a749a 100644
->> > > > --- a/include/uapi/linux/bpf.h
->> > > > +++ b/include/uapi/linux/bpf.h
->> > > > @@ -5500,7 +5500,11 @@ struct bpf_sock {
->> > > >     __u32 src_ip4;
->> > > >     __u32 src_ip6[4];
->> > > >     __u32 src_port;         /* host byte order */
->> > > > -   __u32 dst_port;         /* network byte order */
->> > > > +   __u32 dst_port;         /* low 16-bits are in network byte order,
->> > > > +                            * and high 16-bits are filled by 0.
->> > > > +                            * So the real port in host byte order is
->> > > > +                            * bpf_ntohs((__u16)dst_port).
->> > > > +                            */
->> > > >     __u32 dst_ip4;
->> > > >     __u32 dst_ip6[4];
->> > > >     __u32 state;
->> > >
->> > > I'm probably missing something obvious, but is there anything stopping
->> > > us from splitting the field, so that dst_ports is 16-bit wide?
->> > >
->> > > I gave a quick check to the change below and it seems to pass verifier
->> > > checks and sock_field tests.
->> > >
->> > > IDK, just an idea. Didn't give it a deeper thought.
->> > >
->> > > --8<--
->> > >
->> > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> > > index 4a2f7041ebae..344d62ccafba 100644
->> > > --- a/include/uapi/linux/bpf.h
->> > > +++ b/include/uapi/linux/bpf.h
->> > > @@ -5574,7 +5574,8 @@ struct bpf_sock {
->> > >       __u32 src_ip4;
->> > >       __u32 src_ip6[4];
->> > >       __u32 src_port;         /* host byte order */
->> > > -     __u32 dst_port;         /* network byte order */
->> > > +     __u16 unused;
->> > > +     __u16 dst_port;         /* network byte order */
->> > This will break the existing bpf prog.
->> 
->> I think Jakub's idea is partially expressed:
->> +       case offsetof(struct bpf_sock, dst_port):
->> +               bpf_ctx_record_field_size(info, sizeof(__u16));
->> +               return bpf_ctx_narrow_access_ok(off, size, sizeof(__u16));
->> 
->> Either 'unused' needs to be after dst_port or
->> bpf_sock_is_valid_access() needs to allow offset at 'unused'
->> and at 'dst_port'.
->> And allow u32 access though the size is actually u16.
->> Then the existing bpf progs (without recompiling) should work?
-> Yes, I think that should work with the existing bpf progs.
-> I suspect putting 'dst_port' first and then followed by 'unused'
-> may be easier.  That will also serve as a natural doc for the
-> current behavior (the value is in the lower 16 bits).
 
-You're right. I can't count. Now fixed in [1].
+--lFSd7VNl4nEuksga
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> It can be extended to bpf_sk_lookup? bpf_sk_lookup can read at any
-> offset of these 4 bytes, so may need to read 0 during
-> convert_ctx_accesses?
+On Wed, Jan 12, 2022 at 07:26:46PM +0530, Sameer Pujar wrote:
+> This reverts following commit 69125b4b9440 ("reset: tegra-bpmp: Revert
+> Handle errors in BPMP response").
+>=20
+> The Tegra194 HDA reset failure is fixed by commit d278dc9151a0 ("ALSA:
+> hda/tegra: Fix Tegra194 HDA reset failure"). The temporary revert of
+> original commit c045ceb5a145 ("reset: tegra-bpmp: Handle errors in BPMP
+> response") can be removed now.
+>=20
+> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+> ---
+>  drivers/reset/tegra/reset-bpmp.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 
-Let's see what the feedback to [1] will be.
+Hi Philipp,
 
-[1] https://lore.kernel.org/bpf/20220127172448.155686-1-jakub@cloudflare.com/T/#t
+the commit that fixed the HDA reset failure was merged into v5.17-rc1,
+so this can safely be applied as a fix for v5.17. At the same time the
+existing bug is fairly harmless, so deferring this to v5.18 would also
+be fine.
+
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+--lFSd7VNl4nEuksga
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmHy1y8ACgkQ3SOs138+
+s6HU+g/8DQ4NAOdFDNmf1ft03thYqebvUH/l5hm+2YyzCHU2p0NCxlf4cfe6/jyV
+7ssvooV4zsyt8Pq3vj1tcelNRTHrHVYrURWaRveqyw/Hz2VbCqO+daStarv5Wafg
+E05P0XEgPs1L1YyvT6BQRcSt+z1XTwMZYAoPRO1iL4bMD27rRwpEfmnSIyga1T46
+y4kuNiGFZN7XkBjlZcoSiefW51/anKAWI/elh99eNDQquW7J4h37CSDI2wbGQYbf
+S2lUhN0nSwmbOYiW9Q7A4vcKwfVgeWeVKpWRgzH9rKBMu9G/Zymla06yasZ/MYDk
+CFKTlqNGnXYfsPeJjfu/2K+3eHhw7sGvVXOkZuQNrrd4s5vEWh4jxIcD2JrpceCQ
+EuhZIRz4mgjPUuGALyLHtgDpNaCtuGLFCtbLTCcGnjgjLH1p9z20/NoO6iXtBmRj
+kHn2sUM08BnneBqtj63vYUXtPKhaQApwkHEjNUgfh/mMzBfODnXS0lmEYYpND8sT
+EG2gSdbqo4CcT9aro+/nn/uAvP/w/ZYVkLR7G/Z/UpzM46D9bNMVcsBdYR5/QA+G
+0mS1FhX/BHgogbtlCkGXJtQN60DlKXZy2sh06WPBSTGD9Vd2HvGiNhMn/0bwltHN
+/8rL9DPFfvRElTTY8DShRNSvXf0JT8Mbu/1RH3JYGvylwsx0aj4=
+=FmYd
+-----END PGP SIGNATURE-----
+
+--lFSd7VNl4nEuksga--

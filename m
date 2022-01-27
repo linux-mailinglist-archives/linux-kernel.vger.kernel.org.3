@@ -2,207 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BF249EC66
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4499949EC68
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344002AbiA0UVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 15:21:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S1344011AbiA0UWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 15:22:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343981AbiA0UVW (ORCPT
+        with ESMTP id S1343981AbiA0UWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:21:22 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74338C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:21:21 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id m4so8417208ejb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:21:21 -0800 (PST)
+        Thu, 27 Jan 2022 15:22:23 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7E6C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:22:23 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so2994211pjq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:22:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zteXgpZ/JH4IqimdwPBayrW7aIOlMpDuJVk4lYJ5/YU=;
-        b=WaiASpp09I4cE41LfRl1IYElP2t6jW/Urgc9CLi/V/9T1HmCIjuqjmzUjKMrfq1BWv
-         9VlKEWW9pcyZcKsHjqC10GF4CyH+P4+r4341qe4OSmg0M5Fy7dZrAHtngVabykR9Uvft
-         6RpAKb2PPUpdmvw/wtlEc+6ZP1F/xVcPSlirRFFwpKBqjncJ+UxNzk4/XCA+XxRAJWNf
-         GZx2w8q4jrJnWLdPkMvpEvWQDV7Gz507O8K1KykA95mcAy38Hf6vCdaSNBe/UVu1eB56
-         n8Ne6oPzgkvz8nrMoX5aCgcSH+g0pEy1kPvtG8lvm7ST/AdHV+nkLbO9wBmyMqv6B+2q
-         qOnA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iKuuVqdayh65BOs3QlcJ6pbf0rkmkRMe+Lp1oFkny8c=;
+        b=bbAvaOrBiYQC7RFxWBcx8VnN8m184zyOBkf16LekFtzpPyThJ4lx2gNpt/eZEV+wiy
+         Im4jCQzSINPD87Ptw0Do0AmiL01Gc8WgVMJUSQaaWnppa0Ql7QMmxWs7d/uj5aW2thZG
+         +gXMDt3UmgHUGpqJmeNIKGrHLTw1EEJ826Xy1IXiPYOMxipNOk6/HlYxa9GwVmZjU9oG
+         Ck8IOzu+lLqAc4quoZGHI2vN0a1tEdQmf/4LeWrTpB1CkPTnxMHI1uPW4KjH/Yk+CioC
+         QO062WshhfvjMHgzRibp9SknkZkQF0HqZCxk2ClfPL7gjAp+cr4k+r/6JJ7+K4LLVnXk
+         8jZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zteXgpZ/JH4IqimdwPBayrW7aIOlMpDuJVk4lYJ5/YU=;
-        b=bgneGRXfW5SIOpl12VWfezjfsCzFgGa2cyQ/CEyBO9I+BoAyj0l5dANWhLMcb/WRin
-         6fI3oh0and4BLSikez1XuPNcJpghw6QAlqJeOVCLvzGfuumGwzDEfkypf56DPSRBWUGi
-         1MieP1vjpsgqCD1ows3H+x8nKEO0levkp7KkoZTLqPfZBwqGrEaRB/xw7N0mvLgUAHkL
-         SmGxjw1GritszTHh01J6Erm7qRlca2JKcdZZxrCcPscniug7QGS/YJZvFpC/+npDm6d7
-         A/C4CArllJY3p6Gsc/JlqX7zkt8QUL0M1TKYps8dtDzJDTVnzXzmI3WuUpGEYSbthizD
-         UOIw==
-X-Gm-Message-State: AOAM533Nwtgbh7/ZpydITl7twImfvOgRrj8xwtaeAhuzC7VZ0xOO+BvO
-        Q9kcLC817LfjhWmMfHbGzWXKKjfVsJCMjtsGJkY=
-X-Google-Smtp-Source: ABdhPJx5JZCIJRCofzXsOZZYujBAN5o9bM+cU4dUvHmF2uHF7ZRIAKghbvkM75vJucUsEuQWQFLmF5p1D8jnck5thYg=
-X-Received: by 2002:a17:907:60cf:: with SMTP id hv15mr4127275ejc.702.1643314879801;
- Thu, 27 Jan 2022 12:21:19 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iKuuVqdayh65BOs3QlcJ6pbf0rkmkRMe+Lp1oFkny8c=;
+        b=MkPzuu9kP2jMLed4F6pi6tTaRk/fpPtR/nmMdCZoqM+qbQDrIDUycCAr5UyVnNSbVK
+         JHnIpyw/ycGx1eiL8KjvUZ5rneLQaBklOysHc0DJAkDJWyiB2nMnkdL15XI+wKwj2chu
+         5XMrJM9JgI+hPhRXjXU3j+Sa3XQFfQ5YiAz5OfF/4ECwR9J08AraQG1c2Bhi2om4X2JH
+         XifbJUBJrm60N7FoV/miyRmPTopWqbAfYTFhI3TuKpAgweDZJEYxGVA3bZQ569jYFmNK
+         Cy4pSKYbp56k/VCDRkeQzhdtfmuSrlGTmQCchwGe4lPLRVeZp/wpfUhQVHhdSH9IkFh0
+         JLKw==
+X-Gm-Message-State: AOAM532kS/9p9kECqtPt/Z6JiRiAa4oIMakXOeU+4ah+NUZOWKrh47K/
+        3ht/aIZ/NzIuY2tjq2GnedLKoQ==
+X-Google-Smtp-Source: ABdhPJzwkgUTEXFE1qykze0xRlKlyYYL2dHK+otqpecyQIADcjZz7ovAKDX79mubX2rWygZ5T4NSRQ==
+X-Received: by 2002:a17:902:ce84:: with SMTP id f4mr4634037plg.140.1643314943089;
+        Thu, 27 Jan 2022 12:22:23 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id om6sm177678pjb.24.2022.01.27.12.22.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 12:22:22 -0800 (PST)
+Date:   Thu, 27 Jan 2022 13:22:20 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 RESEND 0/7] coresight: trbe: Workaround Cortex-A510
+ erratas
+Message-ID: <20220127202220.GA2191206@p14s>
+References: <1643120437-14352-1-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-References: <20220126080947.4529-1-yangyicong@hisilicon.com>
- <20220126080947.4529-3-yangyicong@hisilicon.com> <YfK9DSMFabjYm/MV@BLR-5CG11610CF.amd.com>
-In-Reply-To: <YfK9DSMFabjYm/MV@BLR-5CG11610CF.amd.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Fri, 28 Jan 2022 09:21:08 +1300
-Message-ID: <CAGsJ_4xL3tynB9P=rKMoX2otW4bMMU5Z-P9zSudMV3+fr2hpXw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-To:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Cc:     Yicong Yang <yangyicong@hisilicon.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        prime.zeng@huawei.com,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        ego@linux.vnet.ibm.com,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Guodong Xu <guodong.xu@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1643120437-14352-1-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 4:41 AM Gautham R. Shenoy
-<gautham.shenoy@amd.com> wrote:
->
-> On Wed, Jan 26, 2022 at 04:09:47PM +0800, Yicong Yang wrote:
-> > From: Barry Song <song.bao.hua@hisilicon.com>
-> >
-> > For platforms having clusters like Kunpeng920, CPUs within the same
-> > cluster have lower latency when synchronizing and accessing shared
-> > resources like cache. Thus, this patch tries to find an idle cpu
-> > within the cluster of the target CPU before scanning the whole LLC
-> > to gain lower latency.
-> >
-> > Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this
-> > patch doesn't consider SMT for this moment.
-> >
-> > Testing has been done on Kunpeng920 by pinning tasks to one numa
-> > and two numa. On Kunpeng920, Each numa has 8 clusters and each
-> > cluster has 4 CPUs.
-> >
-> > With this patch, We noticed enhancement on tbench within one
-> > numa or cross two numa.
-> >
-> > On numa 0:
-> >                             5.17-rc1                patched
-> > Hmean     1        324.73 (   0.00%)      378.01 *  16.41%*
-> > Hmean     2        645.36 (   0.00%)      754.63 *  16.93%*
-> > Hmean     4       1302.09 (   0.00%)     1507.54 *  15.78%*
-> > Hmean     8       2612.03 (   0.00%)     2982.57 *  14.19%*
-> > Hmean     16      5307.12 (   0.00%)     5886.66 *  10.92%*
-> > Hmean     32      9354.22 (   0.00%)     9908.13 *   5.92%*
-> > Hmean     64      7240.35 (   0.00%)     7278.78 *   0.53%*
-> > Hmean     128     6186.40 (   0.00%)     6187.85 (   0.02%)
-> >
-> > On numa 0-1:
-> >                             5.17-rc1                patched
-> > Hmean     1        320.01 (   0.00%)      378.44 *  18.26%*
-> > Hmean     2        643.85 (   0.00%)      752.52 *  16.88%*
-> > Hmean     4       1287.36 (   0.00%)     1505.62 *  16.95%*
-> > Hmean     8       2564.60 (   0.00%)     2955.29 *  15.23%*
-> > Hmean     16      5195.69 (   0.00%)     5814.74 *  11.91%*
-> > Hmean     32      9769.16 (   0.00%)    10872.63 *  11.30%*
-> > Hmean     64     15952.50 (   0.00%)    17281.98 *   8.33%*
-> > Hmean     128    13113.77 (   0.00%)    13895.20 *   5.96%*
-> > Hmean     256    10997.59 (   0.00%)    11244.69 *   2.25%*
-> > Hmean     512    14623.60 (   0.00%)    15526.25 *   6.17%*
-> >
-> > This will also help to improve the MySQL. With MySQL server
-> > running on numa 0 and client running on numa 1, both QPS and
-> > latency is imporved on read-write case:
-> >                         5.17-rc1        patched
-> > QPS-16threads        143333.2633    145077.4033(+1.22%)
-> > QPS-24threads        195085.9367    202719.6133(+3.91%)
-> > QPS-32threads        241165.6867      249020.74(+3.26%)
-> > QPS-64threads        244586.8433    253387.7567(+3.60%)
-> > avg-lat-16threads           2.23           2.19(+1.19%)
-> > avg-lat-24threads           2.46           2.36(+3.79%)
-> > avg-lat-36threads           2.66           2.57(+3.26%)
-> > avg-lat-64threads           5.23           5.05(+3.44%)
-> >
-> > Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-> > Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-> > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> > ---
-> >  kernel/sched/fair.c | 46 +++++++++++++++++++++++++++++++++++++++++----
-> >  1 file changed, 42 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 5146163bfabb..2f84a933aedd 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -6262,12 +6262,46 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
-> >
-> >  #endif /* CONFIG_SCHED_SMT */
-> >
-> > +#ifdef CONFIG_SCHED_CLUSTER
-> > +/*
-> > + * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
-> > + */
-> > +static inline int scan_cluster(struct task_struct *p, int prev_cpu, int target)
-> > +{
-> > +     struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-> > +     struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
-> > +     int cpu, idle_cpu;
-> > +
-> > +     /* TODO: Support SMT case while a machine with both cluster and SMT born */
-> > +     if (!sched_smt_active() && sd) {
-> > +             for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
-> > +                     idle_cpu = __select_idle_cpu(cpu, p);
-> > +                     if ((unsigned int)idle_cpu < nr_cpumask_bits)
-> > +                             return idle_cpu;
-> > +             }
-> > +
-> > +             /* Don't ping-pong tasks in and out cluster frequently */
-> > +             if (cpus_share_resources(target, prev_cpu))
-> > +                     return target;
->
-> We reach here when there aren't any idle CPUs within the
-> cluster. However there might be idle CPUs in the MC domain. Is a busy
-> @target preferable to a potentially idle CPU within the larger domain
-> ?
+On Tue, Jan 25, 2022 at 07:50:30PM +0530, Anshuman Khandual wrote:
+> 	This series adds three different workarounds in the TRBE driver for
+> Cortex-A510 specific erratas. But first, this adds Cortex-A510 specific cpu
+> part number definition in the platform. This series applies on 5.17-rc1.
+> 
+> Relevant errata documents can be found here.
+> 
+> https://developer.arm.com/documentation/SDEN2397239/900
+> https://developer.arm.com/documentation/SDEN2397589/900
+> 
+> Changes in V3:
+> 
+> https://lore.kernel.org/all/1641872346-3270-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> - Moved the comment inside trbe_needs_drain_after_disable()
+> - Moved the comment inside trbe_needs_ctxt_sync_after_enable()
+> 
+> Changes in V2:
+> 
+> https://lore.kernel.org/all/1641517808-5735-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> Accommodated most review comments from the previous version.
+> 
+> - Split all patches into CPU errata definition, detection and TRBE workarounds
+> - s/TRBE_WORKAROUND_SYSREG_WRITE_FAILURE/TRBE_NEEDS_DRAIN_AFTER_DISABLE
+> - s/TRBE_WORKAROUND_CORRUPTION_WITH_ENABLE/TRBE_NEEDS_CTXT_SYNC_AFTER_ENABLE
+> - s/trbe_may_fail_sysreg_write()/trbe_needs_drain_after_disable()
+> - s/trbe_may_corrupt_with_enable()/trbe_needs_ctxt_sync_after_enable()
+> - Updated Kconfig help message for config ARM64_ERRATUM_1902691
+> - Updated error message for trbe_is_broken() detection
+> - Added new trblimitr parameter to set_trbe_enabled(), improving performance
+> - Added COMPILE_TEST dependency in the errata, until TRBE part is available
+> 
+> Changes in V1:
+> 
+> https://lore.kernel.org/lkml/1641359159-22726-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> 
+> Anshuman Khandual (7):
+>   arm64: Add Cortex-A510 CPU part definition
+>   arm64: errata: Add detection for TRBE ignored system register writes
+>   arm64: errata: Add detection for TRBE invalid prohibited states
+>   arm64: errata: Add detection for TRBE trace data corruption
+>   coresight: trbe: Work around the ignored system register writes
+>   coresight: trbe: Work around the invalid prohibited states
+>   coresight: trbe: Work around the trace data corruption
+> 
+>  Documentation/arm64/silicon-errata.rst       |   6 +
+>  arch/arm64/Kconfig                           |  59 ++++++++++
+>  arch/arm64/include/asm/cputype.h             |   2 +
+>  arch/arm64/kernel/cpu_errata.c               |  27 +++++
+>  arch/arm64/tools/cpucaps                     |   3 +
+>  drivers/hwtracing/coresight/coresight-trbe.c | 114 ++++++++++++++-----
+>  drivers/hwtracing/coresight/coresight-trbe.h |   8 --
+>  7 files changed, 183 insertions(+), 36 deletions(-)
 
-Hi Gautham,
+I have applied this set and sent a pull request to Catalin for the arm64
+portion.
 
-My benchmark showed some performance regression while load was medium or above
-if we grabbed idle cpu in and out the cluster. it turned out the
-regression disappeared if
-we blocked the ping-pong. so the logic here is that if we have scanned
-and found an
-idle cpu within the cluster before, we don't let the task jumping back
-and forth frequently
-as cache synchronization is higher cost. but the code still allows
-scanning out of the cluster
-if we haven't packed waker and wakee together yet.
+Thanks,
+Mathieu
 
-it might not be a universal win in all kinds of workload. we saw
-tbench, mysql benefit from
-the whole change. but pgbench seems not always. so we are still on the
-way to make possible
-further tuning here.
-
->
->
-> --
-> Thanks and Regards
-> gautham.
-
-Thanks
-Barry
+> 
+> -- 
+> 2.25.1
+> 

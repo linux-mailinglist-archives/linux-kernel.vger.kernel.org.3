@@ -2,124 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F47949D70B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C358049D70E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234153AbiA0BAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 20:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
+        id S234193AbiA0BAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 20:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiA0BAN (ORCPT
+        with ESMTP id S231202AbiA0BA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 20:00:13 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CD7C06173B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:00:13 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id n9-20020a17090a73c900b001b5cafefa27so804272pjk.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:00:13 -0800 (PST)
+        Wed, 26 Jan 2022 20:00:28 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA02C06161C;
+        Wed, 26 Jan 2022 17:00:28 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id k14so1216324qtq.10;
+        Wed, 26 Jan 2022 17:00:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=dJKNUD3iuu442ap/Za5pEHcy4QO6ctzGW3ukPbvVbWM=;
-        b=EUYOgXjTPFKEXtqD40KTU8UpFAGHUKEFFUWkriycEm7WMocUsEI0CcK5GSYYsm8+bD
-         I0GXH6Crq+lsLTb1jmknQaS0XNuF5kQlPH7VkjO694gNWvXb6twDJNgKWT8Una1gFVni
-         yaSi4ldYWDcoDApSGgpBnXmbBUvn14LnbwrFkcWkHqP+cJsXL1FTB/TLAbZqDIIrnE1t
-         aG88sINQO3s9sOybFz/Y7b0APlua2knUtjt9Rl02hEagcPISs4Du163mdb+894hDeonU
-         vXYl2rPcb8+EdXsovtNxam37xwu8ayyMURKtwnMnw+njUlADPajJRnzW+fp6BIcfRPK/
-         L4DA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oOvSBbWCPiHxycWnE6d9U3dqPlTna4pm8BiP7zmWn/o=;
+        b=Aax+YLnYbz42JEIfuegpzY8AYIjXBMB07z+IQ3FBAtIHnFe0jyayWfG9fVMhzsbhi2
+         Z5n5z7uQrTSAVx1wbHqza4+2ZaZLUZrrrqItGMiwrcCSk9o1k+SC4VwBC0ojsx6t9fgG
+         kVp3ZAbGjAAsAWssovBowXeYzz2VWgEBVCEjJCgkQ6du14MDc4rnND0u8oIskexFPgng
+         Vh02pF15Rgb8bJxRIxwtTolQL7n0BdykX2iRHqRO44k5Pqgfnv22anaji/u3cB++pe2H
+         0vwsOpb+vRs0McYGzIK7p5HmGN7SX+LSBuj2LCEfQ+lPEHZ0+PehjEEu/zTn+ohP4Wx9
+         Uq0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=dJKNUD3iuu442ap/Za5pEHcy4QO6ctzGW3ukPbvVbWM=;
-        b=cIkk9Nw9PiDY1MCNI98QupdZy07XaRBvw4HvggkjBKL4SaVKn+Mkj6U9V3fp4aZZth
-         RvYPU2g4IfR5NIE/pbvcLs2k/3cCwfl4s0Z+vSi9e2Jwh4oWDUJkXiPtW+hjWy9B3o1J
-         bhka6Q9RQeejLzI7FVWPAGb0FgffEPEatoFBfmll5c7XVHmdrirvyuUBEWr6ox6mMCoW
-         0HfRKg+anVuQMU9Gm3Y1Utcts2J4+jsr30OdzNFLocBpOI869BxGb45QjKRPN/cVTUOz
-         xwkvSWKqwzuqLqiDQOLvAfI834WNzlIayoomKvGzgBhq6MOACb/UqAK8qWGkfpox+Zc+
-         97Uw==
-X-Gm-Message-State: AOAM532zecfq5UrhLNhM0/ynIrjTT9qzzN1chom5dv8LAPmHj/LIMa8Z
-        WJK3c/eJ2/Vf7uIlJSVU2t9IzO0zd9jue+AdN6A=
-X-Google-Smtp-Source: ABdhPJwFSwE3TGA0QbCBNZMR7XSbfhSdLOhd3pQ1YvvEL83+bpnHHSOSsvFNPjYi/9gx1+wKWt1Bv6bRadYw8axp/Ak=
-X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
- (user=willmcvicker job=sendgmr) by 2002:a17:903:124e:: with SMTP id
- u14mr1596646plh.57.1643245212964; Wed, 26 Jan 2022 17:00:12 -0800 (PST)
-Date:   Thu, 27 Jan 2022 01:00:08 +0000
-Message-Id: <20220127010009.2617569-1-willmcvicker@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [PATCH v2 1/1] kbuild: install the modules.order for external modules
-From:   Will McVicker <willmcvicker@google.com>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     kernel-team@android.com, Will McVicker <willmcvicker@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oOvSBbWCPiHxycWnE6d9U3dqPlTna4pm8BiP7zmWn/o=;
+        b=jTw1FAgZE9LcQuWFz+eIgkVEvPRX/5+JazEphGEoINSZTmde78i6C+yJZVWO/9kLWs
+         JzhaQZP1pNktu2f33f8Qo/HC8O02nap7jCBTCGrHsr0PK31BeSwOw1kjOisqoxVwKLD6
+         s+qHRTfMdjchC0De7FSa+J3WulpqCd01Z5ZKPsxwG110pEpSC39BJNd5c8vOS883SVK4
+         USVCaVFri1z9oGcINcI4lxtfuKhXi0ZjQTLeEt80b6w8fJHMVDIDY+b6Now+L+PZNIFO
+         ulMZ3/LogK/LMIXQyO4KJmSv9jFFWl8BAhXdM/tFz6xtMPhKw27IVdJG6emI9VQKOISy
+         6ZwA==
+X-Gm-Message-State: AOAM531M5tMhMkEUky1XHRSke4bNusG+2vvMahGCP4EYjp66nbx9k6nk
+        WrQmA5qIQYXE2g1NuoLaSMpC7YsANuEsaw==
+X-Google-Smtp-Source: ABdhPJzMh8f+/jHW866ULny/PNfJYdkK92/oo7Yd+Kdq9AK7cCJ/+uFNSyYwJ9XYHEyJIcPKi5Giaw==
+X-Received: by 2002:a05:622a:284:: with SMTP id z4mr1070975qtw.612.1643245227707;
+        Wed, 26 Jan 2022 17:00:27 -0800 (PST)
+Received: from master-x64.sparksnet (c-98-233-193-225.hsd1.dc.comcast.net. [98.233.193.225])
+        by smtp.gmail.com with ESMTPSA id n2sm483389qti.59.2022.01.26.17.00.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 17:00:27 -0800 (PST)
+From:   Peter Geis <pgwipeout@gmail.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Quartz64-A fixes and enablement from 5.17-rc1
+Date:   Wed, 26 Jan 2022 20:00:20 -0500
+Message-Id: <20220127010023.3169415-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to install the modules.order file for external modules
-during module_install in order to retain the Makefile ordering
-of external modules. This helps reduce the extra steps necessary to
-properly order loading of external modules when there are multiple
-kernel modules compiled within a given KBUILD_EXTMOD directory.
+Good Evening,
 
-To handle compiling multiple external modules within the same
-INSTALL_MOD_DIR, kbuild will append a suffix to the installed
-modules.order file defined like so:
+This is the first of several patch series for further expanding
+Quartz64-A support.
 
-  echo "${KBUILD_EXTMOD}" | md5sum | cut -d " " -f 1
+This series has the following patches:
+Fix the ddr regulator voltage.
+Add pmu_io_domains to permit sdio and high speed emmc support.
+Add sdmmc1 node for wifi support.
 
-Example:
-  KBUILD_EXTMOD=/mnt/a.b/c-d/my_driver results in:
-  modules.order._mnt_a_b_c_d_my_driver
+Please review and apply.
 
-The installed module.order.$(extmod_suffix) files can then be appended
-to the staging modules.order file which defines the order to load all of
-the modules during boot.
+Very Respectfully,
+Peter Geis
 
-Example:
-  cd $(MODLIB)
-  find extra/. -name modules.order.* -exec cat {} >> modules.order \;
 
-Signed-off-by: Will McVicker <willmcvicker@google.com>
----
-v2: Use md5sum to fix a "Filename too long" failure when KBUILD_EXTMOD
-    exceeds 241 characters.
+Peter Geis (3):
+  arm64: dts: rockchip: fix Quartz64-A ddr regulator voltage
+  arm64: dts: rockchip: add Quartz64-A pmu_io_domains
+  arm64: dts: rockchip: add Quartz64-A sdmmc1 node
 
- scripts/Makefile.modinst | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 60 ++++++++++++++++++-
+ 1 file changed, 58 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-index c2c43a0ecfe0..a6ef273d395f 100644
---- a/scripts/Makefile.modinst
-+++ b/scripts/Makefile.modinst
-@@ -24,6 +24,10 @@ suffix-$(CONFIG_MODULE_COMPRESS_XZ)	:= .xz
- suffix-$(CONFIG_MODULE_COMPRESS_ZSTD)	:= .zst
- 
- modules := $(patsubst $(extmod_prefix)%, $(dst)/%$(suffix-y), $(modules))
-+ifneq ($(KBUILD_EXTMOD),)
-+extmod_suffix := $(shell echo "${KBUILD_EXTMOD}" | md5sum | cut -d " " -f 1)
-+modules += $(dst)/modules.order.$(extmod_suffix)
-+endif
- 
- __modinst: $(modules)
- 	@:
-@@ -82,6 +86,12 @@ $(dst)/%.ko: $(extmod_prefix)%.ko FORCE
- 	$(call cmd,strip)
- 	$(call cmd,sign)
- 
-+ifneq ($(KBUILD_EXTMOD),)
-+$(dst)/modules.order.$(extmod_suffix): $(MODORDER) FORCE
-+	$(call cmd,install)
-+	@sed -i "s:^$(KBUILD_EXTMOD):$(INSTALL_MOD_DIR):g" $@
-+endif
-+
- else
- 
- $(dst)/%.ko: FORCE
 -- 
-2.35.0.rc0.227.g00780c9af4-goog
+2.25.1
 

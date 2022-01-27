@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1477749E982
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF3F49E981
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245083AbiA0R5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:57:18 -0500
-Received: from mga02.intel.com ([134.134.136.20]:19418 "EHLO mga02.intel.com"
+        id S231310AbiA0R5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:57:12 -0500
+Received: from mga02.intel.com ([134.134.136.20]:19450 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244951AbiA0Rzk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S244952AbiA0Rzk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Jan 2022 12:55:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643306140; x=1674842140;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=eGN63N0a99zN4ja5pEhr049Oij8dwvnWeFfMaFaK4UI=;
-  b=WzA6nD24PUgNKJLp+avNOMP/DutzoK1/M6uTxLi3p7w9dv7Zemmf7BFL
-   Pd4JmHkOjrLyHAfE0NhxwBvjXHUo94U3BQR68N0AkhpOo3f8FrHjghaSs
-   zOHextBSeoHbJOz/9eq8nSzrohrC9oF8tVC56rAvxlmSBhp+PI6EE6FPe
-   2KvpA9Bkis996+ue0CwQkdvrDw9WZY8zwm5rCyGnYSJqYk3ETMo5I9jWX
-   Bgfrn3Q36hTWdDWzYEUAzhHlz1S1CaINSKnAty72LKbgCCMK+gg+47So1
-   S6N3W+A//yA1/zcsAL3CNN42YBbJJEz+Y5OKG/sPpOSKdl+RWV96QK/se
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="234302445"
+  bh=nFif/WsK5jLMynqNca82ezzZaEZ8rp9PXHlxBPSpvCs=;
+  b=gtxZp12x3dOduT82sQyWwAHAg+b+LHL9f1ze/VvwQwA2MemMmKkLfojQ
+   zZzTKexanFnwYlMYo58ndo/ITt1BBCxABHmXRrQ7+SIcisI+oBIDvnx3V
+   G1Q3OehmpVm8Nary88TTGJ3RVWzrR6iJO5/6ejbrGiZiI99yvtgvitVwc
+   kZMUEmx+B7TlEH1cObSGGNOtpuD/5R2xuDMPchV6E/0ITtAurofcZ+v5n
+   BEnqCSuIlGHFaKXddJ2Ut9numBvcwPQdKkWNp9y2PFTdhKHlfoAHfdX1w
+   9VQR4pcfAExAnxyHqM7N6fY/qFPJ3J6bnzXzn1vhu1FUKZONXVoLH+qWC
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="234302447"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="234302445"
+   d="scan'208";a="234302447"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:55:12 -0800
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="674796155"
+   d="scan'208";a="674796158"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
   by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:55:12 -0800
 From:   ira.weiny@intel.com
@@ -40,9 +40,9 @@ To:     Dave Hansen <dave.hansen@linux.intel.com>,
 Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V8 29/44] mm/pkeys: Introduce PKS fault callbacks
-Date:   Thu, 27 Jan 2022 09:54:50 -0800
-Message-Id: <20220127175505.851391-30-ira.weiny@intel.com>
+Subject: [PATCH V8 30/44] mm/pkeys: Test setting a PKS key in a custom fault callback
+Date:   Thu, 27 Jan 2022 09:54:51 -0800
+Message-Id: <20220127175505.851391-31-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220127175505.851391-1-ira.weiny@intel.com>
 References: <20220127175505.851391-1-ira.weiny@intel.com>
@@ -52,269 +52,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rick Edgecombe <rick.p.edgecombe@intel.com>
+From: Ira Weiny <ira.weiny@intel.com>
 
-Some PKS keys will want special handling on accesses that violate the
-Pkey permissions.  One of these is PMEM which will want to have a mode
-that logs the access violation, disables protection, and continues
-rather than oops'ing the machine.
+A common use case for the custom fault callbacks will be for the
+callback to warn of the violation and relax the permissions rather than
+crash the kernel.
 
-Provide an API to set callbacks for individual Pkeys.  Call these
-through pks_handle_key_fault() which is called in the fault handler.
+An example of this is for non-security use cases which may want to relax
+the permissions and flag the invalid access rather than strictly crash
+the kernel.  In this case the user defines a callback which detects this
+condition, reports the error, and allows for continued operation by
+handling the fault through the pks_update_exception().
 
-Since PKS faults do not provide the key that faulted, this information
-needs to be recovered by walking the page tables and extracting it from
-the leaf entry.  The key can then be used to call the specific user
-defined callback.
+Add a test which does this.
 
-This infrastructure could be used to implement the PKS testing code.
-Unfortunately, this would limit the ability to test this code itself as
-well as limit the testing code to a single Pkey.  Because
-pks_test_callback() is zero overhead if CONFIG_PKS_TEST is not specified
-it is left as a separate hook in the fault handler.
+	$ echo 5 > /sys/kernel/debug/x86/run_pks
+	$ cat /sys/kernel/debug/x86/run_pks
+	PASS
 
-Add documentation.
-
-Co-developed-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 
 ---
-Changes for V8:
-	Add pt_regs to the callback signature so that
-		pks_update_exception() can be called if needed.
-	Update commit message
-	Determine if page is large prior to not present
-	Update commit message with more clarity as to why this was kept
-		separate from pks_abandon_protections() and
-		pks_test_callback()
-	Embed documentation in c file.
-	Move handle_pks_key_fault() to pkeys.c
-		s/handle_pks_key_fault/pks_handle_key_fault/
-		This consolidates the PKS code nicely
-	Add feature check to pks_handle_key_fault()
-	From Rick Edgecombe
-		Fix key value check
-	From kernel test robot
-		Add static to handle_pks_key_fault
-
-Changes for V7:
-	New patch
+Changes for V8
+	New test developed just to double check for regressions while
+	reworking the code.
 ---
- Documentation/core-api/protection-keys.rst |  9 ++-
- arch/x86/include/asm/pks.h                 |  9 +++
- arch/x86/mm/fault.c                        |  3 +
- arch/x86/mm/pkeys.c                        | 86 ++++++++++++++++++++++
- include/linux/pkeys.h                      |  3 +
- include/linux/pks-keys.h                   |  2 +
- 6 files changed, 111 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/pks.h |  2 ++
+ arch/x86/mm/pkeys.c        |  6 +++-
+ lib/pks/pks_test.c         | 74 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 81 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
-index b89308bf117e..267efa2112e7 100644
---- a/Documentation/core-api/protection-keys.rst
-+++ b/Documentation/core-api/protection-keys.rst
-@@ -115,7 +115,8 @@ Overview
- 
- Similar to user space pkeys, supervisor pkeys allow additional protections to
- be defined for a supervisor mappings.  Unlike user space pkeys, violations of
--these protections result in a kernel oops.
-+these protections result in a kernel oops unless a PKS fault handler is
-+provided which handles the fault.
- 
- Supervisor Memory Protection Keys (PKS) is a feature which is found on Intel's
- Sapphire Rapids (and later) "Scalable Processor" Server CPUs.  It will also be
-@@ -150,6 +151,12 @@ Changing permissions of individual keys
- .. kernel-doc:: arch/x86/mm/pkeys.c
-         :identifiers: pks_update_exception
- 
-+Overriding Default Fault Behavior
-+---------------------------------
-+
-+.. kernel-doc:: arch/x86/mm/pkeys.c
-+        :doc: DEFINE_PKS_FAULT_CALLBACK
-+
- MSR details
- -----------
- 
 diff --git a/arch/x86/include/asm/pks.h b/arch/x86/include/asm/pks.h
-index 065386c8bf37..55541bb64d08 100644
+index 55541bb64d08..e09934c540e2 100644
 --- a/arch/x86/include/asm/pks.h
 +++ b/arch/x86/include/asm/pks.h
-@@ -9,6 +9,8 @@ void pks_write_current(void);
- void pks_save_pt_regs(struct pt_regs *regs);
- void pks_restore_pt_regs(struct pt_regs *regs);
- void pks_dump_fault_info(struct pt_regs *regs);
-+bool pks_handle_key_fault(struct pt_regs *regs, unsigned long hw_error_code,
-+			  unsigned long address);
+@@ -34,6 +34,8 @@ static inline bool pks_handle_key_fault(struct pt_regs *regs,
  
- #else /* !CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
+ bool pks_test_callback(struct pt_regs *regs);
+ #define __static_or_pks_test
++bool pks_test_fault_callback(struct pt_regs *regs, unsigned long address,
++			     bool write);
  
-@@ -18,6 +20,13 @@ static inline void pks_save_pt_regs(struct pt_regs *regs) { }
- static inline void pks_restore_pt_regs(struct pt_regs *regs) { }
- static inline void pks_dump_fault_info(struct pt_regs *regs) { }
+ #else /* !CONFIG_PKS_TEST */
  
-+static inline bool pks_handle_key_fault(struct pt_regs *regs,
-+					unsigned long hw_error_code,
-+					unsigned long address)
-+{
-+	return false;
-+}
-+
- #endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
- 
- 
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index 697c06f08103..e378573d97a7 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1162,6 +1162,9 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
- 		 */
- 		WARN_ON_ONCE(!cpu_feature_enabled(X86_FEATURE_PKS));
- 
-+		if (pks_handle_key_fault(regs, hw_error_code, address))
-+			return;
-+
- 		/*
- 		 * If a protection key exception occurs it could be because a PKS test
- 		 * is running.  If so, pks_test_callback() will clear the protection
 diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index 6723ae42732a..531cf6c74ad7 100644
+index 531cf6c74ad7..f30ac8215785 100644
 --- a/arch/x86/mm/pkeys.c
 +++ b/arch/x86/mm/pkeys.c
-@@ -11,6 +11,7 @@
- #include <asm/cpufeature.h>             /* boot_cpu_has, ...            */
- #include <asm/mmu_context.h>            /* vma_pkey()                   */
- #include <asm/pks.h>
-+#include <asm/trap_pf.h>		/* X86_PF_WRITE */
+@@ -239,7 +239,11 @@ __static_or_pks_test DEFINE_PER_CPU(u32, pkrs_cache);
+  *	#endif
+  *	};
+  */
+-static const pks_key_callback pks_key_callbacks[PKS_KEY_NR_CONSUMERS] = { 0 };
++static const pks_key_callback pks_key_callbacks[PKS_KEY_NR_CONSUMERS] = {
++#ifdef CONFIG_PKS_TEST
++	[PKS_KEY_TEST]		= pks_test_fault_callback,
++#endif
++};
  
- int __execute_only_pkey(struct mm_struct *mm)
- {
-@@ -212,6 +213,91 @@ u32 pkey_update_pkval(u32 pkval, int pkey, u32 accessbits)
+ static bool pks_call_fault_callback(struct pt_regs *regs, unsigned long address,
+ 				    bool write, u16 key)
+diff --git a/lib/pks/pks_test.c b/lib/pks/pks_test.c
+index 008a1079579d..1528df0bb283 100644
+--- a/lib/pks/pks_test.c
++++ b/lib/pks/pks_test.c
+@@ -19,6 +19,7 @@
+  * * 3  Check the context armed in '2' to ensure the MSR value was preserved
+  * * 4  Test that the exception thread PKRS remains independent of the
+  *      interrupted threads PKRS
++ * * 5  Test setting a key to RD/WR in a fault callback to abandon a key
+  * * 8  Loop through all CPUs, report the msr, and check against the default.
+  * * 9  Set up and fault on a PKS protected page.
+  *
+@@ -56,6 +57,7 @@
+ #define ARM_CTX_SWITCH		2
+ #define CHECK_CTX_SWITCH	3
+ #define RUN_EXCEPTION		4
++#define RUN_FAULT_ABANDON	5
+ #define RUN_CRASH_TEST		9
  
- __static_or_pks_test DEFINE_PER_CPU(u32, pkrs_cache);
- 
-+/**
-+ * DOC: DEFINE_PKS_FAULT_CALLBACK
-+ *
-+ * Users may also provide a fault handler which can handle a fault differently
-+ * than an oops.  For example if 'MY_FEATURE' wanted to define a handler they
-+ * can do so by adding the coresponding entry to the pks_key_callbacks array.
-+ *
-+ * .. code-block:: c
-+ *
-+ *	#ifdef CONFIG_MY_FEATURE
-+ *	bool my_feature_pks_fault_callback(struct pt_regs *regs,
-+ *					   unsigned long address, bool write)
-+ *	{
-+ *		if (my_feature_fault_is_ok)
-+ *			return true;
-+ *		return false;
-+ *	}
-+ *	#endif
-+ *
-+ *	static const pks_key_callback pks_key_callbacks[PKS_KEY_NR_CONSUMERS] = {
-+ *		[PKS_KEY_DEFAULT]            = NULL,
-+ *	#ifdef CONFIG_MY_FEATURE
-+ *		[PKS_KEY_PGMAP_PROTECTION]   = my_feature_pks_fault_callback,
-+ *	#endif
-+ *	};
-+ */
-+static const pks_key_callback pks_key_callbacks[PKS_KEY_NR_CONSUMERS] = { 0 };
-+
-+static bool pks_call_fault_callback(struct pt_regs *regs, unsigned long address,
-+				    bool write, u16 key)
-+{
-+	if (key >= PKS_KEY_NR_CONSUMERS)
-+		return false;
-+
-+	if (pks_key_callbacks[key])
-+		return pks_key_callbacks[key](regs, address, write);
-+
-+	return false;
-+}
-+
-+bool pks_handle_key_fault(struct pt_regs *regs, unsigned long hw_error_code,
-+			  unsigned long address)
-+{
-+	bool write;
-+	pgd_t pgd;
-+	p4d_t p4d;
-+	pud_t pud;
-+	pmd_t pmd;
-+	pte_t pte;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_PKS))
-+		return false;
-+
-+	write = (hw_error_code & X86_PF_WRITE);
-+
-+	pgd = READ_ONCE(*(init_mm.pgd + pgd_index(address)));
-+	if (!pgd_present(pgd))
-+		return false;
-+
-+	p4d = READ_ONCE(*p4d_offset(&pgd, address));
-+	if (p4d_large(p4d))
-+		return pks_call_fault_callback(regs, address, write,
-+					       pte_flags_pkey(p4d_val(p4d)));
-+	if (!p4d_present(p4d))
-+		return false;
-+
-+	pud = READ_ONCE(*pud_offset(&p4d, address));
-+	if (pud_large(pud))
-+		return pks_call_fault_callback(regs, address, write,
-+					       pte_flags_pkey(pud_val(pud)));
-+	if (!pud_present(pud))
-+		return false;
-+
-+	pmd = READ_ONCE(*pmd_offset(&pud, address));
-+	if (pmd_large(pmd))
-+		return pks_call_fault_callback(regs, address, write,
-+					       pte_flags_pkey(pmd_val(pmd)));
-+	if (!pmd_present(pmd))
-+		return false;
-+
-+	pte = READ_ONCE(*pte_offset_kernel(&pmd, address));
-+	return pks_call_fault_callback(regs, address, write,
-+				       pte_flags_pkey(pte_val(pte)));
-+}
-+
- /*
-  * pks_write_pkrs() - Write the pkrs of the current CPU
-  * @new_pkrs: New value to write to the current CPU register
-diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
-index c318d97f5da8..a53e4f2c41af 100644
---- a/include/linux/pkeys.h
-+++ b/include/linux/pkeys.h
-@@ -82,6 +82,9 @@ static inline void pks_mk_readwrite(int pkey)
- 	pks_update_protection(pkey, PKEY_READ_WRITE);
+ DECLARE_PER_CPU(u32, pkrs_cache);
+@@ -519,6 +521,75 @@ static void check_ctx_switch(struct file *file)
+ 	}
  }
  
-+typedef bool (*pks_key_callback)(struct pt_regs *regs, unsigned long address,
-+				 bool write);
++struct {
++	struct pks_test_ctx *ctx;
++	void *test_page;
++	bool armed;
++	bool callback_seen;
++} fault_callback_ctx;
 +
- #else /* !CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
- 
- static inline void pks_mk_noaccess(int pkey) {}
-diff --git a/include/linux/pks-keys.h b/include/linux/pks-keys.h
-index 69a0be979515..a3fcd8df8688 100644
---- a/include/linux/pks-keys.h
-+++ b/include/linux/pks-keys.h
-@@ -27,6 +27,7 @@
-  *	{
-  *		PKS_KEY_DEFAULT         = 0,
-  *		PKS_KEY_MY_FEATURE      = 1,
-+ *		PKS_KEY_NR_CONSUMERS    = 2,
-  *	}
-  *
-  *	#define PKS_INIT_VALUE (PKR_RW_KEY(PKS_KEY_DEFAULT)		|
-@@ -43,6 +44,7 @@
- enum pks_pkey_consumers {
- 	PKS_KEY_DEFAULT		= 0, /* Must be 0 for default PTE values */
- 	PKS_KEY_TEST		= 1,
-+	PKS_KEY_NR_CONSUMERS	= 2,
- };
- 
- #define PKS_INIT_VALUE (PKR_RW_KEY(PKS_KEY_DEFAULT)		| \
++bool pks_test_fault_callback(struct pt_regs *regs, unsigned long address,
++			     bool write)
++{
++	if (!fault_callback_ctx.armed)
++		return false;
++
++	fault_callback_ctx.armed = false;
++	fault_callback_ctx.callback_seen = true;
++
++	pks_update_exception(regs, fault_callback_ctx.ctx->pkey, 0);
++
++	return true;
++}
++
++static bool run_fault_clear_test(void)
++{
++	struct pks_test_ctx *ctx;
++	void *test_page;
++	bool rc = true;
++
++	ctx = alloc_ctx(PKS_KEY_TEST);
++	if (IS_ERR(ctx))
++		return false;
++
++	test_page = alloc_test_page(ctx->pkey);
++	if (!test_page) {
++		pr_err("Failed to vmalloc page???\n");
++		free_ctx(ctx);
++		return false;
++	}
++
++	test_armed_key = PKS_KEY_TEST;
++	fault_callback_ctx.ctx = ctx;
++	fault_callback_ctx.test_page = test_page;
++	fault_callback_ctx.armed = true;
++	fault_callback_ctx.callback_seen = false;
++
++	pks_mk_noaccess(test_armed_key);
++
++	/* fault */
++	memcpy(test_page, ctx->data, 8);
++
++	if (!fault_callback_ctx.callback_seen) {
++		pr_err("Failed to see the callback\n");
++		rc = false;
++		goto done;
++	}
++
++	/* no fault */
++	fault_callback_ctx.callback_seen = false;
++	memcpy(test_page, ctx->data, 8);
++
++	if (fault_caught() || fault_callback_ctx.callback_seen) {
++		pr_err("The key failed to be set RD/WR in the callback\n");
++		return false;
++	}
++
++done:
++	free_ctx(ctx);
++	return rc;
++}
++
+ static ssize_t pks_read_file(struct file *file, char __user *user_buf,
+ 			     size_t count, loff_t *ppos)
+ {
+@@ -572,6 +643,9 @@ static ssize_t pks_write_file(struct file *file, const char __user *user_buf,
+ 	case RUN_EXCEPTION:
+ 		last_test_pass = run_exception_test();
+ 		break;
++	case RUN_FAULT_ABANDON:
++		last_test_pass = run_fault_clear_test();
++		break;
+ 	default:
+ 		last_test_pass = false;
+ 		break;
 -- 
 2.31.1
 

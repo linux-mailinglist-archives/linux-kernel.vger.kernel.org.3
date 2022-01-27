@@ -2,134 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB5C49DDFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E9E49DDFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238566AbiA0JcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:32:04 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:35744 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229861AbiA0JcC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:32:02 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGuCHZvJhv+AEAA--.14616S2;
-        Thu, 27 Jan 2022 17:31:52 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, kexec@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] kdump: Add support for crashkernel=auto
-Date:   Thu, 27 Jan 2022 17:31:51 +0800
-Message-Id: <1643275911-19489-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9AxGuCHZvJhv+AEAA--.14616S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF43Gr4rJrWfGrWDtF48tFb_yoW5KF43pr
-        Z7CryfK34fGFnxG3yxJrn3C34rAw1xua4akas7Ar1FgFsaywn3Kr1Sgr1aqr9Fqr4F9FWY
-        vF4Sgrn09a40v3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4f
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU8KZXUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S238591AbiA0JcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:32:09 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:43912 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229861AbiA0JcH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 04:32:07 -0500
+X-UUID: 6a179c00dcc447f1b8a7e23db931ab64-20220127
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=lCw7xxlThueL7C/oHzrF0dm+seOD7h4+6Gc3SeDLnuo=;
+        b=D0/jHsiy1/KJNp7FoOiyw93FIL8kWlGZoDWEuY2bVaJ3jA3yeG+qzd8CI5QziyhCLLvGzKF0Mp8fC34tlDQVxg7vl13cFCN+/utsgthxu4Ob8F+8tEARLJe3joeWg9uy8pXDimHlmOCRNQHIOaIz9DsmaX/hzEJ/F20YUkwTqXM=;
+X-UUID: 6a179c00dcc447f1b8a7e23db931ab64-20220127
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 51152178; Thu, 27 Jan 2022 17:32:02 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 27 Jan 2022 17:32:00 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 27 Jan 2022 17:32:00 +0800
+Subject: Re: [PATCH 1/2] arm64: dts: mt8192: add PWRAP node
+To:     Hui-Liu Liu <hui.liu@mediatek.com>, <lee.jones@linaro.org>,
+        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <eddie.huang@mediatek.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <fshao@chromium.org>
+CC:     <srv_heupstream@mediatek.com>, <zhiyong.tao@mediatek.com>,
+        <hsin-hsiung.wang@mediatek.com>, <sean.wang@mediatek.com>,
+        <yuchen.huang@mediatek.com>, <wen.su@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Wens Tsai <wenst@chromium.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        Rex-BC Chen <Rex-BC.Chen@mediatek.com>
+References: <20220127063145.13413-1-hui.liu@mediatek.com>
+ <20220127063145.13413-2-hui.liu@mediatek.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+Message-ID: <8725f9cb-9c40-2d51-0a7b-96aaf80f7bdf@mediatek.com>
+Date:   Thu, 27 Jan 2022 17:32:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20220127063145.13413-2-hui.liu@mediatek.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set the reserved memory automatically for the crash kernel based on
-architecture.
-
-Most code of this patch come from:
-https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-8/-/tree/c8s
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- Documentation/admin-guide/kdump/kdump.rst       | 13 +++++++++++++
- Documentation/admin-guide/kernel-parameters.txt |  5 +++++
- kernel/crash_core.c                             | 20 ++++++++++++++++++++
- 3 files changed, 38 insertions(+)
-
-diff --git a/Documentation/admin-guide/kdump/kdump.rst b/Documentation/admin-guide/kdump/kdump.rst
-index cb30ca3d..8f8a9cc 100644
---- a/Documentation/admin-guide/kdump/kdump.rst
-+++ b/Documentation/admin-guide/kdump/kdump.rst
-@@ -335,6 +335,19 @@ crashkernel syntax
- 
-             crashkernel=0,low
- 
-+4) crashkernel=auto
-+
-+   You can use crashkernel=auto if you have enough memory. The threshold
-+   is 1G on x86_64 and s390x, 2G on arm64, ppc64 and ppc64le. If your system
-+   memory is less than the threshold crashkernel=auto will not reserve memory.
-+
-+   The automatically reserved memory size varies based on architecture.
-+   The size changes according to system memory size like below:
-+       x86_64: 1G-4G:160M,4G-64G:192M,64G-1T:256M,1T-:512M
-+       s390x:  1G-4G:160M,4G-64G:192M,64G-1T:256M,1T-:512M
-+       arm64:  2G-:448M
-+       ppc64:  2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G
-+
- Boot into System Kernel
- -----------------------
- 1) Update the boot loader (such as grub, yaboot, or lilo) configuration
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f5a27f0..14f052d 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -783,6 +783,11 @@
- 			Format:
- 			<first_slot>,<last_slot>,<port>,<enum_bit>[,<debug>]
- 
-+	crashkernel=auto
-+			[KNL] Set the reserved memory automatically for the crash kernel
-+			based on architecture.
-+			See Documentation/admin-guide/kdump/kdump.rst for further details.
-+
- 	crashkernel=size[KMG][@offset[KMG]]
- 			[KNL] Using kexec, Linux can switch to a 'crash kernel'
- 			upon panic. This parameter reserves the physical
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 256cf6d..32c51e2 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -252,6 +252,26 @@ static int __init __parse_crashkernel(char *cmdline,
- 	if (suffix)
- 		return parse_crashkernel_suffix(ck_cmdline, crash_size,
- 				suffix);
-+
-+	if (strncmp(ck_cmdline, "auto", 4) == 0) {
-+#if defined(CONFIG_X86_64) || defined(CONFIG_S390)
-+		ck_cmdline = "1G-4G:160M,4G-64G:192M,64G-1T:256M,1T-:512M";
-+#elif defined(CONFIG_ARM64)
-+		ck_cmdline = "2G-:448M";
-+#elif defined(CONFIG_PPC64)
-+		char *fadump_cmdline;
-+
-+		fadump_cmdline = get_last_crashkernel(cmdline, "fadump=", NULL);
-+		fadump_cmdline = fadump_cmdline ?
-+				fadump_cmdline + strlen("fadump=") : NULL;
-+		if (!fadump_cmdline || (strncmp(fadump_cmdline, "off", 3) == 0))
-+			ck_cmdline = "2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G";
-+		else
-+			ck_cmdline = "4G-16G:768M,16G-64G:1G,64G-128G:2G,128G-1T:4G,1T-2T:6G,2T-4T:12G,4T-8T:20G,8T-16T:36G,16T-32T:64G,32T-64T:128G,64T-:180G";
-+#endif
-+		pr_info("Using crashkernel=auto, the size chosen is a best effort estimation.\n");
-+	}
-+
- 	/*
- 	 * if the commandline contains a ':', then that's the extended
- 	 * syntax -- if not, it must be the classic syntax
--- 
-2.1.0
+T24gMS8yNy8yMiAyOjMxIFBNLCBIdWktTGl1IExpdSB3cm90ZToNCj4gRnJvbTogSHVpIExpdSA8
+aHVpLmxpdUBtZWRpYXRlay5jb20+DQo+IA0KPiBBZGQgcHdyYXAgbm9kZS4NCj4gDQo+IFNpZ25l
+ZC1vZmYtYnk6IEh1aSBMaXUgPGh1aS5saXVAbWVkaWF0ZWsuY29tPg0KPiAtLS0NCj4gICBhcmNo
+L2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE5Mi5kdHNpIHwgMTIgKysrKysrKysrKysrDQo+
+ICAgMSBmaWxlIGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9h
+cmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE5Mi5kdHNpIGIvYXJjaC9hcm02NC9ib290
+L2R0cy9tZWRpYXRlay9tdDgxOTIuZHRzaQ0KPiBpbmRleCA1M2Q3OTBjMzM1ZjkuLjllZjMzZGJm
+N2E3MyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxOTIu
+ZHRzaQ0KPiArKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE5Mi5kdHNpDQo+
+IEBAIC0zMTYsNiArMzE2LDE4IEBAIHN5c3RpbWVyOiB0aW1lckAxMDAxNzAwMCB7DQo+ICAgCQkJ
+Y2xvY2stbmFtZXMgPSAiY2xrMTNtIjsNCj4gICAJCX07DQo+ICAgDQo+ICsJCXB3cmFwOiBwd3Jh
+cEAxMDAyNjAwMCB7DQo+ICsJCQljb21wYXRpYmxlID0gIm1lZGlhdGVrLG10Njg3My1wd3JhcCI7
+DQo+ICsJCQlyZWcgPSA8MCAweDEwMDI2MDAwIDAgMHgxMDAwPjsNCj4gKwkJCXJlZy1uYW1lcyA9
+ICJwd3JhcCI7DQo+ICsJCQlpbnRlcnJ1cHRzID0gPEdJQ19TUEkgMjIwIElSUV9UWVBFX0xFVkVM
+X0hJR0ggMD47DQo+ICsJCQljbG9ja3MgPSA8JmluZnJhY2ZnIENMS19JTkZSQV9QTUlDX0FQPiwN
+Cj4gKwkJCQkgPCZpbmZyYWNmZyBDTEtfSU5GUkFfUE1JQ19UTVI+Ow0KPiArCQkJY2xvY2stbmFt
+ZXMgPSAic3BpIiwgIndyYXAiOw0KPiArCQkJYXNzaWduZWQtY2xvY2tzID0gPCZ0b3Bja2dlbiBD
+TEtfVE9QX1BXUkFQX1VMUE9TQ19TRUw+Ow0KPiArCQkJYXNzaWduZWQtY2xvY2stcGFyZW50cyA9
+IDwmdG9wY2tnZW4gQ0xLX1RPUF9PU0NfRDEwPjsNCj4gKwkJfTsNCj4gKw0KPiAgIAkJc2NwX2Fk
+c3A6IGNsb2NrLWNvbnRyb2xsZXJAMTA3MjAwMDAgew0KPiAgIAkJCWNvbXBhdGlibGUgPSAibWVk
+aWF0ZWssbXQ4MTkyLXNjcF9hZHNwIjsNCj4gICAJCQlyZWcgPSA8MCAweDEwNzIwMDAwIDAgMHgx
+MDAwPjsNCj4gDQoNClJldmlld2VkLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0
+ZWsuY29tPg0KDQpSZWdhcmRzLA0KTWFjcGF1bCBMaW4=
 

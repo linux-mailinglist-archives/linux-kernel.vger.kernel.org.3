@@ -2,139 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9548849EC4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5906049EC4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:11:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343873AbiA0UKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 15:10:47 -0500
-Received: from mail-yb1-f174.google.com ([209.85.219.174]:33643 "EHLO
-        mail-yb1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343865AbiA0UKp (ORCPT
+        id S1343899AbiA0ULy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Jan 2022 15:11:54 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:38190 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229827AbiA0ULx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:10:45 -0500
-Received: by mail-yb1-f174.google.com with SMTP id l68so12295050ybl.0;
-        Thu, 27 Jan 2022 12:10:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gh+UlDf/TEfrWF/4dLOcpRWKXy/rGv4qkE/LWOydCEU=;
-        b=VzKMX/umQH3GLHH8plYvpHJysEDD0dZL+41KvnSMfQ9D27OQOmWeSYgqx1/Qiq2vVO
-         0KIPlihYXZPdP4XNdr0VQmc1apdpTTtaISIBPakvfIIeC8+sI6dyvCBmau99JkCYzfAq
-         Z2JVXKZbZeHRSjlxdbbJhL3A1cmM3zAdp8r3BC9aAfvDK4WIgq2r63APluHLC73Qvep8
-         vVapGUyhQK0ZXzQcfaU9tTiPyMUjRqqnYGUx3qKwDEnuh6BgU7ZZ7zHRSslUINUPOtrQ
-         BDcZDPDCcHkj2XzOH5kcNUTYKnpbqma/CjZXv/Pt1OTVopWSBHo5ZxbcxOaB+M4CzMgt
-         xhlQ==
-X-Gm-Message-State: AOAM533Ia/3Ig1kDRy6vr06pqeEBzcferopnP8zTFkfQ803Q7auVSygh
-        krots3ar4ZOKh2apYqaqQsBqESUqvzl9NtQtByM=
-X-Google-Smtp-Source: ABdhPJxONF5czKwKSr4XjHPsxyOZpvAMwe77IoMGqGHLhMjlI7aWj9Ry3JZes3jus7I/ZL+eEQZOs4ed0Zan2Vgsxg0=
-X-Received: by 2002:a25:180a:: with SMTP id 10mr8572542yby.552.1643314236571;
- Thu, 27 Jan 2022 12:10:36 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHTsKTdSyC7Jwk56tDR8QwM_oO13ByBRaA78VpHymOZ7J4NQ9Q@mail.gmail.com>
- <CAJZ5v0jrU4Xw2wzdUL9Vd2C6u8NVx5J79DeiRY6KU1xT6ZSuqw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jrU4Xw2wzdUL9Vd2C6u8NVx5J79DeiRY6KU1xT6ZSuqw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 27 Jan 2022 21:10:25 +0100
-Message-ID: <CAJZ5v0gLMSPsaS7Jnsr8DhevaQamsVk=pu=BfXZxrT+SBAM=fQ@mail.gmail.com>
-Subject: Re: [RFC] PM: suspend: Upstreaming wakeup reason capture support
-To:     Kelly Rossmoyer <krossmo@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Vijay Nayak <nayakvij@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 27 Jan 2022 15:11:53 -0500
+Received: from smtpclient.apple (p4ff9fc34.dip0.t-ipconnect.de [79.249.252.52])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 61E98CED25;
+        Thu, 27 Jan 2022 21:11:51 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
+Subject: Re: [PATCH v2 2/2] Bluetooth: btintel: surface Intel telemetry events
+ through mgmt
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <20220127181738.v2.2.I63681490281b2392aa1ac05dff91a126394ab649@changeid>
+Date:   Thu, 27 Jan 2022 21:11:50 +0100
+Cc:     BlueZ <linux-bluetooth@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        =?utf-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
+        Joseph Hwang <josephsih@google.com>,
+        Archie Pusaka <apusaka@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <05486302-58D8-464D-A276-552DF63E9C57@holtmann.org>
+References: <20220127181738.v2.1.I2015b42d2d0a502334c9c3a2983438b89716d4f0@changeid>
+ <20220127181738.v2.2.I63681490281b2392aa1ac05dff91a126394ab649@changeid>
+To:     Joseph Hwang <josephsih@chromium.org>
+X-Mailer: Apple Mail (2.3693.40.0.1.81)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 8:54 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Jan 10, 2022 at 7:49 PM Kelly Rossmoyer <krossmo@google.com> wrote:
-> >
-> > # Introduction
-> >
-> > To aid optimization, troubleshooting, and attribution of battery life, the
-> > Android kernel currently includes a set of patches which provide enhanced
-> > visibility into kernel suspend/resume/abort behaviors.  The capabilities
-> > and implementation of this feature have evolved significantly since an
-> > unsuccessful attempt to upstream the original code
-> > (https://lkml.org/lkml/2014/3/10/716), and we would like to (re)start a
-> > conversation about upstreaming, starting with the central question: is
-> > there support for upstreaming this set of features?
-> >
-> > # Motivation
-> >
-> > Of the many factors influencing battery life on Linux-powered mobile
-> > devices, kernel suspend tends to be amongst the most impactful.  Maximizing
-> > time spent in suspend and minimizing the frequency of net-negative suspend
-> > cycles are both important contributors to battery life optimization.  But
-> > enabling that optimization - and troubleshooting when things go wrong -
-> > requires more observability of suspend/resume/abort behavior than Linux
-> > currently provides.  While mechanisms like `/sys/power/pm_wakeup_irq` and
-> > wakeup_source stats are useful, they are incomplete and scattered.  The
-> > Android kernel wakeup reason patches implement significant improvements in
-> > that area.
-> >
-> > # Features
-> >
-> > As of today, the active set of patches surface the following
-> > suspend-related data:
-> >
-> > * wakeup IRQs, including:
-> >    * multiple IRQs if more than one is pending during resume flow
-> >    * unmapped HW IRQs (wakeup-capable in HW) that should not be
-> >      occurring
-> >    * misconfigured IRQs (e.g. both enable_irq_wake() and
-> >      IRQF_NO_SUSPEND)
-> >    * threaded IRQs (not just the parent chip's IRQ)
-> >
-> > * non-IRQ wakeups, including:
-> >    * wakeups caused by an IRQ that was consumed by lower-level SW
-> >    * wakeups from SOC architecture that don't manifest as IRQs
-> >
-> > * abort reasons, including:
-> >    * wakeup_source activity
-> >    * failure to freeze userspace
-> >    * failure to suspend devices
-> >    * failed syscore_suspend callback
-> >
-> > * durations from the most recent cycle, including:
-> >    * time spent doing suspend/resume work
-> >    * time spent in suspend
-> >
-> > In addition to battery life optimization and troubleshooting, some of these
-> > capabilities also lay the groundwork for efforts around improving
-> > attribution of wakeups/aborts (e.g. to specific processes, device features,
-> > external devices, etc).
-> >
-> > # Shortcomings
-> >
-> > While the core implementation (see below) is relatively straightforward and
-> > localized, calls into that core are somewhat widely spread in order to
-> > capture the breadth of events of interest.  The pervasiveness of those
-> > hooks is clearly an area where improvement would be beneficial, especially
-> > if a cleaner solution preserved equivalent capabilities.
-> >
-> > # Existing Code
-> >
-> > As a reference for how Android currently implements the core code for these
-> > features (which would need a bit of work before submission even if all
-> > features were included), see the following link:
-> >
-> > https://android.googlesource.com/kernel/common/+/refs/heads/android-mainline/kernel/power/wakeup_reason.c
->
-> So as Zichar said, this is quite heavy-weight.
->
-> I'm not fundamentally against adding more infrastructure to help
-> identify issues related to system suspend, but there needs to be a
-> clear benefit associated with any change in this direction.
+Hi Jospeh,
 
-That said, the general idea behind wakeup_source objects is that every
-system wakeup event should be recorded in one of them which then can
-be used for later analysis.
+> When receiving a HCI vendor event, the kernel checks if it is an
+> Intel telemetry event. If yes, the event is sent to bluez user
+> space through the mgmt socket.
+> 
+> Signed-off-by: Joseph Hwang <josephsih@chromium.org>
+> Reviewed-by: Archie Pusaka <apusaka@chromium.org>
+> ---
+> 
+> Changes in v2:
+> - Drop the pull_quality_report_data function from hci_dev.
+>  Do not bother hci_dev with it. Do not bleed the details
+>  into the core.
+> 
+> drivers/bluetooth/btintel.c      | 27 ++++++++++++++++++++++++++-
+> drivers/bluetooth/btintel.h      |  7 +++++++
+> include/net/bluetooth/hci_core.h |  1 +
+> net/bluetooth/hci_event.c        | 12 ++++++++++++
+> 4 files changed, 46 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
+> index 1a4f8b227eac..9e1fdb68b669 100644
+> --- a/drivers/bluetooth/btintel.c
+> +++ b/drivers/bluetooth/btintel.c
+> @@ -2401,8 +2401,9 @@ static int btintel_setup_combined(struct hci_dev *hdev)
+> 	set_bit(HCI_QUIRK_SIMULTANEOUS_DISCOVERY, &hdev->quirks);
+> 	set_bit(HCI_QUIRK_NON_PERSISTENT_DIAG, &hdev->quirks);
+> 
+> -	/* Set up the quality report callback for Intel devices */
+> +	/* Set up the quality report callbacks for Intel devices */
+> 	hdev->set_quality_report = btintel_set_quality_report;
+> +	hdev->is_quality_report_evt = btintel_is_quality_report_evt;
+> 
+> 	/* For Legacy device, check the HW platform value and size */
+> 	if (skb->len == sizeof(ver) && skb->data[1] == 0x37) {
+> @@ -2645,6 +2646,30 @@ void btintel_secure_send_result(struct hci_dev *hdev,
+> }
+> EXPORT_SYMBOL_GPL(btintel_secure_send_result);
+> 
+> +#define INTEL_PREFIX		0x8087
+> +#define TELEMETRY_CODE		0x03
+> +
+> +struct intel_prefix_evt_data {
+> +	__le16 vendor_prefix;
+> +	__u8 code;
+> +	__u8 data[];   /* a number of struct intel_tlv subevents */
+> +} __packed;
+> +
+> +bool btintel_is_quality_report_evt(struct sk_buff *skb)
+> +{
+> +	struct intel_prefix_evt_data *ev;
+> +	u16 vendor_prefix;
+> +
+> +	if (skb->len < sizeof(struct intel_prefix_evt_data))
+> +		return false;
+> +
+> +	ev = (struct intel_prefix_evt_data *)skb->data;
+> +	vendor_prefix = __le16_to_cpu(ev->vendor_prefix);
+> +
+> +	return vendor_prefix == INTEL_PREFIX && ev->code == TELEMETRY_CODE;
+> +}
+> +EXPORT_SYMBOL_GPL(btintel_is_quality_report_evt);
+> +
+> MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+> MODULE_DESCRIPTION("Bluetooth support for Intel devices ver " VERSION);
+> MODULE_VERSION(VERSION);
+> diff --git a/drivers/bluetooth/btintel.h b/drivers/bluetooth/btintel.h
+> index c9b24e9299e2..6dd4695b8b86 100644
+> --- a/drivers/bluetooth/btintel.h
+> +++ b/drivers/bluetooth/btintel.h
+> @@ -210,6 +210,7 @@ void btintel_bootup(struct hci_dev *hdev, const void *ptr, unsigned int len);
+> void btintel_secure_send_result(struct hci_dev *hdev,
+> 				const void *ptr, unsigned int len);
+> int btintel_set_quality_report(struct hci_dev *hdev, bool enable);
+> +bool btintel_is_quality_report_evt(struct sk_buff *skb);
+> #else
+> 
+> static inline int btintel_check_bdaddr(struct hci_dev *hdev)
+> @@ -305,4 +306,10 @@ static inline int btintel_set_quality_report(struct hci_dev *hdev, bool enable)
+> {
+> 	return -ENODEV;
+> }
+> +
+> +static inline bool btintel_is_quality_report_evt(struct sk_buff *skb)
+> +{
+> +	return false;
+> +}
+> +
+> #endif
+> diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+> index b726fd595895..9d855ac1cb29 100644
+> --- a/include/net/bluetooth/hci_core.h
+> +++ b/include/net/bluetooth/hci_core.h
+> @@ -632,6 +632,7 @@ struct hci_dev {
+> 	void (*cmd_timeout)(struct hci_dev *hdev);
+> 	bool (*wakeup)(struct hci_dev *hdev);
+> 	int (*set_quality_report)(struct hci_dev *hdev, bool enable);
+> +	bool (*is_quality_report_evt)(struct sk_buff *skb);
+> 	int (*get_data_path_id)(struct hci_dev *hdev, __u8 *data_path);
+> 	int (*get_codec_config_data)(struct hci_dev *hdev, __u8 type,
+> 				     struct bt_codec *codec, __u8 *vnd_len,
+> diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+> index 1b69d3efd415..892a48d2f6be 100644
+> --- a/net/bluetooth/hci_event.c
+> +++ b/net/bluetooth/hci_event.c
+> @@ -4238,6 +4238,16 @@ static void aosp_quality_report_evt(struct hci_dev *hdev,  void *data,
+> 				    QUALITY_SPEC_AOSP_BQR);
+> }
+> 
+> +static void intel_vendor_evt(struct hci_dev *hdev,  void *data,
+> +			     struct sk_buff *skb)
+> +{
+> +	/* Only interested in the telemetry event for now. */
+> +	if (hdev->set_quality_report &&
+> +	    hdev->is_quality_report_evt && hdev->is_quality_report_evt(skb))
+> +		mgmt_quality_report(hdev, skb->data, skb->len,
+> +				    QUALITY_SPEC_INTEL_TELEMETRY);
+> +}
+> +
 
-If there are reasons why this cannot work in general, what are they?
+this is not workable like this. Intel specific stuff has to stay out of net/bluetooth/. Frankly I am also confused why this is this way in the first place.
+
+So if a driver sets aosp_capable, then we can check the AOSP range and hand it to net/bluetooth/aosp.c for further processing. For the MSFT extensions, we can already map them accordingly due to the event prefix. And everything other event has to go to the driver as raw event to do whatever it wants with it.
+
+Regards
+
+Marcel
+

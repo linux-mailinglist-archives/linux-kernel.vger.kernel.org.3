@@ -2,176 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 117DF49D721
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC5949D725
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:10:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234269AbiA0BJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 20:09:01 -0500
-Received: from lgeamrelo11.lge.com ([156.147.23.51]:60167 "EHLO
-        lgeamrelo11.lge.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbiA0BI7 (ORCPT
+        id S234288AbiA0BKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 20:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234291AbiA0BKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 20:08:59 -0500
-Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
-        by 156.147.23.51 with ESMTP; 27 Jan 2022 10:08:57 +0900
-X-Original-SENDERIP: 156.147.1.125
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
-        by 156.147.1.125 with ESMTP; 27 Jan 2022 10:08:57 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     torvalds@linux-foundation.org, mingo@redhat.com,
+        Wed, 26 Jan 2022 20:10:32 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9C8C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:10:31 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 81DA9EE;
+        Thu, 27 Jan 2022 02:10:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1643245828;
+        bh=BPUcwthO7R4TX+y7PM6L06wt4SEiKj1uceVdIu2FkzU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g//YgZq/hVPZQAL6ludO1xfEhlZg/zxbUz/ZQ1dN/ZfMWmpWGF+CsRJ7Ekc6sqX1o
+         g90pOMzqNjYwvf/q21IwIYyntGklt84kICF/SqKHYyTwMOqTi2jdZQ7zw5Sad8fkZ7
+         RtJvVVmmuy9YB1Qdnad1evVUeGSZTJ/fpFmhdMXc=
+Date:   Thu, 27 Jan 2022 03:10:09 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
+Cc:     a.hajda@samsung.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
+        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
-        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
-        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
-        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-        amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: Patches(Dept) for v5.17-rc1
-Date:   Thu, 27 Jan 2022 10:08:53 +0900
-Message-Id: <1643245733-14513-1-git-send-email-byungchul.park@lge.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1643078204-12663-1-git-send-email-byungchul.park@lge.com>
-References: <1643078204-12663-1-git-send-email-byungchul.park@lge.com>
+Subject: Re: [PATCH v2] drm/bridge: Add missing pm_runtime_put_sync
+Message-ID: <YfHw8WwDpnRXO07G@pendragon.ideasonboard.com>
+References: <Ye21tlZKRRe2vUzR@pendragon.ideasonboard.com>
+ <1643008835-73961-1-git-send-email-lyz_cs@pku.edu.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1643008835-73961-1-git-send-email-lyz_cs@pku.edu.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following messages are for the latest tag, v5.17-rc1.
-Hope you are gonna be satisfied with it!
+Hi Yongzhi,
 
-Thanks,
-Byungchul
+Thank you for the patch.
 
---->8---
-From 68ee7ab996fc7d67b6b506f48da106493ca2546a Mon Sep 17 00:00:00 2001
-From: Byungchul Park <byungchul.park@lge.com>
-Date: Tue, 25 Jan 2022 10:12:54 +0900
-Subject: [RFC 00/14] DEPT(DEPendency Tracker)
+On Sun, Jan 23, 2022 at 11:20:35PM -0800, Yongzhi Liu wrote:
+> pm_runtime_get_sync() will increase the rumtime PM counter
+> even when it returns an error. Thus a pairing decrement is needed
+> to prevent refcount leak. Fix this by replacing this API with
+> pm_runtime_resume_and_get(), which will not change the runtime
+> PM counter on error. Besides, a matching decrement is needed
+> on the error handling path to keep the counter balanced.
+> 
+> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
 
-Hi forks,
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-I've been developing a tool for detecting deadlock possibilities by
-tracking wait/event rather than lock(?) acquisition order to try to
-cover all synchonization machanisms. It's done on v5.10 tag. I bet
-it would work great! Try it and see what's gonna happen.
-
-Now that there's a porting issue, I made Dept rely on Lockdep. But it
-should be separated from Lockdep once it's considered worth having.
-
-Benifit:
-
-	0. Works with all lock primitives.
-	1. Works with wait_for_completion()/complete().
-	2. Works with 'wait' on PG_locked.
-	3. Works with 'wait' on PG_writeback.
-	4. Works with swait/wakeup.
-	5. Multiple reports are allowed.
-	6. Deduplication control on multiple reports.
-	7. Withstand false positives thanks to 5.
-	8. Easy to tag any wait/event.
-
-Future work:
-
-	0. To make it more stable.
-	1. To separates Dept from Lockdep.
-	2. To improves performance in terms of time and space.
-	3. To use Dept as a dependency engine for Lockdep.
-	4. To add any missing tags of wait/event in the kernel.
-	5. To deduplicate stack trace.
-
-I hope you guys are gonna be satisfied with Dept. Don't hesitate to
-give any feedback. I will adopt any feedbacks if reasonable.
-
-Thanks,
-Byungchul
-
-Byungchul Park (14):
-  llist: Move llist_{head,node} definition to types.h
-  dept: Implement Dept(Dependency Tracker)
-  dept: Embed Dept data in Lockdep
-  dept: Apply Dept to spinlock
-  dept: Apply Dept to mutex families
-  dept: Apply Dept to rwlock
-  dept: Apply Dept to wait_for_completion()/complete()
-  dept: Apply Dept to seqlock
-  dept: Apply Dept to rwsem
-  dept: Add proc knobs to show stats and dependency graph
-  dept: Introduce split map concept and new APIs for them
-  dept: Apply Dept to wait/event of PG_{locked,writeback}
-  dept: Separate out SDT(Single-event Dependency Tracker) header
-  dept: Apply SDT to swait
-
- include/linux/completion.h        |   48 +-
- include/linux/dept.h              |  541 ++++++++
- include/linux/dept_page.h         |   71 +
- include/linux/dept_sdt.h          |   53 +
- include/linux/hardirq.h           |    3 +
- include/linux/irqflags.h          |   33 +-
- include/linux/llist.h             |    9 +-
- include/linux/lockdep.h           |  156 ++-
- include/linux/lockdep_types.h     |    3 +
- include/linux/mutex.h             |   31 +
- include/linux/page-flags.h        |   26 +-
- include/linux/pagemap.h           |    7 +-
- include/linux/percpu-rwsem.h      |   10 +-
- include/linux/rtmutex.h           |   11 +-
- include/linux/rwlock.h            |   48 +
- include/linux/rwlock_api_smp.h    |    8 +-
- include/linux/rwlock_types.h      |    7 +
- include/linux/rwsem.h             |   31 +
- include/linux/sched.h             |    3 +
- include/linux/seqlock.h           |   19 +-
- include/linux/spinlock.h          |   24 +
- include/linux/spinlock_types.h    |   10 +
- include/linux/swait.h             |    4 +
- include/linux/types.h             |    8 +
- init/init_task.c                  |    2 +
- init/main.c                       |    4 +
- kernel/Makefile                   |    1 +
- kernel/dependency/Makefile        |    5 +
- kernel/dependency/dept.c          | 2593 +++++++++++++++++++++++++++++++++++++
- kernel/dependency/dept_hash.h     |   11 +
- kernel/dependency/dept_internal.h |   26 +
- kernel/dependency/dept_object.h   |   14 +
- kernel/dependency/dept_proc.c     |   97 ++
- kernel/exit.c                     |    1 +
- kernel/fork.c                     |    2 +
- kernel/locking/lockdep.c          |   12 +-
- kernel/module.c                   |    2 +
- kernel/sched/completion.c         |   12 +-
- kernel/sched/swait.c              |    8 +
- kernel/softirq.c                  |    6 +-
- kernel/trace/trace_preemptirq.c   |   19 +-
- lib/Kconfig.debug                 |   21 +
- mm/filemap.c                      |   62 +
- mm/page_ext.c                     |    5 +
- 44 files changed, 4009 insertions(+), 58 deletions(-)
- create mode 100644 include/linux/dept.h
- create mode 100644 include/linux/dept_page.h
- create mode 100644 include/linux/dept_sdt.h
- create mode 100644 kernel/dependency/Makefile
- create mode 100644 kernel/dependency/dept.c
- create mode 100644 kernel/dependency/dept_hash.h
- create mode 100644 kernel/dependency/dept_internal.h
- create mode 100644 kernel/dependency/dept_object.h
- create mode 100644 kernel/dependency/dept_proc.c
+> ---
+>  drivers/gpu/drm/bridge/nwl-dsi.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
+> index 9282e61..30aacd9 100644
+> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
+> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+> @@ -862,18 +862,19 @@ nwl_dsi_bridge_mode_set(struct drm_bridge *bridge,
+>  	memcpy(&dsi->mode, adjusted_mode, sizeof(dsi->mode));
+>  	drm_mode_debug_printmodeline(adjusted_mode);
+>  
+> -	pm_runtime_get_sync(dev);
+> +	if (pm_runtime_resume_and_get(dev) < 0)
+> +		return;
+>  
+>  	if (clk_prepare_enable(dsi->lcdif_clk) < 0)
+> -		return;
+> +		goto runtime_put;
+>  	if (clk_prepare_enable(dsi->core_clk) < 0)
+> -		return;
+> +		goto runtime_put;
+>  
+>  	/* Step 1 from DSI reset-out instructions */
+>  	ret = reset_control_deassert(dsi->rst_pclk);
+>  	if (ret < 0) {
+>  		DRM_DEV_ERROR(dev, "Failed to deassert PCLK: %d\n", ret);
+> -		return;
+> +		goto runtime_put;
+>  	}
+>  
+>  	/* Step 2 from DSI reset-out instructions */
+> @@ -883,13 +884,18 @@ nwl_dsi_bridge_mode_set(struct drm_bridge *bridge,
+>  	ret = reset_control_deassert(dsi->rst_esc);
+>  	if (ret < 0) {
+>  		DRM_DEV_ERROR(dev, "Failed to deassert ESC: %d\n", ret);
+> -		return;
+> +		goto runtime_put;
+>  	}
+>  	ret = reset_control_deassert(dsi->rst_byte);
+>  	if (ret < 0) {
+>  		DRM_DEV_ERROR(dev, "Failed to deassert BYTE: %d\n", ret);
+> -		return;
+> +		goto runtime_put;
+>  	}
+> +
+> +	return;
+> +
+> +runtime_put:
+> +	pm_runtime_put_sync(dev);
+>  }
+>  
+>  static void
 
 -- 
-1.9.1
+Regards,
 
+Laurent Pinchart

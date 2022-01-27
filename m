@@ -2,135 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E075949DEEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA5049DEEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239204AbiA0KLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 05:11:49 -0500
-Received: from 8bytes.org ([81.169.241.247]:48002 "EHLO theia.8bytes.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238978AbiA0KL0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 05:11:26 -0500
-Received: from cap.home.8bytes.org (p549ad610.dip0.t-ipconnect.de [84.154.214.16])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by theia.8bytes.org (Postfix) with ESMTPSA id C1787DB2;
-        Thu, 27 Jan 2022 11:11:24 +0100 (CET)
-From:   Joerg Roedel <joro@8bytes.org>
-To:     x86@kernel.org
-Cc:     Joerg Roedel <joro@8bytes.org>, Joerg Roedel <jroedel@suse.de>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org, hpa@zytor.com,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        David Rientjes <rientjes@google.com>,
-        Cfir Cohen <cfir@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mike Stunes <mstunes@vmware.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Martin Radev <martin.b.radev@gmail.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
-Subject: [PATCH v3 10/10] x86/kexec/64: Support kexec under SEV-ES with AP Jump Table Blob
-Date:   Thu, 27 Jan 2022 11:10:44 +0100
-Message-Id: <20220127101044.13803-11-joro@8bytes.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220127101044.13803-1-joro@8bytes.org>
-References: <20220127101044.13803-1-joro@8bytes.org>
+        id S232441AbiA0KMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 05:12:47 -0500
+Received: from mail-ua1-f49.google.com ([209.85.222.49]:36775 "EHLO
+        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229518AbiA0KMp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 05:12:45 -0500
+Received: by mail-ua1-f49.google.com with SMTP id u76so3808915uau.3;
+        Thu, 27 Jan 2022 02:12:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y8tFLfG3AkbX5FC2LkFwx+nrAMcVQcoVBJvwDmbMZbE=;
+        b=ghD6eUP5+9xYrVMzM4SXkCmEgS8ZwIVwvqpd0PwSB9TGpw4BHRw/Jve3AYZi02vDXP
+         1jVif9W4JdGBcJrQ/TaIpQcuyx4zFPFiJEEL8dgPxSpu/fMR/KL6EdOBuNgO5iDN0cir
+         zkXbfjsgAnTFBqHMo3hB2T5Hem76Mm8/nxSlknwtOVDcncYH6iQ0F3zbZ6BbK2RjLHhq
+         Zdw/PHSFNC9uJj+2y765ba13C/CDKgBLOqyNPTXyb6zelrNczKUCGbbF04QMoZPyuwz9
+         syNs97JXqd00tKqWp5RTice7AimkGSyimiOlRJ5stECQorkpatm+ps3puic0/LWRFC8G
+         WXIw==
+X-Gm-Message-State: AOAM530hPE4PpTYhPUTZQPC864PFvtuGxg4HhdXOLT/e5gaSCjWLYoKG
+        F7nIMyJUPbF58rUI+dfoIrDZhMqLA74Jkw==
+X-Google-Smtp-Source: ABdhPJygabxpKaOvJSjf6MZ745UE5jG/K/hV4OcXsIIiAXNGIOa32UslKNPUjZ6tGIn6tA+/4m7u+w==
+X-Received: by 2002:a67:b003:: with SMTP id z3mr1292949vse.64.1643278365124;
+        Thu, 27 Jan 2022 02:12:45 -0800 (PST)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id z27sm489554vsf.24.2022.01.27.02.12.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 02:12:44 -0800 (PST)
+Received: by mail-ua1-f48.google.com with SMTP id y4so3825165uad.1;
+        Thu, 27 Jan 2022 02:12:44 -0800 (PST)
+X-Received: by 2002:ab0:6cf9:: with SMTP id l25mr1377097uai.122.1643278364573;
+ Thu, 27 Jan 2022 02:12:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220121014117.21248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220121014117.21248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 27 Jan 2022 11:12:33 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUW+7mCLHnWbPQ4oxNO9Awri9TNN8bTDq7uGSYncAdWKw@mail.gmail.com>
+Message-ID: <CAMuHMdUW+7mCLHnWbPQ4oxNO9Awri9TNN8bTDq7uGSYncAdWKw@mail.gmail.com>
+Subject: Re: [PATCH v2] soc: renesas: Add support for reading product revision
+ for RZ/G2L family
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+Hi Prabhakar,
 
-When the AP jump table blob is installed the kernel can hand over the
-APs from the old to the new kernel. Enable kexec when the AP jump
-table blob has been installed.
+On Fri, Jan 21, 2022 at 2:41 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> From: Biju Das <biju.das.jz@bp.renesas.com>
+>
+> As per RZ/G2L HW manual (Rev.1.00 Sep, 2021) DEV_ID [31:28] indicates
+> product revision. Use this information to populate the revision info
+> for RZ/G2L family.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1->v2
+> * Fixed freeing up soc_dev_attr in error path.
 
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
----
- arch/x86/include/asm/sev.h         |  2 ++
- arch/x86/kernel/machine_kexec_64.c |  3 ++-
- arch/x86/kernel/sev.c              | 15 +++++++++++++++
- 3 files changed, 19 insertions(+), 1 deletion(-)
+Thanks for the update!
 
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index e342dce3e7a1..41e07d037b6e 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -91,6 +91,7 @@ extern enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
- 					  u64 exit_code, u64 exit_info_1,
- 					  u64 exit_info_2);
- void sev_es_stop_this_cpu(void);
-+bool sev_kexec_supported(void);
- #else
- static inline void sev_es_ist_enter(struct pt_regs *regs) { }
- static inline void sev_es_ist_exit(void) { }
-@@ -98,6 +99,7 @@ static inline int sev_es_setup_ap_jump_table(struct real_mode_header *rmh) { ret
- static inline void sev_es_nmi_complete(void) { }
- static inline int sev_es_efi_map_ghcbs(pgd_t *pgd) { return 0; }
- static inline void sev_es_stop_this_cpu(void) { }
-+static inline bool sev_kexec_supported(void) { return true; }
- #endif
- 
- #endif
-diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-index 5079a75f8944..c58808fe3fb5 100644
---- a/arch/x86/kernel/machine_kexec_64.c
-+++ b/arch/x86/kernel/machine_kexec_64.c
-@@ -27,6 +27,7 @@
- #include <asm/kexec-bzimage64.h>
- #include <asm/setup.h>
- #include <asm/set_memory.h>
-+#include <asm/sev.h>
- 
- #ifdef CONFIG_ACPI
- /*
-@@ -271,7 +272,7 @@ static void load_segments(void)
- 
- static bool machine_kexec_supported(void)
- {
--	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-+	if (!sev_kexec_supported())
- 		return false;
- 
- 	return true;
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 1bced5b49150..17dcbcddd6ab 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -884,6 +884,21 @@ static int __init sev_setup_ap_jump_table(void)
- }
- core_initcall(sev_setup_ap_jump_table);
- 
-+bool sev_kexec_supported(void)
-+{
-+	if (!cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-+		return true;
-+
-+	/*
-+	 * KEXEC with SEV-ES and more than one CPU is only supported
-+	 * when the AP jump table is installed.
-+	 */
-+	if (num_possible_cpus() > 1)
-+		return sev_ap_jumptable_blob_installed;
-+	else
-+		return true;
-+}
-+
- static void __init alloc_runtime_data(int cpu)
- {
- 	struct sev_es_runtime_data *data;
--- 
-2.34.1
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.18.
 
+> --- a/drivers/soc/renesas/renesas-soc.c
+> +++ b/drivers/soc/renesas/renesas-soc.c
+> @@ -405,41 +417,38 @@ static int __init renesas_soc_init(void)
+>
+>                         eshi = ((product >> 4) & 0x0f) + 1;
+>                         eslo = product & 0xf;
+> +                       soc_dev_attr->revision = kasprintf(GFP_KERNEL, "ES%u.%u",
+> +                                                          eshi, eslo);
+> +               }  else if (id == &id_rzg2l) {
+> +                       eshi =  ((product >> 28) & 0x0f);
+> +                       soc_dev_attr->revision = kasprintf(GFP_KERNEL, "Rev %u",
+> +                                                          eshi);
+
+Would you mind if I would drop the "Rev " while applying?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

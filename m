@@ -2,186 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ADA49EC83
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C97449EC84
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237016AbiA0Uhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 15:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S241366AbiA0Uih convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Jan 2022 15:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236959AbiA0Uhw (ORCPT
+        with ESMTP id S236959AbiA0Uig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:37:52 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3A0C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:37:52 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id nn16-20020a17090b38d000b001b56b2bce31so4224910pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:37:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5zRPiVXKQJnIvFiBGkHq6ju0/RKXpE5LqP8JIErA6+A=;
-        b=CfT0fWYKB1hO4qQ9GV8xmqubclF/fIkanpe1lgeduXWSr/koO+yz/w6mA29iz7IzTq
-         R7GscS3dUrZggCzr7Ne0/xMf0PF/tp7B5Lw31/3NBxoSsZSjvGw981Rnn/1bbwJLDY7T
-         yViu+tcFBnzRPfpWnu0WJj1e2lmZd/6BqYWdS4GWbSK7RgReFr2aMWilBPIk0NtxcZgZ
-         7pFUncOJzYQ334RFLv1ajP3sbXZ7wHxTezLe0stlt1is0bwQ5tbUJNBprVnrwMYKGOBf
-         OFG0Vim+aAwy6vIaDI80pZsEp4Z0N5esaw//uvE/JBJqsizf+GEG60n9/OL7flYy0dP8
-         o1xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5zRPiVXKQJnIvFiBGkHq6ju0/RKXpE5LqP8JIErA6+A=;
-        b=4QIYf5td5tj9FZZRQpBqoW8vJIKxxxF9RcSLPDSqwSPL+FjXHx12pmW1lTqEpyO9Qy
-         rAi5957eJoE0+Rn+xhF9tqfHSlAksPOtWHMI0VVGRRmCuSLeJUFa3fim83lOcicpIiO8
-         jiqepVorf8S0Vh902qLQU6Sv6m5VxZUJY+LHghIajhVvc14i67gS5gAgWokRn80R3ttk
-         M1fdQ6GIGMqQxi23iEIEfwjT51p3HAgiQydlO0pua41Kmth0C94fJ3ieHrCVb5icf1/J
-         4YoRkvQQBcgqKaklgoiIUJqbyH4suQUrlJz4U0vVabhhKz0Avc2+/KqruKekc39EuLVm
-         YN8Q==
-X-Gm-Message-State: AOAM531sC034C52WsvPBJjFYZ6J68TWkEOFgMiBmcvUw/8MFqpDHVd6K
-        mBLJrfvUxdNv2oNVZZaQDgb6KQ==
-X-Google-Smtp-Source: ABdhPJwvlYs9JcL+IH0gEFUp/iIZnp+yfrLv4nYE7ef/xpEhywq4U47rREEBrntl66R10kQ6zqL/4w==
-X-Received: by 2002:a17:90a:39c6:: with SMTP id k6mr15969349pjf.194.1643315871478;
-        Thu, 27 Jan 2022 12:37:51 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:7713:237d:48f3:f690])
-        by smtp.gmail.com with ESMTPSA id j6sm6992623pfu.18.2022.01.27.12.37.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 12:37:50 -0800 (PST)
-Date:   Thu, 27 Jan 2022 12:37:44 -0800
-From:   Benson Leung <bleung@google.com>
-To:     Won Chung <wonchung@google.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ACPI: device_sysfs: Add sysfs support for _PLD
-Message-ID: <YfMCmCb47zocYXCA@google.com>
-References: <20220126235807.3164317-1-wonchung@google.com>
+        Thu, 27 Jan 2022 15:38:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7610FC061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:38:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 197BC61904
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 20:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E89CC340E4;
+        Thu, 27 Jan 2022 20:38:34 +0000 (UTC)
+Date:   Thu, 27 Jan 2022 15:38:32 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Yinan Liu <yinan@linux.alibaba.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] ftrace: Have architectures opt-in for mcount build time
+  sorting
+Message-ID: <20220127153821.3bc1ac6e@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yN0c5RbogYywFKuv"
-Content-Disposition: inline
-In-Reply-To: <20220126235807.3164317-1-wonchung@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From f7d4ef4e77464e08af38789ea5d3a9cfb80a3d78 Mon Sep 17 00:00:00 2001
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Date: Tue, 25 Jan 2022 09:19:10 -0500
+Subject: [PATCH] ftrace: Have architectures opt-in for mcount build time
+ sorting
 
---yN0c5RbogYywFKuv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+First S390 complained that the sorting of the mcount sections at build
+time caused the kernel to crash on their architecture. Now PowerPC is
+complaining about it too. And also ARM64 appears to be having issues.
 
-Hi Won,
+It may be necessary to also update the relocation table for the values
+in the mcount table. Not only do we have to sort the table, but also
+update the relocations that may be applied to the items in the table.
 
-On Wed, Jan 26, 2022 at 11:58:07PM +0000, Won Chung wrote:
-> When ACPI table includes _PLD fields for a device, create a new file
-> (pld) in sysfs to share _PLD fields.
+If the system is not relocatable, then it is fine to sort, but if it is,
+some architectures may have issues (although x86 does not as it shifts all
+addresses the same).
 
-If you're adding a new attribute, you should also update the Documentation
-file here: Documentation/ABI/testing/sysfs-bus-acpi
+Add a HAVE_BUILDTIME_MCOUNT_SORT that an architecture can set to say it is
+safe to do the sorting at build time.
 
-Thanks,
-Benson
+Also update the config to compile in build time sorting in the sorttable
+code in scripts/ to depend on CONFIG_BUILDTIME_MCOUNT_SORT.
 
+Link: https://lore.kernel.org/all/944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com/
 
->=20
-> Signed-off-by: Won Chung <wonchung@google.com>
-> ---
->  drivers/acpi/device_sysfs.c | 42 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->=20
-> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-> index d5d6403ba07b..8d4df5fb1c45 100644
-> --- a/drivers/acpi/device_sysfs.c
-> +++ b/drivers/acpi/device_sysfs.c
-> @@ -509,6 +509,40 @@ static ssize_t status_show(struct device *dev, struc=
-t device_attribute *attr,
->  }
->  static DEVICE_ATTR_RO(status);
-> =20
-> +static ssize_t pld_show(struct device *dev, struct device_attribute *att=
-r,
-> +			char *buf)
-> +{
-> +	struct acpi_device *acpi_dev =3D to_acpi_device(dev);
-> +	acpi_status status;
-> +	struct acpi_pld_info *pld;
-> +
-> +	status =3D acpi_get_physical_device_location(acpi_dev->handle, &pld);
-> +	if (ACPI_FAILURE(status))
-> +		return -ENODEV;
-> +
-> +	return sprintf(buf, "GROUP_TOKEN=3D%u\n"
-> +		"GROUP_POSITION=3D%u\n"
-> +		"USER_VISIBLE=3D%u\n"
-> +		"DOCK=3D%u\n"
-> +		"BAY=3D%u\n"
-> +		"LID=3D%u\n"
-> +		"PANEL=3D%u\n"
-> +		"HORIZONTAL_POSITION=3D%u\n"
-> +		"VERTICAL_POSITION=3D%u\n"
-> +		"SHAPE=3D%u\n",
-> +		pld->group_token,
-> +		pld->group_position,
-> +		pld->user_visible,
-> +		pld->dock,
-> +		pld->bay,
-> +		pld->lid,
-> +		pld->panel,
-> +		pld->horizontal_position,
-> +		pld->vertical_position,
-> +		pld->shape);
-> +}
-> +static DEVICE_ATTR_RO(pld);
-> +
->  /**
->   * acpi_device_setup_files - Create sysfs attributes of an ACPI device.
->   * @dev: ACPI device object.
-> @@ -595,6 +629,12 @@ int acpi_device_setup_files(struct acpi_device *dev)
->  						    &dev_attr_real_power_state);
->  	}
-> =20
-> +	if (acpi_has_method(dev->handle, "_PLD")) {
-> +		result =3D device_create_file(&dev->dev, &dev_attr_pld);
-> +		if (result)
-> +			goto end;
-> +	}
-> +
->  	acpi_expose_nondev_subnodes(&dev->dev.kobj, &dev->data);
-> =20
->  end:
-> @@ -645,4 +685,6 @@ void acpi_device_remove_files(struct acpi_device *dev)
->  		device_remove_file(&dev->dev, &dev_attr_status);
->  	if (dev->handle)
->  		device_remove_file(&dev->dev, &dev_attr_path);
-> +	if (acpi_has_method(dev->handle, "_PLD"))
-> +		device_remove_file(&dev->dev, &dev_attr_pld);
->  }
-> --=20
-> 2.35.0.rc0.227.g00780c9af4-goog
->=20
+Cc: Yinan Liu <yinan@linux.alibaba.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Reported-by: Sachin Sant <sachinp@linux.ibm.com>
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Mark Rutland <mark.rutland@arm.com> [arm64]
+Tested-by: Sachin Sant <sachinp@linux.ibm.com>
+Fixes: 72b3942a173c ("scripts: ftrace - move the sort-processing in ftrace_init")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Changes since v1: https://lore.kernel.org/all/20220127114249.03b1b52b@gandalf.local.home/
+ - Have CONFIG_BUILDTIME_MCOUNT_SORT depend on DYNAMIC_FTRACE
+   otherwise it fails to build when DYNAMIC_FTRACE is not set
+   because it can not find the mcount section in the sorttable code.
 
---=20
-Benson Leung
-Staff Software Engineer
-Chrome OS Kernel
-Google Inc.
-bleung@google.com
-Chromium OS Project
-bleung@chromium.org
+ arch/arm/Kconfig     | 1 +
+ arch/x86/Kconfig     | 1 +
+ kernel/trace/Kconfig | 8 +++++++-
+ scripts/Makefile     | 2 +-
+ 4 files changed, 10 insertions(+), 2 deletions(-)
 
---yN0c5RbogYywFKuv
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index c2724d986fa0..5256ebe57451 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -82,6 +82,7 @@ config ARM
+ 	select HAVE_EBPF_JIT if !CPU_ENDIAN_BE32
+ 	select HAVE_CONTEXT_TRACKING
+ 	select HAVE_C_RECORDMCOUNT
++	select HAVE_BUILDTIME_MCOUNT_SORT
+ 	select HAVE_DEBUG_KMEMLEAK if !XIP_KERNEL
+ 	select HAVE_DMA_CONTIGUOUS if MMU
+ 	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && !CPU_ENDIAN_BE32 && MMU
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 7399327d1eff..46080dea5dba 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -186,6 +186,7 @@ config X86
+ 	select HAVE_CONTEXT_TRACKING_OFFSTACK	if HAVE_CONTEXT_TRACKING
+ 	select HAVE_C_RECORDMCOUNT
+ 	select HAVE_OBJTOOL_MCOUNT		if STACK_VALIDATION
++	select HAVE_BUILDTIME_MCOUNT_SORT
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_DMA_CONTIGUOUS
+ 	select HAVE_DYNAMIC_FTRACE
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index 752ed89a293b..a5eb5e7fd624 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -70,10 +70,16 @@ config HAVE_C_RECORDMCOUNT
+ 	help
+ 	  C version of recordmcount available?
+ 
++config HAVE_BUILDTIME_MCOUNT_SORT
++       bool
++       help
++         An architecture selects this if it sorts the mcount_loc section
++	 at build time.
++
+ config BUILDTIME_MCOUNT_SORT
+        bool
+        default y
+-       depends on BUILDTIME_TABLE_SORT && !S390
++       depends on HAVE_BUILDTIME_MCOUNT_SORT && DYNAMIC_FTRACE
+        help
+          Sort the mcount_loc section at build time.
+ 
+diff --git a/scripts/Makefile b/scripts/Makefile
+index b082d2f93357..cedc1f0e21d8 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -32,7 +32,7 @@ HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
+ HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
+ endif
+ 
+-ifdef CONFIG_DYNAMIC_FTRACE
++ifdef CONFIG_BUILDTIME_MCOUNT_SORT
+ HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
+ endif
+ 
+-- 
+2.33.0
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYfMCmAAKCRBzbaomhzOw
-wv/lAP0fZ4J1IJCrLit7NHh8xFteID06c/Ga76+iIXX+6x6MjwEAox9Fhj77FOn1
-QH3TPybVr1ADTo0TiUmRtUQbDxVpfAA=
-=c5Dl
------END PGP SIGNATURE-----
-
---yN0c5RbogYywFKuv--

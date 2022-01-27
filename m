@@ -2,150 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3987849DBD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1644349DBD7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237455AbiA0Hpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 02:45:38 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:35890
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237442AbiA0Hpg (ORCPT
+        id S237469AbiA0HrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 02:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232172AbiA0HrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 02:45:36 -0500
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9D4823F1D0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:45:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643269535;
-        bh=A2nKj4Pl+64Ysr4+QSknv7VT4EFI0AF9z9C7GHdP12w=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=uOtW3NGdj0gIRpAVE0/UHen6y/HD6qyn2I+E3mmFZcC3pkoC5vkxlszO4wcCEV9un
-         xC+M7hAp9O9i2pNuET/m5hfTG2/ujZ9wqfC7hMqTc1J0eWA1YlmnivT7/4kYWghsQ6
-         mrK4Piiq68FXhbZloP6RyalTRX/SOABMC82urInh+qxT6rmqRWFDU4OFbasz1iQVnG
-         +lQQQcgTw64hZ7cis+m5Md24bxEFJh0Mqs3Fkk0VUM5wG8zIPDd7Pljp4JcFURjSVg
-         XQI/idF9ggOimGlEa0Yr3iaQ2Ce6ZTyHlY7BUJcAoKX/ilb5qGLpWdFInUFjtvStae
-         JMsw0ai0ehiAA==
-Received: by mail-wr1-f72.google.com with SMTP id r27-20020adfb1db000000b001d7567e33baso714655wra.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 23:45:35 -0800 (PST)
+        Thu, 27 Jan 2022 02:47:20 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E80C061714
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 23:47:20 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id k17so1865109plk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 23:47:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=ccbbHyPa2zNHaY1DTEmYbekClrFWWB6tGVPD92+73A4=;
+        b=DL8Mh5tykZhwRpRlx6PJFlY4l+TJ1nDbLWtCJWqUPgUufRJcQlc87OeuQ/NuEY9Q5G
+         Zks30HfjIunhbY2mjzrWf6Nxj0xs3OONqSulWD+5zL2qAELSaD+6fb/DvceJcL5XKa1A
+         zbuCDk6/v8MpDP/hVjbsTdxUaj3N9Yb0wbwJ3bQbRdR368uKmm88twG0rjmWVbcXCm5a
+         nKkTqGxMLxYv4KUXT0HgPwE8X1b89pNZ7/wZvH9OCJuWwPd6CZLrTc6mpFkb9Y/R3Nq8
+         tSK9xz5SeD89C7w6LBVKHLv7n8i9dmvkmVkBzGI+LptF5O6i6ryaX+0DoFTZTcI9jDaM
+         Hg3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A2nKj4Pl+64Ysr4+QSknv7VT4EFI0AF9z9C7GHdP12w=;
-        b=YpkkkO3XS1+JGCKy6LnvgRJoLb3WIQsV/blfs/IHvdDAswNrKojNY2z7hU6i7tW9l7
-         EvyBuXwx4VEaJnMw5uSmZqm0pT6lMUC+dMjvpF5JaQGcTDYMsUitPmX/mWtwbsaFhLmT
-         II4oi3h95Owweg9RvaPUeRZG0uzXzN/sORDZ4YU8bs45ywevZu/CMg8CRVTGnB3CsSuL
-         gE+ee/ld954Irb+B+c5o6KsDUJWpNcmAukzq2lf0u1eV5FLV0zzAOVbvycQhk4/x61il
-         4J+gEH9uxqayBBe9w9vbkVJd/o2pujXpLeZUyiaCIYU0VcI3LwtMKHiu3sK41OrI/Uf8
-         0SHQ==
-X-Gm-Message-State: AOAM532lHNhi/oM9g8+AsXXFOTmhagOIEx96q+gzAgUzgVxZAfreZ0oj
-        G8xSMkhEv/d0fP6Hde6lMEzcufU0bhg39QibTADCINka/m8ajVWKloAABstZgGe6ECIDik1dWuA
-        0Zd+WoLCkv+7YvQBXNQM4Mm2BAvzRk4RyK1cbF/kq2Q==
-X-Received: by 2002:adf:ffd0:: with SMTP id x16mr1770494wrs.489.1643269535295;
-        Wed, 26 Jan 2022 23:45:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz7jAoPbLTEGbFOH5NdL0XmAfgEGITHjiDTMGRmPjC05oBjkMk8eXbStMM/Z+R7G7OO6XMvnw==
-X-Received: by 2002:adf:ffd0:: with SMTP id x16mr1770480wrs.489.1643269535072;
-        Wed, 26 Jan 2022 23:45:35 -0800 (PST)
-Received: from [192.168.0.62] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id m6sm1647098wrw.54.2022.01.26.23.45.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 23:45:34 -0800 (PST)
-Message-ID: <c69d1daf-45c8-3ac5-a0b0-bb853593c54e@canonical.com>
-Date:   Thu, 27 Jan 2022 08:45:33 +0100
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=ccbbHyPa2zNHaY1DTEmYbekClrFWWB6tGVPD92+73A4=;
+        b=swIlsDUc9ioDK5UzWBC5MNIMTQw/LekWzVg5MqEnJL4ozadfS7Uf+VHYIc9UzjsNxz
+         85WNzeEZB/vH93OKpN7xXVNmXPsB/BHOppBZw3DmW36AUfwDcRJ7jL84dhfKbRDI+p9Q
+         OeBTooJrrnygHv/HDh+PYydmHIQTGULcWYP6WRsVaDhE4pl20vWouzS3dn/V+kLaceYu
+         qv5LAAg21wFXsTdSNi+Ctiq8VWcV69ZsBX6UhOS5TnkqBs2p7zufgMHvGlR8oUozxf8R
+         jfmQVCEuqMa2zI6dD2Kj0CBxUx4FWFcQeV1RazWyVCauGs/VYB4GcIbvVkZ3fXbdu44w
+         P2Xg==
+X-Gm-Message-State: AOAM530KWYnPJPeKKIzyWqzW8eInfLotYmkHRuCRztGgjzGRtshthvoZ
+        Zif5bbEaol3nUV20z+y0VSXk/opyuSI=
+X-Google-Smtp-Source: ABdhPJzTdfAMHZgt09EJywuiYpaTjuAUSIUWYp3MJHgXqIFFyR1hxS2GInBjux6BQyeantrGUFUIXw==
+X-Received: by 2002:a17:90a:b90b:: with SMTP id p11mr2900928pjr.189.1643269640138;
+        Wed, 26 Jan 2022 23:47:20 -0800 (PST)
+Received: from localhost (193-116-82-75.tpgi.com.au. [193.116.82.75])
+        by smtp.gmail.com with ESMTPSA id y16sm4521122pfl.128.2022.01.26.23.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 23:47:19 -0800 (PST)
+Date:   Thu, 27 Jan 2022 17:47:14 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: ppc: hard lockup / hang in v5.17-rc1 under QEMU
+To:     =?iso-8859-1?q?C=E9dric?= Le Goater <clg@kaod.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <CANiq72n_FmDx=r-o9J8gYc6LpwRL5EGmhM6Xzwv27Xc7h1TNDw@mail.gmail.com>
+        <cf6ac499-4190-cbe5-255c-f9edf07a4786@kaod.org>
+        <CANiq72mV3AzmBDVJM+tQriEoDu_9LFBrK_vR6GC4qEmLw0UepQ@mail.gmail.com>
+In-Reply-To: <CANiq72mV3AzmBDVJM+tQriEoDu_9LFBrK_vR6GC4qEmLw0UepQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 6/8] dt-bindings: vendor-prefixes: add LG Electronics
-Content-Language: en-US
-To:     Petr Vorel <petr.vorel@gmail.com>, Luca Weiss <luca@z3ntu.xyz>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Max Merchel <Max.Merchel@tq-group.com>,
-        Hao Fang <fanghao11@huawei.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jean THOMAS <virgule@jeanthomas.me>
-References: <YfHlV13Zi4KV+bNT@pevik>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <YfHlV13Zi4KV+bNT@pevik>
+Message-Id: <1643269597.wkij0f82dr.astroid@bobo.none>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2022 01:20, Petr Vorel wrote:
-> Hi all,
-> 
->>> Hi Krzysztof,
-> 
->>> On Montag, 13. September 2021 10:49:43 CEST Krzysztof Kozlowski wrote:
->>>> On 12/09/2021 01:27, Luca Weiss wrote:
->>>>> LG Electronics is a part of the LG Corporation and produces, amongst
->>>>> other things, consumer electronics such as phones and smartwatches.
-> 
->>>> Hi,
-> 
->>>> Thanks for the patches.
-> 
->>>> I think "lge" it's the same prefix as "lg". There is no sense in having
->>>> multiple vendor prefixes just because company splits inside business
->>>> units or subsidiaries. The same as with other conglomerates, e.g.
->>>> Samsung - if we wanted to be specific, there will be 4-5 Samsung
->>>> vendors... Not mentioning that company organisation is not always
->>>> disclosed and can change.
-> 
-> 
->>> I was mostly following qcom-msm8974-lge-nexus5-hammerhead as it's the other LG
->>> device tree I am aware of so I've picked lge instead of lg. Also worth noting
->>> that Google uses "LGE" in the Android device tree[1] or in the model name in
->>> the LG G Watch R kernel sources ("LGE APQ 8026v2 LENOK rev-1.0")
-> 
->> [1] Does not point to kernel tree. Downstream user could be a good
->> argument to switch to lge, but then I would expect correcting other "lg"
->> devices which are in fact made by LGE.
-> 
-> 
->>> I don't have a strong opinion either way so I'm fine with either.
-> 
->>> If we decide to go with "lg" do we want to change the Nexus 5 devicetree
->>> (hammerhead) also, that one has the lge name in at least compatible and
->>> filename (I don't know how much of a breaking change that would be considered
->>> as).
-> 
->> We would have to add a new one and mark the old compatible as deprecated.
-> 
-> Have we sorted this lg- vs. lge- ?
-> 
-> There are both:
-> arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-> vs
-> arch/arm/boot/dts/qcom-apq8026-lg-lenok.dts
-> 
+Excerpts from Miguel Ojeda's message of January 27, 2022 4:57 am:
+> On Wed, Jan 26, 2022 at 4:03 PM C=C3=A9dric Le Goater <clg@kaod.org> wrot=
+e:
+>>
+>> Indeed. I could reproduce.
+>=20
+> Thanks for the quick confirmation!
+>=20
+>> Could you please send the QEMU command line and the full dmesg ? and
+>> possibly open an issue on :
+>>
+>>    https://gitlab.com/qemu-project/qemu/-/issues/
+>>
+>> I guess it's a QEMU modeling issue.
+>=20
+> Of course -- done (details there):
+>=20
+>     https://gitlab.com/qemu-project/qemu/-/issues/842
 
-Probably renaming/unifying/correcting prefix in existing compatibles is
-not worth the effort. This would make a mess and affect other DTS users.
+That sounds like my fault actually.
 
-Most of existing usages of "lg" prefix are panels which are coming from
-another subsidiary of LG - LG Display. We all use there "lg" prefix, not
-"lgd".
-Plus mention before Bullhead mobile phone which is coming from LG
-Electronics.
+https://lists.ozlabs.org/pipermail/linuxppc-dev/2022-January/239178.html
 
-If we use generalized "lg" prefix for one subsidiary (LG Display), then
-let's do the same for another subsidiary - LG Electronics. Plus entire
-branding of LG Electronics products is LG: the website, the logo,
-advertisements. Everywhere except legal footer.
-
-I vote for using "lg" for both subsidiaries: LG Display and LG Electronics.
-
-
-Best regards,
-Krzysztof
+Thanks,
+Nick

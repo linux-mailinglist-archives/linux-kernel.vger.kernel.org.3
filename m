@@ -2,119 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 783FA49EB29
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A4449EB2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239931AbiA0TjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:39:13 -0500
-Received: from mga05.intel.com ([192.55.52.43]:34274 "EHLO mga05.intel.com"
+        id S239133AbiA0TjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:39:20 -0500
+Received: from mga11.intel.com ([192.55.52.93]:39357 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229639AbiA0TjM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:39:12 -0500
+        id S229639AbiA0TjN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 14:39:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643312352; x=1674848352;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K8TsweYnEBuPUmpbQF/V+mUt3gLgV/uS+4rbemKBr0g=;
-  b=Bg4F9KLm0QOhga2dDiVh1sDGjXID7amOOv9jyHmU28VnxHSLBNsXZdCq
-   eecE7rnSU/+Z19zQ9ugTwdX5BqJp0lWdXOcPfCXJfRsI+PivSnKKhPElA
-   Ip1MqmryS2yLJBDqiBGoU62lAWa24jwalD3/empiAyJ9ix3WOtRAKEPhR
-   /7phUrR1GQtEB18iP0xrLhHiakeZ+R2tI3sx0zpmPI0hVlBHKpZdhZOpn
-   jVASBTqDmbeZVNbBbUeBNbKYoRKciTzt8MqG66sHxmIR5J8eF20hx7XGv
-   WsGqLzdxzQpvmxHexsZRXQip+0hESxJE9ekPEkbUwWgoOaN8O+EXWUVKy
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="333301866"
+  t=1643312353; x=1674848353;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eY/bKymh/uUeFbsSmJKZ1CVvViDHVKHvZv1YTayd+uk=;
+  b=OIfsXx6/FnR2L9e/wcg1NHxLPjxeIm6csp/LquIPaAlpugXGEkCaAH42
+   X6Iv4Pfrs7AllDs4zBKeIDdOHrrPeVsPj/Dc4JYVVPHWI6ieyOPAmEekr
+   mVvDO2HVApUpZVojyh9OtOQDeEgAGKsqpaqRKa4Vvwj9A9zkTIP0B98WY
+   RrBvQvzBkppf4+xlLuQNVs5sRJo+6jdshvXPBdaQqDK1hpSLiB/dfDLKb
+   iyZp3qwgTjUL/g0/wkivhgOw4RHJJwtq0444yhp/iWPuRN9KjcRcbeliL
+   kO9nRpHXCASw5GF+W0Y7vwQVlTnUboFZCPhLN7bn0lPOHwj2hUfVavjSk
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="244551414"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="333301866"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 11:39:12 -0800
+   d="scan'208";a="244551414"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 11:39:13 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="480431704"
+   d="scan'208";a="618451561"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 27 Jan 2022 11:39:10 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Jan 2022 11:39:10 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nDAbu-000Mxz-1H; Thu, 27 Jan 2022 19:39:10 +0000
-Date:   Fri, 28 Jan 2022 03:39:00 +0800
+        id 1nDAbu-000My1-2e; Thu, 27 Jan 2022 19:39:10 +0000
+Date:   Fri, 28 Jan 2022 03:39:05 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [davidhildenbrand:single_zone 4/4] drivers/base/memory.c:648:14:
- warning: no previous prototype for 'early_node_zone_for_memory_block'
-Message-ID: <202201280300.xX8fHtiK-lkp@intel.com>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, djwong@kernel.org,
+        dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+        jane.chu@oracle.com
+Subject: Re: [PATCH v10 8/9] xfs: Implement ->notify_failure() for XFS
+Message-ID: <202201280314.SI8wtlfT-lkp@intel.com>
+References: <20220127124058.1172422-9-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220127124058.1172422-9-ruansy.fnst@fujitsu.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/davidhildenbrand/linux single_zone
-head:   176a3d535903312944f7489127f520c5494bc810
-commit: 176a3d535903312944f7489127f520c5494bc810 [4/4] tmp
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220128/202201280300.xX8fHtiK-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+Hi Shiyang,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on linux/master]
+[also build test ERROR on linus/master v5.17-rc1 next-20220127]
+[cannot apply to xfs-linux/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: ia64-defconfig (https://download.01.org/0day-ci/archive/20220128/202201280314.SI8wtlfT-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
-        # https://github.com/davidhildenbrand/linux/commit/176a3d535903312944f7489127f520c5494bc810
-        git remote add davidhildenbrand git://github.com/davidhildenbrand/linux
-        git fetch --no-tags davidhildenbrand single_zone
-        git checkout 176a3d535903312944f7489127f520c5494bc810
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/cb7650562991fc273fbf4c53b6e3db4bb9bb0b5e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
+        git checkout cb7650562991fc273fbf4c53b6e3db4bb9bb0b5e
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash fs/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/base/memory.c:648:14: warning: no previous prototype for 'early_node_zone_for_memory_block' [-Wmissing-prototypes]
-     648 | struct zone *early_node_zone_for_memory_block(int nid, struct memory_block *mem)
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from fs/xfs/xfs_buf.h:14,
+                    from fs/xfs/xfs_linux.h:80,
+                    from fs/xfs/xfs.h:22,
+                    from fs/xfs/xfs_buf.c:6:
+   include/linux/dax.h:73:30: warning: 'struct dax_holder_operations' declared inside parameter list will not be visible outside of this definition or declaration
+      73 |                 const struct dax_holder_operations *ops)
+         |                              ^~~~~~~~~~~~~~~~~~~~~
+   fs/xfs/xfs_buf.c: In function 'xfs_alloc_buftarg':
+>> fs/xfs/xfs_buf.c:1959:33: error: passing argument 3 of 'dax_register_holder' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    1959 |                                 &xfs_dax_holder_operations);
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                 |
+         |                                 const struct dax_holder_operations *
+   In file included from fs/xfs/xfs_buf.h:14,
+                    from fs/xfs/xfs_linux.h:80,
+                    from fs/xfs/xfs.h:22,
+                    from fs/xfs/xfs_buf.c:6:
+   include/linux/dax.h:73:53: note: expected 'const struct dax_holder_operations *' but argument is of type 'const struct dax_holder_operations *'
+      73 |                 const struct dax_holder_operations *ops)
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   cc1: some warnings being treated as errors
+--
+   In file included from fs/xfs/xfs_buf.h:14,
+                    from fs/xfs/xfs_linux.h:80,
+                    from fs/xfs/xfs.h:22,
+                    from fs/xfs/xfs_notify_failure.c:6:
+   include/linux/dax.h:73:30: warning: 'struct dax_holder_operations' declared inside parameter list will not be visible outside of this definition or declaration
+      73 |                 const struct dax_holder_operations *ops)
+         |                              ^~~~~~~~~~~~~~~~~~~~~
+>> fs/xfs/xfs_notify_failure.c:220:14: error: variable 'xfs_dax_holder_operations' has initializer but incomplete type
+     220 | const struct dax_holder_operations xfs_dax_holder_operations = {
+         |              ^~~~~~~~~~~~~~~~~~~~~
+>> fs/xfs/xfs_notify_failure.c:221:10: error: 'const struct dax_holder_operations' has no member named 'notify_failure'
+     221 |         .notify_failure         = xfs_dax_notify_failure,
+         |          ^~~~~~~~~~~~~~
+   fs/xfs/xfs_notify_failure.c:221:35: warning: excess elements in struct initializer
+     221 |         .notify_failure         = xfs_dax_notify_failure,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~
+   fs/xfs/xfs_notify_failure.c:221:35: note: (near initialization for 'xfs_dax_holder_operations')
+>> fs/xfs/xfs_notify_failure.c:220:36: error: storage size of 'xfs_dax_holder_operations' isn't known
+     220 | const struct dax_holder_operations xfs_dax_holder_operations = {
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/early_node_zone_for_memory_block +648 drivers/base/memory.c
+vim +/dax_register_holder +1959 fs/xfs/xfs_buf.c
 
-   647	
- > 648	struct zone *early_node_zone_for_memory_block(int nid, struct memory_block *mem)
-   649	{
-   650		const unsigned long start_pfn = section_nr_to_pfn(mem->start_section_nr);
-   651		const unsigned long nr_pages = PAGES_PER_SECTION * sections_per_block;
-   652	
-   653		struct zone *zone, *matching_zone = NULL;
-   654		pg_data_t *pgdat = NODE_DATA(nid);
-   655		int i;
-   656	
-   657		/*
-   658		 * This logic only works for early memory, when the applicable zones
-   659		 * already span the memory block. We don't expect overlapping zones on
-   660		 * a single node for early memory. So if we're told that some pfns
-   661		 * of a node fall into this memory block, we can assume that all node
-   662		 * zones that intersect with the memory block are actually applicable.
-   663		 * No need to look at the memmap.
-   664		 *
-   665		 * Memory hot(un)plug updates the zone manually after memory
-   666		 * onlinig/offlining succeed.
-   667		 */
-   668		for (i = 0; i < MAX_NR_ZONES; i++) {
-   669			zone = pgdat->node_zones + i;
-   670			if (!populated_zone(zone))
-   671				continue;
-   672			if (!zone_intersects(zone, start_pfn, nr_pages))
-   673				continue;
-   674			if (!matching_zone) {
-   675				matching_zone = zone;
-   676				continue;
-   677			}
-   678			/* Spans multiple zones ... */
-   679			matching_zone = NULL;
-   680			break;
-   681		}
-   682		return matching_zone;
-   683	}
-   684	
+  1938	
+  1939	struct xfs_buftarg *
+  1940	xfs_alloc_buftarg(
+  1941		struct xfs_mount	*mp,
+  1942		struct block_device	*bdev)
+  1943	{
+  1944		xfs_buftarg_t		*btp;
+  1945	
+  1946		btp = kmem_zalloc(sizeof(*btp), KM_NOFS);
+  1947	
+  1948		btp->bt_mount = mp;
+  1949		btp->bt_dev =  bdev->bd_dev;
+  1950		btp->bt_bdev = bdev;
+  1951		btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off);
+  1952		if (btp->bt_daxdev) {
+  1953			if (dax_get_holder(btp->bt_daxdev)) {
+  1954				xfs_err(mp, "DAX device already in use?!");
+  1955				goto error_free;
+  1956			}
+  1957	
+  1958			dax_register_holder(btp->bt_daxdev, mp,
+> 1959					&xfs_dax_holder_operations);
+  1960		}
+  1961	
+  1962		/*
+  1963		 * Buffer IO error rate limiting. Limit it to no more than 10 messages
+  1964		 * per 30 seconds so as to not spam logs too much on repeated errors.
+  1965		 */
+  1966		ratelimit_state_init(&btp->bt_ioerror_rl, 30 * HZ,
+  1967				     DEFAULT_RATELIMIT_BURST);
+  1968	
+  1969		if (xfs_setsize_buftarg_early(btp, bdev))
+  1970			goto error_free;
+  1971	
+  1972		if (list_lru_init(&btp->bt_lru))
+  1973			goto error_free;
+  1974	
+  1975		if (percpu_counter_init(&btp->bt_io_count, 0, GFP_KERNEL))
+  1976			goto error_lru;
+  1977	
+  1978		btp->bt_shrinker.count_objects = xfs_buftarg_shrink_count;
+  1979		btp->bt_shrinker.scan_objects = xfs_buftarg_shrink_scan;
+  1980		btp->bt_shrinker.seeks = DEFAULT_SEEKS;
+  1981		btp->bt_shrinker.flags = SHRINKER_NUMA_AWARE;
+  1982		if (register_shrinker(&btp->bt_shrinker))
+  1983			goto error_pcpu;
+  1984		return btp;
+  1985	
+  1986	error_pcpu:
+  1987		percpu_counter_destroy(&btp->bt_io_count);
+  1988	error_lru:
+  1989		list_lru_destroy(&btp->bt_lru);
+  1990	error_free:
+  1991		kmem_free(btp);
+  1992		return NULL;
+  1993	}
+  1994	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

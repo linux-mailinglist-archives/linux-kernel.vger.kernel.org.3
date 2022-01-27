@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7ADC49E984
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ED749E985
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245146AbiA0R5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:57:31 -0500
-Received: from mga02.intel.com ([134.134.136.20]:19413 "EHLO mga02.intel.com"
+        id S245403AbiA0R5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:57:33 -0500
+Received: from mga02.intel.com ([134.134.136.20]:19415 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244887AbiA0Rzl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S244803AbiA0Rzl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Jan 2022 12:55:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643306141; x=1674842141;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=N0Tv6h4FB/cnby57OzSRsvLwV94sj1hOq8tCorWfjUU=;
-  b=PvEbuGjY3Eo+yEZGX4dvh5M2DEhUMo6dFW0dERwAXKsn4MRNOkapidoT
-   UjxL/2irzlOZG975XrowBC33Ey2HSjvjpoBDuLX3Z8YaVFF43Yub6zI9X
-   qggMGHcpeQBIoMIyX8CyxFvFSfGXAlFlZMH8ncEupbFUgU9wQWRHKuu1I
-   V78Z+DJF0OJBxk5tylwc07lCdCNlTUx77PHec0/Z1LEudKv/pEcTto8EC
-   asKYIs3N97ZJ3AeSITi3OPivc02eEQyE2nm8yl7cJquk9UrWBgVWHqmM3
-   QYK3YZRMhmiOGw/l3t8dkxw3R0DlEESr9Z0ciyALc8b677Po4UgPcKJun
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="234302449"
+  bh=m/ObHfnUjtOOeBMl3JoeXOlyP2CRjZaVHbLDfc2RsE4=;
+  b=EcIYjo5Nz7rrtYAAQgR10uqPrfK+IHGLhZf9VWa9O/Wnwmsjn7ampO9H
+   F/S+x48ielLNX6rEWukLWT4JtaNoxTWnOZKvK9+ZxpSSrROtJQuAJPun3
+   /je2o2chzq2R0TGjj1WLQlOIwJeZXyjLIT2SuopKrwPCQaSw8xVaUI0IA
+   qB+kT8yp/iU+4OwbIMuZi7wd6Tvtu2e4x99xlKHN51kYlohH1exHsfLTA
+   ledXDdCm1IcQlnTp20/AeHFIt+m8MG6SVLamGUKusWCgeiDtBT2u6VvVi
+   qM94+Fh5tdZpxjMAVWe5LMIQZJbSA+rF39K25UI1y1x4vjzvNGjgGxWgw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="234302450"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="234302449"
+   d="scan'208";a="234302450"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:55:12 -0800
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="674796162"
+   d="scan'208";a="674796165"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
   by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:55:12 -0800
 From:   ira.weiny@intel.com
@@ -40,9 +40,9 @@ To:     Dave Hansen <dave.hansen@linux.intel.com>,
 Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V8 31/44] mm/pkeys: Add pks_available()
-Date:   Thu, 27 Jan 2022 09:54:52 -0800
-Message-Id: <20220127175505.851391-32-ira.weiny@intel.com>
+Subject: [PATCH V8 32/44] memremap_pages: Add Kconfig for DEVMAP_ACCESS_PROTECTION
+Date:   Thu, 27 Jan 2022 09:54:53 -0800
+Message-Id: <20220127175505.851391-33-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220127175505.851391-1-ira.weiny@intel.com>
 References: <20220127175505.851391-1-ira.weiny@intel.com>
@@ -54,84 +54,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-The PKS code calls will not fail if they are called and a CPU does not
-support the PKS feature.  There will be no protection but the API is
-safe to call.  However, adding the overhead of these calls on CPUs which
-don't support PKS is inefficient
+The persistent memory (PMEM) driver uses the memremap_pages facility to
+provide 'struct page' metadata (vmemmap) for PMEM.  Given that PMEM
+capacity maybe orders of magnitude higher capacity than System RAM it
+presents a large vulnerability surface to stray writes.  Unlike stray
+writes to System RAM, which may result in a crash or other undesirable
+behavior, stray writes to PMEM additionally are more likely to result in
+permanent data loss. Reboot is not a remediation for PMEM corruption
+like it is for System RAM.
 
-Define pks_available() to allow users to check if PKS is enabled on the
-current system.  If not they can chose to optimize around the PKS calls.
+Given that PMEM access from the kernel is limited to a constrained set
+of locations (PMEM driver, Filesystem-DAX, and direct-I/O to a DAX
+page), it is amenable to supervisor pkey protection.
+
+Not all systems with PMEM will want additional protections.  Therefore,
+add a Kconfig option for the user to configure the additional devmap
+protections.
+
+Only systems with supervisor protection keys (PKS) are able to support
+this new protection so depend on ARCH_HAS_SUPERVISOR_PKEYS.
+Furthermore, select ARCH_ENABLE_SUPERVISOR_PKEYS to ensure that the
+architecture support is enabled if PMEM is the only use case.
+
+Only PMEM which is advertised to the memory subsystem needs this
+protection.  Therefore, the feature depends on NVDIMM_PFN.
+
+A default of (NVDIMM_PFN && ARCH_HAS_SUPERVISOR_PKEYS) was suggested but
+logically that is the same as saying default 'yes' because both
+NVDIMM_PFN and ARCH_HAS_SUPERVISOR_PKEYS are required.  Therefore a
+default of 'yes' is used.
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
 Changes for V8
-	s/pks_enabled/pks_available
+	Split this out from
+		[PATCH V7 13/18] memremap_pages: Add access protection via supervisor Protection Keys (PKS)
 ---
- Documentation/core-api/protection-keys.rst |  3 +++
- arch/x86/mm/pkeys.c                        | 10 ++++++++++
- include/linux/pkeys.h                      |  6 ++++++
- 3 files changed, 19 insertions(+)
+ mm/Kconfig | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
-index 267efa2112e7..27c9701d4aeb 100644
---- a/Documentation/core-api/protection-keys.rst
-+++ b/Documentation/core-api/protection-keys.rst
-@@ -151,6 +151,9 @@ Changing permissions of individual keys
- .. kernel-doc:: arch/x86/mm/pkeys.c
-         :identifiers: pks_update_exception
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 46f2bb15aa4e..67e0264acf7d 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -776,6 +776,24 @@ config ZONE_DEVICE
  
-+.. kernel-doc:: arch/x86/mm/pkeys.c
-+        :identifiers: pks_available
+ 	  If FS_DAX is enabled, then say Y.
+ 
++config DEVMAP_ACCESS_PROTECTION
++	bool "Access protection for memremap_pages()"
++	depends on NVDIMM_PFN
++	depends on ARCH_HAS_SUPERVISOR_PKEYS
++	select ARCH_ENABLE_SUPERVISOR_PKEYS
++	default y
 +
- Overriding Default Fault Behavior
- ---------------------------------
- 
-diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
-index f30ac8215785..fa71037c1dd0 100644
---- a/arch/x86/mm/pkeys.c
-+++ b/arch/x86/mm/pkeys.c
-@@ -418,6 +418,16 @@ static void __pks_update_protection(int pkey, u32 protection)
- 	pks_write_pkrs(current->thread.pks_saved_pkrs);
- }
- 
-+/**
-+ * pks_available() - Is PKS available on this system
-+ *
-+ * Return if PKS is currently supported and enabled on this system.
-+ */
-+bool pks_available(void)
-+{
-+	return cpu_feature_enabled(X86_FEATURE_PKS);
-+}
++	help
++	  Enable extra protections on device memory.  This protects against
++	  unintended access to devices such as a stray writes.  This feature is
++	  particularly useful to protect against corruption of persistent
++	  memory.
 +
- /*
-  * Do not call this directly, see pks_mk*().
-  *
-diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
-index a53e4f2c41af..ec5463c373a1 100644
---- a/include/linux/pkeys.h
-+++ b/include/linux/pkeys.h
-@@ -55,6 +55,7 @@ static inline bool arch_pkeys_enabled(void)
- 
- #include <uapi/asm-generic/mman-common.h>
- 
-+bool pks_available(void);
- void pks_update_protection(int pkey, u32 protection);
- void pks_update_exception(struct pt_regs *regs, int pkey, u32 protection);
- 
-@@ -87,6 +88,11 @@ typedef bool (*pks_key_callback)(struct pt_regs *regs, unsigned long address,
- 
- #else /* !CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
- 
-+static inline bool pks_available(void)
-+{
-+	return false;
-+}
++	  This depends on architecture support of supervisor PKeys and has no
++	  overhead if the architecture does not support them.
 +
- static inline void pks_mk_noaccess(int pkey) {}
- static inline void pks_mk_readwrite(int pkey) {}
- static inline void pks_update_exception(struct pt_regs *regs,
++	  If you have persistent memory say 'Y'.
++
+ config DEV_PAGEMAP_OPS
+ 	bool
+ 
 -- 
 2.31.1
 

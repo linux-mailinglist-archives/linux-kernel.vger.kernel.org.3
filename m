@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7E949E401
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F36549E404
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241931AbiA0OA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 09:00:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51550 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241011AbiA0OAN (ORCPT
+        id S242013AbiA0OA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 09:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241055AbiA0OAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 09:00:13 -0500
+        Thu, 27 Jan 2022 09:00:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56AFC061747;
+        Thu, 27 Jan 2022 06:00:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5BB0BB82287;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62B9461B8D;
+        Thu, 27 Jan 2022 14:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C50BAC340F0;
         Thu, 27 Jan 2022 14:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ECE5FC36AE3;
-        Thu, 27 Jan 2022 14:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643292011;
-        bh=CYunBMddd9vXfgSmHRNWWiWCi6UBp8t/F0L+BGJTblw=;
+        s=k20201202; t=1643292012;
+        bh=DirBArJgrjkWAQ7ngqn2ezBLFz+I/u2qZpfU/RrUKzQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=GDqCgLj/oQJw5bzxosAu+/6SPgVHY/PzrLOsoqJEaQ27fLnjjm/Zt5r8HDw0NAve5
-         blCbLhqGyU46Kk2AtJnw1oJcH7jzz+bSrawwRvDBxtFcuHoYdsEJpbBE9wnvc+50N+
-         Ku3j7xMWpbWoPXnK470dKEqOECp4/8XrVeMojq120wWUTHp1y/GidaI/1gzsRhdA8R
-         1A7wTcYW5jnu0AuWO7jijjfePhauzP2ogYJ4gKEe0CUv0MnmAw/dbf7hU/eQHvdHu3
-         xPWePYCr7iU2M1PKz3/MDtuStZr34Lpj9kIV9gyC0XXWt/HwryHfy1qX4BAYiKT+Lh
-         Moax/0wzh0R/w==
+        b=gaZL5jTvKrX6X+2aOXQo4/a/q8YQCBNBa/Fp6GiDlai391WuHemlcG5tjz6Sa06Of
+         In8X9UcNmH3TBy/FMh5JPZ3nVjxT22OGydccZDSBueRaaBq4ot+YZX/x41NcTnROFF
+         QRGq+lOBsAHi1p0OkDLsKJSJPa2/TNgXsVGLAReV37mpfxShmy3Wd2FOcgh/FG8PGD
+         QttQl603JcpAQH4DQx7LGQbf3fkNc3xgo1htXCzPKZPV1BIVhTw7HpNhkjO17fw5n9
+         HKvhWkVvNk3Mqq7JxltzF1Sh4J1XWFrgkGMRYi4OWQB8NoUbQaDk6CGkPe5BocblQv
+         /GuNo1dZPZCFQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2AB1E5D084;
-        Thu, 27 Jan 2022 14:00:10 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4B18E5D087;
+        Thu, 27 Jan 2022 14:00:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: stmmac: dwmac-sun8i: use return val of
- readl_poll_timeout()
+Subject: Re: [PATCH net-next] nfp: nsp: Simplify array allocation
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164329201085.13469.12025143259464894463.git-patchwork-notify@kernel.org>
-Date:   Thu, 27 Jan 2022 14:00:10 +0000
-References: <20220126165215.1921-1-jszhang@kernel.org>
-In-Reply-To: <20220126165215.1921-1-jszhang@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, kuba@kernel.org,
-        mcoquelin.stm32@gmail.com, mripard@kernel.org, wens@csie.org,
-        jernej.skrabec@gmail.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+Message-Id: <164329201273.13469.1026660627963932938.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Jan 2022 14:00:12 +0000
+References: <af578bd3eb471b9613bcba7f714cca7e297a4620.1643214385.git.robin.murphy@arm.com>
+In-Reply-To: <af578bd3eb471b9613bcba7f714cca7e297a4620.1643214385.git.robin.murphy@arm.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     simon.horman@corigine.com, kuba@kernel.org, davem@davemloft.net,
+        oss-drivers@corigine.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -56,24 +54,20 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Thu, 27 Jan 2022 00:52:15 +0800 you wrote:
-> When readl_poll_timeout() timeout, we'd better directly use its return
-> value.
+On Wed, 26 Jan 2022 16:30:33 +0000 you wrote:
+> Prefer kcalloc() to kzalloc(array_size()) for allocating an array.
 > 
-> Before this patch:
-> [    2.145528] dwmac-sun8i: probe of 4500000.ethernet failed with error -14
-> 
-> After this patch:
-> [    2.138520] dwmac-sun8i: probe of 4500000.ethernet failed with error -110
-> 
-> [...]
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>  drivers/net/ethernet/netronome/nfp/nfpcore/nfp_nsp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Here is the summary with links:
-  - net: stmmac: dwmac-sun8i: use return val of readl_poll_timeout()
-    https://git.kernel.org/netdev/net/c/9e0db41e7a0b
+  - [net-next] nfp: nsp: Simplify array allocation
+    https://git.kernel.org/netdev/net-next/c/d9f393f468aa
 
 You are awesome, thank you!
 -- 

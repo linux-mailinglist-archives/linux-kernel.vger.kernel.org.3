@@ -2,68 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E87449E857
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495E149E85A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244300AbiA0RE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:04:29 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:52579 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S244288AbiA0RE1 (ORCPT
+        id S244312AbiA0RGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238767AbiA0RGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:04:27 -0500
-Received: (qmail 178313 invoked by uid 1000); 27 Jan 2022 12:04:26 -0500
-Date:   Thu, 27 Jan 2022 12:04:26 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Re: [PATCH] tools/memory-model: Clarify syntactic and semantic
- dependencies
-Message-ID: <YfLQmgsXp6pg0XIy@rowland.harvard.edu>
-References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
- <YfBk265vVo4FL4MJ@rowland.harvard.edu>
- <YfJ7Rr9Kdk4u78lt@Pauls-MacBook-Pro.local>
+        Thu, 27 Jan 2022 12:06:00 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9251EC06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:06:00 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id u24so4510301eds.11
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:06:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QMS9fD/WrWFkaVLvvHnWkd5VT+VDxZ6T//qmHJ+4+4c=;
+        b=qVoJJfnyibWSf36Pm2N2SPhy9vcLXbq1PZ3JWBxOuzKfvLHz7SRAIPm/nje0xtsVq/
+         tJ+lGd/VB3dN1PbiaKZGUftm7TGrHFoKalvnXnfvSqVBWxmYJxbLiO6ISOQvYyKhkZ+f
+         +QM7p2SX905hFGmcuq5gvQvL7MBNrX8+aRVOaurqc9CKQrrBtox2fJ1MIX4OYXZCOtXE
+         k1oeI+GUvgBGiGQFug8diHWRPo0V964fWlraxXjtGMkPRugGbenM/BQNMn3XVlWjbx+b
+         q5y4JBRfCDSaBQGHwRer5wjKDconnlY1ZcXxytG7sL/8gOpNLJrZkZdLGRPu+nLLN9Xa
+         Ba5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QMS9fD/WrWFkaVLvvHnWkd5VT+VDxZ6T//qmHJ+4+4c=;
+        b=WCqOEAscNvF42xVI9TVvDhJKpDJt+w7FGxxk14fzRQ4zbYXwpMHoXATRId+cJV774h
+         Gwqaa044u8t3RuiKBlJLvbZEvj8dX2a5aO3XNLlcghJ6UsCfPnBA4zF+sd91Avfqifot
+         HyT2cnEG+p68KpDd9Zbw6XekKDqXjOqbIUvk41S6Hdfg9mrhe/mYlpa6m366d4h4gIgD
+         TILN8wD/eDrxx8oN6saO0g4RCSuM6DdcJz0ckXI/HXxUwvDKqmxnjPA6yUGBWg8kfvGf
+         bG6VP9VliCQBoUlHllf8ADIKskCChGWpwPnMvbd/vkI4W17IeaEoiA5nTYpPeTAH1itQ
+         Ln6Q==
+X-Gm-Message-State: AOAM530M7uVaSRCQWujCOgon0g15LNYlHpk21ys2P90MYV4JBFbtKBXi
+        5kvAle0tPfI4gMbBla2DoQA=
+X-Google-Smtp-Source: ABdhPJyszo4zBZb8TzfgxUrfRI901tPnpok7/CKn0J2WsWlYDQP77Q2m0NVRALZfxuccs5N51D54sA==
+X-Received: by 2002:a50:ee97:: with SMTP id f23mr4474666edr.31.1643303158993;
+        Thu, 27 Jan 2022 09:05:58 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id l3sm8898616ejg.44.2022.01.27.09.05.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 09:05:58 -0800 (PST)
+Date:   Thu, 27 Jan 2022 19:05:57 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH] arm64: dts: ls1028a-qds: define mdio slots for
+ networking options
+Message-ID: <20220127170557.v7lg3harlf2skeqi@skbuf>
+References: <20220126092650.19962-1-leoyang.li@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfJ7Rr9Kdk4u78lt@Pauls-MacBook-Pro.local>
+In-Reply-To: <20220126092650.19962-1-leoyang.li@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:00:22PM +0100, Paul Heidekrüger wrote:
-> On Tue, Jan 25, 2022 at 04:00:11PM -0500, Alan Stern wrote:
-> > That's a very abstract way of describing the situation; it doesn't do a 
-> > good job of getting the real idea across.  It also mixes up two separate 
-> > ideas: behaviors being unaffected by a syntactic dependency and 
-> > behaviors being undefined.  They should be described separately. 
+On Wed, Jan 26, 2022 at 03:26:50AM -0600, Li Yang wrote:
+> The ls1028a QDS board support different pluggable PHY cards.  Define the
+> nodes for these slots to be updated at boot time with overlay according
+> to board setup.
 > 
-> Many thanks for the feedback! I agree, the explanation works a lot
-> better once readers have been introduced to data, addr and ctrl
-> relations. 
-> 
-> > I would prefer something along these lines...
-> 
-> Shall I resubmit the patch with you as co-developer, or, given that it's
-> arguably your work now, would you like to submit the patch yourself?
+> Signed-off-by: Alex Marginean <alexandru.marginean@nxp.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
+> ---
 
-I'll submit it myself, with Suggested-by: you.  How does that sound?
+Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Alan
+This fixes:
+=> tftp $fdt_addr_r fsl-ls1028a-qds.dtb && tftp $fdt_ovr_addr_r fsl-ls1028a-qds-85bb.dtb
+=> fdt addr $fdt_addr_r && fdt resize 0x100000 && fdt apply $fdt_ovr_addr_r
+failed on fdt_overlay_apply(): FDT_ERR_NOTFOUND
+
+>  .../boot/dts/freescale/fsl-ls1028a-qds.dts    | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> index 177bc1405f0f..19d3952dbffe 100644
+> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dts
+> @@ -107,6 +107,30 @@ qds_phy1: ethernet-phy@5 {
+>  				reg = <5>;
+>  			};
+>  		};
+> +
+> +		mdio_slot1: mdio@4 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <4>;
+> +		};
+> +
+> +		mdio_slot2: mdio@5 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <5>;
+> +		};
+> +
+> +		mdio_slot3: mdio@6 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <6>;
+> +		};
+> +
+> +		mdio_slot4: mdio@7 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <7>;
+> +		};
+>  	};
+>  };
+>  
+> -- 
+> 2.25.1
+> 

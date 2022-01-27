@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23ED549E26A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:32:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F228149E26C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241164AbiA0McI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
+        id S241171AbiA0Meg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:34:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241155AbiA0McG (ORCPT
+        with ESMTP id S231901AbiA0Meg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:32:06 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44294C061747
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:32:06 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id k31so8238592ybj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:32:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=COpeNcGqK7rU8NWuuX70BzF9hjX60zHAg4InNi+lH9o=;
-        b=pzVVpfcEntY+G5U9MHsg/CfJ2W1YSulSnlwD/sW0y8/+3ywkp9EZyR8pIz90nObFmH
-         7ZlaJDdpb2iEkJBy2D6IKJvXEWUB9tOLoOSiCTImJE/7gAyFp0hJ3/cGO51n9K6wItUr
-         MhQCoU6wLir8SOFlg0DmA6N0hoo/Cf5SWf1ATjExapkFMFghpuWZq9kcEmGEkgk39E6w
-         d/PlRjsdYKvxsC4EvoOwaH2lttPKhFgp9551zW5lJPYLQMo7eiciaa7tvHXwMaNo99Eq
-         daIWT5y50m46ZZ/LRGFT0yW3vpdySL76ga+ae3TYG2d5OMDDvRawpl/OBv78slda4IOB
-         6+LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=COpeNcGqK7rU8NWuuX70BzF9hjX60zHAg4InNi+lH9o=;
-        b=MExuqAa4v69qLn5rZ/kVBZTpWSozhStn9emzpQmlamJbXS1j7Jjeb3XPlkjD0gcryp
-         mgi2V4AYJR9C+dxKqKdgcFI5hsPnLINC7fT/BGryPX1dc8ebFIhfQpQUyiJBkTjLlYoe
-         1ZnrPuJcwWKTKO2YCBeDKWUex58wS8YM1AtT0/A8I2JHiZCoECVliENPnD3oryNP9FlT
-         h4Xxqsk0IQ13286V0HImwzF38vENLXqvwv762tIXlkctwssvqBq5fRUTZu9wBQATcOXn
-         3P5ebszhPJhZUM8LODvt8ycf79TQd+sC1azOLIgbdM13x6mW9SYD8WNLmoi2qHbaoacB
-         WTcw==
-X-Gm-Message-State: AOAM5322jYtfwxdtwASS89KdBn+7njU62CPoQSwk8apLmI2J30yVv3/9
-        OHO3nRAVGcBLfpBdiVVOjVRoYa2ARUGBJo3qTABemw==
-X-Google-Smtp-Source: ABdhPJyzgIN/zJvjgm1gJJmqv/GrBPj+qbTmCJp+I7H1bg2/dqnsBjz5C7f1mfTByUR+0q77ysw6xdh5wWLkDBY3QlE=
-X-Received: by 2002:a25:97c4:: with SMTP id j4mr5574523ybo.108.1643286725423;
- Thu, 27 Jan 2022 04:32:05 -0800 (PST)
+        Thu, 27 Jan 2022 07:34:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79E3C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:34:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EC5261A70
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB75C340E4;
+        Thu, 27 Jan 2022 12:34:32 +0000 (UTC)
+Date:   Thu, 27 Jan 2022 12:34:28 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jianyong Wu <Jianyong.Wu@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Justin He <Justin.He@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        Anshuman Khandual <Anshuman.Khandual@arm.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "quic_qiancai@quicinc.com" <quic_qiancai@quicinc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "gshan@redhat.com" <gshan@redhat.com>, nd <nd@arm.com>
+Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
+ mapping
+Message-ID: <YfKRVJlWrgluqD9e@arm.com>
+References: <DB7PR08MB3737631DEE8D6625D3A9E393F7209@DB7PR08MB3737.eurprd08.prod.outlook.com>
+ <CAMj1kXF7DJ5UeMn=9gw_Hs3Fa525OFEPsriO=ZprT3rN83=qtQ@mail.gmail.com>
+ <AM9PR08MB72763D5DA0C5F22D2126ABF4F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
+ <CAMj1kXGjAxd2xb0u1PLSLGAe8jJdhJm3wR+y=7qB4C1J6Ebgcw@mail.gmail.com>
+ <3e6513f9-77ca-79e5-d185-7e9a11ec7689@redhat.com>
+ <AM9PR08MB72764111B775352448D75CD9F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
+ <65fdd873-1f93-56e3-c7a5-98d621c5dbd8@redhat.com>
+ <7eb4bc77-c1db-99c4-4c77-ae9ddd159abb@redhat.com>
+ <AM9PR08MB7276062BC7B474174FFFA11BF4219@AM9PR08MB7276.eurprd08.prod.outlook.com>
+ <ca62449b-7ab0-0e18-ee5a-b46b3f527385@redhat.com>
 MIME-Version: 1.0
-References: <20220124184100.867127425@linuxfoundation.org> <374e9357-35eb-3555-3fe5-7b72c3a77a39@linaro.org>
- <ef6a4bcf-832b-3a5d-9643-827239293772@linaro.org> <CA+G9fYtTU_7DVaxwbLWnKBfqwbW51ebEoP=+vah7f6cWYSrKkQ@mail.gmail.com>
- <alpine.LRH.2.23.451.2201261532050.15350@MyRouter>
-In-Reply-To: <alpine.LRH.2.23.451.2201261532050.15350@MyRouter>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 27 Jan 2022 18:01:53 +0530
-Message-ID: <CA+G9fYt35cFuTWEP5-+Dq5K9ZzMQTd0OG679vQs+0+92EhHvmg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/846] 5.15.17-rc1 review
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
-        pavel@denx.de, jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, stable@vger.kernel.org,
-        Russell King <russell.king@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca62449b-7ab0-0e18-ee5a-b46b3f527385@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Jan 2022 at 21:05, Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> > Regressions detected on arm, arm64, i386, x86 on 5.15 and 5.10
-> >
-> > > >
-> > > > This is one from arm64:
-> > > >    /builds/linux/arch/arm64/mm/extable.c: In function 'fixup_exception':
-> > > >    /builds/linux/arch/arm64/mm/extable.c:17:13: error: implicit declaration of function 'in_bpf_jit' [-Werror=implicit-function-declaration]
-> > > >       17 |         if (in_bpf_jit(regs))
-> > > >          |             ^~~~~~~~~~
-> > > >    cc1: some warnings being treated as errors
-> > > >    make[3]: *** [/builds/linux/scripts/Makefile.build:277: arch/arm64/mm/extable.o] Error 1
-> > >
-> > > Bisection here pointed to "arm64/bpf: Remove 128MB limit for BPF JIT programs". Reverting made the build succeed.
-> >
-> > arm64/bpf: Remove 128MB limit for BPF JIT programs
-> > commit b89ddf4cca43f1269093942cf5c4e457fd45c335 upstream.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
->
-> Thanks for the report!
->
-> This one needs slightly different handling on 5.15. Russell had a 5.15
-> patch for this (where BPF exception handling was still handled separately)
-> and I've included it below. I verified it applies cleanly to the
-> linux-5.15.y branch and builds.  I'd suggest either skipping backport of
-> this fix to stable completely, or just applying the below to 5.15 and
-> skipping further backports.
+On Thu, Jan 27, 2022 at 01:22:47PM +0100, David Hildenbrand wrote:
+> > Yes, system_state can roughly separate these callers of __create_pgd_mapping. When system_state > SYSTEM_BOOTING we can add the lock.
+> > Thus, I have the following change:
+> > 
+> > static DEFINE_SPINLOCK(swapper_pgdir_lock);
+> > +static DEFINE_MUTEX(fixmap_lock);
+> > 
+> >  void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
+> >  {
+> > @@ -329,6 +330,8 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+> >         }
+> >         BUG_ON(p4d_bad(p4d));
+> > 
+> > +       if (system_state > SYSTEM_BOOTING)
+> 
+> As there is nothing smaller than SYSTEM_BOOTING, you can use
+> 	if (system_state != SYSTEM_BOOTING)
+> 
+> ...
+> 
+> > 
+> > It seems work and somehow simper. But I don't know if it is reasonable to do this. So, any idea? @Ard Biesheuvel  @Catalin Marinas 
+> 
+> It's worth looking at kernel/notifier.c, e.g.,
+> blocking_notifier_chain_register()
+> 
+> if (unlikely(system_state == SYSTEM_BOOTING))
+> 	return notifier_chain_register(&nh->head, n);
+> 
+> down_write(&nh->rwsem);
+> ret = notifier_chain_register(&nh->head, n);
+> up_write(&nh->rwsem);
+> 
+> If we decide to go down that path, we should make sure to add a comment like
+> 
+> /*
+>  * No need for locking during early boot. And it doesn't work as
+>  * expected with KASLR enabled where we might clear BSS twice.
+>  */
 
-Build test pass with this patch on stable/linux-5.15.y.
-I have not run any tests.
+A similar approach sounds fine to me.
 
-- Naresh
+-- 
+Catalin

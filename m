@@ -2,174 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5370A49E5F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4309A49E5F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236698AbiA0PYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:24:39 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52998 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231421AbiA0PYh (ORCPT
+        id S236915AbiA0PZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231421AbiA0PZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:24:37 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20RF11bC022756;
-        Thu, 27 Jan 2022 15:24:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hUFEVcbtFFdXYF2aSiR/wks0GiXAIcRZVVzHOqM3ihk=;
- b=g6XfByjBBW2seZiHpoVX7JPCwOXPk/trg5NkkCB3jAJQlggnRITLIDkrnyULuWjIAWur
- 46Tq8YXFm3lwI838b8AqTKlTZcglfQTqznxM8Kix62hhcaShjRbv0GFXLb1QDQjPoiPT
- 5K+efyi1S/hER70bA2CKb2SAF83ZMpFCJnJR/lBlhImLwQ07MDaIzOI6mJgplnFK8sHR
- lcjRLnKH8sAp5SdHzSOJKYzwmanzPjOXS5bsDW/p1svDAmFmG/WxRewy7cw9WzbZb+Zc
- F/FOJFOGBQOnNC0hWgjK3ZsjTvFYsMSE4trp1+90CJP3TfghqnciETkkVOBT0Ggg5OJj lQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3duun6udee-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 15:24:23 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20RF15VE024417;
-        Thu, 27 Jan 2022 15:24:22 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3duun6uddw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 15:24:22 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20RFIZUm013596;
-        Thu, 27 Jan 2022 15:24:20 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma01dal.us.ibm.com with ESMTP id 3dr9jcnred-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 15:24:20 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20RFOJD231850816
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Jan 2022 15:24:19 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F03B26E060;
-        Thu, 27 Jan 2022 15:24:18 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 43D446E05B;
-        Thu, 27 Jan 2022 15:24:15 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu, 27 Jan 2022 15:24:14 +0000 (GMT)
-Message-ID: <eb917dd4-fc8e-2c15-815d-4f9eaa971d60@linux.ibm.com>
-Date:   Thu, 27 Jan 2022 10:24:14 -0500
+        Thu, 27 Jan 2022 10:25:03 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D19C061714;
+        Thu, 27 Jan 2022 07:25:03 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id k17so2844843plk.0;
+        Thu, 27 Jan 2022 07:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TcINCPBvZZnIlb1v0W7FD1yLYZgGIWjtm+qYyk+jHvI=;
+        b=ORft9sssfk3gpt0aJHQNKhO+McSeQZT9T8IAhHmdu9D0mOUyvP+DG5Ip01Q89mvvPK
+         GUQ7SZaSWJI7QWnuq/iWdh+DPCxphwdVxk49sU5Nv6fxuXWWYzoxUjoUoskeGQEbmNfY
+         oQyxk5Qe2JIOgnniqRSf+aKFFceNjfOXwOzHGkJsKIRbnp3sMmlDfb9pyWaUmbI25HRV
+         +8H2IRMBK2H6KXhdCGZKh15DZyiyPOTHxFLtC1b6H3ln6+z3i5vNN4Yg+fkzDGnV/D1l
+         jwtKntQ8T1LUZvV37aTjVXVucTwzTPjiIrwWdwW7qF7r3q9EviY/xo0FrSNQ9FzThvtO
+         WWdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TcINCPBvZZnIlb1v0W7FD1yLYZgGIWjtm+qYyk+jHvI=;
+        b=0AAQ9jx2+uvtaXCk0brETevhBNnWkRos4vX6xAbLD+wKTpAQ1xJg02wnKGvUPfYCuJ
+         hfSAmEHf1Ol1fvQuyfzvgfgzOzf4KdpZMJCpFXVFX/dyCIlMQxmY7X/pqXNRcrMcOYza
+         FkwCbisptFsyrmLLr57UFOWoBzXET0Y9/xyyA58ivaHZt7MMy5qE4KujgDvTcvxRjITk
+         Qk0ulAiF0mrx2/yhEtga9XkQ00To7fppGCdnb7PFURjTRw89JiBDIwqATXkQJe4I7CGT
+         KLArStyOQwulhh4lTmU3UXTnka3w77MY6dgo7UQKT4JupvIj/delYnLdloebsMsAJyMC
+         KSmg==
+X-Gm-Message-State: AOAM531of5gz1QtNnk+h9ktNXYxqdOFQ4v2ud0CXi94n9w2NfKKGGsj8
+        NXAV8jXvtJn6eNnGRGZ48LrkTMD0IQw=
+X-Google-Smtp-Source: ABdhPJxdE08zr7LyZr3heg8HkuCZ2fWxrYT6uqVsdRM1xa1L+/v0fxIjbf2x2XZvoUAZ8t44BUVPsA==
+X-Received: by 2002:a17:902:dacf:: with SMTP id q15mr3712540plx.76.1643297102871;
+        Thu, 27 Jan 2022 07:25:02 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id mr21sm3158355pjb.12.2022.01.27.07.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 07:25:02 -0800 (PST)
+Date:   Thu, 27 Jan 2022 07:25:00 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        robh+dt@kernel.org, UNGLinuxDriver@microchip.com,
+        linux@armlinux.org.uk, f.fainelli@gmail.com,
+        vivien.didelot@gmail.com, vladimir.oltean@nxp.com, andrew@lunn.ch
+Subject: Re: [PATCH net-next 3/7] net: lan966x: Add support for ptp clocks
+Message-ID: <20220127152500.GB20642@hoboy.vegasvil.org>
+References: <20220127102333.987195-1-horatiu.vultur@microchip.com>
+ <20220127102333.987195-4-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 21/23] ima: Introduce securityfs file to activate an
- IMA namespace
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
- <20220125224645.79319-22-stefanb@linux.vnet.ibm.com>
- <20220126143140.awwlv3h2jqotng2n@wittgenstein>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220126143140.awwlv3h2jqotng2n@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i148xUf73sf1N-75QirIAyEQAE2QJY0I
-X-Proofpoint-ORIG-GUID: zWQIkGBP0kakaTpkVfHC-99O5PQVzXnp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-27_03,2022-01-27_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 priorityscore=1501 spamscore=0 clxscore=1015 phishscore=0
- bulkscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201270092
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127102333.987195-4-horatiu.vultur@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 27, 2022 at 11:23:29AM +0100, Horatiu Vultur wrote:
+> The lan966x has 3 PHC. Enable each of them, for now all the
+> timestamping is happening on the first PHC.
+> 
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-On 1/26/22 09:31, Christian Brauner wrote:
-> On Tue, Jan 25, 2022 at 05:46:43PM -0500, Stefan Berger wrote:
->
-> Hm, I'd rather do something like (uncompiled, untested):
->
-> +static ssize_t ima_write_active(struct file *filp,
-> 				const char __user *buf,
-> 				size_t count, loff_t *ppos)
-> {
-> 	struct ima_namespace *ns = &init_ima_ns;
-> 	int err;
-> 	unsigned int active;
-> 	char *kbuf = NULL;
-> 	ssize_t length;
->
-> 	if (count >= 3)
-> 		return -EINVAL;
->
-> 	/* No partial writes. */
-> 	if (*ppos != 0)
-> 		return -EINVAL;
->
-> 	if (ns_active(ns))
-> 		return -EBUSY;
->
-> 	kbuf = memdup_user_nul(buf, count);
-> 	if (IS_ERR(kbuf))
-> 		return PTR_ERR(kbuf);
->
-> 	err = kstrtouint(kbuf, 10, &active);
-> 	kfree(kbuf);
-> 	if (err)
-> 		return err;
->
-> 	if (active != 1)
-> 		return -EINVAL;
->
-> 	atomic_set(&ns->active, 1);
-> 	return count;
-> }
-
-Rearranged it to look lik this?
-
-static ssize_t ima_write_active(struct file *filp,
-                                 const char __user *buf,
-                                 size_t count, loff_t *ppos)
-{
-         struct ima_namespace *ns = &init_ima_ns;
-         unsigned int active;
-         char *kbuf;
-         int err;
-
-         if (ns_is_active(ns))
-                 return -EBUSY;
-
-         /* accepting '1\n' and '1\0' and no partial writes */
-         if (count >= 3 || *ppos != 0)
-                 return -EINVAL;
-
-         kbuf = memdup_user_nul(buf, count);
-         if (IS_ERR(kbuf))
-                 return PTR_ERR(kbuf);
-
-         err = kstrtouint(kbuf, 10, &active);
-         kfree(kbuf);
-         if (err)
-                 return err;
-
-         if (active != 1)
-                 return -EINVAL;
-
-         atomic_set(&ns->active, 1);
-         return count;
-}
-
-
+Acked-by: Richard Cochran <richardcochran@gmail.com>

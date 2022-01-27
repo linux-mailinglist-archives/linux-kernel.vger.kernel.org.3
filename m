@@ -2,105 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE2749EDF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC7E49EDFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237950AbiA0WK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 17:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S238336AbiA0WLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 17:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiA0WKZ (ORCPT
+        with ESMTP id S229507AbiA0WLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 17:10:25 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0EDC061714;
-        Thu, 27 Jan 2022 14:10:25 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id b14so6432113ljb.0;
-        Thu, 27 Jan 2022 14:10:25 -0800 (PST)
+        Thu, 27 Jan 2022 17:11:20 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9433C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:11:20 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 16-20020a250410000000b006191bfe8642so3868216ybe.19
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:11:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pkUjSb/fdfaa3FAu68ePw4JIYSvRfOC6qyjCilb3MLA=;
-        b=RZypLcBcYIUdWY9vV42TppO4LaQPblBv+kCbhi7sSIeity0kCuHxjxBkOW+017vQfl
-         mGJzLUkiIibnMnTTVFBLt50VetVg1KzsVDl5jUao0XF5T7oAmS+N8pzAB7j2FNpZGYiq
-         xbHy2XvQvsScldzehtVeFOoApJ3rHFqpSLvhJxxrFdkCY4SBOyNaqvrt+GIQFpxxuFFh
-         CmyJh/SQOY6vLReOapEDPt77zxgz4JT8F/AZF2zWXE0KCoQ1ChkpEBN24khQj5g1i9qq
-         aguCWoq8pgm51d0p5z0SrS13R+0j/TGLyIS5NFK+7PHw2xgpowySjWS1of9EUGPSq6jn
-         /AOQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=MHbMxovO6AcAN2vYhPcfy5isPlyEXuvf7h8ZW6A2Y+Y=;
+        b=JCvw8MBgwkGImJIrpAHCQh0U5vi/BlQwmJPfV3rLDETbMfh6yfDO4M0JWJBqIFu7TJ
+         TETjHmFWbv8fiQozxuzy1HUOPJsr3K5tWuj4R9UEgdiI50+VvKsvJ5MsKSagJExL9Fju
+         0PRFYzsN3Q0/gbZokFUXD2hxuaKKvIWacV5b2XthgTVM1FtGYJnfyl9t/0dsOoTGRkCQ
+         dtbPluEjCNANUna5lmsz23rG9VD0w9KhYvGUfpCIbS/0bGlOrn8/4OC+aQzwJQK76QL9
+         YDS+dr4DylDWMaiYXN9mtpprN7MiRjc5TmMD/zb0AKoGoSgxbvTYzdtxuZMiYrj6er78
+         v4nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pkUjSb/fdfaa3FAu68ePw4JIYSvRfOC6qyjCilb3MLA=;
-        b=tfMmVXe40SSgzi1gp75b3U8T5saZ6sZiNg6gAv2dC0KikkIBgFISBUuR2tThVGspTw
-         aravKdUXGq3zPkeylhkxfFugDTTrTL9ovBFHJLqlb8fMIAdVxzWnSPEdQS0Qorlj+E4F
-         Ja+j24Fsky1MVRHsiUPpT5ZHbtv3ukeE3lqaEc6HyQ6TIgrNcu9eE7nlGWLNHXEiu5Tk
-         sErDd5tW7ug4rKwW6CNTObgMD4y7GmuXnbUJLG0uCMMkNrWQUoN+50B5RSAfy6ZCY5Nf
-         +5iovHwdqhSShoYvqEc4tNqacTehQMnkPclg2xrwupMRELVCN8LXcoYM+AUVBXZ3dUpR
-         09vQ==
-X-Gm-Message-State: AOAM530D/tqL6MhFDKXFf5sG2IzJRcf+9Bzs1m3Acmw814enhXbrSQDO
-        3v5uoIek5bVj0cso6gM9x41dbZxlExK4LW4hSGw=
-X-Google-Smtp-Source: ABdhPJy9dJl6L/bnRQi8tK1Am+5DPjPBZvatcTyLSMpbpD4vy19hTtp8mGF/Cl1TBx2f3Cw7TL+lgScx4mlljQ4behg=
-X-Received: by 2002:a2e:5d3:: with SMTP id 202mr3981304ljf.330.1643321423317;
- Thu, 27 Jan 2022 14:10:23 -0800 (PST)
-MIME-Version: 1.0
-References: <164325106958.29787.4865219843242892726.stgit@noble.brown> <164325158955.29787.4769373293473421057.stgit@noble.brown>
-In-Reply-To: <164325158955.29787.4769373293473421057.stgit@noble.brown>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Fri, 28 Jan 2022 07:10:11 +0900
-Message-ID: <CAKFNMom4Z76ti4fp69UeKYf0d4x635OR7Q_CjVnBj+vQSuhESg@mail.gmail.com>
-Subject: Re: [PATCH 2/9] Remove bdi_congested() and wb_congested() and related functions
-To:     NeilBrown <neilb@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, Linux MM <linux-mm@kvack.org>,
-        linux-nilfs <linux-nilfs@vger.kernel.org>,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
-        LKML <linux-kernel@vger.kernel.org>, linux-block@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=MHbMxovO6AcAN2vYhPcfy5isPlyEXuvf7h8ZW6A2Y+Y=;
+        b=1SgLksyUV9m0LQvB+GqKx6bn3Dvy7sLS3ebGdRrWUUjgNy4XvKhdZa357EMBagPFXG
+         V9MpMM1kaypozaDvCQFAF/lbAZ626D0nZWRtqZgrsv9anQPkjifG+DtmFd0AYt0c1miO
+         qiSsJsb/Yv9osyLqz0Z3oM9J0JkFHsilnRLqsKflzU+HEFKa8gSSYNU8CUKIQf0Jwkf8
+         EVDHiNTHbdFXGO57/VxJOMwyvvLZ2jdooP94npdNVSUcw71I7OgpqpCnX667Q0yKjobm
+         9NxQG8oiJ5R6FKv89niDsQ1kAkgOgIAYncdws45PwcyXgcN44EcKfKTqtgB4Tl0WQHQ2
+         3URA==
+X-Gm-Message-State: AOAM530zJb9c7NrKCmF/Uh5Sf1nMFuVrY0xIg4dwURO4HEFQ/KCjy3yM
+        wYWKPbw15Clf6G/53KhhjM6wuBK3MfqhGv1rn7Hl
+X-Google-Smtp-Source: ABdhPJwN3KVWegxyHHiIXTTmlstEucD6pQ1XLu2joNb+rGzqKl4AWrQa2pDPchrhP0iDqpgB5lXQxHdcXS1/oMS+vh8d
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:c864:1e56:28bc:526b])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:9988:: with SMTP id
+ p8mr8106207ybo.128.1643321479925; Thu, 27 Jan 2022 14:11:19 -0800 (PST)
+Date:   Thu, 27 Jan 2022 14:11:15 -0800
+Message-Id: <20220127221115.3731388-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Christian Brauner <christian@brauner.io>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     "Zach O'Keefe" <zokeefe@google.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Axel Rasmussen <axelrasmussen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 11:47 AM NeilBrown <neilb@suse.de> wrote:
->
-> These functions are no longer useful as the only bdis that report
-> congestion are in ceph, fuse, and nfs.  None of those bdis can be the
-> target of the calls in drbd, ext2, nilfs2, or xfs.
->
-> Removing the test on bdi_write_contested() in current_may_throttle()
-> could cause a small change in behaviour, but only when PF_LOCAL_THROTTLE
-> is set.
->
-> So replace the calls by 'false' and simplify the code - and remove the
-> functions.
->
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> ---
->  drivers/block/drbd/drbd_int.h |    3 ---
->  drivers/block/drbd/drbd_req.c |    3 +--
->  fs/ext2/ialloc.c              |    2 --
->  fs/nilfs2/segbuf.c            |   11 -----------
->  fs/xfs/xfs_buf.c              |    3 ---
->  include/linux/backing-dev.h   |   26 --------------------------
->  mm/vmscan.c                   |    4 +---
->  7 files changed, 2 insertions(+), 50 deletions(-)
+These are some trivial fixups, which were needed to build the tests with
+clang and -Werror. The following issues are fixed:
 
-for nilfs2 bits,
+- Remove various unused variables.
+- In child_poll_leader_exit_test, clang isn't smart enough to realize
+  syscall(SYS_exit, 0) won't return, so it complains we never return
+  from a non-void function. Add an extra exit(0) to appease it.
+- In test_pidfd_poll_leader_exit, ret may be branched on despite being
+  uninitialized, if we have !use_waitpid. Initialize it to zero to get
+  the right behavior in that case.
 
-Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ tools/testing/selftests/clone3/clone3.c    | 2 --
+ tools/testing/selftests/pidfd/pidfd_test.c | 6 +++---
+ tools/testing/selftests/pidfd/pidfd_wait.c | 5 ++---
+ 3 files changed, 5 insertions(+), 8 deletions(-)
 
-Thanks,
-Ryusuke Konishi
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index 076cf4325f78..cd4582129c7d 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -126,8 +126,6 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
+ 
+ int main(int argc, char *argv[])
+ {
+-	pid_t pid;
+-
+ 	uid_t uid = getuid();
+ 
+ 	ksft_print_header();
+diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+index 529eb700ac26..9a2d64901d59 100644
+--- a/tools/testing/selftests/pidfd/pidfd_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_test.c
+@@ -441,7 +441,6 @@ static void test_pidfd_poll_exec(int use_waitpid)
+ {
+ 	int pid, pidfd = 0;
+ 	int status, ret;
+-	pthread_t t1;
+ 	time_t prog_start = time(NULL);
+ 	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
+ 
+@@ -500,13 +499,14 @@ static int child_poll_leader_exit_test(void *args)
+ 	 */
+ 	*child_exit_secs = time(NULL);
+ 	syscall(SYS_exit, 0);
++	/* Never reached, but appeases compiler thinking we should return. */
++	exit(0);
+ }
+ 
+ static void test_pidfd_poll_leader_exit(int use_waitpid)
+ {
+ 	int pid, pidfd = 0;
+-	int status, ret;
+-	time_t prog_start = time(NULL);
++	int status, ret = 0;
+ 	const char *test_name = "pidfd_poll check for premature notification on non-empty"
+ 				"group leader exit";
+ 
+diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
+index be2943f072f6..17999e082aa7 100644
+--- a/tools/testing/selftests/pidfd/pidfd_wait.c
++++ b/tools/testing/selftests/pidfd/pidfd_wait.c
+@@ -39,7 +39,7 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
+ 
+ TEST(wait_simple)
+ {
+-	int pidfd = -1, status = 0;
++	int pidfd = -1;
+ 	pid_t parent_tid = -1;
+ 	struct clone_args args = {
+ 		.parent_tid = ptr_to_u64(&parent_tid),
+@@ -47,7 +47,6 @@ TEST(wait_simple)
+ 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
+ 		.exit_signal = SIGCHLD,
+ 	};
+-	int ret;
+ 	pid_t pid;
+ 	siginfo_t info = {
+ 		.si_signo = 0,
+@@ -88,7 +87,7 @@ TEST(wait_simple)
+ 
+ TEST(wait_states)
+ {
+-	int pidfd = -1, status = 0;
++	int pidfd = -1;
+ 	pid_t parent_tid = -1;
+ 	struct clone_args args = {
+ 		.parent_tid = ptr_to_u64(&parent_tid),
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
+

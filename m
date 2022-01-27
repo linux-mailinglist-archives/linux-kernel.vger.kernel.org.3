@@ -2,367 +2,494 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B19249DA7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D6749DA81
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiA0GQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 01:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S236496AbiA0GRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 01:17:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236464AbiA0GQi (ORCPT
+        with ESMTP id S236482AbiA0GRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 01:16:38 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5C0C061714
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 22:16:37 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id t9so2708971lji.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 22:16:37 -0800 (PST)
+        Thu, 27 Jan 2022 01:17:49 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041EDC061749
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 22:17:48 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id e8so1609200ilm.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 22:17:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lZy6gIz8qsTv0+hK2j40vK3ScNlxjlwiIEPx+AHPFmQ=;
-        b=gfHvxonGQZNWpONnpbroF5pN4q+Ao4xpUNORiEE/sJTdmtmUK1oA0qGA2EVkjlQZze
-         MRZh4SEDA8T7ZuaXzBl/rE5aw4N6rbFNcHtigYxQkO3iiLoLyNUx2ukA9T18kvF9L+E8
-         kUtVmTpypsv48HyNoa+68oNYsZYc6V06RurlMfIIr4YU5bipH3YKYcstE+kAE3SNZ0bC
-         D4aMHUwBz/sScruYLJTMaicaoTQG866b+Ar9aPCr0J/soX8riYF2MvsaI7gbheAO7q03
-         d6hvBOWjL0Pr5zXg/jdehrvycl4IKyrCK4P6syExUNzUwNxGIxohzfS5UFeP0szz4XRJ
-         Lorw==
+        bh=K+PEDmguhAETuYbK/cZB9FOANOyYAp2S8+nEc9n/mQU=;
+        b=iDybhItg/XzNzWl80CoExdT2RTvnURVMAVlackcztP3KfCh9u2X200bSpeRm2yptL9
+         nwqTmmZsPP9PcD6RYHKvEhNrACcSwm1apV7RDr3PwczX9lH0Yl4fCD+IsD+/mxCPssbC
+         ZlcZiFQ3SwtPR4RJNICJ1sEaj0zhmyfuoA5Po=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lZy6gIz8qsTv0+hK2j40vK3ScNlxjlwiIEPx+AHPFmQ=;
-        b=Pv4rHdo9vcQDYvOVPNjXXsjO2gkKyG1o4CnJ2ewPnC5zqkL74Yod2ZCYWY7qLGAAlD
-         YtdAmz0GOcUza6XrOourR4T59X9W+xfydIQaQPRv+M7SY90dEtF4/E836b6a0FJnpDog
-         VXaMe1SdtTtG96lDXjtAlEv7Hry5bE4aSDcIwdE96NRRIN7jeUBcRWMZzMNRRhG+qYoA
-         Dio4W65vQB/EDknWf3NyKQQ9MakYN3vQsdMdcMj7Gbyc4klTZvOhqq9efsZnpPX6YuBf
-         Lu9szXenOM37YJixCXFISxppmIL4N/yLS/qeT3crrakV6pKYjtyadhPRDe4Qahfjr7Ir
-         Ddxw==
-X-Gm-Message-State: AOAM530Ff61ipziVmhLBiEnaAK4x2yKI6MxzyFc1Y+HHQuQTxo/kBiuZ
-        RTH2V3PlGWeYVErXSb4lOEDobvAyDTS2lHdWCBrQ1Q==
-X-Google-Smtp-Source: ABdhPJz5gd2qhZtwnW5MAlPYqN+yaqd8BfTvPZc8JvC0qS7m/esHFmu85pKzNq8KbT2EuNgK5NcPsqWC3ANmyksCCns=
-X-Received: by 2002:a05:651c:1987:: with SMTP id bx7mr1885036ljb.136.1643264196116;
- Wed, 26 Jan 2022 22:16:36 -0800 (PST)
+        bh=K+PEDmguhAETuYbK/cZB9FOANOyYAp2S8+nEc9n/mQU=;
+        b=e5nV20h9sbuKKQAK9y3mjdXb1Zn5zyIka6uj8fCUASCc1nILx58SZ+OzIk5SiCStFp
+         Go6DE0z0DPdhK6MBkW4XkaKktKdYmsMPd0B5mJoxGJlw01sPh3PpIoJqqTZcv3itMGhc
+         5NypvofSi8nzwCHBwtJyySjtlvv6NRgBk8da8qBhgg2OFVQx9PhcCcmnvjJHvjSex5Vc
+         8/7R170GaXYxeYdJSOp0MSN9V8GTZhojQlPV0j3fo+nQ+HfD/HIMpJiDeNHsCOXAFPWL
+         Q6LQ+1M7iIgS/1t7It7kZk/M7CUC/SlLDxyY4DGmLvK5r7euZSb8FilmGiRUz85pZBZW
+         XeTg==
+X-Gm-Message-State: AOAM530qFy3x7tYEF/VkddGT0ZktOp/F+PfJ9mBaVBhTzgq/41mDMZ24
+        g+cWHKOpJGGVi4R3s5J50MuURCIJS+hQz0KikF08Cw==
+X-Google-Smtp-Source: ABdhPJwhSX6ptuiWr7zLHXvs2G7rb4MFy6FF1+d1TTIL3R/m/aWyVpfm9LNnOKq47fodb8rEI/XldAUZnxMJKyapypQ=
+X-Received: by 2002:a92:ca0c:: with SMTP id j12mr1638728ils.105.1643264268223;
+ Wed, 26 Jan 2022 22:17:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20220125162938.838382-1-jens.wiklander@linaro.org> <20220125162938.838382-6-jens.wiklander@linaro.org>
-In-Reply-To: <20220125162938.838382-6-jens.wiklander@linaro.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 27 Jan 2022 11:46:24 +0530
-Message-ID: <CAFA6WYN6=D9anxMTECEhhiuWwnKz54KFBx_BkajWzz-9RbM-_Q@mail.gmail.com>
-Subject: Re: [PATCH v3 05/12] tee: replace tee_shm_alloc()
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
+References: <20220105022726.2458-1-allen-kh.cheng@mediatek.com> <20220105022726.2458-8-allen-kh.cheng@mediatek.com>
+In-Reply-To: <20220105022726.2458-8-allen-kh.cheng@mediatek.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Thu, 27 Jan 2022 14:17:22 +0800
+Message-ID: <CAJMQK-j0F_yrWNnS418O7e1AdS7VH76XdQMx2boLoe2LVV0nYA@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] arm64: dts: Add Mediatek SoC MT8186 dts and
+ evaluation board and Makefile
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 21:59, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+On Wed, Jan 5, 2022 at 10:27 AM allen-kh.cheng
+<allen-kh.cheng@mediatek.com> wrote:
 >
-> tee_shm_alloc() is replaced by three new functions,
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
 >
-> tee_shm_alloc_user_buf() - for user mode allocations, replacing passing
-> the flags TEE_SHM_MAPPED | TEE_SHM_DMA_BUF
+> Add basic chip support for Mediatek MT8186
 >
-> tee_shm_alloc_kernel_buf() - for kernel mode allocations, slightly
-> optimized compared to using the flags TEE_SHM_MAPPED | TEE_SHM_DMA_BUF.
->
-> tee_shm_alloc_priv_kernel_buf() - primarily for TEE driver internal use.
-
-Need update: tee_shm_alloc_priv_buf()?
-
->
-> This also makes the interface easier to use as we can get rid of the
-> somewhat hard to use flags parameter.
->
-> The TEE subsystem and the TEE drivers are updated to use the new
-> functions instead.
->
-> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
 > ---
->  drivers/tee/optee/call.c    |   2 +-
->  drivers/tee/optee/device.c  |   5 +-
->  drivers/tee/optee/ffa_abi.c |   3 +-
->  drivers/tee/optee/smc_abi.c |   5 +-
->  drivers/tee/tee_shm.c       | 108 +++++++++++++++++++++++-------------
->  include/linux/tee_drv.h     |  16 +-----
->  6 files changed, 75 insertions(+), 64 deletions(-)
+>  arch/arm64/boot/dts/mediatek/Makefile       |   1 +
+>  arch/arm64/boot/dts/mediatek/mt8186-evb.dts |  24 ++
+>  arch/arm64/boot/dts/mediatek/mt8186.dtsi    | 352 ++++++++++++++++++++
+>  3 files changed, 377 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-evb.dts
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt8186.dtsi
 >
-
-With minor comments incorporated, feel free to add:
-
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-
-> diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-> index b25cc1fac945..bd49ec934060 100644
-> --- a/drivers/tee/optee/call.c
-> +++ b/drivers/tee/optee/call.c
-> @@ -120,7 +120,7 @@ struct tee_shm *optee_get_msg_arg(struct tee_context *ctx, size_t num_params,
->         if (optee->rpc_arg_count)
->                 sz += OPTEE_MSG_GET_ARG_SIZE(optee->rpc_arg_count);
->
-> -       shm = tee_shm_alloc(ctx, sz, TEE_SHM_MAPPED | TEE_SHM_PRIV);
-> +       shm = tee_shm_alloc_priv_buf(ctx, sz);
->         if (IS_ERR(shm))
->                 return shm;
->
-> diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
-> index 128a2d2a50a1..f3947be13e2e 100644
-> --- a/drivers/tee/optee/device.c
-> +++ b/drivers/tee/optee/device.c
-> @@ -121,10 +121,9 @@ static int __optee_enumerate_devices(u32 func)
->         if (rc < 0 || !shm_size)
->                 goto out_sess;
->
-> -       device_shm = tee_shm_alloc(ctx, shm_size,
-> -                                  TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
-> +       device_shm = tee_shm_alloc_kernel_buf(ctx, shm_size);
->         if (IS_ERR(device_shm)) {
-> -               pr_err("tee_shm_alloc failed\n");
-> +               pr_err("tee_shm_alloc_kernel_buf failed\n");
->                 rc = PTR_ERR(device_shm);
->                 goto out_sess;
->         }
-> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> index e690d9420966..d71880ede6d6 100644
-> --- a/drivers/tee/optee/ffa_abi.c
-> +++ b/drivers/tee/optee/ffa_abi.c
-> @@ -439,8 +439,7 @@ static void handle_ffa_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
->                 shm = optee_rpc_cmd_alloc_suppl(ctx, arg->params[0].u.value.b);
->                 break;
->         case OPTEE_RPC_SHM_TYPE_KERNEL:
-> -               shm = tee_shm_alloc(ctx, arg->params[0].u.value.b,
-> -                                   TEE_SHM_MAPPED | TEE_SHM_PRIV);
-> +               shm = tee_shm_alloc_priv_buf(ctx, arg->params[0].u.value.b);
->                 break;
->         default:
->                 arg->ret = TEEC_ERROR_BAD_PARAMETERS;
-> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-> index b679037ea794..66d5d1b56b95 100644
-> --- a/drivers/tee/optee/smc_abi.c
-> +++ b/drivers/tee/optee/smc_abi.c
-> @@ -650,7 +650,7 @@ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
->                 shm = optee_rpc_cmd_alloc_suppl(ctx, sz);
->                 break;
->         case OPTEE_RPC_SHM_TYPE_KERNEL:
-> -               shm = tee_shm_alloc(ctx, sz, TEE_SHM_MAPPED | TEE_SHM_PRIV);
-> +               shm = tee_shm_alloc_priv_buf(ctx, sz);
->                 break;
->         default:
->                 arg->ret = TEEC_ERROR_BAD_PARAMETERS;
-> @@ -775,8 +775,7 @@ static void optee_handle_rpc(struct tee_context *ctx,
->
->         switch (OPTEE_SMC_RETURN_GET_RPC_FUNC(param->a0)) {
->         case OPTEE_SMC_RPC_FUNC_ALLOC:
-> -               shm = tee_shm_alloc(ctx, param->a1,
-> -                                   TEE_SHM_MAPPED | TEE_SHM_PRIV);
-> +               shm = tee_shm_alloc_priv_buf(ctx, param->a1);
->                 if (!IS_ERR(shm) && !tee_shm_get_pa(shm, 0, &pa)) {
->                         reg_pair_from_64(&param->a1, &param->a2, pa);
->                         reg_pair_from_64(&param->a4, &param->a5,
-> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> index f0a9cccd2f2c..dc02afd7b5c9 100644
-> --- a/drivers/tee/tee_shm.c
-> +++ b/drivers/tee/tee_shm.c
-> @@ -49,25 +49,14 @@ static void tee_shm_release(struct tee_device *teedev, struct tee_shm *shm)
->         tee_device_put(teedev);
->  }
->
-> -struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
-> +static struct tee_shm *shm_alloc_helper(struct tee_context *ctx, size_t size,
-> +                                       size_t align, u32 flags, int id)
->  {
->         struct tee_device *teedev = ctx->teedev;
->         struct tee_shm *shm;
-> -       size_t align;
->         void *ret;
->         int rc;
->
-> -       if (!(flags & TEE_SHM_MAPPED)) {
-> -               dev_err(teedev->dev.parent,
-> -                       "only mapped allocations supported\n");
-> -               return ERR_PTR(-EINVAL);
-> -       }
-> -
-> -       if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF | TEE_SHM_PRIV))) {
-> -               dev_err(teedev->dev.parent, "invalid shm flags 0x%x", flags);
-> -               return ERR_PTR(-EINVAL);
-> -       }
-> -
->         if (!tee_device_get(teedev))
->                 return ERR_PTR(-EINVAL);
->
-> @@ -84,18 +73,16 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
->         }
->
->         refcount_set(&shm->refcount, 1);
-> -       shm->flags = flags | TEE_SHM_POOL;
-> +       shm->flags = flags;
-> +       shm->id = id;
-> +
-> +       /*
-> +        * We're assigning this as it is needed if the shm is to be
-> +        * registered. If this function returns OK then the caller expected
-> +        * to call teedev_ctx_get() or clear shm->ctx in case it's not
-> +        * needed any longer.
-> +        */
->         shm->ctx = ctx;
-> -       if (flags & TEE_SHM_DMA_BUF) {
-> -               align = PAGE_SIZE;
-> -               /*
-> -                * Request to register the shm in the pool allocator below
-> -                * if supported.
-> -                */
-> -               shm->flags |= TEE_SHM_REGISTER;
-> -       } else {
-> -               align = 2 * sizeof(long);
-> -       }
->
->         rc = teedev->pool->ops->alloc(teedev->pool, shm, size, align);
->         if (rc) {
-> @@ -103,28 +90,14 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
->                 goto err_kfree;
->         }
->
-> -       if (flags & TEE_SHM_DMA_BUF) {
-> -               mutex_lock(&teedev->mutex);
-> -               shm->id = idr_alloc(&teedev->idr, shm, 1, 0, GFP_KERNEL);
-> -               mutex_unlock(&teedev->mutex);
-> -               if (shm->id < 0) {
-> -                       ret = ERR_PTR(shm->id);
-> -                       goto err_pool_free;
-> -               }
-> -       }
-> -
->         teedev_ctx_get(ctx);
-> -
->         return shm;
-> -err_pool_free:
-> -       teedev->pool->ops->free(teedev->pool, shm);
->  err_kfree:
->         kfree(shm);
->  err_dev_put:
->         tee_device_put(teedev);
->         return ret;
->  }
-> -EXPORT_SYMBOL_GPL(tee_shm_alloc);
->
->  /**
->   * tee_shm_alloc_user_buf() - Allocate shared memory for user space
-> @@ -140,7 +113,36 @@ EXPORT_SYMBOL_GPL(tee_shm_alloc);
->   */
->  struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size)
->  {
-> -       return tee_shm_alloc(ctx, size, TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
-> +       u32 flags = TEE_SHM_MAPPED | TEE_SHM_DMA_BUF | TEE_SHM_REGISTER |
-> +                   TEE_SHM_POOL;
-> +       struct tee_device *teedev = ctx->teedev;
-> +       struct tee_shm *shm;
-> +       void *ret;
-> +       int id;
-> +
-> +       mutex_lock(&teedev->mutex);
-> +       id = idr_alloc(&teedev->idr, NULL, 1, 0, GFP_KERNEL);
-> +       mutex_unlock(&teedev->mutex);
-> +       if (id < 0)
-> +               return ERR_PTR(id);
-> +
-> +       shm = shm_alloc_helper(ctx, size, PAGE_SIZE, flags, id);
-> +       if (IS_ERR(shm)) {
-> +               mutex_lock(&teedev->mutex);
-> +               idr_remove(&teedev->idr, id);
-> +               mutex_unlock(&teedev->mutex);
-> +               return shm;
-> +       }
-> +
-> +       mutex_lock(&teedev->mutex);
-> +       ret = idr_replace(&teedev->idr, shm, id);
-> +       mutex_unlock(&teedev->mutex);
-> +       if (IS_ERR(ret)) {
-> +               tee_shm_free(shm);
-> +               return ret;
-> +       }
-> +
-> +       return shm;
->  }
->
->  /**
-> @@ -157,10 +159,36 @@ struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size)
->   */
->  struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size)
->  {
-> -       return tee_shm_alloc(ctx, size, TEE_SHM_MAPPED);
-> +       u32 flags = TEE_SHM_MAPPED | TEE_SHM_REGISTER | TEE_SHM_POOL;
-> +
-> +       return shm_alloc_helper(ctx, size, PAGE_SIZE, flags, -1);
->  }
->  EXPORT_SYMBOL_GPL(tee_shm_alloc_kernel_buf);
->
-> +/**
-> + * tee_shm_alloc_priv_buf() - Allocate shared memory for a privatly shared
-
-typo: s/privatly/privately/
-
--Sumit
-
-> + *                           kernel buffer
-> + * @ctx:       Context that allocates the shared memory
-> + * @size:      Requested size of shared memory
-> + *
-> + * This function returns similar shared memory as
-> + * tee_shm_alloc_kernel_buf(), but with the difference that the memory
-> + * might not be registered in secure world in case the driver supports
-> + * passing memory not registered in advance.
-> + *
-> + * This function should normally only be used internally in the TEE
-> + * drivers.
-> + *
-> + * @returns a pointer to 'struct tee_shm'
+> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
+> index 4f68ebed2e31..2271c3452c64 100644
+> --- a/arch/arm64/boot/dts/mediatek/Makefile
+> +++ b/arch/arm64/boot/dts/mediatek/Makefile
+> @@ -31,5 +31,6 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-kodama-sku32.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
+> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8186-evb.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
+>  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8186-evb.dts b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
+> new file mode 100644
+> index 000000000000..eb23d1f19f87
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
+> @@ -0,0 +1,24 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2022 MediaTek Inc.
 > + */
-> +struct tee_shm *tee_shm_alloc_priv_buf(struct tee_context *ctx, size_t size)
-> +{
-> +       u32 flags = TEE_SHM_MAPPED | TEE_SHM_PRIV | TEE_SHM_POOL;
+> +/dts-v1/;
+> +#include "mt8186.dtsi"
 > +
-> +       return shm_alloc_helper(ctx, size, sizeof(long) * 2, flags, -1);
-> +}
-> +EXPORT_SYMBOL_GPL(tee_shm_alloc_priv_buf);
+> +/ {
+> +       model = "MediaTek MT8186 evaluation board";
+> +       compatible = "mediatek,mt8186-evb", "mediatek,mt8186";
 > +
->  struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
->                                  size_t length, u32 flags)
->  {
-> diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
-> index ed641dc314bd..7f038f8787c7 100644
-> --- a/include/linux/tee_drv.h
-> +++ b/include/linux/tee_drv.h
-> @@ -273,21 +273,7 @@ static inline void tee_shm_pool_free(struct tee_shm_pool *pool)
->   */
->  void *tee_get_drvdata(struct tee_device *teedev);
->
-> -/**
-> - * tee_shm_alloc() - Allocate shared memory
-> - * @ctx:       Context that allocates the shared memory
-> - * @size:      Requested size of shared memory
-> - * @flags:     Flags setting properties for the requested shared memory.
-> - *
-> - * Memory allocated as global shared memory is automatically freed when the
-> - * TEE file pointer is closed. The @flags field uses the bits defined by
-> - * TEE_SHM_* above. TEE_SHM_MAPPED must currently always be set. If
-> - * TEE_SHM_DMA_BUF global shared memory will be allocated and associated
-> - * with a dma-buf handle, else driver private memory.
-> - *
-> - * @returns a pointer to 'struct tee_shm'
-> - */
-> -struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags);
-> +struct tee_shm *tee_shm_alloc_priv_buf(struct tee_context *ctx, size_t size);
->  struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size);
->
->  /**
+> +       aliases {
+> +               serial0 = &uart0;
+> +       };
+> +
+> +       chosen {
+> +               stdout-path = "serial0:921600n8";
+> +       };
+> +
+> +       memory {
+> +               device_type = "memory";
+> +               reg = <0 0x40000000 0 0x80000000>;
+> +       };
+> +};
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> new file mode 100644
+> index 000000000000..fce84c341291
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> @@ -0,0 +1,352 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2022 MediaTek Inc.
+> + */
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/phy/phy.h>
+> +
+> +/ {
+> +       compatible = "mediatek,mt8186";
+> +       interrupt-parent = <&gic>;
+> +       #address-cells = <2>;
+> +       #size-cells = <2>;
+> +
+> +       cpus {
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +
+> +               cpu0: cpu@000 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55", "arm,armv8";
+> +                       reg = <0x0000>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2000000000>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l &mcusysoff>;
+> +                       next-level-cache = <&l2_0>;
+> +               };
+> +
+> +               cpu1: cpu@001 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55", "arm,armv8";
+> +                       reg = <0x0100>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2000000000>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l &mcusysoff>;
+> +                       next-level-cache = <&l2_0>;
+> +               };
+> +
+> +               cpu2: cpu@002 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55", "arm,armv8";
+> +                       reg = <0x0200>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2000000000>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l &mcusysoff>;
+> +                       next-level-cache = <&l2_0>;
+> +               };
+> +
+> +               cpu3: cpu@003 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55", "arm,armv8";
+> +                       reg = <0x0300>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2000000000>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l &mcusysoff>;
+> +                       next-level-cache = <&l2_0>;
+> +               };
+> +
+> +               cpu4: cpu@100 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55", "arm,armv8";
+> +                       reg = <0x0400>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2000000000>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l &mcusysoff>;
+> +                       next-level-cache = <&l2_0>;
+> +               };
+> +
+> +               cpu5: cpu@101 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a55", "arm,armv8";
+> +                       reg = <0x0500>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2000000000>;
+> +                       cpu-idle-states = <&cpuoff_l &clusteroff_l &mcusysoff>;
+> +                       next-level-cache = <&l2_0>;
+> +               };
+> +
+> +               cpu6: cpu@102 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a75", "arm,armv8";
+> +                       reg = <0x0600>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2050000000>;
+> +                       cpu-idle-states = <&cpuoff_b &clusteroff_b &mcusysoff>;
+> +                       next-level-cache = <&l2_1>;
+> +               };
+> +
+> +               cpu7: cpu@103 {
+> +                       device_type = "cpu";
+> +                       compatible = "arm,cortex-a75", "arm,armv8";
+> +                       reg = <0x0700>;
+> +                       enable-method = "psci";
+> +                       clock-frequency = <2050000000>;
+> +                       cpu-idle-states = <&cpuoff_b &clusteroff_b &mcusysoff>;
+> +                       next-level-cache = <&l2_1>;
+> +               };
+> +
+> +               cpu-map {
+> +                       cluster0 {
+> +                               core0 {
+> +                                       cpu = <&cpu0>;
+> +                               };
+> +
+> +                               core1 {
+> +                                       cpu = <&cpu1>;
+> +                               };
+> +
+> +                               core2 {
+> +                                       cpu = <&cpu2>;
+> +                               };
+> +
+> +                               core3 {
+> +                                       cpu = <&cpu3>;
+> +                               };
+> +
+> +                               core4 {
+> +                                       cpu = <&cpu4>;
+> +                               };
+> +
+> +                               core5 {
+> +                                       cpu = <&cpu5>;
+> +                               };
+> +
+> +                       };
+> +                       cluster1 {
+> +                               core0 {
+> +                                       cpu = <&cpu6>;
+> +                               };
+> +
+> +                               core1 {
+> +                                       cpu = <&cpu7>;
+> +                               };
+> +                       };
+> +               };
+> +
+> +               idle-states {
+> +                       entry-method = "psci";
+> +
+> +                       cpuoff_l: cpu-off-l {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x00010001>;
+> +                               local-timer-stop;
+> +                               entry-latency-us = <50>;
+> +                               exit-latency-us = <100>;
+> +                               min-residency-us = <1600>;
+> +                       };
+> +
+> +                       cpuoff_b: cpu-off-b {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x00010001>;
+> +                               local-timer-stop;
+> +                               entry-latency-us = <50>;
+> +                               exit-latency-us = <100>;
+> +                               min-residency-us = <1400>;
+> +                       };
+> +
+> +                       clusteroff_l: cluster-off-l {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x01010001>;
+> +                               local-timer-stop;
+> +                               entry-latency-us = <100>;
+> +                               exit-latency-us = <250>;
+> +                               min-residency-us = <2100>;
+> +                       };
+> +
+> +                       clusteroff_b: cluster-off-b {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x01010001>;
+> +                               local-timer-stop;
+> +                               entry-latency-us = <100>;
+> +                               exit-latency-us = <250>;
+> +                               min-residency-us = <1900>;
+> +                       };
+> +
+> +                       mcusysoff: mcusys-off {
+> +                               compatible = "arm,idle-state";
+> +                               arm,psci-suspend-param = <0x01010002>;
+> +                               local-timer-stop;
+> +                               entry-latency-us = <300>;
+> +                               exit-latency-us = <1200>;
+> +                               min-residency-us = <2600>;
+> +                       };
+> +               };
+> +
+> +               l2_0: l2-cache0 {
+> +                       compatible = "cache";
+> +                       next-level-cache = <&l3_0>;
+> +               };
+> +
+> +               l2_1: l2-cache1 {
+> +                       compatible = "cache";
+> +                       next-level-cache = <&l3_0>;
+> +               };
+> +
+> +               l3_0: l3-cache {
+> +                       compatible = "cache";
+> +               };
+> +       };
+> +
+> +       clk26m: oscillator-26m {
+> +               compatible = "fixed-clock";
+> +               #clock-cells = <0>;
+> +               clock-frequency = <26000000>;
+> +       };
+> +
+> +       clk32k: oscillator-32k {
+> +               compatible = "fixed-clock";
+> +               #clock-cells = <0>;
+> +               clock-frequency = <32000>;
+> +       };
+> +
+> +       psci {
+> +               compatible      = "arm,psci-1.0";
+> +               method          = "smc";
+> +       };
+> +
+
+please move below nodes into soc {}
+
+
+> +       gic: interrupt-controller {
+> +               compatible = "arm,gic-v3";
+> +               #interrupt-cells = <3>;
+> +               #address-cells = <2>;
+> +               #size-cells = <2>;
+> +               #redistributor-regions = <1>;
+> +               interrupt-parent = <&gic>;
+> +               interrupt-controller;
+> +               reg = <0 0x0c000000 0 0x40000>, // distributor
+> +                     <0 0x0c040000 0 0x200000>; // redistributor
+> +               interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +       };
+> +
+> +       watchdog: watchdog@10007000 {
+> +               compatible = "mediatek,mt8186-wdt",
+> +                               "mediatek,mt6589-wdt";
+> +               reg = <0 0x10007000 0 0x1000>;
+> +       };
+> +
+> +       sys_timer@10017000 {
+> +               compatible = "mediatek,mt8186_timer",
+> +                            "mediatek,mt6765-timer";
+> +               reg = <0 0x10017000 0 0x1000>;
+> +               interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>;
+> +               clocks = <&clk26m>;
+> +       };
+> +
+> +       timer: timer {
+> +               compatible = "arm,armv8-timer";
+> +               interrupt-parent = <&gic>;
+> +               interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
+> +                               <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
+> +                               <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
+> +                               <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
+> +               clock-frequency = <13000000>;
+> +       };
+> +
+> +       uart0: serial@11002000 {
+> +               compatible = "mediatek,mt8186-uart",
+> +                            "mediatek,mt6577-uart";
+> +               reg = <0 0x11002000 0 0x1000>;
+> +               interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
+> +               clocks = <&clk26m>, <&clk26m>;
+> +               clock-names = "baud", "bus";
+> +       };
+> +
+> +       uart1: serial@11003000 {
+> +               compatible = "mediatek,mt8186-uart",
+> +                            "mediatek,mt6577-uart";
+> +               reg = <0 0x11003000 0 0x1000>;
+> +               interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>;
+> +               clocks = <&clk26m>, <&clk26m>;
+> +               clock-names = "baud", "bus";
+> +               status = "disabled";
+> +       };
+> +
+> +       uart2: serial@11018000 {
+> +               compatible = "mediatek,mt8186-uart",
+> +                            "mediatek,mt6577-uart";
+> +               reg = <0 0x11018000 0 0x1000>;
+> +               interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
+> +               clocks = <&clk26m>, <&clk26m>;
+> +               clock-names = "baud", "bus";
+> +               status = "disabled";
+> +       };
+> +
+> +       mmc0: mmc@11230000 {
+> +               compatible = "mediatek,mt8186-mmc", "mediatek,mt8183-mmc";
+> +               reg = <0 0x11230000 0 0x1000>,
+> +                     <0 0x11cd0000 0 0x1000>;
+> +               interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
+> +               clocks = <&clk26m>,
+> +                        <&clk26m>,
+> +                        <&clk26m>,
+> +                        <&clk26m>;
+> +               clock-names = "source", "hclk", "source_cg",
+> +                             "ahb_clk";
+> +               status = "disabled";
+> +       };
+> +
+> +       mmc1: mmc@11240000 {
+> +               compatible = "mediatek,mt8186-mmc", "mediatek,mt8183-mmc";
+> +               reg = <0 0x11240000 0 0x1000>,
+> +                     <0 0x11c90000 0 0x1000>;
+> +               interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
+> +               clocks = <&clk26m>,
+> +                        <&clk26m>,
+> +                        <&clk26m>;
+> +               clock-names = "source", "hclk", "source_cg";
+> +               status = "disabled";
+> +       };
+> +
+> +       u3phy1: usb-phy1@11c80000 {
+> +               compatible = "mediatek,mt8186-tphy", "mediatek,generic-tphy-v2";
+> +               #address-cells = <2>;
+> +               #size-cells = <2>;
+> +               ranges;
+> +               status = "okay";
+> +
+> +               u2port1: usb2-phy1@11c80000 {
+> +                       reg = <0 0x11c80000 0 0x700>;
+> +                       clocks = <&clk26m>;
+> +                       clock-names = "ref";
+> +                       #phy-cells = <1>;
+> +                       status = "okay";
+> +               };
+> +
+> +               u3port1: usb3-phy1@11c80900 {
+> +                       reg = <0 0x11c80900 0 0x700>;
+> +                       clocks = <&clk26m>;
+> +                       clock-names = "ref";
+> +                       #phy-cells = <1>;
+> +                       status = "okay";
+> +               };
+> +       };
+> +
+> +       u3phy0: usb-phy@11ca0000 {
+> +               compatible = "mediatek,mt8186-tphy", "mediatek,generic-tphy-v2";
+> +               #address-cells = <2>;
+> +               #size-cells = <2>;
+> +               ranges;
+> +               status = "okay";
+> +
+> +               u2port0: usb2-phy@11ca0000 {
+> +                       reg = <0 0x11ca0000 0 0x700>;
+> +                       clocks = <&clk26m>;
+> +                       clock-names = "ref";
+> +                       #phy-cells = <1>;
+> +                       mediatek,discth = <0x8>;
+> +                       status = "okay";
+> +               };
+> +       };
+> +};
 > --
-> 2.31.1
+> 2.18.0
 >

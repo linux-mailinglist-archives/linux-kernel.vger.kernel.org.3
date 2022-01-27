@@ -2,81 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 468C249DE36
+	by mail.lfdr.de (Postfix) with ESMTP id DB48749DE38
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234511AbiA0Jhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:37:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37006 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiA0Jht (ORCPT
+        id S238665AbiA0JiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:38:04 -0500
+Received: from ste-pvt-msa1.bahnhof.se ([213.80.101.70]:60002 "EHLO
+        ste-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229864AbiA0JiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:37:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DFBDB80C9F
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:37:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1D2DC340E4;
-        Thu, 27 Jan 2022 09:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643276267;
-        bh=W1zbMWs4f3PzTaEU2FjlPr9KdGXRGkxlTC9ie8d2lPk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yr10iEa8cv4ElDOnXj2wmINHGYLpDqW1iQWeE1eWCb9uNw7EsmYluWaaL5N/Mt2NM
-         U16RZ8aU1hW7sOojMPdVuKLLCfrpto1nzGUz0lFgvZZIVmh81MfL/nTn5zbykDaWk4
-         WkGLJXAcNIbgWAFFUhmFqcx8b+WCPKoLL89KHsXY=
-Date:   Thu, 27 Jan 2022 10:37:39 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Ralph Siemsen <ralph.siemsen@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: at25 eeprom driver: NULL pointer dereference (bisected to
- af40d16042d6 ("Merge v5.15-rc5 into char-misc-next"))
-Message-ID: <YfJn48rLw9/U38BP@kroah.com>
-References: <3887fe1b-58ac-902d-a4ef-1f8825d55aa6@csgroup.eu>
- <20220126193816.GA3763305@maple.netwinder.org>
- <17598be4-c5f5-c9ae-ee24-652fc06f36ce@csgroup.eu>
+        Thu, 27 Jan 2022 04:38:02 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id F22253F6A1;
+        Thu, 27 Jan 2022 10:38:00 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Flag: NO
+X-Spam-Score: -2.1
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 tagged_above=-999 required=6.31
+        tests=[BAYES_00=-1.9, DKIM_SIGNED=0.1, DKIM_VALID=-0.1,
+        DKIM_VALID_AU=-0.1, DKIM_VALID_EF=-0.1, NICE_REPLY_A=-0.001,
+        URIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no
+Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
+        dkim=pass (1024-bit key) header.d=shipmail.org
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id HV0cfcZUN293; Thu, 27 Jan 2022 10:37:59 +0100 (CET)
+Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id CD9B13F636;
+        Thu, 27 Jan 2022 10:37:57 +0100 (CET)
+Received: from [192.168.0.209] (unknown [192.55.54.50])
+        by mail1.shipmail.org (Postfix) with ESMTPSA id D6B953626A5;
+        Thu, 27 Jan 2022 10:37:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
+        t=1643276277; bh=T0bnNFvqHkTrNJF5LWMl+KiCnilYvzbUtJvNeImUEEk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kFJ4XKzuXOQC0TqVyxd9+200cUOqF0fpOQc+cIWPB9f8pDi92dAI8UaAl+LftpA0v
+         FgO4ULBJxdhBdRUm/DTLJZMXkPkylDIfQuduMVrRJcWOO5xtK9Dn1M7MBQa9D59KaK
+         9aJaqv2K4c/kusNguko16tV8oCOWfaIMbCMzXQgc=
+Message-ID: <ce91e091-0df1-5c4d-a070-7b82d74d3f42@shipmail.org>
+Date:   Thu, 27 Jan 2022 10:37:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [Intel-gfx] [PATCH v5 1/5] drm/i915: add needs_compact_pt flag
+Content-Language: en-US
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Matthew Auld <matthew.auld@intel.com>
+References: <20220125193530.3272386-1-bob.beckett@collabora.com>
+ <20220125193530.3272386-2-bob.beckett@collabora.com>
+ <6d0a57e7-daf7-6436-e806-7cc8794c2d50@shipmail.org>
+ <19bf8290-9308-b5c6-eb73-4020fa81aa66@collabora.com>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m_=28Intel=29?= 
+        <thomas_os@shipmail.org>
+In-Reply-To: <19bf8290-9308-b5c6-eb73-4020fa81aa66@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <17598be4-c5f5-c9ae-ee24-652fc06f36ce@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 09:32:06AM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 26/01/2022 � 20:38, Ralph Siemsen a �crit�:
-> > Hi Christophe,
-> > 
-> > On Wed, Jan 26, 2022 at 07:18:42PM +0000, Christophe Leroy wrote:
-> >> Getting below Oops on boot.
-> >>
-> >> v5.16 is OK, v5.17-rc1 has the problem
-> >>
-> >> Bisected to af40d16042d6 ("Merge v5.15-rc5 into char-misc-next"), bisect
-> >> log after the oops dump.
-> >>
-> >> I'm a bit puzzled to end up on a merge commit, that commit doesn't show
-> >> any diff with 'git show' but has a huge list of changes with 'git show
-> >> --stat'. I must be missing something.
-> > 
-> > There is a mistake in the merge commit. The fix is here:
-> > https://lore.kernel.org/all/20220118182003.3385019-1-keescook@chromium.org/
-> > 
-> 
-> It fixes the problem, thanks.
-> 
-> FWIW, you can add to that patch:
-> 
-> Tested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Thanks, but it's already in my tree and will go to Linus in a few days.
+On 1/26/22 18:11, Robert Beckett wrote:
+>
+>
+> On 26/01/2022 13:49, Thomas Hellström (Intel) wrote:
+>>
+>> On 1/25/22 20:35, Robert Beckett wrote:
+>>> From: Ramalingam C <ramalingam.c@intel.com>
+>>>
+>>> Add a new platform flag, needs_compact_pt, to mark the requirement of
+>>> compact pt layout support for the ppGTT when using 64K GTT pages.
+>>>
+>>> With this flag has_64k_pages will only indicate requirement of 64K
+>>> GTT page sizes or larger for device local memory access.
+>>>
+>>> Suggested-by: Matthew Auld <matthew.auld@intel.com>
+>>> Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+>>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+>>> ---
+>>>   drivers/gpu/drm/i915/i915_drv.h          | 10 +++++++---
+>>>   drivers/gpu/drm/i915/i915_pci.c          |  2 ++
+>>>   drivers/gpu/drm/i915/intel_device_info.h |  1 +
+>>>   3 files changed, 10 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/i915/i915_drv.h 
+>>> b/drivers/gpu/drm/i915/i915_drv.h
+>>> index 44c1f98144b4..1258b7779705 100644
+>>> --- a/drivers/gpu/drm/i915/i915_drv.h
+>>> +++ b/drivers/gpu/drm/i915/i915_drv.h
+>>> @@ -1512,12 +1512,16 @@ IS_SUBPLATFORM(const struct drm_i915_private 
+>>> *i915,
+>>>   /*
+>>>    * Set this flag, when platform requires 64K GTT page sizes or 
+>>> larger for
+>>> - * device local memory access. Also this flag implies that we 
+>>> require or
+>>> - * at least support the compact PT layout for the ppGTT when using 
+>>> the 64K
+>>> - * GTT pages.
+>>
+>> Why do we remove these comment lines?
+> Because HAS_64K_PAGES now means just 64K page, it no longer means also 
+> requires compact pt.
+> This is to support other products that will have 64K but not have the 
+> PDE non-sharing restriction in future.
+>
+> Those lines moved to the next change NEEDS_COMPACT_PT, which is now 
+> separate.
 
-greg k-h
+Yes, NEEDS_COMPACT_PT indicates that compact is *required* but does 
+"HAS_64K_PAGES" still mean compact is supported? That information is lost.
+
+/Thomas
+
+

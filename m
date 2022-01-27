@@ -2,182 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5953649DE84
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DAA49DE89
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238131AbiA0Jy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:54:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36008 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238049AbiA0Jyy (ORCPT
+        id S238332AbiA0Jz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234345AbiA0JzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:54:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643277294;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rDdQPcDy/BXM/pP3P0TjV4ib8OmOcmrz0QfWKeXF3XU=;
-        b=aBzazBcC9t1r+rgGFJV59//zay2wR2VXe+qqbrF0eqs4LO2sZODuFTLp7zytKa+foQzA5m
-        3LdRxTXfh3jY0slmQ+ccrZHnnEf1z604tRn6C47WigLUZEBiaD7MK6Z7eJRR0ajnGqVjur
-        JUaxbKtxkBqVoyPS0MmviXZEGQcTDnI=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-478-SJzfXgKFOMuejcovtyjN2Q-1; Thu, 27 Jan 2022 04:54:52 -0500
-X-MC-Unique: SJzfXgKFOMuejcovtyjN2Q-1
-Received: by mail-yb1-f200.google.com with SMTP id 4-20020a250304000000b006137f4a9920so5035390ybd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:54:52 -0800 (PST)
+        Thu, 27 Jan 2022 04:55:25 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D130C061714;
+        Thu, 27 Jan 2022 01:55:25 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id h14so6851948ybe.12;
+        Thu, 27 Jan 2022 01:55:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/EedJrG4ul4UwFA3alRTDn+7vyfBymCk2ZRwzLvGunI=;
+        b=VAkvS+4+4m9uodQr+lOef7e4aMBiZSRvbRhCl8EvFL8dPoU7aajphSlGTJwbf6G4RG
+         +KAXXYIhkuR61kROEhKH5Y0ouyYWDZ48ay/s3NbZKieWtbC+xL3SRtHVmPFWVaqaB2A1
+         f+bEkgdj4JRAYXZnHb6AXZgHtfuBQQBqO0Z8JDTwAzzyuIYU25252pG6JUgtROEXOH00
+         BPRvyHAUGhHCL0i6LFN8ICnurGmT03vxwzT9kFJCcIpNC24vcFBOZiykXSAQ0PAQ61sy
+         +Bw6JnodlGy+8diz8TaiJk6lQv4WXkYyYRl4Mg0Q8lLfCqHb0nBLN+gpsT38Xr+4gTgS
+         q9gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rDdQPcDy/BXM/pP3P0TjV4ib8OmOcmrz0QfWKeXF3XU=;
-        b=K/ddG82SHrlrx/cgnZHrKjlIPm5gYpLpPrbaxzw9xXiBxDS1pG7AfGqLtZtNuXqI+c
-         LSUBttqdpccFEKdeBXwvl6fBnb5aPyyskeEvsnr7ltFN6AlCaRy98LgUeYvTYiBsXJoF
-         w650xhtY3ZzBR17aRCiZZNeczDCN72Xu4UouwtLXBGxPHOpAV6FbtX1JlYcSxnOmH9uh
-         ca1C2UvikBy57I8UsebqYOEUloTo+5b9CUuAtfPpKqD9llJIg4fMd8tXq8XyTBVGkCVg
-         KMilhFT0BxanTU73Bw7aT2JfqPU6/p+pfyXR9MgDmrJG28P8WpHrIMCpCsGhhPw48QTF
-         vYug==
-X-Gm-Message-State: AOAM531Y8LjbibDiH2NMEWyq72xPwH3h+Hq9Sv1PueEkz9W5HSFfXIX0
-        2PHTMNydU1jIX8v1Rv8s1Cw/q2nZV0ypiVWzFYh28UQqShZAapWmP46GIXa2NQwW+lmazXbadsj
-        +kPlk+94xM+MpO3uSEQ3Kos0DetpapJYPyRJoWu66
-X-Received: by 2002:a25:b003:: with SMTP id q3mr4101555ybf.767.1643277291804;
-        Thu, 27 Jan 2022 01:54:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxIUAhfn61houAngphIKxZWb+8qIDFd2Y+AxEj9EvOc+Kbl9jUki4ydOR8JkmOT4urcd1J7Cnw9TB1/ZvP+Wqg=
-X-Received: by 2002:a25:b003:: with SMTP id q3mr4101543ybf.767.1643277291583;
- Thu, 27 Jan 2022 01:54:51 -0800 (PST)
+        bh=/EedJrG4ul4UwFA3alRTDn+7vyfBymCk2ZRwzLvGunI=;
+        b=lryoYfNPfPamztyoIjr52kQRROW4ix9O1Pz3IWatpCO706mi8pldTg7Kh0zKQNr3v7
+         7eID1CwImpRbELLA4ziMU6O8eNf415wXzte3YBM3l3BRd8P1dD0DwlQUIR8A4m6TWEwx
+         PaiA5qB45yjId/gdIwRSsnUXeCzQmC7hVNjAH0xN6nOmHv+sOmjgGzCDzs3HLOwnQAgC
+         J7MIvHFh4hIeX7Q6Iih0K8i9IvOMYCptSDrk8ucJxl/WVr0KEOMofGElppZtCmYn3c+Q
+         718X6rtdm7MgEdMeOYYzrnSug3GlVhwzi3OM8FGFGzjgEjfjcNDnQ6xfayt7orKKuNbA
+         2heg==
+X-Gm-Message-State: AOAM531jXcp853Ql2Q3QZ+FIDGejmTjPQHqSD1jpviNdbYpFyAJhFOHK
+        J9Ykz0VqbS0NGSQHScA86JMlIow5bqnFY7QEeSw=
+X-Google-Smtp-Source: ABdhPJxprAY982Zt5MSbxLAgHsuavBv30BLYQ5498ZVxx3qKzuslSVSbiUu9KBNIyQ9Kxqga4qYumyh/Rxyodf8MQxk=
+X-Received: by 2002:a25:dfc7:: with SMTP id w190mr4396026ybg.696.1643277324675;
+ Thu, 27 Jan 2022 01:55:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120214948.3637895-1-smayhew@redhat.com> <20220120214948.3637895-2-smayhew@redhat.com>
-In-Reply-To: <20220120214948.3637895-2-smayhew@redhat.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Thu, 27 Jan 2022 10:54:35 +0100
-Message-ID: <CAFqZXNv7=ROfyzZGojy2DQvY0xp4Dd5oHW_0KG6BLiD7A8zeKQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
-To:     Scott Mayhew <smayhew@redhat.com>
-Cc:     SElinux list <selinux@vger.kernel.org>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+References: <20220127010023.3169415-1-pgwipeout@gmail.com> <20220127010023.3169415-4-pgwipeout@gmail.com>
+ <07281029-0efd-0a74-0d96-92e3dcf5bbb7@gmail.com>
+In-Reply-To: <07281029-0efd-0a74-0d96-92e3dcf5bbb7@gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Thu, 27 Jan 2022 04:55:13 -0500
+Message-ID: <CAMdYzYrKq==Bs0aonrJBC+W2c4nQ8cUn2dn_Se4WDaRCkT6SYg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: rockchip: add Quartz64-A sdmmc1 node
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 10:50 PM Scott Mayhew <smayhew@redhat.com> wrote:
-> selinux_sb_mnt_opts_compat() is called under the sb_lock spinlock and
-> shouldn't be performing any memory allocations.  Fix this by parsing the
-> sids at the same time we're chopping up the security mount options
-> string and then using the pre-parsed sids when doing the comparison.
+On Thu, Jan 27, 2022 at 1:18 AM Johan Jonker <jbx6244@gmail.com> wrote:
 >
-> Fixes: cc274ae7763d ("selinux: fix sleeping function called from invalid context")
-> Fixes: 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an existing mount")
-> Signed-off-by: Scott Mayhew <smayhew@redhat.com>
-> ---
->  security/selinux/hooks.c | 112 ++++++++++++++++++++++++++-------------
->  1 file changed, 76 insertions(+), 36 deletions(-)
 >
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 5b6895e4fc29..f27ca9e870c0 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -342,6 +342,11 @@ static void inode_free_security(struct inode *inode)
 >
->  struct selinux_mnt_opts {
->         const char *fscontext, *context, *rootcontext, *defcontext;
-> +       u32 fscontext_sid;
-> +       u32 context_sid;
-> +       u32 rootcontext_sid;
-> +       u32 defcontext_sid;
-> +       unsigned short preparsed;
->  };
+> On 1/27/22 02:00, Peter Geis wrote:
+> > The sdmmc1 node on Quartz64-A supports the optional wifi module from
+> > Pine64.
+> > Add the sdmmc1 node and requisite sdio_pwrseq to enable wifi support on
+> > the Quartz64-A.
+> >
+> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > ---
+> >  .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 45 +++++++++++++++++++
+> >  1 file changed, 45 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> > index 33c2c18caaa9..1d73ac6557c5 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> > @@ -91,6 +91,18 @@ simple-audio-card,codec {
+> >               };
+> >       };
+> >
+> > +     sdio_pwrseq: sdio-pwrseq {
 >
->  static void selinux_free_mnt_opts(void *mnt_opts)
-> @@ -598,12 +603,11 @@ static int bad_option(struct superblock_security_struct *sbsec, char flag,
->         return 0;
->  }
+> > +             status = "okay";
 >
-> -static int parse_sid(struct super_block *sb, const char *s, u32 *sid,
-> -                    gfp_t gfp)
-> +static int parse_sid(struct super_block *sb, const char *s, u32 *sid)
->  {
->         int rc = security_context_str_to_sid(&selinux_state, s,
-> -                                            sid, gfp);
-> -       if (rc)
-> +                                            sid, GFP_KERNEL);
-> +       if (rc && sb != NULL)
->                 pr_warn("SELinux: security_context_str_to_sid"
->                        "(%s) failed for (dev %s, type %s) errno=%d\n",
->                        s, sb->s_id, sb->s_type->name, rc);
-> @@ -673,8 +677,7 @@ static int selinux_set_mnt_opts(struct super_block *sb,
->          */
->         if (opts) {
->                 if (opts->fscontext) {
-> -                       rc = parse_sid(sb, opts->fscontext, &fscontext_sid,
-> -                                       GFP_KERNEL);
-> +                       rc = parse_sid(sb, opts->fscontext, &fscontext_sid);
->                         if (rc)
->                                 goto out;
->                         if (bad_option(sbsec, FSCONTEXT_MNT, sbsec->sid,
-> @@ -683,8 +686,7 @@ static int selinux_set_mnt_opts(struct super_block *sb,
->                         sbsec->flags |= FSCONTEXT_MNT;
->                 }
->                 if (opts->context) {
-> -                       rc = parse_sid(sb, opts->context, &context_sid,
-> -                                       GFP_KERNEL);
-> +                       rc = parse_sid(sb, opts->context, &context_sid);
->                         if (rc)
->                                 goto out;
->                         if (bad_option(sbsec, CONTEXT_MNT, sbsec->mntpoint_sid,
-> @@ -693,8 +695,7 @@ static int selinux_set_mnt_opts(struct super_block *sb,
->                         sbsec->flags |= CONTEXT_MNT;
->                 }
->                 if (opts->rootcontext) {
-> -                       rc = parse_sid(sb, opts->rootcontext, &rootcontext_sid,
-> -                                       GFP_KERNEL);
-> +                       rc = parse_sid(sb, opts->rootcontext, &rootcontext_sid);
->                         if (rc)
->                                 goto out;
->                         if (bad_option(sbsec, ROOTCONTEXT_MNT, root_isec->sid,
-> @@ -703,8 +704,7 @@ static int selinux_set_mnt_opts(struct super_block *sb,
->                         sbsec->flags |= ROOTCONTEXT_MNT;
->                 }
->                 if (opts->defcontext) {
-> -                       rc = parse_sid(sb, opts->defcontext, &defcontext_sid,
-> -                                       GFP_KERNEL);
-> +                       rc = parse_sid(sb, opts->defcontext, &defcontext_sid);
->                         if (rc)
->                                 goto out;
->                         if (bad_option(sbsec, DEFCONTEXT_MNT, sbsec->def_sid,
-> @@ -976,6 +976,9 @@ static int selinux_add_opt(int token, const char *s, void **mnt_opts)
->  {
->         struct selinux_mnt_opts *opts = *mnt_opts;
->         bool is_alloc_opts = false;
-> +       bool preparse_sid = false;
-> +       u32 sid;
-> +       int rc;
->
->         if (token == Opt_seclabel)
->                 /* eaten and completely ignored */
-> @@ -991,26 +994,57 @@ static int selinux_add_opt(int token, const char *s, void **mnt_opts)
->                 is_alloc_opts = true;
->         }
->
-> +       if (selinux_initialized(&selinux_state))
-> +               preparse_sid = true;
-> +
+> When a node is not previously disabled, then there's no need for "okay".
 
-I wonder if we could make this all much simpler by *always* doing the
-label parsing in selinux_add_opt() and just returning an error when
-!selinux_initialized(&selinux_state). Before the new mount API, mount
-options were always passed directly to the mount(2) syscall, so it
-wasn't possible to pass any SELinux mount options before the SELinux
-policy was loaded. I don't see why we need to jump through hoops here
-just to support this pseudo-feature of stashing an unparsed label into
-an fs_context before policy is loaded... Userspace should never need
-to do that.
+Thanks, this is here in case an end user wants to easily hack the
+board to use this for other purposes.
 
--- 
-Ondrej Mosnacek
-Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
+>
+> > +             compatible = "mmc-pwrseq-simple";
+> > +             clocks = <&rk817 1>;
+> > +             clock-names = "ext_clock";
+> > +             pinctrl-names = "default";
+> > +             pinctrl-0 = <&wifi_enable_h>;
+> > +             reset-gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_LOW>;
+> > +             post-power-on-delay-ms = <100>;
+> > +             power-off-delay-us = <5000000>;
+> > +     };
+> > +
+> >       vcc12v_dcin: vcc12v_dcin {
+> >               compatible = "regulator-fixed";
+> >               regulator-name = "vcc12v_dcin";
+> > @@ -147,6 +159,17 @@ vcc_sys: vcc_sys {
+> >               regulator-max-microvolt = <4400000>;
+> >               vin-supply = <&vbus>;
+> >       };
+> > +
+> > +     /* sourced from vcc_sys, sdio module operates internally at 3.3v */
+> > +     vcc_wl: vcc_wl {
+> > +             compatible = "regulator-fixed";
+> > +             regulator-name = "vcc_wl";
+> > +             regulator-always-on;
+> > +             regulator-boot-on;
+> > +             regulator-min-microvolt = <3300000>;
+> > +             regulator-max-microvolt = <3300000>;
+> > +             vin-supply = <&vcc_sys>;
+> > +     };
+> >  };
+> >
+> >  &cpu0 {
+> > @@ -475,6 +498,12 @@ pmic_int_l: pmic-int-l {
+> >               };
+> >       };
+> >
+> > +     sdio-pwrseq {
+> > +             wifi_enable_h: wifi-enable-h {
+> > +                     rockchip,pins = <2 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
+> > +             };
+> > +     };
+> > +
+> >       vcc_sd {
+> >               vcc_sd_h: vcc-sd-h {
+> >                       rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
+> > @@ -516,6 +545,22 @@ &sdmmc0 {
+> >       status = "okay";
+> >  };
+> >
+> > +&sdmmc1 {
+> > +     bus-width = <4>;
+> > +     cap-sd-highspeed;
+> > +     cap-sdio-irq;
+>
+> > +     disable-wp;
+>
+> From mmc-controller.yaml:
+>
+>   disable-wp:
+>     $ref: /schemas/types.yaml#/definitions/flag
+>     description:
+>       When set, no physical write-protect line is present. This
+>       property should only be specified when the controller has a
+>       dedicated write-protect detection logic. If a GPIO is always used
+>       for the write-protect detection logic, it is sufficient to not
+>       specify the wp-gpios property in the absence of a write-protect
+>       line. Not used in combination with eMMC or SDIO.
 
+Appreciate it, I will drop this.
+
+>
+> > +     keep-power-in-suspend;
+> > +     mmc-pwrseq = <&sdio_pwrseq>;
+> > +     non-removable;
+> > +     pinctrl-names = "default";
+> > +     pinctrl-0 = <&sdmmc1_bus4 &sdmmc1_cmd &sdmmc1_clk>;
+> > +     sd-uhs-sdr104;
+> > +     vmmc-supply = <&vcc_wl>;
+> > +     vqmmc-supply = <&vcc_1v8>;
+> > +     status = "okay";
+> > +};
+> > +
+> >  &spdif {
+> >       status = "okay";
+> >  };

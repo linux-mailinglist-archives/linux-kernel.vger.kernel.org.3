@@ -2,101 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2BD49DBF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C46049DBFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237542AbiA0Hwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 02:52:43 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36066
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229949AbiA0Hwj (ORCPT
+        id S237552AbiA0Hw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 02:52:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48823 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237540AbiA0Hw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 02:52:39 -0500
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 476D53F1D0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643269958;
-        bh=qdfi4d+HIRszzf26gXi/pQU/uCw5YnQfSUk9vCmYV/U=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=qovQ6rB8MkLVUT6Nyhw/eGBQdpE1fWj9NRKiVdlcY8XJFlGMfA9aNn1fnCWPlevEf
-         Rg7t4/nPyrwFtALI2JmD52w0D7ELditIOGouxJ88q79oWJBemESbTPz8B1cDnzLerF
-         OSCLAjLD9FTXwjEBfdBmwq4OhCYG5eyGldtuoC+RG0jKBD0EYQuPGMN8VmAXD8LAn7
-         kjXd4fWjEgCaEBOiwuwKs3P247cnaK/sBDFalkVM7wT8NtP3sM5OaFVi2bXeinL1RU
-         H+T+ArkZkzp3oH/zuPDM+EKGX8MFpuike7b4bDmcp/rNPDzORTRZUptcnK3drbrfUp
-         kw37de0ahiFbQ==
-Received: by mail-ed1-f70.google.com with SMTP id en7-20020a056402528700b00404aba0a6ffso986612edb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 23:52:38 -0800 (PST)
+        Thu, 27 Jan 2022 02:52:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643269978;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YabZw893JW2loWWPIkIyf476d9uOVXRZS4qkmaaFWdY=;
+        b=dEAztcVvqXvO5AoWHtf2fhT15hFniJPT5G9ZVgG10rLmncKq4oNrEUusxF4wOVbskyj18f
+        BhmIjrTAwW6W7A3fo8p7pIKi2/3MQLlVRZ4pE4Dch6GuYyyOh1MfcWSFnF8KX4PzvbtvQv
+        VzgTgB4u7i31QOZi6K+n2Gn5zrxkBQw=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-367-vPNVuSZnOxu_w_C5OKjFpA-1; Thu, 27 Jan 2022 02:52:56 -0500
+X-MC-Unique: vPNVuSZnOxu_w_C5OKjFpA-1
+Received: by mail-wr1-f70.google.com with SMTP id i16-20020adfa510000000b001d7f57750a6so754146wrb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 23:52:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=qdfi4d+HIRszzf26gXi/pQU/uCw5YnQfSUk9vCmYV/U=;
-        b=74Yi7f7unBWKZXgK+C+HhV5kbdXd3dfzM8cytBhdobXzkdxEwL8N1DNaa4lt3XO4xm
-         pi+1kCcR+8HKgVDQWdzeqX9NQDiEeb2F4U0i+UcJFa+va4RXabUS3MDoDCd0eL72OnVm
-         XBLt9zYFqz41/WOBxaafdXTYbDPTakmImerzLz2rCqbBttqA+FyT62of48AqgKX1JB0d
-         Y2+2tBQDBXvOMresKqPK2r/f9Zhf62XNqGA9ROxKLuYmVS2amBGgmEMXvSVk06S4VgS3
-         h6C7GuMQSJJZl2K4wrF+e3+rDYPXSb5KPSlemX0veDOUtx9r0/7HtFlcrb8oKYa44Uq2
-         eBhg==
-X-Gm-Message-State: AOAM531SB9Z3UUAbeqj57hW6H2z8lDszouGK6UNsetFrr2Rq6m58/FrT
-        A2I8Rucnr6ygJOH/ZcUO3pBYdOnA73GprCXPQoO+/mOLozb7CseK6+gpFCJAEKG0OAkpb5aHO5g
-        mSalE254rTpTVQmUonv4Ac/xO5+ajY/JswnoWsm/VUA==
-X-Received: by 2002:a05:6402:438d:: with SMTP id o13mr2539235edc.258.1643269956983;
-        Wed, 26 Jan 2022 23:52:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzXgM/NUB2nDHBifcFiSo9kBuXpOj4f7jGx7eR7EFTCWiVTMxtZDYwMkSwUrGK449uKeKU31A==
-X-Received: by 2002:a05:6402:438d:: with SMTP id o13mr2539208edc.258.1643269956206;
-        Wed, 26 Jan 2022 23:52:36 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id bv2sm8305550ejb.154.2022.01.26.23.52.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 23:52:35 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        nick.hawkins@hpe.com, verdun@hpe.com
-Subject: [PATCH] dt-bindings: vendor-prefixes: clarify HP prefix
-Date:   Thu, 27 Jan 2022 08:52:29 +0100
-Message-Id: <20220127075229.10299-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        bh=YabZw893JW2loWWPIkIyf476d9uOVXRZS4qkmaaFWdY=;
+        b=TXsz29Y8ASn5GueFyCIENSqEqzcyval5tSjht6OtG1Dbebs8AjYXnMyLQQHgT+8oir
+         wOYRfFOFGo1dIY9WXv7Ju0jzeealMlRXXQ8FGxdHBvoNWKE3t+lu3xc42VR5GCm1DE6J
+         P8CGhgWRd4zp8G54Sw7LjOoItsjYyNaqs61p0Jt4mq6e4FLbfnhYAP1i9y5Dv50MBFVp
+         oqOf7/rVs1A6MGQXqq+Ev2d9YpOfwHFCtgyzguJpzVwwqHe2TJCLYEbWdrdKF70+Aqzi
+         /GnoIIfM1mb7pqOZTG0l8Qe2Xeqhdrq+ZOLNMMknWZxuwIk8GlwimhohhHp38juNYA63
+         aVug==
+X-Gm-Message-State: AOAM530YxxeZl4PvK7WtTcKNRalE3oRcOLWZfU1TED5tYRPgNIRBbgGn
+        qYZdX6fvAaO4ws4K3OZtsC2UlLTuD2yZef5X6SqEmRIZ4mvAmGV0d5D8fwcr1Ih1yucNV3xsb2B
+        wkhMcSlRnczK7IApuLhukBWpv
+X-Received: by 2002:a7b:cf3a:: with SMTP id m26mr2104980wmg.4.1643269975575;
+        Wed, 26 Jan 2022 23:52:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwlfPajydhgnYfO0Y/v2sVH+H3onh4KBKxIDGD/yrfss4vYkRjbod1Tuq2X/m1REL0RMkV9qg==
+X-Received: by 2002:a7b:cf3a:: with SMTP id m26mr2104961wmg.4.1643269975358;
+        Wed, 26 Jan 2022 23:52:55 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id a3sm1641890wri.89.2022.01.26.23.52.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 23:52:54 -0800 (PST)
+Message-ID: <e82f74a6-437b-0db0-aba7-afd54bceac2e@redhat.com>
+Date:   Thu, 27 Jan 2022 08:52:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [KVM] 2efd61a608:
+ WARNING:at_arch/x86/kvm/../../../virt/kvm/kvm_main.c:#mark_page_dirty_in_slot
+Content-Language: en-US
+To:     kernel test robot <oliver.sang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Cc:     LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        lkp@intel.com
+References: <20220127023015.GA34140@xsang-OptiPlex-9020>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220127023015.GA34140@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two independent companies: "HP Inc." and "Hewlett Packard
-Enterprise". Clarify that "hp" prefix is about the first one.
+On 1/27/22 03:30, kernel test robot wrote:
+> Greeting,
+> 
+> FYI, we noticed the following commit (built with gcc-9):
+> 
+> commit: 2efd61a608b0039911924d2e5d7028eb37496e85 ("KVM: Warn if mark_page_dirty() is called without an active vCPU")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> [ 123.817787][ T9801] RIP: 0010:mark_page_dirty_in_slot (arch/x86/kvm/../../../virt/kvm/kvm_main.c:3160 (discriminator 1))
+> [ 123.935134][ T9801] __kvm_write_guest_page (arch/x86/kvm/../../../virt/kvm/kvm_main.c:2947)
+> [ 123.940399][ T9801] kvm_write_guest (arch/x86/kvm/../../../virt/kvm/kvm_main.c:2978)
+> [ 123.944953][ T9801] kvm_hv_invalidate_tsc_page (arch/x86/kvm/hyperv.c:1220)
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Hi, this is known and should be fixed soon.
 
----
-
-Cc: nick.hawkins@hpe.com
-Cc: verdun@hpe.com
-
-Optionally please squash it with a new patch adding "hpe" prefix.
-See: https://lore.kernel.org/all/20220125194609.32314-1-nick.hawkins@hpe.com/
----
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 0d8da47cda1a..05a059c8a011 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -518,7 +518,7 @@ patternProperties:
-   "^hoperun,.*":
-     description: Jiangsu HopeRun Software Co., Ltd.
-   "^hp,.*":
--    description: Hewlett Packard
-+    description: Hewlett Packard Inc.
-   "^hsg,.*":
-     description: HannStar Display Co.
-   "^holtek,.*":
--- 
-2.32.0
+Paolo
 

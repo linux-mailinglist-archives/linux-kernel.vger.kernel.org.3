@@ -2,97 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A16D49DC2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9130749DC3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237619AbiA0IEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 03:04:51 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:3645 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237602AbiA0IEs (ORCPT
+        id S237658AbiA0IJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 03:09:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230127AbiA0IJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 03:04:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643270688; x=1674806688;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=YWLfVwtEW0AriDI6I/Te250BeiLS2TU4DY+DRwJFHks=;
-  b=BEWmouZ30hUnIS+zpAitd7OKx4lWkqshMMAs2782q4exEDd6x6dvlIQd
-   yKQzJw2nTO72JmSUPP0J1bizsNrl9hKROItQM1OvYCaaYYaTf4Tef4bU+
-   9kgyVGn+O3/uVpgQoX/XIkVeBKZhhwEM7lKTIVS+hBX5y10urGiDdKZND
-   Vn4ea+1SPWCXZafjLdNVM5LiDWNFR1Q3k3ioYD3aypPiX7mYt5X/vYrKD
-   BPChi5nLXEaBFTr61GkGoGwkC5oVApkwgmydg0ikXpoWUOaJxGrqz0PQp
-   wyJ7wZ7YnWrfn3WdnW9cWOWdgALXaxgkU55k35+xgS7DltieGUGLpd13Z
-   A==;
-IronPort-SDR: JSOzhSf5BRfTmZ4iMVuE+uJ+mY5S7DSTp3OG3gmA7908KbSHCvhwxC0ZBobm3nU2NQrdjarO6o
- n4DmSUanG5wcq46EF9GanyNAg7s6FNzzUav6XWBx3eFaPrUPl5xMa5xrds5I5EY39uzL3TUB8c
- 2gFxDBs5OlCrWLTy/ANsFCMsG74YrwMUU99SkknKkZQdln9d60ONhhsEbk6ECUsmULYmxd4Wgs
- n0juJNj1ysd6E8NmBoWyQxv/h1dZ+0OYBe97k3sH2UHTcieCDRvR34KyAbgALmS4yxjSCo4Ii+
- 2yR72ZfUd09C2J8hgS95r98O
-X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
-   d="scan'208";a="144049447"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jan 2022 01:04:47 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 27 Jan 2022 01:04:46 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 27 Jan 2022 01:04:42 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <tudor.ambarus@microchip.com>
-CC:     <UNGLinuxDriver@microchip.com>, <linux-crypto@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>
-Subject: [PATCH] crypto: atmel: add support for AES and SHA IPs available on lan966x SoC
-Date:   Thu, 27 Jan 2022 13:34:08 +0530
-Message-ID: <20220127080408.15791-1-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 27 Jan 2022 03:09:36 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F18FC061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:09:36 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id h14so1861335plf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:09:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jj3qMvBjTT6j/SOlKMxE/OiM+a/oHNHlcXnrCMXcDmk=;
+        b=bSUKyFoupKbe49Ggrxey89hibKPASxMbA8SqWgfUtjl9y27Hdy6Ri+9U1Gi49Hgvo+
+         vvzknfSpgbAyJ20xn6rB7HXEPq4YoYmGxgWhNt9E9BvbSzWOVvsZu99V/JB793FDS3vK
+         AY4yXWOFSOzO7CSp5xoW1HrlW8bqkdcRCo3LpylT9+MLifAFhcwSm5AZaCzRF/z3pBG1
+         Igj3ePjUwl1GWNeKPkEKIOw5NcgcmIaOOr+YBBi9GRgymExCx25kcvdaZN7lZP59661k
+         p0oidc/D3nqjRuvT4+tNaCGXU3VgBQoTWNAQYulzIY8FLYFxQfx4XKR7FNrCfcWmT5eg
+         KYiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jj3qMvBjTT6j/SOlKMxE/OiM+a/oHNHlcXnrCMXcDmk=;
+        b=eL6McRAN0tdMlLdn7ESWXRxQQhuH7xdTOywacyfPqqJoNAsOZN0IysbjxSfB40+ehA
+         jsnILW9u3I6UAUKyzZ/agFrui21aZfjeyvX7PNZN86hYQ6FXTk9ifjw5p2rACIJOR2b6
+         Q6G6umJuuvUch32QyhhRmDxRakZKuWyCAYgLaFIRoKSLVeVW84B1n9feTAzAGU2xojtH
+         NoaQzAh44Gjmor2PLyt7x8Pm7gmD4gMjSZPo/CHQOYKaIYNU7dLGu8SAOLGU1l5IhSs7
+         JY7EYrQ82UNGWGAGawSsZ7f1ORkgNtLy+PdKcVIw1WzO6ugsAqDbcBkYzdDuD5vlZ7v4
+         vxuQ==
+X-Gm-Message-State: AOAM530KoazlJXzGAK2UVYsEVGrXqbRfL3Wgq9/0SgUOcGs+AXb1ixE3
+        0+BEVcGMqX4+hKWMPyzoaI2beCUZ1ATkmo5HUuNbvQ==
+X-Google-Smtp-Source: ABdhPJxZS5vsEhTE3sodpt30zTPMiVoW+wEFG/jG/MGBVTCtKkVuatLV8KwwjL8hQW+AvPpI+HrBm45VEN/mksF6D9c=
+X-Received: by 2002:a17:90b:3882:: with SMTP id mu2mr579746pjb.150.1643270976034;
+ Thu, 27 Jan 2022 00:09:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220125162938.838382-1-jens.wiklander@linaro.org>
+ <20220125162938.838382-4-jens.wiklander@linaro.org> <CAFA6WYOT7capu1RrK57HAu_qKvG65X_C1-esw3DyD4_9LeKZSg@mail.gmail.com>
+In-Reply-To: <CAFA6WYOT7capu1RrK57HAu_qKvG65X_C1-esw3DyD4_9LeKZSg@mail.gmail.com>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 27 Jan 2022 09:09:25 +0100
+Message-ID: <CAHUa44Ec0Mcr_4PW0pi2mkFBHW8wLQBK9F9WNkaid_MrhaeBTg@mail.gmail.com>
+Subject: Re: [PATCH v3 03/12] tee: add tee_shm_alloc_user_buf()
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        David Howells <dhowells@redhat.com>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for hardware version of AES and SHA IPs
-available on lan966x SoC.
+On Thu, Jan 27, 2022 at 6:56 AM Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> On Tue, 25 Jan 2022 at 21:59, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+> >
+> > Adds a new function tee_shm_alloc_user_buf() or user mode allocations,
+>
+> typo: s/or/for/
+>
+> > replacing passing the flags TEE_SHM_MAPPED | TEE_SHM_DMA_BUF to
+> > tee_shm_alloc().
+> >
+> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > ---
+> >  drivers/tee/tee_core.c     |  2 +-
+> >  drivers/tee/tee_private.h  |  2 ++
+> >  drivers/tee/tee_shm.c      | 17 +++++++++++++++++
+> >  drivers/tee/tee_shm_pool.c |  2 +-
+> >  include/linux/tee_drv.h    |  2 +-
+> >  5 files changed, 22 insertions(+), 3 deletions(-)
+> >
+>
+> Apart from minor comments below:
+>
+> Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
 
-Tested-by: Vradha Panchal <vradha.panchal@microchip.com>
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
- drivers/crypto/atmel-aes.c | 2 ++
- drivers/crypto/atmel-sha.c | 2 ++
- 2 files changed, 4 insertions(+)
+Thanks, I'll fix those.
 
-diff --git a/drivers/crypto/atmel-aes.c b/drivers/crypto/atmel-aes.c
-index fe0558403191..358f1092d890 100644
---- a/drivers/crypto/atmel-aes.c
-+++ b/drivers/crypto/atmel-aes.c
-@@ -2509,6 +2509,8 @@ static void atmel_aes_get_cap(struct atmel_aes_dev *dd)
- 
- 	/* keep only major version number */
- 	switch (dd->hw_version & 0xff0) {
-+	case 0x700:
-+		fallthrough;
- 	case 0x500:
- 		dd->caps.has_dualbuff = 1;
- 		dd->caps.has_cfb64 = 1;
-diff --git a/drivers/crypto/atmel-sha.c b/drivers/crypto/atmel-sha.c
-index 1b13f601fd95..6c7bb91c8cce 100644
---- a/drivers/crypto/atmel-sha.c
-+++ b/drivers/crypto/atmel-sha.c
-@@ -2508,6 +2508,8 @@ static void atmel_sha_get_cap(struct atmel_sha_dev *dd)
- 
- 	/* keep only major version number */
- 	switch (dd->hw_version & 0xff0) {
-+	case 0x700:
-+		fallthrough;
- 	case 0x510:
- 		dd->caps.has_dma = 1;
- 		dd->caps.has_dualbuff = 1;
--- 
-2.17.1
+/Jens
 
+>
+> > diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+> > index 3fc426dad2df..a15812baaeb1 100644
+> > --- a/drivers/tee/tee_core.c
+> > +++ b/drivers/tee/tee_core.c
+> > @@ -297,7 +297,7 @@ static int tee_ioctl_shm_alloc(struct tee_context *ctx,
+> >         if (data.flags)
+> >                 return -EINVAL;
+> >
+> > -       shm = tee_shm_alloc(ctx, data.size, TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
+> > +       shm = tee_shm_alloc_user_buf(ctx, data.size);
+> >         if (IS_ERR(shm))
+> >                 return PTR_ERR(shm);
+> >
+> > diff --git a/drivers/tee/tee_private.h b/drivers/tee/tee_private.h
+> > index e55204df31ce..e09c8aa5d967 100644
+> > --- a/drivers/tee/tee_private.h
+> > +++ b/drivers/tee/tee_private.h
+> > @@ -68,4 +68,6 @@ void tee_device_put(struct tee_device *teedev);
+> >  void teedev_ctx_get(struct tee_context *ctx);
+> >  void teedev_ctx_put(struct tee_context *ctx);
+> >
+> > +struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size);
+> > +
+> >  #endif /*TEE_PRIVATE_H*/
+> > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> > index 499fccba3d74..7e7e762fc1de 100644
+> > --- a/drivers/tee/tee_shm.c
+> > +++ b/drivers/tee/tee_shm.c
+> > @@ -127,6 +127,23 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> >  }
+> >  EXPORT_SYMBOL_GPL(tee_shm_alloc);
+> >
+> > +/**
+> > + * tee_shm_alloc_user_buf() - Allocate shared memory for user space
+> > + * @ctx:       Context that allocates the shared memory
+> > + * @size:      Requested size of shared memory
+> > + *
+> > + * Memory allocated as user space shared memory is automatically freed when
+> > + * the TEE file pointer is closed. The primary usage of this function is
+> > + * when the TEE driver doesn't support registering ordinary user space
+> > + * memory.
+> > + *
+> > + * @returns a pointer to 'struct tee_shm'
+> > + */
+> > +struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size)
+> > +{
+> > +       return tee_shm_alloc(ctx, size, TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
+> > +}
+> > +
+> >  /**
+> >   * tee_shm_alloc_kernel_buf() - Allocate shared memory for kernel buffer
+> >   * @ctx:       Context that allocates the shared memory
+> > diff --git a/drivers/tee/tee_shm_pool.c b/drivers/tee/tee_shm_pool.c
+> > index a9f9d50fd181..0e460347138a 100644
+> > --- a/drivers/tee/tee_shm_pool.c
+> > +++ b/drivers/tee/tee_shm_pool.c
+> > @@ -1,6 +1,6 @@
+> >  // SPDX-License-Identifier: GPL-2.0-only
+> >  /*
+> > - * Copyright (c) 2015, Linaro Limited
+> > + * Copyright (c) 2015, 2017, 2022 Linaro Limited
+>
+> Redundant change?
+>
+> >   */
+> >  #include <linux/device.h>
+> >  #include <linux/dma-buf.h>
+> > diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
+> > index 6b0f0d01ebdf..975500b2553e 100644
+> > --- a/include/linux/tee_drv.h
+> > +++ b/include/linux/tee_drv.h
+> > @@ -1,6 +1,6 @@
+> >  /* SPDX-License-Identifier: GPL-2.0-only */
+> >  /*
+> > - * Copyright (c) 2015-2016, Linaro Limited
+> > + * Copyright (c) 2015-2022 Linaro Limited
+>
+> Ditto?
+>
+> -Sumit
+>
+> >   */
+> >
+> >  #ifndef __TEE_DRV_H
+> > --
+> > 2.31.1
+> >

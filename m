@@ -2,114 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D7B49E944
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A6D49E94D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243076AbiA0RrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:47:10 -0500
-Received: from mga14.intel.com ([192.55.52.115]:23995 "EHLO mga14.intel.com"
+        id S233659AbiA0RxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:53:10 -0500
+Received: from mga03.intel.com ([134.134.136.65]:12501 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229956AbiA0RrJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:47:09 -0500
+        id S229793AbiA0RxI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 12:53:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643305629; x=1674841629;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q7j840C1wGJf53Hp/9GYEyeHEbOI9B1npOOT1aGZzHw=;
-  b=X0pRk6KlD84uVEK3t7GpkcQA24TRapxBRor+F+7oQutvu4sxn8xNFUmZ
-   Lz3XUh2X7D56hqXrB2SquJ9a6YOSsJF/AiSkLR4Lqh6p8CIvEuQsBMqeK
-   o75Ym3ZyXpTODxo/6hEzjolrbK7ChRQoC8gBTfHShENRc2u0haPiHVrBp
-   PH9RmEEgG3eS7+OnPjiHZogHveW5+E9LxDZnbB7SYb4GjpbXJaPdXYfa6
-   q8vubjdTsYAF3oqXZPh8NYcpbjD8Z8zr3X3CuGN7u5zpllxyOye7YrC0y
-   4HrSR8owTxQqxCyJXuh2ytOg2IhqxHWzzAmoi+B2eoqJh3C0eQ/vq07Yw
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="247143734"
+  t=1643305988; x=1674841988;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tCh3KeanZj/ZPm+lHCxPp9c/l5PtX+90oCV0K8T9uTU=;
+  b=e3CpjnlC/UmP1Jeyk04k59qqVYFqmrlsHru//8anboxXb59akmyf9rRM
+   ny2MNvgB/c02XcoZ4iKtL9b4VFxQXctTacvNfUhZZnqU7iIQt4CRUCJo9
+   LIIhyLY52oGykbv9WBVE7Frf7rEmJxfZNYZc2z/camD/waxUggUdqV3Jh
+   i3RG6hGus3pttkbX09h7W+ky5I0MSyR9Gd5zRSMJPoq9PARYvl5kkEBhw
+   cBsLV3d/KJlhd0pIDxSBDRrfRFEnM5EnRJXi+TL0J1LRVNYahECSE7CAu
+   P/2kQfRAZO0cmBxAPBPxTglprWA4mubova6NpbHKsaHMCB4cIcYoW22YU
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246868356"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="247143734"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:47:09 -0800
+   d="scan'208";a="246868356"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:53:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="563874781"
+   d="scan'208";a="674795706"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Jan 2022 09:47:06 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 27 Jan 2022 09:53:06 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nD8rR-000Msc-PJ; Thu, 27 Jan 2022 17:47:05 +0000
-Date:   Fri, 28 Jan 2022 01:46:40 +0800
+        id 1nD8xF-000Msy-Vb; Thu, 27 Jan 2022 17:53:05 +0000
+Date:   Fri, 28 Jan 2022 01:52:15 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>, hch@lst.de, jgg@nvidia.com,
-        jani.nikula@linux.intel.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Zhi Wang <zhi.wang.linux@gmail.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Terrence Xu <terrence.xu@intel.com>,
-        intel-gvt-dev@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH 1/3] i915/gvt: Introduce the mmio_table.c to
- support VFIO new mdev API
-Message-ID: <202201280121.YX5gboDp-lkp@intel.com>
-References: <20220127120508.11330-1-zhi.a.wang@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ da123016ca8cb5697366c0b2dd55059b976e67e4
+Message-ID: <61f2dbcf.sgmCGEPyJMfnjwWR%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127120508.11330-1-zhi.a.wang@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: da123016ca8cb5697366c0b2dd55059b976e67e4  rcu-tasks: Fix computation of CPU-to-list shift counts
 
-I love your patch! Perhaps something to improve:
+elapsed time: 728m
 
-[auto build test WARNING on drm-tip/drm-tip]
-[also build test WARNING on next-20220127]
-[cannot apply to drm-intel/for-linux-next hch-configfs/for-next v5.17-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+configs tested: 201
+configs skipped: 3
 
-url:    https://github.com/0day-ci/linux/commits/Zhi-Wang/i915-gvt-Introduce-the-mmio_table-c-to-support-VFIO-new-mdev-API/20220127-200727
-base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220128/202201280121.YX5gboDp-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f32dccb9a43b02ce4e540d6ba5dbbdb188f2dc7d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/533f92651a7a56481a053f1e04dc5a5ec024ffb9
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Zhi-Wang/i915-gvt-Introduce-the-mmio_table-c-to-support-VFIO-new-mdev-API/20220127-200727
-        git checkout 533f92651a7a56481a053f1e04dc5a5ec024ffb9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20220124
+powerpc              randconfig-c003-20220124
+m68k                            q40_defconfig
+powerpc                 linkstation_defconfig
+arm                         s3c6400_defconfig
+m68k                           sun3_defconfig
+arm                        oxnas_v6_defconfig
+m68k                          multi_defconfig
+sparc                            allyesconfig
+powerpc                       ppc64_defconfig
+m68k                        stmark2_defconfig
+xtensa                  nommu_kc705_defconfig
+mips                         rt305x_defconfig
+arm                            zeus_defconfig
+nios2                         10m50_defconfig
+xtensa                              defconfig
+arc                        vdk_hs38_defconfig
+ia64                        generic_defconfig
+sh                           sh2007_defconfig
+um                                  defconfig
+sh                          rsk7269_defconfig
+parisc                generic-64bit_defconfig
+mips                        bcm47xx_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+m68k                          hp300_defconfig
+nds32                               defconfig
+sh                ecovec24-romimage_defconfig
+m68k                       m5249evb_defconfig
+arm                             rpc_defconfig
+xtensa                  audio_kc705_defconfig
+mips                         cobalt_defconfig
+powerpc                      makalu_defconfig
+powerpc                     tqm8541_defconfig
+arc                 nsimosci_hs_smp_defconfig
+arm                         lubbock_defconfig
+riscv                            allyesconfig
+powerpc                     rainier_defconfig
+sparc                       sparc64_defconfig
+mips                    maltaup_xpa_defconfig
+arm                          pxa3xx_defconfig
+powerpc                      pasemi_defconfig
+m68k                       m5208evb_defconfig
+arc                            hsdk_defconfig
+arm                            hisi_defconfig
+sh                   sh7724_generic_defconfig
+powerpc                      ppc6xx_defconfig
+arc                              alldefconfig
+arc                        nsimosci_defconfig
+sparc64                          alldefconfig
+sh                            migor_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                      tqm8xx_defconfig
+h8300                            alldefconfig
+sh                        apsh4ad0a_defconfig
+xtensa                    xip_kc705_defconfig
+h8300                     edosk2674_defconfig
+powerpc                     pq2fads_defconfig
+powerpc                  storcenter_defconfig
+sh                             shx3_defconfig
+sh                             espt_defconfig
+powerpc                 mpc837x_rdb_defconfig
+arm                           corgi_defconfig
+arm                          pxa910_defconfig
+powerpc                  iss476-smp_defconfig
+arm                  randconfig-c002-20220127
+arm                  randconfig-c002-20220124
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20220124
+x86_64               randconfig-a003-20220124
+x86_64               randconfig-a001-20220124
+x86_64               randconfig-a004-20220124
+x86_64               randconfig-a005-20220124
+x86_64               randconfig-a006-20220124
+i386                 randconfig-a002-20220124
+i386                 randconfig-a005-20220124
+i386                 randconfig-a003-20220124
+i386                 randconfig-a004-20220124
+i386                 randconfig-a001-20220124
+i386                 randconfig-a006-20220124
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220127
+arc                  randconfig-r043-20220127
+arc                  randconfig-r043-20220124
+s390                 randconfig-r044-20220127
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/gvt/handlers.c:45:6: warning: no previous prototype for function 'intel_gvt_match_device' [-Wmissing-prototypes]
-   bool intel_gvt_match_device(struct intel_gvt *gvt,
-        ^
-   drivers/gpu/drm/i915/gvt/handlers.c:45:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool intel_gvt_match_device(struct intel_gvt *gvt,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/intel_gvt_match_device +45 drivers/gpu/drm/i915/gvt/handlers.c
-
-12d14cc43b3470 Zhi Wang 2016-08-30  44  
-12d14cc43b3470 Zhi Wang 2016-08-30 @45  bool intel_gvt_match_device(struct intel_gvt *gvt,
-12d14cc43b3470 Zhi Wang 2016-08-30  46  		unsigned long device)
-12d14cc43b3470 Zhi Wang 2016-08-30  47  {
-533f92651a7a56 Zhi Wang 2022-01-27  48  	return intel_gvt_get_device_type(gvt->gt->i915) & device;
-12d14cc43b3470 Zhi Wang 2016-08-30  49  }
-12d14cc43b3470 Zhi Wang 2016-08-30  50  
+clang tested configs:
+arm                  randconfig-c002-20220124
+riscv                randconfig-c006-20220124
+i386                 randconfig-c001-20220124
+powerpc              randconfig-c003-20220124
+mips                 randconfig-c004-20220124
+x86_64               randconfig-c007-20220124
+arm                  colibri_pxa300_defconfig
+mips                         tb0219_defconfig
+mips                          malta_defconfig
+powerpc                 mpc836x_mds_defconfig
+powerpc                   bluestone_defconfig
+mips                           ip27_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                    socrates_defconfig
+powerpc                      obs600_defconfig
+arm                            mmp2_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                   microwatt_defconfig
+mips                     loongson2k_defconfig
+arm                        neponset_defconfig
+powerpc                     kmeter1_defconfig
+arm                    vt8500_v6_v7_defconfig
+powerpc                          g5_defconfig
+powerpc                      acadia_defconfig
+arm                        magician_defconfig
+mips                        omega2p_defconfig
+i386                             allyesconfig
+powerpc                      walnut_defconfig
+powerpc                     kilauea_defconfig
+powerpc               mpc834x_itxgp_defconfig
+powerpc                      katmai_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a011-20220124
+x86_64               randconfig-a013-20220124
+x86_64               randconfig-a015-20220124
+x86_64               randconfig-a016-20220124
+x86_64               randconfig-a014-20220124
+x86_64               randconfig-a012-20220124
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                 randconfig-a011-20220124
+i386                 randconfig-a016-20220124
+i386                 randconfig-a013-20220124
+i386                 randconfig-a014-20220124
+i386                 randconfig-a015-20220124
+i386                 randconfig-a012-20220124
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+riscv                randconfig-r042-20220124
+hexagon              randconfig-r045-20220124
+hexagon              randconfig-r045-20220127
+hexagon              randconfig-r041-20220124
+hexagon              randconfig-r041-20220127
+riscv                randconfig-r042-20220126
+s390                 randconfig-r044-20220126
+s390                 randconfig-r044-20220124
+hexagon              randconfig-r045-20220126
+hexagon              randconfig-r041-20220126
+hexagon              randconfig-r045-20220125
+hexagon              randconfig-r041-20220125
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

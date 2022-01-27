@@ -2,148 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD71449E4D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF40549E4D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242524AbiA0Ojc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 09:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
+        id S242528AbiA0Oks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 09:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242440AbiA0Oja (ORCPT
+        with ESMTP id S231443AbiA0Okr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 09:39:30 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4ED3C061747;
-        Thu, 27 Jan 2022 06:39:29 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id o12so5695802lfg.12;
-        Thu, 27 Jan 2022 06:39:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XkYKE/mqIw+ZogEPzGoXmtOQI8nkKTmA4V70TLbVWS4=;
-        b=BHb2Xn1jq66/9MHahrzGm/gWUKtVbh/58wKW18vGWzni3fO5qyqP4VG1OOnOie8Jsh
-         gDERoDSbSutwAXYx2C5vNn4TrrwM4BpgdHcNKbywEL+R5MYLhL5n2nGGvdHyYC3+WdiR
-         AH7kOLTk/zgQKoF333ryAx/KFlOhDG6pX/tZk4LwhLgv5peCfB01DtWBVE+9RHO5Zn9/
-         GlTTQk4e9TGZCrINPfliTtlCZdTAH9LmWOb+qXQAmfLULPmn+Omh2L6j2NgulGAPM/A+
-         p0mPzTS/Ny1WZgGK/AicqnPTN5Ub7NU4t23e3Ka67Gnz7TG7Nyg0lXeqh7s3FoDGgrJx
-         11/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XkYKE/mqIw+ZogEPzGoXmtOQI8nkKTmA4V70TLbVWS4=;
-        b=6iLmI2H/+JAizdRH6u1BkFYrXGezfYRXBsQmrG1wzIbN24qW/yFCoQz0+XMdIv+q73
-         FuLJ5a4+50vMIMcbDUB/qV0D637F9LN1XErH7td7BBURsprUfxL/Vs8dvCyhUGCxqcCE
-         X62D+ivGdSIulisip3vQj/PZLdqlCDRoPN3p5EG08/VUkKboGb4lMIovRmdkGOSgYqKt
-         c4BJQuN+8rVdRv+010k6M0EL+wxXNxw4Gapg1Rz6P5RoGtHOXIzUkzrk7s/NM0TXJqQy
-         rDgvK3mN8qGrqCpPe9PfIMPNpmjJmsKQy9qY+IyYOt72Anjm6/3xMzxyhS8tH8g5LYKz
-         Y2Nw==
-X-Gm-Message-State: AOAM533hWHQ1QUAKT+lgDSES8w8zPc2JK3tXStRuzgstZIx7CvVncyGb
-        cTyGmBUc2MqLgz77jeCl0k8=
-X-Google-Smtp-Source: ABdhPJy1MhVvMOXi8UxQ8s4idXCyJ+ifGIsp8CpwyHRf9+W1A9LbFInI9I0x2geweWfK/i1YhzfC+Q==
-X-Received: by 2002:a05:6512:3d1c:: with SMTP id d28mr2997039lfv.135.1643294367899;
-        Thu, 27 Jan 2022 06:39:27 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-126.dynamic.spd-mgts.ru. [109.252.138.126])
-        by smtp.googlemail.com with ESMTPSA id r13sm476323lfr.65.2022.01.27.06.39.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 06:39:22 -0800 (PST)
-Message-ID: <e8d3ca39-ddeb-2c21-6000-1cc65da57915@gmail.com>
-Date:   Thu, 27 Jan 2022 17:39:15 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 04/21] kernel: Add combined power-off+restart handler
- call chain API
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Thu, 27 Jan 2022 09:40:47 -0500
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE88C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 06:40:46 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 4BEBCD8B22F;
+        Thu, 27 Jan 2022 15:40:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1643294441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OkaYBUaQDMs19i4HXWrJsJm9o280IUe9ric8r65dz6o=;
+        b=b3G9grRz8fhqkUesaxFiZYnVSzSaACXLpHjBzkwG+iE6FOB6Cmuw+Oy3MuAw6tkBb6NOsL
+        wUO74jv79omeTLK4hbzu5aKyLqYQkvwFVJ1iC3lvAQGuk4t6AjRP5yPPjznvIcg+h89tMJ
+        HGbRVAy8T9dtZ1WaUSRHpoK6niUcv1U=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20211212210309.9851-1-digetx@gmail.com>
- <20211212210309.9851-5-digetx@gmail.com> <Ydofs2CIfA+r5KAz@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <Ydofs2CIfA+r5KAz@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH 1/7] genirq: Provide generic_handle_irq_safe().
+Date:   Thu, 27 Jan 2022 15:40:39 +0100
+Message-ID: <5753562.DvuYhMxLoT@natalenko.name>
+In-Reply-To: <20220127113303.3012207-2-bigeasy@linutronix.de>
+References: <20220127113303.3012207-1-bigeasy@linutronix.de> <20220127113303.3012207-2-bigeasy@linutronix.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Michał,
+Hello.
 
-09.01.2022 02:35, Michał Mirosław пишет:
-> BTW, I couldn't find a right description of my idea of unifying the
-> chains before, so let me sketch it now.
-> 
-> The idea is to have a single system-off chain in which the callback
-> gets a mode ({QUERY_*, PREP_*, DO_*} for each of {*_REBOOT, *_POWEROFF, ...?).
-> The QUERY_* calls would be made in can_kernel_reboot/poweroff(): all
-> would be called, and if at least one returned true, then the shutdown
-> mode would continue. All of PREP_* would be called then. After that
-> all DO_* would be tried until one doesn't return (succeeded or broke
-> the system hard). Classic for(;;); could be a final fallback for the
-> case where arch/machine (lowest priority) call would return instead
-> of halting the system in machine-dependent way. The QUERY and PREP
-> stages could be combined, but I haven't thought about it enough to
-> see what conditions would need to be imposed on the callbacks in
-> that case (maybe it's not worth the trouble, since it isn't a fast
-> path anyway?). The goal here is to have less (duplicated) code in
-> kernel, but otherwise it seems equivalent to your API proposal.
+On =C4=8Dtvrtek 27. ledna 2022 12:32:57 CET Sebastian Andrzej Siewior wrote:
+> Provide generic_handle_irq_safe() which can be used can used from any
+> context.
+>=20
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>  include/linux/irqdesc.h |  1 +
+>  kernel/irq/irqdesc.c    | 21 +++++++++++++++++++++
+>  2 files changed, 22 insertions(+)
+>=20
+> diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+> index 93d270ca0c567..a77584593f7d1 100644
+> --- a/include/linux/irqdesc.h
+> +++ b/include/linux/irqdesc.h
+> @@ -160,6 +160,7 @@ static inline void generic_handle_irq_desc(struct irq=
+_desc *desc)
+> =20
+>  int handle_irq_desc(struct irq_desc *desc);
+>  int generic_handle_irq(unsigned int irq);
+> +int generic_handle_irq_safe(unsigned int irq);
+> =20
+>  #ifdef CONFIG_IRQ_DOMAIN
+>  /*
+> diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+> index 2267e6527db3c..97223df2f460e 100644
+> --- a/kernel/irq/irqdesc.c
+> +++ b/kernel/irq/irqdesc.c
+> @@ -662,6 +662,27 @@ int generic_handle_irq(unsigned int irq)
+>  }
+>  EXPORT_SYMBOL_GPL(generic_handle_irq);
+> =20
+> +/**
+> + * generic_handle_irq_safe - Invoke the handler for a particular irq
+> + * @irq:	The irq number to handle
+> + *
+> + * Returns:	0 on success, or -EINVAL if conversion has failed
+> + *
+> + * This function must be called either from an IRQ context with irq regs
+> + * initialized or with care from any context.
+> + */
+> +int generic_handle_irq_safe(unsigned int irq)
+> +{
+> +	unsigned long flags;
+> +	int ret;
+> +
+> +	local_irq_save(flags);
+> +	ret =3D handle_irq_desc(irq_to_desc(irq));
+> +	local_irq_restore(flags);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(generic_handle_irq_safe);
+> +
+>  #ifdef CONFIG_IRQ_DOMAIN
+>  /**
+>   * generic_handle_domain_irq - Invoke the handler for a HW irq belonging
+>=20
 
-Thank you again for yours proposal! IMO, it's much more important to
-keep the core code simple and maintainable, rather than try to optimize
-it without a very good reason, given that this isn't a hot code path at
-all and saving a couple of bytes won't be noticeable. The poweroff,
-restart and reboot were separated before this series and I'm finding
-that it's easier to follow the code when it's structured that way. I'm
-not convinced that we need to change it.
+Reviewed-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+
+Thank you.
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
+

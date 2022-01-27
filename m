@@ -2,276 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A6D49E94D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8D149E94E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbiA0RxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:53:10 -0500
-Received: from mga03.intel.com ([134.134.136.65]:12501 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229793AbiA0RxI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:53:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643305988; x=1674841988;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tCh3KeanZj/ZPm+lHCxPp9c/l5PtX+90oCV0K8T9uTU=;
-  b=e3CpjnlC/UmP1Jeyk04k59qqVYFqmrlsHru//8anboxXb59akmyf9rRM
-   ny2MNvgB/c02XcoZ4iKtL9b4VFxQXctTacvNfUhZZnqU7iIQt4CRUCJo9
-   LIIhyLY52oGykbv9WBVE7Frf7rEmJxfZNYZc2z/camD/waxUggUdqV3Jh
-   i3RG6hGus3pttkbX09h7W+ky5I0MSyR9Gd5zRSMJPoq9PARYvl5kkEBhw
-   cBsLV3d/KJlhd0pIDxSBDRrfRFEnM5EnRJXi+TL0J1LRVNYahECSE7CAu
-   P/2kQfRAZO0cmBxAPBPxTglprWA4mubova6NpbHKsaHMCB4cIcYoW22YU
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246868356"
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="246868356"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:53:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="674795706"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Jan 2022 09:53:06 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nD8xF-000Msy-Vb; Thu, 27 Jan 2022 17:53:05 +0000
-Date:   Fri, 28 Jan 2022 01:52:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- da123016ca8cb5697366c0b2dd55059b976e67e4
-Message-ID: <61f2dbcf.sgmCGEPyJMfnjwWR%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S237529AbiA0RxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231817AbiA0RxJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 12:53:09 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04F6C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:53:09 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id s1so3155091ilj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:53:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=irEE7yHILyJWoTqBD2Snz597LhBeTSpmicRdNJceySU=;
+        b=WaoWsAgLDsn8+cDXwJGuBSwy822bEXB3Sr5ofxaHfQSg7Gu+gT6bYzIxtbbeA7LcAc
+         rhYG211svtnFRxmgpOVlYL0RNEfxluZbJKmoK7IwSwPASU++F88KcAnU9ab9ZuRbs3Gp
+         SEKa+Jd+5CHfIDx3N4JFN+KLiJ7wEUqIYq/gtogS9Sa6yh7oBfVQ3va15aJs5s9kUW4v
+         rVdjzODrABmhUZPQaTM87Q0iAMdVFm/ur7QCk13JE7p/3MMyCvTVsl2B7Xbx+SfxN4RK
+         4KkTUNGkprWu9S8CxGXGwj752zhjT12FxXO2SlU0lZfQiF6hBp2po442vmAKqp+imTiL
+         E56Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=irEE7yHILyJWoTqBD2Snz597LhBeTSpmicRdNJceySU=;
+        b=PbIQN02LfSDOcQ6HqIPOAWPO1iRueaOqVZKu4VI53pFQU37VcEhCpIJjaM+NeNZRyK
+         C8GswrkUUJ3UVPxLh0cnOJBCUuZq/jtrXicaFRtAQ0HGo1ALlVp9QGyFMxYhBObatAvM
+         kvSFw3W4dkAaRyXArMjqsFzLXi/qv4a7UPIB4ppTMDpv0SrExIB1fIHFzy1O/px3zURH
+         ZQWGzgF5pmSQcJxKoE5sMbEZmd8db3qse5qoNq7tR9r4dTm2TLtGmFyUqQrjs0DnFp0D
+         qBaXG7v/fB0Tt2sO5H8r45KsJkpvjau/CxyOBy9qj2tAaFKcabJG9Hxw9SldWwtgLC0D
+         6s0A==
+X-Gm-Message-State: AOAM531aYQj9uZh6M0z27mTPXkKkj+5YgTBpVIKN0/eMN7SdPb0Exq49
+        f4DUBq9ALXn40tu/3QSuP7cj6orKLGgZM3cmLPK6xw==
+X-Google-Smtp-Source: ABdhPJylTVfStujKAvnQnAOslIqzd/2GW4sVblM2ShOJLob04RtjYxUGCRV5LHSHyVj2VeZvQx7cZLbtNdgTd92UD/0=
+X-Received: by 2002:a05:6e02:1b81:: with SMTP id h1mr3315954ili.239.1643305988641;
+ Thu, 27 Jan 2022 09:53:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20220113180308.15610-1-mike.kravetz@oracle.com> <b476e461-aba9-e92b-d392-270029ab6b18@redhat.com>
+In-Reply-To: <b476e461-aba9-e92b-d392-270029ab6b18@redhat.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 27 Jan 2022 09:52:32 -0800
+Message-ID: <CAJHvVciKkrumi=WZE=NoQ1PYdYnu-UCV037HSTg_nUDDBe_gow@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/3] Add hugetlb MADV_DONTNEED support
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, Michal Hocko <mhocko@suse.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: da123016ca8cb5697366c0b2dd55059b976e67e4  rcu-tasks: Fix computation of CPU-to-list shift counts
+On Thu, Jan 27, 2022 at 3:57 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 13.01.22 19:03, Mike Kravetz wrote:
+> > Userfaultfd selftests for hugetlb does not perform UFFD_EVENT_REMAP
+> > testing.  However, mremap support was recently added in commit
+> > 550a7d60bd5e ("mm, hugepages: add mremap() support for hugepage backed
+> > vma").  While attempting to enable mremap support in the test, it was
+> > discovered that the mremap test indirectly depends on MADV_DONTNEED.
+> >
+> > hugetlb does not support MADV_DONTNEED.  However, the only thing
+> > preventing support is a check in can_madv_lru_vma().  Simply removing
+> > the check will enable support.
+> >
+> > This is sent as a RFC because there is no existing use case calling
+> > for hugetlb MADV_DONTNEED support except possibly the userfaultfd test.
+> > However, adding support makes sense as it is fairly trivial and brings
+> > hugetlb functionality more in line with 'normal' memory.
+> >
+>
+> Just a note:
+>
+> QEMU doesn't use huge anonymous memory directly (MAP_ANON | MAP_HUGE...)
+> but instead always goes either via hugetlbfs or via memfd.
+>
+> For MAP_PRIVATE hugetlb mappings, fallocate(FALLOC_FL_PUNCH_HOLE) seems
+> to get the job done (IOW: also discards private anon pages). See the
+> comments in the QEMU code below. I remember that that is somewhat
+> inconsistent. For ordinary MAP_PRIVATE mapped files I remember that we
+> always need fallocate(FALLOC_FL_PUNCH_HOLE) + madvise(QEMU_MADV_DONTNEED)
+> to make sure
+>
+> a) All file pages are removed
+> b) All private anon pages are removed
+>
+> IIRC hugetlbfs really is different in that regard, but maybe other fs
+> behave similarly.
+>
+> That's why QEMU was able to live for now without MADV_DONTNEED support
+> for hugetlbfs and most probably won't ever need it.
 
-elapsed time: 728m
+Agreed, all of the production use cases I'm aware of use hugetlbfs,
+not MAP_HUGE...
 
-configs tested: 201
-configs skipped: 3
+But, I would say this is convenient for testing purposes. It's
+slightly more convenient to not have to mount hugetlbfs / perform the
+associated setup for tests.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Perhaps that's only a small motivation for enabling this, but then
+again Mike's patch to do so is likewise very small. :)
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-m68k                            q40_defconfig
-powerpc                 linkstation_defconfig
-arm                         s3c6400_defconfig
-m68k                           sun3_defconfig
-arm                        oxnas_v6_defconfig
-m68k                          multi_defconfig
-sparc                            allyesconfig
-powerpc                       ppc64_defconfig
-m68k                        stmark2_defconfig
-xtensa                  nommu_kc705_defconfig
-mips                         rt305x_defconfig
-arm                            zeus_defconfig
-nios2                         10m50_defconfig
-xtensa                              defconfig
-arc                        vdk_hs38_defconfig
-ia64                        generic_defconfig
-sh                           sh2007_defconfig
-um                                  defconfig
-sh                          rsk7269_defconfig
-parisc                generic-64bit_defconfig
-mips                        bcm47xx_defconfig
-arm                           sunxi_defconfig
-arm                        multi_v7_defconfig
-m68k                          hp300_defconfig
-nds32                               defconfig
-sh                ecovec24-romimage_defconfig
-m68k                       m5249evb_defconfig
-arm                             rpc_defconfig
-xtensa                  audio_kc705_defconfig
-mips                         cobalt_defconfig
-powerpc                      makalu_defconfig
-powerpc                     tqm8541_defconfig
-arc                 nsimosci_hs_smp_defconfig
-arm                         lubbock_defconfig
-riscv                            allyesconfig
-powerpc                     rainier_defconfig
-sparc                       sparc64_defconfig
-mips                    maltaup_xpa_defconfig
-arm                          pxa3xx_defconfig
-powerpc                      pasemi_defconfig
-m68k                       m5208evb_defconfig
-arc                            hsdk_defconfig
-arm                            hisi_defconfig
-sh                   sh7724_generic_defconfig
-powerpc                      ppc6xx_defconfig
-arc                              alldefconfig
-arc                        nsimosci_defconfig
-sparc64                          alldefconfig
-sh                            migor_defconfig
-openrisc                 simple_smp_defconfig
-powerpc                      tqm8xx_defconfig
-h8300                            alldefconfig
-sh                        apsh4ad0a_defconfig
-xtensa                    xip_kc705_defconfig
-h8300                     edosk2674_defconfig
-powerpc                     pq2fads_defconfig
-powerpc                  storcenter_defconfig
-sh                             shx3_defconfig
-sh                             espt_defconfig
-powerpc                 mpc837x_rdb_defconfig
-arm                           corgi_defconfig
-arm                          pxa910_defconfig
-powerpc                  iss476-smp_defconfig
-arm                  randconfig-c002-20220127
-arm                  randconfig-c002-20220124
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20220124
-x86_64               randconfig-a003-20220124
-x86_64               randconfig-a001-20220124
-x86_64               randconfig-a004-20220124
-x86_64               randconfig-a005-20220124
-x86_64               randconfig-a006-20220124
-i386                 randconfig-a002-20220124
-i386                 randconfig-a005-20220124
-i386                 randconfig-a003-20220124
-i386                 randconfig-a004-20220124
-i386                 randconfig-a001-20220124
-i386                 randconfig-a006-20220124
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220127
-arc                  randconfig-r043-20220127
-arc                  randconfig-r043-20220124
-s390                 randconfig-r044-20220127
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
 
-clang tested configs:
-arm                  randconfig-c002-20220124
-riscv                randconfig-c006-20220124
-i386                 randconfig-c001-20220124
-powerpc              randconfig-c003-20220124
-mips                 randconfig-c004-20220124
-x86_64               randconfig-c007-20220124
-arm                  colibri_pxa300_defconfig
-mips                         tb0219_defconfig
-mips                          malta_defconfig
-powerpc                 mpc836x_mds_defconfig
-powerpc                   bluestone_defconfig
-mips                           ip27_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                    socrates_defconfig
-powerpc                      obs600_defconfig
-arm                            mmp2_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                   microwatt_defconfig
-mips                     loongson2k_defconfig
-arm                        neponset_defconfig
-powerpc                     kmeter1_defconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                          g5_defconfig
-powerpc                      acadia_defconfig
-arm                        magician_defconfig
-mips                        omega2p_defconfig
-i386                             allyesconfig
-powerpc                      walnut_defconfig
-powerpc                     kilauea_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                      katmai_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64               randconfig-a011-20220124
-x86_64               randconfig-a013-20220124
-x86_64               randconfig-a015-20220124
-x86_64               randconfig-a016-20220124
-x86_64               randconfig-a014-20220124
-x86_64               randconfig-a012-20220124
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                 randconfig-a011-20220124
-i386                 randconfig-a016-20220124
-i386                 randconfig-a013-20220124
-i386                 randconfig-a014-20220124
-i386                 randconfig-a015-20220124
-i386                 randconfig-a012-20220124
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-riscv                randconfig-r042-20220124
-hexagon              randconfig-r045-20220124
-hexagon              randconfig-r045-20220127
-hexagon              randconfig-r041-20220124
-hexagon              randconfig-r041-20220127
-riscv                randconfig-r042-20220126
-s390                 randconfig-r044-20220126
-s390                 randconfig-r044-20220124
-hexagon              randconfig-r045-20220126
-hexagon              randconfig-r041-20220126
-hexagon              randconfig-r045-20220125
-hexagon              randconfig-r041-20220125
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+>
+> ...
+>        /* The logic here is messy;
+>          *    madvise DONTNEED fails for hugepages
+>          *    fallocate works on hugepages and shmem
+>          *    shared anonymous memory requires madvise REMOVE
+>          */
+>         need_madvise = (rb->page_size == qemu_host_page_size);
+>         need_fallocate = rb->fd != -1;
+>         if (need_fallocate) {
+>             /* For a file, this causes the area of the file to be zero'd
+>              * if read, and for hugetlbfs also causes it to be unmapped
+>              * so a userfault will trigger.
+>              */
+> #ifdef CONFIG_FALLOCATE_PUNCH_HOLE
+>             ret = fallocate(rb->fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+>                             start, length);
+>             if (ret) {
+>                 ret = -errno;
+>                 error_report("ram_block_discard_range: Failed to fallocate "
+>                              "%s:%" PRIx64 " +%zx (%d)",
+>                              rb->idstr, start, length, ret);
+>                 goto err;
+>             }
+> #else
+>             ret = -ENOSYS;
+>             error_report("ram_block_discard_range: fallocate not available/file"
+>                          "%s:%" PRIx64 " +%zx (%d)",
+>                          rb->idstr, start, length, ret);
+>             goto err;
+> #endif
+>         }
+>         if (need_madvise) {
+>             /* For normal RAM this causes it to be unmapped,
+>              * for shared memory it causes the local mapping to disappear
+>              * and to fall back on the file contents (which we just
+>              * fallocate'd away).
+>              */
+> #if defined(CONFIG_MADVISE)
+>             if (qemu_ram_is_shared(rb) && rb->fd < 0) {
+>                 ret = madvise(host_startaddr, length, QEMU_MADV_REMOVE);
+>             } else {
+>                 ret = madvise(host_startaddr, length, QEMU_MADV_DONTNEED);
+>             }
+>             if (ret) {
+>                 ret = -errno;
+>                 error_report("ram_block_discard_range: Failed to discard range "
+>                              "%s:%" PRIx64 " +%zx (%d)",
+>                              rb->idstr, start, length, ret);
+>                 goto err;
+>             }
+> #else
+> ...
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>

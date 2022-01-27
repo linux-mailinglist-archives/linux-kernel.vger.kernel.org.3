@@ -2,88 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 410A149EAA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA1149EAA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245017AbiA0S4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 13:56:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
+        id S244987AbiA0SyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbiA0S43 (ORCPT
+        with ESMTP id S232813AbiA0SyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:56:29 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D2EC061714;
-        Thu, 27 Jan 2022 10:56:28 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id r59so3813281pjg.4;
-        Thu, 27 Jan 2022 10:56:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=IitcHpxexEeeK4nrp3ByNY1yDn5cj29OgUtFySczhTw=;
-        b=fa7zc/rDd3aBFao+quSyUNqbDWm6bTGg1m4U2ge4JR3ErWEYq0OIOlhR39TkA1eM5H
-         2S8UzO8wA55ZzsBLO/pC/TYDhCDH+GywHxNiSz7jkpc+TeC9ehYXmBcQ0VnfETfsa58D
-         hivrvvdFjyxxV2xlTbCPKGi4nMKXepxBEmwWgQqBRAGUxb0OWjaQ1WkcNim5JczTZAhZ
-         a/Yq3dMdAZGmw0FOe7Qr8UzwMmD5KivPowAxZZnAfeP821mXSR8ak1tIGaivjesDwFus
-         Yz5/ju9EVmry24BNT+wunCYy7xJ/En9Klcs044QdKHVYtje3XmI6+PpmVzY3A6KQKJw1
-         ViTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=IitcHpxexEeeK4nrp3ByNY1yDn5cj29OgUtFySczhTw=;
-        b=J/LiVZtHKj7+lkgNRaniJArcyNwyeeEjVP9VpGSLOaw2xk4PxNVpuz5PWZk+gWGSVE
-         35FV2Hj4/HSalwtnnouPBqrbeLfuJ4MWv9ci2Lo5kccMYRL+ysHxwrNjOk81uL2qrffY
-         aaKPuhSljU14oewKtaLYtBBWPrLejmkQpBcp4DZw5M3RlO4OhEOYFZwLYq9bXa/Uwjaq
-         K/Z1p5qFDURDjZuj++sL4Etc0OOAVj2dELwjMYFXEFkLSLMZ6VlKToAd6e3RYGdByEOL
-         la7mnLPRlp0P04z9Qn2XBDZM8E1AYgkXwVevDpU9SdAQ2x7na6+ch3J+at+KwyOcEmwK
-         KOxA==
-X-Gm-Message-State: AOAM531RahlESMz3RG0G3QBSvTkoyjZT3kjgLx1K0cdwijt/DQPqez2j
-        IR7wFt8KGCr8lpvreHmdsmk=
-X-Google-Smtp-Source: ABdhPJx0hbzrGwPn48xF6CGrnKtcUaUxYpjtw2E+F0k9HUnNjm3tC2vvxUylPCyMvNuYLuwn6GM2bA==
-X-Received: by 2002:a17:90b:102:: with SMTP id p2mr5623220pjz.84.1643309788252;
-        Thu, 27 Jan 2022 10:56:28 -0800 (PST)
-Received: from mail.broadcom.net ([192.19.11.250])
-        by smtp.gmail.com with ESMTPSA id e15sm6409439pfv.59.2022.01.27.10.56.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 10:56:28 -0800 (PST)
-From:   Kamal Dasu <kdasu.kdev@gmail.com>
-To:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: [PATCH] spi: bcm-qspi: check for valid cs before applying chip select
-Date:   Thu, 27 Jan 2022 13:53:59 -0500
-Message-Id: <20220127185359.27322-1-kdasu.kdev@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 27 Jan 2022 13:54:02 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B3DC061714;
+        Thu, 27 Jan 2022 10:54:02 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 076B237C;
+        Thu, 27 Jan 2022 18:54:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 076B237C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1643309642; bh=jtk/KW+m1IYL06hk5WX5d6y8yOstM3j8jRuf438cZ5w=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=LfYJQ5qH671bolRDkVUx5Jka9GmV8s9BWDtBhu5ot9FYvIJ//RLhKItmYhoaOu4LP
+         YUiUC9WsmK1wZ+PP7mJemvWQjDs2CvwrONLllC21Sf/Q97OL5DjmTdStL0ACgTYbcM
+         tmoEqhbvmClTDWAOL2cmjHb6BjaUmnnBRiWBQVhH1UrWtIaOvOQlJpVClq2Q1LN/Y8
+         L5z0RlGz6s5H2BBh77TiHDqu12WMeiUUh61uP/DbatrVigc3ILU1+edVEE8klFs0A3
+         fXWdnxgNpnT3MT1KjyoWv/qbTsAe1jYuYMqcLE4LC/uHrnXvooRBkOYlOBjpsIUDzM
+         1WfM3vb6nSHDQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Florian Eckert <fe@dev.tdt.de>
+Subject: Re: [PATCH v2 1/1] docs: process: submitting-patches: Clarify the
+ Reported-by usage
+In-Reply-To: <1e2e99f6-e9bf-7d93-9629-3d70275c77f4@infradead.org>
+References: <20220127163258.48482-1-andriy.shevchenko@linux.intel.com>
+ <1e2e99f6-e9bf-7d93-9629-3d70275c77f4@infradead.org>
+Date:   Thu, 27 Jan 2022 11:54:33 -0700
+Message-ID: <87h79pqaae.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apply only valid chip select value. This change fixes case where chip
-select is set to initial value of '-1' during probe and  PM supend and
-subsequent resume can try to use the value with undefined behaviour.
-Also in case where gpio based chip select, the check in
-bcm_qspi_chip_select() shall prevent undefined behaviour on resume.
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
-Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
----
- drivers/spi/spi-bcm-qspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On 1/27/22 08:32, Andy Shevchenko wrote:
+>> It's unclear from "Submitting Patches" documentation that Reported-by
+>> is not supposed to be used against new features. (It's more clear
+>> in the section 5.4 "Patch formatting and changelogs" of the "A guide
+>> to the Kernel Development Process", where it suggests that change
+>> should fix something existing in the kernel. Clarify the Reported-by
+>> usage in the "Submitting Patches".
+>> 
+>> Reported-by: Florian Eckert <fe@dev.tdt.de>
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> ---
+>> v2: rephrased as suggested by Jonathan
+>>  Documentation/process/submitting-patches.rst | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+>> index 31ea120ce531..fb496b2ebfd3 100644
+>> --- a/Documentation/process/submitting-patches.rst
+>> +++ b/Documentation/process/submitting-patches.rst
+>> @@ -495,7 +495,8 @@ Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:
+>>  The Reported-by tag gives credit to people who find bugs and report them and it
+>>  hopefully inspires them to help us again in the future.  Please note that if
+>>  the bug was reported in private, then ask for permission first before using the
+>> -Reported-by tag.
+>> +Reported-by tag. The tag is intended for bugs; please do not use it to credit
+>> +feature requests.
+>>  
+>
+> LGTM.
+> Although it could refer to Suggested-by.  :)
+>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index c9a769b8594b..86c76211b3d3 100644
---- a/drivers/spi/spi-bcm-qspi.c
-+++ b/drivers/spi/spi-bcm-qspi.c
-@@ -585,7 +585,7 @@ static void bcm_qspi_chip_select(struct bcm_qspi *qspi, int cs)
- 	u32 rd = 0;
- 	u32 wr = 0;
- 
--	if (qspi->base[CHIP_SELECT]) {
-+	if (cs >= 0 && qspi->base[CHIP_SELECT]) {
- 		rd = bcm_qspi_read(qspi, CHIP_SELECT, 0);
- 		wr = (rd & ~0xff) | (1 << cs);
- 		if (rd == wr)
--- 
-2.17.1
+Applied, thanks.
 
+jon

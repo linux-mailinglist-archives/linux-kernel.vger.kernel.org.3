@@ -2,71 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D96549DA9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C946D49DA9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbiA0G1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 01:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbiA0G1P (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 01:27:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7779C061714;
-        Wed, 26 Jan 2022 22:27:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 26B39CE1F68;
-        Thu, 27 Jan 2022 06:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0B0C340E4;
-        Thu, 27 Jan 2022 06:27:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643264831;
-        bh=QGqOz4ZDf4nVB8gL1AxXDvBSwWaWQERKk7xslRGJ8rQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N8g/ED00AlAbfrHbrjW1D6kuHCe75G7Xly3p68HemZwwRPYWHYrX8WEtcGLzgrKPP
-         /5MFO93D8fkkai/b3aylIb0Yp2bmdtSSvKmqsutvH7I5T64NlqAPEf1a5/jgZyMam2
-         sG2n+9lmxc9u+inuFV3dVPv68gEOuYy+q8UKN8ZxyPIDEF6M0yfTUScmDYkGKXsGij
-         hhVm611wRHGhvRGKZ3z4MFUKV7DULybRKHCW8BTURRUMs9ULDYGQjHHhJfR82ad0/Q
-         1N4/DevuBv7nCdqlLGIhg2Iufc/ve03MxR6VnugwlU+lkBQ6PxTZMvlQqxjovKbxgJ
-         qHCd1R2tOD8jg==
-Date:   Thu, 27 Jan 2022 11:57:07 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Cc:     kishon@ti.com, p.zabel@pengutronix.de, balbi@kernel.org,
-        jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-phy@lists.infradead.org, khilman@baylibre.com
-Subject: Re: [PATCH v6 0/3] phy: amlogic: fix shared reset control use
-Message-ID: <YfI7O5EvRI+m+QAj@matsya>
-References: <20220111095255.176141-1-aouledameur@baylibre.com>
+        id S236691AbiA0G2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 01:28:33 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:43424 "EHLO cpanel.siel.si"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231461AbiA0G2a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 01:28:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=FgwRnq9LXy5OB93h4wH7N1/Jh1xMOSG6nh6fj6lu7CM=; b=cxVhi0uUtDf5c9OY3Z6Pt/TgaL
+        EyqOoz/lPQ82/opoxLAQnLkFd6Pnja/e6LUe7JK/ozaD2oKHKUEH78NBWEVaUqdZdPhSkESmCsTDH
+        mZXrzW7wdL47/5QmEhG/vf9eASkA9czB7xA4zD65lTKINmXc3LVh0QpSje04teTjvm2MJMLLfhSRW
+        erCq44jwGjGcxC94cTqHi87vUXaOi9P19k2RDgqCNm5d9nvCrFVDrkD9gtDUCjdcTOyxnxdXXK7Dr
+        lA64x1cDbb6AbrJ0qYhzltAHmJvewSdVpHaS08sdwTfKjbWUkwxvY8Vpe6QlXxkC62ivMUWqRxN2J
+        ToDvOmvg==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:51200 helo=[192.168.69.215])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1nCyGY-001dVz-Bq; Thu, 27 Jan 2022 07:28:25 +0100
+Subject: Re: [PATCH RESEND 1/2] ARM: dts: imx6: phyFLEX: add missing pmic mfd
+ subdevices
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     robh+dt@kernel.org, s.hauer@pengutronix.de,
+        devicetree@vger.kernel.org, festevam@gmail.com,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        y.bas@phytec.com
+References: <20211216115529.2331475-1-andrej.picej@norik.com>
+ <20220126092426.GJ4686@dragon>
+From:   Andrej Picej <andrej.picej@norik.com>
+Message-ID: <38498017-dd47-ac02-0db7-85cf7fc48a59@norik.com>
+Date:   Thu, 27 Jan 2022 07:28:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220111095255.176141-1-aouledameur@baylibre.com>
+In-Reply-To: <20220126092426.GJ4686@dragon>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-01-22, 10:52, Amjad Ouled-Ameur wrote:
-> This patchset fixes a usb suspend warning seen on the libretech-cc by
-> using reset_control_rearm() call of the reset framework API. 
-> This call allows a reset consummer to release the reset line even when 
-> just triggered so that it may be triggered again by other reset
-> consummers.
-> 
-> reset_control_(de)assert() calls are called, in some meson usb drivers, 
-> on a shared reset line when reset_control_reset has been used. This is not
-> allowed by the reset framework.
-> 
-> Finally the meson usb drivers are updated to use this new call, which
-> solves the suspend issue addressed by the previous reverted 
-> commit 7a410953d1fb ("usb: dwc3: meson-g12a: fix shared reset control
-> use").
+Hi Shawn,
 
-Applied, thanks
+On 26. 01. 22 10:24, Shawn Guo wrote:
+> On Thu, Dec 16, 2021 at 12:55:28PM +0100, Andrej Picej wrote:
+>> phyFLEX PMIC DA9063 has also RTC and watchdog support. Add both
+>> mfd subdevices so they can be used.
+>>
+>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>> ---
+>>   arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+>> index f3236204cb5a..2ec154756bbc 100644
+>> --- a/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+>> +++ b/arch/arm/boot/dts/imx6qdl-phytec-pfla02.dtsi
+>> @@ -205,6 +205,14 @@ vdd_mx6_high_reg: ldo11 {
+>>   				regulator-always-on;
+>>   			};
+>>   		};
+>> +
+>> +		pmic_rtc: rtc {
+> 
+> Maybe a more specific label like the following?
+> 
+> 		da9063_rtc: rtc
+> 
+> And it's more aligned with da9063_wdog below.
+> 
+>> +			compatible = "dlg,da9063-rtc";
+>> +		};
+>> +
+>> +		da9063_wdog: wdt {
+> 
+> watchdog for the node name.
+> 
 
--- 
-~Vinod
+I'll apply your suggestions and send v2.
+Do you agree that I also change the commit subject line to "ARM: dts: 
+imx6qdl-phytec: ...", as you suggested in patch 2/2?
+
+Thanks for your review.
+
+Andrej

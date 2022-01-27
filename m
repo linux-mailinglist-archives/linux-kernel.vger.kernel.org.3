@@ -2,199 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5BF49DBE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB5149DBD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:47:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237495AbiA0HsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 02:48:04 -0500
-Received: from mout.gmx.net ([212.227.15.19]:49881 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237509AbiA0HsB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 02:48:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643269658;
-        bh=B6O+fbNXpuVx/JeWAT/s1SRi+S3qIN/7KTiOemSzClQ=;
-        h=X-UI-Sender-Class:Date:From:To:CC:Subject:In-Reply-To:References;
-        b=LSyk+VLUeHop98U+fGWPlkh8FHD6XxyQEnlMf+afuZVoG90g+pD+sudMryMFrndTH
-         dlEcHIDS8EIGY0kKBbRkwu4aFKgLGbNFtWS9QDKkrzgbuU2Z6WP05ji7bkUWxIsjh3
-         8OXbZhT6yudW7ixlUojotWCt6iVec/E4fdKSExk8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [127.0.0.1] ([88.152.144.107]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1psI-1nFBMQ1R6m-002EiE; Thu, 27
- Jan 2022 08:47:38 +0100
-Date:   Thu, 27 Jan 2022 08:47:35 +0100
-From:   Heinrich Schuchardt <xypron.glpk@gmx.de>
-To:     Sunil V L <sunilvl@ventanamicro.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Abner Chang <abner.chang@hpe.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_1/1=5D_riscv/efi=5Fstub=3A_A?= =?US-ASCII?Q?dd_support_for_RISCV=5FEFI=5FBOOT=5FPROTOCOL?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220126110615.33371-2-sunilvl@ventanamicro.com>
-References: <20220126110615.33371-1-sunilvl@ventanamicro.com> <20220126110615.33371-2-sunilvl@ventanamicro.com>
-Message-ID: <667AE324-A8D2-41ED-B9DF-62750F3C2574@gmx.de>
+        id S237483AbiA0Hrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 02:47:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50178 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232172AbiA0Hrr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 02:47:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643269667;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xkdPq4yx3Zwg5TsWMNJ53xqznx4G+wL2Z4oOgHdThh4=;
+        b=FGCx5kuOiUQifFFTV0QbaTZCg4bozGiXTbF5WaJdWx6Q7Odc5j8yt9RwR2ubzUS7UxD15E
+        zqKtYR2dr/lKK1pO0SM2y3pIhJpr8drxisHclEVI60+Hhi2h6TCd7dmoijzzmHd7ovZ2tq
+        Q4D7YVTGNeDwV55yg9/zD5QM0z3kyHg=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-192-cVeggEZJOiKHSNWqUoY3yA-1; Thu, 27 Jan 2022 02:47:45 -0500
+X-MC-Unique: cVeggEZJOiKHSNWqUoY3yA-1
+Received: by mail-pj1-f69.google.com with SMTP id o72-20020a17090a0a4e00b001b4e5b5b6c0so1425155pjo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 23:47:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xkdPq4yx3Zwg5TsWMNJ53xqznx4G+wL2Z4oOgHdThh4=;
+        b=rB8F+bJPB6vYNjkcit45U6UZ36QG73jVTozowUitE6MUqXFLYgX11jR1xg2bXf6FS9
+         h/DqHJ9G2V7E8v3RDba7laD/Twq6koWq7IztEM/o7oNn1N4uqbNsW+m1MK2YKJeG3+cH
+         iYh2Ywak8R/Wvt1RfPM71L0NCaigczHkLyt1WxqavUkANFN5ndAX9Kdo6/F0VuWYwU8k
+         UQactHtPAI8Ee8VjQ5ZkHfe1S8uG+qKxiGkZY2sYA0RwqD7ERn1gbuSl6nefLFEuDIxg
+         YR+k7seb7P+3+hqMxAqZEFbpIdo3TfQPuIUqonJ0muQoPxkE9Tm4trhflQbftP1j9nsO
+         Nxew==
+X-Gm-Message-State: AOAM533WJf+UlsCahH5UiMOXZoHdweKr/6z27XLanwmFUAfsyyqTUGHR
+        4jOSC3vXnc2/BKj7vCODxXOShRYrFK/X8Zic0LUnYg9k8z03oofdJ/TqSznBQl+yftiRupZEHil
+        9LIMwr2QJXk60zIwdLEg46h3z
+X-Received: by 2002:a63:7d0b:: with SMTP id y11mr1940251pgc.402.1643269664432;
+        Wed, 26 Jan 2022 23:47:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwhkb6CFMMrOoWSQ7BaMpDPFHK9eL1ryoIoea8/zX+wWjUvBqsI5uIZGY8tiftBLWLZZexr9w==
+X-Received: by 2002:a63:7d0b:: with SMTP id y11mr1940238pgc.402.1643269664195;
+        Wed, 26 Jan 2022 23:47:44 -0800 (PST)
+Received: from [10.72.13.149] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id 25sm5282463pje.22.2022.01.26.23.47.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jan 2022 23:47:43 -0800 (PST)
+Message-ID: <acef3625-566b-6438-61a8-49d4363a148a@redhat.com>
+Date:   Thu, 27 Jan 2022 15:47:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:z73T+TjRtpbU/BjDJ+ZgfGzrDysqWANGnHJJ2QfyQymXFONDONt
- QsHYcTbfbjQMhbfcwAJ0zmgVGHUNEri9dgpf9fsB0UiFlR+OJX+M5h3c1+Svs71yiFKaUKb
- 9tusTCA/b5/v1ksQ4nPmHycsW/wJeAS5rD1K+ypQ9IwubrW5E1KTex4k29a7lIXj8tlQHKb
- ujRJ0GsYWMYuJrqRNjBrQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1KJIZ6Tb9vw=:sFqZ1jynooNFIrmQsVVFwg
- 3jq1YfXVGDvELQil/m+D2Vxj5brTOTMofT/JuZBV1zURAFEz22IHS5SBmviTvZocKI1LcquP4
- mHJwLhkMR35+54ILXIBcSW4Z4A9SlaSsQ1TncuZ0MY6KfVVxxtkW2bzEM8jpxb7IVu4XHrWA2
- nfuxPHk3+83R7mlp2H2SQdHNHg9DX1Y4xg1P0wr/dXVsJvsfsIEgm/MihXx1R7YqPV+dFCrtS
- 4N4l993AGjZN35wA11A+sS7hGVgmNuDI5IxDJjK6A9GeEoVxh03zCPliEEx6Ezun9Cj2kEpiL
- 3++WL6VaMpUvhBO/saw3IRHQXQUHwSPvRnQ2VCMNcbYIQg9NDTtOzHi8HHE7uYfM4456jApP9
- xVhF5VzEafwLkQdC3X2WEuhJcELjayLTU0siv2t6rZ/bvmuQkQ++Y1A6lPHdSDFg7ukk2hXp3
- ztptc7j72gP38i74YEtDvBKUdkPMIFOkeUugDqNDn6sIdv987sDjxNkeYYCSSnJkUetRCektw
- dYqm7g+6dDPalucjYzeVre8k3NzeHk7ufHDLP7GfoVXzZGjTuegQBV2nu4HJtJ9OzjwF7DtOe
- dJ1SVeTMMs8gsLJjlm14j+W8QzH4Y/1JYXBU1hbujo1z0BXFmYmiM94D1yYxJnP/7RaLGzRys
- xdRCGcX3hgn6xyzdGOeF7dAORbBs6u8ABUWwpc2aRiZx4GkraHivFDYGCczqQFHGQ6iAwG6Jo
- 7sYE0r7INcoi4IV3MwxprULnxjfRJpj23CncJeb+aa2d+vfNq0fSMrFbgA/cc8yU0kZlKveh5
- MLhHQHjintSks//uW61lGab9DF61SaR+fKpRkwtobH8W5D+DCyNtkhlNB09O5Mkt7FOZ/XN+m
- sprW5O8to1UE7+T0Ty6MW9qPr6Ku8Fiben9/cgzdUm82/r+g9m65WYwOSdxAUn63rzTsCyVQb
- L2lueE7oef3kO3rH72df0uiFA++szQh0o7ZK7uJtWVbCCnsdmXM/v6hs/1Se+ypczGSz1W50N
- eaHZ/OPsA3OrNaDa4M+d7J94AToafMtdDFWlEceAxzkDD1QLUX+5WIkFVb62twAwDyAWRil1q
- Co/eyePrKvv27Q=
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/4] drivers/net/virtio_net: Fixed padded vheader to
+ use v1 with hash.
+Content-Language: en-US
+To:     Andrew Melnychenko <andrew@daynix.com>, netdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        mst@redhat.com
+Cc:     yan@daynix.com, yuri.benditovich@daynix.com
+References: <20220117080009.3055012-1-andrew@daynix.com>
+ <20220117080009.3055012-2-andrew@daynix.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20220117080009.3055012-2-andrew@daynix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 26=2E Januar 2022 12:06:15 MEZ schrieb Sunil V L <sunilvl@ventanamicro=
-=2Ecom>:
->This patch adds the support for getting the boot hart ID in
->Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL=2E
 
-It would be helpful to add a link to the spec in the commit message and ma=
-ybe a comment that this protocol is needed for the ACPI use case=2E
-
+在 2022/1/17 下午4:00, Andrew Melnychenko 写道:
+> The header v1 provides additional info about RSS.
+> Added changes to computing proper header length.
+> In the next patches, the header may contain RSS hash info
+> for the hash population.
 >
->Signed-off-by: Sunil V L <sunilvl@ventanamicro=2Ecom>
->---
-> drivers/firmware/efi/libstub/efistub=2Eh    | 15 ++++++++++++
-> drivers/firmware/efi/libstub/riscv-stub=2Ec | 28 ++++++++++++++++++++---
-> include/linux/efi=2Eh                       |  1 +
-> 3 files changed, 41 insertions(+), 3 deletions(-)
+> Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+
+> ---
+>   drivers/net/virtio_net.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
 >
->diff --git a/drivers/firmware/efi/libstub/efistub=2Eh b/drivers/firmware/=
-efi/libstub/efistub=2Eh
->index edb77b0621ea=2E=2E0428f8816942 100644
->--- a/drivers/firmware/efi/libstub/efistub=2Eh
->+++ b/drivers/firmware/efi/libstub/efistub=2Eh
->@@ -720,6 +720,21 @@ union efi_tcg2_protocol {
-> 	} mixed_mode;
-> };
->=20
->+typedef union riscv_efi_boot_protocol riscv_efi_boot_protocol_t;
->+
->+union riscv_efi_boot_protocol {
->+	struct {
->+		u64 revision;
->+		efi_status_t (__efiapi *get_boot_hartid)(
->+							 riscv_efi_boot_protocol_t *,
->+							 size_t *);
-
-I prefer to have parameter names for readability
-
-According to the platform specification mhartid is MXLEN wide=2E UINTN (si=
-ze_t) is SXLEN wide=2E=20
-
-Does this have any implications on how we define the protocol?
-
->+	};
->+	struct {
->+		u32 revision;
->+		u32 get_boot_hartid;>+	} mixed_mode;
->+};
->+
-> typedef union efi_load_file_protocol efi_load_file_protocol_t;
-> typedef union efi_load_file_protocol efi_load_file2_protocol_t;
->=20
->diff --git a/drivers/firmware/efi/libstub/riscv-stub=2Ec b/drivers/firmwa=
-re/efi/libstub/riscv-stub=2Ec
->index 380e4e251399=2E=2Ec7add4eb5453 100644
->--- a/drivers/firmware/efi/libstub/riscv-stub=2Ec
->+++ b/drivers/firmware/efi/libstub/riscv-stub=2Ec
->@@ -46,12 +46,34 @@ static u32 get_boot_hartid_from_fdt(void)
-> 	return fdt32_to_cpu(*prop);
-> }
->=20
->+static u32 get_boot_hartid_from_efi(void)
->+{
-
-The returned value must be UINTN /size_t like the protocol=2E This width m=
-ust be carried to the legacy entry point of Linux=2E
-
->+	efi_guid_t boot_protocol_guid =3D RISCV_EFI_BOOT_PROTOCOL_GUID;
->+	efi_status_t status;
->+	riscv_efi_boot_protocol_t *boot_protocol;
->+	size_t boot_hart_id;
->+
->+	status =3D efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
->+			     (void **)&boot_protocol);
->+	if (status =3D=3D EFI_SUCCESS) {
->+		status =3D efi_call_proto(boot_protocol,
->+					get_boot_hartid, &boot_hart_id);
->+		if (status =3D=3D EFI_SUCCESS) {
->+			return (u32)boot_hart_id;
->+		}
->+	}
->+	return U32_MAX;
-
-U32_MAX is a legal value for the hart id=2E
-
->+}
->+
-> efi_status_t check_platform_features(void)
-> {
->-	hartid =3D get_boot_hartid_from_fdt();
->+	hartid =3D get_boot_hartid_from_efi();
-> 	if (hartid =3D=3D U32_MAX) {
->-		efi_err("/chosen/boot-hartid missing or invalid!\n");
->-		return EFI_UNSUPPORTED;
->+		hartid =3D get_boot_hartid_from_fdt();
->+		if (hartid =3D=3D U32_MAX) {
-
-U32_MAX is a legal value for the hart id=2E Please, separate status and va=
-lue=2E
-
-Best regards
-
-Heinrich
-
->+			efi_err("/chosen/boot-hartid missing or invalid!\n");
->+			return EFI_UNSUPPORTED;
->+		}
-> 	}
-> 	return EFI_SUCCESS;
-> }
->diff --git a/include/linux/efi=2Eh b/include/linux/efi=2Eh
->index ccd4d3f91c98=2E=2E9822c730207c 100644
->--- a/include/linux/efi=2Eh
->+++ b/include/linux/efi=2Eh
->@@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
-> #define EFI_CONSOLE_OUT_DEVICE_GUID		EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4=
-,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
-> #define APPLE_PROPERTIES_PROTOCOL_GUID		EFI_GUID(0x91bd12fe, 0xf6c3, 0x4=
-4fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
-> #define EFI_TCG2_PROTOCOL_GUID			EFI_GUID(0x607f766c, 0x7455, 0x42be,  0=
-x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
->+#define RISCV_EFI_BOOT_PROTOCOL_GUID		EFI_GUID(0xccd15fec, 0x6f73, 0x4ee=
-c,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
-> #define EFI_LOAD_FILE_PROTOCOL_GUID		EFI_GUID(0x56ec3091, 0x954c, 0x11d2=
-,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
-> #define EFI_LOAD_FILE2_PROTOCOL_GUID		EFI_GUID(0x4006c0c1, 0xfcb3, 0x403=
-e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
-> #define EFI_RT_PROPERTIES_TABLE_GUID		EFI_GUID(0xeb66918a, 0x7eef, 0x402=
-a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 569eecfbc2cd..05fe5ba32187 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -242,13 +242,13 @@ struct virtnet_info {
+>   };
+>   
+>   struct padded_vnet_hdr {
+> -	struct virtio_net_hdr_mrg_rxbuf hdr;
+> +	struct virtio_net_hdr_v1_hash hdr;
+>   	/*
+>   	 * hdr is in a separate sg buffer, and data sg buffer shares same page
+>   	 * with this header sg. This padding makes next sg 16 byte aligned
+>   	 * after the header.
+>   	 */
+> -	char padding[4];
+> +	char padding[12];
+>   };
+>   
+>   static bool is_xdp_frame(void *ptr)
+> @@ -1266,7 +1266,8 @@ static unsigned int get_mergeable_buf_len(struct receive_queue *rq,
+>   					  struct ewma_pkt_len *avg_pkt_len,
+>   					  unsigned int room)
+>   {
+> -	const size_t hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
+> +	struct virtnet_info *vi = rq->vq->vdev->priv;
+> +	const size_t hdr_len = vi->hdr_len;
+>   	unsigned int len;
+>   
+>   	if (room)
+> @@ -2851,7 +2852,7 @@ static void virtnet_del_vqs(struct virtnet_info *vi)
+>    */
+>   static unsigned int mergeable_min_buf_len(struct virtnet_info *vi, struct virtqueue *vq)
+>   {
+> -	const unsigned int hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
+> +	const unsigned int hdr_len = vi->hdr_len;
+>   	unsigned int rq_size = virtqueue_get_vring_size(vq);
+>   	unsigned int packet_len = vi->big_packets ? IP_MAX_MTU : vi->dev->max_mtu;
+>   	unsigned int buf_len = hdr_len + ETH_HLEN + VLAN_HLEN + packet_len;
 

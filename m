@@ -2,114 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA3449E5D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3589549E5D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243010AbiA0PSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:18:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
+        id S242984AbiA0PSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243140AbiA0PRw (ORCPT
+        with ESMTP id S243008AbiA0PSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:17:52 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E706C061753
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:17:52 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id o15so2067709vki.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:17:52 -0800 (PST)
+        Thu, 27 Jan 2022 10:18:01 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90743C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:18:00 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id n12-20020a05600c3b8c00b0034eb13edb8eso3473061wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:18:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3L9dijJzC3e3/PCe51KV9pEonuhgRM2pwbe2CRq/cZg=;
-        b=Hi1EbSU3KfSYW6t3mHRqxA7YFt5tK95/PMV+AHZgPTzxlY/b12QKGs6RJbVAjhZepz
-         ew/eQOgDvEriqLoJCwiLplxCz38HtJ0hU4P4NWAM4y5pbab4xYnzI0PcHrwhFintDOYQ
-         tv5e32a18VVXRITOk9uUvNVBPXt/8K6rgI9Xkx9B4B7hgjRJS+vLFs1KE9t6Dj9vCoDw
-         ibRBOqQW5x5fbUqTNxKx1a3g5UEnnYGfvDp4lHuHsm7cQAORMeOiRnvrDvD6PG3tHYpG
-         PqvgPRfPCIucMcs63yIol5xLAe2MbrIZojEv8AB+VP1cm3n2ZzCsWLWRa+ys+wdCGAld
-         pw0A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:references:from:organization:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=i/4aHvLx0xlbDSqE5Ac8Q/MRCnzzAZwCoPVM4qh+V4w=;
+        b=FdlX2cAa7CE60w67jBg6HmtvKc522BNrx0l5/2tRysWxW0cNYpAb64ydNIshwNPuTd
+         uxrL5qiIeadcTJYyAi8luphU/iB2wmS2vmTXY6O17gq7nFGs+w1rvKQXcNb/6uMUuscI
+         /ulkX6vF3MLTbtT0fwQwEByn8zVwz1cBgwR1uVuMFya9EgKviwKkzkVCtmdtrcSQtlT/
+         jd+KSPnvl8NhhDt/rFqWA1wYgTnbjIAFRbaGBYXaFEP5GP9A5R6e3gRcleChZxdHMhPL
+         tIdICe8JGho+oSLYj7ziMHqWpnOWafyNPs2M0hGJ98mbMo3qToD3gVacyxJEmHH/n/Er
+         yZxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3L9dijJzC3e3/PCe51KV9pEonuhgRM2pwbe2CRq/cZg=;
-        b=BuGWQeMg5TMzhoeReCoGn+X6uYXV/t6cOugIuMr6S4apqohG6aqOUfovYiwZjCOZQy
-         0/Uot4CVV5uYlJ2ALK616JIVZlWvnFpZsR74iNbZDqZuBgnHlEoa19+I/+ZInERpZJsy
-         EGUlU994ir4CqDRmq6bhdk25KEFSsU+SSmEZExjq2zBASYJb/xuyiZIZA6i6mo/jFGye
-         qXHE4HGySa7mkxBL82aQdr5cTDONAdtzzhK0DYLzY76HPs3sglSO2MHoIQsQgOyPTwoj
-         93h9CsgK8kwp8TEug+/SGMokl9+CorJV9Gn3XDMPVVFw1NLhMNFE7PLa6dsuf4dIFus4
-         Hk2Q==
-X-Gm-Message-State: AOAM533DXpn3t1EERvzQqSlmnU5kFCvhx7q6L157JBFsJrqtJYcrCRbN
-        VcKhBEenNWfp+r7DCkceiegWgbagDfE=
-X-Google-Smtp-Source: ABdhPJyjiIlzgGCtbk84BcDb/DcnAiaFOK7aQjfzB2cooxpKWdiGGJHSHMHqHrGS70hrOri7eecG2A==
-X-Received: by 2002:a1f:640e:: with SMTP id y14mr1852642vkb.2.1643296671278;
-        Thu, 27 Jan 2022 07:17:51 -0800 (PST)
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
-        by smtp.gmail.com with ESMTPSA id r11sm1445066uaw.7.2022.01.27.07.17.50
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:subject:to:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=i/4aHvLx0xlbDSqE5Ac8Q/MRCnzzAZwCoPVM4qh+V4w=;
+        b=VtEu9rLb2uuni7cOYiZb5zctxHXDtiOPL6BpQgJEzvXOiUASycqDw6oSAAss+Nfdux
+         GypzHDlKkITY4I0nQ1iw+7pet17ubX473tqToxdj0E94AzsE+u03C7FIgAOh78gu8KWd
+         Xk92gBH/bq5y65ORfxbnGHnK6Chv9xyxvTBOCVM2YZabuFLOaCpW6lm+ggvzONn/A+uL
+         TjHKBIfxtSAiQkD1AIcoTCL8pT8aS3qS/7GyVlht3axp4ydkF7KxI0Nw2Lr7aSvDN5Lq
+         PlOHiWH+slGAuC1FXffC0n5eM4f+V/lqES5984sJrYm5CUtOX9HeWgVP2pVXBV8X5Mjj
+         ntgA==
+X-Gm-Message-State: AOAM530kWoeMUOTUvk1CPUxljlUl6t8Ny5nK6qTuGQPKdEwNfgE3smMT
+        VK1JcMiJlmnge5/1n07Tx9ANVkMUTUCkew==
+X-Google-Smtp-Source: ABdhPJxCtaI6rDdSrWhgGXAU48ojSnr/s7UKOh8uTG3JXRhqdw26prPvM1Sx1LN+Lig1Hi2yFiTrKg==
+X-Received: by 2002:a05:600c:4e90:: with SMTP id f16mr943648wmq.175.1643296678696;
+        Thu, 27 Jan 2022 07:17:58 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff? ([2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff])
+        by smtp.gmail.com with ESMTPSA id d9sm2544985wrp.14.2022.01.27.07.17.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 07:17:50 -0800 (PST)
-Received: by mail-vk1-f179.google.com with SMTP id o15so2067674vki.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:17:50 -0800 (PST)
-X-Received: by 2002:a05:6122:1811:: with SMTP id ay17mr1708154vkb.2.1643296669982;
- Thu, 27 Jan 2022 07:17:49 -0800 (PST)
+        Thu, 27 Jan 2022 07:17:58 -0800 (PST)
+Subject: Re: [PATCH] arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO domain
+ for GPIOE_2
+To:     Dongjin Kim <tobetter@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220127151656.GA2419733@paju>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <6cd58652-f24e-3919-589f-d71eb0e8070f@baylibre.com>
+Date:   Thu, 27 Jan 2022 16:17:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <cover.1643243772.git.asml.silence@gmail.com>
-In-Reply-To: <cover.1643243772.git.asml.silence@gmail.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 27 Jan 2022 10:17:13 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSdp-ueFOSSsX2+wCFK2PwdVuRx=8WCV8GjKGOORiwHeSA@mail.gmail.com>
-Message-ID: <CA+FuTSdp-ueFOSSsX2+wCFK2PwdVuRx=8WCV8GjKGOORiwHeSA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 00/10] udp/ipv6 optimisations
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220127151656.GA2419733@paju>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 7:36 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
->
-> Shed some weight from udp/ipv6. Zerocopy benchmarks over dummy showed
-> ~5% tx/s improvement, should be similar for small payload non-zc
-> cases.
->
-> The performance comes from killing 4 atomics and a couple of big struct
-> memcpy/memset. 1/10 removes a pair of atomics on dst refcounting for
-> cork->skb setup, 9/10 saves another pair on cork init. 5/10 and 8/10
-> kill extra 88B memset and memcpy respectively.
->
-> v2: add a comment about setting dst early in ip6_setup_cork()
->     drop non-udp patches for now
->     add patch 10
->
-> Pavel Begunkov (10):
->   ipv6: optimise dst refcounting on skb init
->   udp6: shuffle up->pending AF_INET bits
->   ipv6: remove daddr temp buffer in __ip6_make_skb
->   ipv6: clean up cork setup/release
->   ipv6: don't zero inet_cork_full::fl after use
->   ipv6: pass full cork into __ip6_append_data()
->   udp6: pass flow in ip6_make_skb together with cork
->   udp6: don't make extra copies of iflow
->   ipv6: optimise dst refcounting on cork init
->   ipv6: partially inline ipv6_fixup_options
->
->  include/net/ipv6.h    |  14 ++++--
->  net/ipv6/exthdrs.c    |   8 ++--
->  net/ipv6/ip6_output.c |  99 ++++++++++++++++++++++------------------
->  net/ipv6/udp.c        | 103 ++++++++++++++++++++----------------------
->  4 files changed, 118 insertions(+), 106 deletions(-)
+On 27/01/2022 16:16, Dongjin Kim wrote:
+> GPIOE_2 is in AO domain and "<&gpio GPIOE_2 ...>" changes the state of
+> TF_PWR_EN of 'FC8731' on BPI-M5
+> 
+> Fixes: 976e920183e4 ("arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts")
+> 
+> Signed-off-by: Dongjin Kim <tobetter@gmail.com>
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+> index 212c6aa5a3b8..5751c48620ed 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+> @@ -123,7 +123,7 @@ vddio_c: regulator-vddio_c {
+>  		regulator-min-microvolt = <1800000>;
+>  		regulator-max-microvolt = <3300000>;
+>  
+> -		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
+> +		enable-gpio = <&gpio_ao GPIOE_2 GPIO_ACTIVE_HIGH>;
+>  		enable-active-high;
+>  		regulator-always-on;
+>  
+> 
 
-For the series:
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Thanks !
 
-Iterative review vs v1, where I only had one small comment, which was
-addressed. NB: Due to some subject line changes, it wasn't immediately
-clear to me that this was just a range-diff over the first 10 patches
-in both series.
+Neil

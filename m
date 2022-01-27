@@ -2,119 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F17649E3CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419CE49E3D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236884AbiA0Npr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235814AbiA0Npp (ORCPT
+        id S237015AbiA0NsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:48:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50772 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236958AbiA0NsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:45:45 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4D3C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:45:45 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id m11so3661866edi.13
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:45:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mtKbL9VFRGZ4IG0MK9ycnh7MZHJevnbKDerPRyEA610=;
-        b=aQSEhB4CvtRQWEAU3IHB6XOETTp0S2WzCX8WVQf9fuM6ealYIyYC1vnWD9QvNgKZZA
-         qNsjxsTdAJ4IYCu7aUksuf34dS+VIgt3Kde1KLVAqRNbGPD+spIr62aHddSUSaE3Zumu
-         cKNvSBSU57NfFVrrRqRdy6nCdWAYS7gVqCCI10esJeidmQ//P02e2Tojyg+9Lwx5z81R
-         MmdkqPEGQmfz+Pwn11afwEFFwX8aXKwPGzbwpGYFNr97GNLJ5xbe4XLcMX/gPrTtSrsz
-         FkI7ZIlk2CQvUD0GAdOiZOB/ujvtp1Pebj+mNeBxnHi24J+wrO34ftT17azFGSqha5Jb
-         /J+w==
+        Thu, 27 Jan 2022 08:48:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643291291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qeMejuqUYSLLdd514sPE+ORPHLaeU4t8CK+PCMHAxZ8=;
+        b=cJ3VXd15ARG4HLHRrmxcsGcFoUlMUl0n6njlgqekP3SjF1WGPAqYYLhBd+ioHdzisSO3Bd
+        ofCoJ7axLPMeAbv/uDOKE4TWM1mJFyU9Zt+9V9OgN6buACB0Ei+GarN8S3F8+J/Sp47Anr
+        eiE3Do7Y8NpxmT/VFT9ElaFZafVJSrM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-617-TnpCNEQKOQuMhGItYcSHWQ-1; Thu, 27 Jan 2022 08:48:09 -0500
+X-MC-Unique: TnpCNEQKOQuMhGItYcSHWQ-1
+Received: by mail-wm1-f71.google.com with SMTP id bg16-20020a05600c3c9000b0034bea12c043so4203737wmb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:48:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mtKbL9VFRGZ4IG0MK9ycnh7MZHJevnbKDerPRyEA610=;
-        b=7erJVV7F3fFksL+xDl+KYhZHmUUegUJjcI/DieN1Mg5rDVxuX6GVPGe1cYM/iWIntB
-         VzgiV2DcYTRS9GDkeDuyIrVGpPW2vQYiuH2Llx+SqBu8IQHiIj01UGwN+HhLeL+X5Gxz
-         4j77WfCyErLlzf0G8nO2+9iPU1BIqL5zX7NyJF7Ik5uRrZVegz0w62/8EOWbyxcrBWTD
-         HPPkdnyaIsE5Y2et3zfnECLELAG42xk9XucsFOhIIfZtMwQSCxi8hbxsXoUMW91kfw2Q
-         eUgoUoTl7Eg/vAKlBOn6Azcv85gwK3OTJ53u0uS2p/Kkaord7Z7aKyc7lUmQ0/AEgF2r
-         Tfqw==
-X-Gm-Message-State: AOAM5321tEOz3Ig8oNmBQrlOWe3FtIA+eqUPTPB4KwSPZ5A0uD8/G6BY
-        jBXAOxPJxJROLxOsrfmcP5bE4jtTxm2zGrABemunL2iAnnTTwg==
-X-Google-Smtp-Source: ABdhPJxKR5Xtl5Kl0BFX7FJnrmsGRVNDzMawcGgJRRdy/b5xk3w7C1a/7I3Bjmqk5rL+OcPLzih9R+ww9/B3KWHxNz8=
-X-Received: by 2002:aa7:c043:: with SMTP id k3mr3752391edo.184.1643291143936;
- Thu, 27 Jan 2022 05:45:43 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qeMejuqUYSLLdd514sPE+ORPHLaeU4t8CK+PCMHAxZ8=;
+        b=fQOOgc197G01xS4gktQhO72f8lnFTL6DZlt1hYZUqi1nDKZO2uVRSyN06JbFNGz6FU
+         NM8w3/y2zd8h0NoZLPXOaXJVrM4qtQjkA/Tx17cvpDNvd6tk+U9Xjs4/T+N0Fo2BQ2ar
+         uVrKpEYprHXwrXZgxs1IZ5qzf9Y/8F38PsqPvpVEDz++vd8W91Q6Mp0L6gVJym05uhNt
+         I51TOkwdqK2IrvOV0xr7NgdcK+hCO8wFw1fVCP5f3zGxNRJ6lcnZ1wxG+N7HnNiqOckP
+         f3ez0VLEg2KMKhPMgkHUKoYKOtwCczApAv+XB2mQ7muUrFdd2Uw4dw4yLz7mP5GdEIl5
+         HxHA==
+X-Gm-Message-State: AOAM532YWCXRclFKcAL7wnVzc+b29K9obq8odkOonh0ftsdYu+Jyf1AD
+        Q0tq4jQAX1qRycJ4eX0G2Um638aNqCsc4Y7zaFBHNENxfemvzMoXBBjJvD6Fe67+8S5XyHYuaIW
+        ALvKYXzg9y5fFljM5TsUilVkb
+X-Received: by 2002:a05:6000:1e07:: with SMTP id bj7mr3126099wrb.154.1643291287411;
+        Thu, 27 Jan 2022 05:48:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx1yi36HsEaCv3P3WgyXf8vZRq5KMr2tYugmYroN9fO4JUtAwBtQuhc2nSv+yeb4QeF5DfhwQ==
+X-Received: by 2002:a05:6000:1e07:: with SMTP id bj7mr3126072wrb.154.1643291287167;
+        Thu, 27 Jan 2022 05:48:07 -0800 (PST)
+Received: from ?IPv6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id h1sm2120913wrq.82.2022.01.27.05.48.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 05:48:06 -0800 (PST)
+Subject: Re: [PATCH v4 16/21] KVM: arm64: Support SDEI ioctl commands on VM
+To:     Gavin Shan <gshan@redhat.com>, kvmarm@lists.cs.columbia.edu
+Cc:     maz@kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan.Cameron@huawei.com, pbonzini@redhat.com, will@kernel.org
+References: <20210815001352.81927-1-gshan@redhat.com>
+ <20210815001352.81927-17-gshan@redhat.com>
+ <6a4f1736-3af0-ccaa-e8a0-242759610430@redhat.com>
+ <96776800-d6fd-757b-348b-e566f068ed2a@redhat.com>
+From:   Eric Auger <eauger@redhat.com>
+Message-ID: <a6df80c4-dcd7-bbf4-394f-278e6416701e@redhat.com>
+Date:   Thu, 27 Jan 2022 14:48:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220127100947.150555-1-jeanmichel.hautbois@ideasonboard.com>
-In-Reply-To: <20220127100947.150555-1-jeanmichel.hautbois@ideasonboard.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 27 Jan 2022 13:45:25 +0000
-Message-ID: <CAPY8ntBQUtO08BU5aAQXZ6=ChVy3UypwSb1ZLFJtE2kfJKET0A@mail.gmail.com>
-Subject: Re: [PATCH] media: adv7180: Fix media bus format
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        lars@metafoo.de, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <96776800-d6fd-757b-348b-e566f068ed2a@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Michel
+Hi gavin,
 
-On Thu, 27 Jan 2022 at 10:09, Jean-Michel Hautbois
-<jeanmichel.hautbois@ideasonboard.com> wrote:
->
-> MEDIA_BUS_FMT_UYVY8_2X8 isn't correct for CSI-2. Use
-> MEDIA_BUS_FMT_UYVY8_1X16 instead.
+On 1/12/22 8:03 AM, Gavin Shan wrote:
+> Hi Eric,
+> 
+> On 11/10/21 9:48 PM, Eric Auger wrote:
+>> On 8/15/21 2:13 AM, Gavin Shan wrote:
+>>> This supports ioctl commands on VM to manage the various objects.
+>>> It's primarily used by VMM to accomplish live migration. The ioctl
+>>> commands introduced by this are highlighted as blow:
+>> below
+>>>
+>>>     * KVM_SDEI_CMD_GET_VERSION
+>>>       Retrieve the version of current implementation
+>> which implementation, SDEI?
+>>>     * KVM_SDEI_CMD_SET_EVENT
+>>>       Add event to be exported from KVM so that guest can register
+>>>       against it afterwards
+>>>     * KVM_SDEI_CMD_GET_KEVENT_COUNT
+>>>       Retrieve number of registered SDEI events
+>>>     * KVM_SDEI_CMD_GET_KEVENT
+>>>       Retrieve the state of the registered SDEI event
+>>>     * KVM_SDEI_CMD_SET_KEVENT
+>>>       Populate the registered SDEI event
+>> I think we really miss the full picture of what you want to achieve with
+>> those IOCTLs or at least I fail to get it. Please document the UAPI
+>> separately including the structs and IOCTLs.
+> 
+> The commit log will be improved accordingly in next revision. Yep, I will
+> add document for UAPI and IOCTLs :)
+> 
+>>>
+>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>>> ---
+>>>   arch/arm64/include/asm/kvm_sdei.h      |   1 +
+>>>   arch/arm64/include/uapi/asm/kvm_sdei.h |  17 +++
+>>>   arch/arm64/kvm/arm.c                   |   3 +
+>>>   arch/arm64/kvm/sdei.c                  | 171 +++++++++++++++++++++++++
+>>>   include/uapi/linux/kvm.h               |   3 +
+>>>   5 files changed, 195 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/include/asm/kvm_sdei.h
+>>> b/arch/arm64/include/asm/kvm_sdei.h
+>>> index 19f2d9b91f85..8f5ea947ed0e 100644
+>>> --- a/arch/arm64/include/asm/kvm_sdei.h
+>>> +++ b/arch/arm64/include/asm/kvm_sdei.h
+>>> @@ -125,6 +125,7 @@ int kvm_sdei_hypercall(struct kvm_vcpu *vcpu);
+>>>   int kvm_sdei_register_notifier(struct kvm *kvm, unsigned long num,
+>>>                      kvm_sdei_notifier notifier);
+>>>   void kvm_sdei_deliver(struct kvm_vcpu *vcpu);
+>>> +long kvm_sdei_vm_ioctl(struct kvm *kvm, unsigned long arg);
+>>>   void kvm_sdei_destroy_vcpu(struct kvm_vcpu *vcpu);
+>>>   void kvm_sdei_destroy_vm(struct kvm *kvm);
+>>>   diff --git a/arch/arm64/include/uapi/asm/kvm_sdei.h
+>>> b/arch/arm64/include/uapi/asm/kvm_sdei.h
+>>> index 4ef661d106fe..35ff05be3c28 100644
+>>> --- a/arch/arm64/include/uapi/asm/kvm_sdei.h
+>>> +++ b/arch/arm64/include/uapi/asm/kvm_sdei.h
+>>> @@ -57,5 +57,22 @@ struct kvm_sdei_vcpu_state {
+>>>       struct kvm_sdei_vcpu_regs    normal_regs;
+>>>   };
+>>>   +#define KVM_SDEI_CMD_GET_VERSION        0
+>>> +#define KVM_SDEI_CMD_SET_EVENT            1
+>>> +#define KVM_SDEI_CMD_GET_KEVENT_COUNT        2
+>>> +#define KVM_SDEI_CMD_GET_KEVENT            3
+>>> +#define KVM_SDEI_CMD_SET_KEVENT            4
+>>> +
+>>> +struct kvm_sdei_cmd {
+>>> +    __u32                        cmd;
+>>> +    union {
+>>> +        __u32                    version;
+>>> +        __u32                    count;
+>>> +        __u64                    num;
+>>> +        struct kvm_sdei_event_state        kse_state;
+>>> +        struct kvm_sdei_kvm_event_state        kske_state;
+>>> +    };
+>>> +};
+>>> +
+>>>   #endif /* !__ASSEMBLY__ */
+>>>   #endif /* _UAPI__ASM_KVM_SDEI_H */
+>>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+>>> index 0c3db1ef1ba9..8d61585124b2 100644
+>>> --- a/arch/arm64/kvm/arm.c
+>>> +++ b/arch/arm64/kvm/arm.c
+>>> @@ -1389,6 +1389,9 @@ long kvm_arch_vm_ioctl(struct file *filp,
+>>>               return -EFAULT;
+>>>           return kvm_vm_ioctl_mte_copy_tags(kvm, &copy_tags);
+>>>       }
+>>> +    case KVM_ARM_SDEI_COMMAND: {
+>>> +        return kvm_sdei_vm_ioctl(kvm, arg);
+>>> +    }
+>>>       default:
+>>>           return -EINVAL;
+>>>       }
+>>> diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
+>>> index 5f7a37dcaa77..bdd76c3e5153 100644
+>>> --- a/arch/arm64/kvm/sdei.c
+>>> +++ b/arch/arm64/kvm/sdei.c
+>>> @@ -931,6 +931,177 @@ void kvm_sdei_create_vcpu(struct kvm_vcpu *vcpu)
+>>>       vcpu->arch.sdei = vsdei;
+>>>   }
+>>>   +static long kvm_sdei_set_event(struct kvm *kvm,
+>>> +                   struct kvm_sdei_event_state *kse_state)
+>>> +{
+>>> +    struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
+>>> +    struct kvm_sdei_event *kse = NULL;
+>>> +
+>>> +    if (!kvm_sdei_is_valid_event_num(kse_state->num))
+>>> +        return -EINVAL;
+>>> +
+>>> +    if (!(kse_state->type == SDEI_EVENT_TYPE_SHARED ||
+>>> +          kse_state->type == SDEI_EVENT_TYPE_PRIVATE))
+>>> +        return -EINVAL;
+>>> +
+>>> +    if (!(kse_state->priority == SDEI_EVENT_PRIORITY_NORMAL ||
+>>> +          kse_state->priority == SDEI_EVENT_PRIORITY_CRITICAL))
+>>> +        return -EINVAL;
+>>> +
+>>> +    kse = kvm_sdei_find_event(kvm, kse_state->num);
+>>> +    if (kse)
+>>> +        return -EEXIST;
+>>> +
+>>> +    kse = kzalloc(sizeof(*kse), GFP_KERNEL);
+>>> +    if (!kse)
+>>> +        return -ENOMEM;
+>> userspace can exhaust the mem since there is no limit. There must be a
+>> max.
+>>
+> 
+> Ok. I think it's minor or corner case. For now, the number of defined SDEI
+> events are only one. I leave it for something to be improved in future.
+Hum ok, actually this depends on kvm_sdei_is_valid_event_num's
+implementation.
+> 
+>>> +
+>>> +    kse->state = *kse_state;
+>>> +    kse->kvm = kvm;
+>>> +    list_add_tail(&kse->link, &ksdei->events);
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static long kvm_sdei_get_kevent_count(struct kvm *kvm, int *count)
+>>> +{
+>>> +    struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
+>>> +    struct kvm_sdei_kvm_event *kske = NULL;
+>>> +    int total = 0;
+>>> +
+>>> +    list_for_each_entry(kske, &ksdei->kvm_events, link) {
+>>> +        total++;
+>>> +    }
+>>> +
+>>> +    *count = total;
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static long kvm_sdei_get_kevent(struct kvm *kvm,
+>>> +                struct kvm_sdei_kvm_event_state *kske_state)
+shouldn't the function return a int instead?
+>>> +{
+>>> +    struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
+>>> +    struct kvm_sdei_kvm_event *kske = NULL;
+>>> +
+>>> +    /*
+>>> +     * The first entry is fetched if the event number is invalid.
+>>> +     * Otherwise, the next entry is fetched.
+>> why don't we return an error? What is the point returning the next entry?
+> 
+> The SDEI events attached to the KVM are migrated one by one. Thoese
+> attached
+> SDEI events are linked through a linked list:
+> 
+>     (1) on !kvm_sdei_is_valid_event_num(kske_state->num), the first SDEI
+> event
+>         in the linked list is retrieved from source VM and will be
+> restored on
+>         the destination VM.
+> 
+>     (2) Otherwise, the next SDEI event in the linked list will be retrieved
+>         from source VM and restored on the destination VM.
 
-2X8 isn't correct for CSI-2, but it is correct for the parallel
-configuration that is also supported by this driver.
+and why not returning NULL if the num is incorrect? Why do return the
+1st elem?
 
-Referencing the adv7180 datasheet[1] page 76, OF_SEL (bits [5:2] of
-register 0x03) are 0010b for 16bit, or 0011b for 8 bit.
-[2] in the driver sets these bits to 0011b, so it is in 2x8 mode.
+Eric
+> 
+> Another option is to introduce additional struct like below. In this
+> way, all
+> the attached SDEI events are retrieved and restored once. In this way, the
+> memory block used for storing @kvm_sdei_kvm_event_state should be allocated
+> and released by QEMU. Please let me know your preference:
+> 
+>     struct xxx {
+>            __u64                              count;
+>            struct kvm_sdei_kvm_event_state    events;
+>     }
+> 
+>>> +     */
+>>> +    if (!kvm_sdei_is_valid_event_num(kske_state->num)) {
+>>> +        kske = list_first_entry_or_null(&ksdei->kvm_events,
+>>> +                struct kvm_sdei_kvm_event, link);
+>>> +    } else {
+>>> +        kske = kvm_sdei_find_kvm_event(kvm, kske_state->num);
+>>> +        if (kske && !list_is_last(&kske->link, &ksdei->kvm_events))
+>>> +            kske = list_next_entry(kske, link);
+>> Sorry I don't get why we return the next one?
+> 
+> Please refer to the explanation above.
+> 
+>>> +        else
+>>> +            kske = NULL;
+>>> +    }
+>>> +
+>>> +    if (!kske)
+>>> +        return -ENOENT;
+>>> +
+>>> +    *kske_state = kske->state;
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static long kvm_sdei_set_kevent(struct kvm *kvm,
+>>> +                struct kvm_sdei_kvm_event_state *kske_state)
+>>> +{
+>>> +    struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
+>>> +    struct kvm_sdei_event *kse = NULL;
+>>> +    struct kvm_sdei_kvm_event *kske = NULL;
+>>> +
+>>> +    /* Sanity check */
+>>> +    if (!kvm_sdei_is_valid_event_num(kske_state->num))
+>>> +        return -EINVAL;
+>>> +
+>>> +    if (!(kske_state->route_mode == SDEI_EVENT_REGISTER_RM_ANY ||
+>>> +          kske_state->route_mode == SDEI_EVENT_REGISTER_RM_PE))
+>>> +        return -EINVAL;
+>>> +
+>>> +    /* Check if the event number is valid */
+>>> +    kse = kvm_sdei_find_event(kvm, kske_state->num);
+>>> +    if (!kse)
+>>> +        return -ENOENT;
+>>> +
+>>> +    /* Check if the event has been populated */
+>>> +    kske = kvm_sdei_find_kvm_event(kvm, kske_state->num);
+>>> +    if (kske)
+>>> +        return -EEXIST;
+>>> +
+>>> +    kske = kzalloc(sizeof(*kske), GFP_KERNEL);
+>> userspace can exhaust the mem since there is no limit
+> 
+> Ok.
+> 
+>>> +    if (!kske)
+>>> +        return -ENOMEM;
+>>> +
+>>> +    kske->state = *kske_state;
+>>> +    kske->kse   = kse;
+>>> +    kske->kvm   = kvm;
+>>> +    list_add_tail(&kske->link, &ksdei->kvm_events);
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +long kvm_sdei_vm_ioctl(struct kvm *kvm, unsigned long arg)
+>>> +{
+>>> +    struct kvm_sdei_kvm *ksdei = kvm->arch.sdei;
+>>> +    struct kvm_sdei_cmd *cmd = NULL;
+>>> +    void __user *argp = (void __user *)arg;
+>>> +    bool copy = false;
+>>> +    long ret = 0;
+>>> +
+>>> +    /* Sanity check */
+>>> +    if (!ksdei) {
+>>> +        ret = -EPERM;
+>>> +        goto out;
+>>> +    }
+>>> +
+>>> +    cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
+>>> +    if (!cmd) {
+>>> +        ret = -ENOMEM;
+>>> +        goto out;
+>>> +    }
+>>> +
+>>> +    if (copy_from_user(cmd, argp, sizeof(*cmd))) {
+>>> +        ret = -EFAULT;
+>>> +        goto out;
+>>> +    }
+>>> +
+>>> +    spin_lock(&ksdei->lock);
+>>> +
+>>> +    switch (cmd->cmd) {
+>>> +    case KVM_SDEI_CMD_GET_VERSION:
+>>> +        copy = true;
+>>> +        cmd->version = (1 << 16);       /* v1.0.0 */
+>>> +        break;
+>>> +    case KVM_SDEI_CMD_SET_EVENT:
+>>> +        ret = kvm_sdei_set_event(kvm, &cmd->kse_state);
+>>> +        break;
+>>> +    case KVM_SDEI_CMD_GET_KEVENT_COUNT:
+>>> +        copy = true;
+>>> +        ret = kvm_sdei_get_kevent_count(kvm, &cmd->count);
+>>> +        break;
+>>> +    case KVM_SDEI_CMD_GET_KEVENT:
+>>> +        copy = true;
+>>> +        ret = kvm_sdei_get_kevent(kvm, &cmd->kske_state);
+>>> +        break;
+>>> +    case KVM_SDEI_CMD_SET_KEVENT:
+>>> +        ret = kvm_sdei_set_kevent(kvm, &cmd->kske_state);
+>>> +        break;
+>>> +    default:
+>>> +        ret = -EINVAL;
+>>> +    }
+>>> +
+>>> +    spin_unlock(&ksdei->lock);
+>>> +out:
+>>> +    if (!ret && copy && copy_to_user(argp, cmd, sizeof(*cmd)))
+>>> +        ret = -EFAULT;
+>>> +
+>>> +    kfree(cmd);
+>>> +    return ret;
+>>> +}
+>>> +
+>>>   void kvm_sdei_destroy_vcpu(struct kvm_vcpu *vcpu)
+>>>   {
+>>>       struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
+>>> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+>>> index d9e4aabcb31a..8cf41fd4bf86 100644
+>>> --- a/include/uapi/linux/kvm.h
+>>> +++ b/include/uapi/linux/kvm.h
+>>> @@ -1679,6 +1679,9 @@ struct kvm_xen_vcpu_attr {
+>>>   #define KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_DATA    0x4
+>>>   #define KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADJUST    0x5
+>>>   +/* Available with KVM_CAP_ARM_SDEI */
+>>> +#define KVM_ARM_SDEI_COMMAND    _IOWR(KVMIO, 0xce, struct kvm_sdei_cmd)
+>>> +
+>>>   /* Secure Encrypted Virtualization command */
+>>>   enum sev_cmd_id {
+>>>       /* Guest initialization commands */
+>>>
+> 
+> Thanks,
+> Gavin
+> 
 
-You may be able to get away with a simple check of
-if (state->chip_info->flags & ADV7180_FLAG_MIPI_CSI2)
-  fmt->code = MEDIA_BUS_FMT_UYVY8_1X16;
-else
-  fmt->code = MEDIA_BUS_FMT_UYVY8_2X8;
-but I haven't examined all the potential options.
-
-  Dave
-
-[1] https://www.analog.com/media/en/technical-documentation/data-sheets/ADV7180.pdf
-[2] https://github.com/torvalds/linux/blob/master/drivers/media/i2c/adv7180.c#L1006
-
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-> ---
->  drivers/media/i2c/adv7180.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-> index d9a99fcfacb1..cbededfb6b3f 100644
-> --- a/drivers/media/i2c/adv7180.c
-> +++ b/drivers/media/i2c/adv7180.c
-> @@ -655,7 +655,7 @@ static int adv7180_enum_mbus_code(struct v4l2_subdev *sd,
->         if (code->index != 0)
->                 return -EINVAL;
->
-> -       code->code = MEDIA_BUS_FMT_UYVY8_2X8;
-> +       code->code = MEDIA_BUS_FMT_UYVY8_1X16;
->
->         return 0;
->  }
-> @@ -665,7 +665,7 @@ static int adv7180_mbus_fmt(struct v4l2_subdev *sd,
->  {
->         struct adv7180_state *state = to_state(sd);
->
-> -       fmt->code = MEDIA_BUS_FMT_UYVY8_2X8;
-> +       fmt->code = MEDIA_BUS_FMT_UYVY8_1X16;
->         fmt->colorspace = V4L2_COLORSPACE_SMPTE170M;
->         fmt->width = 720;
->         fmt->height = state->curr_norm & V4L2_STD_525_60 ? 480 : 576;
-> --
-> 2.32.0
->

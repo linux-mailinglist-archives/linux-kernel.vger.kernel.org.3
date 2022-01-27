@@ -2,107 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCF649ED00
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0E149ED23
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243146AbiA0VDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 16:03:03 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:18292 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344206AbiA0VDA (ORCPT
+        id S1344314AbiA0VLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 16:11:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344156AbiA0VK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 16:03:00 -0500
+        Thu, 27 Jan 2022 16:10:59 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7BEC061753
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:10:59 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id i4so3642515qtr.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:10:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643317380; x=1674853380;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OXRAZ4ZbAiGfh4OhUn2p/TK/Z5xaiNitvZb8Ee+RiIw=;
-  b=tOqFrcLs87Gi7yG4SKpEeKjvu79v2fgAfc78i+1LfmHLECKocY9Si7Tf
-   gq2Uo5V302RNiqLsZbahcQkCCAr00HvjAE06blYkEnl5w/0Hg4rbljgZi
-   2eTVEisRQfN6uuDbHHOI4xDl6Fh7IVTibY29fDJ23ePWvd0jutpjaCHjv
-   Q=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jan 2022 13:03:00 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 13:02:59 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 13:02:59 -0800
-Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 27 Jan 2022 13:02:58 -0800
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-To:     <dmitry.torokhov@gmail.com>
-CC:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <collinsd@codeaurora.org>,
-        <bjorn.andersson@linaro.org>, <swboyd@chromium.org>,
-        <skakit@codeaurora.org>,
-        Anjelique Melendez <quic_amelende@quicinc.com>
-Subject: [PATCH v2 4/4] input: misc: pm8941-pwrkey: simulate missed key press events
-Date:   Thu, 27 Jan 2022 13:00:29 -0800
-Message-ID: <20220127210024.25597-5-quic_amelende@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220127210024.25597-1-quic_amelende@quicinc.com>
-References: <20220127210024.25597-1-quic_amelende@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=m0D8ivz9PDCDCKh/arptMpR3/ao+LhFd+WDbL0Ndw6mZAYZf1UgxGLzVj40s+AmZjb
+         DuEwjd7NT9LFwA9OjKx7vr7puLYpS6zkJNbh+1BfuQgx4db+dU06Jgc7C75K093Hwjn/
+         9mCc5rYI5j3y1VvMx9vpxL5dad+OafMT9QhIQgFRN9dvv+QgByQ7o1yzKGSP02L54Znm
+         q7FBXWGkelfiR3xpWnnkdKDqg2UlG70uCnsM1s4SP7cRlEb+IJNQAjeVKHpZy42mZonq
+         RnHAdJAaDrxUHvlQWr6CsD5rnkBvpJUkcJOYzRgUFr/Bb7DCHALpPY9Ux9K4Rjywr0lt
+         YgYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=Uom92bwL3TAr5NcOS7JhicJ81i1wxyhlP/hSMhVt7kElMVs2aqS9PpZh172nKnmWqb
+         u3mukI4EwE4vsfAdN4qGAmUzbbuGLVrf4Psx/HnNNDM8MCd2DiuSBm5/oCPS1oQR5Ni7
+         dLdrvk7sRRgx2OVyP9leL+8q/yEsf4x2Bhs0xeK2FPkIlfv+wkVRukvJz7FC6Os50h+a
+         uQdvBoeFWfHxGmCu3PqfAluc5R+2HpFXHUtMDamh8Qd2h0oI0nWblW8m4mhOKqOFDWqE
+         42YxuUcC3GYlqikXgkuI5hYyj/+tTFyokBzW8w8bjzeJDRr7E9svPbAVes8KJZpJn2o0
+         a15Q==
+X-Gm-Message-State: AOAM530zHL4t4uWB9cYUv0Ngg/C8lRxubVLB6o1PcBFZ8mYN1WodoSqy
+        iJTLIfsykWAS+vYpJaergVkqe3I2n5wFPUJX2ZdMxNGuKKg=
+X-Google-Smtp-Source: ABdhPJxjfwa8g49rNfb5xQ4Dtq316EM5E6QepnaR+uvM+BcTaI+qmB/caHz8VslukXXXqzp0798ys0wp0mZ+YQ4gMH8=
+X-Received: by 2002:ac8:4e48:: with SMTP id e8mr4202203qtw.64.1643317847801;
+ Thu, 27 Jan 2022 13:10:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Received: by 2002:a05:6214:e4b:0:0:0:0 with HTTP; Thu, 27 Jan 2022 13:10:46
+ -0800 (PST)
+Reply-To: eanna00111@gmail.com
+From:   Mrs Anna Edward <mussaaliooooo7@gmail.com>
+Date:   Thu, 27 Jan 2022 13:10:46 -0800
+Message-ID: <CAFbf-n2dj0f-EXo2OhZA4D_6QXVYoysuMB5_+AOQv9Sb_nGe0w@mail.gmail.com>
+Subject: Urgent Reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Collins <collinsd@codeaurora.org>
+Greeting to you,
+Please forgive me for stressing you with my predicaments and I sorry
+to approach you through this media because it serves the fastest means
+of communication. I came across your E-mail from my personal search
+and I decided to contact you believing you will be honest to fulfill
+my final wish before I die.
 
-The status of the keys connected to the KPDPWR_N and RESIN_N pins
-is identified by reading corresponding bits in the interrupt real
-time status register.  If the status has changed by the time that
-the interrupt is handled then a press event will be missed.
+I am Mrs Anna Edward, 63 years, from USA, I am childless and I am
+suffering from a pro-long critical cancer, my doctors confirmed I may
+not live beyond two months from now as my ill health has defiled all
+forms of medical treatment. Since my days are numbered, I have decided
+willingly to fulfill my long-time promise to donate you the sum
+($5.000.000.00) million dollars I inherited from my late husband Mr.
+Edward Herbart, foreign bank account over years. I need a very honest
+person who can assist in transfer of this money to his or her account
+and use the funds for charity work of God while you use 50% for
+yourself. I want you to know there is no risk involved; it is 100%
+hitch free & safe.
 
-Maintain a last known status variable to find unbalanced release
-events and simulate press events for each accordingly.
+If you are interested in assisting in getting this fund into your
+account for a charity project to fulfill my promise before I die
+please let me know immediately.
 
-Signed-off-by: David Collins <collinsd@codeaurora.org>
-Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
----
- drivers/input/misc/pm8941-pwrkey.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
-index bcdbe260b684..99ef2ff92eb1 100644
---- a/drivers/input/misc/pm8941-pwrkey.c
-+++ b/drivers/input/misc/pm8941-pwrkey.c
-@@ -76,6 +76,7 @@ struct pm8941_pwrkey {
- 	u32 code;
- 	u32 sw_debounce_time_us;
- 	ktime_t sw_debounce_end_time;
-+	bool last_status;
- 	const struct pm8941_data *data;
- };
- 
-@@ -162,6 +163,16 @@ static irqreturn_t pm8941_pwrkey_irq(int irq, void *_data)
- 		pwrkey->sw_debounce_end_time = ktime_add_us(ktime_get(),
- 						pwrkey->sw_debounce_time_us);
- 
-+	/*
-+	 * Simulate a press event in case a release event occurred without a
-+	 * corresponding press event.
-+	 */
-+	if (!pwrkey->last_status && !sts) {
-+		input_report_key(pwrkey->input, pwrkey->code, 1);
-+		input_sync(pwrkey->input);
-+	}
-+	pwrkey->last_status = sts;
-+
- 	input_report_key(pwrkey->input, pwrkey->code, sts);
- 	input_sync(pwrkey->input);
- 
--- 
-2.34.1
-
+I will appreciate your utmost confidentiality as I wait for your reply.
+Best Regards,
+Mrs Anna Edward

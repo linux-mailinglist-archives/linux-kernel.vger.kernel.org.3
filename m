@@ -2,83 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C396449E34A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E044249E357
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241873AbiA0NXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241798AbiA0NXA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:23:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2A1C06174E;
-        Thu, 27 Jan 2022 05:22:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 776CBB82213;
-        Thu, 27 Jan 2022 13:22:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9863FC340E4;
-        Thu, 27 Jan 2022 13:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643289772;
-        bh=gw18Fbvfp/ZEQuA9OJdXjIR6yRIzDEoPY96pix/ilGQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D/idt8ra099XTl6YPGYstQELWlBsoUXLp9amRf+aqvj1IcC9/fD8ktbfl/zC+nPGk
-         oDoSzzufNCZLCwTITvC548tMScQNDXlGs81N7y19jcub9YNquaKkWXtJxmAC+G4zhS
-         EfIsahAmL1vV5aIUM/f66fTODwMzOGBQay+z183M=
-Date:   Thu, 27 Jan 2022 14:22:49 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
-Message-ID: <YfKcqcq4Ii1qu2+8@kroah.com>
-References: <20220127110742.922752-1-o.rempel@pengutronix.de>
- <YfJ+ceEzvzMM1JsW@kroah.com>
- <20220127123152.GF9150@pengutronix.de>
+        id S236827AbiA0NYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:24:15 -0500
+Received: from foss.arm.com ([217.140.110.172]:33148 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229565AbiA0NYO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 08:24:14 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 225B51063;
+        Thu, 27 Jan 2022 05:24:14 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.14.34])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D36163F766;
+        Thu, 27 Jan 2022 05:24:12 -0800 (PST)
+Date:   Thu, 27 Jan 2022 13:24:00 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Yinan Liu <yinan@linux.alibaba.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [powerpc] ftrace warning kernel/trace/ftrace.c:2068 with
+ code-patching selftests
+Message-ID: <YfKc8MDwenS1iXqQ@FVFF77S0Q05N>
+References: <e9422643-a210-b77f-a037-da63a9d2e925@linux.alibaba.com>
+ <20220124114548.30241947@gandalf.local.home>
+ <0fa0daec-881a-314b-e28b-3828e80bbd90@linux.alibaba.com>
+ <YfFclROd+0/61q2d@FVFF77S0Q05N>
+ <YfKGKWW5UfZ15kCW@FVFF77S0Q05N>
+ <CAMj1kXHgpr0KYx5PYO_SpqaN8Ar2kfmc9Pb-d26uaYDpjwTz9w@mail.gmail.com>
+ <YfKOENgR6sLnHQmA@FVFF77S0Q05N>
+ <CAMj1kXGsmK9pBmgwmMEr302eCHtL=cqs4jqM_jOiK-bLO2gQog@mail.gmail.com>
+ <YfKXM0wBfTh0V8+L@FVFF77S0Q05N>
+ <CAMj1kXF3Fg2O=5prQnUWeNFeCqojP1z2zDXMwxFdcNtWLfL7Vg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127123152.GF9150@pengutronix.de>
+In-Reply-To: <CAMj1kXF3Fg2O=5prQnUWeNFeCqojP1z2zDXMwxFdcNtWLfL7Vg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 01:31:52PM +0100, Oleksij Rempel wrote:
-> On Thu, Jan 27, 2022 at 12:13:53PM +0100, Greg KH wrote:
-> > On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
-> > > The weakest link of usbnet devices is the USB cable.
-> > 
-> > The weakest link of any USB device is the cable, why is this somehow
-> > special to usbnet devices?
-> > 
-> > > Currently there is
-> > > no way to automatically detect cable related issues except of analyzing
-> > > kernel log, which would differ depending on the USB host controller.
-> > > 
-> > > The Ethernet packet counter could potentially show evidence of some USB
-> > > related issues, but can be Ethernet related problem as well.
-> > > 
-> > > To provide generic way to detect USB issues or HW issues on different
-> > > levels we need to make use of devlink.
-> > 
-> > Please make this generic to all USB devices, usbnet is not special here
-> > at all.
+On Thu, Jan 27, 2022 at 02:07:03PM +0100, Ard Biesheuvel wrote:
+> On Thu, 27 Jan 2022 at 13:59, Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > On Thu, Jan 27, 2022 at 01:22:17PM +0100, Ard Biesheuvel wrote:
+> > > On Thu, 27 Jan 2022 at 13:20, Mark Rutland <mark.rutland@arm.com> wrote:
+> > > > On Thu, Jan 27, 2022 at 01:03:34PM +0100, Ard Biesheuvel wrote:
+> > > >
+> > > > > These architectures use place-relative extables for the same reason:
+> > > > > place relative references are resolved at build time rather than at
+> > > > > runtime during relocation, making a build time sort feasible.
+> > > > >
+> > > > > arch/alpha/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> > > > > arch/arm64/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> > > > > arch/ia64/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> > > > > arch/parisc/include/asm/uaccess.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> > > > > arch/powerpc/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> > > > > arch/riscv/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> > > > > arch/s390/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> > > > > arch/x86/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> > > > >
+> > > > > Note that the swap routine becomes something like the below, given
+> > > > > that the relative references need to be fixed up after the entry
+> > > > > changes place in the sorted list.
+> > > > >
+> > > > > static void swap_ex(void *a, void *b, int size)
+> > > > > {
+> > > > >         struct exception_table_entry *x = a, *y = b, tmp;
+> > > > >         int delta = b - a;
+> > > > >
+> > > > >         tmp = *x;
+> > > > >         x->insn = y->insn + delta;
+> > > > >         y->insn = tmp.insn - delta;
+> > > > >         ...
+> > > > > }
+> > > > >
+> > > > > As a bonus, the resulting footprint of the table in the image is
+> > > > > reduced by 8x, given that every 8 byte pointer has an accompanying 24
+> > > > > byte RELA record, so we go from 32 bytes to 4 bytes for every call to
+> > > > > __gnu_mcount_mc.
+> > > >
+> > > > Absolutely -- it'd be great if we could do that for the callsite locations; the
+> > > > difficulty is that the entries are generated by the compiler itself, so we'd
+> > > > either need some build/link time processing to convert each absolute 64-bit
+> > > > value to a relative 32-bit offset, or new compiler options to generate those as
+> > > > relative offsets from the outset.
+> > >
+> > > Don't we use scripts/recordmcount.pl for that?
+> >
+> > Not quite -- we could adjust it to do so, but today it doesn't consider
+> > existing mcount_loc entries, and just generates new ones where the compiler has
+> > generated calls to mcount, which it finds by scanning the instructions in the
+> > binary. Today it is not used:
+> >
+> > * On arm64 when we default to using `-fpatchable-function-entry=N`.  That makes
+> >   the compiler insert 2 NOPs in the function prologue, and log the location of
+> >   that NOP sled to a section called.  `__patchable_function_entries`.
+> >
+> >   We need the compiler to do that since we can't reliably identify 2 NOPs in a
+> >   function prologue as being intended to be a patch site, as e.g. there could
+> >   be notrace functions where the compiler had to insert NOPs for alignment of a
+> >   subsequent brnach or similar.
+> >
+> > * On architectures with `-nop-mcount`. On these, it's necessary to use
+> >   `-mrecord-mcount` to have the compiler log the patch-site, for the same
+> >   reason as with `-fpatchable-function-entry`.
+> >
+> > * On architectures with `-mrecord-mcount` generally, since this avoids the
+> >   overhead of scanning each object.
+> >
+> > * On x86 when objtool is used.
+> >
 > 
-> Ok. I'll need some help. What is the best place to attach devlink
-> registration in the USB subsystem and the places to attach health
-> reporters?
+> Right.
+> 
+> I suppose that on arm64, we can work around this by passing
+> --apply-dynamic-relocs to the linker, so that all R_AARCH64_RELATIVE
+> targets are prepopulated with the link time value of the respective
+> addresses. It does cause some bloat, which is why we disable that
+> today, but we could make that dependent on ftrace being enabled.
 
-You tell us, you are the one that thinks this needs to be reported to
-userspace.  What is only being reported in kernel logs that userspace
-somehow needs to see?  And what will userspace do with that information?
+We'd also need to teach the build-time sort to update the relocations, unless
+you mean to also change the boot-time reloc code to RMW with the offset?
 
-thanks,
+I think for right now the best thing is to disable the build-time sort for
+arm64, but maybe something like that is the right thing to do longer term.
 
-greg k-h
+> I do wonder how much over head we accumulate, though, by having all
+> these relocations, but I suppose that is the situation today in any
+> case.
+
+Yeah; I suspect if we want to do something about that we want to do it more
+generally, and would probably need to do something like the x86 approach and
+rewrite the relocs at build-time to something more compressed. If we applied
+the dynamic relocs with the link-time address we'd only need 4 bytes to
+identify each pointer to apply an offset to.
+
+I'm not exactly sure how we could do that, nor what the trade-off look like in
+practice.
+
+THanks,
+Mark.

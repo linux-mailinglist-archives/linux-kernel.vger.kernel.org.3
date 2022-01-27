@@ -2,150 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D30F749DE99
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450DC49DE9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234701AbiA0J7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:59:16 -0500
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:25450 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiA0J7P (ORCPT
+        id S238709AbiA0KAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 05:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229956AbiA0KAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:59:15 -0500
+        Thu, 27 Jan 2022 05:00:20 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AF9C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:00:19 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id e2so3747265wra.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 02:00:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1643277555; x=1674813555;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=RLiidatky/+Hiquq9tPj8nfmzJZf/NX+3FB9B8gor6M=;
-  b=IJnsMJvyLj+FSUvVH+ZPFevfQVNo0jqFwKM6DR/c170PLw6q0SSydadD
-   08rVpC8weKyKudpCNn3JRPXXBzu2coW7smRuThvZ6/9tFEZulRJHDak6/
-   rbdxbQsHTSdyAfNk1Y4ywr2pS2It7w0UPDEe9Hwlf8Cfl4Iqg+a+8jlZ4
-   k=;
-X-IronPort-AV: E=Sophos;i="5.88,320,1635206400"; 
-   d="scan'208";a="173487821"
-Subject: Re: [PATCH 1/4] EDAC: Fix calculation of returned address and next offset in
- edac_align_ptr()
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-39fdda15.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 27 Jan 2022 09:59:03 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-39fdda15.us-west-2.amazon.com (Postfix) with ESMTPS id 8A27041AA8;
-        Thu, 27 Jan 2022 09:59:03 +0000 (UTC)
-Received: from EX13D13UWB002.ant.amazon.com (10.43.161.21) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Thu, 27 Jan 2022 09:59:03 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D13UWB002.ant.amazon.com (10.43.161.21) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Thu, 27 Jan 2022 09:59:02 +0000
-Received: from [192.168.22.106] (10.1.213.23) by mail-relay.amazon.com
- (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.28 via Frontend
- Transport; Thu, 27 Jan 2022 09:58:59 +0000
-Message-ID: <9bd8f3c5-2281-8235-9eac-d2c371245a54@amazon.com>
-Date:   Thu, 27 Jan 2022 11:58:58 +0200
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=dj+Wxdz6jJyNZo3oThjdxQEE66JUp4dziKqN/pwvYhw=;
+        b=YpQltIzwqQUIZLwJV9b7TpxpNtLjJFOUUFaDuIY26pQRByLg/xUO0XcNO1hXuzgrtv
+         aXl2Ea2ymMN7sHKA1BKyX7TuvIs+MfmbCx1sApsh3bpKknTlQ9SWaixDSnqHtxqdTSri
+         E4CRr7QEGLltTYA32aqiK2eD9wBeb86J4/dhY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=dj+Wxdz6jJyNZo3oThjdxQEE66JUp4dziKqN/pwvYhw=;
+        b=6sV1YjP+sN50GJblJMuvjR38Pa2d8W3P3ko8GMjxhcRVSVod9RwA25+ZjgZCmDw34n
+         91rwVB032BqjAdbBPhvpiyoKlYqoPWlPI7hpEkRX0cK9D3cIn+eJKUCnEIWdn7EMwnlR
+         DopUqDShe3KnttbTCt/UzL/0cK8LbPy6Ei3P945RtwXddGm1I1OvtCxTCFaecw0sPOoo
+         J2W0Rglz1b0a4+2CKmvuuaLOnvyfD5ZaGveyhXrIpmT+PFonCW4xY78HL2XwLNyehrO4
+         dwQuwIn74w0ec3kmo3Ub/ddk5MMtb8UQclYO7EsNqtMfD7UHnYZnae7zr3Nf1cNGc7/4
+         LRhQ==
+X-Gm-Message-State: AOAM533KDnXyAjniUyc7OU7yTFeA/hxQrROR1liWI+bXz4kwvCklQ2KT
+        ElSian0ktjaRCDS8MkJnHIiLnQ==
+X-Google-Smtp-Source: ABdhPJyZcMRUfkbUyRjJW3Arq9MAqFzUEFnjmUGAvJqKbxi8qGWFKt2XXxgNxptn90NiYH0fbc4aFA==
+X-Received: by 2002:a5d:55c3:: with SMTP id i3mr2307961wrw.537.1643277618288;
+        Thu, 27 Jan 2022 02:00:18 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id i2sm1843836wmq.23.2022.01.27.02.00.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 02:00:17 -0800 (PST)
+Date:   Thu, 27 Jan 2022 11:00:14 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH 02/19] dma-buf-map: Add helper to initialize
+ second map
+Message-ID: <YfJtLkdkh4yde20f@phenom.ffwll.local>
+Mail-Followup-To: Lucas De Marchi <lucas.demarchi@intel.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org
+References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+ <20220126203702.1784589-3-lucas.demarchi@intel.com>
+ <f0dbdcc0-13b5-c484-0bf3-a1f8c3e48954@amd.com>
+ <20220127075728.ygwgorhnrwaocdqv@ldmartin-desk2>
+ <3066c6a7-fc73-d34d-d209-a3ff6818dfb6@amd.com>
+ <YfJedaoeJjE3grum@phenom.ffwll.local>
+ <20220127093332.wnkd2qy4tvwg5i5l@ldmartin-desk2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <mchehab@kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
-        <hanochu@amazon.com>
-References: <20220113100622.12783-1-farbere@amazon.com>
- <20220113100622.12783-2-farbere@amazon.com> <YfALFy7LGGIOS2Fv@zn.tnic>
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <YfALFy7LGGIOS2Fv@zn.tnic>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220127093332.wnkd2qy4tvwg5i5l@ldmartin-desk2>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/2022 4:37 PM, Borislav Petkov wrote:
-> How exactly did this "become an issue"?
-One of the fields in our private-data structure is 'struct notifier_block'
-which has a next field of type 'struct notifier_block __rcu *'.
-The size of our private-data structure is greater than 8, and it comes after
-'struct edac_mc_layer' which has a size that is not zero modulo eight, and
-also ends at an address that is not zero modulo eight.
-Because of the bug in edac_align_ptr(), our private-data structure which
-should have been aligned to 8 wasn't (it was aligned to 4), so
-notifier_block was also not aligned to 8, and finally next wasn't aligned
-to 8.
+On Thu, Jan 27, 2022 at 01:33:32AM -0800, Lucas De Marchi wrote:
+> On Thu, Jan 27, 2022 at 09:57:25AM +0100, Daniel Vetter wrote:
+> > On Thu, Jan 27, 2022 at 09:02:54AM +0100, Christian König wrote:
+> > > Am 27.01.22 um 08:57 schrieb Lucas De Marchi:
+> > > > On Thu, Jan 27, 2022 at 08:27:11AM +0100, Christian König wrote:
+> > > > > Am 26.01.22 um 21:36 schrieb Lucas De Marchi:
+> > > > > > When dma_buf_map struct is passed around, it's useful to be able to
+> > > > > > initialize a second map that takes care of reading/writing to an offset
+> > > > > > of the original map.
+> > > > > >
+> > > > > > Add a helper that copies the struct and add the offset to the proper
+> > > > > > address.
+> > > > >
+> > > > > Well what you propose here can lead to all kind of problems and is
+> > > > > rather bad design as far as I can see.
+> > > > >
+> > > > > The struct dma_buf_map is only to be filled in by the exporter and
+> > > > > should not be modified in this way by the importer.
+> > > >
+> > > > humn... not sure if I was  clear. There is no importer and exporter here.
+> > > 
+> > > Yeah, and exactly that's what I'm pointing out as problem here.
+> > > 
+> > > You are using the inter driver framework for something internal to the
+> > > driver. That is an absolutely clear NAK!
+> > > 
+> > > We could discuss that, but you guys are just sending around patches to do
+> > > this without any consensus that this is a good idea.
+> > 
+> > Uh I suggested this, also we're already using dma_buf_map all over the
+> > place as a convenient abstraction. So imo that's all fine, it should allow
+> > drivers to simplify some code where on igpu it's in normal kernel memory
+> > and on dgpu it's behind some pci bar.
+> > 
+> > Maybe we should have a better name for that struct (and maybe also a
+> > better place), but way back when we discussed that bikeshed I didn't come
+> > up with anything better really.
+> 
+> I suggest iosys_map since it abstracts access to IO and system memory.
+> 
+> > 
+> > > > There is a role delegation on filling out and reading a buffer when
+> > > > that buffer represents a struct layout.
+> > > >
+> > > > struct bla {
+> > > >     int a;
+> > > >     int b;
+> > > >     int c;
+> > > >     struct foo foo;
+> > > >     struct bar bar;
+> > > >     int d;
+> > > > }
+> > > >
+> > > >
+> > > > This implementation allows you to have:
+> > > >
+> > > >     fill_foo(struct dma_buf_map *bla_map) { ... }
+> > > >     fill_bar(struct dma_buf_map *bla_map) { ... }
+> > > >
+> > > > and the first thing these do is to make sure the map it's pointing to
+> > > > is relative to the struct it's supposed to write/read. Otherwise you're
+> > > > suggesting everything to be relative to struct bla, or to do the same
+> > > > I'm doing it, but IMO more prone to error:
+> > > >
+> > > >     struct dma_buf_map map = *bla_map;
+> > > >     dma_buf_map_incr(map, offsetof(...));
+> > 
+> > Wrt the issue at hand I think the above is perfectly fine code. The idea
+> > with dma_buf_map is really that it's just a special pointer, so writing
+> > the code exactly as pointer code feels best. Unfortunately you cannot make
+> > them typesafe (because of C), so the code sometimes looks a bit ugly.
+> > Otherwise we could do stuff like container_of and all that with
+> > typechecking in the macros.
+> 
+> I had exactly this code above, but after writting quite a few patches
+> using it, particularly with functions that have to write to 2 maps (see
+> patch 6 for example), it felt much better to have something to
+> initialize correctly from the start
+> 
+> 	struct dma_buf_map other_map = *bla_map;
+> 	/* poor Lucas forgetting dma_buf_map_incr(map, offsetof(...)); */
+> 
+> is error prone and hard to debug since you will be reading/writting
+> from/to another location rather than exploding
+> 
+> While with the construct below
+> 
+> 	other_map;
+> 	...
+> 	other_map = INITIALIZER()
+> 
+> I can rely on the compiler complaining about uninitialized var. And
+> in most of the cases I can just have this single line in the beggining of the
+> function when the offset is constant:
+> 
+> 	struct dma_buf_map other_map = INITIALIZER(bla_map, offsetof(..));
 
-> So, please explain more verbosely, a specific example or how I could
-> reproduce it, would be even better.
+Hm yeah that's a good point that this allows us to rely on the compiler to
+check for uninitialized variables.
 
-Our al_mc_edac driver calls atomic_notifier_chain_register() on probe, to
-add the notifier_block to panic_notifier_list.
-We probe the driver more than once, and each time we use the same value for
-the priority field in the notifier_block (so the newer notifier_block should
-come later in panic_notifier_list).
-When the driver is probed for the second time, we get an unable to handle
-kernel paging request panic at rcu_assign_pointer() which is called from
-notifier_chain_register().
-It happens when rcu_assign_pointer() tries to set the unaligned next pointer
-from the first probe, to point to the new notifier_block of the second
-probe.
+Maybe include the above (with editing, but keeping the examples) in the
+kerneldoc to explain why/how to use this? With that the concept at least
+has my
 
-Unable to handle kernel paging request at virtual address ffff8013e8037f4c
-Mem abort info:
- Â  ESR = 0x96000061
- Â  Exception class = DABT (current EL), IL = 32 bits
- Â  SET = 0, FnV = 0
- Â  EA = 0, S1PTW = 0
-Data abort info:
- Â  ISV = 0, ISS = 0x00000061
- Â  CM = 0, WnR = 1
- Â  swapper pgtable: 4k pages, 48-bit VAs, pgdp = (____ptrval____)
- Â  [ffff8013e8037f4c] pgd=00000013ffff8003, pud=00680013c0000711
- Â  Internal error: Oops: 96000061 [#1] SMP
- Â  Modules linked in:
- Â  Process swapper/0 (pid: 1, stack limit = 0x(____ptrval____))
- Â  CPU: 10 PID: 1 Comm: swapper/0 Not tainted 4.19.191 #1016
- Â  Hardware name: Annapurna Labs Alpine V3 EVP (DT)
- Â  pstate: 20000085 (nzCv daIf -PAN -UAO)
- Â  pc : atomic_notifier_chain_register+0x80/0xb8
- Â  lr : atomic_notifier_chain_register+0x38/0xb8
-sp : ffff0000097d3b10
-x29: ffff0000097d3b10 x28: ffff000009108068
-x27: ffff0000095ca000 x26: ffff8013ed0a8744
-x25: ffff0000096e3000 x24: ffff000009199000
-x23: ffff8013ed016810 x22: ffff8013ed016800
-x21: 0000000000000000 x20: ffff8013ed0a8744
-x19: ffff0000095ca6d8 x18: ffffffffffffffff
-x17: 0000000000000000 x16: 0000000000000000
-x15: ffff0000091996c8 x14: 2820564544203a63
-x13: 6d5f6c612072656c x12: 6c6f72746e6f6320
-x11: 636164655f636d5f x10: ffff000009199918
-x9 : ffff000009173018 x8 : ffff00000878ec80
-x7 : 676e69766947203a x6 : 00000000000002b1
-x5 : 000000000000003f x4 : 0000000000000000
-x3 : 000000007fffffff x2 : ffff8013e8037f4c
-x1 : 0000000000000096 x0 : ffff0000091bacf8
-Call trace:
- Â atomic_notifier_chain_register+0x80/0xb8
- Â al_mc_edac_probe+0x224/0x468
- Â platform_drv_probe+0x58/0xa8
-really_probe+0x2cc/0x3b8
-driver_probe_device+0x12c/0x148
-__driver_attach+0x148/0x150
-bus_for_each_dev+0x84/0xd8
-driver_attach+0x30/0x40
-bus_add_driver+0x174/0x2a8
-driver_register+0x64/0x110
-__platform_driver_register+0x54/0x60
-al_mc_edac_driver_init+0x20/0x28
-do_one_initcall+0x54/0x208
-kernel_init_freeable+0x294/0x354
-kernel_init+0x18/0x118
-ret_from_fork+0x10/0x18
-Code: 91002002 f9400400 b5ffff60 f9000680 (c89ffc54)
----[ end trace dba8c8c6291afa5b ]---
-Kernel panic - not syncing: Fatal exception
-SMP: stopping secondary CPUs
-Kernel Offset: disabled
-CPU features: 0x0,20006008
-Memory Limit: none
----[ end Kernel panic - not syncing: Fatal exception ]---
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
+I'll leave it up to you & Christian to find a prettier color choice for
+the naming bikeshed.
+-Daniel
+
+> 
+> Lucas De Marchi
+> 
+> > -Daniel
+> > 
+> > > > IMO this construct is worse because at a point in time in the function
+> > > > the map was pointing to the wrong thing the function was supposed to
+> > > > read/write.
+> > > >
+> > > > It's also useful when the function has double duty, updating a global
+> > > > part of the struct and a table inside it (see example in patch 6)
+> > > >
+> > > > thanks
+> > > > Lucas De Marchi
+> > > 
+> > 
+> > -- 
+> > Daniel Vetter
+> > Software Engineer, Intel Corporation
+> > http://blog.ffwll.ch
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

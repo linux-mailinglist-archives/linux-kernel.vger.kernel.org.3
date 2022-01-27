@@ -2,150 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA7649EDC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF71F49EDC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238341AbiA0Vun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 16:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
+        id S236410AbiA0Vwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 16:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbiA0Vum (ORCPT
+        with ESMTP id S232585AbiA0Vw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 16:50:42 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4F2C061714;
-        Thu, 27 Jan 2022 13:50:42 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so4454237pjp.0;
-        Thu, 27 Jan 2022 13:50:42 -0800 (PST)
+        Thu, 27 Jan 2022 16:52:29 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56476C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:52:29 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a88-20020a25a1e1000000b00615c588ab22so8559697ybi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:52:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bPYN1y0P5vV2Se4amYQVixGh8Z0Upgf/B1r9635Dq04=;
-        b=bkyYQxusr3zSqNY4Xt/NT/oMbZsjX0v5CJwGSwmXvL9pROv3rTHnXgFouQYjHEynGw
-         mk/ieFvAk6YukjrVSeM77IhHHsDOG8QJDTkzlm7Qa+r9S6pLilRiLZwre60zJyMrhtjj
-         X6f57BqpFDgeraghfMb6mTjp6Zfyb3uTClLQxjZj3sNTr2y9vSgRbptjEGm4FE9HL8ey
-         LQk9e8mQtCaWk8X6sG7LfzUTHgNatTrm2LhqKaLPU/Tl79b6+VcVfaVXhUShNomLeQTc
-         YORdr3RIPUNdFOHN9ABJX/EqSL8XhH11awY/PzQDqI5oLsIBHd+SZDw/zfLJyv7YZnrl
-         D3NQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=JPoXnQxk1ka8IPJ0XT1Jbys/cgKi0K3dUrFoxr2hH90=;
+        b=AREOSaMxAUumJURgukoWmMtb4bSG3MUzjwZxH13PkmDxsGa4jqih87mtx1VOca+FO+
+         uYfHoElnx0xbW8dtx76lzBMyitQ0SijCqOknlvCAYkHaMqlRry/XHIoVCp3rwviHZSgZ
+         5bveJRUoYiigwe3v4MKWOwS9NCpzHJJjxEGjdTYRWDJl5jmezh5cQiG+2mffhKOSMUqF
+         rtAjR5XdiS4w+O+XH6sUTpQKhZdlVKpUhzwT3iKLMIn95BmULQpHT24yxyrbe8UemQ3u
+         /tq+IrAs3bU4yw3U9ZmFGuvxd1BtW3icneIalGq5YrU884YGNAhO4EP48UUd30aYuBd6
+         69og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bPYN1y0P5vV2Se4amYQVixGh8Z0Upgf/B1r9635Dq04=;
-        b=kmlpmY9QkZfkVh7l6ImVSgWGBaxB6e32ybJiot37O3z9e2miQ7IMkaC8I2zGwqgg7D
-         cnOMyrn2EZTB97vwzvjQqAdcMHhlSDRsc0mEgqCG3gnAsViw2hYWqMyUS4wJQ78RdA+P
-         6bBoNGGA0jv1rX8jqCXY6eWChshAsCfk1XbYQouIgRljidTs7wJfBpqFxWQ4JIkWSlR8
-         d7kGCLlHdVJnMpvKF/G7OxI6KzSxgRN3X1/CHVyX33VJYkRpkIuQn9aLJbwH+tLH0fhj
-         72wHRP8xas/eTFpVu4Qx/UVBwb/vok1AnaA2an6H5zJmpuCK9c3p8galn/61+JbYNJ6w
-         EPOQ==
-X-Gm-Message-State: AOAM531fyBhBQ2eyNhtLO2vW9KVeZCCous6g7DWBvWBWfZQYEFF99m7I
-        1u4H3mNgv1oEVhNI4b4EJfYZFqp7HGE=
-X-Google-Smtp-Source: ABdhPJyDiKOPVs7PSeybcMqGT+1WLcaLVA9hNTX4HM3cU1nMFQNppy/umKeKJWkVxkFJVMtMUCPjHQ==
-X-Received: by 2002:a17:90b:1d01:: with SMTP id on1mr5407800pjb.77.1643320241519;
-        Thu, 27 Jan 2022 13:50:41 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j6sm7073973pfu.18.2022.01.27.13.50.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 13:50:40 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM
-        BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE...),
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-gpio@vger.kernel.org (open list:PIN CONTROL SUBSYSTEM),
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE)
-Subject: [PATCH] pinctrl: bcm2835: Fix a few error paths
-Date:   Thu, 27 Jan 2022 13:50:31 -0800
-Message-Id: <20220127215033.267227-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=JPoXnQxk1ka8IPJ0XT1Jbys/cgKi0K3dUrFoxr2hH90=;
+        b=tTGHgSN3ybYYATqzFXp6zMwecAPHvbfHb/WoXXC+pxQzQAITULXsY8lCxunrMV82t3
+         6iNo78cjaSv43Om/AZnOXQ/Dr+ZCXGM0IVYrGKtkCtExPl3FTE6hKpPCx2A2dA/oHCTh
+         ERD52VVYdKQ6n/tdEXVQuWd85z4m3Kd48mYCuyF97UN5eHL6tNOUj1+mDDyxlJwcfCLP
+         1w+YwXQ+HQZ6DilF7NFHl1YHdUE9A8AilurMfiovREf4eJJaY/GH5KaoFeq/hp6IUZxX
+         CrxmEiK2RXmrBazeDupK/E79cCczu1nQ24LGQ8x9yVnTY5mJKkpC69VBUSxM+4zMKhdt
+         eLEg==
+X-Gm-Message-State: AOAM530a/bzXFIsAuCcsjIHmOQk3rC+QR5q7qYNrYwRTKqnzuLqluPc/
+        cL5iwbsRUr65a85MEueNwO3wfwUSN0IYvw==
+X-Google-Smtp-Source: ABdhPJzBGtnLv/y52L2vEZJ97rm4iMHe/jYh76HL0wmgaI1BonlqwJGG8ueykRayA1mNwbDWnLuCJ5DjNAhFWQ==
+X-Received: from dlatypov.svl.corp.google.com ([2620:15c:2cd:202:5484:2aa:f5f4:a1e0])
+ (user=dlatypov job=sendgmr) by 2002:a81:23d1:: with SMTP id
+ j200mr0ywj.471.1643320347735; Thu, 27 Jan 2022 13:52:27 -0800 (PST)
+Date:   Thu, 27 Jan 2022 13:52:22 -0800
+Message-Id: <20220127215222.159049-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH] kunit: cleanup assertion macro internal variables
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio
-hogs") a few error paths would not unwind properly the registration of
-gpio ranges. Correct that by assigning a single error label and goto it
-whenever we encounter a fatal error.
+All the operands should be tagged `const`.
+We're only assigning them to variables so that we can compare them (e.g.
+check if left == right, etc.) and avoid evaluating expressions multiple
+times.
 
-Fixes: 266423e60ea1 ("pinctrl: bcm2835: Change init order for gpio hogs")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+There's no need for them to be mutable.
+
+Also rename the helper variable `loc` to `__loc` like we do with
+`__assertion` and `__strs` to avoid potential name collisions with user
+code.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- drivers/pinctrl/bcm/pinctrl-bcm2835.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+Note: this patch is based on top of
+https://lore.kernel.org/all/20220125210011.3817742-4-dlatypov@google.com/
+There is no semantic dependency between the patches, but they touch
+adjacent lines.
+---
+ include/kunit/test.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pinctrl/bcm/pinctrl-bcm2835.c b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-index c4ebfa852b42..47e433e09c5c 100644
---- a/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-+++ b/drivers/pinctrl/bcm/pinctrl-bcm2835.c
-@@ -1269,16 +1269,18 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
- 				     sizeof(*girq->parents),
- 				     GFP_KERNEL);
- 	if (!girq->parents) {
--		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
--		return -ENOMEM;
-+		err = -ENOMEM;
-+		goto out_remove;
- 	}
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 088ff394ae94..00b9ff7783ab 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -779,10 +779,10 @@ void kunit_do_failed_assertion(struct kunit *test,
  
- 	if (is_7211) {
- 		pc->wake_irq = devm_kcalloc(dev, BCM2835_NUM_IRQS,
- 					    sizeof(*pc->wake_irq),
- 					    GFP_KERNEL);
--		if (!pc->wake_irq)
--			return -ENOMEM;
-+		if (!pc->wake_irq) {
-+			err = -ENOMEM;
-+			goto out_remove;
-+		}
- 	}
- 
- 	/*
-@@ -1306,8 +1308,10 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
- 
- 		len = strlen(dev_name(pc->dev)) + 16;
- 		name = devm_kzalloc(pc->dev, len, GFP_KERNEL);
--		if (!name)
--			return -ENOMEM;
-+		if (!name) {
-+			err = -ENOMEM;
-+			goto out_remove;
-+		}
- 
- 		snprintf(name, len, "%s:bank%d", dev_name(pc->dev), i);
- 
-@@ -1326,11 +1330,14 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
- 	err = gpiochip_add_data(&pc->gpio_chip, pc);
- 	if (err) {
- 		dev_err(dev, "could not add GPIO chip\n");
--		pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
--		return err;
-+		goto out_remove;
- 	}
- 
- 	return 0;
-+
-+out_remove:
-+	pinctrl_remove_gpio_range(pc->pctl_dev, &pc->gpio_range);
-+	return err;
- }
- 
- static struct platform_driver bcm2835_pinctrl_driver = {
+ #define KUNIT_ASSERTION(test, assert_type, pass, assert_class, INITIALIZER, fmt, ...) do { \
+ 	if (unlikely(!(pass))) {					       \
+-		static const struct kunit_loc loc = KUNIT_CURRENT_LOC;	       \
++		static const struct kunit_loc __loc = KUNIT_CURRENT_LOC;       \
+ 		struct assert_class __assertion = INITIALIZER;		       \
+ 		kunit_do_failed_assertion(test,				       \
+-					  &loc,				       \
++					  &__loc,			       \
+ 					  assert_type,			       \
+ 					  &__assertion.assert,		       \
+ 					  fmt,				       \
+@@ -872,8 +872,8 @@ void kunit_do_failed_assertion(struct kunit *test,
+ 				    fmt,				       \
+ 				    ...)				       \
+ do {									       \
+-	typeof(left) __left = (left);					       \
+-	typeof(right) __right = (right);				       \
++	const typeof(left) __left = (left);				       \
++	const typeof(right) __right = (right);				       \
+ 	static const struct kunit_binary_assert_text __text = {		       \
+ 		.operation = #op,					       \
+ 		.left_text = #left,					       \
+@@ -956,7 +956,7 @@ do {									       \
+ 						fmt,			       \
+ 						...)			       \
+ do {									       \
+-	typeof(ptr) __ptr = (ptr);					       \
++	const typeof(ptr) __ptr = (ptr);				       \
+ 									       \
+ 	KUNIT_ASSERTION(test,						       \
+ 			assert_type,					       \
 -- 
-2.25.1
+2.35.0.rc2.247.g8bbb082509-goog
 

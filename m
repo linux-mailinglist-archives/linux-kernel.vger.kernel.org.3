@@ -2,92 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7341F49DEBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FA949DEBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbiA0KHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 05:07:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiA0KH3 (ORCPT
+        id S238936AbiA0KJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 05:09:00 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52268 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231903AbiA0KJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 05:07:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A26C061714;
-        Thu, 27 Jan 2022 02:07:28 -0800 (PST)
-Date:   Thu, 27 Jan 2022 11:07:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643278047;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BYR/PyGx3Is3z5vyQ7uQWePnywgy3STS2Zjh/6oWB0g=;
-        b=3+jlgIGZnwa7n1WXDDDEEw2Ii2QECYNqe0NSkpNOyQa0ccXogPSRQVQlY0JP9w/VOOLbY3
-        XO4sO6UZGNagabhsBj4oKGt/QOAeK6eQ89GS/GEiC6CvsSursMfYyvzfl3fHOZ3fcYd/iE
-        /yVypAZLNeNcJLH7bd2g2JiwD8d/IOKyovEg8LuO933QoPh9y9jFUE6NvcU7XjxMuBPIHy
-        gDLKJlxyvw0iuTk1nWJxwDw/byAdRbSXMli6CDm43Ank0LGP1a6DmxdbFiwHw6q0MrvQ7v
-        IPdJouVa3nk0AUmrUgD4A8m5UX3ygaOT9gMH16Pkk8F0G+3YJm9ZdW3IsS5xow==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643278047;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BYR/PyGx3Is3z5vyQ7uQWePnywgy3STS2Zjh/6oWB0g=;
-        b=5zGFD1PQXG0Ly0F6dyiuD/oNCcrKyXOQdoSoXU26xwYejsI2F9UnIvYnCJJyiruCS3gzBE
-        U1LW0uCPDzDycSAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        rcu@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mike Galbraith <efault@gmx.de>
-Subject: Re: [PATCH v3 2/4] sched: Introduce migratable()
-Message-ID: <YfJu3Z9wKOAjLuad@linutronix.de>
-References: <20210811201354.1976839-1-valentin.schneider@arm.com>
- <20210811201354.1976839-3-valentin.schneider@arm.com>
- <20210817170925.2jwqvgvmqab2glwu@linutronix.de>
- <87czq573et.mognet@arm.com>
- <YfF9I5PcZJA5532B@linutronix.de>
- <87r18u2wr8.mognet@arm.com>
+        Thu, 27 Jan 2022 05:09:00 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5C6B61CB3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 10:08:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DC7C340E6;
+        Thu, 27 Jan 2022 10:08:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643278139;
+        bh=CjgfnKCUXCgE+sPBD6QLLmJdl+2z0gfy7GhTQpNGo9c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jJrWFI/tbmTazNW/QpYsc6WNg2YsPDMzb1QbyY2oJuvc/C++1f3hS1ZpIlDFkg8LE
+         OiA4HCbAHT8B2Z9AGqJJ7dqFpV7aZT/yIoSaaCE/HCBnfkX2aodp5eEweinWphpqq6
+         xXWhXJfXdLuES0tVp6ezzunjmTQIc9g6nhUccT6Q=
+Date:   Thu, 27 Jan 2022 11:08:56 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Aleksa =?utf-8?B?VnXEjWtvdmnEhw==?= <aleksav013@gmail.com>
+Cc:     salah.triki@gmail.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: dio: Fixed coding style issues
+Message-ID: <YfJvOO+YKRDR35BJ@kroah.com>
+References: <20220126195341.5154-1-aleksav013@gmail.com>
+ <YfI7rZrYn4liKuPB@kroah.com>
+ <20220127100414.o3hj63sirlavyb33@artix.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <87r18u2wr8.mognet@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220127100414.o3hj63sirlavyb33@artix.localdomain>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-26 18:10:51 [+0000], Valentin Schneider wrote:
-> > | 2021-08-11 21:13 +0100 Valentin Schneider    =E2=88=99 sched: Introdu=
-ce migratable()
-> > | 2021-08-11 21:13 +0100 Valentin Schneider    =E2=88=99 arm64: mm: Mak=
-e arch_faults_on_old_pte() check for migratability
-=E2=80=A6
-> Heh, had forgotten about those - I'm happy to repost with the
-> s/migratable/is_migratable/. I also need to go back to those splats I got
-> on my emag and fix the PMU/GPIO warnings...
+On Thu, Jan 27, 2022 at 11:04:14AM +0100, Aleksa Vučković wrote:
+> Hey,
+> 
+> I made a really simple patch fixing coding style errors.
+> Could you please review it, and tell me how to prevent errors like this:
+> 
+> > - Your patch did many different things all at once, making it
+> > difficult to review.
+> 
+> from happening in the future.
+> 
+> Should i split changes into 2 patches? One for upper half and one for
+> lower half of the file I changed?
 
-Now that I look at it gain, you might want to drop #1 and then #2 would
-switch to cant_migrate(). This might work=E2=80=A6
+One patch per type of logical change is recommended, the location in the
+file does not matter.
 
-Sebastian
+> Many lines have multiple errors, so if I fix one error, I also need to
+> fix the other one.
+
+That's not a problem, and is not why your previous patches were
+rejected.  Your previous patches were rejected as in your attempts to
+fix coding style issues you added new ones.
+
+> So I can not just have patch fixing one thing at the
+> time. Should I try to fix error in this manner:
+> [PATCH 1/3] fix lines that have ONLY spaces to tabs error
+> [PATCH 2/3] fix lines that have ONLY braces error
+> [PATCH 3/3] fix lines that have spaces to tabs error AND braces error
+> or should I have a different approach?
+
+Look at the examples on the staging mailing list for how to do this
+well.  There are thousands of examples of "do only one type of change
+per patch" out there.  To ignore the work others have done is odd.
+
+> Sorry for bothering, this is my first time submitting patches.
+
+Please start out by working in the drivers/staging/ part of the kernel
+when learning how to do development, as that is explicitly what that
+part of the kernel is for, and it keeps other maintainers from being
+bothered by basic functionality and procedural issues like this.
+
+thanks,
+
+greg k-h

@@ -2,85 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C0D49E99E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB2049E9A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 19:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbiA0SFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 13:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235281AbiA0SFk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:05:40 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84FEC06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 10:05:40 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id p63so3717923iod.11
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 10:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Y6t/HLJoZRMAq0YMzTaHPBGjeHGV6rmgV1hXLsNEaXA=;
-        b=LHvGtJfXMpZK44WF9ZY005FpCS0vJoSKvY/Yhz1zaVSMBWug4MxCWXqoeyn6IBVnMe
-         A+cT1RvoyL5cCH5d4vEPFVJDcGfznTASOTOh3uiJuWQ7aPAd9prAsIJcSU4dPJhk1sTc
-         TZKgn3WDfohEglxJIr40gILapE9RdgW0xW41A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Y6t/HLJoZRMAq0YMzTaHPBGjeHGV6rmgV1hXLsNEaXA=;
-        b=TftaIKQsaAbstlEtLnz8A53I4RYTjq0GzbXgZGOMge+l+Cc0BAdWjkseX4XDmY62nY
-         vJYvMKXchbTUTJ5uyzF4EPB3a1f0dSvXqgfdpOyZz9ZQOebAerW4II58zaVrBilMokPP
-         MtBwhSepNE540Mam+KpRQcJEQmfcVGSNjz3vM4kw9PEpCvRKUELLnCrZLojQN5e7r1bm
-         b4qf6SoEfSKd39yDZEXD/uovPzZEFP+xWHUzSvXCUsO0gcxFjHPxTsoiHP7gSV25wFwK
-         0+D2ieySD4vK6tXMoKxje5JVRgqrIsodR3/1UH4wzv7fOVBk0ClO0KWgrtCvWiPSZb7b
-         ZNIw==
-X-Gm-Message-State: AOAM532lUYL+yS52XJk8twCU+fzCev5lSA0QRRcKKr/VZX94WRpLi4du
-        9mR6GqTtbtemCmtDUBFmrY42gg==
-X-Google-Smtp-Source: ABdhPJyy3ckcWni8fxqVjws57TQznsXqmVAuFW5XVh2tNilQYn6vCrZg3TBfS5IFonuSZc3+ohw7VQ==
-X-Received: by 2002:a02:a519:: with SMTP id e25mr2431138jam.315.1643306740176;
-        Thu, 27 Jan 2022 10:05:40 -0800 (PST)
-Received: from ?IPv6:2601:282:8200:4c:fcdb:3423:ed25:a583? ([2601:282:8200:4c:fcdb:3423:ed25:a583])
-        by smtp.gmail.com with ESMTPSA id w10sm4115625iow.44.2022.01.27.10.05.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 10:05:39 -0800 (PST)
-Subject: Re: [PATCH v2 1/3] selftests/zram: Skip max_comp_streams interface on
- newer kernel
-To:     Yang Xu <xuyang2018.jy@fujitsu.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, naresh.kamboju@linaro.org,
-        pvorel@suse.cz, Shuah Khan <skhan@linuxfoundation.org>
-References: <590c1f1c-2da1-583a-d055-83c15969cf80@linuxfoundation.org>
- <1643274697-3393-1-git-send-email-xuyang2018.jy@fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <c3410567-7d69-9020-8477-a8ba957505c8@linuxfoundation.org>
-Date:   Thu, 27 Jan 2022 11:05:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S238965AbiA0SGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 13:06:22 -0500
+Received: from mga05.intel.com ([192.55.52.43]:25424 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236657AbiA0SGR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 13:06:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643306777; x=1674842777;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aAQSLnsFhUPTordpbiaInHqdpfNTKKO9IrT60Vc8DBU=;
+  b=JQovtNFVDfrOUfallVALl3O92zyMho82lWPtEE0WCLydvDgp/DrDH2IU
+   XrJISnyMTTplpyLcVscH1uF+zFiQVqctWazka+33eJQoKfQzqdxpCOxr4
+   4HJvffV1LfLIrFy5geC02U9mYs9sDoD7gS92ch3SxXrternlghTURBcJE
+   J7Thu02jHVjdoQsTUhYeaxSJkMnkyR2IZX6E/B4w1qggQIALnM3RPzAGg
+   XtXrqFKrayFZH16cPR1pZK8kEt3Ph9DKpLINPUhKZGQjAzu9ACM5/G3Xv
+   48Z3KZNjdhuOFIPXfrKjnZKnNzIOUPY6/N+cAHg9W4Bl3T6a1jm5ArVEN
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="333281985"
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="333281985"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 10:05:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="533196457"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Jan 2022 10:05:57 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 3C665167; Thu, 27 Jan 2022 20:06:10 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH v2 1/1] serial: 8250_exar: derive nr_ports from PCI ID for Acces I/O cards
+Date:   Thu, 27 Jan 2022 20:06:08 +0200
+Message-Id: <20220127180608.71509-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <1643274697-3393-1-git-send-email-xuyang2018.jy@fujitsu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 2:11 AM, Yang Xu wrote:
-> Since commit 43209ea2d17a ("zram: remove max_comp_streams internals"), zram
-> has switched to per-cpu streams. Even kernel still keep this interface for
-> some reasons, but writing to max_comp_stream doesn't take any effect. So
-> skip it on newer kernel ie 4.7.
-> 
-> The code that comparing kernel version is from xfstests testsuite ext4/053.
-> 
-> Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
-> ---
+In the similar way how it's done in 8250_pericom, derive the number of
+the UART ports from PCI ID for Acces I/O cards.
 
-Thank you. This and the other 2 patches are in linux-kselftest fixes branch
-for rc3.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: fixed variable name (Ilpo)
+ drivers/tty/serial/8250/8250_exar.c | 37 ++++++++++-------------------
+ 1 file changed, 13 insertions(+), 24 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+index a4508ac0cac9..a243f36c41fa 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -611,7 +611,12 @@ exar_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *ent)
+ 
+ 	maxnr = pci_resource_len(pcidev, bar) >> (board->reg_shift + 3);
+ 
+-	nr_ports = board->num_ports ? board->num_ports : pcidev->device & 0x0f;
++	if (pcidev->vendor == PCI_VENDOR_ID_ACCESSIO)
++		nr_ports = BIT(((pcidev->device & 0x38) >> 3) - 1);
++	else if (board->num_ports)
++		nr_ports = board->num_ports;
++	else
++		nr_ports = pcidev->device & 0x0f;
+ 
+ 	priv = devm_kzalloc(&pcidev->dev, struct_size(priv, line, nr_ports), GFP_KERNEL);
+ 	if (!priv)
+@@ -710,22 +715,6 @@ static int __maybe_unused exar_resume(struct device *dev)
+ 
+ static SIMPLE_DEV_PM_OPS(exar_pci_pm, exar_suspend, exar_resume);
+ 
+-static const struct exar8250_board acces_com_2x = {
+-	.num_ports	= 2,
+-	.setup		= pci_xr17c154_setup,
+-};
+-
+-static const struct exar8250_board acces_com_4x = {
+-	.num_ports	= 4,
+-	.setup		= pci_xr17c154_setup,
+-};
+-
+-static const struct exar8250_board acces_com_8x = {
+-	.num_ports	= 8,
+-	.setup		= pci_xr17c154_setup,
+-};
+-
+-
+ static const struct exar8250_board pbn_fastcom335_2 = {
+ 	.num_ports	= 2,
+ 	.setup		= pci_fastcom335_setup,
+@@ -810,13 +799,13 @@ static const struct exar8250_board pbn_exar_XR17V8358 = {
+ 	}
+ 
+ static const struct pci_device_id exar_pci_tbl[] = {
+-	EXAR_DEVICE(ACCESSIO, COM_2S, acces_com_2x),
+-	EXAR_DEVICE(ACCESSIO, COM_4S, acces_com_4x),
+-	EXAR_DEVICE(ACCESSIO, COM_8S, acces_com_8x),
+-	EXAR_DEVICE(ACCESSIO, COM232_8, acces_com_8x),
+-	EXAR_DEVICE(ACCESSIO, COM_2SM, acces_com_2x),
+-	EXAR_DEVICE(ACCESSIO, COM_4SM, acces_com_4x),
+-	EXAR_DEVICE(ACCESSIO, COM_8SM, acces_com_8x),
++	EXAR_DEVICE(ACCESSIO, COM_2S, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_4S, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_8S, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM232_8, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_2SM, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_4SM, pbn_exar_XR17C15x),
++	EXAR_DEVICE(ACCESSIO, COM_8SM, pbn_exar_XR17C15x),
+ 
+ 	CONNECT_DEVICE(XR17C152, UART_2_232, pbn_connect),
+ 	CONNECT_DEVICE(XR17C154, UART_4_232, pbn_connect),
+-- 
+2.34.1
+

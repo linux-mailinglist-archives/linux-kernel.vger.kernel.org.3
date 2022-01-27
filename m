@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F7249E22B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F10949E22F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240980AbiA0MUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236183AbiA0MUF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:20:05 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA1FC06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:20:05 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id k18so4368456wrg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:20:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SXCJKgua9IOP7ZZ8L1T8exfDe6Y8hRB/10rQrO1fO5g=;
-        b=N0dh3y0RnknkW67MgC0xj8N9weplnujuLdrwLC6ZvhPm09uuZk8svPLAeIl4PMo6Co
-         1pDmIcCZkyXAwHF/vHcDnWKmFFAcj/lQjCT0oVRzRzH0u9jOoyxG6w58j7Wy6ZyI3QjJ
-         ZeVS61oau1VpcnIG4fJ6mdgP7BCZ9ZAlg+7xDGCLTPA1SEpZf06NOS/pb/Q5QIlSONXo
-         +G1deNf+iZUqm9DfZyu17R7EsU2tBR6BzojYdwVOA7Bfza7AGH/aSmbo7of/343a/KDt
-         ILoBzBk9YEnW1+nMyDemjpOd9aqlSI0vn79xEkgyRhgZDKChcFsqibEB29HSw9uktUKg
-         MpBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SXCJKgua9IOP7ZZ8L1T8exfDe6Y8hRB/10rQrO1fO5g=;
-        b=IwcwvC5Ya56IRxnkT7PiUUtSWGbDDkJtvwwkKrOlCE0ciiL2hmhZKlHCjkboBUHhK0
-         +m1AW+ktwrxWB4XrwS9mLlhg2K0klrDlx9VO5bdxG3cFhym8cd0kx5DJiBQVf4yrwDoM
-         9JtY5A/XCzcoUx68hC14j/foWpNZljb8P6YJshO5NLpd/msQ150TJH0y0rvnSuqbp6ok
-         +WetmFMYo7qKuR/2BCXMfFQy+UkieHVjhsZEzCH1Y/l/dtB52QwMIwpcoT78vsWd7SIG
-         8POV+ypEfvJ2y90c9nDAOft4n2WWNmEWnJFfPnLD5nqE370IN5u3d8u9plpgKD7p9nDp
-         uiqg==
-X-Gm-Message-State: AOAM533vhVQI/ZqNtJyCePMuGJDg5pjkurwECn1OfVF4VAj9ODXSDd7m
-        6lWG5NvN/9Wr8wEOAwEACmQO+w==
-X-Google-Smtp-Source: ABdhPJxVl9w/ppxzzdHkGN6KP7X4FtTENzJePI8kGhbvQD41pVUSXbgeSl1GJR63yU5x4Xxi8q1nZg==
-X-Received: by 2002:a5d:4888:: with SMTP id g8mr2846429wrq.555.1643286003962;
-        Thu, 27 Jan 2022 04:20:03 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id m14sm2584465wrp.4.2022.01.27.04.20.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 04:20:03 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     a.kartashev@yadro.com, andrew@aj.id.au, joel@jms.id.au,
-        robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] ARM: dts: aspeed: remove unhandled fttmr010,pwm-outputs
-Date:   Thu, 27 Jan 2022 12:19:52 +0000
-Message-Id: <20220127121952.3985981-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        id S241034AbiA0MUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:20:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:58282 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229971AbiA0MUq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 07:20:46 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7740D1063;
+        Thu, 27 Jan 2022 04:20:46 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.14.34])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2ACD73F7D8;
+        Thu, 27 Jan 2022 04:20:45 -0800 (PST)
+Date:   Thu, 27 Jan 2022 12:20:32 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Yinan Liu <yinan@linux.alibaba.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [powerpc] ftrace warning kernel/trace/ftrace.c:2068 with
+ code-patching selftests
+Message-ID: <YfKOENgR6sLnHQmA@FVFF77S0Q05N>
+References: <944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com>
+ <e9422643-a210-b77f-a037-da63a9d2e925@linux.alibaba.com>
+ <20220124114548.30241947@gandalf.local.home>
+ <0fa0daec-881a-314b-e28b-3828e80bbd90@linux.alibaba.com>
+ <YfFclROd+0/61q2d@FVFF77S0Q05N>
+ <YfKGKWW5UfZ15kCW@FVFF77S0Q05N>
+ <CAMj1kXHgpr0KYx5PYO_SpqaN8Ar2kfmc9Pb-d26uaYDpjwTz9w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHgpr0KYx5PYO_SpqaN8Ar2kfmc9Pb-d26uaYDpjwTz9w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fttmr010,pwm-outputs is not handled by its timer driver, so this
-property is useless.
-Fixes: 67ac01d03862 ("ARM: dts: aspeed: add device tree for YADRO VEGMAN BMC")
+On Thu, Jan 27, 2022 at 01:03:34PM +0100, Ard Biesheuvel wrote:
+> On Thu, 27 Jan 2022 at 12:47, Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > [adding LKML so this is easier for others to find]
+> >
+> > If anyone wants to follow the thread from the start, it's at:
+> >
+> >   https://lore.kernel.org/linuxppc-dev/944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com/
+> >
+> > Ard, I was under the impression that the 32-bit arm kernel was (virtually)
+> > relocatable, but I couldn't spot where, and suspect I'm mistaken. Do you know
+> > whether it currently does any boot-time dynamic relocation?
+> 
+> No, it does not.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- arch/arm/boot/dts/aspeed-bmc-vegman.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+Thanks for comfirming!
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-vegman.dtsi b/arch/arm/boot/dts/aspeed-bmc-vegman.dtsi
-index 1a5b25b2ea29..43af63910571 100644
---- a/arch/arm/boot/dts/aspeed-bmc-vegman.dtsi
-+++ b/arch/arm/boot/dts/aspeed-bmc-vegman.dtsi
-@@ -166,7 +166,6 @@ &sdhci1 {
- };
- 
- &timer {
--	fttmr010,pwm-outputs = <5>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_timer5_default>;
- 	#pwm-cells = <3>;
--- 
-2.34.1
+So 32-bit arm should be able to opt into the build-time sort as-is.
 
+> > Steve asked for a bit more detail on IRC, so the below is an attempt to explain
+> > what's actually going on here.
+> >
+> > The short answer is that relocatable kernels (e.g. those with KASLR support)
+> > need to handle the kernel being loaded at (somewhat) arbitrary virtual
+> > addresses. Even where code can be position-independent, any pointers in the
+> > kernel image (e.g. the contents of the mcount_loc table) need to be updated to
+> > account for the specific VA the kernel was loaded at -- arch code does this
+> > early at boot time by applying dynamic (ELF) relocations.
+> 
+> These architectures use place-relative extables for the same reason:
+> place relative references are resolved at build time rather than at
+> runtime during relocation, making a build time sort feasible.
+> 
+> arch/alpha/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> arch/arm64/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> arch/ia64/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> arch/parisc/include/asm/uaccess.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> arch/powerpc/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> arch/riscv/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> arch/s390/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> arch/x86/include/asm/extable.h:#define ARCH_HAS_RELATIVE_EXTABLE
+> 
+> Note that the swap routine becomes something like the below, given
+> that the relative references need to be fixed up after the entry
+> changes place in the sorted list.
+> 
+> static void swap_ex(void *a, void *b, int size)
+> {
+>         struct exception_table_entry *x = a, *y = b, tmp;
+>         int delta = b - a;
+> 
+>         tmp = *x;
+>         x->insn = y->insn + delta;
+>         y->insn = tmp.insn - delta;
+>         ...
+> }
+> 
+> As a bonus, the resulting footprint of the table in the image is
+> reduced by 8x, given that every 8 byte pointer has an accompanying 24
+> byte RELA record, so we go from 32 bytes to 4 bytes for every call to
+> __gnu_mcount_mc.
+
+Absolutely -- it'd be great if we could do that for the callsite locations; the
+difficulty is that the entries are generated by the compiler itself, so we'd
+either need some build/link time processing to convert each absolute 64-bit
+value to a relative 32-bit offset, or new compiler options to generate those as
+relative offsets from the outset.
+
+Thanks,
+Mark.

@@ -2,115 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA46A49EEDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F66049EEDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240092AbiA0Xcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 18:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
+        id S239508AbiA0XdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 18:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbiA0Xct (ORCPT
+        with ESMTP id S232474AbiA0XdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 18:32:49 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010D6C061714;
-        Thu, 27 Jan 2022 15:32:49 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id p5so13291575ybd.13;
-        Thu, 27 Jan 2022 15:32:48 -0800 (PST)
+        Thu, 27 Jan 2022 18:33:17 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E24BC06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:33:17 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id z131so3672594pgz.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:33:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=45b55r8UrP19JXUlLW74FhqYl/0CdywuMW59aCYj888=;
-        b=flncRfSPwRoAgqDR9OXU6u8IxKFDE5sMsLuqOng6ONrSAhCQEKo08oV6HPk8FYDthr
-         9f0pU1HM9KHv1Il3dWqN1RCpfqD2WF/WEWC86K+0NuHgXbl2CKuCJ32D74Yr/w4luSmz
-         +Kth0fcvEoCCWqcXYhCK1dLCN7T9y5aOnoHGYjEtTPTM+xD70/VvawKq/rPOO7bR57My
-         ZNLsF9/l4SlDHgoVA38O5E2i5n0KK8+QEGfK8UtLaLpjtEbqmn9i3sJrpZImASTWmBBh
-         lICci5Ql846yLCpsLrZz1mH0GqPaG3rmpRFNyDWV9WE7c3Ft2sUBl1+YxXDbZH0TGKIb
-         t6Pg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=pITh0ffjadrUQOaU2KwCuZyyLPNTIW84DGhaNVnbVqw=;
+        b=Q7NtIHy4Hxp5NgKGxUh60134j+g5dctZA3EsK+hPi3Pe9Vp/2/wwA2Eob4c8d7J0I4
+         ND1ViXWiZGyMdB+NDyuZZZX5vVc+QMiRVSjf6Gn1uchpPEFWIp/sZDKzTmyOgouUk/rX
+         VQadx6vORLFxIz91QvmBcFE3M6yIaIO/SglMIGuoFP/4NUqZ5T9zc3N7Kn8n/h4uwHts
+         zOYSS+ewSqKKAYiI2UPNooQFWu8QwqaCVhzMfiygHV7GQ0deAlGAvOVHEnSJp4I8Gbsv
+         PmEctop8YVISDxI8rS7vFnvwGEjFyZlQS033mcz9hVbEdGnVIXmaohevHIuSp5n6Kq8e
+         QZKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=45b55r8UrP19JXUlLW74FhqYl/0CdywuMW59aCYj888=;
-        b=urQ2J62rIug3BOn6nCR10IBdXryQI873XBhG343AB/awjni+9XfpnFc6sEE4i6twUm
-         k7PkTwxZureRSJxFZJoGFA/yl8d6e9eK8vBKPi7R/C6Rgki4jN/ZqI0K7gKKXqfDCV9y
-         coiJmYESh8QMt+dmP+5f5SRdmnyitgU3JyrL58+H+XtJqOEXw4miaggmCqzMoEKC0gn5
-         8EbO5OKj2XL0TA3KDwJKG6LTL130C1jSkSxN48Hen/cY9ueLWMf4tSjMhz16eBEFkPeE
-         49jNjPjFafrvf7jXeMwGpXwkMiVn2Ou0HuYkZbTzsN4AVrJsB+LJkf8P7vRSBfhvZkT1
-         UdHA==
-X-Gm-Message-State: AOAM530k3LsPmd6m3mjAZXv+xEdkkMxt9uxqeBbpepyDWbKlZtpdVyso
-        fGDHBPex//Rxl85qWInms89FZRPZn+jj5p4n1Fg=
-X-Google-Smtp-Source: ABdhPJzw0vXppBjuNB3RMkeTHKdzaHn5o9WVCpp9aGE46D/kj99Jzrn/fB+HFG2Bllds+UXD7Yz1rLkpDvPrYyyERTc=
-X-Received: by 2002:a25:d0cb:: with SMTP id h194mr9514813ybg.680.1643326368214;
- Thu, 27 Jan 2022 15:32:48 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pITh0ffjadrUQOaU2KwCuZyyLPNTIW84DGhaNVnbVqw=;
+        b=MN/cWfm6f3vU4E/hd5E0h1gXCIuv4yLwZv62Fso1fcxH32eLvJW2PZGXljcALZqFNX
+         J/Bmh3rw7Oa8/UvnTIR4vwa2x0bQX+Io88+rJp10Wn6fpMIjBZZZqx0zzhWvc8gNAnTR
+         XMfFTjFNqFj1i/d0xCHBBmc2c1edEaGz6gs9ZjirNVs0oBy3GPSEcY3xLtoaZaDvK6Xz
+         uEMnHd18ui7LJhdcOLAQsvBjn+fFiscx9dQ2kgmhMEPQwonZ01QFh9G8/A467qbVr5ds
+         HELYkRFPLZsI6eT3xDZqHmbisEwkB7/ErJau2Cj92CqydjRDGP8HrY6h7B3OwurtiYPU
+         BCvw==
+X-Gm-Message-State: AOAM533l9K/kKtjqpwwrN/MK8zihw0N21cu4H0CuH+oWpGxXqMdFW45S
+        eRYYG++AP8ty8/E+YP3yZfQyRA==
+X-Google-Smtp-Source: ABdhPJwFU98JcQ0OAm4YbgoIGxfgDdE/Z28f64GtL1o7Gr6yY6tlbjG9r5yjHmX66IuBD9wFeMrOGA==
+X-Received: by 2002:a05:6a00:a16:: with SMTP id p22mr5043763pfh.40.1643326396809;
+        Thu, 27 Jan 2022 15:33:16 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q11sm3604085pfk.149.2022.01.27.15.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 15:33:16 -0800 (PST)
+Date:   Thu, 27 Jan 2022 23:33:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, tglx@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, x86@kernel.org,
+        pjt@google.com, posk@google.com, avagin@google.com,
+        jannh@google.com, tdelisle@uwaterloo.ca, mark.rutland@arm.com,
+        posk@posk.io, Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [RFC][PATCH v2 4/5] x86/uaccess: Implement
+ unsafe_try_cmpxchg_user()
+Message-ID: <YfMruK8/1izZ2VHS@google.com>
+References: <20220120155517.066795336@infradead.org>
+ <20220120160822.852009966@infradead.org>
+ <YfIAsHQv5Q84fOqO@google.com>
+ <YfI9Y5l0fQAKuJav@google.com>
+ <YfJsNcYNH8JTHrM/@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20220127010023.3169415-1-pgwipeout@gmail.com> <07281029-0efd-0a74-0d96-92e3dcf5bbb7@gmail.com>
- <CAMdYzYrKq==Bs0aonrJBC+W2c4nQ8cUn2dn_Se4WDaRCkT6SYg@mail.gmail.com> <3859424.JUeRptVaKW@diego>
-In-Reply-To: <3859424.JUeRptVaKW@diego>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Thu, 27 Jan 2022 18:32:36 -0500
-Message-ID: <CAMdYzYoQkR805xCyPstf2nrnzymVB3Ff4_cQAz_qsbokz8DG2w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: dts: rockchip: add Quartz64-A sdmmc1 node
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Johan Jonker <jbx6244@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YfJsNcYNH8JTHrM/@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 5:15 AM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Am Donnerstag, 27. Januar 2022, 10:55:13 CET schrieb Peter Geis:
-> > On Thu, Jan 27, 2022 at 1:18 AM Johan Jonker <jbx6244@gmail.com> wrote:
-> > >
-> > >
-> > >
-> > > On 1/27/22 02:00, Peter Geis wrote:
-> > > > The sdmmc1 node on Quartz64-A supports the optional wifi module fro=
-m
-> > > > Pine64.
-> > > > Add the sdmmc1 node and requisite sdio_pwrseq to enable wifi suppor=
-t on
-> > > > the Quartz64-A.
-> > > >
-> > > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > > > ---
-> > > >  .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 45 +++++++++++++++=
-++++
-> > > >  1 file changed, 45 insertions(+)
-> > > >
-> > > > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/a=
-rch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> > > > index 33c2c18caaa9..1d73ac6557c5 100644
-> > > > --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> > > > +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> > > > @@ -91,6 +91,18 @@ simple-audio-card,codec {
-> > > >               };
-> > > >       };
-> > > >
-> > > > +     sdio_pwrseq: sdio-pwrseq {
-> > >
-> > > > +             status =3D "okay";
-> > >
-> > > When a node is not previously disabled, then there's no need for "oka=
-y".
-> >
-> > Thanks, this is here in case an end user wants to easily hack the
-> > board to use this for other purposes.
->
-> but please drop it here as well.
->
-> A user "hacking" a devicetree should be able to also just _add_
-> a status "disabled" :-) .
++Nick
 
-Understood, will do.
-Thanks!
+On Thu, Jan 27, 2022, Peter Zijlstra wrote:
+> On Thu, Jan 27, 2022 at 06:36:19AM +0000, Sean Christopherson wrote:
+> > On Thu, Jan 27, 2022, Sean Christopherson wrote:
+> > > Doh, I should have specified that KVM needs 8-byte CMPXCHG on 32-bit kernels due
+> > > to using it to atomically update guest PAE PTEs and LTR descriptors (yay).
+> > > 
+> > > Also, KVM's use case isn't a tight loop, how gross would it be to add a slightly
+> > > less unsafe version that does __uaccess_begin_nospec()?  KVM pre-checks the address
+> > > way ahead of time, so the access_ok() check can be omitted.  Alternatively, KVM
+> > > could add its own macro, but that seems a little silly.  E.g. somethign like this,
+> > > though I don't think this is correct
+> > 
+> > *sigh*
+> > 
+> > Finally realized I forgot to add back the page offset after converting from guest
+> > page frame to host virtual address.  Anyways, this is what I ended up with, will
+> > test more tomorrow.
+> 
+> Looks about right :-) (famous last words etc..)
 
->
->
+And it was right, but clang-13 ruined the party :-/
+
+clang barfs on asm goto with a "+m" input/output.  Change the "+m" to "=m" and
+clang is happy.  Remove usage of the label, clang is happy.
+
+I tried a bunch of different variants to see if anything would squeak by, but
+clang found a way to die on everything I threw at it.
+
+$ clang --version
+
+  Debian clang version 13.0.0-9+build1
+  Target: x86_64-pc-linux-gnu
+  Thread model: posix
+  InstalledDir: /usr/bin
+
+As written, with a named label param, clang yields:
+
+  $ echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
+  <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
+  int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }
+                            ^
+  <stdin>:1:29: error: unknown token in expression
+  <inline asm>:1:9: note: instantiated into assembly here
+          .long () - .
+               ^
+  2 errors generated.
+
+While clang is perfectly happy switching "+m" to "=m":
+
+  $ echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "=m"(*x) ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
+
+Referencing the label with a numbered param yields either the original error:
+
+  $ echo 'int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
+  <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
+  int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }
+                            ^
+  <stdin>:1:29: error: unknown token in expression
+  <inline asm>:1:9: note: instantiated into assembly here
+          .long () - .
+                 ^
+   2 errors generated.
+
+Bumping the param number (more below) yields a different error (I tried defining
+tmp1, that didn't work :-) ).
+
+  $ echo 'int foo(int *x) { asm goto (".long (%l2) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | clang -x c - -c -o /dev/null
+  error: Undefined temporary symbol .Ltmp1
+  1 error generated.
+
+Regarding the param number, gcc also appears to have a goof with asm goto and "+m",
+but bumping the param number in that case remedies its woes.
+
+  $echo 'int foo(int *x) { asm goto (".long (%l1) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
+  <stdin>: In function ‘foo’:
+  <stdin>:1:19: error: invalid 'asm': '%l' operand isn't a label
+
+  $ echo 'int foo(int *x) { asm goto (".long (%l2) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | gcc -x c - -c -o /dev/null
+
+
+So my immediate question: how do we want to we deal with this in the kernel?  Keeping
+in mind that I'd really like to send this to stable@ to fix the KVM mess.
+
+I can think of few options that are varying degrees of gross.
+
+  1) Use a more complex sequence for probing CC_HAS_ASM_GOTO_OUTPUT.
+
+  2) Use an output-only "=m" operand.
+
+  3) Use an input register param.
+
+Option #1 has the obvious downside of the fancier asm goto for  __get_user_asm()
+and friends being collateral damage.  The biggest benefit is it'd reduce the
+likelihood of someone else having to debug similar errors, which was quite painful.
+
+Options #2 and #3 are quite gross, but I _think_ would be ok since the sequence
+is tagged as clobbering memory anyways?

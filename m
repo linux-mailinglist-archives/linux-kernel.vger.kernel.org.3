@@ -2,105 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3589549E5D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E26149E5DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242984AbiA0PSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S233749AbiA0PSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243008AbiA0PSB (ORCPT
+        with ESMTP id S230010AbiA0PSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:18:01 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90743C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:18:00 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id n12-20020a05600c3b8c00b0034eb13edb8eso3473061wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:18:00 -0800 (PST)
+        Thu, 27 Jan 2022 10:18:39 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AA2C061714;
+        Thu, 27 Jan 2022 07:18:39 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d18so2782253plg.2;
+        Thu, 27 Jan 2022 07:18:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=i/4aHvLx0xlbDSqE5Ac8Q/MRCnzzAZwCoPVM4qh+V4w=;
-        b=FdlX2cAa7CE60w67jBg6HmtvKc522BNrx0l5/2tRysWxW0cNYpAb64ydNIshwNPuTd
-         uxrL5qiIeadcTJYyAi8luphU/iB2wmS2vmTXY6O17gq7nFGs+w1rvKQXcNb/6uMUuscI
-         /ulkX6vF3MLTbtT0fwQwEByn8zVwz1cBgwR1uVuMFya9EgKviwKkzkVCtmdtrcSQtlT/
-         jd+KSPnvl8NhhDt/rFqWA1wYgTnbjIAFRbaGBYXaFEP5GP9A5R6e3gRcleChZxdHMhPL
-         tIdICe8JGho+oSLYj7ziMHqWpnOWafyNPs2M0hGJ98mbMo3qToD3gVacyxJEmHH/n/Er
-         yZxw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=WqIhQEdz48PlWPYyUraILDyAKoqjq+mQzfifZT10HY8=;
+        b=FTAtH8zu4qk5Iwj0kA34upNHGn7nBlN5VfBZDPK2TiMz+F55poljgCKMP6Rg03PaIA
+         8Yx6mPTUSKA4JQK67VEheb9BZRfpsg2pQ1GUJ35go2jvZni4z4eHHiZtF06ScSJu3V5s
+         mQSd/Ku4cMLZEEaNE1soXtFgH0ptTZkUo59Qc6c31wT1TZH/V+xpuft/9KcX28yc5NPF
+         XtEB5Pgiri9u8k1sUVJ3wg16e5tHojKPHHN0Zvoe09B8oBDyenyFQOBLGcTj/uu4gDNc
+         vwP8TpianrTJPMf16UGduOulZuT2peSWwVYbIg9T6Wcihp0BgEHT/dODjc1x0AVXPx2L
+         4wCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=i/4aHvLx0xlbDSqE5Ac8Q/MRCnzzAZwCoPVM4qh+V4w=;
-        b=VtEu9rLb2uuni7cOYiZb5zctxHXDtiOPL6BpQgJEzvXOiUASycqDw6oSAAss+Nfdux
-         GypzHDlKkITY4I0nQ1iw+7pet17ubX473tqToxdj0E94AzsE+u03C7FIgAOh78gu8KWd
-         Xk92gBH/bq5y65ORfxbnGHnK6Chv9xyxvTBOCVM2YZabuFLOaCpW6lm+ggvzONn/A+uL
-         TjHKBIfxtSAiQkD1AIcoTCL8pT8aS3qS/7GyVlht3axp4ydkF7KxI0Nw2Lr7aSvDN5Lq
-         PlOHiWH+slGAuC1FXffC0n5eM4f+V/lqES5984sJrYm5CUtOX9HeWgVP2pVXBV8X5Mjj
-         ntgA==
-X-Gm-Message-State: AOAM530kWoeMUOTUvk1CPUxljlUl6t8Ny5nK6qTuGQPKdEwNfgE3smMT
-        VK1JcMiJlmnge5/1n07Tx9ANVkMUTUCkew==
-X-Google-Smtp-Source: ABdhPJxCtaI6rDdSrWhgGXAU48ojSnr/s7UKOh8uTG3JXRhqdw26prPvM1Sx1LN+Lig1Hi2yFiTrKg==
-X-Received: by 2002:a05:600c:4e90:: with SMTP id f16mr943648wmq.175.1643296678696;
-        Thu, 27 Jan 2022 07:17:58 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff? ([2001:861:44c0:66c0:bd6:ac2b:1e48:f2ff])
-        by smtp.gmail.com with ESMTPSA id d9sm2544985wrp.14.2022.01.27.07.17.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 07:17:58 -0800 (PST)
-Subject: Re: [PATCH] arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO domain
- for GPIOE_2
-To:     Dongjin Kim <tobetter@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220127151656.GA2419733@paju>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <6cd58652-f24e-3919-589f-d71eb0e8070f@baylibre.com>
-Date:   Thu, 27 Jan 2022 16:17:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=WqIhQEdz48PlWPYyUraILDyAKoqjq+mQzfifZT10HY8=;
+        b=m2SGfKzg9htigrQCiCcN1z2fTdOX9fL3EWSc9Wk03u9+0QLFT0XhAiwEioi8v+ZtjI
+         jvmtrqWiaYE7FMtyiRFNDw2CODaRWMTRzFsCP9zXfDKhQeiraRynmE7gKYYsxJD/uRng
+         v7VSeDu6IHGMWWcZM2x59lrrv27qeK7XHBDAGT03tPFViMLzSqSxQiNm50RltCaLLDt9
+         Tv36S8kLcXkl1r7AHryxqMgoEx12ECwH4VtKEQQfNSQkfUGiMWgcSzx0zq8qRTs1aJjz
+         v45Tpwtm22WEOpgcHF/4lNQqQ5HwEOBIMuDR4Er4utByvymIPPV2oBuCexesh13hcQYM
+         xSZg==
+X-Gm-Message-State: AOAM532O4eyUiXA3hBt8kIFyA4jL6J539NpC1viqSU6v/yQvrZIah5xM
+        emQYC3+bLTgk5LJz8WJR3YU=
+X-Google-Smtp-Source: ABdhPJxGw09dr0rC62QVyGyQBQVqdBg9zRK/3HN7BFS736rW5pJ20vbTyHfMbPW3k18KzI9Kq669iA==
+X-Received: by 2002:a17:902:d48e:: with SMTP id c14mr3548243plg.137.1643296718860;
+        Thu, 27 Jan 2022 07:18:38 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id j11sm6025265pfu.55.2022.01.27.07.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 07:18:38 -0800 (PST)
+Date:   Thu, 27 Jan 2022 07:18:36 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        robh+dt@kernel.org, UNGLinuxDriver@microchip.com,
+        linux@armlinux.org.uk, f.fainelli@gmail.com,
+        vivien.didelot@gmail.com, vladimir.oltean@nxp.com, andrew@lunn.ch
+Subject: Re: [PATCH net-next 2/7] net: lan966x: Add registers that are use
+ for ptp functionality
+Message-ID: <20220127151836.GA20642@hoboy.vegasvil.org>
+References: <20220127102333.987195-1-horatiu.vultur@microchip.com>
+ <20220127102333.987195-3-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <20220127151656.GA2419733@paju>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127102333.987195-3-horatiu.vultur@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2022 16:16, Dongjin Kim wrote:
-> GPIOE_2 is in AO domain and "<&gpio GPIOE_2 ...>" changes the state of
-> TF_PWR_EN of 'FC8731' on BPI-M5
-> 
-> Fixes: 976e920183e4 ("arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts")
-> 
-> Signed-off-by: Dongjin Kim <tobetter@gmail.com>
-> ---
->  arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> index 212c6aa5a3b8..5751c48620ed 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> @@ -123,7 +123,7 @@ vddio_c: regulator-vddio_c {
->  		regulator-min-microvolt = <1800000>;
->  		regulator-max-microvolt = <3300000>;
->  
-> -		enable-gpio = <&gpio GPIOE_2 GPIO_ACTIVE_HIGH>;
-> +		enable-gpio = <&gpio_ao GPIOE_2 GPIO_ACTIVE_HIGH>;
->  		enable-active-high;
->  		regulator-always-on;
->  
-> 
+On Thu, Jan 27, 2022 at 11:23:28AM +0100, Horatiu Vultur wrote:
+> This patch adds the registers that will be used to configure the PHC in
+> the HW.
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+See "This patch" in Documentation/process/submitting-patches.rst
 
-Thanks !
-
-Neil
+Thanks,
+Richard

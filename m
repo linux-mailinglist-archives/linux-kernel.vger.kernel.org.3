@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC77449E96A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B5549E956
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244969AbiA0R4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:56:05 -0500
-Received: from mga12.intel.com ([192.55.52.136]:65458 "EHLO mga12.intel.com"
+        id S244665AbiA0RzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:55:14 -0500
+Received: from mga04.intel.com ([192.55.52.120]:37541 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244833AbiA0RzY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:55:24 -0500
+        id S240185AbiA0RzJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 12:55:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643306124; x=1674842124;
+  t=1643306109; x=1674842109;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=j+f4pB+zxhX52T3Z+EIdgYytL0v+soefFOtz8ajtICA=;
-  b=l9B+LgzeB+CzhyqeewZKg7poc/iX68K4orhbTdiNXRP85yaMH1OWDbl6
-   c4qIhdgpUA+Zmde95G5MK5okuggBD6wohCX3ok1xkl5h2YT2JbW9XiMbF
-   DK2RdypXFXG3OTTCubl534Dj0CvwzO86LMb/URRGttsSPuZdekcrNjiSr
-   iU1ntRlonebua1dt2iWUMo/DW6qA2tjsULs5HwKj4M5gTjLybOt83m/Yz
-   h+4MLxo+9b8PhIhz84SIKdEkIABP3sfwXw181ktso0IDYlJ3m+HzcDGF/
-   UiVIEHicaJicZb50atGYS1VCkSThf++V1lQeuq1vJCJ5F8LOt8YRL8cc9
+  bh=w+BqwH+CQKO+ZVKKUrwBRI90a7JcX6kP/I2yOdwHEMM=;
+  b=aOPYtRtFHK1YqNhG7ED/IlqK+wbesoNNM6KPJn9k620uEE2WFXyWv3bN
+   ITw8+WuQvxWv5Dx9sWtCqHiKvqNSmklzKmP5rUqMJza4jBynix0Nzyd1p
+   B34wOy58+yW02QxZx3Pg/6D5xMtUQ30k2noKKq9MXDA98husHCl23LDj9
+   WErMZ4u9oDOGxj66316KZslFRRZiyyjIqMDs4FC/VFZpkyzO05dz2ZZwD
+   7Ag0ZoVF8SgV3Yu9IhfLByq5TK4Ed3yBqrYAebYxwhcyO4CwqpZ9FnTqF
+   6V9s+Wm2/8C0HgDloD4/FYEwPcK8grVP/ETnjnRSStm0gwiolt24Na9Sf
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="226899125"
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245766389"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="226899125"
+   d="scan'208";a="245766389"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:55:08 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:55:09 -0800
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="674796077"
+   d="scan'208";a="674796080"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
   by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:55:08 -0800
 From:   ira.weiny@intel.com
@@ -40,9 +40,9 @@ To:     Dave Hansen <dave.hansen@linux.intel.com>,
 Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V8 10/44] Documentation/pkeys: Add initial PKS documentation
-Date:   Thu, 27 Jan 2022 09:54:31 -0800
-Message-Id: <20220127175505.851391-11-ira.weiny@intel.com>
+Subject: [PATCH V8 11/44] mm/pkeys: Define static PKS key array and default values
+Date:   Thu, 27 Jan 2022 09:54:32 -0800
+Message-Id: <20220127175505.851391-12-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220127175505.851391-1-ira.weiny@intel.com>
 References: <20220127175505.851391-1-ira.weiny@intel.com>
@@ -54,95 +54,168 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-Add initial overview and configuration information about PKS.
+Kernel users will need a way to allocate a PKS Pkey for their use.
+
+Introduce pks-keys.h as a place to define enum pks_pkey_consumers and
+the macro PKS_INIT_VALUE.  PKS_INIT_VALUE holds the default value for
+each key.  Kernel users reserve a key value by adding an entry to the
+enum pks_pkey_consumers with a unique value [1-15] and replacing that
+value in the PKS_INIT_VALUE macro using the desired default macro;
+PKR_RW_KEY(), PKR_WD_KEY(), or PKR_AD_KEY().
+
+Use this value to initialize all CPUs at boot.
+
+pks-keys.h is added as a new header with minimal header dependencies.
+This allows the use of PKS_INIT_VALUE within other headers where the
+additional includes from pkeys.h caused major conflicts.  The main
+conflict was using PKS_INIT_VALUE for INIT_TRHEAD in asm/processor.h
+
+Add documentation.
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+
 ---
- Documentation/core-api/protection-keys.rst | 57 ++++++++++++++++++++--
- 1 file changed, 53 insertions(+), 4 deletions(-)
+Changes for V8
+	Create pks-keys.h to solve header conflicts in subsequent
+		patches.
+	Remove create_initial_pkrs_value() which did not work
+		Replace it with PKS_INIT_VALUE
+		Fix up documentation to match
+	s/PKR_RW_BIT/PKR_RW_KEY()/
+	s/PKRS_INIT_VALUE/PKS_INIT_VALUE
+	Split this off of the previous patch
+	Update documentation and embed it in the code to help ensure it
+	is kept up to date.
+
+Changes for V7
+	Create a dynamic pkrs_initial_value in early init code.
+	Clean up comments
+	Add comment to macro guard
+---
+ Documentation/core-api/protection-keys.rst |  4 ++
+ arch/x86/include/asm/pkeys_common.h        |  1 +
+ arch/x86/mm/pkeys.c                        |  2 +-
+ include/linux/pkeys.h                      |  2 +
+ include/linux/pks-keys.h                   | 59 ++++++++++++++++++++++
+ 5 files changed, 67 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/pks-keys.h
 
 diff --git a/Documentation/core-api/protection-keys.rst b/Documentation/core-api/protection-keys.rst
-index 12331db474aa..58670e3ee39e 100644
+index 58670e3ee39e..af283a1a9aa0 100644
 --- a/Documentation/core-api/protection-keys.rst
 +++ b/Documentation/core-api/protection-keys.rst
-@@ -12,6 +12,9 @@ PKeys Userspace (PKU) is a feature which is found on Intel's Skylake "Scalable
- Processor" Server CPUs and later.  And it will be available in future
- non-server Intel parts and future AMD processors.
+@@ -129,6 +129,10 @@ Kernel users intending to use PKS support should depend on
+ ARCH_HAS_SUPERVISOR_PKEYS, and select ARCH_ENABLE_SUPERVISOR_PKEYS to turn on
+ this support within the core.
  
-+Protection Keys for Supervisor pages (PKS) is available in the SDM since May
-+2020.
-+
- pkeys work by dedicating 4 previously Reserved bits in each page table entry to
- a "protection key", giving 16 possible keys.
++PKS Key Allocation
++------------------
++.. kernel-doc:: include/linux/pks-keys.h
++        :doc: PKS_KEY_ALLOCATION
  
-@@ -22,13 +25,20 @@ and Write Disable) for each of 16 keys.
- Being a CPU register, PKRU is inherently thread-local, potentially giving each
- thread a different set of protections from every other thread.
+ MSR details
+ -----------
+diff --git a/arch/x86/include/asm/pkeys_common.h b/arch/x86/include/asm/pkeys_common.h
+index d02ab5bc3fff..efb101dee3aa 100644
+--- a/arch/x86/include/asm/pkeys_common.h
++++ b/arch/x86/include/asm/pkeys_common.h
+@@ -8,6 +8,7 @@
  
--There are two instructions (RDPKRU/WRPKRU) for reading and writing to the
--register.  The feature is only available in 64-bit mode, even though there is
-+For Userspace (PKU), there are two instructions (RDPKRU/WRPKRU) for reading and
-+writing to the register.
-+
-+For Supervisor (PKS), the register (MSR_IA32_PKRS) is accessible only to the
-+kernel through rdmsr and wrmsr.
-+
-+The feature is only available in 64-bit mode, even though there is
- theoretically space in the PAE PTEs.  These permissions are enforced on data
- access only and have no effect on instruction fetches.
+ #define PKR_PKEY_SHIFT(pkey)	(pkey * PKR_BITS_PER_PKEY)
  
--Syscalls
--========
-+
-+
-+Syscalls for user space keys
-+============================
++#define PKR_RW_KEY(pkey)	(0          << PKR_PKEY_SHIFT(pkey))
+ #define PKR_AD_KEY(pkey)	(PKR_AD_BIT << PKR_PKEY_SHIFT(pkey))
+ #define PKR_WD_KEY(pkey)	(PKR_WD_BIT << PKR_PKEY_SHIFT(pkey))
  
- There are 3 system calls which directly interact with pkeys::
+diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+index 02629219e683..a5b5b86e97ce 100644
+--- a/arch/x86/mm/pkeys.c
++++ b/arch/x86/mm/pkeys.c
+@@ -217,7 +217,7 @@ void pks_setup(void)
+ 	if (!cpu_feature_enabled(X86_FEATURE_PKS))
+ 		return;
  
-@@ -95,3 +105,42 @@ with a read()::
- The kernel will send a SIGSEGV in both cases, but si_code will be set
- to SEGV_PKERR when violating protection keys versus SEGV_ACCERR when
- the plain mprotect() permissions are violated.
+-	wrmsrl(MSR_IA32_PKRS, 0);
++	wrmsrl(MSR_IA32_PKRS, PKS_INIT_VALUE);
+ 	cr4_set_bits(X86_CR4_PKS);
+ }
+ 
+diff --git a/include/linux/pkeys.h b/include/linux/pkeys.h
+index 86be8bf27b41..e9ea8f152915 100644
+--- a/include/linux/pkeys.h
++++ b/include/linux/pkeys.h
+@@ -48,4 +48,6 @@ static inline bool arch_pkeys_enabled(void)
+ 
+ #endif /* ! CONFIG_ARCH_HAS_PKEYS */
+ 
++#include <linux/pks-keys.h>
 +
+ #endif /* _LINUX_PKEYS_H */
+diff --git a/include/linux/pks-keys.h b/include/linux/pks-keys.h
+new file mode 100644
+index 000000000000..05fe4a1cf888
+--- /dev/null
++++ b/include/linux/pks-keys.h
+@@ -0,0 +1,59 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_PKS_KEYS_H
++#define _LINUX_PKS_KEYS_H
 +
-+Kernel API for PKS support
-+==========================
++#ifdef CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
 +
-+Overview
-+--------
++#include <asm/pkeys_common.h>
 +
-+Similar to user space pkeys, supervisor pkeys allow additional protections to
-+be defined for a supervisor mappings.  Unlike user space pkeys, violations of
-+these protections result in a kernel oops.
++/**
++ * DOC: PKS_KEY_ALLOCATION
++ *
++ * Users reserve a key value by adding an entry to enum pks_pkey_consumers with
++ * a unique value from 1 to 15.  Then replacing that value in the
++ * PKS_INIT_VALUE macro using the desired default protection; PKR_RW_KEY(),
++ * PKR_WD_KEY(), or PKR_AD_KEY().
++ *
++ * PKS_KEY_DEFAULT must remain 0 key with a default of read/write to support
++ * non-pks protected pages.  Unused keys should be set (Access Disabled
++ * PKR_AD_KEY()).
++ *
++ * For example to configure a key for 'MY_FEATURE' with a default of Write
++ * Disabled.
++ *
++ * .. code-block:: c
++ *
++ *	enum pks_pkey_consumers
++ *	{
++ *		PKS_KEY_DEFAULT         = 0,
++ *		PKS_KEY_MY_FEATURE      = 1,
++ *	}
++ *
++ *	#define PKS_INIT_VALUE (PKR_RW_KEY(PKS_KEY_DEFAULT)		|
++ *				PKR_WD_KEY(PKS_KEY_MY_FEATURE)		|
++ *				PKR_AD_KEY(2)	| PKR_AD_KEY(3)		|
++ *				PKR_AD_KEY(4)	| PKR_AD_KEY(5)		|
++ *				PKR_AD_KEY(6)	| PKR_AD_KEY(7)		|
++ *				PKR_AD_KEY(8)	| PKR_AD_KEY(9)		|
++ *				PKR_AD_KEY(10)	| PKR_AD_KEY(11)	|
++ *				PKR_AD_KEY(12)	| PKR_AD_KEY(13)	|
++ *				PKR_AD_KEY(14)	| PKR_AD_KEY(15))
++ *
++ */
++enum pks_pkey_consumers {
++	PKS_KEY_DEFAULT		= 0, /* Must be 0 for default PTE values */
++};
 +
-+Supervisor Memory Protection Keys (PKS) is a feature which is found on Intel's
-+Sapphire Rapids (and later) "Scalable Processor" Server CPUs.  It will also be
-+available in future non-server Intel parts.
++#define PKS_INIT_VALUE (PKR_RW_KEY(PKS_KEY_DEFAULT)		| \
++			PKR_AD_KEY(1)	| \
++			PKR_AD_KEY(2)	| PKR_AD_KEY(3)		| \
++			PKR_AD_KEY(4)	| PKR_AD_KEY(5)		| \
++			PKR_AD_KEY(6)	| PKR_AD_KEY(7)		| \
++			PKR_AD_KEY(8)	| PKR_AD_KEY(9)		| \
++			PKR_AD_KEY(10)	| PKR_AD_KEY(11)	| \
++			PKR_AD_KEY(12)	| PKR_AD_KEY(13)	| \
++			PKR_AD_KEY(14)	| PKR_AD_KEY(15))
 +
-+Also qemu has support as well: https://www.qemu.org/2021/04/30/qemu-6-0-0/
++#endif /* CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS */
 +
-+Kconfig
-+-------
-+Kernel users intending to use PKS support should depend on
-+ARCH_HAS_SUPERVISOR_PKEYS, and select ARCH_ENABLE_SUPERVISOR_PKEYS to turn on
-+this support within the core.
-+
-+
-+MSR details
-+-----------
-+
-+It should be noted that the underlying WRMSR(MSR_IA32_PKRS) is not serializing
-+but still maintains ordering properties similar to WRPKRU.
-+
-+Older versions of the SDM on PKRS may be wrong with regard to this
-+serialization.  The text should be the same as that of WRPKRU.  From the WRPKRU
-+text:
-+
-+	WRPKRU will never execute transiently. Memory accesses
-+	affected by PKRU register will not execute (even transiently)
-+	until all prior executions of WRPKRU have completed execution
-+	and updated the PKRU register.
++#endif /* _LINUX_PKS_KEYS_H */
 -- 
 2.31.1
 

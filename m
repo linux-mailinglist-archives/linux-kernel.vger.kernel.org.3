@@ -2,148 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2E149E052
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 388D149E059
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239665AbiA0LLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:11:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:54800 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229484AbiA0LLe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:11:34 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48EDA1FB;
-        Thu, 27 Jan 2022 03:11:34 -0800 (PST)
-Received: from [10.57.39.22] (unknown [10.57.39.22])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9526B3F7D8;
-        Thu, 27 Jan 2022 03:11:31 -0800 (PST)
-Message-ID: <1ec258b8-c6dd-aa0f-8583-2d7667314be9@arm.com>
-Date:   Thu, 27 Jan 2022 11:11:13 +0000
+        id S240012AbiA0LMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229484AbiA0LMW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 06:12:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01ECBC061714;
+        Thu, 27 Jan 2022 03:12:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55F3DB821EE;
+        Thu, 27 Jan 2022 11:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A0ECC340E4;
+        Thu, 27 Jan 2022 11:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643281939;
+        bh=V5HYgTWJFQ5JJsKuBtDbntq5jM8gqYnHqlB+WwVQUg0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=qs+oygNUvOkZojCS4tbIHBbHNnN2c83jSwVTtC+PXReiKpUgTryV/Jn9i4kA11TCx
+         wQIA8T/xXWysKr5FVnBsdp7s6T57gZuXoA8b+6AKW4GBWhPcMDiC878wFDfjGOUfSX
+         5ddnmsg5pr+FfS6jpyfRuWWfH+qIetrTGJZM1PAYwXCjUJyQB7D1Wcs5o++QKht+ze
+         N6Qaj6XKvoxOKPWxiTmKIzgNkaDO61bAS7aaPRXf+qfG+7pz/a1932PlgtYdjIokd4
+         zXshthMZgvLd9Pe0iKyNgu1FzP9P91fWoKA6y5OydLOCZNYRF9sJ2Iz0TLFNBDx5FN
+         vYRqTrnWEMhKw==
+Message-ID: <2e66ef3e8f5df0529d3c289f8ed0be6a051d95ea.camel@kernel.org>
+Subject: Re: [PATCH 5/9] cephfs: don't set/clear bdi_congestion
+From:   Jeff Layton <jlayton@kernel.org>
+To:     NeilBrown <neilb@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Date:   Thu, 27 Jan 2022 06:12:15 -0500
+In-Reply-To: <164325158958.29787.8840004338500709466.stgit@noble.brown>
+References: <164325106958.29787.4865219843242892726.stgit@noble.brown>
+         <164325158958.29787.8840004338500709466.stgit@noble.brown>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Andrew Kilroy <andrew.kilroy@arm.com>
-Subject: Re: [RFC PATCH 1/1] perf arm64: Implement --topdown with metrics
-To:     Andi Kleen <ak@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Ian Rogers <irogers@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <4c375d34-bf20-496d-22fc-aed8597126e2@huawei.com>
- <20211214184240.24215-1-andrew.kilroy@arm.com>
- <20211214184240.24215-2-andrew.kilroy@arm.com>
- <CAP-5=fXJeH0ZvcHPa20N5KfLwnYSw29rpK3OrnvE0o3u-vGTLA@mail.gmail.com>
- <b1640897-10d7-c11e-4a7a-d17633916c8e@huawei.com>
- <5a2e29c1-2c7e-1b55-9192-62060309aeca@arm.com>
- <12e0deef-08db-445f-4958-bcd5c3e10367@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <12e0deef-08db-445f-4958-bcd5c3e10367@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andi,
+On Thu, 2022-01-27 at 13:46 +1100, NeilBrown wrote:
+> The bdi congestion framework is no-longer used - writeback uses other
+> mechanisms to manage throughput.
+> 
+> So remove calls to set_bdi_congested() and clear_bdi_congested(), and
+> remove the writeback_count which is used only to guide the setting and
+> clearing.
+> 
+> The congestion_kb mount option is no longer meaningful, but as it is
+> visible to user-space, removing it needs more consideration.
+> 
+> Signed-off-by: NeilBrown <neilb@suse.de>
+> ---
+>  fs/ceph/addr.c  |   27 ---------------------------
+>  fs/ceph/super.c |    2 --
+>  fs/ceph/super.h |    2 --
+>  3 files changed, 31 deletions(-)
+> 
+> diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
+> index c98e5238a1b6..9147667f8cd5 100644
+> --- a/fs/ceph/addr.c
+> +++ b/fs/ceph/addr.c
+> @@ -57,11 +57,6 @@
+>   * accounting is preserved.
+>   */
+>  
+> -#define CONGESTION_ON_THRESH(congestion_kb) (congestion_kb >> (PAGE_SHIFT-10))
+> -#define CONGESTION_OFF_THRESH(congestion_kb)				\
+> -	(CONGESTION_ON_THRESH(congestion_kb) -				\
+> -	 (CONGESTION_ON_THRESH(congestion_kb) >> 2))
+> -
+>  static int ceph_netfs_check_write_begin(struct file *file, loff_t pos, unsigned int len,
+>  					struct folio *folio, void **_fsdata);
+>  
+> @@ -561,10 +556,6 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
+>  	dout("writepage %p page %p index %lu on %llu~%llu snapc %p seq %lld\n",
+>  	     inode, page, page->index, page_off, len, snapc, snapc->seq);
+>  
+> -	if (atomic_long_inc_return(&fsc->writeback_count) >
+> -	    CONGESTION_ON_THRESH(fsc->mount_options->congestion_kb))
+> -		set_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
+> -
+>  	req = ceph_osdc_new_request(osdc, &ci->i_layout, ceph_vino(inode), page_off, &len, 0, 1,
+>  				    CEPH_OSD_OP_WRITE, CEPH_OSD_FLAG_WRITE, snapc,
+>  				    ceph_wbc.truncate_seq, ceph_wbc.truncate_size,
+> @@ -621,10 +612,6 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
+>  	ceph_put_wrbuffer_cap_refs(ci, 1, snapc);
+>  	ceph_put_snap_context(snapc);  /* page's reference */
+>  
+> -	if (atomic_long_dec_return(&fsc->writeback_count) <
+> -	    CONGESTION_OFF_THRESH(fsc->mount_options->congestion_kb))
+> -		clear_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
+> -
+>  	return err;
+>  }
+>  
+> @@ -704,12 +691,6 @@ static void writepages_finish(struct ceph_osd_request *req)
+>  			BUG_ON(!page);
+>  			WARN_ON(!PageUptodate(page));
+>  
+> -			if (atomic_long_dec_return(&fsc->writeback_count) <
+> -			     CONGESTION_OFF_THRESH(
+> -					fsc->mount_options->congestion_kb))
+> -				clear_bdi_congested(inode_to_bdi(inode),
+> -						    BLK_RW_ASYNC);
+> -
+>  			ceph_put_snap_context(detach_page_private(page));
+>  			end_page_writeback(page);
+>  			dout("unlocking %p\n", page);
+> @@ -952,14 +933,6 @@ static int ceph_writepages_start(struct address_space *mapping,
+>  			dout("%p will write page %p idx %lu\n",
+>  			     inode, page, page->index);
+>  
+> -			if (atomic_long_inc_return(&fsc->writeback_count) >
+> -			    CONGESTION_ON_THRESH(
+> -				    fsc->mount_options->congestion_kb)) {
+> -				set_bdi_congested(inode_to_bdi(inode),
+> -						  BLK_RW_ASYNC);
+> -			}
+> -
+> -
+>  			pages[locked_pages++] = page;
+>  			pvec.pages[i] = NULL;
+>  
+> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+> index bf79f369aec6..b2f38af9fca8 100644
+> --- a/fs/ceph/super.c
+> +++ b/fs/ceph/super.c
+> @@ -801,8 +801,6 @@ static struct ceph_fs_client *create_fs_client(struct ceph_mount_options *fsopt,
+>  	fsc->filp_gen = 1;
+>  	fsc->have_copy_from2 = true;
+>  
+> -	atomic_long_set(&fsc->writeback_count, 0);
+> -
+>  	err = -ENOMEM;
+>  	/*
+>  	 * The number of concurrent works can be high but they don't need
+> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+> index 67f145e1ae7a..fc58adf1d36a 100644
+> --- a/fs/ceph/super.h
+> +++ b/fs/ceph/super.h
+> @@ -120,8 +120,6 @@ struct ceph_fs_client {
+>  
+>  	struct ceph_mds_client *mdsc;
+>  
+> -	atomic_long_t writeback_count;
+> -
+>  	struct workqueue_struct *inode_wq;
+>  	struct workqueue_struct *cap_wq;
+>  
+> 
+> 
 
+Thanks Neil.
 
-On 21/12/2021 14:03, Andi Kleen wrote:
-> 
-> On 12/20/2021 9:21 AM, Andrew Kilroy wrote:
->>
->> On 15/12/2021 10:52, John Garry wrote:
->>> Hi Andrew,
->>>
->>>>>   const struct pmu_event *metricgroup__find_metric(const char *metric,
->>>>>                                                   const struct 
->>>>> pmu_events_map *map);
->>>>>   int metricgroup__parse_groups_test(struct evlist *evlist,
->>>>> diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
->>>>> index 1081b20f9891..57c0c5f2c6bd 100644
->>>>> --- a/tools/perf/util/topdown.c
->>>>> +++ b/tools/perf/util/topdown.c
->>>>> @@ -56,3 +56,9 @@ __weak bool arch_topdown_sample_read(struct evsel 
->>>>> *leader __maybe_unused)
->>>>>   {
->>>>>          return false;
->>>>>   }
->>>>> +
->>>>> +__weak bool arch_topdown_use_json_metrics(void)
->>>>> +{
->>>
->>> AFAICS, only x86 supports topdown today and that is because they have 
->>> special kernel topdown events exposed for the kernel CPU PMU driver. 
->>> So other architectures - not only arm - would need rely on 
->>> metricgroups for topdown support. So let's make this generic for all 
->>> archs.
->>>
->>>> I like this extension! I've ranted in the past about weak symbols
->>>> breaking with archives due to lazy loading [1]. In this case
->>>> tools/perf/arch/arm64/util/topdown.c has no other symbols within it
->>>> and so the weak symbol has an extra chance of being linked
->>>> incorrectly. We could add a new command line of --topdown-json to
->>>> avoid this, but there seems little difference in doing this over just
->>>> doing '-M TopDownL1'.
->>>
->>>
->>>> Is it possible to use the json metric approach
->>>> for when the CPU version fails?
->>>
->>> I think that's a good idea.
->>>
->>
->>
->> While looking into using the json metrics approach as a fallback to 
->> the original, I noticed  there are two json metricgroups 'TopdownL1' 
->> and 'TopDownL1' (note the case difference) on x86. Not sure if the 
->> case difference is intentional.
->>
->> On skylake, 'TopdownL1' contains the four json metrics Retiring, 
->> Bad_Speculation, Frontend_Bound, and Backend_Bound.  'TopDownL1' has 
->> 'SLOTS', 'CoreIPC', 'CoreIPC_SMT', 'Instructions'.  I think its a 
->> similar situation on other x86 chips.
-> 
-> 
-> There's also SMT metrics.
-> 
-> 
-> We don't want to include CoreIPC etc. by default because it would cause 
-> multiplexing in common situations.
-> 
->>
->> The search for those metrics by metricgroup name is case insensitive, 
->> so it's picking up all 8 metrics when using the lookup string 
->> 'TopDownL1'.  So the extra 'SLOTS', 'CoreIPC', 'CoreIPC_SMT', 
->> 'Instructions' metrics would be printed as well.
->>
->> Not sure what the significance of the case difference might be.
->>
->> Should we use a different string than 'TopDownL1' as the metric group 
->> name to search for?
-> 
-> 
-> We should probably fix the case (or just make the match case insensitive)
-> 
-> Can we just keep x86 at using the kernel metrics? On Skylake and earlier 
-> it needs different formulas and other options depending whether SMT is 
-> on or off, so it's not straight forward to express it as json directly.
-> 
-
-I posted a v2 of these patches which keeps x86 only using the kernel 
-metrics.
-
- 
-https://lore.kernel.org/linux-perf-users/20220111150749.13365-1-andrew.kilroy@arm.com/
-
-Would be good to get your feedback,
-
-Thanks
-Andrew
-
+I'll plan to pull this into the ceph testing branch and do some testing
+with it, but at a quick glance I don't forsee any issues. This should
+make v5.18, but we may be able to get it in sooner.
+-- 
+Jeff Layton <jlayton@kernel.org>

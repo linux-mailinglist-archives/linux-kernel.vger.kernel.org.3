@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3BC49EE60
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB30349EE62
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237864AbiA0XBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 18:01:42 -0500
-Received: from mail-eopbgr00091.outbound.protection.outlook.com ([40.107.0.91]:27635
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229801AbiA0XBk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 18:01:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iuDXK/pSLbRMKMlYyhgldqjHezfpHur0FqelCOXDS8tlCZPOAgr/olF6617O+O+fKx2krYgTY/eU5lkk+D/U2Bwzr2Y/aPfhx8wcxKKeXD8Ble8410pMapCKe/Nb8BBN5w0lkxvDzxAZXPkGFaEDkNk0/Yjx/BDV6z+5nHJgusHKc8g9bZ8WTSH4RN6vjisIyY2vPjdMe+sfA7n892i5FqxvSt5mZIPApf8Y1xKL59Faukqov3oJ7X+mavB3GBKhrd2ZAZDXjrf2d3ruH5m5IOouZxkTUgq8CrLYMCvJYuDwi+clIHAC9kkNuxidcImOms2+LiGVHToFZJn2t1UXSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WV70892ULfZC4D2rutOz/ZTCtFW5DrbHovlS24aUWag=;
- b=DrZ4TM1SNeTNmZw3Bl6LBaeyu3kwqxzYp+33P8q9O6o0HPlK6dFfYzXPYvERacRVjKfNqLpJQ48nE2LTw3Qr+MRZ1lnsFHUH995D14IlwN5dXOPDUgQfWgWtZUxG2dlTlnSjCrBBAQXbNGhHNid6qxL9F6wktWmQ2/lLqtA3OAEQVFqu6IFA/8i5pLSGQ0qsq00xxHtBEV7WbIhllcDjZJtJaaHM9od9VLfiGaUMJciAqjDCW37QUNz4TezslW1z4LJ55Fjsm+PDEQa+Fjnq36phtLyz08JE38IW53mXqo4fGORz/+ETuW8uwEqj/TfDXnhGdejvl+DqkP0EpDPgVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 194.176.121.59) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=sma.de;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=sma.de; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sma.de; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WV70892ULfZC4D2rutOz/ZTCtFW5DrbHovlS24aUWag=;
- b=QgqOEEC3PY5vt5LcsmGhTKe9xIH5YfivtdOj7xMFsGu/ElQsznm4KJ+vJPRVIR3XdHD3zFv5CiOZAVi3fk0mx1sWYaTbC5lsThMfAFiP+xp5jjwEGY86uhEwc3JJ6VLOPXLVV4bm8AFQcYnmMNFVYeifQhWKwC9i1mCuhd7uTGc=
-Received: from AM7PR04CA0028.eurprd04.prod.outlook.com (2603:10a6:20b:110::38)
- by DBBPR04MB6107.eurprd04.prod.outlook.com (2603:10a6:10:cf::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Thu, 27 Jan
- 2022 23:01:38 +0000
-Received: from AM5EUR02FT057.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:20b:110:cafe::83) by AM7PR04CA0028.outlook.office365.com
- (2603:10a6:20b:110::38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18 via Frontend
- Transport; Thu, 27 Jan 2022 23:01:38 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 194.176.121.59) smtp.mailfrom=sma.de; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=sma.de;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning sma.de
- discourages use of 194.176.121.59 as permitted sender)
-Received: from webmail.sma.de (194.176.121.59) by
- AM5EUR02FT057.mail.protection.outlook.com (10.152.9.242) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4930.15 via Frontend Transport; Thu, 27 Jan 2022 23:01:37 +0000
-Received: from SVR-DE-EXHYB-01.sma.de ([10.0.40.14]) by webmail.sma.de over TLS secured channel with Microsoft SMTPSVC(8.5.9600.16384);
-         Fri, 28 Jan 2022 00:01:05 +0100
-Received: from pc6682 (10.9.12.142) by SVR-DE-EXHYB-01.sma.de (10.0.40.14)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.2176.2; Fri, 28
- Jan 2022 00:00:53 +0100
-Date:   Fri, 28 Jan 2022 00:00:52 +0100
-From:   Andre Kalb <svc.sw.rte.linux@sma.de>
-To:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] printk: Set console_set_on_cmdline=1 when using console=""
- or console=null
-Message-ID: <YfMkJKUuGBwyT611@pc6682>
-Reply-To: Andre Kalb <andre.kalb@sma.de>
+        id S239780AbiA0XCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 18:02:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237773AbiA0XCD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 18:02:03 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55851C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:02:03 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id z7so3889654ilb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 15:02:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=/udoNmOdToKZ46JixRPRrkFS07mcQhi4GHZVYYVEkbc=;
+        b=JbObllQ61T/iGnBUjULS9/tBm7bjFLR+cUslbw4rxf/RHEdNUXRLGNH1OQE1R1MAzC
+         q7UY5vIIWqOJtz0a0PAM3vf4YwRtuLNO46PyqyWtRRoy64vBGofSZnluxWLr+h+usGJh
+         KSuk+fFej0loknxj937nOtODaRaL5x5T4VVIU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/udoNmOdToKZ46JixRPRrkFS07mcQhi4GHZVYYVEkbc=;
+        b=0fue62JDoDUyUxVidkLgPBdlVm75Tzwl7TGdY4lb1U9dIFE8epdWpqQsmZIPPFGgWj
+         Bm6SfmTRYL4De8JwCe8DS0r040Ge/CqKqBcx/zA0blcH+k7sPE4PM5Sxl9OJbh/nWbVV
+         MyEIcv63d5vKLNVHfpxLbGn4RffcHlB3kCzvUfbEC2irRDsUhTAIWKQ95mBD81Q2kZh1
+         IcanEvkLg/dG4/uq7sio8jDfD/WPSE6TD8Dkx7BvckYEt3xEOKcLOnoDS17kWsMmCuUM
+         TsuK3YwAXKcqgbYv+62YQhtAK8QYfc6UK54rJJLgM98Qv+RyowS5Bn9NLnYTx42SEoaM
+         CS2w==
+X-Gm-Message-State: AOAM531u8zcdWTcJDSGX++EVnBBiA/0eJZdOAXCieAccva/zVLNs2bUM
+        hnNHQg2NoqaUen3LW9KoeJvskQ==
+X-Google-Smtp-Source: ABdhPJw7snTnsDnp2NSxNMlJZgf+Ks8g/n0IOMPOVZLcnCw/cpfCGHXpCKnBGD88sSz5Dq3YV4zEVA==
+X-Received: by 2002:a05:6e02:188c:: with SMTP id o12mr4196131ilu.95.1643324522750;
+        Thu, 27 Jan 2022 15:02:02 -0800 (PST)
+Received: from ?IPv6:2601:282:8200:4c:fcdb:3423:ed25:a583? ([2601:282:8200:4c:fcdb:3423:ed25:a583])
+        by smtp.gmail.com with ESMTPSA id m4sm12666632iln.48.2022.01.27.15.02.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 15:02:02 -0800 (PST)
+Subject: Re: [PATCH 2/5] kselftest: Fix vdso_test_time to pass on skips
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shuah@kernel.org, Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220126102723.23300-1-cristian.marussi@arm.com>
+ <20220126102723.23300-3-cristian.marussi@arm.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3603bae9-d292-8c67-331f-18fe54586355@linuxfoundation.org>
+Date:   Thu, 27 Jan 2022 16:02:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-Originating-IP: [10.9.12.142]
-X-ClientProxiedBy: SVR-DE-EXHYB-01.sma.de (10.0.40.14) To
- SVR-DE-EXHYB-01.sma.de (10.0.40.14)
-X-OriginalArrivalTime: 27 Jan 2022 23:01:05.0552 (UTC) FILETIME=[C3718900:01D813D1]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f6ae6ab3-463a-48c1-fd60-08d9e1e8f901
-X-MS-TrafficTypeDiagnostic: DBBPR04MB6107:EE_
-X-Microsoft-Antispam-PRVS: <DBBPR04MB6107F1038CC013F7B4E02780E3219@DBBPR04MB6107.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:612;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V9PrFx3/agpVhAScpoOP+80f5x4smaBa2f22TS+HUgUeFNjkPHBxEFNV5nWH8QkYS1bg2byEyQ7AAqE/t7I4Kjd7Jelo8KecM6EpYOsza+ayxqN42wmGV17/EaV9OLsOLFi9k5jzKRM/QejndL7xiwrgOzJrrSCjxQdn54y/n8rqnDpIDVzDEzIsS2fTAdCfFDCsIFROEU3Ex2DWmTe76jh8UM4erZqrQBjzT1t/ZDhx7qZERATqmhPYhEMhNj5ved6PLpQregKOBgAfBJnLSR1n0a7bcU4pX9YzJhUZhZ/LlDFKr+/gjg4T/Y1/4pN4wkZ0UGzhqqa8ql7K/WMO5OvqoCm8B7GUU5AAjCB8OdBhbBHeQDMOt3IxzC6Tg7ejdJq4NOi5oLHkkCXFq9Mz7uppJwrAObt886DBOfNdQ69dVAvUoox9WpOvCbTHvq7GvhbDyZirLg0Fbz0dT6IrT0ZjiSw+ePO9Wv4K+piZ/b3G8WgiTOZsqPaKK92c12Bn2d/cDOAzqMPQPxQ40SmtjqV0V5a9d64c+wYjNuxHErIw3DnaNT/BFZZl1tmnuzecxgxgyzfReOHRGi6RCZnQ3bPPVisr/2nAP4Mc/uaiGB2M9QxkEaM6rpUsAviC38Oln4zaK71kS7QpYOVJ2svib1m4XYcFT7RuVVK0gMUvS9CXwCQnYGzLBQCAOldt3hZQIlPbLeK1FuhZlbWk60Cc3g==
-X-Forefront-Antispam-Report: CIP:194.176.121.59;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:webmail.sma.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(86362001)(40460700003)(26005)(110136005)(4744005)(186003)(47076005)(36860700001)(316002)(9686003)(508600001)(16526019)(9576002)(82310400004)(356005)(5660300002)(70206006)(70586007)(81166007)(8936002)(55016003)(426003)(336012)(2906002)(33716001)(8676002)(36900700001)(20210929001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: sma.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 23:01:37.5642
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6ae6ab3-463a-48c1-fd60-08d9e1e8f901
-X-MS-Exchange-CrossTenant-Id: a059b96c-2829-4d11-8837-4cc1ff84735d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a059b96c-2829-4d11-8837-4cc1ff84735d;Ip=[194.176.121.59];Helo=[webmail.sma.de]
-X-MS-Exchange-CrossTenant-AuthSource: AM5EUR02FT057.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6107
+In-Reply-To: <20220126102723.23300-3-cristian.marussi@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case of using console="" or console=null set console_set_on_cmdline=1
-to disable chosen{ "stdout-path" } node from devicetree.
+On 1/26/22 3:27 AM, Cristian Marussi wrote:
+> When a vDSO symbol is not found, all the testcases in vdso_test_abi usually
+> report a SKIP, which, in turn, is reported back to Kselftest as a PASS.
+> 
+> Testcase vdso_test_time, instead, reporting a SKIP, causes the whole set of
+> tests within vdso_test_abi to be considered FAIL when symbol is not found.
+> 
+> Fix it reporting a PASS when vdso_test_time cannot find the vdso symbol.
+> 
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> Seen as a failure on both a JUNO and a Dragonboard on both recent and old
+> kernels/testruns:
+> 
+> root@deb-buster-arm64:~# /opt/ksft/vDSO/vdso_test_abi
+> [vDSO kselftest] VDSO_VERSION: LINUX_2.6.39
+> The time is 1637922136.675304
+> The time is 1637922136.675361000
+> The resolution is 0 1
+> clock_id: CLOCK_REALTIME [PASS]
+> The time is 1927.760604900
+> The resolution is 0 1
+> clock_id: CLOCK_BOOTTIME [PASS]
+> The time is 1637922136.675649700
+> The resolution is 0 1
+> clock_id: CLOCK_TAI [PASS]
+> The time is 1637922136.672000000
+> The resolution is 0 4000000
+> clock_id: CLOCK_REALTIME_COARSE [PASS]
+> The time is 1927.761005600
+> The resolution is 0 1
+> clock_id: CLOCK_MONOTONIC [PASS]
+> The time is 1927.761132780
+> The resolution is 0 1
+> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> The time is 1927.757093740
+> The resolution is 0 4000000
+> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+> Could not find __kernel_time              <<< This caused a FAIL as a whole
+> root@deb-buster-arm64:~# echo $?
+> 1
+> 
+> e.g.: https://lkft.validation.linaro.org/scheduler/job/2192570#L27778
+> ---
+>   tools/testing/selftests/vDSO/vdso_test_abi.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> index 3d603f1394af..7dcc66d1cecf 100644
+> --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
+> +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> @@ -90,8 +90,9 @@ static int vdso_test_time(void)
+>   		(vdso_time_t)vdso_sym(version, name[2]);
+>   
+>   	if (!vdso_time) {
+> +		/* Skip if symbol not found: consider skipped tests as passed */
+>   		printf("Could not find %s\n", name[2]);
+> -		return KSFT_SKIP;
+> +		return KSFT_PASS;
 
-To jump out from drivers/of/base.c, line 2087 of_console_check function
-with false.
+Skip is a the right option here. Pass indicates that the functionality
+has been tested and it passed. There is a clear message that says that
+the symbol isn't found
 
-Signed-off-by: Andre Kalb <andre.kalb@sma.de>
----
- kernel/printk/printk.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 82abfaf3c2aa..df5ab35b8af2 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -2385,6 +2385,7 @@ static int __init console_setup(char *str)
- 	 */
- 	if (str[0] == 0 || strcmp(str, "null") == 0) {
- 		__add_preferred_console("ttynull", 0, NULL, NULL, true);
-+		console_set_on_cmdline = 1;
- 		return 1;
- 	}
- 
--- 
-2.31.1
-
+thanks,
+-- Shuah

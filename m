@@ -2,81 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D0749D9CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 06:04:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817CF49D9CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 06:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbiA0FEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 00:04:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33162 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232660AbiA0FEI (ORCPT
+        id S233385AbiA0FEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 00:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229922AbiA0FE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 00:04:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643259847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=plPajYXA8B5ZLakDfOB/mq6gwvfYbK84k4ZYLKgoU6w=;
-        b=K/uusz10UWBF0kNGSINnxEN0rCT9PEtgs0Tclz6pdbMLSqFnmN/dtncCELtyt2KO0VO0jp
-        Y4w5DWy3PwS0uxyDYySqf8FwRTs4tQOAoujs2KgIMolnLTikqHKRCKaVoSRc/Nhc/aSOmp
-        3DFiAp4+oaKwgSfPzBhdL7j2CV1GXIY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-307-NGGhIgoONtKk4r22eqt6yQ-1; Thu, 27 Jan 2022 00:03:57 -0500
-X-MC-Unique: NGGhIgoONtKk4r22eqt6yQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4E02283DD23;
-        Thu, 27 Jan 2022 05:03:55 +0000 (UTC)
-Received: from T590 (ovpn-8-29.pek2.redhat.com [10.72.8.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6162F5ED2D;
-        Thu, 27 Jan 2022 05:03:40 +0000 (UTC)
-Date:   Thu, 27 Jan 2022 13:03:35 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-Cc:     Tejun Heo <tj@kernel.org>, mkoutny@suse.com, paulmck@kernel.org,
-        axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH v6 2/2] block: cancel all throttled bios in del_gendisk()
-Message-ID: <YfInp7SsZNNgRfB7@T590>
-References: <20220110134758.2233758-1-yukuai3@huawei.com>
- <20220110134758.2233758-3-yukuai3@huawei.com>
- <Yd5FkuhYX9YcgQkZ@T590>
- <b416e6a6-f2c9-caf3-dacd-f937746207da@huawei.com>
- <YfF+yukISfkuc9IK@slm.duckdns.org>
- <630c162b-8bdd-d87e-0d80-c7a78ea267a5@huawei.com>
+        Thu, 27 Jan 2022 00:04:28 -0500
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94656C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 21:04:28 -0800 (PST)
+Received: by mail-yb1-xb42.google.com with SMTP id h14so5029031ybe.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 21:04:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=iwTlr6XvSelMQvxE4FCzSoqxJP9AZOMONrsLOQWM2vfs+9s13joXNVUdwyuOETS047
+         x71abld96KJ7jhbuZyf3p7NH/cWNI1t5LO1zLbhaF5kPZp57ZvFYujYkK0uUCdux+xCz
+         9u4NMcgoC0D+Q3ENCEoW+fFLHnYfiDvSWhvKB2yGmY0zN/EnCkiEy0vHEKuJZwDoIoeM
+         lAuQ7MMFKhbqCbCBjLhA41wS8BxgZym/nfSP5q1hdvQUbvsewgaEH+MrxDjU4CiMnqzk
+         ZflUJsDZxnpxneaaw8swJmysZsnenOM0OfKuEMlbM9VyRE+5ygUkkh0liwF3FpYLoi/j
+         bgrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=CGHIe6RjI3G6lys+JBo4MPD0ANM9G+OkiAK13WwzcOvBW7gm+8QxjCbE9pB1mrdiz2
+         bxNRZpxTVXJlz6vhB9+spUuy6D9IWWdg4bn4CkG2TIeook2CSPRWOz5qRdGckt/HT7lo
+         X+j2iyBIA8/mZBkB+jp8Vb+vgQXbfLVlloMLMoGkqH0HwdI5fkzCAA3joAuaQckxHzyn
+         8rR32rFmg8yS4S7/wYyjlwoSxXKOpNCo1wLGrMtWOVm3BPFi4gHT6atdOQlZhPIU4hD2
+         xzSQ/DdibgfvfYH/dubPDqRpLzxqJ6dnf7K0rnBnyefdJRN3ns7F00iKu9y9amWXR7pH
+         aAdg==
+X-Gm-Message-State: AOAM533BA7zfEaylTJLwzExyUEmKsRJXkkwLdSIHAC62Z848sbhQMTTf
+        AKzk6JiUCfFLmDAn5GFFcMCPKN4eemDnLgVHZnA=
+X-Google-Smtp-Source: ABdhPJyKvlRjeyOxKTI91x6LswfB5lA9GCfWoYLIW0eAybZgOcSF3tBvuMOiMrGHBeRTEmstO74nSWAosO10uTah5sA=
+X-Received: by 2002:a25:4dd5:: with SMTP id a204mr3501144ybb.222.1643259867436;
+ Wed, 26 Jan 2022 21:04:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <630c162b-8bdd-d87e-0d80-c7a78ea267a5@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Received: by 2002:a05:7010:9887:b0:202:35b1:633a with HTTP; Wed, 26 Jan 2022
+ 21:04:27 -0800 (PST)
+Reply-To: avamedicinemed3@gmail.com
+From:   Dr Ava Smith <drtracywilliam38@gmail.com>
+Date:   Wed, 26 Jan 2022 21:04:27 -0800
+Message-ID: <CA+W_Y5aP5=wWztgia3r=jRh4_xjuvqHD8pQ7qgQ8gKvuBCSs2g@mail.gmail.com>
+Subject: From Dr Ava Smith from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 10:45:33AM +0800, yukuai (C) wrote:
-> 在 2022/01/27 1:03, Tejun Heo 写道:
-> > On Mon, Jan 24, 2022 at 11:50:11AM +0800, yukuai (C) wrote:
-> > > Both ways can fix the problem, which way do you prefer?
-> > 
-> > Ming's suggested change seems simpler, no?
-> 
-> Hi,
-> 
-> Yes, if Ming don't mind, I can send a new version after Ming's
-> pathset "block: don't drain file system I/O on del_gendisk".
-
-The patch of canceling throttled bios shouldn't be conflicted
-with the above big patchset, and you can send it out now against
-for-5.18/block.
-
-
-Thanks,
-Ming
-
+-- 
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava

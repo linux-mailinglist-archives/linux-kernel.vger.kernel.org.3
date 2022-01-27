@@ -2,101 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6039149EB39
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C215E49EB38
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245663AbiA0Tmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245738AbiA0Tms (ORCPT
+        id S245649AbiA0Tmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:42:39 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57358 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245263AbiA0Tmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:42:48 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F293AC06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:42:47 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id k25so8260547ejp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:42:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SlWIcHy/3XR7mwnK/GHpmwHwVvr/nhApahfqBZocrNU=;
-        b=YqCrznekqjJGqxJTiBCV9J98MH4sLOY2AlzJgugPm5/1S+vb4pcJxV9Zwm2mcVL5sq
-         yOPmh7MmaQfsM0y7I43NHEJJesuDa7jaPzANYVQYPXe/kubBYmv+/msm7zagHrutr6QN
-         L7Wk9Blrv1JS4QjFiEsYcfIxdd0N+UgCW6sZnnqKNn/vsbb5p9+SNSzu+Udg2f4pR2e3
-         4S5keBjy2zohERuHuVzADnODSIZMZiT7cky9vprdIm74ZstoTdru90283pSzQttQs+Ei
-         b8XtsBlGpgPnU5l+YQK4dP3TUw8HDrLnTPZfGGDMvRpNvYln48idGU1LpLbjXwhw5/5R
-         u9dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SlWIcHy/3XR7mwnK/GHpmwHwVvr/nhApahfqBZocrNU=;
-        b=LydJViDv13c/0huGqm4CQqxogzEbQyyDyxgBjYZw9jy/6XtWiybMBQFByFfjufYLKq
-         DaxFZu4GzLXYspF0NRPZahsbhsMcbgXGEViL7c47kOwr3UiXfQhQ/tM7IV/t7teXMDzy
-         RyZoCqsmXs6ZA42U18gze9N2r0SB5gRJiNCzhBKnHPC1qJjpstsHI3Gke6z9/JQbsQho
-         s5H8i70W1xsP5Hc5yiM6sXEmrw3A4vVNQps/7NzwETgDCj9WvLxLhMisBzP+/DOglnjj
-         KYZYf6PsygdeR+RkNDq5Vyw/rLWtv763/UaYt/0clwpZh0f4VeAR+eIheWDmw35HomsB
-         OhBg==
-X-Gm-Message-State: AOAM533BoPfD/6qXMJgl8qB5rTDppAnGzcheLIQVq/EXkGjo6OBJATy7
-        cKLRec5+nDqtolNSK5bRM+fMotX2f4Tn//q9cALZvw==
-X-Google-Smtp-Source: ABdhPJyRYphRCJufijT8nLWfSafgBSzq7ruAzTjmpKHgO1/ZkxNEN0MqTxVHWccur1KVci8YLBBrAKSYGIwvmUfOKJE=
-X-Received: by 2002:a17:907:2d92:: with SMTP id gt18mr3911682ejc.579.1643312566461;
- Thu, 27 Jan 2022 11:42:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20220126183429.1840447-1-pasha.tatashin@soleen.com>
- <20220126183429.1840447-2-pasha.tatashin@soleen.com> <72cae3c0-e06e-4fe5-24d5-a2c94d99780f@suse.cz>
-In-Reply-To: <72cae3c0-e06e-4fe5-24d5-a2c94d99780f@suse.cz>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Thu, 27 Jan 2022 14:42:09 -0500
-Message-ID: <CA+CK2bCP0iFAdr-4VxiS2ubQT0O0c_j-qS4Q0khhRBCLJqQBrg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/9] mm: add overflow and underflow checks for page->_refcount
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        william.kucharski@oracle.com,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        schmitzmic@gmail.com, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Paul Turner <pjt@google.com>, Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 27 Jan 2022 14:42:38 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20RJcvYs004439;
+        Thu, 27 Jan 2022 19:42:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=pj1NKpQbH5pDAnBSZ6ZEh9QlXO/BiqZbqDY+xndFINQ=;
+ b=ArUxI9xaJnMkc1m/ctLCFYLNYmbLq3j2EEPW4mhMbS9IlLQbC5TY9UfNjI0rROw8oi2u
+ 7Nenc9Kw208aEa34ewjzCclSsBPFlk3fwTXjIHEbvEsw5Mf9A/IPg5Z2ojFaMI6CKW8L
+ kj/hAWY4b6vnUz2W72pUtbiUQOD1vwG3Rkl2QU69f4BVgaJRuSGnTogXzI6KA37+VfUD
+ 7aE7dUsxtatUu6TDk/yPMTijyr5M7lKvY4Qa3TxaNgrREIyycOlQLxpaTtt34tYfMd9e
+ rvwjXlhUBpdZccrCAub+uelWNFBE9pxymSVFE6ei+5HiJHp6SpFnmqHMZ7AUWN5lZ7D/ gQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dv1brrc7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 19:42:24 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20RJfDZQ012915;
+        Thu, 27 Jan 2022 19:42:23 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dv1brrc77-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 19:42:23 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20RJc5TI000707;
+        Thu, 27 Jan 2022 19:42:21 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3dr9j9uchp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Jan 2022 19:42:21 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20RJgIqw44499358
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Jan 2022 19:42:18 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E45C25205A;
+        Thu, 27 Jan 2022 19:42:17 +0000 (GMT)
+Received: from sig-9-65-89-165.ibm.com (unknown [9.65.89.165])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5DB0C52050;
+        Thu, 27 Jan 2022 19:42:15 +0000 (GMT)
+Message-ID: <38a2c2b2d1829e9949bd984958e880e54ae7cf5c.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 06/23] ima: Move arch_policy_entry into ima_namespace
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Date:   Thu, 27 Jan 2022 14:42:14 -0500
+In-Reply-To: <20220126091104.jbedxrewojcmvy3u@wittgenstein>
+References: <20220125224645.79319-1-stefanb@linux.vnet.ibm.com>
+         <20220125224645.79319-7-stefanb@linux.vnet.ibm.com>
+         <20220126091104.jbedxrewojcmvy3u@wittgenstein>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: EFrkMEN0Vw9pu_-7IXT2CP4xF-M23kgt
+X-Proofpoint-ORIG-GUID: 8-dUcX1JxUB9y2GW9MGQi7Rsn0s9ApOg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-27_03,2022-01-27_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ malwarescore=0 phishscore=0 bulkscore=0 adultscore=0 mlxscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201270112
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > diff --git a/include/linux/page_ref.h b/include/linux/page_ref.h
-> > index 2e677e6ad09f..fe4864f7f69c 100644
-> > --- a/include/linux/page_ref.h
-> > +++ b/include/linux/page_ref.h
-> > @@ -117,7 +117,10 @@ static inline void init_page_count(struct page *page)
-> >
-> >  static inline void page_ref_add(struct page *page, int nr)
-> >  {
-> > -     atomic_add(nr, &page->_refcount);
-> > +     int old_val = atomic_fetch_add(nr, &page->_refcount);
-> > +     int new_val = old_val + nr;
-> > +
-> > +     VM_BUG_ON_PAGE((unsigned int)new_val < (unsigned int)old_val, page);
->
-> This seems somewhat weird, as it will trigger not just on overflow, but also
-> if nr is negative. Which I think is valid usage, even though the function
-> has 'add' in name, because 'nr' is signed?
+On Wed, 2022-01-26 at 10:11 +0100, Christian Brauner wrote:
+> On Tue, Jan 25, 2022 at 05:46:28PM -0500, Stefan Berger wrote:
+> > From: Stefan Berger <stefanb@linux.ibm.com>
+> > 
+> > Move the arch_policy_entry pointer into ima_namespace.
+> > 
+> > When freeing the memory set the pointer to NULL.
+> > 
+> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > ---
+> 
+> Only relevant for the initial imans (for now) since it is derived from a
+> boot parameter. Maybe mention this in the commit message.
 
-I have not found any places in the mainline kernel where nr is
-negative in page_ref_add(). I think, by adding this assert we ensure
-that when 'add' shows up in backtraces it can be assured that the ref
-count has increased, and if page_ref_sub() showed up it means it
-decreased. It is strange to have both functions, and yet allow them to
-do the opposite. We can also change the type to unsigned.
+Enabling architecture specific policy rules is based on
+CONFIG_IMA_ARCH_POLICY.  As the name implies, each architecture is free
+to define their own policy rules.  For example on x86, based on the
+secure boot mode both measurement and signature verification rules are
+defined for the kexec kernel image and kernel modules. Similarly on
+powerpc, different measurement and signature verification rules for the
+kexec kernel image and kernel modules are defined based on whether
+trusted boot, secure boot, or both are enabled [2].
 
-Pasha
+As neither kexec nor loading kernel modules are applicable, the
+architecture policy rules are limited to initial imans.
+
+[1] security/integrity/ima/ima_efi.c 
+[2] arch/powerpc/kernel/ima_arch.c
+
+> 
+> Move into struct ima_namespace looks good,
+> Acked-by: Christian Brauner <brauner@kernel.org>
+
+Thanks, Christian.
+
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+

@@ -2,73 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC8B49E55B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E00B949E55F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242741AbiA0PCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:02:51 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:54436 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237314AbiA0PCt (ORCPT
+        id S242752AbiA0PDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237314AbiA0PDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:02:49 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 21B551F403B9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643295768;
-        bh=di0QlooY9Xo01DVMWIhw7aG/KryjQggrU+H4kEUJCBs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=aGTgsniM1VQF3R1ga0HwRknNztMGKeXKiZ1fuXUfZIxEzqSbVbHW6EmIUbz+3bX5E
-         rAOC8sqSNdnChw1Y+L0XhoiLpv0yYFj+XEuWELPt/day6gpS9SvG7StaTcetw33syR
-         BJfmf5Q9VcLes8Z/xNaUfWt7FwVRZluWopfwuotYZlLvdnlrpC2lu3jkXSig3banzg
-         hKQ+cDD1XeEX9V9yrYiQ0TVpIX5XI27FukUzwcr63FHc0T64zWufYtIMJWdUBQDoEt
-         fs+/mT1Rkf7B1D0iB1EIOrsYHOSmEFTBmcNH3YvcxphMJL6Arp+9c2uGCUcUDmeadR
-         DJOSTr2ufubKQ==
-Subject: Re: [PATCH v1 06/14] media: platform: mtk-mdp3: Modify mtk-img-ipi.h
- for MT8195 SCP
-To:     "roy-cw.yeh" <roy-cw.yeh@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        "river . cheng" <river.cheng@mediatek.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220117055254.9777-1-roy-cw.yeh@mediatek.com>
- <20220117055254.9777-7-roy-cw.yeh@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <f6bbe7ff-1487-0ed1-595d-2449d57098ca@collabora.com>
-Date:   Thu, 27 Jan 2022 16:02:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Thu, 27 Jan 2022 10:03:32 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C37C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:03:32 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id v74so2899135pfc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:03:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C7e4lg+TQfiAQXzFbshw2MDjmu8fgeZdHDlpi+UGvYo=;
+        b=IcQOxoah2w7acJz2e232GpOd3VrUx3E64S+sV7uDemfCljVeAuN3WzP457onmqiQDh
+         u76szjjCW7GV6AipI7srdUWYmlM/68bIR2yp4xjNhM0YQo8yCq4AL225+l5VJKIa5S0/
+         /0Mrhq05nFY4E9v+nHU727CI3fqDyqy4b3DxGAIyiU+bXsmER10zWCok5yDH/n7gX2SZ
+         FibE55PLbZ96OrTzbmV/bmKpjnTunPNNbxIVWFHCrc7Jlo/hvORouyuNPI1cS5lww/dX
+         sjVX4BJwQSzd7CDM6Iluftc4Wib/6cfgL5rRwAcjO9BJhwPoi21Zs6X3U6YXwJflTTPm
+         XZxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C7e4lg+TQfiAQXzFbshw2MDjmu8fgeZdHDlpi+UGvYo=;
+        b=1vYuHAfvvQ03LdyX+HahnxCI5JyRaJhugQL8zM2UMbEy2ecfpSyPjeAp4LXhIcS4mc
+         Yz9HYNSKQCJ/YHK99ZwktDKpBv5ke1LeiSHKqGZeDs8w4nebSIf2W4LKx0xznfTYzGjR
+         /WHe0gHevVc1M6/5MvOdnOLQ8I6VARFir8Q1CsshMQjZa1QJGKJX3HT2pJYZa9eF0HKJ
+         4M+LuwCyT5NSJqPpvcPtT9R0jn0QNUPF0nbQe2yeIVbjiCd6MaRWRacOw2UVutOBPCoY
+         z94dhwc/9lwfCb0Jx0UZF76AfhhNJQ4EB5WBgexlvV6WuGNNzYhlIDJWWPFZvP+DMCfW
+         OwdA==
+X-Gm-Message-State: AOAM533amzhUnEKp86sSs5ZGWqMTNzxdLGrmHiWjaFW+aj32toxwhXX4
+        qmbTJhuzPptN83lUtXM3TQVygA==
+X-Google-Smtp-Source: ABdhPJxeyTfytHmnbDJ+Aaj8xg4RdWFqAQNQtZWVFA0EOzrcxwnG9kZL1+ndwFC95obPUkTU31j1Sg==
+X-Received: by 2002:aa7:8055:: with SMTP id y21mr3161629pfm.62.1643295811734;
+        Thu, 27 Jan 2022 07:03:31 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k12sm6235793pfc.107.2022.01.27.07.03.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 07:03:31 -0800 (PST)
+Date:   Thu, 27 Jan 2022 15:03:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>,
+        Like Xu <likexu@tencent.com>
+Subject: Re: [PATCH 0/3] KVM: x86: XSS and XCR0 fixes
+Message-ID: <YfK0P67bo5oSPXn4@google.com>
+References: <20220126172226.2298529-1-seanjc@google.com>
+ <3e978189-4c9a-53c3-31e7-c8ac1c51af31@redhat.com>
+ <YfGJWNVuFYZ8kl2I@google.com>
+ <f1389ace-6f5d-9f48-bb12-4835c29e6402@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20220117055254.9777-7-roy-cw.yeh@mediatek.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f1389ace-6f5d-9f48-bb12-4835c29e6402@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/01/22 06:52, roy-cw.yeh ha scritto:
-> From: "Roy-CW.Yeh" <roy-cw.yeh@mediatek.com>
+On Thu, Jan 27, 2022, Paolo Bonzini wrote:
+> On 1/26/22 18:48, Sean Christopherson wrote:
+> > On Wed, Jan 26, 2022, Paolo Bonzini wrote:
+> > > On 1/26/22 18:22, Sean Christopherson wrote:
+> > > > For convenience, Like's patch split up and applied on top of Xiaoyao.
+> > > > Tagged all for @stable, probably want to (retroactively?) get Xiaoyao's
+> > > > patch tagged too?
+> > > > Like Xu (2):
+> > > >     KVM: x86: Update vCPU's runtime CPUID on write to MSR_IA32_XSS
+> > > >     KVM: x86: Sync the states size with the XCR0/IA32_XSS at, any time
+> > > > 
+> > > > Xiaoyao Li (1):
+> > > >     KVM: x86: Keep MSR_IA32_XSS unchanged for INIT
+> > > > 
+> > > >    arch/x86/kvm/x86.c | 6 +++---
+> > > >    1 file changed, 3 insertions(+), 3 deletions(-)
+> > > > 
+> > > > 
+> > > > base-commit: e2e83a73d7ce66f62c7830a85619542ef59c90e4
+> > > 
+> > > Queued, though I'll note that I kinda disagree with the stable@ marking of
+> > > patch 1 (and therefore with the patch order) as it has no effect in
+> > > practice.
+> > 
+> > Hmm, that's not a given, is it?  E.g. the guest can configure XSS early on and
+> > then expect the configured value to live across INIT-SIPI-SIPI.  I agree it's
+> > highly unlikely for any guest to actually do that, but I don't like assuming all
+> > guests will behave a certain way.
 > 
-> 1. Modify struct member to 4 byte-alignment for MT8195 SCP limitation
-> 2. Add new struct for hw engine adding in MT8195
-> 
-> Signed-off-by: Roy-CW.Yeh <roy-cw.yeh@mediatek.com>
+> No, I meant in the sense that supported_xss is always zero right now, and
+> therefore so is MSR_IA32_XSS.
 
-This will break MT8183; is there any new firmware for that SoC that will
-synchronize these structures?
-
-Alternatively, you should add a new version of these structures and select
-them with a wrapper function on a per-SoC basis, or per firmware version.
+Oh, duh.

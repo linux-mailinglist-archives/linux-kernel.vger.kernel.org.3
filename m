@@ -2,68 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6B149E338
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55D949E339
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241651AbiA0NTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:19:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S241671AbiA0NTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236333AbiA0NTX (ORCPT
+        with ESMTP id S236333AbiA0NTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:19:23 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D53EC061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:19:23 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id v192so1824768vkv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:19:23 -0800 (PST)
+        Thu, 27 Jan 2022 08:19:39 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046D2C061714;
+        Thu, 27 Jan 2022 05:19:39 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id g11so2769202qvu.3;
+        Thu, 27 Jan 2022 05:19:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=daXBJ885kTWVd79S4QRLYH6bWi9T1PMxnbsGfWQlTqs=;
-        b=h1iQRl1YEJOUVW1IqOwi+PNR3H0U8Le+RePBBuDtsryUhqPsXSkHH903Z2CiZr5R7T
-         FGtmQUR5w8R0+cenW5n6Epex8O8B4UJJu8rQ4ahK08krltJMjSXM36WO5WTIyn/6UkpG
-         elaMWNfvALtPEQFTeKxXrHFWHtWZVRg2kdacqCWBE9gJcI11SuuUNydGJWkyPiLKJLhq
-         hxJCL/DQVyjHeNKDgTxfEDqF2jSX4jbSrs6aO8m6JR9UPaopspXR8N4yTahW+WMpX0NZ
-         lPgBo/LsMqa2QEo9eJY96ku2aIv/zhrhHBorpmO8UMV8lixzJJkpk7G6dqDnistlDIjK
-         B0Tg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C74jfdbNawsIBV6R7zfjbmW2XPSzvOksBpOCdplGLqY=;
+        b=gTEc3lRdhx7971tbOcZqznnIvd8m7BHhKe4pS5w4jH8y0NLOjLCWVNCHkajLrd13ha
+         u+OHYdzSy/gCvVVvX1WrsvDrIkCgigqI20f0JGovIhoAAQG1nNvrcf7FqZH2GvNYPDCx
+         XoYBB0/sl7gaSZT2I8Z4uwfmVyJq5WPDmkevZbaIYEKTjgLzBshxYZONJphIT4Elvol8
+         Q/8FBfBU/i0gJuzdU6xUqlPeNC1DJBeP6XLal5QiliGs7IuxW6nTNi8ksmf94qVackQW
+         wsq6bXmO7C4SUK54oFooF++/OTWFfd2F8xk9FTjSO9wFHPbldgW9UqfUUmVL+1qpswMD
+         I8Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=daXBJ885kTWVd79S4QRLYH6bWi9T1PMxnbsGfWQlTqs=;
-        b=xuWOeiG3yVIGXfIx4WDFMOyxphwYTxKGbB/uMYrbw1xezf3MrMP5r2jvnV7mrJ8WAF
-         2+cXV2W2b7StOjNi/PnL4tQupygPNFqLcWJYFGwWNyoTCVPzXKi4mRzzMjgXoVQDyQ5L
-         Yjb7E6J00LKa/LFMHKhIhFw5RMHz5vG9uE2d1ZKVVoC8R5HLc1qTpX2OdICk8rNw/KlH
-         7YLbAY6Ld8/5NvIW3UxH2reFKLfoYG2FHdApaG8AoUwf8B1ctTxr0r9f3QyuGwOKsayn
-         cSbzUZH1LlJvaNzyN8kobIlJ1aX+E8EaykEtq1VppEFBG6rF7RRHxL2ZjR5ue/EY1gw0
-         cC/A==
-X-Gm-Message-State: AOAM533DzP1a1JTRKhP5yhjrfFnA8vBmZbw2Q+TV1UlFst6RQZScofcv
-        5d8iTqea+RrmjY5nXjAFolkTobgh+ynashmXTQI=
-X-Google-Smtp-Source: ABdhPJywslTh3XNmVvMd/ImlrQx4kPNU4Kx0rxzm+4MmKREHvmgOlti6cFmT6pIxXzxe06JY23aVT/zXQE5/a1cSA1M=
-X-Received: by 2002:a1f:4e03:: with SMTP id c3mr1410341vkb.7.1643289561869;
- Thu, 27 Jan 2022 05:19:21 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C74jfdbNawsIBV6R7zfjbmW2XPSzvOksBpOCdplGLqY=;
+        b=24TgOjkjttJJN4QFsuA+OsPm2S4SR+Qt+Z69mvMeHmshkTyZECGupH7dY6lZRTbdKy
+         1R+TSgZr6qweA7ShqgR5hpna2LgNvRqwoHGCBnmF7hCmqOFUal8oFcw+BcYsVFAla1/u
+         P0Y+VJsTkNyFSlkWv9qBd4/qU6+Op7uQPDIKjWkHCK4lq9nJEFPMy2ESGXfOp7k23Tu0
+         J/+Voy93TN1orC/+Rt8BL6xjTpsoAevjFiJkqxNMsCaaUagNig5q8EWBSXz+2CbP4ysO
+         M8QhZVl3AyaWuhtXvIOnyxEN6PWNWgDFwJnsHb/UAE8VHUT94bbwPyBGUw1hAkPgC6Zj
+         tYbA==
+X-Gm-Message-State: AOAM532QQoQbMDxFIUpi1rNNUTG3qxKb7OsLxrvOijv4ys4xCVwDWUV6
+        twSovC/eLsL+MC/SaJHcAGY=
+X-Google-Smtp-Source: ABdhPJyrjAbrE9n3FKI6tkKbcaepEq/htjIWbuyZQIKuoJSuWAn/lI2QFlIweN4FXQNqhuHN0NRkkQ==
+X-Received: by 2002:a05:6214:e49:: with SMTP id o9mr2851724qvc.13.1643289578138;
+        Thu, 27 Jan 2022 05:19:38 -0800 (PST)
+Received: from mail.google.com ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id a16sm1379263qtx.7.2022.01.27.05.19.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 05:19:37 -0800 (PST)
+Date:   Thu, 27 Jan 2022 21:19:29 +0800
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@redhat.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] perf/ftrace: system_wide collection is not effective by
+ default
+Message-ID: <20220127131929.ydxtkpbguk7fyho5@mail.google.com>
+References: <20220126151921.2519-1-changbin.du@gmail.com>
+ <CAM9d7cipbsg46=UNY8-h-e9RAsqeJRcL=mi_RXbtQwQUbwPehQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a59:1a0e:0:b0:27d:8e8c:f1ac with HTTP; Thu, 27 Jan 2022
- 05:19:21 -0800 (PST)
-Reply-To: revfrpaulwilliams2@gmail.com
-From:   "Rev. Fr. Paul Williams" <wilaanslima@gmail.com>
-Date:   Thu, 27 Jan 2022 18:49:21 +0530
-Message-ID: <CAC02N4fWzCBSsve3goNVAS2h5k7w7Q_a3HMztQXs5hJR-ui2gA@mail.gmail.com>
-Subject: Donation From Williams Foundation.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7cipbsg46=UNY8-h-e9RAsqeJRcL=mi_RXbtQwQUbwPehQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Contact Rev. Fr. Paul Williams Foundation for a charity donation of
-$6,200,000.00 United States Dollars immediately. We are a non-profit
-organization with a mission to provide every individual from
-low-income communities with a high quality of living.
+On Wed, Jan 26, 2022 at 03:47:48PM -0800, Namhyung Kim wrote:
+> Hello,
+> 
+> On Wed, Jan 26, 2022 at 7:19 AM Changbin Du <changbin.du@gmail.com> wrote:
+> >
+> > The ftrace.target.system_wide must be set before invoking
+> > evlist__create_maps(), otherwise it has no effect.
+> 
+> Oh, right.  Thanks for pointing that out.
+> 
+> >
+> > Fixes: 53be50282269 ("perf ftrace: Add 'latency' subcommand")
+> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> > ---
+> >  tools/perf/builtin-ftrace.c | 45 ++++++++++++++++++++-----------------
+> >  1 file changed, 24 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
+> > index dec24dc0e767..26bff29ad277 100644
+> > --- a/tools/perf/builtin-ftrace.c
+> > +++ b/tools/perf/builtin-ftrace.c
+> > @@ -1115,6 +1115,7 @@ enum perf_ftrace_subcommand {
+> >  int cmd_ftrace(int argc, const char **argv)
+> >  {
+> >         int ret;
+> > +       int (*cmd_func)(struct perf_ftrace *) = NULL;
+> >         struct perf_ftrace ftrace = {
+> >                 .tracer = DEFAULT_TRACER,
+> >                 .target = { .uid = UINT_MAX, },
+> > @@ -1221,6 +1222,28 @@ int cmd_ftrace(int argc, const char **argv)
+> >                 goto out_delete_filters;
+> >         }
+> >
+> > +       switch (subcmd) {
+> > +       case PERF_FTRACE_TRACE:
+> > +               if (!argc && target__none(&ftrace.target))
+> > +                       ftrace.target.system_wide = true;
+> 
+> We can move only this part after parse_options().
+>
+I prefer that all parsing works get be done first. :)
 
-We enable the poor around the globe to maximize their potential needs
-and transform their lives completely. We work in the field of
-Education, Homeless and Less-privileged financially with no strings
-attached by donating funds and supplemental needs to them. E-mail at:
-revfrpaulwilliams2@gmail.com
+> > +               cmd_func = __cmd_ftrace;
+> > +               break;
+> > +       case PERF_FTRACE_LATENCY:
+> > +               if (list_empty(&ftrace.filters)) {
+> > +                       pr_err("Should provide a function to measure\n");
+> > +                       parse_options_usage(ftrace_usage, options, "T", 1);
+> > +                       ret = -EINVAL;
+> > +                       goto out_delete_evlist;
+> 
+> Otherwise, it should go to the out_delete_filters.
+> 
+yes, will fix it.
+
+> > +               }
+> > +               cmd_func = __cmd_latency;
+> > +               break;
+> > +       case PERF_FTRACE_NONE:
+> > +       default:
+> > +               pr_err("Invalid subcommand\n");
+> > +               ret = -EINVAL;
+> > +               goto out_delete_evlist;
+> 
+> Ditto.
+> 
+okay.
+
+> Thanks,
+> Namhyung
+> 
+> 
+> > +       }
+> > +
+> >         ret = target__validate(&ftrace.target);
+> >         if (ret) {
+> >                 char errbuf[512];
+> > @@ -1248,27 +1271,7 @@ int cmd_ftrace(int argc, const char **argv)
+> >                         goto out_delete_evlist;
+> >         }
+> >
+> > -       switch (subcmd) {
+> > -       case PERF_FTRACE_TRACE:
+> > -               if (!argc && target__none(&ftrace.target))
+> > -                       ftrace.target.system_wide = true;
+> > -               ret = __cmd_ftrace(&ftrace);
+> > -               break;
+> > -       case PERF_FTRACE_LATENCY:
+> > -               if (list_empty(&ftrace.filters)) {
+> > -                       pr_err("Should provide a function to measure\n");
+> > -                       parse_options_usage(ftrace_usage, options, "T", 1);
+> > -                       ret = -EINVAL;
+> > -                       goto out_delete_evlist;
+> > -               }
+> > -               ret = __cmd_latency(&ftrace);
+> > -               break;
+> > -       case PERF_FTRACE_NONE:
+> > -       default:
+> > -               pr_err("Invalid subcommand\n");
+> > -               ret = -EINVAL;
+> > -               break;
+> > -       }
+> > +       ret = cmd_func(&ftrace);
+> >
+> >  out_delete_evlist:
+> >         evlist__delete(ftrace.evlist);
+> > --
+> > 2.32.0
+> >
+
+-- 
+Cheers,
+Changbin Du

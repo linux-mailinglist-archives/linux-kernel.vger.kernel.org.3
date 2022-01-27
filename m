@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B21D49E3BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB96349E3BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238568AbiA0NkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:40:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44618 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236993AbiA0NkM (ORCPT
+        id S233597AbiA0Nlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:41:32 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:60728 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232718AbiA0Nlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:40:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A83CF61C3F;
-        Thu, 27 Jan 2022 13:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1721CC340EE;
-        Thu, 27 Jan 2022 13:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643290811;
-        bh=b+OFj1/WSKrOIbpsXtEbDy9nMLToWSoegv5zebPHMmI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Jb83ubKc7kE9tDtlvh+qIuPqKk6xBYHaGY90+5Zh7LZQL3oqfPb+J98jlWlBjkQ77
-         m1Wfnbc2LVGy+uKh9iLbsyioeuU6tIgalr1m2qVz70N9VyHer7Pczk5VQ9mjz0gzIP
-         PtR8opxVjxw0vuObXM2rxhcMCdFdB0Vgw0yliU3T3VOxywnIUxlIHxW4X020mki34e
-         ZMBwZ77wvVteMCvBfHs7KZUNDqNcccH+A3tRQDkpzLIsQio7IW2Lu6GI4VW59qZ9pN
-         K4/jUa+sECzPKBjxe3ZuCb0Axpz5wJkG5NUpCwi0Y3BXWsE4MAW0t54sVz5H8Ce54W
-         jFOmkoLaIPx+Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EE2B4E5D08C;
-        Thu, 27 Jan 2022 13:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH resend] ipv4: Namespaceify min_adv_mss sysctl knob
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164329081096.3515.3479311562867643415.git-patchwork-notify@kernel.org>
-Date:   Thu, 27 Jan 2022 13:40:10 +0000
-References: <20220126071058.1168074-1-xu.xin16@zte.com.cn>
-In-Reply-To: <20220126071058.1168074-1-xu.xin16@zte.com.cn>
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xu.xin16@zte.com.cn
+        Thu, 27 Jan 2022 08:41:31 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 65A2A1F3A9;
+        Thu, 27 Jan 2022 13:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643290890; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CsNqWadBVftamGMdNcq8yj2hlSzuyWYBlN4D3DqGekY=;
+        b=MBM6wQlkkbtHV1aMirek2g+HK4bXd43zwV3NTEq9eGAY1G4QWk+bP6Jdeca6RDcP0aBuGa
+        rrZoGmI19MKYt4MQcKX5QfrgQ6aOAunDu034PmR/l+DxltsYjy8veXB0C409xWRymjMyds
+        TjJtOTs33d7MbPkVgAUIB66Bb6Dmtww=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643290890;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CsNqWadBVftamGMdNcq8yj2hlSzuyWYBlN4D3DqGekY=;
+        b=f1kjFnru1IyQiOL8k8PWNK8IJT6qfQz/XKRIJguaC+x0wtanz79XikI2MhzyhPGg5T54kd
+        wQK4fyjPtPHkySBA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 2EF76A3B81;
+        Thu, 27 Jan 2022 13:41:30 +0000 (UTC)
+Date:   Thu, 27 Jan 2022 14:41:30 +0100
+Message-ID: <s5ha6fhjnxx.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     trix@redhat.com
+Cc:     perex@perex.cz, tiwai@suse.com, nathan@kernel.org,
+        ndesaulniers@google.com, kai.heng.feng@canonical.com,
+        jiapeng.chong@linux.alibaba.com, giun7a@gmail.com,
+        colin.king@intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] ALSA: usb-audio: initialize variables that could ignore errors
+In-Reply-To: <20220126182142.1184819-1-trix@redhat.com>
+References: <20220126182142.1184819-1-trix@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 26 Jan 2022 07:10:58 +0000 you wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
+On Wed, 26 Jan 2022 19:21:42 +0100,
+trix@redhat.com wrote:
 > 
-> Different netns has different requirement on the setting of min_adv_mss
-> sysctl which the advertised MSS will be never lower than.
+> From: Tom Rix <trix@redhat.com>
 > 
-> Enable min_adv_mss to be configured per network namespace.
+> clang static analysis reports this representative issue
+> mixer.c:1548:35: warning: Assigned value is garbage or undefined
+>         ucontrol->value.integer.value[0] = val;
+>                                          ^ ~~~
 > 
-> [...]
+> The filter_error() macro allows errors to be ignored.
+> If errors can be ignored, initialize variables
+> so garbage will not be used.
+> 
+> Fixes: 48cc42973509 ("ALSA: usb-audio: Filter error from connector kctl ops, too")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Here is the summary with links:
-  - [resend] ipv4: Namespaceify min_adv_mss sysctl knob
-    https://git.kernel.org/netdev/net-next/c/2e9589ff809e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks, applied.
 
 
+Takashi

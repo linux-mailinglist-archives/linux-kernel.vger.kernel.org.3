@@ -2,82 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD5149DEA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C2749DE5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbiA0KAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 05:00:43 -0500
-Received: from mail-ua1-f52.google.com ([209.85.222.52]:40654 "EHLO
-        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiA0KAm (ORCPT
+        id S234409AbiA0Jpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:45:39 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:32124 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238840AbiA0Jpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 05:00:42 -0500
-Received: by mail-ua1-f52.google.com with SMTP id w21so3702558uan.7;
-        Thu, 27 Jan 2022 02:00:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MYcVuPoB0oi6VcbUyfjJ45yJ95BHctSH0SlEgz3cJO4=;
-        b=C9XHE7eeOBn/5NoRyJirxxDrbXGHUjKJ8M5Y0faTL81ZgRa79rvpYSmFDnmUIsQWaP
-         2W7Tu6VqmkCmut7o9IG5pCsnCzrgYAsV7LxyNaF5D6yiQPXB7ZisFSqblEL3xknubtKt
-         5NYyLSOWA0BRu0o5oJOrqRPAgwKn0XxKBTRZN7dVJzaJEj7ijwx0UKOUoUDxSiQe/oRg
-         6bbOHFRfmMmSikeHeffNBLmMjUHxOW7yAJvOm7NiRbcnbx+C3jGIPOHvlueOkChuYNfX
-         X9dLQ0ETQGrowmBirBTVQYC/GGOdKW1pGnFeYg7pGxgSTY6/mBmheJ6UYhGLK1rdRu8Y
-         wcUA==
-X-Gm-Message-State: AOAM531/oupUw5+aoqEN9RN9Xofkh948cWBOls84B6/g27Zwnk3LWzMg
-        X4eAKManaFS/mXTvZDtE09/bF7QvXAOHrl8O
-X-Google-Smtp-Source: ABdhPJxH9P+HIWa+EYqILXxpgvpbzz1WMdaTvMY9lWm+30IGfvdbSfTl0pXByDYtL32By7zHuAwiFA==
-X-Received: by 2002:a67:fd63:: with SMTP id h3mr1109545vsa.77.1643277641523;
-        Thu, 27 Jan 2022 02:00:41 -0800 (PST)
-Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
-        by smtp.gmail.com with ESMTPSA id w124sm474100vke.20.2022.01.27.02.00.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 02:00:41 -0800 (PST)
-Received: by mail-ua1-f50.google.com with SMTP id l1so3699240uap.8;
-        Thu, 27 Jan 2022 02:00:41 -0800 (PST)
-X-Received: by 2002:a67:5f83:: with SMTP id t125mr1106654vsb.68.1643277640872;
- Thu, 27 Jan 2022 02:00:40 -0800 (PST)
+        Thu, 27 Jan 2022 04:45:36 -0500
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JkwcB5Bnzz8wf1;
+        Thu, 27 Jan 2022 17:42:34 +0800 (CST)
+Received: from dggpemm500004.china.huawei.com (7.185.36.219) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 27 Jan 2022 17:45:33 +0800
+Received: from huawei.com (10.175.124.27) by dggpemm500004.china.huawei.com
+ (7.185.36.219) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 27 Jan
+ 2022 17:45:32 +0800
+From:   Laibin Qiu <qiulaibin@huawei.com>
+To:     <axboe@kernel.dk>, <andriy.shevchenko@linux.intel.com>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alex_y_xu@yahoo.ca>
+Subject: [PATCH -next] blk-mq: Fix wrong wakeup batch configuration which will cause hang
+Date:   Thu, 27 Jan 2022 18:00:47 +0800
+Message-ID: <20220127100047.1763746-1-qiulaibin@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20220120051559.746322-1-nikita.yoush@cogentembedded.com>
-In-Reply-To: <20220120051559.746322-1-nikita.yoush@cogentembedded.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 27 Jan 2022 11:00:29 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVw5BZUys-yOotRApgpXjGviWoBFtFrbQost2TcX4j8YQ@mail.gmail.com>
-Message-ID: <CAMuHMdVw5BZUys-yOotRApgpXjGviWoBFtFrbQost2TcX4j8YQ@mail.gmail.com>
-Subject: Re: [PATCH v3] arm64: dts: renesas: add MOST device
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500004.china.huawei.com (7.185.36.219)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 6:16 AM Nikita Yushchenko
-<nikita.yoush@cogentembedded.com> wrote:
-> This patch adds mlp device to dtsi files for R-Car Gen3 SoCs that have
-> it.
->
-> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Commit 180dccb0dba4f ("blk-mq: fix tag_get wait task can't be
+awakened") will recalculating wake_batch when inc or dec active_queues
+to avoid wake_batch is > hctx_max_depth. At the same time, in order to
+not affect performance as much as possible, the minimum wakeup batch is
+set to 4. But when the QD is small (such as QD=1), if inc or dec
+active_queues will increase wakeup batch, which will lead to hang.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.18.
+Fix this problem with the following strategies:
+QD          :  >= 32 | < 32
+---------------------------------
+wakeup batch:  8~4   | 3~1
 
-Note that as this device has no DT binding documentation, and the driver
-is under staging, this can not be considered stable.
+Fixes: 180dccb0dba4f ("blk-mq: fix tag_get wait task can't be awakened")
+Link: https://lore.kernel.org/linux-block/78cafe94-a787-e006-8851-69906f0c2128@huawei.com/T/#t
+Reported-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+---
+ lib/sbitmap.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Gr{oetje,eeting}s,
+diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+index 6220fa67fb7e..09d293c30fd2 100644
+--- a/lib/sbitmap.c
++++ b/lib/sbitmap.c
+@@ -488,9 +488,13 @@ void sbitmap_queue_recalculate_wake_batch(struct sbitmap_queue *sbq,
+ 					    unsigned int users)
+ {
+ 	unsigned int wake_batch;
++	unsigned int min_batch;
++	unsigned int depth = (sbq->sb.depth + users - 1) / users;
+ 
+-	wake_batch = clamp_val((sbq->sb.depth + users - 1) /
+-			users, 4, SBQ_WAKE_BATCH);
++	min_batch = sbq->sb.depth >= (4 * SBQ_WAIT_QUEUES) ? 4 : 1;
++
++	wake_batch = clamp_val(depth / SBQ_WAIT_QUEUES,
++			min_batch, SBQ_WAKE_BATCH);
+ 	__sbitmap_queue_update_wake_batch(sbq, wake_batch);
+ }
+ EXPORT_SYMBOL_GPL(sbitmap_queue_recalculate_wake_batch);
+-- 
+2.22.0
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

@@ -2,82 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE76249DC60
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DB849DC64
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237691AbiA0IRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 03:17:21 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:36616 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiA0IRS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 03:17:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 48642CE213A;
-        Thu, 27 Jan 2022 08:17:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D34CC340E4;
-        Thu, 27 Jan 2022 08:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643271435;
-        bh=Vz6j8+veRlY62brRWPOqvaCy7k66WD4jXoCSaiRWZ6I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=v5lMxpSU5SWkGRjbjqfQGKBOxmtjq9zczKb+qt6FVzlKRX78kXGz2/FKGW3pd9rvT
-         oibDwE48VkIwW+lfP2vx2ZX7nTCyOd3m3QfJZBaFlkjynpPj3Y481UgpoxMD1Gdz68
-         DCVOCT42EEBW8J8LNpsHulEfF/gFC+LEXVb2DGhQ=
-Date:   Thu, 27 Jan 2022 09:17:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 5.16 0000/1033] 5.16.3-rc2 review
-Message-ID: <YfJVCNjvDUWj/s5e@kroah.com>
-References: <20220125155447.179130255@linuxfoundation.org>
- <20220126210546.GA3265892@roeck-us.net>
+        id S237706AbiA0ISM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 03:18:12 -0500
+Received: from mga03.intel.com ([134.134.136.65]:29322 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237689AbiA0ISL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 03:18:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643271491; x=1674807491;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=eXBkGgw60bdFoIyLSIRLyrUbjMrn4EVCKvo0GitUMPk=;
+  b=XvTcTlImmatMQjUVWThCT8EiCIh2yCd+GVoo2dSQ7nl4p/1S9DX0WQME
+   HR/+CogbqXMT7BNAOWB1qsqEuekSpIR67v3N9bp1SfcCQoxSL4geWj69y
+   TNf8NshK3OM5uFBOQkVrwpetd+B9QnctKGZn11z/YZf5lrjwuevMicrb5
+   Y6AxJapL910xc1/Ff/F5gVRfd1Wo/4huA7t2PhihQ4jG8jcYpk+IIC/i/
+   e4ceC3FeBMX9+Ef4EHXr31hbbL6Amsujwzq+qyOdbG72EO76O9SF9xCZV
+   cZapaJfyrnbM00uKvjL+WTQZ19oUK84AhL1NTrake/RCqsM0NmhSOVgAL
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246730620"
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="246730620"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 00:18:10 -0800
+X-IronPort-AV: E=Sophos;i="5.88,320,1635231600"; 
+   d="scan'208";a="521125802"
+Received: from anithaha-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.224.126])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 00:18:10 -0800
+Date:   Thu, 27 Jan 2022 00:18:10 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc:     linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH 02/19] dma-buf-map: Add helper to initialize
+ second map
+Message-ID: <20220127081810.6zt6cyib4s7kpa6f@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+ <20220126203702.1784589-3-lucas.demarchi@intel.com>
+ <f0dbdcc0-13b5-c484-0bf3-a1f8c3e48954@amd.com>
+ <20220127075728.ygwgorhnrwaocdqv@ldmartin-desk2>
+ <3066c6a7-fc73-d34d-d209-a3ff6818dfb6@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220126210546.GA3265892@roeck-us.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3066c6a7-fc73-d34d-d209-a3ff6818dfb6@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 01:05:46PM -0800, Guenter Roeck wrote:
-> On Tue, Jan 25, 2022 at 05:33:08PM +0100, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.16.3 release.
-> > There are 1033 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Thu, 27 Jan 2022 15:52:30 +0000.
-> > Anything received after that time might be too late.
-> > 
-> > The whole patch series can be found in one patch at:
-> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.3-rc2.gz
-> > or in the git tree and branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> > and the diffstat can be found below.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
-> > -------------
-> > Pseudo-Shortlog of commits:
-> > 
-> > 
-> [ ... ]
-> > 
-> > Chen Wandun <chenwandun@huawei.com>
-> >     mm/page_isolation: unset migratetype directly for non Buddy page
-> > 
-> 
-> This patch causes some of my qemu emulations to crash due to lack of memory.
-> This is seen both in v5.16.3-rc2 and in the mainline kernel. A request to
-> revert this patch is here:
-> 
-> https://lore.kernel.org/linux-mm/20220124084151.GA95197@francesco-nb.int.toradex.com/t/
+On Thu, Jan 27, 2022 at 09:02:54AM +0100, Christian König wrote:
+>Am 27.01.22 um 08:57 schrieb Lucas De Marchi:
+>>On Thu, Jan 27, 2022 at 08:27:11AM +0100, Christian König wrote:
+>>>Am 26.01.22 um 21:36 schrieb Lucas De Marchi:
+>>>>When dma_buf_map struct is passed around, it's useful to be able to
+>>>>initialize a second map that takes care of reading/writing to an offset
+>>>>of the original map.
+>>>>
+>>>>Add a helper that copies the struct and add the offset to the proper
+>>>>address.
+>>>
+>>>Well what you propose here can lead to all kind of problems and is 
+>>>rather bad design as far as I can see.
+>>>
+>>>The struct dma_buf_map is only to be filled in by the exporter and 
+>>>should not be modified in this way by the importer.
+>>
+>>humn... not sure if I was  clear. There is no importer and exporter here.
+>
+>Yeah, and exactly that's what I'm pointing out as problem here.
+>
+>You are using the inter driver framework for something internal to the 
+>driver. That is an absolutely clear NAK!
+>
+>We could discuss that, but you guys are just sending around patches to 
+>do this without any consensus that this is a good idea.
 
-Thanks, I'll go drop it from the queue.
+s/you guys/you/ if you have to blame anyone - I'm the only s-o-b in
+these patches. I'm sending these to _build consensus_ on what may be a good
+use for it showing a real problem it's helping to fix.
 
-greg k-h
+ From its documentation:
+
+  * The type :c:type:`struct dma_buf_map <dma_buf_map>` and its helpers are
+  * actually independent from the dma-buf infrastructure. When sharing buffers
+  * among devices, drivers have to know the location of the memory to access
+  * the buffers in a safe way. :c:type:`struct dma_buf_map <dma_buf_map>`
+  * solves this problem for dma-buf and its users. If other drivers or
+  * sub-systems require similar functionality, the type could be generalized
+  * and moved to a more prominent header file.
+
+if there is no consensus and a better alternative, I'm perfectly fine in
+throwing it out and using the better approach.
+
+Lucas De Marchi

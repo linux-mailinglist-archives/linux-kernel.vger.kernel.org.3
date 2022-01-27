@@ -2,119 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3D049EAF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1F849EAF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245481AbiA0TRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        id S245490AbiA0TSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238175AbiA0TRI (ORCPT
+        with ESMTP id S232986AbiA0TSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:17:08 -0500
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98234C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:17:07 -0800 (PST)
-Received: by mail-ua1-x931.google.com with SMTP id n15so6373639uaq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:17:07 -0800 (PST)
+        Thu, 27 Jan 2022 14:18:43 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C60CC061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:18:43 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id h14so11641286ybe.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:18:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WWd/j0V4bM1SNXijY8Al7obHDXjn02X3w8mcFaxNQV4=;
-        b=AJBacPMcmcko/uoAPMj+0ExXf3lFAF/wB23/S0bhyrCyXIFOrVmtTBPNyJ0gT8f9Y7
-         LkEz6o9LoQhGvYl0iseS0N5v2zNo36j1qz1ZYnQ+8ce+aqN8xSUEAtHDeqMZqc9MUZNk
-         fug157WV4+yPzJnbKsfVnQ9ZF2O84FASnWy+KaYozBQucaGFmIxug5Xoen20HX9OKk+2
-         o18Y0lmWu6BcxOXtJnaQ/9jPKetA0uf8dTxt35DrWw0z1twU7yGy39x93usX+9d/Qz10
-         ZHs7dugqiVlDo+2CUFUucKRRlX9TrUti53CbyLqr3JJWRtnqQVd0//0oV7uJDCQz5kut
-         kL7A==
+        d=howett-net.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aC48KH6V3XmmrT5/w0oKx66CGk7WIL8m2w7STuh0meQ=;
+        b=XMu4tnK4KcSZ1cna9kqFgZQ/Lg2E2brBZoo2IG6n2aXNSOHuY8m9o+dKKynxoHbdLb
+         OlkQ4LRByKDvLab29KtkAU/Eh2gYrhNCiFWjntCYXNglgHgiuKG2fllcuQiSRoZcT4wX
+         HdQpnxTlkiwmDhzyggWAUnEJ4E0Thv8ltMqc1u3URsFVjfxDFsFpiWXiVpPXuVckB3SY
+         r5Q//XxkPXdHKXfSHzCp0Km9iOPfKwOyyRRPmhVsbMtIv0FWZb+NPw3UcFqIuM/vven8
+         sGAHUBDNQ3DjICuBcb2XyKgQmpzQSpx3PWjcw9Sp1AUgY9sKGHs2jzpstgQ/OczCYsOO
+         6bgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WWd/j0V4bM1SNXijY8Al7obHDXjn02X3w8mcFaxNQV4=;
-        b=L4tnCYza6rNC4JTCbKiDPBWrMrkCR1I3ybbN1MBN3yVhTNisJZMYr8mBG+l4aSjTSn
-         PrZPuJpaAIo3TuqzhijRzIMhmSfDHXxpTYHL9tkicZKIedfpwFMx1Yc+Bt1vZYf97PCz
-         K3ScUHsBPC6eefU0Dx5TUeDQQNuKuRW1FHDiGvwWee4YROyKF6V9jR7pv1bsCc92LadU
-         JFP7fSL67EGe+Tfe7mFVRdo0c7vUyabVy7CrjDvdmLcqgauPFl0RQR+4EqQgXa9pCtSK
-         feXhzCTfYHUzcoA2aTgtQrRXxr2n3pK8FfuCP0BFv+k+dpcrDe37uuxuv9EALZMzUHKz
-         TkIA==
-X-Gm-Message-State: AOAM530PI4O6SckwywqrrIgXUwFcN4wNoOwnk8hN88FOD+Yi30RPWNXa
-        HkWpsfTbvStpexvoo4kZOOf4pHsaiLR2ie13Ldg=
-X-Google-Smtp-Source: ABdhPJxXXq33WD0jAr0TYxw9NU9e/WmIA6makbbS2KoPechu47rL5p1jSA7ry+Y/CJjG9DpsgV2biO4PDiut0gX8zGA=
-X-Received: by 2002:a9f:3b19:: with SMTP id i25mr2490649uah.14.1643311025394;
- Thu, 27 Jan 2022 11:17:05 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aC48KH6V3XmmrT5/w0oKx66CGk7WIL8m2w7STuh0meQ=;
+        b=gfzXGLbPlI9wnmzocA6xnXIQosrTWlCUG6123xwtrAaTe70A8GIrVY7JeOq1RuEGmP
+         KBRWwC3VSZ/DIPnspTG9kVISf3weUAlcGjntE5mzhTmbwjMdiS/dw2h3BGPqqvHGXBh5
+         t4QFm7HcZgy62NP3/QGWMUm0i7mKLFCM0wTKWHMIV3BsCXW8+8kJbTl3nnM5shWeiKj6
+         xoRf8fQWDQRKQzBcMZC+EJ5OU+Fj9VW3YCWuKCxWtO//ABUYUW85ZnDpxEos+5QaJQiX
+         dXv/hyQYF0yIViWKN+OnsT8K0pbZMxU40mLjXwZaTrV2bQocDHJSoOgXsbrKtA8R9/8z
+         MQdA==
+X-Gm-Message-State: AOAM531QVV92Ng2Kx1d9uP05I9FdFoHNfYx9Goo1LiUvZ8yR/5VCiJvh
+        DH+PqrQErqHWK82wsGG5g3WWx2PRFwUuSBKZ4mzKNw==
+X-Google-Smtp-Source: ABdhPJxK1x+ykwISdwoZ+vrCN4Ztz3s7awgLGueodNCqxDFjDiC/Eh2khNlRmO7T1/XCN8eKLbeHAB/Frha2qGh8Plc=
+X-Received: by 2002:a05:6902:154c:: with SMTP id r12mr8040586ybu.674.1643311122667;
+ Thu, 27 Jan 2022 11:18:42 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a9f:37c7:0:0:0:0:0 with HTTP; Thu, 27 Jan 2022 11:17:04
- -0800 (PST)
-Reply-To: mrabderazack55@gmail.com
-From:   "MR ABDE RAZACK." <azea7751@gmail.com>
-Date:   Thu, 27 Jan 2022 19:17:04 +0000
-Message-ID: <CAPmUj7+1pJducDOwe2tW31p0CEy=NkgLz_fUyOoanpXu-YpvJg@mail.gmail.com>
-Subject: URGENT IS VERY NEEDED PLEASE
-To:     undisclosed-recipients:;
+References: <20220126180020.15873-1-dustin@howett.net> <20220126180020.15873-3-dustin@howett.net>
+ <YfLqloFQpF7bURGi@chromium.org>
+In-Reply-To: <YfLqloFQpF7bURGi@chromium.org>
+From:   Dustin Howett <dustin@howett.net>
+Date:   Thu, 27 Jan 2022 13:18:31 -0600
+Message-ID: <CA+BfgNKS_uGZVh5K=O5Q-Brj-wWyg+gn1Nx4-Gr5OVb46ZFi=A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] platform/chrome: cros_ec_lpcs: reserve the MEC LPC
+ I/O ports first
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Michael Niksa <michael.niksa@live.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+On Thu, Jan 27, 2022 at 12:55 PM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> Hi Dustin,
+>
+> I can't find this update in the EC code base [1]. Is there any reason
+> you are not adding this, or is the change in flight (or in some other
+> location)?
+>
+> [1] https://chromium.googlesource.com/chromiumos/platform/ec/+/refs/heads/main/include/ec_commands.h
+>
 
-With due respect, I have decided to contact you on a business
-transaction that will be beneficial to both of us. At the bank last
-account and auditing evaluation, my staffs came across an old account
-which was being maintained by a foreign client who we learn was among
-the deceased passengers of motor accident on November.2003, the
-deceased was unable to run this account since his death. The account
-has remained dormant without the knowledge of his family since it was
-put in a safe deposit account in the bank for future investment by the
-client.
+Hey Prashant,
 
-Since his demise, even the members of his family haven't applied for
-claims over this fund and it has been in the safe deposit account
-until I discovered that it cannot be claimedsince our client is a
-foreign national and we are sure that he has no next of kin here to
-file claims over the money. As the director of the department, this
-discovery was brought to my office so as to decide what is to be done.
-I decided to seek ways through which to transfer this money out of the
-bank and out of the country too.
+The host communication adapters in the EC repo don't support the MEC
+protocol at all,
+so it did not seem necessary to bring these changes over. I'd be happy
+to do so, of
+course, if that is desirable.
 
-The total amount in the account is USD$18.5 millions with my positions
-as staffs of the bank, I am handicapped because I cannot operate
-foreign accounts and cannot lay bonafide claim over this money. The
-client was a foreign national and you will only be asked to act as his
-next of kin and I will supply you with all the necessary information
-and bank data to assist you in being able to transfer this money to
-any bank of your choice where this money could be transferred into.
+My understanding (well, my guess) is that protocol support was never
+added because
+it is already implemented here in cros_ec_lpcs. Userland I/O port
+access is(?) less desirable
+than having this driver handle it.
 
-The total sum will be shared as follows: 50% for me, 50% for you and
-expenses incidental occur during the transfer will be incur by both of
-us. The transfer is risk free on both sides hence you are going to
-follow my instruction till the fund transfer to your account. Since I
-work in this bank that is why you should be confident in the success
-of this transaction because you will be updated with information as at
-when desired.
+d
 
-I will wish you to keep this transaction secret and confidential as I
-am hoping to retire with my share of this money at the end of
-transaction which will be when this money is safety in your account. I
-will then come over to your country for sharing according to the
-previously agreed percentages. You might even have to advise me on
-possibilities of investment in your country or elsewhere of our
-choice. May God help you to help me to a restive retirement, Amen,
-
-Please for further information and inquires feel free to contact me
-back immediately for more explanation and better understanding I want
-you to assure me your capability of handling this project with trust
-by providing me your following information details such as:So you can
-contact me in my private emailaddres. (mrabderazack55@gmail.com)
-
-(1)NAME..............
-(2)AGE:................
-(3)SEX:.....................
-(4)PHONE NUMBER:.................
-(5)OCCUPATION:................ .....
-(6)YOUR COUNTRY:.....................
-
-Yours sincerely,
-
-MR ABDE RAZACK.
+> Thanks,
+>
+> -Prashant

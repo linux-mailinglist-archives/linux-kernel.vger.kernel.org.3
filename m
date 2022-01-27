@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC5949D725
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8C449D727
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234288AbiA0BKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 20:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S234325AbiA0BK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 20:10:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbiA0BKc (ORCPT
+        with ESMTP id S230465AbiA0BK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 20:10:32 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9C8C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:10:31 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 81DA9EE;
-        Thu, 27 Jan 2022 02:10:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643245828;
-        bh=BPUcwthO7R4TX+y7PM6L06wt4SEiKj1uceVdIu2FkzU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g//YgZq/hVPZQAL6ludO1xfEhlZg/zxbUz/ZQ1dN/ZfMWmpWGF+CsRJ7Ekc6sqX1o
-         g90pOMzqNjYwvf/q21IwIYyntGklt84kICF/SqKHYyTwMOqTi2jdZQ7zw5Sad8fkZ7
-         RtJvVVmmuy9YB1Qdnad1evVUeGSZTJ/fpFmhdMXc=
-Date:   Thu, 27 Jan 2022 03:10:09 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
-Cc:     a.hajda@samsung.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        Wed, 26 Jan 2022 20:10:58 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EE3C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:10:57 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id m11so1437169edi.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:10:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ezizBQJzev59fSxaPiCAfhX5lgLl/r7lnW/TtwPXhG8=;
+        b=NlD2IckMmRI2RKARXlvPtGcR7GXp1Z4X/v8iPLvUwpDBgjkmfSNUmTv9LUSrAxfnmD
+         M7jH6bQQCgoDicDTkvXPLGrojNTp1u9JdJUdo2IMMHO79VaBv00li0yfcjDp9x/oZp3a
+         sPSFit5FvNS5FpX+HBeijVk0+JJYLwo4Kk5mPjXryrwD3Ft20pXZc2FGxka3n2YVh1K7
+         Qyg1ot/cVyipuEKyeuirJ5UwmcRynCAUaZpwBZhs63mXwNEzT1btPpNcoLSj4YaAfmvg
+         SzLy/CsCihnVhJ9/IoK6Tt3AijNMavTN/sZUQ4lFUqXK7D/Svt6bx+JPi30uw9AyHiq/
+         IuYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ezizBQJzev59fSxaPiCAfhX5lgLl/r7lnW/TtwPXhG8=;
+        b=vdlWR7NrkbI3BXEf9WcrHLRwqFs9WrQpKZPFbB7T1RM0Lku8LeG/OxVarcWRT1ADMm
+         +qwxfB4iie0Wbd3PU7AukO7la+Z02lVkP7kedhLVW9hNaCM8KV2inD6ZVDgz/hkFMXTS
+         0OqSDUyrShk5h2/OhnSGj+hOS1uKywsHK6v0vo3OJL4wPq7UEHADz9u5yF0eDUMkM/Jv
+         XmhoRmOZLAxhVTX53s9CY/FpIm9IXYxjzOjmmTpMQB1EGAbAF6C2d1d1P5YjSX2kTi3W
+         ZXsmU2m4dgz0xWtHkteKvrmnyWgYfgrOGv5Pv5c5E0irscA0IPQVPnbIi6vdKdj98k0A
+         VwZg==
+X-Gm-Message-State: AOAM533/YeWj5UhG8aUI93hX38n1vmsYI2QFrcFQRNigUwqRLISdV0ze
+        8xQ5aaaVPTI+XExXN17Jpp4=
+X-Google-Smtp-Source: ABdhPJxIdE/of/4IGj89ekhK751/aJ6U10BCkPQIouD0ZVupPoTGazWmR0/rvf7f7zT9OvrR4nXxig==
+X-Received: by 2002:aa7:dd02:: with SMTP id i2mr1514611edv.251.1643245856071;
+        Wed, 26 Jan 2022 17:10:56 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id w18sm7777189edr.59.2022.01.26.17.10.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 26 Jan 2022 17:10:55 -0800 (PST)
+Date:   Thu, 27 Jan 2022 01:10:54 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Wei Yang <richard.weiyang@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        peterz@infradead.org, will@kernel.org, linyunsheng@huawei.com,
+        aarcange@redhat.com, feng.tang@intel.com, ebiederm@xmission.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm/bridge: Add missing pm_runtime_put_sync
-Message-ID: <YfHw8WwDpnRXO07G@pendragon.ideasonboard.com>
-References: <Ye21tlZKRRe2vUzR@pendragon.ideasonboard.com>
- <1643008835-73961-1-git-send-email-lyz_cs@pku.edu.cn>
+Subject: Re: [PATCH] mm: remove offset check on page->compound_head and
+ folio->lru
+Message-ID: <20220127011054.zlqtydxbhi4ioj5d@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <Yde6hZ41agqa2zs3@casper.infradead.org>
+ <20220107134059.flxr2hcd6ilb6vt7@master>
+ <Ydi6iMbSZ/FewYPT@casper.infradead.org>
+ <20220107160825.13c71fdd871d7d5611d116b9@linux-foundation.org>
+ <YdjfsbAR0UlwyC6b@casper.infradead.org>
+ <20220108081340.3oi2z2rm3cbqozzt@master>
+ <20220123013852.mm7eyn3z26v3hkc2@master>
+ <93c48e68-2266-72ee-0763-65805b94c968@suse.cz>
+ <20220124225531.26yyse52yo5x3fr5@master>
+ <581f4247-83b1-df39-6724-af0565d0c7ea@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1643008835-73961-1-git-send-email-lyz_cs@pku.edu.cn>
+In-Reply-To: <581f4247-83b1-df39-6724-af0565d0c7ea@suse.cz>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yongzhi,
+On Tue, Jan 25, 2022 at 11:11:40AM +0100, Vlastimil Babka wrote:
+>On 1/24/22 23:55, Wei Yang wrote:
+>> On Mon, Jan 24, 2022 at 11:30:10AM +0100, Vlastimil Babka wrote:
+>>>On 1/23/22 02:38, Wei Yang wrote:
+>>>> On Sat, Jan 08, 2022 at 08:13:40AM +0000, Wei Yang wrote:
+>>>>>On Sat, Jan 08, 2022 at 12:49:53AM +0000, Matthew Wilcox wrote:
+>>>>>>On Fri, Jan 07, 2022 at 04:08:25PM -0800, Andrew Morton wrote:
+>>>>>
+>>>>>To me, if folio has the same layout of page, folio meets this requirement. I
+>>>>>still not catch the point why we need this check here.
+>>>>>
+>>>> 
+>>>> Hi, Matthew
+>>>> 
+>>>> Are you back from vocation? If you could give more insight on this check, I
+>>>> would be appreciated.
+>>>
+>>>I can offer my insight (which might be of course wrong). Ideally one day
+>>>page.lru will be gone and only folio will be used for LRU pages. Then there
+>>>won't be a  FOLIO_MATCH(lru, lru); and FOLIO_MATCH(compound_head, lru);
+>>>won't appear to be redundant anymore. lru is list_head so two pointers and
+>> 
+>> Thanks for your comment.
+>> 
+>> I can't imagine the final result. If we would remove page.lru, we could remove
+>> FOLIO_MATCH(lru, lru) and add FOLIO_MATCH(compound_head, lru) at that moment?
+>
+>Yes, or we could forget to do it. Adding it right now is another option that
+>Matthew has chosen and I don't see a strong reason to change it. Can you
+>measure a kernel build speedup thanks to removing the now redundant check?
+>
 
-Thank you for the patch.
+If we forget to do it, the compile would fail, right?
 
-On Sun, Jan 23, 2022 at 11:20:35PM -0800, Yongzhi Liu wrote:
-> pm_runtime_get_sync() will increase the rumtime PM counter
-> even when it returns an error. Thus a pairing decrement is needed
-> to prevent refcount leak. Fix this by replacing this API with
-> pm_runtime_resume_and_get(), which will not change the runtime
-> PM counter on error. Besides, a matching decrement is needed
-> on the error handling path to keep the counter balanced.
-> 
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+Put it here for a future reason is not persuasive.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/gpu/drm/bridge/nwl-dsi.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
-> index 9282e61..30aacd9 100644
-> --- a/drivers/gpu/drm/bridge/nwl-dsi.c
-> +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-> @@ -862,18 +862,19 @@ nwl_dsi_bridge_mode_set(struct drm_bridge *bridge,
->  	memcpy(&dsi->mode, adjusted_mode, sizeof(dsi->mode));
->  	drm_mode_debug_printmodeline(adjusted_mode);
->  
-> -	pm_runtime_get_sync(dev);
-> +	if (pm_runtime_resume_and_get(dev) < 0)
-> +		return;
->  
->  	if (clk_prepare_enable(dsi->lcdif_clk) < 0)
-> -		return;
-> +		goto runtime_put;
->  	if (clk_prepare_enable(dsi->core_clk) < 0)
-> -		return;
-> +		goto runtime_put;
->  
->  	/* Step 1 from DSI reset-out instructions */
->  	ret = reset_control_deassert(dsi->rst_pclk);
->  	if (ret < 0) {
->  		DRM_DEV_ERROR(dev, "Failed to deassert PCLK: %d\n", ret);
-> -		return;
-> +		goto runtime_put;
->  	}
->  
->  	/* Step 2 from DSI reset-out instructions */
-> @@ -883,13 +884,18 @@ nwl_dsi_bridge_mode_set(struct drm_bridge *bridge,
->  	ret = reset_control_deassert(dsi->rst_esc);
->  	if (ret < 0) {
->  		DRM_DEV_ERROR(dev, "Failed to deassert ESC: %d\n", ret);
-> -		return;
-> +		goto runtime_put;
->  	}
->  	ret = reset_control_deassert(dsi->rst_byte);
->  	if (ret < 0) {
->  		DRM_DEV_ERROR(dev, "Failed to deassert BYTE: %d\n", ret);
-> -		return;
-> +		goto runtime_put;
->  	}
-> +
-> +	return;
-> +
-> +runtime_put:
-> +	pm_runtime_put_sync(dev);
->  }
->  
->  static void
+>>>thus valid pointers are aligned in such a way they can't accidentaly set the
+>>>bit 0.
+>>>
+>> 
 
 -- 
-Regards,
-
-Laurent Pinchart
+Wei Yang
+Help you, Help me

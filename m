@@ -2,214 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E27AD49E727
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2B549E731
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243522AbiA0QNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 11:13:06 -0500
-Received: from mga14.intel.com ([192.55.52.115]:13651 "EHLO mga14.intel.com"
+        id S243590AbiA0QOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 11:14:12 -0500
+Received: from mga06.intel.com ([134.134.136.31]:5381 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235073AbiA0QNE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:13:04 -0500
+        id S243566AbiA0QOL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 11:14:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643299984; x=1674835984;
+  t=1643300051; x=1674836051;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=lMqzku40mv0XLTrAKz9N0IkN2fxOV9wJUhxMw5OgQ+4=;
-  b=AiAA86rW8dHsVEh74chXIZtuPmPwrNIVRyw36dn2vKrsvoGZ1u8VRHGH
-   jqdAILWmsc33PIkni+8M4gEIEUXEn74k0m71rmsOB8cPMY2VtAG8l5zFb
-   J3yVkbOZYg0Y+Lm9Hu9J7nxXP4UXKXshxpTMoFiCqyW6qwxqkwgiL+y4b
-   V0MBvW/s2miZI0CmQOJeB/VVXuWthsWaaqYdIXR5K4NuGPmBgm+DNywY9
-   cmoSNfgcf0MhVlFNXey2dvQt0nU9ysS9pvFblUgI01xoOdaqBKJamIjH7
-   1hw++xv2Fv+6oU512ajimeqGCLKXvUNaxhEEWsAW4Y7YvBxAjqj0Kf5XB
+   mime-version:in-reply-to;
+  bh=3bb9JoZDY5PZwbc2+qweKuL9rGbUODs3lF1L0htuqdY=;
+  b=RMCcOzadZHRxFsWu/M12Efnw3Hm7xsCFU0AI9Tke1FIvpYJHmqOfUmq6
+   uIqgzaIENRBU1sX7bzbJrDVtRt5JwEa01iXNPKsd4fS2VHrIqeM0/EAJY
+   /W1C29KnAOfYXoehVLmh1H4l2SqJSeJVpPtpv0rhKKuMMpobxa6uqUrrL
+   fJa7Xex9wVVsEwF6ILpDjMfw635Cg20SGe17jUFaRLXvr3OjAGMgIVisd
+   M0lT9OqkMrg/JlCNOdC9+uwoLwIIybuvrFu6eVWOizG/1RHefebx6YDI1
+   +4liKlrzYIXJ4nEBCNp7fhW8KljqKNEekobQ0G2cf8HTNuROZGRT+M9CJ
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="247117902"
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="307609977"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="247117902"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:12:47 -0800
+   d="scan'208";a="307609977"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:14:11 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="563839362"
-Received: from anithaha-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.224.126])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:12:46 -0800
-Date:   Thu, 27 Jan 2022 08:12:46 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc:     linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH 02/19] dma-buf-map: Add helper to initialize
- second map
-Message-ID: <20220127161246.mpyxmxmm55ewz5ik@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
- <20220126203702.1784589-3-lucas.demarchi@intel.com>
- <f0dbdcc0-13b5-c484-0bf3-a1f8c3e48954@amd.com>
- <20220127075728.ygwgorhnrwaocdqv@ldmartin-desk2>
- <3066c6a7-fc73-d34d-d209-a3ff6818dfb6@amd.com>
- <YfJedaoeJjE3grum@phenom.ffwll.local>
- <20220127093332.wnkd2qy4tvwg5i5l@ldmartin-desk2>
- <YfJtLkdkh4yde20f@phenom.ffwll.local>
- <27aed6b1-b465-6a52-2b0a-d748c9798414@amd.com>
+   d="scan'208";a="674765149"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 27 Jan 2022 08:14:07 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nD7PN-000Mm0-Ua; Thu, 27 Jan 2022 16:14:01 +0000
+Date:   Fri, 28 Jan 2022 00:13:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, djwong@kernel.org,
+        dan.j.williams@intel.com, david@fromorbit.com, hch@infradead.org,
+        jane.chu@oracle.com
+Subject: Re: [PATCH v10 1/9] dax: Introduce holder for dax_device
+Message-ID: <202201280053.mWAlT70p-lkp@intel.com>
+References: <20220127124058.1172422-2-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <27aed6b1-b465-6a52-2b0a-d748c9798414@amd.com>
+In-Reply-To: <20220127124058.1172422-2-ruansy.fnst@fujitsu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 11:21:20AM +0100, Christian König wrote:
->Am 27.01.22 um 11:00 schrieb Daniel Vetter:
->>On Thu, Jan 27, 2022 at 01:33:32AM -0800, Lucas De Marchi wrote:
->>>On Thu, Jan 27, 2022 at 09:57:25AM +0100, Daniel Vetter wrote:
->>>>On Thu, Jan 27, 2022 at 09:02:54AM +0100, Christian König wrote:
->>>>>Am 27.01.22 um 08:57 schrieb Lucas De Marchi:
->>>>>>On Thu, Jan 27, 2022 at 08:27:11AM +0100, Christian König wrote:
->>>>>>>Am 26.01.22 um 21:36 schrieb Lucas De Marchi:
->>>>>>>>When dma_buf_map struct is passed around, it's useful to be able to
->>>>>>>>initialize a second map that takes care of reading/writing to an offset
->>>>>>>>of the original map.
->>>>>>>>
->>>>>>>>Add a helper that copies the struct and add the offset to the proper
->>>>>>>>address.
->>>>>>>Well what you propose here can lead to all kind of problems and is
->>>>>>>rather bad design as far as I can see.
->>>>>>>
->>>>>>>The struct dma_buf_map is only to be filled in by the exporter and
->>>>>>>should not be modified in this way by the importer.
->>>>>>humn... not sure if I was  clear. There is no importer and exporter here.
->>>>>Yeah, and exactly that's what I'm pointing out as problem here.
->>>>>
->>>>>You are using the inter driver framework for something internal to the
->>>>>driver. That is an absolutely clear NAK!
->>>>>
->>>>>We could discuss that, but you guys are just sending around patches to do
->>>>>this without any consensus that this is a good idea.
->>>>Uh I suggested this, also we're already using dma_buf_map all over the
->>>>place as a convenient abstraction. So imo that's all fine, it should allow
->>>>drivers to simplify some code where on igpu it's in normal kernel memory
->>>>and on dgpu it's behind some pci bar.
->>>>
->>>>Maybe we should have a better name for that struct (and maybe also a
->>>>better place), but way back when we discussed that bikeshed I didn't come
->>>>up with anything better really.
->>>I suggest iosys_map since it abstracts access to IO and system memory.
->>>
->>>>>>There is a role delegation on filling out and reading a buffer when
->>>>>>that buffer represents a struct layout.
->>>>>>
->>>>>>struct bla {
->>>>>>     int a;
->>>>>>     int b;
->>>>>>     int c;
->>>>>>     struct foo foo;
->>>>>>     struct bar bar;
->>>>>>     int d;
->>>>>>}
->>>>>>
->>>>>>
->>>>>>This implementation allows you to have:
->>>>>>
->>>>>>     fill_foo(struct dma_buf_map *bla_map) { ... }
->>>>>>     fill_bar(struct dma_buf_map *bla_map) { ... }
->>>>>>
->>>>>>and the first thing these do is to make sure the map it's pointing to
->>>>>>is relative to the struct it's supposed to write/read. Otherwise you're
->>>>>>suggesting everything to be relative to struct bla, or to do the same
->>>>>>I'm doing it, but IMO more prone to error:
->>>>>>
->>>>>>     struct dma_buf_map map = *bla_map;
->>>>>>     dma_buf_map_incr(map, offsetof(...));
->>>>Wrt the issue at hand I think the above is perfectly fine code. The idea
->>>>with dma_buf_map is really that it's just a special pointer, so writing
->>>>the code exactly as pointer code feels best. Unfortunately you cannot make
->>>>them typesafe (because of C), so the code sometimes looks a bit ugly.
->>>>Otherwise we could do stuff like container_of and all that with
->>>>typechecking in the macros.
->>>I had exactly this code above, but after writting quite a few patches
->>>using it, particularly with functions that have to write to 2 maps (see
->>>patch 6 for example), it felt much better to have something to
->>>initialize correctly from the start
->>>
->>>	struct dma_buf_map other_map = *bla_map;
->>>	/* poor Lucas forgetting dma_buf_map_incr(map, offsetof(...)); */
->>>
->>>is error prone and hard to debug since you will be reading/writting
->>>from/to another location rather than exploding
->>>
->>>While with the construct below
->>>
->>>	other_map;
->>>	...
->>>	other_map = INITIALIZER()
->>>
->>>I can rely on the compiler complaining about uninitialized var. And
->>>in most of the cases I can just have this single line in the beggining of the
->>>function when the offset is constant:
->>>
->>>	struct dma_buf_map other_map = INITIALIZER(bla_map, offsetof(..));
->>Hm yeah that's a good point that this allows us to rely on the compiler to
->>check for uninitialized variables.
->>
->>Maybe include the above (with editing, but keeping the examples) in the
->>kerneldoc to explain why/how to use this? With that the concept at least
->>has my
->>
->>Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
->>
->>I'll leave it up to you & Christian to find a prettier color choice for
->>the naming bikeshed.
->
->There is one major issue remaining with this and that is dma_buf_vunmap():
->
->void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
->
->Here we expect the original pointer as returned by dma_buf_map(), 
->otherwise we vunmap() the wrong area!
+Hi Shiyang,
 
-yeah... I think the most confusing aspect here is about the name.
+Thank you for the patch! Perhaps something to improve:
 
-	void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
+[auto build test WARNING on linux/master]
+[also build test WARNING on linus/master v5.17-rc1 next-20220127]
+[cannot apply to xfs-linux/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-this function is the implementation of the dma_buf, not dma_buf_map,
-which is another thing entirely. I think the rename will be benefitial
-for this to be cleared out, because then it's more obvious the shallow
-copy of the map is the equivalent of having
+url:    https://github.com/0day-ci/linux/commits/Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
+config: arm-imx_v4_v5_defconfig (https://download.01.org/0day-ci/archive/20220128/202201280053.mWAlT70p-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f32dccb9a43b02ce4e540d6ba5dbbdb188f2dc7d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/0day-ci/linux/commit/57669ed05e93b37d995c5247eebe218ab2058c9a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Shiyang-Ruan/fsdax-introduce-fs-query-to-support-reflink/20220127-204239
+        git checkout 57669ed05e93b37d995c5247eebe218ab2058c9a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/iomap/
 
-	u8 *p = buffer;
-	...
-	p += 10;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Etc. You can't kfree(p) and expect it to work.
+All warnings (new ones prefixed by >>):
 
-Lucas De Marchi
+   In file included from fs/iomap/buffered-io.c:13:
+>> include/linux/dax.h:73:16: warning: declaration of 'struct dax_holder_operations' will not be visible outside of this function [-Wvisibility]
+                   const struct dax_holder_operations *ops)
+                                ^
+   1 warning generated.
 
->For all TTM based driver this doesn't matter since we keep the vmap 
->base separately in the BO anyway (IIRC), but we had at least one case 
->where this made boom last year.
->
->Christian.
->
->>-Daniel
->>
->>>Lucas De Marchi
->>>
->>>>-Daniel
->>>>
->>>>>>IMO this construct is worse because at a point in time in the function
->>>>>>the map was pointing to the wrong thing the function was supposed to
->>>>>>read/write.
->>>>>>
->>>>>>It's also useful when the function has double duty, updating a global
->>>>>>part of the struct and a table inside it (see example in patch 6)
->>>>>>
->>>>>>thanks
->>>>>>Lucas De Marchi
->>>>-- 
->>>>Daniel Vetter
->>>>Software Engineer, Intel Corporation
->>>>https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fblog.ffwll.ch%2F&amp;data=04%7C01%7Cchristian.koenig%40amd.com%7C0654a16ea3444271d7c308d9e17bd35d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637788744226808874%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=Q6soluBglaZLhLszdapaWuUVsqMq5qvJOKiJjO%2B9BTg%3D&amp;reserved=0
->
+
+vim +73 include/linux/dax.h
+
+    48	
+    49	void dax_register_holder(struct dax_device *dax_dev, void *holder,
+    50			const struct dax_holder_operations *ops);
+    51	void dax_unregister_holder(struct dax_device *dax_dev);
+    52	void *dax_get_holder(struct dax_device *dax_dev);
+    53	void put_dax(struct dax_device *dax_dev);
+    54	void kill_dax(struct dax_device *dax_dev);
+    55	void dax_write_cache(struct dax_device *dax_dev, bool wc);
+    56	bool dax_write_cache_enabled(struct dax_device *dax_dev);
+    57	bool dax_synchronous(struct dax_device *dax_dev);
+    58	void set_dax_synchronous(struct dax_device *dax_dev);
+    59	/*
+    60	 * Check if given mapping is supported by the file / underlying device.
+    61	 */
+    62	static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
+    63						     struct dax_device *dax_dev)
+    64	{
+    65		if (!(vma->vm_flags & VM_SYNC))
+    66			return true;
+    67		if (!IS_DAX(file_inode(vma->vm_file)))
+    68			return false;
+    69		return dax_synchronous(dax_dev);
+    70	}
+    71	#else
+    72	static inline void dax_register_holder(struct dax_device *dax_dev, void *holder,
+  > 73			const struct dax_holder_operations *ops)
+    74	{
+    75	}
+    76	static inline void dax_unregister_holder(struct dax_device *dax_dev)
+    77	{
+    78	}
+    79	static inline void *dax_get_holder(struct dax_device *dax_dev)
+    80	{
+    81		return NULL;
+    82	}
+    83	static inline struct dax_device *alloc_dax(void *private,
+    84			const struct dax_operations *ops)
+    85	{
+    86		/*
+    87		 * Callers should check IS_ENABLED(CONFIG_DAX) to know if this
+    88		 * NULL is an error or expected.
+    89		 */
+    90		return NULL;
+    91	}
+    92	static inline void put_dax(struct dax_device *dax_dev)
+    93	{
+    94	}
+    95	static inline void kill_dax(struct dax_device *dax_dev)
+    96	{
+    97	}
+    98	static inline void dax_write_cache(struct dax_device *dax_dev, bool wc)
+    99	{
+   100	}
+   101	static inline bool dax_write_cache_enabled(struct dax_device *dax_dev)
+   102	{
+   103		return false;
+   104	}
+   105	static inline bool dax_synchronous(struct dax_device *dax_dev)
+   106	{
+   107		return true;
+   108	}
+   109	static inline void set_dax_synchronous(struct dax_device *dax_dev)
+   110	{
+   111	}
+   112	static inline bool daxdev_mapping_supported(struct vm_area_struct *vma,
+   113					struct dax_device *dax_dev)
+   114	{
+   115		return !(vma->vm_flags & VM_SYNC);
+   116	}
+   117	#endif
+   118	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1C349D867
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0A549D83D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233233AbiA0CtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 21:49:11 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:55004 "EHLO
+        id S235312AbiA0Cr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 21:47:29 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:54910 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiA0CtJ (ORCPT
+        with ESMTP id S235332AbiA0Cr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 21:49:09 -0500
+        Wed, 26 Jan 2022 21:47:27 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D36CF1F45F;
-        Thu, 27 Jan 2022 02:49:06 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5274B1F37C;
+        Thu, 27 Jan 2022 02:47:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643251746; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1643251645; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cZDgYM8qwS7cEjgCZQh3dYscA/4Dgjn5wr47tYjWHxQ=;
-        b=OabKjx61FrTXFFxOiTH9E0UU6VNFC44VWp7PWLnKiKXP6g2ugD0tfQ02c4R1eM0eHNLx9S
-        G2jSPZ8PxVtwKkHPLyq1DoOJE8/o9xInUSEIPNVQw3bZ9rdhv0nRfFw1T3aU0HrltaTx4Z
-        Wl5jPTVqSxQVC9k6/tLDDrT2ibDEDcM=
+        bh=jI/D3cF7XEXdB5GQX4lb6Wy9m6GRhCmmHGkuQyOPpFQ=;
+        b=VX2TuVX3kVXj7I3yebeDc8tJhqUeKFahw7htyoPYO3KgwI8voUPLoTgzRNx/JSiLVhU/pI
+        PPvM89l8O0cQ8t5Y4EbvjYgRiyI3ZXJtDxQdExlie++bqkCqSIOkOOHkYuKsMFnZN7za32
+        IJBB7rIe80iXXaofxAvQKJAQL19xGqQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643251746;
+        s=susede2_ed25519; t=1643251645;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cZDgYM8qwS7cEjgCZQh3dYscA/4Dgjn5wr47tYjWHxQ=;
-        b=D98bulEbZ/C02MAVX9285ZaaoqlEkffCcUaXh/N7JqN3KhqQHCrwZ5n3haM36DVFvGMwjK
-        I4U0mIHIzRrzrODA==
+        bh=jI/D3cF7XEXdB5GQX4lb6Wy9m6GRhCmmHGkuQyOPpFQ=;
+        b=5aAhOmFiE7Zr4YHy1hjvEWZl9gGAb4CzbdFGOZ1ijWoIeTfN0EVmBsbDU+SJDeHhSv2Nsh
+        D2DZQVwETY1/jVCQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3ED9513E46;
-        Thu, 27 Jan 2022 02:48:56 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C5FBA13E46;
+        Thu, 27 Jan 2022 02:47:18 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id KeWrOhgI8mFFLAAAMHmgww
-        (envelope-from <neilb@suse.de>); Thu, 27 Jan 2022 02:48:56 +0000
-Subject: [PATCH 7/9] NFS: remove congestion control.
+        id Khj7ILYH8mG/KwAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 27 Jan 2022 02:47:18 +0000
+Subject: [PATCH 2/9] Remove bdi_congested() and wb_congested() and related
+ functions
 From:   NeilBrown <neilb@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
@@ -67,7 +68,7 @@ Cc:     linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
         ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
         linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
 Date:   Thu, 27 Jan 2022 13:46:29 +1100
-Message-ID: <164325158959.29787.14903007819591774556.stgit@noble.brown>
+Message-ID: <164325158955.29787.4769373293473421057.stgit@noble.brown>
 In-Reply-To: <164325106958.29787.4865219843242892726.stgit@noble.brown>
 References: <164325106958.29787.4865219843242892726.stgit@noble.brown>
 User-Agent: StGit/0.23
@@ -78,162 +79,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux no longer uses the bdi congestion tracking framework.
-So remove code from bdi which tries to support it.
+These functions are no longer useful as the only bdis that report
+congestion are in ceph, fuse, and nfs.  None of those bdis can be the
+target of the calls in drbd, ext2, nilfs2, or xfs.
 
-Also remove the "nfs_congestion_kb" sysctl.  This is a user-visible
-change, but unlikely to be a problematic one.
+Removing the test on bdi_write_contested() in current_may_throttle()
+could cause a small change in behaviour, but only when PF_LOCAL_THROTTLE
+is set.
+
+So replace the calls by 'false' and simplify the code - and remove the
+functions.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- fs/nfs/sysctl.c           |    7 ------
- fs/nfs/write.c            |   53 +--------------------------------------------
- include/linux/nfs_fs.h    |    1 -
- include/linux/nfs_fs_sb.h |    1 -
- 4 files changed, 1 insertion(+), 61 deletions(-)
+ drivers/block/drbd/drbd_int.h |    3 ---
+ drivers/block/drbd/drbd_req.c |    3 +--
+ fs/ext2/ialloc.c              |    2 --
+ fs/nilfs2/segbuf.c            |   11 -----------
+ fs/xfs/xfs_buf.c              |    3 ---
+ include/linux/backing-dev.h   |   26 --------------------------
+ mm/vmscan.c                   |    4 +---
+ 7 files changed, 2 insertions(+), 50 deletions(-)
 
-diff --git a/fs/nfs/sysctl.c b/fs/nfs/sysctl.c
-index 7aea195ddb35..18f3ff77fd0c 100644
---- a/fs/nfs/sysctl.c
-+++ b/fs/nfs/sysctl.c
-@@ -22,13 +22,6 @@ static struct ctl_table nfs_cb_sysctls[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec_jiffies,
- 	},
--	{
--		.procname	= "nfs_congestion_kb",
--		.data		= &nfs_congestion_kb,
--		.maxlen		= sizeof(nfs_congestion_kb),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec,
--	},
- 	{ }
- };
+diff --git a/drivers/block/drbd/drbd_int.h b/drivers/block/drbd/drbd_int.h
+index f27d5b0f9a0b..f804b1bfb3e6 100644
+--- a/drivers/block/drbd/drbd_int.h
++++ b/drivers/block/drbd/drbd_int.h
+@@ -638,9 +638,6 @@ enum {
+ 	STATE_SENT,		/* Do not change state/UUIDs while this is set */
+ 	CALLBACK_PENDING,	/* Whether we have a call_usermodehelper(, UMH_WAIT_PROC)
+ 				 * pending, from drbd worker context.
+-				 * If set, bdi_write_congested() returns true,
+-				 * so shrink_page_list() would not recurse into,
+-				 * and potentially deadlock on, this drbd worker.
+ 				 */
+ 	DISCONNECT_SENT,
  
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index 987a187bd39a..1c22ea6f23c3 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -397,33 +397,8 @@ static int wb_priority(struct writeback_control *wbc)
- 	return ret;
- }
+diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
+index 3235532ae077..2e5fb7e442e3 100644
+--- a/drivers/block/drbd/drbd_req.c
++++ b/drivers/block/drbd/drbd_req.c
+@@ -909,8 +909,7 @@ static bool remote_due_to_read_balancing(struct drbd_device *device, sector_t se
  
--/*
-- * NFS congestion control
-- */
+ 	switch (rbm) {
+ 	case RB_CONGESTED_REMOTE:
+-		return bdi_read_congested(
+-			device->ldev->backing_bdev->bd_disk->bdi);
++		return 0;
+ 	case RB_LEAST_PENDING:
+ 		return atomic_read(&device->local_cnt) >
+ 			atomic_read(&device->ap_pending_cnt) + atomic_read(&device->rs_pending_cnt);
+diff --git a/fs/ext2/ialloc.c b/fs/ext2/ialloc.c
+index df14e750e9fe..d632764da240 100644
+--- a/fs/ext2/ialloc.c
++++ b/fs/ext2/ialloc.c
+@@ -173,8 +173,6 @@ static void ext2_preread_inode(struct inode *inode)
+ 	struct backing_dev_info *bdi;
+ 
+ 	bdi = inode_to_bdi(inode);
+-	if (bdi_rw_congested(bdi))
+-		return;
+ 
+ 	block_group = (inode->i_ino - 1) / EXT2_INODES_PER_GROUP(inode->i_sb);
+ 	gdp = ext2_get_group_desc(inode->i_sb, block_group, NULL);
+diff --git a/fs/nilfs2/segbuf.c b/fs/nilfs2/segbuf.c
+index 43287b0d3e9b..d1ebc9da7130 100644
+--- a/fs/nilfs2/segbuf.c
++++ b/fs/nilfs2/segbuf.c
+@@ -343,17 +343,6 @@ static int nilfs_segbuf_submit_bio(struct nilfs_segment_buffer *segbuf,
+ 	struct bio *bio = wi->bio;
+ 	int err;
+ 
+-	if (segbuf->sb_nbio > 0 &&
+-	    bdi_write_congested(segbuf->sb_super->s_bdi)) {
+-		wait_for_completion(&segbuf->sb_bio_event);
+-		segbuf->sb_nbio--;
+-		if (unlikely(atomic_read(&segbuf->sb_err))) {
+-			bio_put(bio);
+-			err = -EIO;
+-			goto failed;
+-		}
+-	}
 -
--int nfs_congestion_kb;
+ 	bio->bi_end_io = nilfs_end_bio_write;
+ 	bio->bi_private = segbuf;
+ 	bio_set_op_attrs(bio, mode, mode_flags);
+diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
+index b45e0d50a405..b7ebcfe6b8d3 100644
+--- a/fs/xfs/xfs_buf.c
++++ b/fs/xfs/xfs_buf.c
+@@ -843,9 +843,6 @@ xfs_buf_readahead_map(
+ {
+ 	struct xfs_buf		*bp;
+ 
+-	if (bdi_read_congested(target->bt_bdev->bd_disk->bdi))
+-		return;
 -
--#define NFS_CONGESTION_ON_THRESH 	(nfs_congestion_kb >> (PAGE_SHIFT-10))
--#define NFS_CONGESTION_OFF_THRESH	\
--	(NFS_CONGESTION_ON_THRESH - (NFS_CONGESTION_ON_THRESH >> 2))
--
--static void nfs_set_page_writeback(struct page *page)
+ 	xfs_buf_read_map(target, map, nmaps,
+ 		     XBF_TRYLOCK | XBF_ASYNC | XBF_READ_AHEAD, &bp, ops,
+ 		     __this_address);
+diff --git a/include/linux/backing-dev.h b/include/linux/backing-dev.h
+index 860b675c2929..2d764566280c 100644
+--- a/include/linux/backing-dev.h
++++ b/include/linux/backing-dev.h
+@@ -135,11 +135,6 @@ static inline bool writeback_in_progress(struct bdi_writeback *wb)
+ 
+ struct backing_dev_info *inode_to_bdi(struct inode *inode);
+ 
+-static inline int wb_congested(struct bdi_writeback *wb, int cong_bits)
 -{
--	struct inode *inode = page_file_mapping(page)->host;
--	struct nfs_server *nfss = NFS_SERVER(inode);
--	int ret = test_set_page_writeback(page);
--
--	WARN_ON_ONCE(ret != 0);
--
--	if (atomic_long_inc_return(&nfss->writeback) >
--			NFS_CONGESTION_ON_THRESH)
--		set_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
+-	return wb->congested & cong_bits;
 -}
 -
- static void nfs_end_page_writeback(struct nfs_page *req)
+ long congestion_wait(int sync, long timeout);
+ 
+ static inline bool mapping_can_writeback(struct address_space *mapping)
+@@ -391,27 +386,6 @@ static inline void wb_blkcg_offline(struct blkcg *blkcg)
+ 
+ #endif	/* CONFIG_CGROUP_WRITEBACK */
+ 
+-static inline int bdi_congested(struct backing_dev_info *bdi, int cong_bits)
+-{
+-	return wb_congested(&bdi->wb, cong_bits);
+-}
+-
+-static inline int bdi_read_congested(struct backing_dev_info *bdi)
+-{
+-	return bdi_congested(bdi, 1 << WB_sync_congested);
+-}
+-
+-static inline int bdi_write_congested(struct backing_dev_info *bdi)
+-{
+-	return bdi_congested(bdi, 1 << WB_async_congested);
+-}
+-
+-static inline int bdi_rw_congested(struct backing_dev_info *bdi)
+-{
+-	return bdi_congested(bdi, (1 << WB_sync_congested) |
+-				  (1 << WB_async_congested));
+-}
+-
+ const char *bdi_dev_name(struct backing_dev_info *bdi);
+ 
+ #endif	/* _LINUX_BACKING_DEV_H */
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index ce8492939bd3..0b930556c4f2 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2362,9 +2362,7 @@ static unsigned int move_pages_to_lru(struct lruvec *lruvec,
+  */
+ static int current_may_throttle(void)
  {
--	struct inode *inode = page_file_mapping(req->wb_page)->host;
--	struct nfs_server *nfss = NFS_SERVER(inode);
- 	bool is_done;
- 
- 	is_done = nfs_page_group_sync_on_bit(req, PG_WB_END);
-@@ -432,8 +407,6 @@ static void nfs_end_page_writeback(struct nfs_page *req)
- 		return;
- 
- 	end_page_writeback(req->wb_page);
--	if (atomic_long_dec_return(&nfss->writeback) < NFS_CONGESTION_OFF_THRESH)
--		clear_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
+-	return !(current->flags & PF_LOCAL_THROTTLE) ||
+-		current->backing_dev_info == NULL ||
+-		bdi_write_congested(current->backing_dev_info);
++	return !(current->flags & PF_LOCAL_THROTTLE);
  }
  
  /*
-@@ -617,7 +590,7 @@ static int nfs_page_async_flush(struct nfs_pageio_descriptor *pgio,
- 	if (IS_ERR(req))
- 		goto out;
- 
--	nfs_set_page_writeback(page);
-+	set_page_writeback(page);
- 	WARN_ON_ONCE(test_bit(PG_CLEAN, &req->wb_flags));
- 
- 	/* If there is a fatal error that covers this write, just exit */
-@@ -1850,7 +1823,6 @@ static void nfs_commit_release_pages(struct nfs_commit_data *data)
- 	struct nfs_page	*req;
- 	int status = data->task.tk_status;
- 	struct nfs_commit_info cinfo;
--	struct nfs_server *nfss;
- 
- 	while (!list_empty(&data->pages)) {
- 		req = nfs_list_entry(data->pages.next);
-@@ -1891,9 +1863,6 @@ static void nfs_commit_release_pages(struct nfs_commit_data *data)
- 		/* Latency breaker */
- 		cond_resched();
- 	}
--	nfss = NFS_SERVER(data->inode);
--	if (atomic_long_read(&nfss->writeback) < NFS_CONGESTION_OFF_THRESH)
--		clear_bdi_congested(inode_to_bdi(data->inode), BLK_RW_ASYNC);
- 
- 	nfs_init_cinfo(&cinfo, data->inode, data->dreq);
- 	nfs_commit_end(cinfo.mds);
-@@ -2162,26 +2131,6 @@ int __init nfs_init_writepagecache(void)
- 	if (nfs_commit_mempool == NULL)
- 		goto out_destroy_commit_cache;
- 
--	/*
--	 * NFS congestion size, scale with available memory.
--	 *
--	 *  64MB:    8192k
--	 * 128MB:   11585k
--	 * 256MB:   16384k
--	 * 512MB:   23170k
--	 *   1GB:   32768k
--	 *   2GB:   46340k
--	 *   4GB:   65536k
--	 *   8GB:   92681k
--	 *  16GB:  131072k
--	 *
--	 * This allows larger machines to have larger/more transfers.
--	 * Limit the default to 256M
--	 */
--	nfs_congestion_kb = (16*int_sqrt(totalram_pages())) << (PAGE_SHIFT-10);
--	if (nfs_congestion_kb > 256*1024)
--		nfs_congestion_kb = 256*1024;
--
- 	return 0;
- 
- out_destroy_commit_cache:
-diff --git a/include/linux/nfs_fs.h b/include/linux/nfs_fs.h
-index 02aa49323d1d..17045c229277 100644
---- a/include/linux/nfs_fs.h
-+++ b/include/linux/nfs_fs.h
-@@ -569,7 +569,6 @@ extern void nfs_complete_unlink(struct dentry *dentry, struct inode *);
- /*
-  * linux/fs/nfs/write.c
-  */
--extern int  nfs_congestion_kb;
- extern int  nfs_writepage(struct page *page, struct writeback_control *wbc);
- extern int  nfs_writepages(struct address_space *, struct writeback_control *);
- extern int  nfs_flush_incompatible(struct file *file, struct page *page);
-diff --git a/include/linux/nfs_fs_sb.h b/include/linux/nfs_fs_sb.h
-index ca0959e51e81..3444ebbc63b6 100644
---- a/include/linux/nfs_fs_sb.h
-+++ b/include/linux/nfs_fs_sb.h
-@@ -137,7 +137,6 @@ struct nfs_server {
- 	struct rpc_clnt *	client_acl;	/* ACL RPC client handle */
- 	struct nlm_host		*nlm_host;	/* NLM client handle */
- 	struct nfs_iostats __percpu *io_stats;	/* I/O statistics */
--	atomic_long_t		writeback;	/* number of writeback pages */
- 	unsigned int		flags;		/* various flags */
- 
- /* The following are for internal use only. Also see uapi/linux/nfs_mount.h */
 
 

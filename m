@@ -2,78 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7E949E21E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D899049E249
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241079AbiA0MLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:11:32 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43750 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbiA0MLW (ORCPT
+        id S241174AbiA0MXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:23:10 -0500
+Received: from mo-csw1115.securemx.jp ([210.130.202.157]:51248 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241131AbiA0MXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:11:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F1F2B82227;
-        Thu, 27 Jan 2022 12:11:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40EA1C340E4;
-        Thu, 27 Jan 2022 12:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643285480;
-        bh=l6TRy4jFk0Trxh8+yK9kI1v0jsEYunfLcp1/XiEleh8=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=kda1foNqREMz9pKhLX9F6Jrq8C1fgqA/P2pVwJzWbJ3rXX1MHuzhq7EJ9q99Hbw+C
-         u0UEB9YScQdiQCy7e3OEya4I2PtqJjc/SlGo2b2waVmgiWikvqtNhzHhcs80GmiwLi
-         ebxiH0PbRkD7Hbudc3X3p9J8y9nsWElkTjn9o6DTAD0XoJQI6fluSqukZV3BWjWrU8
-         d+XK8lyWxKDxtMXRTbjZS/aKVQvTGPDIVMT8qHW581O/fImoxhv18Q4kBvPQfAFhkS
-         xC6ByS0UQmJf4MdxkNM1HZXnRQgjhYr+GVa6wASYHeU9XlizjPUUZzumAZpLjSXt8z
-         ohCI2MilfYfLw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Pkshih <pkshih@realtek.com>,
-        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "tony0620emma\@gmail.com" <tony0620emma@gmail.com>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: Re: [PATCH 3/4] rtw88: Move enum rtw_tx_queue_type mapping code to tx.{c,h}
-References: <20220114234825.110502-1-martin.blumenstingl@googlemail.com>
-        <20220114234825.110502-4-martin.blumenstingl@googlemail.com>
-        <b2bf2bc5f04b488487797aa21c50a130@realtek.com>
-        <87czkogsc4.fsf@kernel.org>
-        <CAFBinCCeCoRmqApeeAD534dKrhgbnh4wSBF88oLLXqL-TYv5+w@mail.gmail.com>
-Date:   Thu, 27 Jan 2022 14:11:14 +0200
-In-Reply-To: <CAFBinCCeCoRmqApeeAD534dKrhgbnh4wSBF88oLLXqL-TYv5+w@mail.gmail.com>
-        (Martin Blumenstingl's message of "Sun, 23 Jan 2022 19:34:18 +0100")
-Message-ID: <87mtjhjs4d.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
+        Thu, 27 Jan 2022 07:23:07 -0500
+Received: by mo-csw.securemx.jp (mx-mo-csw1115) id 20RCMYHE013237; Thu, 27 Jan 2022 21:22:34 +0900
+X-Iguazu-Qid: 2wGrVsu7KfUduQM9LP
+X-Iguazu-QSIG: v=2; s=0; t=1643286153; q=2wGrVsu7KfUduQM9LP; m=fopQoZOB4RR+7GxNd2KPhSIopbwQ/GZx7RuWAarFPzU=
+Received: from imx12-a.toshiba.co.jp (imx12-a.toshiba.co.jp [61.202.160.135])
+        by relay.securemx.jp (mx-mr1111) id 20RCMVwj014423
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 27 Jan 2022 21:22:32 +0900
+X-SA-MID: 32405228
+From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nobuhiro1.iwamatsu@toshiba.co.jp, yuji2.ishikawa@toshiba.co.jp
+Subject: [PATCH 0/1] net: stmmac: dwmac-visconti: Avoid updating hardware register for unexpected speed requst
+Date:   Thu, 27 Jan 2022 21:17:13 +0900
+X-TSB-HOP: ON
+X-TSB-HOP2: ON
+Message-Id: <20220127121714.22915-1-yuji2.ishikawa@toshiba.co.jp>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Martin Blumenstingl <martin.blumenstingl@googlemail.com> writes:
+Function visconti_eth_fix_mac_speed() should not change a register when an unexpected speed value is passed.
 
-> Hi Kalle,
->
-> On Wed, Jan 19, 2022 at 7:20 AM Kalle Valo <kvalo@kernel.org> wrote:
-> [...]
->> I was about to answer that with a helper function it's easier to catch
->> out of bands access, but then noticed the helper doesn't have a check
->> for that. Should it have one?
->
-> you mean something like:
->     if (ac >= IEEE80211_NUM_ACS)
->         return RTW_TX_QUEUE_BE;
->
-> Possibly also with a WARN_ON/WARN_ON_ONCE
+Yuji Ishikawa (1):
+  net: stmmac: dwmac-visconti: No change to ETHER_CLOCK_SEL for
+    unexpected speed request.
 
-Yeah, something like that would be good.
+ drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.17.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

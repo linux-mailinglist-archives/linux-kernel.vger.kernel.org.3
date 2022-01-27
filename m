@@ -2,144 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F065D49E244
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD9249E248
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241110AbiA0MWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:22:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:56879 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231201AbiA0MWv (ORCPT
+        id S241153AbiA0MXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:23:09 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:51384 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241120AbiA0MXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:22:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643286171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nxOgqVaBtovwOha3ZcVtcrq82KpILnkAf73efsykbq0=;
-        b=JtNYiRixN9WqSC35fGTmecZaM8IeR4NCkqCj8XZRKeVtI1vaLpRrDTdXIFVgoWqF1Qt8CC
-        URfK65cqqzGDLsNQxrirWvju8pscALU2NFunQd1k1aYTKwEkB+vKriHvFUqTOUHabXu7+T
-        UOEfJDFSWCrO5drSeToYIAHU2bZezak=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-141-AmMQJFBvN2G8l6BtcGtqvQ-1; Thu, 27 Jan 2022 07:22:50 -0500
-X-MC-Unique: AmMQJFBvN2G8l6BtcGtqvQ-1
-Received: by mail-ej1-f72.google.com with SMTP id rl11-20020a170907216b00b006b73a611c1aso1229616ejb.22
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:22:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=nxOgqVaBtovwOha3ZcVtcrq82KpILnkAf73efsykbq0=;
-        b=ppRgpWaZMCSLC8xV8Wi2HAfTBY0fL7FSD7Cra/0iZcyA4HDplEFm+QCDyFp6yptRJm
-         +8nGRcT8l6DB8WgnLoXCPMFO4nHo/pH8SB8/5oriC08diejcb4+iKgvUScB7JfcNIPaR
-         jfXK4bDVBsEKJlbUgo80SgSbX7r1Kas4R+YPh0oT5YopqSMFEtxkraKaVmw6IJYdPku+
-         pF/vpkzFMjmg7w4TpoQsJsK7n3bXYW2C57FVGEFCGKkoZkxznv6ZOSJecTQh2pZ2HaNK
-         2hfJR5LaXmwAVTTPkplnapXNhzMhaWKdlkCoFHgbXk1Z+xzyHcuHlZxtbFlK0pOux9bn
-         HUKQ==
-X-Gm-Message-State: AOAM5303Hbsl4uAWHspdEIZUxlcX1v4KfqsoNpqca7sD5iQ5cDCHFfew
-        UUvWtabEYohhdaFqCZ560WtZw0swI+SjuW5Cyn/HwKSMryMACnC9XLNeh/qQ4xU3lrb8BkTId2F
-        g0WopsZqEI6EfDTWEhjyQUYvJ
-X-Received: by 2002:a17:907:1c1c:: with SMTP id nc28mr2649060ejc.651.1643286168896;
-        Thu, 27 Jan 2022 04:22:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzNVn0jnbx1OlPtjBvgMoVu5Kvzo5GMcACdQCd0LC5App747E8g74+qlOMI13AN7LLmriq46Q==
-X-Received: by 2002:a17:907:1c1c:: with SMTP id nc28mr2649050ejc.651.1643286168698;
-        Thu, 27 Jan 2022 04:22:48 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70d:8300:4812:9d4f:6cd8:7f47? (p200300cbc70d830048129d4f6cd87f47.dip0.t-ipconnect.de. [2003:cb:c70d:8300:4812:9d4f:6cd8:7f47])
-        by smtp.gmail.com with ESMTPSA id gg14sm8654976ejb.159.2022.01.27.04.22.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 04:22:48 -0800 (PST)
-Message-ID: <ca62449b-7ab0-0e18-ee5a-b46b3f527385@redhat.com>
-Date:   Thu, 27 Jan 2022 13:22:47 +0100
+        Thu, 27 Jan 2022 07:23:05 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 20RCMo3D041382;
+        Thu, 27 Jan 2022 06:22:50 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1643286170;
+        bh=M+t4TNyz45XBmCPzZgTRKAq1n7WDttb+rCbMTRGsH/I=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=XkAxfKj3fnwD4EDaZNL+Y4uKWtT/HgS2eVzm0zuoagMIDkEfBCKAuWJcYu72BuQZC
+         5nCP4svvbM93kbU1H+LPKtmjMGEtqzlbWSvVqzIyDu2u2nSCktY4kN8jKLGfBB4OxK
+         /pSfuhGnDBz1oSxbY4GWL2MeOz8BFP47vTd92Ta4=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 20RCMoaG037595
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 27 Jan 2022 06:22:50 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 27
+ Jan 2022 06:22:50 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 27 Jan 2022 06:22:50 -0600
+Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 20RCMlME047186;
+        Thu, 27 Jan 2022 06:22:48 -0600
+Subject: Re: [PATCH] phy: cadence: Sierra: Add support for skipping
+ configuration
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+CC:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20220127085700.10333-1-a-govindraju@ti.com>
+ <20220127101938.GD1978@kadam>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <41985856-48f4-7333-b1d8-35d0f4c55509@ti.com>
+Date:   Thu, 27 Jan 2022 17:52:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
+In-Reply-To: <20220127101938.GD1978@kadam>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Jianyong Wu <Jianyong.Wu@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>
-Cc:     Justin He <Justin.He@arm.com>, "will@kernel.org" <will@kernel.org>,
-        Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "quic_qiancai@quicinc.com" <quic_qiancai@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "gshan@redhat.com" <gshan@redhat.com>, nd <nd@arm.com>
-References: <20211216082812.165387-1-jianyong.wu@arm.com>
- <YdXdjcJ7jbnkFsqp@arm.com>
- <AM9PR08MB7276E0DE6B4224C22B20A89CF44C9@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YdcRLohx777jzWah@arm.com>
- <AM9PR08MB7276B412F02CA0431E30E06CF44D9@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <YdgZJ/mBG+BCxmEv@arm.com>
- <DB7PR08MB3737631DEE8D6625D3A9E393F7209@DB7PR08MB3737.eurprd08.prod.outlook.com>
- <CAMj1kXF7DJ5UeMn=9gw_Hs3Fa525OFEPsriO=ZprT3rN83=qtQ@mail.gmail.com>
- <AM9PR08MB72763D5DA0C5F22D2126ABF4F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <CAMj1kXGjAxd2xb0u1PLSLGAe8jJdhJm3wR+y=7qB4C1J6Ebgcw@mail.gmail.com>
- <3e6513f9-77ca-79e5-d185-7e9a11ec7689@redhat.com>
- <AM9PR08MB72764111B775352448D75CD9F4209@AM9PR08MB7276.eurprd08.prod.outlook.com>
- <65fdd873-1f93-56e3-c7a5-98d621c5dbd8@redhat.com>
- <7eb4bc77-c1db-99c4-4c77-ae9ddd159abb@redhat.com>
- <AM9PR08MB7276062BC7B474174FFFA11BF4219@AM9PR08MB7276.eurprd08.prod.outlook.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3] arm64/mm: avoid fixmap race condition when create pud
- mapping
-In-Reply-To: <AM9PR08MB7276062BC7B474174FFFA11BF4219@AM9PR08MB7276.eurprd08.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dan,
+
+On 27/01/22 3:49 pm, Dan Carpenter wrote:
+> On Thu, Jan 27, 2022 at 02:26:58PM +0530, Aswath Govindraju wrote:
+>> Skip the phy configuration if the required configurations were done in an
+>> earlier boot stage.
+>>
 > 
-> Yes, system_state can roughly separate these callers of __create_pgd_mapping. When system_state > SYSTEM_BOOTING we can add the lock.
-> Thus, I have the following change:
+> Why are you doing this?  Could you please put in the commit message if
+> the user will see an improvement from this change.
 > 
-> static DEFINE_SPINLOCK(swapper_pgdir_lock);
-> +static DEFINE_MUTEX(fixmap_lock);
+
+In some cases, the SerDes configuration can be done in the bootloaders
+itself and in these the reconfiguration can be skipped in kernel. For
+example 2 different cores can be using the SerDes, in this case the
+bootloaders configure the SerDes, so that the cores can later on use the
+lanes directly without configuring the lanes again.
+
+I will include this in the commit message of the respin.
+
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> ---
 > 
->  void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
->  {
-> @@ -329,6 +330,8 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
->         }
->         BUG_ON(p4d_bad(p4d));
+> [ snip ]
 > 
-> +       if (system_state > SYSTEM_BOOTING)
-
-As there is nothing smaller than SYSTEM_BOOTING, you can use
-	if (system_state != SYSTEM_BOOTING)
-
-...
-
+>> @@ -1382,16 +1401,24 @@ static int cdns_sierra_phy_probe(struct platform_device *pdev)
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> -	ret = cdns_sierra_phy_get_resets(sp, dev);
+>> -	if (ret)
+>> -		goto unregister_clk;
+>> -
+>>  	ret = cdns_sierra_phy_enable_clocks(sp);
+>>  	if (ret)
+>>  		goto unregister_clk;
+>>  
+>> -	/* Enable APB */
+>> -	reset_control_deassert(sp->apb_rst);
+>> +	regmap_field_read(sp->pma_cmn_ready, &sp->already_configured);
+>> +
+>> +	if (!(sp->already_configured)) {
 > 
-> It seems work and somehow simper. But I don't know if it is reasonable to do this. So, any idea? @Ard Biesheuvel  @Catalin Marinas 
+> Delete extra parens.
+> 
+>> +		ret = cdns_sierra_phy_clk(sp);
+>> +		if (ret)
+>> +			goto unregister_clk;
+> 
+> The goto should release the most recent successful allocation which is
+> cdns_sierra_phy_enable_clocks().  So this should be goto clk_disable.
+> Except that will also call reset_control_assert() which is wrong...  The
+> rules are generally that error handling should be in the reverse order
+> from how we allocated it.  If allocation is optional the cleanup should
+> be optional.  The allocation and unwind code should mirror each other.
+> 
+>> +
+>> +		ret = cdns_sierra_phy_get_resets(sp, dev);
+>> +		if (ret)
+>> +			goto unregister_clk;
+> 
+> goto clk_disable;
+> 
+>> +
+>> +		/* Enable APB */
+>> +		reset_control_deassert(sp->apb_rst);
+> 
+> Since this is now optional it should be optional in the cleanup.
+> 
+>> +	}
+>>  
+> 
+> Since the order of allocations has changed, the other gotos need to be
+> updated to free the most recent allocation as well.  Then the error
+> handling looks like this:
+> 
+> 	return 0;
+> 
+> put_control:
+> 	while (--node >= 0)
+> 		reset_control_put(sp->phys[node].lnk_rst);
+> ctrl_assert:
+> 	if (!sp->already_configured)
+> 		reset_control_assert(sp->apb_rst);
+> clk_disable:
+> 	cdns_sierra_phy_disable_clocks(sp);
+> unregister_clk:
+> 	cdns_sierra_clk_unregister(sp);
+> 	return ret;
+> 
+> 
+>>  	/* Check that PHY is present */
+>>  	regmap_field_read(sp->macro_id_type, &id_value);
+>> @@ -1433,8 +1460,10 @@ static int cdns_sierra_phy_probe(struct platform_device *pdev)
+>>  
+>>  		sp->num_lanes += sp->phys[node].num_lanes;
+>>  
+>> -		gphy = devm_phy_create(dev, child, &ops);
+>> -
+>> +		if (!(sp->already_configured))
+> 
+> Delete parens.
+> 
+>> +			gphy = devm_phy_create(dev, child, &ops);
+>> +		else
+>> +			gphy = devm_phy_create(dev, child, &noop_ops);
+>>  		if (IS_ERR(gphy)) {
+>>  			ret = PTR_ERR(gphy);
+>>  			of_node_put(child);
+>> @@ -1455,7 +1484,7 @@ static int cdns_sierra_phy_probe(struct platform_device *pdev)
+>>  	}
+>>  
+>>  	/* If more than one subnode, configure the PHY as multilink */
+>> -	if (!sp->autoconf && sp->nsubnodes > 1) {
+>> +	if (!(sp->already_configured && sp->autoconf) && sp->nsubnodes > 1) {
+> 
+> It's normally easier to understand conditions when you push the ! as
+> far in as possible:
+> 
+> 	if ((!sp->already_configured || !sp->autoconf) &&
+> 	    sp->nsubnodes > 1) {
+> 
+> Is this condition right?  Shouldn't it be:
+> 
+> 	if (!sp->already_configured && !sp->autoconf && sp->nsubnodes > 1) {
+> 
+> The ->already_configured is set/stored in firmware so I don't know when
+> that happens.  Please, add that information to the commit message when
+> you resend.
+> 
 
-It's worth looking at kernel/notifier.c, e.g.,
-blocking_notifier_chain_register()
-
-if (unlikely(system_state == SYSTEM_BOOTING))
-	return notifier_chain_register(&nh->head, n);
-
-down_write(&nh->rwsem);
-ret = notifier_chain_register(&nh->head, n);
-up_write(&nh->rwsem);
+Sorry, my logic was wrong. I will correct this in the respin.
 
 
+Thank you for the review comments
 
-If we decide to go down that path, we should make sure to add a comment like
+Regards,
+Aswath
 
-/*
- * No need for locking during early boot. And it doesn't work as
- * expected with KASLR enabled where we might clear BSS twice.
- */
-
--- 
-Thanks,
-
-David / dhildenb
+> regards,
+> dan carpenter
+> 
 

@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2506249DAFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 010A349DB03
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbiA0Gwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 01:52:35 -0500
-Received: from smtpbgjp3.qq.com ([54.92.39.34]:52434 "EHLO smtpbgjp3.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236959AbiA0Gwe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 01:52:34 -0500
-X-QQ-mid: bizesmtp40t1643266335tamrph7a
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 27 Jan 2022 14:52:03 +0800 (CST)
-X-QQ-SSF: 0140000000000080E000B00A0000000
-X-QQ-FEAT: 2vDQexJ/FkbCPcVh34DJWyrqgJQoXftLpjju8zpJmmDl16S8eciDAUOBgkzJs
-        T0aHwbB9ziLqNdKp9VMj0JoTTIvRHImMNXznEqlHYXEBIZgEtTp/KKfiY+Ss+euBgx6+lmj
-        4uVa1TI234Y+B9BmTy4UkxETxCAg0rjnCVfiJMJesXgQkDxkYDKdMLqyqUhFKJSNIetFQsX
-        RqdZ9Y4UxL4RK2o/dQZKYbHmI4SjcgTxDvWjDfsgRiQwXzq4S3gSdi9w17/6/xJcBxO4emV
-        aehgVXdLlYiEGorA+WUUrcccSwMtZS3JIN5Xxv5Uw4QY8fJS8LMsu8oLVtjPvwMLqYueXDv
-        7mnW0bvsnn001uVx7w=
-X-QQ-GoodBg: 2
-From:   tangmeng <tangmeng@uniontech.com>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        airlied@linux.ie, daniel@ffwll.ch, jsarha@ti.com,
-        tomi.valkeinen@ti.com, linux@dominikbrodowski.net,
-        Peter.Chen@nxp.com, gregkh@linuxfoundation.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH] drivers: Fix typo in comment
-Date:   Thu, 27 Jan 2022 14:51:56 +0800
-Message-Id: <20220127065156.22372-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S236988AbiA0Gwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 01:52:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236970AbiA0Gwx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 01:52:53 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E662EC061714;
+        Wed, 26 Jan 2022 22:52:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=dCJQMJKL5IVz1Z8zwkX2bymXH1fFjLGZs4aTLD4gTKE=; b=QMQYP7stSyLIc5Ob038zt/GXVe
+        FxbqDCMpQFpyu72raeYh8/gsSU0GxZGbp3s9Pt+nlgmA4ozYtJtOy8+yucVxFFfQrInSuXMAlsvJm
+        KHEKni20loUi3hYE11abbNDAhPjVR4ICMNZ+iwQV5exKQakXuyZRnt9/o8sgjfdxTvcwXti1h2qjt
+        74dt/UOUjm4fZ4GkZySsGJPMM82uhEldZf5f9IgQk6j5eh/ES/UAi5+JaZAIgVo1xdgfRgc2YmHH7
+        LTcGr2zViVo2evZvrQHyTXzrpBNaYBq1bkakrPWJSzYNMQbL6gfSNhjRPFKJjsh2qYilsdK47u1pM
+        GviCG0bg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nCyeH-0045So-Bn; Thu, 27 Jan 2022 06:52:49 +0000
+Message-ID: <6b4f3d82-01e8-5bf3-927f-33ac62178fd5@infradead.org>
+Date:   Wed, 26 Jan 2022 22:52:43 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: mmotm 2022-01-26-21-04 uploaded (gpu/drm/i915/i915_gem_evict.h)
+Content-Language: en-US
+To:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
+References: <20220127050456.M1eh-ltbc%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220127050456.M1eh-ltbc%akpm@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
-X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace disbale with disable and replace unavaibale with unavailable.
 
-Signed-off-by: tangmeng <tangmeng@uniontech.com>
----
- drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c | 2 +-
- drivers/gpu/drm/tilcdc/tilcdc_crtc.c  | 2 +-
- drivers/pcmcia/rsrc_nonstatic.c       | 2 +-
- drivers/usb/chipidea/udc.c            | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c b/drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c
-index aef9d059ae52..a642c04cf17d 100644
---- a/drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c
-+++ b/drivers/gpu/drm/amd/amdgpu/mxgpu_vi.c
-@@ -544,7 +544,7 @@ static int xgpu_vi_mailbox_rcv_irq(struct amdgpu_device *adev,
- {
- 	int r;
- 
--	/* trigger gpu-reset by hypervisor only if TDR disbaled */
-+	/* trigger gpu-reset by hypervisor only if TDR disabled */
- 	if (!amdgpu_gpu_recovery) {
- 		/* see what event we get */
- 		r = xgpu_vi_mailbox_rcv_msg(adev, IDH_FLR_NOTIFICATION);
-diff --git a/drivers/gpu/drm/tilcdc/tilcdc_crtc.c b/drivers/gpu/drm/tilcdc/tilcdc_crtc.c
-index 29890d704cb4..b986946b3b10 100644
---- a/drivers/gpu/drm/tilcdc/tilcdc_crtc.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_crtc.c
-@@ -996,7 +996,7 @@ irqreturn_t tilcdc_crtc_irq(struct drm_crtc *crtc)
- 	if (stat & LCDC_FRAME_DONE) {
- 		tilcdc_crtc->frame_done = true;
- 		wake_up(&tilcdc_crtc->frame_done_wq);
--		/* rev 1 lcdc appears to hang if irq is not disbaled here */
-+		/* rev 1 lcdc appears to hang if irq is not disabled here */
- 		if (priv->rev == 1)
- 			tilcdc_clear(dev, LCDC_RASTER_CTRL_REG,
- 				     LCDC_V1_FRAME_DONE_INT_ENA);
-diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
-index 6b6c578b5f92..ad1141fddb4c 100644
---- a/drivers/pcmcia/rsrc_nonstatic.c
-+++ b/drivers/pcmcia/rsrc_nonstatic.c
-@@ -394,7 +394,7 @@ static int do_validate_mem(struct pcmcia_socket *s,
-  * do_mem_probe() checks a memory region for use by the PCMCIA subsystem.
-  * To do so, the area is split up into sensible parts, and then passed
-  * into the @validate() function. Only if @validate() and @fallback() fail,
-- * the area is marked as unavaibale for use by the PCMCIA subsystem. The
-+ * the area is marked as unavailable for use by the PCMCIA subsystem. The
-  * function returns the size of the usable memory area.
-  */
- static int do_mem_probe(struct pcmcia_socket *s, u_long base, u_long num,
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index f9ca5010f65b..dc6c96e04bcf 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -2152,7 +2152,7 @@ static void udc_id_switch_for_host(struct ci_hdrc *ci)
- {
- 	/*
- 	 * host doesn't care B_SESSION_VALID event
--	 * so clear and disbale BSV irq
-+	 * so clear and disable BSV irq
- 	 */
- 	if (ci->is_otg)
- 		hw_write_otgsc(ci, OTGSC_BSVIE | OTGSC_BSVIS, OTGSC_BSVIS);
+On 1/26/22 21:04, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2022-01-26-21-04 has been uploaded to
+> 
+>    https://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> https://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> https://ozlabs.org/~akpm/mmotm/series
+> 
+> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> followed by the base kernel version against which this patch series is to
+> be applied.
+
+on x86_64:
+(from linux-next.patch)
+
+
+  HDRTEST drivers/gpu/drm/i915/i915_gem_evict.h
+In file included from <command-line>:0:0:
+./../drivers/gpu/drm/i915/i915_gem_evict.h:15:15: error: ‘struct i915_gem_ww_ctx’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+        struct i915_gem_ww_ctx *ww,
+               ^~~~~~~~~~~~~~~
+./../drivers/gpu/drm/i915/i915_gem_evict.h:21:14: error: ‘struct i915_gem_ww_ctx’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+       struct i915_gem_ww_ctx *ww,
+              ^~~~~~~~~~~~~~~
+./../drivers/gpu/drm/i915/i915_gem_evict.h:25:16: error: ‘struct i915_gem_ww_ctx’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+         struct i915_gem_ww_ctx *ww);
+                ^~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+
 -- 
-2.20.1
-
-
-
+~Randy

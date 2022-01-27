@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5584E49E2C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9E449E2C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236705AbiA0Mnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:43:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
+        id S241264AbiA0MoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:44:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiA0Mns (ORCPT
+        with ESMTP id S229689AbiA0MoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:43:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A193C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:43:47 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643287424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qSHHDT/Ul5pdE8P6t8ktZ9Ch92LKxsTFGQCx9xs50Ts=;
-        b=LYymgM7gSvAe12Kl0R+39pP7HTY/Uxe4k/fIaFhilZ7BMilRUQ1dVAl/6qkc03kPf/esZL
-        GlTVjVtX1RaD7OkB9LM7QHRe+e+QBtapPUzs4vOcytGj9CWsQwI0iXaPrSUFxrLLYfnq9N
-        sm9QEksAmz4l1vpWZmOJU6Pxx0q6I4y6ELMupPefWEBHWYzbGbavSMqIFDZMyPrHlg78dc
-        ho4KmZDEC+eJQaCer/kGKjyoWLRUd3/HSxTBlRAZm4s8t7yWgkUXAFRIgcjokuD5aV0TV8
-        /aZE43XZ2JxrfpqI8qnxS/h/lwLPPloZYDd2ZqyZS7P3p5437r0GFleeI2QlwA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643287424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qSHHDT/Ul5pdE8P6t8ktZ9Ch92LKxsTFGQCx9xs50Ts=;
-        b=1mjwPP3APj9JnPBTx4fhkY/v7JblGGEk2mjg8PXe7hcZHnDDrmFM4i5A8iDOcb8kfBGY4H
-        SH2VcKslMiHM7wAQ==
-To:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Thu, 27 Jan 2022 07:44:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6919C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:44:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A770FB819C2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C350FC340E4;
+        Thu, 27 Jan 2022 12:44:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643287451;
+        bh=wAG19dWzrmVRY7z5bVram9oydUwz5Bz8k/viR2YEktI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kC3SGE/iemVN/a/lCg3YsF5Nk+n6KLolRWdeqBKGjVamyvIO0XWfImAhXU3gWyqBz
+         WZaAOu4pWOtCGm+1EXlpKpTDSi6KBK57ancyHuXRgWJ17MnzWbfvHq72zIlx9MY55y
+         0spfBiYdXoAPsrRjVST4gc2eqlacgoW+4XxDCMULXdr9VJKO+857iJpJDcR79pJSxT
+         O18hZg3S7XDRyMhlCogEnqx43b3uhCs7U8FTVoxwXPAm6S4rgXqIb24hk7lTm8qVKL
+         iu63Q90Vq3dat/6OJ1DQgWXi0W/+evb8eU+9n96LrEJax+a+geoBrZOTnza3saIF0y
+         KDrogEx/1xdSg==
+Date:   Thu, 27 Jan 2022 14:44:04 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] printk: disable optimistic spin during panic
-In-Reply-To: <YfKEGg0zQqXBVqGG@alley>
-References: <20220121190222.572694-1-stephen.s.brennan@oracle.com>
- <20220121190222.572694-3-stephen.s.brennan@oracle.com>
- <YfER7tlXZZpX94c9@google.com> <87r18un83x.fsf@jogness.linutronix.de>
- <YfEdNKWI7GqKr9P/@google.com> <87tudqwegy.fsf@stepbren-lnx.us.oracle.com>
- <YfJFjHdg/khNXiRd@google.com> <YfKEGg0zQqXBVqGG@alley>
-Date:   Thu, 27 Jan 2022 13:49:44 +0106
-Message-ID: <877dalpcvz.fsf@jogness.linutronix.de>
+Subject: Re: [PATCH] mm/mmzone.h: remove unused macros
+Message-ID: <YfKTlMMa3RZoF+3I@kernel.org>
+References: <20220127093210.62293-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127093210.62293-1-linmiaohe@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-27, Petr Mladek <pmladek@suse.com> wrote:
-> I mean that chance of dealock caused by the internal semaohore spin
-> lock is super small. In compare, a lot of tricky code is guarded
-> by console_sem. It looks like a big risk to ignore the semaphore
-> early in panic().
+On Thu, Jan 27, 2022 at 05:32:10PM +0800, Miaohe Lin wrote:
+> Remove pgdat_page_nr, nid_page_nr and NODE_MEM_MAP. They are unused now.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Agreed.
+Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
 
-> A better solution would be to use raw_spin_trylock_irqsave() in
-> down_trylock().
+> ---
+>  include/linux/mmzone.h | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index aed44e9b5d89..6c004256d943 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -920,12 +920,6 @@ typedef struct pglist_data {
+>  
+>  #define node_present_pages(nid)	(NODE_DATA(nid)->node_present_pages)
+>  #define node_spanned_pages(nid)	(NODE_DATA(nid)->node_spanned_pages)
+> -#ifdef CONFIG_FLATMEM
+> -#define pgdat_page_nr(pgdat, pagenr)	((pgdat)->node_mem_map + (pagenr))
+> -#else
+> -#define pgdat_page_nr(pgdat, pagenr)	pfn_to_page((pgdat)->node_start_pfn + (pagenr))
+> -#endif
+> -#define nid_page_nr(nid, pagenr) 	pgdat_page_nr(NODE_DATA(nid),(pagenr))
+>  
+>  #define node_start_pfn(nid)	(NODE_DATA(nid)->node_start_pfn)
+>  #define node_end_pfn(nid) pgdat_end_pfn(NODE_DATA(nid))
+> @@ -1101,7 +1095,6 @@ static inline struct pglist_data *NODE_DATA(int nid)
+>  {
+>  	return &contig_page_data;
+>  }
+> -#define NODE_MEM_MAP(nid)	mem_map
+>  
+>  #else /* CONFIG_NUMA */
+>  
+> -- 
+> 2.23.0
+> 
+> 
 
-down_trylock() is attempting to decrement a semaphore. It should not
-fail just because another CPU is also in the process of
-decrementing/incrementing the semaphore.
-
-Maybe a down_trylock_cond() could be introduced where the trylock could
-fail if a given condition is not met. The function would need to
-implement its own internal trylock spin loop to check the condition. But
-then we could pass in a condition for it to abort. For example, when in
-panic and we are not the panic CPU.
-
-John
+-- 
+Sincerely yours,
+Mike.

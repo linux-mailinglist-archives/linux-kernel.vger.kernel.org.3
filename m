@@ -2,142 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A7F49EC73
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73DF49EC79
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237950AbiA0U0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 15:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
+        id S1344018AbiA0U1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 15:27:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiA0U0k (ORCPT
+        with ESMTP id S231384AbiA0U1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:26:40 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F215BC061748
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:26:39 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id p12so5249843edq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:26:39 -0800 (PST)
+        Thu, 27 Jan 2022 15:27:48 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237B9C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:27:48 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id p7so5233335edc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:27:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Fi1CjDDx2TurE9KIT9xNPFydS/AJyEq38oGV2uaA61U=;
-        b=zrJPnyAi4QGp6MxlP38emBrpS5F5jPUi1PK1fZWvpwb0xusZzOev1cXwqXD93Ah303
-         Ys26qGM+xFSapbAYx+F93tj/Kg5JrfOi1eaHxcUZPXT2gfuzK3Trv25cghbnsmpduaIp
-         rJEr880xWNlS5IhFzKydfG6n3habeIUecE+dPbH9yYuzu6pIVi66TjU8gPS0Fk/b1YOV
-         z/FwOdNYLUobxS5GHQc1FFk9W41zhXeECZD3ZxDA/9Qi+v+sppG50iWj+WkIXkNCiyK3
-         kq8QpsI70OhvFhB0uMMS2pDWpgN+VgzO7VyqMjXjE2SeWZ3kCOXqSuUUv/zkJHcqesvt
-         6KhQ==
+        bh=uQiZE2VyuneBgtPlVUPa+7lot3dvumZ8OUhp+P+Pisk=;
+        b=c3udS0AewguSXGj0fpjk/0blod+wQRlJFsXf8KlOJNO73FK2ggGMw6HehwoubLxviD
+         KmHNG1z6x6X05zwfDb2yI3KjCjysS8VKyfnse6vOHBEdLZ70Eo4X0KyRoOHoAWLMnCFU
+         svXVr9brYTWXEkKvKWbZMrM1ifulBAZizQ6lK2K3zSc6olMdefCW7YjLjRKDhEhoBBHP
+         SEf29+nV7lVTbcx17b536uXUDv50tudZB10t517JDl+zTKf3SiGF6884j4ChWVz58GdX
+         QkICQKlojYWlC7eNEwnVH+5fGPwumyCqEk2vqQ33AOoWtj7sRDjF9uQgdg+QXw6w/Ds2
+         WO7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Fi1CjDDx2TurE9KIT9xNPFydS/AJyEq38oGV2uaA61U=;
-        b=zU3/SywL3p1p1JDcFnGxGR+VETWiATApkn8HxV+MqHBQVKTf22IdU/aQFpZD7qVB6g
-         nsImfHdRdsug/6mYGlzQmwKlrJaKE8XOdQ4Xn5YwNh0wYvRL2JLeUSDCVw9KRxZg1SXQ
-         98XHSWdRPc4XVAI/TyRKLU24/k7VolBCJFnH1X7AUCzMddeHY8+aBHKNfCZ+IBJR3ra6
-         xdSidt/G4rx8R79WEj2hA+xWJ1Tcge70JIY1Z9lVXPfaYhBcxSpW8Agbpc7jjjC5ZaMc
-         K+7ioDk/SSyZ6OmuZZQFMS2vmurkigz1NC79VWw0tPDtpZyP1GU+FbSuc1HlFzVYwJ7n
-         zzGA==
-X-Gm-Message-State: AOAM533kjrjoO63DZm3bud9nVnroB/4Fpi6BlUuHRVsR0NXDOQug/fFB
-        Vp8qdEugbcGgZ/EnNKvqUo0oTuFBo6zgP8UKGrhUQg==
-X-Google-Smtp-Source: ABdhPJznXPKKye7FSdr+lVY9GNZVYl4Rl6/0Ojgh5L4rDb57d3KmHVB5vjBqJr6BFTPH1QZ7Ji/9E0+4jr95RWzgttk=
-X-Received: by 2002:a05:6402:1703:: with SMTP id y3mr5072637edu.239.1643315198479;
- Thu, 27 Jan 2022 12:26:38 -0800 (PST)
+        bh=uQiZE2VyuneBgtPlVUPa+7lot3dvumZ8OUhp+P+Pisk=;
+        b=nSncb0ku9PGmGr8rPLt2pZ9lX4eyOatqP22RiyoWypQsXZEM4leQY+jGOA9ODtrDZJ
+         svEn4jwg4S+dZeZP/Fh9Vkrd5rgyGpkovIlzsBFyD7QxPAQ4drmpz+Ut7vjqOQZ64QTN
+         ffSfETNGV3smC1OQtmJn3yFn3XlpxofZaD9tIQtLmApOg9M1fXixkUSLUAkOMUTJqm4x
+         3f2E1FNaKC8+6A70emV4vCLWDucXO3iy1GGpyp863F4kTn50+HKEH7HN95k7ROwxEWW6
+         MaEMgRJwKGidyvSxXsusfnPmHTZoy5YtoH52ROdYxiluncX5Ldmrd3jnV1gqn2KzzIJS
+         SWRg==
+X-Gm-Message-State: AOAM530hXhXeUcjTAf69i8MZBYE7sWK/vfiYVEGx55XY/SYWj3OxiwMd
+        lRamqICEVSuO1uLzQon3mZBqxvqwi50VZ/ubiNBTZQ==
+X-Google-Smtp-Source: ABdhPJzTfpGcj/rkTsEu64/xIaiWOn1k3wDrfH0T/ccffkuYCK2S1zUU8DcZdwfKA+HbhLwYClft3oxpezf3u1kBp6I=
+X-Received: by 2002:a50:eb46:: with SMTP id z6mr5076147edp.229.1643315266494;
+ Thu, 27 Jan 2022 12:27:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20220113091056.1297982-1-james.clark@arm.com>
-In-Reply-To: <20220113091056.1297982-1-james.clark@arm.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 27 Jan 2022 13:26:26 -0700
-Message-ID: <CANLsYkx4u_+hPNNdmN23g58RprqkcUfhoPeZhu578DKU0qJ_hg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] coresight: Add config flag to enable branch broadcast
-To:     James Clark <james.clark@arm.com>
-Cc:     Suzuki.Poulose@arm.com, coresight@lists.linaro.org,
-        leo.yan@linaro.com, mike.leach@linaro.org,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20220125210011.3817742-1-dlatypov@google.com> <20220125210011.3817742-4-dlatypov@google.com>
+ <CABVgOSm4EWFK5-KWto1HF3AEY9c77s5MufufXRDek3PAcWCccA@mail.gmail.com> <CAGS_qxpDGLR6=NKgxps+PXi-kyZDuyV67j6AybqTmOYOi5XqXw@mail.gmail.com>
+In-Reply-To: <CAGS_qxpDGLR6=NKgxps+PXi-kyZDuyV67j6AybqTmOYOi5XqXw@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 27 Jan 2022 12:27:35 -0800
+Message-ID: <CAGS_qxqwRT9hqej_2KFWyFZ+A2DuD214BKHKD4KVd70B7X_Nkw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] kunit: factor out str constants from binary assertion structs
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+On Thu, Jan 27, 2022 at 12:21 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Wed, Jan 26, 2022 at 7:39 PM David Gow <davidgow@google.com> wrote:
+> >
+> > On Wed, Jan 26, 2022 at 5:00 AM Daniel Latypov <dlatypov@google.com> wrote:
+> > >
+> > > If the compiler doesn't optimize them away, each kunit assertion (use of
+> > > KUNIT_EXPECT_EQ, etc.) can use 88 bytes of stack space in the worst and
+> > > most common case. This has led to compiler warnings and a suggestion
+> > > from Linus to move data from the structs into static const's where
+> > > possible [1].
+> > >
+> > > This builds upon [2] which did so for the base struct kunit_assert type.
+> > > That only reduced sizeof(struct kunit_binary_assert) from 88 to 64.
+> > >
+> > > Given these are by far the most commonly used asserts, this patch
+> > > factors out the textual representations of the operands and comparator
+> > > into another static const, saving 16 more bytes.
+> > >
+> > > In detail, KUNIT_EXPECT_EQ(test, 2 + 2, 5) yields the following struct
+> > >   (struct kunit_binary_assert) {
+> > >     .assert = <struct kunit_assert>,
+> > >     .operation = "==",
+> > >     .left_text = "2 + 2",
+> > >     .left_value = 4,
+> > >     .right_text = "5",
+> > >     .right_value = 5,
+> > >   }
+> > > After this change
+> > >   static const struct kunit_binary_assert_text __text = {
+> > >     .operation = "==",
+> > >     .left_text = "2 + 2",
+> > >     .right_text = "5",
+> > >   };
+> > >   (struct kunit_binary_assert) {
+> > >     .assert = <struct kunit_assert>,
+> > >     .text = &__text,
+> > >     .left_value = 4,
+> > >     .right_value = 5,
+> > >   }
+> > >
+> > > This also DRYs the code a bit more since these str fields were repeated
+> > > for the string and pointer versions of kunit_binary_assert.
+> > >
+> > > Note: we could name the kunit_binary_assert_text fields left/right
+> > > instead of left_text/right_text. But that would require changing the
+> > > macros a bit since they have args called "left" and "right" which would
+> > > be substituted in `.left = #left` as `.2 + 2 = \"2 + 2\"`.
+> > >
+> > > [1] https://groups.google.com/g/kunit-dev/c/i3fZXgvBrfA/m/VULQg1z6BAAJ
+> > > [2] https://lore.kernel.org/linux-kselftest/20220113165931.451305-6-dlatypov@google.com/
+> > >
+> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > ---
+> >
+> > This definitely _feels_ like it's adding a bit more complexity than
+> > would be ideal by splitting this out into a separate function, but I
+> > do agree that it's worth it.
+>
+> I'll note that this was *more* of a simplification until I deduped the
+> binary macros.
+> Since we only have one macro now passing in the left/right/op strings
+> now, it doesn't look like as much of an improvement anymore.
+>
+> So now the main other benefits are DRYing the assert structs.
+> And I lean towards feeling that + stack size decrease = good enough
+> reason to go ahead with the refactor.
+>
+> Re complexity, here's what KUNIT_EXPECT_EQ(test, 1 + 1, 2) turns into
+>
+> do {
+>   typeof(1 + 1) __left = (1 + 1);
+>   typeof(2) __right = (2);
+>   static const struct kunit_binary_assert_text __text = {
+>     .operation = "==",
+>     .left_text = "1 + 1",
+>     .right_text = "2",
+>   };
+>   do {
+>     if (__builtin_expect(!!(!(__left == __right)), 0)) {
+>       static const struct kunit_loc loc = {
+>         .file = "lib/kunit/kunit-example-test.c",
+>         .line = 29
+>       };
+>       struct kunit_binary_assert __assertion = {
+>         .assert = { .format = kunit_binary_assert_format },
+>         .text = &__text,
+>         .left_value = __left,
+>         .right_value = __right
+>       };
+>       kunit_do_failed_assertion(test, &loc, KUNIT_EXPECTATION,
+>               &__assertion.assert,
+>               ((void *)0));
+>     }
+>   } while (0);
+> } while (0);
+>
+> Actually, looking at this, I realize we should probably
+> 1) move the __text decl into the if statement
 
-I am seriously back-logged in my patch reviews and as such will not be
-able to get to your work in the usual 14 days.  At this time and if
-everything goes well, I should be able to start reviewing this
-patchset during the week of February 7th.
+Nevermind, was a brainfart.
+We can't move that into the if, since that happens inside the
+KUNIT_ASSERTION macro and so we need to initialize __text outside of
+it.
 
-Thanks,
-Mathieu
+It's a bit unfortunately we need to pay the cost of initializing
+__text even when we might not use it, but that's honestly a fairly
+minimal cost and performance isn't KUnit's focus anyways.
 
-On Thu, 13 Jan 2022 at 02:11, James Clark <james.clark@arm.com> wrote:
+> 2) probably should rename loc to __loc, oops.
 >
-> This allows enabling branch broadcast for Perf hosted sessions (the option
-> is currently only available for the sysfs interface). Hopefully this could
-> be useful for testing the decode in perf, for example does a determinisitic
-> run with branch broadcast enabled look the same as with it disabled? It
-> could also be used for scenarios like OpenJ9's support for JIT code:
+> I'll send out a v2 that does #1.
+> Maybe I'll include another patch that does #2 at the end of this
+> series since the source patch already got picked up into Shuah's tree.
 >
->   java -Xjit:perfTool hello.java
->
-> Currently this is not working and you get the usual errors of a missing
-> DSO, but branch broadcast would have to be enabled anyway before working
-> through this next issue:
->
->   CS ETM Trace: Debug data not found for address 0xffff7b94b058 in /tmp/perf-29360.map
->
-> Address range support in Perf for branch broadcast has also not been added
-> here, but could be added later.
->
-> The documentation has been refactored slightly to allow updates to be made
-> that link the Perf format arguments with the existing documentation.
->
-> For Suzuki's comment, I will do it as a separate change that converts all
-> the other hard coded values to a more consistent sysreg.h style:
->
->   nit: While at this, please could you change the hard coded value
->   to ETM4_CFG_BIT_RETSTK ?
->
-> Changes since v1:
->
->   * Added Leo's reviewed by on patch 3
->   * Fix bracket styling
->   * Add documentation
->
-> Applies on top of coresight/next efa56eddf5d5c. But this docs fix is also
-> required to get the links to work:
->   https://marc.info/?l=linux-doc&m=164139331923986&w=2
->
-> Also available at: https://gitlab.arm.com/linux-arm/linux-jc/-/tree/james-branch-broadcast-v2
->
-> James Clark (6):
->   coresight: Add config flag to enable branch broadcast
->   coresight: Fail to open with return stacks if they are unavailable
->   perf cs-etm: Update deduction of TRCCONFIGR register for branch
->     broadcast
->   Documentation: coresight: Turn numbered subsections into real
->     subsections
->   Documentation: coresight: Link config options to existing
->     documentation
->   Documentation: coresight: Expand branch broadcast documentation
->
->  .../coresight/coresight-etm4x-reference.rst   | 14 ++++-
->  Documentation/trace/coresight/coresight.rst   | 56 +++++++++++++++++--
->  .../hwtracing/coresight/coresight-etm-perf.c  |  2 +
->  .../coresight/coresight-etm4x-core.c          | 23 ++++++--
->  include/linux/coresight-pmu.h                 |  2 +
->  tools/include/linux/coresight-pmu.h           |  2 +
->  tools/perf/arch/arm/util/cs-etm.c             |  3 +
->  7 files changed, 92 insertions(+), 10 deletions(-)
->
-> --
-> 2.28.0
->
+> >
+> > I think left_text / right_text are good enough names, too: I wouldn't
+> > bother trying to make them .left/.right.
+> >
+> >
+> > Reviewed-by: David Gow <davidgow@google.com>

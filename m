@@ -2,105 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA5049DEEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC4049DEF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 11:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiA0KMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 05:12:47 -0500
-Received: from mail-ua1-f49.google.com ([209.85.222.49]:36775 "EHLO
-        mail-ua1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiA0KMp (ORCPT
+        id S234878AbiA0KOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 05:14:34 -0500
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:59870
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229518AbiA0KOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 05:12:45 -0500
-Received: by mail-ua1-f49.google.com with SMTP id u76so3808915uau.3;
-        Thu, 27 Jan 2022 02:12:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y8tFLfG3AkbX5FC2LkFwx+nrAMcVQcoVBJvwDmbMZbE=;
-        b=ghD6eUP5+9xYrVMzM4SXkCmEgS8ZwIVwvqpd0PwSB9TGpw4BHRw/Jve3AYZi02vDXP
-         1jVif9W4JdGBcJrQ/TaIpQcuyx4zFPFiJEEL8dgPxSpu/fMR/KL6EdOBuNgO5iDN0cir
-         zkXbfjsgAnTFBqHMo3hB2T5Hem76Mm8/nxSlknwtOVDcncYH6iQ0F3zbZ6BbK2RjLHhq
-         Zdw/PHSFNC9uJj+2y765ba13C/CDKgBLOqyNPTXyb6zelrNczKUCGbbF04QMoZPyuwz9
-         syNs97JXqd00tKqWp5RTice7AimkGSyimiOlRJ5stECQorkpatm+ps3puic0/LWRFC8G
-         WXIw==
-X-Gm-Message-State: AOAM530hPE4PpTYhPUTZQPC864PFvtuGxg4HhdXOLT/e5gaSCjWLYoKG
-        F7nIMyJUPbF58rUI+dfoIrDZhMqLA74Jkw==
-X-Google-Smtp-Source: ABdhPJygabxpKaOvJSjf6MZ745UE5jG/K/hV4OcXsIIiAXNGIOa32UslKNPUjZ6tGIn6tA+/4m7u+w==
-X-Received: by 2002:a67:b003:: with SMTP id z3mr1292949vse.64.1643278365124;
-        Thu, 27 Jan 2022 02:12:45 -0800 (PST)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id z27sm489554vsf.24.2022.01.27.02.12.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 02:12:44 -0800 (PST)
-Received: by mail-ua1-f48.google.com with SMTP id y4so3825165uad.1;
-        Thu, 27 Jan 2022 02:12:44 -0800 (PST)
-X-Received: by 2002:ab0:6cf9:: with SMTP id l25mr1377097uai.122.1643278364573;
- Thu, 27 Jan 2022 02:12:44 -0800 (PST)
+        Thu, 27 Jan 2022 05:14:31 -0500
+Received: from [192.168.1.9] (unknown [222.129.35.96])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 0957F3F336;
+        Thu, 27 Jan 2022 10:14:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643278469;
+        bh=B7XWtDPVFpdv23EpjWRaYlK3xfQcvW6SrE+CKuoYqBg=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=mqyQ2xuvMdVBoVdv50FL9fafQQh5ywYnm3cdnTtKaBO3pBcGTTH5ZfZHOGf3PykO2
+         nArGyJtfQVRarvtpkL5TjzR9BgWSiRPiih0We9eFD5HvaYGZdnAR4iXm9wU4M2Ysrg
+         AqyZgB88sChq/d+8Ff70QwDFyocJtC3WAApIMhScZlndLy/1F0BdMs12Lk8F4hyoIw
+         ioJTRGsVYx+1CtMPEjvMmcb3QGozV7zBkL4EMTGVfZZgIRsaPZEs2KqlcPEG1RDDOw
+         SGzcCsyOT7RB5avhcDYO/XOlwSZdaG2NNf/C8hZCnJ7jSQTRk+1ew/0KKyxw1ulhBF
+         Bpy3Q96yAfDQw==
+Message-ID: <4ba77e39-93e7-9263-0a3a-57695e4ad945@canonical.com>
+Date:   Thu, 27 Jan 2022 18:14:19 +0800
 MIME-Version: 1.0
-References: <20220121014117.21248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220121014117.21248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 27 Jan 2022 11:12:33 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUW+7mCLHnWbPQ4oxNO9Awri9TNN8bTDq7uGSYncAdWKw@mail.gmail.com>
-Message-ID: <CAMuHMdUW+7mCLHnWbPQ4oxNO9Awri9TNN8bTDq7uGSYncAdWKw@mail.gmail.com>
-Subject: Re: [PATCH v2] soc: renesas: Add support for reading product revision
- for RZ/G2L family
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] net: usb: r8152: Add MAC passthrough support for
+ RTL8153BL
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Mario.Limonciello@amd.com, kuba@kernel.org,
+        henning.schild@siemens.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, hayeswang@realtek.com, tiwai@suse.de
+References: <20220127100109.12979-1-aaron.ma@canonical.com>
+ <YfJvhItQAmRJrool@kroah.com>
+From:   Aaron Ma <aaron.ma@canonical.com>
+In-Reply-To: <YfJvhItQAmRJrool@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+On 1/27/22 18:10, Greg KH wrote:
+>> +#define BL_MASK                 BIT(3)
+> No tab?:(
+> 
 
-On Fri, Jan 21, 2022 at 2:41 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> From: Biju Das <biju.das.jz@bp.renesas.com>
->
-> As per RZ/G2L HW manual (Rev.1.00 Sep, 2021) DEV_ID [31:28] indicates
-> product revision. Use this information to populate the revision info
-> for RZ/G2L family.
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v1->v2
-> * Fixed freeing up soc_dev_attr in error path.
+My bad, vim paste.
+Allow me to fix it v2.
 
-Thanks for the update!
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.18.
-
-> --- a/drivers/soc/renesas/renesas-soc.c
-> +++ b/drivers/soc/renesas/renesas-soc.c
-> @@ -405,41 +417,38 @@ static int __init renesas_soc_init(void)
->
->                         eshi = ((product >> 4) & 0x0f) + 1;
->                         eslo = product & 0xf;
-> +                       soc_dev_attr->revision = kasprintf(GFP_KERNEL, "ES%u.%u",
-> +                                                          eshi, eslo);
-> +               }  else if (id == &id_rzg2l) {
-> +                       eshi =  ((product >> 28) & 0x0f);
-> +                       soc_dev_attr->revision = kasprintf(GFP_KERNEL, "Rev %u",
-> +                                                          eshi);
-
-Would you mind if I would drop the "Rev " while applying?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Aaron

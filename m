@@ -2,156 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED21449D713
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B710F49D715
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbiA0BAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 20:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234211AbiA0BAb (ORCPT
+        id S234242AbiA0BBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 20:01:04 -0500
+Received: from lgeamrelo13.lge.com ([156.147.23.53]:44500 "EHLO
+        lgeamrelo11.lge.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231469AbiA0BBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 20:00:31 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B3BC06173B;
-        Wed, 26 Jan 2022 17:00:31 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id e16so1239276qtq.6;
-        Wed, 26 Jan 2022 17:00:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GxAKjAaT7xRmtbaC3UIIpwOLw+3uTtc8mu7tmoAjfy4=;
-        b=Zz5yz1+UVMMTvLCtOtyv1ZgzZJE+2Lbq65e1LjBY2npGuew1iHnyPapsTtMOi75TUT
-         OfHJYobE6UF154PgmJ07u8oVnSikBFm32KgAAf4mtcRE647MF4g+YG4nBr6+6dhU4AMR
-         ZL9cs3fdTfoSbP5Re4bP3QUTpj+If2aBNL1cbldtmqrUa127ilFC6P2DZoEUOtm/0y33
-         tobH1jDchHq7J0Kcwyj/26mufSQ+K42HYBfc04EGwlCLOVI5iVztHPK9bn4joRWodAK1
-         4diVKf38TynRJDKMTWjngeHPelD3K13PgZtiMMDysSNIS0+N7ANcGX34PEGrquNOou7i
-         e6aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GxAKjAaT7xRmtbaC3UIIpwOLw+3uTtc8mu7tmoAjfy4=;
-        b=7Q9xJILXcuq2HoV7Xxi9xQq5DZxmhSeD/z5W5jFY/PPYWqqKOoiifVHwhhOMNiYb7t
-         l8qttxQmynNqNWbmxdE47NHUbkltskAzLLvmkh8cg3xFbVwcQecmc7WXgFU/DazQvfyN
-         nezOMeQfU2iYI4nb3byQgQG8FtTyjqRT7PUKw2v3Q84Q3gN5AYGC5Do2VBV7fMswb7VS
-         83W6HmyPw9rzerO6yBbrjqveCnS3L9kp/vs7n6IbqfCl41iB5A58TmBVNYiRvaJlKfpi
-         pBwzWNb+qJgRZcKSj8oA7pEklmvfs3EapsS4cbJ0gS5h5HnQSHwUJ8ULH36r09hsyB1j
-         5jqw==
-X-Gm-Message-State: AOAM533bqMicg1KiEuf940wLsvMqwLpFB2BmcVBUXSFrau85CVSpjqSO
-        rK7cg2WedLNfybOuKUyzzNk=
-X-Google-Smtp-Source: ABdhPJwg/dm6qzEciVkoxXvVnll6gPik2tZHun90f4n5bDYY8SUlJCOcYtpp5q5msQBnzLhJSOiGrQ==
-X-Received: by 2002:ac8:578e:: with SMTP id v14mr1045070qta.345.1643245230206;
-        Wed, 26 Jan 2022 17:00:30 -0800 (PST)
-Received: from master-x64.sparksnet (c-98-233-193-225.hsd1.dc.comcast.net. [98.233.193.225])
-        by smtp.gmail.com with ESMTPSA id n2sm483389qti.59.2022.01.26.17.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 17:00:30 -0800 (PST)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>
-Cc:     Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: rockchip: add Quartz64-A sdmmc1 node
-Date:   Wed, 26 Jan 2022 20:00:23 -0500
-Message-Id: <20220127010023.3169415-4-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220127010023.3169415-1-pgwipeout@gmail.com>
-References: <20220127010023.3169415-1-pgwipeout@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 26 Jan 2022 20:01:02 -0500
+Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
+        by 156.147.23.53 with ESMTP; 27 Jan 2022 10:00:57 +0900
+X-Original-SENDERIP: 156.147.1.126
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
+        by 156.147.1.126 with ESMTP; 27 Jan 2022 10:00:57 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     torvalds@linux-foundation.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+        amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: [RFC 00/14] DEPT(DEPendency Tracker)
+Date:   Thu, 27 Jan 2022 10:00:53 +0900
+Message-Id: <1643245254-11122-1-git-send-email-byungchul.park@lge.com>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1643078204-12663-1-git-send-email-byungchul.park@lge.com>
+References: <1643078204-12663-1-git-send-email-byungchul.park@lge.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sdmmc1 node on Quartz64-A supports the optional wifi module from
-Pine64.
-Add the sdmmc1 node and requisite sdio_pwrseq to enable wifi support on
-the Quartz64-A.
++cc
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
----
- .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
+linux-mm@kvack.org
+akpm@linux-foundation.org
+mhocko@kernel.org
+minchan@kernel.org
+hannes@cmpxchg.org
+vdavydov.dev@gmail.com
+sj@kernel.org
+jglisse@redhat.com
+dennis@kernel.org
+cl@linux.com
+penberg@kernel.org
+rientjes@google.com
+vbabka@suse.cz
+ngupta@vflare.org
+linux-block@vger.kernel.org
+axboe@kernel.dk
+paolo.valente@linaro.org
+josef@toxicpanda.com
+linux-fsdevel@vger.kernel.org
+viro@zeniv.linux.org.uk
+jack@suse.cz
+jlayton@kernel.org
+dan.j.williams@intel.com
+hch@infradead.org
+djwong@kernel.org
+dri-devel@lists.freedesktop.org
+airlied@linux.ie
+rodrigosiqueiramelo@gmail.com
+melissa.srw@gmail.com
+hamohammed.sa@gmail.com
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index 33c2c18caaa9..1d73ac6557c5 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-@@ -91,6 +91,18 @@ simple-audio-card,codec {
- 		};
- 	};
- 
-+	sdio_pwrseq: sdio-pwrseq {
-+		status = "okay";
-+		compatible = "mmc-pwrseq-simple";
-+		clocks = <&rk817 1>;
-+		clock-names = "ext_clock";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wifi_enable_h>;
-+		reset-gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_LOW>;
-+		post-power-on-delay-ms = <100>;
-+		power-off-delay-us = <5000000>;
-+	};
-+
- 	vcc12v_dcin: vcc12v_dcin {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc12v_dcin";
-@@ -147,6 +159,17 @@ vcc_sys: vcc_sys {
- 		regulator-max-microvolt = <4400000>;
- 		vin-supply = <&vbus>;
- 	};
-+
-+	/* sourced from vcc_sys, sdio module operates internally at 3.3v */
-+	vcc_wl: vcc_wl {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc_wl";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc_sys>;
-+	};
- };
- 
- &cpu0 {
-@@ -475,6 +498,12 @@ pmic_int_l: pmic-int-l {
- 		};
- 	};
- 
-+	sdio-pwrseq {
-+		wifi_enable_h: wifi-enable-h {
-+			rockchip,pins = <2 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	vcc_sd {
- 		vcc_sd_h: vcc-sd-h {
- 			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -516,6 +545,22 @@ &sdmmc0 {
- 	status = "okay";
- };
- 
-+&sdmmc1 {
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	cap-sdio-irq;
-+	disable-wp;
-+	keep-power-in-suspend;
-+	mmc-pwrseq = <&sdio_pwrseq>;
-+	non-removable;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sdmmc1_bus4 &sdmmc1_cmd &sdmmc1_clk>;
-+	sd-uhs-sdr104;
-+	vmmc-supply = <&vcc_wl>;
-+	vqmmc-supply = <&vcc_1v8>;
-+	status = "okay";
-+};
-+
- &spdif {
- 	status = "okay";
- };
+--->8---
+From 68ee7ab996fc7d67b6b506f48da106493ca2546a Mon Sep 17 00:00:00 2001
+From: Byungchul Park <byungchul.park@lge.com>
+Date: Tue, 25 Jan 2022 10:12:54 +0900
+Subject: [RFC 00/14] DEPT(DEPendency Tracker)
+
+Hi forks,
+
+I've been developing a tool for detecting deadlock possibilities by
+tracking wait/event rather than lock(?) acquisition order to try to
+cover all synchonization machanisms. It's done on v5.10 tag. I bet
+it would work great! Try it and see what's gonna happen.
+
+Now that there's a porting issue, I made Dept rely on Lockdep. But it
+should be separated from Lockdep once it's considered worth having.
+
+Benifit:
+
+	0. Works with all lock primitives.
+	1. Works with wait_for_completion()/complete().
+	2. Works with 'wait' on PG_locked.
+	3. Works with 'wait' on PG_writeback.
+	4. Works with swait/wakeup.
+	5. Multiple reports are allowed.
+	6. Deduplication control on multiple reports.
+	7. Withstand false positives thanks to 5.
+	8. Easy to tag any wait/event.
+
+Future work:
+
+	0. To make it more stable.
+	1. To separates Dept from Lockdep.
+	2. To improves performance in terms of time and space.
+	3. To use Dept as a dependency engine for Lockdep.
+	4. To add any missing tags of wait/event in the kernel.
+	5. To deduplicate stack trace.
+
+I hope you guys are gonna be satisfied with Dept. Don't hesitate to
+give any feedback. I will adopt any feedbacks if reasonable.
+
+Thanks,
+Byungchul
+
+Byungchul Park (14):
+  llist: Move llist_{head,node} definition to types.h
+  dept: Implement Dept(Dependency Tracker)
+  dept: Embed Dept data in Lockdep
+  dept: Apply Dept to spinlock
+  dept: Apply Dept to mutex families
+  dept: Apply Dept to rwlock
+  dept: Apply Dept to wait_for_completion()/complete()
+  dept: Apply Dept to seqlock
+  dept: Apply Dept to rwsem
+  dept: Add proc knobs to show stats and dependency graph
+  dept: Introduce split map concept and new APIs for them
+  dept: Apply Dept to wait/event of PG_{locked,writeback}
+  dept: Separate out SDT(Single-event Dependency Tracker) header
+  dept: Apply SDT to swait
+
+ include/linux/completion.h        |   48 +-
+ include/linux/dept.h              |  541 ++++++++
+ include/linux/dept_page.h         |   71 +
+ include/linux/dept_sdt.h          |   53 +
+ include/linux/hardirq.h           |    3 +
+ include/linux/irqflags.h          |   33 +-
+ include/linux/llist.h             |    9 +-
+ include/linux/lockdep.h           |  156 ++-
+ include/linux/lockdep_types.h     |    3 +
+ include/linux/mutex.h             |   31 +
+ include/linux/page-flags.h        |   26 +-
+ include/linux/pagemap.h           |    7 +-
+ include/linux/percpu-rwsem.h      |   10 +-
+ include/linux/rtmutex.h           |   11 +-
+ include/linux/rwlock.h            |   48 +
+ include/linux/rwlock_api_smp.h    |    8 +-
+ include/linux/rwlock_types.h      |    7 +
+ include/linux/rwsem.h             |   31 +
+ include/linux/sched.h             |    3 +
+ include/linux/seqlock.h           |   19 +-
+ include/linux/spinlock.h          |   24 +
+ include/linux/spinlock_types.h    |   10 +
+ include/linux/swait.h             |    4 +
+ include/linux/types.h             |    8 +
+ init/init_task.c                  |    2 +
+ init/main.c                       |    4 +
+ kernel/Makefile                   |    1 +
+ kernel/dependency/Makefile        |    5 +
+ kernel/dependency/dept.c          | 2593 +++++++++++++++++++++++++++++++++++++
+ kernel/dependency/dept_hash.h     |   11 +
+ kernel/dependency/dept_internal.h |   26 +
+ kernel/dependency/dept_object.h   |   14 +
+ kernel/dependency/dept_proc.c     |   97 ++
+ kernel/exit.c                     |    1 +
+ kernel/fork.c                     |    2 +
+ kernel/locking/lockdep.c          |   12 +-
+ kernel/module.c                   |    2 +
+ kernel/sched/completion.c         |   12 +-
+ kernel/sched/swait.c              |    8 +
+ kernel/softirq.c                  |    6 +-
+ kernel/trace/trace_preemptirq.c   |   19 +-
+ lib/Kconfig.debug                 |   21 +
+ mm/filemap.c                      |   62 +
+ mm/page_ext.c                     |    5 +
+ 44 files changed, 4009 insertions(+), 58 deletions(-)
+ create mode 100644 include/linux/dept.h
+ create mode 100644 include/linux/dept_page.h
+ create mode 100644 include/linux/dept_sdt.h
+ create mode 100644 kernel/dependency/Makefile
+ create mode 100644 kernel/dependency/dept.c
+ create mode 100644 kernel/dependency/dept_hash.h
+ create mode 100644 kernel/dependency/dept_internal.h
+ create mode 100644 kernel/dependency/dept_object.h
+ create mode 100644 kernel/dependency/dept_proc.c
+
 -- 
-2.25.1
+1.9.1
 

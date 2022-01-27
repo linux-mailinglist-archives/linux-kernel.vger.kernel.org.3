@@ -2,181 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DAA49DE89
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D5349DE8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238332AbiA0Jz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234345AbiA0JzZ (ORCPT
+        id S238488AbiA0Jzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:55:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60502 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232315AbiA0JzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Jan 2022 04:55:25 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D130C061714;
-        Thu, 27 Jan 2022 01:55:25 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id h14so6851948ybe.12;
-        Thu, 27 Jan 2022 01:55:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/EedJrG4ul4UwFA3alRTDn+7vyfBymCk2ZRwzLvGunI=;
-        b=VAkvS+4+4m9uodQr+lOef7e4aMBiZSRvbRhCl8EvFL8dPoU7aajphSlGTJwbf6G4RG
-         +KAXXYIhkuR61kROEhKH5Y0ouyYWDZ48ay/s3NbZKieWtbC+xL3SRtHVmPFWVaqaB2A1
-         f+bEkgdj4JRAYXZnHb6AXZgHtfuBQQBqO0Z8JDTwAzzyuIYU25252pG6JUgtROEXOH00
-         BPRvyHAUGhHCL0i6LFN8ICnurGmT03vxwzT9kFJCcIpNC24vcFBOZiykXSAQ0PAQ61sy
-         +Bw6JnodlGy+8diz8TaiJk6lQv4WXkYyYRl4Mg0Q8lLfCqHb0nBLN+gpsT38Xr+4gTgS
-         q9gA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643277325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ayJC/AZO9vzgGtnHmUqrAsjgR30wt4COjGg6oQDHxO0=;
+        b=aPKLsa7zUMXolsLKrmUt3tzDuQkXlZvF1cFA4TD1w7mCFu/ddzGMoZpSJ42+IzBy2AYO6u
+        uWwFs6Ej4E0ZNv30fLfFIsm2+yonvRaj0eRvATxED+Dxa9s/maPbHvYaT2TL8VjY6O2zYh
+        60vHUq/It8vY1Bhnt6HUqpArpa27REg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-275-ezjar76PMAiIy1sw3wnrjw-1; Thu, 27 Jan 2022 04:55:22 -0500
+X-MC-Unique: ezjar76PMAiIy1sw3wnrjw-1
+Received: by mail-wm1-f69.google.com with SMTP id bg32-20020a05600c3ca000b00349f2aca1beso1237337wmb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:55:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/EedJrG4ul4UwFA3alRTDn+7vyfBymCk2ZRwzLvGunI=;
-        b=lryoYfNPfPamztyoIjr52kQRROW4ix9O1Pz3IWatpCO706mi8pldTg7Kh0zKQNr3v7
-         7eID1CwImpRbELLA4ziMU6O8eNf415wXzte3YBM3l3BRd8P1dD0DwlQUIR8A4m6TWEwx
-         PaiA5qB45yjId/gdIwRSsnUXeCzQmC7hVNjAH0xN6nOmHv+sOmjgGzCDzs3HLOwnQAgC
-         J7MIvHFh4hIeX7Q6Iih0K8i9IvOMYCptSDrk8ucJxl/WVr0KEOMofGElppZtCmYn3c+Q
-         718X6rtdm7MgEdMeOYYzrnSug3GlVhwzi3OM8FGFGzjgEjfjcNDnQ6xfayt7orKKuNbA
-         2heg==
-X-Gm-Message-State: AOAM531jXcp853Ql2Q3QZ+FIDGejmTjPQHqSD1jpviNdbYpFyAJhFOHK
-        J9Ykz0VqbS0NGSQHScA86JMlIow5bqnFY7QEeSw=
-X-Google-Smtp-Source: ABdhPJxprAY982Zt5MSbxLAgHsuavBv30BLYQ5498ZVxx3qKzuslSVSbiUu9KBNIyQ9Kxqga4qYumyh/Rxyodf8MQxk=
-X-Received: by 2002:a25:dfc7:: with SMTP id w190mr4396026ybg.696.1643277324675;
- Thu, 27 Jan 2022 01:55:24 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=ayJC/AZO9vzgGtnHmUqrAsjgR30wt4COjGg6oQDHxO0=;
+        b=fKoJ5zSWTigN9AQAALgVGnqJV4C07sVT+n9f8wOPseWze7NhRGY+8nK0AkSQv8VXlW
+         U60T49UhFXh2fUJfRW1JcMbcPJRqumZ6wcpxAzym3Sh0BY6Jw1tdpzDlUAGtZmhv4KJg
+         E7Hv75BnZL4dwV5i0sIAP8SPhrgv8iI9GYa89QLAsTNRcXXWo/eKwqXYVr25lxSU7k7u
+         mctANaZWr7J+0lXHhkp39qufaDIdUeVtnt1eM+7UJSkw6gIAwjLDcNkMxqkWGKk6McdP
+         5eJZCuRWZkBsCZc8K1VyisEuFkliaGbX9s5A19a4pKtZOTxIeBLHTAfk72gNHEqVI2RA
+         pp3w==
+X-Gm-Message-State: AOAM5317rvmyTExypnj/P45ppcK20mrnWmTDMKTYWR7osIvAIM5IG5Qk
+        JceXapfqKXP9eH1AuinFSyGn1A8RsEWtVvebvled0DYP3f+xPzpzv9Ejobk4RaxniagyzYGJECd
+        tmZguGOf7kLFEq7lo50coJ7Vm
+X-Received: by 2002:adf:fd4e:: with SMTP id h14mr2208994wrs.675.1643277321621;
+        Thu, 27 Jan 2022 01:55:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxZjm99+TehRbfRz6MCxIEwSAqNIX73JIx0nKVcQ4IDxr+ai0NNDfqWzRX2Azp20cMyui99Gw==
+X-Received: by 2002:adf:fd4e:: with SMTP id h14mr2208981wrs.675.1643277321380;
+        Thu, 27 Jan 2022 01:55:21 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70d:8300:4812:9d4f:6cd8:7f47? (p200300cbc70d830048129d4f6cd87f47.dip0.t-ipconnect.de. [2003:cb:c70d:8300:4812:9d4f:6cd8:7f47])
+        by smtp.gmail.com with ESMTPSA id e13sm1980242wrq.35.2022.01.27.01.55.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 01:55:20 -0800 (PST)
+Message-ID: <f65493d9-e46f-af9f-1895-1f5b546bb5ed@redhat.com>
+Date:   Thu, 27 Jan 2022 10:55:20 +0100
 MIME-Version: 1.0
-References: <20220127010023.3169415-1-pgwipeout@gmail.com> <20220127010023.3169415-4-pgwipeout@gmail.com>
- <07281029-0efd-0a74-0d96-92e3dcf5bbb7@gmail.com>
-In-Reply-To: <07281029-0efd-0a74-0d96-92e3dcf5bbb7@gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Thu, 27 Jan 2022 04:55:13 -0500
-Message-ID: <CAMdYzYrKq==Bs0aonrJBC+W2c4nQ8cUn2dn_Se4WDaRCkT6SYg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: dts: rockchip: add Quartz64-A sdmmc1 node
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] mm/mmzone.h: remove unused macros
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220127093210.62293-1-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220127093210.62293-1-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 1:18 AM Johan Jonker <jbx6244@gmail.com> wrote:
->
->
->
-> On 1/27/22 02:00, Peter Geis wrote:
-> > The sdmmc1 node on Quartz64-A supports the optional wifi module from
-> > Pine64.
-> > Add the sdmmc1 node and requisite sdio_pwrseq to enable wifi support on
-> > the Quartz64-A.
-> >
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > ---
-> >  .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 45 +++++++++++++++++++
-> >  1 file changed, 45 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> > index 33c2c18caaa9..1d73ac6557c5 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> > @@ -91,6 +91,18 @@ simple-audio-card,codec {
-> >               };
-> >       };
-> >
-> > +     sdio_pwrseq: sdio-pwrseq {
->
-> > +             status = "okay";
->
-> When a node is not previously disabled, then there's no need for "okay".
+On 27.01.22 10:32, Miaohe Lin wrote:
+> Remove pgdat_page_nr, nid_page_nr and NODE_MEM_MAP. They are unused now.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  include/linux/mmzone.h | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index aed44e9b5d89..6c004256d943 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -920,12 +920,6 @@ typedef struct pglist_data {
+>  
+>  #define node_present_pages(nid)	(NODE_DATA(nid)->node_present_pages)
+>  #define node_spanned_pages(nid)	(NODE_DATA(nid)->node_spanned_pages)
+> -#ifdef CONFIG_FLATMEM
+> -#define pgdat_page_nr(pgdat, pagenr)	((pgdat)->node_mem_map + (pagenr))
+> -#else
+> -#define pgdat_page_nr(pgdat, pagenr)	pfn_to_page((pgdat)->node_start_pfn + (pagenr))
+> -#endif
+> -#define nid_page_nr(nid, pagenr) 	pgdat_page_nr(NODE_DATA(nid),(pagenr))
+>  
+>  #define node_start_pfn(nid)	(NODE_DATA(nid)->node_start_pfn)
+>  #define node_end_pfn(nid) pgdat_end_pfn(NODE_DATA(nid))
+> @@ -1101,7 +1095,6 @@ static inline struct pglist_data *NODE_DATA(int nid)
+>  {
+>  	return &contig_page_data;
+>  }
+> -#define NODE_MEM_MAP(nid)	mem_map
+>  
+>  #else /* CONFIG_NUMA */
+>  
 
-Thanks, this is here in case an end user wants to easily hack the
-board to use this for other purposes.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
->
-> > +             compatible = "mmc-pwrseq-simple";
-> > +             clocks = <&rk817 1>;
-> > +             clock-names = "ext_clock";
-> > +             pinctrl-names = "default";
-> > +             pinctrl-0 = <&wifi_enable_h>;
-> > +             reset-gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_LOW>;
-> > +             post-power-on-delay-ms = <100>;
-> > +             power-off-delay-us = <5000000>;
-> > +     };
-> > +
-> >       vcc12v_dcin: vcc12v_dcin {
-> >               compatible = "regulator-fixed";
-> >               regulator-name = "vcc12v_dcin";
-> > @@ -147,6 +159,17 @@ vcc_sys: vcc_sys {
-> >               regulator-max-microvolt = <4400000>;
-> >               vin-supply = <&vbus>;
-> >       };
-> > +
-> > +     /* sourced from vcc_sys, sdio module operates internally at 3.3v */
-> > +     vcc_wl: vcc_wl {
-> > +             compatible = "regulator-fixed";
-> > +             regulator-name = "vcc_wl";
-> > +             regulator-always-on;
-> > +             regulator-boot-on;
-> > +             regulator-min-microvolt = <3300000>;
-> > +             regulator-max-microvolt = <3300000>;
-> > +             vin-supply = <&vcc_sys>;
-> > +     };
-> >  };
-> >
-> >  &cpu0 {
-> > @@ -475,6 +498,12 @@ pmic_int_l: pmic-int-l {
-> >               };
-> >       };
-> >
-> > +     sdio-pwrseq {
-> > +             wifi_enable_h: wifi-enable-h {
-> > +                     rockchip,pins = <2 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
-> > +             };
-> > +     };
-> > +
-> >       vcc_sd {
-> >               vcc_sd_h: vcc-sd-h {
-> >                       rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
-> > @@ -516,6 +545,22 @@ &sdmmc0 {
-> >       status = "okay";
-> >  };
-> >
-> > +&sdmmc1 {
-> > +     bus-width = <4>;
-> > +     cap-sd-highspeed;
-> > +     cap-sdio-irq;
->
-> > +     disable-wp;
->
-> From mmc-controller.yaml:
->
->   disable-wp:
->     $ref: /schemas/types.yaml#/definitions/flag
->     description:
->       When set, no physical write-protect line is present. This
->       property should only be specified when the controller has a
->       dedicated write-protect detection logic. If a GPIO is always used
->       for the write-protect detection logic, it is sufficient to not
->       specify the wp-gpios property in the absence of a write-protect
->       line. Not used in combination with eMMC or SDIO.
+-- 
+Thanks,
 
-Appreciate it, I will drop this.
+David / dhildenb
 
->
-> > +     keep-power-in-suspend;
-> > +     mmc-pwrseq = <&sdio_pwrseq>;
-> > +     non-removable;
-> > +     pinctrl-names = "default";
-> > +     pinctrl-0 = <&sdmmc1_bus4 &sdmmc1_cmd &sdmmc1_clk>;
-> > +     sd-uhs-sdr104;
-> > +     vmmc-supply = <&vcc_wl>;
-> > +     vqmmc-supply = <&vcc_1v8>;
-> > +     status = "okay";
-> > +};
-> > +
-> >  &spdif {
-> >       status = "okay";
-> >  };

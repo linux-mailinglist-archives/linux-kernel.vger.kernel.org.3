@@ -2,110 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7825C49ED76
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C039D49ED79
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344387AbiA0Vfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 16:35:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37872 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344382AbiA0Vfe (ORCPT
+        id S1344400AbiA0Vgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 16:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240790AbiA0Vgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 16:35:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6350FB8235A;
-        Thu, 27 Jan 2022 21:35:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D5E4C340E4;
-        Thu, 27 Jan 2022 21:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643319332;
-        bh=ZOy4cVJA1BbVLKHYo7U0M4xJy3LtHwHCgHuQBsugCEE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MkqdQm40rU2640o7ii+zKdxu1PyVT+dnjNDKb31tlXi69hKooYzZVjiM6SQr0cQaV
-         hty2UXyrlyz3BFhxjLMfMe9uVS7Yx9f+pU4ls3IDI+9et2W5yGp0A1/2U6SUSfTLZX
-         FfWhg3ckFL5hDCnEKX9ONzdEBc4WQLaWjUnrZyJiDkGViAml2dnjxT5MJdM/BNMLbj
-         T55CcdqTtEE/Legh2uGmcSvAD26QNjTbCoWitUsT9ExVL8kXDzWO3kpw+MOif/PfeP
-         NmMbEmvwWYZHjpff31iPkPp8A5nBtTMr/JEp/dyJi9gfwMED5oMVG7AuwNIV8Xh5Cb
-         BTOzMAwjQN5Qw==
-Date:   Thu, 27 Jan 2022 22:35:28 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Terry Bowman <Terry.Bowman@amd.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        sudheesh.mavila@amd.com,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Subject: Re: [PATCH v3 7/9] i2c: piix4: Add EFCH MMIO support to SMBus base
- address detect
-Message-ID: <YfMQIERpNPUtm8Qg@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <Terry.Bowman@amd.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Robert Richter <rrichter@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, sudheesh.mavila@amd.com,
-        "Shah, Nehal-bakulchandra" <Nehal-bakulchandra.Shah@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-References: <20220119230626.31560-1-terry.bowman@amd.com>
- <20220119230626.31560-8-terry.bowman@amd.com>
- <CAHp75VdtnOuBK1ctkjO59vujopCrQ+MQ_LyBB+Mi2HJk4HaJuQ@mail.gmail.com>
- <67071cd7-b1b1-7647-3090-365b45b3b1f6@amd.com>
+        Thu, 27 Jan 2022 16:36:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB95C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 13:36:31 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nDCRC-0006Rf-Ku; Thu, 27 Jan 2022 22:36:14 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nDCRB-00CpYf-FH; Thu, 27 Jan 2022 22:36:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nDCRA-001olD-2d; Thu, 27 Jan 2022 22:36:12 +0100
+Date:   Thu, 27 Jan 2022 22:36:07 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-fbdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Noralf Tronnes <notro@tronnes.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        kernel@pengutronix.de, Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH 2/5] staging: fbtft: Deduplicate driver registration
+ macros
+Message-ID: <20220127213607.xbggvbm454u7qfid@pengutronix.de>
+References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
+ <20220123175201.34839-3-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EYvDka3TInQc7Mtl"
+        protocol="application/pgp-signature"; boundary="67mr4ifnx6prswud"
 Content-Disposition: inline
-In-Reply-To: <67071cd7-b1b1-7647-3090-365b45b3b1f6@amd.com>
+In-Reply-To: <20220123175201.34839-3-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---EYvDka3TInQc7Mtl
-Content-Type: text/plain; charset=us-ascii
+--67mr4ifnx6prswud
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hello Greg,
 
-> I'll leave as-is if Ok with you.
+On Sun, Jan 23, 2022 at 06:51:58PM +0100, Uwe Kleine-K=F6nig wrote:
+> The two macros FBTFT_REGISTER_DRIVER and FBTFT_REGISTER_SPI_DRIVER
+> contain quite some duplication: Both define an spi driver and an of device
+> table and the differences are quite subtle.
+>=20
+> So create two new macros and use both twice.
+>=20
+> Link: https://lore.kernel.org/r/20220118181338.207943-2-u.kleine-koenig@p=
+engutronix.de
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Yes, it is OK.
+You picked this patch into your staging-next branch, I guess from the
+original submission. Not sure how Mark wants to continue with the series
+=66rom this thread, but at least my plan was that he will create an
+immutable branch on top of 5.17-rc2 (assuming 5.17-rc2 will contain
+"staging: fbtft: Fix error path in fbtft_driver_module_init()") with the
+remaining 4 patches in this series.
 
+In a private mail you agreed to this procedure, but this didn't stop you
+taking this patch?! What is your plan here? The obvious (to me) options
+are:
 
---EYvDka3TInQc7Mtl
+ - Delay this series until after the next merge window.
+ - You back out this patch from staging-next and ack here for Mark to
+   apply it to an immutable branch.
+ - You keep this patch in staging-next and still ack here for Mark to
+   apply it to an immutable branch. Then the patch would be included
+   twice.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--67mr4ifnx6prswud
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmHzEB8ACgkQFA3kzBSg
-KbblYhAAprdLH9goT16zYOlebtVUGbzdVXBxS+AFY82JBO+svDGPAq1mvKgTKEFY
-x4EobR9aVGdWILLXVK7T4YWE8vgH00U7JRDJE7+rYpRcAnQnk4x0j7G59wyMon+b
-D3yHeSduTgECgg5pUFb1Eeds9gXLfqwC8OhM5oZoxaG1o4fnp32wudg/uFsJrnBZ
-pGDOZc7vctlyeJF129Tuhb4C6L67EqymZLHLIgzW8fs+J4CtyEXPeaP4mpEjSfd2
-D9iWNfmlcf4n2Uc9xYN6CKWQkrnTp6pj1pIjjPoJbelRhLhVrG1dXr3Wrdpm6V7U
-3ucnMpF/cCZeepNGGdRBv+RNVwX+kle8pujN/jBhiZghsNy9V3K50jm+xAV85gGI
-2bsh11kZsBmzijOudFgW0cDUyi6Re3spaD9GhaSk/+FqGL5SHNWMxvlX3S+LHmrk
-Mrnq2WI5Ih68nEozYL9S0V+CRa08avetWtzPevqT3J8OOB+XutNIV94jtbygHvuB
-fJY09pYIs1QLjgBjBF8BZEo4YM7H4/gCAfhLiXwYqHCsn0U0dw9GaCNsjJ9tV8oV
-cL2uDE7Y+lCHy1m03niIOc0EcO7m6XWeDj9v8jNZf6jq8X3M0BIuysTqPhScUy33
-MNC5aEfWLRCYeM7QVLemmRpt7yn6d/3sCrkQIFXowcwuJVNpN74=
-=u+ce
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmHzEEQACgkQwfwUeK3K
+7AkdBQf/QYxLjRjjSpz8FTj3K6vGIxGPAC7hZKjN9Sekvmf8ql2qAJ0veXMox5Hs
+AVo6BooWW8n6qnIE6j05wMMcJz16iBdVNo5kOSFo1vt7rP0sXbp/i1UIiU1hBcTT
+Mt/oYvsLpnwdh0OyI7h3ZfOdHo05HG8l/fjCBsHMozW1wuGvVIHnbN9zMyLEClyC
+58/88JKuKUU0REoLty0vkSjzfwmbQoXTbrkXgGHUkUyzk5g4JekV2R+xIkhmVWp6
+49EtKM6Xg8ykJKh51BNltCBDtrvNRuw/oKa5atlrCgKAfhynZv29X/oPNg4jXVPw
+k3jTHuwnI9NtkZxvtNMmRylFxVvrtw==
+=JziW
 -----END PGP SIGNATURE-----
 
---EYvDka3TInQc7Mtl--
+--67mr4ifnx6prswud--

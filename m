@@ -2,125 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F122F49E232
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BAAB49E240
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241062AbiA0MUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:20:54 -0500
-Received: from foss.arm.com ([217.140.110.172]:58304 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241050AbiA0MUx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:20:53 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1F57113E;
-        Thu, 27 Jan 2022 04:20:52 -0800 (PST)
-Received: from [10.163.42.218] (unknown [10.163.42.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F1B0F3F7D8;
-        Thu, 27 Jan 2022 04:20:48 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [RFC V1 06/11] arm64/perf: Drive BRBE from perf event states
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <1642998653-21377-1-git-send-email-anshuman.khandual@arm.com>
- <1642998653-21377-7-git-send-email-anshuman.khandual@arm.com>
- <YfF/zBS3kL/+eC1k@robh.at.kernel.org>
-Message-ID: <9e56509a-2772-a333-ccc3-ad49a2028616@arm.com>
-Date:   Thu, 27 Jan 2022 17:50:54 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S240980AbiA0MWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241078AbiA0MWS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 07:22:18 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C57C061747
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:22:17 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id 23so8100967ybf.7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:22:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=3hB9Pz6IWWJ5e7Q7LJO+f7Hvw0FPQfxvZX3pslGGprg=;
+        b=ntq5txrAiaRnnSYQlIbMFX9yyxuv2ySgZhUuXwgFl3VjEENE4TPnfiUcbKWy8UlCJH
+         Xv1qCObUn7HIRPtto8YmdaTIigsu2/dBkvzn5zBUCS5Rom0RnrUMLb3Hi/Y53yplNPRb
+         iSCil1KGMM17K5x1zt5/gEOx3o3O4a27dS+B20iOxYHrBaDQQYXZ2skDKGiYC8Yd5U+O
+         rtuO1yMa2eiiI4Fb9RQvskyNLOQwNSn5ioCb+pyLVAHGAUrqZZaeJxTEX4tyDRjirPMy
+         EYuyE+oBQnfwKwtfEK4+pjkM2bct8AFgQJ9DHU8VArEw375D/5uNj8pNWuqBx4OWldmg
+         l05A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=3hB9Pz6IWWJ5e7Q7LJO+f7Hvw0FPQfxvZX3pslGGprg=;
+        b=PMnVloNddLtqI70zQbA8Q+lgQVT2NsIo3VhRWcFeW05vUKkInJxrkYWAWsmBIwhLAp
+         OtDDlq3nQ/4ydJooasUhB4TaVpMfoyZzyQCq9TkCqw/Xv5mjHrTkhqYTP5JcghO7qsxC
+         cLw2V3b/3QrdazooTcfvQp+BHkcMMaeLIBKbV81DEON3kaz3e0kwStA2yP7OW39q0Mip
+         O/c1qhDsM9s/vgAduACj6UJpQDudWKX3b3UUOuJxZ10de0HBe4wD7RX0F/eDqntA2sDK
+         jGryq3ayrP7qQX38ryw3hORt8060sJhaKUwgaqaaAG8VgJTOk8YhkpvIbCtrObr6/X83
+         /cVg==
+X-Gm-Message-State: AOAM53124s2ovwLdokFsTMtcxyOgtOKElROXNZQaO0RyE+0oo5cjKjbF
+        03q9O6JXRUQvrKnHJV+HTWBS5b4PDubNj5bUy2/P0w==
+X-Google-Smtp-Source: ABdhPJzytcm5xEDIvl0zeaLFWxg0fZUVG5vboDDlEChIHTA93sE6aZZBgrDRfJIg+aN0+BwPBqgtjUxzA37MsECRi1k=
+X-Received: by 2002:a25:b13:: with SMTP id 19mr4857037ybl.684.1643286137004;
+ Thu, 27 Jan 2022 04:22:17 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YfF/zBS3kL/+eC1k@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 27 Jan 2022 17:52:05 +0530
+Message-ID: <CA+G9fYtGGdxLwkV=VHdDP_d2C0oLd7=wUhF1wcYtndpp-y5BTA@mail.gmail.com>
+Subject: [next] i386: ERROR: modpost: "__aeabi_uldivmod" [fs/btrfs/btrfs.ko] undefined!
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, lkft-triage@lists.linaro.org,
+        regressions@lists.linux.dev
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Sterba <dsterba@suse.com>,
+        Josef Bacik <josef@toxicpanda.com>, Chris Mason <clm@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[ Please ignore this email if it is already reported ]
 
-On 1/26/22 10:37 PM, Rob Herring wrote:
-> On Mon, Jan 24, 2022 at 10:00:48AM +0530, Anshuman Khandual wrote:
->> Branch stack sampling rides along the normal perf event and all the branch
->> records get captured during the PMU interrupt. This just changes perf event
->> handling on the arm64 platform to accommodate required BRBE operations that
->> will enable branch stack sampling support.
->>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: linux-perf-users@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Cc: linux-arm-kernel@lists.infradead.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  arch/arm64/kernel/perf_event.c |  6 +++++
->>  drivers/perf/arm_pmu.c         | 40 ++++++++++++++++++++++++++++++++++
->>  2 files changed, 46 insertions(+)
->>
->> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
->> index f6a47036b0b4..11c82c8f2eec 100644
->> --- a/arch/arm64/kernel/perf_event.c
->> +++ b/arch/arm64/kernel/perf_event.c
->> @@ -864,6 +864,12 @@ static irqreturn_t armv8pmu_handle_irq(struct arm_pmu *cpu_pmu)
->>  		if (!armpmu_event_set_period(event))
->>  			continue;
->>  
->> +		if (has_branch_stack(event)) {
->> +			cpu_pmu->brbe_read(cpuc, event);
-> 
-> Is has_branch_stack() guaranteed to be false on arm32? If not, this will 
-> be a NULL function ptr.
+Regression detected while building modules Linux next-20220127 on arm and i386
+with kselftest (kselftest-merge) configs with gcc-11.
 
-armpmu_event_init() blocks a perf event from being created with branch
-stack sampling request without CONFIG_ARM_BRBE_PMU option being enabled
-first, which has dependency on CONFIG_ARM64. So has_branch_stack() is
-guaranteed to be false on arm32.
+Build errors i386:
+------------------
+make --silent --keep-going --jobs=8
+  ARCH=i386 CROSS_COMPILE=i686-linux-gnu- 'CC=sccache
+i686-linux-gnu-gcc' 'HOSTCC=sccache gcc'
 
-static int armpmu_event_init(struct perf_event *event)
-{
-	....
-        if (has_branch_stack(event)) {
-                /*
-                 * BRBE support is absent. Select CONFIG_ARM_BRBE_PMU
-                 * in the config, before branch stack sampling events
-                 * can be requested.
-                 */
-                if (!IS_ENABLED(CONFIG_ARM_BRBE_PMU)) {
-                        pr_warn_once("BRBE is disabled, select CONFIG_ARM_BRBE_PMU\n");
-                        return -EOPNOTSUPP;
-                }
+ERROR: modpost: "__umoddi3" [fs/btrfs/btrfs.ko] undefined!
+make[2]: *** [/builds/linux/scripts/Makefile.modpost:134:
+modules-only.symvers] Error 1
+make[2]: *** Deleting file 'modules-only.symvers'
+
+Build errors arm:
+------------------
+make --silent --keep-going --jobs=8
+  ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
+arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
+
+ERROR: modpost: "__aeabi_uldivmod" [fs/btrfs/btrfs.ko] undefined!
+make[2]: *** [/builds/linux/scripts/Makefile.modpost:134:
+modules-only.symvers] Error 1
 
 
-config ARM_BRBE_PMU
-        tristate "Enable support for Branch Record Buffer Extension (BRBE)"
-        depends on ARM64 && ARM_PMU
-        default y
-        help
-          Enable perf support for Branch Record Buffer Extension (BRBE) which
-          records all branches taken in an execution path. This supports some
-          branch types and privilege based filtering. It captured additional
-          relevant information such as cycle count, misprediction and branch
-          type, branch privilege level etc.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> 
-> To add to my other comments, this patch is where I would add 
-> brbe_read(), etc. to arm_pmu.
 
-Because all new arm_pmu helpers get added and get used in the perf driver
-in the same patch, although the actual helper implementation would still
-come by bit later via the driver. This also uses updates to pmu_hw_events
-struct as well, then that patch needs to be folded here as well.
+meta data:
+-----------
+    git describe: next-20220127
+    git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+    git_sha: 0eb96e2c58c03e79fc2ee833ba88bf9226986564
+    git_short_log: 0eb96e2c58c0 (\"Add linux-next specific files for 20220127\")
+    target_arch: arm / i386
+    toolchain: gcc-11
 
-There is no problem as such, kind of bit subjective. I just feel inclined
-to keep the independent infrastructure changes separate making it easy to
-review while also creating a flow.
+Build log:
+-------------
+https://builds.tuxbuild.com/24GSTOD7EpxnncxTZgHJzXw97t5/
+https://builds.tuxbuild.com/24A38knX5TuIfIPU54KLcUReDcN/
+
+
+steps to reproduce:
+-------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+
+tuxmake --runtime podman --target-arch i386 --toolchain gcc-11 \
+ --kconfig https://builds.tuxbuild.com/24GSQgCAtqXT6UgGf37kLxUHlYX/config \
+   cpupower headers kernel kselftest kselftest-merge modules
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org

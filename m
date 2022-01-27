@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAEC49E34C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4C449E34D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241962AbiA0NXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
+        id S241986AbiA0NXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241782AbiA0NXB (ORCPT
+        with ESMTP id S241809AbiA0NXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Jan 2022 08:23:01 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484F8C061757
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:22:57 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id n8so5322661lfq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:22:57 -0800 (PST)
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6C9C06175A
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:22:59 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id e9so4317564ljq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:22:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7K2ZoWo7A3VK2p2YuUqNX5mlstHmQYkZvdeMYQDRBgA=;
-        b=DvJ42WZGL6xIU1SJVI32SaW4vRcAdT3+YIjAhClWAeYHr0wzntb9gm+G25e6D+Mr8U
-         oNB5s6lrm/QtXOr6x/ieRMbB1Dz3tte5Xm+ZY013YoUl5RquBqcELw0u8Bko4/uv30KE
-         Jookr+6Q5ce8zNoDPpQPEVYlv4J4oFC6L6bBovv8MNOlXfDeOxUrk12FDWG9EKsK26dp
-         gkMH29Ggmv12iKwEZIQIjbgII4qW5nyCAv2Ds7yFzzATTCXVFyTSdghqb3Z+AuZYbMq6
-         AbXtyhywP71xbk2Oet9QPNykRKUMcMjYHFpovkh6H0qEj9Ih1oUmiLG8YIvO5TkQrqLn
-         8z9A==
+        bh=S1q+vnglpO2PDv2QmjtSXkjrsf77H3g2pU/xh3PtXsQ=;
+        b=dBoiU1gV4FcN5h0v1+Ht5FHOoXQeAL25AFLxoz/HhI1aTyz+dzrdmjyM7KgAfIU5Kx
+         +Oh+BJYNSfMgfqiBCxlizwUauGa9t1H5FoBokNBdRNGJTcPuBEYEb+1cM2wYoy++6f1b
+         m64NXmz+zWb9MT8KE86VJUuJZLnCuetMwLTfXD/z6Ubfa+uEQFGUx1YFJN19tSuVzK6s
+         IXIAT5iYtQbpXAseRn9OR7Hw/ktnnNS5UdBBZeZd1r9myqhRsu+DxZ0FP89/q855f8+c
+         66yZY6kGbao2rU8l6Kt4Ek2OMeIWkEggjjZhcri0DbF9a68H26pKvlIFqHfx6wb/ZFL9
+         xgMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7K2ZoWo7A3VK2p2YuUqNX5mlstHmQYkZvdeMYQDRBgA=;
-        b=iFJRi6D9aWuLSNWaxmTP5qy1YWQajuJsq9VBnpooZfnxQPcMthagMOvm0yf6gu6u52
-         eS1JTWKbTaS4CXxwY4n0QGCmZbEGuef4355H+LzXfVJHRWIhnY6XyIzcDh91oyOrjox5
-         b8JwrNTMPSmPrxo49VO4uxHu+WpdEghxDByLULJzTd0l+REvBTu+v8s1PGpWupb5t7Zd
-         KU0U1fc3dFKxR3TxDC5+VQlHWzU1atfKpTuw8pxe8os461fzGPvH9JhQGu32TzLPM0TZ
-         UGNqVxbIkfU0YJWsDkPwv0yYcz0OK+qRuyTi0EAxhIXDEK7xfReghSBEA6bQuSpcL4R2
-         kRdA==
-X-Gm-Message-State: AOAM533avYLAdWNfSatPjjFBeCIob04pc68P9WD79tgJdA27qXBL4wwt
-        Oje9U3Nx+KMSeo5xHwM6+S5fzQvZB7k=
-X-Google-Smtp-Source: ABdhPJwIKvJeJYr78aiPnHxXfUNWm4IOcWHHMSgnsZOOuQeVo9MyJQTvMcHuNzRtP+rWvkLnJ+jTKQ==
-X-Received: by 2002:a05:6512:1699:: with SMTP id bu25mr2815086lfb.681.1643289775573;
-        Thu, 27 Jan 2022 05:22:55 -0800 (PST)
+        bh=S1q+vnglpO2PDv2QmjtSXkjrsf77H3g2pU/xh3PtXsQ=;
+        b=kiaIv8Fo65pO+cvXCsYo1bMOj4C2Qgn4OLbv4XSnmoaohSmQ1A+Dt+9AJeS6amwUCS
+         10StlCvxs3SQXd0av4nNvE5haZ8MtEgSP/HbMhD4qEfutIgeLxaGjJOmyngy/lJMKBg/
+         pGwZxz3AfYN8e2S/LlgygMWf/swprnjhiPlRXren06vWI9ptA1ep8P1WQmc0AnqSDhCA
+         vJeeFxmSM8UGufVYNwiUE9LffjMjKv38PmYSQHjuek8Cuyli/N7ZqQeA0AJ5l32D3yDw
+         X6JeefwJSoXKBJuJQuSL4n70gMU7UT5t6DbeUKcpJkJxV9/pEC90liU9ezqA85nSriCE
+         Ynsw==
+X-Gm-Message-State: AOAM532xbYOrPOzsszEx/wjiUFfO1Z80oEnCSawiJhdrtYB8eb9sNj5S
+        oQkxBZXyu98GEld88GI3ATw=
+X-Google-Smtp-Source: ABdhPJyW21GLrmtKSmGHnLJmdJ5DP3VKdlko5bJTSPTxdviTYdSWzSMpaEY/E2uPRqOTTYtWphLnWg==
+X-Received: by 2002:a2e:8e98:: with SMTP id z24mr2842965ljk.19.1643289777871;
+        Thu, 27 Jan 2022 05:22:57 -0800 (PST)
 Received: from elysium.toya.net.pl (staticline-31-183-166-172.toya.net.pl. [31.183.166.172])
-        by smtp.gmail.com with ESMTPSA id s16sm1306918lfp.197.2022.01.27.05.22.54
+        by smtp.gmail.com with ESMTPSA id s16sm1306918lfp.197.2022.01.27.05.22.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 05:22:54 -0800 (PST)
+        Thu, 27 Jan 2022 05:22:57 -0800 (PST)
 From:   Karolina Drobnik <karolinadrobnik@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     akpm@linux-foundation.org, mike.rapoport@gmail.com,
         linux-kernel@vger.kernel.org,
         Karolina Drobnik <karolinadrobnik@gmail.com>
-Subject: [PATCH 11/16] memblock tests: Add memblock reset function
-Date:   Thu, 27 Jan 2022 14:21:29 +0100
-Message-Id: <4ceb25e17a162c7e15c1cbe138019a4be48d3c93.1643206612.git.karolinadrobnik@gmail.com>
+Subject: [PATCH 12/16] memblock tests: Add memblock_add tests
+Date:   Thu, 27 Jan 2022 14:21:30 +0100
+Message-Id: <13745fec282f5c96d39faea7cac8e034abbbfd5c.1643206612.git.karolinadrobnik@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1643206612.git.karolinadrobnik@gmail.com>
 References: <cover.1643206612.git.karolinadrobnik@gmail.com>
@@ -65,162 +65,259 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Memblock simulator needs to be able to reset memblock data structures
-between different test cases. Add a function that sets all fields to
-their default values.
+Add checks for adding a new region in different scenarios:
+ - The region does not overlap with existing entries
+ - The region overlaps with one of the previous entries: from the top
+  (its end address is bigger than the base of the existing region) or
+  from the bottom (its base address is smaller than the end address of
+  one of the regions)
+ - The region is within an already defined region
+ - The same region is added twice to the collection of available memory
+   regions
 
-Add a test checking if memblock is being initialized to expected values.
+Add checks for memblock initialization to verify it sets memblock data
+structures to expected values.
 
 Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
 ---
- tools/testing/memblock/Makefile          |  4 ++-
- tools/testing/memblock/main.c            |  2 ++
- tools/testing/memblock/tests/basic_api.c | 32 ++++++++++++++++++++++++
- tools/testing/memblock/tests/basic_api.h | 10 ++++++++
- tools/testing/memblock/tests/common.c    | 27 ++++++++++++++++++++
- tools/testing/memblock/tests/common.h    | 15 +++++++++++
- 6 files changed, 89 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/memblock/tests/basic_api.c
- create mode 100644 tools/testing/memblock/tests/basic_api.h
- create mode 100644 tools/testing/memblock/tests/common.c
- create mode 100644 tools/testing/memblock/tests/common.h
+ tools/testing/memblock/tests/basic_api.c | 215 +++++++++++++++++++++++
+ 1 file changed, 215 insertions(+)
 
-diff --git a/tools/testing/memblock/Makefile b/tools/testing/memblock/Makefile
-index 35105923f235..31c4ef625ede 100644
---- a/tools/testing/memblock/Makefile
-+++ b/tools/testing/memblock/Makefile
-@@ -5,7 +5,9 @@ CFLAGS += -I. -I../../include -Wall -O2 -fsanitize=address \
- 	  -fsanitize=undefined -D CONFIG_PHYS_ADDR_T_64BIT
- LDFLAGS += -fsanitize=address -fsanitize=undefined
- TARGETS = main
--OFILES = main.o memblock.o lib/slab.o mmzone.o slab.o
-+TEST_OFILES = tests/basic_api.o tests/common.o
-+DEP_OFILES = memblock.o lib/slab.o mmzone.o slab.o
-+OFILES = main.o $(DEP_OFILES) $(TEST_OFILES)
- EXTR_SRC = ../../../mm/memblock.c
- 
- ifeq ($(BUILD), 32)
-diff --git a/tools/testing/memblock/main.c b/tools/testing/memblock/main.c
-index 62958da35d0f..da65b0adee91 100644
---- a/tools/testing/memblock/main.c
-+++ b/tools/testing/memblock/main.c
-@@ -1,6 +1,8 @@
+diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
+index 7f2597b3dd4d..6c047b7b31ab 100644
+--- a/tools/testing/memblock/tests/basic_api.c
++++ b/tools/testing/memblock/tests/basic_api.c
+@@ -1,6 +1,7 @@
  // SPDX-License-Identifier: GPL-2.0-or-later
-+#include "tests/basic_api.h"
+ #include <string.h>
+ #include <linux/memblock.h>
++#include <linux/sizes.h>
+ #include "basic_api.h"
  
- int main(int argc, char **argv)
- {
-+	memblock_basic_checks();
+ #define EXPECTED_MEMBLOCK_REGIONS			128
+@@ -25,8 +26,222 @@ static int memblock_initialization_check(void)
  	return 0;
  }
-diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
-new file mode 100644
-index 000000000000..7f2597b3dd4d
---- /dev/null
-+++ b/tools/testing/memblock/tests/basic_api.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+#include <string.h>
-+#include <linux/memblock.h>
-+#include "basic_api.h"
-+
-+#define EXPECTED_MEMBLOCK_REGIONS			128
-+
-+static int memblock_initialization_check(void)
+ 
++/*
++ * A simple test that adds a memory block of a specified base address
++ * and size to the collection of available memory regions (memblock.memory).
++ * It checks if a new entry was created and if region counter and total memory
++ * were correctly updated.
++ */
++static int memblock_add_simple_check(void)
 +{
++	struct memblock_region *rgn;
++
++	rgn = &memblock.memory.regions[0];
++
++	struct region r = {
++		.base = SZ_1G,
++		.size = SZ_4M
++	};
++
++	reset_memblock();
++	memblock_add(r.base, r.size);
++
++	assert(rgn->base == r.base);
++	assert(rgn->size == r.size);
++
++	assert(memblock.memory.cnt == 1);
++	assert(memblock.memory.total_size == r.size);
++
++	return 0;
++}
++
++/*
++ * A test that tries to add two memory blocks that don't overlap with one another.
++ * It checks if two correctly initialized entries were added to the collection
++ * of available memory regions (memblock.memory) and if this change was reflected
++ * in memblock.memory's total size and region counter.
++ */
++static int memblock_add_disjoint_check(void)
++{
++	struct memblock_region *rgn1, *rgn2;
++
++	rgn1 = &memblock.memory.regions[0];
++	rgn2 = &memblock.memory.regions[1];
++
++	struct region r1 = {
++		.base = SZ_1G,
++		.size = SZ_8K
++	};
++	struct region r2 = {
++		.base = SZ_1G + SZ_16K,
++		.size = SZ_8K
++	};
++
++	reset_memblock();
++	memblock_add(r1.base, r1.size);
++	memblock_add(r2.base, r2.size);
++
++	assert(rgn1->base == r1.base);
++	assert(rgn1->size == r1.size);
++
++	assert(rgn2->base == r2.base);
++	assert(rgn2->size == r2.size);
++
++	assert(memblock.memory.cnt == 2);
++	assert(memblock.memory.total_size == r1.size + r2.size);
++
++	return 0;
++}
++
++/*
++ * A test that tries to add two memory blocks, where the second one overlaps
++ * with the beginning of the first entry (that is r1.base < r2.base + r2.size).
++ * After this, it checks if two entries are merged into one region that starts
++ * at r2.base and has size of two regions minus their intersection. It also
++ * verifies the reported total size of the available memory and region counter.
++ */
++static int memblock_add_overlap_top_check(void)
++{
++	struct memblock_region *rgn;
++	phys_addr_t total_size;
++
++	rgn = &memblock.memory.regions[0];
++
++	struct region r1 = {
++		.base = SZ_512M,
++		.size = SZ_1G
++	};
++	struct region r2 = {
++		.base = SZ_256M,
++		.size = SZ_512M
++	};
++
++	total_size = (r1.base - r2.base) + r1.size;
++
++	reset_memblock();
++	memblock_add(r1.base, r1.size);
++	memblock_add(r2.base, r2.size);
++
++	assert(rgn->base == r2.base);
++	assert(rgn->size == total_size);
++
++	assert(memblock.memory.cnt == 1);
++	assert(memblock.memory.total_size == total_size);
++
++	return 0;
++}
++
++/*
++ * A test that tries to add two memory blocks, where the second one overlaps
++ * with the end of the first entry (that is r2.base < r1.base + r1.size).
++ * After this, it checks if two entries are merged into one region that starts
++ * at r1.base and has size of two regions minus their intersection. It verifies
++ * that memblock can still see only one entry and has a correct total size of
++ * the available memory.
++ */
++static int memblock_add_overlap_bottom_check(void)
++{
++	struct memblock_region *rgn;
++	phys_addr_t total_size;
++
++	rgn = &memblock.memory.regions[0];
++
++	struct region r1 = {
++		.base = SZ_128M,
++		.size = SZ_512M
++	};
++	struct region r2 = {
++		.base = SZ_256M,
++		.size = SZ_1G
++	};
++
++	total_size = (r2.base - r1.base) + r2.size;
++
++	reset_memblock();
++	memblock_add(r1.base, r1.size);
++	memblock_add(r2.base, r2.size);
++
++	assert(rgn->base == r1.base);
++	assert(rgn->size == total_size);
++
++	assert(memblock.memory.cnt == 1);
++	assert(memblock.memory.total_size == total_size);
++
++	return 0;
++}
++
++/*
++ * A test that tries to add two memory blocks, where the second one is
++ * within the range of the first entry (that is r1.base < r2.base &&
++ * r2.base + r2.size < r1.base + r1.size). It checks if two entries are merged
++ * into one region that stays the same. The counter and total size of available
++ * memory are expected to not be updated.
++ */
++static int memblock_add_within_check(void)
++{
++	struct memblock_region *rgn;
++
++	rgn = &memblock.memory.regions[0];
++
++	struct region r1 = {
++		.base = SZ_8M,
++		.size = SZ_32M
++	};
++	struct region r2 = {
++		.base = SZ_16M,
++		.size = SZ_1M
++	};
++
++	reset_memblock();
++	memblock_add(r1.base, r1.size);
++	memblock_add(r2.base, r2.size);
++
++	assert(rgn->base == r1.base);
++	assert(rgn->size == r1.size);
++
++	assert(memblock.memory.cnt == 1);
++	assert(memblock.memory.total_size == r1.size);
++
++	return 0;
++}
++
++/*
++ * A simple test that tries to add the same memory block twice. The counter
++ * and total size of available memory are expected to not be updated.
++ */
++static int memblock_add_twice_check(void)
++{
++	struct region r = {
++		.base = SZ_16K,
++		.size = SZ_2M
++	};
++
 +	reset_memblock();
 +
-+	assert(memblock.memory.regions);
++	memblock_add(r.base, r.size);
++	memblock_add(r.base, r.size);
++
 +	assert(memblock.memory.cnt == 1);
-+	assert(memblock.memory.max == EXPECTED_MEMBLOCK_REGIONS);
-+	assert(strcmp(memblock.memory.name, "memory") == 0);
-+
-+	assert(memblock.reserved.regions);
-+	assert(memblock.reserved.cnt == 1);
-+	assert(memblock.memory.max == EXPECTED_MEMBLOCK_REGIONS);
-+	assert(strcmp(memblock.reserved.name, "reserved") == 0);
-+
-+	assert(!memblock.bottom_up);
-+	assert(memblock.current_limit == MEMBLOCK_ALLOC_ANYWHERE);
++	assert(memblock.memory.total_size == r.size);
 +
 +	return 0;
 +}
 +
-+int memblock_basic_checks(void)
++static int memblock_add_checks(void)
 +{
-+	memblock_initialization_check();
++	memblock_add_simple_check();
++	memblock_add_disjoint_check();
++	memblock_add_overlap_top_check();
++	memblock_add_overlap_bottom_check();
++	memblock_add_within_check();
++	memblock_add_twice_check();
++
 +	return 0;
 +}
-diff --git a/tools/testing/memblock/tests/basic_api.h b/tools/testing/memblock/tests/basic_api.h
-new file mode 100644
-index 000000000000..1ceecfca1f47
---- /dev/null
-+++ b/tools/testing/memblock/tests/basic_api.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+#ifndef _MEMBLOCK_BASIC_H
-+#define _MEMBLOCK_BASIC_H
 +
-+#include <assert.h>
-+#include "common.h"
-+
-+int memblock_basic_checks(void);
-+
-+#endif
-diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
-new file mode 100644
-index 000000000000..03de6eab0c3c
---- /dev/null
-+++ b/tools/testing/memblock/tests/common.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+#include "tests/common.h"
-+#include <string.h>
-+
-+#define INIT_MEMBLOCK_REGIONS			128
-+#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
-+
-+void reset_memblock(void)
-+{
-+	memset(memblock.memory.regions, 0,
-+	       memblock.memory.cnt * sizeof(struct memblock_region));
-+	memset(memblock.reserved.regions, 0,
-+	       memblock.reserved.cnt * sizeof(struct memblock_region));
-+
-+	memblock.memory.cnt	= 1;
-+	memblock.memory.max	= INIT_MEMBLOCK_REGIONS;
-+	memblock.memory.name	= "memory";
-+	memblock.memory.total_size = 0;
-+
-+	memblock.reserved.cnt	= 1;
-+	memblock.reserved.max	= INIT_MEMBLOCK_RESERVED_REGIONS;
-+	memblock.reserved.name	= "reserved";
-+	memblock.reserved.total_size = 0;
-+
-+	memblock.bottom_up	= false;
-+	memblock.current_limit	= MEMBLOCK_ALLOC_ANYWHERE;
-+}
-diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
-new file mode 100644
-index 000000000000..48efc4270ea1
---- /dev/null
-+++ b/tools/testing/memblock/tests/common.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+#ifndef _MEMBLOCK_TEST_H
-+#define _MEMBLOCK_TEST_H
-+
-+#include <linux/types.h>
-+#include <linux/memblock.h>
-+
-+struct region {
-+	phys_addr_t base;
-+	phys_addr_t size;
-+};
-+
-+void reset_memblock(void);
-+
-+#endif
+ int memblock_basic_checks(void)
+ {
+ 	memblock_initialization_check();
++	memblock_add_checks();
+ 	return 0;
+ }
 -- 
 2.30.2
 

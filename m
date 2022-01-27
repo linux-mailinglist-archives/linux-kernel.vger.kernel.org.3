@@ -2,86 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3235149D9B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 05:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05CF349D9B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 05:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbiA0E5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 23:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiA0E5f (ORCPT
+        id S236086AbiA0E7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 23:59:02 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:38991 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229750AbiA0E7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 23:57:35 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF9CC06161C;
-        Wed, 26 Jan 2022 20:57:34 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JkpHJ5c6Pz4xcT;
-        Thu, 27 Jan 2022 15:57:32 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643259452;
-        bh=9LiJK7T4H6E/r0tI+zhD7z+AZV9GbGkr8ik2vuoYm20=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Lb0cuKsZV/ya5XqKfROAIoy2asqqANwTHGibUWvMMj8pXI1U+aB/FlfxFkguHDZYJ
-         mWD5N283hOnLucBSoctI/JIz9ll4dxJoa8xnlupRp1mhfq49uEqLuLwBxfbw0rfsgu
-         g3/xsrHo+pLL/k9T2ydn6gsOUMxvYigTeJ640MyzPocXIlprLq7x7Q2ivZlwPVb2iW
-         nSJ3Vpzs3wrqTQQ2U6btYBMB5YBJwt31kgSHyh1AcAclM/SqHBr+W6bVmJO7ltREFs
-         j+91mkXWhtQYRUyfrV+N5nvSL87WHymS/cY+lpZsYQqwQhXEo113Zr+cK7XnawYG6n
-         Up8A8ZUz+BMew==
-Date:   Thu, 27 Jan 2022 15:57:32 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Li-hao Kuo <lhjeff911@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the spi tree
-Message-ID: <20220127155732.44113feb@canb.auug.org.au>
+        Wed, 26 Jan 2022 23:59:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643259541; x=1674795541;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jf9V216nusuCRFt1B0tCe8eS+M0OwEBMRQly1e8ptqE=;
+  b=RCEcHfHMN53N5SlMJOvLgC05u5nbTXPkspocEUJZuC8g3qy5fE6nSP8p
+   OmDE0AP1rDPn1xqZ8h9k+lpfP5Ww8PPKmHAYXkrNR7o12KAmPr+JrrkRR
+   4gE0CFC+GMbEhXWR4J8U3Za03/WFKT8abueqNWOCqJN+VEiMfZFjFeSGO
+   A=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Jan 2022 20:59:01 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 20:59:01 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 26 Jan 2022 20:59:00 -0800
+Received: from [10.216.22.240] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 26 Jan
+ 2022 20:58:56 -0800
+Message-ID: <f45f5952-e31c-5e9d-2560-064199beb29f@quicinc.com>
+Date:   Thu, 27 Jan 2022 10:28:52 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8WR_SPWPWNKl5jUifwquQr=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk for
+ DWC3 controller
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Doug Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>
+References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
+ <Ydb79/twbxLDJB8/@kroah.com>
+ <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
+ <YfE9s06CIv1P3bA/@kroah.com>
+From:   Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+In-Reply-To: <YfE9s06CIv1P3bA/@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8WR_SPWPWNKl5jUifwquQr=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 1/26/2022 5:55 PM, Greg Kroah-Hartman wrote:
+> On Fri, Jan 07, 2022 at 10:27:59AM +0530, Sandeep Maheswaram wrote:
+>> On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
+>>> On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram wrote:
+>>>> Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+>>>> Runtime suspend of phy drivers was failing from DWC3 driver as runtime
+>>>> usage value is 2 because the phy is initialized from DWC3 and HCD core.
+>>>> DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+>>>> initialization in HCD core.
+>>>>
+>>>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>>> ---
+>>>> v5:
+>>>> Added comment to explain the change done.
+>>>> v4:
+>>>> Changed pdev->dev.parent->of_node to sysdev->of_node
+>>>>
+>>>>    drivers/usb/host/xhci-plat.c | 8 ++++++++
+>>>>    1 file changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+>>>> index c1edcc9..e6014d4 100644
+>>>> --- a/drivers/usb/host/xhci-plat.c
+>>>> +++ b/drivers/usb/host/xhci-plat.c
+>>>> @@ -327,6 +327,14 @@ static int xhci_plat_probe(struct platform_device *pdev)
+>>>>    					 &xhci->imod_interval);
+>>>>    	}
+>>>> +	/*
+>>>> +	 * Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
+>>>> +	 * DWC3 manages phy in their core drivers. Set this quirk to avoid phy
+>>>> +	 * initialization in HCD core.
+>>>> +	 */
+>>>> +	if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
+>>>> +		xhci->quirks |= XHCI_SKIP_PHY_INIT;
+>>>> +
+>>> Why is this function caring about dwc3 stuff?  Shoudn't this be a
+>>> "generic" device property instead of this device-specific one?
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>> This quirk is set only if required for some controllers (eg: dwc3 & cdns3).
+>>
+>> Please check below commit.
+>>
+>> https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/
+> That commit has nothing to do with a specific "dwc3" quirk anywhere.
+> Why not set this flag in the specific platform xhci driver instead where
+> it belongs?
+>
+> thanks,
+>
+> greg k-h
 
-After merging the spi tree, today's linux-next build (s390 allyesconfig)
-failed like this:
+There is no specific xhci platform driver for dwc3 controllers.
 
-drivers/spi/spi-sunplus-sp7021.c:568:12: error: 'sp7021_spi_runtime_resume'=
- defined but not used [-Werror=3Dunused-function]
-drivers/spi/spi-sunplus-sp7021.c:560:12: error: 'sp7021_spi_runtime_suspend=
-' defined but not used [-Werror=3Dunused-function]
+dwc3 controllers use xhci-plat driver .
 
-Caused by commit
+We can add this quirk in usb/dwc3/host.c as cdns3 does but that requires 
+tying dwc3 and xhci driver .
 
-  f62ca4e2a863 ("spi: Add spi driver for Sunplus SP7021")
+https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/
 
---=20
-Cheers,
-Stephen Rothwell
+Regards
 
---Sig_/8WR_SPWPWNKl5jUifwquQr=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Sandeep
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHyJjwACgkQAVBC80lX
-0GxFuwf/ZD7jCTN8fXHnk8NOxlujrhU4d2aiJNF9TJ/h4B50B9s7crQZeplMbHLJ
-EmXhlEbBrTnUwm36MV4Fz46WwlBLdoxzVBw/S6/7gdBZX7fQh9ttzRdvLjRsEI84
-laKEsiPg+Uj/AZIUFtQ+gv4sj2O7pEl7YW4Omqu9TDbkBCuPDZcTa2Pl5/SJh50P
-DWgJ/aVlMsdR3/Pt/8xwyoNmC/NVjeECNSMYTN+VrSkhw4qSziWTibu5jRULL9dN
-Y2P+TcMzDOcCUWm8h8y515fRufJIaAWOpP2zuh5aZ/xQLJp+qlvzFMJAeDZDh6pV
-jdzKCdIJ1E4xbXiNgsNtXi65xYYp2A==
-=6uOq
------END PGP SIGNATURE-----
-
---Sig_/8WR_SPWPWNKl5jUifwquQr=--

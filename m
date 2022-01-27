@@ -2,84 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2443F49EE36
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 304D449EE3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241009AbiA0Wmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 17:42:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
+        id S238808AbiA0WoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 17:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiA0Wmg (ORCPT
+        with ESMTP id S236318AbiA0WoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 17:42:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B954CC061714;
-        Thu, 27 Jan 2022 14:42:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF2ADB818E6;
-        Thu, 27 Jan 2022 22:42:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93342C340E4;
-        Thu, 27 Jan 2022 22:42:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1643323352;
-        bh=ybh+vNa1e2zVCBIHmgIav4rSBCIa4tEXBrjj/Zvd9DM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lD8DNYdSP5VgdUVvLTzLs87NT6X2RUv/tVO0wVWZV57Mo8tiF+Cy9CVqnSr4Mr28N
-         /4z/vln9zP3ZnibjoeX42f/bT+EANd4Y6/PvlZ8IiaLj4IayJe8a69r3sno42DD5jQ
-         fiofeE7oSvVhmRsxcbaFoTER4oAWLDgl8zvqXutM=
-Date:   Thu, 27 Jan 2022 14:42:29 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-nilfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Subject: Re: [PATCH 0/9] Remove remaining parts of congestions tracking
- code.
-Message-Id: <20220127144229.a7109a508521db5e8ddda09c@linux-foundation.org>
-In-Reply-To: <164325106958.29787.4865219843242892726.stgit@noble.brown>
-References: <164325106958.29787.4865219843242892726.stgit@noble.brown>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Thu, 27 Jan 2022 17:44:13 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEB0C061747
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:44:13 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id b186so2650380oif.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:44:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=qSVKg7QZolISP6CL5b8ywycxZ4eSO4ME5S7Xwxs213U=;
+        b=lCcj/YjgaTpAlalRmpvtJQ/UCinvUZbRA9eUiHZhQD7E5jN4xLRKHLDlDIcMCnTRCu
+         VGfKHHUcHcpwOTrk8eglOlSjaQhDiWgqp0SO+CizBk+xAeTcKf5e892ZE/dIRY76sHjZ
+         C17pHcz6fmaFbkfIIu7hBgPWOgnL1lDwUjWE8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=qSVKg7QZolISP6CL5b8ywycxZ4eSO4ME5S7Xwxs213U=;
+        b=44VHpQPU3HCRqkXInu3aVZNbDIb2Wthuw2vuEzUl/8sb3+P06YmAxlBeYeoiGP41fL
+         Kn9POPUSb7rZljNDs2Lj5n87zUqtMYPad8li20CdPGH56jRX8jiCcYATGQZQHcsPqgNL
+         TjirBTtouaSxb+4aFKbXEu39FMYW7qoU/zQ2CmF11P++3WPxcZbCNdWuDx+CME132VOu
+         6APRbLJSb6ohJgm7fyxuvSH58FXqNvW34l7/CIHWgVObDfrYnBoLfsrkDZCeotELbGE4
+         InywnCDhQ3J395zr6KlaUjciQFQzMadqCO4L/wrLt6rTvOka1fBJIYxoB2WzQDJJrWZE
+         DVOg==
+X-Gm-Message-State: AOAM532ZAgEMB7t4ny8iQbG2DytgQSby9dNrXBjvny1FhdGSV5ejVdgB
+        g2zMHcePrjJrNzDXNOliKHTBbpWuk2CDXwSntOlTAg==
+X-Google-Smtp-Source: ABdhPJxeu4g7MfMP+1tgPBzH30aCdvexTG7BkQSmwQCJuBHQCEk/KNDciKzXewaSrUaJUSrJfMRHftNA2sOuP6IbKd4=
+X-Received: by 2002:a05:6808:190f:: with SMTP id bf15mr8419513oib.40.1643323453189;
+ Thu, 27 Jan 2022 14:44:13 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 27 Jan 2022 14:44:12 -0800
+MIME-Version: 1.0
+In-Reply-To: <20220127210024.25597-4-quic_amelende@quicinc.com>
+References: <20220127210024.25597-1-quic_amelende@quicinc.com> <20220127210024.25597-4-quic_amelende@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 27 Jan 2022 14:44:12 -0800
+Message-ID: <CAE-0n53oQEs+GO8+SXf1Zp4RT3FNvFzpDT+jYJA4fub77w+utw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] input: misc: pm8941-pwrkey: add software key press
+ debouncing support
+To:     Anjelique Melendez <quic_amelende@quicinc.com>,
+        dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, collinsd@codeaurora.org,
+        bjorn.andersson@linaro.org, skakit@codeaurora.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 13:46:29 +1100 NeilBrown <neilb@suse.de> wrote:
+Quoting Anjelique Melendez (2022-01-27 13:00:27)
+> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
+> index 7005aede4f81..bcdbe260b684 100644
+> --- a/drivers/input/misc/pm8941-pwrkey.c
+> +++ b/drivers/input/misc/pm8941-pwrkey.c
+[...]
+>
+> +static int pm8941_pwrkey_sw_debounce_init(struct pm8941_pwrkey *pwrkey)
+> +{
+> +       unsigned int val, addr, mask;
+> +       int error;
+> +
+> +       if (pwrkey->data->has_pon_pbs && !pwrkey->pon_pbs_baseaddr) {
+> +               dev_err(pwrkey->dev, "PON_PBS address missing, can't read HW debounce time\n");
+> +               return 0;
+> +       }
+> +
+> +       if (pwrkey->pon_pbs_baseaddr)
+> +               addr = pwrkey->pon_pbs_baseaddr + PON_DBC_CTL;
+> +       else
+> +               addr = pwrkey->baseaddr + PON_DBC_CTL;
+> +       error = regmap_read(pwrkey->regmap, addr, &val);
+> +       if (error)
+> +               return error;
+> +
+> +       if (pwrkey->subtype >= PON_SUBTYPE_GEN2_PRIMARY)
+> +               mask = 0xf;
+> +       else
+> +               mask = 0x7;
+> +
+> +       pwrkey->sw_debounce_time_us = 2 * USEC_PER_SEC /
+> +                                               (1 << (mask - (val & mask)));
 
-> Congestion hasn't been reliably tracked for quite some time.
-> Most MM uses of it for guiding writeback decisions were removed in 5.16.
-> Some other uses were removed in 17-rc1.
-> 
-> This series removes the remaining places that test for congestion, and
-> the few places which still set it.
-> 
-> The second patch touches a few filesystems.  I didn't think there was
-> much value in splitting this out by filesystems, but if maintainers
-> would rather I did that, I will.
-> 
-> The f2fs, cephfs, fuse, NFS, and block patches can go through the
-> respective trees proving the final patch doesn't land until after they
-> all do - so maybe it should be held for 5.18-rc2 if all the rest lands
-> by 5.18-rc1.
+         pwrkey->sw_debounce_time_us = 2 * USEC_PER_SEC / (1 << (mask
+- (val & mask)));
 
-Plan B: I'll just take everything.  While collecting tested-bys and
-acked-bys from filesystem maintainers (please).
+Nitpick: Put this one one line?
 
+> +
+> +       dev_dbg(pwrkey->dev, "SW debounce time = %u us\n",
+> +               pwrkey->sw_debounce_time_us);
+> +
+> +       return 0;
+> +}
+> +
+>  static int __maybe_unused pm8941_pwrkey_suspend(struct device *dev)
+>  {
+>         struct pm8941_pwrkey *pwrkey = dev_get_drvdata(dev);

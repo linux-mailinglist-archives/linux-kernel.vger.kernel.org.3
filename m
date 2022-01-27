@@ -2,145 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8FE49ED4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D713E49ED53
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 22:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240596AbiA0VRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 16:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S238198AbiA0VVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 16:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiA0VRF (ORCPT
+        with ESMTP id S231293AbiA0VVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 16:17:05 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4D7C061714;
-        Thu, 27 Jan 2022 13:17:04 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id p15so8834191ejc.7;
-        Thu, 27 Jan 2022 13:17:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vK3O5xU/kDvpC1TY8wAbZnvb+Z1YDXs3E7FOpCSGFrE=;
-        b=e58gnAgOojyV60UkneFpVxVMsLU4Zov6g4GoK0ybOHVmrN9t/jNQcmtnU7ssHc5I+s
-         vLxK0zG1wbIW7FadS4WnMA5s3bb0Ucu+Ra7WozizPzxJuNdSc8WY4Vxq0aTBGMioxHWq
-         mrMsEtTC56V5TJrFEnzaXtVrVpbLtRY4GO7xn2ygSmlyuA/14102+3guY3/vK/o7man3
-         wzBaTMsDJbKdtgWo/OcqEYtzebzEBmk5AK3JCl38JGBhIjJI4u8L00Cew/qVaMjbWDj3
-         i4O3InHDsHUeEOLkqX8hxRJWC0cdxKn7I1sb1dDOO2en5NEAmZXwiUyra1prtabpF1wx
-         ye+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vK3O5xU/kDvpC1TY8wAbZnvb+Z1YDXs3E7FOpCSGFrE=;
-        b=7mcYP4k2IvdaQ2XZgHLJ6Qq1yqM8h8vtRRE6NgEtUiNaT1ygaJz1saaAwx+vGFVwt5
-         Iulp4YSgNUbkbmp55EQzjfT4IZqCIknV0vzgm30pvlKQqZVQpKaYjVqMKliofewuc/4M
-         +AM2IGHbkoFeMdvI4wsqnXtOovIHEiNhbvo883lriqd+TLa0avJ3u+XOw7myUpAYGQcs
-         L5JVPUYaoO/iaXUEihzxCT0zJ7azXFbMjRnM97Y/prgGzSq2SKSF5rlNd361nsRx1to6
-         DursVg2NdlQwNg5oWmWgRZDYxI98zfjj1jCzF04qVP9Ni7VJO4bO29pvE5/c0ktiLAl+
-         A5pA==
-X-Gm-Message-State: AOAM530IiF7fc6CtTcxx0gdj5mjQycVBsS2CbeojVYICVgyHeBg3h/AR
-        tDCEyRirbb2Bpk0dT7vxTx+CyIOs2lDhYdf27ic=
-X-Google-Smtp-Source: ABdhPJwNpo25p3cIrN5oTAXtkNb4Mi5A68K7YEBZvzb3Dl9MLwx/5LT7nXeEIdTd+aUkUYX7hbk+cIjmisD46+wZ15o=
-X-Received: by 2002:a17:906:4fcd:: with SMTP id i13mr4231891ejw.644.1643318223500;
- Thu, 27 Jan 2022 13:17:03 -0800 (PST)
+        Thu, 27 Jan 2022 16:21:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7BAC061714;
+        Thu, 27 Jan 2022 13:21:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6889761AEC;
+        Thu, 27 Jan 2022 21:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F2AC340E4;
+        Thu, 27 Jan 2022 21:21:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643318461;
+        bh=vEhS+uNe9MbUR6FumfDLesP9xJaTiiHWcuhhBI9N7ng=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=IQmm35PUiDv2We4J7ZGC4FxPaSSCGo58PxoDdwdSL0UveVkGmu+yWA/vovPZkqzfZ
+         7JsY/0uKSSAhZxpoi8HO5CAVE2lQkfp49fgLqfDLELm1iOm+AzWBjDolNRFBwNPH1i
+         UQzMNPyE+q5yEzzHh4eFC94y4Dt6Gf1xCdCQlq9BhzLxcIMMRChsOXBoCmRl5ov3zp
+         S0yhkIMouP8saTG2EerbZ+O0XPx4PA5iIjncsOvIJKDW1ZoeYZSgrucqGCZvyJbRy4
+         SDqUAhQaJ9w/SFmZIXbpRl9q6N6Ir++gvJmKBw9O5ygLhJIx0y87ow95C34w8F7Jao
+         i0RRrNzKjWHDA==
+Date:   Thu, 27 Jan 2022 15:21:00 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "qizhong.cheng" <qizhong.cheng@mediatek.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, chuanjia.liu@mediatek.com,
+        Srikanth Thokala <srikanth.thokala@intel.com>,
+        Pratyush Anand <pratyush.anand@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Subject: Re: [PATCH] PCI: mediatek: Change MSI interrupt processing sequence
+Message-ID: <20220127212100.GA102267@bhelgaas>
 MIME-Version: 1.0
-References: <20220120202805.3369-1-shy828301@gmail.com> <af603cbe-4a38-9947-5e6d-9a9328b473fb@redhat.com>
- <CAG48ez1xuZdELb=5ed1i0ruoFu5kAaWsf0LgRXEGhrDAcHz8fw@mail.gmail.com>
- <f7f82234-7599-9e39-1108-f8fbe2c1efc9@redhat.com> <CAG48ez17d3p53tSfuDTNCaANyes8RNNU-2i+eFMqkMwuAbRT4Q@mail.gmail.com>
- <5b4e2c29-8f1a-5a68-d243-a30467cc02d4@redhat.com> <CAHbLzkqLTkVJk+z8wpa03ponf7k30=Sx6qULwsGsvr5cq5d1aw@mail.gmail.com>
- <5a565d5a-0540-4041-ce63-a8fd5d1bb340@redhat.com> <CAHbLzkqXy-W9sD5HFOK_rm_TR8uSP29b+RjKjA5zOZ+0dkqMbQ@mail.gmail.com>
- <2a1c5bd2-cb8c-b93b-68af-de620438d19a@redhat.com>
-In-Reply-To: <2a1c5bd2-cb8c-b93b-68af-de620438d19a@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 27 Jan 2022 13:16:51 -0800
-Message-ID: <CAHbLzkrQiQyh=36fOtqcODU3RO92jBVxU0o7wU8PyHJ_83LjiQ@mail.gmail.com>
-Subject: Re: [v2 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Jann Horn <jannh@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d78b45e461b204d375830217d0d27ffdd97cedd3.camel@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 10:54 AM David Hildenbrand <david@redhat.com> wrote:
->
-> >>> Just page lock or elevated page refcount could serialize against THP
-> >>> split AFAIK.
-> >>>
-> >>>>
-> >>>> But yeah, using the mapcount of a page that is not even mapped
-> >>>> (migration entry) is clearly wrong.
-> >>>>
-> >>>> To summarize: reading the mapcount on an unlocked page will easily
-> >>>> return a wrong result and the result should not be relied upon. reading
-> >>>> the mapcount of a migration entry is dangerous and certainly wrong.
-> >>>
-> >>> Depends on your usecase. Some just want to get a snapshot, just like
-> >>> smaps, they don't care.
-> >>
-> >> Right, but as discussed, even the snapshot might be slightly wrong. That
-> >> might be just fine for smaps (and I would have enjoyed a comment in the
-> >> code stating that :) ).
-> >
-> > I think that is documented already, see Documentation/filesystems/proc.rst:
-> >
-> > Note: reading /proc/PID/maps or /proc/PID/smaps is inherently racy (consistent
-> > output can be achieved only in the single read call).
->
-> Right, but I think there is a difference between
->
-> * Atomic values that change immediately afterwards ("this value used to
->   be true at one point in time")
-> * Values that are unstable because we cannot read them atomically ("this
->   value never used to be true")
->
-> I'd assume with the documented race we actually talk about the first
-> point, but I might be just wrong.
->
-> >
-> > Of course, if the extra note is preferred in the code, I could try to
-> > add some in a separate patch.
->
-> When staring at the (original) code I would have hoped to find something
-> like:
->
-> /*
->  * We use page_mapcount() to get a snapshot of the mapcount. Without
->  * holding the page lock this snapshot can be slightly wrong as we
->  * cannot always read the mapcount atomically. As long we hold the PT
->  * lock, the page cannot get unmapped and it's at safe to call
->  * page_mapcount().
->  */
->
-> With the addition of
->
-> "... For unmapped pages (e.g., migration entries) we cannot guarantee
-> that, so treat the mapcount as being 1."
+[+cc Srikanth, Pratyush, Thomas, Pali, Ryder, Jianjun]
 
-It seems a little bit confusing to me, it is not safe to call with PTL
-held either, right? I'd like to rephrase the note to:
+On Wed, Jan 26, 2022 at 11:37:58AM +0800, qizhong.cheng wrote:
+> On Tue, 2022-01-25 at 17:21 +0000, Marc Zyngier wrote:
+> > On 2022-01-25 16:57, Bjorn Helgaas wrote:
+> > > On Sun, Jan 23, 2022 at 11:33:06AM +0800, qizhong cheng wrote:
+> > > > As an edge-triggered interrupts, its interrupt status should
+> > > > be cleared before dispatch to the handler of device.
+> > > 
+> > > I'm not an IRQ expert, but the reasoning that "we should clear
+> > > the MSI interrupt status before dispatching the handler because
+> > > MSI is an edge-triggered interrupt" doesn't seem completely
+> > > convincing because your code will now look like this:
+> > > 
+> > >   /* Clear the INTx */
+> > >   writel(1 << bit, port->base + PCIE_INT_STATUS);
+> > >   generic_handle_domain_irq(port->irq_domain, bit - INTX_SHIFT);
+> > >   ...
+> > > 
+> > >   /* Clear MSI interrupt status */
+> > >   writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
+> > >   generic_handle_domain_irq(port->inner_domain, bit);
+> > > 
+> > > You clear interrupt status before dispatching the handler for
+> > > *both* level-triggered INTx interrupts and edge-triggered MSI
+> > > interrupts.
+> > > 
+> > > So it doesn't seem that simply being edge-triggered is the
+> > > critical factor here.
+> > 
+> > This is the usual problem with these half-baked implementations.
+> > The signalling to the primary interrupt controller is level, as
+> > they take a multitude of input and (crucially) latch the MSI
+> > edges. Effectively, this is an edge-to-level converter, with all
+> > the problems that this creates.
+> > 
+> > By clearing the status *after* the handling, you lose edges that
+> > have been received and coalesced after the read of the status
+> > register. By clearing it *before*, you are acknowledging the
+> > interrupts early, and allowing them to be coalesced independently
+> > of the ones that have been received earlier.
+> > 
+> > This is however mostly an educated guess. Someone with access to
+> > the TRM should verify this.
+> 
+> Yes, as Maz said, we save the edge-interrupt status so that it
+> becomes a level-interrupt. This is similar to an edge-to-level
+> converter, so we need to clear it *before*. We found this problem
+> through a lot of experiments and tested this patch.
 
-/*
-         * The page_mapcount() is called to get a snapshot of the mapcount.
-         * Without holding the page lock this snapshot can be slightly wrong as
-         * we cannot always read the mapcount atomically.  Holding PTL doesn't
-         * guarantee calling page_mapcount() is safe for all cases either, for
-         * example, migration entries.
-         */
+I thought there might be other host controllers with similar design,
+so I looked at all the other drivers and tried to figure out whether
+any others had similar problems.
 
->
-> But this is just my personal preference ... :) I do think the patch does
-> the right thing in regard to migration entries.
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+The ones below look suspicious to me because they all clear some sort
+of status register *after* handling an MSI.  Can you guys take a look
+and make sure they are working correctly?
+
+  keembay_pcie_msi_irq_handler
+    status = readl(pcie->apb_base + PCIE_REGS_INTERRUPT_STATUS)
+    if (status & MSI_CTRL_INT)
+      dw_handle_msi_irq
+	generic_handle_domain_irq
+      writel(status, pcie->apb_base + PCIE_REGS_INTERRUPT_STATUS)
+
+  spear13xx_pcie_irq_handler
+    status = readl(&app_reg->int_sts)
+    if (status & MSI_CTRL_INT)
+      dw_handle_msi_irq
+	generic_handle_domain_irq
+    writel(status, &app_reg->int_clr)
+
+  advk_pcie_handle_int
+    isr0_status = advk_readl(pcie, PCIE_ISR0_REG)
+    if (isr0_status & PCIE_ISR0_MSI_INT_PENDING)
+      advk_pcie_handle_msi
+        advk_readl(pcie, PCIE_MSI_STATUS_REG)
+	advk_writel(pcie, BIT(msi_idx), PCIE_MSI_STATUS_REG)
+	generic_handle_irq
+	advk_writel(pcie, PCIE_ISR0_MSI_INT_PENDING, PCIE_ISR0_REG)
+
+  mtk_pcie_irq_handler
+    status = readl_relaxed(pcie->base + PCIE_INT_STATUS_REG)
+    for_each_set_bit_from(irq_bit, &status, ...)
+      mtk_pcie_msi_handler
+        generic_handle_domain_irq
+      writel_relaxed(BIT(irq_bit), pcie->base + PCIE_INT_STATUS_REG)
+
+Bjorn

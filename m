@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD9449E7E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0332949E7E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244056AbiA0Qoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 11:44:37 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:37359 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244054AbiA0Qof (ORCPT
+        id S234585AbiA0QpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 11:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234423AbiA0QpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:44:35 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jl5z466Pgz4xcT;
-        Fri, 28 Jan 2022 03:44:32 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643301873;
-        bh=MX51oCd5bYSXDZe8p/UcQRq6AXgsb/XDeiec+w4Y0wY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Uao15/lhQjJwl2dipxNY9hvuxyNRyiggc/Y9TMjW0SAZVdse/rAQYvNMFyQOCQ5Nn
-         dLd1qBLsk2zmx8LMMQ81QbOj1gD9WS1w4eH1xJTOy0zApo3XztRKXo+5D2FhnSbp95
-         zx1Ught578YSy4xnNaX7k8CFUjoGPM8SNWpc6sTeAkEMhXZpK0tSvUGufq89wpjw0+
-         69vqjQvE3mnSZNLsuQ+I11Lp0Lkuvt/btise/qWipXdaAJcoekaUSQX2x1KODIC0R2
-         PZ3LmsWLfWUDie/TBpPz9535V60v9SfRmXaQs5WeM+3+KyJr/K9KWuPgO+t6pG7Gu1
-         IqizhWW5aP4sQ==
-Date:   Fri, 28 Jan 2022 03:44:30 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings in Linus' tree
-Message-ID: <20220128034430.77fef717@canb.auug.org.au>
-In-Reply-To: <20220127060141.GA10653@lst.de>
-References: <20220127153055.6dd9f73d@canb.auug.org.au>
-        <20220127060141.GA10653@lst.de>
+        Thu, 27 Jan 2022 11:45:05 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81612C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 08:45:05 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so8070198pju.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 08:45:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :in-reply-to;
+        bh=WiG8e4rFhf3TAlPr7MXRtjgD0oBCA9X+CmBmQI1Z8BM=;
+        b=tcEHUtmXrDWlHm/yOPUWB6afp5YSifkZAJgM5UKd5Rdb7+ZSPfQjkD1UjsQAYkmnIE
+         R98PAnasU0HP7DZkcc7LcoNOyAYVrHdARTqqMvy9zdnYnId42F1NgZCWdPCJJaZhpy4V
+         Zp+TcIsKQVgT6qH4C0Ki8VfXgkx8+rUbfbqJG7VflEIRZ0svGs1lAnYDUlh6Xnipbmwm
+         /0OMmUVlXnZksA0KRtPIMgSLu/A/1QHWGzXxc7Krk4aIxQrfkx/5WjP9DlWuo6swJbId
+         PuJ0Pm4whgoT4LNR9DqZqzvD0DHmPIoEOJ4fSPx78kXhgIqMia3yLR/xtjRBhAXrowIE
+         xmfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:in-reply-to;
+        bh=WiG8e4rFhf3TAlPr7MXRtjgD0oBCA9X+CmBmQI1Z8BM=;
+        b=nF1Bj39ptyRWKECPn5OoU8lLfodTmYOPTctLTagWObDscKg7BidfBXtHZbO9GkNJAk
+         h8/v/+6EZyWhk+eSSAe6DvTdlhtVxONLLQnAwxcUiBZ6NUrBu2HvLak/NtyWSJL0zKLv
+         YTRtnZLbWpgqvUvD4wV9JT1uYtl70Kcsu21QpTrmYtEB4WVJTnt9ZiiELN21JGIHcTNg
+         Y9ql7KWFhIGTzAcTwPBERvcp7SG6hpD//TC5wr990mico3+Xg9Mazg6UYIorwAguYbBs
+         7COZwzskyILOs81IQOtOcq5kz5XBhp1S7UZ9tp6N0NyI+6trs61rxScWXGI6yLFrmn4A
+         ywtQ==
+X-Gm-Message-State: AOAM532IzdacJa8qimceNFMPKY5ekWCJ0gXN62ka2Uku0V3jy3B21ENm
+        SBekrNGjDsHAyPQ+WbPqq471Hw==
+X-Google-Smtp-Source: ABdhPJwnt99Hy7hFh3oGiEC1FitCeWH1wk49aL6d8IF8AcSgbFZnUmnNqnIhVhbrTa/m8kAPTHcT7A==
+X-Received: by 2002:a17:90a:9908:: with SMTP id b8mr14638416pjp.125.1643301904503;
+        Thu, 27 Jan 2022 08:45:04 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:7713:237d:48f3:f690])
+        by smtp.gmail.com with ESMTPSA id mn2sm3178870pjb.38.2022.01.27.08.45.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 08:45:03 -0800 (PST)
+Date:   Thu, 27 Jan 2022 08:44:57 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Benson Leung <bleung@chromium.org>, chrome-platform@lists.linux.dev
+Cc:     bleung@google.com, pmalani@chromium.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: platform-chrome: Add new
+ chrome-platform@lists.linux.dev list
+Message-ID: <164330181439.2996990.7235316022532021501.b4-ty@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/03=0ATfZR7Di9qbVyibM7nu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E1Fh8DIqhPrTlsFd"
+Content-Disposition: inline
+In-Reply-To: <20220126222233.2852280-1-bleung@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/03=0ATfZR7Di9qbVyibM7nu
-Content-Type: text/plain; charset=US-ASCII
+
+--E1Fh8DIqhPrTlsFd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Christoph,
-
-On Thu, 27 Jan 2022 07:01:41 +0100 Christoph Hellwig <hch@lst.de> wrote:
->
-> On Thu, Jan 27, 2022 at 03:30:55PM +1100, Stephen Rothwell wrote:
-> >=20
-> > Building Linus' tree, today's linux-next build (htmldocs) produced
-> > these warnings:
-> >=20
-> > include/linux/blkdev.h:1533: warning: Function parameter or member 'sta=
-rt_time' not described in 'bio_end_io_acct'
-> > include/linux/blkdev.h:1533: warning: Excess function parameter 'start'=
- description in 'bio_end_io_acct'
-> >=20
-> > Introduced by commit
-> >=20
-> >   956d510ee78c ("block: add disk/bio-based accounting helpers") =20
+On Wed, 26 Jan 2022 14:22:33 -0800, Benson Leung wrote:
 >=20
-> The warning looks correct, but that commit is rather old, so something
-> else must have caused it to be emitted now?
 
-Yeah, but I couldn't see anything obvious.
+
+Applied to for-next.
+
+[1/1] MAINTAINERS: platform-chrome: Add new chrome-platform@lists.linux.dev=
+ list
+      commit: 664de6a26b7f17eebca896c3e18201b15d5c7b19
+
 
 --=20
-Cheers,
-Stephen Rothwell
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
 
---Sig_/03=0ATfZR7Di9qbVyibM7nu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--E1Fh8DIqhPrTlsFd
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHyy+4ACgkQAVBC80lX
-0GxH8ggAn7Nw74omN15x0YNxT3itr8Sm2r6A2ogQkLGg+3R7+lXaPBj5tSSJbPhY
-3OIRG+BpK/l9OcP8NOP9wLNidd6mg6qbpjD4F4Y28K94p38sXAYnCMBcMmyBVMEk
-JuLOChGb2BCaESVJkK9MTvII6kigVgSstUkzKWhb98hcJrETZ//fA44EPiM0D9Q5
-QC3ic6OkVMYPeDA22oE+lC5Uj92J6uQlMCiPcyp68xSnU+VAtPtFLlX0sDGOCu/x
-xNC+WQJNo9oe81Z5wt86QZ658G9e9+C8c/bRlk9LiD9Z+MFZSNdXQHydoFG96b5w
-U5taHJ2gYE60tTH6e2vplWZ1n85Y1w==
-=WLhG
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYfLMCQAKCRBzbaomhzOw
+wmhTAQCIRyO9gXLKbcChHnl054jF5HaMDq61VMVJilowCGIEPAEA6HbrVq6aKYel
+2kCSQn/+iWgT5f2Gy1ZjYlNE2xk1DwU=
+=pIDh
 -----END PGP SIGNATURE-----
 
---Sig_/03=0ATfZR7Di9qbVyibM7nu--
+--E1Fh8DIqhPrTlsFd--

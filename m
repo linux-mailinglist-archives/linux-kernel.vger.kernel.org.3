@@ -2,191 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E6E49E789
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DE149E78B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243743AbiA0QaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 11:30:06 -0500
-Received: from mail-bn8nam12on2060.outbound.protection.outlook.com ([40.107.237.60]:49281
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        id S243733AbiA0QaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 11:30:10 -0500
+Received: from mail-dm6nam10on2127.outbound.protection.outlook.com ([40.107.93.127]:5409
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243733AbiA0QaF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:30:05 -0500
+        id S243747AbiA0QaI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 11:30:08 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K1TNDyew9NlE8izCxbtncz6MTAXRaq3gSarNRmh/n/0miDckyS7anQ36SiT4lOLD7i9p19nH3UkYRQfW+m5BhjbGN/2mJ1h1wGooROBvUbglnQgPQdRc+7c8Bk7bROg1ppLE4UDa8xfJoUyMV7W0fqiYVRdn0Pq4HbpMSvnSsgcQYA/Aujb0nU0Y7rM+hVdIcg00YYepKf4wTO3f1RYlkpc+7e0xkaSfDlL4zYCIoBz5uAHQr8p9yX9lidy6Jh1eo1aicik6Jmp64WgZZ3/HXwweAQz259MyqaMdjlDj85RbH5hk6l3iMeiXWLUwRSDY15eYdGzKZg+YiltufkoyJw==
+ b=Ccjx6zDbuOnFosq8Rt85gHUQvgyTqav0i596gbsvj/NYjWvxY9td0IPfbvNB4/NR+4rFdH6FalTsBN/Cn1vJS3hcgZBwgpg7L5hFeAcOwyLRkaZI+fo4ixswjpRmiT631kwJD0Bcgfe0uHE0FGGexFQJOKXXipm0fZ65snWV1Xzdl4W9TP2njtUCQ8xYqzbrcarJK3zZ9PUAH0Ue3Z9BhRUGdrjfHrbvNuXLRwx8G+xvDXj0WBRHwUhVKoirTqtC8Tghof9Xs0Qjje4l8/JCISuEvBqpBJ8PrBiUmJ4H06Os8ITS1PAEhFBtB1dVrTie+p94coJfUlaCPM5tMCg7xQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CTCgOX3RikiQI+E4bhO8j8beESP4amrizJWSCE7VWng=;
- b=RjfaDocDUh9auDR7+Akusy1vnoSHS/4tDIzrbhIsogFzDTxjDPGoHrgLCuRFqZPsKOWVDCXacgGZFRHePa3SpYE4adl6M2rm4PjEHSG6z6amn6MRDHAvKgzLePYQYvTGaOjedjRUjKjQxNP1w9YiaIW00NVtotZQe4jlOTwuqmqBSaqkAgsrexXRCPwkOjxIG+ihJhi+ryQbBU4e3aFzMM9P1PgukuTIPY8GzD7fqv+ZOYrUxu0f9Fr09u/q1p5SiuuIMQeU05DQFxYpD3FBc8r7MNbZY+Y26JL4k/6Rs2FFB3PKG6IWanchrnIGLuZE3Wep0aYd6vwy6WN0ix3vBQ==
+ bh=ND038PngL9SDxEB+gfunheSDzWfpvSZl3TYK9DK/nnU=;
+ b=G5qbsBy8+MO0JQQS/wZEw4AeSeF8vmaMUtXW1Rp+iWmMBEdX/Pjb3X8Ihuko6l1TGWd3Fn2aHv/uyjhJ3X1ws8fFvuFuOGoL/M2al0KhQp/Oo389zI1MCIpPift3PDys+C9Q3Zbcv/jd81W0QMEoZk7QDrIqCmt5BhvwUFPvazvRYcgcvO/X6NYXG6Wh3tqmAMzXowbpkSFafaiaZUnK+JoXUCkxS6IdSxNVvQTxrWMIt2UQcsKJ5iCW8uUcrt3+1eukawVM9r+QmpFxCUj4VI9hq4tohrBrV4qx33X+xNCkoMZrcSLzhzjsngY31rU/YQ1weS8tV4KSwZhlpY0ZOQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CTCgOX3RikiQI+E4bhO8j8beESP4amrizJWSCE7VWng=;
- b=YWIF42mRCev29DX8aCpbvH/kHHqycJSTG16/nsOY2FQjWB5ZBBhymVV4ALRvTEhYL38MZja4vnVvwxO6ltZvikhpqvhutMFCMywbY5dXs1ODthvf+W4jAkNTXoaZV+2A47nYk9PXH/+We+nqgTMAxy4FMihTNNNl/KJccWgc2TU=
+ bh=ND038PngL9SDxEB+gfunheSDzWfpvSZl3TYK9DK/nnU=;
+ b=Tmq3txTS1jJRYqK14aQe8irWQXfdDxXAeSEJd3sh0yULU4XJ6gEpkRsbyVT7R66nFRBgsnJScdyUB+9teG5/eqbl5gP3Omlb17vTzBXnWDAwqNn6sHxfWFYTnJxky8PLmtXSonqZ5Z5Qt+AI5Y/RI/31UOaJUkn7RO9VPpLYyJg=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2470.namprd12.prod.outlook.com (2603:10b6:4:b4::39) by
- BY5PR12MB3651.namprd12.prod.outlook.com (2603:10b6:a03:1a9::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Thu, 27 Jan
- 2022 16:29:59 +0000
-Received: from DM5PR12MB2470.namprd12.prod.outlook.com
- ([fe80::19bf:2e9b:64c3:b04b]) by DM5PR12MB2470.namprd12.prod.outlook.com
- ([fe80::19bf:2e9b:64c3:b04b%6]) with mapi id 15.20.4930.018; Thu, 27 Jan 2022
- 16:29:59 +0000
-Message-ID: <efd76cc3-98af-f70a-74e6-f15f84fd927a@amd.com>
-Date:   Thu, 27 Jan 2022 21:59:44 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bharata B Rao <bharata@amd.com>
-Subject: Re: [RFC PATCH 3/6] KVM: SVM: Implement demand page pinning
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>
-References: <20220118110621.62462-1-nikunj@amd.com>
- <20220118110621.62462-4-nikunj@amd.com>
- <CAMkAt6rxeGZ3SpF9UoSW0U5XWmTNe-iSMc5jgCmOLP587J03Aw@mail.gmail.com>
- <04698792-95b8-f5b6-5b2c-375806626de6@amd.com>
- <CAMkAt6rCU3K-dk7edxa9iKrOZ0uh5442K0U5Fbux=js0q6qQ+g@mail.gmail.com>
-From:   "Nikunj A. Dadhania" <nikunj@amd.com>
-In-Reply-To: <CAMkAt6rCU3K-dk7edxa9iKrOZ0uh5442K0U5Fbux=js0q6qQ+g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BMXPR01CA0073.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:54::13) To DM5PR12MB2470.namprd12.prod.outlook.com
- (2603:10b6:4:b4::39)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by BYAPR10MB3608.namprd10.prod.outlook.com
+ (2603:10b6:a03:120::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.10; Thu, 27 Jan
+ 2022 16:30:05 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::2d52:2a96:7e6c:460f%4]) with mapi id 15.20.4909.017; Thu, 27 Jan 2022
+ 16:30:05 +0000
+Date:   Thu, 27 Jan 2022 08:30:09 -0800
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH v3 net-next 2/2] net: mscc: ocelot: use bulk reads for
+ stats
+Message-ID: <20220127163009.GA3546@COLIN-DESKTOP1.localdomain>
+References: <20220125071531.1181948-1-colin.foster@in-advantage.com>
+ <20220125071531.1181948-3-colin.foster@in-advantage.com>
+ <20220126183436.063b467c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126183436.063b467c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+X-ClientProxiedBy: MW2PR16CA0007.namprd16.prod.outlook.com (2603:10b6:907::20)
+ To MWHPR1001MB2351.namprd10.prod.outlook.com (2603:10b6:301:35::37)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 52c56b82-fba7-409a-af33-08d9e1b242b1
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3651:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB365131C2A56DCACCC51C5F75E2219@BY5PR12MB3651.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Office365-Filtering-Correlation-Id: d1ca80a5-268f-45ce-f917-08d9e1b24658
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3608:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR10MB360833546A9DBD6374606A1AA4219@BYAPR10MB3608.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 39kHOsCLTwFiJeiGTqCXhfdE+6eVL++paTmdjAE7G1w4X9W8BfTUb47bVlRq9XyLPtb0b+ATJXKVKQeugQ7HSrKstmGHOdWOFr2wm/5tB9iC82vMBSnWhska01HpMSHuwqSTsvcXh2lUEVaVyKKOS6PMMN9PcnMcB8RPs1ePmNkgqgYb8bIn5XA7TZBNY6azcJbPtgtVk1mRnSnmsH/VQgeANiKFAiUqXM2S3TipLQxlg90sqYRRVJjzXrJrD30dXveBRDb/F/RBxSN8/XRIdMcUw6sVNiVLmnPu2T39OtBcF5m7qy0a0lwiKobcvRrfCVWNnehWAgEiCU3Dsqa4PY8gykx2GYCoGQn7J8KrKViwMeAYYKbke4kej/pT5EuYZolFaqOmozHTUsdoKuHlTe+F7rreTNKDqBmcAM11GdKgWKtGBfw+Sb3xWtDH39PUkrYzMfRLw6NNVC+npjd8/G6NOMkG07Y4KrTWMBk7qg25yqQtigS4z5WaiZRershKnZNLSaBU12SnNSHcyRphYl5whPWq0ihSVfb8oWRT+Q39VbIH8E+24hl6WbcUDchIiFM8kpMwVzNhLenr0KO241b5Kpk+qyN9DfBrqiDH3FiG+pkIlnVMBGKpehtPGhUuK6LfI6dFmBKk/i1YT9jvgFmhQIPIvHtQxb9JTbdlRxyTH1b0mSrUjcJAxsnwzizwmvjN+PvSbLefgXpu3cJd2sfyjMBmzrgqrrp0g84r0Kg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2470.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(186003)(6916009)(316002)(508600001)(6666004)(54906003)(31696002)(66556008)(38100700002)(4326008)(8936002)(66476007)(8676002)(66946007)(6486002)(2616005)(6512007)(2906002)(5660300002)(6506007)(31686004)(53546011)(83380400001)(36756003)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 07ED+K6XId8BeAMkq6bMHP1WxxAyX90FL52IpWAyh4kba6LVEIcFCuPJ8dekrewb+Zj4cv9uBHBfaE5+6ujMfg6L+uTIsmeh3lO4kwcftdURG0eI5+mVKXnZO3zKtPeRh1WOjMybJ+4TQkk5coC5FjEd4kHL6WfWrtK0x62sOTpSUnIjBV8Nz4qUBbwTUzeh1vUplLLYIgr+LDKDcYKmVRX6CpbWCgPZABVsjo/Fcg1nqWnOOf38izeTHBwnLrdPegWg2f5jKCj2GVBatr27TYFLdYZXnhWXuH1xBnwxONH/yp4LVaIimGM5Cq6/gzdO2bIWIKiSFcnjNIkwN3TCryCFl7RRmsGbEA933SBChEeBKEwoLJutfEv6F0psV9ACZbVHKPQiCw8925+NOiFSToqIh/oevIUyM4tEnANTozwYp9ZjnUj0PP9729Ro7BPs2JjXCaD+33S1u3QwdhaKIpq8qo5Zk/r4uYTkbE3z8lrO9bHgIKmUS6sDM4biPlimai4lOyP6agdtXlfEA5Klj6Al0VdeBpAcBW1eE+TOXRbtv8jpyjML/68h2CU1VHbG/XKxFiZd7qNdFQjENeEDM2uj2m1nZT8bOUKyuWyrIpCNDimIXHPRLKucowMmEkPfTkjMHDPITU/OD35Y53WR+63rad8eV/SHcVgY42wBEWDnc8HN8sYnqHVe3qe25qnYhXiJYKifWoZoMHh6UvI9xw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(136003)(39830400003)(396003)(366004)(42606007)(38350700002)(6506007)(26005)(5660300002)(54906003)(4326008)(8676002)(2906002)(6916009)(9686003)(186003)(83380400001)(8936002)(52116002)(1076003)(66946007)(66476007)(6486002)(38100700002)(6512007)(44832011)(86362001)(316002)(508600001)(66556008)(33656002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V0N2UVFNT2ZzKzhkclc0MHFuWUlWcEhzTWVZZ0g2aGN4YUJVNEVQVWw2R1pG?=
- =?utf-8?B?Sy9KTnZ5QVRxYlVyd0VkSDAvLzFvS1hvQ3hVT2xVYUdEYVhwNTNSNjY4QWZv?=
- =?utf-8?B?ZHRHVTdhSXRMSXRiMTgyR1pBT2kzZ0hsVHJ5LzkrRWUxMDJWc1dGTEhDZmdp?=
- =?utf-8?B?cytxN0t5L21HNTRybnUwS2JTR3dMRU9UV1ZRT0wyd24xN3RjVWlqRGpOSjRH?=
- =?utf-8?B?Wm0yWWtOQ0I1K1pCM09UZHlXVVBwM2ErcUhFZlR5TVJTeDRZV2JKay9hZXVI?=
- =?utf-8?B?aFltVk9MQVJtbWVxK3ZJbzhtaUozNGtoRkx4Z1k3Mks0aW1KZEpQWkd2Y0tX?=
- =?utf-8?B?SkJRdXpBQWxXbkJsQUROUFduUzBqdnEzcnUreUlXMmg4UGlFeDFUWStqVk1L?=
- =?utf-8?B?RGk4VU9XNlRWZmNjMnREdzVvQlhXakVBK3V3Nmx5WERzNE5HQmFpbjhMc3NU?=
- =?utf-8?B?NG1QUjg4ZHpVM1QvdUx4NDhyc2NRbnFTdEwyaWQva2FvcWxiSDczNU9ZU0dF?=
- =?utf-8?B?K2pzOU9lVko4aEFZaitxZkhCeWdVS2RJOHVDSUw5Z0dGM015VHEzekR2UTBJ?=
- =?utf-8?B?eWFnZlZDdkFJRzJaSUd1UE1pK1l5WmFWaDZNc0IrcFRGK1dyT0tIR21LekJV?=
- =?utf-8?B?Z3ZNZXNjWVRGVmJuYVRPK2ZkT2VjNlZjcENoRTk5OVpQaUdEODg3SUJzcWov?=
- =?utf-8?B?Ui9rcTArZ3dxOGxyVG10NEJ4NkNRbUZNVm13eU44YStqbUZPSmpZdXRUVVdu?=
- =?utf-8?B?VkI1ZUhmTXVnQVNhZE85emtuOXpBVktiM1lUMW1XbCtYeEdycTJqMGZCL0ty?=
- =?utf-8?B?ZHdPQVRZcmUrQ2U0ZThyam14TVNwNnN3cDFLdWVWaVRHREEzcmlZL1FsdVJG?=
- =?utf-8?B?WlFUUjNsQ01yNXA1YlgyMnpDRDZQWUhaV0lFS2ZkbHhlSytlT0dPcGhkMjVz?=
- =?utf-8?B?Q0t0SFFmY2tCU1J1Y2lVdEJQdEtNOG5PQnF0aTdpR0o1bDlBQ1VBdEEwMWs1?=
- =?utf-8?B?aEJwODlVSTMwTlI0RUc2UEVzaC9QZmgxM3JXVmxhQzBJOUxHcVhUR25zbFFh?=
- =?utf-8?B?YTZYUDFMNkhZcEx6ZUtMckpzelJUbmZWS3lVbkdsS0wvR2l3aVFzSXlTUnMz?=
- =?utf-8?B?WWhBTDhwVEx3Qkt0bm9ORFk1V2gxbVBrbkl0MGxJLzJTOHgyN1V4V0FXek1t?=
- =?utf-8?B?Nk14dGZXdWxQK2Q5RUkrQjVBWk1sbkFNVjNIZTViSFpZVk5NVFhMa2NDbEVS?=
- =?utf-8?B?QXh2azc5WXpYRWV4ZVQyd3NCcm5zOTVHc3RoUGpVaEJ1ellDSmpmbXo1SDhs?=
- =?utf-8?B?WUpxem1rWVZjWC90eVNNeFIrNXRreGFySmdpMlBDRC9WaHZ4ME9Ldy9TaUFx?=
- =?utf-8?B?TVNYeHlDUzJpZkVSS01mNmlWdGZ0WTZlRWdCQlF1ckxwMTRmMTI3NGFhS3RB?=
- =?utf-8?B?NURGaURzN25lQjVoRDVyY1lJb2wyQVVUTXpid2ZNdGNKRmUwTDN0TzJITDBk?=
- =?utf-8?B?MEVKU2s4TFo0SkNwR3kzWEJ6aFA1aUJ1UldGQlBPVWVCNHFPSzZBcWZ5N3Y3?=
- =?utf-8?B?S3VBRzdJcE5sZWEyUm15ZGI3aHcxRFFKTCtURi9SU3FzbW56REs3em5YUm01?=
- =?utf-8?B?WGs3V2VTNUpXaXJqZGh6aG9pVmxLeG1aOVhjTWphcmJKQlJ1bTRySE1iZFlZ?=
- =?utf-8?B?TEdsWWp1em1mUU84M3NJNmxYUkp4YytjVloyN3ZMQmM4K2UySU1KS3podWxm?=
- =?utf-8?B?UzNvYk9FdG1Vb2p3WVc3WUZlZjJCTVVJcXFWVWIrZ25FQ2ttZlFnUWd1UE1Z?=
- =?utf-8?B?OUVPWG9zak5BRVBhZ3prRjR6dGlwZkhrNGtoK2paRjhrVy85b2ZKSWZXTlk3?=
- =?utf-8?B?czJ3UGpmdHlHUG1aUnJVRm9tR0RlQXdrMElyVzU0M2p6R1VPS1hPdCtNdE9t?=
- =?utf-8?B?WUg3NE1ya2lOdk1SSzhBVGhZVmhMa2p4YlJrc3hxUFlLQ0taRUg3YitsVmcy?=
- =?utf-8?B?cHZPcEU0WGRvTnNpcnVBRlFIOFV0ZWVsRXRBUUVnbTZGTjlRS1FQRjYzbk1y?=
- =?utf-8?B?TE91NmtVdnNwSHljamhtVE5PZFpoVVoxd0F4bWhKVTl1UDFSWFdCa3RPZVps?=
- =?utf-8?B?YWlnOEkxeDNydjJKWGVSaHBPL3FVODhwT0lvY1lXOUV3Q01xSm5rWkVUbVpL?=
- =?utf-8?Q?U/PxHJ1qaUXxDETVkJslVDg=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52c56b82-fba7-409a-af33-08d9e1b242b1
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2470.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HAZmlI1fPyzipPTuIeGi7oqbo/eKyRSF073PcGyhB8XS8lz/r6qZli5CLs9w?=
+ =?us-ascii?Q?HnSrs1q3V9v1U7ykxBh9ZJjgj5ao76Uuv+A7mVPuwaVfUTZdTFVRlD/raiEe?=
+ =?us-ascii?Q?Jc3o9g2nSnYDfwg9U6LnOGbu2Qo4dtljTbtCxfQDJppmN6bEI7U5nAhDQx1i?=
+ =?us-ascii?Q?6P7ks2yzAo2POmooc7Tvwxtm5EKBcrkfDPl8qK8KCar5nSOeqXiB8c+0SqL7?=
+ =?us-ascii?Q?xYq9nrKvBtWjA6JAbYi0kosqh9qqiVMAm3Tr+zj16plbVNeOXKyGRaPmWrCB?=
+ =?us-ascii?Q?etyJ6yq9DJb2ELleQjMG2UD7oMrgUr4tkp7p5597eEJ37F4GJTt6LL3RMEDA?=
+ =?us-ascii?Q?zr9aLHDli6+fx6u3jQZSPuvFB+l9Akwlidg4udtyTJuV+FHb8LDbKHD0ekLm?=
+ =?us-ascii?Q?E3TpSQ9MMXKgECk7j45dcUdbs/WNqSVyvzAdYoAP08I6Zfk0qrGwfR5qBGXC?=
+ =?us-ascii?Q?niSzkcgWf7vKh7JJp+9encfem6rsjyLW+gL0hDcLD/7RDpTTlv21ORGFhPNI?=
+ =?us-ascii?Q?QpJCs8bZHO7bj8hus+GYqlnelxAT4lgPPMZfxa+D8MNUtECRraU9Cu6cfAbu?=
+ =?us-ascii?Q?KEjwMiPk6b60rp/tnkacikFJYU+khuOVcUDoF1J90Kh7VDq6TRGDPC3GMpV7?=
+ =?us-ascii?Q?LFWD/RLpTGrbtHVtarssdapgvMK8d2s3cNzXXBoMgj5p91Ix99fitVt2qi/G?=
+ =?us-ascii?Q?9Qx0MTdvnz9SG2lk4M5uLgMLslq+Mhutk/8sEET7ZMSH4e7GNdHsFGKxTYqE?=
+ =?us-ascii?Q?CeLRVAmb6Uruuf10oMkxG7IlkBsFRZlCgocWwAfBmj2NgAsXdurKg04d1PX+?=
+ =?us-ascii?Q?JLglfFRz347oKjgvzoXB5VQbdrpEznqiotX+OeQNr84AV/nBGyrhNhSbpPD1?=
+ =?us-ascii?Q?15o8U7KXKBX0QG/nnTRtTUltpPrAi1xGCI4BwlIkXU6dsvMCA1U3wPvC5GUM?=
+ =?us-ascii?Q?MGY0eByEMfvlmcTuOH2UvOoIWTQwihyzxjUUG2vuHPdYXoPp5Zgdb5/rntyr?=
+ =?us-ascii?Q?cD5zVLD0htKlEk9u97SgjufhwTEPFXAMtpXJ8FkvK3ATE3xVPNWRgsORXUcT?=
+ =?us-ascii?Q?Xl2mvv6gJeon8ruXigD/XfTd+/Bl5GL+V2FMbj2Z1NJ8ZzyR3hQ11pQ0BM08?=
+ =?us-ascii?Q?Ohu4j474UujdVGUtSOj5Gp0JopWLJ22IUqrNLWrV0TeNKl24h0gbWXkTlhv6?=
+ =?us-ascii?Q?3HLxSWRqnwGMYaCQguDGsPxsNq624sWG9XEGe0Fzuh2EQiNgeuACepcgPfn+?=
+ =?us-ascii?Q?XSlWMXhP38YtnNybvjPSnWlB1d7FwrP523O6686JS42M0/uRoE175IT4priu?=
+ =?us-ascii?Q?+MtZJVl1xo47aRs9FFkWoPZQIyQ/JAoUPXfc4Z9XJUgvQH2+qR6a/MUFMJq3?=
+ =?us-ascii?Q?qhwGW54MGqA0KZ0khaFBnCLBRVYXg5WLenn8TeXGgw2IFlQieknUwOvXPWwB?=
+ =?us-ascii?Q?fjR3G3hBNfFN5Irt6zYrPNJXyfwniVodkljkG9wmG8RAKxyOCnEb5ckViJL9?=
+ =?us-ascii?Q?OUNwtj0TjYMaQ4vyMkCzTO15v9AbNcVvHyP+fXN8/gNotaYSDdhC9U4/rUe5?=
+ =?us-ascii?Q?MIXnfMW9LP/p3H5MFPMSSTMBfrfTIAASBF2l66sNV+7yveJJmUZXX/nYKe0f?=
+ =?us-ascii?Q?2Qcn5Cqw1MrmRrwH/rv/jxg3Sr4p95O5HrRqP6doW9hgAkigZMqUC4BOPys7?=
+ =?us-ascii?Q?3641JmfEpktikNX7cSgpe0Uqj6Y=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1ca80a5-268f-45ce-f917-08d9e1b24658
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 16:29:59.3379
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 16:30:05.3893
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UN4gBlaL/uRrEtlsUNM5aSOP0Udlbl++bPDgQZbFrROg0nRVJLZiZl1HxBfBRmpT1BUzPhWP45cMgCIsAUFWmQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3651
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q5OF9ptJsyhmjMwgNk9FiJu6KznJ/DfaFN2lN7KjrAqtUWCVynTAaD4LxX6jFP0h1MfLpcpABportAv+p/F7DgDE9ZYA9bPT+DTCMM6GoB8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB3608
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/2022 11:29 PM, Peter Gonda wrote:
-> On Tue, Jan 25, 2022 at 10:49 AM Nikunj A. Dadhania <nikunj@amd.com> wrote:
->>
->> Hi Peter
->>
->> On 1/25/2022 10:17 PM, Peter Gonda wrote:
->>>> @@ -1637,8 +1627,6 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
->>>>         src->handle = 0;
->>>>         src->pages_locked = 0;
->>>>         src->enc_context_owner = NULL;
->>>> -
->>>> -       list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
->>> I think we need to move the pinned SPTE entries into the target, and
->>> repin the pages in the target here. Otherwise the pages will be
->>> unpinned when the source is cleaned up. Have you thought about how
->>> this could be done?
+Hi Jakub,
 
-Right, copying just the list doesn't look to be sufficient. 
-
-In destination kvm context, will have to go over the source region list of 
-pinned pages and pin them. Roughly something like the below:
-
-struct list_head *head = &src->pinned_regions_list;
-struct pinned_region *new, old;
-
-if (!list_empty(head)) {
-	list_for_each_safe(pos, q, head) {
-		old = list_entry(pos, struct pinned_region, list);
-		/* alloc new region and initialize with old */
-		new = kzalloc(sizeof(*region), GFP_KERNEL_ACCOUNT);
-		new->uaddr = old->uaddr;
-		new->len = old->len;
-		new->npages = old->npages;
-		/* pin memory */
-		new->pages = sev_pin_memory(kvm, new->uaddr, new->npages);
-		list_add_tail(&new->list, &dst->pinned_regions_list);
-		...
-	}
-}
-
->>>
->> I am testing migration with pinned_list, I see that all the guest pages are
->> transferred/pinned on the other side during migration. I think that there is
->> assumption that all private pages needs to be moved.
->>
->> QEMU: target/i386/sev.c:bool sev_is_gfn_in_unshared_region(unsigned long gfn)
->>
->> Will dig more on this.
+On Wed, Jan 26, 2022 at 06:34:36PM -0800, Jakub Kicinski wrote:
+> On Mon, 24 Jan 2022 23:15:31 -0800 Colin Foster wrote:
+> > Create and utilize bulk regmap reads instead of single access for gathering
+> > stats. The background reading of statistics happens frequently, and over
+> > a few contiguous memory regions.
+> > 
+> > High speed PCIe buses and MMIO access will probably see negligible
+> > performance increase. Lower speed buses like SPI and I2C could see
+> > significant performance increase, since the bus configuration and register
+> > access times account for a large percentage of data transfer time.
+> > 
+> > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
 > 
-> The code you linked appears to be for a remote migration. 
+> > +static int ocelot_prepare_stats_regions(struct ocelot *ocelot)
+> > +{
+> > +	struct ocelot_stats_region *region = NULL;
+> > +	unsigned int last;
+> > +	int i;
+> > +
+> > +	INIT_LIST_HEAD(&ocelot->stats_regions);
+> > +
+> > +	for (i = 0; i < ocelot->num_stats; i++) {
+> > +		if (region && ocelot->stats_layout[i].offset == last + 1) {
+> > +			region->count++;
+> > +		} else {
+> > +			region = devm_kzalloc(ocelot->dev, sizeof(*region),
+> > +					      GFP_KERNEL);
+> > +			if (!region)
+> > +				return -ENOMEM;
+> > +
+> > +			region->offset = ocelot->stats_layout[i].offset;
+> > +			region->count = 1;
+> > +			list_add_tail(&region->node, &ocelot->stats_regions);
+> > +		}
+> > +
+> > +		last = ocelot->stats_layout[i].offset;
+> > +	}
+> > +
+> > +	list_for_each_entry(region, &ocelot->stats_regions, node) {
+> > +		region->buf = devm_kzalloc(ocelot->dev,
+> > +					   region->count * sizeof(*region->buf),
+> > +					   GFP_KERNEL);
+> 
+> devm_kcalloc()
 
-Yes, that is correct.
+Good catch. I'll probably give it another day for review and resubmit 
+tomrrow. 
 
-> This
-> function is for an "intra-host" migration meaning we are just moving
-> the VMs memory and state to a new userspace VMM on the same not an
-> entirely new host.
-
-Regards
-Nikunj
+> 
+> > +
+> 
+> unnecessary new line
+> 
+> > +		if (!region->buf)
+> > +			return -ENOMEM;

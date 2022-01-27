@@ -2,125 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D6F49EC7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ADA49EC83
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344047AbiA0UaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 15:30:20 -0500
-Received: from mga02.intel.com ([134.134.136.20]:32839 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231384AbiA0UaS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:30:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643315418; x=1674851418;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2VPTiOkEchTu2v390pzQVhsxxfW11PH55/4gHOPpmN4=;
-  b=apBwMnJ8a3DieqCSTFZpTRpqr4lV1SzqzTdG+jUGXDTj/DrMVjzgxEnd
-   fDKIDUi4ka37IAzXaIYcLMf6zOQHmdwGMWajOnimLSedaGIMFpPLsSO+L
-   Y8MTw816qLwU4pQzfz4O/NRAKdBRmRdxzFHb37qdMfHAD3usmIZ3fpyw1
-   V44tNjBMvp6CiKFbS284e5VmqwcQRRm/HBdkb0fGKjpYOKUpdESbxkeRM
-   GGdKanAw9bu+d2N9ciZybpwsV63Q7Xw9rCH4pYGlYuwJ+Di1Cpzmowh4G
-   b0dZaZ2TuLdgp0n0R/t07AXymR0KQdOWndeF6py83DlRCURGO22SAJ4+U
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="234334704"
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="234334704"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 12:30:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="696796048"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Jan 2022 12:30:16 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nDBPM-000N13-2q; Thu, 27 Jan 2022 20:30:16 +0000
-Date:   Fri, 28 Jan 2022 04:30:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ardb:arm32-ftrace-fixes 46/50] arch/arm/kernel/ftrace.c:239:39:
- error: 'struct stackframe' has no member named 'lr_addr'
-Message-ID: <202201280425.w2sPQp19-lkp@intel.com>
+        id S237016AbiA0Uhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 15:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236959AbiA0Uhw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 15:37:52 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3A0C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:37:52 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id nn16-20020a17090b38d000b001b56b2bce31so4224910pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:37:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5zRPiVXKQJnIvFiBGkHq6ju0/RKXpE5LqP8JIErA6+A=;
+        b=CfT0fWYKB1hO4qQ9GV8xmqubclF/fIkanpe1lgeduXWSr/koO+yz/w6mA29iz7IzTq
+         R7GscS3dUrZggCzr7Ne0/xMf0PF/tp7B5Lw31/3NBxoSsZSjvGw981Rnn/1bbwJLDY7T
+         yViu+tcFBnzRPfpWnu0WJj1e2lmZd/6BqYWdS4GWbSK7RgReFr2aMWilBPIk0NtxcZgZ
+         7pFUncOJzYQ334RFLv1ajP3sbXZ7wHxTezLe0stlt1is0bwQ5tbUJNBprVnrwMYKGOBf
+         OFG0Vim+aAwy6vIaDI80pZsEp4Z0N5esaw//uvE/JBJqsizf+GEG60n9/OL7flYy0dP8
+         o1xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5zRPiVXKQJnIvFiBGkHq6ju0/RKXpE5LqP8JIErA6+A=;
+        b=4QIYf5td5tj9FZZRQpBqoW8vJIKxxxF9RcSLPDSqwSPL+FjXHx12pmW1lTqEpyO9Qy
+         rAi5957eJoE0+Rn+xhF9tqfHSlAksPOtWHMI0VVGRRmCuSLeJUFa3fim83lOcicpIiO8
+         jiqepVorf8S0Vh902qLQU6Sv6m5VxZUJY+LHghIajhVvc14i67gS5gAgWokRn80R3ttk
+         M1fdQ6GIGMqQxi23iEIEfwjT51p3HAgiQydlO0pua41Kmth0C94fJ3ieHrCVb5icf1/J
+         4YoRkvQQBcgqKaklgoiIUJqbyH4suQUrlJz4U0vVabhhKz0Avc2+/KqruKekc39EuLVm
+         YN8Q==
+X-Gm-Message-State: AOAM531sC034C52WsvPBJjFYZ6J68TWkEOFgMiBmcvUw/8MFqpDHVd6K
+        mBLJrfvUxdNv2oNVZZaQDgb6KQ==
+X-Google-Smtp-Source: ABdhPJwvlYs9JcL+IH0gEFUp/iIZnp+yfrLv4nYE7ef/xpEhywq4U47rREEBrntl66R10kQ6zqL/4w==
+X-Received: by 2002:a17:90a:39c6:: with SMTP id k6mr15969349pjf.194.1643315871478;
+        Thu, 27 Jan 2022 12:37:51 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:7713:237d:48f3:f690])
+        by smtp.gmail.com with ESMTPSA id j6sm6992623pfu.18.2022.01.27.12.37.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 12:37:50 -0800 (PST)
+Date:   Thu, 27 Jan 2022 12:37:44 -0800
+From:   Benson Leung <bleung@google.com>
+To:     Won Chung <wonchung@google.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ACPI: device_sysfs: Add sysfs support for _PLD
+Message-ID: <YfMCmCb47zocYXCA@google.com>
+References: <20220126235807.3164317-1-wonchung@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yN0c5RbogYywFKuv"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220126235807.3164317-1-wonchung@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm32-ftrace-fixes
-head:   db81a4be9a228c6d728b5e10ada88553cc72a001
-commit: 94e8ea79256baf12b39634037ff5336c1930308e [46/50] ARM: ftrace: enable the graph tracer with the EABI unwinder
-config: arm-buildonly-randconfig-r006-20220124 (https://download.01.org/0day-ci/archive/20220128/202201280425.w2sPQp19-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=94e8ea79256baf12b39634037ff5336c1930308e
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb arm32-ftrace-fixes
-        git checkout 94e8ea79256baf12b39634037ff5336c1930308e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--yN0c5RbogYywFKuv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All errors (new ones prefixed by >>):
+Hi Won,
 
-   arch/arm/kernel/ftrace.c:216:6: warning: no previous prototype for 'prepare_ftrace_return' [-Wmissing-prototypes]
-     216 | void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm/kernel/ftrace.c: In function 'prepare_ftrace_return':
->> arch/arm/kernel/ftrace.c:239:39: error: 'struct stackframe' has no member named 'lr_addr'
-     239 |                         parent = frame.lr_addr;
-         |                                       ^
+On Wed, Jan 26, 2022 at 11:58:07PM +0000, Won Chung wrote:
+> When ACPI table includes _PLD fields for a device, create a new file
+> (pld) in sysfs to share _PLD fields.
+
+If you're adding a new attribute, you should also update the Documentation
+file here: Documentation/ABI/testing/sysfs-bus-acpi
+
+Thanks,
+Benson
 
 
-vim +239 arch/arm/kernel/ftrace.c
+>=20
+> Signed-off-by: Won Chung <wonchung@google.com>
+> ---
+>  drivers/acpi/device_sysfs.c | 42 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>=20
+> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
+> index d5d6403ba07b..8d4df5fb1c45 100644
+> --- a/drivers/acpi/device_sysfs.c
+> +++ b/drivers/acpi/device_sysfs.c
+> @@ -509,6 +509,40 @@ static ssize_t status_show(struct device *dev, struc=
+t device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(status);
+> =20
+> +static ssize_t pld_show(struct device *dev, struct device_attribute *att=
+r,
+> +			char *buf)
+> +{
+> +	struct acpi_device *acpi_dev =3D to_acpi_device(dev);
+> +	acpi_status status;
+> +	struct acpi_pld_info *pld;
+> +
+> +	status =3D acpi_get_physical_device_location(acpi_dev->handle, &pld);
+> +	if (ACPI_FAILURE(status))
+> +		return -ENODEV;
+> +
+> +	return sprintf(buf, "GROUP_TOKEN=3D%u\n"
+> +		"GROUP_POSITION=3D%u\n"
+> +		"USER_VISIBLE=3D%u\n"
+> +		"DOCK=3D%u\n"
+> +		"BAY=3D%u\n"
+> +		"LID=3D%u\n"
+> +		"PANEL=3D%u\n"
+> +		"HORIZONTAL_POSITION=3D%u\n"
+> +		"VERTICAL_POSITION=3D%u\n"
+> +		"SHAPE=3D%u\n",
+> +		pld->group_token,
+> +		pld->group_position,
+> +		pld->user_visible,
+> +		pld->dock,
+> +		pld->bay,
+> +		pld->lid,
+> +		pld->panel,
+> +		pld->horizontal_position,
+> +		pld->vertical_position,
+> +		pld->shape);
+> +}
+> +static DEVICE_ATTR_RO(pld);
+> +
+>  /**
+>   * acpi_device_setup_files - Create sysfs attributes of an ACPI device.
+>   * @dev: ACPI device object.
+> @@ -595,6 +629,12 @@ int acpi_device_setup_files(struct acpi_device *dev)
+>  						    &dev_attr_real_power_state);
+>  	}
+> =20
+> +	if (acpi_has_method(dev->handle, "_PLD")) {
+> +		result =3D device_create_file(&dev->dev, &dev_attr_pld);
+> +		if (result)
+> +			goto end;
+> +	}
+> +
+>  	acpi_expose_nondev_subnodes(&dev->dev.kobj, &dev->data);
+> =20
+>  end:
+> @@ -645,4 +685,6 @@ void acpi_device_remove_files(struct acpi_device *dev)
+>  		device_remove_file(&dev->dev, &dev_attr_status);
+>  	if (dev->handle)
+>  		device_remove_file(&dev->dev, &dev_attr_path);
+> +	if (acpi_has_method(dev->handle, "_PLD"))
+> +		device_remove_file(&dev->dev, &dev_attr_pld);
+>  }
+> --=20
+> 2.35.0.rc0.227.g00780c9af4-goog
+>=20
 
-   213	
-   214	#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-   215	asmlinkage
-   216	void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
-   217				   unsigned long frame_pointer,
-   218				   unsigned long stack_pointer)
-   219	{
-   220		unsigned long return_hooker = (unsigned long) &return_to_handler;
-   221		unsigned long old;
-   222	
-   223		if (unlikely(atomic_read(&current->tracing_graph_pause)))
-   224			return;
-   225	
-   226		if (IS_ENABLED(CONFIG_UNWINDER_FRAME_POINTER)) {
-   227			/* FP points one word below parent's top of stack */
-   228			frame_pointer += 4;
-   229		} else {
-   230			struct stackframe frame = {
-   231				.fp = frame_pointer,
-   232				.sp = stack_pointer,
-   233				.lr = self_addr,
-   234				.pc = self_addr,
-   235			};
-   236			if (unwind_frame(&frame) < 0)
-   237				return;
-   238			if (frame.lr != self_addr)
- > 239				parent = frame.lr_addr;
-   240			frame_pointer = frame.sp;
-   241		}
-   242	
-   243		old = *parent;
-   244		*parent = return_hooker;
-   245	
-   246		if (function_graph_enter(old, self_addr, frame_pointer, NULL))
-   247			*parent = old;
-   248	}
-   249	
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--yN0c5RbogYywFKuv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYfMCmAAKCRBzbaomhzOw
+wv/lAP0fZ4J1IJCrLit7NHh8xFteID06c/Ga76+iIXX+6x6MjwEAox9Fhj77FOn1
+QH3TPybVr1ADTo0TiUmRtUQbDxVpfAA=
+=c5Dl
+-----END PGP SIGNATURE-----
+
+--yN0c5RbogYywFKuv--

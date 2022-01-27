@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6255D49EC2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B47649EC31
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 21:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343731AbiA0UG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 15:06:57 -0500
+        id S1343829AbiA0UHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 15:07:00 -0500
 Received: from mail-eopbgr80041.outbound.protection.outlook.com ([40.107.8.41]:8839
         "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232984AbiA0UGz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:06:55 -0500
+        id S231156AbiA0UG5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 15:06:57 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SFRxIK84Ydd0dyxTPiHbQd/u7vA4m267NWheVVc43ya6aaN9aeVQwcrKD9S7lWfXv9xvuRP1AMCDo/oKxsMTlSHXpnw4QcrKvBLRfyf8JObBGj264IzwmRuMUp3UebO97VHw7i8Jg0ArGYlm3y4PGq9AfMA3h6ZTtKoTinzkc8PTnPj6HT/aNsJOHil9k5rLgf/U70IczuhJEi6VtPl8u6mdbIIKrYMWFQ7jdJnGTlAMpfGwMtzKxSJEDuEa7t5ewFl2i+KRL04XL2Y4VrjF8uc+yDTZd+mfwNwXJnLHFDj23I4eIkdWcKNdYL1kAqpm9C8rTPiJN2MwMzNNJj2f0Q==
+ b=JLuse11DLWB20rbK+3t6UfKo1YX0+HosN+3Y3iIW4Mz3HvXY6Djc3iRMGG5cn8lw9fTtQYUNQCKkRbEnIumZfxwV2lTf667rT2UyeKZu/eAAPssZdAUZ9P31/KyIHa31ccFMtVh9Hr1vqKnFfphP+gKsg7uvjBcvewudLO2Wu7eZ80zkfgpYgfTVHm0VrnwKD38KZUgqx2YNCWIMv2RpWYu4PMMAANbEGi4rPCTMpthzYXEO1aLcjDSaAKmZa2JV9Q+MgLG1zDFuVyatk6JxfWQBfdQgCHhvBxpbMk4bHToKmov4MXNnzF7fNjLPcRQibnfPwoJEcifbyU8BEAhw9Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YzHP/x+dYHR6FvTXMK0BLZIhC37+aiehnMT9dxjDGf4=;
- b=ZmNyEUEhQbtkHd5BYaF5jlhZmjRubsQoBtxkCMCGSMFDc5/KAdIsbcmtHb1qNm7aoZ7LHcml4bR6D9BlVJ2JTwpJqg7tflNHen01GzOD/uglmpFQa1xGPUvehEWsOLa/uf3/zTUypZmBG+wXOzLbNbSYYZrCg55Z4rbhKK1Qq2xc72xuTc8BmP38AcYAu7HyQmm+CBIz0oa+18bMdI8vMsV2ymqw67zbfJDqLV2NQKQz7+8F5sLRIYyEbmK1hlo0hADxg962C84XZ86LOE7KsTrEkoBS0dy0AD3ciiHMzmJ9+o7XsA4GIExfbIg/BzKHm6M+NfIolpEcMQPxju3GyQ==
+ bh=VQ9q5vjkZjkiyqauylhlD5CDmI0n7NoRcRcreqp/J/Q=;
+ b=NHbrVgWh5M6bpgH7OGZWI95KtbiJPHgERSjcJLHpfQiINMVRmgWEPBXdOTrYD/VbGKiOzd27nRdQAqm4HjLt5ileFyUsrNvLwtlKnN9p8Tz516hrV/QKXp60Yk3o4mTdsnr0ifk6ho2EfxvfH081rEzTBfMCTVJ7DOv+npAzC7u8cc1cdbBTJiWni7YR8iC83swBslz4C2MmEptVPKXzE6aBBPZo7ugWO/t0cZkwRwUkqVQ5ZSIJEUScd3BnQzXxfPxNh/laMbvkv5gwDnuzuWlY1szq7gObjIKY4h0hJ8Wc9cSyRFt6YrdOrMVN7RqHDkVZkDuFWrUgBTQi7UgMDA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YzHP/x+dYHR6FvTXMK0BLZIhC37+aiehnMT9dxjDGf4=;
- b=BErEmWjv5fZmi90Rqd1McUJwbcKNbz0ZEgaRjMHPGGyfU5gG526mnU+pICUNXixhbFCNAMgLR691ssjEv1AmH/qEWq25PPzP02P1276VJ1C/zJyk41SR3SptwsgHlkioGweAHelRZMcQxU7MVTtDYiVCoa78j4Jj6kBjXSBJIKr+gePd1xSAgMwNgYalKTrVFI/nz2QRmw1nXv5QvnOFUEPTxnn/+LvXbRlBK7wM4LFGy7EcOWQdXDrGYINgfS2bRfJcZMxlfDQhDdlLajTZCXrkt3k3tykIePWKdEg9JKr3DZDP6/6TbLq5c/TyY7pL+S0n76PiZm78dBdXR7hMfw==
+ bh=VQ9q5vjkZjkiyqauylhlD5CDmI0n7NoRcRcreqp/J/Q=;
+ b=lwlTrpQWIuj0aI/dWfIna3A6VFFp1AdjziKKqy5QnPXjv2xC7C0vca4aGFvpQyMSl8ORm1F2TQPvZJ8sl50RpmzTVduLQ+QoPIotohG8tYMSXtNrCtjvET4ZJKMCvHTwb2CFAp/XPYbnWSGBl9vUI7yAFr12Lcw3o0xBrQkFTObL7K2zo0l/vqzZVoTu7O59y//wxm4QxT24jNXepfQVjisWsJsTGz35UT7V9zi1ygeoc+s+oLWsgPBxDX6BFuR4rV5eexs7LqRn7V3m7c0Mh0018ptgO/s6whoxHyUxv2rSlYKf7hT+OtdRhgaSPhKnTdPSDKam7MfpdcwJ5pDFWw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=seco.com;
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
  by AM0PR03MB3747.eurprd03.prod.outlook.com (2603:10a6:208:4f::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Thu, 27 Jan
- 2022 20:06:51 +0000
+ 2022 20:06:53 +0000
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::2d1f:654e:f946:1a95]) by DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::2d1f:654e:f946:1a95%6]) with mapi id 15.20.4930.015; Thu, 27 Jan 2022
- 20:06:51 +0000
+ 20:06:52 +0000
 From:   Sean Anderson <sean.anderson@seco.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
@@ -46,9 +46,9 @@ Cc:     Robert Hancock <robert.hancock@calian.com>,
         linux-kernel@vger.kernel.org,
         Balaji Prakash J <bjagadee@codeaurora.org>,
         Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH v3 2/7] usb: dwc3: Get clocks individually
-Date:   Thu, 27 Jan 2022 15:06:31 -0500
-Message-Id: <20220127200636.1456175-3-sean.anderson@seco.com>
+Subject: [PATCH v3 3/7] usb: dwc3: Calculate REFCLKPER based on reference clock
+Date:   Thu, 27 Jan 2022 15:06:32 -0500
+Message-Id: <20220127200636.1456175-4-sean.anderson@seco.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220127200636.1456175-1-sean.anderson@seco.com>
 References: <20220127200636.1456175-1-sean.anderson@seco.com>
@@ -59,223 +59,106 @@ X-ClientProxiedBy: MN2PR12CA0030.namprd12.prod.outlook.com
  (2603:10a6:10:19::27)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cf0f319d-b56e-42de-17e4-08d9e1d08e96
+X-MS-Office365-Filtering-Correlation-Id: 2cb61563-7f64-4717-0a54-08d9e1d08f6f
 X-MS-TrafficTypeDiagnostic: AM0PR03MB3747:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR03MB3747670F0059AD74F79F155996219@AM0PR03MB3747.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-Microsoft-Antispam-PRVS: <AM0PR03MB37475E5C37ECB78AC46F2BE596219@AM0PR03MB3747.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:949;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XdjEH8OQJNMJ8X4C/wj3l+u60LS9xtZ3agBZ8mxCTsSSY8SBU6UhQsUnWUJrkT5W1YwRPUgOTecOExok5QyIGiTl2BtkcMCN+mfN99PaDSYqspaRb3IxGq9pR/6AW5o0OuFheAdPtSw8aTmgrpqEHRYhbTF0Sh2NkGYVubAxRcHcb5LI863v/Td51HOMHUoxcdc+N3WGS9KNi8hPweYJMnY13HzZRtAvEIv6tOIXOYReQUlfdCrRr7tI0yBlkhDzdDu0So9D1RR/idwq8kDTx2rli69e694U7ERQZ0iNvS9ofzY+AzzC2rRrzALQRh0Px8H/whnXDKAI9fvIuOafOeljQLv8x/5nHkqDoszHFYFb4g6GVZQ2cp+kBQRBiz7qws7feks4OkHoyMHGco1IM2dfA/RdfnLQgIhbDwa3ZECqVwfS1+N5h+dZySvOOvfsDeb9qlYjZnNdo4IrIUPfkUkREBd/l1cCOrPlD0v0CXN0BQury2Rkesw+1frzEz2wIRq89eHX3xCgH/SipBLauYkA0ZyGyCQL8RpOtXxdejcA+7q5PBhyP37FxzkV2dGaKV6jELkSLy4b/GrQYugHPoYzdVsxKbE+w41b3KrpJjRX/lWMKUsjMc7z5N3VoLkp4JQupuQp37UBzeh8Rj1tWP8jqcIiSF84AipYEcYVypnJwty/3gNlCGphxBNALOImYUEZsyn9I4/gZT4RvDJsdQ==
+X-Microsoft-Antispam-Message-Info: W5YlZA/EMLMQjqgUPRC7a75ACXTPg8jo8h1dNxfQ87RpH4u/enRQYe9vcI8AIrc2rVt/rSbxp//JcK5Fkv1Z5VQsup9jfX0Yor3YyztK6Bg5p5ZC8QAtqseMmKtNGDKz9MitdjGCVKJ6UCs7LV8qhnsmIBY7qSLfm0jJanyvoSugi6Hk/xzHnVTiNl8xNA1z/t7YQ5tAjh80Dhsp5gdgzwH+AWOsK2rjMlkQmUJ7OPRJo38qN22YQbvAZUMlNDax6Ujc+QDCjClIRxC7tv4Dn+YvCIe1QQd3e+qS7cJ5QVb3uO9fpSVzR55R+M6vIE/BC+htZhkChjFWAK7E8mxUEsuMf9RBEULZsYIgoPaX9/FyZNwor4njFQa5Fkgn6EK/w1gIdntLjJEJD5WTxRnLcHxHV3rHXsZWmGpS8D0flhFPWrVY5cYapxN3Zq+c5vvP/xUwIBbADDwNuWajQjCgAMqcEDLpQ/+BrvCxfIvGxuMx5h8VbkKELes0nktVWMN+wWorXApcddJpIAYKsHastPv0ffxh8YrHLP+srOApZOD3WXS1fco1k8G48jwjbJdjBfPAgZC0jJwYDfrmjEWLJmonpreYfG2FviPHvwpO2Hm9K+S9VAhW2knjXFM91AP4RIvuvVRPfr95YlPxwzCtW1iPngHQ6mXHp5Rv1TDa5+R6hOEx4EdqOw9aFDwqlpOG8nxFAEbCxOn10g3yuoJW8w==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(83380400001)(36756003)(52116002)(6666004)(6512007)(6506007)(107886003)(2616005)(186003)(26005)(1076003)(5660300002)(38350700002)(38100700002)(66476007)(66556008)(66946007)(4326008)(8676002)(8936002)(2906002)(44832011)(54906003)(86362001)(6486002)(316002)(20210929001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tzyz9kM3xDiAagzo4Wi7XJxg5C5BYN1lIvy+JPi2LyDpbncZNmm9LqnAzsv/?=
- =?us-ascii?Q?1PT/k/N8rX+gB7QpTGZPUw1sky6KACW1AR26WOfE88qeUCJ1wwdTP1H8s1Jq?=
- =?us-ascii?Q?nQXpD48T8u1Lz8YDmbUy2RK0I8mS4NFPuF8cL+XtcXTFjwYpht1qgUHwy/cv?=
- =?us-ascii?Q?U9yeAsaT2ECZFk7dfjBHzXhbP9mutT4MkJzu+3VpowKBg3se5M0rOWD1BMuW?=
- =?us-ascii?Q?64axSsNcy0DPTswOJHWvC7aManxneUq5dLTUJXgEruCPuXxDHYBtzyIeCnp+?=
- =?us-ascii?Q?vetWVgN7pHhv+mhh6kzVoRr2SHMt2Umspm8OCfN9wt43wwyJb76G/wH1m6SZ?=
- =?us-ascii?Q?pdAvuGMt0lANTS6FS60kQC+y4sw1fKS9fRH7/T8skGOeVn8DAH1VRMb+UKkH?=
- =?us-ascii?Q?QQcxIb483Au9MoFmQ6xQ1YyvHoeMRD5azcrmMr6N3/XsmpszcfNRy85m2plw?=
- =?us-ascii?Q?wLdCI+QMc0S2pYCZhSGayqs7B5iS0u7LZTBI5WNmtWm9s/Rwuf/BP0ewpSsM?=
- =?us-ascii?Q?2VOQuSGcw1cnuC89Z+2aL25tpdpLEpRe4/N9AWPmAcUyAw1oA96oMjTq2quU?=
- =?us-ascii?Q?Xm6MNCu6+HWTgH0Ibtcav/G7su3HS/hRYsELtpiju6XKS3DPvUhPP1EzDIoN?=
- =?us-ascii?Q?+uuUpcTQMaqCpH2QdRuk3UKu+Mnj1sEZM1/k/71EAp9MbjrqZ80dm8X7Q0aH?=
- =?us-ascii?Q?MsMFAPKMf1L8HKm0JCrnvFANp3uWBSHrcSlEJUmRQdoNxf+AplRMV+k3E12p?=
- =?us-ascii?Q?hDGjfAsB87/kCLnGwyx4tkpOohPNdAqpzEhXWFPv49XG1GHarwV1LWJvH2RF?=
- =?us-ascii?Q?Lg+rkbAMy6WUVAXzodjo5OOhA1T2+XeaO6PKhXesbjR8+1J3URdrJDsgdZGD?=
- =?us-ascii?Q?PeF9SlwtxTFf7xxvyYuEoR/B9TTwqN3AP8q/OhDGb6NhRATGxyQyZ9XvCsHA?=
- =?us-ascii?Q?XZulPVe3G9NssIFZF0iexcYhMtBM7Im4IiEpmNTYNhW2Z0kW8E9kF4P5kycN?=
- =?us-ascii?Q?g3ops1902xMKFqgwJxb0nA7skL0dLmqiuVMiMYfC34pelPqH9cTpHsN4eSxO?=
- =?us-ascii?Q?blOUVp5qVP7yncuhlxvpsFkx+j39x0S+y8mVI7cHg9DT2EGyhcnCvWjLPxeL?=
- =?us-ascii?Q?1HdEHDh4BugKq23QNxxoTqUhB8S6JFPSTkLwiSvDe+mYxxyHD1DzzLKsJuSg?=
- =?us-ascii?Q?LBTCn15VQtDEAyKlRFvHwf4K+MM9/GNAoqIKbNKVDebwmyRPkEnySMtSV8Qy?=
- =?us-ascii?Q?pvEunBueDyMNOMGhj9cWYatjQ/mvopkKH1cIyJWnvZMuJ49wU1mj5VGY3pfP?=
- =?us-ascii?Q?M8+8u4PlH3EKtO62OyfDriuqdOewA3MOV9GVBd1omGqTN1GQZhCvHxZxVjF3?=
- =?us-ascii?Q?I7BBGJVV4gN1dDvTp2KBfjx1/mXXA5qlgyX0RIgJN7E0dtccjTzdbEh/Xuml?=
- =?us-ascii?Q?/GcKxzrwZT23cFTAHd+1wA6qgRWubSt3bp4p4DkeDl59Uwjz3DbS40b9tSaN?=
- =?us-ascii?Q?qb8/yWrh1UHvj7BqcbGFM7j+d8L+msY8pmBr+oCTyLBKc4SnCcxnDx5P9mJ4?=
- =?us-ascii?Q?NpSoepuMNwcIcsWvVJ3S8s+XlTsv4WrLVfOd6xsdyvrxFa1cRAmZpMPLKS1W?=
- =?us-ascii?Q?hiu1wAXN9vTXftyzikvGvW0=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5QAo6ZazratIQXIReL/Z5mr5O6RLXvyeeE8wA3HjwELt8uGF0U53WwaQbKgg?=
+ =?us-ascii?Q?7qTYbgdJlU8hZBgp7mOhrlcuKJXtmyJg6GJQ3FwRsue89E4k/D3KbViyug71?=
+ =?us-ascii?Q?l4Uc8eMz8EGjLD9P63G3O/kB9on4NHAS/t0nqd/fC5uj1uSPTDy/RmKrMHTB?=
+ =?us-ascii?Q?EOnaSyEY9XmEznLBiNvY/GaR4B5nVqHBpYAJGfNYsrzdcVVakRdBOGTnvJiL?=
+ =?us-ascii?Q?grnRVCRKQrd1HzAxWSvSf/n4bIRaiOgKEPVmyvDqde5canLph2UtkzXMDRdg?=
+ =?us-ascii?Q?tj5o3YAbQIt1UjE2guJi7+0SWAyHr/oDnsMLmR80VDBgqAdc+20jHPteX7Ph?=
+ =?us-ascii?Q?GwMTkpk8/gB8QB8Bic8dktmGB8qTK20L0ZIAN7MH+QAMvz6sSZ1M4UDoPqBi?=
+ =?us-ascii?Q?uU4XFVqgJRnF2x2Npk0z/ZnPA5fA5NIQwymdVVORUKFjfw/AQRyuf09g6WZz?=
+ =?us-ascii?Q?KNqzj/LrS+lY2ly1B/VBLOIKOC+87wimHud9milnjPTNMK2HXIQl2R9t+ECL?=
+ =?us-ascii?Q?cskIXp3OOrKsN5gAk/9yCES5EwIO9cbEn09tAeh6izeOzWQ+wK/7Fl3gtqOg?=
+ =?us-ascii?Q?s6FWGoS7hlfWNbdzNUDMke9ywGhHAJq2192sfNZpbMvDzGM5HAffN6PKvrp/?=
+ =?us-ascii?Q?RCtcyZ2JJbuiXIj50JNQSsn0kGrPPUQ7RQtkzOFy4rBoZgOziINY84koH7Kz?=
+ =?us-ascii?Q?JpycbvgcSnImBdvRqBlzjC+89e2ADPixre3/tAyPVY4sARbKidDWrZIu/iRB?=
+ =?us-ascii?Q?Zc4WfkmlYRaELdbIhnc4XIYek6Ms1rbCrV78dofrDbX1UmBJk7QoqILKnTZc?=
+ =?us-ascii?Q?wTi1SxZOXyhcFIFZUJxEEJ1A3b/buECB3ycruNZWPqvDvHdOXouovPoFf4+L?=
+ =?us-ascii?Q?n5i1cI3xKni3x3pBsnq5epge9vwFMN9goIEhNFOK2+sVSVrz4kb8B6b5Ml4e?=
+ =?us-ascii?Q?xk/N15Sz7ulKaGn9u2BGnZkrYDCFm4pcbDTuh8FtELFsK3NSlqcQ8TzmMQ1S?=
+ =?us-ascii?Q?VC+R0SmEEo3rC3wNtkU+7TPYBwtm/QGpWIj4UhZeTZsDkyoKzC/R4NTrPcSr?=
+ =?us-ascii?Q?EmCwzCMmT/xVxJGSXxFfz4D90PdAcvjKg2FLN4EGLeeXc+QJiP/4GG62x0BN?=
+ =?us-ascii?Q?lTTWAy3bAr0C+IpI1laxXRe2hFuvs1fKFUsYfDPOYvzptsDsFnpiFfvSKdsz?=
+ =?us-ascii?Q?ozPWMwVvMrW4pshe8Js8EtKsrLQJB/mYXQKY7zEwfHOA0S0kN0hoAnt4RnWl?=
+ =?us-ascii?Q?av7mlh/cBjEhIggAgrtnO0nP8YgbXq7PovL3xV7fT/RbWbSnDrMNLvTa9kRQ?=
+ =?us-ascii?Q?OQqv1kwgNRcmWdxSJG7m38X2rn3aiNRyQsg6Jbzk/b2x3jkXkXglTBoeQn9c?=
+ =?us-ascii?Q?VqrJeV3AlxX8FuZ7kFgb4hc+JvFlwoC85flNoO9SDXdqNDGACCW4AOxS0UPm?=
+ =?us-ascii?Q?QEROZz4N58OXbkamo0/fR9wUImPELvlE7C6vJOP2HfP+KRl+e3FF5NcxdxPz?=
+ =?us-ascii?Q?TsKwcaRzu3b9QLGM4MZkdzmRl0idQ2jmeO+aXl6RUStXkC9j5ZSINmDvK9Lt?=
+ =?us-ascii?Q?NryuRjYmmfkj63Sz0nj0S/1JaFkTHaDNzO2sfMsFpoTPbHGLKjHW2Cz9lm2m?=
+ =?us-ascii?Q?wZsyqpWfMzVuuSngtWuu/eY=3D?=
 X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf0f319d-b56e-42de-17e4-08d9e1d08e96
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2cb61563-7f64-4717-0a54-08d9e1d08f6f
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 20:06:51.2221
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 20:06:52.6595
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +KWIdU2qjwX4v5sGxjEGvumalowcjr6e1r//hAWk+etBKv9MVSpmYrZJgDmzObmd7xSUrTG8P2r4iVZcJJajSQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: uS1cLZkDHDTfvvvNjpRjE5JU3SnJ/MiFPmsFG05H7vjcWpDkqWLDVruTOfKIB7nfgLrjaoNZOp5y+9oqBFyTTQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR03MB3747
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of grabbing all clocks in bulk, grab them individually. This will
-allow us to get the frequency or otherwise deal with discrete clocks. This
-may break some platforms if they use a clock which doesn't use one of the
-documented names.
+Instead of using a special property to determine the reference clock
+period, use the rate of the reference clock. When we have a legacy
+snps,ref-clock-period-ns property and no reference clock, use it
+instead. Fractional clocks are not currently supported, and will be
+dealt with in the next commit.
 
 Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 Reviewed-by: Robert Hancock <robert.hancock@calian.com>
+Tested-by: Robert Hancock <robert.hancock@calian.com>
 ---
 
-(no changes since v2)
+Changes in v3:
+- Define each variable on its own line
 
-Changes in v2:
-- Document clock members
-
- drivers/usb/dwc3/core.c | 62 +++++++++++++++++++++++++++++++++--------
- drivers/usb/dwc3/core.h | 10 ++++---
- 2 files changed, 56 insertions(+), 16 deletions(-)
+ drivers/usb/dwc3/core.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index f4c09951b517..699ab9abdc47 100644
+index 699ab9abdc47..38fef5c74359 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
-@@ -745,6 +745,38 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
- 	return 0;
- }
- 
-+static int dwc3_clk_enable(struct dwc3 *dwc)
-+{
-+	int ret;
-+
-+	ret = clk_prepare_enable(dwc->bus_clk);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(dwc->ref_clk);
-+	if (ret)
-+		goto disable_bus_clk;
-+
-+	ret = clk_prepare_enable(dwc->susp_clk);
-+	if (ret)
-+		goto disable_ref_clk;
-+
-+	return 0;
-+
-+disable_ref_clk:
-+	clk_disable_unprepare(dwc->ref_clk);
-+disable_bus_clk:
-+	clk_disable_unprepare(dwc->bus_clk);
-+	return ret;
-+}
-+
-+static void dwc3_clk_disable(struct dwc3 *dwc)
-+{
-+	clk_disable_unprepare(dwc->susp_clk);
-+	clk_disable_unprepare(dwc->ref_clk);
-+	clk_disable_unprepare(dwc->bus_clk);
-+}
-+
- static void dwc3_core_exit(struct dwc3 *dwc)
+@@ -347,14 +347,24 @@ static void dwc3_frame_length_adjustment(struct dwc3 *dwc)
+  */
+ static void dwc3_ref_clk_period(struct dwc3 *dwc)
  {
- 	dwc3_event_buffers_cleanup(dwc);
-@@ -758,7 +790,7 @@ static void dwc3_core_exit(struct dwc3 *dwc)
- 	usb_phy_set_suspend(dwc->usb3_phy, 1);
- 	phy_power_off(dwc->usb2_generic_phy);
- 	phy_power_off(dwc->usb3_generic_phy);
--	clk_bulk_disable_unprepare(dwc->num_clks, dwc->clks);
-+	dwc3_clk_disable(dwc);
- 	reset_control_assert(dwc->reset);
++	unsigned long period;
++	unsigned long rate;
+ 	u32 reg;
+ 
+-	if (dwc->ref_clk_per == 0)
++	if (dwc->ref_clk) {
++		rate = clk_get_rate(dwc->ref_clk);
++		if (!rate)
++			return;
++		period = NSEC_PER_SEC / rate;
++	} else if (dwc->ref_clk_per) {
++		period = dwc->ref_clk_per;
++	} else {
+ 		return;
++	}
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
+ 	reg &= ~DWC3_GUCTL_REFCLKPER_MASK;
+-	reg |=  FIELD_PREP(DWC3_GUCTL_REFCLKPER_MASK, dwc->ref_clk_per);
++	reg |=  FIELD_PREP(DWC3_GUCTL_REFCLKPER_MASK, period);
+ 	dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
  }
- 
-@@ -1605,25 +1637,31 @@ static int dwc3_probe(struct platform_device *pdev)
- 		return PTR_ERR(dwc->reset);
- 
- 	if (dev->of_node) {
--		ret = devm_clk_bulk_get_all(dev, &dwc->clks);
--		if (ret == -EPROBE_DEFER)
--			return ret;
- 		/*
- 		 * Clocks are optional, but new DT platforms should support all
- 		 * clocks as required by the DT-binding.
- 		 */
--		if (ret < 0)
--			dwc->num_clks = 0;
--		else
--			dwc->num_clks = ret;
-+		dwc->bus_clk = devm_clk_get_optional(dev, "bus_early");
-+		if (IS_ERR(dwc->bus_clk))
-+			return dev_err_probe(dev, PTR_ERR(dwc->bus_clk),
-+					     "could not get bus clock\n");
- 
-+		dwc->ref_clk = devm_clk_get_optional(dev, "ref");
-+		if (IS_ERR(dwc->ref_clk))
-+			return dev_err_probe(dev, PTR_ERR(dwc->ref_clk),
-+					     "could not get ref clock\n");
-+
-+		dwc->susp_clk = devm_clk_get_optional(dev, "suspend");
-+		if (IS_ERR(dwc->susp_clk))
-+			return dev_err_probe(dev, PTR_ERR(dwc->susp_clk),
-+					     "could not get suspend clock\n");
- 	}
- 
- 	ret = reset_control_deassert(dwc->reset);
- 	if (ret)
- 		return ret;
- 
--	ret = clk_bulk_prepare_enable(dwc->num_clks, dwc->clks);
-+	ret = dwc3_clk_enable(dwc);
- 	if (ret)
- 		goto assert_reset;
- 
-@@ -1711,7 +1749,7 @@ static int dwc3_probe(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 
- disable_clks:
--	clk_bulk_disable_unprepare(dwc->num_clks, dwc->clks);
-+	dwc3_clk_disable(dwc);
- assert_reset:
- 	reset_control_assert(dwc->reset);
- 
-@@ -1755,7 +1793,7 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
- 	if (ret)
- 		return ret;
- 
--	ret = clk_bulk_prepare_enable(dwc->num_clks, dwc->clks);
-+	ret = dwc3_clk_enable(dwc);
- 	if (ret)
- 		goto assert_reset;
- 
-@@ -1766,7 +1804,7 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
- 	return 0;
- 
- disable_clks:
--	clk_bulk_disable_unprepare(dwc->num_clks, dwc->clks);
-+	dwc3_clk_disable(dwc);
- assert_reset:
- 	reset_control_assert(dwc->reset);
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index e1cc3f7398fb..45cfa7d9f27a 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -978,8 +978,9 @@ struct dwc3_scratchpad_array {
-  * @eps: endpoint array
-  * @gadget: device side representation of the peripheral controller
-  * @gadget_driver: pointer to the gadget driver
-- * @clks: array of clocks
-- * @num_clks: number of clocks
-+ * @bus_clk: clock for accessing the registers
-+ * @ref_clk: reference clock
-+ * @susp_clk: clock used when the SS phy is in low power (S3) state
-  * @reset: reset control
-  * @regs: base address for our registers
-  * @regs_size: address space size
-@@ -1134,8 +1135,9 @@ struct dwc3 {
- 	struct usb_gadget	*gadget;
- 	struct usb_gadget_driver *gadget_driver;
- 
--	struct clk_bulk_data	*clks;
--	int			num_clks;
-+	struct clk		*bus_clk;
-+	struct clk		*ref_clk;
-+	struct clk		*susp_clk;
- 
- 	struct reset_control	*reset;
  
 -- 
 2.25.1

@@ -2,175 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 913DD49D6AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C5649D6BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233870AbiA0A0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 19:26:19 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:10160 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229589AbiA0A0R (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 19:26:17 -0500
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20QKZ7qj017314;
-        Thu, 27 Jan 2022 00:26:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=5JfvMoIRtHatb6eef4hqYYEmQS6IcLmS/YychWU1Eo0=;
- b=k0csC3U1eXaRR+yMw7ShMdCbLefVmxaHm1aIlgfMbmMA5qP9BdZQqtLhxwuYDRIAtgc9
- IL7k1pXKBqRUsY1EXNC2xzYfQbR7oFi7X7CD+s4TwyQxMKH1MjeivqDP1nQK5A1M17tF
- vgtY3yygiI5NFPTfIJPPCBrSVCke9zCt7e6yGLiM27hdnlZGnWkgnUdTo/gYtdE38SHK
- PhSqiJ6Ko1rqvTl2qqXc6datnXT/yz68Sqz/apyehprxFd5SDj8tVhbYCzqJ4+vJrhiw
- YjRCIgqhmIPivQOyG8/+QYk7n/GpydPx7csQ8fcVBo8MfI7KaLTij8roSDgoOwAPFr+D tQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dsy9s7k2t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Jan 2022 00:25:59 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 20R0H317046880;
-        Thu, 27 Jan 2022 00:25:58 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
-        by userp3030.oracle.com with ESMTP id 3dr7227whc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Jan 2022 00:25:58 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KtQr1ZiUlusxTf0mKYdvycer10euk+bJn4cMdAYoezNY3UOajlNuTiLCM+xEE/sGbdbgBF4CFQHfRF4aPTF+7HzguqKhHpnFcCy3H97xMOzpTucPUb1bJL85LMRphzNaHRrcuWaI69y5rsVTXhU4uMcBf07dt10FGqzAphPt12eCY09Wjs2VruhAOcdTaMM1KVe6t8ul1qSZkKKPU5n1yDWOUPrNaNsV5/RrkZKl3ZM1//JwJgbVEiSlneKEptsUZo9ML+UutDhXguXl0/GqdyFdzMO4+42jmQCXzbXM0hrtZpKLuHVza6F/JMDfFiBzVJNo8uhVA3ABZ1ZOK6VZsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5JfvMoIRtHatb6eef4hqYYEmQS6IcLmS/YychWU1Eo0=;
- b=VXBYez8Kcq3kxWd8q1xmpKnrB7kCAgr6vfPX1t1CsMuN/PNb3svslCOyxp+eVAP2CgWiyy54qqkrUJZFlE6bW1I062BfApMrZkoKLEbGFs15q0+QSIzvU7Ho3xESH9RqWVnENTQY/adNK5m+tSd1elTRScK1VFgvWLWJ1SJQ4zAN5Qz/nLFgG0Fr4Ssi2/g5fbGB9BEGwcTMGu/2F+g0XszfiM7iq2xy5vjSbA+6Uxr4N7GES5yd/y1+UYuFm082k1vhakkRYimEygbpxylbyvjGBNiXaE0YOqJPBwGls4B/4zT1rvmuNGTJRV+dlLMXE9ZeoQ3ekeDy2SQsh8uClg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5JfvMoIRtHatb6eef4hqYYEmQS6IcLmS/YychWU1Eo0=;
- b=xSg1VS6L7hTxX9pHMCkCNBnf8bzmUEP54N5qk8ITcp/arEIsKQJkECRDJlHDtkPGCh7Sjjz3eR+XQklsiCCZdJLr7eRwJ7sVnYGll6ryxaj9wE/PAL9ce1xel3ZgkKffJQdWBc/nBFO3oWAI+waWzgZ6muiJ6+YXnGgozgpaw+s=
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com (2603:10b6:a03:2d1::14)
- by SN4PR10MB5605.namprd10.prod.outlook.com (2603:10b6:806:208::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Thu, 27 Jan
- 2022 00:25:56 +0000
-Received: from SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::d034:a8db:9e32:acde]) by SJ0PR10MB4429.namprd10.prod.outlook.com
- ([fe80::d034:a8db:9e32:acde%4]) with mapi id 15.20.4909.019; Thu, 27 Jan 2022
- 00:25:56 +0000
-From:   Jane Chu <jane.chu@oracle.com>
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     "david@fromorbit.com" <david@fromorbit.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        "dave.jiang@intel.com" <dave.jiang@intel.com>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>
-Subject: Re: [PATCH v3 0/7] DAX poison recovery
-Thread-Topic: [PATCH v3 0/7] DAX poison recovery
-Thread-Index: AQHYBx1mMl0+u9/A1ECT4doipsHhkaxruVyAgAEGPwCABTQgAIAEJu+A
-Date:   Thu, 27 Jan 2022 00:25:55 +0000
-Message-ID: <eb09688d-2fa1-80c2-61e5-972ff58eadbf@oracle.com>
-References: <20220111185930.2601421-1-jane.chu@oracle.com>
- <Yekxd1/MboidZo4C@infradead.org>
- <4e8c454f-ae48-d4a2-27c4-be6ee89fc9b3@oracle.com>
- <Ye5q7MSypmwdV4iT@infradead.org>
-In-Reply-To: <Ye5q7MSypmwdV4iT@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bcfde5b1-7718-4436-44d5-08d9e12b95b5
-x-ms-traffictypediagnostic: SN4PR10MB5605:EE_
-x-microsoft-antispam-prvs: <SN4PR10MB5605A165BB45CB68BB202B4BF3219@SN4PR10MB5605.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1417;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pvngJnniqeHTZRQu6d/8PEqHRwhbLeHeoCcDxdALouv9qjGvMXh8EaOsKsRQLQwjKDdazPMvN/ivFpmpLRgFrTE70VsgohceJ492il8ez5jnxpi8Vf7ROpIn5BVPHwibPX9lAjVhxcGBED1FPWIGpeAxtb0+FozHgCjVvKc3cQ7yUmi5TNeVlCIcp4wdgDWptQZWKY3TII9ObggJpXtO/1t4WtCoQNJKigEv3uYtZfi4Wq6qM7qRPxH4ZUu8T++S5eegyiKD18XoRhrbo1PY8JdICLLRikqvU3EsRYxivPnklT/HzNlt8ttxTJSN2jvr/5enEnHi22MSuy4/3z0YdCo8Z9+bp0bj3OYC2M2hD3fnBrQQ1ngB92qwjWDuNTPsadoIhyzxct/WsNqy2hIoKpjzMNbwmQ1tUVOYUBcvUBPq+0zAqApUw6O3T5iP4oz5y7H/dbss5SjQ9hj3EhYvGjYcInJ71ZR8my16Tx3jr3zynUAIO7XMuNaNc069qPbbyKy9C0h64yEP3+7SSatOdxs2rlVkoyreQ0QbBt1gfCMWCNVPhPAgkkK33fCCY/49Uga+dhgdEgtOMecYcCagv9Ine3QI8tv2RFCaqbSr4l8PU4eWa5Dyr9xkfJnKzM7FYFoWniN0fDaGyGkkP6/n/2e0xJ7nUO2yZSBMv0FnLXywKmSD/UvESyfWFIbKbCChWLW2KCzP7MyRHRRJjWxAE9xFv2PRHqWk0SL4CS7BKdnXFRfCw+oGBnaQJU32uDj0z6BgFkPEQstCg6XQCI+1Nw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB4429.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(6486002)(71200400001)(66946007)(66446008)(122000001)(316002)(31686004)(64756008)(44832011)(6512007)(76116006)(91956017)(26005)(38100700002)(7416002)(54906003)(2906002)(4326008)(83380400001)(38070700005)(8936002)(4744005)(36756003)(31696002)(8676002)(6916009)(186003)(86362001)(508600001)(2616005)(66476007)(66556008)(5660300002)(53546011)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RXEveW0vejhNVjZiOS9yR2orbnVITmRtTVV3bkpYSVcxYnlRYUE0REJjZnlY?=
- =?utf-8?B?WkdUMEtUd1JSVDFURGNsM2F1K2NLRHpMRWw1Q0pUcnBrWnM4VFQ3aTFwdW16?=
- =?utf-8?B?d0RGUTZNam13bnV5ZkNwMTBNb3dXcDFiaDlEUk9nUWlOUnRaazZnam5rMWkz?=
- =?utf-8?B?MGw1Mm1YZ1pyQ0tzUHh5Zm53N04rT0EvbUhGdEtJOU82K2owOVF6RjR1Ym5r?=
- =?utf-8?B?aS9qNHQyMnB6UjlybzZiVW5aNVlzL2pkSm9Benlja2VHWW5pYmQxWEJ5QVpm?=
- =?utf-8?B?Rk9LMGRmenFuWWc5ay9QTEhZSWsvc3lMelRFQ3hhWVhNaUhRT0JUUTZqZ2tI?=
- =?utf-8?B?TEI1MG5QOW1ua0JDMno3R2RNcE5ycGM1NXBNL284dHY4UlZ3cEc3bGQ2YlJr?=
- =?utf-8?B?M2EycFlJY011RHRlTmFNc1pwbS9icEVoOVEwOFdoTy9aK1ZwNnNUM1JUU2cw?=
- =?utf-8?B?NUMvSWVQTjBtZmlBQUovSk1Mb3VBaWFYcHo1MVlDNmNYaEZSeHJLRDREWUhL?=
- =?utf-8?B?VnMvek1DUE9KVWFIRnZHbWQ0eWFGd2Z2dEdLM3VmemhYM3FCYzFnd29iZHBq?=
- =?utf-8?B?ZHJRU3VzNlBNaXRZS1ZCNTRPcENCWUQwQUVTdXdOT1NHVFdJdXgwS3ZPcTda?=
- =?utf-8?B?RldvQ0pSTWtaNGVBVXZQVDZWc3lsVXNpdm1PSGFNWHlxNnd4b1lTU0d2b0RQ?=
- =?utf-8?B?SXVWTmZUQVFONDdWUVpSeUZIVjlHeHVIbGFJWTlCemVkSWFsdjQ0QlpJWWU1?=
- =?utf-8?B?NXdvZTZ1ejlwcTB4WE83bWlTNm5NV1U2SUpEMGJ5dkpWZ3VCeTBoaDByOWtH?=
- =?utf-8?B?ZDVBcmFIN2RmRFJqaWxFNitTZ1ZIMHVrY3d6NVp0Q0xyZVRPc3FpbW9VeVVx?=
- =?utf-8?B?bHR3b0VyR3phb1F5S1VDS1pDYklPZkZSWi8yOEk5UWlBbUR5UnlCeFhmeWZ2?=
- =?utf-8?B?SjJ0bStuVFdlWCtqZ3FLRXlkc2k0b0pMV0FzWHhDL1NLTWJKVUkvaHZWVUcy?=
- =?utf-8?B?cUlNaDhadVl4bVZsb0RvcEdrNWk2SzdBT1h1QkN4ODd1b0t5QzFpVWhacm9Z?=
- =?utf-8?B?VStUN1gzNXQ1L2xxa2JxdXI4ZDNQb0JBMG56QmlYcjFVbVljRU1DblVZQ3Az?=
- =?utf-8?B?K2xxL3FxN3FFK3hnOTZqVm4wYk16WVpPbWVqdlZDVEExZ2N0TndBMUJHWEJS?=
- =?utf-8?B?VHdGQkZGZnZ2c3hmbVNGdjROWWZtMmYyV0FUWUV0bTAyVERtcTMzNmdPcHVh?=
- =?utf-8?B?ZzNLaEV4STRuR0dPS2swSGU4WGlDeHNydGt2MjViYnp1MkV5ZWpGcXNGbkRo?=
- =?utf-8?B?cG15UGxkN1VIeEp4allTY1EzRDdJSWljcFhDTzVsK2p5aXg3VHFydXVTc1JN?=
- =?utf-8?B?OVhyakJpMS9SUERZZVpzRWxNVTRabEVHMk1OcUZsUEczWStOcmh6ZWZqRkU4?=
- =?utf-8?B?ODlER09JYWFVQVl6WUZ5MnRQZjhjc0dmanhuSksrNlQ1WVBSMFphV0tTdE5v?=
- =?utf-8?B?RnhuWklHcWpkL0t5dG5pLzIrckcxQ010aDhnbCszVkRybmpzTnNPdmVkbzhu?=
- =?utf-8?B?U0pHcXFMODU2L2d2azlOdHRTS0REcjdUa3ZmdUZxZ09lVFh0T3dEL2hZUDJG?=
- =?utf-8?B?MnZwSWJhVC9ZTC92T3lkUCs2Z3dKZE9aUDRBY3FTeGh1NE0vK01meU8yZXc0?=
- =?utf-8?B?anBuSW5yK3N6Q1c0U2FSVWx6Z25ldU1hMlJqVlU2NmY5dlIyR2NkVjFobkFM?=
- =?utf-8?B?RnZ0Ymg2dXViWWo5ejY3bzhhT2RhUFBKQXpZS2paWmo0SExxb2F0QkRUOVFx?=
- =?utf-8?B?TW80dW1IdlorSzRtenczTjNvQytVYUMvUTZYRXVzSDVIUC9NVnNQZ3I1b1h5?=
- =?utf-8?B?aWRpbFZTOGJzZDRBVlE2OUpuY09qTzNBR05YNGRHU2twV1BLek1ISk4zeXpK?=
- =?utf-8?B?TkI2OXYzQ2RUZFNBbmJJT3lDZWFMOE9OelVwWFJFL2RPV1psL3ZuKzFjM0ta?=
- =?utf-8?B?NzhRWCt0T1V1d2tqMnB6ZGZJS29ScXNBZmsyNVU4c2lmK2U2cEZSNkhDL0V2?=
- =?utf-8?B?VE03bTV5Ly9KRFptVDAyQVAvYlpYb0lHQURlWlpKQlpXaGl2UU93NkszeWdw?=
- =?utf-8?B?Vy9wQXA0c3BLSWhDbkJMM0hTVkpFQ2crSERrOUJYdjJUR3FaT3BSNFRiOU4v?=
- =?utf-8?B?ZHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D7ADC38D4B7FFF418AF7B8B42C5651E4@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S233891AbiA0Aas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 19:30:48 -0500
+Received: from mga04.intel.com ([192.55.52.120]:1815 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230248AbiA0Aar (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Jan 2022 19:30:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643243447; x=1674779447;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vGPJ+QXF3m4aGQpAZFqmKD5MYgp0/7v7TQGixCfkWUo=;
+  b=TxCHMtjFRtyhxs8VlnI4i5xu/rP+cGksxUgDKN1MjwbDhR4S1tsKwVgW
+   GbDMSfa3FKUmO4EeojiYb/PXm6XrG26UhHugOW5JkYqu/AetwEy6v5PcW
+   Hl9woBLmbvdSyvA+aGswG8FHRSdJB9WAHH2cQJJWVK8qhSV7Sgzh7wOPW
+   Gw1Ry1JusmjQzlaUFTYRfFixCLDvgOd9hUgpuyhk4PWt//tFRKQI3rD76
+   3DkZ0yXa5b2K1opUj3qCNabDSmxdEsM3PF41lHoOEEbSIoR/3ljE+HyG9
+   UFY6yWPn9juk1ygQ8ccQut+5AF8Z7pNcsM9MBvPLphtgvTh3fXgdA55Er
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245536593"
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="245536593"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 16:30:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,319,1635231600"; 
+   d="scan'208";a="563592516"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2022 16:30:27 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCsgE-000Lqz-B7; Thu, 27 Jan 2022 00:30:26 +0000
+Date:   Thu, 27 Jan 2022 08:29:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonghyeon Kim <tome01@ajou.ac.kr>, dan.j.williams@intel.com
+Cc:     kbuild-all@lists.01.org, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, akpm@linux-foundation.org,
+        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Jonghyeon Kim <tome01@ajou.ac.kr>
+Subject: Re: [PATCH 2/2] dax/kmem: Update spanned page stat of origin device
+ node
+Message-ID: <202201270836.H8feaOM9-lkp@intel.com>
+References: <20220126170002.19754-2-tome01@ajou.ac.kr>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB4429.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcfde5b1-7718-4436-44d5-08d9e12b95b5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jan 2022 00:25:56.0382
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2LcuAIdlHeNX3L6ylCu2tb0TjZe0WTp6v3VtPa0haavtutMFwnhOZbpiHfEiFw/tylFf1/72SXr1/laCbu5EZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR10MB5605
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10239 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=946
- adultscore=0 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201270000
-X-Proofpoint-GUID: _9Kn0o8E__aAen6zdxizj9bXtfKVpt6o
-X-Proofpoint-ORIG-GUID: _9Kn0o8E__aAen6zdxizj9bXtfKVpt6o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126170002.19754-2-tome01@ajou.ac.kr>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMS8yNC8yMDIyIDE6MDEgQU0sIENocmlzdG9waCBIZWxsd2lnIHdyb3RlOg0KPiBPbiBGcmks
-IEphbiAyMSwgMjAyMiBhdCAwMTozMzo0MEFNICswMDAwLCBKYW5lIENodSB3cm90ZToNCj4+PiBX
-aGF0IHRyZWUgaXMgdGhpcyBhZ2FpbnN0PyBJIGNhbid0IGFwcGx5IGl0IHRvIGVpdGhlciA1LjE2
-IG9yIExpbnVzJw0KPj4+IGN1cnJlbnQgdHJlZS4NCj4+DQo+PiBJdCB3YXMgYmFzZWQgb24geW91
-ciAnZGF4LWJsb2NrLWNsZWFudXAnIGJyYW5jaCBhIHdoaWxlIGJhY2suDQo+IA0KPiBEbyB5b3Ug
-aGF2ZSBhIGdpdCB0cmVlIHdpdGggeW91ciBwYXRjaGVzIGluY2x1ZGVkIGF2YWlsYWJsZSBzb21l
-d2hlcmU/DQoNClNvcnJ5IEkgZG9uJ3QgaGF2ZSBhIGdpdCB0cmVlLCBzbyBJIHJlYmFzZWQgdGhl
-IHNlcmllcyB0byANCnY1LjE3LXJjMS04MS1nMDI4MGUzYzU4ZjksIGhvcGUgdGhhdCBoZWxwcy4N
-Cg0KLWphbmUNCg0K
+Hi Jonghyeon,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on hnaz-mm/master]
+
+url:    https://github.com/0day-ci/linux/commits/Jonghyeon-Kim/mm-memory_hotplug-Export-shrink-span-functions-for-zone-and-node/20220127-010219
+base:   https://github.com/hnaz/linux-mm master
+config: x86_64-randconfig-a002-20220124 (https://download.01.org/0day-ci/archive/20220127/202201270836.H8feaOM9-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/ef33cc7f7380ddd07a3fedb42f35c1f81de401a4
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jonghyeon-Kim/mm-memory_hotplug-Export-shrink-span-functions-for-zone-and-node/20220127-010219
+        git checkout ef33cc7f7380ddd07a3fedb42f35c1f81de401a4
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dax/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/dax/kmem.c: In function 'dev_dax_kmem_probe':
+>> drivers/dax/kmem.c:156:42: error: 'ZONE_DEVICE' undeclared (first use in this function)
+     156 |   struct zone *zone = &pgdat->node_zones[ZONE_DEVICE];
+         |                                          ^~~~~~~~~~~
+   drivers/dax/kmem.c:156:42: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +/ZONE_DEVICE +156 drivers/dax/kmem.c
+
+    44	
+    45	static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
+    46	{
+    47		struct device *dev = &dev_dax->dev;
+    48		unsigned long total_len = 0;
+    49		struct dax_kmem_data *data;
+    50		int i, rc, mapped = 0;
+    51		int numa_node;
+    52		int dev_node;
+    53	
+    54		/*
+    55		 * Ensure good NUMA information for the persistent memory.
+    56		 * Without this check, there is a risk that slow memory
+    57		 * could be mixed in a node with faster memory, causing
+    58		 * unavoidable performance issues.
+    59		 */
+    60		numa_node = dev_dax->target_node;
+    61		if (numa_node < 0) {
+    62			dev_warn(dev, "rejecting DAX region with invalid node: %d\n",
+    63					numa_node);
+    64			return -EINVAL;
+    65		}
+    66	
+    67		for (i = 0; i < dev_dax->nr_range; i++) {
+    68			struct range range;
+    69	
+    70			rc = dax_kmem_range(dev_dax, i, &range);
+    71			if (rc) {
+    72				dev_info(dev, "mapping%d: %#llx-%#llx too small after alignment\n",
+    73						i, range.start, range.end);
+    74				continue;
+    75			}
+    76			total_len += range_len(&range);
+    77		}
+    78	
+    79		if (!total_len) {
+    80			dev_warn(dev, "rejecting DAX region without any memory after alignment\n");
+    81			return -EINVAL;
+    82		}
+    83	
+    84		data = kzalloc(struct_size(data, res, dev_dax->nr_range), GFP_KERNEL);
+    85		if (!data)
+    86			return -ENOMEM;
+    87	
+    88		rc = -ENOMEM;
+    89		data->res_name = kstrdup(dev_name(dev), GFP_KERNEL);
+    90		if (!data->res_name)
+    91			goto err_res_name;
+    92	
+    93		rc = memory_group_register_static(numa_node, total_len);
+    94		if (rc < 0)
+    95			goto err_reg_mgid;
+    96		data->mgid = rc;
+    97	
+    98		for (i = 0; i < dev_dax->nr_range; i++) {
+    99			struct resource *res;
+   100			struct range range;
+   101	
+   102			rc = dax_kmem_range(dev_dax, i, &range);
+   103			if (rc)
+   104				continue;
+   105	
+   106			/* Region is permanently reserved if hotremove fails. */
+   107			res = request_mem_region(range.start, range_len(&range), data->res_name);
+   108			if (!res) {
+   109				dev_warn(dev, "mapping%d: %#llx-%#llx could not reserve region\n",
+   110						i, range.start, range.end);
+   111				/*
+   112				 * Once some memory has been onlined we can't
+   113				 * assume that it can be un-onlined safely.
+   114				 */
+   115				if (mapped)
+   116					continue;
+   117				rc = -EBUSY;
+   118				goto err_request_mem;
+   119			}
+   120			data->res[i] = res;
+   121	
+   122			/*
+   123			 * Set flags appropriate for System RAM.  Leave ..._BUSY clear
+   124			 * so that add_memory() can add a child resource.  Do not
+   125			 * inherit flags from the parent since it may set new flags
+   126			 * unknown to us that will break add_memory() below.
+   127			 */
+   128			res->flags = IORESOURCE_SYSTEM_RAM;
+   129	
+   130			/*
+   131			 * Ensure that future kexec'd kernels will not treat
+   132			 * this as RAM automatically.
+   133			 */
+   134			rc = add_memory_driver_managed(data->mgid, range.start,
+   135					range_len(&range), kmem_name, MHP_NID_IS_MGID);
+   136	
+   137			if (rc) {
+   138				dev_warn(dev, "mapping%d: %#llx-%#llx memory add failed\n",
+   139						i, range.start, range.end);
+   140				release_resource(res);
+   141				kfree(res);
+   142				data->res[i] = NULL;
+   143				if (mapped)
+   144					continue;
+   145				goto err_request_mem;
+   146			}
+   147			mapped++;
+   148		}
+   149	
+   150		dev_set_drvdata(dev, data);
+   151	
+   152		/* Update spanned_pages of the device numa node */
+   153		dev_node = dev_to_node(dev);
+   154		if (dev_node != numa_node && dev_node < numa_node) {
+   155			struct pglist_data *pgdat = NODE_DATA(dev_node);
+ > 156			struct zone *zone = &pgdat->node_zones[ZONE_DEVICE];
+   157			unsigned long start_pfn = zone->zone_start_pfn;
+   158			unsigned long nr_pages = NODE_DATA(numa_node)->node_spanned_pages;
+   159	
+   160			shrink_zone_span(zone, start_pfn, start_pfn + nr_pages);
+   161			update_pgdat_span(pgdat);
+   162		}
+   163	
+   164		return 0;
+   165	
+   166	err_request_mem:
+   167		memory_group_unregister(data->mgid);
+   168	err_reg_mgid:
+   169		kfree(data->res_name);
+   170	err_res_name:
+   171		kfree(data);
+   172		return rc;
+   173	}
+   174	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E3949EAC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E4E49EAC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245331AbiA0TFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:05:14 -0500
+        id S229612AbiA0TFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:05:16 -0500
 Received: from mail-am6eur05on2087.outbound.protection.outlook.com ([40.107.22.87]:49248
         "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229612AbiA0TFM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:05:12 -0500
+        id S239096AbiA0TFN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 14:05:13 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d7DIMsOa+VNTE2ONPYrlIOjf0Rj7CdHGy5Ljh14utRJZ2odzkYzFphl9BXK52oLDm2rBGoUNtkaz5hIxFeYlDb/k2VKdCD0sevWBbzwP34qnmKNT1oExI05JPSEOtxrjUDZwfIsHddNAP0W3TSax8VCsgkJ1k/UyVYpUV8G6+FguAYmrl/hUGj8MjvCv9WJ7fDndwoclCSwO0Wn5AW8YwtUbkrhJij6gHA8y9hLBe/b/tp67dC5Sfw6uzmqVY65KtLkZntLyHWMvdik5JhsWI6nbqyqFjT3J+5zrNs0VrC/WHyfWqvdUhqlcqw28b/xFKVQCmKLVlzv+j4pkPe6naA==
+ b=XrA6EFXUioPOuQGbNS3pjhfeZ0T4fbxhmUa2Y/DNzfiPNmDB2UlPnAvc9Za/lu83nT6Fl+7y5thEDVOISNF/7WFfba7f2GWgyqxd8nXgIsG/LKY7h0PqEWSYfZM+0OqtbwWfpCheLBmFx8W54cBt1hGlSNu/6aw1h811eL3blzFyI5enOQOZAOiOPNu1xLWtbhJtQxmXKpRnqcmQgEVaTifQ4m0IFIqzuWDVmQOk22zSjp4PWSRiSg/6NipfJB4wtE+yGxXNJ1wiPYSzaZD90TLAf6mcMbnptWFptcwDN27ax9OCKnBac0hxzoyEOrMbBK6CRSBW8s1i8wKaszpoYg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3JigRZhjVEWGDRVBQDBND/0vdpjKoyirNdQHEURcgl8=;
- b=d6UJ/1IVjATZFgGoB+/CJL7DpNnPcmpLfKJVdCMfsgMSQyAA0kQxnykyR/CCrAItonBn7a7ObXXnzCNXxGGjNNOXn8DQMoli+J0N/GDdgWjPMw5hY32YESFVKLKP+65+taw7MpZhNUXVg7CtAOGHIfDMaCCjAo69IfZaaOjyRLJO650e1/FPG1N2MScwx4Unbp1y5lM/85L5UJVIYPHsI9V5qMKdays73EzSQEnjM6boNaVr/Jbx4iuVjHhjxJVIx+oliyF4ZPrcYQe6f1MTpYmnH/5LTUTedsJ2E2e9DgsoI8SBpLIBCTXP1GwuWAURrgqleGQ31MGs4NZa70P+5g==
+ bh=kIOXQA3PKm8u78cTTrQaCwjXsfrHlm0ewbpaN4mbu08=;
+ b=Tt4UA5coQTFH46nnxijO3XgpU/HJH2rdkK6RAU1hbEjIo1xNAMIpNWSNzEovKZkt2M5MgNFUqlCBMSb3gOLoNyzN02Tc/g97xT8UyAgyeFgaFded69cgBMY0/pb1mjSA30P3kuOHV/D/hkFw6Ur1eDVS3O3Fg6F82WfBHBkJN6HwiHyLEbP2ufMHjnL2Ffwqi+aj1xnIHry6CysLpneSauMGFUDfIGu6E5MsNuG9clYVH6b+jiOpIWR+XpfFAnQ9eAgx5Fg7oUwxRPlyjwkSkkjN8CAGmh1LQX1v2xLwhiNzp7PzJTucgGHo+irmrLAK7LaOs2lOr37FhCvuR3OamQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3JigRZhjVEWGDRVBQDBND/0vdpjKoyirNdQHEURcgl8=;
- b=W1We6CAjsbXXdcYK2B6g+eeao06C7XnJuR8r+ipECtPOp0LVCv8Ky7yC8j6DRWs5gtYe8yMPsD0reRS5fPbevQ3jmLhONH67PwJm5AIMYWU+zlH1+6xchMCtWwewjHUf2isGBKCVFQKJqAIBMJHmsEZEh6T41pSgb5ozwUxdLas=
+ bh=kIOXQA3PKm8u78cTTrQaCwjXsfrHlm0ewbpaN4mbu08=;
+ b=E2s8RgX/B99IRZqSTQN0PUGArqeKJunmlkiHF8l0kYa67GJNiyKectdO3E8gQxP/b5sGYVe+ZobfWbOkL5ZcwIzT7NCxVpFKd0rw0F7NQma0R4foZgUQ9sqayOvtQxWWm6TKwJyDNiLuZ0Bz39kAq8x36+lp0Unk9KFXzImMB2w=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=wolfvision.net;
 Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com (2603:10a6:3:e1::23)
  by AM6PR08MB4072.eurprd08.prod.outlook.com (2603:10a6:20b:a8::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Thu, 27 Jan
- 2022 19:05:09 +0000
+ 2022 19:05:11 +0000
 Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com
  ([fe80::e14f:197:5001:4c56]) by HE1PR0802MB2426.eurprd08.prod.outlook.com
  ([fe80::e14f:197:5001:4c56%3]) with mapi id 15.20.4930.017; Thu, 27 Jan 2022
- 19:05:09 +0000
+ 19:05:11 +0000
 From:   Michael Riesch <michael.riesch@wolfvision.net>
 To:     linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
@@ -46,10 +46,12 @@ Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
         Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
         Michael Riesch <michael.riesch@wolfvision.net>,
         Liang Chen <cl@rock-chips.com>
-Subject: [PATCH 1/2] arm64: dts: rockchip: rename and sort the rk356x usb2 phy handles
-Date:   Thu, 27 Jan 2022 20:04:55 +0100
-Message-Id: <20220127190456.2195527-1-michael.riesch@wolfvision.net>
+Subject: [PATCH 2/2] arm64: dts: rockchip: add usb2 support to rk3568-evb1-v10
+Date:   Thu, 27 Jan 2022 20:04:56 +0100
+Message-Id: <20220127190456.2195527-2-michael.riesch@wolfvision.net>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220127190456.2195527-1-michael.riesch@wolfvision.net>
+References: <20220127190456.2195527-1-michael.riesch@wolfvision.net>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: ZR0P278CA0179.CHEP278.PROD.OUTLOOK.COM
@@ -57,206 +59,149 @@ X-ClientProxiedBy: ZR0P278CA0179.CHEP278.PROD.OUTLOOK.COM
  (2603:10a6:3:e1::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: add9295f-03c3-43d5-9ad1-08d9e1c7f005
+X-MS-Office365-Filtering-Correlation-Id: 599868e6-ece3-4874-abce-08d9e1c7f161
 X-MS-TrafficTypeDiagnostic: AM6PR08MB4072:EE_
-X-Microsoft-Antispam-PRVS: <AM6PR08MB4072273E94D9B45902F09BA7F2219@AM6PR08MB4072.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-Microsoft-Antispam-PRVS: <AM6PR08MB40725D67153EC74A479A6D88F2219@AM6PR08MB4072.eurprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gFpF3DzacKitj7jqFIi1AhXJiOpq91R0vkz3aZuS7CZ0XtSFARJSKMNaTlZ7tOMUHWnpCFzAXim6iBpKPun3cpVf4WLoQhXDYR1MFvBQ10kxVjVwbZ8uGuN7llE7UM/lLwYCVeICZvGPl/CffgjEfm0+CUNlK2M9uxrGm9dqga5cmr2RLerYMqJwSWUtXwU4qy7VXPeP1W7V5mqLd0xZ6ibVNDbO88c3UXVdbOwkdZpiFpBAZgOCOhWP3oUD71LX3nSpC8+5RumKBKW2IWRGNpSzZUh94LOufGUv33cbS22WvpgrrYygvn+XEBEmGBcqN2QtmVSMLh1kHSaeKsr4Sz4aNLyO9vXzesUZL4Or89OGfuOeF3BLtyKrl2LX8Sp7XQEUYnOgUDAC9IEyVwr3xXEraPcmoRBUbgaaEBCa70oWAn4GSOONtbgXDgJ0vTuxq2WHeUYz+On2o/iWWSoYUqLXXY0gKsl90TvL/JRY/KGzWDRbVOk9WZUFnaWGHSofH8nZPJvCU5hHx86KiDQmKxxeWZN4NzRrheCnEzUDQWZlaUn5UZRYQW6Otg+ksBV3tcdqtJ3iy+0AXpAxsVvM3ZYNqXnDkh7oPHfnxbHNk8CadD1N2lymfliVwyV9LEVrKcjLmBicZuq9FlNmvnHwBw==
+X-Microsoft-Antispam-Message-Info: sgkb80d2aVJwMHWyzxI3qo3GITemEU/3zCumHsdUmTkQ20qJ9rX5UoZN7JjJztyMTg/gIL5Qv+xJhByIfkBrpDENR8w3SPLksY19Bi1dxwurpFHIQyjVsx3KjJV1kofhaCROwRmsp6AZjo3XzTcp4bMpbr6Usm7LRm4uZoLU+64cb6KjmeRt05JNH9/GxasjERj8jtNeeT8qJ/mrR3Ob1dow7qHlZhxgRECimMjq7qrV7/u98s8JUm0Wj47pn9jHmqf4FdwjyCM4esKR1XBs6QNUbTmP4SUBZUIsGub+xUOX6vREJLHFVLp6fyPFJevQ0c95C45HcdaUF7SHvv/Z3RzO82UBEYoOq3sNbXDqwx5Ym6HKj/OztAzIqGM9ELLakjwePNkLAYjvsWFJ+ASF38T42JGpuWA4+myNriA1/2v1OYQpx9iLeruO3GI7jA2P9KwjaUpq/NMwc6GgCt6yGtxR3xcPEzBgRYLKFVzco4+QwZH/Wg4Q2mIgNJDydtQ0egvNFEzergOy9yR+cBOJsQAz4GbSBHJGiwMBvY6/WK6nzsAF5yBExH/q07m+qf45f9P7Pom1Z4Nq1kmH4ECQbaL5CR0ijIpvp5z6I0lf0xY+deL/s607NoBvUKdlhGVhkAktgdujMjkEONylgm4e8w==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0802MB2426.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(4326008)(8936002)(66476007)(86362001)(66946007)(83380400001)(66556008)(38100700002)(5660300002)(44832011)(6666004)(186003)(2906002)(36756003)(316002)(2616005)(54906003)(6512007)(508600001)(1076003)(52116002)(6486002)(6506007)(20210929001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yBfmw7pNfy48ee8ruI5tNDjIR3IBnJX/hBtVMlsBEU6rp6ZasarytX2KboDi?=
- =?us-ascii?Q?DTfbeRsOHXD8xbxYEJPhRJed+0VRX862fMOY9pmVKaLCULKaP2WA759ToWRD?=
- =?us-ascii?Q?obxw6+S7uBur3F55H973zP95+9xSZvx3yGxQ4SFrK8YsCfEcK/sAgarg7hUw?=
- =?us-ascii?Q?Yu7Il/0vjR0q+330ldhQw+rmF6bn4sNihJZjb/w4vwP6znNbka1I053Yh4/g?=
- =?us-ascii?Q?HkSg8wnKJ12wxopJSGWc/Q/qDlgmcpi9YNX00YtU2fWe0yJGEQdpkNlx2FDv?=
- =?us-ascii?Q?43F2iFNAnTAnVJeZbeRsBz5vxmTWqwbbkoS53CvclxpcqyshE3ZozQMbSMLH?=
- =?us-ascii?Q?USFvk3oiKrAFBFmCwC5zpgZc9aR400WYr63aBX3YSKfJE0nonx2EGgsdgZvo?=
- =?us-ascii?Q?76jLILeSiQQBqgbNMJVLdkNgH6s90FFqSFK6RlBNB/0THrAsgP/yCyMygvBt?=
- =?us-ascii?Q?mLYmfmLKLymXhCMLzj/gVkFC9QqOxbldcd/p+SfHYCoo4KfjBpR2YJYeDoGc?=
- =?us-ascii?Q?qaLNfWOHYIrRtVSxquiGN69kDAsSV29ykM0ERwq44KWEheldjiPeXHvM+NKO?=
- =?us-ascii?Q?aGnnUdTU1RXVRPOSYheEzj5l9EI3BWllej+Ram8tgSECHXa0p8m0jVx049uD?=
- =?us-ascii?Q?FjXsw2e12nQrye/HcEBtLthImqQT6t7d81AuFAaRTMQuEGubW1CYlJ3FWgws?=
- =?us-ascii?Q?aZSlPDiMD1aIGGJabYFtz2qyRuUC3NY5qFIYE6imNB3EugoE7rBRoEw+QGMD?=
- =?us-ascii?Q?6gT/UQKiClD/kneBEP/KPwTRCe63cQNZiystW1Au1B1W7cH+6R49db6uZtmA?=
- =?us-ascii?Q?hpnOmVQGbtKgKJtazOYO/NwWmJi0W1HWhfBeZ/95vogTW8cvn2oHea4bMadL?=
- =?us-ascii?Q?KhGxf9fqjvOFLlqEO62fo1yMrgj9+gWSisa3QdWT+momERc6UuTF0xyd6+Bs?=
- =?us-ascii?Q?Tr8P9zYTJt/wlQATJvXQ7IeMsz+q0aq+REWMLt/1tFe4gV3BW/FVHylI8vL7?=
- =?us-ascii?Q?hRlFnkiUUUTVXmSuN3nL5kRUmyLoMz6+6L8Ib3zy5WkovK9pIUhrY3/BwiEf?=
- =?us-ascii?Q?RULSjnATtc+5rwqZVaTob6qzFmg1SYTndujSSDwxVIZJZeKI1YBDvIa36WR8?=
- =?us-ascii?Q?JBUB/W7p+5J0TOwnzApZVZv7kRLox3aZ2fGac+g5qe+chNeGGxWQoo6B/0vd?=
- =?us-ascii?Q?0QTI8foffY4TkT/bxDCdeCdH2Eg3rS3hNixMmQBR70yGk3tD4TbKiM1S95Ll?=
- =?us-ascii?Q?JZM0mB1n328wTD93GUliz3UnK2GD40i0qX4pkS3NvKiJoroqLWBLSmAunZjt?=
- =?us-ascii?Q?56D36IlhjOUNuTWaFH0XJKYOa/5+CDEid8IiI9hb036sYwY0SLQgv7ZqC2j0?=
- =?us-ascii?Q?0sJoxvfhGF+GikzrQV6N8Kg4sen5UXp3zpXxYqZqEhvcsWsCpl8x57ipktix?=
- =?us-ascii?Q?kVWrIjcgU53bYzpkeBJD0HOTwpdBjqHsZ3SOUlr0mzv6OZiwcoK1N0MxkuFA?=
- =?us-ascii?Q?BjNFBNnjzPoGB9PWVuXMHe0L+c5qztn83I3fzbKil0urbuodVFcQEdzniG/N?=
- =?us-ascii?Q?Fynev7KBaepSOvqtKUfn1tG6HA7iYZNWG1OZgNrw1MG8Rv/WMaffenzP+xdv?=
- =?us-ascii?Q?qTBJseS2O2LJJjzkIEWIMeUjqwyxwCArW8vuIqwC8sC9jdBno+i7kbIarzxi?=
- =?us-ascii?Q?1Vcv04nzrlGCtod61qPeNAElDWodCEP/ifjwj+aL33s815eb8ELg5WUqtTDo?=
- =?us-ascii?Q?4/m74IZeVw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SMZR/sKZXCVhc4a9uUkwiy/xUrrWA5RN2+25xmpUGn/4CmB5emB+xo0SQuT1?=
+ =?us-ascii?Q?eXhJfF9HnAhgys/39RxW3C2hjuCDLVSDGjtMj4DW97Rsy+CB1pgp3G+dqq/N?=
+ =?us-ascii?Q?J+o33FFKtIMQ9lTMpjNQf3jjYBaEpIBIjgJJEPYPR5VgxnZBmnoc/eUxWYtT?=
+ =?us-ascii?Q?zMJDCGaSTJtCYlLVvAEY4mAix85EQS5OyFTwx0LZorhYGzwg44CrSXAnedMF?=
+ =?us-ascii?Q?qz+rodtipWY7ZhceYXEfJRREABAoihn+lNfPt18IfAhR2dvYj4ODC9b8DrOZ?=
+ =?us-ascii?Q?pSHIFg7h+uGw5cnaIQDWrqfVukZ4tbkj8US+AViYGfu/6ruX91hJn0QsuWIt?=
+ =?us-ascii?Q?uaEg6sZJLwCJCIAhStxEtGnHsHVuhx13cijCC3P5Wb90RhNg8vN2II+y1dQG?=
+ =?us-ascii?Q?CfKUEE+JrRqiRtA6sL9luG892ZnkMvNtCd0hegmLy9EMsP3eRHnGq1cu9NOB?=
+ =?us-ascii?Q?TdEDpZQ7Ax3giyhaM1D2iF7vcVSgLtbGMCIPIaNgYqrun4xfaSKX0jvGL5+g?=
+ =?us-ascii?Q?n5IHZPalBQf/DMpef6Sr8rcNMqCdWg/lPYoFYcV9YFQ+HT9ezVQtv42t9WRF?=
+ =?us-ascii?Q?gfiOKYPov+IhN1jjBFJfEX3B8ALTv8rNg+L3GWc96pb1y7HKk0u7BB0LLetR?=
+ =?us-ascii?Q?PXGdFhJGwPJeo3HUs4Oiv44WSVVZJiUBBK2lglp93VjdkUNvQG6MRsdxYRFK?=
+ =?us-ascii?Q?ammtFGZ0hU8EbRJxFv1BX1KgR/baqfKMa7k219+qxpYHG6V9yhOphbaBly3s?=
+ =?us-ascii?Q?zsxcOxKkp7xZNcXqHmezkoYcdwEsJW8ZxnPcCtcX98JSHwe00pRmmUbf6N9+?=
+ =?us-ascii?Q?0KCnXB/u5cAObLQeJPZ9oUIgDTtkSvJ6r3qvN3bD6Z79FQg07Wb513EokomQ?=
+ =?us-ascii?Q?xMgp4lh1cilHsejDObBWRceXYuiPt4govQEoT0U9URszTvZVJe8pnQRjyqLE?=
+ =?us-ascii?Q?AkwSiojAypzPgJpxXOn8Uhx9v09xZHZUBYLEBsC1S9hA0v2Ey1KWoqDAkDM4?=
+ =?us-ascii?Q?6BJ07ZfhRUxeeEkMe25IikvRhVj+r4yxdssR2ZH5wLVKkXr/tluD5EDRMdRU?=
+ =?us-ascii?Q?24syeOQZeuWvJcCQF2WpqU0DozXIEOaL3Zn2CtYpMMarN2ExRCoS21fjw0H+?=
+ =?us-ascii?Q?Q87r9MOaI4nK+/beNf11KpgLwZhzInjP7gEuvHx3ejcpCTBlmvScUsGtyKCT?=
+ =?us-ascii?Q?1Whd88JVQNxVgElIp4JTVBGy8EjUOtcz8H6bMU1y4jNRJklTA0bxu6hiNdIO?=
+ =?us-ascii?Q?+Ohecty+o799L6kw0NYJyffgCD/hTevM1A/p2CLLQ93ei7QJmw7hDmRSY5H5?=
+ =?us-ascii?Q?a58TTtAns0I4VP3Jhfjw9l1WFNx3xt1m+GtCZNBRPAJMHsZ0gcGnIaAqF65M?=
+ =?us-ascii?Q?EtCiR7vr+Fswy7V3JBW3x3gBciHmr0xSNXDr4ebtp+ZGlE2lg71eDU/Vqte/?=
+ =?us-ascii?Q?seTsRnpNLnsuLuF0CEtlzdRlqy31HfNEb6o8NPkw8wQBKCUWtpd7k6pja4lD?=
+ =?us-ascii?Q?kDwpGZlCvV4hAi7C2GLr+KcD46T5tajoyYMYtY84yTgvskDahsWDP9/SqTW7?=
+ =?us-ascii?Q?Uk36p4AUHzFafyS0yw60K9Lft4dUvHSihrYHJ9ZehSG5OkCBqJlrit3YNFW3?=
+ =?us-ascii?Q?WnfZO3rcNfC78sNN/wXDia5TDD2QHki23faXDMPyJ5jYmgeVwrMAu/Wips+3?=
+ =?us-ascii?Q?5bG5x020Ai1C+X80Lg6IHTFUOtn38aCXo6whNKc+d0qQC/DEeoxFYUHS+SGY?=
+ =?us-ascii?Q?rFNkJRl7+edh0UQh1TxxDGX1Iy/b4RE=3D?=
 X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: add9295f-03c3-43d5-9ad1-08d9e1c7f005
+X-MS-Exchange-CrossTenant-Network-Message-Id: 599868e6-ece3-4874-abce-08d9e1c7f161
 X-MS-Exchange-CrossTenant-AuthSource: HE1PR0802MB2426.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 19:05:09.3463
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 19:05:11.5181
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4ky4Oswkb2wlIJXRzpB+tcCcjsSuKofuTO8V1F1ThadxtyRhezEjYEGeyhG8VrV8thdSiy4TMaT8VITOjTkcTzu0Ime9MSNt+EsDdQ9WgGk=
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5BAhio4VLAsN78BIrLEAkoz+CVCH0VHndH1mrgxy3M8lV6EPaYDDOU26bPWc+cQT8+IWULhzw4InJoXlW9l7PzBKV7H1/21wqbBpNb/DlU4=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR08MB4072
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All nodes and handles related to USB have the prefix usb or usb2,
-whereas the phy handles are prefixed with u2phy. Rename for
-consistency reasons and to facilitate sorting.
-
-This patch also updates the handles in the only board file that
-uses them (rk3566-quartz64-a.dts).
+Activate the USB2 controller and phy nodes in the device tree of the
+RK3568 EVB1.
 
 Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
 ---
- .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 18 ++++++++---------
- arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 20 +++++++++----------
- 2 files changed, 19 insertions(+), 19 deletions(-)
+ .../boot/dts/rockchip/rk3568-evb1-v10.dts     | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-index f1d6bf10c650..3e65465ac7d5 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-@@ -574,32 +574,32 @@ &uart2 {
- 	status = "okay";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
+index 184e2aa2416a..c68bade0d99b 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
+@@ -53,6 +53,28 @@ vcc5v0_sys: vcc5v0-sys {
+ 		vin-supply = <&dc_12v>;
+ 	};
+ 
++	vcc5v0_usb: vcc5v0-usb {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc5v0_usb";
++		regulator-always-on;
++		regulator-boot-on;
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&dc_12v>;
++	};
++
++	vcc5v0_usb_host: vcc5v0-usb-host {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio0 RK_PA6 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&vcc5v0_usb_host_en>;
++		regulator-name = "vcc5v0_usb_host";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&vcc5v0_usb>;
++	};
++
+ 	vcc3v3_lcd0_n: vcc3v3-lcd0-n {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "vcc3v3_lcd0_n";
+@@ -345,6 +367,12 @@ pmic_int: pmic_int {
+ 				<0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
+ 		};
+ 	};
++
++	usb {
++		vcc5v0_usb_host_en: vcc5v0_usb_host_en {
++			rockchip,pins = <0 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
  };
  
--&u2phy1_host {
--	phy-supply = <&vcc5v0_usb20_host>;
+ &pmu_io_domains {
+@@ -390,3 +418,33 @@ &sdmmc0 {
+ &uart2 {
+ 	status = "okay";
+ };
++
 +&usb_host0_ehci {
- 	status = "okay";
- };
- 
--&u2phy1_otg {
--	phy-supply = <&vcc5v0_usb20_host>;
++	status = "okay";
++};
++
 +&usb_host0_ohci {
- 	status = "okay";
- };
- 
--&u2phy1 {
++	status = "okay";
++};
++
 +&usb_host1_ehci {
- 	status = "okay";
- };
- 
--&usb_host0_ehci {
++	status = "okay";
++};
++
 +&usb_host1_ohci {
- 	status = "okay";
- };
- 
--&usb_host0_ohci {
++	status = "okay";
++};
++
 +&usb2phy1 {
- 	status = "okay";
- };
- 
--&usb_host1_ehci {
++	status = "okay";
++};
++
 +&usb2phy1_host {
-+	phy-supply = <&vcc5v0_usb20_host>;
- 	status = "okay";
- };
- 
--&usb_host1_ohci {
++	phy-supply = <&vcc5v0_usb_host>;
++	status = "okay";
++};
++
 +&usb2phy1_otg {
-+	phy-supply = <&vcc5v0_usb20_host>;
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index 8ee2fab676f4..69c30992ced2 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -214,7 +214,7 @@ usb_host0_ehci: usb@fd800000 {
- 		interrupts = <GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&cru HCLK_USB2HOST0>, <&cru HCLK_USB2HOST0_ARB>,
- 			 <&cru PCLK_USB>;
--		phys = <&u2phy1_otg>;
-+		phys = <&usb2phy1_otg>;
- 		phy-names = "usb";
- 		status = "disabled";
- 	};
-@@ -225,7 +225,7 @@ usb_host0_ohci: usb@fd840000 {
- 		interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&cru HCLK_USB2HOST0>, <&cru HCLK_USB2HOST0_ARB>,
- 			 <&cru PCLK_USB>;
--		phys = <&u2phy1_otg>;
-+		phys = <&usb2phy1_otg>;
- 		phy-names = "usb";
- 		status = "disabled";
- 	};
-@@ -236,7 +236,7 @@ usb_host1_ehci: usb@fd880000 {
- 		interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&cru HCLK_USB2HOST1>, <&cru HCLK_USB2HOST1_ARB>,
- 			 <&cru PCLK_USB>;
--		phys = <&u2phy1_host>;
-+		phys = <&usb2phy1_host>;
- 		phy-names = "usb";
- 		status = "disabled";
- 	};
-@@ -247,7 +247,7 @@ usb_host1_ohci: usb@fd8c0000 {
- 		interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&cru HCLK_USB2HOST1>, <&cru HCLK_USB2HOST1_ARB>,
- 			 <&cru PCLK_USB>;
--		phys = <&u2phy1_host>;
-+		phys = <&usb2phy1_host>;
- 		phy-names = "usb";
- 		status = "disabled";
- 	};
-@@ -1195,7 +1195,7 @@ pwm15: pwm@fe700030 {
- 		status = "disabled";
- 	};
- 
--	u2phy0: usb2phy@fe8a0000 {
-+	usb2phy0: usb2phy@fe8a0000 {
- 		compatible = "rockchip,rk3568-usb2phy";
- 		reg = <0x0 0xfe8a0000 0x0 0x10000>;
- 		clocks = <&pmucru CLK_USBPHY0_REF>;
-@@ -1206,18 +1206,18 @@ u2phy0: usb2phy@fe8a0000 {
- 		#clock-cells = <0>;
- 		status = "disabled";
- 
--		u2phy0_host: host-port {
-+		usb2phy0_host: host-port {
- 			#phy-cells = <0>;
- 			status = "disabled";
- 		};
- 
--		u2phy0_otg: otg-port {
-+		usb2phy0_otg: otg-port {
- 			#phy-cells = <0>;
- 			status = "disabled";
- 		};
- 	};
- 
--	u2phy1: usb2phy@fe8b0000 {
-+	usb2phy1: usb2phy@fe8b0000 {
- 		compatible = "rockchip,rk3568-usb2phy";
- 		reg = <0x0 0xfe8b0000 0x0 0x10000>;
- 		clocks = <&pmucru CLK_USBPHY1_REF>;
-@@ -1228,12 +1228,12 @@ u2phy1: usb2phy@fe8b0000 {
- 		#clock-cells = <0>;
- 		status = "disabled";
- 
--		u2phy1_host: host-port {
-+		usb2phy1_host: host-port {
- 			#phy-cells = <0>;
- 			status = "disabled";
- 		};
- 
--		u2phy1_otg: otg-port {
-+		usb2phy1_otg: otg-port {
- 			#phy-cells = <0>;
- 			status = "disabled";
- 		};
++	phy-supply = <&vcc5v0_usb_host>;
++	status = "okay";
++};
 -- 
 2.30.2
 

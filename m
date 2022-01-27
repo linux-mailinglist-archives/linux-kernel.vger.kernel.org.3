@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEA149DB4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EBE49DB5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237218AbiA0HQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 02:16:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53462 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237229AbiA0HQn (ORCPT
+        id S237192AbiA0HXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 02:23:02 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:35509 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230171AbiA0HXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 02:16:43 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2C446199A;
-        Thu, 27 Jan 2022 07:16:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA7F1C340E4;
-        Thu, 27 Jan 2022 07:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643267802;
-        bh=aQTabdo3x60SROvtozm0EwIIrGbHYLocFPhck/zO6Jc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WslhGgR2y00UODDn5KbT/IGStk9Xi80kxmJs6CULbXBHErlwVoZ7CxofUHxur9+a3
-         DHiPmbq4wV0grNLjMnn9mIp7lLUTOHp+0r9W91wAXZiYMCCREJ8SwPHxKSRd4ZrCrQ
-         bcGYE3MZnnGdbkk5TVE9Q6qs6Kr/Ekj9HZlRRRXQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-mmc@vger.kernel.org, stable <stable@vger.kernel.org>,
-        whitehat002 <hackyzh002@gmail.com>
-Subject: [PATCH v2] moxart: fix potential use-after-free on remove path
-Date:   Thu, 27 Jan 2022 08:16:38 +0100
-Message-Id: <20220127071638.4057899-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.0
+        Thu, 27 Jan 2022 02:23:01 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 19E055C00CE;
+        Thu, 27 Jan 2022 02:23:01 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 27 Jan 2022 02:23:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=jmOFRNqeia8Jwv6HakalwIdHv5r33fycUZ8Ohh
+        YSdrI=; b=gjbVRNyHosFvzz7vHX7EjSXxLm54HwhfugkQqbhbiNtiF3MzOlhK7A
+        7yjpRkc+s3pe7JAvKqHdMmK21/5mlD6Y+judlvIte/jPkLPRRJPbdrm7nIBkKPfE
+        fuMhRoPAZXwWdal90I9tlnuc09mAvTk9MWZce66MYAY9mIBpb2CBnblNWUtEpEkK
+        toiDhiQ6vslrgo+wScHqLcXdoSAwz520IOEbDJICXz0+YU4WA3G+azxqmQyNzx+5
+        GQZ7VIeLbmMbhTairpuGYQB6jht+NE6O03bEH7a+BS5S8OUHpkY39yVVBtZvuHY3
+        zn3z9KHKo7oFqVkKH4EZy+96FF/21skA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=jmOFRNqeia8Jwv6Ha
+        kalwIdHv5r33fycUZ8OhhYSdrI=; b=U/DG73Ek6XPZTNwdQwwGcgLUVuOS3elJv
+        svGvi4QgszniwRu0MbYaWVNiqMDP9pXQ8jHkp9Y48labRMz73QsFiVeMioB4etTi
+        7BOHjdEsfSRXewwvkf61/pWMZUNhFphLOY5U+EBPyQQhX8zVRrF9rkFFYMn5c6B6
+        k9PsJ7FFBPjeNz2iJQeHHU/nKqwgjfrxwbRAOQ2j4N5yWjSEp9MR4YhlWT0F0BWO
+        Kaw3Uiinc0JwRfi7GpPMmk2wM+I5dnFN+ofspg2UbM72Ikc8GthYSfY6OPzzbICE
+        czoh+xZiIqtMXob64V7MuuyXfb2qGUB6GJyEgHGKh8r8U+P96c0jQ==
+X-ME-Sender: <xms:VEjyYfxuqCyXymG9V1EaKkPFwNXD9UDxzbdVJrci1XrcDMl9OJGRLg>
+    <xme:VEjyYXTFs3fJECy9X9OOKbxdQd5vtGefrb7mlD54MXIekG5F_x_dlQ_wwA_Uixe9S
+    33oPVR3IO-ESQ>
+X-ME-Received: <xmr:VEjyYZWiQRElVILXOHfJ224wKhiwchTpOpcJdD6ftUP_k8nt9_QkSDGyvLnO1z_dUU_nfOHq2y6bDZQ2-ssEheILl9hndchG>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrfedvgddutdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:VEjyYZiDQ60J3N4ziFtf6QT0On3bYQh5EuHwmatgRH2T3ZTh6ljNmw>
+    <xmx:VEjyYRBcXcq42kPxeb9-8w3ZDRJV1ULN7lVXpPCri8RwitBXZP5rEw>
+    <xmx:VEjyYSIvHUpmdQdkGtZ__yMOPow3k0bgwvPxaDxAskEjxPNZlMD4pg>
+    <xmx:VUjyYT2LPx2yq3mzEmeXykuCC8QmRF_PBoVh_RMSkBlSNvmbZ7Qarg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Jan 2022 02:22:59 -0500 (EST)
+Date:   Thu, 27 Jan 2022 08:22:56 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Maciej W. Rozycki" <macro@embecosm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tty.current tree
+Message-ID: <YfJIUIj1mDcShwpV@kroah.com>
+References: <20220127091800.1e8f333b@canb.auug.org.au>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1450; h=from:subject; bh=aQTabdo3x60SROvtozm0EwIIrGbHYLocFPhck/zO6Jc=; b=owGbwMvMwCRo6H6F97bub03G02pJDImf3C5bhW/+b7q/OKvoGUODesuaq7cvrl4U9jPYmsNCJMmX U+1sRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEwkXYRhvt9Vjf2/Le8uWS7Xtufs8t mijtYPHjHMr+t7NvNmU4BmRegqrqCUheXJBS1NAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127091800.1e8f333b@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was reported that the mmc host structure could be accessed after it
-was freed in moxart_remove(), so fix this by saving the base register of
-the device and using it instead of the pointer dereference.
+On Thu, Jan 27, 2022 at 09:18:00AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the tty.current tree, today's linux-next build (x86_64
+> allmodconfig) produced these warnings:
+> 
+> In file included from <command-line>:
+> ./usr/include/linux/cyclades.h:6:2: warning: #warning "Support for features provided by this header has been removed" [-Wcpp]
+>     6 | #warning "Support for features provided by this header has been removed"
+>       |  ^~~~~~~
+> ./usr/include/linux/cyclades.h:7:2: warning: #warning "Please consider updating your code" [-Wcpp]
+>     7 | #warning "Please consider updating your code"
+>       |  ^~~~~~~
+> 
+> 
+> Introduced by commit
+> 
+>   f23653fe6447 ("tty: Partially revert the removal of the Cyclades public API")
+> 
+> This is a bit annoying :-(
 
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Cc: Xin Xiong <xiongx18@fudan.edu.cn>
-Cc: Xin Tan <tanxin.ctf@gmail.com>
-Cc: Tony Lindgren <tony@atomide.com>
-Cc: Yang Li <yang.lee@linux.alibaba.com>
-Cc: linux-mmc@vger.kernel.org
-Cc: stable <stable@vger.kernel.org>
-Reported-by: whitehat002 <hackyzh002@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-v2: changed to only move mmc_free_host() call as per Ulf's request
+Sorry, odd it doesn't show up in my builds, nor in 0-day.
 
- drivers/mmc/host/moxart-mmc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Can we exclude include/uapi/linux/cyclades.h from the headers checking,
+> please?
 
-diff --git a/drivers/mmc/host/moxart-mmc.c b/drivers/mmc/host/moxart-mmc.c
-index 16d1c7a43d33..b6eb75f4bbfc 100644
---- a/drivers/mmc/host/moxart-mmc.c
-+++ b/drivers/mmc/host/moxart-mmc.c
-@@ -705,12 +705,12 @@ static int moxart_remove(struct platform_device *pdev)
- 	if (!IS_ERR_OR_NULL(host->dma_chan_rx))
- 		dma_release_channel(host->dma_chan_rx);
- 	mmc_remove_host(mmc);
--	mmc_free_host(mmc);
- 
- 	writel(0, host->base + REG_INTERRUPT_MASK);
- 	writel(0, host->base + REG_POWER_CONTROL);
- 	writel(readl(host->base + REG_CLOCK_CONTROL) | CLK_OFF,
- 	       host->base + REG_CLOCK_CONTROL);
-+	mmc_free_host(mmc);
- 
- 	return 0;
- }
--- 
-2.35.0
+Let me fix this up, thanks.
 
+greg k-h

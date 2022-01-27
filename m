@@ -2,269 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 358E749DE13
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5576549DE1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234351AbiA0JdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:33:23 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:37430 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234330AbiA0JdV (ORCPT
+        id S238714AbiA0Jdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:33:45 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:19192 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238644AbiA0Jdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:33:21 -0500
-X-UUID: 362124296bef4aec9b0dffd80c5440b8-20220127
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=7qyA3Hmn8WxM0ZCS5NyboeQLM/DW8rd1daZTdXOakEw=;
-        b=L8+vIsKmgLkIbgnsnu44zmeahJ5D0NksMfY2AKLsCIVZvJPKEQQSbzT3h7p0gYYh1/0EPO/KnKIdNAxCAA9RExgpBADYt+TNQSLzyQiTX4sqggykOtU5yVBr4/o0rnQH+YJFsIy/6HIv0qBjrJqq1xl9hWmaZIO6PZkEQ8vcCOk=;
-X-UUID: 362124296bef4aec9b0dffd80c5440b8-20220127
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 327273625; Thu, 27 Jan 2022 17:33:16 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 27 Jan 2022 17:33:15 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 27 Jan 2022 17:33:14 +0800
-Subject: Re: [PATCH 2/2] arm64: dts: mt6359: add PMIC MT6359 related nodes
-To:     Hui-Liu Liu <hui.liu@mediatek.com>, <lee.jones@linaro.org>,
-        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <eddie.huang@mediatek.com>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <fshao@chromium.org>
-CC:     <srv_heupstream@mediatek.com>, <zhiyong.tao@mediatek.com>,
-        <hsin-hsiung.wang@mediatek.com>, <sean.wang@mediatek.com>,
-        <yuchen.huang@mediatek.com>, <wen.su@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Macpaul Lin <macpaul@gmail.com>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        Rex-BC Chen <Rex-BC.Chen@mediatek.com>
-References: <20220127063145.13413-1-hui.liu@mediatek.com>
- <20220127063145.13413-3-hui.liu@mediatek.com>
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-Message-ID: <c9f31d96-07a6-e5c9-33c8-5cd9aad46330@mediatek.com>
-Date:   Thu, 27 Jan 2022 17:33:14 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 27 Jan 2022 04:33:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643276015; x=1674812015;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ozq+LTwpMXjth0rTIKHrkM8marZVKxy8MHKPzE4YwIs=;
+  b=Zwod3tojI8jd8fL/tO8sCswfAnx8Wl5ilYegyohCuwLCCpRmEN/cDw/S
+   PA9IzaHwoBZJni+cWGWPM4fAL+LgoZ2kSANzuj8e+5+3DuTZK8xtZiO3m
+   1c+iXpRZnTgUVa8nqij90/3JLt02+cAuGMUY89RZhRFMbg95WKulYrjIo
+   E=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jan 2022 01:33:35 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 01:33:34 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 27 Jan 2022 01:33:34 -0800
+Received: from [10.253.77.50] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 27 Jan
+ 2022 01:33:29 -0800
+Message-ID: <25d9a681-b899-5936-868d-34f645ee40ef@quicinc.com>
+Date:   Thu, 27 Jan 2022 17:33:26 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220127063145.13413-3-hui.liu@mediatek.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v2 2/9] Coresight: Add coresight TPDM source driver
 Content-Language: en-US
-Content-Transfer-Encoding: base64
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Mike Leach <mike.leach@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20211209141543.21314-1-quic_jinlmao@quicinc.com>
+ <20211209141543.21314-3-quic_jinlmao@quicinc.com>
+ <20211214185714.GB1549991@p14s>
+ <85ad17fb-c885-831d-d841-4c6f10920355@quicinc.com>
+ <CAJ9a7Vh2d79Ro72ZDsbQSVS8VrH3c+X+xo8849yGS4Z73+yq_w@mail.gmail.com>
+ <20211216190223.GA78825@p14s>
+ <2703bf83-3a87-e69f-2392-7e0568e91712@quicinc.com>
+ <20220121171552.GA1811357@p14s>
+ <24c09945-bcda-81e4-f53c-af871f696094@quicinc.com>
+ <20220126153437.GA2144852@p14s>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <20220126153437.GA2144852@p14s>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCk9uIDEvMjcvMjIgMjozMSBQTSwgSHVpLUxpdSBMaXUgd3JvdGU6DQo+IEZyb206IEh1aSBM
-aXUgPGh1aS5saXVAbWVkaWF0ZWsuY29tPg0KPiANCj4gQWRkIE1UNjM1OSBub2RlLg0KPiANCj4g
-U2lnbmVkLW9mZi1ieTogSHVpIExpdSA8aHVpLmxpdUBtZWRpYXRlay5jb20+DQo+IC0tLQ0KPiAg
-IGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2MzU5LmR0c2kgICAgfCAyOTggKysrKysr
-KysrKysrKysrKysrKysNCj4gICBhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE5Mi1l
-dmIuZHRzIHwgICAxICsNCj4gICAyIGZpbGVzIGNoYW5nZWQsIDI5OSBpbnNlcnRpb25zKCspDQo+
-ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2MzU5
-LmR0c2kNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210
-NjM1OS5kdHNpIGIvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDYzNTkuZHRzaQ0KPiBu
-ZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLmRmM2U4MjIyMzJkMw0K
-PiAtLS0gL2Rldi9udWxsDQo+ICsrKyBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2
-MzU5LmR0c2kNCj4gQEAgLTAsMCArMSwyOTggQEANCj4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlm
-aWVyOiAoR1BMLTIuMCBPUiBNSVQpDQo+ICsvKg0KPiArICogQ29weXJpZ2h0IChDKSAyMDIyIE1l
-ZGlhVGVrIEluYy4NCj4gKyAqLw0KPiArDQo+ICsmcHdyYXAgew0KPiArCXBtaWM6IHBtaWMgew0K
-PiArCQljb21wYXRpYmxlID0gIm1lZGlhdGVrLG10NjM1OSI7DQo+ICsJCWludGVycnVwdC1jb250
-cm9sbGVyOw0KPiArCQkjaW50ZXJydXB0LWNlbGxzID0gPDI+Ow0KPiArDQo+ICsJCW10NjM1OWNv
-ZGVjOiBtdDYzNTljb2RlYyB7DQo+ICsJCX07DQo+ICsNCj4gKwkJcmVndWxhdG9ycyB7DQo+ICsJ
-CQltdDYzNTlfdnMxX2J1Y2tfcmVnOiBidWNrX3ZzMSB7DQo+ICsJCQkJcmVndWxhdG9yLW5hbWUg
-PSAidnMxIjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDw4MDAwMDA+Ow0KPiAr
-CQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDIyMDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRv
-ci1lbmFibGUtcmFtcC1kZWxheSA9IDwwPjsNCj4gKwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0K
-PiArCQkJfTsNCj4gKwkJCW10NjM1OV92Z3B1MTFfYnVja19yZWc6IGJ1Y2tfdmdwdTExIHsNCj4g
-KwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2Z3B1MTEiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWlj
-cm92b2x0ID0gPDQwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTE5
-Mzc1MD47DQo+ICsJCQkJcmVndWxhdG9yLXJhbXAtZGVsYXkgPSA8NTAwMD47DQo+ICsJCQkJcmVn
-dWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDIwMD47DQo+ICsJCQkJcmVndWxhdG9yLWFsbG93
-ZWQtbW9kZXMgPSA8MCAxIDI+Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92bW9kZW1fYnVja19y
-ZWc6IGJ1Y2tfdm1vZGVtIHsNCj4gKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2bW9kZW0iOw0KPiAr
-CQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDQwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9y
-LW1heC1taWNyb3ZvbHQgPSA8MTEwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLXJhbXAtZGVsYXkg
-PSA8MTA3NjA+Ow0KPiArCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyMDA+Ow0K
-PiArCQkJfTsNCj4gKwkJCW10NjM1OV92cHVfYnVja19yZWc6IGJ1Y2tfdnB1IHsNCj4gKwkJCQly
-ZWd1bGF0b3ItbmFtZSA9ICJ2cHUiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0g
-PDQwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTE5Mzc1MD47DQo+
-ICsJCQkJcmVndWxhdG9yLXJhbXAtZGVsYXkgPSA8NTAwMD47DQo+ICsJCQkJcmVndWxhdG9yLWVu
-YWJsZS1yYW1wLWRlbGF5ID0gPDIwMD47DQo+ICsJCQkJcmVndWxhdG9yLWFsbG93ZWQtbW9kZXMg
-PSA8MCAxIDI+Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92Y29yZV9idWNrX3JlZzogYnVja192
-Y29yZSB7DQo+ICsJCQkJcmVndWxhdG9yLW5hbWUgPSAidmNvcmUiOw0KPiArCQkJCXJlZ3VsYXRv
-ci1taW4tbWljcm92b2x0ID0gPDQwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3Zv
-bHQgPSA8MTMwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLXJhbXAtZGVsYXkgPSA8NTAwMD47DQo+
-ICsJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDIwMD47DQo+ICsJCQkJcmVndWxh
-dG9yLWFsbG93ZWQtbW9kZXMgPSA8MCAxIDI+Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92czJf
-YnVja19yZWc6IGJ1Y2tfdnMyIHsNCj4gKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2czIiOw0KPiAr
-CQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDgwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9y
-LW1heC1taWNyb3ZvbHQgPSA8MTYwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1w
-LWRlbGF5ID0gPDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1hbHdheXMtb247DQo+ICsJCQl9Ow0KPiAr
-CQkJbXQ2MzU5X3ZwYV9idWNrX3JlZzogYnVja192cGEgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1l
-ID0gInZwYSI7DQo+ICsJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCj4g
-KwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzNjUwMDAwPjsNCj4gKwkJCQlyZWd1bGF0
-b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MzAwPjsNCj4gKwkJCX07DQo+ICsJCQltdDYzNTlfdnBy
-b2MyX2J1Y2tfcmVnOiBidWNrX3Zwcm9jMiB7DQo+ICsJCQkJcmVndWxhdG9yLW5hbWUgPSAidnBy
-b2MyIjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDw0MDAwMDA+Ow0KPiArCQkJ
-CXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDExOTM3NTA+Ow0KPiArCQkJCXJlZ3VsYXRvci1y
-YW1wLWRlbGF5ID0gPDc1MDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9
-IDwyMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1hbGxvd2VkLW1vZGVzID0gPDAgMSAyPjsNCj4gKwkJ
-CX07DQo+ICsJCQltdDYzNTlfdnByb2MxX2J1Y2tfcmVnOiBidWNrX3Zwcm9jMSB7DQo+ICsJCQkJ
-cmVndWxhdG9yLW5hbWUgPSAidnByb2MxIjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9s
-dCA9IDw0MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDExOTM3NTA+
-Ow0KPiArCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDc1MDA+Ow0KPiArCQkJCXJlZ3VsYXRv
-ci1lbmFibGUtcmFtcC1kZWxheSA9IDwyMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1hbGxvd2VkLW1v
-ZGVzID0gPDAgMSAyPjsNCj4gKwkJCX07DQo+ICsJCQltdDYzNTlfdmNvcmVfc3NodWJfYnVja19y
-ZWc6IGJ1Y2tfdmNvcmVfc3NodWIgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0gInZjb3JlX3Nz
-aHViIjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDw0MDAwMDA+Ow0KPiArCQkJ
-CXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDExOTM3NTA+Ow0KPiArCQkJfTsNCj4gKwkJCW10
-NjM1OV92Z3B1MTFfc3NodWJfYnVja19yZWc6IGJ1Y2tfdmdwdTExX3NzaHViIHsNCj4gKwkJCQly
-ZWd1bGF0b3ItbmFtZSA9ICJ2Z3B1MTFfc3NodWIiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWlj
-cm92b2x0ID0gPDQwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTE5
-Mzc1MD47DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZhdWQxOF9sZG9fcmVnOiBsZG9fdmF1ZDE4
-IHsNCj4gKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2YXVkMTgiOw0KPiArCQkJCXJlZ3VsYXRvci1t
-aW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0
-ID0gPDE4MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNDA+
-Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92c2ltMV9sZG9fcmVnOiBsZG9fdnNpbTEgew0KPiAr
-CQkJCXJlZ3VsYXRvci1uYW1lID0gInZzaW0xIjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jv
-dm9sdCA9IDwxNzAwMDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzMTAw
-MDAwPjsNCj4gKwkJCX07DQo+ICsJCQltdDYzNTlfdmlicl9sZG9fcmVnOiBsZG9fdmliciB7DQo+
-ICsJCQkJcmVndWxhdG9yLW5hbWUgPSAidmliciI7DQo+ICsJCQkJcmVndWxhdG9yLW1pbi1taWNy
-b3ZvbHQgPSA8MTIwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MzMw
-MDAwMD47DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZyZjEyX2xkb19yZWc6IGxkb192cmYxMiB7
-DQo+ICsJCQkJcmVndWxhdG9yLW5hbWUgPSAidnJmMTIiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4t
-bWljcm92b2x0ID0gPDExMDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0g
-PDEzMDAwMDA+Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92dXNiX2xkb19yZWc6IGxkb192dXNi
-IHsNCj4gKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2dXNiIjsNCj4gKwkJCQlyZWd1bGF0b3ItbWlu
-LW1pY3Jvdm9sdCA9IDwzMDAwMDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9
-IDwzMDAwMDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8OTYwPjsN
-Cj4gKwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92c3Jh
-bV9wcm9jMl9sZG9fcmVnOiBsZG9fdnNyYW1fcHJvYzIgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1l
-ID0gInZzcmFtX3Byb2MyIjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDw1MDAw
-MDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDEyOTM3NTA+Ow0KPiArCQkJ
-CXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDc1MDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1lbmFibGUt
-cmFtcC1kZWxheSA9IDwyNDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1hbHdheXMtb247DQo+ICsJCQl9
-Ow0KPiArCQkJbXQ2MzU5X3ZpbzE4X2xkb19yZWc6IGxkb192aW8xOCB7DQo+ICsJCQkJcmVndWxh
-dG9yLW5hbWUgPSAidmlvMTgiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE3
-MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDE5MDAwMDA+Ow0KPiAr
-CQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDw5NjA+Ow0KPiArCQkJCXJlZ3VsYXRv
-ci1hbHdheXMtb247DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZjYW1pb19sZG9fcmVnOiBsZG9f
-dmNhbWlvIHsNCj4gKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2Y2FtaW8iOw0KPiArCQkJCXJlZ3Vs
-YXRvci1taW4tbWljcm92b2x0ID0gPDE3MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWlj
-cm92b2x0ID0gPDE5MDAwMDA+Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92Y24xOF9sZG9fcmVn
-OiBsZG9fdmNuMTggew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0gInZjbjE4IjsNCj4gKwkJCQly
-ZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItbWF4
-LW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVs
-YXkgPSA8MjQwPjsNCj4gKwkJCX07DQo+ICsJCQltdDYzNTlfdmZlMjhfbGRvX3JlZzogbGRvX3Zm
-ZTI4IHsNCj4gKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2ZmUyOCI7DQo+ICsJCQkJcmVndWxhdG9y
-LW1pbi1taWNyb3ZvbHQgPSA8MjgwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3Zv
-bHQgPSA8MjgwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDEy
-MD47DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZjbjEzX2xkb19yZWc6IGxkb192Y24xMyB7DQo+
-ICsJCQkJcmVndWxhdG9yLW5hbWUgPSAidmNuMTMiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWlj
-cm92b2x0ID0gPDkwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTMw
-MDAwMD47DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZjbjMzXzFfYnRfbGRvX3JlZzogbGRvX3Zj
-bjMzXzFfYnQgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0gInZjbjMzXzFfYnQiOw0KPiArCQkJ
-CXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDI4MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1t
-YXgtbWljcm92b2x0ID0gPDM1MDAwMDA+Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92Y24zM18x
-X3dpZmlfbGRvX3JlZzogbGRvX3ZjbjMzXzFfd2lmaSB7DQo+ICsJCQkJcmVndWxhdG9yLW5hbWUg
-PSAidmNuMzNfMV93aWZpIjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwyODAw
-MDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzNTAwMDAwPjsNCj4gKwkJ
-CX07DQo+ICsJCQltdDYzNTlfdmF1eDE4X2xkb19yZWc6IGxkb192YXV4MTggew0KPiArCQkJCXJl
-Z3VsYXRvci1uYW1lID0gInZhdXgxOCI7DQo+ICsJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQg
-PSA8MTgwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTgwMDAwMD47
-DQo+ICsJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI0MD47DQo+ICsJCQkJcmVn
-dWxhdG9yLWFsd2F5cy1vbjsNCj4gKwkJCX07DQo+ICsJCQltdDYzNTlfdnNyYW1fb3RoZXJzX2xk
-b19yZWc6IGxkb192c3JhbV9vdGhlcnMgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0gInZzcmFt
-X290aGVycyI7DQo+ICsJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCj4g
-KwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxMjkzNzUwPjsNCj4gKwkJCQlyZWd1bGF0
-b3ItcmFtcC1kZWxheSA9IDw1MDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVs
-YXkgPSA8MjQwPjsNCj4gKwkJCX07DQo+ICsJCQltdDYzNTlfdmVmdXNlX2xkb19yZWc6IGxkb192
-ZWZ1c2Ugew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0gInZlZnVzZSI7DQo+ICsJCQkJcmVndWxh
-dG9yLW1pbi1taWNyb3ZvbHQgPSA8MTcwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNy
-b3ZvbHQgPSA8MjAwMDAwMD47DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3Z4bzIyX2xkb19yZWc6
-IGxkb192eG8yMiB7DQo+ICsJCQkJcmVndWxhdG9yLW5hbWUgPSAidnhvMjIiOw0KPiArCQkJCXJl
-Z3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgt
-bWljcm92b2x0ID0gPDIyMDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1hbHdheXMtb247DQo+ICsJ
-CQl9Ow0KPiArCQkJbXQ2MzU5X3ZyZmNrX2xkb19yZWc6IGxkb192cmZjayB7DQo+ICsJCQkJcmVn
-dWxhdG9yLW5hbWUgPSAidnJmY2siOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0g
-PDE1MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDE3MDAwMDA+Ow0K
-PiArCQkJfTsNCj4gKwkJCW10NjM1OV92cmZja18xX2xkb19yZWc6IGxkb192cmZja18xIHsNCj4g
-KwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2cmZjayI7DQo+ICsJCQkJcmVndWxhdG9yLW1pbi1taWNy
-b3ZvbHQgPSA8MTI0MDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTYw
-MDAwMD47DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZiaWYyOF9sZG9fcmVnOiBsZG9fdmJpZjI4
-IHsNCj4gKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2YmlmMjgiOw0KPiArCQkJCXJlZ3VsYXRvci1t
-aW4tbWljcm92b2x0ID0gPDI4MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0
-ID0gPDI4MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNDA+
-Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92aW8yOF9sZG9fcmVnOiBsZG9fdmlvMjggew0KPiAr
-CQkJCXJlZ3VsYXRvci1uYW1lID0gInZpbzI4IjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jv
-dm9sdCA9IDwyODAwMDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzMzAw
-MDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0KPiArCQkJfTsNCj4gKwkJCW10NjM1
-OV92ZW1jX2xkb19yZWc6IGxkb192ZW1jIHsNCj4gKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2ZW1j
-IjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwyOTAwMDAwPjsNCj4gKwkJCQly
-ZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzMzAwMDAwPjsNCj4gKwkJCX07DQo+ICsJCQltdDYz
-NTlfdmVtY18xX2xkb19yZWc6IGxkb192ZW1jXzEgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0g
-InZlbWMiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDI1MDAwMDA+Ow0KPiAr
-CQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDMzMDAwMDA+Ow0KPiArCQkJfTsNCj4gKwkJ
-CW10NjM1OV92Y24zM18yX2J0X2xkb19yZWc6IGxkb192Y24zM18yX2J0IHsNCj4gKwkJCQlyZWd1
-bGF0b3ItbmFtZSA9ICJ2Y24zM18yX2J0IjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9s
-dCA9IDwyODAwMDAwPjsNCj4gKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzNTAwMDAw
-PjsNCj4gKwkJCX07DQo+ICsJCQltdDYzNTlfdmNuMzNfMl93aWZpX2xkb19yZWc6IGxkb192Y24z
-M18yX3dpZmkgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0gInZjbjMzXzJfd2lmaSI7DQo+ICsJ
-CQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8MjgwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9y
-LW1heC1taWNyb3ZvbHQgPSA8MzUwMDAwMD47DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZhMTJf
-bGRvX3JlZzogbGRvX3ZhMTIgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0gInZhMTIiOw0KPiAr
-CQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDEyMDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRv
-ci1tYXgtbWljcm92b2x0ID0gPDEzMDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1hbHdheXMtb247
-DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZhMDlfbGRvX3JlZzogbGRvX3ZhMDkgew0KPiArCQkJ
-CXJlZ3VsYXRvci1uYW1lID0gInZhMDkiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0
-ID0gPDgwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTIwMDAwMD47
-DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZyZjE4X2xkb19yZWc6IGxkb192cmYxOCB7DQo+ICsJ
-CQkJcmVndWxhdG9yLW5hbWUgPSAidnJmMTgiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWljcm92
-b2x0ID0gPDE3MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDE4MTAw
-MDA+Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92c3JhbV9tZF9sZG9fcmVnOiBsZG9fdnNyYW1f
-bWQgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0gInZzcmFtX21kIjsNCj4gKwkJCQlyZWd1bGF0
-b3ItbWluLW1pY3Jvdm9sdCA9IDw1MDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92
-b2x0ID0gPDEyOTM3NTA+Ow0KPiArCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDEwNzYwPjsN
-Cj4gKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjQwPjsNCj4gKwkJCX07DQo+
-ICsJCQltdDYzNTlfdnVmc19sZG9fcmVnOiBsZG9fdnVmcyB7DQo+ICsJCQkJcmVndWxhdG9yLW5h
-bWUgPSAidnVmcyI7DQo+ICsJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8MTcwMDAwMD47
-DQo+ICsJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTkwMDAwMD47DQo+ICsJCQl9Ow0K
-PiArCQkJbXQ2MzU5X3ZtMThfbGRvX3JlZzogbGRvX3ZtMTggew0KPiArCQkJCXJlZ3VsYXRvci1u
-YW1lID0gInZtMTgiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE3MDAwMDA+
-Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDE5MDAwMDA+Ow0KPiArCQkJCXJl
-Z3VsYXRvci1hbHdheXMtb247DQo+ICsJCQl9Ow0KPiArCQkJbXQ2MzU5X3ZiYmNrX2xkb19yZWc6
-IGxkb192YmJjayB7DQo+ICsJCQkJcmVndWxhdG9yLW5hbWUgPSAidmJiY2siOw0KPiArCQkJCXJl
-Z3VsYXRvci1taW4tbWljcm92b2x0ID0gPDExMDAwMDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgt
-bWljcm92b2x0ID0gPDEyMDAwMDA+Ow0KPiArCQkJfTsNCj4gKwkJCW10NjM1OV92c3JhbV9wcm9j
-MV9sZG9fcmVnOiBsZG9fdnNyYW1fcHJvYzEgew0KPiArCQkJCXJlZ3VsYXRvci1uYW1lID0gInZz
-cmFtX3Byb2MxIjsNCj4gKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDw1MDAwMDA+Ow0K
-PiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDEyOTM3NTA+Ow0KPiArCQkJCXJlZ3Vs
-YXRvci1yYW1wLWRlbGF5ID0gPDc1MDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1k
-ZWxheSA9IDwyNDA+Ow0KPiArCQkJCXJlZ3VsYXRvci1hbHdheXMtb247DQo+ICsJCQl9Ow0KPiAr
-CQkJbXQ2MzU5X3ZzaW0yX2xkb19yZWc6IGxkb192c2ltMiB7DQo+ICsJCQkJcmVndWxhdG9yLW5h
-bWUgPSAidnNpbTIiOw0KPiArCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE3MDAwMDA+
-Ow0KPiArCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDMxMDAwMDA+Ow0KPiArCQkJfTsN
-Cj4gKwkJCW10NjM1OV92c3JhbV9vdGhlcnNfc3NodWJfbGRvOiBsZG9fdnNyYW1fb3RoZXJzX3Nz
-aHViIHsNCj4gKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2c3JhbV9vdGhlcnNfc3NodWIiOw0KPiAr
-CQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDUwMDAwMD47DQo+ICsJCQkJcmVndWxhdG9y
-LW1heC1taWNyb3ZvbHQgPSA8MTI5Mzc1MD47DQo+ICsJCQl9Ow0KPiArCQl9Ow0KPiArDQo+ICsJ
-CW10NjM1OXJ0YzogbXQ2MzU5cnRjIHsNCj4gKwkJCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ2
-MzU4LXJ0YyI7DQo+ICsJCX07DQo+ICsJfTsNCj4gK307DQo+IGRpZmYgLS1naXQgYS9hcmNoL2Fy
-bTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE5Mi1ldmIuZHRzIGIvYXJjaC9hcm02NC9ib290L2R0
-cy9tZWRpYXRlay9tdDgxOTItZXZiLmR0cw0KPiBpbmRleCAwMjA1ODM3ZmE2OTguLjgwOGJlNDky
-ZTk3MCAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxOTIt
-ZXZiLmR0cw0KPiArKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE5Mi1ldmIu
-ZHRzDQo+IEBAIC01LDYgKzUsNyBAQA0KPiAgICAqLw0KPiAgIC9kdHMtdjEvOw0KPiAgICNpbmNs
-dWRlICJtdDgxOTIuZHRzaSINCj4gKyNpbmNsdWRlICJtdDYzNTkuZHRzaSINCj4gICANCj4gICAv
-IHsNCj4gICAJbW9kZWwgPSAiTWVkaWFUZWsgTVQ4MTkyIGV2YWx1YXRpb24gYm9hcmQiOw0KPiAN
-Cg0KUmV2aWV3ZWQtYnk6IE1hY3BhdWwgTGluIExpbmNwYXVsLmxpbkBtZWRpYXRlay5jb20+DQoN
-ClJlZ2FyZHMsDQpNYWNwYXVsIExpbg==
 
+On 1/26/2022 11:34 PM, Mathieu Poirier wrote:
+> On Wed, Jan 26, 2022 at 03:07:38PM +0800, Jinlong Mao wrote:
+>> Hi Mathieu,
+>>
+>> Good afternoon.
+>>
+>> On 1/22/2022 1:15 AM, Mathieu Poirier wrote:
+>>> Hey Jinlong,
+>>>
+>>> On Fri, Jan 21, 2022 at 10:01:47PM +0800, Jinlong Mao wrote:
+>>>> Hi Mathieu,
+>>>>
+>>>> Good Day.
+>>>>
+>>>> On 12/17/2021 3:02 AM, Mathieu Poirier wrote:
+>>>>> [...]
+>>>>>
+>>>>>>>>> +
+>>>>>>>>> +static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+>>>>>>>>> +{
+>>>>>>>>> +    static int traceid = TPDM_TRACE_ID_START;
+>>>>>>>>> +
+>>>>>>>>> +    drvdata->traceid = traceid++;
+>>>>>>>>> +}
+>>>>>>>> I have been specific on how to properly do this in the last revision.  Given the
+>>>>>>>> above about the MAINTAINERS file, I am not sure that I will continue reviewing this set.
+>>>>>>>>
+>>>>>>>> There is also no need to rush another revision as I won't have the bandwidth to
+>>>>>>>> process it before the holidays.
+>>>>>>>>
+>>>>>>>> Thanks,
+>>>>>>>> Mathieu
+>>>>>>> Hi Mathieu,
+>>>>>>>
+>>>>>>> Sorry, not addressed your previous comments here.
+>>>>>>>
+>>>>>>> For the trace id, each coresight component has 7 bits to store the trace
+>>>>>>> id. So the trace id should be from 1 to 127 as 0 is invalid.
+>>>>>> IDs 0x70 - 0x7F (`112 - 127 ) are reserved - see the ARM Coresight
+>>>>>> Architecture specification v3.0
+>>>>>>
+>>>>> Correct
+>>>>>
+>>>>>>> Apart from TPDMs/STM/ETMs, we also have other coresight components in
+>>>>>>> our internal device. About 80 ids are already used.
+>>>>>>>
+>>>>>>> Some components have fixed trace id in HW. If we use functions below to
+>>>>>>> count the trace id, there will be conflict to other components.
+>>>>>>>
+>>>>>>> Can we use 1-15 for etm trace ids  and 16 - 127 for other coresight
+>>>>>>> components ? And handle trace ids in its' own driver ?
+>>>>>>>
+>>>>>> This will limit systems to 15 cores - some have more!
+>>>>>>
+>>>>> Correct
+>>>>>
+>>>>>>> static inline int coresight_get_system_trace_id(int id)
+>>>>>>> {
+>>>>>>>             /* Start system IDs above the highest per CPU trace ID. */
+>>>>>>>             return coresigth_get_trace_id(cpumask_last(cpu_possible_mask) + 1);
+>>>>>>> }
+>>>>> Looking at my own suggestion again this won't work since it returns the same traceID
+>>>>> when called multiple times.
+>>>>>
+>>>>> For this patchset and _without_ taking into account internal devices that have
+>>>>> their traceID set in HW:
+>>>>>
+>>>>> 1. Define a bitmask that is 7 bit wide.
+>>>> Should it be a 128 bit wide bitmask  (0--127)?
+>>> Yes, you are correct.
+>>>
+>>>>> 2. By default, set bits under 0x10 and between 0x70 - 0x7F.
+>>>>> 3. In coresight_get_system_trace_id(), drop the @id parameter and allocate the
+>>>>> first available bit after cpumask_last(cpu_possible_mask) + 1.
+>>>> Should it allocate the first available bit after (cpumask_last(cpu_possible_mask) *2 ) + 0x10 ?
+>>>> Return the first zero bit position as the trace id and set the bit.
+>>> I need to clarify something with Mike on this - I will get back to you on
+>>> Monday.
+>> Do you have more comments on this ?
+> I just received clarifications on this - there is no need to continue enacting
+> the current scheme and as such reserving bits following the above formula will
+> not be needed either.  Simply assigning free traceIDs based on request will
+> work just fine.
+>
+> That of course is taking into account that 0x0, 0x1 and 0x70 - 0x7f are
+> reserved.  0x1 is currently used for STM and should eventually be fixed to
+> simply request a traceID the same way any other component do.  You can fix it as
+> part of this set but it is not mandatory.
+>
+> Let me know if there are things I haven't been clear on.
+>
+> Thanks,
+> Mathieu
+
+Hi Mathieu,
+
+
+Do you mean ETM sources and other sources can share the same 
+"coresight_get_trace_id" function ?
+
+
+int trace_id = 1;
+
+int coresight_get_trace_id ()
+{
+     trace_id += 1;
+     if (trace_id > 1 && trace_id < 0x70)
+         return trace_id;
+     else
+         return -EINVAL;
+}
+
+or do we still need a different function for other sources like use 
+"coresight_get_system_trace_id" ?
+Return the id from 1 and skip the ids which equeals to 
+CORESIGHT_ETM_PMU_SEED + (cpu * 2).
+
+Thanks
+
+Jinlong Mao
+
+>>>>> 4. Define a new function called coresight_put_system_trace_id(int id) that
+>>>>> clears the bit in the mask corresponding to @id.
+>>>>>
+>>>>> For now that should work.
+>>>>>
+>>>>>>> static inline int coresight_get_trace_id(int cpu)
+>>>>>>> {
+>>>>>>>         /*
+>>>>>>>          * A trace ID of value 0 is invalid, so let's start at some
+>>>>>>>          * random value that fits in 7 bits and go from there.  Since
+>>>>>>>          * the common convention is to have data trace IDs be I(N) + 1,
+>>>>>>>          * set instruction trace IDs as a function of the CPU number.
+>>>>>>>          */
+>>>>>>>         return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
+>>>>>>> }
+>>>>>>>
+>>>>>> This fixed relationship between cpu and trace ID is used in the perf
+>>>>>> tooling to populate the elements in the perf.data file to correctly
+>>>>>> allow association between CPU and trace data, and thus allow correct
+>>>>>> trace decode.
+>>>>> TraceIDs associated to CPUs are communicated to the perf tooling by way of the
+>>>>> perf header - theoretically we should be able to change the allocation scheme
+>>>>> without impacting the decoding process.
+>>>>>
+>>>>>> It should be possible to create another more dynamic mapping scheme -
+>>>>>> but this must include a way to support the perf requirements too.
+>>>>>>
+>>>>> TraceIDs have been a lurking problem for as long as the subsystem has existed.
+>>>>> For now what I have suggested above should be sufficient to provide an
+>>>>> in-between solution that doesn't hold back this patchset.
+>>>>>
+>>>>> That being said, we need to start thinking about the best way to do this.  I
+>>>>> will put a patchset together in the new year that aims in that direction.
+>>>>>
+>>>>>> Regards
+>>>>>>
+>>>>>> Mike
+>>>>>>
+>>>>>>> Thanks
+>>>>>>>
+>>>>>>> Jinlong Mao
+>>>>>>>
+>>>>>>>>> +
+>>>>>>>>> +static int tpdm_probe(struct amba_device *adev, const struct amba_id *id)
+>>>>>>>>> +{
+>>>>>>>>> +    struct device *dev = &adev->dev;
+>>>>>>>>> +    struct coresight_platform_data *pdata;
+>>>>>>>>> +    struct tpdm_drvdata *drvdata;
+>>>>>>>>> +    struct coresight_desc desc = { 0 };
+>>>>>>>>> +
+>>>>>>>>> +    desc.name = coresight_alloc_device_name(&tpdm_devs, dev);
+>>>>>>>>> +    if (!desc.name)
+>>>>>>>>> +            return -ENOMEM;
+>>>>>>>>> +    pdata = coresight_get_platform_data(dev);
+>>>>>>>>> +    if (IS_ERR(pdata))
+>>>>>>>>> +            return PTR_ERR(pdata);
+>>>>>>>>> +    adev->dev.platform_data = pdata;
+>>>>>>>>> +
+>>>>>>>>> +    drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+>>>>>>>>> +    if (!drvdata)
+>>>>>>>>> +            return -ENOMEM;
+>>>>>>>>> +    drvdata->dev = &adev->dev;
+>>>>>>>>> +    dev_set_drvdata(dev, drvdata);
+>>>>>>>>> +
+>>>>>>>>> +    drvdata->base = devm_ioremap_resource(dev, &adev->res);
+>>>>>>>>> +    if (!drvdata->base)
+>>>>>>>>> +            return -ENOMEM;
+>>>>>>>>> +
+>>>>>>>>> +    mutex_init(&drvdata->lock);
+>>>>>>>>> +
+>>>>>>>>> +    desc.type = CORESIGHT_DEV_TYPE_SOURCE;
+>>>>>>>>> +    desc.subtype.source_subtype = CORESIGHT_DEV_SUBTYPE_SOURCE_SYS;
+>>>>>>>>> +    desc.ops = &tpdm_cs_ops;
+>>>>>>>>> +    desc.pdata = adev->dev.platform_data;
+>>>>>>>>> +    desc.dev = &adev->dev;
+>>>>>>>>> +    drvdata->csdev = coresight_register(&desc);
+>>>>>>>>> +    if (IS_ERR(drvdata->csdev))
+>>>>>>>>> +            return PTR_ERR(drvdata->csdev);
+>>>>>>>>> +
+>>>>>>>>> +    tpdm_init_default_data(drvdata);
+>>>>>>>>> +    pm_runtime_put(&adev->dev);
+>>>>>>>>> +
+>>>>>>>>> +    return 0;
+>>>>>>>>> +}
+>>>>>>>>> +
+>>>>>>>>> +static void __exit tpdm_remove(struct amba_device *adev)
+>>>>>>>>> +{
+>>>>>>>>> +    struct tpdm_drvdata *drvdata = dev_get_drvdata(&adev->dev);
+>>>>>>>>> +
+>>>>>>>>> +    coresight_unregister(drvdata->csdev);
+>>>>>>>>> +}
+>>>>>>>>> +
+>>>>>>>>> +static struct amba_id tpdm_ids[] = {
+>>>>>>>>> +    {
+>>>>>>>>> +            .id = 0x000f0e00,
+>>>>>>>>> +            .mask = 0x000fff00,
+>>>>>>>>> +    },
+>>>>>>>>> +    { 0, 0},
+>>>>>>>>> +};
+>>>>>>>>> +
+>>>>>>>>> +static struct amba_driver tpdm_driver = {
+>>>>>>>>> +    .drv = {
+>>>>>>>>> +            .name   = "coresight-tpdm",
+>>>>>>>>> +            .owner  = THIS_MODULE,
+>>>>>>>>> +            .suppress_bind_attrs = true,
+>>>>>>>>> +    },
+>>>>>>>>> +    .probe          = tpdm_probe,
+>>>>>>>>> +    .id_table       = tpdm_ids,
+>>>>>>>>> +};
+>>>>>>>>> +
+>>>>>>>>> +module_amba_driver(tpdm_driver);
+>>>>>>>>> +
+>>>>>>>>> +MODULE_LICENSE("GPL v2");
+>>>>>>>>> +MODULE_DESCRIPTION("Trace, Profiling & Diagnostic Monitor driver");
+>>>>>>>>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
+>>>>>>>>> new file mode 100644
+>>>>>>>>> index 000000000000..980ae90ff1c8
+>>>>>>>>> --- /dev/null
+>>>>>>>>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+>>>>>>>>> @@ -0,0 +1,31 @@
+>>>>>>>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>>>>>>>> +/*
+>>>>>>>>> + * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
+>>>>>>>>> + */
+>>>>>>>>> +
+>>>>>>>>> +#ifndef _CORESIGHT_CORESIGHT_TPDM_H
+>>>>>>>>> +#define _CORESIGHT_CORESIGHT_TPDM_H
+>>>>>>>>> +
+>>>>>>>>> +/* Default value of the traceid */
+>>>>>>>>> +#define TPDM_TRACE_ID_START 128
+>>>>>>>>> +
+>>>>>>>>> +/**
+>>>>>>>>> + * struct tpdm_drvdata - specifics associated to an TPDM component
+>>>>>>>>> + * @base:       memory mapped base address for this component.
+>>>>>>>>> + * @dev:        The device entity associated to this component.
+>>>>>>>>> + * @csdev:      component vitals needed by the framework.
+>>>>>>>>> + * @lock:       lock for the enable value.
+>>>>>>>>> + * @enable:     enable status of the component.
+>>>>>>>>> + * @traceid:    value of the current ID for this component.
+>>>>>>>>> + */
+>>>>>>>>> +
+>>>>>>>>> +struct tpdm_drvdata {
+>>>>>>>>> +    void __iomem            *base;
+>>>>>>>>> +    struct device           *dev;
+>>>>>>>>> +    struct coresight_device *csdev;
+>>>>>>>>> +    struct mutex            lock;
+>>>>>>>>> +    bool                    enable;
+>>>>>>>>> +    int                     traceid;
+>>>>>>>>> +};
+>>>>>>>>> +
+>>>>>>>>> +#endif  /* _CORESIGHT_CORESIGHT_TPDM_H */
+>>>>>>>>> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+>>>>>>>>> index 93a2922b7653..e48d463be63b 100644
+>>>>>>>>> --- a/include/linux/coresight.h
+>>>>>>>>> +++ b/include/linux/coresight.h
+>>>>>>>>> @@ -65,6 +65,7 @@ enum coresight_dev_subtype_source {
+>>>>>>>>>         CORESIGHT_DEV_SUBTYPE_SOURCE_PROC,
+>>>>>>>>>         CORESIGHT_DEV_SUBTYPE_SOURCE_BUS,
+>>>>>>>>>         CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE,
+>>>>>>>>> +    CORESIGHT_DEV_SUBTYPE_SOURCE_SYS,
+>>>>>>>>>      };
+>>>>>>>>>
+>>>>>>>>>      enum coresight_dev_subtype_helper {
+>>>>>>>>> --
+>>>>>>>>> 2.17.1
+>>>>>>>>>
+>>>>>> -- 
+>>>>>> Mike Leach
+>>>>>> Principal Engineer, ARM Ltd.
+>>>>>> Manchester Design Centre. UK

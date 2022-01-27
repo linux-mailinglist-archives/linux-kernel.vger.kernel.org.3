@@ -2,82 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF18249E6CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FB549E6D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243305AbiA0P6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:58:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbiA0P6I (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:58:08 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B36C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:58:08 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id w27-20020a9d5a9b000000b005a17d68ae89so2938224oth.12
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:58:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=GUGMKOXoeh+DsxEq/mythQWeBs2PTApaRiGCR6ELsyQ=;
-        b=pNX/Qqvwa5YDDB5a+1UHDjajNzfsXVxDCHYf9UU833tqpKU5xZQiYGuqL4ReJWsb0C
-         CbRAY4GY6BpQSEFGCE9HrbG0Q830IRGFaJVrBwrmKp3XGzWShqVffhdHVytApysahrJA
-         gY+TAtEaPk0+AlIbLYpRzvD+dwaOasZcY9BKoeJwy7f1TH7cvDOX0g1CVnygJ2y8rFyP
-         AMcF106MfcIgPH9WRgjFaeebDJLJ/LGjzzm14QHCDodlkyxs2MuLpgCvoegC+tyKWHBh
-         iifF2LTtW0b9lEx88IRlZ8WdDacJrSwcXESXCX+AKQBR1ioAVj1aYEUK25QBN6vA/aKL
-         YPUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=GUGMKOXoeh+DsxEq/mythQWeBs2PTApaRiGCR6ELsyQ=;
-        b=een7mClUS7nnfJcgmnWa2F7f70WuSweT4UOUDpunnFiLdtjN/kaBxxg4OmodtyeOH5
-         zUY3WanEp9dIfjHNamEcTw2zrx/k/mJXbfpowAaZVZSHK+T0ioG9O5akFKs2HYKAuTnB
-         +Xr0JwbpLNx4ALPxWzYSNmEH33NHjPspKFLpJNq6Qdv4vFU94OcWtaURm9LDgpaOaKGf
-         V6gbp7asBr7+9Wm0SXfDUoUFSN//luJnm0IYRLemvHVaDXYl/Q/iCSndyqn8N8tNixsA
-         UlyoKHzkKaqW3Sz7gIXQQkAq3cvA8SXD2x6cyLdWQm+1cR77h1tKwHYGaPdoinaNM7ka
-         xuLw==
-X-Gm-Message-State: AOAM531yO2bhb73sD6LVJ5SFQxm0iDB35b1SEFYy6EsP3MeN4pWag13t
-        6ok6UTlnlRPeWBDJn+nBS7D9b8NL1S/hrIgoY+o=
-X-Google-Smtp-Source: ABdhPJx04KrzSIJZA6QipLYyJWwxskgIVtPBFJ47zppt5wmnYQ9YYMbyjIVNMRoLfIcNWm4wP6IpAy+rKrUHvkAjpNE=
-X-Received: by 2002:a9d:4806:: with SMTP id c6mr2253331otf.317.1643299087655;
- Thu, 27 Jan 2022 07:58:07 -0800 (PST)
+        id S243304AbiA0P7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:59:16 -0500
+Received: from mga09.intel.com ([134.134.136.24]:17584 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231296AbiA0P7N (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 10:59:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643299153; x=1674835153;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=H+/eoThfG+75X7A+Op4iugtDZzzkJmdbY8DLaA/CLPA=;
+  b=fcF9PTA2Lb7QYAluYFRd2sPZArZvZb4tzXK6viPcEFoOFNg4EhlvUWfC
+   Kelk4zmQ8Cg+wV21giYtCtsY97obXpEFj3Vpn2nloHgn4QZGheW74CR0g
+   SKQBuJ0iOM/0OU4pb6RJ9JEf3K+/kIY90ZQV9uYjfPThSlUngHqn2Pp6J
+   phYsI2LqU77iT2Awi5xVWuP/2z76NH+pvAh2oQtFwtNfR2VVddaWgFaPo
+   Bv/lMxQ/Ynnz9gwBPcxq2UJtGJqrWDCAD0KDhOWSbfTzzFy3Os4WFqUYO
+   zxyS6QAWr7d8ANoAdocP1mjCDW2u/IjqbPiE4OHIdrcqHcMcaf4bkdbhs
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="246670595"
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="246670595"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 07:59:13 -0800
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="480345386"
+Received: from anithaha-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.224.126])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 07:59:13 -0800
+Date:   Thu, 27 Jan 2022 07:59:13 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     intel-gfx@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Subject: Re: [Intel-gfx] [PATCH 02/19] dma-buf-map: Add helper to initialize
+ second map
+Message-ID: <20220127155913.vt7a74zmsglghzom@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+ <20220126203702.1784589-3-lucas.demarchi@intel.com>
+ <b7a3fe1d-3b85-cb7e-19cf-1611ff4f3c9e@suse.de>
 MIME-Version: 1.0
-Received: by 2002:a4a:3f47:0:0:0:0:0 with HTTP; Thu, 27 Jan 2022 07:58:07
- -0800 (PST)
-Reply-To: abrahammorrison443@gmail.com
-From:   Abraham Morrison <revpasjames@gmail.com>
-Date:   Thu, 27 Jan 2022 07:58:07 -0800
-Message-ID: <CAFj8vfXLzkLUPGaWN5scxRLJvfoP+M_-UYWu89PNWRe3werQHw@mail.gmail.com>
-Subject: Good day!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b7a3fe1d-3b85-cb7e-19cf-1611ff4f3c9e@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jak si=C4=99 masz? Mam nadziej=C4=99, =C5=BCe jeste=C5=9B zdrowy i zdrowy? =
-Informuj=C4=99, =C5=BCe
-pomy=C5=9Blnie zako=C5=84czy=C5=82em transakcj=C4=99 z pomoc=C4=85 nowego p=
-artnera. W
-mi=C4=99dzyczasie postanowi=C5=82em zrekompensowa=C4=87 ci kwot=C4=99 500 0=
-00 USD z powodu
-twoich wcze=C5=9Bniejszych wysi=C5=82k=C3=B3w, chocia=C5=BC rozczarowa=C5=
-=82e=C5=9B mnie po drodze.
+On Thu, Jan 27, 2022 at 03:33:12PM +0100, Thomas Zimmermann wrote:
+>
+>
+>Am 26.01.22 um 21:36 schrieb Lucas De Marchi:
+>>When dma_buf_map struct is passed around, it's useful to be able to
+>>initialize a second map that takes care of reading/writing to an offset
+>>of the original map.
+>>
+>>Add a helper that copies the struct and add the offset to the proper
+>>address.
+>>
+>>Cc: Sumit Semwal <sumit.semwal@linaro.org>
+>>Cc: Christian König <christian.koenig@amd.com>
+>>Cc: linux-media@vger.kernel.org
+>>Cc: dri-devel@lists.freedesktop.org
+>>Cc: linaro-mm-sig@lists.linaro.org
+>>Cc: linux-kernel@vger.kernel.org
+>>Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+>>---
+>>  include/linux/dma-buf-map.h | 29 +++++++++++++++++++++++++++++
+>>  1 file changed, 29 insertions(+)
+>>
+>>diff --git a/include/linux/dma-buf-map.h b/include/linux/dma-buf-map.h
+>>index 65e927d9ce33..3514a859f628 100644
+>>--- a/include/linux/dma-buf-map.h
+>>+++ b/include/linux/dma-buf-map.h
+>>@@ -131,6 +131,35 @@ struct dma_buf_map {
+>>  		.is_iomem = false, \
+>>  	}
+>>+/**
+>>+ * DMA_BUF_MAP_INIT_OFFSET - Initializes struct dma_buf_map from another dma_buf_map
+>>+ * @map_:	The dma-buf mapping structure to copy from
+>>+ * @offset:	Offset to add to the other mapping
+>>+ *
+>>+ * Initializes a new dma_buf_struct based on another. This is the equivalent of doing:
+>>+ *
+>>+ * .. code-block: c
+>>+ *
+>>+ *	dma_buf_map map = other_map;
+>>+ *	dma_buf_map_incr(&map, &offset);
+>>+ *
+>>+ * Example usage:
+>>+ *
+>>+ * .. code-block: c
+>>+ *
+>>+ *	void foo(struct device *dev, struct dma_buf_map *base_map)
+>>+ *	{
+>>+ *		...
+>>+ *		struct dma_buf_map = DMA_BUF_MAP_INIT_OFFSET(base_map, FIELD_OFFSET);
+>>+ *		...
+>>+ *	}
+>>+ */
+>>+#define DMA_BUF_MAP_INIT_OFFSET(map_, offset_)	(struct dma_buf_map)	\
+>>+	{								\
+>>+		.vaddr = (map_)->vaddr + (offset_),			\
+>>+		.is_iomem = (map_)->is_iomem,				\
+>>+	}
+>>+
+>
+>It's illegal to access .vaddr  with raw pointer. Always use a 
+>dma_buf_memcpy_() interface. So why would you need this macro when you 
+>have dma_buf_memcpy_*() with an offset parameter?
 
-Radz=C4=99 skontaktowa=C4=87 si=C4=99 z moj=C4=85 sekretark=C4=85 w sprawie=
- karty bankomatowej
-o warto=C5=9Bci 500.000,00 $, kt=C3=B3r=C4=85 zachowa=C5=82em dla Ciebie.
+I did a better job with an example in 20220127093332.wnkd2qy4tvwg5i5l@ldmartin-desk2
 
-Skontaktuj si=C4=99 z ni=C4=85, podaj=C4=85c poni=C5=BCsze informacje.
-Imi=C4=99: Linda Koffi
-E-mail: koffilinda785@gmail.com
+While doing this series I had code like this when using the API in a function to
+parse/update part of the struct mapped:
 
-Popro=C5=9B j=C4=85, aby przes=C5=82a=C5=82a Ci ca=C5=82kowit=C4=85 sum=C4=
-=99 (500.000.00 dolar=C3=B3w) karty
-bankomatowej, kt=C3=B3r=C4=85 zachowa=C5=82em dla Ciebie.
+	int bla_parse_foo(struct dma_buf_map *bla_map)
+	{
+		struct dma_buf_map foo_map = *bla_map;
+		...
 
-Pan Abraham Morrison
+		dma_buf_map_incr(&foo_map, offsetof(struct bla, foo));
+
+		...
+	}
+
+Pasting the rest of the reply here:
+
+I had exactly this code above, but after writting quite a few patches
+using it, particularly with functions that have to write to 2 maps (see
+patch 6 for example), it felt much better to have something to
+initialize correctly from the start
+
+         struct dma_buf_map other_map = *bla_map;
+         /* poor Lucas forgetting dma_buf_map_incr(map, offsetof(...)); */
+
+is error prone and hard to debug since you will be reading/writting
+from/to another location rather than exploding
+
+While with the construct below
+
+         other_map;
+         ...
+         other_map = INITIALIZER()
+
+I can rely on the compiler complaining about uninitialized var. And
+in most of the cases I can just have this single line in the beggining of the
+function when the offset is constant:
+
+         struct dma_buf_map other_map = INITIALIZER(bla_map, offsetof(..));
+
+
+This is useful when you have several small functions in charge of
+updating/reading inner struct members.
+
+>
+>I've also been very careful to distinguish between .vaddr and 
+>.vaddr_iomem, even in places where I wouldn't have to. This macro 
+>breaks the assumption.
+
+That's one reason I think if we have this macro, it should be in the
+dma_buf_map.h header (or whatever we rename these APIs to). It's the
+only place where we can safely add code that relies on the implementation
+of the "private" fields in struct dma_buf_map.
+
+Lucas De Marchi
+
+>
+>Best regards
+>Thomas
+>
+>>  /**
+>>   * dma_buf_map_set_vaddr - Sets a dma-buf mapping structure to an address in system memory
+>>   * @map:	The dma-buf mapping structure
+>
+>-- 
+>Thomas Zimmermann
+>Graphics Driver Developer
+>SUSE Software Solutions Germany GmbH
+>Maxfeldstr. 5, 90409 Nürnberg, Germany
+>(HRB 36809, AG Nürnberg)
+>Geschäftsführer: Ivo Totev
+
+
+

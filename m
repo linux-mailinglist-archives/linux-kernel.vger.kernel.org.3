@@ -2,83 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B1349E0E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD3349E0E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240317AbiA0L26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S235789AbiA0L34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiA0L25 (ORCPT
+        with ESMTP id S229691AbiA0L3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:28:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4230C06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:28:57 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nD2xP-00061U-Mf; Thu, 27 Jan 2022 12:28:51 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nD2xP-0008N3-4t; Thu, 27 Jan 2022 12:28:51 +0100
-Date:   Thu, 27 Jan 2022 12:28:51 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v1 2/4] dt-bindings: net: add schema for
- Microchip/SMSC LAN95xx USB Ethernet controllers
-Message-ID: <20220127112851.GD9150@pengutronix.de>
-References: <20220127104905.899341-1-o.rempel@pengutronix.de>
- <20220127104905.899341-3-o.rempel@pengutronix.de>
- <YfJ6/xdacR59Jvq+@kroah.com>
+        Thu, 27 Jan 2022 06:29:55 -0500
+Received: from biche.re (biche.re [IPv6:2607:5300:201:3100::6c88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D95CC061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 03:29:55 -0800 (PST)
+Date:   Thu, 27 Jan 2022 12:29:48 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 biche.re 0AE2E40F64
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=biche.re; s=biche;
+        t=1643282991; bh=qt2OQlf2eNHyy4Rr7O8K2qYNm+v84dIqyVBhQttppkQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sHgz6mbJvYlDHdFTCC4BSz9S6lpP3+3Y8z3pQK36ASM/CWaxmgYUpURcBFdZaIER8
+         qnL2HYrWQbFEhv7v+ib31Yu47mHSD9CF5EA0RAxi+oWn5tv0cahs89tRVt1+5Yzvz7
+         7IxObd8Ue8J7RIFWdKozjHwPVJQDiuL8CTSuvnrZpWBShWZWU8N0AgcbBYKV5C2rs/
+         TeiNxeX9DMJJVn2h7XK7J4sGKPpOyM2chtA19I1xBMC0dHZT6s0exAmlq7ZxgZWCmS
+         4V/Buhtv+j/Eaza95P82lvaX+DeY9RFFF/PRga+jNScuZsy+pPpDNmBCyXKM12MD+S
+         pfufrZzrqQrgQ==
+From:   Victorien Molle <biche@biche.re>
+To:     linux-kernel@vger.kernel.org
+Cc:     Victorien Molle <biche@biche.re>
+Subject: Re: [PATCH] KVM: x86: Add support for basic RAPL (Running Average
+ Power Limit) metrics
+Message-ID: <YfKCLAdwh0LZXIDz@ultrahax>
+References: <20220109182317.1075762-1-biche@biche.re>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfJ6/xdacR59Jvq+@kroah.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 12:24:39 up 47 days, 20:10, 83 users,  load average: 0.01, 0.08,
- 0.14
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <20220109182317.1075762-1-biche@biche.re>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 11:59:11AM +0100, Greg KH wrote:
-> On Thu, Jan 27, 2022 at 11:49:03AM +0100, Oleksij Rempel wrote:
-> > Create initial schema for Microchip/SMSC LAN95xx USB Ethernet controllers and
-> > import all currently supported USB IDs form drivers/net/usb/smsc95xx.c
-> 
-> That is a loosing game to play.  There is a reason that kernel drivers
-> only require a device id in 1 place, instead of multiple places like
-> other operating systems.  Please do not go back and make the same
-> mistakes others have.
-> 
-> Not to mention that I think overall this is a bad idea anyway.  USB
-> devices are self-describing, don't add them to DT.
-
-This patch set is the pre-step before making it even more complicated
-with description of external PHYs and DSA switches. I assume, it is
-preferable to have schema to be able to automatically validate it.
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+ping https://lore.kernel.org/all/20220109182317.1075762-1-biche@biche.re/T/#u

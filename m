@@ -2,95 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E95449D812
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7828949D813
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbiA0CbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 21:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
+        id S235175AbiA0CcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 21:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235159AbiA0CbU (ORCPT
+        with ESMTP id S232931AbiA0CcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 21:31:20 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56785C061747
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 18:31:20 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id d18so1281739plg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 18:31:20 -0800 (PST)
+        Wed, 26 Jan 2022 21:32:06 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF756C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 18:32:05 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id m90so2219505uam.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 18:32:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/+eRF4BZ3tTy/ASyWDjy8fK3DAjpfZ5B0yUKffA62sc=;
-        b=RtBFwQLvghr0bKZt8o0ujYoZIxrqrrdMuDfo+8ozx8bZzBA0MJYkMcImqh+werc/2B
-         ILxbYf6ot/VZjtxWnp36bXvSZd7zD5HyTTIKFJ+w46s7fx1zXQyOjw4Un53UE0QxAKi7
-         OZRAnuRSD5/+d/hKYiHmgvWtbVxIpk6gvPbToTY+z851QK9pHzz0k/I2pC21h+Xzpmtj
-         8GQm+LGWSxWztGwDONZABzEuPXAiA6+7WdcttenQjI6/1TvD9L7bPSexhUrY8FY9nzPy
-         sXLJKiR0zcG/UBPNVSill1UaCojE8mqumnGGczeBCMXH7vcQeLUakqwAsMTuoODnmcDI
-         T6QQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=IYS69qZ1M+aD42ElGruYniB4cm7bFbPswBL4L2R+Rpw=;
+        b=ePn0hK2vp0ybVie/ZPuv58PDr18ncvERfF251WNT3FdNOp4SIvGKHyunqrzj6v0Lbs
+         7F2WFhfH4fNa+MUcbufwx/Ww60AquLEXT3u347FNer73Vr3BXNEwFBl3M4lRF47QIfMi
+         J3bkE2gHrFpxN9E/g27atYf2aXq4LcJ2Ua9DP4xh2UQYe0oGhqhfZZYDPaRFNxcpdyX4
+         nMot+5p29LZtGPkxfIC4drpjGn7JGfSc2ZSCcIM+LHtP3Yn1zXBns3YlZjJ03/Nm7sCU
+         ar2bKl/mixQghItl5QoeVf6Q97BWYxgljdKUM1376grDHM6ci2iu1prqkuPcExCwTPCv
+         Yrnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/+eRF4BZ3tTy/ASyWDjy8fK3DAjpfZ5B0yUKffA62sc=;
-        b=sKBMjO1cQ4q1Pi5SQi71UmmMt2eBuwJ781truJc5xGwOEON1DqezdP5mV0qC2UIh+M
-         cWeNwVf27J59HconH5OFHv+OhiZRTrmxUq323IUFZS4hZJLXYczVGANUxYZ67mg7T5yt
-         jWRYpOHWB2H+5Sz+r78nMjxUBVc8tscuCvbe/yE2jcd2r+2Wko+PYegL4jZG/1iMoT5q
-         P6wjCcAGXvjqb10Qj9BJhoyZHvPFzD+uN1aZ+b2KeJLlEWhs1EQuDbug5SRONzwBrNMk
-         vhbsakGAGOu+kQmJK65KYNFataqGMIBwXA6Ey5ITfmWlj+JlnJKDSvVmGgLUa0fWtcxZ
-         ernQ==
-X-Gm-Message-State: AOAM530lt5FPxUbbXsl0V7xG9FeBwUaIGWpErr1WvkrTnxhj4/mmoHGo
-        53NXxrCw5Gvig7WP+J8Y+UHHTA==
-X-Google-Smtp-Source: ABdhPJzGyJlDx3Aj8sNJy4V12gMazAiPRsegp4PUfw8oEBeqklGKdQepPr+NCUGhTLgShKgRjnaXgA==
-X-Received: by 2002:a17:902:d4cb:: with SMTP id o11mr1332120plg.43.1643250679584;
-        Wed, 26 Jan 2022 18:31:19 -0800 (PST)
-Received: from google.com ([2401:fa00:1:10:c283:8675:30a2:a4ed])
-        by smtp.gmail.com with ESMTPSA id s2sm8260862pgq.38.2022.01.26.18.31.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 18:31:19 -0800 (PST)
-Date:   Thu, 27 Jan 2022 10:31:16 +0800
-From:   Tzung-Bi Shih <tzungbi@google.com>
-To:     "Dustin L. Howett" <dustin@howett.net>
-Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Michael Niksa <michael.niksa@live.com>
-Subject: Re: [PATCH v2 0/2] platform/chrome: add support for the Framework
- Laptop
-Message-ID: <YfID9LgDOW0GkJ26@google.com>
-References: <20220126180020.15873-1-dustin@howett.net>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=IYS69qZ1M+aD42ElGruYniB4cm7bFbPswBL4L2R+Rpw=;
+        b=D6MZFPefcBqusmFQCpLLPGiq3l2WMPsj5RgJRm54Q64lGE2r8ksBQ3ZXH0PQ9+bOoy
+         UyyxW68Bqz335OcwgLWPVpg6J9toevUfRgVEjlE7OrOZJGeY7NiMPLW6ZNm6zBj62Z8F
+         2ErJVMYye9J2i6LR0AdBWZv85mF5WI2bPqa85Xq2Pnjz4MQqCqk630DfdaEVbfJDOKBG
+         DhZOapdgD7KfsqbWqOAc85XXfXePSVYJb0V15XyKSKbtGwuqTJW7pSgTg1sWOySfgOLL
+         zWLBSdN9Q979tl+sEidfVWpRi3Nm7rj3Vuewppufxab+b8akkjBTK5Btn04MZIzGfq9J
+         XVeA==
+X-Gm-Message-State: AOAM532Fz+a2/Iz4shDU8Qui5lGKgtAyTXsuYgF0juSq2fyO8Gex4U/T
+        XYegxti8y2rOto9xzW3m9OJ/4GRv+j1jTncTfWo=
+X-Google-Smtp-Source: ABdhPJyS/AuBJlFqU7qffy+2Qpt924/mr9I56s1ITMiN8t3M0ahpp10mmDlPL+hC00zsMdw4g7aOb37Os26Dommbs00=
+X-Received: by 2002:ab0:59f0:: with SMTP id k45mr797949uad.135.1643250724744;
+ Wed, 26 Jan 2022 18:32:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126180020.15873-1-dustin@howett.net>
+Sender: agaddafi306@gmail.com
+Received: by 2002:a59:8017:0:b0:27e:c86f:6e63 with HTTP; Wed, 26 Jan 2022
+ 18:32:04 -0800 (PST)
+From:   "MRS. Maya Olivia" <mrs.mayaolivia@gmail.com>
+Date:   Thu, 27 Jan 2022 02:32:04 +0000
+X-Google-Sender-Auth: VTAKiGyOautKZpEqpE_O5zDRF7A
+Message-ID: <CAHLv1O9tjqz1e7sxAQp8qsgJi2jBi7VkM4777b4Gjx=xmJ3uWg@mail.gmail.com>
+Subject: CAN I TRUST YOU FOR THIS PROJECT?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 12:00:18PM -0600, Dustin L. Howett wrote:
-> This patch series adds support for the Framework Laptop to the cros_ec
-> LPC driver.
-> 
-> The Framework Laptop is a non-Chromebook laptop that uses the ChromeOS
-> Embedded Controller. Since the machine was designed to present a more
-> normal device profile, it does not report all 512 I/O ports that are
-> typically used by cros_ec_lpcs. Because of this, changes to the driver's
-> port reservation scheme were required.
-> 
-> Since this EC driver probes the MEC range first, and uses only the MEC
-> range if that probe succeeds[^1], we can get by without requesting the
-> entire port range required by non-MEC embedded controllers until
-> absolutely necessary.
-> 
-> [^1]: this includes "memory mapped" read - where the traditional LPC EC
-> requires I/O ports 0x900-0x9FF, the MEC EC multiplexes reads/writes
-> over the same eight ports, 0x800-0x807.
-> 
-> Changelog in v2:
->   Cleaned up the commit subjects per request.
-> 
-> Dustin L. Howett (2):
->   platform/chrome: cros_ec_lpcs: detect the Framework Laptop
->   platform/chrome: cros_ec_lpcs: reserve the MEC LPC I/O ports first
+My husband wish, can I trust you?
 
-For the series,
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+I am Mrs. Maya Oliver, from Norway
+. Firstly, I am married to Mr. Patrick Oliver, A diamond and gold
+merchant who owns a small gold Mine in Burkina Faso and Egypt Cairo;
+He died of Cardiovascular Disease in mid-March 2011. During his
+lifetime he deposited the sum of =E2=82=AC 18.5 Million Euro) Eighteen
+million, Five hundred thousand Euros in a bank in Ouagadougou the
+capital city of Burkina Faso. The deposited money was from the sale of
+the shares, death benefits payment and entitlements of my deceased
+husband by his company.
+
+Since his death I decided not to remarry, when my late husband was
+Alive he deposited the sum of =E2=82=AC 18.5 Million Euro) Eight million, F=
+ive hundred
+thousand Euro) in a bank in Burkina Faso, Presently this money is
+still in bank. And My Doctor told me that I don't have much time to
+live because of the cancer problem,
+
+Having known my condition I decided to hand you over this fund to take
+care of the less-privileged people, you will utilize this money the
+way I am going to instruct herein. I want you to take 35% Percent of
+the total money for your personal use While 65% of the money will go
+to charity" people and helping the orphanage.
+
+I don't want my husband's efforts to be used by the Government. I grew
+up as an Orphan and I don't have anybody as my family member,
+Meanwhile i have concluded with the bank to transfer the funds to you,
+once you are in contact with them by any of the transfer method as
+listed below
+the total funds is currently with the RIA transfer company under the
+guiding of my bank director and they have been instructed to transfer
+the funds to you through the listed options bellow
+
+1, Money Gram
+2, ATM card,
+3 RIA
+4, Online Transfer
+
+note that the  mention above method of transfer is 100% guarantee for
+you to received the funds without much delaying, once you are in
+contact with them,   base on the urgency required for you to handle
+the project, as my doctors has confirmed that I don=E2=80=99t have much tim=
+e
+to live, bellow is the contact of the RIA and Money Gram  transfer
+office manager who will proceed the transfer to you once you are in
+contact with them.
+
+
+BELOW HERE IS THEIR CONTACT INFORMATION
+OFFICE NAME: RIA MONEY TRANSFER SERVICE BURKINA FASO
+CONTACT PERSON: Mr. Mohamed SIMPORE - Directeur g=C3=A9n=C3=A9ral
+CONTACT FIRST EMAIL:  transferriamoney0@gmail.com
+CONTACT SECOND EMAIL:  servicemoneygram8@gmail.com
+Phone Numbers: (+226) 25 49 24 0470
+ let  me know once you start receiving the funds bit by bit
+Regards,
+Mrs. Maya Oliver,

@@ -2,246 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D320149E8DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE4F49E8D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238820AbiA0RX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:23:57 -0500
-Received: from mail-mw2nam08on2089.outbound.protection.outlook.com ([40.107.101.89]:42336
-        "EHLO NAM04-MW2-obe.outbound.protection.outlook.com"
+        id S233239AbiA0RXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:23:22 -0500
+Received: from mail-eopbgr140131.outbound.protection.outlook.com ([40.107.14.131]:8580
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230193AbiA0RX4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:23:56 -0500
+        id S232024AbiA0RXS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 12:23:18 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mh0Dvrya+ak7wnuStDXQ8bvmXwTPOevkg2dg1RWDFy9YabC1WuZ8kS+nz5KFguQHF4QcL+6xllDp8xEA/b9WbDe9BXKbRsT+R/h1aM2p1yLC6mi6psimd556J8g29Q2XJxBN3rC+EgUTB/AYtLeJ1WSxGzfdYXiuserHxk2aIrPDlN3lw1wqEC9/SIjjXBwjJnxiQp9oM7ept3JufeKrDeoIYaNdWrdktylHUcFPrTQDEHr3EY0dvcBJKJ51d0bE7ICr0TcPpZ6ypi+p8eUUXFX5dKzmCKjXP//eXs8Qyh9dD5FLBFaUICxVe0vvLyAzFrLsCwFgsFR2Z70K9AuiZQ==
+ b=DmJo1bcLJSqCn9/nY0R30nm9488K/mNvNSRTwuMfMkivAWR+pC9IIWNIONsuKx0TppMtw5P3K793QHKGJfuS9/LKaOyl72pulxae4LJGBa5gogMUy2qx5y4h9kYC0lJVNjXsmHtr4PLEizSeZdXglx5C6TaD9a5AsStKm0hTsMEUlANcOuUdY5hFalku+GUMHAbG/f95+7r+L3KNho3ryII+KkHjH7Yd5vTFytKJUO8i9csPuqWYfbgYn/26L2A2w8+GhtNbvrlIvhLU/ZU3U3As29lO51ytNUMiggeFsirE5T6bEGe4fX/Xzsqma8MqMvAhJ031smlbqqN75KZkfQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TE1VBFnA90hYRW1pYSUROKkXBeREUPNpDB1wYyPhPJE=;
- b=jEJrbklYTYU6u+UIlB6uSdIMVcl05rW0qdfs3hpysydrhLNOhwtLS+UnYxGO0K84lIVfTn6nhLBuviILwDTgtT9bSukvqIWEuX65UWYmU6MxSCX/tx1264ztjB/z93cO0XTo/zsSaN/8gKHUhIFHy895LTAWH+AlKOUYE7Uznsmyl1R1z5hzYlIWw0u+ORUU8kIPslT+CjdT2+/WUmLkQu2G/izZ56kb1yIgBqtQLBEOE0wH6HVmOtOOy2EkIZbkl3Eo5Ihu8Uqt5lfArlxpHnlN/PcmumPBhgY39IMjib8vlASCgEatlQMyqEXiBXx0lclphDz+U4mlX/Cra4JifQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=9FzclXlid2G0/YBctwdLiXbaJOmtENI2vVBw04OZi4Q=;
+ b=KurZwEwp8Rn6GYPk7Zl0V6Zkdt44g0RQDJdRLa0GjAj8XnlrSewIyJ67F14IyozhYaTDCvQS3YRoAU/Bw0uiKk3yr8IU1Gq07TAqLXLMfwFMmF4KPTag9fk6TUpZOwpiKr5OihsA4KrIJkrjIwJh6fFCSdJhKfBGg9aqDkf2eam6BlgJ96UQguu7iHEpljYp+ZuAxIPbB4l1M81fdWnppTLUOV+lboweDJFRlH2Hx5CSyEuIEgYF2Qh5o26ROsBhxOWKpuoUeY+qzB3nGX9awF3Zs/dCmWBXCGG+2Ig5gPH6HhstRRqRPsSemucj8vIuKJdYXIvtX0zcs/k/rF11HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 217.111.95.66) smtp.rcpttodomain=nxp.com smtp.mailfrom=arri.de; dmarc=none
+ action=none header.from=arri.de; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TE1VBFnA90hYRW1pYSUROKkXBeREUPNpDB1wYyPhPJE=;
- b=P55ITN/rNRdleLBP4+HU3AVWWq2tVNKm3etpcZEf/Dk0sn7OalBMF6U13RwFNqtihs0FIK4/TkJrpGHrMEbzx/YXmgZ3SyY7YplaDz/fFdgHguErAn2CrWcrthcjK7sD4EH0xjevEqGhVVpGyf0xvpn1moBByE1qwy1ch9adlcw=
-Received: from MW4PR03CA0279.namprd03.prod.outlook.com (2603:10b6:303:b5::14)
- by CO6PR12MB5410.namprd12.prod.outlook.com (2603:10b6:5:35b::5) with
+ bh=9FzclXlid2G0/YBctwdLiXbaJOmtENI2vVBw04OZi4Q=;
+ b=MaPGrhy4C7rhwJD9XBATINN+zCzG5FJYCohODc6cQJDa354sq0AmVhbl7UY0zghEd4N0pv8Fcrh5U74lSIS4Qg5QRKfWI9HJhIHXMuTIuBu7Z3OALqhGR5+8SY8gdjZse8iEo/5sqhXULmDvULGNTCSVZGTfk04jpegCAlZsPdU=
+Received: from SV0P279CA0007.NORP279.PROD.OUTLOOK.COM (2603:10a6:f10:11::12)
+ by DB6PR07MB3111.eurprd07.prod.outlook.com (2603:10a6:6:1f::30) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Thu, 27 Jan
- 2022 17:23:54 +0000
-Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b5:cafe::ac) by MW4PR03CA0279.outlook.office365.com
- (2603:10b6:303:b5::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.5; Thu, 27 Jan
+ 2022 17:23:16 +0000
+Received: from HE1EUR02FT008.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:f10:11:cafe::c9) by SV0P279CA0007.outlook.office365.com
+ (2603:10a6:f10:11::12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
- Transport; Thu, 27 Jan 2022 17:23:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4930.15 via Frontend Transport; Thu, 27 Jan 2022 17:23:53 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 27 Jan
- 2022 11:23:52 -0600
-Date:   Thu, 27 Jan 2022 11:23:08 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v8 29/40] x86/compressed/64: add support for SEV-SNP
- CPUID table in #VC handlers
-Message-ID: <20220127172308.erfrpuwm6ivbdh5q@amd.com>
-References: <20220118142345.65wuub2p3alavhpb@amd.com>
- <20220118143238.lu22npcktxuvadwk@amd.com>
- <20220118143730.wenhm2bbityq7wwy@amd.com>
- <YebsKcpnYzvjaEjs@zn.tnic>
- <20220118172043.djhy3dwg4fhhfqfs@amd.com>
- <Yeb7vOaqDtH6Fpsb@zn.tnic>
- <20220118184930.nnwbgrfr723qabnq@amd.com>
- <20220119011806.av5rtxfv4et2sfkl@amd.com>
- <YefzQuqrV8kdLr9z@zn.tnic>
- <20220119162747.ewgxirwcnrcajazm@amd.com>
+ Transport; Thu, 27 Jan 2022 17:23:15 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.66)
+ smtp.mailfrom=arri.de; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arri.de;
+Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
+ designate 217.111.95.66 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.111.95.66; helo=mta.arri.de;
+Received: from mta.arri.de (217.111.95.66) by
+ HE1EUR02FT008.mail.protection.outlook.com (10.152.10.77) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4930.15 via Frontend Transport; Thu, 27 Jan 2022 17:23:15 +0000
+Received: from localhost.localdomain (192.168.54.252) by mta.arri.de
+ (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.498.0; Thu, 27 Jan
+ 2022 18:23:14 +0100
+From:   Christian Eggers <ceggers@arri.de>
+To:     Sean Anderson <sean.anderson@seco.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+CC:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <linux-crypto@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <ceggers@arri.de>
+Subject: PROBLEM: encryption test failures since "crypto: mxs-dcp - Use sg_mapping_iter to copy data"
+Date:   Thu, 27 Jan 2022 18:23:13 +0100
+Message-ID: <2126453.Icojqenx9y@localhost.localdomain>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220119162747.ewgxirwcnrcajazm@amd.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
+X-Originating-IP: [192.168.54.252]
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 975bec9a-9af1-445c-0d81-08d9e1b9ca9c
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5410:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR12MB54102B7DB1569C521A28054795219@CO6PR12MB5410.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Office365-Filtering-Correlation-Id: 52795983-62cd-41f2-aa70-08d9e1b9b411
+X-MS-TrafficTypeDiagnostic: DB6PR07MB3111:EE_
+X-Microsoft-Antispam-PRVS: <DB6PR07MB31112B5E45756CCE694B6FFDBF219@DB6PR07MB3111.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:534;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HZ0gjAw7w+vY7xxdns0CA8REuTzgDddVOIIWdRXgcIdl2PT97t8nSArgi3tedycMamY51MH6VEcJsU6l8rQYHaq/Twn0DTVtYAcqrQgRaZvferpSSaUS1j5AEmMSNw1zdoVJZgvilW8CuKA+kg3Yj0u5xwqtZYJEf+K8F+Me5DuBY4WPagLEHpAa1gYyTPNc4rdBysfhDr2AgEUbGu6Qyfva6OKqEoGCxkoBwvmDRoAa8jkmpBjqs53H+NceLvejo6G0pIZCwRL64NpjU+7G9av+L4MeNoIFSJj5DUTPJplOlYttv+nKwHHW2TxObyN63jmPRUbPVXj/Coe2CS8lwU8HRiqbRUJTZfBpHO40RPevqIVG0XYu8swGZrGefez4Cjc6DksLlbhvG9s+A3LiNB3QRFFDhwpkbQ8PPDEZ3mI5NTt1p87CZQUjzqwlZf4EqNapXZ3N/nPbRFb1v03SOCRXGda/veKhNM+IC2lEBpAhMB9NwYKL3sNNTxHLSn6fROFeBzyImsl8sdi2F39bAPGo3p9KVjF98SPsAe+zv3OJdNySYWJ5vHxU72RXMngL9E+VqKDJ24PFfnLNMapvPHxBcATrZTYLYgqIbRUZ7M21FIw3ewl6/EUsWJ8Ga4xgzaT4ouFkvR6HUXaeJdvZgR7ore6nbCCoDAlbP+q+YD5AtVIs88ogYN24FatqE2Set9L+oMsP3mnBkBUJyUfXrQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(16526019)(7416002)(36860700001)(6666004)(40460700003)(186003)(1076003)(26005)(7406005)(86362001)(82310400004)(83380400001)(5660300002)(47076005)(2616005)(426003)(508600001)(336012)(8936002)(8676002)(4326008)(44832011)(70206006)(70586007)(81166007)(316002)(356005)(36756003)(54906003)(6916009)(2906002)(36900700001)(20210929001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 17:23:53.2185
+X-Microsoft-Antispam-Message-Info: XYL/OIWrR9q9IuwY17H6ZTD416CUpRdMPdNfydZjs2DYZ4ErfCe207UpNjvDXz5Z7nZQM2J/Lvi+5WM34oMoA1WuAOPudeqyTbTQ/5li6F4IJKPtvbMO/lm8lslClVmeqnREE2gHTsE8x62cjMeVKvxKBNpFPFgD41fqlamvSc4t+o+pbsUwDPk4l4xpcGuc8j/vNpim/XIAw4r8n5Mi4zD9qOjAnuVfeQx+Z5LWPVVQYqnpEc5BE6ZjFIitqkgNBg4PqvXniAKlUnoHRbk7lo8RVP6vUoeBME8CAEfmaOSUeUPIU/9Wr/dF+kv7o3j7f6FGqsbSEugexmNDjfGPqQZ4HixaaJkLMF6nNEGbb/GtWab4QHeJY+Rc+0uQPOogXbd3v557S8pKH7jtYb8HehMALa+iLys51Hq4+D1i1DX4kJ+cn3fEp0KIOaL9+YV78hCIJ+U/DXXl0YeuS7ZkHDpLj+ZLJhQq/tJw5KGXvjHuQsLrkcYNc15x3aE97fl25gQ8reJH5M3X5+DLozO9h83SVYXDMQ+NmMHZqWF3bxGqOjbxmRcD7jLEIx4hQhBR4+z8ynDp70EA36UYsG8gpDPV9j7avBE/CZNvIS0C9wAbPNP7R11MQnsycW/Ausbjbhry51S2jYNv3NyXTshIZ1ZBRxRQX2ZLqsa4rzcCeDXfz+/rHDzAycW5QEOPktEf7esjD5FtZKCPiXMETEGKCZKBF+fnCPZqE9wEJ6XTlAQQm2a0d4XiOIGHiDC54DkgaJU/nnX6pGMYtIWyI2+WQkZEwfKr8zWrglTauQgfFe0=
+X-Forefront-Antispam-Report: CIP:217.111.95.66;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(336012)(426003)(5660300002)(107886003)(83380400001)(8936002)(4326008)(70586007)(8676002)(36860700001)(70206006)(356005)(16526019)(186003)(26005)(55016003)(82310400004)(316002)(47076005)(110136005)(508600001)(54906003)(2906002)(81166007)(40460700003)(36916002)(9686003)(86362001)(7696005)(39026012)(36900700001)(20210929001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: arri.de
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 17:23:15.3079
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 975bec9a-9af1-445c-0d81-08d9e1b9ca9c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 52795983-62cd-41f2-aa70-08d9e1b9b411
+X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.66];Helo=[mta.arri.de]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR02FT008.eop-EUR02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5410
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR07MB3111
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 10:27:47AM -0600, Michael Roth wrote:
-> On Wed, Jan 19, 2022 at 12:17:22PM +0100, Borislav Petkov wrote:
-> > On Tue, Jan 18, 2022 at 07:18:06PM -0600, Michael Roth wrote:
-> > > If 'fake_count'/'reported_count' is greater than the actual number of
-> > > entries in the table, 'actual_count', then all table entries up to
-> > > 'fake_count' will also need to pass validation. Generally the table
-> > > will be zero'd out initially, so those additional/bogus entries will
-> > > be interpreted as a CPUID leaves where all fields are 0. Unfortunately,
-> > > that's still considered a valid leaf, even if it's a duplicate of the
-> > > *actual* 0x0 leaf present earlier in the table. The current code will
-> > > handle this fine, since it scans the table in order, and uses the
-> > > valid 0x0 leaf earlier in the table.
-> > 
-> > I guess it would be prudent to have some warnings when enumerating those
-> > leafs and when the count index "goes off into the weeds", so to speak,
-> > and starts reading 0-CPUID entries. I.e., "dear guest owner, your HV is
-> > giving you a big lie: a weird/bogus CPUID leaf count..."
-> > 
-> > :-)
-> 
+SoC: i.MX6ULL
 
-Sorry for the delay, this response got stuck in my mail queue apparently.
+After upgrading from v5.10.65-rt53 to v5.10.73-rt54 I get two additional messages on boot:
 
-> Ok, there's some sanity checks that happen a little later in boot via
-> snp_cpuid_check_status(), after printk is enabled, that reports some
-> basic details to dmesg like the number of entries in the table. I can
-> add some additional sanity checks to flag the above case (really,
-> all-zero entries never make sense, since CPUID 0x0 is supposed to report
-> the max standard-range CPUID leaf, and leaf 0x1 at least should always
-> be present). I'll print a warning for such cases, add maybe dump the
-> cpuid the table in that case so it can be examined more easily by
-> owner.
-> 
-> > 
-> > And lemme make sure I understand it: the ->count itself is not
-> > measured/encrypted because you want to be flexible here and supply
-> > different blobs with different CPUID leafs?
-> 
-> Yes, but to be clear it's the entire CPUID page, including the count,
-> that's not measured (though it is encrypted after passing PSP
-> validation). Probably the biggest reason is the logistics of having
-> untrusted cloud vendors provide a copy of the CPUID values they plan
-> to pass to the guest, since a new measurement would need to be
-> calculated for every new configuration (using different guest
-> cpuflags, SMP count, etc.), since those table values will need to be
-> made easily-accessible to guest owner for all these measurement
-> calculations, and they can't be trusted so each table would need to
-> be checked either manually or by some tooling that could be difficult
-> to implement unless it was something simple like "give me the expected
-> CPUID values and I'll check if the provided CPUID table agrees with
-> that".
-> 
-> At that point it's much easier for the guest owner to just check the
-> CPUID values directly against known good values for a particular
-> configuration as part of their attestation process and leave the
-> untrusted cloud vendor out of it completely. So not measuring the
-> CPUID page as part of SNP attestation allows for that flexibility.
-> 
-> > 
-> > > This is isn't really a special case though, it falls under the general
-> > > category of a hypervisor inserting garbage entries that happen to pass
-> > > validation, but don't reflect values that a guest would normally see.
-> > > This will be detectable as part of guest owner attestation, since the
-> > > guest code is careful to guarantee that the values seen after boot,
-> > > once the attestation stage is reached, will be identical to the values
-> > > seen during boot, so if this sort of manipulation of CPUID values
-> > > occurred, the guest owner will notice this during attestation, and can
-> > > abort the boot at that point. The Documentation patch addresses this
-> > > in more detail.
-> > 
-> > Yap, it is important this is properly explained there so that people can
-> > pay attention to during attestation.
-> > 
-> > > If 'fake_count' is less than 'actual_count', then the PSP skips
-> > > validation for anything >= 'fake_count', and leaves them in the table.
-> > > That should also be fine though, since guest code should never exceed
-> > > 'fake_count'/'reported_count', as that's a blatant violation of the
-> > > spec, and it doesn't make any sense for a guest to do this. This will
-> > > effectively 'hide' entries, but those resulting missing CPUID leaves
-> > > will be noticeable to the guest owner once attestation phase is
-> > > reached.
-> > 
-> > Noticeable because the guest owner did supply a CPUID table with X
-> > entries but the HV is reporting Y?
-> 
-> Or even more simply by the guest owner simply running 'cpuid -r -1' on
-> the guest after boot, and making sure all the expected entries are
-> present. If the HV manipulated the count to be lower, there would be
-> missing entries, if they manipulated it to be higher, then there would
-> either be extra duplicate entries at the end of the table (which the
-> #VC handler would ignore due to it using the first matching entry in
-> the table when doing lookups), or additional non-duplicate garbage
-> entries, which will show up in 'cpuid -r -1' as unexpected entries.
-> 
-> Really 'cpuid -r -1' is the guest owner/userspace view of things, so
-> some of these nuances about the table contents might be noteworthy,
-> but wouldn't actually affect guest behavior, which would be the main
-> thing attestation process should be concerned with.
-> 
-> > 
-> > If so, you can make this part of the attestation process: guest owners
-> > should always check the CPUID entries count to be of a certain value.
-> > 
-> > > This does all highlight the need for some very thorough guidelines
-> > > on how a guest owner should implement their attestation checks for
-> > > cpuid, however. I think a section in the reference implementation
-> > > notes/document that covers this would be a good starting point. I'll
-> > > also check with the PSP team on tightening up some of these CPUID
-> > > page checks to rule out some of these possibilities in the future.
-> > 
-> > Now you're starting to grow the right amount of paranoia - I'm glad I
-> > was able to sensitize you properly!
-> > 
-> > :-)))
-> 
-> Hehe =*D
-> 
-> Thanks!
-> 
-> -Mike
+...
+[    3.786333] alg: skcipher: ecb-aes-dcp encryption test failed (wrong result) on test vector 0, cfg="two even aligned splits"
+[    3.789020] alg: skcipher: cbc-aes-dcp encryption test failed (wrong result) on test vector 0, cfg="two even aligned splits"
+[    3.793741] mxs-dcp 2280000.crypto: mxs_dcp: initialized
+..
+
+After reverting the commit
+
+2e6d793e1bf0 ("crypto: mxs-dcp - Use sg_mapping_iter to copy data")
+
+the error messages above disappear again.
+
+regards
+Christian
+
+[3.] Keywords: mxc-dcp, crypto manager self tests
+[4.] Kernel information
+[4.1.] Kernel version (from /proc/version):
+Linux version 5.10.73-rt54+ (eggers@localhost.localdomain) (arm-poky-linux-gnueabi-gcc (GCC) 10.2.0, GNU ld (GNU Binutils) 2.35.1) #19 PREEMPT_RT Thu Jan 27 17:56:20 CET 2022
+
+[4.2.] Kernel .config file:
+[5.] Most recent kernel version which did not have the bug: 5.10.65-rt53
+[8.] Environment
+[8.1.] Software (add the output of the ver_linux script here)
+n/a (embedded system, kernel cross compiled)
+
+[8.2.] Processor information (from /proc/cpuinfo):
+processor       : 0
+model name      : ARMv7 Processor rev 5 (v7l)
+BogoMIPS        : 16.00
+Features        : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm 
+CPU implementer : 0x41
+CPU architecture: 7
+CPU variant     : 0x0
+CPU part        : 0xc07
+CPU revision    : 5
+
+Hardware        : Freescale i.MX6 Ultralite (Device Tree)
+Revision        : 0000
+Serial          : 0000000000000000
+
+
+

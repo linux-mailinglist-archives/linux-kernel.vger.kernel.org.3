@@ -2,115 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B360849E159
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9217949E164
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 12:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240706AbiA0LnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 06:43:21 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:43670 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240698AbiA0LnO (ORCPT
+        id S240735AbiA0Lo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 06:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232131AbiA0LoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 06:43:14 -0500
-X-UUID: 5392cfc1e80d4afcb2d179da13656c7e-20220127
-X-UUID: 5392cfc1e80d4afcb2d179da13656c7e-20220127
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1820353872; Thu, 27 Jan 2022 19:43:12 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs10n2.mediatek.inc
- (172.21.101.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3; Thu, 27 Jan 2022
- 19:43:10 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- MTKCAS36.mediatek.inc (172.27.4.170) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Thu, 27 Jan 2022 19:43:10 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <jitao.shi@mediatek.com>, xinlei lee <xinlei.lee@mediatek.com>
-Subject: [v1,3/3] drm/mediatek: Move the getting bridge node function to mtk_dsi_bind
-Date:   Thu, 27 Jan 2022 19:42:53 +0800
-Message-ID: <1643283773-7081-4-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1643283773-7081-1-git-send-email-xinlei.lee@mediatek.com>
-References: <1643283773-7081-1-git-send-email-xinlei.lee@mediatek.com>
+        Thu, 27 Jan 2022 06:44:25 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA248C061714;
+        Thu, 27 Jan 2022 03:44:24 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id w11so4266574wra.4;
+        Thu, 27 Jan 2022 03:44:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=LdvVnzVP+ambH9LK42MFqP+4gobIMIEV2AtnE2m4+4w=;
+        b=AO2Ubp21T4K3UXrE4ox8RrOuzjwwgrlPkeKckx6Grh9RDZ/sTc4sbmYVdr0jjAzpTw
+         QVQQPpq97aK2jW5XFd7bQnzTVqoBJJj6378shYn3d2cksVOP7/4zyAiwlP+kuExwEhDw
+         XZJrGcwnFl9NeV9+LhDnIPEtlKSJuAh2tjefqYKPD21aILv8pPHehPvOIQyGlgjdFsPj
+         oMzJiea1Io27zOiupzkuaNpJcLwNMgIk7MJ6504aaHlBk3VjA7u9dBrKb0HD/gWe/+pQ
+         RvbtkX3j16vPwnewh6iIwT26ia4TZVLMcK3m4cq6+CdyMByCBzP2UMRi0DkN5ke2sf1n
+         11WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LdvVnzVP+ambH9LK42MFqP+4gobIMIEV2AtnE2m4+4w=;
+        b=k6gc6e3VY79WHjK+Qv87cR9HK8/28tg9F8Y56ph87pk//OmlTdH+kCk6xX4pcs5nNm
+         5fUJ2Mhpe9TC/Q/iB4/Y2s5wZBZqG7Ky/JzTrCV9PgDDJNy0M0oE2po8c4Qglh+ACgGB
+         wjMNZPHCeuJPtYsOneuC06EtIkWUi3jsO+V3W/mrZbPsdDSxvGDujCxZlqlm7gUkcd4E
+         GZXMRWA2685u6fAWc/x5SpAisR+h9lBCRsH06l0zAdJHugCOMRjwMl2+Vja4/DIBlrpj
+         H7TQTSd25gXH8VXXL3T1Gw9ounFWEgWNuj8veg5h2Byau3WuWFFvLDetrIoVEoZzjwxT
+         JfBA==
+X-Gm-Message-State: AOAM533NlqfET6XZ5IeUy7TFl13VWmtqKDeRFmQWMq+raHE1C2H1C8jy
+        3t+pjrGaRRnLka7i4ttCIAM=
+X-Google-Smtp-Source: ABdhPJx/KQtwKWNuH/SNqZ6CP2qgfsi4lZk1rb4KUhwVnUiM+JCFI4ynUa/ZWR4g7iYh+f08Ls5ePQ==
+X-Received: by 2002:adf:a410:: with SMTP id d16mr2795659wra.517.1643283863392;
+        Thu, 27 Jan 2022 03:44:23 -0800 (PST)
+Received: from [192.168.178.21] (p57b0bff8.dip0.t-ipconnect.de. [87.176.191.248])
+        by smtp.gmail.com with ESMTPSA id a6sm1918382wrx.101.2022.01.27.03.44.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jan 2022 03:44:22 -0800 (PST)
+Message-ID: <50cf1f2f-3fb2-8abb-7497-dafcd97935f3@gmail.com>
+Date:   Thu, 27 Jan 2022 12:44:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Linaro-mm-sig] Re: [Intel-gfx] [PATCH 02/19] dma-buf-map: Add
+ helper to initialize second map
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org
+References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+ <20220126203702.1784589-3-lucas.demarchi@intel.com>
+ <f0dbdcc0-13b5-c484-0bf3-a1f8c3e48954@amd.com>
+ <20220127075728.ygwgorhnrwaocdqv@ldmartin-desk2>
+ <3066c6a7-fc73-d34d-d209-a3ff6818dfb6@amd.com>
+ <YfJedaoeJjE3grum@phenom.ffwll.local>
+ <20220127093332.wnkd2qy4tvwg5i5l@ldmartin-desk2>
+ <YfJtLkdkh4yde20f@phenom.ffwll.local>
+ <27aed6b1-b465-6a52-2b0a-d748c9798414@amd.com>
+ <YfJ/DvhxaGGppGV6@phenom.ffwll.local>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <YfJ/DvhxaGGppGV6@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xinlei lee <xinlei.lee@mediatek.com>
+Am 27.01.22 um 12:16 schrieb Daniel Vetter:
+> On Thu, Jan 27, 2022 at 11:21:20AM +0100, Christian König wrote:
+>> Am 27.01.22 um 11:00 schrieb Daniel Vetter:
+>>> On Thu, Jan 27, 2022 at 01:33:32AM -0800, Lucas De Marchi wrote:
+>>>> On Thu, Jan 27, 2022 at 09:57:25AM +0100, Daniel Vetter wrote:
+>>>>> On Thu, Jan 27, 2022 at 09:02:54AM +0100, Christian König wrote:
+>>>>>> Am 27.01.22 um 08:57 schrieb Lucas De Marchi:
+>>>>>>> On Thu, Jan 27, 2022 at 08:27:11AM +0100, Christian König wrote:
+>>>>>>>> Am 26.01.22 um 21:36 schrieb Lucas De Marchi:
+>>>>>>>>> When dma_buf_map struct is passed around, it's useful to be able to
+>>>>>>>>> initialize a second map that takes care of reading/writing to an offset
+>>>>>>>>> of the original map.
+>>>>>>>>>
+>>>>>>>>> Add a helper that copies the struct and add the offset to the proper
+>>>>>>>>> address.
+>>>>>>>> Well what you propose here can lead to all kind of problems and is
+>>>>>>>> rather bad design as far as I can see.
+>>>>>>>>
+>>>>>>>> The struct dma_buf_map is only to be filled in by the exporter and
+>>>>>>>> should not be modified in this way by the importer.
+>>>>>>> humn... not sure if I was  clear. There is no importer and exporter here.
+>>>>>> Yeah, and exactly that's what I'm pointing out as problem here.
+>>>>>>
+>>>>>> You are using the inter driver framework for something internal to the
+>>>>>> driver. That is an absolutely clear NAK!
+>>>>>>
+>>>>>> We could discuss that, but you guys are just sending around patches to do
+>>>>>> this without any consensus that this is a good idea.
+>>>>> Uh I suggested this, also we're already using dma_buf_map all over the
+>>>>> place as a convenient abstraction. So imo that's all fine, it should allow
+>>>>> drivers to simplify some code where on igpu it's in normal kernel memory
+>>>>> and on dgpu it's behind some pci bar.
+>>>>>
+>>>>> Maybe we should have a better name for that struct (and maybe also a
+>>>>> better place), but way back when we discussed that bikeshed I didn't come
+>>>>> up with anything better really.
+>>>> I suggest iosys_map since it abstracts access to IO and system memory.
+>>>>
+>>>>>>> There is a role delegation on filling out and reading a buffer when
+>>>>>>> that buffer represents a struct layout.
+>>>>>>>
+>>>>>>> struct bla {
+>>>>>>>       int a;
+>>>>>>>       int b;
+>>>>>>>       int c;
+>>>>>>>       struct foo foo;
+>>>>>>>       struct bar bar;
+>>>>>>>       int d;
+>>>>>>> }
+>>>>>>>
+>>>>>>>
+>>>>>>> This implementation allows you to have:
+>>>>>>>
+>>>>>>>       fill_foo(struct dma_buf_map *bla_map) { ... }
+>>>>>>>       fill_bar(struct dma_buf_map *bla_map) { ... }
+>>>>>>>
+>>>>>>> and the first thing these do is to make sure the map it's pointing to
+>>>>>>> is relative to the struct it's supposed to write/read. Otherwise you're
+>>>>>>> suggesting everything to be relative to struct bla, or to do the same
+>>>>>>> I'm doing it, but IMO more prone to error:
+>>>>>>>
+>>>>>>>       struct dma_buf_map map = *bla_map;
+>>>>>>>       dma_buf_map_incr(map, offsetof(...));
+>>>>> Wrt the issue at hand I think the above is perfectly fine code. The idea
+>>>>> with dma_buf_map is really that it's just a special pointer, so writing
+>>>>> the code exactly as pointer code feels best. Unfortunately you cannot make
+>>>>> them typesafe (because of C), so the code sometimes looks a bit ugly.
+>>>>> Otherwise we could do stuff like container_of and all that with
+>>>>> typechecking in the macros.
+>>>> I had exactly this code above, but after writting quite a few patches
+>>>> using it, particularly with functions that have to write to 2 maps (see
+>>>> patch 6 for example), it felt much better to have something to
+>>>> initialize correctly from the start
+>>>>
+>>>> 	struct dma_buf_map other_map = *bla_map;
+>>>> 	/* poor Lucas forgetting dma_buf_map_incr(map, offsetof(...)); */
+>>>>
+>>>> is error prone and hard to debug since you will be reading/writting
+>>>> from/to another location rather than exploding
+>>>>
+>>>> While with the construct below
+>>>>
+>>>> 	other_map;
+>>>> 	...
+>>>> 	other_map = INITIALIZER()
+>>>>
+>>>> I can rely on the compiler complaining about uninitialized var. And
+>>>> in most of the cases I can just have this single line in the beggining of the
+>>>> function when the offset is constant:
+>>>>
+>>>> 	struct dma_buf_map other_map = INITIALIZER(bla_map, offsetof(..));
+>>> Hm yeah that's a good point that this allows us to rely on the compiler to
+>>> check for uninitialized variables.
+>>>
+>>> Maybe include the above (with editing, but keeping the examples) in the
+>>> kerneldoc to explain why/how to use this? With that the concept at least
+>>> has my
+>>>
+>>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>>>
+>>> I'll leave it up to you & Christian to find a prettier color choice for
+>>> the naming bikeshed.
+>> There is one major issue remaining with this and that is dma_buf_vunmap():
+>>
+>> void dma_buf_vunmap(struct dma_buf *dmabuf, struct dma_buf_map *map);
+>>
+>> Here we expect the original pointer as returned by dma_buf_map(), otherwise
+>> we vunmap() the wrong area!
+>>
+>> For all TTM based driver this doesn't matter since we keep the vmap base
+>> separately in the BO anyway (IIRC), but we had at least one case where this
+>> made boom last year.
+> Yeah but isn't that the same if it's just a void *?
+>
+> If you pass the wrong pointer to an unmap function and not exactly what
+> you go from the map function, then things go boom. This is like
+> complaining that the following code wont work
+>
+> 	u32 *stuff
+>
+> 	stuff = kmap_local(some_page);
+> 	*stuff++ = 0;
+> 	*stuff = 1;
+> 	kunmap_locak(stuff);
+>
+> It's just ... don't do that :-) Also since we pass dma_buf_map by value
+> and not by pointer anywhere, the risk of this happening is pretty low
+> since you tend to work on a copy. Same with void * pointers really.
+>
+> Now if people start to pass around struct dma_buf_map * as pointers for
+> anything else than out parameters, then we're screwed. But that's like
+> passing around void ** for lolz, which is just wrong (except when it's an
+> out parameter or actually an array of pointers ofc).
+>
+> Or I really don't get your concern and you mean something else?
 
-The order of probe function for bridge drivers and dsi drivers is uncertain.
-To avoid the dsi probe cannot be executed, we place getting bridge node function in
-mtk_dsi_bind.
+No that's pretty much it. It's just that we hide the pointer inside a 
+structure and it is absolutely not obvious to a driver dev that you 
+can't do:
 
-Signed-off-by:Xinlei Lee <xinlei.lee@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_dsi.c | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
+dma_buf_vmap(.., &map);
+dma_buf_map_inr(&map, x);
+dma_buf_vunmap(.., &map);
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 62af60d..a390f26 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -991,6 +991,21 @@ static int mtk_dsi_bind(struct device *dev, struct device *master, void *data)
- 	int ret;
- 	struct drm_device *drm = data;
- 	struct mtk_dsi *dsi = dev_get_drvdata(dev);
-+	struct drm_panel *panel;
-+
-+	ret = drm_of_find_panel_or_bridge(dev->of_node, 0, 0,
-+					  &panel, &dsi->next_bridge);
-+	if (ret)
-+		return ret;
-+
-+	if (panel) {
-+		dsi->next_bridge = devm_drm_panel_bridge_add(dev, panel);
-+		if (IS_ERR(dsi->next_bridge)) {
-+			ret = PTR_ERR(dsi->next_bridge);
-+			dev_err(dev, "failed to add bridge: %d\n", ret);
-+			return ret;
-+		}
-+	}
- 
- 	ret = mtk_dsi_encoder_init(drm, dsi);
- 	if (ret)
-@@ -1016,7 +1031,6 @@ static int mtk_dsi_probe(struct platform_device *pdev)
- {
- 	struct mtk_dsi *dsi;
- 	struct device *dev = &pdev->dev;
--	struct drm_panel *panel;
- 	struct resource *regs;
- 	int irq_num;
- 	int ret;
-@@ -1033,19 +1047,6 @@ static int mtk_dsi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = drm_of_find_panel_or_bridge(dev->of_node, 0, 0,
--					  &panel, &dsi->next_bridge);
--	if (ret)
--		goto err_unregister_host;
--
--	if (panel) {
--		dsi->next_bridge = devm_drm_panel_bridge_add(dev, panel);
--		if (IS_ERR(dsi->next_bridge)) {
--			ret = PTR_ERR(dsi->next_bridge);
--			goto err_unregister_host;
--		}
--	}
--
- 	dsi->driver_data = of_device_get_match_data(dev);
- 
- 	dsi->engine_clk = devm_clk_get(dev, "engine");
--- 
-2.6.4
+As bare minimum I strongly suggest that we add some WARN_ONs to the 
+framework to check that the pointer given to dma_buf_vunmap() is at 
+least page aligned.
+
+Christian.
+
+> -Daniel
+>
+>
+>> Christian.
+>>
+>>> -Daniel
+>>>
+>>>> Lucas De Marchi
+>>>>
+>>>>> -Daniel
+>>>>>
+>>>>>>> IMO this construct is worse because at a point in time in the function
+>>>>>>> the map was pointing to the wrong thing the function was supposed to
+>>>>>>> read/write.
+>>>>>>>
+>>>>>>> It's also useful when the function has double duty, updating a global
+>>>>>>> part of the struct and a table inside it (see example in patch 6)
+>>>>>>>
+>>>>>>> thanks
+>>>>>>> Lucas De Marchi
+>>>>> -- 
+>>>>> Daniel Vetter
+>>>>> Software Engineer, Intel Corporation
+>>>>> https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fblog.ffwll.ch%2F&amp;data=04%7C01%7Cchristian.koenig%40amd.com%7C0654a16ea3444271d7c308d9e17bd35d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637788744226808874%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=Q6soluBglaZLhLszdapaWuUVsqMq5qvJOKiJjO%2B9BTg%3D&amp;reserved=0
 

@@ -2,88 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C89749DD22
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309C549DD2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbiA0JAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:00:22 -0500
-Received: from smtpbg703.qq.com ([203.205.195.89]:36716 "EHLO
-        smtpproxy21.qq.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238104AbiA0JAV (ORCPT
+        id S238126AbiA0JBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:01:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:50524 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231668AbiA0JBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:00:21 -0500
-X-QQ-mid: bizesmtp43t1643274007t8sa334g
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 27 Jan 2022 17:00:01 +0800 (CST)
-X-QQ-SSF: 0140000000200090E000C00A0000000
-X-QQ-FEAT: nnjWNCC3Pd2Gry3AWSm/mVxwssU5xdxnJ6Cjs2RQO2G+C3WtpV0Qqw+SNMq6Z
-        QqNpR1oggIOktD1eMsqTTnZL5c20GpnnhuFGCFe3xoXK/HOWo5N4g+O/ujWSqfG2+NX/AcY
-        mMih7+jygtydz/MIWHkCHWIBf14OSibTBUG7XAv4qTPJ8fSkej5TOGMAdf1utKQr1BxH4/6
-        i/eOG+pVU7uGGOT921rNPNmdnQZqbejjB4NXQ0y6BMzu8VBmtPHdGMlZ99beKonIebh12lt
-        wEe6QR9dMUjKFigKuU/ymL3kyzutMypM+YNvU3mlQmRCm4E+1om5xTCSiWy1v1LkbKN9rF9
-        00IgxAMjJ0nl8RdWofxotvfViRvNnke0a9jfK9sGYN82PjxlkI=
-X-QQ-GoodBg: 2
-From:   tangmeng <tangmeng@uniontech.com>
-To:     axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tangmeng <tangmeng@uniontech.com>
-Subject: [PATCH] scsi: sr: Improve the judgment statement
-Date:   Thu, 27 Jan 2022 17:00:00 +0800
-Message-Id: <20220127090000.5289-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 27 Jan 2022 04:01:34 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 87ABA1F882;
+        Thu, 27 Jan 2022 09:01:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643274093; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uf6L1U20L42jQ06xefiKuwA7v4ertkV/8P81jUSoYis=;
+        b=VqCRighSWgCkUFJuLikNgA17cNUdoQJUUMG40XffnG266MZ4zbi84gI2NlZBRuFTgJEaa0
+        fELyOdxO5Leeh+/wwz6VwxGtf+BdohVQUq4AQrdEgo3ph2A2b9/RzhSfnndwAtTjMobW1X
+        RTKbzaqsHULmA3qdggTQzuSflnpTVG0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643274093;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uf6L1U20L42jQ06xefiKuwA7v4ertkV/8P81jUSoYis=;
+        b=vGIapNrOTT3gC/AXlc2MXAoxBVjNtZ5L1hGxECi4SW4qf5MejumWnp/9gYGPfVvWB+VRLl
+        rSXoTgEUWwhr6uAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B85E313CFB;
+        Thu, 27 Jan 2022 09:01:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7cJPK2xf8mFaEwAAMHmgww
+        (envelope-from <jroedel@suse.de>); Thu, 27 Jan 2022 09:01:32 +0000
+Date:   Thu, 27 Jan 2022 10:01:31 +0100
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, hpa@zytor.com,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        David Rientjes <rientjes@google.com>,
+        Cfir Cohen <cfir@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mike Stunes <mstunes@vmware.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Martin Radev <martin.b.radev@gmail.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 08/12] x86/sev: Park APs on AP Jump Table with GHCB
+ protocol version 2
+Message-ID: <YfJfa955Pkg1y6Gv@suse.de>
+References: <20210913155603.28383-1-joro@8bytes.org>
+ <20210913155603.28383-9-joro@8bytes.org>
+ <YY6XQfmvmpmUiIGj@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign7
-X-QQ-Bgrelay: 1
+In-Reply-To: <YY6XQfmvmpmUiIGj@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous code has a less-than-perfect usage of judgment syntax.
+On Fri, Nov 12, 2021 at 05:33:05PM +0100, Borislav Petkov wrote:
+> On Mon, Sep 13, 2021 at 05:55:59PM +0200, Joerg Roedel wrote:
+> > +		     "ljmpl	*%0" : :
+> > +		     "m" (real_mode_header->sev_real_ap_park_asm),
+> > +		     "b" (sev_es_jump_table_pa >> 4));
+> 
+> In any case, this asm needs comments: why those regs, why
+> sev_es_jump_table_pa >> 4 in rbx (I found later in the patch why) and so
+> on.
 
-When the med->media_event_code value is equal to 2 or 3, the same
-value is returned, so it would be better to combine the implementation
-statements when the med->media_event_code value is equal to 2 or 3.
+Turned out the jump_table_pa is not used in asm code anymore. It was a
+left-over from a previous version of the patch, it is removed now.
 
-Moreover, when a variable is equal to multiple values, it is better
-to use a switch judgment statement.
+> > +SYM_INNER_LABEL(sev_ap_park_paging_off, SYM_L_GLOBAL)
+> 
+> Global symbol but used only in this file. .L-prefix then?
 
-mechanical switch on the Drive) to eject the specified slot or media.
+It needs to be a global symbol so the pa_ variant can be generated.
 
-Signed-off-by: tangmeng <tangmeng@uniontech.com>
----
- drivers/scsi/sr.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+Regards,
 
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index f925b1f1f9ad..610baa630067 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -222,12 +222,16 @@ static unsigned int sr_get_events(struct scsi_device *sdev)
- 	if (eh->nea || eh->notification_class != 0x4)
- 		return 0;
- 
--	if (med->media_event_code == 1)
-+	switch (med->media_event_code) {
-+	case 1:
- 		return DISK_EVENT_EJECT_REQUEST;
--	else if (med->media_event_code == 2)
--		return DISK_EVENT_MEDIA_CHANGE;
--	else if (med->media_event_code == 3)
-+	case 2:
-+	case 3:
- 		return DISK_EVENT_MEDIA_CHANGE;
-+	default:
-+		break;
-+	}
-+
- 	return 0;
- }
- 
 -- 
-2.20.1
+Jörg Rödel
+jroedel@suse.de
 
-
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5
+90409 Nürnberg
+Germany
+ 
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev
 

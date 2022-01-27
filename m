@@ -2,66 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F27B49EB24
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D64EF49EB2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 20:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239788AbiA0Tfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 14:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S245632AbiA0Tjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 14:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiA0Tfn (ORCPT
+        with ESMTP id S240050AbiA0Tja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 14:35:43 -0500
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D30C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:35:43 -0800 (PST)
-Received: by mail-vs1-xe44.google.com with SMTP id r20so284375vsn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:35:43 -0800 (PST)
+        Thu, 27 Jan 2022 14:39:30 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FF1C061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:39:30 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id ah7so8243082ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 11:39:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=CnehUZwQrYVBpmc2ighYqjEhs4i4jCzhX9nHmTruo5A=;
-        b=OtuGpBTPxxSJJYBaFHWrDVwcc3L99ZBuCOs3Z+YLIOyQgCsMOERror4r2YPLDg3eRI
-         L2DvOuf/gBazbHwt2OT1glfloDHwuntdGdFkQLEbQPID0d+HqLnnlzNVm4aW11K0OPKp
-         cJSQeXgKyXfNe10Dpi3FNU9eXSXF1sIFczkrgRKoGvAAgWZD1xbHdscXIFnqZoYUl11w
-         Q9deXLkdXIWEm8XR8cdt4hcdxZzPAgTiolaOZE5JNGUQmY4eo1RBMEhH0afd4t0UPBoY
-         1o4CZSQ1aX/faCuX75rnbONG2nusfQu1cbjlOWzorhVpC9EwJPxnA8ehxHVelCiZu61h
-         TTVw==
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BFb8NFrlSpLTas5OqZUZmins6ncV7W5Rmo5+3meVR3g=;
+        b=Y1M+Bf1wwslphNC9H9x0VpVivB/SCcil9aYfoAVt13yg5Ovnt7H3lIEMuriqtFhlpv
+         ekrnPLi/jLCjKpYhcBiKQBI9U8Q2idhM5Y2jnY5rVDWUw1D6PturF4Qp5HxF07TKCc1Z
+         hVPZC4maBNEUCfeGSOEebJPeP6XLJ/2fdS8qKWy0JeBADfPYrbrLx2OhCFPxksMVJcQc
+         pfFFyD8UgurIoPS2TtPatrHLxpKUCG+aG2YLdtHhjbazAXLDlRPMwy5COPM6VtOcVKhi
+         0rl/2OvACuxdK0d4eD5XYawWhm3ABq00YjIyLHYSPCUVqI1G0PbJJKlCvEeYhPk9CmHS
+         MKfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=CnehUZwQrYVBpmc2ighYqjEhs4i4jCzhX9nHmTruo5A=;
-        b=4tKn/6pmEbkD2HIUpPc2/NKvLfFkgeWXU6vmgJFxiN6jbOJgShdvCoPjRMJZIn4Xc2
-         u4FhM2BWMreIiN31i1Bj3HoYJyA8CTzmToaCmmSbfDHAku9BWCTkI3bHpKHhAITUd1n7
-         Ey49GKSniYnEkhv6r5tlOPyKST4mT5k+N+OpFAdkyOFm7FF6o3mgjEQxTBwmstti4ZUQ
-         xnHDuhj8HijCSeMDjREQLllO3dr8TJ4Kuyh0mXEee0RbHtyY62jrQhSlj7rh3N2JuUL9
-         anCiqk6WotU3fhpicQg/9d8qXrgNTdOZG7sOVe27PgXRpzGhHQQ+gKHyHd8gKi0BC6Ao
-         3dLw==
-X-Gm-Message-State: AOAM530dqPhX/ZeSOhZU5E1JOsR23M+7q+3GSa2WQiBKvzjqwQ/TWNd+
-        EKwu8rt9Q2v43tmCA4sEk8ZiF6Dyv4LjVVVl0+A=
-X-Google-Smtp-Source: ABdhPJwR8dyvdcHk9v2e/vmI5mKFu6tWFKVYrrH30JUc4+xgdEOfaN1eOe1FuIio0SlHv8UhJTDfpeZe49oAdqcW+Ds=
-X-Received: by 2002:a05:6102:3310:: with SMTP id v16mr2218256vsc.56.1643312142160;
- Thu, 27 Jan 2022 11:35:42 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BFb8NFrlSpLTas5OqZUZmins6ncV7W5Rmo5+3meVR3g=;
+        b=uWeOikz6qygq0OnYKiSXNAVqbwbarNj00YOuvJ5Ik2v/MujixmIAEWbrp79lNijXu/
+         4OEQoAS1vEEFPDnMaYnMW0MVpN7qrhV5eag6MQW10Xbhe+YusVjHpC1w6H6kuiiGixSA
+         j+FRhrxqBJcMTKs83gSW8PaOpFzn3oQeGag/FPYNj1UttDL+0jOexvegl5CAgO0OCd+k
+         2g1RcbgvH1dlQQSrAXY/+CUT4Ow5AREN+J/VUT3ueawIKpfwdNBG6H0o2Dojt7muoiTH
+         nkVcY1QyCuq2rjhgoJo1gUZ+UiBbKXrPdgtwYVvPUzoBPDAFYn2BPVbXfaUK4nQRSk06
+         jBgw==
+X-Gm-Message-State: AOAM530unqjZIPIMuj6ZfokeMWp1IFKsA70Srt5oH3fbuba59KnfDhCB
+        K2e1Klj1RsdEqTW1/fbT2Vuh5mIJ/NTPNUidxuVEiA==
+X-Google-Smtp-Source: ABdhPJwuhg8zPBVbIllXAibAi/ysZVpdojXGj11dmGEm1WuhDT5JouZwm0vT8xovbBnIKrNXGk5qaynKQV2BHOOjEus=
+X-Received: by 2002:a17:906:dc92:: with SMTP id cs18mr4099175ejc.590.1643312369033;
+ Thu, 27 Jan 2022 11:39:29 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6130:39f:0:0:0:0 with HTTP; Thu, 27 Jan 2022 11:35:41
- -0800 (PST)
-Reply-To: werinammawussi@gmail.com
-From:   Werinam Mawussi <mredwinmorris986@gmail.com>
-Date:   Thu, 27 Jan 2022 20:35:41 +0100
-Message-ID: <CAM7JAv=m6vWgWEK6F+Wz=0sR=q9N7ErWZZwM0fuku_p6eOwB2Q@mail.gmail.com>
-Subject: Important Notification
-To:     undisclosed-recipients:;
+References: <20220126183429.1840447-1-pasha.tatashin@soleen.com>
+ <20220126183429.1840447-2-pasha.tatashin@soleen.com> <YfGZ/0hhkqVeX04p@casper.infradead.org>
+ <CA+CK2bDHkOQbTrK=GbsGbojAj_6gaAX_8w3cBCd_LWqXt--yZA@mail.gmail.com> <b7f580cb-84f7-5c78-5f68-7ab8f67b0811@suse.cz>
+In-Reply-To: <b7f580cb-84f7-5c78-5f68-7ab8f67b0811@suse.cz>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Thu, 27 Jan 2022 14:38:52 -0500
+Message-ID: <CA+CK2bBAXZSX6E0boEoZ=Cake94v9q4LuWzQ-mj0QbWTsQcjOw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/9] mm: add overflow and underflow checks for page->_refcount
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, linux-m68k@lists.linux-m68k.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        william.kucharski@oracle.com,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        schmitzmic@gmail.com, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Paul Turner <pjt@google.com>, Hugh Dickins <hughd@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am bringing this notice to your attention in respect of the death of
-a  client of mine that has the same surname as you and his fund valued
-at  $19.9M to be paid to you.contact me at werinammawussi@gmail.com
-for more details.
+> > This is not only about chasing a bug. This also about preventing
+> > memory corruption and information leaking that are caused by ref_count
+> > bugs from happening.
+>
+> So you mean it like a security hardening feature, not just debugging? To me
+> it's dubious to put security hardening under CONFIG_DEBUG_VM. I think it's
+> just Fedora that uses DEBUG_VM in general production kernels?
 
-Yours Sincerely,
-Werinam Mawussi,
-Attorney At Law.
+In our (Google) internal kernel, I added another macro:
+PAGE_REF_BUG(cond, page) to replace VM_BUG_ON_PAGE() in page_ref.h.
+The new macro keeps the asserts always enabled.  I was thinking of
+adding something like this to the upstream kernel as well, however, I
+am worried about performance implications of having extra conditions
+in these routines, so I think we would need yet another config which
+decouples DEBUG_VM and some security crucial VM asserts. However, to
+reduce controversial discussions, I decided not to do this as part of
+this series, and perhaps do it as a follow-up work.
+
+Pasha

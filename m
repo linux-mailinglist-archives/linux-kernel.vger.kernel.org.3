@@ -2,149 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A0049E39C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B82A49E3A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242012AbiA0NfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:35:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:33558 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242027AbiA0NdR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:33:17 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACC5B1063;
-        Thu, 27 Jan 2022 05:33:16 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.14.34])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C39D3F766;
-        Thu, 27 Jan 2022 05:33:14 -0800 (PST)
-Date:   Thu, 27 Jan 2022 13:33:02 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Yinan Liu <yinan@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org, Sachin Sant <sachinp@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, ardb@kernel.org,
-        keescook@chromium.org, hca@linux.ibm.com
-Subject: Re: [powerpc] ftrace warning kernel/trace/ftrace.c:2068 with
- code-patching selftests
-Message-ID: <YfKfDnbNGina2lKz@FVFF77S0Q05N>
-References: <e9422643-a210-b77f-a037-da63a9d2e925@linux.alibaba.com>
- <20220124114548.30241947@gandalf.local.home>
- <0fa0daec-881a-314b-e28b-3828e80bbd90@linux.alibaba.com>
- <YfFclROd+0/61q2d@FVFF77S0Q05N>
- <YfKGKWW5UfZ15kCW@FVFF77S0Q05N>
- <yt9dy231gzae.fsf@linux.ibm.com>
- <YfKPmFJ2MGsem4VB@FVFF77S0Q05N>
- <20220127074601.41a3773d@rorschach.local.home>
- <YfKZXvB9vCN1bA1c@FVFF77S0Q05N>
- <yt9dsft9gvyo.fsf@linux.ibm.com>
+        id S242037AbiA0Nh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:37:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241898AbiA0NfT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 08:35:19 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D7AC061762
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:33:42 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id e8so4928587wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:33:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wBYBbfKnJeYUc1b/K/sTSN+3xZ7MU+5mXvQbL+YBpf0=;
+        b=cvPQcV2+PDwUikYRGtN5buRuUCbCyeHatX24qTROl5cP0nZft/HvlADmJb3FsIMn1f
+         fjLp2P9E5DTJISf+1KsyACgSb5gMrobgOnLq5ULTIgPRe/6Hn+WOg5WxW4zfAgwMMFTg
+         3/wJnwuKUpAdXO/JcEtYKbV1ImMSu7S+bn0BWxAXKTq9XPcpkjrMriBsW5KPnnpkrq7v
+         bJ5n8m/T7+/oc5kiAhuiYqB4gKE4WxMu/ngxO4aSAAYNszNC+jqwBp65Zq4QYWbTHSXs
+         EcbsRhQfQJkHf0pmYGfOfxBOYVjzYdrYI7VXZCy6fOFIPKhhB07JjOVREZaxu7GN9fT6
+         p6CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wBYBbfKnJeYUc1b/K/sTSN+3xZ7MU+5mXvQbL+YBpf0=;
+        b=Qe4UUufQST3axs5RAOkOzqZz8m+oltrsJPDAIXNj3L0ied04iVD53+XRYAnkTCqdVL
+         6ORFsL/ZKY/0wIe0bq55CEuIw2lie5qdrICTs8kzv+qzDkFPQGvaAULpvA0ARgDid+5A
+         7xVuM3F6QFWjndi7NZKC3laiUEWn2dT/a+PCw/jqcj/FGanf2Sh2v8F898adQZQ3v+Kw
+         wqO1X0f+PRuyQsNca7IX9Rv9IXPmethtHjhk5l9NF+Q+uFHBZ75KYqDYoWmqP0EmSwvG
+         mPA0ZDSvDvwzqQ92Vs803jYnVyP4UUYiDEN4dsG4npMwFGzsfDvkX6hCT037Oye218tb
+         519w==
+X-Gm-Message-State: AOAM533RZkLf08I0wVeMrYbrYUIdyteJVwqsavz9Ynp8LXNYJ7NXWKjn
+        9bNGZUVz+s87WNvFSA4oQzK0Ng==
+X-Google-Smtp-Source: ABdhPJw7/2XzmcS9TsTU/CyIVS/eE4HyfQhTzGPBJzPM3C0dRA1zgz92f00V7ixt0lmnb4l9Fk/cSw==
+X-Received: by 2002:a5d:4c81:: with SMTP id z1mr3090423wrs.568.1643290421013;
+        Thu, 27 Jan 2022 05:33:41 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id w8sm2173912wrq.3.2022.01.27.05.33.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 05:33:40 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH] crypto: engine: disable BH during completion
+Date:   Thu, 27 Jan 2022 13:33:32 +0000
+Message-Id: <20220127133332.4011509-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yt9dsft9gvyo.fsf@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 02:16:31PM +0100, Sven Schnelle wrote:
-> Mark Rutland <mark.rutland@arm.com> writes:
-> 
-> > On Thu, Jan 27, 2022 at 07:46:01AM -0500, Steven Rostedt wrote:
-> >> On Thu, 27 Jan 2022 12:27:04 +0000
-> >> Mark Rutland <mark.rutland@arm.com> wrote:
-> >> 
-> >> > Ah, so those non-ELF relocations for the mcount_loc table just mean "apply the
-> >> > KASLR offset here", which is equivalent for all entries.
-> >> > 
-> >> > That makes sense, thanks!
-> >> 
-> >> And this is why we were having such a hard time understanding each other ;-)
-> >
-> > ;)
-> >
-> > With that in mind, I think that we understand that the build-time sort works
-> > for:
-> >
-> > * arch/x86, becuase the non-ELF relocations for mcount_loc happen to be
-> >   equivalent.
-> >  
-> > * arch/arm, because there's no dynamic relocaiton and the mcount_loc entries
-> >   have been finalized prior to sorting.
-> >
-> > ... but doesn't work for anyone else (including arm64) because the ELF
-> > relocations are not equivalent, and need special care that is not yet
-> > implemented.
-> 
-> For s390 my idea is to just skip the addresses between __start_mcount_loc
-> and __stop_mcount_loc, because for these addresses we know that they are
-> 64 bits wide, so we just need to add the KASLR offset.
-> 
-> I'm thinking about something like this:
-> 
-> diff --git a/arch/s390/boot/compressed/decompressor.h b/arch/s390/boot/compressed/decompressor.h
-> index f75cc31a77dd..015d7e2e94ef 100644
-> --- a/arch/s390/boot/compressed/decompressor.h
-> +++ b/arch/s390/boot/compressed/decompressor.h
-> @@ -25,6 +25,8 @@ struct vmlinux_info {
->  	unsigned long rela_dyn_start;
->  	unsigned long rela_dyn_end;
->  	unsigned long amode31_size;
-> +	unsigned long start_mcount_loc;
-> +	unsigned long stop_mcount_loc;
->  };
->  
->  /* Symbols defined by linker scripts */
-> diff --git a/arch/s390/boot/startup.c b/arch/s390/boot/startup.c
-> index 1aa11a8f57dd..7bb0d88db5c6 100644
-> --- a/arch/s390/boot/startup.c
-> +++ b/arch/s390/boot/startup.c
-> @@ -88,6 +88,11 @@ static void handle_relocs(unsigned long offset)
->  	dynsym = (Elf64_Sym *) vmlinux.dynsym_start;
->  	for (rela = rela_start; rela < rela_end; rela++) {
->  		loc = rela->r_offset + offset;
-> +		if ((loc >= vmlinux.start_mcount_loc) &&
-> +		    (loc < vmlinux.stop_mcount_loc)) {
-> +			(*(unsigned long *)loc) += offset;
-> +			continue;
-> +		}
->  		val = rela->r_addend;
->  		r_sym = ELF64_R_SYM(rela->r_info);
->  		if (r_sym) {
-> @@ -232,6 +237,8 @@ static void offset_vmlinux_info(unsigned long offset)
->  	vmlinux.rela_dyn_start += offset;
->  	vmlinux.rela_dyn_end += offset;
->  	vmlinux.dynsym_start += offset;
-> +	vmlinux.start_mcount_loc += offset;
-> +	vmlinux.stop_mcount_loc += offset;
->  }
->  
->  static unsigned long reserve_amode31(unsigned long safe_addr)
-> diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
-> index 42c43521878f..51c773405608 100644
-> --- a/arch/s390/kernel/vmlinux.lds.S
-> +++ b/arch/s390/kernel/vmlinux.lds.S
-> @@ -213,6 +213,8 @@ SECTIONS
->  		QUAD(__rela_dyn_start)				/* rela_dyn_start */
->  		QUAD(__rela_dyn_end)				/* rela_dyn_end */
->  		QUAD(_eamode31 - _samode31)			/* amode31_size */
-> +		QUAD(__start_mcount_loc)
-> +		QUAD(__stop_mcount_loc)
->  	} :NONE
->  
->  	/* Debugging sections.	*/
-> 
-> Not sure whether that would also work on power, and also not sure
-> whether i missed something thinking about that. Maybe it doesn't even
-> work. ;-)
+When doing iperf over ipsec with crypto hardware sun8i-ce, I hit some
+spinlock recursion bug.
 
-I don't know enough about s390 or powerpc relocs to say whether that works, but
-I can say that approach isn't going to work for arm64 without other signficant
-changes.
+This is due to crypto/crypto_engine not disabling BH when calling
+completion function.
 
-I want to get the regression fixed ASAP, so can we take a simple patch for -rc2
-which disables the build-time sort where it's currently broken (by limiting the
-opt-in to arm and x86), then follow-up per-architecture to re-enable it if
-desired/safe?
+Fixes: 735d37b5424b ("crypto: engine - Introduce the block request crypto engine framework")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ crypto/crypto_engine.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thanks,
-Mark.
+diff --git a/crypto/crypto_engine.c b/crypto/crypto_engine.c
+index fb07da9920ee..b3844f6d98a3 100644
+--- a/crypto/crypto_engine.c
++++ b/crypto/crypto_engine.c
+@@ -7,6 +7,7 @@
+  * Author: Baolin Wang <baolin.wang@linaro.org>
+  */
+ 
++#include <linux/bottom_half.h>
+ #include <linux/err.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+@@ -53,7 +54,9 @@ static void crypto_finalize_request(struct crypto_engine *engine,
+ 				dev_err(engine->dev, "failed to unprepare request\n");
+ 		}
+ 	}
++	local_bh_disable();
+ 	req->complete(req, err);
++	local_bh_enable();
+ 
+ 	kthread_queue_work(engine->kworker, &engine->pump_requests);
+ }
+-- 
+2.34.1
+

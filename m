@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC38D49DA64
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4786149DA66
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 07:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236387AbiA0GBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 01:01:45 -0500
-Received: from verein.lst.de ([213.95.11.211]:42573 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232585AbiA0GBo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 01:01:44 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id AA89B68AFE; Thu, 27 Jan 2022 07:01:41 +0100 (CET)
-Date:   Thu, 27 Jan 2022 07:01:41 +0100
-From:   Christoph Hellwig <hch@lst.de>
+        id S236410AbiA0GCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 01:02:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44010 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232585AbiA0GCK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 01:02:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16D99B8122D;
+        Thu, 27 Jan 2022 06:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9536EC340E4;
+        Thu, 27 Jan 2022 06:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1643263327;
+        bh=18F7TPAyWii7cLJq8O3chhgnB+lzYDieQMqnJvkgd1Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qqzt++0S1KfgHJI9jDKXDmWe4kimB0tvA9ruc5+EIxCSJ89bqs3KJdZjbPXDfWUoI
+         avRIc54/N68lFGam4zEkxZ03Fn3oJ/6/BTwnBGbQfd7C/oT77z/VEDdGw6tzTfWBFZ
+         FAmi4szf/9eFoFJgqtYjfkIPSiAjjyB3sSgvy7Jk=
+Date:   Wed, 26 Jan 2022 22:02:06 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings in Linus' tree
-Message-ID: <20220127060141.GA10653@lst.de>
-References: <20220127153055.6dd9f73d@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127153055.6dd9f73d@canb.auug.org.au>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org
+Subject: Re: mmotm 2022-01-26-21-04 uploaded
+Message-Id: <20220126220206.2ec57a68c5a803818adbc816@linux-foundation.org>
+In-Reply-To: <20220127165110.55e88e44@canb.auug.org.au>
+References: <20220127050456.M1eh-ltbc%akpm@linux-foundation.org>
+        <20220127165110.55e88e44@canb.auug.org.au>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 03:30:55PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Building Linus' tree, today's linux-next build (htmldocs) produced
-> these warnings:
-> 
-> include/linux/blkdev.h:1533: warning: Function parameter or member 'start_time' not described in 'bio_end_io_acct'
-> include/linux/blkdev.h:1533: warning: Excess function parameter 'start' description in 'bio_end_io_acct'
-> 
-> Introduced by commit
-> 
->   956d510ee78c ("block: add disk/bio-based accounting helpers")
+On Thu, 27 Jan 2022 16:51:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-The warning looks correct, but that commit is rather old, so something
-else must have caused it to be emitted now?
-
+> Hi Andrew,
 > 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> On Wed, 26 Jan 2022 21:04:56 -0800 akpm@linux-foundation.org wrote:
+> >
+> > * docs-sysctl-kernel-add-missing-bit-to-panic_print.patch
+> > * panic-add-option-to-dump-all-cpus-backtraces-in-panic_print.patch
+> > * panic-allow-printing-extra-panic-information-on-kdump.patch
+> 
+> 
+> > * sysctl-documentation-fix-table-format-warning.patch
+> 
+> Just wondering why this patch isn't up just after the above patches
+> (instead of being in the post-next section)?
 
+Dependencies are all over the place and are moving around.  Now fixed
+up, thanks.
 
----end quoted text---

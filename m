@@ -2,146 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C86E49DCAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B8349DCF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 09:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237850AbiA0IkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 03:40:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59633 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231469AbiA0IkB (ORCPT
+        id S234256AbiA0IvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 03:51:00 -0500
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net ([162.243.164.74]:34660
+        "HELO zg8tmtyylji0my4xnjqunzqa.icoremail.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with SMTP id S231296AbiA0IvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 03:40:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643272801;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vfnWWKEVjGKb36aA96y+8vHW4NMLWf6mwas7AEDwyAs=;
-        b=Sduyj9jyRX7MBIi2xDo7B39F72GxlkRVsCgMM3RUe/sZlo9z+ajsnYt1jSZuBKDu+yeqBb
-        0pw6LFASJRVyXCWyfKvImmt33sPf6xxbIje91Z/FPJOpmctWFGJsTvvlH//irD1inwc6h6
-        prBFhMBharx3LdB0Ii4tu5SUHnsAwKA=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-468-lD5VHOFKOCG8L4J1_4GgBg-1; Thu, 27 Jan 2022 03:39:59 -0500
-X-MC-Unique: lD5VHOFKOCG8L4J1_4GgBg-1
-Received: by mail-ej1-f69.google.com with SMTP id rl11-20020a170907216b00b006b73a611c1aso977098ejb.22
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 00:39:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=vfnWWKEVjGKb36aA96y+8vHW4NMLWf6mwas7AEDwyAs=;
-        b=4DqRLD1qhHV34RqBj2/VdrYr9FYAe328GnEJGIVdPPhmIIATYbwEY3pzhqMtdhyrMo
-         dsDnVLDsyFWt/6GEeQgwdexEG2A6JdNqJ4SeKrck1ffDUsDTvBx3hiykIUAvgVlPZ0Qe
-         HwgbPFbqLHsRmZueetMFaciAz3n9ABaYaEOXiWtrvW1DyT3i3lp0xAWFTrU+sFNE2H6C
-         3sNDIzBu2hRkXDt4eYSw28eyi6A6bJbM79SGGHdgVuKMZptyWfl44nr+3Aj2pVvjO4i3
-         mr6DPzAFLaiekybjE56oaes5MhX0/pTkWzoy74/wp1iUAaewq2J3JP0ZXZwlqBfuyHiQ
-         SkFw==
-X-Gm-Message-State: AOAM5321YRY5dX0xXkmu4sZTsohKszykw6PDB6IDwN1k70iltQPVK6Zk
-        mIekfznAEMtJW6rcYVvAGjkgJcd+5q5bufDpNo4fTvf/GnfX1GtizZnvMWH4mCsid7aXtG9FQTy
-        UxnEBIhCf3gBkonLMkerYwiJc
-X-Received: by 2002:a50:ed06:: with SMTP id j6mr2737791eds.16.1643272798155;
-        Thu, 27 Jan 2022 00:39:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwJZot5/alOLrnvU6fGCDgOxjmuFTxhkyvHAqTn45vj3OcrM7LhowN72mwxSsCfTAGmmI9gfw==
-X-Received: by 2002:a50:ed06:: with SMTP id j6mr2737777eds.16.1643272797871;
-        Thu, 27 Jan 2022 00:39:57 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70d:8300:4812:9d4f:6cd8:7f47? (p200300cbc70d830048129d4f6cd87f47.dip0.t-ipconnect.de. [2003:cb:c70d:8300:4812:9d4f:6cd8:7f47])
-        by smtp.gmail.com with ESMTPSA id p12sm8405760ejd.180.2022.01.27.00.39.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 00:39:57 -0800 (PST)
-Message-ID: <f23028db-a351-e6b0-6c17-f14191ab3985@redhat.com>
-Date:   Thu, 27 Jan 2022 09:39:56 +0100
+        Thu, 27 Jan 2022 03:51:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=tpBXyk58Jg
+        yZqTP47JYR0QRHkiNkU3LS/ermuUkfhN0=; b=eu07TI5cQFhMttxHVWaPT4t2rz
+        SP06Hx/ddVL2NkFLk1YRxF54ugJjBWTOMvTc2A7IUJLC2L/siZxY/c54Bdk1sf0O
+        82mIbp7rHuq1IwwD8mPK94QESot26NDwQLKraBNzjWHNKI7hpDWYU2oNB1mCcIdj
+        qipiwdJw1kvkvwYyM=
+Received: from localhost.localdomain (unknown [111.192.165.103])
+        by app2 (Coremail) with SMTP id XQUFCgCHZxjFW_JhLQZ4AA--.35395S4;
+        Thu, 27 Jan 2022 16:46:23 +0800 (CST)
+From:   Xin Xiong <xiongx18@fudan.edu.cn>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>
+Subject: [PATCH] mtd: rawnand: atmel: fix refcount issue in atmel_nand_controller_init
+Date:   Thu, 27 Jan 2022 16:41:05 +0800
+Message-Id: <20220127084104.3683-1-xiongx18@fudan.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
-        mgorman@techsingularity.net, mhocko@suse.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220127012023.18095-1-richard.weiyang@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] mm/memory_hotplug: build zonelist for managed_zone
-In-Reply-To: <20220127012023.18095-1-richard.weiyang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: XQUFCgCHZxjFW_JhLQZ4AA--.35395S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw47ZF4DGrW7uF4rZw47urg_yoW8tr1fpF
+        WUtFW3ZFWUtFs3ZF12kayxuF1rZ3WkJFyUG39Fqa4kZ3ZxX34jk34Yqry0vFy8CFWfuF17
+        ZF47t3W8CF1UCFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUB014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
+        648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI4
+        8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
+        wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
+        v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
+        Y4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUndgADUUUU
+X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAg0TEFKp2iospQAAsO
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.01.22 02:20, Wei Yang wrote:
-> During memory hotplug, when online/offline a zone, we need to rebuild
-> the zonelist for all node. There are two checks to decide whether a zone
-> would be added to zonelist:
-> 
->   * one in online_pages/offline_pages to decide necessity
->   * one in build_zonerefs_node to do real add
-> 
-> Currently we use different criteria at these two places, which is
-> different from the original behavior.
-> 
-> Originally during memory hotplug, zonelist is re-built when zone hasn't
-> been populated. This in introduced in 'commit 6811378e7d8b ("[PATCH]
-> wait_table and zonelist initializing for memory hotadd: update zonelists")'.
-> And at that moment, build_zonelists_node() also use populated_zone() to
-> decide whether the zone should be added to zonelist.
-> 
-> While in 'commit 6aa303defb74 ("mm, vmscan: only allocate and reclaim
-> from zones with pages managed by the buddy allocator")',
-> build_zonelists_node() changed to use managed_zone() to add zonelist.
-> But we still use populated_zone() to decide the necessity.
-> 
-> This patch restore the original behavior by using the same criteria to
-> add a zone in zonelist during memory hotplug.
-> 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-> Fixes: 6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones with pages managed by the buddy allocator")
-> CC: Mel Gorman <mgorman@techsingularity.net>
-> ---
->  mm/memory_hotplug.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 2a9627dc784c..8f1906b33937 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1102,11 +1102,11 @@ int __ref online_pages(unsigned long pfn, unsigned long nr_pages,
->  	spin_unlock_irqrestore(&zone->lock, flags);
->  
->  	/*
-> -	 * If this zone is not populated, then it is not in zonelist.
-> +	 * If this zone is not managed, then it is not in zonelist.
->  	 * This means the page allocator ignores this zone.
->  	 * So, zonelist must be updated after online.
->  	 */
-> -	if (!populated_zone(zone)) {
-> +	if (!managed_zone(zone)) {
->  		need_zonelists_rebuild = 1;
->  		setup_zone_pageset(zone);
->  	}
-> @@ -1985,7 +1985,7 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
->  	/* reinitialise watermarks and update pcp limits */
->  	init_per_zone_wmark_min();
->  
-> -	if (!populated_zone(zone)) {
-> +	if (!managed_zone(zone)) {
->  		zone_pcp_reset(zone);
->  		build_all_zonelists(NULL);
->  	}
+The reference counting issue happens in several error handling paths
+on a refcounted object "nc->dmac". In these paths, the function simply
+returns the error code, forgetting to balance the reference count of
+"nc->dmac", increased earlier by dma_request_channel(), which may
+cause refcount leaks.
 
-A note that managed_zone() is a moving target w.r.t. memory ballooning.
-In extreme cases, we can have whole zones (temporarily) be completely
-!managed for that reason.
+Fix it by decrementing the refcount of specific object in those error
+paths.
 
-IMHO memory hot(un)plug is usually the wrong place to check for
-managed_zone(), it cares about populated_zone().
+Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
+Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+---
+ drivers/mtd/nand/raw/atmel/nand-controller.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/nand/raw/atmel/nand-controller.c
+index f3276ee9e4fe..7003877632fb 100644
+--- a/drivers/mtd/nand/raw/atmel/nand-controller.c
++++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
+@@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
+ 	nc->mck = of_clk_get(dev->parent->of_node, 0);
+ 	if (IS_ERR(nc->mck)) {
+ 		dev_err(dev, "Failed to retrieve MCK clk\n");
+-		return PTR_ERR(nc->mck);
++		ret = PTR_ERR(nc->mck);
++		goto out_release_dma;
+ 	}
+ 
+ 	np = of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
+ 	if (!np) {
+ 		dev_err(dev, "Missing or invalid atmel,smc property\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto out_release_dma;
+ 	}
+ 
+ 	nc->smc = syscon_node_to_regmap(np);
+@@ -2074,10 +2076,20 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
+ 	if (IS_ERR(nc->smc)) {
+ 		ret = PTR_ERR(nc->smc);
+ 		dev_err(dev, "Could not get SMC regmap (err = %d)\n", ret);
+-		return ret;
++		goto out_release_dma;
+ 	}
+ 
+ 	return 0;
++
++out_release_dma:
++	if (nc->caps->has_dma && !atmel_nand_avoid_dma) {
++		if (!IS_ERR_OR_NULL(nc->dmac)) {
++			dma_release_channel(nc->dmac);
++			nc->dmac = NULL;
++		}
++	}
++
++	return ret;
+ }
+ 
+ static int
 -- 
-Thanks,
-
-David / dhildenb
+2.25.1
 

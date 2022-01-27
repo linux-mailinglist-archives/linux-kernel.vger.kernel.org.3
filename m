@@ -2,82 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F00C49E6BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF2D49E6BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243298AbiA0Px3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:53:29 -0500
-Received: from mga06.intel.com ([134.134.136.31]:3117 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237754AbiA0Px2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:53:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643298808; x=1674834808;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WdEb1ilNidCIDGY6NLsRhMxlByQjbKF0GxWuJf1/mhY=;
-  b=WVg0fNtt84MNxam9Ox2t0o2DL8Pt1SZ22RJtxmTQqgrYVo/qXT7KbpN6
-   3Wmy4XjUAcrl8l5z+hIwhNbwYjFJuAmZFqp1XuNrEkeL5ijZx9gTLr9gc
-   LjlGP04dbdI5GwkQnYb60I8skXM6d9l0MFGwW8ZR46dJR+/gLtU+yPI+N
-   m3nIx4pn4BZ0NWmvsKtF17OH3jtFNx5yOhDBglX8bq6pV2Zljr2aYi4gs
-   R8Ejp26UaPPUjltbenjT/ZsT3eThbNAweeT4lWhT4TyKiiSHrawesKguT
-   AhaAy3h7YiFiPTILkpXj5uFfhnVGy26uW4VIrT0ZTG64Ft0EUFIC7fUl0
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="307603734"
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="307603734"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 07:53:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="674757728"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Jan 2022 07:53:26 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CCD67167; Thu, 27 Jan 2022 17:53:39 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Eckert <fe@dev.tdt.de>
-Subject: [PATCH v1 1/1] docs: process: submitting-patches: Clarify the Reported-by usage
-Date:   Thu, 27 Jan 2022 17:53:34 +0200
-Message-Id: <20220127155334.47154-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S243301AbiA0PyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237754AbiA0PyU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 10:54:20 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46B2C061714;
+        Thu, 27 Jan 2022 07:54:19 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b9so6212116lfq.6;
+        Thu, 27 Jan 2022 07:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tEdIw9wvH2zzikieh/eX5e+Rn+l7enMUtCDEVtvQdrk=;
+        b=RFckaGUnFbqIPS+Q3iHJdF5OVea6d/84A+JBwxVoCixniwESqyDafZ3gFBKPIzaPrO
+         8TSOKZ8Jp4DbbQkgIq0OIxwnbnNzUcMY2U5VBYn3mxflXD9WRG+qxFBn3BVNEIPYLLIA
+         FyTGNk8T2sB2CWrxUGumY2eAgbTTOY3HW3lrIuou4T+wPPAdnH1NiwFcCfVM4DcI2ZTN
+         PvLMjVheIkU+hB3Rm1WXGRR0wAD7dd6/Is6eiIW6AfgrgkyTkx45Yo0e6JlB/+rgI3A9
+         Ye+wgETRfXf5dDOEv7DHF3JcXiOqlv+iuMiTp058SHGz2cAAWKl5Y2Huco9lXwSBdVKA
+         +azA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tEdIw9wvH2zzikieh/eX5e+Rn+l7enMUtCDEVtvQdrk=;
+        b=b8TZh8zad6ij1UQ8xCDrUZNKGrvsVxxDJ0rJgkzbbVyU9MVOcrtvFQGcCOIuG0LrYI
+         jaOCfQsGHKVW3CkEbO6ApKvdq/lS7F6ectyl1kKkjHBQEQhtZX3NRC4QpyCVqQwkMk3L
+         lUzCdLuK4fnM0CGdSnTAWCOslglH4AKCXUL+265DH7SaayUVJSPqovPEHrNEpwxcl1td
+         vK2+jgTSfKum/OA4N5Uoa7fMUHFmwl6zUBnvpOqJqVjXBUP0lpxwjaQ2RZsxhTCPgmV4
+         LY2O1vUW4JP6le7LfJyruR5cLsgPC5mP9O2NLuFXZwgeOvWRvEJRUSyGUojmq+SNUr2q
+         9sDg==
+X-Gm-Message-State: AOAM533vT7VhTG1KqirJhknhkb6THnp+VmzqX9vnOMjtiaaiCLZG8fJT
+        CFpLZGG70d0TIkWzGg0w94A=
+X-Google-Smtp-Source: ABdhPJw2RbNlH1CI/XMN31AVt5cBqVHbtguMFCuLTIRR3y0VtDDhtWko0pU27pPdEeTzVhMuLYIUcQ==
+X-Received: by 2002:a05:6512:1054:: with SMTP id c20mr3147735lfb.654.1643298857761;
+        Thu, 27 Jan 2022 07:54:17 -0800 (PST)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id m22sm1689600lfq.192.2022.01.27.07.54.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jan 2022 07:54:17 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Thu, 27 Jan 2022 16:54:15 +0100
+To:     Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Manfred Spraul <manfred@colorfullife.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vasily Averin <vvs@virtuozzo.com>, cgel.zte@gmail.com,
+        shakeelb@google.com, rdunlap@infradead.org, dbueso@suse.de,
+        unixbhaskar@gmail.com, chi.minghao@zte.com.cn, arnd@arndb.de,
+        Zeal Robot <zealci@zte.com.cn>, linux-mm@kvack.org,
+        1vier1@web.de, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/util.c: Make kvfree() safe for calling while holding
+ spinlocks
+Message-ID: <YfLAJyKVGNOTUCSc@pc638.lan>
+References: <20211222194828.15320-1-manfred@colorfullife.com>
+ <20220126185340.58f88e8e1b153b6650c83270@linux-foundation.org>
+ <c658f8c5-a808-f2f1-2e1e-cfb68dd19d6a@colorfullife.com>
+ <YfJXDDeDwZuBxs13@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfJXDDeDwZuBxs13@dhcp22.suse.cz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's unclear from "Submitting Patches" documentation that Reported-by
-is not supposed to be used against new features. (It's more clear
-in the section 5.4 "Patch formatting and changelogs" of the "A guide
-to the Kernel Development Process", where it suggests that change
-should fix something existing in the kernel. Clarify the Reported-by
-usage in the "Submitting Patches".
+On Thu, Jan 27, 2022 at 09:25:48AM +0100, Michal Hocko wrote:
+> On Thu 27-01-22 06:59:50, Manfred Spraul wrote:
+> > Hi Andrew,
+> > 
+> > On 1/27/22 03:53, Andrew Morton wrote:
+> > > On Wed, 22 Dec 2021 20:48:28 +0100 Manfred Spraul <manfred@colorfullife.com> wrote:
+> > > 
+> > > > One codepath in find_alloc_undo() calls kvfree() while holding a spinlock.
+> > > > Since vfree() can sleep this is a bug.
+> > > > 
+> > > > Previously, the code path used kfree(), and kfree() is safe to be called
+> > > > while holding a spinlock.
+> > > > 
+> > > > Minghao proposed to fix this by updating find_alloc_undo().
+> > > > 
+> > > > Alternate proposal to fix this: Instead of changing find_alloc_undo(),
+> > > > change kvfree() so that the same rules as for kfree() apply:
+> > > > Having different rules for kfree() and kvfree() just asks for bugs.
+> > > > 
+> > > > Disadvantage: Releasing vmalloc'ed memory will be delayed a bit.
+> > > I know we've been around this loop a bunch of times and deferring was
+> > > considered.   But I forget the conclusion.  IIRC, mhocko was involved?
+> > 
+> > I do not remember a mail from mhocko.
+> 
+> I do not remember either.
+> 
+> > 
+> > Shakeel proposed to use the approach from Chi.
+> > 
+> > Decision: https://marc.info/?l=linux-kernel&m=164132032717757&w=2
+> 
+> And I would agree with Shakeel and go with the original change to the
+> ipc code. That is trivial and without any other side effects like this
+> one. I bet nobody has evaluated what the undconditional deferred freeing
+> has. At least changelog doesn't really dive into that more than a very
+> vague statement that this will happen.
+>
+Absolutely agree here. Especially that changing the kvfree() will not
+look stable.
 
-Reported-by: Florian Eckert <fe@dev.tdt.de>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- Documentation/process/submitting-patches.rst | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+After applying the https://www.spinics.net/lists/linux-mm/msg282264.html
+we will be able to use vfree() from atomic anyway.
 
-diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-index 31ea120ce531..24c1a5565385 100644
---- a/Documentation/process/submitting-patches.rst
-+++ b/Documentation/process/submitting-patches.rst
-@@ -495,7 +495,8 @@ Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:
- The Reported-by tag gives credit to people who find bugs and report them and it
- hopefully inspires them to help us again in the future.  Please note that if
- the bug was reported in private, then ask for permission first before using the
--Reported-by tag.
-+Reported-by tag. A new feature can't be reported since there is no code in the
-+kernel to fix.
- 
- A Tested-by: tag indicates that the patch has been successfully tested (in
- some environment) by the person named.  This tag informs maintainers that
--- 
-2.34.1
-
+--
+Vlad Rezki

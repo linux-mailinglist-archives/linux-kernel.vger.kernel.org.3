@@ -2,80 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6488F49E8C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E6B49E8D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244475AbiA0RVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
+        id S244601AbiA0RV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:21:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244471AbiA0RVT (ORCPT
+        with ESMTP id S244587AbiA0RVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:21:19 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09F6C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:21:18 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id z199so4394730iof.10
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:21:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=vX9QiDLaYn8bVSU3hlkgLiboqNWqtYndewsSA+nMLWU=;
-        b=JoPRJEV4mOazgn8m2YU6as5qPgCFfepMeIoPVMRgVPEJI9Ub8O/yKiINZTEFt0085d
-         qIu0oACDLqJyRpHwlz9lBJaoiZSGQItG7DPaOU4RceXwSuEIXm4/gel1MjBfFg6bZqnX
-         Wbm6jfdrEluAQ7/aeWZPQxgKa+7GUP1sx6W2erD/Y3oNga6FLO9ABqqM/E3DBHPJP+0X
-         nkGkUbWztI+gVxmlCvIrzSI1IQoRijm6l9nllEPku4RJiraJy2S5kIuiYTjOgzZxcNyO
-         NQLZUagsIuksu/6besjb75mRVATKA38SNBfLJ8/vzbGRTm4bE6gIDJo06xk1pByH+ABe
-         o9GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=vX9QiDLaYn8bVSU3hlkgLiboqNWqtYndewsSA+nMLWU=;
-        b=6VVFSSCX46pUyZzsn2Qf4gvZHObLNo1cBkIQ8rBTIUHDY+zj11wgh/vd1E6KiLCVwu
-         l0ca9zyKfiRet5Dtd7CifVONWOS1HdIUli4aKDT2KQSJ7oIfFDkCzC0kBGUpNYmhrbp9
-         K/GkABnnW5+DkCcWc7fS5LVrAGzV3JFkTmo41on/Zqh4Lfez+NUTjFZoNIdQIWsPr3m8
-         97TbzCXV8cNng/K6A7CpoSRLrp+iCkgqDnUfu/a/KFCzTC6saKMt47oiMMgQiDcMjDRq
-         DVvl/XxGPYxJSNblCPLbVlEuIq0LiOqoaKKkvQdUgcytbmkggf37wCNW+NKOIUW8CT5g
-         dVLA==
-X-Gm-Message-State: AOAM530wx8b8QIN6XzPmO04JsOC+ZVreox53SLyL/qyAF97dTZ1BM/MI
-        GSIyEhjar6aUuEpgew040XxiwdYdamFwrQ==
-X-Google-Smtp-Source: ABdhPJy7KI+BSyikaBzBavqRB7HBA1Xp43h7HYOmAzuC/x27dLqkbQUv0Wvk8+CaCv0puT56ueDjzg==
-X-Received: by 2002:a02:94e8:: with SMTP id x95mr2327870jah.20.1643304077994;
-        Thu, 27 Jan 2022 09:21:17 -0800 (PST)
-Received: from x1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id y2sm3690848ilj.29.2022.01.27.09.21.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 09:21:17 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <20220127064221.1314477-1-hch@lst.de>
-References: <20220127064221.1314477-1-hch@lst.de>
-Subject: Re: [PATCH] MAINTAINERS: add bio.h to the block section
-Message-Id: <164330407734.211725.3209544365057118163.b4-ty@kernel.dk>
-Date:   Thu, 27 Jan 2022 10:21:17 -0700
+        Thu, 27 Jan 2022 12:21:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B71C06174A;
+        Thu, 27 Jan 2022 09:21:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=++lt+r3Y4bab0BW17JDv/wIUj9g0zt5v7cL/jioKeD0=; b=czZbjO7aOmG9ULVsiPLq0AKYyk
+        8qBtfGEiLrKZBGqIHHOzsEZA2c5rbVMKc5G6FbwhDyE3oV4TBssSL9yj5tfHR1ObUh+x1o9qglJ1V
+        mYCQ0I0lkGHUl7RaK9paMq7G66fkz7KefVBUqlvb2qpCKTUjRsRGpoHk1LF2RYE4UsX1g3j+Hgfpf
+        ytc9McdcWB8PJpHiZOCUGw1lGLIkgQuxBi4GMoW3NCXa3PmW9aXD7CjbS1M1OuH7FQvpno3S4L8U2
+        DFszPJcNd4jvHawf813oPG/SoUqbSxiZvXuzF5+IgrcHre7f/D6/fFV7wF0NbM2lPnuZNZF4PA5uT
+        zuGNJhgQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nD8Sd-005Snl-3S; Thu, 27 Jan 2022 17:21:27 +0000
+Message-ID: <1e2e99f6-e9bf-7d93-9629-3d70275c77f4@infradead.org>
+Date:   Thu, 27 Jan 2022 09:21:21 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/1] docs: process: submitting-patches: Clarify the
+ Reported-by usage
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Florian Eckert <fe@dev.tdt.de>
+References: <20220127163258.48482-1-andriy.shevchenko@linux.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220127163258.48482-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 07:42:21 +0100, Christoph Hellwig wrote:
-> bio.h is pater of the block layer, so list it in the MAINTAINERS file
-> as such.
+
+
+On 1/27/22 08:32, Andy Shevchenko wrote:
+> It's unclear from "Submitting Patches" documentation that Reported-by
+> is not supposed to be used against new features. (It's more clear
+> in the section 5.4 "Patch formatting and changelogs" of the "A guide
+> to the Kernel Development Process", where it suggests that change
+> should fix something existing in the kernel. Clarify the Reported-by
+> usage in the "Submitting Patches".
 > 
+> Reported-by: Florian Eckert <fe@dev.tdt.de>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: rephrased as suggested by Jonathan
+>  Documentation/process/submitting-patches.rst | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
+> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+> index 31ea120ce531..fb496b2ebfd3 100644
+> --- a/Documentation/process/submitting-patches.rst
+> +++ b/Documentation/process/submitting-patches.rst
+> @@ -495,7 +495,8 @@ Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:
+>  The Reported-by tag gives credit to people who find bugs and report them and it
+>  hopefully inspires them to help us again in the future.  Please note that if
+>  the bug was reported in private, then ask for permission first before using the
+> -Reported-by tag.
+> +Reported-by tag. The tag is intended for bugs; please do not use it to credit
+> +feature requests.
+>  
 
-Applied, thanks!
+LGTM.
+Although it could refer to Suggested-by.  :)
 
-[1/1] MAINTAINERS: add bio.h to the block section
-      commit: d216a7289054bd8ef875533658ec5bda8c8f3f4b
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-Best regards,
+thanks.
+
+>  A Tested-by: tag indicates that the patch has been successfully tested (in
+>  some environment) by the person named.  This tag informs maintainers that
+
 -- 
-Jens Axboe
-
-
+~Randy

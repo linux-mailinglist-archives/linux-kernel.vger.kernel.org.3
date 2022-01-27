@@ -2,235 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 096BC49EED8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA46A49EEDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Jan 2022 00:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240843AbiA0Xc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 18:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
+        id S240092AbiA0Xcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 18:32:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbiA0Xc1 (ORCPT
+        with ESMTP id S234481AbiA0Xct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 18:32:27 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2CAC061714;
-        Thu, 27 Jan 2022 15:32:26 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id k17so13424251ybk.6;
-        Thu, 27 Jan 2022 15:32:26 -0800 (PST)
+        Thu, 27 Jan 2022 18:32:49 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010D6C061714;
+        Thu, 27 Jan 2022 15:32:49 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id p5so13291575ybd.13;
+        Thu, 27 Jan 2022 15:32:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2c/F8gVeTTbHXbx0XQ5ikZShYrhmUzF8uhfDRE9SO80=;
-        b=WpbEjen4liuYPof+iDZf0ZkbosXmzOZkuRERavNXbFCEZGGczqon0RMxH9em2slv8l
-         H1Jxl8cTk3JWnH/PSxVETJnvej0u1cwaZeJ4EOuA6XmKLZNG5BVU8bJFizUE94p4Yr5H
-         /ZDJ/iPWUSs2B0WL7sSPzoQYVcRTtvL9DGhFQADt3sXWYW30ox384tGQ23oqSZtBb5Hc
-         WqFxXHC+LlbUgrrStX1j3+ffrxUhWWKrk2FRURd9faFdmGP9SlRtuWi3VIAlWgaWkP+b
-         HFLB7KmxjKvSEmHjSGoXw6qWhTmXHQ8BOW5yA/FXD4BJfcWrZw9LTeFRj5medxJRM3nk
-         DC1Q==
+         :cc:content-transfer-encoding;
+        bh=45b55r8UrP19JXUlLW74FhqYl/0CdywuMW59aCYj888=;
+        b=flncRfSPwRoAgqDR9OXU6u8IxKFDE5sMsLuqOng6ONrSAhCQEKo08oV6HPk8FYDthr
+         9f0pU1HM9KHv1Il3dWqN1RCpfqD2WF/WEWC86K+0NuHgXbl2CKuCJ32D74Yr/w4luSmz
+         +Kth0fcvEoCCWqcXYhCK1dLCN7T9y5aOnoHGYjEtTPTM+xD70/VvawKq/rPOO7bR57My
+         ZNLsF9/l4SlDHgoVA38O5E2i5n0KK8+QEGfK8UtLaLpjtEbqmn9i3sJrpZImASTWmBBh
+         lICci5Ql846yLCpsLrZz1mH0GqPaG3rmpRFNyDWV9WE7c3Ft2sUBl1+YxXDbZH0TGKIb
+         t6Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2c/F8gVeTTbHXbx0XQ5ikZShYrhmUzF8uhfDRE9SO80=;
-        b=CzGkp2bd9Qoc/AxSC1KH0jVVC3LWv5r7H0iQwLogmPaIYSSOHTm7Sk/O945pSGCTj6
-         20W+hZwfmydAV2qccehrwVt9swYh3pGW9welaL0K3m00bQijBxUE4A4bhZanHSQ9ITm4
-         kJI/4SP3Mhpjo1tRr5f/HBqX3RUyJ+M4UplXZfgw4Yxitq3DDJzO98Ry1T/PbE8FBzZS
-         iasfb+PlfABAiKgUxQUqZ5wWWZtmJFLU2kPgfRuoWsrks7j81MQEZnhyRRpY63fcduaM
-         aokHLbdOfH45zoCTLA/D5oWl8wqq8PLkHHVkKoSwa6UDnezhVwf5pTwyNvFLx7A9Ynzm
-         BNwg==
-X-Gm-Message-State: AOAM531vrXNjURsxsziv8Z+eVd7u8dOGCJhxfB18f+GeE4F9dzXJWlc/
-        AfsItUOrqtewv9EKLgXtwvL0qia50GFhMy9VHjieIESmLCg=
-X-Google-Smtp-Source: ABdhPJzz8cYjcFa9Tumc8DOoCF9F3XKo4UL0o1Thi3RBfh7bjeK5z7v08IE0yLdguvZSOOx/qEk4+MR1ulKB4l9TECY=
-X-Received: by 2002:a05:6902:704:: with SMTP id k4mr8607453ybt.355.1643326345421;
- Thu, 27 Jan 2022 15:32:25 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=45b55r8UrP19JXUlLW74FhqYl/0CdywuMW59aCYj888=;
+        b=urQ2J62rIug3BOn6nCR10IBdXryQI873XBhG343AB/awjni+9XfpnFc6sEE4i6twUm
+         k7PkTwxZureRSJxFZJoGFA/yl8d6e9eK8vBKPi7R/C6Rgki4jN/ZqI0K7gKKXqfDCV9y
+         coiJmYESh8QMt+dmP+5f5SRdmnyitgU3JyrL58+H+XtJqOEXw4miaggmCqzMoEKC0gn5
+         8EbO5OKj2XL0TA3KDwJKG6LTL130C1jSkSxN48Hen/cY9ueLWMf4tSjMhz16eBEFkPeE
+         49jNjPjFafrvf7jXeMwGpXwkMiVn2Ou0HuYkZbTzsN4AVrJsB+LJkf8P7vRSBfhvZkT1
+         UdHA==
+X-Gm-Message-State: AOAM530k3LsPmd6m3mjAZXv+xEdkkMxt9uxqeBbpepyDWbKlZtpdVyso
+        fGDHBPex//Rxl85qWInms89FZRPZn+jj5p4n1Fg=
+X-Google-Smtp-Source: ABdhPJzw0vXppBjuNB3RMkeTHKdzaHn5o9WVCpp9aGE46D/kj99Jzrn/fB+HFG2Bllds+UXD7Yz1rLkpDvPrYyyERTc=
+X-Received: by 2002:a25:d0cb:: with SMTP id h194mr9514813ybg.680.1643326368214;
+ Thu, 27 Jan 2022 15:32:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20220127190456.2195527-1-michael.riesch@wolfvision.net>
-In-Reply-To: <20220127190456.2195527-1-michael.riesch@wolfvision.net>
+References: <20220127010023.3169415-1-pgwipeout@gmail.com> <07281029-0efd-0a74-0d96-92e3dcf5bbb7@gmail.com>
+ <CAMdYzYrKq==Bs0aonrJBC+W2c4nQ8cUn2dn_Se4WDaRCkT6SYg@mail.gmail.com> <3859424.JUeRptVaKW@diego>
+In-Reply-To: <3859424.JUeRptVaKW@diego>
 From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Thu, 27 Jan 2022 18:32:13 -0500
-Message-ID: <CAMdYzYpkXdXDST+N8dEn7UvibXmytwNeJ+KZ9bn9Oq+RJuSaeQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arm64: dts: rockchip: rename and sort the rk356x usb2
- phy handles
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+Date:   Thu, 27 Jan 2022 18:32:36 -0500
+Message-ID: <CAMdYzYoQkR805xCyPstf2nrnzymVB3Ff4_cQAz_qsbokz8DG2w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: rockchip: add Quartz64-A sdmmc1 node
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Johan Jonker <jbx6244@gmail.com>, Rob Herring <robh+dt@kernel.org>,
         devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Liang Chen <cl@rock-chips.com>
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 2:05 PM Michael Riesch
-<michael.riesch@wolfvision.net> wrote:
+On Thu, Jan 27, 2022 at 5:15 AM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
 >
-> All nodes and handles related to USB have the prefix usb or usb2,
-> whereas the phy handles are prefixed with u2phy. Rename for
-> consistency reasons and to facilitate sorting.
+> Am Donnerstag, 27. Januar 2022, 10:55:13 CET schrieb Peter Geis:
+> > On Thu, Jan 27, 2022 at 1:18 AM Johan Jonker <jbx6244@gmail.com> wrote:
+> > >
+> > >
+> > >
+> > > On 1/27/22 02:00, Peter Geis wrote:
+> > > > The sdmmc1 node on Quartz64-A supports the optional wifi module fro=
+m
+> > > > Pine64.
+> > > > Add the sdmmc1 node and requisite sdio_pwrseq to enable wifi suppor=
+t on
+> > > > the Quartz64-A.
+> > > >
+> > > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> > > > ---
+> > > >  .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 45 +++++++++++++++=
+++++
+> > > >  1 file changed, 45 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/a=
+rch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> > > > index 33c2c18caaa9..1d73ac6557c5 100644
+> > > > --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> > > > +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> > > > @@ -91,6 +91,18 @@ simple-audio-card,codec {
+> > > >               };
+> > > >       };
+> > > >
+> > > > +     sdio_pwrseq: sdio-pwrseq {
+> > >
+> > > > +             status =3D "okay";
+> > >
+> > > When a node is not previously disabled, then there's no need for "oka=
+y".
+> >
+> > Thanks, this is here in case an end user wants to easily hack the
+> > board to use this for other purposes.
 >
-> This patch also updates the handles in the only board file that
-> uses them (rk3566-quartz64-a.dts).
+> but please drop it here as well.
+>
+> A user "hacking" a devicetree should be able to also just _add_
+> a status "disabled" :-) .
 
-Good Evening,
-
-While I'm not against this idea, my main concern still stands.
-I spent a great deal of thought on this, and decided to go the route I
-did to maintain consistency with previous generations.
-As such, I see one of three paths here:
-- Pull this patch only and depart rk356x from previous SoCs.
-- Do the same for previous SoCs to maintain consistency.
-- Drop this patch to maintain consistency with previous SoCs.
-
-I ask that others weigh in here, as offline discussion has produced
-mixed results already.
-
-Thanks,
-Peter
+Understood, will do.
+Thanks!
 
 >
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> ---
->  .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 18 ++++++++---------
->  arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 20 +++++++++----------
->  2 files changed, 19 insertions(+), 19 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> index f1d6bf10c650..3e65465ac7d5 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
-> @@ -574,32 +574,32 @@ &uart2 {
->         status = "okay";
->  };
->
-> -&u2phy1_host {
-> -       phy-supply = <&vcc5v0_usb20_host>;
-> +&usb_host0_ehci {
->         status = "okay";
->  };
->
-> -&u2phy1_otg {
-> -       phy-supply = <&vcc5v0_usb20_host>;
-> +&usb_host0_ohci {
->         status = "okay";
->  };
->
-> -&u2phy1 {
-> +&usb_host1_ehci {
->         status = "okay";
->  };
->
-> -&usb_host0_ehci {
-> +&usb_host1_ohci {
->         status = "okay";
->  };
->
-> -&usb_host0_ohci {
-> +&usb2phy1 {
->         status = "okay";
->  };
->
-> -&usb_host1_ehci {
-> +&usb2phy1_host {
-> +       phy-supply = <&vcc5v0_usb20_host>;
->         status = "okay";
->  };
->
-> -&usb_host1_ohci {
-> +&usb2phy1_otg {
-> +       phy-supply = <&vcc5v0_usb20_host>;
->         status = "okay";
->  };
-> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> index 8ee2fab676f4..69c30992ced2 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> @@ -214,7 +214,7 @@ usb_host0_ehci: usb@fd800000 {
->                 interrupts = <GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>;
->                 clocks = <&cru HCLK_USB2HOST0>, <&cru HCLK_USB2HOST0_ARB>,
->                          <&cru PCLK_USB>;
-> -               phys = <&u2phy1_otg>;
-> +               phys = <&usb2phy1_otg>;
->                 phy-names = "usb";
->                 status = "disabled";
->         };
-> @@ -225,7 +225,7 @@ usb_host0_ohci: usb@fd840000 {
->                 interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>;
->                 clocks = <&cru HCLK_USB2HOST0>, <&cru HCLK_USB2HOST0_ARB>,
->                          <&cru PCLK_USB>;
-> -               phys = <&u2phy1_otg>;
-> +               phys = <&usb2phy1_otg>;
->                 phy-names = "usb";
->                 status = "disabled";
->         };
-> @@ -236,7 +236,7 @@ usb_host1_ehci: usb@fd880000 {
->                 interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
->                 clocks = <&cru HCLK_USB2HOST1>, <&cru HCLK_USB2HOST1_ARB>,
->                          <&cru PCLK_USB>;
-> -               phys = <&u2phy1_host>;
-> +               phys = <&usb2phy1_host>;
->                 phy-names = "usb";
->                 status = "disabled";
->         };
-> @@ -247,7 +247,7 @@ usb_host1_ohci: usb@fd8c0000 {
->                 interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
->                 clocks = <&cru HCLK_USB2HOST1>, <&cru HCLK_USB2HOST1_ARB>,
->                          <&cru PCLK_USB>;
-> -               phys = <&u2phy1_host>;
-> +               phys = <&usb2phy1_host>;
->                 phy-names = "usb";
->                 status = "disabled";
->         };
-> @@ -1195,7 +1195,7 @@ pwm15: pwm@fe700030 {
->                 status = "disabled";
->         };
->
-> -       u2phy0: usb2phy@fe8a0000 {
-> +       usb2phy0: usb2phy@fe8a0000 {
->                 compatible = "rockchip,rk3568-usb2phy";
->                 reg = <0x0 0xfe8a0000 0x0 0x10000>;
->                 clocks = <&pmucru CLK_USBPHY0_REF>;
-> @@ -1206,18 +1206,18 @@ u2phy0: usb2phy@fe8a0000 {
->                 #clock-cells = <0>;
->                 status = "disabled";
->
-> -               u2phy0_host: host-port {
-> +               usb2phy0_host: host-port {
->                         #phy-cells = <0>;
->                         status = "disabled";
->                 };
->
-> -               u2phy0_otg: otg-port {
-> +               usb2phy0_otg: otg-port {
->                         #phy-cells = <0>;
->                         status = "disabled";
->                 };
->         };
->
-> -       u2phy1: usb2phy@fe8b0000 {
-> +       usb2phy1: usb2phy@fe8b0000 {
->                 compatible = "rockchip,rk3568-usb2phy";
->                 reg = <0x0 0xfe8b0000 0x0 0x10000>;
->                 clocks = <&pmucru CLK_USBPHY1_REF>;
-> @@ -1228,12 +1228,12 @@ u2phy1: usb2phy@fe8b0000 {
->                 #clock-cells = <0>;
->                 status = "disabled";
->
-> -               u2phy1_host: host-port {
-> +               usb2phy1_host: host-port {
->                         #phy-cells = <0>;
->                         status = "disabled";
->                 };
->
-> -               u2phy1_otg: otg-port {
-> +               usb2phy1_otg: otg-port {
->                         #phy-cells = <0>;
->                         status = "disabled";
->                 };
-> --
-> 2.30.2
 >

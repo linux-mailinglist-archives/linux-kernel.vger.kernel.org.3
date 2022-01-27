@@ -2,113 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0073D49E317
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDF749E31A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 14:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241551AbiA0NIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 08:08:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:49046 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241485AbiA0NIo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 08:08:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643288923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UQyYdiBdtNH1VNsfeubJWuB78VJ2++qYCFEjN1L+z1o=;
-        b=REsqJ/sDmKCFT+pO4C3sOOJgNC1DEmOBRb1YtPXgyvcv734ubQnrjV++p2KY2+AHGbvB0M
-        uKjYi0/dT57yCtKkJ/TaWn4qP4uv0eNN+b9LIgSz9L5QKVmtibauzlIRNz9WezdUctSqEv
-        B7zoZo5t5my5zohTDfmnwnk39hoDUSk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-455-uY06vfEoMf22pv-FM5_umw-1; Thu, 27 Jan 2022 08:08:42 -0500
-X-MC-Unique: uY06vfEoMf22pv-FM5_umw-1
-Received: by mail-wr1-f71.google.com with SMTP id x4-20020adfbb44000000b001d83e815683so1060440wrg.8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 05:08:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UQyYdiBdtNH1VNsfeubJWuB78VJ2++qYCFEjN1L+z1o=;
-        b=GXO1PIRZbGyAy+/wVKkRR5DjXDeskD6tYUgfibUFDtwgJeX66Tler/BET8BADvPctu
-         JEnJc2M36syB33o+TV8lwuhCsaLRTjua7dy8GMeDf4aRu4eq6/wtzssjab34qHVS4cCi
-         DWnmlx6z9dGZ080VjOFaxINmMaIERdElLFmC7Zdo4WHGK33V0h0bbW5EqzY6W1PUUHGL
-         /np+HGb6qO6zROQSoEzWh7TpwzEN/f/6LeeVwulIjQ0xXAyZqZx+xxmzhQOE+5bfsiQN
-         cJbBASmD2py6t69KxNj+mIn5JIVOcVE8biu2xMOKyDZco4DXalL36pnptvLTER8KUK8l
-         cIBA==
-X-Gm-Message-State: AOAM532RRC+vGu/9aqjJAv4NR5MGV/TpbbREHBv9IDio4VxGXlcAInyv
-        K3Mtwka9d8WNYFJzskfHwltG+3F/BaUVS0m7ovEVtWWOXZo8JSCXoL1/v5FMIP5d/mjOZzbdus2
-        zzJoh0FS72hUvTy5ekHaN55bR
-X-Received: by 2002:a5d:4943:: with SMTP id r3mr3001473wrs.130.1643288921379;
-        Thu, 27 Jan 2022 05:08:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy8QfFcL0XfIO8hOXFedQuXUsgq2JTBDc2xnb6vs395KWwqaCiCCi/yJzVGlZa/jOkdHUHQ0Q==
-X-Received: by 2002:a5d:4943:: with SMTP id r3mr3001421wrs.130.1643288920603;
-        Thu, 27 Jan 2022 05:08:40 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id s9sm2100610wrr.84.2022.01.27.05.08.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 05:08:40 -0800 (PST)
-Message-ID: <b54d8092-c7bc-93b3-c306-b77dd57db6ce@redhat.com>
-Date:   Thu, 27 Jan 2022 14:08:38 +0100
+        id S241562AbiA0NJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 08:09:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:60666 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241485AbiA0NJA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 08:09:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78C161063;
+        Thu, 27 Jan 2022 05:09:00 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.14.34])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 169AE3F766;
+        Thu, 27 Jan 2022 05:08:58 -0800 (PST)
+Date:   Thu, 27 Jan 2022 13:08:46 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Sven Schnelle <svens@linux.ibm.com>,
+        Yinan Liu <yinan@linux.alibaba.com>,
+        linuxppc-dev@lists.ozlabs.org, Sachin Sant <sachinp@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, ardb@kernel.org,
+        keescook@chromium.org
+Subject: Re: [powerpc] ftrace warning kernel/trace/ftrace.c:2068 with
+ code-patching selftests
+Message-ID: <YfKZXvB9vCN1bA1c@FVFF77S0Q05N>
+References: <944D10DA-8200-4BA9-8D0A-3BED9AA99F82@linux.ibm.com>
+ <e9422643-a210-b77f-a037-da63a9d2e925@linux.alibaba.com>
+ <20220124114548.30241947@gandalf.local.home>
+ <0fa0daec-881a-314b-e28b-3828e80bbd90@linux.alibaba.com>
+ <YfFclROd+0/61q2d@FVFF77S0Q05N>
+ <YfKGKWW5UfZ15kCW@FVFF77S0Q05N>
+ <yt9dy231gzae.fsf@linux.ibm.com>
+ <YfKPmFJ2MGsem4VB@FVFF77S0Q05N>
+ <20220127074601.41a3773d@rorschach.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/doc: Add section in the introduction page about
- learning material
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pekka Paalanen <pekka.paalanen@collabora.co.uk>
-References: <20220127082058.434421-1-javierm@redhat.com>
- <c99a7784-7ac4-e305-1a06-dfb514a409ff@suse.de>
- <b305cb36-1a09-c990-a3e6-98d420c62e3a@redhat.com>
- <YfKCoOk2sxDzHVXv@phenom.ffwll.local>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YfKCoOk2sxDzHVXv@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127074601.41a3773d@rorschach.local.home>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/22 12:31, Daniel Vetter wrote:
-> On Thu, Jan 27, 2022 at 11:50:30AM +0100, Javier Martinez Canillas wrote:
-
-[snip]
-
->> Indeed. And we can add such section as a follow-up. Maybe referring to some
->> of the drivers in drivers/gpu/drm/tiny.
+On Thu, Jan 27, 2022 at 07:46:01AM -0500, Steven Rostedt wrote:
+> On Thu, 27 Jan 2022 12:27:04 +0000
+> Mark Rutland <mark.rutland@arm.com> wrote:
 > 
-> Do we have a talk anywhere for tiny?
->
-
-I couldn't find one for tiny.
- 
-> Otherwise I think it'd be good to just add a paragraph about "hey tiny
-> exists" and maybe link to fbdev helpers and simple pipe helpers to get
-> people started with the right entry points for simple drivers.
->
-
-Ok. I can add some sentences about drm/tiny and point out that the DRM
-drivers there could be used as a good references for simple drivers.
- 
-> And make it clear that the above pile of links is more for general
-> overview and if you don't yet know what exactly it is you need.
+> > Ah, so those non-ELF relocations for the mcount_loc table just mean "apply the
+> > KASLR offset here", which is equivalent for all entries.
+> > 
+> > That makes sense, thanks!
 > 
+> And this is why we were having such a hard time understanding each other ;-)
 
-Sure, I'll add that too.
+;)
 
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+With that in mind, I think that we understand that the build-time sort works
+for:
 
+* arch/x86, becuase the non-ELF relocations for mcount_loc happen to be
+  equivalent.
+ 
+* arch/arm, because there's no dynamic relocaiton and the mcount_loc entries
+  have been finalized prior to sorting.
+
+... but doesn't work for anyone else (including arm64) because the ELF
+relocations are not equivalent, and need special care that is not yet
+implemented.
+
+So we should have arm and x86 opt-in, but for now everyone else (including
+arm64, powerpc, s390) should be left with the prior behaviour with the runtime
+sort only (in case the build-time sort breaks anything, as I mentioned in my
+other mail).
+
+Does that sound about right?
+
+In future we might be able to do something much smarter (e.g. adding some
+preprocessing to use relative entries).
+
+I'll take a look at shelf. :)
+
+Thanks,
+Mark.
+
+> I started a new project called "shelf", which is a shell interface to
+> read ELF files (Shelf on a ELF!).
+> 
+> It uses my ccli library:
+> 
+>    https://github.com/rostedt/libccli
+> 
+> and can be found here:
+> 
+>    https://github.com/rostedt/shelf
+> 
+> Build and install the latest libccli and then build this with just
+> "make".
+> 
+>   $ shelf vmlinux
+> 
+> and then you can see what is stored in the mcount location:
+> 
+>   shelf> dump symbol __start_mcount_loc - __stop_mcount_loc
+> 
+> I plan on adding more to include the REL and RELA sections and show how
+> they affect symbols and such.
+> 
+> Feel free to contribute too ;-)
+> 
+> -- Steve

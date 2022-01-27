@@ -2,126 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F86749D77F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A1849D783
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234522AbiA0Bcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 20:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
+        id S234567AbiA0BgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 20:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbiA0Bcl (ORCPT
+        with ESMTP id S231694AbiA0Bf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 20:32:41 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E45C06161C;
-        Wed, 26 Jan 2022 17:32:41 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id e81so3087453oia.6;
-        Wed, 26 Jan 2022 17:32:41 -0800 (PST)
+        Wed, 26 Jan 2022 20:35:57 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4A9C06161C;
+        Wed, 26 Jan 2022 17:35:57 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id y27so1312905pfa.0;
+        Wed, 26 Jan 2022 17:35:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qCtH/ypAXmYDr6RjK5BruZCO9IbiFs41tnc4Av1HVRU=;
-        b=nb2+zVVoP5FgZ/oje4rt8CeGz1R/DGOSEfXupo/v7APMgjJhEFbgciWKE46gkTGUVe
-         0EwyHsWhcGnf4PIjplvT98i/TND9CELEcBMomOE1JBXMTk4E0Q5M64QWjnEsEdK1BCsH
-         FaqyQFxgWSKgPFijB94WEgDiXNKFzThnVl2B7TEH6U//Ue1EPOa+hR6laCvypxKX8e2x
-         sFwwnaLWN2j0BW+P8wFRbdxBiOATFGh7c5YZEAOJLZIW8yqFrno2iTAlxcULdcv/mQQT
-         vhUhYAU+e438SMuZ9ud4l8AV5XjMrYPxBHfNxwliJMT/CZEaXnlhlP/Dvn1hGeGF2unb
-         WGuA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YGeQibo141N0DXeCq178P+dmKawAPL71KRhdN2QxS1E=;
+        b=gDkIdCriLd2jkQ0wgYezc5YgKHbAoj3XuKv4Rf8wdPYWgkZKKAszFr5oAoScwHqpKV
+         OtWGKjWk5OmhWCOZUu5y5okfRH9OnoxX33ImJh82bCjOpwW7E79yvzlvyRZLF4ZWgurO
+         VmnjA8LQJ4yYVU4LfJxNbMczEGjQXZYNj1pjPW6RWK8xIggYZzFtsQLOlxa5TOSYcvDn
+         fT9sfj47SfdpMY35SD+GcMJxvxm0l/EXqOtpK5ols1oYdG71qaTaNK7h6ULZT7RxFE9C
+         Fgy0oG9xKSg75iJ7IHRLRsa6aHVadEBGxkUbQ+d+w7hz6iy8IbUiXbwqbg3M+WGjhLYZ
+         5q+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=qCtH/ypAXmYDr6RjK5BruZCO9IbiFs41tnc4Av1HVRU=;
-        b=PNILo2tVLslHazVj+bW0i859BCbG2FgmQKgSPirgePrXE6l7zhr0aAGJa1ctdX6rRL
-         MIBIst16qpx9JwuZ4Og8+uvEaqudXp2a7GIoPmIeQRpijldonmt40K8USBbXBKMShsQX
-         qFXcddKtFSXaGzIYjcF/hGMkoMVixkAoM2auxsehXhcf/VKzX4cy6IYZmt/tBVU2V/Uy
-         g/Gt+1fzLvvJ1D2cwp7JFv6elPyc7wIDxtGYu/59IjYwq8EDE5ROltW/rNxoRkq5amLe
-         ByRqi7mQG86sKGVwnVCIWhnZCWNasT8G5n+E/5OqpkoAZT+SAYIYwS9WCtGUP3+FLhNP
-         HOrw==
-X-Gm-Message-State: AOAM530xX7u93I5bHDOsu5eLibMxDMVA6gc4zeY9SXtTCMGPnmmzEdTJ
-        evZalCwqc0kShcm6K/Eo6iA=
-X-Google-Smtp-Source: ABdhPJx6/0rs2bzhh4CVU1hxj+vuEjMK50dLStrQMPv/HowItDMJ7Ii7kF0yqliE6QiTiZe5UAaRmA==
-X-Received: by 2002:a05:6808:1a12:: with SMTP id bk18mr5435394oib.44.1643247160872;
-        Wed, 26 Jan 2022 17:32:40 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n22sm8245730ooq.27.2022.01.26.17.32.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YGeQibo141N0DXeCq178P+dmKawAPL71KRhdN2QxS1E=;
+        b=vTGAwh16cNT2pWtcACCs2FEmH6kRnQyb6vI46JKl1FC20QQkfw/YccRS2hc3uv5DqF
+         yjqLsSzk1ATZAIKTM5jxWlaBnGuedBcQN5G8Nzqsg7tX1vRZm3Q+amqtQsdn4rPrP+Qv
+         d2dnI846COdvHIsD7iBW5I3Ahs1adeIfgphFszxm1u0eSDK9t9j1QBXIyblC2F3cm8wG
+         GRqDtiJ2f1ebV+8kf2boUgh76Wjt51DKUc2qy6KTbghViMuDLJRilssxhGSZq9yd6YxB
+         6V4Ia4aYSZwVcgr+sKYzN2au4Mcu6L5SmhSw28L+UkNRc6YUsi+/tmpt3yhXC4APvU/r
+         KIGg==
+X-Gm-Message-State: AOAM533XSt5n6fEvwoV7rWwSSO6t5qY4gVivgACEXN/oCcgh1wtmbaEa
+        CwRUXzASlLy7S0xDSeV1iPfpMJEM4Ck=
+X-Google-Smtp-Source: ABdhPJxY4izhUzo0WA3RAbftmr25C/cB3NqL+IFF9Rd0H9PNDhDSNE9+H2K/6r4aKYDB274Ptu6M5A==
+X-Received: by 2002:a65:5a8c:: with SMTP id c12mr1152901pgt.238.1643247357195;
+        Wed, 26 Jan 2022 17:35:57 -0800 (PST)
+Received: from hoboy.vegasvil.org ([2601:640:8200:33:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id z8sm3547632pfe.42.2022.01.26.17.35.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 17:32:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 26 Jan 2022 17:32:38 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Laibin Qiu <qiulaibin@huawei.com>
-Cc:     axboe@kernel.dk, ming.lei@redhat.com, john.garry@huawei.com,
-        martin.petersen@oracle.com, hare@suse.de,
-        akpm@linux-foundation.org, bvanassche@acm.org,
-        andriy.shevchenko@linux.intel.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next V5] blk-mq: fix tag_get wait task can't be awakened
-Message-ID: <20220127013238.GA1478141@roeck-us.net>
-References: <20220113025536.1479653-1-qiulaibin@huawei.com>
+        Wed, 26 Jan 2022 17:35:56 -0800 (PST)
+Date:   Wed, 26 Jan 2022 17:35:54 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     davidcomponentone@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] ptp: replace snprintf with sysfs_emit
+Message-ID: <20220127013554.GA943@hoboy.vegasvil.org>
+References: <e4fa9680b8b939901adcf91123ab1778a0a7a38d.1643182187.git.yang.guang5@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220113025536.1479653-1-qiulaibin@huawei.com>
+In-Reply-To: <e4fa9680b8b939901adcf91123ab1778a0a7a38d.1643182187.git.yang.guang5@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Jan 13, 2022 at 10:55:36AM +0800, Laibin Qiu wrote:
-> In case of shared tags, there might be more than one hctx which
-> allocates from the same tags, and each hctx is limited to allocate at
-> most:
->         hctx_max_depth = max((bt->sb.depth + users - 1) / users, 4U);
+On Thu, Jan 27, 2022 at 08:02:36AM +0800, davidcomponentone@gmail.com wrote:
+> From: Yang Guang <yang.guang5@zte.com.cn>
 > 
-> tag idle detection is lazy, and may be delayed for 30sec, so there
-> could be just one real active hctx(queue) but all others are actually
-> idle and still accounted as active because of the lazy idle detection.
-> Then if wake_batch is > hctx_max_depth, driver tag allocation may wait
-> forever on this real active hctx.
+> coccinelle report:
+> ./drivers/ptp/ptp_sysfs.c:17:8-16:
+> WARNING: use scnprintf or sprintf
+> ./drivers/ptp/ptp_sysfs.c:390:8-16:
+> WARNING: use scnprintf or sprintf
 > 
-> Fix this by recalculating wake_batch when inc or dec active_queues.
+> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
 > 
-> Fixes: 0d2602ca30e41 ("blk-mq: improve support for shared tags maps")
-> Suggested-by: Ming Lei <ming.lei@redhat.com>
-> Suggested-by: John Garry <john.garry@huawei.com>
-> Signed-off-by: Laibin Qiu <qiulaibin@huawei.com>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+> Signed-off-by: David Yang <davidcomponentone@gmail.com>
 
-I understand this problem has been reported already, but still:
-
-This patch causes a hang in several of my qemu emulations when
-trying to boot from usb. Reverting it fixes the problem. Bisect log
-is attached.
-
-Boot logs are available at
-https://kerneltests.org/builders/qemu-arm-aspeed-master/builds/230/steps/qemubuildcommand/logs/stdio
-but don't really show much: the affected tests simply hang until they
-are aborted.
-
-Guenter
-
----
-bisect log:
-
-# bad: [0280e3c58f92b2fe0e8fbbdf8d386449168de4a8] Merge tag 'nfs-for-5.17-1' of git://git.linux-nfs.org/projects/anna/linux-nfs
-# good: [64f29d8856a9e0d1fcdc5344f76e70c364b941cb] Merge tag 'ceph-for-5.17-rc1' of git://github.com/ceph/ceph-client
-git bisect start 'HEAD' '64f29d8856a9'
-# bad: [b087788c20aa959f83df989b31fdcc4182b2d067] Merge tag 'ata-5.17-rc1-part2' of git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata
-git bisect bad b087788c20aa959f83df989b31fdcc4182b2d067
-# bad: [0854dc81e108c90cccda6d1fc54bc270f16a3cc9] Merge tag 'docs-5.17-2' of git://git.lwn.net/linux
-git bisect bad 0854dc81e108c90cccda6d1fc54bc270f16a3cc9
-# good: [75242f31db6cabf602a5eb84c13b579099d72a65] Merge tag 'rtc-5.17' of git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux
-git bisect good 75242f31db6cabf602a5eb84c13b579099d72a65
-# good: [f3a78227eef20c0ba13bbf9401f0a340bca3ad16] Merge tag 'io_uring-5.17-2022-01-21' of git://git.kernel.dk/linux-block
-git bisect good f3a78227eef20c0ba13bbf9401f0a340bca3ad16
-# bad: [3c7c25038b6c7d66a6816028219914379be6a5cc] Merge tag 'block-5.17-2022-01-21' of git://git.kernel.dk/linux-block
-git bisect bad 3c7c25038b6c7d66a6816028219914379be6a5cc
-# bad: [e6a2e5116e07ce5acc8698785c29e9e47f010fd5] block: Remove unnecessary variable assignment
-git bisect bad e6a2e5116e07ce5acc8698785c29e9e47f010fd5
-# bad: [413ec8057bc3d368574abd05dd27e747063b2f59] loop: remove redundant initialization of pointer node
-git bisect bad 413ec8057bc3d368574abd05dd27e747063b2f59
-# bad: [180dccb0dba4f5e84a4a70c1be1d34cbb6528b32] blk-mq: fix tag_get wait task can't be awakened
-git bisect bad 180dccb0dba4f5e84a4a70c1be1d34cbb6528b32
-# first bad commit: [180dccb0dba4f5e84a4a70c1be1d34cbb6528b32] blk-mq: fix tag_get wait task can't be awakened
+Acked-by: Richard Cochran <richardcochran@gmail.com>

@@ -2,182 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB2649DE3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263A349DE3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238698AbiA0Jk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:40:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiA0Jkt (ORCPT
+        id S238702AbiA0JlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:41:20 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37296 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231681AbiA0JlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:40:49 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D965C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:40:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lvav6w4RL7NKrEvUZyn1XwHr4Zh15twSaNF7a5WtXSk=; b=ajcKPVJ0U6ICQKzzpGvPYHyimn
-        DvDkI/QYYuP3s/Kergb6IPd74Cr9w9pdH0jnNrdg70G7SzD04tE8AgUs4g1sIlitpLOGGZIz2202V
-        TMXfFdMmpyNJ24eejV4LN0bi9nPVMznRwew6ay5TvwIoHurxs6e8NI8J+HkOii7QhYYMd/js1Ze9V
-        Pc8JP8qbk1/IcUlInHmDsQO20FVFmHkODRjvuPPB11MlsyGrT0+tFe9Y458HRcDKtsxZKE3j6O5ba
-        mPkbg7DtV2Ye4gCwn1vV6KkvKzIBY47DvbWPIL3owHfgTMyumKFkXtmxFpTIZNJ06Ty6dgLPsfbg2
-        vml7/H2A==;
-Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nD1Gm-00EwQH-92; Thu, 27 Jan 2022 09:40:44 +0000
-Message-ID: <12192be9cdf2e13001a24f3c1bafee21727b5cf4.camel@infradead.org>
-Subject: Re: [EXTERNAL] [PATCH] x86,kvm/xen: Remove superfluous .fixup usage
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Cc:     pbonzini@redhat.com, linux-kernel@vger.kernel.org
-Date:   Thu, 27 Jan 2022 09:40:41 +0000
-In-Reply-To: <20220123124219.GH20638@worktop.programming.kicks-ass.net>
-References: <20220123124219.GH20638@worktop.programming.kicks-ass.net>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-Trz798H703eXEXR4clYR"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 27 Jan 2022 04:41:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9960F61BCB
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:41:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78497C340E4;
+        Thu, 27 Jan 2022 09:41:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643276479;
+        bh=p4uXNmT7t58NwCRHsbijJnTaA9+RdUDdYmuEIzvP+EE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OFh2oJcjcvFWOkJ5iKzRpgstH9r8uX2jnzQWLapYRuQfEA5Gp3IQ9ZivTUeHK5hU8
+         Yo0FKao1C14H1VNsV08D8vpNhjp+vuAqM0LUac91DOAPed9cLBTCW9KhAlvsiNV2x7
+         eV0rGB/7VlEp9IHRiIYD43SSVdYswHKXcjgFsUbs=
+Date:   Thu, 27 Jan 2022 10:41:16 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sami =?iso-8859-1?Q?Ky=F6stil=E4?= <skyostil@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, dtor@chromium.org,
+        evanbenn@chromium.org, arnd@arndb.de
+Subject: Re: [PATCH 2/2] drivers/misc: add transfer ioctl for HPS
+Message-ID: <YfJovN7clqBZ8NDr@kroah.com>
+References: <20220127083545.1020423-1-skyostil@chromium.org>
+ <20220127083545.1020423-3-skyostil@chromium.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220127083545.1020423-3-skyostil@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 27, 2022 at 07:35:45PM +1100, Sami Kyöstilä wrote:
+> This patch adds an ioctl operation for sending and receiving data from
+> the ChromeOS snooping protection sensor (a.k.a., HPS). This allows
+> userspace programs to perform a combined read/write I2C transaction
+> through a single syscall.
+> 
+> The I2C wire protocol for the device is documented at:
+> 
+> https://chromium.googlesource.com/chromiumos/platform/hps-firmware/+/
+> refs/heads/main/docs/host_device_i2c_protocol.md
+> 
+> Signed-off-by: Sami Kyöstilä <skyostil@chromium.org>
+> ---
+> 
+>  MAINTAINERS              |  1 +
+>  drivers/misc/hps-i2c.c   | 81 ++++++++++++++++++++++++++++++++++++++++
+>  include/uapi/linux/hps.h | 20 ++++++++++
+>  3 files changed, 102 insertions(+)
+>  create mode 100644 include/uapi/linux/hps.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9dea4b8c2ab5..d5fc066fdbc2 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8803,6 +8803,7 @@ M:	Sami Kyöstilä <skyostil@chromium.org>
+>  R:	Evan Benn <evanbenn@chromium.org>
+>  S:	Maintained
+>  F:	drivers/misc/hps-i2c.c
+> +F:	include/uapi/linux/hps.h
+>  
+>  HSI SUBSYSTEM
+>  M:	Sebastian Reichel <sre@kernel.org>
+> diff --git a/drivers/misc/hps-i2c.c b/drivers/misc/hps-i2c.c
+> index fe9f073b0352..748ead49d678 100644
+> --- a/drivers/misc/hps-i2c.c
+> +++ b/drivers/misc/hps-i2c.c
+> @@ -17,9 +17,11 @@
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+>  #include <linux/pm_runtime.h>
+> +#include <uapi/linux/hps.h>
+>  
+>  #define HPS_ACPI_ID		"GOOG0020"
+>  #define HPS_MAX_DEVICES		1
+> +#define HPS_MAX_MSG_SIZE	8192
+>  
+>  struct hps_drvdata {
+>  	struct i2c_client *client;
+> @@ -60,6 +62,8 @@ static int hps_open(struct inode *inode, struct file *file)
+>  	ret = pm_runtime_get_sync(dev);
+>  	if (ret < 0)
+>  		goto pm_get_fail;
+> +
+> +	file->private_data = hps->client;
+>  	return 0;
+>  
+>  pm_get_fail:
+> @@ -84,10 +88,87 @@ static int hps_release(struct inode *inode, struct file *file)
+>  	return ret;
+>  }
+>  
+> +static int hps_do_ioctl_transfer(struct i2c_client *client,
+> +				 struct hps_transfer_ioctl_data *args)
+> +{
+> +	int ret;
+> +	int nmsg = 0;
+> +	struct i2c_msg msgs[2] = {
+> +		{
+> +			.addr = client->addr,
+> +			.flags = client->flags,
+> +		},
+> +		{
+> +			.addr = client->addr,
+> +			.flags = client->flags,
+> +		},
+> +	};
+> +
+> +	if (args->isize) {
+> +		msgs[nmsg].len = args->isize;
+> +		msgs[nmsg].buf = memdup_user(args->ibuf, args->isize);
+> +		if (IS_ERR(msgs[nmsg].buf)) {
+> +			ret = PTR_ERR(msgs[nmsg].buf);
+> +			goto memdup_fail;
+> +		}
+> +		nmsg++;
+> +	}
+> +
+> +	if (args->osize) {
+> +		msgs[nmsg].len = args->osize;
+> +		msgs[nmsg].buf = memdup_user(args->obuf, args->osize);
+> +		msgs[nmsg].flags |= I2C_M_RD;
+> +		if (IS_ERR(msgs[nmsg].buf)) {
+> +			ret = PTR_ERR(msgs[nmsg].buf);
+> +			goto memdup_fail;
+> +		}
+> +		nmsg++;
+> +	}
+> +
+> +	ret = i2c_transfer(client->adapter, &msgs[0], nmsg);
+> +	if (ret > 0 && args->osize) {
+> +		if (copy_to_user(args->obuf, msgs[nmsg - 1].buf, ret))
+> +			ret = -EFAULT;
+> +	}
 
---=-Trz798H703eXEXR4clYR
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Why can't you just do normal i2c transfers to/from userspace instead of
+requring a custom ioctl?
 
-On Sun, 2022-01-23 at 13:42 +0100, Peter Zijlstra wrote:
-> Commit 14243b387137 ("KVM: x86/xen: Add KVM_IRQ_ROUTING_XEN_EVTCHN and
-> event channel delivery") adds superfluous .fixup usage after the whole
-> .fixup section was removed in commit e5eefda5aa51 ("x86: Remove .fixup
-> section").
->=20
-> Fixes: 14243b387137 ("KVM: x86/xen: Add KVM_IRQ_ROUTING_XEN_EVTCHN and ev=
-ent channel delivery")
-> Reported-by: Borislav Petkov <bp@alien8.de>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+thanks,
 
-
-Tested-by: David Woodhouse <dwmw@amazon.co.uk>
-Acked-by: David Woodhouse <dwmw@amazon.co.uk>
-
-Thanks.
-
---=-Trz798H703eXEXR4clYR
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwMTI3MDk0MDQxWjAvBgkqhkiG9w0BCQQxIgQgCDc3Vq6x
-BhtkSxIak3ZG5AnaUECGzY7PTGp2OgR8L3gwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCrq0fT5m57IAB2NhvtlFpkkdu/hCB4QUkr
-sVrZ6RJfZyzY+2N67koSQfpjGP1YzVWkxlbYX3yvj+5mY/VbN4GxC+kxX/0rgp+7A3IoW8vFbCc0
-1WqyMm6z4WAm/vNRWGhz5o7FaNQXzMEm1IbhyIkehkKqh2hb/TibmcOzNIjtoBdtS8Xdo80ezSqW
-FdwVLaMAyEdD1SfQIvA7NNbXgyaR7SpYJ/oiT2mdvxYdWFjoPTlh1IQfEtotLNJxN0PHIPSfH9Cz
-JssK+3hshkErcuul6rha9vkqE9r06Z8n4eBnupHiIqWr1v3R/q7J7prBtSbGl/J0kP0ya5ksMO90
-62YDpdl+IUvaWjRW4NVmmno+vZU8Y6ZY4We8gFfc3L3VWlQNwNt1whGpJMV8wclP/aHXFaCk6O17
-THMB2kdA5kntccVVIRt6e8ZzFz7B0Y/m+zvaa42EQn6Q3UqEq5VHKFcnOAE3dYEy+cnhekD2PX4N
-JLmG6Lpyre9tSYaZQXqhqAY+xpBV6XC8c/3dSh7uI4ZUWt9JfYAx3tzJoosAKIuikYMsr1VJOxJt
-4xcILhBr3AtV3LB6PvyqM06qmmgkl518pxsQmC0X+TvbtcgIvybdiKgxRJzfjj+6KUPgIX/LeDrp
-KOCfg0USkXJ7xvULQI2koTZW+exD8SPghP5WmvN64QAAAAAAAA==
-
-
---=-Trz798H703eXEXR4clYR--
-
+greg k-h

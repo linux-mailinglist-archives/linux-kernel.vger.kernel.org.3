@@ -2,114 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDBF49DE1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE1549DE27
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238717AbiA0Jdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:33:46 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45600
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238660AbiA0Jdh (ORCPT
+        id S232109AbiA0JgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:36:13 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:50866 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229699AbiA0JgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:33:37 -0500
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 04BA03F1B3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 09:33:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643276015;
-        bh=ab1luuZzn+rKwB0G/H73SwnYANJP++VOjHTq7jQ19wY=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=j7X4ELq6R73cQTTV+KhiFFg2KIZeMEhRVhWV5UEu5HtqS4+LmdhKNFy9nLzf/3vfP
-         O2A2BVqIuhn8wDJFtcDZsqIqCwjaR7uqtYgogJAUxZw28wnSMV8a/rHc1yJgTCAI/c
-         wx3C26T6ypR51MSUnwdpNE+qVUqa9Gat2m7tWr5EFhwHyjVZIPdCx921nKh3AkPslY
-         mM0DaQ48EvEEUNIvF3eVtW3PLElJ0rD0SeFVbp7cM7KKIkpv0lRETh+EYxzBdyELh7
-         3dsIEh3sHYnoXDwhLkd1+AJ6OG5iyx1Tb4+ShWYTJK+bC0VkPPOJoFBTU1tKV2vZw0
-         7BiHQnS+0QB8A==
-Received: by mail-wm1-f69.google.com with SMTP id o194-20020a1ca5cb000000b00350b177fb22so3148995wme.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:33:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ab1luuZzn+rKwB0G/H73SwnYANJP++VOjHTq7jQ19wY=;
-        b=GrXZYcSQFgHGRl/Q9QjIE+YPdbuubzVa2iR5crEiAgjgjAvx4BBbgwIxzGZu+ORhBt
-         VEqOeh61IGJjvrhWA2aqSrAIiWp7hyZrMYTq1Tw1zF8Fk71WRmCLACyxqncT4955WutX
-         mnHZ2KsFGTUceQzA/I7lGzEOpnMtD5PEUKne4ynksIl0+Gu2Z1J+fTcJAzV4YZWYMht/
-         mljjHFB9SAwkYhSQEnx7Q+ECT9o748ESAg+weZ7SAXb9q6bVSlOTnvpxmeL9klJocTkt
-         olzEwFzl/AHk6ChQb2+MnU/MU+xm7o2X0rsUTxusXErAmwgxfFbBjH/mBkkQNHAqzZKf
-         OXJg==
-X-Gm-Message-State: AOAM531mQM8Omoco2DtsGRloL3pjqfItAGZqLYxjhDBFjJGT0XyZ+kbw
-        peFZdqyRYcFF3RJhEfRmcLUPOJ6L3h85WNTIsohnnu8nd702bCTJiMxJdKkD3jYmt7z7Ew7SOlx
-        ed4X9H3o9glKkQkS3R3a+F6iG2daNAZrOWysj1MooVg==
-X-Received: by 2002:a5d:6dac:: with SMTP id u12mr2301429wrs.410.1643276014737;
-        Thu, 27 Jan 2022 01:33:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwackDtjcmH0YUiJyk7XzFedBt6pMCl5S0pLhlnvxCHhFBKHp3Es5kkgM0yYe1bv2SYad+4QQ==
-X-Received: by 2002:a5d:6dac:: with SMTP id u12mr2301414wrs.410.1643276014525;
-        Thu, 27 Jan 2022 01:33:34 -0800 (PST)
-Received: from [192.168.0.63] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id p7sm1533601wmq.20.2022.01.27.01.33.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Jan 2022 01:33:34 -0800 (PST)
-Message-ID: <cb11d2e0-dd03-9a48-74f3-0a22f49f16b5@canonical.com>
-Date:   Thu, 27 Jan 2022 10:33:33 +0100
+        Thu, 27 Jan 2022 04:36:12 -0500
+X-UUID: 18b85e8565714eccacd26e804009fa9f-20220127
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=4Mdu4dP44jYB1UdM0uaD1oyQ+nWAaTLV7TqoxKckcQk=;
+        b=ACGCQ4Be8G0Q/VeDv/kuchX5oH1XthHNztfwSc2oxiX8bMOhaFG+EgvuCqMsV33dYuw6+f9bB2HyEhakJhqYDPodqJnS27rAAaAXRvBARv/eM7uRzH3UtbJNMJ5Oy6x2zTsb4eVoeHj1wDXUcxRTVZZwfLK6qEgHU7yNLyN1n04=;
+X-UUID: 18b85e8565714eccacd26e804009fa9f-20220127
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 988202731; Thu, 27 Jan 2022 17:36:10 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 27 Jan 2022 17:36:08 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 27 Jan 2022 17:36:08 +0800
+Subject: Re: [PATCH 0/2] Add pwrap node for MediaTek MT8192 SoC and mt6359
+ node for MediaTek PMIC MT6359
+To:     Hui-Liu Liu <hui.liu@mediatek.com>, <lee.jones@linaro.org>,
+        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <eddie.huang@mediatek.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <fshao@chromium.org>
+CC:     <srv_heupstream@mediatek.com>, <zhiyong.tao@mediatek.com>,
+        <hsin-hsiung.wang@mediatek.com>, <sean.wang@mediatek.com>,
+        <yuchen.huang@mediatek.com>, <wen.su@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Macpaul Lin <macpaul@gmail.com>,
+        Wens Tsai <wenst@chromium.org>,
+        Pablo Sun <pablo.sun@mediatek.com>
+References: <20220127063145.13413-1-hui.liu@mediatek.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+Message-ID: <aeb9bc06-c6e3-810b-7ec5-6e0038d32c88@mediatek.com>
+Date:   Thu, 27 Jan 2022 17:36:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [GIT PULL] arm64: dts: samsung: Second pull for v5.17
+In-Reply-To: <20220127063145.13413-1-hui.liu@mediatek.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
-References: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211227112959.7325-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/12/2021 12:29, Krzysztof Kozlowski wrote:
-> Hi,
-> 
-> Second pull with DTS for ARM64, on top of previous pull.
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-> The following changes since commit 51b1a5729469cef57a3c97aa014aa6e1d2b8d864:
-> 
->   dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850 (2021-12-20 10:35:32 +0100)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt64-5.17-2
-> 
-> for you to fetch changes up to a1828d772e0738c30a383a7d335aded2f2baf908:
-> 
->   arm64: dts: exynos: Add initial E850-96 board support (2021-12-22 12:31:13 +0100)
-> 
-> ----------------------------------------------------------------
-> Samsung DTS ARM64 changes for v5.17, part two
-> 
-> Add initial Exynos850 support and WinLink E850-96 board using it.
-> 
-> ----------------------------------------------------------------
-> Sam Protsenko (2):
->       arm64: dts: exynos: Add initial Exynos850 SoC support
->       arm64: dts: exynos: Add initial E850-96 board support
-> 
+DQpPbiAxLzI3LzIyIDI6MzEgUE0sIEh1aS1MaXUgTGl1IHdyb3RlOg0KPiBUaGlzIHBhdGhzZXQg
+YWRkIHB3cmFwIG5vZGUgdG8gU29DIE1UODE5MiwgYW5kIGFkZCBQTUlDIE1UNjM1OSByZWxhdGVk
+IG5vZGVzLg0KPiBNVDYzNTkgaXMgdGhlIHByaW1hcnkgUE1JQyBmb3IgTVQ4MTkyIGFuZCBwcm9i
+YWJseSBvdGhlciBTb0NzLg0KPiANCj4gVGhlIHNlcmllc1sxXSBhbmQgc2VyaWVzWzJdIHNlbmQg
+YnkgSHNpbi1Ic2l1bmcgd2lsbCBjb250aW51ZSB0byB1cHN0cmVhbSBpbiB0aGlzIHBhdGhzZXQg
+YWZ0ZXJ3YXJkcy4NCj4gDQo+IFsxXSBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3Byb2pl
+Y3QvbGludXgtbWVkaWF0ZWsvcGF0Y2gvMTYxNTU2MzI4Ni0yMjEyNi02LWdpdC1zZW5kLWVtYWls
+LWhzaW4taHNpdW5nLndhbmdAbWVkaWF0ZWsuY29tLw0KPiBbMl0gaHR0cHM6Ly9wYXRjaHdvcmsu
+a2VybmVsLm9yZy9wcm9qZWN0L2xpbnV4LW1lZGlhdGVrL3BhdGNoLzE2MjIwMTE5MjctMzU5LTkt
+Z2l0LXNlbmQtZW1haWwtaHNpbi1oc2l1bmcud2FuZ0BtZWRpYXRlay5jb20vDQo+IA0KPiBIdWkg
+TGl1ICgyKToNCj4gICAgYXJtNjQ6IGR0czogbXQ4MTkyOiBhZGQgUFdSQVAgbm9kZQ0KPiAgICBh
+cm02NDogZHRzOiBtdDYzNTk6IGFkZCBQTUlDIE1UNjM1OSByZWxhdGVkIG5vZGVzDQo+IA0KPiAg
+IGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2MzU5LmR0c2kgICAgfCAyOTggKysrKysr
+KysrKysrKysrKysrKysNCj4gICBhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE5Mi1l
+dmIuZHRzIHwgICAxICsNCj4gICBhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE5Mi5k
+dHNpICAgIHwgIDEyICsNCj4gICAzIGZpbGVzIGNoYW5nZWQsIDMxMSBpbnNlcnRpb25zKCspDQo+
+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2MzU5
+LmR0c2kNCj4gDQo+IC0tDQo+IDIuMjUuMQ0KPiANCj4gDQoNClRoaXMgcGF0Y2hzZXQgaXMgYmFz
+ZWQgb24gWzFdDQoNClsxXSBhcm02NDogZHRzOiBBZGQgbWVkaWF0ZWsgU29DIG10ODE5NSBhbmQg
+ZXZhbHVhdGlvbiBib2FyZA0KLSANCmh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVj
+dC9saW51eC1tZWRpYXRlay9wYXRjaC8yMDIyMDExMjExNDcyNC4xOTUzLTQtdGluZ2hhbi5zaGVu
+QG1lZGlhdGVrLmNvbS8NCg0KSSd2ZSB0ZXN0ZWQgdGhpcyBwYXRjaCBzZXQgYnVpbGQgcGFzcyB3
+aXRoIFsxXSBmb3IgYm90aCBtdDgxOTIgYW5kIA0KbXQ4MTk1IHBsYXRmb3JtIG9uIGxpbnV4LTUu
+MTctcmMxLg0KDQpSZXZpZXdlZC1ieTogTWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVr
+LmNvbT4NCg0KUmVnYXJkcywNCk1hY3BhdWwgTGlu
 
-I'll send all this as v5.18 material, so this pull-req can be skipped.
-
-
-Best regards,
-Krzysztof

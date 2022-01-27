@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD1E49E986
+	by mail.lfdr.de (Postfix) with ESMTP id D785C49E987
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 18:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245418AbiA0R5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 12:57:34 -0500
-Received: from mga12.intel.com ([192.55.52.136]:65467 "EHLO mga12.intel.com"
+        id S245441AbiA0R5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 12:57:42 -0500
+Received: from mga12.intel.com ([192.55.52.136]:65504 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244796AbiA0Rzl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 12:55:41 -0500
+        id S244998AbiA0Rzs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 12:55:48 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643306141; x=1674842141;
+  t=1643306148; x=1674842148;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5PNbZiFfcGOHVsut66vPdPMpwN8Bxyu2O4inZ1cSArk=;
-  b=dlt905LV9MBr0qoh5Naryw0LXMXrkdIJi0j2yheM77mQ+Q7o5z+CUvgW
-   FHOE4PadWcFt4/a2Olf5tzHazsG5wdpT8sHNlks4SwuCeA3agBZEEcski
-   ZhEZt96OCDvsUVX7EbwpvLPIv4T530mIiZCn7TWnbFvAMv0hW+naUnQGJ
-   YbtBQ8y6IzpNEfjVXRm8bJYjgYiBAjrkmrIiJ7eGVjqp4oAtT7clXv8JV
-   byiQkO0mlav7KSQEeDl+miBiQ8sMe5Bi35vUlCDRRDHlzhYV0MevxuCu/
-   ClXKbUu9otQ6SZVPwEO8A8pArIOsGANPv4/IU0C8mFoQyR2PEA9+klaTF
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="226899147"
+  bh=TPB2LrmlUVsHBLkS8/W1ZpxXOGwMXL8e5PUJSM7dUI8=;
+  b=mQFPB2LlCR7Kocqq2sbAjxLPjhj3YvSTrpLYYd3eMhPUykgby1VJncT9
+   8q8jro8VaTekqbUKPiDwyFzvd4BauvxxmaNyWJ0pvmz4R0YKUzsND2Xii
+   lF33ssx1+umUNlwGdMoDp4f1V5frKHgCQA+3bUsE/sjrc4kRPSH9wZEOg
+   RSZA8JHjdyB74SHOuP7iYARlhBMmOhnUhejhvPqwN4k0FrptBA5ijMxdF
+   gavLPMDbe5KdRkxMhUB2N/FqQufS3oa5ktJUcANe5l/GJp0B0t/eoLrGd
+   UfQCCoWc5nAqcJP92SWfixX9E/8REkbJw/kyvjq/92xF8eG0GibN0Elck
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="226899150"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="226899147"
+   d="scan'208";a="226899150"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:55:14 -0800
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="674796208"
+   d="scan'208";a="674796214"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
   by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 09:55:14 -0800
 From:   ira.weiny@intel.com
@@ -40,9 +40,9 @@ To:     Dave Hansen <dave.hansen@linux.intel.com>,
 Cc:     Ira Weiny <ira.weiny@intel.com>, Fenghua Yu <fenghua.yu@intel.com>,
         Rick Edgecombe <rick.p.edgecombe@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V8 42/44] dax: Stray access protection for dax_direct_access()
-Date:   Thu, 27 Jan 2022 09:55:03 -0800
-Message-Id: <20220127175505.851391-43-ira.weiny@intel.com>
+Subject: [PATCH V8 43/44] nvdimm/pmem: Enable stray access protection
+Date:   Thu, 27 Jan 2022 09:55:04 -0800
+Message-Id: <20220127175505.851391-44-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220127175505.851391-1-ira.weiny@intel.com>
 References: <20220127175505.851391-1-ira.weiny@intel.com>
@@ -54,239 +54,149 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-dax_direct_access() provides a way to obtain the direct map address of
-PMEM memory.  Coordinate PKS protection with dax_direct_access() of
-protected devmap pages.
+Now that all valid kernel access' to PMEM have been annotated with
+{__}pgmap_mk_{readwrite,noaccess}() PGMAP_PROTECTION is safe to enable
+in the pmem layer.
 
-Introduce 3 new dax_operation calls .map_protected .mk_readwrite and
-.mk_noaccess. These 3 calls do not have to be implemented by the dax
-provider if no protection is implemented.
+Implement the pmem_map_protected() and pmem_mk_{readwrite,noaccess}() to
+communicate this memory has extra protection to the upper layers if
+PGMAP_PROTECTION is specified.
 
-Threads of execution can use dax_mk_{readwrite,noaccess}() to relax the
-protection of the dax device and allow direct use of the kaddr returned
-from dax_direct_access().  The dax_mk_{readwrite,noaccess}() calls only
-need to be used to guard actual access to the memory.  Other uses of
-dax_direct_access() do not need to use these guards.
-
-For users who require a permanent address to the dax device such as the
-DM write cache.  dax_map_protected() indicates that the dax device has
-additional protections and that user should create it's own permanent
-mapping of the memory.  Update the DM write cache code to create this
-permanent mapping.
+Internally, the pmem driver uses a cached virtual address,
+pmem->virt_addr (pmem_addr).  Use __pgmap_mk_{readwrite,noaccess}()
+directly when PGMAP_PROTECTION is active on the device.
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
 Changes for V8
-	Rebase changes on 5.17-rc1
-	Clean up the cover letter
-		dax_read_lock() is not required
-		s/dax_protected()/dax_map_protected()/
-	Testing revealed a dax_flush() which was not properly protected.
-
-Changes for V7
-	Rework cover letter.
-	Do not include a FS_DAX_LIMITED restriction for dcss.  It  will
-		simply not implement the protection and there is no need
-		to special case this.
-		Clean up commit message because I did not originally
-		understand the nuance of the s390 device.
-	Introduce dax_{protected,mk_readwrite,mk_noaccess}()
-	From Dan Williams
-		Remove old clean up cruft from previous versions
-		Remove map_protected
-	Remove 'global' parameters all calls
+	Rebase to 5.17-rc1
+	Remove global param
+	Add internal structure which uses the pmem device and pgmap
+		device directly in the *_mk_*() calls.
+	Add pmem dax ops callbacks
+	Use pgmap_protection_available()
+	s/PGMAP_PKEY_PROTECT/PGMAP_PROTECTION
 ---
- drivers/dax/super.c        | 54 ++++++++++++++++++++++++++++++++++++++
- drivers/md/dm-writecache.c |  8 +++++-
- fs/dax.c                   |  8 ++++++
- fs/fuse/virtio_fs.c        |  2 ++
- include/linux/dax.h        |  8 ++++++
- 5 files changed, 79 insertions(+), 1 deletion(-)
+ drivers/nvdimm/pmem.c | 52 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 51 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-index e3029389d809..705b2e736200 100644
---- a/drivers/dax/super.c
-+++ b/drivers/dax/super.c
-@@ -117,6 +117,8 @@ enum dax_device_flags {
-  * @pgoff: offset in pages from the start of the device to translate
-  * @nr_pages: number of consecutive pages caller can handle relative to @pfn
-  * @kaddr: output parameter that returns a virtual address mapping of pfn
-+ *         Direct access through this pointer must be guarded by calls to
-+ *         dax_mk_{readwrite,noaccess}()
-  * @pfn: output parameter that returns an absolute pfn translation of @pgoff
-  *
-  * Return: negative errno if an error occurs, otherwise the number of
-@@ -209,6 +211,58 @@ void dax_flush(struct dax_device *dax_dev, void *addr, size_t size)
- #endif
- EXPORT_SYMBOL_GPL(dax_flush);
- 
-+bool dax_map_protected(struct dax_device *dax_dev)
-+{
-+	if (!dax_alive(dax_dev))
-+		return false;
-+
-+	if (dax_dev->ops->map_protected)
-+		return dax_dev->ops->map_protected(dax_dev);
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(dax_map_protected);
-+
-+/**
-+ * dax_mk_readwrite() - make protected dax devices read/write
-+ * @dax_dev: the dax device representing the memory to access
-+ *
-+ * Any access of the kaddr memory returned from dax_direct_access() must be
-+ * guarded by dax_mk_readwrite() and dax_mk_noaccess().  This ensures that any
-+ * dax devices which have additional protections are allowed to relax those
-+ * protections for the thread using this memory.
-+ *
-+ * NOTE these calls must be contained within a single thread of execution and
-+ * both must be guarded by dax_read_lock()  Which is also a requirement for
-+ * dax_direct_access() anyway.
-+ */
-+void dax_mk_readwrite(struct dax_device *dax_dev)
-+{
-+	if (!dax_alive(dax_dev))
-+		return;
-+
-+	if (dax_dev->ops->mk_readwrite)
-+		dax_dev->ops->mk_readwrite(dax_dev);
-+}
-+EXPORT_SYMBOL_GPL(dax_mk_readwrite);
-+
-+/**
-+ * dax_mk_noaccess() - restore protection to dax devices if needed
-+ * @dax_dev: the dax device representing the memory to access
-+ *
-+ * See dax_direct_access() and dax_mk_readwrite()
-+ *
-+ * NOTE Must be called prior to dax_read_unlock()
-+ */
-+void dax_mk_noaccess(struct dax_device *dax_dev)
-+{
-+	if (!dax_alive(dax_dev))
-+		return;
-+
-+	if (dax_dev->ops->mk_noaccess)
-+		dax_dev->ops->mk_noaccess(dax_dev);
-+}
-+EXPORT_SYMBOL_GPL(dax_mk_noaccess);
-+
- void dax_write_cache(struct dax_device *dax_dev, bool wc)
- {
- 	if (wc)
-diff --git a/drivers/md/dm-writecache.c b/drivers/md/dm-writecache.c
-index 4f31591d2d25..5d6d7b6bad30 100644
---- a/drivers/md/dm-writecache.c
-+++ b/drivers/md/dm-writecache.c
-@@ -297,7 +297,13 @@ static int persistent_memory_claim(struct dm_writecache *wc)
- 		r = -EOPNOTSUPP;
- 		goto err2;
- 	}
--	if (da != p) {
-+
-+	/*
-+	 * Force the write cache to map the pages directly if the dax device
-+	 * mapping is protected or if the number of pages returned was not what
-+	 * was requested.
-+	 */
-+	if (dax_map_protected(wc->ssd_dev->dax_dev) || da != p) {
- 		long i;
- 		wc->memory_map = NULL;
- 		pages = kvmalloc_array(p, sizeof(struct page *), GFP_KERNEL);
-diff --git a/fs/dax.c b/fs/dax.c
-index cd03485867a7..0b22a1091fe2 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -728,7 +728,9 @@ static int copy_cow_page_dax(struct vm_fault *vmf, const struct iomap_iter *iter
- 		return rc;
- 	}
- 	vto = kmap_atomic(vmf->cow_page);
-+	dax_mk_readwrite(iter->iomap.dax_dev);
- 	copy_user_page(vto, kaddr, vmf->address, vmf->cow_page);
-+	dax_mk_noaccess(iter->iomap.dax_dev);
- 	kunmap_atomic(vto);
- 	dax_read_unlock(id);
- 	return 0;
-@@ -937,8 +939,10 @@ static int dax_writeback_one(struct xa_state *xas, struct dax_device *dax_dev,
- 	count = 1UL << dax_entry_order(entry);
- 	index = xas->xa_index & ~(count - 1);
- 
-+	dax_mk_readwrite(dax_dev);
- 	dax_entry_mkclean(mapping, index, pfn);
- 	dax_flush(dax_dev, page_address(pfn_to_page(pfn)), count * PAGE_SIZE);
-+	dax_mk_noaccess(dax_dev);
- 	/*
- 	 * After we have flushed the cache, we can clear the dirty tag. There
- 	 * cannot be new dirty data in the pfn after the flush has completed as
-@@ -1125,8 +1129,10 @@ static int dax_memzero(struct dax_device *dax_dev, pgoff_t pgoff,
- 
- 	ret = dax_direct_access(dax_dev, pgoff, 1, &kaddr, NULL);
- 	if (ret > 0) {
-+		dax_mk_readwrite(dax_dev);
- 		memset(kaddr + offset, 0, size);
- 		dax_flush(dax_dev, kaddr + offset, size);
-+		dax_mk_noaccess(dax_dev);
- 	}
- 	return ret;
- }
-@@ -1260,12 +1266,14 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
- 		if (map_len > end - pos)
- 			map_len = end - pos;
- 
-+		dax_mk_readwrite(dax_dev);
- 		if (iov_iter_rw(iter) == WRITE)
- 			xfer = dax_copy_from_iter(dax_dev, pgoff, kaddr,
- 					map_len, iter);
- 		else
- 			xfer = dax_copy_to_iter(dax_dev, pgoff, kaddr,
- 					map_len, iter);
-+		dax_mk_noaccess(dax_dev);
- 
- 		pos += xfer;
- 		length -= xfer;
-diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
-index 9d737904d07c..c748218fe70c 100644
---- a/fs/fuse/virtio_fs.c
-+++ b/fs/fuse/virtio_fs.c
-@@ -774,8 +774,10 @@ static int virtio_fs_zero_page_range(struct dax_device *dax_dev,
- 	rc = dax_direct_access(dax_dev, pgoff, nr_pages, &kaddr, NULL);
- 	if (rc < 0)
- 		return rc;
-+	dax_mk_readwrite(dax_dev);
- 	memset(kaddr, 0, nr_pages << PAGE_SHIFT);
- 	dax_flush(dax_dev, kaddr, nr_pages << PAGE_SHIFT);
-+	dax_mk_noaccess(dax_dev);
- 	return 0;
+diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+index 58d95242a836..2afff8157233 100644
+--- a/drivers/nvdimm/pmem.c
++++ b/drivers/nvdimm/pmem.c
+@@ -138,6 +138,18 @@ static blk_status_t read_pmem(struct page *page, unsigned int off,
+ 	return BLK_STS_OK;
  }
  
-diff --git a/include/linux/dax.h b/include/linux/dax.h
-index 9fc5f99a0ae2..261af298f89f 100644
---- a/include/linux/dax.h
-+++ b/include/linux/dax.h
-@@ -30,6 +30,10 @@ struct dax_operations {
- 			sector_t, sector_t);
- 	/* zero_page_range: required operation. Zero page range   */
- 	int (*zero_page_range)(struct dax_device *, pgoff_t, size_t);
++static void __pmem_mk_readwrite(struct pmem_device *pmem)
++{
++	if (pmem->pgmap.flags & PGMAP_PROTECTION)
++		__pgmap_mk_readwrite(&pmem->pgmap);
++}
 +
-+	bool (*map_protected)(struct dax_device *dax_dev);
-+	void (*mk_readwrite)(struct dax_device *dax_dev);
-+	void (*mk_noaccess)(struct dax_device *dax_dev);
++static void __pmem_mk_noaccess(struct pmem_device *pmem)
++{
++	if (pmem->pgmap.flags & PGMAP_PROTECTION)
++		__pgmap_mk_noaccess(&pmem->pgmap);
++}
++
+ static blk_status_t pmem_do_read(struct pmem_device *pmem,
+ 			struct page *page, unsigned int page_off,
+ 			sector_t sector, unsigned int len)
+@@ -149,7 +161,10 @@ static blk_status_t pmem_do_read(struct pmem_device *pmem,
+ 	if (unlikely(is_bad_pmem(&pmem->bb, sector, len)))
+ 		return BLK_STS_IOERR;
+ 
++	__pmem_mk_readwrite(pmem);
+ 	rc = read_pmem(page, page_off, pmem_addr, len);
++	__pmem_mk_noaccess(pmem);
++
+ 	flush_dcache_page(page);
+ 	return rc;
+ }
+@@ -181,11 +196,14 @@ static blk_status_t pmem_do_write(struct pmem_device *pmem,
+ 	 * after clear poison.
+ 	 */
+ 	flush_dcache_page(page);
++
++	__pmem_mk_readwrite(pmem);
+ 	write_pmem(pmem_addr, page, page_off, len);
+ 	if (unlikely(bad_pmem)) {
+ 		rc = pmem_clear_poison(pmem, pmem_off, len);
+ 		write_pmem(pmem_addr, page, page_off, len);
+ 	}
++	__pmem_mk_noaccess(pmem);
+ 
+ 	return rc;
+ }
+@@ -301,11 +319,36 @@ static long pmem_dax_direct_access(struct dax_device *dax_dev,
+ 	return __pmem_direct_access(pmem, pgoff, nr_pages, kaddr, pfn);
+ }
+ 
++static bool pmem_map_protected(struct dax_device *dax_dev)
++{
++	struct pmem_device *pmem = dax_get_private(dax_dev);
++
++	return (pmem->pgmap.flags & PGMAP_PROTECTION);
++}
++
++static void pmem_mk_readwrite(struct dax_device *dax_dev)
++{
++	__pmem_mk_readwrite(dax_get_private(dax_dev));
++}
++
++static void pmem_mk_noaccess(struct dax_device *dax_dev)
++{
++	__pmem_mk_noaccess(dax_get_private(dax_dev));
++}
++
+ static const struct dax_operations pmem_dax_ops = {
+ 	.direct_access = pmem_dax_direct_access,
+ 	.zero_page_range = pmem_dax_zero_page_range,
  };
  
- #if IS_ENABLED(CONFIG_DAX)
-@@ -187,6 +191,10 @@ int dax_zero_page_range(struct dax_device *dax_dev, pgoff_t pgoff,
- 			size_t nr_pages);
- void dax_flush(struct dax_device *dax_dev, void *addr, size_t size);
- 
-+bool dax_map_protected(struct dax_device *dax_dev);
-+void dax_mk_readwrite(struct dax_device *dax_dev);
-+void dax_mk_noaccess(struct dax_device *dax_dev);
++static const struct dax_operations pmem_protected_dax_ops = {
++	.direct_access = pmem_dax_direct_access,
++	.zero_page_range = pmem_dax_zero_page_range,
++	.map_protected = pmem_map_protected,
++	.mk_readwrite = pmem_mk_readwrite,
++	.mk_noaccess = pmem_mk_noaccess,
++};
 +
- ssize_t dax_iomap_rw(struct kiocb *iocb, struct iov_iter *iter,
- 		const struct iomap_ops *ops);
- vm_fault_t dax_iomap_fault(struct vm_fault *vmf, enum page_entry_size pe_size,
+ static ssize_t write_cache_show(struct device *dev,
+ 		struct device_attribute *attr, char *buf)
+ {
+@@ -427,6 +470,8 @@ static int pmem_attach_disk(struct device *dev,
+ 	pmem->pfn_flags = PFN_DEV;
+ 	if (is_nd_pfn(dev)) {
+ 		pmem->pgmap.type = MEMORY_DEVICE_FS_DAX;
++		if (pgmap_protection_available())
++			pmem->pgmap.flags |= PGMAP_PROTECTION;
+ 		addr = devm_memremap_pages(dev, &pmem->pgmap);
+ 		pfn_sb = nd_pfn->pfn_sb;
+ 		pmem->data_offset = le64_to_cpu(pfn_sb->dataoff);
+@@ -440,6 +485,8 @@ static int pmem_attach_disk(struct device *dev,
+ 		pmem->pgmap.range.end = res->end;
+ 		pmem->pgmap.nr_range = 1;
+ 		pmem->pgmap.type = MEMORY_DEVICE_FS_DAX;
++		if (pgmap_protection_available())
++			pmem->pgmap.flags |= PGMAP_PROTECTION;
+ 		addr = devm_memremap_pages(dev, &pmem->pgmap);
+ 		pmem->pfn_flags |= PFN_MAP;
+ 		bb_range = pmem->pgmap.range;
+@@ -474,7 +521,10 @@ static int pmem_attach_disk(struct device *dev,
+ 	nvdimm_badblocks_populate(nd_region, &pmem->bb, &bb_range);
+ 	disk->bb = &pmem->bb;
+ 
+-	dax_dev = alloc_dax(pmem, &pmem_dax_ops);
++	if (pmem->pgmap.flags & PGMAP_PROTECTION)
++		dax_dev = alloc_dax(pmem, &pmem_protected_dax_ops);
++	else
++		dax_dev = alloc_dax(pmem, &pmem_dax_ops);
+ 	if (IS_ERR(dax_dev)) {
+ 		rc = PTR_ERR(dax_dev);
+ 		goto out;
 -- 
 2.31.1
 

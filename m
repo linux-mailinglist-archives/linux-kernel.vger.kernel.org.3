@@ -2,93 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFDA49DB65
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8014649DB6E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237243AbiA0HYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 02:24:46 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:35232
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233739AbiA0HYn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 02:24:43 -0500
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8F4323F1CC
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 07:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643268275;
-        bh=2EcT5EJ8UI+o/Ys5+M67bQkoP+QAgsb522s0Pfb1Agk=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=qapwjp6SYRN8v0N4Gm1kOP42Pn/SNSySbP1WE1cweKt9UvEqRU2WfkIyUmB1DbE6t
-         3NIV/DH1h26oZTayp4aZGwAYiQSQgYsB3qHx44byb3ubd0iaCHVc/MK+xfkq85d2mB
-         Qwj+8jy5yNZ4aXtnYj1/0LIRQtjmnwqcX8oo6uUtH0yw8F9KiQwFl8E3FtGPxAXNPW
-         5M5kdJthBCq0W7gUvghyZcU8/qVGfz1v7omynTjig5vWT6HLlAuuQZ997V/kxSeD8T
-         RpRs/y50aJsg4AIlrS8j6vL+F8EGbrfVHgXfxsnmj8TguU/dgaN1eGfaSAfQqoxrRP
-         x912a5IsYT83A==
-Received: by mail-ej1-f71.google.com with SMTP id d18-20020a1709063ed200b006a5eeb2ee4dso916544ejj.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 23:24:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2EcT5EJ8UI+o/Ys5+M67bQkoP+QAgsb522s0Pfb1Agk=;
-        b=HenR7YeqWyawOZBcKHjyfbNnyYLQFRuHhQM5gZzNq6XCmkbSHoP2IV11tL6rXWR18c
-         Iu834GUSYiFt2SMsUP3XxmdrYEBFwUL5Ux1OJjV2sC2h/1KrXck/O9EUCHGZrfnqM4PH
-         op/XGPvrvyjlXJQVacFeSJHpS1hwQsGKtPyX0XFo/DvIAke41vvkR72di6t7HD0izXfs
-         Q7/kzZT/f5RgcL4b0MP5/c4BhbxEcjrlwA9yL3kQp2um0Zu0J0qfipc+jF0Tes45rD4H
-         CU3oz0vsllezCO9E2bXS12SNBmyDfFXjDgvZJUPaltqbQ9PGr39RhQNEKqwiJDuBvjEb
-         mN1g==
-X-Gm-Message-State: AOAM530ED5noUV7W3J3npwkvDOEBM5fe38jqyPHhm3UUUunQZnjo7OuI
-        rriBKpA8Bxev2kCQ7FIxFvPJQMkLZOxz/NuapMC1Dprx1OjSCChIAyGky+O3rjFxowZiC0wzMgM
-        nIB0I91S1pKWzFriyM1psvKbxRWCusuPOigESXkateg==
-X-Received: by 2002:a17:906:1454:: with SMTP id q20mr1923077ejc.461.1643268275267;
-        Wed, 26 Jan 2022 23:24:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxtU2EdH4ioS0aMxUEH5h2Wibr/B48T4c2n82kNh44zPnwQD33NBPuvPT458iPvV0bmFRHbvA==
-X-Received: by 2002:a17:906:1454:: with SMTP id q20mr1923070ejc.461.1643268275068;
-        Wed, 26 Jan 2022 23:24:35 -0800 (PST)
-Received: from [192.168.0.62] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id u9sm8310737ejo.119.2022.01.26.23.24.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 23:24:34 -0800 (PST)
-Message-ID: <984330af-c2c0-18b1-6d72-f1b910fbfc3d@canonical.com>
-Date:   Thu, 27 Jan 2022 08:24:34 +0100
-MIME-Version: 1.0
+        id S237254AbiA0H1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 02:27:20 -0500
+Received: from mail-bn7nam10on2061.outbound.protection.outlook.com ([40.107.92.61]:17760
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237192AbiA0H1T (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 02:27:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ewdATfFs8IjT/e+aGVdXQJXOwxtpHxevN4Wj0BzSUyE8rhI8QSW/m5T5Lkr2deG9xBD1o6ZVFR9b1ttgEqeC0QmUCUcUc/gjGjaW2D9eex3lG0NdfTUBlL5SKP7z9A9MOqa8TA5ulbkoolwWMTWRpV1+rjTUIhbTpMdh1C1lr7ZybV6JBKH0OUtzGLK7A2h2Z99zN9FIeOJ20q+kNochokDueIsbucbdQBsQz/+1WlKpjXbonZIwfTTR+pX2yQ0l9JdSR/5L+wXu9eVvs5HNMwma6NYKP5/RBZd7n+PAgjgS2zx5QwrELI40eLfI4TXS6Fsmdo4PpsKeLv/OFAQyww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WAyxq43yKpnPAdn+/QR3a/24qkATUY3MSXD/g0pPkSs=;
+ b=oEP//wfdi3bTeTxj1wkCFhGPFT7LdyWx9TlDfoNXJpqp0dyK2hxUsiV1U/a2ZZdTGOrAy7E6pBGFyRDuaEFGff0hD3scKAYEwYDg61qtBeBhk8wV+x3/1N7UGK4Z7nwZGZAPVQQqm8xZcfXSUjBj8KyMjIosCTLlRD/59yQW62HKZ+wqtqz7RjxeTS4mt5Rgba1kYlve5O2DMEMeYc4TPwSruVJlSVR8uVx3DQ4rZUE976cv7h9hnI92pv8XhcwO7z8cSCrnFnjM10cOvBJxc7YIoc+sTrEhYWTIzaNmBm3LJZp8hJ5xXdqlzZ5PvyznKF9apYMhvdZZ2l0yXs0+QA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WAyxq43yKpnPAdn+/QR3a/24qkATUY3MSXD/g0pPkSs=;
+ b=cCNanOCYh2nA4oFcM4j6wyu3JyWaRkxf1nwubTxs3Mvo0NFC3NFPKmtkgL7BiFj/VzIGEKhvkE8rM45VIHRUu9e96ecL/w0KdUADqa5Wd+Nm6Fww6icVPd7r3CsdVOxClD4kWOx7HxLg0K9PpyoOjUo3fUT0LZr4UcdebLcHZDE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (20.178.210.205) by
+ DM6PR12MB2603.namprd12.prod.outlook.com (20.176.116.84) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4930.15; Thu, 27 Jan 2022 07:27:16 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d8e7:e6b0:d63c:4a21]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d8e7:e6b0:d63c:4a21%5]) with mapi id 15.20.4909.019; Thu, 27 Jan 2022
+ 07:27:16 +0000
+Message-ID: <f0dbdcc0-13b5-c484-0bf3-a1f8c3e48954@amd.com>
+Date:   Thu, 27 Jan 2022 08:27:11 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] dt-bindings: regulator: maxim,max8973: Drop Tegra
- specifics from example
+Subject: Re: [PATCH 02/19] dma-buf-map: Add helper to initialize second map
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220126231250.1635021-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220126231250.1635021-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        intel-gfx@lists.freedesktop.org
+Cc:     dri-devel@lists.freedesktop.org,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+ <20220126203702.1784589-3-lucas.demarchi@intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220126203702.1784589-3-lucas.demarchi@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM6P191CA0100.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:209:8a::41) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d481c12f-3a39-425a-5287-08d9e1667206
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2603:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB26031297356638C44CF5AEB183219@DM6PR12MB2603.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qdUT8mdwGgzFGIZkwxj2kvS+CFEhlpkHPxUWvprinf/Q+xGgqqEkcrp6Hlr35ZV65FZLKxN5mCNSTsdzYvdOeYvnt2Cxe8UvrGbl/E3FIGxZ84XkbU8TeqYukirFV/yXIgEk6jwX+BTTSs/3TQUYehm25Gb5Sb1hLOX4hwSubK08hs2kkkQhaH+zQy4lo9PVwDz5AjR74jxoA93h2gwS8+RR3ndWJ7z+u/0lq1yKruZiaFJTfd1j2VPqwdezzKimXQA3yvj0vdSXWmsFuWo1XGWuzvC2lh3Rkn94hXGG5oPtxRwbY7m5NtmjPOWEQp1ijVKWxvK/KLMvZwEjReY1DzdW51w9BuPxKpb0bFodsWAWtEUnJJ1TfGXwGTfnDmD5ZaqEjbr+emZFtZzrVx91Mm6BnsqAnfAA0kML3j/3hPXtr2Y/yBk/JJlbQdW3MAJXk8zfI3iBvqaKsiA+MDO/6QFNJRrfBb9Htwc5FWLyUlv1pw9AZrsD5KPGn2NJCSuooVMYXRoZd+IIbmH8w1SUjFckuwWdksNVWir0c0ffEAzBvNUGyU8iVtxNck9r1TKuXysNBAA8fUhyT6ch05qyP2yRTGQeeC5PG2PrXAlK3MqcTgD2rqLy6O5nVVG25XBsCP7gZRTKtAYYsvf6hNiDcFWvLUG9QUNM/XY5r68GN0cKpam50wA2qrurmGcRANp4fatdQxVciVWgTkf01+7/vXkxHMQ4YMNapCsmsejKSMTaW2kBy9dgJVvxPMPqU6wm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(38100700002)(5660300002)(66946007)(31696002)(2906002)(66476007)(8936002)(8676002)(316002)(66556008)(6666004)(31686004)(86362001)(4326008)(66574015)(508600001)(2616005)(83380400001)(6512007)(26005)(6506007)(6486002)(36756003)(186003)(45980500001)(43740500002)(20210929001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L1BNS0xoR2lDM0pLSUFhRkxWK0R6R0xKUGVnL0tvWU5OTndtQXNINVZVTm1D?=
+ =?utf-8?B?QkM2MnUrdjVWaS9rVVJHbDIxV0ZaTUtJZnNUeDU5cVl3UGdTZjlYdEhhQlU3?=
+ =?utf-8?B?TlhzZm1VSU94SXVUNm1UY0tKcU45V2k4amhINWVoUzVWaml5aHRudTJ0QW8r?=
+ =?utf-8?B?dGFhSWhjcElUNXRPOUYzZEN6TndwTjJxTmFMMGcxN0gzQkRLeWxKSnBVNjBo?=
+ =?utf-8?B?V24yNkpPbG9mMmJsaFBrL0phYWUwWW1EMkl2RThlbFI1TFYvZ1UzTGd6UXdE?=
+ =?utf-8?B?QklOeGsrMWZ0ejRSVWE4WEtzb3JOejVZb25Ta2c1c0JpZCt6MHgwWjFMQU9I?=
+ =?utf-8?B?M3M4Q1R2UXhKTFJkVDZqcE5hYWdOOFBYRW9FeWhOUkdMb0oxWHdBVnNXdlNr?=
+ =?utf-8?B?Q3ZKR1JLK05JTDl2bitDL1JRWXAzNmJFODg1STY1SkVuYm9laVJOUzJ6MnNY?=
+ =?utf-8?B?cmMwRFk4SklMVlVKM1VQRWlCd24rVVErLzN2ZWNxQ2V1U3pKUGRyeDZESjZm?=
+ =?utf-8?B?OWMwVDJyVTlZNFY1VVJJWVlIOFdjVE0weXpiRGtZTS90QVIrQmQ5MHpUeS9C?=
+ =?utf-8?B?Mk96eGovR0d0SjdnWldGVWxtUWdheDhQeURYMUJYbG94eUZmR1ZyVFJ1V3pG?=
+ =?utf-8?B?Ui9VR1ZBa3hoS29vcEJicVRqOE5URzhzYWdVbWtIb2FyeTlGbS9VRnljZUgr?=
+ =?utf-8?B?dXIwN0lxQlZCRVdsSlFGNHg3V0lPeGh0djVnaW5SUWJlNWtVNkpDYmZsYTZu?=
+ =?utf-8?B?bHBUT2x6ekxFQXZNVTB1dDAxR1ZJaS95ZkZNT2pqZCtqTWlockhyYXpyMlZF?=
+ =?utf-8?B?WVZVcGxPN2tRYXZ2N2R0MFFIaXhROERUa2dNZzQxL2NzdFVsRnpoZDJ4a1Mv?=
+ =?utf-8?B?YUg3WlhpZjhzZGtKNXZvbVpyQTMwQmI5YUhwWnY1Tmp6eHlCYXlHWG8xQW55?=
+ =?utf-8?B?NysvejlJZUwxZFF4ZlpSMEpOanRKUmttbWpxQnJJZVJJejJURys2L29wQmpv?=
+ =?utf-8?B?S0c5MU9OZUJQbk5zek13VEtBcmZGY2U4UG9ON2xUNnBEUDVLNHlleE13c05j?=
+ =?utf-8?B?NUNtVllmejJXZnc0SkRwMk8rbWhQZkI2VnhGRm5HVU5sTUdORVJjeXk5NjY2?=
+ =?utf-8?B?Q0EwOTMyNmc5MXNiVUMwK0JXOXRqczEwbUkyUlJiOFQwc3VwU2dDWEF0VjRu?=
+ =?utf-8?B?YnRtZ2kwWG1zRWR2QlZwNUJ3dERPWXdoMGZ0SUsza1A5ZGpnQ0JuaExjTnRG?=
+ =?utf-8?B?VE5KWnhZVm02TGVHVzUwbys2aWlGZS83UHlnUzBsY1lwb2dyYlBrcGk3RjR0?=
+ =?utf-8?B?L2I5ZFBSM2NGUzFNdGZPQm9PTjdHeFRzOVp0Wk5PY0ZaWmlST1lwM0hTWEds?=
+ =?utf-8?B?ejlhQnpVUHdRaS8yNDY0QStlUTlUKy9Vd2xUYkZ1ZmtTL3h6b1lQSVZnMDNJ?=
+ =?utf-8?B?OWwyWERXblZOUFV1a0d2SHgxZ0RwZGsyWXM0Njg2a0JUOW5CaEFGbTFkTDE0?=
+ =?utf-8?B?MjQybzM4YkN2VXpUUU4rdnNhQUdXdDJKNUFGV3Y4MUlxN0VlSlZyWjZINkpU?=
+ =?utf-8?B?WjE4ZnV3cmY2Uk5VVER5NnhyaGEwVGFkdHZwUmtIenZPdHlsNnhvMDlFUTZj?=
+ =?utf-8?B?ck1MaFo5ay81REdkUlR2OXVuVm9BRFlrSW5NRjh1QlZBZUtvNER5NUFWak5E?=
+ =?utf-8?B?STNJRE5mT3l1cFIrVlZRSTVsYXgvRWZLVThrRlNzaldsbVU1Y0ZYdTNSVWg3?=
+ =?utf-8?B?MjBOZjFqbm5iS2gzWkZ6NTFoL21iT3hZdVFHaUtFTit0YlJmN3FTcnhvTi8r?=
+ =?utf-8?B?V3Nrc1cxYWU4RkdKQnF2L0wzWkw4THR4OVJXdVVDMEh6aThvSXRaeXVTSTRi?=
+ =?utf-8?B?aW42OSt6cldjVlpLck5zMXlJblpFVUNaRlgxb1VWVnhycjBrSExLRURVZ0FD?=
+ =?utf-8?B?U3lrTDVYZEhicXZJNVdWUEVpdVlZQ1NZOTJXeU1DRzJDUzRaZ2lpUGl0ZlJG?=
+ =?utf-8?B?Um1YK2Q4eGJGbzduNHpDOHM1VStrRHZmZ3BvTUVBZk9YZnRHYXc2NlEyU00v?=
+ =?utf-8?B?eTVRTmlBMFRuejJRS3hjMW1zc2lRWjdTcWZRMVJLM1lVaTZzNWRDM1hMTjdW?=
+ =?utf-8?Q?DcAI=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d481c12f-3a39-425a-5287-08d9e1667206
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2022 07:27:16.7285
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qTeNZA25bCsp6F6Bu4QZ6LPuOXo8IuwLb5ZyzhycE+6kwzYXhSwxy9ifbedTjLrC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2603
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2022 00:12, Rob Herring wrote:
-> There's no need to complicate examples with a platform specific macro.
-> It also complicates example parsing to figure out the number of interrupt
-> cells in examples (based on the bracketing).
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Am 26.01.22 um 21:36 schrieb Lucas De Marchi:
+> When dma_buf_map struct is passed around, it's useful to be able to
+> initialize a second map that takes care of reading/writing to an offset
+> of the original map.
+>
+> Add a helper that copies the struct and add the offset to the proper
+> address.
+
+Well what you propose here can lead to all kind of problems and is 
+rather bad design as far as I can see.
+
+The struct dma_buf_map is only to be filled in by the exporter and 
+should not be modified in this way by the importer.
+
+If you need to copy only a certain subset of the mapping use the 
+functions you added in patch #1.
+
+Regards,
+Christian.
+
+>
+> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> Cc: Christian König <christian.koenig@amd.com>
+> Cc: linux-media@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linaro-mm-sig@lists.linaro.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
 > ---
->  .../devicetree/bindings/regulator/maxim,max8973.yaml         | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
+>   include/linux/dma-buf-map.h | 29 +++++++++++++++++++++++++++++
+>   1 file changed, 29 insertions(+)
+>
+> diff --git a/include/linux/dma-buf-map.h b/include/linux/dma-buf-map.h
+> index 65e927d9ce33..3514a859f628 100644
+> --- a/include/linux/dma-buf-map.h
+> +++ b/include/linux/dma-buf-map.h
+> @@ -131,6 +131,35 @@ struct dma_buf_map {
+>   		.is_iomem = false, \
+>   	}
+>   
+> +/**
+> + * DMA_BUF_MAP_INIT_OFFSET - Initializes struct dma_buf_map from another dma_buf_map
+> + * @map_:	The dma-buf mapping structure to copy from
+> + * @offset:	Offset to add to the other mapping
+> + *
+> + * Initializes a new dma_buf_struct based on another. This is the equivalent of doing:
+> + *
+> + * .. code-block: c
+> + *
+> + *	dma_buf_map map = other_map;
+> + *	dma_buf_map_incr(&map, &offset);
+> + *
+> + * Example usage:
+> + *
+> + * .. code-block: c
+> + *
+> + *	void foo(struct device *dev, struct dma_buf_map *base_map)
+> + *	{
+> + *		...
+> + *		struct dma_buf_map = DMA_BUF_MAP_INIT_OFFSET(base_map, FIELD_OFFSET);
+> + *		...
+> + *	}
+> + */
+> +#define DMA_BUF_MAP_INIT_OFFSET(map_, offset_)	(struct dma_buf_map)	\
+> +	{								\
+> +		.vaddr = (map_)->vaddr + (offset_),			\
+> +		.is_iomem = (map_)->is_iomem,				\
+> +	}
+> +
+>   /**
+>    * dma_buf_map_set_vaddr - Sets a dma-buf mapping structure to an address in system memory
+>    * @map:	The dma-buf mapping structure
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-
-Best regards,
-Krzysztof

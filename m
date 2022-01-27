@@ -2,105 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBFC49E6E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A30249E6D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 17:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243376AbiA0QCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 11:02:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38531 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243363AbiA0QCh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:02:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643299356;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=7FQTIiP8uSrPA9XLCevbyqcBlL979Xzr6Ul1VbrIeY0=;
-        b=L6kpnRkh4ktHRvbqOuYy4DoO9vPDuHPrPqDlyUCUywmALAeD2UtK+9w0LRfFgNKHaQMoYl
-        QHV9038oUpsm1GulfFsiIUGWk2a/tY4WUHF0y9G+65ii6Z49O446rfAC55Onq1IE2a6haf
-        HiAfOqal96xRJroe9UBdmte2RGlp44Q=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-mChErr9KNs2aQ2tmLAhjmw-1; Thu, 27 Jan 2022 11:02:30 -0500
-X-MC-Unique: mChErr9KNs2aQ2tmLAhjmw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C97951091DA4;
-        Thu, 27 Jan 2022 16:02:28 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 99021838C4;
-        Thu, 27 Jan 2022 16:01:42 +0000 (UTC)
-Subject: [PATCH 0/4] cifs: Use fscache I/O again after the rewrite disabled it
-From:   David Howells <dhowells@redhat.com>
-To:     Steve French <smfrench@gmail.com>
-Cc:     Shyam Prasad N <nspmangalore@gmail.com>,
-        linux-cifs@vger.kernel.org, linux-cachefs@redhat.com,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, dhowells@redhat.com,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-cifs@vger.kernel.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 27 Jan 2022 16:01:41 +0000
-Message-ID: <164329930161.843658.7387773437540491743.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        id S243334AbiA0QBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 11:01:55 -0500
+Received: from mga04.intel.com ([192.55.52.120]:25457 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243322AbiA0QBy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 11:01:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643299314; x=1674835314;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gyBZixaBm40qjjJXVPmiJ75pob0TuT04D30E4HETsXo=;
+  b=AVuFUIJwgrPxo8wX4MvAUkySZ7BNJc7JpyyUy8WFvgFqiCwyL5sFTuLZ
+   HrXpidAXTxCSJNQEB6u4NtOkiz95M5Epk6mQbOfWs0jTfFlkfQClPlNg0
+   SZYyHOyV2Ox3vzUeiHiyXaz5PjihHiLpBMs6bTY6HL1RHgg/vIWIexhM0
+   Tq4RgeVJhlF3vtPivbLmeBLE3dYT7MehN9KkjFsSfnvnS2X5CKVOkEdiU
+   F6Q22oUiYzsSn+yxqiJNHfZqcwq7C6aA63gQh/5DA7xJk0PZF0Lhjg8O1
+   6aot2J81lpVre5loqTtaN/q1SY8hUZaUM6z+iwQLDBjYeskcwIeau9tno
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245735788"
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="245735788"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:01:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
+   d="scan'208";a="563833241"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 27 Jan 2022 08:01:42 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C5CBD167; Thu, 27 Jan 2022 18:01:55 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Allen Pais <apais@linux.microsoft.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] firmware: tee_bnxt: Use UUID API for exporting the UUID
+Date:   Thu, 27 Jan 2022 18:01:50 +0200
+Message-Id: <20220127160150.48140-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is export_uuid() function which exports uuid_t to the u8 array.
+Use it instead of open coding variant.
 
-Hi Steve,
+This allows to hide the uuid_t internals.
 
-Here are some patches to make cifs actually do I/O to the cache after it
-got disabled in the fscache rewrite[1] plus a warning fix that you might
-want to detach and take separately:
-
- (1) Fix a kernel doc warning.
-
- (2) Change cifs from using ->readpages() to using ->readahead().
-
- (3) Provide a netfs cache op to query for the presence of data in the
-     cache.[*]
-
- (4) Make ->readahead() call
-
-The patches can be found here also:
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-rewrite
-
-David
-
-[*] Ideally, we would use the netfslib read helpers, but it's probably better
-    to roll iterators down into cifs's I/O layer before doing that[2].
-
-Link: https://lore.kernel.org/r/164021479106.640689.17404516570194656552.stgit@warthog.procyon.org.uk/ [1]
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=cifs-experimental [2]
-
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-David Howells (4):
-      Fix a warning about a malformed kernel doc comment in cifs by removing the
-      cifs: Transition from ->readpages() to ->readahead()
-      netfs, cachefiles: Add a method to query presence of data in the cache
-      cifs: Implement cache I/O by accessing the cache directly
 
+v2: resent with Cc to Christoph since the original maintainers are
+    non-responsive for mare than a year (previous resent was dated
+    2021-01-21).
 
- Documentation/filesystems/netfs_library.rst |  16 ++
- fs/cachefiles/io.c                          |  59 ++++++
- fs/cifs/connect.c                           |   2 +-
- fs/cifs/file.c                              | 221 ++++++++------------
- fs/cifs/fscache.c                           | 126 +++++++++--
- fs/cifs/fscache.h                           |  79 ++++---
- include/linux/netfs.h                       |   7 +
- 7 files changed, 322 insertions(+), 188 deletions(-)
+ drivers/firmware/broadcom/tee_bnxt_fw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
+index a5bf4c3f6dc7..40e3183a3d11 100644
+--- a/drivers/firmware/broadcom/tee_bnxt_fw.c
++++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
+@@ -197,7 +197,7 @@ static int tee_bnxt_fw_probe(struct device *dev)
+ 		return -ENODEV;
+ 
+ 	/* Open session with Bnxt load Trusted App */
+-	memcpy(sess_arg.uuid, bnxt_device->id.uuid.b, TEE_IOCTL_UUID_LEN);
++	export_uuid(sess_arg.uuid, &bnxt_device->id.uuid);
+ 	sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+ 	sess_arg.num_params = 0;
+ 
+-- 
+2.34.1
 

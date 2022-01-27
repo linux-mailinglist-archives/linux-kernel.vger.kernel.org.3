@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEDB49D7F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3DD49D7F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 03:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234946AbiA0CTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 21:19:23 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1880 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234896AbiA0CTW (ORCPT
+        id S234984AbiA0CUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 21:20:35 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:53850 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231582AbiA0CUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 21:19:22 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20R1lsZo027966;
-        Thu, 27 Jan 2022 02:19:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Mzl41XpXzpO2lLy47QbOh3uvKRi2UezMNbgO7obqdes=;
- b=XwdDCM2R77upJowuJirnyq60cUWinkzT5ge/aQCNoGJ/2UWBAt130PFHATPissiavnAf
- oD/Hi4QOPdSDI8QGtuklN3E7sF8cRdRaokR99RL01STeEUy/N3DHotrRKHpLuZk9qqAh
- cGF59l+uDVN3ObgwM/rGorDcwgdY5xEeBQTA2R1QRzIjv9ez5Hs9pWZWuMCJ+2Q5wtJ/
- 9lbI10BPSELYSbbyrUfMOu27Pc+3KYMYHXIhP7fE0rO15yJCua2sb8D6HKZHmeKaJR78
- NuxRg0c2SSbstbW4TkPA+jpvT37cJdrbq/g0CfyDIYS+lnXMB0NO1MuV5wOVFUoOxp1s wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3duj1wrhe1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 02:19:15 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 20R2FIF1027703;
-        Thu, 27 Jan 2022 02:19:15 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3duj1wrhdb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 02:19:15 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 20R2CDe1019117;
-        Thu, 27 Jan 2022 02:19:13 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3dr9j9k0hu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Jan 2022 02:19:12 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 20R2JAcn37093854
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Jan 2022 02:19:10 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83D00AE04D;
-        Thu, 27 Jan 2022 02:19:10 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2888EAE045;
-        Thu, 27 Jan 2022 02:19:09 +0000 (GMT)
-Received: from sig-9-65-92-33.ibm.com (unknown [9.65.92.33])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 27 Jan 2022 02:19:09 +0000 (GMT)
-Message-ID: <f87e6cef510013e3a7ce2ce31a444767650f9fdf.camel@linux.ibm.com>
-Subject: Re: [PATCH v4] integrity: check the return value of
- audit_log_start()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Xiaoke Wang <xkernel.wang@foxmail.com>
-Cc:     paul <paul@paul-moore.com>, jmorris <jmorris@namei.org>,
-        serge <serge@hallyn.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Wed, 26 Jan 2022 21:19:08 -0500
-In-Reply-To: <tencent_0685FF3C104366D05C368E2E0A88F043A507@qq.com>
-References: <tencent_0685FF3C104366D05C368E2E0A88F043A507@qq.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: nAgn9JSimx0DnyB3xEfGDNx9xmSrX3ax
-X-Proofpoint-GUID: eKkt6vatNwETBYJqhT6FJ32m5mTQm3u6
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 26 Jan 2022 21:20:34 -0500
+X-UUID: 311ddb002ece4225a4ff8e7d350586b6-20220127
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:CC:To:Subject; bh=zv6kHK8XcIu/9fbhvtq0nRCaxzxKlIOUazyYdUv8qM4=;
+        b=TjhS2njcPmWcFJ0Q279D9hKa+q+uaHuqx1skB80XpWT0IWnKb3MJ6ZexwdSc6+xZiioP3BM2wYslv4i+VjOdu0rFkR1LngUNsn0uaE5418xiL1TKkxqZ/dJgiFSmIwZLG3lcP3I/IWbBIe2sr7wB2jQEru8PN2V3Q65KBTX2Puc=;
+X-UUID: 311ddb002ece4225a4ff8e7d350586b6-20220127
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1660428893; Thu, 27 Jan 2022 10:20:31 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 27 Jan 2022 10:20:29 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 27 Jan 2022 10:20:29 +0800
+Subject: Re: [PATCH net-next v2 6/9] net: ethernet: mtk-star-emac: add timing
+ adjustment support
+To:     Biao Huang <biao.huang@mediatek.com>,
+        David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "Fabien Parent" <fparent@baylibre.com>
+CC:     Jakub Kicinski <kuba@kernel.org>, Felix Fietkau <nbd@nbd.name>,
+        "John Crispin" <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
+        <srv_heupstream@mediatek.com>
+References: <20220127015857.9868-1-biao.huang@mediatek.com>
+ <20220127015857.9868-7-biao.huang@mediatek.com>
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+Message-ID: <ca39f3b3-7c61-bcdd-d072-d441612855d2@mediatek.com>
+Date:   Thu, 27 Jan 2022 10:20:29 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-26_09,2022-01-26_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=799 malwarescore=0 suspectscore=0 adultscore=0 spamscore=0
- bulkscore=0 phishscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201270011
+In-Reply-To: <20220127015857.9868-7-biao.huang@mediatek.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiaoke,
-
-On Thu, 2022-01-27 at 09:59 +0800, Xiaoke Wang wrote:
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
-> 
-> audit_log_start() returns audit_buffer pointer on success or NULL on
-> error, so it is better to check the return value of it.
-> 
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-> Reviewed-by: Paul Moore <paul@paul-moore.com>
-
-Thanks, this patch is staged in the next-integrity-testing branch 
-https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/
-
-Mimi
+DQpPbiAxLzI3LzIyIDk6NTggQU0sIEJpYW8gSHVhbmcgd3JvdGU6DQo+IEFkZCBzaW1wbGUgY2xv
+Y2sgaW52ZXJzaW9uIGZvciB0aW1pbmcgYWRqdXN0bWVudCBpbiBkcml2ZXIuDQo+IEFkZCBwcm9w
+ZXJ0eSAibWVkaWF0ZWssdHhjLWludmVyc2UiIG9yICJtZWRpYXRlayxyeGMtaW52ZXJzZSIgdG8N
+Cj4gZGV2aWNlIG5vZGUgd2hlbiBuZWNlc3NhcnkuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBCaWFv
+IEh1YW5nIDxiaWFvLmh1YW5nQG1lZGlhdGVrLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogWWluZ2h1
+YSBQYW4gPG90X3lpbmdodWEucGFuQG1lZGlhdGVrLmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy9u
+ZXQvZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX3N0YXJfZW1hYy5jIHwgMzQgKysrKysrKysrKysrKysr
+KysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAzNCBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX3N0YXJfZW1hYy5jIGIvZHJp
+dmVycy9uZXQvZXRoZXJuZXQvbWVkaWF0ZWsvbXRrX3N0YXJfZW1hYy5jDQo+IGluZGV4IGQ2OWY3
+NTY2MWU3NS4uZDVlOTc0ZTBkYjZkIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL25ldC9ldGhlcm5l
+dC9tZWRpYXRlay9tdGtfc3Rhcl9lbWFjLmMNCj4gKysrIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQv
+bWVkaWF0ZWsvbXRrX3N0YXJfZW1hYy5jDQo+IEBAIC0xMzEsNiArMTMxLDExIEBAIHN0YXRpYyBj
+b25zdCBjaGFyICpjb25zdCBtdGtfc3Rhcl9jbGtfbmFtZXNbXSA9IHsgImNvcmUiLCAicmVnIiwg
+InRyYW5zIiB9Ow0KPiAgICNkZWZpbmUgTVRLX1NUQVJfUkVHX0lOVF9NQVNLCQkJMHgwMDU0DQo+
+ICAgI2RlZmluZSBNVEtfU1RBUl9CSVRfSU5UX01BU0tfRk5SQwkJQklUKDYpDQo+ICAgDQo+ICsv
+KiBEZWxheS1NYWNybyBSZWdpc3RlciAqLw0KPiArI2RlZmluZSBNVEtfU1RBUl9SRUdfVEVTVDAJ
+CQkweDAwNTgNCj4gKyNkZWZpbmUgTVRLX1NUQVJfQklUX0lOVl9SWF9DTEsJCQlCSVQoMzApDQo+
+ICsjZGVmaW5lIE1US19TVEFSX0JJVF9JTlZfVFhfQ0xLCQkJQklUKDMxKQ0KPiArDQo+ICAgLyog
+TWlzYy4gQ29uZmlnIFJlZ2lzdGVyICovDQo+ICAgI2RlZmluZSBNVEtfU1RBUl9SRUdfVEVTVDEJ
+CQkweDAwNWMNCj4gICAjZGVmaW5lIE1US19TVEFSX0JJVF9URVNUMV9SU1RfSEFTSF9NQklTVAlC
+SVQoMzEpDQo+IEBAIC0yNjgsNiArMjczLDggQEAgc3RydWN0IG10a19zdGFyX3ByaXYgew0KPiAg
+IAlpbnQgZHVwbGV4Ow0KPiAgIAlpbnQgcGF1c2U7DQo+ICAgCWJvb2wgcm1paV9yeGM7DQo+ICsJ
+Ym9vbCByeF9pbnY7DQo+ICsJYm9vbCB0eF9pbnY7DQo+ICAgDQo+ICAgCWNvbnN0IHN0cnVjdCBt
+dGtfc3Rhcl9jb21wYXQgKmNvbXBhdF9kYXRhOw0KPiAgIA0KPiBAQCAtMTQ1MCw2ICsxNDU3LDI1
+IEBAIHN0YXRpYyB2b2lkIG10a19zdGFyX2Nsa19kaXNhYmxlX3VucHJlcGFyZSh2b2lkICpkYXRh
+KQ0KPiAgIAljbGtfYnVsa19kaXNhYmxlX3VucHJlcGFyZShNVEtfU1RBUl9OQ0xLUywgcHJpdi0+
+Y2xrcyk7DQo+ICAgfQ0KPiAgIA0KPiArc3RhdGljIGludCBtdGtfc3Rhcl9zZXRfdGltaW5nKHN0
+cnVjdCBtdGtfc3Rhcl9wcml2ICpwcml2KQ0KPiArew0KPiArCXN0cnVjdCBkZXZpY2UgKmRldiA9
+IG10a19zdGFyX2dldF9kZXYocHJpdik7DQo+ICsJdW5zaWduZWQgaW50IGRlbGF5X3ZhbCA9IDA7
+DQo+ICsNCj4gKwlzd2l0Y2ggKHByaXYtPnBoeV9pbnRmKSB7DQo+ICsJY2FzZSBQSFlfSU5URVJG
+QUNFX01PREVfUk1JSToNCj4gKwkJZGVsYXlfdmFsIHw9IEZJRUxEX1BSRVAoTVRLX1NUQVJfQklU
+X0lOVl9SWF9DTEssIHByaXYtPnJ4X2ludik7DQo+ICsJCWRlbGF5X3ZhbCB8PSBGSUVMRF9QUkVQ
+KE1US19TVEFSX0JJVF9JTlZfVFhfQ0xLLCBwcml2LT50eF9pbnYpOw0KPiArCQlicmVhazsNCj4g
+KwlkZWZhdWx0Og0KPiArCQlkZXZfZXJyKGRldiwgIlRoaXMgaW50ZXJmYWNlIG5vdCBzdXBwb3J0
+ZWRcbiIpOw0KPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwl9DQo+ICsNCj4gKwlyZWdtYXBfd3Jp
+dGUocHJpdi0+cmVncywgTVRLX1NUQVJfUkVHX1RFU1QwLCBkZWxheV92YWwpOw0KPiArDQo+ICsJ
+cmV0dXJuIDA7DQo+ICt9DQo+ICAgc3RhdGljIGludCBtdGtfc3Rhcl9wcm9iZShzdHJ1Y3QgcGxh
+dGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgIHsNCj4gICAJc3RydWN0IGRldmljZV9ub2RlICpvZl9u
+b2RlOw0KPiBAQCAtMTUzMiw2ICsxNTU4LDggQEAgc3RhdGljIGludCBtdGtfc3Rhcl9wcm9iZShz
+dHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgIAl9DQo+ICAgDQo+ICAgCXByaXYtPnJt
+aWlfcnhjID0gb2ZfcHJvcGVydHlfcmVhZF9ib29sKG9mX25vZGUsICJtZWRpYXRlayxybWlpLXJ4
+YyIpOw0KPiArCXByaXYtPnJ4X2ludiA9IG9mX3Byb3BlcnR5X3JlYWRfYm9vbChvZl9ub2RlLCAi
+bWVkaWF0ZWsscnhjLWludmVyc2UiKTsNCj4gKwlwcml2LT50eF9pbnYgPSBvZl9wcm9wZXJ0eV9y
+ZWFkX2Jvb2wob2Zfbm9kZSwgIm1lZGlhdGVrLHR4Yy1pbnZlcnNlIik7DQo+ICAgDQo+ICAgCWlm
+IChwcml2LT5jb21wYXRfZGF0YS0+c2V0X2ludGVyZmFjZV9tb2RlKSB7DQo+ICAgCQlyZXQgPSBw
+cml2LT5jb21wYXRfZGF0YS0+c2V0X2ludGVyZmFjZV9tb2RlKG5kZXYpOw0KPiBAQCAtMTU0MSw2
+ICsxNTY5LDEyIEBAIHN0YXRpYyBpbnQgbXRrX3N0YXJfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rl
+dmljZSAqcGRldikNCj4gICAJCX0NCj4gICAJfQ0KPiAgIA0KPiArCXJldCA9IG10a19zdGFyX3Nl
+dF90aW1pbmcocHJpdik7DQo+ICsJaWYgKHJldCkgew0KPiArCQlkZXZfZXJyKGRldiwgIkZhaWxl
+ZCB0byBzZXQgdGltaW5nLCBlcnIgPSAlZFxuIiwgcmV0KTsNCj4gKwkJcmV0dXJuIC1FSU5WQUw7
+DQo+ICsJfQ0KPiArDQo+ICAgCXJldCA9IGRtYV9zZXRfbWFza19hbmRfY29oZXJlbnQoZGV2LCBE
+TUFfQklUX01BU0soMzIpKTsNCj4gICAJaWYgKHJldCkgew0KPiAgIAkJZGV2X2VycihkZXYsICJ1
+bnN1cHBvcnRlZCBETUEgbWFza1xuIik7DQo+IA0KDQpSZXZpZXdlZC1ieTogTWFjcGF1bCBMaW4g
+PG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCg0KUmVnYXJkcywNCk1hY3BhdWwgTGlu
 

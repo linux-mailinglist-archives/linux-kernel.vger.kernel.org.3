@@ -2,211 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6BF49EE3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652E849EE42
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 23:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244215AbiA0WrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 17:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
+        id S244561AbiA0Wtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 17:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiA0WrT (ORCPT
+        with ESMTP id S230330AbiA0Wtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 17:47:19 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E50C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:47:18 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id y15so8142115lfa.9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:47:18 -0800 (PST)
+        Thu, 27 Jan 2022 17:49:53 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFC7C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:49:53 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id h12so4723805pjq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 14:49:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GjHUuqQH8JVxmocQ1vB3QRAgmIYi4so6JV2ldg8Qna8=;
-        b=tadvaPckx4r3MPOgnSQQCqX7CvRLyV49Z6VolacjjfmiCOPeMZNvw/n3MyV2J+nRdu
-         hMXdCaid7H5hlc0Se9aJsF8ROOHdIJ1XtdnlVlLwUlLFslhG32442znXy7GsdRNBG05q
-         NkbmMprA2XtecU08TnZU6hhN0raXXZSkTZzlC5cbu3Fg/fP5I0V8h0j8yVze6x36dRHH
-         ELWjlXaFxOffOQ2VNsqRJQRt8Ga8MPGoY92HJ2tCyEjrVR6ZU5RjcGeLVXiPpOKggzwP
-         XZPtEcWl+4I5Vpyn0UdyIBugStlAinGUVY4DOSCqcQqp73W6Bxf1CUt0bX7qwxWNA5WA
-         ElqA==
+        bh=k+xO8EqLFUCui4EksMPBTtUzqUy69IME3pxskdaGT84=;
+        b=S/3NlMq/VzH6n8N/3ItPaKj87TfCkln/Xpf2ZWUcGIww2DDgYlXdWKPg0qHfB9n7s4
+         xdOiXsftmKSBycWFZkjTPVNWlFtY1Zf5COYn/bwEUt7AaInIQxQRuj0To48lViySlErr
+         KHE25WkSTam4RCChpke3fQtwBFMDfTfzQgEF92epl5Q1jV5Qo7gtwTjo3GhqYuVG2mrV
+         AGY9ZkM7jBHnHO1cpXN/E9CaSLinbz2ctsREOUw+jnvInnrMznwRbPxiUgTjrTf058uz
+         k5XaSUIDXVaUr7O1YWP1A7ms0N/RNfNHek0VY5lsH9FUySwzHcTT4pg9L33Etx9ukjH2
+         SYgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GjHUuqQH8JVxmocQ1vB3QRAgmIYi4so6JV2ldg8Qna8=;
-        b=5XYTNBtZbxEA5KFWkvqSiW0voczXzmkyET8HMeSMeQekCgzeIS6m/8FZ/+vgss7CoA
-         HjndgifI9xa/dta+sjz/1K8ElCOmA8tqcQXLtsgcsSOkFPCUgLTazfez+lo8UDl8epz0
-         pAn0z6VxqDYHUQnjWny4CmDtL82wiGSNzNZpQQtrdzSFdbHebFbF5B4wFCQmXjTxq/eV
-         6ThAxl6kmgWn0BDAOU9qXalxAen8ZHI9DMqjXWYKVAR1JeQ39yWqE/5bbBUtXAghGldd
-         Jxk81809KaSQgrFByqN6vDD2ZCCKWGcE1j/jg3OqUzQHzhKQ2mDpSkKv0i/ICQDn5zMk
-         +HTA==
-X-Gm-Message-State: AOAM532Mb1XG47DpjId0aVMC7YiTYnSTtJxpTQ5qlf/dhJHrqFZjQ3fe
-        Hn17pouL0dD8L1GJMsvVoW0UcT+AGS1n8dmUrmF2CA==
-X-Google-Smtp-Source: ABdhPJwf2eU9dQWZaPtXNpqaSJbqd37RRf00Y7CUNwXuSZNS1ndxY7n2prmgDhYz8lI31KJtbbC8HikIkG5PJzgQRC8=
-X-Received: by 2002:ac2:5510:: with SMTP id j16mr4239686lfk.240.1643323636985;
- Thu, 27 Jan 2022 14:47:16 -0800 (PST)
+        bh=k+xO8EqLFUCui4EksMPBTtUzqUy69IME3pxskdaGT84=;
+        b=qxusmjFGxCytBak7/Oahr/mbPD2s8QVFOP1NJeS7A9ZRvh2js6xUmCN2SYYc0h98KZ
+         9m9TnATWEeWkcSZ8gbMJjOIxEG4XV2SJGRSp7M0rB6m7j0YH4wPC3f/CMGVwI5qfJUAO
+         MYvxeoqnEtCuTDFv3t5mo07dxDBCFq+cboxXhwTBivjd9oEBFaBZDeeVkSWaKBYqUx+j
+         YbsbTLz/0B0XgUSQ4ijsogRn7NpL1i/7+T3Z3BWZJ92/xcg8zywhHzk1ErFvBUn5ksjf
+         498iTTRedxfHZXqqwMYJsNVMkEuNCvRh44HAKLxm6HpP4zRxHBOyNtLM9sfF5WOydQD/
+         48XA==
+X-Gm-Message-State: AOAM533Ol1rMXp1joN7V4Zj0VSaZwBkTeBOmnSPgTFOCOSSKiUDq13KF
+        8lcwSvIa1Sob+qqWfQLflOGNiD7SjZwQb/JyFqP6LA==
+X-Google-Smtp-Source: ABdhPJzHixJG/xXB3xwpj3793Z17iaq6LfTsT5F2gkjyLAl6ZDQgwQE9zFs+Zx3q+fX/aMrEm2pow6J2TZZv0OWaIp8=
+X-Received: by 2002:a17:90b:4a82:: with SMTP id lp2mr6552523pjb.179.1643323792568;
+ Thu, 27 Jan 2022 14:49:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20220127151945.1244439-1-trix@redhat.com> <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
-In-Reply-To: <953eb015-4b78-f7b-5dc1-6491c6bf27e@linux-m68k.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 27 Jan 2022 14:47:04 -0800
-Message-ID: <CAKwvOdnWHVV+3s8SO=Q8FfZ7hVekRVDL5q+7CwAk_z44xaex8w@mail.gmail.com>
-Subject: Re: [PATCH] scsi: megaraid: cleanup formatting of megaraid
-To:     Finn Thain <fthain@linux-m68k.org>, Miguel Ojeda <ojeda@kernel.org>
-Cc:     Tom Rix <trix@redhat.com>, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, nathan@kernel.org,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Joe Perches <joe@perches.com>
+References: <20211215001812.9006-1-tharvey@gateworks.com> <20220126090739.GH4686@dragon>
+In-Reply-To: <20220126090739.GH4686@dragon>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 27 Jan 2022 14:49:41 -0800
+Message-ID: <CAJ+vNU3Xj-b2BSc_6MQrtrh-G=5dMdMmw0S8EtujVz_7FvkQ0w@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8m{m,n}_venice*: add gpio-line-names
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Miguel (the clang-format maintainer), Joe (checkpatch maintainer)
-These criticisms are worth reviewing.
+On Wed, Jan 26, 2022 at 1:07 AM Shawn Guo <shawnguo@kernel.org> wrote:
+>
+> On Tue, Dec 14, 2021 at 04:18:12PM -0800, Tim Harvey wrote:
+> > Add gpio-line-names for the various GPIO's used on Gateworks Venice
+> > boards. Note that these GPIO's are typically 'configured' in Boot
+> > Firmware via gpio-hog therefore we only configure line names to keep the
+> > boot firmware configuration from changing on kernel init.
+> >
+> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+>
+> It doesn't apply to my imx/dt64 branch.  Could you rebase?
+>
 
-On Thu, Jan 27, 2022 at 2:38 PM Finn Thain <fthain@linux-m68k.org> wrote:
->
->
-> On Thu, 27 Jan 2022, trix@redhat.com wrote:
->
-> > From: Tom Rix <trix@redhat.com>
-> >
-> > checkpatch reports several hundred formatting errors. Run these files
-> > through clang-format and knock off some of them.
-> >
->
-> That method seems like a good recipe for endless churn unless checkpatch
-> and clang-format really agree about these style rules.
->
-> Why use checkpatch to assess code style, if we could simply diff the
-> existing source with the output from clang-format... but it seems that
-> clang-format harms readability, makes indentation errors and uses
-> inconsistent style rules. Some examples:
->
-> >  static unsigned short int max_sectors_per_io = MAX_SECTORS_PER_IO;
-> >  module_param(max_sectors_per_io, ushort, 0);
-> > -MODULE_PARM_DESC(max_sectors_per_io, "Maximum number of sectors per I/O request (default=MAX_SECTORS_PER_IO=128)");
-> > -
-> > +MODULE_PARM_DESC(
-> > +     max_sectors_per_io,
-> > +     "Maximum number of sectors per I/O request (default=MAX_SECTORS_PER_IO=128)");
-> >
-> >  static unsigned short int max_mbox_busy_wait = MBOX_BUSY_WAIT;
-> >  module_param(max_mbox_busy_wait, ushort, 0);
-> > -MODULE_PARM_DESC(max_mbox_busy_wait, "Maximum wait for mailbox in microseconds if busy (default=MBOX_BUSY_WAIT=10)");
-> > +MODULE_PARM_DESC(
-> > +     max_mbox_busy_wait,
-> > +     "Maximum wait for mailbox in microseconds if busy (default=MBOX_BUSY_WAIT=10)");
-> >
->
-> This code is longer for no real improvement.
->
-> >
-> >  /*
-> >   * The File Operations structure for the serial/ioctl interface of the driver
-> >   */
-> >  static const struct file_operations megadev_fops = {
-> > -     .owner          = THIS_MODULE,
-> > -     .unlocked_ioctl = megadev_unlocked_ioctl,
-> > -     .open           = megadev_open,
-> > -     .llseek         = noop_llseek,
-> > +     .owner = THIS_MODULE,
-> > +     .unlocked_ioctl = megadev_unlocked_ioctl,
-> > +     .open = megadev_open,
-> > +     .llseek = noop_llseek,
-> >  };
-> >
-> >  /*
->
-> Readability loss.
->
-> > -             prod_info_dma_handle = dma_map_single(&adapter->dev->dev,
-> > -                                                   (void *)&adapter->product_info,
-> > -                                                   sizeof(mega_product_info),
-> > -                                                   DMA_FROM_DEVICE);
-> > +             prod_info_dma_handle = dma_map_single(
-> > +                     &adapter->dev->dev, (void *)&adapter->product_info,
-> > +                     sizeof(mega_product_info), DMA_FROM_DEVICE);
-> >
->
-> Note the orphaned first parameter and odd indentation.
->
-> >
-> >  static DEF_SCSI_QCMD(megaraid_queue)
-> >
-> > -/**
-> > +     /**
-> >   * mega_allocate_scb()
-> >   * @adapter: pointer to our soft state
-> >   * @cmd: scsi command from the mid-layer
->
-> Indentation error.
->
-> > @@ -418,15 +409,14 @@ static DEF_SCSI_QCMD(megaraid_queue)
-> >   * Allocate a SCB structure. This is the central structure for controller
-> >   * commands.
-> >   */
-> > -static inline scb_t *
-> > -mega_allocate_scb(adapter_t *adapter, struct scsi_cmnd *cmd)
-> > +     static inline scb_t *mega_allocate_scb(adapter_t *adapter,
-> > +                                            struct scsi_cmnd *cmd)
-> >  {
-> >       struct list_head *head = &adapter->free_list;
->
-> Same.
->
-> > @@ -586,26 +568,25 @@ mega_build_cmd(adapter_t *adapter, struct scsi_cmnd *cmd, int *busy)
-> >
-> >               ldrv_num = mega_get_ldrv_num(adapter, cmd, channel);
-> >
-> > -
-> >               max_ldrv_num = (adapter->flag & BOARD_40LD) ?
-> > -                     MAX_LOGICAL_DRIVES_40LD : MAX_LOGICAL_DRIVES_8LD;
-> > +                                    MAX_LOGICAL_DRIVES_40LD :
-> > +                                          MAX_LOGICAL_DRIVES_8LD;
-> >
->
-> Churn, if not readability loss. Note the indentation change here is
-> inconsistent with the indentation change noted above.
->
-> >                        * 6-byte READ(0x08) or WRITE(0x0A) cdb
-> >                        */
-> > -                     if( cmd->cmd_len == 6 ) {
-> > -                             mbox->m_out.numsectors = (u32) cmd->cmnd[4];
-> > -                             mbox->m_out.lba =
-> > -                                     ((u32)cmd->cmnd[1] << 16) |
-> > -                                     ((u32)cmd->cmnd[2] << 8) |
-> > -                                     (u32)cmd->cmnd[3];
-> > +                     if (cmd->cmd_len == 6) {
-> > +                             mbox->m_out.numsectors = (u32)cmd->cmnd[4];
-> > +                             mbox->m_out.lba = ((u32)cmd->cmnd[1] << 16) |
-> > +                                               ((u32)cmd->cmnd[2] << 8) |
-> > +                                               (u32)cmd->cmnd[3];
-> >
-> >                               mbox->m_out.lba &= 0x1FFFFF;
-> >
->
-> Here, the orphaned term is moved up, next to the =. And yet,
->
-> >
-> >                       /* Calculate Scatter-Gather info */
-> > -                     mbox->m_out.numsgelements = mega_build_sglist(adapter, scb,
-> > -                                     (u32 *)&mbox->m_out.xferaddr, &seg);
-> > +                     mbox->m_out.numsgelements =
-> > +                             mega_build_sglist(adapter, scb,
-> > +                                               (u32 *)&mbox->m_out.xferaddr,
-> > +                                               &seg);
-> >
-> >                       return scb;
-> >
->
-> ... here the first term is moved down and orphaned, which is another
-> inconsistency.
+Shawn,
 
+Sure, I'll try to submit another version within a couple of days.
 
+Did you happen to see 'arm64: dts: imx8mm-venice*: add PCIe support'
+[1]? It seems to have been archived for some reason and it may have to
+be rebased after I re-post this one unless you can take that now.
 
--- 
-Thanks,
-~Nick Desaulniers
+Best Regards,
+
+Tim
+[1] - https://patchwork.kernel.org/project/linux-arm-kernel/patch/20211216164149.13333-1-tharvey@gateworks.com/

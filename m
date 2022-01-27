@@ -2,390 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2225D49E66B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A78F49E64E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243059AbiA0Pm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:42:56 -0500
-Received: from mga04.intel.com ([192.55.52.120]:23622 "EHLO mga04.intel.com"
+        id S242879AbiA0PlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:41:10 -0500
+Received: from foss.arm.com ([217.140.110.172]:39834 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243123AbiA0Pms (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:42:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643298168; x=1674834168;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pgpF1HclREDWxl4bKSRDHExPzqY2ZGLaOCIggkW8uK4=;
-  b=BhIQ0OUXUBogc8awatZRkFe8pZz9MiPNMgKzwYgzpI4GMvsAgHBQNBvW
-   RWC1jCF+wgDjEIske7oWNejnKqqEmoJWr6Hu2RV0P8bwlsYupSSmwDrhu
-   45WCZdyU5X6aikdSf4S+gtPAp2329T7CPOuV8lQSwac0Y3iTu1DIu3G8B
-   nlDBylTJ7f6AunoEVi/Fj9zV4wvI+36H+0ruW+/QZ/ygF7XnY3SGItcUz
-   5S02JkeZWHakVdOYlHBwF8vGk3LtIgUYeRUYWPfjTCZU9j1so+IOsSZ9G
-   IL0/Sfwqc2njYxy6+iwRDuxDvxubFhIt5nPs4YrEuq4xB/yKnyDF+rFLj
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245730421"
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="245730421"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 07:41:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="535705389"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga008.jf.intel.com with ESMTP; 27 Jan 2022 07:41:49 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 20RFfjOr028674;
-        Thu, 27 Jan 2022 15:41:48 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Martyna Szapar-Mudlaw <martyna.szapar-mudlaw@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net-next 4/4] ice: switch: use convenience macros to declare dummy pkt templates
-Date:   Thu, 27 Jan 2022 16:40:09 +0100
-Message-Id: <20220127154009.623304-5-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220127154009.623304-1-alexandr.lobakin@intel.com>
-References: <20220127154009.623304-1-alexandr.lobakin@intel.com>
+        id S234206AbiA0PlJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 10:41:09 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 02D091063;
+        Thu, 27 Jan 2022 07:41:09 -0800 (PST)
+Received: from e113632-lin.cambridge.arm.com (e113632-lin.cambridge.arm.com [10.1.196.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 55D0F3F766;
+        Thu, 27 Jan 2022 07:41:07 -0800 (PST)
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org
+Cc:     John Keeping <john@metanate.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: [PATCH v2] sched/rt: Plug rt_mutex_setprio() vs push_rt_task() race
+Date:   Thu, 27 Jan 2022 15:40:59 +0000
+Message-Id: <20220127154059.974729-1-valentin.schneider@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Declarations of dummy/template packet headers and offsets can be
-minified to improve readability and simplify adding new templates.
-Move all the repetitive constructions into two macros and let them
-do the name and type expansions.
-Linewrap removal is yet another positive side effect.
+John reported that push_rt_task() can end up invoking
+find_lowest_rq(rq->curr) when curr is not an RT task (in this case a CFS
+one), which causes mayhem down convert_prio().
 
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+This can happen when current gets demoted to e.g. CFS when releasing an
+rt_mutex, and the local CPU gets hit with an rto_push_work irqwork before
+getting the chance to reschedule. Exactly who triggers this work isn't
+entirely clear to me - switched_from_rt() only invokes rt_queue_pull_task()
+if there are no RT tasks on the local RQ, which means the local CPU can't
+be in the rto_mask.
+
+My current suspected sequence is something along the lines of the below,
+with the demoted task being current.
+
+  mark_wakeup_next_waiter()
+    rt_mutex_adjust_prio()
+      rt_mutex_setprio() // deboost originally-CFS task
+	check_class_changed()
+	  switched_from_rt() // Only rt_queue_pull_task() if !rq->rt.rt_nr_running
+	  switched_to_fair() // Sets need_resched
+      __balance_callbacks() // if pull_rt_task(), tell_cpu_to_push() can't select local CPU per the above
+      raw_spin_rq_unlock(rq)
+
+       // need_resched is set, so task_woken_rt() can't
+       // invoke push_rt_tasks(). Best I can come up with is
+       // local CPU has rt_nr_migratory >= 2 after the demotion, so stays
+       // in the rto_mask, and then:
+
+       <some other CPU running rto_push_irq_work_func() queues rto_push_work on this CPU>
+	 push_rt_task()
+	   // breakage follows here as rq->curr is CFS
+
+Move an existing check to check rq->curr vs the next pushable task's
+priority before getting anywhere near find_lowest_rq(). While at it, add an
+explicit sched_class of rq->curr check prior to invoking
+find_lowest_rq(rq->curr). Align the DL logic to also reschedule regardless
+of next_task's migratability.
+
+Link: http://lore.kernel.org/r/Yb3vXx3DcqVOi+EA@donbot
+Fixes: a7c81556ec4d ("sched: Fix migrate_disable() vs rt/dl balancing")
+Reported-by: John Keeping <john@metanate.com>
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+Tested-by: John Keeping <john@metanate.com>
 ---
- drivers/net/ethernet/intel/ice/ice_switch.c | 83 +++++++++++----------
- 1 file changed, 42 insertions(+), 41 deletions(-)
+v1 -> v2: Reworded comments, added DL part (Dietmar)
+---
+ kernel/sched/deadline.c | 12 ++++++------
+ kernel/sched/rt.c       | 32 ++++++++++++++++++++++----------
+ 2 files changed, 28 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_switch.c b/drivers/net/ethernet/intel/ice/ice_switch.c
-index 68202671a114..2105cae0f2f8 100644
---- a/drivers/net/ethernet/intel/ice/ice_switch.c
-+++ b/drivers/net/ethernet/intel/ice/ice_switch.c
-@@ -41,15 +41,22 @@ struct ice_dummy_pkt_profile {
- 	u16 pkt_len;
- };
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index d2c072b0ef01..62f0cf842277 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -2240,12 +2240,6 @@ static int push_dl_task(struct rq *rq)
+ 		return 0;
  
-+#define ICE_PKT_OFFSETS(type)						\
-+	static const struct ice_dummy_pkt_offsets			\
-+	ice_dummy_##type##_packet_offsets[]
+ retry:
+-	if (is_migration_disabled(next_task))
+-		return 0;
+-
+-	if (WARN_ON(next_task == rq->curr))
+-		return 0;
+-
+ 	/*
+ 	 * If next_task preempts rq->curr, and rq->curr
+ 	 * can move away, it makes sense to just reschedule
+@@ -2258,6 +2252,12 @@ static int push_dl_task(struct rq *rq)
+ 		return 0;
+ 	}
+ 
++	if (is_migration_disabled(next_task))
++		return 0;
 +
-+#define ICE_PKT_TEMPLATE(type)						\
-+	static const u8 ice_dummy_##type##_packet[]
++	if (WARN_ON(next_task == rq->curr))
++		return 0;
 +
- #define ICE_PKT_PROFILE(type) ({					\
- 	(struct ice_dummy_pkt_profile){					\
--		.pkt		= dummy_##type##_packet,		\
--		.pkt_len	= sizeof(dummy_##type##_packet),	\
--		.offsets	= dummy_##type##_packet_offsets,	\
-+		.pkt		= ice_dummy_##type##_packet,		\
-+		.pkt_len	= sizeof(ice_dummy_##type##_packet),	\
-+		.offsets	= ice_dummy_##type##_packet_offsets,	\
- 	};								\
- })
+ 	/* We might release rq lock */
+ 	get_task_struct(next_task);
  
--static const struct ice_dummy_pkt_offsets dummy_gre_tcp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(gre_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -61,7 +68,7 @@ static const struct ice_dummy_pkt_offsets dummy_gre_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 7b4f4fbbb404..14f273c29518 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -2026,6 +2026,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 		return 0;
  
--static const u8 dummy_gre_tcp_packet[] = {
-+ICE_PKT_TEMPLATE(gre_tcp) = {
- 	0x00, 0x00, 0x00, 0x00,	/* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -96,7 +103,7 @@ static const u8 dummy_gre_tcp_packet[] = {
- 	0x00, 0x00, 0x00, 0x00
- };
+ retry:
++	/*
++	 * It's possible that the next_task slipped in of
++	 * higher priority than current. If that's the case
++	 * just reschedule current.
++	 */
++	if (unlikely(next_task->prio < rq->curr->prio)) {
++		resched_curr(rq);
++		return 0;
++	}
++
+ 	if (is_migration_disabled(next_task)) {
+ 		struct task_struct *push_task = NULL;
+ 		int cpu;
+@@ -2033,6 +2043,18 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 		if (!pull || rq->push_busy)
+ 			return 0;
  
--static const struct ice_dummy_pkt_offsets dummy_gre_udp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(gre_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -108,7 +115,7 @@ static const struct ice_dummy_pkt_offsets dummy_gre_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
++		/*
++		 * Invoking find_lowest_rq() on anything but an RT task doesn't
++		 * make sense. Per the above priority check, curr has to
++		 * be of higher priority than next_task, so no need to
++		 * reschedule when bailing out.
++		 *
++		 * Note that the stoppers are masqueraded as SCHED_FIFO
++		 * (cf. sched_set_stop_task()), so we can't rely on rt_task().
++		 */
++		if (rq->curr->sched_class != &rt_sched_class)
++			return 0;
++
+ 		cpu = find_lowest_rq(rq->curr);
+ 		if (cpu == -1 || cpu == rq->cpu)
+ 			return 0;
+@@ -2057,16 +2079,6 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 	if (WARN_ON(next_task == rq->curr))
+ 		return 0;
  
--static const u8 dummy_gre_udp_packet[] = {
-+ICE_PKT_TEMPLATE(gre_udp) = {
- 	0x00, 0x00, 0x00, 0x00,	/* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -140,7 +147,7 @@ static const u8 dummy_gre_udp_packet[] = {
- 	0x00, 0x08, 0x00, 0x00,
- };
+-	/*
+-	 * It's possible that the next_task slipped in of
+-	 * higher priority than current. If that's the case
+-	 * just reschedule current.
+-	 */
+-	if (unlikely(next_task->prio < rq->curr->prio)) {
+-		resched_curr(rq);
+-		return 0;
+-	}
+-
+ 	/* We might release rq lock */
+ 	get_task_struct(next_task);
  
--static const struct ice_dummy_pkt_offsets dummy_udp_tun_tcp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(udp_tun_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -155,7 +162,7 @@ static const struct ice_dummy_pkt_offsets dummy_udp_tun_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_udp_tun_tcp_packet[] = {
-+ICE_PKT_TEMPLATE(udp_tun_tcp) = {
- 	0x00, 0x00, 0x00, 0x00,  /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -193,7 +200,7 @@ static const u8 dummy_udp_tun_tcp_packet[] = {
- 	0x00, 0x00, 0x00, 0x00
- };
- 
--static const struct ice_dummy_pkt_offsets dummy_udp_tun_udp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(udp_tun_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -208,7 +215,7 @@ static const struct ice_dummy_pkt_offsets dummy_udp_tun_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_udp_tun_udp_packet[] = {
-+ICE_PKT_TEMPLATE(udp_tun_udp) = {
- 	0x00, 0x00, 0x00, 0x00,  /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -243,8 +250,7 @@ static const u8 dummy_udp_tun_udp_packet[] = {
- 	0x00, 0x08, 0x00, 0x00,
- };
- 
--static const struct ice_dummy_pkt_offsets
--dummy_gre_ipv6_tcp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(gre_ipv6_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -256,7 +262,7 @@ dummy_gre_ipv6_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_gre_ipv6_tcp_packet[] = {
-+ICE_PKT_TEMPLATE(gre_ipv6_tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -296,8 +302,7 @@ static const u8 dummy_gre_ipv6_tcp_packet[] = {
- 	0x00, 0x00, 0x00, 0x00
- };
- 
--static const struct ice_dummy_pkt_offsets
--dummy_gre_ipv6_udp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(gre_ipv6_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -309,7 +314,7 @@ dummy_gre_ipv6_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_gre_ipv6_udp_packet[] = {
-+ICE_PKT_TEMPLATE(gre_ipv6_udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -346,8 +351,7 @@ static const u8 dummy_gre_ipv6_udp_packet[] = {
- 	0x00, 0x08, 0x00, 0x00,
- };
- 
--static const struct ice_dummy_pkt_offsets
--dummy_udp_tun_ipv6_tcp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(udp_tun_ipv6_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -362,7 +366,7 @@ dummy_udp_tun_ipv6_tcp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_udp_tun_ipv6_tcp_packet[] = {
-+ICE_PKT_TEMPLATE(udp_tun_ipv6_tcp) = {
- 	0x00, 0x00, 0x00, 0x00,  /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -405,8 +409,7 @@ static const u8 dummy_udp_tun_ipv6_tcp_packet[] = {
- 	0x00, 0x00, 0x00, 0x00
- };
- 
--static const struct ice_dummy_pkt_offsets
--dummy_udp_tun_ipv6_udp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(udp_tun_ipv6_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -421,7 +424,7 @@ dummy_udp_tun_ipv6_udp_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_udp_tun_ipv6_udp_packet[] = {
-+ICE_PKT_TEMPLATE(udp_tun_ipv6_udp) = {
- 	0x00, 0x00, 0x00, 0x00,  /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -462,7 +465,7 @@ static const u8 dummy_udp_tun_ipv6_udp_packet[] = {
- };
- 
- /* offset info for MAC + IPv4 + UDP dummy packet */
--static const struct ice_dummy_pkt_offsets dummy_udp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -471,7 +474,7 @@ static const struct ice_dummy_pkt_offsets dummy_udp_packet_offsets[] = {
- };
- 
- /* Dummy packet for MAC + IPv4 + UDP */
--static const u8 dummy_udp_packet[] = {
-+ICE_PKT_TEMPLATE(udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -491,7 +494,7 @@ static const u8 dummy_udp_packet[] = {
- };
- 
- /* offset info for MAC + VLAN + IPv4 + UDP dummy packet */
--static const struct ice_dummy_pkt_offsets dummy_vlan_udp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(vlan_udp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_VLAN_OFOS,	12 },
- 	{ ICE_ETYPE_OL,		16 },
-@@ -501,7 +504,7 @@ static const struct ice_dummy_pkt_offsets dummy_vlan_udp_packet_offsets[] = {
- };
- 
- /* C-tag (801.1Q), IPv4:UDP dummy packet */
--static const u8 dummy_vlan_udp_packet[] = {
-+ICE_PKT_TEMPLATE(vlan_udp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -523,7 +526,7 @@ static const u8 dummy_vlan_udp_packet[] = {
- };
- 
- /* offset info for MAC + IPv4 + TCP dummy packet */
--static const struct ice_dummy_pkt_offsets dummy_tcp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV4_OFOS,	14 },
-@@ -532,7 +535,7 @@ static const struct ice_dummy_pkt_offsets dummy_tcp_packet_offsets[] = {
- };
- 
- /* Dummy packet for MAC + IPv4 + TCP */
--static const u8 dummy_tcp_packet[] = {
-+ICE_PKT_TEMPLATE(tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -555,7 +558,7 @@ static const u8 dummy_tcp_packet[] = {
- };
- 
- /* offset info for MAC + VLAN (C-tag, 802.1Q) + IPv4 + TCP dummy packet */
--static const struct ice_dummy_pkt_offsets dummy_vlan_tcp_packet_offsets[] = {
-+ICE_PKT_OFFSETS(vlan_tcp) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_VLAN_OFOS,	12 },
- 	{ ICE_ETYPE_OL,		16 },
-@@ -565,7 +568,7 @@ static const struct ice_dummy_pkt_offsets dummy_vlan_tcp_packet_offsets[] = {
- };
- 
- /* C-tag (801.1Q), IPv4:TCP dummy packet */
--static const u8 dummy_vlan_tcp_packet[] = {
-+ICE_PKT_TEMPLATE(vlan_tcp) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -589,7 +592,7 @@ static const u8 dummy_vlan_tcp_packet[] = {
- 	0x00, 0x00,	/* 2 bytes for 4 byte alignment */
- };
- 
--static const struct ice_dummy_pkt_offsets dummy_tcp_ipv6_packet_offsets[] = {
-+ICE_PKT_OFFSETS(tcp_ipv6) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV6_OFOS,	14 },
-@@ -597,7 +600,7 @@ static const struct ice_dummy_pkt_offsets dummy_tcp_ipv6_packet_offsets[] = {
- 	{ ICE_PROTOCOL_LAST,	0 },
- };
- 
--static const u8 dummy_tcp_ipv6_packet[] = {
-+ICE_PKT_TEMPLATE(tcp_ipv6) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -625,8 +628,7 @@ static const u8 dummy_tcp_ipv6_packet[] = {
- };
- 
- /* C-tag (802.1Q): IPv6 + TCP */
--static const struct ice_dummy_pkt_offsets
--dummy_vlan_tcp_ipv6_packet_offsets[] = {
-+ICE_PKT_OFFSETS(vlan_tcp_ipv6) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_VLAN_OFOS,	12 },
- 	{ ICE_ETYPE_OL,		16 },
-@@ -636,7 +638,7 @@ dummy_vlan_tcp_ipv6_packet_offsets[] = {
- };
- 
- /* C-tag (802.1Q), IPv6 + TCP dummy packet */
--static const u8 dummy_vlan_tcp_ipv6_packet[] = {
-+ICE_PKT_TEMPLATE(vlan_tcp_ipv6) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -666,7 +668,7 @@ static const u8 dummy_vlan_tcp_ipv6_packet[] = {
- };
- 
- /* IPv6 + UDP */
--static const struct ice_dummy_pkt_offsets dummy_udp_ipv6_packet_offsets[] = {
-+ICE_PKT_OFFSETS(udp_ipv6) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_ETYPE_OL,		12 },
- 	{ ICE_IPV6_OFOS,	14 },
-@@ -675,7 +677,7 @@ static const struct ice_dummy_pkt_offsets dummy_udp_ipv6_packet_offsets[] = {
- };
- 
- /* IPv6 + UDP dummy packet */
--static const u8 dummy_udp_ipv6_packet[] = {
-+ICE_PKT_TEMPLATE(udp_ipv6) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
-@@ -703,8 +705,7 @@ static const u8 dummy_udp_ipv6_packet[] = {
- };
- 
- /* C-tag (802.1Q): IPv6 + UDP */
--static const struct ice_dummy_pkt_offsets
--dummy_vlan_udp_ipv6_packet_offsets[] = {
-+ICE_PKT_OFFSETS(vlan_udp_ipv6) = {
- 	{ ICE_MAC_OFOS,		0 },
- 	{ ICE_VLAN_OFOS,	12 },
- 	{ ICE_ETYPE_OL,		16 },
-@@ -714,7 +715,7 @@ dummy_vlan_udp_ipv6_packet_offsets[] = {
- };
- 
- /* C-tag (802.1Q), IPv6 + UDP dummy packet */
--static const u8 dummy_vlan_udp_ipv6_packet[] = {
-+ICE_PKT_TEMPLATE(vlan_udp_ipv6) = {
- 	0x00, 0x00, 0x00, 0x00, /* ICE_MAC_OFOS 0 */
- 	0x00, 0x00, 0x00, 0x00,
- 	0x00, 0x00, 0x00, 0x00,
 -- 
-2.34.1
+2.25.1
 

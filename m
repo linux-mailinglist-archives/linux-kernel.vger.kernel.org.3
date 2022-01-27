@@ -2,58 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B284349E672
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A775649E681
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 16:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243074AbiA0PoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 10:44:01 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:58116 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234341AbiA0PoA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 10:44:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=NRNfjci1BUqMB7hhJHAezNYkKercVodV9D1Lc98O3ZE=; b=yF5nFX+LAKzUnFrdwhYrQ29vb+
-        LLgfv6kPaZAiKmc165TT20rHGLoi8fVqSLClhC6jJAK5KgqJLYPX6HgCgNjlIePdLjiuTokqh8KDW
-        SDI/cgY78nVbw9WCgvblLjTvp/P5rZUqlIC/L0k81APy44gHNX/nFnxUmAEou686GbcU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nD6wD-0030do-4Y; Thu, 27 Jan 2022 16:43:53 +0100
-Date:   Thu, 27 Jan 2022 16:43:53 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] usbnet: add devlink support
-Message-ID: <YfK9uV0BviEiemDi@lunn.ch>
-References: <20220127110742.922752-1-o.rempel@pengutronix.de>
+        id S243116AbiA0PqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 10:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243097AbiA0PqO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 27 Jan 2022 10:46:14 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1FAC061714;
+        Thu, 27 Jan 2022 07:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=te34am54aUpFtK+DUx9YCfw5VurpEVmeZCzYybJUFVs=; b=DalpuByIZ+ookpm/OOIdVEWrm8
+        WrsrgpLkhUtDWtK3cuAveqIl8AfwAkAqCwSDisxbMD167/Jz32GCvSZSU9py6pLraPF++nCvRA1IX
+        1a0pk5i3hpseMlpLiU5qwQK0iai13QM+6jni9uvJO1hY2dRon10HG9pATqfhri7zdNirDNLkJ3254
+        jONq5ebPfDhaeBJ/5+Hasnevwiw3NEOY+xfHClosK9XnJc23O19Q9xVeDGMYcYsjUgdnCxVpuU3Oi
+        4zigj/i+jaB5hMagavS1VBqHuugcSrpA0t7yKRZTBj8wW5QNbsWl9i1e3V0mwDqLEDhLQqG7VQEj7
+        lMspEUOg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nD6yM-004CiD-C2; Thu, 27 Jan 2022 15:46:06 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0202F986245; Thu, 27 Jan 2022 16:46:04 +0100 (CET)
+Date:   Thu, 27 Jan 2022 16:46:04 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 00/15] rseq uapi and selftest updates
+Message-ID: <20220127154604.GQ20638@worktop.programming.kicks-ass.net>
+References: <20220124171253.22072-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127110742.922752-1-o.rempel@pengutronix.de>
+In-Reply-To: <20220124171253.22072-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:07:42PM +0100, Oleksij Rempel wrote:
-> The weakest link of usbnet devices is the USB cable. Currently there is
-> no way to automatically detect cable related issues except of analyzing
-> kernel log, which would differ depending on the USB host controller.
-> 
-> The Ethernet packet counter could potentially show evidence of some USB
-> related issues, but can be Ethernet related problem as well.
+On Mon, Jan 24, 2022 at 12:12:38PM -0500, Mathieu Desnoyers wrote:
+> Mathieu Desnoyers (15):
+>   selftests/rseq: introduce own copy of rseq uapi header
+>   rseq: Remove broken uapi field layout on 32-bit little endian
+>   selftests/rseq: Remove useless assignment to cpu variable
+>   selftests/rseq: Remove volatile from __rseq_abi
+>   selftests/rseq: Introduce rseq_get_abi() helper
+>   selftests/rseq: Introduce thread pointer getters
+>   selftests/rseq: Uplift rseq selftests for compatibility with
+>     glibc-2.35
+>   selftests/rseq: Fix ppc32: wrong rseq_cs 32-bit field pointer on big
+>     endian
+>   selftests/rseq: Fix ppc32 missing instruction selection "u" and "x"
+>     for load/store
+>   selftests/rseq: Fix ppc32 offsets by using long rather than off_t
+>   selftests/rseq: Fix warnings about #if checks of undefined tokens
+>   selftests/rseq: Remove arm/mips asm goto compiler work-around
+>   selftests/rseq: Fix: work-around asm goto compiler bugs
+>   selftests/rseq: x86-64: use %fs segment selector for accessing rseq
+>     thread area
+>   selftests/rseq: x86-32: use %gs segment selector for accessing rseq
+>     thread area
 
-I don't know the usbnet drivers very well. A quick look suggests they
-don't support statistics via ethtool -S. So you could make use of that
-to return statistics about USB error events.
-
-However, GregKH point still stands, maybe such statistics should be
-made for all USB devices, and be available in /sys/bus/usb/devices/*
-
-     Andrew
+Thanks, I'll go stick then in sched/core.

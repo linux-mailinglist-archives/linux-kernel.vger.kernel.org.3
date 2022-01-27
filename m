@@ -2,252 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 719E649D6FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3709F49D704
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234005AbiA0Av6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 19:51:58 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:54018 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229510AbiA0Av4 (ORCPT
+        id S234054AbiA0A4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 19:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234043AbiA0A4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 19:51:56 -0500
-X-UUID: 591aaecfc1b54c7d8ac2c421ac6ea10d-20220127
-X-UUID: 591aaecfc1b54c7d8ac2c421ac6ea10d-20220127
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <biao.huang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 750309554; Thu, 27 Jan 2022 08:51:52 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 27 Jan 2022 08:51:51 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 27 Jan 2022 08:51:50 +0800
-Message-ID: <cabca14fc2cabc85c4a9bd9946d88066c5d8e2f2.camel@mediatek.com>
-Subject: Re: [PATCH net-next v1 3/9] net: ethernet: mtk-star-emac: add
- support for MT8365 SoC
-From:   Biao Huang <biao.huang@mediatek.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Felix Fietkau" <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
-        <srv_heupstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-Date:   Thu, 27 Jan 2022 08:51:50 +0800
-In-Reply-To: <CAMRc=MefKOmdKbm5KT=zQLORwm7oYe1oUy_XW3heqAqFqbE5NQ@mail.gmail.com>
-References: <20220120070226.1492-1-biao.huang@mediatek.com>
-         <20220120070226.1492-4-biao.huang@mediatek.com>
-         <CAMRc=MefKOmdKbm5KT=zQLORwm7oYe1oUy_XW3heqAqFqbE5NQ@mail.gmail.com>
+        Wed, 26 Jan 2022 19:56:03 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091F7C06161C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:56:03 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id bg32-20020a05600c3ca000b00349f2aca1beso702902wmb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:56:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=LoERNwA8xmWnMRUS58kPHL8vW8xT0FQRW2sRgtn7u0w=;
+        b=Q6u2q6a4h8e+wmuP3o/7Z/SKYlZ4d9c8MTBhQBmKXwV/XS9zuDNin/uBSsf4CUn4p7
+         7hwMJHczWpE2aDXrMxeLAed5AyJOE6PJub7KXPy5n9InC2QmPc6DTKBMXcFqr+VhkgQL
+         N5DrnHTBGdQTkxe/9kioyybS8Y5EWT1QPKb/TW2W1MQ8bwL4AfOHs3uAaKTi5jmP2Cr+
+         8Oe2jpN+pJAHHQDpZa4BuXmZeHlMow1m37Lv8B2zrgoalIyC6VVR/lCi4hhTmL/UjWHN
+         k90xVtf44yBOuVtUBD/0ijvjkB9QL88oIC2YvspCbFqi2CLeq2bgR6vmvDno1subfT9+
+         Ltqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=LoERNwA8xmWnMRUS58kPHL8vW8xT0FQRW2sRgtn7u0w=;
+        b=3G5rrV464nWVcgT/4ZjkoXZd76xJGGXgIc+tIic1MsnGQL+YQVRzWSCgFxBObHqn3b
+         yYPiJUjVAKgBFIx4lNR2r2i7VKLxFXhPr8NcWFu163+Ns/xKbqW9EpDsE/80UQ33tYAn
+         eBv9ERTpBl87EifeIROohj/32o65rHg70CpTGgR7d4M0o5PvuyeIkWstwkbKS0wgcvu7
+         f2y9FDJWXZOtuVOuNNIg7EsUv9ZAZYleUBvb11DqHWCvxeBWSfg4MfuCb5kWCkkLZ3qV
+         JrajfVY8Q+toTtdLl6FdImH4PkDm7kQDDoQD5EOKUGH7Nxnm1TnDo3c/d+JBtrunfLR7
+         2xLw==
+X-Gm-Message-State: AOAM533P5c/pCurOZyuWqlzjudqJywBHibbmq+G/brU43xf4bHeIrqSf
+        odNdoglSj1gk7yb0fmqDgprYL5p97w==
+X-Google-Smtp-Source: ABdhPJzuLcNk5JgrXPuPZqgJaZCbjNQrZ45faG5X5GxA2E4X3W1I0zBMgX9VABCPsfk/ieE9xOaCcA4lEA==
+X-Received: from jannh2.zrh.corp.google.com ([2a00:79e0:9d:4:e695:855e:ae74:d6f])
+ (user=jannh job=sendgmr) by 2002:a1c:a5d0:: with SMTP id o199mr9613780wme.65.1643244961486;
+ Wed, 26 Jan 2022 16:56:01 -0800 (PST)
+Date:   Thu, 27 Jan 2022 01:55:55 +0100
+Message-Id: <20220127005555.2766254-1-jannh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
+Subject: [RFC PATCH] x86/dumpstack: Fix unwind failure due to off-by-one-frame
+From:   Jann Horn <jannh@google.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Bartosz,
-	Thanks for your comments!
+(emphasis on the "RFC", not the "PATCH"...)
 
-On Tue, 2022-01-25 at 11:21 +0100, Bartosz Golaszewski wrote:
-> On Thu, Jan 20, 2022 at 8:02 AM Biao Huang <biao.huang@mediatek.com>
-> wrote:
-> > 
-> > Add Ethernet driver support for MT8365 SoC.
-> > 
-> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
-> > Signed-off-by: Yinghua Pan <ot_yinghua.pan@mediatek.com>
-> > Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> > ---
-> >  drivers/net/ethernet/mediatek/mtk_star_emac.c | 75
-> > ++++++++++++++++---
-> >  1 file changed, 64 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/mediatek/mtk_star_emac.c
-> > b/drivers/net/ethernet/mediatek/mtk_star_emac.c
-> > index 7c2af775d601..403439782db9 100644
-> > --- a/drivers/net/ethernet/mediatek/mtk_star_emac.c
-> > +++ b/drivers/net/ethernet/mediatek/mtk_star_emac.c
-> > @@ -151,6 +151,7 @@ static const char *const mtk_star_clk_names[] =
-> > { "core", "reg", "trans" };
-> >  #define MTK_STAR_REG_MAC_CLK_CONF              0x00ac
-> >  #define MTK_STAR_MSK_MAC_CLK_CONF              GENMASK(7, 0)
-> >  #define MTK_STAR_BIT_CLK_DIV_10                        0x0a
-> > +#define MTK_STAR_BIT_CLK_DIV_50                        0x32
-> > 
-> >  /* Counter registers. */
-> >  #define MTK_STAR_REG_C_RXOKPKT                 0x0100
-> > @@ -183,9 +184,11 @@ static const char *const mtk_star_clk_names[]
-> > = { "core", "reg", "trans" };
-> >  #define MTK_STAR_REG_C_RX_TWIST                        0x0218
-> > 
-> >  /* Ethernet CFG Control */
-> > -#define MTK_PERICFG_REG_NIC_CFG_CON            0x03c4
-> > -#define MTK_PERICFG_MSK_NIC_CFG_CON_CFG_MII    GENMASK(3, 0)
-> > -#define MTK_PERICFG_BIT_NIC_CFG_CON_RMII       BIT(0)
-> > +#define MTK_PERICFG_REG_NIC_CFG0_CON           0x03c4
-> > +#define MTK_PERICFG_REG_NIC_CFG1_CON           0x03c8
-> > +#define MTK_PERICFG_REG_NIC_CFG_CON_V2         0x0c10
-> > +#define MTK_PERICFG_REG_NIC_CFG_CON_CFG_INTF   GENMASK(3, 0)
-> > +#define MTK_PERICFG_BIT_NIC_CFG_CON_RMII       1
-> > 
-> >  /* Represents the actual structure of descriptors used by the MAC.
-> > We can
-> >   * reuse the same structure for both TX and RX - the layout is the
-> > same, only
-> > @@ -234,6 +237,7 @@ struct mtk_star_ring {
-> >  };
-> > 
-> >  struct mtk_star_compat {
-> > +       int (*set_interface_mode)(struct net_device *ndev);
-> >         unsigned char bit_clk_div;
-> >  };
-> > 
-> > @@ -909,13 +913,6 @@ static void mtk_star_init_config(struct
-> > mtk_star_priv *priv)
-> >                            priv->compat_data->bit_clk_div);
-> >  }
-> > 
-> > -static void mtk_star_set_mode_rmii(struct mtk_star_priv *priv)
-> > -{
-> > -       regmap_update_bits(priv->pericfg,
-> > MTK_PERICFG_REG_NIC_CFG_CON,
-> > -                          MTK_PERICFG_MSK_NIC_CFG_CON_CFG_MII,
-> > -                          MTK_PERICFG_BIT_NIC_CFG_CON_RMII);
-> > -}
-> > -
-> >  static int mtk_star_enable(struct net_device *ndev)
-> >  {
-> >         struct mtk_star_priv *priv = netdev_priv(ndev);
-> > @@ -1531,7 +1528,13 @@ static int mtk_star_probe(struct
-> > platform_device *pdev)
-> >                 return -ENODEV;
-> >         }
-> > 
-> > -       mtk_star_set_mode_rmii(priv);
-> > +       if (priv->compat_data->set_interface_mode) {
-> > +               ret = priv->compat_data->set_interface_mode(ndev);
-> > +               if (ret) {
-> > +                       dev_err(dev, "Failed to set phy interface,
-> > err = %d\n", ret);
-> > +                       return -EINVAL;
-> > +               }
-> > +       }
-> 
-> Shouldn't you still call mtk_star_set_mode_rmii(priv) if there's no
-> callback?
-mtk_star_set_mode_rmii is replaced by priv->compat_data-
->set_interface_mode,
-all the interface settings are moved to set_interface_mode,
-and we'll implement it for every IC.
+I've hit a bug where __dump_stack() ends up printing a stack trace that
+consists purely of guesses (all printed frames start with "? ").
 
-so, mtk_star_set_mode_rmii is no longer used.
-> 
-> > 
-> >         ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> >         if (ret) {
-> > @@ -1564,10 +1567,58 @@ static int mtk_star_probe(struct
-> > platform_device *pdev)
-> >         return devm_register_netdev(dev, ndev);
-> >  }
-> > 
-> > +static int mt8516_set_interface_mode(struct net_device *ndev)
-> > +{
-> > +       struct mtk_star_priv *priv = netdev_priv(ndev);
-> > +       struct device *dev = mtk_star_get_dev(priv);
-> > +       unsigned int intf_val = 0;
-> 
-> No need to initialize.
-OK, will fix it in next send.
-> 
-> > +
-> > +       switch (priv->phy_intf) {
-> > +       case PHY_INTERFACE_MODE_RMII:
-> > +               intf_val = MTK_PERICFG_BIT_NIC_CFG_CON_RMII;
-> > +               break;
-> > +       default:
-> > +               dev_err(dev, "This interface not supported\n");
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       regmap_update_bits(priv->pericfg,
-> > MTK_PERICFG_REG_NIC_CFG0_CON,
-> > +                          MTK_PERICFG_REG_NIC_CFG_CON_CFG_INTF,
-> > +                          intf_val);
-> > +       return 0;
-> 
-> You can directly return regmap_update_bits().
-OK, will fix it in next send.
-> 
-> > +}
-> > +
-> > +static int mt8365_set_interface_mode(struct net_device *ndev)
-> > +{
-> > +       struct mtk_star_priv *priv = netdev_priv(ndev);
-> > +       struct device *dev = mtk_star_get_dev(priv);
-> > +       unsigned int intf_val = 0;
-> > +
-> > +       switch (priv->phy_intf) {
-> > +       case PHY_INTERFACE_MODE_RMII:
-> > +               intf_val = MTK_PERICFG_BIT_NIC_CFG_CON_RMII;
-> > +               break;
-> > +       default:
-> > +               dev_err(dev, "This interface not supported\n");
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       regmap_update_bits(priv->pericfg,
-> > MTK_PERICFG_REG_NIC_CFG_CON_V2,
-> > +                          MTK_PERICFG_REG_NIC_CFG_CON_CFG_INTF,
-> > +                          intf_val);
-> > +       return 0;
-> > +}
-> 
-> Same as above.
-OK, will fix it in next send.
-> 
-> > +
-> >  static struct mtk_star_compat mtk_star_mt8516_compat = {
-> > +       .set_interface_mode = mt8516_set_interface_mode,
-> >         .bit_clk_div = MTK_STAR_BIT_CLK_DIV_10,
-> >  };
-> > 
-> > +static struct mtk_star_compat mtk_star_mt8365_compat = {
-> > +       .set_interface_mode = mt8365_set_interface_mode,
-> > +       .bit_clk_div = MTK_STAR_BIT_CLK_DIV_50,
-> > +};
-> > +
-> >  static const struct of_device_id mtk_star_of_match[] = {
-> >         { .compatible = "mediatek,mt8516-eth",
-> >           .data = &mtk_star_mt8516_compat },
-> > @@ -1575,6 +1626,8 @@ static const struct of_device_id
-> > mtk_star_of_match[] = {
-> >           .data = &mtk_star_mt8516_compat },
-> >         { .compatible = "mediatek,mt8175-eth",
-> >           .data = &mtk_star_mt8516_compat },
-> > +       { .compatible = "mediatek,mt8365-eth",
-> > +         .data = &mtk_star_mt8365_compat },
-> >         { }
-> >  };
-> >  MODULE_DEVICE_TABLE(of, mtk_star_of_match);
-> > --
-> > 2.25.1
-> > 
-> 
-> Bart
+Debugging the issue, I found that show_trace_log_lvl() is looking at a
+stack that looks like this:
+
+    function             stored value    pointer in show_trace_log_lvl()
+    ====================================================================
+            show_stack   saved RIP
+            show_stack   saved RBP       <-- stack
+    show_trace_log_lvl   saved RIP       <-- unwind_get_return_address_ptr(...)
+    show_trace_log_lvl   ...
+    show_trace_log_lvl   ...
+
+show_trace_log_lvl() then iterates up the stack with its `stack`
+variable; but because `unwind_get_return_address_ptr(&state)` is below the
+starting point, the two never compile equal, and so `reliable` is never
+set to 1.
+
+Poking around a bit, I see two issues.
+
+The first issue is that __unwind_start() tries to figure out whether
+`first_frame` is inside the current frame before even having looked up
+the ORC entry that determines where the current frame ends.
+That can't work and results in being off-by-one-frame in some cases no
+matter how we twist the comparison between `state->sp` and `first_frame`.
+
+The second issue is that show_trace_log_lvl() asks __unwind_start() to
+stop when it finds the frame containing `stack`, but then tries
+comparing `unwind_get_return_address_ptr(&state)` (which has to be below
+`stack`, since it is part of the lower frame) with `stack`.
+That can't work if __unwind_start() is working properly - we'll have to
+unwind up another frame.
+
+This patch is an attempt to fix that, but I guess there might still be
+issues with it in the interaction with show_regs_if_on_stack() in
+show_trace_log_lvl(), or something like that?
+
+Another option might be to rework even more how ORC stack walking works,
+and always compute the location of the next frame in __unwind_start()
+and unwind_next(), such that it becomes possible to query for the top
+of the current frame?
+
+Or a completely different approach, do more special-casing of different
+unwinding scenarios in __unwind_start(), such that unwinding a remote
+task doesn't go through the skip-ahead loop, and unwinding the current
+task from a starting point is always guaranteed to skip the given frame
+and stop at the following one? Or something along those lines?
+That would also make it more obviously correct what happens if a
+function specifies its own frame as the starting point wrt to changes to
+that frame's contents before the call to unwind_next()... now that I'm
+typing this out, I think that might be the best option?
+
+[no signoff because I think this patch might be a terrible idea...]
+---
+ arch/x86/kernel/dumpstack.c  | 10 ++++++++
+ arch/x86/kernel/unwind_orc.c | 46 ++++++++++++++++++++++++++++++++----
+ 2 files changed, 52 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/kernel/dumpstack.c b/arch/x86/kernel/dumpstack.c
+index 53de044e5654..2bffe8132e7c 100644
+--- a/arch/x86/kernel/dumpstack.c
++++ b/arch/x86/kernel/dumpstack.c
+@@ -195,6 +195,16 @@ static void show_trace_log_lvl(struct task_struct *task, struct pt_regs *regs,
+ 	printk("%sCall Trace:\n", log_lvl);
+ 
+ 	unwind_start(&state, task, regs, stack);
++
++	/* We asked unwind_start() to give us the unwind state for the frame
++	 * that contains @stack. But unwind_get_return_address_ptr() gives the
++	 * pointer to the saved RIP at the top of the previous frame.
++	 * If we want to be able to compare unwind_get_return_address_ptr()
++	 * with stack positions starting at @stack, we have to skip to the next
++	 * frame.
++	 */
++	unwind_next_frame(&state);
++
+ 	stack = stack ? : get_stack_pointer(task, regs);
+ 	regs = unwind_get_entry_regs(&state, &partial);
+ 
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 2de3c8c5eba9..611ffa4d3701 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -706,10 +706,48 @@ void __unwind_start(struct unwind_state *state, struct task_struct *task,
+ 	}
+ 
+ 	/* Otherwise, skip ahead to the user-specified starting frame: */
+-	while (!unwind_done(state) &&
+-	       (!on_stack(&state->stack_info, first_frame, sizeof(long)) ||
+-			state->sp < (unsigned long)first_frame))
+-		unwind_next_frame(state);
++	while (!unwind_done(state)) {
++		struct unwind_state lookahead_state;
++		/* If we're not even on the right stack yet, skip. */
++		if (!on_stack(&state->stack_info, first_frame, sizeof(long))) {
++			unwind_next_frame(state);
++			continue;
++		}
++
++		/*
++		 * What the user has given us is just a pointer somewhere *into*
++		 * a frame - for example, if the caller used
++		 * __builtin_frame_address(0), that function will have a saved
++		 * RBP below the saved RIP (yes, even when compiling without
++		 * frame pointers), and first_frame will point to that saved
++		 * RBP. If we're unwinding a remote task, we might be dealing
++		 * with a first_frame pointer to the bottom of a stack frame.
++		 *
++		 * So if we want to stop at the frame *containing* first_frame,
++		 * we have to first look up the next ORC entry and check whether
++		 * first_frame is within the current frame.
++		 */
++		lookahead_state = *state;
++		unwind_next_frame(&lookahead_state);
++
++		/*
++		 * It might be that the current frame is the last frame on this
++		 * stack, and the lookahead_state points to an entirely
++		 * different stack. We already decided above that we want to
++		 * stop somewhere on the current stack, so stop here.
++		 */
++		if (lookahead_state.stack_info.type != state->stack_info.type)
++			break;
++
++		/*
++		 * Stop if the user-specified address is below where the next
++		 * frame starts (meaning it is in the current frame).
++		 */
++		if ((unsigned long)first_frame < lookahead_state.sp)
++			break;
++
++		*state = lookahead_state;
++	}
+ 
+ 	return;
+ 
+
+base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
+prerequisite-patch-id: c01c9b02a02ca0c6996a5fb02e68e137444a0a53
+-- 
+2.35.0.rc0.227.g00780c9af4-goog
 

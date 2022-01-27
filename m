@@ -2,121 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372A549D76D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A6E49D772
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbiA0BUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 20:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234344AbiA0BUh (ORCPT
+        id S234455AbiA0BWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 20:22:54 -0500
+Received: from mail.efficios.com ([167.114.26.124]:52402 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234416AbiA0BWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 20:20:37 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB30BC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:20:36 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id l5so1529292edv.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:20:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=elzTyLMca2pvBYgTWQkNCYxxJD3xd3Z07gwcpc0mZtg=;
-        b=KhzTbfhlLCq7WoRZGIlVP2DWwdbNn8huwiVIEymR5ot3XAei7DWDavfibE2uqvBynt
-         VwAblbIyC1TAAY7NNPiWWIswT6tpHI/p20XwfTFb2NSk2X9tCFKTbmCA/9jiRAJsDSpx
-         5noVlLG5D3zSE6TuKW2YgDDm2p+WK2gn3rYd4wyl6X1byv8HT8noGwmQXStOFfusghyC
-         Mi5I9Hsgasbhq4ryOk5ZP1+blHerBXCGMirm5iFwV/a928QkHwhXs+JZ1nBwH7bZMKy8
-         aGLMwVG30fPujmctdeq1UblZKed22fC42zl5bdDVA9cT0bXqS0sEYLgFOIJ67LzBBEcS
-         rXRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=elzTyLMca2pvBYgTWQkNCYxxJD3xd3Z07gwcpc0mZtg=;
-        b=GX4QDiHld5f3leJMSzRCESrhPttOWTHN4CD96sGdm7THo5FRGVp7LadsWYtR7qQmT5
-         DL9AFkeLHlJehElIuaGrX9wo24wAKxLwpWtX6/pR7SfWb/2r85P8hQghTkLXCstRSWYf
-         XuZODYzh2274zETrzDn5iaTu8Ywijd5NTNDJFQ1oxMl6QwhLBWTIUeKUTynqvEH8CUxG
-         b6Qc2s0DCjB75hJVpuK0g6UGacUVJTrqNO7jZz6Z2+4nvjVdv1SB3vyMiQDnqbCJaSfw
-         AICfQ3WExs14OSlXE9nBZ5vcuStB7F0Iv3Hxo6HDpVJAwuqDRKY7KDRktGNMG0Mtj2VC
-         FjFA==
-X-Gm-Message-State: AOAM530PAK2Q84sUbpkHkt0AR5pFFIyn96wuc6EDG/heyR6tLfRYCCd3
-        8iwh0VQa958eagZ1a8Mty44=
-X-Google-Smtp-Source: ABdhPJxei5y/VVo7zaV2Lm4x0kqN1JeLqWTk6B3KNkWX512WC3+wql8dOVc78jaL5emQGyaPdU5ZBQ==
-X-Received: by 2002:a05:6402:11c7:: with SMTP id j7mr1485069edw.139.1643246435430;
-        Wed, 26 Jan 2022 17:20:35 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id by22sm8057957ejb.84.2022.01.26.17.20.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 26 Jan 2022 17:20:35 -0800 (PST)
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     akpm@linux-foundation.org, mgorman@techsingularity.net,
-        mhocko@suse.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Wei Yang <richard.weiyang@gmail.com>
-Subject: [PATCH] mm/memory_hotplug: build zonelist for managed_zone
-Date:   Thu, 27 Jan 2022 01:20:23 +0000
-Message-Id: <20220127012023.18095-1-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        Wed, 26 Jan 2022 20:22:53 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id D94AC363E3A;
+        Wed, 26 Jan 2022 20:22:52 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id gmMN3NZlGKwc; Wed, 26 Jan 2022 20:22:52 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 8CEEA36364A;
+        Wed, 26 Jan 2022 20:22:52 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 8CEEA36364A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643246572;
+        bh=WhNg8N27gF3iN7GhFfsYWyunl7sLSzaowOAX4hMmAOk=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=ksTPZa3S+qK6YhDekMwQ0stz2dWonSKhqPS0WNseabD2jtYgYHEj4WIPOc1/wJq7f
+         M3hzH0N9kk9tc5dkSqfn38+YlbE0BBn9sIPJ3LwLGR5GC2lqYeuIn8lWAq2/4MYzl5
+         6QoF4wpooCkqr4A7+7UgwwaxI3QGWK+q1ZrO24VBxJQa6Uxuxyz2kOxc5wmRlrY6qQ
+         r5lsjkeL7PEFprPRnI5DGQYWCuzzWdE8844/JkbPykO/8vy/ghsTljIems7szS/ucs
+         X5QwfcQz6TWHm9MCvbbh6gHEcxs13wtJ8GvRHN/jU6RHFXVPDzgCIGeEDCxa1jLaJe
+         829Sh+3KRSRlA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Ewz4yBBKn4A1; Wed, 26 Jan 2022 20:22:52 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 7ECD5363649;
+        Wed, 26 Jan 2022 20:22:52 -0500 (EST)
+Date:   Wed, 26 Jan 2022 20:22:52 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Paul Turner <pjt@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Michael Jeanson <mjeanson@efficios.com>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1211272108.4257.1643246572499.JavaMail.zimbra@efficios.com>
+Subject: rseq vcpu_id ideas
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
+Thread-Index: ix/xoRPtt8dW/JcuQ/MP/FnBqGa3UA==
+Thread-Topic: rseq vcpu_id ideas
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During memory hotplug, when online/offline a zone, we need to rebuild
-the zonelist for all node. There are two checks to decide whether a zone
-would be added to zonelist:
+Hi Paul,
 
-  * one in online_pages/offline_pages to decide necessity
-  * one in build_zonerefs_node to do real add
+I remember our LPC discussions about your virtual cpu ids ideas, and noticed some tcmalloc code
+with "prototype" fields for vcpu_id and numa node id
+(https://github.com/google/tcmalloc/blob/master/tcmalloc/internal/linux_syscall_support.h#L34).
 
-Currently we use different criteria at these two places, which is
-different from the original behavior.
+I'm currently toying with ideas very close to vcpu_ids to solve issues with overzealous
+memory allocation for LTTng-UST (user-space tracer) in use-cases where containers use few
+cores.
 
-Originally during memory hotplug, zonelist is re-built when zone hasn't
-been populated. This in introduced in 'commit 6811378e7d8b ("[PATCH]
-wait_table and zonelist initializing for memory hotadd: update zonelists")'.
-And at that moment, build_zonelists_node() also use populated_zone() to
-decide whether the zone should be added to zonelist.
+My current thinking is that we could use your vcpu_id idea, but apply it on a per-pid-namespace
+basis rather than per-process. We may have to be clever with NUMA as well to ensure good NUMA
+locality.
 
-While in 'commit 6aa303defb74 ("mm, vmscan: only allocate and reclaim
-from zones with pages managed by the buddy allocator")',
-build_zonelists_node() changed to use managed_zone() to add zonelist.
-But we still use populated_zone() to decide the necessity.
+Do you have any thought about this, and perhaps some prototype rseq extension code you could
+share as a starting point ?
 
-This patch restore the original behavior by using the same criteria to
-add a zone in zonelist during memory hotplug.
+Thanks,
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-Fixes: 6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones with pages managed by the buddy allocator")
-CC: Mel Gorman <mgorman@techsingularity.net>
----
- mm/memory_hotplug.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Mathieu
 
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 2a9627dc784c..8f1906b33937 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1102,11 +1102,11 @@ int __ref online_pages(unsigned long pfn, unsigned long nr_pages,
- 	spin_unlock_irqrestore(&zone->lock, flags);
- 
- 	/*
--	 * If this zone is not populated, then it is not in zonelist.
-+	 * If this zone is not managed, then it is not in zonelist.
- 	 * This means the page allocator ignores this zone.
- 	 * So, zonelist must be updated after online.
- 	 */
--	if (!populated_zone(zone)) {
-+	if (!managed_zone(zone)) {
- 		need_zonelists_rebuild = 1;
- 		setup_zone_pageset(zone);
- 	}
-@@ -1985,7 +1985,7 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
- 	/* reinitialise watermarks and update pcp limits */
- 	init_per_zone_wmark_min();
- 
--	if (!populated_zone(zone)) {
-+	if (!managed_zone(zone)) {
- 		zone_pcp_reset(zone);
- 		build_all_zonelists(NULL);
- 	}
 -- 
-2.33.1
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

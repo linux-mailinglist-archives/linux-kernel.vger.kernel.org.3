@@ -2,141 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A55A149D752
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E4149D755
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234520AbiA0BMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 20:12:08 -0500
-Received: from lgeamrelo11.lge.com ([156.147.23.51]:60599 "EHLO
-        lgeamrelo11.lge.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbiA0BL1 (ORCPT
+        id S231668AbiA0BNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 20:13:22 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:53416 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229699AbiA0BNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 20:11:27 -0500
-Received: from unknown (HELO lgemrelse6q.lge.com) (156.147.1.121)
-        by 156.147.23.51 with ESMTP; 27 Jan 2022 10:11:20 +0900
-X-Original-SENDERIP: 156.147.1.121
-X-Original-MAILFROM: byungchul.park@lge.com
-Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
-        by 156.147.1.121 with ESMTP; 27 Jan 2022 10:11:20 +0900
-X-Original-SENDERIP: 10.177.244.38
-X-Original-MAILFROM: byungchul.park@lge.com
-From:   Byungchul Park <byungchul.park@lge.com>
-To:     torvalds@linux-foundation.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
-        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
-        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
-        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
-        amir73il@gmail.com, bfields@fieldses.org,
-        gregkh@linuxfoundation.org, kernel-team@lge.com,
-        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
-        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
-        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
-        paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, djwong@kernel.org,
-        dri-devel@lists.freedesktop.org, airlied@linux.ie,
-        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-        hamohammed.sa@gmail.com
-Subject: [PATCH on v5.17-rc1 14/14] dept: Apply SDT to swait
-Date:   Thu, 27 Jan 2022 10:11:12 +0900
-Message-Id: <1643245873-15542-14-git-send-email-byungchul.park@lge.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1643245873-15542-1-git-send-email-byungchul.park@lge.com>
-References: <1643245733-14513-1-git-send-email-byungchul.park@lge.com>
- <1643245873-15542-1-git-send-email-byungchul.park@lge.com>
+        Wed, 26 Jan 2022 20:13:20 -0500
+X-UUID: 10bf234b2fd24b158e55d7fb15b378c1-20220127
+X-UUID: 10bf234b2fd24b158e55d7fb15b378c1-20220127
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <biao.huang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 4121814; Thu, 27 Jan 2022 09:13:15 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 27 Jan 2022 09:13:14 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 27 Jan 2022 09:13:13 +0800
+Message-ID: <07089392136a4a0790dd1fe73443db7e47700077.camel@mediatek.com>
+Subject: Re: [PATCH net-next v1 4/9] dt-bindings: net: mtk-star-emac: add
+ support for MT8365
+From:   Biao Huang <biao.huang@mediatek.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+CC:     David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Felix Fietkau" <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Yinghua Pan <ot_yinghua.pan@mediatek.com>,
+        <srv_heupstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+Date:   Thu, 27 Jan 2022 09:13:13 +0800
+In-Reply-To: <CAMRc=MdVKdXcK0gdBSpaaSm5fx1o5Sy_0-JJBPK0=Xp7UmQnqQ@mail.gmail.com>
+References: <20220120070226.1492-1-biao.huang@mediatek.com>
+         <20220120070226.1492-5-biao.huang@mediatek.com>
+         <CAMRc=MdVKdXcK0gdBSpaaSm5fx1o5Sy_0-JJBPK0=Xp7UmQnqQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Makes SDT able to track dependencies by swait.
+Dear Bartosz,
+	Thanks for your comments~
 
-Signed-off-by: Byungchul Park <byungchul.park@lge.com>
----
- include/linux/swait.h | 4 ++++
- kernel/sched/swait.c  | 8 ++++++++
- 2 files changed, 12 insertions(+)
-
-diff --git a/include/linux/swait.h b/include/linux/swait.h
-index 6a8c22b..dbdf2ce 100644
---- a/include/linux/swait.h
-+++ b/include/linux/swait.h
-@@ -6,6 +6,7 @@
- #include <linux/stddef.h>
- #include <linux/spinlock.h>
- #include <linux/wait.h>
-+#include <linux/dept_sdt.h>
- #include <asm/current.h>
- 
- /*
-@@ -43,6 +44,7 @@
- struct swait_queue_head {
- 	raw_spinlock_t		lock;
- 	struct list_head	task_list;
-+	struct dept_map		dmap;
- };
- 
- struct swait_queue {
-@@ -61,6 +63,7 @@ struct swait_queue {
- #define __SWAIT_QUEUE_HEAD_INITIALIZER(name) {				\
- 	.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),		\
- 	.task_list	= LIST_HEAD_INIT((name).task_list),		\
-+	.dmap		= DEPT_SDT_MAP_INIT(name),			\
- }
- 
- #define DECLARE_SWAIT_QUEUE_HEAD(name)					\
-@@ -72,6 +75,7 @@ extern void __init_swait_queue_head(struct swait_queue_head *q, const char *name
- #define init_swait_queue_head(q)				\
- 	do {							\
- 		static struct lock_class_key __key;		\
-+		sdt_map_init(&(q)->dmap);			\
- 		__init_swait_queue_head((q), #q, &__key);	\
- 	} while (0)
- 
-diff --git a/kernel/sched/swait.c b/kernel/sched/swait.c
-index e1c655f..b6c2efb 100644
---- a/kernel/sched/swait.c
-+++ b/kernel/sched/swait.c
-@@ -27,6 +27,7 @@ void swake_up_locked(struct swait_queue_head *q)
- 		return;
- 
- 	curr = list_first_entry(&q->task_list, typeof(*curr), task_list);
-+	sdt_event(&q->dmap);
- 	wake_up_process(curr->task);
- 	list_del_init(&curr->task_list);
- }
-@@ -69,6 +70,7 @@ void swake_up_all(struct swait_queue_head *q)
- 	while (!list_empty(&tmp)) {
- 		curr = list_first_entry(&tmp, typeof(*curr), task_list);
- 
-+		sdt_event(&q->dmap);
- 		wake_up_state(curr->task, TASK_NORMAL);
- 		list_del_init(&curr->task_list);
- 
-@@ -97,6 +99,9 @@ void prepare_to_swait_exclusive(struct swait_queue_head *q, struct swait_queue *
- 	__prepare_to_swait(q, wait);
- 	set_current_state(state);
- 	raw_spin_unlock_irqrestore(&q->lock, flags);
-+
-+	if (state & TASK_NORMAL)
-+		sdt_wait(&q->dmap);
- }
- EXPORT_SYMBOL(prepare_to_swait_exclusive);
- 
-@@ -119,6 +124,9 @@ long prepare_to_swait_event(struct swait_queue_head *q, struct swait_queue *wait
- 	}
- 	raw_spin_unlock_irqrestore(&q->lock, flags);
- 
-+	if (!ret && state & TASK_NORMAL)
-+		sdt_wait(&q->dmap);
-+
- 	return ret;
- }
- EXPORT_SYMBOL(prepare_to_swait_event);
--- 
-1.9.1
+On Tue, 2022-01-25 at 11:23 +0100, Bartosz Golaszewski wrote:
+> On Thu, Jan 20, 2022 at 8:02 AM Biao Huang <biao.huang@mediatek.com>
+> wrote:
+> > 
+> > Add binding document for Ethernet on MT8365.
+> > 
+> > Signed-off-by: Biao Huang <biao.huang@mediatek.com>
+> > ---
+> >  Documentation/devicetree/bindings/net/mediatek,star-emac.yaml | 1
+> > +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/mediatek,star-
+> > emac.yaml b/Documentation/devicetree/bindings/net/mediatek,star-
+> > emac.yaml
+> > index e6a5ff208253..87a8b25b03a6 100644
+> > --- a/Documentation/devicetree/bindings/net/mediatek,star-emac.yaml
+> > +++ b/Documentation/devicetree/bindings/net/mediatek,star-emac.yaml
+> > @@ -23,6 +23,7 @@ properties:
+> >        - mediatek,mt8516-eth
+> >        - mediatek,mt8518-eth
+> >        - mediatek,mt8175-eth
+> > +      - mediatek,mt8365-eth
+> > 
+> >    reg:
+> >      maxItems: 1
+> > --
+> > 2.25.1
+> > 
+> 
+> Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
+I'll add revieed-by in next send.
 

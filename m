@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A269D49DBC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B856649DBD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 08:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237420AbiA0Hjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 02:39:41 -0500
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:35389 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbiA0Hjk (ORCPT
+        id S237445AbiA0HpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 02:45:21 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:38874 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230516AbiA0HpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 02:39:40 -0500
-Received: by mail-wm1-f50.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso5287874wmj.0;
-        Wed, 26 Jan 2022 23:39:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RKtXYPsL4FZx1b/8XEZmhVsP2QrG7CtPdAKDsf7DNCY=;
-        b=j3iqjmGGQbdhl4+Pej5EhtyMSFoj+751UKW80HKAERhgLaCVhAqVdspL9e6KwxXniR
-         kdn49lbVhzIMurgOcKsLWpZIujow06b6HiJUj7WsW3ahmjmH2r3IuGnBPrWlUKMLlogj
-         LRlgcPi6VJISlNvyH+uuLSsUFxXJBczY3YYLZiurkemdBPea18WujjOR3zN1v5bUEiRU
-         cA7s5pfEZD/vj585wThub9tlxm6s6BIuca56Ek+h28aQkgA1v1qMyn31kILT95HzVCMF
-         TcJ6qkE0hgfRbKhLvyW2UPj1qblDzWo9Z6wYNqxgDyg9K1eVMJAbPP3SPcbcOylu9l2X
-         2klQ==
-X-Gm-Message-State: AOAM5322LWiEoQHegiqKEzDok//ZXwp50ouYkunTJFnY6QzBQgNwmhq8
-        dRN4uQnXrub2UwFRpGGxpBG1B1JoweA=
-X-Google-Smtp-Source: ABdhPJyYtaNmBS17DR5zKwadnAh9GK2L3GMOJ0jvXvo+B0ukC9ovbS6TS767qu7y8iqTB8vC2kZYkA==
-X-Received: by 2002:a7b:c08b:: with SMTP id r11mr10600482wmh.111.1643269179433;
-        Wed, 26 Jan 2022 23:39:39 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id n11sm13771930wms.3.2022.01.26.23.39.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 23:39:38 -0800 (PST)
-Message-ID: <cbf04c3c-b2d6-f818-cf23-a5a8e2fb727e@kernel.org>
-Date:   Thu, 27 Jan 2022 08:39:37 +0100
+        Thu, 27 Jan 2022 02:45:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09B1161A00;
+        Thu, 27 Jan 2022 07:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC32C340E4;
+        Thu, 27 Jan 2022 07:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643269518;
+        bh=Pn6SdFQhWRIFVHlZ099gr5Yj9PEQL6cWl2zcqtxdzXU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bxVOnLftM90mM4IL9e11P7kFkyhSy8BmhyayYWQVenk5zhWRSRyPU4E6GrZ1PMnkm
+         3I7/WQfOHSJexmCFXxyb/9pKskJEytm1/mrpIrnuNm2kqKTyFGY24r4kXlK+FrxM2A
+         t3s2oshOUGN0VcsZ68qcZZasPeOgqSmpgMsQXdTc=
+Date:   Thu, 27 Jan 2022 08:45:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 4.4 000/114] 4.4.300-rc1 review
+Message-ID: <YfJNiyEJNMNwhkpK@kroah.com>
+References: <20220124183927.095545464@linuxfoundation.org>
+ <abdecad5-9733-033b-e911-d692fef42ed0@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] tty: Replace acpi_bus_get_device()
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-serial@vger.kernel.org
-References: <7355105.EvYhyI6sBW@kreacher>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <7355105.EvYhyI6sBW@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abdecad5-9733-033b-e911-d692fef42ed0@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26. 01. 22, 20:55, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Jan 26, 2022 at 01:25:29PM -0800, Guenter Roeck wrote:
+> Hi Greg,
 > 
-> Replace acpi_bus_get_device() that is going to be dropped with
-> acpi_fetch_acpi_dev().
+> On 1/24/22 10:41, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 4.4.300 release.
+> > There are 114 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Wed, 26 Jan 2022 18:39:11 +0000.
+> > Anything received after that time might be too late.
+> > 
 > 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> A new version of this branch was pushed into the stable-queue git
+> repository around 10:30 PST, AFAICS without any actual changes.
+> This caused all my builders to start from scratch (again).
+> Would it be possible to avoid such dummy pushes ?
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+I'll try to avoid it, but it is usually easier for me to do "generate
+all -rcs and push them out", than do to them individually, which is why
+this happened.
 
-thanks,
--- 
-js
-suse labs
+sorry,
+
+greg k-h

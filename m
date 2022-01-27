@@ -2,210 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E95149E4E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB1749E4E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 15:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242562AbiA0Oo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 09:44:27 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:42318 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242557AbiA0Oo0 (ORCPT
+        id S242575AbiA0Ook (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 09:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242589AbiA0Oog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 09:44:26 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5C51D1F3A9;
-        Thu, 27 Jan 2022 14:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643294665; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Cr3ctQmKfbS4sGDuTWUwYiSQNoJONGqojhFsGxcH7XU=;
-        b=HLr6Nh4iXXcg6paXWYBSgWX/X7dUFH0wcYEmVU9d3f/bR9kxvYPT9BfNP13nE0rRwMPbth
-        hjTjpyOsIqzTB1I8aSnM9kpc7v6mHZls3zH+TpcKUjQz/EyA22IxKSzlbbzB+Eg1fA0FMj
-        4Ku9jyRdAT06U+XqjfcEIL6jnc494HA=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0991DA3B87;
-        Thu, 27 Jan 2022 14:44:24 +0000 (UTC)
-Date:   Thu, 27 Jan 2022 15:44:21 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Nico Pache <npache@redhat.com>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Rafael Aquini <raquini@redhat.com>
-Subject: Re: [PATCH 4/6] mm, memory_hotplug: reorganize new pgdat
- initialization
-Message-ID: <YfKvxVkkJ415DH4t@dhcp22.suse.cz>
-References: <20220127085305.20890-1-mhocko@kernel.org>
- <20220127085305.20890-5-mhocko@kernel.org>
- <6db33bb0-c72a-5539-5873-14039702e2a3@redhat.com>
+        Thu, 27 Jan 2022 09:44:36 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E9EC061714
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 06:44:36 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id s185so6260725oie.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 06:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=darEVYQSE8nP3jpJzwSkUiUgFJtcguGHbAaA8wiRNaA=;
+        b=Ypwxd6R69jdEi7v85ZpAoA++E5ZdaNFLhQI7oFvsnng/vm4suU1TWo0YEj5rgZ0eAX
+         x4X/DCGq/OZw2IjERsddLvz2PN8Qw2zARqXg+pRcZ49XBjAm0Tx9bFH5XsiSRGPgAalt
+         w/8nvHMrblwuL3Jb+qwBrxsF6vLJz6O3LlTzcauEgTqRsXJCzfRJjZxtaa6wuPzohZ09
+         IDXxDNhN83LNO/eVTUpMzZqkhDFtd+mEgk6gSPyQqduI4+m7RIvUVlhrPiIjrr0fl2Kd
+         FSHQaVB/NWcA70SEss5ZoS+0dBIcjv5cfze/AvGUiIhf2DRFlDpnip3DT5ojr4GMKgHs
+         34mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=darEVYQSE8nP3jpJzwSkUiUgFJtcguGHbAaA8wiRNaA=;
+        b=GnngO5VOurN34ErbEuA06LXjGTJ2NQkZjVw3j8+j5ppk6VCZwWB4VSdek3ezeHkByb
+         7CIxwuMrKxUYDYmV6BJ+QjXQSZGPY3JWmkT/bwC9Aua/xLDOkRw4kFjddK8Ocs1QhSFX
+         75c0D1oujFor5J1xwBWJ6meImozrk2PeCYy1Cks134wEnDMOxs5Qeb+DphZiH/mkx9yL
+         g5BFJ7bTRx05qjhC00pemsV0pqXdtZdNdEkbJXKgUfQOEGEo0+iYyGNsL0tp2VVzafIS
+         NrUlVrQQwmeVJg5eivCCnGZX4DCYamBABecpnnW5LUsxcNBg6L+f8v8Kbs11AUvRmZPV
+         YpPA==
+X-Gm-Message-State: AOAM531NzEwDFFnIRuCwTfZN0NnTrwCTR2sPD+XPPVDzGPOqujLrDplC
+        19ZrAAiHcc9II+iXTn1WNpCiJQCON4eWeuaRhoTG+w==
+X-Google-Smtp-Source: ABdhPJx4uxUdzNLOjtmP4roFlEQVaxC6kgtGFXTbTsPTVjAMwP3ZTHmEUmX1RdOLYiTInZ5cC0JLwb9wMsusDW+wdS0=
+X-Received: by 2002:a05:6808:b10:: with SMTP id s16mr2364269oij.307.1643294675382;
+ Thu, 27 Jan 2022 06:44:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6db33bb0-c72a-5539-5873-14039702e2a3@redhat.com>
+References: <20220126171232.2599547-1-jannh@google.com> <CACT4Y+b8ty07hAANzktksbbe5HdDM=jm6TSYLKawctpBmPfatw@mail.gmail.com>
+ <CAG48ez3mfAwgkJp+GKLnbtgQoQVT78U+voRN09H5S=7Ewf+DgQ@mail.gmail.com>
+In-Reply-To: <CAG48ez3mfAwgkJp+GKLnbtgQoQVT78U+voRN09H5S=7Ewf+DgQ@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 27 Jan 2022 15:44:24 +0100
+Message-ID: <CACT4Y+bOsS+veBKSMQX+Etz=93PZv-nhKYm4-Gmigmv551LCtg@mail.gmail.com>
+Subject: Re: [PATCH] x86/csum: Add KASAN/KCSAN instrumentation
+To:     Jann Horn <jannh@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        kasan-dev@googlegroups.com, Eric Dumazet <edumazet@google.com>,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 27-01-22 13:46:53, David Hildenbrand wrote:
-> On 27.01.22 09:53, Michal Hocko wrote:
-> > From: Michal Hocko <mhocko@suse.com>
-> > 
-> > When a !node_online node is brought up it needs a hotplug specific
-> > initialization because the node could be either uninitialized yet or it
-> > could have been recycled after previous hotremove. hotadd_init_pgdat is
-> > responsible for that.
-> > 
-> > Internal pgdat state is initialized at two places currently
-> > 	- hotadd_init_pgdat
-> > 	- free_area_init_core_hotplug
-> > There is no real clear cut what should go where but this patch's chosen to
-> > move the whole internal state initialization into free_area_init_core_hotplug.
-> > hotadd_init_pgdat is still responsible to pull all the parts together -
-> > most notably to initialize zonelists because those depend on the overall topology.
-> > 
-> > This patch doesn't introduce any functional change.
-> > 
-> > Acked-by: Rafael Aquini <raquini@redhat.com>
-> > Signed-off-by: Michal Hocko <mhocko@suse.com>
-> > ---
-> >  include/linux/memory_hotplug.h |  2 +-
-> >  mm/memory_hotplug.c            | 28 +++-------------------------
-> >  mm/page_alloc.c                | 25 +++++++++++++++++++++++--
-> >  3 files changed, 27 insertions(+), 28 deletions(-)
-> > 
-> > diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> > index 60f09d3ebb3d..76bf2de86def 100644
-> > --- a/include/linux/memory_hotplug.h
-> > +++ b/include/linux/memory_hotplug.h
-> > @@ -319,7 +319,7 @@ extern void set_zone_contiguous(struct zone *zone);
-> >  extern void clear_zone_contiguous(struct zone *zone);
-> >  
-> >  #ifdef CONFIG_MEMORY_HOTPLUG
-> > -extern void __ref free_area_init_core_hotplug(int nid);
-> > +extern void __ref free_area_init_core_hotplug(struct pglist_data *pgdat);
-> >  extern int __add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
-> >  extern int add_memory(int nid, u64 start, u64 size, mhp_t mhp_flags);
-> >  extern int add_memory_resource(int nid, struct resource *resource,
-> > diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> > index 875cdc7ffa58..ddc62f8b591f 100644
-> > --- a/mm/memory_hotplug.c
-> > +++ b/mm/memory_hotplug.c
-> > @@ -1166,39 +1166,16 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
-> >  {
-> >  	struct pglist_data *pgdat;
-> >  
-> > -	pgdat = NODE_DATA(nid);
-> > -
-> >  	/*
-> >  	 * NODE_DATA is preallocated (free_area_init) but its internal
-> >  	 * state is not allocated completely. Add missing pieces.
-> >  	 * Completely offline nodes stay around and they just need
-> >  	 * reintialization.
-> >  	 */
-> > -	if (pgdat->per_cpu_nodestats == &boot_nodestats) {
-> > -		pgdat->per_cpu_nodestats =
-> > -			alloc_percpu(struct per_cpu_nodestat);
-> > -	} else {
-> > -		int cpu;
-> > -		/*
-> > -		 * Reset the nr_zones, order and highest_zoneidx before reuse.
-> > -		 * Note that kswapd will init kswapd_highest_zoneidx properly
-> > -		 * when it starts in the near future.
-> > -		 */
-> > -		pgdat->nr_zones = 0;
-> > -		pgdat->kswapd_order = 0;
-> > -		pgdat->kswapd_highest_zoneidx = 0;
-> > -		for_each_online_cpu(cpu) {
-> > -			struct per_cpu_nodestat *p;
-> > -
-> > -			p = per_cpu_ptr(pgdat->per_cpu_nodestats, cpu);
-> > -			memset(p, 0, sizeof(*p));
-> > -		}
-> > -	}
-> > -
-> > -	pgdat->node_start_pfn = 0;
-> > +	pgdat = NODE_DATA(nid);
-> >  
-> >  	/* init node's zones as empty zones, we don't have any present pages.*/
-> > -	free_area_init_core_hotplug(nid);
-> > +	free_area_init_core_hotplug(pgdat);
-> >  
-> >  	/*
-> >  	 * The node we allocated has no zone fallback lists. For avoiding
-> > @@ -1210,6 +1187,7 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
-> >  	 * When memory is hot-added, all the memory is in offline state. So
-> >  	 * clear all zones' present_pages because they will be updated in
-> >  	 * online_pages() and offline_pages().
-> > +	 * TODO: should be in free_area_init_core_hotplug?
-> >  	 */
-> >  	reset_node_managed_pages(pgdat);
-> >  	reset_node_present_pages(pgdat);
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 1a05669044d3..32d0189de4c5 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -7506,12 +7506,33 @@ static void __meminit zone_init_internals(struct zone *zone, enum zone_type idx,
-> >   * NOTE: this function is only called during memory hotplug
-> >   */
-> >  #ifdef CONFIG_MEMORY_HOTPLUG
-> > -void __ref free_area_init_core_hotplug(int nid)
-> > +void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
-> >  {
-> > +	int nid = pgdat->node_id;
-> >  	enum zone_type z;
-> > -	pg_data_t *pgdat = NODE_DATA(nid);
-> > +	int cpu;
-> >  
-> >  	pgdat_init_internals(pgdat);
-> > +
-> > +	if (pgdat->per_cpu_nodestats == &boot_nodestats)
-> > +		pgdat->per_cpu_nodestats = alloc_percpu(struct per_cpu_nodestat);
-> > +
-> > +	/*
-> > +	 * Reset the nr_zones, order and highest_zoneidx before reuse.
-> > +	 * Note that kswapd will init kswapd_highest_zoneidx properly
-> > +	 * when it starts in the near future.
-> > +	 */
-> > +	pgdat->nr_zones = 0;
-> > +	pgdat->kswapd_order = 0;
-> > +	pgdat->kswapd_highest_zoneidx = 0;
-> > +	pgdat->node_start_pfn = 0;
-> > +	for_each_online_cpu(cpu) {
-> > +		struct per_cpu_nodestat *p;
-> > +
-> > +		p = per_cpu_ptr(pgdat->per_cpu_nodestats, cpu);
-> > +		memset(p, 0, sizeof(*p));
-> > +	}
-> > +
-> >  	for (z = 0; z < MAX_NR_ZONES; z++)
-> >  		zone_init_internals(&pgdat->node_zones[z], z, nid, 0);
-> >  }
-> 
-> I feel like we should be initializing all of this only once, just after
-> allocating the node. There should be no difference between a node we're
-> reusing and a "fresh" node. IOW, memory offlining should be resetting
-> all state accordingly when the last memory goes away.
-> 
-> But I might be wrong and this patch looks like an improvement, as you
-> say,  without functional change
+On Wed, 26 Jan 2022 at 18:48, Jann Horn <jannh@google.com> wrote:
+> > > In the optimized X86 version of the copy-with-checksum helpers, use
+> > > instrument_*() before accessing buffers from assembly code so that KASAN
+> > > and KCSAN don't have blind spots there.
+> [...]
+> > Can these potentially be called with KERNEL_DS as in some compat
+> > syscalls? If so it's better to use instrument_copy_to/from_user.
+> > Or probably it's better to use them anyway b/c we also want to know
+> > about user accesses for uaccess logging and maybe other things.
+>
+> Christoph Hellwig has basically eradicated KERNEL_DS. :)
+>
+> In particular, on X86, set_fs(KERNEL_DS) doesn't really do anything
+> anymore since commit 47058bb54b579 ("x86: remove address space
+> overrides using set_fs()").
 
-Yeah, I really wanted to have this simple and straightforward. To be
-completely honest I am not even sure this is necessary. Something really
-woth looking at.
- 
-> Acked-by: David Hildenbrand <david@redhat.com>
+That's good!
 
-Thanks!
-
--- 
-Michal Hocko
-SUSE Labs
+But still need this for uaccess logging.

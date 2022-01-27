@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE7549E278
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B46FB49E279
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 13:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241194AbiA0MjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 07:39:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241186AbiA0MjW (ORCPT
+        id S241202AbiA0MkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 07:40:10 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52376 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241186AbiA0MkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 07:39:22 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2FCC06173B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:39:22 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso7427605pjv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 04:39:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mVxBAkWsQpPETTTC043ddBxh6xT5/MragtmZsS3czxs=;
-        b=Ev++BUaIm5pi6ngoEhGe0N3rFzGd2uTb+8FgOKtOCRisKN40hbQWQxEVjcncYyF+kY
-         htly4sXh0A8K1m9mLyi6x+oq7DAXq9chUWr1pHrh02IhL0FttyLxyiycEOdaxcpepa17
-         qggZESAwS4Z6FnjATKHp+UuXr6nwuasT7NYptzB+jakcQrUTSYLXe/9Q4x4OIV1iUkLw
-         ktqH6X3os+muR6z7hQMwwkJEg4Xy7U8inbNUnVGW6aH4UecQOyLmL931BJX9ML2IcyZx
-         WMfEqPhK75uQO5EMZNCSYCxRJgYuAldh6hHAoiNRUslmmg/eQ+S80ln9NAJyw1isgdDG
-         ZXJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mVxBAkWsQpPETTTC043ddBxh6xT5/MragtmZsS3czxs=;
-        b=IPVKhK8DmNjLdoAzPNAK8UUYT35Uv6V7GP7WlQNr0MYirjMTutcWGmPvvLYWIr5+ca
-         f3SENy+URNHEJGNQIn8cZRK8AwTqChRls548kmhluvTOz3xPRZA5OaM2Yqm5XsUbRTQZ
-         JkroJtnqCFGwkGNFHo4pgPhg8JrziK96i7EKv/8vOiGKJORap9FtVsLVLTn/w1DBJwWQ
-         CJf2Z7VzOvpct33y1mtapfI0P33ZXNQw7RVYTwv7apdttlYC6pw+l2u/Pfcp8dJUsHD/
-         nfPtiuHC0WDRuiQDwOfwWCmw1rUPf4ykXAfWLEaAJe0iftSHdvuVsoeftvBRaQOewk8V
-         JiZw==
-X-Gm-Message-State: AOAM533IXZsjWNYDMA7AHIZPIdCPaaCZORc4F6m7zq5CqgbNXw8iQdk7
-        8Fkj0BDUp2NAnRq4OyvhXbXsz+gjlWhrC6Paky4ZhQ==
-X-Google-Smtp-Source: ABdhPJyEKi/LS1EiQ+NnAQ3tB5JKwiJjm+5moS8DjS32v1HHHsrgHQUq77R9pIoG722Y1Uvby5cr5WUTtnsB/t3tOSw=
-X-Received: by 2002:a17:903:41c9:: with SMTP id u9mr3036244ple.174.1643287161508;
- Thu, 27 Jan 2022 04:39:21 -0800 (PST)
+        Thu, 27 Jan 2022 07:40:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47B0AB82228
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 12:40:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0858EC340E4;
+        Thu, 27 Jan 2022 12:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643287206;
+        bh=JnlBSQS1AFrenlZcFKIvZzSqaAGifybnUZXObr1eoag=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i/v/gSJJHYSymievjsJE2D9V15USSFVUI1g2oB3UR1s4BPya1TcsGj7M4TdbrG3xv
+         ztjXQHi3pp8UBwrUZ8obIw0pM8fLI6sx99gHlhSF8jq8AwOKZ53La9gk20/WPxKiiG
+         IcbjS+SYB/2tekd19VNeX55R2V4hsxNw2ANt8VuorrTtfXJ1DJHRh3L0wffyPuenxY
+         TdbY651ULXJ+kvXGbwb/vuEFuiNsuq6ZbPg4d5zSfykjBTP1LPifQqMygm8es8nGm1
+         AHqDuJqYU1npqy3VT3HZXloMaKr3WgFqb1JYUc08m7GAW5TVhH5SqmW+HBmApGHVr0
+         twLvNlaYwDx3g==
+Date:   Thu, 27 Jan 2022 14:39:59 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        hch@infradead.org, akpm@linux-foundation.org
+Subject: Re: [RFC V1 02/31] mm/mmap: Clarify protection_map[] indices
+Message-ID: <YfKSn6u3YsErB/Ky@kernel.org>
+References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
+ <1643029028-12710-3-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-References: <20220125162938.838382-1-jens.wiklander@linaro.org>
- <20220125162938.838382-8-jens.wiklander@linaro.org> <CAFA6WYOLRqU4m5RJGJac9AtcpD7pt9Owd7D+XN8GjWRMAPBNuw@mail.gmail.com>
-In-Reply-To: <CAFA6WYOLRqU4m5RJGJac9AtcpD7pt9Owd7D+XN8GjWRMAPBNuw@mail.gmail.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 27 Jan 2022 13:39:10 +0100
-Message-ID: <CAHUa44HdOjJCt_1yGKaWXW6rUqo0ZGHBk7Tutwk69iv-7TR+mg@mail.gmail.com>
-Subject: Re: [PATCH v3 07/12] optee: use driver internal tee_contex for some rpc
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        stable@vger.kernel.org, Lars Persson <larper@axis.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1643029028-12710-3-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 7:32 AM Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> +Lars
->
-> Hi Jens,
->
-> On Tue, 25 Jan 2022 at 21:59, Jens Wiklander <jens.wiklander@linaro.org> wrote:
-> >
-> > Uses the new driver internal tee_context when allocating driver private
-> > shared memory. This decouples the shared memory object from its original
-> > tee_context. This is needed when the life time of such a memory
-> > allocation outlives the client tee_context.
-> >
-> > Fixes: 217e0250cccb ("tee: use reference counting for tee_context")
-> > Cc: stable@vger.kernel.org
-> > Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > ---
-> >  drivers/tee/optee/ffa_abi.c | 17 +++++++++--------
-> >  drivers/tee/optee/smc_abi.c |  7 ++++---
-> >  2 files changed, 13 insertions(+), 11 deletions(-)
-> >
->
-> As this commit fixes multiple issues seen earlier due to pre-allocated
-> SHM cache in client's context. I think it makes sense to separate this
-> as a standalone fix with few bits from patch #6 to target 5.17
-> release. As otherwise it will take a long path via 5.18 and then
-> backport to stable trees. In the meantime there can be other side
-> effects noticed similar to one from Lars.
+On Mon, Jan 24, 2022 at 06:26:39PM +0530, Anshuman Khandual wrote:
+> protection_map[] maps vm_flags access combinations into page protection
+> value as defined by the platform via __PXXX and __SXXX macros. The array
+> indices in protection_map[], represents vm_flags access combinations but
+> it's not very intuitive to derive. This makes it clear and explicit.
 
-The few bits needed from #6 is actually the entire "optee: add driver
-private tee_context". I'll combine the two and send them as a separate
-patch, that way it's easier to keep track of what's needed for the
-stable trees.
+The protection_map is going to be removed in one of the next patches, why
+bother with this patch at all?
+ 
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  mm/mmap.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 1e8fdb0b51ed..254d716220df 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -102,8 +102,22 @@ static void unmap_region(struct mm_struct *mm,
+>   *								x: (yes) yes
+>   */
+>  pgprot_t protection_map[16] __ro_after_init = {
+> -	__P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
+> -	__S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
+> +	[VM_NONE]				= __P000,
+> +	[VM_READ]				= __P001,
+> +	[VM_WRITE]				= __P010,
+> +	[VM_READ|VM_WRITE]			= __P011,
+> +	[VM_EXEC]				= __P100,
+> +	[VM_EXEC|VM_READ]			= __P101,
+> +	[VM_EXEC|VM_WRITE]			= __P110,
+> +	[VM_EXEC|VM_READ|VM_WRITE]		= __P111,
+> +	[VM_SHARED]				= __S000,
+> +	[VM_SHARED|VM_READ]			= __S001,
+> +	[VM_SHARED|VM_WRITE]			= __S010,
+> +	[VM_SHARED|VM_READ|VM_WRITE]		= __S011,
+> +	[VM_SHARED|VM_EXEC]			= __S100,
+> +	[VM_SHARED|VM_READ|VM_EXEC]		= __S101,
+> +	[VM_SHARED|VM_WRITE|VM_EXEC]		= __S110,
+> +	[VM_SHARED|VM_READ|VM_WRITE|VM_EXEC]	= __S111
+>  };
+>  
+>  #ifndef CONFIG_ARCH_HAS_FILTER_PGPROT
+> -- 
+> 2.25.1
+> 
+> 
 
-Thanks,
-Jens
+-- 
+Sincerely yours,
+Mike.

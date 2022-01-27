@@ -2,177 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8360C49DD33
+	by mail.lfdr.de (Postfix) with ESMTP id 3313549DD32
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 10:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238153AbiA0JCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Jan 2022 04:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S238131AbiA0JC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Jan 2022 04:02:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238144AbiA0JCa (ORCPT
+        with ESMTP id S231668AbiA0JCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Jan 2022 04:02:30 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF75C061714
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:02:30 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id d12-20020a17090a628c00b001b4f47e2f51so6918270pjj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:02:30 -0800 (PST)
+        Thu, 27 Jan 2022 04:02:22 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B04C06173B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:02:22 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id o30-20020a05600c511e00b0034f4c3186f4so5382324wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Jan 2022 01:02:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NOr8pePWI+bJZ/oa++rpCFf9EpUKVjAXphwkR7CQVj4=;
-        b=bqpl+VmnL4zn6FZ2t+qWfFzRvZTpzNcwwVlrsoIm6qABHP+3ui3yH+ggMWymZQNXHU
-         8Gm4yFd/IBGoS4x8xsiBq+0UJDmjUz2MjNOcNBHxeXsVGUL3ULWGVsFAWdqSRSfrB78z
-         YnRlweQDuiJvd1SB0/rWod5eUVZvuPtslmEWEHrXXU+HOvvd+5j2an/hACuR8ALlGEPB
-         k174wF9pRRKIYQfynuSSr5ykmp4wa8C+hrQTtzRW63Gf+zOhjIoI6ITrdHE5awq73plW
-         pUo+ZnbLuDaAvRz/mq3JAOCIn6EAg5swaGVg7pmWDprIDfCH7XoimT8W2LAdO3mf+z01
-         k+7Q==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2eUp5BPA7UfOIln4xH7CwxT1Ma80FeWymOHUn7zCIP4=;
+        b=dyrPXO7cE4gGhdr62w9NB2LQs7tCfPqXlS9wZhcNJ3LBFuWW5npKrGGN8Cazq8NJot
+         BxyCmogAv1xf8upzj44O4tbQ1nXye5DqAz4KDKa+WFj0vpjF4FS5UUA4i8UW94oJvPyC
+         l+syOL5kJlAvG+sdasXA5o4s4EboxOAc+MtoQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NOr8pePWI+bJZ/oa++rpCFf9EpUKVjAXphwkR7CQVj4=;
-        b=h8kLCsl46H7nBc4wPKuhFM6Ku8ynoLMT+4QqmczLJN2vWhKVsZ32z9KpahHLWdxqi9
-         6hkIWNyEe5Yxhf6aL4DO7qbDQKOFSWbcVJu0EMZr3k6mHfLkHUUy/s53+NKJcai30vg2
-         RaA3s4Zh9O6I0EGTNGFcuNfa6YpoKQbOfZ0bFC8YytvwKqHfgycIHrO6m0+KFbyLMyJF
-         p6EiQ9u2fY6j2njFpXSA+d9uwapfPdzzfepaztlHuib2x+8iyU72ip82LR7jYiMc34C6
-         qUX7Xfl90fmF9WU7qWu5eUsCboLnkEHlVo6Rwsy6KeV401vcTQs6nNrxyi6T678g/WE8
-         Lvrw==
-X-Gm-Message-State: AOAM533Nml2uu3dV1OirLD2lb6xt47YKAPhDQ0q6V/cDxlJWvVHbMzAu
-        CfmikT2HEaedxiRtMFCrUZByOcryzw==
-X-Google-Smtp-Source: ABdhPJz0QpYxbPpTnkIgWlwr9AaijSub8zFBYNU/QsBUvRPB2SpOczpG2ksYXjXPcJ3XKCW3sxiDOA==
-X-Received: by 2002:a17:90b:4ad1:: with SMTP id mh17mr3151428pjb.135.1643274149303;
-        Thu, 27 Jan 2022 01:02:29 -0800 (PST)
-Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id v17sm4614165pfm.10.2022.01.27.01.02.23
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=2eUp5BPA7UfOIln4xH7CwxT1Ma80FeWymOHUn7zCIP4=;
+        b=oV0wcYLUzAfMk8pBUp2cbIYtQdEqJAum5xr4SxN2A/plemNDmT02W+cujVGVPjl2Bh
+         aP8KwYbOVgrah2n33kJ+hAZ7i8hqI/QI9zb35In0IorvLzM/pE3c9gHgjWoDaZq9wtgb
+         YaC/RCpxPWoWM3S37JoHFbG7ZUouPoGYQYlWLEXhu4NMUwR+dsib6YUfE7AAKDlWdZy+
+         /VGLcyklsau7lJSkGJNS/DKz/MOi2IBAjoGvqEJuaNYaXC47qJrB32fN+X2qYVZ7zATR
+         pK6zrbxf1jRB1SpKntNfnzmi17gQisIG2xlkMsV/WQFWwpJW9x1W1G3LaeE4QHLS0ZRN
+         v+/w==
+X-Gm-Message-State: AOAM530z3BAM0J2Oh7YVHtM7/dyY93dLg6OjCbcV26DniIbkq5bZ4g+8
+        cMh4odi4WGlp/pJJF5+iT2rs6g==
+X-Google-Smtp-Source: ABdhPJx7pri2h0SYfqbY/4LaK5La7Uq+0ogxt1MTcUVnBBIqjx46Tng5d79ruBwDVjMRf43CzcKvZw==
+X-Received: by 2002:a05:600c:1994:: with SMTP id t20mr5336216wmq.124.1643274140526;
+        Thu, 27 Jan 2022 01:02:20 -0800 (PST)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id r8sm1595758wrx.2.2022.01.27.01.02.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 01:02:28 -0800 (PST)
-From:   Pingfan Liu <kernelfans@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Pingfan Liu <kernelfans@gmail.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>, kexec@lists.infradead.org
-Subject: [PATCHv2] kexec: disable cpu hotplug until the rebooting cpu is stable
-Date:   Thu, 27 Jan 2022 17:02:15 +0800
-Message-Id: <20220127090215.32000-1-kernelfans@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 27 Jan 2022 01:02:19 -0800 (PST)
+Date:   Thu, 27 Jan 2022 10:02:18 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Matthew Brost <matthew.brost@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH 01/19] dma-buf-map: Add read/write helpers
+Message-ID: <YfJfmitYfbqIgqqC@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
+References: <20220126203702.1784589-1-lucas.demarchi@intel.com>
+ <20220126203702.1784589-2-lucas.demarchi@intel.com>
+ <91bfa9d4-99fc-767e-5ba2-a2643cf585f5@amd.com>
+ <20220127073637.GA17282@jons-linux-dev-box>
+ <0f948558-6f31-fd81-5349-38ab21379f86@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <0f948558-6f31-fd81-5349-38ab21379f86@amd.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following identical code piece appears in both
-migrate_to_reboot_cpu() and smp_shutdown_nonboot_cpus():
+On Thu, Jan 27, 2022 at 08:59:36AM +0100, Christian König wrote:
+> Am 27.01.22 um 08:36 schrieb Matthew Brost:
+> > [SNIP]
+> > > >    /**
+> > > >     * dma_buf_map_memcpy_to - Memcpy into dma-buf mapping
+> > > >     * @dst:	The dma-buf mapping structure
+> > > > @@ -263,4 +304,44 @@ static inline void dma_buf_map_incr(struct dma_buf_map *map, size_t incr)
+> > > >    		map->vaddr += incr;
+> > > >    }
+> > > > +/**
+> > > > + * dma_buf_map_read_field - Read struct member from dma-buf mapping with
+> > > > + * arbitrary size and handling un-aligned accesses
+> > > > + *
+> > > > + * @map__:	The dma-buf mapping structure
+> > > > + * @type__:	The struct to be used containing the field to read
+> > > > + * @field__:	Member from struct we want to read
+> > > > + *
+> > > > + * Read a value from dma-buf mapping calculating the offset and size: this assumes
+> > > > + * the dma-buf mapping is aligned with a a struct type__. A single u8, u16, u32
+> > > > + * or u64 can be read, based on the offset and size of type__.field__.
+> > > > + */
+> > > > +#define dma_buf_map_read_field(map__, type__, field__) ({				\
+> > > > +	type__ *t__;									\
+> > > > +	typeof(t__->field__) val__;							\
+> > > > +	dma_buf_map_memcpy_from_offset(&val__, map__, offsetof(type__, field__),	\
+> > > > +				       sizeof(t__->field__));				\
+> > > > +	val__;										\
+> > > > +})
+> > > > +
+> > > > +/**
+> > > > + * dma_buf_map_write_field - Write struct member to the dma-buf mapping with
+> > > > + * arbitrary size and handling un-aligned accesses
+> > > > + *
+> > > > + * @map__:	The dma-buf mapping structure
+> > > > + * @type__:	The struct to be used containing the field to write
+> > > > + * @field__:	Member from struct we want to write
+> > > > + * @val__:	Value to be written
+> > > > + *
+> > > > + * Write a value to the dma-buf mapping calculating the offset and size.
+> > > > + * A single u8, u16, u32 or u64 can be written based on the offset and size of
+> > > > + * type__.field__.
+> > > > + */
+> > > > +#define dma_buf_map_write_field(map__, type__, field__, val__) ({			\
+> > > > +	type__ *t__;									\
+> > > > +	typeof(t__->field__) val____ = val__;						\
+> > > > +	dma_buf_map_memcpy_to_offset(map__, offsetof(type__, field__),			\
+> > > > +				     &val____, sizeof(t__->field__));			\
+> > > > +})
+> > > > +
+> > > Uff well that absolutely looks like overkill to me.
+> > > 
+> > Hold on...
+> > 
+> > > That's a rather special use case as far as I can see and I think we should
+> > > only have this in the common framework if more than one driver is using it.
+> > > 
+> > I disagree, this is rather elegant.
+> > 
+> > The i915 can't be the *only* driver that defines a struct which
+> > describes the layout of a dma_buf object.
+> 
+> That's not the problem, amdgpu as well as nouveau are doing that as well.
+> The problem is DMA-buf is a buffer sharing framework between drivers.
+> 
+> In other words which importer is supposed to use this with a DMA-buf
+> exported by another device?
+> 
+> > IMO this base macro allows *all* other drivers to build on this write
+> > directly to fields in structures those drivers have defined.
+> 
+> Exactly that's the point. This is something drivers should absolutely *NOT*
+> do.
+> 
+> That are driver internals and it is extremely questionable to move this into
+> the common framework.
 
-	if (!cpu_online(primary_cpu))
-		primary_cpu = cpumask_first(cpu_online_mask);
+See my other reply.
 
-This is due to a breakage like the following:
-   migrate_to_reboot_cpu();
-   cpu_hotplug_enable();
-                          --> comes a cpu_down(this_cpu) on other cpu
-   machine_shutdown();
+This is about struct dma_buf_map, which is just a tagged pointer.
 
-Although the kexec-reboot task can get through a cpu_down() on its cpu,
-this code looks a little confusing.
+Which happens to be used by the dma_buf cross-driver interface, but it's
+also used plenty internally in buffer allocation helpers, fbdev,
+everything else. And it was _meant_ to be used like that - this thing is
+my idea, I know :-)
 
-Make things straight forward by keeping cpu hotplug disabled until
-smp_shutdown_nonboot_cpus() holds cpu_add_remove_lock. By this way, the
-breakage is squashed out and the rebooting cpu can keep unchanged.
-
-Note: this patch only affects the kexec-reboot on arches, which rely on
-cpu hotplug mechanism.
-
-Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Cc: Vincent Donnefort <vincent.donnefort@arm.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: YueHaibing <yuehaibing@huawei.com>
-Cc: Baokun Li <libaokun1@huawei.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Cc: kexec@lists.infradead.org
-To: linux-kernel@vger.kernel.org
----
-v1 -> v2:
- improve commit log
-
- kernel/cpu.c        | 16 ++++++++++------
- kernel/kexec_core.c | 10 ++++------
- 2 files changed, 14 insertions(+), 12 deletions(-)
-
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 9c92147f0812..87bdf21de950 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1240,20 +1240,24 @@ int remove_cpu(unsigned int cpu)
- }
- EXPORT_SYMBOL_GPL(remove_cpu);
- 
-+/* primary_cpu keeps unchanged after migrate_to_reboot_cpu() */
- void smp_shutdown_nonboot_cpus(unsigned int primary_cpu)
- {
- 	unsigned int cpu;
- 	int error;
- 
-+	/*
-+	 * Block other cpu hotplug event, so primary_cpu is always online if
-+	 * it is not touched by us
-+	 */
- 	cpu_maps_update_begin();
--
- 	/*
--	 * Make certain the cpu I'm about to reboot on is online.
--	 *
--	 * This is inline to what migrate_to_reboot_cpu() already do.
-+	 * migrate_to_reboot_cpu() disables CPU hotplug assuming that
-+	 * no further code needs to use CPU hotplug (which is true in
-+	 * the reboot case). However, the kexec path depends on using
-+	 * CPU hotplug again; so re-enable it here.
- 	 */
--	if (!cpu_online(primary_cpu))
--		primary_cpu = cpumask_first(cpu_online_mask);
-+	__cpu_hotplug_enable();
- 
- 	for_each_online_cpu(cpu) {
- 		if (cpu == primary_cpu)
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index 68480f731192..db4fa6b174e3 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -1168,14 +1168,12 @@ int kernel_kexec(void)
- 		kexec_in_progress = true;
- 		kernel_restart_prepare("kexec reboot");
- 		migrate_to_reboot_cpu();
--
- 		/*
--		 * migrate_to_reboot_cpu() disables CPU hotplug assuming that
--		 * no further code needs to use CPU hotplug (which is true in
--		 * the reboot case). However, the kexec path depends on using
--		 * CPU hotplug again; so re-enable it here.
-+		 * migrate_to_reboot_cpu() disables CPU hotplug. If an arch
-+		 * relies on the cpu teardown to achieve reboot, it needs to
-+		 * re-enable CPU hotplug there.
- 		 */
--		cpu_hotplug_enable();
-+
- 		pr_notice("Starting new kernel\n");
- 		machine_shutdown();
- 	}
+I guess we could move/rename it, but like I said I really don't have any
+good ideas. Got some?
+-Daniel
 -- 
-2.31.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,260 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E821C49D719
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117DF49D721
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 02:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiA0BCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 20:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbiA0BCH (ORCPT
+        id S234269AbiA0BJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 20:09:01 -0500
+Received: from lgeamrelo11.lge.com ([156.147.23.51]:60167 "EHLO
+        lgeamrelo11.lge.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231455AbiA0BI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 20:02:07 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A5BC06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:02:07 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id p5so3749978ybd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 17:02:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uCfp+mv9XZ6IpRY4p39vfAWXjlQsufjrNR7XuTkTSA0=;
-        b=kdDs0j4eBH3Ul2Ha67seRy8CctY5Z2a7drDpC8CObpmBHSn2BUzrQ66VOQP2A2q296
-         ooormPp/0unPlT1OI0BXNtgapKdTHvG4Z/aOdVn/KHCtUijkzcZQe0/6+SqX3gWmeEaV
-         dCieIwRoz/jSlxJkqgsZPnAL+ufJP/UA+yuTk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uCfp+mv9XZ6IpRY4p39vfAWXjlQsufjrNR7XuTkTSA0=;
-        b=LjLgM9Om1RwQmeoeulQI+99H9XYPCLP26r7oGsoyIZrzKVDihKU6HwuyFlXVCQP0JF
-         fTnoGWR6nspgqclCQHNrBrGAie3P9CU8eUolXqddzBaKaMU4blltzSzaW0igxjmH2T5R
-         kde2ROqoVqLKdJqulKFRKmWaLT4OUAr2eLj7rwuGZqLtxbNjslYb6TykuTqE9jSAMg1G
-         FblFsau9ARCE+0Sjw9RvIviaTRPN1KAE4XFx2MT5m2o3k0KJDuGIY15B69L7vyZxigAz
-         Zwc9OhIQp5kouE7xzOzW2kZn7DQtc8444gNYon0hC+VhTMWgUxrxRtqQ2SKre5RtB0cU
-         u2aQ==
-X-Gm-Message-State: AOAM533FNlRCJvulKoQ9XTnnhix2CwxxUy0VrZRnGgHi8ERwrmfevppE
-        SbXVX4AdMWgVFt+VM16aln4nwWPUiB4RomiaZ6Ed
-X-Google-Smtp-Source: ABdhPJwQbOzQxlbt/a09fR00iPVtrGYZ3evSYo/X9KWDDMiaD4+h8WJwnD/VD0VlB6JkhcFk6WwSAaraJPX1jw0TtgU=
-X-Received: by 2002:a5b:44:: with SMTP id e4mr2376039ybp.713.1643245326587;
- Wed, 26 Jan 2022 17:02:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20220120090918.2646626-1-atishp@rivosinc.com> <20220120090918.2646626-7-atishp@rivosinc.com>
- <1AA3005C-E9C8-4E4B-900D-DD48B37CEA41@jrtc27.com> <CAOnJCUKJmHv2Rs3=FR3LjiZqvM5uxcVeZ3D5xRSbEeDFCeS9=Q@mail.gmail.com>
- <CAMuHMdW+ZO0=Qc8NCWujZUq=L-LZJpcd7oZo4MxRFYMmcURXVQ@mail.gmail.com> <CAMuHMdXq7OQJL6H7=JRnDTR6p+AD0o2Ctjn806XZQZ9PYjvepg@mail.gmail.com>
-In-Reply-To: <CAMuHMdXq7OQJL6H7=JRnDTR6p+AD0o2Ctjn806XZQZ9PYjvepg@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Wed, 26 Jan 2022 17:01:55 -0800
-Message-ID: <CAOnJCU+AVS5Js4ZXmUubTqwU5Ye-9_z8onEE1mwhvCsOXchFBg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] RISC-V: Do not use cpumask data structure for
- hartid bitmap
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 26 Jan 2022 20:08:59 -0500
+Received: from unknown (HELO lgeamrelo01.lge.com) (156.147.1.125)
+        by 156.147.23.51 with ESMTP; 27 Jan 2022 10:08:57 +0900
+X-Original-SENDERIP: 156.147.1.125
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO localhost.localdomain) (10.177.244.38)
+        by 156.147.1.125 with ESMTP; 27 Jan 2022 10:08:57 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     torvalds@linux-foundation.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     peterz@infradead.org, will@kernel.org, tglx@linutronix.de,
+        rostedt@goodmis.org, joel@joelfernandes.org, sashal@kernel.org,
+        daniel.vetter@ffwll.ch, chris@chris-wilson.co.uk,
+        duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+        tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+        amir73il@gmail.com, bfields@fieldses.org,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+        ngupta@vflare.org, linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.cz, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Patches(Dept) for v5.17-rc1
+Date:   Thu, 27 Jan 2022 10:08:53 +0900
+Message-Id: <1643245733-14513-1-git-send-email-byungchul.park@lge.com>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1643078204-12663-1-git-send-email-byungchul.park@lge.com>
+References: <1643078204-12663-1-git-send-email-byungchul.park@lge.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 1:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Atish,
->
-> On Wed, Jan 26, 2022 at 9:28 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Wed, Jan 26, 2022 at 3:21 AM Atish Patra <atishp@atishpatra.org> wrote:
-> > > On Tue, Jan 25, 2022 at 2:26 PM Jessica Clarke <jrtc27@jrtc27.com> wrote:
-> > > > On 20 Jan 2022, at 09:09, Atish Patra <atishp@rivosinc.com> wrote:
-> > > > > Currently, SBI APIs accept a hartmask that is generated from struct
-> > > > > cpumask. Cpumask data structure can hold upto NR_CPUs value. Thus, it
-> > > > > is not the correct data structure for hartids as it can be higher
-> > > > > than NR_CPUs for platforms with sparse or discontguous hartids.
-> > > > >
-> > > > > Remove all association between hartid mask and struct cpumask.
-> > > > >
-> > > > > Reviewed-by: Anup Patel <anup@brainfault.org> (For Linux RISC-V changes)
-> > > > > Acked-by: Anup Patel <anup@brainfault.org> (For KVM RISC-V changes)
-> > > > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> >
-> > > I am yet to reproduce it on my end.
-> > > @Geert Uytterhoeven: can you please try the below diff on your end.
-> >
-> > Unfortunately it doesn't fix the issue for me.
-> >
-> > /me debugging...
->
-> Found it: after this commit, the SBI_EXT_RFENCE_REMOTE_FENCE_I and
-> SBI_EXT_RFENCE_REMOTE_SFENCE_VMA ecalls are now called with
-> hmask = 0x8000000000000001 and hbase = 1 instead of hmask = 3 and
-> hbase = 0.
->
-> cpuid 1 maps to  hartid 0
-> cpuid 0 maps to hartid 1
->
->     __sbi_rfence_v02:364: cpuid 1 hartid 0
->     __sbi_rfence_v02:377: hartid 0 hbase 1
->     hmask |= 1UL << (hartid - hbase);
->
-> oops
->
->     __sbi_rfence_v02_call:303: SBI_EXT_RFENCE_REMOTE_FENCE_I hmask
-> 8000000000000001 hbase 1
->
+The following messages are for the latest tag, v5.17-rc1.
+Hope you are gonna be satisfied with it!
 
-Ahh yes. hmask will be incorrect if the bootcpu(cpu 0) is a higher
-hartid and it is trying to do a remote tlb flush/IPI
-to lower the hartid. We should generate the hartid array before the loop.
+Thanks,
+Byungchul
 
-Can you try this diff ? It seems to work for me during multiple boot
-cycle on the unleashed.
+--->8---
+From 68ee7ab996fc7d67b6b506f48da106493ca2546a Mon Sep 17 00:00:00 2001
+From: Byungchul Park <byungchul.park@lge.com>
+Date: Tue, 25 Jan 2022 10:12:54 +0900
+Subject: [RFC 00/14] DEPT(DEPendency Tracker)
 
-You can find the patch here as well
-https://github.com/atishp04/linux/commits/v5.17-rc1
+Hi forks,
 
---------------------------------------------------------------------------------------------------------------------------------
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index f72527fcb347..4ebeb5813edc 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -8,6 +8,8 @@
- #include <linux/init.h>
- #include <linux/pm.h>
- #include <linux/reboot.h>
-+#include <linux/sort.h>
-+
- #include <asm/sbi.h>
- #include <asm/smp.h>
+I've been developing a tool for detecting deadlock possibilities by
+tracking wait/event rather than lock(?) acquisition order to try to
+cover all synchonization machanisms. It's done on v5.10 tag. I bet
+it would work great! Try it and see what's gonna happen.
 
-@@ -85,7 +87,7 @@ static unsigned long
-__sbi_v01_cpumask_to_hartmask(const struct cpumask *cpu_mas
-  pr_warn("Unable to send any request to hartid > BITS_PER_LONG for
-SBI v0.1\n");
-  break;
-  }
-- hmask |= 1 << hartid;
-+ hmask |= 1UL << hartid;
-  }
+Now that there's a porting issue, I made Dept rely on Lockdep. But it
+should be separated from Lockdep once it's considered worth having.
 
-  return hmask;
-@@ -160,7 +162,7 @@ static int __sbi_send_ipi_v01(const struct cpumask
-*cpu_mask)
- {
-  unsigned long hart_mask;
+Benifit:
 
-- if (!cpu_mask)
-+ if (!cpu_mask || cpumask_empty(cpu_mask))
-  cpu_mask = cpu_online_mask;
-  hart_mask = __sbi_v01_cpumask_to_hartmask(cpu_mask);
+	0. Works with all lock primitives.
+	1. Works with wait_for_completion()/complete().
+	2. Works with 'wait' on PG_locked.
+	3. Works with 'wait' on PG_writeback.
+	4. Works with swait/wakeup.
+	5. Multiple reports are allowed.
+	6. Deduplication control on multiple reports.
+	7. Withstand false positives thanks to 5.
+	8. Easy to tag any wait/event.
 
-@@ -176,7 +178,7 @@ static int __sbi_rfence_v01(int fid, const struct
-cpumask *cpu_mask,
-  int result = 0;
-  unsigned long hart_mask;
+Future work:
 
-- if (!cpu_mask)
-+ if (!cpu_mask || cpumask_empty(cpu_mask))
-  cpu_mask = cpu_online_mask;
-  hart_mask = __sbi_v01_cpumask_to_hartmask(cpu_mask);
+	0. To make it more stable.
+	1. To separates Dept from Lockdep.
+	2. To improves performance in terms of time and space.
+	3. To use Dept as a dependency engine for Lockdep.
+	4. To add any missing tags of wait/event in the kernel.
+	5. To deduplicate stack trace.
 
-@@ -236,6 +238,18 @@ static int __sbi_rfence_v01(int fid, const struct
-cpumask *cpu_mask,
- static void sbi_set_power_off(void) {}
- #endif /* CONFIG_RISCV_SBI_V01 */
+I hope you guys are gonna be satisfied with Dept. Don't hesitate to
+give any feedback. I will adopt any feedbacks if reasonable.
 
-+static int cmp_ulong(const void *A, const void *B)
-+{
-+ const unsigned long *a = A, *b = B;
-+
-+ if (*a < *b)
-+ return -1;
-+ else if (*a > *b)
-+ return 1;
-+ else
-+ return 0;
-+}
-+
- static void __sbi_set_timer_v02(uint64_t stime_value)
- {
- #if __riscv_xlen == 32
-@@ -251,13 +265,22 @@ static int __sbi_send_ipi_v02(const struct
-cpumask *cpu_mask)
- {
-  unsigned long hartid, cpuid, hmask = 0, hbase = 0;
-  struct sbiret ret = {0};
-- int result;
-+ int result, index = 0, max_index = 0;
-+ unsigned long hartid_arr[NR_CPUS] = {0};
+Thanks,
+Byungchul
 
-- if (!cpu_mask)
-+ if (!cpu_mask || cpumask_empty(cpu_mask))
-  cpu_mask = cpu_online_mask;
+Byungchul Park (14):
+  llist: Move llist_{head,node} definition to types.h
+  dept: Implement Dept(Dependency Tracker)
+  dept: Embed Dept data in Lockdep
+  dept: Apply Dept to spinlock
+  dept: Apply Dept to mutex families
+  dept: Apply Dept to rwlock
+  dept: Apply Dept to wait_for_completion()/complete()
+  dept: Apply Dept to seqlock
+  dept: Apply Dept to rwsem
+  dept: Add proc knobs to show stats and dependency graph
+  dept: Introduce split map concept and new APIs for them
+  dept: Apply Dept to wait/event of PG_{locked,writeback}
+  dept: Separate out SDT(Single-event Dependency Tracker) header
+  dept: Apply SDT to swait
 
-  for_each_cpu(cpuid, cpu_mask) {
-  hartid = cpuid_to_hartid_map(cpuid);
-+ hartid_arr[index] = hartid;
-+ index++;
-+ }
-+
-+ max_index = index;
-+ sort(hartid_arr, max_index, sizeof(unsigned long), cmp_ulong, NULL);
-+ for (index = 0; index < max_index; index++) {
-+ hartid = hartid_arr[index];
-  if (hmask && ((hbase + BITS_PER_LONG) <= hartid)) {
-  ret = sbi_ecall(SBI_EXT_IPI, SBI_EXT_IPI_SEND_IPI,
-  hmask, hbase, 0, 0, 0, 0);
-@@ -345,13 +368,21 @@ static int __sbi_rfence_v02(int fid, const
-struct cpumask *cpu_mask,
-      unsigned long arg4, unsigned long arg5)
- {
-  unsigned long hartid, cpuid, hmask = 0, hbase = 0;
-- int result;
-+ int result, index = 0, max_index = 0;
-+ unsigned long hartid_arr[NR_CPUS] = {0};
-
-- if (!cpu_mask)
-+ if (!cpu_mask || cpumask_empty(cpu_mask))
-  cpu_mask = cpu_online_mask;
-
-  for_each_cpu(cpuid, cpu_mask) {
-  hartid = cpuid_to_hartid_map(cpuid);
-+ hartid_arr[index] = hartid;
-+ index++;
-+ }
-+ max_index = index;
-+ sort(hartid_arr, max_index, sizeof(unsigned long), cmp_ulong, NULL);
-+ for (index = 0; index < max_index; index++) {
-+ hartid = hartid_arr[index];
-  if (hmask && ((hbase + BITS_PER_LONG) <= hartid)) {
-  result = __sbi_rfence_v02_call(fid, hmask, hbase,
-         start, size, arg4, arg5);
-
---------------------------------------------------------------------------------------------------------------------------------
-
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
-
+ include/linux/completion.h        |   48 +-
+ include/linux/dept.h              |  541 ++++++++
+ include/linux/dept_page.h         |   71 +
+ include/linux/dept_sdt.h          |   53 +
+ include/linux/hardirq.h           |    3 +
+ include/linux/irqflags.h          |   33 +-
+ include/linux/llist.h             |    9 +-
+ include/linux/lockdep.h           |  156 ++-
+ include/linux/lockdep_types.h     |    3 +
+ include/linux/mutex.h             |   31 +
+ include/linux/page-flags.h        |   26 +-
+ include/linux/pagemap.h           |    7 +-
+ include/linux/percpu-rwsem.h      |   10 +-
+ include/linux/rtmutex.h           |   11 +-
+ include/linux/rwlock.h            |   48 +
+ include/linux/rwlock_api_smp.h    |    8 +-
+ include/linux/rwlock_types.h      |    7 +
+ include/linux/rwsem.h             |   31 +
+ include/linux/sched.h             |    3 +
+ include/linux/seqlock.h           |   19 +-
+ include/linux/spinlock.h          |   24 +
+ include/linux/spinlock_types.h    |   10 +
+ include/linux/swait.h             |    4 +
+ include/linux/types.h             |    8 +
+ init/init_task.c                  |    2 +
+ init/main.c                       |    4 +
+ kernel/Makefile                   |    1 +
+ kernel/dependency/Makefile        |    5 +
+ kernel/dependency/dept.c          | 2593 +++++++++++++++++++++++++++++++++++++
+ kernel/dependency/dept_hash.h     |   11 +
+ kernel/dependency/dept_internal.h |   26 +
+ kernel/dependency/dept_object.h   |   14 +
+ kernel/dependency/dept_proc.c     |   97 ++
+ kernel/exit.c                     |    1 +
+ kernel/fork.c                     |    2 +
+ kernel/locking/lockdep.c          |   12 +-
+ kernel/module.c                   |    2 +
+ kernel/sched/completion.c         |   12 +-
+ kernel/sched/swait.c              |    8 +
+ kernel/softirq.c                  |    6 +-
+ kernel/trace/trace_preemptirq.c   |   19 +-
+ lib/Kconfig.debug                 |   21 +
+ mm/filemap.c                      |   62 +
+ mm/page_ext.c                     |    5 +
+ 44 files changed, 4009 insertions(+), 58 deletions(-)
+ create mode 100644 include/linux/dept.h
+ create mode 100644 include/linux/dept_page.h
+ create mode 100644 include/linux/dept_sdt.h
+ create mode 100644 kernel/dependency/Makefile
+ create mode 100644 kernel/dependency/dept.c
+ create mode 100644 kernel/dependency/dept_hash.h
+ create mode 100644 kernel/dependency/dept_internal.h
+ create mode 100644 kernel/dependency/dept_object.h
+ create mode 100644 kernel/dependency/dept_proc.c
 
 -- 
-Regards,
-Atish
+1.9.1
+

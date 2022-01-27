@@ -2,207 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3709F49D704
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F149049D707
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Jan 2022 01:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiA0A4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Jan 2022 19:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S234147AbiA0A5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Jan 2022 19:57:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234043AbiA0A4D (ORCPT
+        with ESMTP id S234074AbiA0A5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Jan 2022 19:56:03 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091F7C06161C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:56:03 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id bg32-20020a05600c3ca000b00349f2aca1beso702902wmb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Jan 2022 16:56:02 -0800 (PST)
+        Wed, 26 Jan 2022 19:57:16 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0D1C06161C;
+        Wed, 26 Jan 2022 16:57:15 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id h7so2304077ejf.1;
+        Wed, 26 Jan 2022 16:57:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=LoERNwA8xmWnMRUS58kPHL8vW8xT0FQRW2sRgtn7u0w=;
-        b=Q6u2q6a4h8e+wmuP3o/7Z/SKYlZ4d9c8MTBhQBmKXwV/XS9zuDNin/uBSsf4CUn4p7
-         7hwMJHczWpE2aDXrMxeLAed5AyJOE6PJub7KXPy5n9InC2QmPc6DTKBMXcFqr+VhkgQL
-         N5DrnHTBGdQTkxe/9kioyybS8Y5EWT1QPKb/TW2W1MQ8bwL4AfOHs3uAaKTi5jmP2Cr+
-         8Oe2jpN+pJAHHQDpZa4BuXmZeHlMow1m37Lv8B2zrgoalIyC6VVR/lCi4hhTmL/UjWHN
-         k90xVtf44yBOuVtUBD/0ijvjkB9QL88oIC2YvspCbFqi2CLeq2bgR6vmvDno1subfT9+
-         Ltqg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VsdfdT2nUTvq3M0Rq/sXfwAbcz10llX1no1laZ549WU=;
+        b=SJgsJjCx+C/2c/iqIlkmDTBGy4F+Gr+cT1NNAF03vMeRWX3qY7zPFc3LZW/EFNVV4O
+         FoNQ02HmBBQx2MNo/BCvvYuQG+AFY7hqF8e+3ISbhudkGGwjrQUS65nQZyhc99hI0UHT
+         J7+1rSJpbdUllG5ot66JQLPyONDBkuhCn8dn5j+EAkL4pi3B1f5Ba/8+NHgx1bQAJXY8
+         Qv8Re71xR62RkF7yLBcvhHY0p4VWWO4ue4aoHLopYTe/qC7l2Ve7lcBKZQOMAlz2xzRX
+         N1Vn9rCzoCpK03IQQWNjnt/iVl9ZFJOUaSZ5Cw6RhNWQAexkvsu5kjOUKND7p6ROTmAm
+         FpQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=LoERNwA8xmWnMRUS58kPHL8vW8xT0FQRW2sRgtn7u0w=;
-        b=3G5rrV464nWVcgT/4ZjkoXZd76xJGGXgIc+tIic1MsnGQL+YQVRzWSCgFxBObHqn3b
-         yYPiJUjVAKgBFIx4lNR2r2i7VKLxFXhPr8NcWFu163+Ns/xKbqW9EpDsE/80UQ33tYAn
-         eBv9ERTpBl87EifeIROohj/32o65rHg70CpTGgR7d4M0o5PvuyeIkWstwkbKS0wgcvu7
-         f2y9FDJWXZOtuVOuNNIg7EsUv9ZAZYleUBvb11DqHWCvxeBWSfg4MfuCb5kWCkkLZ3qV
-         JrajfVY8Q+toTtdLl6FdImH4PkDm7kQDDoQD5EOKUGH7Nxnm1TnDo3c/d+JBtrunfLR7
-         2xLw==
-X-Gm-Message-State: AOAM533P5c/pCurOZyuWqlzjudqJywBHibbmq+G/brU43xf4bHeIrqSf
-        odNdoglSj1gk7yb0fmqDgprYL5p97w==
-X-Google-Smtp-Source: ABdhPJzuLcNk5JgrXPuPZqgJaZCbjNQrZ45faG5X5GxA2E4X3W1I0zBMgX9VABCPsfk/ieE9xOaCcA4lEA==
-X-Received: from jannh2.zrh.corp.google.com ([2a00:79e0:9d:4:e695:855e:ae74:d6f])
- (user=jannh job=sendgmr) by 2002:a1c:a5d0:: with SMTP id o199mr9613780wme.65.1643244961486;
- Wed, 26 Jan 2022 16:56:01 -0800 (PST)
-Date:   Thu, 27 Jan 2022 01:55:55 +0100
-Message-Id: <20220127005555.2766254-1-jannh@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.rc0.227.g00780c9af4-goog
-Subject: [RFC PATCH] x86/dumpstack: Fix unwind failure due to off-by-one-frame
-From:   Jann Horn <jannh@google.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VsdfdT2nUTvq3M0Rq/sXfwAbcz10llX1no1laZ549WU=;
+        b=5lPj3+Lsby701QClLXVn3pxbzqSm21fROYVYF5YWZC/aQyHCs/ZYsmn7hTFrKFD50j
+         tr1V+6JNPIs3BtLzkVQ7GDyE3lAKM68Us0MLmUO1Z9FaSmLn77nP+ZLjjzuf4Ld0EF1V
+         c/lRT4Ebh7I+h15l7xT5a7+e8a5MrjVStE6inBA+71YgF3X9ccIbgiHbpNRvJ0m4oKbc
+         dqNoHAA3FPmb4+dUf7ZvKZBPHWnA2W7HZDQdXt4jkpQUo4yMoq3Ow6UzMvhWDiQr+zFU
+         b2x2fN0Teb/d2B4EjkfKJnqyqGpvNqpHhgzKPp2lKaDZ0WyMr1KwaqGypWXDkdXCtnX/
+         QKJg==
+X-Gm-Message-State: AOAM530Dw3rtjOtK/mSeip+Mhm2fdesXyDYnJm/wpX/dcqAXpdiThXN3
+        PGBMz6xqWC6GJ9E0MLhyOn2AY5SabZqrmRZRfyQ=
+X-Google-Smtp-Source: ABdhPJx7CvBASaNQ3ZA0C3AS6+j7aDS1YM4FBkvWCNZb6+fBpQsaU3NYTIheLr+ZwKPmxmE+OEjfH+BV0CI0Smkmpmk=
+X-Received: by 2002:a17:907:7210:: with SMTP id dr16mr1116134ejc.486.1643245033968;
+ Wed, 26 Jan 2022 16:57:13 -0800 (PST)
+MIME-Version: 1.0
+References: <20220119044649.GL947480@paulmck-ThinkPad-P17-Gen-1>
+ <20220119182143.GA2183703@paulmck-ThinkPad-P17-Gen-1> <CAABZP2x-esy+9R4iiMZR5UV7YnYQxikAgsAQM+PU-o9+m9WMpw@mail.gmail.com>
+ <20220120210636.GR947480@paulmck-ThinkPad-P17-Gen-1> <CAABZP2zCWJ1S3We1f6UNVW=Q6h7cz8uMbR7PTzt9UWH9CjSZuw@mail.gmail.com>
+ <CAABZP2z=ESWA1EYf1LGS40ipJxcVOAUkvJHA-rdDP6_0Oqjgsg@mail.gmail.com>
+ <20220125180907.GN4285@paulmck-ThinkPad-P17-Gen-1> <CAABZP2xGZ__8MZWL0kGAdYJ9ZNq2omw9-VTACmrG8wR8RswG2A@mail.gmail.com>
+ <CAABZP2wt03juddoKfxO0m=+kn407267jLJn+gPRzU-w3nUBkAQ@mail.gmail.com>
+ <20220126045022.GW4285@paulmck-ThinkPad-P17-Gen-1> <20220126051427.GA3240075@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220126051427.GA3240075@paulmck-ThinkPad-P17-Gen-1>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Thu, 27 Jan 2022 08:57:02 +0800
+Message-ID: <CAABZP2xEQCCz3WKP8XbRmfb+F0e7DP9U+OHn30iHqnHEe0YR_g@mail.gmail.com>
+Subject: Re: Problems with rcutorture on ppc64le: allmodconfig(2) and other failures
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rcu <rcu@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(emphasis on the "RFC", not the "PATCH"...)
+Hi Paul
 
-I've hit a bug where __dump_stack() ends up printing a stack trace that
-consists purely of guesses (all printed frames start with "? ").
+Thank you for your perfect patch!
 
-Debugging the issue, I found that show_trace_log_lvl() is looking at a
-stack that looks like this:
+After apply your patch, I invoke
+"tools/testing/selftests/rcutorture/bin/torture.sh --duration 10" on
+next-20220125. we succeed in allmodconfig!
 
-    function             stored value    pointer in show_trace_log_lvl()
-    ====================================================================
-            show_stack   saved RIP
-            show_stack   saved RBP       <-- stack
-    show_trace_log_lvl   saved RIP       <-- unwind_get_return_address_ptr(...)
-    show_trace_log_lvl   ...
-    show_trace_log_lvl   ...
+Following are the test logs (154.223.142.244 is my own internet cloud
+server maintained by myself, I believe it is safe to access the text
+content via web, but not so sure)
 
-show_trace_log_lvl() then iterates up the stack with its `stack`
-variable; but because `unwind_get_return_address_ptr(&state)` is below the
-starting point, the two never compile equal, and so `reliable` is never
-set to 1.
+1. torture log
+http://154.223.142.244/logs/20220127/2022.01.26-19.43.04.log (there
+are many Chinese words "Thursday" in it because I forget to set
+terminal locale to English, I am sorry), I excerpt some content here:
 
-Poking around a bit, I see two issues.
+SUCCESSES:
+allmodconfig(0)
+tools/testing/selftests/rcutorture/res/2022.01.26-19.43.04-torture/allmodconfig
+FAILURES:
+rcutorture(2) /home/zzy/Program/linux-next/linux-next/tools/testing/selftests/rcutorture/res/2022.01.26-19.43.04-torture/results-rcutorture
+  Summary: Warnings: 1 Call Traces: 1
+  Summary: Warnings: 1 Call Traces: 1
+  Summary: Warnings: 1 Call Traces: 1
+  Summary: Warnings: 1 Call Traces: 1
+  Summary: Warnings: 1 Call Traces: 1
 
-The first issue is that __unwind_start() tries to figure out whether
-`first_frame` is inside the current frame before even having looked up
-the ORC entry that determines where the current frame ends.
-That can't work and results in being off-by-one-frame in some cases no
-matter how we twist the comparison between `state->sp` and `first_frame`.
+2. Make.exitcode for allmodeconfig
+http://154.223.142.244/logs/20220127/allmodconfig/Make.exitcode
 
-The second issue is that show_trace_log_lvl() asks __unwind_start() to
-stop when it finds the frame containing `stack`, but then tries
-comparing `unwind_get_return_address_ptr(&state)` (which has to be below
-`stack`, since it is part of the lower frame) with `stack`.
-That can't work if __unwind_start() is working properly - we'll have to
-unwind up another frame.
+3. Make.out for allmodeconfig
+http://154.223.142.244/logs/20220127/allmodconfig/Make.out
 
-This patch is an attempt to fix that, but I guess there might still be
-issues with it in the interaction with show_regs_if_on_stack() in
-show_trace_log_lvl(), or something like that?
+4. result of invoking: find 2022.01.26-19.43.04-torture -name
+console.log.diags|xargs -I{} echo "echo {}; cat {}"|xargs -I{} bash -c
+"{}":
+http://154.223.142.244/logs/20220127/consoles.logs.diags
+All of the console.log.diags complain about one thing:
+2022.01.26-19.43.04-torture/results-refscale-clock/NOPREEMPT/console.log.diags
+[    0.017721] WARNING: CPU: 0 PID: 0 at
+kernel/trace/trace_events.c:417 trace_event_raw_init+0xea/0x580
+[    0.017754] Call Trace:
+2022.01.26-19.43.04-torture/results-rcuscale-kvfree-kasan/TREE/console.log.diags
+[    0.102911] WARNING: CPU: 0 PID: 0 at
+kernel/trace/trace_events.c:417 trace_event_raw_init+0x113/0x6e0
+[    0.102992] Call Trace:
+2022.01.26-19.43.04-torture/results-rcuscale-tasks-tracing-kasan/TREE/console.log.diags
+[    0.060924] WARNING: CPU: 0 PID: 0 at
+kernel/trace/trace_events.c:417 trace_event_raw_init+0x113/0x6e0
+[    0.061006] Call Trace:
+I am glad to study these warnings further but they don't seem to be
+related to this patch.
 
-Another option might be to rework even more how ORC stack walking works,
-and always compute the location of the next frame in __unwind_start()
-and unwind_next(), such that it becomes possible to query for the top
-of the current frame?
 
-Or a completely different approach, do more special-casing of different
-unwinding scenarios in __unwind_start(), such that unwinding a remote
-task doesn't go through the skip-ahead loop, and unwinding the current
-task from a starting point is always guaranteed to skip the given frame
-and stop at the following one? Or something along those lines?
-That would also make it more obviously correct what happens if a
-function specifies its own frame as the starting point wrt to changes to
-that frame's contents before the call to unwind_next()... now that I'm
-typing this out, I think that might be the best option?
+Thanks again
+Sincerely
+Zhouyi
 
-[no signoff because I think this patch might be a terrible idea...]
----
- arch/x86/kernel/dumpstack.c  | 10 ++++++++
- arch/x86/kernel/unwind_orc.c | 46 ++++++++++++++++++++++++++++++++----
- 2 files changed, 52 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kernel/dumpstack.c b/arch/x86/kernel/dumpstack.c
-index 53de044e5654..2bffe8132e7c 100644
---- a/arch/x86/kernel/dumpstack.c
-+++ b/arch/x86/kernel/dumpstack.c
-@@ -195,6 +195,16 @@ static void show_trace_log_lvl(struct task_struct *task, struct pt_regs *regs,
- 	printk("%sCall Trace:\n", log_lvl);
- 
- 	unwind_start(&state, task, regs, stack);
-+
-+	/* We asked unwind_start() to give us the unwind state for the frame
-+	 * that contains @stack. But unwind_get_return_address_ptr() gives the
-+	 * pointer to the saved RIP at the top of the previous frame.
-+	 * If we want to be able to compare unwind_get_return_address_ptr()
-+	 * with stack positions starting at @stack, we have to skip to the next
-+	 * frame.
-+	 */
-+	unwind_next_frame(&state);
-+
- 	stack = stack ? : get_stack_pointer(task, regs);
- 	regs = unwind_get_entry_regs(&state, &partial);
- 
-diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
-index 2de3c8c5eba9..611ffa4d3701 100644
---- a/arch/x86/kernel/unwind_orc.c
-+++ b/arch/x86/kernel/unwind_orc.c
-@@ -706,10 +706,48 @@ void __unwind_start(struct unwind_state *state, struct task_struct *task,
- 	}
- 
- 	/* Otherwise, skip ahead to the user-specified starting frame: */
--	while (!unwind_done(state) &&
--	       (!on_stack(&state->stack_info, first_frame, sizeof(long)) ||
--			state->sp < (unsigned long)first_frame))
--		unwind_next_frame(state);
-+	while (!unwind_done(state)) {
-+		struct unwind_state lookahead_state;
-+		/* If we're not even on the right stack yet, skip. */
-+		if (!on_stack(&state->stack_info, first_frame, sizeof(long))) {
-+			unwind_next_frame(state);
-+			continue;
-+		}
-+
-+		/*
-+		 * What the user has given us is just a pointer somewhere *into*
-+		 * a frame - for example, if the caller used
-+		 * __builtin_frame_address(0), that function will have a saved
-+		 * RBP below the saved RIP (yes, even when compiling without
-+		 * frame pointers), and first_frame will point to that saved
-+		 * RBP. If we're unwinding a remote task, we might be dealing
-+		 * with a first_frame pointer to the bottom of a stack frame.
-+		 *
-+		 * So if we want to stop at the frame *containing* first_frame,
-+		 * we have to first look up the next ORC entry and check whether
-+		 * first_frame is within the current frame.
-+		 */
-+		lookahead_state = *state;
-+		unwind_next_frame(&lookahead_state);
-+
-+		/*
-+		 * It might be that the current frame is the last frame on this
-+		 * stack, and the lookahead_state points to an entirely
-+		 * different stack. We already decided above that we want to
-+		 * stop somewhere on the current stack, so stop here.
-+		 */
-+		if (lookahead_state.stack_info.type != state->stack_info.type)
-+			break;
-+
-+		/*
-+		 * Stop if the user-specified address is below where the next
-+		 * frame starts (meaning it is in the current frame).
-+		 */
-+		if ((unsigned long)first_frame < lookahead_state.sp)
-+			break;
-+
-+		*state = lookahead_state;
-+	}
- 
- 	return;
- 
-
-base-commit: 0280e3c58f92b2fe0e8fbbdf8d386449168de4a8
-prerequisite-patch-id: c01c9b02a02ca0c6996a5fb02e68e137444a0a53
--- 
-2.35.0.rc0.227.g00780c9af4-goog
-
+On Wed, Jan 26, 2022 at 1:14 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Tue, Jan 25, 2022 at 08:50:22PM -0800, Paul E. McKenney wrote:
+> > On Wed, Jan 26, 2022 at 12:09:12PM +0800, Zhouyi Zhou wrote:
+> > > Great Discovery !!
+> > > Hi Paul,
+> > > I track the log
+> > > make[2]: *** No rule to make target
+> > > 'arch/x86/kvm//home/zzy/Program/linux-next/linux-next/tools/testing/selftests/rcutorture/kvm_main.o',
+> >
+> > That does look like a very odd pathname, now that you mention it.
+> >
+> > > needed by 'arch/x86/kvm/kvm.o
+> > > into the file virt/kvm/Makefile.kvm:
+> > > 1# SPDX-License-Identifier: GPL-2.0
+> > >  2#
+> > >  3# Makefile for Kernel-based Virtual Machine module
+> > >  4#
+> > >  5
+> > >  6KVM ?= ../../../virt/kvm
+> > >  7
+> > >  8kvm-y := $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o
+> > >  9kvm-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
+> > > 10kvm-$(CONFIG_KVM_MMIO) += $(KVM)/coalesced_mmio.o
+> > > 11kvm-$(CONFIG_KVM_ASYNC_PF) += $(KVM)/async_pf.o
+> > > 12kvm-$(CONFIG_HAVE_KVM_IRQ_ROUTING) += $(KVM)/irqchip.o
+> > > 13kvm-$(CONFIG_HAVE_KVM_DIRTY_RING) += $(KVM)/dirty_ring.o
+> > > 14kvm-$(CONFIG_HAVE_KVM_PFNCACHE) += $(KVM)/pfncache.o
+> > > line 6's ?= indicates to set the KDIR variable only if it's not
+> > > set/doesn't have a value.
+> > >
+> > > I guess we have set the variable KVM somewhere before make, I will
+> > > continue tracking it.
+> >
+> > But if you build an allmodconfig kernel by hand afterwards, it works?
+> >
+> > I wonder if I need to use a different environment variable in my scripts.
+> > For example, from tools/testing/selftests/rcutorture/bin/kvm.sh:
+> >
+> > KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
+> > PATH=${KVM}/bin:$PATH; export PATH
+> >
+> > Maybe like the (untested) patch shown below.
+>
+> A somewhat more official version below.  Thank you for following up
+> on this!
+>
+>                                                         Thanx, Paul
+>
+> ------------------------------------------------------------------------
+>
+> commit 6b5cdbe80b01ce604fdf0f3ef6717a6466aca041
+> Author: Paul E. McKenney <paulmck@kernel.org>
+> Date:   Tue Jan 25 21:08:55 2022 -0800
+>
+>     torture: Change KVM environment variable to RCUTORTURE
+>
+>     The torture-test scripting's long-standing use of KVM as the environment
+>     variable tracking the pathname of the rcutorture directory now conflicts
+>     with allmodconfig builds due to the virt/kvm/Makefile.kvm file's use
+>     of this as a makefile variable.  This commit therefore changes the
+>     torture-test scripting from KVM to RCUTORTURE, avoiding the name conflict.
+>
+>     Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+>     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>
+> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-again.sh b/tools/testing/selftests/rcutorture/bin/kvm-again.sh
+> index 5a0023d183dac..0941f1ddab658 100755
+> --- a/tools/testing/selftests/rcutorture/bin/kvm-again.sh
+> +++ b/tools/testing/selftests/rcutorture/bin/kvm-again.sh
+> @@ -47,8 +47,8 @@ else
+>         exit 1
+>  fi
+>
+> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
+> -PATH=${KVM}/bin:$PATH; export PATH
+> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
+> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
+>  . functions.sh
+>
+>  dryrun=
+> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
+> index 370406bbfeedc..f17000a2ccf1f 100755
+> --- a/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
+> +++ b/tools/testing/selftests/rcutorture/bin/kvm-check-branches.sh
+> @@ -49,8 +49,8 @@ fi
+>  mkdir $resdir/$ds
+>  echo Results directory: $resdir/$ds
+>
+> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
+> -PATH=${KVM}/bin:$PATH; export PATH
+> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
+> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
+>  . functions.sh
+>  echo Using all `identify_qemu_vcpus` CPUs.
+>
+> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh b/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh
+> index e4a00779b8c69..ee886b40a5d2c 100755
+> --- a/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh
+> +++ b/tools/testing/selftests/rcutorture/bin/kvm-end-run-stats.sh
+> @@ -22,8 +22,8 @@ T=${TMPDIR-/tmp}/kvm-end-run-stats.sh.$$
+>  trap 'rm -rf $T' 0
+>  mkdir $T
+>
+> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
+> -PATH=${KVM}/bin:$PATH; export PATH
+> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
+> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
+>  . functions.sh
+>  default_starttime="`get_starttime`"
+>  starttime="${2-default_starttime}"
+> diff --git a/tools/testing/selftests/rcutorture/bin/kvm-remote.sh b/tools/testing/selftests/rcutorture/bin/kvm-remote.sh
+> index 29b068a55b466..8c4c1e4792d02 100755
+> --- a/tools/testing/selftests/rcutorture/bin/kvm-remote.sh
+> +++ b/tools/testing/selftests/rcutorture/bin/kvm-remote.sh
+> @@ -19,8 +19,8 @@ then
+>         exit 1
+>  fi
+>
+> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
+> -PATH=${KVM}/bin:$PATH; export PATH
+> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
+> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
+>  . functions.sh
+>
+>  starttime="`get_starttime`"
+> @@ -108,8 +108,8 @@ else
+>                 cat $T/kvm-again.sh.out | tee -a "$oldrun/remote-log"
+>                 exit 2
+>         fi
+> -       cp -a "$rundir" "$KVM/res/"
+> -       oldrun="$KVM/res/$ds"
+> +       cp -a "$rundir" "$RCUTORTURE/res/"
+> +       oldrun="$RCUTORTURE/res/$ds"
+>  fi
+>  echo | tee -a "$oldrun/remote-log"
+>  echo " ----" kvm-again.sh output: "(`date`)" | tee -a "$oldrun/remote-log"
+> diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
+> index 348ad177a5acc..55b2c15332827 100755
+> --- a/tools/testing/selftests/rcutorture/bin/kvm.sh
+> +++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
+> @@ -25,15 +25,15 @@ LANG=en_US.UTF-8; export LANG
+>
+>  dur=$((30*60))
+>  dryrun=""
+> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
+> -PATH=${KVM}/bin:$PATH; export PATH
+> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
+> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
+>  . functions.sh
+>
+>  TORTURE_ALLOTED_CPUS="`identify_qemu_vcpus`"
+>  TORTURE_DEFCONFIG=defconfig
+>  TORTURE_BOOT_IMAGE=""
+>  TORTURE_BUILDONLY=
+> -TORTURE_INITRD="$KVM/initrd"; export TORTURE_INITRD
+> +TORTURE_INITRD="$RCUTORTURE/initrd"; export TORTURE_INITRD
+>  TORTURE_KCONFIG_ARG=""
+>  TORTURE_KCONFIG_GDB_ARG=""
+>  TORTURE_BOOT_GDB_ARG=""
+> @@ -262,7 +262,7 @@ else
+>         exit 1
+>  fi
+>
+> -CONFIGFRAG=${KVM}/configs/${TORTURE_SUITE}; export CONFIGFRAG
+> +CONFIGFRAG=${RCUTORTURE}/configs/${TORTURE_SUITE}; export CONFIGFRAG
+>
+>  defaultconfigs="`tr '\012' ' ' < $CONFIGFRAG/CFLIST`"
+>  if test -z "$configs"
+> @@ -272,7 +272,7 @@ fi
+>
+>  if test -z "$resdir"
+>  then
+> -       resdir=$KVM/res
+> +       resdir=$RCUTORTURE/res
+>  fi
+>
+>  # Create a file of test-name/#cpus pairs, sorted by decreasing #cpus.
+> @@ -386,7 +386,7 @@ END {
+>  # Generate a script to execute the tests in appropriate batches.
+>  cat << ___EOF___ > $T/script
+>  CONFIGFRAG="$CONFIGFRAG"; export CONFIGFRAG
+> -KVM="$KVM"; export KVM
+> +RCUTORTURE="$RCUTORTURE"; export RCUTORTURE
+>  PATH="$PATH"; export PATH
+>  TORTURE_ALLOTED_CPUS="$TORTURE_ALLOTED_CPUS"; export TORTURE_ALLOTED_CPUS
+>  TORTURE_BOOT_IMAGE="$TORTURE_BOOT_IMAGE"; export TORTURE_BOOT_IMAGE
+> @@ -569,7 +569,7 @@ ___EOF___
+>  awk < $T/cfgcpu.pack \
+>         -v TORTURE_BUILDONLY="$TORTURE_BUILDONLY" \
+>         -v CONFIGDIR="$CONFIGFRAG/" \
+> -       -v KVM="$KVM" \
+> +       -v RCUTORTURE="$RCUTORTURE" \
+>         -v ncpus=$cpus \
+>         -v jitter="$jitter" \
+>         -v rd=$resdir/$ds/ \
+> diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
+> index d1cb60085d8f2..e00e60efb2310 100755
+> --- a/tools/testing/selftests/rcutorture/bin/torture.sh
+> +++ b/tools/testing/selftests/rcutorture/bin/torture.sh
+> @@ -13,8 +13,8 @@
+>  scriptname=$0
+>  args="$*"
+>
+> -KVM="`pwd`/tools/testing/selftests/rcutorture"; export KVM
+> -PATH=${KVM}/bin:$PATH; export PATH
+> +RCUTORTURE="`pwd`/tools/testing/selftests/rcutorture"; export RCUTORTURE
+> +PATH=${RCUTORTURE}/bin:$PATH; export PATH
+>  . functions.sh
+>
+>  TORTURE_ALLOTED_CPUS="`identify_qemu_vcpus`"
